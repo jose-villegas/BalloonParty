@@ -34,6 +34,20 @@ namespace BalloonParty.Projectile.Model
             return false;
         }
 
+        public T GetBuff<T>()
+            where T : class, IProjectileBuff
+        {
+            for (var i = 0; i < _buffs.Count; i++)
+            {
+                if (_buffs[i] is T match)
+                {
+                    return match;
+                }
+            }
+
+            return null;
+        }
+
         public void AddBuff(IProjectileBuff buff)
         {
             if (!_buffs.Contains(buff))

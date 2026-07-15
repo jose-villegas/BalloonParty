@@ -5,19 +5,21 @@ using MessagePipe;
 namespace BalloonParty.Projectile.Buffs
 {
     /// <summary>
-    ///     Doubles the projectile's flight speed until it loses a shield to a wall. The speedup is applied
-    ///     in <c>ProjectileMotionResolver</c> (the layer that owns movement), which queries
-    ///     <c>HasBuff&lt;SpeedProjectileBuff&gt;()</c>; this type is only identity + end-condition.
+    ///     Multiplies the projectile's flight speed until it loses a shield to a wall. The multiplier is
+    ///     read by <c>ProjectileMotionResolver</c> via <c>GetBuff&lt;SpeedProjectileBuff&gt;()</c>.
     /// </summary>
     internal sealed class SpeedProjectileBuff : IProjectileBuff
     {
         private readonly IProjectileBuffEndCondition _endCondition;
 
+        public float Multiplier { get; }
+
         public IProjectileBuffEndCondition EndCondition => _endCondition;
 
-        internal SpeedProjectileBuff(ISubscriber<ShieldLostMessage> wallBounces)
+        internal SpeedProjectileBuff(ISubscriber<ShieldLostMessage> wallBounces, float multiplier = 2f)
         {
             _endCondition = new WallBounceEndCondition(wallBounces);
+            Multiplier = multiplier;
         }
 
         public void Dispose()

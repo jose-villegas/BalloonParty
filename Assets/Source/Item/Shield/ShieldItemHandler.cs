@@ -73,8 +73,9 @@ namespace BalloonParty.Item.Shield
             // granted is what the wall consumes to end both buffs, rather than destroying the projectile.
             if (_palette.IsRainbow(balloon.GetColorId()))
             {
+                var settings = _itemConfig[ItemType.Shield];
                 _buffs.Apply(new RainbowShieldProjectileBuff(_wallBounces));
-                _buffs.Apply(new SpeedProjectileBuff(_wallBounces));
+                _buffs.Apply(new SpeedProjectileBuff(_wallBounces, settings.Shield.SpeedBuffMultiplier));
             }
 
             _shieldGainedPublisher.Publish(new ShieldGainedMessage(balloon.SlotIndex.Value));

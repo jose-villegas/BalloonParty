@@ -9,8 +9,8 @@ using BalloonParty.Configuration.Items;
 namespace BalloonParty.Item.Snipe
 {
     /// <summary>
-    ///     Grants the active projectile a <see cref="SpeedProjectileBuff" /> — doubles its flight speed
-    ///     until it loses a shield to a wall. Purely a buff grant: no damage, no shield change.
+    ///     Grants the active projectile a <see cref="SpeedProjectileBuff" /> — increases its flight speed
+    ///     (multiplier from config) until it loses a shield to a wall. Purely a buff grant: no damage, no shield change.
     /// </summary>
     internal class SnipeItemHandler : IBalloonItem
     {
@@ -36,8 +36,9 @@ namespace BalloonParty.Item.Snipe
 
         public UniTask Activate(ItemActivationContext activation)
         {
-            _buffs.Apply(new SpeedProjectileBuff(_wallBounces));
-            _effectPlayer.Play(_itemConfig[ItemType.Snipe], activation.WorldPosition, activation.Balloon.GetColorId());
+            var settings = _itemConfig[ItemType.Snipe];
+            _buffs.Apply(new SpeedProjectileBuff(_wallBounces, settings.Snipe.SpeedBuffMultiplier));
+            _effectPlayer.Play(settings, activation.WorldPosition, activation.Balloon.GetColorId());
             return UniTask.CompletedTask;
         }
     }

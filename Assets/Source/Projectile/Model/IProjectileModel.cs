@@ -15,5 +15,8 @@ namespace BalloonParty.Projectile.Model
 
         bool HasBuff<T>()
             where T : IProjectileBuff;
+
+        T GetBuff<T>()
+            where T : class, IProjectileBuff;
     }
 }

@@ -97,7 +97,12 @@ namespace BalloonParty.Item.Lightning
             // A rainbow holder converts a whole colour group to rainbow (chosen by the last projectile's
             // colour) instead of destroying; a concrete holder chains and destroys its own colour.
             var matchColor = convertsToRainbow ? _activeProjectile?.ColorName.Value : sourceColorId;
-            if (string.IsNullOrEmpty(matchColor) || (convertsToRainbow && _palette.IsRainbow(matchColor)))
+            if (convertsToRainbow && (string.IsNullOrEmpty(matchColor) || _palette.IsRainbow(matchColor)))
+            {
+                matchColor = FindNearestColor(balloon, worldPosition);
+            }
+
+            if (string.IsNullOrEmpty(matchColor))
             {
                 return UniTask.CompletedTask;
             }
@@ -240,6 +245,49 @@ namespace BalloonParty.Item.Lightning
 
             _distanceComparer.Origin = origin;
             result.Sort(_distanceComparer);
+        }
+
+        private string FindNearestColor(IBalloonModel source, Vector3 origin)
+        {
+            var bestSqr = float.MaxValue;
+            string bestColor = null;
+
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                for (var row = 0; row < _grid.Rows; row++)
+                {
+                    if (_grid.IsEmpty(col, row))
+                    {
+                        continue;
+                    }
+
+                    var slot = new Vector2Int(col, row);
+                    if (_grid.At(slot) is not IBalloonModel model || ReferenceEquals(model, source))
+                    {
+                        continue;
+                    }
+
+                    if (model is not IHasColor colored)
+                    {
+                        continue;
+                    }
+
+                    var color = colored.Color.Value;
+                    if (string.IsNullOrEmpty(color) || _palette.IsRainbow(color))
+                    {
+                        continue;
+                    }
+
+                    var sqr = (origin - _grid.IndexToWorldPosition(slot)).sqrMagnitude;
+                    if (sqr < bestSqr)
+                    {
+                        bestSqr = sqr;
+                        bestColor = color;
+                    }
+                }
+            }
+
+            return bestColor;
         }
     }
 }

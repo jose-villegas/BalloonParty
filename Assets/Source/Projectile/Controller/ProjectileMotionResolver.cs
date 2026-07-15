@@ -9,8 +9,6 @@ namespace BalloonParty.Projectile.Controller
     /// <summary>Plain, headless-testable projectile flight rules; the view only applies the returned <see cref="ProjectileStep" />.</summary>
     internal sealed class ProjectileMotionResolver
     {
-        private const float SpeedBuffMultiplier = 2f;
-
         private readonly WallLimits _walls;
 
         [Inject]
@@ -22,7 +20,8 @@ namespace BalloonParty.Projectile.Controller
         /// <summary>Advances one fixed step, mutating direction/shield count on a wall bounce.</summary>
         internal ProjectileStep Step(IWriteableProjectileModel model, Vector3 position, float deltaTime)
         {
-            var speed = model.HasBuff<SpeedProjectileBuff>() ? model.Speed * SpeedBuffMultiplier : model.Speed;
+            var speedBuff = model.GetBuff<SpeedProjectileBuff>();
+            var speed = speedBuff != null ? model.Speed * speedBuff.Multiplier : model.Speed;
             position += model.Direction * (speed * deltaTime);
             position = _walls.Clamp(position, out var reflect);
 
