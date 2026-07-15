@@ -27,6 +27,11 @@ namespace BalloonParty.Configuration.Effects
         /// taps soften faster with distance (distance-dependent penumbra). 0 = same as bounce spread.</summary>
         float ShadowMipSpread { get; }
 
+        /// <summary>Weight of the three secondary bounce directions (perpendicular + opposite) relative to
+        /// the primary (toward-light) direction. 0 = single-direction bounce (current), 1 = all four
+        /// directions contribute equally.</summary>
+        float SecondaryBounceWeight { get; }
+
         /// <summary>Shadow darkening intensity (0 = no shadow, 1 = fully darkened).</summary>
         float ShadowStrength { get; }
 
