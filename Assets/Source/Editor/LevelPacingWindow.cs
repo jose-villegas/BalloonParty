@@ -31,8 +31,8 @@ namespace BalloonParty.Editor
             130f,  // Colors (dropdown + swatches)
             100f,  // Balloons (collapsed) — dynamic when expanded
             100f,  // Items
-            20f,   // −
             24f,   // ►
+            20f,   // −
         };
 
         private static readonly string[] ColHeaders =
@@ -342,8 +342,15 @@ namespace BalloonParty.Editor
                 DrawWeightsCell(CellRect(rowRect, 7), paramsProp, "_itemWeights", "Item");
             }
 
-            // − button (col 8)
-            var delRect = CellRect(rowRect, 8);
+            // ► button (col 8)
+            var expandRect = CellRect(rowRect, 8);
+            if (GUI.Button(expandRect, _expandedRow == index ? "▼" : "►"))
+            {
+                _expandedRow = _expandedRow == index ? -1 : index;
+            }
+
+            // − button (col 9 — rightmost)
+            var delRect = CellRect(rowRect, 9);
             if (GUI.Button(delRect, "−"))
             {
                 _rangesProp.DeleteArrayElementAtIndex(index);
@@ -353,13 +360,6 @@ namespace BalloonParty.Editor
                 }
 
                 return;
-            }
-
-            // ► button (col 9)
-            var expandRect = CellRect(rowRect, 9);
-            if (GUI.Button(expandRect, _expandedRow == index ? "▼" : "►"))
-            {
-                _expandedRow = _expandedRow == index ? -1 : index;
             }
 
             if (_expandedRow == index && paramsProp != null)
