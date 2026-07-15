@@ -224,6 +224,10 @@ namespace BalloonParty.Editor
             var gapBg = new Color(0.15f, 0.15f, 0.15f, 1f);
             EditorGUI.DrawRect(groupTitleRect, gapBg);
             DrawGroupTitles(groupTitleRect);
+            var hSepColor = new Color(0.35f, 0.35f, 0.35f, 0.5f);
+            EditorGUI.DrawRect(
+                new Rect(groupTitleRect.x, groupTitleRect.yMax - SeparatorWidth, groupTitleRect.width, SeparatorWidth),
+                hSepColor);
 
             // Header
             var headerRect = GUILayoutUtility.GetRect(TotalWidth(), RowHeight);
@@ -234,6 +238,9 @@ namespace BalloonParty.Editor
             DrawGroupBackground(headerRect, 4, 5, headerBg);
             DrawGroupBackground(headerRect, 6, 9, headerBg);
             DrawHeaderCells(headerRect);
+            EditorGUI.DrawRect(
+                new Rect(headerRect.x, headerRect.yMax - SeparatorWidth, headerRect.width, SeparatorWidth),
+                hSepColor);
 
             // Rows
             for (var i = 0; i < count; i++)
