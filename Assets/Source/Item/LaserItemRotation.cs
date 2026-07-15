@@ -80,8 +80,8 @@ namespace BalloonParty.Item
                 return;
             }
 
-            // Idle telegraph reads as the Unbreakable colour; the fired beam takes the owner's colour.
-            var colorIndex = _palette.PaletteIndexOf(GamePalette.UnbreakableColorId);
+            // Idle telegraph reads as the LaserAim colour; the fired beam takes the owner's colour.
+            var colorIndex = _palette.PaletteIndexOf(GamePalette.LaserAimColorId);
             var center = transform.position;
             _horizontal = Light.Segment(center, center, _lightHalfWidth, _lightIntensity, colorIndex);
             _vertical = Light.Segment(center, center, _lightHalfWidth, _lightIntensity, colorIndex);
