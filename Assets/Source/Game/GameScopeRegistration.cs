@@ -169,6 +169,8 @@ namespace BalloonParty.Game
             builder.RegisterComponentInHierarchy<OrthogonalSizeCameraController>();
             builder.RegisterComponentInHierarchy<CameraShakeService>();
             builder.RegisterComponentInHierarchy<SceneCaptureService>();
+            builder.RegisterComponentInHierarchy<ScreenSpaceLightService>();
+            builder.RegisterComponentInHierarchy<CameraBackgroundTint>();
             builder.RegisterComponentInHierarchy<CinematicCameraView>();
             builder.RegisterComponentInHierarchy<SpeckField>();
             builder.Register<CinematicCameraRig>(Lifetime.Singleton);

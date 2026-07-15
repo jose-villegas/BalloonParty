@@ -76,6 +76,8 @@ namespace BalloonParty.Game
             builder.RegisterInstance<IBushSettings>(_bushSettings);
             builder.RegisterInstance<IDisturbanceFieldSettings>(_disturbanceFieldSettings);
             builder.RegisterInstance<ISceneLightFieldSettings>(_sceneLightFieldSettings);
+            builder.RegisterInstance<IScreenSpaceLightSettings>(_sceneLightFieldSettings);
+            builder.RegisterInstance<ISceneLightSettings>(_sceneLightFieldSettings);
             builder.RegisterInstance<ISpeckFieldSettings>(_speckFieldSettings);
             builder.RegisterInstance<ILevelPacingConfiguration>(_levelPacingConfiguration);
             builder.RegisterInstance(new ThrowerSettings(_projectilePrefab));

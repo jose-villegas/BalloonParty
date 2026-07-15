@@ -147,7 +147,9 @@ namespace BalloonParty.Display
             _texture = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32)
             {
                 name = "SceneCapture",
-                filterMode = FilterMode.Bilinear
+                filterMode = FilterMode.Bilinear,
+                useMipMap = true,
+                autoGenerateMips = true
             };
 
             _captureCamera.targetTexture = _texture;

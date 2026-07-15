@@ -1,7 +1,8 @@
+using BalloonParty.Configuration.Effects;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Rendering;
 using UnityEngine;
-using BalloonParty.Configuration.Cinematics;
+using VContainer;
 
 namespace BalloonParty.Display
 {
@@ -17,6 +18,7 @@ namespace BalloonParty.Display
         private static readonly int TapAspectId = Shader.PropertyToID("_TapAspect");
         private static readonly int TapDecayId = Shader.PropertyToID("_TapDecay");
         private static readonly int TapStartId = Shader.PropertyToID("_TapStart");
+        private static readonly int MipSpreadId = Shader.PropertyToID("_MipSpread");
         private static readonly int HistoryTexId = Shader.PropertyToID("_HistoryTex");
         private static readonly int TemporalBlendId = Shader.PropertyToID("_TemporalBlend");
         private static readonly int LightTexId = Shader.PropertyToID("_LightTex");
@@ -26,30 +28,9 @@ namespace BalloonParty.Display
         private static readonly int MagnitudeRefId = Shader.PropertyToID("_MagnitudeRef");
         private static readonly int AmbientColorId = Shader.PropertyToID("_AmbientColor");
 
-        [Tooltip("Assign explicitly — device builds strip shaders that are only " +
-                 "referenced via Shader.Find, which is kept as an editor fallback.")]
-        [SerializeField] private Shader _smearShader;
-        [SerializeField] private Shader _overlayShader;
-        [Tooltip("How far an object's shadow/bleed reaches, in world units.")]
-        [SerializeField] private float _smearDistance = 1.5f;
-        [Tooltip("Per-tap weight decay along the march — lower dies off faster.")]
-        [Range(0.1f, 1f)]
-        [SerializeField] private float _tapDecay = 0.8f;
-        [Tooltip("Taps skipped at the march start so occluders don't fully self-shadow.")]
-        [SerializeField] private float _tapStart = 1f;
-        [Range(0f, 1f)]
-        [SerializeField] private float _shadowStrength = 0.35f;
-        [SerializeField] private Color _shadowTint = new Color(0.55f, 0.6f, 0.75f);
-        [Range(0f, 2f)]
-        [SerializeField] private float _bounceStrength = 0.25f;
-        [Tooltip("Off skips the history blit and its two buffers entirely — the light " +
-                 "responds instantly, but moving sprites may flicker at capture resolution.")]
-        [SerializeField] private bool _temporalSmoothing = true;
-        [Tooltip("Fraction of the fresh light buffer accepted per frame — lower is " +
-                 "smoother but laggier. Kills the texel flicker of moving sprites at " +
-                 "capture resolution.")]
-        [Range(0.02f, 1f)]
-        [SerializeField] private float _temporalResponse = 0.2f;
+        [Inject] private IScreenSpaceLightSettings _settings;
+        [Inject] private ISceneLightSettings _lightSettings;
+
         [Tooltip("Overlay sorting — above all gameplay, below UI.")]
         [SortingLayerName]
         [SerializeField] private string _sortingLayerName = "Sky";
@@ -59,7 +40,6 @@ namespace BalloonParty.Display
 
         private Camera _camera;
         private SceneCaptureService _capture;
-        private SceneLightService _sceneLight;
         private Material _smearMaterial;
         private Material _overlayMaterial;
         private RenderTexture _smearTarget;
@@ -77,16 +57,6 @@ namespace BalloonParty.Display
         {
             _camera = GetComponent<Camera>();
             _capture = GetComponent<SceneCaptureService>();
-
-            // The light owner lives on a dedicated scene object (Game.unity's "Lighting"), not on
-            // the camera prefab — a scene object can't be referenced from the shared prefab, so
-            // resolve it at runtime.
-            _sceneLight = FindFirstObjectByType<SceneLightService>();
-            if (_sceneLight == null)
-            {
-                Debug.LogError("ScreenSpaceLightService: no SceneLightService in the scene — " +
-                                "the GI smear direction will not update.", this);
-            }
         }
 
         private void OnEnable()
@@ -119,11 +89,11 @@ namespace BalloonParty.Display
             Graphics.Blit(source, _smearTarget, _smearMaterial, 0);
             Graphics.Blit(_smearTarget, _workTarget, _smearMaterial, 1);
 
-            if (_temporalSmoothing)
+            if (_settings.TemporalSmoothing)
             {
                 // Temporal accumulation: blend into history, then swap for next frame.
                 _smearMaterial.SetTexture(HistoryTexId, _historyTarget);
-                _smearMaterial.SetFloat(TemporalBlendId, _historyValid ? _temporalResponse : 1f);
+                _smearMaterial.SetFloat(TemporalBlendId, _historyValid ? _settings.TemporalResponse : 1f);
                 Graphics.Blit(_workTarget, _lightTarget, _smearMaterial, 2);
                 _historyValid = true;
 
@@ -172,27 +142,30 @@ namespace BalloonParty.Display
                 return true;
             }
 
+            var smearShader = _settings.SmearShader;
+            var overlayShader = _settings.OverlayShader;
+
             // Editor-only fallback — device builds strip shaders only referenced by name.
-            if (_smearShader == null)
+            if (smearShader == null)
             {
-                _smearShader = Shader.Find("Hidden/BalloonParty/Display/ScreenSpaceLightSmear");
+                smearShader = Shader.Find("Hidden/BalloonParty/Display/ScreenSpaceLightSmear");
             }
 
-            if (_overlayShader == null)
+            if (overlayShader == null)
             {
-                _overlayShader = Shader.Find("BalloonParty/Display/ScreenSpaceLightOverlay");
+                overlayShader = Shader.Find("BalloonParty/Display/ScreenSpaceLightOverlay");
             }
 
-            if (_smearShader == null || _overlayShader == null)
+            if (smearShader == null || overlayShader == null)
             {
                 Debug.LogWarning("ScreenSpaceLightService: shader references missing — assign " +
-                                 "them on the component; Shader.Find-only shaders are stripped " +
-                                 "from builds. Disabling.", this);
+                                 "them on the SceneLightFieldSettings asset; Shader.Find-only " +
+                                 "shaders are stripped from builds. Disabling.", this);
                 return false;
             }
 
-            _smearMaterial = new Material(_smearShader);
-            _overlayMaterial = new Material(_overlayShader);
+            _smearMaterial = new Material(smearShader);
+            _overlayMaterial = new Material(overlayShader);
 
             if (_overlayLayer < 0)
             {
@@ -234,7 +207,7 @@ namespace BalloonParty.Display
             }
 
             // The ping-pong pair only exists while smoothing is on (live-toggleable).
-            if (!_temporalSmoothing)
+            if (!_settings.TemporalSmoothing)
             {
                 ReleaseHistoryTargets();
                 return;
@@ -263,15 +236,16 @@ namespace BalloonParty.Display
             // X. Camera-only — no owner read here now that direction comes from the field; the
             // shader's field-off fallback reads the flat global direction the owner publishes.
             var worldHeight = _camera.orthographicSize * 2f;
-            var stepWorld = _smearDistance / TapCount;
+            var stepWorld = _settings.SmearDistance / TapCount;
             _smearMaterial.SetFloat(TapStepScaleId, stepWorld / worldHeight);
             _smearMaterial.SetFloat(TapAspectId, _camera.aspect);
 
-            _smearMaterial.SetFloat(TapDecayId, _tapDecay);
-            _smearMaterial.SetFloat(TapStartId, _tapStart);
+            _smearMaterial.SetFloat(TapDecayId, _settings.TapDecay);
+            _smearMaterial.SetFloat(TapStartId, _settings.TapStart);
+            _smearMaterial.SetFloat(MipSpreadId, _settings.MipSpread);
 
-            _overlayMaterial.SetColor(ShadowTintId, _shadowTint);
-            _overlayMaterial.SetFloat(ShadowStrengthId, _shadowStrength);
+            _overlayMaterial.SetColor(ShadowTintId, _settings.ShadowTint);
+            _overlayMaterial.SetFloat(ShadowStrengthId, _settings.ShadowStrength);
 
             // Intensity coupling now lives per-fragment in the overlay via the field magnitude,
             // not here: bounce scales by the absolute local magnitude (field-off that equals
@@ -279,9 +253,8 @@ namespace BalloonParty.Display
             // push _bounceStrength RAW to avoid double-applying intensity. The reference feeds
             // the overlay's relative shadow coupling — field-off (magnitude == reference) it
             // resolves to 1, leaving the authored shadow strength bit-identical to today.
-            _overlayMaterial.SetFloat(BounceStrengthId, _bounceStrength);
-            _overlayMaterial.SetFloat(
-                MagnitudeRefId, _sceneLight != null ? Mathf.Max(_sceneLight.Intensity, 1e-4f) : 1f);
+            _overlayMaterial.SetFloat(BounceStrengthId, _settings.BounceStrength);
+            _overlayMaterial.SetFloat(MagnitudeRefId, Mathf.Max(_lightSettings.Intensity, 1e-4f));
 
             // Measured against the capture's clear color so open sky nets to neutral.
             _overlayMaterial.SetColor(AmbientColorId, _camera.backgroundColor);

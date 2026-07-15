@@ -6,17 +6,18 @@ sample once at its anchor to get the local light *direction + magnitude + colour
 many lights contribute. This folder is the field's **producer**; consumers read it through the
 shared shader include `Assets/Shaders/BalloonParty/Include/SceneLight.cginc`.
 
-`SceneLightService` (in `Display/`) stays the owner of the single *directional* key light and its
-flat globals (`_SceneLightDir` / `_SceneLightColor` / `_SceneLightIntensity`). The field is a
-super-set layered on top: at rest it is exactly those globals painted uniformly, and every field
-helper falls back to the flat globals when the field is off — so the field is a strictly additive
-seam, never a replacement.
+`SceneLightFieldService` is the single owner of both the light **field** RT and the **ambient
+globals** (`_SceneLightDir` / `_SceneLightColor` / `_SceneLightIntensity`). The ambient values are
+project-wide config on the `SceneLightFieldSettings` SO (injected as `ISceneLightSettings`), pushed
+every tick so they stay live-tunable. The field is a super-set layered on top: at rest it is exactly
+those globals painted uniformly, and every field helper falls back to the flat globals when the field
+is off — so the field is a strictly additive seam, never a replacement.
 
 ## Contents
 
 | File | What it provides |
 |---|---|
-| `SceneLightFieldService` | Plain-C# DI service (`IStartable`/`ITickable`/`IDisposable`), registered in `GameScopeRegistration` next to `DisturbanceFieldService` (Singleton, `AsImplementedInterfaces().AsSelf()`). Builds the field via `SceneLightFieldResources`, sizes it through the shared `DisturbanceFieldCoordinates` (driven by `IGameDisplayConfiguration`), and runs the three-pass pipeline (below) **only on ticks where a registered light changed** — the field is purely local, so it has no dependency on the ambient owner (`SceneLightService`) and ambient tweaks never re-render it. Holds the registry of on lights, subscribing to each one's reactive properties to know when to re-render. Pushes the bounds/texel/palette globals + on-flag; releases the RTs in `Dispose`. API: `RegisterLight(Light) → IDisposable`, `ClearLights()` |
+| `SceneLightFieldService` | Plain-C# DI service (`IStartable`/`ITickable`/`IDisposable`), registered in `GameScopeRegistration` next to `DisturbanceFieldService` (Singleton, `AsImplementedInterfaces().AsSelf()`). Pushes the ambient globals (`_SceneLightDir`/`_SceneLightColor`/`_SceneLightIntensity`) from `ISceneLightSettings` every tick, then builds the field via `SceneLightFieldResources` **only on ticks where a registered light changed**. Holds the registry of on lights, subscribing to each one's reactive properties to know when to re-render. Pushes the bounds/texel/palette globals + on-flag; releases the RTs in `Dispose`. API: `RegisterLight(Light) → IDisposable`, `ClearLights()` |
 | `SceneLightFieldResources` | The field's GPU resources — **two** ping-pong RTs (`ARGBHalf` where supported, else `ARGB32`) and the fill / accumulate / gradient materials — kept separate from the service's logic, mirroring `DisturbanceFieldResources`. Owns the `_SceneLightTex` global push, `BlitAndSwap`, the `Fill(magnitude, direction)` and `Gradient()` passes, and exposes `AccumulateMaterial` for the service to upload the light arrays onto |
 | `ISceneLightFieldSettings` / `SceneLightFieldSettings` | Read-only config interface + `ScriptableObject` (in `Configuration/Effects`, mirroring `IDisturbanceFieldSettings`) exposing the field's tuning knobs: `TexelsPerUnit` (RT density), `MaxLights` (per-batch cap, ≤ the accumulate shader's 32), `AccumulationCeiling` (overlap soft-clamp), `DirectionResponse` (how strongly a light's local brightness bends the field direction toward it). Light *falloff shape* is per-light (`Light.FalloffPower`), not here. Injected into the service; registered directly in `GameLifetimeScope` like the other settings SOs — so **create the asset** via `Create ▸ Configuration ▸ Scene Light Field Settings` and assign it on the `GameLifetimeScope` (an unassigned slot NREs on start, same as its siblings). |
 | `Light` | A small reactive model a caller owns: `Position` / `EndPosition` / `Radius` (perpendicular half-width) / `Intensity` / `FalloffPower` / `PaletteIndex` as `ReactiveProperty`s, with `const` defaults. `EndPosition == Position` is a point/disc light; set them apart (or use `Light.Segment(start, end, …)`) for a **capsule/area** light — a beam decaying from its axis to the sides (the laser cross is two of these). On/off is `RegisterLight`/dispose; brightness is `Intensity`; no built-in decay. **Not** a config ScriptableObject. (Name collides with `UnityEngine.Light` — alias when both are in scope.) |

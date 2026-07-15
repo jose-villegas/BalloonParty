@@ -3,7 +3,7 @@
 
 // Shared scene-light access (see @ref plan_lighting). Two layers behind one API:
 //
-//   * the FLAT globals SceneLightService pushes — SceneLightDirection() / SceneLightTint() /
+//   * the FLAT globals SceneLightFieldService pushes — SceneLightDirection() / SceneLightTint() /
 //     ShadowLightFade(), copied here verbatim so a per-shader helper block becomes a mechanical
 //     "delete the local copy, #include this" at migration (Phase B);
 //   * the field-aware *At(worldPos) helpers that sample the SceneLightFieldService RT, each falling
@@ -13,12 +13,12 @@
 // Uniforms are declared here, NOT in any Properties block — a per-material value would mask the
 // global. A shader migrating onto this include deletes its own local declarations of these.
 
-// Global shader property — set by SceneLightService, not in Properties so
+// Global shader property — set by SceneLightFieldService, not in Properties so
 // material values can't mask it. Points TOWARD the light, normalized;
 // canonical (-0.707, 0.707) = upper-left.
 float4 _SceneLightDir;
 
-// Set globally by SceneLightService; kept out of Properties so no
+// Set globally by SceneLightFieldService; kept out of Properties so no
 // material value can shadow the scene-wide light. Colour's alpha is the
 // "owner has pushed" validity flag (see SceneLightTint).
 float4 _SceneLightColor;
@@ -38,7 +38,7 @@ float     _SceneLightFieldOn;
 // into A. A tagged light tints its region this colour instead of the global key light.
 float4 _SceneLightPalette[16];
 
-// Guarded read of the scene light (see SceneLightService): normalized, toward
+// Guarded read of the scene light (see SceneLightFieldService): normalized, toward
 // the light; falls back to the canonical direction if the global hasn't been
 // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
 float2 SceneLightDirection()
