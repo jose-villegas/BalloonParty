@@ -102,6 +102,11 @@ namespace BalloonParty.Balloon.Type
         // reads as a rising swarm around the tough while it breathes.
         private void EmitAlternatingPulse()
         {
+            if (this == null)
+            {
+                return;
+            }
+
             var profile = _disturbanceField.GetProfile(StampSource.ToughWarning);
             var strength = Mathf.Abs(profile.Strength) * (_repelPulse ? 1f : -1f);
             _repelPulse = !_repelPulse;
