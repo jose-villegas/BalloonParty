@@ -14,7 +14,7 @@ namespace BalloonParty.Editor
         private const float RowHeight = 20f;
         private const float RangeColWidth = 80f;
         private const float RangedIntColWidth = 80f;
-        private const float MaskColWidth = 100f;
+        private const float MaskColWidth = 120f;
         private const float WeightsColWidth = 140f;
         private const float HeaderHeight = 22f;
         private const float SeparatorWidth = 1f;
@@ -23,6 +23,7 @@ namespace BalloonParty.Editor
         private readonly ConfigAssetCache<GamePalette> _paletteCache = new();
 
         private string[] _paletteNames;
+        private Color[] _paletteColors;
 
         private LevelPacingConfiguration _asset;
         private SerializedObject _serialized;
@@ -40,9 +41,16 @@ namespace BalloonParty.Editor
         {
             TryLoadAsset();
             var palette = _paletteCache.Value;
-            _paletteNames = palette != null
-                ? palette.Colors.Select(c => c.Name).ToArray()
-                : new[] { "0", "1", "2", "3", "4", "5", "6", "7" };
+            if (palette != null)
+            {
+                _paletteNames = palette.Colors.Select(c => c.Name).ToArray();
+                _paletteColors = palette.Colors.Select(c => c.Color).ToArray();
+            }
+            else
+            {
+                _paletteNames = new[] { "0", "1", "2", "3", "4", "5", "6", "7" };
+                _paletteColors = System.Array.Empty<Color>();
+            }
         }
 
         private void OnGUI()
@@ -107,6 +115,12 @@ namespace BalloonParty.Editor
             for (var i = 0; i < count; i++)
             {
                 DrawRow(i);
+            }
+
+            EditorGUILayout.Space(4f);
+            if (GUILayout.Button("+ Add Range", GUILayout.Width(120f)))
+            {
+                _rangesProp.InsertArrayElementAtIndex(count);
             }
 
             EditorGUILayout.EndScrollView();
@@ -187,6 +201,17 @@ namespace BalloonParty.Editor
 
             GUILayout.FlexibleSpace();
 
+            if (GUILayout.Button("−", EditorStyles.miniButton, GUILayout.Width(20f)))
+            {
+                _rangesProp.DeleteArrayElementAtIndex(index);
+                if (_expandedRow == index)
+                {
+                    _expandedRow = -1;
+                }
+
+                return;
+            }
+
             if (GUILayout.Button(_expandedRow == index ? "▼" : "►", GUILayout.Width(24f)))
             {
                 _expandedRow = _expandedRow == index ? -1 : index;
@@ -251,13 +276,26 @@ namespace BalloonParty.Editor
 
             EditorGUIUtility.labelWidth = 1f;
             var newMask = EditorGUILayout.MaskField(" ", maskProp.intValue, _paletteNames,
-                GUILayout.Width(MaskColWidth));
+                GUILayout.Width(70f));
             if (newMask != maskProp.intValue)
             {
                 maskProp.intValue = newMask;
             }
 
             EditorGUIUtility.labelWidth = 0f;
+
+            // Draw color swatches for the selected bits
+            var mask = maskProp.intValue;
+            for (var i = 0; i < _paletteColors.Length; i++)
+            {
+                if ((mask & (1 << i)) == 0)
+                {
+                    continue;
+                }
+
+                var rect = GUILayoutUtility.GetRect(8f, 12f, GUILayout.Width(8f));
+                EditorGUI.DrawRect(rect, _paletteColors[i]);
+            }
         }
 
         private static void DrawWeightsCell(SerializedProperty paramsProp, string fieldName, string kind)
