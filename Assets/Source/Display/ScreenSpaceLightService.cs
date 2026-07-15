@@ -21,6 +21,7 @@ namespace BalloonParty.Display
         private static readonly int MipSpreadId = Shader.PropertyToID("_MipSpread");
         private static readonly int ShadowMipSpreadId = Shader.PropertyToID("_ShadowMipSpread");
         private static readonly int SecondaryWeightId = Shader.PropertyToID("_SecondaryWeight");
+        private static readonly int BounceJitterId = Shader.PropertyToID("_BounceJitter");
         private static readonly int HistoryTexId = Shader.PropertyToID("_HistoryTex");
         private static readonly int TemporalBlendId = Shader.PropertyToID("_TemporalBlend");
         private static readonly int LightTexId = Shader.PropertyToID("_LightTex");
@@ -30,13 +31,13 @@ namespace BalloonParty.Display
         private static readonly int MagnitudeRefId = Shader.PropertyToID("_MagnitudeRef");
         private static readonly int AmbientColorId = Shader.PropertyToID("_AmbientColor");
 
-        [Inject] private IScreenSpaceLightSettings _settings;
-        [Inject] private ISceneLightSettings _lightSettings;
-
         [Tooltip("Overlay sorting — above all gameplay, below UI.")]
         [SortingLayerName]
         [SerializeField] private string _sortingLayerName = "Sky";
         [SerializeField] private int _sortingOrder = 32000;
+
+        [Inject] private IScreenSpaceLightSettings _settings;
+        [Inject] private ISceneLightSettings _lightSettings;
 
         private static int _overlayLayer = -1;
 
@@ -247,6 +248,11 @@ namespace BalloonParty.Display
             _smearMaterial.SetFloat(MipSpreadId, _settings.MipSpread);
             _smearMaterial.SetFloat(ShadowMipSpreadId, _settings.ShadowMipSpread);
             _smearMaterial.SetFloat(SecondaryWeightId, _settings.SecondaryBounceWeight);
+
+            // Temporal jitter: rotate the 4-direction fan by (frame % 4) × 22.5° so the
+            // temporal EMA integrates 16 unique angles over 4 frames.
+            const float jitterStep = 22.5f * Mathf.Deg2Rad;
+            _smearMaterial.SetFloat(BounceJitterId, (Time.frameCount % 4) * jitterStep);
 
             _overlayMaterial.SetColor(ShadowTintId, _settings.ShadowTint);
             _overlayMaterial.SetFloat(ShadowStrengthId, _settings.ShadowStrength);
