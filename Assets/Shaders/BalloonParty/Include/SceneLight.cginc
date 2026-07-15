@@ -164,9 +164,19 @@ float SceneLightPaletteIndex(float a)
 
 // The palette index of the LOCAL light tagging this position (0..15), or -1 if untagged / field off.
 // Lets a consumer opt a specific stamp colour out of its lighting (e.g. a cloud that ignores a beam).
+// A is POINT-sampled (snapped to the nearest texel centre) — bilinear A blends toward neighbours and
+// decodes to a foreign slot, which on a thin stamp (a laser beam) is every fragment, so a bilinear read
+// would never match the tag. Mirrors the texel snap SceneLightPaletteColorAt uses.
 float SceneLightPaletteIndexAt(float2 worldPos)
 {
-    return _SceneLightFieldOn < 0.5 ? -1.0 : SceneLightPaletteIndex(SceneLightFieldSample(worldPos).a);
+    if (_SceneLightFieldOn < 0.5)
+    {
+        return -1.0;
+    }
+
+    float2 texel = _SceneLightTexelSize.xy;
+    float2 snapped = (floor(SceneLightFieldUV(worldPos) / texel) + 0.5) * texel;
+    return SceneLightPaletteIndex(tex2D(_SceneLightTex, snapped).a);
 }
 
 // One texel's A → its palette colour, or the key light where untagged. The colour reconstruction
