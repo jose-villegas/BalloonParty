@@ -4,29 +4,20 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
     // arch_screen_space_light doc). Input is the SceneCaptureService capture (with mipmaps),
     // whose alpha channel is sprite coverage (the capture camera clears with alpha 0).
     //
-    // Pass 0 — cone march (HSSVGI/HBIL pattern), two opposite marches per pixel (8 taps
-    // each, with exponential decay). Each tap samples at an increasing mip level
-    // (mip = _MipSpread × log₂(1 + t)) so far taps capture averaged scene color over a
-    // widening solid angle — the cone approximates the integral of incoming radiance at
-    // each distance. Near taps stay at mip 0 for sharp contact detail. _MipSpread = 0
-    // collapses to the old flat march (all mip 0). The march direction is PER-FRAGMENT:
-    // each pixel maps its capture UV to world through the field bounds and reads the local
-    // toward-light direction from the light field (SceneLight.cginc), so a point/area light
-    // bends the bleed and shadows around it. Field-off the field returns the flat global
-    // direction everywhere and this reduces to the old single-direction smear.
-    //   rgb (reflection/bleed) marches DOWN-light — the composited scene color
-    //     down-light of this pixel (sky included, not premultiplied by coverage); the
-    //     overlay subtracts the ambient sky so only bright/dark deviations bleed.
-    //   a (shadow) marches TOWARD the light — an occluder sitting between this pixel
-    //     and the source darkens it, so the shadow shows up on the far side.
-    // The two must march opposite ways: a shadow is cast onto the side of an object
-    // away from the light, while its glow bleeds onto the side facing the light —
-    // marching both the same way stacks them on top of each other instead.
+    // Pass 0 — multi-direction cone march (RSM-style VPL gather in 2D). Shadow and bounce
+    // are decoupled:
+    //   SHADOW — single direction toward the light (8 taps, _ShadowMipSpread penumbra).
+    //     Directional by definition: an occluder blocks light between source and receiver.
+    //   BOUNCE — 4 directions at 90° spacing around the field's local toward-light vector
+    //     (8 taps each, _MipSpread cone widening). Each direction gathers indirect color
+    //     from lit surfaces at that angle — omnidirectional color bleed. The primary
+    //     direction (down-light) has weight 1; the three secondary directions are scaled
+    //     by _SecondaryWeight (0 = single-direction, 1 = equal). _SecondaryWeight = 0
+    //     collapses to the old single-direction march, bit-identical to the pre-RSM shader.
+    //   The march direction is PER-FRAGMENT from the light field (SceneLight.cginc), so
+    //   local lights bend all four directions around them.
     // Pass 1 — 3x3 box soften to remove smear streaks.
-    // Pass 2 — temporal blend against the previous smoothed buffer: at capture
-    // resolution a moving sprite jumps whole texels per frame and the bounce tint
-    // visibly flickers; folding each fresh build in gradually integrates that away
-    // (the light is low-frequency, so the lag is invisible).
+    // Pass 2 — temporal blend against the previous smoothed buffer.
     Properties
     {
         _MainTex ("Source", 2D) = "black" {}
@@ -57,68 +48,75 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
             float  _TapStart;
             float  _MipSpread;
             float  _ShadowMipSpread;
+            float  _SecondaryWeight;
+
+            // Rotate a 2D vector by (cos, sin) pair.
+            float2 rot(float2 v, float2 cs) { return float2(v.x*cs.x - v.y*cs.y, v.x*cs.y + v.y*cs.x); }
 
             fixed4 frag(v2f_img IN) : SV_Target
             {
-                float3 bounceAcc = 0;
-                float  shadowAcc = 0;
-                float  weightSum = 0;
-
                 // Coverage at this pixel — casters have ~1, open ground/sky ~0.
                 float ownCoverage = tex2Dlod(_MainTex, float4(IN.uv, 0, 0)).a;
 
-                // Per-fragment march direction from the light field: map this pixel's capture
-                // UV to world through the field bounds, read the toward-light direction there,
-                // and march DOWN-light (negated). The unit direction becomes a UV step via the
-                // service-pushed world→UV scale, with the aspect correcting X for a non-square
-                // view. Field-off, the helper returns the flat global direction everywhere and
-                // the scale/aspect are uniform, so stepUv collapses to the single global step
-                // the service used to push — bit-identical to the old fixed march.
+                // Per-fragment march direction from the light field.
                 float2 worldPos = _SceneLightFieldBoundsMin.xy + IN.uv * _SceneLightFieldBoundsSize.xy;
                 float2 downLight = -SceneLightDirectionAt(worldPos);
-                float2 stepUv = float2(downLight.x / _TapAspect, downLight.y) * _TapStepScale;
+                float2 stepBase = float2(downLight.x / _TapAspect, downLight.y) * _TapStepScale;
 
-                // Mip count for clamping (from texel size: width = 1/_MainTex_TexelSize.z).
+                // Mip count for clamping.
                 float maxMip = log2(max(_MainTex_TexelSize.z, _MainTex_TexelSize.w));
 
+                // --- Shadow: single direction (toward the light) ---
+                float shadowAcc = 0;
+                float shadowWeightSum = 0;
+
                 [unroll]
-                for (int t = 0; t < TAP_COUNT; t++)
+                for (int s = 0; s < TAP_COUNT; s++)
                 {
-                    // _TapStart offsets both marches away from the pixel so an object
-                    // doesn't fully shadow/glow itself.
-                    float offset = _TapStart + t;
-                    float w = pow(_TapDecay, t);
-                    weightSum += w;
-
-                    // Cone march: sample at increasing mip levels so distant taps capture
-                    // averaged scene color over a widening solid angle — the cone approximates
-                    // the integral of incoming radiance at each radius (HSSVGI/HBIL pattern).
-                    // _MipSpread = 0 collapses to the old flat march (all mip 0).
-                    float mip = min(_MipSpread * log2(1.0 + (float)t), maxMip);
-
-                    // Shadow uses a steeper mip ramp for distance-dependent penumbra: near
-                    // taps stay sharp (contact shadow), far taps read increasingly averaged
-                    // coverage (soft penumbra far from the caster).
-                    float shadowMip = min(_ShadowMipSpread * log2(1.0 + (float)t), maxMip);
-
-                    // Bounce = the composited scene color down-light, now cone-widened so far
-                    // taps average over a broader region (captures cluster-scale bleed without
-                    // needing more taps). Shadow still samples at full resolution for sharp
-                    // contact, transitioning to wider mip for softer penumbra at distance.
-                    float4 lit = tex2Dlod(_MainTex, float4(IN.uv + stepUv * offset, 0, mip));
-                    bounceAcc += lit.rgb * w;
-
-                    float4 occluder = tex2Dlod(_MainTex, float4(IN.uv - stepUv * offset, 0, shadowMip));
+                    float offset = _TapStart + s;
+                    float w = pow(_TapDecay, s);
+                    float shadowMip = min(_ShadowMipSpread * log2(1.0 + (float)s), maxMip);
+                    float4 occluder = tex2Dlod(_MainTex, float4(IN.uv - stepBase * offset, 0, shadowMip));
                     shadowAcc += occluder.a * w;
+                    shadowWeightSum += w;
                 }
 
-                // Cast the shadow only onto NON-occluder pixels: a caster sampling its own
-                // coverage would otherwise just darken itself into a centered blob rather
-                // than throwing a shadow onto the ground beside it. (1 - ownCoverage)
-                // masks the casters out, leaving the offset silhouette on open ground.
-                float shadow = (shadowAcc / weightSum) * (1.0 - ownCoverage);
+                float shadow = (shadowAcc / shadowWeightSum) * (1.0 - ownCoverage);
 
-                return float4(bounceAcc / weightSum, shadow);
+                // --- Bounce: 4 directions (primary + 3 secondary at 90° spacing) ---
+                // The primary direction is down-light (existing behavior); the three
+                // secondary directions fan out at +90°, 180°, -90° around it, catching
+                // indirect light from all quadrants (RSM-style VPL gather in 2D).
+                float2 dirs[4] = {
+                    stepBase,                              // 0°   (primary, down-light)
+                    float2(-stepBase.y, stepBase.x),       // +90°
+                    -stepBase,                             // 180° (up-light)
+                    float2(stepBase.y, -stepBase.x)        // -90°
+                };
+                float dirWeights[4] = { 1.0, _SecondaryWeight, _SecondaryWeight, _SecondaryWeight };
+
+                float3 bounceAcc = 0;
+                float  bounceWeightSum = 0;
+
+                [unroll]
+                for (int d = 0; d < 4; d++)
+                {
+                    float dw = dirWeights[d];
+                    if (dw < 0.001) continue;
+
+                    [unroll]
+                    for (int t = 0; t < TAP_COUNT; t++)
+                    {
+                        float offset = _TapStart + t;
+                        float w = pow(_TapDecay, t) * dw;
+                        float mip = min(_MipSpread * log2(1.0 + (float)t), maxMip);
+                        float4 lit = tex2Dlod(_MainTex, float4(IN.uv + dirs[d] * offset, 0, mip));
+                        bounceAcc += lit.rgb * w;
+                        bounceWeightSum += w;
+                    }
+                }
+
+                return float4(bounceAcc / bounceWeightSum, shadow);
             }
             ENDCG
         }

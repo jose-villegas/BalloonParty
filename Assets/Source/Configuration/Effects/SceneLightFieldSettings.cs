@@ -80,6 +80,12 @@ namespace BalloonParty.Configuration.Effects
         [Range(0f, 2f)]
         [SerializeField] private float _bounceStrength = 0.25f;
 
+        [Tooltip("Weight of the three secondary bounce directions (±90° and 180° from " +
+                 "the primary light direction). 0 = single-direction march (cheapest), " +
+                 "1 = all four directions contribute equally (omnidirectional bounce).")]
+        [Range(0f, 1f)]
+        [SerializeField] private float _secondaryBounceWeight = 0.5f;
+
         [Header("GI — Temporal")]
         [Tooltip("Off skips the history blit and its two buffers entirely — the light " +
                  "responds instantly, but moving sprites may flicker at capture resolution.")]
@@ -117,6 +123,7 @@ namespace BalloonParty.Configuration.Effects
         public float ShadowStrength => _shadowStrength;
         public Color ShadowTint => _shadowTint;
         public float BounceStrength => _bounceStrength;
+        public float SecondaryBounceWeight => _secondaryBounceWeight;
         public bool TemporalSmoothing => _temporalSmoothing;
         public float TemporalResponse => _temporalResponse;
 
