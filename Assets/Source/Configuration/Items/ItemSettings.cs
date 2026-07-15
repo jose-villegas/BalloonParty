@@ -84,8 +84,6 @@ namespace BalloonParty.Configuration.Items
         [SerializeField] [Min(0f)] private float _beamLightFalloff = 1.5f;
         [SerializeField] [Min(0f)] private float _beamLightFallbackSeconds = 0.4f;
 
-        [Header("Telegraph (idle spinning preview)")]
-        [Tooltip("Cast a spinning cross of light while the laser sits idle on a balloon.")]
         [SerializeField] private bool _telegraphEnabled;
         [SerializeField] [Min(0f)] private float _telegraphHalfLength = 2f;
         [SerializeField] [Min(0f)] private float _telegraphHalfWidth = 0.5f;
