@@ -19,28 +19,30 @@ namespace BalloonParty.Editor
         private const float SeparatorWidth = 1f;
         private const float SwatchSize = 10f;
         private const float CurveFieldWidth = 80f;
-        private const int BalloonColIndex = 6;
-        private const int ItemColIndex = 7;
+        private const int BalloonColIndex = 5;
+        private const int ItemColIndex = 6;
         private const float BalloonExpandedWidth = 310f;
         private const float ItemExpandedWidth = 170f;
 
         private static readonly float[] ColWidths =
         {
-            90f,   // Range
-            40f,   // Spawn (single int)
-            40f,   // Board (single int)
-            130f,  // Cadence (min/max + mode)
-            40f,   // 1st Turn (single int)
-            130f,  // Colors (dropdown + swatches)
-            100f,  // Balloons (collapsed) — dynamic when expanded
-            100f,  // Items
-            24f,   // ►
-            20f,   // −
+            90f,   // 0: Range
+            40f,   // 1: Spawn (single int)
+            40f,   // 2: Board (single int)
+            40f,   // 3: 1st Turn (single int)
+            130f,  // 4: Colors (dropdown + swatches)
+            100f,  // 5: Balloons (collapsed) — dynamic when expanded
+            100f,  // 6: Items — dynamic when expanded
+            130f,  // 7: Cadence (min/max + mode)
+            80f,   // 8: Initial Count curve
+            80f,   // 9: Wave Count curve
+            24f,   // 10: ►
+            20f,   // 11: −
         };
 
         private static readonly string[] ColHeaders =
         {
-            "Range", "Spawn", "Board", "Cadence", "1st Turn", "Colors", "Balloons", "Items", "", ""
+            "Range", "Spawn", "Board", "1st Turn", "Colors", "Balloons", "Items", "Cadence", "Init Count", "Wave Count", "", ""
         };
 
         private readonly ConfigAssetCache<LevelPacingConfiguration> _assetCache = new();
@@ -395,9 +397,8 @@ namespace BalloonParty.Editor
             {
                 DrawIntCell(CellRect(rowRect, 1), paramsProp, "_spawnLines");
                 DrawIntCell(CellRect(rowRect, 2), paramsProp, "_boardLines");
-                DrawRangedIntCell(CellRect(rowRect, 3), paramsProp, "_itemCadence");
-                DrawIntCell(CellRect(rowRect, 4), paramsProp, "_firstSpawnTurn");
-                DrawMaskCell(CellRect(rowRect, 5), paramsProp);
+                DrawIntCell(CellRect(rowRect, 3), paramsProp, "_firstSpawnTurn");
+                DrawMaskCell(CellRect(rowRect, 4), paramsProp);
 
                 if (_balloonsExpanded)
                 {
@@ -417,17 +418,21 @@ namespace BalloonParty.Editor
                 {
                     DrawItemCellCollapsed(CellRect(rowRect, ItemColIndex), itemsProp);
                 }
+
+                DrawRangedIntCell(CellRect(rowRect, 7), paramsProp, "_itemCadence");
+                DrawCurveCell(CellRect(rowRect, 8), paramsProp, "_initialItemCountWeights");
+                DrawCurveCell(CellRect(rowRect, 9), paramsProp, "_itemCountWeights");
             }
 
-            // ► button (col 8)
-            var expandRect = CellRect(rowRect, 8);
+            // ► button (col 10)
+            var expandRect = CellRect(rowRect, 10);
             if (GUI.Button(expandRect, _expandedRow == index ? "▼" : "►"))
             {
                 _expandedRow = _expandedRow == index ? -1 : index;
             }
 
-            // − button (col 9 — rightmost)
-            var delRect = CellRect(rowRect, 9);
+            // − button (col 11 — rightmost)
+            var delRect = CellRect(rowRect, 11);
             if (GUI.Button(delRect, "−"))
             {
                 _rangesProp.DeleteArrayElementAtIndex(index);
@@ -501,6 +506,18 @@ namespace BalloonParty.Editor
             EditorGUI.LabelField(slashRect, "/");
             maxProp.intValue = EditorGUI.IntField(maxRect, maxProp.intValue);
             modeProp.enumValueIndex = (int)(RangeMode)EditorGUI.EnumPopup(modeRect, (RangeMode)modeProp.enumValueIndex);
+        }
+
+        private static void DrawCurveCell(Rect cell, SerializedProperty paramsProp, string fieldName)
+        {
+            var prop = paramsProp.FindPropertyRelative(fieldName);
+            if (prop == null)
+            {
+                return;
+            }
+
+            var fieldRect = new Rect(cell.x + 2f, cell.y + 2f, cell.width - 4f, cell.height - 4f);
+            EditorGUI.PropertyField(fieldRect, prop, GUIContent.none);
         }
 
         private void DrawMaskCell(Rect cell, SerializedProperty paramsProp)
