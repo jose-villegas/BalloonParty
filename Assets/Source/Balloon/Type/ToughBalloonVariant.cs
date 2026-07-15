@@ -29,6 +29,7 @@ namespace BalloonParty.Balloon.Type
         [Inject] private IPublisher<SpeckSpawnRequestMessage> _speckPublisher;
 
         private MaterialPropertyBlock _block;
+        private CompositeDisposable _bindDisposables;
         private Tween _damageTween;
         private float _currentDamageProgress;
         private bool _repelPulse;
@@ -38,8 +39,15 @@ namespace BalloonParty.Balloon.Type
             _block = new MaterialPropertyBlock();
         }
 
+        private void OnDestroy()
+        {
+            _bindDisposables?.Dispose();
+        }
+
         public void Bind(IBalloonModel model, CompositeDisposable disposables)
         {
+            _bindDisposables = disposables;
+
             if (_renderer == null)
             {
                 Debug.LogError(
