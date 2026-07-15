@@ -122,7 +122,7 @@ namespace BalloonParty.Item
             // telegraph can register (it's the capture we already resolved above).
             if (_lightField != null && _activeCapture is LaserItemRotation laser)
             {
-                laser.ConfigureLightField(_lightField, _palette);
+                laser.ConfigureLightField(_lightField, _palette, settings.Laser);
             }
 
             ApplySorting(_slotIndex.Value);

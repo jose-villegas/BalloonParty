@@ -84,6 +84,13 @@ namespace BalloonParty.Configuration.Items
         [SerializeField] [Min(0f)] private float _beamLightFalloff = 1.5f;
         [SerializeField] [Min(0f)] private float _beamLightFallbackSeconds = 0.4f;
 
+        [Header("Telegraph (idle spinning preview)")]
+        [Tooltip("Cast a spinning cross of light while the laser sits idle on a balloon.")]
+        [SerializeField] private bool _telegraphEnabled;
+        [SerializeField] [Min(0f)] private float _telegraphHalfLength = 2f;
+        [SerializeField] [Min(0f)] private float _telegraphHalfWidth = 0.5f;
+        [SerializeField] [Min(0f)] private float _telegraphIntensity = 1.5f;
+
         public float RaycastDistance => _laserRaycastDistance;
         public float CircleCastRadius => _laserCircleCastRadius;
         public float ColorCycles => _laserColorCycles;
@@ -99,6 +106,18 @@ namespace BalloonParty.Configuration.Items
 
         /// <summary>Beam-light lifetime when the beam effect reports no duration.</summary>
         public float BeamLightFallbackSeconds => _beamLightFallbackSeconds;
+
+        /// <summary>Whether the idle telegraph cross-light is active.</summary>
+        public bool TelegraphEnabled => _telegraphEnabled;
+
+        /// <summary>Half-length of each arm of the telegraph cross.</summary>
+        public float TelegraphHalfLength => _telegraphHalfLength;
+
+        /// <summary>Perpendicular half-width of each telegraph arm segment.</summary>
+        public float TelegraphHalfWidth => _telegraphHalfWidth;
+
+        /// <summary>Intensity of the telegraph light.</summary>
+        public float TelegraphIntensity => _telegraphIntensity;
     }
 
     [Serializable]
