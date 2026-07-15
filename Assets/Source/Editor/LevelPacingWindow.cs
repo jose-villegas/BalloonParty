@@ -279,7 +279,7 @@ namespace BalloonParty.Editor
             TableDrawHelper.DrawHorizontalSeparator(headerRect, hSepColor);
 
             // Rows
-            for (var i = 0; i < count; i++)
+            for (var i = 0; i < _rangesProp.arraySize; i++)
             {
                 DrawRow(i);
             }
@@ -287,7 +287,7 @@ namespace BalloonParty.Editor
             EditorGUILayout.Space(4f);
             if (GUILayout.Button("+ Add Range", GUILayout.Width(120f)))
             {
-                _rangesProp.InsertArrayElementAtIndex(count);
+                _rangesProp.InsertArrayElementAtIndex(_rangesProp.arraySize);
             }
 
             EditorGUILayout.EndScrollView();
