@@ -48,13 +48,17 @@ namespace BalloonParty.Tests.Slots
         }
 
         [Test]
-        public void OptimalBalanceMove_NegativeClumpBias_PullsTowardSameType()
+        public void OptimalBalanceMove_WallBias_PrefersLineExtension()
         {
-            _grid.Place(new BalloonModel(new BalloonModelConfig(separationBias: -1f)), null, new Vector2Int(1, 2));
-            PlaceBalloon(2, 2);
+            // Tough balloons at (0,2) and (2,2) form a horizontal line; a third tough at (1,2) should
+            // prefer the candidate that continues or stays near that line.
+            var tough = new ToughBalloonModel(new BalloonModelConfig(hitsToPop: 2, balanceBias: 5f));
+            _grid.Place(tough, null, new Vector2Int(1, 2));
+            _grid.Place(new ToughBalloonModel(new BalloonModelConfig(hitsToPop: 2)), null, new Vector2Int(0, 1));
 
-            // Both candidates score negative (clump bias), so the start-at-int.MinValue rule matters:
-            // straight-up (1,1) is nearer the same-type buddy and wins over shifted (0,1).
+            // (1,1) is collinear with (0,1) on the horizontal axis; shifted (0,1) is occupied.
+            // The wall-bias on (1,1) scores 1 (one same-type along horizontal) vs the remaining
+            // candidate which scores 0, so (1,1) wins.
             Assert.AreEqual(new Vector2Int(1, 1), _evaluator.OptimalBalanceMove(1, 2));
         }
 

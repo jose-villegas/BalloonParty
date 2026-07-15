@@ -42,6 +42,64 @@ namespace BalloonParty.Shared.Extensions
             return count;
         }
 
+        // The three hex axes expressed as doubled-coordinate steps: horizontal (±2,0), diagonal-right
+        // (±1,±1 same sign), diagonal-left (±1,∓1 opposite sign).
+        private static readonly (int dDoubled, int dRow)[] AxisSteps = { (2, 0), (1, 1), (1, -1) };
+
+        /// <summary>
+        ///     Counts same-type balloons along the best-aligned hex axis through <paramref name="candidate" />.
+        ///     For each of the three hex axes, walks both directions and counts consecutive same-type
+        ///     occupants. Returns the max across axes — rewarding candidates that extend an existing line
+        ///     (wall) rather than forming a lump.
+        /// </summary>
+        internal static int BestLineCountSameType(this IBalloonModel self, SlotGrid grid, Vector2Int candidate)
+        {
+            var doubled = candidate.x * 2 + (candidate.y & 1);
+            var best = 0;
+
+            foreach (var (dDoubled, dRow) in AxisSteps)
+            {
+                var count = WalkAxis(self, grid, candidate.y, doubled, dDoubled, dRow)
+                          + WalkAxis(self, grid, candidate.y, doubled, -dDoubled, -dRow);
+                if (count > best)
+                {
+                    best = count;
+                }
+            }
+
+            return best;
+        }
+
+        private static int WalkAxis(IBalloonModel self, SlotGrid grid, int row, int doubled, int dDoubled, int dRow)
+        {
+            var count = 0;
+            var r = row + dRow;
+            var d = doubled + dDoubled;
+
+            // Walk up to 6 cells — enough for any practical board width/height.
+            for (var i = 0; i < 6; i++, r += dRow, d += dDoubled)
+            {
+                var col = (d - (r & 1)) / 2;
+                var pos = new Vector2Int(col, r);
+                if (!grid.InBounds(pos))
+                {
+                    break;
+                }
+
+                if (grid.At(pos) is IBalloonModel other && !ReferenceEquals(other, self)
+                    && other.TypeName == self.TypeName)
+                {
+                    count++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return count;
+        }
+
         /// <summary>Squared world distance from <paramref name="candidate" /> to the nearest balloon of <paramref name="self" />'s type (excluding itself); <see cref="float.MaxValue" /> if none.</summary>
         internal static float NearestSameTypeSqrDistance(this IBalloonModel self, SlotGrid grid, Vector2Int candidate)
         {

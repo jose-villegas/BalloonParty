@@ -27,11 +27,8 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Relative chance this balloon is chosen to host an item when items are granted. 0 = never.")]
         [SerializeField] private float _itemActivationWeight = 1f;
 
-        [Tooltip("Same-type proximity tendency (squared world distance × this): positive keeps apart (tough), negative clumps together (soap). 0 = off.")]
-        [SerializeField] private float _separationBias;
-
-        [Tooltip("Balance-weight bias toward candidates whose diagonal hex neighbours share this balloon's color (per matching neighbour × this) — encourages diagonal same-color lines. Currently honoured by simple colored balloons. 0 = off.")]
-        [SerializeField] private float _diagonalColorBias;
+        [Tooltip("Per-type balance-weight bias strength. Each balloon type interprets this differently: colored balloons bias toward diagonal same-color neighbours, tough balloons bias toward straight-line (wall) formations. 0 = off.")]
+        [SerializeField] private float _balanceBias;
 
         [Tooltip("Max slots this balloon rises per balance window (the turn's spawn cluster, or each in-flight pulse) — lower reads heavier/slower. 0 = unlimited.")]
         [SerializeField] private int _maxBalanceSteps;
@@ -57,8 +54,7 @@ namespace BalloonParty.Configuration.Balloons
         public int HitsToPop => _hitsToPop;
         public int ScoreValue => _scoreValue;
         public float ItemActivationWeight => _itemActivationWeight;
-        public float SeparationBias => _separationBias;
-        public float DiagonalColorBias => _diagonalColorBias;
+        public float BalanceBias => _balanceBias;
         public int MaxBalanceSteps => _maxBalanceSteps;
         public int BalancePriority => _balancePriority;
         public bool DirectBalanceMotion => _directBalanceMotion;

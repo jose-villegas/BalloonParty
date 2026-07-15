@@ -15,7 +15,7 @@ namespace BalloonParty.Balloon.Model
         IHasDurability, IHasScore, IHasScoreColor
     {
         private readonly ColorSource _colorSource;
-        private readonly float _diagonalColorBias;
+        private readonly float _balanceBias;
 
         public ReactiveProperty<string> Color { get; } = new();
         public ReactiveProperty<ItemType> Item { get; } = new(ItemType.None);
@@ -34,23 +34,22 @@ namespace BalloonParty.Balloon.Model
             : base(config)
         {
             _colorSource = new ColorSource(palette, allowedColors);
-            _diagonalColorBias = config.DiagonalColorBias;
+            _balanceBias = config.BalanceBias;
             ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
             ItemActivationWeight = config.ItemActivationWeight;
         }
 
         // Prefer candidates with this color nearby off-row (hex radius 2, own row excluded) — over many
-        // rebalances same-color balloons drift into diagonal lines. Composes with the base proximity bias.
+        // rebalances same-color balloons drift into diagonal lines.
         public override int WeightBias(SlotGrid grid, Vector2Int candidate)
         {
-            var bias = base.WeightBias(grid, candidate);
-            if (_diagonalColorBias <= 0f)
+            if (_balanceBias <= 0f)
             {
-                return bias;
+                return 0;
             }
 
-            return bias + Mathf.RoundToInt(_diagonalColorBias * this.CountSameColorDiagonals(grid, candidate));
+            return Mathf.RoundToInt(_balanceBias * this.CountSameColorDiagonals(grid, candidate));
         }
 
         public void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results)

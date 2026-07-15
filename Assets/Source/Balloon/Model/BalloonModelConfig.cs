@@ -13,8 +13,7 @@ namespace BalloonParty.Balloon.Model
         public readonly int HitsToPop;
         public readonly IReadOnlyList<NudgeOverride> NudgeOverrides;
         public readonly float ItemActivationWeight;
-        public readonly float SeparationBias;
-        public readonly float DiagonalColorBias;
+        public readonly float BalanceBias;
         public readonly int MaxBalanceSteps;
         public readonly int BalancePriority;
         public readonly float DeflectStampScale;
@@ -27,8 +26,7 @@ namespace BalloonParty.Balloon.Model
             int hitsToPop = 1,
             NudgeOverride[] nudgeOverrides = null,
             float itemActivationWeight = 1f,
-            float separationBias = 0f,
-            float diagonalColorBias = 0f,
+            float balanceBias = 0f,
             int maxBalanceSteps = 0,
             int balancePriority = 0,
             float deflectStampScale = 0f,
@@ -39,8 +37,7 @@ namespace BalloonParty.Balloon.Model
             HitsToPop = hitsToPop;
             NudgeOverrides = nudgeOverrides;
             ItemActivationWeight = itemActivationWeight;
-            SeparationBias = separationBias;
-            DiagonalColorBias = diagonalColorBias;
+            BalanceBias = balanceBias;
             MaxBalanceSteps = maxBalanceSteps;
             BalancePriority = balancePriority;
             DeflectStampScale = deflectStampScale;
@@ -54,8 +51,7 @@ namespace BalloonParty.Balloon.Model
             HitsToPop = entry.HitsToPop;
             NudgeOverrides = entry.NudgeOverrides;
             ItemActivationWeight = entry.ItemActivationWeight;
-            SeparationBias = entry.SeparationBias;
-            DiagonalColorBias = entry.DiagonalColorBias;
+            BalanceBias = entry.BalanceBias;
             MaxBalanceSteps = entry.MaxBalanceSteps;
             BalancePriority = entry.BalancePriority;
             DeflectStampScale = entry.DeflectStampScale;

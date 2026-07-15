@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Nudge;
-using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
@@ -13,8 +12,6 @@ namespace BalloonParty.Balloon.Model
     internal abstract class BalloonModelBase : IWriteableBalloonModel, IPressureMovable, IBalanceInfluence,
         IHasDeflectStamp
     {
-        private readonly float _separationBias;
-
         public BalloonType TypeName { get; }
         public int RegistryHandle { get; set; } = -1;
         public int MaxBalanceSteps { get; }
@@ -50,24 +47,16 @@ namespace BalloonParty.Balloon.Model
         {
             TypeName = config.TypeName;
             HitsRemaining = new ReactiveProperty<int>(config.HitsToPop);
-            _separationBias = config.SeparationBias;
             MaxBalanceSteps = config.MaxBalanceSteps;
             BalancePriority = config.BalancePriority;
             DirectBalanceMotion = config.DirectBalanceMotion;
             DeflectStampScale = config.DeflectStampScale;
         }
 
-        // Same-type proximity tendency, signed: positive keeps apart (candidates farther from the nearest
-        // same-type score higher — tough), negative clumps together (soap). Overrides compose on top.
+        // Subclasses override to apply their own bias strategy using config.BalanceBias.
         public virtual int WeightBias(SlotGrid grid, Vector2Int candidate)
         {
-            if (_separationBias == 0f)
-            {
-                return 0;
-            }
-
-            var sqrDistance = this.NearestSameTypeSqrDistance(grid, candidate);
-            return sqrDistance < float.MaxValue ? Mathf.RoundToInt(_separationBias * sqrDistance) : 0;
+            return 0;
         }
 
         public virtual HitOutcome EvaluateHit(DamageContext context)
