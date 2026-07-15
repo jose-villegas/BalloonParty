@@ -219,8 +219,15 @@ namespace BalloonParty.Editor
 
             _scroll = EditorGUILayout.BeginScrollView(_scroll);
 
+            // Group title row
+            var groupTitleRect = GUILayoutUtility.GetRect(TotalWidth(), RowHeight);
+            var gapBg = new Color(0.15f, 0.15f, 0.15f, 1f);
+            EditorGUI.DrawRect(groupTitleRect, gapBg);
+            DrawGroupTitles(groupTitleRect);
+
             // Header
             var headerRect = GUILayoutUtility.GetRect(TotalWidth(), RowHeight);
+            EditorGUI.DrawRect(headerRect, gapBg);
             var headerBg = new Color(0.18f, 0.18f, 0.18f, 1f);
             DrawGroupBackground(headerRect, 0, 3, headerBg);
             DrawGroupBackground(headerRect, 4, 5, headerBg);
@@ -320,6 +327,30 @@ namespace BalloonParty.Editor
             EditorGUI.DrawRect(groupRect, bg);
         }
 
+        private void DrawGroupTitles(Rect rowRect)
+        {
+            var style = new GUIStyle(EditorStyles.boldLabel)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                fontSize = 11
+            };
+
+            // Group 1: Spawning (cols 0–3)
+            var g1Start = rowRect.x + ColX(0);
+            var g1End = rowRect.x + ColX(3) + EffectiveColWidth(3);
+            EditorGUI.LabelField(new Rect(g1Start, rowRect.y, g1End - g1Start, rowRect.height), "Spawning", style);
+
+            // Group 2: Palette (cols 4–5)
+            var g2Start = rowRect.x + ColX(4);
+            var g2End = rowRect.x + ColX(5) + EffectiveColWidth(5);
+            EditorGUI.LabelField(new Rect(g2Start, rowRect.y, g2End - g2Start, rowRect.height), "Palette", style);
+
+            // Group 3: Content (cols 6–9)
+            var g3Start = rowRect.x + ColX(6);
+            var g3End = rowRect.x + ColX(9) + EffectiveColWidth(9);
+            EditorGUI.LabelField(new Rect(g3Start, rowRect.y, g3End - g3Start, rowRect.height), "Content", style);
+        }
+
         private void DrawHeaderCells(Rect rowRect)
         {
             var style = new GUIStyle(EditorStyles.boldLabel)
@@ -408,7 +439,10 @@ namespace BalloonParty.Editor
             var balloonsProp = paramsProp?.FindPropertyRelative("_balloonWeights");
             var rowRect = GUILayoutUtility.GetRect(TotalWidth(), RowHeight);
 
-            // Background — draw per group for floating panel effect
+            // Background — fill full row with gap color, then paint group panels on top
+            var gapColor = new Color(0.15f, 0.15f, 0.15f, 1f);
+            EditorGUI.DrawRect(rowRect, gapColor);
+
             Color rowBg;
             if (isFallback)
             {
