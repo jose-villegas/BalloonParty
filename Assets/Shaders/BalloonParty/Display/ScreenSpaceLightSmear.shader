@@ -49,6 +49,7 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
             float  _MipSpread;
             float  _ShadowMipSpread;
             float  _SecondaryWeight;
+            float  _BounceJitter;
 
             // Rotate a 2D vector by (cos, sin) pair.
             float2 rot(float2 v, float2 cs) { return float2(v.x*cs.x - v.y*cs.y, v.x*cs.y + v.y*cs.x); }
@@ -84,14 +85,17 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                 float shadow = (shadowAcc / shadowWeightSum) * (1.0 - ownCoverage);
 
                 // --- Bounce: 4 directions (primary + 3 secondary at 90° spacing) ---
-                // The primary direction is down-light (existing behavior); the three
-                // secondary directions fan out at +90°, 180°, -90° around it, catching
-                // indirect light from all quadrants (RSM-style VPL gather in 2D).
+                // Temporal jitter rotates the entire fan by _BounceJitter radians each frame
+                // so that the temporal EMA integrates more unique angles over time.
+                float2 jitterCS;
+                sincos(_BounceJitter, jitterCS.y, jitterCS.x);
+                float2 jitteredBase = rot(stepBase, jitterCS);
+
                 float2 dirs[4] = {
-                    stepBase,                              // 0°   (primary, down-light)
-                    float2(-stepBase.y, stepBase.x),       // +90°
-                    -stepBase,                             // 180° (up-light)
-                    float2(stepBase.y, -stepBase.x)        // -90°
+                    jitteredBase,                                    // 0°   (primary, down-light)
+                    float2(-jitteredBase.y, jitteredBase.x),         // +90°
+                    -jitteredBase,                                   // 180° (up-light)
+                    float2(jitteredBase.y, -jitteredBase.x)          // -90°
                 };
                 float dirWeights[4] = { 1.0, _SecondaryWeight, _SecondaryWeight, _SecondaryWeight };
 
