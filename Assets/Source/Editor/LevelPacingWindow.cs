@@ -468,7 +468,7 @@ namespace BalloonParty.Editor
 
             // Prefab thumbnails
             var x = labelRect.xMax;
-            var thumbSize = cell.height - 4f;
+            var thumbSize = 12f;
             var balloonsConfig = _balloonsConfigCache.Value;
 
             for (var i = 0; i < count && x + thumbSize < cell.xMax; i++)
@@ -488,7 +488,7 @@ namespace BalloonParty.Editor
 
                 var balloonType = (BalloonType)typeProp.intValue;
                 var preview = FindBalloonPreview(balloonsConfig, balloonType);
-                var thumbRect = new Rect(x, cell.y + 2f, thumbSize, thumbSize);
+                var thumbRect = new Rect(x, cell.y + (cell.height - thumbSize) / 2f, thumbSize, thumbSize);
 
                 if (preview != null)
                 {
