@@ -57,10 +57,6 @@ Shader "BalloonParty/Grid/PuffCloud"
         // noise — a large/low-frequency warp instead snakes the whole beam into ribbons. A no-op where
         // no local light is near (the field is uniform there), so it never touches the rest look. 0 = off.
         _LightWarpAmount    ("Light Field Warp",   Range(0, 1.5))      = 0.35
-        // Ignore local lights of this palette colour when reading the light field, so that colour of
-        // light leaves the cloud untouched (e.g. the laser telegraph, tagged Unbreakable, shouldn't light
-        // the clouds). [PaletteIndex] shows the named swatch dropdown; "None" stores -1 (ignore nothing).
-        [PaletteIndex] _IgnoreLightPaletteIndex ("Ignore Light Colour", Float) = -1
         _NormalStrength     ("Normal Strength",    Range(0, 3))        = 1.2
         _NormalEpsilon      ("Normal Sample Offset",Range(0.001, 0.05))= 0.012
 
@@ -158,7 +154,6 @@ Shader "BalloonParty/Grid/PuffCloud"
             float  _LightIntensity;
             float  _LightInfluence;
             float  _LightWarpAmount;
-            float  _IgnoreLightPaletteIndex;
             float  _NormalStrength;
             float  _NormalEpsilon;
 
@@ -282,11 +277,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 // tagged with the ignored palette index, fall back to the flat ambient globals — the
                 // cloud lights as if that light weren't there (the laser beam, tagged Unbreakable, is the
                 // motivating case). A no-op when the index is -1 or the texel carries a different light.
-                float ignoredIdx = _IgnoreLightPaletteIndex;
-                bool ignoreLocal = ignoredIdx >= 0.0
-                    && abs(SceneLightPaletteIndexAt(worldPos) - ignoredIdx) < 0.5;
-
-                float2 ld = ignoreLocal ? SceneLightDirection() : SceneLightDirectionAt(worldPos);
+                float2 ld = SceneLightDirectionAt(worldPos);
                 float3 lightVec = normalize(float3(ld, 0.6));
 
                 float NdotL = dot(normal, lightVec);
@@ -300,7 +291,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 fixed3 lit = lerp(_AmbientColor.rgb, _LightColor.rgb, halfLambert);
                 fixed3 shading = lerp(fixed3(1, 1, 1), lit, _LightIntensity);
 
-                float3 sceneTint = ignoreLocal ? SceneLightTint() : SceneLightTintAt(worldPos);
+                float3 sceneTint = SceneLightTintAt(worldPos);
                 return shading * lerp(float3(1.0, 1.0, 1.0), sceneTint, _LightInfluence);
             }
 
@@ -341,19 +332,11 @@ Shader "BalloonParty/Grid/PuffCloud"
                 float borderFade = SlotFalloff(wpLocal);
 
                 #ifdef _SHADOW_ON
-                // A local light of the ignored palette colour is bypassed COMPLETELY: the cloud reads the
-                // flat ambient globals for the drop shadow's direction AND fade too (the diffuse/tint path
-                // in CloudLighting does the same at its own sample), so that colour of light leaves no
-                // trace — not even a shifted or faded shadow.
-                bool ignoreLight = _IgnoreLightPaletteIndex >= 0.0
-                    && abs(SceneLightPaletteIndexAt(wpRest) - _IgnoreLightPaletteIndex) < 0.5;
-
                 // The shadow lands down-light of the cloud: direction derived from the scene
                 // light (-toward-light) sampled at the cloud's OWN position (what casts the
                 // shadow, not where it lands), only the distance stays authored — so rotating
                 // the light moves the drop shadow together with the diffuse shading.
-                float2 shadowLightDir = ignoreLight ? SceneLightDirection() : SceneLightDirectionAt(wpRest);
-                float2 shadowOffset = -shadowLightDir * _ShadowDistance;
+                float2 shadowOffset = -SceneLightDirectionAt(wpRest) * _ShadowDistance;
                 float2 shadowWpWorld = wpRest   - shadowOffset;
                 float2 shadowWpLocal = wpLocal  - shadowOffset;
                 float  shadowFade = SlotFalloff(shadowWpLocal);
@@ -451,7 +434,7 @@ Shader "BalloonParty/Grid/PuffCloud"
 
                     shadowAlpha = shadowCloud * _ShadowColor.a * IN.color.a;
                     shadowAlpha *= smoothstep(0.0, _ShadowSoftness + 0.01, shadowCloud);
-                    shadowAlpha *= ignoreLight ? ShadowLightFade() : ShadowLightFadeAt(wpRest);
+                    shadowAlpha *= ShadowLightFadeAt(wpRest);
                 }
 
                 if (cloud < 0.001 && shadowAlpha < 0.001) discard;
