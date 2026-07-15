@@ -282,9 +282,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 // tagged with the ignored palette index, fall back to the flat ambient globals — the
                 // cloud lights as if that light weren't there (the laser beam, tagged Unbreakable, is the
                 // motivating case). A no-op when the index is -1 or the texel carries a different light.
-                float ignoredIdx = _IgnoreLightPaletteIndex;
-                bool ignoreLocal = ignoredIdx >= 0.0
-                    && abs(SceneLightPaletteIndexAt(worldPos) - ignoredIdx) < 0.5;
+                bool ignoreLocal = SceneLightFootprintHasIndex(worldPos, _IgnoreLightPaletteIndex);
 
                 float2 ld = ignoreLocal ? SceneLightDirection() : SceneLightDirectionAt(worldPos);
                 float3 lightVec = normalize(float3(ld, 0.6));
@@ -345,8 +343,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 // flat ambient globals for the drop shadow's direction AND fade too (the diffuse/tint path
                 // in CloudLighting does the same at its own sample), so that colour of light leaves no
                 // trace — not even a shifted or faded shadow.
-                bool ignoreLight = _IgnoreLightPaletteIndex >= 0.0
-                    && abs(SceneLightPaletteIndexAt(wpRest) - _IgnoreLightPaletteIndex) < 0.5;
+                bool ignoreLight = SceneLightFootprintHasIndex(wpRest, _IgnoreLightPaletteIndex);
 
                 // The shadow lands down-light of the cloud: direction derived from the scene
                 // light (-toward-light) sampled at the cloud's OWN position (what casts the

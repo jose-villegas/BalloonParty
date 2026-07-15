@@ -162,21 +162,27 @@ float SceneLightPaletteIndex(float a)
     return a > 0.001 ? min(floor(a * 16.0 + 0.5) - 1.0, 15.0) : -1.0;
 }
 
-// The palette index of the LOCAL light tagging this position (0..15), or -1 if untagged / field off.
-// Lets a consumer opt a specific stamp colour out of its lighting (e.g. a cloud that ignores a beam).
-// A is POINT-sampled (snapped to the nearest texel centre) — bilinear A blends toward neighbours and
-// decodes to a foreign slot, which on a thin stamp (a laser beam) is every fragment, so a bilinear read
-// would never match the tag. Mirrors the texel snap SceneLightPaletteColorAt uses.
-float SceneLightPaletteIndexAt(float2 worldPos)
+// True when ANY texel in the bilinear 2×2 footprint at worldPos carries `ignoredIndex` (a palette slot;
+// pass < 0 to disable). A consumer that wants a light COLOUR to leave no trace must test the whole
+// footprint, not a single texel: R (brightness) and GB (direction) are bilinear, so they bleed one texel
+// past the A tag — a nearest-texel test leaves a one-texel fringe still lit and direction-bent, which
+// traces the stamp's shape even after its colour is dropped. Testing all four texels the bilinear read
+// actually blends removes exactly that contaminated footprint. False when the field is off.
+bool SceneLightFootprintHasIndex(float2 worldPos, float ignoredIndex)
 {
-    if (_SceneLightFieldOn < 0.5)
+    if (_SceneLightFieldOn < 0.5 || ignoredIndex < 0.0)
     {
-        return -1.0;
+        return false;
     }
 
     float2 texel = _SceneLightTexelSize.xy;
-    float2 snapped = (floor(SceneLightFieldUV(worldPos) / texel) + 0.5) * texel;
-    return SceneLightPaletteIndex(tex2D(_SceneLightTex, snapped).a);
+    float2 uv00 = (floor(SceneLightFieldUV(worldPos) / texel - 0.5) + 0.5) * texel;
+    float4 idx = float4(
+        SceneLightPaletteIndex(tex2D(_SceneLightTex, uv00).a),
+        SceneLightPaletteIndex(tex2D(_SceneLightTex, uv00 + float2(texel.x, 0.0)).a),
+        SceneLightPaletteIndex(tex2D(_SceneLightTex, uv00 + float2(0.0, texel.y)).a),
+        SceneLightPaletteIndex(tex2D(_SceneLightTex, uv00 + texel).a));
+    return any(abs(idx - ignoredIndex) < 0.5);
 }
 
 // One texel's A → its palette colour, or the key light where untagged. The colour reconstruction
