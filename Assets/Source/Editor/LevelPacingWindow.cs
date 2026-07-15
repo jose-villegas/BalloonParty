@@ -504,6 +504,10 @@ namespace BalloonParty.Editor
                 EditorGUI.DrawRect(sep, new Color(0.35f, 0.35f, 0.35f, 0.5f));
             }
 
+            // Horizontal row separator at the bottom
+            var hSep = new Rect(rowRect.x, rowRect.yMax - SeparatorWidth, rowRect.width, SeparatorWidth);
+            EditorGUI.DrawRect(hSep, new Color(0.35f, 0.35f, 0.35f, 0.5f));
+
             // Range (col 0)
             DrawRangeCell(CellRect(rowRect, 0), fromProp, toProp, isFallback);
 
