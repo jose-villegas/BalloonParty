@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
@@ -7,10 +6,7 @@ using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
-using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
-using Cysharp.Threading.Tasks;
-using MessagePipe;
 using UniRx;
 using UnityEngine;
 using VContainer;
@@ -35,7 +31,6 @@ namespace BalloonParty.Balloon.Type
         // Palette is inherited from ColorableBalloonVariant (protected) — a second [Inject] field of
         // the same type here would make VContainer's injector throw "Duplicate injection found".
         [Inject] private IActiveLevelParameters _levelParams;
-        [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         [Inject] private DisturbanceFieldService _disturbanceField;
 
         private readonly List<int> _colorIndices = new();
@@ -43,7 +38,6 @@ namespace BalloonParty.Balloon.Type
         private MaterialPropertyBlock _block;
         private float _timeOffset;
         private int _colorCursor;
-        private int _bindGeneration;
 
         private void Awake()
         {
@@ -66,35 +60,12 @@ namespace BalloonParty.Balloon.Type
 
         public void Bind(IBalloonModel model, CompositeDisposable disposables)
         {
-            _bindGeneration++;
             PushBands();
             RebuildColors();
-
-            // LevelDifficultyResolver also reacts to this message to re-resolve Current, and MessagePipe
-            // doesn't guarantee subscriber order — defer a frame so the new allowed set has landed.
-            _levelUpSubscriber
-                .Subscribe(_ => RepushBandsNextFrame().Forget())
-                .AddTo(disposables);
 
             // One colour-only stamp (no force — R stays at rest) tags nearby specks with the next
             // available colour each pulse; the RainbowColor profile's Interval paces how fast it cycles.
             _disturbanceField.StartPulse(StampSource.RainbowColor, EmitColor).AddTo(disposables);
-        }
-
-        private async UniTaskVoid RepushBandsNextFrame()
-        {
-            var generation = _bindGeneration;
-            await UniTask.Yield(PlayerLoopTiming.Update);
-
-            // Bail if destroyed, or if a despawn+rebind (pool reuse) happened during the yield — otherwise we'd
-            // push a stale level's bands onto whatever balloon now occupies this instance.
-            if (this == null || generation != _bindGeneration)
-            {
-                return;
-            }
-
-            PushBands();
-            RebuildColors();
         }
 
         private void RebuildColors()
