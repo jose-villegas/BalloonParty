@@ -36,7 +36,6 @@ namespace BalloonParty.Configuration.Level
         private void OnValidate()
         {
 #if UNITY_EDITOR
-            SortRangesByFromLevel();
             WarnOnGapsAndOverlaps();
             WarnOnMissingOrMultipleTails();
             WarnOnEmptyWeightedSets();
@@ -154,11 +153,6 @@ namespace BalloonParty.Configuration.Level
         }
 
 #if UNITY_EDITOR
-        private void SortRangesByFromLevel()
-        {
-            Array.Sort(_ranges, (a, b) => a.FromLevel.CompareTo(b.FromLevel));
-        }
-
         private void WarnOnGapsAndOverlaps()
         {
             for (var i = 1; i < _ranges.Length; i++)
