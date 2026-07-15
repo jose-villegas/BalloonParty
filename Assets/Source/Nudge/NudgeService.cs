@@ -37,7 +37,7 @@ namespace BalloonParty.Nudge
             _nudgeSubscriber.Subscribe(OnNudge);
         }
 
-        private void NudgeActor(Vector2Int slot, Vector3 origin, float distance, float duration)
+        private void NudgeActor(Vector2Int slot, Vector3 origin, float distance, float duration, NudgeType source)
         {
             if (_grid.ViewAt(slot) is not INudgeable nudgeableView)
             {
@@ -45,7 +45,7 @@ namespace BalloonParty.Nudge
             }
 
             var slotPos = _grid.IndexToWorldPosition(slot);
-            nudgeableView.Nudge(slotPos, slotPos - origin, distance, duration, null);
+            nudgeableView.Nudge(slotPos, slotPos - origin, distance, duration, source, null);
         }
 
         private void OnActorHit(ActorHitMessage msg)
@@ -68,7 +68,7 @@ namespace BalloonParty.Nudge
 
                 var slot = neighbor.SlotIndex;
                 _resolver.Resolve(nudgeable.NudgeOverrides, null, NudgeType.Neighbor, out var distance, out var duration);
-                NudgeActor(slot, hitSlotPos, distance, duration);
+                NudgeActor(slot, hitSlotPos, distance, duration, NudgeType.Neighbor);
             }
         }
 
@@ -98,7 +98,7 @@ namespace BalloonParty.Nudge
 
             var slot = slotActor.SlotIndex;
             _resolver.Resolve(msg.Actor.NudgeOverrides, msg.Overrides, msg.Source, out var distance, out var duration);
-            NudgeActor(slot, msg.Origin, distance, duration);
+            NudgeActor(slot, msg.Origin, distance, duration, msg.Source);
         }
 
         private void HandleShockwave(NudgeMessage msg)
@@ -160,7 +160,7 @@ namespace BalloonParty.Nudge
                 return;
             }
 
-            NudgeActor(slot, msg.Origin, distance, duration);
+            NudgeActor(slot, msg.Origin, distance, duration, NudgeType.Shockwave);
         }
     }
 }

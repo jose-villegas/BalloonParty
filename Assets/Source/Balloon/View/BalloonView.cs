@@ -217,10 +217,12 @@ namespace BalloonParty.Balloon.View
             Vector3 direction,
             float nudgeDistance,
             float nudgeDuration,
+            NudgeType source,
             Action onComplete)
         {
-            // Skip if mid-spawn/balance and we didn't cause the instability.
-            if (Model is IWriteableDynamicSlotActor stableChecker
+            // A direct deflect impact always plays — other nudges skip if mid-spawn/balance.
+            if (source != NudgeType.Deflect
+                && Model is IWriteableDynamicSlotActor stableChecker
                 && !stableChecker.IsStable.Value
                 && !_isNudging)
             {

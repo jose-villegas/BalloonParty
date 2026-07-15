@@ -11,6 +11,7 @@ namespace BalloonParty.Nudge
             Vector3 direction,
             float nudgeDistance,
             float nudgeDuration,
+            NudgeType source,
             Action onComplete);
     }
 }
