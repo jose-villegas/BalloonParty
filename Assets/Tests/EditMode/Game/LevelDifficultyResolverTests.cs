@@ -112,7 +112,8 @@ namespace BalloonParty.Tests.Game
             var entry = CreateCatalogEntry("Simple", BalloonType.Simple, weight: 1f, maxCount: 0);
             _balloonsConfig.Entries.Returns(new[] { entry });
 
-            SetSingleRange(1, 0, BalloonType.Simple, 1f, maxCountOverride: 2);
+            SetSingleRange(1, 0, BalloonType.Simple, 1f,
+                initialCountCurve: new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(2f, 1f)));
             var resolver = BuildResolver();
             resolver.Start();
 
@@ -128,8 +129,8 @@ namespace BalloonParty.Tests.Game
             var late = CreateCatalogEntry("Tough", BalloonType.Tough, weight: 1f, maxCount: 0);
             _balloonsConfig.Entries.Returns(new[] { early, late });
 
-            var earlyRange = MakeRange(1, 4, new RangedInt(1, 1), new[] { new BalloonTypeWeight(BalloonType.Simple, 1f) });
-            var lateRange = MakeRange(5, 0, new RangedInt(3, 3), new[] { new BalloonTypeWeight(BalloonType.Tough, 1f) });
+            var earlyRange = MakeRange(1, 4, 1, new[] { new BalloonTypeWeight(BalloonType.Simple, 1f) });
+            var lateRange = MakeRange(5, 0, 3, new[] { new BalloonTypeWeight(BalloonType.Tough, 1f) });
             _pacing.Ranges.Returns(new[] { earlyRange, lateRange });
 
             var resolver = BuildResolver();
@@ -150,8 +151,8 @@ namespace BalloonParty.Tests.Game
             var entry = CreateCatalogEntry("Simple", BalloonType.Simple, weight: 1f, maxCount: 0);
             _balloonsConfig.Entries.Returns(new[] { entry });
 
-            var earlyRange = MakeRange(1, 4, new RangedInt(1, 1), new[] { new BalloonTypeWeight(BalloonType.Simple, 1f) });
-            var lateRange = MakeRange(5, 0, new RangedInt(9, 9), new[] { new BalloonTypeWeight(BalloonType.Simple, 1f) });
+            var earlyRange = MakeRange(1, 4, 1, new[] { new BalloonTypeWeight(BalloonType.Simple, 1f) });
+            var lateRange = MakeRange(5, 0, 9, new[] { new BalloonTypeWeight(BalloonType.Simple, 1f) });
             _pacing.Ranges.Returns(new[] { earlyRange, lateRange });
 
             var resolver = BuildResolver();
@@ -167,7 +168,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void TryGetGridActorGate_TypeInGate_ReturnsResolvedCount()
         {
-            var range = MakeRange(1, 0, new RangedInt(1, 1), new[] { new BalloonTypeWeight(BalloonType.Simple, 1f) });
+            var range = MakeRange(1, 0, 1, new[] { new BalloonTypeWeight(BalloonType.Simple, 1f) });
             SetField(range.Parameters, "_gridActorGates", new[] { new GridActorTypeGate(GridActorType.Puff, new RangedInt(5, 5)) });
             _pacing.Ranges.Returns(new[] { range });
 
@@ -181,7 +182,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void TryGetGridActorGate_TypeAbsentFromGate_ReturnsFalse()
         {
-            var range = MakeRange(1, 0, new RangedInt(1, 1), new[] { new BalloonTypeWeight(BalloonType.Simple, 1f) });
+            var range = MakeRange(1, 0, 1, new[] { new BalloonTypeWeight(BalloonType.Simple, 1f) });
             SetField(range.Parameters, "_gridActorGates", new[] { new GridActorTypeGate(GridActorType.Puff, new RangedInt(5, 5)) });
             _pacing.Ranges.Returns(new[] { range });
 
@@ -264,7 +265,7 @@ namespace BalloonParty.Tests.Game
         {
             var entry = CreateCatalogEntry("Simple", BalloonType.Simple, weight: 1f, maxCount: 0);
             _balloonsConfig.Entries.Returns(new[] { entry });
-            SetSingleRange(1, 0, BalloonType.Simple, 1f, spawnLinesMode: RangeMode.Random, spawnLinesMax: 5);
+            SetSingleRange(1, 0, BalloonType.Simple, 1f, spawnLines: 5);
 
             var resolver = BuildResolver();
             resolver.Start();
@@ -283,16 +284,19 @@ namespace BalloonParty.Tests.Game
 
         private void SetSingleRange(
             int fromLevel, int toLevel, BalloonType type, float weight,
-            int maxCountOverride = 0, RangeMode spawnLinesMode = RangeMode.Fixed, int spawnLinesMax = 1)
+            int spawnLines = 1, AnimationCurve initialCountCurve = null)
         {
-            var range = MakeRange(
-                fromLevel, toLevel,
-                new RangedInt(1, spawnLinesMax, spawnLinesMode),
-                new[] { new BalloonTypeWeight(type, weight, maxCountOverride) });
+            var balloonWeight = new BalloonTypeWeight(type, weight);
+            if (initialCountCurve != null)
+            {
+                SetStructField(ref balloonWeight, "_initialCountWeights", initialCountCurve);
+            }
+
+            var range = MakeRange(fromLevel, toLevel, spawnLines, new[] { balloonWeight });
             _pacing.Ranges.Returns(new[] { range });
         }
 
-        private static LevelRangeEntry MakeRange(int fromLevel, int toLevel, RangedInt spawnLines, BalloonTypeWeight[] weights)
+        private static LevelRangeEntry MakeRange(int fromLevel, int toLevel, int spawnLines, BalloonTypeWeight[] weights)
         {
             var parameters = new RangedLevelParameters();
             SetField(parameters, "_spawnLines", spawnLines);
@@ -335,6 +339,14 @@ namespace BalloonParty.Tests.Game
             target.GetType()
                 .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance)!
                 .SetValue(target, value);
+        }
+
+        private static void SetStructField<T>(ref T target, string fieldName, object value) where T : struct
+        {
+            var boxed = (object)target;
+            typeof(T).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance)!
+                .SetValue(boxed, value);
+            target = (T)boxed;
         }
     }
 }
