@@ -23,6 +23,10 @@ namespace BalloonParty.Configuration.Effects
         /// (<c>mip = spread × log₂(1 + tapIndex)</c>). 0 disables (flat march, all mip 0).</summary>
         float MipSpread { get; }
 
+        /// <summary>Shadow-specific mip spread — typically higher than <see cref="MipSpread"/> so shadow
+        /// taps soften faster with distance (distance-dependent penumbra). 0 = same as bounce spread.</summary>
+        float ShadowMipSpread { get; }
+
         /// <summary>Shadow darkening intensity (0 = no shadow, 1 = fully darkened).</summary>
         float ShadowStrength { get; }
 

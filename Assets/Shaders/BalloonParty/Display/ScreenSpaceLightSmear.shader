@@ -56,6 +56,7 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
             float  _TapDecay;
             float  _TapStart;
             float  _MipSpread;
+            float  _ShadowMipSpread;
 
             fixed4 frag(v2f_img IN) : SV_Target
             {
@@ -95,6 +96,11 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                     // _MipSpread = 0 collapses to the old flat march (all mip 0).
                     float mip = min(_MipSpread * log2(1.0 + (float)t), maxMip);
 
+                    // Shadow uses a steeper mip ramp for distance-dependent penumbra: near
+                    // taps stay sharp (contact shadow), far taps read increasingly averaged
+                    // coverage (soft penumbra far from the caster).
+                    float shadowMip = min(_ShadowMipSpread * log2(1.0 + (float)t), maxMip);
+
                     // Bounce = the composited scene color down-light, now cone-widened so far
                     // taps average over a broader region (captures cluster-scale bleed without
                     // needing more taps). Shadow still samples at full resolution for sharp
@@ -102,7 +108,7 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                     float4 lit = tex2Dlod(_MainTex, float4(IN.uv + stepUv * offset, 0, mip));
                     bounceAcc += lit.rgb * w;
 
-                    float4 occluder = tex2Dlod(_MainTex, float4(IN.uv - stepUv * offset, 0, mip));
+                    float4 occluder = tex2Dlod(_MainTex, float4(IN.uv - stepUv * offset, 0, shadowMip));
                     shadowAcc += occluder.a * w;
                 }
 
