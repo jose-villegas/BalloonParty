@@ -69,6 +69,11 @@ namespace BalloonParty.Display
 
         private void LateUpdate()
         {
+            if (_settings == null)
+            {
+                return;
+            }
+
             // The capture camera renders during the render phase, after LateUpdate, so this
             // reads the previous frame's capture. One frame of staleness is invisible here
             // (temporally blended buffer, refreshes every SceneCaptureFrameInterval frames) and
