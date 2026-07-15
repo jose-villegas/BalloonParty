@@ -45,12 +45,13 @@ namespace BalloonParty.Editor
             100f,  // 9: Items — dynamic when expanded
             100f,  // 10: Actors — dynamic when expanded
             44f,   // 11: Expand (►)
-            44f,   // 12: Delete (−)
+            34f,   // 12: Dupe (⧉)
+            44f,   // 13: Delete (−)
         };
 
         private static readonly string[] ColHeaders =
         {
-            "Range", "Spawn", "Board", "1st Turn", "Colors", "Balloons", "Cadence", "Init Count", "Wave Count", "Items", "Actors", "Expand", "Delete"
+            "Range", "Spawn", "Board", "1st Turn", "Colors", "Balloons", "Cadence", "Init Count", "Wave Count", "Items", "Actors", "Expand", "Dupe", "Delete"
         };
 
         private readonly ConfigAssetCache<LevelPacingConfiguration> _assetCache = new();
@@ -295,7 +296,7 @@ namespace BalloonParty.Editor
         private float TotalWidth()
         {
             var total = 0f;
-            for (var i = 0; i < ColWidths.Length - 2; i++)
+            for (var i = 0; i < ColWidths.Length - 3; i++)
             {
                 if (HasGapBefore(i))
                 {
@@ -750,7 +751,7 @@ namespace BalloonParty.Editor
             DrawGroupBackground(rowRect, 10, 10, rowBg);
 
             // Separators (only for left-anchored columns 0–9)
-            for (var i = 0; i < ColWidths.Length - 2; i++)
+            for (var i = 0; i < ColWidths.Length - 3; i++)
             {
                 var colW = EffectiveColWidth(i);
                 var sep = new Rect(rowRect.x + ColX(i) + colW, rowRect.y, SeparatorWidth, rowRect.height);
@@ -811,8 +812,16 @@ namespace BalloonParty.Editor
                 _expandedRow = _expandedRow == index ? -1 : index;
             }
 
-            // − button (col 12) — right-anchored
-            var delRect = CellRect(rowRect, 12);
+            // ⧉ duplicate button (col 12) — right-anchored
+            var dupeRect = CellRect(rowRect, 12);
+            if (GUI.Button(dupeRect, "⧉"))
+            {
+                _rangesProp.InsertArrayElementAtIndex(index);
+                return;
+            }
+
+            // − button (col 13) — right-anchored
+            var delRect = CellRect(rowRect, 13);
             if (GUI.Button(delRect, "−"))
             {
                 _rangesProp.DeleteArrayElementAtIndex(index);
