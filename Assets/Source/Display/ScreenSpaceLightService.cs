@@ -19,6 +19,7 @@ namespace BalloonParty.Display
         private static readonly int TapDecayId = Shader.PropertyToID("_TapDecay");
         private static readonly int TapStartId = Shader.PropertyToID("_TapStart");
         private static readonly int MipSpreadId = Shader.PropertyToID("_MipSpread");
+        private static readonly int BlurSharpnessId = Shader.PropertyToID("_BlurSharpness");
         private static readonly int HistoryTexId = Shader.PropertyToID("_HistoryTex");
         private static readonly int TemporalBlendId = Shader.PropertyToID("_TemporalBlend");
         private static readonly int LightTexId = Shader.PropertyToID("_LightTex");
@@ -243,6 +244,7 @@ namespace BalloonParty.Display
             _smearMaterial.SetFloat(TapDecayId, _settings.TapDecay);
             _smearMaterial.SetFloat(TapStartId, _settings.TapStart);
             _smearMaterial.SetFloat(MipSpreadId, _settings.MipSpread);
+            _smearMaterial.SetFloat(BlurSharpnessId, _settings.BlurSharpness);
 
             _overlayMaterial.SetColor(ShadowTintId, _settings.ShadowTint);
             _overlayMaterial.SetFloat(ShadowStrengthId, _settings.ShadowStrength);

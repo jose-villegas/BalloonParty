@@ -38,5 +38,10 @@ namespace BalloonParty.Configuration.Effects
 
         /// <summary>Fraction of the fresh light buffer accepted per frame — lower is smoother but laggier.</summary>
         float TemporalResponse { get; }
+
+        /// <summary>Bilateral blur edge sensitivity — higher values more aggressively preserve edges
+        /// where sprite coverage (alpha) differs between neighbouring pixels (object vs sky boundary).
+        /// Range: 1 (very soft, almost ignores edges) to 100 (razor-sharp edge preservation).</summary>
+        float BlurSharpness { get; }
     }
 }

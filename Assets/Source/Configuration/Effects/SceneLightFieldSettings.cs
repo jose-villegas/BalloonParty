@@ -85,6 +85,13 @@ namespace BalloonParty.Configuration.Effects
         [Range(0.02f, 1f)]
         [SerializeField] private float _temporalResponse = 0.2f;
 
+        [Header("GI — Blur")]
+        [Tooltip("Bilateral edge sensitivity — higher values more aggressively preserve " +
+                 "edges at sprite/sky coverage boundaries, preventing light bleeding " +
+                 "across silhouettes. Low values let the blur soften everything equally.")]
+        [Range(1f, 100f)]
+        [SerializeField] private float _blurSharpness = 30f;
+
         [Header("GI — Shaders")]
         [Tooltip("Assign explicitly — device builds strip shaders that are only " +
                  "referenced via Shader.Find.")]
@@ -112,6 +119,7 @@ namespace BalloonParty.Configuration.Effects
         public float BounceStrength => _bounceStrength;
         public bool TemporalSmoothing => _temporalSmoothing;
         public float TemporalResponse => _temporalResponse;
+        public float BlurSharpness => _blurSharpness;
 
         // ISceneLightSettings
         public Vector2 LightDirection =>

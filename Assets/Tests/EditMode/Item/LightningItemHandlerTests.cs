@@ -76,8 +76,6 @@ namespace BalloonParty.Tests.Item
                 Substitute.For<IGameDisplayConfiguration>(), palette,
                 Substitute.For<ISceneLightFieldSettings>(), Substitute.For<ISceneLightSettings>());
 
-
-
             _handler = new LightningItemHandler(
                 itemConfig,
                 _hitDispatcher,
