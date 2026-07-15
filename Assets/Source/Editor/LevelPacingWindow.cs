@@ -437,6 +437,12 @@ namespace BalloonParty.Editor
 
         private void DrawBalloonFocusGroup(Rect groupRect, GUIStyle labelStyle)
         {
+            if (!_balloonsExpanded)
+            {
+                EditorGUI.LabelField(groupRect, "Balloons", labelStyle);
+                return;
+            }
+
             var labelW = groupRect.width - 74f;
             EditorGUI.LabelField(new Rect(groupRect.x, groupRect.y, labelW, groupRect.height), "Balloons", labelStyle);
 
@@ -452,8 +458,7 @@ namespace BalloonParty.Editor
             var picked = EditorGUI.Popup(dropdownRect, 0, names);
             if (picked > 0)
             {
-                var typeIndex = picked - 1;
-                FocusBalloonTypeInAllRows(allTypes[typeIndex], typeIndex);
+                FocusBalloonTypeInAllRows(allTypes[picked - 1], picked - 1);
             }
         }
 
@@ -489,6 +494,12 @@ namespace BalloonParty.Editor
 
         private void DrawItemFocusGroup(Rect groupRect, GUIStyle labelStyle)
         {
+            if (!_itemsExpanded)
+            {
+                EditorGUI.LabelField(groupRect, "Items", labelStyle);
+                return;
+            }
+
             var labelW = groupRect.width - 74f;
             EditorGUI.LabelField(new Rect(groupRect.x, groupRect.y, labelW, groupRect.height), "Items", labelStyle);
 
@@ -510,6 +521,12 @@ namespace BalloonParty.Editor
 
         private void DrawActorFocusGroup(Rect groupRect, GUIStyle labelStyle)
         {
+            if (!_actorsExpanded)
+            {
+                EditorGUI.LabelField(groupRect, "Actors", labelStyle);
+                return;
+            }
+
             var labelW = groupRect.width - 74f;
             EditorGUI.LabelField(new Rect(groupRect.x, groupRect.y, labelW, groupRect.height), "Actors", labelStyle);
 
