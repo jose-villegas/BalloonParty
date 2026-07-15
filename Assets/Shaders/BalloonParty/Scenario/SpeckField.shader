@@ -262,15 +262,14 @@ Shader "BalloonParty/Scenario/SpeckField"
                 col.a = lerp(col.a, tex.a * target.a, heat);
 
                 // Light as color replacement gated by local boost (field R):
-                // influence (0–1) blends between emissive (base color, unaffected) and fully lit
-                // (dimmed by ambient, colored by local light). The local boost from R gates the
-                // color replacement — no local light = no color change, just ambient dimming.
+                // influence 0–1 blends from emissive (base color) to fully lit (dimmed by ambient,
+                // colored by local light). Above 1 it makes the speck adopt local light color more
+                // eagerly. Target is the raw palette color — NOT multiplied by brightness, so the
+                // palette's authored hue is preserved without over-exposure clipping to white.
                 float3 lightColor = i.lightData.rgb;
                 float local = i.lightData.a;
                 float ambient = SceneLightAmbientMagnitude();
-                float brightness = ambient + local;
-                float3 targetL = lightColor * brightness;
-                float3 litColor = lerp(col.rgb * ambient, targetL, saturate(local));
+                float3 litColor = lerp(col.rgb * ambient, lightColor, saturate(local * i.lightInfluence));
                 col.rgb = lerp(col.rgb, litColor, saturate(i.lightInfluence));
 
                 col.a *= i.alpha;
