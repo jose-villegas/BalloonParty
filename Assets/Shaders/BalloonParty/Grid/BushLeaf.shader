@@ -60,6 +60,8 @@ Shader "BalloonParty/Grid/BushLeaf"
             #pragma multi_compile _ _RATTLE_ON
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
+            #include "../Include/SpriteScale.cginc"
+            #include "../Include/Composite.cginc"
 
             sampler2D _MainTex;
             fixed4 _LeafColor;
@@ -239,10 +241,8 @@ Shader "BalloonParty/Grid/BushLeaf"
             {
                 UNITY_SETUP_INSTANCE_ID(i);
 
-                // Bounds check: outside [0,1] after scaling is beyond the sprite
-                float2 spriteUV = (i.rawUV - 0.5) / _SpriteScale + 0.5;
-                float2 inBounds = step(0.0, spriteUV) * step(spriteUV, 1.0);
-                float spriteMask = inBounds.x * inBounds.y;
+                float2 spriteUV = ScaleSpriteUV(i.rawUV, _SpriteScale);
+                float spriteMask = SpriteBoundsMask(spriteUV);
 
                 float2 shadowRaw = i.rawUV + i.localShadowOffset;
                 float s = _ShadowSoftness;
@@ -288,10 +288,7 @@ Shader "BalloonParty/Grid/BushLeaf"
                 // glint); softness/alpha math above is untouched.
                 col.rgb = lerp(col.rgb, _HighlightColor.rgb * i.lightTint, hlMask * _HighlightColor.a);
 
-                // Composite: shadow behind, leaf on top (Porter-Duff "over")
-                fixed3 rgb = col.rgb * col.a + shadow.rgb * shadow.a * (1.0 - col.a);
-                fixed  a   = col.a + shadow.a * (1.0 - col.a);
-                return fixed4(rgb / max(a, 0.001), a);
+                return PorterDuffOver(col, shadow);
             }
             ENDCG
         }

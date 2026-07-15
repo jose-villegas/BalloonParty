@@ -44,6 +44,7 @@
  #pragma multi_compile_instancing
  #include "UnityCG.cginc"
  #include "../Include/SceneLight.cginc"
+ #include "../Include/ShineSweep.cginc"
 
      struct appdata_t
      {
@@ -121,20 +122,14 @@
              location = frac((_Time.y + _TimeOffset) * _ShineSpeed);
          }
 
-         float lowLevel = location - _ShineWidth;
-         float highLevel = location + _ShineWidth;
-         // Opted-in materials sweep along the scene light's axis, travelling DOWN-light
-         // (enters from the lit side; top-to-bottom under the canonical upper-left light);
-         // the default keeps the classic hardcoded 45-degree diagonal.
-         float currentDistanceProjection = _ShineFromSceneLight > 0.5
-             ? dot(uv - 0.5, -lightDir) + 0.5
-             : (uv.x + uv.y) / 2;
-         if (currentDistanceProjection > lowLevel && currentDistanceProjection < highLevel) {
-             float whitePower = 1- (abs(currentDistanceProjection - location) / _ShineWidth);
+         float projection = CalcShineProjection(uv, lightDir, _ShineFromSceneLight);
+         fixed shineFade = CalcShineFade(projection, location, _ShineWidth);
+         if (shineFade > 0)
+         {
              // Opted-in shine is "lit by the scene light" — axis AND colour — so tint it;
              // the default (UI) sweep stays pure white regardless of the scene light.
              float3 shineTint = _ShineFromSceneLight > 0.5 ? lightTint : float3(1.0, 1.0, 1.0);
-             color.rgb +=  color.a * whitePower * shineTint;
+             color.rgb += color.a * shineFade * shineTint;
          }
 
          return color;

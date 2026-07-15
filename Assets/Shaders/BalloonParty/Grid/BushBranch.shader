@@ -45,6 +45,8 @@ Shader "BalloonParty/Grid/BushBranch"
             #pragma multi_compile_instancing
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
+            #include "../Include/SpriteScale.cginc"
+            #include "../Include/Composite.cginc"
 
             sampler2D _MainTex;
             sampler2D _BranchGradient;
@@ -93,7 +95,7 @@ Shader "BalloonParty/Grid/BushBranch"
                 UNITY_TRANSFER_INSTANCE_ID(v, o);
                 o.pos = UnityObjectToClipPos(v.vertex);
                 o.rawUV = v.uv;
-                o.uv = (v.uv - 0.5) / _SpriteScale + 0.5;
+                o.uv = ScaleSpriteUV(v.uv, _SpriteScale);
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex).xy;
                 return o;
             }
@@ -128,8 +130,7 @@ Shader "BalloonParty/Grid/BushBranch"
                 UNITY_SETUP_INSTANCE_ID(i);
 
                 // Bounds check for sprite content
-                float2 inBounds = step(0.0, i.uv) * step(i.uv, 1.0);
-                float spriteMask = inBounds.x * inBounds.y;
+                float spriteMask = SpriteBoundsMask(i.uv);
 
                 // Shadow — 9-tap blur
                 float s = _ShadowSoftness;
@@ -174,16 +175,9 @@ Shader "BalloonParty/Grid/BushBranch"
                 col *= lerp(float3(1.0, 1.0, 1.0), SceneLightTintAt(i.worldPos), _LightInfluence);
 
                 // Composite: AO (bottom) ← shadow ← branch (top)
-                // 1. Shadow over AO
-                fixed3 base = ao.rgb * ao.a;
-                fixed  baseA = ao.a;
-                base = shadow.rgb * shadow.a + base * (1.0 - shadow.a);
-                baseA = shadow.a + baseA * (1.0 - shadow.a);
-
-                // 2. Branch over combined
-                fixed3 rgb = col * branchAlpha + base * (1.0 - branchAlpha);
-                fixed  a   = branchAlpha + baseA * (1.0 - branchAlpha);
-                return fixed4(rgb / max(a, 0.001), a);
+                fixed4 base = PorterDuffOver(shadow, ao);
+                fixed4 branch = fixed4(col, branchAlpha);
+                return PorterDuffOver(branch, base);
             }
             ENDCG
         }

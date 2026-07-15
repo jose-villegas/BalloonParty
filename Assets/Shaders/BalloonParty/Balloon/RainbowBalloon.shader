@@ -102,6 +102,9 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
 
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
+            #include "../Include/MathConst.cginc"
+            #include "../Include/Glitter.cginc"
+            #include "../Include/ShineSweep.cginc"
 
             struct Attributes
             {
@@ -225,7 +228,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 // authored angle. The AXIS follows only the main (ambient) light — flat
                 // SceneLightDirection(), not the field — so local lights recolour the bands (tint,
                 // below) without twisting their rotation. Same local-UV sway caveat as the shine.
-                float ang = _BandAngle * 6.2831853;
+                float ang = _BandAngle * BP_TAU;
                 float2 axis = _BandsFromSceneLight > 0.5
                     ? SceneLightDirection()
                     : float2(cos(ang), sin(ang));
@@ -274,7 +277,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 // flat SceneLightDirection(), not the field — so a passing local light recolours the
                 // shine (tint, below) without bending its sweep angle. Caveat: uv is local sprite
                 // space (not rotation-compensated), so the axis sways with the balloon — accepted.
-                float shineAng = _ShineAngle * 6.2831853;
+                float shineAng = _ShineAngle * BP_TAU;
                 float2 axis = _ShineFromSceneLight > 0.5
                     ? -SceneLightDirection()
                     : float2(cos(shineAng), sin(shineAng));
@@ -288,34 +291,10 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 return inside * (1.0 - abs(projection - shineLocation) / _ShineWidth);
             }
 
-            // Cheap deterministic 2D hash -> pseudo-random value in [0, 1). No texture lookup needed.
-            inline float Hash21(float2 p)
-            {
-                p = frac(p * float2(123.34, 456.21));
-                p += dot(p, p + 45.32);
-                return frac(p.x * p.y);
-            }
-
-            // Scattered twinkling specks: tile UV into a grid, jitter each speck off its cell centre,
-            // only some cells sparkle at all, and each blinks at its own random phase/speed.
             inline fixed GlitterAmount(float2 uv)
             {
-                float2 cellUv  = uv * _GlitterDensity;
-                float2 cellId  = floor(cellUv);
-                float2 cellPos = frac(cellUv) - 0.5;
-
-                float2 jitter = float2(Hash21(cellId + 17.0), Hash21(cellId + 91.0)) - 0.5;
-                float  dist   = length(cellPos - jitter * 0.6);
-                float  speck  = smoothstep(_GlitterSize, 0.0, dist);
-
-                float rnd     = Hash21(cellId);
-                float phase   = rnd * 6.2831853;
-                float twinkle = saturate(sin(_Time.y * _GlitterSpeed + phase) * 0.5 + 0.5);
-                twinkle = pow(twinkle, max(_GlitterSharpness, 1.0));
-
-                float active = step(1.0 - _GlitterChance, Hash21(cellId + 5.0));
-
-                return speck * twinkle * active;
+                return GlitterAmountBase(uv * _GlitterDensity, _GlitterSize, _GlitterSpeed,
+                                         _GlitterSharpness, _GlitterChance);
             }
 
             fixed4 frag(Varyings IN) : SV_Target

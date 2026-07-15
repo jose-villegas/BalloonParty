@@ -65,6 +65,7 @@ Shader "BalloonParty/Paint/PaintBlob"
             #pragma multi_compile_instancing
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
+            #include "../Include/Composite.cginc"
 
             struct appdata_t
             {
@@ -255,12 +256,9 @@ Shader "BalloonParty/Paint/PaintBlob"
 
                 // ── Composite: shadow under blob (Porter-Duff "over") ──
                 #ifdef _SHADOW_ON
-                fixed3 shadowRGB = _ShadowColor.rgb;
-                fixed  combinedA = alpha + shadowAlpha * (1.0 - alpha);
-                fixed3 combinedRGB = combinedA > 0.0001
-                    ? (col * alpha + shadowRGB * shadowAlpha * (1.0 - alpha)) / combinedA
-                    : col;
-                return fixed4(combinedRGB, combinedA);
+                fixed4 blobColor = fixed4(col, alpha);
+                fixed4 shadowColor = fixed4(_ShadowColor.rgb, shadowAlpha);
+                return PorterDuffOver(blobColor, shadowColor);
                 #else
                 return fixed4(col, alpha);
                 #endif

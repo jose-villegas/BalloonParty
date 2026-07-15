@@ -45,6 +45,7 @@ Shader "BalloonParty/Sprite/Glitter"
             #pragma multi_compile _ PIXELSNAP_ON
             #pragma multi_compile_instancing
             #include "UnityCG.cginc"
+            #include "../Include/Glitter.cginc"
 
             struct appdata_t
             {
@@ -111,34 +112,10 @@ Shader "BalloonParty/Sprite/Glitter"
                 return color;
             }
 
-            // Cheap deterministic 2D hash -> pseudo-random value in [0, 1). No texture lookup needed.
-            inline float Hash21(float2 p)
-            {
-                p = frac(p * float2(123.34, 456.21));
-                p += dot(p, p + 45.32);
-                return frac(p.x * p.y);
-            }
-
-            // Scattered twinkling specks: tile UV into a grid, jitter each speck off its cell centre,
-            // only some cells sparkle at all, and each blinks at its own random phase/speed.
             inline fixed GlitterAmount(float2 uv)
             {
-                float2 cellUv  = uv * _GlitterDensity;
-                float2 cellId  = floor(cellUv);
-                float2 cellPos = frac(cellUv) - 0.5;
-
-                float2 jitter = float2(Hash21(cellId + 17.0), Hash21(cellId + 91.0)) - 0.5;
-                float  dist   = length(cellPos - jitter * 0.6);
-                float  speck  = smoothstep(_GlitterSize, 0.0, dist);
-
-                float rnd     = Hash21(cellId);
-                float phase   = rnd * 6.2831853;
-                float twinkle = saturate(sin(_Time.y * _GlitterSpeed + phase) * 0.5 + 0.5);
-                twinkle = pow(twinkle, max(_GlitterSharpness, 1.0));
-
-                float active = step(1.0 - _GlitterChance, Hash21(cellId + 5.0));
-
-                return speck * twinkle * active;
+                return GlitterAmountBase(uv * _GlitterDensity, _GlitterSize, _GlitterSpeed,
+                                         _GlitterSharpness, _GlitterChance);
             }
 
             fixed4 frag(v2f IN) : SV_Target

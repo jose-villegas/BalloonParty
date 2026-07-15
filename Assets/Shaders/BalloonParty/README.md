@@ -75,3 +75,60 @@ OUT.color = IN.color * _Color * _RendererColor;
 - Materials using `MaterialPropertyBlock` for per-instance shader properties (`_DamageProgress`, `_VoronoiSeed`, `_TimeOffset`, `_ShadowScale`, `_SpriteScale`) must have GPU instancing **disabled** — instancing batching discards MPB values for properties not in the instancing buffer.
 - Materials on ParticleSystem or TrailRenderer using custom shaders must have GPU instancing **disabled** — these renderer types do not populate `unity_SpriteRendererColorArray`.
 
+## Code Reuse — Shared Includes
+
+Shared logic lives in `.cginc` files under `Include/` (or `Noise/` for procedural generation). Any function, constant, or pattern that appears in two or more shaders **must** be extracted into a shared include — copy-pasting shader code across files is a maintenance hazard identical to duplicating C# methods.
+
+### Existing includes
+
+| Include | Location | What it provides |
+|---|---|---|
+| `SceneLight.cginc` | `Include/` | All scene-light access — direction, tint, magnitude, field sampling, palette decode, shadow fade. The single source of truth for lighting uniforms and helpers |
+| `SimplexNoise2D.cginc` | `Noise/` | 2D simplex noise `SimplexNoise2D(float2 p)` → `[-1, 1]` |
+| `GielisSDF.cginc` | `Grid/Editor/` | Gielis superformula SDF for procedural leaf/petal shapes |
+| `LeafVeins.cginc` | `Grid/Editor/` | Procedural leaf vein pattern for bake shaders |
+
+### Rules
+
+1. **Extract on second use.** The first time a function appears in one shader, it stays inline. The moment it appears in a second shader, extract into a `.cginc`.
+2. **One responsibility per include.** Each `.cginc` covers a single concern (shadow blur, glitter hash, sprite scaling). Don't bundle unrelated helpers.
+3. **Include-guard every file.** Use `#ifndef BALLOONPARTY_<NAME>_INCLUDED` / `#define` / `#endif`.
+4. **No uniforms in includes** unless they are truly global (scene-wide, set by a service). Per-material properties stay declared in the shader that uses them. `SceneLight.cginc` is the exception — its uniforms are global and must NOT appear in any `Properties` block.
+5. **Inline helper functions.** Mark all include functions `inline` — the compiler can eliminate call overhead and the intent (small reusable helper) is clear.
+6. **`Include/` for cross-domain, subfolder for domain-specific.** Helpers used across Sprite/, Balloon/, Grid/ live in `Include/`. Helpers used only within one domain (e.g., grid-only SDF) live in that domain's subfolder.
+7. **Name constants, not magic numbers.** Numeric literals that carry meaning (`6.2831853`, `0.0174533`, `0.707`) must be `#define` constants in the include or at the top of the shader.
+
+### Identified shared patterns (extraction candidates)
+
+| Pattern | Current locations | Target include |
+|---|---|---|
+| 9-tap box-blur shadow (`SampleAlpha` + `SoftShadowAlpha`) | SpriteShadow, SpriteShadowComposite, SpriteShineShadow, BushBranch, BushLeaf | `Include/ShadowBlur.cginc` |
+| Glitter hash + grid sparkle (`Hash21` + `GlitterAmount`) | SpriteGlitter, SpriteGlitterSwirl, RainbowBalloon | `Include/Glitter.cginc` |
+| Shine sweep band (periodic sweep timing + projection) | SpriteShine, SpriteShineShadow, RainbowBalloon | `Include/ShineSweep.cginc` |
+| Sprite-centre VTF light sampling (`spriteCenterWorld` + `SceneLightDirectionAtLOD`) | SpriteShadow, SpriteShineShadow, SpriteLightDriven, SpriteDiffuse, PaintBlob, BushBranch, BushLeaf | Already in `SceneLight.cginc` (helpers exist); vertex boilerplate is trivial (2 lines) — no include needed |
+| Sprite scale + bounds mask (`ScaleSpriteUV` + `inBounds`) | SpriteShadow, SpriteShadowComposite, SpriteShineShadow, PaintBlob, BushBranch, BushLeaf | `Include/SpriteScale.cginc` |
+| Porter-Duff "over" composite | SpriteShadow, SpriteShadowComposite, SpriteShineShadow, PaintBlob, BushBranch, BushLeaf | `Include/Composite.cginc` |
+| Radial falloff (aspect-corrected smoothstep) | DisturbanceStampBatched, SceneLightAccumulate | `Include/RadialFalloff.cginc` |
+| Math constants (`TAU`, `DEG_TO_RAD`, `HALF_SQRT2`) | 20+ shaders use `6.2831853`, `0.0174533`, `0.707` inline | `Include/MathConst.cginc` |
+
+### Include path convention
+
+All includes use project-relative paths from the shader's location:
+```hlsl
+#include "../Include/SceneLight.cginc"
+#include "../Include/ShadowBlur.cginc"
+#include "../Noise/SimplexNoise2D.cginc"
+```
+
+### Comments in shaders
+
+Same rule as C# — comment the **why**, not the what. Shader comments should explain:
+- Why a particular approximation was chosen over the exact math
+- Why a tap/sample count was picked (performance vs quality trade-off)
+- Why a fallback exists (e.g., "field not yet pushed at edit time")
+- Platform/hardware constraints a section works around
+
+Do NOT comment:
+- What a standard operation does (`// sample the texture`, `// transform to clip space`)
+- What a well-named function returns (`// returns the shadow alpha`)
+

@@ -62,6 +62,10 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
 
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
+            #include "../Include/ShadowBlur.cginc"
+            #include "../Include/ShineSweep.cginc"
+            #include "../Include/SpriteScale.cginc"
+            #include "../Include/Composite.cginc"
 
             struct Attributes
             {
@@ -134,57 +138,28 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
 
             inline fixed SampleAlpha(float2 uv)
             {
-                // Out-of-bounds taps must read as transparent: with clamp wrap the sampler
-                // returns the edge pixel instead, smearing streaks wherever opaque pixels
-                // touch the texture edge.
-                float2 inBounds = step(0.0, uv) * step(uv, 1.0);
-                return tex2D(_MainTex, uv).a * inBounds.x * inBounds.y;
+                return SampleAlphaGuarded(_MainTex, uv);
             }
 
             inline fixed SoftShadowAlpha(float2 shadowUV, float s)
             {
-                fixed a =
-                    SampleAlpha(shadowUV + float2(-s, -s)) +
-                    SampleAlpha(shadowUV + float2( 0, -s)) +
-                    SampleAlpha(shadowUV + float2( s, -s)) +
-                    SampleAlpha(shadowUV + float2(-s,  0)) +
-                    SampleAlpha(shadowUV                 ) +
-                    SampleAlpha(shadowUV + float2( s,  0)) +
-                    SampleAlpha(shadowUV + float2(-s,  s)) +
-                    SampleAlpha(shadowUV + float2( 0,  s)) +
-                    SampleAlpha(shadowUV + float2( s,  s));
-                return a / 9.0;
+                return SoftShadowAlpha9Tap(_MainTex, shadowUV, s);
             }
 
             inline fixed4 SampleSpriteWithShine(float2 uv, float2 lightDir, float3 lightTint)
             {
                 fixed4 color = tex2D(_MainTex, uv);
 
-                // Sweep duration is 1/speed seconds. Full cycle = sweep + interval.
-                // frac gives 0→1 within the cycle; the sweep occupies the first portion.
-                float sweepDuration = 1.0 / max(_ShineSpeed, 0.001);
-                float cycleDuration = sweepDuration + _ShineInterval;
-                float t = fmod(_Time.y, cycleDuration);
+                float shineLocation = CalcShineSweepLocation(_ShineSpeed, _ShineInterval, _ShineWidth);
+                float projection = CalcShineProjection(uv, lightDir, _ShineFromSceneLight);
+                fixed shineFade = CalcShineFade(projection, shineLocation, _ShineWidth);
 
-                // Map t to shine position: -width → 1+width during sweep, then off-screen
-                float shineLocation = -_ShineWidth + (1.0 + 2.0 * _ShineWidth) * saturate(t / sweepDuration);
-
-                float lowLevel = shineLocation - _ShineWidth;
-                float highLevel = shineLocation + _ShineWidth;
-                // Opted-in materials sweep along the scene light's axis, travelling DOWN-light
-                // (enters from the lit side); default keeps the classic hardcoded 45-degree
-                // diagonal (these are mostly UI materials).
-                float projection = _ShineFromSceneLight > 0.5
-                    ? dot(uv - 0.5, -lightDir) + 0.5
-                    : (uv.x + uv.y) / 2;
-
-                if (projection > lowLevel && projection < highLevel)
+                if (shineFade > 0)
                 {
-                    float whitePower = 1 - (abs(projection - shineLocation) / _ShineWidth);
                     // Opted-in shine is "lit by the scene light" — axis AND colour — so tint it;
                     // the default (UI) sweep stays pure white regardless of the scene light.
                     float3 shineTint = _ShineFromSceneLight > 0.5 ? lightTint : float3(1.0, 1.0, 1.0);
-                    color.rgb += color.a * whitePower * shineTint;
+                    color.rgb += color.a * shineFade * shineTint;
                 }
 
                 return color;
@@ -192,20 +167,15 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
 
             fixed4 frag(Varyings IN) : SV_Target
             {
-
-                // Scale sprite UV inward from center for shadow margin
-                float2 spriteUV = (IN.uv - 0.5) / _SpriteScale + 0.5;
-
-                float2 inBounds = step(0.0, spriteUV) * step(spriteUV, 1.0);
-                float  spriteMask = inBounds.x * inBounds.y;
+                float2 spriteUV = ScaleSpriteUV(IN.uv, _SpriteScale);
+                float  spriteMask = SpriteBoundsMask(spriteUV);
 
                 // Main sprite with shine
                 fixed4 sprite = SampleSpriteWithShine(spriteUV, IN.lightDir, IN.lightTint) * IN.color;
                 sprite.a *= spriteMask;
 
                 // Shadow — opted-in materials follow the scene light (direction away from it,
-                // authored distance); the default keeps the hand-authored offset. Shine sweep
-                // above is untouched — pure UI/decoration, not a lighting element.
+                // authored distance); the default keeps the hand-authored offset.
                 float2 shadowOffset = _ShadowFromSceneLight > 0.5
                     ? -IN.lightDir * _ShadowDistance
                     : _ShadowOffset;
@@ -220,18 +190,8 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
                 // expressive/UI shadows stay authored regardless of the scene light.
                 shadowAlpha *= _ShadowFromSceneLight > 0.5 ? IN.shadowFade : 1.0;
 
-                // Composite shadow under sprite (Porter-Duff over)
-                fixed3 shadowRGB = _ShadowColor.rgb * IN.color.rgb;
-                fixed spriteA    = sprite.a;
-                fixed combinedA  = spriteA + shadowAlpha * (1.0 - spriteA);
-
-                fixed4 result;
-                result.a   = combinedA;
-                result.rgb = combinedA > 0.0001
-                    ? (sprite.rgb * spriteA + shadowRGB * shadowAlpha * (1.0 - spriteA)) / combinedA
-                    : sprite.rgb;
-
-                return result;
+                fixed4 shadow = fixed4(_ShadowColor.rgb * IN.color.rgb, shadowAlpha);
+                return PorterDuffOver(sprite, shadow);
             }
             ENDCG
         }

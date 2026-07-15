@@ -102,6 +102,9 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
 
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
+            #include "../Include/ShadowBlur.cginc"
+            #include "../Include/SpriteScale.cginc"
+            #include "../Include/Composite.cginc"
             #include "UnityUI.cginc"
 
             #pragma multi_compile __ UNITY_UI_CLIP_RECT
@@ -175,53 +178,20 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
 
             inline fixed SampleAlpha(float2 uv)
             {
-                // Out-of-bounds taps must read as transparent: with clamp wrap the sampler
-                // returns the edge pixel instead, smearing streaks wherever opaque pixels
-                // touch the texture edge.
-                float2 inBounds = step(0.0, uv) * step(uv, 1.0);
-                return tex2D(_MainTex, uv).a * inBounds.x * inBounds.y;
+                return SampleAlphaGuarded(_MainTex, uv);
             }
 
-            // 9-tap box blur centred on shadowUV.
-            // When softness == 0 all taps collapse to the same point (hard edge).
             inline fixed SoftShadowAlpha(float2 shadowUV, float s)
             {
-                fixed a =
-                    SampleAlpha(shadowUV + float2(-s, -s)) +
-                    SampleAlpha(shadowUV + float2( 0, -s)) +
-                    SampleAlpha(shadowUV + float2( s, -s)) +
-                    SampleAlpha(shadowUV + float2(-s,  0)) +
-                    SampleAlpha(shadowUV                 ) +
-                    SampleAlpha(shadowUV + float2( s,  0)) +
-                    SampleAlpha(shadowUV + float2(-s,  s)) +
-                    SampleAlpha(shadowUV + float2( 0,  s)) +
-                    SampleAlpha(shadowUV + float2( s,  s));
-                return a / 9.0;
-            }
-
-            // Porter-Duff "over": composite src on top of dst.
-            // Returns pre-multiplied (rgb*a, a) form for chaining.
-            inline fixed4 Over(fixed4 src, fixed4 dst)
-            {
-                fixed4 result;
-                result.a   = src.a + dst.a * (1.0 - src.a);
-                result.rgb = result.a > 0.0001
-                    ? (src.rgb * src.a + dst.rgb * dst.a * (1.0 - src.a)) / result.a
-                    : dst.rgb;
-                return result;
+                return SoftShadowAlpha9Tap(_MainTex, shadowUV, s);
             }
 
             // ------------------------------------------------------------------ fragment
 
             fixed4 frag(Varyings IN) : SV_Target
             {
-                // Scale both sprites inward from center so the quad has transparent
-                // margins on all sides — shadow can bleed into those margins freely.
-                float2 spriteUV = (IN.uv - 0.5) / _SpriteScale + 0.5;
-
-                // Anything outside [0,1] after scaling is beyond the sprite — transparent.
-                float2 inBounds  = step(0.0, spriteUV) * step(spriteUV, 1.0);
-                float  spriteMask = inBounds.x * inBounds.y;
+                float2 spriteUV = ScaleSpriteUV(IN.uv, _SpriteScale);
+                float  spriteMask = SpriteBoundsMask(spriteUV);
 
                 // ---- Layer 1: main sprite ----------------------------------------
                 fixed4 layer1  = tex2D(_MainTex, spriteUV) * _FirstLayerColor * IN.color;
@@ -260,8 +230,8 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
 
                 // ---- Composite: shadow → layer1 → layer2 (bottom → top) ----------
                 fixed4 result = shadow;
-                result        = Over(layer1, result); // layer1 over shadow
-                result        = Over(layer2, result); // layer2 over (layer1+shadow)
+                result        = PorterDuffOver(layer1, result);
+                result        = PorterDuffOver(layer2, result);
 
                 #ifdef UNITY_UI_CLIP_RECT
                 result.a *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);

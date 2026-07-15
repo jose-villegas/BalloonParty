@@ -55,6 +55,7 @@ Shader "BalloonParty/Sprite/GlitterSwirl"
             #pragma multi_compile _ PIXELSNAP_ON
             #pragma multi_compile_instancing
             #include "UnityCG.cginc"
+            #include "../Include/Glitter.cginc"
 
             struct appdata_t
             {
@@ -128,16 +129,9 @@ Shader "BalloonParty/Sprite/GlitterSwirl"
                 return color;
             }
 
-            // Cheap deterministic 2D hash -> pseudo-random value in [0, 1). No texture lookup needed.
-            inline float Hash21(float2 p)
-            {
-                p = frac(p * float2(123.34, 456.21));
-                p += dot(p, p + 45.32);
-                return frac(p.x * p.y);
-            }
-
-            // Scattered twinkling specks: tile UV into a grid, jitter each speck off its cell centre,
-            // only some cells sparkle at all, and each blinks at its own random phase/speed.
+            // Scattered twinkling specks with drift and orbital swirl motion. Extends the base
+            // glitter with per-speck orbit and whole-field drift, plus a mirror axis that
+            // reverses motion on the far half.
             inline fixed GlitterAmount(float2 uv, float2 localPos)
             {
                 // Mirror at the sprite centre: the split runs along the LOCAL _MirrorAxis (so it follows
@@ -156,14 +150,14 @@ Shader "BalloonParty/Sprite/GlitterSwirl"
 
                 // Each speck orbits a small circle at its own phase — reads as spinning rather than a
                 // rigid slide. Reversing it on the mirrored half makes the two sides counter-spin.
-                float  ang    = _Time.y * _SwirlSpeed + Hash21(cellId + 33.0) * 6.2831853;
+                float  ang    = _Time.y * _SwirlSpeed + Hash21(cellId + 33.0) * BP_TAU;
                 float2 orbit  = float2(cos(ang), sin(ang)) * (_SwirlRadius * side);
 
                 float  dist   = length(cellPos - (jitter * 0.6 + orbit));
                 float  speck  = smoothstep(_GlitterSize, 0.0, dist);
 
                 float rnd     = Hash21(cellId);
-                float phase   = rnd * 6.2831853;
+                float phase   = rnd * BP_TAU;
                 float twinkle = saturate(sin(_Time.y * _GlitterSpeed + phase) * 0.5 + 0.5);
                 twinkle = pow(twinkle, max(_GlitterSharpness, 1.0));
 

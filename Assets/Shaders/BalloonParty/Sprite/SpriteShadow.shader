@@ -90,6 +90,9 @@ Shader "BalloonParty/Sprite/SpriteShadow"
 
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
+            #include "../Include/ShadowBlur.cginc"
+            #include "../Include/SpriteScale.cginc"
+            #include "../Include/Composite.cginc"
             #include "UnityUI.cginc"
 
             #pragma multi_compile __ UNITY_UI_CLIP_RECT
@@ -158,50 +161,28 @@ Shader "BalloonParty/Sprite/SpriteShadow"
 
             inline fixed SampleAlpha(float2 uv)
             {
-                // Out-of-bounds taps must read as transparent: with clamp wrap the sampler
-                // returns the edge pixel instead, smearing streaks wherever opaque pixels
-                // touch the texture edge.
-                float2 inBounds = step(0.0, uv) * step(uv, 1.0);
-                return tex2D(_MainTex, uv).a * inBounds.x * inBounds.y;
+                return SampleAlphaGuarded(_MainTex, uv);
             }
 
-            // 9-tap box blur centred on shadowUV.
-            // When softness == 0 all taps collapse to the same point (hard edge).
             inline fixed SoftShadowAlpha(float2 shadowUV, float s)
             {
-                fixed a =
-                    SampleAlpha(shadowUV + float2(-s, -s)) +
-                    SampleAlpha(shadowUV + float2( 0, -s)) +
-                    SampleAlpha(shadowUV + float2( s, -s)) +
-                    SampleAlpha(shadowUV + float2(-s,  0)) +
-                    SampleAlpha(shadowUV                 ) +
-                    SampleAlpha(shadowUV + float2( s,  0)) +
-                    SampleAlpha(shadowUV + float2(-s,  s)) +
-                    SampleAlpha(shadowUV + float2( 0,  s)) +
-                    SampleAlpha(shadowUV + float2( s,  s));
-                return a / 9.0;
+                return SoftShadowAlpha9Tap(_MainTex, shadowUV, s);
             }
 
             fixed4 frag(Varyings IN) : SV_Target
             {
-                // Scale the sprite UV inward from center so the quad has transparent
+                // Scale sprite UV inward from center so the quad has transparent
                 // margins on all sides — shadow can bleed into those margins freely.
-                float2 spriteUV = (IN.uv - 0.5) / _SpriteScale + 0.5;
-
-                // Anything outside [0,1] after scaling is beyond the sprite — transparent.
-                float2 inBounds = step(0.0, spriteUV) * step(spriteUV, 1.0);
-                float  spriteMask = inBounds.x * inBounds.y;
+                float2 spriteUV = ScaleSpriteUV(IN.uv, _SpriteScale);
+                float  spriteMask = SpriteBoundsMask(spriteUV);
 
                 // Main sprite colour — masked to bounds
                 fixed4 sprite  = tex2D(_MainTex, spriteUV) * IN.color;
                 sprite.a      *= spriteMask;
 
-                // Shadow samples from the same scaled UV, then shifted.
                 // Opted-in materials follow the scene light (direction away from it, authored
                 // distance); the default keeps the hand-authored offset — expressive shadows
-                // (UI, items, effects) aren't scene lighting. Applied in local sprite UV — no
-                // vertex world-rotation capture, so a spinning sprite's shadow lags the light
-                // slightly (accepted; sway is small).
+                // (UI, items, effects) aren't scene lighting.
                 float2 shadowOffset = _ShadowFromSceneLight > 0.5
                     ? -IN.lightDir * _ShadowDistance
                     : _ShadowOffset;
@@ -211,25 +192,14 @@ Shader "BalloonParty/Sprite/SpriteShadow"
                     ? SampleAlpha(shadowUV)
                     : SoftShadowAlpha(shadowUV, _ShadowSoftness);
 
-                // Weight by vertex alpha and shadow colour alpha
                 shadowAlpha *= IN.color.a * _ShadowColor.a;
                 // Only opted-in (scene-light-following) shadows fade with light intensity —
                 // expressive/UI shadows stay authored regardless of the scene light.
                 shadowAlpha *= _ShadowFromSceneLight > 0.5 ? IN.shadowFade : 1.0;
 
-                // Porter-Duff "over": composite shadow under sprite
-                //   A_out   = A_sprite + A_shadow * (1 - A_sprite)
-                //   RGB_out = (RGB_sprite * A_sprite + RGB_shadow * A_shadow * (1 - A_sprite)) / A_out
                 // Shadow RGB is tinted by the renderer's vertex color, mirroring how the sprite is tinted.
-                fixed3 shadowRGB = _ShadowColor.rgb * IN.color.rgb;
-                fixed spriteA   = sprite.a;
-                fixed combinedA = spriteA + shadowAlpha * (1.0 - spriteA);
-
-                fixed4 result;
-                result.a   = combinedA;
-                result.rgb = combinedA > 0.0001
-                    ? (sprite.rgb * spriteA + shadowRGB * shadowAlpha * (1.0 - spriteA)) / combinedA
-                    : sprite.rgb;
+                fixed4 shadow = fixed4(_ShadowColor.rgb * IN.color.rgb, shadowAlpha);
+                fixed4 result = PorterDuffOver(sprite, shadow);
 
                 #ifdef UNITY_UI_CLIP_RECT
                 result.a *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);
