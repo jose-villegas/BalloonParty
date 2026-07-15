@@ -54,8 +54,9 @@ namespace BalloonParty.Editor
         private Vector2 _scroll;
         private int _expandedRow = -1;
         private bool _balloonsExpanded;
+        private float _collapsedBalloonColWidth = ColWidths[BalloonColIndex];
 
-        private float EffectiveBalloonColWidth => _balloonsExpanded ? BalloonExpandedWidth : ColWidths[BalloonColIndex];
+        private float EffectiveBalloonColWidth => _balloonsExpanded ? BalloonExpandedWidth : _collapsedBalloonColWidth;
 
         [MenuItem("Tools/BalloonParty/Level Pacing")]
         private static void Open()
@@ -132,6 +133,41 @@ namespace BalloonParty.Editor
             if (count == 0)
             {
                 EditorGUILayout.HelpBox("No ranges defined.", MessageType.Warning);
+            }
+
+            // Compute collapsed balloon column width from the widest row
+            if (!_balloonsExpanded)
+            {
+                var thumbSize = RowHeight - 4f;
+                var maxActive = 0;
+                for (var i = 0; i < count; i++)
+                {
+                    var paramsProp = _rangesProp.GetArrayElementAtIndex(i).FindPropertyRelative("_parameters");
+                    var bProp = paramsProp?.FindPropertyRelative("_balloonWeights");
+                    if (bProp == null || !bProp.isArray)
+                    {
+                        continue;
+                    }
+
+                    var active = 0;
+                    for (var j = 0; j < bProp.arraySize; j++)
+                    {
+                        var w = bProp.GetArrayElementAtIndex(j).FindPropertyRelative("_weight");
+                        if (w != null && w.floatValue > 0f)
+                        {
+                            active++;
+                        }
+                    }
+
+                    if (active > maxActive)
+                    {
+                        maxActive = active;
+                    }
+                }
+
+                _collapsedBalloonColWidth = Mathf.Max(
+                    ColWidths[BalloonColIndex],
+                    32f + maxActive * (thumbSize + 2f));
             }
 
             _scroll = EditorGUILayout.BeginScrollView(_scroll);
@@ -468,10 +504,10 @@ namespace BalloonParty.Editor
 
             // Prefab thumbnails
             var x = labelRect.xMax;
-            var thumbSize = 12f;
+            var thumbSize = cell.height - 4f;
             var balloonsConfig = _balloonsConfigCache.Value;
 
-            for (var i = 0; i < count && x + thumbSize < cell.xMax; i++)
+            for (var i = 0; i < count; i++)
             {
                 var entryProp = balloonsProp.GetArrayElementAtIndex(i);
                 var weightProp = entryProp.FindPropertyRelative("_weight");
