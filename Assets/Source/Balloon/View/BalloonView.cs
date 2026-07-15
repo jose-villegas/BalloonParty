@@ -74,11 +74,13 @@ namespace BalloonParty.Balloon.View
         private Material _originalBodyMaterial;
         private MaterialPropertyBlock _rainbowBlock;
         private bool _isNudging;
+        private bool _tweenPausedForNudge;
 
         public IBalloonModel Model { get; private set; }
         public IBalloonVariant Variant => _variant;
         public TweenTracker TweenTracker => _tweenTracker;
         public SlotActorKind ActorKind => SlotActorKind.Dynamic;
+        bool IBalloonMotionView.IsNudging => _isNudging;
         public Transform RotationPivot => _swayPivot != null ? _swayPivot : transform;
 
         internal ITransformCapture TransformCapture => _itemService?.TransformCapture;
@@ -128,6 +130,7 @@ namespace BalloonParty.Balloon.View
             Model = null;
             _hitVfxOverrides = null;
             _isNudging = false;
+            _tweenPausedForNudge = false;
         }
 
         // Stops the idle animator so a board effect's tween owns the balloon's rotation without the idle
@@ -226,11 +229,70 @@ namespace BalloonParty.Balloon.View
                 && !stableChecker.IsStable.Value
                 && !_isNudging)
             {
+                Debug.Log($"[Nudge] BalloonView.Nudge({source}): SKIPPED — unstable & not nudging, {gameObject.name}");
                 return;
             }
 
+            var trackerPlaying = _tweenTracker.IsPlaying;
+
+            // Non-deflect nudges must not fight an active balance DOPath (lives in TweenTracker).
+            if (source != NudgeType.Deflect && trackerPlaying)
+            {
+                Debug.Log($"[Nudge] BalloonView.Nudge({source}): SKIPPED — tracker playing, {gameObject.name}");
+                return;
+            }
+
+            // The visual position is where the balloon currently IS (prevents first-frame snap).
+            // For Deflect on mid-balance balloons, the grid position could be far away (the balance
+            // target), so use visual as the return target too (symmetric bounce; balance resumes after).
+            // For everything else, the grid position is the correct return target — any small drift
+            // from previous nudge replacements gets smoothly corrected over the nudge duration.
+            var visualPos = transform.position;
+            var returnPosition = slotPosition;
+
+            if (source == NudgeType.Deflect && trackerPlaying)
+            {
+                returnPosition = visualPos;
+            }
+
+            var drift = (returnPosition - visualPos).sqrMagnitude;
+            if (drift > 0.01f)
+            {
+                Debug.LogWarning($"[Nudge] BalloonView.Nudge({source}): slot drift — " +
+                                 $"grid=({slotPosition.x:F2},{slotPosition.y:F2}) " +
+                                 $"visual=({visualPos.x:F2},{visualPos.y:F2}) {gameObject.name}");
+            }
+
+            Debug.Log($"[Nudge] BalloonView.Nudge({source}): ACCEPTED — isNudging={_isNudging} " +
+                      $"trackerPlaying={trackerPlaying} " +
+                      $"stable={((Model as IWriteableDynamicSlotActor)?.IsStable.Value ?? true)} {gameObject.name}");
+
             var currentScale = transform.localScale;
-            transform.DOKill();
+
+            if (source == NudgeType.Deflect)
+            {
+                if (_tweenPausedForNudge)
+                {
+                    // A previous deflect already paused the tracker. The balloon has moved since
+                    // that pause point, so the DOPath progress no longer matches. Discard it —
+                    // a future balance will create a fresh path from the current position.
+                    _tweenTracker.Kill();
+                    _tweenPausedForNudge = false;
+                }
+                else if (trackerPlaying)
+                {
+                    // Pause the balance tween (lives in TweenTracker, not on the transform directly) so
+                    // it doesn't fight the nudge ticker. Resume on CompleteNudge.
+                    _tweenTracker.Pause();
+                    _tweenPausedForNudge = true;
+                    Debug.Log($"[Nudge] BalloonView.Nudge: PAUSED tracker, using visual pos {slotPosition}");
+                }
+            }
+            else
+            {
+                transform.DOKill();
+                _tweenPausedForNudge = false;
+            }
 
             if (Model is IWriteableDynamicSlotActor writable)
             {
@@ -241,7 +303,7 @@ namespace BalloonParty.Balloon.View
 
             // Silently replaces any nudge already running for this view.
             _motionTicker.StartNudge(
-                this, slotPosition, direction.normalized * nudgeDistance, nudgeDuration, onComplete);
+                this, visualPos, returnPosition, direction.normalized * nudgeDistance, nudgeDuration, onComplete);
 
             if (currentScale != Vector3.one)
             {
@@ -256,18 +318,47 @@ namespace BalloonParty.Balloon.View
 
         public void CompleteNudge(Action onComplete)
         {
-            if (Model is IWriteableDynamicSlotActor w)
-            {
-                w.IsStable.Value = true;
-            }
+            Debug.Log($"[Nudge] BalloonView.CompleteNudge: tweenPaused={_tweenPausedForNudge} " +
+                      $"hasDeferred={onComplete != null} {gameObject.name}");
 
             _isNudging = false;
+
+            if (_tweenPausedForNudge)
+            {
+                _tweenPausedForNudge = false;
+
+                if (onComplete != null)
+                {
+                    // A deferred balance will start a new tween — kill the paused one outright
+                    // instead of resuming then immediately killing it.
+                    _tweenTracker.Kill();
+                }
+                else
+                {
+                    // No deferred balance: the paused balance tween resumes and sets IsStable on completion.
+                    _tweenTracker.Resume();
+                }
+            }
+            else if (onComplete == null && Model is IWriteableDynamicSlotActor w)
+            {
+                // No paused tween and no deferred balance — the nudge was the only motion.
+                w.IsStable.Value = true;
+            }
+            // When onComplete != null and no paused tween: IsStable is already false (set by
+            // TryBalanceSlot). The deferred StartBalanceTween's OnComplete will restore it.
+
             onComplete?.Invoke();
         }
 
         public void RegisterDisposeOnDespawn(IDisposable disposable)
         {
             _bindDisposables.Add(disposable);
+        }
+
+        public void OnNudgeCancelled()
+        {
+            _isNudging = false;
+            _tweenPausedForNudge = false;
         }
 
         public void SetHitVfxOverrides(HitVfxOverride[] overrides)

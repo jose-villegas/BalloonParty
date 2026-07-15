@@ -134,54 +134,83 @@ namespace BalloonParty.Balloon.Controller
                         "— model/view desync.");
                 }
 
+                // If a nudge (e.g. deflect bounce) is playing, let it finish first — the balance
+                // tween starts from wherever the nudge returns the balloon to.
+                if (view is View.IBalloonMotionView { IsNudging: true } nudgingView)
+                {
+                    Debug.Log($"[Nudge] BalloonBalancer: DEFERRING balance for slot {slot} — mid-nudge");
+                    var capturedActor = actor;
+                    var capturedView = view;
+                    // Snapshot the path — the pooled list will be released by ReleasePaths() before
+                    // this callback fires.
+                    var pathSnapshot = new List<Vector3>(path);
+                    _motionTicker.ReplaceOnComplete(nudgingView, () =>
+                    {
+                        StartBalanceTween(capturedActor, pathSnapshot, capturedView);
+                    });
+                    continue;
+                }
+
                 view.TweenTracker.Kill();
                 view.transform.DOKill();
 
-                // A ticker-driven nudge escapes DOKill — cancel it explicitly.
+                // A ticker-driven nudge escapes DOKill — cancel it explicitly and reset the view's
+                // nudge flags so subsequent neighbour nudges respect the stability guard.
                 if (view is View.IBalloonMotionView motionView)
                 {
                     _motionTicker.CancelNudge(motionView);
+                    motionView.OnNudgeCancelled();
+                    Debug.Log($"[Nudge] BalloonBalancer: cancelled nudge for slot {slot}");
                 }
 
-                var currentScale = view.transform.localScale;
-                var viewTransform = view.transform;
+                StartBalanceTween(actor, path, view);
+            }
+        }
 
-                // Direct movers skip the resolve's intermediate waypoints and tween straight to the end.
-                var directMotion = actor is IBalanceInfluence { DirectBalanceMotion: true } && path.Count > 1;
+        private void StartBalanceTween(
+            IWriteableDynamicSlotActor actor, List<Vector3> path, ISlotActorView view)
+        {
+            var currentScale = view.transform.localScale;
+            var viewTransform = view.transform;
 
-                // A (near-)zero-length path NaNs inside DOTween: ConvertToConstantPathPerc's lengths
-                // table is all zeros, its percent lookup divides 0/0, and the NaN propagates into the
-                // position setter. Skip the tween and complete the move inline instead.
-                var travelSqr = directMotion
-                    ? (path[^1] - viewTransform.position).sqrMagnitude
-                    : PolylineSqrLength(viewTransform.position, path);
-                if (travelSqr < DegenerateMoveSqrEpsilon)
-                {
-                    actor.IsStable.Value = true;
-                    _balancePathHolder.Release(actor);
-                }
-                else
-                {
-                    var waypoints = directMotion
-                        ? FinalWaypointBuffer(viewTransform.position, path)
-                        : WaypointBuffer(viewTransform.position, path);
+            view.TweenTracker.Kill();
+            viewTransform.DOKill();
 
-                    var tween = viewTransform
-                        .DOPath(waypoints, _balloonsConfig.TimeForBalloonsBalance, PathType.CatmullRom)
-                        .StampDisturbanceAlongPath(viewTransform, _disturbanceField, StampSource.BalloonPath)
-                        .OnComplete(() =>
-                        {
-                            actor.IsStable.Value = true;
-                            _balancePathHolder.Release(actor);
-                        });
+            // Direct movers skip the resolve's intermediate waypoints and tween straight to the end.
+            var directMotion = actor is IBalanceInfluence { DirectBalanceMotion: true } && path.Count > 1;
 
-                    view.TweenTracker.Append(tween);
-                }
+            // A (near-)zero-length path NaNs inside DOTween: ConvertToConstantPathPerc's lengths
+            // table is all zeros, its percent lookup divides 0/0, and the NaN propagates into the
+            // position setter. Skip the tween and complete the move inline instead.
+            var travelSqr = directMotion
+                ? (path[^1] - viewTransform.position).sqrMagnitude
+                : PolylineSqrLength(viewTransform.position, path);
+            if (travelSqr < DegenerateMoveSqrEpsilon)
+            {
+                actor.IsStable.Value = true;
+                _balancePathHolder.Release(actor);
+            }
+            else
+            {
+                var waypoints = directMotion
+                    ? FinalWaypointBuffer(viewTransform.position, path)
+                    : WaypointBuffer(viewTransform.position, path);
 
-                if (currentScale != Vector3.one)
-                {
-                    view.transform.DOScale(Vector3.one, _balloonsConfig.TimeForBalloonsBalance);
-                }
+                var tween = viewTransform
+                    .DOPath(waypoints, _balloonsConfig.TimeForBalloonsBalance, PathType.CatmullRom)
+                    .StampDisturbanceAlongPath(viewTransform, _disturbanceField, StampSource.BalloonPath)
+                    .OnComplete(() =>
+                    {
+                        actor.IsStable.Value = true;
+                        _balancePathHolder.Release(actor);
+                    });
+
+                view.TweenTracker.Append(tween);
+            }
+
+            if (currentScale != Vector3.one)
+            {
+                viewTransform.DOScale(Vector3.one, _balloonsConfig.TimeForBalloonsBalance);
             }
         }
 

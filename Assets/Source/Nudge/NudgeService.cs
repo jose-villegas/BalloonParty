@@ -41,10 +41,12 @@ namespace BalloonParty.Nudge
         {
             if (_grid.ViewAt(slot) is not INudgeable nudgeableView)
             {
+                Debug.Log($"[Nudge] NudgeActor({slot}, {source}): no INudgeable view at slot — skipped");
                 return;
             }
 
             var slotPos = _grid.IndexToWorldPosition(slot);
+            Debug.Log($"[Nudge] NudgeActor({slot}, {source}): dist={distance:F3} dur={duration:F3} → calling Nudge");
             nudgeableView.Nudge(slotPos, slotPos - origin, distance, duration, source, null);
         }
 
@@ -54,6 +56,8 @@ namespace BalloonParty.Nudge
             {
                 return;
             }
+
+            Debug.Log($"[Nudge] OnActorHit: outcome={msg.Outcome} slot={msg.Actor.SlotIndex}");
 
             var hitSlot = msg.Actor.SlotIndex;
             var hitSlotPos = _grid.IndexToWorldPosition(hitSlot);
@@ -88,16 +92,19 @@ namespace BalloonParty.Nudge
         {
             if (msg.Actor == null)
             {
+                Debug.Log("[Nudge] HandleSingleActor: Actor is null — skipped");
                 return;
             }
 
             if (msg.Actor is not ISlotActor slotActor)
             {
+                Debug.Log("[Nudge] HandleSingleActor: Actor is not ISlotActor — skipped");
                 return;
             }
 
             var slot = slotActor.SlotIndex;
             _resolver.Resolve(msg.Actor.NudgeOverrides, msg.Overrides, msg.Source, out var distance, out var duration);
+            Debug.Log($"[Nudge] HandleSingleActor({msg.Source}): slot={slot} dist={distance:F3}");
             NudgeActor(slot, msg.Origin, distance, duration, msg.Source);
         }
 

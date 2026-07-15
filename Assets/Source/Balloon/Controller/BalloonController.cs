@@ -170,21 +170,27 @@ namespace BalloonParty.Balloon.Controller
 
         private void Deflect(ActorHitMessage msg)
         {
-            var balloonWorldPos = _grid.IndexToWorldPosition(_model.SlotIndex.Value);
-            _deflectedPublisher.Publish(new BalloonDeflectedMessage(_model, balloonWorldPos, msg.ProjectileDirection));
+            var viewPos = (Vector3)_view.transform.position;
+            var slotWorldPos = _grid.IndexToWorldPosition(_model.SlotIndex.Value);
+            Debug.Log($"[Nudge] BalloonController.Deflect: slot={_model.SlotIndex.Value} " +
+                      $"worldPos={slotWorldPos} viewPos={viewPos}");
 
-            // Heavy types jolt the air on impact: wide for the unbreakable's reflect, slot-sized for the
-            // tough's elastic bounce. Zero direction = a symmetric shockwave ring (like the pop), not a wake.
+            // Projectile reflection needs the visual position — the ball bounced off the view, not
+            // the (potentially different) model-slot position during a mid-balance move.
+            _deflectedPublisher.Publish(new BalloonDeflectedMessage(_model, viewPos, msg.ProjectileDirection));
+
             if (_model is IHasDeflectStamp stamper && stamper.DeflectStampScale > 0f)
             {
                 _disturbanceField.Stamp(
-                    StampSource.BalloonDeflect, balloonWorldPos, Vector2.zero, stamper.DeflectStampScale,
+                    StampSource.BalloonDeflect, viewPos, Vector2.zero, stamper.DeflectStampScale,
                     _palette.PaletteIndexOf(ImpactColorId()));
             }
 
+            // NudgeMessage origin uses the slot world position: NudgeService computes direction as
+            // slotPos − origin, which yields the projectile direction only when origin = slotPos − dir.
             _nudgePublisher.Publish(new NudgeMessage(
                 _model,
-                balloonWorldPos - msg.ProjectileDirection.normalized,
+                slotWorldPos - msg.ProjectileDirection.normalized,
                 NudgeType.Deflect));
         }
 
