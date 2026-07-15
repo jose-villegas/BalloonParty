@@ -21,7 +21,7 @@ namespace BalloonParty.Editor
         private const float CurveFieldWidth = 80f;
         private const float GroupGap = 20f;
         private const int BalloonColIndex = 5;
-        private const int ItemColIndex = 6;
+        private const int ItemColIndex = 9;
         private const float BalloonExpandedWidth = 310f;
         private const float ItemExpandedWidth = 170f;
 
@@ -36,17 +36,17 @@ namespace BalloonParty.Editor
             40f,   // 3: 1st Turn (single int)
             130f,  // 4: Colors (dropdown + swatches)
             100f,  // 5: Balloons (collapsed) — dynamic when expanded
-            100f,  // 6: Items — dynamic when expanded
-            130f,  // 7: Cadence (min/max + mode)
-            80f,   // 8: Initial Count curve
-            80f,   // 9: Wave Count curve
+            130f,  // 6: Cadence (min/max + mode)
+            80f,   // 7: Initial Count curve
+            80f,   // 8: Wave Count curve
+            100f,  // 9: Items — dynamic when expanded
             44f,   // 10: Expand (►)
             44f,   // 11: Delete (−)
         };
 
         private static readonly string[] ColHeaders =
         {
-            "Range", "Spawn", "Board", "1st Turn", "Colors", "Balloons", "Items", "Cadence", "Init Count", "Wave Count", "Expand", "Delete"
+            "Range", "Spawn", "Board", "1st Turn", "Colors", "Balloons", "Cadence", "Init Count", "Wave Count", "Items", "Expand", "Delete"
         };
 
         private readonly ConfigAssetCache<LevelPacingConfiguration> _assetCache = new();
@@ -534,6 +534,10 @@ namespace BalloonParty.Editor
                     DrawBalloonCellCollapsed(CellRect(rowRect, BalloonColIndex), balloonsProp);
                 }
 
+                DrawRangedIntCell(CellRect(rowRect, 6), paramsProp, "_itemCadence");
+                DrawCurveCell(CellRect(rowRect, 7), paramsProp, "_initialItemCountWeights");
+                DrawCurveCell(CellRect(rowRect, 8), paramsProp, "_itemCountWeights");
+
                 var itemsProp = paramsProp.FindPropertyRelative("_itemWeights");
                 if (_itemsExpanded)
                 {
@@ -543,10 +547,6 @@ namespace BalloonParty.Editor
                 {
                     DrawItemCellCollapsed(CellRect(rowRect, ItemColIndex), itemsProp);
                 }
-
-                DrawRangedIntCell(CellRect(rowRect, 7), paramsProp, "_itemCadence");
-                DrawCurveCell(CellRect(rowRect, 8), paramsProp, "_initialItemCountWeights");
-                DrawCurveCell(CellRect(rowRect, 9), paramsProp, "_itemCountWeights");
             }
 
             // ► button (col 10) — right-anchored
