@@ -39,6 +39,9 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Heavy movers animate straight from start to final slot instead of touring every resolve waypoint. Author true for Unbreakable.")]
         [SerializeField] private bool _directBalanceMotion;
 
+        [Tooltip("When true, side and down neighbours are valid balance candidates even without a shove — the actor drifts freely in all directions, steered only by its WeightBias (e.g. soap clusters clumping).")]
+        [SerializeField] private bool _omnidirectionalBalance;
+
         [Tooltip("A projectile deflecting off this balloon stamps the disturbance field at its slot, radius = BalloonDeflect profile × this (unbreakable ~3 for a heavy jolt, tough 1 for the elastic bounce). 0 = no stamp.")]
         [SerializeField] private float _deflectStampScale;
 
@@ -58,6 +61,7 @@ namespace BalloonParty.Configuration.Balloons
         public int MaxBalanceSteps => _maxBalanceSteps;
         public int BalancePriority => _balancePriority;
         public bool DirectBalanceMotion => _directBalanceMotion;
+        public bool OmnidirectionalBalance => _omnidirectionalBalance;
         public float DeflectStampScale => _deflectStampScale;
         public int SpawnWeight => _spawnWeight;
 

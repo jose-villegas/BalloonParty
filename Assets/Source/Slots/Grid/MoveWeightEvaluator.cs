@@ -76,6 +76,7 @@ namespace BalloonParty.Slots.Grid
             }
 
             var isUpMove = to.y == from.y - 1;
+            var omnidirectional = influence is { OmnidirectionalBalance: true };
             var alignment = 0f;
             if (shove.Active)
             {
@@ -87,9 +88,10 @@ namespace BalloonParty.Slots.Grid
             {
                 weight = CalculateWeight(to.x, to.y);
             }
-            else if (!shove.Active || alignment < 0f)
+            else if (!omnidirectional && (!shove.Active || alignment < 0f))
             {
-                // Side/down moves exist only under a shove, and never back into the shover.
+                // Side/down moves exist only under a shove or for omnidirectional actors,
+                // and never back into the shover.
                 return false;
             }
 

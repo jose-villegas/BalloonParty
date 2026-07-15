@@ -21,8 +21,7 @@ MonoBehaviour:
     _hitsToPop: 1
     _scoreValue: 1
     _itemActivationWeight: 1
-    _separationBias: 0
-    _diagonalColorBias: 1
+    _balanceBias: 3
     _maxBalanceSteps: -1
     _balancePriority: 1
     _directBalanceMotion: 0
@@ -36,8 +35,7 @@ MonoBehaviour:
     _hitsToPop: 1
     _scoreValue: 5
     _itemActivationWeight: 0
-    _separationBias: 0
-    _diagonalColorBias: 1
+    _balanceBias: 3
     _maxBalanceSteps: -1
     _balancePriority: 1
     _directBalanceMotion: 0
@@ -51,8 +49,7 @@ MonoBehaviour:
     _hitsToPop: 1
     _scoreValue: 10
     _itemActivationWeight: 0
-    _separationBias: 0
-    _diagonalColorBias: 1
+    _balanceBias: 3
     _maxBalanceSteps: -1
     _balancePriority: 1
     _directBalanceMotion: 0
@@ -77,8 +74,7 @@ MonoBehaviour:
     _hitsToPop: 3
     _scoreValue: 15
     _itemActivationWeight: 0
-    _separationBias: 1.5
-    _diagonalColorBias: 0
+    _balanceBias: 3
     _maxBalanceSteps: 1
     _balancePriority: 0
     _directBalanceMotion: 0
@@ -95,8 +91,7 @@ MonoBehaviour:
     _hitsToPop: 3
     _scoreValue: 0
     _itemActivationWeight: 0
-    _separationBias: -1.5
-    _diagonalColorBias: 0
+    _balanceBias: 2
     _maxBalanceSteps: 0
     _balancePriority: 0
     _directBalanceMotion: 0
@@ -118,8 +113,7 @@ MonoBehaviour:
     _hitsToPop: -1
     _scoreValue: 50
     _itemActivationWeight: 0
-    _separationBias: 0
-    _diagonalColorBias: 0
+    _balanceBias: 2
     _maxBalanceSteps: 0
     _balancePriority: 0
     _directBalanceMotion: 1
@@ -133,8 +127,7 @@ MonoBehaviour:
     _hitsToPop: 1
     _scoreValue: 1
     _itemActivationWeight: 0.1
-    _separationBias: 0
-    _diagonalColorBias: 0
+    _balanceBias: 3
     _maxBalanceSteps: 0
     _balancePriority: 0
     _directBalanceMotion: 0

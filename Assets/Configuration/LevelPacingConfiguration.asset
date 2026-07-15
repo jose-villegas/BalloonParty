@@ -499,6 +499,9 @@ MonoBehaviour:
       - _type: 5
         _weight: 1
         _maximumAllowedOverride: 5
+      - _type: 0
+        _weight: 0
+        _maximumAllowedOverride: 0
       _gridActorGates: []
       _allowedColorsMask: 3
   - _fromLevel: 3
@@ -837,6 +840,9 @@ MonoBehaviour:
       - _type: 2
         _weight: 2
         _maximumAllowedOverride: 3
+      - _type: 0
+        _weight: 0
+        _maximumAllowedOverride: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -1161,8 +1167,11 @@ MonoBehaviour:
         _weight: 1
         _maximumAllowedOverride: 3
       - _type: 2
-        _weight: 0.8
+        _weight: 1
         _maximumAllowedOverride: 2
+      - _type: 0
+        _weight: 1
+        _maximumAllowedOverride: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -1487,8 +1496,11 @@ MonoBehaviour:
         _weight: 0.7
         _maximumAllowedOverride: 2
       - _type: 2
-        _weight: 0.5
-        _maximumAllowedOverride: 1
+        _weight: 0.8
+        _maximumAllowedOverride: 2
+      - _type: 0
+        _weight: 1
+        _maximumAllowedOverride: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -2003,11 +2015,14 @@ MonoBehaviour:
         _weight: 0.5
         _maximumAllowedOverride: 2
       - _type: 2
-        _weight: 0.35
+        _weight: 0.5
         _maximumAllowedOverride: 1
       - _type: 4
         _weight: 1
         _maximumAllowedOverride: 2
+      - _type: 0
+        _weight: 1
+        _maximumAllowedOverride: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -2522,11 +2537,14 @@ MonoBehaviour:
         _weight: 0.5
         _maximumAllowedOverride: 2
       - _type: 2
-        _weight: 0.35
+        _weight: 0.3
         _maximumAllowedOverride: 1
       - _type: 4
         _weight: 0.7
         _maximumAllowedOverride: 2
+      - _type: 0
+        _weight: 2
+        _maximumAllowedOverride: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -3242,6 +3260,9 @@ MonoBehaviour:
       - _type: 6
         _weight: 1
         _maximumAllowedOverride: 5
+      - _type: 0
+        _weight: 1
+        _maximumAllowedOverride: 0
       _gridActorGates:
       - _type: 0
         _count:
