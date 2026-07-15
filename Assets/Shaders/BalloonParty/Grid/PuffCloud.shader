@@ -50,6 +50,9 @@ Shader "BalloonParty/Grid/PuffCloud"
         // Diffuse response to the scene light (colour x intensity multiplies the whole cloud):
         // 0 = unlit (authored look always), 1 = fully lit.
         _LightInfluence     ("Light Influence",    Range(0, 1))        = 1
+        // Blends the scene-light colour into the cloud's noise shape: 0 = uniform colour overlay,
+        // 1 = colour tracks the cloud density (strong in the core, absent at edges).
+        _ColorNoiseBias     ("Color Noise Bias",   Range(0, 1))        = 0.5
         // Domain-warps the LIGHT-FIELD lookup by the cloud's DETAIL-octave noise (world units), so a
         // local light's crisp stamp geometry (the laser cross, a bomb disc) gets a noisy, integrated
         // edge instead of reading as hard geometry. Kept small + high-frequency on purpose: the stamp
@@ -153,6 +156,7 @@ Shader "BalloonParty/Grid/PuffCloud"
             fixed4 _AmbientColor;
             float  _LightIntensity;
             float  _LightInfluence;
+            float  _ColorNoiseBias;
             float  _LightWarpAmount;
             float  _NormalStrength;
             float  _NormalEpsilon;
@@ -257,7 +261,7 @@ Shader "BalloonParty/Grid/PuffCloud"
             // ddx/ddy nearly free, replacing four extra noise evaluations per pixel. The
             // 2·epsilon factor keeps the authored _NormalEpsilon/_NormalStrength scaling of
             // the central differences this replaces.
-            fixed3 CloudLighting(float2 worldGradient, float2 worldPos)
+            fixed3 CloudLighting(float2 worldGradient, float2 worldPos, float cloudDensity)
             {
                 // Clamp kills rare derivative spikes (2×2 quads straddling divergent state) —
                 // a legit cloud slope never exceeds this.
@@ -269,14 +273,6 @@ Shader "BalloonParty/Grid/PuffCloud"
                 // Field-aware: sampled at the cloud's own world position (per-fragment),
                 // falling back to the flat global when the field is off. Already points
                 // toward the light — direct consumption, no sign flip.
-                // A/B: the previous authored value (1,-1) lit clouds from lower-right
-                // (opposite the global's upper-left). If that inverted look is the
-                // intended art, negate here (ld = -SceneLightDirectionAt(worldPos)) —
-                // decide in-editor against the cloud drop shadow.
-                // Opt a specific stamp colour out of the cloud's lighting: where the local light here is
-                // tagged with the ignored palette index, fall back to the flat ambient globals — the
-                // cloud lights as if that light weren't there (the laser beam, tagged Unbreakable, is the
-                // motivating case). A no-op when the index is -1 or the texel carries a different light.
                 float2 ld = SceneLightDirectionAt(worldPos);
                 float3 lightVec = normalize(float3(ld, 0.6));
 
@@ -291,8 +287,18 @@ Shader "BalloonParty/Grid/PuffCloud"
                 fixed3 lit = lerp(_AmbientColor.rgb, _LightColor.rgb, halfLambert);
                 fixed3 shading = lerp(fixed3(1, 1, 1), lit, _LightIntensity);
 
+                // _ColorNoiseBias blends the scene colour into the cloud's noise shape: at 0 the
+                // tint applies uniformly; at 1 it tracks cloud density (strong in the core, absent
+                // at thin edges), making the colour feel integrated into the turbulence. The local
+                // light intensity (R channel) gates the bias so the modulation only engages where
+                // a light actually reaches — the ambient/global key light stays uniform.
+                float localMag = _SceneLightFieldOn > 0.5
+                    ? saturate(SceneLightFieldSample(worldPos).r)
+                    : 0.0;
+                float biasStrength = _ColorNoiseBias * localMag;
+                float influence = lerp(_LightInfluence, _LightInfluence * cloudDensity, biasStrength);
                 float3 sceneTint = SceneLightTintAt(worldPos);
-                return shading * lerp(float3(1.0, 1.0, 1.0), sceneTint, _LightInfluence);
+                return shading * lerp(float3(1.0, 1.0, 1.0), sceneTint, influence);
             }
 
             v2f vert(appdata_t IN)
@@ -458,7 +464,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                     NoiseOctave(warpP + float2(-8.4, 47.1))) * _LightWarpAmount;
 
                 // Compose main cloud with shadow behind
-                fixed3 lighting = CloudLighting(lightGradient, wpLight);
+                fixed3 lighting = CloudLighting(lightGradient, wpLight, cloud);
                 fixed3 mainRgb  = _CloudColor.rgb * IN.color.rgb * lighting;
 
                 fixed  combinedA   = mainAlpha + shadowAlpha * (1.0 - mainAlpha);
@@ -471,7 +477,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 if (cloud < 0.001) discard;
 
                 float mainAlpha = cloud * _CloudColor.a * IN.color.a;
-                fixed3 lighting = CloudLighting(lightGradient, wpRest);
+                fixed3 lighting = CloudLighting(lightGradient, wpRest, cloud);
                 fixed3 mainRgb  = _CloudColor.rgb * IN.color.rgb * lighting;
 
                 return fixed4(mainRgb, mainAlpha);

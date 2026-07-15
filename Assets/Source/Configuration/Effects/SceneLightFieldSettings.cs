@@ -64,6 +64,12 @@ namespace BalloonParty.Configuration.Effects
         [Range(0f, 2f)]
         [SerializeField] private float _mipSpread = 0.7f;
 
+        [Tooltip("Shadow-specific mip spread — controls distance-dependent penumbra. " +
+                 "Higher than the bounce spread means shadows soften faster with distance " +
+                 "(sharp at contact, soft far away). 0 = uses the bounce spread instead.")]
+        [Range(0f, 4f)]
+        [SerializeField] private float _shadowMipSpread = 1.4f;
+
         [Header("GI — Shadow")]
         [Range(0f, 1f)]
         [SerializeField] private float _shadowStrength = 0.35f;
@@ -107,6 +113,7 @@ namespace BalloonParty.Configuration.Effects
         public float TapDecay => _tapDecay;
         public float TapStart => _tapStart;
         public float MipSpread => _mipSpread;
+        public float ShadowMipSpread => _shadowMipSpread > 0f ? _shadowMipSpread : _mipSpread;
         public float ShadowStrength => _shadowStrength;
         public Color ShadowTint => _shadowTint;
         public float BounceStrength => _bounceStrength;
