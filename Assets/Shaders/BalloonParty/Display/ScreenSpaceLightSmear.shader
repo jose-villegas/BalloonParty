@@ -22,12 +22,7 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
     // The two must march opposite ways: a shadow is cast onto the side of an object
     // away from the light, while its glow bleeds onto the side facing the light —
     // marching both the same way stacks them on top of each other instead.
-    // Pass 1 — occlusion-aware bilateral cross blur: a 9-tap cross (±2 horizontal + ±2
-    // vertical + centre) weighted by Gaussian distance AND alpha-coverage similarity.
-    // Sprite coverage in the smear's alpha is our depth proxy: pixels whose coverage
-    // differs significantly (object edge vs open sky) get low bilateral weight, preventing
-    // the light buffer from bleeding across silhouette boundaries. Much softer than the
-    // old 3×3 box, without smearing shadows onto lit ground.
+    // Pass 1 — 3x3 box soften to remove smear streaks.
     // Pass 2 — temporal blend against the previous smoothed buffer: at capture
     // resolution a moving sprite jumps whole texels per frame and the bounce tint
     // visibly flickers; folding each fresh build in gradually integrates that away
@@ -131,42 +126,23 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
 
             sampler2D _MainTex;
             float4 _MainTex_TexelSize;
-            float _BlurSharpness;
 
             fixed4 frag(v2f_img IN) : SV_Target
             {
                 float2 texel = _MainTex_TexelSize.xy;
-                float4 center = tex2D(_MainTex, IN.uv);
-                float refAlpha = center.a;
-
-                // Gaussian distance weights for offsets 1 and 2 (sigma ~ 1.2).
-                const float w1 = 0.6065;
-                const float w2 = 0.1353;
-
-                float4 acc = center;
-                float wSum = 1.0;
-
-                // Horizontal and vertical arms (±1, ±2 texels).
-                float2 offsets[8] = {
-                    float2( 1, 0), float2(-1, 0),
-                    float2( 2, 0), float2(-2, 0),
-                    float2( 0, 1), float2( 0,-1),
-                    float2( 0, 2), float2( 0,-2)
-                };
-                float gWeights[8] = { w1, w1, w2, w2, w1, w1, w2, w2 };
+                float4 acc = 0;
 
                 [unroll]
-                for (int i = 0; i < 8; i++)
+                for (int y = -1; y <= 1; y++)
                 {
-                    float4 s = tex2D(_MainTex, IN.uv + texel * offsets[i]);
-                    float alphaDiff = abs(s.a - refAlpha);
-                    float bilateral = exp(-alphaDiff * alphaDiff * _BlurSharpness);
-                    float w = gWeights[i] * bilateral;
-                    acc += s * w;
-                    wSum += w;
+                    [unroll]
+                    for (int x = -1; x <= 1; x++)
+                    {
+                        acc += tex2D(_MainTex, IN.uv + texel * float2(x, y));
+                    }
                 }
 
-                return acc / wSum;
+                return acc / 9.0;
             }
             ENDCG
         }
