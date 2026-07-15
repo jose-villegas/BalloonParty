@@ -243,9 +243,10 @@ Shader "BalloonParty/Scenario/SpeckField"
                 col.rgb = lerp(col.rgb, target.rgb, heat);
                 col.a = lerp(col.a, tex.a * target.a, heat);
 
-                // Scene-light tint, eased by the per-look influence (0 = emissive; 1 = full; >1 over-drives).
-                // Floored at 0 so an over-driven tint below neutral can't push the colour negative.
-                col.rgb *= max(float3(0.0, 0.0, 0.0), lerp(float3(1.0, 1.0, 1.0), i.lightTint, i.lightInfluence));
+                // Scene-light tint as an exposure curve: influence=0 → emissive (tint ignored),
+                // influence=1 → linear, >1 → stronger contrast. pow never goes negative, so even
+                // a weak local light in a dark ambient is visible instead of clamped to black.
+                col.rgb *= pow(max(float3(0.001, 0.001, 0.001), i.lightTint), i.lightInfluence);
 
                 col.a *= i.alpha;
                 return col;
