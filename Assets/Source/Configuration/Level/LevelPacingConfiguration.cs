@@ -37,7 +37,7 @@ namespace BalloonParty.Configuration.Level
         {
 #if UNITY_EDITOR
             WarnOnGapsAndOverlaps();
-            WarnOnMissingOrMultipleTails();
+            WarnOnMissingOrMultipleFallbacks();
             WarnOnEmptyWeightedSets();
             WarnOnNonMonotonicThreshold();
 #endif
@@ -141,15 +141,23 @@ namespace BalloonParty.Configuration.Level
         // Mirrors the resolver's lookup: the range containing the level, falling back to the open-ended tail.
         private int MaskForLevel(int level)
         {
+            var fallbackMask = 0;
+
             for (var i = 0; i < _ranges.Length; i++)
             {
+                if (_ranges[i].IsFallback)
+                {
+                    fallbackMask = _ranges[i].Parameters?.AllowedColorsMask ?? 0;
+                    continue;
+                }
+
                 if (_ranges[i].Contains(level))
                 {
                     return _ranges[i].Parameters?.AllowedColorsMask ?? 0;
                 }
             }
 
-            return _ranges.Length > 0 ? _ranges[_ranges.Length - 1].Parameters?.AllowedColorsMask ?? 0 : 0;
+            return fallbackMask;
         }
 
 #if UNITY_EDITOR
@@ -159,6 +167,11 @@ namespace BalloonParty.Configuration.Level
             {
                 var previous = _ranges[i - 1];
                 var current = _ranges[i];
+
+                if (previous.IsFallback || current.IsFallback)
+                {
+                    continue;
+                }
 
                 if (previous.IsOpenEnded)
                 {
@@ -178,21 +191,21 @@ namespace BalloonParty.Configuration.Level
             }
         }
 
-        private void WarnOnMissingOrMultipleTails()
+        private void WarnOnMissingOrMultipleFallbacks()
         {
-            var tailCount = 0;
+            var fallbackCount = 0;
             for (var i = 0; i < _ranges.Length; i++)
             {
-                if (_ranges[i].IsOpenEnded)
+                if (_ranges[i].IsFallback)
                 {
-                    tailCount++;
+                    fallbackCount++;
                 }
             }
 
-            if (tailCount != 1)
+            if (fallbackCount != 1)
             {
                 Debug.LogWarning(
-                    $"LevelPacingConfiguration ({name}): expected exactly one open-ended tail range, found {tailCount}.");
+                    $"LevelPacingConfiguration ({name}): expected exactly one fallback range (either level bound = -1), found {fallbackCount}.");
             }
         }
 

@@ -91,19 +91,27 @@ namespace BalloonParty.Game.Level
                 _palette.ColorNamesForMask(_current.AllowedColorsMask));
         }
 
-        // Falls back to the last authored range, which acts as the open-ended tail.
+        // Falls back to the entry marked with -1 in either level bound.
         private LevelRangeEntry ResolveRange(int level)
         {
             var ranges = _pacing.Ranges;
+            var fallback = default(LevelRangeEntry);
+
             for (var i = 0; i < ranges.Count; i++)
             {
+                if (ranges[i].IsFallback)
+                {
+                    fallback = ranges[i];
+                    continue;
+                }
+
                 if (ranges[i].Contains(level))
                 {
                     return ranges[i];
                 }
             }
 
-            return ranges.Count > 0 ? ranges[ranges.Count - 1] : default;
+            return fallback;
         }
 
         private List<ResolvedBalloonEntry> BuildBalloonPickList(LevelParameters parameters)
