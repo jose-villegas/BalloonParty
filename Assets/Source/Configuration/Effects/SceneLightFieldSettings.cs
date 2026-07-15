@@ -1,3 +1,4 @@
+using BalloonParty.Shared;
 using UnityEngine;
 
 namespace BalloonParty.Configuration.Effects
@@ -8,6 +9,7 @@ namespace BalloonParty.Configuration.Effects
         [Header("Main Light")]
         [Tooltip("Points TOWARD the light (normalized on read); shadows extend the opposite way. " +
                  "The canonical scene light sits upper-left.")]
+        [UnitCircle]
         [SerializeField] private Vector2 _lightDirection = new(-0.707f, 0.707f);
 
         [Tooltip("The light's tint — multiplies into each consumer's authored response colour " +
