@@ -48,8 +48,10 @@ namespace BalloonParty.Tests.Configuration
             }
         }
 
+        // Auto-sorting on validate was deliberately removed (4d3ec62c) — OnValidate only warns,
+        // leaving the authored order intact.
         [Test]
-        public void OnValidate_SortsRangesByFromLevel()
+        public void OnValidate_DoesNotReorderRanges()
         {
             var second = MakeRange(10, 0);
             var first = MakeRange(1, 9);
@@ -58,8 +60,8 @@ namespace BalloonParty.Tests.Configuration
             InvokeOnValidate();
 
             ILevelPacingConfiguration pacing = _config;
-            Assert.AreEqual(1, pacing.Ranges[0].FromLevel);
-            Assert.AreEqual(10, pacing.Ranges[1].FromLevel);
+            Assert.AreEqual(10, pacing.Ranges[0].FromLevel);
+            Assert.AreEqual(1, pacing.Ranges[1].FromLevel);
         }
 
         [Test]

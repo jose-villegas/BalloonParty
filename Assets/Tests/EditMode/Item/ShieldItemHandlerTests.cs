@@ -99,8 +99,10 @@ namespace BalloonParty.Tests.Item
                 Arg.Is<ShieldGainedMessage>(m => m.SlotIndex == slot));
         }
 
+        // The speed buff was deliberately dropped from rainbow shield activation (6caa776d) —
+        // only the rainbow-shield buff remains.
         [Test]
-        public void Activate_RainbowHolder_AppliesRainbowAndSpeedBuffs()
+        public void Activate_RainbowHolder_AppliesOnlyRainbowShieldBuff()
         {
             _palette.IsRainbow(GamePalette.RainbowColorId).Returns(true);
             var balloon = CreateBalloon(new Vector2Int(1, 1));
@@ -108,8 +110,8 @@ namespace BalloonParty.Tests.Item
 
             _handler.Activate(new ItemActivationContext(balloon, Vector3.zero, Vector3.zero));
 
+            _buffs.Received(1).Apply(Arg.Any<ProjectileBuff>());
             _buffs.Received(1).Apply(Arg.Is<ProjectileBuff>(b => b.Id == ProjectileBuffId.RainbowShield));
-            _buffs.Received(1).Apply(Arg.Is<ProjectileBuff>(b => b.Id == ProjectileBuffId.Speed));
         }
 
         [Test]

@@ -142,6 +142,28 @@ namespace BalloonParty.Tests.PlayMode
             var transit = Resolve<BalancePathHolder>();
             yield return WaitUntil(() => !pause.IsAnyPaused.Value, message: "Overflow hold never released.");
             yield return WaitUntil(() => !AnyInTransit(transit, grid), message: "Balance moves never settled.");
+
+            // Transit only tracks balance moves — spawn path tweens fly outside BalancePathHolder, so
+            // models occupy slots while their colliders are still en route. A physics activation fired
+            // then hits empty space; wait for every actor's IsStable (set by the spawn/balance
+            // OnComplete) so "settled" means colliders have actually arrived.
+            yield return WaitUntil(() => AllStable(grid), message: "Some balloon never reported IsStable.");
+        }
+
+        internal static bool AllStable(SlotGrid grid)
+        {
+            for (var col = 0; col < grid.Columns; col++)
+            {
+                for (var row = 0; row < grid.Rows; row++)
+                {
+                    if (grid.At(new Vector2Int(col, row)) is IDynamicSlotActor { IsStable: { Value: false } })
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         internal static bool AnyInTransit(BalancePathHolder transit, SlotGrid grid)

@@ -149,14 +149,27 @@ namespace BalloonParty.Tests.Item
         }
 
         [Test]
-        public void Activate_RainbowHolder_NoProjectileColor_DoesNothing()
+        public void Activate_RainbowHolder_NoProjectileColor_ConvertsNearestColorGroup()
         {
             var source = PlaceBalloon(0, 0, GamePalette.RainbowColorId);
             var red = PlaceBalloon(1, 0, "Red");
+            var blue = PlaceBalloon(4, 0, "Blue");
 
             _handler.Activate(new ItemActivationContext(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)), Vector3.zero));
 
-            Assert.AreEqual("Red", red.Color.Value);
+            // No projectile colour to key on, so the fallback picks the nearest concrete colour.
+            Assert.AreEqual(GamePalette.RainbowColorId, red.Color.Value);
+            Assert.AreEqual("Blue", blue.Color.Value);
+            _hitDispatcher.DidNotReceive().Dispatch(Arg.Any<ActorHitMessage>());
+        }
+
+        [Test]
+        public void Activate_RainbowHolder_NoConcreteBalloons_DoesNothing()
+        {
+            var source = PlaceBalloon(0, 0, GamePalette.RainbowColorId);
+
+            _handler.Activate(new ItemActivationContext(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)), Vector3.zero));
+
             _hitDispatcher.DidNotReceive().Dispatch(Arg.Any<ActorHitMessage>());
         }
 

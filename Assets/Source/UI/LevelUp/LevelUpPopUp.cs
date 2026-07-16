@@ -144,6 +144,13 @@ namespace BalloonParty.UI.LevelUp
 
         private void OnGlowTrailArrived()
         {
+            // A trail in flight outlives the popup when the ceremony tears down (or the scene
+            // unloads) before it lands — the arrival callback must not touch destroyed UI.
+            if (this == null || _levelGlowFill == null)
+            {
+                return;
+            }
+
             _glowTrailArrivedCount++;
             _levelGlowFill.fillAmount = Mathf.Clamp01(
                 (float)_glowTrailArrivedCount / _glowTrailTotalCount);
