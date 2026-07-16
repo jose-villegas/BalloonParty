@@ -7,7 +7,7 @@ namespace BalloonParty.Shared.Animation
     {
         private Sequence _active;
 
-        public bool IsPlaying => _active != null && _active.IsActive() && !_active.IsComplete();
+        public bool IsPlaying => _active != null && _active.IsActive() && _active.IsPlaying();
 
         public void Append(Tween tween)
         {

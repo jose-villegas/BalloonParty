@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.View;
 using UnityEngine;
@@ -6,88 +5,143 @@ using VContainer.Unity;
 
 namespace BalloonParty.Balloon.Controller
 {
-    /// <summary>Drives the balloon nudge out-and-back; balance moves and despawn must call <see cref="CancelNudge"/> explicitly since a ticker-driven lerp escapes <c>transform.DOKill()</c>.</summary>
-    internal sealed class BalloonMotionTicker : ITickable
+    /// <summary>
+    /// Applies nudge impulses as a stackable offset on top of a base position owned by whichever
+    /// system last wrote the view's transform (spawn path, balance DOPath, pool teleport). Runs
+    /// last in the frame as an <see cref="ILateTickable"/> so it never fights another writer: the
+    /// base is detected by comparing this frame's position against what was written last frame,
+    /// never assumed or pushed by callers. See PLAN-NudgeLayeredMotion for the model.
+    /// </summary>
+    internal sealed class BalloonMotionTicker : ILateTickable
     {
-        private readonly List<NudgeEntry> _nudges = new(32);
-        private readonly Stack<NudgeEntry> _nudgePool = new(32);
+        private const int MaxImpulsesPerView = 8;
+        private const float AdoptEpsilonSqr = 1e-12f;
 
-        public void Tick()
+        private readonly List<NudgeState> _states = new(32);
+        private readonly Dictionary<IBalloonMotionView, NudgeState> _lookup = new(32);
+        private readonly Stack<NudgeState> _pool = new(32);
+
+        public void LateTick()
         {
-            TickNudges();
+            Advance(Time.deltaTime);
         }
 
-        internal void StartNudge(
-            IBalloonMotionView view,
-            Vector3 slotPosition,
-            Vector3 offset,
-            float duration,
-            Action onComplete)
+        internal void AddImpulse(IBalloonMotionView view, Vector3 offset, float duration)
         {
-            CancelNudge(view);
-
-            var entry = _nudgePool.Count > 0 ? _nudgePool.Pop() : new NudgeEntry();
-            entry.View = view;
-            entry.SlotPosition = slotPosition;
-            entry.Offset = offset;
-            entry.Duration = Mathf.Max(duration, 0.0001f);
-            entry.Elapsed = 0f;
-            entry.OnComplete = onComplete;
-            _nudges.Add(entry);
-        }
-
-        /// <summary>Removes a view's running nudge without completing it.</summary>
-        internal void CancelNudge(IBalloonMotionView view)
-        {
-            for (var i = 0; i < _nudges.Count; i++)
+            if (!_lookup.TryGetValue(view, out var state))
             {
-                if (!ReferenceEquals(_nudges[i].View, view))
-                {
-                    continue;
-                }
+                state = _pool.Count > 0 ? _pool.Pop() : new NudgeState();
+                state.View = view;
+                // First-frame rule: seed both from the view's current position so frame one never snaps.
+                state.BasePosition = view.Position;
+                state.LastWritten = view.Position;
+                _states.Add(state);
+                _lookup.Add(view, state);
+            }
 
-                RecycleNudge(i);
+            var impulse = new NudgeImpulse { Offset = offset, Duration = Mathf.Max(duration, 0.0001f) };
+
+            if (state.Impulses.Count < MaxImpulsesPerView)
+            {
+                state.Impulses.Add(impulse);
                 return;
             }
+
+            OverwriteMostComplete(state.Impulses, impulse);
         }
 
-        private void TickNudges()
+        /// <summary>Clears a view's impulses and drops its state without a final write — the caller is despawning/teleporting the view.</summary>
+        internal void CancelAll(IBalloonMotionView view)
         {
-            var deltaTime = Time.deltaTime;
-
-            // Backwards so swap-remove doesn't skip elements.
-            for (var i = _nudges.Count - 1; i >= 0; i--)
+            if (_lookup.TryGetValue(view, out var state))
             {
-                var entry = _nudges[i];
-                entry.Elapsed += deltaTime;
-                var progress = Mathf.Clamp01(entry.Elapsed / entry.Duration);
-
-                var reach = progress < 0.5f
-                    ? EaseOutQuad(progress * 2f)
-                    : 1f - EaseOutQuad((progress - 0.5f) * 2f);
-                entry.View.ApplyNudgePosition(entry.SlotPosition + entry.Offset * reach);
-
-                if (progress < 1f)
-                {
-                    continue;
-                }
-
-                var view = entry.View;
-                var onComplete = entry.OnComplete;
-                RecycleNudge(i);
-                view.CompleteNudge(onComplete);
+                ReleaseStateAt(_states.IndexOf(state));
             }
         }
 
-        private void RecycleNudge(int index)
+        // Internal so edit-mode tests can drive the ticker deterministically (Time.deltaTime isn't injectable).
+        internal void Advance(float deltaTime)
         {
-            var entry = _nudges[index];
-            entry.View = null;
-            entry.OnComplete = null;
-            _nudgePool.Push(entry);
+            for (var i = _states.Count - 1; i >= 0; i--)
+            {
+                var state = _states[i];
+                var view = state.View;
 
-            _nudges[index] = _nudges[_nudges.Count - 1];
-            _nudges.RemoveAt(_nudges.Count - 1);
+                // Someone else moved the transform since our last write (DOTween, pool teleport, ...) —
+                // adopt it as the new base rather than fighting it.
+                if ((view.Position - state.LastWritten).sqrMagnitude > AdoptEpsilonSqr)
+                {
+                    state.BasePosition = view.Position;
+                }
+
+                var totalOffset = AdvanceImpulses(state.Impulses, deltaTime);
+
+                if (state.Impulses.Count == 0)
+                {
+                    view.Position = state.BasePosition;
+                    ReleaseStateAt(i);
+                    continue;
+                }
+
+                view.Position = state.BasePosition + totalOffset;
+                // Store the read-back, not the computed value: the setter round-trips world→local,
+                // so under a non-identity parent the transform may hold a value that differs from
+                // what we wrote by more than the adoption epsilon — comparing against the read-back
+                // keeps reconciliation immune to that float error.
+                state.LastWritten = view.Position;
+            }
+        }
+
+        // Advances every impulse, swap-removing completed ones, and returns the summed offset of
+        // what remains. Backwards so swap-remove doesn't skip elements.
+        private static Vector3 AdvanceImpulses(List<NudgeImpulse> impulses, float deltaTime)
+        {
+            var totalOffset = Vector3.zero;
+
+            for (var j = impulses.Count - 1; j >= 0; j--)
+            {
+                var impulse = impulses[j];
+                impulse.Elapsed += deltaTime;
+                var progress = Mathf.Clamp01(impulse.Elapsed / impulse.Duration);
+
+                if (progress >= 1f)
+                {
+                    impulses[j] = impulses[^1];
+                    impulses.RemoveAt(impulses.Count - 1);
+                    continue;
+                }
+
+                impulses[j] = impulse;
+                totalOffset += impulse.Offset * Reach(progress);
+            }
+
+            return totalOffset;
+        }
+
+        // Cap reached — overwrite whichever impulse is closest to finishing (silent; shockwave spam cap).
+        private static void OverwriteMostComplete(List<NudgeImpulse> impulses, NudgeImpulse replacement)
+        {
+            var replaceIndex = 0;
+            var bestProgress = -1f;
+
+            for (var i = 0; i < impulses.Count; i++)
+            {
+                var progress = impulses[i].Elapsed / impulses[i].Duration;
+                if (progress > bestProgress)
+                {
+                    bestProgress = progress;
+                    replaceIndex = i;
+                }
+            }
+
+            impulses[replaceIndex] = replacement;
+        }
+
+        private static float Reach(float progress)
+        {
+            return progress < 0.5f
+                ? EaseOutQuad(progress * 2f)
+                : 1f - EaseOutQuad((progress - 0.5f) * 2f);
         }
 
         private static float EaseOutQuad(float t)
@@ -95,14 +149,32 @@ namespace BalloonParty.Balloon.Controller
             return 1f - (1f - t) * (1f - t);
         }
 
-        private sealed class NudgeEntry
+        private void ReleaseStateAt(int index)
         {
-            public IBalloonMotionView View;
-            public Vector3 SlotPosition;
+            var state = _states[index];
+            _lookup.Remove(state.View);
+
+            _states[index] = _states[^1];
+            _states.RemoveAt(_states.Count - 1);
+
+            state.View = null;
+            state.Impulses.Clear();
+            _pool.Push(state);
+        }
+
+        private struct NudgeImpulse
+        {
             public Vector3 Offset;
             public float Duration;
             public float Elapsed;
-            public Action OnComplete;
+        }
+
+        private sealed class NudgeState
+        {
+            public IBalloonMotionView View;
+            public Vector3 BasePosition;
+            public Vector3 LastWritten;
+            public readonly List<NudgeImpulse> Impulses = new(MaxImpulsesPerView);
         }
     }
 }

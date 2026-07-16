@@ -1,15 +1,11 @@
-using System;
 using UnityEngine;
 
 namespace BalloonParty.Balloon.View
 {
-    /// <summary>Setter surface <c>BalloonMotionTicker</c> drives during a nudge.</summary>
+    /// <summary>Position surface <c>BalloonMotionTicker</c> reads (base reconciliation) and writes (base + impulses).</summary>
     internal interface IBalloonMotionView
     {
-        /// <summary>Sets the root position during a ticker-driven nudge.</summary>
-        void ApplyNudgePosition(Vector3 position);
-
-        /// <summary>Finishes a nudge; not called for cancelled nudges.</summary>
-        void CompleteNudge(Action onComplete);
+        /// <summary>Transform.position passthrough.</summary>
+        Vector3 Position { get; set; }
     }
 }

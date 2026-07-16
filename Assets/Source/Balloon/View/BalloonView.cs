@@ -73,13 +73,17 @@ namespace BalloonParty.Balloon.View
         private HitVfxOverride[] _hitVfxOverrides;
         private Material _originalBodyMaterial;
         private MaterialPropertyBlock _rainbowBlock;
-        private bool _isNudging;
 
         public IBalloonModel Model { get; private set; }
         public IBalloonVariant Variant => _variant;
         public TweenTracker TweenTracker => _tweenTracker;
         public SlotActorKind ActorKind => SlotActorKind.Dynamic;
         public Transform RotationPivot => _swayPivot != null ? _swayPivot : transform;
+        Vector3 IBalloonMotionView.Position
+        {
+            get => transform.position;
+            set => transform.position = value;
+        }
 
         internal ITransformCapture TransformCapture => _itemService?.TransformCapture;
 
@@ -121,13 +125,12 @@ namespace BalloonParty.Balloon.View
         {
             TweenTracker.Kill();
             transform.DOKill();
-            _motionTicker?.CancelNudge(this);
+            _motionTicker?.CancelAll(this);
             _bindDisposables.Clear();
             _itemService?.Unbind();
             SetBodyMaterial(_originalBodyMaterial);
             Model = null;
             _hitVfxOverrides = null;
-            _isNudging = false;
         }
 
         // Stops the idle animator so a board effect's tween owns the balloon's rotation without the idle
@@ -212,55 +215,14 @@ namespace BalloonParty.Balloon.View
             _itemService?.Unbind();
         }
 
-        public void Nudge(
-            Vector3 slotPosition,
-            Vector3 direction,
-            float nudgeDistance,
-            float nudgeDuration,
-            Action onComplete)
+        public void Nudge(Vector3 direction, float distance, float duration)
         {
-            // Skip if mid-spawn/balance and we didn't cause the instability.
-            if (Model is IWriteableDynamicSlotActor stableChecker
-                && !stableChecker.IsStable.Value
-                && !_isNudging)
+            if (direction.sqrMagnitude < 1e-8f)
             {
                 return;
             }
 
-            var currentScale = transform.localScale;
-            transform.DOKill();
-
-            if (Model is IWriteableDynamicSlotActor writable)
-            {
-                writable.IsStable.Value = false;
-            }
-
-            _isNudging = true;
-
-            // Silently replaces any nudge already running for this view.
-            _motionTicker.StartNudge(
-                this, slotPosition, direction.normalized * nudgeDistance, nudgeDuration, onComplete);
-
-            if (currentScale != Vector3.one)
-            {
-                transform.DOScale(Vector3.one, nudgeDuration);
-            }
-        }
-
-        public void ApplyNudgePosition(Vector3 position)
-        {
-            transform.position = position;
-        }
-
-        public void CompleteNudge(Action onComplete)
-        {
-            if (Model is IWriteableDynamicSlotActor w)
-            {
-                w.IsStable.Value = true;
-            }
-
-            _isNudging = false;
-            onComplete?.Invoke();
+            _motionTicker.AddImpulse(this, direction.normalized * distance, duration);
         }
 
         public void RegisterDisposeOnDespawn(IDisposable disposable)

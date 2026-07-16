@@ -41,12 +41,12 @@ namespace BalloonParty.Tests.Balloon
                 Substitute.For<IPublisher<PausedMessage>>(), Substitute.For<IPublisher<ResumedMessage>>());
 
             // DisturbanceField is only dereferenced when animating a non-empty balance, so these
-            // grid-only tests can omit it; the motion ticker is plain C# and cheap to real.
+            // grid-only tests can omit it.
             _balancer = new BalloonBalancer(
                 _grid, balanceQuery, _balloonsConfig, pathHolder,
                 CaptureBalanceRequests(),
                 CaptureLoaded(), StubSubscriber<ProjectileDestroyedMessage>(),
-                _pauseService, null, new BalloonMotionTicker());
+                _pauseService, null);
             _balancer.Start();
         }
 

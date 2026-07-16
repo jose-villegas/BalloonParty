@@ -45,7 +45,7 @@ namespace BalloonParty.Nudge
             }
 
             var slotPos = _grid.IndexToWorldPosition(slot);
-            nudgeableView.Nudge(slotPos, slotPos - origin, distance, duration, null);
+            nudgeableView.Nudge(slotPos - origin, distance, duration);
         }
 
         private void OnActorHit(ActorHitMessage msg)
