@@ -24,6 +24,9 @@ namespace BalloonParty.Tests.PlayMode
         private const int MaxLines = 60;
         private const int FramesPerLine = 4;
 
+        // This fixture exists to drain HP to zero — the run-loss lock would make that impossible.
+        protected override bool ProtectRunFromLoss => false;
+
         [UnityTest]
         public IEnumerator InitialLoad_HealthStartsAtConfiguredHitPoints()
         {

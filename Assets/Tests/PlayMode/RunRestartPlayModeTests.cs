@@ -15,6 +15,9 @@ namespace BalloonParty.Tests.PlayMode
     /// </summary>
     public class RunRestartPlayModeTests : PlayModeGameTest
     {
+        // RunController.EndRun is a no-op under the level lock, and this fixture calls it directly.
+        protected override bool ProtectRunFromLoss => false;
+
         [UnityTest]
         public IEnumerator Restart_ClearsAndRepopulatesBoard()
         {

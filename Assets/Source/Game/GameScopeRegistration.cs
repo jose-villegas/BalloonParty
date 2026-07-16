@@ -91,7 +91,7 @@ namespace BalloonParty.Game
             builder.Register<PoolManager>(Lifetime.Singleton);
             builder.Register<TrailEndpointRegistry>(Lifetime.Singleton);
             builder.Register<PauseService>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
-            builder.Register<TimeScaleService>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
+            builder.RegisterEntryPoint<TimeScaleService>().AsSelf().As<IRunResettable>();
             builder.Register<ProjectilePositionProvider>(Lifetime.Singleton);
             builder.Register<ImpactEventBus>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();

@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Cheats;
 using BalloonParty.Game;
+using DG.Tweening;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
@@ -27,14 +29,34 @@ namespace BalloonParty.Tests.PlayMode
     {
         internal const float DefaultTimeout = 15f;
 
+        // Board-filling scaffolding can reject enough spawns to drain HP to zero, and a lost run swaps
+        // the board for the loss→restart cinematic state mid-test. The dev level lock makes hearts
+        // undrainable (and EndRun a no-op), so fixtures observe only the motion they drive. Fixtures
+        // that deliberately exercise loss, level-up, or EndRun override this to false.
+        protected virtual bool ProtectRunFromLoss => true;
+
         [SetUp]
         public void ResetNavigation()
         {
             Navigation.TransitionTo(NavigationState.Launch);
+
+            // Per-test rather than static: CheatState.ResetOnPlay clears the flag at play-mode start.
+            CheatState.BlockLevelUp = ProtectRunFromLoss;
+        }
+
+        [TearDown]
+        public void ClearRunLossProtection()
+        {
+            CheatState.BlockLevelUp = false;
         }
 
         internal static IEnumerator LoadGameScene()
         {
+            // A tween mid-flight when the previous test's scene unloads (loss-cinematic camera move,
+            // score trail, thrower entrance) would fire on destroyed targets in THIS test — kill
+            // everything before loading so each test starts tween-clean.
+            DOTween.KillAll();
+
             var load = SceneManager.LoadSceneAsync("Game", LoadSceneMode.Single);
             while (load != null && !load.isDone)
             {

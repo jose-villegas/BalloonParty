@@ -1,3 +1,4 @@
+using System;
 using BalloonParty.Configuration;
 using BalloonParty.Display;
 using BalloonParty.Shared.Extensions;
@@ -10,7 +11,7 @@ namespace BalloonParty.Game.Cinematics
     /// <summary>
     ///     The shared cinematic camera driver — all tweens run in unscaled time since segments warp Time.timeScale.
     /// </summary>
-    internal class CinematicCameraRig
+    internal class CinematicCameraRig : IDisposable
     {
         private const float FrustumPadding = 0.1f;
 
@@ -28,6 +29,13 @@ namespace BalloonParty.Game.Cinematics
         {
             _camera = view != null ? view.Camera : null;
             _orthoController = orthoController;
+        }
+
+        // An unscaled tween mid-flight at scope disposal (scene unload during a cinematic) would
+        // otherwise outlive the camera and fire on its destroyed transform.
+        public void Dispose()
+        {
+            KillTween();
         }
 
         public void PreparePanIn(CameraRigCinematicSettings segment)

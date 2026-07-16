@@ -17,6 +17,9 @@ namespace BalloonParty.Tests.PlayMode
     /// </summary>
     public class LevelUpCinematicPlayModeTests : PlayModeGameTest
     {
+        // The level lock would suppress the very level-up ceremony this fixture triggers.
+        protected override bool ProtectRunFromLoss => false;
+
         [UnityTest]
         public IEnumerator TriggerLevelUp_RunsCeremonyWithoutError()
         {
