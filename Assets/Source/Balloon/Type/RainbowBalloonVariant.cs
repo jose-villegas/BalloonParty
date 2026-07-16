@@ -91,7 +91,7 @@ namespace BalloonParty.Balloon.Type
         // (the RainbowColor profile authors Strength 0), so it never pushes specks — R stays at rest.
         private void EmitColor()
         {
-            if (_colorIndices.Count == 0)
+            if (this == null || _colorIndices.Count == 0)
             {
                 return;
             }
