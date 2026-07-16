@@ -23,7 +23,7 @@ Each frame (`Tick`), only when navigation state is `Game` and the entrance anima
 - Updates its aim direction from the view's pointer read (`_view.IsAiming` / `TryGetAimDirection`)
 - Tells the view to rotate to match that direction
 - Eases the loaded projectile into the spawn point position using `Ease.OutBack`
-- Updates the prediction trace line while the mouse button is held
+- Updates the prediction trace line while the mouse button is held, and drives the scene-light capsules mirroring its legs (`PredictionTraceLights` — see `Prediction/README.md`)
 - Fires on mouse-up
 
 `Tick` is a no-op outside the `Game` navigation state or while any `PauseService` source is paused — the thrower cannot aim or fire during the level-up ceremony, cinematics, or the overflow heart-drain lock.
@@ -39,3 +39,4 @@ When a `ProjectileDestroyedMessage` arrives, `ThrowerController` returns the old
 - **ProjectileLoadedMessage** — published after each load so shield UI can self-bind
 - **IGameConfiguration** — provides `LimitsClockwise`, `ProjectileSpeed`, `ProjectileStartingShields`, `ProjectileLoadDuration`
 - **PredictionTraceCalculator / ThrowerView** — calculates and renders the aim trajectory line while the player holds the mouse button
+- **PredictionTraceLights / SceneLightFieldService** — capsule lights mirroring the trace's legs, intensity fading launch→tip via a curve; registered while aiming, disposed on fire/release/reset

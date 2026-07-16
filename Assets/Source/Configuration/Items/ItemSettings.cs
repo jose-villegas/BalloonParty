@@ -130,6 +130,7 @@ namespace BalloonParty.Configuration.Items
         [Tooltip("How many times the glow lerps through the full colour set over the anim's duration.")]
         [SerializeField] [Min(0f)] private float _lightningGlowColorCycles = 2f;
 
+        [Tooltip("Half-width of the capsule flash light cast along each arc the chain travels.")]
         [SerializeField] [Min(0f)] private float _popLightRadius = 0.8f;
         [SerializeField] [Min(0f)] private float _popLightIntensity = 2f;
         [SerializeField] [Min(0f)] private float _popLightSeconds = 0.2f;
@@ -141,13 +142,13 @@ namespace BalloonParty.Configuration.Items
         public float FractalDecay => _lightningFractalDecay;
         public float GlowColorCycles => _lightningGlowColorCycles;
 
-        /// <summary>Radius of the flash light cast at each node the chain reaches.</summary>
+        /// <summary>Half-width of the capsule flash light cast along each arc the chain travels.</summary>
         public float PopLightRadius => _popLightRadius;
 
-        /// <summary>Peak magnitude of each chain-node flash light.</summary>
+        /// <summary>Peak magnitude of each chain-arc flash light.</summary>
         public float PopLightIntensity => _popLightIntensity;
 
-        /// <summary>Lifetime of each chain-node flash light.</summary>
+        /// <summary>Lifetime of each chain-arc flash light.</summary>
         public float PopLightSeconds => _popLightSeconds;
     }
 

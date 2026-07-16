@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Prediction;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Shared.SceneLight;
 using BalloonParty.Shared.Messages;
 using DG.Tweening;
 using MessagePipe;
@@ -35,6 +38,8 @@ namespace BalloonParty.Thrower
         private readonly ThrowerSettings _settings;
         private readonly ThrowerView _view;
         private readonly ProjectilePositionProvider _positionProvider;
+        private readonly SceneLightFieldService _lightField;
+        private readonly IGamePalette _palette;
         private readonly CompositeDisposable _subscriptions = new();
 
         // Cached since Object.name allocates; Reload() hits this twice per shot.
@@ -47,6 +52,7 @@ namespace BalloonParty.Thrower
         private float _loadElapsed;
         private float _loadDuration;
         private PredictionTraceCalculator _traceCalculator;
+        private PredictionTraceLights _traceLights;
 
         [Inject]
         internal ThrowerController(
@@ -63,7 +69,9 @@ namespace BalloonParty.Thrower
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             ISubscriber<GameOverMessage> gameOverSubscriber,
             PauseService pauseService,
-            ProjectilePositionProvider positionProvider)
+            ProjectilePositionProvider positionProvider,
+            SceneLightFieldService lightField,
+            IGamePalette palette)
         {
             _view = view;
             _config = config;
@@ -79,12 +87,19 @@ namespace BalloonParty.Thrower
             _gameOverSubscriber = gameOverSubscriber;
             _pauseService = pauseService;
             _positionProvider = positionProvider;
+            _lightField = lightField;
+            _palette = palette;
             _projectilePoolKey = settings.ProjectilePrefab.name;
         }
 
         public void Start()
         {
             _traceCalculator = new PredictionTraceCalculator(_config);
+
+            // The line glows in its own presentation-only palette entry, tunable on the palette asset
+            // independently of the shot's Sparks light. A missing entry resolves to -1 = key light.
+            _traceLights = new PredictionTraceLights(
+                _lightField, _config, _palette.PaletteIndexOf(_settings.PredictionLightColor));
 
             _poolManager.Register(_projectilePoolKey,
                 new ProjectilePoolChannel(_resolver, _settings.ProjectilePrefab));
@@ -116,6 +131,7 @@ namespace BalloonParty.Thrower
 
         public void Dispose()
         {
+            _traceLights?.Dispose();
             _subscriptions.Dispose();
         }
 
@@ -203,6 +219,8 @@ namespace BalloonParty.Thrower
 
         private void Reload()
         {
+            // Tick is gated during resets, so a trace left visible at reset time would strand its lights.
+            _traceLights?.Clear();
             _positionProvider.Clear();
 
             if (_activeView != null)
@@ -231,6 +249,7 @@ namespace BalloonParty.Thrower
             _activeProjectile.Direction = _direction;
             _positionProvider.SetFree(true);
             _view.ClearTrace();
+            _traceLights.Clear();
             _view.PlayRecoil(_direction);
         }
 
@@ -275,11 +294,13 @@ namespace BalloonParty.Thrower
             if (_activeProjectile == null || _activeProjectile.IsFree || !_view.IsAiming)
             {
                 _view.ClearTrace();
+                _traceLights.Clear();
                 return;
             }
 
             _traceCalculator.Calculate(_activeView.transform.position, _direction, _tracePoints);
             _view.SetTrace(_tracePoints);
+            _traceLights.SetTrace(_tracePoints);
         }
     }
 }

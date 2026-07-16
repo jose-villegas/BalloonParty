@@ -44,6 +44,7 @@ namespace BalloonParty.Shared.SceneLight
         private static readonly int StampCountId = Shader.PropertyToID("_StampCount");
         private static readonly int StampCentersId = Shader.PropertyToID("_StampCenters");
         private static readonly int StampRadiiId = Shader.PropertyToID("_StampRadii");
+        private static readonly int StampEndRadiiId = Shader.PropertyToID("_StampEndRadii");
         private static readonly int StampMagnitudesId = Shader.PropertyToID("_StampMagnitudes");
         private static readonly int StampFalloffsId = Shader.PropertyToID("_StampFalloffs");
         private static readonly int StampColorIndicesId = Shader.PropertyToID("_StampColorIndices");
@@ -60,6 +61,7 @@ namespace BalloonParty.Shared.SceneLight
         private readonly List<Registration> _lights = new();
         private readonly Vector4[] _batchCenters = new Vector4[ShaderStampCapacity];
         private readonly float[] _batchRadii = new float[ShaderStampCapacity];
+        private readonly float[] _batchEndRadii = new float[ShaderStampCapacity];
         private readonly float[] _batchMagnitudes = new float[ShaderStampCapacity];
         private readonly float[] _batchFalloffs = new float[ShaderStampCapacity];
         private readonly float[] _batchColorIndices = new float[ShaderStampCapacity];
@@ -151,6 +153,7 @@ namespace BalloonParty.Shared.SceneLight
             light.Position.Subscribe(_ => _dirty = true).AddTo(subscription);
             light.EndPosition.Subscribe(_ => _dirty = true).AddTo(subscription);
             light.Radius.Subscribe(_ => _dirty = true).AddTo(subscription);
+            light.EndRadius.Subscribe(_ => _dirty = true).AddTo(subscription);
             light.Intensity.Subscribe(_ => _dirty = true).AddTo(subscription);
             light.FalloffPower.Subscribe(_ => _dirty = true).AddTo(subscription);
             light.PaletteIndex.Subscribe(_ => _dirty = true).AddTo(subscription);
@@ -206,6 +209,7 @@ namespace BalloonParty.Shared.SceneLight
                 var endUV = _coords.WorldToUV(light.EndPosition.Value);
                 _batchCenters[count] = new Vector4(startUV.x, startUV.y, endUV.x, endUV.y);
                 _batchRadii[count] = _coords.WorldRadiusToUV(light.Radius.Value);
+                _batchEndRadii[count] = _coords.WorldRadiusToUV(light.EndRadius.Value);
                 _batchMagnitudes[count] = light.Intensity.Value;
                 _batchFalloffs[count] = light.FalloffPower.Value;
                 _batchColorIndices[count] = PaletteChannelEncoding.Encode(light.PaletteIndex.Value);
@@ -226,6 +230,7 @@ namespace BalloonParty.Shared.SceneLight
             material.SetInt(StampCountId, count);
             material.SetVectorArray(StampCentersId, _batchCenters);
             material.SetFloatArray(StampRadiiId, _batchRadii);
+            material.SetFloatArray(StampEndRadiiId, _batchEndRadii);
             material.SetFloatArray(StampMagnitudesId, _batchMagnitudes);
             material.SetFloatArray(StampFalloffsId, _batchFalloffs);
             material.SetFloatArray(StampColorIndicesId, _batchColorIndices);

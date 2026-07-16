@@ -36,7 +36,8 @@ Shader "Hidden/BalloonParty/SceneLightAccumulate"
             int       _StampCount;
 
             float4 _StampCenters[MAX_STAMPS];      // xy = UV center
-            float  _StampRadii[MAX_STAMPS];        // UV radius
+            float  _StampRadii[MAX_STAMPS];        // UV radius at the segment start
+            float  _StampEndRadii[MAX_STAMPS];     // UV radius at the segment end; == start for uniform width
             float  _StampMagnitudes[MAX_STAMPS];   // peak magnitude at the centre (>= 0)
             float  _StampFalloffs[MAX_STAMPS];     // per-light radial falloff exponent (1 = linear cone)
             float  _StampColorIndices[MAX_STAMPS]; // encoded palette index; 0 = no color
@@ -78,7 +79,6 @@ Shader "Hidden/BalloonParty/SceneLightAccumulate"
                 {
                     float2 a = _StampCenters[s].xy;   // segment start (UV)
                     float2 b = _StampCenters[s].zw;   // segment end (UV); == a for a point light
-                    float  radius = _StampRadii[s];
                     float  magnitude = _StampMagnitudes[s];
 
                     // Distance from the pixel to the segment [a, b], aspect-corrected so the metric is
@@ -90,6 +90,11 @@ Shader "Hidden/BalloonParty/SceneLightAccumulate"
                     ba.y *= _StampAspect;
                     float h = saturate(dot(pa, ba) / max(dot(ba, ba), 1e-8));
                     float dist = length(pa - ba * h);
+
+                    // The half-width tapers along the axis (h = 0 at the start, 1 at the end) — a cone
+                    // beam. Equal radii lerp to the same value, so uniform capsules are untouched. The
+                    // gradient pass derives GB from R, so the taper shapes the direction field too.
+                    float radius = lerp(_StampRadii[s], _StampEndRadii[s], h);
 
                     // Smooth radial falloff, peak on the axis → 0 at the radius, shaped by the light's own
                     // falloff exponent (1 = linear, higher = more concentrated). No plateau, so R (and the

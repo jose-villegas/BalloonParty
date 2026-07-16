@@ -187,12 +187,14 @@ namespace BalloonParty.Item.Lightning
                 var (model, pos) = targets[index];
                 ApplyTo(model, pos);
 
-                // A colour-matched flash light at each node the chain reaches, held briefly then
-                // released. The chain unfolds over several frames, so each jump registers its own
-                // light live (lights are retained state, not a single-frame stamp).
+                // A colour-matched capsule flash along the arc the bolt just traveled (positions[index]
+                // is the node it jumped from), held briefly then released. The chain unfolds over
+                // several frames, so each jump registers its own light live (lights are retained
+                // state, not a single-frame stamp). positions is per-activation, so capturing it here
+                // is safe even though jumps arrive after Activate returns.
                 var lightning = settings.Lightning;
                 var registration = _lightField.RegisterLight(
-                    new Light(pos, lightning.PopLightRadius, lightning.PopLightIntensity,
+                    Light.Segment(positions[index], pos, lightning.PopLightRadius, lightning.PopLightIntensity,
                         _palette.PaletteIndexOf(matchColor)));
                 ExpireLight(lightning.PopLightSeconds, registration).Forget();
             }

@@ -83,7 +83,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance<ISpeckFieldSettings>(_speckFieldSettings);
             builder.RegisterInstance<ILevelPacingConfiguration>(_levelPacingConfiguration);
             builder.RegisterInstance<IBuffConfiguration>(_buffConfiguration);
-            builder.RegisterInstance(new ThrowerSettings(_projectilePrefab));
+            builder.RegisterInstance(new ThrowerSettings(_projectilePrefab, GamePalette.PredictionColorId));
             builder.RegisterInstance(_scoreTrailPrefab);
         }
     }

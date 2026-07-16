@@ -6,9 +6,14 @@ namespace BalloonParty.Thrower
     {
         public readonly ProjectileView ProjectilePrefab;
 
-        public ThrowerSettings(ProjectileView projectilePrefab)
+        // Palette entry id tinting the prediction line's glow; the color itself is authored on the
+        // palette asset's entry, so tuning it never touches code.
+        public readonly string PredictionLightColor;
+
+        public ThrowerSettings(ProjectileView projectilePrefab, string predictionLightColor)
         {
             ProjectilePrefab = projectilePrefab;
+            PredictionLightColor = predictionLightColor;
         }
     }
 }

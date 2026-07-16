@@ -118,16 +118,17 @@ items add no GPU cost.
 |---|---|---|---|---|---|
 | **Bomb** | Point (disc) | 1 | Effect duration | Source balloon | `ItemSettings.Bomb` (`BlastLightRadiusScale`, `BlastLightIntensity`, `BlastLightFallbackSeconds`) |
 | **Laser** | Capsule (segment) | 2 (H + V beams) | Effect duration | Source balloon | `ItemSettings.Laser` (`BeamLightHalfWidth`, `BeamLightIntensity`, `BeamLightFalloff`, `BeamLightFallbackSeconds`) |
-| **Lightning** | Point (disc) | 1 per chain target | `PopLightSeconds` | Matched target colour | `ItemSettings.Lightning` (`PopLightRadius`, `PopLightIntensity`, `PopLightSeconds`) |
+| **Lightning** | Capsule (segment) | 1 per chain arc | `PopLightSeconds` | Matched target colour | `ItemSettings.Lightning` (`PopLightRadius` = beam half-width, `PopLightIntensity`, `PopLightSeconds`) |
 
 All lights are tagged with a palette index (the source/matched colour) for local colour casting via
 the field's A channel. Untagged regions fall back to the global `_SceneLightColor`. The field's
 palette-decode include (`SceneLightTintAt`) gives consumers a smooth colour glow driven by the
 bilinear magnitude — no per-item shader work needed.
 
-**Area lights (Laser):** The two beam lights use `Light.Segment(start, end, halfWidth, …)` — a
-capsule shape where falloff decays from the segment axis to the sides. This is the primary area-light
-consumer; point lights (`start == end`) are a degenerate capsule (a disc).
+**Area lights (Laser, Lightning):** Beam lights use `Light.Segment(start, end, halfWidth, …)` — a
+capsule shape where falloff decays from the segment axis to the sides. Laser casts one along each
+beam; Lightning casts one along each arc the bolt travels as it jumps. Point lights
+(`start == end`) are a degenerate capsule (a disc).
 
 **Rainbow bomb scaling:** A rainbow-triggered bomb scales the light radius visually (via
 `RainbowEffectScale`) for a bigger-looking blast glow, but the kill radius is unchanged.
