@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: TrailMaterial_Prediction
-  m_Shader: {fileID: 10721, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: c54f79cfbe564ea89c698a14dc7c78a3, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -44,11 +44,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 491c552672f943e4db1fd1bc5ada8088, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1ac7d2053982d406a805a48ecb8f76ec, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: 7b72793e0d38043d3aeba7c3a42b4ac0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -67,16 +71,27 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _GlitterAcross: 6
+    - _GlitterBrightness: 1
+    - _GlitterChance: 0.5
+    - _GlitterDensity: 55
+    - _GlitterSharpness: 15
+    - _GlitterSize: 0.5
+    - _GlitterSpeed: 6
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _InvFade: 1
     - _Metallic: 0
+    - _MinVisibility: 0.5
     - _Mode: 0
+    - _NoiseScale: 5
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _ShadowSoftness: 0.01
     - _Shininess: 0.7
+    - _SmokeContrast: 8
+    - _SmokeStrength: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SpriteScale: 0.75
@@ -86,16 +101,21 @@ Material:
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
+    - _SwirlRadius: 0.4
+    - _SwirlSpeed: 2
     - _UVSec: 0
     - _UseUIAlphaClip: 0
     - _ZTest: 4
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Drift: {r: 0, g: 0.15, b: 0, a: 0}
     - _EmisColor: {r: 0.2, g: 0.2, b: 0.2, a: 0}
     - _Emission: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _GlitterColor: {r: 1, g: 0, b: 0, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ScrollSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _ShadowColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.75}
     - _ShadowOffset: {r: 0.1, g: -0.1, b: 0, a: 0}
     - _SpecColor: {r: 1, g: 1, b: 1, a: 1}

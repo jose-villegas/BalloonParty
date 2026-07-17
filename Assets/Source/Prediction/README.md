@@ -10,7 +10,7 @@ Pure C# class (no MonoBehaviour) that takes an origin, direction, and reusable `
 
 ### PredictionTraceView
 
-MonoBehaviour with a `LineRenderer`. Call `SetTrace(points)` to update, `SetColor(color)` to set `startColor`/`endColor`, or `Clear()` to hide. Attach to the Thrower prefab alongside a `LineRenderer`.
+MonoBehaviour with a `LineRenderer`. Call `SetTrace(points)` to update, `SetColor(color)` to set `startColor`/`endColor`, or `Clear()` to hide. Attach to the Thrower prefab alongside a `LineRenderer`. For the smoke + glitter look, use the `BalloonParty/Display/TraceGlitterLine` material shader (SightSmoke's drifting-noise alpha eat plus GlitterSwirl's orbiting specks in one pass) and set the LineRenderer's texture mode to **Tile** so the pattern density stays constant over any aim length — the config-driven trace colour reaches the shader through the renderer's start/end vertex colours.
 
 ### PredictionTraceProvider
 

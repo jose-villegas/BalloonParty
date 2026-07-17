@@ -27,7 +27,7 @@ MonoBehaviour:
   _initialPredictionLength: 1
   _predictionTraceMaxBounces: 2
   _predictionTraceMaxSteps: 15
-  _predictionTraceColor: {r: 0.1960784, g: 0.8039216, b: 0.1960784, a: 0.2509804}
+  _predictionTraceColor: {r: 1, g: 0.3882353, b: 0.2784314, a: 0.2509804}
   _scorePointTraceDuration: 1
   _scorePointsScatterDelay: 0.02
   _scorePointBurstDuration: 0.12
