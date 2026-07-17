@@ -139,13 +139,15 @@ namespace BalloonParty.Thrower
             TryFire();
         }
 
-        // Editor-tooling entry (Shot Solver): aim the thrower at the given direction and fire this
-        // frame, bypassing mouse input. Snaps the loaded shot to the spawn point first so the launch
-        // origin matches the solver's per-angle simulation exactly.
+        // Editor-tooling entry (Shot Solver window / Fire Best Shot cheat): aim the thrower at the
+        // given direction and fire, bypassing mouse input. Snaps the loaded shot to the spawn point
+        // first so the launch origin matches the solver's per-angle simulation exactly. Deliberately
+        // NOT pause-gated — the cheat console holds PauseSource.Cheat while open, so a pause guard
+        // would make the cheat a silent no-op; arming while paused is safe because the pause-gated
+        // FixedUpdate keeps the shot still until the menu closes.
         internal void FireAt(Vector3 direction)
         {
-            if (!_isMovable || _pauseService.IsAnyPaused.Value
-                || _activeProjectile == null || _activeView == null || _activeProjectile.IsFree)
+            if (!_isMovable || _activeProjectile == null || _activeView == null || _activeProjectile.IsFree)
             {
                 return;
             }

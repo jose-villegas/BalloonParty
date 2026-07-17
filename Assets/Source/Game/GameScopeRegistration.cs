@@ -201,6 +201,7 @@ namespace BalloonParty.Game
             builder.Register<BlockLevelUpCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ForceGameOverCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ForceRestartCheat>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<FireBestShotCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.RegisterComponentOnNewGameObject<BalloonRemoverCheat>(Lifetime.Singleton, "BalloonRemoverCheat")
                 .AsImplementedInterfaces()
                 .AsSelf();
