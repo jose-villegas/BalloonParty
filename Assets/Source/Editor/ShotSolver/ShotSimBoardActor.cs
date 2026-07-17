@@ -40,19 +40,6 @@ namespace BalloonParty.Editor.ShotSolver
         }
     }
 
-    /// <summary>One balance move's linear path, evaluated purely by elapsed time (see
-    /// <see cref="ShotSimDynamicActor.EvaluateBalancePosition" />) rather than ticked frame by frame.
-    /// Before the first real move, <see cref="From" /> == <see cref="To" /> == the gathered home
-    /// position and <see cref="StartTime" /> sits at negative infinity, so evaluation always resolves
-    /// to the home position without a branch.</summary>
-    internal struct ShotBalanceSegment
-    {
-        public Vector2 From;
-        public Vector2 To;
-        public float StartTime;
-        public float Duration;
-    }
-
     /// <summary>One nudge impulse, evaluated analytically at any time via <see cref="ShotMotionMath.Reach" />
     /// instead of decayed frame by frame — mirrors <c>BalloonMotionTicker</c>'s impulse record.</summary>
     internal struct ShotNudgeImpulse
@@ -74,7 +61,19 @@ namespace BalloonParty.Editor.ShotSolver
     {
         internal const int MaxImpulses = 8; // mirrors BalloonMotionTicker.MaxImpulsesPerView
 
+        // Start position + up to 8 chained hops within one pulse — the planner rarely produces more
+        // than 2-3 for a single actor before its step budget or the board stops it.
+        private const int MaxWaypoints = 9;
+
         internal readonly List<ShotNudgeImpulse> NudgeImpulses = new();
+
+        private readonly Vector2[] _waypoints = new Vector2[MaxWaypoints];
+        private readonly float[] _cumulativeLengths = new float[MaxWaypoints];
+
+        private int _waypointCount;
+        private float _pathLength;
+        private float _segmentStartTime = float.NegativeInfinity;
+        private float _segmentDuration = 1f;
 
         public ReactiveProperty<Vector2Int> SlotIndex { get; } = new();
         public ReactiveProperty<bool> IsStable { get; } = new(true);
@@ -88,7 +87,6 @@ namespace BalloonParty.Editor.ShotSolver
         internal bool IsShotTarget { get; set; }
 
         internal IReadOnlyList<NudgeOverride> NudgeOverrides { get; set; }
-        internal ShotBalanceSegment BalanceSegment { get; private set; }
 
         SlotActorKind ISlotActor.Kind => SlotActorKind.Dynamic;
         Vector2Int ISlotActor.SlotIndex => SlotIndex.Value;
@@ -112,29 +110,50 @@ namespace BalloonParty.Editor.ShotSolver
         {
             SlotIndex.Value = homeSlot;
             IsStable.Value = true;
-            BalanceSegment = new ShotBalanceSegment
-            {
-                From = homePosition,
-                To = homePosition,
-                StartTime = float.NegativeInfinity,
-                Duration = 1f,
-            };
+            _waypoints[0] = homePosition;
+            _cumulativeLengths[0] = 0f;
+            _waypointCount = 1;
+            _pathLength = 0f;
+            _segmentStartTime = float.NegativeInfinity;
+            _segmentDuration = 1f;
             NudgeImpulses.Clear();
         }
 
-        /// <summary>Starts a new segment from wherever the balance position currently sits at
-        /// <paramref name="startTime" /> — mirrors <c>BalloonBalancer.StartBalanceTween</c> reading the
-        /// view's live (possibly mid-tween) position as the new tween's start, so a pulse that lands
-        /// before the previous move finished still animates from the true in-transit position.</summary>
+        /// <summary>Starts (or extends) the balance path for a pulse. A NEW pulse starts from wherever
+        /// the balance position currently sits — mirrors <c>BalloonBalancer.StartBalanceTween</c> reading
+        /// the view's live (possibly mid-tween) position as the new tween's start. A repeat call from
+        /// the SAME pulse chains the hop as an extra waypoint, mirroring <c>RecordPath</c> building the
+        /// multi-waypoint DOPath — except for direct movers, whose live tween skips intermediates
+        /// (<c>FinalWaypointBuffer</c>), so here the last waypoint is overwritten instead.</summary>
         internal void BeginBalanceMove(float startTime, Vector2 toPosition, float duration)
         {
-            BalanceSegment = new ShotBalanceSegment
+            var samePulse = startTime == _segmentStartTime;
+            if (!samePulse)
             {
-                From = EvaluateBalancePosition(startTime),
-                To = toPosition,
-                StartTime = startTime,
-                Duration = duration,
-            };
+                _waypoints[0] = EvaluateBalancePosition(startTime);
+                _waypointCount = 1;
+                _segmentStartTime = startTime;
+                _segmentDuration = Mathf.Max(duration, 0.0001f);
+            }
+
+            if (samePulse && (DirectBalanceMotion || _waypointCount >= MaxWaypoints))
+            {
+                _waypoints[_waypointCount - 1] = toPosition;
+            }
+            else
+            {
+                _waypoints[_waypointCount] = toPosition;
+                _waypointCount++;
+            }
+
+            _cumulativeLengths[0] = 0f;
+            for (var i = 1; i < _waypointCount; i++)
+            {
+                _cumulativeLengths[i] =
+                    _cumulativeLengths[i - 1] + Vector2.Distance(_waypoints[i - 1], _waypoints[i]);
+            }
+
+            _pathLength = _cumulativeLengths[_waypointCount - 1];
         }
 
         /// <summary>Balance position plus the summed nudge-impulse offset — the sim's full moving
@@ -145,28 +164,49 @@ namespace BalloonParty.Editor.ShotSolver
         }
 
         /// <summary>The balance-only layer <see cref="EvaluateCenter" /> stacks the nudge offset on
-        /// top of.</summary>
+        /// top of: OutQuad-eased progress (the project's DOTween default ease — DOTweenSettings.asset)
+        /// along the waypoint polyline by ARC LENGTH, mirroring DOPath's constant-speed path
+        /// percentage. Catmull-Rom's corner rounding is the one thing not reproduced (README).</summary>
         internal Vector2 EvaluateBalancePosition(float t)
         {
-            var segment = BalanceSegment;
-            var duration = segment.Duration <= 0f ? 1f : segment.Duration;
-            var localT = Mathf.Clamp01((t - segment.StartTime) / duration);
-            return Vector2.Lerp(segment.From, segment.To, localT);
+            if (_pathLength <= 0f)
+            {
+                return _waypoints[_waypointCount - 1];
+            }
+
+            var localT = Mathf.Clamp01((t - _segmentStartTime) / _segmentDuration);
+            var arc = EaseOutQuad(localT) * _pathLength;
+            var segmentIndex = ArcSegmentIndex(arc);
+            var segmentStart = _cumulativeLengths[segmentIndex - 1];
+            var segmentLength = _cumulativeLengths[segmentIndex] - segmentStart;
+            var segmentT = segmentLength <= 0f ? 1f : (arc - segmentStart) / segmentLength;
+            return Vector2.Lerp(_waypoints[segmentIndex - 1], _waypoints[segmentIndex], segmentT);
         }
 
-        /// <summary>Constant while a move is in flight (the relative-velocity quadratic's exact term);
-        /// zero once it has settled or before the first move ever starts.</summary>
+        /// <summary>Instantaneous velocity of the eased polyline motion — the moving-circle solve's
+        /// linearization term; the two-pass refinement absorbs the easing's curvature. Zero once
+        /// settled or before the first move ever starts.</summary>
         internal Vector2 EvaluateBalanceVelocity(float t)
         {
-            var segment = BalanceSegment;
-            var duration = segment.Duration <= 0f ? 1f : segment.Duration;
-            var localT = (t - segment.StartTime) / duration;
-            if (localT < 0f || localT >= 1f)
+            var localT = (t - _segmentStartTime) / _segmentDuration;
+            if (localT < 0f || localT >= 1f || _pathLength <= 0f)
             {
                 return Vector2.zero;
             }
 
-            return (segment.To - segment.From) / duration;
+            var arc = EaseOutQuad(localT) * _pathLength;
+            var segmentIndex = ArcSegmentIndex(arc);
+            var segmentStart = _cumulativeLengths[segmentIndex - 1];
+            var segmentLength = _cumulativeLengths[segmentIndex] - segmentStart;
+            if (segmentLength <= 0f)
+            {
+                return Vector2.zero;
+            }
+
+            var direction = (_waypoints[segmentIndex] - _waypoints[segmentIndex - 1]) / segmentLength;
+
+            // d(arc)/dt = pathLength x ease'(localT)/duration, with OutQuad' = 2(1 - t).
+            return direction * (_pathLength * 2f * (1f - localT) / _segmentDuration);
         }
 
         private Vector2 EvaluateNudgeOffset(float t)
@@ -180,6 +220,25 @@ namespace BalloonParty.Editor.ShotSolver
             }
 
             return total;
+        }
+
+        private static float EaseOutQuad(float t)
+        {
+            return 1f - (1f - t) * (1f - t);
+        }
+
+        // First waypoint index whose cumulative length covers the queried arc distance.
+        private int ArcSegmentIndex(float arc)
+        {
+            for (var i = 1; i < _waypointCount; i++)
+            {
+                if (arc <= _cumulativeLengths[i])
+                {
+                    return i;
+                }
+            }
+
+            return _waypointCount - 1;
         }
     }
 

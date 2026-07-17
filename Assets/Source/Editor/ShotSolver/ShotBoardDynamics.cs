@@ -281,10 +281,9 @@ namespace BalloonParty.Editor.ShotSolver
             ApplyMoves(pulseTime);
         }
 
-        // Multiple moves for the same actor within one pulse collapse to its FINAL destination: each
-        // BeginBalanceMove call re-samples the CURRENT balance position at the (shared) pulse start
-        // time, which for a same-pulse second move is still the pre-pulse position (localT == 0), so
-        // the later move in execution order simply overwrites the segment with the true final target.
+        // Same-pulse moves for one actor CHAIN as waypoints (mirroring RecordPath building the live
+        // multi-waypoint DOPath); BeginBalanceMove itself distinguishes a fresh pulse from a chained
+        // hop by the shared pulse start time, and collapses direct movers to their final target.
         private void ApplyMoves(float pulseTime)
         {
             foreach (var move in _moves)

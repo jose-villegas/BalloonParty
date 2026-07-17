@@ -54,9 +54,11 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   shields spent. Any balloon contact resets counter and cruise.
 - **Balance & nudge (dynamic board)** — when the window supplies `ShotBoardDynamics`, rebalance
   pulses fire at `k × FlightRebalanceInterval` running the REAL `BalancePlanner` over a real
-  `SlotGrid` (no mirrored rules — rule drift is impossible); moved balloons travel linearly to
-  their final slot over `TimeForBalloonsBalance`, and contacts against them solve the
-  moving-circle quadratic. Every contact nudges the target's occupied hex neighbours and deflects
+  `SlotGrid` (no mirrored rules — rule drift is impossible); moved balloons follow their hop
+  waypoints as an arc-length polyline with OutQuad-eased progress over `TimeForBalloonsBalance`
+  (mirroring `DOPath`'s constant-speed percentage under the project's DOTween default ease —
+  `DOTweenSettings.asset`), and contacts against them solve the moving-circle quadratic
+  linearized at the instantaneous eased velocity. Every contact nudges the target's occupied hex neighbours and deflects
   additionally shove the hit balloon, with the exact `Reach` impulse envelope; centres become
   `balancePosition(t) + Σ impulses(t)`. Pops `Remove` from the dynamics grid so later pulses see
   the gaps. With no dynamics supplied the loop takes the original static fast path unchanged.
@@ -64,16 +66,17 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
 ## Accepted approximations (plan §7)
 
 - The live balancer defers a requested balance one frame; the sim applies it at pulse time.
-- Multi-waypoint Catmull-Rom balance paths ≈ a straight line to the final slot.
+- Balance motion is the eased waypoint POLYLINE — Catmull-Rom's corner rounding between hops is
+  the one part of the live path shape not reproduced.
 - Heavy step budgets reset per simulated shot; in-game the turn budget may be part-spent at fire
   time (unknowable from a snapshot).
 - Flight pulses never relocate roamers (`relocateRoamers: false`) — matches the live code.
 - Idle sway/animator drift is not modeled (visual-only).
-- Wall-clamp overshoot truncation (the game loses the sub-step overshoot remainder within a bounce
-  step) is ignored — a per-bounce timing shift of at most one fixed step, no path-shape effect.
-- Contact search against wobbling balloons freezes centres at the segment's start time, then
-  re-solves once at the candidate hit time (two-pass fixed point) — exact for balance motion
-  (linear), approximate only for the small, smooth nudge envelope.
+- Contact search against moving balloons linearizes at the segment-start instantaneous velocity,
+  then re-solves once at the candidate hit time (two-pass fixed point) — the easing's curvature
+  and the small, smooth nudge envelope are both absorbed by the refinement, not modeled exactly.
+- (The live flight itself is now the exact billiard: walls mirror the overshoot and deflects carry
+  the penetration remainder, so no truncation gap exists between game and sim at bounces.)
 
 ## Sweep and refine
 

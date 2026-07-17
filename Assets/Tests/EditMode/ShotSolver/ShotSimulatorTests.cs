@@ -292,6 +292,39 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         [Test]
+        public void EvaluateBalancePosition_MirrorsDOTweenOutQuadEase()
+        {
+            // The live tween is DOPath with the project's DOTween default ease (OutQuad, per
+            // DOTweenSettings.asset): at half the duration the balloon has covered 75% of its path.
+            var actor = new ShotSimDynamicActor();
+            actor.ResetTo(Vector2Int.zero, Vector2.zero);
+            actor.BeginBalanceMove(startTime: 0f, toPosition: new Vector2(10f, 0f), duration: 1f);
+
+            Assert.AreEqual(0f, actor.EvaluateBalancePosition(0f).x, 1e-4f);
+            Assert.AreEqual(7.5f, actor.EvaluateBalancePosition(0.5f).x, 1e-4f, "OutQuad(0.5) = 0.75");
+            Assert.AreEqual(10f, actor.EvaluateBalancePosition(1f).x, 1e-4f);
+            Assert.AreEqual(10f, actor.EvaluateBalancePosition(5f).x, 1e-4f, "settled — holds the target");
+            Assert.AreEqual(Vector2.zero, actor.EvaluateBalanceVelocity(5f), "no velocity after settling");
+        }
+
+        [Test]
+        public void BeginBalanceMove_SamePulseHops_ChainAsArcLengthPolyline()
+        {
+            // Two same-pulse hops (right 1, then up 1) form an L-shaped path of length 2, walked by
+            // eased ARC LENGTH like DOPath's constant-speed percentage: OutQuad(0.5) = 0.75 of the
+            // path = 1.5 units in — halfway up the vertical leg, NOT on the straight chord to (1,1).
+            var actor = new ShotSimDynamicActor();
+            actor.ResetTo(Vector2Int.zero, Vector2.zero);
+            actor.BeginBalanceMove(startTime: 0f, toPosition: new Vector2(1f, 0f), duration: 1f);
+            actor.BeginBalanceMove(startTime: 0f, toPosition: new Vector2(1f, 1f), duration: 1f);
+
+            var midway = actor.EvaluateBalancePosition(0.5f);
+
+            Assert.AreEqual(1f, midway.x, 1e-4f);
+            Assert.AreEqual(0.5f, midway.y, 1e-4f);
+        }
+
+        [Test]
         public void Simulate_BalancePulse_MovesHangingBalloonIntoTheShotsPath()
         {
             // A 1x2 grid: the only balloon hangs at row 1 over an empty row 0 (unbalanced by
