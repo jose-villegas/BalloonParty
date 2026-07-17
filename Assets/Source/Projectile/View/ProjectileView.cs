@@ -313,6 +313,7 @@ namespace BalloonParty.Projectile.View
             if (step.Outcome == ProjectileStepOutcome.Bounced)
             {
                 _shieldLostPublisher.Publish(new ShieldLostMessage(step.Position));
+                TryEnterCruise(step.Position, step.Direction);
             }
 
             transform.position = step.Position;
@@ -356,8 +357,54 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            _motionResolver.Deflect(
+            transform.position = _motionResolver.Deflect(
                 _model, transform.position, msg.BalloonWorldPosition, msg.SurfaceRadius + _contactRadius);
+        }
+
+        // The resolver counts empty bounces; entry is confirmed HERE because it needs physics: past
+        // the threshold, trace the wall-reflected ray ahead and only an actually-empty corridor —
+        // no balloon within the next threshold bounces — earns the speed ramp. Re-checked every
+        // bounce, so a corridor that opens up mid-flight can still trigger it.
+        private void TryEnterCruise(Vector3 position, Vector3 direction)
+        {
+            var threshold = _config.CruiseWallBounceThreshold;
+            if (threshold <= 0 || _model.IsCruising.Value || _model.ConsecutiveWallBounces < threshold)
+            {
+                return;
+            }
+
+            if (!IsPathClearAhead(position, direction, threshold))
+            {
+                return;
+            }
+
+            _model.CruiseStartShields = _model.ShieldsRemaining.Value;
+            _model.IsCruising.Value = true;
+        }
+
+        private bool IsPathClearAhead(Vector3 position, Vector3 direction, int bounces)
+        {
+            var walls = _motionResolver.Walls;
+            var mask = 1 << BalloonsLayer;
+
+            for (var i = 0; i < bounces; i++)
+            {
+                if (!walls.TryFindCrossing(position, direction, out var crossing, out var wallNormal))
+                {
+                    return false;
+                }
+
+                var distance = Vector3.Distance(position, crossing);
+                if (Physics2D.CircleCast(position, _contactRadius, direction, distance, mask).collider != null)
+                {
+                    return false;
+                }
+
+                position = crossing;
+                direction = Vector3.Reflect(direction, wallNormal.normalized);
+            }
+
+            return true;
         }
 
         private void OnCruiseChanged(bool isCruising)

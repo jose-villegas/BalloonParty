@@ -77,6 +77,30 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
+        public void Deflect_ReturnsAnalyticContactPointOnTheSurface()
+        {
+            // Trigger fired 0.1 deep inside the circle; the returned point must be the surface entry,
+            // not the penetrated position — the caller snaps the shot there to kill chord drift.
+            var model = NewModel(direction: Vector2.down, speed: 1f, shields: 3);
+
+            var contact = _resolver.Deflect(model, new Vector3(0f, 0.3f, 0f), Vector3.zero, 0.4f);
+
+            Assert.AreEqual(0f, contact.x, 1e-4f);
+            Assert.AreEqual(0.4f, contact.y, 1e-4f, "snapped back to the circle's top surface");
+        }
+
+        [Test]
+        public void Deflect_DegenerateInput_KeepsThePenetratedPosition()
+        {
+            var model = NewModel(direction: Vector2.zero, speed: 1f, shields: 3);
+            var position = new Vector3(0.1f, 0.2f, 0f);
+
+            var contact = _resolver.Deflect(model, position, Vector3.zero, 0.4f);
+
+            Assert.AreEqual(position, contact, "no ray to backtrack — stay where the trigger fired");
+        }
+
+        [Test]
         public void TryComputeContactNormal_HeadOn_NormalOpposesTravel()
         {
             // Travelling down onto a circle at the origin, trigger fired 0.1 deep inside.
@@ -148,24 +172,10 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
-        public void Step_ConsecutiveBounces_EntersCruiseAtThreshold()
+        public void Step_ConsecutiveBounces_CountsWithoutEnteringCruise()
         {
-            var resolver = CruiseResolver(threshold: 2, maxMultiplier: 3f);
-            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 5);
-
-            resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
-            Assert.IsFalse(model.IsCruising.Value, "one bounce is below the threshold");
-
-            model.Direction = Vector2.up;
-            resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
-            Assert.IsTrue(model.IsCruising.Value, "second consecutive bounce reaches the threshold");
-            Assert.AreEqual(2, model.ConsecutiveWallBounces);
-            Assert.AreEqual(3, model.CruiseStartShields, "ramp denominator snapshots the shields left at entry");
-        }
-
-        [Test]
-        public void Step_ThresholdZero_NeverCruises()
-        {
+            // Entry is the view's call (it confirms with a physics lookahead) — the resolver only
+            // maintains the counter the view checks against the threshold.
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 10);
 
             for (var i = 0; i < 5; i++)
@@ -174,13 +184,14 @@ namespace BalloonParty.Tests.Projectile
                 _resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
             }
 
-            Assert.IsFalse(model.IsCruising.Value, "threshold 0 disables cruise entirely");
+            Assert.AreEqual(5, model.ConsecutiveWallBounces);
+            Assert.IsFalse(model.IsCruising.Value, "the plain resolver never flips cruise on by itself");
         }
 
         [Test]
         public void Step_CruiseEntry_StartsAtBaseSpeed()
         {
-            var resolver = CruiseResolver(threshold: 1, maxMultiplier: 3f);
+            var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 4);
             model.CruiseStartShields = 4;
             model.IsCruising.Value = true;
@@ -194,7 +205,8 @@ namespace BalloonParty.Tests.Projectile
         [Test]
         public void Step_CruiseRamp_SpeedsUpAsShieldsSpend()
         {
-            var resolver = CruiseResolver(threshold: 1, maxMultiplier: 3f);
+            // Entry bank 4 at 0.5/shield -> max x3; half the bounces spent, linear ramp -> x2.
+            var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
             model.CruiseStartShields = 4;
             model.IsCruising.Value = true;
@@ -207,14 +219,29 @@ namespace BalloonParty.Tests.Projectile
         [Test]
         public void Step_CruiseRamp_PeaksOnLastShieldSpent()
         {
-            var resolver = CruiseResolver(threshold: 1, maxMultiplier: 3f);
+            var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 0);
             model.CruiseStartShields = 4;
             model.IsCruising.Value = true;
 
             var step = resolver.Step(model, Vector3.zero, 1f);
 
-            Assert.AreEqual(3f, step.Position.y, 1e-4f, "all entry shields spent — full max multiplier");
+            Assert.AreEqual(3f, step.Position.y, 1e-4f, "all entry shields spent — 1 + 0.5 x 4 = x3");
+        }
+
+        [Test]
+        public void Step_CruiseTopSpeed_ScalesWithEntryShields()
+        {
+            // The whole point of the shield-scaled cap: a bigger bank tops out faster. Entry 8 at
+            // 0.5/shield fully spent -> x5, where entry 4 gave x3.
+            var resolver = CruiseResolver(perShield: 0.5f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 0);
+            model.CruiseStartShields = 8;
+            model.IsCruising.Value = true;
+
+            var step = resolver.Step(model, Vector3.zero, 1f);
+
+            Assert.AreEqual(5f, step.Position.y, 1e-4f);
         }
 
         [Test]
@@ -223,7 +250,7 @@ namespace BalloonParty.Tests.Projectile
             // A hold-then-jump curve: flat 0 until t=1, so even at half the shields spent the shot
             // must still be at base speed — proves the curve, not the linear fraction, shapes the ramp.
             var resolver = CruiseResolver(
-                threshold: 1, maxMultiplier: 3f,
+                perShield: 0.5f,
                 curve: new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(0.99f, 0f), new Keyframe(1f, 1f)));
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
             model.CruiseStartShields = 4;
@@ -235,24 +262,22 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
-        public void Step_LethalBounce_DoesNotEnterCruise()
+        public void Step_LethalBounce_DoesNotCountACruiseBounce()
         {
-            var resolver = CruiseResolver(threshold: 1, maxMultiplier: 3f);
+            var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 0);
 
             var step = resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
 
             Assert.AreEqual(ProjectileStepOutcome.Destroyed, step.Outcome);
-            Assert.IsFalse(model.IsCruising.Value, "a shot dying on the wall never starts cruising");
+            Assert.AreEqual(0, model.ConsecutiveWallBounces, "a lethal bounce ends the shot, not the count");
         }
 
-        private static ProjectileMotionResolver CruiseResolver(
-            int threshold, float maxMultiplier, AnimationCurve curve = null)
+        private static ProjectileMotionResolver CruiseResolver(float perShield, AnimationCurve curve = null)
         {
             var config = Substitute.For<IGameConfiguration>();
             config.LimitsClockwise.Returns(Walls);
-            config.CruiseWallBounceThreshold.Returns(threshold);
-            config.CruiseMaxSpeedMultiplier.Returns(maxMultiplier);
+            config.CruiseSpeedPerShield.Returns(perShield);
             config.CruiseRampCurve.Returns(curve ?? AnimationCurve.Linear(0f, 0f, 1f, 1f));
             return new ProjectileMotionResolver(config);
         }
