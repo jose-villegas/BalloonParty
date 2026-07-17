@@ -64,6 +64,11 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
         // sphere (sphere-coherent); off (default), the classic per-quadrant hardcoded diagonal.
         [ToggleUI] _ShineFromSceneLight ("Shine Follows Scene Light", Float) = 0
 
+        // Palette colours whose light this balloon should NOT receive (multi-select, stored as a
+        // bitmask). Set it to the balloon's own emission colour so it glows rather than lighting
+        // itself, while still receiving every other colour. (See SceneLight.cginc.)
+        [PaletteMask] _ExcludeLightPaletteMask ("Exclude Light Palettes", Float) = 0
+
 
         [Header(Deflect Flash)]
         _DeflectFlash ("Flash (0-1)", Range(0, 1)) = 0
@@ -195,6 +200,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
             float _ShineSpeed;
             float _ShineInterval;
             float _ShineFromSceneLight;
+            float _ExcludeLightPaletteMask;
 
 
             // Deflect
@@ -222,8 +228,8 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                 // Sample the light field ONCE per sphere, at the shared _SphereCenter (VTF,
                 // target 3.5) — the PaintBlob precedent — not this quadrant's own transform
                 // centre, which would desync the four quadrants from each other.
-                OUT.lightDir  = SceneLightDirectionAtLOD(_SphereCenter.xy);
-                OUT.lightTint = SceneLightTintAtLOD(_SphereCenter.xy);
+                OUT.lightDir  = SceneLightDirectionMaskedAtLOD(_SphereCenter.xy, _ExcludeLightPaletteMask);
+                OUT.lightTint = SceneLightTintMaskedAtLOD(_SphereCenter.xy, _ExcludeLightPaletteMask);
 
                 #ifdef PIXELSNAP_ON
                 OUT.vertex = UnityPixelSnap(OUT.vertex);

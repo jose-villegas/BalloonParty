@@ -349,5 +349,53 @@ float ShadowLightFadeAtLOD(float2 worldPos)
     return _SceneLightColor.a > 0.5 ? saturate(SceneLightMagnitudeAtLOD(worldPos)) : 1.0;
 }
 
+// ---- Palette-mask light exclusion ----
+//
+// A receiver can ignore light of chosen palette colours by passing an exclude MASK (bit i = palette
+// index i; authored per-material via the [PaletteMask] drawer). Where the field's dominant local
+// light is tagged with an excluded index, its local contribution is dropped and only the ambient/
+// other-colour light remains — so e.g. an emitter can reject its OWN colour (glow, not be lit) while
+// still receiving every other colour. Mask 0 (or field off) excludes nothing.
+
+// True when the strongest local light here is tagged with a palette index whose bit is set in
+// `excludeMask`. Bit test in float math (portable below SM4): index i is set when the i-th binary
+// digit of the mask is 1. Palette is <= 16 slots, so the mask fits a float exactly.
+bool SceneLightTagInMaskAtLOD(float2 worldPos, float excludeMask)
+{
+    if (_SceneLightFieldOn < 0.5 || excludeMask < 0.5)
+    {
+        return false;
+    }
+
+    float index = SceneLightPaletteIndex(SceneLightFieldSampleLOD(worldPos).a);
+    if (index < 0.0)
+    {
+        return false;
+    }
+
+    return fmod(floor(excludeMask / exp2(index)), 2.0) >= 0.5;
+}
+
+// Tint that drops any masked-out palette colour's light (ambient/key fallback there) but keeps every
+// other colour and the ambient.
+float3 SceneLightTintMaskedAtLOD(float2 worldPos, float excludeMask)
+{
+    if (SceneLightTagInMaskAtLOD(worldPos, excludeMask))
+    {
+        float3 keyColor = _SceneLightColor.a > 0.5 ? _SceneLightColor.rgb : float3(1.0, 1.0, 1.0);
+        return keyColor * SceneLightAmbientMagnitude();
+    }
+
+    return SceneLightTintAtLOD(worldPos);
+}
+
+// Direction counterpart: masked-out tag -> the ambient/global direction, no local pull.
+float2 SceneLightDirectionMaskedAtLOD(float2 worldPos, float excludeMask)
+{
+    return SceneLightTagInMaskAtLOD(worldPos, excludeMask)
+        ? SceneLightDirection()
+        : SceneLightDirectionAtLOD(worldPos);
+}
+
 
 #endif // BALLOONPARTY_SCENE_LIGHT_INCLUDED
