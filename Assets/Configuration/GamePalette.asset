@@ -37,3 +37,6 @@ MonoBehaviour:
   - _name: Projectile
     _color: {r: 0.2, g: 0.2, b: 0.2, a: 1}
     _presentationOnly: 1
+  - _name: Prediction
+    _color: {r: 0.46666667, g: 0.8666667, b: 0.46666667, a: 1}
+    _presentationOnly: 1

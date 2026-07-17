@@ -37,6 +37,12 @@ Shader "BalloonParty/Sprite/LightDriven"
         // shadow child's (0.04, -0.04): zero the child's localPosition and put the magnitude
         // here, so the placement orbits with the light. 0 = rotation only.
         _OrbitDistance ("Down-Light Offset", Range(0, 0.5)) = 0
+        // 0 = a single point sample at the sprite's anchor (the old behaviour). >0 integrates the
+        // field over a disc of this world-space radius (anchor + 4 rim taps) so a light sweeping
+        // across the sprite's footprint turns the response smoothly instead of flipping the instant
+        // its peak crosses one texel — tune it toward the sprite's visual size for accessories that
+        // sit near light sources (a glint on a balloon a laser sweeps past).
+        _ReceiverRadius ("Receiver Radius (disc integration)", Range(0, 1)) = 0
 
         [Header(Light Response)]
         // Glint archetype: the sprite is reflected light, so it takes the scene light's
@@ -123,6 +129,7 @@ Shader "BalloonParty/Sprite/LightDriven"
             float _RotateLightMode;
             float _BakedAngle;
             float _OrbitDistance;
+            float _ReceiverRadius;
             float _TintBySceneLight;
             float _FadeWithSceneLight;
             float _LightMode;
@@ -144,22 +151,32 @@ Shader "BalloonParty/Sprite/LightDriven"
                 // below moves the vertex) — VTF (target 3.5), the PaintBlob precedent.
                 float2 anchorWorld = float2(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13);
 
-                // Down-light direction feeding BOTH the swing and the orbit, scoped by _RotateLightMode.
-                // Local yields a rest weight of 0 (art keeps its baked orientation/placement) that grows
-                // as a local light nears; Full/Ambient stay full strength (dirAmount 1).
-                float dirAmount = 1.0;
+                // Down-light FLOW feeding BOTH the swing and the orbit, scoped by _RotateLightMode. Flow
+                // (see SceneLight.cginc) is never normalized — its length IS the confidence in its
+                // direction, so dirAmount comes straight from it instead of a separate out-param. Local
+                // yields a rest length of 0 (art keeps its baked orientation/placement) that grows as a
+                // local light nears; Ambient is always full confidence (the flat global can't flip);
+                // Full carries the field's own confidence, which is what fixes the perpendicular flip —
+                // it dips toward 0 (swing/orbit fade through rest) instead of snapping 180 when a local
+                // light opposes the ambient or its peak crosses the anchor.
+                float dirAmount;
                 float2 downLight;
                 if (_RotateLightMode > 1.5)
                 {
-                    downLight = -SceneLightLocalDirectionAtLOD(anchorWorld, dirAmount);
+                    float2 flow = SceneLightLocalFlowAtLOD(anchorWorld, _ReceiverRadius);
+                    dirAmount = saturate(length(flow));
+                    downLight = -flow;
                 }
                 else if (_RotateLightMode > 0.5)
                 {
+                    dirAmount = 1.0;
                     downLight = -SceneLightDirection();
                 }
                 else
                 {
-                    downLight = -SceneLightDirectionAtLOD(anchorWorld);
+                    float2 flow = SceneLightFlowAtLOD(anchorWorld, _ReceiverRadius);
+                    dirAmount = saturate(length(flow));
+                    downLight = -flow;
                 }
                 OUT.shadowFade = ShadowLightFadeAtLOD(anchorWorld);
 
@@ -185,8 +202,12 @@ Shader "BalloonParty/Sprite/LightDriven"
 
                 // Rotation is optional: a baked ground shadow keeps its authored shape (orbit
                 // only) and behaves like a plain sprite here.
-                // dirAmount fades the swing in (Local mode): 0 at rest keeps the baked angle, 1 = full
-                // swing to the light. Full/Ambient pass dirAmount 1, so this is the plain swing there.
+                // dirAmount fades the swing by the flow's own confidence in ALL modes (generalized from
+                // the old Local-only pattern): 0 keeps the baked angle, 1 = full swing to the light.
+                // Ambient/rest-Full pass dirAmount 1 (bit-identical to before); it only dips below 1 near
+                // a cancellation, which is exactly where atan2(downLight) would otherwise be unstable —
+                // atan2 on a near-zero flow is technically undefined, but harmless here since dirAmount
+                // ~0 kills the swing amplitude before that angle ever shows up.
                 float delta = _RotateArt > 0.5
                     ? (atan2(downLight.y, downLight.x) - radians(_BakedAngle) - objAngle) * dirAmount
                     : 0.0;
@@ -200,9 +221,14 @@ Shader "BalloonParty/Sprite/LightDriven"
                 // transform-authored offset (e.g. the baked shadow's (0.04, -0.04)) becomes a
                 // light-tracked placement. Scaled by the transform's world scale (|worldX|) so
                 // bigger balloons keep proportionally bigger offsets, matching the old
-                // localPosition behavior.
+                // localPosition behavior. downLight is UNNORMALIZED flow, so its own magnitude already
+                // carries the confidence — no separate dirAmount factor here (double-counting it would
+                // square the fade). At rest that magnitude is exactly 1 (ambient-only flow), so this
+                // matches the old orbit distance bit-for-bit; near a cancellation it shrinks toward 0 and
+                // grows back on the other side, so the shadow SLIDES through its rest point instead of
+                // teleporting across it.
                 float4 worldPos = mul(unity_ObjectToWorld, v);
-                worldPos.xy += downLight * (_OrbitDistance * length(worldX) * dirAmount);
+                worldPos.xy += downLight * (_OrbitDistance * length(worldX));
 
                 OUT.vertex = UnityWorldToClipPos(worldPos);
                 OUT.texcoord = IN.texcoord;

@@ -73,15 +73,21 @@ Material:
     - _GlossyReflections: 1
     - _LightInfluence: 1
     - _LightMode: 1
+    - _LocalShadeOnly: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _ShadeLightZ: 1
+    - _ShadeStrength: 0.2
+    - _ShadeWrap: 0.75
     - _ShadowDistance: 0.1414
     - _ShadowFromSceneLight: 1
     - _ShadowSoftness: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
+    - _SphereRadius: 0.5
+    - _SphereShading: 0
     - _SpriteScale: 0.75
     - _SrcBlend: 1
     - _Stencil: 0
@@ -99,5 +105,6 @@ Material:
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowColor: {r: 1, g: 1, b: 1, a: 0.2509804}
     - _ShadowOffset: {r: 0.1, g: -0.1, b: 0, a: 0}
+    - _SphereCenter: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

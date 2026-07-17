@@ -99,13 +99,13 @@ are still correct. This is why lights are reactive: the service subscribes to ea
 flag, rather than polling or re-rendering blindly. The on-flag is set once, after the first render, so a
 missing owner leaves it at 0.
 
-## Device builds: the three field shaders are serialized
+## Device builds: the field shaders are serialized
 
-All three passes are `Hidden/` shaders (`SceneLightFieldFill`, `SceneLightAccumulate`,
-`SceneLightGradient`), which a device build would strip if they were only reached by `Shader.Find`. So
-the settings SO carries **serialized `Shader` references** (`FillShader`/`AccumulateShader`/`GradientShader`,
-mirroring `IDisturbanceFieldSettings`), which pull them into the build via the asset. **Assign all three
-on the `SceneLightFieldSettings` asset** — the resources prefer the serialized reference and fall back to
+All passes are `Hidden/` shaders (`SceneLightFieldFill`, `SceneLightAccumulate`, `SceneLightGradient`),
+which a device build would strip if they were only reached by `Shader.Find`. So the settings SO carries
+**serialized `Shader` references** (`FillShader`/`AccumulateShader`/`GradientShader`, mirroring
+`IDisturbanceFieldSettings`), which pull them into the build via the asset. **Assign all three on the
+`SceneLightFieldSettings` asset** — the resources prefer the serialized reference and fall back to
 `Shader.Find` only as an editor convenience (that fallback is stripped on device, so an unassigned slot
 breaks the field there).
 
@@ -119,6 +119,26 @@ breaks the field there).
 - the **field-aware** helpers — `SceneLightDirectionAt(worldPos)`, `SceneLightMagnitudeAt(worldPos)`,
   `SceneLightTintAt(worldPos)`, `ShadowLightFadeAt(worldPos)` (plus `…LOD` variants for vertex-stage / VTF
   consumers) — each of which returns the flat result when `_SceneLightFieldOn < 0.5`.
+
+**Flow helpers (perpendicular-flip fix).** `SceneLightDirectionAt`/`SceneLightFieldDecodeDir` decode a
+direction and re-normalize it — correct on average, but the re-normalize is what made local
+light-driven accessories SNAP 180° (shadows/glints flipping left↔right, up↔down) whenever a local
+light's direction opposed the ambient enough to cancel, or its peak crossed the sample point (the
+field's raw GB is already near-zero there, so the sign flip that `normalize()` turns into an instant
+180 is a texel-to-texel accident, not a real direction change). `SceneLightFlowAtLOD(worldPos,
+receiverRadius)` / `SceneLightLocalFlowAtLOD(worldPos, receiverRadius)` fix this by never normalizing:
+they return a **flow** vector whose magnitude IS the confidence in its direction (0 at a cancellation,
+not an arbitrary pick), so a consumer that scales its response by that magnitude reads the
+cancellation as a fade-through-rest instead of a teleport. `receiverRadius > 0` additionally integrates
+the field over a small disc (the anchor plus 4 rim taps) so a light sweeping across a sprite's
+footprint turns the flow continuously instead of flipping the instant its peak crosses one texel.
+`SpriteLightDriven.shader` is the first consumer: its `_ReceiverRadius` property (0 = point sample,
+matching the old cost) exposes the disc radius per material, and its Full/Local rotation modes now
+size the swing/orbit amplitude from the flow's own magnitude instead of assuming full confidence —
+Ambient mode is unaffected (the flat global direction can't flip). Existing materials get the flip fix
+automatically at the default radius of 0; the disc integration is an opt-in per-material tuning knob
+on top.
+
 
 `SceneLightTintAt` also applies the A **palette colour**: it blends from the global key light toward the
 tagged light's palette RGB (from the global `_SceneLightPalette[16]` the service pushes) by how far the
@@ -174,8 +194,4 @@ has zero visual effect**: the field OFF is bit-identical to today.
   palette-tagged to the matched target colour, lasting `PopLightSeconds`.
 - **First consumer (shipped)** — the projectile registers a small `Light` that follows it and takes its
   colour (Sparks while colourless); see `Projectile/README.md`.
-- **Prediction line** — `PredictionTraceLights` mirrors the aim trace with one `Light.Segment` capsule
-  per leg while the player holds to aim, intensity fading launch→tip via a curve (tinted by the
-  presentation-only `Prediction` palette entry); registered on aim, mutated in place per update,
-  disposed on fire/release; see `Prediction/README.md`.
 - **Next** — more game-source wiring (balloon pops flashing their colour), further field tuning.

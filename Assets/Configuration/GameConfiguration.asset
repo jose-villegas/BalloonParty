@@ -27,6 +27,66 @@ MonoBehaviour:
   _initialPredictionLength: 1
   _predictionTraceMaxBounces: 2
   _predictionTraceMaxSteps: 15
+  _predictionLightHalfWidth: 0.175
+  _predictionLightIntensity: 0.9
+  _predictionLightFalloffPower: 0.95
+  _predictionLightFadeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5106251
+      value: 0.5101539
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.080152154
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.5304388
+      outSlope: -0.5304388
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.10409647
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _predictionLightWidthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _scorePointTraceDuration: 1
   _scorePointsScatterDelay: 0.02
   _scorePointBurstDuration: 0.12

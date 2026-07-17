@@ -134,6 +134,74 @@ float2 SceneLightLocalDirectionAtLOD(float2 worldPos, out float weightOut)
     return len > 1e-4 ? raw / len : float2(0.0, 1.0);
 }
 
+// ---- Flow: magnitude-carrying direction, safe to blend/orbit without ever normalizing ----
+//
+// SceneLightFieldDecodeDir (above) decodes a direction and re-normalizes it — correct once a local
+// light dominates, but that normalize() is exactly why perpendicular/local light-driven accessories
+// can SNAP 180°: when the local and ambient directions oppose enough to cancel, the lerp's input
+// passes near the zero vector and normalize() picks an arbitrary side; and since the field's raw GB
+// is (weight * localDir), it is itself near-zero and sign-flips the instant a light's peak crosses the
+// sample point, which normalize() turns into an instant flip instead of a smooth swing. The functions
+// below never normalize: they return a FLOW whose magnitude IS the confidence in its direction (0 = no
+// defined direction, reads as "at rest" — not a coin-flip), so a consumer that scales its response by
+// that magnitude (see SpriteLightDriven) fades smoothly THROUGH the cancellation instead of
+// teleporting across it.
+
+// Shared tap set behind SceneLightFlowAtLOD / SceneLightLocalFlowAtLOD: the field's raw GB decode
+// (weight * localDir, un-biased, NOT renormalized), averaged over a receiver disc. receiverRadius <= 0
+// is a single anchor tap (point-sample parity with the existing helpers' cost). receiverRadius > 0
+// also taps the 4 rim points (+-X, +-Y at receiverRadius WORLD units — offset before the UV mapping,
+// so the bounds-to-UV scale the other helpers rely on stays correct even when the field isn't square
+// in world space) and averages all 5 raws. Averaging VECTORS (not weights-then-directions) is the
+// point: a light sweeping across the disc rotates the net flux continuously instead of flipping the
+// instant its peak crosses one texel.
+float2 SceneLightFieldRawFlowAtLOD(float2 worldPos, float receiverRadius)
+{
+    float2 raw = SceneLightFieldSampleLOD(worldPos).gb * 2.0 - 1.0;
+    if (receiverRadius <= 1e-4)
+    {
+        return raw;
+    }
+
+    float2 rawPX = tex2Dlod(_SceneLightTex, float4(SceneLightFieldUV(worldPos + float2(receiverRadius, 0.0)), 0.0, 0.0)).gb * 2.0 - 1.0;
+    float2 rawNX = tex2Dlod(_SceneLightTex, float4(SceneLightFieldUV(worldPos - float2(receiverRadius, 0.0)), 0.0, 0.0)).gb * 2.0 - 1.0;
+    float2 rawPY = tex2Dlod(_SceneLightTex, float4(SceneLightFieldUV(worldPos + float2(0.0, receiverRadius)), 0.0, 0.0)).gb * 2.0 - 1.0;
+    float2 rawNY = tex2Dlod(_SceneLightTex, float4(SceneLightFieldUV(worldPos - float2(0.0, receiverRadius)), 0.0, 0.0)).gb * 2.0 - 1.0;
+    return (raw + rawPX + rawNX + rawPY + rawNY) * (1.0 / 5.0);
+}
+
+// Toward-light FLOW (ambient + local), never normalized. Contract: exactly SceneLightDirection() at
+// local weight 0; approaches the local direction as weight approaches 1; in between, ambient and local
+// combine as VECTORS, so an opposing local light doesn't flip the result — it shrinks toward zero (the
+// cancellation dip) and grows out the other side, which is the fix for the perpendicular flip.
+// Field-off falls back to the flat ambient direction, matching the other …At helpers.
+float2 SceneLightFlowAtLOD(float2 worldPos, float receiverRadius)
+{
+    if (_SceneLightFieldOn < 0.5)
+    {
+        return SceneLightDirection();
+    }
+
+    float2 avgRaw = SceneLightFieldRawFlowAtLOD(worldPos, receiverRadius);
+    float w = saturate(length(avgRaw));
+    return SceneLightDirection() * (1.0 - w) + avgRaw;
+}
+
+// The LOCAL-only flow — no ambient term, for the Local rotation/orbit mode. Its length replaces the
+// old SceneLightLocalDirectionAtLOD out-param (0 = no local light here, growing toward 1 as one nears):
+// a caller multiplies its swing/orbit amplitude by it directly instead of reading a separate weightOut.
+// Zero vector when there's no local light or the field is off (atan2 on a zero vector is undefined but
+// harmless downstream — that same zero length kills the amplitude that would use its angle).
+float2 SceneLightLocalFlowAtLOD(float2 worldPos, float receiverRadius)
+{
+    if (_SceneLightFieldOn < 0.5)
+    {
+        return float2(0.0, 0.0);
+    }
+
+    return SceneLightFieldRawFlowAtLOD(worldPos, receiverRadius);
+}
+
 // The ambient (global) light magnitude — the key light's intensity, guarded to 1.0 before the owner
 // has pushed. This is the baseline the field's local boost adds ON TOP of; the field itself no longer
 // stores it (its R channel is the local boost only, 0 at rest).
@@ -267,6 +335,7 @@ float3 SceneLightLocalAtLOD(float2 worldPos)
     return SceneLightPaletteColorAtLOD(SceneLightFieldUV(worldPos), keyColor) * local;
 }
 
+
 // No light, no shadow, at a world position — same clamp as ShadowLightFade(), scaled by the
 // local magnitude once the field is live (the fallback comes free from SceneLightMagnitudeAt's
 // own field-off branch, so this needs no separate _SceneLightFieldOn check).
@@ -279,5 +348,6 @@ float ShadowLightFadeAtLOD(float2 worldPos)
 {
     return _SceneLightColor.a > 0.5 ? saturate(SceneLightMagnitudeAtLOD(worldPos)) : 1.0;
 }
+
 
 #endif // BALLOONPARTY_SCENE_LIGHT_INCLUDED

@@ -31,21 +31,6 @@ namespace BalloonParty.Configuration
         [SerializeField] private int _predictionTraceMaxBounces;
         [SerializeField] private int _predictionTraceMaxSteps;
 
-        [Tooltip("Half-width of the capsule lights mirroring the prediction line while aiming (one per trace leg).")]
-        [SerializeField] [Min(0f)] private float _predictionLightHalfWidth = 0.35f;
-        [SerializeField] [Min(0f)] private float _predictionLightIntensity = 1f;
-        [SerializeField] [Min(0f)] private float _predictionLightFalloffPower = 2f;
-
-        [Tooltip("Intensity multiplier along the line from launch (t=0) to tip (t=1), sampled at each " +
-                 "trace leg's arc-length midpoint.")]
-        [SerializeField] private AnimationCurve _predictionLightFadeCurve =
-            AnimationCurve.EaseInOut(0f, 1f, 1f, 0.15f);
-
-        [Tooltip("Half-width multiplier along the line from launch (t=0) to tip (t=1) — wide→thin or any " +
-                 "combo; the beam lerps between each leg's endpoint samples.")]
-        [SerializeField] private AnimationCurve _predictionLightWidthCurve =
-            AnimationCurve.Linear(0f, 1f, 1f, 1f);
-
         [Header("Score")]
         [SerializeField] private float _scorePointTraceDuration;
         [SerializeField] private float _scorePointsScatterDelay = 0.08f;
@@ -74,11 +59,6 @@ namespace BalloonParty.Configuration
         public float PredictionTraceStep => _initialPredictionLength;
         public int PredictionTraceMaxBounces => _predictionTraceMaxBounces;
         public int PredictionTraceMaxSteps => _predictionTraceMaxSteps;
-        public float PredictionLightHalfWidth => _predictionLightHalfWidth;
-        public float PredictionLightIntensity => _predictionLightIntensity;
-        public float PredictionLightFalloffPower => _predictionLightFalloffPower;
-        public AnimationCurve PredictionLightFadeCurve => _predictionLightFadeCurve;
-        public AnimationCurve PredictionLightWidthCurve => _predictionLightWidthCurve;
         public float ScorePointTraceDuration => _scorePointTraceDuration;
         public float ScorePointsScatterDelay => _scorePointsScatterDelay;
         public float ScorePointBurstDuration => _scorePointBurstDuration;
