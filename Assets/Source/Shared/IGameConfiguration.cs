@@ -18,6 +18,9 @@ namespace BalloonParty.Shared
         AnimationCurve CruiseTapCurve { get; }
         float CruiseTapEaseDuration { get; }
         int CruisePiercingTapThreshold { get; }
+        AnimationCurve LastShieldApproachCurve { get; }
+        float LastShieldApproachDuration { get; }
+        float LastShieldTimeScale { get; }
         float ShieldTrailDuration { get; }
 
         Vector2Int SlotsSize { get; }

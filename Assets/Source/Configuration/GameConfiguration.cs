@@ -41,6 +41,20 @@ namespace BalloonParty.Configuration
                  "then pops everything it touches, unbreakables included. 0 disables.")]
         [SerializeField] [Min(0)] private int _cruisePiercingTapThreshold = 3;
 
+        [Tooltip("Position easing across a doomed 0-shield segment, sampled on NORMALIZED TIME over " +
+                 "LastShieldApproachDuration (x = time 0..1, y = distance fraction from last bounce to " +
+                 "the death wall, 0->1). The 'last breath' — same wall-clock length whatever the " +
+                 "segment's length. Ease-out = drift slower into the wall.")]
+        [SerializeField] private AnimationCurve _lastShieldApproachCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+
+        [Tooltip("Seconds the last-breath approach takes to cross its doomed segment. The whole moment " +
+                 "is normalized to this GAME time (so it stretches under the slow-mo below). 0 disables.")]
+        [SerializeField] [Min(0f)] private float _lastShieldApproachDuration = 3f;
+
+        [Tooltip("Global time scale claimed during the doomed last-breath moment — the whole game " +
+                 "slows to this (1 = no slow-mo). Spawning hard-stops separately; this just paces the drama.")]
+        [SerializeField] [Range(0f, 1f)] private float _lastShieldTimeScale = 0.3f;
+
         [Header("Slots")]
         [SerializeField] private Vector2Int _slotsSize;
         [SerializeField] private Vector2 _slotSeparation;
@@ -78,6 +92,9 @@ namespace BalloonParty.Configuration
         public AnimationCurve CruiseTapCurve => _cruiseTapCurve;
         public float CruiseTapEaseDuration => _cruiseTapEaseDuration;
         public int CruisePiercingTapThreshold => _cruisePiercingTapThreshold;
+        public AnimationCurve LastShieldApproachCurve => _lastShieldApproachCurve;
+        public float LastShieldApproachDuration => _lastShieldApproachDuration;
+        public float LastShieldTimeScale => _lastShieldTimeScale;
         public Vector2 SlotSeparation => _slotSeparation;
         public Vector2 SlotsOffset => _slotsOffset;
         public Vector2Int SlotsSize => _slotsSize;

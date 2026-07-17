@@ -36,7 +36,7 @@ namespace BalloonParty.Projectile.View
 
         [Header("Pierce Spiral")]
         [Tooltip("Child renderer carrying the PierceConeSpiral material — fades in once the shot earns " +
-                 "the piercing buff (cruise taps), fades out with it.")]
+                 "the piercing state (cruise taps), fades out with it or during the doomed last breath.")]
         [SerializeField] private SpriteRenderer _pierceSpiralRenderer;
         [Tooltip("Seconds for the spiral to lerp in/out when the piercing state flips.")]
         [SerializeField] [Min(0f)] private float _pierceFadeDuration = 0.35f;
@@ -54,6 +54,8 @@ namespace BalloonParty.Projectile.View
         [Inject] private IPublisher<ProjectileFiredMessage> _firedPublisher;
         [Inject] private IPublisher<ProjectileCruiseStartedMessage> _cruiseStartedPublisher;
         [Inject] private IPublisher<ProjectileCruiseEndedMessage> _cruiseEndedPublisher;
+        [Inject] private IPublisher<ProjectileDoomedStartedMessage> _doomedStartedPublisher;
+        [Inject] private IPublisher<ProjectileDoomedEndedMessage> _doomedEndedPublisher;
         [Inject] private IPublisher<SpeckSpawnRequestMessage> _speckPublisher;
         [Inject] private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
         [Inject] private ProjectileHitResolver _hitResolver;
@@ -68,6 +70,7 @@ namespace BalloonParty.Projectile.View
         private int _sparksColorIndex = -1;
         private IDisposable _deflectedSubscription;
         private IDisposable _cruiseSubscription;
+        private IDisposable _doomedSubscription;
         private ProjectileTrail _projectileTrail;
         private float _contactRadius;
         private bool _shieldShown;
@@ -141,6 +144,10 @@ namespace BalloonParty.Projectile.View
             {
                 EmitFireBurst();
 
+                // The muzzle is the first flight segment's origin — the last-shield ease measures
+                // approach progress from wherever the current segment began (updated on each bounce).
+                _model.SegmentStartPosition = transform.position;
+
                 // Colourless shots read as the Sparks tint; recoloured shots take their own colour
                 // (kept in step by UpdateGlowColor).
                 _light = new Light(transform.position, _lightRadius, _lightIntensity, LightColorIndex());
@@ -205,6 +212,7 @@ namespace BalloonParty.Projectile.View
             ResetPierceSpiral();
             LifecycleHelper.DisposeAndClear(ref _deflectedSubscription);
             LifecycleHelper.DisposeAndClear(ref _cruiseSubscription);
+            LifecycleHelper.DisposeAndClear(ref _doomedSubscription);
 
             // Mirror OnDespawned's cleanup: a pooled instance must never inherit a still-running
             // disappear tween from its previous life — that would scale the fresh projectile to zero
@@ -224,6 +232,7 @@ namespace BalloonParty.Projectile.View
             _light = null;
             LifecycleHelper.DisposeAndClear(ref _deflectedSubscription);
             LifecycleHelper.DisposeAndClear(ref _cruiseSubscription);
+            LifecycleHelper.DisposeAndClear(ref _doomedSubscription);
             _model = null;
             _shieldShown = false;
             _disappearing = false;
@@ -260,6 +269,11 @@ namespace BalloonParty.Projectile.View
             _cruiseSubscription = model.IsCruising
                 .SkipLatestValueOnSubscribe()
                 .Subscribe(OnCruiseChanged);
+
+            _doomedSubscription?.Dispose();
+            _doomedSubscription = model.IsLastShieldApproach
+                .SkipLatestValueOnSubscribe()
+                .Subscribe(OnDoomedChanged);
         }
 
         private void DestroyProjectile()
@@ -269,6 +283,14 @@ namespace BalloonParty.Projectile.View
             if (_model != null && _model.IsCruising.Value)
             {
                 _model.IsCruising.Value = false;
+            }
+
+            // Critical: the doomed shot dies WITH IsLastShieldApproach still true (the final step set
+            // it, then the wall killed it). Close it here so the doomed-ended message fires — else the
+            // slow-mo time-scale claim never releases and the spawner stays paused forever.
+            if (_model != null && _model.IsLastShieldApproach.Value)
+            {
+                _model.IsLastShieldApproach.Value = false;
             }
 
             // Publish now, not after the scale-down: the thrower scales this shot away (it returns to the
@@ -308,6 +330,12 @@ namespace BalloonParty.Projectile.View
 
         private void MoveAndBounce()
         {
+            // A shot with no shields left dies at the next wall — UNLESS a balloon in the way could
+            // still pop and refund one. When the single segment ahead is clear of any balloon, that
+            // wall is certain death: flag the doomed run so the resolver eases the last-breath drift.
+            _model.IsLastShieldApproach.Value = _model.ShieldsRemaining.Value == 0
+                && IsPathClearAhead(transform.position, _model.Direction, 1);
+
             var step = _motionResolver.Step(_model, transform.position, Time.fixedDeltaTime);
 
             if (step.Outcome != ProjectileStepOutcome.Moved)
@@ -432,7 +460,15 @@ namespace BalloonParty.Projectile.View
 
             var inTapBeat = _model.IsCruising.Value
                             && _model.CruiseTapElapsed < _config.CruiseTapEaseDuration;
-            var target = _model.HasBuff(ProjectileBuffId.Piercing) && !inTapBeat ? 1f : 0f;
+
+            // Hide the spiral while the shot is drifting to its death (doomed last-shield segment):
+            // a piercing flourish there reads as a power-up right as it dies, and the clear path
+            // means there's nothing to pierce anyway.
+            var target = _model.IsPiercing.Value
+                         && !inTapBeat
+                         && !_model.IsLastShieldApproach.Value
+                ? 1f
+                : 0f;
             var maxStep = _pierceFadeDuration > 0f ? Time.deltaTime / _pierceFadeDuration : 1f;
             _pierceAlpha = Mathf.MoveTowards(_pierceAlpha, target, maxStep);
 
@@ -466,6 +502,18 @@ namespace BalloonParty.Projectile.View
             else
             {
                 _cruiseEndedPublisher.Publish(new ProjectileCruiseEndedMessage(transform.position));
+            }
+        }
+
+        private void OnDoomedChanged(bool doomed)
+        {
+            if (doomed)
+            {
+                _doomedStartedPublisher.Publish(new ProjectileDoomedStartedMessage(transform.position));
+            }
+            else
+            {
+                _doomedEndedPublisher.Publish(new ProjectileDoomedEndedMessage());
             }
         }
 

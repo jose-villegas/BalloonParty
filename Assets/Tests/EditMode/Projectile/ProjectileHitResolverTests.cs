@@ -100,12 +100,40 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
+        public void Resolve_PiercingBuff_KeepsCruisingThroughContact()
+        {
+            _projectile.IsPiercing.Value = true;
+            _projectile.ConsecutiveWallBounces = 4;
+            _projectile.IsCruising.Value = true;
+
+            _resolver.Resolve(_projectile, new BalloonModel(new BalloonModelConfig(hitsToPop: 1)), Vector3.zero);
+
+            Assert.IsTrue(_projectile.IsCruising.Value, "piercing rides the cruise through the pop");
+            Assert.AreEqual(4, _projectile.ConsecutiveWallBounces, "bounce counter isn't reset while piercing");
+        }
+
+        [Test]
+        public void Resolve_PiercingBuff_ToughPierceHalvesSpeedScale()
+        {
+            _projectile.IsPiercing.Value = true;
+            _projectile.IsCruising.Value = true;
+            _projectile.CruisePierceSpeedScale = 1f;
+
+            // A 2-hit tough is a >1-hit actor — piercing pops it but the plow halves the speed scale.
+            _resolver.Resolve(_projectile, new BalloonModel(new BalloonModelConfig(hitsToPop: 2)), Vector3.zero);
+            Assert.AreEqual(0.5f, _projectile.CruisePierceSpeedScale, 1e-4f);
+
+            // A 1-hit balloon costs nothing — the scale rides through unchanged.
+            _resolver.Resolve(_projectile, new BalloonModel(new BalloonModelConfig(hitsToPop: 1)), Vector3.zero);
+            Assert.AreEqual(0.5f, _projectile.CruisePierceSpeedScale, 1e-4f, "a 1-hit pop doesn't decay speed");
+        }
+
+        [Test]
         public void Resolve_PiercingBuff_PopsAWouldBeDeflector()
         {
             // Two hits to pop would normally deflect the first contact; the cruise-earned piercing
             // buff flips it to a straight pop (DamageFlags.Piercing through EvaluateNormalHit).
-            _projectile.AddBuff(new ProjectileBuff(
-                ProjectileBuffId.Piercing, 1f, BuffModifierOp.Flat, new ShotLifetimeEndCondition()));
+            _projectile.IsPiercing.Value = true;
             var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 2));
             balloon.Color.Value = "Red";
 

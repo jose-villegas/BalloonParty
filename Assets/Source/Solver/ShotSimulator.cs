@@ -206,6 +206,7 @@ namespace BalloonParty.Solver
             var consecutiveWallBounces = 0;
             var isCruising = false;
             var isPiercing = false;
+            var pierceSpeedScale = 1f;
             var cruiseStartShields = 0;
 
             string streakColor = null;
@@ -237,7 +238,8 @@ namespace BalloonParty.Solver
                 }
 
                 var speed = Mathf.Max(
-                    CurrentSpeed(projectileSpeed, isCruising, cruiseStartShields, shields, cruiseConfig), MinSpeed);
+                    CurrentSpeed(projectileSpeed, isCruising, cruiseStartShields, shields, pierceSpeedScale, cruiseConfig),
+                    MinSpeed);
 
                 var hasWallEvent = TryFindWallCrossing(walls, position, direction, out var wallDistance, out var wallNormal);
 
@@ -290,7 +292,8 @@ namespace BalloonParty.Solver
                         workingSet, ref activeCount, balloonIndex, position, projectileContactRadius,
                         ref direction, ref streakColor, ref streakCount, ref projectileColor,
                         ref rawScore, ref pops, ref toughsCleared, ref shields, elapsed, dynamics,
-                        ref consecutiveWallBounces, ref isCruising, targetColorId, isPiercing);
+                        ref consecutiveWallBounces, ref isCruising, targetColorId, isPiercing,
+                        ref pierceSpeedScale);
                     continue;
                 }
 
@@ -307,7 +310,17 @@ namespace BalloonParty.Solver
                 direction = Vector2.Reflect(direction, wallNormal.normalized);
                 consecutiveWallBounces++;
 
-                if (cruiseConfig.WallBounceThreshold > 0 && !isCruising
+                if (isCruising && pierceSpeedScale < 1f)
+                {
+                    // Only after plowing a tough (scale decayed) does a wall end the run: cruise
+                    // ends, speed returns to base, and the earned piercing is consumed — mirrors
+                    // ProjectileMotionResolver. An armed shot cruising empty space keeps both.
+                    isCruising = false;
+                    consecutiveWallBounces = 0;
+                    pierceSpeedScale = 1f;
+                    isPiercing = false;
+                }
+                else if (cruiseConfig.WallBounceThreshold > 0 && !isCruising
                     && consecutiveWallBounces >= cruiseConfig.WallBounceThreshold
                     && IsPathClearAhead(
                         walls, position, direction, cruiseConfig.WallBounceThreshold, projectileContactRadius,
@@ -342,7 +355,7 @@ namespace BalloonParty.Solver
         // folded into ShotCruiseConfig.TapLagSeconds on the timeline instead.
         private static float CurrentSpeed(
             float baseSpeed, bool isCruising, int cruiseStartShields, int shieldsRemaining,
-            in ShotCruiseConfig cruiseConfig)
+            float pierceSpeedScale, in ShotCruiseConfig cruiseConfig)
         {
             if (!isCruising)
             {
@@ -351,7 +364,9 @@ namespace BalloonParty.Solver
 
             var startShields = Mathf.Max(cruiseStartShields, 1);
             var taps = Mathf.Clamp(cruiseStartShields - shieldsRemaining, 0, startShields);
-            return baseSpeed * (1f + (cruiseConfig.SpeedPerShield * taps));
+            // Pierce scale bleeds the ramp down through tough plows; floor at base speed.
+            var speed = baseSpeed * (1f + (cruiseConfig.SpeedPerShield * taps)) * pierceSpeedScale;
+            return Mathf.Max(speed, baseSpeed);
         }
 
         // Mirrors ProjectileView.IsPathClearAhead: traces the wall-reflected ray for `bounces` more
@@ -451,14 +466,18 @@ namespace BalloonParty.Solver
             ref string streakColor, ref int streakCount, ref string projectileColor,
             ref int rawScore, ref int pops, ref int toughsCleared, ref int shields,
             float tHit, ShotBoardDynamics dynamics, ref int consecutiveWallBounces, ref bool isCruising,
-            string targetColorId, bool isPiercing)
+            string targetColorId, bool isPiercing, ref float pierceSpeedScale)
         {
             ref var balloon = ref workingSet[index];
 
             // Any contact ends an empty-corridor cruise and resets its bounce counter — mirrors
-            // ProjectileHitResolver.Resolve's unconditional reset at the top of every hit.
-            consecutiveWallBounces = 0;
-            isCruising = false;
+            // ProjectileHitResolver.Resolve — UNLESS the shot has earned piercing, which rides the
+            // cruise (and its stacking speed ramp) on through the pop instead of dropping to base.
+            if (!isPiercing)
+            {
+                consecutiveWallBounces = 0;
+                isCruising = false;
+            }
 
             var incomingDirection = direction;
             dynamics?.OnBalloonHit(balloon.Actor, tHit);
@@ -473,6 +492,13 @@ namespace BalloonParty.Solver
                 DeflectOffBalloon(center, balloon.Radius + projectileContactRadius, contactPosition, ref direction);
                 dynamics?.OnBalloonDeflected(balloon.Actor, incomingDirection, tHit);
                 return;
+            }
+
+            // Plowing a tough (>1-hit) actor while piercing halves the cruise speed (floored at base
+            // in CurrentSpeed) — mirrors ProjectileHitResolver.
+            if (isPiercing && balloon.HitsRemaining > 1)
+            {
+                pierceSpeedScale *= 0.5f;
             }
 
             // A colour filter scopes SCORE attribution only (milestone masks count one colour's

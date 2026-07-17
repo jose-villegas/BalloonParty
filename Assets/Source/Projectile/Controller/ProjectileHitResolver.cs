@@ -38,21 +38,37 @@ namespace BalloonParty.Projectile.Controller
         {
             projectile.LastHitBalloon = balloon;
 
-            // Any balloon contact — pop, deflect, absorb — ends the empty-corridor cruise and
-            // restarts its wall-bounce counter.
-            projectile.ConsecutiveWallBounces = 0;
-            if (projectile.IsCruising.Value)
+            if (!projectile.IsPiercing.Value)
             {
-                projectile.IsCruising.Value = false;
+                // Building phase: any balloon contact ends the empty-corridor cruise and restarts
+                // the wall-bounce counter.
+                projectile.ConsecutiveWallBounces = 0;
+                if (projectile.IsCruising.Value)
+                {
+                    projectile.IsCruising.Value = false;
+                }
+            }
+            else
+            {
+                // Armed piercing: the cruise (and its speed) rides on through pops — but plowing a
+                // TOUGH actor (one that would take more than one hit) costs it half its current
+                // speed. The motion resolver floors the total at base, and the next wall ends it.
+                var requiresMultipleHits =
+                    (balloon is IHasDurability durable && durable.HitsRemaining.Value > 1)
+                    || balloon is UnbreakableBalloonModel;
+                if (requiresMultipleHits)
+                {
+                    projectile.CruisePierceSpeedScale *= 0.5f;
+                }
             }
 
             // A rainbow-buffed projectile pierces (plows through tough/unbreakable balloons instead of
             // one-shotting or deflecting off them), scores colour-agnostically, and rainbow-converts what
             // it pops near — until it loses a shield to a wall (which ends the buff).
             var isRainbowBuff = projectile.HasBuff(ProjectileBuffId.RainbowShield);
-            var isPiercingBuff = projectile.HasBuff(ProjectileBuffId.Piercing);
+            var isPiercing = projectile.IsPiercing.Value;
             var flags = (isRainbowBuff ? DamageFlags.WildcardStreak | DamageFlags.Piercing : DamageFlags.Normal)
-                        | (isPiercingBuff ? DamageFlags.Piercing : DamageFlags.Normal)
+                        | (isPiercing ? DamageFlags.Piercing : DamageFlags.Normal)
                         | DamageFlags.DirectHit;
             var damageContext = new DamageContext(1, flags, projectile.ColorName.Value);
             var outcome = balloon.EvaluateHit(damageContext);

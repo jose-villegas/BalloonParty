@@ -4,7 +4,6 @@ namespace BalloonParty.Projectile.Model
     public enum ProjectileBuffId
     {
         Speed,
-        RainbowShield,
-        Piercing
+        RainbowShield
     }
 }

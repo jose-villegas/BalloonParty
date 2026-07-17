@@ -68,6 +68,8 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ProjectileFiredMessage>(options);
             builder.RegisterMessageBroker<ProjectileCruiseStartedMessage>(options);
             builder.RegisterMessageBroker<ProjectileCruiseEndedMessage>(options);
+            builder.RegisterMessageBroker<ProjectileDoomedStartedMessage>(options);
+            builder.RegisterMessageBroker<ProjectileDoomedEndedMessage>(options);
             builder.RegisterMessageBroker<SpeckSpawnRequestMessage>(options);
             builder.RegisterMessageBroker<ItemCheckMessage>(options);
             builder.RegisterMessageBroker<ItemActivatedMessage>(options);
@@ -95,6 +97,7 @@ namespace BalloonParty.Game
             builder.Register<TrailEndpointRegistry>(Lifetime.Singleton);
             builder.Register<PauseService>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<TimeScaleService>().AsSelf().As<IRunResettable>();
+            builder.RegisterEntryPoint<ProjectileDoomedTimeScaleController>();
             builder.Register<ProjectilePositionProvider>(Lifetime.Singleton);
             builder.Register<PredictionTraceProvider>(Lifetime.Singleton);
             builder.Register<ImpactEventBus>(Lifetime.Singleton)

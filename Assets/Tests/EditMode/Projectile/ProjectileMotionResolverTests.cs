@@ -307,12 +307,12 @@ namespace BalloonParty.Tests.Projectile
 
             // This bounce spends shield 4 -> 3: taps = 5 - 3 = 2, still below the threshold.
             resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
-            Assert.IsFalse(model.HasBuff(ProjectileBuffId.Piercing), "two taps — not armed yet");
+            Assert.IsFalse(model.IsPiercing.Value, "two taps — not armed yet");
 
             // Next bounce: taps = 3 — the shot arms for the rest of its life.
             model.Direction = Vector2.up;
             resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
-            Assert.IsTrue(model.HasBuff(ProjectileBuffId.Piercing), "third tap arms piercing");
+            Assert.IsTrue(model.IsPiercing.Value, "third tap arms piercing");
         }
 
         [Test]
@@ -329,7 +329,103 @@ namespace BalloonParty.Tests.Projectile
                 resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
             }
 
-            Assert.IsFalse(model.HasBuff(ProjectileBuffId.Piercing), "0 disables the piercing grant");
+            Assert.IsFalse(model.IsPiercing.Value, "0 disables the piercing grant");
+        }
+
+        [Test]
+        public void Step_WallAfterToughPlow_EndsCruiseAndResetsScale()
+        {
+            // scale < 1 means the shot has already plowed a tough — the next wall is the recovery.
+            var resolver = CruiseResolver(perShield: 0.5f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
+            model.CruiseStartShields = 3;
+            model.IsCruising.Value = true;
+            model.CruisePierceSpeedScale = 0.5f;
+            model.IsPiercing.Value = true;
+
+            resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
+
+            Assert.IsFalse(model.IsCruising.Value, "the recovery wall ends the speed cruise");
+            Assert.AreEqual(1f, model.CruisePierceSpeedScale, 1e-4f, "pierce speed scale resets to base");
+            Assert.IsFalse(model.IsPiercing.Value,
+                "piercing is consumed at the recovery wall — a normal shot again");
+        }
+
+        [Test]
+        public void Step_PiercingWallBounce_BeforeAnyToughKeepsCruising()
+        {
+            // Freshly armed (scale == 1, hasn't hit a tough): a corridor wall must NOT slow it —
+            // the cruise rides on, no premature reset.
+            var resolver = CruiseResolver(perShield: 0.5f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
+            model.CruiseStartShields = 5;
+            model.IsCruising.Value = true;
+            model.CruisePierceSpeedScale = 1f;
+            model.IsPiercing.Value = true;
+
+            resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
+
+            Assert.IsTrue(model.IsCruising.Value, "an armed shot keeps cruising off empty corridor walls");
+            Assert.IsTrue(model.IsPiercing.Value,
+                "nothing slowed it, so piercing isn't spent");
+        }
+
+        [Test]
+        public void Step_PierceSpeedScale_FloorsAtBaseSpeed()
+        {
+            var resolver = CruiseResolver(perShield: 0.5f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 0);
+            model.CruiseStartShields = 4;   // ramp target x3 at full spend
+            model.IsCruising.Value = true;
+            model.CruisePierceSpeedScale = 0.01f;   // decayed hard by many tough plows
+
+            var step = resolver.Step(model, Vector3.zero, 1f);
+
+            Assert.AreEqual(1f, step.Position.y, 1e-4f, "never below normal speed however much it decayed");
+        }
+
+        [Test]
+        public void Step_LastShieldApproach_TraversesSegmentNormalizedToTime()
+        {
+            // Segment from y=0 to the top wall (y=5), length 5; a linear time->position curve over a
+            // 4s duration. At elapsed 2s (halfway in TIME) the shot sits at half the segment (y=2.5),
+            // independent of speed — the moment is timed, not distance-driven.
+            var resolver = LastShieldResolver(AnimationCurve.Linear(0f, 0f, 1f, 1f), durationSeconds: 4f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 0);
+            model.IsLastShieldApproach.Value = true;
+            model.SegmentStartPosition = Vector3.zero;
+            model.SegmentElapsed = 2f;
+
+            var step = resolver.Step(model, Vector3.zero, 1f);
+
+            Assert.AreEqual(ProjectileStepOutcome.Moved, step.Outcome);
+            Assert.AreEqual(2.5f, step.Position.y, 1e-4f, "halfway in time = halfway along the segment");
+        }
+
+        [Test]
+        public void Step_LastShieldApproach_DiesOnceTheTimerCompletes()
+        {
+            // Elapsed past the duration overshoots the wall so the doomed shot crosses and dies,
+            // rather than resting exactly on it forever.
+            var resolver = LastShieldResolver(AnimationCurve.Linear(0f, 0f, 1f, 1f), durationSeconds: 3f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 0);
+            model.IsLastShieldApproach.Value = true;
+            model.SegmentStartPosition = Vector3.zero;
+            model.SegmentElapsed = 3f;
+
+            var step = resolver.Step(model, new Vector3(0f, 5f, 0f), 1f);
+
+            Assert.AreEqual(ProjectileStepOutcome.Destroyed, step.Outcome, "the completed timer sends it into the wall");
+        }
+
+        private static ProjectileMotionResolver LastShieldResolver(AnimationCurve approachCurve, float durationSeconds)
+        {
+            var config = Substitute.For<IGameConfiguration>();
+            config.LimitsClockwise.Returns(Walls);
+            config.CruiseTapCurve.Returns(AnimationCurve.Linear(0f, 0f, 1f, 1f));
+            config.LastShieldApproachCurve.Returns(approachCurve);
+            config.LastShieldApproachDuration.Returns(durationSeconds);
+            return new ProjectileMotionResolver(config);
         }
 
         private static ProjectileMotionResolver CruiseResolver(

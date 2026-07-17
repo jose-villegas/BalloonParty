@@ -14,6 +14,8 @@ namespace BalloonParty.Projectile.Controller
         private readonly float _cruiseTapEaseDuration;
         private readonly int _cruisePiercingTapThreshold;
         private readonly AnimationCurve _cruiseTapCurve;
+        private readonly AnimationCurve _lastShieldApproachCurve;
+        private readonly float _lastShieldApproachDuration;
 
         // The view needs the same wall geometry for its cruise lookahead trace.
         internal WallLimits Walls => _walls;
@@ -26,18 +28,26 @@ namespace BalloonParty.Projectile.Controller
             _cruiseTapEaseDuration = config.CruiseTapEaseDuration;
             _cruisePiercingTapThreshold = config.CruisePiercingTapThreshold;
             _cruiseTapCurve = config.CruiseTapCurve ?? AnimationCurve.Linear(0f, 0f, 1f, 1f);
+            // An un-authored (newly-added) serialized curve deserializes empty and evaluates to 0,
+            // which would crawl the shot — fall back to a constant-1 no-op until it's authored.
+            _lastShieldApproachCurve = config.LastShieldApproachCurve is { length: > 0 }
+                ? config.LastShieldApproachCurve
+                : AnimationCurve.Linear(0f, 0f, 1f, 1f);
+            _lastShieldApproachDuration = config.LastShieldApproachDuration;
         }
 
         /// <summary>Advances one fixed step, mutating direction/shield count on a wall bounce.</summary>
         internal ProjectileStep Step(IWriteableProjectileModel model, Vector3 position, float deltaTime)
         {
-            var speed = model.ComputeBuffedValue(ProjectileBuffId.Speed, model.Speed);
+            var baseSpeed = model.ComputeBuffedValue(ProjectileBuffId.Speed, model.Speed);
+            var speed = baseSpeed;
 
             // The earned long-flight reward: every cruise bounce adds a velocity TAP of
             // CruiseSpeedPerShield — cumulative, so a 13-shield bank accumulates 13 taps where a
             // 2-shield bank gets 2. Each tap replays the animation envelope from t=0: the new
             // target speed scaled by curve(elapsed/duration), so a curve starting at 0 freezes the
-            // shot for a beat before it picks up.
+            // shot for a beat before it picks up. The pierce scale bleeds this down as a piercing
+            // shot plows through tough actors; the floor keeps it from ever dropping below base.
             if (model.IsCruising.Value)
             {
                 var startShields = Mathf.Max(model.CruiseStartShields, 1);
@@ -47,11 +57,36 @@ namespace BalloonParty.Projectile.Controller
                 var progress = _cruiseTapEaseDuration > 0f
                     ? Mathf.Clamp01(model.CruiseTapElapsed / _cruiseTapEaseDuration)
                     : 1f;
-                speed *= target * _cruiseTapCurve.Evaluate(progress);
+
+                // The pierce decay floors the ramp at base ("min normal speed"); the per-tap freeze
+                // animation rides on top and may still dip the shot to a momentary standstill.
+                var cruiseSpeed = Mathf.Max(baseSpeed * target * model.CruisePierceSpeedScale, baseSpeed);
+                speed = cruiseSpeed * _cruiseTapCurve.Evaluate(progress);
                 model.CruiseTapElapsed += deltaTime;
             }
 
-            position += model.Direction * (speed * deltaTime);
+            // The 'last breath': on a doomed 0-shield segment (flagged by the view once the path to
+            // the death wall is clear of any shield source), traverse origin -> wall over a FIXED
+            // wall-clock time (normalized, so segment length doesn't change the moment's pace), the
+            // curve easing the position. Once the timer completes, overshoot past the wall so the
+            // shot crosses and dies rather than resting on it.
+            if (model.IsLastShieldApproach.Value
+                && _lastShieldApproachDuration > 1e-4f
+                && _walls.TryFindCrossing(model.SegmentStartPosition, model.Direction, out var deathWall, out _))
+            {
+                var segmentLength = Vector3.Distance(model.SegmentStartPosition, deathWall);
+                var normalizedTime = Mathf.Clamp01(model.SegmentElapsed / _lastShieldApproachDuration);
+                var distance = normalizedTime >= 1f
+                    ? segmentLength + (baseSpeed * deltaTime)
+                    : segmentLength * Mathf.Clamp01(_lastShieldApproachCurve.Evaluate(normalizedTime));
+                model.SegmentElapsed += deltaTime;
+                position = model.SegmentStartPosition + (Vector3)(model.Direction.normalized * distance);
+            }
+            else
+            {
+                model.SegmentElapsed += deltaTime;
+                position += model.Direction * (speed * deltaTime);
+            }
             position = _walls.Reflect(position, out var reflect, out var wallContact);
 
             if (reflect == Vector3.zero)
@@ -70,25 +105,37 @@ namespace BalloonParty.Projectile.Controller
             // space (HitResolver resets the counter on any balloon touch). Entry into cruise is the
             // VIEW's call — it confirms with a physics lookahead the plain resolver can't run.
             model.ConsecutiveWallBounces++;
-            if (model.IsCruising.Value)
+            if (model.IsCruising.Value && model.CruisePierceSpeedScale < 1f)
+            {
+                // Only ONCE the shot has plowed a tough (scale decayed below 1) does a wall end the
+                // run: cruise ends, speed returns to normal, AND the earned piercing is consumed —
+                // the shot is a normal shot again (deflects off toughs). An armed shot cruising an
+                // empty corridor, or one that has only popped 1-hit balloons, keeps both its speed
+                // and its pierce; nothing has slowed it, so nothing is spent.
+                model.IsCruising.Value = false;
+                model.ConsecutiveWallBounces = 0;
+                model.CruisePierceSpeedScale = 1f;
+                model.IsPiercing.Value = false;
+            }
+            else if (model.IsCruising.Value)
             {
                 // A new tap lands with this bounce — restart its freeze-then-pickup envelope.
                 model.CruiseTapElapsed = 0f;
 
                 // A long-enough cruise ARMS the shot: from this tap on it pierces everything it
-                // touches (unbreakables included) for the rest of its life — contact ends the
-                // cruise but never the earned buff.
+                // touches (unbreakables included) for the rest of its life.
                 var taps = model.CruiseStartShields - model.ShieldsRemaining.Value;
                 if (_cruisePiercingTapThreshold > 0
                     && taps >= _cruisePiercingTapThreshold
-                    && !model.HasBuff(ProjectileBuffId.Piercing))
+                    && !model.IsPiercing.Value)
                 {
-                    model.AddBuff(new ProjectileBuff(
-                        ProjectileBuffId.Piercing, 1f, BuffModifierOp.Flat, new ShotLifetimeEndCondition()));
+                    model.IsPiercing.Value = true;
                 }
             }
 
             model.Direction = Vector2.Reflect(model.Direction, reflect.normalized);
+            model.SegmentStartPosition = wallContact;
+            model.SegmentElapsed = 0f;
             return ProjectileStep.Bounced(position, wallContact, model.Direction);
         }
 
@@ -122,6 +169,8 @@ namespace BalloonParty.Projectile.Controller
             var contactPoint = balloonPosition + (Vector3)(surfaceNormal * contactRadius);
             contactPoint.z = projectilePosition.z;
             var remainder = (projectilePosition - contactPoint).magnitude;
+            model.SegmentStartPosition = contactPoint;
+            model.SegmentElapsed = 0f;
             return contactPoint + (Vector3)(model.Direction * remainder);
         }
 

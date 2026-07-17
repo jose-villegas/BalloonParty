@@ -22,7 +22,7 @@ MonoBehaviour:
   _limitsClockwise: {x: 4, y: 2.25, z: -4.5, w: -2.25}
   _shieldTrailDuration: 0.5
   _cruiseWallBounceThreshold: 3
-  _cruiseSpeedPerShield: 1
+  _cruiseSpeedPerShield: 0.667
   _cruiseTapCurve:
     serializedVersion: 2
     m_Curve:

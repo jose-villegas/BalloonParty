@@ -39,6 +39,8 @@ namespace BalloonParty.Balloon.Spawner
         private readonly CancellationTokenSource _cts = new();
         private readonly CompositeDisposable _subscriptions = new();
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
+        private readonly ISubscriber<ProjectileDoomedStartedMessage> _doomedStartedSubscriber;
+        private readonly ISubscriber<ProjectileDoomedEndedMessage> _doomedEndedSubscriber;
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private readonly SlotGrid _grid;
@@ -58,6 +60,7 @@ namespace BalloonParty.Balloon.Spawner
         private int[] _columnSortKeys;
         private int _turnCount;
         private int _generation;
+        private bool _doomedActive;
         private int _batchCursor;
         private bool _prewarmed;
 
@@ -77,6 +80,8 @@ namespace BalloonParty.Balloon.Spawner
             BalloonFactory factory,
             IPublisher<BalanceBalloonsMessage> balancePublisher,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
+            ISubscriber<ProjectileDoomedStartedMessage> doomedStartedSubscriber,
+            ISubscriber<ProjectileDoomedEndedMessage> doomedEndedSubscriber,
             ISubscriber<ActorHitMessage> hitSubscriber,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             IPublisher<ItemCheckMessage> itemCheckPublisher,
@@ -94,6 +99,8 @@ namespace BalloonParty.Balloon.Spawner
             _factory = factory;
             _balancePublisher = balancePublisher;
             _destroyedSubscriber = destroyedSubscriber;
+            _doomedStartedSubscriber = doomedStartedSubscriber;
+            _doomedEndedSubscriber = doomedEndedSubscriber;
             _hitSubscriber = hitSubscriber;
             _levelUpSubscriber = levelUpSubscriber;
             _itemCheckPublisher = itemCheckPublisher;
@@ -114,6 +121,8 @@ namespace BalloonParty.Balloon.Spawner
 
             _lineSubscriber.Subscribe(msg => OnSpawnLinesRequested(msg.LineCount)).AddTo(_subscriptions);
             _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed()).AddTo(_subscriptions);
+            _doomedStartedSubscriber.Subscribe(_ => _doomedActive = true).AddTo(_subscriptions);
+            _doomedEndedSubscriber.Subscribe(_ => _doomedActive = false).AddTo(_subscriptions);
             _hitSubscriber.Subscribe(OnActorHit).AddTo(_subscriptions);
 
             // Reset per level-up so FirstSpawnTurn is a fresh per-level grace period.
@@ -434,6 +443,18 @@ namespace BalloonParty.Balloon.Spawner
 
                 for (var i = 0; i < lineCount; i++)
                 {
+                    if (generation != _generation)
+                    {
+                        return;
+                    }
+
+                    // Hold new lines out of a shot's doomed 'last breath' — spawning balloons into
+                    // the frozen death moment reads wrong. Resume once it ends (or the run moves on).
+                    while (_doomedActive && generation == _generation)
+                    {
+                        await UniTask.Yield(ct);
+                    }
+
                     if (generation != _generation)
                     {
                         return;

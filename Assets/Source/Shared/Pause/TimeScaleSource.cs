@@ -9,6 +9,9 @@ namespace BalloonParty.Shared.Pause
         LevelUpPopup,
 
         /// <summary>The level-transition Ascent's slow-mo while the old level's balloons pop.</summary>
-        LevelTransition
+        LevelTransition,
+
+        /// <summary>A shot's doomed 'last breath' — bullet-time while it drifts to the wall it dies on.</summary>
+        LastShield
     }
 }
