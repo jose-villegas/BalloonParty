@@ -141,6 +141,29 @@ namespace BalloonParty.Tests.Balloon
             Assert.IsTrue(_grid.IsEmpty(1, 2));
         }
 
+        [Test]
+        public void Plan_UncappedOmnidirectionalActor_TerminatesInsteadOfPingPonging()
+        {
+            // The fallback-level crash: an uncapped omnidirectional actor (the Unbreakable profile)
+            // alone on a sparse board. Every candidate move scores 0 (empty support cones tie with
+            // omni side/down moves) and the later-wins tie-break picks down/side hops that re-
+            // unbalance it — (0,1) → (1,2) → (0,1) → … forever, growing the move list until OOM.
+            // The revisit guard must break the cycle: once a slot has been occupied this Plan, the
+            // actor can't take it back.
+            BuildGrid(2, 3);
+
+            var roamer = new BalloonModel(new BalloonModelConfig(hitsToPop: 1, omnidirectionalBalance: true));
+            _grid.Place(roamer, null, new Vector2Int(0, 1));
+
+            _planner.Plan(_turnSteps, _moves);
+
+            Assert.LessOrEqual(_moves.Count, 3, "a lone actor settles (or stalls) in a hop or two — never loops");
+            foreach (var move in _moves)
+            {
+                Assert.AreSame(roamer, move.Actor);
+            }
+        }
+
         private void BuildGrid(int columns, int rows)
         {
             var gameConfig = Substitute.For<IGameConfiguration>();

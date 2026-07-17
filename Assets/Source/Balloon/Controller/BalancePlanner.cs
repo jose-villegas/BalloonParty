@@ -24,6 +24,8 @@ namespace BalloonParty.Balloon.Controller
         private readonly SlotGrid _grid;
         private readonly GridBalanceQuery _balanceQuery;
         private readonly List<PassCandidate> _passCandidates = new();
+        private readonly Dictionary<IWriteableDynamicSlotActor, HashSet<Vector2Int>> _visitedThisPlan = new();
+        private readonly Stack<HashSet<Vector2Int>> _visitedPool = new();
 
         internal BalancePlanner(SlotGrid grid, GridBalanceQuery balanceQuery)
         {
@@ -38,9 +40,29 @@ namespace BalloonParty.Balloon.Controller
         // and later passes see the updated occupancy.
         internal void Plan(Dictionary<IWriteableDynamicSlotActor, int> turnSteps, List<BalanceMove> movesOut)
         {
+            ReleaseVisited();
+
+            // Convergence backstop: an UNCAPPED omnidirectional actor whose side/down moves score the
+            // same 0 as its empty-cone up moves can ping-pong between two slots forever (the fallback
+            // board's unbreakable crowds hit this — an unbounded loop that OOM-crashed via the growing
+            // move list). The revisit guard below breaks every such cycle; this cap is the last line
+            // if a new one slips through: genuine settles need at most ~one pass per slot.
+            var maxPasses = (_grid.Columns * _grid.Rows) + 8;
+            var passes = 0;
             while (BalanceOnePass(turnSteps, movesOut))
             {
+                passes++;
+                if (passes >= maxPasses)
+                {
+                    Debug.LogError(
+                        $"BalancePlanner.Plan: no convergence after {passes} passes " +
+                        $"({movesOut.Count} moves) — aborting the run. A move cycle slipped past the " +
+                        "revisit guard; the board is left mid-settle but consistent.");
+                    break;
+                }
             }
+
+            ReleaseVisited();
         }
 
         private bool BalanceOnePass(
@@ -121,6 +143,22 @@ namespace BalloonParty.Balloon.Controller
                 return false;
             }
 
+            // Never move an actor back into a slot it already occupied during this Plan: revisiting
+            // means the race is cycling, not settling (weight-0 omnidirectional side moves tie with
+            // empty-cone up moves and the later-wins tie-break picks them indefinitely). A genuine
+            // settle is monotone — it never needs a slot back within the same run.
+            if (!_visitedThisPlan.TryGetValue(dynamicActor, out var visited))
+            {
+                visited = _visitedPool.Count > 0 ? _visitedPool.Pop() : new HashSet<Vector2Int>();
+                visited.Add(currentSlot);
+                _visitedThisPlan[dynamicActor] = visited;
+            }
+
+            if (!visited.Add(nextSlot.Value))
+            {
+                return false;
+            }
+
             var actorView = _grid.ViewAt(currentSlot);
             _grid.Remove(currentSlot);
             _grid.Place(dynamicActor, actorView, nextSlot.Value);
@@ -133,6 +171,17 @@ namespace BalloonParty.Balloon.Controller
             }
 
             return true;
+        }
+
+        private void ReleaseVisited()
+        {
+            foreach (var visited in _visitedThisPlan.Values)
+            {
+                visited.Clear();
+                _visitedPool.Push(visited);
+            }
+
+            _visitedThisPlan.Clear();
         }
 
         private struct PassCandidate
