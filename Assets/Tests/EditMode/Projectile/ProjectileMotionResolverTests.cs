@@ -71,9 +71,66 @@ namespace BalloonParty.Tests.Projectile
             // Projectile directly above the balloon, travelling down → reflects to travelling up.
             var model = NewModel(direction: Vector2.down, speed: 1f, shields: 3);
 
-            _resolver.Deflect(model, new Vector3(0f, 1f, 0f), Vector3.zero);
+            _resolver.Deflect(model, new Vector3(0f, 1f, 0f), Vector3.zero, 0.4f);
 
             Assert.Greater(model.Direction.y, 0f, "bounced back upward off the balloon");
+        }
+
+        [Test]
+        public void TryComputeContactNormal_HeadOn_NormalOpposesTravel()
+        {
+            // Travelling down onto a circle at the origin, trigger fired 0.1 deep inside.
+            var found = ProjectileMotionResolver.TryComputeContactNormal(
+                new Vector2(0f, 0.3f), Vector2.down, Vector2.zero, 0.4f, out var normal);
+
+            Assert.IsTrue(found);
+            Assert.AreEqual(0f, normal.x, 0.0001f);
+            Assert.AreEqual(1f, normal.y, 0.0001f);
+        }
+
+        [Test]
+        public void TryComputeContactNormal_PenetratedOblique_MatchesAnalyticEntry()
+        {
+            // Travelling +X along y = 0.2 into a radius-0.4 circle at the origin: analytic entry at
+            // x = -sqrt(0.4^2 - 0.2^2). The trigger position sits well past it, inside the circle.
+            var found = ProjectileMotionResolver.TryComputeContactNormal(
+                new Vector2(0.1f, 0.2f), Vector2.right, Vector2.zero, 0.4f, out var normal);
+
+            var entryX = -Mathf.Sqrt(0.4f * 0.4f - 0.2f * 0.2f);
+            Assert.IsTrue(found);
+            Assert.AreEqual(entryX / 0.4f, normal.x, 0.0001f);
+            Assert.AreEqual(0.2f / 0.4f, normal.y, 0.0001f);
+            Assert.AreEqual(1f, normal.magnitude, 0.0001f);
+        }
+
+        [Test]
+        public void TryComputeContactNormal_GrazingChord_NormalPerpendicularToTravel()
+        {
+            // Chord at the circle's edge: y equals the radius → entry tangency, normal straight up.
+            var found = ProjectileMotionResolver.TryComputeContactNormal(
+                new Vector2(0f, 0.4f), Vector2.right, Vector2.zero, 0.4f, out var normal);
+
+            Assert.IsTrue(found);
+            Assert.AreEqual(0f, normal.x, 0.001f);
+            Assert.AreEqual(1f, normal.y, 0.001f);
+        }
+
+        [Test]
+        public void TryComputeContactNormal_LineMissesCircle_ReturnsFalse()
+        {
+            var found = ProjectileMotionResolver.TryComputeContactNormal(
+                new Vector2(0f, 1f), Vector2.right, Vector2.zero, 0.4f, out _);
+
+            Assert.IsFalse(found);
+        }
+
+        [Test]
+        public void TryComputeContactNormal_DegenerateInput_ReturnsFalse()
+        {
+            Assert.IsFalse(ProjectileMotionResolver.TryComputeContactNormal(
+                Vector2.zero, Vector2.zero, Vector2.zero, 0.4f, out _));
+            Assert.IsFalse(ProjectileMotionResolver.TryComputeContactNormal(
+                Vector2.zero, Vector2.right, Vector2.zero, 0f, out _));
         }
 
         [Test]

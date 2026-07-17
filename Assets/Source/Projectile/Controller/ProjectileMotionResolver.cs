@@ -38,11 +38,56 @@ namespace BalloonParty.Projectile.Controller
             return ProjectileStep.Bounced(position, model.Direction);
         }
 
-        /// <summary>Reflects the projectile off a deflecting balloon's surface normal.</summary>
-        internal void Deflect(IWriteableProjectileModel model, Vector3 projectilePosition, Vector3 balloonPosition)
+        /// <summary>Reflects the projectile off a deflecting balloon at the ANALYTIC contact point.
+        /// The trigger fires at a discrete fixed step, so the reported position sits up to a step
+        /// length inside the balloon — a radial normal there is displaced by up to ~30° from the
+        /// true tangency, turning aim→outcome into a step-phase staircase. Backtracking the travel
+        /// ray to the exact circle entry keeps deflections the clean billiard the shot-geometry
+        /// puzzle work relies on (see @ref plan_shot_geometry).</summary>
+        internal void Deflect(
+            IWriteableProjectileModel model, Vector3 projectilePosition, Vector3 balloonPosition, float contactRadius)
         {
-            var surfaceNormal = ((Vector2)projectilePosition - (Vector2)balloonPosition).normalized;
+            if (!TryComputeContactNormal(
+                    projectilePosition, model.Direction, balloonPosition, contactRadius, out var surfaceNormal))
+            {
+                // Degenerate trigger (zero direction, no ray-circle crossing) — the penetrated radial
+                // normal is still a sane reflection.
+                surfaceNormal = ((Vector2)projectilePosition - (Vector2)balloonPosition).normalized;
+            }
+
             model.Direction = Vector2.Reflect(model.Direction, surfaceNormal);
+        }
+
+        /// <summary>Backtracks the travel ray from the (penetrated) trigger position to its entry into
+        /// the contact circle — smallest positive t with |position − t·direction − center| = radius —
+        /// and returns the unit normal there. False when the ray's line never crosses the circle or the
+        /// entry lies ahead of the position (both only reachable through degenerate trigger states).</summary>
+        internal static bool TryComputeContactNormal(
+            Vector2 position, Vector2 direction, Vector2 center, float radius, out Vector2 normal)
+        {
+            normal = default;
+            if (radius <= 0f || direction.sqrMagnitude < 1e-8f)
+            {
+                return false;
+            }
+
+            var travel = direction.normalized;
+            var toPosition = position - center;
+            var along = Vector2.Dot(toPosition, travel);
+            var discriminant = along * along - toPosition.sqrMagnitude + radius * radius;
+            if (discriminant < 0f)
+            {
+                return false;
+            }
+
+            var backtrack = along + Mathf.Sqrt(discriminant);
+            if (backtrack < 0f)
+            {
+                return false;
+            }
+
+            normal = (toPosition - travel * backtrack) / radius;
+            return true;
         }
     }
 }

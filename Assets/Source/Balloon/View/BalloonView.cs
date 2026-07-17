@@ -79,6 +79,13 @@ namespace BalloonParty.Balloon.View
         public TweenTracker TweenTracker => _tweenTracker;
         public SlotActorKind ActorKind => SlotActorKind.Dynamic;
         public Transform RotationPivot => _swayPivot != null ? _swayPivot : transform;
+
+        // World-space contact radius for exact-contact deflection (uniform scale assumed, matching
+        // the light-driven accessories' convention). Falls back to bounds for non-circle colliders.
+        internal float ContactRadius => _collider is CircleCollider2D circle
+            ? circle.radius * transform.lossyScale.x
+            : _collider != null ? _collider.bounds.extents.x : 0f;
+
         Vector3 IBalloonMotionView.Position
         {
             get => transform.position;

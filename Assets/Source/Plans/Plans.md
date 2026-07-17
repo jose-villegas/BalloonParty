@@ -17,3 +17,4 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_nudge_layered_motion
 - @subpage plan_lighting
 - @subpage plan_gi_normals
+- @subpage plan_shot_geometry

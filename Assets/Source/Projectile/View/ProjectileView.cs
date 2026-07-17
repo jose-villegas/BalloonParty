@@ -58,6 +58,7 @@ namespace BalloonParty.Projectile.View
         private int _sparksColorIndex = -1;
         private IDisposable _deflectedSubscription;
         private ProjectileTrail _projectileTrail;
+        private float _contactRadius;
         private bool _shieldShown;
         private ProjectileShieldView _shieldView;
         private Vector3 _baseScale;
@@ -81,6 +82,15 @@ namespace BalloonParty.Projectile.View
             }
 
             _baseScale = transform.localScale;
+
+            // World contact radius for exact-contact deflection: the tightest half-extent of our own
+            // collider (a capsule's cross-section radius) — cached once, colliders don't change.
+            var collider = GetComponent<Collider2D>();
+            _contactRadius = collider is CircleCollider2D circle
+                ? circle.radius * transform.lossyScale.x
+                : collider is CapsuleCollider2D capsule
+                    ? Mathf.Min(capsule.size.x, capsule.size.y) * 0.5f * transform.lossyScale.x
+                    : 0f;
             _shieldView = GetComponentInChildren<ProjectileShieldView>(true);
             _projectileTrail = GetComponentInChildren<ProjectileTrail>(true);
         }
@@ -327,7 +337,8 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            _motionResolver.Deflect(_model, transform.position, msg.BalloonWorldPosition);
+            _motionResolver.Deflect(
+                _model, transform.position, msg.BalloonWorldPosition, msg.SurfaceRadius + _contactRadius);
         }
 
         private void PlayBounceEffect(Vector3 position)

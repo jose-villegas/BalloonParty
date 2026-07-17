@@ -175,7 +175,8 @@ namespace BalloonParty.Balloon.Controller
 
             // Projectile reflection needs the visual position — the ball bounced off the view, not
             // the (potentially different) model-slot position during a mid-balance move.
-            _deflectedPublisher.Publish(new BalloonDeflectedMessage(_model, viewPos, msg.ProjectileDirection));
+            _deflectedPublisher.Publish(
+                new BalloonDeflectedMessage(_model, viewPos, msg.ProjectileDirection, _view.ContactRadius));
 
             if (_model is IHasDeflectStamp stamper && stamper.DeflectStampScale > 0f)
             {
