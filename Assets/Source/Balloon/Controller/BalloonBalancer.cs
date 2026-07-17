@@ -29,9 +29,6 @@ namespace BalloonParty.Balloon.Controller
         private const float DegenerateMoveSqrEpsilon = 1e-6f;
 
         // Higher priority intervenes first; equal priorities keep the sweep's original order.
-        private static readonly Comparison<PassCandidate> ByInterventionOrder = (a, b) =>
-            a.Priority != b.Priority ? b.Priority - a.Priority : a.Order - b.Order;
-
         private static readonly Comparison<RoamCandidate> ByRoamOrder = (a, b) =>
             a.Priority != b.Priority ? b.Priority - a.Priority : a.Order - b.Order;
 
@@ -45,10 +42,11 @@ namespace BalloonParty.Balloon.Controller
         private readonly PauseService _pauseService;
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly PressurePropagation _pressurePropagation;
+        private readonly BalancePlanner _balancePlanner;
         private readonly Dictionary<IWriteableDynamicSlotActor, List<Vector3>> _paths = new();
         private readonly List<PressurePropagation.Move> _pressureMoves = new();
+        private readonly List<BalanceMove> _balanceMoves = new();
         private readonly Dictionary<IWriteableDynamicSlotActor, int> _turnSteps = new();
-        private readonly List<PassCandidate> _passCandidates = new();
         private readonly List<RoamCandidate> _roamers = new();
         private readonly List<Vector2Int> _restingSlots = new();
         private readonly Dictionary<int, Vector3[]> _waypointBuffers = new();
@@ -87,6 +85,7 @@ namespace BalloonParty.Balloon.Controller
             _pauseService = pauseService;
             _disturbanceField = disturbanceField;
             _pressurePropagation = new PressurePropagation(grid, balanceQuery.Evaluator, debugRecorder);
+            _balancePlanner = new BalancePlanner(grid, balanceQuery);
         }
 
         public void Start()
@@ -198,28 +197,29 @@ namespace BalloonParty.Balloon.Controller
                 RelocateRoamers();
             }
 
-            while (BalanceOnePass())
-            {
-            }
+            _balanceMoves.Clear();
+            _balancePlanner.Plan(_turnSteps, _balanceMoves);
+            ApplyBalanceMoves();
 
             AnimatePaths(_paths);
             ReleasePaths();
         }
 
-        // One round of the race: every unbalanced actor gets a move attempt in intervention order —
-        // faster types act first and win contested slots. Returns whether any actor was shifted.
-        private bool BalanceOnePass()
+        // BalancePathHolder.Reserve only tracks transit slots for its own bookkeeping — it never reads
+        // grid state — so reserving each move's slots here, after the planner already mutated the grid
+        // for every pass, is behaviorally identical to the pre-refactor code's per-move reserve-then-
+        // mutate order. IsStable and RecordPath are likewise deferred: nothing during planning reads
+        // either, and RecordPath's append order still matches execution order (an actor moving twice
+        // appears twice, in order).
+        private void ApplyBalanceMoves()
         {
-            CollectPassCandidates();
-
-            var moved = false;
-            for (var i = 0; i < _passCandidates.Count; i++)
+            foreach (var move in _balanceMoves)
             {
-                var slot = _passCandidates[i].Slot;
-                moved |= TryBalanceSlot(slot.x, slot.y);
+                _balancePathHolder.Reserve(move.Actor, move.From);
+                _balancePathHolder.Reserve(move.Actor, move.To);
+                move.Actor.IsStable.Value = false;
+                RecordPath(move.Actor, _grid.IndexToWorldPosition(move.To));
             }
-
-            return moved;
         }
 
         // Pre-pass of the race: each IPreBalanceRelocatable defines its own placement; the balancer only
@@ -284,85 +284,6 @@ namespace BalloonParty.Balloon.Controller
                     }
                 }
             }
-        }
-
-        // Snapshots this round's unbalanced actors, ordered by their BalancePriority. Earlier moves can
-        // invalidate a candidate; TryBalanceSlot re-validates everything, so a stale entry is a no-op.
-        private void CollectPassCandidates()
-        {
-            _passCandidates.Clear();
-
-            for (var col = 0; col < _grid.Columns; col++)
-            {
-                for (var row = 1; row < _grid.Rows; row++)
-                {
-                    if (_grid.IsEmpty(col, row) || !_balanceQuery.IsUnbalanced(col, row))
-                    {
-                        continue;
-                    }
-
-                    var slot = new Vector2Int(col, row);
-                    _passCandidates.Add(new PassCandidate
-                    {
-                        Slot = slot,
-                        Priority = (_grid.At(slot) as IBalanceInfluence)?.BalancePriority ?? 0,
-                        Order = _passCandidates.Count,
-                    });
-                }
-            }
-
-            _passCandidates.Sort(ByInterventionOrder);
-        }
-
-        // Shifts the actor at (col, row) toward its optimal empty slot. Returns whether it moved.
-        private bool TryBalanceSlot(int col, int row)
-        {
-            if (_grid.IsEmpty(col, row))
-            {
-                return false;
-            }
-
-            if (!_balanceQuery.IsUnbalanced(col, row))
-            {
-                return false;
-            }
-
-            var currentSlot = new Vector2Int(col, row);
-            if (_grid.At(currentSlot) is not IWriteableDynamicSlotActor dynamicActor)
-            {
-                return false;
-            }
-
-            // Physical weight: a heavy actor only moves so many slots per TURN. The budget spans every
-            // balance run between projectile deaths (pre/post-spawn, flight pulses) — a per-run cap would
-            // grant one step per run and read as multi-step hops.
-            var stepCap = (dynamicActor as IBalanceInfluence)?.MaxBalanceSteps ?? 0;
-            if (stepCap > 0 && _turnSteps.GetValueOrDefault(dynamicActor) >= stepCap)
-            {
-                return false;
-            }
-
-            var nextSlot = _balanceQuery.OptimalNextEmptySlot(col, row);
-            if (!nextSlot.HasValue)
-            {
-                return false;
-            }
-
-            _balancePathHolder.Reserve(dynamicActor, currentSlot);
-            _balancePathHolder.Reserve(dynamicActor, nextSlot.Value);
-
-            var actorView = _grid.ViewAt(currentSlot);
-            _grid.Remove(currentSlot);
-            _grid.Place(dynamicActor, actorView, nextSlot.Value);
-            dynamicActor.IsStable.Value = false;
-
-            RecordPath(dynamicActor, _grid.IndexToWorldPosition(nextSlot.Value));
-            if (stepCap > 0)
-            {
-                _turnSteps[dynamicActor] = _turnSteps.GetValueOrDefault(dynamicActor) + 1;
-            }
-
-            return true;
         }
 
         private void RecordPath(IWriteableDynamicSlotActor actor, Vector3 targetPosition)
@@ -564,13 +485,6 @@ namespace BalloonParty.Balloon.Controller
 
             _balanceRequested = true;
             BalanceNextFrameAsync(_generation).Forget();
-        }
-
-        private struct PassCandidate
-        {
-            public Vector2Int Slot;
-            public int Priority;
-            public int Order;
         }
 
         private struct RoamCandidate
