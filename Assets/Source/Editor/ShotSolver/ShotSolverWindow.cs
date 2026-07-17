@@ -12,6 +12,7 @@ using BalloonParty.Shared.Rendering;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
+using BalloonParty.Solver;
 using BalloonParty.Thrower;
 using UnityEditor;
 using UnityEngine;
@@ -303,7 +304,7 @@ namespace BalloonParty.Editor.ShotSolver
             SceneView.RepaintAll();
         }
 
-        private void BuildWindows(IReadOnlyList<bool> qualifies, in LiveContext context, ShotBalloonState[] workingSet)
+        private void BuildWindows(IReadOnlyList<bool> qualifies, in ShotSolveContext context, ShotBalloonState[] workingSet)
         {
             _windows.Clear();
             _bestWindowIndex = -1;
@@ -349,7 +350,7 @@ namespace BalloonParty.Editor.ShotSolver
         }
 
         private void TryAddWindow(
-            float fromDegrees, float toDegrees, in LiveContext context, ShotBalloonState[] workingSet, ref float bestWidth)
+            float fromDegrees, float toDegrees, in ShotSolveContext context, ShotBalloonState[] workingSet, ref float bestWidth)
         {
             var widthDegrees = toDegrees - fromDegrees;
             if (widthDegrees < _minWindowWidthDegrees)
@@ -387,7 +388,7 @@ namespace BalloonParty.Editor.ShotSolver
         // known to qualify, to within BoundaryPrecisionDegrees — the plan's "~0.01°" fair-window
         // resolution (§2).
         private float RefineBoundary(
-            float outsideDegrees, float insideDegrees, in LiveContext context, ShotBalloonState[] workingSet)
+            float outsideDegrees, float insideDegrees, in ShotSolveContext context, ShotBalloonState[] workingSet)
         {
             for (var iteration = 0;
                  iteration < MaxBisectionIterations && Mathf.Abs(insideDegrees - outsideDegrees) > BoundaryPrecisionDegrees;
@@ -409,25 +410,12 @@ namespace BalloonParty.Editor.ShotSolver
         }
 
         private ShotSimulationResult SimulateAt(
-            float angleDegrees, in LiveContext context, ShotBalloonState[] workingSet, List<Vector2> pathOut = null,
+            float angleDegrees, in ShotSolveContext context, ShotBalloonState[] workingSet, List<Vector2> pathOut = null,
             List<float> timesOut = null, float radiusBias = 0f)
         {
-            return ShotSimulator.Simulate(
-                context.Board, context.WallLimitsClockwise, OriginForAngle(angleDegrees, context),
-                DirectionFromDegrees(angleDegrees), context.StartingShields, context.ProjectileContactRadius,
-                workingSet, pathOut: pathOut, projectileSpeed: context.ProjectileSpeed,
-                cruiseConfig: context.CruiseConfig, dynamics: context.Dynamics, timestampsOut: timesOut,
-                targetColorId: string.IsNullOrEmpty(_targetColorId) ? null : _targetColorId,
-                radiusBias: radiusBias);
-        }
-
-        // The thrower rotates around its pivot to aim (ThrowerView.RotateTo: fire-direction angle − 90°),
-        // carrying the child spawn point with it — so the true launch origin orbits the pivot per angle.
-        // A fixed snapshot origin makes the drawn path miss the projectile's actual tip.
-        private static Vector2 OriginForAngle(float angleDegrees, in LiveContext context)
-        {
-            var rotation = Quaternion.AngleAxis(angleDegrees - 90f, Vector3.forward);
-            return context.ThrowerPivot + (Vector2)(rotation * context.SpawnLocalOffset);
+            return ShotBoardGather.SimulateAt(
+                angleDegrees, context, workingSet, pathOut, timesOut, radiusBias,
+                string.IsNullOrEmpty(_targetColorId) ? null : _targetColorId);
         }
 
         // The Game view only renders gizmos from scene objects, so the path rides a play-mode
@@ -478,7 +466,7 @@ namespace BalloonParty.Editor.ShotSolver
                 return;
             }
 
-            scope.Container.Resolve<ThrowerController>().FireAt(DirectionFromDegrees(_bestAngleDegrees));
+            scope.Container.Resolve<ThrowerController>().FireAt(ShotBoardGather.DirectionFromDegrees(_bestAngleDegrees));
             BeginDivergenceTracking(scope);
         }
 
@@ -594,13 +582,7 @@ namespace BalloonParty.Editor.ShotSolver
             return Mathf.Lerp(_arcMinDegrees, _arcMaxDegrees, t);
         }
 
-        private static Vector2 DirectionFromDegrees(float degrees)
-        {
-            var radians = degrees * Mathf.Deg2Rad;
-            return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
-        }
-
-        private static bool TryGatherLiveContext(out LiveContext context)
+        private static bool TryGatherLiveContext(out ShotSolveContext context)
         {
             context = default;
 
@@ -616,183 +598,17 @@ namespace BalloonParty.Editor.ShotSolver
                 return false;
             }
 
-            var grid = scope.Container.Resolve<SlotGrid>();
-            var config = scope.Container.Resolve<IGameConfiguration>();
-            var balloonsConfig = scope.Container.Resolve<IBalloonsConfiguration>();
-            var throwerSettings = scope.Container.Resolve<ThrowerSettings>();
-
-            var targets = new List<ShotBalloonSnapshot>();
-            var otherDynamicActors = new List<ShotDynamicActorSnapshot>();
-            var staticActors = new List<ShotStaticActorSnapshot>();
-            CollectBoard(grid, targets, otherDynamicActors, staticActors);
-
             // ~0.5 frame of interval-crossing quantization + 1 frame of deferred-Balance yield, at
             // whatever rate the editor is actually rendering right now.
             var pulseDelay = Mathf.Clamp(1.5f * Time.smoothDeltaTime, 0f, 0.1f);
-            var dynamics = new ShotBoardDynamics(
-                config, balloonsConfig, targets, otherDynamicActors, staticActors, pulseDelay);
-            var cruiseConfig = new ShotCruiseConfig(
-                config.CruiseWallBounceThreshold, config.CruiseSpeedPerShield,
-                config.CruiseTapEaseDuration, config.CruiseTapCurve, config.CruisePiercingTapThreshold);
-
-            // Un-rotate the spawn point back into the thrower's aim-neutral frame so the sweep can
-            // re-rotate it for every candidate angle.
-            var spawnLocalOffset =
-                Quaternion.Inverse(thrower.Rotation) * (thrower.SpawnPointPosition - thrower.Position);
-
-            context = new LiveContext(
-                targets,
-                config.LimitsClockwise,
-                thrower.Position,
-                spawnLocalOffset,
-                config.ProjectileStartingShields,
-                ResolveProjectileContactRadius(throwerSettings),
-                config.ProjectileSpeed,
-                cruiseConfig,
-                dynamics,
-                balloonsConfig.NudgeDistance);
+            context = ShotBoardGather.Gather(
+                scope.Container.Resolve<SlotGrid>(),
+                scope.Container.Resolve<IGameConfiguration>(),
+                scope.Container.Resolve<IBalloonsConfiguration>(),
+                thrower,
+                scope.Container.Resolve<ThrowerSettings>(),
+                pulseDelay);
             return true;
-        }
-
-        // Every occupied slot feeds the dynamic-board sim's SlotGrid (task 4b): poppable/deflectable
-        // shot targets — including never-popping Unbreakables — go to `targets` (geometry +
-        // balance/nudge properties); any other Dynamic occupant goes to `otherDynamicActors` (balance
-        // properties only, no collision geometry); every Static occupant (obstacles, gatekeepers, ...)
-        // goes to `staticActors` (slot only — BalancePlanner never moves it).
-        private static void CollectBoard(
-            SlotGrid grid, List<ShotBalloonSnapshot> targets, List<ShotDynamicActorSnapshot> otherDynamicActors,
-            List<ShotStaticActorSnapshot> staticActors)
-        {
-            for (var col = 0; col < grid.Columns; col++)
-            {
-                for (var row = 0; row < grid.Rows; row++)
-                {
-                    if (grid.IsEmpty(col, row))
-                    {
-                        continue;
-                    }
-
-                    var index = new Vector2Int(col, row);
-                    var actor = grid.At(index);
-
-                    if (actor.Kind == SlotActorKind.Static)
-                    {
-                        staticActors.Add(new ShotStaticActorSnapshot(index));
-                        continue;
-                    }
-
-                    if (TryBuildTargetSnapshot(grid, index, actor, out var target))
-                    {
-                        targets.Add(target);
-                        continue;
-                    }
-
-                    var influence = actor as IBalanceInfluence;
-                    otherDynamicActors.Add(new ShotDynamicActorSnapshot(
-                        index, influence?.BalancePriority ?? 0, influence?.MaxBalanceSteps ?? 0,
-                        influence?.DirectBalanceMotion ?? false));
-                }
-            }
-        }
-
-        // Durable + scorable actors are poppable/deflectable targets. Unbreakables have no
-        // IHasDurability (EvaluateHit never mutates HitsRemaining) yet still DEFLECT the live shot,
-        // so they enter as never-popping deflect geometry — int.MaxValue durability keeps the sim's
-        // HitsRemaining > 1 branch permanently deflecting (deflects score nothing, matching the game).
-        private static bool TryBuildTargetSnapshot(
-            SlotGrid grid, Vector2Int index, IWriteableSlotActor actor, out ShotBalloonSnapshot snapshot)
-        {
-            snapshot = default;
-
-            int hitsRemaining;
-            if (actor is IHasDurability durable)
-            {
-                hitsRemaining = durable.HitsRemaining.Value;
-            }
-            else if (actor is UnbreakableBalloonModel)
-            {
-                hitsRemaining = int.MaxValue;
-            }
-            else
-            {
-                return false;
-            }
-
-            if (actor is not IHasScore scored)
-            {
-                return false;
-            }
-
-            var colorId = actor is IHasColor colorable ? colorable.Color.Value : null;
-            var influence = actor as IBalanceInfluence;
-            var nudgeOverrides = actor is IHasNudge nudgeable ? nudgeable.NudgeOverrides : null;
-
-            // The view's live position, not the slot's lattice home: balance tweens and nudge wobble
-            // displace views, and the shot collides with the view's collider — the slot is where the
-            // balloon belongs, the view is where it IS right now.
-            var view = grid.ActorViewAt<BalloonView>(index);
-            var radius = view != null ? view.ContactRadius : 0f;
-            var position = view != null
-                ? (Vector2)view.transform.position
-                : (Vector2)grid.IndexToWorldPosition(index);
-
-            snapshot = new ShotBalloonSnapshot(
-                position, radius, colorId, scored.ScoreValue, hitsRemaining, index,
-                influence?.BalancePriority ?? 0, influence?.MaxBalanceSteps ?? 0,
-                influence?.DirectBalanceMotion ?? false, nudgeOverrides);
-            return true;
-        }
-
-        // Mirrors ProjectileView.Awake's own (private) contact-radius derivation — a capsule's
-        // cross-section half-extent, or a circle's radius, scaled by the prefab's world scale.
-        private static float ResolveProjectileContactRadius(ThrowerSettings settings)
-        {
-            var prefabView = settings?.ProjectilePrefab;
-            if (prefabView == null)
-            {
-                return 0f;
-            }
-
-            var collider = prefabView.GetComponent<Collider2D>();
-            return collider switch
-            {
-                CircleCollider2D circle => circle.radius * prefabView.transform.lossyScale.x,
-                CapsuleCollider2D capsule =>
-                    Mathf.Min(capsule.size.x, capsule.size.y) * 0.5f * prefabView.transform.lossyScale.x,
-                _ => 0f,
-            };
-        }
-
-        private readonly struct LiveContext
-        {
-            public readonly IReadOnlyList<ShotBalloonSnapshot> Board;
-            public readonly Vector4 WallLimitsClockwise;
-            public readonly Vector2 ThrowerPivot;
-            public readonly Vector3 SpawnLocalOffset;
-            public readonly int StartingShields;
-            public readonly float ProjectileContactRadius;
-            public readonly float ProjectileSpeed;
-            public readonly ShotCruiseConfig CruiseConfig;
-            public readonly ShotBoardDynamics Dynamics;
-            public readonly float NudgeAmplitude;
-
-            public LiveContext(
-                IReadOnlyList<ShotBalloonSnapshot> board, Vector4 wallLimitsClockwise, Vector2 throwerPivot,
-                Vector3 spawnLocalOffset, int startingShields, float projectileContactRadius,
-                float projectileSpeed, ShotCruiseConfig cruiseConfig, ShotBoardDynamics dynamics,
-                float nudgeAmplitude)
-            {
-                Board = board;
-                WallLimitsClockwise = wallLimitsClockwise;
-                ThrowerPivot = throwerPivot;
-                SpawnLocalOffset = spawnLocalOffset;
-                StartingShields = startingShields;
-                ProjectileContactRadius = projectileContactRadius;
-                ProjectileSpeed = projectileSpeed;
-                CruiseConfig = cruiseConfig;
-                Dynamics = dynamics;
-                NudgeAmplitude = nudgeAmplitude;
-            }
         }
 
         private readonly struct ShotSolverWindowEntry

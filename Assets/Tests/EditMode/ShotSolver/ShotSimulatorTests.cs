@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using BalloonParty.Editor.ShotSolver;
+using BalloonParty.Solver;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Shared;
 using BalloonParty.Slots.Grid;

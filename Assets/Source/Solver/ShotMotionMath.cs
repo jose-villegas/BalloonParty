@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BalloonParty.Editor.ShotSolver
+namespace BalloonParty.Solver
 {
     /// <summary>Pure math shared by the dynamic-board sim: the nudge envelope (mirrors
     /// <c>BalloonMotionTicker.Reach</c> exactly — @ref plan_shot_geometry §7c) and the moving-circle

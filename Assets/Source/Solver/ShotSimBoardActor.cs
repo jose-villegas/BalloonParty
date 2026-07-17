@@ -5,7 +5,7 @@ using BalloonParty.Slots.Grid;
 using UniRx;
 using UnityEngine;
 
-namespace BalloonParty.Editor.ShotSolver
+namespace BalloonParty.Solver
 {
     /// <summary>Gathered occupant of a grid slot that is a dynamic (balanceable) actor but NOT a
     /// poppable/deflectable shot target — e.g. an Unbreakable roamer (durable+scored but excluded by

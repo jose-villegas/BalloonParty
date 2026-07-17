@@ -5,7 +5,7 @@ using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared;
 using UnityEngine;
 
-namespace BalloonParty.Editor.ShotSolver
+namespace BalloonParty.Solver
 {
     /// <summary>One board actor as the solver sees it — enough to reproduce pop/deflect/score rules
     /// without a live <c>IBalloonModel</c>. <see cref="ColorId" /> null/empty means colourless

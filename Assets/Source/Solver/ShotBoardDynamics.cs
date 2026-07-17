@@ -7,7 +7,7 @@ using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
 using UnityEngine;
 
-namespace BalloonParty.Editor.ShotSolver
+namespace BalloonParty.Solver
 {
     /// <summary>Owns a real headless <c>SlotGrid</c> + <c>GridBalanceQuery</c> + <c>BalancePlanner</c>
     /// over stub actors, plus the per-balloon nudge-impulse bookkeeping — the dynamic-board half of
