@@ -146,7 +146,7 @@ namespace BalloonParty.Projectile.View
 
                 // The muzzle is the first flight segment's origin — the last-shield ease measures
                 // approach progress from wherever the current segment began (updated on each bounce).
-                _model.SegmentStartPosition = transform.position;
+                _model.Flight.SegmentStartPosition = transform.position;
 
                 // Colourless shots read as the Sparks tint; recoloured shots take their own colour
                 // (kept in step by UpdateGlowColor).
@@ -407,7 +407,7 @@ namespace BalloonParty.Projectile.View
         private void TryEnterCruise(Vector3 position, Vector3 direction)
         {
             var threshold = _config.CruiseWallBounceThreshold;
-            if (threshold <= 0 || _model.IsCruising.Value || _model.ConsecutiveWallBounces < threshold)
+            if (threshold <= 0 || _model.IsCruising.Value || _model.Flight.ConsecutiveWallBounces < threshold)
             {
                 return;
             }
@@ -417,8 +417,8 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            _model.CruiseStartShields = _model.ShieldsRemaining.Value;
-            _model.CruiseTapElapsed = 0f;
+            _model.Flight.CruiseStartShields = _model.ShieldsRemaining.Value;
+            _model.Flight.CruiseTapElapsed = 0f;
             _model.IsCruising.Value = true;
         }
 
@@ -459,7 +459,7 @@ namespace BalloonParty.Projectile.View
             }
 
             var inTapBeat = _model.IsCruising.Value
-                            && _model.CruiseTapElapsed < _config.CruiseTapEaseDuration;
+                            && _model.Flight.CruiseTapElapsed < _config.CruiseTapEaseDuration;
 
             // Hide the spiral while the shot is drifting to its death (doomed last-shield segment):
             // a piercing flourish there reads as a power-up right as it dies, and the clear path

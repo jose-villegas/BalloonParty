@@ -25,6 +25,10 @@ namespace BalloonParty.Projectile.Model
         bool IsFree { get; }
         IBalloonModel LastHitBalloon { get; }
 
+        // Read-only view of the flight bookkeeping (see IProjectileFlightState) — grouped and
+        // un-mutable, so it stays off the mutable status surface while remaining observable.
+        IProjectileFlightState Flight { get; }
+
         bool HasBuff(ProjectileBuffId id);
 
         /// <summary>

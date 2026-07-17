@@ -50,19 +50,19 @@ namespace BalloonParty.Projectile.Controller
             // shot plows through tough actors; the floor keeps it from ever dropping below base.
             if (model.IsCruising.Value)
             {
-                var startShields = Mathf.Max(model.CruiseStartShields, 1);
+                var startShields = Mathf.Max(model.Flight.CruiseStartShields, 1);
                 var taps = Mathf.Clamp(
-                    model.CruiseStartShields - model.ShieldsRemaining.Value, 0, startShields);
+                    model.Flight.CruiseStartShields - model.ShieldsRemaining.Value, 0, startShields);
                 var target = 1f + _cruiseSpeedPerShield * taps;
                 var progress = _cruiseTapEaseDuration > 0f
-                    ? Mathf.Clamp01(model.CruiseTapElapsed / _cruiseTapEaseDuration)
+                    ? Mathf.Clamp01(model.Flight.CruiseTapElapsed / _cruiseTapEaseDuration)
                     : 1f;
 
                 // The pierce decay floors the ramp at base ("min normal speed"); the per-tap freeze
                 // animation rides on top and may still dip the shot to a momentary standstill.
-                var cruiseSpeed = Mathf.Max(baseSpeed * target * model.CruisePierceSpeedScale, baseSpeed);
+                var cruiseSpeed = Mathf.Max(baseSpeed * target * model.Flight.CruisePierceSpeedScale, baseSpeed);
                 speed = cruiseSpeed * _cruiseTapCurve.Evaluate(progress);
-                model.CruiseTapElapsed += deltaTime;
+                model.Flight.CruiseTapElapsed += deltaTime;
             }
 
             // The 'last breath': on a doomed 0-shield segment (flagged by the view once the path to
@@ -72,19 +72,19 @@ namespace BalloonParty.Projectile.Controller
             // shot crosses and dies rather than resting on it.
             if (model.IsLastShieldApproach.Value
                 && _lastShieldApproachDuration > 1e-4f
-                && _walls.TryFindCrossing(model.SegmentStartPosition, model.Direction, out var deathWall, out _))
+                && _walls.TryFindCrossing(model.Flight.SegmentStartPosition, model.Direction, out var deathWall, out _))
             {
-                var segmentLength = Vector3.Distance(model.SegmentStartPosition, deathWall);
-                var normalizedTime = Mathf.Clamp01(model.SegmentElapsed / _lastShieldApproachDuration);
+                var segmentLength = Vector3.Distance(model.Flight.SegmentStartPosition, deathWall);
+                var normalizedTime = Mathf.Clamp01(model.Flight.SegmentElapsed / _lastShieldApproachDuration);
                 var distance = normalizedTime >= 1f
                     ? segmentLength + (baseSpeed * deltaTime)
                     : segmentLength * Mathf.Clamp01(_lastShieldApproachCurve.Evaluate(normalizedTime));
-                model.SegmentElapsed += deltaTime;
-                position = model.SegmentStartPosition + (Vector3)(model.Direction.normalized * distance);
+                model.Flight.SegmentElapsed += deltaTime;
+                position = model.Flight.SegmentStartPosition + (Vector3)(model.Direction.normalized * distance);
             }
             else
             {
-                model.SegmentElapsed += deltaTime;
+                model.Flight.SegmentElapsed += deltaTime;
                 position += model.Direction * (speed * deltaTime);
             }
             position = _walls.Reflect(position, out var reflect, out var wallContact);
@@ -104,8 +104,8 @@ namespace BalloonParty.Projectile.Controller
             // Consecutive wall bounces with no balloon contact = the shot may be ping-ponging empty
             // space (HitResolver resets the counter on any balloon touch). Entry into cruise is the
             // VIEW's call — it confirms with a physics lookahead the plain resolver can't run.
-            model.ConsecutiveWallBounces++;
-            if (model.IsCruising.Value && model.CruisePierceSpeedScale < 1f)
+            model.Flight.ConsecutiveWallBounces++;
+            if (model.IsCruising.Value && model.Flight.CruisePierceSpeedScale < 1f)
             {
                 // Only ONCE the shot has plowed a tough (scale decayed below 1) does a wall end the
                 // run: cruise ends, speed returns to normal, AND the earned piercing is consumed —
@@ -113,18 +113,18 @@ namespace BalloonParty.Projectile.Controller
                 // empty corridor, or one that has only popped 1-hit balloons, keeps both its speed
                 // and its pierce; nothing has slowed it, so nothing is spent.
                 model.IsCruising.Value = false;
-                model.ConsecutiveWallBounces = 0;
-                model.CruisePierceSpeedScale = 1f;
+                model.Flight.ConsecutiveWallBounces = 0;
+                model.Flight.CruisePierceSpeedScale = 1f;
                 model.IsPiercing.Value = false;
             }
             else if (model.IsCruising.Value)
             {
                 // A new tap lands with this bounce — restart its freeze-then-pickup envelope.
-                model.CruiseTapElapsed = 0f;
+                model.Flight.CruiseTapElapsed = 0f;
 
                 // A long-enough cruise ARMS the shot: from this tap on it pierces everything it
                 // touches (unbreakables included) for the rest of its life.
-                var taps = model.CruiseStartShields - model.ShieldsRemaining.Value;
+                var taps = model.Flight.CruiseStartShields - model.ShieldsRemaining.Value;
                 if (_cruisePiercingTapThreshold > 0
                     && taps >= _cruisePiercingTapThreshold
                     && !model.IsPiercing.Value)
@@ -134,8 +134,8 @@ namespace BalloonParty.Projectile.Controller
             }
 
             model.Direction = Vector2.Reflect(model.Direction, reflect.normalized);
-            model.SegmentStartPosition = wallContact;
-            model.SegmentElapsed = 0f;
+            model.Flight.SegmentStartPosition = wallContact;
+            model.Flight.SegmentElapsed = 0f;
             return ProjectileStep.Bounced(position, wallContact, model.Direction);
         }
 
@@ -169,8 +169,8 @@ namespace BalloonParty.Projectile.Controller
             var contactPoint = balloonPosition + (Vector3)(surfaceNormal * contactRadius);
             contactPoint.z = projectilePosition.z;
             var remainder = (projectilePosition - contactPoint).magnitude;
-            model.SegmentStartPosition = contactPoint;
-            model.SegmentElapsed = 0f;
+            model.Flight.SegmentStartPosition = contactPoint;
+            model.Flight.SegmentElapsed = 0f;
             return contactPoint + (Vector3)(model.Direction * remainder);
         }
 

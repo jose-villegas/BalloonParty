@@ -19,18 +19,14 @@ namespace BalloonParty.Projectile.Model
         public float Speed { get; set; }
         public bool IsFree { get; set; }
         public IBalloonModel LastHitBalloon { get; set; }
-        public int ConsecutiveWallBounces { get; set; }
-        public int CruiseStartShields { get; set; }
-        public float CruiseTapElapsed { get; set; }
-        public float CruisePierceSpeedScale { get; set; } = 1f;
-        public Vector3 SegmentStartPosition { get; set; }
-        public float SegmentElapsed { get; set; }
+        public ProjectileFlightState Flight { get; } = new();
 
         IReadOnlyReactiveProperty<string> IProjectileModel.ColorName => ColorName;
         IReadOnlyReactiveProperty<int> IProjectileModel.ShieldsRemaining => ShieldsRemaining;
         IReadOnlyReactiveProperty<bool> IProjectileModel.IsCruising => IsCruising;
         IReadOnlyReactiveProperty<bool> IProjectileModel.IsPiercing => IsPiercing;
         IReadOnlyReactiveProperty<bool> IProjectileModel.IsLastShieldApproach => IsLastShieldApproach;
+        IProjectileFlightState IProjectileModel.Flight => Flight;
 
         public bool HasBuff(ProjectileBuffId id)
         {

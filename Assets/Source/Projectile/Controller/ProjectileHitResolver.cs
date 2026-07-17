@@ -42,7 +42,7 @@ namespace BalloonParty.Projectile.Controller
             {
                 // Building phase: any balloon contact ends the empty-corridor cruise and restarts
                 // the wall-bounce counter.
-                projectile.ConsecutiveWallBounces = 0;
+                projectile.Flight.ConsecutiveWallBounces = 0;
                 if (projectile.IsCruising.Value)
                 {
                     projectile.IsCruising.Value = false;
@@ -58,7 +58,7 @@ namespace BalloonParty.Projectile.Controller
                     || balloon is UnbreakableBalloonModel;
                 if (requiresMultipleHits)
                 {
-                    projectile.CruisePierceSpeedScale *= 0.5f;
+                    projectile.Flight.CruisePierceSpeedScale *= 0.5f;
                 }
             }
 

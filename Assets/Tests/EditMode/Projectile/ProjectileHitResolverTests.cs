@@ -90,26 +90,26 @@ namespace BalloonParty.Tests.Projectile
         [Test]
         public void Resolve_AnyBalloonContact_EndsCruiseAndResetsBounceCount()
         {
-            _projectile.ConsecutiveWallBounces = 4;
+            _projectile.Flight.ConsecutiveWallBounces = 4;
             _projectile.IsCruising.Value = true;
 
             _resolver.Resolve(_projectile, new BalloonModel(new BalloonModelConfig(hitsToPop: 1)), Vector3.zero);
 
             Assert.IsFalse(_projectile.IsCruising.Value, "balloon contact ends the cruise");
-            Assert.AreEqual(0, _projectile.ConsecutiveWallBounces, "counter restarts on any contact");
+            Assert.AreEqual(0, _projectile.Flight.ConsecutiveWallBounces, "counter restarts on any contact");
         }
 
         [Test]
         public void Resolve_PiercingBuff_KeepsCruisingThroughContact()
         {
             _projectile.IsPiercing.Value = true;
-            _projectile.ConsecutiveWallBounces = 4;
+            _projectile.Flight.ConsecutiveWallBounces = 4;
             _projectile.IsCruising.Value = true;
 
             _resolver.Resolve(_projectile, new BalloonModel(new BalloonModelConfig(hitsToPop: 1)), Vector3.zero);
 
             Assert.IsTrue(_projectile.IsCruising.Value, "piercing rides the cruise through the pop");
-            Assert.AreEqual(4, _projectile.ConsecutiveWallBounces, "bounce counter isn't reset while piercing");
+            Assert.AreEqual(4, _projectile.Flight.ConsecutiveWallBounces, "bounce counter isn't reset while piercing");
         }
 
         [Test]
@@ -117,15 +117,15 @@ namespace BalloonParty.Tests.Projectile
         {
             _projectile.IsPiercing.Value = true;
             _projectile.IsCruising.Value = true;
-            _projectile.CruisePierceSpeedScale = 1f;
+            _projectile.Flight.CruisePierceSpeedScale = 1f;
 
             // A 2-hit tough is a >1-hit actor — piercing pops it but the plow halves the speed scale.
             _resolver.Resolve(_projectile, new BalloonModel(new BalloonModelConfig(hitsToPop: 2)), Vector3.zero);
-            Assert.AreEqual(0.5f, _projectile.CruisePierceSpeedScale, 1e-4f);
+            Assert.AreEqual(0.5f, _projectile.Flight.CruisePierceSpeedScale, 1e-4f);
 
             // A 1-hit balloon costs nothing — the scale rides through unchanged.
             _resolver.Resolve(_projectile, new BalloonModel(new BalloonModelConfig(hitsToPop: 1)), Vector3.zero);
-            Assert.AreEqual(0.5f, _projectile.CruisePierceSpeedScale, 1e-4f, "a 1-hit pop doesn't decay speed");
+            Assert.AreEqual(0.5f, _projectile.Flight.CruisePierceSpeedScale, 1e-4f, "a 1-hit pop doesn't decay speed");
         }
 
         [Test]

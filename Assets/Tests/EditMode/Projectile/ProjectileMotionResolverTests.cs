@@ -189,7 +189,7 @@ namespace BalloonParty.Tests.Projectile
                 _resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
             }
 
-            Assert.AreEqual(5, model.ConsecutiveWallBounces);
+            Assert.AreEqual(5, model.Flight.ConsecutiveWallBounces);
             Assert.IsFalse(model.IsCruising.Value, "the plain resolver never flips cruise on by itself");
         }
 
@@ -198,7 +198,7 @@ namespace BalloonParty.Tests.Projectile
         {
             var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 4);
-            model.CruiseStartShields = 4;
+            model.Flight.CruiseStartShields = 4;
             model.IsCruising.Value = true;
 
             var step = resolver.Step(model, Vector3.zero, 1f);
@@ -213,7 +213,7 @@ namespace BalloonParty.Tests.Projectile
             // Entry bank 4 at 0.5/shield -> max x3; half the bounces spent, linear ramp -> x2.
             var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
-            model.CruiseStartShields = 4;
+            model.Flight.CruiseStartShields = 4;
             model.IsCruising.Value = true;
 
             var step = resolver.Step(model, Vector3.zero, 1f);
@@ -226,7 +226,7 @@ namespace BalloonParty.Tests.Projectile
         {
             var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 0);
-            model.CruiseStartShields = 4;
+            model.Flight.CruiseStartShields = 4;
             model.IsCruising.Value = true;
 
             var step = resolver.Step(model, Vector3.zero, 1f);
@@ -241,7 +241,7 @@ namespace BalloonParty.Tests.Projectile
             // 0.5/shield fully spent -> x5, where entry 4 gave x3.
             var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 0);
-            model.CruiseStartShields = 8;
+            model.Flight.CruiseStartShields = 8;
             model.IsCruising.Value = true;
 
             var step = resolver.Step(model, Vector3.zero, 1f);
@@ -257,9 +257,9 @@ namespace BalloonParty.Tests.Projectile
             // window completes it holds the full target.
             var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 1f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
-            model.CruiseStartShields = 4;
+            model.Flight.CruiseStartShields = 4;
             model.IsCruising.Value = true;
-            model.CruiseTapElapsed = 0f;
+            model.Flight.CruiseTapElapsed = 0f;
 
             var frozen = resolver.Step(model, Vector3.zero, 0.5f);
             Assert.AreEqual(0f, frozen.Position.y, 1e-4f, "curve(0) = 0 — the freeze beat");
@@ -276,13 +276,13 @@ namespace BalloonParty.Tests.Projectile
         {
             var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 1f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
-            model.CruiseStartShields = 4;
+            model.Flight.CruiseStartShields = 4;
             model.IsCruising.Value = true;
-            model.CruiseTapElapsed = 99f;
+            model.Flight.CruiseTapElapsed = 99f;
 
             resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
 
-            Assert.AreEqual(0f, model.CruiseTapElapsed, "a cruise bounce replays the animation from t=0");
+            Assert.AreEqual(0f, model.Flight.CruiseTapElapsed, "a cruise bounce replays the animation from t=0");
         }
 
         [Test]
@@ -294,7 +294,7 @@ namespace BalloonParty.Tests.Projectile
             var step = resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
 
             Assert.AreEqual(ProjectileStepOutcome.Destroyed, step.Outcome);
-            Assert.AreEqual(0, model.ConsecutiveWallBounces, "a lethal bounce ends the shot, not the count");
+            Assert.AreEqual(0, model.Flight.ConsecutiveWallBounces, "a lethal bounce ends the shot, not the count");
         }
 
         [Test]
@@ -302,7 +302,7 @@ namespace BalloonParty.Tests.Projectile
         {
             var resolver = CruiseResolver(perShield: 0f, piercingTapThreshold: 3);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 4);
-            model.CruiseStartShields = 5;
+            model.Flight.CruiseStartShields = 5;
             model.IsCruising.Value = true;
 
             // This bounce spends shield 4 -> 3: taps = 5 - 3 = 2, still below the threshold.
@@ -320,7 +320,7 @@ namespace BalloonParty.Tests.Projectile
         {
             var resolver = CruiseResolver(perShield: 0f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 10);
-            model.CruiseStartShields = 10;
+            model.Flight.CruiseStartShields = 10;
             model.IsCruising.Value = true;
 
             for (var i = 0; i < 6; i++)
@@ -338,15 +338,15 @@ namespace BalloonParty.Tests.Projectile
             // scale < 1 means the shot has already plowed a tough — the next wall is the recovery.
             var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
-            model.CruiseStartShields = 3;
+            model.Flight.CruiseStartShields = 3;
             model.IsCruising.Value = true;
-            model.CruisePierceSpeedScale = 0.5f;
+            model.Flight.CruisePierceSpeedScale = 0.5f;
             model.IsPiercing.Value = true;
 
             resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
 
             Assert.IsFalse(model.IsCruising.Value, "the recovery wall ends the speed cruise");
-            Assert.AreEqual(1f, model.CruisePierceSpeedScale, 1e-4f, "pierce speed scale resets to base");
+            Assert.AreEqual(1f, model.Flight.CruisePierceSpeedScale, 1e-4f, "pierce speed scale resets to base");
             Assert.IsFalse(model.IsPiercing.Value,
                 "piercing is consumed at the recovery wall — a normal shot again");
         }
@@ -358,9 +358,9 @@ namespace BalloonParty.Tests.Projectile
             // the cruise rides on, no premature reset.
             var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
-            model.CruiseStartShields = 5;
+            model.Flight.CruiseStartShields = 5;
             model.IsCruising.Value = true;
-            model.CruisePierceSpeedScale = 1f;
+            model.Flight.CruisePierceSpeedScale = 1f;
             model.IsPiercing.Value = true;
 
             resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
@@ -375,9 +375,9 @@ namespace BalloonParty.Tests.Projectile
         {
             var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 0);
-            model.CruiseStartShields = 4;   // ramp target x3 at full spend
+            model.Flight.CruiseStartShields = 4;   // ramp target x3 at full spend
             model.IsCruising.Value = true;
-            model.CruisePierceSpeedScale = 0.01f;   // decayed hard by many tough plows
+            model.Flight.CruisePierceSpeedScale = 0.01f;   // decayed hard by many tough plows
 
             var step = resolver.Step(model, Vector3.zero, 1f);
 
@@ -393,8 +393,8 @@ namespace BalloonParty.Tests.Projectile
             var resolver = LastShieldResolver(AnimationCurve.Linear(0f, 0f, 1f, 1f), durationSeconds: 4f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 0);
             model.IsLastShieldApproach.Value = true;
-            model.SegmentStartPosition = Vector3.zero;
-            model.SegmentElapsed = 2f;
+            model.Flight.SegmentStartPosition = Vector3.zero;
+            model.Flight.SegmentElapsed = 2f;
 
             var step = resolver.Step(model, Vector3.zero, 1f);
 
@@ -410,8 +410,8 @@ namespace BalloonParty.Tests.Projectile
             var resolver = LastShieldResolver(AnimationCurve.Linear(0f, 0f, 1f, 1f), durationSeconds: 3f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 0);
             model.IsLastShieldApproach.Value = true;
-            model.SegmentStartPosition = Vector3.zero;
-            model.SegmentElapsed = 3f;
+            model.Flight.SegmentStartPosition = Vector3.zero;
+            model.Flight.SegmentElapsed = 3f;
 
             var step = resolver.Step(model, new Vector3(0f, 5f, 0f), 1f);
 
