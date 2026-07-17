@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration.Effects;
@@ -14,6 +15,9 @@ using MessagePipe;
 using UniRx;
 using UnityEngine;
 using VContainer;
+using BalloonParty.Shared.SceneLight;
+using Light = BalloonParty.Shared.SceneLight.Light;
+using Random = UnityEngine.Random;
 
 namespace BalloonParty.Balloon.Type
 {
@@ -36,6 +40,22 @@ namespace BalloonParty.Balloon.Type
                  "the outer renderers' bounds at Awake.")]
         [SerializeField] private float _sphereRadius;
 
+        [Header("Breathing light (Unbreakable colour)")]
+        [SerializeField] [Min(0f)] private float _breathMinIntensity = 0.8f;
+        [SerializeField] [Min(0f)] private float _breathMaxIntensity = 1.8f;
+        [SerializeField] [Min(0f)] private float _breathMinRadius = 0.8f;
+        [SerializeField] [Min(0f)] private float _breathMaxRadius = 1.4f;
+        [Tooltip("Seconds for one full breathe cycle (min -> max -> min).")]
+        [SerializeField] [Min(0.01f)] private float _breathPeriod = 2f;
+        [Tooltip("Seconds the breathe freezes after this unbreakable is hit (deflects a shot). 0 = no pause.")]
+        [SerializeField] [Min(0f)] private float _breathHitPauseDuration = 0.5f;
+
+        [Header("Deflect flash (Sparks colour)")]
+        [SerializeField] [Min(0f)] private float _deflectFlashIntensity = 2.5f;
+        [SerializeField] [Min(0f)] private float _deflectFlashRadius = 1.2f;
+        [Tooltip("Seconds the deflect flash stays lit before snapping off.")]
+        [SerializeField] [Min(0f)] private float _deflectFlashDuration = 0.12f;
+
         private MaterialPropertyBlock _block;
         private float _instancePhase;
         private Vector3 _pushedCenter;
@@ -43,6 +63,17 @@ namespace BalloonParty.Balloon.Type
         private DisturbanceFieldService _disturbanceField;
         private IGamePalette _palette;
         private IPublisher<SpeckSpawnRequestMessage> _speckPublisher;
+        private SceneLightFieldService _lightField;
+        private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
+        private IBalloonModel _model;
+        private Light _breathLight;
+        private Light _flashLight;
+        private IDisposable _flashRegistration;
+        private float _flashOffTime;
+        private float _breathTime;
+        private float _breathPausedUntil;
+        private int _unbreakableColorIndex = -1;
+        private int _sparksColorIndex = -1;
 
         private void Awake()
         {
@@ -81,11 +112,14 @@ namespace BalloonParty.Balloon.Type
             {
                 PushSphereState(_instancePhase, false);
             }
+
+            TickLights();
         }
 
         private void OnDisable()
         {
             _sceneCapture?.Release();
+            EndFlash();
         }
 
         private void OnValidate()
@@ -101,12 +135,17 @@ namespace BalloonParty.Balloon.Type
         [Inject]
         private void Construct(
             SceneCaptureService sceneCapture, DisturbanceFieldService disturbanceField, IGamePalette palette,
-            IPublisher<SpeckSpawnRequestMessage> speckPublisher)
+            IPublisher<SpeckSpawnRequestMessage> speckPublisher, SceneLightFieldService lightField,
+            ISubscriber<BalloonDeflectedMessage> deflectedSubscriber)
         {
             _sceneCapture = sceneCapture;
             _disturbanceField = disturbanceField;
             _palette = palette;
             _speckPublisher = speckPublisher;
+            _lightField = lightField;
+            _deflectedSubscriber = deflectedSubscriber;
+            _unbreakableColorIndex = palette.PaletteIndexOf(GamePalette.UnbreakableColorId);
+            _sparksColorIndex = palette.PaletteIndexOf(GamePalette.SparksColorId);
 
             // Settle the ref-count for an instance injected while already active.
             if (isActiveAndEnabled)
@@ -130,6 +169,21 @@ namespace BalloonParty.Balloon.Type
                 _disturbanceField
                     .StartPulse(StampSource.UnbreakableBurst, () => EmitPulse(StampSource.UnbreakableBurst))
                     .AddTo(disposables);
+            }
+
+            _model = model;
+
+            // A steady Unbreakable-colour glow that breathes (intensity + radius lerp on a sine) the
+            // whole time this balloon is alive; the registration turns it off when the view despawns.
+            if (_lightField != null)
+            {
+                _breathTime = 0f;
+                _breathPausedUntil = 0f;
+                _breathLight = new Light(
+                    transform.position, _breathMinRadius, _breathMinIntensity, _unbreakableColorIndex);
+                _lightField.RegisterLight(_breathLight).AddTo(disposables);
+                _deflectedSubscriber.Subscribe(OnDeflected).AddTo(disposables);
+                disposables.Add(Disposable.Create(() => { EndFlash(); _breathLight = null; }));
             }
         }
 
@@ -164,6 +218,66 @@ namespace BalloonParty.Balloon.Type
                 _block.SetFloat(AnimationSpeedId, zeroShaderClock ? 0f : ShaderClockRate);
                 r.SetPropertyBlock(_block);
             }
+        }
+
+        private void TickLights()
+        {
+            if (_breathLight != null)
+            {
+                _breathLight.Position.Value = transform.position;
+                _breathLight.EndPosition.Value = transform.position;
+
+                // A hit freezes the breathe for a beat: the accumulator stops (so it resumes smoothly,
+                // no phase snap) while the pause window is open. _instancePhase desyncs each
+                // unbreakable's breathe so a cluster doesn't pulse in unison.
+                if (Time.time >= _breathPausedUntil)
+                {
+                    _breathTime += Time.deltaTime;
+                }
+
+                var t = (Mathf.Sin((_breathTime + _instancePhase) * (2f * Mathf.PI / _breathPeriod)) + 1f) * 0.5f;
+                _breathLight.Intensity.Value = Mathf.Lerp(_breathMinIntensity, _breathMaxIntensity, t);
+                _breathLight.Radius.Value = Mathf.Lerp(_breathMinRadius, _breathMaxRadius, t);
+                _breathLight.EndRadius.Value = _breathLight.Radius.Value;
+            }
+
+            if (_flashRegistration != null)
+            {
+                _flashLight.Position.Value = transform.position;
+                _flashLight.EndPosition.Value = transform.position;
+                if (Time.time >= _flashOffTime)
+                {
+                    EndFlash();
+                }
+            }
+        }
+
+        // A projectile deflecting off THIS unbreakable pops a brief Sparks-colour flash on, then off.
+        private void OnDeflected(BalloonDeflectedMessage msg)
+        {
+            if (_lightField == null || _model == null || msg.Balloon != _model)
+            {
+                return;
+            }
+
+            _flashLight ??= new Light(
+                transform.position, _deflectFlashRadius, _deflectFlashIntensity, _sparksColorIndex);
+            _flashLight.Radius.Value = _deflectFlashRadius;
+            _flashLight.EndRadius.Value = _deflectFlashRadius;
+            _flashLight.Intensity.Value = _deflectFlashIntensity;
+            _flashLight.Position.Value = transform.position;
+            _flashLight.EndPosition.Value = transform.position;
+            _flashRegistration ??= _lightField.RegisterLight(_flashLight);
+            _flashOffTime = Time.time + _deflectFlashDuration;
+
+            // Stun the breathe: hold it frozen for the configured beat after the hit.
+            _breathPausedUntil = Time.time + _breathHitPauseDuration;
+        }
+
+        private void EndFlash()
+        {
+            _flashRegistration?.Dispose();
+            _flashRegistration = null;
         }
 
         private void EmitPulse(StampSource source)
