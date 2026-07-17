@@ -325,6 +325,31 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         [Test]
+        public void BeginBalanceMove_MidWobble_SeedsPathFromTheWobbledCentre()
+        {
+            // The live tween's waypoint 0 is the view's CURRENT position, nudge offset included
+            // (StartBalanceTween reads viewTransform.position; the motion ticker then re-adds the
+            // impulse on top of every tween write). A pulse landing at an impulse's peak must
+            // therefore start the path one full offset away from the lattice home.
+            var actor = new ShotSimDynamicActor();
+            actor.ResetTo(Vector2Int.zero, Vector2.zero);
+            actor.NudgeImpulses.Add(new ShotNudgeImpulse
+            {
+                Offset = new Vector2(1f, 0f),
+                StartTime = 0f,
+                Duration = 1f,
+            });
+
+            // t = 0.5 is the Reach envelope's peak — the wobble is exactly the full offset.
+            actor.BeginBalanceMove(startTime: 0.5f, toPosition: new Vector2(0f, 5f), duration: 1f);
+
+            Assert.AreEqual(1f, actor.EvaluateBalancePosition(0.5f).x, 1e-4f,
+                "path departs from the wobbled position, not the lattice home");
+            Assert.AreEqual(2f, actor.EvaluateCenter(0.5f).x, 1e-4f,
+                "the start offset is briefly double-carried — exactly what the live ticker does");
+        }
+
+        [Test]
         public void Simulate_BalancePulse_MovesHangingBalloonIntoTheShotsPath()
         {
             // A 1x2 grid: the only balloon hangs at row 1 over an empty row 0 (unbalanced by

@@ -119,18 +119,22 @@ namespace BalloonParty.Editor.ShotSolver
             NudgeImpulses.Clear();
         }
 
-        /// <summary>Starts (or extends) the balance path for a pulse. A NEW pulse starts from wherever
-        /// the balance position currently sits — mirrors <c>BalloonBalancer.StartBalanceTween</c> reading
-        /// the view's live (possibly mid-tween) position as the new tween's start. A repeat call from
-        /// the SAME pulse chains the hop as an extra waypoint, mirroring <c>RecordPath</c> building the
-        /// multi-waypoint DOPath — except for direct movers, whose live tween skips intermediates
-        /// (<c>FinalWaypointBuffer</c>), so here the last waypoint is overwritten instead.</summary>
+        /// <summary>Starts (or extends) the balance path for a pulse. A NEW pulse starts from the FULL
+        /// centre — balance position plus the live nudge offset — because that is what the game does:
+        /// <c>BalloonBalancer.StartBalanceTween</c> seeds waypoint 0 with the view's current position
+        /// (wobble included), and <c>BalloonMotionTicker</c> then adopts each tween write as the new
+        /// base and re-adds the CURRENT impulse offset on top — so a tween starting mid-wobble briefly
+        /// double-carries the start offset, converging to lattice+impulses as the path proceeds. A
+        /// repeat call from the SAME pulse chains the hop as an extra waypoint, mirroring
+        /// <c>RecordPath</c> building the multi-waypoint DOPath — except for direct movers, whose live
+        /// tween skips intermediates (<c>FinalWaypointBuffer</c>), so the last waypoint is overwritten
+        /// instead.</summary>
         internal void BeginBalanceMove(float startTime, Vector2 toPosition, float duration)
         {
             var samePulse = startTime == _segmentStartTime;
             if (!samePulse)
             {
-                _waypoints[0] = EvaluateBalancePosition(startTime);
+                _waypoints[0] = EvaluateCenter(startTime);
                 _waypointCount = 1;
                 _segmentStartTime = startTime;
                 _segmentDuration = Mathf.Max(duration, 0.0001f);

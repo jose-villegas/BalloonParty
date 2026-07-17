@@ -60,8 +60,10 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   `DOTweenSettings.asset`), and contacts against them solve the moving-circle quadratic
   linearized at the instantaneous eased velocity. Every contact nudges the target's occupied hex neighbours and deflects
   additionally shove the hit balloon, with the exact `Reach` impulse envelope; centres become
-  `balancePosition(t) + Σ impulses(t)`. Pops `Remove` from the dynamics grid so later pulses see
-  the gaps. With no dynamics supplied the loop takes the original static fast path unchanged.
+  `balancePosition(t) + Σ impulses(t)`, and a pulse landing mid-wobble seeds its path from the
+  WOBBLED centre (waypoint 0 = view position in the live `StartBalanceTween`, with the ticker
+  re-adding impulses on top of tween writes — the brief start-offset double-carry is faithful).
+  Pops `Remove` from the dynamics grid so later pulses see the gaps. With no dynamics supplied the loop takes the original static fast path unchanged.
 
 ## Accepted approximations (plan §7)
 
