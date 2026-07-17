@@ -461,7 +461,11 @@ namespace BalloonParty.Editor.ShotSolver
             var staticActors = new List<ShotStaticActorSnapshot>();
             CollectBoard(grid, targets, otherDynamicActors, staticActors);
 
-            var dynamics = new ShotBoardDynamics(config, balloonsConfig, targets, otherDynamicActors, staticActors);
+            // ~0.5 frame of interval-crossing quantization + 1 frame of deferred-Balance yield, at
+            // whatever rate the editor is actually rendering right now.
+            var pulseDelay = Mathf.Clamp(1.5f * Time.smoothDeltaTime, 0f, 0.1f);
+            var dynamics = new ShotBoardDynamics(
+                config, balloonsConfig, targets, otherDynamicActors, staticActors, pulseDelay);
             var cruiseConfig = new ShotCruiseConfig(
                 config.CruiseWallBounceThreshold, config.CruiseSpeedPerShield, config.CruiseRampCurve);
 

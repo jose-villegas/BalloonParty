@@ -397,5 +397,46 @@ namespace BalloonParty.Tests.ShotSolver
             Assert.AreEqual(1, dynamicResult.Pops, "the rebalance pulse drops it onto the flight line in time");
             Assert.IsTrue(dynamicResult.BoardCleared);
         }
+
+        [Test]
+        public void Simulate_PulseExecutionDelay_ShiftsWhenTheMoveStarts()
+        {
+            // Same hanging-balloon setup, but a pulse delay far longer than the flight: the move never
+            // starts before the shot passes, so the dynamic run misses exactly like the static one —
+            // proving the delay genuinely shifts the pulse schedule rather than being cosmetic.
+            var separation = new Vector2(1f, 1f);
+            var offset = new Vector2(0f, -4f);
+            var slot0 = (Vector2)HexCoordinates.IndexToWorldPosition(new Vector2Int(0, 0), separation, offset);
+            var slot1 = (Vector2)HexCoordinates.IndexToWorldPosition(new Vector2Int(0, 1), separation, offset);
+
+            var gameConfig = Substitute.For<IGameConfiguration>();
+            gameConfig.SlotsSize.Returns(new Vector2Int(1, 2));
+            gameConfig.SlotSeparation.Returns(separation);
+            gameConfig.SlotsOffset.Returns(offset);
+
+            var balloonsConfig = Substitute.For<IBalloonsConfiguration>();
+            balloonsConfig.FlightRebalanceInterval.Returns(1f);
+            balloonsConfig.TimeForBalloonsBalance.Returns(0.1f);
+
+            var board = new[]
+            {
+                new ShotBalloonSnapshot(
+                    slot1, 0.2f, "Red", 1, 1,
+                    slotIndex: new Vector2Int(0, 1), balancePriority: 0, maxBalanceSteps: 0,
+                    directBalanceMotion: false, nudgeOverrides: null),
+            };
+            var delayedDynamics = new ShotBoardDynamics(
+                gameConfig, balloonsConfig, board,
+                Array.Empty<ShotDynamicActorSnapshot>(), Array.Empty<ShotStaticActorSnapshot>(),
+                pulseExecutionDelay: 100f);
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, new Vector4(1000f, 1000f, -1000f, -1000f), new Vector2(slot0.x, slot0.y - 5f),
+                Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet, projectileSpeed: 1f, dynamics: delayedDynamics);
+
+            Assert.AreEqual(0, result.Pops, "the delayed pulse never fires before the shot passes");
+        }
     }
 }

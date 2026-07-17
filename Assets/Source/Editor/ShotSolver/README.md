@@ -67,7 +67,9 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
 
 ## Accepted approximations (plan §7)
 
-- The live balancer defers a requested balance one frame; the sim applies it at pulse time.
+- The live balancer notices an interval crossing on a render frame and defers the actual
+  Balance() one more — modeled as a pulse execution delay the window estimates from the live
+  frame time (~1.5 × `Time.smoothDeltaTime`), an estimate rather than the exact per-frame lag.
 - Balance motion is the eased waypoint POLYLINE — Catmull-Rom's corner rounding between hops is
   the one part of the live path shape not reproduced.
 - Heavy step budgets reset per simulated shot; in-game the turn budget may be part-spent at fire

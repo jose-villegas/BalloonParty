@@ -26,6 +26,7 @@ namespace BalloonParty.Editor.ShotSolver
         private readonly BalancePlanner _planner;
         private readonly NudgeOverrideResolver _nudgeResolver;
         private readonly float _flightRebalanceInterval;
+        private readonly float _pulseExecutionDelay;
         private readonly float _balanceDuration;
         private readonly IReadOnlyList<ShotBalloonSnapshot> _targets;
         private readonly IReadOnlyList<ShotDynamicActorSnapshot> _otherDynamicSnapshots;
@@ -49,13 +50,20 @@ namespace BalloonParty.Editor.ShotSolver
             IBalloonsConfiguration balloonsConfig,
             IReadOnlyList<ShotBalloonSnapshot> targets,
             IReadOnlyList<ShotDynamicActorSnapshot> otherDynamicActors,
-            IReadOnlyList<ShotStaticActorSnapshot> staticActors)
+            IReadOnlyList<ShotStaticActorSnapshot> staticActors,
+            float pulseExecutionDelay = 0f)
         {
             _grid = new SlotGrid(gameConfig, new BalancePathHolder());
             _balanceQuery = new GridBalanceQuery(_grid);
             _planner = new BalancePlanner(_grid, _balanceQuery);
             _nudgeResolver = new NudgeOverrideResolver(balloonsConfig);
             _flightRebalanceInterval = balloonsConfig.FlightRebalanceInterval;
+
+            // The live pulse lands late: TickFlightRebalance only notices the interval crossing at the
+            // next render frame (0..1 frame of quantization) and RequestBalance defers the actual
+            // Balance() one more frame (BalanceNextFrameAsync) — the caller estimates that lag from
+            // its real frame time so the sim's moves start when the game's tweens actually do.
+            _pulseExecutionDelay = Mathf.Max(pulseExecutionDelay, 0f);
             _balanceDuration = Mathf.Max(balloonsConfig.TimeForBalloonsBalance, 0.0001f);
 
             _targets = targets;
@@ -123,7 +131,9 @@ namespace BalloonParty.Editor.ShotSolver
             }
 
             _turnSteps.Clear();
-            _nextPulseTime = _flightRebalanceInterval > 0f ? _flightRebalanceInterval : float.PositiveInfinity;
+            _nextPulseTime = _flightRebalanceInterval > 0f
+                ? _flightRebalanceInterval + _pulseExecutionDelay
+                : float.PositiveInfinity;
             _pulsesRun = 0;
         }
 
