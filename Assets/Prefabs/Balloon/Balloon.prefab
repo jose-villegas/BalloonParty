@@ -25,13 +25,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 315407971490248995}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0, z: -0.9927888, w: -0.11987703}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.86613554, y: 0.86613554, z: 0.86613554}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6555064605166848896}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -193.77}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5890643277408351852
 SpriteRenderer:
   serializedVersion: 2
@@ -58,7 +58,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 98880998518a94ceb9bb35b57ea1e58e, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_SortingOrder: 35
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 552b4dcac1d374f4fb7d75321a9e3205, type: 3}
-  m_Color: {r: 1, g: 0.4117647, b: 0.38039216, a: 1}
+  m_Color: {r: 1, g: 0.6470588, b: 0, a: 0.7529412}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -381,6 +381,7 @@ GameObject:
   - component: {fileID: 7744549277022113413}
   - component: {fileID: -4720687053981353126}
   - component: {fileID: 6173351546761552298}
+  - component: {fileID: 7480911328229068980}
   m_Layer: 10
   m_Name: Balloon
   m_TagString: Balloons
@@ -512,6 +513,7 @@ MonoBehaviour:
   - {fileID: 5110843805831965112}
   - {fileID: 6020316169838688404}
   - {fileID: 8377671993713916893}
+  - {fileID: 5890643277408351852}
   _collider: {fileID: 7822387025677367451}
   _tweenTracker: {fileID: -4720687053981353126}
   _itemService: {fileID: 5541380524191057241}
@@ -545,6 +547,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.Type.SimpleBalloonType
   _allowedColorsMask: -1
+--- !u!114 &7480911328229068980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5923847143892959990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 412e6d4b49e5e432c8ada6ca4ff9bd6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Prediction.TraceHitMarker
+  _marker: {fileID: 3221824090879841419}
+  _circleRadius: 0.3525
+  _markerOffset: 0.275
+  _markerRenderer: {fileID: 5890643277408351852}
+  _minIntensity: 0.2
+  _minScale: 1
 --- !u!1 &6117035275633951413
 GameObject:
   m_ObjectHideFlags: 0

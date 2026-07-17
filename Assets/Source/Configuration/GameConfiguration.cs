@@ -30,6 +30,8 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _initialPredictionLength;
         [SerializeField] private int _predictionTraceMaxBounces;
         [SerializeField] private int _predictionTraceMaxSteps;
+        [Tooltip("Start/end color applied to the prediction trace LineRenderer.")]
+        [SerializeField] private Color _predictionTraceColor = Color.white;
 
         [Header("Score")]
         [SerializeField] private float _scorePointTraceDuration;
@@ -59,6 +61,7 @@ namespace BalloonParty.Configuration
         public float PredictionTraceStep => _initialPredictionLength;
         public int PredictionTraceMaxBounces => _predictionTraceMaxBounces;
         public int PredictionTraceMaxSteps => _predictionTraceMaxSteps;
+        public Color PredictionTraceColor => _predictionTraceColor;
         public float ScorePointTraceDuration => _scorePointTraceDuration;
         public float ScorePointsScatterDelay => _scorePointsScatterDelay;
         public float ScorePointBurstDuration => _scorePointBurstDuration;

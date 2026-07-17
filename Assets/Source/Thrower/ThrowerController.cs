@@ -35,6 +35,7 @@ namespace BalloonParty.Thrower
         private readonly ThrowerSettings _settings;
         private readonly ThrowerView _view;
         private readonly ProjectilePositionProvider _positionProvider;
+        private readonly PredictionTraceProvider _traceProvider;
         private readonly CompositeDisposable _subscriptions = new();
 
         // Cached since Object.name allocates; Reload() hits this twice per shot.
@@ -63,7 +64,8 @@ namespace BalloonParty.Thrower
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             ISubscriber<GameOverMessage> gameOverSubscriber,
             PauseService pauseService,
-            ProjectilePositionProvider positionProvider)
+            ProjectilePositionProvider positionProvider,
+            PredictionTraceProvider traceProvider)
         {
             _view = view;
             _config = config;
@@ -79,12 +81,14 @@ namespace BalloonParty.Thrower
             _gameOverSubscriber = gameOverSubscriber;
             _pauseService = pauseService;
             _positionProvider = positionProvider;
+            _traceProvider = traceProvider;
             _projectilePoolKey = settings.ProjectilePrefab.name;
         }
 
         public void Start()
         {
             _traceCalculator = new PredictionTraceCalculator(_config);
+            _view.SetTraceColor(_config.PredictionTraceColor);
 
             _poolManager.Register(_projectilePoolKey,
                 new ProjectilePoolChannel(_resolver, _settings.ProjectilePrefab));
@@ -203,6 +207,8 @@ namespace BalloonParty.Thrower
 
         private void Reload()
         {
+            // Tick is gated during resets, so a trace left active at reset time would strand a stale marker.
+            _traceProvider.Clear();
             _positionProvider.Clear();
 
             if (_activeView != null)
@@ -231,6 +237,7 @@ namespace BalloonParty.Thrower
             _activeProjectile.Direction = _direction;
             _positionProvider.SetFree(true);
             _view.ClearTrace();
+            _traceProvider.Clear();
             _view.PlayRecoil(_direction);
         }
 
@@ -275,11 +282,13 @@ namespace BalloonParty.Thrower
             if (_activeProjectile == null || _activeProjectile.IsFree || !_view.IsAiming)
             {
                 _view.ClearTrace();
+                _traceProvider.Clear();
                 return;
             }
 
             _traceCalculator.Calculate(_activeView.transform.position, _direction, _tracePoints);
             _view.SetTrace(_tracePoints);
+            _traceProvider.SetTrace(_tracePoints);
         }
     }
 }

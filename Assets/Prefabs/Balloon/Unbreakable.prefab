@@ -1852,7 +1852,7 @@ PrefabInstance:
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: _spriteLayerRenderers.Array.size
-      value: 15
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
@@ -1933,7 +1933,7 @@ PrefabInstance:
         type: 3}
       propertyPath: '_spriteLayerRenderers.Array.data[15]'
       value: 
-      objectReference: {fileID: 2172912401704632730}
+      objectReference: {fileID: 2023256564039978850}
     - target: {fileID: 7822387025677367451, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: m_Radius
@@ -1996,6 +1996,12 @@ PrefabInstance:
 --- !u!4 &676214037225156561 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4956682995811686111, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+    type: 3}
+  m_PrefabInstance: {fileID: 5596789036533627150}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &2023256564039978850 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 5890643277408351852, guid: 85afc73ba92384dafa9d8a43874d2dd6,
     type: 3}
   m_PrefabInstance: {fileID: 5596789036533627150}
   m_PrefabAsset: {fileID: 0}

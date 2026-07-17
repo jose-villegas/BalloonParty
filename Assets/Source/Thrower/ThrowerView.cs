@@ -93,5 +93,10 @@ namespace BalloonParty.Thrower
 
             _traceView.SetTrace(points);
         }
+
+        public void SetTraceColor(Color color)
+        {
+            _traceView?.SetColor(color);
+        }
     }
 }

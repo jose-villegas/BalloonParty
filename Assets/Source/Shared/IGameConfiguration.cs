@@ -22,6 +22,7 @@ namespace BalloonParty.Shared
         float PredictionTraceStep { get; }
         int PredictionTraceMaxBounces { get; }
         int PredictionTraceMaxSteps { get; }
+        Color PredictionTraceColor { get; }
 
         float ScorePointTraceDuration { get; }
         float ScorePointsScatterDelay { get; }

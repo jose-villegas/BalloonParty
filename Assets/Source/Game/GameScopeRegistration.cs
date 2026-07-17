@@ -20,6 +20,7 @@ using BalloonParty.Item.Paint;
 using BalloonParty.Item.Shield;
 using BalloonParty.Item.Snipe;
 using BalloonParty.Nudge;
+using BalloonParty.Prediction;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Controller;
@@ -93,6 +94,7 @@ namespace BalloonParty.Game
             builder.Register<PauseService>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<TimeScaleService>().AsSelf().As<IRunResettable>();
             builder.Register<ProjectilePositionProvider>(Lifetime.Singleton);
+            builder.Register<PredictionTraceProvider>(Lifetime.Singleton);
             builder.Register<ImpactEventBus>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
             builder.Register<NudgeOverrideResolver>(Lifetime.Singleton);

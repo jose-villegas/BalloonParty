@@ -36,6 +36,12 @@ namespace BalloonParty.Prediction
             _lineRenderer.SetPositions(_positionBuffer);
         }
 
+        public void SetColor(Color color)
+        {
+            _lineRenderer.startColor = color;
+            _lineRenderer.endColor = color;
+        }
+
         public void Clear()
         {
             _lineRenderer.positionCount = 0;
