@@ -222,15 +222,28 @@ namespace BalloonParty.Slots.Actor.Archetype
             return _offsetMatrices;
         }
 
+        // Unity-aware null check, NOT ??=: these static meshes are created dynamically, so exiting
+        // play mode with domain reload off keeps the C# reference alive while Unity destroys the
+        // native mesh. A destroyed UnityEngine.Object is C#-non-null but Unity-null, so ??= would
+        // return the dead mesh (DrawMeshInstanced then throws "mesh is null"); == null respects the
+        // overload and rebuilds it.
         private static Mesh GetBranchQuadMesh()
         {
-            _sharedBranchQuad ??= MeshHelper.CreateQuad(QuadPivot.Center);
+            if (_sharedBranchQuad == null)
+            {
+                _sharedBranchQuad = MeshHelper.CreateQuad(QuadPivot.Center);
+            }
+
             return _sharedBranchQuad;
         }
 
         private static Mesh GetLeafQuadMesh()
         {
-            _sharedLeafQuad ??= MeshHelper.CreateQuad(QuadPivot.Bottom);
+            if (_sharedLeafQuad == null)
+            {
+                _sharedLeafQuad = MeshHelper.CreateQuad(QuadPivot.Bottom);
+            }
+
             return _sharedLeafQuad;
         }
 
