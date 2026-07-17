@@ -5,6 +5,7 @@ using BalloonParty.Balloon.View;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Game;
 using BalloonParty.Nudge;
+using BalloonParty.Projectile;
 using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Rendering;
@@ -42,8 +43,14 @@ namespace BalloonParty.Editor.ShotSolver
         private static readonly Color NonQualifyingColor = new(0.4f, 0.4f, 0.4f);
         private static readonly Color TargetLineColor = new(0.9f, 0.75f, 0.2f);
 
+        private static readonly Color ActualPathColor = new(1f, 0.8f, 0.1f);
+
         private readonly List<ShotSolverWindowEntry> _windows = new();
         private readonly List<Vector2> _bestWindowPath = new();
+        private readonly List<float> _bestWindowTimes = new();
+        private readonly List<Vector2> _predictedPath = new();
+        private readonly List<float> _predictedTimes = new();
+        private readonly List<Vector3> _actualSamples = new();
 
         private int _sampleCount = DefaultSampleCount;
         private int _targetScore = DefaultTargetScore;
@@ -55,6 +62,15 @@ namespace BalloonParty.Editor.ShotSolver
         private int _bestWindowIndex = -1;
         private string _lastRunSummary = "No sweep run yet.";
         private float _bestAngleDegrees = float.NaN;
+        private string _targetColorId = string.Empty;
+        private bool _checkRobustness;
+        private string _divergenceSummary = string.Empty;
+        private bool _divergenceTracking;
+        private float _fireStartTime;
+        private float _lastSampleTime;
+        private float _maxDivergence;
+        private float _maxDivergenceTime;
+        private ProjectilePositionProvider _positionProvider;
         private Vector2 _windowListScroll;
         private WorldPolylineGizmo _pathGizmo;
 
@@ -67,11 +83,13 @@ namespace BalloonParty.Editor.ShotSolver
         private void OnEnable()
         {
             SceneView.duringSceneGui += OnSceneGUI;
+            EditorApplication.update += TickDivergence;
         }
 
         private void OnDisable()
         {
             SceneView.duringSceneGui -= OnSceneGUI;
+            EditorApplication.update -= TickDivergence;
             DestroyPathGizmo();
         }
 
@@ -90,6 +108,10 @@ namespace BalloonParty.Editor.ShotSolver
             DrawStrip(GUILayoutUtility.GetRect(0, StripHeight, GUILayout.ExpandWidth(true)));
             EditorGUILayout.Space();
             EditorGUILayout.LabelField(_lastRunSummary, EditorStyles.wordWrappedMiniLabel);
+            if (!string.IsNullOrEmpty(_divergenceSummary))
+            {
+                EditorGUILayout.LabelField(_divergenceSummary, EditorStyles.wordWrappedMiniLabel);
+            }
             EditorGUILayout.Space();
             DrawWindowList();
         }
@@ -105,6 +127,20 @@ namespace BalloonParty.Editor.ShotSolver
             EditorGUILayout.BeginHorizontal();
             _targetScore = EditorGUILayout.IntField("Target Score", _targetScore);
             _minWindowWidthDegrees = Mathf.Max(0f, EditorGUILayout.FloatField("Min Window °", _minWindowWidthDegrees));
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            _targetColorId = EditorGUILayout.TextField(
+                new GUIContent("Target Colour", "Empty = all colours. When set, only pops of this colour id " +
+                                                "count toward the target score (milestone-mask style); streaks " +
+                                                "and refunds still run unfiltered."),
+                _targetColorId);
+            _checkRobustness = EditorGUILayout.ToggleLeft(
+                new GUIContent("±Nudge robustness", "Re-simulates each window's centre with every contact " +
+                                                    "circle fattened AND thinned by the nudge amplitude — a " +
+                                                    "window that survives both still qualifies with balloons " +
+                                                    "wobbled toward or away from the ray."),
+                _checkRobustness, GUILayout.Width(150));
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
@@ -178,9 +214,11 @@ namespace BalloonParty.Editor.ShotSolver
             {
                 var window = _windows[i];
                 var marker = i == _bestWindowIndex ? "   ★ best" : string.Empty;
+                var robustness = !_checkRobustness ? string.Empty : window.Robust ? "   ✓robust" : "   ±fragile";
                 EditorGUILayout.LabelField(
                     $"{window.FromDegrees:F2}°  →  {window.ToDegrees:F2}°   width {window.WidthDegrees:F2}°   " +
-                    $"score {window.CenterScore}   pops {window.CenterPops}   toughs {window.CenterToughsCleared}{marker}");
+                    $"score {window.CenterScore}   pops {window.CenterPops}   toughs {window.CenterToughsCleared}" +
+                    $"{robustness}{marker}");
             }
 
             EditorGUILayout.EndScrollView();
@@ -200,6 +238,11 @@ namespace BalloonParty.Editor.ShotSolver
             }
 
             SceneDrawingHelper.DrawWorldPolyline(points, PathColor, PathThicknessPixels);
+
+            if (_actualSamples.Count >= 2)
+            {
+                SceneDrawingHelper.DrawWorldPolyline(_actualSamples, ActualPathColor, PathThicknessPixels);
+            }
         }
 
         private void RunSweep()
@@ -243,7 +286,7 @@ namespace BalloonParty.Editor.ShotSolver
             if (usedFallback)
             {
                 _bestAngleDegrees = SampleAngle(bestSampleIndex);
-                SimulateAt(_bestAngleDegrees, context, workingSet, _bestWindowPath);
+                SimulateAt(_bestAngleDegrees, context, workingSet, _bestWindowPath, _bestWindowTimes);
             }
 
             stopwatch.Stop();
@@ -301,7 +344,7 @@ namespace BalloonParty.Editor.ShotSolver
                 var best = _windows[_bestWindowIndex];
                 var centerDegrees = (best.FromDegrees + best.ToDegrees) * 0.5f;
                 _bestAngleDegrees = centerDegrees;
-                SimulateAt(centerDegrees, context, workingSet, _bestWindowPath);
+                SimulateAt(centerDegrees, context, workingSet, _bestWindowPath, _bestWindowTimes);
             }
         }
 
@@ -317,9 +360,21 @@ namespace BalloonParty.Editor.ShotSolver
             var centerDegrees = (fromDegrees + toDegrees) * 0.5f;
             var centerResult = SimulateAt(centerDegrees, context, workingSet);
 
+            // Robust = the centre shot still reaches the target with every contact circle fattened
+            // AND thinned by the nudge amplitude — a positional-uncertainty band for wobbling balloons.
+            var robust = false;
+            if (_checkRobustness && context.NudgeAmplitude > 0f)
+            {
+                robust =
+                    SimulateAt(centerDegrees, context, workingSet, radiusBias: context.NudgeAmplitude)
+                        .RawScore >= _targetScore
+                    && SimulateAt(centerDegrees, context, workingSet, radiusBias: -context.NudgeAmplitude)
+                        .RawScore >= _targetScore;
+            }
+
             _windows.Add(new ShotSolverWindowEntry(
                 fromDegrees, toDegrees, widthDegrees, centerResult.RawScore, centerResult.Pops,
-                centerResult.ToughsCleared));
+                centerResult.ToughsCleared, robust));
 
             if (widthDegrees > bestWidth)
             {
@@ -353,14 +408,17 @@ namespace BalloonParty.Editor.ShotSolver
             return insideDegrees;
         }
 
-        private static ShotSimulationResult SimulateAt(
-            float angleDegrees, in LiveContext context, ShotBalloonState[] workingSet, List<Vector2> pathOut = null)
+        private ShotSimulationResult SimulateAt(
+            float angleDegrees, in LiveContext context, ShotBalloonState[] workingSet, List<Vector2> pathOut = null,
+            List<float> timesOut = null, float radiusBias = 0f)
         {
             return ShotSimulator.Simulate(
                 context.Board, context.WallLimitsClockwise, OriginForAngle(angleDegrees, context),
                 DirectionFromDegrees(angleDegrees), context.StartingShields, context.ProjectileContactRadius,
                 workingSet, pathOut: pathOut, projectileSpeed: context.ProjectileSpeed,
-                cruiseConfig: context.CruiseConfig, dynamics: context.Dynamics);
+                cruiseConfig: context.CruiseConfig, dynamics: context.Dynamics, timestampsOut: timesOut,
+                targetColorId: string.IsNullOrEmpty(_targetColorId) ? null : _targetColorId,
+                radiusBias: radiusBias);
         }
 
         // The thrower rotates around its pivot to aim (ThrowerView.RotateTo: fire-direction angle − 90°),
@@ -421,6 +479,113 @@ namespace BalloonParty.Editor.ShotSolver
             }
 
             scope.Container.Resolve<ThrowerController>().FireAt(DirectionFromDegrees(_bestAngleDegrees));
+            BeginDivergenceTracking(scope);
+        }
+
+        // Freezes the just-swept prediction and samples the real shot against it every editor update —
+        // the plan's §7 4d divergence readout: where (and when) reality leaves the predicted path.
+        private void BeginDivergenceTracking(ThrowerLifetimeScope scope)
+        {
+            if (_bestWindowPath.Count < 2 || _bestWindowTimes.Count != _bestWindowPath.Count)
+            {
+                return;
+            }
+
+            _predictedPath.Clear();
+            _predictedPath.AddRange(_bestWindowPath);
+            _predictedTimes.Clear();
+            _predictedTimes.AddRange(_bestWindowTimes);
+            _actualSamples.Clear();
+            _positionProvider = scope.Container.Resolve<ProjectilePositionProvider>();
+            _fireStartTime = Time.time;
+            _lastSampleTime = float.NegativeInfinity;
+            _maxDivergence = 0f;
+            _maxDivergenceTime = 0f;
+            _divergenceSummary = "Fire Best: tracking divergence…";
+            _divergenceTracking = true;
+        }
+
+        private void TickDivergence()
+        {
+            if (!_divergenceTracking || !Application.isPlaying)
+            {
+                return;
+            }
+
+            var flightTime = Time.time - _fireStartTime;
+            if (_positionProvider == null || !_positionProvider.IsActive)
+            {
+                // Grace window for the shot's first free physics frame; afterwards, gone = flight over.
+                if (flightTime > 0.5f)
+                {
+                    FinishDivergenceTracking(flightTime);
+                }
+
+                return;
+            }
+
+            if (flightTime - _lastSampleTime < 0.02f)
+            {
+                return;
+            }
+
+            _lastSampleTime = flightTime;
+            var actual = (Vector2)_positionProvider.Position;
+            var predicted = PredictedPositionAt(flightTime);
+            var divergence = Vector2.Distance(actual, predicted);
+            if (divergence > _maxDivergence)
+            {
+                _maxDivergence = divergence;
+                _maxDivergenceTime = flightTime;
+            }
+
+            if (_actualSamples.Count < 4096)
+            {
+                _actualSamples.Add(actual);
+            }
+
+            _divergenceSummary =
+                $"Fire Best t={flightTime:F2}s — divergence now {divergence:F3} wu, " +
+                $"max {_maxDivergence:F3} wu @ {_maxDivergenceTime:F2}s";
+            Repaint();
+
+            if (flightTime > _predictedTimes[^1] + 1f)
+            {
+                FinishDivergenceTracking(flightTime);
+            }
+        }
+
+        private void FinishDivergenceTracking(float flightTime)
+        {
+            _divergenceTracking = false;
+            _divergenceSummary = _actualSamples.Count == 0
+                ? "Fire Best: no shot observed (blocked or paused?)"
+                : $"Fire Best done ({flightTime:F2}s tracked) — max divergence {_maxDivergence:F3} wu " +
+                  $"@ {_maxDivergenceTime:F2}s over {_actualSamples.Count} samples (actual path drawn in yellow)";
+            Repaint();
+            SceneView.RepaintAll();
+        }
+
+        // Time-interpolated position along the frozen prediction — between events flight is linear in
+        // time per segment (the tap-lag fold makes freeze windows read as slower constant motion).
+        private Vector2 PredictedPositionAt(float flightTime)
+        {
+            if (flightTime <= _predictedTimes[0])
+            {
+                return _predictedPath[0];
+            }
+
+            for (var i = 1; i < _predictedTimes.Count; i++)
+            {
+                if (flightTime <= _predictedTimes[i])
+                {
+                    var span = _predictedTimes[i] - _predictedTimes[i - 1];
+                    var t = span <= 0f ? 1f : (flightTime - _predictedTimes[i - 1]) / span;
+                    return Vector2.Lerp(_predictedPath[i - 1], _predictedPath[i], t);
+                }
+            }
+
+            return _predictedPath[^1];
         }
 
         private float SampleAngle(int index)
@@ -484,7 +649,8 @@ namespace BalloonParty.Editor.ShotSolver
                 ResolveProjectileContactRadius(throwerSettings),
                 config.ProjectileSpeed,
                 cruiseConfig,
-                dynamics);
+                dynamics,
+                balloonsConfig.NudgeDistance);
             return true;
         }
 
@@ -608,11 +774,13 @@ namespace BalloonParty.Editor.ShotSolver
             public readonly float ProjectileSpeed;
             public readonly ShotCruiseConfig CruiseConfig;
             public readonly ShotBoardDynamics Dynamics;
+            public readonly float NudgeAmplitude;
 
             public LiveContext(
                 IReadOnlyList<ShotBalloonSnapshot> board, Vector4 wallLimitsClockwise, Vector2 throwerPivot,
                 Vector3 spawnLocalOffset, int startingShields, float projectileContactRadius,
-                float projectileSpeed, ShotCruiseConfig cruiseConfig, ShotBoardDynamics dynamics)
+                float projectileSpeed, ShotCruiseConfig cruiseConfig, ShotBoardDynamics dynamics,
+                float nudgeAmplitude)
             {
                 Board = board;
                 WallLimitsClockwise = wallLimitsClockwise;
@@ -623,6 +791,7 @@ namespace BalloonParty.Editor.ShotSolver
                 ProjectileSpeed = projectileSpeed;
                 CruiseConfig = cruiseConfig;
                 Dynamics = dynamics;
+                NudgeAmplitude = nudgeAmplitude;
             }
         }
 
@@ -634,10 +803,11 @@ namespace BalloonParty.Editor.ShotSolver
             public readonly int CenterScore;
             public readonly int CenterPops;
             public readonly int CenterToughsCleared;
+            public readonly bool Robust;
 
             public ShotSolverWindowEntry(
                 float fromDegrees, float toDegrees, float widthDegrees, int centerScore, int centerPops,
-                int centerToughsCleared)
+                int centerToughsCleared, bool robust)
             {
                 FromDegrees = fromDegrees;
                 ToDegrees = toDegrees;
@@ -645,6 +815,7 @@ namespace BalloonParty.Editor.ShotSolver
                 CenterScore = centerScore;
                 CenterPops = centerPops;
                 CenterToughsCleared = centerToughsCleared;
+                Robust = robust;
             }
         }
     }

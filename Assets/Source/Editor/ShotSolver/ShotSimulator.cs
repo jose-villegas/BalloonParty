@@ -189,11 +189,13 @@ namespace BalloonParty.Editor.ShotSolver
             float projectileSpeed = 1f,
             ShotCruiseConfig cruiseConfig = default,
             ShotBoardDynamics dynamics = null,
-            List<float> timestampsOut = null)
+            List<float> timestampsOut = null,
+            string targetColorId = null,
+            float radiusBias = 0f)
         {
             var walls = new WallLimits(wallLimitsClockwise);
             dynamics?.ResetForNewFlight();
-            var activeCount = CopyIntoWorkingSet(board, workingSet, dynamics);
+            var activeCount = CopyIntoWorkingSet(board, workingSet, dynamics, radiusBias);
 
             var position = origin;
             var direction = aimDirection.sqrMagnitude > AxisEpsilon ? aimDirection.normalized : Vector2.right;
@@ -285,7 +287,7 @@ namespace BalloonParty.Editor.ShotSolver
                         workingSet, ref activeCount, balloonIndex, position, projectileContactRadius,
                         ref direction, ref streakColor, ref streakCount, ref projectileColor,
                         ref rawScore, ref pops, ref toughsCleared, ref shields, elapsed, dynamics,
-                        ref consecutiveWallBounces, ref isCruising);
+                        ref consecutiveWallBounces, ref isCruising, targetColorId);
                     continue;
                 }
 
@@ -408,13 +410,17 @@ namespace BalloonParty.Editor.ShotSolver
             return dynamics != null ? workingSet[index].Actor.EvaluateCenter(t) : workingSet[index].Position;
         }
 
+        // radiusBias fattens/thins every contact circle uniformly — the robustness band's positional-
+        // uncertainty proxy (a balloon nudged toward the ray is equivalent to a fatter target).
         private static int CopyIntoWorkingSet(
-            IReadOnlyList<ShotBalloonSnapshot> board, ShotBalloonState[] workingSet, ShotBoardDynamics dynamics)
+            IReadOnlyList<ShotBalloonSnapshot> board, ShotBalloonState[] workingSet, ShotBoardDynamics dynamics,
+            float radiusBias)
         {
             var count = Mathf.Min(board.Count, workingSet.Length);
             for (var i = 0; i < count; i++)
             {
                 workingSet[i] = new ShotBalloonState(board[i]);
+                workingSet[i].Radius = Mathf.Max(0f, workingSet[i].Radius + radiusBias);
                 if (dynamics != null)
                 {
                     workingSet[i].Actor = dynamics.TargetActors[i];
@@ -433,7 +439,8 @@ namespace BalloonParty.Editor.ShotSolver
             float projectileContactRadius, ref Vector2 direction,
             ref string streakColor, ref int streakCount, ref string projectileColor,
             ref int rawScore, ref int pops, ref int toughsCleared, ref int shields,
-            float tHit, ShotBoardDynamics dynamics, ref int consecutiveWallBounces, ref bool isCruising)
+            float tHit, ShotBoardDynamics dynamics, ref int consecutiveWallBounces, ref bool isCruising,
+            string targetColorId)
         {
             ref var balloon = ref workingSet[index];
 
@@ -455,15 +462,22 @@ namespace BalloonParty.Editor.ShotSolver
                 return;
             }
 
+            // A colour filter scopes SCORE attribution only (milestone masks count one colour's
+            // points); streaks, refunds and board effects run unfiltered, exactly as the game would.
             if (string.IsNullOrEmpty(balloon.ColorId))
             {
-                ResolveToughPop(balloon.ScoreValue, ref streakColor, ref streakCount, ref rawScore, ref toughsCleared);
+                var counts = string.IsNullOrEmpty(targetColorId);
+                ResolveToughPop(
+                    counts ? balloon.ScoreValue : 0, ref streakColor, ref streakCount, ref rawScore,
+                    ref toughsCleared);
             }
             else
             {
+                var counts = string.IsNullOrEmpty(targetColorId)
+                    || string.Equals(balloon.ColorId, targetColorId, StringComparison.Ordinal);
                 ResolveGreenPop(
-                    balloon.ColorId, balloon.ScoreValue, ref streakColor, ref streakCount, ref projectileColor,
-                    ref rawScore, ref shields);
+                    balloon.ColorId, counts ? balloon.ScoreValue : 0, ref streakColor, ref streakCount,
+                    ref projectileColor, ref rawScore, ref shields);
             }
 
             pops++;

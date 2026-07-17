@@ -155,4 +155,6 @@ per-colour filter for milestone masks.
   deflect-target triggers, two-pass contact refinement (see the ShotSolver README's
   accepted-approximations list).
 - **4d** — polish: per-colour window filters, robustness bands (does the window survive ±nudge
-  amplitude), Fire Best divergence readout.
+  amplitude), Fire Best divergence readout. **Done** — Target Colour attribution filter
+  (score-only; mechanics unfiltered), ±nudge radius-bias robustness tags, and the live
+  predicted-vs-actual divergence tracker (max/when/yellow overlay).

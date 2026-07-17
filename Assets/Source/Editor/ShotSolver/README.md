@@ -101,6 +101,13 @@ list and draws it via `SceneDrawingHelper.DrawWorldPolyline`.
 3. Set target score, min window width, arc, and sample count (or keep the defaults).
 4. **Run Sweep** — reads the live board/thrower/projectile once, sweeps, refines, and lists windows.
 5. Toggle **Draw Best** to see the widest qualifying window's flight path in the Scene view.
+6. **Target Colour** (empty = all): when set, only pops of that colour id count toward the target
+   score — milestone-mask style; streaks/refunds still run unfiltered.
+7. **±Nudge robustness**: each window's centre is re-simulated with every contact circle fattened
+   AND thinned by the nudge amplitude; windows that survive both are tagged ✓robust.
+8. **Fire Best** freezes the prediction, forces the shot, and samples the real projectile against
+   the predicted timeline every editor update — live divergence readout in the window, actual path
+   drawn in yellow next to the red prediction.
 
 The design-time follow-up (Task 3: choosing `r_projectile` against the 0.104 knife edge, the fair
 threshold, and optionally wiring the solver into spawn validation) is not implemented here.

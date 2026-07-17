@@ -222,9 +222,10 @@ namespace BalloonParty.Tests.ShotSolver
         public void Simulate_TapEaseLag_AddsTimePerCruiseBounce()
         {
             // Same corridor as the cruise-ramp test, plus a 1s tap animation with a linear 0->1 curve:
-            // mean curve value 0.5, so each cruise bounce (entry at t=1, then the t=3+lag bounce)
-            // costs 0.5s of timeline — timestamps shift from [0,1,3,4] to [0,1,3.5,4.75] (the final
-            // crossing also runs at x2 from the spent shield, halving its 2-unit flight).
+            // mean curve value 0.5, so EACH cruise bounce (entry at t=1, then the bounce at t=3.5)
+            // adds 0.5s of timeline lag — timestamps shift from [0,1,3,4] to [0,1,3.5,5.0]: entry lag
+            // pushes the base-speed crossing to 3.5, then the second lag plus 2 units at the x2
+            // target (1s) lands the death bounce at 5.0.
             var walls = new Vector4(1000f, 1f, -1000f, -1f);
             var board = new[] { new ShotBalloonSnapshot(new Vector2(0f, 500f), 0.2f, "Red", 1, 1) };
             var workingSet = new ShotBalloonState[board.Length];
@@ -240,7 +241,7 @@ namespace BalloonParty.Tests.ShotSolver
             Assert.AreEqual(4, timestamps.Count);
             Assert.AreEqual(1f, timestamps[1], 1e-3f, "entry bounce lands on time; its lag applies after");
             Assert.AreEqual(3.5f, timestamps[2], 1e-3f, "0.5s entry-tap lag + the 2-unit crossing at base speed");
-            Assert.AreEqual(4.75f, timestamps[3], 1e-3f, "second tap lag + 2 units at the x2 target");
+            Assert.AreEqual(5f, timestamps[3], 1e-3f, "second 0.5s tap lag + 2 units at the x2 target");
         }
 
         [Test]
@@ -459,6 +460,52 @@ namespace BalloonParty.Tests.ShotSolver
                 workingSet: workingSet, projectileSpeed: 1f, dynamics: delayedDynamics);
 
             Assert.AreEqual(0, result.Pops, "the delayed pulse never fires before the shot passes");
+        }
+
+        [Test]
+        public void Simulate_TargetColorFilter_ScopesScoreAttributionOnly()
+        {
+            // Red, Blue, Red column: filtered to "Red", only the two red pops score — but the streak
+            // still runs unfiltered, so the second red lands at streak 3 (1 + 3 = 4), not streak 2.
+            var board = new[]
+            {
+                new ShotBalloonSnapshot(new Vector2(0f, 1f), 0.1f, "Red", 1, 1),
+                new ShotBalloonSnapshot(new Vector2(0f, 2f), 0.1f, "Red", 1, 1),
+                new ShotBalloonSnapshot(new Vector2(0f, 3f), 0.1f, "Red", 1, 1),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var filtered = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
+                workingSet: workingSet, targetColorId: "Blue");
+
+            Assert.AreEqual(0, filtered.RawScore, "no Blue on the board — nothing attributes");
+            Assert.AreEqual(3, filtered.Pops, "pops still happen, they just don't score");
+
+            var matching = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
+                workingSet: workingSet, targetColorId: "Red");
+
+            Assert.AreEqual(1 + 2 + 3, matching.RawScore, "matching colour attributes with its true streaks");
+        }
+
+        [Test]
+        public void Simulate_RadiusBias_TurnsANearMissIntoAHit()
+        {
+            // The ray passes 0.15 from a radius-0.1 balloon: a miss — until the +0.1 robustness bias
+            // fattens the contact circle past the gap.
+            var board = new[] { new ShotBalloonSnapshot(new Vector2(0.15f, 2f), 0.1f, "Red", 1, 1) };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var unbiased = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet);
+            Assert.AreEqual(0, unbiased.Pops);
+
+            var biased = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet, radiusBias: 0.1f);
+            Assert.AreEqual(1, biased.Pops, "the fattened circle covers the wobble band");
         }
     }
 }
