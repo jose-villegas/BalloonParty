@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Nudge;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared;
 using UnityEngine;
@@ -10,7 +11,10 @@ namespace BalloonParty.Editor.ShotSolver
     /// without a live <c>IBalloonModel</c>. <see cref="ColorId" /> null/empty means colourless
     /// (mirrors a balloon that does NOT implement <c>IHasColor</c>, e.g. <c>ToughBalloonModel</c>) —
     /// that flag, not <see cref="HitsRemaining" />, is what the simulator uses to choose flat
-    /// streak-breaking tough scoring over multiplied green scoring.</summary>
+    /// streak-breaking tough scoring over multiplied green scoring. The dynamic-board fields
+    /// (<see cref="SlotIndex" /> onward) are only meaningful when the sim is given a
+    /// <see cref="ShotBoardDynamics" /> — the legacy 5-arg constructor zeroes them, which is exactly
+    /// what the static (no-dynamics) code path ignores.</summary>
     internal readonly struct ShotBalloonSnapshot
     {
         public readonly Vector2 Position;
@@ -18,19 +22,39 @@ namespace BalloonParty.Editor.ShotSolver
         public readonly string ColorId;
         public readonly int ScoreValue;
         public readonly int HitsRemaining;
+        public readonly Vector2Int SlotIndex;
+        public readonly int BalancePriority;
+        public readonly int MaxBalanceSteps;
+        public readonly bool DirectBalanceMotion;
+        public readonly IReadOnlyList<NudgeOverride> NudgeOverrides;
 
         public ShotBalloonSnapshot(Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining)
+            : this(position, radius, colorId, scoreValue, hitsRemaining, default, 0, 0, false, null)
+        {
+        }
+
+        public ShotBalloonSnapshot(
+            Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining,
+            Vector2Int slotIndex, int balancePriority, int maxBalanceSteps, bool directBalanceMotion,
+            IReadOnlyList<NudgeOverride> nudgeOverrides)
         {
             Position = position;
             Radius = radius;
             ColorId = colorId;
             ScoreValue = scoreValue;
             HitsRemaining = hitsRemaining;
+            SlotIndex = slotIndex;
+            BalancePriority = balancePriority;
+            MaxBalanceSteps = maxBalanceSteps;
+            DirectBalanceMotion = directBalanceMotion;
+            NudgeOverrides = nudgeOverrides;
         }
     }
 
     /// <summary>Mutable per-simulation copy of a <see cref="ShotBalloonSnapshot" /> — <see cref="HitsRemaining" />
-    /// decrements on a deflect; a popped entry is swap-removed from the caller's active count.</summary>
+    /// decrements on a deflect; a popped entry is swap-removed from the caller's active count.
+    /// <see cref="Actor" /> is null unless the sim was given a <see cref="ShotBoardDynamics" />, in
+    /// which case it is the persistent stub backing this entry's position/nudge state.</summary>
     internal struct ShotBalloonState
     {
         public Vector2 Position;
@@ -38,6 +62,7 @@ namespace BalloonParty.Editor.ShotSolver
         public string ColorId;
         public int ScoreValue;
         public int HitsRemaining;
+        public ShotSimDynamicActor Actor;
 
         public ShotBalloonState(in ShotBalloonSnapshot snapshot)
         {
@@ -46,6 +71,25 @@ namespace BalloonParty.Editor.ShotSolver
             ColorId = snapshot.ColorId;
             ScoreValue = snapshot.ScoreValue;
             HitsRemaining = snapshot.HitsRemaining;
+            Actor = null;
+        }
+    }
+
+    /// <summary>The cruise speed-ramp knobs, mirroring <c>ProjectileMotionResolver</c>/<c>ProjectileView</c>
+    /// exactly (see <see cref="ShotSimulator" />'s cruise handling). Default (all-zero) disables cruise
+    /// entirely — <see cref="WallBounceThreshold" /> &lt;= 0 is the same "0 disables" convention
+    /// <c>IGameConfiguration.CruiseWallBounceThreshold</c> uses.</summary>
+    internal readonly struct ShotCruiseConfig
+    {
+        public readonly int WallBounceThreshold;
+        public readonly float SpeedPerShield;
+        public readonly AnimationCurve RampCurve;
+
+        public ShotCruiseConfig(int wallBounceThreshold, float speedPerShield, AnimationCurve rampCurve)
+        {
+            WallBounceThreshold = wallBounceThreshold;
+            SpeedPerShield = speedPerShield;
+            RampCurve = rampCurve;
         }
     }
 
@@ -74,13 +118,16 @@ namespace BalloonParty.Editor.ShotSolver
     }
 
     /// <summary>Pure, headless, deterministic billiard simulator for one aim direction (see
-    /// @ref plan_shot_geometry). Motion is linear at constant speed, so speed never enters the model —
-    /// flight is simulated EVENT TO EVENT (next analytic wall crossing or next analytic balloon-corridor
-    /// entry along the ray), not fixed-step, which keeps a full sweep of thousands of angles cheap and
-    /// exact rather than an approximation of one. Reuses
-    /// <see cref="ProjectileMotionResolver.TryComputeContactNormal" /> for deflect contacts — the exact
-    /// entry point this class already solved for satisfies that method's own backtrack (it returns
-    /// backtrack = 0 there), so a simulated deflect lands on the identical normal a live shot would.</summary>
+    /// @ref plan_shot_geometry). Motion is linear at constant SPEED PER SEGMENT (speed only changes at
+    /// events — wall bounces enter/advance cruise, balloon contacts reset it), so flight is simulated
+    /// EVENT TO EVENT (next analytic wall crossing, next analytic balloon-corridor entry, or next due
+    /// balance pulse), not fixed-step — exact rather than an approximation, and cheap enough for a
+    /// sweep of thousands of angles. Reuses <see cref="ProjectileMotionResolver.TryComputeContactNormal" />
+    /// for deflect contacts. With <paramref name="dynamics" /> null the loop takes the ORIGINAL static
+    /// path unchanged (see <see cref="TryFindNearestBalloonEntry" />) — the fast path task 4b/4c were
+    /// required to preserve; with it non-null, balloon centres become time-dependent
+    /// (<see cref="ShotBoardDynamics.EvaluateCenter" />) and balance pulses/nudge impulses run for
+    /// real.</summary>
     internal static class ShotSimulator
     {
         internal const int DefaultMaxEvents = 500;
@@ -93,12 +140,21 @@ namespace BalloonParty.Editor.ShotSolver
         // crossing possible), avoiding a near-zero divide in the analytic wall-time formula.
         private const float AxisEpsilon = 1e-6f;
 
+        // Floor under the current segment speed so a degenerate (zero/negative) config value can never
+        // divide time by zero when converting a solved distance into a timestamp.
+        private const float MinSpeed = 0.0001f;
+
         /// <summary>Simulates one aim direction to completion. <paramref name="workingSet" /> is a
         /// caller-owned scratch buffer (sized to at least <paramref name="board" />.Count) reused
-        /// across calls — the only per-call cost is copying the board into it, so a sweep of
-        /// thousands of angles allocates nothing. <paramref name="pathOut" />, when non-null, is
-        /// cleared and filled with the flight's event positions (origin first) for scene-view
-        /// drawing — leave it null during a bulk sweep.</summary>
+        /// across calls — with <paramref name="dynamics" /> null the only per-call cost is copying the
+        /// board into it, so a sweep of thousands of angles allocates nothing.
+        /// <paramref name="pathOut" />, when non-null, is cleared and filled with the flight's event
+        /// positions (origin first) for scene-view drawing; <paramref name="timestampsOut" />, when
+        /// non-null, is filled in parallel with each point's absolute simulated time (task 4b's
+        /// timeline). Leave both null during a bulk sweep. <paramref name="projectileSpeed" /> and
+        /// <paramref name="cruiseConfig" /> drive the timeline even without a dynamic board;
+        /// <paramref name="dynamics" />, when supplied, additionally runs flight-rebalance pulses and
+        /// nudge impulses against a real <c>SlotGrid</c> (see <see cref="ShotBoardDynamics" />).</summary>
         internal static ShotSimulationResult Simulate(
             IReadOnlyList<ShotBalloonSnapshot> board,
             Vector4 wallLimitsClockwise,
@@ -108,14 +164,23 @@ namespace BalloonParty.Editor.ShotSolver
             float projectileContactRadius,
             ShotBalloonState[] workingSet,
             int maxEvents = DefaultMaxEvents,
-            List<Vector2> pathOut = null)
+            List<Vector2> pathOut = null,
+            float projectileSpeed = 1f,
+            ShotCruiseConfig cruiseConfig = default,
+            ShotBoardDynamics dynamics = null,
+            List<float> timestampsOut = null)
         {
             var walls = new WallLimits(wallLimitsClockwise);
-            var activeCount = CopyIntoWorkingSet(board, workingSet);
+            dynamics?.ResetForNewFlight();
+            var activeCount = CopyIntoWorkingSet(board, workingSet, dynamics);
 
             var position = origin;
             var direction = aimDirection.sqrMagnitude > AxisEpsilon ? aimDirection.normalized : Vector2.right;
             var shields = startingShields;
+            var elapsed = 0f;
+            var consecutiveWallBounces = 0;
+            var isCruising = false;
+            var cruiseStartShields = 0;
 
             string streakColor = null;
             var streakCount = 0;
@@ -134,6 +199,9 @@ namespace BalloonParty.Editor.ShotSolver
                 pathOut.Add(position);
             }
 
+            timestampsOut?.Clear();
+            timestampsOut?.Add(0f);
+
             while (activeCount > 0)
             {
                 if (events >= maxEvents)
@@ -142,31 +210,67 @@ namespace BalloonParty.Editor.ShotSolver
                     break;
                 }
 
-                var hasWallEvent = TryFindWallCrossing(walls, position, direction, out var wallT, out var wallNormal);
-                var hasBalloonEvent = TryFindNearestBalloonEntry(
-                    workingSet, activeCount, position, direction, projectileContactRadius,
-                    out var balloonT, out var balloonIndex);
+                var speed = Mathf.Max(
+                    CurrentSpeed(projectileSpeed, isCruising, cruiseStartShields, shields, cruiseConfig), MinSpeed);
+
+                var hasWallEvent = TryFindWallCrossing(walls, position, direction, out var wallDistance, out var wallNormal);
+
+                bool hasBalloonEvent;
+                float balloonDistance;
+                int balloonIndex;
+                if (dynamics != null)
+                {
+                    hasBalloonEvent = TryFindNearestBalloonEntryDynamic(
+                        workingSet, activeCount, position, direction, speed, elapsed, projectileContactRadius,
+                        out balloonDistance, out balloonIndex);
+                }
+                else
+                {
+                    hasBalloonEvent = TryFindNearestBalloonEntry(
+                        workingSet, activeCount, position, direction, projectileContactRadius,
+                        out balloonDistance, out balloonIndex);
+                }
 
                 if (!hasWallEvent && !hasBalloonEvent)
                 {
                     break;
                 }
 
-                events++;
+                var eventIsBalloon = hasBalloonEvent && (!hasWallEvent || balloonDistance < wallDistance);
+                var eventDistance = eventIsBalloon ? balloonDistance : wallDistance;
 
-                if (hasBalloonEvent && (!hasWallEvent || balloonT < wallT))
+                if (dynamics != null)
                 {
-                    position += direction * balloonT;
+                    var candidateEventTime = elapsed + (eventDistance / speed);
+                    if (dynamics.TryRunPulseIfDue(candidateEventTime, out var pulseTime))
+                    {
+                        position += direction * ((pulseTime - elapsed) * speed);
+                        elapsed = pulseTime;
+                        pathOut?.Add(position);
+                        timestampsOut?.Add(elapsed);
+                        continue;
+                    }
+                }
+
+                events++;
+                elapsed += eventDistance / speed;
+
+                if (eventIsBalloon)
+                {
+                    position += direction * balloonDistance;
                     pathOut?.Add(position);
+                    timestampsOut?.Add(elapsed);
                     ResolveBalloonContact(
                         workingSet, ref activeCount, balloonIndex, position, projectileContactRadius,
                         ref direction, ref streakColor, ref streakCount, ref projectileColor,
-                        ref rawScore, ref pops, ref toughsCleared, ref shields);
+                        ref rawScore, ref pops, ref toughsCleared, ref shields, elapsed, dynamics,
+                        ref consecutiveWallBounces, ref isCruising);
                     continue;
                 }
 
-                position += direction * wallT;
+                position += direction * wallDistance;
                 pathOut?.Add(position);
+                timestampsOut?.Add(elapsed);
                 shields--;
                 if (shields < 0)
                 {
@@ -175,17 +279,119 @@ namespace BalloonParty.Editor.ShotSolver
                 }
 
                 direction = Vector2.Reflect(direction, wallNormal.normalized);
+                consecutiveWallBounces++;
+
+                if (cruiseConfig.WallBounceThreshold > 0 && !isCruising
+                    && consecutiveWallBounces >= cruiseConfig.WallBounceThreshold
+                    && IsPathClearAhead(
+                        walls, position, direction, cruiseConfig.WallBounceThreshold, projectileContactRadius,
+                        workingSet, activeCount, elapsed, dynamics))
+                {
+                    cruiseStartShields = shields;
+                    isCruising = true;
+                }
             }
 
             return new ShotSimulationResult(rawScore, pops, toughsCleared, activeCount == 0, events, died, capped);
         }
 
-        private static int CopyIntoWorkingSet(IReadOnlyList<ShotBalloonSnapshot> board, ShotBalloonState[] workingSet)
+        // Mirrors ProjectileMotionResolver.Step's cruise ramp exactly: max multiplier = 1 + SpeedPerShield
+        // x the shields banked at cruise entry, so a bigger bank tops out faster; progress = bounces'
+        // worth of entry shields already spent, sampled through the ramp curve.
+        private static float CurrentSpeed(
+            float baseSpeed, bool isCruising, int cruiseStartShields, int shieldsRemaining,
+            in ShotCruiseConfig cruiseConfig)
+        {
+            if (!isCruising)
+            {
+                return baseSpeed;
+            }
+
+            var startShields = Mathf.Max(cruiseStartShields, 1);
+            var bounceFraction = Mathf.Clamp01((cruiseStartShields - shieldsRemaining) / (float)startShields);
+            var maxMultiplier = 1f + (cruiseConfig.SpeedPerShield * cruiseStartShields);
+            var curve = cruiseConfig.RampCurve ?? AnimationCurve.Linear(0f, 0f, 1f, 1f);
+            return baseSpeed * Mathf.Lerp(1f, maxMultiplier, curve.Evaluate(bounceFraction));
+        }
+
+        // Mirrors ProjectileView.IsPathClearAhead: traces the wall-reflected ray for `bounces` more
+        // crossings, checking each segment (up to its own wall-crossing point only, matching the game's
+        // per-segment CircleCast) against every active balloon's CURRENT centre — frozen at tHit, since
+        // the live check is one instantaneous physics query, not a projection of future balloon motion.
+        private static bool IsPathClearAhead(
+            in WallLimits walls, Vector2 position, Vector2 direction, int bounces, float projectileContactRadius,
+            ShotBalloonState[] workingSet, int activeCount, float tHit, ShotBoardDynamics dynamics)
+        {
+            for (var i = 0; i < bounces; i++)
+            {
+                if (!TryFindWallCrossing(walls, position, direction, out var wallDistance, out var wallNormal))
+                {
+                    return false;
+                }
+
+                if (SegmentHitsAnyBalloon(
+                        position, direction, wallDistance, projectileContactRadius, workingSet, activeCount, tHit,
+                        dynamics))
+                {
+                    return false;
+                }
+
+                position += direction * wallDistance;
+                direction = Vector2.Reflect(direction, wallNormal.normalized);
+            }
+
+            return true;
+        }
+
+        private static bool SegmentHitsAnyBalloon(
+            Vector2 position, Vector2 direction, float segmentLength, float projectileContactRadius,
+            ShotBalloonState[] workingSet, int activeCount, float tHit, ShotBoardDynamics dynamics)
+        {
+            for (var i = 0; i < activeCount; i++)
+            {
+                var center = CurrentBalloonCenter(workingSet, i, tHit, dynamics);
+                var combinedRadius = workingSet[i].Radius + projectileContactRadius;
+                var toCenter = position - center;
+
+                if (toCenter.sqrMagnitude <= combinedRadius * combinedRadius)
+                {
+                    return true; // already overlapping at the check instant
+                }
+
+                var along = Vector2.Dot(toCenter, direction);
+                var discriminant = (along * along) - toCenter.sqrMagnitude + (combinedRadius * combinedRadius);
+                if (discriminant < 0f)
+                {
+                    continue;
+                }
+
+                var entryDistance = -along - Mathf.Sqrt(discriminant);
+                if (entryDistance >= 0f && entryDistance <= segmentLength)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static Vector2 CurrentBalloonCenter(
+            ShotBalloonState[] workingSet, int index, float t, ShotBoardDynamics dynamics)
+        {
+            return dynamics != null ? workingSet[index].Actor.EvaluateCenter(t) : workingSet[index].Position;
+        }
+
+        private static int CopyIntoWorkingSet(
+            IReadOnlyList<ShotBalloonSnapshot> board, ShotBalloonState[] workingSet, ShotBoardDynamics dynamics)
         {
             var count = Mathf.Min(board.Count, workingSet.Length);
             for (var i = 0; i < count; i++)
             {
                 workingSet[i] = new ShotBalloonState(board[i]);
+                if (dynamics != null)
+                {
+                    workingSet[i].Actor = dynamics.TargetActors[i];
+                }
             }
 
             return count;
@@ -199,14 +405,26 @@ namespace BalloonParty.Editor.ShotSolver
             ShotBalloonState[] workingSet, ref int activeCount, int index, Vector2 contactPosition,
             float projectileContactRadius, ref Vector2 direction,
             ref string streakColor, ref int streakCount, ref string projectileColor,
-            ref int rawScore, ref int pops, ref int toughsCleared, ref int shields)
+            ref int rawScore, ref int pops, ref int toughsCleared, ref int shields,
+            float tHit, ShotBoardDynamics dynamics, ref int consecutiveWallBounces, ref bool isCruising)
         {
             ref var balloon = ref workingSet[index];
+
+            // Any contact ends an empty-corridor cruise and resets its bounce counter — mirrors
+            // ProjectileHitResolver.Resolve's unconditional reset at the top of every hit.
+            consecutiveWallBounces = 0;
+            isCruising = false;
+
+            var incomingDirection = direction;
+            dynamics?.OnBalloonHit(balloon.Actor, tHit);
+
+            var center = dynamics != null ? balloon.Actor.EvaluateCenter(tHit) : balloon.Position;
 
             if (balloon.HitsRemaining > 1)
             {
                 balloon.HitsRemaining--;
-                DeflectOffBalloon(balloon.Position, balloon.Radius + projectileContactRadius, contactPosition, ref direction);
+                DeflectOffBalloon(center, balloon.Radius + projectileContactRadius, contactPosition, ref direction);
+                dynamics?.OnBalloonDeflected(balloon.Actor, incomingDirection, tHit);
                 return;
             }
 
@@ -222,6 +440,7 @@ namespace BalloonParty.Editor.ShotSolver
             }
 
             pops++;
+            dynamics?.RemoveFromGrid(balloon.Actor);
             RemoveActive(workingSet, ref activeCount, index);
         }
 
@@ -281,7 +500,9 @@ namespace BalloonParty.Editor.ShotSolver
 
         // Nearest analytic line-circle entry among the active set — same family as
         // TraceHitGeometry.TryFindSurfaceHit / ProjectileMotionResolver.TryComputeContactNormal, solved
-        // here for the smallest positive entry distance rather than a backtrack.
+        // here for the smallest positive entry distance rather than a backtrack. UNCHANGED from before
+        // task 4b/4c — this is the fast, exact path a dynamics-free call always takes, so the no-motion
+        // regression case is byte-for-byte the pre-existing code.
         private static bool TryFindNearestBalloonEntry(
             ShotBalloonState[] workingSet, int activeCount, Vector2 position, Vector2 direction,
             float projectileContactRadius, out float bestT, out int bestIndex)
@@ -311,6 +532,72 @@ namespace BalloonParty.Editor.ShotSolver
             }
 
             return bestIndex >= 0;
+        }
+
+        // The dynamic-board counterpart of TryFindNearestBalloonEntry: each balloon's centre is a
+        // function of time (see ShotSimDynamicActor.EvaluateCenter), so its entry is found by the
+        // two-pass fixed point in TryFindMovingBalloonEntry rather than the plain static formula.
+        private static bool TryFindNearestBalloonEntryDynamic(
+            ShotBalloonState[] workingSet, int activeCount, Vector2 position, Vector2 direction, float speed,
+            float segmentStartTime, float projectileContactRadius, out float bestT, out int bestIndex)
+        {
+            bestT = float.PositiveInfinity;
+            bestIndex = -1;
+
+            for (var i = 0; i < activeCount; i++)
+            {
+                var combinedRadius = workingSet[i].Radius + projectileContactRadius;
+                if (!TryFindMovingBalloonEntry(
+                        workingSet[i].Actor, position, direction, speed, segmentStartTime, combinedRadius,
+                        out var entryDistance))
+                {
+                    continue;
+                }
+
+                if (entryDistance <= EventEpsilon || entryDistance >= bestT)
+                {
+                    continue;
+                }
+
+                bestT = entryDistance;
+                bestIndex = i;
+            }
+
+            return bestIndex >= 0;
+        }
+
+        // Two-pass fixed point (@ref plan_shot_geometry §7c): pass 1 freezes the balloon's centre at the
+        // segment's start time and uses its balance-only velocity (nudge doesn't contribute a velocity
+        // term — its curve isn't linear); pass 2 re-samples the FULL centre (balance + nudge) at the
+        // pass-1 candidate hit time and re-solves with the same velocity, correcting most of the
+        // curvature error. When neither balance nor nudge is active this is two identical static solves
+        // — bit-identical to the non-dynamic path (ShotMotionMath.TrySolveMovingEntry reduces exactly to
+        // the static formula when velocity is zero).
+        private static bool TryFindMovingBalloonEntry(
+            ShotSimDynamicActor actor, Vector2 origin, Vector2 direction, float speed, float segmentStartTime,
+            float combinedRadius, out float distance)
+        {
+            distance = 0f;
+            var velocity = actor.EvaluateBalanceVelocity(segmentStartTime);
+            var center0 = actor.EvaluateCenter(segmentStartTime);
+
+            if (!ShotMotionMath.TrySolveMovingEntry(origin, direction, speed, center0, velocity, combinedRadius, out var d1))
+            {
+                return false;
+            }
+
+            var t1 = d1 / speed;
+            var refinedCenter = actor.EvaluateCenter(segmentStartTime + t1);
+            var shiftedCenter = refinedCenter - (velocity * t1);
+
+            if (!ShotMotionMath.TrySolveMovingEntry(origin, direction, speed, shiftedCenter, velocity, combinedRadius, out var d2))
+            {
+                distance = d1; // pass 2 degenerate (rare) — the pass-1 estimate is still a real contact
+                return true;
+            }
+
+            distance = d2;
+            return true;
         }
 
         // Analytic per-axis wall time — only walls the ray is heading toward are candidates. A tie

@@ -77,10 +77,82 @@ billiard of §2.
 3. **Design pass** — measure and *choose* r_projectile against the 0.104 knife edge; decide the
    fair-window threshold; optionally wire the solver into spawn validation ("reroll toughs
    until a ≥ threshold window exists") for authored puzzle levels.
+4. **Dynamic-board simulation** — see §7. Model the two systems that move the board *during*
+   the shot (flight rebalance pulses, nudge wobble), so long ricochet predictions stop
+   diverging after the first few hits.
 
 ## 6. Verification
 
 Task 1: edit-mode tests for the backtrack math (head-on, oblique, grazing, degenerate inside
 spawn); in-editor feel check that deflects read unchanged in normal play (angular corrections
 are ≤ the old discretization error, so no retuning expected). Tasks 2–3 are editor tooling —
-validated by use.
+validated by use. Task 4: planner-extraction refactor must keep every existing balancer
+edit-mode/play-mode test green (behavior-identical); sim fidelity validated with Fire Best —
+fire the drawn path on a live board and compare where reality diverges.
+
+## 7. Task 4 — dynamic-board simulation (balance + nudge + N colors)
+
+The static-board sim is exact only until the board reacts. Two reaction systems run mid-flight:
+
+- **Flight rebalance** (`BalloonBalancer.TickFlightRebalance`): every `FlightRebalanceInterval`
+  seconds while a shot is free, unbalanced actors move to `GridBalanceQuery.OptimalNextEmptySlot`
+  (intervention-priority order, heavy `MaxBalanceSteps` caps), views tweening over
+  `TimeForBalloonsBalance`. Pops open gaps → the next pulse reflows the board under the shot.
+- **Nudge wobble** (`NudgeService` → `BalloonMotionTicker`): every hit nudges the target's
+  `IHasNudge` neighbors (`NudgeType.Neighbor`); deflects additionally shove the hit balloon
+  (`NudgeType.Deflect`, direction = projectile heading). Displacement is an impulse stack:
+  `offset(t) = Σ amplitude·dir · Reach(elapsed/duration)`, `Reach` = analytic out-and-back
+  (ease-out-quad to peak at progress 0.5, mirrored back to zero). Colliders ride the view, so
+  wobble genuinely changes contacts.
+
+### Design
+
+**(a) Timeline.** Events gain timestamps: `dt = distance / speed(t)`. Speed mirrors base speed
+and the cruise ramp (`CruiseWallBounceThreshold` / `CruiseMaxSpeedMultiplier` / `CruiseRampCurve`
+against shields spent since cruise entry) — the sim already counts wall bounces.
+
+**(b) Balance via the real rules, not a mirror.** `SlotGrid` and `GridBalanceQuery` are plain
+headless classes (edit-mode tests already construct them). Extract the decision core of
+`BalloonBalancer.Balance` (pass collection → priority sort → `TryBalanceSlot` loop, minus views/
+tweens/path-holder) into a pure `BalancePlanner` that returns moves `(actor, from, to)`; the
+balancer consumes it (behavior-identical refactor), and the sim instantiates a real
+`SlotGrid` + `GridBalanceQuery` + planner over stub actors built from the snapshot (slot index,
+dynamic-or-static, `BalancePriority`, `MaxBalanceSteps`). Rule drift becomes impossible.
+Pulses fire at `t = k·FlightRebalanceInterval`; each move animates as **linear** motion
+from start to final slot over `TimeForBalloonsBalance` (approximating the Catmull-Rom path);
+contacts against a moving balloon solve the same quadratic with relative velocity
+`|p − c₀ + t(s·d − v)| = r`.
+
+**(c) Nudge as analytic impulses.** The sim keeps an impulse list per balloon with the exact
+`Reach` envelope, fed by the same triggers (hit → neighbors, deflect → target; distances/
+durations from `NudgeOverrideResolver` defaults). Centers become `home(t) + Σ impulses(t)` —
+smooth and small, so contact finding freezes centers at the segment's start time, then refines
+once at the candidate hit time (two-pass fixed point).
+
+**(d) N colors.** Scoring is already colour-id-string keyed (streak = consecutive same colour,
+mirroring `ColorStreakTracker`); the dynamic extension must keep it that way — no single-colour
+assumptions. Multi-colour boards then work unchanged; window reporting can later gain a
+per-colour filter for milestone masks.
+
+### Accepted approximations (log, don't hide)
+
+- The balancer defers a requested balance one frame; the sim applies it at pulse time.
+- Multi-waypoint Catmull-Rom balance paths ≈ straight line to the final slot.
+- Heavy step budgets reset per shot in the sim; in-game the turn budget may be part-spent at
+  fire time (unknowable from a snapshot).
+- Flight pulses never relocate roamers (`relocateRoamers: false`) — matches the code.
+- Idle sway/animator drift is not modeled (visual-only; colliders follow the motion ticker's
+  base + impulses, which we do model).
+
+### Staging
+
+- **4a** — `BalancePlanner` extraction + edit-mode tests (runtime refactor; all existing
+  balancer tests stay green). **Done** — `Assets/Source/Balloon/Controller/BalancePlanner.cs`.
+- **4b** — sim timeline + pulse schedule + moving-circle contacts (editor, consumes 4a).
+  **Done** — `ShotBoardDynamics` + `ShotMotionMath` + timestamped `ShotSimulator` events; the
+  cruise ramp (shield-scaled max, lookahead-confirmed entry) is mirrored in the same pass.
+- **4c** — nudge impulse modeling (editor). **Done** — exact `Reach` envelope, hit-neighbour and
+  deflect-target triggers, two-pass contact refinement (see the ShotSolver README's
+  accepted-approximations list).
+- **4d** — polish: per-colour window filters, robustness bands (does the window survive ±nudge
+  amplitude), Fire Best divergence readout.

@@ -1,15 +1,18 @@
 # ShotSolver
 
-Editor tooling for `PLAN-ShotGeometry.md` Task 2 — sweeps aim angle against the live board and
-reports which windows reach a target score. See `Assets/Source/Plans/PLAN-ShotGeometry.md` for the
-math background (the shot as a deterministic billiard) and the rules this mirrors.
+Editor tooling for `PLAN-ShotGeometry.md` Tasks 2 and 4 — sweeps aim angle against the live board
+and reports which windows reach a target score. See `Assets/Source/Plans/PLAN-ShotGeometry.md` for
+the math background (the shot as a deterministic billiard) and the rules this mirrors.
 
 ## Contents
 
 | File | What it does |
 |---|---|
-| `ShotSimulator` | Pure, headless, static class — simulates one aim direction to completion, event-to-event (next analytic wall crossing or next analytic balloon-corridor entry), never fixed-step. Reuses `ProjectileMotionResolver.TryComputeContactNormal` for deflect contacts. Mirrors the runtime's pop/deflect/shield/streak rules (see below) on a `ShotBalloonSnapshot` board — no `MonoBehaviour`, no live model, no allocation beyond the caller-owned working-set buffer |
-| `ShotSolverWindow` | `Tools > BalloonParty > Shot Solver` — play-mode-only window. Snapshots the live board (`SlotGrid`, resolved via `GameLifetimeScope.Container`), thrower origin, and projectile contact radius; sweeps N angles across a configurable arc; refines qualifying-window edges by bisection; plots score vs. angle as a strip of `EditorGUI` rect fills; lists qualifying windows; can draw the best window's centre-angle flight path into the Scene view |
+| `ShotSimulator` | Pure, headless, static class — simulates one aim direction to completion, event-to-event (next analytic wall crossing, next analytic balloon-corridor entry, or next due balance pulse), never fixed-step. Reuses `ProjectileMotionResolver.TryComputeContactNormal` for deflect contacts. Mirrors the runtime's pop/deflect/shield/streak rules (see below) on a `ShotBalloonSnapshot` board — no `MonoBehaviour`, no live model, no allocation beyond the caller-owned working-set buffer. Events carry timestamps (`t += distance / speed(segment)`), and speed mirrors the cruise ramp exactly |
+| `ShotSolverWindow` | `Tools > BalloonParty > Shot Solver` — play-mode-only window. Snapshots the live board (`SlotGrid`, resolved via `GameLifetimeScope.Container`), thrower origin, and projectile contact radius; sweeps N angles across a configurable arc; refines qualifying-window edges by bisection; plots score vs. angle as a strip of `EditorGUI` rect fills; lists qualifying windows; can draw the best window's centre-angle flight path into the Scene view; **Fire Best** re-sweeps and forces the shot via `ThrowerController.FireAt` |
+| `ShotBoardDynamics` | The dynamic-board half (plan §7): owns a real headless `SlotGrid` + `GridBalanceQuery` + `BalancePlanner` over stub actors, schedules flight-rebalance pulses on the sim timeline, and keeps per-balloon nudge-impulse state. Built once per gather, reset per simulated flight |
+| `ShotSimBoardActor` | The stub actors (`ShotSimDynamicActor`/`ShotSimStaticActor`) the dynamics grid is populated with, plus the per-flight snapshot structs for non-target actors |
+| `ShotMotionMath` | Pure math: the nudge `Reach` envelope (mirrors `BalloonMotionTicker` exactly) and the moving-circle entry solve (relative-velocity quadratic, reduces to the exact static solve at zero velocity) |
 
 ## Rule mirroring
 
@@ -19,7 +22,14 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   `BalloonModelBase.EvaluateNormalHit`, direct-hit damage is always 1); `== 1` pops. The deflect
   normal comes from the real `ProjectileMotionResolver.TryComputeContactNormal` — the simulator's own
   analytic entry point already sits exactly on the contact circle, so that method's backtrack
-  resolves to zero and returns the exact contact normal, not an approximation.
+  resolves to zero and returns the exact contact normal, not an approximation. Unbreakables enter
+  the board as `int.MaxValue`-durability targets: permanent deflectors that never pop and score
+  nothing on deflect, exactly like the game.
+- **Radii, never hardcoded** — each target's contact circle is its live view's `ContactRadius`
+  (`CircleCollider2D.radius × lossyScale.x`), plus the projectile's own contact radius per test.
+  The differing collider setups (coloured 0.3125 at prefab scale ~0.866 ≈ 0.271 world; tough 0.325
+  at scale 1; unbreakable 0.325 at scale ~1.097 ≈ 0.357 world) flow through per view — the same
+  `ContactRadius` the deflect message itself carries, so game and sim can't disagree per balloon.
 - **Colourless vs. coloured scoring** — a `ShotBalloonSnapshot.ColorId` of null/empty models a
   balloon that does NOT implement `IHasColor` (`ToughBalloonModel`); non-null models one that does
   (`BalloonModel`). Tough pops score a flat `ScoreValue` and reset the streak — mirrors
@@ -37,6 +47,33 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
 - **Rainbow / wildcard balloons and buffs are out of scope** — the board snapshot has no wildcard
   flag, matching the plan's own scope (§1: pops, tough deflects, shields). Note this if the solver is
   ever pointed at a board with rainbow balloons or an active rainbow-buffed shot.
+- **Cruise** — entry mirrors `ProjectileView.TryEnterCruise`: past the wall-bounce threshold, a
+  walls-only lookahead of `threshold` more segments must be balloon-free (tested against
+  time-evaluated centres) before the ramp engages. Speed mirrors `ProjectileMotionResolver.Step`:
+  max multiplier `1 + CruiseSpeedPerShield × entry shields`, curve-sampled on the fraction of entry
+  shields spent. Any balloon contact resets counter and cruise.
+- **Balance & nudge (dynamic board)** — when the window supplies `ShotBoardDynamics`, rebalance
+  pulses fire at `k × FlightRebalanceInterval` running the REAL `BalancePlanner` over a real
+  `SlotGrid` (no mirrored rules — rule drift is impossible); moved balloons travel linearly to
+  their final slot over `TimeForBalloonsBalance`, and contacts against them solve the
+  moving-circle quadratic. Every contact nudges the target's occupied hex neighbours and deflects
+  additionally shove the hit balloon, with the exact `Reach` impulse envelope; centres become
+  `balancePosition(t) + Σ impulses(t)`. Pops `Remove` from the dynamics grid so later pulses see
+  the gaps. With no dynamics supplied the loop takes the original static fast path unchanged.
+
+## Accepted approximations (plan §7)
+
+- The live balancer defers a requested balance one frame; the sim applies it at pulse time.
+- Multi-waypoint Catmull-Rom balance paths ≈ a straight line to the final slot.
+- Heavy step budgets reset per simulated shot; in-game the turn budget may be part-spent at fire
+  time (unknowable from a snapshot).
+- Flight pulses never relocate roamers (`relocateRoamers: false`) — matches the live code.
+- Idle sway/animator drift is not modeled (visual-only).
+- Wall-clamp overshoot truncation (the game loses the sub-step overshoot remainder within a bounce
+  step) is ignored — a per-bounce timing shift of at most one fixed step, no path-shape effect.
+- Contact search against wobbling balloons freezes centres at the segment's start time, then
+  re-solves once at the candidate hit time (two-pass fixed point) — exact for balance motion
+  (linear), approximate only for the small, smooth nudge envelope.
 
 ## Sweep and refine
 

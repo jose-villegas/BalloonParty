@@ -1,10 +1,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
+using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
+using BalloonParty.Configuration.Balloons;
 using BalloonParty.Game;
+using BalloonParty.Nudge;
 using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Rendering;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using BalloonParty.Thrower;
@@ -355,7 +359,8 @@ namespace BalloonParty.Editor.ShotSolver
             return ShotSimulator.Simulate(
                 context.Board, context.WallLimitsClockwise, OriginForAngle(angleDegrees, context),
                 DirectionFromDegrees(angleDegrees), context.StartingShields, context.ProjectileContactRadius,
-                workingSet, pathOut: pathOut);
+                workingSet, pathOut: pathOut, projectileSpeed: context.ProjectileSpeed,
+                cruiseConfig: context.CruiseConfig, dynamics: context.Dynamics);
         }
 
         // The thrower rotates around its pivot to aim (ThrowerView.RotateTo: fire-direction angle − 90°),
@@ -448,10 +453,17 @@ namespace BalloonParty.Editor.ShotSolver
 
             var grid = scope.Container.Resolve<SlotGrid>();
             var config = scope.Container.Resolve<IGameConfiguration>();
+            var balloonsConfig = scope.Container.Resolve<IBalloonsConfiguration>();
             var throwerSettings = scope.Container.Resolve<ThrowerSettings>();
 
-            var board = new List<ShotBalloonSnapshot>();
-            CollectBoard(grid, board);
+            var targets = new List<ShotBalloonSnapshot>();
+            var otherDynamicActors = new List<ShotDynamicActorSnapshot>();
+            var staticActors = new List<ShotStaticActorSnapshot>();
+            CollectBoard(grid, targets, otherDynamicActors, staticActors);
+
+            var dynamics = new ShotBoardDynamics(config, balloonsConfig, targets, otherDynamicActors, staticActors);
+            var cruiseConfig = new ShotCruiseConfig(
+                config.CruiseWallBounceThreshold, config.CruiseSpeedPerShield, config.CruiseRampCurve);
 
             // Un-rotate the spawn point back into the thrower's aim-neutral frame so the sweep can
             // re-rotate it for every candidate angle.
@@ -459,16 +471,26 @@ namespace BalloonParty.Editor.ShotSolver
                 Quaternion.Inverse(thrower.Rotation) * (thrower.SpawnPointPosition - thrower.Position);
 
             context = new LiveContext(
-                board,
+                targets,
                 config.LimitsClockwise,
                 thrower.Position,
                 spawnLocalOffset,
                 config.ProjectileStartingShields,
-                ResolveProjectileContactRadius(throwerSettings));
+                ResolveProjectileContactRadius(throwerSettings),
+                config.ProjectileSpeed,
+                cruiseConfig,
+                dynamics);
             return true;
         }
 
-        private static void CollectBoard(SlotGrid grid, List<ShotBalloonSnapshot> board)
+        // Every occupied slot feeds the dynamic-board sim's SlotGrid (task 4b): poppable/deflectable
+        // shot targets — including never-popping Unbreakables — go to `targets` (geometry +
+        // balance/nudge properties); any other Dynamic occupant goes to `otherDynamicActors` (balance
+        // properties only, no collision geometry); every Static occupant (obstacles, gatekeepers, ...)
+        // goes to `staticActors` (slot only — BalancePlanner never moves it).
+        private static void CollectBoard(
+            SlotGrid grid, List<ShotBalloonSnapshot> targets, List<ShotDynamicActorSnapshot> otherDynamicActors,
+            List<ShotStaticActorSnapshot> staticActors)
         {
             for (var col = 0; col < grid.Columns; col++)
             {
@@ -479,23 +501,48 @@ namespace BalloonParty.Editor.ShotSolver
                         continue;
                     }
 
-                    if (TryBuildSnapshot(grid, new Vector2Int(col, row), out var snapshot))
+                    var index = new Vector2Int(col, row);
+                    var actor = grid.At(index);
+
+                    if (actor.Kind == SlotActorKind.Static)
                     {
-                        board.Add(snapshot);
+                        staticActors.Add(new ShotStaticActorSnapshot(index));
+                        continue;
                     }
+
+                    if (TryBuildTargetSnapshot(grid, index, actor, out var target))
+                    {
+                        targets.Add(target);
+                        continue;
+                    }
+
+                    var influence = actor as IBalanceInfluence;
+                    otherDynamicActors.Add(new ShotDynamicActorSnapshot(
+                        index, influence?.BalancePriority ?? 0, influence?.MaxBalanceSteps ?? 0,
+                        influence?.DirectBalanceMotion ?? false));
                 }
             }
         }
 
-        // Only actors durable AND scorable are poppable/deflectable shot targets — this excludes
-        // Unbreakables (IHasScore but no IHasDurability, EvaluateHit never mutates HitsRemaining) and
-        // every non-balloon grid actor, matching the plan's scope (pops, tough deflects, shields).
-        private static bool TryBuildSnapshot(SlotGrid grid, Vector2Int index, out ShotBalloonSnapshot snapshot)
+        // Durable + scorable actors are poppable/deflectable targets. Unbreakables have no
+        // IHasDurability (EvaluateHit never mutates HitsRemaining) yet still DEFLECT the live shot,
+        // so they enter as never-popping deflect geometry — int.MaxValue durability keeps the sim's
+        // HitsRemaining > 1 branch permanently deflecting (deflects score nothing, matching the game).
+        private static bool TryBuildTargetSnapshot(
+            SlotGrid grid, Vector2Int index, IWriteableSlotActor actor, out ShotBalloonSnapshot snapshot)
         {
             snapshot = default;
 
-            var actor = grid.At(index);
-            if (actor is not IHasDurability durable)
+            int hitsRemaining;
+            if (actor is IHasDurability durable)
+            {
+                hitsRemaining = durable.HitsRemaining.Value;
+            }
+            else if (actor is UnbreakableBalloonModel)
+            {
+                hitsRemaining = int.MaxValue;
+            }
+            else
             {
                 return false;
             }
@@ -506,6 +553,8 @@ namespace BalloonParty.Editor.ShotSolver
             }
 
             var colorId = actor is IHasColor colorable ? colorable.Color.Value : null;
+            var influence = actor as IBalanceInfluence;
+            var nudgeOverrides = actor is IHasNudge nudgeable ? nudgeable.NudgeOverrides : null;
 
             // The view's live position, not the slot's lattice home: balance tweens and nudge wobble
             // displace views, and the shot collides with the view's collider — the slot is where the
@@ -516,7 +565,10 @@ namespace BalloonParty.Editor.ShotSolver
                 ? (Vector2)view.transform.position
                 : (Vector2)grid.IndexToWorldPosition(index);
 
-            snapshot = new ShotBalloonSnapshot(position, radius, colorId, scored.ScoreValue, durable.HitsRemaining.Value);
+            snapshot = new ShotBalloonSnapshot(
+                position, radius, colorId, scored.ScoreValue, hitsRemaining, index,
+                influence?.BalancePriority ?? 0, influence?.MaxBalanceSteps ?? 0,
+                influence?.DirectBalanceMotion ?? false, nudgeOverrides);
             return true;
         }
 
@@ -548,10 +600,14 @@ namespace BalloonParty.Editor.ShotSolver
             public readonly Vector3 SpawnLocalOffset;
             public readonly int StartingShields;
             public readonly float ProjectileContactRadius;
+            public readonly float ProjectileSpeed;
+            public readonly ShotCruiseConfig CruiseConfig;
+            public readonly ShotBoardDynamics Dynamics;
 
             public LiveContext(
                 IReadOnlyList<ShotBalloonSnapshot> board, Vector4 wallLimitsClockwise, Vector2 throwerPivot,
-                Vector3 spawnLocalOffset, int startingShields, float projectileContactRadius)
+                Vector3 spawnLocalOffset, int startingShields, float projectileContactRadius,
+                float projectileSpeed, ShotCruiseConfig cruiseConfig, ShotBoardDynamics dynamics)
             {
                 Board = board;
                 WallLimitsClockwise = wallLimitsClockwise;
@@ -559,6 +615,9 @@ namespace BalloonParty.Editor.ShotSolver
                 SpawnLocalOffset = spawnLocalOffset;
                 StartingShields = startingShields;
                 ProjectileContactRadius = projectileContactRadius;
+                ProjectileSpeed = projectileSpeed;
+                CruiseConfig = cruiseConfig;
+                Dynamics = dynamics;
             }
         }
 
