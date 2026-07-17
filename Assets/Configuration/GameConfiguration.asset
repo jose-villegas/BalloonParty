@@ -49,6 +49,32 @@ MonoBehaviour:
     m_RotationOrder: 4
   _cruiseTapEaseDuration: 0.25
   _cruisePiercingTapThreshold: 3
+  _lastShieldApproachCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _lastShieldApproachDuration: 0.2
+  _lastShieldTimeScale: 0.3
   _slotsSize: {x: 6, y: 11}
   _slotSeparation: {x: 0.375, y: 0.65}
   _slotsOffset: {x: 5, y: 3.25}
