@@ -295,9 +295,9 @@ namespace BalloonParty.Editor.ShotSolver
             return new ShotSimulationResult(rawScore, pops, toughsCleared, activeCount == 0, events, died, capped);
         }
 
-        // Mirrors ProjectileMotionResolver.Step's cruise ramp exactly: max multiplier = 1 + SpeedPerShield
-        // x the shields banked at cruise entry, so a bigger bank tops out faster; progress = bounces'
-        // worth of entry shields already spent, sampled through the ramp curve.
+        // Mirrors ProjectileMotionResolver.Step's cruise ramp exactly: every cruise bounce adds a
+        // velocity TAP of SpeedPerShield (cumulative — a 13-shield bank accumulates 13 taps, a
+        // 2-shield bank 2), with the curve only re-pacing the taps (linear = equal taps per bounce).
         private static float CurrentSpeed(
             float baseSpeed, bool isCruising, int cruiseStartShields, int shieldsRemaining,
             in ShotCruiseConfig cruiseConfig)
@@ -308,10 +308,10 @@ namespace BalloonParty.Editor.ShotSolver
             }
 
             var startShields = Mathf.Max(cruiseStartShields, 1);
-            var bounceFraction = Mathf.Clamp01((cruiseStartShields - shieldsRemaining) / (float)startShields);
-            var maxMultiplier = 1f + (cruiseConfig.SpeedPerShield * cruiseStartShields);
+            var taps = Mathf.Clamp(cruiseStartShields - shieldsRemaining, 0, startShields);
             var curve = cruiseConfig.RampCurve ?? AnimationCurve.Linear(0f, 0f, 1f, 1f);
-            return baseSpeed * Mathf.Lerp(1f, maxMultiplier, curve.Evaluate(bounceFraction));
+            var shapedTaps = curve.Evaluate(taps / (float)startShields) * startShields;
+            return baseSpeed * (1f + (cruiseConfig.SpeedPerShield * shapedTaps));
         }
 
         // Mirrors ProjectileView.IsPathClearAhead: traces the wall-reflected ray for `bounces` more

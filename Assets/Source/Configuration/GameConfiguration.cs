@@ -29,9 +29,10 @@ namespace BalloonParty.Configuration
                  "shields, so a 13-shield cruise tops out much faster than a 5-shield one.")]
         [SerializeField] [Min(0f)] private float _cruiseSpeedPerShield = 0.25f;
 
-        [Tooltip("Ramp shape from base speed (t=0, cruise entry) to the shield-scaled max (t=1, last " +
-                 "shield spent), sampled bounce-to-bounce on bounces-since-entry / entry shields.")]
-        [SerializeField] private AnimationCurve _cruiseRampCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+        [Tooltip("Pacing of the per-bounce velocity taps, sampled on bounces-since-entry / entry " +
+                 "shields. LINEAR = every bounce adds one equal tap regardless of bank size (the " +
+                 "cumulative feel); an eased curve re-sizes taps along the run but keeps the same top.")]
+        [SerializeField] private AnimationCurve _cruiseRampCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
 
         [Header("Slots")]
         [SerializeField] private Vector2Int _slotsSize;

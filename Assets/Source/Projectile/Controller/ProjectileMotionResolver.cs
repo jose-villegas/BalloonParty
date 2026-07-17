@@ -28,16 +28,18 @@ namespace BalloonParty.Projectile.Controller
         {
             var speed = model.ComputeBuffedValue(ProjectileBuffId.Speed, model.Speed);
 
-            // The earned long-flight reward: a cruising shot ramps from base speed as bounces spend
-            // the shields it entered with, bounce to bounce along the curve. The TOP speed scales with
-            // the entry bank — a 13-shield cruise peaks far faster than a 5-shield one.
+            // The earned long-flight reward: every cruise bounce adds a velocity TAP of
+            // CruiseSpeedPerShield — cumulative, so a 13-shield bank accumulates 13 taps where a
+            // 2-shield bank gets 2. The curve only re-paces the taps (linear = equal taps per
+            // bounce): shapedTaps = curve(taps/bank) x bank, which reduces to exactly the tap
+            // count on a linear curve.
             if (model.IsCruising.Value)
             {
                 var startShields = Mathf.Max(model.CruiseStartShields, 1);
-                var bounceFraction = Mathf.Clamp01(
-                    (model.CruiseStartShields - model.ShieldsRemaining.Value) / (float)startShields);
-                var maxMultiplier = 1f + _cruiseSpeedPerShield * model.CruiseStartShields;
-                speed *= Mathf.Lerp(1f, maxMultiplier, _cruiseRampCurve.Evaluate(bounceFraction));
+                var taps = Mathf.Clamp(
+                    model.CruiseStartShields - model.ShieldsRemaining.Value, 0, startShields);
+                var shapedTaps = _cruiseRampCurve.Evaluate(taps / (float)startShields) * startShields;
+                speed *= 1f + _cruiseSpeedPerShield * shapedTaps;
             }
 
             position += model.Direction * (speed * deltaTime);
