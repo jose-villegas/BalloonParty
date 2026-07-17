@@ -54,7 +54,11 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   per-tap ANIMATION (target × `CruiseTapCurve(elapsed/CruiseTapEaseDuration)`, the
   freeze-then-pickup beat) never bends the path, so the event sim folds it into a per-bounce
   timeline lag of `duration × (1 − mean curve value)` — an approximation only when a segment is
-  shorter than the ease window. Any balloon contact resets counter and cruise.
+  shorter than the ease window. Any balloon contact resets counter and cruise. Reaching
+  `CruisePiercingTapThreshold` taps ARMS piercing for the rest of the flight (mirrors the
+  resolver's buff grant): every later contact pops — unbreakables included — and flies on unbent.
+  Approximation: a pierced colourless pop scores through the flat tough rule, ignoring the
+  game's projectile-colour attribution nuance for unbreakables under a Target Colour filter.
 - **Balance & nudge (dynamic board)** — when the window supplies `ShotBoardDynamics`, rebalance
   pulses fire at `k × FlightRebalanceInterval` running the REAL `BalancePlanner` over a real
   `SlotGrid` (no mirrored rules — rule drift is impossible); moved balloons follow their hop

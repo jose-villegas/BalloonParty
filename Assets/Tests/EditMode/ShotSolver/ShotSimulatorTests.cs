@@ -463,6 +463,40 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         [Test]
+        public void Simulate_PiercingArmedByCruiseTaps_PopsAWouldBeForeverDeflector()
+        {
+            // A narrow corridor climbed diagonally (slope 0.25: each 2-unit crossing rises 0.5).
+            // Cruise enters at bounce 1 (threshold 1, the next segment is clear of the high target);
+            // taps reach 3 at bounce 4, arming piercing just before segment 5 crosses the
+            // 999-durability deflector at (0, 2) dead-on. Armed: it pops and flies on. Unarmed
+            // control: the same flight only ever deflects it.
+            var walls = new Vector4(1000f, 1f, -1000f, -1f);
+            var board = new[]
+            {
+                new ShotBalloonSnapshot(new Vector2(0f, 2f), 0.15f, null, 7, 999),
+                new ShotBalloonSnapshot(new Vector2(0f, 500f), 0.2f, "Red", 1, 1),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var armed = new ShotCruiseConfig(
+                wallBounceThreshold: 1, speedPerShield: 0f, piercingTapThreshold: 3);
+            var armedResult = ShotSimulator.Simulate(
+                board, walls, Vector2.zero, new Vector2(1f, 0.25f), startingShields: 6,
+                projectileContactRadius: 0f, workingSet: workingSet, cruiseConfig: armed);
+
+            Assert.AreEqual(1, armedResult.Pops, "armed at tap 3 — the deflector pops on contact");
+            Assert.AreEqual(1, armedResult.ToughsCleared);
+            Assert.AreEqual(7, armedResult.RawScore, "colourless pop scores its flat value");
+
+            var unarmed = new ShotCruiseConfig(wallBounceThreshold: 1, speedPerShield: 0f);
+            var unarmedResult = ShotSimulator.Simulate(
+                board, walls, Vector2.zero, new Vector2(1f, 0.25f), startingShields: 6,
+                projectileContactRadius: 0f, workingSet: workingSet, cruiseConfig: unarmed);
+
+            Assert.AreEqual(0, unarmedResult.Pops, "without the piercing grant it only ever deflects");
+        }
+
+        [Test]
         public void Simulate_TargetColorFilter_ScopesScoreAttributionOnly()
         {
             // Red, Blue, Red column: filtered to "Red", only the two red pops score — but the streak

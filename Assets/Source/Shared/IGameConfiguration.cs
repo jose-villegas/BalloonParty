@@ -17,6 +17,7 @@ namespace BalloonParty.Shared
         float CruiseSpeedPerShield { get; }
         AnimationCurve CruiseTapCurve { get; }
         float CruiseTapEaseDuration { get; }
+        int CruisePiercingTapThreshold { get; }
         float ShieldTrailDuration { get; }
 
         Vector2Int SlotsSize { get; }

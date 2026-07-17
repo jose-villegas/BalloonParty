@@ -90,12 +90,14 @@ namespace BalloonParty.Editor.ShotSolver
         public readonly int WallBounceThreshold;
         public readonly float SpeedPerShield;
         public readonly float TapLagSeconds;
+        public readonly int PiercingTapThreshold;
 
         public ShotCruiseConfig(int wallBounceThreshold, float speedPerShield, float tapEaseDuration = 0f,
-            AnimationCurve tapCurve = null)
+            AnimationCurve tapCurve = null, int piercingTapThreshold = 0)
         {
             WallBounceThreshold = wallBounceThreshold;
             SpeedPerShield = speedPerShield;
+            PiercingTapThreshold = piercingTapThreshold;
 
             if (tapEaseDuration <= 0f)
             {
@@ -203,6 +205,7 @@ namespace BalloonParty.Editor.ShotSolver
             var elapsed = 0f;
             var consecutiveWallBounces = 0;
             var isCruising = false;
+            var isPiercing = false;
             var cruiseStartShields = 0;
 
             string streakColor = null;
@@ -287,7 +290,7 @@ namespace BalloonParty.Editor.ShotSolver
                         workingSet, ref activeCount, balloonIndex, position, projectileContactRadius,
                         ref direction, ref streakColor, ref streakCount, ref projectileColor,
                         ref rawScore, ref pops, ref toughsCleared, ref shields, elapsed, dynamics,
-                        ref consecutiveWallBounces, ref isCruising, targetColorId);
+                        ref consecutiveWallBounces, ref isCruising, targetColorId, isPiercing);
                     continue;
                 }
 
@@ -319,6 +322,14 @@ namespace BalloonParty.Editor.ShotSolver
                 if (isCruising)
                 {
                     elapsed += cruiseConfig.TapLagSeconds;
+
+                    // Mirrors ProjectileMotionResolver's piercing grant: a long-enough cruise arms
+                    // the shot for the rest of its life — contacts end the cruise, never the buff.
+                    if (cruiseConfig.PiercingTapThreshold > 0
+                        && cruiseStartShields - shields >= cruiseConfig.PiercingTapThreshold)
+                    {
+                        isPiercing = true;
+                    }
                 }
             }
 
@@ -440,7 +451,7 @@ namespace BalloonParty.Editor.ShotSolver
             ref string streakColor, ref int streakCount, ref string projectileColor,
             ref int rawScore, ref int pops, ref int toughsCleared, ref int shields,
             float tHit, ShotBoardDynamics dynamics, ref int consecutiveWallBounces, ref bool isCruising,
-            string targetColorId)
+            string targetColorId, bool isPiercing)
         {
             ref var balloon = ref workingSet[index];
 
@@ -454,7 +465,9 @@ namespace BalloonParty.Editor.ShotSolver
 
             var center = dynamics != null ? balloon.Actor.EvaluateCenter(tHit) : balloon.Position;
 
-            if (balloon.HitsRemaining > 1)
+            // A piercing shot pops EVERYTHING it touches (DamageFlags.Piercing — unbreakables
+            // included) and flies on unbent; only unarmed shots deflect off durable actors.
+            if (!isPiercing && balloon.HitsRemaining > 1)
             {
                 balloon.HitsRemaining--;
                 DeflectOffBalloon(center, balloon.Radius + projectileContactRadius, contactPosition, ref direction);

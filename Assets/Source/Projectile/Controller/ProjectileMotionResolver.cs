@@ -1,3 +1,4 @@
+using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace BalloonParty.Projectile.Controller
         private readonly WallLimits _walls;
         private readonly float _cruiseSpeedPerShield;
         private readonly float _cruiseTapEaseDuration;
+        private readonly int _cruisePiercingTapThreshold;
         private readonly AnimationCurve _cruiseTapCurve;
 
         // The view needs the same wall geometry for its cruise lookahead trace.
@@ -22,6 +24,7 @@ namespace BalloonParty.Projectile.Controller
             _walls = new WallLimits(config.LimitsClockwise);
             _cruiseSpeedPerShield = config.CruiseSpeedPerShield;
             _cruiseTapEaseDuration = config.CruiseTapEaseDuration;
+            _cruisePiercingTapThreshold = config.CruisePiercingTapThreshold;
             _cruiseTapCurve = config.CruiseTapCurve ?? AnimationCurve.Linear(0f, 0f, 1f, 1f);
         }
 
@@ -71,6 +74,18 @@ namespace BalloonParty.Projectile.Controller
             {
                 // A new tap lands with this bounce — restart its freeze-then-pickup envelope.
                 model.CruiseTapElapsed = 0f;
+
+                // A long-enough cruise ARMS the shot: from this tap on it pierces everything it
+                // touches (unbreakables included) for the rest of its life — contact ends the
+                // cruise but never the earned buff.
+                var taps = model.CruiseStartShields - model.ShieldsRemaining.Value;
+                if (_cruisePiercingTapThreshold > 0
+                    && taps >= _cruisePiercingTapThreshold
+                    && !model.HasBuff(ProjectileBuffId.Piercing))
+                {
+                    model.AddBuff(new ProjectileBuff(
+                        ProjectileBuffId.Piercing, 1f, BuffModifierOp.Flat, new ShotLifetimeEndCondition()));
+                }
             }
 
             model.Direction = Vector2.Reflect(model.Direction, reflect.normalized);

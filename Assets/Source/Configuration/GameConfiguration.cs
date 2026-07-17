@@ -37,6 +37,10 @@ namespace BalloonParty.Configuration
         [Tooltip("Seconds the per-bounce tap animation takes. 0 = instant speed changes (no freeze).")]
         [SerializeField] [Min(0f)] private float _cruiseTapEaseDuration = 0.25f;
 
+        [Tooltip("Cruise taps (bounces since entry) that arm PIERCING for the rest of the shot — it " +
+                 "then pops everything it touches, unbreakables included. 0 disables.")]
+        [SerializeField] [Min(0)] private int _cruisePiercingTapThreshold = 3;
+
         [Header("Slots")]
         [SerializeField] private Vector2Int _slotsSize;
         [SerializeField] private Vector2 _slotSeparation;
@@ -73,6 +77,7 @@ namespace BalloonParty.Configuration
         public float CruiseSpeedPerShield => _cruiseSpeedPerShield;
         public AnimationCurve CruiseTapCurve => _cruiseTapCurve;
         public float CruiseTapEaseDuration => _cruiseTapEaseDuration;
+        public int CruisePiercingTapThreshold => _cruisePiercingTapThreshold;
         public Vector2 SlotSeparation => _slotSeparation;
         public Vector2 SlotsOffset => _slotsOffset;
         public Vector2Int SlotsSize => _slotsSize;

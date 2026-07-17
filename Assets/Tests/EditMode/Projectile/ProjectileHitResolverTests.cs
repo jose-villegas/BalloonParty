@@ -100,6 +100,22 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
+        public void Resolve_PiercingBuff_PopsAWouldBeDeflector()
+        {
+            // Two hits to pop would normally deflect the first contact; the cruise-earned piercing
+            // buff flips it to a straight pop (DamageFlags.Piercing through EvaluateNormalHit).
+            _projectile.AddBuff(new ProjectileBuff(
+                ProjectileBuffId.Piercing, 1f, BuffModifierOp.Flat, new ShotLifetimeEndCondition()));
+            var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 2));
+            balloon.Color.Value = "Red";
+
+            _resolver.Resolve(_projectile, balloon, Vector3.zero);
+
+            _hitDispatcher.Received(1).Dispatch(Arg.Is<ActorHitMessage>(m =>
+                m.Actor == balloon && m.Outcome == HitOutcome.Pop));
+        }
+
+        [Test]
         public void Resolve_PopNormalBalloon_StealsColour()
         {
             var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));

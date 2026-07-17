@@ -34,6 +34,13 @@ namespace BalloonParty.Projectile.View
         [Tooltip("Full palette loops per second the glow cycles through while the rainbow buff is active.")]
         [SerializeField] [Min(0f)] private float _rainbowGlowSpeed = 1.5f;
 
+        [Header("Pierce Spiral")]
+        [Tooltip("Child renderer carrying the PierceConeSpiral material — fades in once the shot earns " +
+                 "the piercing buff (cruise taps), fades out with it.")]
+        [SerializeField] private SpriteRenderer _pierceSpiralRenderer;
+        [Tooltip("Seconds for the spiral to lerp in/out when the piercing state flips.")]
+        [SerializeField] [Min(0f)] private float _pierceFadeDuration = 0.35f;
+
         [Header("Scene Light")]
         [Tooltip("Radius of the light this shot casts into the scene-light field. Keep small — it's a bullet.")]
         [SerializeField] [Min(0f)] private float _lightRadius = 0.6f;
@@ -73,6 +80,7 @@ namespace BalloonParty.Projectile.View
         private float _rainbowGlowTimer;
         private bool _rainbowGlowActive;
         private bool _hasFlown;
+        private float _pierceAlpha;
 
         /// <summary>True once the fired shot has taken at least one physics step.</summary>
         internal bool HasFlown => _hasFlown;
@@ -116,6 +124,7 @@ namespace BalloonParty.Projectile.View
             }
 
             TickRainbowGlow();
+            TickPierceSpiral();
         }
 
         private void FixedUpdate()
@@ -193,6 +202,7 @@ namespace BalloonParty.Projectile.View
             _hasFlown = false;
             _rainbowGlowActive = false;
             _rainbowGlowTimer = 0f;
+            ResetPierceSpiral();
             LifecycleHelper.DisposeAndClear(ref _deflectedSubscription);
             LifecycleHelper.DisposeAndClear(ref _cruiseSubscription);
 
@@ -219,6 +229,7 @@ namespace BalloonParty.Projectile.View
             _disappearing = false;
             _rainbowGlowActive = false;
             _rainbowGlowTimer = 0f;
+            ResetPierceSpiral();
             transform.DOKill();
             transform.localScale = _baseScale;
             transform.rotation = Quaternion.identity;
@@ -406,6 +417,43 @@ namespace BalloonParty.Projectile.View
             }
 
             return true;
+        }
+
+        // The earned-piercing aura eases in rather than popping on — the buff lands mid-flight at a
+        // wall bounce, and an instant full-strength spiral there reads as a glitch, not a power-up.
+        // It also DUCKS during every tap beat (the freeze-then-pickup window each cruise bounce
+        // replays) and re-flourishes after — the aura winding back up with the shot.
+        private void TickPierceSpiral()
+        {
+            if (_pierceSpiralRenderer == null)
+            {
+                return;
+            }
+
+            var inTapBeat = _model.IsCruising.Value
+                            && _model.CruiseTapElapsed < _config.CruiseTapEaseDuration;
+            var target = _model.HasBuff(ProjectileBuffId.Piercing) && !inTapBeat ? 1f : 0f;
+            var maxStep = _pierceFadeDuration > 0f ? Time.deltaTime / _pierceFadeDuration : 1f;
+            _pierceAlpha = Mathf.MoveTowards(_pierceAlpha, target, maxStep);
+
+            _pierceSpiralRenderer.enabled = _pierceAlpha > 0f;
+            var color = _pierceSpiralRenderer.color;
+            color.a = _pierceAlpha;
+            _pierceSpiralRenderer.color = color;
+        }
+
+        private void ResetPierceSpiral()
+        {
+            _pierceAlpha = 0f;
+            if (_pierceSpiralRenderer == null)
+            {
+                return;
+            }
+
+            _pierceSpiralRenderer.enabled = false;
+            var color = _pierceSpiralRenderer.color;
+            color.a = 0f;
+            _pierceSpiralRenderer.color = color;
         }
 
         private void OnCruiseChanged(bool isCruising)

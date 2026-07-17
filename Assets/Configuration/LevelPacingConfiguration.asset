@@ -16,8 +16,8 @@ MonoBehaviour:
   - _fromLevel: 1
     _toLevel: 1
     _parameters:
-      _spawnLines: 5
-      _boardLines: 6
+      _spawnLines: 4
+      _boardLines: 7
       _itemCadence:
         _min: 0
         _max: 0

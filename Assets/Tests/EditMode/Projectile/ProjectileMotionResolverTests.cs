@@ -297,12 +297,49 @@ namespace BalloonParty.Tests.Projectile
             Assert.AreEqual(0, model.ConsecutiveWallBounces, "a lethal bounce ends the shot, not the count");
         }
 
-        private static ProjectileMotionResolver CruiseResolver(float perShield, float tapEaseDuration = 0f)
+        [Test]
+        public void Step_CruiseTaps_ArmPiercingAtThreshold()
+        {
+            var resolver = CruiseResolver(perShield: 0f, piercingTapThreshold: 3);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 4);
+            model.CruiseStartShields = 5;
+            model.IsCruising.Value = true;
+
+            // This bounce spends shield 4 -> 3: taps = 5 - 3 = 2, still below the threshold.
+            resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
+            Assert.IsFalse(model.HasBuff(ProjectileBuffId.Piercing), "two taps — not armed yet");
+
+            // Next bounce: taps = 3 — the shot arms for the rest of its life.
+            model.Direction = Vector2.up;
+            resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
+            Assert.IsTrue(model.HasBuff(ProjectileBuffId.Piercing), "third tap arms piercing");
+        }
+
+        [Test]
+        public void Step_PiercingThresholdZero_NeverArms()
+        {
+            var resolver = CruiseResolver(perShield: 0f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 10);
+            model.CruiseStartShields = 10;
+            model.IsCruising.Value = true;
+
+            for (var i = 0; i < 6; i++)
+            {
+                model.Direction = Vector2.up;
+                resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
+            }
+
+            Assert.IsFalse(model.HasBuff(ProjectileBuffId.Piercing), "0 disables the piercing grant");
+        }
+
+        private static ProjectileMotionResolver CruiseResolver(
+            float perShield, float tapEaseDuration = 0f, int piercingTapThreshold = 0)
         {
             var config = Substitute.For<IGameConfiguration>();
             config.LimitsClockwise.Returns(Walls);
             config.CruiseSpeedPerShield.Returns(perShield);
             config.CruiseTapEaseDuration.Returns(tapEaseDuration);
+            config.CruisePiercingTapThreshold.Returns(piercingTapThreshold);
             config.CruiseTapCurve.Returns(AnimationCurve.Linear(0f, 0f, 1f, 1f));
             return new ProjectileMotionResolver(config);
         }
