@@ -66,6 +66,8 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<BoardClearMessage>(options);
             builder.RegisterMessageBroker<ProjectileLoadedMessage>(options);
             builder.RegisterMessageBroker<ProjectileFiredMessage>(options);
+            builder.RegisterMessageBroker<ProjectileCruiseStartedMessage>(options);
+            builder.RegisterMessageBroker<ProjectileCruiseEndedMessage>(options);
             builder.RegisterMessageBroker<SpeckSpawnRequestMessage>(options);
             builder.RegisterMessageBroker<ItemCheckMessage>(options);
             builder.RegisterMessageBroker<ItemActivatedMessage>(options);

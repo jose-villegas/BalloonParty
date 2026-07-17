@@ -8,6 +8,10 @@ namespace BalloonParty.Projectile.Model
     {
         IReadOnlyReactiveProperty<string> ColorName { get; }
         IReadOnlyReactiveProperty<int> ShieldsRemaining { get; }
+
+        // True while the shot is ping-ponging through empty space (consecutive wall bounces with no
+        // balloon contact) — the earned long-flight moment feedback systems key off.
+        IReadOnlyReactiveProperty<bool> IsCruising { get; }
         Vector3 Direction { get; }
         float Speed { get; }
         bool IsFree { get; }

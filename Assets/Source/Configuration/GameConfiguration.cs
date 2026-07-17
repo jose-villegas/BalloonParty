@@ -21,6 +21,18 @@ namespace BalloonParty.Configuration
         [SerializeField] private Vector4 _limitsClockwise;
         [SerializeField] private float _shieldTrailDuration;
 
+        [Tooltip("Consecutive wall bounces with no balloon contact before the shot counts as CRUISING " +
+                 "(the earned long-flight moment: feedback + shield-scaled acceleration). 0 disables.")]
+        [SerializeField] [Min(0)] private int _cruiseWallBounceThreshold = 3;
+
+        [Tooltip("Speed multiplier a cruising shot reaches by the time its last shield is spent. The shot " +
+                 "starts at base speed on cruise entry and ramps toward this as bounces spend shields.")]
+        [SerializeField] [Min(1f)] private float _cruiseMaxSpeedMultiplier = 3f;
+
+        [Tooltip("Ramp shape from base speed (t=0, cruise entry) to the max multiplier (t=1, last shield " +
+                 "spent), sampled on the fraction of entry-time shields already spent.")]
+        [SerializeField] private AnimationCurve _cruiseRampCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+
         [Header("Slots")]
         [SerializeField] private Vector2Int _slotsSize;
         [SerializeField] private Vector2 _slotSeparation;
@@ -53,6 +65,9 @@ namespace BalloonParty.Configuration
         public float ProjectileDeadDriftFactor => _projectileDeadDriftFactor;
         public Vector4 LimitsClockwise => _limitsClockwise;
         public float ShieldTrailDuration => _shieldTrailDuration;
+        public int CruiseWallBounceThreshold => _cruiseWallBounceThreshold;
+        public float CruiseMaxSpeedMultiplier => _cruiseMaxSpeedMultiplier;
+        public AnimationCurve CruiseRampCurve => _cruiseRampCurve;
         public Vector2 SlotSeparation => _slotSeparation;
         public Vector2 SlotsOffset => _slotsOffset;
         public Vector2Int SlotsSize => _slotsSize;

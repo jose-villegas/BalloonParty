@@ -38,6 +38,14 @@ namespace BalloonParty.Projectile.Controller
         {
             projectile.LastHitBalloon = balloon;
 
+            // Any balloon contact — pop, deflect, absorb — ends the empty-corridor cruise and
+            // restarts its wall-bounce counter.
+            projectile.ConsecutiveWallBounces = 0;
+            if (projectile.IsCruising.Value)
+            {
+                projectile.IsCruising.Value = false;
+            }
+
             // A rainbow-buffed projectile pierces (plows through tough/unbreakable balloons instead of
             // one-shotting or deflecting off them), scores colour-agnostically, and rainbow-converts what
             // it pops near — until it loses a shield to a wall (which ends the buff).

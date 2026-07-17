@@ -9,17 +9,35 @@ namespace BalloonParty.Projectile.Controller
     internal sealed class ProjectileMotionResolver
     {
         private readonly WallLimits _walls;
+        private readonly int _cruiseWallBounceThreshold;
+        private readonly float _cruiseMaxSpeedMultiplier;
+        private readonly AnimationCurve _cruiseRampCurve;
 
         [Inject]
         internal ProjectileMotionResolver(IGameConfiguration config)
         {
             _walls = new WallLimits(config.LimitsClockwise);
+            _cruiseWallBounceThreshold = config.CruiseWallBounceThreshold;
+            _cruiseMaxSpeedMultiplier = config.CruiseMaxSpeedMultiplier;
+            _cruiseRampCurve = config.CruiseRampCurve ?? AnimationCurve.Linear(0f, 0f, 1f, 1f);
         }
 
         /// <summary>Advances one fixed step, mutating direction/shield count on a wall bounce.</summary>
         internal ProjectileStep Step(IWriteableProjectileModel model, Vector3 position, float deltaTime)
         {
             var speed = model.ComputeBuffedValue(ProjectileBuffId.Speed, model.Speed);
+
+            // The earned long-flight reward: a cruising shot ramps from base speed toward the max
+            // multiplier as bounces spend the shields it entered cruise with — the longer the empty
+            // corridor runs, the faster it gets, peaking on its final shield.
+            if (model.IsCruising.Value)
+            {
+                var startShields = Mathf.Max(model.CruiseStartShields, 1);
+                var spentFraction = Mathf.Clamp01(
+                    (model.CruiseStartShields - model.ShieldsRemaining.Value) / (float)startShields);
+                speed *= Mathf.Lerp(1f, _cruiseMaxSpeedMultiplier, _cruiseRampCurve.Evaluate(spentFraction));
+            }
+
             position += model.Direction * (speed * deltaTime);
             position = _walls.Clamp(position, out var reflect);
 
@@ -32,6 +50,19 @@ namespace BalloonParty.Projectile.Controller
             if (model.ShieldsRemaining.Value < 0)
             {
                 return ProjectileStep.Destroyed(position, model.Direction);
+            }
+
+            // Consecutive wall bounces with no balloon contact = the shot is ping-ponging through
+            // empty space (HitResolver resets the counter on any balloon touch). Deterministic
+            // flight means this only resolves by traversing the corridor — make it a moment, not
+            // a chore.
+            model.ConsecutiveWallBounces++;
+            if (_cruiseWallBounceThreshold > 0
+                && !model.IsCruising.Value
+                && model.ConsecutiveWallBounces >= _cruiseWallBounceThreshold)
+            {
+                model.CruiseStartShields = model.ShieldsRemaining.Value;
+                model.IsCruising.Value = true;
             }
 
             model.Direction = Vector2.Reflect(model.Direction, reflect.normalized);

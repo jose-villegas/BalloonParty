@@ -13,6 +13,9 @@ namespace BalloonParty.Shared
         Ease ProjectileDisappearEase { get; }
         float ProjectileDeadDriftFactor { get; }
         Vector4 LimitsClockwise { get; }
+        int CruiseWallBounceThreshold { get; }
+        float CruiseMaxSpeedMultiplier { get; }
+        AnimationCurve CruiseRampCurve { get; }
         float ShieldTrailDuration { get; }
 
         Vector2Int SlotsSize { get; }

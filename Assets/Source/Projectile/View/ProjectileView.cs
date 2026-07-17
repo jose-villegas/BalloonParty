@@ -14,6 +14,7 @@ using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Actor;
 using DG.Tweening;
 using MessagePipe;
+using UniRx;
 using UnityEngine;
 using VContainer;
 using BalloonParty.Configuration.Effects;
@@ -44,6 +45,8 @@ namespace BalloonParty.Projectile.View
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
         [Inject] private IPublisher<ShieldLostMessage> _shieldLostPublisher;
         [Inject] private IPublisher<ProjectileFiredMessage> _firedPublisher;
+        [Inject] private IPublisher<ProjectileCruiseStartedMessage> _cruiseStartedPublisher;
+        [Inject] private IPublisher<ProjectileCruiseEndedMessage> _cruiseEndedPublisher;
         [Inject] private IPublisher<SpeckSpawnRequestMessage> _speckPublisher;
         [Inject] private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
         [Inject] private ProjectileHitResolver _hitResolver;
@@ -57,6 +60,7 @@ namespace BalloonParty.Projectile.View
         private IDisposable _lightRegistration;
         private int _sparksColorIndex = -1;
         private IDisposable _deflectedSubscription;
+        private IDisposable _cruiseSubscription;
         private ProjectileTrail _projectileTrail;
         private float _contactRadius;
         private bool _shieldShown;
@@ -190,6 +194,7 @@ namespace BalloonParty.Projectile.View
             _rainbowGlowActive = false;
             _rainbowGlowTimer = 0f;
             LifecycleHelper.DisposeAndClear(ref _deflectedSubscription);
+            LifecycleHelper.DisposeAndClear(ref _cruiseSubscription);
 
             // Mirror OnDespawned's cleanup: a pooled instance must never inherit a still-running
             // disappear tween from its previous life — that would scale the fresh projectile to zero
@@ -208,6 +213,7 @@ namespace BalloonParty.Projectile.View
             LifecycleHelper.DisposeAndClear(ref _lightRegistration);
             _light = null;
             LifecycleHelper.DisposeAndClear(ref _deflectedSubscription);
+            LifecycleHelper.DisposeAndClear(ref _cruiseSubscription);
             _model = null;
             _shieldShown = false;
             _disappearing = false;
@@ -237,10 +243,23 @@ namespace BalloonParty.Projectile.View
 
             _deflectedSubscription?.Dispose();
             _deflectedSubscription = _deflectedSubscriber.Subscribe(OnBalloonDeflected);
+
+            // A fresh model always starts un-cruising, so skip the initial value — only transitions publish.
+            _cruiseSubscription?.Dispose();
+            _cruiseSubscription = model.IsCruising
+                .SkipLatestValueOnSubscribe()
+                .Subscribe(OnCruiseChanged);
         }
 
         private void DestroyProjectile()
         {
+            // A shot that dies mid-cruise (last shield spent on a wall) still closes its cruise, so
+            // started/ended feedback always pairs up.
+            if (_model != null && _model.IsCruising.Value)
+            {
+                _model.IsCruising.Value = false;
+            }
+
             // Publish now, not after the scale-down: the thrower scales this shot away (it returns to the
             // pool once that finishes) and loads a fresh instance, so it never reuses one mid-disappear.
             _balancePublisher.Publish(default);
@@ -339,6 +358,19 @@ namespace BalloonParty.Projectile.View
 
             _motionResolver.Deflect(
                 _model, transform.position, msg.BalloonWorldPosition, msg.SurfaceRadius + _contactRadius);
+        }
+
+        private void OnCruiseChanged(bool isCruising)
+        {
+            if (isCruising)
+            {
+                _cruiseStartedPublisher.Publish(new ProjectileCruiseStartedMessage(
+                    transform.position, _model.Direction, _model.ShieldsRemaining.Value));
+            }
+            else
+            {
+                _cruiseEndedPublisher.Publish(new ProjectileCruiseEndedMessage(transform.position));
+            }
         }
 
         private void PlayBounceEffect(Vector3 position)

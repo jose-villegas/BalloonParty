@@ -88,6 +88,18 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
+        public void Resolve_AnyBalloonContact_EndsCruiseAndResetsBounceCount()
+        {
+            _projectile.ConsecutiveWallBounces = 4;
+            _projectile.IsCruising.Value = true;
+
+            _resolver.Resolve(_projectile, new BalloonModel(new BalloonModelConfig(hitsToPop: 1)), Vector3.zero);
+
+            Assert.IsFalse(_projectile.IsCruising.Value, "balloon contact ends the cruise");
+            Assert.AreEqual(0, _projectile.ConsecutiveWallBounces, "counter restarts on any contact");
+        }
+
+        [Test]
         public void Resolve_PopNormalBalloon_StealsColour()
         {
             var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));

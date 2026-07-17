@@ -11,14 +11,18 @@ namespace BalloonParty.Projectile.Model
 
         public ReactiveProperty<string> ColorName { get; } = new(null);
         public ReactiveProperty<int> ShieldsRemaining { get; } = new(0);
+        public ReactiveProperty<bool> IsCruising { get; } = new(false);
 
         public Vector3 Direction { get; set; }
         public float Speed { get; set; }
         public bool IsFree { get; set; }
         public IBalloonModel LastHitBalloon { get; set; }
+        public int ConsecutiveWallBounces { get; set; }
+        public int CruiseStartShields { get; set; }
 
         IReadOnlyReactiveProperty<string> IProjectileModel.ColorName => ColorName;
         IReadOnlyReactiveProperty<int> IProjectileModel.ShieldsRemaining => ShieldsRemaining;
+        IReadOnlyReactiveProperty<bool> IProjectileModel.IsCruising => IsCruising;
 
         public bool HasBuff(ProjectileBuffId id)
         {
