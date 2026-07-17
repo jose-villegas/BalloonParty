@@ -111,9 +111,18 @@ namespace BalloonParty.Projectile.Controller
             var toPosition = position - center;
             var along = Vector2.Dot(toPosition, travel);
             var discriminant = along * along - toPosition.sqrMagnitude + radius * radius;
+
+            // A true tangency has discriminant exactly 0, but mixed-precision evaluation can land it
+            // a few billionths negative — clamp the noise band so knife-edge grazing contacts get the
+            // analytic tangent normal instead of falling back to the penetrated radial one.
             if (discriminant < 0f)
             {
-                return false;
+                if (discriminant < -1e-6f)
+                {
+                    return false;
+                }
+
+                discriminant = 0f;
             }
 
             var backtrack = along + Mathf.Sqrt(discriminant);
