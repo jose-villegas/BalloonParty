@@ -3,6 +3,7 @@
     "rootNamespace": "BalloonParty.Tests",
     "references": [
         "BalloonParty.Runtime",
+        "BalloonParty.Editor",
         "VContainer",
         "VContainer.Editor",
         "UniRx",

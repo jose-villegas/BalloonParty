@@ -139,6 +139,24 @@ namespace BalloonParty.Thrower
             TryFire();
         }
 
+        // Editor-tooling entry (Shot Solver): aim the thrower at the given direction and fire this
+        // frame, bypassing mouse input. Snaps the loaded shot to the spawn point first so the launch
+        // origin matches the solver's per-angle simulation exactly.
+        internal void FireAt(Vector3 direction)
+        {
+            if (!_isMovable || _pauseService.IsAnyPaused.Value
+                || _activeProjectile == null || _activeView == null || _activeProjectile.IsFree)
+            {
+                return;
+            }
+
+            _direction = direction.normalized;
+            _view.RotateTo(_direction);
+            _activeView.transform.position = _view.SpawnPointPosition;
+            _activeView.transform.rotation = _view.Rotation;
+            Fire();
+        }
+
         private void PlayEntrance()
         {
             _view.AnimateEntrance().OnComplete(() =>
@@ -233,6 +251,11 @@ namespace BalloonParty.Thrower
                 return;
             }
 
+            Fire();
+        }
+
+        private void Fire()
+        {
             _activeProjectile.IsFree = true;
             _activeProjectile.Direction = _direction;
             _positionProvider.SetFree(true);

@@ -8,7 +8,8 @@ namespace BalloonParty.Thrower
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterComponentInHierarchy<ThrowerView>();
-            builder.RegisterEntryPoint<ThrowerController>();
+            // AsSelf so editor tooling (Shot Solver) can resolve the controller and force a shot.
+            builder.RegisterEntryPoint<ThrowerController>().AsSelf();
         }
     }
 }

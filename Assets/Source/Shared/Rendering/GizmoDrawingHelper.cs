@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BalloonParty.Shared.Rendering
@@ -8,6 +9,41 @@ namespace BalloonParty.Shared.Rendering
     /// </summary>
     public static class GizmoDrawingHelper
     {
+        /// <summary>
+        ///     Draws a world-space open polyline through consecutive points (e.g. a simulated flight path).
+        ///     Gizmo lines have no pixel width, so thickness (world units) is faked with parallel offset
+        ///     lines perpendicular to each segment in the XY plane; 0 draws a single hairline.
+        /// </summary>
+        public static void DrawWorldPolyline(IReadOnlyList<Vector3> points, Color color, float thickness = 0f)
+        {
+            if (points == null || points.Count < 2)
+            {
+                return;
+            }
+
+            Gizmos.color = color;
+            for (var i = 0; i < points.Count - 1; i++)
+            {
+                var from = points[i];
+                var to = points[i + 1];
+                Gizmos.DrawLine(from, to);
+
+                if (thickness <= 0f)
+                {
+                    continue;
+                }
+
+                var direction = (to - from).normalized;
+                var perpendicular = new Vector3(-direction.y, direction.x, 0f);
+                for (var step = 1; step <= 2; step++)
+                {
+                    var offset = perpendicular * (thickness * 0.25f * step);
+                    Gizmos.DrawLine(from + offset, to + offset);
+                    Gizmos.DrawLine(from - offset, to - offset);
+                }
+            }
+        }
+
         /// <summary>
         ///     Draws a world-space axis-aligned rectangle from center, width and height.
         /// </summary>

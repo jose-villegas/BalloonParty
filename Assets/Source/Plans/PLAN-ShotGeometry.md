@@ -71,6 +71,9 @@ billiard of §2.
 2. **Shot solver (editor)** — given a board snapshot: enumerate critical angles (tangencies to
    all reachable balloon images within the shield budget), evaluate intervals, plot score-vs-θ,
    report windows ≥ threshold. Editor window per the EffectPreview/maps-window tooling patterns.
+   **Done** — `Assets/Source/Editor/ShotSolver/` (`ShotSimulator` + `ShotSolverWindow`, see its
+   README). Sweeps N samples and refines window edges by bisection rather than the exact critical-
+   angle enumeration described above — that enumeration is still v2.
 3. **Design pass** — measure and *choose* r_projectile against the 0.104 knife edge; decide the
    fair-window threshold; optionally wire the solver into spawn validation ("reroll toughs
    until a ≥ threshold window exists") for authored puzzle levels.

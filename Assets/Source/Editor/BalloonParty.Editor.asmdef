@@ -6,7 +6,9 @@
         "NaughtyAttributes.Core",
         "NaughtyAttributes.Editor",
         "Unity.2D.Sprite.Editor",
-        "Unity.RenderPipelines.Universal.Runtime"
+        "Unity.RenderPipelines.Universal.Runtime",
+        "VContainer",
+        "UniRx"
     ],
     "includePlatforms": [
         "Editor"

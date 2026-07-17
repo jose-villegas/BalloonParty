@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,6 +9,24 @@ namespace BalloonParty.Editor
     /// </summary>
     public static class SceneDrawingHelper
     {
+        /// <summary>
+        ///     Draws a world-space open polyline through consecutive points (e.g. a simulated flight path).
+        ///     Thickness is in pixels; 0 draws Unity's default hairline.
+        /// </summary>
+        public static void DrawWorldPolyline(IReadOnlyList<Vector3> points, Color color, float thickness = 0f)
+        {
+            if (points == null || points.Count < 2)
+            {
+                return;
+            }
+
+            Handles.color = color;
+            for (var i = 0; i < points.Count - 1; i++)
+            {
+                Handles.DrawLine(points[i], points[i + 1], thickness);
+            }
+        }
+
         /// <summary>
         ///     Draws a world-space axis-aligned rectangle defined by center, width and height.
         /// </summary>
