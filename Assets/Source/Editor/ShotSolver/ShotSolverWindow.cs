@@ -467,7 +467,8 @@ namespace BalloonParty.Editor.ShotSolver
             var dynamics = new ShotBoardDynamics(
                 config, balloonsConfig, targets, otherDynamicActors, staticActors, pulseDelay);
             var cruiseConfig = new ShotCruiseConfig(
-                config.CruiseWallBounceThreshold, config.CruiseSpeedPerShield, config.CruiseRampCurve);
+                config.CruiseWallBounceThreshold, config.CruiseSpeedPerShield,
+                config.CruiseTapEaseDuration, config.CruiseTapCurve);
 
             // Un-rotate the spawn point back into the thrower's aim-neutral frame so the sweep can
             // re-rotate it for every candidate angle.

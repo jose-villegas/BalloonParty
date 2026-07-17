@@ -16,6 +16,10 @@ namespace BalloonParty.Projectile.Model
         // Shield count captured at cruise entry: the ramp's denominator, so speed climbs from base
         // toward the max as the remaining shields spend down from this snapshot.
         int CruiseStartShields { get; set; }
+
+        // Seconds since the last cruise speed change (entry or bounce) — drives the per-tap
+        // freeze-then-pickup animation envelope.
+        float CruiseTapElapsed { get; set; }
         new Vector3 Direction { get; set; }
         new float Speed { get; set; }
         new bool IsFree { get; set; }

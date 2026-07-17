@@ -10,7 +10,8 @@ namespace BalloonParty.Projectile.Controller
     {
         private readonly WallLimits _walls;
         private readonly float _cruiseSpeedPerShield;
-        private readonly AnimationCurve _cruiseRampCurve;
+        private readonly float _cruiseTapEaseDuration;
+        private readonly AnimationCurve _cruiseTapCurve;
 
         // The view needs the same wall geometry for its cruise lookahead trace.
         internal WallLimits Walls => _walls;
@@ -20,7 +21,8 @@ namespace BalloonParty.Projectile.Controller
         {
             _walls = new WallLimits(config.LimitsClockwise);
             _cruiseSpeedPerShield = config.CruiseSpeedPerShield;
-            _cruiseRampCurve = config.CruiseRampCurve ?? AnimationCurve.Linear(0f, 0f, 1f, 1f);
+            _cruiseTapEaseDuration = config.CruiseTapEaseDuration;
+            _cruiseTapCurve = config.CruiseTapCurve ?? AnimationCurve.Linear(0f, 0f, 1f, 1f);
         }
 
         /// <summary>Advances one fixed step, mutating direction/shield count on a wall bounce.</summary>
@@ -30,16 +32,20 @@ namespace BalloonParty.Projectile.Controller
 
             // The earned long-flight reward: every cruise bounce adds a velocity TAP of
             // CruiseSpeedPerShield — cumulative, so a 13-shield bank accumulates 13 taps where a
-            // 2-shield bank gets 2. The curve only re-paces the taps (linear = equal taps per
-            // bounce): shapedTaps = curve(taps/bank) x bank, which reduces to exactly the tap
-            // count on a linear curve.
+            // 2-shield bank gets 2. Each tap replays the animation envelope from t=0: the new
+            // target speed scaled by curve(elapsed/duration), so a curve starting at 0 freezes the
+            // shot for a beat before it picks up.
             if (model.IsCruising.Value)
             {
                 var startShields = Mathf.Max(model.CruiseStartShields, 1);
                 var taps = Mathf.Clamp(
                     model.CruiseStartShields - model.ShieldsRemaining.Value, 0, startShields);
-                var shapedTaps = _cruiseRampCurve.Evaluate(taps / (float)startShields) * startShields;
-                speed *= 1f + _cruiseSpeedPerShield * shapedTaps;
+                var target = 1f + _cruiseSpeedPerShield * taps;
+                var progress = _cruiseTapEaseDuration > 0f
+                    ? Mathf.Clamp01(model.CruiseTapElapsed / _cruiseTapEaseDuration)
+                    : 1f;
+                speed *= target * _cruiseTapCurve.Evaluate(progress);
+                model.CruiseTapElapsed += deltaTime;
             }
 
             position += model.Direction * (speed * deltaTime);
@@ -61,6 +67,11 @@ namespace BalloonParty.Projectile.Controller
             // space (HitResolver resets the counter on any balloon touch). Entry into cruise is the
             // VIEW's call — it confirms with a physics lookahead the plain resolver can't run.
             model.ConsecutiveWallBounces++;
+            if (model.IsCruising.Value)
+            {
+                // A new tap lands with this bounce — restart its freeze-then-pickup envelope.
+                model.CruiseTapElapsed = 0f;
+            }
 
             model.Direction = Vector2.Reflect(model.Direction, reflect.normalized);
             return ProjectileStep.Bounced(position, wallContact, model.Direction);

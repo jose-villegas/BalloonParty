@@ -29,10 +29,13 @@ namespace BalloonParty.Configuration
                  "shields, so a 13-shield cruise tops out much faster than a 5-shield one.")]
         [SerializeField] [Min(0f)] private float _cruiseSpeedPerShield = 0.25f;
 
-        [Tooltip("Pacing of the per-bounce velocity taps, sampled on bounces-since-entry / entry " +
-                 "shields. LINEAR = every bounce adds one equal tap regardless of bank size (the " +
-                 "cumulative feel); an eased curve re-sizes taps along the run but keeps the same top.")]
-        [SerializeField] private AnimationCurve _cruiseRampCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
+        [Tooltip("Per-bounce speed-change animation: replayed from t=0 on EVERY cruise bounce, scaling " +
+                 "the new target speed by curve(elapsed/duration). Start the curve at 0 to freeze the " +
+                 "shot for a beat before it picks up to the new speed; end at 1 for the full target.")]
+        [SerializeField] private AnimationCurve _cruiseTapCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
+
+        [Tooltip("Seconds the per-bounce tap animation takes. 0 = instant speed changes (no freeze).")]
+        [SerializeField] [Min(0f)] private float _cruiseTapEaseDuration = 0.25f;
 
         [Header("Slots")]
         [SerializeField] private Vector2Int _slotsSize;
@@ -68,7 +71,8 @@ namespace BalloonParty.Configuration
         public float ShieldTrailDuration => _shieldTrailDuration;
         public int CruiseWallBounceThreshold => _cruiseWallBounceThreshold;
         public float CruiseSpeedPerShield => _cruiseSpeedPerShield;
-        public AnimationCurve CruiseRampCurve => _cruiseRampCurve;
+        public AnimationCurve CruiseTapCurve => _cruiseTapCurve;
+        public float CruiseTapEaseDuration => _cruiseTapEaseDuration;
         public Vector2 SlotSeparation => _slotSeparation;
         public Vector2 SlotsOffset => _slotsOffset;
         public Vector2Int SlotsSize => _slotsSize;

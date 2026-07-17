@@ -379,6 +379,7 @@ namespace BalloonParty.Projectile.View
             }
 
             _model.CruiseStartShields = _model.ShieldsRemaining.Value;
+            _model.CruiseTapElapsed = 0f;
             _model.IsCruising.Value = true;
         }
 

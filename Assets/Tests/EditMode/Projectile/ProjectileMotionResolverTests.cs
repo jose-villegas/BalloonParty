@@ -250,20 +250,39 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
-        public void Step_CruiseRamp_FollowsConfiguredCurve()
+        public void Step_TapEnvelope_FreezesThenPicksUpToTarget()
         {
-            // A hold-then-jump curve: flat 0 until t=1, so even at half the shields spent the shot
-            // must still be at base speed — proves the curve, not the linear fraction, shapes the ramp.
-            var resolver = CruiseResolver(
-                perShield: 0.5f,
-                curve: new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(0.99f, 0f), new Keyframe(1f, 1f)));
+            // Tap animation: 1s linear 0->1 curve. Right after a tap (elapsed 0) the shot is FROZEN
+            // (curve(0) = 0); halfway through the window it flies at half the x2 target; once the
+            // window completes it holds the full target.
+            var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 1f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
             model.CruiseStartShields = 4;
             model.IsCruising.Value = true;
+            model.CruiseTapElapsed = 0f;
 
-            var step = resolver.Step(model, Vector3.zero, 1f);
+            var frozen = resolver.Step(model, Vector3.zero, 0.5f);
+            Assert.AreEqual(0f, frozen.Position.y, 1e-4f, "curve(0) = 0 — the freeze beat");
 
-            Assert.AreEqual(1f, step.Position.y, 0.05f, "curve holds the ramp at base until the very end");
+            var pickingUp = resolver.Step(model, frozen.Position, 0.5f);
+            Assert.AreEqual(0.5f, pickingUp.Position.y, 1e-4f, "curve(0.5) = 0.5 of the x2 target over 0.5s");
+
+            var atTarget = resolver.Step(model, pickingUp.Position, 0.5f);
+            Assert.AreEqual(1.5f, atTarget.Position.y, 1e-4f, "window complete — full x2 target");
+        }
+
+        [Test]
+        public void Step_CruiseBounce_RestartsTheTapEnvelope()
+        {
+            var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 1f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
+            model.CruiseStartShields = 4;
+            model.IsCruising.Value = true;
+            model.CruiseTapElapsed = 99f;
+
+            resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
+
+            Assert.AreEqual(0f, model.CruiseTapElapsed, "a cruise bounce replays the animation from t=0");
         }
 
         [Test]
@@ -278,12 +297,13 @@ namespace BalloonParty.Tests.Projectile
             Assert.AreEqual(0, model.ConsecutiveWallBounces, "a lethal bounce ends the shot, not the count");
         }
 
-        private static ProjectileMotionResolver CruiseResolver(float perShield, AnimationCurve curve = null)
+        private static ProjectileMotionResolver CruiseResolver(float perShield, float tapEaseDuration = 0f)
         {
             var config = Substitute.For<IGameConfiguration>();
             config.LimitsClockwise.Returns(Walls);
             config.CruiseSpeedPerShield.Returns(perShield);
-            config.CruiseRampCurve.Returns(curve ?? AnimationCurve.Linear(0f, 0f, 1f, 1f));
+            config.CruiseTapEaseDuration.Returns(tapEaseDuration);
+            config.CruiseTapCurve.Returns(AnimationCurve.Linear(0f, 0f, 1f, 1f));
             return new ProjectileMotionResolver(config);
         }
 

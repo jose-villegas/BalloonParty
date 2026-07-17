@@ -173,8 +173,7 @@ namespace BalloonParty.Tests.ShotSolver
             var board = new[] { new ShotBalloonSnapshot(new Vector2(0f, 500f), 0.2f, "Red", 1, 1) };
             var workingSet = new ShotBalloonState[board.Length];
             var timestamps = new List<float>();
-            var cruise = new ShotCruiseConfig(
-                wallBounceThreshold: 1, speedPerShield: 1f, rampCurve: AnimationCurve.Linear(0f, 0f, 1f, 1f));
+            var cruise = new ShotCruiseConfig(wallBounceThreshold: 1, speedPerShield: 1f);
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.right, startingShields: 2, projectileContactRadius: 0f,
@@ -201,8 +200,7 @@ namespace BalloonParty.Tests.ShotSolver
             };
             var workingSet = new ShotBalloonState[board.Length];
             var timestamps = new List<float>();
-            var cruise = new ShotCruiseConfig(
-                wallBounceThreshold: 1, speedPerShield: 1f, rampCurve: AnimationCurve.Linear(0f, 0f, 1f, 1f));
+            var cruise = new ShotCruiseConfig(wallBounceThreshold: 1, speedPerShield: 1f);
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.right, startingShields: 2, projectileContactRadius: 0f,
@@ -221,6 +219,31 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         [Test]
+        public void Simulate_TapEaseLag_AddsTimePerCruiseBounce()
+        {
+            // Same corridor as the cruise-ramp test, plus a 1s tap animation with a linear 0->1 curve:
+            // mean curve value 0.5, so each cruise bounce (entry at t=1, then the t=3+lag bounce)
+            // costs 0.5s of timeline — timestamps shift from [0,1,3,4] to [0,1,3.5,4.75] (the final
+            // crossing also runs at x2 from the spent shield, halving its 2-unit flight).
+            var walls = new Vector4(1000f, 1f, -1000f, -1f);
+            var board = new[] { new ShotBalloonSnapshot(new Vector2(0f, 500f), 0.2f, "Red", 1, 1) };
+            var workingSet = new ShotBalloonState[board.Length];
+            var timestamps = new List<float>();
+            var cruise = new ShotCruiseConfig(
+                wallBounceThreshold: 1, speedPerShield: 1f, tapEaseDuration: 1f,
+                tapCurve: AnimationCurve.Linear(0f, 0f, 1f, 1f));
+
+            ShotSimulator.Simulate(
+                board, walls, Vector2.zero, Vector2.right, startingShields: 2, projectileContactRadius: 0f,
+                workingSet: workingSet, projectileSpeed: 1f, cruiseConfig: cruise, timestampsOut: timestamps);
+
+            Assert.AreEqual(4, timestamps.Count);
+            Assert.AreEqual(1f, timestamps[1], 1e-3f, "entry bounce lands on time; its lag applies after");
+            Assert.AreEqual(3.5f, timestamps[2], 1e-3f, "0.5s entry-tap lag + the 2-unit crossing at base speed");
+            Assert.AreEqual(4.75f, timestamps[3], 1e-3f, "second tap lag + 2 units at the x2 target");
+        }
+
+        [Test]
         public void Simulate_WithTimelineDefaults_MatchesStaticResults()
         {
             // The regression gate for tasks 4b/4c: the timeline/cruise/dynamics parameters must not
@@ -233,8 +256,7 @@ namespace BalloonParty.Tests.ShotSolver
                 new ShotBalloonSnapshot(new Vector2(0f, 3f), 0.1f, "Red", 1, 1),
             };
             var workingSet = new ShotBalloonState[board.Length];
-            var cruise = new ShotCruiseConfig(
-                wallBounceThreshold: 99, speedPerShield: 5f, rampCurve: AnimationCurve.Linear(0f, 0f, 1f, 1f));
+            var cruise = new ShotCruiseConfig(wallBounceThreshold: 99, speedPerShield: 5f);
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,

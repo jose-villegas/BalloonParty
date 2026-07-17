@@ -75,21 +75,42 @@ namespace BalloonParty.Editor.ShotSolver
         }
     }
 
-    /// <summary>The cruise speed-ramp knobs, mirroring <c>ProjectileMotionResolver</c>/<c>ProjectileView</c>
+    /// <summary>The cruise knobs, mirroring <c>ProjectileMotionResolver</c>/<c>ProjectileView</c>
     /// exactly (see <see cref="ShotSimulator" />'s cruise handling). Default (all-zero) disables cruise
     /// entirely — <see cref="WallBounceThreshold" /> &lt;= 0 is the same "0 disables" convention
-    /// <c>IGameConfiguration.CruiseWallBounceThreshold</c> uses.</summary>
+    /// <c>IGameConfiguration.CruiseWallBounceThreshold</c> uses. The per-bounce tap ANIMATION (target
+    /// speed scaled by curve(elapsed/duration), the freeze-then-pickup beat) never bends the path, so
+    /// the event sim folds it into <see cref="TapLagSeconds" /> — the time an eased startup loses
+    /// versus flying the whole segment at the target speed: duration × (1 − mean curve value) —
+    /// added to the timeline once per cruise bounce.</summary>
     internal readonly struct ShotCruiseConfig
     {
+        private const int CurveAverageSamples = 16;
+
         public readonly int WallBounceThreshold;
         public readonly float SpeedPerShield;
-        public readonly AnimationCurve RampCurve;
+        public readonly float TapLagSeconds;
 
-        public ShotCruiseConfig(int wallBounceThreshold, float speedPerShield, AnimationCurve rampCurve)
+        public ShotCruiseConfig(int wallBounceThreshold, float speedPerShield, float tapEaseDuration = 0f,
+            AnimationCurve tapCurve = null)
         {
             WallBounceThreshold = wallBounceThreshold;
             SpeedPerShield = speedPerShield;
-            RampCurve = rampCurve;
+
+            if (tapEaseDuration <= 0f)
+            {
+                TapLagSeconds = 0f;
+                return;
+            }
+
+            var curve = tapCurve ?? AnimationCurve.Linear(0f, 0f, 1f, 1f);
+            var sum = 0f;
+            for (var i = 0; i <= CurveAverageSamples; i++)
+            {
+                sum += curve.Evaluate(i / (float)CurveAverageSamples);
+            }
+
+            TapLagSeconds = tapEaseDuration * (1f - (sum / (CurveAverageSamples + 1)));
         }
     }
 
@@ -290,6 +311,13 @@ namespace BalloonParty.Editor.ShotSolver
                     cruiseStartShields = shields;
                     isCruising = true;
                 }
+
+                // Every cruise bounce (entry included) replays the tap animation — on the event
+                // timeline that's a pure time cost, never a path change.
+                if (isCruising)
+                {
+                    elapsed += cruiseConfig.TapLagSeconds;
+                }
             }
 
             return new ShotSimulationResult(rawScore, pops, toughsCleared, activeCount == 0, events, died, capped);
@@ -297,7 +325,8 @@ namespace BalloonParty.Editor.ShotSolver
 
         // Mirrors ProjectileMotionResolver.Step's cruise ramp exactly: every cruise bounce adds a
         // velocity TAP of SpeedPerShield (cumulative — a 13-shield bank accumulates 13 taps, a
-        // 2-shield bank 2), with the curve only re-pacing the taps (linear = equal taps per bounce).
+        // 2-shield bank 2). This is the steady-state target; the per-tap animation envelope is
+        // folded into ShotCruiseConfig.TapLagSeconds on the timeline instead.
         private static float CurrentSpeed(
             float baseSpeed, bool isCruising, int cruiseStartShields, int shieldsRemaining,
             in ShotCruiseConfig cruiseConfig)
@@ -309,9 +338,7 @@ namespace BalloonParty.Editor.ShotSolver
 
             var startShields = Mathf.Max(cruiseStartShields, 1);
             var taps = Mathf.Clamp(cruiseStartShields - shieldsRemaining, 0, startShields);
-            var curve = cruiseConfig.RampCurve ?? AnimationCurve.Linear(0f, 0f, 1f, 1f);
-            var shapedTaps = curve.Evaluate(taps / (float)startShields) * startShields;
-            return baseSpeed * (1f + (cruiseConfig.SpeedPerShield * shapedTaps));
+            return baseSpeed * (1f + (cruiseConfig.SpeedPerShield * taps));
         }
 
         // Mirrors ProjectileView.IsPathClearAhead: traces the wall-reflected ray for `bounces` more

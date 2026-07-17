@@ -50,8 +50,11 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
 - **Cruise** — entry mirrors `ProjectileView.TryEnterCruise`: past the wall-bounce threshold, a
   walls-only lookahead of `threshold` more segments must be balloon-free (tested against
   time-evaluated centres) before the ramp engages. Speed mirrors `ProjectileMotionResolver.Step`:
-  max multiplier `1 + CruiseSpeedPerShield × entry shields`, curve-sampled on the fraction of entry
-  shields spent. Any balloon contact resets counter and cruise.
+  every cruise bounce adds one cumulative `CruiseSpeedPerShield` tap (13-bank → 13 taps). The
+  per-tap ANIMATION (target × `CruiseTapCurve(elapsed/CruiseTapEaseDuration)`, the
+  freeze-then-pickup beat) never bends the path, so the event sim folds it into a per-bounce
+  timeline lag of `duration × (1 − mean curve value)` — an approximation only when a segment is
+  shorter than the ease window. Any balloon contact resets counter and cruise.
 - **Balance & nudge (dynamic board)** — when the window supplies `ShotBoardDynamics`, rebalance
   pulses fire at `k × FlightRebalanceInterval` running the REAL `BalancePlanner` over a real
   `SlotGrid` (no mirrored rules — rule drift is impossible); moved balloons follow their hop

@@ -19,6 +19,7 @@ namespace BalloonParty.Projectile.Model
         public IBalloonModel LastHitBalloon { get; set; }
         public int ConsecutiveWallBounces { get; set; }
         public int CruiseStartShields { get; set; }
+        public float CruiseTapElapsed { get; set; }
 
         IReadOnlyReactiveProperty<string> IProjectileModel.ColorName => ColorName;
         IReadOnlyReactiveProperty<int> IProjectileModel.ShieldsRemaining => ShieldsRemaining;
