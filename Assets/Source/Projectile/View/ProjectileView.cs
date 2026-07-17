@@ -301,7 +301,7 @@ namespace BalloonParty.Projectile.View
 
             if (step.Outcome != ProjectileStepOutcome.Moved)
             {
-                PlayBounceEffect(step.Position);
+                PlayBounceEffect(step.WallContact);
             }
 
             if (step.Outcome == ProjectileStepOutcome.Destroyed)
@@ -312,7 +312,7 @@ namespace BalloonParty.Projectile.View
 
             if (step.Outcome == ProjectileStepOutcome.Bounced)
             {
-                _shieldLostPublisher.Publish(new ShieldLostMessage(step.Position));
+                _shieldLostPublisher.Publish(new ShieldLostMessage(step.WallContact));
                 TryEnterCruise(step.Position, step.Direction);
             }
 

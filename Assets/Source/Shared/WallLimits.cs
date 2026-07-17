@@ -22,13 +22,9 @@ namespace BalloonParty.Shared
         }
 
         /// <summary>
-        ///     Clamps <paramref name="position" /> inside the walls and reports the summed inward
-        ///     normal of every wall crossed (<see cref="Vector3.zero" /> if none).
-        /// </summary>
-        /// <summary>
         ///     Finds the first wall the ray from <paramref name="position" /> along
         ///     <paramref name="direction" /> crosses: the crossing point and the summed inward normal
-        ///     (a corner hit sums both walls, matching <see cref="Clamp" />'s convention). False when
+        ///     (a corner hit sums both walls, matching <see cref="Reflect" />'s convention). False when
         ///     the direction is (near-)zero.
         /// </summary>
         public bool TryFindCrossing(Vector3 position, Vector3 direction, out Vector3 crossing, out Vector3 normal)
@@ -79,32 +75,46 @@ namespace BalloonParty.Shared
             return true;
         }
 
-        public Vector3 Clamp(Vector3 position, out Vector3 reflectNormal)
+        /// <summary>
+        ///     Mirror-reflects <paramref name="position" /> back across every wall it crossed (the
+        ///     exact billiard continuation — the overshoot travels on along the reflected heading, so
+        ///     neither distance nor time is lost), reporting the summed inward normal
+        ///     (<see cref="Vector3.zero" /> if none) and the wall-projected contact point for
+        ///     presentation. Clamping instead would keep the full parallel advance while zeroing the
+        ///     perpendicular overshoot, displacing every post-bounce path laterally by up to one step
+        ///     — an error the deterministic-shot work cannot absorb.
+        /// </summary>
+        public Vector3 Reflect(Vector3 position, out Vector3 reflectNormal, out Vector3 wallContact)
         {
             reflectNormal = Vector3.zero;
+            wallContact = position;
 
             if (position.y > Top)
             {
                 reflectNormal += Vector3.down;
-                position.y = Top;
+                wallContact.y = Top;
+                position.y = 2f * Top - position.y;
             }
 
             if (position.x > Right)
             {
                 reflectNormal += Vector3.left;
-                position.x = Right;
+                wallContact.x = Right;
+                position.x = 2f * Right - position.x;
             }
 
             if (position.y < Bottom)
             {
                 reflectNormal += Vector3.up;
-                position.y = Bottom;
+                wallContact.y = Bottom;
+                position.y = 2f * Bottom - position.y;
             }
 
             if (position.x < Left)
             {
                 reflectNormal += Vector3.right;
-                position.x = Left;
+                wallContact.x = Left;
+                position.x = 2f * Left - position.x;
             }
 
             return position;

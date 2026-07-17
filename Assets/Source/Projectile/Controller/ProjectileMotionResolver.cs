@@ -41,7 +41,7 @@ namespace BalloonParty.Projectile.Controller
             }
 
             position += model.Direction * (speed * deltaTime);
-            position = _walls.Clamp(position, out var reflect);
+            position = _walls.Reflect(position, out var reflect, out var wallContact);
 
             if (reflect == Vector3.zero)
             {
@@ -51,7 +51,8 @@ namespace BalloonParty.Projectile.Controller
             model.ShieldsRemaining.Value--;
             if (model.ShieldsRemaining.Value < 0)
             {
-                return ProjectileStep.Destroyed(position, model.Direction);
+                // A dead shot stops AT the wall — the mirrored continuation is for survivors.
+                return ProjectileStep.Destroyed(wallContact, model.Direction);
             }
 
             // Consecutive wall bounces with no balloon contact = the shot may be ping-ponging empty
@@ -60,7 +61,7 @@ namespace BalloonParty.Projectile.Controller
             model.ConsecutiveWallBounces++;
 
             model.Direction = Vector2.Reflect(model.Direction, reflect.normalized);
-            return ProjectileStep.Bounced(position, model.Direction);
+            return ProjectileStep.Bounced(position, wallContact, model.Direction);
         }
 
         /// <summary>Reflects the projectile off a deflecting balloon at the ANALYTIC contact point,
@@ -85,13 +86,15 @@ namespace BalloonParty.Projectile.Controller
 
             model.Direction = Vector2.Reflect(model.Direction, surfaceNormal);
 
-            // Return the analytic contact point so the caller can snap the shot onto the surface.
-            // Reflecting from the penetrated trigger position would exit along a chord displaced by
-            // up to a fixed step — an error the Sinai dispersion law (@ref plan_shot_geometry §3)
-            // amplifies ×10–20 per subsequent deflect, wrecking long predictions.
+            // Snap to the analytic contact point, then carry the already-travelled penetration
+            // distance along the REFLECTED heading — the exact billiard continuation, losing neither
+            // geometry nor time. Reflecting from the penetrated trigger position would exit along a
+            // chord displaced by up to a fixed step — an error the Sinai dispersion law
+            // (@ref plan_shot_geometry §3) amplifies ×10–20 per subsequent deflect.
             var contactPoint = balloonPosition + (Vector3)(surfaceNormal * contactRadius);
             contactPoint.z = projectilePosition.z;
-            return contactPoint;
+            var remainder = (projectilePosition - contactPoint).magnitude;
+            return contactPoint + (Vector3)(model.Direction * remainder);
         }
 
         /// <summary>Backtracks the travel ray from the (penetrated) trigger position to its entry into

@@ -41,15 +41,18 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
-        public void Step_CrossingWallWithShield_ClampsReflectsAndDecrements()
+        public void Step_CrossingWallWithShield_MirrorsReflectsAndDecrements()
         {
-            // Heading straight up from y=4.5 at speed 1 lands at 5.5 → clamped to the top wall.
+            // Heading straight up from y=4.5 at speed 1 lands at 5.5 → mirrored back to 4.5: the
+            // overshoot continues along the reflected heading (exact billiard, no time or lateral
+            // offset lost), while the wall contact reports where the bounce visually happened.
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 1);
 
             var step = _resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
 
             Assert.AreEqual(ProjectileStepOutcome.Bounced, step.Outcome);
-            Assert.AreEqual(5f, step.Position.y, 1e-4f, "clamped to the top wall");
+            Assert.AreEqual(4.5f, step.Position.y, 1e-4f, "overshoot mirrored back below the wall");
+            Assert.AreEqual(5f, step.WallContact.y, 1e-4f, "bounce VFX anchor sits on the wall itself");
             Assert.AreEqual(0, model.ShieldsRemaining.Value, "one shield consumed");
             Assert.Less(model.Direction.y, 0f, "reflected downward off the top wall");
         }
@@ -62,6 +65,7 @@ namespace BalloonParty.Tests.Projectile
             var step = _resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
 
             Assert.AreEqual(ProjectileStepOutcome.Destroyed, step.Outcome);
+            Assert.AreEqual(5f, step.Position.y, 1e-4f, "a dead shot stops AT the wall, not mirrored");
             Assert.AreEqual(-1, model.ShieldsRemaining.Value, "decrement crossed below zero");
         }
 
@@ -77,16 +81,17 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
-        public void Deflect_ReturnsAnalyticContactPointOnTheSurface()
+        public void Deflect_ReturnsContactPointPlusReflectedRemainder()
         {
-            // Trigger fired 0.1 deep inside the circle; the returned point must be the surface entry,
-            // not the penetrated position — the caller snaps the shot there to kill chord drift.
+            // Trigger fired 0.1 deep inside the circle: snap to the surface entry (0, 0.4), then the
+            // already-travelled 0.1 of penetration continues along the reflected (upward) heading —
+            // the exact billiard continuation, so no distance or time is lost at the contact.
             var model = NewModel(direction: Vector2.down, speed: 1f, shields: 3);
 
             var contact = _resolver.Deflect(model, new Vector3(0f, 0.3f, 0f), Vector3.zero, 0.4f);
 
             Assert.AreEqual(0f, contact.x, 1e-4f);
-            Assert.AreEqual(0.4f, contact.y, 1e-4f, "snapped back to the circle's top surface");
+            Assert.AreEqual(0.5f, contact.y, 1e-4f, "surface entry 0.4 plus the 0.1 remainder, reflected up");
         }
 
         [Test]
