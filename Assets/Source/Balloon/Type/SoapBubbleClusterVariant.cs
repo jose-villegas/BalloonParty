@@ -45,6 +45,13 @@ namespace BalloonParty.Balloon.Type
             EnsureBlock();
             _instancePhase = Random.value * 100f;
 
+            // The quad must stay axis-aligned — the shader rotates the content. Nothing rotates
+            // this child at runtime, so a one-time reset here (not a per-frame one) is enough.
+            if (_renderer != null)
+            {
+                _renderer.transform.localRotation = Quaternion.identity;
+            }
+
             // Instances that never Bind (scene-placed, previews) still get a live clock.
             if (Application.isPlaying)
             {
@@ -75,12 +82,6 @@ namespace BalloonParty.Balloon.Type
                 PushEditPreview(editorTime);
             }
 #endif
-
-            // The quad must stay axis-aligned — the shader rotates the content.
-            if (_renderer != null)
-            {
-                _renderer.transform.localRotation = Quaternion.identity;
-            }
         }
 
         private void OnValidate()

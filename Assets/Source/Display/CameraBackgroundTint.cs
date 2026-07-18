@@ -8,9 +8,10 @@ namespace BalloonParty.Display
     ///     The scene light's diffuse term for the camera's solid clear colour — the same
     ///     albedo × light response Sprite/Diffuse gives sprites, applied to the background. Owns
     ///     the AUTHORED base colour (the camera's backgroundColor becomes derived state, so the
-    ///     multiply can never compound on itself). Applies in Update so every LateUpdate consumer
-    ///     of camera.backgroundColor (the GI's ambient reference, the scene capture's clear)
-    ///     reads the already-tinted value the same frame.
+    ///     multiply can never compound on itself). All inputs (the authored colour, the light
+    ///     influence, and the scene light settings asset) are static once injected, so the tint is
+    ///     applied once in OnEnable; only the editor keeps re-applying every frame, so inspector
+    ///     tweaks still preview live in edit mode.
     /// </summary>
     [ExecuteAlways]
     [RequireComponent(typeof(Camera))]
@@ -27,7 +28,32 @@ namespace BalloonParty.Display
 
         private Camera _camera;
 
+        private void OnEnable()
+        {
+            Apply();
+        }
+
+#if UNITY_EDITOR
         private void Update()
+        {
+            // Edit mode has no DI, and the base colour/light influence/light settings asset may be
+            // under live authoring, so keep re-applying every frame there. Play mode already
+            // applied once in OnEnable — its inputs never change afterwards.
+            if (!Application.isPlaying)
+            {
+                Apply();
+            }
+        }
+#endif
+
+        private void Reset()
+        {
+            // Adding the component adopts the camera's current colour as the authored base, so
+            // wiring it up is a no-op visually.
+            _baseColor = GetComponent<Camera>().backgroundColor;
+        }
+
+        private void Apply()
         {
             if (_camera == null)
             {
@@ -44,13 +70,6 @@ namespace BalloonParty.Display
             var background = _baseColor * lit;
             background.a = _baseColor.a;
             _camera.backgroundColor = background;
-        }
-
-        private void Reset()
-        {
-            // Adding the component adopts the camera's current colour as the authored base, so
-            // wiring it up is a no-op visually.
-            _baseColor = GetComponent<Camera>().backgroundColor;
         }
     }
 }

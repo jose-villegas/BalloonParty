@@ -179,6 +179,8 @@ namespace BalloonParty.Balloon.Type
             // out when settled; registered dark, the registration removed when the view despawns.
             if (_lightField != null)
             {
+                // _moveLightRadius is authored and never changes after this — Radius/EndRadius are
+                // fixed here at construction and TickLights only ever touches Position/Intensity.
                 _moveLightValue = 0f;
                 _lastLightPos = transform.position;
                 _moveLight = new Light(transform.position, _moveLightRadius, 0f, _unbreakableColorIndex);
@@ -229,17 +231,21 @@ namespace BalloonParty.Balloon.Type
                 var moving = (pos - _lastLightPos).sqrMagnitude > MoveEpsilonSqr;
                 _lastLightPos = pos;
 
-                _moveLight.Position.Value = pos;
-                _moveLight.EndPosition.Value = pos;
-                _moveLight.Radius.Value = _moveLightRadius;
-                _moveLight.EndRadius.Value = _moveLightRadius;
+                // Once settled AND fully faded out, position/intensity are already at rest (radius is
+                // fixed at construction) — every write below would be a same-value no-op, so skip them.
+                // Still let a fade-out in progress tick to completion before this engages.
+                if (moving || _moveLightValue > 0f)
+                {
+                    _moveLight.Position.Value = pos;
+                    _moveLight.EndPosition.Value = pos;
 
-                // Lit while moving, faded out when settled. The gradual fade also bridges the gaps
-                // between 50 Hz balance-move writes so a 120 Hz frame with no delta doesn't flicker it.
-                var target = moving ? _moveLightIntensity : 0f;
-                var maxDelta = _moveLightIntensity / _moveLightFadeDuration * Time.deltaTime;
-                _moveLightValue = Mathf.MoveTowards(_moveLightValue, target, maxDelta);
-                _moveLight.Intensity.Value = _moveLightValue;
+                    // Lit while moving, faded out when settled. The gradual fade also bridges the gaps
+                    // between 50 Hz balance-move writes so a 120 Hz frame with no delta doesn't flicker it.
+                    var target = moving ? _moveLightIntensity : 0f;
+                    var maxDelta = _moveLightIntensity / _moveLightFadeDuration * Time.deltaTime;
+                    _moveLightValue = Mathf.MoveTowards(_moveLightValue, target, maxDelta);
+                    _moveLight.Intensity.Value = _moveLightValue;
+                }
             }
 
             if (_flashRegistration != null)
