@@ -2040,12 +2040,12 @@ MonoBehaviour:
   - {fileID: 5277771306453227080}
   - {fileID: 4146674627186969373}
   _sphereRadius: 0.5
-  _breathMinIntensity: 0.1
-  _breathMaxIntensity: 1.2
+  _breathMinIntensity: 0
+  _breathMaxIntensity: 1
   _breathMinRadius: 0
-  _breathMaxRadius: 1.25
+  _breathMaxRadius: 1.2
   _breathPeriod: 2
-  _breathHitPauseDuration: 1
+  _breathHitPauseDuration: 3
   _deflectFlashIntensity: 2.5
   _deflectFlashRadius: 1.2
   _deflectFlashDuration: 0.12

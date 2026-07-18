@@ -28,6 +28,9 @@ namespace BalloonParty.Balloon.Type
         // Matches the shader's _AnimationSpeed default.
         private const float ShaderClockRate = 2f;
 
+        // Below this squared per-frame move, the balloon counts as settled (motion light fades out).
+        private const float MoveEpsilonSqr = 1e-6f;
+
         private static readonly int SphereCenterId = Shader.PropertyToID("_SphereCenter");
         private static readonly int SphereRadiusId = Shader.PropertyToID("_SphereRadius");
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
@@ -40,15 +43,14 @@ namespace BalloonParty.Balloon.Type
                  "the outer renderers' bounds at Awake.")]
         [SerializeField] private float _sphereRadius;
 
-        [Header("Breathing light (Unbreakable colour)")]
-        [SerializeField] [Min(0f)] private float _breathMinIntensity = 0.8f;
-        [SerializeField] [Min(0f)] private float _breathMaxIntensity = 1.8f;
-        [SerializeField] [Min(0f)] private float _breathMinRadius = 0.8f;
-        [SerializeField] [Min(0f)] private float _breathMaxRadius = 1.4f;
-        [Tooltip("Seconds for one full breathe cycle (min -> max -> min).")]
-        [SerializeField] [Min(0.01f)] private float _breathPeriod = 2f;
-        [Tooltip("Seconds the breathe freezes after this unbreakable is hit (deflects a shot). 0 = no pause.")]
-        [SerializeField] [Min(0f)] private float _breathHitPauseDuration = 0.5f;
+        [Header("Motion light (Unbreakable colour)")]
+        [Tooltip("An Unbreakable-colour light at the balloon's position that lights up only while it " +
+                 "MOVES (balance/nudge) and fades out when it settles.")]
+        [SerializeField] [Min(0f)] private float _moveLightIntensity = 1.5f;
+        [SerializeField] [Min(0f)] private float _moveLightRadius = 1.2f;
+        [Tooltip("Seconds to fade the motion light fully in (on move) or out (on settle). The gradual " +
+                 "fade also bridges the gaps between fixed-step balance moves so it doesn't flicker.")]
+        [SerializeField] [Min(0.01f)] private float _moveLightFadeDuration = 0.3f;
 
         [Header("Deflect flash (Sparks colour)")]
         [SerializeField] [Min(0f)] private float _deflectFlashIntensity = 2.5f;
@@ -66,12 +68,12 @@ namespace BalloonParty.Balloon.Type
         private SceneLightFieldService _lightField;
         private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
         private IBalloonModel _model;
-        private Light _breathLight;
+        private Light _moveLight;
         private Light _flashLight;
         private IDisposable _flashRegistration;
         private float _flashOffTime;
-        private float _breathTime;
-        private float _breathPausedUntil;
+        private float _moveLightValue;
+        private Vector3 _lastLightPos;
         private int _unbreakableColorIndex = -1;
         private int _sparksColorIndex = -1;
 
@@ -173,17 +175,16 @@ namespace BalloonParty.Balloon.Type
 
             _model = model;
 
-            // A steady Unbreakable-colour glow that breathes (intensity + radius lerp on a sine) the
-            // whole time this balloon is alive; the registration turns it off when the view despawns.
+            // An Unbreakable-colour light at the balloon that lights up only while it moves and fades
+            // out when settled; registered dark, the registration removed when the view despawns.
             if (_lightField != null)
             {
-                _breathTime = 0f;
-                _breathPausedUntil = 0f;
-                _breathLight = new Light(
-                    transform.position, _breathMinRadius, _breathMinIntensity, _unbreakableColorIndex);
-                _lightField.RegisterLight(_breathLight).AddTo(disposables);
+                _moveLightValue = 0f;
+                _lastLightPos = transform.position;
+                _moveLight = new Light(transform.position, _moveLightRadius, 0f, _unbreakableColorIndex);
+                _lightField.RegisterLight(_moveLight).AddTo(disposables);
                 _deflectedSubscriber.Subscribe(OnDeflected).AddTo(disposables);
-                disposables.Add(Disposable.Create(() => { EndFlash(); _breathLight = null; }));
+                disposables.Add(Disposable.Create(() => { EndFlash(); _moveLight = null; }));
             }
         }
 
@@ -222,23 +223,23 @@ namespace BalloonParty.Balloon.Type
 
         private void TickLights()
         {
-            if (_breathLight != null)
+            if (_moveLight != null)
             {
-                _breathLight.Position.Value = transform.position;
-                _breathLight.EndPosition.Value = transform.position;
+                var pos = transform.position;
+                var moving = (pos - _lastLightPos).sqrMagnitude > MoveEpsilonSqr;
+                _lastLightPos = pos;
 
-                // A hit freezes the breathe for a beat: the accumulator stops (so it resumes smoothly,
-                // no phase snap) while the pause window is open. _instancePhase desyncs each
-                // unbreakable's breathe so a cluster doesn't pulse in unison.
-                if (Time.time >= _breathPausedUntil)
-                {
-                    _breathTime += Time.deltaTime;
-                }
+                _moveLight.Position.Value = pos;
+                _moveLight.EndPosition.Value = pos;
+                _moveLight.Radius.Value = _moveLightRadius;
+                _moveLight.EndRadius.Value = _moveLightRadius;
 
-                var t = (Mathf.Sin((_breathTime + _instancePhase) * (2f * Mathf.PI / _breathPeriod)) + 1f) * 0.5f;
-                _breathLight.Intensity.Value = Mathf.Lerp(_breathMinIntensity, _breathMaxIntensity, t);
-                _breathLight.Radius.Value = Mathf.Lerp(_breathMinRadius, _breathMaxRadius, t);
-                _breathLight.EndRadius.Value = _breathLight.Radius.Value;
+                // Lit while moving, faded out when settled. The gradual fade also bridges the gaps
+                // between 50 Hz balance-move writes so a 120 Hz frame with no delta doesn't flicker it.
+                var target = moving ? _moveLightIntensity : 0f;
+                var maxDelta = _moveLightIntensity / _moveLightFadeDuration * Time.deltaTime;
+                _moveLightValue = Mathf.MoveTowards(_moveLightValue, target, maxDelta);
+                _moveLight.Intensity.Value = _moveLightValue;
             }
 
             if (_flashRegistration != null)
@@ -269,9 +270,6 @@ namespace BalloonParty.Balloon.Type
             _flashLight.EndPosition.Value = transform.position;
             _flashRegistration ??= _lightField.RegisterLight(_flashLight);
             _flashOffTime = Time.time + _deflectFlashDuration;
-
-            // Stun the breathe: hold it frozen for the configured beat after the hit.
-            _breathPausedUntil = Time.time + _breathHitPauseDuration;
         }
 
         private void EndFlash()
