@@ -1289,3 +1289,30 @@ Touchpoints: `ILevelProgress`/`ClaimProgress`, `LevelController` (required-thres
 bookkeeping, `WillLevelUp`), `ColorProgressBar` (stashed max + post-drain start value),
 `ScoreController` (drop the cap comment in `PublishPoints`), TrailChoreography contracts
 (no change expected — the watermark/`LastScore` semantics are already cumulative).
+
+## 16 — Grand Antiprism: the 100 denomination (José, 2026-07-19)
+
+The score-shape catalog (PLAN-TrailChoreography) gains a 100 denomination: the **grand
+antiprism**, the exceptional uniform 4-POLYTOPE — 100 vertices, 500 edges (degree 10 at
+every vertex), 320 cells. Low priority: a 100-point single-colour group is effectively
+unreachable until the roguelike run modifiers (§13) exist — but José wants it AUTHORED
+AND TESTABLE (edit-mode construction asserts) ahead of reachability, like the rest of
+the catalog.
+
+Implementation sketch (for whichever session picks it up):
+- **Vertices**: the 600-cell's 120 unit-icosian vertices MINUS two completely orthogonal
+  great-circle decagon rings (10 + 10) — e.g. generate the 120, remove the xy-plane ring
+  `(cos kπ/5, sin kπ/5, 0, 0)` and the orthogonal zw ring, assert exactly 100 remain.
+- **Edges**: pairs at the grand antiprism's edge distance among the survivors; assert 500
+  undirected edges and degree exactly 10 at every vertex.
+- **Projection**: 4D→3D at catalog build time (static): perspective-from-w
+  (`scale = 1/(c − w)`) for the layered-shell look, or plain drop-w orthographic — pick
+  by eye in-editor; the ticker stays pure Vector3 (a live 4D rotation projected per tick
+  is a possible later flourish, NOT v1).
+- **Walks**: all degrees even → Eulerian; partition the 500 edges into edge-disjoint
+  closed circuits (same build-time greedy extraction as the rhombicosacron's), single-
+  inked; 100 pens via DistributePens. This is by far the densest frame — profile it.
+- **Ripples**: ShapeFormationTicker.MaxVertexCount → 100; decomposition tests
+  (100 = [100]; check knock-ons — e.g. 250 = [100, 100, 50] once 100 exists);
+  RadiusScale ~1.6; per-formation ribbon-correction cost makes the queued NativeArray
+  batching lever (memory: optimization findings) effectively a prerequisite.
