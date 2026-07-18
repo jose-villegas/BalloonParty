@@ -120,7 +120,7 @@ namespace BalloonParty.Game.Score.Behaviours
     /// </summary>
     internal sealed class ShapeFormationTicker : ILateTickable
     {
-        private const int MaxVertexCount = 30;
+        private const int MaxVertexCount = 50;
         private const float SnapFadeDuration = 0.1f;
         private const float MinDuration = 0.0001f;
         private const float FreezeRibbonTime = 600f;

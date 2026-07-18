@@ -357,6 +357,23 @@ triangle is just `{3/1}, m = 1` — one implementation covers every tier.
 
 ### `BigScore` — 3D shape catalog + score decomposition (José, 2026-07-19)
 
+**Catalog crown — the golden-ratio star-and-solid family (shipped 2026-07-19).** The upper
+ladder is `{50, 30, 20, 12, 10, …}`. 10 stays the latitude-ring globe; 12/20/30/50 are a
+coherent φ-based family sharing one construction vocabulary. **12** — small stellated
+dodecahedron: the icosahedron's 12 vertices, one pentagram `{5/2}` circuit per vertex (its
+five neighbours), every edge double-inked (each chord in two circuits). **20** — regular
+dodecahedron: 12 pentagon face circuits sliced from coplanar vertex rings, each edge shared
+by two faces (double-inked). **30** — dodecadodecahedron: 24 face circuits (12 pentagons
+`{5}` + 12 pentagrams `{5/2}`) over the icosidodecahedron's 30 vertices, each edge shared
+by one pentagon and one pentagram (double-inked). **50** — rhombicosacron: 50 vertices on
+the icosahedral 3-fold axes (20 face centroids, degree 6) and 2-fold axes (30 edge
+midpoints, degree 4); the 120-edge graph is Eulerian and partitions into 13 edge-disjoint
+closed circuits, so every edge is inked exactly once (single-inked — the family's one
+deliberate exception). Decomposition changed from greedy to optimal coin change (fewest
+pieces, remainder-free preferred, deterministic largest-on-optimal-path reconstruction):
+`13=10+3`, `7=5+2`, `250=50×5`. `ShapeFormationTicker.MaxVertexCount` raised 30 → 50.
+A future 100 (grand antiprism, 4-polytope) is specced in PLAN-FutureIdeas §16.
+
 **Denomination = vertex count, full 1:1 decomposition.** A shape's score value IS its vertex
 count; every point is one orbiting pen trail. A group's total decomposes **greedily largest-first**
 over the catalog ladder `{30, 20, 10, 8, 6, 5, 4, 3, 2}` (`ShapeCatalog.Denominations`), remainders

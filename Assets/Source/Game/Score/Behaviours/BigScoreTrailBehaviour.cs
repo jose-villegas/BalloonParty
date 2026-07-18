@@ -11,9 +11,10 @@ namespace BalloonParty.Game.Score.Behaviours
 {
     /// <summary>
     ///     Decomposes a big score into a catalog of 3D shapes and launches them all at once. Every point is one
-    ///     orbiting pen trail: the group's total splits greedily over <see cref="ShapeCatalog.Denominations"/>
-    ///     (largest-first, remainders recurse), each denomination becomes one formation of that many pens, and a
-    ///     terminal remainder of 1 becomes a single classic default trail. The formations bloom around the pop at
+    ///     orbiting pen trail: the group's total splits into the fewest pieces over
+    ///     <see cref="ShapeCatalog.Denominations"/> (optimal coin change; see <see cref="Decompose"/>), each
+    ///     denomination becomes one formation of that many pens, and a terminal remainder of 1 becomes a single
+    ///     classic default trail. The formations bloom around the pop at
     ///     spread sub-centres, tumble and orbit toward the bar, and each reports its own contiguous score range on
     ///     landing — the LARGEST takes the top range (so it carries <c>LastScore</c> and is the principal the
     ///     level-up cinematic tracks). The <see cref="ShapeFormationTicker"/> owns the per-frame simulation; this
@@ -42,6 +43,12 @@ namespace BalloonParty.Game.Score.Behaviours
         private readonly ShapeFormationTicker _ticker;
         private readonly IScoreTrailBehaviourConfiguration _config;
         private readonly List<int> _denominations = new(16);
+
+        // Grow-only DP scratch for the optimal decomposition, indexed by total: fewest pieces and whether that
+        // count needs a terminal remainder. Main-thread only (Decompose runs on the score-report path), so a
+        // shared static buffer never allocates in steady state — it only grows when a larger total appears.
+        private static int[] _dpPieces = new int[0];
+        private static bool[] _dpRemainder = new bool[0];
 
         [Inject]
         internal BigScoreTrailBehaviour(ShapeFormationTicker ticker, IScoreTrailBehaviourConfiguration config)
@@ -131,26 +138,97 @@ namespace BalloonParty.Game.Score.Behaviours
             }
         }
 
-        // Greedy largest-first over the catalog ladder; remainders recurse. Since 2 and 3 are both denominations
-        // the remainder after the pass is 0 or 1, and a terminal 1 (the single default trail) is appended.
+        // Optimal coin change over the catalog ladder: the FEWEST pieces, where an unavoidable terminal 1 is a
+        // piece carrying a heavy penalty (any remainder-free split beats any split with a remainder, whatever the
+        // piece count). Among optimal splits the reconstruction is deterministic — always the largest denomination
+        // that stays on an optimal path — which also yields the descending order the pipeline expects
+        // (13 = 10+3, not 12+1; 7 = 5+2, not 6+1). 2 and 3 both being denominations, only total 1 needs a remainder.
         internal static void Decompose(int total, List<int> result)
         {
             result.Clear();
-            var denominations = ShapeCatalog.Denominations;
-            for (var i = 0; i < denominations.Count; i++)
+            if (total <= 0)
             {
-                var denomination = denominations[i];
-                while (total >= denomination)
+                return;
+            }
+
+            var denominations = ShapeCatalog.Denominations;
+            ComputeDpCosts(total, denominations);
+            ReconstructLargestFirst(total, denominations, result);
+        }
+
+        // Fills the grow-only cost tables for every t in [0, total]: the fewest pieces to build t and whether that
+        // count needs a terminal remainder. t == 1 is the only total no denomination reaches (min is 2).
+        private static void ComputeDpCosts(int total, IReadOnlyList<int> denominations)
+        {
+            EnsureDpCapacity(total);
+            _dpPieces[0] = 0;
+            _dpRemainder[0] = false;
+            for (var t = 1; t <= total; t++)
+            {
+                var bestPieces = int.MaxValue;
+                var bestRemainder = true;
+                for (var i = 0; i < denominations.Count; i++)
                 {
-                    result.Add(denomination);
-                    total -= denomination;
+                    var d = denominations[i];
+                    if (d <= t && IsBetterDp(_dpRemainder[t - d], _dpPieces[t - d] + 1, bestRemainder, bestPieces))
+                    {
+                        bestRemainder = _dpRemainder[t - d];
+                        bestPieces = _dpPieces[t - d] + 1;
+                    }
+                }
+
+                _dpRemainder[t] = bestPieces == int.MaxValue || bestRemainder;
+                _dpPieces[t] = bestPieces == int.MaxValue ? 1 : bestPieces;
+            }
+        }
+
+        // Deterministic reconstruction: at each step take the largest denomination that stays on an optimal path
+        // (this also emits the pieces in descending order). A leftover 1 is the terminal remainder piece.
+        private static void ReconstructLargestFirst(int total, IReadOnlyList<int> denominations, List<int> result)
+        {
+            var remaining = total;
+            while (remaining > 1)
+            {
+                for (var i = 0; i < denominations.Count; i++)
+                {
+                    var d = denominations[i];
+                    if (d <= remaining
+                        && _dpPieces[remaining - d] + 1 == _dpPieces[remaining]
+                        && _dpRemainder[remaining - d] == _dpRemainder[remaining])
+                    {
+                        result.Add(d);
+                        remaining -= d;
+                        break;
+                    }
                 }
             }
 
-            if (total == 1)
+            if (remaining == 1)
             {
                 result.Add(1);
             }
+        }
+
+        // A candidate split is better when it avoids a remainder the other needs, else when it uses fewer pieces.
+        private static bool IsBetterDp(bool remainder, int pieces, bool bestRemainder, int bestPieces)
+        {
+            if (remainder != bestRemainder)
+            {
+                return !remainder;
+            }
+
+            return pieces < bestPieces;
+        }
+
+        private static void EnsureDpCapacity(int total)
+        {
+            if (_dpPieces.Length >= total + 1)
+            {
+                return;
+            }
+
+            _dpPieces = new int[total + 1];
+            _dpRemainder = new bool[total + 1];
         }
 
         // Rolls the shapes head-over-heels ALONG the hit direction, like a ball struck forward: the roll axis is

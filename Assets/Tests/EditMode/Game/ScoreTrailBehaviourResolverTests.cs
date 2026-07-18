@@ -80,19 +80,28 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void Decompose_GreedyLargestFirst_MatchesDesignExamples()
+        public void Decompose_OptimalCoinChange_MatchesDesignExamples()
         {
-            // 13 = 10-sphere + triangle; the 12-sphere is deliberately absent from the ladder (12 would greedily
-            // split 13 as 12+1, contradicting this example).
+            // Fewest pieces, remainder-free splits preferred, reconstructed largest-first. 13 = 10 + 3 (two
+            // pieces), NOT 12 + 1 (which a greedy pass over a 12-inclusive ladder would produce).
             CollectionAssert.AreEqual(new[] { 10, 3 }, Decompose(13));
 
-            // 7 = triangular prism + one leftover default trail (a terminal remainder of 1).
-            CollectionAssert.AreEqual(new[] { 6, 1 }, Decompose(7));
+            // 12 is now a denomination (the small stellated dodecahedron): 12 = [12], and 14 = 12 + 2.
+            CollectionAssert.AreEqual(new[] { 12 }, Decompose(12));
+            CollectionAssert.AreEqual(new[] { 12, 2 }, Decompose(14));
 
-            // 250 = eight 30-spheres + one 10-sphere.
-            CollectionAssert.AreEqual(new[] { 30, 30, 30, 30, 30, 30, 30, 30, 10 }, Decompose(250));
+            // 7 = 5 + 2 (two pieces, remainder-free) — better than greedy's 6 + 1 remainder split.
+            CollectionAssert.AreEqual(new[] { 5, 2 }, Decompose(7));
 
-            // 2 = the line shape; 1 = no shape, just a single default trail.
+            // 50 (the rhombicosacron) is now the ladder's crown: 50 = [50], 62 = 50 + 12, 100 = 50 + 50.
+            CollectionAssert.AreEqual(new[] { 50 }, Decompose(50));
+            CollectionAssert.AreEqual(new[] { 50, 12 }, Decompose(62));
+            CollectionAssert.AreEqual(new[] { 50, 50 }, Decompose(100));
+
+            // 250 = five 50s (five pieces) — beats the pre-50 optimum of eight 30s + one 10 (nine pieces).
+            CollectionAssert.AreEqual(new[] { 50, 50, 50, 50, 50 }, Decompose(250));
+
+            // 2 = the line shape; 1 = no shape, just a single default trail (the terminal remainder).
             CollectionAssert.AreEqual(new[] { 2 }, Decompose(2));
             CollectionAssert.AreEqual(new[] { 1 }, Decompose(1));
         }
@@ -140,11 +149,174 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void ShapeCatalog_DroppedAndNonDenominationLookups_Fail()
+        public void ShapeCatalog_NonDenominationLookup_Fails()
         {
-            // 12 is authored nowhere (dropped from the ladder to honour 13 = 10+3); 7 is not a denomination.
-            Assert.IsFalse(ShapeCatalog.TryGet(12, out _));
+            // 7 is not a denomination (the optimal split reaches it as 5 + 2), so no shape is authored for it.
             Assert.IsFalse(ShapeCatalog.TryGet(7, out _));
+        }
+
+        [Test]
+        public void ShapeCatalog_StellatedDodecahedron_TwelveUniformPentagramCircuits()
+        {
+            Assert.IsTrue(ShapeCatalog.TryGet(12, out var shape));
+            Assert.AreEqual(12, shape.Walks.Length, "one pentagram circuit per icosahedron vertex");
+
+            var touched = new HashSet<int>();
+            foreach (var walk in shape.Walks)
+            {
+                var ring = walk.Vertices;
+                Assert.AreEqual(5, ring.Length, "each circuit is a five-vertex pentagram");
+                Assert.AreEqual(5, new HashSet<int>(ring).Count, "a circuit visits five distinct vertices");
+                touched.UnionWith(ring);
+
+                // A regular pentagram: every skip-2 chord (consecutive ring entries) is the same length.
+                var reference = (shape.Vertices[ring[1]] - shape.Vertices[ring[0]]).magnitude;
+                for (var s = 0; s < ring.Length; s++)
+                {
+                    var chord = (shape.Vertices[ring[(s + 1) % ring.Length]] - shape.Vertices[ring[s]]).magnitude;
+                    Assert.AreEqual(reference, chord, 1e-3f, "pentagram chords must be uniform");
+                }
+            }
+
+            Assert.AreEqual(12, touched.Count, "the twelve circuits together cover all twelve vertices");
+
+            foreach (var pens in shape.PensPerWalk)
+            {
+                Assert.AreEqual(1, pens, "one pen per circuit (twelve 1s summing to the denomination)");
+            }
+        }
+
+        [Test]
+        public void ShapeCatalog_Dodecahedron_TwelveDoubleInkedPentagonFaces()
+        {
+            Assert.IsTrue(ShapeCatalog.TryGet(20, out var shape));
+            Assert.AreEqual(12, shape.Walks.Length, "twelve pentagon face circuits");
+            AssertFiveDistinctPerWalk(shape);
+
+            var edges = InspectCircuits(shape);
+            Assert.Less(edges.MaxLength - edges.MinLength, 1e-3f, "all pentagon edges are the same length");
+            Assert.AreEqual(30, edges.Multiplicity.Count, "a dodecahedron has 30 edges");
+            CollectionAssert.AreEqual(new[] { 2 }, DistinctValues(edges.Multiplicity), "each edge shared by two faces");
+            Assert.AreEqual(20, edges.Touched.Count, "all twenty vertices covered");
+        }
+
+        [Test]
+        public void ShapeCatalog_Dodecadodecahedron_PentagonsAndPentagramsDoubleInked()
+        {
+            Assert.IsTrue(ShapeCatalog.TryGet(30, out var shape));
+            Assert.AreEqual(24, shape.Walks.Length, "twelve pentagons + twelve pentagrams");
+            AssertFiveDistinctPerWalk(shape);
+
+            var edges = InspectCircuits(shape);
+            Assert.Less(edges.MaxLength - edges.MinLength, 1e-3f, "uniform edge length across pentagons and pentagrams");
+            Assert.AreEqual(60, edges.Multiplicity.Count, "a dodecadodecahedron has 60 edges");
+            CollectionAssert.AreEqual(
+                new[] { 2 }, DistinctValues(edges.Multiplicity), "each edge shared by one pentagon and one pentagram");
+            Assert.AreEqual(30, edges.Touched.Count, "all thirty vertices covered");
+        }
+
+        [Test]
+        public void ShapeCatalog_Rhombicosacron_EulerianCircuitsInkEveryEdgeOnce()
+        {
+            Assert.IsTrue(ShapeCatalog.TryGet(50, out var shape));
+
+            var unit = 0;
+            foreach (var v in shape.Vertices)
+            {
+                Assert.AreEqual(1f, v.magnitude, 1e-3f, "every vertex is on the unit sphere");
+                unit++;
+            }
+
+            Assert.AreEqual(50, unit);
+            Assert.AreEqual(50, new HashSet<Vector3>(shape.Vertices).Count, "fifty distinct vertices");
+
+            foreach (var walk in shape.Walks)
+            {
+                Assert.GreaterOrEqual(walk.Vertices.Length, 3, "each circuit is a closed loop");
+            }
+
+            var edges = InspectCircuits(shape);
+            Assert.AreEqual(120, edges.Multiplicity.Count, "a rhombicosacron has 120 edges");
+            CollectionAssert.AreEqual(
+                new[] { 1 }, DistinctValues(edges.Multiplicity), "every edge inked exactly once (single-inked)");
+            Assert.AreEqual(50, edges.Touched.Count, "all fifty vertices covered");
+
+            var degrees = DegreeHistogram(edges.Multiplicity);
+            Assert.AreEqual(30, CountByDegree(degrees, 4), "thirty two-fold vertices of degree four");
+            Assert.AreEqual(20, CountByDegree(degrees, 6), "twenty three-fold vertices of degree six");
+        }
+
+        private static void AssertFiveDistinctPerWalk(FormationShape shape)
+        {
+            foreach (var walk in shape.Walks)
+            {
+                Assert.AreEqual(5, walk.Vertices.Length, "a face circuit has five vertices");
+                Assert.AreEqual(5, new HashSet<int>(walk.Vertices).Count, "a face circuit visits five distinct vertices");
+            }
+        }
+
+        private static CircuitInspection InspectCircuits(FormationShape shape)
+        {
+            var multiplicity = new Dictionary<long, int>();
+            var touched = new HashSet<int>();
+            var minLength = float.MaxValue;
+            var maxLength = float.MinValue;
+            foreach (var walk in shape.Walks)
+            {
+                var ring = walk.Vertices;
+                for (var i = 0; i < ring.Length; i++)
+                {
+                    var a = ring[i];
+                    var b = ring[(i + 1) % ring.Length];
+                    touched.Add(a);
+                    var length = (shape.Vertices[a] - shape.Vertices[b]).magnitude;
+                    minLength = Mathf.Min(minLength, length);
+                    maxLength = Mathf.Max(maxLength, length);
+                    var key = a < b ? (long)a * 100 + b : (long)b * 100 + a;
+                    multiplicity.TryGetValue(key, out var count);
+                    multiplicity[key] = count + 1;
+                }
+            }
+
+            return new CircuitInspection(multiplicity, touched, minLength, maxLength);
+        }
+
+        private static int[] DistinctValues(Dictionary<long, int> multiplicity)
+        {
+            var set = new SortedSet<int>(multiplicity.Values);
+            var values = new int[set.Count];
+            set.CopyTo(values);
+            return values;
+        }
+
+        private static Dictionary<int, int> DegreeHistogram(Dictionary<long, int> multiplicity)
+        {
+            var degree = new Dictionary<int, int>();
+            foreach (var key in multiplicity.Keys)
+            {
+                var a = (int)(key / 100);
+                var b = (int)(key % 100);
+                degree.TryGetValue(a, out var da);
+                degree[a] = da + 1;
+                degree.TryGetValue(b, out var db);
+                degree[b] = db + 1;
+            }
+
+            return degree;
+        }
+
+        private static int CountByDegree(Dictionary<int, int> degrees, int target)
+        {
+            var count = 0;
+            foreach (var d in degrees.Values)
+            {
+                if (d == target)
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
 
         private static int[] Decompose(int total)
@@ -162,6 +334,23 @@ namespace BalloonParty.Tests.Game
                 { ScoreTrailBehaviourId.DefaultScore, handler },
             };
             return new ScoreTrailBehaviourResolver(config, handlers);
+        }
+
+        private readonly struct CircuitInspection
+        {
+            public readonly Dictionary<long, int> Multiplicity;
+            public readonly HashSet<int> Touched;
+            public readonly float MinLength;
+            public readonly float MaxLength;
+
+            public CircuitInspection(
+                Dictionary<long, int> multiplicity, HashSet<int> touched, float minLength, float maxLength)
+            {
+                Multiplicity = multiplicity;
+                Touched = touched;
+                MinLength = minLength;
+                MaxLength = maxLength;
+            }
         }
 
         private sealed class SpyBehaviour : IScoreTrailBehaviour
