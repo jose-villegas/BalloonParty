@@ -115,7 +115,7 @@ internal interface IScoreTrailBehaviour
 {
     /// Owns the group from spawn to final arrival. MUST: register exactly one principal
     /// flight under context.TrailId before returning (the cinematic may pause/track it);
-    /// report arrivals via context.Reporter with ascending Score values summing to
+    /// report arrivals via context.Reporter with true cumulative Score values summing to
     /// context.Points; return every pooled instance it spawned.
     void Begin(in ScoreTrailContext context);
 }
@@ -136,8 +136,10 @@ internal readonly struct ScoreTrailContext
 internal interface IScoreTrailReporter
 {
     /// Publishes one ScoreTrailArrivedMessage(color, score, points, at). The service
-    /// asserts (dev builds) that reports per group are ascending in score and sum to
-    /// the group total, then unregisters the principal flight after the final report.
+    /// asserts (dev builds) that reports per group never overshoot and finally sum to
+    /// the group total. Flight (un)registration stays fully handler-owned — the reporter
+    /// does NOT touch Flights (step 2: DefaultScore registers/unregisters every trail
+    /// itself, exactly as the pre-seam inline code did, for parity).
     void ReportArrival(int score, int points, Vector3 at);
 }
 ```
@@ -174,7 +176,7 @@ If mixed representation is ever wanted (e.g. 47 points as a "+40" carrier plus 7
 trails), the split belongs in the RESOLVER, not inside a handler: it partitions the group
 into sub-groups over contiguous score ranges and routes each to its own handler
 (`base+1..base+7 → DefaultScore`, `base+8..base+47 → BigScore`). The reporter invariant
-(ascending scores, reports sum to the total) is already partition-shaped, the watermark
+(true cumulative scores, reports sum to the total) is already partition-shaped, the watermark
 doesn't care who reports what, and the principal rule stays unambiguous: the sub-group
 containing `LastScore` owns the principal — so the big chunk always takes the top of the
 range. Handlers stay single-purpose; composition has exactly one home. Not built in v1 —
@@ -251,8 +253,18 @@ Worst case rerun (5× multiplier × 50-point unbreakable): today 250 trails / 50
    inlines what becomes `DefaultScore` (no seam yet); cinematic subscription retargeted
    (`TrailId(msg)` from the group message); `+= Points` consumers. **Playtest gate:
    visually indistinguishable from today.**
-2. **Extract the seam**: `IScoreTrailBehaviour` + reporter + config + resolver;
-   `DefaultScore` becomes the first handler. Pure refactor, second parity gate.
+2. **Extract the seam** ✅ *(landed — pure refactor, awaiting in-editor parity playtest)*:
+   `IScoreTrailBehaviour` + `ScoreTrailContext` + `IScoreTrailReporter` + `ScoreTrailBehaviourConfiguration`
+   + `ScoreTrailBehaviourResolver`; `DefaultScore` becomes the first handler. `ScoreTrailService` slims to
+   endpoint/colour lookup → context → `resolver.Resolve(points).Begin(context)`, and `LevelUpCinematic`
+   derives its tipping id from `resolver.PrincipalIdFor(msg)` so it can't diverge from what the handler
+   registers. One deliberate divergence beyond parity: the service now implements `IRunResettable` and
+   cancels+recreates a **group-scoped** `CancellationTokenSource` on run reset, so a group's spawn loop can
+   no longer bleed trails into the next run (a pre-existing hole — the service `_cts` only cancelled on
+   `Dispose`; prewarm still rides that lifetime `_cts`). Level-up does **not** cancel it — the ceremony
+   relies on in-flight trails continuing. Config binding is a serialized field on `GameLifetimeScope` (scene
+   inspector), so the resolver degrades to `DefaultScore` (one-time dev warning) when the asset is unwired.
+   Second parity gate.
 3. **`BigScore`**: carrier + tributaries + tiers, threshold authored in config
    (`MinPoints` ~40 to start). Playtest for feel; iterate knobs in-editor.
 4. Retune `ScoreTrailPrewarmPerColor` down (128 → ~32) once BigScore bounds the worst

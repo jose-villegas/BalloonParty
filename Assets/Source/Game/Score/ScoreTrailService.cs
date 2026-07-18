@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using BalloonParty.Game.Run;
+using BalloonParty.Game.Score.Behaviours;
 using BalloonParty.Shared;
-using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
 using BalloonParty.UI.Score;
@@ -14,7 +15,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Game.Score
 {
-    internal class ScoreTrailService : IStartable, IDisposable
+    internal class ScoreTrailService : IStartable, IDisposable, IRunResettable
     {
         private readonly IPublisher<ScoreTrailArrivedMessage> _arrivedPublisher;
         private readonly Dictionary<string, Color> _colorLookup = new();
@@ -22,15 +23,21 @@ namespace BalloonParty.Game.Score
         private readonly CancellationTokenSource _cts = new();
         private readonly TrailFlightRegistry<TrailId> _flights = new();
         private readonly PoolManager _poolManager;
+        private readonly Stack<ScoreTrailReporter> _reporterPool = new();
+        private readonly ScoreTrailBehaviourResolver _resolver;
         private readonly ISubscriber<ScorePointsGroupMessage> _scoredSubscriber;
         private readonly Dictionary<string, TrailSpawner> _spawners = new();
         private readonly TrailEndpointRegistry _endpoints;
         private readonly FlyingTrail _trailPrefab;
 
+        private CancellationTokenSource _groupCts = new();
         private IDisposable _scoreSubscription;
 
         internal TrailFlightRegistry<TrailId> Flights => _flights;
         internal FlyingTrail TrailPrefab => _trailPrefab;
+
+        // Cancelling stale group-spawn loops is independent of gameplay state, so it can run first.
+        public int ResetOrder => RunResetOrder.Quiesce;
 
         [Inject]
         internal ScoreTrailService(
@@ -39,6 +46,7 @@ namespace BalloonParty.Game.Score
             IPublisher<ScoreTrailArrivedMessage> arrivedPublisher,
             PoolManager poolManager,
             TrailEndpointRegistry endpoints,
+            ScoreTrailBehaviourResolver resolver,
             FlyingTrail trailPrefab)
         {
             _config = config;
@@ -46,6 +54,7 @@ namespace BalloonParty.Game.Score
             _arrivedPublisher = arrivedPublisher;
             _poolManager = poolManager;
             _endpoints = endpoints;
+            _resolver = resolver;
             _trailPrefab = trailPrefab;
         }
 
@@ -53,6 +62,8 @@ namespace BalloonParty.Game.Score
         {
             _cts.Cancel();
             _cts.Dispose();
+            _groupCts.Cancel();
+            _groupCts.Dispose();
             _scoreSubscription?.Dispose();
         }
 
@@ -61,22 +72,18 @@ namespace BalloonParty.Game.Score
             _scoreSubscription = _scoredSubscriber.Subscribe(OnScorePointsGroup);
         }
 
+        // Stop stale group spawns from bleeding into the next run; already-airborne trails are left to
+        // finish (the ceremony/loss paths own their completion). Prewarm stays on the service-lifetime _cts.
+        public void ResetRun(int generation)
+        {
+            _groupCts.Cancel();
+            _groupCts.Dispose();
+            _groupCts = new CancellationTokenSource();
+        }
+
         internal ITrailEndpoint GetTarget(string colorName)
         {
             return _endpoints.TryGet(colorName, out var endpoint) ? endpoint : null;
-        }
-
-        private void OnScorePointsGroup(ScorePointsGroupMessage msg)
-        {
-            if (!_endpoints.TryGet(msg.ColorName, out _))
-            {
-                Debug.LogWarning(
-                    $"ScoreTrailService: no target provider registered for " +
-                    $"color \"{msg.ColorName}\" — score trail skipped.");
-                return;
-            }
-
-            SpawnGroupAsync(msg).Forget();
         }
 
         internal void RegisterTarget(string colorName, ITrailEndpoint target, Color color)
@@ -98,80 +105,95 @@ namespace BalloonParty.Game.Score
             spawner.PrewarmAsync(_config.ScoreTrailPrewarmPerColor, _cts.Token).Forget();
         }
 
-        private Vector3 ComputeScatterOrigin(Vector3 center, int index, int count)
+        private void OnScorePointsGroup(ScorePointsGroupMessage msg)
         {
-            if (count <= 1)
+            if (!_endpoints.TryGet(msg.ColorName, out var endpoint))
             {
-                return center;
+                Debug.LogWarning(
+                    $"ScoreTrailService: no target provider registered for " +
+                    $"color \"{msg.ColorName}\" — score trail skipped.");
+                return;
             }
 
-            var radius = Mathf.Min(_config.SlotSeparation.x, _config.SlotSeparation.y) * 1.5f;
-            var angle = 2f * Mathf.PI * index / count;
-            Vector3 direction = VectorMathExtensions.DirectionFromAngle(angle);
-            return center + direction * radius;
+            var color = _colorLookup.TryGetValue(msg.ColorName, out var c) ? c : Color.white;
+            var reporter = RentReporter(msg.ColorName, msg.Points);
+            var context = new ScoreTrailContext(
+                msg.ColorName,
+                color,
+                msg.WorldPosition,
+                msg.Points,
+                msg.FirstScore,
+                msg.LastScore,
+                endpoint,
+                _spawners[msg.ColorName],
+                _flights,
+                reporter,
+                _config,
+                _groupCts.Token);
+
+            _resolver.Resolve(msg.Points).Begin(context);
         }
 
-        private void SpawnTrail(string colorName, Vector3 center, Vector3 scatterOrigin, TrailId id)
+        private ScoreTrailReporter RentReporter(string colorName, int total)
         {
-            var target = _endpoints.TryGet(colorName, out var endpoint) ? endpoint.RandomPosition() : Vector3.zero;
-            var color = _colorLookup.TryGetValue(colorName, out var c) ? c : Color.white;
-            var spawner = _spawners[colorName];
-            var hasBurst = scatterOrigin != center;
-
-            Action onArrived = () =>
-            {
-                _flights.Unregister(id);
-                _arrivedPublisher.Publish(
-                    new ScoreTrailArrivedMessage(colorName, id.Score, points: 1, target));
-            };
-
-            Transform transform;
-            if (hasBurst)
-            {
-                transform = spawner.SpawnBurst(center,
-                    scatterOrigin,
-                    target,
-                    _config.ScorePointBurstDuration,
-                    _config.ScorePointTraceDuration,
-                    color,
-                    onArrived);
-            }
-            else
-            {
-                transform = spawner.Spawn(scatterOrigin,
-                    target,
-                    _config.ScorePointTraceDuration,
-                    color,
-                    onArrived);
-            }
-
-            _flights.Register(id, transform, center);
+            var reporter = _reporterPool.Count > 0
+                ? _reporterPool.Pop()
+                : new ScoreTrailReporter(_arrivedPublisher, ReturnReporter);
+            reporter.Begin(colorName, total);
+            return reporter;
         }
 
-        // One state machine per group reproduces today's per-point schedule (spawn i at 0.02 s × i):
-        // the first spawn is immediate, then each iteration awaits until its shared-start target time.
-        // Scheduling against t0 (scaled, like the delay) instead of chaining fixed waits keeps frame
-        // rounding from accumulating per step — a chained 20 ms wait rounds up to a whole frame every
-        // iteration, stretching a long group's tail by tens of percent at 60 Hz. A late frame simply
-        // spawns the overdue points immediately, exactly like the old parallel per-point delays.
-        private async UniTaskVoid SpawnGroupAsync(ScorePointsGroupMessage msg)
+        private void ReturnReporter(ScoreTrailReporter reporter)
         {
-            var center = msg.WorldPosition;
-            var count = msg.Points;
-            var delay = _config.ScorePointsScatterDelay;
-            var start = Time.time;
+            _reporterPool.Push(reporter);
+        }
 
-            for (var i = 0; i < count; i++)
+        // One per in-flight group; recycled once its reports sum to the group total. Publishes each arrival
+        // and (dev builds) polices the handler contract with ORDER-INDEPENDENT invariants only: report
+        // order is deliberately unconstrained because TrailFlightRegistry.CompleteAll (level-up/loss)
+        // fires remaining arrivals in dictionary order, and the LevelController watermark is order-safe.
+        private sealed class ScoreTrailReporter : IScoreTrailReporter
+        {
+            private readonly IPublisher<ScoreTrailArrivedMessage> _publisher;
+            private readonly Action<ScoreTrailReporter> _recycle;
+
+            private string _colorName;
+            private int _total;
+            private int _cumulative;
+
+            internal ScoreTrailReporter(
+                IPublisher<ScoreTrailArrivedMessage> publisher, Action<ScoreTrailReporter> recycle)
             {
-                var remainingMs = Mathf.RoundToInt((start + delay * i - Time.time) * 1000f);
-                if (remainingMs > 0)
+                _publisher = publisher;
+                _recycle = recycle;
+            }
+
+            internal void Begin(string colorName, int total)
+            {
+                _colorName = colorName;
+                _total = total;
+                _cumulative = 0;
+            }
+
+            public void ReportArrival(int score, int points, Vector3 at)
+            {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                Debug.Assert(_cumulative + points <= _total,
+                    $"ScoreTrail {_colorName}: reported points {_cumulative + points} exceed group total {_total}.");
+#endif
+                _cumulative += points;
+                _publisher.Publish(new ScoreTrailArrivedMessage(_colorName, score, points, at));
+
+                if (_cumulative < _total)
                 {
-                    await UniTask.Delay(remainingMs, cancellationToken: _cts.Token);
+                    return;
                 }
 
-                var id = new TrailId(msg.ColorName, msg.FirstScore + i);
-                var origin = ComputeScatterOrigin(center, i, count);
-                SpawnTrail(msg.ColorName, center, origin, id);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                Debug.Assert(_cumulative == _total,
+                    $"ScoreTrail {_colorName}: final reports summed to {_cumulative}, expected {_total}.");
+#endif
+                _recycle(this);
             }
         }
     }

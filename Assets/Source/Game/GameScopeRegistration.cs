@@ -2,9 +2,11 @@
 using BalloonParty.Cheats;
 #endif
 
+using System.Collections.Generic;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Balloon.View;
+using BalloonParty.Configuration;
 using BalloonParty.Display;
 using BalloonParty.Game.Cinematics;
 using BalloonParty.Game.Danger;
@@ -12,6 +14,7 @@ using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Game.Score;
+using BalloonParty.Game.Score.Behaviours;
 using BalloonParty.Item;
 using BalloonParty.Item.Bomb;
 using BalloonParty.Item.Laser;
@@ -152,7 +155,9 @@ namespace BalloonParty.Game
             builder.Register<ILossForecast, LossForecast>(Lifetime.Singleton);
             builder.RegisterEntryPoint<SpaceDanger>().AsSelf().As<IDangerLevel>();
             builder.Register<HeartTrailTracker>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
-            builder.RegisterEntryPoint<ScoreTrailService>().AsSelf();
+            builder.Register<DefaultScoreTrailBehaviour>(Lifetime.Singleton).AsSelf();
+            builder.Register(BuildScoreTrailResolver, Lifetime.Singleton);
+            builder.RegisterEntryPoint<ScoreTrailService>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<ItemAssigner>();
             builder.RegisterEntryPoint<ItemActivator>();
             builder.RegisterEntryPoint<ProjectileBuffService>().As<IProjectileBuffs>();
@@ -192,6 +197,16 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<GameOverLossCinematic>();
             builder.RegisterEntryPoint<LevelTransitionController>();
             builder.RegisterComponentInHierarchy<GameOverScreen>();
+        }
+
+        // Step 2 wires one handler; the dictionary is the seam BigScore slots into (step 3).
+        private static ScoreTrailBehaviourResolver BuildScoreTrailResolver(IObjectResolver container)
+        {
+            var handlers = new Dictionary<ScoreTrailBehaviourId, IScoreTrailBehaviour>
+            {
+                { ScoreTrailBehaviourId.DefaultScore, container.Resolve<DefaultScoreTrailBehaviour>() },
+            };
+            return new ScoreTrailBehaviourResolver(container.Resolve<IScoreTrailBehaviourConfiguration>(), handlers);
         }
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD

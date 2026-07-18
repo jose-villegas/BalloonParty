@@ -4,6 +4,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Score;
+using BalloonParty.Game.Score.Behaviours;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
@@ -36,6 +37,7 @@ namespace BalloonParty.Game.Cinematics
         private readonly ILevelProgress _levelProgress;
         private readonly ILossForecast _lossForecast;
         private readonly ScoreTrailService _scoreTrailService;
+        private readonly ScoreTrailBehaviourResolver _resolver;
         private readonly PauseService _pauseService;
         private readonly CancellationTokenSource _cts = new();
 
@@ -64,6 +66,7 @@ namespace BalloonParty.Game.Cinematics
             ILevelProgress levelProgress,
             ILossForecast lossForecast,
             ScoreTrailService scoreTrailService,
+            ScoreTrailBehaviourResolver resolver,
             PauseService pauseService)
             : base(director, rig, timeScale, settings)
         {
@@ -74,6 +77,7 @@ namespace BalloonParty.Game.Cinematics
             _levelProgress = levelProgress;
             _lossForecast = lossForecast;
             _scoreTrailService = scoreTrailService;
+            _resolver = resolver;
             _pauseService = pauseService;
         }
 
@@ -129,10 +133,11 @@ namespace BalloonParty.Game.Cinematics
             }
 
             _sessionActive = true;
-            // Track the group's FIRST trail: it spawns immediately, so the bounded registry wait behaves
-            // exactly as today's per-point capture. The group's LAST trail can spawn seconds later under
-            // scatter stagger and would race WaitForTippingTrailAsync's timeout.
-            _tippingTrailId = new TrailId(msg.ColorName, msg.FirstScore);
+            // The handler nominates its principal trail (via the resolver), so the tipping id can never
+            // diverge from what actually registers: DefaultScore's FIRST trail spawns immediately and is
+            // timeout-safe under the bounded registry wait; the group's LAST trail can spawn seconds later
+            // under scatter stagger and would race WaitForTippingTrailAsync's timeout.
+            _tippingTrailId = _resolver.PrincipalIdFor(msg);
             _trackedFlight = null;
             _lastTrailPosition = msg.WorldPosition;
 

@@ -37,6 +37,7 @@ namespace BalloonParty.Game
         [SerializeField] private SpeckFieldSettings _speckFieldSettings;
         [SerializeField] private LevelPacingConfiguration _levelPacingConfiguration;
         [SerializeField] private BuffConfiguration _buffConfiguration;
+        [SerializeField] private ScoreTrailBehaviourConfiguration _scoreTrailBehaviourConfiguration;
         [SerializeField] private ProjectileView _projectilePrefab;
         [SerializeField] private FlyingTrail _scoreTrailPrefab;
 
@@ -83,6 +84,13 @@ namespace BalloonParty.Game
             builder.RegisterInstance<ISpeckFieldSettings>(_speckFieldSettings);
             builder.RegisterInstance<ILevelPacingConfiguration>(_levelPacingConfiguration);
             builder.RegisterInstance<IBuffConfiguration>(_buffConfiguration);
+
+            // An unassigned asset degrades to an empty table — the resolver then falls back to DefaultScore
+            // (a one-time dev warning), so correctness never depends on the field being wired in the scene.
+            builder.RegisterInstance<IScoreTrailBehaviourConfiguration>(
+                _scoreTrailBehaviourConfiguration != null
+                    ? _scoreTrailBehaviourConfiguration
+                    : ScriptableObject.CreateInstance<ScoreTrailBehaviourConfiguration>());
             builder.RegisterInstance(new ThrowerSettings(_projectilePrefab));
             builder.RegisterInstance(_scoreTrailPrefab);
         }

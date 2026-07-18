@@ -12,7 +12,8 @@ not here.** `ScoreController` writes progress into `ILevelProgress` but never de
 | `TrailId` | Readonly struct — uniquely identifies a score trail by `(Color, Score)`. Two colors can share the same numeric score, so both are needed. No level component: the level-up is gated by the transition, so a trail is only ever in flight during the one level it belongs to |
 | `ScoreController` | `IStartable` — score-keeping only (implements `IRunScore`, exposing `TotalScore`). Hits reach it as `HitPipeline`'s first dispatch stage (`OnActorHit` invoked directly, not bus-subscribed) so the streak tracker is guaranteed current when `Dispatch` returns. It casts the actor to `IHasScoreColor`, calls `ResolveScoreAttribution(context, attributions)`, applies the streak multiplier, then writes each color's points into `ILevelProgress.ClaimProgress` (which caps them at the level threshold) and publishes one `ScorePointsGroupMessage` per resolved color carrying the group's total `Points`. On trail arrival it only tallies lifetime totals (`_persistentScore` + `TotalScore` by `msg.Points`); confirming level progress on arrival is `LevelController`'s job. Run-scoped: totals reset via `IRunResettable.ResetRun()` (see `Game/Run/`) |
 | `ColorStreakTracker` | Plain C# singleton — single source of truth for the color streak. `Record(colorId, breaksStreak)` updates state and returns the multiplier to apply. `breaksStreak = true` resets the chain and returns 1 (attribution still scores, no bonus). Auto-resets on `ScoreLevelUpMessage`. Exposed to UI consumers as `GetStreak(colorName)` via the `IColorStreak` interface |
-| `ScoreTrailService` | `IStartable` + `IDisposable` — subscribes to `ScorePointsGroupMessage`; spawns one pooled `FlyingTrail` orb per point in the group, unconditionally. Composes `TrailFlightRegistry<TrailId>` (exposed as `Flights`) so the cinematic can look up, pause, and complete in-flight trails by id. Fans the group's points out into a scatter ring, staggering each spawn by `ScorePointsScatterDelay` |
+| `ScoreTrailService` | `IStartable` + `IDisposable` + `IRunResettable` — subscribes to `ScorePointsGroupMessage`, resolves the group to an `IScoreTrailBehaviour` (by group total, via `ScoreTrailBehaviourResolver`), builds a `ScoreTrailContext`, and hands the group to the handler's `Begin`. Owns the shared infrastructure the handlers borrow: the per-color `TrailSpawner`s and prewarm, the endpoint/color lookups, the `TrailFlightRegistry<TrailId>` (exposed as `Flights`), and a pooled `IScoreTrailReporter` per group that publishes `ScoreTrailArrivedMessage` (and asserts the handler contract in dev builds). On a run reset it cancels the group-spawn `CancellationToken` so stale groups stop spawning into the next run |
+| `Behaviours/` | The choreography seam — see [Trail Behaviour Seam](#trail-behaviour-seam) |
 
 ## Streak Multiplier
 
@@ -46,15 +47,30 @@ progress, the threshold cap, the post-level-up straggler suppression (via `Level
 latch), `WillLevelUp`/`GetProgress`/`GetRequiredPoints`, and the `ScoreLevelUpMessage` trigger. See
 `Game/Level/README.md` for the two-phase commit and how a trail arrival confirms progress.
 
+## Trail Behaviour Seam
+
+`Behaviours/` decouples *what a score group is worth* from *how it flies*. `ScoreTrailService` no longer
+spawns trails itself: it resolves each `ScorePointsGroupMessage` to an `IScoreTrailBehaviour` through
+`ScoreTrailBehaviourResolver` (highest-`MinPoints` entry the group's total clears wins, table authored in
+`IScoreTrailBehaviourConfiguration`), packs the shared infrastructure into a `ScoreTrailContext` (palette
+colour, endpoint, spawner, `Flights` registry, a pooled `IScoreTrailReporter`, config, a group-scoped
+cancellation token), and calls `Begin`. The handler owns everything from spawn to arrival: it registers and
+unregisters its own flights, and reports arrivals through the reporter with true cumulative scores that sum to the
+group total. Each handler also nominates its **principal trail** via `GetPrincipalId` — the one the level-up
+cinematic tracks — so the cinematic derives the tipping id from the same code (`resolver.PrincipalIdFor(msg)`)
+that decides what registers, and the two can never disagree. `DefaultScore` is the only handler today and
+reproduces the pre-seam pipeline byte-for-byte (one trail per point, scatter fan, `0.02 s` stagger, one point
+reported per landing, first trail = principal); `BigScore` slots into the resolver's dictionary in step 3.
+
 ## Spawn & Cinematic Interception
 
-`ScoreTrailService` spawns one trail per point in each `ScorePointsGroupMessage`, unconditionally — nothing gates spawning during cinematics. A single per-group task walks the points in order for stagger delay: the first point spawns immediately, each subsequent point after one more `ScorePointsScatterDelay`. Each flight registers in the `TrailFlightRegistry<TrailId>` (exposed as `Flights`) on spawn and unregisters on arrival.
+The `DefaultScore` handler spawns one trail per point in each `ScorePointsGroupMessage`, unconditionally — nothing gates spawning during cinematics. A single per-group task walks the points in order for stagger delay: the first point spawns immediately, each subsequent point after one more `ScorePointsScatterDelay`. Each flight registers in the `TrailFlightRegistry<TrailId>` (exposed as `Flights`) on spawn and unregisters on arrival.
 
 `RegisterTarget` (called by each `ColorProgressBar` in `Start()`) also prewarms that color's `ScoreTrail_{colorName}` pool via `TrailSpawner.PrewarmAsync`, to `IGameConfiguration.ScoreTrailPrewarmPerColor` (default 64) — one `Instantiate` per frame so registering a color at level setup never spikes into a hitch. A level restart re-registering the same color is a no-op past the first call, so the pool tops up once instead of growing unboundedly.
 
 The level-up cinematic (`LevelUpCinematic` in `Game/Cinematics/`) intercepts through that registry rather than through this service:
 
-1. On a `ScorePointsGroupMessage` where `ILevelProgress.WillLevelUp()` is true, it records `new TrailId(msg.ColorName, msg.FirstScore)` as the tipping trail — the group's FIRST point, which spawns immediately — and waits (`UniTask.WaitUntil`) for that id to appear in `Flights`. Tracking the first (not last) point keeps the bounded wait timeout-safe: later points in the group can spawn seconds later under scatter stagger.
+1. On a `ScorePointsGroupMessage` where `ILevelProgress.WillLevelUp()` is true, it records `_resolver.PrincipalIdFor(msg)` as the tipping trail and waits for that id to appear in `Flights`. The handler nominates its own principal, so the cinematic never hardcodes the numbering: for `DefaultScore` that resolves to the group's FIRST point (`msg.FirstScore`), which spawns immediately, keeping the bounded wait timeout-safe — later points can spawn seconds later under scatter stagger.
 2. It then pauses that single flight (`FlyingTrail.DisableMoveTween()` + `TrailFlight.Pause()`) and puppets its position/scale along the pan-in curve while the camera follows. All other in-flight trails keep flying at normal speed so their progress-bar arrivals confirm naturally.
 3. When the tipping trail reaches its bar (or its matching `ScoreTrailArrivedMessage` lands first), the cinematic calls `Flights.CompleteAll()` — every remaining in-flight trail completes instantly so all progress is confirmed before the popup opens.
 
