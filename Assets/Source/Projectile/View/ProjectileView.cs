@@ -93,6 +93,7 @@ namespace BalloonParty.Projectile.View
         private bool _rainbowGlowActive;
         private bool _hasFlown;
         private float _pierceAlpha;
+        private PathTrace.SegmentBlocked _segmentBlocked;
 
         /// <summary>True once the fired shot has taken at least one physics step.</summary>
         internal bool HasFlown => _hasFlown;
@@ -349,8 +350,23 @@ namespace BalloonParty.Projectile.View
             // A shot with no shields left dies at the next wall — UNLESS a balloon in the way could
             // still pop and refund one. When the single segment ahead is clear of any balloon, that
             // wall is certain death: flag the doomed run so the resolver eases the last-breath drift.
-            _model.IsLastShieldApproach.Value = _model.ShieldsRemaining.Value == 0
+            var wasDoomed = _model.IsLastShieldApproach.Value;
+            var doomed = _model.ShieldsRemaining.Value == 0
                 && IsPathClearAhead(transform.position, _model.Direction, 1);
+            _model.IsLastShieldApproach.Value = doomed;
+
+            // Anchor the last-breath glide at the instant doom begins. The resolver eases position from
+            // SegmentStartPosition over SegmentElapsed/duration, but those track the last WALL bounce —
+            // a shot only reaches 0 shields there, yet stays UN-doomed while a balloon blocks the path
+            // (it could still pop and refund). Once that balloon clears, doom flips on mid-segment with
+            // SegmentElapsed already past duration, so the first doomed step overshoots the death wall
+            // and returns Destroyed before transform.position is written — the shot vanishes in midair.
+            // Re-anchoring on the rising edge gives the glide its full timed runway from here to the wall.
+            if (doomed && !wasDoomed)
+            {
+                _model.Flight.SegmentStartPosition = transform.position;
+                _model.Flight.SegmentElapsed = 0f;
+            }
 
             var step = _motionResolver.Step(_model, transform.position, Time.fixedDeltaTime);
 
@@ -449,27 +465,12 @@ namespace BalloonParty.Projectile.View
 
         private bool IsPathClearAhead(Vector3 position, Vector3 direction, int bounces)
         {
-            var walls = _motionResolver.Walls;
-            var mask = 1 << BalloonsLayer;
+            // Cached once (this runs every fixed step) so the closure over the collider query isn't
+            // re-allocated per call. The solver mirrors this trace analytically — see PathTrace.
+            _segmentBlocked ??= (from, dir, length) =>
+                Physics2D.CircleCast(from, _contactRadius, dir, length, 1 << BalloonsLayer).collider != null;
 
-            for (var i = 0; i < bounces; i++)
-            {
-                if (!walls.TryFindCrossing(position, direction, out var crossing, out var wallNormal))
-                {
-                    return false;
-                }
-
-                var distance = Vector3.Distance(position, crossing);
-                if (Physics2D.CircleCast(position, _contactRadius, direction, distance, mask).collider != null)
-                {
-                    return false;
-                }
-
-                position = crossing;
-                direction = Vector3.Reflect(direction, wallNormal.normalized);
-            }
-
-            return true;
+            return PathTrace.IsClearAhead(_motionResolver.Walls, position, direction, bounces, _segmentBlocked);
         }
 
         // The earned-piercing aura eases in rather than popping on — the buff lands mid-flight at a

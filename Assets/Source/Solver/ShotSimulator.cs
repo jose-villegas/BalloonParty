@@ -369,10 +369,13 @@ namespace BalloonParty.Solver
             return Mathf.Max(speed, baseSpeed);
         }
 
-        // Mirrors ProjectileView.IsPathClearAhead: traces the wall-reflected ray for `bounces` more
-        // crossings, checking each segment (up to its own wall-crossing point only, matching the game's
-        // per-segment CircleCast) against every active balloon's CURRENT centre — frozen at tHit, since
-        // the live check is one instantaneous physics query, not a projection of future balloon motion.
+        // The event-timeline mirror of the live path-clear check (Shared.PathTrace / the predicate
+        // ProjectileView feeds it): traces the wall-reflected ray for `bounces` more crossings, checking
+        // each segment (up to its own wall-crossing point only, matching the game's per-segment
+        // CircleCast) against every active balloon's CURRENT centre — frozen at tHit, since the live
+        // check is one instantaneous physics query, not a projection of future balloon motion.
+        // Deliberately NOT routed through PathTrace: it keeps its own determinism-tuned wall crossing
+        // (TryFindWallCrossing, shared with the main flight loop) and its analytic occupancy test.
         private static bool IsPathClearAhead(
             in WallLimits walls, Vector2 position, Vector2 direction, int bounces, float projectileContactRadius,
             ShotBalloonState[] workingSet, int activeCount, float tHit, ShotBoardDynamics dynamics)
