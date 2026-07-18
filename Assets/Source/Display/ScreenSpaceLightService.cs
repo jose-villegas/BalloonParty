@@ -46,6 +46,7 @@ namespace BalloonParty.Display
         private RenderTexture _workTarget;
         private MeshRenderer _overlayRenderer;
         private Transform _overlayTransform;
+        private int _lastContentVersion = -1;
 
         internal RenderTexture LightTexture => _workTarget;
 
@@ -84,12 +85,32 @@ namespace BalloonParty.Display
                 return;
             }
 
-            EnsureTargets(source);
-            PushParameters();
+            var recreated = EnsureTargets(source);
+            var rebuild = recreated || _capture.ContentVersion != _lastContentVersion;
 
-            Graphics.Blit(source, _smearTarget, _smearMaterial, 0);
-            Graphics.Blit(_smearTarget, _workTarget, _smearMaterial, 1);
-            _overlayMaterial.SetTexture(LightTexId, _workTarget);
+            // The blit chain is a pure function of the capture content + these params (no
+            // temporal state anymore), so between capture refreshes it would just reproduce
+            // last time's pixels — skip it and keep the existing _workTarget bound.
+#if UNITY_EDITOR
+            // In-editor every frame so SO knob tweaks stay live-tunable; a smear-param tweak
+            // without a rebuild takes effect on the next capture refresh (<= one interval), an
+            // overlay-param tweak (read straight from the material, no rebuild needed) is
+            // immediate either way.
+            PushParameters();
+#else
+            if (rebuild)
+            {
+                PushParameters();
+            }
+#endif
+
+            if (rebuild)
+            {
+                _lastContentVersion = _capture.ContentVersion;
+                Graphics.Blit(source, _smearTarget, _smearMaterial, 0);
+                Graphics.Blit(_smearTarget, _workTarget, _smearMaterial, 1);
+                _overlayMaterial.SetTexture(LightTexId, _workTarget);
+            }
 
             FitOverlayToFrustum();
             SetOverlayVisible(true);
@@ -175,7 +196,7 @@ namespace BalloonParty.Display
             return true;
         }
 
-        private void EnsureTargets(RenderTexture source)
+        private bool EnsureTargets(RenderTexture source)
         {
             if (_smearTarget == null || _smearTarget.width != source.width
                                      || _smearTarget.height != source.height)
@@ -185,10 +206,14 @@ namespace BalloonParty.Display
 
                 _smearTarget = CreateTarget(source, "ScreenSpaceLightSmear");
                 _workTarget = CreateTarget(source, "ScreenSpaceLightWork");
+                return true;
             }
+
+            return false;
         }
 
-        // Pushed every frame so the knobs stay live-tunable in play mode.
+        // Gated to capture refreshes outside the editor (see LateUpdate); always run in-editor
+        // so SO knobs stay live-tunable in play mode.
         private void PushParameters()
         {
             // The smear now derives its march direction PER-FRAGMENT from the light field, so
@@ -219,7 +244,10 @@ namespace BalloonParty.Display
             _overlayMaterial.SetFloat(BounceStrengthId, _settings.BounceStrength);
             _overlayMaterial.SetFloat(MagnitudeRefId, Mathf.Max(_lightSettings.Intensity, 1e-4f));
 
-            // Measured against the capture's clear color so open sky nets to neutral.
+            // Measured against the capture's clear color so open sky nets to neutral. Outside
+            // the editor this (and MagnitudeRefId above) now update in lockstep with capture
+            // refreshes rather than every display frame — which is when the capture itself last
+            // re-matched its clear colour, so it's more correct as well as cheaper.
             _overlayMaterial.SetColor(AmbientColorId, _camera.backgroundColor);
         }
 

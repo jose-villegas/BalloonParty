@@ -136,7 +136,11 @@ preserving authored shadow strength.
 2. **Blit chain runs from `LateUpdate`, not a camera callback.** URP's RenderGraph
    rejects `Graphics.Blit` issued from inside render callbacks. `LateUpdate` runs outside
    the render loop entirely, reading the **previous** frame's capture (invisible at the
-   time-paced capture cadence).
+   time-paced capture cadence). It also only rebuilds when `SceneCaptureService.ContentVersion`
+   has advanced (or targets were resized) — the chain is a pure function of the capture, so
+   between refreshes it would just reproduce the last result. The version stamps at the
+   *start* of the capture's own `LateUpdate` (last frame's `enabled` camera rendered last
+   frame), so the signal is correct regardless of component execution order.
 3. **The feedback loop is structurally impossible.** The overlay lives on
    `TransparentFX`, excluded from the capture mask — the capture always sees the *unlit*
    scene.

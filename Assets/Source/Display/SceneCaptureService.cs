@@ -36,6 +36,10 @@ namespace BalloonParty.Display
 
         internal RenderTexture CaptureTexture => _texture;
 
+        // Bumped once per unique capture; consumers gate rebuild work on this instead of
+        // re-deriving from their own cadence.
+        internal int ContentVersion { get; private set; }
+
         private void Awake()
         {
             _mainCamera = GetComponent<Camera>();
@@ -51,6 +55,18 @@ namespace BalloonParty.Display
 
         private void LateUpdate()
         {
+            // The capture camera renders during the render phase, i.e. after last frame's
+            // LateUpdate — so "enabled" here (before this frame's toggle below) reflects last
+            // frame's decision and its pixels are new as of now. Stamping at the start (rather
+            // than alongside the render-trigger below) keeps the signal correct regardless of
+            // LateUpdate ordering between this component and its consumers; worst case a
+            // consumer sees a new version one frame late, the same staleness the smear already
+            // tolerates when reading CaptureTexture.
+            if (_captureCamera.enabled)
+            {
+                ContentVersion++;
+            }
+
             _captureAccumulator += Time.unscaledDeltaTime;
 
             // SceneCaptureFrameInterval was authored as "every N frames at 60 fps"; reinterpreted
