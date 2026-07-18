@@ -52,14 +52,24 @@ namespace BalloonParty.Game.Level
 
         public void Start()
         {
-            ResolveFor(1);
+            ResolveFor(StartLevel());
             _subscription = _levelUpSubscriber.Subscribe(msg => ResolveFor(msg.NewLevel));
         }
 
         public void ResetRun(int generation)
         {
             _rng = new System.Random(generation);
-            ResolveFor(1);
+            ResolveFor(StartLevel());
+        }
+
+        // Dev "play from level N" override (CheatState.StartLevel); 1 in release.
+        private static int StartLevel()
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            return Mathf.Max(1, BalloonParty.Cheats.CheatState.StartLevel);
+#else
+            return 1;
+#endif
         }
 
         public void Dispose()

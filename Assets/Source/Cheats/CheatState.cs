@@ -17,12 +17,27 @@ namespace BalloonParty.Cheats
         /// <see cref="BlockLevelUpCheat" />.</summary>
         public static bool BlockLevelUp;
 
+        /// <summary>The level a fresh run BEGINS at (dev "play from level N"). 1 = normal. Read by
+        /// LevelController/LevelDifficultyResolver on run reset. The Level Pacing window stashes it in
+        /// EditorPrefs under <see cref="StartLevelPrefKey" /> to carry it across the enter-play reload;
+        /// the cheat menu sets it directly and restarts.</summary>
+        public static int StartLevel = 1;
+
+        internal const string StartLevelPrefKey = "BalloonParty.Cheats.StartLevel";
+
         // With Enter Play Mode Options disabling domain reload, statics survive between play sessions — reset
-        // the lock on each play start so it never silently carries over. Runs earliest, before scene load.
+        // the flags on each play start so they never silently carry over. Runs earliest, before scene load.
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetOnPlay()
         {
             BlockLevelUp = false;
+#if UNITY_EDITOR
+            // Pick up (and consume) the "play from here" level the pacing window stashed before entering play.
+            StartLevel = Mathf.Max(1, UnityEditor.EditorPrefs.GetInt(StartLevelPrefKey, 1));
+            UnityEditor.EditorPrefs.DeleteKey(StartLevelPrefKey);
+#else
+            StartLevel = 1;
+#endif
         }
     }
 }

@@ -1,5 +1,8 @@
 using System.Linq;
 using BalloonParty.Balloon.Type;
+using BalloonParty.Cheats;
+using BalloonParty.Game;
+using BalloonParty.Game.Run;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Level;
@@ -9,6 +12,7 @@ using BalloonParty.Shared;
 using BalloonParty.Slots.Actor.Archetype;
 using UnityEditor;
 using UnityEngine;
+using VContainer;
 
 namespace BalloonParty.Editor
 {
@@ -44,14 +48,15 @@ namespace BalloonParty.Editor
             80f,   // 8: Wave Count curve
             100f,  // 9: Items — dynamic when expanded
             100f,  // 10: Actors — dynamic when expanded
-            44f,   // 11: Expand (►)
-            34f,   // 12: Dupe (⧉)
-            44f,   // 13: Delete (−)
+            34f,   // 11: Expand (foldout icon)
+            34f,   // 12: Duplicate icon
+            34f,   // 13: Delete (trash icon)
+            34f,   // 14: Play from this level
         };
 
         private static readonly string[] ColHeaders =
         {
-            "Range", "Spawn", "Board", "1st Turn", "Colors", "Balloons", "Cadence", "Init Count", "Wave Count", "Items", "Actors", "Expand", "Dupe", "Delete"
+            "Range", "Spawn", "Board", "1st Turn", "Colors", "Balloons", "Cadence", "Init Count", "Wave Count", "Items", "Actors", "Expand", "Dupe", "Delete", "Play"
         };
 
         private readonly ConfigAssetCache<LevelPacingConfiguration> _assetCache = new();
@@ -805,24 +810,25 @@ namespace BalloonParty.Editor
                 }
             }
 
-            // ► button (col 11) — right-anchored
+            // Action icons (cols 11-14) — right-anchored.
+            var expanded = _expandedRow == index;
             var expandRect = CellRect(rowRect, 11);
-            if (GUI.Button(expandRect, _expandedRow == index ? "▼" : "►"))
+            if (GUI.Button(expandRect, IconButton(
+                    expanded ? "d_winbtn_win_restore" : "d_winbtn_win_max",
+                    expanded ? "▼" : "►", expanded ? "Collapse details" : "Expand details")))
             {
-                _expandedRow = _expandedRow == index ? -1 : index;
+                _expandedRow = expanded ? -1 : index;
             }
 
-            // ⧉ duplicate button (col 12) — right-anchored
             var dupeRect = CellRect(rowRect, 12);
-            if (GUI.Button(dupeRect, "⧉"))
+            if (GUI.Button(dupeRect, IconButton("TreeEditor.Duplicate", "⧉", "Duplicate range")))
             {
                 _rangesProp.InsertArrayElementAtIndex(index);
                 return;
             }
 
-            // − button (col 13) — right-anchored
             var delRect = CellRect(rowRect, 13);
-            if (GUI.Button(delRect, "−"))
+            if (GUI.Button(delRect, IconButton("TreeEditor.Trash", "−", "Delete range")))
             {
                 _rangesProp.DeleteArrayElementAtIndex(index);
                 if (_expandedRow == index)
@@ -833,10 +839,71 @@ namespace BalloonParty.Editor
                 return;
             }
 
+            // Start a run beginning at this range's first level (dev only — the cheat menu has the
+            // in-play equivalent). The fallback catch-all row has no concrete level, so it plays from
+            // just past the highest authored range — the first level that resolves to the fallback.
+            var playRect = CellRect(rowRect, 14);
+            var playLevel = isFallback ? FallbackStartLevel() : Mathf.Max(1, from);
+            var playTip = isFallback ? "Play the fallback range (level " + playLevel + ")" : "Play from this level";
+            if (GUI.Button(playRect, IconButton("PlayButton", "▶", playTip)))
+            {
+                StartFromLevel(playLevel);
+            }
+
             if (_expandedRow == index && paramsProp != null)
             {
                 DrawExpandedDetails(paramsProp);
             }
+        }
+
+        // A built-in editor icon for a button, falling back to a text glyph if the icon name is absent
+        // in this Unity version (so the button always renders something actionable).
+        private static GUIContent IconButton(string iconName, string glyphFallback, string tooltip)
+        {
+            var icon = EditorGUIUtility.IconContent(iconName);
+            if (icon?.image != null)
+            {
+                return new GUIContent(icon.image, tooltip);
+            }
+
+            return new GUIContent(glyphFallback, tooltip);
+        }
+
+        // Sets the dev start-level override and begins a run at that level. In play mode it restarts the
+        // live run directly; from edit mode it stashes the level for CheatState to consume on play start.
+        private static void StartFromLevel(int level)
+        {
+            if (Application.isPlaying)
+            {
+                CheatState.StartLevel = level;
+                var scope = Object.FindFirstObjectByType<GameLifetimeScope>();
+                scope?.Container.Resolve<RunController>().RestartRun();
+                return;
+            }
+
+            EditorPrefs.SetInt(CheatState.StartLevelPrefKey, level);
+            EditorApplication.isPlaying = true;
+        }
+
+        // The first level that resolves to the fallback range: one past the highest level any authored
+        // (non-fallback) range covers, so ResolveRange finds no bounded match and returns the fallback.
+        private int FallbackStartLevel()
+        {
+            var highest = 0;
+            for (var i = 0; i < _rangesProp.arraySize; i++)
+            {
+                var entry = _rangesProp.GetArrayElementAtIndex(i);
+                var from = entry.FindPropertyRelative("_fromLevel").intValue;
+                var to = entry.FindPropertyRelative("_toLevel").intValue;
+                if (from < 0 || to < 0)
+                {
+                    continue;
+                }
+
+                highest = Mathf.Max(highest, Mathf.Max(from, to));
+            }
+
+            return highest + 1;
         }
 
         private static void DrawRangeCell(Rect cell, SerializedProperty fromProp, SerializedProperty toProp, bool isFallback)

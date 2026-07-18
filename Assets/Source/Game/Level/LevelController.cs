@@ -161,7 +161,11 @@ namespace BalloonParty.Game.Level
 
         private void ClearRunState()
         {
-            _level.Value = 1;
+            var startLevel = 1;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            startLevel = Mathf.Max(1, BalloonParty.Cheats.CheatState.StartLevel);
+#endif
+            _level.Value = startLevel;
             _phase.Value = LevelUpPhase.Playing;
             _pendingNewLevel = 0;
             ResetColorProgress();
