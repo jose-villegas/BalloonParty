@@ -40,12 +40,5 @@ namespace BalloonParty.Configuration.Effects
 
         /// <summary>Bounce color bleed strength (scene color deviation from ambient × this).</summary>
         float BounceStrength { get; }
-
-        /// <summary>Whether to blend the light buffer against its previous frame (kills texel flicker
-        /// from moving sprites at capture resolution).</summary>
-        bool TemporalSmoothing { get; }
-
-        /// <summary>Fraction of the fresh light buffer accepted per frame — lower is smoother but laggier.</summary>
-        float TemporalResponse { get; }
     }
 }

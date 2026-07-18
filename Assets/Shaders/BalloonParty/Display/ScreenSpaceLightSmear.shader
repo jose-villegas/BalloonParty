@@ -17,7 +17,6 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
     //   The march direction is PER-FRAGMENT from the light field (SceneLight.cginc), so
     //   local lights bend all four directions around them.
     // Pass 1 — 3x3 box soften to remove smear streaks.
-    // Pass 2 — temporal blend against the previous smoothed buffer.
     Properties
     {
         _MainTex ("Source", 2D) = "black" {}
@@ -49,10 +48,6 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
             float  _MipSpread;
             float  _ShadowMipSpread;
             float  _SecondaryWeight;
-            float  _BounceJitter;
-
-            // Rotate a 2D vector by (cos, sin) pair.
-            float2 rot(float2 v, float2 cs) { return float2(v.x*cs.x - v.y*cs.y, v.x*cs.y + v.y*cs.x); }
 
             fixed4 frag(v2f_img IN) : SV_Target
             {
@@ -85,17 +80,11 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                 float shadow = (shadowAcc / shadowWeightSum) * (1.0 - ownCoverage);
 
                 // --- Bounce: 4 directions (primary + 3 secondary at 90° spacing) ---
-                // Temporal jitter rotates the entire fan by _BounceJitter radians each frame
-                // so that the temporal EMA integrates more unique angles over time.
-                float2 jitterCS;
-                sincos(_BounceJitter, jitterCS.y, jitterCS.x);
-                float2 jitteredBase = rot(stepBase, jitterCS);
-
                 float2 dirs[4] = {
-                    jitteredBase,                                    // 0°   (primary, down-light)
-                    float2(-jitteredBase.y, jitteredBase.x),         // +90°
-                    -jitteredBase,                                   // 180° (up-light)
-                    float2(jitteredBase.y, -jitteredBase.x)          // -90°
+                    stepBase,                                // 0°   (primary, down-light)
+                    float2(-stepBase.y, stepBase.x),         // +90°
+                    -stepBase,                               // 180° (up-light)
+                    float2(stepBase.y, -stepBase.x)          // -90°
                 };
                 float dirWeights[4] = { 1.0, _SecondaryWeight, _SecondaryWeight, _SecondaryWeight };
 
@@ -151,26 +140,6 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                 }
 
                 return acc / 9.0;
-            }
-            ENDCG
-        }
-
-        Pass
-        {
-            CGPROGRAM
-            #pragma vertex vert_img
-            #pragma fragment frag
-            #include "UnityCG.cginc"
-
-            sampler2D _MainTex;
-            sampler2D _HistoryTex;
-            float _TemporalBlend;
-
-            fixed4 frag(v2f_img IN) : SV_Target
-            {
-                fixed4 current = tex2D(_MainTex, IN.uv);
-                fixed4 history = tex2D(_HistoryTex, IN.uv);
-                return lerp(history, current, _TemporalBlend);
             }
             ENDCG
         }

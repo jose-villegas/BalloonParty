@@ -21,9 +21,6 @@ namespace BalloonParty.Display
         private static readonly int MipSpreadId = Shader.PropertyToID("_MipSpread");
         private static readonly int ShadowMipSpreadId = Shader.PropertyToID("_ShadowMipSpread");
         private static readonly int SecondaryWeightId = Shader.PropertyToID("_SecondaryWeight");
-        private static readonly int BounceJitterId = Shader.PropertyToID("_BounceJitter");
-        private static readonly int HistoryTexId = Shader.PropertyToID("_HistoryTex");
-        private static readonly int TemporalBlendId = Shader.PropertyToID("_TemporalBlend");
         private static readonly int LightTexId = Shader.PropertyToID("_LightTex");
         private static readonly int ShadowTintId = Shader.PropertyToID("_ShadowTint");
         private static readonly int ShadowStrengthId = Shader.PropertyToID("_ShadowStrength");
@@ -47,14 +44,10 @@ namespace BalloonParty.Display
         private Material _overlayMaterial;
         private RenderTexture _smearTarget;
         private RenderTexture _workTarget;
-        private RenderTexture _lightTarget;
-        private RenderTexture _historyTarget;
         private MeshRenderer _overlayRenderer;
         private Transform _overlayTransform;
-        private bool _historyValid;
 
-        // Ping-ponged, so neither backing field consistently holds the latest build.
-        internal RenderTexture LightTexture { get; private set; }
+        internal RenderTexture LightTexture => _workTarget;
 
         private void Awake()
         {
@@ -76,8 +69,8 @@ namespace BalloonParty.Display
 
             // The capture camera renders during the render phase, after LateUpdate, so this
             // reads the previous frame's capture. One frame of staleness is invisible here
-            // (temporally blended buffer, refreshes every SceneCaptureFrameInterval frames) and
-            // buys running outside URP's RenderGraph, which rejects mid-render-loop Graphics.Blit.
+            // (the buffer refreshes every SceneCaptureFrameInterval frames anyway) and buys
+            // running outside URP's RenderGraph, which rejects mid-render-loop Graphics.Blit.
             var source = _capture.CaptureTexture;
             if (source == null)
             {
@@ -96,24 +89,7 @@ namespace BalloonParty.Display
 
             Graphics.Blit(source, _smearTarget, _smearMaterial, 0);
             Graphics.Blit(_smearTarget, _workTarget, _smearMaterial, 1);
-
-            if (_settings.TemporalSmoothing)
-            {
-                // Temporal accumulation: blend into history, then swap for next frame.
-                _smearMaterial.SetTexture(HistoryTexId, _historyTarget);
-                _smearMaterial.SetFloat(TemporalBlendId, _historyValid ? _settings.TemporalResponse : 1f);
-                Graphics.Blit(_workTarget, _lightTarget, _smearMaterial, 2);
-                _historyValid = true;
-
-                _overlayMaterial.SetTexture(LightTexId, _lightTarget);
-                LightTexture = _lightTarget;
-                (_historyTarget, _lightTarget) = (_lightTarget, _historyTarget);
-            }
-            else
-            {
-                _overlayMaterial.SetTexture(LightTexId, _workTarget);
-                LightTexture = _workTarget;
-            }
+            _overlayMaterial.SetTexture(LightTexId, _workTarget);
 
             FitOverlayToFrustum();
             SetOverlayVisible(true);
@@ -129,8 +105,6 @@ namespace BalloonParty.Display
         {
             ReleaseTarget(ref _smearTarget);
             ReleaseTarget(ref _workTarget);
-            ReleaseTarget(ref _lightTarget);
-            ReleaseTarget(ref _historyTarget);
 
             if (_smearMaterial != null)
             {
@@ -208,31 +182,10 @@ namespace BalloonParty.Display
             {
                 ReleaseTarget(ref _smearTarget);
                 ReleaseTarget(ref _workTarget);
-                ReleaseHistoryTargets();
 
                 _smearTarget = CreateTarget(source, "ScreenSpaceLightSmear");
                 _workTarget = CreateTarget(source, "ScreenSpaceLightWork");
             }
-
-            // The ping-pong pair only exists while smoothing is on (live-toggleable).
-            if (!_settings.TemporalSmoothing)
-            {
-                ReleaseHistoryTargets();
-                return;
-            }
-
-            if (_lightTarget == null)
-            {
-                _lightTarget = CreateTarget(source, "ScreenSpaceLightA");
-                _historyTarget = CreateTarget(source, "ScreenSpaceLightB");
-            }
-        }
-
-        private void ReleaseHistoryTargets()
-        {
-            ReleaseTarget(ref _lightTarget);
-            ReleaseTarget(ref _historyTarget);
-            _historyValid = false;
         }
 
         // Pushed every frame so the knobs stay live-tunable in play mode.
@@ -253,12 +206,6 @@ namespace BalloonParty.Display
             _smearMaterial.SetFloat(MipSpreadId, _settings.MipSpread);
             _smearMaterial.SetFloat(ShadowMipSpreadId, _settings.ShadowMipSpread);
             _smearMaterial.SetFloat(SecondaryWeightId, _settings.SecondaryBounceWeight);
-
-            // Temporal jitter: only when the EMA is active — without it the per-frame
-            // rotation would flicker visibly instead of being smoothed out.
-            const float jitterStep = 22.5f * Mathf.Deg2Rad;
-            float jitter = _settings.TemporalSmoothing ? (Time.frameCount % 4) * jitterStep : 0f;
-            _smearMaterial.SetFloat(BounceJitterId, jitter);
 
             _overlayMaterial.SetColor(ShadowTintId, _settings.ShadowTint);
             _overlayMaterial.SetFloat(ShadowStrengthId, _settings.ShadowStrength);

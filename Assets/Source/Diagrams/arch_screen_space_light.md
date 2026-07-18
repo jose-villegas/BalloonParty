@@ -52,9 +52,8 @@ digraph ScreenSpaceLight {
 
         Pass0 [label="Pass 0 — RSM-style multi-direction gather\nSHADOW: 8-tap toward-light march\n(single direction, _ShadowMipSpread penumbra)\nBOUNCE: 4 directions × 8 taps\n(0°/90°/180°/270° around field dir)\n_SecondaryWeight modulates non-primary"];
         Pass1 [label="Pass 1 — 3×3 box soften"];
-        Pass2 [label="Pass 2 — temporal EMA\nvs ping-pong history\n(_temporalResponse)"];
 
-        Pass0 -> Pass1 -> Pass2;
+        Pass0 -> Pass1;
     }
 
     LightTex [label="_LightTex (light buffer)\nRGB = multi-dir bounce color\nA = shadow amount", fillcolor="#cfe0f0"];
@@ -75,7 +74,7 @@ digraph ScreenSpaceLight {
     CapTex   -> Pass0    [label="_MainTex\n(mip chain)"];
     Include  -> Pass0    [label="local direction\nper fragment\n(rotates all 4 dirs)", style=bold, color="#2266aa"];
     Include  -> Overlay  [label="local magnitude\nper fragment", style=bold, color="#2266aa"];
-    Pass2    -> LightTex;
+    Pass1    -> LightTex;
     LightTex -> Overlay  [label="_LightTex"];
     MainCam  -> Overlay  [label="_AmbientColor\n= camera bg", style=dashed];
     Quad     -> Frame    [label="2·src·dst\n(darken + brighten)"];
@@ -108,7 +107,7 @@ near taps read mip 0 (sharp), far taps read higher mips (averaged over wider are
 `RGB` is the composited scene (sprites over the sky clear), `A` is a sprite-coverage mask. This
 capture is shared — the Unbreakable chrome reflection is another consumer.
 
-**Smear** (`ScreenSpaceLightSmear`, 3 blit passes at capture resolution):
+**Smear** (`ScreenSpaceLightSmear`, 2 blit passes at capture resolution):
 - **Pass 0** — **RSM-style 4-direction VPL gather**. Shadow and bounce are decoupled:
   - *Shadow* (single direction): 8-tap march toward the light with `_ShadowMipSpread`
     penumbra — sharp at contact, soft at distance. Multiplied by `(1 − ownCoverage)` so
@@ -118,10 +117,9 @@ capture is shared — the Unbreakable chrome reflection is another consumer.
     are scaled by `_SecondaryWeight` (0–1). Setting it to 0 collapses to the old
     single-direction march. All 4 directions rotate with the field's local direction, so
     a nearby point light bends the entire gather pattern around it.
-- **Pass 1** is a 3×3 box blur that removes the smear's directional streaks.
-- **Pass 2** is a temporal EMA against a ping-pong history buffer: at capture resolution
-  a moving sprite jumps whole texels per frame and the bounce flickers; folding each
-  build gradually integrates that away, and the light's low frequency hides the lag.
+- **Pass 1** is a 3×3 box blur that removes the smear's directional streaks. (A former
+  Pass 2 — temporal EMA against a ping-pong history — was never enabled in the shipped
+  tuning and was removed 2026-07-18.)
 
 **Composite** (`ScreenSpaceLightOverlay`): a camera-fitted quad on `TransparentFX`,
 sorting `Sky`/32000 (above gameplay, below UI), drawn with `Blend DstColor SrcColor`
@@ -138,7 +136,7 @@ preserving authored shadow strength.
 2. **Blit chain runs from `LateUpdate`, not a camera callback.** URP's RenderGraph
    rejects `Graphics.Blit` issued from inside render callbacks. `LateUpdate` runs outside
    the render loop entirely, reading the **previous** frame's capture (invisible at the
-   temporal-blend + time-paced cadence).
+   time-paced capture cadence).
 3. **The feedback loop is structurally impossible.** The overlay lives on
    `TransparentFX`, excluded from the capture mask — the capture always sees the *unlit*
    scene.

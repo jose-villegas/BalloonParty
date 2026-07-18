@@ -362,11 +362,12 @@ field's local light, so nearby point/area lights bend the entire gather pattern 
 - `CameraBackgroundTint` reads from `ISceneLightSettings` (DI-injected).
 - Single SO serves three interfaces (`ISceneLightFieldSettings`, `IScreenSpaceLightSettings`,
   `ISceneLightSettings`), registered in `GameLifetimeScope`.
+- 2026-07-18: the temporal-smoothing path (smear Pass 2 EMA, ping-pong history buffers,
+  bounce-direction jitter, `TemporalSmoothing`/`TemporalResponse` knobs) was removed — it shipped
+  disabled and never earned its complexity. The smear is now two passes (gather + box soften).
 
 ### Future exploration
 
-- **Temporal jitter**: rotate the 4 bounce directions by ¼ turn each frame so the temporal EMA
-  effectively integrates 16 directions at 4-frame lag (free quality boost).
 - **Phase D (Radiance Cascades)**: 2-level cascade replacing the flat multi-direction march. The
   light field is converging toward a cascade-0 representation — a natural evolution if more spatial
   coherence is needed for far-field bounce.
