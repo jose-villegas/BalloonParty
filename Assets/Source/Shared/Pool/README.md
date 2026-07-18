@@ -14,7 +14,7 @@ Effects (VFX that need to `Play` and `Stop`) have their own hierarchy, separate 
 
 - **`IEffect`** — interface with `Play(position, tint)`, `Play(position, rotation, tint)`, and `Stop()`. Not item-specific — any system that wants to abstract a visual effect can use it.
 - **`EffectView`** — abstract `MonoBehaviour` implementing `IPoolable` + `IEffect`. Holds an `Action onComplete` callback. Subclasses implement `Play()` and `Stop()`.
-- **`ParticleEffectView`** — `EffectView` subclass for particle effects. Stops and clears the particle in `OnSpawned()` (prevents stale color from Play-on-Awake). Detects completion via `!_particle.IsAlive()` in `Update()`.
+- **`ParticleEffectView`** — `EffectView` subclass for particle effects. Stops and clears the particle in `OnSpawned()` (prevents stale color from Play-on-Awake). Detects completion natively: `main.stopAction = ParticleSystemStopAction.Callback` (set once in `Awake()`) drives `OnParticleSystemStopped()` instead of polling `IsAlive()` every frame. Requires the `ParticleSystem` on the *same* GameObject — Unity only sends the callback there. If a child system (sub-emitter) outlives the root's own stop, `OnParticleSystemStopped` falls back to a cheap `IsAlive(true)` check in `Update()` until the children finish too, matching the old default (`IsAlive()` = `withChildren: true`).
 - **`AnimatorEffectView`** — `EffectView` subclass for animator-driven effects. Timer-based completion against the first clip's length.
 - Effect views are pooled via the generic **`SimplePoolChannel<EffectView>`** (see below) — the prefab must already have the correct `EffectView` subclass attached.
 
@@ -22,7 +22,7 @@ Effects (VFX that need to `Play` and `Stop`) have their own hierarchy, separate 
 
 For simple particle effects that don't need the full `EffectView` contract:
 
-- **`PoolableParticle`** — `MonoBehaviour` implementing `IPoolable` and `IEffect`. `OnSpawned()` stops the particle to prevent stale color from Play-on-Awake. The consumer calls `Play(pos, color, onComplete)` and handles the return in the `onComplete` callback.
+- **`PoolableParticle`** — `MonoBehaviour` implementing `IPoolable` and `IEffect`. `OnSpawned()` stops the particle to prevent stale color from Play-on-Awake. The consumer calls `Play(pos, color, onComplete)` and handles the return in the `onComplete` callback. Completion is detected the same way as `ParticleEffectView`: `stopAction = Callback` → `OnParticleSystemStopped()`, with an `IsAlive(true)` fallback in `Update()` for prefabs whose child sub-emitters outlive the root's own stop (e.g. the tough-balloon-pop smoke child).
 - **`ParticlePoolChannel`** — `PoolChannel<PoolableParticle>` that takes a `GameObject` prefab and adds `PoolableParticle` via `AddComponent`. Used for balloon pop VFX and shield VFX.
 
 ## Return Responsibility
