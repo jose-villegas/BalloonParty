@@ -65,6 +65,7 @@ namespace BalloonParty.Solver
                 config, balloonsConfig, targets, otherDynamicActors, staticActors, pulseExecutionDelay);
             var cruiseConfig = new ShotCruiseConfig(
                 config.CruiseWallBounceThreshold, config.CruiseSpeedPerShield,
+                config.MaxCruiseSpeedMultiplier,
                 config.CruiseTapEaseDuration, config.CruiseTapCurve, config.CruisePiercingTapThreshold);
 
             // Un-rotate the spawn point back into the thrower's aim-neutral frame so per-angle

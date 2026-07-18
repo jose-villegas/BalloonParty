@@ -29,6 +29,11 @@ namespace BalloonParty.Configuration
                  "shields, so a 13-shield cruise tops out much faster than a 5-shield one.")]
         [SerializeField] [Min(0f)] private float _cruiseSpeedPerShield = 0.25f;
 
+        [Tooltip("Hard ceiling on cruise speed as a multiple of the base speed. At extremely high " +
+                 "shield counts the cumulative taps can push the shot fast enough to skip past wall " +
+                 "geometry in a single fixed step — this cap prevents that. 0 = unlimited.")]
+        [SerializeField] [Min(0f)] private float _maxCruiseSpeedMultiplier = 4f;
+
         [Tooltip("Per-bounce speed-change animation: replayed from t=0 on EVERY cruise bounce, scaling " +
                  "the new target speed by curve(elapsed/duration). Start the curve at 0 to freeze the " +
                  "shot for a beat before it picks up to the new speed; end at 1 for the full target.")]
@@ -89,6 +94,7 @@ namespace BalloonParty.Configuration
         public float ShieldTrailDuration => _shieldTrailDuration;
         public int CruiseWallBounceThreshold => _cruiseWallBounceThreshold;
         public float CruiseSpeedPerShield => _cruiseSpeedPerShield;
+        public float MaxCruiseSpeedMultiplier => _maxCruiseSpeedMultiplier;
         public AnimationCurve CruiseTapCurve => _cruiseTapCurve;
         public float CruiseTapEaseDuration => _cruiseTapEaseDuration;
         public int CruisePiercingTapThreshold => _cruisePiercingTapThreshold;

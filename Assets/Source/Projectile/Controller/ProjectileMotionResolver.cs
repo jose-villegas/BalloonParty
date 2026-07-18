@@ -11,6 +11,7 @@ namespace BalloonParty.Projectile.Controller
     {
         private readonly WallLimits _walls;
         private readonly float _cruiseSpeedPerShield;
+        private readonly float _maxCruiseSpeedMultiplier;
         private readonly float _cruiseTapEaseDuration;
         private readonly int _cruisePiercingTapThreshold;
         private readonly AnimationCurve _cruiseTapCurve;
@@ -25,6 +26,7 @@ namespace BalloonParty.Projectile.Controller
         {
             _walls = new WallLimits(config.LimitsClockwise);
             _cruiseSpeedPerShield = config.CruiseSpeedPerShield;
+            _maxCruiseSpeedMultiplier = config.MaxCruiseSpeedMultiplier;
             _cruiseTapEaseDuration = config.CruiseTapEaseDuration;
             _cruisePiercingTapThreshold = config.CruisePiercingTapThreshold;
             _cruiseTapCurve = config.CruiseTapCurve ?? AnimationCurve.Linear(0f, 0f, 1f, 1f);
@@ -54,6 +56,10 @@ namespace BalloonParty.Projectile.Controller
                 var taps = Mathf.Clamp(
                     model.Flight.CruiseStartShields - model.ShieldsRemaining.Value, 0, startShields);
                 var target = 1f + _cruiseSpeedPerShield * taps;
+                if (_maxCruiseSpeedMultiplier > 0f)
+                {
+                    target = Mathf.Min(target, _maxCruiseSpeedMultiplier);
+                }
                 var progress = _cruiseTapEaseDuration > 0f
                     ? Mathf.Clamp01(model.Flight.CruiseTapElapsed / _cruiseTapEaseDuration)
                     : 1f;

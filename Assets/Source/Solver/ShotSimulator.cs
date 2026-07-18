@@ -89,14 +89,17 @@ namespace BalloonParty.Solver
 
         public readonly int WallBounceThreshold;
         public readonly float SpeedPerShield;
+        public readonly float MaxSpeedMultiplier;
         public readonly float TapLagSeconds;
         public readonly int PiercingTapThreshold;
 
-        public ShotCruiseConfig(int wallBounceThreshold, float speedPerShield, float tapEaseDuration = 0f,
+        public ShotCruiseConfig(int wallBounceThreshold, float speedPerShield,
+            float maxSpeedMultiplier = 0f, float tapEaseDuration = 0f,
             AnimationCurve tapCurve = null, int piercingTapThreshold = 0)
         {
             WallBounceThreshold = wallBounceThreshold;
             SpeedPerShield = speedPerShield;
+            MaxSpeedMultiplier = maxSpeedMultiplier;
             PiercingTapThreshold = piercingTapThreshold;
 
             if (tapEaseDuration <= 0f)
@@ -364,8 +367,14 @@ namespace BalloonParty.Solver
 
             var startShields = Mathf.Max(cruiseStartShields, 1);
             var taps = Mathf.Clamp(cruiseStartShields - shieldsRemaining, 0, startShields);
+            var target = 1f + cruiseConfig.SpeedPerShield * taps;
+            if (cruiseConfig.MaxSpeedMultiplier > 0f)
+            {
+                target = Mathf.Min(target, cruiseConfig.MaxSpeedMultiplier);
+            }
+
             // Pierce scale bleeds the ramp down through tough plows; floor at base speed.
-            var speed = baseSpeed * (1f + (cruiseConfig.SpeedPerShield * taps)) * pierceSpeedScale;
+            var speed = baseSpeed * target * pierceSpeedScale;
             return Mathf.Max(speed, baseSpeed);
         }
 
