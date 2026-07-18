@@ -62,12 +62,14 @@ Material:
     m_Ints: []
     m_Floats:
     - PixelSnap: 0
+    - _AnimationSpeed: 2
     - _BumpScale: 1
     - _ColorMask: 15
     - _Cutoff: 0.5
     - _DeflectFlash: 0
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _ExcludeLightPaletteMask: 64
     - _ExhaustCenter: 0.141
     - _ExhaustFalloff: 3
     - _ExhaustFlicker: 8
@@ -76,6 +78,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _LightInfluence: 1
     - _MetalBrighten: 0.334
     - _MetalDarken: 0.583
     - _MetalDetailStrength: 0.7
@@ -106,6 +109,7 @@ Material:
     - _SpecularAngle: 45
     - _SpecularBend: -2.08
     - _SpecularBendEdge: -6
+    - _SpecularDistance: 0.495
     - _SpecularHighlights: 1
     - _SpecularIntensity: 0.9
     - _SpecularPower: 149
