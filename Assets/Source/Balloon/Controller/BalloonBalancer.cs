@@ -418,8 +418,13 @@ namespace BalloonParty.Balloon.Controller
         {
             var interval = _balloonsConfig.FlightRebalanceInterval;
             if (interval <= 0f || _activeProjectile == null || !_activeProjectile.IsFree
+                || _activeProjectile.IsLastShieldApproach.Value
                 || _pauseService.IsAnyPaused.Value)
             {
+                // Freeze the board while a doomed shot glides its last-breath segment: with respawn
+                // already held (BalloonSpawner) and rebalance stopped here, nothing can drift into the
+                // computed glide path, so the eased traversal is safe for any curve. Resumes when the
+                // shot dies and a fresh one loads (IsLastShieldApproach clears with the new model).
                 _flightRebalanceElapsed = 0f;
                 return false;
             }
