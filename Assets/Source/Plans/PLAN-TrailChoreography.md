@@ -225,6 +225,50 @@ score-milestone animation ideas.
 Worst case rerun (5× multiplier × 50-point unbreakable): today 250 trails / 500 tweens /
 250 arrivals / 5 s tail → **1 carrier + ≤24 tributaries / ~50 tweens / 1 arrival / ~1.2 s**.
 
+### `BigScore` shape choreography — star-polygon formations (José, 2026-07-18)
+
+The tributary spectacle is a drawn **star polygon {n/k}**, using the trails' ribbons as
+the pen (reference: the classic nested-pentagram construction — golden-ratio
+self-similarity). Tiers map score → vertex count: triangle {3/1}, square {4/1},
+pentagram **{5/2}** ("next+1" vertex skipping), and richer stars above ({6/1}, {7/2}…).
+
+Three phases per repetition, all closed-form:
+1. **Deploy** — n trails fly from the pop origin to the vertices of a regular n-gon:
+   `vᵢ = C + r·(cos φᵢ, sin φᵢ)`, `φᵢ = θ₀ + 2πi/n`.
+2. **Draw** — each trail traverses ONE chord simultaneously: `vᵢ → v₍ᵢ₊ₖ₎`. For
+   gcd(n,k)=1 the n concurrent chords complete the whole star in a single sweep — no
+   sequential pen-tracing.
+3. **Collapse** — `r(t) → 0` (the triangle variant adds in-plane rotation:
+   `φᵢ + ωt`); every trail spirals/pulls inward, ribbons drawing the collapse, meeting
+   at C.
+
+**Nesting**: after a collapse, redeploy to `r·s` with `θ₀ += nestRotation` and repeat,
+`m` times. Defaults follow the pentagram's own geometry: `s = 1/φ² ≈ 0.382`,
+`nestRotation = π/n` — successive stars land exactly where the natural nesting puts
+them. Per-repetition phase durations scale with radius (smaller stars draw faster — an
+accelerating crescendo into the final collapse), then the merge flash fires and the
+carrier launches with the +N.
+
+Implementation decisions:
+- **Ticker, not tweens**: motion is analytic, so a formation ticker (`ILateTickable`,
+  the `BalloonMotionTicker` pattern) evaluates `vᵢ(t)` directly — zero waypoint
+  allocation, exact spirals; `DOPath` would approximate what we can compute.
+- **Ribbon persistence is the aesthetic**: `TrailRenderer.time` must cover the whole
+  repetition sequence so outer stars remain visible while inner ones draw (the nested
+  look). Per-tier knob; restored to the flight tuning before the carrier leg. `Clear()`
+  tributary ribbons on merge. `minVertexDistance` is the smoothness/vertex-budget knob.
+- **Pause contract**: the cinematic can freeze the principal at ANY moment, so the
+  formation's pausable state is `(repetition, phase, t)` — pausing stops the clock. The
+  principal is the formation's tracked center pre-merge, which BECOMES the carrier —
+  the camera has something meaningful to follow through every phase.
+- **Anchor**: centered on the pop origin, `r` scaled by tier and clamped inside
+  `WallLimits` so a corner pop doesn't draw off-screen.
+
+Per-tier config row: `n`, `k`, `repeats m`, `nestScale s` (default 1/φ²),
+`nestRotation` (default π/n), `baseRadius`, per-phase durations, `ribbonTime`,
+`rotationSpeed ω` (0 = pure scale collapse). The triangle is just `{3/1}, m = 1` — one
+implementation covers every tier.
+
 ### Degenerate configs worth knowing exist
 
 - *Formation flight* (keep N full trails, single valued arrival) = `BigScore` with
