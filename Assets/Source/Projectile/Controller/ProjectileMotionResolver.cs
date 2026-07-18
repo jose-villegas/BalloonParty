@@ -156,7 +156,7 @@ namespace BalloonParty.Projectile.Controller
                 // normal is still a sane reflection, from where the shot actually is.
                 surfaceNormal = ((Vector2)projectilePosition - (Vector2)balloonPosition).normalized;
                 model.Direction = Vector2.Reflect(model.Direction, surfaceNormal);
-                return projectilePosition;
+                return _walls.ClampInside(projectilePosition);
             }
 
             model.Direction = Vector2.Reflect(model.Direction, surfaceNormal);
@@ -168,10 +168,17 @@ namespace BalloonParty.Projectile.Controller
             // (@ref plan_shot_geometry §3) amplifies ×10–20 per subsequent deflect.
             var contactPoint = balloonPosition + (Vector3)(surfaceNormal * contactRadius);
             contactPoint.z = projectilePosition.z;
+
+            // A balloon in an edge column can sit within its own collider radius of a wall, putting the
+            // contact point (and the reflected continuation) OUTSIDE the field. Left un-clamped, the
+            // next Step reads the out-of-bounds position as a wall crossing and spends a shield — a
+            // phantom bounce that can kill a 0-shield shot at the deflect. Clamp so a deflect never
+            // starts a step out of bounds; genuine wall hits still resolve on later steps.
+            contactPoint = _walls.ClampInside(contactPoint);
             var remainder = (projectilePosition - contactPoint).magnitude;
             model.Flight.SegmentStartPosition = contactPoint;
             model.Flight.SegmentElapsed = 0f;
-            return contactPoint + (Vector3)(model.Direction * remainder);
+            return _walls.ClampInside(contactPoint + (Vector3)(model.Direction * remainder));
         }
 
         /// <summary>Backtracks the travel ray from the (penetrated) trigger position to its entry into

@@ -75,6 +75,17 @@ namespace BalloonParty.Shared
             return true;
         }
 
+        /// <summary>Clamps a position inside the walls WITHOUT reflecting or reporting a crossing —
+        /// used to keep a snapped point (e.g. a deflect contact off a near-wall balloon, whose collider
+        /// radius can extend past the wall) in-bounds so the next step doesn't read it as a spurious
+        /// wall bounce.</summary>
+        public Vector3 ClampInside(Vector3 position)
+        {
+            position.x = Mathf.Clamp(position.x, Left, Right);
+            position.y = Mathf.Clamp(position.y, Bottom, Top);
+            return position;
+        }
+
         /// <summary>
         ///     Mirror-reflects <paramref name="position" /> back across every wall it crossed (the
         ///     exact billiard continuation — the overshoot travels on along the reflected heading, so

@@ -95,6 +95,21 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
+        public void Deflect_NearWallBalloon_ClampsResultInsideWalls()
+        {
+            // A balloon near the right wall (centre 4.7, radius 0.4) has its far surface at x=5.1 —
+            // past the wall at 5. A shot penetrating from x=5 leftward deflects with a contact there;
+            // un-clamped the returned position would sit outside, and the next Step would read it as a
+            // spurious wall bounce (a shield loss that could kill a 0-shield shot at the deflect).
+            var model = NewModel(direction: Vector2.left, speed: 1f, shields: 3);
+
+            var contact = _resolver.Deflect(model, new Vector3(5f, 0f, 0f), new Vector3(4.7f, 0f, 0f), 0.4f);
+
+            Assert.LessOrEqual(contact.x, 5f + 1e-4f, "deflect result stays inside the right wall");
+            Assert.GreaterOrEqual(contact.x, -5f - 1e-4f);
+        }
+
+        [Test]
         public void Deflect_DegenerateInput_KeepsThePenetratedPosition()
         {
             var model = NewModel(direction: Vector2.zero, speed: 1f, shields: 3);
