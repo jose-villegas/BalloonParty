@@ -145,9 +145,9 @@ namespace BalloonParty.Configuration
         {
             return new[]
             {
-                new BigScoreTierConfig(40, 3, 1, 1, GoldenNestScale, 0f, 2.2f, 0.25f, 0.35f, 0.5f, 0.8f, 180f),
-                new BigScoreTierConfig(80, 4, 1, 1, GoldenNestScale, 0f, 2.5f, 0.25f, 0.35f, 0.5f, 0.9f, 0f),
-                new BigScoreTierConfig(150, 5, 2, 2, GoldenNestScale, 0f, 2.8f, 0.25f, 0.35f, 0.5f, 1.0f, 0f),
+                new BigScoreTierConfig(40, 3, 1, 1, GoldenNestScale, 0f, 1.1f, 0.25f, 0.35f, 0.5f, 0.8f, 180f),
+                new BigScoreTierConfig(80, 4, 1, 1, GoldenNestScale, 0f, 1.3f, 0.25f, 0.35f, 0.5f, 0.9f, 0f),
+                new BigScoreTierConfig(150, 5, 2, 2, GoldenNestScale, 0f, 1.5f, 0.25f, 0.35f, 0.5f, 1.0f, 0f),
             };
         }
     }

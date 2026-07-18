@@ -16,9 +16,13 @@ namespace BalloonParty.Game.Score.Behaviours
     /// </summary>
     internal sealed class BigScoreTrailBehaviour : IScoreTrailBehaviour
     {
+        // The star's edge stays inside this fraction of the board's half-extent — full extent would
+        // pin every oversized formation to the exact board middle via the centre clamp.
+        private const float MaxRadiusExtent = 0.9f;
+
         // Defensive: only used if the tier table is empty (the wired asset always has rows).
         private static readonly BigScoreTierConfig FallbackTier =
-            new(0, 3, 1, 1, 0.381966f, 0f, 2f, 0.25f, 0.35f, 0.5f, 0.8f, 180f);
+            new(0, 3, 1, 1, 0.381966f, 0f, 1.2f, 0.25f, 0.35f, 0.5f, 0.8f, 180f);
 
         private readonly ShapeFormationTicker _ticker;
         private readonly IScoreTrailBehaviourConfiguration _config;
@@ -40,12 +44,20 @@ namespace BalloonParty.Game.Score.Behaviours
         public void Begin(in ScoreTrailContext context)
         {
             var tier = ResolveTier(context.Points);
-            var center = ClampCenter(context.Origin, tier.BaseRadius, context.Config.LimitsClockwise);
+            var limits = new WallLimits(context.Config.LimitsClockwise);
+
+            // Fit the radius to the play area FIRST: a radius past half the board's extent would make
+            // the centre clamp collapse every formation to the board middle (the star could only fit
+            // there), tearing the shape away from its pop. Shrinking keeps the formation pop-local.
+            var halfExtent = Mathf.Min(limits.Right - limits.Left, limits.Top - limits.Bottom) * 0.5f;
+            var radius = Mathf.Min(tier.BaseRadius, halfExtent * MaxRadiusExtent);
+            var center = ClampCenter(context.Origin, radius, limits);
             var carrierId = new TrailId(context.ColorName, context.LastScore);
 
             var request = new BigScoreFormationRequest(
                 center,
                 context.Origin,
+                radius,
                 context.Color,
                 context.Points,
                 context.LastScore,
@@ -92,10 +104,10 @@ namespace BalloonParty.Game.Score.Behaviours
             return tiers == null || tiers.Count == 0 ? FallbackTier : SelectTier(tiers, points);
         }
 
-        // Shifts the centre inward so C +/- BaseRadius stays inside the walls rather than shrinking the star.
-        private static Vector3 ClampCenter(Vector3 origin, float radius, Vector4 limitsClockwise)
+        // Shifts the centre inward so C +/- radius stays inside the walls (the radius was already fitted
+        // to the board, so a clamp range can only invert on a degenerate play area).
+        private static Vector3 ClampCenter(Vector3 origin, float radius, in WallLimits limits)
         {
-            var limits = new WallLimits(limitsClockwise);
             var center = origin;
             center.x = ClampAxis(origin.x, limits.Left + radius, limits.Right - radius);
             center.y = ClampAxis(origin.y, limits.Bottom + radius, limits.Top - radius);

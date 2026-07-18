@@ -18,6 +18,7 @@ namespace BalloonParty.Game.Score.Behaviours
     {
         internal readonly Vector3 Center;
         internal readonly Vector3 DeployFrom;
+        internal readonly float Radius;
         internal readonly Color Color;
         internal readonly int Points;
         internal readonly int LastScore;
@@ -33,6 +34,7 @@ namespace BalloonParty.Game.Score.Behaviours
         internal BigScoreFormationRequest(
             Vector3 center,
             Vector3 deployFrom,
+            float radius,
             Color color,
             int points,
             int lastScore,
@@ -47,6 +49,7 @@ namespace BalloonParty.Game.Score.Behaviours
         {
             Center = center;
             DeployFrom = deployFrom;
+            Radius = radius;
             Color = color;
             Points = points;
             LastScore = lastScore;
@@ -197,7 +200,7 @@ namespace BalloonParty.Game.Score.Behaviours
             state.PhaseElapsed += dt;
             var progress = Mathf.Clamp01(state.PhaseElapsed / duration);
 
-            var radius = state.Tier.BaseRadius * scale;
+            var radius = state.Radius * scale;
             var theta = RepTheta(state);
             for (var i = 0; i < state.VertexCount; i++)
             {
@@ -221,7 +224,7 @@ namespace BalloonParty.Game.Score.Behaviours
             state.PhaseElapsed += dt;
             var progress = Mathf.Clamp01(state.PhaseElapsed / duration);
 
-            var radius = state.Tier.BaseRadius * scale;
+            var radius = state.Radius * scale;
             var theta = RepTheta(state);
             var n = state.VertexCount;
             var k = state.Tier.Skip;
@@ -248,7 +251,7 @@ namespace BalloonParty.Game.Score.Behaviours
             state.PhaseElapsed += dt;
             var progress = Mathf.Clamp01(state.PhaseElapsed / duration);
 
-            var radius = state.Tier.BaseRadius * scale;
+            var radius = state.Radius * scale;
             var theta = RepTheta(state);
             var spin = state.Tier.RotationSpeedRadians * state.PhaseElapsed;
             var radiusFactor = 1f - progress;
@@ -471,6 +474,7 @@ namespace BalloonParty.Game.Score.Behaviours
             internal TrailId CarrierId;
             internal Vector3 Center;
             internal Vector3 DeployFrom;
+            internal float Radius;
             internal CancellationToken CancellationToken;
             internal FormationPhase Phase;
             internal float CarrierFlightDuration;
@@ -500,6 +504,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 CarrierId = request.CarrierId;
                 Center = request.Center;
                 DeployFrom = request.DeployFrom;
+                Radius = request.Radius;
                 CancellationToken = request.CancellationToken;
                 CarrierFlightDuration = request.CarrierFlightDuration;
                 Points = request.Points;
