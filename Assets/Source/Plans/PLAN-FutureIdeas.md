@@ -1264,3 +1264,28 @@ don't-defend-against-the-impossible stance: a shipped gap in the level ranges sh
 *(The original 14.4 — deleting the dead catalog spawn-rate properties — is done: `GameStartedBalloonLines`/
 `NewProjectileBalloonLines`, `ItemSettings.TurnCheckEvery`, and `GridActorPrefabEntry`'s
 `Weight`/`MinCount`/`MaxCount` + `IWeightedEntry` impl were removed once pacing owned those values.)*
+
+## 15 — Level-Up Point Carry-Over (José, 2026-07-18)
+
+Overshoot points must survive a level-up: requirement 700, a pop lands the color at 730 →
+the 30 leftover counts toward the next level's progress AND the run score. Today
+`ILevelProgress.ClaimProgress` caps `granted` at the threshold, so overshoot is silently
+discarded before it ever becomes trails, score, or progress — with TrailChoreography's
+"+N" orb arrivals the discard gets more visible (one big orb can straddle the boundary),
+so this should land alongside or shortly after that plan's step 3.
+
+Design direction (sketch, not final): make per-color progress numbering **run-cumulative**
+(never reset at level-up) and turn level requirements into moving thresholds
+(`required += PointsRequiredForLevel` each level). Then:
+- `ClaimProgress` stops capping; overshoot is just numbering past the current threshold.
+- `LevelController`'s arrival watermark keeps working unchanged (Min/Max on cumulative
+  numbers is level-agnostic).
+- `TrailId` uniqueness holds across level boundaries for free (today it relies on "a trail
+  only flies within one level" — carry-over would otherwise strain that during straggler
+  windows).
+- The bar's ceremony drain/reset starts the new level's slider at the leftover instead
+  of zero — the visible payoff.
+Touchpoints: `ILevelProgress`/`ClaimProgress`, `LevelController` (required-threshold
+bookkeeping, `WillLevelUp`), `ColorProgressBar` (stashed max + post-drain start value),
+`ScoreController` (drop the cap comment in `PublishPoints`), TrailChoreography contracts
+(no change expected — the watermark/`LastScore` semantics are already cumulative).
