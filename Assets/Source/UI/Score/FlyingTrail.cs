@@ -34,6 +34,9 @@ namespace BalloonParty.UI.Score
         private bool _followUnscaled;
         private bool _following;
         private Gradient _flightGradient;
+        // Shared scratch for TranslateRibbon — main-thread only, grown on demand, never shrunk.
+        private static Vector3[] _ribbonScratch = new Vector3[256];
+
         private Color _defaultColor;
         private Vector3 _defaultScale;
         private float _defaultRibbonTime;
@@ -90,8 +93,9 @@ namespace BalloonParty.UI.Score
             _flightGradient = null;
             transform.DOKill();
             ApplySortingOrder(OverlaySortingOrder);
-            // Restore the authored ribbon length so a formation's per-tier override can't leak into pooled reuse.
+            // Restore the authored ribbon length/emission so a formation's overrides can't leak into pooled reuse.
             _trailRenderer.time = _defaultRibbonTime;
+            _trailRenderer.emitting = true;
         }
 
         public void SetSortingOrder(int order)
@@ -203,6 +207,39 @@ namespace BalloonParty.UI.Score
         internal void SetRibbonTime(float time)
         {
             _trailRenderer.time = time;
+        }
+
+        // Pen up/down: formations travel between vertices without drawing (deploy), then emit while
+        // actually tracing chords — otherwise the deploy spokes bury the drawn shape.
+        internal void SetRibbonEmitting(bool emitting)
+        {
+            _trailRenderer.emitting = emitting;
+        }
+
+        // Rigidly shifts the recorded ribbon by a world-space delta. Ribbons record WORLD positions, so
+        // a formation translating while it draws would shear every line; shifting the history by the
+        // formation's per-frame movement keeps drawn geometry true while the whole figure glides.
+        internal void TranslateRibbon(Vector3 delta)
+        {
+            var count = _trailRenderer.positionCount;
+            if (count == 0)
+            {
+                return;
+            }
+
+            if (_ribbonScratch.Length < count)
+            {
+                _ribbonScratch = new Vector3[Mathf.NextPowerOfTwo(count)];
+            }
+
+            _trailRenderer.GetPositions(_ribbonScratch);
+
+            // Per-index writes: SetPositions takes its count from the ARRAY length, which would push
+            // scratch garbage past the ribbon's real point count.
+            for (var i = 0; i < count; i++)
+            {
+                _trailRenderer.SetPosition(i, _ribbonScratch[i] + delta);
+            }
         }
 
         internal void ClearRibbon()

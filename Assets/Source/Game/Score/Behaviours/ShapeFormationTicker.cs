@@ -169,6 +169,9 @@ namespace BalloonParty.Game.Score.Behaviours
                 vertex.transform.position = request.DeployFrom;
                 vertex.transform.localScale = Vector3.one;
                 vertex.ClearRibbon();
+                // Pen up: deploy travels to the vertices without drawing, or the pop->vertex spokes
+                // bury the star (the long nested-look ribbon time keeps them alive the whole sequence).
+                vertex.SetRibbonEmitting(false);
                 state.Vertices[i] = vertex;
             }
 
@@ -187,7 +190,22 @@ namespace BalloonParty.Game.Score.Behaviours
                 state.TotalElapsed += dt;
                 var driftT = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(state.TotalElapsed / state.TotalDuration));
                 var driftEnd = Vector3.Lerp(state.InitialCenter, state.DriftTarget, state.Tier.DriftToTarget);
-                state.Center = Vector3.Lerp(state.InitialCenter, driftEnd, driftT);
+                var newCenter = Vector3.Lerp(state.InitialCenter, driftEnd, driftT);
+
+                // Ribbons record WORLD positions, so translating the formation while it draws would
+                // shear every line; shifting the drawn history by the frame's delta keeps the figure
+                // rigid in formation space while the whole thing glides. The carrier's ribbon is left
+                // alone on purpose — its drift line IS its real path.
+                var delta = newCenter - state.Center;
+                if (state.VerticesLive && delta.sqrMagnitude > 0f)
+                {
+                    for (var i = 0; i < state.VertexCount; i++)
+                    {
+                        state.Vertices[i].TranslateRibbon(delta);
+                    }
+                }
+
+                state.Center = newCenter;
             }
 
             switch (state.Phase)
@@ -229,6 +247,12 @@ namespace BalloonParty.Game.Score.Behaviours
 
             if (progress >= 1f)
             {
+                // Pen down exactly at the vertices: the chords drawn from here ARE the star.
+                for (var i = 0; i < state.VertexCount; i++)
+                {
+                    state.Vertices[i].SetRibbonEmitting(true);
+                }
+
                 state.Phase = FormationPhase.Draw;
                 state.PhaseElapsed = 0f;
             }
@@ -291,6 +315,13 @@ namespace BalloonParty.Game.Score.Behaviours
             {
                 state.Repetition++;
                 state.DeployFrom = state.Center;
+                // Pen up for the inward travel — nested stars connect visually via the persisting
+                // ribbons of earlier stars, not via travel lines (matches the reference nesting).
+                for (var i = 0; i < state.VertexCount; i++)
+                {
+                    state.Vertices[i].SetRibbonEmitting(false);
+                }
+
                 state.Phase = FormationPhase.Deploy;
                 state.PhaseElapsed = 0f;
                 return;
