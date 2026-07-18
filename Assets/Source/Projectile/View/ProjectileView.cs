@@ -46,6 +46,12 @@ namespace BalloonParty.Projectile.View
         [SerializeField] [Min(0f)] private float _lightRadius = 0.6f;
         [SerializeField] [Min(0f)] private float _lightIntensity = 1.5f;
 
+        [Header("Shield-Loss Flash")]
+        [Tooltip("A brief Sparks-colour light popped at the wall each time a bounce spends a shield.")]
+        [SerializeField] [Min(0f)] private float _shieldFlashIntensity = 2f;
+        [SerializeField] [Min(0f)] private float _shieldFlashRadius = 0.9f;
+        [SerializeField] [Min(0f)] private float _shieldFlashDuration = 0.12f;
+
         [Inject] private IGameConfiguration _config;
         [Inject] private IGamePalette _palette;
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
@@ -67,6 +73,9 @@ namespace BalloonParty.Projectile.View
         private IWriteableProjectileModel _model;
         private Light _light;
         private IDisposable _lightRegistration;
+        private Light _shieldFlashLight;
+        private IDisposable _shieldFlashRegistration;
+        private float _shieldFlashOffTime;
         private int _sparksColorIndex = -1;
         private IDisposable _deflectedSubscription;
         private IDisposable _cruiseSubscription;
@@ -128,6 +137,11 @@ namespace BalloonParty.Projectile.View
 
             TickRainbowGlow();
             TickPierceSpiral();
+
+            if (_shieldFlashRegistration != null && Time.time >= _shieldFlashOffTime)
+            {
+                EndShieldFlash();
+            }
         }
 
         private void FixedUpdate()
@@ -210,6 +224,7 @@ namespace BalloonParty.Projectile.View
             _rainbowGlowActive = false;
             _rainbowGlowTimer = 0f;
             ResetPierceSpiral();
+            EndShieldFlash();
             LifecycleHelper.DisposeAndClear(ref _deflectedSubscription);
             LifecycleHelper.DisposeAndClear(ref _cruiseSubscription);
             LifecycleHelper.DisposeAndClear(ref _doomedSubscription);
@@ -230,6 +245,7 @@ namespace BalloonParty.Projectile.View
         {
             LifecycleHelper.DisposeAndClear(ref _lightRegistration);
             _light = null;
+            EndShieldFlash();
             LifecycleHelper.DisposeAndClear(ref _deflectedSubscription);
             LifecycleHelper.DisposeAndClear(ref _cruiseSubscription);
             LifecycleHelper.DisposeAndClear(ref _doomedSubscription);
@@ -353,6 +369,11 @@ namespace BalloonParty.Projectile.View
             {
                 _shieldLostPublisher.Publish(new ShieldLostMessage(step.WallContact));
                 TryEnterCruise(step.Position, step.Direction);
+
+                // Punctuate the bounce: a radial impact into the motion field at the wall, plus a
+                // brief Sparks-colour light flash at the same point.
+                _disturbanceField.Stamp(StampSource.ProjectileImpact, step.WallContact, Vector2.zero);
+                FlashShieldLoss(step.WallContact);
             }
 
             transform.position = step.Position;
@@ -396,8 +417,12 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            transform.position = _motionResolver.Deflect(
+            var contact = _motionResolver.Deflect(
                 _model, transform.position, msg.BalloonWorldPosition, msg.SurfaceRadius + _contactRadius);
+            transform.position = contact;
+
+            // The same radial impact as a wall bounce, at the deflect point.
+            _disturbanceField.Stamp(StampSource.ProjectileImpact, contact, Vector2.zero);
         }
 
         // The resolver counts empty bounces; entry is confirmed HERE because it needs physics: past
@@ -503,6 +528,31 @@ namespace BalloonParty.Projectile.View
             {
                 _cruiseEndedPublisher.Publish(new ProjectileCruiseEndedMessage(transform.position));
             }
+        }
+
+        // A brief Sparks-colour light at the wall where a bounce just spent a shield — fixed at the
+        // contact point (it doesn't follow the shot on) and snapped off after the flash duration.
+        private void FlashShieldLoss(Vector3 position)
+        {
+            if (_sparksColorIndex < 0)
+            {
+                _sparksColorIndex = _palette.PaletteIndexOf(GamePalette.SparksColorId);
+            }
+
+            _shieldFlashLight ??= new Light(position, _shieldFlashRadius, _shieldFlashIntensity, _sparksColorIndex);
+            _shieldFlashLight.Position.Value = position;
+            _shieldFlashLight.EndPosition.Value = position;
+            _shieldFlashLight.Radius.Value = _shieldFlashRadius;
+            _shieldFlashLight.EndRadius.Value = _shieldFlashRadius;
+            _shieldFlashLight.Intensity.Value = _shieldFlashIntensity;
+            _shieldFlashLight.PaletteIndex.Value = _sparksColorIndex;
+            _shieldFlashRegistration ??= _lightField.RegisterLight(_shieldFlashLight);
+            _shieldFlashOffTime = Time.time + _shieldFlashDuration;
+        }
+
+        private void EndShieldFlash()
+        {
+            LifecycleHelper.DisposeAndClear(ref _shieldFlashRegistration);
         }
 
         private void OnDoomedChanged(bool doomed)

@@ -17,6 +17,7 @@ namespace BalloonParty.Configuration.Effects
         BalloonDeflect = 1 << 6,
         ToughWarning  = 1 << 7,
         RainbowColor  = 1 << 8,
+        ProjectileImpact = 1 << 10,
         UnbreakableBurst = 1 << 11,
     }
 
