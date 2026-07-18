@@ -33,6 +33,10 @@ namespace BalloonParty.Game.Score.Behaviours
     {
         internal readonly int Denomination;
         internal readonly float RadiusScale;
+
+        // The shape's local X aligns to the projectile hit direction at spawn (the line: its slope IS the
+        // shot's linear equation); unaligned shapes start at a uniform random orientation instead.
+        internal readonly bool AlignToHit;
         internal readonly Vector3[] Vertices;
         internal readonly FormationWalk[] Walks;
         internal readonly int[] PensPerWalk;
@@ -43,10 +47,12 @@ namespace BalloonParty.Game.Score.Behaviours
         internal readonly float[] Perimeters;
         internal readonly float[][] Cumulative;
 
-        internal FormationShape(int denomination, float radiusScale, Vector3[] vertices, FormationWalk[] walks)
+        internal FormationShape(
+            int denomination, float radiusScale, Vector3[] vertices, FormationWalk[] walks, bool alignToHit = false)
         {
             Denomination = denomination;
             RadiusScale = radiusScale;
+            AlignToHit = alignToHit;
             Vertices = vertices;
             Walks = walks;
             PensPerWalk = DistributePens(denomination, walks);
@@ -154,7 +160,7 @@ namespace BalloonParty.Game.Score.Behaviours
         {
             var vertices = new[] { new Vector3(-1f, 0f, 0f), new Vector3(1f, 0f, 0f) };
             var walks = new[] { Chord(0, 1) };
-            return Build(2, 0.5f, vertices, walks);
+            return Build(2, 0.5f, vertices, walks, alignToHit: true);
         }
 
         // 3 = a flat equilateral triangle: one 3-cycle (the old star tier's triangle, now one loop, no nesting).
@@ -273,7 +279,8 @@ namespace BalloonParty.Game.Score.Behaviours
         }
 
         // Normalizes vertices to a unit bounding radius so RadiusScale means the same thing across shapes.
-        private static FormationShape Build(int denomination, float radiusScale, Vector3[] vertices, FormationWalk[] walks)
+        private static FormationShape Build(
+            int denomination, float radiusScale, Vector3[] vertices, FormationWalk[] walks, bool alignToHit = false)
         {
             var maxMagnitude = 0f;
             for (var i = 0; i < vertices.Length; i++)
@@ -294,7 +301,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 }
             }
 
-            return new FormationShape(denomination, radiusScale, vertices, walks);
+            return new FormationShape(denomination, radiusScale, vertices, walks, alignToHit);
         }
 
         // Accumulates sphere vertices ring by ring (already unit magnitude) and one loop walk per ring.

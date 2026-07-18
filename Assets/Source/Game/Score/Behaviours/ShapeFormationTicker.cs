@@ -65,9 +65,11 @@ namespace BalloonParty.Game.Score.Behaviours
         internal readonly Vector3 Origin;
         internal readonly float FormationRadius;
         internal readonly bool IsPrincipal;
+        internal readonly Quaternion InitialRotation;
 
         internal BigScoreFormationRequest(
-            FormationShape shape, int value, int rangeLast, Vector3 origin, float formationRadius, bool isPrincipal)
+            FormationShape shape, int value, int rangeLast, Vector3 origin, float formationRadius,
+            bool isPrincipal, Quaternion initialRotation)
         {
             Shape = shape;
             Value = value;
@@ -75,6 +77,7 @@ namespace BalloonParty.Game.Score.Behaviours
             Origin = origin;
             FormationRadius = formationRadius;
             IsPrincipal = isPrincipal;
+            InitialRotation = initialRotation;
         }
     }
 
@@ -589,7 +592,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 Origin = request.Origin;
                 Center = request.Origin;
                 TargetOffset = Vector3.zero;
-                InitialRotation = Random.rotationUniform;
+                InitialRotation = request.InitialRotation;
                 Rotation = InitialRotation;
                 // All formations of a pop roll about the shared hit-derived axis (a coherent constellation tumble);
                 // a non-projectile pop with no direction falls back to a per-shape random axis.

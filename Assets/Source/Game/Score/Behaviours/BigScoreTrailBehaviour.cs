@@ -85,6 +85,7 @@ namespace BalloonParty.Game.Score.Behaviours
             // Synchronous: registers the anchor in Flights before this returns (the cinematic depends on it).
             var group = _ticker.BeginGroup(in groupRequest);
 
+            var hasHitDirection = context.HitDirection.sqrMagnitude >= 1e-6f;
             var cursor = context.LastScore;
             for (var i = 0; i < formationCount; i++)
             {
@@ -96,7 +97,14 @@ namespace BalloonParty.Game.Score.Behaviours
                     ? principalCenter
                     : ClampCenter(SubCenter(context.Origin, i, spacing), radius, limits);
 
-                _ticker.LaunchFormation(group, new BigScoreFormationRequest(shape, value, cursor, origin, radius, isPrincipal));
+                // A hit-aligned shape spawns with its local X along the shot (the line: its slope IS the
+                // shot's linear equation); everything else starts at a uniform random orientation.
+                var initialRotation = shape.AlignToHit && hasHitDirection
+                    ? Quaternion.FromToRotation(Vector3.right, context.HitDirection.normalized)
+                    : UnityEngine.Random.rotationUniform;
+
+                _ticker.LaunchFormation(group, new BigScoreFormationRequest(
+                    shape, value, cursor, origin, radius, isPrincipal, initialRotation));
                 cursor -= value;
             }
 
