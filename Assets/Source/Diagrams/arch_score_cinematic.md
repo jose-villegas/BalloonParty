@@ -14,9 +14,9 @@ intercept that pauses the tipping trail mid-flight.
 owning balloon reacts and before the `ActorHitMessage` broadcast — see
 @ref arch_turn_pipeline); it casts the actor to `IHasScoreColor` and
 calls `ResolveScoreAttribution` — the actor appends one `ScoreAttribution` per color
-bar it contributes to. `ScoreController` publishes one `ScorePointMessage` per
-individual point × streak multiplier. `ScoreTrailService` spawns a pooled `FlyingTrail`
-orb per message.
+bar it contributes to. `ScoreController` publishes one `ScorePointsGroupMessage` per
+resolved color, carrying the group's total points. `ScoreTrailService` spawns a pooled
+`FlyingTrail` orb per point in the group.
 
 **Projected vs confirmed progress (owned by `LevelController`, not `ScoreController`):**
 `LevelController` holds two per-color counters. Projected progress advances immediately on
@@ -29,7 +29,7 @@ See @ref arch_cinematics_architecture and `Game/Level/README.md`.
 
 **Cinematic intercept:**
 `LevelUpCinematic` (a plain C# producer over the `CameraRigCinematic` runner — see
-@ref arch_cinematics_architecture) subscribes to `ScorePointMessage`. When
+@ref arch_cinematics_architecture) subscribes to `ScorePointsGroupMessage`. When
 `ILevelProgress.WillLevelUp()` is true at publish time it awaits the tipping trail's registration in
 `TrailFlightRegistry`, then intercepts it: the move tween is killed and the trail is
 puppeted manually along the pan-in segment's `TimeScaleCurve` while the camera pans in

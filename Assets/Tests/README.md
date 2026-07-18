@@ -120,7 +120,7 @@ Tests the trajectory bounce algorithm — pure math with wall reflection.
 
 ### `ScoreControllerTests` — 25 tests
 
-Tests the scoring pipeline, level-up logic, streak multiplier, `WillLevelUp` projected-progress check, next-level trail renumbering, and the run-scoped lifecycle (no cross-session persistence; reset via `IRunResettable`) — deferred scoring via trail arrival, multi-map accumulation with an all-colors threshold gate, consecutive same-color pop multiplier, projected vs confirmed progress, `ScorePointMessage` field correctness, and `IHitable`-based scoring with non-balloon actors.
+Tests the scoring pipeline, level-up logic, streak multiplier, `WillLevelUp` projected-progress check, next-level trail renumbering, and the run-scoped lifecycle (no cross-session persistence; reset via `IRunResettable`) — deferred scoring via trail arrival, multi-map accumulation with an all-colors threshold gate, consecutive same-color pop multiplier, projected vs confirmed progress, `ScorePointsGroupMessage` field correctness, and `IHitable`-based scoring with non-balloon actors.
 
 | Area | Tests | What could break |
 |---|---|---|
@@ -139,11 +139,10 @@ Tests the scoring pipeline, level-up logic, streak multiplier, `WillLevelUp` pro
 | Streak resets on level-up | 1 | Missing reset in CheckLevelUp |
 | `WillLevelUp` — all colors projected | 1 | Wrong dictionary or comparator on projected map |
 | `WillLevelUp` — one color short | 1 | Returns true prematurely |
-| `ScorePointMessage` below threshold | 1 | Wrong `Level` or spurious renumbering |
-| `ScorePointMessage` at tipping point | 1 | Off-by-one — `>` vs `>=` makes tipping point next-level |
-| `ScorePointMessage` above threshold renumbered | 1 | Score not renumbered or level not incremented |
-| `GroupSize` equals points published | 1 | Wrong group size breaks stagger timing in `ScoreTrailService` |
-| `GroupIndex` sequential | 1 | Non-sequential indices break trail scatter delay order |
+| Group only publishes granted points | 1 | Cap not applied — over-threshold points leak |
+| Group numbered from claimed base | 1 | `FirstScore`/`LastScore` off-by-one against the base |
+| Group carries total points | 1 | Wrong `Points` breaks slider/notice value |
+| One group message per pop | 1 | Multiple messages break the per-color group contract |
 | `IHitable` non-balloon actor — `Pop` outcome scores | 1 | Scoring pipeline too narrowly typed to `IBalloonModel` |
 | `Absorb` outcome — does not score | 1 | Absorb mis-routed as Pop |
 | Run starts at level 1, ignoring persisted level | 1 | Cross-session restore re-introduced — breaks run-based model |

@@ -16,7 +16,7 @@
 
 ### The problem (measured)
 
-One score point = one `ScorePointMessage` = one pooled `FlyingTrail` = one arrival = one
+One score point = one per-point score message = one pooled `FlyingTrail` = one arrival = one
 notice. The streak multiplier scales the **point count** before the per-point publish loop
 (`ScoreController.ResolveAttributions` → `PublishPoints`), so a 5× multiplier on a 50-point
 unbreakable hit produces **250 trails, 500 tweens, 250 arrivals, 250 notices over 5 s** of
@@ -48,8 +48,8 @@ keep their existing seams — they just receive valued arrivals instead of unit 
 These were established by reading the code on 2026-07-18 — they are the load-bearing facts
 this design is built on:
 
-1. **`ScorePointMessage` has exactly two subscribers**: `ScoreTrailService` (spawns) and
-   `LevelUpCinematic` (tipping capture). No other system reads the per-point stream.
+1. **The per-point score message had exactly two subscribers**: `ScoreTrailService` (spawns)
+   and `LevelUpCinematic` (tipping capture). No other system read the per-point stream.
 2. **The cinematic does not need the exact threshold-crossing score.** It captures
    `TrailId(msg)` from the *first* message it sees while `_levelProgress.WillLevelUp()` is
    true (`LevelUpCinematic.OnScorePoint`), waits for that id in the `Flights` registry,
@@ -71,7 +71,7 @@ this design is built on:
 
 ## Contracts
 
-### Message: `ScorePointsGroupMessage` (replaces per-point `ScorePointMessage`)
+### Message: `ScorePointsGroupMessage` (replaces the per-point score message)
 
 ```csharp
 internal readonly struct ScorePointsGroupMessage
@@ -188,12 +188,19 @@ this is the designed extension point.
 
 Spawns `Points` trails exactly as `ScoreTrailService` does now: scatter-fan origins
 (`2π·i/Points` at 1.5× slot separation), 0.02 s stagger, `SpawnBurst` bloom + trace, each
-trail reporting `(baseScore + i + 1, points: 1)` on landing. The LAST trail is the
-principal (id score = `LastScore`).
+trail reporting `(baseScore + i + 1, points: 1)` on landing. The FIRST trail is the
+principal (id score = `FirstScore`) — it spawns immediately, so its registration is
+timeout-safe under scatter stagger.
 
-Two accepted micro-deltas from today, both invisible in play:
-- The cinematic tracks the tipping group's **last** trail instead of its first (today it
-  captures the first per-point message's id). Same flight cohort, same look.
+Principal selection is handler-specific, not a fixed `LastScore` rule. DefaultScore staggers
+its spawns, so its principal must be the FIRST trail: the group's last trail can spawn seconds
+later and would race `WaitForTippingTrailAsync`'s bounded wait. Only a handler whose principal
+spawns immediately (BigScore's carrier) can nominate `LastScore`. **Step-2 contract detail:**
+the cinematic must derive the tipping id the same way the handler nominates its principal — the
+context should carry the principal's id, chosen by the resolver/handler pairing, rather than
+hardcoding `LastScore`.
+
+One accepted micro-delta from today, invisible in play:
 - Only the principal registers in `Flights` (today every trail registers). The registry's
   only consumers are the cinematic (principal only) and `CompleteAll` (loss/level paths) —
   handlers must also expose in-flight cleanup for `CompleteAll`; the service keeps a list

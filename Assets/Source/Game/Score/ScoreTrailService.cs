@@ -22,7 +22,7 @@ namespace BalloonParty.Game.Score
         private readonly CancellationTokenSource _cts = new();
         private readonly TrailFlightRegistry<TrailId> _flights = new();
         private readonly PoolManager _poolManager;
-        private readonly ISubscriber<ScorePointMessage> _scoredSubscriber;
+        private readonly ISubscriber<ScorePointsGroupMessage> _scoredSubscriber;
         private readonly Dictionary<string, TrailSpawner> _spawners = new();
         private readonly TrailEndpointRegistry _endpoints;
         private readonly FlyingTrail _trailPrefab;
@@ -35,7 +35,7 @@ namespace BalloonParty.Game.Score
         [Inject]
         internal ScoreTrailService(
             IGameConfiguration config,
-            ISubscriber<ScorePointMessage> scoredSubscriber,
+            ISubscriber<ScorePointsGroupMessage> scoredSubscriber,
             IPublisher<ScoreTrailArrivedMessage> arrivedPublisher,
             PoolManager poolManager,
             TrailEndpointRegistry endpoints,
@@ -58,7 +58,7 @@ namespace BalloonParty.Game.Score
 
         public void Start()
         {
-            _scoreSubscription = _scoredSubscriber.Subscribe(OnScorePoint);
+            _scoreSubscription = _scoredSubscriber.Subscribe(OnScorePointsGroup);
         }
 
         internal ITrailEndpoint GetTarget(string colorName)
@@ -66,7 +66,7 @@ namespace BalloonParty.Game.Score
             return _endpoints.TryGet(colorName, out var endpoint) ? endpoint : null;
         }
 
-        private void OnScorePoint(ScorePointMessage msg)
+        private void OnScorePointsGroup(ScorePointsGroupMessage msg)
         {
             if (!_endpoints.TryGet(msg.ColorName, out _))
             {
@@ -76,11 +76,7 @@ namespace BalloonParty.Game.Score
                 return;
             }
 
-            var id = new TrailId(msg);
-            var center = msg.WorldPosition;
-            var origin = ComputeScatterOrigin(center, msg.GroupIndex, msg.GroupSize);
-
-            SpawnTrailAsync(msg.ColorName, center, origin, id, msg.GroupIndex).Forget();
+            SpawnGroupAsync(msg).Forget();
         }
 
         internal void RegisterTarget(string colorName, ITrailEndpoint target, Color color)
@@ -126,7 +122,7 @@ namespace BalloonParty.Game.Score
             {
                 _flights.Unregister(id);
                 _arrivedPublisher.Publish(
-                    new ScoreTrailArrivedMessage(colorName, id.Score, target));
+                    new ScoreTrailArrivedMessage(colorName, id.Score, points: 1, target));
             };
 
             Transform transform;
@@ -152,20 +148,26 @@ namespace BalloonParty.Game.Score
             _flights.Register(id, transform, center);
         }
 
-        private async UniTaskVoid SpawnTrailAsync(
-            string colorName,
-            Vector3 center,
-            Vector3 scatterOrigin,
-            TrailId id,
-            int groupIndex)
+        // One state machine per group reproduces today's per-point schedule (spawn i at 0.02 s × i): the
+        // first spawn is immediate, then each subsequent spawn waits one scatter delay before firing. The
+        // old code launched N parallel delay tasks off a shared t0; this awaits them in sequence instead.
+        private async UniTaskVoid SpawnGroupAsync(ScorePointsGroupMessage msg)
         {
-            if (groupIndex > 0)
-            {
-                var delayMs = Mathf.RoundToInt(_config.ScorePointsScatterDelay * 1000f) * groupIndex;
-                await UniTask.Delay(delayMs, cancellationToken: _cts.Token);
-            }
+            var center = msg.WorldPosition;
+            var count = msg.Points;
+            var delayMs = Mathf.RoundToInt(_config.ScorePointsScatterDelay * 1000f);
 
-            SpawnTrail(colorName, center, scatterOrigin, id);
+            for (var i = 0; i < count; i++)
+            {
+                if (i > 0)
+                {
+                    await UniTask.Delay(delayMs, cancellationToken: _cts.Token);
+                }
+
+                var id = new TrailId(msg.ColorName, msg.FirstScore + i);
+                var origin = ComputeScatterOrigin(center, i, count);
+                SpawnTrail(msg.ColorName, center, origin, id);
+            }
         }
     }
 }

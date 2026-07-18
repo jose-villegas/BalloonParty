@@ -24,7 +24,7 @@ namespace BalloonParty.Tests.Game
 
         private ILevelProgress _levelProgress;
         private IGamePalette _palette;
-        private IPublisher<ScorePointMessage> _scoredPublisher;
+        private IPublisher<ScorePointsGroupMessage> _scoredPublisher;
         private ScoreController _controller;
         private ColorStreakTracker _streakTracker;
         private IMessageHandler<ScoreTrailArrivedMessage> _trailArrivedHandler;
@@ -64,7 +64,7 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<ScoreTrailArrivedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
-            _scoredPublisher = Substitute.For<IPublisher<ScorePointMessage>>();
+            _scoredPublisher = Substitute.For<IPublisher<ScorePointsGroupMessage>>();
 
             var levelUpSubscriber = Substitute.For<ISubscriber<ScoreLevelUpMessage>>();
             levelUpSubscriber
@@ -102,7 +102,7 @@ namespace BalloonParty.Tests.Game
 
             FireHit(model, 1);
 
-            _scoredPublisher.DidNotReceive().Publish(Arg.Any<ScorePointMessage>());
+            _scoredPublisher.DidNotReceive().Publish(Arg.Any<ScorePointsGroupMessage>());
         }
 
         [Test]
@@ -112,8 +112,8 @@ namespace BalloonParty.Tests.Game
 
             FireHit(model, 1);
 
-            _scoredPublisher.Received(5).Publish(
-                Arg.Is<ScorePointMessage>(m => m.ColorName == Red));
+            _scoredPublisher.Received(1).Publish(
+                Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 5));
             // Total only counts on confirmed arrival, not on the pop.
             Assert.AreEqual(0, _controller.TotalScore.Value);
         }
@@ -134,7 +134,7 @@ namespace BalloonParty.Tests.Game
             _controller.OnActorHit(new ActorHitMessage(actor, Vector3.zero, Vector3.up,
                 actor.EvaluateHit(new DamageContext(1)), new DamageContext(1)));
 
-            _scoredPublisher.DidNotReceive().Publish(Arg.Any<ScorePointMessage>());
+            _scoredPublisher.DidNotReceive().Publish(Arg.Any<ScorePointsGroupMessage>());
         }
 
         [Test]
@@ -201,8 +201,8 @@ namespace BalloonParty.Tests.Game
             FireHitWithColor(CreateRainbowModel(2), 1, Red);
 
             // First pop → streak multiplier 1, so each allowed colour scores its full value (2).
-            _scoredPublisher.Received(2).Publish(Arg.Is<ScorePointMessage>(m => m.ColorName == Red));
-            _scoredPublisher.Received(2).Publish(Arg.Is<ScorePointMessage>(m => m.ColorName == Blue));
+            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 2));
+            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Blue && m.Points == 2));
         }
 
         [Test]
@@ -218,75 +218,76 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void Streak_MultipliesPoints()
         {
+            // The streak multiplier scales the single group's point total (was: point-message count).
             FirePop(Red);
-            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointMessage>(m => m.ColorName == Red));
+            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 1));
 
             _scoredPublisher.ClearReceivedCalls();
             FirePop(Red);
-            _scoredPublisher.Received(2).Publish(Arg.Is<ScorePointMessage>(m => m.ColorName == Red));
+            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 2));
 
             _scoredPublisher.ClearReceivedCalls();
             FirePop(Red);
-            _scoredPublisher.Received(3).Publish(Arg.Is<ScorePointMessage>(m => m.ColorName == Red));
+            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 3));
         }
 
         [Test]
         public void Streak_MultipliesWithScoreValue()
         {
             FireHit(CreateModel(Red, 1, 2), 1);
-            _scoredPublisher.Received(2).Publish(Arg.Is<ScorePointMessage>(m => m.ColorName == Red));
+            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 2));
 
             _scoredPublisher.ClearReceivedCalls();
             FireHit(CreateModel(Red, 1, 2), 1);
-            _scoredPublisher.Received(4).Publish(Arg.Is<ScorePointMessage>(m => m.ColorName == Red));
+            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 4));
         }
 
         [Test]
         public void ScorePoint_PublishesOnlyGrantedPoints()
         {
-            // The level caps a scoreValue-4 pop at 3; the 4th point must not publish.
+            // The level caps a scoreValue-4 pop at 3; the group carries only the granted 3.
             _levelProgress.ClaimProgress(Red, 4).Returns((0, 3));
 
             FireHit(CreateModel(Red, 1, 4), 1);
 
-            _scoredPublisher.Received(3).Publish(Arg.Is<ScorePointMessage>(m => m.ColorName == Red));
-            _scoredPublisher.DidNotReceive().Publish(Arg.Is<ScorePointMessage>(m => m.Score > 3));
+            _scoredPublisher.Received(1).Publish(
+                Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 3 && m.LastScore == 3));
         }
 
         [Test]
         public void ScorePoint_NumbersFromClaimedBase()
         {
-            // Points are numbered from the base progress the level reports, not from 1.
+            // The group is numbered from the base progress the level reports, not from 1.
             _levelProgress.ClaimProgress(Red, Arg.Any<int>()).Returns((5, 2));
 
             FirePop(Red);
 
-            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointMessage>(m => m.Score == 6));
-            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointMessage>(m => m.Score == 7));
+            _scoredPublisher.Received(1).Publish(
+                Arg.Is<ScorePointsGroupMessage>(m => m.FirstScore == 6 && m.LastScore == 7));
         }
 
         [Test]
-        public void ScorePoint_GroupSizeEqualsPoints()
+        public void ScorePoint_GroupCarriesTotalPoints()
         {
             FireHit(CreateModel(Red, 1, 3), 1);
 
-            _scoredPublisher.Received(3).Publish(Arg.Is<ScorePointMessage>(m => m.GroupSize == 3));
+            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointsGroupMessage>(m => m.Points == 3));
         }
 
         [Test]
-        public void ScorePoint_GroupIndexIsSequential()
+        public void ScorePoint_PublishesOneGroupPerPop()
         {
-            var received = new List<ScorePointMessage>();
+            var received = new List<ScorePointsGroupMessage>();
             _scoredPublisher
-                .When(p => p.Publish(Arg.Any<ScorePointMessage>()))
-                .Do(ci => received.Add(ci.Arg<ScorePointMessage>()));
+                .When(p => p.Publish(Arg.Any<ScorePointsGroupMessage>()))
+                .Do(ci => received.Add(ci.Arg<ScorePointsGroupMessage>()));
 
             FireHit(CreateModel(Red, 1, 3), 1);
 
-            Assert.AreEqual(3, received.Count);
-            Assert.AreEqual(0, received[0].GroupIndex);
-            Assert.AreEqual(1, received[1].GroupIndex);
-            Assert.AreEqual(2, received[2].GroupIndex);
+            // One group per attribution entry, carrying a contiguous score range (was: N per-point messages).
+            Assert.AreEqual(1, received.Count);
+            Assert.AreEqual(1, received[0].FirstScore);
+            Assert.AreEqual(3, received[0].LastScore);
         }
 
         [Test]
@@ -347,9 +348,9 @@ namespace BalloonParty.Tests.Game
             return model;
         }
 
-        private void FireTrailArrived(string color, int score)
+        private void FireTrailArrived(string color, int score, int points = 1)
         {
-            _trailArrivedHandler.Handle(new ScoreTrailArrivedMessage(color, score, Vector3.zero));
+            _trailArrivedHandler.Handle(new ScoreTrailArrivedMessage(color, score, points, Vector3.zero));
         }
 
         private static IBalloonModel CreateModel(string color, int hitsRemaining, int scoreValue = 1)

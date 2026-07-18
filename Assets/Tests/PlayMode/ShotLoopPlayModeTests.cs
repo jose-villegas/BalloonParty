@@ -45,7 +45,7 @@ namespace BalloonParty.Tests.PlayMode
             yield return WaitForColliderAt(grid, slot);
 
             var scored = false;
-            var scoreSub = Resolve<ISubscriber<ScorePointMessage>>().Subscribe(_ => scored = true);
+            var scoreSub = Resolve<ISubscriber<ScorePointsGroupMessage>>().Subscribe(_ => scored = true);
             var before = BalloonCount(grid);
 
             // Launch straight at the target — the projectile view moves on IsFree; once free the thrower's

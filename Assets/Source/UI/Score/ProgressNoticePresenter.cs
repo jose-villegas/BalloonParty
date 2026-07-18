@@ -51,7 +51,7 @@ namespace BalloonParty.UI.Score
             await _poolManager.PrewarmAsync(_streakPoolKey, streakCount, ct);
         }
 
-        internal void SpawnPointNotice(Vector2 anchoredPosition)
+        internal void SpawnPointNotice(Vector2 anchoredPosition, int points)
         {
             var notice = _poolManager.GetOrRegister(_pointPoolKey,
                 () => new SimplePoolChannel<ProgressNotice>(_pointPrefab));
@@ -59,7 +59,7 @@ namespace BalloonParty.UI.Score
             notice.SetParent(_parent);
             notice.SetAnchoredPosition(anchoredPosition);
             _activeNotices.Add(notice);
-            notice.Show(1,
+            notice.Show(points,
                 () =>
                 {
                     _activeNotices.Remove(notice);

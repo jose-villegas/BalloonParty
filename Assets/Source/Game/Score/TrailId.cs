@@ -1,5 +1,4 @@
 using System;
-using BalloonParty.Shared.Messages;
 
 namespace BalloonParty.Game.Score
 {
@@ -16,12 +15,6 @@ namespace BalloonParty.Game.Score
         {
             Color = color;
             Score = score;
-        }
-
-        internal TrailId(ScorePointMessage msg)
-        {
-            Color = msg.ColorName;
-            Score = msg.Score;
         }
 
         public bool Equals(TrailId other)

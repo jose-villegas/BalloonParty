@@ -18,14 +18,14 @@ publishers know nothing about subscribers; subscribers know nothing about publis
   the broadcast serves order-independent observers only; it carries the pre-computed
   `HitOutcome` so every subscriber reads the same result without re-evaluating the hit.
   Never publish `ActorHitMessage` directly — route hits through `IHitDispatcher`
-- `ScoreController` → `ScorePointMessage` → (`ScoreTrailService`, `ColorProgressBar`,
-  `LevelUpCinematic`) — one message per point per streak multiplier; carries full
-  trail identity for deduplication
+- `ScoreController` → `ScorePointsGroupMessage` → (`ScoreTrailService`,
+  `LevelUpCinematic`) — one message per resolved color; carries the group's total
+  points and the last point's cumulative score
 - `BalloonSpawner` / `ProjectileView` → `BalanceBalloonsMessage` → `BalloonBalancer`
   — pure signal; no data needed
 - `ScoreController` → `ScoreLevelUpMessage` → (`ColorProgressBar`, `LevelUpPopUp`,
   `ColorStreakTracker`) — announces the *confirmed* level-up (the cinematic itself
-  triggers earlier, off `ScorePointMessage` when `WillLevelUp()` is true)
+  triggers earlier, off `ScorePointsGroupMessage` when `WillLevelUp()` is true)
 
 ## Guidance
 

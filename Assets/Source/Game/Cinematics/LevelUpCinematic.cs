@@ -30,7 +30,7 @@ namespace BalloonParty.Game.Cinematics
         private const float TrailRegisterTimeoutFactor = 3f;
 
         private readonly IGameConfiguration _config;
-        private readonly ISubscriber<ScorePointMessage> _scoredSubscriber;
+        private readonly ISubscriber<ScorePointsGroupMessage> _scoredSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         private readonly ILevelProgress _levelProgress;
@@ -58,7 +58,7 @@ namespace BalloonParty.Game.Cinematics
             TimeScaleService timeScale,
             ICinematicsSettings settings,
             IGameConfiguration config,
-            ISubscriber<ScorePointMessage> scoredSubscriber,
+            ISubscriber<ScorePointsGroupMessage> scoredSubscriber,
             ISubscriber<LevelUpDismissedMessage> dismissedSubscriber,
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
             ILevelProgress levelProgress,
@@ -110,7 +110,7 @@ namespace BalloonParty.Game.Cinematics
             }
         }
 
-        private void OnScorePoint(ScorePointMessage msg)
+        private void OnScorePoint(ScorePointsGroupMessage msg)
         {
             if (_sessionActive || Cinematic.IsPlaying)
             {
@@ -129,7 +129,10 @@ namespace BalloonParty.Game.Cinematics
             }
 
             _sessionActive = true;
-            _tippingTrailId = new TrailId(msg);
+            // Track the group's FIRST trail: it spawns immediately, so the bounded registry wait behaves
+            // exactly as today's per-point capture. The group's LAST trail can spawn seconds later under
+            // scatter stagger and would race WaitForTippingTrailAsync's timeout.
+            _tippingTrailId = new TrailId(msg.ColorName, msg.FirstScore);
             _trackedFlight = null;
             _lastTrailPosition = msg.WorldPosition;
 

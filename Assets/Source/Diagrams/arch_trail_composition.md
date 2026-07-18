@@ -31,7 +31,7 @@ target) and calls `Complete()` on the handle when it lands.
 ## Guidance
 
 **Adding a new trail consumer (e.g. a new cinematic that intercepts a trail type):**
-1. Subscribe to the relevant `ScorePointMessage` variant
+1. Subscribe to the relevant `ScorePointsGroupMessage` variant
 2. Await `Flights.Contains(id)` then `Flights.Get(id)` — works whether the trail has
    spawned yet or not
 3. Drive the `TrailFlight` handle (`Pause` / `Resume` / `Complete`); use

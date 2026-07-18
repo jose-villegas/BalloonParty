@@ -18,7 +18,7 @@ namespace BalloonParty.Game.Score
         private readonly ILevelProgress _levelProgress;
         private readonly IGamePalette _palette;
         private readonly Dictionary<string, int> _persistentScore = new();
-        private readonly IPublisher<ScorePointMessage> _scoredPublisher;
+        private readonly IPublisher<ScorePointsGroupMessage> _scoredPublisher;
         private readonly ColorStreakTracker _streakTracker;
         private readonly ReactiveProperty<int> _totalScore = new(0);
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
@@ -32,7 +32,7 @@ namespace BalloonParty.Game.Score
 
         public ScoreController(
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
-            IPublisher<ScorePointMessage> scoredPublisher,
+            IPublisher<ScorePointsGroupMessage> scoredPublisher,
             ILevelProgress levelProgress,
             IGamePalette palette,
             ColorStreakTracker streakTracker)
@@ -91,7 +91,6 @@ namespace BalloonParty.Game.Score
             PublishAttributionGroup(attributions, msg.WorldPosition, msg.Context.Flags);
         }
 
-        /// <summary>Every message shares the same <c>GroupSize</c> so the UI can fan them out together.</summary>
         private void PublishAttributionGroup(
             IReadOnlyList<ScoreAttribution> attributions, Vector3 worldPosition, DamageFlags flags)
         {
@@ -106,13 +105,7 @@ namespace BalloonParty.Game.Score
             var multiplier = RecordStreakMultiplier(attributions, flags);
             ResolveAttributions(attributions, multiplier, resolved);
 
-            var groupSize = SumPoints(resolved);
-            if (groupSize <= 0)
-            {
-                return;
-            }
-
-            PublishPoints(resolved, groupSize, worldPosition);
+            PublishPoints(resolved, multiplier, worldPosition);
         }
 
         // A mixed group breaks the streak — unless exactly one entry is a wildcard's streak anchor
@@ -182,33 +175,18 @@ namespace BalloonParty.Game.Score
             }
         }
 
-        private static int SumPoints(IReadOnlyList<(string Color, int Points, int BaseProgress)> resolved)
-        {
-            var total = 0;
-            foreach (var (_, pts, _) in resolved)
-            {
-                total += pts;
-            }
-
-            return total;
-        }
-
         // Points are capped at the level threshold, so every point belongs to the current level.
         private void PublishPoints(
-            IReadOnlyList<(string Color, int Points, int BaseProgress)> resolved, int groupSize, Vector3 worldPosition)
+            IReadOnlyList<(string Color, int Points, int BaseProgress)> resolved, int multiplier, Vector3 worldPosition)
         {
-            var groupIndex = 0;
             foreach (var (color, points, baseProgress) in resolved)
             {
-                for (var i = 0; i < points; i++, groupIndex++)
-                {
-                    _scoredPublisher.Publish(new ScorePointMessage(
-                        color,
-                        worldPosition,
-                        baseProgress + i + 1,
-                        groupSize,
-                        groupIndex));
-                }
+                _scoredPublisher.Publish(new ScorePointsGroupMessage(
+                    color,
+                    worldPosition,
+                    points,
+                    baseProgress + points,
+                    multiplier));
             }
         }
 
@@ -227,8 +205,8 @@ namespace BalloonParty.Game.Score
             }
 #endif
 
-            _persistentScore[msg.ColorName]++;
-            _totalScore.Value++;
+            _persistentScore[msg.ColorName] += msg.Points;
+            _totalScore.Value += msg.Points;
         }
     }
 }

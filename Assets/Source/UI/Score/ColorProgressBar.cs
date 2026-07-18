@@ -331,10 +331,10 @@ namespace BalloonParty.UI.Score
             }
 
             _animator.SetTrigger(TrailHitTrigger);
-            _progressSlider.value = Mathf.Min(_progressSlider.value + 1, _progressSlider.maxValue);
+            _progressSlider.value = Mathf.Min(_progressSlider.value + msg.Points, _progressSlider.maxValue);
 
             var anchored = RectAnchorMath.WorldToAnchoredPosition((RectTransform)transform, msg.WorldPosition);
-            _notices.SpawnPointNotice(anchored);
+            _notices.SpawnPointNotice(anchored, msg.Points);
 
             if (_progressSlider.value >= _progressSlider.maxValue)
             {

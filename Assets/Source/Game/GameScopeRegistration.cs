@@ -55,7 +55,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ActorHitMessage>(options);
             builder.RegisterMessageBroker<BalloonDeflectedMessage>(options);
             builder.RegisterMessageBroker<NudgeMessage>(options);
-            builder.RegisterMessageBroker<ScorePointMessage>(options);
+            builder.RegisterMessageBroker<ScorePointsGroupMessage>(options);
             builder.RegisterMessageBroker<StreakChangedMessage>(options);
             builder.RegisterMessageBroker<ScoreLevelUpMessage>(options);
             builder.RegisterMessageBroker<GameOverMessage>(options);

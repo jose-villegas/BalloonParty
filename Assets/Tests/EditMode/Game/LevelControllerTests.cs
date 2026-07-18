@@ -393,7 +393,7 @@ namespace BalloonParty.Tests.Game
 
         private void FireTrailArrived(string color, int score)
         {
-            _trailArrivedHandler.Handle(new ScoreTrailArrivedMessage(color, score, Vector3.zero));
+            _trailArrivedHandler.Handle(new ScoreTrailArrivedMessage(color, score, points: 1, Vector3.zero));
         }
 
         private void FireDismissed()
