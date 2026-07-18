@@ -45,6 +45,7 @@ namespace BalloonParty.Thrower
         private ProjectileView _activeView;
         private Vector3 _direction = Vector3.up;
         private bool _isMovable;
+        private bool _tracePublished;
         private float _loadElapsed;
         private float _loadDuration;
         private PredictionTraceCalculator _traceCalculator;
@@ -129,6 +130,9 @@ namespace BalloonParty.Thrower
                 || Navigation.Current.Value != NavigationState.Game
                 || _pauseService.IsAnyPaused.Value)
             {
+                // A pause or state change mid-aim must take the trace down with it, or the aim line
+                // and hit markers linger through the overflow/level-up/loss windows.
+                ClearPredictionTrace();
                 return;
             }
 
@@ -228,7 +232,7 @@ namespace BalloonParty.Thrower
         private void Reload()
         {
             // Tick is gated during resets, so a trace left active at reset time would strand a stale marker.
-            _traceProvider.Clear();
+            ClearPredictionTrace();
             _positionProvider.Clear();
 
             if (_activeView != null)
@@ -261,8 +265,7 @@ namespace BalloonParty.Thrower
             _activeProjectile.IsFree = true;
             _activeProjectile.Direction = _direction;
             _positionProvider.SetFree(true);
-            _view.ClearTrace();
-            _traceProvider.Clear();
+            ClearPredictionTrace();
             _view.PlayRecoil(_direction);
         }
 
@@ -306,14 +309,28 @@ namespace BalloonParty.Thrower
         {
             if (_activeProjectile == null || _activeProjectile.IsFree || !_view.IsAiming)
             {
-                _view.ClearTrace();
-                _traceProvider.Clear();
+                ClearPredictionTrace();
                 return;
             }
 
             _traceCalculator.Calculate(_activeView.transform.position, _direction, _tracePoints);
             _view.SetTrace(_tracePoints);
             _traceProvider.SetTrace(_tracePoints);
+            _tracePublished = true;
+        }
+
+        // Idempotent so the every-tick not-aiming path doesn't re-issue LineRenderer clears and
+        // provider version bumps.
+        private void ClearPredictionTrace()
+        {
+            if (!_tracePublished)
+            {
+                return;
+            }
+
+            _view.ClearTrace();
+            _traceProvider.Clear();
+            _tracePublished = false;
         }
     }
 }
