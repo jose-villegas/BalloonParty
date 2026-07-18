@@ -390,6 +390,8 @@ namespace BalloonParty.Projectile.View
 
             if (step.Outcome == ProjectileStepOutcome.Destroyed)
             {
+                _disturbanceField.Stamp(StampSource.ProjectileImpact, step.WallContact, Vector2.zero);
+                FlashShieldLoss(step.WallContact);
                 DestroyProjectile();
                 return;
             }
