@@ -30,6 +30,11 @@ namespace BalloonParty.Game.Score.Behaviours
         // ~1 approaches pure in-plane twirl. Promote to the settings SO if it wants live tuning.
         private const float ScreenTwirl = 0.45f;
 
+        // A hit-aligned line tilts this far from its flight axis and precesses about it, so the spinning
+        // segment (and its persisting ink) sweeps a BICONE along the shot — depth from a 2-vertex shape.
+        // 90 would flatten it to a propeller disk, ~0 would hide the spin entirely.
+        private const float ConeHalfAngleDegrees = 55f;
+
         // Defensive fallback if the config's curve is unwired; the real asset always supplies one.
         private static readonly BigScoreFormationSettings FallbackSettings =
             new(1.2f, AnimationCurve.EaseInOut(0f, 0f, 1.8f, 0f), 6f, 1.15f, 60f);
@@ -97,14 +102,25 @@ namespace BalloonParty.Game.Score.Behaviours
                     ? principalCenter
                     : ClampCenter(SubCenter(context.Origin, i, spacing), radius, limits);
 
-                // A hit-aligned shape spawns with its local X along the shot (the line: its slope IS the
-                // shot's linear equation); everything else starts at a uniform random orientation.
-                var initialRotation = shape.AlignToHit && hasHitDirection
-                    ? Quaternion.FromToRotation(Vector3.right, context.HitDirection.normalized)
-                    : UnityEngine.Random.rotationUniform;
+                if (shape.AlignToHit && hasHitDirection)
+                {
+                    // The line's slope starts at the shot's linear equation, tilted ConeHalfAngle from the
+                    // flight axis, and PRECESSES about that axis — the sweep (and its persisting ink)
+                    // traces a bicone along the shot, giving the 2-vertex shape real volume.
+                    var flightAxis = context.HitDirection.normalized;
+                    var tiltAxis = Vector3.Cross(Vector3.back, flightAxis).normalized;
+                    var coneDirection = Quaternion.AngleAxis(ConeHalfAngleDegrees, tiltAxis) * flightAxis;
+                    var alignedRotation = Quaternion.FromToRotation(Vector3.right, coneDirection);
 
-                _ticker.LaunchFormation(group, new BigScoreFormationRequest(
-                    shape, value, cursor, origin, radius, isPrincipal, initialRotation));
+                    _ticker.LaunchFormation(group, new BigScoreFormationRequest(
+                        shape, value, cursor, origin, radius, isPrincipal, alignedRotation,
+                        flightAxis, hasSpinAxis: true));
+                }
+                else
+                {
+                    _ticker.LaunchFormation(group, new BigScoreFormationRequest(
+                        shape, value, cursor, origin, radius, isPrincipal, UnityEngine.Random.rotationUniform));
+                }
                 cursor -= value;
             }
 

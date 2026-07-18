@@ -67,9 +67,14 @@ namespace BalloonParty.Game.Score.Behaviours
         internal readonly bool IsPrincipal;
         internal readonly Quaternion InitialRotation;
 
+        // Per-formation spin-axis override (the hit-aligned line precesses about the FLIGHT axis to
+        // sweep a bicone); unset falls back to the group's shared roll axis.
+        internal readonly Vector3 SpinAxis;
+        internal readonly bool HasSpinAxis;
+
         internal BigScoreFormationRequest(
             FormationShape shape, int value, int rangeLast, Vector3 origin, float formationRadius,
-            bool isPrincipal, Quaternion initialRotation)
+            bool isPrincipal, Quaternion initialRotation, Vector3 spinAxis = default, bool hasSpinAxis = false)
         {
             Shape = shape;
             Value = value;
@@ -78,6 +83,8 @@ namespace BalloonParty.Game.Score.Behaviours
             FormationRadius = formationRadius;
             IsPrincipal = isPrincipal;
             InitialRotation = initialRotation;
+            SpinAxis = spinAxis;
+            HasSpinAxis = hasSpinAxis;
         }
     }
 
@@ -594,9 +601,12 @@ namespace BalloonParty.Game.Score.Behaviours
                 TargetOffset = Vector3.zero;
                 InitialRotation = request.InitialRotation;
                 Rotation = InitialRotation;
-                // All formations of a pop roll about the shared hit-derived axis (a coherent constellation tumble);
-                // a non-projectile pop with no direction falls back to a per-shape random axis.
-                SpinAxis = group.HasSpinAxis ? group.SpinAxis : Random.onUnitSphere;
+                // All formations of a pop roll about the shared hit-derived axis (a coherent constellation
+                // tumble) unless the shape overrides it (the hit-aligned line precesses about the flight
+                // axis, sweeping a bicone); a directionless pop falls back to a per-shape random axis.
+                SpinAxis = request.HasSpinAxis
+                    ? request.SpinAxis
+                    : group.HasSpinAxis ? group.SpinAxis : Random.onUnitSphere;
                 Duration = Mathf.Max(group.Settings.ScaleOverTravel.Duration(), MinDuration);
                 Elapsed = 0f;
                 FadeElapsed = 0f;
