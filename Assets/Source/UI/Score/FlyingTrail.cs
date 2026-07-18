@@ -216,11 +216,11 @@ namespace BalloonParty.UI.Score
             _trailRenderer.emitting = emitting;
         }
 
-        // Rigidly re-frames the recorded ribbon by the formation's delta transform (translate + rotate).
-        // Ribbons record WORLD positions, so a formation that moves or spins while it draws would shear
-        // every line; carrying each drawn point through p' = newCenter + R(deltaRadians)·(p − oldCenter)
-        // keeps the whole figure rigid in formation space while its centre glides and its frame rotates.
-        internal void TransformRibbon(Vector3 oldCenter, Vector3 newCenter, float deltaRadians)
+        // Rigidly re-frames the recorded ribbon by the formation's delta transform (translate + 3D rotate).
+        // Ribbons record WORLD positions, so a formation that glides or tumbles while it draws would shear
+        // every line; carrying each drawn point through p' = newCenter + delta·(p − oldCenter) keeps the
+        // whole figure rigid in formation space while its centre glides and its frame tumbles.
+        internal void TransformRibbon(Vector3 oldCenter, Vector3 newCenter, Quaternion delta)
         {
             var count = _trailRenderer.positionCount;
             if (count == 0)
@@ -235,31 +235,25 @@ namespace BalloonParty.UI.Score
 
             _trailRenderer.GetPositions(_ribbonScratch);
 
-            // Pure translation is the common case (no path rotation yet) — skip the trig entirely.
-            if (deltaRadians == 0f)
+            // Pure translation is the common case (the shape holds a fixed tilt until its draw finishes) —
+            // skip the quaternion rotate entirely.
+            if (delta == Quaternion.identity)
             {
-                var delta = newCenter - oldCenter;
+                var offset = newCenter - oldCenter;
 
                 // Per-index writes: SetPositions takes its count from the ARRAY length, which would push
                 // scratch garbage past the ribbon's real point count.
                 for (var i = 0; i < count; i++)
                 {
-                    _trailRenderer.SetPosition(i, _ribbonScratch[i] + delta);
+                    _trailRenderer.SetPosition(i, _ribbonScratch[i] + offset);
                 }
 
                 return;
             }
 
-            var cos = Mathf.Cos(deltaRadians);
-            var sin = Mathf.Sin(deltaRadians);
             for (var i = 0; i < count; i++)
             {
-                var p = _ribbonScratch[i];
-                var dx = p.x - oldCenter.x;
-                var dy = p.y - oldCenter.y;
-                _trailRenderer.SetPosition(
-                    i,
-                    new Vector3(newCenter.x + dx * cos - dy * sin, newCenter.y + dx * sin + dy * cos, p.z));
+                _trailRenderer.SetPosition(i, newCenter + delta * (_ribbonScratch[i] - oldCenter));
             }
         }
 

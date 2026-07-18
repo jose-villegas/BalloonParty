@@ -25,140 +25,91 @@ namespace BalloonParty.Configuration
     }
 
     /// <summary>
-    ///     One BigScore visual tier: the star polygon {n/k} the carrier's tributaries draw, its nesting, and
-    ///     the phase timing. Selected by group total (highest <see cref="MinPoints"/> the group clears).
+    ///     Global knobs shared by every BigScore formation. The old per-tier star table (and the deploy/draw/
+    ///     collapse phase machine) are gone: a group's score decomposes over the <see cref="ShapeCatalog"/> and
+    ///     each denomination lives one Travel phase whose scale-over-time curve blooms the shape from a point,
+    ///     holds it, and tapers it back to a point at the bar. The only per-shape variation is the catalog's
+    ///     <c>RadiusScale</c>.
     /// </summary>
     [Serializable]
-    internal struct BigScoreTierConfig
+    internal struct BigScoreFormationSettings
     {
-        [Tooltip("Lowest group total this tier claims.")]
-        [SerializeField] private int _minPoints;
-
-        [Tooltip("Star polygon vertex count n (3-8).")]
-        [Range(3, 8)]
-        [SerializeField] private int _vertexCount;
-
-        [Tooltip("Chord skip k in {n/k}: each vertex draws to vertex (i+k). 1 = convex n-gon, 2 = pentagram-style.")]
-        [SerializeField] private int _skip;
-
-        [Tooltip("Nested repetitions m: the star redraws inward this many times.")]
-        [SerializeField] private int _repeats;
-
-        [Tooltip("Radius ratio between successive nested stars (default 1/phi^2 = 0.381966).")]
-        [SerializeField] private float _nestScale;
-
-        [Tooltip("Rotation added per nesting, in degrees. 0 = auto (180/n, the natural nesting offset).")]
-        [SerializeField] private float _nestRotationDegrees;
-
-        [Tooltip("Outermost star radius in world units, before the in-bounds clamp.")]
+        [Tooltip("Outermost formation radius in world units (before the per-shape RadiusScale and the in-bounds fit).")]
         [SerializeField] private float _baseRadius;
 
-        [Tooltip("Fly-out (deploy) phase duration for the outer star; nested stars scale down with radius.")]
-        [SerializeField] private float _deployDuration;
+        [Tooltip("Normalized shape scale over the formation's life. Y multiplies the fitted radius; the curve's " +
+                 "LAST KEY TIME is the formation duration (seconds). Author: bloom from 0 to ~1 early, hold/decay, " +
+                 "taper to 0 at the bar.")]
+        [SerializeField] private AnimationCurve _scaleOverTravel;
 
-        [Tooltip("Chord-draw phase duration for the outer star.")]
-        [SerializeField] private float _drawDuration;
+        [Tooltip("PRIMARY STYLE KNOB (with Coverage): pen travel speed between vertices, in WORLD units/second — " +
+                 "so ink density and energy read the same across shape sizes. A walk of world perimeter L laps in " +
+                 "L/PenSpeed seconds.")]
+        [SerializeField] private float _penSpeed;
 
-        [Tooltip("Inward-collapse phase duration for the outer star.")]
-        [SerializeField] private float _collapseDuration;
+        [Tooltip("STYLE DIAL, not a clamp. Each pen's ribbon time is (loopPeriod / pensOnWalk) * this. >= 1 reads " +
+                 "as a solid wireframe; < 1 is an intentional look — chasing comet heads with fading tails; << 1 = " +
+                 "orbiting pearls.")]
+        [Range(0.2f, 2f)]
+        [SerializeField] private float _coverage;
 
-        [Tooltip("TrailRenderer.time the vertex ribbons use, long enough to keep outer stars visible while inner ones draw.")]
-        [SerializeField] private float _ribbonTime;
+        [Tooltip("Tumble speed, degrees/second, about a random axis for the whole life (invisible while the shape " +
+                 "is still a point): spins the pens + drawn ink as the shape travels to the bar.")]
+        [SerializeField] private float _spinSpeedDegrees;
 
-        [Tooltip("Path rotation, degrees/second, once the first star is drawn: spins the whole simulation " +
-                 "(vertices + drawn ink) about its centre through the collapse and the final flight to the bar.")]
-        [SerializeField] private float _rotationSpeedDegrees;
-
-        [Tooltip("Fraction of the pop-to-bar distance the whole formation drifts across while drawing " +
-                 "(0 = anchored at the pop, 1 = merges at the bar); the carrier flies the remainder.")]
-        [Range(0f, 1f)]
-        [SerializeField] private float _driftToTarget;
-
-        public int MinPoints => _minPoints;
-        public int VertexCount => Mathf.Clamp(_vertexCount, 3, 8);
-        public int Skip => Mathf.Clamp(_skip, 1, VertexCount - 1);
-        public int Repeats => Mathf.Max(1, _repeats);
-        public float NestScale => _nestScale;
         public float BaseRadius => _baseRadius;
-        public float DeployDuration => _deployDuration;
-        public float DrawDuration => _drawDuration;
-        public float CollapseDuration => _collapseDuration;
-        public float RibbonTime => _ribbonTime;
-        public float DriftToTarget => Mathf.Clamp01(_driftToTarget);
+        public AnimationCurve ScaleOverTravel => _scaleOverTravel;
+        public float PenSpeed => _penSpeed;
+        public float Coverage => _coverage;
+        public float SpinSpeedDegrees => _spinSpeedDegrees;
 
-        // 0 authored → the natural nesting offset pi/n so successive stars land where the geometry puts them.
-        public float NestRotationRadians =>
-            Mathf.Approximately(_nestRotationDegrees, 0f)
-                ? Mathf.PI / VertexCount
-                : _nestRotationDegrees * Mathf.Deg2Rad;
-
-        public float RotationSpeedRadians => _rotationSpeedDegrees * Mathf.Deg2Rad;
-
-        internal BigScoreTierConfig(
-            int minPoints,
-            int vertexCount,
-            int skip,
-            int repeats,
-            float nestScale,
-            float nestRotationDegrees,
+        internal BigScoreFormationSettings(
             float baseRadius,
-            float deployDuration,
-            float drawDuration,
-            float collapseDuration,
-            float ribbonTime,
-            float rotationSpeedDegrees,
-            float driftToTarget)
+            AnimationCurve scaleOverTravel,
+            float penSpeed,
+            float coverage,
+            float spinSpeedDegrees)
         {
-            _minPoints = minPoints;
-            _vertexCount = vertexCount;
-            _skip = skip;
-            _repeats = repeats;
-            _nestScale = nestScale;
-            _nestRotationDegrees = nestRotationDegrees;
             _baseRadius = baseRadius;
-            _deployDuration = deployDuration;
-            _drawDuration = drawDuration;
-            _collapseDuration = collapseDuration;
-            _ribbonTime = ribbonTime;
-            _rotationSpeedDegrees = rotationSpeedDegrees;
-            _driftToTarget = driftToTarget;
+            _scaleOverTravel = scaleOverTravel;
+            _penSpeed = penSpeed;
+            _coverage = coverage;
+            _spinSpeedDegrees = spinSpeedDegrees;
         }
     }
 
     [CreateAssetMenu(menuName = "Configuration/Score Trail Behaviours", fileName = "ScoreTrailBehaviourConfiguration")]
     internal class ScoreTrailBehaviourConfiguration : ScriptableObject, IScoreTrailBehaviourConfiguration
     {
-        private const float GoldenNestScale = 0.381966f;
-
         [Tooltip("Choreography handlers keyed by score magnitude, evaluated highest MinPoints first. " +
                  "A DefaultScore entry at MinPoints 0 is the catch-all.")]
         [SerializeField] private ScoreTrailBehaviourEntry[] _entries = DefaultEntries();
 
-        [Tooltip("BigScore star-polygon tiers, evaluated highest MinPoints first (the tier the group total clears).")]
-        [SerializeField] private BigScoreTierConfig[] _bigScoreTiers = DefaultTiers();
+        [Tooltip("Global BigScore formation timing/size/spin knobs shared by every decomposed shape.")]
+        [SerializeField] private BigScoreFormationSettings _bigScoreSettings = DefaultSettings();
 
         public IReadOnlyList<ScoreTrailBehaviourEntry> Entries => _entries;
-        public IReadOnlyList<BigScoreTierConfig> BigScoreTiers => _bigScoreTiers;
+        public BigScoreFormationSettings BigScoreSettings => _bigScoreSettings;
 
         private static ScoreTrailBehaviourEntry[] DefaultEntries()
         {
             return new[]
             {
-                new ScoreTrailBehaviourEntry(ScoreTrailBehaviourId.BigScore, 40),
+                new ScoreTrailBehaviourEntry(ScoreTrailBehaviourId.BigScore, 7),
                 new ScoreTrailBehaviourEntry(ScoreTrailBehaviourId.DefaultScore, 0),
             };
         }
 
-        // triangle {3/1} at 40, square {4/1} at 80, nested pentagram {5/2}x2 at 150; durations accelerate
-        // inward; each tier spins along its path once formed (90/60/45 deg/s, gentler for the busier stars).
-        private static BigScoreTierConfig[] DefaultTiers()
+        // Bloom to full within ~14% of the 1.8 s life, gentle decay through the middle, taper to a point at the
+        // bar; pens travel at 6 world units/s and tile their walks with 15% overlap; the figure tumbles at 60°/s.
+        private static BigScoreFormationSettings DefaultSettings()
         {
-            return new[]
-            {
-                new BigScoreTierConfig(40, 3, 1, 1, GoldenNestScale, 0f, 1.1f, 0.25f, 0.35f, 0.5f, 0.8f, 90f, 0.6f),
-                new BigScoreTierConfig(80, 4, 1, 1, GoldenNestScale, 0f, 1.3f, 0.25f, 0.35f, 0.5f, 0.9f, 60f, 0.6f),
-                new BigScoreTierConfig(150, 5, 2, 2, GoldenNestScale, 0f, 1.5f, 0.25f, 0.35f, 0.5f, 1.0f, 45f, 0.6f),
-            };
+            var scaleOverTravel = new AnimationCurve(
+                new Keyframe(0f, 0f),
+                new Keyframe(0.25f, 1f),
+                new Keyframe(1.2f, 0.8f),
+                new Keyframe(1.8f, 0f));
+            return new BigScoreFormationSettings(1.2f, scaleOverTravel, 6f, 1.15f, 60f);
         }
     }
 }

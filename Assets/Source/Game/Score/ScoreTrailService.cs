@@ -120,6 +120,7 @@ namespace BalloonParty.Game.Score
                 msg.ColorName,
                 color,
                 msg.WorldPosition,
+                msg.HitDirection,
                 msg.Points,
                 msg.FirstScore,
                 msg.LastScore,

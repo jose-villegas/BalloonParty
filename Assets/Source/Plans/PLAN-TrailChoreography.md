@@ -81,6 +81,7 @@ internal readonly struct ScorePointsGroupMessage
     public readonly int Points;              // total points this group carries (post-multiplier, post-cap)
     public readonly int LastScore;           // cumulative per-color number of the group's LAST point
     public readonly int Multiplier;          // streak multiplier that produced Points (discrimination input)
+    public readonly Vector3 HitDirection;    // shot direction at impact; BigScore rolls its shapes about it
 }
 ```
 
@@ -232,6 +233,15 @@ Worst case rerun (5× multiplier × 50-point unbreakable): today 250 trails / 50
 
 ### `BigScore` shape choreography — anchored simulation space (José, 2026-07-18)
 
+> *Superseded 2026-07-19 by the **3D shape catalog + score decomposition** model below. The
+> anchored simulation-space core (bare pooled anchor Transform as the frame centre + principal, the
+> collapsed cluster flying to the bar, `TransformRibbon` rigidity, the transport bridge) all carried
+> forward; what changed is the geometry (a hand-authored 3D catalog, not a single {n/k} star with
+> nesting), the drawing model (pens orbit closed walks forever, not one chord sweep), the phase
+> machine (one curve-driven Travel phase, not deploy/draw/collapse/final-flight), and score handling
+> (a group **decomposes** into many simultaneous shapes rather than one tier). Kept for the
+> derivation of the anchor/ribbon/transport machinery.*
+
 The spectacle is a drawn **star polygon {n/k}**, using the trails' ribbons as the pen
 (reference: the classic nested-pentagram construction — golden-ratio self-similarity).
 Tiers map score → vertex count: triangle {3/1}, square {4/1}, pentagram **{5/2}**
@@ -329,6 +339,80 @@ triangle is just `{3/1}, m = 1` — one implementation covers every tier.
 >   registering/unregistering the anchor flight itself; `BigScoreTrailBehaviour` only picks the tier, anchors
 >   the centre, and calls `Launch`. Keeps the "consumer that `Get()`s returns" rule unambiguous.
 
+### `BigScore` — 3D shape catalog + score decomposition (José, 2026-07-19)
+
+**Denomination = vertex count, full 1:1 decomposition.** A shape's score value IS its vertex
+count; every point is one orbiting pen trail. A group's total decomposes **greedily largest-first**
+over the catalog ladder `{30, 20, 10, 8, 6, 5, 4, 3, 2}` (`ShapeCatalog.Denominations`), remainders
+recurse, and a terminal remainder of 1 becomes one classic default-style trail. `13 = 10-sphere +
+triangle`; `250 = 8×30-sphere + 10-sphere`; `7 = triangular-prism + 1`. Because 2 and 3 are both
+denominations the remainder after the pass is always 0 or 1. There is **no visual cap** — trail
+count scales with score by design (ticker-driven, zero tweens, one arrival per formation, so the old
+per-arrival costs stay dead). Threshold `MinPoints` drops to **7** in the asset (2–6-point pops keep
+classic trails).
+
+> **12 is dropped from the ladder.** The design lists spheres at 10/12/20/30, but greedy over a
+> 12-inclusive ladder splits `13` as `12+1`, contradicting the required `13 = 10+3` (and `7 = 6+1`
+> pins pure greedy, so no single rule reconciles both once 12 is present). Spheres are 10/20/30 —
+> three increasing accuracies. Re-add 12 to the ladder + catalog only if `13 = 12+1` becomes
+> acceptable. `Decompose` is an internal static pure function on `BigScoreTrailBehaviour` (tested).
+
+**The catalog (`ShapeCatalog`, `internal static`, built once, zero-alloc lookup).** Each shape is
+local 3D vertices (normalized to unit bounding radius), a set of **closed walks** its pens orbit,
+and a `RadiusScale`:
+- `2` = line (a single edge as a back-and-forth shuttle), `3` = triangle (one 3-cycle), `4` =
+  tetrahedron (4-cycle + two diagonal shuttles), `5` = square pyramid (a 5-cycle through the apex +
+  3 shuttles), `6` = triangular prism (two triangle loops + 3 vertical shuttles along the wide
+  axis), `8` = cube (a Hamiltonian 8-cycle + 4 shuttles).
+- `10/20/30` = spheres as **latitude rings**: `10` = 2 rings of 5; `20` = 3 rings 6/8/6; `30` = 4
+  rings 6/8/8/6 + 2 pole shuttles (meridian arcs, a hint of longitude). Ring segments are **arcs**
+  (slerp); polyhedron edges are **chords** (lerp).
+
+**Drawing = perpetual orbiting loops.** Pens are distributed across a shape's walks proportionally
+to walk length (`PensPerWalk`, largest-remainder, summing to the denomination), spaced evenly along
+each walk by **arc length**, and orbit continuously: the first lap draws the wireframe, later laps
+re-ink it; `k` pens sharing a period-`P` walk cover it in `P/k`. Pen travel speed is authored in
+**world units/second** (`PenSpeed`, the primary style knob) so ink density reads the same across
+shape sizes; a **coverage** style dial (Range 0.2–2) sets each pen's ribbon time
+`= (worldPerimeter / pensOnWalk / penSpeed) × coverage` at scale 1 — `≥1` solid wireframe, `<1`
+chasing comet heads, `≪1` orbiting pearls.
+
+**One curve-driven Travel phase** (the repo's "curve's last key is the duration" idiom, per
+`TrackedTrailSettings`/PLAN-CinematicsArchitecture). A single `ScaleOverTravel` `AnimationCurve` on
+the settings gives normalized shape scale over seconds and its last key time is the formation
+duration `D`. The world position of a pen is `C(t) + Q(t)·(radius · scale(t) · localₚ(t))`:
+- `C(t) = Lerp(origin, liveTarget, SmoothStep(t/D))` — the shape blooms at its sub-centre and
+  travels to the bar. **Live target tracking** replaces all sampling policy: the random landing
+  offset is sampled once at launch, then `liveTarget = Target.Center + offset` re-read every tick,
+  so a drifting UI bar can never leave the landing stale (the `SetupFollow` principle).
+- `scale(t)` — the curve: `0 → bloom → hold → 0`, so the shape grows from a point and tapers back to
+  one at the bar. **Pens are pen-down from t = 0** (no deploy phase, no deploy spokes — the shape
+  blooms from a point).
+- `Q(t)` — a fixed random tilt spun from t = 0 (invisible while the shape is a point). The tumble
+  **axis derives from the projectile hit direction** — `Cross(Vector3.back, hitDirection).normalized`
+  — so the whole constellation rolls head-over-heels along the shot like momentum from the impact
+  (all formations of a pop share the axis; a near-zero direction, e.g. item/laser/board pops, falls
+  back to a per-shape random axis). Spin speed stays a global settings knob.
+
+`TransformRibbon` re-frames the drawn ink by the tick's translate+tumble delta (now a
+**`Quaternion`**), keeping the figure rigid in formation space. It is deliberately **not**
+scale-corrected: the scale change is slow next to the loop speed and pens continuously re-ink at the
+current scale, so slightly-larger old ink fading behind the shrinking shape reads as a natural
+afterglow.
+
+**Decomposition + simultaneity.** `BigScoreTrailBehaviour.Begin` decomposes `context.Points`, then
+launches ALL resulting formations at once at spread sub-centres (golden-angle phyllotaxis around the
+pop, each wall-clamped). The **largest** formation takes the **top** contiguous score range (so it
+carries `LastScore` and is the principal — `GetPrincipalId` unchanged) and its sub-centre is the
+pop; the rest take descending ranges. Each formation reports `(itsRangeLast, itsValue)` on landing;
+a terminal remainder of 1 spawns one classic `context.Spawner.Spawn` trail reporting `(itsScore, 1)`.
+Reports sum to the total by construction. Only the **principal's** anchor registers in `Flights`
+(the cinematic tracks one); all formations of the group share that flight for the transport bridge,
+so a pause/`Idle` fans out to every shape. The flight stays registered through the group's whole life
+and is unregistered only once the last formation finishes, so a principal that lands first never
+falsely snaps the others. `MaxVertexCount = 30`; per-formation state (30-slot pen arrays), groups,
+and anchors are all pooled — zero per-frame allocation.
+
 ### Degenerate configs worth knowing exist
 
 - *Formation flight* (keep N full trails, single valued arrival) = `BigScore` with
@@ -369,15 +453,20 @@ triangle is just `{3/1}, m = 1` — one implementation covers every tier.
    relies on in-flight trails continuing. Config binding is a serialized field on `GameLifetimeScope` (scene
    inspector), so the resolver degrades to `DefaultScore` (one-time dev warning) when the asset is unwired.
    Second parity gate.
-3. **`BigScore`** ✅ *(landed 2026-07-18, reworked to anchored simulation-space — awaiting in-editor
-   playtest)*: `BigScoreTrailBehaviour` + `ShapeFormationTicker` (star-polygon formations around a pooled
-   anchor Transform, the collapsed cluster flies to the bar — no carrier trail, no merge flash),
-   `BigScoreTierConfig` table on the config asset (tiers `{3/1}@40`, `{4/1}@80`, `{5/2}×2@150`, each with a
-   nonzero path `rotationSpeed`), `TrailSpawner.Acquire/Release`, `FlyingTrail` ribbon-time set/restore +
-   `TransformRibbon`. Threshold `MinPoints 40`. See the transport-bridge contract note above. Playtest for
-   feel; iterate knobs in-editor.
-4. Retune `ScoreTrailPrewarmPerColor` down (128 → ~32) once BigScore bounds the worst
-   case; revisit the 0.02 s stagger for the default path.
+3. **`BigScore`** ✅ *(landed 2026-07-18 as star tiers; reworked 2026-07-19 to the 3D shape catalog +
+   score decomposition model — awaiting in-editor playtest)*: `BigScoreTrailBehaviour` +
+   `ShapeFormationTicker` + `ShapeCatalog`. A group's score **decomposes** over the catalog ladder into many
+   3D shapes launched simultaneously at spread sub-centres; each shape's pens **orbit closed walks** through
+   one **curve-driven Travel phase** (bloom → hold → taper to a point at the bar), tumbling about the
+   **projectile hit direction**. `BigScoreFormationSettings` (a single global block: `BaseRadius`,
+   `ScaleOverTravel` curve, `PenSpeed`, `Coverage`, `SpinSpeed`) replaces the tier table;
+   `TrailSpawner.Acquire/Release`, `FlyingTrail` ribbon-time set/restore + quaternion `TransformRibbon`.
+   Threshold `MinPoints 7`. See the 3D-catalog subsection + the transport-bridge contract note above.
+   Playtest for feel; iterate knobs in-editor.
+4. **`ScoreTrailPrewarmPerColor` stays at 128 — the step-4 prewarm reduction is CANCELLED.** Full 1:1
+   decomposition keeps the peak trail demand (a 250-point pop is ~250 concurrent pens on one colour), so the
+   worst case is not bounded the way the carrier/tributary design would have bounded it; the prewarm must
+   still cover a large burst. Revisit the 0.02 s stagger for the default path only.
 
 Verification: step 1/2 gates are in-editor playtests (pop bursts, a level-up mid-storm to
 exercise the tipping path, a loss mid-storm for `CompleteAll`); step 3 adds the 5×

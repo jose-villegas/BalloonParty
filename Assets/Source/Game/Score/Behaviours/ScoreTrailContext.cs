@@ -14,6 +14,7 @@ namespace BalloonParty.Game.Score.Behaviours
         internal readonly string ColorName;
         internal readonly Color Color;
         internal readonly Vector3 Origin;
+        internal readonly Vector3 HitDirection;
         internal readonly int Points;
         internal readonly int FirstScore;
         internal readonly int LastScore;
@@ -28,6 +29,7 @@ namespace BalloonParty.Game.Score.Behaviours
             string colorName,
             Color color,
             Vector3 origin,
+            Vector3 hitDirection,
             int points,
             int firstScore,
             int lastScore,
@@ -41,6 +43,7 @@ namespace BalloonParty.Game.Score.Behaviours
             ColorName = colorName;
             Color = color;
             Origin = origin;
+            HitDirection = hitDirection;
             Points = points;
             FirstScore = firstScore;
             LastScore = lastScore;

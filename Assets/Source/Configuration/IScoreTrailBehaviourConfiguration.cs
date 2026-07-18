@@ -10,7 +10,7 @@ namespace BalloonParty.Configuration
     {
         IReadOnlyList<ScoreTrailBehaviourEntry> Entries { get; }
 
-        /// <summary>BigScore star-polygon tiers, evaluated highest-<c>MinPoints</c>-first by the handler.</summary>
-        IReadOnlyList<BigScoreTierConfig> BigScoreTiers { get; }
+        /// <summary>Global BigScore formation knobs shared by every decomposed shape.</summary>
+        BigScoreFormationSettings BigScoreSettings { get; }
     }
 }

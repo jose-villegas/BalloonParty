@@ -62,47 +62,60 @@ that decides what registers, and the two can never disagree. `DefaultScore` repr
 byte-for-byte (one trail per point, scatter fan, `0.02 s` stagger, one point reported per landing, first trail =
 principal). `BigScore` is the confluence handler for large awards (see below).
 
-### `BigScore` + `ShapeFormationTicker`
+### `BigScore` + `ShapeFormationTicker` + `ShapeCatalog`
 
-Once a group clears the `BigScore` `MinPoints` (authored `40`), the group flies as **n vertex trails around a
-pooled anchor** instead of one trail per point — the 5×-on-a-cluster worst case becomes one arrival, not
-hundreds. `BigScoreTrailBehaviour` picks a tier (`IScoreTrailBehaviourConfiguration.BigScoreTiers`, highest
-`MinPoints` the total clears), clamps the formation centre inside `WallLimits` (shifting `C` inward so
-`C ± BaseRadius` stays on-screen), and hands a `BigScoreFormationRequest` to `ShapeFormationTicker`. The ticker
-activates a bare pooled **anchor Transform** at `C` and registers **it** in `Flights` under `(Color, LastScore)`
-**synchronously in `Begin`** (the cinematic's registry wait depends on it) — nothing visible rides the anchor;
-it is just the frame's centre and the principal the cinematic can track/pause. The anchor reports **once**
-(`LastScore, Points`) — one `+N` notice/slider/score step.
+Once a group clears the `BigScore` `MinPoints` (authored `7`), its score **decomposes** into a catalog of 3D
+shapes flown all at once — every point is one orbiting pen trail, so the 5×-on-a-cluster worst case becomes a
+handful of arrivals (one per shape), not hundreds.
 
-`ShapeFormationTicker` (`ILateTickable`, pooled zero-alloc state + anchors, `BalloonMotionTicker`-style
-swap-remove) drives every formation closed-form each `LateTick`. The simulation is pure math: n vertices in a
-local frame with a translate/rotate/scale applied. World vertex `C(t) + R(Ω(t)) · (r(t) · dir(φᵢ + repRotation))`
-— the path rotation Ω folds into the angle. Per repetition, n vertex trails **deploy** from the pop origin to a
-regular n-gon's vertices, **draw** one chord each simultaneously (`vᵢ → v₍ᵢ₊ₖ₎`, a star polygon {n/k}), then
-**collapse** as a pure radial `r → 0` inside the rotating frame. Nesting redraws inward `m` times at `r·NestScale`
-with `θ₀ += NestRotation` and radius-scaled (accelerating) durations. **Ω** is 0 until the first Draw completes,
-then advances at the tier's `RotationSpeed` (formation clock) for the rest of the formation including the final
-flight — one rotation concept, so the collapse's own spin is subsumed. At the end there is **no flash**: the
-collapsed cluster (all vertices at `r≈0`, pen ON — one bright comet) flies with the centre to a **freshly
-sampled** endpoint over `CarrierFlightDuration` (smoothstepped so the handoff from drift is continuous), then
-reports at the target and releases. Sampling the endpoint fresh at flight start — instead of reusing the
-launch-time drift sample, which the drifting UI bar can leave stale — is what keeps the comet landing *on* the
-bar.
+`ShapeCatalog` (`internal static`, built once, zero-alloc lookup) is hand-authored 3D shape data. A denomination
+maps to a shape whose vertex count equals it: `2` line, `3` triangle, `4` tetrahedron, `5` square pyramid, `6`
+triangular prism, `8` cube (polyhedra partition their edges into closed **walks** — a Hamiltonian-ish cycle plus
+back-and-forth shuttles), and `10/20/30` spheres drawn as latitude **rings** (arc walks; `30` adds pole meridian
+shuttles). `Denominations` is the decomposition **ladder** `{30, 20, 10, 8, 6, 5, 4, 3, 2}` — the 12-sphere is
+dropped so greedy gives `13 = 10+3` (see the plan). `BigScoreTrailBehaviour.Decompose` (an internal static pure
+function) walks the ladder greedily largest-first; a terminal remainder of 1 becomes a single classic default
+trail.
 
-The whole figure is **rigid in formation space**: each tick, if the centre moved or Ω changed, every live
-vertex ribbon is re-framed through `FlyingTrail.TransformRibbon(oldCenter, newCenter, deltaRadians)`
-(`p' = newCenter + R(Δ)·(p − oldCenter)`; pure translation is the `Δ == 0` fast path). Ribbons record WORLD
-positions, so this carries the drawn ink through the same translate+rotate the live frame moved through.
+`BigScoreTrailBehaviour.Begin` decomposes `context.Points`, fits every shape's radius inside `WallLimits`, spreads
+the formations' sub-centres around the pop (golden-angle phyllotaxis, each wall-clamped), and launches them
+simultaneously. The **largest** formation is the **principal**: its sub-centre is the pop, it takes the top score
+range (carrying `LastScore`), and `ShapeFormationTicker` registers **its** bare pooled **anchor Transform** in
+`Flights` under `(Color, LastScore)` **synchronously in `Begin`** (the cinematic's registry wait depends on it).
+Every formation reports **once** — `(itsRangeLast, itsValue)` — so the reports sum to the group total.
 
-**Transport bridge** — the anchor's `TrailFlight` handle is the formation's pause/snap/slow-mo interface,
-polled per tick: `Paused` freezes the formation (the cinematic owns the anchor transform — the ticker stops
-writing it — and vertices hold position); `Idle` (the pan-in or a `CompleteAll` drove the principal home)
-**snaps** — report the whole value now at the anchor's position, fade the live vertices out (unscaled,
-freeze-safe), release the anchor; `Speed` scales the formation clock (slow-mo). The formation clock is scaled
-time (matches the trail tweens); the snap fade is unscaled so it survives the level-up freeze. A group-CTS
-cancellation (run reset) releases everything **without** reporting — the reset zeroes the run's score anyway. A
-`Reported` guard (plus the reporter's own backstop) keeps the snap and the final-flight arrival from
-double-firing.
+`ShapeFormationTicker` (`ILateTickable`, pooled zero-alloc state + groups + anchors, `BalloonMotionTicker`-style
+swap-remove) drives every formation closed-form each `LateTick`. A formation lives **one Travel phase**: with the
+shape scale driven by the settings' `ScaleOverTravel` curve (its last key time is the duration `D`), a pen's world
+position is `C(t) + Q(t) · (radius · scale(t) · localₚ(t))`:
+
+- `C(t) = Lerp(origin, liveTarget, SmoothStep(t/D))` — blooms at the sub-centre, travels to the bar. `liveTarget`
+  re-reads the endpoint centre every tick (plus a launch-sampled offset), so a drifting UI bar can never leave the
+  landing stale (the `SetupFollow` moving-target principle).
+- `scale(t)` — the curve: `0 → bloom → hold → 0`, so the shape grows from a point and tapers back to one at the
+  bar. Pens are **pen-down from t = 0** (no deploy phase, no deploy spokes).
+- `Q(t)` — a fixed random tilt spun from t = 0, about the **projectile hit direction**
+  (`Cross(Vector3.back, HitDirection)`), so the whole constellation rolls head-over-heels like momentum from the
+  shot (all formations share the axis; a directionless pop falls back to a per-shape random axis).
+- `localₚ(t)` — the pen's position on its closed walk, orbiting continuously at `PenSpeed` **world units/second**
+  (parameterized by arc length): the first lap draws the wireframe, later laps re-ink it; `k` pens tile a
+  period-`P` walk in `P/k`. `Coverage` (a style dial, Range 0.2–2) sets each pen's ribbon time — `≥1` solid
+  wireframe, `<1` chasing comet heads, `≪1` orbiting pearls.
+
+The whole figure is **rigid in formation space**: each tick every live pen ribbon is re-framed through
+`FlyingTrail.TransformRibbon(oldCenter, newCenter, Quaternion delta)` (`p' = newCenter + delta·(p − oldCenter)`;
+pure translation is the identity-delta fast path). It is deliberately **not** scale-corrected — pens continuously
+re-ink at the current scale, so slightly-larger old ink fading behind the shrinking shape reads as an afterglow.
+
+**Transport bridge** — the group's anchor `TrailFlight` handle is the pause/snap/slow-mo interface, shared by
+every formation in the group (so a cinematic pause/completion fans out to the whole constellation), polled per
+tick: `Paused` freezes the formation and inflates its ribbon time so the drawn figure survives the freeze; `Idle`
+(the pan-in or a `CompleteAll` drove the principal home) **snaps** — report the value now at the anchor's
+position, fade the live pens out (unscaled, freeze-safe), release; `Speed` scales the formation clock (slow-mo).
+The flight stays registered (InFlight) through the group's whole life and is unregistered only once the last
+formation finishes, so a principal that lands first never falsely snaps the others. A group-CTS cancellation (run
+reset) releases everything **without** reporting. A `Reported` guard (plus the reporter's own backstop) keeps a
+snap and a normal arrival from double-firing.
 
 ## Spawn & Cinematic Interception
 
@@ -118,7 +131,7 @@ The level-up cinematic (`LevelUpCinematic` in `Game/Cinematics/`) intercepts thr
 
 ## Interactions
 
-- **`ScorePointsGroupMessage`** — published by `ScoreController` on pop (one per resolved color, carries the group's total `Points`, `LastScore`, and streak `Multiplier`), consumed by `ScoreTrailService` and `LevelUpCinematic`
+- **`ScorePointsGroupMessage`** — published by `ScoreController` on pop (one per resolved color, carries the group's total `Points`, `LastScore`, streak `Multiplier`, and the shot's `HitDirection` — BigScore rolls its shapes about it), consumed by `ScoreTrailService` and `LevelUpCinematic`
 - **`ScoreTrailArrivedMessage`** — published by `ScoreTrailService` on trail arrival, consumed by `ScoreController` (lifetime tally), `LevelController` (progress confirmation), `ColorProgressBar`, and `LevelUpCinematic`
 - **`ScoreLevelUpMessage`** — published by `LevelController` on level-up (see `Game/Level/`), consumed by `ColorProgressBar`, `LevelUpPopUp`, `LevelDifficultyResolver`, and `ColorStreakTracker` (auto-reset)
 - **`Cinematics/`** — `LevelUpCinematic` intercepts the tipping trail via `ScoreTrailService.Flights` (see Spawn & Cinematic Interception above) and reads the tipping bar's world position via `ScoreTrailService.GetTarget`

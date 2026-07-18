@@ -88,11 +88,11 @@ namespace BalloonParty.Game.Score
 
             using var attributionPool = UnityEngine.Pool.ListPool<ScoreAttribution>.Get(out var attributions);
             scoreColor.ResolveScoreAttribution(in msg.Context, attributions);
-            PublishAttributionGroup(attributions, msg.WorldPosition, msg.Context.Flags);
+            PublishAttributionGroup(attributions, msg.WorldPosition, msg.Context.Flags, msg.ProjectileDirection);
         }
 
         private void PublishAttributionGroup(
-            IReadOnlyList<ScoreAttribution> attributions, Vector3 worldPosition, DamageFlags flags)
+            IReadOnlyList<ScoreAttribution> attributions, Vector3 worldPosition, DamageFlags flags, Vector3 hitDirection)
         {
             if (attributions.Count == 0)
             {
@@ -105,7 +105,7 @@ namespace BalloonParty.Game.Score
             var multiplier = RecordStreakMultiplier(attributions, flags);
             ResolveAttributions(attributions, multiplier, resolved);
 
-            PublishPoints(resolved, multiplier, worldPosition);
+            PublishPoints(resolved, multiplier, worldPosition, hitDirection);
         }
 
         // A mixed group breaks the streak — unless exactly one entry is a wildcard's streak anchor
@@ -177,7 +177,8 @@ namespace BalloonParty.Game.Score
 
         // Points are capped at the level threshold, so every point belongs to the current level.
         private void PublishPoints(
-            IReadOnlyList<(string Color, int Points, int BaseProgress)> resolved, int multiplier, Vector3 worldPosition)
+            IReadOnlyList<(string Color, int Points, int BaseProgress)> resolved, int multiplier, Vector3 worldPosition,
+            Vector3 hitDirection)
         {
             foreach (var (color, points, baseProgress) in resolved)
             {
@@ -186,7 +187,8 @@ namespace BalloonParty.Game.Score
                     worldPosition,
                     points,
                     baseProgress + points,
-                    multiplier));
+                    multiplier,
+                    hitDirection));
             }
         }
 

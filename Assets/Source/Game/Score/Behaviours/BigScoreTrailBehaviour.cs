@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using UnityEngine;
 using VContainer;
@@ -8,25 +10,29 @@ using VContainer;
 namespace BalloonParty.Game.Score.Behaviours
 {
     /// <summary>
-    ///     Anchor-takes-all confluence: n vertex trails draw a star polygon {n/k} around the pop (nested per
-    ///     the tier) in a local frame centred on a bare pooled anchor Transform, then collapse into one bright
-    ///     comet that flies to the bar. The anchor is the principal and reports exactly once — one "+N"
-    ///     arrival, so a 5x-on-a-cluster award is one arrival instead of hundreds. The
-    ///     <see cref="ShapeFormationTicker"/> owns the per-frame motion; this handler only picks the tier,
-    ///     anchors the formation, and launches it.
+    ///     Decomposes a big score into a catalog of 3D shapes and launches them all at once. Every point is one
+    ///     orbiting pen trail: the group's total splits greedily over <see cref="ShapeCatalog.Denominations"/>
+    ///     (largest-first, remainders recurse), each denomination becomes one formation of that many pens, and a
+    ///     terminal remainder of 1 becomes a single classic default trail. The formations bloom around the pop at
+    ///     spread sub-centres, tumble and orbit toward the bar, and each reports its own contiguous score range on
+    ///     landing — the LARGEST takes the top range (so it carries <c>LastScore</c> and is the principal the
+    ///     level-up cinematic tracks). The <see cref="ShapeFormationTicker"/> owns the per-frame simulation; this
+    ///     handler only decomposes, lays out, fits, and launches.
     /// </summary>
     internal sealed class BigScoreTrailBehaviour : IScoreTrailBehaviour
     {
-        // The star's edge stays inside this fraction of the board's half-extent — full extent would
-        // pin every oversized formation to the exact board middle via the centre clamp.
+        // Each formation's radius stays inside this fraction of the board's half-extent so the largest shape
+        // never draws off-screen; a radius past half the extent would pin every sub-centre to the board middle.
         private const float MaxRadiusExtent = 0.9f;
+        private const float GoldenAngle = 2.399963f;
 
-        // Defensive: only used if the tier table is empty (the wired asset always has rows).
-        private static readonly BigScoreTierConfig FallbackTier =
-            new(0, 3, 1, 1, 0.381966f, 0f, 1.2f, 0.25f, 0.35f, 0.5f, 0.8f, 90f, 0.6f);
+        // Defensive fallback if the config's curve is unwired; the real asset always supplies one.
+        private static readonly BigScoreFormationSettings FallbackSettings =
+            new(1.2f, AnimationCurve.EaseInOut(0f, 0f, 1.8f, 0f), 6f, 1.15f, 60f);
 
         private readonly ShapeFormationTicker _ticker;
         private readonly IScoreTrailBehaviourConfiguration _config;
+        private readonly List<int> _denominations = new(16);
 
         [Inject]
         internal BigScoreTrailBehaviour(ShapeFormationTicker ticker, IScoreTrailBehaviourConfiguration config)
@@ -35,7 +41,7 @@ namespace BalloonParty.Game.Score.Behaviours
             _config = config;
         }
 
-        // The anchor registers immediately at the formation centre, so it can nominate LastScore (unlike the
+        // The anchor registers immediately at the principal centre, so it can nominate LastScore (unlike the
         // staggered default fan-out): the cinematic's bounded registry wait is timeout-safe from frame one.
         public TrailId GetPrincipalId(in ScorePointsGroupMessage msg)
         {
@@ -44,69 +50,149 @@ namespace BalloonParty.Game.Score.Behaviours
 
         public void Begin(in ScoreTrailContext context)
         {
-            var tier = ResolveTier(context.Points);
+            Decompose(context.Points, _denominations);
+            var settings = _config != null ? _config.BigScoreSettings : FallbackSettings;
+            var hasRemainder = _denominations.Count > 0 && _denominations[^1] == 1;
+            var formationCount = hasRemainder ? _denominations.Count - 1 : _denominations.Count;
+
             var limits = new WallLimits(context.Config.LimitsClockwise);
+            var fitScale = FitScale(settings.BaseRadius, limits);
+            var fittedMaxRadius = settings.BaseRadius * fitScale * MaxRadiusScale();
+            var spacing = 2f * fittedMaxRadius;
 
-            // Fit the radius to the play area FIRST: a radius past half the board's extent would make
-            // the centre clamp collapse every formation to the board middle (the star could only fit
-            // there), tearing the shape away from its pop. Shrinking keeps the formation pop-local.
-            var halfExtent = Mathf.Min(limits.Right - limits.Left, limits.Top - limits.Bottom) * 0.5f;
-            var radius = Mathf.Min(tier.BaseRadius, halfExtent * MaxRadiusExtent);
-            var center = ClampCenter(context.Origin, radius, limits);
             var carrierId = new TrailId(context.ColorName, context.LastScore);
+            // Clamp the principal (the largest formation) with the max fitted radius so even a 30-sphere stays on-board.
+            var principalCenter = ClampCenter(context.Origin, fittedMaxRadius, limits);
+            var hasSpinAxis = TumbleAxis(context.HitDirection, out var spinAxis);
 
-            var request = new BigScoreFormationRequest(
-                center,
-                context.Origin,
-                radius,
-                context.Color,
-                context.Points,
-                context.LastScore,
+            var groupRequest = new BigScoreGroupRequest(
+                principalCenter,
                 carrierId,
+                context.Color,
                 context.Target,
                 context.Spawner,
                 context.Flights,
                 context.Reporter,
-                tier,
-                context.Config.ScorePointTraceDuration,
+                settings,
+                spinAxis,
+                hasSpinAxis,
                 context.CancellationToken);
 
             // Synchronous: registers the anchor in Flights before this returns (the cinematic depends on it).
-            _ticker.Launch(in request);
+            var group = _ticker.BeginGroup(in groupRequest);
+
+            var cursor = context.LastScore;
+            for (var i = 0; i < formationCount; i++)
+            {
+                var value = _denominations[i];
+                ShapeCatalog.TryGet(value, out var shape);
+                var isPrincipal = i == 0;
+                var radius = settings.BaseRadius * fitScale * shape.RadiusScale;
+                var origin = isPrincipal
+                    ? principalCenter
+                    : ClampCenter(SubCenter(context.Origin, i, spacing), radius, limits);
+
+                _ticker.LaunchFormation(group, new BigScoreFormationRequest(shape, value, cursor, origin, radius, isPrincipal));
+                cursor -= value;
+            }
+
+            if (hasRemainder)
+            {
+                // The lone leftover point flies as a classic default trail (parity with DefaultScore's single point).
+                SpawnDefaultTrail(in context, cursor);
+            }
         }
 
-        // Highest MinPoints the group clears; falls back to the lowest authored tier (then the hardcoded one).
-        internal static BigScoreTierConfig SelectTier(IReadOnlyList<BigScoreTierConfig> tiers, int points)
+        // Greedy largest-first over the catalog ladder; remainders recurse. Since 2 and 3 are both denominations
+        // the remainder after the pass is 0 or 1, and a terminal 1 (the single default trail) is appended.
+        internal static void Decompose(int total, List<int> result)
         {
-            var best = tiers[0];
-            var bestMin = -1;
-            var lowest = tiers[0];
-            for (var i = 0; i < tiers.Count; i++)
+            result.Clear();
+            var denominations = ShapeCatalog.Denominations;
+            for (var i = 0; i < denominations.Count; i++)
             {
-                var tier = tiers[i];
-                if (tier.MinPoints < lowest.MinPoints)
+                var denomination = denominations[i];
+                while (total >= denomination)
                 {
-                    lowest = tier;
-                }
-
-                if (tier.MinPoints <= points && tier.MinPoints > bestMin)
-                {
-                    best = tier;
-                    bestMin = tier.MinPoints;
+                    result.Add(denomination);
+                    total -= denomination;
                 }
             }
 
-            return bestMin >= 0 ? best : lowest;
+            if (total == 1)
+            {
+                result.Add(1);
+            }
         }
 
-        private BigScoreTierConfig ResolveTier(int points)
+        // Rolls the shapes head-over-heels ALONG the hit direction, like a ball struck forward: the roll axis is
+        // the screen-plane normal perpendicular to travel (ω ∝ n × v, n toward the camera = Vector3.back). A
+        // near-zero hit direction (item/laser/board pops carry none) leaves the axis unset for a random fallback.
+        private static bool TumbleAxis(Vector3 hitDirection, out Vector3 axis)
         {
-            var tiers = _config?.BigScoreTiers;
-            return tiers == null || tiers.Count == 0 ? FallbackTier : SelectTier(tiers, points);
+            if (hitDirection.sqrMagnitude < 1e-6f)
+            {
+                axis = Vector3.zero;
+                return false;
+            }
+
+            axis = Vector3.Cross(Vector3.back, hitDirection).normalized;
+            return true;
         }
 
-        // Shifts the centre inward so C +/- radius stays inside the walls (the radius was already fitted
-        // to the board, so a clamp range can only invert on a degenerate play area).
+        private void SpawnDefaultTrail(in ScoreTrailContext context, int score)
+        {
+            var target = context.Target != null ? context.Target.RandomPosition() : Vector3.zero;
+            var id = new TrailId(context.ColorName, score);
+            var flights = context.Flights;
+            var reporter = context.Reporter;
+
+            Action onArrived = () =>
+            {
+                flights.Unregister(id);
+                reporter.ReportArrival(score, points: 1, target);
+            };
+
+            var transform = context.Spawner.Spawn(
+                context.Origin, target, context.Config.ScorePointTraceDuration, context.Color, onArrived);
+            flights.Register(id, transform, context.Origin);
+        }
+
+        // Phyllotaxis (golden-angle spiral) so the sub-centres spread evenly; index 0 (the principal) sits at the
+        // pop, the rest fan outward at sqrt-growing radii spaced by neighbouring diameters. Off-board centres are
+        // pulled in by the per-formation wall clamp (a very large burst just packs densely near the edges).
+        private static Vector3 SubCenter(Vector3 origin, int index, float spacing)
+        {
+            var angle = index * GoldenAngle;
+            var distance = spacing * Mathf.Sqrt(index);
+            return origin + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * distance;
+        }
+
+        private static float MaxRadiusScale()
+        {
+            var max = 0f;
+            var denominations = ShapeCatalog.Denominations;
+            for (var i = 0; i < denominations.Count; i++)
+            {
+                if (ShapeCatalog.TryGet(denominations[i], out var shape) && shape.RadiusScale > max)
+                {
+                    max = shape.RadiusScale;
+                }
+            }
+
+            return max > 0f ? max : 1f;
+        }
+
+        // Shrinks every formation uniformly so the LARGEST shape's radius fits the board's playable half-extent.
+        private static float FitScale(float baseRadius, in WallLimits limits)
+        {
+            var halfExtent = Mathf.Min(limits.Right - limits.Left, limits.Top - limits.Bottom) * 0.5f;
+            var largest = baseRadius * MaxRadiusScale();
+            return largest > Mathf.Epsilon ? Mathf.Min(1f, halfExtent * MaxRadiusExtent / largest) : 1f;
+        }
+
+        // Shifts the centre inward so C +/- radius stays inside the walls (the radius was already fitted to the
+        // board, so a clamp range can only invert on a degenerate play area).
         private static Vector3 ClampCenter(Vector3 origin, float radius, in WallLimits limits)
         {
             var center = origin;
@@ -117,7 +203,7 @@ namespace BalloonParty.Game.Score.Behaviours
 
         private static float ClampAxis(float value, float min, float max)
         {
-            // A play area narrower than the star just centres it rather than clamping to a crossed bound.
+            // A play area narrower than the shape just centres it rather than clamping to a crossed bound.
             return min > max ? 0.5f * (min + max) : Mathf.Clamp(value, min, max);
         }
     }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Configuration;
@@ -11,96 +10,115 @@ using VContainer.Unity;
 namespace BalloonParty.Game.Score.Behaviours
 {
     /// <summary>
-    ///     Everything <see cref="ShapeFormationTicker.Launch"/> needs to drive one BigScore star formation:
-    ///     the pooled trail channel, palette colour, endpoint, registry/reporter seams, and the tier geometry.
+    ///     Shared, once-per-pop data for one BigScore group: the pooled trail channel, palette colour, endpoint,
+    ///     registry/reporter seams, the principal's carrier id and anchor placement, and the global formation
+    ///     settings. A group holds one registered anchor flight (the principal the cinematic tracks) and fans out
+    ///     to N formations launched via <see cref="ShapeFormationTicker.LaunchFormation"/>.
     /// </summary>
-    internal readonly struct BigScoreFormationRequest
+    internal readonly struct BigScoreGroupRequest
     {
-        internal readonly Vector3 Center;
-        internal readonly Vector3 DeployFrom;
-        internal readonly float Radius;
-        internal readonly Color Color;
-        internal readonly int Points;
-        internal readonly int LastScore;
+        internal readonly Vector3 AnchorPosition;
         internal readonly TrailId CarrierId;
+        internal readonly Color Color;
         internal readonly ITrailEndpoint Target;
         internal readonly TrailSpawner Spawner;
         internal readonly TrailFlightRegistry<TrailId> Flights;
         internal readonly IScoreTrailReporter Reporter;
-        internal readonly BigScoreTierConfig Tier;
-        internal readonly float CarrierFlightDuration;
+        internal readonly BigScoreFormationSettings Settings;
+        internal readonly Vector3 SpinAxis;
+        internal readonly bool HasSpinAxis;
         internal readonly CancellationToken CancellationToken;
 
-        internal BigScoreFormationRequest(
-            Vector3 center,
-            Vector3 deployFrom,
-            float radius,
-            Color color,
-            int points,
-            int lastScore,
+        internal BigScoreGroupRequest(
+            Vector3 anchorPosition,
             TrailId carrierId,
+            Color color,
             ITrailEndpoint target,
             TrailSpawner spawner,
             TrailFlightRegistry<TrailId> flights,
             IScoreTrailReporter reporter,
-            BigScoreTierConfig tier,
-            float carrierFlightDuration,
+            BigScoreFormationSettings settings,
+            Vector3 spinAxis,
+            bool hasSpinAxis,
             CancellationToken cancellationToken)
         {
-            Center = center;
-            DeployFrom = deployFrom;
-            Radius = radius;
-            Color = color;
-            Points = points;
-            LastScore = lastScore;
+            AnchorPosition = anchorPosition;
             CarrierId = carrierId;
+            Color = color;
             Target = target;
             Spawner = spawner;
             Flights = flights;
             Reporter = reporter;
-            Tier = tier;
-            CarrierFlightDuration = carrierFlightDuration;
+            Settings = settings;
+            SpinAxis = spinAxis;
+            HasSpinAxis = hasSpinAxis;
             CancellationToken = cancellationToken;
         }
     }
 
+    /// <summary>One shape inside a group: its catalog geometry, score value + range, sub-centre, fitted radius.</summary>
+    internal readonly struct BigScoreFormationRequest
+    {
+        internal readonly FormationShape Shape;
+        internal readonly int Value;
+        internal readonly int RangeLast;
+        internal readonly Vector3 Origin;
+        internal readonly float FormationRadius;
+        internal readonly bool IsPrincipal;
+
+        internal BigScoreFormationRequest(
+            FormationShape shape, int value, int rangeLast, Vector3 origin, float formationRadius, bool isPrincipal)
+        {
+            Shape = shape;
+            Value = value;
+            RangeLast = rangeLast;
+            Origin = origin;
+            FormationRadius = formationRadius;
+            IsPrincipal = isPrincipal;
+        }
+    }
+
     /// <summary>
-    ///     The analytic driver behind <see cref="BigScoreTrailBehaviour"/>. Each formation is pure math: n
-    ///     vertices in a local frame that we apply a translate/rotate/scale to. The frame has a CENTER — the
-    ///     spawn-axis origin, not a trail — carried by a bare pooled anchor Transform. The anchor's transform
-    ///     is registered as the principal flight (the registry/cinematic contract needs a Transform to
-    ///     track/pause/complete); nothing visible rides it. The n vertex trails read only the world positions
-    ///     of the vertices and move between them, drawing the star polygon {n/k} (nested m times) with their
-    ///     ribbons. All positions are closed-form, evaluated once per <see cref="ILateTickable.LateTick"/>;
-    ///     state objects and anchors are pooled, so a running formation never allocates. Mirrors
-    ///     <c>BalloonMotionTicker</c>'s pooled-state + swap-remove idioms.
+    ///     The analytic driver behind <see cref="BigScoreTrailBehaviour"/>. A group's score decomposes into shapes
+    ///     (<see cref="ShapeCatalog"/>); each shape is one formation of n pens whose ribbons are the ink. A
+    ///     formation is pure math evaluated once per <see cref="ILateTickable.LateTick"/> — states, groups and
+    ///     anchors are pooled, so a running formation never allocates. Mirrors <c>BalloonMotionTicker</c>'s
+    ///     pooled-state + swap-remove idioms.
     ///
-    ///     World vertex: <c>C(t) + R(Ω(t)) · (r(t) · dir(φᵢ + repRotation))</c> — the path rotation Ω folds
-    ///     into the angle. Ω is 0 until the first Draw completes, then advances at the tier's RotationSpeed
-    ///     (formation clock) for the rest of the formation, including the final flight; the collapse is a pure
-    ///     radial r→0 inside that rotating frame.
-    ///
-    ///     Transport bridge — the anchor's <see cref="TrailFlight"/> handle is the formation's pause/snap/
-    ///     slow-mo interface, polled every tick:
+    ///     One life, one Travel phase (plus a SnapFade for cinematic interrupts): with the shape's scale driven by
+    ///     the settings' curve (its last key time is the duration), the world position of a pen is
+    ///     <c>C(t) + Q(t) · (radius · scale(t) · localₚ(t))</c> where
     ///     <list type="bullet">
-    ///       <item>Paused — the level-up cinematic froze the principal; the formation freezes in place and
-    ///             the anchor is left for the cinematic to drag.</item>
-    ///       <item>Idle — the cinematic pan-in or a <c>CompleteAll</c> (level-up/loss) drove the principal
-    ///             home; snap: report the whole value now, fade the live vertices out (unscaled), release.</item>
-    ///       <item>Speed — a slow-mo factor scaling the formation clock (matches the trail tweens).</item>
+    ///       <item><c>C(t) = Lerp(origin, liveTarget, SmoothStep(t/D))</c> — the shape blooms at its sub-centre and
+    ///             travels to the bar; <c>liveTarget</c> re-reads the endpoint centre every tick (plus a
+    ///             launch-sampled offset), so a drifting UI bar can never leave the landing stale.</item>
+    ///       <item><c>Q(t)</c> — a fixed random tilt spun about a random axis from t = 0 (invisible while the
+    ///             shape is still a point).</item>
+    ///       <item><c>scale(t)</c> — the settings curve: 0 → bloom → hold → 0, so the shape grows from a point and
+    ///             tapers back to one at the bar. Pens are PEN-DOWN from t = 0, so no deploy spokes exist.</item>
+    ///       <item><c>localₚ(t)</c> — the pen's position on its closed walk, orbiting continuously; the first lap
+    ///             draws the wireframe, later laps re-ink it, k pens tile a period-P walk in P/k.</item>
     ///     </list>
+    ///
+    ///     Transport bridge — the group's anchor <see cref="TrailFlight"/> handle is the pause/snap/slow-mo
+    ///     interface, polled every tick; every formation in the group shares it, so a cinematic pause or completion
+    ///     fans out to the whole group. Paused freezes the formation (and inflates the ribbon time so the drawn
+    ///     figure survives the cinematic freeze); Idle snaps (report the value now, fade the pens out unscaled);
+    ///     Speed scales the formation clock. The flight stays registered (InFlight) through the group's whole life
+    ///     and is unregistered only once the last formation finishes, so a principal that lands first never falsely
+    ///     signals Idle to the others.
     /// </summary>
     internal sealed class ShapeFormationTicker : ILateTickable
     {
-        private const int MaxVertexCount = 8;
+        private const int MaxVertexCount = 30;
         private const float SnapFadeDuration = 0.1f;
-        private const float MinPhaseDuration = 0.0001f;
-        private const float TwoPi = Mathf.PI * 2f;
-        private const float InitialTheta = Mathf.PI * 0.5f;
+        private const float MinDuration = 0.0001f;
+        private const float FreezeRibbonTime = 600f;
 
-        private readonly List<FormationState> _states = new(8);
-        private readonly Stack<FormationState> _pool = new(8);
+        private readonly List<FormationState> _states = new(16);
+        private readonly Stack<FormationState> _pool = new(16);
         private readonly Stack<Transform> _anchorPool = new(8);
+        private readonly Stack<FormationGroup> _groupPool = new(8);
 
         public void LateTick()
         {
@@ -110,13 +128,14 @@ namespace BalloonParty.Game.Score.Behaviours
             for (var i = _states.Count - 1; i >= 0; i--)
             {
                 var state = _states[i];
+                var group = state.Group;
 
-                // Run reset recreated the group CTS — discard the formation WITHOUT reporting (the reset
-                // clears the run's score, so unreported points are moot).
-                if (state.CancellationToken.IsCancellationRequested)
+                // Run reset recreated the group CTS — discard WITHOUT reporting (the reset clears the run's score).
+                if (group.CancellationToken.IsCancellationRequested)
                 {
-                    HardRelease(state);
+                    ReleaseVertices(state);
                     ReleaseStateAt(i);
+                    DecrementGroup(group);
                     continue;
                 }
 
@@ -126,250 +145,159 @@ namespace BalloonParty.Game.Score.Behaviours
                     if (AdvanceSnapFade(state, unscaledDt))
                     {
                         ReleaseStateAt(i);
+                        DecrementGroup(group);
                     }
 
                     continue;
                 }
 
-                var flightPhase = state.Flight.Phase;
+                var flightPhase = group.Flight.Phase;
 
-                // Cinematic froze the principal — freeze the whole formation and let the cinematic own the
-                // anchor transform (vertex trails stay put where they were last written).
+                // Cinematic froze the principal — freeze the whole formation and inflate the ribbons so the drawn
+                // figure doesn't decay while the cinematic owns the anchor transform.
                 if (flightPhase == FlightPhase.Paused)
                 {
+                    FreezeRibbons(state);
                     continue;
                 }
 
-                // Cinematic pan-in / CompleteAll drove the principal to Idle — the value settles now.
+                // Unpaused — restore the computed coverage times before advancing.
+                ThawRibbons(state);
+
+                // Cinematic pan-in / CompleteAll drove the principal to Idle — snap this formation now.
                 if (flightPhase == FlightPhase.Idle)
                 {
-                    Settle(state, i);
+                    Snap(state, i, group);
                     continue;
                 }
 
-                if (AdvanceFormation(state, dt * state.Flight.Speed))
+                if (AdvanceFormation(state, dt * group.Flight.Speed))
                 {
                     ReleaseStateAt(i);
+                    DecrementGroup(group);
                 }
             }
         }
 
         // Synchronous so the anchor registers before the caller's Begin returns (the cinematic's registry wait
-        // depends on it). Acquires the anchor + n vertex trails and seeds a pooled formation state.
-        internal void Launch(in BigScoreFormationRequest request)
+        // depends on it). Acquires a pooled group + its anchor and registers the principal flight.
+        internal FormationGroup BeginGroup(in BigScoreGroupRequest request)
         {
-            var state = _pool.Count > 0 ? _pool.Pop() : new FormationState();
-            state.Initialize(in request);
-
-            var anchor = AcquireAnchor(request.Center);
-            state.Anchor = anchor;
-            state.Flight = request.Flights.Register(request.CarrierId, anchor, request.Center);
-
-            // Sampled ONCE at launch: the drawing phases drift toward this point; the final flight re-samples
-            // a fresh endpoint (this early sample can go stale — hitting below the moving UI bar).
-            state.DriftTarget = request.Target != null ? request.Target.RandomPosition() : request.Center;
-            state.TotalDuration = PhasedDuration(request.Tier);
-            state.TotalElapsed = 0f;
-
-            var count = request.Tier.VertexCount;
-            for (var i = 0; i < count; i++)
-            {
-                var vertex = request.Spawner.Acquire(request.Color);
-                vertex.SetRibbonTime(request.Tier.RibbonTime);
-                vertex.transform.position = request.DeployFrom;
-                vertex.transform.localScale = Vector3.one;
-                vertex.ClearRibbon();
-                // Pen up: deploy travels to the vertices without drawing, or the pop->vertex spokes
-                // bury the star (the long nested-look ribbon time keeps them alive the whole sequence).
-                vertex.SetRibbonEmitting(false);
-                state.Vertices[i] = vertex;
-            }
-
-            state.VertexCount = count;
-            state.VerticesLive = true;
-            _states.Add(state);
+            var group = _groupPool.Count > 0 ? _groupPool.Pop() : new FormationGroup();
+            var anchor = AcquireAnchor(request.AnchorPosition);
+            group.Initialize(in request, anchor, request.Flights.Register(request.CarrierId, anchor, request.AnchorPosition));
+            return group;
         }
 
-        // Returns true when the formation has finished its final flight and the state should be released.
+        // Acquires the n orbiting pens and seeds a pooled formation state under its group. Pens are distributed
+        // across the shape's walks (PensPerWalk), evenly phase-offset along each, and each gets a per-walk ribbon
+        // coverage time so k pens tile a period-P walk (computed at scale 1 — conservative as the shape shrinks).
+        internal void LaunchFormation(FormationGroup group, in BigScoreFormationRequest request)
+        {
+            var state = _pool.Count > 0 ? _pool.Pop() : new FormationState();
+            state.Initialize(group, in request);
+
+            var shape = request.Shape;
+            var penSpeed = Mathf.Max(group.Settings.PenSpeed, MinDuration);
+            var coverage = group.Settings.Coverage;
+            state.LocalPenSpeed = penSpeed / Mathf.Max(request.FormationRadius, MinDuration);
+            var pen = 0;
+            for (var w = 0; w < shape.Walks.Length; w++)
+            {
+                var perimeter = shape.Perimeters[w];
+                var k = shape.PensPerWalk[w];
+                if (k <= 0)
+                {
+                    continue;
+                }
+
+                // Coverage = a k-pen share of one lap, scaled by the style dial. Lap period is the WORLD perimeter
+                // (at scale 1) over the pen speed, so ink density reads the same across shape sizes.
+                var lapPeriod = request.FormationRadius * perimeter / penSpeed;
+                var ribbonTime = lapPeriod / k * coverage;
+                for (var j = 0; j < k; j++)
+                {
+                    state.PenWalk[pen] = w;
+                    state.PenStartDist[pen] = (float)j / k * perimeter;
+                    state.PenRibbonTime[pen] = ribbonTime;
+
+                    var vertex = group.Spawner.Acquire(group.Color);
+                    vertex.SetRibbonTime(ribbonTime);
+                    vertex.transform.position = request.Origin;
+                    vertex.transform.localScale = Vector3.one;
+                    vertex.ClearRibbon();
+                    // Pen down from t = 0: the shape blooms from a point (scale 0), so there are no deploy spokes.
+                    vertex.SetRibbonEmitting(true);
+                    state.Vertices[pen] = vertex;
+                    pen++;
+                }
+            }
+
+            state.VertexCount = pen;
+            state.VerticesLive = true;
+
+            // Sample the random landing offset ONCE; the live target re-reads the endpoint centre every tick.
+            if (group.Target != null)
+            {
+                var offset = group.Target.RandomPosition() - group.Target.Center;
+                offset.z = 0f;
+                state.TargetOffset = offset;
+            }
+
+            _states.Add(state);
+            group.Remaining++;
+        }
+
+        // Returns true when the formation has finished its travel and the state should be released.
         private bool AdvanceFormation(FormationState state, float dt)
         {
+            var group = state.Group;
+            var settings = group.Settings;
             var oldCenter = state.Center;
             var oldRotation = state.Rotation;
 
-            // Centre motion: drift toward the bar while drawing, then the fresh-sampled final leg. Both are
-            // smoothstepped so the handoff at the last collapse is continuous.
-            Vector3 newCenter;
-            if (state.Phase == FormationPhase.FinalFlight)
-            {
-                state.FinalElapsed += dt;
-                var flightT = Mathf.SmoothStep(0f, 1f,
-                    Mathf.Clamp01(state.FinalElapsed / Mathf.Max(state.CarrierFlightDuration, MinPhaseDuration)));
-                newCenter = Vector3.Lerp(state.FinalStartCenter, state.FinalTarget, flightT);
-            }
-            else if (state.TotalDuration > 0f)
-            {
-                state.TotalElapsed += dt;
-                var driftT = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(state.TotalElapsed / state.TotalDuration));
-                var driftEnd = Vector3.Lerp(state.InitialCenter, state.DriftTarget, state.Tier.DriftToTarget);
-                newCenter = Vector3.Lerp(state.InitialCenter, driftEnd, driftT);
-            }
-            else
-            {
-                newCenter = oldCenter;
-            }
+            state.Elapsed += dt;
+            var t = state.Elapsed;
 
-            // Path rotation Ω advances once the first star is drawn (formation clock, includes the final flight).
-            var newRotation = oldRotation + (state.RotationActive ? state.Tier.RotationSpeedRadians * dt : 0f);
-            var deltaRadians = newRotation - oldRotation;
+            // Centre travels origin -> live target (re-read each tick, so a moving bar is still hit exactly).
+            var liveTarget = group.Target != null ? group.Target.Center + state.TargetOffset : state.Origin;
+            var travelT = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(t / state.Duration));
+            var newCenter = Vector3.Lerp(state.Origin, liveTarget, travelT);
 
-            // Ribbons record WORLD positions, so re-frame the drawn history by the same translate+rotate the
-            // live frame moved through, keeping the whole figure rigid in formation space.
-            if (state.VerticesLive && (newCenter != oldCenter || deltaRadians != 0f))
+            // Tumble spins from t = 0 (invisible while the shape is a point).
+            var newRotation = Quaternion.AngleAxis(settings.SpinSpeedDegrees * t, state.SpinAxis) * state.InitialRotation;
+            var delta = newRotation * Quaternion.Inverse(oldRotation);
+
+            // Re-frame the drawn ink by the same translate+tumble the live frame moved through (rigid in formation
+            // space). Deliberately NOT scale-corrected: the scale change is slow next to the loop speed and the
+            // pens continuously re-ink at the current scale, so slightly larger old ink fading behind the shrinking
+            // shape reads as a natural afterglow rather than a shear.
+            if (state.VerticesLive && (newCenter != oldCenter || delta != Quaternion.identity))
             {
                 for (var i = 0; i < state.VertexCount; i++)
                 {
-                    state.Vertices[i].TransformRibbon(oldCenter, newCenter, deltaRadians);
+                    state.Vertices[i].TransformRibbon(oldCenter, newCenter, delta);
                 }
             }
 
             state.Center = newCenter;
             state.Rotation = newRotation;
 
-            switch (state.Phase)
+            var scale = settings.ScaleOverTravel != null ? settings.ScaleOverTravel.Evaluate(t) : 0f;
+            for (var p = 0; p < state.VertexCount; p++)
             {
-                case FormationPhase.Deploy:
-                    AdvanceDeploy(state, dt);
-                    break;
-                case FormationPhase.Draw:
-                    AdvanceDraw(state, dt);
-                    break;
-                case FormationPhase.Collapse:
-                    AdvanceCollapse(state, dt);
-                    break;
-                case FormationPhase.FinalFlight:
-                    return AdvanceFinalFlight(state);
-            }
-
-            WriteAnchor(state);
-            return false;
-        }
-
-        private void AdvanceDeploy(FormationState state, float dt)
-        {
-            var scale = RepScale(state);
-            var duration = Mathf.Max(state.Tier.DeployDuration * scale, MinPhaseDuration);
-            state.PhaseElapsed += dt;
-            var progress = Mathf.Clamp01(state.PhaseElapsed / duration);
-
-            var radius = state.Radius * scale;
-            var theta = RepTheta(state);
-            for (var i = 0; i < state.VertexCount; i++)
-            {
-                var vertex = Vertex(state, i, radius, theta);
-                state.Vertices[i].transform.position = Vector3.Lerp(state.DeployFrom, vertex, progress);
-            }
-
-            if (progress >= 1f)
-            {
-                // Pen down exactly at the vertices: the chords drawn from here ARE the star.
-                for (var i = 0; i < state.VertexCount; i++)
-                {
-                    state.Vertices[i].SetRibbonEmitting(true);
-                }
-
-                state.Phase = FormationPhase.Draw;
-                state.PhaseElapsed = 0f;
-            }
-        }
-
-        private void AdvanceDraw(FormationState state, float dt)
-        {
-            var scale = RepScale(state);
-            var duration = Mathf.Max(state.Tier.DrawDuration * scale, MinPhaseDuration);
-            state.PhaseElapsed += dt;
-            var progress = Mathf.Clamp01(state.PhaseElapsed / duration);
-
-            var radius = state.Radius * scale;
-            var theta = RepTheta(state);
-            var n = state.VertexCount;
-            var k = state.Tier.Skip;
-            for (var i = 0; i < n; i++)
-            {
-                var start = Vertex(state, i, radius, theta);
-                var end = Vertex(state, (i + k) % n, radius, theta);
-                state.Vertices[i].transform.position = Vector3.Lerp(start, end, progress);
-            }
-
-            if (progress >= 1f)
-            {
-                // The shape is now formed — Ω starts here and runs through every later phase and the flight.
-                state.RotationActive = true;
-                state.Phase = FormationPhase.Collapse;
-                state.PhaseElapsed = 0f;
-            }
-        }
-
-        private void AdvanceCollapse(FormationState state, float dt)
-        {
-            var scale = RepScale(state);
-            var duration = Mathf.Max(state.Tier.CollapseDuration * scale, MinPhaseDuration);
-            state.PhaseElapsed += dt;
-            var progress = Mathf.Clamp01(state.PhaseElapsed / duration);
-
-            // Pure radial r→0 inside the rotating frame (theta already carries Ω, so the collapse spins with it).
-            var radius = state.Radius * scale * (1f - progress);
-            var theta = RepTheta(state);
-            var n = state.VertexCount;
-            var k = state.Tier.Skip;
-            for (var i = 0; i < n; i++)
-            {
-                state.Vertices[i].transform.position = Vertex(state, (i + k) % n, radius, theta);
-            }
-
-            if (progress < 1f)
-            {
-                return;
-            }
-
-            if (state.Repetition + 1 < state.Tier.Repeats)
-            {
-                state.Repetition++;
-                state.DeployFrom = state.Center;
-                // Pen up for the inward travel — nested stars connect visually via the persisting
-                // ribbons of earlier stars, not via travel lines (matches the reference nesting).
-                for (var i = 0; i < state.VertexCount; i++)
-                {
-                    state.Vertices[i].SetRibbonEmitting(false);
-                }
-
-                state.Phase = FormationPhase.Deploy;
-                state.PhaseElapsed = 0f;
-                return;
-            }
-
-            BeginFinalFlight(state);
-        }
-
-        // The collapsed cluster (all vertices at r≈0, pen ON — one bright comet) flies with the centre to a
-        // FRESHLY sampled endpoint. Ω keeps advancing (the point cluster spinning is invisible).
-        private bool AdvanceFinalFlight(FormationState state)
-        {
-            for (var i = 0; i < state.VertexCount; i++)
-            {
-                state.Vertices[i].transform.position = state.Center;
+                state.Vertices[p].transform.position = LocalToWorld(state, PenOrbitLocal(state, p) * scale);
             }
 
             WriteAnchor(state);
 
-            if (state.FinalElapsed < state.CarrierFlightDuration)
+            if (t < state.Duration)
             {
                 return false;
             }
 
-            ReportOnce(state, state.FinalTarget);
-            state.Flights.Unregister(state.CarrierId);
+            ReportOnce(state, liveTarget);
             ReleaseVertices(state);
-            ReleaseAnchor(state);
             return true;
         }
 
@@ -389,27 +317,11 @@ namespace BalloonParty.Game.Score.Behaviours
             return true;
         }
 
-        private void BeginFinalFlight(FormationState state)
+        // The cinematic drove the shared flight Idle — settle this formation's value at the anchor and fade.
+        private void Snap(FormationState state, int index, FormationGroup group)
         {
-            state.Phase = FormationPhase.FinalFlight;
-            state.FinalElapsed = 0f;
-            state.FinalStartCenter = state.Center;
+            ReportOnce(state, group.Anchor != null ? group.Anchor.position : state.Center);
 
-            // Re-sample the endpoint NOW: the launch-time sample can go stale (the UI bar drifts), which reads
-            // as the comet hitting below the target. Zero z onto the formation plane, like the cinematic does.
-            var target = state.Target != null ? state.Target.RandomPosition() : state.Center;
-            target.z = 0f;
-            state.FinalTarget = target;
-        }
-
-        private void Settle(FormationState state, int index)
-        {
-            ReportOnce(state, state.Anchor != null ? state.Anchor.position : state.Center);
-            state.Flights.Unregister(state.CarrierId);
-            ReleaseAnchor(state);
-
-            // Formation-phase interrupt: the vertices are still out, so fade them (unscaled — survives the
-            // level-up freeze) before releasing.
             if (state.VerticesLive)
             {
                 state.Phase = FormationPhase.SnapFade;
@@ -418,9 +330,40 @@ namespace BalloonParty.Game.Score.Behaviours
             }
 
             ReleaseStateAt(index);
+            DecrementGroup(group);
         }
 
-        private void ReportOnce(FormationState state, Vector3 at)
+        private void FreezeRibbons(FormationState state)
+        {
+            if (state.Frozen || !state.VerticesLive)
+            {
+                return;
+            }
+
+            for (var i = 0; i < state.VertexCount; i++)
+            {
+                state.Vertices[i].SetRibbonTime(FreezeRibbonTime);
+            }
+
+            state.Frozen = true;
+        }
+
+        private void ThawRibbons(FormationState state)
+        {
+            if (!state.Frozen || !state.VerticesLive)
+            {
+                return;
+            }
+
+            for (var i = 0; i < state.VertexCount; i++)
+            {
+                state.Vertices[i].SetRibbonTime(state.PenRibbonTime[i]);
+            }
+
+            state.Frozen = false;
+        }
+
+        private static void ReportOnce(FormationState state, Vector3 at)
         {
             if (state.Reported)
             {
@@ -428,14 +371,22 @@ namespace BalloonParty.Game.Score.Behaviours
             }
 
             state.Reported = true;
-            state.Reporter.ReportArrival(state.LastScore, state.Points, at);
+            state.Group.Reporter.ReportArrival(state.RangeLast, state.Value, at);
         }
 
-        private void HardRelease(FormationState state)
+        // Once the last formation of a group leaves, unregister the flight and release the anchor + group.
+        private void DecrementGroup(FormationGroup group)
         {
-            state.Flights.Unregister(state.CarrierId);
-            ReleaseAnchor(state);
-            ReleaseVertices(state);
+            group.Remaining--;
+            if (group.Remaining > 0 || group.CleanedUp)
+            {
+                return;
+            }
+
+            group.CleanedUp = true;
+            group.Flights.Unregister(group.CarrierId);
+            ReleaseAnchor(group);
+            ReleaseGroup(group);
         }
 
         private void ReleaseVertices(FormationState state)
@@ -449,7 +400,7 @@ namespace BalloonParty.Game.Score.Behaviours
             {
                 if (state.Vertices[i] != null)
                 {
-                    state.Spawner.Release(state.Vertices[i]);
+                    state.Group.Spawner.Release(state.Vertices[i]);
                     state.Vertices[i] = null;
                 }
             }
@@ -463,17 +414,13 @@ namespace BalloonParty.Game.Score.Behaviours
             _states[index] = _states[^1];
             _states.RemoveAt(_states.Count - 1);
 
-            state.Spawner = null;
-            state.Flights = null;
-            state.Reporter = null;
-            state.Target = null;
-            state.Anchor = null;
-            state.Flight = null;
+            state.Group = null;
+            state.Shape = null;
             _pool.Push(state);
         }
 
-        // Bare, invisible Transform carrying the formation centre; the registry/cinematic need a Transform to
-        // track/pause. Deactivated on release and pushed back, never destroyed.
+        // Bare, invisible Transform carrying the group's principal centre; the registry/cinematic need a Transform
+        // to track/pause. Deactivated on release and pushed back, never destroyed.
         private Transform AcquireAnchor(Vector3 position)
         {
             var anchor = _anchorPool.Count > 0 ? _anchorPool.Pop() : new GameObject("ShapeFormationAnchor").transform;
@@ -482,59 +429,68 @@ namespace BalloonParty.Game.Score.Behaviours
             return anchor;
         }
 
-        private void ReleaseAnchor(FormationState state)
+        private void ReleaseAnchor(FormationGroup group)
         {
-            if (state.Anchor == null)
+            if (group.Anchor == null)
             {
                 return;
             }
 
-            state.Anchor.gameObject.SetActive(false);
-            _anchorPool.Push(state.Anchor);
-            state.Anchor = null;
+            group.Anchor.gameObject.SetActive(false);
+            _anchorPool.Push(group.Anchor);
+            group.Anchor = null;
         }
 
-        // Sum of every repetition's deploy+draw+collapse with the same per-phase clamps the tick uses,
-        // so drift progress hits exactly 1 as the final collapse ends.
-        private static float PhasedDuration(in BigScoreTierConfig tier)
+        private void ReleaseGroup(FormationGroup group)
         {
-            var total = 0f;
-            var scale = 1f;
-            for (var rep = 0; rep < tier.Repeats; rep++)
-            {
-                total += Mathf.Max(tier.DeployDuration * scale, MinPhaseDuration)
-                         + Mathf.Max(tier.DrawDuration * scale, MinPhaseDuration)
-                         + Mathf.Max(tier.CollapseDuration * scale, MinPhaseDuration);
-                scale *= tier.NestScale;
-            }
-
-            return total;
-        }
-
-        private static float RepScale(FormationState state)
-        {
-            return Mathf.Pow(state.Tier.NestScale, state.Repetition);
-        }
-
-        // Base orientation + nesting offset + the path rotation Ω, folded into one angle (R(Ω)·dir(φ) = dir(φ+Ω)).
-        private static float RepTheta(FormationState state)
-        {
-            return InitialTheta + state.Repetition * state.Tier.NestRotationRadians + state.Rotation;
-        }
-
-        private static Vector3 Vertex(FormationState state, int index, float radius, float theta)
-        {
-            var phi = theta + TwoPi * index / state.VertexCount;
-            Vector3 direction = VectorMathExtensions.DirectionFromAngle(phi);
-            return state.Center + direction * radius;
+            group.Spawner = null;
+            group.Flights = null;
+            group.Reporter = null;
+            group.Target = null;
+            group.Flight = null;
+            _groupPool.Push(group);
         }
 
         private static void WriteAnchor(FormationState state)
         {
-            if (state.Anchor != null)
+            if (state.IsPrincipal && state.Group.Anchor != null)
             {
-                state.Anchor.position = state.Center;
+                state.Group.Anchor.position = state.Center;
             }
+        }
+
+        private static Vector3 LocalToWorld(FormationState state, Vector3 local)
+        {
+            return state.Center + state.Rotation * (state.FormationRadius * local);
+        }
+
+        // The pen's local position on its closed walk at the current orbit time, parameterized by LOCAL arc length
+        // (so a world-units pen speed gives constant travel speed between vertices). Arc walks slerp their segments
+        // (curved ring bands), chords lerp them.
+        private static Vector3 PenOrbitLocal(FormationState state, int p)
+        {
+            var w = state.PenWalk[p];
+            var walk = state.Shape.Walks[w];
+            var m = walk.Vertices.Length;
+            var perimeter = state.Shape.Perimeters[w];
+            if (perimeter <= Mathf.Epsilon)
+            {
+                return state.Shape.Vertices[walk.Vertices[0]];
+            }
+
+            var cumulative = state.Shape.Cumulative[w];
+            var d = Mathf.Repeat(state.PenStartDist[p] + state.Elapsed * state.LocalPenSpeed, perimeter);
+            var seg = 0;
+            while (seg < m - 1 && cumulative[seg + 1] <= d)
+            {
+                seg++;
+            }
+
+            var segLength = cumulative[seg + 1] - cumulative[seg];
+            var localT = segLength > Mathf.Epsilon ? (d - cumulative[seg]) / segLength : 0f;
+            var a = state.Shape.Vertices[walk.Vertices[seg]];
+            var b = state.Shape.Vertices[walk.Vertices[(seg + 1) % m]];
+            return walk.Arc ? Vector3.Slerp(a, b, localT) : Vector3.Lerp(a, b, localT);
         }
 
         private static void ScaleVertices(FormationState state, float scale)
@@ -551,77 +507,101 @@ namespace BalloonParty.Game.Score.Behaviours
 
         private enum FormationPhase
         {
-            Deploy,
-            Draw,
-            Collapse,
-            FinalFlight,
+            Travel,
             SnapFade
         }
 
-        private sealed class FormationState
+        // One per BigScore group. Owns the single registered anchor flight the cinematic tracks and the shared
+        // per-pop seams; every formation in the group reads its Flight for the transport bridge.
+        internal sealed class FormationGroup
         {
-            internal readonly FlyingTrail[] Vertices = new FlyingTrail[MaxVertexCount];
-
             internal Transform Anchor;
             internal TrailFlight Flight;
             internal TrailSpawner Spawner;
             internal TrailFlightRegistry<TrailId> Flights;
             internal IScoreTrailReporter Reporter;
             internal ITrailEndpoint Target;
-            internal BigScoreTierConfig Tier;
+            internal BigScoreFormationSettings Settings;
             internal TrailId CarrierId;
-            internal Vector3 Center;
-            internal Vector3 InitialCenter;
-            internal Vector3 DeployFrom;
-            internal Vector3 DriftTarget;
-            internal Vector3 FinalStartCenter;
-            internal Vector3 FinalTarget;
-            internal float Radius;
-            internal float Rotation;
-            internal float TotalDuration;
-            internal float TotalElapsed;
-            internal float FinalElapsed;
+            internal Color Color;
+            internal Vector3 SpinAxis;
+            internal bool HasSpinAxis;
             internal CancellationToken CancellationToken;
-            internal FormationPhase Phase;
-            internal float CarrierFlightDuration;
-            internal float PhaseElapsed;
-            internal float FadeElapsed;
-            internal int Points;
-            internal int LastScore;
-            internal int VertexCount;
-            internal int Repetition;
-            internal bool VerticesLive;
-            internal bool RotationActive;
-            internal bool Reported;
+            internal int Remaining;
+            internal bool CleanedUp;
 
-            internal void Initialize(in BigScoreFormationRequest request)
+            internal void Initialize(in BigScoreGroupRequest request, Transform anchor, TrailFlight flight)
             {
+                Anchor = anchor;
+                Flight = flight;
                 Spawner = request.Spawner;
                 Flights = request.Flights;
                 Reporter = request.Reporter;
                 Target = request.Target;
-                Tier = request.Tier;
+                Settings = request.Settings;
                 CarrierId = request.CarrierId;
-                Center = request.Center;
-                InitialCenter = request.Center;
-                DeployFrom = request.DeployFrom;
-                Radius = request.Radius;
-                Rotation = 0f;
+                Color = request.Color;
+                SpinAxis = request.SpinAxis;
+                HasSpinAxis = request.HasSpinAxis;
                 CancellationToken = request.CancellationToken;
-                CarrierFlightDuration = request.CarrierFlightDuration;
-                Points = request.Points;
-                LastScore = request.LastScore;
-                Phase = FormationPhase.Deploy;
-                PhaseElapsed = 0f;
+                Remaining = 0;
+                CleanedUp = false;
+            }
+        }
+
+        private sealed class FormationState
+        {
+            internal readonly FlyingTrail[] Vertices = new FlyingTrail[MaxVertexCount];
+            internal readonly int[] PenWalk = new int[MaxVertexCount];
+            internal readonly float[] PenStartDist = new float[MaxVertexCount];
+            internal readonly float[] PenRibbonTime = new float[MaxVertexCount];
+
+            internal FormationGroup Group;
+            internal FormationShape Shape;
+            internal Vector3 Origin;
+            internal Vector3 Center;
+            internal Vector3 TargetOffset;
+            internal Quaternion Rotation;
+            internal Quaternion InitialRotation;
+            internal Vector3 SpinAxis;
+            internal float FormationRadius;
+            internal float LocalPenSpeed;
+            internal float Duration;
+            internal float Elapsed;
+            internal float FadeElapsed;
+            internal FormationPhase Phase;
+            internal int Value;
+            internal int RangeLast;
+            internal int VertexCount;
+            internal bool IsPrincipal;
+            internal bool VerticesLive;
+            internal bool Reported;
+            internal bool Frozen;
+
+            internal void Initialize(FormationGroup group, in BigScoreFormationRequest request)
+            {
+                Group = group;
+                Shape = request.Shape;
+                Value = request.Value;
+                RangeLast = request.RangeLast;
+                IsPrincipal = request.IsPrincipal;
+                FormationRadius = request.FormationRadius;
+                Origin = request.Origin;
+                Center = request.Origin;
+                TargetOffset = Vector3.zero;
+                InitialRotation = Random.rotationUniform;
+                Rotation = InitialRotation;
+                // All formations of a pop roll about the shared hit-derived axis (a coherent constellation tumble);
+                // a non-projectile pop with no direction falls back to a per-shape random axis.
+                SpinAxis = group.HasSpinAxis ? group.SpinAxis : Random.onUnitSphere;
+                Duration = Mathf.Max(group.Settings.ScaleOverTravel.Duration(), MinDuration);
+                Elapsed = 0f;
                 FadeElapsed = 0f;
-                FinalElapsed = 0f;
+                Phase = FormationPhase.Travel;
                 VertexCount = 0;
-                Repetition = 0;
                 VerticesLive = false;
-                RotationActive = false;
                 Reported = false;
-                Anchor = null;
-                Flight = null;
+                Frozen = false;
             }
         }
     }
