@@ -21,6 +21,15 @@ namespace BalloonParty.Game.Level
     /// </summary>
     internal class LevelDifficultyResolver : IStartable, IDisposable, IRunResettable, IActiveLevelParameters, ILevelThresholds
     {
+        // The rainbow balloon's band colours are the level's allowed set — identical for every rainbow on
+        // the board — so they ride GLOBAL shader properties pushed once per level here (this resolver is the
+        // single owner of the allowed-colours change) instead of per-renderer. See RainbowBalloon.shader.
+        private static readonly int RainbowBandColor0Id = Shader.PropertyToID("_RainbowBandColor0");
+        private static readonly int RainbowBandColor1Id = Shader.PropertyToID("_RainbowBandColor1");
+        private static readonly int RainbowBandColor2Id = Shader.PropertyToID("_RainbowBandColor2");
+        private static readonly int RainbowBandColor3Id = Shader.PropertyToID("_RainbowBandColor3");
+        private static readonly int RainbowBandCountId = Shader.PropertyToID("_RainbowBandCount");
+
         private readonly ILevelPacingConfiguration _pacing;
         private readonly IBalloonsConfiguration _balloonsConfig;
         private readonly IItemConfiguration _itemConfig;
@@ -94,11 +103,38 @@ namespace BalloonParty.Game.Level
             var activeItems = new List<ItemSettings>();
             BuildItemPickList(_current, itemPickList, activeItems);
 
+            var allowedColorNames = _palette.ColorNamesForMask(_current.AllowedColorsMask);
+
             _current.BindResolved(
                 BuildBalloonPickList(_current),
                 itemPickList,
                 activeItems,
-                _palette.ColorNamesForMask(_current.AllowedColorsMask));
+                allowedColorNames);
+
+            PushRainbowBandGlobals(allowedColorNames);
+        }
+
+        // Pushes the level's allowed colours as global shader properties for the rainbow balloon's bands.
+        // Once per level (here), not per balloon — every rainbow shares the same set.
+        private void PushRainbowBandGlobals(IReadOnlyList<string> colors)
+        {
+            Shader.SetGlobalColor(RainbowBandColor0Id, RainbowColorAt(colors, 0));
+            Shader.SetGlobalColor(RainbowBandColor1Id, RainbowColorAt(colors, 1));
+            Shader.SetGlobalColor(RainbowBandColor2Id, RainbowColorAt(colors, 2));
+            Shader.SetGlobalColor(RainbowBandColor3Id, RainbowColorAt(colors, 3));
+            Shader.SetGlobalFloat(RainbowBandCountId, Mathf.Max(1, colors.Count));
+        }
+
+        // Clamps to the last allowed colour when fewer than 4 are unlocked — the shader's _RainbowBandCount
+        // already excludes the unused slots from the cycle, so the clamp is just a safe fill.
+        private Color RainbowColorAt(IReadOnlyList<string> colors, int index)
+        {
+            if (colors == null || colors.Count == 0)
+            {
+                return Color.white;
+            }
+
+            return _palette.GetColor(colors[Mathf.Clamp(index, 0, colors.Count - 1)]);
         }
 
         // Falls back to the entry marked with -1 in either level bound.

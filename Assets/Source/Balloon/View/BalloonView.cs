@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
@@ -21,18 +20,12 @@ using VContainer;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Configuration.Items;
-using BalloonParty.Game.Level;
 
 namespace BalloonParty.Balloon.View
 {
     public class BalloonView : MonoBehaviour, IPoolable, ISlotActorView, INudgeable, IBalloonMotionView
     {
         private static readonly int IsStableParam = Animator.StringToHash("IsStable");
-        private static readonly int Color0Id = Shader.PropertyToID("_Color0");
-        private static readonly int Color1Id = Shader.PropertyToID("_Color1");
-        private static readonly int Color2Id = Shader.PropertyToID("_Color2");
-        private static readonly int Color3Id = Shader.PropertyToID("_Color3");
-        private static readonly int BandCountId = Shader.PropertyToID("_BandCount");
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
 
         [Header("References")] [SerializeField]
@@ -64,7 +57,6 @@ namespace BalloonParty.Balloon.View
         [Inject] private PoolManager _poolManager;
         [Inject] private BalloonMotionTicker _motionTicker;
         [Inject] private SceneLightFieldService _lightField;
-        [Inject] private IActiveLevelParameters _levelParams;
 
         private readonly CompositeDisposable _bindDisposables = new();
 
@@ -345,7 +337,7 @@ namespace BalloonParty.Balloon.View
             if (_palette.IsRainbow(colorId))
             {
                 SetBodyMaterial(_balloonsConfig.RainbowMaterial);
-                PushRainbowBands();
+                PushRainbowTimeOffset();
 
                 foreach (var renderer in _colorableRenderers)
                 {
@@ -369,9 +361,10 @@ namespace BalloonParty.Balloon.View
             }
         }
 
-        // Ensures the rainbow shader shows only the level-allowed colours — critical for paint-converted
-        // balloons that have no RainbowBalloonVariant to push bands on their behalf.
-        private void PushRainbowBands()
+        // The rainbow band colours + count are GLOBAL (set once per level by LevelDifficultyResolver), so
+        // a paint-converted balloon only needs its own per-instance phase — a random _TimeOffset so its
+        // bands don't scroll in lockstep with other rainbows. This is the only property still per-renderer.
+        private void PushRainbowTimeOffset()
         {
             if (_bodyRenderer == null)
             {
@@ -380,26 +373,9 @@ namespace BalloonParty.Balloon.View
 
             _rainbowBlock ??= new MaterialPropertyBlock();
 
-            var colors = _palette.ColorNamesForMask(_levelParams.Current.AllowedColorsMask);
-
             _bodyRenderer.GetPropertyBlock(_rainbowBlock);
-            _rainbowBlock.SetColor(Color0Id, RainbowColorAt(colors, 0));
-            _rainbowBlock.SetColor(Color1Id, RainbowColorAt(colors, 1));
-            _rainbowBlock.SetColor(Color2Id, RainbowColorAt(colors, 2));
-            _rainbowBlock.SetColor(Color3Id, RainbowColorAt(colors, 3));
-            _rainbowBlock.SetFloat(BandCountId, Mathf.Max(1, colors.Count));
             _rainbowBlock.SetFloat(TimeOffsetId, UnityEngine.Random.Range(0f, 100f));
             _bodyRenderer.SetPropertyBlock(_rainbowBlock);
-        }
-
-        private Color RainbowColorAt(IReadOnlyList<string> colors, int index)
-        {
-            if (colors == null || colors.Count == 0)
-            {
-                return Color.white;
-            }
-
-            return _palette.GetColor(colors[Mathf.Clamp(index, 0, colors.Count - 1)]);
         }
 
         private void SetBodyMaterial(Material material)

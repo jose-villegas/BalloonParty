@@ -19,11 +19,11 @@ namespace BalloonParty.Balloon.Type
     /// </summary>
     internal class RainbowBalloonVariant : ColorableBalloonVariant, IBalloonViewBinding
     {
-        private static readonly int Color0Id = Shader.PropertyToID("_Color0");
-        private static readonly int Color1Id = Shader.PropertyToID("_Color1");
-        private static readonly int Color2Id = Shader.PropertyToID("_Color2");
-        private static readonly int Color3Id = Shader.PropertyToID("_Color3");
-        private static readonly int BandCountId = Shader.PropertyToID("_BandCount");
+        private static readonly int Color0Id = Shader.PropertyToID("_RainbowBandColor0");
+        private static readonly int Color1Id = Shader.PropertyToID("_RainbowBandColor1");
+        private static readonly int Color2Id = Shader.PropertyToID("_RainbowBandColor2");
+        private static readonly int Color3Id = Shader.PropertyToID("_RainbowBandColor3");
+        private static readonly int BandCountId = Shader.PropertyToID("_RainbowBandCount");
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
 
         [SerializeField] private SpriteRenderer _renderer;
@@ -55,12 +55,12 @@ namespace BalloonParty.Balloon.Type
             }
 
             _timeOffset = UnityEngine.Random.Range(0f, 100f);
-            PushBands();
+            PushTimeOffset();
         }
 
         public void Bind(IBalloonModel model, CompositeDisposable disposables)
         {
-            PushBands();
+            PushTimeOffset();
             RebuildColors();
 
             // One colour-only stamp (no force — R stays at rest) tags nearby specks with the next
@@ -101,8 +101,11 @@ namespace BalloonParty.Balloon.Type
             _disturbanceField.Stamp(StampSource.RainbowColor, transform.position, Vector2.zero, index);
         }
 
-        /// <summary>Pushes the banded colours for an explicit palette + allowed-colours mask — the seam the
-        /// editor preview uses (edit mode has no DI, so it feeds the palette asset directly).</summary>
+        /// <summary>Pushes the banded colours for an explicit palette + allowed-colours mask via a
+        /// MaterialPropertyBlock — the EDITOR bands preview only (edit mode has no DI and no resolver, so
+        /// it feeds the palette asset directly and overrides the unset globals). At runtime the colours are
+        /// GLOBAL (set once per level by <c>LevelDifficultyResolver</c>), so this per-renderer push is not
+        /// on the runtime path.</summary>
         internal void PushBands(IGamePalette palette, int allowedColorsMask)
         {
             if (_renderer == null || palette == null)
@@ -125,9 +128,19 @@ namespace BalloonParty.Balloon.Type
             _renderer.SetPropertyBlock(_block);
         }
 
-        private void PushBands()
+        // Only the per-instance phase is per-renderer now — the band colours ride the level globals.
+        private void PushTimeOffset()
         {
-            PushBands(Palette, _levelParams.Current.AllowedColorsMask);
+            if (_renderer == null)
+            {
+                return;
+            }
+
+            _block ??= new MaterialPropertyBlock();
+
+            _renderer.GetPropertyBlock(_block);
+            _block.SetFloat(TimeOffsetId, _timeOffset);
+            _renderer.SetPropertyBlock(_block);
         }
 
         // Clamps to the last allowed colour when fewer than 4 are unlocked — harmless either way, since

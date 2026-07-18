@@ -43,6 +43,7 @@ namespace BalloonParty.Configuration.Palette
         [SerializeField] private PaletteEntry[] _colors;
 
         private Dictionary<string, PaletteEntry> _byName;
+        private Dictionary<int, IReadOnlyList<string>> _namesByMask;
         private string[] _names;
         private string[] _progressNames;
 
@@ -53,6 +54,7 @@ namespace BalloonParty.Configuration.Palette
         private void OnEnable()
         {
             _byName = null;
+            _namesByMask = null;
             _names = null;
             _progressNames = null;
         }
@@ -61,6 +63,7 @@ namespace BalloonParty.Configuration.Palette
         private void OnValidate()
         {
             _byName = null;
+            _namesByMask = null;
             _names = null;
             _progressNames = null;
         }
@@ -91,8 +94,16 @@ namespace BalloonParty.Configuration.Palette
             return colorName != null && _byName.TryGetValue(colorName, out var entry) ? entry : null;
         }
 
+        // The mask only changes per level, so cache the resolved list per mask — every rainbow balloon
+        // and the level resolver ask for the same set. Invalidated with the other caches on reload.
         public IReadOnlyList<string> ColorNamesForMask(int mask)
         {
+            _namesByMask ??= new Dictionary<int, IReadOnlyList<string>>();
+            if (_namesByMask.TryGetValue(mask, out var cached))
+            {
+                return cached;
+            }
+
             var names = new List<string>();
             for (var i = 0; i < _colors.Length; i++)
             {
@@ -102,6 +113,7 @@ namespace BalloonParty.Configuration.Palette
                 }
             }
 
+            _namesByMask[mask] = names;
             return names;
         }
 

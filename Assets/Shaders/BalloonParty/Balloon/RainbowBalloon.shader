@@ -1,12 +1,15 @@
 Shader "BalloonParty/Balloon/RainbowBalloon"
 {
     // A "rainbow star" balloon: the flat sprite tint is replaced by scrolling diagonal
-    // colour bands cycling through up to four selectable colours. Colour count + values are
-    // meant to be driven at runtime from the level's allowed colours (via MaterialPropertyBlock),
-    // but default to the full palette so the material previews standalone. Keeps SpriteShineShadow's
-    // diagonal shine sweep (no drop shadow) plus a scattered twinkling glitter layer on top. An
-    // optional UV-rect mask excludes a region (e.g. the balloon's knot) from the band tint, so it
-    // reads as a stable part of the sprite instead of being cut across by the scroll.
+    // colour bands cycling through up to four selectable colours. Colour count + values are the
+    // LEVEL's allowed colours — identical for every rainbow balloon in a level — so they are pushed
+    // ONCE per level as GLOBAL shader properties (_RainbowBandColor0.._RainbowBandColor3 /
+    // _RainbowBandCount, set by LevelDifficultyResolver) rather than per-renderer. They are therefore
+    // NOT in the Properties block; the editor bands preview feeds the same globals via a
+    // MaterialPropertyBlock (edit mode has no resolver). Keeps SpriteShineShadow's diagonal shine
+    // sweep (no drop shadow) plus a scattered twinkling glitter layer on top. An optional UV-rect
+    // mask excludes a region (e.g. the balloon's knot) from the band tint, so it reads as a stable
+    // part of the sprite instead of being cut across by the scroll.
 
     Properties
     {
@@ -14,11 +17,9 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
         [HideInInspector] _RendererColor ("Renderer Color", Color) = (1, 1, 1, 1)
 
         [Header(Bands)]
-        _Color0 ("Colour 0", Color) = (0.467, 0.867, 0.467, 1)
-        _Color1 ("Colour 1", Color) = (1.0, 0.412, 0.380, 1)
-        _Color2 ("Colour 2", Color) = (0.012, 0.663, 0.957, 1)
-        _Color3 ("Colour 3", Color) = (0.612, 0.153, 0.690, 1)
-        _BandCount   ("Colour Count",  Range(1, 4))  = 4
+        // Band colours + count are GLOBAL (level-allowed set, set once per level) — declared as
+        // plain uniforms below, deliberately NOT here, so a serialized material value can't shadow
+        // the global.
         _StripeCount ("Stripe Density", Range(1, 12)) = 5
         _ScrollSpeed ("Scroll Speed",  Range(-5, 5)) = 1.0
         _BandBlend   ("Edge Softness", Range(0, 0.5)) = 0.08
@@ -140,11 +141,13 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             float     _GlitterBrightness;
             float     _GlitterShineBind;
 
-            fixed4 _Color0;
-            fixed4 _Color1;
-            fixed4 _Color2;
-            fixed4 _Color3;
-            float  _BandCount;
+            // GLOBAL band data — fed by Shader.SetGlobalColor/Float once per level (see header). Not
+            // in Properties, so never shadowed by a serialized material value.
+            fixed4 _RainbowBandColor0;
+            fixed4 _RainbowBandColor1;
+            fixed4 _RainbowBandColor2;
+            fixed4 _RainbowBandColor3;
+            float  _RainbowBandCount;
             float  _StripeCount;
             float  _ScrollSpeed;
             float  _BandBlend;
@@ -192,10 +195,10 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
 
             inline fixed3 ColorAt(int i)
             {
-                if (i <= 0) { return _Color0.rgb; }
-                if (i == 1) { return _Color1.rgb; }
-                if (i == 2) { return _Color2.rgb; }
-                return _Color3.rgb;
+                if (i <= 0) { return _RainbowBandColor0.rgb; }
+                if (i == 1) { return _RainbowBandColor1.rgb; }
+                if (i == 2) { return _RainbowBandColor2.rgb; }
+                return _RainbowBandColor3.rgb;
             }
 
             // Swirly seams: a dual-frequency sine along the seam direction (perpendicular to
@@ -222,7 +225,8 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 return _SphereBend * z;
             }
 
-            inline fixed3 RainbowBand(float2 uv)
+            // bulge is SphereBulge(uv), passed in so frag computes it once and shares it with the shine.
+            inline fixed3 RainbowBand(float2 uv, float bulge)
             {
                 // Opted-in: the bands scroll along the scene light's axis instead of the
                 // authored angle. The AXIS follows only the main (ambient) light — flat
@@ -236,14 +240,14 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 float across = dot(uv - 0.5, float2(-axis.y, axis.x));
                 float swirl = SeamSwirl(across);
 
-                // The bands share the shine's spherical bulge, so the whole pattern wraps the
-                // balloon coherently.
-                float s = (projection + swirl + SphereBulge(uv)) * _StripeCount
+                // The bands share the shine's spherical bulge (computed once in frag), so the whole
+                // pattern wraps the balloon coherently.
+                float s = (projection + swirl + bulge) * _StripeCount
                           + _Time.y * _ScrollSpeed + _TimeOffset;
                 float cell = floor(s);
                 float t = frac(s);
 
-                float n = max(_BandCount, 1.0);
+                float n = max(_RainbowBandCount, 1.0);
                 float m = fmod(fmod(cell, n) + n, n); // always in [0, n), even for negative scroll
                 int i0 = (int)m;
                 int i1 = (int)fmod(m + 1.0, n);
@@ -264,7 +268,8 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             }
 
             // Additive white shine sweep (0..1) — same diagonal band shape as SpriteShineShadow, angle tunable.
-            inline fixed ShineAmount(float2 uv)
+            // bulge is SphereBulge(uv), shared with the colour bands so both wrap the sphere identically.
+            inline fixed ShineAmount(float2 uv, float bulge)
             {
                 float sweepDuration = 1.0 / max(_ShineSpeed, 0.001);
                 float cycleDuration = sweepDuration + _ShineInterval;
@@ -286,7 +291,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 // The glint waves with the colour seams (same SeamSwirl) and wraps the balloon
                 // with the same spherical bulge as the bands — one coherent deformed pattern.
                 float across = dot(uv - 0.5, float2(-axis.y, axis.x));
-                projection += SeamSwirl(across) + SphereBulge(uv);
+                projection += SeamSwirl(across) + bulge;
                 float inside = step(shineLocation - _ShineWidth, projection) * step(projection, shineLocation + _ShineWidth);
                 return inside * (1.0 - abs(projection - shineLocation) / _ShineWidth);
             }
@@ -301,8 +306,11 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             {
                 fixed4 tex = tex2D(_MainTex, IN.uv);
 
+                // Spherical bulge depends only on uv — compute once and share with bands AND shine.
+                float bulge = SphereBulge(IN.uv);
+
                 // Masked region (e.g. the knot) keeps its plain sprite colour instead of the band tint.
-                fixed3 bandColor = lerp(RainbowBand(IN.uv), fixed3(1, 1, 1), MaskAmount(IN.uv));
+                fixed3 bandColor = lerp(RainbowBand(IN.uv, bulge), fixed3(1, 1, 1), MaskAmount(IN.uv));
 
                 // Sprite shading × band colour, then additive white shine on top. The glitter is bound to
                 // the shine amount (by _GlitterShineBind) so the specks only twinkle along the sweeping band.
@@ -311,8 +319,13 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 // Diffuse term: the composed body is lit by the scene light. The bands keep their
                 // palette HUE (no per-band swap) — brightness and cast follow the light, eased by
                 // _LightInfluence. The shine/glitter emissives above their own gating stay additive.
-                rgb *= lerp(float3(1.0, 1.0, 1.0), SceneLightTintAt(IN.worldPos), _LightInfluence);
-                fixed shine = ShineAmount(IN.uv);
+                // Gate the field read: at _LightInfluence 0 the lerp collapses to no-op but still samples
+                // the field texture, so skip it entirely (uniform branch).
+                if (_LightInfluence > 0.001)
+                {
+                    rgb *= lerp(float3(1.0, 1.0, 1.0), SceneLightTintAt(IN.worldPos), _LightInfluence);
+                }
+                fixed shine = ShineAmount(IN.uv, bulge);
                 // Opted-in shine is "lit by the scene light" — axis AND colour — so tint it;
                 // the classic default sweep stays pure white regardless of the scene light.
                 float3 shineTint = _ShineFromSceneLight > 0.5 ? SceneLightTintAt(IN.worldPos) : float3(1.0, 1.0, 1.0);
