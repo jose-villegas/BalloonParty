@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.ScoreTrailBehaviourConfiguration
   _entries:
   - _id: 1
-    _minPoints: 7
+    _minPoints: 2
   - _id: 0
     _minPoints: 0
   _bigScoreSettings:

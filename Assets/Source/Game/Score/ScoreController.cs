@@ -159,10 +159,24 @@ namespace BalloonParty.Game.Score
         }
 
         // Keeps only what was granted (capped at the level threshold) plus its base for numbering.
+        // The attribution contract is ONE entry per colour (see ScoreAttribution's doc): duplicates fan
+        // a single pop into multiple same-colour score groups, which starves the shape decomposition —
+        // aggregate at the source (ScoreAttributions.AddRandomPerColor) instead.
         private void ResolveAttributions(
             IReadOnlyList<ScoreAttribution> attributions, int multiplier,
             List<(string Color, int Points, int BaseProgress)> resolved)
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            for (var i = 0; i < attributions.Count; i++)
+            {
+                for (var j = i + 1; j < attributions.Count; j++)
+                {
+                    Debug.Assert(attributions[i].ColorId != attributions[j].ColorId,
+                        $"Duplicate colour '{attributions[i].ColorId}' in one attribution group — " +
+                        "aggregate per colour at the source.");
+                }
+            }
+#endif
             foreach (var attribution in attributions)
             {
                 var (baseProgress, granted) = _levelProgress.ClaimProgress(attribution.ColorId, attribution.Points * multiplier);

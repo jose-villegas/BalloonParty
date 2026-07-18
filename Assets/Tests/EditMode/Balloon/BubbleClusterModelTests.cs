@@ -57,7 +57,7 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void BubbleClusterModel_ResolveScoreAttribution_EntryCountEqualsHitsRemainingPlusOne()
+        public void BubbleClusterModel_ResolveScoreAttribution_TotalPointsEqualHitsRemainingPlusOne()
         {
             _model.HitsRemaining.Value = 3;
             SetupPaletteWithColors("Red", "Blue");
@@ -65,7 +65,29 @@ namespace BalloonParty.Tests.Balloon
             var results = new List<ScoreAttribution>();
             _model.ResolveScoreAttribution(new DamageContext(1), results);
 
-            Assert.AreEqual(3 + 1, results.Count);
+            var total = 0;
+            foreach (var attr in results)
+            {
+                total += attr.Points;
+            }
+
+            Assert.AreEqual(3 + 1, total);
+        }
+
+        [Test]
+        public void BubbleClusterModel_ResolveScoreAttribution_AggregatesToOneEntryPerColor()
+        {
+            _model.HitsRemaining.Value = 9;
+            SetupPaletteWithColors("Red", "Blue");
+
+            var results = new List<ScoreAttribution>();
+            _model.ResolveScoreAttribution(new DamageContext(1), results);
+
+            var seen = new HashSet<string>();
+            foreach (var attr in results)
+            {
+                Assert.IsTrue(seen.Add(attr.ColorId), $"duplicate colour entry '{attr.ColorId}'");
+            }
         }
 
         [Test]
@@ -84,7 +106,7 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void BubbleClusterModel_ResolveScoreAttribution_EachEntryScoresOnePoint()
+        public void BubbleClusterModel_ResolveScoreAttribution_SingleColor_OneAggregatedEntry()
         {
             _model.HitsRemaining.Value = 2;
             SetupPaletteWithColors("Red");
@@ -92,10 +114,9 @@ namespace BalloonParty.Tests.Balloon
             var results = new List<ScoreAttribution>();
             _model.ResolveScoreAttribution(new DamageContext(1), results);
 
-            foreach (var attr in results)
-            {
-                Assert.AreEqual(1, attr.Points);
-            }
+            Assert.AreEqual(1, results.Count);
+            Assert.AreEqual("Red", results[0].ColorId);
+            Assert.AreEqual(2 + 1, results[0].Points);
         }
 
         [Test]

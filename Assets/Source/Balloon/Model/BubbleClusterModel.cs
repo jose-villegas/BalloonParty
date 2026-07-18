@@ -49,17 +49,11 @@ namespace BalloonParty.Balloon.Model
 
         public void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results)
         {
-            var colors = _colorSource.Resolve();
-            if (colors == null || colors.Count == 0)
-            {
-                return;
-            }
-
-            for (var i = 0; i < HitsRemaining.Value + 1; i++)
-            {
-                var colorId = colors[Random.Range(0, colors.Count)];
-                results.Add(new ScoreAttribution(colorId, 1, true));
-            }
+            // Aggregated per colour (the attribution contract): one N-point entry per colour keeps the
+            // pop as per-colour score GROUPS downstream, so a cluster pop can decompose into shapes
+            // instead of fanning into per-point 1-point trails.
+            ScoreAttributions.AddRandomPerColor(
+                results, _colorSource.Resolve(), HitsRemaining.Value + 1, breaksStreak: true);
         }
     }
 }

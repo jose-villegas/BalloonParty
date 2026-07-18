@@ -95,7 +95,7 @@ namespace BalloonParty.Configuration
         {
             return new[]
             {
-                new ScoreTrailBehaviourEntry(ScoreTrailBehaviourId.BigScore, 7),
+                new ScoreTrailBehaviourEntry(ScoreTrailBehaviourId.BigScore, 2),
                 new ScoreTrailBehaviourEntry(ScoreTrailBehaviourId.DefaultScore, 0),
             };
         }
