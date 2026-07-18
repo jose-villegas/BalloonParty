@@ -1,0 +1,284 @@
+@page plan_trail_choreography Trail Choreography
+
+# Trail Choreography
+
+> Replaces the fixed one-point-one-trail score pipeline with a **choreography seam**: score
+> groups publish as one message, and a per-group **behaviour handler** — selected by score
+> magnitude through a config table — owns everything between spawn and arrival. The default
+> handler reproduces today's look byte-for-byte; a `BigScore` handler makes large awards
+> spectacular *and* cheap. Resolves the constraint that reverted f27376f (the level-up
+> cinematic's tipping-trail dependency) — verified against the current code, the cinematic
+> needs less than that revert assumed.
+
+---
+
+## Orientation — start here
+
+### The problem (measured)
+
+One score point = one `ScorePointMessage` = one pooled `FlyingTrail` = one arrival = one
+notice. The streak multiplier scales the **point count** before the per-point publish loop
+(`ScoreController.ResolveAttributions` → `PublishPoints`), so a 5× multiplier on a 50-point
+unbreakable hit produces **250 trails, 500 tweens, 250 arrivals, 250 notices over 5 s** of
+scatter stagger. José's profiler capture during such a peak: `Canvas.SendWillRenderCanvases`
+/ `Canvas.BuildBatch` dominate (arrival-side UI), ~10% `DOTween` update (flight tweens).
+The notice Animator→ticker rewrite (629951fe) removed the worst canvas offender; the
+remaining costs all scale linearly with point count.
+
+Trail count itself is **not** a hard limit — trails are world-space (no canvas), and
+~100–150 concurrent is comfortable. What must be bounded is the *arrival* count (each one
+touches UI) and the worst-case in-flight count (DOTween capacity growth past ~200 tweeners,
+the 128/color pool cliff, spawn-time closure churn).
+
+### The design in one paragraph
+
+`ScoreController` publishes **one message per attribution entry** carrying the group's
+total points. `ScoreTrailService` resolves the group's score against a config table to a
+**behaviour id** (`DefaultScore`, `BigScore`, …) and delegates to that id's registered
+`IScoreTrailBehaviour`. The handler spawns and animates trails however it wants, reports
+arrivals through a service-owned reporter (partial `+1`s or a single `+N` — its choice, as
+long as the reports sum to the group total), and nominates one **principal trail** that the
+level-up cinematic can track and pause. Notices, slider, score, and level progression all
+keep their existing seams — they just receive valued arrivals instead of unit ones.
+
+---
+
+## Verified constraints (what the current code actually requires)
+
+These were established by reading the code on 2026-07-18 — they are the load-bearing facts
+this design is built on:
+
+1. **`ScorePointMessage` has exactly two subscribers**: `ScoreTrailService` (spawns) and
+   `LevelUpCinematic` (tipping capture). No other system reads the per-point stream.
+2. **The cinematic does not need the exact threshold-crossing score.** It captures
+   `TrailId(msg)` from the *first* message it sees while `_levelProgress.WillLevelUp()` is
+   true (`LevelUpCinematic.OnScorePoint`), waits for that id in the `Flights` registry,
+   then grabs the flight, calls `DisableMoveTween()` on its `FlyingTrail`, pauses it, and
+   camera-follows its transform. Arrival is matched by `(ColorName, Score)` equality.
+   → Any scheme works if: the id is derivable from the message, a flight registers under
+   it, its motion is pausable, and one arrival report carries exactly that score.
+3. **`LevelController.OnTrailArrived` is a watermark**, not a counter:
+   `confirmable = Min(msg.Score, projected)` then `Max` into confirmed progress. Arrivals
+   whose `Score` is the *cumulative per-color point number* confirm progress through that
+   point, monotonically and out-of-order-safely. → Zero changes needed there, ever, as
+   long as reported scores are the true cumulative numbers.
+4. **`ScoreController.OnTrailArrived` and `ColorProgressBar.OnTrailArrived` are unit
+   counters** (`++`, `slider + 1`, `Show(1)`) → they need the arrival's point value.
+5. **Pooling rule**: the consumer that `Get()`s returns. Handlers own their instances.
+6. `ProgressNotice.Show(int)` already scales/offsets by value — the notice UI is K>1-ready.
+
+---
+
+## Contracts
+
+### Message: `ScorePointsGroupMessage` (replaces per-point `ScorePointMessage`)
+
+```csharp
+internal readonly struct ScorePointsGroupMessage
+{
+    public readonly string ColorName;
+    public readonly Vector3 WorldPosition;   // pop origin (scatter/burst center)
+    public readonly int Points;              // total points this group carries (post-multiplier, post-cap)
+    public readonly int LastScore;           // cumulative per-color number of the group's LAST point
+    public readonly int Multiplier;          // streak multiplier that produced Points (discrimination input)
+}
+```
+
+- Published by `ScoreController.PublishPoints` — one per resolved attribution entry
+  (multi-color pops publish one per color, as today's groups already do).
+- `LastScore = baseProgress + granted` — the same numbering the watermark consumes.
+- `TrailId` for the group = `(ColorName, LastScore)`; uniqueness holds because per-color
+  numbering is strictly increasing within a level.
+- `GroupSize`/`GroupIndex` (today's scatter-fan inputs) move INTO the handler's domain —
+  the handler decides how many visual objects exist, so the fan parameters are its own.
+
+### Arrival: `ScoreTrailArrivedMessage` gains `Points`
+
+```csharp
+public readonly struct ScoreTrailArrivedMessage
+{
+    public readonly string ColorName;
+    public readonly int Score;      // cumulative number of the LAST point this arrival confirms
+    public readonly int Points;     // how many points land with this arrival (was implicitly 1)
+    public readonly Vector3 WorldPosition;
+}
+```
+
+Consumer changes: `ScoreController` `+= Points` (persistent + total), `ColorProgressBar`
+slider `+= Points` and `Show(Points)`. `LevelController` unchanged (watermark reads
+`Score`). `LevelUpCinematic` unchanged (matches `Score` equality).
+
+### The seam: `IScoreTrailBehaviour`
+
+```csharp
+internal interface IScoreTrailBehaviour
+{
+    /// Owns the group from spawn to final arrival. MUST: register exactly one principal
+    /// flight under context.TrailId before returning (the cinematic may pause/track it);
+    /// report arrivals via context.Reporter with ascending Score values summing to
+    /// context.Points; return every pooled instance it spawned.
+    void Begin(in ScoreTrailContext context);
+}
+
+internal readonly struct ScoreTrailContext
+{
+    public readonly string ColorName;
+    public readonly Color Color;              // palette-resolved
+    public readonly Vector3 Origin;
+    public readonly int Points;
+    public readonly int LastScore;
+    public readonly TrailId TrailId;          // (ColorName, LastScore) — the principal's id
+    public readonly ITrailEndpoint Target;
+    public readonly TrailSpawner Spawner;     // the color's pooled trail channel
+    public readonly IScoreTrailReporter Reporter;
+}
+
+internal interface IScoreTrailReporter
+{
+    /// Publishes one ScoreTrailArrivedMessage(color, score, points, at). The service
+    /// asserts (dev builds) that reports per group are ascending in score and sum to
+    /// the group total, then unregisters the principal flight after the final report.
+    void ReportArrival(int score, int points, Vector3 at);
+}
+```
+
+- Handlers are **plain C#**, registered in VContainer keyed by `ScoreTrailBehaviourId`
+  (enum). Stateless per invocation — per-group state lives in a small pooled state object
+  or in the closures/tweens of the flight itself (two `BigScore` groups can be in flight
+  concurrently).
+- The **principal-flight rule** exists solely for the cinematic (constraint 2). The
+  service provides `RegisterPrincipal(Transform)` on the context or reporter so the
+  registry bookkeeping stays in one place.
+
+### Discrimination: `ScoreTrailBehaviourConfig` (SO, on the existing settings pattern)
+
+```
+Entries (evaluated highest-first):
+  { Id: BigScore,     MinPoints: 40,  ...visual knobs (tier thresholds, visual cap, merge window) }
+  { Id: DefaultScore, MinPoints: 0 }
+```
+
+Resolver: highest `MinPoints <= group.Points` wins. **Decided (José, 2026-07-18):
+discrimination is by group total ("big because cluster"), not by multiplier** — the
+`Multiplier` field stays in the message purely as future data. Injected as a read-only
+interface per repo convention.
+
+#### Value/visual decoupling — why there is no "dividend"
+
+The reporter contract separates value (what arrivals deliver) from visuals (what flies).
+In `BigScore`, the carrier reports the ENTIRE group value in one arrival; tributaries are
+worth zero — their count is a density choice (`VisualCap`), never arithmetic. Nothing
+divides, so no remainder exists and handlers never need an internal default path.
+
+If mixed representation is ever wanted (e.g. 47 points as a "+40" carrier plus 7 ordinary
+trails), the split belongs in the RESOLVER, not inside a handler: it partitions the group
+into sub-groups over contiguous score ranges and routes each to its own handler
+(`base+1..base+7 → DefaultScore`, `base+8..base+47 → BigScore`). The reporter invariant
+(ascending scores, reports sum to the total) is already partition-shaped, the watermark
+doesn't care who reports what, and the principal rule stays unambiguous: the sub-group
+containing `LastScore` owns the principal — so the big chunk always takes the top of the
+range. Handlers stay single-purpose; composition has exactly one home. Not built in v1 —
+this is the designed extension point.
+
+---
+
+## Handlers
+
+### `DefaultScore` — byte-for-byte parity with today
+
+Spawns `Points` trails exactly as `ScoreTrailService` does now: scatter-fan origins
+(`2π·i/Points` at 1.5× slot separation), 0.02 s stagger, `SpawnBurst` bloom + trace, each
+trail reporting `(baseScore + i + 1, points: 1)` on landing. The LAST trail is the
+principal (id score = `LastScore`).
+
+Two accepted micro-deltas from today, both invisible in play:
+- The cinematic tracks the tipping group's **last** trail instead of its first (today it
+  captures the first per-point message's id). Same flight cohort, same look.
+- Only the principal registers in `Flights` (today every trail registers). The registry's
+  only consumers are the cinematic (principal only) and `CompleteAll` (loss/level paths) —
+  handlers must also expose in-flight cleanup for `CompleteAll`; the service keeps a list
+  of live group states for that.
+
+### `BigScore` — the first real implementer (confluence)
+
+One **carrier** trail carries the whole group value to the bar; up to `VisualCap`
+(~16–24) **tributaries** provide the spectacle: they bloom outward on the existing burst
+path, then converge onto the moving carrier via the existing `FlyingTrail.SetupFollow`
+(`Func<Vector3>` target = carrier transform) and are absorbed — flash, return to pool,
+carrier grows a tier. Tributaries are plain sprite motes (no TrailRenderer) — at ~0.3 s
+lifetimes the trail ribbon reads as noise anyway. The carrier is the principal; it reports
+once: `(LastScore, Points)` → one "+N" notice, one slider step, one score bump.
+
+Carrier **tiers** (config): value thresholds → scale/glow/gradient escalation, evaluated
+as absorbed value accumulates — "the carrier crossing a tier mid-flight" is the hook for
+score-milestone animation ideas.
+
+Worst case rerun (5× multiplier × 50-point unbreakable): today 250 trails / 500 tweens /
+250 arrivals / 5 s tail → **1 carrier + ≤24 tributaries / ~50 tweens / 1 arrival / ~1.2 s**.
+
+### Degenerate configs worth knowing exist
+
+- *Formation flight* (keep N full trails, single valued arrival) = `BigScore` with
+  `VisualCap = Points` and merge disabled — a fallback look if confluence doesn't land.
+- Pure orb coalescing (earlier design discussion) = `BigScore` with `VisualCap` orbs and
+  no carrier — strictly less spectacle, kept only for reference.
+
+---
+
+## What this deliberately does NOT change
+
+- Streak notices (`StreakChangedMessage` path), the level-up ceremony/glow-trail drain,
+  heart/shield trails (`HeartTrailController`, `ShieldTrailController` — separate
+  spawner uses, untouched).
+- `LevelController` progression semantics (watermark — constraint 3).
+- `ProgressNotice`/`ProgressNoticePresenter` (the ticker rewrite stands; `Show(Points)` is
+  already supported).
+- The `TrailId`-based cinematic contract — it is *satisfied*, not redesigned.
+
+---
+
+## Implementation order (each step compiles + is committable)
+
+1. **Message swap behind parity**: `ScorePointsGroupMessage` + valued
+   `ScoreTrailArrivedMessage`; `ScoreController` publishes groups; `ScoreTrailService`
+   inlines what becomes `DefaultScore` (no seam yet); cinematic subscription retargeted
+   (`TrailId(msg)` from the group message); `+= Points` consumers. **Playtest gate:
+   visually indistinguishable from today.**
+2. **Extract the seam**: `IScoreTrailBehaviour` + reporter + config + resolver;
+   `DefaultScore` becomes the first handler. Pure refactor, second parity gate.
+3. **`BigScore`**: carrier + tributaries + tiers, threshold authored in config
+   (`MinPoints` ~40 to start). Playtest for feel; iterate knobs in-editor.
+4. Retune `ScoreTrailPrewarmPerColor` down (128 → ~32) once BigScore bounds the worst
+   case; revisit the 0.02 s stagger for the default path.
+
+Verification: step 1/2 gates are in-editor playtests (pop bursts, a level-up mid-storm to
+exercise the tipping path, a loss mid-storm for `CompleteAll`); step 3 adds the 5×
+unbreakable profiler capture compared against José's pre-change capture
+(`Canvas.SendWillRenderCanvases`, DOTween update, GC alloc). `dotnet build` + edit-mode
+tests per commit as usual.
+
+---
+
+## Open questions for review
+
+1. ~~**Discrimination inputs**~~ — RESOLVED: by group total ("big because cluster"); see
+   the value/visual-decoupling subsection for why this creates no dividend/remainder
+   problem and where a mixed-representation split would live if ever wanted.
+2. ~~**Score label rhythm**~~ — RESOLVED: +N chunks. The notice shows the group value
+   ("+100"), the total score steps by N per carrier arrival (zero-alloc `SetThousands`
+   path either way). Two authoring follow-ups this creates: (a) the notice's scale /
+   X-offset curves are keyed only to value 10 today — values beyond clamp to the last
+   key, so re-author the curves for the BigScore value range during step-3 playtest;
+   (b) decide the label format — today it renders the bare number, "+" prefix is a small
+   formatting addition alongside the value change.
+3. ~~**Tier authoring**~~ — RESOLVED: plain thresholds on the `BigScore` config entry.
+   If other systems (popups, audio stingers) later want the same milestones, promote the
+   thresholds to a shared asset then — not before (authoring affordances over
+   infrastructure).
+4. ~~**`CompleteAll` shape**~~ — RESOLVED: logic snaps, visuals fade. On `CancelAll`,
+   every live group SYNCHRONOUSLY reports its remaining points (score/watermark settle
+   immediately — the ceremony and loss flows depend on that), then each live trail plays
+   a short fire-and-forget fade (unscaled — the level-up freeze zeroes timeScale) and
+   returns to the pool at fade end. Cost is bounded by concurrent trails at cancellation
+   (≤ ~25 under BigScore), one short tween each, once. `OnDespawned`'s tween-kill covers
+   a force-return racing the fade.

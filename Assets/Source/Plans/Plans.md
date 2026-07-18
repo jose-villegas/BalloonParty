@@ -18,3 +18,4 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_lighting
 - @subpage plan_gi_normals
 - @subpage plan_shot_geometry
+- @subpage plan_trail_choreography
