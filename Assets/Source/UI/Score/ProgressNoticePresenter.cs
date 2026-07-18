@@ -67,9 +67,9 @@ namespace BalloonParty.UI.Score
                 });
         }
 
-        // The streak notice is persistent: it holds (its animator no longer auto-dismisses) until the
-        // streak grows into a new one or is lost. Showing again flies the current one away and pops a
-        // fresh one at the new value.
+        // The streak notice is persistent: it holds (negative hold duration — no auto-dismiss) until
+        // the streak grows into a new one or is lost. Showing again flies the current one away and
+        // pops a fresh one at the new value.
         internal void ShowStreak(int streak)
         {
             DismissStreak();
@@ -112,7 +112,7 @@ namespace BalloonParty.UI.Score
             _poolManager.Return(_streakPoolKey, notice);
         }
 
-        // Immediate (not animated): clears every notice even when the Animator is frozen. Each notice's
+        // Immediate (not animated): snaps every notice straight to completed. Each notice's
         // completion callback removes it from the list.
         internal void DismissAllNotices()
         {
@@ -122,9 +122,9 @@ namespace BalloonParty.UI.Score
             }
         }
 
-        // Plays each notice's disappear instead of snapping. Requires the notice Animator to run on
-        // unscaled time — the level-up popup freezes timeScale to 0 while this is called, so a scaled
-        // Animator would stall the fade mid-way. Completion callbacks drain the list as each finishes.
+        // Plays each notice's disappear instead of snapping. Notices tick on unscaled time — the
+        // level-up popup freezes timeScale to 0 while this is called, so a scaled tick would stall
+        // the fade mid-way. Completion callbacks drain the list as each finishes.
         internal void DismissAllAnimated()
         {
             for (var i = _activeNotices.Count - 1; i >= 0; i--)

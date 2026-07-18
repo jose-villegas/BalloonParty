@@ -291,15 +291,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreakNotice
       objectReference: {fileID: 0}
-    - target: {fileID: 8115177882997527811, guid: 8026f44bf1b214739b2bc56e217d5105,
+    - target: {fileID: 4022841750403956333, guid: 8026f44bf1b214739b2bc56e217d5105,
         type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 05042d30ed5f54f83a888566c42405b2, type: 2}
-    - target: {fileID: 8115177882997527811, guid: 8026f44bf1b214739b2bc56e217d5105,
-        type: 3}
-      propertyPath: m_UpdateMode
-      value: 2
+      propertyPath: _holdDuration
+      value: -1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

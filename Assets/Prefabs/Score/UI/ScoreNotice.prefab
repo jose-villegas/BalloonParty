@@ -325,7 +325,6 @@ GameObject:
   m_Component:
   - component: {fileID: 703661213927668032}
   - component: {fileID: 7735398952300550109}
-  - component: {fileID: 8115177882997527811}
   - component: {fileID: 1319174416173524732}
   - component: {fileID: 4022841750403956333}
   m_Layer: 5
@@ -367,28 +366,6 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
---- !u!95 &8115177882997527811
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7487055791320916758}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 45456e51e46580a43af14592dba3dc7b, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 2
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!223 &1319174416173524732
 Canvas:
   m_ObjectHideFlags: 0
@@ -425,7 +402,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.UI.ScoreNotice
   _colorableRenderer: []
-  _animator: {fileID: 8115177882997527811}
+  _canvasGroup: {fileID: 7735398952300550109}
   _labelTransform: {fileID: 6478643938032442419}
   _label: {fileID: 6315786945281002352}
   _scaleCurve:
