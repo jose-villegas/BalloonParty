@@ -23,7 +23,12 @@ namespace BalloonParty.Shared.Pool
 
         internal void Unregister(TId id)
         {
-            _flights.Remove(id);
+            // Mark the handle inert: holders of a direct reference (the level-up cinematic's tracked
+            // flight) must stop steering/completing the pooled instance once its arrival has fired.
+            if (_flights.Remove(id, out var flight))
+            {
+                flight.MarkCompleted();
+            }
         }
 
         internal bool TryGet(TId id, out TrailFlight flight)

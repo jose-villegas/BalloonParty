@@ -256,9 +256,12 @@ namespace BalloonParty.Game.Cinematics
 
         private void AdvanceTrackedTrail()
         {
-            // Trail was completed/returned out from under us — end the pan-in instead of stalling.
-            if (_trackedFlight?.Transform == null)
+            // Trail was completed/returned out from under us (destroyed transform, or its arrival fired
+            // via its own tween / a CompleteAll and the flight went Idle) — the pooled instance may
+            // already be flying for another group, so stop steering it and end the pan-in instead.
+            if (_trackedFlight?.Transform == null || _trackedFlight.Phase == FlightPhase.Idle)
             {
+                _trackedFlight = null;
                 if (Runner.IsPanInRunning)
                 {
                     EndPanIn();

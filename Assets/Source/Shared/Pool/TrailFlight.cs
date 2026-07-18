@@ -63,16 +63,28 @@ namespace BalloonParty.Shared.Pool
         }
 
         /// <summary>
-        ///     Jumps the trail to completed state so onComplete fires immediately.
+        ///     Jumps the trail to completed state so onComplete fires immediately. Idempotent: once the
+        ///     flight is Idle the pooled instance may already be flying for a NEW group, so completing
+        ///     again would fire someone else's arrival — a stale holder's Complete must be a no-op.
         /// </summary>
         internal void Complete()
         {
-            if (_transform == null)
+            if (Phase == FlightPhase.Idle || _transform == null)
             {
                 return;
             }
 
+            // Set before DOComplete: the completion callback re-enters via Unregister → MarkCompleted.
+            Phase = FlightPhase.Idle;
             _transform.DOComplete();
+        }
+
+        /// <summary>
+        ///     The trail's arrival fired through its own tween — the pooled instance can be reused for a
+        ///     new flight any frame now, so every later transport command on this handle must no-op.
+        /// </summary>
+        internal void MarkCompleted()
+        {
             Phase = FlightPhase.Idle;
         }
 

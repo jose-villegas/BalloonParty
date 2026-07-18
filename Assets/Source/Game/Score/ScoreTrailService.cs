@@ -23,7 +23,6 @@ namespace BalloonParty.Game.Score
         private readonly CancellationTokenSource _cts = new();
         private readonly TrailFlightRegistry<TrailId> _flights = new();
         private readonly PoolManager _poolManager;
-        private readonly Stack<ScoreTrailReporter> _reporterPool = new();
         private readonly ScoreTrailBehaviourResolver _resolver;
         private readonly ISubscriber<ScorePointsGroupMessage> _scoredSubscriber;
         private readonly Dictionary<string, TrailSpawner> _spawners = new();
@@ -116,7 +115,7 @@ namespace BalloonParty.Game.Score
             }
 
             var color = _colorLookup.TryGetValue(msg.ColorName, out var c) ? c : Color.white;
-            var reporter = RentReporter(msg.ColorName, msg.Points);
+            var reporter = new ScoreTrailReporter(_arrivedPublisher, msg.ColorName, msg.Points);
             var context = new ScoreTrailContext(
                 msg.ColorName,
                 color,
@@ -134,66 +133,49 @@ namespace BalloonParty.Game.Score
             _resolver.Resolve(msg.Points).Begin(context);
         }
 
-        private ScoreTrailReporter RentReporter(string colorName, int total)
-        {
-            var reporter = _reporterPool.Count > 0
-                ? _reporterPool.Pop()
-                : new ScoreTrailReporter(_arrivedPublisher, ReturnReporter);
-            reporter.Begin(colorName, total);
-            return reporter;
-        }
-
-        private void ReturnReporter(ScoreTrailReporter reporter)
-        {
-            _reporterPool.Push(reporter);
-        }
-
-        // One per in-flight group; recycled once its reports sum to the group total. Publishes each arrival
-        // and (dev builds) polices the handler contract with ORDER-INDEPENDENT invariants only: report
+        // One per group, allocated per pop — NOT pooled: trails hold this instance via their arrival
+        // closures, and a recycled instance turns any late/double report into cross-group corruption
+        // (misattributed colour/score arrivals, which desynced the level-up pan-in). One small object
+        // per pop is noise next to the group's own async state machine. Publishes each arrival and
+        // (dev builds) polices the handler contract with ORDER-INDEPENDENT invariants only: report
         // order is deliberately unconstrained because TrailFlightRegistry.CompleteAll (level-up/loss)
         // fires remaining arrivals in dictionary order, and the LevelController watermark is order-safe.
         private sealed class ScoreTrailReporter : IScoreTrailReporter
         {
             private readonly IPublisher<ScoreTrailArrivedMessage> _publisher;
-            private readonly Action<ScoreTrailReporter> _recycle;
+            private readonly string _colorName;
+            private readonly int _total;
 
-            private string _colorName;
-            private int _total;
             private int _cumulative;
 
             internal ScoreTrailReporter(
-                IPublisher<ScoreTrailArrivedMessage> publisher, Action<ScoreTrailReporter> recycle)
+                IPublisher<ScoreTrailArrivedMessage> publisher, string colorName, int total)
             {
                 _publisher = publisher;
-                _recycle = recycle;
-            }
-
-            internal void Begin(string colorName, int total)
-            {
                 _colorName = colorName;
                 _total = total;
-                _cumulative = 0;
             }
 
             public void ReportArrival(int score, int points, Vector3 at)
             {
+                // Backstop: a report after the group closed means a trail's arrival fired twice
+                // (an ownership bug upstream) — drop it rather than corrupt score/progress state.
+                if (_cumulative >= _total)
+                {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                    Debug.LogError(
+                        $"ScoreTrail {_colorName}: arrival (score {score}, points {points}) reported " +
+                        $"after the group already summed to {_total} — dropped. Double-completion upstream?");
+#endif
+                    return;
+                }
+
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
                 Debug.Assert(_cumulative + points <= _total,
                     $"ScoreTrail {_colorName}: reported points {_cumulative + points} exceed group total {_total}.");
 #endif
                 _cumulative += points;
                 _publisher.Publish(new ScoreTrailArrivedMessage(_colorName, score, points, at));
-
-                if (_cumulative < _total)
-                {
-                    return;
-                }
-
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-                Debug.Assert(_cumulative == _total,
-                    $"ScoreTrail {_colorName}: final reports summed to {_cumulative}, expected {_total}.");
-#endif
-                _recycle(this);
             }
         }
     }
