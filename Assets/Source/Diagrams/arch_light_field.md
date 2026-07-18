@@ -39,7 +39,7 @@ digraph SceneLightField {
 
         Registry [label="On/Off Registry\nRegisterLight(Light) → IDisposable\nClearLights()"];
         Dirty    [label="Dirty flag\n(reactive subscriptions\nflip on property change)"];
-        Pipeline [label="3-pass pipeline\n(only when dirty)"];
+        Pipeline [label="3-pass pipeline\n(dirty + cadence cap)"];
 
         Registry -> Dirty [label="subscribe\nto each light"];
         Dirty -> Pipeline [label="trigger\nre-render"];
@@ -141,8 +141,11 @@ caller animating `Intensity`.
 
 **The service** (`SceneLightFieldService`, singleton `IStartable`/`ITickable`/`IDisposable`)
 subscribes to each registered light's reactive properties. When anything changes it flips a dirty
-flag; `Tick` re-renders only when dirty. An idle scene (static lights, no movement) skips the
-pipeline entirely — the RT keeps its last, still-correct contents.
+flag; `Tick` re-renders only when dirty AND a frame-interval cadence cap (`FieldFrameInterval`,
+authored as "every N frames at 60 fps") has elapsed — so a light that dirties the field every frame
+(a tracked projectile) can't run the pipeline faster than its authored cadence, regardless of display
+refresh rate. An idle scene (static lights, no movement) skips the pipeline entirely — the RT keeps
+its last, still-correct contents.
 
 **The pipeline** (three blit passes over two ping-pong RTs):
 
@@ -187,6 +190,13 @@ makes the field a strictly additive seam.
 6. **Dirty-gated cost.** The pipeline is skipped entirely when nothing changed. An idle scene with
    static lights pays zero GPU cost per frame. The field runs at `TexelsPerUnit = 32` (finer than
    the disturbance field's 8) — affordable because it's not ticked every frame.
+
+7. **Cadence-capped, not just dirty-gated.** A light that dirties every tick (a tracked projectile)
+   would otherwise re-render at the display's full refresh rate for identical visuals — 2× the GPU
+   cost on a 120 Hz panel versus 60 Hz. `FieldFrameInterval` is authored as "every N frames at 60 fps"
+   and reinterpreted as seconds, accumulated with unscaled time (mirroring `SceneCaptureService`'s
+   capture cadence), decoupling render cost from display refresh. The very first render is exempt
+   from the cap so consumers never sample an empty RT.
 
 ## Channel encoding (single RT)
 

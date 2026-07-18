@@ -15,7 +15,7 @@ namespace BalloonParty.Shared.SceneLight
     ///     architecture applied to light, see @ref plan_lighting "Milestone 3"). The field is purely
     ///     LOCAL: it carries only what registered lights stamp (R = local boost, GB = local direction
     ///     weight, A = palette tag). The ambient (direction/colour/intensity) comes from
-    ///     <see cref="ISceneLightSettings"/> and is pushed as global shader properties every tick, so
+    ///     <see cref="ISceneLightSettings"/> and is pushed as global shader properties once at startup, so
     ///     consumers combine local + ambient without a separate MonoBehaviour owner. A render runs a
     ///     three-pass ping-pong pipeline: <b>fill</b> to the empty rest state, <b>accumulate</b> every
     ///     registered light's cone into R (tagging A), then <b>gradient</b> to write the local direction
@@ -23,8 +23,10 @@ namespace BalloonParty.Shared.SceneLight
     ///
     ///     Lights are STATE, not events: a caller <see cref="RegisterLight"/>s a <see cref="Light"/> to
     ///     turn it on and disposes the registration to turn it off. The service watches each light's
-    ///     reactive properties and only re-renders when one changed — an idle scene costs nothing, and
-    ///     ambient tweaks never re-render it (consumers read those from the globals live).
+    ///     reactive properties and re-renders only when one changed AND a frame-interval cadence cap (see
+    ///     <see cref="ISceneLightFieldSettings.FieldFrameInterval"/>) has elapsed — an idle scene costs
+    ///     nothing, a moving light can't force the pipeline past its authored cadence regardless of display
+    ///     refresh rate, and ambient tweaks never re-render it (consumers read those from the globals live).
     /// </summary>
     internal class SceneLightFieldService : IStartable, ITickable, IDisposable
     {
@@ -72,6 +74,7 @@ namespace BalloonParty.Shared.SceneLight
         private bool _dirty = true;
         private bool _warnedOverflow;
         private bool _fieldOn;
+        private float _renderAccumulator;
 
         internal RenderTexture FieldTexture => _resources.FieldTexture;
 
@@ -104,16 +107,31 @@ namespace BalloonParty.Shared.SceneLight
 
             // The palette is static config, so push it once as a global the include decodes A against.
             PushGlobalPalette();
+
+            // Ambient globals are static config, not per-frame state — push them once here; Tick only
+            // re-pushes under UNITY_EDITOR, for live inspector tuning.
+            PushAmbientGlobals();
         }
 
-        // Pushes the ambient globals every tick so the SO knobs stay live-tunable in play mode, then
-        // re-renders the field only when a registered light changed. An idle scene skips the pipeline
-        // entirely; the RT keeps its last (still-correct) contents.
+        // Re-renders the field's pipeline only when a registered light changed AND the cadence cap (see
+        // FieldFrameInterval) allows it — a fast-moving light would otherwise dirty the field every frame,
+        // running the pipeline at the display's full refresh rate for identical visuals. An idle scene
+        // skips the pipeline entirely; the RT keeps its last (still-correct) contents.
         void ITickable.Tick()
         {
+#if UNITY_EDITOR
             PushAmbientGlobals();
+#endif
 
-            if (!_resources.IsReady || (_fieldOn && !_dirty))
+            // FieldFrameInterval is authored as "every N frames at 60 fps"; reinterpreted here as seconds
+            // so the field's re-render cost doesn't scale with display refresh — a 120 Hz panel would
+            // otherwise double it. Unscaled time on purpose: the dirty gate already makes a frozen scene
+            // free, and lights animating during the level-up freeze keep working. Clamped to at most one
+            // interval so idle time can't bank multiple instant re-renders.
+            var interval = _settings.FieldFrameInterval / 60f;
+            _renderAccumulator = Mathf.Min(_renderAccumulator + Time.unscaledDeltaTime, interval);
+
+            if (!_resources.IsReady || (_fieldOn && (!_dirty || _renderAccumulator < interval)))
             {
                 return;
             }
@@ -125,6 +143,10 @@ namespace BalloonParty.Shared.SceneLight
             _resources.Gradient();
 
             _dirty = false;
+
+            // Subtract, don't reset: a render can fire below the interval (the ungated bootstrap render),
+            // and a plain reset would delay the next one.
+            _renderAccumulator = Mathf.Max(0f, _renderAccumulator - interval);
 
             // The on-flag is static once the field is live; set it after the first full pipeline render.
             if (!_fieldOn)
@@ -267,8 +289,10 @@ namespace BalloonParty.Shared.SceneLight
             Shader.SetGlobalVector(BoundsSizeId, new Vector4(bounds.width, bounds.height, 0f, 0f));
         }
 
-        // Pushed every tick so the SO knobs stay live-tunable. Replaces the former SceneLightService
-        // MonoBehaviour — direction, colour, intensity are now project-wide config, not per-scene.
+        // Pushed once in Start (ambient globals are static config); Tick re-pushes it only under
+        // UNITY_EDITOR, so these SO knobs stay live-tunable in play mode without costing a build. Replaces
+        // the former SceneLightService MonoBehaviour — direction, colour, intensity are now project-wide
+        // config, not per-scene.
         private void PushAmbientGlobals()
         {
             Shader.SetGlobalVector(SceneLightDirId, _lightSettings.LightDirection);

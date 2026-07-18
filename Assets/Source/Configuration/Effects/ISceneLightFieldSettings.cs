@@ -15,6 +15,11 @@ namespace BalloonParty.Configuration.Effects
         /// dirty-gated) RT. Far finer than the disturbance field's, which ticks every frame.</summary>
         int TexelsPerUnit { get; }
 
+        /// <summary>The field's re-render cadence, authored as "every N frames at 60 fps" and reinterpreted
+        /// in seconds (see <see cref="BalloonParty.Shared.SceneLight.SceneLightFieldService"/>) so cost
+        /// doesn't scale with display refresh — a 120 Hz panel would otherwise double it.</summary>
+        int FieldFrameInterval { get; }
+
         /// <summary>Max simultaneous lights composited in one accumulate batch. Capped by the accumulate
         /// shader's compile-time stamp array, so raising it past that needs a shader edit too.</summary>
         int MaxLights { get; }

@@ -16,6 +16,7 @@ MonoBehaviour:
   _lightColor: {r: 1, g: 1, b: 1, a: 1}
   _intensity: 1
   _texelsPerUnit: 32
+  _fieldFrameInterval: 1
   _maxLights: 32
   _accumulationCeiling: 3
   _directionResponse: 5
@@ -31,7 +32,5 @@ MonoBehaviour:
   _shadowTint: {r: 0.1, g: 0.1, b: 0.1, a: 1}
   _bounceStrength: 0.25
   _secondaryBounceWeight: 0.5
-  _temporalSmoothing: 0
-  _temporalResponse: 0.2
   _smearShader: {fileID: 4800000, guid: 8a14fe89476c045b294beadef2be1e12, type: 3}
   _overlayShader: {fileID: 4800000, guid: 93bf1f4f895d74648adb05d6b926be02, type: 3}

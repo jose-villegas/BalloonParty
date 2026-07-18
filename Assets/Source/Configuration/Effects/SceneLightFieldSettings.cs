@@ -26,6 +26,12 @@ namespace BalloonParty.Configuration.Effects
                  "finer than the disturbance field's 8.")]
         [SerializeField] [Range(8, 64)] private int _texelsPerUnit = 32;
 
+        [Header("Field — Cadence")]
+        [Tooltip("Render the field every Nth frame at 60 fps (reinterpreted as seconds so cost doesn't " +
+                 "scale with display refresh — a 120 Hz panel would otherwise double it). The dirty gate " +
+                 "still applies: an idle scene never re-renders regardless of this interval.")]
+        [SerializeField] [Range(1, 4)] private int _fieldFrameInterval = 1;
+
         [Header("Field — Lights")]
         [Tooltip("Max simultaneous lights composited per accumulate batch. Capped by the accumulate " +
                  "shader's MAX_STAMPS (32) — raising it past that also needs a shader edit.")]
@@ -88,17 +94,6 @@ namespace BalloonParty.Configuration.Effects
         [Range(0f, 1f)]
         [SerializeField] private float _secondaryBounceWeight = 0.5f;
 
-        [Header("GI — Temporal")]
-        [Tooltip("Off skips the history blit and its two buffers entirely — the light " +
-                 "responds instantly, but moving sprites may flicker at capture resolution.")]
-        [SerializeField] private bool _temporalSmoothing = true;
-
-        [Tooltip("Fraction of the fresh light buffer accepted per frame — lower is " +
-                 "smoother but laggier. Kills the texel flicker of moving sprites at " +
-                 "capture resolution.")]
-        [Range(0.02f, 1f)]
-        [SerializeField] private float _temporalResponse = 0.2f;
-
         [Header("GI — Shaders")]
         [Tooltip("Assign explicitly — device builds strip shaders that are only " +
                  "referenced via Shader.Find.")]
@@ -110,6 +105,7 @@ namespace BalloonParty.Configuration.Effects
         public Shader AccumulateShader => _accumulateShader;
         public Shader GradientShader => _gradientShader;
         public int TexelsPerUnit => _texelsPerUnit;
+        public int FieldFrameInterval => _fieldFrameInterval;
         public int MaxLights => _maxLights;
         public float AccumulationCeiling => _accumulationCeiling;
         public float DirectionResponse => _directionResponse;
@@ -126,8 +122,6 @@ namespace BalloonParty.Configuration.Effects
         public Color ShadowTint => _shadowTint;
         public float BounceStrength => _bounceStrength;
         public float SecondaryBounceWeight => _secondaryBounceWeight;
-        public bool TemporalSmoothing => _temporalSmoothing;
-        public float TemporalResponse => _temporalResponse;
 
         // ISceneLightSettings
         public Vector2 LightDirection =>

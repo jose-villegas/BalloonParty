@@ -9,7 +9,8 @@ shared shader include `Assets/Shaders/BalloonParty/Include/SceneLight.cginc`.
 `SceneLightFieldService` is the single owner of both the light **field** RT and the **ambient
 globals** (`_SceneLightDir` / `_SceneLightColor` / `_SceneLightIntensity`). The ambient values are
 project-wide config on the `SceneLightFieldSettings` SO (injected as `ISceneLightSettings`), pushed
-every tick so they stay live-tunable. The field is a super-set layered on top: at rest it is exactly
+once at startup (re-pushed every tick only in the editor, so they stay live-tunable in play mode). The
+field is a super-set layered on top: at rest it is exactly
 those globals painted uniformly, and every field helper falls back to the flat globals when the field
 is off — so the field is a strictly additive seam, never a replacement.
 
@@ -17,9 +18,9 @@ is off — so the field is a strictly additive seam, never a replacement.
 
 | File | What it provides |
 |---|---|
-| `SceneLightFieldService` | Plain-C# DI service (`IStartable`/`ITickable`/`IDisposable`), registered in `GameScopeRegistration` next to `DisturbanceFieldService` (Singleton, `AsImplementedInterfaces().AsSelf()`). Pushes the ambient globals (`_SceneLightDir`/`_SceneLightColor`/`_SceneLightIntensity`) from `ISceneLightSettings` every tick, then builds the field via `SceneLightFieldResources` **only on ticks where a registered light changed**. Holds the registry of on lights, subscribing to each one's reactive properties to know when to re-render. Pushes the bounds/texel/palette globals + on-flag; releases the RTs in `Dispose`. API: `RegisterLight(Light) → IDisposable`, `ClearLights()` |
+| `SceneLightFieldService` | Plain-C# DI service (`IStartable`/`ITickable`/`IDisposable`), registered in `GameScopeRegistration` next to `DisturbanceFieldService` (Singleton, `AsImplementedInterfaces().AsSelf()`). Pushes the ambient globals (`_SceneLightDir`/`_SceneLightColor`/`_SceneLightIntensity`) from `ISceneLightSettings` once at startup (re-pushed every tick only in the editor, for live tuning), then builds the field via `SceneLightFieldResources` **only on ticks where a registered light changed AND a frame-interval cadence cap has elapsed** (`FieldFrameInterval`, see Cadence below). Holds the registry of on lights, subscribing to each one's reactive properties to know when to re-render. Pushes the bounds/texel/palette globals + on-flag; releases the RTs in `Dispose`. API: `RegisterLight(Light) → IDisposable`, `ClearLights()` |
 | `SceneLightFieldResources` | The field's GPU resources — **two** ping-pong RTs (`ARGBHalf` where supported, else `ARGB32`) and the fill / accumulate / gradient materials — kept separate from the service's logic, mirroring `DisturbanceFieldResources`. Owns the `_SceneLightTex` global push, `BlitAndSwap`, the `Fill(magnitude, direction)` and `Gradient()` passes, and exposes `AccumulateMaterial` for the service to upload the light arrays onto |
-| `ISceneLightFieldSettings` / `SceneLightFieldSettings` | Read-only config interface + `ScriptableObject` (in `Configuration/Effects`, mirroring `IDisturbanceFieldSettings`) exposing the field's tuning knobs: `TexelsPerUnit` (RT density), `MaxLights` (per-batch cap, ≤ the accumulate shader's 32), `AccumulationCeiling` (overlap soft-clamp), `DirectionResponse` (how strongly a light's local brightness bends the field direction toward it). Light *falloff shape* is per-light (`Light.FalloffPower`), not here. Injected into the service; registered directly in `GameLifetimeScope` like the other settings SOs — so **create the asset** via `Create ▸ Configuration ▸ Scene Light Field Settings` and assign it on the `GameLifetimeScope` (an unassigned slot NREs on start, same as its siblings). |
+| `ISceneLightFieldSettings` / `SceneLightFieldSettings` | Read-only config interface + `ScriptableObject` (in `Configuration/Effects`, mirroring `IDisturbanceFieldSettings`) exposing the field's tuning knobs: `TexelsPerUnit` (RT density), `FieldFrameInterval` (re-render cadence cap, see Cadence below), `MaxLights` (per-batch cap, ≤ the accumulate shader's 32), `AccumulationCeiling` (overlap soft-clamp), `DirectionResponse` (how strongly a light's local brightness bends the field direction toward it). Light *falloff shape* is per-light (`Light.FalloffPower`), not here. Injected into the service; registered directly in `GameLifetimeScope` like the other settings SOs — so **create the asset** via `Create ▸ Configuration ▸ Scene Light Field Settings` and assign it on the `GameLifetimeScope` (an unassigned slot NREs on start, same as its siblings). |
 | `Light` | A small reactive model a caller owns: `Position` / `EndPosition` / `Radius` / `EndRadius` (perpendicular half-width at each end) / `Intensity` / `FalloffPower` / `PaletteIndex` as `ReactiveProperty`s, with `const` defaults. `EndPosition == Position` is a point/disc light; set them apart (or use `Light.Segment(start, end, …)`) for a **capsule/area** light — a beam decaying from its axis to the sides (the laser cross is two of these). Set `EndRadius` apart from `Radius` (or pass `endRadius`) to **taper** the beam — the half-width lerps along the axis, and since the gradient pass derives GB from R, the taper shapes the local direction field too. On/off is `RegisterLight`/dispose; brightness is `Intensity`; no built-in decay. **Not** a config ScriptableObject. (Name collides with `UnityEngine.Light` — alias when both are in scope.) |
 
 ## Channel encoding (single RT)
@@ -34,7 +35,8 @@ is off — so the field is a strictly additive seam, never a replacement.
 
 A render rebuilds the whole field from scratch (there's no in-texture persistence like the disturbance
 field's diffusion) via a three-pass ping-pong over the two RTs. It runs only when the field is dirty
-(a registered light or the directional owner changed) — see the cadence note below:
+(a registered light or the directional owner changed) **and** the frame-interval cadence cap has
+elapsed — see the cadence note below:
 
 1. **Fill** (`Hidden/BalloonParty/SceneLightFieldFill`) — clears to the constant rest state: R = 0
    (no local light), GB = 0.5 (neutral), A = 0. This is the read buffer the chain builds on.
@@ -98,6 +100,16 @@ registered/cleared, or the directional owner's live-tunable direction/intensity 
 are still correct. This is why lights are reactive: the service subscribes to each one and flips a dirty
 flag, rather than polling or re-rendering blindly. The on-flag is set once, after the first render, so a
 missing owner leaves it at 0.
+
+Dirty alone isn't the whole gate: a light that moves every frame (a tracked projectile) would otherwise
+dirty the field every tick, running the full pipeline at the display's refresh rate — 2× the GPU cost on
+a 120 Hz panel versus 60 Hz, for identical visuals. `FieldFrameInterval` (on `ISceneLightFieldSettings`)
+is authored as "every N frames at 60 fps" and reinterpreted as seconds, accumulated with
+`Time.unscaledDeltaTime` (mirroring `SceneCaptureService`'s capture-cadence knob) — so the render cadence
+is capped independent of display refresh. Unscaled time keeps the cadence advancing during a freeze
+(e.g. the level-up cinematic), same as the dirty-driven lights animating through it. The very first
+render (before the on-flag is set) always fires immediately, regardless of the cap, so consumers never
+sample an empty RT.
 
 ## Device builds: the field shaders are serialized
 
