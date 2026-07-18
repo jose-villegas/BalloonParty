@@ -24,6 +24,7 @@ MonoBehaviour:
   _accumulateShader: {fileID: 4800000, guid: 513b4faad2f24e98a1608740054ff01e, type: 3}
   _gradientShader: {fileID: 4800000, guid: 84e7249f74d8460b8b7e1a87871a2b98, type: 3}
   _smearDistance: 0.65
+  _smearDownscale: 2
   _tapDecay: 0.65
   _tapStart: 1.215
   _mipSpread: 1.25

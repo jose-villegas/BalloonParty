@@ -59,6 +59,12 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("How far an object's shadow/bleed reaches, in world units.")]
         [SerializeField] private float _smearDistance = 1.5f;
 
+        [Tooltip("Divisor applied to the capture resolution for the smear/work targets. 1 = capture " +
+                 "resolution (the old behavior, for A/B); 2 quarters the fragment count. The light buffer " +
+                 "is low-frequency, so it survives well below capture resolution.")]
+        [Range(1, 4)]
+        [SerializeField] private int _smearDownscale = 2;
+
         [Tooltip("Per-tap weight decay along the march — lower dies off faster.")]
         [Range(0.1f, 1f)]
         [SerializeField] private float _tapDecay = 0.8f;
@@ -114,6 +120,7 @@ namespace BalloonParty.Configuration.Effects
         public Shader SmearShader => _smearShader;
         public Shader OverlayShader => _overlayShader;
         public float SmearDistance => _smearDistance;
+        public int SmearDownscale => _smearDownscale;
         public float TapDecay => _tapDecay;
         public float TapStart => _tapStart;
         public float MipSpread => _mipSpread;

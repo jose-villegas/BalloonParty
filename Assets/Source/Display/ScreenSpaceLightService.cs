@@ -198,14 +198,22 @@ namespace BalloonParty.Display
 
         private bool EnsureTargets(RenderTexture source)
         {
-            if (_smearTarget == null || _smearTarget.width != source.width
-                                     || _smearTarget.height != source.height)
+            // The light buffer is low-frequency (blurred, composited multiplicatively), so it
+            // tolerates running well below capture resolution — at the default downscale of 2
+            // this quarters the fragment count both passes push. Comparing against the computed
+            // size (not the source size) means a live SO tweak of the knob also forces a rebuild
+            // here, so it's flippable for A/B in play mode without touching the capture itself.
+            var width = Mathf.Max(1, source.width / Mathf.Max(1, _settings.SmearDownscale));
+            var height = Mathf.Max(1, source.height / Mathf.Max(1, _settings.SmearDownscale));
+
+            if (_smearTarget == null || _smearTarget.width != width
+                                     || _smearTarget.height != height)
             {
                 ReleaseTarget(ref _smearTarget);
                 ReleaseTarget(ref _workTarget);
 
-                _smearTarget = CreateTarget(source, "ScreenSpaceLightSmear");
-                _workTarget = CreateTarget(source, "ScreenSpaceLightWork");
+                _smearTarget = CreateTarget(width, height, "ScreenSpaceLightSmear");
+                _workTarget = CreateTarget(width, height, "ScreenSpaceLightWork");
                 return true;
             }
 
@@ -265,9 +273,9 @@ namespace BalloonParty.Display
             }
         }
 
-        private static RenderTexture CreateTarget(RenderTexture source, string name)
+        private static RenderTexture CreateTarget(int width, int height, string name)
         {
-            return new RenderTexture(source.width, source.height, 0, RenderTextureFormat.ARGB32)
+            return new RenderTexture(width, height, 0, RenderTextureFormat.ARGB32)
             {
                 name = name,
                 filterMode = FilterMode.Bilinear

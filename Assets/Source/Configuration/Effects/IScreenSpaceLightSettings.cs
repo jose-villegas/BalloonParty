@@ -13,6 +13,12 @@ namespace BalloonParty.Configuration.Effects
         /// <summary>How far an object's shadow/bleed reaches, in world units.</summary>
         float SmearDistance { get; }
 
+        /// <summary>Divisor applied to the capture resolution for the smear/work targets. The light
+        /// buffer is low-frequency (blurred, composited multiplicatively), so it tolerates running well
+        /// below capture resolution — pass 1's box soften doubles as the upsample filter and the overlay
+        /// samples it bilinearly.</summary>
+        int SmearDownscale { get; }
+
         /// <summary>Per-tap weight decay along the march — lower dies off faster.</summary>
         float TapDecay { get; }
 

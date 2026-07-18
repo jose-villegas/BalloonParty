@@ -46,12 +46,12 @@ digraph ScreenSpaceLight {
     }
 
     subgraph cluster_smear {
-        label="ScreenSpaceLightSmear.shader — blit chain";
+        label="ScreenSpaceLightSmear.shader — blit chain, runs at SmearDownscale";
         style=filled;
         fillcolor="#f5f5dc";
 
-        Pass0 [label="Pass 0 — RSM-style multi-direction gather\nSHADOW: 8-tap toward-light march\n(single direction, _ShadowMipSpread penumbra)\nBOUNCE: 4 directions × 8 taps\n(0°/90°/180°/270° around field dir)\n_SecondaryWeight modulates non-primary"];
-        Pass1 [label="Pass 1 — 3×3 box soften"];
+        Pass0 [label="Pass 0 — RSM-style multi-direction gather (downscaled res)\nSHADOW: 8-tap toward-light march\n(single direction, _ShadowMipSpread penumbra)\nbranched off when ownCoverage >= 0.999\nBOUNCE: 4 directions × 8 taps\n(0°/90°/180°/270° around field dir)\n_SecondaryWeight modulates non-primary"];
+        Pass1 [label="Pass 1 — 3×3 box soften (downscaled res, doubles as upsample)"];
 
         Pass0 -> Pass1;
     }
@@ -107,11 +107,14 @@ near taps read mip 0 (sharp), far taps read higher mips (averaged over wider are
 `RGB` is the composited scene (sprites over the sky clear), `A` is a sprite-coverage mask. This
 capture is shared — the Unbreakable chrome reflection is another consumer.
 
-**Smear** (`ScreenSpaceLightSmear`, 2 blit passes at capture resolution):
+**Smear** (`ScreenSpaceLightSmear`, 2 blit passes, run at `SmearDownscale` below capture
+resolution — the buffer is low-frequency, so it tolerates the drop; pass 1's soften doubles
+as the upsample filter and the overlay samples it bilinearly):
 - **Pass 0** — **RSM-style 4-direction VPL gather**. Shadow and bounce are decoupled:
   - *Shadow* (single direction): 8-tap march toward the light with `_ShadowMipSpread`
     penumbra — sharp at contact, soft at distance. Multiplied by `(1 − ownCoverage)` so
-    casters don't self-shadow.
+    casters don't self-shadow. The march is skipped (branched) when `ownCoverage >= 0.999`,
+    since fragments deep inside a sprite would have the result zeroed anyway.
   - *Bounce* (4 directions): each direction is 8 taps with `_MipSpread` cone widening.
     The primary direction (down-light) has weight 1; three secondary directions (±90°, 180°)
     are scaled by `_SecondaryWeight` (0–1). Setting it to 0 collapses to the old
@@ -178,7 +181,9 @@ clusters.
 
 ## Cost
 
-Three blits at capture resolution (~150×70 px) per captured frame + one fullscreen
-alpha-blended quad with a single low-res fetch. Pass 0 now does 4×8 + 8 = 40 taps per
-pixel (vs. the old 16), but at 135×67 (~9K texels) this is still ~360K texture samples
-— trivial on mobile at the time-paced cadence.
+Two blits at `SmearDownscale` below capture resolution per *unique* capture (the chain
+skips entirely between `ContentVersion` advances) + one fullscreen alpha-blended quad
+with a single low-res fetch every frame. Pass 0 does up to 4×8 + 8 = 40 taps per pixel,
+minus the shadow march on sprite-covered fragments; at the default downscale of 2 the
+fragment count is a quarter of the capture's — trivial on mobile at the time-paced
+cadence.

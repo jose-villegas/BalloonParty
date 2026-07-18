@@ -8,6 +8,8 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
     // are decoupled:
     //   SHADOW — single direction toward the light (8 taps, _ShadowMipSpread penumbra).
     //     Directional by definition: an occluder blocks light between source and receiver.
+    //     Skipped (branched) on fragments inside a sprite's own coverage, since the result
+    //     is zeroed by (1 - ownCoverage) there anyway.
     //   BOUNCE — 4 directions at 90° spacing around the field's local toward-light vector
     //     (8 taps each, _MipSpread cone widening). Each direction gathers indirect color
     //     from lit surfaces at that angle — omnidirectional color bleed. The primary
@@ -63,21 +65,32 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                 float maxMip = log2(max(_MainTex_TexelSize.z, _MainTex_TexelSize.w));
 
                 // --- Shadow: single direction (toward the light) ---
-                float shadowAcc = 0;
-                float shadowWeightSum = 0;
+                // Skipped entirely inside sprites (ownCoverage ~= 1): the result is multiplied
+                // by (1 - ownCoverage) below anyway, so the 8 taps would just compute a value
+                // that gets zeroed. The branch is spatially coherent (whole sprite interiors on
+                // a busy screen), so it's cheap on mobile. The 0.999 threshold bounds the skipped
+                // contribution to <= 0.001 — below what the ARGB32 buffer resolves.
+                float shadow = 0;
 
-                [unroll]
-                for (int s = 0; s < TAP_COUNT; s++)
+                [branch]
+                if (ownCoverage < 0.999)
                 {
-                    float offset = _TapStart + s;
-                    float w = pow(_TapDecay, s);
-                    float shadowMip = min(_ShadowMipSpread * log2(1.0 + (float)s), maxMip);
-                    float4 occluder = tex2Dlod(_MainTex, float4(IN.uv - stepBase * offset, 0, shadowMip));
-                    shadowAcc += occluder.a * w;
-                    shadowWeightSum += w;
-                }
+                    float shadowAcc = 0;
+                    float shadowWeightSum = 0;
 
-                float shadow = (shadowAcc / shadowWeightSum) * (1.0 - ownCoverage);
+                    [unroll]
+                    for (int s = 0; s < TAP_COUNT; s++)
+                    {
+                        float offset = _TapStart + s;
+                        float w = pow(_TapDecay, s);
+                        float shadowMip = min(_ShadowMipSpread * log2(1.0 + (float)s), maxMip);
+                        float4 occluder = tex2Dlod(_MainTex, float4(IN.uv - stepBase * offset, 0, shadowMip));
+                        shadowAcc += occluder.a * w;
+                        shadowWeightSum += w;
+                    }
+
+                    shadow = (shadowAcc / shadowWeightSum) * (1.0 - ownCoverage);
+                }
 
                 // --- Bounce: 4 directions (primary + 3 secondary at 90° spacing) ---
                 float2 dirs[4] = {
