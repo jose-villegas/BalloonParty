@@ -8,11 +8,12 @@ using VContainer;
 namespace BalloonParty.Game.Score.Behaviours
 {
     /// <summary>
-    ///     Carrier-takes-all confluence: one carrier trail carries the whole group value to the bar while n
-    ///     vertex trails draw a star polygon {n/k} around the pop (nested per the tier), then flash out as the
-    ///     carrier launches. The carrier is the principal and reports exactly once — one "+N" arrival, so a
-    ///     5x-on-a-cluster award is one arrival instead of hundreds. The <see cref="ShapeFormationTicker"/>
-    ///     owns the per-frame motion; this handler only picks the tier, anchors the formation, and launches it.
+    ///     Anchor-takes-all confluence: n vertex trails draw a star polygon {n/k} around the pop (nested per
+    ///     the tier) in a local frame centred on a bare pooled anchor Transform, then collapse into one bright
+    ///     comet that flies to the bar. The anchor is the principal and reports exactly once — one "+N"
+    ///     arrival, so a 5x-on-a-cluster award is one arrival instead of hundreds. The
+    ///     <see cref="ShapeFormationTicker"/> owns the per-frame motion; this handler only picks the tier,
+    ///     anchors the formation, and launches it.
     /// </summary>
     internal sealed class BigScoreTrailBehaviour : IScoreTrailBehaviour
     {
@@ -22,7 +23,7 @@ namespace BalloonParty.Game.Score.Behaviours
 
         // Defensive: only used if the tier table is empty (the wired asset always has rows).
         private static readonly BigScoreTierConfig FallbackTier =
-            new(0, 3, 1, 1, 0.381966f, 0f, 1.2f, 0.25f, 0.35f, 0.5f, 0.8f, 180f, 0.6f);
+            new(0, 3, 1, 1, 0.381966f, 0f, 1.2f, 0.25f, 0.35f, 0.5f, 0.8f, 90f, 0.6f);
 
         private readonly ShapeFormationTicker _ticker;
         private readonly IScoreTrailBehaviourConfiguration _config;
@@ -34,7 +35,7 @@ namespace BalloonParty.Game.Score.Behaviours
             _config = config;
         }
 
-        // The carrier spawns immediately at the formation centre, so it can nominate LastScore (unlike the
+        // The anchor registers immediately at the formation centre, so it can nominate LastScore (unlike the
         // staggered default fan-out): the cinematic's bounded registry wait is timeout-safe from frame one.
         public TrailId GetPrincipalId(in ScorePointsGroupMessage msg)
         {
@@ -70,7 +71,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 context.Config.ScorePointTraceDuration,
                 context.CancellationToken);
 
-            // Synchronous: registers the carrier in Flights before this returns (the cinematic depends on it).
+            // Synchronous: registers the anchor in Flights before this returns (the cinematic depends on it).
             _ticker.Launch(in request);
         }
 

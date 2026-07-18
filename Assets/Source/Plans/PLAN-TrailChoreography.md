@@ -210,6 +210,11 @@ One accepted micro-delta from today, invisible in play:
 
 ### `BigScore` — the first real implementer (confluence)
 
+> *Historical — the carrier/tributary/merge-flash model below is superseded by the anchored
+> simulation-space design in the next subsection (no carrier trail, no flash; a bare anchor
+> Transform is the center and the collapsed cluster itself flies to the bar). Kept for the
+> worst-case sizing and the value/visual-decoupling rationale.*
+
 One **carrier** trail carries the whole group value to the bar; up to `VisualCap`
 (~16–24) **tributaries** provide the spectacle: they bloom outward on the existing burst
 path, then converge onto the moving carrier via the existing `FlyingTrail.SetupFollow`
@@ -225,29 +230,57 @@ score-milestone animation ideas.
 Worst case rerun (5× multiplier × 50-point unbreakable): today 250 trails / 500 tweens /
 250 arrivals / 5 s tail → **1 carrier + ≤24 tributaries / ~50 tweens / 1 arrival / ~1.2 s**.
 
-### `BigScore` shape choreography — star-polygon formations (José, 2026-07-18)
+### `BigScore` shape choreography — anchored simulation space (José, 2026-07-18)
 
-The tributary spectacle is a drawn **star polygon {n/k}**, using the trails' ribbons as
-the pen (reference: the classic nested-pentagram construction — golden-ratio
-self-similarity). Tiers map score → vertex count: triangle {3/1}, square {4/1},
-pentagram **{5/2}** ("next+1" vertex skipping), and richer stars above ({6/1}, {7/2}…).
+The spectacle is a drawn **star polygon {n/k}**, using the trails' ribbons as the pen
+(reference: the classic nested-pentagram construction — golden-ratio self-similarity).
+Tiers map score → vertex count: triangle {3/1}, square {4/1}, pentagram **{5/2}**
+("next+1" vertex skipping), and richer stars above ({6/1}, {7/2}…).
+
+**There is no central carrier trail.** The shape-system space has a *center* — the
+spawn-axis origin, carried by a bare pooled **anchor Transform**, not a trail — and the
+simulation is pure math: n vertices in a local frame that a translate/rotate/scale is
+applied to. We move/rotate/scale that frame; the vertex trails only read the resulting
+world positions and move between them. The anchor's transform is what the registry and
+cinematic track/pause/complete; nothing visible rides it.
+
+World vertex: `C(t) + R(Ω(t)) · (r(t) · dir(φᵢ + repRotation))` — the path rotation Ω
+folds into the angle (`R(Ω)·dir(φ) = dir(φ + Ω)`).
 
 Three phases per repetition, all closed-form:
 1. **Deploy** — n trails fly from the pop origin to the vertices of a regular n-gon:
-   `vᵢ = C + r·(cos φᵢ, sin φᵢ)`, `φᵢ = θ₀ + 2πi/n`.
+   `vᵢ = C + r·dir(φᵢ)`, `φᵢ = θ₀ + repRotation + Ω + 2πi/n`.
 2. **Draw** — each trail traverses ONE chord simultaneously: `vᵢ → v₍ᵢ₊ₖ₎`. For
    gcd(n,k)=1 the n concurrent chords complete the whole star in a single sweep — no
    sequential pen-tracing.
-3. **Collapse** — `r(t) → 0` (the triangle variant adds in-plane rotation:
-   `φᵢ + ωt`); every trail spirals/pulls inward, ribbons drawing the collapse, meeting
-   at C.
+3. **Collapse** — a pure radial `r(t) → 0` *inside the rotating frame*; every trail pulls
+   inward, ribbons drawing the collapse, meeting at C.
+
+**Ω (path rotation)** is 0 until the FIRST Draw completes, then advances at the tier's
+`RotationSpeed` (formation clock — scaled `dt × Flight.Speed`) for the rest of the
+formation, INCLUDING the final flight. It is the one rotation concept: the collapse has
+no separate spin — it is the radial pull inside the frame Ω rotates.
 
 **Nesting**: after a collapse, redeploy to `r·s` with `θ₀ += nestRotation` and repeat,
 `m` times. Defaults follow the pentagram's own geometry: `s = 1/φ² ≈ 0.382`,
 `nestRotation = π/n` — successive stars land exactly where the natural nesting puts
 them. Per-repetition phase durations scale with radius (smaller stars draw faster — an
-accelerating crescendo into the final collapse), then the merge flash fires and the
-carrier launches with the +N.
+accelerating crescendo into the final collapse).
+
+**Final flight (no flash, no carrier)**: after the last collapse the collapsed cluster
+(all n vertices at `r≈0`, pen ON — they read as one bright comet) flies *with the center*
+to the bar over `CarrierFlightDuration`, Ω still advancing (the point cluster spinning is
+invisible). The endpoint is sampled **fresh** at flight start (`Target.RandomPosition()`,
+z zeroed onto the formation plane); the launch-time drift sample is used ONLY as the drift
+direction while drawing — reusing it here is what made the comet hit *below* the moving UI
+bar. The final leg is smoothstepped so the handoff from drift is continuous. On arrival:
+report `(LastScore, Points)` at the fresh target, release the vertices + anchor, unregister.
+
+**Rigid in formation space**: ribbons record WORLD positions, so each tick — if the center
+moved or Ω changed — every live vertex ribbon is re-framed by the same delta transform,
+`p' = C_new + R(ΔΩ)·(p − C_old)` (`FlyingTrail.TransformRibbon`; pure translation is the
+`ΔΩ == 0` fast path). This carries the drawn ink through the same translate+rotate the live
+frame moved through, keeping the whole figure rigid while it glides and spins.
 
 Implementation decisions:
 - **Ticker, not tweens**: motion is analytic, so a formation ticker (`ILateTickable`,
@@ -255,48 +288,45 @@ Implementation decisions:
   allocation, exact spirals; `DOPath` would approximate what we can compute.
 - **Ribbon persistence is the aesthetic**: `TrailRenderer.time` must cover the whole
   repetition sequence so outer stars remain visible while inner ones draw (the nested
-  look). Per-tier knob; restored to the flight tuning before the carrier leg. `Clear()`
-  tributary ribbons on merge. `minVertexDistance` is the smoothness/vertex-budget knob.
-- **Pause contract**: the cinematic can freeze the principal at ANY moment, so the
-  formation's pausable state is `(repetition, phase, t)` — pausing stops the clock. The
-  principal is the formation's tracked center pre-merge, which BECOMES the carrier —
-  the camera has something meaningful to follow through every phase.
-- **Anchor**: centered on the pop origin, `r` scaled by tier and clamped inside
+  look). Per-tier knob, restored on `OnDespawned`. `minVertexDistance` is the
+  smoothness/vertex-budget knob.
+- **Anchor pool**: `ShapeFormationTicker` owns a small `Stack<Transform>` of bare
+  `ShapeFormationAnchor` GameObjects, activated per formation and deactivated on release,
+  never destroyed — zero per-frame allocation.
+- **Anchor placement**: centered on the pop origin, `r` scaled by tier and clamped inside
   `WallLimits` so a corner pop doesn't draw off-screen.
 
 Per-tier config row: `n`, `k`, `repeats m`, `nestScale s` (default 1/φ²),
 `nestRotation` (default π/n), `baseRadius`, per-phase durations, `ribbonTime`,
-`rotationSpeed ω` (0 = pure scale collapse). The triangle is just `{3/1}, m = 1` — one
-implementation covers every tier.
+`rotationSpeed ω` (path spin once formed — nonzero for every tier), `driftToTarget`. The
+triangle is just `{3/1}, m = 1` — one implementation covers every tier.
 
-> **Transport-bridge contract (landed 2026-07-18).** The formation's pause/snap/slow-mo interface is the
-> carrier's `TrailFlight` handle, polled by `ShapeFormationTicker` every tick — this is *the* seam between the
-> analytic formation and the cinematic/loss/reset machinery:
-> - `Phase == Paused` → the cinematic froze the principal (it `Pause()`d the carrier flight in
->   `BeginCinematicWithTrail`); the ticker stops advancing the clock **and stops writing the carrier
+> **Transport-bridge contract (reworked 2026-07-18).** The formation's pause/snap/slow-mo interface is the
+> **anchor's** `TrailFlight` handle, polled by `ShapeFormationTicker` every tick — this is *the* seam between
+> the analytic formation and the cinematic/loss/reset machinery:
+> - `Phase == Paused` → the cinematic froze the principal (it `Pause()`d the anchor flight in
+>   `BeginCinematicWithTrail`); the ticker stops advancing the clock **and stops writing the anchor
 >   transform**, so it never fights the cinematic's `AdvanceTrackedTrail` writes. Vertices hold position.
 > - `Phase == Idle` → the pan-in completed the flight, or a `CompleteAll` (level-up/loss) did; the ticker
->   **snaps** in that tick: reports the whole `(LastScore, Points)` at the carrier's current position, then
->   fade-releases the live vertices (unscaled scale-out) and releases the carrier. A `Reported` guard + the
->   reporter's backstop prevent a double-fire against the carrier's own tween arrival.
-> - `flight.Speed` multiplies the formation `dt` (slow-mo). The formation clock is scaled time; the flash/snap
->   fades are unscaled (freeze-safe). `DisableMoveTween` on the pre-launch carrier is a no-op (no tween yet) —
->   verified.
+>   **snaps** in that tick: reports the whole `(LastScore, Points)` at the anchor's current position, then
+>   fade-releases the live vertices (unscaled scale-out) and releases the anchor. A `Reported` guard + the
+>   reporter's backstop prevent a double-fire against the final-flight arrival.
+> - `flight.Speed` multiplies the formation `dt` (slow-mo). The formation clock is scaled time; the snap fade
+>   is unscaled (freeze-safe). The anchor has no `FlyingTrail`, so the cinematic's `DisableMoveTween` call is
+>   null-conditional — only tween-driven `DefaultScore` principals need it.
 >
-> **Deviations from the prose above, flagged:**
-> - Tributaries are **full `FlyingTrail` vertex trails with their `TrailRenderer` ribbon as the pen**, not
->   "plain sprite motes (no TrailRenderer)" as the earlier confluence paragraph said — the shape-choreography
->   design (this section) supersedes it: the ribbon *is* how the star is drawn, so a per-tier `ribbonTime`
->   (restored on `OnDespawned`) is essential.
-> - There is no value-accumulating `VisualCap`/tier-glow escalation. A **tier is the star geometry** picked by
->   group total (`BigScoreTiers`, highest `MinPoints` cleared); vertex count = the tier's `n`, capped at a hard
+> **Design notes:**
+> - Vertices are **full `FlyingTrail` trails with their `TrailRenderer` ribbon as the pen** — the ribbon *is*
+>   how the star is drawn, so a per-tier `ribbonTime` (restored on `OnDespawned`) is essential.
+> - There is no `VisualCap`/tier-glow escalation. A **tier is the star geometry** picked by group total
+>   (`BigScoreTiers`, highest `MinPoints` cleared); vertex count = the tier's `n`, capped at a hard
 >   `MaxVertexCount = 8`.
 > - The snap on `CompleteAll` reports **in the ticker tick that observes `Idle`**, not synchronously inside
->   `CompleteAll` (Q4's "SYNCHRONOUSLY"): the carrier has no tween during the formation, so `CompleteAll`'s
->   `Complete()` cannot fire a report itself. The one-frame settle is invisible — the level-up was already
->   decided by `WillLevelUp()` (projected), and the watermark confirm is order-safe bookkeeping.
-> - `ShapeFormationTicker` owns **both** pool acquire and release for the carrier and vertices (single owner),
->   registering/unregistering the carrier flight itself; `BigScoreTrailBehaviour` only picks the tier, anchors
+>   `CompleteAll`: the anchor has no tween during the formation, so `CompleteAll`'s `Complete()` cannot fire a
+>   report itself. The one-frame settle is invisible — the level-up was already decided by `WillLevelUp()`
+>   (projected), and the watermark confirm is order-safe bookkeeping.
+> - `ShapeFormationTicker` owns **both** pool acquire and release for the anchor and vertices (single owner),
+>   registering/unregistering the anchor flight itself; `BigScoreTrailBehaviour` only picks the tier, anchors
 >   the centre, and calls `Launch`. Keeps the "consumer that `Get()`s returns" rule unambiguous.
 
 ### Degenerate configs worth knowing exist
@@ -339,11 +369,13 @@ implementation covers every tier.
    relies on in-flight trails continuing. Config binding is a serialized field on `GameLifetimeScope` (scene
    inspector), so the resolver degrades to `DefaultScore` (one-time dev warning) when the asset is unwired.
    Second parity gate.
-3. **`BigScore`** ✅ *(landed 2026-07-18 — awaiting in-editor playtest)*: `BigScoreTrailBehaviour` +
-   `ShapeFormationTicker` (star-polygon formations, carrier-takes-all), `BigScoreTierConfig` table on the
-   config asset (tiers `{3/1}@40`, `{4/1}@80`, `{5/2}×2@150`), `TrailSpawner.Acquire/Release`, `FlyingTrail`
-   ribbon-time set/restore. Threshold `MinPoints 40`. See the transport-bridge contract note above. Playtest
-   for feel; iterate knobs in-editor.
+3. **`BigScore`** ✅ *(landed 2026-07-18, reworked to anchored simulation-space — awaiting in-editor
+   playtest)*: `BigScoreTrailBehaviour` + `ShapeFormationTicker` (star-polygon formations around a pooled
+   anchor Transform, the collapsed cluster flies to the bar — no carrier trail, no merge flash),
+   `BigScoreTierConfig` table on the config asset (tiers `{3/1}@40`, `{4/1}@80`, `{5/2}×2@150`, each with a
+   nonzero path `rotationSpeed`), `TrailSpawner.Acquire/Release`, `FlyingTrail` ribbon-time set/restore +
+   `TransformRibbon`. Threshold `MinPoints 40`. See the transport-bridge contract note above. Playtest for
+   feel; iterate knobs in-editor.
 4. Retune `ScoreTrailPrewarmPerColor` down (128 → ~32) once BigScore bounds the worst
    case; revisit the 0.02 s stagger for the default path.
 

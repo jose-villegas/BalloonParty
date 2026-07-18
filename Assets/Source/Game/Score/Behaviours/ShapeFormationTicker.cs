@@ -65,16 +65,26 @@ namespace BalloonParty.Game.Score.Behaviours
     }
 
     /// <summary>
-    ///     The analytic driver behind <see cref="BigScoreTrailBehaviour"/>: each live formation flies n vertex
-    ///     trails through the deploy → draw → collapse phases of a star polygon {n/k} (nested m times), then
-    ///     flashes them out and launches the carrier to the bar. All positions are closed-form and evaluated
-    ///     once per <see cref="ILateTickable.LateTick"/>; state objects are pooled, so a running formation
-    ///     never allocates. Mirrors <c>BalloonMotionTicker</c>'s pooled-state + swap-remove idioms.
+    ///     The analytic driver behind <see cref="BigScoreTrailBehaviour"/>. Each formation is pure math: n
+    ///     vertices in a local frame that we apply a translate/rotate/scale to. The frame has a CENTER — the
+    ///     spawn-axis origin, not a trail — carried by a bare pooled anchor Transform. The anchor's transform
+    ///     is registered as the principal flight (the registry/cinematic contract needs a Transform to
+    ///     track/pause/complete); nothing visible rides it. The n vertex trails read only the world positions
+    ///     of the vertices and move between them, drawing the star polygon {n/k} (nested m times) with their
+    ///     ribbons. All positions are closed-form, evaluated once per <see cref="ILateTickable.LateTick"/>;
+    ///     state objects and anchors are pooled, so a running formation never allocates. Mirrors
+    ///     <c>BalloonMotionTicker</c>'s pooled-state + swap-remove idioms.
     ///
-    ///     Transport bridge — the carrier's <see cref="TrailFlight"/> handle is the formation's pause/snap/
+    ///     World vertex: <c>C(t) + R(Ω(t)) · (r(t) · dir(φᵢ + repRotation))</c> — the path rotation Ω folds
+    ///     into the angle. Ω is 0 until the first Draw completes, then advances at the tier's RotationSpeed
+    ///     (formation clock) for the rest of the formation, including the final flight; the collapse is a pure
+    ///     radial r→0 inside that rotating frame.
+    ///
+    ///     Transport bridge — the anchor's <see cref="TrailFlight"/> handle is the formation's pause/snap/
     ///     slow-mo interface, polled every tick:
     ///     <list type="bullet">
-    ///       <item>Paused — the level-up cinematic froze the principal; the formation freezes in place.</item>
+    ///       <item>Paused — the level-up cinematic froze the principal; the formation freezes in place and
+    ///             the anchor is left for the cinematic to drag.</item>
     ///       <item>Idle — the cinematic pan-in or a <c>CompleteAll</c> (level-up/loss) drove the principal
     ///             home; snap: report the whole value now, fade the live vertices out (unscaled), release.</item>
     ///       <item>Speed — a slow-mo factor scaling the formation clock (matches the trail tweens).</item>
@@ -83,13 +93,14 @@ namespace BalloonParty.Game.Score.Behaviours
     internal sealed class ShapeFormationTicker : ILateTickable
     {
         private const int MaxVertexCount = 8;
-        private const float FlashDuration = 0.1f;
+        private const float SnapFadeDuration = 0.1f;
         private const float MinPhaseDuration = 0.0001f;
         private const float TwoPi = Mathf.PI * 2f;
         private const float InitialTheta = Mathf.PI * 0.5f;
 
         private readonly List<FormationState> _states = new(8);
         private readonly Stack<FormationState> _pool = new(8);
+        private readonly Stack<Transform> _anchorPool = new(8);
 
         public void LateTick()
         {
@@ -120,43 +131,42 @@ namespace BalloonParty.Game.Score.Behaviours
                     continue;
                 }
 
-                var carrierPhase = state.Flight.Phase;
+                var flightPhase = state.Flight.Phase;
 
                 // Cinematic froze the principal — freeze the whole formation and let the cinematic own the
-                // carrier transform (vertex trails stay put where they were last written).
-                if (carrierPhase == FlightPhase.Paused)
+                // anchor transform (vertex trails stay put where they were last written).
+                if (flightPhase == FlightPhase.Paused)
                 {
                     continue;
                 }
 
-                // Cinematic pan-in / CompleteAll drove the principal to Idle, or the carrier's own launch tween
-                // landed. Either way the value settles now.
-                if (carrierPhase == FlightPhase.Idle || state.CarrierLanded)
+                // Cinematic pan-in / CompleteAll drove the principal to Idle — the value settles now.
+                if (flightPhase == FlightPhase.Idle)
                 {
                     Settle(state, i);
                     continue;
                 }
 
-                AdvanceFormation(state, dt * state.Flight.Speed, unscaledDt);
+                if (AdvanceFormation(state, dt * state.Flight.Speed))
+                {
+                    ReleaseStateAt(i);
+                }
             }
         }
 
-        // Synchronous so the carrier registers before the caller's Begin returns (the cinematic's registry wait
-        // depends on it). Acquires the carrier + n vertex trails and seeds a pooled formation state.
+        // Synchronous so the anchor registers before the caller's Begin returns (the cinematic's registry wait
+        // depends on it). Acquires the anchor + n vertex trails and seeds a pooled formation state.
         internal void Launch(in BigScoreFormationRequest request)
         {
             var state = _pool.Count > 0 ? _pool.Pop() : new FormationState();
             state.Initialize(in request);
 
-            var carrier = request.Spawner.Acquire(request.Color);
-            carrier.transform.position = request.Center;
-            // Clear AFTER the teleport so the jump from the pooled position doesn't draw a streak.
-            carrier.ClearRibbon();
-            state.Carrier = carrier;
-            state.Flight = request.Flights.Register(request.CarrierId, carrier.transform, request.Center);
+            var anchor = AcquireAnchor(request.Center);
+            state.Anchor = anchor;
+            state.Flight = request.Flights.Register(request.CarrierId, anchor, request.Center);
 
-            // Sampled ONCE: the formation drifts toward this exact point and the carrier finishes the
-            // trip to it, so the whole journey reads as one continuous flight to the bar.
+            // Sampled ONCE at launch: the drawing phases drift toward this point; the final flight re-samples
+            // a fresh endpoint (this early sample can go stale — hitting below the moving UI bar).
             state.DriftTarget = request.Target != null ? request.Target.RandomPosition() : request.Center;
             state.TotalDuration = PhasedDuration(request.Tier);
             state.TotalElapsed = 0f;
@@ -180,33 +190,50 @@ namespace BalloonParty.Game.Score.Behaviours
             _states.Add(state);
         }
 
-        private void AdvanceFormation(FormationState state, float dt, float unscaledDt)
+        // Returns true when the formation has finished its final flight and the state should be released.
+        private bool AdvanceFormation(FormationState state, float dt)
         {
-            // The whole formation glides toward the bar while it draws (DriftToTarget = the fraction
-            // of the pop-to-bar distance covered by the time the last collapse ends); every vertex and
-            // the carrier derive from Center, so moving it moves the shape.
-            if (state.Phase != FormationPhase.Merge && state.TotalDuration > 0f)
+            var oldCenter = state.Center;
+            var oldRotation = state.Rotation;
+
+            // Centre motion: drift toward the bar while drawing, then the fresh-sampled final leg. Both are
+            // smoothstepped so the handoff at the last collapse is continuous.
+            Vector3 newCenter;
+            if (state.Phase == FormationPhase.FinalFlight)
+            {
+                state.FinalElapsed += dt;
+                var flightT = Mathf.SmoothStep(0f, 1f,
+                    Mathf.Clamp01(state.FinalElapsed / Mathf.Max(state.CarrierFlightDuration, MinPhaseDuration)));
+                newCenter = Vector3.Lerp(state.FinalStartCenter, state.FinalTarget, flightT);
+            }
+            else if (state.TotalDuration > 0f)
             {
                 state.TotalElapsed += dt;
                 var driftT = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(state.TotalElapsed / state.TotalDuration));
                 var driftEnd = Vector3.Lerp(state.InitialCenter, state.DriftTarget, state.Tier.DriftToTarget);
-                var newCenter = Vector3.Lerp(state.InitialCenter, driftEnd, driftT);
-
-                // Ribbons record WORLD positions, so translating the formation while it draws would
-                // shear every line; shifting the drawn history by the frame's delta keeps the figure
-                // rigid in formation space while the whole thing glides. The carrier's ribbon is left
-                // alone on purpose — its drift line IS its real path.
-                var delta = newCenter - state.Center;
-                if (state.VerticesLive && delta.sqrMagnitude > 0f)
-                {
-                    for (var i = 0; i < state.VertexCount; i++)
-                    {
-                        state.Vertices[i].TranslateRibbon(delta);
-                    }
-                }
-
-                state.Center = newCenter;
+                newCenter = Vector3.Lerp(state.InitialCenter, driftEnd, driftT);
             }
+            else
+            {
+                newCenter = oldCenter;
+            }
+
+            // Path rotation Ω advances once the first star is drawn (formation clock, includes the final flight).
+            var newRotation = oldRotation + (state.RotationActive ? state.Tier.RotationSpeedRadians * dt : 0f);
+            var deltaRadians = newRotation - oldRotation;
+
+            // Ribbons record WORLD positions, so re-frame the drawn history by the same translate+rotate the
+            // live frame moved through, keeping the whole figure rigid in formation space.
+            if (state.VerticesLive && (newCenter != oldCenter || deltaRadians != 0f))
+            {
+                for (var i = 0; i < state.VertexCount; i++)
+                {
+                    state.Vertices[i].TransformRibbon(oldCenter, newCenter, deltaRadians);
+                }
+            }
+
+            state.Center = newCenter;
+            state.Rotation = newRotation;
 
             switch (state.Phase)
             {
@@ -219,13 +246,12 @@ namespace BalloonParty.Game.Score.Behaviours
                 case FormationPhase.Collapse:
                     AdvanceCollapse(state, dt);
                     break;
-                case FormationPhase.Merge:
-                    AdvanceMerge(state, unscaledDt);
-                    break;
-                case FormationPhase.CarrierFlight:
-                    // The launch tween owns the carrier; the transport-bridge poll handles landing/interrupt.
-                    break;
+                case FormationPhase.FinalFlight:
+                    return AdvanceFinalFlight(state);
             }
+
+            WriteAnchor(state);
+            return false;
         }
 
         private void AdvanceDeploy(FormationState state, float dt)
@@ -242,8 +268,6 @@ namespace BalloonParty.Game.Score.Behaviours
                 var vertex = Vertex(state, i, radius, theta);
                 state.Vertices[i].transform.position = Vector3.Lerp(state.DeployFrom, vertex, progress);
             }
-
-            WriteCarrier(state);
 
             if (progress >= 1f)
             {
@@ -276,10 +300,10 @@ namespace BalloonParty.Game.Score.Behaviours
                 state.Vertices[i].transform.position = Vector3.Lerp(start, end, progress);
             }
 
-            WriteCarrier(state);
-
             if (progress >= 1f)
             {
+                // The shape is now formed — Ω starts here and runs through every later phase and the flight.
+                state.RotationActive = true;
                 state.Phase = FormationPhase.Collapse;
                 state.PhaseElapsed = 0f;
             }
@@ -292,19 +316,15 @@ namespace BalloonParty.Game.Score.Behaviours
             state.PhaseElapsed += dt;
             var progress = Mathf.Clamp01(state.PhaseElapsed / duration);
 
-            var radius = state.Radius * scale;
+            // Pure radial r→0 inside the rotating frame (theta already carries Ω, so the collapse spins with it).
+            var radius = state.Radius * scale * (1f - progress);
             var theta = RepTheta(state);
-            var spin = state.Tier.RotationSpeedRadians * state.PhaseElapsed;
-            var radiusFactor = 1f - progress;
             var n = state.VertexCount;
             var k = state.Tier.Skip;
             for (var i = 0; i < n; i++)
             {
-                var offset = Vertex(state, (i + k) % n, radius, theta) - state.Center;
-                state.Vertices[i].transform.position = state.Center + Rotate(offset, spin) * radiusFactor;
+                state.Vertices[i].transform.position = Vertex(state, (i + k) % n, radius, theta);
             }
-
-            WriteCarrier(state);
 
             if (progress < 1f)
             {
@@ -327,32 +347,37 @@ namespace BalloonParty.Game.Score.Behaviours
                 return;
             }
 
-            state.Phase = FormationPhase.Merge;
-            state.FadeElapsed = 0f;
+            BeginFinalFlight(state);
         }
 
-        private void AdvanceMerge(FormationState state, float unscaledDt)
+        // The collapsed cluster (all vertices at r≈0, pen ON — one bright comet) flies with the centre to a
+        // FRESHLY sampled endpoint. Ω keeps advancing (the point cluster spinning is invisible).
+        private bool AdvanceFinalFlight(FormationState state)
         {
-            state.FadeElapsed += unscaledDt;
-            var fade = Mathf.Clamp01(state.FadeElapsed / FlashDuration);
-            ScaleVertices(state, 1f - fade);
-            WriteCarrier(state);
-
-            if (fade < 1f)
+            for (var i = 0; i < state.VertexCount; i++)
             {
-                return;
+                state.Vertices[i].transform.position = state.Center;
             }
 
+            WriteAnchor(state);
+
+            if (state.FinalElapsed < state.CarrierFlightDuration)
+            {
+                return false;
+            }
+
+            ReportOnce(state, state.FinalTarget);
+            state.Flights.Unregister(state.CarrierId);
             ReleaseVertices(state);
-            LaunchCarrier(state);
-            state.Phase = FormationPhase.CarrierFlight;
+            ReleaseAnchor(state);
+            return true;
         }
 
         // True once the fade completes and the vertices have been released.
         private bool AdvanceSnapFade(FormationState state, float unscaledDt)
         {
             state.FadeElapsed += unscaledDt;
-            var fade = Mathf.Clamp01(state.FadeElapsed / FlashDuration);
+            var fade = Mathf.Clamp01(state.FadeElapsed / SnapFadeDuration);
             ScaleVertices(state, 1f - fade);
 
             if (fade < 1f)
@@ -364,19 +389,27 @@ namespace BalloonParty.Game.Score.Behaviours
             return true;
         }
 
+        private void BeginFinalFlight(FormationState state)
+        {
+            state.Phase = FormationPhase.FinalFlight;
+            state.FinalElapsed = 0f;
+            state.FinalStartCenter = state.Center;
+
+            // Re-sample the endpoint NOW: the launch-time sample can go stale (the UI bar drifts), which reads
+            // as the comet hitting below the target. Zero z onto the formation plane, like the cinematic does.
+            var target = state.Target != null ? state.Target.RandomPosition() : state.Center;
+            target.z = 0f;
+            state.FinalTarget = target;
+        }
+
         private void Settle(FormationState state, int index)
         {
-            ReportOnce(state, state.Carrier != null ? state.Carrier.transform.position : state.Center);
+            ReportOnce(state, state.Anchor != null ? state.Anchor.position : state.Center);
             state.Flights.Unregister(state.CarrierId);
-
-            if (state.Carrier != null)
-            {
-                state.Spawner.Release(state.Carrier);
-                state.Carrier = null;
-            }
+            ReleaseAnchor(state);
 
             // Formation-phase interrupt: the vertices are still out, so fade them (unscaled — survives the
-            // level-up freeze) before releasing. A post-merge landing has none left, so drop the state now.
+            // level-up freeze) before releasing.
             if (state.VerticesLive)
             {
                 state.Phase = FormationPhase.SnapFade;
@@ -385,11 +418,6 @@ namespace BalloonParty.Game.Score.Behaviours
             }
 
             ReleaseStateAt(index);
-        }
-
-        private void LaunchCarrier(FormationState state)
-        {
-            state.Carrier.Setup(state.DriftTarget, state.Color, state.CarrierFlightDuration, state.OnCarrierLanded);
         }
 
         private void ReportOnce(FormationState state, Vector3 at)
@@ -406,14 +434,7 @@ namespace BalloonParty.Game.Score.Behaviours
         private void HardRelease(FormationState state)
         {
             state.Flights.Unregister(state.CarrierId);
-
-            if (state.Carrier != null)
-            {
-                // Pool return kills any in-flight launch tween via OnDespawned; no arrival fires.
-                state.Spawner.Release(state.Carrier);
-                state.Carrier = null;
-            }
-
+            ReleaseAnchor(state);
             ReleaseVertices(state);
         }
 
@@ -446,9 +467,31 @@ namespace BalloonParty.Game.Score.Behaviours
             state.Flights = null;
             state.Reporter = null;
             state.Target = null;
-            state.Carrier = null;
+            state.Anchor = null;
             state.Flight = null;
             _pool.Push(state);
+        }
+
+        // Bare, invisible Transform carrying the formation centre; the registry/cinematic need a Transform to
+        // track/pause. Deactivated on release and pushed back, never destroyed.
+        private Transform AcquireAnchor(Vector3 position)
+        {
+            var anchor = _anchorPool.Count > 0 ? _anchorPool.Pop() : new GameObject("ShapeFormationAnchor").transform;
+            anchor.position = position;
+            anchor.gameObject.SetActive(true);
+            return anchor;
+        }
+
+        private void ReleaseAnchor(FormationState state)
+        {
+            if (state.Anchor == null)
+            {
+                return;
+            }
+
+            state.Anchor.gameObject.SetActive(false);
+            _anchorPool.Push(state.Anchor);
+            state.Anchor = null;
         }
 
         // Sum of every repetition's deploy+draw+collapse with the same per-phase clamps the tick uses,
@@ -473,9 +516,10 @@ namespace BalloonParty.Game.Score.Behaviours
             return Mathf.Pow(state.Tier.NestScale, state.Repetition);
         }
 
+        // Base orientation + nesting offset + the path rotation Ω, folded into one angle (R(Ω)·dir(φ) = dir(φ+Ω)).
         private static float RepTheta(FormationState state)
         {
-            return InitialTheta + state.Repetition * state.Tier.NestRotationRadians;
+            return InitialTheta + state.Repetition * state.Tier.NestRotationRadians + state.Rotation;
         }
 
         private static Vector3 Vertex(FormationState state, int index, float radius, float theta)
@@ -485,18 +529,11 @@ namespace BalloonParty.Game.Score.Behaviours
             return state.Center + direction * radius;
         }
 
-        private static Vector3 Rotate(Vector3 v, float radians)
+        private static void WriteAnchor(FormationState state)
         {
-            var cos = Mathf.Cos(radians);
-            var sin = Mathf.Sin(radians);
-            return new Vector3(v.x * cos - v.y * sin, v.x * sin + v.y * cos, v.z);
-        }
-
-        private static void WriteCarrier(FormationState state)
-        {
-            if (state.Carrier != null)
+            if (state.Anchor != null)
             {
-                state.Carrier.transform.position = state.Center;
+                state.Anchor.position = state.Center;
             }
         }
 
@@ -517,32 +554,33 @@ namespace BalloonParty.Game.Score.Behaviours
             Deploy,
             Draw,
             Collapse,
-            Merge,
-            CarrierFlight,
+            FinalFlight,
             SnapFade
         }
 
         private sealed class FormationState
         {
             internal readonly FlyingTrail[] Vertices = new FlyingTrail[MaxVertexCount];
-            internal readonly Action OnCarrierLanded;
 
-            internal FlyingTrail Carrier;
+            internal Transform Anchor;
             internal TrailFlight Flight;
             internal TrailSpawner Spawner;
             internal TrailFlightRegistry<TrailId> Flights;
             internal IScoreTrailReporter Reporter;
             internal ITrailEndpoint Target;
             internal BigScoreTierConfig Tier;
-            internal Color Color;
             internal TrailId CarrierId;
             internal Vector3 Center;
             internal Vector3 InitialCenter;
             internal Vector3 DeployFrom;
             internal Vector3 DriftTarget;
+            internal Vector3 FinalStartCenter;
+            internal Vector3 FinalTarget;
             internal float Radius;
+            internal float Rotation;
             internal float TotalDuration;
             internal float TotalElapsed;
+            internal float FinalElapsed;
             internal CancellationToken CancellationToken;
             internal FormationPhase Phase;
             internal float CarrierFlightDuration;
@@ -553,13 +591,8 @@ namespace BalloonParty.Game.Score.Behaviours
             internal int VertexCount;
             internal int Repetition;
             internal bool VerticesLive;
-            internal bool CarrierLanded;
+            internal bool RotationActive;
             internal bool Reported;
-
-            internal FormationState()
-            {
-                OnCarrierLanded = () => CarrierLanded = true;
-            }
 
             internal void Initialize(in BigScoreFormationRequest request)
             {
@@ -568,12 +601,12 @@ namespace BalloonParty.Game.Score.Behaviours
                 Reporter = request.Reporter;
                 Target = request.Target;
                 Tier = request.Tier;
-                Color = request.Color;
                 CarrierId = request.CarrierId;
                 Center = request.Center;
                 InitialCenter = request.Center;
                 DeployFrom = request.DeployFrom;
                 Radius = request.Radius;
+                Rotation = 0f;
                 CancellationToken = request.CancellationToken;
                 CarrierFlightDuration = request.CarrierFlightDuration;
                 Points = request.Points;
@@ -581,12 +614,13 @@ namespace BalloonParty.Game.Score.Behaviours
                 Phase = FormationPhase.Deploy;
                 PhaseElapsed = 0f;
                 FadeElapsed = 0f;
+                FinalElapsed = 0f;
                 VertexCount = 0;
                 Repetition = 0;
                 VerticesLive = false;
-                CarrierLanded = false;
+                RotationActive = false;
                 Reported = false;
-                Carrier = null;
+                Anchor = null;
                 Flight = null;
             }
         }

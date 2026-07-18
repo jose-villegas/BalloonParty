@@ -65,7 +65,8 @@ namespace BalloonParty.Configuration
         [Tooltip("TrailRenderer.time the vertex ribbons use, long enough to keep outer stars visible while inner ones draw.")]
         [SerializeField] private float _ribbonTime;
 
-        [Tooltip("Collapse in-plane rotation, degrees/second. 0 = pure radial collapse (no spin).")]
+        [Tooltip("Path rotation, degrees/second, once the first star is drawn: spins the whole simulation " +
+                 "(vertices + drawn ink) about its centre through the collapse and the final flight to the bar.")]
         [SerializeField] private float _rotationSpeedDegrees;
 
         [Tooltip("Fraction of the pop-to-bar distance the whole formation drifts across while drawing " +
@@ -148,14 +149,15 @@ namespace BalloonParty.Configuration
             };
         }
 
-        // triangle {3/1} at 40, square {4/1} at 80, nested pentagram {5/2}x2 at 150; durations accelerate inward.
+        // triangle {3/1} at 40, square {4/1} at 80, nested pentagram {5/2}x2 at 150; durations accelerate
+        // inward; each tier spins along its path once formed (90/60/45 deg/s, gentler for the busier stars).
         private static BigScoreTierConfig[] DefaultTiers()
         {
             return new[]
             {
-                new BigScoreTierConfig(40, 3, 1, 1, GoldenNestScale, 0f, 1.1f, 0.25f, 0.35f, 0.5f, 0.8f, 180f, 0.6f),
-                new BigScoreTierConfig(80, 4, 1, 1, GoldenNestScale, 0f, 1.3f, 0.25f, 0.35f, 0.5f, 0.9f, 0f, 0.6f),
-                new BigScoreTierConfig(150, 5, 2, 2, GoldenNestScale, 0f, 1.5f, 0.25f, 0.35f, 0.5f, 1.0f, 0f, 0.6f),
+                new BigScoreTierConfig(40, 3, 1, 1, GoldenNestScale, 0f, 1.1f, 0.25f, 0.35f, 0.5f, 0.8f, 90f, 0.6f),
+                new BigScoreTierConfig(80, 4, 1, 1, GoldenNestScale, 0f, 1.3f, 0.25f, 0.35f, 0.5f, 0.9f, 60f, 0.6f),
+                new BigScoreTierConfig(150, 5, 2, 2, GoldenNestScale, 0f, 1.5f, 0.25f, 0.35f, 0.5f, 1.0f, 45f, 0.6f),
             };
         }
     }

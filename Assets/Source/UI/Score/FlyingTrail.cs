@@ -34,7 +34,7 @@ namespace BalloonParty.UI.Score
         private bool _followUnscaled;
         private bool _following;
         private Gradient _flightGradient;
-        // Shared scratch for TranslateRibbon — main-thread only, grown on demand, never shrunk.
+        // Shared scratch for TransformRibbon — main-thread only, grown on demand, never shrunk.
         private static Vector3[] _ribbonScratch = new Vector3[256];
 
         private Color _defaultColor;
@@ -216,10 +216,11 @@ namespace BalloonParty.UI.Score
             _trailRenderer.emitting = emitting;
         }
 
-        // Rigidly shifts the recorded ribbon by a world-space delta. Ribbons record WORLD positions, so
-        // a formation translating while it draws would shear every line; shifting the history by the
-        // formation's per-frame movement keeps drawn geometry true while the whole figure glides.
-        internal void TranslateRibbon(Vector3 delta)
+        // Rigidly re-frames the recorded ribbon by the formation's delta transform (translate + rotate).
+        // Ribbons record WORLD positions, so a formation that moves or spins while it draws would shear
+        // every line; carrying each drawn point through p' = newCenter + R(deltaRadians)·(p − oldCenter)
+        // keeps the whole figure rigid in formation space while its centre glides and its frame rotates.
+        internal void TransformRibbon(Vector3 oldCenter, Vector3 newCenter, float deltaRadians)
         {
             var count = _trailRenderer.positionCount;
             if (count == 0)
@@ -234,11 +235,31 @@ namespace BalloonParty.UI.Score
 
             _trailRenderer.GetPositions(_ribbonScratch);
 
-            // Per-index writes: SetPositions takes its count from the ARRAY length, which would push
-            // scratch garbage past the ribbon's real point count.
+            // Pure translation is the common case (no path rotation yet) — skip the trig entirely.
+            if (deltaRadians == 0f)
+            {
+                var delta = newCenter - oldCenter;
+
+                // Per-index writes: SetPositions takes its count from the ARRAY length, which would push
+                // scratch garbage past the ribbon's real point count.
+                for (var i = 0; i < count; i++)
+                {
+                    _trailRenderer.SetPosition(i, _ribbonScratch[i] + delta);
+                }
+
+                return;
+            }
+
+            var cos = Mathf.Cos(deltaRadians);
+            var sin = Mathf.Sin(deltaRadians);
             for (var i = 0; i < count; i++)
             {
-                _trailRenderer.SetPosition(i, _ribbonScratch[i] + delta);
+                var p = _ribbonScratch[i];
+                var dx = p.x - oldCenter.x;
+                var dy = p.y - oldCenter.y;
+                _trailRenderer.SetPosition(
+                    i,
+                    new Vector3(newCenter.x + dx * cos - dy * sin, newCenter.y + dx * sin + dy * cos, p.z));
             }
         }
 

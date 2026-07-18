@@ -194,7 +194,9 @@ namespace BalloonParty.Game.Cinematics
 
             _pauseService.Pause(PauseSource.Cinematic);
 
-            _trackedFlight.Transform.GetComponent<FlyingTrail>().DisableMoveTween();
+            // Formation principals are bare anchor Transforms with no FlyingTrail — only tween-driven trails
+            // (DefaultScore) need their move tween killed before we puppet the transform along the pan-in.
+            _trackedFlight.Transform.GetComponent<FlyingTrail>()?.DisableMoveTween();
             _trackedFlight.Pause();
 
             SubscribeForPanIn();

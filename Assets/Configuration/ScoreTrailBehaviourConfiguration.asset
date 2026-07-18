@@ -29,7 +29,7 @@ MonoBehaviour:
     _drawDuration: 0.35
     _collapseDuration: 0.5
     _ribbonTime: 0.8
-    _rotationSpeedDegrees: 180
+    _rotationSpeedDegrees: 90
     _driftToTarget: 0.6
   - _minPoints: 80
     _vertexCount: 4
@@ -42,7 +42,7 @@ MonoBehaviour:
     _drawDuration: 0.35
     _collapseDuration: 0.5
     _ribbonTime: 0.9
-    _rotationSpeedDegrees: 0
+    _rotationSpeedDegrees: 60
     _driftToTarget: 0.6
   - _minPoints: 150
     _vertexCount: 5
@@ -55,5 +55,5 @@ MonoBehaviour:
     _drawDuration: 0.35
     _collapseDuration: 0.5
     _ribbonTime: 1
-    _rotationSpeedDegrees: 0
+    _rotationSpeedDegrees: 45
     _driftToTarget: 0.6
