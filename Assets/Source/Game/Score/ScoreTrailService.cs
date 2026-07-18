@@ -148,20 +148,25 @@ namespace BalloonParty.Game.Score
             _flights.Register(id, transform, center);
         }
 
-        // One state machine per group reproduces today's per-point schedule (spawn i at 0.02 s × i): the
-        // first spawn is immediate, then each subsequent spawn waits one scatter delay before firing. The
-        // old code launched N parallel delay tasks off a shared t0; this awaits them in sequence instead.
+        // One state machine per group reproduces today's per-point schedule (spawn i at 0.02 s × i):
+        // the first spawn is immediate, then each iteration awaits until its shared-start target time.
+        // Scheduling against t0 (scaled, like the delay) instead of chaining fixed waits keeps frame
+        // rounding from accumulating per step — a chained 20 ms wait rounds up to a whole frame every
+        // iteration, stretching a long group's tail by tens of percent at 60 Hz. A late frame simply
+        // spawns the overdue points immediately, exactly like the old parallel per-point delays.
         private async UniTaskVoid SpawnGroupAsync(ScorePointsGroupMessage msg)
         {
             var center = msg.WorldPosition;
             var count = msg.Points;
-            var delayMs = Mathf.RoundToInt(_config.ScorePointsScatterDelay * 1000f);
+            var delay = _config.ScorePointsScatterDelay;
+            var start = Time.time;
 
             for (var i = 0; i < count; i++)
             {
-                if (i > 0)
+                var remainingMs = Mathf.RoundToInt((start + delay * i - Time.time) * 1000f);
+                if (remainingMs > 0)
                 {
-                    await UniTask.Delay(delayMs, cancellationToken: _cts.Token);
+                    await UniTask.Delay(remainingMs, cancellationToken: _cts.Token);
                 }
 
                 var id = new TrailId(msg.ColorName, msg.FirstScore + i);
