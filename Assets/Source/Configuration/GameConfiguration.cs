@@ -56,9 +56,11 @@ namespace BalloonParty.Configuration
                  "is normalized to this GAME time (so it stretches under the slow-mo below). 0 disables.")]
         [SerializeField] [Min(0f)] private float _lastShieldApproachDuration = 3f;
 
-        [Tooltip("Global time scale claimed during the doomed last-breath moment — the whole game " +
-                 "slows to this (1 = no slow-mo). Spawning hard-stops separately; this just paces the drama.")]
-        [SerializeField] [Range(0f, 1f)] private float _lastShieldTimeScale = 0.3f;
+        [Tooltip("Time-scale envelope across the doomed last-breath approach, sampled on NORMALIZED " +
+                 "TIME (x = 0..1 from doom start to death wall). Y = time scale (0 = frozen, 1 = full " +
+                 "speed). Replaces the flat LastShieldTimeScale — author a curve that eases the " +
+                 "slow-mo in and/or out for dramatic pacing.")]
+        [SerializeField] private AnimationCurve _lastShieldTimeScaleCurve = AnimationCurve.Constant(0f, 1f, 0.3f);
 
         [Header("Slots")]
         [SerializeField] private Vector2Int _slotsSize;
@@ -100,7 +102,7 @@ namespace BalloonParty.Configuration
         public int CruisePiercingTapThreshold => _cruisePiercingTapThreshold;
         public AnimationCurve LastShieldApproachCurve => _lastShieldApproachCurve;
         public float LastShieldApproachDuration => _lastShieldApproachDuration;
-        public float LastShieldTimeScale => _lastShieldTimeScale;
+        public AnimationCurve LastShieldTimeScaleCurve => _lastShieldTimeScaleCurve;
         public Vector2 SlotSeparation => _slotSeparation;
         public Vector2 SlotsOffset => _slotsOffset;
         public Vector2Int SlotsSize => _slotsSize;

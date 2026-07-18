@@ -260,7 +260,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _marker
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 3013865873843498727}
     - target: {fileID: 7480911328229068980, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: _markerRenderer

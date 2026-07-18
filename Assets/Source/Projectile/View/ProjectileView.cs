@@ -315,6 +315,14 @@ namespace BalloonParty.Projectile.View
                 _model.IsLastShieldApproach.Value = false;
             }
 
+            // A dead shot isn't piercing. Clear it too, else the aura's doom guard (which keyed off
+            // IsLastShieldApproach) is defeated the instant the line above runs — pierceActive turns
+            // true again and the spiral flashes on over the disappear, right at the death wall.
+            if (_model != null && _model.IsPiercing.Value)
+            {
+                _model.IsPiercing.Value = false;
+            }
+
             // Publish now, not after the scale-down: the thrower scales this shot away (it returns to the
             // pool once that finishes) and loads a fresh instance, so it never reuses one mid-disappear.
             _balancePublisher.Publish(default);
