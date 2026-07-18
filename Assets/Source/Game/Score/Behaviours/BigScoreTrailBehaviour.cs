@@ -26,6 +26,10 @@ namespace BalloonParty.Game.Score.Behaviours
         private const float MaxRadiusExtent = 0.9f;
         private const float GoldenAngle = 2.399963f;
 
+        // Out-of-plane tilt blended into the roll axis (see TumbleAxis) — 0 restores pure rolling,
+        // ~1 approaches pure in-plane twirl. Promote to the settings SO if it wants live tuning.
+        private const float ScreenTwirl = 0.45f;
+
         // Defensive fallback if the config's curve is unwired; the real asset always supplies one.
         private static readonly BigScoreFormationSettings FallbackSettings =
             new(1.2f, AnimationCurve.EaseInOut(0f, 0f, 1.8f, 0f), 6f, 1.15f, 60f);
@@ -126,8 +130,13 @@ namespace BalloonParty.Game.Score.Behaviours
         }
 
         // Rolls the shapes head-over-heels ALONG the hit direction, like a ball struck forward: the roll axis is
-        // the screen-plane normal perpendicular to travel (ω ∝ n × v, n toward the camera = Vector3.back). A
-        // near-zero hit direction (item/laser/board pops carry none) leaves the axis unset for a random fallback.
+        // the screen-plane perpendicular to travel (ω ∝ n × v, n toward the camera = Vector3.back), TILTED out
+        // of the plane by ScreenTwirl. The tilt is load-bearing, not flavour: a pure in-plane axis leaves any
+        // geometry lying along it motionless (a straight-up shot's roll axis IS the line shape's own local X —
+        // both its vertices sit ON the axis), and flat shapes only foreshorten about in-plane axes under the
+        // ortho camera. A z component guarantees every shape — lines and flat polygons included — visibly
+        // twirls as well as rolls. A near-zero hit direction (item/laser/board pops carry none) leaves the
+        // axis unset for a random fallback.
         private static bool TumbleAxis(Vector3 hitDirection, out Vector3 axis)
         {
             if (hitDirection.sqrMagnitude < 1e-6f)
@@ -136,7 +145,8 @@ namespace BalloonParty.Game.Score.Behaviours
                 return false;
             }
 
-            axis = Vector3.Cross(Vector3.back, hitDirection).normalized;
+            var roll = Vector3.Cross(Vector3.back, hitDirection).normalized;
+            axis = (roll + Vector3.back * ScreenTwirl).normalized;
             return true;
         }
 
