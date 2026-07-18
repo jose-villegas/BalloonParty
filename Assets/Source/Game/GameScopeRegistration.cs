@@ -156,6 +156,8 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<SpaceDanger>().AsSelf().As<IDangerLevel>();
             builder.Register<HeartTrailTracker>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.Register<DefaultScoreTrailBehaviour>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<ShapeFormationTicker>().AsSelf();
+            builder.Register<BigScoreTrailBehaviour>(Lifetime.Singleton).AsSelf();
             builder.Register(BuildScoreTrailResolver, Lifetime.Singleton);
             builder.RegisterEntryPoint<ScoreTrailService>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<ItemAssigner>();
@@ -199,12 +201,13 @@ namespace BalloonParty.Game
             builder.RegisterComponentInHierarchy<GameOverScreen>();
         }
 
-        // Step 2 wires one handler; the dictionary is the seam BigScore slots into (step 3).
+        // The dictionary is the choreography seam: the resolver maps each ScoreTrailBehaviourId to its handler.
         private static ScoreTrailBehaviourResolver BuildScoreTrailResolver(IObjectResolver container)
         {
             var handlers = new Dictionary<ScoreTrailBehaviourId, IScoreTrailBehaviour>
             {
                 { ScoreTrailBehaviourId.DefaultScore, container.Resolve<DefaultScoreTrailBehaviour>() },
+                { ScoreTrailBehaviourId.BigScore, container.Resolve<BigScoreTrailBehaviour>() },
             };
             return new ScoreTrailBehaviourResolver(container.Resolve<IScoreTrailBehaviourConfiguration>(), handlers);
         }

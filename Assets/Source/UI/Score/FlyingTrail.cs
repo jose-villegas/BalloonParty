@@ -36,6 +36,7 @@ namespace BalloonParty.UI.Score
         private Gradient _flightGradient;
         private Color _defaultColor;
         private Vector3 _defaultScale;
+        private float _defaultRibbonTime;
 
         private void Awake()
         {
@@ -44,6 +45,7 @@ namespace BalloonParty.UI.Score
             ApplySortingOrder(OverlaySortingOrder);
             _defaultColor = _renderer.color;
             _defaultScale = transform.localScale;
+            _defaultRibbonTime = _trailRenderer.time;
         }
 
         private void Update()
@@ -88,6 +90,8 @@ namespace BalloonParty.UI.Score
             _flightGradient = null;
             transform.DOKill();
             ApplySortingOrder(OverlaySortingOrder);
+            // Restore the authored ribbon length so a formation's per-tier override can't leak into pooled reuse.
+            _trailRenderer.time = _defaultRibbonTime;
         }
 
         public void SetSortingOrder(int order)
@@ -184,6 +188,26 @@ namespace BalloonParty.UI.Score
         public void DisableMoveTween()
         {
             LifecycleHelper.KillAndClear(ref _moveTween);
+        }
+
+        // Solid tint with no flight gradient — for trails a caller drives directly (formation vertices/carrier)
+        // rather than through Setup, which would otherwise apply the colour for it.
+        internal void SetColor(Color color)
+        {
+            _flightGradient = null;
+            ApplyColor(color);
+        }
+
+        // Per-tier ribbon length so nested-star tiers stay visible through the whole sequence; OnDespawned
+        // restores the authored value.
+        internal void SetRibbonTime(float time)
+        {
+            _trailRenderer.time = time;
+        }
+
+        internal void ClearRibbon()
+        {
+            _trailRenderer.Clear();
         }
 
         // Shared by the plain flight and the burst's second leg.

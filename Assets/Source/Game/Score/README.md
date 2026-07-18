@@ -58,9 +58,36 @@ cancellation token), and calls `Begin`. The handler owns everything from spawn t
 unregisters its own flights, and reports arrivals through the reporter with true cumulative scores that sum to the
 group total. Each handler also nominates its **principal trail** via `GetPrincipalId` — the one the level-up
 cinematic tracks — so the cinematic derives the tipping id from the same code (`resolver.PrincipalIdFor(msg)`)
-that decides what registers, and the two can never disagree. `DefaultScore` is the only handler today and
-reproduces the pre-seam pipeline byte-for-byte (one trail per point, scatter fan, `0.02 s` stagger, one point
-reported per landing, first trail = principal); `BigScore` slots into the resolver's dictionary in step 3.
+that decides what registers, and the two can never disagree. `DefaultScore` reproduces the pre-seam pipeline
+byte-for-byte (one trail per point, scatter fan, `0.02 s` stagger, one point reported per landing, first trail =
+principal). `BigScore` is the confluence handler for large awards (see below).
+
+### `BigScore` + `ShapeFormationTicker`
+
+Once a group clears the `BigScore` `MinPoints` (authored `40`), the group flies as **one carrier + n vertex
+trails** instead of one trail per point — the 5×-on-a-cluster worst case becomes one arrival, not hundreds.
+`BigScoreTrailBehaviour` picks a tier (`IScoreTrailBehaviourConfiguration.BigScoreTiers`, highest `MinPoints`
+the total clears), clamps the formation centre inside `WallLimits` (shifting `C` inward so `C ± BaseRadius`
+stays on-screen), acquires the carrier (`TrailSpawner.Acquire`) at `C`, registers it in `Flights` under
+`(Color, LastScore)` **synchronously in `Begin`** (the cinematic's registry wait depends on it), and hands a
+`BigScoreFormationRequest` to `ShapeFormationTicker`. The carrier is the principal and reports **once**
+(`LastScore, Points`) — one `+N` notice/slider/score step.
+
+`ShapeFormationTicker` (`ILateTickable`, pooled zero-alloc state, `BalloonMotionTicker`-style swap-remove)
+drives every formation closed-form each `LateTick`. Per repetition, n vertex trails **deploy** from the pop
+origin to a regular n-gon's vertices, **draw** one chord each simultaneously (`vᵢ → v₍ᵢ₊ₖ₎`, a star polygon
+{n/k}), then **collapse** to `C` (optional in-plane spin). Nesting redraws inward `m` times at `r·NestScale`
+with `θ₀ += NestRotation` and radius-scaled (accelerating) durations. At the end the vertices **flash** out
+(unscaled scale-to-zero) and the carrier launches to the bar on `FlyingTrail`'s normal tween flight.
+
+**Transport bridge** — the carrier's `TrailFlight` handle is the formation's pause/snap/slow-mo interface,
+polled per tick: `Paused` freezes the formation (the cinematic owns the carrier transform, vertices hold
+position); `Idle` (the pan-in or a `CompleteAll` drove the principal home) **snaps** — report the whole value
+now at the carrier's position, fade the live vertices out (unscaled, freeze-safe), release; `Speed` scales the
+formation clock (slow-mo). The formation clock is scaled time (matches the trail tweens); the flash/snap fades
+are unscaled so they survive the level-up freeze. A group-CTS cancellation (run reset) releases everything
+**without** reporting — the reset zeroes the run's score anyway. A `Reported` guard (plus the reporter's own
+backstop) keeps the snap and the carrier's tween arrival from double-firing.
 
 ## Spawn & Cinematic Interception
 

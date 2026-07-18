@@ -122,6 +122,23 @@ namespace BalloonParty.Shared.Pool
             return trail.transform;
         }
 
+        // Raw pool acquire for callers that drive the trail's motion themselves (the shape-formation ticker)
+        // instead of through a Spawn* flight. Colour is applied here exactly as Spawn does; the consumer that
+        // Acquires MUST Release. The ribbon is left as authored — the caller clears/retimes it as needed.
+        internal FlyingTrail Acquire(Color color)
+        {
+            var trail = _poolManager.GetOrRegister(_poolKey, _channelFactory);
+            trail.transform.localScale = Vector3.one;
+            ApplySortingOrder(trail);
+            trail.SetColor(color);
+            return trail;
+        }
+
+        internal void Release(FlyingTrail trail)
+        {
+            _poolManager.Return(_poolKey, trail);
+        }
+
         // GetOrRegister would hand out (and leak) one instance, so register separately before topping up.
         internal UniTask PrewarmAsync(int count, CancellationToken ct = default)
         {

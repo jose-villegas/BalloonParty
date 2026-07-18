@@ -9,5 +9,8 @@ namespace BalloonParty.Configuration
     internal interface IScoreTrailBehaviourConfiguration
     {
         IReadOnlyList<ScoreTrailBehaviourEntry> Entries { get; }
+
+        /// <summary>BigScore star-polygon tiers, evaluated highest-<c>MinPoints</c>-first by the handler.</summary>
+        IReadOnlyList<BigScoreTierConfig> BigScoreTiers { get; }
     }
 }

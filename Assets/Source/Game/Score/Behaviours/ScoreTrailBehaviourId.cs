@@ -4,5 +4,6 @@ namespace BalloonParty.Game.Score.Behaviours
     internal enum ScoreTrailBehaviourId
     {
         DefaultScore,
+        BigScore,
     }
 }

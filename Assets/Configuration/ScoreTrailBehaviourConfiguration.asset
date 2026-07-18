@@ -13,5 +13,44 @@ MonoBehaviour:
   m_Name: ScoreTrailBehaviourConfiguration
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.ScoreTrailBehaviourConfiguration
   _entries:
+  - _id: 1
+    _minPoints: 40
   - _id: 0
     _minPoints: 0
+  _bigScoreTiers:
+  - _minPoints: 40
+    _vertexCount: 3
+    _skip: 1
+    _repeats: 1
+    _nestScale: 0.381966
+    _nestRotationDegrees: 0
+    _baseRadius: 2.2
+    _deployDuration: 0.25
+    _drawDuration: 0.35
+    _collapseDuration: 0.5
+    _ribbonTime: 0.8
+    _rotationSpeedDegrees: 180
+  - _minPoints: 80
+    _vertexCount: 4
+    _skip: 1
+    _repeats: 1
+    _nestScale: 0.381966
+    _nestRotationDegrees: 0
+    _baseRadius: 2.5
+    _deployDuration: 0.25
+    _drawDuration: 0.35
+    _collapseDuration: 0.5
+    _ribbonTime: 0.9
+    _rotationSpeedDegrees: 0
+  - _minPoints: 150
+    _vertexCount: 5
+    _skip: 2
+    _repeats: 2
+    _nestScale: 0.381966
+    _nestRotationDegrees: 0
+    _baseRadius: 2.8
+    _deployDuration: 0.25
+    _drawDuration: 0.35
+    _collapseDuration: 0.5
+    _ribbonTime: 1
+    _rotationSpeedDegrees: 0

@@ -72,6 +72,8 @@ MonoBehaviour:
   _levelPacingConfiguration: {fileID: 11400000, guid: 1e1fe4e6ad3a04cc6aed58b832dbbf17,
     type: 2}
   _buffConfiguration: {fileID: 11400000, guid: 728ca45d06ca84d878604fa7f93c2357, type: 2}
+  _scoreTrailBehaviourConfiguration: {fileID: 11400000, guid: f5a3059bd63343178e49c2a90c9a8f91,
+    type: 2}
   _projectilePrefab: {fileID: 7317932863533360661, guid: 514e1ddc348a5498aa3edae2404ff130,
     type: 3}
   _scoreTrailPrefab: {fileID: 1429749022553535108, guid: 17e678e81b22a4d3481d8307861019b8,

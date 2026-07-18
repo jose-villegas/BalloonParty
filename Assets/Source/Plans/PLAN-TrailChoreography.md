@@ -269,6 +269,36 @@ Per-tier config row: `n`, `k`, `repeats m`, `nestScale s` (default 1/φ²),
 `rotationSpeed ω` (0 = pure scale collapse). The triangle is just `{3/1}, m = 1` — one
 implementation covers every tier.
 
+> **Transport-bridge contract (landed 2026-07-18).** The formation's pause/snap/slow-mo interface is the
+> carrier's `TrailFlight` handle, polled by `ShapeFormationTicker` every tick — this is *the* seam between the
+> analytic formation and the cinematic/loss/reset machinery:
+> - `Phase == Paused` → the cinematic froze the principal (it `Pause()`d the carrier flight in
+>   `BeginCinematicWithTrail`); the ticker stops advancing the clock **and stops writing the carrier
+>   transform**, so it never fights the cinematic's `AdvanceTrackedTrail` writes. Vertices hold position.
+> - `Phase == Idle` → the pan-in completed the flight, or a `CompleteAll` (level-up/loss) did; the ticker
+>   **snaps** in that tick: reports the whole `(LastScore, Points)` at the carrier's current position, then
+>   fade-releases the live vertices (unscaled scale-out) and releases the carrier. A `Reported` guard + the
+>   reporter's backstop prevent a double-fire against the carrier's own tween arrival.
+> - `flight.Speed` multiplies the formation `dt` (slow-mo). The formation clock is scaled time; the flash/snap
+>   fades are unscaled (freeze-safe). `DisableMoveTween` on the pre-launch carrier is a no-op (no tween yet) —
+>   verified.
+>
+> **Deviations from the prose above, flagged:**
+> - Tributaries are **full `FlyingTrail` vertex trails with their `TrailRenderer` ribbon as the pen**, not
+>   "plain sprite motes (no TrailRenderer)" as the earlier confluence paragraph said — the shape-choreography
+>   design (this section) supersedes it: the ribbon *is* how the star is drawn, so a per-tier `ribbonTime`
+>   (restored on `OnDespawned`) is essential.
+> - There is no value-accumulating `VisualCap`/tier-glow escalation. A **tier is the star geometry** picked by
+>   group total (`BigScoreTiers`, highest `MinPoints` cleared); vertex count = the tier's `n`, capped at a hard
+>   `MaxVertexCount = 8`.
+> - The snap on `CompleteAll` reports **in the ticker tick that observes `Idle`**, not synchronously inside
+>   `CompleteAll` (Q4's "SYNCHRONOUSLY"): the carrier has no tween during the formation, so `CompleteAll`'s
+>   `Complete()` cannot fire a report itself. The one-frame settle is invisible — the level-up was already
+>   decided by `WillLevelUp()` (projected), and the watermark confirm is order-safe bookkeeping.
+> - `ShapeFormationTicker` owns **both** pool acquire and release for the carrier and vertices (single owner),
+>   registering/unregistering the carrier flight itself; `BigScoreTrailBehaviour` only picks the tier, anchors
+>   the centre, and calls `Launch`. Keeps the "consumer that `Get()`s returns" rule unambiguous.
+
 ### Degenerate configs worth knowing exist
 
 - *Formation flight* (keep N full trails, single valued arrival) = `BigScore` with
@@ -309,8 +339,11 @@ implementation covers every tier.
    relies on in-flight trails continuing. Config binding is a serialized field on `GameLifetimeScope` (scene
    inspector), so the resolver degrades to `DefaultScore` (one-time dev warning) when the asset is unwired.
    Second parity gate.
-3. **`BigScore`**: carrier + tributaries + tiers, threshold authored in config
-   (`MinPoints` ~40 to start). Playtest for feel; iterate knobs in-editor.
+3. **`BigScore`** ✅ *(landed 2026-07-18 — awaiting in-editor playtest)*: `BigScoreTrailBehaviour` +
+   `ShapeFormationTicker` (star-polygon formations, carrier-takes-all), `BigScoreTierConfig` table on the
+   config asset (tiers `{3/1}@40`, `{4/1}@80`, `{5/2}×2@150`), `TrailSpawner.Acquire/Release`, `FlyingTrail`
+   ribbon-time set/restore. Threshold `MinPoints 40`. See the transport-bridge contract note above. Playtest
+   for feel; iterate knobs in-editor.
 4. Retune `ScoreTrailPrewarmPerColor` down (128 → ~32) once BigScore bounds the worst
    case; revisit the 0.02 s stagger for the default path.
 
