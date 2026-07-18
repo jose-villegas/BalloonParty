@@ -41,6 +41,11 @@ namespace BalloonParty.Projectile.View
         [Tooltip("Seconds for the spiral to lerp in/out when the piercing state flips.")]
         [SerializeField] [Min(0f)] private float _pierceFadeDuration = 0.35f;
 
+        [Tooltip("How far the piercing aura DUCKS (not off) during each cruise tap beat. A piercing " +
+                 "shot re-taps faster than the tap-ease window, so ducking fully to 0 would keep the " +
+                 "aura permanently hidden exactly while it's armed.")]
+        [SerializeField] [Range(0f, 1f)] private float _pierceTapBeatAlpha = 0.5f;
+
         [Header("Scene Light")]
         [Tooltip("Radius of the light this shot casts into the scene-light field. Keep small — it's a bullet.")]
         [SerializeField] [Min(0f)] private float _lightRadius = 0.6f;
@@ -475,8 +480,9 @@ namespace BalloonParty.Projectile.View
 
         // The earned-piercing aura eases in rather than popping on — the buff lands mid-flight at a
         // wall bounce, and an instant full-strength spiral there reads as a glitch, not a power-up.
-        // It also DUCKS during every tap beat (the freeze-then-pickup window each cruise bounce
-        // replays) and re-flourishes after — the aura winding back up with the shot.
+        // While armed it stays lit; each tap beat (the freeze-then-pickup window every cruise bounce
+        // replays) only DUCKS it toward _pierceTapBeatAlpha and it re-flourishes after — the aura
+        // winding back up with the shot.
         private void TickPierceSpiral()
         {
             if (_pierceSpiralRenderer == null)
@@ -484,16 +490,15 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
+            // A piercing shot re-taps faster than the tap-ease window, so ducking to 0 here would keep
+            // the aura hidden the whole time it's armed — dim toward the floor instead. Still hidden
+            // entirely while doomed (drifting to its death): a flourish there reads as a power-up right
+            // as it dies, and the clear path means there's nothing to pierce anyway.
             var inTapBeat = _model.IsCruising.Value
                             && _model.Flight.CruiseTapElapsed < _config.CruiseTapEaseDuration;
-
-            // Hide the spiral while the shot is drifting to its death (doomed last-shield segment):
-            // a piercing flourish there reads as a power-up right as it dies, and the clear path
-            // means there's nothing to pierce anyway.
-            var target = _model.IsPiercing.Value
-                         && !inTapBeat
-                         && !_model.IsLastShieldApproach.Value
-                ? 1f
+            var pierceActive = _model.IsPiercing.Value && !_model.IsLastShieldApproach.Value;
+            var target = pierceActive
+                ? (inTapBeat ? _pierceTapBeatAlpha : 1f)
                 : 0f;
             var maxStep = _pierceFadeDuration > 0f ? Time.deltaTime / _pierceFadeDuration : 1f;
             _pierceAlpha = Mathf.MoveTowards(_pierceAlpha, target, maxStep);
