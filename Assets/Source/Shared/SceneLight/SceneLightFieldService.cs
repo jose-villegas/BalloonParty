@@ -27,6 +27,9 @@ namespace BalloonParty.Shared.SceneLight
     ///     <see cref="ISceneLightFieldSettings.FieldFrameInterval"/>) has elapsed — an idle scene costs
     ///     nothing, a moving light can't force the pipeline past its authored cadence regardless of display
     ///     refresh rate, and ambient tweaks never re-render it (consumers read those from the globals live).
+    ///     Past the cadence gate, a texel-quantized batch comparison further absorbs any write too small
+    ///     for the RT to resolve (sub-texel drift, a converged fade tail) — so "changed" means changed by
+    ///     more than the field's own resolution, not merely written.
     /// </summary>
     internal class SceneLightFieldService : IStartable, ITickable, IDisposable
     {
@@ -68,13 +71,29 @@ namespace BalloonParty.Shared.SceneLight
         private readonly float[] _batchFalloffs = new float[ShaderStampCapacity];
         private readonly float[] _batchColorIndices = new float[ShaderStampCapacity];
 
+        // The batch actually last sent to the GPU, kept to compare against the freshly built one — see
+        // BatchUnchanged. Mirrors the _batch* set shape/order so the two stay easy to read side by side.
+        private readonly Vector4[] _renderedCenters = new Vector4[ShaderStampCapacity];
+        private readonly float[] _renderedRadii = new float[ShaderStampCapacity];
+        private readonly float[] _renderedEndRadii = new float[ShaderStampCapacity];
+        private readonly float[] _renderedMagnitudes = new float[ShaderStampCapacity];
+        private readonly float[] _renderedFalloffs = new float[ShaderStampCapacity];
+        private readonly float[] _renderedColorIndices = new float[ShaderStampCapacity];
+
         private DisturbanceFieldCoordinates _coords;
         private int _maxLights;
         private float _stampAspect = 1f;
+        private float _epsilonX;
+        private float _epsilonY;
+        private float _epsilonRadius;
         private bool _dirty = true;
         private bool _warnedOverflow;
         private bool _fieldOn;
         private float _renderAccumulator;
+
+        // -1 forces the first comparison in Tick to fail, so nothing can skip before a real render has
+        // ever populated the _rendered* arrays.
+        private int _renderedCount = -1;
 
         internal RenderTexture FieldTexture => _resources.FieldTexture;
 
@@ -96,6 +115,14 @@ namespace BalloonParty.Shared.SceneLight
             // UV space is normalised per-axis over a non-square field, so the accumulate shader corrects
             // the vertical delta by this ratio to keep a radius circular in world space.
             _stampAspect = _coords.Bounds.height / _coords.Bounds.width;
+
+            // Half a texel per axis: a stamp delta below this can't move the rendered RT, so
+            // BatchUnchanged treats it as unchanged rather than paying for an invisible re-render.
+            _epsilonX = 0.5f / _coords.Width;
+            _epsilonY = 0.5f / _coords.Height;
+
+            // Radii are scalar UV (not per-axis), so use the conservative (finer) axis.
+            _epsilonRadius = Mathf.Min(_epsilonX, _epsilonY);
             _resources.Initialize(
                 _coords.Width, _coords.Height,
                 _settings.FillShader, _settings.AccumulateShader, _settings.GradientShader);
@@ -116,7 +143,10 @@ namespace BalloonParty.Shared.SceneLight
         // Re-renders the field's pipeline only when a registered light changed AND the cadence cap (see
         // FieldFrameInterval) allows it — a fast-moving light would otherwise dirty the field every frame,
         // running the pipeline at the display's full refresh rate for identical visuals. An idle scene
-        // skips the pipeline entirely; the RT keeps its last (still-correct) contents.
+        // skips the pipeline entirely; the RT keeps its last (still-correct) contents. Past that gate, the
+        // freshly built batch is also compared against the one last sent to the GPU (BatchUnchanged) — a
+        // write the RT's texel resolution can't distinguish (sub-texel drift, a converged fade tail) is
+        // absorbed rather than paying for a visually identical re-render.
         void ITickable.Tick()
         {
 #if UNITY_EDITOR
@@ -137,6 +167,18 @@ namespace BalloonParty.Shared.SceneLight
             }
 
             var count = BuildBatch();
+
+            // The batch changed by less than the field can resolve (sub-texel drift, a converged fade
+            // tail, an equal-within-a-texel rewrite) — skip the pipeline. Safe to clear _dirty: any further
+            // write re-fires the light's ReactiveProperty subscription and dirties it again. Don't touch
+            // the accumulator here — an absorbed write isn't a render, so a real change arriving next tick
+            // should still be judged against the same cadence boundary, not one this skip already spent.
+            if (count == _renderedCount && BatchUnchanged(count))
+            {
+                _dirty = false;
+                return;
+            }
+
             _resources.Fill();
             RunAccumulate(count);
             PushGradientParams();
@@ -147,6 +189,16 @@ namespace BalloonParty.Shared.SceneLight
             // Subtract, don't reset: a render can fire below the interval (the ungated bootstrap render),
             // and a plain reset would delay the next one.
             _renderAccumulator = Mathf.Max(0f, _renderAccumulator - interval);
+
+            // Remember what was actually sent to the GPU so the next tick's batch can be compared against
+            // it. The stale tail beyond count is never read back — count is compared first.
+            Array.Copy(_batchCenters, _renderedCenters, count);
+            Array.Copy(_batchRadii, _renderedRadii, count);
+            Array.Copy(_batchEndRadii, _renderedEndRadii, count);
+            Array.Copy(_batchMagnitudes, _renderedMagnitudes, count);
+            Array.Copy(_batchFalloffs, _renderedFalloffs, count);
+            Array.Copy(_batchColorIndices, _renderedColorIndices, count);
+            _renderedCount = count;
 
             // The on-flag is static once the field is live; set it after the first full pipeline render.
             if (!_fieldOn)
@@ -239,6 +291,48 @@ namespace BalloonParty.Shared.SceneLight
             }
 
             return count;
+        }
+
+        // Compares the freshly built batch against the one last sent to the GPU, tolerant of deltas the
+        // field's own texel resolution can't resolve — see the field-level epsilons computed in Start.
+        // Plain loop, no LINQ/allocation: this runs every tick the cadence gate passes.
+        private bool BatchUnchanged(int count)
+        {
+            const float valueEpsilon = 1e-3f;
+
+            for (var i = 0; i < count; i++)
+            {
+                var center = _batchCenters[i];
+                var renderedCenter = _renderedCenters[i];
+                if (Mathf.Abs(center.x - renderedCenter.x) >= _epsilonX ||
+                    Mathf.Abs(center.z - renderedCenter.z) >= _epsilonX ||
+                    Mathf.Abs(center.y - renderedCenter.y) >= _epsilonY ||
+                    Mathf.Abs(center.w - renderedCenter.w) >= _epsilonY)
+                {
+                    return false;
+                }
+
+                if (Mathf.Abs(_batchRadii[i] - _renderedRadii[i]) >= _epsilonRadius ||
+                    Mathf.Abs(_batchEndRadii[i] - _renderedEndRadii[i]) >= _epsilonRadius)
+                {
+                    return false;
+                }
+
+                if (Mathf.Abs(_batchMagnitudes[i] - _renderedMagnitudes[i]) >= valueEpsilon ||
+                    Mathf.Abs(_batchFalloffs[i] - _renderedFalloffs[i]) >= valueEpsilon)
+                {
+                    return false;
+                }
+
+                // The encoded palette index is discrete, not a continuum — any change is a different
+                // colour, so this compares exactly rather than tolerating drift.
+                if (_batchColorIndices[i] != _renderedColorIndices[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void RunAccumulate(int count)

@@ -111,6 +111,12 @@ is capped independent of display refresh. Unscaled time keeps the cadence advanc
 render (before the on-flag is set) always fires immediately, regardless of the cap, so consumers never
 sample an empty RT.
 
+Past the cadence gate, the service also compares the freshly built stamp batch against the one last
+sent to the GPU (texel-quantized epsilons for position/radius, a small absolute epsilon for
+magnitude/falloff, exact match for the palette index) and skips the render when nothing changed beyond
+what the field's own resolution can show — sub-texel drift, a converged fade tail, or an equal-within-a-texel
+rewrite no longer cost a re-render.
+
 ## Device builds: the field shaders are serialized
 
 All passes are `Hidden/` shaders (`SceneLightFieldFill`, `SceneLightAccumulate`, `SceneLightGradient`),
