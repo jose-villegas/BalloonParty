@@ -13,6 +13,10 @@ namespace BalloonParty.UI.Score
         private const string OverlaySortingLayer = "UI";
         private const int OverlaySortingOrder = 100;
 
+        // A ribbon lifetime long enough to outlast any level-up freeze, so a paused orb's tail doesn't decay
+        // while it hangs behind the popup. Mirrors ShapeFormationTicker's formation-vertex freeze.
+        private const float FrozenRibbonTime = 600f;
+
         private static readonly AnimationCurve LinearFallback = AnimationCurve.Linear(0f, 0f, 1f, 1f);
 
         [SerializeField] private SpriteRenderer _renderer;
@@ -207,6 +211,19 @@ namespace BalloonParty.UI.Score
         internal void SetRibbonTime(float time)
         {
             _trailRenderer.time = time;
+        }
+
+        // Called when a flight is paused (level-up freeze): inflate the ribbon lifetime so the frozen orb keeps
+        // its tail. OnDespawned (on eventual completion) restores the authored value, and ThawRibbon covers a
+        // resume. Formation anchors have no FlyingTrail, so only tween-driven default trails hit this.
+        internal void FreezeRibbon()
+        {
+            _trailRenderer.time = FrozenRibbonTime;
+        }
+
+        internal void ThawRibbon()
+        {
+            _trailRenderer.time = _defaultRibbonTime;
         }
 
         // Pen up/down: formations travel between vertices without drawing (deploy), then emit while

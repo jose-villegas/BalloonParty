@@ -339,6 +339,22 @@ triangle is just `{3/1}, m = 1` — one implementation covers every tier.
 >   registering/unregistering the anchor flight itself; `BigScoreTrailBehaviour` only picks the tier, anchors
 >   the centre, and calls `Launch`. Keeps the "consumer that `Get()`s returns" rule unambiguous.
 
+> **Pause-through-ceremony (2026-07-19).** The level-up no longer `CompleteAll`s the survivors at the pan-in
+> end — clearing the drawn constellations mid-flight read as harsh. Instead they are **frozen through the
+> popup and resolved as outgoing-level content**. `LevelUpCinematic` calls `Flights.PauseAll()` the moment
+> `ILevelProgress.Phase` becomes `Pending` (not at `BeginCinematic`: the non-tracked trails must keep flying
+> until then so their arrivals *confirm* the level-up — freezing them earlier, with `CompleteAll` now gone
+> from the pan-in end, would strand the popup unconfirmed and soft-lock, worst for a small `DefaultScore`
+> final pop). Each frozen formation freezes + inflates its ribbons (`Paused` branch); a plain `DefaultScore`
+> orb does the same via `TrailFlight.Pause → FlyingTrail.FreezeRibbon`. Resolution happens at the transition
+> seam: `ScoreTrailService` implements `ITransitionOutgoingContent`, and `HoldOutgoing` (called mid-Ascent
+> while the phase is still `Transitioning`) `CompleteAll`s them — arrivals bank their points (never banked
+> while frozen, so total score stays correct) and the formations snap-fade under the descent that covers
+> their exit. **Numbering invariant:** because this runs before `LevelTransitionCompletedMessage` flips the
+> phase back to `Playing`, the arrivals (carrying the finished level's cumulative score) land in a
+> non-`Playing` phase and are ignored by `LevelController`/`ColorProgressBar`, so an old-level survivor can
+> never step the new bar's slider or watermark. Abort/loss (`AbortSession`) keeps the immediate `CompleteAll`.
+
 ### `BigScore` — 3D shape catalog + score decomposition (José, 2026-07-19)
 
 **Denomination = vertex count, full 1:1 decomposition.** A shape's score value IS its vertex

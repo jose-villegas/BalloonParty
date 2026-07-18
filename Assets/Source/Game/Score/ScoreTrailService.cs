@@ -6,6 +6,7 @@ using BalloonParty.Game.Score.Behaviours;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Slots.Actor;
 using BalloonParty.UI.Score;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -15,7 +16,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Game.Score
 {
-    internal class ScoreTrailService : IStartable, IDisposable, IRunResettable
+    internal class ScoreTrailService : IStartable, IDisposable, IRunResettable, ITransitionOutgoingContent
     {
         private readonly IPublisher<ScoreTrailArrivedMessage> _arrivedPublisher;
         private readonly Dictionary<string, Color> _colorLookup = new();
@@ -78,6 +79,21 @@ namespace BalloonParty.Game.Score
             _groupCts.Cancel();
             _groupCts.Dispose();
             _groupCts = new CancellationTokenSource();
+        }
+
+        // The level-up ceremony freezes the surviving score trails behind the popup (see LevelUpCinematic); they
+        // are outgoing-level content exactly like the old board's balloons. The Ascent covers their exit, so at
+        // this seam we simply resolve them: CompleteAll fires each survivor's arrival — ScoreController banks the
+        // points (they were never banked while frozen) and the shape formations snap-fade out. This runs while
+        // the phase is still Transitioning, before LevelTransitionCompleted returns it to Playing, so the arrivals
+        // land in a non-Playing phase and can't step the new level's progress or bar (the numbering invariant).
+        public void HoldOutgoing(Transform outgoingRoot, float exitDrop)
+        {
+            _flights.CompleteAll();
+        }
+
+        public void ReleaseOutgoing()
+        {
         }
 
         internal ITrailEndpoint GetTarget(string colorName)

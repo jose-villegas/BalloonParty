@@ -29,7 +29,7 @@ The director does not know about level-ups, trails, or cameras. Producers define
 | **Begin** | `BeginCinematic(LevelUpPanIn)`, `Pause(Cinematic)` freezes the projectile (and thrower input). Tipping trail's move tween killed, scale tween paused, position/scale driven manually by `PanInTick` |
 | **Tick** | `_slowDownCurve` modulates tipping trail speed (1.0 → 0.3). Other trails fly at normal `Time.timeScale` (unmodified). Camera pans toward tipping trail, clamped so the trail always stays within the orthographic frustum |
 | **End trigger** | Tipping trail progress ≥ 1 → `Complete()` fires `onArrived` → `ScoreTrailArrivedMessage` |
-| **End** | `CompleteAll()` finishes stragglers, `EndCinematic()` → gate opens → popup shows |
+| **End** | `EndCinematic()` → gate opens → popup shows. **No `CompleteAll` here** — the surviving trails stay frozen through the popup (see *Pausing survivors through the ceremony* below) |
 
 ### Gate — Popup Wait + Glow Trails
 
@@ -43,7 +43,7 @@ After the appear animation finishes, `LevelUpPopUp` publishes `LevelUpGlowTrails
 |---|---|
 | **Trigger** | `LevelUpDismissedMessage` (player pressed Continue) |
 | **`LevelUpCinematic.OnDismissed`** | `Resume(Cinematic)` and finalizes its own session (`NavigationState.Game`). It does **not** touch the camera — the un-zoom is the Ascent's. `CinematicState.LevelUpRestore` is no longer played (kept in the enum/settings for serialized-index stability) |
-| **`LevelTransitionController`** | Driven by `ILevelProgress.Phase → Transitioning` (the dismissal advances the phase; the Ascent watches the phase, not the message). Waits for `!Cinematic.IsPlaying` (safety net) then for overflow drain, un-zooms the camera (`RestoreTweened`, synced to the board effect's `EstimateSeconds()`), and runs the Ascent. Runs an injected `IBoardEffect` to clear the old balloons — bound to `BoardFloatAwayEffect`, so level-up balloons float away rather than pop. Both halves of the old level travel with the descent: statics ride via `ITransitionOutgoingContent`, and the old balloons are detached off the grid + reparented under the `ScenarioContentRoot` (`BalloonControllerRegistry.DetachOutgoing`) by the float effect's `Collect()` — hence the root-reset happens *before* `Collect()` so their reparent lands at the right offset |
+| **`LevelTransitionController`** | Driven by `ILevelProgress.Phase → Transitioning` (the dismissal advances the phase; the Ascent watches the phase, not the message). Waits for `!Cinematic.IsPlaying` (safety net) then for overflow drain, un-zooms the camera (`RestoreTweened`, synced to the board effect's `EstimateSeconds()`), and runs the Ascent. Runs an injected `IBoardEffect` to clear the old balloons — bound to `BoardFloatAwayEffect`, so level-up balloons float away rather than pop. Both halves of the old level travel with the descent: statics ride via `ITransitionOutgoingContent`, and the old balloons are detached off the grid + reparented under the `ScenarioContentRoot` (`BalloonControllerRegistry.DetachOutgoing`) by the float effect's `Collect()` — hence the root-reset happens *before* `Collect()` so their reparent lands at the right offset. The level-up's **frozen score trails** are outgoing content too: `ScoreTrailService.HoldOutgoing` resolves them here (`CompleteAll`) so they disappear under the Ascent (see *Pausing survivors through the ceremony*) |
 
 ### Pause Integration
 
@@ -53,7 +53,34 @@ After the appear animation finishes, `LevelUpPopUp` publishes `LevelUpGlowTrails
 | Trail spawning | Not gated — projectile is frozen so no new pops occur; scatter-delayed trails from the triggering pop complete before the popup |
 | Balloon animators/particles | popup claims `TimeScaleSource.LevelUpPopup` = 0 via `TimeScaleService` |
 | Popup UI | `AnimatorUpdateMode.UnscaledTime` + `ignoreTimeScale` delays |
-| Score trails (non-tipping) | Never paused — fly at normal speed during cinematic |
+| Score trails (non-tipping) | Fly at normal speed **during** the pan-in — their arrivals must land to confirm the level-up (`LevelController` needs every colour's trails to arrive before it flips to `Pending`). Frozen only once the ceremony is confirmed (see below) |
+
+### Pausing survivors through the ceremony
+
+The level-up used to **clear** every still-airborne trail with `CompleteAll()` at the end of the pan-in.
+Now that big scores fly as drawn constellations, snapping them away read as harsh — so the survivors are
+**paused through the popup and resolved as outgoing-level content**, exactly like the old board's balloons.
+
+1. **Freeze at confirmation, not at pan-in start.** `LevelUpCinematic` subscribes to `ILevelProgress.Phase`
+   and calls `Flights.PauseAll()` the moment it becomes `Pending` (the popup is up). This is deliberately
+   *not* done at `BeginCinematic`: pausing everything up front would freeze the very trails whose arrivals
+   *confirm* the level-up, and with `CompleteAll` gone from the pan-in end nothing else would force those
+   arrivals — the popup would never fire (a soft-lock, worst for a small `DefaultScore` final pop where the
+   tracked trail alone can't reach the colour's threshold). Letting them fly until `Pending` means every
+   confirming arrival has already landed, so the freeze can only ever catch pure visual survivors. The
+   `ShapeFormationTicker` freezes each frozen formation and inflates its ribbons; `TrailFlight.Pause` does the
+   same for a plain `DefaultScore` orb (`FlyingTrail.FreezeRibbon`) so its tail doesn't decay behind the popup.
+2. **Resolve at the transition seam.** `ScoreTrailService` implements `ITransitionOutgoingContent`; its
+   `HoldOutgoing` (called by `LevelTransitionController` mid-Ascent, while the phase is still `Transitioning`)
+   calls `Flights.CompleteAll()`. Each survivor's arrival fires — `ScoreController` banks its points (they were
+   never banked while frozen, so total score stays correct) and the formations snap-fade out. The Ascent's
+   board effect visually covers their exit, so they "safely disappear" there. Because this runs *before*
+   `LevelTransitionCompletedMessage` returns the phase to `Playing`, the arrivals (carrying the finished
+   level's numbering) land in a non-`Playing` phase and are ignored by `LevelController`/`ColorProgressBar` —
+   they can't step the **new** level's progress, bar, or watermark.
+3. **Abort/loss keep the old immediate cleanup.** A loss committing mid-pan-in (`AbortSession`) still
+   `CompleteAll()`s at once — that path never reaches a transition, so it must not leave anything frozen.
+   Every session exit disposes the freeze subscription; abort/dismiss/dispose are all leak-audited.
 
 ### Trail Identity
 

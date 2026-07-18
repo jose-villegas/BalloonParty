@@ -355,6 +355,26 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void OutgoingSurvivorArrival_WhileTransitioning_DoesNotStepResetProgress()
+        {
+            // The level-up ceremony freezes its surviving score trails behind the popup, then resolves them
+            // (CompleteAll) as outgoing-level content when the transition runs — while the phase is still
+            // Transitioning, AFTER progress has reset for the new level. Those arrivals carry the finished
+            // level's cumulative score; landing them now must not step the reset numbering (the invariant the
+            // resolve point rests on: the transition runs before the phase returns to Playing).
+            _thresholds.PointsRequiredForLevel(Arg.Any<int>()).Returns(2);
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
+            FireDismissed();
+            Assert.AreEqual(LevelUpPhase.Transitioning, _controller.Phase.Value);
+            Assert.AreEqual(0, _controller.GetProgress(Red), "progress reset for the new level on dismissal");
+
+            FireTrailArrived(Red, 2); // a frozen survivor completing, carrying the finished level's score
+
+            Assert.AreEqual(0, _controller.GetProgress(Red), "an outgoing survivor must not step the new level");
+        }
+
+        [Test]
         public void Phase_CyclesThroughTheCeremony()
         {
             _thresholds.PointsRequiredForLevel(1).Returns(2);

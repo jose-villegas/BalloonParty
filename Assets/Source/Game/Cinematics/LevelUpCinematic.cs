@@ -14,6 +14,7 @@ using BalloonParty.Shared.Pool;
 using BalloonParty.UI.Score;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
+using UniRx;
 using UnityEngine;
 using VContainer;
 using BalloonParty.Configuration.Cinematics;
@@ -44,6 +45,7 @@ namespace BalloonParty.Game.Cinematics
         private TrackedTrailSettings _trackedTrailSettings;
         private IDisposable _scoreSubscription;
         private IDisposable _sessionSubscription;
+        private IDisposable _freezeSubscription;
         private Vector3 _lastTrailPosition;
         private bool _sessionActive;
         private TrailId _tippingTrailId;
@@ -106,6 +108,7 @@ namespace BalloonParty.Game.Cinematics
             _cts.Cancel();
             _cts.Dispose();
             DisposeSessionSubscription();
+            LifecycleHelper.DisposeAndClear(ref _freezeSubscription);
             _scoreSubscription?.Dispose();
 
             if (_pauseService.IsPaused(PauseSource.Cinematic))
@@ -199,6 +202,19 @@ namespace BalloonParty.Game.Cinematics
             _trackedFlight.Transform.GetComponent<FlyingTrail>()?.DisableMoveTween();
             _trackedFlight.Pause();
 
+            // Only the tracked principal freezes now; the rest keep flying so their arrivals still CONFIRM the
+            // level-up (LevelController needs every colour's trails to land before it flips to Pending). The
+            // moment the ceremony IS confirmed (Phase → Pending — the popup is up), freeze whatever is still
+            // airborne so the shapes hold behind the popup instead of snapping away. The level transition then
+            // disposes them as outgoing-level content (ScoreTrailService.HoldOutgoing). Freezing at Pending
+            // rather than pan-in start is load-bearing: pausing the confirming trails before they land would
+            // strand the level-up unconfirmed and soft-lock the popup (with CompleteAll gone from EndPanIn,
+            // nothing else would force those arrivals).
+            LifecycleHelper.DisposeAndClear(ref _freezeSubscription);
+            _freezeSubscription = _levelProgress.Phase
+                .Where(phase => phase == LevelUpPhase.Pending)
+                .Subscribe(_ => _scoreTrailService.Flights.PauseAll());
+
             SubscribeForPanIn();
         }
 
@@ -230,6 +246,8 @@ namespace BalloonParty.Game.Cinematics
 
         private void OnCinematicEnded()
         {
+            // Pending has long since fired by any terminal, so the freeze hook has done its job; drop it.
+            LifecycleHelper.DisposeAndClear(ref _freezeSubscription);
             _sessionActive = false;
             Navigation.TransitionTo(NavigationState.Game);
         }
@@ -296,7 +314,10 @@ namespace BalloonParty.Game.Cinematics
         private void AbortSession()
         {
             DisposeSessionSubscription();
+            LifecycleHelper.DisposeAndClear(ref _freezeSubscription);
             _trackedFlight = null;
+            // Aborts want immediate cleanup — complete every survivor now (banks points, snap-fades the shapes)
+            // rather than leaving them frozen for a transition that this path never reaches.
             _scoreTrailService.Flights.CompleteAll();
 
             if (_pauseService.IsPaused(PauseSource.Cinematic))
@@ -310,9 +331,12 @@ namespace BalloonParty.Game.Cinematics
 
         private void EndPanIn()
         {
+            // No CompleteAll here anymore: the survivors stay frozen through the popup (frozen at Pending) and
+            // are resolved as outgoing-level content when the level transition runs. The freeze subscription is
+            // deliberately left live — in a multi-colour tip, Pending can still be one straggler-arrival away
+            // when the tracked hero lands, and that late Pending must still freeze the remaining survivors.
             DisposeSessionSubscription();
             _trackedFlight = null;
-            _scoreTrailService.Flights.CompleteAll();
             Runner.EndPanIn();
             SubscribeForDismissed();
         }

@@ -159,7 +159,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ShapeFormationTicker>().AsSelf();
             builder.Register<BigScoreTrailBehaviour>(Lifetime.Singleton).AsSelf();
             builder.Register(BuildScoreTrailResolver, Lifetime.Singleton);
-            builder.RegisterEntryPoint<ScoreTrailService>().AsSelf().As<IRunResettable>();
+            builder.RegisterEntryPoint<ScoreTrailService>().AsSelf().As<IRunResettable>().As<ITransitionOutgoingContent>();
             builder.RegisterEntryPoint<ItemAssigner>();
             builder.RegisterEntryPoint<ItemActivator>();
             builder.RegisterEntryPoint<ProjectileBuffService>().As<IProjectileBuffs>();

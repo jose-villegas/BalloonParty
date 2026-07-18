@@ -1,3 +1,4 @@
+using BalloonParty.UI.Score;
 using DG.Tweening;
 using UnityEngine;
 
@@ -33,6 +34,10 @@ namespace BalloonParty.Shared.Pool
             }
 
             _transform.DOPause();
+            // A default trail's TrailRenderer keeps decaying in real time even while the transform is paused,
+            // so a long freeze would dissolve the frozen orb's tail; hold the ribbon until it resolves. Null on
+            // formation anchors (their vertices are frozen by ShapeFormationTicker instead).
+            _transform.GetComponent<FlyingTrail>()?.FreezeRibbon();
             Phase = FlightPhase.Paused;
         }
 
@@ -44,6 +49,7 @@ namespace BalloonParty.Shared.Pool
             }
 
             _transform.DOPlay();
+            _transform.GetComponent<FlyingTrail>()?.ThawRibbon();
             Phase = FlightPhase.InFlight;
         }
 
