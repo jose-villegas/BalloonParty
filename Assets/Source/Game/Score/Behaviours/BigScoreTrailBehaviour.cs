@@ -22,7 +22,7 @@ namespace BalloonParty.Game.Score.Behaviours
 
         // Defensive: only used if the tier table is empty (the wired asset always has rows).
         private static readonly BigScoreTierConfig FallbackTier =
-            new(0, 3, 1, 1, 0.381966f, 0f, 1.2f, 0.25f, 0.35f, 0.5f, 0.8f, 180f);
+            new(0, 3, 1, 1, 0.381966f, 0f, 1.2f, 0.25f, 0.35f, 0.5f, 0.8f, 180f, 0.6f);
 
         private readonly ShapeFormationTicker _ticker;
         private readonly IScoreTrailBehaviourConfiguration _config;

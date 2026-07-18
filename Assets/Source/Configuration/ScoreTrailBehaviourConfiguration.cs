@@ -68,6 +68,11 @@ namespace BalloonParty.Configuration
         [Tooltip("Collapse in-plane rotation, degrees/second. 0 = pure radial collapse (no spin).")]
         [SerializeField] private float _rotationSpeedDegrees;
 
+        [Tooltip("Fraction of the pop-to-bar distance the whole formation drifts across while drawing " +
+                 "(0 = anchored at the pop, 1 = merges at the bar); the carrier flies the remainder.")]
+        [Range(0f, 1f)]
+        [SerializeField] private float _driftToTarget;
+
         public int MinPoints => _minPoints;
         public int VertexCount => Mathf.Clamp(_vertexCount, 3, 8);
         public int Skip => Mathf.Clamp(_skip, 1, VertexCount - 1);
@@ -78,6 +83,7 @@ namespace BalloonParty.Configuration
         public float DrawDuration => _drawDuration;
         public float CollapseDuration => _collapseDuration;
         public float RibbonTime => _ribbonTime;
+        public float DriftToTarget => Mathf.Clamp01(_driftToTarget);
 
         // 0 authored → the natural nesting offset pi/n so successive stars land where the geometry puts them.
         public float NestRotationRadians =>
@@ -99,7 +105,8 @@ namespace BalloonParty.Configuration
             float drawDuration,
             float collapseDuration,
             float ribbonTime,
-            float rotationSpeedDegrees)
+            float rotationSpeedDegrees,
+            float driftToTarget)
         {
             _minPoints = minPoints;
             _vertexCount = vertexCount;
@@ -113,6 +120,7 @@ namespace BalloonParty.Configuration
             _collapseDuration = collapseDuration;
             _ribbonTime = ribbonTime;
             _rotationSpeedDegrees = rotationSpeedDegrees;
+            _driftToTarget = driftToTarget;
         }
     }
 
@@ -145,9 +153,9 @@ namespace BalloonParty.Configuration
         {
             return new[]
             {
-                new BigScoreTierConfig(40, 3, 1, 1, GoldenNestScale, 0f, 1.1f, 0.25f, 0.35f, 0.5f, 0.8f, 180f),
-                new BigScoreTierConfig(80, 4, 1, 1, GoldenNestScale, 0f, 1.3f, 0.25f, 0.35f, 0.5f, 0.9f, 0f),
-                new BigScoreTierConfig(150, 5, 2, 2, GoldenNestScale, 0f, 1.5f, 0.25f, 0.35f, 0.5f, 1.0f, 0f),
+                new BigScoreTierConfig(40, 3, 1, 1, GoldenNestScale, 0f, 1.1f, 0.25f, 0.35f, 0.5f, 0.8f, 180f, 0.6f),
+                new BigScoreTierConfig(80, 4, 1, 1, GoldenNestScale, 0f, 1.3f, 0.25f, 0.35f, 0.5f, 0.9f, 0f, 0.6f),
+                new BigScoreTierConfig(150, 5, 2, 2, GoldenNestScale, 0f, 1.5f, 0.25f, 0.35f, 0.5f, 1.0f, 0f, 0.6f),
             };
         }
     }

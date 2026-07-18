@@ -136,7 +136,8 @@ namespace BalloonParty.Tests.Game
                 drawDuration: 0.35f,
                 collapseDuration: 0.5f,
                 ribbonTime: 0.8f,
-                rotationSpeedDegrees: 0f);
+                rotationSpeedDegrees: 0f,
+                driftToTarget: 0.6f);
         }
 
         private sealed class SpyBehaviour : IScoreTrailBehaviour

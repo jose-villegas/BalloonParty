@@ -30,6 +30,7 @@ MonoBehaviour:
     _collapseDuration: 0.5
     _ribbonTime: 0.8
     _rotationSpeedDegrees: 180
+    _driftToTarget: 0.6
   - _minPoints: 80
     _vertexCount: 4
     _skip: 1
@@ -42,6 +43,7 @@ MonoBehaviour:
     _collapseDuration: 0.5
     _ribbonTime: 0.9
     _rotationSpeedDegrees: 0
+    _driftToTarget: 0.6
   - _minPoints: 150
     _vertexCount: 5
     _skip: 2
@@ -54,3 +56,4 @@ MonoBehaviour:
     _collapseDuration: 0.5
     _ribbonTime: 1
     _rotationSpeedDegrees: 0
+    _driftToTarget: 0.6

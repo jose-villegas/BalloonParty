@@ -155,6 +155,12 @@ namespace BalloonParty.Game.Score.Behaviours
             state.Carrier = carrier;
             state.Flight = request.Flights.Register(request.CarrierId, carrier.transform, request.Center);
 
+            // Sampled ONCE: the formation drifts toward this exact point and the carrier finishes the
+            // trip to it, so the whole journey reads as one continuous flight to the bar.
+            state.DriftTarget = request.Target != null ? request.Target.RandomPosition() : request.Center;
+            state.TotalDuration = PhasedDuration(request.Tier);
+            state.TotalElapsed = 0f;
+
             var count = request.Tier.VertexCount;
             for (var i = 0; i < count; i++)
             {
@@ -173,6 +179,17 @@ namespace BalloonParty.Game.Score.Behaviours
 
         private void AdvanceFormation(FormationState state, float dt, float unscaledDt)
         {
+            // The whole formation glides toward the bar while it draws (DriftToTarget = the fraction
+            // of the pop-to-bar distance covered by the time the last collapse ends); every vertex and
+            // the carrier derive from Center, so moving it moves the shape.
+            if (state.Phase != FormationPhase.Merge && state.TotalDuration > 0f)
+            {
+                state.TotalElapsed += dt;
+                var driftT = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(state.TotalElapsed / state.TotalDuration));
+                var driftEnd = Vector3.Lerp(state.InitialCenter, state.DriftTarget, state.Tier.DriftToTarget);
+                state.Center = Vector3.Lerp(state.InitialCenter, driftEnd, driftT);
+            }
+
             switch (state.Phase)
             {
                 case FormationPhase.Deploy:
@@ -341,8 +358,7 @@ namespace BalloonParty.Game.Score.Behaviours
 
         private void LaunchCarrier(FormationState state)
         {
-            var target = state.Target != null ? state.Target.RandomPosition() : Vector3.zero;
-            state.Carrier.Setup(target, state.Color, state.CarrierFlightDuration, state.OnCarrierLanded);
+            state.Carrier.Setup(state.DriftTarget, state.Color, state.CarrierFlightDuration, state.OnCarrierLanded);
         }
 
         private void ReportOnce(FormationState state, Vector3 at)
@@ -402,6 +418,23 @@ namespace BalloonParty.Game.Score.Behaviours
             state.Carrier = null;
             state.Flight = null;
             _pool.Push(state);
+        }
+
+        // Sum of every repetition's deploy+draw+collapse with the same per-phase clamps the tick uses,
+        // so drift progress hits exactly 1 as the final collapse ends.
+        private static float PhasedDuration(in BigScoreTierConfig tier)
+        {
+            var total = 0f;
+            var scale = 1f;
+            for (var rep = 0; rep < tier.Repeats; rep++)
+            {
+                total += Mathf.Max(tier.DeployDuration * scale, MinPhaseDuration)
+                         + Mathf.Max(tier.DrawDuration * scale, MinPhaseDuration)
+                         + Mathf.Max(tier.CollapseDuration * scale, MinPhaseDuration);
+                scale *= tier.NestScale;
+            }
+
+            return total;
         }
 
         private static float RepScale(FormationState state)
@@ -473,8 +506,12 @@ namespace BalloonParty.Game.Score.Behaviours
             internal Color Color;
             internal TrailId CarrierId;
             internal Vector3 Center;
+            internal Vector3 InitialCenter;
             internal Vector3 DeployFrom;
+            internal Vector3 DriftTarget;
             internal float Radius;
+            internal float TotalDuration;
+            internal float TotalElapsed;
             internal CancellationToken CancellationToken;
             internal FormationPhase Phase;
             internal float CarrierFlightDuration;
@@ -503,6 +540,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 Color = request.Color;
                 CarrierId = request.CarrierId;
                 Center = request.Center;
+                InitialCenter = request.Center;
                 DeployFrom = request.DeployFrom;
                 Radius = request.Radius;
                 CancellationToken = request.CancellationToken;
