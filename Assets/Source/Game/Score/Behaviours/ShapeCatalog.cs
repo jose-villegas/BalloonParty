@@ -139,7 +139,7 @@ namespace BalloonParty.Game.Score.Behaviours
         // φ (golden ratio) — the dodecahedron's vertex coordinates are framed on it.
         private const float Phi = 1.6180339887498949f;
 
-        private static readonly int[] LadderDenominations = { 100, 50, 30, 20, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+        private static readonly int[] LadderDenominations = { 100, 50, 30, 20, 15, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
 
         private static readonly Dictionary<int, FormationShape> Shapes = BuildShapes();
 
@@ -171,6 +171,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 { 9, BuildTriaugmentedTriangularPrism() },
                 { 10, BuildOctagonalBipyramid() },
                 { 12, BuildHexagonalPrism() },
+                { 15, BuildPentagonalCupola() },
                 { 20, BuildDodecahedron() },
                 { 30, BuildStarBall() },
                 { 50, BuildTorus() },
@@ -336,6 +337,41 @@ namespace BalloonParty.Game.Score.Behaviours
             }
 
             return Build(12, 1.1f, vertices, walks);
+        }
+
+        // 15 = a pentagonal cupola (Johnson J5): a decagon base and a pentagon top joined by an alternating
+        // band of five squares and five triangles — 10 + 5 vertices, all 25 edges equal. The decagon and
+        // pentagon rings draw the caps; five triangle walks thread the ten lateral edges through each pentagon
+        // apex, retracing only the five triangle-base decagon edges (the minimal doubling the ten odd-degree
+        // base vertices allow). Every square face still reads as an outline across the rings + laterals.
+        private static FormationShape BuildPentagonalCupola()
+        {
+            const float decagonRadius = 1.6180340f;   // 1/(2 sin 18°), unit-edge decagon
+            const float pentagonRadius = 0.8506508f;   // 1/(2 sin 36°), unit-edge pentagon
+            const float halfHeight = 0.2628655f;       // half the unit-edge cupola height
+
+            var vertices = new Vector3[15];
+            for (var j = 0; j < 10; j++)
+            {
+                var a = 2f * Mathf.PI * j / 10f;
+                vertices[j] = new Vector3(Mathf.Cos(a) * decagonRadius, Mathf.Sin(a) * decagonRadius, -halfHeight);
+            }
+
+            for (var i = 0; i < 5; i++)
+            {
+                // Each pentagon apex sits above the midpoint of a decagon edge — offset half a decagon step.
+                var a = 2f * Mathf.PI * i / 5f + Mathf.PI / 10f;
+                vertices[10 + i] = new Vector3(
+                    Mathf.Cos(a) * pentagonRadius, Mathf.Sin(a) * pentagonRadius, halfHeight);
+            }
+
+            var walks = new[]
+            {
+                Chord(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                Chord(10, 11, 12, 13, 14),
+                Chord(10, 0, 1), Chord(11, 2, 3), Chord(12, 4, 5), Chord(13, 6, 7), Chord(14, 8, 9),
+            };
+            return Build(15, 1.35f, vertices, walks);
         }
 
         // 10 = octagonal bipyramid: an 8-vertex equator ring (radius 0.8 — taller than wide) + two

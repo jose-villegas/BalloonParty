@@ -90,9 +90,11 @@ namespace BalloonParty.Tests.Game
             CollectionAssert.AreEqual(new[] { 12 }, Decompose(12));
             CollectionAssert.AreEqual(new[] { 12, 2 }, Decompose(14));
 
-            // 7 and 9 are now denominations (hexagonal pyramid, triaugmented triangular prism): each one piece.
+            // 7, 9 and 15 are now denominations (hexagonal pyramid, triaugmented triangular prism, pentagonal
+            // cupola): each is a single piece rather than a multi-shape split.
             CollectionAssert.AreEqual(new[] { 7 }, Decompose(7));
             CollectionAssert.AreEqual(new[] { 9 }, Decompose(9));
+            CollectionAssert.AreEqual(new[] { 15 }, Decompose(15));
 
             // The 50 (rhombicosacron) and its showcase combo are unchanged by the 100's arrival.
             CollectionAssert.AreEqual(new[] { 50 }, Decompose(50));
@@ -283,6 +285,35 @@ namespace BalloonParty.Tests.Game
 
             var degrees = DegreeHistogram(edges.Multiplicity);
             Assert.AreEqual(3, CountByDegree(degrees, 4), "three augmentation apexes of degree four");
+        }
+
+        [Test]
+        public void ShapeCatalog_PentagonalCupola_DecagonAndPentagonCaps()
+        {
+            Assert.IsTrue(ShapeCatalog.TryGet(15, out var shape));
+
+            Assert.AreEqual(15, shape.Vertices.Length);
+            Assert.AreEqual(15, new HashSet<Vector3>(shape.Vertices).Count, "fifteen distinct vertices");
+            Assert.AreEqual(7, shape.Walks.Length, "decagon + pentagon + five triangle facets");
+
+            var edges = InspectCircuits(shape);
+            Assert.Less(edges.MaxLength - edges.MinLength, 1e-3f, "a Johnson solid — every edge the same length");
+            Assert.AreEqual(25, edges.Multiplicity.Count, "a pentagonal cupola has 25 edges");
+            Assert.AreEqual(15, edges.Touched.Count, "all fifteen vertices covered");
+
+            // Ten odd-degree decagon vertices force minimal retracing: the five triangle-base edges are doubled.
+            CollectionAssert.AreEqual(new[] { 1, 2 }, DistinctValues(edges.Multiplicity));
+
+            var doubled = 0;
+            foreach (var multiplicity in edges.Multiplicity.Values)
+            {
+                if (multiplicity == 2)
+                {
+                    doubled++;
+                }
+            }
+
+            Assert.AreEqual(5, doubled, "one retraced base per triangle facet");
         }
 
         [Test]
