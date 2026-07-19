@@ -103,8 +103,24 @@ namespace BalloonParty.Game.Score
             }
 
             using var attributionPool = UnityEngine.Pool.ListPool<ScoreAttribution>.Get(out var attributions);
-            scoreColor.ResolveScoreAttribution(in msg.Context, attributions);
+            using var incompletePool = UnityEngine.Pool.ListPool<string>.Get(out var incompleteColors);
+            CollectIncompleteColors(incompleteColors);
+            scoreColor.ResolveScoreAttribution(in msg.Context, incompleteColors, attributions);
             PublishAttributionGroup(attributions, msg.WorldPosition, msg.Context.Flags, msg.ProjectileDirection);
+        }
+
+        // Colours still short of the level's threshold — a scatter pop confines its split to these, so
+        // completing a colour never wastes the points that would've landed on it (see ResolveScoreAttribution).
+        private void CollectIncompleteColors(List<string> incompleteColors)
+        {
+            var required = _levelProgress.GetRequiredPoints();
+            foreach (var color in _colorKeys)
+            {
+                if (_levelProgress.GetProgress(color) < required)
+                {
+                    incompleteColors.Add(color);
+                }
+            }
         }
 
         private void PublishAttributionGroup(

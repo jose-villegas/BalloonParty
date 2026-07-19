@@ -47,13 +47,15 @@ namespace BalloonParty.Balloon.Model
             return sqrDistance < float.MaxValue ? Mathf.RoundToInt(-_balanceBias * sqrDistance) : 0;
         }
 
-        public void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results)
+        public void ResolveScoreAttribution(
+            in DamageContext context, IReadOnlyList<string> incompleteColors, IList<ScoreAttribution> results)
         {
             // Aggregated per colour (the attribution contract): one N-point entry per colour keeps the
             // pop as per-colour score GROUPS downstream, so a cluster pop can decompose into shapes
-            // instead of fanning into per-point 1-point trails.
+            // instead of fanning into per-point 1-point trails. Confined to incompleteColors so a
+            // completed bar never steals points that should land on one still in progress.
             ScoreAttributions.AddRandomPerColor(
-                results, _colorSource.Resolve(), HitsRemaining.Value + 1, breaksStreak: true);
+                results, _colorSource.Resolve(), incompleteColors, HitsRemaining.Value + 1, breaksStreak: true);
         }
     }
 }

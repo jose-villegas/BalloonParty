@@ -410,7 +410,8 @@ namespace BalloonParty.Tests.Game
             public SlotActorKind Kind => SlotActorKind.Static;
             public HitOutcome EvaluateHit(DamageContext context) => HitOutcome.Pop;
 
-            public void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results)
+            public void ResolveScoreAttribution(
+                in DamageContext context, IReadOnlyList<string> incompleteColors, IList<ScoreAttribution> results)
             {
                 foreach (var (color, points, isPrimary) in _attributions)
                 {

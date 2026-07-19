@@ -52,7 +52,10 @@ namespace BalloonParty.Balloon.Model
             return Mathf.RoundToInt(_balanceBias * this.CountSameColorDiagonals(grid, candidate));
         }
 
-        public void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results)
+        // Single-colour attribution — ignores incompleteColors (only scatter pops avoid a completed bar;
+        // a plain balloon still scores its own colour, banking as overflow if that colour's already full).
+        public void ResolveScoreAttribution(
+            in DamageContext context, IReadOnlyList<string> incompleteColors, IList<ScoreAttribution> results)
         {
             if (HitsRemaining.Value > 0)
             {

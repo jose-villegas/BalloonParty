@@ -63,7 +63,7 @@ namespace BalloonParty.Tests.Balloon
             SetupPaletteWithColors("Red", "Blue");
 
             var results = new List<ScoreAttribution>();
-            _model.ResolveScoreAttribution(new DamageContext(1), results);
+            _model.ResolveScoreAttribution(new DamageContext(1), null, results);
 
             var total = 0;
             foreach (var attr in results)
@@ -81,7 +81,7 @@ namespace BalloonParty.Tests.Balloon
             SetupPaletteWithColors("Red", "Blue");
 
             var results = new List<ScoreAttribution>();
-            _model.ResolveScoreAttribution(new DamageContext(1), results);
+            _model.ResolveScoreAttribution(new DamageContext(1), null, results);
 
             var seen = new HashSet<string>();
             foreach (var attr in results)
@@ -97,7 +97,7 @@ namespace BalloonParty.Tests.Balloon
             SetupPaletteWithColors("Red");
 
             var results = new List<ScoreAttribution>();
-            _model.ResolveScoreAttribution(new DamageContext(1), results);
+            _model.ResolveScoreAttribution(new DamageContext(1), null, results);
 
             foreach (var attr in results)
             {
@@ -112,7 +112,7 @@ namespace BalloonParty.Tests.Balloon
             SetupPaletteWithColors("Red");
 
             var results = new List<ScoreAttribution>();
-            _model.ResolveScoreAttribution(new DamageContext(1), results);
+            _model.ResolveScoreAttribution(new DamageContext(1), null, results);
 
             Assert.AreEqual(1, results.Count);
             Assert.AreEqual("Red", results[0].ColorId);
@@ -128,7 +128,7 @@ namespace BalloonParty.Tests.Balloon
             model.HitsRemaining.Value = 5;
 
             var results = new List<ScoreAttribution>();
-            model.ResolveScoreAttribution(new DamageContext(1), results);
+            model.ResolveScoreAttribution(new DamageContext(1), null, results);
 
             Assert.IsTrue(results.Count > 0);
             foreach (var attr in results)
@@ -144,9 +144,48 @@ namespace BalloonParty.Tests.Balloon
             _palette.Colors.Returns(new List<PaletteEntry>());
 
             var results = new List<ScoreAttribution>();
-            _model.ResolveScoreAttribution(new DamageContext(1), results);
+            _model.ResolveScoreAttribution(new DamageContext(1), null, results);
 
             Assert.AreEqual(0, results.Count);
+        }
+
+        [Test]
+        public void BubbleClusterModel_ResolveScoreAttribution_OneColorComplete_AllPointsGoToRemainingIncomplete()
+        {
+            _model.HitsRemaining.Value = 6; // 7 points total
+            SetupPaletteWithColors("Red", "Blue");
+
+            var results = new List<ScoreAttribution>();
+            _model.ResolveScoreAttribution(new DamageContext(1), new[] { "Blue" }, results);
+
+            Assert.IsFalse(results.Exists(a => a.ColorId == "Red"), "Red is already complete — must not receive points");
+
+            var total = 0;
+            foreach (var attr in results)
+            {
+                Assert.AreEqual("Blue", attr.ColorId);
+                total += attr.Points;
+            }
+
+            Assert.AreEqual(7, total);
+        }
+
+        [Test]
+        public void BubbleClusterModel_ResolveScoreAttribution_AllColorsComplete_FallsBackToScatteringOverAll()
+        {
+            _model.HitsRemaining.Value = 6; // 7 points total
+            SetupPaletteWithColors("Red", "Blue");
+
+            var results = new List<ScoreAttribution>();
+            _model.ResolveScoreAttribution(new DamageContext(1), System.Array.Empty<string>(), results);
+
+            var total = 0;
+            foreach (var attr in results)
+            {
+                total += attr.Points;
+            }
+
+            Assert.AreEqual(7, total);
         }
 
         private void SetupPaletteWithColors(params string[] names)

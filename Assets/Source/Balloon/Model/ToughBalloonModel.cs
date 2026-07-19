@@ -44,12 +44,15 @@ namespace BalloonParty.Balloon.Model
             return Mathf.RoundToInt(_balanceBias * this.BestLineCountSameType(grid, candidate));
         }
 
-        public void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results)
+        public void ResolveScoreAttribution(
+            in DamageContext context, IReadOnlyList<string> incompleteColors, IList<ScoreAttribution> results)
         {
             // Aggregated per colour (the attribution contract): one N-point entry per colour keeps the
             // pop as per-colour score GROUPS downstream, so a tough pop can decompose into shapes
-            // instead of fanning into ScoreValue separate 1-point trails.
-            ScoreAttributions.AddRandomPerColor(results, _colorSource.Resolve(), ScoreValue, breaksStreak: true);
+            // instead of fanning into ScoreValue separate 1-point trails. Confined to incompleteColors so
+            // a completed bar never steals points that should land on one still in progress.
+            ScoreAttributions.AddRandomPerColor(
+                results, _colorSource.Resolve(), incompleteColors, ScoreValue, breaksStreak: true);
         }
     }
 }

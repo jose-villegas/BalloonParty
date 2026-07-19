@@ -20,7 +20,9 @@ namespace BalloonParty.Balloon.Model
             NudgeOverrides = config.NudgeOverrides;
         }
 
-        public void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results)
+        // Single-colour attribution — ignores incompleteColors (see BalloonModel's ResolveScoreAttribution).
+        public void ResolveScoreAttribution(
+            in DamageContext context, IReadOnlyList<string> incompleteColors, IList<ScoreAttribution> results)
         {
             if (!string.IsNullOrEmpty(context.SourceColorId))
             {

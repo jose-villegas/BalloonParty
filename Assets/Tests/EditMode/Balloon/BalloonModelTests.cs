@@ -118,10 +118,26 @@ namespace BalloonParty.Tests.Balloon
             _model.HitsRemaining.Value = 0;
 
             var results = new List<ScoreAttribution>();
-            _model.ResolveScoreAttribution(new DamageContext(1), results);
+            _model.ResolveScoreAttribution(new DamageContext(1), null, results);
 
             Assert.AreEqual(1, results.Count);
             Assert.IsFalse(results[0].IsPrimary);
+            Assert.AreEqual("Red", results[0].ColorId);
+        }
+
+        [Test]
+        public void ResolveScoreAttribution_NotRainbow_IgnoresIncompleteColors_StillScoresOwnColor()
+        {
+            // A completed-bar filter must not affect the single-colour path: a red balloon still scores
+            // red even when "Red" is deliberately excluded from incompleteColors (it just banks as
+            // overflow downstream — see ScoreController.CollectIncompleteColors).
+            _model.Color.Value = "Red";
+            _model.HitsRemaining.Value = 0;
+
+            var results = new List<ScoreAttribution>();
+            _model.ResolveScoreAttribution(new DamageContext(1), new[] { "Blue" }, results);
+
+            Assert.AreEqual(1, results.Count);
             Assert.AreEqual("Red", results[0].ColorId);
         }
 
@@ -132,7 +148,7 @@ namespace BalloonParty.Tests.Balloon
             _model.HitsRemaining.Value = 3;
 
             var results = new List<ScoreAttribution>();
-            _model.ResolveScoreAttribution(new DamageContext(1), results);
+            _model.ResolveScoreAttribution(new DamageContext(1), null, results);
 
             Assert.AreEqual(0, results.Count);
         }
@@ -146,7 +162,7 @@ namespace BalloonParty.Tests.Balloon
             _model.HitsRemaining.Value = 0;
 
             var results = new List<ScoreAttribution>();
-            _model.ResolveScoreAttribution(new DamageContext(1, DamageFlags.Normal, "Red"), results);
+            _model.ResolveScoreAttribution(new DamageContext(1, DamageFlags.Normal, "Red"), null, results);
 
             Assert.AreEqual(0, results.Count);
         }
@@ -160,7 +176,7 @@ namespace BalloonParty.Tests.Balloon
             model.HitsRemaining.Value = 0;
 
             var results = new List<ScoreAttribution>();
-            model.ResolveScoreAttribution(new DamageContext(1, DamageFlags.Normal, "Purple"), results);
+            model.ResolveScoreAttribution(new DamageContext(1, DamageFlags.Normal, "Purple"), null, results);
 
             var primary = results.Find(a => a.IsPrimary);
             Assert.AreEqual("Red", primary.ColorId);
@@ -175,7 +191,7 @@ namespace BalloonParty.Tests.Balloon
             model.HitsRemaining.Value = 0;
 
             var results = new List<ScoreAttribution>();
-            model.ResolveScoreAttribution(new DamageContext(1, DamageFlags.Normal, "Red"), results);
+            model.ResolveScoreAttribution(new DamageContext(1, DamageFlags.Normal, "Red"), null, results);
 
             // Every allowed colour scores its full ScoreValue; exactly one anchors the streak.
             Assert.AreEqual(3, results.Count);
