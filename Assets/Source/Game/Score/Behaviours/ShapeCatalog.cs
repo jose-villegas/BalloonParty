@@ -38,6 +38,10 @@ namespace BalloonParty.Game.Score.Behaviours
         // (gravitas), simple ones can stay zippy; 1 = the global speed.
         internal readonly float SpinScale;
 
+        // Per-shape multiplier on the settings' pen speed — a shape whose walks are much longer than its pen
+        // count needs faster pens to keep the whole figure inked (the star ball's outlines); 1 = global.
+        internal readonly float PenSpeedScale;
+
         // The shape's local X aligns to the projectile hit direction at spawn (the line: its slope IS the
         // shot's linear equation); unaligned shapes start at a uniform random orientation instead.
         internal readonly bool AlignToHit;
@@ -53,11 +57,12 @@ namespace BalloonParty.Game.Score.Behaviours
 
         internal FormationShape(
             int denomination, float radiusScale, Vector3[] vertices, FormationWalk[] walks,
-            bool alignToHit = false, float spinScale = 1f)
+            bool alignToHit = false, float spinScale = 1f, float penSpeedScale = 1f)
         {
             Denomination = denomination;
             RadiusScale = radiusScale;
             SpinScale = spinScale;
+            PenSpeedScale = penSpeedScale;
             AlignToHit = alignToHit;
             Vertices = vertices;
             Walks = walks;
@@ -125,7 +130,7 @@ namespace BalloonParty.Game.Score.Behaviours
     ///     count equals it — full 1:1 decomposition draws every point as one orbiting pen. Small shapes partition
     ///     their edge set into closed walks (a Hamiltonian-ish cycle plus back-and-forth shuttles for the leftover
     ///     edges); 10 is an octagonal bipyramid; 12 the hexagonal prism, 20 the dodecahedron, 30 an
-    ///     garland of three seam-threaded outline stars, 50 a 10×5 torus grid, and 100 a spherical-spiral
+    ///     ball of six outline stars on the octahedral axes, 50 a 10×5 torus grid, and 100 a spherical-spiral
     ///     yarn ball (one closed coil) — the top tier follows silhouette-over-density. The tables
     ///     are built once in the static constructor and returned by reference from <see cref="TryGet"/>, so a
     ///     lookup never allocates.
@@ -437,54 +442,54 @@ namespace BalloonParty.Game.Score.Behaviours
         // pen re-walks two segments from the entry tip back to the exit tip, so no seam ever cuts across
         // a star's interior; those two edges per star are double-inked (the 12/20 precedent). Half-speed
         // SpinScale for readability.
+        // 30 = a BALL OF STARS: six five-point OUTLINE stars stamped onto the sphere at the six octahedral
+        // directions (±x, ±y, ±z). Six stars spread evenly over the WHOLE ball (the coverage three coplanar
+        // stars never reached), and each is drawn by its SILHOUETTE — the pen orbits the tip-notch-tip outline
+        // and never crosses the interior (a {5/2} pentagram's crossing lines read as a tangle; the outline is
+        // the shape you'd cut). Each outline is 10 points (5 golden-notch tips), so this is the catalog's one
+        // shape where the path (60 vertices) is richer than the pen count: the denomination's 30 pens are
+        // distributed five per outline and orbit it, tiling the 10-segment silhouette. Points are SPHERIZED
+        // (unit vectors) and the segments are arcs that hug the surface. Faster pens (PenSpeedScale) keep the
+        // longer outlines fully inked; half-speed SpinScale; tipCapRadians is the coverage dial.
         private static FormationShape BuildStarBall()
         {
-            const int starCount = 3;
+            const int starCount = 6;
             const int tipCount = 5;
             const int outlineCount = 2 * tipCount;
-
-            // The coverage dial: how far each star's tips splay from its centre. Three centres are always
-            // coplanar, so the poles perpendicular to their (equatorial) plane are the bare spots — bigger
-            // stars reach further toward those poles. Past ~1.2 adjacent stars start to overlap (tangle).
-            const float tipCapRadians = 1.1f;
+            const float tipCapRadians = 0.7f;
 
             // Golden-ratio notch: inner/outer tangent radius ≈ 0.382, the classic five-point star cut.
             var notchCapRadians = Mathf.Asin(0.382f * Mathf.Sin(tipCapRadians));
 
+            var axes = new[]
+            {
+                Vector3.right, Vector3.left, Vector3.up, Vector3.down, Vector3.forward, Vector3.back,
+            };
             var vertices = new Vector3[starCount * outlineCount];
-            var walk = new int[starCount * (outlineCount + 3)];
-            var cursor = 0;
+            var walks = new FormationWalk[starCount];
             for (var f = 0; f < starCount; f++)
             {
-                var equator = 2f * Mathf.PI * f / starCount;
-                var normal = new Vector3(Mathf.Cos(equator), Mathf.Sin(equator), 0f);
-                var toNext = new Vector3(-Mathf.Sin(equator), Mathf.Cos(equator), 0f);
+                var normal = axes[f];
+                var reference = Vector3.Cross(
+                    normal, Mathf.Abs(normal.y) < 0.9f ? Vector3.up : Vector3.right).normalized;
+                var binormal = Vector3.Cross(normal, reference);
                 var star = f * outlineCount;
+                var loop = new int[outlineCount];
                 for (var i = 0; i < outlineCount; i++)
                 {
-                    // Even outline points are tips, odd ones the notches between them. Angles run from the
-                    // garland direction: the i=0 tip (54°) leans toward the NEXT star (the seam exit), the
-                    // i=2 tip (126°) toward the PREVIOUS one (the seam entry), both on the north side, so
-                    // the seams bridge the gaps between caps without grazing either outline.
+                    // Even outline points are tips, odd ones the notches between them.
                     var cap = i % 2 == 0 ? tipCapRadians : notchCapRadians;
-                    var angle = (54f + 36f * i) * Mathf.Deg2Rad;
+                    var angle = Mathf.PI * i / tipCount;
                     vertices[star + i] = Mathf.Cos(cap) * normal
-                        + Mathf.Sin(cap) * (Mathf.Cos(angle) * toNext + Mathf.Sin(angle) * Vector3.forward);
+                        + Mathf.Sin(cap) * (Mathf.Cos(angle) * reference + Mathf.Sin(angle) * binormal);
+                    loop[i] = star + i;
                 }
 
-                // Full outline from the entry tip, then two re-walked segments back to the exit tip; the
-                // wrap to the next star's entry is the seam.
-                for (var i = 0; i < outlineCount; i++)
-                {
-                    walk[cursor++] = star + (2 + i) % outlineCount;
-                }
-
-                walk[cursor++] = star + 2;
-                walk[cursor++] = star + 1;
-                walk[cursor++] = star;
+                // The silhouette in order — tip, notch, tip … — traced as arcs that hug the surface.
+                walks[f] = new FormationWalk(loop, arc: true);
             }
 
-            return Build(30, 1.3f, vertices, new[] { Chord(walk) }, spinScale: 0.5f);
+            return Build(30, 1.3f, vertices, walks, spinScale: 0.5f, penSpeedScale: 1.6f);
         }
 
         // 50 = a 10x5 torus grid — the crown tier needed a SILHOUETTE, not more line density: nothing
@@ -782,7 +787,7 @@ namespace BalloonParty.Game.Score.Behaviours
         // Normalizes vertices to a unit bounding radius so RadiusScale means the same thing across shapes.
         private static FormationShape Build(
             int denomination, float radiusScale, Vector3[] vertices, FormationWalk[] walks,
-            bool alignToHit = false, float spinScale = 1f)
+            bool alignToHit = false, float spinScale = 1f, float penSpeedScale = 1f)
         {
             var maxMagnitude = 0f;
             for (var i = 0; i < vertices.Length; i++)
@@ -803,7 +808,8 @@ namespace BalloonParty.Game.Score.Behaviours
                 }
             }
 
-            return new FormationShape(denomination, radiusScale, vertices, walks, alignToHit, spinScale);
+            return new FormationShape(
+                denomination, radiusScale, vertices, walks, alignToHit, spinScale, penSpeedScale);
         }
     }
 }

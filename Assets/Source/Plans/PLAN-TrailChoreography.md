@@ -365,24 +365,24 @@ construction vocabulary. **12** — small stellated
 dodecahedron: the icosahedron's 12 vertices, one pentagram `{5/2}` circuit per vertex (its
 five neighbours), every edge double-inked (each chord in two circuits). **20** — regular
 dodecahedron: 12 pentagon face circuits sliced from coplanar vertex rings, each edge shared
-by two faces (double-inked). **30** — a GARLAND of outline stars: three big 5-pointed
-stars traced by their silhouette (tip-notch-tip, golden-ratio notch, never crossing their
-own interior) on equatorial caps 120° apart, threaded into ONE closed 39-step walk by
-straight tip-to-tip SEAMS — every pen draws a star, exits along the seam into the next
-star, and keeps flowing around the band; all 30 pens share the one walk, half-speed
-SpinScale. Each star's outline closes at its entry tip, then re-walks two segments back to
-the exit tip so no seam cuts across an interior (those six edges are double-inked, the
-12/20 precedent; 33 distinct edges total). Two migration mechanisms died getting here: a
-five-3-point-star bipyramid covered the sphere spatially but lost the star read (coverage
-must never cost silhouette), and a time-rotating hop frame (dwell + 180° antipodal sweep,
-normalized to the travel duration after an absolute-seconds first cut silently never fired
-inside the ~1.2 s life) smeared into SPIRALS — pens keep orbiting while the frame turns, so
-frame rotation composes into helices; migration must live in the walk's geometry (a seam
-the pens traverse), not in a time-varying transform. Earlier
-supersessions on 2026-07-19 taught the tier's design rules: the dodecadodecahedron's stars
-share every edge with its pentagons and vanish; six small pentagram-chord stars superimpose
-front-and-back (wireframes have no occlusion); and chord-drawn stars read as tangles because
-the pen crosses the interior — a star must be drawn as the shape you would CUT, its outline. **50** — a 10×5 torus grid (superseded the
+by two faces (double-inked). **30** — a BALL OF STARS: six 5-point OUTLINE stars stamped on
+the sphere at the six octahedral axes (±x/±y/±z), each drawn by its tip-notch-tip silhouette
+(golden-ratio notch) so the pen orbits the outline and NEVER crosses the interior. Two
+insights unlock it together. (1) STAR COUNT beats star size for covering a ball: six stars
+on the octahedron reach the whole surface where three coplanar stars only made an equatorial
+belt (their centres are always coplanar, leaving two bare poles). (2) The path may be RICHER
+than the pen count: a 5-point outline needs 10 points, so six of them = 60 vertices, but the
+denomination's 30 pens (five per star) simply orbit those outlines, tiling each 10-segment
+silhouette — the catalog's one shape where `Vertices.Length != Denomination` (pens, not
+vertices, equal the score). Points are SPHERIZED (unit vectors) and segments are arcs that
+hug the surface; `PenSpeedScale` (1.6) keeps the longer outlines inked; `tipCapRadians`
+(0.7) is the coverage dial; half-speed SpinScale. The long road here (all 2026-07-19–20)
+taught the rules this form reconciles: chord-drawn/pentagram stars cross their interior and
+read as tangles (draw the outline you'd CUT, not the crossing lines); the dodecadodecahedron's
+stars share every edge with its pentagons and vanish; a five-3-point-star bipyramid covered
+the sphere but lost the star read; a time-rotating hop frame smeared into SPIRALS (frame
+rotation composes into helices — motion must live in the walk geometry); and a three-outline
+garland drew cleanly but only as a belt. **50** — a 10×5 torus grid (superseded the
 rhombicosacron 2026-07-19: the crown tier needed a SILHOUETTE — the doughnut's hole reads
 instantly under tumble where the dense star-duals blurred together against the 30/100).
 Walks are the grid's own rings — 5 major decagons + 10 minor pentagons — every edge in

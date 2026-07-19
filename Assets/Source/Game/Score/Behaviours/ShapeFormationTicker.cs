@@ -207,7 +207,7 @@ namespace BalloonParty.Game.Score.Behaviours
             state.Initialize(group, in request);
 
             var shape = request.Shape;
-            var penSpeed = Mathf.Max(group.Settings.PenSpeed, MinDuration);
+            var penSpeed = Mathf.Max(group.Settings.PenSpeed * shape.PenSpeedScale, MinDuration);
             var coverage = group.Settings.Coverage;
             state.LocalPenSpeed = penSpeed / Mathf.Max(request.FormationRadius, MinDuration);
             var pen = 0;

@@ -141,15 +141,17 @@ namespace BalloonParty.Tests.Game
             {
                 Assert.IsTrue(ShapeCatalog.TryGet(denomination, out var shape), $"missing shape {denomination}");
                 Assert.AreEqual(denomination, shape.Denomination);
-                Assert.AreEqual(denomination, shape.Vertices.Length, $"{denomination} vertex count");
 
+                // The load-bearing invariant is PEN count == denomination (one pen per score point). Vertices
+                // usually match too (1:1), but a shape may carry a richer path than its pens — the star ball's
+                // outlines have 60 vertices with 30 pens orbiting them — so don't assert vertices == denomination.
                 var pens = 0;
                 foreach (var count in shape.PensPerWalk)
                 {
                     pens += count;
                 }
 
-                Assert.AreEqual(denomination, pens, $"{denomination} pens must equal its vertex count");
+                Assert.AreEqual(denomination, pens, $"{denomination} pens must equal the denomination");
                 Assert.AreEqual(shape.Walks.Length, shape.PensPerWalk.Length);
             }
         }
@@ -205,34 +207,31 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void ShapeCatalog_StarBall_GarlandOfThreeSeamThreadedOutlineStars()
+        public void ShapeCatalog_StarBall_SixOutlineStarsOnOctahedralAxes()
         {
             Assert.IsTrue(ShapeCatalog.TryGet(30, out var shape));
 
-            Assert.AreEqual(30, shape.Vertices.Length);
-            Assert.AreEqual(30, new HashSet<Vector3>(shape.Vertices).Count, "thirty distinct vertices");
-            Assert.AreEqual(1, shape.Walks.Length, "one closed walk threads all three stars via seams");
-            CollectionAssert.AreEqual(new[] { 30 }, shape.PensPerWalk, "every pen flows the whole garland");
-            Assert.AreEqual(39, shape.Walks[0].Vertices.Length,
-                "three 10-point outlines + two re-walked steps and a seam entry each");
+            // Six 10-point outlines: the path is richer than the denomination — 60 vertices, but only the
+            // 30 pens (five per star) that the score decomposes into orbit them.
+            Assert.AreEqual(60, shape.Vertices.Length, "six ten-point outline stars");
+            Assert.AreEqual(60, new HashSet<Vector3>(shape.Vertices).Count, "sixty distinct vertices");
+            Assert.AreEqual(6, shape.Walks.Length, "six separate outline stars");
+            CollectionAssert.AreEqual(new[] { 5, 5, 5, 5, 5, 5 }, shape.PensPerWalk, "five pens per outline");
 
-            var edges = InspectCircuits(shape);
-            Assert.AreEqual(33, edges.Multiplicity.Count, "thirty outline edges plus three seams");
-            CollectionAssert.AreEqual(
-                new[] { 1, 2 }, DistinctValues(edges.Multiplicity),
-                "single-inked outlines and seams; only the entry-to-exit re-walk is doubled");
-            Assert.AreEqual(30, edges.Touched.Count, "all vertices covered");
-
-            var doubled = 0;
-            foreach (var multiplicity in edges.Multiplicity.Values)
+            // Every point is spherized onto the unit surface, so all vertices sit at radius 1.
+            foreach (var vertex in shape.Vertices)
             {
-                if (multiplicity == 2)
-                {
-                    doubled++;
-                }
+                Assert.AreEqual(1f, vertex.magnitude, 1e-4f, "spherized onto the sphere surface");
             }
 
-            Assert.AreEqual(6, doubled, "exactly two re-walked segments per star");
+            var edges = InspectCircuits(shape);
+            Assert.AreEqual(60, edges.Multiplicity.Count, "six outlines of ten edges each");
+            CollectionAssert.AreEqual(
+                new[] { 1 }, DistinctValues(edges.Multiplicity), "no shared edges — every outline inked once");
+            Assert.AreEqual(60, edges.Touched.Count, "all vertices covered");
+
+            var degrees = DegreeHistogram(edges.Multiplicity);
+            Assert.AreEqual(60, CountByDegree(degrees, 2), "each outline vertex has degree two");
         }
 
         [Test]

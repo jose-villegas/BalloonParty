@@ -71,13 +71,14 @@ handful of arrivals (one per shape), not hundreds.
 `ShapeCatalog` (`internal static`, built once, zero-alloc lookup) is hand-authored 3D shape data. A denomination
 maps to a shape whose vertex count equals it: `2` line, `3` triangle, `4` tetrahedron, `5` square pyramid, `6`
 triangular prism, `7` hexagonal pyramid, `8` cube, `9` triangular cupola, `10` octagonal bipyramid,
-`12` hexagonal prism, `15` pentagonal cupola, `20` dodecahedron, `30` a GARLAND of
-three seam-threaded outline stars (tip-notch-tip silhouettes, tip-to-tip seams migrating pen to pen around the
-band), `50` a 10×5 torus grid, and `100` a spherical-spiral yarn ball — the upper tiers favour a readable
+`12` hexagonal prism, `15` pentagonal cupola, `20` dodecahedron, `30` a BALL of six
+5-point OUTLINE stars stamped on the octahedral axes (±x/±y/±z, spherized onto the surface, pens tracing each
+silhouette — never crossing the interior; its 60-vertex path carries only 30 pens, five per star),
+`50` a 10×5 torus grid, and `100` a spherical-spiral yarn ball — the upper tiers favour a readable
 **silhouette** over vertex density (a doughnut or a wound ball reads instantly under tumble; denser polyhedra
 just blur). Every shape partitions its edges into closed **walks** a pen orbits forever — a Hamiltonian-ish cycle
-plus back-and-forth shuttles for the polyhedra, latitude/longitude rings for the torus, one long threaded loop
-for the star garland and the yarn ball; arc walks slerp their segments (curved bands), chord walks lerp them
+plus back-and-forth shuttles for the polyhedra, latitude/longitude rings for the torus, one outline per star
+and one long coil for the yarn ball; arc walks slerp their segments (curved bands), chord walks lerp them
 (straight edges). Each shape also carries a `SpinScale` (complex shapes read better tumbling slowly) and an
 optional hit-aligned start (only the line, whose slope IS the shot's linear equation). `Denominations` is the
 decomposition **ladder** `{100, 50, 30, 20, 12, 10, 8, 6, 5, 4, 3, 2}`. `BigScoreTrailBehaviour.Decompose` is an
