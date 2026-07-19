@@ -23,6 +23,7 @@ namespace BalloonParty.Editor.Maps
         private static readonly int SceneCaptureTexId = Shader.PropertyToID("_SceneCaptureTex");
         private static readonly int DisturbanceTexId = Shader.PropertyToID("_DisturbanceTex");
         private static readonly int SceneLightTexId = Shader.PropertyToID("_SceneLightTex");
+        private static readonly int CloudDensityTexId = Shader.PropertyToID("_CloudDensityTex");
         private static readonly int ChannelMaskId = Shader.PropertyToID("_ChannelMask");
         private static readonly int PaletteColorsId = Shader.PropertyToID("_PaletteColors");
         private static readonly int DecodePaletteId = Shader.PropertyToID("_DecodePalette");
@@ -405,6 +406,17 @@ namespace BalloonParty.Editor.Maps
                     "Bounce color, blue — scene color marched toward the light, minus ambient sky.",
                     "Shadow amount — occluder coverage marched away from the light, masked off the " +
                     "casters themselves so only the ground beside them darkens."),
+
+                new MapDescriptor(
+                    "Cloud Field",
+                    () => Application.isPlaying ? Shader.GetGlobalTexture(CloudDensityTexId) : null,
+                    "No cloud field bound — CloudFieldService binds it once the game scope starts.",
+                    "Cloud density — thresholded [0,1] cloud intensity, baked from the scrolling three-octave " +
+                    "noise. Every consumer (BackgroundCloud backdrop, sprite drop-shadows, the GI light smear) " +
+                    "taps this same map.",
+                    "Unused — single-channel (R8) density map.",
+                    "Unused — single-channel (R8) density map.",
+                    "Unused — single-channel (R8) density map."),
 
                 new MapDescriptor("Custom…", null, null, null, null, null, null),
             };

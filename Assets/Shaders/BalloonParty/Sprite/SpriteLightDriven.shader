@@ -61,6 +61,13 @@ Shader "BalloonParty/Sprite/LightDriven"
         // classic always-visible glint. No effect in Full/Ambient modes.
         _RestAlpha ("Resting Alpha (Local)", Range(0, 1)) = 0
 
+        [Header(Cloud Field)]
+        // OPT-IN (shadow archetype): fade this sprite's alpha by the shared cloud field so a baked ground
+        // shadow sinks into the BackgroundCloud layer, surviving where the cloud is and dissolving on
+        // no-cloud texels. Leave off for glints and non-shadow accessories.
+        [Toggle(_CLOUD_FADE_ON)] _CloudShadowFade ("Fade By Cloud Field", Float) = 0
+        _CloudShadowFloor ("Cloud Fade Floor", Range(0, 1)) = 0.0
+
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
     }
 
@@ -88,8 +95,10 @@ Shader "BalloonParty/Sprite/LightDriven"
             #pragma target 3.5
             #pragma multi_compile _ PIXELSNAP_ON
             #pragma multi_compile_instancing
+            #pragma shader_feature_local _CLOUD_FADE_ON
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
+            #include "../Include/CloudField.cginc"
 
             struct appdata_t
             {
@@ -111,6 +120,9 @@ Shader "BalloonParty/Sprite/LightDriven"
                 float  shadowFade  : TEXCOORD2;
                 // 0..1 "how much local light" — drives the resting-alpha fade in Local mode; 1 otherwise.
                 float  localAmount : TEXCOORD3;
+                #ifdef _CLOUD_FADE_ON
+                float2 cloudWorld  : TEXCOORD4;
+                #endif
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -134,6 +146,7 @@ Shader "BalloonParty/Sprite/LightDriven"
             float _FadeWithSceneLight;
             float _LightMode;
             float _RestAlpha;
+            float _CloudShadowFloor;
 
             v2f vert(appdata_t IN)
             {
@@ -230,6 +243,11 @@ Shader "BalloonParty/Sprite/LightDriven"
                 float4 worldPos = mul(unity_ObjectToWorld, v);
                 worldPos.xy += downLight * (_OrbitDistance * length(worldX));
 
+                #ifdef _CLOUD_FADE_ON
+                // Per-fragment world position: the shadow fades by the cloud field texel-by-texel.
+                OUT.cloudWorld = worldPos.xy;
+                #endif
+
                 OUT.vertex = UnityWorldToClipPos(worldPos);
                 OUT.texcoord = IN.texcoord;
                 OUT.color = IN.color * _Color * _RendererColor;
@@ -263,6 +281,12 @@ Shader "BalloonParty/Sprite/LightDriven"
                 // Local mode: rest at _RestAlpha, fade up to full as a local light nears (localAmount is 1
                 // in Full/Ambient, so this is a no-op there). Before the premultiply below.
                 c.a *= lerp(_RestAlpha, 1.0, IN.localAmount);
+
+                #ifdef _CLOUD_FADE_ON
+                // Shadow archetype: fade the (shadow) sprite by the shared cloud field so it sinks into
+                // the backdrop, dissolving on no-cloud texels. Floor keeps a base shadow.
+                c.a *= lerp(_CloudShadowFloor, 1.0, CloudFieldDensity(IN.cloudWorld));
+                #endif
 
                 c.rgb *= c.a;
                 return c;

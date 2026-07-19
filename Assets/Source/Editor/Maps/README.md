@@ -15,12 +15,14 @@ for comparing any of them.
 
 ## What it shows
 
-Three built-in maps, plus a `Custom…` slot for ad hoc inspection:
+Five built-in maps, plus a `Custom…` slot for ad hoc inspection:
 
 - **Scene Capture** — the downscaled capture-layer scene color (`Shader.GetGlobalTexture(_SceneCaptureTex)`), read from `SceneCaptureService`. RGB is scene color; alpha is a sprite coverage mask (~0 over open sky/ground, ~1 over casters) that doubles as the GI light buffer's occlusion/shadow source, since the capture camera clears with alpha 0.
-- **Disturbance Field** — the global disturbance texture (`Shader.GetGlobalTexture(_DisturbanceTex)`). R is density (1.0 = undisturbed equilibrium, stamped toward 0.0 by cloud/foliage displacement); G/B are 0.5-biased X/Y displacement; A is unused (always written 1.0 by `DisturbanceDiffusion.shader`).
+- **Disturbance Field** — the global disturbance texture (`Shader.GetGlobalTexture(_DisturbanceTex)`). R is density (1.0 = undisturbed equilibrium, stamped toward 0.0 by cloud/foliage displacement); G/B are 0.5-biased X/Y displacement; A is a packed palette tag.
+- **Scene Light Field** — the global light field (`Shader.GetGlobalTexture(_SceneLightTex)`). R is light magnitude; G/B are 0.5-biased toward-light direction; A is a packed palette tag.
 - **GI Light Buffer** — `ScreenSpaceLightService.LightTexture`, found in-scene via `FindFirstObjectByType`. RGB is bounce color (scene color marched toward the light, minus ambient sky); A is shadow amount (occluder coverage marched away from the light, masked off the casters themselves so only the ground beside them darkens).
-- **Custom…** — any `Texture` you assign via an `ObjectField`, for one-off inspection outside the three registered maps.
+- **Cloud Field** — the global cloud-density RT (`Shader.GetGlobalTexture(_CloudDensityTex)`), baked by `CloudFieldService`. Single-channel (R8): R is the thresholded [0,1] cloud intensity every consumer (the `BackgroundCloud` backdrop, sprite drop-shadows, the GI light smear) taps at its world position; G/B/A unused.
+- **Custom…** — any `Texture` you assign via an `ObjectField`, for one-off inspection outside the registered maps.
 
 Each map that only binds during Play Mode shows an explanatory `HelpBox` instead of a
 blank preview when unavailable (not in Play Mode, or the owning service/component isn't

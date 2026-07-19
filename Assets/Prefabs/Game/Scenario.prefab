@@ -356,6 +356,7 @@ Transform:
   - {fileID: 6499154915055494154}
   - {fileID: 3435820721858883901}
   - {fileID: 8811000000000000002}
+  - {fileID: 8811000000000000021}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7145486617881593725
@@ -369,7 +370,7 @@ GameObject:
   - component: {fileID: 3435820721858883901}
   - component: {fileID: 839626461199910391}
   m_Layer: 12
-  m_Name: Background
+  m_Name: CouldField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -416,7 +417,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 085e79aff9d2c4e4c9e1e71c7e40ad05, type: 2}
+  - {fileID: 2100000, guid: 6d9cd15f8f79a442586b74e6e6e12be7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -440,11 +441,11 @@ SpriteRenderer:
   m_SortingOrder: -10
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: e0e76c0f65a08ad48bac3fd1f99c4440, type: 3}
-  m_Color: {r: 0.6082353, g: 0.83259755, b: 0.92156863, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 5, y: 9.5}
+  m_Size: {x: 9.5, y: 9.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -618,12 +619,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _netMaterial: {fileID: 2100000, guid: 46acee787ab6549409b05c985c6e388f, type: 2}
-  _stripWidth: 0.5
-  _cellsPerUnitAlong: 2
-  _cellsAcross: 4
-  _netCellsAcross: 3
-  _sortingLayerName: Sky
-  _sortingOrder: 0
+  _stripWidth: 0.9
+  _cellsPerUnitAlong: 10
+  _cellsAcross: 20
+  _netCellsAcross: 128
+  _sortingLayerName: Balloons
+  _sortingOrder: -1
 --- !u!1 &9089331432706058526
 GameObject:
   m_ObjectHideFlags: 0
@@ -715,3 +716,50 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &8811000000000000020
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8811000000000000021}
+  - component: {fileID: 8811000000000000022}
+  m_Layer: 12
+  m_Name: CloudField
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8811000000000000021
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8811000000000000020}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6003813002264364553}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8811000000000000022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8811000000000000020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aedbc2aa6f8849f2bd93601affe2515, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  _densityMaterial: {fileID: 0}
+  _camera: {fileID: 0}
+  _texelsPerUnit: 12

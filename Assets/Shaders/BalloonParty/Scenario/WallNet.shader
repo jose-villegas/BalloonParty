@@ -6,7 +6,9 @@ Shader "BalloonParty/Scenario/WallNet"
     // field is what reveals it — where anything stamps the field near an edge (a projectile bounce, a pop),
     // the band UNFURLS inward to its full depth and BULGES along the impact direction, exposing the tennis
     // -net weave and its depth right at the contact point. Pure vertex work, no CPU sim (BushLeaf tap).
-    // The dreamy glow leans on HDR + bloom, not saturation.
+    // The dreamy glow leans on HDR + bloom, not saturation. Its VISIBILITY (and idle breathing) is driven
+    // by the shared CloudField (CloudField.cginc), so the net shows where there's cloud and fades where
+    // there isn't — it reads as part of the clouds rather than a separate frame.
     Properties
     {
         [HDR] _Color ("Net Color (HDR)", Color) = (1.4, 1.55, 1.7, 0.9)
@@ -32,17 +34,14 @@ Shader "BalloonParty/Scenario/WallNet"
         _BreatheAmplitude ("Breathe Amplitude (wu)", Float) = 0.03
         _BreatheFrequency ("Breathe Frequency", Float) = 0.7
         _BreatheWaves ("Breathe Waves Along Edge", Float) = 3.0
-        // The segment-fade noise (below) also drives the breathing so it drifts organically, not as a
-        // rigid marching sine. These dial how much.
-        _BreatheNoiseAmount ("Breathe Noise Amount", Range(0, 1)) = 0.6
-        _BreatheNoisePhaseWarp ("Breathe Noise Phase Warp", Float) = 2.0
+        // The shared cloud field also drives the breathing so it drifts organically, not as a rigid
+        // marching sine. These dial how much.
+        _BreatheNoiseAmount ("Breathe Cloud Amount", Range(0, 1)) = 0.6
+        _BreatheNoisePhaseWarp ("Breathe Cloud Phase Warp", Float) = 2.0
 
-        [Header(Segment fade (scrolling noise))]
-        [NoScaleOffset] _NoiseTex ("Tileable Noise (R)", 2D) = "white" {}
-        _NoiseScale ("Noise Scale (world)", Float) = 0.6
-        _NoiseScroll ("Noise Scroll (xy)", Vector) = (0.05, 0.12, 0, 0)
-        _FadeStrength ("Fade Strength", Range(0, 1)) = 0.6
-        _FadeContrast ("Fade Contrast", Range(1, 8)) = 3.0
+        [Header(Cloud visibility (shared CloudField))]
+        _FadeStrength ("Cloud Fade Strength", Range(0, 1)) = 0.6
+        _FadeContrast ("Cloud Fade Contrast", Range(1, 8)) = 3.0
         _FadeFloor ("Fade Floor (min visibility)", Range(0, 1)) = 0.15
     }
 
@@ -68,6 +67,7 @@ Shader "BalloonParty/Scenario/WallNet"
             #pragma target 3.5
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
+            #include "../Include/CloudField.cginc"
 
             struct appdata
             {
@@ -107,9 +107,6 @@ Shader "BalloonParty/Scenario/WallNet"
             float _BreatheWaves;
             float _BreatheNoiseAmount;
             float _BreatheNoisePhaseWarp;
-            sampler2D _NoiseTex;
-            float _NoiseScale;
-            float4 _NoiseScroll;
             float _FadeStrength;
             float _FadeContrast;
             float _FadeFloor;
@@ -143,12 +140,10 @@ Shader "BalloonParty/Scenario/WallNet"
                 pos += outward * push * _BillowAmplitude;
 
                 // Idle breathing: a travelling half-rectified sine along the edge, outward-only so the
-                // resting line gently undulates away from the wall and never dips into the play area.
-                // The SAME scrolling noise field (shared with the segment fade) is sampled on the net here
-                // to make it organic — it warps the wave's phase and swells some segments more than others,
-                // all drifting over time. (Default white noise -> a clean sine, so this is a no-op unbound.)
-                float2 breatheUV = worldRest.xy * _NoiseScale + _NoiseScroll.xy * _Time.y;
-                float breatheNoise = tex2Dlod(_NoiseTex, float4(breatheUV, 0, 0)).r;
+                // resting line gently undulates away from the wall and never dips into the play area. The
+                // SHARED cloud field is sampled on the net here to make it organic — it warps the wave's
+                // phase and swells some segments more than others, all drifting with the clouds.
+                float breatheNoise = CloudFieldDensityLOD(worldRest.xy);
                 float phase = v.uv0.y * _BreatheWaves * UNITY_TWO_PI
                             + (breatheNoise - 0.5) * _BreatheNoisePhaseWarp;
                 float wave = 0.5 + 0.5 * sin(_Time.y * _BreatheFrequency + phase);
@@ -165,18 +160,13 @@ Shader "BalloonParty/Scenario/WallNet"
                 return o;
             }
 
-            // Alpha eaten by a scrolling noise mask so the net fades in and out in drifting segments — two
-            // offset samples of the same tileable noise drift past each other for a wispy, non-repeating
-            // look (the Sprite/SightSmoke technique), keyed to world space for spatial stability.
-            float SegmentFade(float2 worldXY)
+            // Visibility driven by the SHARED cloud field: the net shows where there's cloud and fades on
+            // no-cloud texels, so its visible shape reads as part of the clouds. CloudFieldGate resolves to
+            // 1 (fully visible) when the cloud field isn't in the scene, so the net is safe without it.
+            float CloudVisibility(float2 worldXY)
             {
-                float2 nUV = worldXY * _NoiseScale;
-                float2 scroll = _NoiseScroll.xy * _Time.y;
-                float a = tex2D(_NoiseTex, nUV + scroll).r;
-                float b = tex2D(_NoiseTex, nUV * 1.7 - scroll * 0.6).r;
-                float n = a * b;
-
-                float mask = saturate((n - 0.5) * _FadeContrast + 0.5);
+                float cloud = CloudFieldGate(worldXY);
+                float mask = saturate((cloud - 0.5) * _FadeContrast + 0.5);
                 mask = lerp(1.0, mask, _FadeStrength);
                 return max(mask, _FadeFloor);
             }
@@ -211,7 +201,7 @@ Shader "BalloonParty/Scenario/WallNet"
                 col.rgb = lerp(col.rgb, palette, presence * _LightInfluence);
                 // Darken toward the inner lip for a curled-depth read as the band opens.
                 col.rgb *= lerp(1.0, _DepthShade, u * i.open);
-                col.a *= net * feather * SegmentFade(i.worldXY);
+                col.a *= net * feather * CloudVisibility(i.worldXY);
                 return col;
             }
             ENDCG
