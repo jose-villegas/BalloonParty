@@ -349,7 +349,7 @@ below a threshold. The merged cluster's `HitsRemaining` = sum of both (capped at
 rings flowing into each other). One `IBalloonModel` survives; the other is returned
 to the pool.
 
-Scoring angle: merge triggers a bonus payout (`mergedHits × baseScore`), creating a
+Scoring angle: merge triggers a bonus payout (\f$\text{mergedHits} \times \text{baseScore}\f$), creating a
 risk/reward dynamic — letting clusters grow is tempting but reduces future individual
 scoring opportunities.
 
@@ -1274,6 +1274,23 @@ discarded before it ever becomes trails, score, or progress — with TrailChoreo
 "+N" orb arrivals the discard gets more visible (one big orb can straddle the boundary),
 so this should land alongside or shortly after that plan's step 3.
 
+**Shipped 2026-07-19 (capture-and-bank, not carry):** rather than fold the excess back into
+progress or score, `LevelController` now merely *captures* it. `ClaimProgress` still caps
+`granted` at the threshold and progress still resets to zero at level-up exactly as before,
+but the overflow it used to drop (`overflow = points - granted`) is banked run-scoped per
+colour (`_bankedExcess`, read via `ILevelProgress.ExcessPoints`/`TotalExcessPoints`) as a
+running total that accumulates across levels, clears only on a run reset, and skips the
+`BlockLevelUp` cheat. For now it's just logged (editor/dev) when it accrues — nothing in
+gameplay or UI reads it.
+
+The banked value is reserved for a **future per-level scoring / currency system**
+(Balatro-style) meant to enrich the level-up popup — José's chosen direction over spending
+the excess as progress. If that changes and the excess should instead be *applied* (as
+next-level progress or as run score), the two approaches below remain the documented paths:
+the minimal capture-and-carry (seed the new level's progress + bar from the bank on
+dismissal — the code seam is already present, just unwired) and the fuller run-cumulative
+numbering redesign.
+
 Design direction (sketch, not final): make per-color progress numbering **run-cumulative**
 (never reset at level-up) and turn level requirements into moving thresholds
 (`required += PointsRequiredForLevel` each level). Then:
@@ -1301,7 +1318,7 @@ history at commit 7fc97c53 if a 4-polytope ever earns a comeback (e.g. as a rogu
 skin rather than a denomination).
 
 **Implemented 2026-07-19** — shipped in `ShapeCatalog` (600-cell minus two orthogonal great
-decagons traced via the φ-recurrence, perspective-from-w projection at c = 2, Eulerian circuit
+decagons traced via the \f$\varphi\f$-recurrence, perspective-from-w projection at c = 2, Eulerian circuit
 walks with undersized-cycle splicing so every walk earns a pen); cheat preset + tests added.
 
 The score-shape catalog (PLAN-TrailChoreography) gains a 100 denomination: the **grand
@@ -1314,7 +1331,7 @@ the catalog.
 Implementation sketch (for whichever session picks it up):
 - **Vertices**: the 600-cell's 120 unit-icosian vertices MINUS two completely orthogonal
   great-circle decagon rings (10 + 10) — e.g. generate the 120, remove the xy-plane ring
-  `(cos kπ/5, sin kπ/5, 0, 0)` and the orthogonal zw ring, assert exactly 100 remain.
+  \f$(\cos k\pi/5, \sin k\pi/5, 0, 0)\f$ and the orthogonal zw ring, assert exactly 100 remain.
 - **Edges**: pairs at the grand antiprism's edge distance among the survivors; assert 500
   undirected edges and degree exactly 10 at every vertex.
 - **Projection**: 4D→3D at catalog build time (static): perspective-from-w

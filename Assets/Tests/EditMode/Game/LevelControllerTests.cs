@@ -145,6 +145,66 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void ClaimProgress_AboveThreshold_BanksExcess()
+        {
+            // Requirement 7, a pop lands the color at 10 — the 3 leftover is banked, not lost.
+            _thresholds.PointsRequiredForLevel(1).Returns(7);
+
+            _controller.ClaimProgress(Red, 10);
+
+            Assert.AreEqual(3, _controller.ExcessPoints(Red));
+            Assert.AreEqual(3, _controller.TotalExcessPoints());
+        }
+
+        [Test]
+        public void ClaimProgress_MultipleAttributionsAfterCap_EachBanksFullPoints()
+        {
+            // Once the cap is already hit this burst, every further attribution for the colour banks in
+            // full — not just the remainder past the first excess.
+            _thresholds.PointsRequiredForLevel(1).Returns(5);
+
+            _controller.ClaimProgress(Red, 5); // reaches the cap exactly, no excess yet
+            _controller.ClaimProgress(Red, 4); // cap already hit — the whole burst banks
+            _controller.ClaimProgress(Red, 6); // a second attribution, same story
+
+            Assert.AreEqual(10, _controller.ExcessPoints(Red));
+        }
+
+        [Test]
+        public void ExcessBank_AccumulatesAcrossLevels()
+        {
+            // The bank is a running total for the whole run — it keeps growing past a level-up, not reset.
+            _thresholds.PointsRequiredForLevel(Arg.Any<int>()).Returns(2);
+
+            ScoreColor(Red, 5);  // 2 granted, 3 banked
+            ScoreColor(Blue, 2); // completes level 1
+            FireDismissed();     // → level 2, progress resets, bank untouched
+            FireTransitionComplete();
+
+            ScoreColor(Red, 4);  // 2 granted, 2 more banked
+
+            Assert.AreEqual(5, _controller.ExcessPoints(Red), "bank accumulates across the level-up");
+        }
+
+        [Test]
+        public void ClaimProgress_UnderBlockLevelUpCheat_DoesNotBank()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(5);
+            BalloonParty.Cheats.CheatState.BlockLevelUp = true;
+
+            try
+            {
+                _controller.ClaimProgress(Red, 10);
+            }
+            finally
+            {
+                BalloonParty.Cheats.CheatState.BlockLevelUp = false;
+            }
+
+            Assert.AreEqual(0, _controller.ExcessPoints(Red), "the cheat's grant isn't real progress");
+        }
+
+        [Test]
         public void WillLevelUp_AllColorsProjected_ReturnsTrue()
         {
             _thresholds.PointsRequiredForLevel(1).Returns(1);
@@ -295,6 +355,45 @@ namespace BalloonParty.Tests.Game
 
             Assert.AreEqual(0, _controller.GetProgress(Red));
             Assert.AreEqual(0, _controller.GetProgress(Blue));
+        }
+
+        [Test]
+        public void LevelUpDismissed_ResetsProgressToZero_DoesNotSeedFromBank()
+        {
+            // The excess bank never feeds back into progress — a new level starts every colour at 0.
+            _thresholds.PointsRequiredForLevel(1).Returns(7);
+
+            ScoreColor(Red, 10); // 7 granted + confirmed, 3 banked
+            ScoreColor(Blue, 7);
+
+            FireDismissed();
+
+            Assert.AreEqual(0, _controller.GetProgress(Red), "progress resets to zero, unseeded by the bank");
+            Assert.AreEqual(0, _controller.GetProgress(Blue));
+        }
+
+        [Test]
+        public void LevelUpDismissed_DoesNotClearBank()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(7);
+            ScoreColor(Red, 10); // 3 banked
+            ScoreColor(Blue, 7);
+
+            FireDismissed();
+
+            Assert.AreEqual(3, _controller.ExcessPoints(Red), "the bank survives a level-up");
+        }
+
+        [Test]
+        public void ResetRun_ClearsBank()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(7);
+            _controller.ClaimProgress(Red, 10); // 3 banked
+
+            _controller.ResetRun(2);
+
+            Assert.AreEqual(0, _controller.ExcessPoints(Red), "a fresh run clears the bank");
+            Assert.AreEqual(0, _controller.TotalExcessPoints());
         }
 
         [Test]

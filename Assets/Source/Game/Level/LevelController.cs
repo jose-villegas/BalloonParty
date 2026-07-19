@@ -32,6 +32,7 @@ namespace BalloonParty.Game.Level
         private readonly ReactiveProperty<LevelUpPhase> _phase = new(LevelUpPhase.Playing);
         private readonly Dictionary<string, int> _levelProgress = new();
         private readonly Dictionary<string, int> _projectedProgress = new();
+        private readonly Dictionary<string, int> _bankedExcess = new();
         private readonly List<string> _colorKeys = new();
 
         private IDisposable _trailSubscription;
@@ -99,6 +100,22 @@ namespace BalloonParty.Game.Level
             return _levelProgress.GetValueOrDefault(colorName);
         }
 
+        public int ExcessPoints(string color)
+        {
+            return _bankedExcess.GetValueOrDefault(color);
+        }
+
+        public int TotalExcessPoints()
+        {
+            var total = 0;
+            foreach (var key in _colorKeys)
+            {
+                total += _bankedExcess.GetValueOrDefault(key);
+            }
+
+            return total;
+        }
+
         public int GetRequiredPoints()
         {
             return _thresholds.PointsRequiredForLevel(_level.Value);
@@ -140,16 +157,28 @@ namespace BalloonParty.Game.Level
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             // Dev cheat (BlockLevelUpCheat) — level lock: grant the points for the VISUAL (so score trails still
             // fly on a pop) but DON'T advance progress — no projected mutation here, and both OnTrailArrived
-            // handlers skip their commit, so score, bars and level all stay put while the trails play.
+            // handlers skip their commit, so score, bars and level all stay put while the trails play. Not
+            // real progress, so nothing banks either.
             if (BalloonParty.Cheats.CheatState.BlockLevelUp)
             {
                 return (baseProgress, points);
             }
 #endif
 
-            // Cap one level-up per burst — excess is intentionally lost, not carried to the next level.
+            // Cap one level-up per burst — the excess past this level's requirement is dropped from progress
+            // but banked run-scoped (see _bankedExcess) for a future per-level currency system to spend.
             var required = _thresholds.PointsRequiredForLevel(_level.Value);
             var granted = Mathf.Min(points, Mathf.Max(0, required - baseProgress));
+            var overflow = points - granted;
+            if (overflow > 0)
+            {
+                _bankedExcess[color] = _bankedExcess.GetValueOrDefault(color) + overflow;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                Debug.Log($"[LevelController] Banked {overflow} excess {color} " +
+                    $"(colour bank {_bankedExcess[color]}, run bank {TotalExcessPoints()})");
+#endif
+            }
+
             if (granted <= 0)
             {
                 return (baseProgress, 0);
@@ -168,6 +197,9 @@ namespace BalloonParty.Game.Level
             _level.Value = startLevel;
             _phase.Value = LevelUpPhase.Playing;
             _pendingNewLevel = 0;
+            // The excess bank is run-scoped — cleared here (fresh run), but NOT at level-up, where it keeps
+            // accumulating across the run.
+            _bankedExcess.Clear();
             ResetColorProgress();
         }
 
