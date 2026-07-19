@@ -21,6 +21,11 @@ float  _AnimationSpeed;
 float  _TimeOffset;
 float  _DisplaceWorldScale;
 
+// World-space offset added to the noise sample position, pushed by CloudFieldService from the scenario
+// root's transition displacement — so the clouds scroll in step with the Ascent / restart descent. Zero
+// at rest.
+float2 _CloudWorldOffset;
+
 // The disturbance field (globals set by DisturbanceFieldService) — baked INTO the density here so the
 // RT is "already disturbed" and every consumer reacts to bounces/pops for free. Equilibrium is
 // (R 0.5, GB 0.5), which resolves to no effect, so this is a no-op at rest.
@@ -40,9 +45,12 @@ float CloudGenOctave(float2 p)
     return tex2Dlod(_NoiseTex, float4(p / max(_NoisePeriod, 0.0001), 0.0, 0.0)).r * 2.0 - 1.0;
 }
 
-// The undisturbed thresholded cloud intensity in [0, 1] at a world position, from three scrolling octaves.
-float CloudGenBaseDensity(float2 wp)
+// The smooth, un-thresholded cloud intensity in [0, 1] at a world position, from three scrolling octaves.
+float CloudGenRawNoise(float2 wp)
 {
+    // Shift the whole field by the transition offset so the clouds scroll with the ascend/descend.
+    wp += _CloudWorldOffset;
+
     float t = CloudGenTime();
     float2 pBase   = wp * _BaseScale   * _NoiseScale + _ScrollSpeedBase.xy   * t;
     float2 pDetail = wp * _DetailScale * _NoiseScale + _ScrollSpeedDetail.xy * t;
@@ -50,24 +58,29 @@ float CloudGenBaseDensity(float2 wp)
 
     float n = CloudGenOctave(pBase) * 0.50 + CloudGenOctave(pDetail) * 0.30
             + CloudGenOctave(pFine) * 0.20;
-    return smoothstep(_EdgeLow, _EdgeHigh, n * 0.5 + 0.5);
+    return n * 0.5 + 0.5;
 }
 
-// What the blit writes to each RT texel: the cloud density with the disturbance baked in — a repulsion
-// bump (R > 0.5) thins the cloud, and the displacement (GB) crossfades toward fresh noise at the shoved
-// position (so reformation reveals new cloud rather than rubber-banding stretched noise). At equilibrium
-// (R 0.5, GB 0.5) both terms vanish, so it's exactly CloudGenBaseDensity at rest.
-float CloudFieldGenerateDensity(float2 wp)
+// What the blit writes to each RT texel, with the disturbance baked in — a repulsion bump (field R > 0.5)
+// thins the cloud, and the displacement (GB) crossfades toward fresh noise at the shoved position (so
+// reformation reveals new cloud rather than rubber-banding stretched noise). At equilibrium (R 0.5,
+// GB 0.5) both terms vanish. Returns TWO views of the same field:
+//   R = thresholded DENSITY (the cloud shape — backdrop, shadows, GI smear).
+//   G = smooth INTENSITY (for consumers that want to blend against the gradient, e.g. the wall net's
+//       visibility — thresholding it would segment the blend).
+float2 CloudFieldGenerate(float2 wp)
 {
-    float base = CloudGenBaseDensity(wp);
-
     float3 field = tex2Dlod(_DisturbanceTex, float4((wp - _FieldBoundsMin) / _FieldBoundsSize, 0, 0)).rgb;
     float thin = saturate((1.0 - field.r) * 2.0);
     float2 displace = (field.gb - 0.5) * 2.0 * _DisplaceWorldScale;
     float disturbance = saturate(length(displace) / (_DisplaceWorldScale * 0.5 + 0.001));
 
-    float density = disturbance > 0.001 ? lerp(base, CloudGenBaseDensity(wp + displace), disturbance) : base;
-    return density * thin;
+    float rawHere = CloudGenRawNoise(wp);
+    float raw = disturbance > 0.001 ? lerp(rawHere, CloudGenRawNoise(wp + displace), disturbance) : rawHere;
+    raw *= thin;
+
+    float density = smoothstep(_EdgeLow, _EdgeHigh, raw);
+    return float2(density, raw);
 }
 
 #endif

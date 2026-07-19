@@ -78,11 +78,15 @@ namespace BalloonParty.Scenario.View
 
         private void BuildStrips(WallLimits limits)
         {
-            var horizontal = new Vector2(limits.Right - limits.Left, 0f);
+            // Run the horizontal strips past both corners by the strip width so the four edges join into a
+            // continuous frame: the top/bottom bands cover the outer corner squares that the perpendicular
+            // side bands leave open when they unfurl. The side strips stay at the exact edge length, so the
+            // corners are owned by the horizontals — filled, without overlapping the sides.
+            var horizontal = new Vector2((limits.Right - limits.Left) + 2f * _stripWidth, 0f);
             var vertical = new Vector2(0f, limits.Top - limits.Bottom);
 
-            BuildStrip("WallNet_Top", new Vector2(limits.Left, limits.Top), horizontal, Vector2.up);
-            BuildStrip("WallNet_Bottom", new Vector2(limits.Left, limits.Bottom), horizontal, Vector2.down);
+            BuildStrip("WallNet_Top", new Vector2(limits.Left - _stripWidth, limits.Top), horizontal, Vector2.up);
+            BuildStrip("WallNet_Bottom", new Vector2(limits.Left - _stripWidth, limits.Bottom), horizontal, Vector2.down);
             BuildStrip("WallNet_Left", new Vector2(limits.Left, limits.Bottom), vertical, Vector2.left);
             BuildStrip("WallNet_Right", new Vector2(limits.Right, limits.Bottom), vertical, Vector2.right);
         }

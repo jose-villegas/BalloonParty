@@ -66,9 +66,10 @@ Shader "BalloonParty/Display/CloudFieldDensity"
 
             fixed4 frag(v2f i) : SV_Target
             {
-                // The texel's world position = field bounds mapped by the blit UV.
+                // The texel's world position = field bounds mapped by the blit UV. R = density (shape),
+                // G = smooth intensity.
                 float2 worldPos = _CloudFieldBoundsMin + i.uv * _CloudFieldBoundsSize;
-                return CloudFieldGenerateDensity(worldPos).rrrr;
+                return float4(CloudFieldGenerate(worldPos), 0.0, 0.0);
             }
             ENDCG
         }

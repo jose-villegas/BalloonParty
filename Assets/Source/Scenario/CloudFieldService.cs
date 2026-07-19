@@ -16,10 +16,13 @@ namespace BalloonParty.Scenario
     [DisallowMultipleComponent]
     internal sealed class CloudFieldService : MonoBehaviour
     {
+        private const string ScenarioRootName = "ScenarioContentRoot";
+
         private static readonly int DensityTexId = Shader.PropertyToID("_CloudDensityTex");
         private static readonly int BoundsMinId = Shader.PropertyToID("_CloudFieldBoundsMin");
         private static readonly int BoundsSizeId = Shader.PropertyToID("_CloudFieldBoundsSize");
         private static readonly int ActiveId = Shader.PropertyToID("_CloudFieldActive");
+        private static readonly int WorldOffsetId = Shader.PropertyToID("_CloudWorldOffset");
 
         [Tooltip("Blit material (BalloonParty/Display/CloudFieldDensity) — the cloud roll's tuning " +
             "surface: noise texture, scale, scroll, thresholds all live here.")]
@@ -31,8 +34,13 @@ namespace BalloonParty.Scenario
         [Tooltip("Density-RT resolution per world unit.")]
         [SerializeField] private float _texelsPerUnit = 12f;
 
+        [Tooltip("How much the scenario's Ascent/descent scrolls the clouds. 0 = clouds ignore the " +
+            "transition; sign flips the direction (clouds stream with vs against the motion).")]
+        [SerializeField] private float _transitionParallax = 0.5f;
+
         private RenderTexture _densityRT;
         private Rect _bounds;
+        private Transform _scenarioRoot;
 
         private void Start()
         {
@@ -71,6 +79,7 @@ namespace BalloonParty.Scenario
             // world-space, so the clouds stay put in the world as the view pans.
             ResolveBounds();
             PushBoundsGlobals();
+            PushTransitionOffset();
             Bake();
         }
 
@@ -110,8 +119,9 @@ namespace BalloonParty.Scenario
         {
             var width = Mathf.Max(4, Mathf.RoundToInt(_bounds.width * _texelsPerUnit));
             var height = Mathf.Max(4, Mathf.RoundToInt(_bounds.height * _texelsPerUnit));
-            var format = SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.R8)
-                ? RenderTextureFormat.R8
+            // RG: R = density (shape), G = smooth intensity (see CloudFieldGenerate).
+            var format = SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.RG16)
+                ? RenderTextureFormat.RG16
                 : RenderTextureFormat.ARGB32;
 
             _densityRT = new RenderTexture(width, height, 0, format)
@@ -121,6 +131,26 @@ namespace BalloonParty.Scenario
                 wrapMode = TextureWrapMode.Clamp
             };
             _densityRT.Create();
+        }
+
+        // Scrolls the cloud noise by the scenario root's transition displacement (the Ascent / restart
+        // descent move that transform) so the clouds react to the transition. DI-free: the root is a
+        // runtime object, so it's looked up lazily by name and cached. Skipped when parallax is 0.
+        private void PushTransitionOffset()
+        {
+            if (_scenarioRoot == null && !Mathf.Approximately(_transitionParallax, 0f))
+            {
+                var go = GameObject.Find(ScenarioRootName);
+                if (go != null)
+                {
+                    _scenarioRoot = go.transform;
+                }
+            }
+
+            var offset = _scenarioRoot != null
+                ? (Vector2)_scenarioRoot.position * _transitionParallax
+                : Vector2.zero;
+            Shader.SetGlobalVector(WorldOffsetId, offset);
         }
 
         private void PushBoundsGlobals()

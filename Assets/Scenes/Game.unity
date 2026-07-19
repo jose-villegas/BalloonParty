@@ -548,6 +548,11 @@ PrefabInstance:
       objectReference: {fileID: 253765506}
     - target: {fileID: 8811000000000000022, guid: b87d2a91b2e8044649b32c3a684fd6d9,
         type: 3}
+      propertyPath: _texelsPerUnit
+      value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 8811000000000000022, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
       propertyPath: _densityMaterial
       value: 
       objectReference: {fileID: 2100000, guid: 10b206cd4c4534fdaae61c2ccb5bb3d4, type: 2}

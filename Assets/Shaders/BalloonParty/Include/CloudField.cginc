@@ -23,8 +23,8 @@ float2 CloudFieldUV(float2 wp)
     return saturate((wp - _CloudFieldBoundsMin) / size);
 }
 
-// Cloud intensity in [0, 1] at a world position — a single tap of the baked RT, identical for every
-// consumer. Fragment stage.
+// Cloud DENSITY in [0, 1] (R) — the thresholded cloud shape, what most consumers want (backdrop, shadows,
+// GI smear). A single tap of the baked RT. Fragment stage.
 float CloudFieldDensity(float2 wp)
 {
     return tex2D(_CloudDensityTex, CloudFieldUV(wp)).r;
@@ -34,6 +34,18 @@ float CloudFieldDensity(float2 wp)
 float CloudFieldDensityLOD(float2 wp)
 {
     return tex2Dlod(_CloudDensityTex, float4(CloudFieldUV(wp), 0.0, 0.0)).r;
+}
+
+// Smooth cloud INTENSITY in [0, 1] (G) — the un-thresholded field, for consumers that want to blend
+// against the gradient rather than the near-binary density (thresholding it would segment the blend).
+float CloudFieldNoise(float2 wp)
+{
+    return tex2D(_CloudDensityTex, CloudFieldUV(wp)).g;
+}
+
+float CloudFieldNoiseLOD(float2 wp)
+{
+    return tex2Dlod(_CloudDensityTex, float4(CloudFieldUV(wp), 0.0, 0.0)).g;
 }
 
 // A multiplier in [0, 1] for effects that should weaken where there's no cloud (e.g. the GI shadow smear

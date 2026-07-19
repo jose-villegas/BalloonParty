@@ -21,6 +21,7 @@ namespace BalloonParty.Display
         private static readonly int MipSpreadId = Shader.PropertyToID("_MipSpread");
         private static readonly int ShadowMipSpreadId = Shader.PropertyToID("_ShadowMipSpread");
         private static readonly int SecondaryWeightId = Shader.PropertyToID("_SecondaryWeight");
+        private static readonly int CloudGateStrengthId = Shader.PropertyToID("_CloudGateStrength");
         private static readonly int LightTexId = Shader.PropertyToID("_LightTex");
         private static readonly int ShadowTintId = Shader.PropertyToID("_ShadowTint");
         private static readonly int ShadowStrengthId = Shader.PropertyToID("_ShadowStrength");
@@ -239,6 +240,7 @@ namespace BalloonParty.Display
             _smearMaterial.SetFloat(MipSpreadId, _settings.MipSpread);
             _smearMaterial.SetFloat(ShadowMipSpreadId, _settings.ShadowMipSpread);
             _smearMaterial.SetFloat(SecondaryWeightId, _settings.SecondaryBounceWeight);
+            _smearMaterial.SetFloat(CloudGateStrengthId, _settings.CloudShadowGate);
 
             _overlayMaterial.SetColor(ShadowTintId, _settings.ShadowTint);
             _overlayMaterial.SetFloat(ShadowStrengthId, _settings.ShadowStrength);

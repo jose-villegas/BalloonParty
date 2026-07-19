@@ -24,6 +24,14 @@ Shader "BalloonParty/Scenario/WallNet"
         _LightColorRamp ("Light Color Ramp (R gain)", Float) = 1.0
 
         [Header(Reveal (driven by the disturbance field))]
+        // The net colour shifts from _Color (at rest) toward this as it gets more strongly disturbed —
+        // a heat gradient at the impact. Gain shapes how quickly it reaches full.
+        [HDR] _DisturbedColor ("Disturbed Net Color (HDR)", Color) = (1.8, 1.0, 0.5, 1.0)
+        _DisturbColorGain ("Disturb Color Gain", Float) = 1.0
+        // Visibility the net fades toward at MAX disturbance (as the net moves from the field). 1 = reveal
+        // where struck (even off-cloud); 0 = fade out on impact. Blends from the cloud visibility by how
+        // disturbed the spot is.
+        _DisturbVisibilityTarget ("Visibility At Max Disturbance", Range(0, 1)) = 1.0
         _OpenGain ("Open Gain", Float) = 4.0
         _RestOpen ("Rest Open (thin-line sliver)", Range(0.0, 0.3)) = 0.04
         _BillowAmplitude ("Billow Amplitude (wu)", Float) = 0.35
@@ -40,9 +48,11 @@ Shader "BalloonParty/Scenario/WallNet"
         _BreatheNoisePhaseWarp ("Breathe Cloud Phase Warp", Float) = 2.0
 
         [Header(Cloud visibility (shared CloudField))]
-        _FadeStrength ("Cloud Fade Strength", Range(0, 1)) = 0.6
-        _FadeContrast ("Cloud Fade Contrast", Range(1, 8)) = 3.0
-        _FadeFloor ("Fade Floor (min visibility)", Range(0, 1)) = 0.15
+        // Soft threshold on the cloud's smooth intensity: below Low the net is invisible (no-cloud), then
+        // a smooth ramp to full by High — a wide band keeps it from segmenting.
+        _FadeLow ("Cloud Fade-In Low", Range(0, 1)) = 0.35
+        _FadeHigh ("Cloud Fade-In High", Range(0, 1)) = 0.75
+        _FadeFloor ("Fade Floor (min visibility)", Range(0, 1)) = 0.0
     }
 
     SubShader
@@ -84,6 +94,7 @@ Shader "BalloonParty/Scenario/WallNet"
                 float2 net : TEXCOORD1;
                 float open : TEXCOORD2;
                 float2 worldXY : TEXCOORD3;
+                float disturb : TEXCOORD4;
             };
 
             // Republished as globals by the disturbance field each blit — no per-material wiring needed.
@@ -92,6 +103,9 @@ Shader "BalloonParty/Scenario/WallNet"
             float2 _FieldBoundsSize;
 
             fixed4 _Color;
+            fixed4 _DisturbedColor;
+            float _DisturbColorGain;
+            float _DisturbVisibilityTarget;
             float _LineWidth;
             float _LineSoftness;
             float _EdgeFeather;
@@ -107,8 +121,8 @@ Shader "BalloonParty/Scenario/WallNet"
             float _BreatheWaves;
             float _BreatheNoiseAmount;
             float _BreatheNoisePhaseWarp;
-            float _FadeStrength;
-            float _FadeContrast;
+            float _FadeLow;
+            float _FadeHigh;
             float _FadeFloor;
 
             v2f vert(appdata v)
@@ -127,8 +141,9 @@ Shader "BalloonParty/Scenario/WallNet"
                 float mag = length(disp);
 
                 // Unfurl: 0 -> flush to the wall edge line (thin line), 1 -> full depth outward. A sliver
-                // stays at rest.
-                float open = max(_RestOpen, saturate(mag * _OpenGain));
+                // stays at rest. disturbAmt (without the rest floor) also drives the colour gradient.
+                float disturbAmt = saturate(mag * _OpenGain);
+                float open = max(_RestOpen, disturbAmt);
 
                 // Un-extrude back to the wall edge line by how far this row sits outward, relaxing as it opens.
                 float3 pos = worldRest - outward * (across * _StripWidth) * (1.0 - open);
@@ -143,7 +158,7 @@ Shader "BalloonParty/Scenario/WallNet"
                 // resting line gently undulates away from the wall and never dips into the play area. The
                 // SHARED cloud field is sampled on the net here to make it organic — it warps the wave's
                 // phase and swells some segments more than others, all drifting with the clouds.
-                float breatheNoise = CloudFieldDensityLOD(worldRest.xy);
+                float breatheNoise = CloudFieldNoiseLOD(worldRest.xy);
                 float phase = v.uv0.y * _BreatheWaves * UNITY_TWO_PI
                             + (breatheNoise - 0.5) * _BreatheNoisePhaseWarp;
                 float wave = 0.5 + 0.5 * sin(_Time.y * _BreatheFrequency + phase);
@@ -154,21 +169,22 @@ Shader "BalloonParty/Scenario/WallNet"
                 o.across = v.uv0;
                 o.net = v.uv1;
                 o.open = open;
-                // Anchor the segment-fade noise to the REST world position so the fade pattern sits in
-                // world space and drifts by its own scroll, rather than swimming with the billow.
+                // Anchor the cloud/light sampling to the REST world position so it sits in world space
+                // rather than swimming with the billow.
                 o.worldXY = worldRest.xy;
+                o.disturb = disturbAmt;
                 return o;
             }
 
-            // Visibility driven by the SHARED cloud field: the net shows where there's cloud and fades on
-            // no-cloud texels, so its visible shape reads as part of the clouds. CloudFieldGate resolves to
-            // 1 (fully visible) when the cloud field isn't in the scene, so the net is safe without it.
+            // Visibility from the SHARED cloud field's SMOOTH intensity (G, not the near-binary density):
+            // a soft threshold so the net is invisible below the cloud onset (no-cloud ground) and ramps up
+            // smoothly — blending with the gradient without segmenting. Gated to full intensity (1) when the
+            // cloud field isn't in the scene, so the net stays fully visible without it.
             float CloudVisibility(float2 worldXY)
             {
-                float cloud = CloudFieldGate(worldXY);
-                float mask = saturate((cloud - 0.5) * _FadeContrast + 0.5);
-                mask = lerp(1.0, mask, _FadeStrength);
-                return max(mask, _FadeFloor);
+                float intensity = lerp(1.0, CloudFieldNoise(worldXY), _CloudFieldActive);
+                float vis = smoothstep(_FadeLow, _FadeHigh, intensity);
+                return max(vis, _FadeFloor);
             }
 
             // 1 on the thin band around each integer boundary of `coord`, 0 in the cell interior.
@@ -190,6 +206,9 @@ Shader "BalloonParty/Scenario/WallNet"
                 float feather = smoothstep(0.0, feather_w, u) * smoothstep(0.0, feather_w, 1.0 - u);
 
                 fixed4 col = _Color;
+                // Heat gradient: shift the net colour toward the disturbed colour by how strongly this
+                // spot is disturbed (before the scene-light tint, so a nearby light still overrides).
+                col.rgb = lerp(col.rgb, _DisturbedColor.rgb, saturate(i.disturb * _DisturbColorGain));
                 // Receive-only scene light: replace the base colour with the PALETTE-indexed colour of a
                 // nearby tagged light, blended by that light's local presence — so away from lights the net
                 // keeps its authored HDR colour (no white-out), and only where a coloured light sits does it
@@ -201,7 +220,10 @@ Shader "BalloonParty/Scenario/WallNet"
                 col.rgb = lerp(col.rgb, palette, presence * _LightInfluence);
                 // Darken toward the inner lip for a curled-depth read as the band opens.
                 col.rgb *= lerp(1.0, _DepthShade, u * i.open);
-                col.a *= net * feather * CloudVisibility(i.worldXY);
+                // Cloud-driven visibility, blended toward the disturbance target by how disturbed this
+                // spot is — so a struck section reveals (or fades out) regardless of the cloud there.
+                float vis = lerp(CloudVisibility(i.worldXY), _DisturbVisibilityTarget, i.disturb);
+                col.a *= net * feather * vis;
                 return col;
             }
             ENDCG

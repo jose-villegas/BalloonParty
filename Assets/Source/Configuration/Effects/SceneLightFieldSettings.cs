@@ -90,6 +90,11 @@ namespace BalloonParty.Configuration.Effects
 
         [SerializeField] private Color _shadowTint = new Color(0.55f, 0.6f, 0.75f);
 
+        [Tooltip("How strongly the shared cloud field gates the GI shadow. 1 = shadow only survives where " +
+                 "there's cloud; 0 = cloud ignored. No effect when no cloud field is in the scene.")]
+        [Range(0f, 1f)]
+        [SerializeField] private float _cloudShadowGate = 1f;
+
         [Header("GI — Bounce")]
         [Range(0f, 2f)]
         [SerializeField] private float _bounceStrength = 0.25f;
@@ -127,6 +132,7 @@ namespace BalloonParty.Configuration.Effects
         public float ShadowMipSpread => _shadowMipSpread > 0f ? _shadowMipSpread : _mipSpread;
         public float ShadowStrength => _shadowStrength;
         public Color ShadowTint => _shadowTint;
+        public float CloudShadowGate => _cloudShadowGate;
         public float BounceStrength => _bounceStrength;
         public float SecondaryBounceWeight => _secondaryBounceWeight;
 

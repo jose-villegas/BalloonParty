@@ -51,6 +51,7 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
             float  _MipSpread;
             float  _ShadowMipSpread;
             float  _SecondaryWeight;
+            float  _CloudGateStrength;
 
             fixed4 frag(v2f_img IN) : SV_Target
             {
@@ -93,8 +94,9 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                     shadow = (shadowAcc / shadowWeightSum) * (1.0 - ownCoverage);
 
                     // Gate the shadow by the cloud field: the backdrop cloud is the surface shadows land
-                    // on, so don't smear shadow onto no-cloud ground. No-op when the cloud field is absent.
-                    shadow *= CloudFieldGate(worldPos);
+                    // on, so don't smear shadow onto no-cloud ground. _CloudGateStrength dials how strongly
+                    // (1 = full, 0 = ignore cloud). No-op when the cloud field is absent.
+                    shadow *= lerp(1.0, CloudFieldGate(worldPos), _CloudGateStrength);
                 }
 
                 // --- Bounce: 4 directions (primary + 3 secondary at 90° spacing) ---
