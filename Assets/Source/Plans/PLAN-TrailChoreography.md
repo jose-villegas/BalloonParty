@@ -373,8 +373,11 @@ midpoints, degree 4); the 120-edge graph is Eulerian and partitions into 13 edge
 closed circuits, so every edge is inked exactly once (single-inked — the family's one
 deliberate exception). Decomposition changed from greedy to optimal coin change (fewest
 pieces, remainder-free preferred, deterministic largest-on-optimal-path reconstruction):
-`13=10+3`, `7=5+2`, `250=50×5`. `ShapeFormationTicker.MaxVertexCount` raised 30 → 50.
-A future 100 (grand antiprism, 4-polytope) is specced in PLAN-FutureIdeas §16.
+`13=10+3`, `7=5+2`. **100** — grand antiprism (implemented 2026-07-19, FutureIdeas §16):
+the 600-cell's 120 icosians minus two completely orthogonal great decagons, projected
+4D→3D (perspective-from-w, c=2), 500 edges at degree 10 everywhere — Eulerian, single-
+inked over 33 spliced closed walks (undersized cycles merge into hosts so no walk goes
+unpenned). Ladder head: `250=100+100+50`. `ShapeFormationTicker.MaxVertexCount` is 100.
 
 **Denomination = vertex count, full 1:1 decomposition.** A shape's score value IS its vertex
 count; every point is one orbiting pen trail. A group's total decomposes **greedily largest-first**

@@ -1292,6 +1292,10 @@ bookkeeping, `WillLevelUp`), `ColorProgressBar` (stashed max + post-drain start 
 
 ## 16 — Grand Antiprism: the 100 denomination (José, 2026-07-19)
 
+**Implemented 2026-07-19** — shipped in `ShapeCatalog` (600-cell minus two orthogonal great
+decagons traced via the φ-recurrence, perspective-from-w projection at c = 2, Eulerian circuit
+walks with undersized-cycle splicing so every walk earns a pen); cheat preset + tests added.
+
 The score-shape catalog (PLAN-TrailChoreography) gains a 100 denomination: the **grand
 antiprism**, the exceptional uniform 4-POLYTOPE — 100 vertices, 500 edges (degree 10 at
 every vertex), 320 cells. Low priority: a 100-point single-colour group is effectively

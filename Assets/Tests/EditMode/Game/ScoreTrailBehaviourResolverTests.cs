@@ -93,13 +93,16 @@ namespace BalloonParty.Tests.Game
             // 7 = 5 + 2 (two pieces, remainder-free) — better than greedy's 6 + 1 remainder split.
             CollectionAssert.AreEqual(new[] { 5, 2 }, Decompose(7));
 
-            // 50 (the rhombicosacron) is now the ladder's crown: 50 = [50], 62 = 50 + 12, 100 = 50 + 50.
+            // The 50 (rhombicosacron) and its showcase combo are unchanged by the 100's arrival.
             CollectionAssert.AreEqual(new[] { 50 }, Decompose(50));
             CollectionAssert.AreEqual(new[] { 50, 12 }, Decompose(62));
-            CollectionAssert.AreEqual(new[] { 50, 50 }, Decompose(100));
 
-            // 250 = five 50s (five pieces) — beats the pre-50 optimum of eight 30s + one 10 (nine pieces).
-            CollectionAssert.AreEqual(new[] { 50, 50, 50, 50, 50 }, Decompose(250));
+            // 100 (the grand antiprism) is the ladder's crown: 100 = [100] (no longer 50 + 50), 112 = 100 + 12,
+            // 200 = two crowns, 250 = 100 + 100 + 50 (three pieces beats five 50s).
+            CollectionAssert.AreEqual(new[] { 100 }, Decompose(100));
+            CollectionAssert.AreEqual(new[] { 100, 12 }, Decompose(112));
+            CollectionAssert.AreEqual(new[] { 100, 100 }, Decompose(200));
+            CollectionAssert.AreEqual(new[] { 100, 100, 50 }, Decompose(250));
 
             // 2 = the line shape; 1 = no shape, just a single default trail (the terminal remainder).
             CollectionAssert.AreEqual(new[] { 2 }, Decompose(2));
@@ -264,6 +267,36 @@ namespace BalloonParty.Tests.Game
             var degrees = DegreeHistogram(edges.Multiplicity);
             Assert.AreEqual(30, CountByDegree(degrees, 4), "thirty two-fold vertices of degree four");
             Assert.AreEqual(20, CountByDegree(degrees, 6), "twenty three-fold vertices of degree six");
+        }
+
+        [Test]
+        public void ShapeCatalog_GrandAntiprism_FiveHundredEdgesSingleInked()
+        {
+            Assert.IsTrue(ShapeCatalog.TryGet(100, out var shape));
+            Assert.AreEqual(100, shape.Vertices.Length, "one hundred vertices");
+            Assert.AreEqual(
+                100, new HashSet<Vector3>(shape.Vertices).Count, "projection must keep all vertices distinct");
+
+            // Spliced walks may revisit their splice vertex, but every walk stays a closed loop long enough for
+            // DistributePens to seed it — no circuit is ever left unpenned (and thus undrawn).
+            foreach (var walk in shape.Walks)
+            {
+                Assert.GreaterOrEqual(walk.Vertices.Length, 5, "every circuit long enough to earn a pen");
+            }
+
+            foreach (var pens in shape.PensPerWalk)
+            {
+                Assert.GreaterOrEqual(pens, 1, "every circuit gets at least one pen");
+            }
+
+            var edges = InspectCircuits(shape);
+            Assert.AreEqual(500, edges.Multiplicity.Count, "a grand antiprism has 500 edges");
+            CollectionAssert.AreEqual(
+                new[] { 1 }, DistinctValues(edges.Multiplicity), "every edge inked exactly once (single-inked)");
+            Assert.AreEqual(100, edges.Touched.Count, "all one hundred vertices covered");
+
+            var degrees = DegreeHistogram(edges.Multiplicity);
+            Assert.AreEqual(100, CountByDegree(degrees, 10), "degree ten at every vertex");
         }
 
         private static void AssertFiveDistinctPerWalk(FormationShape shape)

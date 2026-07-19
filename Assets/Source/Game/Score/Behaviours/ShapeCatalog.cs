@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -120,18 +121,30 @@ namespace BalloonParty.Game.Score.Behaviours
     ///     their edge set into closed walks (a Hamiltonian-ish cycle plus back-and-forth shuttles for the leftover
     ///     edges); 10 is a latitude-ring globe; the crown of the ladder is a golden-ratio star-and-solid family —
     ///     12 the small stellated dodecahedron, 20 the dodecahedron, 30 the dodecadodecahedron, 50 the
-    ///     rhombicosacron. The tables are built once in the static constructor and returned by reference from
-    ///     <see cref="TryGet"/>, so a lookup never allocates.
+    ///     rhombicosacron, and 100 the grand antiprism (a 4-polytope, projected to 3D at build time). The tables
+    ///     are built once in the static constructor and returned by reference from <see cref="TryGet"/>, so a
+    ///     lookup never allocates.
     ///
     ///     <see cref="Denominations"/> is the decomposition ladder (largest-first) the optimal coin-change split
     ///     (<see cref="BigScoreTrailBehaviour.Decompose"/>) draws its pieces from.
     /// </summary>
     internal static class ShapeCatalog
     {
-        // φ (golden ratio) — the golden-ratio vertex coordinates the star-and-solid family (12/20/30/50) is framed on.
+        // φ (golden ratio) — the vertex coordinates the star-and-solid family (12/20/30/50/100) is framed on.
         private const float Phi = 1.6180339887498949f;
 
-        private static readonly int[] LadderDenominations = { 50, 30, 20, 12, 10, 8, 6, 5, 4, 3, 2 };
+        private static readonly int[] LadderDenominations = { 100, 50, 30, 20, 12, 10, 8, 6, 5, 4, 3, 2 };
+
+        // The 12 even permutations of four positions (A4) — the 600-cell's 96-vertex orbit is the EVEN cyclic
+        // arrangements of (±φ/2, ±1/2, ±1/(2φ), 0); odd arrangements are NOT vertices.
+        private static readonly int[][] EvenPermutations4 =
+        {
+            new[] { 0, 1, 2, 3 }, new[] { 0, 2, 3, 1 }, new[] { 0, 3, 1, 2 },
+            new[] { 1, 0, 3, 2 }, new[] { 1, 2, 0, 3 }, new[] { 1, 3, 2, 0 },
+            new[] { 2, 0, 1, 3 }, new[] { 2, 1, 3, 0 }, new[] { 2, 3, 0, 1 },
+            new[] { 3, 0, 2, 1 }, new[] { 3, 1, 0, 2 }, new[] { 3, 2, 1, 0 },
+        };
+
         private static readonly Dictionary<int, FormationShape> Shapes = BuildShapes();
 
         internal static IReadOnlyList<int> Denominations => LadderDenominations;
@@ -156,6 +169,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 { 20, BuildDodecahedron() },
                 { 30, BuildDodecadodecahedron() },
                 { 50, BuildRhombicosacron() },
+                { 100, BuildGrandAntiprism() },
             };
         }
 
@@ -299,6 +313,26 @@ namespace BalloonParty.Game.Score.Behaviours
             var vertices = RhombicosacronVertices(IcosahedronVertices());
             var walks = EulerianCircuits(vertices);
             return Build(50, 1.45f, vertices, walks);
+        }
+
+        // 100 = grand antiprism, the exceptional uniform 4-POLYTOPE: the 600-cell's 120 unit vertices minus two
+        // completely orthogonal great-decagon rings (10 + 10). The 500 surviving edges (degree 10 everywhere, all
+        // even → Eulerian) partition into edge-disjoint closed circuits, every edge inked exactly once, and the 4D
+        // frame is perspective-projected from w to 3D at build time for the layered-shell look. The ladder's crown.
+        private static FormationShape BuildGrandAntiprism()
+        {
+            var cell = Cell600Vertices();
+            var survivors = RemoveOrthogonalDecagons(cell);
+            var vertices = ProjectPerspectiveFromW(survivors);
+
+            // Edges live in 4D (uniform there; the projection stretches them in 3D, deliberately).
+            var adjacency = EdgeGraph4(survivors, 0.5f * Phi);
+            RequireUniformDegree(adjacency, 10, "grand antiprism");
+            Require(CountEdges(adjacency) == 500, "grand antiprism must have exactly 500 edges");
+
+            var cycles = PartitionIntoCycles(adjacency);
+            MergeUndersizedCycles(cycles, minLength: 5);
+            return Build(100, 1.6f, vertices, ToChordWalks(cycles));
         }
 
         private static FormationWalk Chord(params int[] vertices)
@@ -641,19 +675,109 @@ namespace BalloonParty.Game.Score.Behaviours
         // each edge inked exactly once.
         private static FormationWalk[] EulerianCircuits(Vector3[] vertices)
         {
-            var count = vertices.Length;
-            var adjacency = BuildIncidenceGraph(vertices);
+            return ToChordWalks(PartitionIntoCycles(BuildIncidenceGraph(vertices)));
+        }
+
+        // Partitions an even-degree (Eulerian) edge graph into edge-disjoint closed cycles — shared by the
+        // rhombicosacron (50) and the grand antiprism (100).
+        private static List<List<int>> PartitionIntoCycles(List<int>[] adjacency)
+        {
+            var count = adjacency.Length;
             var used = new HashSet<long>();
-            var circuits = new List<FormationWalk>();
+            var cycles = new List<List<int>>();
             for (var start = 0; start < count; start++)
             {
                 while (UnusedNeighbour(adjacency, used, start, count) != -1)
                 {
-                    TraceCircuits(adjacency, used, start, count, circuits);
+                    TraceCircuits(adjacency, used, start, count, cycles);
                 }
             }
 
-            return circuits.ToArray();
+            return cycles;
+        }
+
+        // DistributePens seeds each walk with floor(length · pens / totalSegments) pens before remainders, so on
+        // a dense frame (the grand antiprism: 100 pens over 500 segments) a cycle shorter than pens-per-segment⁻¹
+        // can end up with ZERO pens — a circuit that would never be inked. Splice each undersized cycle into a
+        // host cycle at a shared vertex (the host detours around the small loop mid-walk): edge-disjointness, and
+        // thus single-inking, is preserved, and every walk is long enough to earn a pen.
+        private static void MergeUndersizedCycles(List<List<int>> cycles, int minLength)
+        {
+            while (true)
+            {
+                var smallIndex = IndexOfUndersized(cycles, minLength);
+                if (smallIndex == -1)
+                {
+                    return;
+                }
+
+                var small = cycles[smallIndex];
+                var hostIndex = FindSpliceHost(cycles, smallIndex, out var hostAt, out var smallAt);
+                var host = cycles[hostIndex];
+
+                // Insert the small cycle after the shared vertex, rotated to start just past it and ending back
+                // on it, so the host's own edges resume unchanged.
+                var detour = new List<int>(small.Count);
+                for (var t = 1; t <= small.Count; t++)
+                {
+                    detour.Add(small[(smallAt + t) % small.Count]);
+                }
+
+                host.InsertRange(hostAt + 1, detour);
+                cycles.RemoveAt(smallIndex);
+            }
+        }
+
+        private static int IndexOfUndersized(List<List<int>> cycles, int minLength)
+        {
+            for (var i = 0; i < cycles.Count; i++)
+            {
+                if (cycles[i].Count < minLength)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        // A vertex on an undersized cycle always sits on other circuits too (its degree exceeds the cycle's two
+        // edges), so a host sharing a vertex is guaranteed for the authored graphs.
+        private static int FindSpliceHost(List<List<int>> cycles, int smallIndex, out int hostAt, out int smallAt)
+        {
+            var small = cycles[smallIndex];
+            for (var j = 0; j < cycles.Count; j++)
+            {
+                if (j == smallIndex)
+                {
+                    continue;
+                }
+
+                var candidate = cycles[j];
+                for (var h = 0; h < candidate.Count; h++)
+                {
+                    var s = small.IndexOf(candidate[h]);
+                    if (s != -1)
+                    {
+                        hostAt = h;
+                        smallAt = s;
+                        return j;
+                    }
+                }
+            }
+
+            throw new InvalidOperationException("ShapeCatalog: an undersized cycle shares no vertex with any host");
+        }
+
+        private static FormationWalk[] ToChordWalks(List<List<int>> cycles)
+        {
+            var walks = new FormationWalk[cycles.Count];
+            for (var i = 0; i < cycles.Count; i++)
+            {
+                walks[i] = Chord(cycles[i].ToArray());
+            }
+
+            return walks;
         }
 
         // Two vertices are adjacent when their axes meet at the icosahedral 3-fold/2-fold incidence angle (dot 1/√3).
@@ -683,9 +807,9 @@ namespace BalloonParty.Game.Score.Behaviours
         }
 
         // Walks unused edges from start, splitting off a simple cycle each time the walk revisits a path vertex,
-        // until start is exhausted. Every edge consumed is inked into exactly one emitted circuit.
+        // until start is exhausted. Every edge consumed lands in exactly one emitted cycle.
         private static void TraceCircuits(
-            List<int>[] adjacency, HashSet<long> used, int start, int count, List<FormationWalk> circuits)
+            List<int>[] adjacency, HashSet<long> used, int start, int count, List<List<int>> cycles)
         {
             var path = new List<int> { start };
             var indexInPath = new Dictionary<int, int> { { start, 0 } };
@@ -707,17 +831,17 @@ namespace BalloonParty.Game.Score.Behaviours
                     continue;
                 }
 
-                var cycle = new int[path.Count - loopStart];
+                var cycle = new List<int>(path.Count - loopStart);
                 for (var t = loopStart; t < path.Count; t++)
                 {
-                    cycle[t - loopStart] = path[t];
+                    cycle.Add(path[t]);
                     if (t > loopStart)
                     {
                         indexInPath.Remove(path[t]);
                     }
                 }
 
-                circuits.Add(Chord(cycle));
+                cycles.Add(cycle);
                 path.RemoveRange(loopStart + 1, path.Count - (loopStart + 1));
             }
         }
@@ -739,6 +863,270 @@ namespace BalloonParty.Game.Score.Behaviours
         private static long EdgeKey(int a, int b, int count)
         {
             return a < b ? (long)a * count + b : (long)b * count + a;
+        }
+
+        // The 600-cell's 120 unit vertices (the icosians): 8 permutations of (±1, 0, 0, 0), 16 of
+        // (±1/2, ±1/2, ±1/2, ±1/2), and 96 EVEN permutations of (±φ/2, ±1/2, ±1/(2φ), 0).
+        private static Vector4[] Cell600Vertices()
+        {
+            var vertices = new List<Vector4>(120);
+            for (var axis = 0; axis < 4; axis++)
+            {
+                for (var sign = -1; sign <= 1; sign += 2)
+                {
+                    var v = Vector4.zero;
+                    v[axis] = sign;
+                    vertices.Add(v);
+                }
+            }
+
+            for (var bits = 0; bits < 16; bits++)
+            {
+                vertices.Add(new Vector4(
+                    (bits & 1) == 0 ? 0.5f : -0.5f,
+                    (bits & 2) == 0 ? 0.5f : -0.5f,
+                    (bits & 4) == 0 ? 0.5f : -0.5f,
+                    (bits & 8) == 0 ? 0.5f : -0.5f));
+            }
+
+            AddEvenPermutationOrbit(vertices);
+
+            var result = vertices.ToArray();
+            Require(result.Length == 120, "the 600-cell must have 120 vertices");
+            for (var i = 0; i < result.Length; i++)
+            {
+                Require(Mathf.Abs(result[i].magnitude - 1f) < 1e-4f, "600-cell vertices must be unit icosians");
+                for (var j = i + 1; j < result.Length; j++)
+                {
+                    Require((result[i] - result[j]).sqrMagnitude > 1e-8f, "600-cell vertices must be distinct");
+                }
+            }
+
+            return result;
+        }
+
+        // The 96-vertex orbit: every EVEN arrangement of (φ/2, 1/2, 1/(2φ), 0) with all sign choices on the
+        // three nonzero entries (index 3 is the zero slot, so it carries no sign).
+        private static void AddEvenPermutationOrbit(List<Vector4> vertices)
+        {
+            var magnitudes = new[] { 0.5f * Phi, 0.5f, 0.5f / Phi, 0f };
+            foreach (var permutation in EvenPermutations4)
+            {
+                for (var signs = 0; signs < 8; signs++)
+                {
+                    var v = Vector4.zero;
+                    var bit = 0;
+                    for (var i = 0; i < 4; i++)
+                    {
+                        var value = magnitudes[permutation[i]];
+                        if (permutation[i] != 3)
+                        {
+                            value = (signs >> bit & 1) == 0 ? value : -value;
+                            bit++;
+                        }
+
+                        v[i] = value;
+                    }
+
+                    vertices.Add(v);
+                }
+            }
+        }
+
+        // Removes two completely orthogonal great decagons (the grand antiprism's missing rings). The rings are
+        // NOT axis-aligned in icosian coordinates, so ring A is traced combinatorially from any edge; ring B from
+        // an edge whose two vertices are both orthogonal to ring A's plane. Exactly 100 vertices survive.
+        private static Vector4[] RemoveOrthogonalDecagons(Vector4[] cell)
+        {
+            var adjacency = EdgeGraph4(cell, 0.5f * Phi);
+            RequireUniformDegree(adjacency, 12, "600-cell");
+
+            var ringA = TraceGreatDecagon(cell, 0, adjacency[0][0]);
+            FindOrthogonalEdge(cell, adjacency, cell[ringA[0]], cell[ringA[1]], out var first, out var second);
+            var ringB = TraceGreatDecagon(cell, first, second);
+
+            foreach (var a in ringA)
+            {
+                foreach (var b in ringB)
+                {
+                    Require(Mathf.Abs(Vector4.Dot(cell[a], cell[b])) < 1e-4f,
+                        "the decagon rings must be completely orthogonal");
+                }
+            }
+
+            var removed = new HashSet<int>(ringA);
+            removed.UnionWith(ringB);
+            Require(removed.Count == 20, "the two decagons must remove 20 distinct vertices");
+
+            var survivors = new List<Vector4>(cell.Length - removed.Count);
+            for (var i = 0; i < cell.Length; i++)
+            {
+                if (!removed.Contains(i))
+                {
+                    survivors.Add(cell[i]);
+                }
+            }
+
+            Require(survivors.Count == 100, "the grand antiprism must have exactly 100 vertices");
+            return survivors.ToArray();
+        }
+
+        // v_{k+1} = φ·v_k − v_{k−1} (the three-term recurrence with 2·cos 36° = φ) walks the great decagon
+        // through an edge of the 600-cell: every iterate must land back on a vertex and close after ten steps.
+        private static int[] TraceGreatDecagon(Vector4[] vertices, int first, int second)
+        {
+            var ring = new int[10];
+            ring[0] = first;
+            ring[1] = second;
+            for (var k = 2; k < 10; k++)
+            {
+                ring[k] = SnapToVertex(vertices, Phi * vertices[ring[k - 1]] - vertices[ring[k - 2]]);
+                Require(ring[k] != -1, "the decagon recurrence left the vertex set");
+            }
+
+            Require(new HashSet<int>(ring).Count == 10, "a great decagon must visit ten distinct vertices");
+            var closing = SnapToVertex(vertices, Phi * vertices[ring[9]] - vertices[ring[8]]);
+            Require(closing == first, "the great decagon must close after ten steps");
+            return ring;
+        }
+
+        // An edge (dot = φ/2 pair) both of whose vertices are orthogonal to ring A's plane — the seed of the
+        // completely orthogonal decagon.
+        private static void FindOrthogonalEdge(
+            Vector4[] cell, List<int>[] adjacency, Vector4 planeA, Vector4 planeB, out int first, out int second)
+        {
+            for (var i = 0; i < cell.Length; i++)
+            {
+                if (!OrthogonalToPlane(cell[i], planeA, planeB))
+                {
+                    continue;
+                }
+
+                var neighbours = adjacency[i];
+                for (var n = 0; n < neighbours.Count; n++)
+                {
+                    if (OrthogonalToPlane(cell[neighbours[n]], planeA, planeB))
+                    {
+                        first = i;
+                        second = neighbours[n];
+                        return;
+                    }
+                }
+            }
+
+            throw new InvalidOperationException("ShapeCatalog: no edge orthogonal to the first decagon's plane");
+        }
+
+        private static bool OrthogonalToPlane(Vector4 v, Vector4 planeA, Vector4 planeB)
+        {
+            return Mathf.Abs(Vector4.Dot(v, planeA)) < 1e-4f && Mathf.Abs(Vector4.Dot(v, planeB)) < 1e-4f;
+        }
+
+        private static int SnapToVertex(Vector4[] vertices, Vector4 target)
+        {
+            for (var i = 0; i < vertices.Length; i++)
+            {
+                if ((vertices[i] - target).sqrMagnitude < 1e-6f)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        // Perspective projection from the w axis, p3 = (x, y, z) / (c − w): nearer-in-w shells project larger,
+        // giving the layered-shell look. c starts at 2 (every |w| ≤ φ/2, far from the pole); if two projected
+        // vertices ever collided, c nudges outward and retries. Build() then normalizes the result.
+        private static Vector3[] ProjectPerspectiveFromW(Vector4[] vertices)
+        {
+            var c = 2f;
+            for (var attempt = 0; attempt < 8; attempt++)
+            {
+                var projected = new Vector3[vertices.Length];
+                for (var i = 0; i < vertices.Length; i++)
+                {
+                    var inverse = 1f / (c - vertices[i].w);
+                    projected[i] = new Vector3(vertices[i].x * inverse, vertices[i].y * inverse, vertices[i].z * inverse);
+                }
+
+                if (AllDistinct(projected))
+                {
+                    return projected;
+                }
+
+                c += 0.25f;
+            }
+
+            throw new InvalidOperationException("ShapeCatalog: no collision-free perspective constant found");
+        }
+
+        private static bool AllDistinct(Vector3[] points)
+        {
+            for (var i = 0; i < points.Length; i++)
+            {
+                for (var j = i + 1; j < points.Length; j++)
+                {
+                    if ((points[i] - points[j]).sqrMagnitude < 1e-8f)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private static List<int>[] EdgeGraph4(Vector4[] vertices, float edgeDot)
+        {
+            var adjacency = new List<int>[vertices.Length];
+            for (var i = 0; i < vertices.Length; i++)
+            {
+                adjacency[i] = new List<int>();
+            }
+
+            for (var i = 0; i < vertices.Length; i++)
+            {
+                for (var j = i + 1; j < vertices.Length; j++)
+                {
+                    if (Mathf.Abs(Vector4.Dot(vertices[i], vertices[j]) - edgeDot) < 1e-4f)
+                    {
+                        adjacency[i].Add(j);
+                        adjacency[j].Add(i);
+                    }
+                }
+            }
+
+            return adjacency;
+        }
+
+        private static void RequireUniformDegree(List<int>[] adjacency, int degree, string label)
+        {
+            for (var i = 0; i < adjacency.Length; i++)
+            {
+                Require(adjacency[i].Count == degree, $"{label}: every vertex must have degree {degree}");
+            }
+        }
+
+        private static int CountEdges(List<int>[] adjacency)
+        {
+            var total = 0;
+            for (var i = 0; i < adjacency.Length; i++)
+            {
+                total += adjacency[i].Count;
+            }
+
+            return total / 2;
+        }
+
+        // The catalog is deterministic build-time data: a violated invariant is an authoring bug, so fail loudly
+        // at static-construction time rather than shipping a malformed shape.
+        private static void Require(bool condition, string message)
+        {
+            if (!condition)
+            {
+                throw new InvalidOperationException("ShapeCatalog: " + message);
+            }
         }
 
         private static Vector3 Cyclic(float x, float y, float z, int shift)
