@@ -192,18 +192,17 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void ShapeCatalog_StarBall_SixSeparatePentagrams()
+        public void ShapeCatalog_StarBall_ThreeOrthogonalDecagrams()
         {
             Assert.IsTrue(ShapeCatalog.TryGet(30, out var shape));
 
             Assert.AreEqual(30, shape.Vertices.Length);
             Assert.AreEqual(30, new HashSet<Vector3>(shape.Vertices).Count, "thirty distinct vertices");
-            Assert.AreEqual(6, shape.Walks.Length, "six separate pentagram loops");
-            CollectionAssert.AreEqual(
-                new[] { 5, 5, 5, 5, 5, 5 }, shape.PensPerWalk, "five pens per star");
+            Assert.AreEqual(3, shape.Walks.Length, "three separate decagram loops");
+            CollectionAssert.AreEqual(new[] { 10, 10, 10 }, shape.PensPerWalk, "ten pens per star");
 
             var edges = InspectCircuits(shape);
-            Assert.AreEqual(30, edges.Multiplicity.Count, "six pentagrams of five chords each");
+            Assert.AreEqual(30, edges.Multiplicity.Count, "three decagrams of ten chords each");
             CollectionAssert.AreEqual(
                 new[] { 1 }, DistinctValues(edges.Multiplicity), "no shared edges — every chord inked once");
             Assert.AreEqual(30, edges.Touched.Count, "all vertices covered");

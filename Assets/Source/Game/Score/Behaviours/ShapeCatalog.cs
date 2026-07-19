@@ -35,6 +35,10 @@ namespace BalloonParty.Game.Score.Behaviours
         internal readonly int Denomination;
         internal readonly float RadiusScale;
 
+        // Per-shape multiplier on the settings' spin speed — complex shapes read better turning slowly
+        // (gravitas), simple ones can stay zippy; 1 = the global speed.
+        internal readonly float SpinScale;
+
         // The shape's local X aligns to the projectile hit direction at spawn (the line: its slope IS the
         // shot's linear equation); unaligned shapes start at a uniform random orientation instead.
         internal readonly bool AlignToHit;
@@ -49,10 +53,12 @@ namespace BalloonParty.Game.Score.Behaviours
         internal readonly float[][] Cumulative;
 
         internal FormationShape(
-            int denomination, float radiusScale, Vector3[] vertices, FormationWalk[] walks, bool alignToHit = false)
+            int denomination, float radiusScale, Vector3[] vertices, FormationWalk[] walks,
+            bool alignToHit = false, float spinScale = 1f)
         {
             Denomination = denomination;
             RadiusScale = radiusScale;
+            SpinScale = spinScale;
             AlignToHit = alignToHit;
             Vertices = vertices;
             Walks = walks;
@@ -119,8 +125,8 @@ namespace BalloonParty.Game.Score.Behaviours
     ///     Hand-authored 3D shape data for BigScore formations. Each denomination maps to a shape whose vertex
     ///     count equals it — full 1:1 decomposition draws every point as one orbiting pen. Small shapes partition
     ///     their edge set into closed walks (a Hamiltonian-ish cycle plus back-and-forth shuttles for the leftover
-    ///     edges); 10 is an octagonal bipyramid; 12 the hexagonal prism, 20 the dodecahedron, 30 a
-    ///     star ball (six separate pentagrams on the sphere), 50 a 10×5 torus grid, and 100 a spherical-spiral
+    ///     edges); 10 is an octagonal bipyramid; 12 the hexagonal prism, 20 the dodecahedron, 30 an
+    ///     armillary of three orthogonal decagram stars, 50 a 10×5 torus grid, and 100 a spherical-spiral
     ///     yarn ball (one closed coil) — the top tier follows silhouette-over-density. The tables
     ///     are built once in the static constructor and returned by reference from <see cref="TryGet"/>, so a
     ///     lookup never allocates.
@@ -299,45 +305,45 @@ namespace BalloonParty.Game.Score.Behaviours
             return Build(20, 1.15f, vertices, walks);
         }
 
-        // 30 = a "star ball": six SEPARATE five-pointed stars on the sphere's cube-face directions
-        // (superseded the dodecadodecahedron — its pentagrams share every edge with its pentagons, so the
-        // stars vanished into the tangle; the ask was "a ball made of stars"). Each star is its own closed
-        // {5/2} loop of five sphere-surface vertices around its face direction — no shared edges, five pens
-        // apiece, crisp under tumble. The cap radius keeps neighbouring stars (90 degrees apart) separated.
+        // 30 = an armillary of stars: three big {10/3} decagrams in the three orthogonal planes
+        // (superseded the six-pentagram ball — wireframes have no occlusion, so six small stars from both
+        // hemispheres superimpose into a tangle; three full-diameter stars crossing at right angles keep
+        // sharp star silhouettes under tumble). Ten pens per star, no shared edges, and a half-speed
+        // SpinScale so the crossing points stay readable.
         private static FormationShape BuildStarBall()
         {
-            const int starCount = 6;
-            const int pointsPerStar = 5;
-            const float capRadians = 0.66f;
-
-            var directions = new[]
-            {
-                Vector3.right, Vector3.left, Vector3.up, Vector3.down, Vector3.forward, Vector3.back,
-            };
+            const int starCount = 3;
+            const int pointsPerStar = 10;
+            const int skip = 3;
 
             var vertices = new Vector3[starCount * pointsPerStar];
             var walks = new FormationWalk[starCount];
-            var capCos = Mathf.Cos(capRadians);
-            var capSin = Mathf.Sin(capRadians);
             for (var f = 0; f < starCount; f++)
             {
-                var normal = directions[f];
-                var reference = Vector3.Cross(
-                    normal, Mathf.Abs(normal.y) < 0.9f ? Vector3.up : Vector3.right).normalized;
-                var binormal = Vector3.Cross(normal, reference);
                 for (var i = 0; i < pointsPerStar; i++)
                 {
                     var angle = 2f * Mathf.PI * i / pointsPerStar;
-                    vertices[f * pointsPerStar + i] = capCos * normal
-                        + capSin * (Mathf.Cos(angle) * reference + Mathf.Sin(angle) * binormal);
+                    var a = Mathf.Cos(angle);
+                    var b = Mathf.Sin(angle);
+                    vertices[f * pointsPerStar + i] = f switch
+                    {
+                        0 => new Vector3(a, b, 0f),
+                        1 => new Vector3(0f, a, b),
+                        _ => new Vector3(b, 0f, a),
+                    };
                 }
 
-                // Skip-2 over the cap ring turns the pentagon into a pentagram.
-                var v = f * pointsPerStar;
-                walks[f] = Chord(v, v + 2, v + 4, v + 1, v + 3);
+                // Skip-3 over the ring traces the {10/3} decagram in one closed loop (gcd(10,3) = 1).
+                var loop = new int[pointsPerStar];
+                for (var i = 0; i < pointsPerStar; i++)
+                {
+                    loop[i] = f * pointsPerStar + i * skip % pointsPerStar;
+                }
+
+                walks[f] = Chord(loop);
             }
 
-            return Build(30, 1.3f, vertices, walks);
+            return Build(30, 1.3f, vertices, walks, spinScale: 0.5f);
         }
 
         // 50 = a 10x5 torus grid — the crown tier needed a SILHOUETTE, not more line density: nothing
@@ -644,7 +650,8 @@ namespace BalloonParty.Game.Score.Behaviours
 
         // Normalizes vertices to a unit bounding radius so RadiusScale means the same thing across shapes.
         private static FormationShape Build(
-            int denomination, float radiusScale, Vector3[] vertices, FormationWalk[] walks, bool alignToHit = false)
+            int denomination, float radiusScale, Vector3[] vertices, FormationWalk[] walks,
+            bool alignToHit = false, float spinScale = 1f)
         {
             var maxMagnitude = 0f;
             for (var i = 0; i < vertices.Length; i++)
@@ -665,9 +672,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 }
             }
 
-            return new FormationShape(denomination, radiusScale, vertices, walks, alignToHit);
+            return new FormationShape(denomination, radiusScale, vertices, walks, alignToHit, spinScale);
         }
-
-        // Accumulates sphere vertices ring by ring (already unit magnitude) and one loop walk per ring.
     }
 }

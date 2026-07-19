@@ -283,7 +283,9 @@ namespace BalloonParty.Game.Score.Behaviours
             var newCenter = Vector3.Lerp(state.Origin, liveTarget, travelT);
 
             // Tumble spins from t = 0 (invisible while the shape is a point).
-            var newRotation = Quaternion.AngleAxis(settings.SpinSpeedDegrees * t, state.SpinAxis) * state.InitialRotation;
+            var newRotation =
+                Quaternion.AngleAxis(settings.SpinSpeedDegrees * state.Shape.SpinScale * t, state.SpinAxis)
+                * state.InitialRotation;
             var delta = newRotation * Quaternion.Inverse(oldRotation);
 
             var scale = settings.ScaleOverTravel != null ? settings.ScaleOverTravel.Evaluate(t) : 0f;
