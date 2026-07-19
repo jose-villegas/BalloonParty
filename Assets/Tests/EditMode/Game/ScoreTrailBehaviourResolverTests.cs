@@ -90,8 +90,8 @@ namespace BalloonParty.Tests.Game
             CollectionAssert.AreEqual(new[] { 12 }, Decompose(12));
             CollectionAssert.AreEqual(new[] { 12, 2 }, Decompose(14));
 
-            // 7 = 5 + 2 (two pieces, remainder-free) — better than greedy's 6 + 1 remainder split.
-            CollectionAssert.AreEqual(new[] { 5, 2 }, Decompose(7));
+            // 7 is now a denomination (the hexagonal pyramid): 7 = [7], one piece.
+            CollectionAssert.AreEqual(new[] { 7 }, Decompose(7));
 
             // The 50 (rhombicosacron) and its showcase combo are unchanged by the 100's arrival.
             CollectionAssert.AreEqual(new[] { 50 }, Decompose(50));
@@ -240,6 +240,27 @@ namespace BalloonParty.Tests.Game
             var degrees = DegreeHistogram(edges.Multiplicity);
             Assert.AreEqual(8, CountByDegree(degrees, 4), "eight equator vertices of degree four");
             Assert.AreEqual(2, CountByDegree(degrees, 8), "two apexes of degree eight");
+        }
+
+        [Test]
+        public void ShapeCatalog_HexagonalPyramid_ApexHubOverHexagonBase()
+        {
+            Assert.IsTrue(ShapeCatalog.TryGet(7, out var shape));
+
+            Assert.AreEqual(7, shape.Vertices.Length);
+            Assert.AreEqual(7, new HashSet<Vector3>(shape.Vertices).Count, "seven distinct vertices");
+            Assert.AreEqual(4, shape.Walks.Length, "one weaving cycle + three base-edge shuttles");
+
+            var edges = InspectCircuits(shape);
+            Assert.AreEqual(12, edges.Multiplicity.Count, "six base edges + six slant edges");
+            Assert.AreEqual(7, edges.Touched.Count, "all seven vertices covered");
+
+            // Six odd-degree base vertices forbid a pure single-inked cover (like the square pyramid): the
+            // three base shuttles are the minimal retraced edges, so multiplicities are 1s and 2s.
+            CollectionAssert.AreEqual(new[] { 1, 2 }, DistinctValues(edges.Multiplicity));
+
+            var degrees = DegreeHistogram(edges.Multiplicity);
+            Assert.AreEqual(1, CountByDegree(degrees, 6), "one apex hub joined to all six base vertices");
         }
 
         [Test]

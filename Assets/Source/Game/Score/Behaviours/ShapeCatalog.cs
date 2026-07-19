@@ -139,7 +139,7 @@ namespace BalloonParty.Game.Score.Behaviours
         // φ (golden ratio) — the dodecahedron's vertex coordinates are framed on it.
         private const float Phi = 1.6180339887498949f;
 
-        private static readonly int[] LadderDenominations = { 100, 50, 30, 20, 12, 10, 8, 6, 5, 4, 3, 2 };
+        private static readonly int[] LadderDenominations = { 100, 50, 30, 20, 12, 10, 8, 7, 6, 5, 4, 3, 2 };
 
         private static readonly Dictionary<int, FormationShape> Shapes = BuildShapes();
 
@@ -166,6 +166,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 { 4, BuildTetrahedron() },
                 { 5, BuildSquarePyramid() },
                 { 6, BuildTriangularPrism() },
+                { 7, BuildHexagonalPyramid() },
                 { 8, BuildCube() },
                 { 10, BuildOctagonalBipyramid() },
                 { 12, BuildHexagonalPrism() },
@@ -229,6 +230,31 @@ namespace BalloonParty.Game.Score.Behaviours
             };
             var walks = new[] { Chord(0, 1, 2), Chord(3, 4, 5), Chord(0, 3), Chord(1, 4), Chord(2, 5) };
             return Build(6, 0.85f, vertices, walks);
+        }
+
+        // 7 = a hexagonal pyramid: six base vertices ringed under one apex. Single-inked like the square
+        // pyramid (5) — one weaving cycle threads every slant edge plus alternate base edges (passing
+        // through the apex three times), three shuttles fill the remaining base edges. Apex degree 6,
+        // base degree 3.
+        private static FormationShape BuildHexagonalPyramid()
+        {
+            const int baseCount = 6;
+            const int apex = baseCount;
+            var vertices = new Vector3[baseCount + 1];
+            for (var i = 0; i < baseCount; i++)
+            {
+                var azimuth = 2f * Mathf.PI * i / baseCount;
+                vertices[i] = new Vector3(Mathf.Cos(azimuth) * 0.85f, Mathf.Sin(azimuth) * 0.85f, -0.4f);
+            }
+
+            vertices[apex] = new Vector3(0f, 0f, 0.95f);
+
+            var walks = new[]
+            {
+                Chord(0, 1, apex, 2, 3, apex, 4, 5, apex),
+                Chord(1, 2), Chord(3, 4), Chord(5, 0),
+            };
+            return Build(7, 0.9f, vertices, walks);
         }
 
         // 8 = cube: a Hamiltonian 8-cycle 0-1-2-3-7-6-5-4 plus the four leftover edges (30, 74, 15, 26) as shuttles.
