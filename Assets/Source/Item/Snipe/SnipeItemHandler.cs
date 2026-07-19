@@ -13,11 +13,13 @@ using BalloonParty.Configuration.Items;
 namespace BalloonParty.Item.Snipe
 {
     /// <summary>
-    ///     Arms the active projectile as a piercing lance: it plows through balloons like a cruise-earned
-    ///     pierce but without entering cruise (so it never gains the per-shield speed tap), and carries a
-    ///     single speed buff until the pierce is spent. Plowing a tough actor bleeds the speed back toward
-    ///     base (the motion resolver's pierce decay), and the next wall then ends the pierce. Pure buff
-    ///     grant: no damage, no shield change.
+    ///     Handles the Snipe item: arms the active projectile as a piercing lance — it plows through
+    ///     balloons like a cruise-earned pierce, but without entering cruise (so it skips cruise's
+    ///     per-shield speed tap) — and grants a single, non-stacking multiplicative
+    ///     <see cref="ProjectileBuffId.Speed" /> buff. A rainbow-balloon host also arms the shared
+    ///     <see cref="ProjectileBuffId.RainbowShield" /> buff. Both buffs ride the pierce and end together
+    ///     when the shared pierce-discharge fires (the plow-then-shatter mechanic itself lives in the
+    ///     projectile's hit/motion resolvers, not here). Non-damaging: no damage, no shield change.
     /// </summary>
     internal class SnipeItemHandler : IBalloonItem, IStartable, IDisposable
     {
