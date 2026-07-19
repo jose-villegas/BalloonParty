@@ -20,8 +20,8 @@ namespace BalloonParty.Cheats
     /// </summary>
     internal class AwardScorePopCheat : ICheat, ICheatControls
     {
-        // One per catalog denomination plus the showcase combos (14 = 12+2, 62 = 50+12).
-        private static readonly int[] Presets = { 2, 3, 4, 5, 6, 8, 10, 12, 14, 20, 30, 50, 62, 100 };
+        // One preset per catalog denomination; arbitrary totals (combo decompositions) go via the field.
+        private static readonly int[] Presets = { 2, 3, 4, 5, 6, 8, 10, 12, 20, 30, 50, 100 };
 
         private readonly IActiveLevelParameters _levelParams;
         private readonly IHitDispatcher _hitDispatcher;
