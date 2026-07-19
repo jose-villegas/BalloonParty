@@ -168,7 +168,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 { 6, BuildTriangularPrism() },
                 { 7, BuildHexagonalPyramid() },
                 { 8, BuildCube() },
-                { 9, BuildTriaugmentedTriangularPrism() },
+                { 9, BuildTriangularCupola() },
                 { 10, BuildOctagonalBipyramid() },
                 { 12, BuildHexagonalPrism() },
                 { 15, BuildPentagonalCupola() },
@@ -276,40 +276,37 @@ namespace BalloonParty.Game.Score.Behaviours
             return Build(8, 0.9f, vertices, walks);
         }
 
-        // 9 = a triaugmented triangular prism (Johnson J51): a triangular prism with a square pyramid raised
-        // on each of its three square faces — a 9-vertex deltahedron (all 21 edges equal). Six prism vertices
-        // of degree five plus three augmentation apexes of degree four. Two triangle-ring walks and three
-        // "diamond" walks (each threading an apex's four slant edges through the two square-face verticals)
-        // cover every edge with only the three verticals retraced — the minimal doubling six odd-degree
-        // vertices allow.
-        private static FormationShape BuildTriaugmentedTriangularPrism()
+        // 9 = a triangular cupola (Johnson J3): a hexagon base and a triangle top joined by an alternating
+        // band of three squares and three triangles — 6 + 3 vertices, all 15 edges equal. A bowl/frustum
+        // silhouette, distinct from the pointy bipyramid at 10 (and a small sibling to the 15's pentagonal
+        // cupola). The hexagon and triangle rings draw the caps; three triangle walks thread the six lateral
+        // edges through each top vertex, retracing only the three triangle-base hexagon edges (the minimal
+        // doubling the six odd-degree base vertices allow).
+        private static FormationShape BuildTriangularCupola()
         {
-            const float circumRadius = 0.5773503f;   // 1/sqrt(3): a unit-edge equilateral triangle
-            const float apexRise = 0.7071068f;        // 1/sqrt(2): the equilateral square-pyramid height
+            const float hexRadius = 1f;                // 1/(2 sin 30°), unit-edge hexagon
+            const float triRadius = 0.5773503f;        // 1/(2 sin 60°), unit-edge triangle
+            const float halfHeight = 0.4082483f;       // half the unit-edge cupola height
 
             var vertices = new Vector3[9];
-            for (var k = 0; k < 3; k++)
+            for (var j = 0; j < 6; j++)
             {
-                var azimuth = Mathf.PI * 0.5f + 2f * Mathf.PI * k / 3f;
-                var x = Mathf.Cos(azimuth) * circumRadius;
-                var y = Mathf.Sin(azimuth) * circumRadius;
-                vertices[k] = new Vector3(x, y, 0.5f);
-                vertices[k + 3] = new Vector3(x, y, -0.5f);
+                var a = 2f * Mathf.PI * j / 6f;
+                vertices[j] = new Vector3(Mathf.Cos(a) * hexRadius, Mathf.Sin(a) * hexRadius, -halfHeight);
             }
 
-            for (var k = 0; k < 3; k++)
+            for (var i = 0; i < 3; i++)
             {
-                // Apex over the square face on the prism edge (k, k+1): the face-centre midpoint pushed
-                // radially out by the pyramid height (the face is vertical, so the apex stays at z = 0).
-                var mid = (vertices[k] + vertices[(k + 1) % 3]) * 0.5f;
-                var center = new Vector3(mid.x, mid.y, 0f);
-                vertices[6 + k] = center + center.normalized * apexRise;
+                // Each top vertex sits above the midpoint of a hexagon edge — offset half a hexagon step.
+                var a = 2f * Mathf.PI * i / 3f + Mathf.PI / 6f;
+                vertices[6 + i] = new Vector3(Mathf.Cos(a) * triRadius, Mathf.Sin(a) * triRadius, halfHeight);
             }
 
             var walks = new[]
             {
-                Chord(0, 1, 2), Chord(3, 4, 5),
-                Chord(0, 6, 1, 4, 6, 3), Chord(1, 7, 2, 5, 7, 4), Chord(2, 8, 0, 3, 8, 5),
+                Chord(0, 1, 2, 3, 4, 5),
+                Chord(6, 7, 8),
+                Chord(6, 0, 1), Chord(7, 2, 3), Chord(8, 4, 5),
             };
             return Build(9, 1f, vertices, walks);
         }
@@ -428,7 +425,11 @@ namespace BalloonParty.Game.Score.Behaviours
             const int starCount = 3;
             const int tipCount = 5;
             const int outlineCount = 2 * tipCount;
-            const float tipCapRadians = 0.8f;
+
+            // The coverage dial: how far each star's tips splay from its centre. Three centres are always
+            // coplanar, so the poles perpendicular to their (equatorial) plane are the bare spots — bigger
+            // stars reach further toward those poles. Past ~1.2 adjacent stars start to overlap (tangle).
+            const float tipCapRadians = 1.1f;
 
             // Golden-ratio notch: inner/outer tangent radius ≈ 0.382, the classic five-point star cut.
             var notchCapRadians = Mathf.Asin(0.382f * Mathf.Sin(tipCapRadians));

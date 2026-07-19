@@ -90,8 +90,8 @@ namespace BalloonParty.Tests.Game
             CollectionAssert.AreEqual(new[] { 12 }, Decompose(12));
             CollectionAssert.AreEqual(new[] { 12, 2 }, Decompose(14));
 
-            // 7, 9 and 15 are now denominations (hexagonal pyramid, triaugmented triangular prism, pentagonal
-            // cupola): each is a single piece rather than a multi-shape split.
+            // 7, 9 and 15 are now denominations (hexagonal pyramid, triangular cupola, pentagonal cupola):
+            // each is a single piece rather than a multi-shape split.
             CollectionAssert.AreEqual(new[] { 7 }, Decompose(7));
             CollectionAssert.AreEqual(new[] { 9 }, Decompose(9));
             CollectionAssert.AreEqual(new[] { 15 }, Decompose(15));
@@ -267,24 +267,32 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void ShapeCatalog_TriaugmentedTriangularPrism_DeltahedronThreeApexes()
+        public void ShapeCatalog_TriangularCupola_HexagonAndTriangleCaps()
         {
             Assert.IsTrue(ShapeCatalog.TryGet(9, out var shape));
 
             Assert.AreEqual(9, shape.Vertices.Length);
             Assert.AreEqual(9, new HashSet<Vector3>(shape.Vertices).Count, "nine distinct vertices");
-            Assert.AreEqual(5, shape.Walks.Length, "two triangle rings + three apex diamonds");
+            Assert.AreEqual(5, shape.Walks.Length, "hexagon + triangle + three triangle facets");
 
             var edges = InspectCircuits(shape);
-            Assert.Less(edges.MaxLength - edges.MinLength, 1e-3f, "a deltahedron — every edge the same length");
-            Assert.AreEqual(21, edges.Multiplicity.Count, "a triaugmented triangular prism has 21 edges");
+            Assert.Less(edges.MaxLength - edges.MinLength, 1e-3f, "a Johnson solid — every edge the same length");
+            Assert.AreEqual(15, edges.Multiplicity.Count, "a triangular cupola has 15 edges");
             Assert.AreEqual(9, edges.Touched.Count, "all nine vertices covered");
 
-            // Six odd-degree prism vertices force minimal retracing: only the three verticals are doubled.
+            // Six odd-degree hexagon vertices force minimal retracing: the three triangle-base edges doubled.
             CollectionAssert.AreEqual(new[] { 1, 2 }, DistinctValues(edges.Multiplicity));
 
-            var degrees = DegreeHistogram(edges.Multiplicity);
-            Assert.AreEqual(3, CountByDegree(degrees, 4), "three augmentation apexes of degree four");
+            var doubled = 0;
+            foreach (var multiplicity in edges.Multiplicity.Values)
+            {
+                if (multiplicity == 2)
+                {
+                    doubled++;
+                }
+            }
+
+            Assert.AreEqual(3, doubled, "one retraced base per triangle facet");
         }
 
         [Test]

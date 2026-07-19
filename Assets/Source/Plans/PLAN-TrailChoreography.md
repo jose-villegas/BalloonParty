@@ -419,10 +419,10 @@ and a `RadiusScale`:
   tetrahedron (4-cycle + two diagonal shuttles), `5` = square pyramid (a 5-cycle through the apex +
   3 shuttles), `6` = triangular prism (two triangle loops + 3 vertical shuttles along the wide
   axis), `7` = hexagonal pyramid (one weaving cycle through the apex threading every slant + 3
-  base-edge shuttles), `8` = cube (a Hamiltonian 8-cycle + 4 shuttles), `9` = triaugmented
-  triangular prism / Johnson J51 (deltahedron: two triangle rings + three apex diamonds, only the
-  three verticals retraced), `15` = pentagonal cupola / Johnson J5 (decagon ring + pentagon ring +
-  five triangle facets threading the ten laterals, only the five triangle bases retraced).
+  base-edge shuttles), `8` = cube (a Hamiltonian 8-cycle + 4 shuttles), `9` = triangular cupola /
+  Johnson J3 (hexagon ring + triangle ring + three triangle facets threading the six laterals, only
+  the three triangle bases retraced), `15` = pentagonal cupola / Johnson J5 (decagon ring + pentagon
+  ring + five triangle facets threading the ten laterals, only the five triangle bases retraced).
 - `10/20/30` = spheres as **latitude rings**: `10` = 2 rings of 5; `20` = 3 rings 6/8/6; `30` = 4
   rings 6/8/8/6 + 2 pole shuttles (meridian arcs, a hint of longitude). Ring segments are **arcs**
   (slerp); polyhedron edges are **chords** (lerp).
