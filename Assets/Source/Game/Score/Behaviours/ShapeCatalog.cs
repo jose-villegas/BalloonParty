@@ -442,7 +442,11 @@ namespace BalloonParty.Game.Score.Behaviours
             const int starCount = 3;
             const int tipCount = 5;
             const int outlineCount = 2 * tipCount;
-            const float tipCapRadians = 0.8f;
+
+            // The coverage dial: how far each star's tips splay from its centre. Three centres are always
+            // coplanar, so the poles perpendicular to their (equatorial) plane are the bare spots — bigger
+            // stars reach further toward those poles. Past ~1.2 adjacent stars start to overlap (tangle).
+            const float tipCapRadians = 1.1f;
 
             // Golden-ratio notch: inner/outer tangent radius ≈ 0.382, the classic five-point star cut.
             var notchCapRadians = Mathf.Asin(0.382f * Mathf.Sin(tipCapRadians));
