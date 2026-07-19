@@ -451,6 +451,66 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
+        public void Step_PierceDischarge_FiresAfterDelayFromLastArm()
+        {
+            // The arming step only SETS the countdown (no decrement), so it starts ticking the NEXT
+            // step: with a 0.2 delay at 0.1/step the discharge fires two ticks after the arm, ending
+            // the pierce and dropping the shot to base.
+            var resolver = CruiseResolver(perShield: 0.5f, pierceDischargeDelay: 0.2f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
+            model.IsPiercing.Value = true;
+            model.Flight.DischargeArmed = true;
+
+            resolver.Step(model, Vector3.zero, 0.1f);
+            Assert.IsTrue(model.IsPiercing.Value, "the arming step only starts the countdown");
+
+            resolver.Step(model, Vector3.zero, 0.1f);
+            Assert.IsTrue(model.IsPiercing.Value, "0.1 of a 0.2 delay elapsed — not yet");
+
+            resolver.Step(model, Vector3.zero, 0.1f);
+            Assert.IsFalse(model.IsPiercing.Value, "delay elapsed — the discharge ends the pierce");
+        }
+
+        [Test]
+        public void Step_PierceDischarge_NewArmMidWindowResetsTheDebounce()
+        {
+            // A fresh plow re-arms mid-countdown; the debounce restarts, so the discharge holds off
+            // until the delay elapses again from the LAST arm — it must NOT fire at the original time.
+            var resolver = CruiseResolver(perShield: 0.5f, pierceDischargeDelay: 0.2f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
+            model.IsPiercing.Value = true;
+            model.Flight.DischargeArmed = true;
+
+            resolver.Step(model, Vector3.zero, 0.1f); // countdown ← 0.2
+            resolver.Step(model, Vector3.zero, 0.1f); // countdown → 0.1
+
+            model.Flight.DischargeArmed = true; // a new tough plow re-arms
+            resolver.Step(model, Vector3.zero, 0.1f); // countdown ← 0.2 again, not fired
+            Assert.IsTrue(model.IsPiercing.Value, "re-arming reset the debounce — no early discharge");
+
+            resolver.Step(model, Vector3.zero, 0.1f); // countdown → 0.1
+            resolver.Step(model, Vector3.zero, 0.1f); // countdown → 0 — fires
+            Assert.IsFalse(model.IsPiercing.Value, "the discharge fires a full delay after the last arm");
+        }
+
+        [Test]
+        public void Step_PiercingWithNoArm_NeverDischarges()
+        {
+            // A piercing shot that never plowed a tough is never armed, so the countdown stays idle and
+            // the discharge never fires — the pierce persists.
+            var resolver = CruiseResolver(perShield: 0.5f, pierceDischargeDelay: 0.2f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
+            model.IsPiercing.Value = true;
+
+            for (var i = 0; i < 6; i++)
+            {
+                resolver.Step(model, Vector3.zero, 0.1f);
+            }
+
+            Assert.IsTrue(model.IsPiercing.Value, "no arm ever set — nothing discharges");
+        }
+
+        [Test]
         public void Step_LastShieldApproach_TraversesSegmentNormalizedToTime()
         {
             // Segment from y=0 to the top wall (y=5), length 5; a linear time->position curve over a
@@ -495,13 +555,14 @@ namespace BalloonParty.Tests.Projectile
         }
 
         private static ProjectileMotionResolver CruiseResolver(
-            float perShield, float tapEaseDuration = 0f, int piercingTapThreshold = 0)
+            float perShield, float tapEaseDuration = 0f, int piercingTapThreshold = 0, float pierceDischargeDelay = 0f)
         {
             var config = Substitute.For<IGameConfiguration>();
             config.LimitsClockwise.Returns(Walls);
             config.CruiseSpeedPerShield.Returns(perShield);
             config.CruiseTapEaseDuration.Returns(tapEaseDuration);
             config.CruisePiercingTapThreshold.Returns(piercingTapThreshold);
+            config.PierceDischargeDelay.Returns(pierceDischargeDelay);
             config.CruiseTapCurve.Returns(AnimationCurve.Linear(0f, 0f, 1f, 1f));
             return new ProjectileMotionResolver(config);
         }

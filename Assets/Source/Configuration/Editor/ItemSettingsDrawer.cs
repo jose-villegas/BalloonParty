@@ -182,8 +182,6 @@ namespace BalloonParty.Configuration.Editor
                     var snipe = property.FindPropertyRelative("_snipe");
                     y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Snipe");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_snipeSpeedBuffMultiplier", "Speed Buff Multiplier");
-                    y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_snipeToughHitSpeedFalloff", "Tough Hit Speed Falloff");
-                    y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_snipeLineClearHalfWidth", "Line Clear Half Width");
                     y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Rainbow");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_snipeChargePerToughHit", "Charge Per Tough Hit");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_bloomBaseRadius", "Bloom Base Radius");
@@ -229,8 +227,8 @@ namespace BalloonParty.Configuration.Editor
                     return row * 13;
 
                 case ItemType.Snipe:
-                    // 3 headers (Snipe/Rainbow/Lights) + 3 + 5 + 4 fields.
-                    return row * 15;
+                    // 3 headers (Snipe/Rainbow/Lights) + 1 + 5 + 4 fields.
+                    return row * 13;
 
                 default:
                     return 0f;

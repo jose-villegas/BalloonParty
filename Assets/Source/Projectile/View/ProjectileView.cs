@@ -300,6 +300,15 @@ namespace BalloonParty.Projectile.View
 
         private void DestroyProjectile()
         {
+            // Shatter any toughs the shot plowed through but never discharged — a piercing run that
+            // ends (out of shields / despawn) with pending toughs flushes them here so none are dropped,
+            // with the same trail flourish the mid-flight discharge gets.
+            if (_model != null && _model.Flight.PendingPierceHits.Count > 0)
+            {
+                _hitResolver.DischargePending(_model);
+                _projectileTrail?.Boost();
+            }
+
             // A shot that dies mid-cruise (last shield spent on a wall) still closes its cruise, so
             // started/ended feedback always pairs up.
             if (_model != null && _model.IsCruising.Value)
@@ -405,6 +414,15 @@ namespace BalloonParty.Projectile.View
                 // brief Sparks-colour light flash at the same point.
                 _disturbanceField.Stamp(StampSource.ProjectileImpact, step.WallContact, Vector2.zero);
                 FlashShieldLoss(step.WallContact);
+            }
+
+            // The motion resolver ends the pierce when the discharge countdown elapses; the plowed toughs
+            // are still pending, so shatter them now (at their strike positions). DestroyProjectile handles
+            // the same flush on a shot that dies before the countdown fires.
+            if (!_model.IsPiercing.Value && _model.Flight.PendingPierceHits.Count > 0)
+            {
+                _hitResolver.DischargePending(_model);
+                _projectileTrail?.Boost();
             }
 
             transform.position = step.Position;

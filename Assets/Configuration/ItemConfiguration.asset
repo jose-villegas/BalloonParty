@@ -171,6 +171,17 @@ MonoBehaviour:
       _spreadLength: 3
       _spreadBaseWidth: 2.5
       _spreadBlobRadius: 0.35
+    _snipe:
+      _snipeSpeedBuffMultiplier: 1.6
+      _snipeChargePerToughHit: 1
+      _bloomBaseRadius: 1
+      _bloomRadiusPerCharge: 0.5
+      _bloomRadiusCap: 4
+      _snipeColorCycles: 2
+      _tracerLightHalfWidth: 0.4
+      _tracerLightIntensity: 2
+      _dischargeLightIntensity: 3
+      _lightFallbackSeconds: 0.3
   - _type: 3
     _maximumAllowed: 2
     _visualPrefab: {fileID: 6897192337968396076, guid: db265edefece34cbf86ee0995069bbbf,
@@ -325,6 +336,17 @@ MonoBehaviour:
       _spreadLength: 3
       _spreadBaseWidth: 2.5
       _spreadBlobRadius: 0.35
+    _snipe:
+      _snipeSpeedBuffMultiplier: 1.6
+      _snipeChargePerToughHit: 1
+      _bloomBaseRadius: 1
+      _bloomRadiusPerCharge: 0.5
+      _bloomRadiusCap: 4
+      _snipeColorCycles: 2
+      _tracerLightHalfWidth: 0.4
+      _tracerLightIntensity: 2
+      _dischargeLightIntensity: 3
+      _lightFallbackSeconds: 0.3
   - _type: 4
     _maximumAllowed: 2
     _visualPrefab: {fileID: 868192500419445839, guid: ad757d902f90141549750e28fe439d82,
@@ -479,6 +501,17 @@ MonoBehaviour:
       _spreadLength: 3
       _spreadBaseWidth: 2.5
       _spreadBlobRadius: 0.35
+    _snipe:
+      _snipeSpeedBuffMultiplier: 1.6
+      _snipeChargePerToughHit: 1
+      _bloomBaseRadius: 1
+      _bloomRadiusPerCharge: 0.5
+      _bloomRadiusCap: 4
+      _snipeColorCycles: 2
+      _tracerLightHalfWidth: 0.4
+      _tracerLightIntensity: 2
+      _dischargeLightIntensity: 3
+      _lightFallbackSeconds: 0.3
   - _type: 1
     _maximumAllowed: 3
     _visualPrefab: {fileID: 8514083812438296857, guid: f951c5e126eee4e2da2094bbdc729ced,
@@ -633,6 +666,17 @@ MonoBehaviour:
       _spreadLength: 3
       _spreadBaseWidth: 2.5
       _spreadBlobRadius: 0.35
+    _snipe:
+      _snipeSpeedBuffMultiplier: 1.6
+      _snipeChargePerToughHit: 1
+      _bloomBaseRadius: 1
+      _bloomRadiusPerCharge: 0.5
+      _bloomRadiusCap: 4
+      _snipeColorCycles: 2
+      _tracerLightHalfWidth: 0.4
+      _tracerLightIntensity: 2
+      _dischargeLightIntensity: 3
+      _lightFallbackSeconds: 0.3
   - _type: 5
     _maximumAllowed: 3
     _visualPrefab: {fileID: 5155374104672875301, guid: caddd14ec47634b779cdad172791812c,
@@ -823,3 +867,214 @@ MonoBehaviour:
       _spreadLength: -3.125
       _spreadBaseWidth: 4.25
       _spreadBlobRadius: 0.35
+    _snipe:
+      _snipeSpeedBuffMultiplier: 1.6
+      _snipeChargePerToughHit: 1
+      _bloomBaseRadius: 1
+      _bloomRadiusPerCharge: 0.5
+      _bloomRadiusCap: 4
+      _snipeColorCycles: 2
+      _tracerLightHalfWidth: 0.4
+      _tracerLightIntensity: 2
+      _dischargeLightIntensity: 3
+      _lightFallbackSeconds: 0.3
+  - _type: 6
+    _maximumAllowed: 3
+    _visualPrefab: {fileID: 5155374104672875301, guid: 5e584528ec8b54477804361a90b025e2,
+      type: 3}
+    _activationEffectPrefab: {fileID: 0}
+    _damage: 1
+    _damageFlags: 0
+    _bomb:
+      _bombRadius: 1.25
+      _bombRainbowEffectScale: 1.5
+      _bombRainbowConversionRange: 1
+      _nudgeOverrides: []
+      _blastLightRadiusScale: 3
+      _blastLightIntensity: 3
+      _blastLightFallbackSeconds: 0.4
+      _implosionRadiusScale: 1.5
+      _implosionStrengthScale: 1.5
+      _implosionDuration: 0.05
+    _laser:
+      _laserRaycastDistance: 20
+      _laserCircleCastRadius: 0.065
+      _laserColorCycles: 2
+      _beamLightHalfWidth: 0.7
+      _beamLightIntensity: 2
+      _beamLightFalloff: 1.5
+      _beamLightFallbackSeconds: 0.4
+      _telegraphEnabled: 0
+      _telegraphHalfLength: 2
+      _telegraphHalfWidth: 0.5
+      _telegraphIntensity: 1.5
+    _lightning:
+      _lightningSegmentsMultiplier: 3
+      _lightningRandomness: 0.2
+      _lightningJumpTime: 0.15
+      _lightningGlowSubdivisions: 4
+      _lightningFractalDecay: 0.55
+      _lightningGlowColorCycles: 2
+      _popLightRadius: 0.8
+      _popLightIntensity: 2
+      _popLightSeconds: 0.2
+    _paint:
+      _paintBlobFlightDuration: 0.75
+      _paintBlobArcCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0.6378676
+          outSlope: 0.6378676
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.7263335
+          value: 0.46330464
+          inSlope: -0.6323804
+          outSlope: -0.6323804
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.028062778
+          outWeight: 0.088008694
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: -1.6929535
+          outSlope: -1.6929535
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      _paintBlobScaleCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0.5
+          inSlope: 1.8253522
+          outSlope: 1.8253522
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.72450185
+          value: 1.822471
+          inSlope: -0.9977113
+          outSlope: -0.9977113
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.045816194
+          outWeight: 0.098910205
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: -2.985396
+          outSlope: -2.985396
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      _paintBlobShadowScaleCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0.3
+          inSlope: 0.8913913
+          outSlope: 0.8913913
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.39841402
+          value: 0.6551428
+          inSlope: 2.7322137
+          outSlope: 2.7322137
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.06436237
+        - serializedVersion: 3
+          time: 0.6827618
+          value: 1.3182733
+          inSlope: -0.15036193
+          outSlope: -0.15036193
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.062254164
+          outWeight: 0.08319314
+        - serializedVersion: 3
+          time: 1
+          value: 0.3
+          inSlope: -3.2098067
+          outSlope: -3.2098067
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      _paintBlobSpriteScaleCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: -0.912098
+          outSlope: -0.912098
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.6767358
+          value: 0.3827506
+          inSlope: 0.090062246
+          outSlope: 0.090062246
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.08525128
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 1.909427
+          outSlope: 1.909427
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      _paintBlobSpinSpeed: 120
+      _paintBlobColorCycles: 2
+      _spreadOffset: 1.65
+      _spreadLength: -3.125
+      _spreadBaseWidth: 4.25
+      _spreadBlobRadius: 0.35
+    _snipe:
+      _snipeSpeedBuffMultiplier: 2
+      _snipeChargePerToughHit: 1
+      _bloomBaseRadius: 1
+      _bloomRadiusPerCharge: 0.5
+      _bloomRadiusCap: 4
+      _snipeColorCycles: 2
+      _tracerLightHalfWidth: 0.4
+      _tracerLightIntensity: 2
+      _dischargeLightIntensity: 3
+      _lightFallbackSeconds: 0.3

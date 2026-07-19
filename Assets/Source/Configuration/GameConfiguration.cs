@@ -46,6 +46,11 @@ namespace BalloonParty.Configuration
                  "then pops everything it touches, unbreakables included. 0 disables.")]
         [SerializeField] [Min(0)] private int _cruisePiercingTapThreshold = 3;
 
+        [Tooltip("Seconds after the last tough/unbreakable a piercing shot plows before it discharges " +
+                 "(shatters the plowed toughs and slows to base). Re-armed by each plow, so a run of " +
+                 "toughs holds it open; the discharge fires this long after the final one.")]
+        [SerializeField] [Min(0f)] private float _pierceDischargeDelay = 0.12f;
+
         [Tooltip("Position easing across a doomed 0-shield segment, sampled on NORMALIZED TIME over " +
                  "LastShieldApproachDuration (x = time 0..1, y = distance fraction from last bounce to " +
                  "the death wall, 0->1). The 'last breath' — same wall-clock length whatever the " +
@@ -100,6 +105,7 @@ namespace BalloonParty.Configuration
         public AnimationCurve CruiseTapCurve => _cruiseTapCurve;
         public float CruiseTapEaseDuration => _cruiseTapEaseDuration;
         public int CruisePiercingTapThreshold => _cruisePiercingTapThreshold;
+        public float PierceDischargeDelay => _pierceDischargeDelay;
         public AnimationCurve LastShieldApproachCurve => _lastShieldApproachCurve;
         public float LastShieldApproachDuration => _lastShieldApproachDuration;
         public AnimationCurve LastShieldTimeScaleCurve => _lastShieldTimeScaleCurve;

@@ -228,12 +228,6 @@ namespace BalloonParty.Configuration.Items
         [Tooltip("Initial flight-speed multiplier granted on activation. Non-stacking — a second Snipe refreshes, not adds.")]
         [SerializeField] [Min(1f)] private float _snipeSpeedBuffMultiplier = 1.6f;
 
-        [Tooltip("Speed scale applied each time the lance plows a tough/unbreakable balloon. Floored at base speed.")]
-        [SerializeField] [Min(0f)] private float _snipeToughHitSpeedFalloff = 0.5f;
-
-        [Tooltip("Half-width of the capsule swept along the terminating segment that decides which hits>1 balloons the discharge clears.")]
-        [SerializeField] [Min(0f)] private float _snipeLineClearHalfWidth = 0.5f;
-
         [Tooltip("Rainbow holder only: charge gained per tough/unbreakable plow. The discharge bloom scales with total charge.")]
         [SerializeField] [Min(0)] private int _snipeChargePerToughHit = 1;
 
@@ -262,8 +256,6 @@ namespace BalloonParty.Configuration.Items
         [SerializeField] [Min(0f)] private float _lightFallbackSeconds = 0.3f;
 
         public float SpeedBuffMultiplier => _snipeSpeedBuffMultiplier;
-        public float ToughHitSpeedFalloff => _snipeToughHitSpeedFalloff;
-        public float LineClearHalfWidth => _snipeLineClearHalfWidth;
         public int ChargePerToughHit => _snipeChargePerToughHit;
         public float BloomBaseRadius => _bloomBaseRadius;
         public float BloomRadiusPerCharge => _bloomRadiusPerCharge;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Run;
+using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
@@ -27,6 +28,7 @@ namespace BalloonParty.Game.Level
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         private readonly ISubscriber<LevelTransitionCompletedMessage> _transitionCompletedSubscriber;
+        private readonly IActiveProjectilePierce _pierce;
 
         private readonly ReactiveProperty<int> _level = new(1);
         private readonly ReactiveProperty<LevelUpPhase> _phase = new(LevelUpPhase.Playing);
@@ -38,6 +40,7 @@ namespace BalloonParty.Game.Level
         private IDisposable _trailSubscription;
         private IDisposable _dismissedSubscription;
         private IDisposable _transitionCompletedSubscription;
+        private IDisposable _pierceEndedSubscription;
 
         // The target level for the deferred increment; applied when the popup is dismissed.
         private int _pendingNewLevel;
@@ -51,7 +54,8 @@ namespace BalloonParty.Game.Level
             IPublisher<ScoreLevelUpMessage> levelUpPublisher,
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
             ISubscriber<LevelUpDismissedMessage> dismissedSubscriber,
-            ISubscriber<LevelTransitionCompletedMessage> transitionCompletedSubscriber)
+            ISubscriber<LevelTransitionCompletedMessage> transitionCompletedSubscriber,
+            IActiveProjectilePierce pierce)
         {
             _levelParams = levelParams;
             _thresholds = thresholds;
@@ -62,6 +66,7 @@ namespace BalloonParty.Game.Level
             _trailArrivedSubscriber = trailArrivedSubscriber;
             _dismissedSubscriber = dismissedSubscriber;
             _transitionCompletedSubscriber = transitionCompletedSubscriber;
+            _pierce = pierce;
         }
 
         public IReadOnlyReactiveProperty<int> Level => _level;
@@ -81,6 +86,15 @@ namespace BalloonParty.Game.Level
             // and scoring reopens only once the Ascent reports it has settled (Transitioning → Playing).
             _dismissedSubscription = _dismissedSubscriber.Subscribe(_ => OnLevelUpDismissed());
             _transitionCompletedSubscription = _transitionCompletedSubscriber.Subscribe(_ => OnTransitionCompleted());
+
+            // A level-up is DETECTED mid-pierce (WillLevelUp stays true the moment we know), but the
+            // COMMIT is held while a shot is piercing so the ceremony doesn't fire mid-flight — see
+            // CheckLevelUp's guard. When the pierce ends (its discharge), re-check: the confirming trails
+            // that arrived during the plow have already advanced progress, so this is where it commits.
+            _pierceEndedSubscription = _pierce.IsPiercing
+                .SkipLatestValueOnSubscribe()
+                .Where(piercing => !piercing)
+                .Subscribe(_ => CheckLevelUp());
         }
 
         public void ResetRun(int generation)
@@ -93,6 +107,7 @@ namespace BalloonParty.Game.Level
             _trailSubscription?.Dispose();
             _dismissedSubscription?.Dispose();
             _transitionCompletedSubscription?.Dispose();
+            _pierceEndedSubscription?.Dispose();
         }
 
         public int GetProgress(string colorName)
@@ -269,6 +284,14 @@ namespace BalloonParty.Game.Level
             // single reentrancy guard (no second message until the current one resolves). nav/loss stay
             // to suppress on a run that's ending, which the phase doesn't model.
             if (_phase.Value != LevelUpPhase.Playing)
+            {
+                return;
+            }
+
+            // Hold the commit while a shot is piercing: it plows many balloons across one flight, so
+            // firing the ceremony on a mid-flight confirming arrival would interrupt the shot. The
+            // pierce-ended subscription re-runs this once the shot discharges.
+            if (_pierce.IsPiercing.Value)
             {
                 return;
             }

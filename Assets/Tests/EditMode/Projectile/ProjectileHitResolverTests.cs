@@ -8,6 +8,7 @@ using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
@@ -113,34 +114,65 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
-        public void Resolve_PiercingBuff_ToughPierceHalvesSpeedScale()
+        public void Resolve_PiercingTough_RecordsWithoutPopping()
         {
             _projectile.IsPiercing.Value = true;
-            _projectile.IsCruising.Value = true;
-            _projectile.Flight.CruisePierceSpeedScale = 1f;
 
-            // A 2-hit tough is a >1-hit actor — piercing pops it but the plow halves the speed scale.
-            _resolver.Resolve(_projectile, new BalloonModel(new BalloonModelConfig(hitsToPop: 2)), Vector3.zero);
-            Assert.AreEqual(0.5f, _projectile.Flight.CruisePierceSpeedScale, 1e-4f);
+            // A 2-hit tough is a >1-hit actor — a piercing shot plows through it, recording the strike
+            // for the discharge instead of popping it on contact.
+            var result = _resolver.Resolve(
+                _projectile, new BalloonModel(new BalloonModelConfig(hitsToPop: 2)), new Vector3(1f, 2f, 0f));
 
-            // A 1-hit balloon costs nothing — the scale rides through unchanged.
-            _resolver.Resolve(_projectile, new BalloonModel(new BalloonModelConfig(hitsToPop: 1)), Vector3.zero);
-            Assert.AreEqual(0.5f, _projectile.Flight.CruisePierceSpeedScale, 1e-4f, "a 1-hit pop doesn't decay speed");
+            Assert.AreEqual(ProjectileHitVisual.None, result);
+            Assert.AreEqual(1, _projectile.Flight.PendingPierceHits.Count, "the plowed tough is recorded");
+            Assert.AreEqual(new Vector3(1f, 2f, 0f), _projectile.Flight.PendingPierceHits[0].Position);
+            Assert.IsTrue(_projectile.Flight.DischargeArmed, "the plow arms the discharge debounce");
+            _hitDispatcher.DidNotReceive().Dispatch(Arg.Any<ActorHitMessage>());
         }
 
         [Test]
-        public void Resolve_PiercingBuff_PopsAWouldBeDeflector()
+        public void Resolve_PiercingNormal_PopsOnContactWithoutRecording()
         {
-            // Two hits to pop would normally deflect the first contact; the cruise-earned piercing
-            // buff flips it to a straight pop (DamageFlags.Piercing through EvaluateNormalHit).
             _projectile.IsPiercing.Value = true;
-            var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 2));
+            var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
             balloon.Color.Value = "Red";
 
             _resolver.Resolve(_projectile, balloon, Vector3.zero);
 
+            Assert.AreEqual(0, _projectile.Flight.PendingPierceHits.Count, "a normal balloon pops, it isn't recorded");
             _hitDispatcher.Received(1).Dispatch(Arg.Is<ActorHitMessage>(m =>
                 m.Actor == balloon && m.Outcome == HitOutcome.Pop));
+        }
+
+        [Test]
+        public void DischargePending_PopsRecordedToughs()
+        {
+            _projectile.IsPiercing.Value = true;
+            var tough = new BalloonModel(new BalloonModelConfig(hitsToPop: 2));
+            _grid.Place(tough, Substitute.For<ISlotActorView>(), new Vector2Int(2, 3));
+
+            _resolver.Resolve(_projectile, tough, new Vector3(1f, 2f, 0f));
+            Assert.AreEqual(1, _projectile.Flight.PendingPierceHits.Count);
+
+            _resolver.DischargePending(_projectile);
+
+            _hitDispatcher.Received(1).Dispatch(Arg.Is<ActorHitMessage>(m =>
+                m.Actor == tough && m.Outcome == HitOutcome.Pop));
+            Assert.AreEqual(0, _projectile.Flight.PendingPierceHits.Count, "the discharge clears the pending set");
+        }
+
+        [Test]
+        public void DischargePending_SkipsToughThatLeftTheBoard()
+        {
+            _projectile.IsPiercing.Value = true;
+            // Recorded but never placed in the grid — it "left the board" before the discharge.
+            var tough = new BalloonModel(new BalloonModelConfig(hitsToPop: 2));
+            tough.SlotIndex.Value = new Vector2Int(2, 3);
+            _resolver.Resolve(_projectile, tough, Vector3.zero);
+
+            _resolver.DischargePending(_projectile);
+
+            _hitDispatcher.DidNotReceive().Dispatch(Arg.Any<ActorHitMessage>());
         }
 
         [Test]

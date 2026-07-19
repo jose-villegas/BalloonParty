@@ -5,6 +5,7 @@ using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Score;
 using BalloonParty.Game.Score.Behaviours;
+using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
@@ -40,6 +41,7 @@ namespace BalloonParty.Game.Cinematics
         private readonly ScoreTrailService _scoreTrailService;
         private readonly ScoreTrailBehaviourResolver _resolver;
         private readonly PauseService _pauseService;
+        private readonly IActiveProjectilePierce _pierce;
         private readonly CancellationTokenSource _cts = new();
 
         private TrackedTrailSettings _trackedTrailSettings;
@@ -69,7 +71,8 @@ namespace BalloonParty.Game.Cinematics
             ILossForecast lossForecast,
             ScoreTrailService scoreTrailService,
             ScoreTrailBehaviourResolver resolver,
-            PauseService pauseService)
+            PauseService pauseService,
+            IActiveProjectilePierce pierce)
             : base(director, rig, timeScale, settings)
         {
             _config = config;
@@ -81,6 +84,7 @@ namespace BalloonParty.Game.Cinematics
             _scoreTrailService = scoreTrailService;
             _resolver = resolver;
             _pauseService = pauseService;
+            _pierce = pierce;
         }
 
         protected override CameraRigCinematicConfig BuildConfig()
@@ -126,6 +130,14 @@ namespace BalloonParty.Game.Cinematics
 
             // No level-up show on a run that is over or already certain to be lost.
             if (Navigation.Current.Value != NavigationState.Game || _lossForecast.LossImminent)
+            {
+                return;
+            }
+
+            // Hold the pan-in while a shot is piercing so the ceremony never pauses the game mid-flight.
+            // The pierce ends by DISCHARGING (IsPiercing cleared BEFORE the plowed toughs are popped), so
+            // those tough pops re-enter here not-piercing and start the ceremony then — after the plow.
+            if (_pierce.IsPiercing.Value)
             {
                 return;
             }

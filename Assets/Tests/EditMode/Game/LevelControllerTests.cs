@@ -4,6 +4,7 @@ using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
+using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
@@ -28,6 +29,8 @@ namespace BalloonParty.Tests.Game
         private ReactiveProperty<NavigationState> _navState;
         private ILossForecast _lossForecast;
         private IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
+        private IActiveProjectilePierce _pierce;
+        private ReactiveProperty<bool> _isPiercing;
         private IMessageHandler<ScoreTrailArrivedMessage> _trailArrivedHandler;
         private IMessageHandler<LevelUpDismissedMessage> _dismissedHandler;
         private IMessageHandler<LevelTransitionCompletedMessage> _completedHandler;
@@ -57,6 +60,10 @@ namespace BalloonParty.Tests.Game
 
             _levelUpPublisher = Substitute.For<IPublisher<ScoreLevelUpMessage>>();
 
+            _isPiercing = new ReactiveProperty<bool>(false);
+            _pierce = Substitute.For<IActiveProjectilePierce>();
+            _pierce.IsPiercing.Returns(_isPiercing);
+
             _controller = BuildController();
             _controller.Start();
         }
@@ -65,6 +72,7 @@ namespace BalloonParty.Tests.Game
         public void TearDown()
         {
             _controller.Dispose();
+            _isPiercing.Dispose();
         }
 
         private LevelController BuildController()
@@ -92,7 +100,7 @@ namespace BalloonParty.Tests.Game
 
             return new LevelController(
                 _levelParams, _thresholds, _palette, _navigation, _lossForecast, _levelUpPublisher,
-                trailArrivedSubscriber, dismissedSubscriber, completedSubscriber);
+                trailArrivedSubscriber, dismissedSubscriber, completedSubscriber, _pierce);
         }
 
         [Test]
@@ -498,6 +506,158 @@ namespace BalloonParty.Tests.Game
 
             Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value);
             Assert.AreEqual(1, _controller.Level.Value);
+        }
+
+        [Test]
+        public void CheckLevelUp_WhilePiercing_HoldsCommit()
+        {
+            // A confirming arrival that completes every colour mid-pierce must not fire the ceremony:
+            // the commit is held so the plowing shot isn't interrupted mid-flight.
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
+            SetPiercing(true);
+
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
+
+            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
+            Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value, "phase stays Playing while held");
+        }
+
+        [Test]
+        public void PierceEnded_WithRequirementMet_PublishesOnceAndGoesPending()
+        {
+            // The pierce discharges after the confirming trails landed — that's where the held commit fires.
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
+            SetPiercing(true);
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
+
+            SetPiercing(false);
+
+            _levelUpPublisher.Received(1).Publish(Arg.Is<ScoreLevelUpMessage>(m => m.NewLevel == 2));
+            Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value);
+        }
+
+        [Test]
+        public void NotPiercing_ConfirmingArrival_FiresImmediately()
+        {
+            // Regression guard: a not-piercing shot behaves exactly as before the pierce gate — the
+            // confirming arrival commits on the spot, no pierce-end needed.
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
+
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
+
+            _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
+            Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value);
+        }
+
+        [Test]
+        public void PierceEnded_RequirementNotMet_DoesNotPublish()
+        {
+            // The pierce ended but only one colour reached the threshold — nothing to commit.
+            _thresholds.PointsRequiredForLevel(1).Returns(5);
+            SetPiercing(true);
+            ScoreColor(Red, 5); // Blue still short
+
+            SetPiercing(false);
+
+            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
+            Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value);
+        }
+
+        [Test]
+        public void MultipleArrivalsDuringPierce_ThenPierceEnds_PublishesOnce()
+        {
+            // Many confirming arrivals plow past during one flight; the single discharge fires the ceremony once.
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
+            SetPiercing(true);
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
+            FireTrailArrived(Red, 2);
+            FireTrailArrived(Blue, 2);
+
+            SetPiercing(false);
+
+            _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
+        }
+
+        [Test]
+        public void ClaimProgress_WhilePiercing_StillBanksExcess()
+        {
+            // Only the COMMIT is held mid-pierce; ClaimProgress isn't gated, so overflow still banks
+            // and confirmed progress still advances during the plow.
+            _thresholds.PointsRequiredForLevel(1).Returns(7);
+            SetPiercing(true);
+
+            ScoreColor(Red, 10); // 7 confirmed, 3 banked
+
+            Assert.AreEqual(3, _controller.ExcessPoints(Red), "the bank fills regardless of the pierce hold");
+            Assert.AreEqual(7, _controller.GetProgress(Red), "confirmed progress advances mid-pierce");
+        }
+
+        [Test]
+        public void PierceEnded_WhenLossImminent_DoesNotPublish()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
+            _lossForecast.LossImminent.Returns(true);
+            SetPiercing(true);
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
+
+            SetPiercing(false);
+
+            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
+            Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value);
+        }
+
+        [Test]
+        public void PierceEnded_WhenNotInGame_DoesNotPublish()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
+            _navState.Value = NavigationState.GameOver;
+            SetPiercing(true);
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
+
+            SetPiercing(false);
+
+            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
+            Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value);
+        }
+
+        [Test]
+        public void PierceEnded_WhileAlreadyPending_DoesNotRePublish()
+        {
+            // A pierce cycle after the ceremony is already Pending must not re-fire it — the phase guard holds.
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
+            _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
+
+            SetPiercing(true);
+            SetPiercing(false);
+
+            _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
+        }
+
+        [Test]
+        public void PierceEnded_AfterDispose_DoesNotFireOrThrow()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
+            SetPiercing(true);
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
+
+            _controller.Dispose();
+
+            Assert.DoesNotThrow(() => SetPiercing(false));
+            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
+        }
+
+        private void SetPiercing(bool piercing)
+        {
+            _isPiercing.Value = piercing;
         }
 
         // Mirrors production: claim each point (advancing projected), then confirm it as its trail lands.

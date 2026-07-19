@@ -38,7 +38,8 @@ namespace BalloonParty.Projectile.Controller
         {
             projectile.LastHitBalloon = balloon;
 
-            if (!projectile.IsPiercing.Value)
+            var isPiercing = projectile.IsPiercing.Value;
+            if (!isPiercing)
             {
                 // Building phase: any balloon contact ends the empty-corridor cruise and restarts
                 // the wall-bounce counter.
@@ -48,25 +49,66 @@ namespace BalloonParty.Projectile.Controller
                     projectile.IsCruising.Value = false;
                 }
             }
-            else
+
+            // A piercing shot plows through a TOUGH actor (one that would take more than one hit)
+            // WITHOUT popping it: the tough is recorded and shattered together with the rest at the
+            // discharge, not on contact. Normal balloons still pop as the shot passes through.
+            var plowsTough = isPiercing
+                && ((balloon is IHasDurability durable && durable.HitsRemaining.Value > 1)
+                    || balloon is UnbreakableBalloonModel);
+            if (plowsTough)
             {
-                // Armed piercing: the cruise (and its speed) rides on through pops — but plowing a
-                // TOUGH actor (one that would take more than one hit) costs it half its current
-                // speed. The motion resolver floors the total at base, and the next wall ends it.
-                var requiresMultipleHits =
-                    (balloon is IHasDurability durable && durable.HitsRemaining.Value > 1)
-                    || balloon is UnbreakableBalloonModel;
-                if (requiresMultipleHits)
-                {
-                    projectile.Flight.CruisePierceSpeedScale *= 0.5f;
-                }
+                projectile.Flight.PendingPierceHits.Add(new PendingPierceHit(balloon, balloonWorldPosition));
+                // Re-arm the discharge countdown: it fires this-many-seconds after the LAST tough, so a
+                // run of toughs holds it open and the whole line shatters together once the shot is clear.
+                projectile.Flight.DischargeArmed = true;
+                return ProjectileHitVisual.None;
             }
 
+            return ResolveContactPop(projectile, balloon, balloonWorldPosition, isPiercing);
+        }
+
+        // The discharge: shatter every tough the shot plowed through but left standing, each at the
+        // position it was struck (piercing kill — unbreakables included). Skips any that already left
+        // the board since the plow. Clears the pending set and its charge.
+        public void DischargePending(IWriteableProjectileModel projectile)
+        {
+            var pending = projectile.Flight.PendingPierceHits;
+            if (pending.Count == 0)
+            {
+                return;
+            }
+
+            var isRainbowBuff = projectile.HasBuff(ProjectileBuffId.RainbowShield);
+            var flags = DamageFlags.Piercing | DamageFlags.DirectHit
+                        | (isRainbowBuff ? DamageFlags.WildcardStreak : DamageFlags.Normal);
+
+            foreach (var hit in pending)
+            {
+                var balloon = hit.Balloon;
+                var slot = balloon.SlotIndex.Value;
+                if (_grid.IsEmpty(slot.x, slot.y) || !ReferenceEquals(_grid.At(slot), balloon))
+                {
+                    continue;
+                }
+
+                var context = new DamageContext(1, flags, projectile.ColorName.Value);
+                var outcome = balloon.EvaluateHit(context);
+                _hitDispatcher.Dispatch(new ActorHitMessage(balloon, hit.Position, projectile.Direction, outcome, context));
+            }
+
+            pending.Clear();
+        }
+
+        // The pop path for a balloon the shot destroys on contact (normal balloons, and any hit while
+        // not piercing). Toughs under piercing never reach here — they are recorded and discharged.
+        private ProjectileHitVisual ResolveContactPop(
+            IWriteableProjectileModel projectile, IBalloonModel balloon, Vector3 balloonWorldPosition, bool isPiercing)
+        {
             // A rainbow-buffed projectile pierces (plows through tough/unbreakable balloons instead of
             // one-shotting or deflecting off them), scores colour-agnostically, and rainbow-converts what
             // it pops near — until it loses a shield to a wall (which ends the buff).
             var isRainbowBuff = projectile.HasBuff(ProjectileBuffId.RainbowShield);
-            var isPiercing = projectile.IsPiercing.Value;
             var flags = (isRainbowBuff ? DamageFlags.WildcardStreak | DamageFlags.Piercing : DamageFlags.Normal)
                         | (isPiercing ? DamageFlags.Piercing : DamageFlags.Normal)
                         | DamageFlags.DirectHit;

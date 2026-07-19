@@ -3,13 +3,15 @@
 # Snipe — an armor-piercing lance that spends itself cracking the tough line
 
 > Snipe is the game's **anti-armor tool**. It arms the projectile with the engine's existing
-> **piercing** state on demand (today only *earned* via a long cruise), adds a single, non-stacking
-> **speed buff**, and plows straight through the soft board. Every tough/unbreakable balloon it
-> cracks **bleeds its speed** (halving per hit, floored at base), and when the buff finally dies on a
-> wall it **clears every hits>1 balloon on that last line**. A **rainbow** holder turns each armor
-> crack into stored **charge**, then discharges a **colorable-only** rainbow bloom scaled by how much
-> armor it ate — you can't paint armor, but shattering it powers the conversion of everything soft
-> around it.
+> **piercing** state on demand (today only *earned* via a long cruise) and adds a single, non-stacking
+> **speed buff**. Piercing is one shared effect reached two ways (cruise or Snipe): the shot pops soft
+> balloons on contact but **plows through tough/unbreakable ones at full speed without popping them**,
+> recording each. A trajectory **lookahead** detects the **last tough** in the run; shortly after, the
+> shot **discharges** — slowing once to base speed and **shattering all the recorded toughs at once**,
+> VFX blooming over each strike. Punch through the armored line at speed, then crack the whole line on
+> the way out. A **rainbow** holder turns each plowed tough into stored **charge**, then discharges a
+> **colorable-only** rainbow bloom scaled by how much armor it ate — you can't paint armor, but
+> shattering it powers the conversion of everything soft around it.
 
 ---
 
@@ -34,48 +36,55 @@ The mechanic is **not new tech** — it rides rails that already exist:
 
 So Snipe is largely a **second grant path** for piercing plus a signature payoff, not a new subsystem.
 
-## 2. Base mechanic (non-rainbow)
+## 2. The unified pierce-discharge mechanic (shared by cruise AND Snipe)
 
-**On activation** (the projectile pops the Snipe balloon, via `IBalloonItem.Activate`):
+**Key reframe (decided 2026-07-19):** cruise-earned piercing and Snipe-granted piercing are the **same
+effect reached two ways**. All the behavior below lives in the **shared pierce path**
+(`ProjectileHitResolver` + `ProjectileMotionResolver` + a discharge step), so it applies to both — a
+cruise pierce and a Snipe lance behave identically once armed.
 
-1. **Arm piercing.** Set the projectile's piercing state so it plows through balloons instead of
-   one-shot-and-stop. This is the same `IsPiercing` state the cruise earns; Snipe grants it directly.
-2. **Grant one Speed buff.** A single multiplicative `ProjectileBuffId.Speed` buff at
-   `SnipeSettings.SpeedBuffMultiplier`. **Non-stacking** — a second Snipe *refreshes* the buff, it does
-   not add. This is deliberately unlike the cruise/shield-lost boost, which is cumulative per banked
-   shield (`CruiseSpeedPerShield`).
+**On activation** (Snipe path): arm `IsPiercing` + a single non-stacking `Speed` buff (Phase 2, shipped).
+The cruise path arms `IsPiercing` after a long cruise, unchanged.
 
-**In flight — two ways it ends:**
+**In flight:**
 
-- **No tough contact.** It pierces and bounces, burning one shield per wall (`ShieldLostMessage`),
-  until it runs out of shields and dies on the last-shield wall. *The game already terminates the shot
-  here* — Snipe adds nothing to this path except the line-clear on that dying segment (§4).
-- **Tough contact (hits > 1).** Each tough/unbreakable plow **bleeds speed** via the existing
-  `CruisePierceSpeedScale *= ToughHitSpeedFalloff` (default `0.5`), floored at true base speed by the
-  motion resolver. The buff then ends on **the next `ShieldLostMessage`** (wall hit) — which triggers
-  the line-clear (§4).
+- **Normal (1-hit) balloons pop on contact** (unchanged).
+- **hits>1 balloons (tough/unbreakable) are plowed through at FULL speed and NOT popped on contact.**
+  Each is **recorded** — the balloon + the world position it was struck (for the discharge VFX). The
+  shot keeps full (buffed) speed through the whole armored run; there is **no per-hit slowdown**
+  (this replaces Phase 2's `CruisePierceSpeedScale *= 0.5` per tough).
+- **Prediction.** Each time a hits>1 balloon is struck, a trajectory lookahead (reuse `ShotSimulator` /
+  `ShotBoardGather` / `PathTrace`) checks whether another hits>1 balloon lies ahead on the remaining
+  path. While one does, the shot stays fast — still punching the armored run.
 
-The **speed-as-visual** through-line is intentional: fast at launch, visibly slowing with each armored
-hit, then a hard discharge. The decay *is* the tell.
+## 3. The discharge — shortly after the last tough
 
-## 3. The "last line"
+When the lookahead finds **no more hits>1 ahead**, the just-struck balloon was the **last** of the run.
+A short beat later (`SnipeSettings.DischargeDelay`, tunable for feel) the shot **discharges**:
 
-The line-clear fires on the **final travel segment the buff dies on** — reached one of two ways, both
-already produced by the engine:
+1. **Slows once to true (un-buffed) base speed** — a single drop, not cumulative. It has punched
+   clear of the armor and now coasts.
+2. **Pops every recorded hits>1 balloon** (piercing kill — unbreakables included), each with a **VFX
+   placed over its recorded hit position**.
+3. Optionally dips **time-scale** briefly (slow-mo) for weight — via `TimeScaleService`
+   (`DischargeTimeScale` / `DischargeTimeScaleDuration`).
+4. The pierce (`IsPiercing`) ends, and — on the Snipe path — the `Speed` buff ends with it.
 
-- the segment where **shields hit 0** (the game's own terminal segment), or
-- the segment ending in the **next wall hit after a tough plow**.
+The shot punches through the armored line *at speed*, then, once clear, slows and **shatters the whole
+line at once**, VFX blooming over each armored balloon. The "shatter after the punch-through" beat —
+not a per-hit grind — is the payoff.
 
-Only hits>1 balloons **on that segment** are affected — a **directional line sweep**, never a global
-tough-purge. "On the line" = within a capsule of half-width `SnipeSettings.LineClearHalfWidth` swept
-along the terminating segment (query via the existing `BalloonOverlapQuery` / non-alloc physics used by
-Bomb/Laser).
+**Edge cases:**
 
-## 4. The payoff — line-clear
+- **No toughs ever hit** → nothing recorded, no discharge. The shot just pierces normals until it runs
+  out of shields (or the cruise ends). Simpler than the old "line-clear on any death."
+- **Shot ends (shields exhausted / despawn) with toughs still pending** (e.g. it died mid-armored-run
+  before the lookahead said "last") → it **flushes** the pending pops then, so recorded toughs are never
+  silently dropped.
 
-On the terminating wall hit, the sniper discharges and **one-shots every hits>1 balloon on that line**
-(piercing damage, so unbreakables die too). Fire into a wall of tough balloons and the dying pass
-cracks the whole armored row at once — the relief valve for an armored board.
+"Which toughs get popped" = exactly the ones the shot **struck** (the recorded list), so the VFX sits on
+real hit positions. There is no wider spatial capsule sweep — `LineClearHalfWidth` from Phase 1 is
+**obsolete** and is removed.
 
 ## 5. Rainbow synergy — "charge-up discharge"
 
@@ -83,15 +92,14 @@ A rainbow holder keeps the entire base behavior (toughs are still **destroyed** 
 paintable, so they can never become rainbow) and adds a **charge → bloom** payoff. Toughs are the
 *fuel*, not the target.
 
-- **Charge.** Each tough/unbreakable plow increments a **count** (`ChargePerToughHit`, default `1`) —
-  the same event that halves speed (`ProjectileHitResolver.cs:59`). Slowing down *is* the charge meter
-  filling.
-- **Discharge bloom.** On the terminating wall hit, in addition to the line-clear, convert **only
-  colorable (`IPaintable`) balloons** within a radius centered on the impact point to rainbow. Radius
-  scales with charge:
+- **Charge.** Charge = the **count of recorded (plowed) hits>1 balloons** in the run
+  (`ChargePerToughHit` per plow, default `1`). The armored run *is* the charge meter.
+- **Discharge bloom.** At the discharge (§3), in addition to popping the recorded toughs, convert
+  **only colorable (`IPaintable`) balloons** within a radius centered on the discharge point to rainbow.
+  Radius scales with charge:
   `min(BloomBaseRadius + charge × BloomRadiusPerCharge, BloomRadiusCap)`.
-  Toughs/unbreakables caught in the bloom are simply not converted (not paintable) — they were already
-  cleared by the line-sweep if on the line.
+  The recorded toughs themselves pop (fuel); any tough/unbreakable caught in the bloom is simply not
+  converted (not paintable).
 - **In-flight conversion.** Like the rainbow-shield buff, the rainbow lance scores colour-agnostically
   and converts popped balloons' `IPaintable` neighbors as it pierces (reuse the existing
   `RainbowShield`-buff path in `ProjectileHitResolver`).
@@ -105,11 +113,11 @@ balloons behind it. Zero toughs cracked → a tiny bloom. The payoff is proporti
 Reuse the item light/disturbance seams (`SceneLightFieldService`, `DisturbanceFieldService.Stamp`; see
 `Item/README.md` "Lights Cast by Items"):
 
-| Beat | Light | Disturbance |
+| Beat | Light | Disturbance / time |
 |---|---|---|
-| In flight | Moving **capsule light** along the lance (laser-beam-light style); intensity tracks current speed so decay reads in the lighting | — |
-| Each tough plow | Small **light spark** at impact | Short **inward** stamp — cracking armor thumps the soft neighbors and telegraphs "charge +1" |
-| Discharge | **Point-light flash** scaled by charge; rainbow cycles the palette via `ColorCycle` | Outward **shockwave** stamped at the impact point, radius matched to the bloom (rainbow: carries the conversion ripple outward) |
+| In flight | Moving **capsule light** along the lance (laser-beam-light style); bright and tight | — |
+| Each tough plow | Small **light spark** at the strike point | Short **inward** stamp — punching the armor thumps its neighbors |
+| Discharge | **Point-light flash** scaled by charge; rainbow cycles the palette via `ColorCycle`. Plus the per-tough **pop VFX** placed over each recorded strike position | Outward **shockwave** stamped at the discharge point; optional brief **slow-mo** time-scale dip (`TimeScaleService`) for weight |
 
 ## 7. Config — `SnipeSettings`
 
@@ -120,48 +128,65 @@ Snipe (non-damaging item) — extend it to surface these.
 | Field | Purpose | Starting value |
 |---|---|---|
 | `SpeedBuffMultiplier` | Initial speed buff (multiplicative, non-stacking) | ~1.6 |
-| `ToughHitSpeedFalloff` | Per-tough-plow speed scale (feeds `CruisePierceSpeedScale`) | 0.5 |
-| `LineClearHalfWidth` | Capsule reach for "on the line" | tune in editor |
-| `ChargePerToughHit` | Rainbow charge per tough plow | 1 |
+| `DischargeDelay` | Beat between "last tough struck" and the discharge (slow + pops) | tune (~0.05–0.15s) |
+| `DischargeTimeScale` | Slow-mo time-scale during the discharge (`1` = off) | tune |
+| `DischargeTimeScaleDuration` | How long the slow-mo dip lasts | tune |
+| `ChargePerToughHit` | Rainbow charge per recorded tough | 1 |
 | `BloomBaseRadius` | Rainbow bloom radius at charge 0 | tune |
 | `BloomRadiusPerCharge` | Bloom radius growth per charge | tune |
 | `BloomRadiusCap` | Hard cap so the bloom never eats the whole board | tune |
-| `NeighborConversionRange` / `ColorCycles` | Rainbow in-flight neighbor conversion + iridescence | mirror other rainbow items |
-| Light params (`radius`/`intensity`/`fallbackSeconds`) | Flight + spark + discharge lights | mirror Laser/Bomb |
+| `ColorCycles` | Rainbow iridescence cycles over flight | mirror other rainbow items |
+| Light params (`tracer`/`discharge`/`fallbackSeconds`) | Flight + spark + discharge lights | mirror Laser/Bomb |
 
-`SpeedBuffMultiplier` supersedes the current reliance on `IBuffConfiguration.GetValue(Speed)` for
-Snipe, so the value is authored per-item rather than shared with other Speed grants.
+`SpeedBuffMultiplier` supersedes the old reliance on `IBuffConfiguration.GetValue(Speed)` for Snipe.
+**Removed by the redesign:** `ToughHitSpeedFalloff` and `LineClearHalfWidth` (no per-tough decay, no
+spatial sweep) — Phase 3 drops both fields + their drawer rows.
 
-> **Perf note (carry into phases 2 & 5):** the flight/light runtime reads `SnipeSettings` fields
-> per-frame during the lance's flight (tracer light intensity tracking speed, colour-cycle lerp,
-> etc.). Snapshot the needed values into locals / the flight state at activation — do **not** walk the
-> `IItemConfiguration.Snipe.X` interface chain every frame.
+> **Perf note:** the flight/light runtime reads `SnipeSettings` fields per-frame during flight.
+> Snapshot needed values at activation — do **not** walk the `IItemConfiguration.Snipe.X` chain each
+> frame. The per-tough prediction lookahead runs only on a hits>1 contact (rare), not per-frame.
 
 ## 8. State ownership
 
 Handlers are singletons and activations overlap (`Item/README.md`), so **no per-activation state on the
-handler**. Piercing already lives on the projectile (`IsPiercing`); the tough-plow speed scale lives on
-`ProjectileFlightState` (`CruisePierceSpeedScale`). Add the rainbow **charge counter** to the same
-per-projectile flight state (e.g. `SnipeCharge`, reset on `ProjectileLoadedMessage` like the other
-flight bookkeeping), never to the handler. The Snipe buff instance carries its `WallBounceEndCondition`
-exactly as today.
+handler**. Piercing lives on the projectile (`IsPiercing`); per-shot pierce bookkeeping lives on
+`ProjectileFlightState`. The redesign adds there: the **recorded pending toughs** (balloon + strike
+position), a **pending-discharge timer** (the `DischargeDelay` countdown once the last tough is
+detected), and the rainbow **charge count** — all reset per shot (a fresh `ProjectileModel`/`Flight` is
+built per shot in `ThrowerController`, so no stale carry-over). The prediction lookahead is a stateless
+query against the live board (`SlotGrid`) + walls. The Snipe `Speed` buff is ended by the discharge (its
+end-condition already keys off `IsPiercing` going false — `PierceEndedEndCondition`, Phase 2).
 
 ## 9. Build order
 
-1. `SnipeSettings` + `ItemSettings` wiring + `ItemSettingsDrawer` surface (compile-checkable).
-2. Grant path: arm `IsPiercing` + non-stacking Speed buff in `SnipeItemHandler`; verify decay-on-tough
-   already works via the existing pierce rails.
-3. Line-clear on the terminating segment (capsule query + piercing dispatch).
-4. Rainbow: charge counter on flight state; discharge bloom (colorable-only radius convert); in-flight
+1. **[SHIPPED]** `SnipeSettings` + wiring + drawer (Phase 1).
+2. **[SHIPPED]** Grant path: arm `IsPiercing` + non-stacking Speed buff; decoupled pierce onto
+   `IsPiercing` + true-base floor (Phase 2). *Superseded in part by the redesign — see 3a.*
+3. **The discharge rework** (this phase, shared cruise+Snipe pierce):
+   - **3a.** `ProjectileHitResolver`: a piercing hit on a hits>1 balloon **records** it (balloon +
+     strike position) and passes through **without popping**; normal balloons pop as before. Remove
+     the per-tough `CruisePierceSpeedScale *= 0.5`. Drop `ToughHitSpeedFalloff` + `LineClearHalfWidth`
+     from config + drawer. Add the pending-tough list + charge count to `ProjectileFlightState`.
+   - **3b.** Prediction: on a hits>1 contact, a trajectory lookahead (`ShotSimulator`/`ShotBoardGather`/
+     `PathTrace`) reports whether another hits>1 lies ahead; if not, start the `DischargeDelay` timer.
+   - **3c.** Discharge (driven from the flight tick / motion resolver): on timer elapse **or** on
+     shot-end flush — slow once to true base, dispatch piercing pops for the recorded toughs, end the
+     pierce. (VFX + slow-mo are Phase 5.)
+   - EditMode tests for: tough plow records-not-pops, prediction "last tough" detection, discharge
+     pops the recorded set, and the shields-exhausted flush.
+4. Rainbow: charge = recorded-tough count; discharge bloom (colorable-only radius convert); in-flight
    neighbor conversion via the `RainbowShield` path.
-5. Lights + disturbance beats (§6).
-6. Playtest in-editor — decay/feel, line-clear framing, bloom scaling, and the light/disturbance beats
-   all need a runtime pass (`dotnet build` cannot validate behavior or shaders).
+5. Feel: lights + disturbance beats (§6) + the per-tough pop VFX over strike positions + the discharge
+   slow-mo dip.
+6. Playtest in-editor — the punch-through-then-shatter beat, prediction correctness, discharge feel,
+   bloom scaling, and all VFX/light beats need a runtime pass (`dotnet build` can't validate behavior).
 
 ## 10. Open tuning (deferred to playtest)
 
-- `SpeedBuffMultiplier` vs. `ToughHitSpeedFalloff` — how fast the lance should feel and how quickly a
-  tough wall drains it.
+- `SpeedBuffMultiplier` and `DischargeDelay` — how fast the lance reads and how long the beat between
+  punch-through and shatter should be.
+- `DischargeTimeScale` / `DischargeTimeScaleDuration` — how heavy the slow-mo should feel (or off).
 - `BloomRadiusPerCharge` / `BloomRadiusCap` — how explosive a big-charge rainbow discharge reads without
   trivializing the board.
-- Whether the in-flight capsule light needs a lower floor so a fully-decayed lance still reads as lit.
+- Prediction horizon — how far ahead the lookahead scans for the next tough (whole remaining path vs. a
+  bounded window), and how that feels when toughs are spread across bounces.

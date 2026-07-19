@@ -155,6 +155,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7efccb99fc684e6da45632440ae6cbd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Projectile.View.ProjectileTrail
+  _dischargeTimeMultiplier: 10
+  _dischargeRestoreDuration: 0.4
 --- !u!1 &526808832131336864
 GameObject:
   m_ObjectHideFlags: 0
