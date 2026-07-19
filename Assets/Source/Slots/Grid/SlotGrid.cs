@@ -198,6 +198,20 @@ namespace BalloonParty.Slots.Grid
             }
         }
 
+        public IEnumerable<Vector2Int> AllOccupiedSlots()
+        {
+            for (var col = 0; col < Columns; col++)
+            {
+                for (var row = 0; row < Rows; row++)
+                {
+                    if (!IsEmpty(col, row))
+                    {
+                        yield return new Vector2Int(col, row);
+                    }
+                }
+            }
+        }
+
         public List<IWriteableSlotActor> GetNeighbors(int col, int row)
         {
             var neighbors = new List<IWriteableSlotActor>();

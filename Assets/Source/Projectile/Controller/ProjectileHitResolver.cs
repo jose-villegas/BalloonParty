@@ -1,7 +1,9 @@
 using BalloonParty.Balloon.Model;
+using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Score;
 using BalloonParty.Projectile.Model;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
@@ -17,18 +19,21 @@ namespace BalloonParty.Projectile.Controller
         private readonly IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
         private readonly ColorStreakTracker _streakTracker;
         private readonly SlotGrid _grid;
+        private readonly IItemConfiguration _itemConfig;
         private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
 
         public ProjectileHitResolver(
             IHitDispatcher hitDispatcher,
             IPublisher<ShieldGainedMessage> shieldGainedPublisher,
             ColorStreakTracker streakTracker,
-            SlotGrid grid)
+            SlotGrid grid,
+            IItemConfiguration itemConfig)
         {
             _hitDispatcher = hitDispatcher;
             _shieldGainedPublisher = shieldGainedPublisher;
             _streakTracker = streakTracker;
             _grid = grid;
+            _itemConfig = itemConfig;
         }
 
         public ProjectileHitVisual Resolve(
@@ -62,6 +67,9 @@ namespace BalloonParty.Projectile.Controller
                 // Re-arm the discharge countdown: it fires this-many-seconds after the LAST tough, so a
                 // run of toughs holds it open and the whole line shatters together once the shot is clear.
                 projectile.Flight.DischargeArmed = true;
+                // Capture rainbow now, while the buff is live — the discharge ends the pierce (dropping
+                // the buff) before it resolves, so HasBuff would read false there.
+                projectile.Flight.PierceWasRainbow = projectile.HasBuff(ProjectileBuffId.RainbowShield);
                 return ProjectileHitVisual.None;
             }
 
@@ -70,7 +78,8 @@ namespace BalloonParty.Projectile.Controller
 
         // The discharge: shatter every tough the shot plowed through but left standing, each at the
         // position it was struck (piercing kill — unbreakables included). Skips any that already left
-        // the board since the plow. Clears the pending set and its charge.
+        // the board since the plow. A rainbow lance also blooms a colour conversion around the shattered
+        // line, scaled by how much armor it ate. Clears the pending set.
         public void DischargePending(IWriteableProjectileModel projectile)
         {
             var pending = projectile.Flight.PendingPierceHits;
@@ -79,12 +88,16 @@ namespace BalloonParty.Projectile.Controller
                 return;
             }
 
-            var isRainbowBuff = projectile.HasBuff(ProjectileBuffId.RainbowShield);
+            // Captured at plow time: the pierce end that precedes this discharge already dropped the
+            // RainbowShield buff, so HasBuff would read false here.
+            var isRainbowBuff = projectile.Flight.PierceWasRainbow;
             var flags = DamageFlags.Piercing | DamageFlags.DirectHit
                         | (isRainbowBuff ? DamageFlags.WildcardStreak : DamageFlags.Normal);
 
+            var center = Vector3.zero;
             foreach (var hit in pending)
             {
+                center += hit.Position;
                 var balloon = hit.Balloon;
                 var slot = balloon.SlotIndex.Value;
                 if (_grid.IsEmpty(slot.x, slot.y) || !ReferenceEquals(_grid.At(slot), balloon))
@@ -95,6 +108,14 @@ namespace BalloonParty.Projectile.Controller
                 var context = new DamageContext(1, flags, projectile.ColorName.Value);
                 var outcome = balloon.EvaluateHit(context);
                 _hitDispatcher.Dispatch(new ActorHitMessage(balloon, hit.Position, projectile.Direction, outcome, context));
+            }
+
+            // You can't paint armor, but shattering it powers the conversion of everything soft around
+            // it — a rainbow lance blooms outward from the centre of the line it plowed, wider the more
+            // toughs it ate. The toughs themselves are the fuel (popped above, and not paintable anyway).
+            if (isRainbowBuff)
+            {
+                BloomConvert(center / pending.Count, pending.Count);
             }
 
             pending.Clear();
@@ -201,6 +222,25 @@ namespace BalloonParty.Projectile.Controller
                 }
 
                 if (_grid.At(neighbor) is IPaintable paintable)
+                {
+                    paintable.Color.Value = GamePalette.RainbowColorId;
+                }
+            }
+        }
+
+        // Converts every paintable balloon within the charge-scaled radius of the discharge centre to
+        // rainbow. Charge is the count of plowed toughs; radius grows per charge up to a hard cap so a
+        // big plow never eats the whole board. Non-paintable actors (toughs/unbreakables) are skipped.
+        private void BloomConvert(Vector3 center, int toughCount)
+        {
+            var snipe = _itemConfig[ItemType.Snipe].Snipe;
+            var charge = toughCount * snipe.ChargePerToughHit;
+            var radius = Mathf.Min(snipe.BloomBaseRadius + charge * snipe.BloomRadiusPerCharge, snipe.BloomRadiusCap);
+
+            foreach (var slot in _grid.AllOccupiedSlots())
+            {
+                if (_grid.At(slot) is IPaintable paintable
+                    && _grid.IndexToWorldPosition(slot).WithinRadius(center, radius))
                 {
                     paintable.Color.Value = GamePalette.RainbowColorId;
                 }

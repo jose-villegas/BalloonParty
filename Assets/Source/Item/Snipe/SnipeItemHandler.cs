@@ -1,4 +1,5 @@
 using System;
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Extensions;
@@ -21,6 +22,7 @@ namespace BalloonParty.Item.Snipe
     internal class SnipeItemHandler : IBalloonItem, IStartable, IDisposable
     {
         private readonly IItemConfiguration _itemConfig;
+        private readonly IGamePalette _palette;
         private readonly ItemEffectPlayer _effectPlayer;
         private readonly IProjectileBuffs _buffs;
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
@@ -33,11 +35,13 @@ namespace BalloonParty.Item.Snipe
         [Inject]
         internal SnipeItemHandler(
             IItemConfiguration itemConfig,
+            IGamePalette palette,
             ItemEffectPlayer effectPlayer,
             IProjectileBuffs buffs,
             ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
         {
             _itemConfig = itemConfig;
+            _palette = palette;
             _effectPlayer = effectPlayer;
             _buffs = buffs;
             _loadedSubscriber = loadedSubscriber;
@@ -68,6 +72,18 @@ namespace BalloonParty.Item.Snipe
                 {
                     _buffs.Apply(new ProjectileBuff(
                         ProjectileBuffId.Speed, settings.Snipe.SpeedBuffMultiplier, BuffModifierOp.Multiplicative,
+                        new PierceEndedEndCondition(_activeProjectile.IsPiercing)));
+                }
+
+                // A rainbow host turns the lance iridescent: it scores colour-agnostically and rainbow-converts
+                // popped balloons' neighbours as it pierces (the shared RainbowShield-buff path), and its
+                // discharge blooms a colour conversion scaled by the toughs it plowed. Tied to the pierce, so
+                // it ends with the discharge alongside the speed buff.
+                if (_palette.IsRainbow(activation.Balloon.GetColorId())
+                    && !_activeProjectile.HasBuff(ProjectileBuffId.RainbowShield))
+                {
+                    _buffs.Apply(new ProjectileBuff(
+                        ProjectileBuffId.RainbowShield, 0f, BuffModifierOp.Flat,
                         new PierceEndedEndCondition(_activeProjectile.IsPiercing)));
                 }
             }

@@ -30,6 +30,11 @@ namespace BalloonParty.Projectile.Model
         // countdown — a run of toughs keeps re-arming it, so the discharge fires after the LAST one.
         public bool DischargeArmed { get; set; }
 
+        // Whether the shot was rainbow-buffed when it plowed a tough — captured at plow time because the
+        // discharge ends the pierce (dropping the RainbowShield buff) BEFORE the discharge is resolved,
+        // so HasBuff would already read false by then.
+        public bool PierceWasRainbow { get; set; }
+
         // Counts down while > 0; when it reaches 0 the motion resolver fires the discharge. 0 = idle.
         public float DischargeCountdown { get; set; }
 

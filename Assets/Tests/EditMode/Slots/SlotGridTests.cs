@@ -372,6 +372,25 @@ namespace BalloonParty.Tests.Slots
         }
 
         [Test]
+        public void AllOccupiedSlots_EmptyGrid_ReturnsNone()
+        {
+            Assert.IsEmpty(_grid.AllOccupiedSlots());
+        }
+
+        [Test]
+        public void AllOccupiedSlots_PartiallyFilled_ReturnsExactlyOccupied()
+        {
+            PlaceAt(0, 0);
+            PlaceAt(3, 5);
+
+            var slots = _grid.AllOccupiedSlots().ToList();
+
+            Assert.AreEqual(2, slots.Count);
+            CollectionAssert.Contains(slots, new Vector2Int(0, 0));
+            CollectionAssert.Contains(slots, new Vector2Int(3, 5));
+        }
+
+        [Test]
         public void IsUnbalanced_BalloonAboveStaticActor_ReturnsFalse()
         {
             // Row 1 (odd): needs direct support at (2,0) AND diagonal at (3,0).
