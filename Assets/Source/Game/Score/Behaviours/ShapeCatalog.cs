@@ -363,14 +363,17 @@ namespace BalloonParty.Game.Score.Behaviours
 
         // 100 = a spherical spiral "yarn ball" (superseded the grand antiprism: 500 projected 4D edges read
         // as noise mid-tumble — the crown wants a SILHOUETTE). One closed 100-vertex walk: the polar angle
-        // runs pole-to-pole and back as a triangle wave while the azimuth advances five full turns, so the
-        // down- and up-coils interleave and the loop closes seamlessly. Half-sample offsets make the two
-        // coils provably never coincide at the crossings. All 100 pens chase one continuous line.
+        // runs pole-to-pole and back as a triangle wave while the azimuth advances nine full turns (coprime
+        // with the 100 samples, so the half-sample crossing guard holds), interleaving ~18 windings — dense enough to read as a SOLID wound ball.
+        // Arc interpolation (the vertices are all on the unit sphere) keeps every winding a great-circle
+        // segment, so the higher turn count costs no polygonal faceting between the 100 samples.
+        // Half-sample offsets make the two coils provably never coincide at the crossings. All 100 pens
+        // chase one continuous line.
         private static FormationShape BuildYarnBall()
         {
             const int count = 100;
-            const float turns = 5f;
-            const float polarPad = 0.18f;
+            const float turns = 9f;
+            const float polarPad = 0.12f;
 
             var vertices = new Vector3[count];
             var loop = new int[count];
@@ -386,7 +389,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 loop[i] = i;
             }
 
-            return Build(100, 1.6f, vertices, new[] { Chord(loop) });
+            return Build(100, 1.6f, vertices, new[] { new FormationWalk(loop, arc: true) });
         }
 
         private static FormationWalk Chord(params int[] vertices)
