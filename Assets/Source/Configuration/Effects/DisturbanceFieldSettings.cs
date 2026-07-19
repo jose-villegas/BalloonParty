@@ -19,6 +19,7 @@ namespace BalloonParty.Configuration.Effects
         RainbowColor  = 1 << 8,
         ProjectileImpact = 1 << 10,
         UnbreakableBurst = 1 << 11,
+        PierceDischarge = 1 << 12,
     }
 
     [Serializable]

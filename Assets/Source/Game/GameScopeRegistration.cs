@@ -166,6 +166,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ItemActivator>();
             builder.RegisterEntryPoint<ProjectileBuffService>().As<IProjectileBuffs>();
             builder.RegisterEntryPoint<ActiveProjectilePierce>().As<IActiveProjectilePierce>();
+            builder.RegisterEntryPoint<PierceDischargeEffects>();
         }
 
         internal static void RegisterItems(this IContainerBuilder builder)

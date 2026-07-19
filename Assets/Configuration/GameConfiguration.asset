@@ -59,6 +59,9 @@ MonoBehaviour:
     m_RotationOrder: 4
   _cruiseTapEaseDuration: 0.25
   _cruisePiercingTapThreshold: 5
+  _pierceDischargeDelay: 0
+  _pierceDischargeTimeScale: 0.2
+  _pierceDischargeTimeScaleDuration: 1.5
   _lastShieldApproachCurve:
     serializedVersion: 2
     m_Curve:

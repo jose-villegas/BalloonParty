@@ -51,6 +51,12 @@ namespace BalloonParty.Configuration
                  "toughs holds it open; the discharge fires this long after the final one.")]
         [SerializeField] [Min(0f)] private float _pierceDischargeDelay = 0.12f;
 
+        [Tooltip("Slow-mo dip at the pierce discharge: the time scale it drops to (1 = no dip).")]
+        [SerializeField] [Range(0f, 1f)] private float _pierceDischargeTimeScale = 0.35f;
+
+        [Tooltip("How long the pierce-discharge slow-mo dip holds, in UNSCALED seconds.")]
+        [SerializeField] [Min(0f)] private float _pierceDischargeTimeScaleDuration = 0.15f;
+
         [Tooltip("Position easing across a doomed 0-shield segment, sampled on NORMALIZED TIME over " +
                  "LastShieldApproachDuration (x = time 0..1, y = distance fraction from last bounce to " +
                  "the death wall, 0->1). The 'last breath' — same wall-clock length whatever the " +
@@ -106,6 +112,8 @@ namespace BalloonParty.Configuration
         public float CruiseTapEaseDuration => _cruiseTapEaseDuration;
         public int CruisePiercingTapThreshold => _cruisePiercingTapThreshold;
         public float PierceDischargeDelay => _pierceDischargeDelay;
+        public float PierceDischargeTimeScale => _pierceDischargeTimeScale;
+        public float PierceDischargeTimeScaleDuration => _pierceDischargeTimeScaleDuration;
         public AnimationCurve LastShieldApproachCurve => _lastShieldApproachCurve;
         public float LastShieldApproachDuration => _lastShieldApproachDuration;
         public AnimationCurve LastShieldTimeScaleCurve => _lastShieldTimeScaleCurve;

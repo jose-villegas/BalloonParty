@@ -5,6 +5,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Item.Snipe;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Grid;
 using MessagePipe;

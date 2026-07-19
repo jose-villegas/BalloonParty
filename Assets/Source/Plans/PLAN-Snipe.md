@@ -117,10 +117,11 @@ Lights use the scene-light field (`SceneLightFieldService`); the light params ar
 |---|---|---|
 | Piercing toward a tough | The shot's `_light` stretches into an **area line** from the shot to the next tough on the current segment (a bounded forward `CircleCast`); telegraphs the armored contact | **SHIPPED** (`ProjectileView`, `_pierceTelegraph*`) |
 | Each tough plow | A brief **Sparks**-colour flash popped at the plowed tough (poll of `PendingPierceHits` growth) | **SHIPPED** (`ProjectileView`, `_pierceSpark*`) |
-| Discharge | Outward **shockwave** (`DisturbanceFieldService.Stamp`) + optional **slow-mo** time-scale dip, both off `PierceDischargedMessage` | **Not yet shipped** |
+| Discharge | Outward **shockwave** (`DisturbanceFieldService.Stamp`, `StampSource.PierceDischarge`) + a brief **slow-mo** time-scale dip (`TimeScaleSource.PierceDischarge`, `IGameConfiguration.PierceDischargeTimeScale`/`Duration`), both off `PierceDischargedMessage` | **SHIPPED** (`PierceDischargeEffects`); the shockwave's `StampProfile` still needs authoring in-editor |
 
-The debounce (§3) is only the discharge *timing*; the slow-mo dip is separate juice and remains a
-Phase-5 goal.
+The debounce (§3) is only the discharge *timing*; the slow-mo dip is separate juice. `PierceDischargeEffects`
+(shared, cruise + Snipe) owns the shockwave + slow-mo; `SnipeDischargeBloom` owns the rainbow bloom — both
+subscribe to `PierceDischargedMessage`.
 
 ## 7. Config — `SnipeSettings`
 
@@ -184,9 +185,10 @@ off `IsPiercing` going false (`PierceEndedEndCondition`, Phase 2).
 4. **[SHIPPED]** Rainbow: charge = recorded-tough count; discharge bloom (colorable-only radius
    convert) in `SnipeDischargeBloom`, off the `PierceDischargedMessage` the discharge publishes;
    in-flight neighbor conversion via the `RainbowShield` path.
-5. **Not yet shipped.** Feel (§6): lights + disturbance beats + the discharge slow-mo dip, all hung off
-   `PierceDischargedMessage`. The debounce (§3) is only the discharge *timing*; the slow-mo is separate
-   juice and remains a Phase-5 goal.
+5. **[SHIPPED]** Feel (§6): the in-flight pierce telegraph + tough-spark lights (`ProjectileView`), and
+   the discharge shockwave + slow-mo dip (`PierceDischargeEffects`, off `PierceDischargedMessage`).
+   Remaining in-editor work: author the `StampSource.PierceDischarge` disturbance profile and tune the
+   light/slow-mo values.
 6. Playtest in-editor — the punch-through-then-shatter beat, discharge feel, and bloom scaling have
    been playtested (Phases 1–4); the deferred lights/disturbance beats (Phase 5) still need a pass once
    built (`dotnet build` can't validate behavior).

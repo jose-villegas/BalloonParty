@@ -12,6 +12,9 @@ namespace BalloonParty.Shared.Pause
         LevelTransition,
 
         /// <summary>A shot's doomed 'last breath' — bullet-time while it drifts to the wall it dies on.</summary>
-        LastShield
+        LastShield,
+
+        /// <summary>A brief slow-mo dip as a piercing shot discharges — shattering the toughs it plowed.</summary>
+        PierceDischarge
     }
 }

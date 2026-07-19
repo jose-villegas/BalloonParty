@@ -424,6 +424,24 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
+        public void Step_PierceDischarge_ZeroDelayFiresTheTickAfterArming()
+        {
+            // A 0 delay means "discharge the moment the plow run ends" — the tick after the last arm.
+            // The countdown parks at 0, so a fire gate keyed on "countdown > 0" swallows it and the
+            // pierce never ends (toughs plowed but never shattered). DischargePending must carry it.
+            var resolver = CruiseResolver(perShield: 0.5f, pierceDischargeDelay: 0f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
+            model.IsPiercing.Value = true;
+            model.Flight.DischargeArmed = true;
+
+            resolver.Step(model, Vector3.zero, 0.1f);
+            Assert.IsTrue(model.IsPiercing.Value, "the arming tick only schedules — the run may continue");
+
+            resolver.Step(model, Vector3.zero, 0.1f);
+            Assert.IsFalse(model.IsPiercing.Value, "with no delay the discharge fires the very next tick");
+        }
+
+        [Test]
         public void Step_PiercingWithNoArm_NeverDischarges()
         {
             // A piercing shot that never plowed a tough is never armed, so the countdown stays idle and
