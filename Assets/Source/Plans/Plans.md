@@ -20,3 +20,4 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_shot_geometry
 - @subpage plan_trail_choreography
 - @subpage plan_gameplay_telemetry
+- @subpage plan_wall_borders
