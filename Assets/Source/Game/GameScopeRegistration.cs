@@ -27,6 +27,7 @@ using BalloonParty.Prediction;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Controller;
+using BalloonParty.Scenario.View;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.GameState;
@@ -188,6 +189,7 @@ namespace BalloonParty.Game
             builder.RegisterComponentInHierarchy<CameraBackgroundTint>();
             builder.RegisterComponentInHierarchy<CinematicCameraView>();
             builder.RegisterComponentInHierarchy<SpeckField>();
+            builder.RegisterComponentInHierarchy<WallNetView>();
             builder.Register<CinematicCameraRig>(Lifetime.Singleton);
 
             builder.Register<GameOverPresentationGate>(Lifetime.Singleton);
