@@ -358,8 +358,10 @@ triangle is just `{3/1}, m = 1` — one implementation covers every tier.
 ### `BigScore` — 3D shape catalog + score decomposition (José, 2026-07-19)
 
 **Catalog crown — the golden-ratio star-and-solid family (shipped 2026-07-19).** The upper
-ladder is `{50, 30, 20, 12, 10, …}`. 10 stays the latitude-ring globe; 12/20/30/50 are a
-coherent φ-based family sharing one construction vocabulary. **12** — small stellated
+ladder is `{50, 30, 20, 12, 10, …}`. **10** — octagonal bipyramid (8-vertex equator ring +
+two apexes; all degrees even → single-inked: one octagon loop + one pole-to-pole zigzag
+threading all 16 fan edges); 12/20/30/50 are a coherent φ-based family sharing one
+construction vocabulary. **12** — small stellated
 dodecahedron: the icosahedron's 12 vertices, one pentagram `{5/2}` circuit per vertex (its
 five neighbours), every edge double-inked (each chord in two circuits). **20** — regular
 dodecahedron: 12 pentagon face circuits sliced from coplanar vertex rings, each edge shared

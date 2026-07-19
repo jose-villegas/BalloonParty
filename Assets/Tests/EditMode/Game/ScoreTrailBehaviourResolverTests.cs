@@ -216,6 +216,26 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void ShapeCatalog_OctagonalBipyramid_SingleInkedTwoWalks()
+        {
+            Assert.IsTrue(ShapeCatalog.TryGet(10, out var shape));
+
+            Assert.AreEqual(10, shape.Vertices.Length);
+            Assert.AreEqual(10, new HashSet<Vector3>(shape.Vertices).Count, "ten distinct vertices");
+            Assert.AreEqual(2, shape.Walks.Length, "equator octagon + one pole-to-pole zigzag");
+
+            var edges = InspectCircuits(shape);
+            Assert.AreEqual(24, edges.Multiplicity.Count, "a bipyramid over an octagon has 24 edges");
+            CollectionAssert.AreEqual(
+                new[] { 1 }, DistinctValues(edges.Multiplicity), "every edge inked exactly once (single-inked)");
+            Assert.AreEqual(10, edges.Touched.Count, "all ten vertices covered");
+
+            var degrees = DegreeHistogram(edges.Multiplicity);
+            Assert.AreEqual(8, CountByDegree(degrees, 4), "eight equator vertices of degree four");
+            Assert.AreEqual(2, CountByDegree(degrees, 8), "two apexes of degree eight");
+        }
+
+        [Test]
         public void ShapeCatalog_Rhombicosacron_EulerianCircuitsInkEveryEdgeOnce()
         {
             Assert.IsTrue(ShapeCatalog.TryGet(50, out var shape));

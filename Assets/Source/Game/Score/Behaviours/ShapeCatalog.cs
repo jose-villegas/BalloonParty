@@ -151,7 +151,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 { 5, BuildSquarePyramid() },
                 { 6, BuildTriangularPrism() },
                 { 8, BuildCube() },
-                { 10, BuildSphere10() },
+                { 10, BuildOctagonalBipyramid() },
                 { 12, BuildSmallStellatedDodecahedron() },
                 { 20, BuildDodecahedron() },
                 { 30, BuildDodecadodecahedron() },
@@ -241,13 +241,34 @@ namespace BalloonParty.Game.Score.Behaviours
             return Build(12, 1.1f, vertices, walks);
         }
 
-        // 10 = 2 latitude ring loops of 5 (offset azimuth).
-        private static FormationShape BuildSphere10()
+        // 10 = octagonal bipyramid: an 8-vertex equator ring (radius 0.8 — taller than wide) + two
+        // apexes. All degrees are even (ring 4, poles 8), so like the rhombicosacron it draws
+        // SINGLE-inked: the equator octagon is one loop, and ONE pole-to-pole zigzag
+        // (top→v0→bottom→v1→top→…) threads all 16 fan edges exactly once.
+        private static FormationShape BuildOctagonalBipyramid()
         {
-            var builder = new SphereBuilder();
-            builder.AddRing(60f, 5, 0f);
-            builder.AddRing(120f, 5, 36f);
-            return builder.Build(10, 1f);
+            const int ringCount = 8;
+            var vertices = new Vector3[ringCount + 2];
+            var ring = new int[ringCount];
+            for (var i = 0; i < ringCount; i++)
+            {
+                var azimuth = 2f * Mathf.PI * i / ringCount;
+                vertices[i] = new Vector3(Mathf.Cos(azimuth) * 0.8f, Mathf.Sin(azimuth) * 0.8f, 0f);
+                ring[i] = i;
+            }
+
+            vertices[8] = new Vector3(0f, 0f, 1f);
+            vertices[9] = new Vector3(0f, 0f, -1f);
+
+            var zigzag = new int[2 * ringCount];
+            for (var i = 0; i < ringCount; i++)
+            {
+                zigzag[2 * i] = i % 2 == 0 ? 8 : 9;
+                zigzag[2 * i + 1] = i;
+            }
+
+            var walks = new[] { Chord(ring), Chord(zigzag) };
+            return Build(10, 1f, vertices, walks);
         }
 
         // 20 = regular dodecahedron: its 12 pentagon faces as 5-loops. Every edge is shared by two faces, so the
@@ -790,32 +811,5 @@ namespace BalloonParty.Game.Score.Behaviours
         }
 
         // Accumulates sphere vertices ring by ring (already unit magnitude) and one loop walk per ring.
-        private sealed class SphereBuilder
-        {
-            private readonly List<Vector3> _vertices = new();
-            private readonly List<FormationWalk> _walks = new();
-
-            internal void AddRing(float polarDegrees, int count, float azimuthOffsetDegrees)
-            {
-                var first = _vertices.Count;
-                var polar = polarDegrees * Mathf.Deg2Rad;
-                var sin = Mathf.Sin(polar);
-                var z = Mathf.Cos(polar);
-                var loop = new int[count];
-                for (var i = 0; i < count; i++)
-                {
-                    var azimuth = (azimuthOffsetDegrees + 360f * i / count) * Mathf.Deg2Rad;
-                    _vertices.Add(new Vector3(sin * Mathf.Cos(azimuth), sin * Mathf.Sin(azimuth), z));
-                    loop[i] = first + i;
-                }
-
-                _walks.Add(new FormationWalk(loop, arc: true));
-            }
-
-            internal FormationShape Build(int denomination, float radiusScale)
-            {
-                return new FormationShape(denomination, radiusScale, _vertices.ToArray(), _walks.ToArray());
-            }
-        }
     }
 }
