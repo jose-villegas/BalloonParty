@@ -61,6 +61,10 @@ namespace BalloonParty.Configuration.Editor
                     y = PropertyDrawerHelper.DrawNamedField(position, y, bomb, "_blastLightRadiusScale", "Flash Light Radius Scale");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, bomb, "_blastLightIntensity", "Flash Light Intensity");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, bomb, "_blastLightFallbackSeconds", "Flash Light Fallback (s)");
+                    y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Implosion");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, bomb, "_implosionRadiusScale", "Radius Scale");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, bomb, "_implosionStrengthScale", "Strength Scale");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, bomb, "_implosionDuration", "Duration (s)");
                     break;
 
                 case ItemType.Laser:
@@ -190,8 +194,8 @@ namespace BalloonParty.Configuration.Editor
                     var nudgeHeight = nudgeOverrides != null
                         ? EditorGUI.GetPropertyHeight(nudgeOverrides, true) + PropertyDrawerHelper.Spacing
                         : 0f;
-                    // Header + damage + radius + 2 rainbow fields.
-                    return (row * 5) + nudgeHeight;
+                    // Bomb header + damage + radius + 2 rainbow + 3 flash-light + Implosion header + 3 implosion.
+                    return (row * 12) + nudgeHeight;
 
                 case ItemType.Laser:
                     // Header + damage + 6 beam fields + telegraph header + 4 telegraph fields.

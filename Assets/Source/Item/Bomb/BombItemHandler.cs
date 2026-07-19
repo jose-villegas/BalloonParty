@@ -99,9 +99,23 @@ namespace BalloonParty.Item.Bomb
                 sourceColorId,
                 isRainbow ? settings.Bomb.RainbowEffectScale : 1f);
 
+            var paletteIndex = _palette.PaletteIndexOf(sourceColorId);
+
+            // Implosion first: a brief, strong inward pull (negative strength = absorption) over a
+            // radius wider than the blast, so the motion field GATHERS inward before the outward shock
+            // throws it out. Its short duration snaps and reforms while the ramped repulsion below
+            // grows, reading as gather-then-blast.
+            var bombProfile = _disturbanceField.GetProfile(StampSource.Bomb);
             _disturbanceField.Stamp(
-                StampSource.Bomb, worldPosition, Vector2.zero,
-                paletteIndex: _palette.PaletteIndexOf(sourceColorId));
+                worldPosition,
+                bombProfile.Radius * settings.Bomb.ImplosionRadiusScale,
+                -Mathf.Abs(bombProfile.Strength) * settings.Bomb.ImplosionStrengthScale,
+                Vector2.zero,
+                settings.Bomb.ImplosionDuration,
+                paletteIndex);
+
+            // The normal outward repulsion (ramped Bomb profile).
+            _disturbanceField.Stamp(StampSource.Bomb, worldPosition, Vector2.zero, paletteIndex: paletteIndex);
 
             // A blast-coloured flash light scaled off the blast radius (visual scale for a rainbow bomb),
             // held for the effect then released.

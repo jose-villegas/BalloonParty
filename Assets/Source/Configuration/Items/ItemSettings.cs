@@ -50,6 +50,16 @@ namespace BalloonParty.Configuration.Items
         [SerializeField] [Min(0f)] private float _blastLightIntensity = 3f;
         [SerializeField] [Min(0f)] private float _blastLightFallbackSeconds = 0.4f;
 
+        [Tooltip("Radius of the inward pull as a multiple of the Bomb disturbance profile radius. " +
+                 ">1 reaches wider than the blast so the field gathers before it shocks outward.")]
+        [SerializeField] [Min(0f)] private float _implosionRadiusScale = 1.5f;
+
+        [Tooltip("Strength of the inward pull as a multiple of the Bomb profile strength (applied inward).")]
+        [SerializeField] [Min(0f)] private float _implosionStrengthScale = 1.5f;
+
+        [Tooltip("Duration of the inward pull — keep it very short; the outward shock follows it.")]
+        [SerializeField] [Min(0f)] private float _implosionDuration = 0.05f;
+
         public float Radius => _bombRadius;
 
         /// <summary>Visual-only: scales a rainbow bomb's activation-effect transform so the blast reads bigger. Does not change the kill radius.</summary>
@@ -68,6 +78,15 @@ namespace BalloonParty.Configuration.Items
 
         /// <summary>Flash-light lifetime when the activation effect reports no duration.</summary>
         public float BlastLightFallbackSeconds => _blastLightFallbackSeconds;
+
+        /// <summary>Radius of the pre-blast inward pull, as a multiple of the Bomb disturbance profile radius.</summary>
+        public float ImplosionRadiusScale => _implosionRadiusScale;
+
+        /// <summary>Strength of the pre-blast inward pull, as a multiple of the Bomb profile strength.</summary>
+        public float ImplosionStrengthScale => _implosionStrengthScale;
+
+        /// <summary>Duration of the pre-blast inward pull — short; the outward shock follows it.</summary>
+        public float ImplosionDuration => _implosionDuration;
     }
 
     [Serializable]
