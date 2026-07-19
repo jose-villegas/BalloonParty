@@ -116,7 +116,7 @@ Lights use the scene-light field (`SceneLightFieldService`); the light params ar
 | Beat | Light | Status |
 |---|---|---|
 | Piercing toward a tough | The shot's `_light` stretches into an **area line** from the shot to the next tough on the current segment (a bounded forward `CircleCast`); telegraphs the armored contact | **SHIPPED** (`ProjectileView`, `_pierceTelegraph*`) |
-| Each tough plow | A brief **Sparks**-colour flash popped at the plowed tough (poll of `PendingPierceHits` growth) | **SHIPPED** (`ProjectileView`, `_pierceSpark*`) |
+| Each tough plow | A brief **Sparks**-colour flash popped at the plowed tough, fired synchronously from `OnTriggerEnter2D` (not a per-Update poll — that would coalesce several substep plows into one flash) | **SHIPPED** (`ProjectileView`, `_pierceSpark*`) |
 | Discharge | Outward **shockwave** (`DisturbanceFieldService.Stamp`, `StampSource.PierceDischarge`) + a brief **slow-mo** time-scale dip (`TimeScaleSource.PierceDischarge`, `IGameConfiguration.PierceDischargeTimeScale`/`Duration`), both off `PierceDischargedMessage` | **SHIPPED** (`PierceDischargeEffects`); the shockwave's `StampProfile` still needs authoring in-editor |
 
 The debounce (§3) is only the discharge *timing*; the slow-mo dip is separate juice. `PierceDischargeEffects`

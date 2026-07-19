@@ -65,6 +65,10 @@ Current claimants:
   particles at 0 while visible; releases on dismiss *after* publishing
   `LevelUpDismissedMessage`, so the restore cinematic's claim is already in place and the
   hand-back never flashes full speed.
+- **`PierceDischargeEffects`** (`TimeScaleSource.PierceDischarge`, `Projectile/Controller/`) —
+  a brief real-time dip when a piercing shot discharges the toughs it plowed through. A fresh
+  discharge cancels and restarts the dip rather than layering; see
+  `Projectile/README.md` § Pierce & Discharge Feel.
 
 `PauseService` handles *logical* pause coordination (projectile, trail spawning);
 `TimeScaleService` handles *visual* time warping. The two are independent.
