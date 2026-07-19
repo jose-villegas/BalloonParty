@@ -16,7 +16,8 @@ namespace BalloonParty.Configuration.Editor
             "_bomb",
             "_laser",
             "_lightning",
-            "_paint"
+            "_paint",
+            "_snipe"
         };
 
         protected override GUIContent BuildFoldoutLabel(GUIContent label, SerializedProperty property)
@@ -176,6 +177,25 @@ namespace BalloonParty.Configuration.Editor
                     y = PropertyDrawerHelper.DrawNamedField(position, y, paint, "_spreadBaseWidth", "Base Width");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, paint, "_spreadBlobRadius", "Blob Radius");
                     break;
+
+                case ItemType.Snipe:
+                    var snipe = property.FindPropertyRelative("_snipe");
+                    y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Snipe");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_snipeSpeedBuffMultiplier", "Speed Buff Multiplier");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_snipeToughHitSpeedFalloff", "Tough Hit Speed Falloff");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_snipeLineClearHalfWidth", "Line Clear Half Width");
+                    y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Rainbow");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_snipeChargePerToughHit", "Charge Per Tough Hit");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_bloomBaseRadius", "Bloom Base Radius");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_bloomRadiusPerCharge", "Bloom Radius Per Charge");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_bloomRadiusCap", "Bloom Radius Cap");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_snipeColorCycles", "Color Cycles");
+                    y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Lights");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_tracerLightHalfWidth", "Tracer Light Half Width");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_tracerLightIntensity", "Tracer Light Intensity");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_dischargeLightIntensity", "Discharge Light Intensity");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_lightFallbackSeconds", "Light Fallback (s)");
+                    break;
             }
 
             return y;
@@ -207,6 +227,10 @@ namespace BalloonParty.Configuration.Editor
                 case ItemType.Paint:
                     // 2 headers + 7 blob fields + 4 spread fields.
                     return row * 13;
+
+                case ItemType.Snipe:
+                    // 3 headers (Snipe/Rainbow/Lights) + 3 + 5 + 4 fields.
+                    return row * 15;
 
                 default:
                     return 0f;

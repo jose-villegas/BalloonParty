@@ -463,7 +463,11 @@ namespace BalloonParty.Projectile.View
         private void TryEnterCruise(Vector3 position, Vector3 direction)
         {
             var threshold = _config.CruiseWallBounceThreshold;
-            if (threshold <= 0 || _model.IsCruising.Value || _model.Flight.ConsecutiveWallBounces < threshold)
+            // A shot already piercing without cruising is a Snipe lance — it must not enter cruise, which
+            // would layer on the per-shield speed tap it deliberately excludes. (A cruise-earned pierce is
+            // always already cruising, so this only gates the Snipe case.)
+            if (threshold <= 0 || _model.IsCruising.Value || _model.IsPiercing.Value
+                || _model.Flight.ConsecutiveWallBounces < threshold)
             {
                 return;
             }

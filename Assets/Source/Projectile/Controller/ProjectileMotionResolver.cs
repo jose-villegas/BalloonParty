@@ -41,35 +41,7 @@ namespace BalloonParty.Projectile.Controller
         /// <summary>Advances one fixed step, mutating direction/shield count on a wall bounce.</summary>
         internal ProjectileStep Step(IWriteableProjectileModel model, Vector3 position, float deltaTime)
         {
-            var baseSpeed = model.ComputeBuffedValue(ProjectileBuffId.Speed, model.Speed);
-            var speed = baseSpeed;
-
-            // The earned long-flight reward: every cruise bounce adds a velocity TAP of
-            // CruiseSpeedPerShield — cumulative, so a 13-shield bank accumulates 13 taps where a
-            // 2-shield bank gets 2. Each tap replays the animation envelope from t=0: the new
-            // target speed scaled by curve(elapsed/duration), so a curve starting at 0 freezes the
-            // shot for a beat before it picks up. The pierce scale bleeds this down as a piercing
-            // shot plows through tough actors; the floor keeps it from ever dropping below base.
-            if (model.IsCruising.Value)
-            {
-                var startShields = Mathf.Max(model.Flight.CruiseStartShields, 1);
-                var taps = Mathf.Clamp(
-                    model.Flight.CruiseStartShields - model.ShieldsRemaining.Value, 0, startShields);
-                var target = 1f + _cruiseSpeedPerShield * taps;
-                if (_maxCruiseSpeedMultiplier > 0f)
-                {
-                    target = Mathf.Min(target, _maxCruiseSpeedMultiplier);
-                }
-                var progress = _cruiseTapEaseDuration > 0f
-                    ? Mathf.Clamp01(model.Flight.CruiseTapElapsed / _cruiseTapEaseDuration)
-                    : 1f;
-
-                // The pierce decay floors the ramp at base ("min normal speed"); the per-tap freeze
-                // animation rides on top and may still dip the shot to a momentary standstill.
-                var cruiseSpeed = Mathf.Max(baseSpeed * target * model.Flight.CruisePierceSpeedScale, baseSpeed);
-                speed = cruiseSpeed * _cruiseTapCurve.Evaluate(progress);
-                model.Flight.CruiseTapElapsed += deltaTime;
-            }
+            var speed = ResolveFlightSpeed(model, deltaTime);
 
             // The 'last breath': on a doomed 0-shield segment (flagged by the view once the path to
             // the death wall is clear of any shield source), traverse origin -> wall over a FIXED
@@ -83,7 +55,7 @@ namespace BalloonParty.Projectile.Controller
                 var segmentLength = Vector3.Distance(model.Flight.SegmentStartPosition, deathWall);
                 var normalizedTime = Mathf.Clamp01(model.Flight.SegmentElapsed / _lastShieldApproachDuration);
                 var distance = normalizedTime >= 1f
-                    ? segmentLength + (baseSpeed * deltaTime)
+                    ? segmentLength + (speed * deltaTime)
                     : segmentLength * Mathf.Clamp01(_lastShieldApproachCurve.Evaluate(normalizedTime));
                 model.Flight.SegmentElapsed += deltaTime;
                 position = model.Flight.SegmentStartPosition + (Vector3)(model.Direction.normalized * distance);
@@ -111,13 +83,15 @@ namespace BalloonParty.Projectile.Controller
             // space (HitResolver resets the counter on any balloon touch). Entry into cruise is the
             // VIEW's call — it confirms with a physics lookahead the plain resolver can't run.
             model.Flight.ConsecutiveWallBounces++;
-            if (model.IsCruising.Value && model.Flight.CruisePierceSpeedScale < 1f)
+            if (model.IsPiercing.Value && model.Flight.CruisePierceSpeedScale < 1f)
             {
                 // Only ONCE the shot has plowed a tough (scale decayed below 1) does a wall end the
-                // run: cruise ends, speed returns to normal, AND the earned piercing is consumed —
-                // the shot is a normal shot again (deflects off toughs). An armed shot cruising an
-                // empty corridor, or one that has only popped 1-hit balloons, keeps both its speed
-                // and its pierce; nothing has slowed it, so nothing is spent.
+                // run: cruise ends, speed returns to normal, AND the piercing is consumed — the shot is
+                // a normal shot again (deflects off toughs). A piercing shot crossing an empty corridor,
+                // or one that has only popped 1-hit balloons, keeps both its speed and its pierce;
+                // nothing has slowed it, so nothing is spent. Keyed off IsPiercing (not IsCruising) so a
+                // Snipe-granted pierce, which never cruises, is spent the same way (IsCruising is already
+                // false for it, so clearing it is a no-op).
                 model.IsCruising.Value = false;
                 model.Flight.ConsecutiveWallBounces = 0;
                 model.Flight.CruisePierceSpeedScale = 1f;
@@ -226,6 +200,51 @@ namespace BalloonParty.Projectile.Controller
 
             normal = (toPosition - travel * backtrack) / radius;
             return true;
+        }
+
+        // The flight speed for this step. Un-buffed base is the floor the pierce decay bleeds down to,
+        // so a fully-decayed shot returns to normal speed even while a speed buff is still applied.
+        private float ResolveFlightSpeed(IWriteableProjectileModel model, float deltaTime)
+        {
+            var trueBaseSpeed = model.Speed;
+            var baseSpeed = model.ComputeBuffedValue(ProjectileBuffId.Speed, model.Speed);
+
+            // The earned long-flight reward: every cruise bounce adds a velocity TAP of
+            // CruiseSpeedPerShield — cumulative, so a 13-shield bank accumulates 13 taps where a
+            // 2-shield bank gets 2. Each tap replays the animation envelope from t=0: the new
+            // target speed scaled by curve(elapsed/duration), so a curve starting at 0 freezes the
+            // shot for a beat before it picks up. The pierce scale bleeds this down as a piercing
+            // shot plows through tough actors; the floor keeps it from ever dropping below base.
+            if (model.IsCruising.Value)
+            {
+                var startShields = Mathf.Max(model.Flight.CruiseStartShields, 1);
+                var taps = Mathf.Clamp(
+                    model.Flight.CruiseStartShields - model.ShieldsRemaining.Value, 0, startShields);
+                var target = 1f + _cruiseSpeedPerShield * taps;
+                if (_maxCruiseSpeedMultiplier > 0f)
+                {
+                    target = Mathf.Min(target, _maxCruiseSpeedMultiplier);
+                }
+                var progress = _cruiseTapEaseDuration > 0f
+                    ? Mathf.Clamp01(model.Flight.CruiseTapElapsed / _cruiseTapEaseDuration)
+                    : 1f;
+
+                // The pierce decay floors the ramp at base ("min normal speed"); the per-tap freeze
+                // animation rides on top and may still dip the shot to a momentary standstill.
+                var cruiseSpeed = Mathf.Max(baseSpeed * target * model.Flight.CruisePierceSpeedScale, trueBaseSpeed);
+                model.Flight.CruiseTapElapsed += deltaTime;
+                return cruiseSpeed * _cruiseTapCurve.Evaluate(progress);
+            }
+
+            if (model.IsPiercing.Value)
+            {
+                // A piercing shot that isn't cruising (a Snipe-granted lance) carries its speed buff at
+                // full until it plows a tough actor; each plow bleeds CruisePierceSpeedScale and the floor
+                // drops it toward true (un-buffed) base — never below normal.
+                return Mathf.Max(baseSpeed * model.Flight.CruisePierceSpeedScale, trueBaseSpeed);
+            }
+
+            return baseSpeed;
         }
     }
 }

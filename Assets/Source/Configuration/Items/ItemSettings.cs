@@ -22,6 +22,7 @@ namespace BalloonParty.Configuration.Items
         [SerializeField] private LaserSettings _laser = new();
         [SerializeField] private LightningSettings _lightning = new();
         [SerializeField] private PaintSettings _paint = new();
+        [SerializeField] private SnipeSettings _snipe = new();
 
         public ItemType Type => _type;
 
@@ -36,6 +37,7 @@ namespace BalloonParty.Configuration.Items
         public LaserSettings Laser => _laser;
         public LightningSettings Lightning => _lightning;
         public PaintSettings Paint => _paint;
+        public SnipeSettings Snipe => _snipe;
     }
 
     [Serializable]
@@ -218,5 +220,58 @@ namespace BalloonParty.Configuration.Items
         public float SpreadLength => _spreadLength;
         public float SpreadBaseWidth => _spreadBaseWidth;
         public float SpreadBlobRadius => _spreadBlobRadius;
+    }
+
+    [Serializable]
+    public class SnipeSettings
+    {
+        [Tooltip("Initial flight-speed multiplier granted on activation. Non-stacking — a second Snipe refreshes, not adds.")]
+        [SerializeField] [Min(1f)] private float _snipeSpeedBuffMultiplier = 1.6f;
+
+        [Tooltip("Speed scale applied each time the lance plows a tough/unbreakable balloon. Floored at base speed.")]
+        [SerializeField] [Min(0f)] private float _snipeToughHitSpeedFalloff = 0.5f;
+
+        [Tooltip("Half-width of the capsule swept along the terminating segment that decides which hits>1 balloons the discharge clears.")]
+        [SerializeField] [Min(0f)] private float _snipeLineClearHalfWidth = 0.5f;
+
+        [Tooltip("Rainbow holder only: charge gained per tough/unbreakable plow. The discharge bloom scales with total charge.")]
+        [SerializeField] [Min(0)] private int _snipeChargePerToughHit = 1;
+
+        [Tooltip("Rainbow holder only: discharge bloom radius at zero charge, in world units.")]
+        [SerializeField] [Min(0f)] private float _bloomBaseRadius = 1f;
+
+        [Tooltip("Rainbow holder only: extra bloom radius per point of charge, in world units.")]
+        [SerializeField] [Min(0f)] private float _bloomRadiusPerCharge = 0.5f;
+
+        [Tooltip("Rainbow holder only: hard cap on the discharge bloom radius so a big charge never eats the whole board.")]
+        [SerializeField] [Min(0f)] private float _bloomRadiusCap = 4f;
+
+        [Tooltip("Rainbow holder only: how many times the iridescent lance lerps through the allowed colours over its flight.")]
+        [SerializeField] [Min(0f)] private float _snipeColorCycles = 2f;
+
+        [Tooltip("Perpendicular half-width (reach) of the capsule light carried along the lance.")]
+        [SerializeField] [Min(0f)] private float _tracerLightHalfWidth = 0.4f;
+
+        [Tooltip("Peak magnitude of the lance's tracer light. Scaled down as the lance's speed decays.")]
+        [SerializeField] [Min(0f)] private float _tracerLightIntensity = 2f;
+
+        [Tooltip("Peak magnitude of the discharge flash light. Scaled up by charge on a rainbow holder.")]
+        [SerializeField] [Min(0f)] private float _dischargeLightIntensity = 3f;
+
+        [Tooltip("Lifetime of the discharge flash light when the effect reports no duration.")]
+        [SerializeField] [Min(0f)] private float _lightFallbackSeconds = 0.3f;
+
+        public float SpeedBuffMultiplier => _snipeSpeedBuffMultiplier;
+        public float ToughHitSpeedFalloff => _snipeToughHitSpeedFalloff;
+        public float LineClearHalfWidth => _snipeLineClearHalfWidth;
+        public int ChargePerToughHit => _snipeChargePerToughHit;
+        public float BloomBaseRadius => _bloomBaseRadius;
+        public float BloomRadiusPerCharge => _bloomRadiusPerCharge;
+        public float BloomRadiusCap => _bloomRadiusCap;
+        public float ColorCycles => _snipeColorCycles;
+        public float TracerLightHalfWidth => _tracerLightHalfWidth;
+        public float TracerLightIntensity => _tracerLightIntensity;
+        public float DischargeLightIntensity => _dischargeLightIntensity;
+        public float LightFallbackSeconds => _lightFallbackSeconds;
     }
 }

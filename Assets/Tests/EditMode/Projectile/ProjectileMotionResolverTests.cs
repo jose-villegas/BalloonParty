@@ -400,6 +400,57 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
+        public void Step_PiercingNotCruising_DecaysAndFloorsAtTrueBase()
+        {
+            // A Snipe lance pierces WITHOUT cruising. With a x2 speed buff and a hard-decayed scale, the
+            // floor is TRUE (un-buffed) base — the buff is spent away, not preserved.
+            var resolver = CruiseResolver(perShield: 0.5f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
+            model.AddBuff(new ProjectileBuff(
+                ProjectileBuffId.Speed, 2f, BuffModifierOp.Multiplicative,
+                new WallBounceEndCondition(NeverFiringWallBounces())));
+            model.IsPiercing.Value = true;
+            model.Flight.CruisePierceSpeedScale = 0.1f;
+
+            var step = resolver.Step(model, Vector3.zero, 1f);
+
+            Assert.AreEqual(1f, step.Position.y, 1e-4f, "decayed lance floors at true base (1), not buffed base (2)");
+        }
+
+        [Test]
+        public void Step_PiercingNotCruising_WallAfterToughPlow_SpendsPierce()
+        {
+            // Keyed off IsPiercing, not IsCruising: a Snipe pierce that has plowed a tough (scale < 1) is
+            // spent by the next wall even though it never cruised.
+            var resolver = CruiseResolver(perShield: 0.5f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
+            model.IsPiercing.Value = true;
+            model.Flight.CruisePierceSpeedScale = 0.5f;
+
+            resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
+
+            Assert.IsFalse(model.IsPiercing.Value, "the wall after a tough plow spends a non-cruising pierce");
+            Assert.AreEqual(1f, model.Flight.CruisePierceSpeedScale, 1e-4f, "pierce speed scale resets to base");
+            Assert.IsFalse(model.IsCruising.Value, "a Snipe pierce never turns cruise on");
+        }
+
+        [Test]
+        public void Step_PiercingNotCruising_BeforeAnyTough_KeepsPiercing()
+        {
+            // Freshly armed (scale == 1, no tough yet): a wall costs a shield but must NOT spend the
+            // pierce — the lance keeps plowing until it hits a tough.
+            var resolver = CruiseResolver(perShield: 0.5f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
+            model.IsPiercing.Value = true;
+            model.Flight.CruisePierceSpeedScale = 1f;
+
+            resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
+
+            Assert.IsTrue(model.IsPiercing.Value, "nothing slowed it — the pierce isn't spent");
+            Assert.AreEqual(2, model.ShieldsRemaining.Value, "the wall still costs a shield");
+        }
+
+        [Test]
         public void Step_LastShieldApproach_TraversesSegmentNormalizedToTime()
         {
             // Segment from y=0 to the top wall (y=5), length 5; a linear time->position curve over a
