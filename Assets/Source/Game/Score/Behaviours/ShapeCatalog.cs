@@ -119,9 +119,9 @@ namespace BalloonParty.Game.Score.Behaviours
     ///     Hand-authored 3D shape data for BigScore formations. Each denomination maps to a shape whose vertex
     ///     count equals it — full 1:1 decomposition draws every point as one orbiting pen. Small shapes partition
     ///     their edge set into closed walks (a Hamiltonian-ish cycle plus back-and-forth shuttles for the leftover
-    ///     edges); 10 is a latitude-ring globe; the crown of the ladder is a golden-ratio star-and-solid family —
-    ///     12 the small stellated dodecahedron, 20 the dodecahedron, 30 the dodecadodecahedron, 50 the
-    ///     rhombicosacron, and 100 the grand antiprism (a 4-polytope, projected to 3D at build time). The tables
+    ///     edges); 10 is an octagonal bipyramid; 12 the small stellated dodecahedron, 20 the dodecahedron, 30 the
+    ///     dodecadodecahedron (a golden-ratio star-and-solid family), 50 a 10×5 torus grid (a SILHOUETTE for the
+    ///     crown tier), and 100 the grand antiprism (a 4-polytope, projected to 3D at build time). The tables
     ///     are built once in the static constructor and returned by reference from <see cref="TryGet"/>, so a
     ///     lookup never allocates.
     ///
