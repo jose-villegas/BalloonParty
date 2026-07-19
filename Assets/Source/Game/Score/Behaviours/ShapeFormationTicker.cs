@@ -246,6 +246,14 @@ namespace BalloonParty.Game.Score.Behaviours
             state.VertexCount = pen;
             state.VerticesLive = true;
 
+            // A guiding central trail rides the formation centre, drawing the real travel path to the
+            // bar underneath the shape — a comet line anchoring each constellation member to its bar.
+            // Its ribbon is deliberately NOT re-framed (its path is genuine motion, not shape geometry).
+            state.Guide = group.Spawner.Acquire(group.Color);
+            state.Guide.transform.position = state.Center;
+            state.Guide.transform.localScale = Vector3.one;
+            state.Guide.ClearRibbon();
+
             // Sample the random landing offset ONCE; the live target re-reads the endpoint centre every tick.
             if (group.Target != null)
             {
@@ -298,6 +306,11 @@ namespace BalloonParty.Game.Score.Behaviours
             state.Center = newCenter;
             state.Rotation = newRotation;
             state.LastScale = scale;
+
+            if (state.Guide != null)
+            {
+                state.Guide.transform.position = newCenter;
+            }
             for (var p = 0; p < state.VertexCount; p++)
             {
                 state.Vertices[p].transform.position = LocalToWorld(state, PenOrbitLocal(state, p) * scale);
@@ -405,6 +418,12 @@ namespace BalloonParty.Game.Score.Behaviours
 
         private void ReleaseVertices(FormationState state)
         {
+            if (state.Guide != null)
+            {
+                state.Group.Spawner.Release(state.Guide);
+                state.Guide = null;
+            }
+
             if (!state.VerticesLive)
             {
                 return;
@@ -590,6 +609,7 @@ namespace BalloonParty.Game.Score.Behaviours
             internal int VertexCount;
             internal bool IsPrincipal;
             internal bool VerticesLive;
+            internal FlyingTrail Guide;
             internal bool Reported;
             internal bool Frozen;
 
@@ -619,6 +639,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 Phase = FormationPhase.Travel;
                 VertexCount = 0;
                 VerticesLive = false;
+                Guide = null;
                 Reported = false;
                 Frozen = false;
             }
