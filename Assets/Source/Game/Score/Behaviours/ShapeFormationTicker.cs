@@ -278,22 +278,26 @@ namespace BalloonParty.Game.Score.Behaviours
             var newRotation = Quaternion.AngleAxis(settings.SpinSpeedDegrees * t, state.SpinAxis) * state.InitialRotation;
             var delta = newRotation * Quaternion.Inverse(oldRotation);
 
-            // Re-frame the drawn ink by the same translate+tumble the live frame moved through (rigid in formation
-            // space). Deliberately NOT scale-corrected: the scale change is slow next to the loop speed and the
-            // pens continuously re-ink at the current scale, so slightly larger old ink fading behind the shrinking
-            // shape reads as a natural afterglow rather than a shear.
-            if (state.VerticesLive && (newCenter != oldCenter || delta != Quaternion.identity))
+            var scale = settings.ScaleOverTravel != null ? settings.ScaleOverTravel.Evaluate(t) : 0f;
+
+            // Re-frame the drawn ink by the same translate+tumble+SCALE the live frame moved through, so the
+            // drawn figure shrinks with the shape as it approaches the bar. Scale correction matters most on
+            // the long-ribbon shapes (the 12's one-pen-per-pentagram walks): un-scaled old ink outlives the
+            // taper and holds the big silhouette. The ratio guards the curve's taper through zero — once the
+            // old scale is ~0 every recorded point already sits at the centre, so 0 simply keeps it there.
+            var scaleRatio = state.LastScale > 1e-4f ? scale / state.LastScale : (scale > 1e-4f ? 1f : 0f);
+            if (state.VerticesLive
+                && (newCenter != oldCenter || delta != Quaternion.identity || !Mathf.Approximately(scaleRatio, 1f)))
             {
                 for (var i = 0; i < state.VertexCount; i++)
                 {
-                    state.Vertices[i].TransformRibbon(oldCenter, newCenter, delta);
+                    state.Vertices[i].TransformRibbon(oldCenter, newCenter, delta, scaleRatio);
                 }
             }
 
             state.Center = newCenter;
             state.Rotation = newRotation;
-
-            var scale = settings.ScaleOverTravel != null ? settings.ScaleOverTravel.Evaluate(t) : 0f;
+            state.LastScale = scale;
             for (var p = 0; p < state.VertexCount; p++)
             {
                 state.Vertices[p].transform.position = LocalToWorld(state, PenOrbitLocal(state, p) * scale);
@@ -573,6 +577,7 @@ namespace BalloonParty.Game.Score.Behaviours
             internal Vector3 TargetOffset;
             internal Quaternion Rotation;
             internal Quaternion InitialRotation;
+            internal float LastScale;
             internal Vector3 SpinAxis;
             internal float FormationRadius;
             internal float LocalPenSpeed;
@@ -601,6 +606,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 TargetOffset = Vector3.zero;
                 InitialRotation = request.InitialRotation;
                 Rotation = InitialRotation;
+                LastScale = 0f;
                 // All formations of a pop roll about the shared hit-derived axis (a coherent constellation
                 // tumble) unless the shape overrides it (the hit-aligned line precesses about the flight
                 // axis, sweeping a bicone); a directionless pop falls back to a per-shape random axis.

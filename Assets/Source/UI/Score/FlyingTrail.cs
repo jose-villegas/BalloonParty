@@ -233,11 +233,12 @@ namespace BalloonParty.UI.Score
             _trailRenderer.emitting = emitting;
         }
 
-        // Rigidly re-frames the recorded ribbon by the formation's delta transform (translate + 3D rotate).
-        // Ribbons record WORLD positions, so a formation that glides or tumbles while it draws would shear
-        // every line; carrying each drawn point through p' = newCenter + delta·(p − oldCenter) keeps the
-        // whole figure rigid in formation space while its centre glides and its frame tumbles.
-        internal void TransformRibbon(Vector3 oldCenter, Vector3 newCenter, Quaternion delta)
+        // Re-frames the recorded ribbon by the formation's delta transform (translate + 3D rotate + scale).
+        // Ribbons record WORLD positions, so a formation that glides, tumbles, or shrinks while it draws
+        // would shear every line; carrying each drawn point through
+        // p' = newCenter + scaleRatio·(delta·(p − oldCenter)) keeps the whole figure glued to formation
+        // space — the drawn ink shrinks with the shape as the travel curve tapers toward the bar.
+        internal void TransformRibbon(Vector3 oldCenter, Vector3 newCenter, Quaternion delta, float scaleRatio)
         {
             var count = _trailRenderer.positionCount;
             if (count == 0)
@@ -252,9 +253,9 @@ namespace BalloonParty.UI.Score
 
             _trailRenderer.GetPositions(_ribbonScratch);
 
-            // Pure translation is the common case (the shape holds a fixed tilt until its draw finishes) —
-            // skip the quaternion rotate entirely.
-            if (delta == Quaternion.identity)
+            // Pure translation is the common case (fixed tilt, scale on a curve plateau) — skip the
+            // quaternion rotate and the scale multiply entirely.
+            if (delta == Quaternion.identity && Mathf.Approximately(scaleRatio, 1f))
             {
                 var offset = newCenter - oldCenter;
 
@@ -270,7 +271,7 @@ namespace BalloonParty.UI.Score
 
             for (var i = 0; i < count; i++)
             {
-                _trailRenderer.SetPosition(i, newCenter + delta * (_ribbonScratch[i] - oldCenter));
+                _trailRenderer.SetPosition(i, newCenter + delta * (_ribbonScratch[i] - oldCenter) * scaleRatio);
             }
         }
 
