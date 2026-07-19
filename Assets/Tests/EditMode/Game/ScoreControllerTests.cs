@@ -28,6 +28,7 @@ namespace BalloonParty.Tests.Game
         private ScoreController _controller;
         private ColorStreakTracker _streakTracker;
         private IMessageHandler<ScoreTrailArrivedMessage> _trailArrivedHandler;
+        private IMessageHandler<ScoreLevelUpMessage> _scoreLevelUpHandler;
 
         [SetUp]
         public void SetUp()
@@ -79,8 +80,16 @@ namespace BalloonParty.Tests.Game
             _streakTracker = new ColorStreakTracker(
                 Substitute.For<IPublisher<StreakChangedMessage>>(), levelUpSubscriber, projectileLoadedSubscriber);
 
+            var scoreLevelUpSubscriber = Substitute.For<ISubscriber<ScoreLevelUpMessage>>();
+            scoreLevelUpSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<ScoreLevelUpMessage>>(h => _scoreLevelUpHandler = h),
+                    Arg.Any<MessageHandlerFilter<ScoreLevelUpMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
             return new ScoreController(
                 trailArrivedSubscriber,
+                scoreLevelUpSubscriber,
                 _scoredPublisher,
                 _levelProgress,
                 _palette,
@@ -125,6 +134,23 @@ namespace BalloonParty.Tests.Game
             FireTrailArrived(Red, 2);
 
             Assert.AreEqual(2, _controller.TotalScore.Value);
+        }
+
+        [Test]
+        public void LevelUp_SnapsTotalToProjected_WithoutDoubleCountingSurvivors()
+        {
+            // A 10-point pop is granted and published (projected = 10); only 4 have landed when the
+            // level-up fires — the popup must show the full reached score, not the low in-flight value.
+            FirePop(Red, 10);
+            FireTrailArrived(Red, 4, 4);
+            Assert.AreEqual(4, _controller.TotalScore.Value, "only the landed points before the level-up");
+
+            _scoreLevelUpHandler.Handle(new ScoreLevelUpMessage(2));
+            Assert.AreEqual(10, _controller.TotalScore.Value, "snapped to the completed level's full score");
+
+            // The remaining 6, frozen and landing later at CompleteAll, are absorbed — no overshoot.
+            FireTrailArrived(Red, 10, 6);
+            Assert.AreEqual(10, _controller.TotalScore.Value, "survivors absorbed, not double-counted");
         }
 
         [Test]

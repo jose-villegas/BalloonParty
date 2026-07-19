@@ -22,8 +22,18 @@ namespace BalloonParty.Game.Score
         private readonly ColorStreakTracker _streakTracker;
         private readonly ReactiveProperty<int> _totalScore = new(0);
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
+        private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private readonly List<string> _colorKeys = new();
+
+        // The score the run WILL show once every in-flight trail lands — summed at publish time (when points
+        // are granted), so it leads _totalScore, which banks per arrival. A level-up freezes the survivors and
+        // only banks them at CompleteAll, so the popup would show a low _totalScore; OnLevelUp snaps it to
+        // _projectedTotal. _snapCredit records how much that snap pre-counted, so the survivors' later arrivals
+        // are absorbed rather than double-added.
+        private int _projectedTotal;
+        private int _snapCredit;
         private IDisposable _trailSubscription;
+        private IDisposable _levelUpSubscription;
 
         public IReadOnlyReactiveProperty<int> TotalScore => _totalScore;
 
@@ -32,12 +42,14 @@ namespace BalloonParty.Game.Score
 
         public ScoreController(
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
+            ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             IPublisher<ScorePointsGroupMessage> scoredPublisher,
             ILevelProgress levelProgress,
             IGamePalette palette,
             ColorStreakTracker streakTracker)
         {
             _trailArrivedSubscriber = trailArrivedSubscriber;
+            _levelUpSubscriber = levelUpSubscriber;
             _scoredPublisher = scoredPublisher;
             _levelProgress = levelProgress;
             _palette = palette;
@@ -47,6 +59,7 @@ namespace BalloonParty.Game.Score
         public void Dispose()
         {
             _trailSubscription?.Dispose();
+            _levelUpSubscription?.Dispose();
         }
 
         public void Start()
@@ -56,6 +69,7 @@ namespace BalloonParty.Game.Score
             ClearRunState();
 
             _trailSubscription = _trailArrivedSubscriber.Subscribe(OnTrailArrived);
+            _levelUpSubscription = _levelUpSubscriber.Subscribe(OnLevelUp);
         }
 
         public void ResetRun(int generation)
@@ -66,6 +80,8 @@ namespace BalloonParty.Game.Score
         private void ClearRunState()
         {
             _totalScore.Value = 0;
+            _projectedTotal = 0;
+            _snapCredit = 0;
 
             foreach (var key in _colorKeys)
             {
@@ -203,6 +219,16 @@ namespace BalloonParty.Game.Score
                     baseProgress + points,
                     multiplier,
                     hitDirection));
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                // Level lock: the trail flies for show but never banks (see OnTrailArrived) — keep the
+                // projected total in step so a later snap can't reveal the withheld points.
+                if (BalloonParty.Cheats.CheatState.BlockLevelUp)
+                {
+                    continue;
+                }
+#endif
+                _projectedTotal += points;
             }
         }
 
@@ -222,7 +248,27 @@ namespace BalloonParty.Game.Score
 #endif
 
             _persistentScore[msg.ColorName] += msg.Points;
-            _totalScore.Value += msg.Points;
+
+            // Absorb points a level-up snap already counted (the frozen survivors from the previous level,
+            // landing now at CompleteAll) so they don't double-add; the rest ticks the total as usual.
+            var points = msg.Points;
+            if (_snapCredit > 0)
+            {
+                var absorbed = Mathf.Min(_snapCredit, points);
+                _snapCredit -= absorbed;
+                points -= absorbed;
+            }
+
+            _totalScore.Value += points;
+        }
+
+        // The level-up popup appears while the last trails are still frozen in flight, so _totalScore would
+        // read low. The level is complete, so its points are all granted (in _projectedTotal) — snap to it, and
+        // credit the gap so the survivors' arrivals at CompleteAll are absorbed instead of counted twice.
+        private void OnLevelUp(ScoreLevelUpMessage msg)
+        {
+            _snapCredit += _projectedTotal - _totalScore.Value;
+            _totalScore.Value = _projectedTotal;
         }
     }
 }
