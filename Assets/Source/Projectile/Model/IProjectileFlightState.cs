@@ -10,7 +10,6 @@ namespace BalloonParty.Projectile.Model
         int ConsecutiveWallBounces { get; }
         int CruiseStartShields { get; }
         float CruiseTapElapsed { get; }
-        float CruisePierceSpeedScale { get; }
         Vector3 SegmentStartPosition { get; }
         float SegmentElapsed { get; }
     }
