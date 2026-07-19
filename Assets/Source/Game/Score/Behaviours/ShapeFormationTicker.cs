@@ -124,6 +124,10 @@ namespace BalloonParty.Game.Score.Behaviours
         private const float MinDuration = 0.0001f;
         private const float FreezeRibbonTime = 600f;
 
+        // How fast the tumble's angular velocity eases toward its target (per second). Ramping it in keeps a
+        // high spin speed from snapping the ribbons with a big rotation delta on the first ticks.
+        private const float SpinRampRate = 2f;
+
         private readonly List<FormationState> _states = new(16);
         private readonly Stack<FormationState> _pool = new(16);
         private readonly Stack<Transform> _anchorPool = new(8);
@@ -282,10 +286,13 @@ namespace BalloonParty.Game.Score.Behaviours
             var travelT = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(t / state.Duration));
             var newCenter = Vector3.Lerp(state.Origin, liveTarget, travelT);
 
-            // Tumble spins from t = 0 (invisible while the shape is a point).
-            var newRotation =
-                Quaternion.AngleAxis(settings.SpinSpeedDegrees * state.Shape.SpinScale * t, state.SpinAxis)
-                * state.InitialRotation;
+            // Tumble spins from t = 0 (invisible while the shape is a point). Ease the angular VELOCITY toward
+            // its target and integrate the angle, so a high spin speed ramps in instead of snapping the ribbons
+            // with a large rotation delta on the first ticks.
+            var targetSpin = settings.SpinSpeedDegrees * state.Shape.SpinScale;
+            state.SpinSpeed = Mathf.Lerp(state.SpinSpeed, targetSpin, 1f - Mathf.Exp(-SpinRampRate * dt));
+            state.SpinAngle += state.SpinSpeed * dt;
+            var newRotation = Quaternion.AngleAxis(state.SpinAngle, state.SpinAxis) * state.InitialRotation;
             var delta = newRotation * Quaternion.Inverse(oldRotation);
 
             var scale = settings.ScaleOverTravel != null ? settings.ScaleOverTravel.Evaluate(t) : 0f;
@@ -614,6 +621,8 @@ namespace BalloonParty.Game.Score.Behaviours
             internal Quaternion InitialRotation;
             internal float LastScale;
             internal Vector3 SpinAxis;
+            internal float SpinSpeed;
+            internal float SpinAngle;
             internal float FormationRadius;
             internal float LocalPenSpeed;
             internal float Duration;
@@ -649,6 +658,8 @@ namespace BalloonParty.Game.Score.Behaviours
                 SpinAxis = request.HasSpinAxis
                     ? request.SpinAxis
                     : group.HasSpinAxis ? group.SpinAxis : Random.onUnitSphere;
+                SpinSpeed = 0f;
+                SpinAngle = 0f;
                 Duration = Mathf.Max(group.Settings.ScaleOverTravel.Duration(), MinDuration);
                 Elapsed = 0f;
                 FadeElapsed = 0f;
