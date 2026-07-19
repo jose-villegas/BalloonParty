@@ -110,13 +110,12 @@ namespace BalloonParty.Game.Score.Behaviours
     ///             draws the wireframe, later laps re-ink it, k pens tile a period-P walk in P/k.</item>
     ///     </list>
     ///
-    ///     Transport bridge — the group's anchor <see cref="TrailFlight"/> handle is the pause/snap/slow-mo
+    ///     Transport bridge — the group's anchor <see cref="TrailFlight"/> handle is the pause/snap
     ///     interface, polled every tick; every formation in the group shares it, so a cinematic pause or completion
     ///     fans out to the whole group. Paused freezes the formation (and inflates the ribbon time so the drawn
-    ///     figure survives the cinematic freeze); Idle snaps (report the value now, fade the pens out unscaled);
-    ///     Speed scales the formation clock. The flight stays registered (InFlight) through the group's whole life
-    ///     and is unregistered only once the last formation finishes, so a principal that lands first never falsely
-    ///     signals Idle to the others.
+    ///     figure survives the cinematic freeze); Idle snaps (report the value now, fade the pens out unscaled).
+    ///     The flight stays registered (InFlight) through the group's whole life and is unregistered only once the
+    ///     last formation finishes, so a principal that lands first never falsely signals Idle to the others.
     /// </summary>
     internal sealed class ShapeFormationTicker : ILateTickable
     {
@@ -181,7 +180,7 @@ namespace BalloonParty.Game.Score.Behaviours
                     continue;
                 }
 
-                if (AdvanceFormation(state, dt * group.Flight.Speed))
+                if (AdvanceFormation(state, dt))
                 {
                     ReleaseStateAt(i);
                     DecrementGroup(group);
@@ -230,6 +229,7 @@ namespace BalloonParty.Game.Score.Behaviours
                     state.PenWalk[pen] = w;
                     state.PenStartDist[pen] = (float)j / k * perimeter;
                     state.PenRibbonTime[pen] = ribbonTime;
+                    state.PenSegment[pen] = 0;
 
                     var vertex = group.Spawner.Acquire(group.Color);
                     vertex.SetRibbonTime(ribbonTime);
@@ -296,14 +296,8 @@ namespace BalloonParty.Game.Score.Behaviours
             // taper and holds the big silhouette. The ratio guards the curve's taper through zero — once the
             // old scale is ~0 every recorded point already sits at the centre, so 0 simply keeps it there.
             var scaleRatio = state.LastScale > 1e-4f ? scale / state.LastScale : (scale > 1e-4f ? 1f : 0f);
-            if (state.VerticesLive
-                && (newCenter != oldCenter || delta != Quaternion.identity || !Mathf.Approximately(scaleRatio, 1f)))
-            {
-                for (var i = 0; i < state.VertexCount; i++)
-                {
-                    state.Vertices[i].TransformRibbon(oldCenter, newCenter, delta, scaleRatio);
-                }
-            }
+            var reframeRibbons = state.VerticesLive
+                && (newCenter != oldCenter || delta != Quaternion.identity || !Mathf.Approximately(scaleRatio, 1f));
 
             state.Center = newCenter;
             state.Rotation = newRotation;
@@ -313,8 +307,16 @@ namespace BalloonParty.Game.Score.Behaviours
             {
                 state.Guide.transform.position = newCenter;
             }
+
+            // Reframe each pen's ribbon before writing its new head position — same per-pen order as before,
+            // just one pass over the pens instead of two.
             for (var p = 0; p < state.VertexCount; p++)
             {
+                if (reframeRibbons)
+                {
+                    state.Vertices[p].TransformRibbon(oldCenter, newCenter, delta, scaleRatio);
+                }
+
                 state.Vertices[p].transform.position = LocalToWorld(state, PenOrbitLocal(state, p) * scale);
             }
 
@@ -515,11 +517,22 @@ namespace BalloonParty.Game.Score.Behaviours
 
             var cumulative = state.Shape.Cumulative[w];
             var d = Mathf.Repeat(state.PenStartDist[p] + state.Elapsed * state.LocalPenSpeed, perimeter);
-            var seg = 0;
+
+            // Pens advance monotonically within a lap, so the segment index only moves forward; resume the
+            // scan from where the pen last was instead of rescanning from 0 every tick. Only a lap wrap
+            // (d falls behind the cached segment's start) forces a rescan from the top.
+            var seg = state.PenSegment[p];
+            if (d < cumulative[seg])
+            {
+                seg = 0;
+            }
+
             while (seg < m - 1 && cumulative[seg + 1] <= d)
             {
                 seg++;
             }
+
+            state.PenSegment[p] = seg;
 
             var segLength = cumulative[seg + 1] - cumulative[seg];
             var localT = segLength > Mathf.Epsilon ? (d - cumulative[seg]) / segLength : 0f;
@@ -590,6 +603,7 @@ namespace BalloonParty.Game.Score.Behaviours
             internal readonly int[] PenWalk = new int[MaxVertexCount];
             internal readonly float[] PenStartDist = new float[MaxVertexCount];
             internal readonly float[] PenRibbonTime = new float[MaxVertexCount];
+            internal readonly int[] PenSegment = new int[MaxVertexCount];
 
             internal FormationGroup Group;
             internal FormationShape Shape;

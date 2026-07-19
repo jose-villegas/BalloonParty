@@ -12,12 +12,9 @@ namespace BalloonParty.Shared.Pool
         private readonly Vector3 _origin;
         private readonly Transform _transform;
 
-        private float _speed = 1f;
-
         internal FlightPhase Phase { get; private set; }
         internal Transform Transform => _transform;
         internal Vector3 Origin => _origin;
-        internal float Speed => _speed;
 
         internal TrailFlight(Transform transform, Vector3 origin)
         {
@@ -39,33 +36,6 @@ namespace BalloonParty.Shared.Pool
             // formation anchors (their vertices are frozen by ShapeFormationTicker instead).
             _transform.GetComponent<FlyingTrail>()?.FreezeRibbon();
             Phase = FlightPhase.Paused;
-        }
-
-        internal void Resume()
-        {
-            if (Phase != FlightPhase.Paused || _transform == null)
-            {
-                return;
-            }
-
-            _transform.DOPlay();
-            _transform.GetComponent<FlyingTrail>()?.ThawRibbon();
-            Phase = FlightPhase.InFlight;
-        }
-
-        /// <summary>
-        ///     Snaps the trail back to its spawn origin.
-        /// </summary>
-        internal void Stop()
-        {
-            if (_transform == null)
-            {
-                return;
-            }
-
-            _transform.DOKill();
-            _transform.position = _origin;
-            Phase = FlightPhase.Idle;
         }
 
         /// <summary>
@@ -92,52 +62,6 @@ namespace BalloonParty.Shared.Pool
         internal void MarkCompleted()
         {
             Phase = FlightPhase.Idle;
-        }
-
-        /// <summary>
-        ///     Sets the timeScale of every active tween on this trail.
-        /// </summary>
-        internal void SetSpeed(float speed)
-        {
-            _speed = speed;
-
-            if (_transform == null)
-            {
-                return;
-            }
-
-            var tweens = DOTween.TweensByTarget(_transform);
-            if (tweens == null)
-            {
-                return;
-            }
-
-            foreach (var tween in tweens)
-            {
-                tween.timeScale = speed;
-            }
-        }
-
-        /// <summary>
-        ///     Switches all active tweens to ignore <see cref="Time.timeScale" />.
-        /// </summary>
-        internal void SetUnscaledTime(bool useUnscaled)
-        {
-            if (_transform == null)
-            {
-                return;
-            }
-
-            var tweens = DOTween.TweensByTarget(_transform);
-            if (tweens == null)
-            {
-                return;
-            }
-
-            foreach (var tween in tweens)
-            {
-                tween.SetUpdate(useUnscaled);
-            }
         }
     }
 }

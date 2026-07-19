@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -143,6 +142,10 @@ namespace BalloonParty.Game.Score.Behaviours
 
         private static readonly Dictionary<int, FormationShape> Shapes = BuildShapes();
 
+        // The largest RadiusScale across every built shape — fixed for the process lifetime, so callers that
+        // used to re-scan the catalog per pop (BigScoreTrailBehaviour.FitScale/Begin) can read it once instead.
+        internal static readonly float MaxRadiusScale = ComputeMaxRadiusScale(Shapes);
+
         internal static IReadOnlyList<int> Denominations => LadderDenominations;
 
         internal static bool TryGet(int denomination, out FormationShape shape)
@@ -177,6 +180,20 @@ namespace BalloonParty.Game.Score.Behaviours
                 { 50, BuildTorus() },
                 { 100, BuildYarnBall() },
             };
+        }
+
+        private static float ComputeMaxRadiusScale(IReadOnlyDictionary<int, FormationShape> shapes)
+        {
+            var max = 0f;
+            foreach (var shape in shapes.Values)
+            {
+                if (shape.RadiusScale > max)
+                {
+                    max = shape.RadiusScale;
+                }
+            }
+
+            return max > 0f ? max : 1f;
         }
 
         // 2 = a single edge as a shuttle; two pens at opposite phases draw it inward from both ends.
@@ -425,11 +442,7 @@ namespace BalloonParty.Game.Score.Behaviours
             const int starCount = 3;
             const int tipCount = 5;
             const int outlineCount = 2 * tipCount;
-
-            // The coverage dial: how far each star's tips splay from its centre. Three centres are always
-            // coplanar, so the poles perpendicular to their (equatorial) plane are the bare spots — bigger
-            // stars reach further toward those poles. Past ~1.2 adjacent stars start to overlap (tangle).
-            const float tipCapRadians = 1.1f;
+            const float tipCapRadians = 0.8f;
 
             // Golden-ratio notch: inner/outer tangent radius ≈ 0.382, the classic five-point star cut.
             var notchCapRadians = Mathf.Asin(0.382f * Mathf.Sin(tipCapRadians));
@@ -717,16 +730,6 @@ namespace BalloonParty.Game.Score.Behaviours
             members.Sort((a, b) => RingAngle(vertices[a], reference, binormal)
                 .CompareTo(RingAngle(vertices[b], reference, binormal)));
             return members.ToArray();
-        }
-
-        // The catalog is deterministic build-time data: a violated invariant is an authoring bug, so fail loudly
-        // at static-construction time rather than shipping a malformed shape.
-        private static void Require(bool condition, string message)
-        {
-            if (!condition)
-            {
-                throw new InvalidOperationException("ShapeCatalog: " + message);
-            }
         }
 
         private static Vector3 Cyclic(float x, float y, float z, int shift)

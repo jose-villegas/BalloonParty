@@ -54,14 +54,6 @@ namespace BalloonParty.Shared.Pool
             }
         }
 
-        internal void ResumeAll()
-        {
-            foreach (var flight in _flights.Values)
-            {
-                flight.Resume();
-            }
-        }
-
         /// <remarks>
         ///     Snapshots and clears first so <see cref="Unregister"/> callbacks can't mutate mid-iteration.
         /// </remarks>
@@ -73,24 +65,6 @@ namespace BalloonParty.Shared.Pool
             foreach (var flight in snapshot)
             {
                 flight.Complete();
-            }
-        }
-
-        internal void StopAll()
-        {
-            foreach (var flight in _flights.Values)
-            {
-                flight.Stop();
-            }
-
-            _flights.Clear();
-        }
-
-        internal void SetSpeedAll(float speed)
-        {
-            foreach (var flight in _flights.Values)
-            {
-                flight.SetSpeed(speed);
             }
         }
     }

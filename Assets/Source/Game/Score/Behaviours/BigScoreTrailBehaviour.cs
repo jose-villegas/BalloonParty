@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Shared;
@@ -12,13 +11,14 @@ namespace BalloonParty.Game.Score.Behaviours
     /// <summary>
     ///     Decomposes a big score into a catalog of 3D shapes and launches them all at once. Every point is one
     ///     orbiting pen trail: the group's total splits into the fewest pieces over
-    ///     <see cref="ShapeCatalog.Denominations"/> (optimal coin change; see <see cref="Decompose"/>), each
-    ///     denomination becomes one formation of that many pens, and a terminal remainder of 1 becomes a single
-    ///     classic default trail. The formations bloom around the pop at
-    ///     spread sub-centres, tumble and orbit toward the bar, and each reports its own contiguous score range on
-    ///     landing — the LARGEST takes the top range (so it carries <c>LastScore</c> and is the principal the
-    ///     level-up cinematic tracks). The <see cref="ShapeFormationTicker"/> owns the per-frame simulation; this
-    ///     handler only decomposes, lays out, fits, and launches.
+    ///     <see cref="ShapeCatalog.Denominations"/> (optimal coin change; see <see cref="Decompose"/>); with 2 and 3
+    ///     both denominations, every total this handler ever sees decomposes remainder-free, so each piece becomes
+    ///     one formation of that many pens with nothing left over (see <see cref="AssertNoRemainder"/>). The
+    ///     formations bloom around the pop at spread sub-centres, tumble and orbit toward the bar, and each reports
+    ///     its own contiguous score range on landing — the LARGEST takes the top range (so it carries
+    ///     <c>LastScore</c> and is the principal the level-up cinematic tracks). The
+    ///     <see cref="ShapeFormationTicker"/> owns the per-frame simulation; this handler only decomposes, lays out,
+    ///     fits, and launches.
     /// </summary>
     internal sealed class BigScoreTrailBehaviour : IScoreTrailBehaviour
     {
@@ -67,13 +67,13 @@ namespace BalloonParty.Game.Score.Behaviours
         public void Begin(in ScoreTrailContext context)
         {
             Decompose(context.Points, _denominations);
+            AssertNoRemainder(_denominations);
             var settings = _config != null ? _config.BigScoreSettings : FallbackSettings;
-            var hasRemainder = _denominations.Count > 0 && _denominations[^1] == 1;
-            var formationCount = hasRemainder ? _denominations.Count - 1 : _denominations.Count;
+            var formationCount = _denominations.Count;
 
             var limits = new WallLimits(context.Config.LimitsClockwise);
             var fitScale = FitScale(settings.BaseRadius, limits);
-            var fittedMaxRadius = settings.BaseRadius * fitScale * MaxRadiusScale();
+            var fittedMaxRadius = settings.BaseRadius * fitScale * ShapeCatalog.MaxRadiusScale;
             var spacing = 2f * fittedMaxRadius;
 
             var carrierId = new TrailId(context.ColorName, context.LastScore);
@@ -130,12 +130,6 @@ namespace BalloonParty.Game.Score.Behaviours
                 }
                 cursor -= value;
             }
-
-            if (hasRemainder)
-            {
-                // The lone leftover point flies as a classic default trail (parity with DefaultScore's single point).
-                SpawnDefaultTrail(in context, cursor);
-            }
         }
 
         // Optimal coin change over the catalog ladder: the FEWEST pieces, where an unavoidable terminal 1 is a
@@ -154,6 +148,18 @@ namespace BalloonParty.Game.Score.Behaviours
             var denominations = ShapeCatalog.Denominations;
             ComputeDpCosts(total, denominations);
             ReconstructLargestFirst(total, denominations, result);
+        }
+
+        // Decompose can only leave a terminal remainder of 1 if 2 and/or 3 drop out of the catalog ladder — with
+        // both present, every total >= 2 (BigScore's floor) decomposes clean. Insurance against that regressing
+        // silently, since the default-trail fallback for a leftover 1 was removed as dead code.
+        private static void AssertNoRemainder(IReadOnlyList<int> denominations)
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            Debug.Assert(
+                denominations.Count == 0 || denominations[^1] != 1,
+                "BigScoreTrailBehaviour: Decompose left a terminal remainder of 1 — did 2 or 3 drop out of ShapeCatalog.Denominations?");
+#endif
         }
 
         // Fills the grow-only cost tables for every t in [0, total]: the fewest pieces to build t and whether that
@@ -252,24 +258,6 @@ namespace BalloonParty.Game.Score.Behaviours
             return true;
         }
 
-        private void SpawnDefaultTrail(in ScoreTrailContext context, int score)
-        {
-            var target = context.Target != null ? context.Target.RandomPosition() : Vector3.zero;
-            var id = new TrailId(context.ColorName, score);
-            var flights = context.Flights;
-            var reporter = context.Reporter;
-
-            Action onArrived = () =>
-            {
-                flights.Unregister(id);
-                reporter.ReportArrival(score, points: 1, target);
-            };
-
-            var transform = context.Spawner.Spawn(
-                context.Origin, target, context.Config.ScorePointTraceDuration, context.Color, onArrived);
-            flights.Register(id, transform, context.Origin);
-        }
-
         // Phyllotaxis (golden-angle spiral) so the sub-centres spread evenly; index 0 (the principal) sits at the
         // pop, the rest fan outward at sqrt-growing radii spaced by neighbouring diameters. Off-board centres are
         // pulled in by the per-formation wall clamp (a very large burst just packs densely near the edges).
@@ -280,26 +268,11 @@ namespace BalloonParty.Game.Score.Behaviours
             return origin + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * distance;
         }
 
-        private static float MaxRadiusScale()
-        {
-            var max = 0f;
-            var denominations = ShapeCatalog.Denominations;
-            for (var i = 0; i < denominations.Count; i++)
-            {
-                if (ShapeCatalog.TryGet(denominations[i], out var shape) && shape.RadiusScale > max)
-                {
-                    max = shape.RadiusScale;
-                }
-            }
-
-            return max > 0f ? max : 1f;
-        }
-
         // Shrinks every formation uniformly so the LARGEST shape's radius fits the board's playable half-extent.
         private static float FitScale(float baseRadius, in WallLimits limits)
         {
             var halfExtent = Mathf.Min(limits.Right - limits.Left, limits.Top - limits.Bottom) * 0.5f;
-            var largest = baseRadius * MaxRadiusScale();
+            var largest = baseRadius * ShapeCatalog.MaxRadiusScale;
             return largest > Mathf.Epsilon ? Mathf.Min(1f, halfExtent * MaxRadiusExtent / largest) : 1f;
         }
 
