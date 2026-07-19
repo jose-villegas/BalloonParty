@@ -21,6 +21,7 @@ namespace BalloonParty.Cheats
         public string Name => "Start From Level";
         public string Section => "Run";
         public IReadOnlyList<string> Tags => new[] { "run", "level", "pacing" };
+        public bool Compact => false;
 
         public StartFromLevelCheat(RunController runController)
         {
@@ -37,16 +38,7 @@ namespace BalloonParty.Cheats
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label("Level", GUILayout.Width(44));
-            if (GUILayout.Button("−", GUILayout.Width(28)))
-            {
-                _level = Mathf.Max(1, _level - 1);
-            }
-
-            GUILayout.Label(_level.ToString(), GUILayout.Width(28));
-            if (GUILayout.Button("+", GUILayout.Width(28)))
-            {
-                _level++;
-            }
+            _level = CheatLayout.IntField("startlevel.level", _level, min: 1);
 
             if (GUILayout.Button("Start From Level"))
             {

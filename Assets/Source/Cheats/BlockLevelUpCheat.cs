@@ -13,6 +13,7 @@ namespace BalloonParty.Cheats
         public string Name => "Level Lock";
         public string Section => "Score";
         public IReadOnlyList<string> Tags => new[] { "score", "levelup", "lock", "loss" };
+        public bool Compact => true;
 
         public void Execute()
         {

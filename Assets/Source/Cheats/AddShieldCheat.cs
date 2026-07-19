@@ -25,6 +25,7 @@ namespace BalloonParty.Cheats
         public string Name => "Add Shields";
         public string Section => "Projectile";
         public IReadOnlyList<string> Tags => new[] { "projectile", "shield" };
+        public bool Compact => false;
 
         public AddShieldCheat(ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
         {
@@ -56,16 +57,7 @@ namespace BalloonParty.Cheats
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label("Amount", GUILayout.Width(52));
-            if (GUILayout.Button("−", GUILayout.Width(28)))
-            {
-                _amount = Mathf.Max(1, _amount - 1);
-            }
-
-            GUILayout.Label(_amount.ToString(), GUILayout.Width(28));
-            if (GUILayout.Button("+", GUILayout.Width(28)))
-            {
-                _amount++;
-            }
+            _amount = CheatLayout.IntField("shield.amount", _amount, min: 1);
 
             if (GUILayout.Button("Add Shields"))
             {

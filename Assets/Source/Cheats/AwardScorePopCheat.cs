@@ -22,6 +22,7 @@ namespace BalloonParty.Cheats
     {
         // One preset per catalog denomination; arbitrary totals (combo decompositions) go via the field.
         private static readonly int[] Presets = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 30, 50, 100 };
+        private static readonly string[] PresetLabels = BuildPresetLabels();
 
         private readonly IActiveLevelParameters _levelParams;
         private readonly IHitDispatcher _hitDispatcher;
@@ -33,6 +34,7 @@ namespace BalloonParty.Cheats
         public string Name => "Award Score Pop";
         public string Section => "Score";
         public IReadOnlyList<string> Tags => new[] { "score", "shapes", "trails" };
+        public bool Compact => false;
 
         public AwardScorePopCheat(
             IActiveLevelParameters levelParams,
@@ -75,16 +77,7 @@ namespace BalloonParty.Cheats
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label("Points", GUILayout.Width(52));
-            if (GUILayout.Button("−", GUILayout.Width(28)))
-            {
-                _points = Mathf.Max(1, _points - 1);
-            }
-
-            GUILayout.Label(_points.ToString(), GUILayout.Width(36));
-            if (GUILayout.Button("+", GUILayout.Width(28)))
-            {
-                _points++;
-            }
+            _points = CheatLayout.IntField("score.points", _points, min: 1);
 
             var colors = _levelParams.Current.AllowedColors;
             var colorLabel = colors != null && colors.Count > 0
@@ -102,17 +95,26 @@ namespace BalloonParty.Cheats
 
             GUILayout.EndHorizontal();
 
-            GUILayout.BeginHorizontal();
-            foreach (var preset in Presets)
+            CheatLayout.BeginPanel("Presets");
+            var clicked = CheatLayout.ButtonGrid(PresetLabels);
+            if (clicked >= 0)
             {
-                if (GUILayout.Button(preset.ToString(), GUILayout.Width(34)))
-                {
-                    _points = preset;
-                    Execute();
-                }
+                _points = Presets[clicked];
+                Execute();
             }
 
-            GUILayout.EndHorizontal();
+            CheatLayout.EndPanel();
+        }
+
+        private static string[] BuildPresetLabels()
+        {
+            var labels = new string[Presets.Length];
+            for (var i = 0; i < Presets.Length; i++)
+            {
+                labels[i] = Presets[i].ToString();
+            }
+
+            return labels;
         }
     }
 }

@@ -38,6 +38,7 @@ namespace BalloonParty.Cheats
         public string Name => "Spawn Balloon";
         public string Section => "Spawning";
         public IReadOnlyList<string> Tags => new[] { "balloons", "spawning", "items" };
+        public bool Compact => false;
 
         public SpawnBalloonCheat(
             BalloonFactory factory,
@@ -58,24 +59,17 @@ namespace BalloonParty.Cheats
 
         public void DrawControls()
         {
-            GUILayout.Label("Type");
-            _typeIndex = GUILayout.SelectionGrid(_typeIndex, TypeLabels(), 4);
+            CheatLayout.BeginPanel("Type");
+            _typeIndex = CheatLayout.SelectionGrid(_typeIndex, TypeLabels());
+            CheatLayout.EndPanel();
 
-            GUILayout.Label("Item");
-            _itemIndex = GUILayout.SelectionGrid(_itemIndex, ItemLabels(), 3);
+            CheatLayout.BeginPanel("Item");
+            _itemIndex = CheatLayout.SelectionGrid(_itemIndex, ItemLabels());
+            CheatLayout.EndPanel();
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Count", GUILayout.Width(44));
-            if (GUILayout.Button("−", GUILayout.Width(28)))
-            {
-                _count = Mathf.Max(1, _count - 1);
-            }
-
-            GUILayout.Label(_count.ToString(), GUILayout.Width(28));
-            if (GUILayout.Button("+", GUILayout.Width(28)))
-            {
-                _count++;
-            }
+            _count = CheatLayout.IntField("spawn.count", _count, min: 1);
 
             if (GUILayout.Button("Spawn"))
             {

@@ -9,6 +9,12 @@ namespace BalloonParty.Cheats
     /// </summary>
     internal interface ICheatControls
     {
+        /// <summary>
+        ///     True for a single-control cheat (e.g. one toggle) whose control already reads as a full
+        ///     label — drawn inline on one row instead of under a separate name header/panel.
+        /// </summary>
+        bool Compact { get; }
+
         void DrawControls();
     }
 }
