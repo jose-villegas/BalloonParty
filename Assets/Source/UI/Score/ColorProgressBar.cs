@@ -201,6 +201,13 @@ namespace BalloonParty.UI.Score
         private void OnLevelUp(ScoreLevelUpMessage msg)
         {
             _stashedMaxValue = _thresholds.PointsRequiredForLevel(msg.NewLevel);
+
+            // The watermark only fires this once every colour has confirmed its requirement, but the slider
+            // sums points as trails LAND — the ones still in flight are frozen behind the popup, so the bar
+            // can read low. Snap it full (maxValue is still this level's requirement) so the popup shows the
+            // score that was actually reached, and the glow drain starts from a completed bar.
+            _progressSlider.value = _progressSlider.maxValue;
+
             ClearCompletionVfx();
             // Animate existing notices out (not a hard snap) as the popup takes over. New ones stay
             // suppressed for the rest of the ceremony via the level FSM phase (see OnTrailArrived) — score
