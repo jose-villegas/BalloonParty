@@ -365,9 +365,11 @@ construction vocabulary. **12** — small stellated
 dodecahedron: the icosahedron's 12 vertices, one pentagram `{5/2}` circuit per vertex (its
 five neighbours), every edge double-inked (each chord in two circuits). **20** — regular
 dodecahedron: 12 pentagon face circuits sliced from coplanar vertex rings, each edge shared
-by two faces (double-inked). **30** — a ball of OUTLINE stars: three
-five-pointed stars traced by their silhouette (tip-notch-tip, golden-ratio notch depth,
-never crossing their own interior), ten pens apiece, half-speed SpinScale. Three
+by two faces (double-inked). **30** — a ball of OUTLINE stars: five
+3-pointed stars traced by their silhouette (tip-notch-tip, deep notches, never crossing
+their own interior) on a trigonal bipyramid — two polar + three equatorial — so the whole
+sphere is covered (three 5-point caps geometrically cannot wrap it); six pens apiece,
+half-speed SpinScale. Three
 supersessions on 2026-07-19 taught the tier's design rules: the dodecadodecahedron's stars
 share every edge with its pentagons and vanish; six small pentagram-chord stars superimpose
 front-and-back (wireframes have no occlusion); and chord-drawn stars read as tangles because

@@ -305,21 +305,30 @@ namespace BalloonParty.Game.Score.Behaviours
             return Build(20, 1.15f, vertices, walks);
         }
 
-        // 30 = a ball of OUTLINE stars: three five-pointed stars traced by their silhouette — tip, notch,
-        // tip, notch — never crossing their own interior (the pentagram-chord versions read as tangles:
-        // the pen slices through the star instead of drawing the shape you would cut from paper). Ten
-        // outline points per star (5 tips + 5 golden-ratio notches, ten pens apiece), the three stars
-        // capping the orthogonal axis directions, half-speed SpinScale for readability.
+        // 30 = a ball of OUTLINE stars: five stars traced by their silhouette — tip, notch, tip, notch —
+        // never crossing their own interior (chord-drawn stars read as tangles: the pen slices through the
+        // star instead of drawing the shape you would cut from paper). Five 3-pointed stars of six outline
+        // points each, placed on a trigonal bipyramid (two polar + three equatorial) so the WHOLE sphere is
+        // covered — three 5-pointed caps geometrically cannot wrap it (the far octant stays bare). Deep
+        // notches keep the sparkle-star read; six pens per contour; half-speed SpinScale for readability.
         private static FormationShape BuildStarBall()
         {
-            const int starCount = 3;
-            const int tipCount = 5;
-            const float tipCapRadians = 0.8f;
+            const int starCount = 5;
+            const int tipCount = 3;
+            const float tipCapRadians = 0.72f;
 
-            // Golden-ratio notch: inner/outer tangent radius ≈ 0.382, the classic five-point star cut.
-            var notchCapRadians = Mathf.Asin(0.382f * Mathf.Sin(tipCapRadians));
+            // Deeper than the five-point golden notch — three-pointed stars need it to read as stars.
+            var notchCapRadians = Mathf.Asin(0.3f * Mathf.Sin(tipCapRadians));
 
-            var axes = new[] { Vector3.right, Vector3.up, Vector3.forward };
+            // Trigonal bipyramid: both poles + three equatorial directions at 120°.
+            var axes = new[]
+            {
+                Vector3.forward,
+                Vector3.back,
+                Vector3.right,
+                new Vector3(-0.5f, 0.8660254f, 0f),
+                new Vector3(-0.5f, -0.8660254f, 0f),
+            };
             var vertices = new Vector3[starCount * 2 * tipCount];
             var walks = new FormationWalk[starCount];
             for (var f = 0; f < starCount; f++)

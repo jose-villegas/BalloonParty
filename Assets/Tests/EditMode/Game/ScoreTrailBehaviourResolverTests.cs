@@ -192,17 +192,17 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void ShapeCatalog_StarBall_ThreeOutlineStars()
+        public void ShapeCatalog_StarBall_FiveOutlineStarsCoverTheSphere()
         {
             Assert.IsTrue(ShapeCatalog.TryGet(30, out var shape));
 
             Assert.AreEqual(30, shape.Vertices.Length);
             Assert.AreEqual(30, new HashSet<Vector3>(shape.Vertices).Count, "thirty distinct vertices");
-            Assert.AreEqual(3, shape.Walks.Length, "three separate outline-star loops");
-            CollectionAssert.AreEqual(new[] { 10, 10, 10 }, shape.PensPerWalk, "ten pens per star");
+            Assert.AreEqual(5, shape.Walks.Length, "five separate outline-star loops");
+            CollectionAssert.AreEqual(new[] { 6, 6, 6, 6, 6 }, shape.PensPerWalk, "six pens per star");
 
             var edges = InspectCircuits(shape);
-            Assert.AreEqual(30, edges.Multiplicity.Count, "three outlines of ten segments each");
+            Assert.AreEqual(30, edges.Multiplicity.Count, "five outlines of six segments each");
             CollectionAssert.AreEqual(
                 new[] { 1 }, DistinctValues(edges.Multiplicity), "no shared edges — every chord inked once");
             Assert.AreEqual(30, edges.Touched.Count, "all vertices covered");
