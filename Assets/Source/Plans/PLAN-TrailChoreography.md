@@ -373,11 +373,13 @@ instantly under tumble where the dense star-duals blurred together against the 3
 Walks are the grid's own rings — 5 major decagons + 10 minor pentagons — every edge in
 exactly one ring (single-inked), every vertex degree 4. Decomposition changed from greedy to optimal coin change (fewest
 pieces, remainder-free preferred, deterministic largest-on-optimal-path reconstruction):
-`13=10+3`, `7=5+2`. **100** — grand antiprism (implemented 2026-07-19, FutureIdeas §16):
-the 600-cell's 120 icosians minus two completely orthogonal great decagons, projected
-4D→3D (perspective-from-w, c=2), 500 edges at degree 10 everywhere — Eulerian, single-
-inked over 33 spliced closed walks (undersized cycles merge into hosts so no walk goes
-unpenned). Ladder head: `250=100+100+50`. `ShapeFormationTicker.MaxVertexCount` is 100.
+`13=10+3`, `7=5+2`. **100** — a spherical-spiral yarn ball
+(superseded the grand antiprism same-day: 500 projected 4D edges read as noise mid-tumble;
+the crown wants a silhouette). One closed 100-vertex coil — polar triangle-wave pole-to-pole
+and back, azimuth advancing five turns, all 100 pens chasing one line. Ladder head:
+`250=100+100+50`. `ShapeFormationTicker.MaxVertexCount` is 100. The legibility principle
+that reshaped the top tier: **12 hexagonal prism, 50 torus, 100 yarn ball** — silhouette
+over density; the grand antiprism/rhombicosacron/stellated-12 live in git history.
 
 **Denomination = vertex count, full 1:1 decomposition.** A shape's score value IS its vertex
 count; every point is one orbiting pen trail. A group's total decomposes **greedily largest-first**

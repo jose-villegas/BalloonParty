@@ -1292,6 +1292,14 @@ bookkeeping, `WillLevelUp`), `ColorProgressBar` (stashed max + post-drain start 
 
 ## 16 — Grand Antiprism: the 100 denomination (José, 2026-07-19)
 
+**Superseded 2026-07-19 (same day as implementation):** the grand antiprism shipped, verified,
+and was then replaced by a spherical-spiral "yarn ball" as the 100 — José's legibility pass
+found 500 projected 4D edges read as noise mid-tumble; the crown tier follows the silhouette
+principle (12 hexagonal prism, 50 torus, 100 yarn ball). The full verified 4D construction
+(600-cell, orthogonal-decagon removal, perspective projection, Eulerian splicing) lives in git
+history at commit 7fc97c53 if a 4-polytope ever earns a comeback (e.g. as a roguelike-exclusive
+skin rather than a denomination).
+
 **Implemented 2026-07-19** — shipped in `ShapeCatalog` (600-cell minus two orthogonal great
 decagons traced via the φ-recurrence, perspective-from-w projection at c = 2, Eulerian circuit
 walks with undersized-cycle splicing so every walk earns a pen); cheat preset + tests added.

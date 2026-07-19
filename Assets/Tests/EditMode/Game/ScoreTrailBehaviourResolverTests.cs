@@ -246,33 +246,23 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void ShapeCatalog_GrandAntiprism_FiveHundredEdgesSingleInked()
+        public void ShapeCatalog_YarnBall_OneClosedCoil()
         {
             Assert.IsTrue(ShapeCatalog.TryGet(100, out var shape));
-            Assert.AreEqual(100, shape.Vertices.Length, "one hundred vertices");
-            Assert.AreEqual(
-                100, new HashSet<Vector3>(shape.Vertices).Count, "projection must keep all vertices distinct");
 
-            // Spliced walks may revisit their splice vertex, but every walk stays a closed loop long enough for
-            // DistributePens to seed it — no circuit is ever left unpenned (and thus undrawn).
-            foreach (var walk in shape.Walks)
-            {
-                Assert.GreaterOrEqual(walk.Vertices.Length, 5, "every circuit long enough to earn a pen");
-            }
-
-            foreach (var pens in shape.PensPerWalk)
-            {
-                Assert.GreaterOrEqual(pens, 1, "every circuit gets at least one pen");
-            }
+            Assert.AreEqual(100, shape.Vertices.Length);
+            Assert.AreEqual(100, new HashSet<Vector3>(shape.Vertices).Count, "one hundred distinct vertices");
+            Assert.AreEqual(1, shape.Walks.Length, "a single continuous coil");
+            CollectionAssert.AreEqual(new[] { 100 }, shape.PensPerWalk, "all pens chase the one line");
 
             var edges = InspectCircuits(shape);
-            Assert.AreEqual(500, edges.Multiplicity.Count, "a grand antiprism has 500 edges");
+            Assert.AreEqual(100, edges.Multiplicity.Count, "a 100-vertex simple cycle has 100 edges");
             CollectionAssert.AreEqual(
-                new[] { 1 }, DistinctValues(edges.Multiplicity), "every edge inked exactly once (single-inked)");
-            Assert.AreEqual(100, edges.Touched.Count, "all one hundred vertices covered");
+                new[] { 1 }, DistinctValues(edges.Multiplicity), "every edge inked exactly once");
+            Assert.AreEqual(100, edges.Touched.Count, "all vertices covered");
 
             var degrees = DegreeHistogram(edges.Multiplicity);
-            Assert.AreEqual(100, CountByDegree(degrees, 10), "degree ten at every vertex");
+            Assert.AreEqual(100, CountByDegree(degrees, 2), "a simple cycle: degree two everywhere");
         }
 
         private static void AssertFiveDistinctPerWalk(FormationShape shape)
