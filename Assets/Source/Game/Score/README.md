@@ -70,12 +70,20 @@ handful of arrivals (one per shape), not hundreds.
 
 `ShapeCatalog` (`internal static`, built once, zero-alloc lookup) is hand-authored 3D shape data. A denomination
 maps to a shape whose vertex count equals it: `2` line, `3` triangle, `4` tetrahedron, `5` square pyramid, `6`
-triangular prism, `8` cube (polyhedra partition their edges into closed **walks** — a Hamiltonian-ish cycle plus
-back-and-forth shuttles), and `10/20/30` spheres drawn as latitude **rings** (arc walks; `30` adds pole meridian
-shuttles). `Denominations` is the decomposition **ladder** `{30, 20, 10, 8, 6, 5, 4, 3, 2}` — the 12-sphere is
-dropped so greedy gives `13 = 10+3` (see the plan). `BigScoreTrailBehaviour.Decompose` (an internal static pure
-function) walks the ladder greedily largest-first; a terminal remainder of 1 becomes a single classic default
-trail.
+triangular prism, `8` cube, `10` octagonal bipyramid, `12` hexagonal prism, `20` dodecahedron, `30` a GARLAND of
+three seam-threaded outline stars (tip-notch-tip silhouettes, tip-to-tip seams migrating pen to pen around the
+band), `50` a 10×5 torus grid, and `100` a spherical-spiral yarn ball — the upper tiers favour a readable
+**silhouette** over vertex density (a doughnut or a wound ball reads instantly under tumble; denser polyhedra
+just blur). Every shape partitions its edges into closed **walks** a pen orbits forever — a Hamiltonian-ish cycle
+plus back-and-forth shuttles for the polyhedra, latitude/longitude rings for the torus, one long threaded loop
+for the star garland and the yarn ball; arc walks slerp their segments (curved bands), chord walks lerp them
+(straight edges). Each shape also carries a `SpinScale` (complex shapes read better tumbling slowly) and an
+optional hit-aligned start (only the line, whose slope IS the shot's linear equation). `Denominations` is the
+decomposition **ladder** `{100, 50, 30, 20, 12, 10, 8, 6, 5, 4, 3, 2}`. `BigScoreTrailBehaviour.Decompose` is an
+optimal coin-change split over that ladder (fewest pieces, with an unavoidable terminal remainder of 1 penalized
+above any remainder-free split; the reconstruction deterministically takes the largest denomination that stays
+on an optimal path, which also yields descending order) — a terminal remainder of 1 becomes a single classic
+default trail.
 
 `BigScoreTrailBehaviour.Begin` decomposes `context.Points`, fits every shape's radius inside `WallLimits`, spreads
 the formations' sub-centres around the pop (golden-angle phyllotaxis, each wall-clamped), and launches them
@@ -103,9 +111,10 @@ position is `C(t) + Q(t) · (radius · scale(t) · localₚ(t))`:
   wireframe, `<1` chasing comet heads, `≪1` orbiting pearls.
 
 The whole figure is **rigid in formation space**: each tick every live pen ribbon is re-framed through
-`FlyingTrail.TransformRibbon(oldCenter, newCenter, Quaternion delta)` (`p' = newCenter + delta·(p − oldCenter)`;
-pure translation is the identity-delta fast path). It is deliberately **not** scale-corrected — pens continuously
-re-ink at the current scale, so slightly-larger old ink fading behind the shrinking shape reads as an afterglow.
+`FlyingTrail.TransformRibbon(oldCenter, newCenter, delta, scaleRatio)` (`p' = newCenter + delta·(p − oldCenter)·
+scaleRatio`; pure translation at scale 1 is the identity-delta fast path). The ribbon **is** scale-corrected — old
+ink shrinks with the shape as it tapers toward the bar, which matters most on the long-ribbon shapes (few pens
+sharing a long walk) where unscaled old ink would outlive the taper and hold the big silhouette.
 
 **Transport bridge** — the group's anchor `TrailFlight` handle is the pause/snap/slow-mo interface, shared by
 every formation in the group (so a cinematic pause/completion fans out to the whole constellation), polled per
