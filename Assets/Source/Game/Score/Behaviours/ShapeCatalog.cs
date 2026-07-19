@@ -168,7 +168,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 { 12, BuildSmallStellatedDodecahedron() },
                 { 20, BuildDodecahedron() },
                 { 30, BuildDodecadodecahedron() },
-                { 50, BuildRhombicosacron() },
+                { 50, BuildTorus() },
                 { 100, BuildGrandAntiprism() },
             };
         }
@@ -304,14 +304,55 @@ namespace BalloonParty.Game.Score.Behaviours
             return Build(30, 1.3f, vertices, walks);
         }
 
-        // 50 = rhombicosacron (dual of the uniform rhombicosahedron): 50 vertices along the icosahedral 3-fold axes
-        // (20 face centres, degree 6) and 2-fold axes (30 edge midpoints, degree 4). All degrees are even, so the
-        // 120-edge graph is Eulerian and partitions into edge-disjoint closed circuits — every edge inked EXACTLY
-        // ONCE (unlike the double-inked face-circuit siblings above). The ladder's crown.
-        private static FormationShape BuildRhombicosacron()
+        // 50 = a 10x5 torus grid — the crown tier needed a SILHOUETTE, not more line density: nothing
+        // else in the catalog has a hole, so the doughnut reads instantly under tumble where the star
+        // duals blurred together (supersedes the rhombicosacron). The walks are the grid's own rings —
+        // 5 major decagons + 10 minor pentagons — every edge in exactly one ring (single-inked) and
+        // every vertex degree 4.
+        private static FormationShape BuildTorus()
         {
-            var vertices = RhombicosacronVertices(IcosahedronVertices());
-            var walks = EulerianCircuits(vertices);
+            const int majorCount = 10;
+            const int minorCount = 5;
+            const float minorRadius = 0.45f;
+
+            var vertices = new Vector3[majorCount * minorCount];
+            for (var i = 0; i < majorCount; i++)
+            {
+                var theta = 2f * Mathf.PI * i / majorCount;
+                var cosTheta = Mathf.Cos(theta);
+                var sinTheta = Mathf.Sin(theta);
+                for (var j = 0; j < minorCount; j++)
+                {
+                    var psi = 2f * Mathf.PI * j / minorCount;
+                    var ring = 1f + minorRadius * Mathf.Cos(psi);
+                    vertices[i * minorCount + j] =
+                        new Vector3(ring * cosTheta, ring * sinTheta, minorRadius * Mathf.Sin(psi));
+                }
+            }
+
+            var walks = new FormationWalk[minorCount + majorCount];
+            for (var j = 0; j < minorCount; j++)
+            {
+                var loop = new int[majorCount];
+                for (var i = 0; i < majorCount; i++)
+                {
+                    loop[i] = i * minorCount + j;
+                }
+
+                walks[j] = Chord(loop);
+            }
+
+            for (var i = 0; i < majorCount; i++)
+            {
+                var loop = new int[minorCount];
+                for (var j = 0; j < minorCount; j++)
+                {
+                    loop[j] = i * minorCount + j;
+                }
+
+                walks[minorCount + i] = Chord(loop);
+            }
+
             return Build(50, 1.45f, vertices, walks);
         }
 
@@ -595,19 +636,6 @@ namespace BalloonParty.Game.Score.Behaviours
             return members.ToArray();
         }
 
-        // The 50 rhombicosacron vertices from one icosahedron: the 20 face centroids (3-fold axes) then the 30 edge
-        // midpoints (2-fold axes), each normalized. Two orbits at two distinct pre-normalization radii.
-        private static Vector3[] RhombicosacronVertices(Vector3[] icosahedron)
-        {
-            var midpoints = IcosahedronEdgeMidpoints(icosahedron, out var neighbours);
-            var centroids = IcosahedronFaceCentroids(icosahedron, neighbours);
-
-            var vertices = new List<Vector3>(50);
-            vertices.AddRange(centroids);
-            vertices.AddRange(midpoints);
-            return Normalized(vertices);
-        }
-
         // The 30 icosahedron edge midpoints (the 2-fold axes), also returning the vertex adjacency the face
         // centroids are traced from. Edges are the vertex pairs at the minimum (edge) separation.
         private static List<Vector3> IcosahedronEdgeMidpoints(Vector3[] icosahedron, out List<int>[] neighbours)
@@ -666,16 +694,6 @@ namespace BalloonParty.Game.Score.Behaviours
             }
 
             return centroids;
-        }
-
-        // Partitions the rhombicosacron's edge graph into edge-disjoint closed circuits. Two vertices are adjacent
-        // when their axes meet at the icosahedral 3-fold/2-fold incidence angle (dot == 1/√3): every vertex then has
-        // even degree (6 on the 20 face-axis verts, 4 on the 30 edge-axis verts), so the graph is Eulerian. A
-        // greedy trace splits off a simple cycle whenever the walk revisits a vertex — moderate-length circuits,
-        // each edge inked exactly once.
-        private static FormationWalk[] EulerianCircuits(Vector3[] vertices)
-        {
-            return ToChordWalks(PartitionIntoCycles(BuildIncidenceGraph(vertices)));
         }
 
         // Partitions an even-degree (Eulerian) edge graph into edge-disjoint closed cycles — shared by the
@@ -778,32 +796,6 @@ namespace BalloonParty.Game.Score.Behaviours
             }
 
             return walks;
-        }
-
-        // Two vertices are adjacent when their axes meet at the icosahedral 3-fold/2-fold incidence angle (dot 1/√3).
-        private static List<int>[] BuildIncidenceGraph(Vector3[] vertices)
-        {
-            var count = vertices.Length;
-            var adjacency = new List<int>[count];
-            for (var i = 0; i < count; i++)
-            {
-                adjacency[i] = new List<int>();
-            }
-
-            var incidence = 1f / Mathf.Sqrt(3f);
-            for (var i = 0; i < count; i++)
-            {
-                for (var j = i + 1; j < count; j++)
-                {
-                    if (Mathf.Abs(Vector3.Dot(vertices[i], vertices[j]) - incidence) < 1e-3f)
-                    {
-                        adjacency[i].Add(j);
-                        adjacency[j].Add(i);
-                    }
-                }
-            }
-
-            return adjacency;
         }
 
         // Walks unused edges from start, splitting off a simple cycle each time the walk revisits a path vertex,

@@ -367,11 +367,11 @@ five neighbours), every edge double-inked (each chord in two circuits). **20** �
 dodecahedron: 12 pentagon face circuits sliced from coplanar vertex rings, each edge shared
 by two faces (double-inked). **30** — dodecadodecahedron: 24 face circuits (12 pentagons
 `{5}` + 12 pentagrams `{5/2}`) over the icosidodecahedron's 30 vertices, each edge shared
-by one pentagon and one pentagram (double-inked). **50** — rhombicosacron: 50 vertices on
-the icosahedral 3-fold axes (20 face centroids, degree 6) and 2-fold axes (30 edge
-midpoints, degree 4); the 120-edge graph is Eulerian and partitions into 13 edge-disjoint
-closed circuits, so every edge is inked exactly once (single-inked — the family's one
-deliberate exception). Decomposition changed from greedy to optimal coin change (fewest
+by one pentagon and one pentagram (double-inked). **50** — a 10×5 torus grid (superseded the
+rhombicosacron 2026-07-19: the crown tier needed a SILHOUETTE — the doughnut's hole reads
+instantly under tumble where the dense star-duals blurred together against the 30/100).
+Walks are the grid's own rings — 5 major decagons + 10 minor pentagons — every edge in
+exactly one ring (single-inked), every vertex degree 4. Decomposition changed from greedy to optimal coin change (fewest
 pieces, remainder-free preferred, deterministic largest-on-optimal-path reconstruction):
 `13=10+3`, `7=5+2`. **100** — grand antiprism (implemented 2026-07-19, FutureIdeas §16):
 the 600-cell's 120 icosians minus two completely orthogonal great decagons, projected

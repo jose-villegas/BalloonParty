@@ -239,34 +239,22 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void ShapeCatalog_Rhombicosacron_EulerianCircuitsInkEveryEdgeOnce()
+        public void ShapeCatalog_Torus_GridRingsSingleInked()
         {
             Assert.IsTrue(ShapeCatalog.TryGet(50, out var shape));
 
-            var unit = 0;
-            foreach (var v in shape.Vertices)
-            {
-                Assert.AreEqual(1f, v.magnitude, 1e-3f, "every vertex is on the unit sphere");
-                unit++;
-            }
-
-            Assert.AreEqual(50, unit);
+            Assert.AreEqual(50, shape.Vertices.Length);
             Assert.AreEqual(50, new HashSet<Vector3>(shape.Vertices).Count, "fifty distinct vertices");
-
-            foreach (var walk in shape.Walks)
-            {
-                Assert.GreaterOrEqual(walk.Vertices.Length, 3, "each circuit is a closed loop");
-            }
+            Assert.AreEqual(15, shape.Walks.Length, "five major decagons + ten minor pentagons");
 
             var edges = InspectCircuits(shape);
-            Assert.AreEqual(120, edges.Multiplicity.Count, "a rhombicosacron has 120 edges");
+            Assert.AreEqual(100, edges.Multiplicity.Count, "a 10x5 torus grid has 100 edges");
             CollectionAssert.AreEqual(
                 new[] { 1 }, DistinctValues(edges.Multiplicity), "every edge inked exactly once (single-inked)");
             Assert.AreEqual(50, edges.Touched.Count, "all fifty vertices covered");
 
             var degrees = DegreeHistogram(edges.Multiplicity);
-            Assert.AreEqual(30, CountByDegree(degrees, 4), "thirty two-fold vertices of degree four");
-            Assert.AreEqual(20, CountByDegree(degrees, 6), "twenty three-fold vertices of degree six");
+            Assert.AreEqual(50, CountByDegree(degrees, 4), "every torus-grid vertex has degree four");
         }
 
         [Test]
