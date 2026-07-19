@@ -28,7 +28,8 @@ cruise-earned piercing — a cruise pierce and a Snipe lance behave identically 
 |---|---|---|
 | Piercing plow | `IProjectileModel.IsPiercing`, `ProjectileHitResolver.Resolve` | A piercing hit on a hits>1 (tough/unbreakable) balloon records it into `ProjectileFlightState.PendingPierceHits` instead of popping it, at full speed — no per-hit slowdown |
 | Discharge debounce | `ProjectileMotionResolver.TickPierceDischarge`, `IGameConfiguration.PierceDischargeDelay` | Each plow (re-)arms a countdown; once idle for `PierceDischargeDelay`, the pierce (and any riding buffs) end and the shot drops to base speed |
-| Discharge shatter | `ProjectileHitResolver.DischargePending` (called from `ProjectileView` on discharge, or on shot death with toughs still pending) | Pops every recorded tough at its strike position; a rainbow-buffed plow also blooms a colour conversion (`BloomConvert`) |
+| Discharge shatter | `ProjectileHitResolver.DischargePending` (called from `ProjectileView` on discharge, or on shot death with toughs still pending) | Pops every recorded tough at its strike position, then publishes `PierceDischargedMessage` (centre, tough count, rainbow flag) |
+| Discharge bloom | `SnipeDischargeBloom` (subscribes to `PierceDischargedMessage`) | On a rainbow discharge, converts paintable balloons within the charge-scaled radius of the shattered line to rainbow |
 | Buff lifecycle | `IProjectileBuffs`, `ProjectileBuffService`, `PierceEndedEndCondition` | Applies a buff to the active projectile and drops it once `IsPiercing` goes false |
 | Neighbor conversion | `ProjectileHitResolver.ConvertNeighborsToRainbow` | Converts `IPaintable` neighbors of a pop to rainbow — **skips non-paintable** toughs/unbreakables |
 
@@ -179,9 +180,11 @@ off `IsPiercing` going false (`PierceEndedEndCondition`, Phase 2).
      the recorded set, and the shields-exhausted flush (`ProjectileHitResolverTests`,
      `ProjectileMotionResolverTests`).
 4. **[SHIPPED]** Rainbow: charge = recorded-tough count; discharge bloom (colorable-only radius
-   convert, `BloomConvert`); in-flight neighbor conversion via the `RainbowShield` path.
-5. **Not yet shipped.** Feel: lights + disturbance beats (§6). The discharge slow-mo dip planned here
-   was dropped in favor of the debounce approach and is no longer part of the plan.
+   convert) in `SnipeDischargeBloom`, off the `PierceDischargedMessage` the discharge publishes;
+   in-flight neighbor conversion via the `RainbowShield` path.
+5. **Not yet shipped.** Feel (§6): lights + disturbance beats + the discharge slow-mo dip, all hung off
+   `PierceDischargedMessage`. The debounce (§3) is only the discharge *timing*; the slow-mo is separate
+   juice and remains a Phase-5 goal.
 6. Playtest in-editor — the punch-through-then-shatter beat, discharge feel, and bloom scaling have
    been playtested (Phases 1–4); the deferred lights/disturbance beats (Phase 5) still need a pass once
    built (`dotnet build` can't validate behavior).

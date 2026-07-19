@@ -80,6 +80,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<TransformCapturedMessage>(options);
             builder.RegisterMessageBroker<ShieldGainedMessage>(options);
             builder.RegisterMessageBroker<ShieldLostMessage>(options);
+            builder.RegisterMessageBroker<PierceDischargedMessage>(options);
             builder.RegisterMessageBroker<ScoreTrailArrivedMessage>(options);
             builder.RegisterMessageBroker<LevelUpDismissedMessage>(options);
             builder.RegisterMessageBroker<GameOverDismissedMessage>(options);
@@ -178,6 +179,7 @@ namespace BalloonParty.Game
             builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<PaintItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<SnipeItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.RegisterEntryPoint<SnipeDischargeBloom>();
         }
 
         internal static void RegisterPresentation(this IContainerBuilder builder)

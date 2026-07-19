@@ -1,8 +1,6 @@
 using System;
-using System.Reflection;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
-using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Score;
 using BalloonParty.Projectile.Buffs;
@@ -25,9 +23,9 @@ namespace BalloonParty.Tests.Projectile
     {
         private IHitDispatcher _hitDispatcher;
         private IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
+        private IPublisher<PierceDischargedMessage> _dischargedPublisher;
         private ColorStreakTracker _streakTracker;
         private SlotGrid _grid;
-        private IItemConfiguration _itemConfig;
         private ProjectileHitResolver _resolver;
         private ProjectileModel _projectile;
 
@@ -36,6 +34,7 @@ namespace BalloonParty.Tests.Projectile
         {
             _hitDispatcher = Substitute.For<IHitDispatcher>();
             _shieldGainedPublisher = Substitute.For<IPublisher<ShieldGainedMessage>>();
+            _dischargedPublisher = Substitute.For<IPublisher<PierceDischargedMessage>>();
 
             var gameConfig = Substitute.For<IGameConfiguration>();
             gameConfig.SlotsSize.Returns(new Vector2Int(6, 10));
@@ -60,15 +59,8 @@ namespace BalloonParty.Tests.Projectile
             _streakTracker = new ColorStreakTracker(
                 Substitute.For<IPublisher<StreakChangedMessage>>(), levelUpSubscriber, projectileLoadedSubscriber);
 
-            // Authored bloom tuning: radius = min(1 + charge*0.5, 4), charge = toughCount*1. Two plowed
-            // toughs therefore bloom a radius of 2 (well under the cap). The non-bloom tests never reach
-            // BloomConvert (no rainbow buff), so these values only bind the discharge-bloom cases.
-            _itemConfig = Substitute.For<IItemConfiguration>();
-            _itemConfig[ItemType.Snipe].Returns(CreateSnipeSettings(
-                chargePerToughHit: 1, bloomBaseRadius: 1f, bloomRadiusPerCharge: 0.5f, bloomRadiusCap: 4f));
-
             _resolver = new ProjectileHitResolver(
-                _hitDispatcher, _shieldGainedPublisher, _streakTracker, _grid, _itemConfig);
+                _hitDispatcher, _shieldGainedPublisher, _dischargedPublisher, _streakTracker, _grid);
             _projectile = new ProjectileModel { IsFree = true };
         }
 
@@ -187,66 +179,54 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
-        public void DischargePending_BloomsFromRainbowCapturedAtPlow_EvenAfterBuffGone()
+        public void DischargePending_RainbowCapturedAtPlow_MessageIsRainbowEvenAfterBuffGone()
         {
             // The real discharge ends the pierce, dropping the RainbowShield buff BEFORE it resolves, so
-            // the bloom must key off the rainbow captured when the tough was plowed — not the live buff.
+            // the published IsRainbow must key off the rainbow captured when the tough was plowed — not
+            // the live buff (the bloom listener downstream depends on this).
             _projectile.IsPiercing.Value = true;
             var rainbow = ApplyRainbowBuff();
             PlaceAndRecordTough(new Vector2Int(2, 4));
-            var target = PlaceBalloon(new Vector2Int(2, 5), "Red");
 
             _projectile.RemoveBuff(rainbow);
             Assert.IsFalse(_projectile.HasBuff(ProjectileBuffId.RainbowShield), "buff gone, as at a real discharge");
 
             _resolver.DischargePending(_projectile);
 
-            Assert.AreEqual(GamePalette.RainbowColorId, target.Color.Value,
-                "bloom uses the rainbow captured at plow time, not HasBuff at discharge");
+            // IsRainbow must reflect the rainbow captured at plow time, not HasBuff at discharge.
+            _dischargedPublisher.Received(1).Publish(Arg.Is<PierceDischargedMessage>(m => m.IsRainbow));
         }
 
         [Test]
-        public void DischargePending_RainbowBuff_BloomsPaintableWithinChargeScaledRadius()
+        public void DischargePending_RainbowBuff_PublishesMessageWithPlowCentroidAndToughCount()
         {
             _projectile.IsPiercing.Value = true;
             ApplyRainbowBuff();
 
-            // Two plowed toughs, recorded at their own slot positions, so the bloom centres on (1.0, -0.25)
-            // — the midpoint of the plowed line. Two toughs → charge 2 → radius 2 (radiusSq 4).
+            // Two plowed toughs, recorded at their own slot positions, so the plow centres on (1.0, -0.25)
+            // — the midpoint of the line.
             PlaceAndRecordTough(new Vector2Int(2, 4));
             PlaceAndRecordTough(new Vector2Int(2, 6));
             Assert.AreEqual(2, _projectile.Flight.PendingPierceHits.Count);
 
-            // (2,5) sits 1.0² from the centre — inside even the base radius.
-            var wellInside = PlaceBalloon(new Vector2Int(2, 5), "Red");
-            // (2,7) sits 3.89² from the centre — outside the base radius (1²) but inside the charge-widened
-            // radius (2²). It only blooms because the charge grew the radius past the base.
-            var chargeWidenedInside = PlaceBalloon(new Vector2Int(2, 7), "Red");
-            // (3,6) sits 4.72² from the centre — just beyond the radius; the charge doesn't reach it.
-            var justOutside = PlaceBalloon(new Vector2Int(3, 6), "Blue");
-
             _resolver.DischargePending(_projectile);
 
-            Assert.AreEqual(GamePalette.RainbowColorId, wellInside.Color.Value);
-            Assert.AreEqual(GamePalette.RainbowColorId, chargeWidenedInside.Color.Value);
-            Assert.AreEqual("Blue", justOutside.Color.Value, "a balloon past the bloom radius is untouched");
+            _dischargedPublisher.Received(1).Publish(Arg.Is<PierceDischargedMessage>(m =>
+                m.Center == new Vector3(1f, -0.25f, 0f) && m.ToughCount == 2 && m.IsRainbow));
         }
 
         [Test]
-        public void DischargePending_NoRainbowBuff_DoesNotBloom()
+        public void DischargePending_NoRainbowBuff_PublishesMessageWithIsRainbowFalse()
         {
             _projectile.IsPiercing.Value = true;
 
             PlaceAndRecordTough(new Vector2Int(2, 4));
             PlaceAndRecordTough(new Vector2Int(2, 6));
 
-            // Sitting right at the plow centre — it would bloom under a rainbow lance, but a plain
-            // piercing discharge only shatters the recorded toughs, it never converts.
-            var atCentre = PlaceBalloon(new Vector2Int(2, 5), "Red");
-
             _resolver.DischargePending(_projectile);
 
-            Assert.AreEqual("Red", atCentre.Color.Value);
+            _dischargedPublisher.Received(1).Publish(Arg.Is<PierceDischargedMessage>(m =>
+                !m.IsRainbow && m.ToughCount == 2));
         }
 
         [Test]
@@ -394,28 +374,6 @@ namespace BalloonParty.Tests.Projectile
             var balloon = Substitute.For<IBalloonModel>();
             balloon.EvaluateHit(Arg.Any<DamageContext>()).Returns(HitOutcome.Absorb);
             return balloon;
-        }
-
-        private static ItemSettings CreateSnipeSettings(
-            int chargePerToughHit, float bloomBaseRadius, float bloomRadiusPerCharge, float bloomRadiusCap)
-        {
-            var settings = new ItemSettings();
-            SetField(settings, "_type", ItemType.Snipe);
-
-            var snipe = new SnipeSettings();
-            SetField(snipe, "_snipeChargePerToughHit", chargePerToughHit);
-            SetField(snipe, "_bloomBaseRadius", bloomBaseRadius);
-            SetField(snipe, "_bloomRadiusPerCharge", bloomRadiusPerCharge);
-            SetField(snipe, "_bloomRadiusCap", bloomRadiusCap);
-            SetField(settings, "_snipe", snipe);
-            return settings;
-        }
-
-        private static void SetField(object target, string fieldName, object value)
-        {
-            target.GetType()
-                .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance)!
-                .SetValue(target, value);
         }
     }
 }

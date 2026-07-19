@@ -1,9 +1,7 @@
 using BalloonParty.Balloon.Model;
-using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Score;
 using BalloonParty.Projectile.Model;
-using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
@@ -17,23 +15,23 @@ namespace BalloonParty.Projectile.Controller
     {
         private readonly IHitDispatcher _hitDispatcher;
         private readonly IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
+        private readonly IPublisher<PierceDischargedMessage> _dischargedPublisher;
         private readonly ColorStreakTracker _streakTracker;
         private readonly SlotGrid _grid;
-        private readonly IItemConfiguration _itemConfig;
         private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
 
         public ProjectileHitResolver(
             IHitDispatcher hitDispatcher,
             IPublisher<ShieldGainedMessage> shieldGainedPublisher,
+            IPublisher<PierceDischargedMessage> dischargedPublisher,
             ColorStreakTracker streakTracker,
-            SlotGrid grid,
-            IItemConfiguration itemConfig)
+            SlotGrid grid)
         {
             _hitDispatcher = hitDispatcher;
             _shieldGainedPublisher = shieldGainedPublisher;
+            _dischargedPublisher = dischargedPublisher;
             _streakTracker = streakTracker;
             _grid = grid;
-            _itemConfig = itemConfig;
         }
 
         public ProjectileHitVisual Resolve(
@@ -110,13 +108,10 @@ namespace BalloonParty.Projectile.Controller
                 _hitDispatcher.Dispatch(new ActorHitMessage(balloon, hit.Position, projectile.Direction, outcome, context));
             }
 
-            // You can't paint armor, but shattering it powers the conversion of everything soft around
-            // it — a rainbow lance blooms outward from the centre of the line it plowed, wider the more
-            // toughs it ate. The toughs themselves are the fuel (popped above, and not paintable anyway).
-            if (isRainbowBuff)
-            {
-                BloomConvert(center / pending.Count, pending.Count);
-            }
+            // Announce the discharge so its feel can play — the rainbow bloom, and (later) lights /
+            // shockwave / slow-mo. Centred on the plowed line, carrying the charge (tough count) and
+            // whether the shot was rainbow.
+            _dischargedPublisher.Publish(new PierceDischargedMessage(center / pending.Count, pending.Count, isRainbowBuff));
 
             pending.Clear();
         }
@@ -222,25 +217,6 @@ namespace BalloonParty.Projectile.Controller
                 }
 
                 if (_grid.At(neighbor) is IPaintable paintable)
-                {
-                    paintable.Color.Value = GamePalette.RainbowColorId;
-                }
-            }
-        }
-
-        // Converts every paintable balloon within the charge-scaled radius of the discharge centre to
-        // rainbow. Charge is the count of plowed toughs; radius grows per charge up to a hard cap so a
-        // big plow never eats the whole board. Non-paintable actors (toughs/unbreakables) are skipped.
-        private void BloomConvert(Vector3 center, int toughCount)
-        {
-            var snipe = _itemConfig[ItemType.Snipe].Snipe;
-            var charge = toughCount * snipe.ChargePerToughHit;
-            var radius = Mathf.Min(snipe.BloomBaseRadius + charge * snipe.BloomRadiusPerCharge, snipe.BloomRadiusCap);
-
-            foreach (var slot in _grid.AllOccupiedSlots())
-            {
-                if (_grid.At(slot) is IPaintable paintable
-                    && _grid.IndexToWorldPosition(slot).WithinRadius(center, radius))
                 {
                     paintable.Color.Value = GamePalette.RainbowColorId;
                 }
