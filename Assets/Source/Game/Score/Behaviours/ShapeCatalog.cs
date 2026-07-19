@@ -139,7 +139,7 @@ namespace BalloonParty.Game.Score.Behaviours
         // φ (golden ratio) — the dodecahedron's vertex coordinates are framed on it.
         private const float Phi = 1.6180339887498949f;
 
-        private static readonly int[] LadderDenominations = { 100, 50, 30, 20, 12, 10, 8, 7, 6, 5, 4, 3, 2 };
+        private static readonly int[] LadderDenominations = { 100, 50, 30, 20, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
 
         private static readonly Dictionary<int, FormationShape> Shapes = BuildShapes();
 
@@ -168,6 +168,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 { 6, BuildTriangularPrism() },
                 { 7, BuildHexagonalPyramid() },
                 { 8, BuildCube() },
+                { 9, BuildTriaugmentedTriangularPrism() },
                 { 10, BuildOctagonalBipyramid() },
                 { 12, BuildHexagonalPrism() },
                 { 20, BuildDodecahedron() },
@@ -272,6 +273,44 @@ namespace BalloonParty.Game.Score.Behaviours
                 Chord(0, 1, 2, 3, 7, 6, 5, 4), Chord(3, 0), Chord(7, 4), Chord(1, 5), Chord(2, 6),
             };
             return Build(8, 0.9f, vertices, walks);
+        }
+
+        // 9 = a triaugmented triangular prism (Johnson J51): a triangular prism with a square pyramid raised
+        // on each of its three square faces — a 9-vertex deltahedron (all 21 edges equal). Six prism vertices
+        // of degree five plus three augmentation apexes of degree four. Two triangle-ring walks and three
+        // "diamond" walks (each threading an apex's four slant edges through the two square-face verticals)
+        // cover every edge with only the three verticals retraced — the minimal doubling six odd-degree
+        // vertices allow.
+        private static FormationShape BuildTriaugmentedTriangularPrism()
+        {
+            const float circumRadius = 0.5773503f;   // 1/sqrt(3): a unit-edge equilateral triangle
+            const float apexRise = 0.7071068f;        // 1/sqrt(2): the equilateral square-pyramid height
+
+            var vertices = new Vector3[9];
+            for (var k = 0; k < 3; k++)
+            {
+                var azimuth = Mathf.PI * 0.5f + 2f * Mathf.PI * k / 3f;
+                var x = Mathf.Cos(azimuth) * circumRadius;
+                var y = Mathf.Sin(azimuth) * circumRadius;
+                vertices[k] = new Vector3(x, y, 0.5f);
+                vertices[k + 3] = new Vector3(x, y, -0.5f);
+            }
+
+            for (var k = 0; k < 3; k++)
+            {
+                // Apex over the square face on the prism edge (k, k+1): the face-centre midpoint pushed
+                // radially out by the pyramid height (the face is vertical, so the apex stays at z = 0).
+                var mid = (vertices[k] + vertices[(k + 1) % 3]) * 0.5f;
+                var center = new Vector3(mid.x, mid.y, 0f);
+                vertices[6 + k] = center + center.normalized * apexRise;
+            }
+
+            var walks = new[]
+            {
+                Chord(0, 1, 2), Chord(3, 4, 5),
+                Chord(0, 6, 1, 4, 6, 3), Chord(1, 7, 2, 5, 7, 4), Chord(2, 8, 0, 3, 8, 5),
+            };
+            return Build(9, 1f, vertices, walks);
         }
 
         // 12 = hexagonal prism (superseded the small stellated dodecahedron: its twelve overlapping

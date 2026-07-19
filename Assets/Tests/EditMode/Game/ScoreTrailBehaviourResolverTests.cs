@@ -90,8 +90,9 @@ namespace BalloonParty.Tests.Game
             CollectionAssert.AreEqual(new[] { 12 }, Decompose(12));
             CollectionAssert.AreEqual(new[] { 12, 2 }, Decompose(14));
 
-            // 7 is now a denomination (the hexagonal pyramid): 7 = [7], one piece.
+            // 7 and 9 are now denominations (hexagonal pyramid, triaugmented triangular prism): each one piece.
             CollectionAssert.AreEqual(new[] { 7 }, Decompose(7));
+            CollectionAssert.AreEqual(new[] { 9 }, Decompose(9));
 
             // The 50 (rhombicosacron) and its showcase combo are unchanged by the 100's arrival.
             CollectionAssert.AreEqual(new[] { 50 }, Decompose(50));
@@ -261,6 +262,27 @@ namespace BalloonParty.Tests.Game
 
             var degrees = DegreeHistogram(edges.Multiplicity);
             Assert.AreEqual(1, CountByDegree(degrees, 6), "one apex hub joined to all six base vertices");
+        }
+
+        [Test]
+        public void ShapeCatalog_TriaugmentedTriangularPrism_DeltahedronThreeApexes()
+        {
+            Assert.IsTrue(ShapeCatalog.TryGet(9, out var shape));
+
+            Assert.AreEqual(9, shape.Vertices.Length);
+            Assert.AreEqual(9, new HashSet<Vector3>(shape.Vertices).Count, "nine distinct vertices");
+            Assert.AreEqual(5, shape.Walks.Length, "two triangle rings + three apex diamonds");
+
+            var edges = InspectCircuits(shape);
+            Assert.Less(edges.MaxLength - edges.MinLength, 1e-3f, "a deltahedron — every edge the same length");
+            Assert.AreEqual(21, edges.Multiplicity.Count, "a triaugmented triangular prism has 21 edges");
+            Assert.AreEqual(9, edges.Touched.Count, "all nine vertices covered");
+
+            // Six odd-degree prism vertices force minimal retracing: only the three verticals are doubled.
+            CollectionAssert.AreEqual(new[] { 1, 2 }, DistinctValues(edges.Multiplicity));
+
+            var degrees = DegreeHistogram(edges.Multiplicity);
+            Assert.AreEqual(3, CountByDegree(degrees, 4), "three augmentation apexes of degree four");
         }
 
         [Test]

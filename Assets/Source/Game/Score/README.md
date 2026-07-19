@@ -70,8 +70,8 @@ handful of arrivals (one per shape), not hundreds.
 
 `ShapeCatalog` (`internal static`, built once, zero-alloc lookup) is hand-authored 3D shape data. A denomination
 maps to a shape whose vertex count equals it: `2` line, `3` triangle, `4` tetrahedron, `5` square pyramid, `6`
-triangular prism, `7` hexagonal pyramid, `8` cube, `10` octagonal bipyramid, `12` hexagonal prism, `20`
-dodecahedron, `30` a GARLAND of
+triangular prism, `7` hexagonal pyramid, `8` cube, `9` triaugmented triangular prism, `10` octagonal
+bipyramid, `12` hexagonal prism, `20` dodecahedron, `30` a GARLAND of
 three seam-threaded outline stars (tip-notch-tip silhouettes, tip-to-tip seams migrating pen to pen around the
 band), `50` a 10×5 torus grid, and `100` a spherical-spiral yarn ball — the upper tiers favour a readable
 **silhouette** over vertex density (a doughnut or a wound ball reads instantly under tumble; denser polyhedra
