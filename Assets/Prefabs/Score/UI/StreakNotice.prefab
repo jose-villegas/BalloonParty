@@ -251,6 +251,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4022841750403956333, guid: 8026f44bf1b214739b2bc56e217d5105,
         type: 3}
+      propertyPath: _holdDuration
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4022841750403956333, guid: 8026f44bf1b214739b2bc56e217d5105,
+        type: 3}
       propertyPath: _colorableRenderer.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -269,6 +274,46 @@ PrefabInstance:
       propertyPath: '_colorableRenderer.Array.data[2]'
       value: 
       objectReference: {fileID: 8780470487739036141}
+    - target: {fileID: 4022841750403956333, guid: 8026f44bf1b214739b2bc56e217d5105,
+        type: 3}
+      propertyPath: _scaleCurve.m_Curve.Array.data[1].value
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4022841750403956333, guid: 8026f44bf1b214739b2bc56e217d5105,
+        type: 3}
+      propertyPath: _scaleCurve.m_Curve.Array.data[2].value
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4022841750403956333, guid: 8026f44bf1b214739b2bc56e217d5105,
+        type: 3}
+      propertyPath: _scaleCurve.m_Curve.Array.data[0].inSlope
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4022841750403956333, guid: 8026f44bf1b214739b2bc56e217d5105,
+        type: 3}
+      propertyPath: _scaleCurve.m_Curve.Array.data[1].inSlope
+      value: 0.11111111
+      objectReference: {fileID: 0}
+    - target: {fileID: 4022841750403956333, guid: 8026f44bf1b214739b2bc56e217d5105,
+        type: 3}
+      propertyPath: _scaleCurve.m_Curve.Array.data[2].inSlope
+      value: 0.07222222
+      objectReference: {fileID: 0}
+    - target: {fileID: 4022841750403956333, guid: 8026f44bf1b214739b2bc56e217d5105,
+        type: 3}
+      propertyPath: _scaleCurve.m_Curve.Array.data[0].outSlope
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4022841750403956333, guid: 8026f44bf1b214739b2bc56e217d5105,
+        type: 3}
+      propertyPath: _scaleCurve.m_Curve.Array.data[1].outSlope
+      value: 0.11111111
+      objectReference: {fileID: 0}
+    - target: {fileID: 4022841750403956333, guid: 8026f44bf1b214739b2bc56e217d5105,
+        type: 3}
+      propertyPath: _scaleCurve.m_Curve.Array.data[2].outSlope
+      value: 0.07222222
+      objectReference: {fileID: 0}
     - target: {fileID: 6315786945281002352, guid: 8026f44bf1b214739b2bc56e217d5105,
         type: 3}
       propertyPath: m_fontAsset
@@ -290,11 +335,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: StreakNotice
-      objectReference: {fileID: 0}
-    - target: {fileID: 4022841750403956333, guid: 8026f44bf1b214739b2bc56e217d5105,
-        type: 3}
-      propertyPath: _holdDuration
-      value: -1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
