@@ -21,8 +21,8 @@ MonoBehaviour:
   _projectileDeadDriftFactor: 0.225
   _limitsClockwise: {x: 4, y: 2.25, z: -4.5, w: -2.25}
   _shieldTrailDuration: 0.5
-  _cruiseWallBounceThreshold: 3
-  _cruiseSpeedPerShield: 0.667
+  _cruiseWallBounceThreshold: 1
+  _cruiseSpeedPerShield: 0.22233333
   _maxCruiseSpeedMultiplier: 25
   _cruiseTapCurve:
     serializedVersion: 2
@@ -37,6 +37,15 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
+      time: 0.46158066
+      value: 0.71010464
+      inSlope: 1.0768387
+      outSlope: 1.0768387
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
       time: 1
       value: 1
       inSlope: 0
@@ -49,7 +58,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _cruiseTapEaseDuration: 0.25
-  _cruisePiercingTapThreshold: 3
+  _cruisePiercingTapThreshold: 5
   _lastShieldApproachCurve:
     serializedVersion: 2
     m_Curve:
@@ -65,8 +74,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -88,7 +97,7 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.9
+      time: 0.75
       value: 1
       inSlope: 0
       outSlope: 0
@@ -97,8 +106,26 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
+      time: 0.97
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.99
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
       time: 1
-      value: 0.2
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

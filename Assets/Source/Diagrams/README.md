@@ -25,6 +25,7 @@ features compose across the whole game.
 | `arch_cinematics_architecture` | The cinematics pipeline: settings SO, producers, runner, traits, TimeScaleService |
 | `arch_score_cinematic` | Score thresholds driving the level-up cinematic |
 | `arch_trail_composition` | Score / glow / flying trail composition during level-up |
+| `arch_shape_formations` | Big scores decomposed into 3D polyhedra drawn by orbiting trail-renderer pens |
 | `arch_bush_system` | Bush cluster generation, baking, and instanced rendering |
 | `arch_screen_space_light` | Screen-space 2D GI: shared capture, per-fragment field-directional smear + cast shadow, magnitude-coupled bounce composite |
 | `arch_light_field` | Scene light field: reactive multi-light RT (point + area), 3-pass pipeline (fill/accumulate/gradient), palette colour, consumer include |

@@ -18,7 +18,7 @@ MonoBehaviour:
   - _id: 0
     _minPoints: 0
   _bigScoreSettings:
-    _baseRadius: 1.2
+    _baseRadius: 1
     _scaleOverTravel:
       serializedVersion: 2
       m_Curve:
@@ -32,7 +32,7 @@ MonoBehaviour:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.25
+        time: 0.16664308
         value: 1
         inSlope: 0
         outSlope: 0
@@ -41,8 +41,8 @@ MonoBehaviour:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.2
-        value: 0.8
+        time: 0.66657233
+        value: 0.5
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -50,7 +50,7 @@ MonoBehaviour:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.8
+        time: 1.19983
         value: 0
         inSlope: 0
         outSlope: 0
@@ -63,4 +63,4 @@ MonoBehaviour:
       m_RotationOrder: 4
     _penSpeed: 6
     _coverage: 1.15
-    _spinSpeedDegrees: 60
+    _spinSpeedDegrees: 270

@@ -34,7 +34,7 @@ MonoBehaviour:
     _nudgeOverrides: []
     _hitVfxOverrides: []
     _hitsToPop: 1
-    _scoreValue: 5
+    _scoreValue: 3
     _itemActivationWeight: 0
     _balanceBias: 3
     _maxBalanceSteps: -1
@@ -49,7 +49,7 @@ MonoBehaviour:
     _nudgeOverrides: []
     _hitVfxOverrides: []
     _hitsToPop: 1
-    _scoreValue: 10
+    _scoreValue: 5
     _itemActivationWeight: 0
     _balanceBias: 3
     _maxBalanceSteps: -1
@@ -75,7 +75,7 @@ MonoBehaviour:
       _prefab: {fileID: 2148469744637963286, guid: 96f46efd86e994a7f95e53ccf7be9cb6,
         type: 3}
     _hitsToPop: 3
-    _scoreValue: 15
+    _scoreValue: 7
     _itemActivationWeight: 0
     _balanceBias: 3
     _maxBalanceSteps: 1
@@ -116,7 +116,7 @@ MonoBehaviour:
       _falloff: 0
     _hitVfxOverrides: []
     _hitsToPop: -1
-    _scoreValue: 50
+    _scoreValue: 20
     _itemActivationWeight: 0
     _balanceBias: 2
     _maxBalanceSteps: 0
@@ -148,7 +148,7 @@ MonoBehaviour:
   _spawnEntryRowOffset: 4
   _timeForBalloonsBalance: 1.75
   _flightRebalanceInterval: 4
-  _popSpawnChance: 0.1
+  _popSpawnChance: 0.2
   _popSpawnFreeRows: 2
   _nudgeDistance: 0.15
   _nudgeDuration: 0.7
