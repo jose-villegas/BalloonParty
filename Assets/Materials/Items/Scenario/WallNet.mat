@@ -35,19 +35,38 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: 7b72793e0d38043d3aeba7c3a42b4ac0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NormalMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _EdgeFeather: 0.12
+    - _BillowAmplitude: 0.68
+    - _BreatheAmplitude: 0.02
+    - _BreatheFrequency: 0.5
+    - _BreatheNoiseAmount: 1
+    - _BreatheNoisePhaseWarp: 1
+    - _BreatheWaves: 20.33
+    - _DepthShade: 0.2
+    - _EdgeFeather: 0.4
     - _EnableExternalAlpha: 0
-    - _LineSoftness: 0.06
-    - _LineWidth: 0.08
+    - _FadeContrast: 1
+    - _FadeFloor: 0
+    - _FadeStrength: 1
+    - _LineSoftness: 0.5
+    - _LineWidth: 0.436
+    - _NoiseScale: 0.4
+    - _OpenGain: 2
+    - _RestOpen: 0.2
+    - _StripWidth: 0.45
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.32777813, g: 0.65837485, b: 0.83076996, a: 0.2509804}
+    - _NoiseScroll: {r: 0.05, g: 0.12, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
