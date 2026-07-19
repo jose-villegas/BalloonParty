@@ -428,7 +428,7 @@ namespace BalloonParty.Tests.Projectile
         {
             // A 0 delay means "discharge the moment the plow run ends" — the tick after the last arm.
             // The countdown parks at 0, so a fire gate keyed on "countdown > 0" swallows it and the
-            // pierce never ends (toughs plowed but never shattered). DischargePending must carry it.
+            // pierce never ends (toughs plowed but never shattered). DischargeScheduled must carry it.
             var resolver = CruiseResolver(perShield: 0.5f, pierceDischargeDelay: 0f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
             model.IsPiercing.Value = true;

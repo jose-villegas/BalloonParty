@@ -35,15 +35,15 @@ namespace BalloonParty.Projectile.Model
         // so HasBuff would already read false by then.
         public bool PierceWasRainbow { get; set; }
 
-        // While a discharge is pending, counts down each tick; the discharge fires when it reaches 0.
-        // The value alone can't say "pending" — a 0 delay is a legitimate fire-next-tick, so
-        // DischargePending is the authority (see below).
+        // While a discharge is scheduled, counts down each tick; the discharge fires when it reaches 0.
+        // The value alone can't say "scheduled" — a 0 delay is a legitimate fire-next-tick, so
+        // DischargeScheduled is the authority (see below).
         public float DischargeCountdown { get; set; }
 
         // Whether a discharge is scheduled: set when the debounce (re)arms, cleared when it fires. This
         // is what gates the countdown — NOT DischargeCountdown > 0, which would swallow a 0-delay config
         // (the countdown would park at 0 and never tick down past it).
-        public bool DischargePending { get; set; }
+        public bool DischargeScheduled { get; set; }
 
         // Wall bounces since the last balloon contact — the cruise detector's counter.
         public int ConsecutiveWallBounces { get; set; }

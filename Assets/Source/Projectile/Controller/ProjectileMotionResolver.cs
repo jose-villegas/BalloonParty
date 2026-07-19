@@ -206,12 +206,12 @@ namespace BalloonParty.Projectile.Controller
             if (flight.DischargeArmed)
             {
                 flight.DischargeCountdown = _pierceDischargeDelay;
-                flight.DischargePending = true;
+                flight.DischargeScheduled = true;
                 flight.DischargeArmed = false;
                 return;
             }
 
-            if (!flight.DischargePending)
+            if (!flight.DischargeScheduled)
             {
                 return;
             }
@@ -223,7 +223,7 @@ namespace BalloonParty.Projectile.Controller
             }
 
             flight.DischargeCountdown = 0f;
-            flight.DischargePending = false;
+            flight.DischargeScheduled = false;
             // Reset the bounce counter with the pierce end: TryEnterCruise gates on !IsPiercing, and the
             // counter is typically already past the cruise threshold here, so without this the shot would
             // re-enter cruise the instant the pierce clears instead of coasting to base.
