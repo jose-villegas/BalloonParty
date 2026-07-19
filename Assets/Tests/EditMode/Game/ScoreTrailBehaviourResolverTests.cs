@@ -157,8 +157,8 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void ShapeCatalog_NonDenominationLookup_Fails()
         {
-            // 7 is not a denomination (the optimal split reaches it as 5 + 2), so no shape is authored for it.
-            Assert.IsFalse(ShapeCatalog.TryGet(7, out _));
+            // 11 is not a denomination (the optimal split reaches it as 9 + 2), so no shape is authored for it.
+            Assert.IsFalse(ShapeCatalog.TryGet(11, out _));
         }
 
         [Test]
@@ -172,12 +172,22 @@ namespace BalloonParty.Tests.Game
 
             var edges = InspectCircuits(shape);
             Assert.AreEqual(18, edges.Multiplicity.Count, "a hexagonal prism has 18 edges");
-            CollectionAssert.AreEqual(
-                new[] { 1 }, DistinctValues(edges.Multiplicity), "every edge inked exactly once (single-inked)");
+
+            // Twelve odd-degree vertices forbid a pure single-inked cover: the six vertical shuttles are the
+            // minimal retraced edges (like the pyramids and cupolas), so multiplicities are 1s and 2s.
+            CollectionAssert.AreEqual(new[] { 1, 2 }, DistinctValues(edges.Multiplicity));
             Assert.AreEqual(12, edges.Touched.Count, "all twelve vertices covered");
 
-            var degrees = DegreeHistogram(edges.Multiplicity);
-            Assert.AreEqual(12, CountByDegree(degrees, 3), "every prism vertex has degree three");
+            var doubled = 0;
+            foreach (var multiplicity in edges.Multiplicity.Values)
+            {
+                if (multiplicity == 2)
+                {
+                    doubled++;
+                }
+            }
+
+            Assert.AreEqual(6, doubled, "one retraced edge per vertical shuttle");
         }
 
         [Test]
