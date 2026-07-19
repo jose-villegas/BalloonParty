@@ -305,39 +305,39 @@ namespace BalloonParty.Game.Score.Behaviours
             return Build(20, 1.15f, vertices, walks);
         }
 
-        // 30 = an armillary of stars: three big {10/3} decagrams in the three orthogonal planes
-        // (superseded the six-pentagram ball — wireframes have no occlusion, so six small stars from both
-        // hemispheres superimpose into a tangle; three full-diameter stars crossing at right angles keep
-        // sharp star silhouettes under tumble). Ten pens per star, no shared edges, and a half-speed
-        // SpinScale so the crossing points stay readable.
+        // 30 = a ball of OUTLINE stars: three five-pointed stars traced by their silhouette — tip, notch,
+        // tip, notch — never crossing their own interior (the pentagram-chord versions read as tangles:
+        // the pen slices through the star instead of drawing the shape you would cut from paper). Ten
+        // outline points per star (5 tips + 5 golden-ratio notches, ten pens apiece), the three stars
+        // capping the orthogonal axis directions, half-speed SpinScale for readability.
         private static FormationShape BuildStarBall()
         {
             const int starCount = 3;
-            const int pointsPerStar = 10;
-            const int skip = 3;
+            const int tipCount = 5;
+            const float tipCapRadians = 0.8f;
 
-            var vertices = new Vector3[starCount * pointsPerStar];
+            // Golden-ratio notch: inner/outer tangent radius ≈ 0.382, the classic five-point star cut.
+            var notchCapRadians = Mathf.Asin(0.382f * Mathf.Sin(tipCapRadians));
+
+            var axes = new[] { Vector3.right, Vector3.up, Vector3.forward };
+            var vertices = new Vector3[starCount * 2 * tipCount];
             var walks = new FormationWalk[starCount];
             for (var f = 0; f < starCount; f++)
             {
-                for (var i = 0; i < pointsPerStar; i++)
+                var normal = axes[f];
+                var reference = Vector3.Cross(
+                    normal, Mathf.Abs(normal.y) < 0.9f ? Vector3.up : Vector3.right).normalized;
+                var binormal = Vector3.Cross(normal, reference);
+                var loop = new int[2 * tipCount];
+                for (var i = 0; i < 2 * tipCount; i++)
                 {
-                    var angle = 2f * Mathf.PI * i / pointsPerStar;
-                    var a = Mathf.Cos(angle);
-                    var b = Mathf.Sin(angle);
-                    vertices[f * pointsPerStar + i] = f switch
-                    {
-                        0 => new Vector3(a, b, 0f),
-                        1 => new Vector3(0f, a, b),
-                        _ => new Vector3(b, 0f, a),
-                    };
-                }
-
-                // Skip-3 over the ring traces the {10/3} decagram in one closed loop (gcd(10,3) = 1).
-                var loop = new int[pointsPerStar];
-                for (var i = 0; i < pointsPerStar; i++)
-                {
-                    loop[i] = f * pointsPerStar + i * skip % pointsPerStar;
+                    // Even outline points are tips, odd ones the notches between them.
+                    var cap = i % 2 == 0 ? tipCapRadians : notchCapRadians;
+                    var angle = Mathf.PI * i / tipCount;
+                    var index = f * 2 * tipCount + i;
+                    vertices[index] = Mathf.Cos(cap) * normal
+                        + Mathf.Sin(cap) * (Mathf.Cos(angle) * reference + Mathf.Sin(angle) * binormal);
+                    loop[i] = index;
                 }
 
                 walks[f] = Chord(loop);

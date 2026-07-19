@@ -365,12 +365,13 @@ construction vocabulary. **12** — small stellated
 dodecahedron: the icosahedron's 12 vertices, one pentagram `{5/2}` circuit per vertex (its
 five neighbours), every edge double-inked (each chord in two circuits). **20** — regular
 dodecahedron: 12 pentagon face circuits sliced from coplanar vertex rings, each edge shared
-by two faces (double-inked). **30** — an armillary of stars: three big
-`{10/3}` decagrams in the orthogonal planes, ten pens apiece, no shared edges, spinning at
-half speed via the new per-shape SpinScale (two supersessions on 2026-07-19: the
-dodecadodecahedron's stars share every edge with its pentagons and vanish; six small
-pentagrams superimpose front-and-back — wireframes have no occlusion. Three full-diameter
-stars keep sharp silhouettes). **50** — a 10×5 torus grid (superseded the
+by two faces (double-inked). **30** — a ball of OUTLINE stars: three
+five-pointed stars traced by their silhouette (tip-notch-tip, golden-ratio notch depth,
+never crossing their own interior), ten pens apiece, half-speed SpinScale. Three
+supersessions on 2026-07-19 taught the tier's design rules: the dodecadodecahedron's stars
+share every edge with its pentagons and vanish; six small pentagram-chord stars superimpose
+front-and-back (wireframes have no occlusion); and chord-drawn stars read as tangles because
+the pen crosses the interior — a star must be drawn as the shape you would CUT, its outline. **50** — a 10×5 torus grid (superseded the
 rhombicosacron 2026-07-19: the crown tier needed a SILHOUETTE — the doughnut's hole reads
 instantly under tumble where the dense star-duals blurred together against the 30/100).
 Walks are the grid's own rings — 5 major decagons + 10 minor pentagons — every edge in
