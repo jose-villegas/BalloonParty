@@ -243,27 +243,11 @@ namespace BalloonParty.Configuration.Items
         [Tooltip("Rainbow holder only: how many times the iridescent lance lerps through the allowed colours over its flight.")]
         [SerializeField] [Min(0f)] private float _snipeColorCycles = 2f;
 
-        [Tooltip("Perpendicular half-width (reach) of the capsule light carried along the lance.")]
-        [SerializeField] [Min(0f)] private float _tracerLightHalfWidth = 0.4f;
-
-        [Tooltip("Peak magnitude of the lance's tracer light. Scaled down as the lance's speed decays.")]
-        [SerializeField] [Min(0f)] private float _tracerLightIntensity = 2f;
-
-        [Tooltip("Peak magnitude of the discharge flash light. Scaled up by charge on a rainbow holder.")]
-        [SerializeField] [Min(0f)] private float _dischargeLightIntensity = 3f;
-
-        [Tooltip("Lifetime of the discharge flash light when the effect reports no duration.")]
-        [SerializeField] [Min(0f)] private float _lightFallbackSeconds = 0.3f;
-
         public float SpeedBuffMultiplier => _snipeSpeedBuffMultiplier;
         public int ChargePerToughHit => _snipeChargePerToughHit;
         public float BloomBaseRadius => _bloomBaseRadius;
         public float BloomRadiusPerCharge => _bloomRadiusPerCharge;
         public float BloomRadiusCap => _bloomRadiusCap;
         public float ColorCycles => _snipeColorCycles;
-        public float TracerLightHalfWidth => _tracerLightHalfWidth;
-        public float TracerLightIntensity => _tracerLightIntensity;
-        public float DischargeLightIntensity => _dischargeLightIntensity;
-        public float LightFallbackSeconds => _lightFallbackSeconds;
     }
 }

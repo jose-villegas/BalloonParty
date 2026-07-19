@@ -19,6 +19,14 @@ namespace BalloonParty.Shared.Extensions
             return (model as IHasColor)?.Color.Value ?? "";
         }
 
+        /// <summary>Whether a piercing shot plows this actor rather than one-shotting it — a durable
+        /// balloon with more than one hit left, or an unbreakable.</summary>
+        internal static bool IsTough(this IBalloonModel model)
+        {
+            return (model is IHasDurability durable && durable.HitsRemaining.Value > 1)
+                   || model is UnbreakableBalloonModel;
+        }
+
         /// <summary>Counts same-color balloons in <paramref name="candidate" />'s diagonal band: its four adjacent diagonals plus the full rows two above/below (own row and the ±1-row outer cells excluded); 0 when colorless.</summary>
         internal static int CountSameColorDiagonals(this IBalloonModel self, SlotGrid grid, Vector2Int candidate)
         {

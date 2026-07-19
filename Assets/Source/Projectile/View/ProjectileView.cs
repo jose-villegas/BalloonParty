@@ -57,6 +57,18 @@ namespace BalloonParty.Projectile.View
         [SerializeField] [Min(0f)] private float _shieldFlashRadius = 0.9f;
         [SerializeField] [Min(0f)] private float _shieldFlashDuration = 0.12f;
 
+        [Header("Pierce Telegraph")]
+        [Tooltip("While piercing toward a tough, the shot's light stretches into an area line from the " +
+                 "shot to that tough — telegraphing the armor it's about to punch. Its half-width and intensity.")]
+        [SerializeField] [Min(0f)] private float _pierceTelegraphHalfWidth = 0.4f;
+        [SerializeField] [Min(0f)] private float _pierceTelegraphIntensity = 2f;
+
+        [Header("Pierce Spark")]
+        [Tooltip("A brief Sparks-colour light popped at each tough the piercing shot plows through.")]
+        [SerializeField] [Min(0f)] private float _pierceSparkIntensity = 2.5f;
+        [SerializeField] [Min(0f)] private float _pierceSparkRadius = 0.7f;
+        [SerializeField] [Min(0f)] private float _pierceSparkDuration = 0.12f;
+
         [Inject] private IGameConfiguration _config;
         [Inject] private IGamePalette _palette;
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
@@ -81,6 +93,9 @@ namespace BalloonParty.Projectile.View
         private Light _shieldFlashLight;
         private IDisposable _shieldFlashRegistration;
         private float _shieldFlashOffTime;
+        private Light _sparkFlashLight;
+        private IDisposable _sparkFlashRegistration;
+        private float _sparkFlashOffTime;
         private int _sparksColorIndex = -1;
         private IDisposable _deflectedSubscription;
         private IDisposable _cruiseSubscription;
@@ -138,7 +153,23 @@ namespace BalloonParty.Projectile.View
             if (_light != null)
             {
                 _light.Position.Value = transform.position;
-                _light.EndPosition.Value = transform.position;
+                if (_model.IsPiercing.Value && TryFindToughAhead(out var toughAhead))
+                {
+                    // Telegraph: stretch the shot's light into an area line reaching the tough it's about
+                    // to punch through, so the armored contact reads a beat before it happens.
+                    _light.EndPosition.Value = toughAhead;
+                    _light.Radius.Value = _pierceTelegraphHalfWidth;
+                    _light.EndRadius.Value = _pierceTelegraphHalfWidth;
+                    _light.Intensity.Value = _pierceTelegraphIntensity;
+                }
+                else
+                {
+                    // Back to a point light as it moves — else the segment would stretch from a stale end.
+                    _light.EndPosition.Value = transform.position;
+                    _light.Radius.Value = _lightRadius;
+                    _light.EndRadius.Value = _lightRadius;
+                    _light.Intensity.Value = _lightIntensity;
+                }
             }
 
             TickRainbowGlow();
@@ -147,6 +178,11 @@ namespace BalloonParty.Projectile.View
             if (_shieldFlashRegistration != null && Time.time >= _shieldFlashOffTime)
             {
                 EndShieldFlash();
+            }
+
+            if (_sparkFlashRegistration != null && Time.time >= _sparkFlashOffTime)
+            {
+                EndSparkFlash();
             }
         }
 
@@ -194,6 +230,11 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
+            // A plow records into PendingPierceHits without popping; if this contact did, spark it here at
+            // the strike — synchronous, so every tough in a tight run flashes (a per-Update poll would
+            // coalesce several substep plows into one).
+            var pendingBefore = _model.Flight.PendingPierceHits.Count;
+
             switch (_hitResolver.Resolve(_model, balloonModel, balloonView.transform.position))
             {
                 case ProjectileHitVisual.Recolored:
@@ -202,6 +243,12 @@ namespace BalloonParty.Projectile.View
                 case ProjectileHitVisual.Destroyed:
                     DestroyProjectile();
                     break;
+            }
+
+            var pending = _model.Flight.PendingPierceHits;
+            if (pending.Count > pendingBefore)
+            {
+                FlashPierceSpark(pending[pending.Count - 1].Position);
             }
         }
 
@@ -231,6 +278,7 @@ namespace BalloonParty.Projectile.View
             _rainbowGlowTimer = 0f;
             ResetPierceSpiral();
             EndShieldFlash();
+            EndSparkFlash();
             LifecycleHelper.DisposeAndClear(ref _deflectedSubscription);
             LifecycleHelper.DisposeAndClear(ref _cruiseSubscription);
             LifecycleHelper.DisposeAndClear(ref _doomedSubscription);
@@ -252,6 +300,7 @@ namespace BalloonParty.Projectile.View
             LifecycleHelper.DisposeAndClear(ref _lightRegistration);
             _light = null;
             EndShieldFlash();
+            EndSparkFlash();
             LifecycleHelper.DisposeAndClear(ref _deflectedSubscription);
             LifecycleHelper.DisposeAndClear(ref _cruiseSubscription);
             LifecycleHelper.DisposeAndClear(ref _doomedSubscription);
@@ -591,6 +640,76 @@ namespace BalloonParty.Projectile.View
         private void EndShieldFlash()
         {
             LifecycleHelper.DisposeAndClear(ref _shieldFlashRegistration);
+        }
+
+        // Pop a brief Sparks-colour flash at a tough the piercing shot just plowed. Called synchronously
+        // from OnTriggerEnter2D per plow, at the strike point.
+        private void FlashPierceSpark(Vector3 position)
+        {
+            if (_sparksColorIndex < 0)
+            {
+                _sparksColorIndex = _palette.PaletteIndexOf(GamePalette.SparksColorId);
+            }
+
+            _sparkFlashLight ??= new Light(position, _pierceSparkRadius, _pierceSparkIntensity, _sparksColorIndex);
+            _sparkFlashLight.Position.Value = position;
+            _sparkFlashLight.EndPosition.Value = position;
+            _sparkFlashLight.Radius.Value = _pierceSparkRadius;
+            _sparkFlashLight.EndRadius.Value = _pierceSparkRadius;
+            _sparkFlashLight.Intensity.Value = _pierceSparkIntensity;
+            _sparkFlashLight.PaletteIndex.Value = _sparksColorIndex;
+            _sparkFlashRegistration ??= _lightField.RegisterLight(_sparkFlashLight);
+            _sparkFlashOffTime = Time.time + _pierceSparkDuration;
+        }
+
+        private void EndSparkFlash()
+        {
+            LifecycleHelper.DisposeAndClear(ref _sparkFlashRegistration);
+        }
+
+        // The next tough (hits>1) on the current flight segment, if any — a bounded forward cast up to the
+        // wall the shot is heading for. Drives the telegraph. TryGetHitBalloon skips the just-plowed
+        // balloon (LastHitBalloon), so the telegraph reaches the NEXT tough, not the one behind the shot.
+        private bool TryFindToughAhead(out Vector3 position)
+        {
+            position = default;
+            var origin = transform.position;
+            if (!_motionResolver.Walls.TryFindCrossing(origin, _model.Direction, out var crossing, out _))
+            {
+                return false;
+            }
+
+            var direction = ((Vector2)_model.Direction).normalized;
+            var length = Vector2.Distance(origin, crossing);
+            var hit = Physics2D.CircleCast(origin, _contactRadius, direction, length, 1 << BalloonsLayer);
+            if (hit.collider == null || !TryGetHitBalloon(hit.collider, out _, out var balloonModel))
+            {
+                return false;
+            }
+
+            // Only telegraph a tough the shot hasn't already plowed this run — else a just-plowed tough
+            // (or an earlier one still on the board after a bounce) would re-light a stale line.
+            if (balloonModel.IsTough() && !AlreadyPlowed(balloonModel))
+            {
+                position = hit.collider.transform.position;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool AlreadyPlowed(IBalloonModel balloon)
+        {
+            var pending = _model.Flight.PendingPierceHits;
+            for (var i = 0; i < pending.Count; i++)
+            {
+                if (ReferenceEquals(pending[i].Balloon, balloon))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void OnDoomedChanged(bool doomed)

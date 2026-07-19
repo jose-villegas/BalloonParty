@@ -188,11 +188,6 @@ namespace BalloonParty.Configuration.Editor
                     y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_bloomRadiusPerCharge", "Bloom Radius Per Charge");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_bloomRadiusCap", "Bloom Radius Cap");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_snipeColorCycles", "Color Cycles");
-                    y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Lights");
-                    y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_tracerLightHalfWidth", "Tracer Light Half Width");
-                    y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_tracerLightIntensity", "Tracer Light Intensity");
-                    y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_dischargeLightIntensity", "Discharge Light Intensity");
-                    y = PropertyDrawerHelper.DrawNamedField(position, y, snipe, "_lightFallbackSeconds", "Light Fallback (s)");
                     break;
             }
 
@@ -227,8 +222,8 @@ namespace BalloonParty.Configuration.Editor
                     return row * 13;
 
                 case ItemType.Snipe:
-                    // 3 headers (Snipe/Rainbow/Lights) + 1 + 5 + 4 fields.
-                    return row * 13;
+                    // 2 headers (Snipe/Rainbow) + 1 + 5 fields.
+                    return row * 8;
 
                 default:
                     return 0f;

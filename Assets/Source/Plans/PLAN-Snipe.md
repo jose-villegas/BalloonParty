@@ -110,19 +110,17 @@ balloons behind it. Zero toughs cracked → a tiny bloom. The payoff is proporti
 
 ## 6. Feel — lights & disturbance
 
-**Not yet shipped.** The plan is to reuse the item light/disturbance seams (`SceneLightFieldService`,
-`DisturbanceFieldService.Stamp`; see `Item/README.md` "Lights Cast by Items"):
+Lights use the scene-light field (`SceneLightFieldService`); the light params are serialized on
+`ProjectileView` (the pierce lights are a shared-pierce VIEW visual, not Snipe-item config).
 
-| Beat | Light | Disturbance |
+| Beat | Light | Status |
 |---|---|---|
-| In flight | Moving **capsule light** along the lance (laser-beam-light style); bright and tight | — |
-| Each tough plow | Small **light spark** at the strike point | Short **inward** stamp — punching the armor thumps its neighbors |
-| Discharge | **Point-light flash** scaled by charge; rainbow cycles the palette via `ColorCycle` | Outward **shockwave** stamped at the discharge point |
+| Piercing toward a tough | The shot's `_light` stretches into an **area line** from the shot to the next tough on the current segment (a bounded forward `CircleCast`); telegraphs the armored contact | **SHIPPED** (`ProjectileView`, `_pierceTelegraph*`) |
+| Each tough plow | A brief **Sparks**-colour flash popped at the plowed tough (poll of `PendingPierceHits` growth) | **SHIPPED** (`ProjectileView`, `_pierceSpark*`) |
+| Discharge | Outward **shockwave** (`DisturbanceFieldService.Stamp`) + optional **slow-mo** time-scale dip, both off `PierceDischargedMessage` | **Not yet shipped** |
 
-`SnipeSettings` already carries `TracerLightHalfWidth`/`TracerLightIntensity` (flight) and
-`DischargeLightIntensity`/`LightFallbackSeconds` (discharge) for this, but nothing reads them yet. The
-discharge slow-mo time-scale dip originally planned for weight was dropped in favor of the debounce
-approach (§3) and isn't part of this beat.
+The debounce (§3) is only the discharge *timing*; the slow-mo dip is separate juice and remains a
+Phase-5 goal.
 
 ## 7. Config — `SnipeSettings`
 
@@ -138,7 +136,11 @@ approach (§3) and isn't part of this beat.
 | `BloomRadiusPerCharge` | Bloom radius growth per charge | 0.5 |
 | `BloomRadiusCap` | Hard cap so the bloom never eats the whole board | 4 |
 | `ColorCycles` | Rainbow iridescence cycles over flight | 2 |
-| `TracerLightHalfWidth` / `TracerLightIntensity` / `DischargeLightIntensity` / `LightFallbackSeconds` | Declared for §6, not yet wired | — |
+
+The pierce lights (telegraph + spark, §6) are **not** here — their params are serialized on
+`ProjectileView`, since they're a shared-pierce view visual (a cruise pierce lights up too), not
+Snipe-item config. The speculative `TracerLight*`/`DischargeLight*`/`LightFallbackSeconds` fields that
+Phase 1 parked on `SnipeSettings` for this were **removed** once the lights landed on the view.
 
 `SpeedBuffMultiplier` supersedes the old reliance on `IBuffConfiguration.GetValue(Speed)` for Snipe.
 **Removed by the redesign:** `ToughHitSpeedFalloff` and `LineClearHalfWidth` (no per-tough decay, no

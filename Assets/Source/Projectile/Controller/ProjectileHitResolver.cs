@@ -2,6 +2,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Score;
 using BalloonParty.Projectile.Model;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
@@ -56,10 +57,7 @@ namespace BalloonParty.Projectile.Controller
             // A piercing shot plows through a TOUGH actor (one that would take more than one hit)
             // WITHOUT popping it: the tough is recorded and shattered together with the rest at the
             // discharge, not on contact. Normal balloons still pop as the shot passes through.
-            var plowsTough = isPiercing
-                && ((balloon is IHasDurability durable && durable.HitsRemaining.Value > 1)
-                    || balloon is UnbreakableBalloonModel);
-            if (plowsTough)
+            if (isPiercing && balloon.IsTough())
             {
                 projectile.Flight.PendingPierceHits.Add(new PendingPierceHit(balloon, balloonWorldPosition));
                 // Re-arm the discharge countdown: it fires this-many-seconds after the LAST tough, so a
