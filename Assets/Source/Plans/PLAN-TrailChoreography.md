@@ -365,11 +365,20 @@ construction vocabulary. **12** — small stellated
 dodecahedron: the icosahedron's 12 vertices, one pentagram `{5/2}` circuit per vertex (its
 five neighbours), every edge double-inked (each chord in two circuits). **20** — regular
 dodecahedron: 12 pentagon face circuits sliced from coplanar vertex rings, each edge shared
-by two faces (double-inked). **30** — a ball of OUTLINE stars: five
-3-pointed stars traced by their silhouette (tip-notch-tip, deep notches, never crossing
-their own interior) on a trigonal bipyramid — two polar + three equatorial — so the whole
-sphere is covered (three 5-point caps geometrically cannot wrap it); six pens apiece,
-half-speed SpinScale. Three
+by two faces (double-inked). **30** — a GARLAND of outline stars: three big 5-pointed
+stars traced by their silhouette (tip-notch-tip, golden-ratio notch, never crossing their
+own interior) on equatorial caps 120° apart, threaded into ONE closed 39-step walk by
+straight tip-to-tip SEAMS — every pen draws a star, exits along the seam into the next
+star, and keeps flowing around the band; all 30 pens share the one walk, half-speed
+SpinScale. Each star's outline closes at its entry tip, then re-walks two segments back to
+the exit tip so no seam cuts across an interior (those six edges are double-inked, the
+12/20 precedent; 33 distinct edges total). Two migration mechanisms died getting here: a
+five-3-point-star bipyramid covered the sphere spatially but lost the star read (coverage
+must never cost silhouette), and a time-rotating hop frame (dwell + 180° antipodal sweep,
+normalized to the travel duration after an absolute-seconds first cut silently never fired
+inside the ~1.2 s life) smeared into SPIRALS — pens keep orbiting while the frame turns, so
+frame rotation composes into helices; migration must live in the walk's geometry (a seam
+the pens traverse), not in a time-varying transform. Earlier
 supersessions on 2026-07-19 taught the tier's design rules: the dodecadodecahedron's stars
 share every edge with its pentagons and vanish; six small pentagram-chord stars superimpose
 front-and-back (wireframes have no occlusion); and chord-drawn stars read as tangles because

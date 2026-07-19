@@ -69,6 +69,9 @@ namespace BalloonParty.Game.Score
 
         public void Start()
         {
+            // The shape catalog builds its static tables on first touch; warming it with the other
+            // scope-start prewarms keeps the build off the session's first big-score frame.
+            ShapeCatalog.Warm();
             _scoreSubscription = _scoredSubscriber.Subscribe(OnScorePointsGroup);
         }
 

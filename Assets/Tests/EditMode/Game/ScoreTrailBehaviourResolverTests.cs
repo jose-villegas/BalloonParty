@@ -192,23 +192,34 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void ShapeCatalog_StarBall_FiveOutlineStarsCoverTheSphere()
+        public void ShapeCatalog_StarBall_GarlandOfThreeSeamThreadedOutlineStars()
         {
             Assert.IsTrue(ShapeCatalog.TryGet(30, out var shape));
 
             Assert.AreEqual(30, shape.Vertices.Length);
             Assert.AreEqual(30, new HashSet<Vector3>(shape.Vertices).Count, "thirty distinct vertices");
-            Assert.AreEqual(5, shape.Walks.Length, "five separate outline-star loops");
-            CollectionAssert.AreEqual(new[] { 6, 6, 6, 6, 6 }, shape.PensPerWalk, "six pens per star");
+            Assert.AreEqual(1, shape.Walks.Length, "one closed walk threads all three stars via seams");
+            CollectionAssert.AreEqual(new[] { 30 }, shape.PensPerWalk, "every pen flows the whole garland");
+            Assert.AreEqual(39, shape.Walks[0].Vertices.Length,
+                "three 10-point outlines + two re-walked steps and a seam entry each");
 
             var edges = InspectCircuits(shape);
-            Assert.AreEqual(30, edges.Multiplicity.Count, "five outlines of six segments each");
+            Assert.AreEqual(33, edges.Multiplicity.Count, "thirty outline edges plus three seams");
             CollectionAssert.AreEqual(
-                new[] { 1 }, DistinctValues(edges.Multiplicity), "no shared edges — every chord inked once");
+                new[] { 1, 2 }, DistinctValues(edges.Multiplicity),
+                "single-inked outlines and seams; only the entry-to-exit re-walk is doubled");
             Assert.AreEqual(30, edges.Touched.Count, "all vertices covered");
 
-            var degrees = DegreeHistogram(edges.Multiplicity);
-            Assert.AreEqual(30, CountByDegree(degrees, 2), "each vertex belongs to exactly one star loop");
+            var doubled = 0;
+            foreach (var multiplicity in edges.Multiplicity.Values)
+            {
+                if (multiplicity == 2)
+                {
+                    doubled++;
+                }
+            }
+
+            Assert.AreEqual(6, doubled, "exactly two re-walked segments per star");
         }
 
         [Test]

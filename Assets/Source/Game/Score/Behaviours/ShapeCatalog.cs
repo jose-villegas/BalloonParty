@@ -126,7 +126,7 @@ namespace BalloonParty.Game.Score.Behaviours
     ///     count equals it — full 1:1 decomposition draws every point as one orbiting pen. Small shapes partition
     ///     their edge set into closed walks (a Hamiltonian-ish cycle plus back-and-forth shuttles for the leftover
     ///     edges); 10 is an octagonal bipyramid; 12 the hexagonal prism, 20 the dodecahedron, 30 an
-    ///     armillary of three orthogonal decagram stars, 50 a 10×5 torus grid, and 100 a spherical-spiral
+    ///     garland of three seam-threaded outline stars, 50 a 10×5 torus grid, and 100 a spherical-spiral
     ///     yarn ball (one closed coil) — the top tier follows silhouette-over-density. The tables
     ///     are built once in the static constructor and returned by reference from <see cref="TryGet"/>, so a
     ///     lookup never allocates.
@@ -148,6 +148,13 @@ namespace BalloonParty.Game.Score.Behaviours
         internal static bool TryGet(int denomination, out FormationShape shape)
         {
             return Shapes.TryGetValue(denomination, out shape);
+        }
+
+        // Forces the one-time static table build at a moment of the caller's choosing (scope start, with the
+        // other prewarms) instead of on the first big score of a session, mid-gameplay.
+        internal static void Warm()
+        {
+            _ = Shapes.Count;
         }
 
         private static Dictionary<int, FormationShape> BuildShapes()
@@ -305,54 +312,60 @@ namespace BalloonParty.Game.Score.Behaviours
             return Build(20, 1.15f, vertices, walks);
         }
 
-        // 30 = a ball of OUTLINE stars: five stars traced by their silhouette — tip, notch, tip, notch —
-        // never crossing their own interior (chord-drawn stars read as tangles: the pen slices through the
-        // star instead of drawing the shape you would cut from paper). Five 3-pointed stars of six outline
-        // points each, placed on a trigonal bipyramid (two polar + three equatorial) so the WHOLE sphere is
-        // covered — three 5-pointed caps geometrically cannot wrap it (the far octant stays bare). Deep
-        // notches keep the sparkle-star read; six pens per contour; half-speed SpinScale for readability.
+        // 30 = a GARLAND of outline stars: three big 5-pointed stars traced by their silhouette — tip,
+        // notch, tip, notch — never crossing their own interior (chord-drawn stars read as tangles: the
+        // pen slices through the star instead of drawing the shape you would cut from paper). Their caps
+        // sit 120° apart around the equator, threaded into ONE closed walk by straight tip-to-tip SEAMS:
+        // every pen draws a star, exits along the seam into the next star, and keeps flowing around the
+        // band — the seam IS the migration between stars (a time-rotating "hop" frame was tried first and
+        // smeared into spirals: pens kept orbiting while the frame turned). After closing an outline the
+        // pen re-walks two segments from the entry tip back to the exit tip, so no seam ever cuts across
+        // a star's interior; those two edges per star are double-inked (the 12/20 precedent). Half-speed
+        // SpinScale for readability.
         private static FormationShape BuildStarBall()
         {
-            const int starCount = 5;
-            const int tipCount = 3;
-            const float tipCapRadians = 0.72f;
+            const int starCount = 3;
+            const int tipCount = 5;
+            const int outlineCount = 2 * tipCount;
+            const float tipCapRadians = 0.8f;
 
-            // Deeper than the five-point golden notch — three-pointed stars need it to read as stars.
-            var notchCapRadians = Mathf.Asin(0.3f * Mathf.Sin(tipCapRadians));
+            // Golden-ratio notch: inner/outer tangent radius ≈ 0.382, the classic five-point star cut.
+            var notchCapRadians = Mathf.Asin(0.382f * Mathf.Sin(tipCapRadians));
 
-            // Trigonal bipyramid: both poles + three equatorial directions at 120°.
-            var axes = new[]
-            {
-                Vector3.forward,
-                Vector3.back,
-                Vector3.right,
-                new Vector3(-0.5f, 0.8660254f, 0f),
-                new Vector3(-0.5f, -0.8660254f, 0f),
-            };
-            var vertices = new Vector3[starCount * 2 * tipCount];
-            var walks = new FormationWalk[starCount];
+            var vertices = new Vector3[starCount * outlineCount];
+            var walk = new int[starCount * (outlineCount + 3)];
+            var cursor = 0;
             for (var f = 0; f < starCount; f++)
             {
-                var normal = axes[f];
-                var reference = Vector3.Cross(
-                    normal, Mathf.Abs(normal.y) < 0.9f ? Vector3.up : Vector3.right).normalized;
-                var binormal = Vector3.Cross(normal, reference);
-                var loop = new int[2 * tipCount];
-                for (var i = 0; i < 2 * tipCount; i++)
+                var equator = 2f * Mathf.PI * f / starCount;
+                var normal = new Vector3(Mathf.Cos(equator), Mathf.Sin(equator), 0f);
+                var toNext = new Vector3(-Mathf.Sin(equator), Mathf.Cos(equator), 0f);
+                var star = f * outlineCount;
+                for (var i = 0; i < outlineCount; i++)
                 {
-                    // Even outline points are tips, odd ones the notches between them.
+                    // Even outline points are tips, odd ones the notches between them. Angles run from the
+                    // garland direction: the i=0 tip (54°) leans toward the NEXT star (the seam exit), the
+                    // i=2 tip (126°) toward the PREVIOUS one (the seam entry), both on the north side, so
+                    // the seams bridge the gaps between caps without grazing either outline.
                     var cap = i % 2 == 0 ? tipCapRadians : notchCapRadians;
-                    var angle = Mathf.PI * i / tipCount;
-                    var index = f * 2 * tipCount + i;
-                    vertices[index] = Mathf.Cos(cap) * normal
-                        + Mathf.Sin(cap) * (Mathf.Cos(angle) * reference + Mathf.Sin(angle) * binormal);
-                    loop[i] = index;
+                    var angle = (54f + 36f * i) * Mathf.Deg2Rad;
+                    vertices[star + i] = Mathf.Cos(cap) * normal
+                        + Mathf.Sin(cap) * (Mathf.Cos(angle) * toNext + Mathf.Sin(angle) * Vector3.forward);
                 }
 
-                walks[f] = Chord(loop);
+                // Full outline from the entry tip, then two re-walked segments back to the exit tip; the
+                // wrap to the next star's entry is the seam.
+                for (var i = 0; i < outlineCount; i++)
+                {
+                    walk[cursor++] = star + (2 + i) % outlineCount;
+                }
+
+                walk[cursor++] = star + 2;
+                walk[cursor++] = star + 1;
+                walk[cursor++] = star;
             }
 
-            return Build(30, 1.3f, vertices, walks, spinScale: 0.5f);
+            return Build(30, 1.3f, vertices, new[] { Chord(walk) }, spinScale: 0.5f);
         }
 
         // 50 = a 10x5 torus grid — the crown tier needed a SILHOUETTE, not more line density: nothing
