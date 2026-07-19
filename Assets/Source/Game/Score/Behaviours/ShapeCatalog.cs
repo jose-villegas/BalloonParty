@@ -119,7 +119,7 @@ namespace BalloonParty.Game.Score.Behaviours
     ///     Hand-authored 3D shape data for BigScore formations. Each denomination maps to a shape whose vertex
     ///     count equals it — full 1:1 decomposition draws every point as one orbiting pen. Small shapes partition
     ///     their edge set into closed walks (a Hamiltonian-ish cycle plus back-and-forth shuttles for the leftover
-    ///     edges); 10 is an octagonal bipyramid; 12 the small stellated dodecahedron, 20 the dodecahedron, 30 the
+    ///     edges); 10 is an octagonal bipyramid; 12 the hexagonal prism, 20 the dodecahedron, 30 the
     ///     dodecadodecahedron (a golden-ratio star-and-solid family), 50 a 10×5 torus grid (a SILHOUETTE for the
     ///     crown tier), and 100 the grand antiprism (a 4-polytope, projected to 3D at build time). The tables
     ///     are built once in the static constructor and returned by reference from <see cref="TryGet"/>, so a
@@ -165,7 +165,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 { 6, BuildTriangularPrism() },
                 { 8, BuildCube() },
                 { 10, BuildOctagonalBipyramid() },
-                { 12, BuildSmallStellatedDodecahedron() },
+                { 12, BuildHexagonalPrism() },
                 { 20, BuildDodecahedron() },
                 { 30, BuildDodecadodecahedron() },
                 { 50, BuildTorus() },
@@ -245,13 +245,28 @@ namespace BalloonParty.Game.Score.Behaviours
             return Build(8, 0.9f, vertices, walks);
         }
 
-        // 12 = small stellated dodecahedron: the icosahedron's 12 vertices framed by 12 pentagram circuits — one
-        // per vertex, tracing that vertex's five neighbours in {5/2} (skip-2) order, one pen apiece. Every chord of
-        // the frame belongs to two adjacent circuits, so the star is deliberately DOUBLE-INKED (a brighter frame).
-        private static FormationShape BuildSmallStellatedDodecahedron()
+        // 12 = hexagonal prism (superseded the small stellated dodecahedron: its twelve overlapping
+        // pentagrams read as a tangle mid-tumble — the prism family scales legibly instead: 6 is the
+        // triangular prism, 12 this). Two hexagon loops plus six vertical shuttles along the wide axis.
+        private static FormationShape BuildHexagonalPrism()
         {
-            var vertices = IcosahedronVertices();
-            var walks = PentagramCircuits(vertices);
+            var vertices = new Vector3[12];
+            for (var i = 0; i < 6; i++)
+            {
+                vertices[i] = PolarAt(60f * i, -0.55f);
+                vertices[6 + i] = PolarAt(60f * i, 0.55f);
+            }
+
+            var bottom = new[] { 0, 1, 2, 3, 4, 5 };
+            var top = new[] { 6, 7, 8, 9, 10, 11 };
+            var walks = new FormationWalk[8];
+            walks[0] = Chord(bottom);
+            walks[1] = Chord(top);
+            for (var i = 0; i < 6; i++)
+            {
+                walks[2 + i] = Chord(i, 6 + i);
+            }
+
             return Build(12, 1.1f, vertices, walks);
         }
 
@@ -391,68 +406,6 @@ namespace BalloonParty.Game.Score.Behaviours
         {
             var rad = degrees * Mathf.Deg2Rad;
             return new Vector3(Mathf.Cos(rad), Mathf.Sin(rad), z);
-        }
-
-        // The 12 icosahedron vertices as the cyclic permutations of (0, ±1, ±φ), normalized to the unit sphere.
-        private static Vector3[] IcosahedronVertices()
-        {
-            var vertices = new[]
-            {
-                new Vector3(0f, 1f, Phi), new Vector3(0f, 1f, -Phi),
-                new Vector3(0f, -1f, Phi), new Vector3(0f, -1f, -Phi),
-                new Vector3(1f, Phi, 0f), new Vector3(1f, -Phi, 0f),
-                new Vector3(-1f, Phi, 0f), new Vector3(-1f, -Phi, 0f),
-                new Vector3(Phi, 0f, 1f), new Vector3(Phi, 0f, -1f),
-                new Vector3(-Phi, 0f, 1f), new Vector3(-Phi, 0f, -1f),
-            };
-
-            for (var i = 0; i < vertices.Length; i++)
-            {
-                vertices[i].Normalize();
-            }
-
-            return vertices;
-        }
-
-        // One pentagram circuit per vertex: the vertex's five neighbours traced {5/2}. The circuits share every
-        // chord pairwise, so together they double-ink all 30 edges of the small stellated dodecahedron's frame.
-        private static FormationWalk[] PentagramCircuits(Vector3[] vertices)
-        {
-            var walks = new FormationWalk[vertices.Length];
-            for (var v = 0; v < vertices.Length; v++)
-            {
-                var ring = OrderNeighbourRing(v, vertices);
-                // Skip-2 over the cyclically ordered ring turns the neighbour pentagon into a pentagram.
-                walks[v] = Chord(ring[0], ring[2], ring[4], ring[1], ring[3]);
-            }
-
-            return walks;
-        }
-
-        // The five nearest vertices to the centre, ordered cyclically by angle in the centre's tangent plane.
-        private static int[] OrderNeighbourRing(int center, Vector3[] vertices)
-        {
-            var centerPosition = vertices[center];
-            var neighbours = new List<int>(vertices.Length - 1);
-            for (var i = 0; i < vertices.Length; i++)
-            {
-                if (i != center)
-                {
-                    neighbours.Add(i);
-                }
-            }
-
-            neighbours.Sort((a, b) => (vertices[a] - centerPosition).sqrMagnitude
-                .CompareTo((vertices[b] - centerPosition).sqrMagnitude));
-            neighbours.RemoveRange(5, neighbours.Count - 5);
-
-            var normal = centerPosition.normalized;
-            var reference = Vector3.ProjectOnPlane(vertices[neighbours[0]] - centerPosition, normal).normalized;
-            var binormal = Vector3.Cross(normal, reference);
-            neighbours.Sort((a, b) => RingAngle(vertices[a] - centerPosition, reference, binormal)
-                .CompareTo(RingAngle(vertices[b] - centerPosition, reference, binormal)));
-
-            return neighbours.ToArray();
         }
 
         private static float RingAngle(Vector3 spoke, Vector3 reference, Vector3 binormal)

@@ -159,34 +159,22 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void ShapeCatalog_StellatedDodecahedron_TwelveUniformPentagramCircuits()
+        public void ShapeCatalog_HexagonalPrism_TwoHexagonsAndSixShuttles()
         {
             Assert.IsTrue(ShapeCatalog.TryGet(12, out var shape));
-            Assert.AreEqual(12, shape.Walks.Length, "one pentagram circuit per icosahedron vertex");
 
-            var touched = new HashSet<int>();
-            foreach (var walk in shape.Walks)
-            {
-                var ring = walk.Vertices;
-                Assert.AreEqual(5, ring.Length, "each circuit is a five-vertex pentagram");
-                Assert.AreEqual(5, new HashSet<int>(ring).Count, "a circuit visits five distinct vertices");
-                touched.UnionWith(ring);
+            Assert.AreEqual(12, shape.Vertices.Length);
+            Assert.AreEqual(12, new HashSet<Vector3>(shape.Vertices).Count, "twelve distinct vertices");
+            Assert.AreEqual(8, shape.Walks.Length, "two hexagon loops + six vertical shuttles");
 
-                // A regular pentagram: every skip-2 chord (consecutive ring entries) is the same length.
-                var reference = (shape.Vertices[ring[1]] - shape.Vertices[ring[0]]).magnitude;
-                for (var s = 0; s < ring.Length; s++)
-                {
-                    var chord = (shape.Vertices[ring[(s + 1) % ring.Length]] - shape.Vertices[ring[s]]).magnitude;
-                    Assert.AreEqual(reference, chord, 1e-3f, "pentagram chords must be uniform");
-                }
-            }
+            var edges = InspectCircuits(shape);
+            Assert.AreEqual(18, edges.Multiplicity.Count, "a hexagonal prism has 18 edges");
+            CollectionAssert.AreEqual(
+                new[] { 1 }, DistinctValues(edges.Multiplicity), "every edge inked exactly once (single-inked)");
+            Assert.AreEqual(12, edges.Touched.Count, "all twelve vertices covered");
 
-            Assert.AreEqual(12, touched.Count, "the twelve circuits together cover all twelve vertices");
-
-            foreach (var pens in shape.PensPerWalk)
-            {
-                Assert.AreEqual(1, pens, "one pen per circuit (twelve 1s summing to the denomination)");
-            }
+            var degrees = DegreeHistogram(edges.Multiplicity);
+            Assert.AreEqual(12, CountByDegree(degrees, 3), "every prism vertex has degree three");
         }
 
         [Test]
