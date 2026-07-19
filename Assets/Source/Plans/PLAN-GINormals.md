@@ -3,7 +3,7 @@
 # GI Normals — hemisphere receivers for the 2D GI
 
 > **Status: PARKED (2026-07-17).** Fully prototyped and working — normals field, smear bounce
-> direction, overlay N·L, plus SpriteDiffuse sphere shading — but the bounce-term payoff was too
+> direction, overlay \f$N \cdot L\f$, plus SpriteDiffuse sphere shading — but the bounce-term payoff was too
 > subtle for the code weight, so it was removed from main. The complete implementation lives on
 > branch `backup/gi-normals-spherize` (commit `da1b143a`), ready to revive if a stronger consumer
 > appears (most likely: normals driving DIRECT light, §2.4). What main kept from this effort:
@@ -30,7 +30,7 @@ magnitude per fragment. Two blind spots:
 
 Balloons are spheres seen face-on: their normals are an analytic hemisphere over a disc —
 no authored normal maps needed. Supplying (a) a normals field for participants and (b) a net
-bounce direction from the smear turns the overlay's bounce term into `N·L` irradiance.
+bounce direction from the smear turns the overlay's bounce term into \f$N \cdot L\f$ irradiance.
 
 This is the per-pixel generalisation of the circle-receiver idea (net ray flux through a
 disc): the same "balloons are spheres" model, taken from per-sprite response to per-fragment
@@ -45,10 +45,10 @@ The disturbance-field pattern a third time: a small service stamps an analytic h
 per participating balloon into a low-res RT.
 
 - **Encoding**: RG = normal.xy mapped 0..1 (`0.5` = flat); A = participation mask.
-  `normal.z = sqrt(saturate(1 - dot(xy, xy)))` reconstructs in the consumer — no B channel
+  \f$normal.z = \sqrt{saturate(1 - dot(xy, xy))}\f$ reconstructs in the consumer — no B channel
   needed (B stays free for a future height/material tag).
 - **Stamp**: per balloon, a quad covering its disc; inside the disc
-  `N.xy = (p - center) / radius`, alpha 1; outside, discard. Painter's order by the balloon's
+  \f$N.xy = (p - center) / radius\f$, alpha 1; outside, discard. Painter's order by the balloon's
   sorting order approximates occlusion (balloons barely overlap; accepted trade-off vs a
   capture camera — revisit only if overlap artefacts show).
 - **Service**: `SceneNormalFieldService` — registry mirrors `SceneLightFieldService`
@@ -62,14 +62,14 @@ per participating balloon into a low-res RT.
 ### 2.2 Bounce direction from the smear
 
 `ScreenSpaceLightSmear` already loops its 8 tap directions — accumulate
-`Σ tapDir × tapLuminance` alongside the colour into a second small target (or packed spare
+\f$\sum tapDir \times tapLuminance\f$ alongside the colour into a second small target (or packed spare
 channels if format allows). The result inherits the mip spread AND the temporal history
 blend, so the direction is pre-smoothed — no flip/shimmer class of bugs (the same reason the
 light-field direction work avoids hard normalisation).
 
 **As shipped:** a dedicated half-resolution direction target (`_BounceDirTex`, separate ping-pong pair from the colour target) with its own temporal history (Pass 3 of `ScreenSpaceLightSmear`), rather than packed channels.
 
-### 2.3 Overlay N·L
+### 2.3 Overlay \f$N \cdot L\f$
 
 In `ScreenSpaceLightOverlay`:
 
@@ -83,14 +83,14 @@ bounce     = lerp(bounceIso, bounceIso * (ndl + _BounceAmbientZ * N.z), nrm.a);
 
 - `_BounceZBias` tunes how "overhead" the bounce reads (0 = pure in-plane, higher = flatter
   response); `_BounceAmbientZ` keeps a face-on floor so participants never go black.
-- `nrm.a = 0` → today's isotropic bounce, bit-for-bit. The whole feature sits behind one
+- \f$nrm.a = 0\f$ → today's isotropic bounce, bit-for-bit. The whole feature sits behind one
   overlay toggle for A/B during tuning.
 
 ### 2.4 Direct-light mismatch (accepted, with a path)
 
 Participants gain oriented bounce while their direct sprite lighting stays flat — acceptable
 (bounce is soft), and the escape hatch is already designed: the same analytic hemisphere doing
-`N·L` against the scene-light field in the balloon shader later unifies direct light, GI, and
+\f$N \cdot L\f$ against the scene-light field in the balloon shader later unifies direct light, GI, and
 the sprite receiver-radius work under one model.
 
 ## 3. Tasks
@@ -101,7 +101,7 @@ the sprite receiver-radius work under one model.
    (mirror the light-field service's testable seams). Push the RT as a global texture and
    add a `GameRenderMapsWindow` descriptor ("GI Normals Field": R/G = 0.5-biased normal XY,
    A = participation mask) so it's inspectable like every other field.
-2. **Smear direction + overlay N·L** — direction accumulation target, overlay sampling,
+2. **Smear direction + overlay \f$N \cdot L\f$** — direction accumulation target, overlay sampling,
    the three tunables, the feature toggle. Shader-heavy; `dotnet build` cannot compile
    shaders — in-editor validation required. If the direction lands in its own target (not
    packed channels), give it a `GameRenderMapsWindow` descriptor too ("GI Bounce Direction").

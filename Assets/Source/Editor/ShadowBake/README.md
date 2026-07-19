@@ -21,7 +21,7 @@ sprite — and since it's offline, the blur can be as soft as it wants.
    - renders the union silhouette of the child sprites (via `CommandBuffer.DrawRenderer`
      — no camera or scene involved, so it works from a scene instance, the prefab stage,
      or the asset inspector; sliced/tiled draw modes render their real meshes),
-   - blurs it offline (iterated separable box blur ≈ Gaussian; padding is derived so the
+   - blurs it offline (iterated separable box blur \f$\approx\f$ Gaussian; padding is derived so the
      penumbra never clips),
    - writes the sprite to `Assets/Sprites/Baked/Shadows/<prefab folder>/<prefab>_Shadow.png`
      (folder mirrors the prefab path so names can't collide), pivot at the baker's origin,

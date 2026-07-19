@@ -153,11 +153,13 @@ its last, still-correct contents.
    the ambient comes from `SceneLightService`'s flat globals, not from the field.
 2. **Accumulate** — batches up to 32 lights per blit (mirrors `DisturbanceStampBatched`). Each
    light is a capsule: falloff uses aspect-corrected distance to the segment `[start, end]`.
-   R is soft-clamped (`MaxBoost·(1−exp(−sum/MaxBoost))`); A writes the dominant light's palette
-   index (`(index+1)/16`). GB passes through.
+   R is soft-clamped
+   (\f$ \mathit{MaxBoost}\cdot\big(1-e^{-\mathit{sum}/\mathit{MaxBoost}}\big) \f$); A writes
+   the dominant light's palette index (\f$ (\mathit{index}+1)/16 \f$). GB passes through.
 3. **Gradient** — derives direction from `grad(R)` via central difference. Blends from rest GB
-   toward the gradient direction by `saturate(localR · DirectionResponse)` — presence-weighted,
-   so flat regions keep the global direction and bright regions capture the local one.
+   toward the gradient direction by \f$ \mathrm{saturate}(\mathit{localR}\cdot \mathit{DirectionResponse}) \f$
+   — presence-weighted, so flat regions keep the global direction and bright regions capture
+   the local one.
 
 **Consumers** read the field through `SceneLight.cginc` (`SceneLightDirectionAt`, `…MagnitudeAt`,
 `…TintAt`, `ShadowLightFadeAt`). When `_SceneLightFieldOn < 0.5` (field off, edit mode, or no
@@ -180,8 +182,9 @@ makes the field a strictly additive seam.
 
 4. **Palette colour via intensity-driven soft edge.** The A channel carries a quantised palette
    index, but `SceneLightTintAt` decodes it into a smooth colour glow by blending key→palette by
-   `saturate((R − rest) / RAMP)` — the smooth bilinear R magnitude drives the colour edge, not the
-   hard index texels. Overlapping lights meet in the dark (between them R is low → colour fades out).
+   \f$ \mathrm{saturate}((R - \mathit{rest}) / \mathit{RAMP}) \f$ — the smooth bilinear R magnitude
+   drives the colour edge, not the hard index texels. Overlapping lights meet in the dark
+   (between them R is low → colour fades out).
 
 5. **Device-build safety.** All three `Hidden/` shaders are serialized on the settings SO
    (`ISceneLightFieldSettings`). `Shader.Find` is an editor-only fallback — an unassigned slot
@@ -203,8 +206,8 @@ makes the field a strictly additive seam.
 | Channel | Meaning | Rest value |
 |---|---|---|
 | **R** | Local light boost above ambient | `0` |
-| **G/B** | 0.5-biased `weight·localDir` (direction toward nearest local light) | `0.5` (neutral) |
-| **A** | Palette colour index `(index+1)/16`; 0 = use `_SceneLightColor` | `0` exactly |
+| **G/B** | 0.5-biased \f$ \mathit{weight}\cdot \mathit{localDir} \f$ (direction toward nearest local light) | `0.5` (neutral) |
+| **A** | Palette colour index \f$ (\mathit{index}+1)/16 \f$; 0 = use `_SceneLightColor` | `0` exactly |
 
 ## Current game sources
 

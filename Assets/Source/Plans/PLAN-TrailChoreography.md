@@ -87,7 +87,7 @@ internal readonly struct ScorePointsGroupMessage
 
 - Published by `ScoreController.PublishPoints` — one per resolved attribution entry
   (multi-color pops publish one per color, as today's groups already do).
-- `LastScore = baseProgress + granted` — the same numbering the watermark consumes.
+- \f$LastScore = baseProgress + granted\f$ — the same numbering the watermark consumes.
 - `TrailId` for the group = `(ColorName, LastScore)`; uniqueness holds because per-color
   numbering is strictly increasing within a level.
 - `GroupSize`/`GroupIndex` (today's scatter-fan inputs) move INTO the handler's domain —
@@ -161,7 +161,7 @@ Entries (evaluated highest-first):
   { Id: DefaultScore, MinPoints: 0 }
 ```
 
-Resolver: highest `MinPoints <= group.Points` wins. **Decided (José, 2026-07-18):
+Resolver: highest \f$MinPoints \le group.Points\f$ wins. **Decided (José, 2026-07-18):
 discrimination is by group total ("big because cluster"), not by multiplier** — the
 `Multiplier` field stays in the message purely as future data. Injected as a read-only
 interface per repo convention.
@@ -176,7 +176,7 @@ divides, so no remainder exists and handlers never need an internal default path
 If mixed representation is ever wanted (e.g. 47 points as a "+40" carrier plus 7 ordinary
 trails), the split belongs in the RESOLVER, not inside a handler: it partitions the group
 into sub-groups over contiguous score ranges and routes each to its own handler
-(`base+1..base+7 → DefaultScore`, `base+8..base+47 → BigScore`). The reporter invariant
+(\f$base+1 \dots base+7\f$ → `DefaultScore`, \f$base+8 \dots base+47\f$ → `BigScore`). The reporter invariant
 (true cumulative scores, reports sum to the total) is already partition-shaped, the watermark
 doesn't care who reports what, and the principal rule stays unambiguous: the sub-group
 containing `LastScore` owns the principal — so the big chunk always takes the top of the
@@ -190,7 +190,7 @@ this is the designed extension point.
 ### `DefaultScore` — byte-for-byte parity with today
 
 Spawns `Points` trails exactly as `ScoreTrailService` does now: scatter-fan origins
-(`2π·i/Points` at 1.5× slot separation), 0.02 s stagger, `SpawnBurst` bloom + trace, each
+(\f$2\pi \cdot i / Points\f$ at 1.5× slot separation), 0.02 s stagger, `SpawnBurst` bloom + trace, each
 trail reporting `(baseScore + i + 1, points: 1)` on landing. The FIRST trail is the
 principal (id score = `FirstScore`) — it spawns immediately, so its registration is
 timeout-safe under scatter stagger.
@@ -254,16 +254,16 @@ applied to. We move/rotate/scale that frame; the vertex trails only read the res
 world positions and move between them. The anchor's transform is what the registry and
 cinematic track/pause/complete; nothing visible rides it.
 
-World vertex: `C(t) + R(Ω(t)) · (r(t) · dir(φᵢ + repRotation))` — the path rotation Ω
-folds into the angle (`R(Ω)·dir(φ) = dir(φ + Ω)`).
+World vertex: \f$C(t) + R(\Omega(t)) \cdot \big(r(t) \cdot \mathrm{dir}(\varphi_i + repRotation)\big)\f$ — the path rotation Ω
+folds into the angle (\f$R(\Omega)\cdot\mathrm{dir}(\varphi) = \mathrm{dir}(\varphi + \Omega)\f$).
 
 Three phases per repetition, all closed-form:
 1. **Deploy** — n trails fly from the pop origin to the vertices of a regular n-gon:
-   `vᵢ = C + r·dir(φᵢ)`, `φᵢ = θ₀ + repRotation + Ω + 2πi/n`.
-2. **Draw** — each trail traverses ONE chord simultaneously: `vᵢ → v₍ᵢ₊ₖ₎`. For
-   gcd(n,k)=1 the n concurrent chords complete the whole star in a single sweep — no
+   \f$v_i = C + r\cdot\mathrm{dir}(\varphi_i)\f$, \f$\varphi_i = \theta_0 + repRotation + \Omega + 2\pi i/n\f$.
+2. **Draw** — each trail traverses ONE chord simultaneously: \f$v_i \to v_{i+k}\f$. For
+   \f$\gcd(n,k)=1\f$ the n concurrent chords complete the whole star in a single sweep — no
    sequential pen-tracing.
-3. **Collapse** — a pure radial `r(t) → 0` *inside the rotating frame*; every trail pulls
+3. **Collapse** — a pure radial \f$r(t) \to 0\f$ *inside the rotating frame*; every trail pulls
    inward, ribbons drawing the collapse, meeting at C.
 
 **Ω (path rotation)** is 0 until the FIRST Draw completes, then advances at the tier's
@@ -271,14 +271,14 @@ Three phases per repetition, all closed-form:
 formation, INCLUDING the final flight. It is the one rotation concept: the collapse has
 no separate spin — it is the radial pull inside the frame Ω rotates.
 
-**Nesting**: after a collapse, redeploy to `r·s` with `θ₀ += nestRotation` and repeat,
-`m` times. Defaults follow the pentagram's own geometry: `s = 1/φ² ≈ 0.382`,
-`nestRotation = π/n` — successive stars land exactly where the natural nesting puts
+**Nesting**: after a collapse, redeploy to \f$r \cdot s\f$ with \f$\theta_0 \mathrel{+}= nestRotation\f$ and repeat,
+`m` times. Defaults follow the pentagram's own geometry: \f$s = 1/\varphi^2 \approx 0.382\f$,
+\f$nestRotation = \pi/n\f$ — successive stars land exactly where the natural nesting puts
 them. Per-repetition phase durations scale with radius (smaller stars draw faster — an
 accelerating crescendo into the final collapse).
 
 **Final flight (no flash, no carrier)**: after the last collapse the collapsed cluster
-(all n vertices at `r≈0`, pen ON — they read as one bright comet) flies *with the center*
+(all n vertices at \f$r \approx 0\f$, pen ON — they read as one bright comet) flies *with the center*
 to the bar over `CarrierFlightDuration`, Ω still advancing (the point cluster spinning is
 invisible). The endpoint is sampled **fresh** at flight start (`Target.RandomPosition()`,
 z zeroed onto the formation plane); the launch-time drift sample is used ONLY as the drift
@@ -288,13 +288,13 @@ report `(LastScore, Points)` at the fresh target, release the vertices + anchor,
 
 **Rigid in formation space**: ribbons record WORLD positions, so each tick — if the center
 moved or Ω changed — every live vertex ribbon is re-framed by the same delta transform,
-`p' = C_new + R(ΔΩ)·(p − C_old)` (`FlyingTrail.TransformRibbon`; pure translation is the
-`ΔΩ == 0` fast path). This carries the drawn ink through the same translate+rotate the live
+\f$p' = C_{new} + R(\Delta\Omega)\cdot(p - C_{old})\f$ (`FlyingTrail.TransformRibbon`; pure translation is the
+\f$\Delta\Omega = 0\f$ fast path). This carries the drawn ink through the same translate+rotate the live
 frame moved through, keeping the whole figure rigid while it glides and spins.
 
 Implementation decisions:
 - **Ticker, not tweens**: motion is analytic, so a formation ticker (`ILateTickable`,
-  the `BalloonMotionTicker` pattern) evaluates `vᵢ(t)` directly — zero waypoint
+  the `BalloonMotionTicker` pattern) evaluates \f$v_i(t)\f$ directly — zero waypoint
   allocation, exact spirals; `DOPath` would approximate what we can compute.
 - **Ribbon persistence is the aesthetic**: `TrailRenderer.time` must cover the whole
   repetition sequence so outer stars remain visible while inner ones draw (the nested
@@ -306,10 +306,10 @@ Implementation decisions:
 - **Anchor placement**: centered on the pop origin, `r` scaled by tier and clamped inside
   `WallLimits` so a corner pop doesn't draw off-screen.
 
-Per-tier config row: `n`, `k`, `repeats m`, `nestScale s` (default 1/φ²),
-`nestRotation` (default π/n), `baseRadius`, per-phase durations, `ribbonTime`,
+Per-tier config row: `n`, `k`, `repeats m`, `nestScale s` (default \f$1/\varphi^2\f$),
+`nestRotation` (default \f$\pi/n\f$), `baseRadius`, per-phase durations, `ribbonTime`,
 `rotationSpeed ω` (path spin once formed — nonzero for every tier), `driftToTarget`. The
-triangle is just `{3/1}, m = 1` — one implementation covers every tier.
+triangle is just `{3/1}`, \f$m = 1\f$ — one implementation covers every tier.
 
 > **Transport-bridge contract (reworked 2026-07-18).** The formation's pause/snap/slow-mo interface is the
 > **anchor's** `TrailFlight` handle, polled by `ShapeFormationTicker` every tick — this is *the* seam between
@@ -388,26 +388,26 @@ instantly under tumble where the dense star-duals blurred together against the 3
 Walks are the grid's own rings — 5 major decagons + 10 minor pentagons — every edge in
 exactly one ring (single-inked), every vertex degree 4. Decomposition changed from greedy to optimal coin change (fewest
 pieces, remainder-free preferred, deterministic largest-on-optimal-path reconstruction):
-`13=10+3`, `7=5+2`. **100** — a spherical-spiral yarn ball
+\f$13=10+3\f$, \f$7=5+2\f$. **100** — a spherical-spiral yarn ball
 (superseded the grand antiprism same-day: 500 projected 4D edges read as noise mid-tumble;
 the crown wants a silhouette). One closed 100-vertex coil — polar triangle-wave pole-to-pole
 and back, azimuth advancing five turns, all 100 pens chasing one line. Ladder head:
-`250=100+100+50`. `ShapeFormationTicker.MaxVertexCount` is 100. The legibility principle
+\f$250=100+100+50\f$. `ShapeFormationTicker.MaxVertexCount` is 100. The legibility principle
 that reshaped the top tier: **12 hexagonal prism, 50 torus, 100 yarn ball** — silhouette
 over density; the grand antiprism/rhombicosacron/stellated-12 live in git history.
 
 **Denomination = vertex count, full 1:1 decomposition.** A shape's score value IS its vertex
 count; every point is one orbiting pen trail. A group's total decomposes **greedily largest-first**
 over the catalog ladder `{30, 20, 10, 8, 6, 5, 4, 3, 2}` (`ShapeCatalog.Denominations`), remainders
-recurse, and a terminal remainder of 1 becomes one classic default-style trail. `13 = 10-sphere +
-triangle`; `250 = 8×30-sphere + 10-sphere`; `7 = triangular-prism + 1`. Because 2 and 3 are both
+recurse, and a terminal remainder of 1 becomes one classic default-style trail. \f$13 = \text{10-sphere} +
+\text{triangle}\f$; \f$250 = 8\times\text{30-sphere} + \text{10-sphere}\f$; \f$7 = \text{triangular-prism} + 1\f$. Because 2 and 3 are both
 denominations the remainder after the pass is always 0 or 1. There is **no visual cap** — trail
 count scales with score by design (ticker-driven, zero tweens, one arrival per formation, so the old
 per-arrival costs stay dead). Threshold `MinPoints` drops to **7** in the asset (2–6-point pops keep
 classic trails).
 
 > **12 is dropped from the ladder.** The design lists spheres at 10/12/20/30, but greedy over a
-> 12-inclusive ladder splits `13` as `12+1`, contradicting the required `13 = 10+3` (and `7 = 6+1`
+> 12-inclusive ladder splits `13` as \f$12+1\f$, contradicting the required \f$13 = 10+3\f$ (and \f$7 = 6+1\f$
 > pins pure greedy, so no single rule reconciles both once 12 is present). Spheres are 10/20/30 —
 > three increasing accuracies. Re-add 12 to the ladder + catalog only if `13 = 12+1` becomes
 > acceptable. `Decompose` is an internal static pure function on `BigScoreTrailBehaviour` (tested).
@@ -426,24 +426,24 @@ and a `RadiusScale`:
 **Drawing = perpetual orbiting loops.** Pens are distributed across a shape's walks proportionally
 to walk length (`PensPerWalk`, largest-remainder, summing to the denomination), spaced evenly along
 each walk by **arc length**, and orbit continuously: the first lap draws the wireframe, later laps
-re-ink it; `k` pens sharing a period-`P` walk cover it in `P/k`. Pen travel speed is authored in
+re-ink it; `k` pens sharing a period-`P` walk cover it in \f$P/k\f$. Pen travel speed is authored in
 **world units/second** (`PenSpeed`, the primary style knob) so ink density reads the same across
 shape sizes; a **coverage** style dial (Range 0.2–2) sets each pen's ribbon time
-`= (worldPerimeter / pensOnWalk / penSpeed) × coverage` at scale 1 — `≥1` solid wireframe, `<1`
-chasing comet heads, `≪1` orbiting pearls.
+\f$= \big(worldPerimeter / pensOnWalk / penSpeed\big) \times coverage\f$ at scale 1 — \f$\ge 1\f$ solid wireframe, \f$<1\f$
+chasing comet heads, \f$\ll 1\f$ orbiting pearls.
 
 **One curve-driven Travel phase** (the repo's "curve's last key is the duration" idiom, per
 `TrackedTrailSettings`/PLAN-CinematicsArchitecture). A single `ScaleOverTravel` `AnimationCurve` on
 the settings gives normalized shape scale over seconds and its last key time is the formation
-duration `D`. The world position of a pen is `C(t) + Q(t)·(radius · scale(t) · localₚ(t))`:
-- `C(t) = Lerp(origin, liveTarget, SmoothStep(t/D))` — the shape blooms at its sub-centre and
+duration `D`. The world position of a pen is \f$C(t) + Q(t)\cdot\big(radius \cdot scale(t) \cdot local_{p}(t)\big)\f$:
+- \f$C(t) = \mathrm{Lerp}(origin, liveTarget, \mathrm{SmoothStep}(t/D))\f$ — the shape blooms at its sub-centre and
   travels to the bar. **Live target tracking** replaces all sampling policy: the random landing
-  offset is sampled once at launch, then `liveTarget = Target.Center + offset` re-read every tick,
+  offset is sampled once at launch, then \f$liveTarget = Target.Center + offset\f$ re-read every tick,
   so a drifting UI bar can never leave the landing stale (the `SetupFollow` principle).
 - `scale(t)` — the curve: `0 → bloom → hold → 0`, so the shape grows from a point and tapers back to
-  one at the bar. **Pens are pen-down from t = 0** (no deploy phase, no deploy spokes — the shape
+  one at the bar. **Pens are pen-down from \f$t = 0\f$** (no deploy phase, no deploy spokes — the shape
   blooms from a point).
-- `Q(t)` — a fixed random tilt spun from t = 0 (invisible while the shape is a point). The tumble
+- `Q(t)` — a fixed random tilt spun from \f$t = 0\f$ (invisible while the shape is a point). The tumble
   **axis derives from the projectile hit direction** — `Cross(Vector3.back, hitDirection).normalized`
   — so the whole constellation rolls head-over-heels along the shot like momentum from the impact
   (all formations of a pop share the axis; a near-zero direction, e.g. item/laser/board pops, falls

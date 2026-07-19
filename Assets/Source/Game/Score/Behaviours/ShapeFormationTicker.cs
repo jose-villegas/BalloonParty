@@ -97,7 +97,7 @@ namespace BalloonParty.Game.Score.Behaviours
     ///
     ///     One life, one Travel phase (plus a SnapFade for cinematic interrupts): with the shape's scale driven by
     ///     the settings' curve (its last key time is the duration), the world position of a pen is
-    ///     <c>C(t) + Q(t) · (radius · scale(t) · localₚ(t))</c> where
+    ///     \f$ C(t) + Q(t)\cdot\big(\mathit{radius}\cdot \mathit{scale}(t)\cdot \mathit{local}_p(t)\big) \f$ where
     ///     <list type="bullet">
     ///       <item><c>C(t) = Lerp(origin, liveTarget, SmoothStep(t/D))</c> — the shape blooms at its sub-centre and
     ///             travels to the bar; <c>liveTarget</c> re-reads the endpoint centre every tick (plus a

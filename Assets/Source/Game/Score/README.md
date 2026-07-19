@@ -41,7 +41,7 @@ No level component is needed: the level-up is gated by the transition, so a trai
 
 ## Progress lives in `Game/Level/`
 
-`ScoreController` does not track level progress. It computes granted points (attribution × streak,
+`ScoreController` does not track level progress. It computes granted points (\f$\text{attribution} \times \text{streak}\f$,
 capped) and calls `ILevelProgress.ClaimProgress`; `LevelController` owns the projected-vs-confirmed
 progress, the threshold cap, the post-level-up straggler suppression (via `LevelUpPhase`, not a
 latch), `WillLevelUp`/`GetProgress`/`GetRequiredPoints`, and the `ScoreLevelUpMessage` trigger. See
@@ -95,9 +95,9 @@ Every formation reports **once** — `(itsRangeLast, itsValue)` — so the repor
 `ShapeFormationTicker` (`ILateTickable`, pooled zero-alloc state + groups + anchors, `BalloonMotionTicker`-style
 swap-remove) drives every formation closed-form each `LateTick`. A formation lives **one Travel phase**: with the
 shape scale driven by the settings' `ScaleOverTravel` curve (its last key time is the duration `D`), a pen's world
-position is `C(t) + Q(t) · (radius · scale(t) · localₚ(t))`:
+position is \f$C(t) + Q(t) \cdot \big(\text{radius} \cdot \text{scale}(t) \cdot \text{local}_p(t)\big)\f$:
 
-- `C(t) = Lerp(origin, liveTarget, SmoothStep(t/D))` — blooms at the sub-centre, travels to the bar. `liveTarget`
+- \f$C(t) = \mathrm{Lerp}\big(\text{origin}, \text{liveTarget}, \mathrm{SmoothStep}(t/D)\big)\f$ — blooms at the sub-centre, travels to the bar. `liveTarget`
   re-reads the endpoint centre every tick (plus a launch-sampled offset), so a drifting UI bar can never leave the
   landing stale (the `SetupFollow` moving-target principle).
 - `scale(t)` — the curve: `0 → bloom → hold → 0`, so the shape grows from a point and tapers back to one at the
@@ -105,14 +105,14 @@ position is `C(t) + Q(t) · (radius · scale(t) · localₚ(t))`:
 - `Q(t)` — a fixed random tilt spun from t = 0, about the **projectile hit direction**
   (`Cross(Vector3.back, HitDirection)`), so the whole constellation rolls head-over-heels like momentum from the
   shot (all formations share the axis; a directionless pop falls back to a per-shape random axis).
-- `localₚ(t)` — the pen's position on its closed walk, orbiting continuously at `PenSpeed` **world units/second**
+- \f$\text{local}_p(t)\f$ — the pen's position on its closed walk, orbiting continuously at `PenSpeed` **world units/second**
   (parameterized by arc length): the first lap draws the wireframe, later laps re-ink it; `k` pens tile a
-  period-`P` walk in `P/k`. `Coverage` (a style dial, Range 0.2–2) sets each pen's ribbon time — `≥1` solid
-  wireframe, `<1` chasing comet heads, `≪1` orbiting pearls.
+  period-`P` walk in \f$P/k\f$. `Coverage` (a style dial, Range 0.2–2) sets each pen's ribbon time — \f$\ge 1\f$ solid
+  wireframe, \f$<1\f$ chasing comet heads, \f$\ll 1\f$ orbiting pearls.
 
 The whole figure is **rigid in formation space**: each tick every live pen ribbon is re-framed through
-`FlyingTrail.TransformRibbon(oldCenter, newCenter, delta, scaleRatio)` (`p' = newCenter + delta·(p − oldCenter)·
-scaleRatio`; pure translation at scale 1 is the identity-delta fast path). The ribbon **is** scale-corrected — old
+`FlyingTrail.TransformRibbon(oldCenter, newCenter, delta, scaleRatio)` (\f$p' = \text{newCenter} + \text{delta} \cdot (p - \text{oldCenter}) \cdot \text{scaleRatio}\f$;
+pure translation at scale 1 is the identity-delta fast path). The ribbon **is** scale-corrected — old
 ink shrinks with the shape as it tapers toward the bar, which matters most on the long-ribbon shapes (few pens
 sharing a long walk) where unscaled old ink would outlive the taper and hold the big silhouette.
 

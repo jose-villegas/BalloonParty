@@ -203,8 +203,8 @@ worldScale = _renderer.bounds.size.x        // world width of the rendered quad
 return transform.position + (Vector3)(rotated * worldScale)
 ```
 
-**Approximation accuracy:** breathe offset `±0.007 wu` and micro-float `±0.018 wu` are
-both below bubble radius `≈ 0.15 wu`. Canonical layout + current rotation is sufficient
+**Approximation accuracy:** breathe offset \f$\pm 0.007\f$ wu and micro-float \f$\pm 0.018\f$ wu are
+both below bubble radius \f$\approx 0.15\f$ wu. Canonical layout + current rotation is sufficient
 for VFX placement.
 
 ### `OnHit` — spin impulse

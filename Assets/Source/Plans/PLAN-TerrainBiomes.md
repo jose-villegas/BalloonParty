@@ -14,7 +14,7 @@
 
 - **Top-down ground plane**: the game is airborne; the terrain is the distant ground
   seen from high above. It scrolls with the scenario travel (ascend/descent) with a
-  parallax factor < 1 — depth for free, and **biome transitions happen across levels**:
+  parallax factor \f$< 1\f$ — depth for free, and **biome transitions happen across levels**:
   the noise field is continuous along the ascent axis, so climbing reveals new biome
   bands naturally.
 - **Seeded & reproducible**: one integer seed + level index → identical terrain.
@@ -184,7 +184,7 @@ design stays cheap.
 
 | Option | How | Tradeoffs |
 |---|---|---|
-| **(a) Dual scrolling noise** | two detail-noise layers scrolled at different speeds/scales, combined into a pseudo-normal; glint = dot(pseudo-normal, light dir) | Two taps; the standard cheap water; light dir MUST be the GI/PuffCloud `_lightDirection` convention so the world shares one sun |
+| **(a) Dual scrolling noise** | two detail-noise layers scrolled at different speeds/scales, combined into a pseudo-normal; \f$\text{glint} = \text{pseudo-normal} \cdot \text{light dir}\f$ | Two taps; the standard cheap water; light dir MUST be the GI/PuffCloud `_lightDirection` convention so the world shares one sun |
 | **(b) Baked Voronoi sparkle** | scrolled pre-baked Voronoi ridge texture as caustic glints | One tap, very stylized; can layer on (a) |
 | **(c) Ripples from density gradient** | band-pass the disturbance density deficit → expanding rings as the field diffuses; 2 extra taps for the gradient | Free propagation (the field already diffuses outward); rings are soft and painterly — likely enough |
 | **(d) True wave sim** | a second small ping-pong RT running the wave equation, stamped by the same disturbance events | **The infrastructure already exists** — `DisturbanceFieldResources`' ping-pong blit is structurally a wave-solver scaffold; a wave kernel + dedicated stamp hook gives real interference/reflection ripples. Cost: one more low-res RT + blit per tick. Gorgeous, but build only if (c) reads flat |
@@ -267,7 +267,7 @@ texture bombing (GPU Gems ch. 20).
   bandwidth under a fully-transparent stack) — verify 2D Renderer opaque-pass ordering
   in the Frame Debugger before relying on it (URP migration rule: verify, don't
   assume).
-- Reaction budget: ≤ 4 extra taps in the common path (disturbance + gradient pair +
+- Reaction budget: \f$\le 4\f$ extra taps in the common path (disturbance + gradient pair +
   detail); wave-sim/footprint RTs are opt-in extras with their own device measurement.
 
 ## Task plan
@@ -334,7 +334,7 @@ A/B + bush wind sync) and **SP-3** (gradient rings vs wave-sim prototype — the
 sim reuses the disturbance ping-pong pattern; build the prototype minimal and be
 ready to delete it). This is the showpiece and the most tuning-heavy task — every
 constant a material property so José live-tunes in play mode. Device measurement
-closes it: ≤ 4 extra taps in the common path; wave-sim/footprint RTs only survive
+closes it: \f$\le 4\f$ extra taps in the common path; wave-sim/footprint RTs only survive
 with their own pacing numbers.
 
 #### B3 — GI integration · **P1 · S · sonnet**

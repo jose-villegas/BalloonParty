@@ -112,9 +112,9 @@ changes. Plain C# / a thin MonoBehaviour writer, no per-material wiring.
   (lines 150-151). Globals coexist with MPB and `DrawMeshInstanced` (BushLeaf already reads
   `_DisturbanceTex`; Unbreakable reads `_SceneCaptureTex`). No C# writes any of the affected
   uniforms; `_SceneLight*` names are unused. Each affected shader has exactly one material.
-- **Specular derivations are pre-computed** (see tasks): `hotspot = _SceneLightDir * k` with
+- **Specular derivations are pre-computed** (see tasks): \f$hotspot = \_SceneLightDir \cdot k\f$ with
   measured k per material (PaintBlob 0.2305, Unbreakable 0.495/0.283, Soap 0.1414, BushLeaf 0.113);
-  Unbreakable's streak angle = `atan2(L) − 90°`, which makes its across-axis equal L so the
+  Unbreakable's streak angle = \f$\operatorname{atan2}(L) - 90^\circ\f$, which makes its across-axis equal L so the
   authored negative bend keeps meaning "bow away from the light" at any angle.
 - **Excluded as decoration (not light):** SpriteShine / SpriteShineShadow / Unbreakable's shine
   band (hardcoded `(u+v)/2` time-scrolled sweeps, no direction uniform) and RainbowBalloon's
@@ -182,9 +182,9 @@ disturbance-field architecture applied to light ("what we are stamping is light"
 **Channel layout** (single RT, disturbance-style, ARGBHalf):
 - **R — local boost**: the local light magnitude above the ambient, 0 at rest (the ambient is the
   global `_SceneLightIntensity`, added by the consumers — the field stores only local lights).
-- **G/B — local direction weight**: 0.5-biased `weight·localDir` (neutral/zero at rest); consumers
+- **G/B — local direction weight**: 0.5-biased \f$weight \cdot localDir\f$ (neutral/zero at rest); consumers
   blend the global `_SceneLightDir` toward `localDir` by the weight. The field stores no ambient.
-- **A — palette colour index**: `(index+1)/16`, 0 = "use `_SceneLightColor`" (light colours are
+- **A — palette colour index**: \f$(index+1)/16\f$, 0 = "use `_SceneLightColor`" (light colours are
   deliberately palette-limited; the key light keeps free RGB via the rest state).
 
 **Consumers sample once** at their anchor (pixel or object centre) and get direction + magnitude +
@@ -192,7 +192,7 @@ colour regardless of light count — N lights collapse into the composite. Rest 
 bit-identical to the directional system, the same migration safety the colour slice used.
 
 **Compositing:** stamps accumulate magnitude (capped) + dominant colour index; direction is NOT
-composited — it derives from the magnitude gradient in a post pass (`dir = normalize(∇R)`, the
+composited — it derives from the magnitude gradient in a post pass (\f$dir = \mathrm{normalize}(\nabla R)\f$, the
 heightfield-normal trick PuffCloud already uses via ddx/ddy). This makes AREA lights trivial:
 authors paint brightness only (greyscale cookie stamps, line/capsule lights for the laser, rect
 washes) and every shape gets plausible directions automatically.
@@ -263,15 +263,15 @@ shared header and sample `…At(worldPos)`.
 
 **Phase C status (2026-07-14 — CODE-COMPLETE, in-editor verification pending).** Shipped: the reactive
 `Light` model (`Position`/`Radius`/`Intensity`/`PaletteIndex` + per-light `FalloffPower`
-`ReactiveProperty`s, `const` defaults; the magnitude is a smooth `(1-dist/radius)^FalloffPower` cone,
+`ReactiveProperty`s, `const` defaults; the magnitude is a smooth \f$(1 - dist/radius)^{FalloffPower}\f$ cone,
 no plateau — a plateau's zero-gradient centre made the derived direction read as a ring);
 `SceneLightFieldResources` upgraded to two ping-pong
 RTs + `BlitAndSwap` with fill/accumulate/gradient materials; two new Hidden shaders
 `SceneLightAccumulate` (batched, 32/blit, mirrors `DisturbanceStampBatched`; each light is a CAPSULE —
 falloff on aspect-corrected distance to the segment `[start,end]`, so point lights are discs and
-segments are area beams (the laser cross); adds to R soft-clamped `_MaxBoost*(1-exp(-sum/_MaxBoost))`, writes the dominant palette
-index to A, passes GB through) and `SceneLightGradient` (`grad(R)` central difference over
-`_FieldTexelSize`, blends rest GB → gradient dir by `saturate(localR * _DirectionResponse)` —
+segments are area beams (the laser cross); adds to R soft-clamped \f$\_MaxBoost \cdot \big(1 - \exp(-sum/\_MaxBoost)\big)\f$, writes the dominant palette
+index to A, passes GB through) and `SceneLightGradient` (\f$\mathrm{grad}(R)\f$ central difference over
+`_FieldTexelSize`, blends rest GB → gradient dir by \f$\mathrm{saturate}(localR \cdot \_DirectionResponse)\f$ —
 presence-weighted, so flat/rest fields keep the global direction); `SceneLightFieldService` upgraded
 with the reactive on/off registry + dirty-gated fill→accumulate→gradient→publish render
 (`RegisterLight(Light) → IDisposable` / `ClearLights` API); and `LightStampCheat` (registered beside
@@ -290,7 +290,7 @@ Diffuse — per-material toggles preserved). Anchor per shader: per-fragment whe
 per-object VTF (`target 3.5`) where it keys off one hotspot (the PaintBlob pattern). The GI march is now
 **per-fragment**: `ScreenSpaceLightSmear` derives its march direction from `SceneLightDirectionAt(worldPos)`
 (worldPos from the field-bounds globals) and `ScreenSpaceLightOverlay` scales bounce by the **absolute**
-local magnitude and shadow by the **relative** magnitude (`local/_MagnitudeRef`) — resolving the old
+local magnitude and shadow by the **relative** magnitude (\f$local/\_MagnitudeRef\f$) — resolving the old
 shadow-coupling open question; `ScreenSpaceLightService` stopped pushing `_TapStepUV`, now pushes
 `_TapStepScale`+`_TapAspect` (the shader builds the step from a unit direction) and raw `_BounceStrength`
 + `_MagnitudeRef`. **Field-OFF bit-identical verified in code** (uniform flat direction reproduces the old
@@ -303,11 +303,11 @@ field-bounds mapping assumes the field is camera-view-aligned.
 now tints its region its palette colour, not just brighter white. `SceneLightFieldService` pushes the
 game palette once as a global `_SceneLightPalette[16]` (`IGamePalette`, same slot order the lights encode)
 plus `_SceneLightTexelSize`; `SceneLight.cginc`'s `SceneLightTintAt`/`AtLOD` decode A → index
-(`round(A*16)-1`, -1 = untagged) and return `_SceneLightPalette[index].rgb * magnitude`, else the global
+(\f$\mathrm{round}(A \cdot 16) - 1\f$, -1 = untagged) and return `_SceneLightPalette[index].rgb * magnitude`, else the global
 key-light path (so field-off / untagged is bit-identical). Smoothness comes from two things: (1) the
 field runs at `TexelsPerUnit = 32` (far finer than the disturbance field's 8 — affordable because the
 light field is dirty-gated, not ticked every frame), and (2) the colour edge is driven by the SMOOTH
-magnitude — `SceneLightTintAt` blends key→palette by `saturate((R − rest) / SCENE_LIGHT_COLOR_RAMP)`, so a
+magnitude — `SceneLightTintAt` blends key→palette by \f$\mathrm{saturate}\big((R - rest) / \mathit{SCENE\_LIGHT\_COLOR\_RAMP}\big)\f$, so a
 light's colour fades in with its (bilinear) brightness rather than snapping at the quantised index texels.
 The colour identity is a plain 2×2 decode-then-blend (`SceneLightPaletteColorAt`). The render-maps preview
 stays raw/point-sampled by design (a field-data inspector). All migrated consumers inherit this through
@@ -331,7 +331,7 @@ A series of enhancements to the screen-space GI pipeline, driven by the newly av
 ### 4a — Mip-Chain Cone March
 
 Enabled `useMipMap` + `autoGenerateMips` on the capture RT. The smear shader's 8-tap march now
-samples at increasing mip levels (`mip = _MipSpread × log₂(1 + t)`), so distant taps read averaged
+samples at increasing mip levels (\f$mip = \_MipSpread \times \log_2(1 + t)\f$), so distant taps read averaged
 scene color over a widening solid angle — approximating the integral of incoming radiance at each
 distance (HSSVGI/HBIL pattern). Near taps stay at mip 0 for sharp contact. `_MipSpread = 0`
 collapses to the old flat march.
@@ -385,5 +385,5 @@ field's local light, so nearby point/area lights bend the entire gather pattern 
   (field contribution above ambient only) is used for glint effects (`LightDriven`) that should flare
   only near a local light source, not glow uniformly under the global ambient.
 - ~~Should GI shadow strength scale with intensity?~~ **Resolved:** The overlay's shadow term now
-  scales by relative magnitude (`localR / _MagnitudeRef`), so dim regions get weaker shadows and
+  scales by relative magnitude (\f$localR / \_MagnitudeRef\f$), so dim regions get weaker shadows and
   bright local lights intensify the bounce — organically, per-fragment, without a separate knob.

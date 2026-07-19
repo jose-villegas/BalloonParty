@@ -91,6 +91,9 @@ SEARCHENGINE           = YES
 SERVER_BASED_SEARCH    = NO
 DISABLE_INDEX          = NO
 GENERATE_TREEVIEW      = YES
+USE_MATHJAX            = YES
+MATHJAX_VERSION        = MathJax_3
+MATHJAX_FORMAT         = HTML-CSS
 
 #---------------------------------------------------------------------------
 # LaTeX / RTF / XML / Man — all off

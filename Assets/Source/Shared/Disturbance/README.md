@@ -193,7 +193,7 @@ Wind direction is set dynamically from stamp directions (opposite to the disturb
 
 ### Lerp stamp lifecycle
 
-When `Stamp()` is called with `duration > 0`, the stamp is queued on `LerpStampScheduler` (`_lerpScheduler`) instead of flushed immediately. Each diffusion tick the scheduler advances all active lerp stamps by the elapsed time, computes the normalized progress `t ∈ [0,1]`, and emits an instant `Stamp()` with `strength * delta` (only the new progress delta since last tick). The stamp radius also expands from `0.3×` to `1.0×` of the configured radius as `t` increases — this creates an expanding shockwave shape rather than a flat-radius pop. When `t >= 1`, the stamp is removed. The pool is capped at `MaxLerpStamps` to bound memory; oldest stamps are evicted when the cap is exceeded.
+When `Stamp()` is called with `duration > 0`, the stamp is queued on `LerpStampScheduler` (`_lerpScheduler`) instead of flushed immediately. Each diffusion tick the scheduler advances all active lerp stamps by the elapsed time, computes the normalized progress \f$t \in [0,1]\f$, and emits an instant `Stamp()` with \f$\text{strength} \times \text{delta}\f$ (only the new progress delta since last tick). The stamp radius also expands from `0.3×` to `1.0×` of the configured radius as `t` increases — this creates an expanding shockwave shape rather than a flat-radius pop. When \f$t \ge 1\f$, the stamp is removed. The pool is capped at `MaxLerpStamps` to bound memory; oldest stamps are evicted when the cap is exceeded.
 
 ### Combined pass
 
@@ -203,7 +203,7 @@ Three routing paths handle every frame:
 
 | Condition | Path | Blits |
 |---|---|---|
-| Diffusion due + stamps pending (≤ 32) | `TickCombinedPass` | **1** |
+| Diffusion due + stamps pending (\f$\le 32\f$) | `TickCombinedPass` | **1** |
 | Stamps pending, no diffusion | `FlushPendingStamps` | 1 per batch of 32 |
 | Diffusion due, no stamps | `TickDiffusion` | 1 |
 | Neither | (skip) | 0 |

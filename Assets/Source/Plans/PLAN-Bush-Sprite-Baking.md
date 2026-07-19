@@ -130,8 +130,8 @@ that is read back to Texture2D for atlas packing.
 3. ✅ **Hue jitter** — per-variant hue rotation in degrees
 4. ✅ **AA alpha** — smoothstep anti-aliased edge with configurable width
 5. ✅ **Palmate midrib** — gradient-driven central vein(s) adapting to lobe count
-   - m < 2.5: single vertical midrib (pinnate venation)
-   - m ≥ 2.5: `floor(m)` midribs radiate from centre (palmate venation)
+   - \f$m < 2.5\f$: single vertical midrib (pinnate venation)
+   - \f$m \ge 2.5\f$: \f$\lfloor m \rfloor\f$ midribs radiate from centre (palmate venation)
    - Each midrib direction aligns with its Gielis lobe axis
    - Multi-midrib mode clips each midrib to its forward side
    - Width parameter, gradient cross-section profile
@@ -170,7 +170,7 @@ that is read back to Texture2D for atlas packing.
     - Fades near leaf edge via SDF distance
     - Controls: Enabled, Density (5–60), Width, Opacity, Angle (°)
 11. ✅ **Petiole** — leaf stem extending from the bottommost Gielis boundary
-    - Samples `GielisRadius(π)` to find the leaf base point
+    - Samples \f$GielisRadius(\pi)\f$ to find the leaf base point
     - Overlaps slightly into the leaf (2× midrib width) for seamless blending
     - Uses midrib gradient cross-section for colour; darkens toward tip
     - Tapered width: configurable -1 to 1 (flared to pointed)
@@ -427,8 +427,8 @@ Shader "Hidden/BalloonParty/Grid/BushBakeBranch"
 
 **Vertex data encoding (set by `BushBranchBaker.BuildSegmentMesh`):**
 - Position: quad corners of the tapered segment in UV/world space
-- Color.r: `cos(angle) * 0.5 + 0.5` (branch direction X)
-- Color.g: `sin(angle) * 0.5 + 0.5` (branch direction Y)
+- Color.r: \f$\cos(angle) \cdot 0.5 + 0.5\f$ (branch direction X)
+- Color.g: \f$\sin(angle) \cdot 0.5 + 0.5\f$ (branch direction Y)
 - Color.b: `0` (reserved)
 - Color.a: normalised depth (0=trunk, 1=tip)
 - UV.x: 0 at left edge, 1 at right edge (drives AA)
@@ -484,11 +484,11 @@ Per segment → 4 vertices forming a tapered quad:
        ╲      ╱
     v0 ────── v1          (base: StartWidth)
 ```
-- `perpendicular = rotate90(normalize(End - Start))`
-- `v0 = Start - perpendicular × StartWidth/2`
-- `v1 = Start + perpendicular × StartWidth/2`
-- `v2 = End - perpendicular × EndWidth/2`
-- `v3 = End + perpendicular × EndWidth/2`
+- \f$perpendicular = rotate90(normalize(End - Start))\f$
+- \f$v0 = Start - perpendicular \times StartWidth/2\f$
+- \f$v1 = Start + perpendicular \times StartWidth/2\f$
+- \f$v2 = End - perpendicular \times EndWidth/2\f$
+- \f$v3 = End + perpendicular \times EndWidth/2\f$
 - Indices: `[0,2,1, 1,2,3]`
 - Vertex colors: all 4 get same `(dirR, dirG, 0, depth)`
 - UV.x: v0,v2 = 0; v1,v3 = 1
@@ -655,7 +655,7 @@ Add `DrawBranchSection()` between `DrawSharedSettings()` and
 - **🎲** — randomise seed
 
 **Runtime visual preview:** CPU-side pixel transform replicating the
-`BushBranch.shader` formula: `color × (0.6 + 0.4 × depth)`. Built from
+`BushBranch.shader` formula: \f$color \times (0.6 + 0.4 \times depth)\f$. Built from
 the raw map on toggle without re-baking.
 
 **Buttons (below preview):**
@@ -682,7 +682,7 @@ discards empty pixels. Rendered via `Graphics.DrawMesh` at queue 3000.
 - `TransparentCutout` render type, `Transparent` queue (so it renders
   in the same pass as other 2D sprites)
 - No blend — opaque write. `clip(alpha - cutoff)` discards empties.
-- Depth shading: `_BranchColor × (0.6 + 0.4 × depth)`
+- Depth shading: \f$\_BranchColor \times (0.6 + 0.4 \times depth)\f$
 - GPU instancing enabled (SpriteRenderer `_RendererColor` pattern)
 
 **Material:** Created at runtime by `BushView` from `IBushSettings.BranchShader`
@@ -709,10 +709,10 @@ Rendered at queue 3001 (after branch at 3000).
 **Shadow system:**
 - 9-tap box blur of leaf alpha at UV offset
 - Shadow direction is world-space: vertex shader inverse-rotates
-  `_ShadowOffset` via `R(-θ)` from `unity_ObjectToWorld`, negated
+  `_ShadowOffset` via \f$R(-\theta)\f$ from `unity_ObjectToWorld`, negated
 - `_SpriteScale` works like `SpriteShadow.shader`: divides UV outward
-  `(uv - 0.5) / scale + 0.5`, sprite appears smaller, margins are
-  transparent. Transform scale compensated by `1/scale` in C#.
+  \f$(uv - 0.5) / scale + 0.5\f$, sprite appears smaller, margins are
+  transparent. Transform scale compensated by \f$1/scale\f$ in C#.
 - Porter-Duff "over" compositing: shadow behind leaf
 - Bounds check masks sprite outside `[0,1]`; shadow bleeds into margins
 
@@ -898,7 +898,7 @@ for each slot:
    `_SpriteScale`) set from `IBushSettings`
 4. Builds `Matrix4x4` for branch (centered at slot world pos, scaled to
    `BushWorldSize`) and for each leaf (offset from slot pos, rotated by
-   `BaseAngle - 90°`, scaled by `slot.Scale * (1/spriteScale)`)
+   \f$BaseAngle - 90^\circ\f$, scaled by \f$slot.Scale \times (1/spriteScale)\f$)
 5. Per-instance `_LeafTint` and `_UVRect` arrays via `MaterialPropertyBlock`
 
 `LateUpdate()` loops `_slotRenderData` and calls:
@@ -913,13 +913,13 @@ vertices at `[-0.5, 0.5]`. Both are static shared meshes with
 **Leaf shader (BushLeaf.shader) features:**
 - Per-instance `_LeafTint` (color) and `_UVRect` (atlas sub-rect) via
   `UNITY_INSTANCING_BUFFER`
-- `_SpriteScale` shrinks sprite within quad via `(uv - 0.5) / scale + 0.5`
+- `_SpriteScale` shrinks sprite within quad via \f$(uv - 0.5) / scale + 0.5\f$
   (same pattern as `SpriteShadow.shader`). Transform scale compensated by
-  `1 / spriteScale` in C# so visual size stays the same.
-- 9-tap soft drop shadow: samples at `rawUV + localShadowOffset`, blurred
+  \f$1 / spriteScale\f$ in C# so visual size stays the same.
+- 9-tap soft drop shadow: samples at \f$rawUV + localShadowOffset\f$, blurred
   by `_ShadowSoftness`, composited via Porter-Duff "over"
 - Shadow direction is **world-space**: the vertex shader inverse-rotates
-  `_ShadowOffset` using `R(-θ)` extracted from `unity_ObjectToWorld` column 0,
+  `_ShadowOffset` using \f$R(-\theta)\f$ extracted from `unity_ObjectToWorld` column 0,
   then negates. Result passed as `localShadowOffset` interpolator.
 - Bounds check masks the sprite outside `[0,1]` after scaling; shadow is
   NOT masked so it bleeds into the margins.
@@ -927,7 +927,7 @@ vertices at `[-0.5, 0.5]`. Both are static shared meshes with
 **Branch shader (BushBranch.shader) features:**
 - `TransparentCutout` render type, `Transparent` queue, no blend
 - `clip(alpha - cutoff)` discards empty pixels
-- Depth shading: `_BranchColor * (0.6 + 0.4 * alpha)`
+- Depth shading: \f$\_BranchColor \cdot (0.6 + 0.4 \cdot alpha)\f$
 - Output alpha = 1.0 (fully opaque where drawn)
 - GPU instancing enabled (SpriteRenderer pattern for `_RendererColor`)
 
@@ -965,8 +965,8 @@ vertices at `[-0.5, 0.5]`. Both are static shared meshes with
 - **Coordinate chain** — attachment positions from the baked variant data
   match the branch map rendering positions. Gizmo yellow dots land ON the
   branches, confirming UV → local → world math is correct.
-- **Pivot math** — `TRS_pos = attachmentPos + rot * (0, -(pivotOffset+0.5)*scale, 0)`.
-  The pivot (at quad local `y = pivotOffset + 0.5`) always cancels back to
+- **Pivot math** — \f$TRS\_pos = attachmentPos + rot \cdot (0, -(pivotOffset+0.5) \cdot scale, 0)\f$.
+  The pivot (at quad local \f$y = pivotOffset + 0.5\f$) always cancels back to
   `attachmentPos` in world space. Verified algebraically and via gizmo overlay.
   Changing `LeafPivotOffset` repositions the quad around a fixed pivot.
 - **Sprite scale** — shader centers at UV (0.5, 0.5); quad center at local
@@ -1032,8 +1032,8 @@ translation-only — set once at setup, never updated per frame.
 - Material uniforms: `_WindFrequency`, `_WindAmplitude`, `_WindNoiseAmplitude`,
   `_WindScalePulse`, `_PivotOffset`
 - Sine oscillation + dual-sine organic noise (replaces CPU Perlin):
-  `sin(t*0.3 + phase*17.3) * sin(t*0.7 + phase*31.1)` — cheap, no texture
-- Pivot-based rotation: shift vertex to pivot (y = pivotOffset + 0.5),
+  \f$\sin(t \cdot 0.3 + phase \cdot 17.3) \cdot \sin(t \cdot 0.7 + phase \cdot 31.1)\f$ — cheap, no texture
+- Pivot-based rotation: shift vertex to pivot (\f$y = pivotOffset + 0.5\f$),
   rotate by animated angle, scale, then translate via static matrix
 - Shadow/highlight inverse rotation uses the GPU-computed cosA/sinA
 
@@ -1051,7 +1051,7 @@ translation-only — set once at setup, never updated per frame.
 
 1. **GPU wind eliminates CPU Tick loop** — zero per-frame CPU cost for wind
    on ~96 leaves. Matrices never change after setup.
-2. **Dual-sine noise replaces Perlin** — `sin(a)*sin(b)` at irrational
+2. **Dual-sine noise replaces Perlin** — \f$\sin(a) \cdot \sin(b)\f$ at irrational
    frequency ratios approximates organic drift without a texture lookup or
    CPU `PerlinNoise`. Visually indistinguishable at leaf-sway amplitudes.
 3. **Phase 4 rattle stays CPU** — damped spring physics is sequential/stateful.
@@ -1076,11 +1076,11 @@ density (R) and displacement direction (GB) at each world position. The
 leaf vertex shader samples this texture at the leaf's world position:
 
 1. Compute leaf world position from the static translation matrix
-2. Convert to disturbance field UV: `(worldPos - _FieldBoundsMin) / _FieldBoundsSize`
+2. Convert to disturbance field UV: \f$(worldPos - \_FieldBoundsMin) / \_FieldBoundsSize\f$
 3. `tex2Dlod` sample (vertex shader) → displacement vector from GB channels
 4. Cross product of displacement with leaf direction → signed rattle angle
-5. Modulated by `_RattleAmplitude × depth` and a fast oscillation
-   `sin(t × _RattleFrequency + phase)` for visible shaking
+5. Modulated by \f$\_RattleAmplitude \times depth\f$ and a fast oscillation
+   \f$\sin(t \times \_RattleFrequency + phase)\f$ for visible shaking
 6. Added to wind angle before the pivot rotation
 
 ### Why this works without CPU spring physics

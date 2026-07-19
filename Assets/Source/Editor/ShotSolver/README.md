@@ -35,12 +35,12 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   (`BalloonModel`). Tough pops score a flat `ScoreValue` and reset the streak — mirrors
   `ScoreController.RecordStreakMultiplier` collapsing `ToughBalloonModel`'s per-point
   `breaksStreak: true` attributions to a locked ×1 multiplier. Green pops score
-  `ScoreValue × streak`, where streak follows `ColorStreakTracker.Record`'s same-colour-extends /
+  \f$\text{ScoreValue} \times \text{streak}\f$, where streak follows `ColorStreakTracker.Record`'s same-colour-extends /
   different-colour-resets rule.
 - **Colour adoption & shield refund** — mirrors `ProjectileHitResolver`: the projectile's tracked
   colour adopts the popped balloon's colour (off the OLD colour, same order as
   `ApplyColorChange` running before the streak record), then a shield is refunded when the streak
-  reaches ≥ 2 of the projectile's now-current colour.
+  reaches \f$\ge 2\f$ of the projectile's now-current colour.
 - **Walls** — analytic per-axis crossing time, then `Vector2.Reflect` off the (possibly summed, for
   an exact corner hit) wall normal — same rectangle and reflect convention as `WallLimits`. Each
   bounce costs a shield; shields dropping below zero ends the flight (`Died`).
@@ -53,21 +53,21 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   every cruise bounce adds one cumulative `CruiseSpeedPerShield` tap (13-bank → 13 taps). The
   per-tap ANIMATION (target × `CruiseTapCurve(elapsed/CruiseTapEaseDuration)`, the
   freeze-then-pickup beat) never bends the path, so the event sim folds it into a per-bounce
-  timeline lag of `duration × (1 − mean curve value)` — an approximation only when a segment is
+  timeline lag of \f$\text{duration} \times (1 - \text{mean curve value})\f$ — an approximation only when a segment is
   shorter than the ease window. Any balloon contact resets counter and cruise. Reaching
   `CruisePiercingTapThreshold` taps ARMS piercing for the rest of the flight (mirrors the
   resolver's buff grant): every later contact pops — unbreakables included — and flies on unbent.
   Approximation: a pierced colourless pop scores through the flat tough rule, ignoring the
   game's projectile-colour attribution nuance for unbreakables under a Target Colour filter.
 - **Balance & nudge (dynamic board)** — when the window supplies `ShotBoardDynamics`, rebalance
-  pulses fire at `k × FlightRebalanceInterval` running the REAL `BalancePlanner` over a real
+  pulses fire at \f$k \times \text{FlightRebalanceInterval}\f$ running the REAL `BalancePlanner` over a real
   `SlotGrid` (no mirrored rules — rule drift is impossible); moved balloons follow their hop
   waypoints as an arc-length polyline with OutQuad-eased progress over `TimeForBalloonsBalance`
   (mirroring `DOPath`'s constant-speed percentage under the project's DOTween default ease —
   `DOTweenSettings.asset`), and contacts against them solve the moving-circle quadratic
   linearized at the instantaneous eased velocity. Every contact nudges the target's occupied hex neighbours and deflects
   additionally shove the hit balloon, with the exact `Reach` impulse envelope; centres become
-  `balancePosition(t) + Σ impulses(t)`, and a pulse landing mid-wobble seeds its path from the
+  \f$\text{balancePosition}(t) + \sum \text{impulses}(t)\f$, and a pulse landing mid-wobble seeds its path from the
   WOBBLED centre (waypoint 0 = view position in the live `StartBalanceTween`, with the ticker
   re-adding impulses on top of tween writes — the brief start-offset double-carry is faithful).
   Pops `Remove` from the dynamics grid so later pulses see the gaps. With no dynamics supplied the loop takes the original static fast path unchanged.
@@ -113,5 +113,5 @@ list and draws it via `SceneDrawingHelper.DrawWorldPolyline`.
    the predicted timeline every editor update — live divergence readout in the window, actual path
    drawn in yellow next to the red prediction.
 
-The design-time follow-up (Task 3: choosing `r_projectile` against the 0.104 knife edge, the fair
+The design-time follow-up (Task 3: choosing \f$r_{\text{projectile}}\f$ against the 0.104 knife edge, the fair
 threshold, and optionally wiring the solver into spawn validation) is not implemented here.

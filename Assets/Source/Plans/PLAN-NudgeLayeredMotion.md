@@ -77,8 +77,8 @@ the fix commits (buff-configuration prefab wiring, pacing/scene tuning, the
 
 ### Design principles
 
-1. **A nudge is a pure impulse.** `offset(t) = direction × distance × reach(t)`
-   where `reach(0) = reach(1) = 0`. It carries no slot position, no return
+1. **A nudge is a pure impulse.** \f$offset(t) = direction \times distance \times reach(t)\f$
+   where \f$reach(0) = reach(1) = 0\f$. It carries no slot position, no return
    position, no completion callback. Return-to-origin is guaranteed by
    construction; drift is mathematically impossible.
 2. **Impulses stack.** A balloon hit twice in quick succession runs two
@@ -89,7 +89,7 @@ the fix commits (buff-configuration prefab wiring, pacing/scene tuning, the
    put the balloon: spawn path tween, balance DOPath, pool teleport, idle. The
    nudge system reads it, never writes it.
 4. **Single writer, last in the frame.** One `ILateTickable` applies
-   `base + Σimpulses` after all Update-phase base writers (DOTween Normal
+   \f$base + \sum impulses\f$ after all Update-phase base writers (DOTween Normal
    update, factory writes, balancer). Nothing else runs later, so there is no
    ordering fight to coordinate.
 
@@ -107,7 +107,7 @@ totalOffset(view) = Σ offset_i over the view's active impulses
 ```
 
 The reach curve is identical to today's (no visual retune needed). Each impulse
-advances by `Time.deltaTime` and removes itself at `Elapsed ≥ Duration`, at
+advances by `Time.deltaTime` and removes itself at \f$Elapsed \ge Duration\f$, at
 which point its contribution is exactly zero.
 
 ### 2.2 Base reconciliation
@@ -123,7 +123,7 @@ view.Position = BasePosition + totalOffset;
 LastWritten = view.Position;
 ```
 
-- Comparison uses a small epsilon (`sqrMagnitude < 1e-12`) — guards against
+- Comparison uses a small epsilon (\f$sqrMagnitude < 10^{-12}\f$) — guards against
   world↔local float round-trips, while real writes (DOTween moves ≥ µm/frame,
   pool teleports) always exceed it.
 - A balance DOPath writes every frame → its value is adopted every frame → the
@@ -192,7 +192,7 @@ under the bounce — verify in editor that this composes acceptably.
   `CancelAll(IBalloonMotionView view)` (clears impulses, drops state WITHOUT a
   final write — the caller is despawning/teleporting the view).
 - `LateTick()` per active state: advance impulses, swap-remove completed ones,
-  reconcile base (§2.2), write `Base + Σoffsets`; on last impulse completed,
+  reconcile base (§2.2), write \f$Base + \sum offsets\f$; on last impulse completed,
   write pure base and release the state.
 - First-frame rule: when a state is created, initialize
   `BasePosition = view.Position` and `LastWritten = view.Position` so frame one
@@ -254,14 +254,14 @@ pattern, since `Time.deltaTime` isn't injectable).
 | Test | Asserts |
 |---|---|
 | Single impulse round trip | position peaks mid-flight, returns *exactly* to base at completion; state released |
-| No first-frame snap | first tick displacement ≤ offset × reach(dt/duration) |
+| No first-frame snap | first tick displacement \f$\le offset \times reach(dt/duration)\f$ |
 | Stacked impulses sum | second impulse added mid-first; displacement = sum; each completes on its own timeline |
 | Stack returns to base | after all impulses finish, position == original base |
 | External base write adopted | move `Position` mid-impulse (simulated DOPath); final == new base |
 | Continuous base writes | write a new base before every tick (balance slide); offsets ride the moving base; final == last base |
 | CancelAll | impulses cleared, no further writes, state reusable |
 | Impulse cap | 9th impulse replaces the most-completed one; never exceeds 8 |
-| Degenerate duration | duration ≤ 0 clamps and completes without NaN |
+| Degenerate duration | \f$duration \le 0\f$ clamps and completes without NaN |
 | Pool reuse | start/complete cycles reuse pooled state (no dictionary/list growth) |
 
 **Update existing tests**: audit `BalloonBalancerTests` and any test touching

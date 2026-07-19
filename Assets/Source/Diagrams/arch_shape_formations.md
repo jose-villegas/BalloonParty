@@ -122,7 +122,10 @@ inline for byte-for-byte parity, so `BigScoreTrailBehaviour` never depends on it
 
 **The ticker is the whole simulation.** `ShapeFormationTicker.LateTick` evaluates, per
 formation and per frame, a pen's world position as
-`C(t) + Q(t) · (radius · scale(t) · localₚ(t))`: `C(t)` lerps origin to the live-tracked
+\f[
+C(t) + Q(t)\cdot\Big(\mathit{radius}\cdot \mathit{scale}(t)\cdot \mathit{local}_p(t)\Big)
+\f]
+`C(t)` lerps origin to the live-tracked
 bar centre, `Q(t)` tumbles about the shared (or per-shape-overridden) spin axis, `scale(t)`
 comes from the settings' bloom-hold-taper curve, and `localₚ(t)` is the pen's position on
 its walk, parameterized by arc length so world-units-per-second pen speed is constant

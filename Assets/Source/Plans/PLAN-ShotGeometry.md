@@ -14,33 +14,33 @@ One aim angle θ determines the entire flight. The pieces, with the shipped cons
 
 | Element | Behaviour | Constants |
 |---|---|---|
-| Motion | pure linear, constant speed, no gravity | speed 8, fixed dt 1/50 → 0.16 wu/step |
-| Walls | analytic clamp + specular reflect, all four sides; each bounce costs a shield | rect x ∈ [−2.25, 2.25], y ∈ [−4.5, 4] (width 4.5 = 6 cols × 0.75) |
-| Pops | pierce — the ray continues unbent; balloon removed synchronously | corridor half-width = r_balloon + r_projectile; r_balloon ≈ 0.271 (0.3125 × 0.866 scale) |
-| Tough deflect | specular reflect off the circle's radial normal at contact | combined radius R ≈ r_balloon + r_projectile |
-| Shields | wall bounces spend one; every streak ≥ 2 same-colour pop refunds one | start 1 |
+| Motion | pure linear, constant speed, no gravity | speed 8, fixed dt \f$1/50\f$ → 0.16 wu/step |
+| Walls | analytic clamp + specular reflect, all four sides; each bounce costs a shield | rect \f$x \in [-2.25, 2.25]\f$, \f$y \in [-4.5, 4]\f$ (width \f$4.5 = 6\,\text{cols} \times 0.75\f$) |
+| Pops | pierce — the ray continues unbent; balloon removed synchronously | \f$\text{corridor half-width} = r_{\text{balloon}} + r_{\text{projectile}}\f$; \f$r_{\text{balloon}} \approx 0.271\f$ (\f$0.3125 \times 0.866\f$ scale) |
+| Tough deflect | specular reflect off the circle's radial normal at contact | combined radius \f$R \approx r_{\text{balloon}} + r_{\text{projectile}}\f$ |
+| Shields | wall bounces spend one; every \f$streak \ge 2\f$ same-colour pop refunds one | start 1 |
 
 Grid: 6 × 11 hex slots, column pitch 0.75 (staggered rows offset 0.375), row pitch 0.65.
 
 ## 2. Why it is exactly solvable
 
 - **Walls unfold.** Axis-aligned mirrors mean any wall-bounce path is a straight line to a
-  mirror image of the target in the reflected-lattice plane (x′ = 2k·4.5 ± x, same in y).
+  mirror image of the target in the reflected-lattice plane (\f$x' = 2k\cdot 4.5 \pm x\f$, same in y).
   Every banked shot is enumerable in closed form — this is the intuition players already have.
 - **Pops are corridor membership.** Between bounces the shot is a ray; it pops exactly the
-  balloons whose centres sit within r_balloon + r_projectile of it. The staggered-column
-  clearance is 0.375, so **r_projectile ≈ 0.104 is the knife edge** between "one clean column"
+  balloons whose centres sit within \f$r_{\text{balloon}} + r_{\text{projectile}}\f$ of it. The staggered-column
+  clearance is 0.375, so **\f$r_{\text{projectile}} \approx 0.104\f$ is the knife edge** between "one clean column"
   and "a three-column swathe" — a deliberate design constant, not an accident to discover.
-- **The outcome map O(θ) is piecewise-smooth** and its only breakpoints are tangency angles —
+- **The outcome map \f$O(\theta)\f$ is piecewise-smooth** and its only breakpoints are tangency angles —
   where the (unfolded) ray grazes some balloon image circle — every one of which is closed-form.
   Enumerate the critical angles, evaluate one θ per interval, and the exact solution set with
   exact window widths falls out. A board is a *fair* puzzle iff its winning window exceeds the
-  input resolution (~0.1°/px of aim drag; threshold ≥ 1–2°).
+  input resolution (\f$\sim 0.1^\circ/\text{px}\f$ of aim drag; threshold \f$\ge 1\text{–}2^\circ\f$).
 
 ## 3. The dispersion law (design constraint)
 
 Tough deflects are convex scatterers — a Sinai billiard. One deflect multiplies an aim-angle
-spread by ≈ 1 + 2L/(R·cos φ) (free flight L ≈ 1.5–3, combined R ≈ 0.37): **×10–20 per deflect**,
+spread by \f$\approx 1 + 2L/(R \cdot \cos\varphi)\f$ (free flight \f$L \approx 1.5\text{–}3\f$, combined \f$R \approx 0.37\f$): **×10–20 per deflect**,
 worse at grazing incidence. Consequences:
 
 - Budget **at most one intentional deflect** before any precision-critical segment.
@@ -52,12 +52,12 @@ worse at grazing incidence. Consequences:
 ## 4. The blocker: discretized deflect contact
 
 Today the deflect normal is radial at wherever the fixed-step trigger caught the projectile —
-up to 0.16 wu *inside* a ≈ 0.27 circle, displacing the contact point by up to ~30°. The flight
+up to 0.16 wu *inside* a \f$\approx 0.27\f$ circle, displacing the contact point by up to \f$\sim 30^\circ\f$. The flight
 is still deterministic, but aim→outcome is a staircase whose treads depend on step phase; a
 solver would have to emulate the stepping bit-exactly, and fair windows fragment.
 
 **Fix (Task 1): exact-contact deflection.** Backtrack the analytic entry point along the
-incoming direction — solve |p − t·d − C| = R for the smallest positive t (the same line–circle
+incoming direction — solve \f$|p - t\cdot d - C| = R\f$ for the smallest positive t (the same line–circle
 entry math as `TraceHitGeometry.TryFindSurfaceHit`) — and reflect off the normal at that
 point. Combined radius from the two colliders involved, threaded through the deflect message.
 Falls back to the current radial normal on degenerate input. With this, the game IS the clean
@@ -70,13 +70,13 @@ billiard of §2.
    collider), `ProjectileMotionResolver.Deflect` rewritten to backtrack-then-reflect.
 2. **Shot solver (editor)** — given a board snapshot: enumerate critical angles (tangencies to
    all reachable balloon images within the shield budget), evaluate intervals, plot score-vs-θ,
-   report windows ≥ threshold. Editor window per the EffectPreview/maps-window tooling patterns.
+   report \f$windows \ge threshold\f$. Editor window per the EffectPreview/maps-window tooling patterns.
    **Done** — `Assets/Source/Editor/ShotSolver/` (`ShotSimulator` + `ShotSolverWindow`, see its
    README). Sweeps N samples and refines window edges by bisection rather than the exact critical-
    angle enumeration described above — that enumeration is still v2.
 3. **Design pass** — measure and *choose* r_projectile against the 0.104 knife edge; decide the
    fair-window threshold; optionally wire the solver into spawn validation ("reroll toughs
-   until a ≥ threshold window exists") for authored puzzle levels.
+   until a \f$\ge threshold\f$ window exists") for authored puzzle levels.
 4. **Dynamic-board simulation** — see §7. Model the two systems that move the board *during*
    the shot (flight rebalance pulses, nudge wobble), so long ricochet predictions stop
    diverging after the first few hits.
@@ -85,7 +85,7 @@ billiard of §2.
 
 Task 1: edit-mode tests for the backtrack math (head-on, oblique, grazing, degenerate inside
 spawn); in-editor feel check that deflects read unchanged in normal play (angular corrections
-are ≤ the old discretization error, so no retuning expected). Tasks 2–3 are editor tooling —
+are \f$\le\f$ the old discretization error, so no retuning expected). Tasks 2–3 are editor tooling —
 validated by use. Task 4: planner-extraction refactor must keep every existing balancer
 edit-mode/play-mode test green (behavior-identical); sim fidelity validated with Fire Best —
 fire the drawn path on a live board and compare where reality diverges.
@@ -101,13 +101,13 @@ The static-board sim is exact only until the board reacts. Two reaction systems 
 - **Nudge wobble** (`NudgeService` → `BalloonMotionTicker`): every hit nudges the target's
   `IHasNudge` neighbors (`NudgeType.Neighbor`); deflects additionally shove the hit balloon
   (`NudgeType.Deflect`, direction = projectile heading). Displacement is an impulse stack:
-  `offset(t) = Σ amplitude·dir · Reach(elapsed/duration)`, `Reach` = analytic out-and-back
+  \f$offset(t) = \sum amplitude \cdot dir \cdot \mathrm{Reach}(elapsed/duration)\f$, `Reach` = analytic out-and-back
   (ease-out-quad to peak at progress 0.5, mirrored back to zero). Colliders ride the view, so
   wobble genuinely changes contacts.
 
 ### Design
 
-**(a) Timeline.** Events gain timestamps: `dt = distance / speed(t)`. Speed mirrors base speed
+**(a) Timeline.** Events gain timestamps: \f$dt = distance / speed(t)\f$. Speed mirrors base speed
 and the cruise ramp (`CruiseWallBounceThreshold` / `CruiseMaxSpeedMultiplier` / `CruiseRampCurve`
 against shields spent since cruise entry) — the sim already counts wall bounces.
 
@@ -118,14 +118,14 @@ tweens/path-holder) into a pure `BalancePlanner` that returns moves `(actor, fro
 balancer consumes it (behavior-identical refactor), and the sim instantiates a real
 `SlotGrid` + `GridBalanceQuery` + planner over stub actors built from the snapshot (slot index,
 dynamic-or-static, `BalancePriority`, `MaxBalanceSteps`). Rule drift becomes impossible.
-Pulses fire at `t = k·FlightRebalanceInterval`; each move animates as **linear** motion
+Pulses fire at \f$t = k\cdot FlightRebalanceInterval\f$; each move animates as **linear** motion
 from start to final slot over `TimeForBalloonsBalance` (approximating the Catmull-Rom path);
 contacts against a moving balloon solve the same quadratic with relative velocity
-`|p − c₀ + t(s·d − v)| = r`.
+\f$|p - c_0 + t(s\cdot d - v)| = r\f$.
 
 **(c) Nudge as analytic impulses.** The sim keeps an impulse list per balloon with the exact
 `Reach` envelope, fed by the same triggers (hit → neighbors, deflect → target; distances/
-durations from `NudgeOverrideResolver` defaults). Centers become `home(t) + Σ impulses(t)` —
+durations from `NudgeOverrideResolver` defaults). Centers become \f$home(t) + \sum impulses(t)\f$ —
 smooth and small, so contact finding freezes centers at the segment's start time, then refines
 once at the candidate hit time (two-pass fixed point).
 
@@ -137,7 +137,7 @@ per-colour filter for milestone masks.
 ### Accepted approximations (log, don't hide)
 
 - The balancer defers a requested balance one frame; the sim applies it at pulse time.
-- Multi-waypoint Catmull-Rom balance paths ≈ straight line to the final slot.
+- Multi-waypoint Catmull-Rom balance paths \f$\approx\f$ straight line to the final slot.
 - Heavy step budgets reset per shot in the sim; in-game the turn budget may be part-spent at
   fire time (unknowable from a snapshot).
 - Flight pulses never relocate roamers (`relocateRoamers: false`) — matches the code.

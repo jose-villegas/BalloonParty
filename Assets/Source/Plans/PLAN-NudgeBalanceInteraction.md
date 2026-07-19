@@ -217,7 +217,7 @@ onComplete ??= previousComplete;  // Inherit deferred balance if present
 **Problem**: `NudgeService` passed `grid.IndexToWorldPosition(slot)` as
 `slotPosition`. For a balloon mid-balance, the model's slot was the **target**
 (far away), but the view was at the **origin**. The first frame of the nudge set
-`transform.position = slotPosition + offset * reach(tiny)` ≈ `slotPosition` →
+\f$transform.position = slotPosition + offset \cdot reach(tiny) \approx slotPosition\f$ →
 the balloon teleported.
 
 **Fix**: Override `slotPosition` with `transform.position` (the visual position)
@@ -241,7 +241,7 @@ Slot (3,0): grid=(0.19, 3.25)
 ```
 
 **Root cause**: The nudge motion formula was symmetric —
-`position = center + offset × reach` — with center = visual position. It always
+\f$position = center + offset \times reach\f$ — with center = visual position. It always
 returned to wherever it started. With the visual-position override, "wherever it
 started" was a drifting point.
 
@@ -253,8 +253,8 @@ started" was a drifting point.
    basePos  = Lerp(startPosition, returnPosition, progress)
    position = basePos + offset × reach
    ```
-   At progress 0: position = startPosition (no snap).
-   At progress 1: position = returnPosition (correct grid slot).
+   At progress 0: \f$position = startPosition\f$ (no snap).
+   At progress 1: \f$position = returnPosition\f$ (correct grid slot).
 
 2. **Return-position inheritance** — when a nudge replaces another mid-flight,
    `CancelNudgeInternal` returns the cancelled entry's `SlotPosition`. The new
@@ -322,7 +322,7 @@ The balloon's motion state is encoded across three booleans:
 | `IsStable.Value` | Model (reactive) | No motion system is driving the balloon |
 | `_tweenTracker.IsPlaying` | `TweenTracker` | A DOPath balance tween is running |
 
-This creates 2³ = 8 possible states, but only ~4 are valid:
+This creates \f$2^3 = 8\f$ possible states, but only ~4 are valid:
 
 | `_isNudging` | `IsStable` | `trackerPlaying` | Valid? |
 |---|---|---|---|

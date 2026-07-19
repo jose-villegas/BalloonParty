@@ -32,7 +32,7 @@ Distance, duration, and falloff are resolved in priority order for each affected
 2. **Publisher override** — `NudgeOverride[]` carried in the `NudgeMessage` (set by item handlers)
 3. **Global default** — `BalloonsConfiguration.NudgeDistance`, `NudgeDuration`, `NudgeFalloff`
 
-Shockwave uses exponential distance falloff: `distance = baseDistance × exp(−falloff × d)`. A per-actor shockwave override skips the falloff entirely and uses its fixed `Distance`.
+Shockwave uses exponential distance falloff: \f$\text{distance} = \text{baseDistance} \times \exp(-\text{falloff} \times d)\f$. A per-actor shockwave override skips the falloff entirely and uses its fixed `Distance`.
 
 ## The impulse model
 
@@ -40,29 +40,31 @@ A nudge is a **pure impulse** — an additive, transient offset applied on top o
 
 The per-frame offset is computed as:
 
-```
-offset(t) = direction × distance × reach(progress)
-```
+\f[
+\text{offset}(t) = \text{direction} \times \text{distance} \times \text{reach}(\text{progress})
+\f]
 
-where `progress = elapsed / duration` and `reach()` is a symmetric ease curve:
+where \f$\text{progress} = \text{elapsed} / \text{duration}\f$ and `reach()` is a symmetric ease curve:
 
-- Outbound half (0 ≤ progress ≤ 0.5): `reach = EaseOutQuad(progress × 2)` — accelerates away, decelerates toward the peak
-- Return half (0.5 < progress ≤ 1): `reach = 1 − EaseOutQuad((progress − 0.5) × 2)` — accelerates back, lands exactly at zero
+- Outbound half (\f$0 \le \text{progress} \le 0.5\f$): \f$\text{reach} = \mathrm{EaseOutQuad}(\text{progress} \times 2)\f$ — accelerates away, decelerates toward the peak
+- Return half (\f$0.5 < \text{progress} \le 1\f$): \f$\text{reach} = 1 - \mathrm{EaseOutQuad}\big((\text{progress} - 0.5) \times 2\big)\f$ — accelerates back, lands exactly at zero
 
-This reach curve is identical to the nudge animation in the prior system — no visual retune needed. At `progress = 0` and `progress = 1`, the offset is exactly zero; the impulse contributes nothing to position at both endpoints.
+This reach curve is identical to the nudge animation in the prior system — no visual retune needed. At \f$\text{progress} = 0\f$ and \f$\text{progress} = 1\f$, the offset is exactly zero; the impulse contributes nothing to position at both endpoints.
 
 Multiple impulses on the same view **stack additively**:
 
-```
-totalOffset(view) = Σ offset_i for all active impulses on view
-finalPosition = BasePosition + totalOffset
-```
+\f[
+\text{totalOffset}(\text{view}) = \sum_i \text{offset}_i \quad \text{for all active impulses on view}
+\f]
+\f[
+\text{finalPosition} = \text{BasePosition} + \text{totalOffset}
+\f]
 
-A balloon hit twice in quick succession shows a bouncing effect: it nudges away for the first impact, gets hit again mid-return, bounces out again from wherever it is, and completes both impulses on independent timelines. Each impulse removal is automatic — when `elapsed ≥ duration`, the impulse is discarded.
+A balloon hit twice in quick succession shows a bouncing effect: it nudges away for the first impact, gets hit again mid-return, bounces out again from wherever it is, and completes both impulses on independent timelines. Each impulse removal is automatic — when \f$\text{elapsed} \ge \text{duration}\f$, the impulse is discarded.
 
 ## Base reconciliation
 
-The nudge ticker applies `BasePosition + Σ impulses` every late tick. It cannot assume it knows when other systems move the balloon, so it detects external writes by remembering the final position it wrote last frame (`LastWritten`). At the start of each late tick:
+The nudge ticker applies \f$\text{BasePosition} + \sum \text{impulses}\f$ every late tick. It cannot assume it knows when other systems move the balloon, so it detects external writes by remembering the final position it wrote last frame (`LastWritten`). At the start of each late tick:
 
 ```
 if (view.Position ≉ LastWritten)   // another system wrote the transform this frame
@@ -71,7 +73,7 @@ view.Position = BasePosition + totalOffset;
 LastWritten = view.Position;
 ```
 
-The comparison uses a small epsilon (`sqrMagnitude < 1e-12`) to guard against world↔local float rounding errors while accepting real position writes (DOTween moves ≥ µm/frame, pool teleports, manually-set positions).
+The comparison uses a small epsilon (\f$\text{sqrMagnitude} < 10^{-12}\f$) to guard against world↔local float rounding errors while accepting real position writes (DOTween moves \f$\ge\f$ µm/frame, pool teleports, manually-set positions).
 
 This reconciliation enables seamless composition:
 

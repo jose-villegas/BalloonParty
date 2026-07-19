@@ -56,19 +56,19 @@ forcing function — this is an elective quality migration.
   overrides.
 - **HDR display output: off** (`allowHDRDisplaySupport: 0`, `useHDRDisplay: 0`) —
   true HDR10 panel output is Wave C, deliberately deferred.
-- **Shader precision:** 25 of the custom shader files use `fixed4` — clamps at ±2 on
-  mobile precision, so HDR color paths (> 2) clip inside the shader even with an HDR
+- **Shader precision:** 25 of the custom shader files use `fixed4` — clamps at \f$\pm 2\f$ on
+  mobile precision, so HDR color paths (\f$>2\f$) clip inside the shader even with an HDR
   target. Needs a per-shader audit on paths that carry light/emissive color; `half4` is
   the fix where flagged.
 - **Palette** (`Configuration/Palette/GamePalette.cs`): `PaletteEntry[]` with plain
-  `Color` fields, no `[ColorUsage]` attributes — no way to author intensity > 1 today.
+  `Color` fields, no `[ColorUsage]` attributes — no way to author intensity \f$>1\f$ today.
   Consumers read via `IGamePalette.GetColor(name)`; MPB-driven tints downstream.
 - **Special RTs whose alpha carries data** (from Display/README.md):
   `_SceneCaptureTex` (ARGB32; A = sprite coverage mask feeding GI) and the GI light
   buffers (ARGB32; A = shadow amount). If these upgrade to HDR they need an
   alpha-bearing HDR format (`ARGBHalf`/`ARGB2101010`), NOT `B10G11R11`. At
   downscale-12 resolution the bandwidth delta is negligible.
-- **GI overlay composite** is a multiplicative blend authored against LDR [0,1]
+- **GI overlay composite** is a multiplicative blend authored against LDR \f$[0,1]\f$
   semantics (`ScreenSpaceLightOverlay.shader`) — must be revisited when the scene
   behind it goes HDR.
 - **Stock materials:** ~30 on `Mobile/Particles/Additive`/`Alpha Blended` — these render
@@ -76,7 +76,7 @@ forcing function — this is an elective quality migration.
   changes in Linear (part of the Wave A re-tune, not a code break).
 - **Tooling in place from the URP migration** (reuse, don't rebuild): Baselines~
   framedump + step screenshots for A/B, Game Render Maps window for buffer inspection
-  (gains an "HDR values > 1" blind spot — see task B5), adb pacing loop, reference
+  (gains an "HDR values \f$>1\f$" blind spot — see task B5), adb pacing loop, reference
   video workflow, `Tools > BalloonParty` menu conventions.
 
 ## Task plan
@@ -109,7 +109,7 @@ Editor: Project Settings → Player → Color Space → Linear. Everything re-re
 "washed/different" immediately — that is expected, not broken. Branch like the URP
 migration (`hdr-color-pipeline`), because main stays shippable while A2 runs.
 Compile-level risk: none (color space is a project setting). Runtime risk: shaders that
-do their own gamma-ish math (check `pow(x, 2.2)`-style hacks — grep before flipping;
+do their own gamma-ish math (check \f$x^{2.2}\f$-style hacks — grep before flipping;
 none known, verify).
 
 #### A2 — Look re-tune · **P0 · L — art-driven, José-led**
@@ -141,25 +141,25 @@ the whole wave.
 Volume override: Tonemapping = **Neutral** (ACES costs more and crushes saturated hues
 — this game is saturated hues; audition both in-editor, decide by eye). Color Grading
 Mode: HDR, LUT 32. Without tonemapping HDR values just clip at white — this is what
-makes >1 values *render* as brightness rolloff.
+makes \f$>1\f$ values *render* as brightness rolloff.
 
 #### B3 — Emissive authoring path · **P1 · M**
 The palette gains HDR intensity: add `[ColorUsage(true, true)]` where entries should
-author >1 (or an explicit per-entry intensity float if full HDR pickers are overkill —
+author \f$>1\f$ (or an explicit per-entry intensity float if full HDR pickers are overkill —
 decide in-editor by authoring one real effect). Sweep the effect systems that deserve
 emitters: lightning, laser/beam, chrome specular sweep, rainbow glitter, level-up glow,
-pop-VFX cores. Per-shader `fixed4 → half4` on the paths that now carry >1 values (the
+pop-VFX cores. Per-shader `fixed4 → half4` on the paths that now carry \f$>1\f$ values (the
 25-file audit; only flagged shaders change — blanket conversion is churn).
 
 #### B4 — Bloom · **P1 · S–M**
-Volume override: Bloom, threshold ≥ 1 (only true HDR emitters bloom — the scene's LDR
+Volume override: Bloom, threshold \f$\ge 1\f$ (only true HDR emitters bloom — the scene's LDR
 content stays clean), low scatter to start. Tune per effect with José's eye. Device
 cost check: bloom's downsample chain is the second-biggest new GPU cost after the post
 pass itself.
 
 #### B5 — Tooling: Render Maps HDR view · **P2 · S (parallel after B1)**
 The Game Render Maps window draws raw values — HDR buffers will display clamped.
-Add a small exposure slider (multiply in the ChannelPreview shader) + a "values > 1"
+Add a small exposure slider (multiply in the ChannelPreview shader) + a "values \f$>1\f$"
 highlight toggle (tint pixels exceeding 1 red). Small, and it makes B3/B4 authoring
 debuggable.
 
