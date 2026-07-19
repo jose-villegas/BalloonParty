@@ -365,9 +365,10 @@ construction vocabulary. **12** — small stellated
 dodecahedron: the icosahedron's 12 vertices, one pentagram `{5/2}` circuit per vertex (its
 five neighbours), every edge double-inked (each chord in two circuits). **20** — regular
 dodecahedron: 12 pentagon face circuits sliced from coplanar vertex rings, each edge shared
-by two faces (double-inked). **30** — dodecadodecahedron: 24 face circuits (12 pentagons
-`{5}` + 12 pentagrams `{5/2}`) over the icosidodecahedron's 30 vertices, each edge shared
-by one pentagon and one pentagram (double-inked). **50** — a 10×5 torus grid (superseded the
+by two faces (double-inked). **30** — a "star ball": six SEPARATE
+pentagrams on the sphere's cube-face directions, five pens apiece, no shared edges
+(superseded the dodecadodecahedron 2026-07-19 — its pentagrams share every edge with its
+pentagons, so the stars vanished into the tangle; the ask was "a ball made of stars"). **50** — a 10×5 torus grid (superseded the
 rhombicosacron 2026-07-19: the crown tier needed a SILHOUETTE — the doughnut's hole reads
 instantly under tumble where the dense star-duals blurred together against the 30/100).
 Walks are the grid's own rings — 5 major decagons + 10 minor pentagons — every edge in

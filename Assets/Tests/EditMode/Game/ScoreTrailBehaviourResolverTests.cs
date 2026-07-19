@@ -192,18 +192,24 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void ShapeCatalog_Dodecadodecahedron_PentagonsAndPentagramsDoubleInked()
+        public void ShapeCatalog_StarBall_SixSeparatePentagrams()
         {
             Assert.IsTrue(ShapeCatalog.TryGet(30, out var shape));
-            Assert.AreEqual(24, shape.Walks.Length, "twelve pentagons + twelve pentagrams");
-            AssertFiveDistinctPerWalk(shape);
+
+            Assert.AreEqual(30, shape.Vertices.Length);
+            Assert.AreEqual(30, new HashSet<Vector3>(shape.Vertices).Count, "thirty distinct vertices");
+            Assert.AreEqual(6, shape.Walks.Length, "six separate pentagram loops");
+            CollectionAssert.AreEqual(
+                new[] { 5, 5, 5, 5, 5, 5 }, shape.PensPerWalk, "five pens per star");
 
             var edges = InspectCircuits(shape);
-            Assert.Less(edges.MaxLength - edges.MinLength, 1e-3f, "uniform edge length across pentagons and pentagrams");
-            Assert.AreEqual(60, edges.Multiplicity.Count, "a dodecadodecahedron has 60 edges");
+            Assert.AreEqual(30, edges.Multiplicity.Count, "six pentagrams of five chords each");
             CollectionAssert.AreEqual(
-                new[] { 2 }, DistinctValues(edges.Multiplicity), "each edge shared by one pentagon and one pentagram");
-            Assert.AreEqual(30, edges.Touched.Count, "all thirty vertices covered");
+                new[] { 1 }, DistinctValues(edges.Multiplicity), "no shared edges — every chord inked once");
+            Assert.AreEqual(30, edges.Touched.Count, "all vertices covered");
+
+            var degrees = DegreeHistogram(edges.Multiplicity);
+            Assert.AreEqual(30, CountByDegree(degrees, 2), "each vertex belongs to exactly one star loop");
         }
 
         [Test]

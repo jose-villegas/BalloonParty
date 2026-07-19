@@ -119,9 +119,9 @@ namespace BalloonParty.Game.Score.Behaviours
     ///     Hand-authored 3D shape data for BigScore formations. Each denomination maps to a shape whose vertex
     ///     count equals it — full 1:1 decomposition draws every point as one orbiting pen. Small shapes partition
     ///     their edge set into closed walks (a Hamiltonian-ish cycle plus back-and-forth shuttles for the leftover
-    ///     edges); 10 is an octagonal bipyramid; 12 the hexagonal prism, 20 the dodecahedron, 30 the
-    ///     dodecadodecahedron (a golden-ratio star-and-solid family), 50 a 10×5 torus grid (a SILHOUETTE for the
-    ///     crown tier), and 100 a spherical-spiral yarn ball (one closed coil). The tables
+    ///     edges); 10 is an octagonal bipyramid; 12 the hexagonal prism, 20 the dodecahedron, 30 a
+    ///     star ball (six separate pentagrams on the sphere), 50 a 10×5 torus grid, and 100 a spherical-spiral
+    ///     yarn ball (one closed coil) — the top tier follows silhouette-over-density. The tables
     ///     are built once in the static constructor and returned by reference from <see cref="TryGet"/>, so a
     ///     lookup never allocates.
     ///
@@ -130,7 +130,7 @@ namespace BalloonParty.Game.Score.Behaviours
     /// </summary>
     internal static class ShapeCatalog
     {
-        // φ (golden ratio) — the vertex coordinates the 20/30 star-and-solid pair is framed on.
+        // φ (golden ratio) — the dodecahedron's vertex coordinates are framed on it.
         private const float Phi = 1.6180339887498949f;
 
         private static readonly int[] LadderDenominations = { 100, 50, 30, 20, 12, 10, 8, 6, 5, 4, 3, 2 };
@@ -157,7 +157,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 { 10, BuildOctagonalBipyramid() },
                 { 12, BuildHexagonalPrism() },
                 { 20, BuildDodecahedron() },
-                { 30, BuildDodecadodecahedron() },
+                { 30, BuildStarBall() },
                 { 50, BuildTorus() },
                 { 100, BuildYarnBall() },
             };
@@ -299,13 +299,44 @@ namespace BalloonParty.Game.Score.Behaviours
             return Build(20, 1.15f, vertices, walks);
         }
 
-        // 30 = dodecadodecahedron: the icosidodecahedron's 30 vertices, 24 face circuits = 12 pentagons {5} + 12
-        // pentagrams {5/2}. Every edge belongs to one pentagon and one pentagram, so each is double-inked (as the
-        // stellated 12). The ladder's near-crown — a uniform star polyhedron of interpenetrating loops.
-        private static FormationShape BuildDodecadodecahedron()
+        // 30 = a "star ball": six SEPARATE five-pointed stars on the sphere's cube-face directions
+        // (superseded the dodecadodecahedron — its pentagrams share every edge with its pentagons, so the
+        // stars vanished into the tangle; the ask was "a ball made of stars"). Each star is its own closed
+        // {5/2} loop of five sphere-surface vertices around its face direction — no shared edges, five pens
+        // apiece, crisp under tumble. The cap radius keeps neighbouring stars (90 degrees apart) separated.
+        private static FormationShape BuildStarBall()
         {
-            var vertices = IcosidodecahedronVertices();
-            var walks = CoplanarFaceWalks(vertices, IcosahedralFaceNormals(), allowPentagrams: true);
+            const int starCount = 6;
+            const int pointsPerStar = 5;
+            const float capRadians = 0.66f;
+
+            var directions = new[]
+            {
+                Vector3.right, Vector3.left, Vector3.up, Vector3.down, Vector3.forward, Vector3.back,
+            };
+
+            var vertices = new Vector3[starCount * pointsPerStar];
+            var walks = new FormationWalk[starCount];
+            var capCos = Mathf.Cos(capRadians);
+            var capSin = Mathf.Sin(capRadians);
+            for (var f = 0; f < starCount; f++)
+            {
+                var normal = directions[f];
+                var reference = Vector3.Cross(
+                    normal, Mathf.Abs(normal.y) < 0.9f ? Vector3.up : Vector3.right).normalized;
+                var binormal = Vector3.Cross(normal, reference);
+                for (var i = 0; i < pointsPerStar; i++)
+                {
+                    var angle = 2f * Mathf.PI * i / pointsPerStar;
+                    vertices[f * pointsPerStar + i] = capCos * normal
+                        + capSin * (Mathf.Cos(angle) * reference + Mathf.Sin(angle) * binormal);
+                }
+
+                // Skip-2 over the cap ring turns the pentagon into a pentagram.
+                var v = f * pointsPerStar;
+                walks[f] = Chord(v, v + 2, v + 4, v + 1, v + 3);
+            }
+
             return Build(30, 1.3f, vertices, walks);
         }
 
@@ -438,38 +469,6 @@ namespace BalloonParty.Game.Score.Behaviours
                     for (var sc = -1; sc <= 1; sc += 2)
                     {
                         vertices.Add(Cyclic(0f, sb * invPhi, sc * Phi, shift));
-                    }
-                }
-            }
-
-            return Normalized(vertices);
-        }
-
-        // The 30 icosidodecahedron vertices (shared by the dodecadodecahedron): the 6 axis points (cyclic
-        // permutations of (0, 0, ±φ)) plus the 24 even/cyclic permutations of (±1/2, ±φ/2, ±φ²/2), normalized.
-        private static Vector3[] IcosidodecahedronVertices()
-        {
-            var vertices = new List<Vector3>(30);
-            for (var sign = -1; sign <= 1; sign += 2)
-            {
-                vertices.Add(new Vector3(sign * Phi, 0f, 0f));
-                vertices.Add(new Vector3(0f, sign * Phi, 0f));
-                vertices.Add(new Vector3(0f, 0f, sign * Phi));
-            }
-
-            var half = 0.5f;
-            var halfPhi = 0.5f * Phi;
-            var halfPhiSq = 0.5f * Phi * Phi;
-            for (var shift = 0; shift < 3; shift++)
-            {
-                for (var sa = -1; sa <= 1; sa += 2)
-                {
-                    for (var sb = -1; sb <= 1; sb += 2)
-                    {
-                        for (var sc = -1; sc <= 1; sc += 2)
-                        {
-                            vertices.Add(Cyclic(sa * half, sb * halfPhi, sc * halfPhiSq, shift));
-                        }
                     }
                 }
             }
