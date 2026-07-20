@@ -25,6 +25,30 @@ MonoBehaviour:
   _displaceDecay: 0.3
   _minStampStrength: 0.001
   _maxLerpStamps: 32
+  _shieldLossVelocityCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 43.642902
+      outSlope: 43.642902
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.019631902
+    - serializedVersion: 3
+      time: 1
+      value: 12.5
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _diffusionShader: {fileID: 4800000, guid: 30d35fca4d5647ab807a2488bff5f3d3, type: 3}
   _stampBatchedShader: {fileID: 4800000, guid: 38f3ac576d314dfd871931c9d00cd8da, type: 3}
   _stampProfiles:

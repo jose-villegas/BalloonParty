@@ -127,15 +127,66 @@ MonoBehaviour:
     - Sources: 1
       Count: 16
       Spread: 0.1
+      CruiseVelocityCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
     - Sources: 2
       Count: 24
       Spread: 0.35
+      CruiseVelocityCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
     - Sources: 4
       Count: 16
       Spread: 0.25
+      CruiseVelocityCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
     - Sources: 8
       Count: 32
       Spread: 0.1
+      CruiseVelocityCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    - Sources: 16
+      Count: 4
+      Spread: 0.1
+      CruiseVelocityCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 10.319505
+          outSlope: 10.319505
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.01779141
+        - serializedVersion: 3
+          time: 1
+          value: 5
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
     _reductionCurve:
       serializedVersion: 2
       m_Curve:
