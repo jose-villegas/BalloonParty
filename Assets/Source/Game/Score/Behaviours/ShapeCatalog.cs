@@ -67,10 +67,15 @@ namespace BalloonParty.Game.Score.Behaviours
         // before world transform. Null means static vertices.
         internal readonly VertexDisplacer Displacer;
 
+        // Per-shape multipliers on the global displacement knobs — lets the catalog author tune amplitude and
+        // animation speed per shape independently of the SO baseline. 1 = use the global value as-is.
+        internal readonly float DisplacementScale;
+        internal readonly float DisplacementSpeed;
+
         internal FormationShape(
             int denomination, float radiusScale, Vector3[] vertices, FormationWalk[] walks,
             bool alignToHit = false, float spinScale = 1f, float penSpeedScale = 1f,
-            VertexDisplacer displacer = null)
+            VertexDisplacer displacer = null, float displacementScale = 1f, float displacementSpeed = 1f)
         {
             Denomination = denomination;
             RadiusScale = radiusScale;
@@ -80,6 +85,8 @@ namespace BalloonParty.Game.Score.Behaviours
             Vertices = vertices;
             Walks = walks;
             Displacer = displacer;
+            DisplacementScale = displacementScale;
+            DisplacementSpeed = displacementSpeed;
             PensPerWalk = DistributePens(denomination, walks);
 
             Perimeters = new float[walks.Length];
@@ -1021,7 +1028,7 @@ namespace BalloonParty.Game.Score.Behaviours
         private static FormationShape Build(
             int denomination, float radiusScale, Vector3[] vertices, FormationWalk[] walks,
             bool alignToHit = false, float spinScale = 1f, float penSpeedScale = 1f,
-            VertexDisplacer displacer = null)
+            VertexDisplacer displacer = null, float displacementScale = 1f, float displacementSpeed = 1f)
         {
             var maxMagnitude = 0f;
             for (var i = 0; i < vertices.Length; i++)
@@ -1043,7 +1050,8 @@ namespace BalloonParty.Game.Score.Behaviours
             }
 
             return new FormationShape(
-                denomination, radiusScale, vertices, walks, alignToHit, spinScale, penSpeedScale, displacer);
+                denomination, radiusScale, vertices, walks, alignToHit, spinScale, penSpeedScale,
+                displacer, displacementScale, displacementSpeed);
         }
     }
 }

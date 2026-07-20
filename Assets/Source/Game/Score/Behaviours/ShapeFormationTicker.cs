@@ -328,7 +328,8 @@ namespace BalloonParty.Game.Score.Behaviours
                 if (state.Shape.Displacer != null)
                 {
                     local = state.Shape.Displacer(local, state.Elapsed,
-                        state.Group.Settings.DisplacementScale, state.Group.Settings.DisplacementSpeed);
+                        state.Group.Settings.DisplacementScale * state.Shape.DisplacementScale,
+                        state.Group.Settings.DisplacementSpeed * state.Shape.DisplacementSpeed);
                 }
 
                 state.Vertices[p].transform.position = LocalToWorld(state, local * scale);

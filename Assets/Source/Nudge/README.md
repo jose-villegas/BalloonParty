@@ -122,4 +122,4 @@ For fine-grained impulse management, `AddImpulse()` also has a spillover cap: wh
 
 ---
 
-**History**: The prior guard-based nudge–balance coordination was replaced by this layered-motion design. See @ref plan_nudge_balance_interaction for the debugging post-mortem and architectural context.
+**History**: The prior guard-based nudge–balance coordination was replaced by this layered-motion design (the debugging post-mortem and architectural rationale led to the current `BalloonMotionTicker` + `NudgeImpulse` architecture).
