@@ -10,10 +10,8 @@ using VContainer.Unity;
 namespace BalloonParty.Game.Score.Behaviours
 {
     /// <summary>
-    ///     Shared, once-per-pop data for one BigScore group: the pooled trail channel, palette colour, endpoint,
-    ///     registry/reporter seams, the principal's carrier id and anchor placement, and the global formation
-    ///     settings. A group holds one registered anchor flight (the principal the cinematic tracks) and fans out
-    ///     to N formations launched via <see cref="ShapeFormationTicker.LaunchFormation"/>.
+    ///     Immutable parameters for one BigScore group. Owns one registered anchor flight (the cinematic
+    ///     principal) and fans out to N formations via <see cref="ShapeFormationTicker.LaunchFormation"/>.
     /// </summary>
     internal readonly struct BigScoreGroupRequest
     {
@@ -89,33 +87,20 @@ namespace BalloonParty.Game.Score.Behaviours
     }
 
     /// <summary>
-    ///     The analytic driver behind <see cref="BigScoreTrailBehaviour"/>. A group's score decomposes into shapes
-    ///     (<see cref="ShapeCatalog"/>); each shape is one formation of n pens whose ribbons are the ink. A
-    ///     formation is pure math evaluated once per <see cref="ILateTickable.LateTick"/> — states, groups and
-    ///     anchors are pooled, so a running formation never allocates. Mirrors <c>BalloonMotionTicker</c>'s
-    ///     pooled-state + swap-remove idioms.
+    ///     Pooled, zero-allocation per-frame driver for every in-flight shape formation. Design constraints:
     ///
-    ///     One life, one Travel phase (plus a SnapFade for cinematic interrupts): with the shape's scale driven by
-    ///     the settings' curve (its last key time is the duration), the world position of a pen is
-    ///     \f$ C(t) + Q(t)\cdot\big(\mathit{radius}\cdot \mathit{scale}(t)\cdot \mathit{local}_p(t)\big) \f$ where
-    ///     <list type="bullet">
-    ///       <item><c>C(t) = Lerp(origin, liveTarget, SmoothStep(t/D))</c> — the shape blooms at its sub-centre and
-    ///             travels to the bar; <c>liveTarget</c> re-reads the endpoint centre every tick (plus a
-    ///             launch-sampled offset), so a drifting UI bar can never leave the landing stale.</item>
-    ///       <item><c>Q(t)</c> — a fixed random tilt spun about a random axis from t = 0 (invisible while the
-    ///             shape is still a point).</item>
-    ///       <item><c>scale(t)</c> — the settings curve: 0 → bloom → hold → 0, so the shape grows from a point and
-    ///             tapers back to one at the bar. Pens are PEN-DOWN from t = 0, so no deploy spokes exist.</item>
-    ///       <item><c>localₚ(t)</c> — the pen's position on its closed walk, orbiting continuously; the first lap
-    ///             draws the wireframe, later laps re-ink it, k pens tile a period-P walk in P/k.</item>
-    ///     </list>
+    ///     • States, groups and anchors are pooled via swap-remove (mirrors <c>BalloonMotionTicker</c>) —
+    ///       a running formation must never allocate; adding fields to <c>FormationState</c> that reference
+    ///       managed heap objects will defeat this.
     ///
-    ///     Transport bridge — the group's anchor <see cref="TrailFlight"/> handle is the pause/snap
-    ///     interface, polled every tick; every formation in the group shares it, so a cinematic pause or completion
-    ///     fans out to the whole group. Paused freezes the formation (and inflates the ribbon time so the drawn
-    ///     figure survives the cinematic freeze); Idle snaps (report the value now, fade the pens out unscaled).
-    ///     The flight stays registered (InFlight) through the group's whole life and is unregistered only once the
-    ///     last formation finishes, so a principal that lands first never falsely signals Idle to the others.
+    ///     • <c>liveTarget</c> re-reads the endpoint centre every tick so a drifting UI bar never leaves
+    ///       the landing position stale — do not cache the target position at launch.
+    ///
+    ///     • Transport bridge: every formation in a group shares a single <see cref="TrailFlight"/> anchor.
+    ///       The flight stays registered (InFlight) through the group's whole life and is unregistered only
+    ///       once the last formation finishes — if a principal that lands first unregistered eagerly, the
+    ///       cinematic would see Idle and snap the remaining shapes mid-travel. Paused inflates ribbon time
+    ///       so the drawn figure survives the freeze; Idle triggers the SnapFade.
     /// </summary>
     internal sealed class ShapeFormationTicker : ILateTickable
     {

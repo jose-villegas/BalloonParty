@@ -265,7 +265,7 @@ namespace BalloonParty.Game.Score.Behaviours
         }
 
         // 6 = triangular prism: the two triangles 0-1-2 and 3-4-5 as loops plus the three verticals (03, 14, 25)
-        // as shuttles running the wide axis (José's "trails along the wide axis").
+        // as shuttles running the wide axis.
         private static FormationShape BuildTriangularPrism()
         {
             var vertices = new[]
@@ -470,16 +470,6 @@ namespace BalloonParty.Game.Score.Behaviours
             return Build(20, 1.15f, vertices, walks);
         }
 
-        // 30 = a GARLAND of outline stars: three big 5-pointed stars traced by their silhouette — tip,
-        // notch, tip, notch — never crossing their own interior (chord-drawn stars read as tangles: the
-        // pen slices through the star instead of drawing the shape you would cut from paper). Their caps
-        // sit 120° apart around the equator, threaded into ONE closed walk by straight tip-to-tip SEAMS:
-        // every pen draws a star, exits along the seam into the next star, and keeps flowing around the
-        // band — the seam IS the migration between stars (a time-rotating "hop" frame was tried first and
-        // smeared into spirals: pens kept orbiting while the frame turned). After closing an outline the
-        // pen re-walks two segments from the entry tip back to the exit tip, so no seam ever cuts across
-        // a star's interior; those two edges per star are double-inked (the 12/20 precedent). Half-speed
-        // SpinScale for readability.
         // 30 = a BALL OF STARS: six five-point OUTLINE stars stamped onto the sphere at the six octahedral
         // directions (±x, ±y, ±z). Six stars spread evenly over the WHOLE ball (the coverage three coplanar
         // stars never reached), and each is drawn by its SILHOUETTE — the pen orbits the tip-notch-tip outline
@@ -535,7 +525,7 @@ namespace BalloonParty.Game.Score.Behaviours
         // from the 60-vertex rhombicosidodecahedron, then face-walking to produce one walk per face.
         private static FormationShape BuildJ80()
         {
-            // Phase 1: generate the full 60-vertex RID and face-walk it to identify the pentagonal caps.
+            // Generate the full 60-vertex RID and face-walk it to identify the pentagonal caps.
             var rid = RhombicosidodecahedronVertices();
             var ridAdj = BuildUniformAdjacency(rid);
             SortNeighborsByAngle(rid, ridAdj);
@@ -593,7 +583,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 }
             }
 
-            // Phase 2: build the J80 edge graph on the remaining 50 and face-walk it.
+            // Build the J80 edge graph on the remaining 50 and face-walk it.
             var adj = BuildUniformAdjacency(vertices);
             SortNeighborsByAngle(vertices, adj);
             var faces = HalfEdgeFaceWalk(vertices.Length, adj);

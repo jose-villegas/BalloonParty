@@ -25,11 +25,8 @@ namespace BalloonParty.Configuration
     }
 
     /// <summary>
-    ///     Global knobs shared by every BigScore formation. The old per-tier star table (and the deploy/draw/
-    ///     collapse phase machine) are gone: a group's score decomposes over the <see cref="ShapeCatalog"/> and
-    ///     each denomination lives one Travel phase whose scale-over-time curve blooms the shape from a point,
-    ///     holds it, and tapers it back to a point at the bar. The only per-shape variation is the catalog's
-    ///     <c>RadiusScale</c>.
+    ///     Global knobs shared by every BigScore formation: radius, pen speed, coverage, spin and the
+    ///     scale-over-travel curve that blooms/tapers each shape.
     /// </summary>
     [Serializable]
     internal struct BigScoreFormationSettings
