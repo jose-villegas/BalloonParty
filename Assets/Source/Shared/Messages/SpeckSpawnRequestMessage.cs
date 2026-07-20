@@ -10,10 +10,15 @@ namespace BalloonParty.Shared.Messages
         public readonly SpeckSource Source;
         public readonly Vector3 WorldPosition;
 
-        public SpeckSpawnRequestMessage(SpeckSource source, Vector3 worldPosition)
+        /// <summary>The shot's normalized velocity t in [0,1] at the spawn moment — only meaningful for
+        /// <see cref="SpeckSource.ProjectileCruise" />'s velocity-scaled profile; ignored by every other source.</summary>
+        public readonly float VelocityT;
+
+        public SpeckSpawnRequestMessage(SpeckSource source, Vector3 worldPosition, float velocityT = 0f)
         {
             Source = source;
             WorldPosition = worldPosition;
+            VelocityT = velocityT;
         }
     }
 }

@@ -101,6 +101,13 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Maximum number of lerp stamps active at once. Oldest are evicted when full.")]
         [SerializeField] [Range(4, 64)] private int _maxLerpStamps = 32;
 
+        [Header("Shield-Loss Velocity Scaling")]
+        [Tooltip("Scales the projectile's shield-loss wall-impact stamp (radius + strength) by its velocity, " +
+                 "normalized 0 (base/non-cruising speed) to 1 (the cruise ramp's max). appliedValue = " +
+                 "base*(curve.Evaluate(t)+1); author y≈0 at t=0 so a base-speed hit matches the unscaled " +
+                 "ProjectileImpact profile. NEEDS AUTHORING.")]
+        [SerializeField] private AnimationCurve _shieldLossVelocityCurve = new();
+
         [Header("Shaders")]
         [Tooltip("Diffusion blit shader. Must be assigned — Shader.Find strips Hidden shaders from builds.")]
         [SerializeField] private Shader _diffusionShader;
@@ -138,6 +145,7 @@ namespace BalloonParty.Configuration.Effects
         public int MaxLerpStamps => _maxLerpStamps;
         public Shader DiffusionShader => _diffusionShader;
         public Shader StampBatchedShader => _stampBatchedShader;
+        public AnimationCurve ShieldLossVelocityCurve => _shieldLossVelocityCurve;
 
         StampProfile IDisturbanceFieldSettings.GetProfile(StampSource source)
         {

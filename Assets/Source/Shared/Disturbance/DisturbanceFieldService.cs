@@ -5,6 +5,7 @@ using UnityEngine;
 using VContainer.Unity;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Shared.Extensions;
 
 namespace BalloonParty.Shared.Disturbance
 {
@@ -219,6 +220,19 @@ namespace BalloonParty.Shared.Disturbance
                 var strength = profile.Strength * (1f - profile.StrengthFalloff * t);
                 Stamp(origin + step * i, radius, strength, direction, profile.Duration, paletteIndex, reportImpact: i == 0);
             }
+        }
+
+        /// <summary>Stamps the source's profile with radius+strength scaled by the shot's velocity-normalized
+        /// <paramref name="velocityT"/> (see <see cref="IDisturbanceFieldSettings.ShieldLossVelocityCurve"/>) —
+        /// used for the projectile's shield-loss wall impact only. An unauthored curve evaluates to 0
+        /// everywhere, so appliedValue = base until it's authored.</summary>
+        internal void StampShieldLoss(StampSource source, Vector3 worldPosition, float velocityT, int paletteIndex = -1)
+        {
+            var profile = _settings.GetProfile(source);
+            var curve = _settings.ShieldLossVelocityCurve;
+            var radius = curve.ScaleByVelocity(profile.Radius, velocityT);
+            var strength = curve.ScaleByVelocity(profile.Strength, velocityT);
+            Stamp(worldPosition, radius, strength, Vector2.zero, profile.Duration, paletteIndex);
         }
 
         private void FlushPendingStamps()

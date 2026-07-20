@@ -20,6 +20,12 @@ namespace BalloonParty.Configuration.Effects
                  "brightness). 1 = neutral, authored look.")]
         [Range(0f, 2f)] [SerializeField] private float _intensity = 1f;
 
+        [Tooltip("Scales the projectile's shield-loss light flash (radius + intensity) by its velocity, " +
+                 "normalized 0 (base/non-cruising speed) to 1 (the cruise ramp's max). appliedValue = " +
+                 "base*(curve.Evaluate(t)+1); author y≈0 at t=0 so a base-speed hit matches the flash's " +
+                 "unscaled radius/intensity. NEEDS AUTHORING.")]
+        [SerializeField] private AnimationCurve _shieldLossLightVelocityCurve = new();
+
         [Header("Field — Resolution")]
         [Tooltip("Field RT density (texels per world unit). Higher = smoother colour/light regions; the RT " +
                  "stays small and only re-renders when a light or the owner changes, so this can be far " +
@@ -141,5 +147,6 @@ namespace BalloonParty.Configuration.Effects
             _lightDirection.sqrMagnitude > 0.0001f ? _lightDirection.normalized : Vector2.up;
         public Color LightColor => _lightColor;
         public float Intensity => _intensity;
+        public AnimationCurve ShieldLossLightVelocityCurve => _shieldLossLightVelocityCurve;
     }
 }

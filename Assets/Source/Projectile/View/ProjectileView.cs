@@ -86,6 +86,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private PauseService _pauseService;
         [Inject] private DisturbanceFieldService _disturbanceField;
         [Inject] private SceneLightFieldService _lightField;
+        [Inject] private ISceneLightSettings _sceneLightSettings;
 
         private IWriteableProjectileModel _model;
         private Light _light;
@@ -448,8 +449,9 @@ namespace BalloonParty.Projectile.View
 
             if (step.Outcome == ProjectileStepOutcome.Destroyed)
             {
-                _disturbanceField.Stamp(StampSource.ProjectileImpact, step.WallContact, Vector2.zero);
-                FlashShieldLoss(step.WallContact);
+                var velocityT = ComputeVelocityT(step.Speed);
+                _disturbanceField.StampShieldLoss(StampSource.ProjectileImpact, step.WallContact, velocityT);
+                FlashShieldLoss(step.WallContact, velocityT);
                 DestroyProjectile();
                 return;
             }
@@ -460,9 +462,20 @@ namespace BalloonParty.Projectile.View
                 TryEnterCruise(step.Position, step.Direction);
 
                 // Punctuate the bounce: a radial impact into the motion field at the wall, plus a
-                // brief Sparks-colour light flash at the same point.
-                _disturbanceField.Stamp(StampSource.ProjectileImpact, step.WallContact, Vector2.zero);
-                FlashShieldLoss(step.WallContact);
+                // brief Sparks-colour light flash at the same point — both scaled by the shot's
+                // velocity at this exact shield-loss instant (see ComputeVelocityT).
+                var velocityT = ComputeVelocityT(step.Speed);
+                _disturbanceField.StampShieldLoss(StampSource.ProjectileImpact, step.WallContact, velocityT);
+                FlashShieldLoss(step.WallContact, velocityT);
+
+                // The cruise-triggered speck burst: one request per bounce while cruising (including the
+                // bounce that just started it), its count scaled by the shot's normalized velocity via
+                // the profile's curve in SpeckField.
+                if (_model.IsCruising.Value)
+                {
+                    _speckPublisher.Publish(new SpeckSpawnRequestMessage(
+                        SpeckSource.ProjectileCruise, step.WallContact, velocityT));
+                }
             }
 
             // The motion resolver ends the pierce when the discharge countdown elapses; the plowed toughs
@@ -617,21 +630,37 @@ namespace BalloonParty.Projectile.View
             }
         }
 
+        // Normalizes a resolved flight speed into [0,1] for the shield-loss stamp curves: t=0 at the
+        // shot's base (un-buffed, non-cruising) speed, t=1 at the fastest the cruise ramp can reach. A
+        // stacked buff (e.g. Snipe) that pushes speed past that ceiling just saturates at 1 rather than
+        // breaking the curve lookup.
+        private float ComputeVelocityT(float speed)
+        {
+            var normalSpeed = _config.ProjectileSpeed;
+            var maxSpeed = normalSpeed * _config.MaxCruiseSpeedMultiplier;
+            return maxSpeed > normalSpeed ? Mathf.Clamp01((speed - normalSpeed) / (maxSpeed - normalSpeed)) : 0f;
+        }
+
         // A brief Sparks-colour light at the wall where a bounce just spent a shield — fixed at the
         // contact point (it doesn't follow the shot on) and snapped off after the flash duration.
-        private void FlashShieldLoss(Vector3 position)
+        // Radius/intensity scale by the shot's velocity at the bounce (see ComputeVelocityT).
+        private void FlashShieldLoss(Vector3 position, float velocityT)
         {
             if (_sparksColorIndex < 0)
             {
                 _sparksColorIndex = _palette.PaletteIndexOf(GamePalette.SparksColorId);
             }
 
-            _shieldFlashLight ??= new Light(position, _shieldFlashRadius, _shieldFlashIntensity, _sparksColorIndex);
+            var curve = _sceneLightSettings.ShieldLossLightVelocityCurve;
+            var radius = curve.ScaleByVelocity(_shieldFlashRadius, velocityT);
+            var intensity = curve.ScaleByVelocity(_shieldFlashIntensity, velocityT);
+
+            _shieldFlashLight ??= new Light(position, radius, intensity, _sparksColorIndex);
             _shieldFlashLight.Position.Value = position;
             _shieldFlashLight.EndPosition.Value = position;
-            _shieldFlashLight.Radius.Value = _shieldFlashRadius;
-            _shieldFlashLight.EndRadius.Value = _shieldFlashRadius;
-            _shieldFlashLight.Intensity.Value = _shieldFlashIntensity;
+            _shieldFlashLight.Radius.Value = radius;
+            _shieldFlashLight.EndRadius.Value = radius;
+            _shieldFlashLight.Intensity.Value = intensity;
             _shieldFlashLight.PaletteIndex.Value = _sparksColorIndex;
             _shieldFlashRegistration ??= _lightField.RegisterLight(_shieldFlashLight);
             _shieldFlashOffTime = Time.time + _shieldFlashDuration;

@@ -18,5 +18,11 @@ namespace BalloonParty.Configuration.Effects
         /// <summary>Scales the light's contribution (diffuse contrast, specular brightness).
         /// 1 = neutral, authored look.</summary>
         float Intensity { get; }
+
+        /// <summary>Scales the projectile's shield-loss light flash (radius + intensity) by its velocity,
+        /// normalized 0 (base/non-cruising speed) → 1 (the cruise ramp's max) — see
+        /// <see cref="BalloonParty.Projectile.View.ProjectileView"/>'s shield-loss flash. Author y≈0 at t=0
+        /// so a base-speed hit reproduces the flash's un-scaled authored radius/intensity.</summary>
+        AnimationCurve ShieldLossLightVelocityCurve { get; }
     }
 }

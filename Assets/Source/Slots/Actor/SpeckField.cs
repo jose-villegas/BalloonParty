@@ -421,17 +421,22 @@ namespace BalloonParty.Slots.Actor
 
         private void OnSpawnRequest(SpeckSpawnRequestMessage msg)
         {
-            Enqueue(GetProfile(msg.Source), msg.WorldPosition);
+            Enqueue(GetProfile(msg.Source), msg.WorldPosition, msg.VelocityT);
         }
 
-        private void Enqueue(SpeckProfile profile, Vector2 worldPos)
+        // Scales the count by the shot's normalized velocity via the shared ScaleByVelocity formula
+        // (Count * (curve.Evaluate(t) + 1)). CruiseVelocityCurve is only authored for the ProjectileCruise
+        // profile; every other profile leaves it empty (null → the formula is a ×1 no-op, so Count is used).
+        private void Enqueue(SpeckProfile profile, Vector2 worldPos, float velocityT = 0f)
         {
-            if (profile.Count <= 0)
+            var count = Mathf.RoundToInt(profile.CruiseVelocityCurve.ScaleByVelocity(profile.Count, velocityT));
+
+            if (count <= 0)
             {
                 return;
             }
 
-            _pending.Add(new PendingSpeck { Position = worldPos, Count = profile.Count, Spread = profile.Spread });
+            _pending.Add(new PendingSpeck { Position = worldPos, Count = count, Spread = profile.Spread });
         }
 
         private SpeckProfile GetProfile(SpeckSource source)
@@ -454,7 +459,12 @@ namespace BalloonParty.Slots.Actor
             var max = 1;
             for (var i = 0; i < profiles.Count; i++)
             {
-                max = Mathf.Max(max, profiles[i].Count);
+                var profile = profiles[i];
+                // A velocity-scaled profile can spawn more than its authored Count — size the scratch buffer
+                // off the peak multiplier (curve.MaxKeyValue() + 1, matching ScaleByVelocity), floored at 1
+                // so an unauthored curve still reserves the base Count, and a scaled-up burst never truncates.
+                var multiplier = Mathf.Max(1f, profile.CruiseVelocityCurve.MaxKeyValue() + 1f);
+                max = Mathf.Max(max, Mathf.CeilToInt(profile.Count * multiplier));
             }
 
             return max;

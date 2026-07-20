@@ -18,29 +18,36 @@ namespace BalloonParty.Projectile.Controller
         public readonly Vector3 Position;
         public readonly Vector3 WallContact;
         public readonly Vector2 Direction;
+
+        /// <summary>The resolved flight speed used to take this step (post-buff, post-cruise-ramp) — the
+        /// instantaneous velocity magnitude for velocity-scaled feedback (e.g. the shield-loss stamp).</summary>
+        public readonly float Speed;
+
         public readonly ProjectileStepOutcome Outcome;
 
-        private ProjectileStep(Vector3 position, Vector3 wallContact, Vector2 direction, ProjectileStepOutcome outcome)
+        private ProjectileStep(
+            Vector3 position, Vector3 wallContact, Vector2 direction, float speed, ProjectileStepOutcome outcome)
         {
             Position = position;
             WallContact = wallContact;
             Direction = direction;
+            Speed = speed;
             Outcome = outcome;
         }
 
-        internal static ProjectileStep Moved(Vector3 position, Vector2 direction)
+        internal static ProjectileStep Moved(Vector3 position, Vector2 direction, float speed)
         {
-            return new ProjectileStep(position, position, direction, ProjectileStepOutcome.Moved);
+            return new ProjectileStep(position, position, direction, speed, ProjectileStepOutcome.Moved);
         }
 
-        internal static ProjectileStep Bounced(Vector3 position, Vector3 wallContact, Vector2 direction)
+        internal static ProjectileStep Bounced(Vector3 position, Vector3 wallContact, Vector2 direction, float speed)
         {
-            return new ProjectileStep(position, wallContact, direction, ProjectileStepOutcome.Bounced);
+            return new ProjectileStep(position, wallContact, direction, speed, ProjectileStepOutcome.Bounced);
         }
 
-        internal static ProjectileStep Destroyed(Vector3 position, Vector2 direction)
+        internal static ProjectileStep Destroyed(Vector3 position, Vector2 direction, float speed)
         {
-            return new ProjectileStep(position, position, direction, ProjectileStepOutcome.Destroyed);
+            return new ProjectileStep(position, position, direction, speed, ProjectileStepOutcome.Destroyed);
         }
     }
 }

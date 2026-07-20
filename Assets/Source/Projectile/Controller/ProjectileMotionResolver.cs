@@ -77,14 +77,14 @@ namespace BalloonParty.Projectile.Controller
 
             if (reflect == Vector3.zero)
             {
-                return ProjectileStep.Moved(position, model.Direction);
+                return ProjectileStep.Moved(position, model.Direction, speed);
             }
 
             model.ShieldsRemaining.Value--;
             if (model.ShieldsRemaining.Value < 0)
             {
                 // A dead shot stops AT the wall — the mirrored continuation is for survivors.
-                return ProjectileStep.Destroyed(wallContact, model.Direction);
+                return ProjectileStep.Destroyed(wallContact, model.Direction, speed);
             }
 
             // Consecutive wall bounces with no balloon contact = the shot may be ping-ponging empty
@@ -110,7 +110,7 @@ namespace BalloonParty.Projectile.Controller
             model.Direction = Vector2.Reflect(model.Direction, reflect.normalized);
             model.Flight.SegmentStartPosition = wallContact;
             model.Flight.SegmentElapsed = 0f;
-            return ProjectileStep.Bounced(position, wallContact, model.Direction);
+            return ProjectileStep.Bounced(position, wallContact, model.Direction, speed);
         }
 
         /// <summary>Reflects the projectile off a deflecting balloon at the ANALYTIC contact point,

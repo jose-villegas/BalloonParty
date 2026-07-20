@@ -33,6 +33,9 @@ namespace BalloonParty.Configuration.Effects
         {
             new() { Sources = SpeckSource.BalloonPop, Count = 16, Spread = 0.1f },
             new() { Sources = SpeckSource.UnbreakableBurst, Count = 24, Spread = 0.35f },
+            // CruiseVelocityCurve is left unauthored (empty) — until it's authored in the Inspector, every
+            // cruise bounce spawns the base Count (4) unscaled (×1). See SpeckProfile.CruiseVelocityCurve.
+            new() { Sources = SpeckSource.ProjectileCruise, Count = 4, Spread = 0.15f },
         };
 
         [Tooltip("The active ceiling follows this curve: X = seconds since the last burst (its last key is " +
