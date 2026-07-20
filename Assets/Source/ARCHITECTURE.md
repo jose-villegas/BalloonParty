@@ -1,6 +1,6 @@
-@page architecture BalloonParty — Architecture Diagrams
+@page architecture Architecture Diagrams
 
-# BalloonParty — Architecture Diagrams
+# Architecture Diagrams
 
 > Visual system maps, data flow diagrams, and scope hierarchy references.
 > Each sub-page includes the diagram and guidance on how the system works and how to extend it.
@@ -21,6 +21,7 @@
 | @subpage arch_cinematics_architecture "Cinematics Architecture" | Settings SO → producers → runner → rig/director/TimeScaleService, traits, interplay |
 | @subpage arch_score_cinematic "Score & Cinematic Pipeline" | Attribution → trails → cinematic intercept → level-up |
 | @subpage arch_trail_composition "Trail Utility Composition" | `TrailFlightRegistry`, endpoint registration and trail interception, cinematic pause |
+| @subpage arch_shape_formations "Score Shape Formations" | Big scores decomposed into 3D polyhedra drawn by orbiting trail-renderer pens |
 | @subpage arch_item_activation "Item Activation Pipeline" | Activation handoff, pool-return coordination, adding new item types |
 | @subpage arch_static_state "Static State" | `Navigation` and `Cinematic` — cross-scene singleton state |
 | @subpage arch_slot_actor "Slot Actor Abstraction" | Interface hierarchy, capability casting, adding new actor types |

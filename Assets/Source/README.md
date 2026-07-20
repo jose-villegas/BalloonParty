@@ -1,6 +1,6 @@
-@page style_guide BalloonParty — Code Style Guide
+@page style_guide Code Style Guide
 
-# BalloonParty — Code Style Guide
+# Code Style Guide
 
 > This document is the authoritative reference for architecture, code standards, and framework usage across `Assets/Source/`. All new code must conform to the rules defined here.
 
