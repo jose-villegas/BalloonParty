@@ -10,5 +10,4 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_future_ideas
 - @subpage plan_hdr_color_pipeline
 - @subpage plan_terrain_biomes
-- @subpage plan_unified_hex_motion
 - @subpage plan_gameplay_telemetry
