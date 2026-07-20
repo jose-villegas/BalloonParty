@@ -75,7 +75,7 @@ MonoBehaviour:
       _prefab: {fileID: 2148469744637963286, guid: 96f46efd86e994a7f95e53ccf7be9cb6,
         type: 3}
     _hitsToPop: 3
-    _scoreValue: 7
+    _scoreValue: 8
     _itemActivationWeight: 0
     _balanceBias: 3
     _maxBalanceSteps: 1
@@ -148,7 +148,7 @@ MonoBehaviour:
   _spawnEntryRowOffset: 4
   _timeForBalloonsBalance: 1.75
   _flightRebalanceInterval: 4
-  _popSpawnChance: 0.2
+  _popSpawnChance: 0.1
   _popSpawnFreeRows: 2
   _nudgeDistance: 0.15
   _nudgeDuration: 0.7
