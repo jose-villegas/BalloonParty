@@ -82,19 +82,6 @@ namespace BalloonParty.Game.Cinematics
             }
         }
 
-        // Wall-clock length of the wave; mirror this if the wave loop's cadence changes.
-        public float EstimateSeconds()
-        {
-            if (_bands.Count == 0)
-            {
-                return 0f;
-            }
-
-            var steps = ((_maxBand - _minBand) / 2) + 1;
-            var ascend = _settings.LevelAscend;
-            return steps * ascend.PopWaveBandSeconds / ascend.PopSlowMoTimeScale;
-        }
-
         public async UniTask PlayAsync(CancellationToken ct)
         {
             if (_bands.Count == 0)

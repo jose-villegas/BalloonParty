@@ -5,7 +5,7 @@ namespace BalloonParty.Configuration.Cinematics
 {
     /// <summary>
     ///     Tuning for the float-away board effect: balloons float up on their own while swaying on a sine
-    ///     and scaling to zero as they clear. Authored entirely in the editor.
+    ///     and tilting into the sway as they clear. Authored entirely in the editor.
     /// </summary>
     [Serializable]
     internal class BoardFloatAwaySettings

@@ -19,9 +19,10 @@ namespace BalloonParty.Game.Cinematics
     /// <summary>
     ///     The loss ceremony, split around the GameOver screen (mirrors the level-up flow): a slow-mo
     ///     push-in over the lost board holds the camera in while the screen shows; on dismiss the camera
-    ///     pulls back, and the run only restarts once that restore ends. Waits out any in-flight cinematic
-    ///     first (the heart-drain keeps playing into game-over) and always opens the gate — even when the
-    ///     beat can't run — so the screen never soft-locks.
+    ///     pulls back while fresh scenery rises in, restarting the run mid-transition (the rise swaps the
+    ///     board rather than resetting it in place). Waits out any in-flight cinematic first (the heart-drain
+    ///     keeps playing into game-over) and always opens the gate — even when the beat can't run — so the
+    ///     screen never soft-locks.
     /// </summary>
     internal sealed class GameOverLossCinematic : CameraRigCinematicProducer
     {
