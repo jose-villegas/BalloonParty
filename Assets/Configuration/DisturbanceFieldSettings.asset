@@ -126,7 +126,7 @@ MonoBehaviour:
     StrengthFalloff: 0
   - Sources: 4096
     Radius: 1.5
-    Strength: 15
+    Strength: 7
     Duration: 0.2
     Interval: 0
     Spacing: 0
