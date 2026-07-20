@@ -14,4 +14,3 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_unified_hex_motion
 - @subpage plan_lighting
 - @subpage plan_gameplay_telemetry
-- @subpage plan_snipe

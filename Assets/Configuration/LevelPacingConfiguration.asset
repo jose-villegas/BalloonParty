@@ -3876,22 +3876,49 @@ MonoBehaviour:
       m_RotationOrder: 4
     _snapToRounding: 1
   - _fromLevel: 2
-    _toLevel: 8
+    _toLevel: 4
     _cumulativeScore:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
         value: 1100
-        inSlope: 5647.012
-        outSlope: 5647.012
+        inSlope: 2909.5283
+        outSlope: 2909.5283
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
-        outWeight: 0.014110429
+        outWeight: 0.02208589
       - serializedVersion: 3
         time: 1
-        value: 3200
+        value: 2500
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _snapToRounding: 1
+  - _fromLevel: 5
+    _toLevel: 10
+    _cumulativeScore:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 3100
+        inSlope: 1337.6184
+        outSlope: 1337.6184
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.026380368
+      - serializedVersion: 3
+        time: 1
+        value: 4000
         inSlope: 2
         outSlope: 2
         tangentMode: 0
