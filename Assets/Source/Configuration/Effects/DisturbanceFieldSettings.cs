@@ -41,8 +41,9 @@ namespace BalloonParty.Configuration.Effects
                  "stamps marched along the fire heading (spaced by Radius).")]
         public float Interval;
 
-        [Tooltip("Marched profiles (ProjectileFire) only: world-units between successive stamps along the line " +
-                 "— total length ≈ Spacing × (count − 1). 0 = use Radius as the spacing.")]
+        [Tooltip("World-units between successive stamps along a line. Marched profiles (ProjectileFire): " +
+                 "total length ≈ Spacing × (count − 1). Path profiles (BalloonPath, via StampDisturbanceAlongPath): " +
+                 "the distance a target must travel to deposit the next wake stamp. 0 = use Radius as the spacing.")]
         public float Spacing;
 
         [Tooltip("Marched profiles (ProjectileFire) only: world-units the Radius GROWS by from the muzzle to " +

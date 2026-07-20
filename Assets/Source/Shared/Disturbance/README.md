@@ -178,7 +178,7 @@ Resolution is derived from `GameDisplayConfiguration.GetOrthogonalSize()` × `Di
 
 ### Stamp API
 
-- **`Stamp(source, worldPos, direction)`** — the overload most callers use: resolves the `StampProfile` configured for the `StampSource` (radius, strength, duration) and forwards to the explicit overload. `GetProfile(source)` is also exposed for callers that need to scale the profile themselves (e.g. `DisturbanceTweenExtensions`).
+- **`Stamp(source, worldPos, direction)`** — the overload most callers use: resolves the `StampProfile` configured for the `StampSource` (radius, strength, duration) and forwards to the explicit overload. `GetProfile(source)` is also exposed for callers that need to scale the profile themselves (e.g. `DisturbanceTweenExtensions.StampDisturbanceAlongPath`, which gates on distance travelled — one stamp per `Spacing` (fallback `Radius`) of the target's scaled movement — rather than once per rendered frame, so along-path wake density is frame-rate independent).
 - **`Stamp(worldPos, radius, strength, direction, duration = 0)`** — queues a disturbance at `worldPos`. World coordinates are converted to field UV space internally. When `duration` is zero (default), the stamp is applied instantly — stamps accumulate in a pending list and are flushed in batches each frame. When `duration` is greater than zero, queues a lerp stamp that ramps from 0 to full strength over that many seconds, spreading the effect smoothly across multiple frames. Useful for pop bursts, bomb detonations, and paint splashes. Every call also reports the impact to `ImpactEventBus`.
 
 ### Diffusion tick
@@ -224,8 +224,8 @@ On frames where stamps arrive but diffusion is not due, all instant stamps are f
 |---|---|---|---|
 | `ProjectileView` | Each `FixedUpdate` in `MoveAndBounce()` | `Projectile` | Continuous wake through Puff clouds; `Duration` from config typically 0 for a sharp per-frame stamp |
 | `ProjectileView` | Once, on the first free frame (muzzle exit) | `ProjectileFire` | Exit force as a cone: `Interval`-many stamps marched along the fire heading (spaced by `Spacing`, which sets the cone length), radius growing (`RadiusGrowth`) and strength fading (`StrengthFalloff`) toward the tip, tagged the reserved `Projectile` palette colour; specks seeded along the same line first; only the muzzle stamp reports impact |
-| `BalloonFactory` | Each frame during spawn path DOTween `OnUpdate` (via `StampDisturbanceAlongPath`) | `BalloonPath` | Spawn animations disturb clouds they pass through |
-| `BalloonBalancer` | Each frame during balance path DOTween `OnUpdate` (via `StampDisturbanceAlongPath`) | `BalloonPath` | Balance animations disturb clouds |
+| `BalloonFactory` | Distance-gated along the spawn path (`OnUpdate`, via `StampDisturbanceAlongPath`) | `BalloonPath` | One stamp per `Spacing`/`Radius` of travel, not per frame; spawn animations disturb clouds they pass through |
+| `BalloonBalancer` | Distance-gated along the balance path (`OnUpdate`, via `StampDisturbanceAlongPath`) | `BalloonPath` | One stamp per `Spacing`/`Radius` of travel, not per frame; balance animations disturb clouds |
 | `BalloonController` | On balloon pop | `BalloonPop` | Pop burst shockwave; `Duration > 0` creates an expanding shockwave shape |
 | `RejectedBalloonEffect` | When an overflow balloon pops | `BalloonPop` | Same pop-burst profile |
 | `BombItemHandler` | On detonation | `Bomb` | Large-radius burst; `Duration > 0` for smooth shockwave spread |
