@@ -34,6 +34,7 @@ The **module** handles everything specific to a particular effect:
 | `EditorGridHelper` | Static utility — `RandomSlotPositions` (picks N random slots sorted by distance from origin). Delegates hex grid math to `SlotGrid.IndexToWorldPosition(index, separation, offset)` — single source of truth for index-to-world conversion |
 | `PaintSplashPreviewModule` | Module for `PaintSplashView` — blob arc flights with particles, spin, splash particle spawning (prefab-stage-aware). Delegates position/scale/MPB math to `PaintSplashView.ComputeBlobFlight` and `ApplyBlobMaterial` |
 | `ChainLightningPreviewModule` | Module for `ChainLightningView` — generates random grid positions as targets, delegates bolt buffer building to `ChainLightningGeometry.BuildBoltBuffers` (with configurable `fractalDecay`), builds a smooth glow path via `ChainLightningGeometry.BuildGlowPath`, interpolates glow position every tick using `PathHelper.SampleAt`, animates forward growth + retraction via delta-time state machine |
+| `LaserPreviewModule` | Module for `LaserView` — recolours the view's wired renderers with the picked tint and samples the effect's `AnimationClip` frame-by-frame via `SampleAnimation` (`Animator.Update` is unreliable outside Play mode), re-applying the tint after each sample |
 
 ## Adding a new effect preview
 

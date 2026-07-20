@@ -23,7 +23,7 @@ Effects (VFX that need to `Play` and `Stop`) have their own hierarchy, separate 
 For simple particle effects that don't need the full `EffectView` contract:
 
 - **`PoolableParticle`** — `MonoBehaviour` implementing `IPoolable` and `IEffect`. `OnSpawned()` stops the particle to prevent stale color from Play-on-Awake. The consumer calls `Play(pos, color, onComplete)` and handles the return in the `onComplete` callback. Completion is detected the same way as `ParticleEffectView`: `stopAction = Callback` → `OnParticleSystemStopped()`, with an `IsAlive(true)` fallback in `Update()` for prefabs whose child sub-emitters outlive the root's own stop (e.g. the tough-balloon-pop smoke child).
-- **`ParticlePoolChannel`** — `PoolChannel<PoolableParticle>` that takes a `GameObject` prefab and adds `PoolableParticle` via `AddComponent`. Used for balloon pop VFX and shield VFX.
+- **`ParticlePoolChannel`** — `PoolChannel<PoolableParticle>` that takes a `GameObject` prefab. `Create()` reuses the prefab's own `PoolableParticle` if it already has one, adding it via `AddComponent` only as a fallback. Used for balloon pop VFX and shield VFX.
 
 ## Return Responsibility
 
@@ -60,10 +60,10 @@ For prefabs that need **no** VContainer injection — the common case for effect
 
 | Channel | Key | Item | Creates via |
 |---|---|---|---|
-| `InjectingPoolChannel<T>` | (varies) | any `IPoolable` | `Object.Instantiate` + `InjectGameObject` |
+| `InjectingPoolChannel<T>` | (varies) | any `IPoolable` | `IObjectResolver.Instantiate` |
 | `BalloonPoolChannel` | prefab name | `BalloonView` | `InjectingPoolChannel` |
 | `ProjectilePoolChannel` | prefab name | `ProjectileView` | `InjectingPoolChannel` |
-| `ParticlePoolChannel` | prefab name (e.g. `"PopVfx"`) | `PoolableParticle` | `Object.Instantiate` + `AddComponent<PoolableParticle>` |
+| `ParticlePoolChannel` | prefab name (e.g. `"PopVfx"`) | `PoolableParticle` | `Object.Instantiate` + existing `PoolableParticle` or `AddComponent<PoolableParticle>` fallback |
 | `SimplePoolChannel<T>` | (varies — prefab name, `ScoreTrail_{color}`, `StreakNotice_{color}`, …) | any non-injected `IPoolable` (`EffectView`, `ItemVisualView`, `FlyingTrail`, `ProgressNotice`) | `Object.Instantiate` (+ `GetComponent<T>` for the `GameObject` overload) |
 
 ## Usage

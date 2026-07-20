@@ -13,8 +13,8 @@ is an optional capability discovered at the call site via a cast.
 **Core interfaces:**
 - `ISlotActor` — read-only: `SlotIndex`, `Kind` (`Dynamic` or `Static`)
 - `IWriteableSlotActor` — adds writable `SlotIndex`; used by grid mutators
-- `IDynamicSlotActor` — adds `IsStable` reactive property; balloons implement this
-- `ISlotActorView` — view contract: `transform`, `TweenTracker`, `ActorKind`
+- `IDynamicSlotActor` — redefines `SlotIndex` as reactive, adds `IsStable` reactive property; balloons implement this
+- `ISlotActorView` — view contract: `transform`, `TweenTracker`, `ActorKind`, `RotationPivot`
 
 **Capability interfaces** — optional traits discovered by casting at the subscriber's
 call site:

@@ -12,7 +12,7 @@ scoring only tallies points and hands them to `ILevelProgress`.
 | `LevelController.cs` | The progression owner (plain C# `IStartable`/`IRunResettable`, implements `ILevelProgress`). Holds the current `Level`, per-colour confirmed + projected progress, and the `LevelUpPhase`. Detects a level-up, publishes `ScoreLevelUpMessage`, and drives the two-phase commit below. |
 | `LevelUpPhase.cs` | The ceremony as one explicit state — `Playing → Pending → Transitioning → Playing`. Replaces the old scattered guard flags: a level-up is only *detected* in `Playing`, and every out-of-phase input (a second detection, a straggler trail, a duplicate dismissal) is rejected because no transition exists for it. |
 | `ILevelProgress.cs` | Read surface of progression: `Level`, `Phase`, `GetRequiredPoints`/`GetProgress`, `WillLevelUp` (projected), `ClaimProgress` (the scoring write-back, capped per level, banking the excess), and `ExcessPoints`/`TotalExcessPoints` (the run-scoped banked excess). |
-| `LevelDifficultyResolver.cs` | Resolves and caches the live per-level mix (implements `IActiveLevelParameters` + `ILevelThresholds`). On level-up it re-resolves `LevelParameters` for the new level, bridging range weights onto the balloon/item catalogs and computing the allowed-colour set. Also owns the points-required formula. |
+| `LevelDifficultyResolver.cs` | Resolves and caches the live per-level mix (implements `IActiveLevelParameters` + `ILevelThresholds`). On level-up it re-resolves `LevelParameters` for the new level, bridging range weights onto the balloon/item catalogs and computing the allowed-colour set. Also exposes the per-level points threshold, delegating to `ILevelPacingConfiguration.ThresholdForLevel`. |
 | `IActiveLevelParameters.cs` | Single read surface for the live difficulty mix (`Current`). Never read `ILevelPacingConfiguration` directly. |
 | `ILevelThresholds.cs` | The per-level score goal (`PointsRequiredForLevel(level)`) for any level, not just the active one. |
 | `LevelTransitionController.cs` | The **Ascent** — the level-transition cinematic. Phase-driven (see below); holds `PauseSource.LevelTransition` for the whole sequence. |
@@ -37,6 +37,11 @@ animations have a stable state to play against:
 3. **`Transitioning → Playing`** — the Ascent reports it has settled (`LevelTransitionCompletedMessage`),
    so scoring reopens.
 
+The `Playing → Pending` commit is also held while a shot is piercing — a pierce plows through many
+balloons in one flight, so firing the ceremony on a mid-flight confirming arrival would interrupt the
+shot. `LevelController` re-checks the moment the pierce discharges, by which point any confirming
+trails that arrived during the plow have already advanced progress.
+
 `Phase` is the cue the rest of the ceremony reads instead of inferring from nav/pause: the popup shows
 on `ScoreLevelUpMessage`, and the Ascent (`LevelTransitionController`) starts on
 `Phase → Transitioning` — deterministic, fires exactly once, no extra re-entrancy flag.
@@ -58,18 +63,21 @@ gameplay or UI reads the bank today — it's reserved for a future per-level cur
 `LevelTransitionController` subscribes to `Phase → Transitioning` and holds
 `PauseSource.LevelTransition` for the whole run so the thrower and spawn-loss checks stay inert until
 the reveal is ready. Its sequence (see the file for the full choreography): wait for any in-flight
-cinematic + the overflow drain → pop the old level's balloons in a **slow-mo anti-diagonal wave** from
-the outermost populated bands inward → slide the **outgoing content** out the bottom on a shared
-conveyor while the **new** scenario descends into place, then reopen scoring. The Ascent moves the
-shared `ScenarioContentRoot`, not the camera; the camera un-zoom is tweened here (synced to the pop
-wave), *not* by `LevelUpCinematic`. Its tuning is `ICinematicsSettings.LevelAscend` — see
+cinematic + the overflow drain → float the old level's balloons away via the injected `IBoardEffect`
+(bound to `BoardFloatAwayEffect`: each balloon rises on a curve while swaying side-to-side, tilting
+into the sway — they *survive*, unlike the game-over's pop) → slide the **outgoing content** out the
+bottom on a shared conveyor while the **new** scenario descends into place, then reopen scoring. The
+Ascent moves the shared `ScenarioContentRoot`, not the camera; the camera un-zoom is tweened here,
+timed by the `LevelUpRestore` segment's own curve — independent of the concurrent board effect — *not*
+by `LevelUpCinematic`. Its tuning is `ICinematicsSettings.LevelAscend` — see
 `Game/Cinematics/README.md` and `Configuration/README.md`.
 
 ## Difficulty resolution
 
 `LevelDifficultyResolver` resolves `LevelParameters` for the current level on start, on level-up, and
 on run reset (before the grid respawns, `RunResetOrder.Derived`). It looks up the authored
-`LevelRangeEntry` (falling back to the last range as the open-ended tail), resolves its `RangedValue`
+`LevelRangeEntry` whose bounds contain the level, falling back to the entry flagged `IsFallback` (a
+`-1` level bound) when none matches, resolves its `RangedValue`
 bands with the run's seeded RNG, then bridges the result onto the catalogs: balloon/item **type
 gates** (a type absent or zero-weight in the range's set is excluded) with effective weight
 `catalogEntry.Weight × rangeWeight.Weight`, and the allowed-colour set from the range's colour mask.

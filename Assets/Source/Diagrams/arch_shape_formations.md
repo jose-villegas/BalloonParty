@@ -26,7 +26,7 @@ digraph ShapeFormations {
         Resolver [label="ScoreTrailBehaviourResolver\nResolve(Points):\nhighest MinPoints\nthat clears wins"];
         ConfigSO [label="IScoreTrailBehaviourConfiguration (SO)\nEntries: (Id, MinPoints)\n+ BigScoreFormationSettings"];
         Reporter [label="ScoreTrailReporter\n(one per group, not pooled)\nReportArrival — asserts\nnever-overshoot, exact sum"];
-        Default  [label="DefaultScoreTrailBehaviour\nclassic per-point fan-out\n(< MinPoints, and the\nremainder=1 tail)"];
+        Default  [label="DefaultScoreTrailBehaviour\nclassic per-point fan-out\n(< MinPoints)"];
     }
 
     subgraph cluster_formation {
@@ -69,7 +69,7 @@ digraph ShapeFormations {
 
     Big -> Catalog [label="TryGet(denomination)\n-> FormationShape"];
     Big -> Ticker [label="BeginGroup (anchor)\nLaunchFormation × denomination"];
-    Big -> Reporter [label="ReportArrival\n(remainder=1 tail,\nparity with Default)"];
+    Big -> Reporter [label="ReportArrival\nper formation\n(remainder-free split)"];
 
     Ticker -> Pens [label="Acquire()/Release()\nper FormationState"];
     Ticker -> Flights [label="Register/Unregister\nCarrierId"];
@@ -107,18 +107,17 @@ configured floor, `BigScoreTrailBehaviour` at or above it. Both handlers share t
 is the only thing that knows shapes exist at all.
 
 **Formation simulation:** `BigScoreTrailBehaviour.Decompose` runs an optimal coin-change
-DP over `ShapeCatalog.Denominations` (`100, 50, 30, 20, 12, 10, 8, 6, 5, 4, 3, 2`),
-picking the fewest pieces and treating any leftover 1 as a heavily-penalized terminal
-remainder. Each denomination becomes one *formation*: `ShapeCatalog.TryGet` returns its
+DP over `ShapeCatalog.Denominations` (`100, 50, 30, 20, 15, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2`),
+picking the fewest pieces, largest-first. With both `2` and `3` on the ladder every total
+this handler ever sees decomposes remainder-free — `AssertNoRemainder` asserts this holds
+rather than silently falling back. Each denomination becomes one *formation*: `ShapeCatalog.TryGet` returns its
 baked `FormationShape` (unit-sphere vertices plus the closed walks a pen orbits — a
 polyhedron's edges partitioned into Hamiltonian-ish cycles and back-and-forth shuttles),
 the behaviour fits every formation's radius inside the board (`FitScale`/`ClampCenter`
 over `WallLimits`) and derives a shared tumble axis from the pop's `HitDirection`, then
 hands the whole group to `ShapeFormationTicker` via `BeginGroup` (which registers one
 bare anchor `Transform` in `TrailFlightRegistry<TrailId>` as the group's *principal*)
-and one `LaunchFormation` call per denomination. A lone remainder of 1 is **not** routed
-through `DefaultScoreTrailBehaviour` — the handler spawns its own single classic trail
-inline for byte-for-byte parity, so `BigScoreTrailBehaviour` never depends on its sibling.
+and one `LaunchFormation` call per denomination.
 
 **The ticker is the whole simulation.** `ShapeFormationTicker.LateTick` evaluates, per
 formation and per frame, a pen's world position as

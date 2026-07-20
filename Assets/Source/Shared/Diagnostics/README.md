@@ -6,14 +6,14 @@ Runtime diagnostic tools for performance monitoring and device configuration.
 
 | File | What it does |
 |---|---|
-| `FPSCounter` | MonoBehaviour that displays average FPS and lowest frame rate per 0.5s interval as an `OnGUI` overlay. Color-coded: green (\f$\ge\f$ warn threshold), yellow (\f$\ge\f$ bad threshold), red (\f$<\f$ bad). Font size, colors, and thresholds configurable via Inspector. **Dev-only** — the whole class is guarded by `UNITY_EDITOR \|\| DEVELOPMENT_BUILD`, so it compiles out of release builds (the scene component and its serialized settings drop with it) |
+| `FPSCounter` | MonoBehaviour that displays average FPS and lowest frame rate per 0.5s interval as an `OnGUI` overlay. Color-coded: green (\f$\ge\f$ warn threshold), yellow (\f$\ge\f$ bad threshold), red (\f$<\f$ bad). Colors and thresholds are read live from the Inspector fields every `OnGUI`; font size is baked into the `GUIStyle` the first time it's built and never rebuilt after, so a font-size change needs a domain reload (entering/exiting Play mode) to take effect. **Dev-only** — the whole class is guarded by `UNITY_EDITOR \|\| DEVELOPMENT_BUILD`, so it compiles out of release builds (the scene component and its serialized settings drop with it) |
 | `FrameRateSettings` | MonoBehaviour that sets `Application.targetFrameRate` on `Awake`. Disables VSync (`vSyncCount = 0`) so the target takes effect. Three modes: **Default60** (fixed 60), **MatchDisplay** (device-dependent — see below), **Custom** (exposes a frame rate field, shown conditionally via `[ShowIf]`). Default mode is `MatchDisplay`. Ships in **all builds** — it's the only code setting the target frame rate, so release needs it |
 
 ## Usage
 
 Add both components to a persistent GameObject in the scene. `FrameRateSettings` should run on the same object or earlier than any gameplay code — it only needs to execute once in `Awake()`.
 
-In the Editor, changing values in Play mode applies immediately via `OnValidate` (`FPSCounter` updates live; `FrameRateSettings` re-applies the target frame rate). In the Editor, `MatchDisplay` leaves the target uncapped (`-1`) — the Game View reports its own refresh rate, not the physical display, so matching it would falsely cap the editor.
+In the Editor, changing `FrameRateSettings`' Inspector fields in Play mode re-applies the target frame rate immediately via `OnValidate`. `FPSCounter` has no such hook — its colors and thresholds are read live in `OnGUI` regardless, but a font-size change needs a domain reload to show (see above). In the Editor, `MatchDisplay` leaves the target uncapped (`-1`) — the Game View reports its own refresh rate, not the physical display, so matching it would falsely cap the editor.
 
 ## MatchDisplay on adaptive-refresh Android
 

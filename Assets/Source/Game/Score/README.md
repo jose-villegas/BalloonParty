@@ -10,9 +10,9 @@ not here.** `ScoreController` writes progress into `ILevelProgress` but never de
 | File | What it does |
 |---|---|
 | `TrailId` | Readonly struct — uniquely identifies a score trail by `(Color, Score)`. Two colors can share the same numeric score, so both are needed. No level component: the level-up is gated by the transition, so a trail is only ever in flight during the one level it belongs to |
-| `ScoreController` | `IStartable` — score-keeping only (implements `IRunScore`, exposing `TotalScore`). Hits reach it as `HitPipeline`'s first dispatch stage (`OnActorHit` invoked directly, not bus-subscribed) so the streak tracker is guaranteed current when `Dispatch` returns. It casts the actor to `IHasScoreColor`, calls `ResolveScoreAttribution(context, attributions)`, applies the streak multiplier, then writes each color's points into `ILevelProgress.ClaimProgress` (which caps them at the level threshold) and publishes one `ScorePointsGroupMessage` per resolved color carrying the group's total `Points`. On trail arrival it only tallies lifetime totals (`_persistentScore` + `TotalScore` by `msg.Points`); confirming level progress on arrival is `LevelController`'s job. Run-scoped: totals reset via `IRunResettable.ResetRun()` (see `Game/Run/`) |
-| `ColorStreakTracker` | Plain C# singleton — single source of truth for the color streak. `Record(colorId, breaksStreak)` updates state and returns the multiplier to apply. `breaksStreak = true` resets the chain and returns 1 (attribution still scores, no bonus). Auto-resets on `ScoreLevelUpMessage`. Exposed to UI consumers as `GetStreak(colorName)` via the `IColorStreak` interface |
-| `ScoreTrailService` | `IStartable` + `IDisposable` + `IRunResettable` — subscribes to `ScorePointsGroupMessage`, resolves the group to an `IScoreTrailBehaviour` (by group total, via `ScoreTrailBehaviourResolver`), builds a `ScoreTrailContext`, and hands the group to the handler's `Begin`. Owns the shared infrastructure the handlers borrow: the per-color `TrailSpawner`s and prewarm, the endpoint/color lookups, the `TrailFlightRegistry<TrailId>` (exposed as `Flights`), and a pooled `IScoreTrailReporter` per group that publishes `ScoreTrailArrivedMessage` (and asserts the handler contract in dev builds). On a run reset it cancels the group-spawn `CancellationToken` so stale groups stop spawning into the next run |
+| `ScoreController` | `IStartable` — score-keeping only (implements `IRunScore`, exposing `TotalScore`). Hits reach it as `HitPipeline`'s first dispatch stage (`OnActorHit` invoked directly, not bus-subscribed) so the streak tracker is guaranteed current when `Dispatch` returns. It casts the actor to `IHasScoreColor`, calls `ResolveScoreAttribution(in context, incompleteColors, attributions)`, applies the streak multiplier, then writes each color's points into `ILevelProgress.ClaimProgress` (which caps them at the level threshold) and publishes one `ScorePointsGroupMessage` per resolved color carrying the group's total `Points`. Granted points also lead a `_projectedTotal` counter (summed at publish time, ahead of what's actually banked); on trail arrival it tallies lifetime totals (`_persistentScore` + `TotalScore` by `msg.Points`) — confirming level progress on arrival is `LevelController`'s job. On level-up it snaps `TotalScore` to `_projectedTotal` (so the popup never shows a stale low number while the last trails sit frozen) and records the gap as `_snapCredit`, which the frozen survivors' later arrivals absorb instead of double-counting. Run-scoped: totals reset via `IRunResettable.ResetRun()` (see `Game/Run/`) |
+| `ColorStreakTracker` | Plain C# singleton — single source of truth for the color streak. `Record(colorId, breaksStreak)` updates state and returns the multiplier to apply. `breaksStreak = true` resets the chain and returns 1 (attribution still scores, no bonus). Auto-resets on `ScoreLevelUpMessage` and on `ProjectileLoadedMessage` (a streak never carries across turns). Exposed to UI consumers as `GetStreak(colorName)` via the `IColorStreak` interface |
+| `ScoreTrailService` | `IStartable` + `IDisposable` + `IRunResettable` — subscribes to `ScorePointsGroupMessage`, resolves the group to an `IScoreTrailBehaviour` (by group total, via `ScoreTrailBehaviourResolver`), builds a `ScoreTrailContext`, and hands the group to the handler's `Begin`. Owns the shared infrastructure the handlers borrow: the per-color `TrailSpawner`s and prewarm, the endpoint/color lookups, the `TrailFlightRegistry<TrailId>` (exposed as `Flights`), and a fresh (not pooled) `IScoreTrailReporter` per group that publishes `ScoreTrailArrivedMessage` (and asserts the handler contract in dev builds). On a run reset it cancels the group-spawn `CancellationToken` so stale groups stop spawning into the next run |
 | `Behaviours/` | The choreography seam — see [Trail Behaviour Seam](#trail-behaviour-seam) |
 
 ## Streak Multiplier
@@ -24,7 +24,7 @@ not here.** `ScoreController` writes progress into `ILevelProgress` but never de
 - Third: streak = 3, points tripled
 - Popping a different color resets to streak = 1
 - `ToughBalloonModel` and `BubbleClusterModel` attributions carry `BreaksStreak = true`, and any mixed-color attribution group breaks the chain too — the streak is reset before crediting points, so scatter pops never benefit from or continue a streak
-- Level-up resets the streak automatically (tracker subscribes to `ScoreLevelUpMessage`)
+- Level-up resets the streak automatically (tracker subscribes to `ScoreLevelUpMessage`), and so does a fresh shot (`ProjectileLoadedMessage`) — a streak never carries across turns
 
 The balloon's `ScoreValue` is multiplied by the current streak before publishing the group's `Points`. More trails spawn, filling the progress bar faster.
 
@@ -53,25 +53,26 @@ latch), `WillLevelUp`/`GetProgress`/`GetRequiredPoints`, and the `ScoreLevelUpMe
 spawns trails itself: it resolves each `ScorePointsGroupMessage` to an `IScoreTrailBehaviour` through
 `ScoreTrailBehaviourResolver` (highest-`MinPoints` entry the group's total clears wins, table authored in
 `IScoreTrailBehaviourConfiguration`), packs the shared infrastructure into a `ScoreTrailContext` (palette
-colour, endpoint, spawner, `Flights` registry, a pooled `IScoreTrailReporter`, config, a group-scoped
+colour, endpoint, spawner, `Flights` registry, a fresh (not pooled) `IScoreTrailReporter`, config, a group-scoped
 cancellation token), and calls `Begin`. The handler owns everything from spawn to arrival: it registers and
 unregisters its own flights, and reports arrivals through the reporter with true cumulative scores that sum to the
 group total. Each handler also nominates its **principal trail** via `GetPrincipalId` — the one the level-up
 cinematic tracks — so the cinematic derives the tipping id from the same code (`resolver.PrincipalIdFor(msg)`)
 that decides what registers, and the two can never disagree. `DefaultScore` reproduces the pre-seam pipeline
 byte-for-byte (one trail per point, scatter fan, `0.02 s` stagger, one point reported per landing, first trail =
-principal). `BigScore` is the confluence handler for large awards (see below).
+principal). `BigScore` is the confluence handler for any group past that floor (see below).
 
 ### `BigScore` + `ShapeFormationTicker` + `ShapeCatalog`
 
-Once a group clears the `BigScore` `MinPoints` (authored `7`), its score **decomposes** into a catalog of 3D
-shapes flown all at once — every point is one orbiting pen trail, so the 5×-on-a-cluster worst case becomes a
-handful of arrivals (one per shape), not hundreds.
+Once a group clears the `BigScore` `MinPoints` (authored `2` — `DefaultScore`'s floor is `0`, so only a
+1-point group ever falls through to it), its score **decomposes** into a catalog of 3D shapes flown all at
+once — every point is one orbiting pen trail, so the 5×-on-a-cluster worst case becomes a handful of
+arrivals (one per shape), not hundreds.
 
 `ShapeCatalog` (`internal static`, built once, zero-alloc lookup) is hand-authored 3D shape data. A denomination
 maps to a shape whose vertex count equals it: `2` line, `3` triangle, `4` tetrahedron, `5` square pyramid, `6`
-triangular prism, `7` hexagonal pyramid, `8` cube, `9` triangular cupola, `10` octagonal bipyramid,
-`12` hexagonal prism, `15` pentagonal cupola, `20` dodecahedron, `30` a BALL of six
+triangular prism, `7` hexagonal pyramid, `8` cube, `9` triangular cupola, `10` octagonal bipyramid, `12` hexagonal
+prism, `15` pentagonal cupola, `20` dodecahedron, `30` a BALL of six
 5-point OUTLINE stars stamped on the octahedral axes (±x/±y/±z, spherized onto the surface, pens tracing each
 silhouette — never crossing the interior; its 60-vertex path carries only 30 pens, five per star),
 `50` a 10×5 torus grid, and `100` a spherical-spiral yarn ball — the upper tiers favour a readable
@@ -81,11 +82,11 @@ plus back-and-forth shuttles for the polyhedra, latitude/longitude rings for the
 and one long coil for the yarn ball; arc walks slerp their segments (curved bands), chord walks lerp them
 (straight edges). Each shape also carries a `SpinScale` (complex shapes read better tumbling slowly) and an
 optional hit-aligned start (only the line, whose slope IS the shot's linear equation). `Denominations` is the
-decomposition **ladder** `{100, 50, 30, 20, 12, 10, 8, 6, 5, 4, 3, 2}`. `BigScoreTrailBehaviour.Decompose` is an
-optimal coin-change split over that ladder (fewest pieces, with an unavoidable terminal remainder of 1 penalized
-above any remainder-free split; the reconstruction deterministically takes the largest denomination that stays
-on an optimal path, which also yields descending order) — a terminal remainder of 1 becomes a single classic
-default trail.
+decomposition **ladder** `{100, 50, 30, 20, 15, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2}`. `BigScoreTrailBehaviour.Decompose`
+is an optimal coin-change split over that ladder (fewest pieces, largest-first reconstruction). With both `2` and
+`3` on the ladder, every total `BigScore` ever sees decomposes remainder-free — `AssertNoRemainder` asserts this
+holds rather than silently falling back (the old remainder-1-becomes-a-classic-trail fallback was dead code and
+has been removed).
 
 `BigScoreTrailBehaviour.Begin` decomposes `context.Points`, fits every shape's radius inside `WallLimits`, spreads
 the formations' sub-centres around the pop (golden-angle phyllotaxis, each wall-clamped), and launches them
@@ -138,7 +139,7 @@ The level-up cinematic (`LevelUpCinematic` in `Game/Cinematics/`) intercepts thr
 
 1. On a `ScorePointsGroupMessage` where `ILevelProgress.WillLevelUp()` is true, it records `_resolver.PrincipalIdFor(msg)` as the tipping trail and waits for that id to appear in `Flights`. The handler nominates its own principal, so the cinematic never hardcodes the numbering: for `DefaultScore` that resolves to the group's FIRST point (`msg.FirstScore`), which spawns immediately, keeping the bounded wait timeout-safe — later points can spawn seconds later under scatter stagger.
 2. It then pauses that single flight (`FlyingTrail.DisableMoveTween()` + `TrailFlight.Pause()`) and puppets its position/scale along the pan-in curve while the camera follows. All other in-flight trails keep flying at normal speed so their progress-bar arrivals confirm naturally.
-3. When the tipping trail reaches its bar (or its matching `ScoreTrailArrivedMessage` lands first), the cinematic calls `Flights.CompleteAll()` — every remaining in-flight trail completes instantly so all progress is confirmed before the popup opens.
+3. When the tipping trail reaches its bar (or its matching `ScoreTrailArrivedMessage` lands first) the pan-in ends — but the survivors are **not** completed there. They stay airborne (confirming progress normally) until `LevelUpPhase` reaches `Pending` (the popup is up), at which point `Flights.PauseAll()` freezes whatever is still in flight behind the popup. Those frozen trails are only resolved later, as outgoing-level content: `LevelTransitionController` calls `ScoreTrailService.HoldOutgoing`, which calls `Flights.CompleteAll()` — every survivor reports its arrival (banking its points) and, for shape formations, snap-fades out. Only the cinematic's own abort path calls `CompleteAll` directly, to resolve everything immediately when the ceremony is cut short.
 
 ## Interactions
 

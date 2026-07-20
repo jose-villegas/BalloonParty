@@ -12,9 +12,9 @@ Every grid occupant is an `ISlotActor`. The grid never speaks directly in balloo
 |---|---|
 | `ISlotActor` | Read-only grid contract — `SlotIndex : Vector2Int`, `Kind : SlotActorKind` |
 | `IWriteableSlotActor` | Writable counterpart — adds `new Vector2Int SlotIndex { get; set; }` |
-| `IDynamicSlotActor` | Extends `ISlotActor` — adds `IReadOnlyReactiveProperty<bool> IsStable`. Actors that can move or be in a transitioning state implement this. Static actors do NOT. |
-| `IWriteableDynamicSlotActor` | Extends both `IDynamicSlotActor` and `IWriteableSlotActor` — adds writable `ReactiveProperty<bool> IsStable` |
-| `ISlotActorView` | View contract — `transform`, `TweenTracker`, `ActorKind` |
+| `IDynamicSlotActor` | Extends `ISlotActor` — redefines `SlotIndex` as a reactive `new IReadOnlyReactiveProperty<Vector2Int>` and adds `IReadOnlyReactiveProperty<bool> IsStable`. Actors that can move or be in a transitioning state implement this. Static actors do NOT. |
+| `IWriteableDynamicSlotActor` | Extends both `IDynamicSlotActor` and `IWriteableSlotActor` — adds writable `new ReactiveProperty<Vector2Int> SlotIndex` and `new ReactiveProperty<bool> IsStable` |
+| `ISlotActorView` | View contract — `transform`, `TweenTracker`, `ActorKind`, `RotationPivot` (the transform an effect should rotate when tilting the actor, so lighting-baked children keep a consistent light direction) |
 | `SlotActorKind` | Enum — `Dynamic` (balancer can relocate, contributes weight) or `Static` (fixed, contributes weight, balancer skips) |
 
 ### Capability interfaces
@@ -26,9 +26,9 @@ Optional traits actors can advertise to consumers:
 | `IHasColor` | Actor has a read-only reactive color identity (string) — consumed by views and item VFX for tinting |
 | `IPaintable` | Extends `IHasColor` — actor's color can be overwritten by the Paint item. Exposes `ReactiveProperty<string> Color`. Actors that don't implement this are immune to paint |
 | `IHasScore` | Actor awards score when destroyed |
-| `IHasScoreColor` | Score attribution contract — `ResolveScoreAttribution(DamageContext, IList<ScoreAttribution>)` called once by `ScoreController` at destruction. Implementations append `(colorId, points, breaksStreak)` entries. Consumed **only** by `ScoreController`; views never read it |
+| `IHasScoreColor` | Score attribution contract — `ResolveScoreAttribution(in DamageContext, IReadOnlyList<string> incompleteColors, IList<ScoreAttribution>)` called once by `ScoreController` at destruction. `incompleteColors` lists the palette colors still short of the level threshold, so scatter implementers (Tough, BubbleCluster) confine their random split to those bars. Implementations append `(colorId, points, breaksStreak, isPrimary)` entries. Consumed **only** by `ScoreController`; views never read it |
 | `IHasNudge` | Actor participates in the nudge force system |
-| `IHitable` | Actor participates in the hit system — `EvaluateHit(DamageContext)` returns a `HitOutcome` and is responsible for mutating any internal state (e.g. decrementing health). Takes a `DamageContext` containing `Damage` (int), `DamageFlags` (`Normal` or `Piercing`), and `SourceColorId` (the color of the hitting projectile — used by `Inherited` score strategies). `Piercing` forces an immediate `Pop` regardless of `HitsRemaining` |
+| `IHitable` | Actor participates in the hit system — `EvaluateHit(DamageContext)` returns a `HitOutcome` and is responsible for mutating any internal state (e.g. decrementing health). Takes a `DamageContext` containing `Damage` (int), `DamageFlags`, and `SourceColorId` (the color of the hitting projectile — read by `ResolveScoreAttribution` implementations that attribute score to the source rather than the actor's own color, e.g. `UnbreakableBalloonModel`). `Piercing` forces an immediate `Pop` regardless of `HitsRemaining` |
 | `IHasDurability` | Extends `IHitable` — actor also tracks `HitsRemaining`. Removal is determined by `HitsRemaining.Value <= 0` after `EvaluateHit` returns |
 | `IHasItemSlot` | Actor can host an item — extends `IHasColor` (item visuals always tint to the host color). Exposes `IReadOnlyReactiveProperty<ItemType> Item` |
 | `IPassThrough` | Actor's slot can be crossed by animation paths (spawn entry, balance moves). Actors that do NOT implement this block traversal; rerouting is deferred to a future phase. |
@@ -40,8 +40,8 @@ Optional traits actors can advertise to consumers:
 
 | Type | Description |
 |---|---|
-| `DamageContext` | Readonly struct — `int Damage` + `DamageFlags Flags` + `string SourceColorId`. Default `Flags = DamageFlags.Normal`, `SourceColorId = ""`. `SourceColorId` carries the palette color name of the projectile or item responsible for the hit — used by `UnbreakableBalloonModel` for score attribution to the source color, and by `ToughBalloonModel` when scattering score to random palette colors |
-| `DamageFlags` | `[Flags]` enum — `Normal = 0`, `Piercing = 1 << 0`. `Piercing` bypasses `HitsRemaining` and forces `Pop` |
+| `DamageContext` | Readonly struct — `int Damage` + `DamageFlags Flags` + `string SourceColorId`. Default `Flags = DamageFlags.Normal`, `SourceColorId = ""`. `SourceColorId` carries the palette color name of the projectile or item responsible for the hit — used by `UnbreakableBalloonModel` for score attribution to the source color |
+| `DamageFlags` | `[Flags]` enum — `Normal = 0`; `Piercing = 1 << 0` bypasses `HitsRemaining` and forces `Pop`; `WildcardStreak = 1 << 1` marks a colour-agnostic streak (a rainbow-buffed shot keeps the streak climbing regardless of colour); `DirectHit = 1 << 2` marks a hit the projectile itself struck, as opposed to AOE/item damage (gates `BalloonSpawner`'s pop-spawn roll); `DeferredStreak = 1 << 3` marks a colourless projectile popping a rainbow balloon, banking the streak contribution until the projectile adopts a real colour |
 
 Paintability is expressed purely through types: a `BalloonModel` implements `IPaintable`; a `ToughBalloonModel` does not — no runtime flag needed.
 
@@ -52,9 +52,9 @@ Paintability is expressed purely through types: a `BalloonModel` implements `IPa
 | Actor | Implements | `EvaluateHit` behaviour |
 |---|---|---|
 | `BalloonModel` (soft) | `IHasDurability`, `IHasScoreColor` | `PassThrough` on survival, `Pop` on death; decrements `HitsRemaining`. `Piercing` flag → `Pop` immediately. No score attribution when `HitsRemaining > 0` after hit |
-| `ToughBalloonModel` | `IHasDurability`, `IHasScoreColor` | `Deflect` on survival, `Pop` on death; decrements `HitsRemaining`. `Piercing` flag → `Pop` immediately. Score scattered to random palette colors on pop |
+| `ToughBalloonModel` | `IHasDurability`, `IHasScoreColor` | `Deflect` on survival, `Pop` on death; decrements `HitsRemaining`. `Piercing` flag → `Pop` immediately. Score scattered across the still-incomplete color bars on pop |
 | `UnbreakableBalloonModel` *(Phase 7.5)* | `IHitable`, `IHasScoreColor` | Always `Deflect`; no `HitsRemaining`. `Piercing` forces `Pop`. Score attributed to source (projectile) color on pop |
-| `BubbleClusterModel` | `IHasDurability`, `IHasScoreColor` | `PassThrough` on survival, `Pop` on death; decrements `HitsRemaining` (bubble count). Score scatters one entry per point of damage to random palette colors; `BreaksStreak = true` on all attributions |
+| `BubbleClusterModel` | `IHasDurability`, `IHasScoreColor` | `PassThrough` on survival, `Pop` on death; decrements `HitsRemaining` (bubble count). Score scattered across the still-incomplete color bars, aggregated one entry per color (never one per point of damage); `BreaksStreak = true` on all attributions |
 | `DeflectorActorModel` *(Phase 8.2b)* | `IHitable` only | Always `Deflect`; no `HitsRemaining`; not a balloon |
 | `AbsorberActorModel` *(Phase 8.2b)* | `IHitable` only | Always `Absorb`; kills the projectile |
 | `GatekeeperActorModel` *(Phase 8.2c)* | `IHasDurability` | `Deflect` on survival, `Pop` on death; decrements `HitsRemaining`. Blocks a column until destroyed. |
@@ -65,18 +65,18 @@ Paintability is expressed purely through types: a `BalloonModel` implements `IPa
 
 | File / Folder | What it does |
 |---|---|
-| `Grid/` | `SlotGrid`, `SlotGridChangedEvent`, `SlotGridView`, `BalancePathHolder` — core grid data structure and balance transit tracking (namespace `BalloonParty.Slots.Grid`) |
-| `Actor/` | Core actor interfaces, spawner, hit controller, and slot selection strategies — `ISlotActor`, `IWriteableSlotActor`, `IDynamicSlotActor`, `IWriteableDynamicSlotActor`, `ISlotActorView`, `SlotActorKind`, `StaticActorModel`, `StaticActorSpawner`, `GridActorHitController`, `ISlotSelectionStrategy`, `RandomSlotSelectionStrategy`, `ClusterSlotSelectionStrategy`, `SlotPlacementMode` (namespace `BalloonParty.Slots.Actor`) |
+| `Grid/` | `SlotGrid`, `SlotGridChangedEvent`, `SlotGridView`, `BalancePathHolder`, `GridBalanceQuery`, `MoveWeightEvaluator`, `HexCoordinates`, `ShoveVector` — core grid data structure, balance heuristics/transit tracking, and hex-coordinate math (namespace `BalloonParty.Slots.Grid`) |
+| `Actor/` | Core actor interfaces, spawner, hit controller, slot selection strategies, and scenario/ambient support — `ISlotActor`, `IWriteableSlotActor`, `IDynamicSlotActor`, `IWriteableDynamicSlotActor`, `ISlotActorView`, `SlotActorKind`, `StaticActorModel`, `StaticActorSpawner`, `GridActorHitController`, `ISlotSelectionStrategy`, `RandomSlotSelectionStrategy`, `ClusterSlotSelectionStrategy`, `SlotPlacementMode`, `IBalanceInfluence`, `IPreBalanceRelocatable`, `ITransitionOutgoingContent`, `ScenarioContentRoot` — plus `SpeckField`/`SpeckProfile`, a GPU-simulated ambient dust/pollen field that listens to `ActorHitMessage` (balloon pops) and explicit spawn-request messages to burst specks at the hit point (namespace `BalloonParty.Slots.Actor`) |
 | `Actor/Cluster/` | Generic slot-cluster infrastructure — `SlotClusterRegistry<TModel>` (hex-adjacency flood-fill, merge/split, publishes `SlotClusterChangedEvent`), `SlotCluster`, `IClusterableSlotActor`, `ISlotClusterSource`, `ClusterView`, `ClusterViewController<TModel, TView, TSettings>`, `IClusterViewSettings` (namespace `BalloonParty.Slots.Actor.Cluster`) |
 | `Actor/Archetype/` | Concrete grid actor models and the Puff/Bush cluster visual systems — see [Archetype README](Actor/Archetype/README.md) (namespace `BalloonParty.Slots.Actor.Archetype`) |
-| `Capabilities/` | Optional capability interfaces — `IHasColor`, `IPaintable`, `IHasScore`, `IHasScoreColor`, `IHasNudge`, `IHasItemSlot`, `IHitable`, `IHasDurability`, `IPassThrough`, `HitOutcome`, `DamageContext`, `DamageFlags`, `ScoreAttribution` (namespace `BalloonParty.Slots.Capabilities`) |
+| `Capabilities/` | Optional capability interfaces — `IHasColor`, `IPaintable`, `IHasScore`, `IHasScoreColor`, `IHasNudge`, `IHasItemSlot`, `IHitable`, `IHasDurability`, `IPassThrough`, `IHasDeflectStamp`, `IWashesProjectileColor`, `HitOutcome`, `DamageContext`, `DamageFlags`, `ScoreAttribution`, `ScoreAttributions` — plus the pressure-cascade pair `IPressureMovable`/`PressureResponse`, which lets a balance push shove, or relocate, a blocking actor instead of stopping at it (namespace `BalloonParty.Slots.Capabilities`) |
 | `Spawner/` | Spawner coordination — `IGridSpawner`, `SpawnStage`, `GridSpawnerCoordinator` (namespace `BalloonParty.Slots.Spawner`) |
 
 ## How it works
 
-The grid is a two-dimensional space of slots arranged in a staggered pattern (odd rows offset by half a column). Each slot is either empty or occupied by an actor model and its view. The grid knows how to convert a slot coordinate into a world position, which slots are unbalanced (missing support from below), and what the best empty slot is for an actor to move into.
+The grid is a two-dimensional space of slots arranged in a staggered pattern (odd rows offset by half a column). Each slot is either empty or occupied by an actor model and its view. `SlotGrid` itself only converts a slot coordinate into a world position (`IndexToWorldPosition`); balance queries — which slots are unbalanced (missing support from below) and what the best empty slot is for an actor to move into — live on `GridBalanceQuery`.
 
-`OptimalNextEmptySlot` uses a recursive weight algorithm to decide between two candidate slots (directly above and diagonally above). The weight of a candidate = count of occupied slots in the tree above it. Higher weight = more support = preferred. On tie, the diagonal candidate wins (via `>=` comparison).
+`GridBalanceQuery.IsUnbalanced` flags a slot missing support from below. `GridBalanceQuery.OptimalNextEmptySlot` delegates to `MoveWeightEvaluator.OptimalBalanceMove`, which uses a recursive weight algorithm to decide between two candidate slots (directly above and diagonally above). The weight of a candidate = count of occupied slots in the tree above it. Higher weight = more support = preferred. On tie, the diagonal candidate wins (via `>=` comparison).
 
 `Place` guards against double-occupation — if a slot is already occupied, the placement is rejected with an exception.
 
@@ -122,11 +122,11 @@ Spawners are injected as `IEnumerable<IGridSpawner>` via VContainer's collection
 ## Interactions
 
 - **BalloonSpawner** — calls `Balance()` once before all line spawns so existing balloons consolidate upward first; then calls `Place` for each new balloon into remaining empty slots; uses `ComputePath` for spawn animation waypoints; publishes `BalanceBalloonsMessage` after spawning for a final settling pass
-- **StaticActorSpawner** — iterates `GridActorConfiguration.Entries`, spawns the per-type count resolved for the active level (`IActiveLevelParameters.Current.TryGetGridActorCount` — absent types are gated out), selects slots via the entry's `ISlotSelectionStrategy`, and calls `Place` per slot
+- **StaticActorSpawner** — iterates `GridActorConfiguration.Entries`, spawns the per-type count resolved for the active level (`IActiveLevelParameters.Current.TryGetGridActorGate` returns a `ResolvedGridActorGate`, read via `gate.Count` — absent types are gated out), selects slots via the entry's `ISlotSelectionStrategy`, and calls `Place` per slot
 - **BalloonController** — calls `Remove` when a balloon is popped; subscribes to `ActorHitMessage`
 - **BalloonBalancer** — reads occupancy to find gaps; skips `Static` actors (or actors that are not `IDynamicSlotActor`); calls `Remove` + `Place` to relocate dynamic actors; uses `ViewAt` to reach views for animation. `Balance()` is `internal` for synchronous pre-spawn consolidation
 - **NudgeService** — uses `GetNeighbors` and `IndexToWorldPosition` to direct nudge animations; filters by `IHasNudge`
-- **PaintItemHandler** — uses `HexNeighborIndices`; casts `At()` result to `IPaintable` for painting
+- **PaintItemHandler** — buckets paintable slots to the nearest of the splash's covering blobs (not hex neighbors); casts `At()` result to `IPaintable` for painting
 - **IGameConfiguration** — provides `SlotsSize`, `SlotSeparation`, `SlotsOffset` for grid construction and position calculations
 
 ## Slot Selection Strategies

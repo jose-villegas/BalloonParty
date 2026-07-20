@@ -34,9 +34,14 @@ See @ref arch_cinematics_architecture and `Game/Level/README.md`.
 `TrailFlightRegistry`, then intercepts it: the move tween is killed and the trail is
 puppeted manually along the pan-in segment's `TimeScaleCurve` while the camera pans in
 and gameplay pauses (`PauseSource.Cinematic`). `Time.timeScale` stays untouched during
-the pan-in — other trails fly at normal speed. When the tipping trail arrives, the
-pan-in ends with `Flights.CompleteAll()`, instantly confirming every remaining
-in-flight trail before the popup opens.
+the pan-in — other trails fly at normal speed, confirming progress as they land. When
+the tipping trail arrives the pan-in ends, but survivors are not force-completed yet —
+they stay frozen once `LevelUpPhase` reaches `Pending` (`Flights.PauseAll()`, so their
+shapes hold behind the popup instead of snapping away). They are only resolved once the
+level transition runs: `LevelTransitionController` calls `ScoreTrailService.HoldOutgoing`,
+which calls `Flights.CompleteAll()`, banking every survivor's points as outgoing-level
+content. (Only the cinematic's own abort path calls `CompleteAll` directly, to resolve
+everything immediately if the ceremony is cut short.)
 
 ## Guidance
 

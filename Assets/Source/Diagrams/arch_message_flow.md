@@ -14,18 +14,21 @@ publishers know nothing about subscribers; subscribers know nothing about publis
 - `ProjectileHitResolver` → `IHitDispatcher.Dispatch` → `HitPipeline` runs the
   order-dependent stages explicitly (`ScoreController.OnActorHit`, then the owning
   `BalloonController` via `BalloonControllerRegistry.Route`) and only then publishes
-  `ActorHitMessage` → (`NudgeService`, `ItemActivator`, `GridActorHitController`) —
-  the broadcast serves order-independent observers only; it carries the pre-computed
-  `HitOutcome` so every subscriber reads the same result without re-evaluating the hit.
-  Never publish `ActorHitMessage` directly — route hits through `IHitDispatcher`
+  `ActorHitMessage` → (`NudgeService`, `ItemActivator`, `GridActorHitController`,
+  `BalloonSpawner`, `SpeckField`) — the broadcast serves order-independent observers
+  only; it carries the pre-computed `HitOutcome` so every subscriber reads the same
+  result without re-evaluating the hit. Never publish `ActorHitMessage` directly —
+  route hits through `IHitDispatcher`
 - `ScoreController` → `ScorePointsGroupMessage` → (`ScoreTrailService`,
   `LevelUpCinematic`) — one message per resolved color; carries the group's total
   points and the last point's cumulative score
 - `BalloonSpawner` / `ProjectileView` → `BalanceBalloonsMessage` → `BalloonBalancer`
   — pure signal; no data needed
-- `ScoreController` → `ScoreLevelUpMessage` → (`ColorProgressBar`, `LevelUpPopUp`,
-  `ColorStreakTracker`) — announces the *confirmed* level-up (the cinematic itself
-  triggers earlier, off `ScorePointsGroupMessage` when `WillLevelUp()` is true)
+- `LevelController` → `ScoreLevelUpMessage` → (`LevelUpPopUp`, `ColorProgressBar`,
+  `ColorStreakTracker`, `ThrowerController`, `BalloonSpawner`, `ScoreController`,
+  `PlayerHealthController`, `LevelDifficultyResolver`, `WallNetView`) — announces the
+  *confirmed* level-up (the cinematic itself triggers earlier, off
+  `ScorePointsGroupMessage` when `WillLevelUp()` is true)
 
 ## Guidance
 

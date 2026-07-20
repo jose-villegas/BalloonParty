@@ -8,7 +8,7 @@ The thrower is the player-controlled launcher at the bottom of the screen. It ai
 |---|---|
 | `ThrowerController` | Plain C# class (`IStartable`, `ITickable`) — aiming, loading, firing, prediction trace, and reload logic |
 | `ThrowerView` | MonoBehaviour — owns the thrower's transform, rotation, entrance animation, prediction trace display, and pointer input (`IsAiming`, `FireReleased`, `TryGetAimDirection` — the only place that touches `Input`/`Camera`) |
-| `ThrowerLifetimeScope` | Child `LifetimeScope` on the Thrower GameObject — registers `ThrowerView` and `ThrowerController` |
+| `ThrowerLifetimeScope` | Child `LifetimeScope` on the Thrower GameObject — registers `ThrowerView` and `ThrowerController` (`.AsSelf()`, so editor tooling can resolve the concrete controller — see `FireAt` below) |
 | `ThrowerSettings` | Holds the `ProjectileView` prefab reference for pool creation (registered in `GameLifetimeScope`) |
 
 ## Gameplay
@@ -28,13 +28,17 @@ Each frame (`Tick`), only when navigation state is `Game` and the entrance anima
 
 `Tick` is a no-op outside the `Game` navigation state or while any `PauseService` source is paused — the thrower cannot aim or fire during the level-up ceremony, cinematics, or the overflow heart-drain lock.
 
-When a `ProjectileDestroyedMessage` arrives, `ThrowerController` returns the old projectile to the pool and loads a new one immediately. A `RunResetMessage` triggers the same reload so a fresh run starts with a fresh projectile (default shields and position). Projectiles are created through `ProjectilePoolChannel` (an `InjectingPoolChannel` — `[Inject]` fields resolved from the parent container, no child scope on the prefab). The pool key is derived from the prefab's name.
+`FireAt(Vector3 direction)` is an internal entry point bypassing mouse input entirely — it snaps the loaded shot to the spawn point, aims it at the given direction, and fires. It exists for editor tooling (the Shot Solver window and the Fire-Best-Shot cheat), which is why `ThrowerLifetimeScope` also registers the controller `.AsSelf()`.
+
+When a `ProjectileDestroyedMessage` or a `LevelUpDismissedMessage` arrives, `ThrowerController` swaps the active projectile: the spent one plays its scale-away disappear animation and only returns to the pool once that finishes, while a fresh instance loads immediately — so the thrower never hands out a shot still mid-disappear. A `ScoreLevelUpMessage` (the level-up freeze) un-fires a shot that was fired the very same frame, before it ever took a physics step, so the dismissal swap doesn't scale-drift a phantom shot away from the muzzle. A `GameOverMessage` scales the active projectile away without loading a replacement (the thrower only reloads on restart). A `BoardClearMessage` or `RunResetMessage` triggers a synchronous reload — the old projectile returns to the pool immediately and a fresh one loads — so a fresh run or a cleared board starts with a fresh projectile (default shields and position). Projectiles are created through `ProjectilePoolChannel` (an `InjectingPoolChannel` — `[Inject]` fields resolved from the parent container, no child scope on the prefab). The pool key is derived from the prefab's name.
 
 ## Interactions
 
 - **PoolManager / ProjectilePoolChannel** — registers and serves the projectile pool (pre-warmed with two instances)
-- **ProjectileDestroyedMessage** — triggers reload
-- **RunResetMessage** — swaps the carried-over projectile for a fresh one on restart
+- **ProjectileDestroyedMessage / LevelUpDismissedMessage** — trigger the scale-away swap (spent shot returns to pool once its disappear finishes; a fresh one loads immediately)
+- **ScoreLevelUpMessage** — un-fires a shot fired the same frame the level-up freeze lands, before the dismissal swap runs
+- **GameOverMessage** — scales the active projectile away with no replacement load
+- **BoardClearMessage / RunResetMessage** — trigger a synchronous reload so a cleared board or a fresh run starts with a fresh projectile
 - **PauseService** — any paused source blocks `Tick` (aim/fire)
 - **ProjectileLoadedMessage** — published after each load so shield UI can self-bind
 - **IGameConfiguration** — provides `LimitsClockwise`, `ProjectileSpeed`, `ProjectileStartingShields`, `ProjectileLoadDuration`, `PredictionTraceColor`

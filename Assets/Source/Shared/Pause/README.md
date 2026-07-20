@@ -13,9 +13,9 @@ This package separates those concerns.
 | Type | Role |
 |---|---|
 | `PauseSource` | Enum identifying *why* something is paused (`Cinematic`, `LevelUp`, …) |
-| `PausedMessage` | Published via MessagePipe when a source transitions from unpaused → paused |
-| `ResumedMessage` | Published via MessagePipe when a source transitions from paused → unpaused |
-| `PauseService` | Singleton coordinator. Reference-counted per source, drives the broadcast |
+| `PausedMessage` | Published via MessagePipe on the unpaused → paused edge (registered as a broker; no live subscriber today) |
+| `ResumedMessage` | Published via MessagePipe on the paused → unpaused edge (registered as a broker; no live subscriber today) |
+| `PauseService` | Singleton coordinator. Reference-counted per source; exposes `IsAnyPaused` (reactive) and `IsPaused(source)` |
 | `TimeScaleService` / `TimeScaleSource` | The only legal writer of `Time.timeScale` (audit-enforced): claim/release, lowest active claim wins, run-reset clears |
 
 ## Usage
@@ -32,14 +32,23 @@ Calls nest safely — a second `Pause` without a matching `Resume` won't broadca
 
 ### Reacting to a pause
 
+Live systems don't subscribe to `PausedMessage`/`ResumedMessage` — they gate on the
+reactive `IsAnyPaused` property instead, so a single check covers every active source:
+
 ```csharp
-// Inject ISubscriber<PausedMessage> and ISubscriber<ResumedMessage>, then:
-_resumedSubscriber.Subscribe(msg =>
+// Inject PauseService, then read it wherever the system already ticks:
+if (_pauseService.IsAnyPaused.Value)
 {
-    if (msg.Source == PauseSource.Cinematic)
-        ResumeWork();
-}).AddTo(_disposable);
+    return;
+}
 ```
+
+`ThrowerController`, `BalloonBalancer`, and `ProjectileView` all gate this way. Use
+`IsPaused(source)` instead when a caller cares about one specific source (e.g. a
+cinematic checking only `PauseSource.Cinematic`, ignoring other pauses in flight).
+`PausedMessage`/`ResumedMessage` remain available for a future subscriber that needs the
+edge transition itself (e.g. "do X once, exactly when pausing begins") rather than a
+per-tick level check.
 
 ## `TimeScaleService` — the only writer of `Time.timeScale`
 
@@ -69,6 +78,11 @@ Current claimants:
   a brief real-time dip when a piercing shot discharges the toughs it plowed through. A fresh
   discharge cancels and restarts the dip rather than layering; see
   `Projectile/README.md` § Pierce & Discharge Feel.
+- **`ProjectileDoomedTimeScaleController`** (`TimeScaleSource.LastShield`, `Projectile/Controller/`) —
+  bullet-time while a shot on its last shield drifts toward the wall it's doomed to die on,
+  curve-sampled over the doomed approach's progress.
+- **`BoardPopWave`** (`TimeScaleSource.LevelTransition`, `Game/Cinematics/`) — slow-mo while the
+  Ascent pop wave clears the old level's balloons band by band.
 
 `PauseService` handles *logical* pause coordination (projectile, trail spawning);
 `TimeScaleService` handles *visual* time warping. The two are independent.

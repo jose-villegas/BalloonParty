@@ -11,7 +11,8 @@ across scene boundaries: `Navigation` and `Cinematic`.
 
 **`Navigation`** holds a `ReactiveProperty<NavigationState>` and exposes
 `TransitionTo(state)`. Any system can observe or transition the current state.
-States: `Launch` → `Game` → `LevelUp` (→ `Game` on dismiss).
+States: `Launch` → `Game` → `LevelUp` (→ `Game` on dismiss), and `Game` → `GameOver`
+(`RunController.EndRun`) → `Game` on restart (`RunController.RestartRun`).
 
 **`Cinematic`** holds a `ReactiveProperty<CinematicState>`. `Begin(state)` /
 `End()` set the state; services that need to pause/resume during a cinematic

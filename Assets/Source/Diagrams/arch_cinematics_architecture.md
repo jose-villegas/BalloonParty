@@ -29,7 +29,8 @@ runner. The level-up runs a **pan-in-only** form (`TryBegin` … `EndPanIn` … 
 leaves timeScale alone during pan-in (gameplay is paused; the segment curve modulates the
 tipping trail's playback speed instead). It does **not** run a restore segment — `EndPanIn`
 leaves the camera zoomed and the Ascent (`LevelTransitionController`) tweens it back via
-`CinematicCameraRig.RestoreTweened`, synced to the pop wave. The heart-drain runs the
+`CinematicCameraRig.RestoreTweened`, timed by the `LevelUpRestore` segment's own curve duration —
+independent of the concurrent board-clear effect. The heart-drain runs the
 **continuous** form: a polled
 end condition ("pile drained ∨ game over") rolls the pan-in straight into a restore that
 tweens *from the current* timeScale, so an early game-over never snaps speed down first.

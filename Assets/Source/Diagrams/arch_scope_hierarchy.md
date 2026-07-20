@@ -11,7 +11,7 @@ parent registrations, so `GameLifetimeScope` is the composition root that every 
 scope can resolve from.
 
 **Current scope tree:**
-- `LaunchLifetimeScope` — launcher scene; registers camera controller and display config
+- `LaunchLifetimeScope` — launcher scene; registers camera controller, display config, and `SceneCaptureService`
 - `GameLifetimeScope` — game scene root; registers all gameplay systems, config SOs,
   MessagePipe brokers, and entry points
   - `ThrowerLifetimeScope` — thrower prefab; registers `ThrowerController` and wires the view
@@ -23,8 +23,8 @@ scope can resolve from.
   - `GameOverLifetimeScope` — game-over panel; a scope shell with no local registrations (hierarchy injection only)
 
 **Pooled prefabs (balloons, projectiles)** do not use child scopes. Their `[Inject]`
-fields are populated via `InjectingPoolChannel` which calls
-`IObjectResolver.InjectGameObject()` directly — no scope creation overhead per instance.
+fields are populated via `InjectingPoolChannel`, which instantiates each instance through
+`IObjectResolver.Instantiate()` directly — no scope creation overhead per instance.
 
 ## Guidance
 

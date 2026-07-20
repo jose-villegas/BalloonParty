@@ -13,6 +13,8 @@ Reusable UI building blocks for editor windows with sortable, selectable tables.
 | `SearchFilterToolbar` | `SearchFilterToolbar.Draw<TEnum>()` — full toolbar with search text field, enum popup filter, and optional refresh button. Generic over any filter enum |
 | `EditorAnimationLoop` | Play/pause/stop animation loop driven by `EditorApplication.update` — tracks delta time, pause state, and playback speed; the caller supplies a tick callback that returns `false` when the animation completes. Used by `EffectPreview/EffectViewPreviewPlayer` |
 | `PaletteColorPicker` | Reusable palette color dropdown + swatch drawing, backed by `ConfigAssetCache<GamePalette>`. Used by the effect previews and `ColorableBalloonVariantEditor` |
+| `TableDrawHelper` | Low-level drawing helpers for absolute-positioned IMGUI table layouts — cell inset, horizontal/vertical separators, group/gap background fills |
+| `PropertyCellDrawer` | Draws common `SerializedProperty` field types (int, float, curve, generic, ranged-int, int-range) inside absolute-positioned table cells, insetting via `TableDrawHelper`. Used by `LevelPacingWindow` |
 
 ## Usage
 

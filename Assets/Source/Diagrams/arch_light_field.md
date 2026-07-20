@@ -119,9 +119,9 @@ digraph SceneLightField {
     Include -> Specks;
 
     /* Flat globals (rest / field-off) */
-    SceneLightService [label="SceneLightService\n_SceneLightDir\n_SceneLightColor\n_SceneLightIntensity", fillcolor="#dce8f5"];
-    SceneLightService -> Include [label="flat fallback\n(field OFF)", style=dashed];
-    SceneLightService -> Fill [label="rest state\n= these globals", style=dashed];
+    SceneLightSettings [label="ISceneLightSettings\n(ambient config, pushed by\nSceneLightFieldService.PushAmbientGlobals)\n_SceneLightDir\n_SceneLightColor\n_SceneLightIntensity", fillcolor="#dce8f5"];
+    SceneLightSettings -> Include [label="flat fallback\n(field OFF)", style=dashed];
+    SceneLightSettings -> Fill [label="rest state\n= these globals", style=dashed];
 }
 @enddot
 
@@ -150,7 +150,7 @@ its last, still-correct contents.
 **The pipeline** (three blit passes over two ping-pong RTs):
 
 1. **Fill** — clears to rest (R=0, GB=0.5 neutral, A=0). The rest state encodes "no local light" —
-   the ambient comes from `SceneLightService`'s flat globals, not from the field.
+   the ambient comes from `ISceneLightSettings`'s globals (pushed by `SceneLightFieldService.PushAmbientGlobals`), not from the field.
 2. **Accumulate** — batches up to 32 lights per blit (mirrors `DisturbanceStampBatched`). Each
    light is a capsule: falloff uses aspect-corrected distance to the segment `[start, end]`.
    R is soft-clamped
@@ -177,7 +177,7 @@ makes the field a strictly additive seam.
    (capsule stamps for beams) and every shape gets plausible directions automatically.
 
 3. **The field is purely local.** R stores only the local boost above ambient; the ambient magnitude
-   and direction come from `SceneLightService`'s flat globals, added by the include's helpers. This
+   and direction come from `ISceneLightSettings`'s globals (pushed by `SceneLightFieldService.PushAmbientGlobals`), added by the include's helpers. This
    means ambient tweaks (day/night, fade-outs) never dirty the field and never re-render it.
 
 4. **Palette colour via intensity-driven soft edge.** The A channel carries a quantised palette

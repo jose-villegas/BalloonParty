@@ -8,7 +8,7 @@ Shared screen-space disturbance field that any game system can stamp into. Puff 
 
 | File | What it does |
 |---|---|
-| `DisturbanceFieldService` | Plain C# `IStartable` + `ITickable` + `IDisposable` — drives the simulation. Runs one diffusion blit per tick (spatial blur + reform toward equilibrium + wind advection + pressure fill + displacement decay), sets per-pass shader uniforms, and batches pending stamps (up to 32 per blit pass) via `DisturbanceStampBatched.shader`. Exposes two `Stamp()` overloads — `Stamp(StampSource, position, direction)` resolves the source's configured `StampProfile` (radius/strength/duration) internally, and the explicit-parameter overload underneath handles instant and lerp stamps. Every stamp also `Report()`s to `ImpactEventBus` (in `Shared/`) for same-frame visual consumers like bush rustle. Pushes `_FieldBoundsMin`, `_FieldBoundsSize` as global shader properties so all consumers (cloud views, the speck field, future effects) read the field without per-instance setup. (`_DisturbanceTex` itself is republished as a global by `DisturbanceFieldResources` on each swap.) Delegates all GPU resource ownership to `DisturbanceFieldResources`. Registered as a singleton in `GameLifetimeScope` |
+| `DisturbanceFieldService` | Plain C# `IStartable` + `ITickable` + `IDisposable` — drives the simulation. Runs one diffusion blit per tick (spatial blur + reform toward equilibrium + wind advection + pressure fill + displacement decay), sets per-pass shader uniforms, and batches pending stamps (up to 32 per blit pass) via `DisturbanceStampBatched.shader`. Exposes `Stamp(StampSource, position, direction)` (resolves the source's `StampProfile`), a radius-scaled sibling overload, `StampCone()` (marches a series of stamps along a direction, e.g. the projectile's muzzle exit), and the explicit-parameter overload underneath that all of them funnel through — every overload takes a `paletteIndex` to tag the stamped region with a palette colour. Stamps that repel (positive strength) `Report()` to `ImpactEventBus` (in `Shared/`) for same-frame visual consumers like bush rustle — colour-only and attracting stamps, and any stamp passed `reportImpact: false`, don't. Pushes `_FieldBoundsMin`, `_FieldBoundsSize` as global shader properties so all consumers (cloud views, the speck field, future effects) read the field without per-instance setup. (`_DisturbanceTex` itself is republished as a global by `DisturbanceFieldResources` on each swap.) Delegates all GPU resource ownership to `DisturbanceFieldResources`. Registered as a singleton in `GameLifetimeScope` |
 | `DisturbanceFieldResources` | Plain C# — owns the GPU resources: the camera-sized `ARGBHalf` RT pair (density in R, displacement XY in GB) that ping-pongs as read/write, the diffusion + batched-stamp materials, and the `_STAMPS_ON` keyword. `BlitAndSwap()` blits read→write through a material, flips the buffers, and republishes the read texture as the global `_DisturbanceTex`. The service owns the shader-param IDs and per-pass uniforms; this just holds, blits, and flips. |
 | `DisturbanceFieldCoordinates` | Plain C# — world ↔ field-UV geometry: derives the field's world-space bounds and texel dimensions from the camera framing (`GetOrthogonalSize()` × `TexelsPerUnit`), converts world positions (`WorldToUV`) and radii (`WorldRadiusToUV`) into the normalised UV space the stamp shaders expect |
 | `LerpStampScheduler` | Plain C# — ramps `duration > 0` stamps into a sequence of instant sub-stamps (see "Lerp stamp lifecycle" below). Capped at `MaxLerpStamps`; the oldest ramp is evicted when full |
@@ -168,18 +168,21 @@ stamps (delta slice)"];
 
 ### RT layout
 
-Two `RenderTexture` instances (`_fieldA`, `_fieldB`) ping-pong as read/write targets. Format is `ARGBHalf` with equilibrium clear color `(1.0, 0.5, 0.5, 1.0)`:
+Two `RenderTexture` instances (`_fieldA`, `_fieldB`) ping-pong as read/write targets. Format is `ARGBHalf` where supported (falls back to `ARGB32` on hardware without half-float RT support), with equilibrium clear color `(0.5, 0.5, 0.5, 0)`:
 
-- **R** = density (1.0 = full cloud, 0.0 = cleared)
+- **R** = signed density — 0.5 is rest; a stamp with positive strength pushes it above 0.5 (repels), negative pulls it below (attracts)
 - **G** = displacement X (0.5 = zero, biased ±0.5 range)
 - **B** = displacement Y (0.5 = zero, biased ±0.5 range)
+- **A** = palette-colour tag — encodes which registered colour last stamped this texel (`PaletteChannelEncoding.Encode(paletteIndex)`, uploaded as `_StampColorIndices`), decayed each diffusion tick by `_ColorDecay` (`DisturbanceFieldSettings.ColorTagDecay`). A `strength == 0` stamp ("colour-only") writes just this channel — a colour tag with no force
 
 Resolution is derived from `GameDisplayConfiguration.GetOrthogonalSize()` × `DisturbanceFieldSettings.TexelsPerUnit`.
 
 ### Stamp API
 
-- **`Stamp(source, worldPos, direction)`** — the overload most callers use: resolves the `StampProfile` configured for the `StampSource` (radius, strength, duration) and forwards to the explicit overload. `GetProfile(source)` is also exposed for callers that need to scale the profile themselves (e.g. `DisturbanceTweenExtensions.StampDisturbanceAlongPath`, which gates on distance travelled — one stamp per `Spacing` (fallback `Radius`) of the target's scaled movement — rather than once per rendered frame, so along-path wake density is frame-rate independent).
-- **`Stamp(worldPos, radius, strength, direction, duration = 0)`** — queues a disturbance at `worldPos`. World coordinates are converted to field UV space internally. When `duration` is zero (default), the stamp is applied instantly — stamps accumulate in a pending list and are flushed in batches each frame. When `duration` is greater than zero, queues a lerp stamp that ramps from 0 to full strength over that many seconds, spreading the effect smoothly across multiple frames. Useful for pop bursts, bomb detonations, and paint splashes. Every call also reports the impact to `ImpactEventBus`.
+- **`Stamp(source, worldPos, direction, paletteIndex = -1)`** — the overload most callers use: resolves the `StampProfile` configured for the `StampSource` (radius, strength, duration) and forwards to the explicit overload. `GetProfile(source)` is also exposed for callers that need to scale the profile themselves (e.g. `DisturbanceTweenExtensions.StampDisturbanceAlongPath`, which gates on distance travelled — one stamp per `Spacing` (fallback `Radius`) of the target's scaled movement — rather than once per rendered frame, so along-path wake density is frame-rate independent).
+- **`Stamp(source, worldPos, direction, radiusScale, paletteIndex = -1)`** — same profile resolution, with the resolved radius scaled by the caller (e.g. a heavier balloon's deflect stamping wider than a light one's).
+- **`StampCone(source, origin, direction, paletteIndex = -1)`** — marches `Interval`-many stamps from `origin` along `direction` (spaced by `Spacing`, fallback `Radius`), the radius growing (`RadiusGrowth`) and the strength fading (`StrengthFalloff`) toward the tip — used for the projectile's muzzle-exit force. Only the first (muzzle) stamp reports impact.
+- **`Stamp(worldPos, radius, strength, direction, duration = 0, paletteIndex = -1, reportImpact = true)`** — the explicit overload every overload above funnels through. World coordinates are converted to field UV space internally. When `duration` is zero (default), the stamp is applied instantly — stamps accumulate in a pending list and are flushed in batches each frame. When `duration` is greater than zero, queues a lerp stamp that ramps from 0 to full strength over that many seconds, spreading the effect smoothly across multiple frames. Useful for pop bursts, bomb detonations, and paint splashes. `paletteIndex` (\f$\ge 0\f$) tags the stamped region with a palette colour in the A channel; a `strength == 0` stamp writes only that colour tag, with no force. Only stamps that repel (`strength > 0`) with `reportImpact: true` (the default) report to `ImpactEventBus` — colour-only stamps, attracting stamps, and constant emitters that opt out never do.
 
 ### Diffusion tick
 
@@ -187,7 +190,7 @@ Runs at a configurable interval (`DiffusionTickInterval`). Each tick:
 1. Semi-Lagrangian wind advection shifts the sample origin
 2. Pressure gradient pushes density from high to low, filling holes directionally
 3. Displacement channels decay toward 0.5 (neutral)
-4. Density trends back toward 1.0 (reform)
+4. Density trends back toward 0.5, the signed-density rest (reform)
 
 Wind direction is set dynamically from stamp directions (opposite to the disturbance velocity), smoothed and decaying — so the reform flows from behind the moving object.
 

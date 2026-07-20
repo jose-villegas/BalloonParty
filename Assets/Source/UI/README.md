@@ -38,5 +38,5 @@ Scene loading is handled by `SceneTransition` (in `Shared/`) — a MonoBehaviour
 - **ScoreController** — all score UI subscribes to its `TotalScore` / `Level` reactive properties and `ScorePointsGroupMessage` / `ScoreLevelUpMessage` events; `ColorProgressBar` reads the current streak via `GetStreak` for displaying streak notices
 - **ScoreTrailService** — `ColorProgressBar` registers trail target providers and subscribes to `ScoreTrailArrivedMessage`; `LevelUpPopUp` reads target positions for glow trail origins
 - **LevelUpPopUp ↔ ColorProgressBar** — popup publishes `LevelUpGlowTrailsMessage` to drain bars in sync with glow trails, and `LevelUpDismissedMessage` to apply the new max and reset
-- **ThrowerController** — binds `ShieldCounterAnimation` to the active `ProjectileModel` after each reload
+- **ThrowerController** — publishes `ProjectileLoadedMessage` on each reload; `ShieldCounterAnimation` subscribes and rebinds the shield labels to the new `ProjectileModel`
 - **IGameConfiguration** — read for point thresholds and trail animation timing

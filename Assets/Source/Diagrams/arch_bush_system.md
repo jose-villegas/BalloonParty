@@ -81,8 +81,12 @@ digraph BushSystem {
 
         FieldService [label="DisturbanceFieldService\n(global _DisturbanceTex)"];
         Stampers     [label="Projectile, Balloon,\nBomb, Laser, Paint\n(stamp callers)"];
+        ImpactBus    [label="ImpactEventBus\n(repelling stamps only)"];
+        RustleCtrl   [label="BushRustleController\n(Tick()ed from BushView.LateUpdate,\nspawns rustle VFX)"];
 
         Stampers -> FieldService [label="Stamp()"];
+        FieldService -> ImpactBus [label="Report()\n(repel + reportImpact)"];
+        ImpactBus -> RustleCtrl  [label=".Pending"];
     }
 
     Settings  -> View      [label="inject"];
@@ -96,6 +100,7 @@ digraph BushSystem {
     Settings -> RattleAnim [label="uniforms\n(amp, freq, damp)", style=dashed];
 
     FieldService -> RattleAnim [label="_DisturbanceTex\n_FieldBoundsMin\n_FieldBoundsSize\n(global shader props)"];
+    RustleCtrl   -> View      [label="Tick()", style=dashed];
 }
 @enddot
 
@@ -112,9 +117,11 @@ rendering and GPU animation.
 - Exporter bundles everything into a `BushVariantData` ScriptableObject
 
 **Runtime (per frame):**
-- `BushView` sets up **static** translation-only matrices once per rebuild
+- `BushView` bakes **static** matrices once per rebuild; `LateUpdate` composes a
+  per-frame translation offset on top of them while the Ascent slide displaces the
+  bush root, then draws
 - `DrawMesh` renders branch quads; `DrawMeshInstanced` renders leaf quads
-- **Zero CPU animation** — all leaf motion runs on the GPU vertex shader
+- **Zero CPU leaf animation** — the wind/rattle motion itself runs on the GPU vertex shader
 
 **GPU vertex shader (per leaf, per vertex):**
 - **Wind:** sine oscillation + dual-sine noise, modulated by depth and phase
@@ -129,19 +136,26 @@ rendering and GPU animation.
 **Disturbance field interaction:**
 - Any system that calls `DisturbanceFieldService.Stamp()` (projectile,
   balloon pop, bomb, laser, paint) automatically affects bush leaves
-- No C# wiring between stampers and bushes — the leaf shader reads the
+- The GPU rattle needs no C# wiring — the leaf shader reads the
   same global `_DisturbanceTex` that Puff clouds use
 - The field's diffusion and reform mechanics provide the rattle settle curve
+- A parallel CPU path exists too: repelling stamps also `Report()` to
+  `ImpactEventBus`, and `BushRustleController` (`Tick()`ed from `BushView.LateUpdate`)
+  reads the pending impacts plus the live projectile position to spawn rustle VFX —
+  so stampers drive a visible CPU-side response as well as the shader rattle
 
 ## Key design decisions
 
-1. **Static matrices** — leaf matrices are set once at `RebuildSlots` and
-   never mutated. No `ITickable`, no per-frame matrix updates.
+1. **Static base matrices** — leaf matrices are baked once at `RebuildRenderResources` and
+   never mutated. No `ITickable`. `BushView.LateUpdate` does compose a per-frame
+   translation offset on top of them while the Ascent slide displaces the bush root,
+   but the animated leaf transform itself is still entirely GPU-side.
 2. **GPU-only animation** — wind and rattle are pure shader features.
    `BushAnimator` was deleted — zero CPU animation cost.
 3. **Shared disturbance field** — rattle reuses the same RT and global
    shader properties as Puff clouds. Adding new stampers (future effects)
-   automatically affects both clouds and bushes.
+   automatically affects both clouds and bushes. Repelling stamps also drive a
+   CPU-side rustle response through `ImpactEventBus` and `BushRustleController`.
 4. **`multi_compile` for rattle** — `_RATTLE_ON` uses `multi_compile` (not
    `shader_feature`) so the variant survives build stripping when enabled
    at runtime via C# `EnableKeyword`.

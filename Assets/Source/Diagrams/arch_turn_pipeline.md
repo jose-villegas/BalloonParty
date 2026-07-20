@@ -17,13 +17,18 @@ hands the collision to the plain-C# `ProjectileHitResolver`, which calls `Evalua
 stages synchronously and explicitly — `ScoreController` records streak/score first, then
 the owning `BalloonController` (resolved via `BalloonControllerRegistry`) pops/deflects —
 and only then broadcasts the message for order-independent observers (`NudgeService`,
-`ItemActivator`, `GridActorHitController`, VFX). No rebalancing occurs during flight.
+`ItemActivator`, `GridActorHitController`, `BalloonSpawner`, `SpeckField`, VFX). A direct
+(`DamageFlags.DirectHit`) pop also gives `BalloonSpawner` a chance to roll an extra
+"pop-spawn" balloon into the board, independent of the turn's own spawn wave. The board
+itself keeps settling during flight too — see "In-flight rebalancing" below.
 
 **Phase 2 — Balance (pre-spawn)**
 When the projectile dies it publishes `ProjectileDestroyedMessage`. `BalloonSpawner`
-receives it and runs a single `Balance()` pass first — consolidating existing balloons
-upward before any new lines arrive. Transit slots for in-progress balance animations
-are reserved in `BalancePathHolder`.
+receives it and, once past the level's `FirstSpawnTurn` grace period (a few turns with no
+spawns at the start of each level), kicks off its spawn sequence — which opens with a
+`Balance(relocateRoamers: true)` pass consolidating existing balloons upward before any new
+lines arrive. Transit slots for in-progress balance animations are reserved in
+`BalancePathHolder`.
 
 **Phase 3 — Spawn**
 New balloon lines are placed with a stagger delay between each. Spawn animations use
@@ -48,11 +53,13 @@ directly — route hits through `IHitDispatcher`.
 **Where to add behavior triggered by turn end (projectile death):**
 Subscribe to `ProjectileDestroyedMessage`. This runs between Phase 1 and Phase 2.
 
-**Why rebalancing is deferred to post-death:**
-Running balance during Phase 1 (mid-flight) causes animation conflicts — competing
-tweens fight for the same transforms, double-occupation visuals appear, and
-`ComputePath` races with moving actors. The two-phase balance (pre-spawn + post-spawn)
-separates concerns cleanly.
+**In-flight rebalancing:**
+Balance isn't confined to the turn boundary. `BalloonBalancer.Tick` pulses a full
+`Balance()` pass at `IBalloonsConfiguration.FlightRebalanceInterval` while a shot is
+airborne — gated on the projectile still being free, not on its last-shield glide, not
+paused, and only when `HasPossibleMove()` finds an actual gap to close. This keeps a long
+flight from leaving the board visibly unsettled for its whole duration, on top of the
+pre-spawn and post-spawn passes below.
 
 **Ordering note:** `BalanceBalloonsMessage` is published by both `ProjectileView`
 (fallback — in case `BalloonSpawner` never gets to publish it) and `BalloonSpawner`
