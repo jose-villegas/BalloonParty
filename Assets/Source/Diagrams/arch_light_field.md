@@ -229,6 +229,5 @@ shadow scales by R relative to the owner's `Intensity` reference. See the update
 
 ## See also
 
-- @ref plan_lighting — full design plan and milestone status
 - @ref arch_screen_space_light — the GI composite that consumes this field
 - `Shared/SceneLight/README.md` — implementation details and API reference

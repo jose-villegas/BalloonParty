@@ -1,7 +1,6 @@
 # Scene Light Field
 
-The **light field** — the disturbance-field architecture applied to light (see @ref plan_lighting,
-"Milestone 3"). A small screen/world-space RenderTexture that every direction/specular consumer can
+The **light field** — the disturbance-field architecture applied to light. A small screen/world-space RenderTexture that every direction/specular consumer can
 sample once at its anchor to get the local light *direction + magnitude + colour*, regardless of how
 many lights contribute. This folder is the field's **producer**; consumers read it through the
 shared shader include `Assets/Shaders/BalloonParty/Include/SceneLight.cginc`.
