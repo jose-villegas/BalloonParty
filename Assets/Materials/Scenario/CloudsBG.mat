@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Background
+  m_Name: CloudsBG
   m_Shader: {fileID: 4800000, guid: 4fef41c1019ea44049da397d62937c64, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -79,11 +79,11 @@ Material:
     - _NoiseDebug: 0
     - _NoisePeriod: 16
     - _NoiseScale: 0.8
-    - _NormalEpsilon: 0.012
+    - _NormalEpsilon: 0.05
     - _NormalStrength: 3
     - _OpenGain: 0.925
     - _RestOpen: 0.195
-    - _ShadowDistance: 1.25
+    - _ShadowDistance: 1.65
     - _ShadowSoftness: 0
     - _SlotBlend: 0.35
     - _SlotRadius: 0.45
