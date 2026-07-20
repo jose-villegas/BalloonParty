@@ -106,7 +106,7 @@ Material:
     - _NormalStrength: 2.5
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _ShadowDistance: 0.212
+    - _ShadowDistance: 0.25
     - _ShadowOffsetX: 0.15
     - _ShadowOffsetY: -0.15
     - _ShadowSoftness: 0.1
@@ -122,7 +122,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _AmbientColor: {r: 0.34117648, g: 0.627451, b: 0.7176471, a: 1}
-    - _CloudColor: {r: 1, g: 1, b: 1, a: 1}
+    - _CloudColor: {r: 0.8274511, g: 0.8274511, b: 0.8274511, a: 1}
     - _Color: {r: 0.9607844, g: 0.9607844, b: 0.9607844, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FieldBoundsMin: {r: -5, g: -8, b: 0, a: 0}

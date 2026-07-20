@@ -541,6 +541,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8811000000000000001, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8811000000000000003, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
+      propertyPath: _stripWidth
+      value: 0.525
+      objectReference: {fileID: 0}
     - target: {fileID: 8811000000000000022, guid: b87d2a91b2e8044649b32c3a684fd6d9,
         type: 3}
       propertyPath: _camera
@@ -556,6 +566,11 @@ PrefabInstance:
       propertyPath: _densityMaterial
       value: 
       objectReference: {fileID: 2100000, guid: 10b206cd4c4534fdaae61c2ccb5bb3d4, type: 2}
+    - target: {fileID: 8811000000000000022, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
+      propertyPath: _transitionParallax
+      value: -0.8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

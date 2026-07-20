@@ -174,16 +174,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42dfabfd81909428ba9048fd10913fa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Display.ScreenSpaceLightService
-  _smearShader: {fileID: 4800000, guid: 8a14fe89476c045b294beadef2be1e12, type: 3}
-  _overlayShader: {fileID: 4800000, guid: 93bf1f4f895d74648adb05d6b926be02, type: 3}
-  _smearDistance: 0.65
-  _tapDecay: 0.45
-  _tapStart: 0.35
-  _shadowStrength: 0.4
-  _shadowTint: {r: 0.2, g: 0.2, b: 0.2, a: 1}
-  _bounceStrength: 0.25
-  _temporalSmoothing: 0
-  _temporalResponse: 0.2
   _sortingLayerName: Sky
   _sortingOrder: 32000
 --- !u!114 &8093058153975969621

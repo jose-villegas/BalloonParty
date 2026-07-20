@@ -59,7 +59,7 @@ Material:
     - _ColorNoiseBias: 0.4
     - _DepthShade: 0.2
     - _DetailScale: 2
-    - _DisplaceWorldScale: 0.65
+    - _DisplaceWorldScale: 0.175
     - _EdgeFeather: 0.4
     - _EdgeHigh: 0.55
     - _EdgeLow: 0.25

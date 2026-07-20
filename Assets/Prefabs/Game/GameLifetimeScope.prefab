@@ -67,6 +67,8 @@ MonoBehaviour:
     type: 2}
   _sceneLightFieldSettings: {fileID: 11400000, guid: 6f1c8ceaec67e46bba09250d145ce93e,
     type: 2}
+  _cloudFieldSettings: {fileID: 11400000, guid: cb9e304f94de349b7bd80e111384c682,
+    type: 2}
   _speckFieldSettings: {fileID: 11400000, guid: 9cafb02834084e8c8db437da292e5a10,
     type: 2}
   _levelPacingConfiguration: {fileID: 11400000, guid: 1e1fe4e6ad3a04cc6aed58b832dbbf17,

@@ -27,6 +27,7 @@ using BalloonParty.Prediction;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Controller;
+using BalloonParty.Scenario;
 using BalloonParty.Scenario.View;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Disturbance;
@@ -193,6 +194,8 @@ namespace BalloonParty.Game
             builder.RegisterComponentInHierarchy<CinematicCameraView>();
             builder.RegisterComponentInHierarchy<SpeckField>();
             builder.RegisterComponentInHierarchy<WallNetView>();
+            builder.Register<CloudFieldService>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.RegisterEntryPoint<LaunchDisturbanceStamp>();
             builder.Register<CinematicCameraRig>(Lifetime.Singleton);
 
             builder.Register<GameOverPresentationGate>(Lifetime.Singleton);

@@ -1,5 +1,9 @@
+using System;
 using System.Collections.Generic;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Messages;
+using MessagePipe;
+using UniRx;
 using UnityEngine;
 using UnityEngine.Rendering;
 using VContainer;
@@ -19,6 +23,7 @@ namespace BalloonParty.Scenario.View
     internal sealed class WallNetView : MonoBehaviour
     {
         private static readonly int StripWidthId = Shader.PropertyToID("_StripWidth");
+        private static readonly int TransitionFadeId = Shader.PropertyToID("_TransitionFade");
 
         [SerializeField] private Material _netMaterial;
 
@@ -38,9 +43,18 @@ namespace BalloonParty.Scenario.View
         [SerializeField] private string _sortingLayerName = "Sky";
         [SerializeField] private int _sortingOrder;
 
+        [Tooltip("How fast the net fades out on a transition / in after the first shot.")]
+        [SerializeField] private float _transitionFadeSpeed = 4f;
+
         private readonly List<Mesh> _meshes = new();
+        private readonly CompositeDisposable _subscriptions = new();
 
         private IGameConfiguration _config;
+        private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
+        private ISubscriber<RunResetMessage> _runResetSubscriber;
+        private ISubscriber<ProjectileFiredMessage> _firedSubscriber;
+        private float _transitionFade;
+        private float _transitionFadeTarget;
 
         private void Start()
         {
@@ -55,10 +69,37 @@ namespace BalloonParty.Scenario.View
             // must match the geometry width the meshes were built with (single source of truth in C#).
             _netMaterial.SetFloat(StripWidthId, _stripWidth);
             BuildStrips(new WallLimits(_config.LimitsClockwise));
+
+            // Start hidden and lerp in on the first shot; a Game transition (level-up ascend, restart
+            // descent) fades it back out until the next first shot.
+            _netMaterial.SetFloat(TransitionFadeId, _transitionFade);
+            _levelUpSubscriber?.Subscribe(_ => _transitionFadeTarget = 0f).AddTo(_subscriptions);
+            _runResetSubscriber?.Subscribe(_ => _transitionFadeTarget = 0f).AddTo(_subscriptions);
+            _firedSubscriber?.Subscribe(_ => _transitionFadeTarget = 1f).AddTo(_subscriptions);
+        }
+
+        private void Update()
+        {
+            if (Mathf.Approximately(_transitionFade, _transitionFadeTarget))
+            {
+                return;
+            }
+
+            // Unscaled so it plays through the transition's time-scale changes; frame-rate independent.
+            _transitionFade = Mathf.Lerp(_transitionFade, _transitionFadeTarget,
+                1f - Mathf.Exp(-_transitionFadeSpeed * Time.unscaledDeltaTime));
+            if (Mathf.Abs(_transitionFade - _transitionFadeTarget) <= 0.001f)
+            {
+                _transitionFade = _transitionFadeTarget;
+            }
+
+            _netMaterial.SetFloat(TransitionFadeId, _transitionFade);
         }
 
         private void OnDestroy()
         {
+            _subscriptions.Dispose();
+
             foreach (var mesh in _meshes)
             {
                 if (mesh != null)
@@ -71,9 +112,16 @@ namespace BalloonParty.Scenario.View
         }
 
         [Inject]
-        private void Construct(IGameConfiguration config)
+        private void Construct(
+            IGameConfiguration config,
+            ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
+            ISubscriber<RunResetMessage> runResetSubscriber,
+            ISubscriber<ProjectileFiredMessage> firedSubscriber)
         {
             _config = config;
+            _levelUpSubscriber = levelUpSubscriber;
+            _runResetSubscriber = runResetSubscriber;
+            _firedSubscriber = firedSubscriber;
         }
 
         private void BuildStrips(WallLimits limits)
@@ -83,12 +131,12 @@ namespace BalloonParty.Scenario.View
             // side bands leave open when they unfurl. The side strips stay at the exact edge length, so the
             // corners are owned by the horizontals — filled, without overlapping the sides.
             var horizontal = new Vector2((limits.Right - limits.Left) + 2f * _stripWidth, 0f);
-            var vertical = new Vector2(0f, limits.Top - limits.Bottom);
+            var vertical = new Vector2(0f, limits.Top - limits.Bottom + 4f);
 
             BuildStrip("WallNet_Top", new Vector2(limits.Left - _stripWidth, limits.Top), horizontal, Vector2.up);
             BuildStrip("WallNet_Bottom", new Vector2(limits.Left - _stripWidth, limits.Bottom), horizontal, Vector2.down);
-            BuildStrip("WallNet_Left", new Vector2(limits.Left, limits.Bottom), vertical, Vector2.left);
-            BuildStrip("WallNet_Right", new Vector2(limits.Right, limits.Bottom), vertical, Vector2.right);
+            BuildStrip("WallNet_Left", new Vector2(limits.Left, limits.Bottom - 2f), vertical, Vector2.left);
+            BuildStrip("WallNet_Right", new Vector2(limits.Right, limits.Bottom - 2f), vertical, Vector2.right);
         }
 
         // Lays one band from `corner` along `alongEdge` (its full world length), extruded OUTWARD (away from

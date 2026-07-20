@@ -12,6 +12,9 @@ Shader "BalloonParty/Scenario/WallNet"
     Properties
     {
         [HDR] _Color ("Net Color (HDR)", Color) = (1.4, 1.55, 1.7, 0.9)
+        // Global fade driven by WallNetView: 1 during play, lerped to 0 across Game transitions and back
+        // in after the first shot. Default 1 so the material reads normally in edit mode.
+        _TransitionFade ("Transition Fade (driven by C#)", Range(0, 1)) = 1
         _LineWidth ("Line Half-Width (uv)", Range(0.01, 0.5)) = 0.08
         _LineSoftness ("Line Softness (uv)", Range(0.0, 0.5)) = 0.06
         _EdgeFeather ("Band Edge Feather (across)", Range(0.0, 0.5)) = 0.12
@@ -106,6 +109,7 @@ Shader "BalloonParty/Scenario/WallNet"
             fixed4 _DisturbedColor;
             float _DisturbColorGain;
             float _DisturbVisibilityTarget;
+            float _TransitionFade;
             float _LineWidth;
             float _LineSoftness;
             float _EdgeFeather;
@@ -223,7 +227,7 @@ Shader "BalloonParty/Scenario/WallNet"
                 // Cloud-driven visibility, blended toward the disturbance target by how disturbed this
                 // spot is — so a struck section reveals (or fades out) regardless of the cloud there.
                 float vis = lerp(CloudVisibility(i.worldXY), _DisturbVisibilityTarget, i.disturb);
-                col.a *= net * feather * vis;
+                col.a *= net * feather * vis * _TransitionFade;
                 return col;
             }
             ENDCG

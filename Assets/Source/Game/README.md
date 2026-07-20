@@ -8,6 +8,8 @@ The entry point that starts and runs the game.
 |---|---|
 | `GameLifetimeScope` | VContainer composition root — registers all game services, entry points, MessagePipe brokers, configuration assets, and (in dev builds) cheats. `Awake()` pre-allocates DOTween capacity (`SetTweensCapacity(1000, 50)`) before building the container to avoid GC from array resizing during the initial balloon spawn burst |
 | `LaunchLifetimeScope` | VContainer root for the Launcher scene — registers `GameDisplayConfiguration` and `OrthogonalSizeCameraController` for the launch camera |
+| `LaunchDisturbanceStamp` | `ITickable`, registered in `GameScopeRegistration` — lets the player poke the shared disturbance field with a finger on the launch screen while the game pre-warms, using the same stamp the projectile wake uses. Only active while `NavigationState.Launch` is current |
+| `LaunchPlayTrigger` | Launch screen's Play button `MonoBehaviour` (wired in the Launcher scene in place of the plain `NavigationTrigger`). Starts the `LaunchAscend` cloud scroll, waits for it to finish, then transitions to `NavigationState.Game` — so the game doesn't appear mid-scroll |
 | `HitPipeline` | `IHitDispatcher` — the single entry point for actor hits; runs the order-dependent stages before broadcasting `ActorHitMessage` (see Architecture) |
 | `Score/` | Score tracking, level progress, streaks, and trail orb management — see `Score/README.md` |
 | `Run/` | Run lifecycle — end-of-run commit, restart reset ordering, best-run meta — see `Run/README.md` |

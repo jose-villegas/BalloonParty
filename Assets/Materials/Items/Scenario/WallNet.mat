@@ -52,14 +52,14 @@ Material:
     - _BreatheNoisePhaseWarp: 1
     - _BreatheWaves: 7
     - _DepthShade: 0.2
-    - _DisturbColorGain: 10
+    - _DisturbColorGain: 0.3
     - _DisturbVisibilityTarget: 1
-    - _EdgeFeather: 0.4
+    - _EdgeFeather: 0.238
     - _EnableExternalAlpha: 0
     - _FadeContrast: 4.68
     - _FadeFloor: 0
     - _FadeHigh: 1
-    - _FadeLow: 0.6
+    - _FadeLow: 0.95
     - _FadeStrength: 1
     - _LightColorRamp: 5
     - _LightInfluence: 1
@@ -68,11 +68,12 @@ Material:
     - _NoiseScale: 0.4
     - _OpenGain: 3
     - _RestOpen: 0.3
-    - _StripWidth: 0.9
+    - _StripWidth: 0.525
+    - _TransitionFade: 1
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 0.9411765, g: 0.9725491, b: 1, a: 1}
-    - _DisturbedColor: {r: 2.1176472, g: 3.2313726, b: 3.6862745, a: 1}
+    - _Color: {r: 0.9411765, g: 0.9725491, b: 1, a: 0.5019608}
+    - _DisturbedColor: {r: 2.1176472, g: 3.2313726, b: 3.6862745, a: 0.5019608}
     - _NoiseScroll: {r: 0.05, g: 0.12, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
