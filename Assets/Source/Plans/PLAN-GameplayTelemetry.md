@@ -18,7 +18,7 @@ the pacing tables in `LevelPacingConfiguration` and the loss-condition tuning.
 
 ## Principles
 
-- **Gameplay reporting only** (José, 2026-07-18). No PII, no device fingerprinting, no
+- **Gameplay reporting only** (2026-07-18). No PII, no device fingerprinting, no
   session identity beyond an anonymous run counter — revisit only if a backend ever needs
   more.
 - **Subscriber-only collection**: a plain C# `GameplayTelemetryService` (VContainer,

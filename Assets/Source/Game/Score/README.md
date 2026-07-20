@@ -64,29 +64,32 @@ principal). `BigScore` is the confluence handler for any group past that floor (
 
 ### `BigScore` + `ShapeFormationTicker` + `ShapeCatalog`
 
-Once a group clears the `BigScore` `MinPoints` (authored `2` — `DefaultScore`'s floor is `0`, so only a
-1-point group ever falls through to it), its score **decomposes** into a catalog of 3D shapes flown all at
-once — every point is one orbiting pen trail, so the 5×-on-a-cluster worst case becomes a handful of
-arrivals (one per shape), not hundreds.
+When a pop scores 2+ points, the system visualises it as spinning 3D wireframe shapes that fly toward the
+score bar — rather than spawning hundreds of individual "+1" trails. Each shape is drawn by **pens**: small
+glowing dots that orbit along the shape's edges, leaving fading ribbon trails behind them (like sparklers
+traced in the dark). The path a pen follows is a **walk** — a closed loop of edges it repeats forever. When
+a shape reaches the bar, it **arrives** and banks its points.
+
+The score **decomposes** into shapes like making change with coins: 47 points might become a 30-shape + a
+12-shape + a 5-shape, all launched simultaneously from the pop position. The `DefaultScore` handler (simple
+single-trail fly-in) only fires for 1-point groups.
 
 `ShapeCatalog` (`internal static`, built once, zero-alloc lookup) is hand-authored 3D shape data. A denomination
 maps to a shape whose vertex count equals it: `2` line, `3` triangle, `4` tetrahedron, `5` square pyramid, `6`
-triangular prism, `7` hexagonal pyramid, `8` cube, `9` triangular cupola, `10` octagonal bipyramid, `12` hexagonal
-prism, `15` pentagonal cupola, `20` dodecahedron, `30` a BALL of six
-5-point OUTLINE stars stamped on the octahedral axes (±x/±y/±z, spherized onto the surface, pens tracing each
-silhouette — never crossing the interior; its 60-vertex path carries only 30 pens, five per star),
-`50` a 10×5 torus grid, and `100` a spherical-spiral yarn ball — the upper tiers favour a readable
-**silhouette** over vertex density (a doughnut or a wound ball reads instantly under tumble; denser polyhedra
-just blur). Every shape partitions its edges into closed **walks** a pen orbits forever — a Hamiltonian-ish cycle
-plus back-and-forth shuttles for the polyhedra, latitude/longitude rings for the torus, one outline per star
-and one long coil for the yarn ball; arc walks slerp their segments (curved bands), chord walks lerp them
-(straight edges). Each shape also carries a `SpinScale` (complex shapes read better tumbling slowly) and an
-optional hit-aligned start (only the line, whose slope IS the shot's linear equation). `Denominations` is the
-decomposition **ladder** `{100, 50, 30, 20, 15, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2}`. `BigScoreTrailBehaviour.Decompose`
-is an optimal coin-change split over that ladder (fewest pieces, largest-first reconstruction). With both `2` and
-`3` on the ladder, every total `BigScore` ever sees decomposes remainder-free — `AssertNoRemainder` asserts this
-holds rather than silently falling back (the old remainder-1-becomes-a-classic-trail fallback was dead code and
-has been removed).
+triangular prism, `7` pentagonal dipyramid (J13), `8` cube, `9` triangular cupola, `10` elongated square
+dipyramid (J15), `12` hexagonal prism, `15` pentagonal cupola, `20` dodecahedron, `30` a ball of six 5-point
+outline stars (pens trace each star's silhouette without crossing the interior; five pens per star),
+`50` parabidiminished rhombicosidodecahedron (J80, face-walked), and `100` a waving sphere (sine-wave vertex
+displacement gives it an organic pulsing look) — the upper tiers favour a readable **silhouette** over vertex
+density. Every shape partitions its edges into closed **walks** a pen orbits forever — face-tracing loops (the
+pen goes around each flat face) for the Johnson solids, one outline per star, latitude/longitude rings for the
+sphere; some walks trace curves (spherical arcs), others trace straight edges. Each shape also carries a
+`SpinScale` (complex shapes tumble more slowly for readability), per-shape `DisplacementScale`/
+`DisplacementSpeed` multipliers for animated shapes, and an optional hit-aligned start (the line tilts to match
+the shot direction). `Denominations` is the decomposition **ladder**
+`{100, 50, 30, 20, 15, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2}`. `BigScoreTrailBehaviour.Decompose`
+is an optimal coin-change split over that ladder (fewest pieces, largest-first). With both `2` and `3` on the
+ladder, every total decomposes remainder-free — `AssertNoRemainder` guards this invariant.
 
 `BigScoreTrailBehaviour.Begin` decomposes `context.Points`, fits every shape's radius inside `WallLimits`, spreads
 the formations' sub-centres around the pop (golden-angle phyllotaxis, each wall-clamped), and launches them

@@ -10,7 +10,7 @@ namespace BalloonParty.Balloon.Controller
     /// system last wrote the view's transform (spawn path, balance DOPath, pool teleport). Runs
     /// last in the frame as an <see cref="ILateTickable"/> so it never fights another writer: the
     /// base is detected by comparing this frame's position against what was written last frame,
-    /// never assumed or pushed by callers. See PLAN-NudgeLayeredMotion for the model.
+    /// never assumed or pushed by callers.
     /// </summary>
     internal sealed class BalloonMotionTicker : ILateTickable
     {

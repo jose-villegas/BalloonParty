@@ -34,7 +34,7 @@ to read the grid, tune difficulty, or playtest spawn density.
 | **Tough** | `ToughBalloonModel` | ✅ `ToughBalloon.prefab` | ✅ | ✅ `ToughBalloon.controller` | ✅ Stable/Unstable Idle | ✅ `PSVFX_ToughBalloonPop` | ✅ `BalloonsConfiguration` | No `IHasColor`; scores via `IHasScoreColor` with `Inherited` strategy (killer earns points in their color) |
 | **Unbreakable** | `UnbreakableBalloonModel` | ✅ `Unbreakable.prefab` | ✅ procedural shader | ✅ `Unbreakable.controller` | ✅ StableIdle | ⚠️ deflect/pop VFX deferred (Phase 9) | ✅ `BalloonsConfiguration` | `IHasScoreColor` mode `Inherited` — scores in killer's color at hit time |
 | **Puff** | `PuffObstacleModel` | ✅ `Puff.prefab` (invisible marker) + `PuffCloud.prefab` | ✅ procedural shader (`PuffCloud.shader`) | n/a — invisible marker; cloud is shader-driven | n/a — cluster cloud animates via shader | ✅ disturbance/reform via `DisturbanceFieldService` | ✅ `GridActorConfiguration` (asset created & registered) | Traversable cloud cluster; full MVC system done (model + registry + view + controller) |
-| **Bush** | `BushObstacleModel` | ✅ `BushCluster` + `BushSlot` | ✅ baked variants (`Art/Bush/Baked/`) | n/a — shader-driven | ✅ GPU wind + rattle | ✅ `PSVFX_BushPassby` | ✅ `GridActorConfiguration` | **✅ Done via the baked skeletal pipeline — see `PLAN-Bush-Sprite-Baking.md`.** Supersedes the simple-sprite spec in the per-actor section below. |
+| **Bush** | `BushObstacleModel` | ✅ `BushCluster` + `BushSlot` | ✅ baked variants (`Art/Bush/Baked/`) | n/a — shader-driven | ✅ GPU wind + rattle | ✅ `PSVFX_BushPassby` | ✅ `GridActorConfiguration` | **✅ Done via the baked skeletal pipeline** (see `Editor/Bush/README.md`). Supersedes the simple-sprite spec in the per-actor section below. |
 | **Deflector** | `DeflectorActorModel` | ❌ | ❌ | ❌ | ❌ Idle, Deflect flash | ❌ bounce flash | ❌ `GridActorConfiguration` | Reflective surface; indestructible |
 | **Absorber** | `AbsorberActorModel` | ❌ | ❌ | ❌ | ❌ Idle pulse, Absorb | ❌ absorb burst | ❌ `GridActorConfiguration` | Hazard; ends the turn on contact |
 | **Gatekeeper** | `GatekeeperActorModel` | ❌ | ❌ | ❌ | ❌ Idle, Hit crack, Break | ❌ hit dust, break burst | ❌ `GridActorConfiguration` | Degrades visually as `HitsRemaining` drops |
@@ -238,7 +238,7 @@ and stores no color state.
 balloons must route around it. Projectiles pass through (no collider).
 
 Implemented as a **baked 2D skeletal plant system** — not the simple sprite originally
-sketched here. See **`PLAN-Bush-Sprite-Baking.md`** for the full design (cluster
+sketched here. See `Assets/Source/Editor/Bush/README.md` for the full design (cluster
 infrastructure shared with Puff, offline-baked branch maps + leaf extraction, GPU wind +
 rattle driven by the disturbance field). Shipped assets:
 
@@ -332,7 +332,7 @@ procedural engine can be tested with real (even rough) assets as early as possib
 ```
 1. [x] GridActorConfiguration SO + registration         ← code, asset, and registration all done
 2. [x] Puff — full MVC cloud system + config entry done
-3. [x] Bush — baked skeletal system (see PLAN-Bush-Sprite-Baking); done
+3. [x] Bush — baked skeletal system (see `Editor/Bush/README.md`); done
 4. [x] Soap Cluster shader + C# Variant + model + prefab + config  ← done; pop VFX deferred to Phase 9
 5. [x] Unbreakable balloon — shader + variant + model + prefab + controller + config  ← done; VFX deferred to Phase 9
 6. [ ] Deflector — first hitable grid actor          ← REMAINING; introduces Deflect VFX pipeline

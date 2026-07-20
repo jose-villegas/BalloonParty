@@ -118,7 +118,7 @@ A bake shader expands the index map into the **terrain composite RT** (moderate 
 The visual calls below can't be settled on paper — each stage lists its candidate
 techniques with tradeoffs, a recommendation, and what the in-editor **spike** must
 prove. Spike protocol: shader variants behind `#pragma multi_compile`-style keywords
-(or just material swaps), toggled live in play mode with José's eye as judge; losers
+(or just material swaps), toggled live in play mode with visual QA as judge; losers
 deleted, never shipped dormant.
 
 ### S1 — Zone blending (bake-time)
@@ -272,7 +272,7 @@ texture bombing (GPU Gems ch. 20).
 
 ## Task plan
 
-Sizes: S ≤ half a day · M ≈ 1–2 days · L ≈ 3+ days. Every wave ends with a José
+Sizes: S ≤ half a day · M ≈ 1–2 days · L ≈ 3+ days. Every wave ends with a visual QA
 in-editor gate. Agent assignments follow the established split: opus for
 quality-critical/subtle work, sonnet for well-specified implementation, haiku for
 mechanical tasks; Fable investigates handoffs, reviews, commits.
@@ -280,9 +280,9 @@ mechanical tasks; Fable investigates handoffs, reviews, commits.
 ### Dependency graph
 
 ```
-A1 data service (opus) ─▶ A2 index-map upload (sonnet) ─▶ A3 bake blit (opus, shader) ─▶ A-gate (José: bake looks right in Render Maps)
+A1 data service (opus) ─▶ A2 index-map upload (sonnet) ─▶ A3 bake blit (opus, shader) ─▶ A-gate (visual QA: bake looks right in Render Maps)
                                                                  │
-                              B1 view + runtime shader v1 (sonnet) ─▶ B2 reactions (opus, shader) ─▶ B3 GI feed (sonnet) ─▶ B-gate (José: style + device perf)
+                              B1 view + runtime shader v1 (sonnet) ─▶ B2 reactions (opus, shader) ─▶ B3 GI feed (sonnet) ─▶ B-gate (visual QA: style + device perf)
                                                                  │
         C1 placement gating seam (sonnet) ◀──────────────────────┤   (needs only A1)
         C2 seed plumbing + debug (haiku) ◀───────────────────────┤   (needs only A1)
@@ -310,12 +310,12 @@ from nearest slot), rebuilt on level start; lifecycle owned by the service's dis
 The composite bake per shader-design S1 + S5: noise-warped hex-distance blending into
 the two-RT layout (composite RGBA8 + id/SDF data map). Ships **spike SP-1**
 (cross-fade vs height-blend, keyword-switched) for the A-gate decision. Shader work is
-in-editor-verified only — José's A-gate: inspect both RTs in the Game Render Maps
+in-editor-verified only — A-gate visual QA: inspect both RTs in the Game Render Maps
 window (add via C3 or the custom slot), pick the blend style, delete the loser. Blend
 width, warp amplitude per biome pair, and per-biome albedo exposed on `BiomeProfile`
 for live tuning; include the 512-vs-1024 resolution check here.
 
-**A-gate (José)**: composite for a handful of seeds reads as natural, blended,
+**A-gate (visual QA)**: composite for a handful of seeds reads as natural, blended,
 style-matched ground. Iterate A3 knobs before any view work.
 
 ### Wave B — view + reactions + GI
@@ -323,7 +323,7 @@ style-matched ground. Iterate A3 knobs before any view work.
 #### B1 — `TerrainView` + runtime shader v1 · **P0 · M · sonnet**
 Quad on Default layer, frustum+margin sizing, parallax binding to `ScenarioContentRoot`
 (mirror SpeckField's motion sampling incl. teleport rejection), opaque queue, composite
-+ world-space detail sampling. No reactions yet. José gate: in-game look vs the
++ world-space detail sampling. No reactions yet. Visual QA gate: in-game look vs the
 screenshots' soft style; travel/parallax feel during ascend + restart descent.
 
 #### B2 — Disturbance reactions · **P1 · M–L · opus**
@@ -333,7 +333,7 @@ darkening, lava emissive pulse, stone inert. Ships **spikes SP-2** (grass techni
 A/B + bush wind sync) and **SP-3** (gradient rings vs wave-sim prototype — the wave
 sim reuses the disturbance ping-pong pattern; build the prototype minimal and be
 ready to delete it). This is the showpiece and the most tuning-heavy task — every
-constant a material property so José live-tunes in play mode. Device measurement
+constant a material property so the author live-tunes in play mode. Device measurement
 closes it: \f$\le 4\f$ extra taps in the common path; wave-sim/footprint RTs only survive
 with their own pacing numbers.
 
@@ -344,7 +344,7 @@ undersides = the money shot). Verify in Game Render Maps (capture alpha semantic
 unchanged — terrain is opaque, so coverage = 1 under the board; check the GI ground
 shadow still behaves).
 
-**B-gate (José)**: full style pass + device build — pacing sample via the adb loop,
+**B-gate (visual QA)**: full style pass + device build — pacing sample via the adb loop,
 overdraw check in Frame Debugger dump vs a pre-terrain baseline capture (take one at
 A-gate time).
 
@@ -369,7 +369,7 @@ inspect the pipeline.
 
 ## Open questions (answer at execution time)
 
-1. **Biome set + matrix**: final list and the elevation/moisture matrix — José authors
+1. **Biome set + matrix**: final list and the elevation/moisture matrix — the author defines
    in `BiomeProfile` during A-gate iteration; the plan assumes
    grass/water/sand/dirt/stone/lava.
 2. **Coverage**: full-frustum ground vs board-footprint-with-sky-margin — decide at B1

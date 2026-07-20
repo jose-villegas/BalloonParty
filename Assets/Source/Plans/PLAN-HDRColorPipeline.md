@@ -81,7 +81,7 @@ forcing function — this is an elective quality migration.
 
 ## Task plan
 
-Sizes: S ≤ half a day · M ≈ 1–2 days · L ≈ 3+ days. **Every wave ends with a José
+Sizes: S ≤ half a day · M ≈ 1–2 days · L ≈ 3+ days. **Every wave ends with a visual QA
 in-editor/device verification gate — same rhythm as the URP migration.**
 
 ### Dependency graph
@@ -112,7 +112,7 @@ Compile-level risk: none (color space is a project setting). Runtime risk: shade
 do their own gamma-ish math (check \f$x^{2.2}\f$-style hacks — grep before flipping;
 none known, verify).
 
-#### A2 — Look re-tune · **P0 · L — art-driven, José-led**
+#### A2 — Look re-tune · **P0 · L — art-driven, art-led**
 Re-tune authored colors until the game reads like the A0 references (or deliberately
 better): palette entries, particle gradients/materials, shader color constants (danger
 gradient, GI shadow tint/bounce strength, cloud shading, bush tints), UI. Agents can
@@ -153,7 +153,7 @@ pop-VFX cores. Per-shader `fixed4 → half4` on the paths that now carry \f$>1\f
 
 #### B4 — Bloom · **P1 · S–M**
 Volume override: Bloom, threshold \f$\ge 1\f$ (only true HDR emitters bloom — the scene's LDR
-content stays clean), low scatter to start. Tune per effect with José's eye. Device
+content stays clean), low scatter to start. Tune per effect by eye. Device
 cost check: bloom's downsample chain is the second-biggest new GPU cost after the post
 pass itself.
 
@@ -184,7 +184,7 @@ lived on devices for a while.
 
 ## Open questions (answer at execution time)
 
-1. **Which effects get HDR emitters first?** José's call — the plan assumes lightning,
+1. **Which effects get HDR emitters first?** an art call — the plan assumes lightning,
    beams, chrome sweep, glitter, level-up glow; the authoring pass (B3) should start
    with ONE showcase effect to validate the whole pipeline before sweeping.
 2. **Palette authoring shape**: full HDR color pickers on `PaletteEntry`

@@ -63,8 +63,7 @@ The net's motion and look now read two shared fields, not just one:
 starts hidden, fades in on the first shot (`ProjectileFiredMessage`), and fades back out on a Game
 transition (`ScoreLevelUpMessage`, `RunResetMessage`) until the next run's first shot.
 
-See `Assets/Source/Plans/PLAN-WallBorders.md` for the full design and phasing, and
-`Assets/Source/Shared/Disturbance/README.md` for the disturbance field.
+See `Assets/Source/Shared/Disturbance/README.md` for the disturbance field.
 
 ## Shader
 

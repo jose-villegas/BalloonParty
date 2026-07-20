@@ -6,8 +6,7 @@
 
 ## What this diagram shows
 
-The full cinematics pipeline after the 2026-07 restructure (see
-`Plans/PLAN-CinematicsArchitecture.md` for the design history): configuration, producers,
+The full cinematics pipeline after the 2026-07 restructure: configuration, producers,
 the shared runner, the services it drives, and every other system a cinematic touches.
 
 **One setup point — `CinematicsSettings` (SO):**

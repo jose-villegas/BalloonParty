@@ -1,8 +1,8 @@
 # ShotSolver
 
-Editor tooling for `PLAN-ShotGeometry.md` Tasks 2 and 4 — sweeps aim angle against the live board
-and reports which windows reach a target score. See `Assets/Source/Plans/PLAN-ShotGeometry.md` for
-the math background (the shot as a deterministic billiard) and the rules this mirrors.
+Editor tooling for the shot geometry system — sweeps aim angle against the live board
+and reports which windows reach a target score. The shot is modelled as a deterministic billiard;
+the simulation mirrors the runtime projectile rules.
 
 ## Contents
 

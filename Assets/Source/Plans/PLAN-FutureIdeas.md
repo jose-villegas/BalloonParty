@@ -1265,7 +1265,7 @@ don't-defend-against-the-impossible stance: a shipped gap in the level ranges sh
 `NewProjectileBalloonLines`, `ItemSettings.TurnCheckEvery`, and `GridActorPrefabEntry`'s
 `Weight`/`MinCount`/`MaxCount` + `IWeightedEntry` impl were removed once pacing owned those values.)*
 
-## 15 — Level-Up Point Carry-Over (José, 2026-07-18)
+## 15 — Level-Up Point Carry-Over (2026-07-18)
 
 Overshoot points must survive a level-up: requirement 700, a pop lands the color at 730 →
 the 30 leftover counts toward the next level's progress AND the run score. Today
@@ -1284,7 +1284,7 @@ running total that accumulates across levels, clears only on a run reset, and sk
 gameplay or UI reads it.
 
 The banked value is reserved for a **future per-level scoring / currency system**
-(Balatro-style) meant to enrich the level-up popup — José's chosen direction over spending
+(Balatro-style) meant to enrich the level-up popup — the chosen direction over spending
 the excess as progress. If that changes and the excess should instead be *applied* (as
 next-level progress or as run score), the two approaches below remain the documented paths:
 the minimal capture-and-carry (seed the new level's progress + bar from the bank on
@@ -1307,10 +1307,10 @@ bookkeeping, `WillLevelUp`), `ColorProgressBar` (stashed max + post-drain start 
 `ScoreController` (drop the cap comment in `PublishPoints`), TrailChoreography contracts
 (no change expected — the watermark/`LastScore` semantics are already cumulative).
 
-## 16 — Grand Antiprism: the 100 denomination (José, 2026-07-19)
+## 16 — Grand Antiprism: the 100 denomination (2026-07-19)
 
 **Superseded 2026-07-19 (same day as implementation):** the grand antiprism shipped, verified,
-and was then replaced by a spherical-spiral "yarn ball" as the 100 — José's legibility pass
+and was then replaced by a spherical-spiral "yarn ball" as the 100 — the legibility pass
 found 500 projected 4D edges read as noise mid-tumble; the crown tier follows the silhouette
 principle (12 hexagonal prism, 50 torus, 100 yarn ball). The full verified 4D construction
 (600-cell, orthogonal-decagon removal, perspective projection, Eulerian splicing) lives in git
@@ -1321,10 +1321,10 @@ skin rather than a denomination).
 decagons traced via the \f$\varphi\f$-recurrence, perspective-from-w projection at c = 2, Eulerian circuit
 walks with undersized-cycle splicing so every walk earns a pen); cheat preset + tests added.
 
-The score-shape catalog (PLAN-TrailChoreography) gains a 100 denomination: the **grand
+The score-shape catalog gains a 100 denomination: the **grand
 antiprism**, the exceptional uniform 4-POLYTOPE — 100 vertices, 500 edges (degree 10 at
 every vertex), 320 cells. Low priority: a 100-point single-colour group is effectively
-unreachable until the roguelike run modifiers (§13) exist — but José wants it AUTHORED
+unreachable until the roguelike run modifiers (§13) exist — but it should be AUTHORED
 AND TESTABLE (edit-mode construction asserts) ahead of reachability, like the rest of
 the catalog.
 
