@@ -15,9 +15,17 @@ namespace BalloonParty.Game
     /// </summary>
     internal sealed class LaunchDisturbanceStamp : ITickable
     {
+        // World-space distance the finger must travel before the heading is refreshed — accumulates
+        // sub-threshold motion instead of reading each frame's raw (frame-rate-dependent, jittery) delta.
+        private const float HeadingStep = 0.05f;
+
+        // How sharply the heading turns toward a new drag direction (0 = frozen, 1 = snap).
+        private const float HeadingResponse = 0.5f;
+
         private readonly DisturbanceFieldService _field;
 
         private Vector3 _lastWorld;
+        private Vector2 _heading;
         private bool _dragging;
 
         public LaunchDisturbanceStamp(DisturbanceFieldService field)
@@ -57,14 +65,31 @@ namespace BalloonParty.Game
             var world = camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f));
             world.z = 0f;
 
-            // Direction from the drag delta (zero on the first frame of a press) so the stamp trails the finger.
-            var direction = _dragging ? ((Vector2)(world - _lastWorld)).normalized : Vector2.zero;
-            _lastWorld = world;
-            _dragging = true;
+            if (!_dragging)
+            {
+                // First frame of a press: no heading yet, so it stamps a plain radial poke.
+                _lastWorld = world;
+                _heading = Vector2.zero;
+                _dragging = true;
+            }
+            else
+            {
+                // Only refresh the heading once the finger has travelled far enough to be a real drag, then
+                // ease into it (Slerp stays stable through a sharp reversal). A slow or momentarily still
+                // finger keeps its last heading instead of collapsing to a directionless poke.
+                var delta = (Vector2)(world - _lastWorld);
+                if (delta.sqrMagnitude >= HeadingStep * HeadingStep)
+                {
+                    _heading = _heading == Vector2.zero
+                        ? delta.normalized
+                        : (Vector2)Vector3.Slerp(_heading, delta.normalized, HeadingResponse);
+                    _lastWorld = world;
+                }
+            }
 
             // Route through the configured StampSource (radius/strength/duration authored on
             // DisturbanceFieldSettings) rather than hardcoding — the same profile the projectile wake uses.
-            _field.Stamp(StampSource.Projectile, world, direction);
+            _field.Stamp(StampSource.Projectile, world, _heading);
         }
     }
 }
