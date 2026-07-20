@@ -41,6 +41,7 @@ namespace BalloonParty.Slots.Actor
         private static readonly int MotionDeltaId = Shader.PropertyToID("_MotionDelta");
         private static readonly int BrownianStrengthId = Shader.PropertyToID("_BrownianStrength");
         private static readonly int DragId = Shader.PropertyToID("_Drag");
+        private static readonly int MaxSpeedId = Shader.PropertyToID("_MaxSpeed");
         private static readonly int MotionInfluenceId = Shader.PropertyToID("_MotionInfluence");
         private static readonly int DisturbanceInfluenceId = Shader.PropertyToID("_DisturbanceInfluence");
         private static readonly int DisturbanceDampingId = Shader.PropertyToID("_DisturbanceDamping");
@@ -191,6 +192,10 @@ namespace BalloonParty.Slots.Actor
                 return;
             }
 
+            // A hitch or a pause/resume can hand the sim an oversized dt; cap it so a single step's
+            // accel/position update can't overshoot (insurance alongside the compute's velocity clamp).
+            dt = Mathf.Min(dt, _settings.Motion.MaxDeltaTime);
+
 #if UNITY_EDITOR
             // Re-push the constant params each frame in the editor so inspector tweaks preview live; a build
             // pushes them once in Start.
@@ -266,6 +271,7 @@ namespace BalloonParty.Slots.Actor
             _compute.SetBuffer(_kernel, SpecksId, _speckBuffer);
             _compute.SetFloat(BrownianStrengthId, motion.BrownianStrength);
             _compute.SetFloat(DragId, motion.Drag);
+            _compute.SetFloat(MaxSpeedId, motion.MaxSpeed);
             _compute.SetFloat(MotionInfluenceId, motion.MotionInfluence);
             _compute.SetVector(RegionMinId, region * -0.5f);
             _compute.SetVector(RegionSizeId, region);

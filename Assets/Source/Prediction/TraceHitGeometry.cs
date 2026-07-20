@@ -10,9 +10,10 @@ namespace BalloonParty.Prediction
     internal static class TraceHitGeometry
     {
         /// <summary>
-        ///     Finds where the polyline FIRST pierces the circle's surface, walking segments in point
-        ///     order — the physical strike point a projectile travelling the trace would touch, not the
-        ///     perpendicular-closest point (which sits ~90° off anywhere but a tangential graze).
+        ///     Finds where the polyline pierces the circle's surface with the highest centrality —
+        ///     the segment most directly aimed at the centre wins over a tangential graze from another.
+        ///     This matters near wall bounces: the pre-bounce segment may graze the detection circle
+        ///     while the post-bounce segment strikes dead-centre.
         ///     Solved per segment as line-circle intersection: from the (unclamped) perpendicular foot,
         ///     the entry lies half a chord back along the travel direction.
         ///     <paramref name="centrality"/> is how central the crossing is: 1 = the line runs through
@@ -24,10 +25,12 @@ namespace BalloonParty.Prediction
             Vector3 center,
             float radius,
             out Vector3 hitPoint,
-            out float centrality)
+            out float centrality,
+            out Vector2 hitDirection)
         {
             hitPoint = default;
             centrality = 0f;
+            hitDirection = Vector2.zero;
 
             if (points == null || points.Count < 2 || radius <= 0f)
             {
@@ -35,6 +38,7 @@ namespace BalloonParty.Prediction
             }
 
             var radiusSqr = radius * radius;
+            var bestCentrality = -1f;
 
             for (var i = 0; i < points.Count - 1; i++)
             {
@@ -61,19 +65,23 @@ namespace BalloonParty.Prediction
 
                 // The overlap must actually touch this segment's [0, length] span: an intersection
                 // entirely behind the start (tExit < 0) or past the end (tEntry > length) belongs to
-                // another segment — walked in point order, so the first accepted hit is the physical
-                // first strike. A segment STARTING inside the circle contributes its start point.
+                // another segment. A segment STARTING inside the circle contributes its start point.
                 if (tEntry > segLength || tExit < 0f)
                 {
                     continue;
                 }
 
-                hitPoint = a + direction * Mathf.Max(tEntry, 0f);
-                centrality = 1f - Mathf.Sqrt(footSqrDistance) / radius;
-                return true;
+                var candidateCentrality = 1f - Mathf.Sqrt(footSqrDistance) / radius;
+                if (candidateCentrality > bestCentrality)
+                {
+                    bestCentrality = candidateCentrality;
+                    hitPoint = a + direction * Mathf.Max(tEntry, 0f);
+                    centrality = candidateCentrality;
+                    hitDirection = direction;
+                }
             }
 
-            return false;
+            return bestCentrality >= 0f;
         }
     }
 }

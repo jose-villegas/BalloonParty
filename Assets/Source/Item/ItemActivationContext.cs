@@ -1,4 +1,5 @@
 using BalloonParty.Balloon.Model;
+using BalloonParty.Slots.Capabilities;
 using UnityEngine;
 
 namespace BalloonParty.Item
@@ -11,12 +12,16 @@ namespace BalloonParty.Item
         public readonly IBalloonModel Balloon;
         public readonly Vector3 WorldPosition;
         public readonly Vector3 ProjectileDirection;
+        public readonly DamageContext DamageContext;
 
-        public ItemActivationContext(IBalloonModel balloon, Vector3 worldPosition, Vector3 projectileDirection)
+        public ItemActivationContext(
+            IBalloonModel balloon, Vector3 worldPosition, Vector3 projectileDirection,
+            DamageContext damageContext = default)
         {
             Balloon = balloon;
             WorldPosition = worldPosition;
             ProjectileDirection = projectileDirection;
+            DamageContext = damageContext;
         }
     }
 }

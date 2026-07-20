@@ -18,7 +18,10 @@
 ## 1. Where this sits today
 
 `Snipe` is a shipped `ItemType` (`Assets/Source/Configuration/Items/ItemType.cs:11`). `SnipeItemHandler`
-(`Assets/Source/Item/Snipe/SnipeItemHandler.cs`) arms `IsPiercing` and grants a single, non-stacking
+(`Assets/Source/Item/Snipe/SnipeItemHandler.cs`) **requires `DamageFlags.DirectHit`** — if the host
+balloon was popped by AoE/item damage (bombs, lasers, lightning) the handler early-returns without
+arming the lance (the balloon is still consumed and the item lost). On a direct projectile hit it
+arms `IsPiercing` and grants a single, non-stacking
 multiplicative `ProjectileBuffId.Speed` buff (value from its own `SnipeSettings.SpeedBuffMultiplier`),
 plus the shared `RainbowShield` buff on a rainbow-balloon host — both ended by `PierceEndedEndCondition`
 once the pierce ends. The plow-then-shatter mechanic below (§2–§5) is fully built and shared with
@@ -43,7 +46,9 @@ effect reached two ways**. All the behavior below lives in the **shared pierce p
 (`ProjectileHitResolver` + `ProjectileMotionResolver` + a discharge step), so it applies to both — a
 cruise pierce and a Snipe lance behave identically once armed.
 
-**On activation** (Snipe path): arm `IsPiercing` + a single non-stacking `Speed` buff (Phase 2, shipped).
+**On activation** (Snipe path): **requires `DamageFlags.DirectHit`** — AoE/item damage destroys the
+host balloon but does not arm the lance. On a direct projectile hit: arm `IsPiercing` + a single
+non-stacking `Speed` buff (Phase 2, shipped).
 The cruise path arms `IsPiercing` after a long cruise, unchanged.
 
 **In flight:**

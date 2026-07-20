@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6226077097571664370}
   - component: {fileID: 6017868743096209770}
   m_Layer: 15
-  m_Name: Blob
+  m_Name: Spiral
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -211,7 +211,11 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6226077097571664370}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7402881001233824042, guid: ef986049aad6e40dcb0027158268936d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4557227612625093108}
   m_SourcePrefab: {fileID: 100100000, guid: ef986049aad6e40dcb0027158268936d, type: 3}
 --- !u!212 &521225372952105024 stripped
 SpriteRenderer:
@@ -219,6 +223,35 @@ SpriteRenderer:
     type: 3}
   m_PrefabInstance: {fileID: 2393593260422564367}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5155374104672875301 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7402881001233824042, guid: ef986049aad6e40dcb0027158268936d,
+    type: 3}
+  m_PrefabInstance: {fileID: 2393593260422564367}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4557227612625093108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5155374104672875301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45bc1a0ea4dac48be94e40e34d8d896d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Item.ProjectileFacingRotator
+  _target: {fileID: 6226077097571664370}
+  _timeToAlign: 0.3
+  _proximityRadius: 5
+  _predictionHitRadius: 1.5
+  _idleSpinSpeed: 90
+  _facingOffsetDegrees: -90
+  _aimMode: 2
+  _flightMode: 1
+  _alignTiming: 1
+  _idleMode: 2
+  _spinSpace: 0
 --- !u!212 &6187239203940332260 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 8424754020425038059, guid: ef986049aad6e40dcb0027158268936d,

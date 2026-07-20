@@ -85,7 +85,7 @@ namespace BalloonParty.Prediction
             // not the perpendicular-closest point, which sits ~90° off anywhere but a tangential graze.
             var hasHit = TraceHitGeometry.TryFindSurfaceHit(
                 _traceProvider.Points, position, _circleRadius,
-                out var hitPoint, out var centrality);
+                out var hitPoint, out var centrality, out _);
 
             if (!hasHit)
             {

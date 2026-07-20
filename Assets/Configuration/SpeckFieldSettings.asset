@@ -23,6 +23,8 @@ MonoBehaviour:
     _swirlAngle: {x: -120, y: 120}
     _flowInfluence: 0.35
     _teleportThreshold: 1
+    _maxSpeed: 5
+    _maxDeltaTime: 0.033333335
     _colorProfiles:
     - _colorMask: 16
       _brownianStrength: 1

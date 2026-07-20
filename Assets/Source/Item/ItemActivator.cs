@@ -73,7 +73,7 @@ namespace BalloonParty.Item
                 return;
             }
 
-            var context = new ItemActivationContext(balloon, msg.WorldPosition, msg.ProjectileDirection);
+            var context = new ItemActivationContext(balloon, msg.WorldPosition, msg.ProjectileDirection, msg.Context);
             ActivateAsync(handler, context).Forget();
         }
 

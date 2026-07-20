@@ -33,6 +33,7 @@ float _TimeSeconds;
 float2 _MotionDelta;
 float _BrownianStrength;
 float _Drag;
+float _MaxSpeed; // 0 = disabled, so an unset value never freezes specks
 float _DisturbanceDamping;
 float _MotionInfluence;
 float _DisturbanceInfluence;
@@ -182,6 +183,16 @@ void Advect(uint3 id : SV_DispatchThreadID)
     // (specks part, then ease back) instead of carrying momentum out of the wake.
     float disturbed = step(1e-8, dot(disturbance, disturbance));
     s.velocity *= saturate(1.0 - (drag + disturbanceDamping * disturbed) * _DeltaTime);
+
+    // Hard speed cap: a fresh (HDR/unbounded) disturbance stamp can produce a steep gradient that flings a
+    // speck past what drag can settle in one frame — it then coasts as a streak once it leaves the stamp's
+    // radius (damping drops back to base drag). Clamping the post-drag speed bounds that without touching
+    // normal drift.
+    float sp = length(s.velocity);
+    if (_MaxSpeed > 0.0 && sp > _MaxSpeed)
+    {
+        s.velocity *= _MaxSpeed / sp;
+    }
 
     float2 preMovePos = s.position;
     s.position += s.velocity * _DeltaTime;

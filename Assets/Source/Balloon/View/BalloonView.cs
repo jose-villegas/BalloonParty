@@ -5,6 +5,7 @@ using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Item;
 using BalloonParty.Nudge;
+using BalloonParty.Projectile;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Animation;
 using BalloonParty.Shared.Rendering;
@@ -57,6 +58,7 @@ namespace BalloonParty.Balloon.View
         [Inject] private PoolManager _poolManager;
         [Inject] private BalloonMotionTicker _motionTicker;
         [Inject] private SceneLightFieldService _lightField;
+        [Inject] private IProjectileFacingSource _projectileFacing;
 
         private readonly CompositeDisposable _bindDisposables = new();
 
@@ -192,6 +194,7 @@ namespace BalloonParty.Balloon.View
                     _spriteLayerRenderers.Length,
                     _poolManager,
                     _lightField,
+                    _projectileFacing,
                     // The item's sorting footprint just changed (added/removed) — re-layer our
                     // above-item renderers over the item's new top order (or the body, if it's gone).
                     () => ApplyAboveItemSorting(Model.SlotIndex.Value));

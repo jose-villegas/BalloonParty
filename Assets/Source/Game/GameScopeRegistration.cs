@@ -106,6 +106,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ProjectileDoomedTimeScaleController>();
             builder.Register<ProjectilePositionProvider>(Lifetime.Singleton);
             builder.Register<PredictionTraceProvider>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<ProjectileFacingSource>().As<IProjectileFacingSource>();
             builder.Register<ImpactEventBus>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
             builder.Register<NudgeOverrideResolver>(Lifetime.Singleton);

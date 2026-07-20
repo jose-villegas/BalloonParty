@@ -1,5 +1,6 @@
 using System;
 using BalloonParty.Configuration;
+using BalloonParty.Projectile;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Rendering;
 using BalloonParty.Shared.Pool;
@@ -25,6 +26,7 @@ namespace BalloonParty.Item
         private IItemConfiguration _itemConfig;
         private PoolManager _poolManager;
         private SceneLightFieldService _lightField;
+        private IProjectileFacingSource _projectileFacing;
         private IReadOnlyReactiveProperty<Vector2Int> _slotIndex;
         private Action _onSortingFootprintChanged;
 
@@ -44,6 +46,7 @@ namespace BalloonParty.Item
             int balloonRendererCount,
             PoolManager poolManager,
             SceneLightFieldService lightField = null,
+            IProjectileFacingSource projectileFacing = null,
             Action onSortingFootprintChanged = null)
         {
             Unbind();
@@ -56,6 +59,7 @@ namespace BalloonParty.Item
             _slotIndex = slotIndex;
             _poolManager = poolManager;
             _lightField = lightField;
+            _projectileFacing = projectileFacing;
             _onSortingFootprintChanged = onSortingFootprintChanged;
 
             item
@@ -123,6 +127,14 @@ namespace BalloonParty.Item
             if (_lightField != null && _activeCapture is LaserItemRotation laser)
             {
                 laser.ConfigureLightField(_lightField, _palette, settings.Laser);
+            }
+
+            // Same non-injection problem for a projectile-facing icon (e.g. Snipe) — it's a separate
+            // component from the transform capture, so it's looked up independently.
+            var facingRotator = _activeView.GetComponentInChildren<ProjectileFacingRotator>();
+            if (_projectileFacing != null && facingRotator != null)
+            {
+                facingRotator.Configure(_projectileFacing);
             }
 
             ApplySorting(_slotIndex.Value);
