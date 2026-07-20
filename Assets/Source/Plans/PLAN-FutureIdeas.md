@@ -1345,3 +1345,16 @@ Implementation sketch (for whichever session picks it up):
   (100 = [100]; check knock-ons — e.g. 250 = [100, 100, 50] once 100 exists);
   RadiusScale ~1.6; per-formation ribbon-correction cost makes the queued NativeArray
   batching lever (memory: optimization findings) effectively a prerequisite.
+
+---
+
+## Bush Visual Polish
+
+Deferred from the bush sprite-baking system (phases 0–4 shipped). Low-priority cosmetic
+improvements — pick up when bushes get another art pass.
+
+- **Ground shadow** — simple dark ellipse sprite under root
+- **Sorting refinement** — leaf matrix order controls painter's algorithm; randomise sort
+  within tip clusters for overlap variety
+- **Branch map variants** — multiple baked branch textures per bush type for visual variety
+  across clusters
