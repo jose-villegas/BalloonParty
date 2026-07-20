@@ -4,6 +4,14 @@ using UnityEngine;
 namespace BalloonParty.Game.Score.Behaviours
 {
     /// <summary>
+    ///     Per-frame vertex displacement function: receives a local position on the shape, the
+    ///     formation's elapsed time, an amplitude scale factor and a time-speed factor (both from the
+    ///     SO config). Returns the displaced position. Applied after orbit interpolation and before
+    ///     the world transform, so movements are in local shape space.
+    /// </summary>
+    internal delegate Vector3 VertexDisplacer(Vector3 localPosition, float elapsedTime, float scale, float speed);
+
+    /// <summary>
     ///     A CLOSED WALK a pen orbits forever: an ordered cyclic list of vertex indices whose consecutive pairs
     ///     (including the wrap from last back to first) are the edges to trace. A 2-vertex walk is a back-and-forth
     ///     shuttle (the degenerate loop that IS the "line" shape). <see cref="Arc"/> chooses interpolation: an arc
@@ -55,9 +63,14 @@ namespace BalloonParty.Game.Score.Behaviours
         internal readonly float[] Perimeters;
         internal readonly float[][] Cumulative;
 
+        // Optional per-frame vertex displacement (sine-wave sphere, etc.). Applied after orbit interpolation,
+        // before world transform. Null means static vertices.
+        internal readonly VertexDisplacer Displacer;
+
         internal FormationShape(
             int denomination, float radiusScale, Vector3[] vertices, FormationWalk[] walks,
-            bool alignToHit = false, float spinScale = 1f, float penSpeedScale = 1f)
+            bool alignToHit = false, float spinScale = 1f, float penSpeedScale = 1f,
+            VertexDisplacer displacer = null)
         {
             Denomination = denomination;
             RadiusScale = radiusScale;
@@ -66,6 +79,7 @@ namespace BalloonParty.Game.Score.Behaviours
             AlignToHit = alignToHit;
             Vertices = vertices;
             Walks = walks;
+            Displacer = displacer;
             PensPerWalk = DistributePens(denomination, walks);
 
             Perimeters = new float[walks.Length];
@@ -130,9 +144,9 @@ namespace BalloonParty.Game.Score.Behaviours
     ///     count equals it — full 1:1 decomposition draws every point as one orbiting pen. Small shapes partition
     ///     their edge set into closed walks (a Hamiltonian-ish cycle plus back-and-forth shuttles for the leftover
     ///     edges); 10 is an octagonal bipyramid; 12 the hexagonal prism, 20 the dodecahedron, 30 an
-    ///     ball of six outline stars on the octahedral axes, 50 a 10×5 torus grid, and 100 a spherical-spiral
-    ///     yarn ball (one closed coil) — the top tier follows silhouette-over-density. The tables
-    ///     are built once in the static constructor and returned by reference from <see cref="TryGet"/>, so a
+    ///     ball of six outline stars on the octahedral axes, 50 the J80 (parabidiminished rhombicosidodecahedron),
+    ///     and 100 a waving Goldberg sphere (sine-displaced UV grid) — the top tier follows silhouette-over-density.
+    ///     The tables are built once in the static constructor and returned by reference from <see cref="TryGet"/>, so a
     ///     lookup never allocates.
     ///
     ///     <see cref="Denominations"/> is the decomposition ladder (largest-first) the optimal coin-change split
@@ -174,16 +188,16 @@ namespace BalloonParty.Game.Score.Behaviours
                 { 4, BuildTetrahedron() },
                 { 5, BuildSquarePyramid() },
                 { 6, BuildTriangularPrism() },
-                { 7, BuildHexagonalPyramid() },
+                { 7, BuildPentagonalDipyramid() },
                 { 8, BuildCube() },
                 { 9, BuildTriangularCupola() },
-                { 10, BuildOctagonalBipyramid() },
+                { 10, BuildElongatedSquareDipyramid() },
                 { 12, BuildHexagonalPrism() },
                 { 15, BuildPentagonalCupola() },
                 { 20, BuildDodecahedron() },
                 { 30, BuildStarBall() },
-                { 50, BuildTorus() },
-                { 100, BuildYarnBall() },
+                { 50, BuildJ80() },
+                { 100, BuildWavingSphere() },
             };
         }
 
@@ -256,27 +270,34 @@ namespace BalloonParty.Game.Score.Behaviours
             return Build(6, 0.85f, vertices, walks);
         }
 
-        // 7 = a hexagonal pyramid: six base vertices ringed under one apex. Single-inked like the square
-        // pyramid (5) — one weaving cycle threads every slant edge plus alternate base edges (passing
-        // through the apex three times), three shuttles fill the remaining base edges. Apex degree 6,
-        // base degree 3.
-        private static FormationShape BuildHexagonalPyramid()
+        // 7 = pentagonal dipyramid (J13): a regular pentagon equator with two apexes above and
+        // below — 5 + 2 = 7 vertices, 10 triangular faces, 15 edges. Two face-tracing walks paint
+        // the shape face-by-face: each walk traces all 5 face outlines of one hemisphere (apex →
+        // base → base → apex, repeating for each face). Pens always orbit along face edges, reading
+        // as a solid polyhedron. Every edge is double-inked (laterals ×2 within their walk, base
+        // edges ×1 per walk = ×2 total).
+        private static FormationShape BuildPentagonalDipyramid()
         {
-            const int baseCount = 6;
-            const int apex = baseCount;
-            var vertices = new Vector3[baseCount + 1];
+            const int baseCount = 5;
+            const int top = baseCount;
+            const int bottom = baseCount + 1;
+            const float baseRadius = 0.75f;
+            const float apexHeight = 0.9f;
+
+            var vertices = new Vector3[baseCount + 2];
             for (var i = 0; i < baseCount; i++)
             {
                 var azimuth = 2f * Mathf.PI * i / baseCount;
-                vertices[i] = new Vector3(Mathf.Cos(azimuth) * 0.85f, Mathf.Sin(azimuth) * 0.85f, -0.4f);
+                vertices[i] = new Vector3(Mathf.Cos(azimuth) * baseRadius, Mathf.Sin(azimuth) * baseRadius, 0f);
             }
 
-            vertices[apex] = new Vector3(0f, 0f, 0.95f);
+            vertices[top] = new Vector3(0f, 0f, apexHeight);
+            vertices[bottom] = new Vector3(0f, 0f, -apexHeight);
 
             var walks = new[]
             {
-                Chord(0, 1, apex, 2, 3, apex, 4, 5, apex),
-                Chord(1, 2), Chord(3, 4), Chord(5, 0),
+                Chord(top, 0, 1, top, 1, 2, top, 2, 3, top, 3, 4, top, 4, 0),
+                Chord(bottom, 0, 1, bottom, 1, 2, bottom, 2, 3, bottom, 3, 4, bottom, 4, 0),
             };
             return Build(7, 0.9f, vertices, walks);
         }
@@ -393,33 +414,43 @@ namespace BalloonParty.Game.Score.Behaviours
             return Build(15, 1.35f, vertices, walks);
         }
 
-        // 10 = octagonal bipyramid: an 8-vertex equator ring (radius 0.8 — taller than wide) + two
-        // apexes. All degrees are even (ring 4, poles 8), so like the rhombicosacron it draws
-        // SINGLE-inked: the equator octagon is one loop, and ONE pole-to-pole zigzag
-        // (top→v0→bottom→v1→top→…) threads all 16 fan edges exactly once.
-        private static FormationShape BuildOctagonalBipyramid()
+        // 10 = elongated square dipyramid (J15): a square prism capped by square pyramids top and
+        // bottom — 4 + 4 + 2 = 10 vertices, 12 faces (4 upper triangles, 4 lower triangles, 4 prism
+        // squares), 20 edges. Six face-tracing walks: the two pyramid walks trace their 4 triangle
+        // outlines each (apex → ring → ring → apex); the four prism walks each orbit one square
+        // face. Pen distribution [3, 3, 1, 1, 1, 1] gives 3 pens per pyramid hemisphere and 1 per
+        // prism face — every face always has a pen on it. Uniform ×2 inking on all 20 edges.
+        private static FormationShape BuildElongatedSquareDipyramid()
         {
-            const int ringCount = 8;
-            var vertices = new Vector3[ringCount + 2];
-            var ring = new int[ringCount];
-            for (var i = 0; i < ringCount; i++)
+            const int ringSize = 4;
+            const int top = 2 * ringSize;
+            const int bottom = 2 * ringSize + 1;
+            const float ringRadius = 0.6f;
+            const float ringZ = 0.35f;
+            const float apexZ = 0.9f;
+
+            var vertices = new Vector3[2 * ringSize + 2];
+            for (var i = 0; i < ringSize; i++)
             {
-                var azimuth = 2f * Mathf.PI * i / ringCount;
-                vertices[i] = new Vector3(Mathf.Cos(azimuth) * 0.8f, Mathf.Sin(azimuth) * 0.8f, 0f);
-                ring[i] = i;
+                var azimuth = 2f * Mathf.PI * i / ringSize + Mathf.PI / 4f;
+                var x = Mathf.Cos(azimuth) * ringRadius;
+                var y = Mathf.Sin(azimuth) * ringRadius;
+                vertices[i] = new Vector3(x, y, ringZ);
+                vertices[ringSize + i] = new Vector3(x, y, -ringZ);
             }
 
-            vertices[8] = new Vector3(0f, 0f, 1f);
-            vertices[9] = new Vector3(0f, 0f, -1f);
+            vertices[top] = new Vector3(0f, 0f, apexZ);
+            vertices[bottom] = new Vector3(0f, 0f, -apexZ);
 
-            var zigzag = new int[2 * ringCount];
-            for (var i = 0; i < ringCount; i++)
+            var walks = new[]
             {
-                zigzag[2 * i] = i % 2 == 0 ? 8 : 9;
-                zigzag[2 * i + 1] = i;
-            }
-
-            var walks = new[] { Chord(ring), Chord(zigzag) };
+                Chord(top, 0, 1, top, 1, 2, top, 2, 3, top, 3, 0),
+                Chord(bottom, 4, 5, bottom, 5, 6, bottom, 6, 7, bottom, 7, 4),
+                Chord(0, 1, 5, 4),
+                Chord(1, 2, 6, 5),
+                Chord(2, 3, 7, 6),
+                Chord(3, 0, 4, 7),
+            };
             return Build(10, 1f, vertices, walks);
         }
 
@@ -492,87 +523,289 @@ namespace BalloonParty.Game.Score.Behaviours
             return Build(30, 1.3f, vertices, walks, spinScale: 0.5f, penSpeedScale: 1.6f);
         }
 
-        // 50 = a 10x5 torus grid — the crown tier needed a SILHOUETTE, not more line density: nothing
-        // else in the catalog has a hole, so the doughnut reads instantly under tumble where the star
-        // duals blurred together (supersedes the rhombicosacron). The walks are the grid's own rings —
-        // 5 major decagons + 10 minor pentagons — every edge in exactly one ring (single-inked) and
-        // every vertex degree 4.
-        private static FormationShape BuildTorus()
+        // 50 = J80 Parabidiminished Rhombicosidodecahedron — 50 vertices, 90 edges, 42 faces (10 tri,
+        // 20 sq, 10 pent, 2 dec). Built by removing two opposite pentagonal cupola caps (5 vertices each)
+        // from the 60-vertex rhombicosidodecahedron, then face-walking to produce one walk per face.
+        private static FormationShape BuildJ80()
         {
-            const int majorCount = 10;
-            const int minorCount = 5;
-            const float minorRadius = 0.45f;
+            // Phase 1: generate the full 60-vertex RID and face-walk it to identify the pentagonal caps.
+            var rid = RhombicosidodecahedronVertices();
+            var ridAdj = BuildUniformAdjacency(rid);
+            SortNeighborsByAngle(rid, ridAdj);
+            var ridFaces = HalfEdgeFaceWalk(rid.Length, ridAdj);
 
-            var vertices = new Vector3[majorCount * minorCount];
-            for (var i = 0; i < majorCount; i++)
+            // Among the RID's 12 pentagonal faces, the two whose centroids have the extreme projections
+            // onto an icosahedral direction are the opposite caps to remove.
+            var axis = new Vector3(0f, 1f, Phi).normalized;
+            var topCap = -1;
+            var botCap = -1;
+            var maxScore = float.MinValue;
+            var minScore = float.MaxValue;
+            for (var i = 0; i < ridFaces.Length; i++)
             {
-                var theta = 2f * Mathf.PI * i / majorCount;
-                var cosTheta = Mathf.Cos(theta);
-                var sinTheta = Mathf.Sin(theta);
-                for (var j = 0; j < minorCount; j++)
+                if (ridFaces[i].Length != 5)
                 {
-                    var psi = 2f * Mathf.PI * j / minorCount;
-                    var ring = 1f + minorRadius * Mathf.Cos(psi);
-                    vertices[i * minorCount + j] =
-                        new Vector3(ring * cosTheta, ring * sinTheta, minorRadius * Mathf.Sin(psi));
+                    continue;
+                }
+
+                var centroid = Vector3.zero;
+                for (var k = 0; k < 5; k++)
+                {
+                    centroid += rid[ridFaces[i][k]];
+                }
+
+                var score = Vector3.Dot(centroid, axis);
+                if (score > maxScore)
+                {
+                    maxScore = score;
+                    topCap = i;
+                }
+
+                if (score < minScore)
+                {
+                    minScore = score;
+                    botCap = i;
                 }
             }
 
-            var walks = new FormationWalk[minorCount + majorCount];
-            for (var j = 0; j < minorCount; j++)
+            // Collect the 10 cap vertex indices to discard and remap the rest to 0..49.
+            var remove = new HashSet<int>();
+            for (var k = 0; k < 5; k++)
             {
-                var loop = new int[majorCount];
-                for (var i = 0; i < majorCount; i++)
-                {
-                    loop[i] = i * minorCount + j;
-                }
-
-                walks[j] = Chord(loop);
+                remove.Add(ridFaces[topCap][k]);
+                remove.Add(ridFaces[botCap][k]);
             }
 
-            for (var i = 0; i < majorCount; i++)
+            var vertices = new Vector3[50];
+            var idx = 0;
+            for (var i = 0; i < 60; i++)
             {
-                var loop = new int[minorCount];
-                for (var j = 0; j < minorCount; j++)
+                if (!remove.Contains(i))
                 {
-                    loop[j] = i * minorCount + j;
+                    vertices[idx++] = rid[i];
                 }
-
-                walks[minorCount + i] = Chord(loop);
             }
 
-            return Build(50, 1.45f, vertices, walks);
+            // Phase 2: build the J80 edge graph on the remaining 50 and face-walk it.
+            var adj = BuildUniformAdjacency(vertices);
+            SortNeighborsByAngle(vertices, adj);
+            var faces = HalfEdgeFaceWalk(vertices.Length, adj);
+
+            var walks = new FormationWalk[faces.Length];
+            for (var i = 0; i < faces.Length; i++)
+            {
+                walks[i] = Chord(faces[i]);
+            }
+
+            return Build(50, 1.45f, vertices, walks, spinScale: 0.6f, penSpeedScale: 1.4f);
         }
 
-        // 100 = a spherical spiral "yarn ball" (superseded the grand antiprism: 500 projected 4D edges read
-        // as noise mid-tumble — the crown wants a SILHOUETTE). One closed 100-vertex walk: the polar angle
-        // runs pole-to-pole and back as a triangle wave while the azimuth advances nine full turns (coprime
-        // with the 100 samples, so the half-sample crossing guard holds), interleaving ~18 windings — dense enough to read as a SOLID wound ball.
-        // Arc interpolation (the vertices are all on the unit sphere) keeps every winding a great-circle
-        // segment, so the higher turn count costs no polygonal faceting between the 100 samples.
-        // Half-sample offsets make the two coils provably never coincide at the crossings. All 100 pens
-        // chase one continuous line.
-        private static FormationShape BuildYarnBall()
+        // The 60 rhombicosidodecahedron vertices: even permutations of (±1,±1,±φ³), (±φ²,±φ,±2φ),
+        // (±(2+φ),0,±φ²), giving a uniform edge length of 2.
+        private static Vector3[] RhombicosidodecahedronVertices()
         {
-            const int count = 100;
-            const float turns = 9f;
-            const float polarPad = 0.12f;
+            var phi2 = Phi * Phi;
+            var phi3 = phi2 * Phi;
+            var twoPhi = 2f * Phi;
+            var twoPlusPhi = 2f + Phi;
 
-            var vertices = new Vector3[count];
-            var loop = new int[count];
-            for (var i = 0; i < count; i++)
+            var verts = new List<Vector3>(60);
+            for (var sx = -1; sx <= 1; sx += 2)
             {
-                var s = (i + 0.5f) / count;
-                var wave = s < 0.5f ? 2f * s : 2f - 2f * s;
-                var polar = polarPad + (Mathf.PI - 2f * polarPad) * wave;
-                var azimuth = turns * 2f * Mathf.PI * s;
-                var sinPolar = Mathf.Sin(polar);
-                vertices[i] = new Vector3(
-                    sinPolar * Mathf.Cos(azimuth), sinPolar * Mathf.Sin(azimuth), Mathf.Cos(polar));
-                loop[i] = i;
+                for (var sy = -1; sy <= 1; sy += 2)
+                {
+                    for (var sz = -1; sz <= 1; sz += 2)
+                    {
+                        for (var shift = 0; shift < 3; shift++)
+                        {
+                            verts.Add(Cyclic(sx, sy, sz * phi3, shift));
+                            verts.Add(Cyclic(sx * phi2, sy * Phi, sz * twoPhi, shift));
+                        }
+                    }
+                }
             }
 
-            return Build(100, 1.6f, vertices, new[] { new FormationWalk(loop, arc: true) });
+            for (var sx = -1; sx <= 1; sx += 2)
+            {
+                for (var sz = -1; sz <= 1; sz += 2)
+                {
+                    for (var shift = 0; shift < 3; shift++)
+                    {
+                        verts.Add(Cyclic(sx * twoPlusPhi, 0f, sz * phi2, shift));
+                    }
+                }
+            }
+
+            return verts.ToArray();
+        }
+
+        // Builds adjacency for a polyhedron with uniform edge length: edges are all pairs at the
+        // minimum pairwise distance.
+        private static List<int>[] BuildUniformAdjacency(Vector3[] verts)
+        {
+            var n = verts.Length;
+            var edgeLen = float.MaxValue;
+            for (var i = 0; i < n; i++)
+            {
+                for (var j = i + 1; j < n; j++)
+                {
+                    var d = Vector3.Distance(verts[i], verts[j]);
+                    if (d < edgeLen)
+                    {
+                        edgeLen = d;
+                    }
+                }
+            }
+
+            var tol = edgeLen * 1.02f;
+            var adj = new List<int>[n];
+            for (var i = 0; i < n; i++)
+            {
+                adj[i] = new List<int>();
+            }
+
+            for (var i = 0; i < n; i++)
+            {
+                for (var j = i + 1; j < n; j++)
+                {
+                    if (Vector3.Distance(verts[i], verts[j]) < tol)
+                    {
+                        adj[i].Add(j);
+                        adj[j].Add(i);
+                    }
+                }
+            }
+
+            return adj;
+        }
+
+        // Sorts each vertex's neighbor list by angle in the tangent plane (outward normal = vertex
+        // direction, consistent winding for convex polyhedra centered at the origin).
+        private static void SortNeighborsByAngle(Vector3[] verts, List<int>[] adj)
+        {
+            for (var v = 0; v < verts.Length; v++)
+            {
+                var normal = verts[v].normalized;
+                var refDir = verts[adj[v][0]] - verts[v];
+                refDir = (refDir - Vector3.Dot(refDir, normal) * normal).normalized;
+                var binormal = Vector3.Cross(normal, refDir);
+                var localV = v;
+                adj[v].Sort((a, b) =>
+                {
+                    var da = verts[a] - verts[localV];
+                    var db = verts[b] - verts[localV];
+                    var angleA = Mathf.Atan2(Vector3.Dot(da, binormal), Vector3.Dot(da, refDir));
+                    var angleB = Mathf.Atan2(Vector3.Dot(db, binormal), Vector3.Dot(db, refDir));
+                    return angleA.CompareTo(angleB);
+                });
+            }
+        }
+
+        // Traces every face of a convex polyhedron via the half-edge successor rule: for directed
+        // edge u→v, the next edge in the face is v→w where w follows u in v's sorted neighbor list.
+        private static int[][] HalfEdgeFaceWalk(int vertexCount, List<int>[] adj)
+        {
+            var used = new HashSet<long>();
+            var faces = new List<int[]>();
+            for (var u = 0; u < vertexCount; u++)
+            {
+                for (var ni = 0; ni < adj[u].Count; ni++)
+                {
+                    var startV = adj[u][ni];
+                    var he = (long)u * vertexCount + startV;
+                    if (used.Contains(he))
+                    {
+                        continue;
+                    }
+
+                    var face = new List<int>();
+                    var cu = u;
+                    var cv = startV;
+                    do
+                    {
+                        face.Add(cu);
+                        used.Add((long)cu * vertexCount + cv);
+                        var pos = adj[cv].IndexOf(cu);
+                        var next = adj[cv][(pos + 1) % adj[cv].Count];
+                        cu = cv;
+                        cv = next;
+                    }
+                    while (cu != u || cv != startV);
+
+                    faces.Add(face.ToArray());
+                }
+            }
+
+            return faces.ToArray();
+        }
+
+        // 100 = a "Goldberg sphere" — 100 vertices on a UV-sphere grid (10 rings × 10 longitudes),
+        // traversed by 20 arc-interpolated walks (10 latitude rings + 10 longitude great circles).
+        // A sum-of-sines radial displacement applied per-frame gives the organic waving-sphere look,
+        // displacing each pen along its surface normal so the mesh undulates like a breathing blob.
+        private static FormationShape BuildWavingSphere()
+        {
+            const int rings = 10;
+            const int segments = 10;
+            const float polarPad = 0.15f;
+
+            var vertices = new Vector3[rings * segments];
+            for (var r = 0; r < rings; r++)
+            {
+                var polar = polarPad + (Mathf.PI - 2f * polarPad) * r / (rings - 1);
+                var sinP = Mathf.Sin(polar);
+                var cosP = Mathf.Cos(polar);
+                for (var s = 0; s < segments; s++)
+                {
+                    var azimuth = 2f * Mathf.PI * s / segments;
+                    vertices[r * segments + s] = new Vector3(
+                        sinP * Mathf.Cos(azimuth), sinP * Mathf.Sin(azimuth), cosP);
+                }
+            }
+
+            var walks = new FormationWalk[rings + segments];
+
+            // 10 latitude ring walks (closed loops around each ring).
+            for (var r = 0; r < rings; r++)
+            {
+                var loop = new int[segments];
+                for (var s = 0; s < segments; s++)
+                {
+                    loop[s] = r * segments + s;
+                }
+
+                walks[r] = new FormationWalk(loop, arc: true);
+            }
+
+            // 10 longitude walks (closed loops pole-to-pole along each meridian).
+            for (var s = 0; s < segments; s++)
+            {
+                var loop = new int[rings];
+                for (var r = 0; r < rings; r++)
+                {
+                    loop[r] = r * segments + s;
+                }
+
+                walks[rings + s] = new FormationWalk(loop, arc: true);
+            }
+
+            return Build(100, 1.6f, vertices, walks, spinScale: 0.4f, penSpeedScale: 1.2f,
+                displacer: WavingSphereDisplacer);
+        }
+
+        // Sum-of-sines radial displacement: three non-aligned spatial frequencies produce organic
+        // undulation without obvious repetition. Cost: 3 sin + 3 dot per pen per frame (~trivial).
+        private static Vector3 WavingSphereDisplacer(Vector3 pos, float time, float scale, float speed)
+        {
+            // pos is already unit-length (slerp on unit-sphere vertices).
+            var n = pos;
+            var t = time * speed;
+            var phase1 = (0.8f * pos.x + 0.4f * pos.y + 0.2f * pos.z) * 4.5f + t * 4.0f;
+            var phase2 = (-0.3f * pos.x + 0.9f * pos.y + 0.5f * pos.z) * 3.7f + t * 3.2f;
+            var phase3 = (0.5f * pos.x - 0.6f * pos.y + 0.8f * pos.z) * 5.2f + t * 4.8f;
+            var displacement = (Mathf.Sin(phase1) + 0.6f * Mathf.Sin(phase2)
+                + 0.35f * Mathf.Sin(phase3)) * 0.09f * scale;
+            return pos + n * displacement;
         }
 
         private static FormationWalk Chord(params int[] vertices)
@@ -787,7 +1020,8 @@ namespace BalloonParty.Game.Score.Behaviours
         // Normalizes vertices to a unit bounding radius so RadiusScale means the same thing across shapes.
         private static FormationShape Build(
             int denomination, float radiusScale, Vector3[] vertices, FormationWalk[] walks,
-            bool alignToHit = false, float spinScale = 1f, float penSpeedScale = 1f)
+            bool alignToHit = false, float spinScale = 1f, float penSpeedScale = 1f,
+            VertexDisplacer displacer = null)
         {
             var maxMagnitude = 0f;
             for (var i = 0; i < vertices.Length; i++)
@@ -809,7 +1043,7 @@ namespace BalloonParty.Game.Score.Behaviours
             }
 
             return new FormationShape(
-                denomination, radiusScale, vertices, walks, alignToHit, spinScale, penSpeedScale);
+                denomination, radiusScale, vertices, walks, alignToHit, spinScale, penSpeedScale, displacer);
         }
     }
 }

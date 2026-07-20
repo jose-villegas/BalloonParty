@@ -324,7 +324,14 @@ namespace BalloonParty.Game.Score.Behaviours
                     state.Vertices[p].TransformRibbon(oldCenter, newCenter, delta, scaleRatio);
                 }
 
-                state.Vertices[p].transform.position = LocalToWorld(state, PenOrbitLocal(state, p) * scale);
+                var local = PenOrbitLocal(state, p);
+                if (state.Shape.Displacer != null)
+                {
+                    local = state.Shape.Displacer(local, state.Elapsed,
+                        state.Group.Settings.DisplacementScale, state.Group.Settings.DisplacementSpeed);
+                }
+
+                state.Vertices[p].transform.position = LocalToWorld(state, local * scale);
             }
 
             WriteAnchor(state);

@@ -57,24 +57,38 @@ namespace BalloonParty.Configuration
                  "is still a point): spins the pens + drawn ink as the shape travels to the bar.")]
         [SerializeField] private float _spinSpeedDegrees;
 
+        [Tooltip("Amplitude multiplier for shapes with a vertex displacer (the waving sphere). 1 = authored default.")]
+        [Range(0f, 3f)]
+        [SerializeField] private float _displacementScale;
+
+        [Tooltip("Time multiplier for vertex displacement animation speed. 1 = authored default.")]
+        [Range(0f, 5f)]
+        [SerializeField] private float _displacementSpeed;
+
         public float BaseRadius => _baseRadius;
         public AnimationCurve ScaleOverTravel => _scaleOverTravel;
         public float PenSpeed => _penSpeed;
         public float Coverage => _coverage;
         public float SpinSpeedDegrees => _spinSpeedDegrees;
+        public float DisplacementScale => _displacementScale;
+        public float DisplacementSpeed => _displacementSpeed;
 
         internal BigScoreFormationSettings(
             float baseRadius,
             AnimationCurve scaleOverTravel,
             float penSpeed,
             float coverage,
-            float spinSpeedDegrees)
+            float spinSpeedDegrees,
+            float displacementScale = 1f,
+            float displacementSpeed = 1f)
         {
             _baseRadius = baseRadius;
             _scaleOverTravel = scaleOverTravel;
             _penSpeed = penSpeed;
             _coverage = coverage;
             _spinSpeedDegrees = spinSpeedDegrees;
+            _displacementScale = displacementScale;
+            _displacementSpeed = displacementSpeed;
         }
     }
 

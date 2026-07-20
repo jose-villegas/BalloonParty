@@ -61,6 +61,8 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    _penSpeed: 6
-    _coverage: 1.125
+    _penSpeed: 12
+    _coverage: 1.35
     _spinSpeedDegrees: 540
+    _displacementScale: 1.25
+    _displacementSpeed: 5
