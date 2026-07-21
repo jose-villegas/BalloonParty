@@ -26,6 +26,8 @@ namespace BalloonParty.Projectile.View
         private static readonly int NoiseScrollDirId = Shader.PropertyToID("_NoiseScrollDir");
         private static readonly int ShapeLerpId = Shader.PropertyToID("_ShapeLerp");
         private static readonly int NoiseIntensityId = Shader.PropertyToID("_NoiseIntensity");
+        private static readonly int SquashAmountId = Shader.PropertyToID("_SquashAmount");
+        private static readonly int SquashAxisId = Shader.PropertyToID("_SquashAxis");
 
         [SerializeField] private SpriteRenderer _fieldRenderer;
 
@@ -61,6 +63,9 @@ namespace BalloonParty.Projectile.View
         private float _morphTimer;
         private float _shapeLerp = 1f;
         private float _noiseIntensity;
+
+        private DampedSpring1D _squashSpring;
+        private Vector2 _squashAxis;
 
         private enum ShieldMorphState
         {
@@ -109,6 +114,9 @@ namespace BalloonParty.Projectile.View
 
             // Shape morph state machine
             UpdateMorphState(dt);
+
+            // Squash spring — decays toward rest (0)
+            _squashSpring.Step(0f, _settings.SquashFrequency, _settings.SquashDamping, dt);
 
             _velFactor = Mathf.Sqrt(
                 Mathf.Clamp01(_model.Speed / Mathf.Max(_settings.MaxVisualSpeed, 1f)));
@@ -243,7 +251,7 @@ namespace BalloonParty.Projectile.View
                 .AddTo(_disposable);
         }
 
-        internal void OnBounce()
+        internal void OnBounce(Vector2 oldDirection, Vector2 newDirection, float speed)
         {
             if (_settings == null)
             {
@@ -254,6 +262,20 @@ namespace BalloonParty.Projectile.View
             _morphState = ShieldMorphState.Bracing;
             _morphTimer = 0f;
             _shapeLerp = 0f;
+
+            // Compute squash axis from reflection (wall normal = normalize(newDir - oldDir))
+            var wallNormal = (newDirection - oldDirection);
+            if (wallNormal.sqrMagnitude > 0.001f)
+            {
+                wallNormal.Normalize();
+                _squashAxis = (Vector2)transform.InverseTransformDirection(wallNormal);
+                _squashAxis.Normalize();
+
+                // Impulse scaled by speed: faster = stronger squash
+                var speedFactor = Mathf.Clamp01(speed / Mathf.Max(_settings.MaxVisualSpeed, 1f));
+                _squashSpring.Reset(0f);
+                _squashSpring.AddImpulse(_settings.SquashImpulseStrength * speedFactor);
+            }
         }
 
         internal void PlayBounceVfx(Vector3 position, Color color)
@@ -277,6 +299,8 @@ namespace BalloonParty.Projectile.View
             _morphTimer = 0f;
             _shapeLerp = 1f;
             _noiseIntensity = 0f;
+            _squashSpring = default;
+            _squashAxis = Vector2.zero;
 
             for (var i = 0; i < MaxLayers; i++)
             {
@@ -420,6 +444,8 @@ namespace BalloonParty.Projectile.View
             _block.SetVector(NoiseScrollDirId, _noiseScrollDir);
             _block.SetFloat(ShapeLerpId, _shapeLerp);
             _block.SetFloat(NoiseIntensityId, _noiseIntensity);
+            _block.SetFloat(SquashAmountId, Mathf.Clamp01(Mathf.Abs(_squashSpring.Position)));
+            _block.SetVector(SquashAxisId, new Vector4(_squashAxis.x, _squashAxis.y, 0f, 0f));
         }
 
         private void PlayShieldChangeFx(int currentCount)

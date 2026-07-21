@@ -13,6 +13,7 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords:
+  - _NOISEENABLED_ON
   - _NOISESCROLLENABLED_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
@@ -67,7 +68,7 @@ Material:
     - _BumpScale: 1
     - _CapsuleHeight: 0.005
     - _CircleCenter: 0.486
-    - _CircleMaskWidth: 0.094
+    - _CircleMaskWidth: 0.084
     - _CircleRadius: 0.044
     - _ColorMask: 15
     - _ColorShift: 0.3
@@ -99,14 +100,15 @@ Material:
     - _LeanBendPower: 4
     - _LeanStrength: 2.5
     - _LeanStrengthY: 0.3
-    - _MaskCenterV: 0.45
+    - _MaskCenterV: 0.364
     - _MaskFade: 0.065
-    - _MaskHeight: 0.145
+    - _MaskHeight: 0.209
     - _MaskRoundness: 0.5
     - _MaskWidth: 0.05
     - _Metallic: 0
     - _Mode: 0
     - _NoiseEnabled: 1
+    - _NoiseIntensity: 0.375
     - _NoiseScale: 100
     - _NoiseScrollEnabled: 1
     - _NoiseScrollSpeed: 70
@@ -127,6 +129,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SpriteScale: 0.8
+    - _SquashAmount: 0
     - _SquashDomeShift: -0.032
     - _SquashMag: 15
     - _SquashStrength: 0.06
@@ -154,6 +157,7 @@ Material:
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 0.36078432}
     - _ShadowOffset: {r: 0.1, g: -0.1, b: 0, a: 0}
+    - _SquashAxis: {r: 0, g: 1, b: 0, a: 0}
     - _SquashNormal: {r: 0, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

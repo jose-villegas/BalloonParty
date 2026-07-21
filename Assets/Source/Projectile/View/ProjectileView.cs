@@ -473,7 +473,7 @@ namespace BalloonParty.Projectile.View
 
             if (step.Outcome == ProjectileStepOutcome.Bounced)
             {
-                _shieldView?.OnBounce();
+                _shieldView?.OnBounce((Vector2)travelDirection, (Vector2)step.Direction, step.Speed);
                 _shieldLostPublisher.Publish(new ShieldLostMessage(step.WallContact));
                 TryAwardSweepTap(step.WallContact, travelDirection);
 
@@ -553,10 +553,12 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
+            var preDir = (Vector2)_model.Direction;
+            var speed = _model.Speed;
             var contact = _motionResolver.Deflect(
                 _model, transform.position, msg.BalloonWorldPosition, msg.SurfaceRadius + _contactRadius);
             transform.position = contact;
-            _shieldView?.OnBounce();
+            _shieldView?.OnBounce(preDir, (Vector2)_model.Direction, speed);
 
             // The same radial impact as a wall bounce, at the deflect point.
             _disturbanceField.Stamp(StampSource.ProjectileImpact, contact, Vector2.zero);

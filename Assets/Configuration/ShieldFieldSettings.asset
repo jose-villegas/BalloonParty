@@ -20,6 +20,9 @@ MonoBehaviour:
   _noiseSpringDamping: 0.85
   _morphCloseDistance: 2.5
   _morphCloseDuration: 0.15
-  _morphOpenDuration: 0.05
+  _morphOpenDuration: 0.15
   _morphBraceDuration: 0.15
   _maxVisualLayers: 10
+  _squashFrequency: 14
+  _squashDamping: 0.35
+  _squashImpulseStrength: 18

@@ -43,6 +43,16 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Maximum number of visual layers rendered.")]
         [SerializeField] [Range(1, 30)] private int _maxVisualLayers = 5;
 
+        [Header("Squash on Impact")]
+        [Tooltip("Spring frequency for squash deformation (Hz).")]
+        [SerializeField] [Range(5f, 30f)] private float _squashFrequency = 14f;
+
+        [Tooltip("Damping ratio for squash spring. <1 overshoots, 1 = critically damped.")]
+        [SerializeField] [Range(0.1f, 1.5f)] private float _squashDamping = 0.35f;
+
+        [Tooltip("Impulse strength injected into the squash spring on impact.")]
+        [SerializeField] [Range(1f, 50f)] private float _squashImpulseStrength = 18f;
+
         public float DissolveSeconds => _dissolveSeconds;
         public float FinalDissolveSeconds => _finalDissolveSeconds;
         public float AppearSeconds => _appearSeconds;
@@ -54,5 +64,8 @@ namespace BalloonParty.Configuration.Effects
         public float MorphOpenDuration => _morphOpenDuration;
         public float MorphBraceDuration => _morphBraceDuration;
         public int MaxVisualLayers => _maxVisualLayers;
+        public float SquashFrequency => _squashFrequency;
+        public float SquashDamping => _squashDamping;
+        public float SquashImpulseStrength => _squashImpulseStrength;
     }
 }

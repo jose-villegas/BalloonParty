@@ -73,6 +73,10 @@ Shader "BalloonParty/Display/EMShieldField"
         _MaskHeight("Mask Half Height", Range(0.1, 0.6)) = 0.5
         _MaskRoundness("Mask Roundness", Range(0.01, 0.5)) = 0.2
         _MaskFade("Mask Fade Softness", Range(0.01, 0.25)) = 0.08
+
+        [Header(Squash)]
+        _SquashAmount("Squash Amount", Range(0, 1)) = 0.0
+        _SquashAxis("Squash Axis", Vector) = (0, 1, 0, 0)
     }
 
     SubShader
@@ -162,6 +166,8 @@ Shader "BalloonParty/Display/EMShieldField"
             float _MaskRoundness;
             float _MaskFade;
 
+            float _SquashAmount;
+            float2 _SquashAxis;
 
             float _DissolveProgress[EM_MAX_LAYERS];
             float _RevealProgress[EM_MAX_LAYERS];
@@ -211,6 +217,21 @@ Shader "BalloonParty/Display/EMShieldField"
                 float2 p = uv - float2(0.5, morphedCenter);
                 // Configurable horizontal scale for the comet shape
                 p.x *= lerp(1.0, _CometWidthScale, sl);
+
+                // Squash deformation: compress along impact axis, expand perpendicular (area-preserving)
+                // Only active in circle mode (fades with 1-sl)
+                float squash = _SquashAmount * (1.0 - sl);
+                if (squash > 0.001)
+                {
+                    float2 axis = normalize(_SquashAxis + float2(1e-6, 0));
+                    float2 perp = float2(-axis.y, axis.x);
+                    float along = dot(p, axis);
+                    float side  = dot(p, perp);
+                    float compress = 1.0 - squash * 0.25;
+                    float expand   = 1.0 / max(compress, 0.5);
+                    p = axis * (along * compress) + perp * (side * expand);
+                }
+
                 float dDome = length(p) - morphedRadius;
 
                 // At sl=0 return pure circle; at sl=1 full comet with tail
