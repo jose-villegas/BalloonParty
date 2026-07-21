@@ -50,8 +50,8 @@ Shader "BalloonParty/Display/EMShieldField"
         _NoiseScale("Noise Scale", Range(1, 100)) = 8.0
         _NoiseScrollSpeed("Noise Scroll Speed", Float) = 5.0
         [Toggle] _NoiseEnabled("Noise Enabled", Float) = 1
+        _NoiseIntensity("Noise Intensity", Range(0, 1)) = 0.0
         _NoiseVelocityIntensity("Noise Velocity Intensity", Range(0, 1)) = 0.0
-        _NoiseStartLayer("Noise Start Layer", Float) = 0
         _DirectionalBias("Direction Bias", Range(0, 1)) = 0.6
 
         [Header(Reveal)]
@@ -145,8 +145,8 @@ Shader "BalloonParty/Display/EMShieldField"
             float _NoiseScale;
             float _NoiseScrollSpeed;
             float _NoiseEnabled;
+            float _NoiseIntensity;
             float _NoiseVelocityIntensity;
-            float _NoiseStartLayer;
             float2 _NoiseScrollDir;
             float _DirectionalBias;
             float _RevealEdge;
@@ -274,7 +274,8 @@ Shader "BalloonParty/Display/EMShieldField"
 
                 // Dissolve noise (on original uv so dissolve anchor stays world-stable)
                 float dissolveBase = 0.0;
-                if (_NoiseEnabled > 0.5)
+                float noiseAlpha = _NoiseIntensity;
+                if (_NoiseEnabled > 0.5 && noiseAlpha > 0.001)
                 {
                     float noiseSpeed = _NoiseScrollSpeed * _VelocityFactor;
                     float2 scrollDir = float2(-_NoiseScrollDir.x * 0.5, 1.0);
@@ -307,9 +308,8 @@ Shader "BalloonParty/Display/EMShieldField"
                         continue;
                     }
 
-                    // Dissolve check
-                    float speckMask = step(_NoiseStartLayer, float(i));
-                    float dissolve = step(dissolveBase, _DissolveProgress[i]);
+                    // Dissolve check — layer is dissolved when its progress exceeds the noise threshold
+                    float dissolve = (_DissolveProgress[i] > 0.001) ? step(dissolveBase, _DissolveProgress[i]) : 0.0;
                     #ifdef EDITOR_PREVIEW
                     dissolve = 0.0;
                     #endif
@@ -354,9 +354,9 @@ Shader "BalloonParty/Display/EMShieldField"
                     float glow = exp(-dist / max(_GlowWidth, 1e-4))
                                  * pulse * tipFade * flowMask * revealMask;
 
-                    // Dissolve edge glow (only when noise specks are active)
+                    // Dissolve edge glow (scaled by noise intensity)
                     float dissolveDist = saturate(1.0 - abs(_DissolveProgress[i] - dissolveBase) * 4.0);
-                    glow += dissolveDist * 0.4 * revealMask * speckMask * _NoiseEnabled;
+                    glow += dissolveDist * 0.4 * revealMask * noiseAlpha;
 
                     // Per-layer color shift (cosine palette)
                     float layerT = float(i) / max(float(EM_MAX_LAYERS - 1), 1.0);

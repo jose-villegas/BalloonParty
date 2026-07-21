@@ -41,35 +41,32 @@ The shield field is hidden until the projectile is fired. `ProjectileShieldView`
 ## Shield Visuals
 
 The projectile's shield appears as a glowing force field resembling magnetic field lines
-wrapping around the ball. Each remaining shield adds a visible concentric layer (up to
-`MaxVisualLayers`). When a shield is gained, it appears with a wipe sweeping from the leading
+wrapping around the ball. Each remaining shield adds a visible concentric layer (up to a
+configured maximum). When a shield is gained, it appears with a wipe sweeping from the leading
 tip to the tail. When lost, the outermost layer crumbles away (starting from the front).
 
-The field reacts to motion: it ripples faster as the projectile speeds up, and when the ball
-bounces off a wall or deflects off a balloon, the field bends backward (like hair blowing in
-wind) then gradually settles. `ProjectileView` calls `_shieldView.OnBounce(oldDir, newDir)` on
-each direction change to trigger this lean impulse.
+While the ball is flying, the glow stretches into a comet shape with a tail trailing behind
+it. As the ball nears a wall, the glow smoothly tucks into a circle, holds that round shape
+through the bounce, then stretches back into the comet as it flies away. The field also
+ripples faster the quicker the ball moves.
 
-**Implementation:** All of the above — the concentric layers, the dissolve animations, the
-motion-reactive bending and bounce squash — are driven by `ProjectileShieldView`, which feeds
-parameters to the `EMShieldField.shader` (a single-quad procedural shader — one draw call
-replacing the former N sprite stack). All shader uniforms — per-layer dissolve/reveal arrays,
-deform points, squash, velocity factor, color — are written to a single `MaterialPropertyBlock`
-and pushed through a unified `PushProperties()` method. Both tween callbacks and the per-frame
-`Update()` call `PushProperties()`, which writes **every** property before calling
+A four-state cycle (Cruising → Closing → Bracing → Opening) drives the shape transition.
+The game predicts how far the next wall is; when it falls below a threshold, closing begins.
+On bounce, the shield force-snaps to circle regardless of the current state.
+
+### Implementation
+
+`ProjectileShieldView` feeds 7 uniforms to the `EMShieldField.shader` (a single-quad
+procedural shader — one draw call). All uniforms — per-layer dissolve/reveal arrays, active
+layers, color, velocity factor, noise scroll direction, and shape lerp — are written to a
+single `MaterialPropertyBlock` and pushed through `WriteAllProperties()`. Both tween callbacks
+and the per-frame `Update()` call this method, which writes **every** property before calling
 `SetPropertyBlock`. This single-push pattern prevents split-brain overwrites where one code
-path's `SetPropertyBlock` call would erase properties written by another. Configuration lives
-in `IShieldFieldSettings` (injected, not serialized on the view).
-
-The field's bending and trailing motion use a 3-point spring system: three `DampedSpring2D`
-instances (fast/mid/slow) each track the projectile's heading but settle at different rates,
-so the dome follows turns almost instantly while the tail lags behind — like a flag trailing in
-wind. A `DampedSpring1D` drives the squash-on-impact effect: bounces inject a jolt proportional
-to the direction change, which the spring oscillates back to rest, briefly compressing the field
-along the wall it hit.
+path's push would erase properties written by another. Configuration lives in
+`IShieldFieldSettings` (injected, not serialized on the view).
 
 All VFX (gain/lose/bounce particles) are spawned via `ParticlePoolChannel` as world-space
-orphans — they are not children of the projectile and survive recycling independently.
+particles — they are not children of the projectile and survive recycling independently.
 
 See @ref plan_em_shield_field for the full shader design and phase status.
 

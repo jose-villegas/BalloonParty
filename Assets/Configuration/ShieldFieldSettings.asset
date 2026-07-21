@@ -18,8 +18,8 @@ MonoBehaviour:
   _maxVisualSpeed: 10
   _noiseSpringFrequency: 5
   _noiseSpringDamping: 0.85
-  _morphCloseDistance: 1.0
+  _morphCloseDistance: 2.5
   _morphCloseDuration: 0.15
-  _morphOpenDuration: 0.25
-  _morphBraceDuration: 0.05
+  _morphOpenDuration: 0.05
+  _morphBraceDuration: 0.15
   _maxVisualLayers: 10

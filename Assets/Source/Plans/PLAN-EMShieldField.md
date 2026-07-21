@@ -2,18 +2,24 @@
 
 # Electromagnetic Shield Field — procedural magnetosphere shader for projectile shields
 
-> Replace the current sprite-stacking shield visual with a single-quad procedural shader
-> rendering dipole magnetic field lines that wrap around the projectile. N configurable
-> concentric shells dissolve apex-first when a shield is consumed.
+> The projectile's shield is a glowing force field — visible concentric rings wrapping around
+> the ball, rendered by a single procedural shader (`EMShieldField.shader`). Each shield the
+> ball carries adds a ring. The field stretches into a comet during travel and tucks into a
+> circle at wall bounces. When a shield is lost, its ring dissolves away starting from the
+> leading tip.
 
 ---
 
 ## Visual Goal
 
-Earth's magnetosphere deflecting solar wind — concentric field lines curving pole-to-pole
+Earth's magnetosphere deflecting solar wind — concentric glowing rings curving pole-to-pole
 around a sphere, with the projectile's heading as the pole axis. Each shield count adds a
-visible shell. Dissolution starts at the leading tip and peels backward (like popping an
-atmosphere from its apex).
+visible ring. When a ring dissolves, it starts at the leading tip and peels backward (like
+popping an atmosphere from its apex).
+
+During travel the field stretches into a comet with a trailing tail. As the projectile
+approaches a wall, the field smoothly closes into a circle (bracing for impact), holds
+that shape through the bounce, then opens back into the comet as it flies away.
 
 ---
 
@@ -24,18 +30,38 @@ IProjectileModel.ShieldsRemaining (ReactiveProperty<int>)
         │
         ▼
 ProjectileShieldView (MonoBehaviour, subscribes via UniRx)
-        │  ┌──────────────────────────────────────────────┐
-        │  │ On change:                                    │
-        │  │  • gain → tween dissolve[layer] 1→0          │
-        │  │  • lose → tween dissolve[layer] 0→1          │
-        │  └──────────────────────────────────────────────┘
+        │  ┌──────────────────────────────────────────────────┐
+        │  │ On ShieldsRemaining change:                       │
+        │  │  • gain → tween dissolve[layer] 1→0              │
+        │  │  • lose → tween dissolve[layer] 0→1              │
+        │  │ Per frame:                                        │
+        │  │  • step noise spring + morph FSM                  │
+        │  │  • WriteAllProperties() → SetPropertyBlock()      │
+        │  └──────────────────────────────────────────────────┘
         │
         ▼
-MaterialPropertyBlock (pushed per-frame during tween)
+MaterialPropertyBlock (7 uniforms pushed per frame)
         │
         ▼
 EMShieldField.shader — single quad, 1 draw call
 ```
+
+### Shape Morph FSM
+
+The field's outline is controlled by `_ShapeLerp` (0 = circle, 1 = comet-with-tail).
+A four-state machine drives the transitions:
+
+```
+Cruising (sl=1)  ──wall < MorphCloseDistance──▶  Closing (sl: 1→0)
+      ▲                                               │
+      │                                          closeT ≥ 1
+      │                                               ▼
+Opening (sl: 0→1)  ◀──braceDuration elapsed──  Bracing (sl=0)
+```
+
+`OnBounce` force-snaps to **Bracing** regardless of the current state, so the field is
+always a circle at the moment of impact. Wall proximity is predicted each frame via
+`WallLimits.TryFindCrossing`.
 
 ---
 
@@ -49,11 +75,21 @@ field lines satisfy `r = R_max × sin²(θ)`. UV space maps:
 - **V-axis** → heading axis (poles at V=0 and V=1)
 - **U-axis** → lateral extent
 
-For each layer `i` (unrolled loop, max 5):
+For each layer `i` (loop, max 30):
 1. Compute shell radius: `R = BaseRadius + i × LayerSpacing`
 2. Evaluate field-line SDF at this layer's R
 3. Check dissolve: `valueNoise(uv × NoiseScale) + (1 - V) × DirectionalBias < DissolveProgress[i]` → clip
 4. Accumulate core + glow
+
+### Comet Shape
+
+The shader blends between two outlines controlled by `_ShapeLerp`:
+
+- **Circle** (`sl = 0`) — defined by `_CircleRadius` and `_CircleCenter`, masked by
+  `_CircleMaskWidth`. Used when bracing for or recovering from a bounce.
+- **Comet** (`sl = 1`) — the dome plus a tapered tail (`_TailLength`, `_TailWidth`,
+  `_TailPower`), smoothed at the junction (`_JunctionSmooth`). `_CometWidthScale`
+  controls lateral spread.
 
 ### Dissolve Mechanism
 
@@ -65,7 +101,7 @@ Directional noise dissolve biased by V-coordinate:
 ### Performance Budget
 
 - **1 quad, 1 draw call** (replaces N SpriteRenderers)
-- ~40 ALU instructions per layer × 5 layers = ~200 fragment instructions
+- ~40 ALU instructions per layer × active layers (typically 5–10 of 30 max)
 - No texture fetches (pure math, hash-based noise)
 - Fill: ~2× projectile screen area
 - Well within mobile budget for a single on-screen quad
@@ -75,109 +111,138 @@ Directional noise dissolve biased by V-coordinate:
 `sin(_Time.y × PulseSpeed + layer × phaseOffset)` modulates line brightness/thickness per layer
 to convey "living energy."
 
-### Velocity-Driven Dynamics (Phase 3)
+### Velocity-Driven Dynamics
 
 The shader warps UVs before the field-line SDF evaluation, giving the field a reactive, physical
 feel:
 
 1. **Ripple** — `sin(V × RippleFrequency + _Time.y × RippleSpeed) × RippleAmplitude × VelocityFactor`
    offsets U, creating velocity-gated sine waves along the heading axis.
-2. **Directional lean** — `_DeformDirection.xy × LeanStrength × pow(1 - V, LeanBendPower)` bends
-   the field toward the trailing edge. The progressive power curve (`LeanBendPower > 1`) means
-   the dome barely moves while the tail sweeps wide — like a flag trailing in wind.
-3. **Noise scroll** — dissolve noise UV scrolls at `_NoiseScrollSpeed × _Time.y`, adding subtle
-   turbulence independent of the warp.
+2. **Noise scroll** — a `DampedSpring2D` tracks the projectile's heading and produces a
+   smoothed direction offset (`_NoiseScrollDir`). The dissolve noise UV scrolls in this
+   direction, adding subtle turbulence that trails behind turns.
 
-The deformation is driven by a **3-point trailing system** rather than a single lean vector:
-three `DampedSpring2D` instances (fast, mid, slow) track the projectile's heading at different
-spring frequencies. Each spring's offset from the current facing is projected into quad-local
-space, packed into a `_DeformPoints` vector array, and pushed per frame. The shader reads
-`[0]` = dome (fast settle), `[1]` = mid, `[2]` = tail (most lag) — this gives the field a
-physically convincing trailing shape rather than a uniform tilt.
-
-A **squash-on-impact** effect uses a `DampedSpring1D` (scalar spring, `Shared/Math/`) whose
-rest position is zero (no squash). `OnBounce` injects an impulse proportional to the direction
-change magnitude (`(1 − dot) × 0.5 × SquashImpulseScale`); the spring overshoots and oscillates
-back to rest, compressing the field along the impact normal. The shader reads `_SquashMag`,
-`_SquashStrength`, and `_SquashNormal` to apply an oriented UV compression.
-
-On bounce, lean impulses are injected into the fast and slow springs (slow receives a reduced
-fraction) and a separate noise-scroll spring. The sqrt velocity-factor curve ensures the ripple
-activates quickly at low speeds but saturates gracefully.
+The sqrt velocity-factor curve (`_VelocityFactor = sqrt(speed / MaxVisualSpeed)`) ensures the
+ripple activates quickly at low speeds but saturates gracefully.
 
 ---
 
 ## Shader Properties
 
+### Comet Shape
 ```hlsl
-[HDR] _Color ("Field Tint", Color) = (0.5, 0.8, 1, 1)
-_BaseRadius ("Base Shell Radius", Range(0.1, 0.5)) = 0.2
-_LayerSpacing ("Layer Spacing", Range(0.02, 0.15)) = 0.06
-_ActiveLayers ("Active Layers", Range(0, 5)) = 3
-_FieldLineThickness ("Line Thickness", Range(0.002, 0.05)) = 0.015
-_GlowWidth ("Glow Width", Range(0.01, 0.2)) = 0.06
-_GlowIntensity ("Glow Intensity", Range(0, 3)) = 1.0
-_PulseSpeed ("Pulse Speed", Range(0, 10)) = 3.0
-_NoiseScale ("Dissolve Noise Scale", Range(1, 20)) = 8.0
-_DirectionalBias ("Dissolve Direction Bias", Range(0, 1)) = 0.6
-
-// Dynamics (Phase 3)
-_VelocityFactor ("Velocity Factor", Range(0, 1)) = 0
-_RippleAmplitude ("Ripple Amplitude", Range(0, 0.1)) = 0.02
-_RippleFrequency ("Ripple Frequency", Range(1, 20)) = 8.0
-_RippleSpeed ("Ripple Speed", Range(0, 20)) = 5.0
-_LeanStrength ("Lean Strength", Range(0, 1)) = 0.3
-_LeanBendPower ("Lean Bend Power", Range(1, 5)) = 2.0
-_DeformDirection ("Deform Direction", Vector) = (0, 0, 0, 0)
-_RevealEdge ("Reveal Edge Softness", Range(0.01, 0.3)) = 0.05
-_NoiseScrollSpeed ("Noise Scroll Speed", Range(0, 5)) = 1.0
-[Toggle] _EditorPreview ("Editor Preview", Float) = 0
-// Per-layer dissolve/reveal progress: float arrays [0..4] via MPB (not in Properties block)
+_DomeCenter, _DomeRadius            // dome origin and size
+_CircleRadius, _CircleCenter        // circle mode origin and size
+_TailLength, _TailWidth, _TailPower // tapered tail geometry
+_JunctionSmooth                     // dome–tail blend
+_CometWidthScale                    // lateral spread of comet
+_ShapeLerp                          // 0 = circle, 1 = comet (driven by MPB)
 ```
 
-**Shader-side array declarations** (outside `Properties {}`, in the CGPROGRAM block):
+### Shells
 ```hlsl
-float _DissolveProgress[5];  // pushed via MPB.SetFloatArray — arrays cannot be in Properties{}
-float _RevealProgress[5];    // reveal wipe per layer (0 = hidden, 1 = fully revealed)
+_BaseRadius      // innermost shell radius
+_LayerSpacing    // gap between concentric shells
+_ActiveLayers    // visible layer count (driven by MPB)
 ```
+
+### Line Appearance
+```hlsl
+_FieldLineThickness, _GlowWidth, _GlowIntensity, _PulseSpeed
+```
+
+### Flow
+```hlsl
+_FlowSpeed, _FlowFrequency, _FlowStrength
+```
+
+### Layer Color
+```hlsl
+_ColorShift, _ColorPhase
+```
+
+### Dissolve
+```hlsl
+_NoiseScale ("Dissolve Noise Scale", Range(1, 100))
+_NoiseScrollSpeed
+[Toggle] _NoiseEnabled
+_NoiseVelocityIntensity
+_NoiseStartLayer
+_DirectionalBias
+```
+
+### Reveal
+```hlsl
+_RevealEdge
+```
+
+### Deformation
+```hlsl
+_VelocityFactor      // sqrt-normalized speed (driven by MPB)
+_RippleAmplitude, _RippleFrequency, _RippleSpeed
+```
+
+### Tip & Shape Mask
+```hlsl
+_TipFade
+_MaskCenterV, _MaskWidth, _CircleMaskWidth, _MaskHeight, _MaskRoundness, _MaskFade
+```
+
+### Per-Layer Arrays (pushed via MPB, not in Properties block)
+```hlsl
+float _DissolveProgress[30];   // noise dissolve per layer (0 = solid, 1 = gone)
+float _RevealProgress[30];     // reveal wipe per layer (0 = hidden, 1 = shown)
+```
+
+### MPB Uniforms (7 values pushed from C# each frame)
+| Uniform | Type | Source |
+|---------|------|--------|
+| `_DissolveProgress[]` | float[30] | Tween-driven per-layer dissolve |
+| `_RevealProgress[]` | float[30] | Tween-driven per-layer reveal wipe |
+| `_ActiveLayers` | float | `IShieldFieldSettings.MaxVisualLayers` |
+| `_Color` | Color | Current projectile color |
+| `_VelocityFactor` | float | `sqrt(speed / MaxVisualSpeed)` |
+| `_NoiseScrollDir` | Vector4 | Noise spring offset in quad-local space |
+| `_ShapeLerp` | float | Morph FSM output (0 = circle, 1 = comet) |
 
 ### Pole Singularity Handling
 
-At the poles (θ=0, θ=π) all field lines converge to r=0. The shader must fade out line
+At the poles (θ=0, θ=π) all field lines converge to r=0. The shader fades out line
 thickness as `sin²(θ)` approaches zero via `smoothstep` to avoid visual pinching artifacts.
 
 ---
 
 ## C# Integration
 
-### Reworked `ProjectileShieldView`
+### `ProjectileShieldView`
 
-- Replaces the `List<SpriteRenderer>` with a single `SpriteRenderer` + EM shield material
-- Caches a `MaterialPropertyBlock` and `float[5]` dissolve + reveal arrays (no GC)
-- Property IDs cached as `static readonly int` (e.g., `Shader.PropertyToID("_DissolveProgress")`)
+- Single `SpriteRenderer` + EM shield material; single `MaterialPropertyBlock`
+- `float[30]` dissolve + reveal arrays (pre-allocated, no GC)
+- Property IDs cached as `static readonly int`
 - On `ShieldsRemaining` change:
   - **Gain**: sets dissolve to 0, tweens `_layerReveal[newLayer]` from 0→1 (reveal wipe, apex→tail)
   - **Lose**: tweens `_layerDissolve[oldLayer]` from 0→1 (noise dissolve)
-- Pushes MPB each tween frame: `SetFloatArray` for both `_DissolveProgress` and `_RevealProgress`
-- All shader properties are funnelled through `PushProperties()` — both tween callbacks and
+- All shader properties are funnelled through `WriteAllProperties()` — both tween callbacks and
   `Update()` call it, guaranteeing every `SetPropertyBlock` writes the full uniform set
   (see [Architectural Lesson](#architectural-lesson--single-push-materialpropertyblock))
-- **Per-frame dynamics** (`Update`): steps a 3-point trailing spring system
-  (`DampedSpring2D` × 3 at fast/mid/slow rates) and a scalar squash spring (`DampedSpring1D`),
-  transforms each into quad-local space, and pushes `_DeformPoints` + `_VelocityFactor` +
-  squash uniforms via the shared `PushProperties()` call
+- **Per-frame dynamics** (`Update`): steps the noise-scroll spring (`DampedSpring2D`), runs the
+  morph FSM (`UpdateMorphState`), computes `_VelocityFactor`, and pushes all 7 uniforms via
+  `WriteAllProperties()`
+- **Shape morph**: `UpdateMorphState` runs the Cruising→Closing→Bracing→Opening FSM.
+  `ComputeWallDistance` uses `WallLimits.TryFindCrossing` to predict how far the next wall is
+  along the current heading. When that distance drops below `MorphCloseDistance`, the field
+  begins closing from comet to circle.
 - **`OnBounce(Vector2 oldDir, Vector2 newDir)`** — called by `ProjectileView` on wall bounce and
-  balloon deflect. Injects lean impulses into the trailing springs and a squash impulse
-  proportional to direction change severity; clamped to unit magnitude
-- Quad orientation: child of projectile (inherits rotation automatically — no manual update)
+  balloon deflect. Force-snaps to **Bracing** (circle shape, `_ShapeLerp = 0`).
+- Quad orientation: child of projectile (inherits rotation automatically)
 - **Color tinting**: subscribes to `model.ColorName`, pushes tint via `MPB.SetColor`
-- **Zero shields / initial state**: renderer disabled (`enabled = false`) when shields = 0;
-  re-enabled on first shield gained. Avoids paying a draw call for a fully-transparent quad.
+- **Zero shields / initial state**: renderer disabled when shields = 0; re-enabled on first
+  shield gained. Avoids paying a draw call for a fully-transparent quad.
 - **`PlayBounceVfx(Vector3, Color)`** remains public — called externally by `ProjectileView`
-- **Tween cleanup**: caches a `Tween _dissolveTween` reference; `Reset()` / `OnDespawned()` calls
-  `_dissolveTween?.Kill()` — no `DOTween.Kill(object)` scan. Clears `CompositeDisposable`.
+- **Tween cleanup**: `Reset()` kills tweens via `DOTween.Kill(this)`, clears
+  `CompositeDisposable`, and resets all spring/morph state to defaults.
 
-### New Configuration
+### Configuration
 
 ```csharp
 // Assets/Source/Configuration/Effects/IShieldFieldSettings.cs
@@ -186,19 +251,14 @@ internal interface IShieldFieldSettings
     float DissolveSeconds { get; }
     float FinalDissolveSeconds { get; }   // slower dissolve for the last shield
     float AppearSeconds { get; }
-    int MaxVisualLayers { get; }
-    float MaxVisualSpeed { get; }         // speed ceiling for the velocity-factor curve
-    float SpringFrequency { get; }        // fast (dome) spring Hz
-    float SpringDamping { get; }          // fast spring damping ratio
-    float SpringFrequencySlow { get; }    // slow (tail) spring Hz
-    float SpringDampingSlow { get; }      // slow spring damping ratio
-    float LeanImpulseScale { get; }       // multiplier on direction-change → lean push
-    float NoiseSpringFrequency { get; }   // noise-scroll spring Hz
-    float NoiseSpringDamping { get; }     // noise-scroll spring damping
-    float SquashStrength { get; }         // shader-side UV compression strength
-    float SquashFrequency { get; }        // squash spring Hz
-    float SquashDamping { get; }          // squash spring damping ratio
-    float SquashImpulseScale { get; }     // bounce severity → squash impulse
+    int MaxVisualLayers { get; }           // up to 30
+    float MaxVisualSpeed { get; }          // speed ceiling for the velocity-factor curve
+    float NoiseSpringFrequency { get; }    // noise-scroll spring Hz
+    float NoiseSpringDamping { get; }      // noise-scroll spring damping
+    float MorphCloseDistance { get; }      // wall distance that triggers closing
+    float MorphCloseDuration { get; }      // seconds to morph from comet to circle
+    float MorphOpenDuration { get; }       // seconds to morph from circle back to comet
+    float MorphBraceDuration { get; }      // seconds to hold the circle shape after closing
 }
 ```
 
@@ -211,14 +271,14 @@ Registered in `GameLifetimeScope` as `RegisterInstance<IShieldFieldSettings>(ass
 ```
 Assets/
 ├── Shaders/BalloonParty/Display/
-│   └── EMShieldField.shader              ← NEW
+│   └── EMShieldField.shader
 ├── Source/Configuration/Effects/
-│   ├── IShieldFieldSettings.cs           ← NEW
-│   └── ShieldFieldSettings.cs            ← NEW (ScriptableObject)
+│   ├── IShieldFieldSettings.cs
+│   └── ShieldFieldSettings.cs            (ScriptableObject)
 ├── Source/Projectile/View/
-│   └── ProjectileShieldView.cs           ← MODIFIED (drives shader via MPB)
+│   └── ProjectileShieldView.cs           (drives shader via MPB)
 └── Configuration/
-    └── ShieldFieldSettings.asset         ← NEW (authored in editor)
+    └── ShieldFieldSettings.asset
 ```
 
 ---
@@ -236,25 +296,23 @@ Assets/
 - Preserve existing VFX spawning (gain/lose/bounce particles)
 
 ### Phase 3 — Dynamics ✓
-- **3-point trailing system**: three `DampedSpring2D` instances (fast dome / mid EMA / slow
-  tail) replaced the single lean-vector approach. Packed into `_DeformPoints` vector array
-  (pushed per frame via MPB). Gives the field a convincing trailing shape on direction change.
-- **UV warp system**: velocity-driven ripple + directional lean bend
-  - `_VelocityFactor` (sqrt of normalized speed) modulates ripple amplitude
-  - `_RippleAmplitude/Frequency/Speed` drive a sine warp along the V-axis
-  - `_LeanStrength` + `_LeanBendPower` apply a progressive power-curve bend from dome to tail,
-    stronger at the trailing edge — the field "trails behind" the projectile on direction change
-- **Reveal wipe**: layer gain now animates a directional wipe (apex→tail) via `_RevealProgress`
-  array; layer loss still uses the existing noise dissolve via `_DissolveProgress`
-- **Editor preview toggle**: `_EditorPreview` property lets artists see deformation in Scene view
-  without play mode
+- **Noise-scroll spring**: a single `DampedSpring2D` tracks the projectile's heading to produce
+  a smoothed scroll direction for dissolve noise. Pushed per frame as `_NoiseScrollDir`.
+- **Velocity-driven ripple**: `_VelocityFactor` (sqrt of normalized speed) modulates
+  `_RippleAmplitude/Frequency/Speed` for sine-wave warping along the V-axis.
+- **Reveal wipe**: layer gain animates a directional wipe (apex→tail) via `_RevealProgress`;
+  layer loss uses noise dissolve via `_DissolveProgress`.
 
-### Phase 4 — Squash-on-Impact ✓
-- **`DampedSpring1D`** (`Shared/Math/`) — new scalar spring (mirrors `DampedSpring2D`'s API).
-  Rests at zero; `OnBounce` injects an impulse proportional to direction change severity.
-  The spring overshoots and oscillates back, compressing the field along the impact normal.
-- Shader reads `_SquashMag`, `_SquashStrength`, `_SquashNormal` for oriented UV compression.
-- `FinalDissolveSeconds` added to `IShieldFieldSettings` for a slower last-shield dissolve.
+### Phase 4 — Shape Morph ✓
+- **Comet/circle morph**: `_ShapeLerp` blends between a tailed comet shape (travel) and a
+  circle (bounce). A 4-state FSM (Cruising → Closing → Bracing → Opening) drives the
+  transitions based on wall proximity and bounce events.
+- **Wall prediction**: `ComputeWallDistance` uses `WallLimits.TryFindCrossing` to detect
+  upcoming walls. When the wall is closer than `MorphCloseDistance`, the field begins closing.
+- **Bounce snap**: `OnBounce` force-snaps to **Bracing** (circle) regardless of current state.
+- Max visual layers increased from 5 to 30.
+- Removed: 3-point trailing springs, squash-on-impact (`DampedSpring1D`), lean/deform
+  direction, dome overlay — replaced by the simpler morph approach.
 
 ### Phase 5 — Tuning & Polish
 - Author `ShieldFieldSettings.asset` with sensible defaults
@@ -263,18 +321,16 @@ Assets/
 
 ---
 
-## Performance Notes (from optimizer review)
+## Performance Notes
 
-- **True ALU budget**: closer to 250–300 instructions (not 200). `atan2` = ~10 ALU on Mali,
-  hash noise × 5 = ~50 ALU, plus SDF/smoothstep/glow. Still within mobile ceiling (~400 max
-  for a single transparent quad at ≤5% screen fill).
-- **Quality toggle**: add `_MaxVisualLayers` in settings — if profiling exceeds 0.3 ms on
-  target GPU, drop to 3 visual layers.
+- **ALU budget**: ~40 ALU per layer. With 30 max layers but typically 5–10 active
+  (`_ActiveLayers` via MPB), expect ~200–400 fragment instructions in practice.
+- **Quality toggle**: `MaxVisualLayers` in settings caps how many layers render — drop to 3
+  if profiling exceeds 0.3 ms on target GPU.
 - **Dual-quad overlap**: during PIERCING state, `PierceConeSpiral` (~80 ALU) may overlap with
-  this shader (~300 ALU). Confirm whether shields + piercing coexist in gameplay. If yes,
-  consider reducing glow ops during piercing or shrinking the quad to avoid overlap.
-- **Noise fallback**: provide `#pragma multi_compile _ _NOISE_TEXTURE` so hash noise can be
-  swapped for a 64×64 R8 texture fetch if needed on older Mali/PowerVR GPUs.
+  this shader. Consider reducing glow ops during piercing if both coexist.
+- **Noise fallback**: `#pragma multi_compile _ _NOISE_TEXTURE` allows swapping hash noise for
+  a 64×64 R8 texture fetch on older Mali/PowerVR GPUs.
 - **Net improvement**: replaces 3–5 draw calls with 1. The fragment ALU increase is paid on
   tiny fill (~1% screen pixels). Strict batching win.
 
@@ -296,13 +352,12 @@ Assets/
 
 Early iterations had two independent code paths calling `SetPropertyBlock` on the same
 `MaterialPropertyBlock`: tween callbacks wrote dissolve/reveal/color, while `Update()` wrote
-deform/squash/velocity. Each path only set its own subset of properties before calling
+dynamics uniforms. Each path only set its own subset of properties before calling
 `SetPropertyBlock`, so whichever ran second would push a block missing the other's latest
-values — making new shader features (squash, deform points) silently invisible whenever a
-tween was active.
+values — making new shader features silently invisible whenever a tween was active.
 
-**Fix:** a single `PushProperties()` method writes **every** uniform onto the block before
-calling `SetPropertyBlock`. Both `Update()` and all tween callbacks call `PushProperties()`
+**Fix:** a single `WriteAllProperties()` method writes **every** uniform onto the block before
+calling `SetPropertyBlock`. Both `Update()` and all tween callbacks call `WriteAllProperties()`
 instead of writing their own subset. This guarantees each push is a complete snapshot.
 
 **Rule:** when multiple code paths share a `MaterialPropertyBlock`, always funnel through one
@@ -315,5 +370,5 @@ method that writes the full property set. Never let two paths each write a subse
 
 - `dotnet build` cannot validate shaders — shader edits need in-editor verification.
 - The quad must be sized to cover the full field extent (~2× projectile radius).
-- Max 5 visual layers recommended; beyond that, ALU budget gets tight on low-end mobile.
-  For >5 shields, outer layers can merge visually (brighter outer shell).
+- Max 30 layers declared in arrays; `MaxVisualLayers` in settings controls how many actually
+  render. Typically 5–10 active layers in gameplay.

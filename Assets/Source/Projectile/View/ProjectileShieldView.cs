@@ -1,6 +1,7 @@
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.Model;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Math;
 using BalloonParty.Shared.Pool;
@@ -24,6 +25,7 @@ namespace BalloonParty.Projectile.View
         private static readonly int VelocityFactorId = Shader.PropertyToID("_VelocityFactor");
         private static readonly int NoiseScrollDirId = Shader.PropertyToID("_NoiseScrollDir");
         private static readonly int ShapeLerpId = Shader.PropertyToID("_ShapeLerp");
+        private static readonly int NoiseIntensityId = Shader.PropertyToID("_NoiseIntensity");
 
         [SerializeField] private SpriteRenderer _fieldRenderer;
 
@@ -34,6 +36,7 @@ namespace BalloonParty.Projectile.View
 
         [Inject] private IGamePalette _palette;
         [Inject] private IShieldFieldSettings _settings;
+        [Inject] private IGameConfiguration _gameConfig;
         [Inject] private PoolManager _poolManager;
         [Inject] private SlotGrid _grid;
         [Inject] private ProjectileMotionResolver _motionResolver;
@@ -57,6 +60,7 @@ namespace BalloonParty.Projectile.View
         private ShieldMorphState _morphState;
         private float _morphTimer;
         private float _shapeLerp = 1f;
+        private float _noiseIntensity;
 
         private enum ShieldMorphState
         {
@@ -109,6 +113,21 @@ namespace BalloonParty.Projectile.View
             _velFactor = Mathf.Sqrt(
                 Mathf.Clamp01(_model.Speed / Mathf.Max(_settings.MaxVisualSpeed, 1f)));
 
+            // Noise specks: off by default, ramp with cruise taps, full on piercing
+            var threshold = _gameConfig != null ? _gameConfig.CruisePiercingTapThreshold : 0;
+            if (_model.IsPiercing.Value)
+            {
+                _noiseIntensity = 1f;
+            }
+            else if (threshold > 0 && _model.IsCruising.Value)
+            {
+                _noiseIntensity = Mathf.Clamp01((float)_model.Flight.TotalCruiseTaps / threshold);
+            }
+            else
+            {
+                _noiseIntensity = 0f;
+            }
+
             var localNoise = (Vector2)transform.InverseTransformDirection(_springNoise.Position)
                              - Vector2.up;
             localNoise = Vector2.ClampMagnitude(localNoise, 1.5f);
@@ -124,11 +143,15 @@ namespace BalloonParty.Projectile.View
             {
                 case ShieldMorphState.Cruising:
                     _shapeLerp = 1f;
-                    var distance = ComputeWallDistance();
-                    if (distance >= 0f && distance < _settings.MorphCloseDistance)
+                    _morphTimer += dt;
+                    if (_morphTimer >= 0.05f)
                     {
-                        _morphState = ShieldMorphState.Closing;
                         _morphTimer = 0f;
+                        var distance = ComputeWallDistance();
+                        if (distance >= 0f && distance < _settings.MorphCloseDistance)
+                        {
+                            _morphState = ShieldMorphState.Closing;
+                        }
                     }
 
                     break;
@@ -136,7 +159,7 @@ namespace BalloonParty.Projectile.View
                 case ShieldMorphState.Closing:
                     _morphTimer += dt;
                     var closeT = Mathf.Clamp01(_morphTimer / Mathf.Max(_settings.MorphCloseDuration, 0.001f));
-                    _shapeLerp = 1f - closeT;
+                    _shapeLerp = 1f - Mathf.SmoothStep(0f, 1f, closeT);
                     if (closeT >= 1f)
                     {
                         _morphState = ShieldMorphState.Bracing;
@@ -159,10 +182,20 @@ namespace BalloonParty.Projectile.View
                 case ShieldMorphState.Opening:
                     _morphTimer += dt;
                     var openT = Mathf.Clamp01(_morphTimer / Mathf.Max(_settings.MorphOpenDuration, 0.001f));
-                    _shapeLerp = openT;
+                    _shapeLerp = Mathf.SmoothStep(0f, 1f, openT);
                     if (openT >= 1f)
                     {
-                        _morphState = ShieldMorphState.Cruising;
+                        // Skip Cruising if already near the next wall
+                        var wallDist = ComputeWallDistance();
+                        if (wallDist >= 0f && wallDist < _settings.MorphCloseDistance)
+                        {
+                            _morphState = ShieldMorphState.Closing;
+                            _morphTimer = 0f;
+                        }
+                        else
+                        {
+                            _morphState = ShieldMorphState.Cruising;
+                        }
                     }
 
                     break;
@@ -190,7 +223,7 @@ namespace BalloonParty.Projectile.View
             _disposable.Dispose();
         }
 
-        public void Bind(IProjectileModel model)
+        internal void Bind(IProjectileModel model)
         {
             _model = model;
             _previousShieldCount = model.ShieldsRemaining.Value;
@@ -210,7 +243,7 @@ namespace BalloonParty.Projectile.View
                 .AddTo(_disposable);
         }
 
-        public void OnBounce(Vector2 oldDirection, Vector2 newDirection)
+        internal void OnBounce()
         {
             if (_settings == null)
             {
@@ -223,12 +256,12 @@ namespace BalloonParty.Projectile.View
             _shapeLerp = 0f;
         }
 
-        public void PlayBounceVfx(Vector3 position, Color color)
+        internal void PlayBounceVfx(Vector3 position, Color color)
         {
             SpawnVfx(_shieldBounceVfxPrefab, position, color);
         }
 
-        public void Reset()
+        internal void Reset()
         {
             _disposable.Clear();
             DOTween.Kill(this);
@@ -243,6 +276,7 @@ namespace BalloonParty.Projectile.View
             _morphState = ShieldMorphState.Cruising;
             _morphTimer = 0f;
             _shapeLerp = 1f;
+            _noiseIntensity = 0f;
 
             for (var i = 0; i < MaxLayers; i++)
             {
@@ -264,7 +298,7 @@ namespace BalloonParty.Projectile.View
             gameObject.SetActive(false);
         }
 
-        public void Show()
+        internal void Show()
         {
             gameObject.SetActive(true);
             AnimateInitialReveal(_previousShieldCount);
@@ -385,6 +419,7 @@ namespace BalloonParty.Projectile.View
             _block.SetFloat(VelocityFactorId, _velFactor);
             _block.SetVector(NoiseScrollDirId, _noiseScrollDir);
             _block.SetFloat(ShapeLerpId, _shapeLerp);
+            _block.SetFloat(NoiseIntensityId, _noiseIntensity);
         }
 
         private void PlayShieldChangeFx(int currentCount)
