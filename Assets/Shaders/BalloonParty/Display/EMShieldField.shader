@@ -22,6 +22,7 @@ Shader "BalloonParty/Display/EMShieldField"
         _TailWidth("Tail Base Width", Range(0, 0.4)) = 0.12
         _TailPower("Tail Convergence", Range(0.5, 4.0)) = 2.0
         _JunctionSmooth("Junction Smoothness", Range(0.005, 0.15)) = 0.04
+        _CometWidthScale("Comet Width Scale", Range(0.3, 3.0)) = 1.0
         _ShapeLerp("Shape Lerp (0=circle, 1=tail)", Range(0, 1)) = 1.0
 
         [Header(Shells)]
@@ -46,9 +47,9 @@ Shader "BalloonParty/Display/EMShieldField"
 
 
         [Header(Dissolve)]
-        _NoiseScale("Noise Scale", Range(1, 40)) = 8.0
+        _NoiseScale("Noise Scale", Range(1, 100)) = 8.0
         _NoiseScrollSpeed("Noise Scroll Speed", Float) = 5.0
-        [Toggle] _NoiseScrollEnabled("Noise Scroll Enabled", Float) = 1
+        [Toggle] _NoiseEnabled("Noise Enabled", Float) = 1
         _NoiseVelocityIntensity("Noise Velocity Intensity", Range(0, 1)) = 0.0
         _NoiseStartLayer("Noise Start Layer", Float) = 0
         _DirectionalBias("Direction Bias", Range(0, 1)) = 0.6
@@ -68,6 +69,7 @@ Shader "BalloonParty/Display/EMShieldField"
         [Header(Shape Mask)]
         _MaskCenterV("Mask Center V", Range(0.1, 0.9)) = 0.5
         _MaskWidth("Mask Half Width", Range(0.05, 0.6)) = 0.4
+        _CircleMaskWidth("Circle Mask Half Width", Range(0.05, 0.6)) = 0.5
         _MaskHeight("Mask Half Height", Range(0.1, 0.6)) = 0.5
         _MaskRoundness("Mask Roundness", Range(0.01, 0.5)) = 0.2
         _MaskFade("Mask Fade Softness", Range(0.01, 0.25)) = 0.08
@@ -126,6 +128,7 @@ Shader "BalloonParty/Display/EMShieldField"
             float _TailWidth;
             float _TailPower;
             float _JunctionSmooth;
+            float _CometWidthScale;
             float _ShapeLerp;
             float _BaseRadius;
             float _LayerSpacing;
@@ -141,7 +144,7 @@ Shader "BalloonParty/Display/EMShieldField"
             float4 _ColorPhase;
             float _NoiseScale;
             float _NoiseScrollSpeed;
-            float _NoiseScrollEnabled;
+            float _NoiseEnabled;
             float _NoiseVelocityIntensity;
             float _NoiseStartLayer;
             float2 _NoiseScrollDir;
@@ -154,6 +157,7 @@ Shader "BalloonParty/Display/EMShieldField"
             float _TipFade;
             float _MaskCenterV;
             float _MaskWidth;
+            float _CircleMaskWidth;
             float _MaskHeight;
             float _MaskRoundness;
             float _MaskFade;
@@ -205,6 +209,8 @@ Shader "BalloonParty/Display/EMShieldField"
                 float morphedCenter = lerp(_CircleCenter, _DomeCenter, sl);
 
                 float2 p = uv - float2(0.5, morphedCenter);
+                // Configurable horizontal scale for the comet shape
+                p.x *= lerp(1.0, _CometWidthScale, sl);
                 float dDome = length(p) - morphedRadius;
 
                 // At sl=0 return pure circle; at sl=1 full comet with tail
@@ -267,17 +273,18 @@ Shader "BalloonParty/Display/EMShieldField"
                 float filled = MorphedSDF(warpedUV);
 
                 // Dissolve noise (on original uv so dissolve anchor stays world-stable)
-                // Noise scrolls along the deform curve direction, scaled by projectile speed
-                float noiseSpeed = _NoiseScrollSpeed * _VelocityFactor * _NoiseScrollEnabled;
-                float2 scrollDir = float2(-_NoiseScrollDir.x * 0.5, 1.0);
-                float2 noiseOffset = scrollDir * _Time.y * noiseSpeed;
-                float noiseRaw = ValueNoise(uv * _NoiseScale + noiseOffset);
-                float noiseVal = lerp(noiseRaw, noiseRaw * _VelocityFactor, _NoiseVelocityIntensity);
-
-                // Dissolve bias anchored to actual dome apex
-                float belowApex = saturate((apexV - uv.y) / max(apexV, 1e-4));
-                float noiseContrib = noiseVal * (1.0 - _DirectionalBias);
-                float dissolveBase = noiseContrib + belowApex * _DirectionalBias;
+                float dissolveBase = 0.0;
+                if (_NoiseEnabled > 0.5)
+                {
+                    float noiseSpeed = _NoiseScrollSpeed * _VelocityFactor;
+                    float2 scrollDir = float2(-_NoiseScrollDir.x * 0.5, 1.0);
+                    float2 noiseOffset = scrollDir * _Time.y * noiseSpeed;
+                    float noiseRaw = ValueNoise(uv * _NoiseScale + noiseOffset);
+                    float noiseVal = lerp(noiseRaw, noiseRaw * _VelocityFactor, _NoiseVelocityIntensity);
+                    float belowApex = saturate((apexV - uv.y) / max(apexV, 1e-4));
+                    float noiseContrib = noiseVal * (1.0 - _DirectionalBias);
+                    dissolveBase = noiseContrib + belowApex * _DirectionalBias;
+                }
 
                 // Tip convergence fade (on original uv) — fades out in circle mode
                 float tipDist = length(uv - float2(0.5, tipY));
@@ -347,9 +354,9 @@ Shader "BalloonParty/Display/EMShieldField"
                     float glow = exp(-dist / max(_GlowWidth, 1e-4))
                                  * pulse * tipFade * flowMask * revealMask;
 
-                    // Dissolve edge glow
+                    // Dissolve edge glow (only when noise specks are active)
                     float dissolveDist = saturate(1.0 - abs(_DissolveProgress[i] - dissolveBase) * 4.0);
-                    glow += dissolveDist * 0.4 * revealMask * speckMask;
+                    glow += dissolveDist * 0.4 * revealMask * speckMask * _NoiseEnabled;
 
                     // Per-layer color shift (cosine palette)
                     float layerT = float(i) / max(float(EM_MAX_LAYERS - 1), 1.0);
@@ -369,7 +376,7 @@ Shader "BalloonParty/Display/EMShieldField"
 
                 // Shape mask: rounded-rect (capsule when roundness >= min(width, height))
                 float2 maskP = uv - float2(0.5, _MaskCenterV);
-                float2 maskHalf = float2(_MaskWidth, _MaskHeight);
+                float2 maskHalf = float2(lerp(_CircleMaskWidth, _MaskWidth, sl), _MaskHeight);
                 float r = min(_MaskRoundness, min(maskHalf.x, maskHalf.y));
                 float2 mq = abs(maskP) - maskHalf + r;
                 float maskDist = length(max(mq, 0.0)) + min(max(mq.x, mq.y), 0.0) - r;
