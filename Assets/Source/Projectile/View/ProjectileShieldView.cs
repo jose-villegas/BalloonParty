@@ -1,7 +1,5 @@
-using System.Collections.Generic;
-using BalloonParty.Configuration;
+using BalloonParty.Configuration.Effects;
 using BalloonParty.Projectile.Model;
-using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Grid;
@@ -13,37 +11,48 @@ using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Projectile.View
 {
-    public class ProjectileShieldView : MonoBehaviour
+    internal class ProjectileShieldView : MonoBehaviour
     {
-        [SerializeField] private List<SpriteRenderer> _shields;
-        [SerializeField] [Range(0f, 1f)] private float _alpha;
-        [SerializeField] private float _colorDuration;
+        private const int MaxLayers = 5;
 
-        [Header("Scaling")] [SerializeField] private float _scaleDuration;
+        private static readonly int DissolveProgressId = Shader.PropertyToID("_DissolveProgress");
+        private static readonly int ActiveLayersId = Shader.PropertyToID("_ActiveLayers");
+        private static readonly int ColorId = Shader.PropertyToID("_Color");
 
-        [SerializeField] private Vector2 _scaleIncrements;
+        [SerializeField] private SpriteRenderer _fieldRenderer;
 
-        [Header("VFX")] [SerializeField] private ParticleSystem _shieldGainVfxPrefab;
-
+        [Header("VFX")]
+        [SerializeField] private ParticleSystem _shieldGainVfxPrefab;
         [SerializeField] private ParticleSystem _shieldLoseVfxPrefab;
         [SerializeField] private ParticleSystem _shieldBounceVfxPrefab;
 
         [Inject] private IGamePalette _palette;
-        [Inject] private IGameConfiguration _config;
+        [Inject] private IShieldFieldSettings _settings;
         [Inject] private PoolManager _poolManager;
         [Inject] private SlotGrid _grid;
 
         private readonly CompositeDisposable _disposable = new();
+        private readonly float[] _layerDissolve = new float[MaxLayers];
 
+        private MaterialPropertyBlock _block;
+
+        private Tween _dissolveTween;
         private int _previousShieldCount;
         private Color _currentColor = Color.white;
         private IProjectileModel _model;
 
         private void Awake()
         {
-            foreach (var shield in _shields)
+            _block = new MaterialPropertyBlock();
+
+            for (var i = 0; i < MaxLayers; i++)
             {
-                shield.transform.localScale = Vector3.zero;
+                _layerDissolve[i] = 1f;
+            }
+
+            if (_fieldRenderer != null)
+            {
+                _fieldRenderer.enabled = false;
             }
 
             gameObject.SetActive(false);
@@ -63,14 +72,14 @@ namespace BalloonParty.Projectile.View
                 .Skip(1)
                 .Subscribe(count =>
                 {
-                    UpdateShieldVisuals(count);
+                    AnimateShieldChange(count);
                     PlayShieldChangeFx(count);
                     _previousShieldCount = count;
                 })
                 .AddTo(_disposable);
 
-            // No filter on empty: a colourless projectile (fresh launch, or washed by soap) must reset
-            // the shield tint to neutral rather than keep the previous projectile's colour.
+            // A colourless projectile (fresh launch, or washed by soap) must reset the shield tint
+            // to neutral rather than keep the previous projectile's colour.
             model.ColorName
                 .Subscribe(UpdateColor)
                 .AddTo(_disposable);
@@ -84,28 +93,112 @@ namespace BalloonParty.Projectile.View
         public void Reset()
         {
             _disposable.Clear();
+            _dissolveTween?.Kill();
+            _dissolveTween = null;
             _model = null;
             _previousShieldCount = 0;
             _currentColor = Color.white;
-            foreach (var shield in _shields)
+
+            for (var i = 0; i < MaxLayers; i++)
             {
-                shield.transform.localScale = Vector3.zero;
-                shield.DOKill();
-                shield.color = Color.white.WithAlpha(_alpha);
+                _layerDissolve[i] = 1f;
             }
 
+            if (_fieldRenderer != null)
+            {
+                _fieldRenderer.enabled = false;
+            }
+
+            PushProperties();
             gameObject.SetActive(false);
         }
 
         public void Show()
         {
             gameObject.SetActive(true);
-            UpdateShieldVisuals(_previousShieldCount);
+            SetImmediateState(_previousShieldCount);
         }
 
-        private Color CurrentColor()
+        private void AnimateShieldChange(int newCount)
         {
-            return _currentColor;
+            _dissolveTween?.Kill();
+            _dissolveTween = null;
+
+            var maxVisual = Mathf.Min(newCount, _settings.MaxVisualLayers);
+            var prevVisual = Mathf.Min(_previousShieldCount, _settings.MaxVisualLayers);
+
+            if (newCount > _previousShieldCount)
+            {
+                // Gained shield(s): appear from outermost new layer inward.
+                var layerIndex = Mathf.Clamp(maxVisual - 1, 0, MaxLayers - 1);
+                _dissolveTween = DOTween.To(
+                        () => _layerDissolve[layerIndex],
+                        v =>
+                        {
+                            _layerDissolve[layerIndex] = v;
+                            PushProperties();
+                        },
+                        0f,
+                        _settings.AppearSeconds)
+                    .SetTarget(this)
+                    .SetEase(Ease.OutQuad);
+            }
+            else if (newCount < _previousShieldCount)
+            {
+                // Lost shield(s): dissolve the outermost former layer.
+                var layerIndex = Mathf.Clamp(prevVisual - 1, 0, MaxLayers - 1);
+                _dissolveTween = DOTween.To(
+                        () => _layerDissolve[layerIndex],
+                        v =>
+                        {
+                            _layerDissolve[layerIndex] = v;
+                            PushProperties();
+                        },
+                        1f,
+                        _settings.DissolveSeconds)
+                    .SetTarget(this)
+                    .SetEase(Ease.InQuad);
+            }
+
+            if (_fieldRenderer != null)
+            {
+                _fieldRenderer.enabled = newCount > 0;
+            }
+        }
+
+        private void SetImmediateState(int count)
+        {
+            if (_settings == null)
+            {
+                return;
+            }
+
+            var maxVisual = Mathf.Min(count, _settings.MaxVisualLayers);
+
+            for (var i = 0; i < MaxLayers; i++)
+            {
+                _layerDissolve[i] = i < maxVisual ? 0f : 1f;
+            }
+
+            if (_fieldRenderer != null)
+            {
+                _fieldRenderer.enabled = count > 0;
+            }
+
+            PushProperties();
+        }
+
+        private void PushProperties()
+        {
+            if (_fieldRenderer == null || _settings == null || _block == null)
+            {
+                return;
+            }
+
+            _block.SetFloatArray(DissolveProgressId, _layerDissolve);
+            _block.SetFloat(ActiveLayersId, _settings.MaxVisualLayers);
+            _block.SetColor(ColorId, _currentColor);
+            _fieldRenderer.SetPropertyBlock(_block);
         }
 
         private void PlayShieldChangeFx(int currentCount)
@@ -116,13 +209,13 @@ namespace BalloonParty.Projectile.View
                 var gainPosition = lastHit != null
                     ? _grid.IndexToWorldPosition(lastHit.SlotIndex.Value)
                     : transform.position;
-                SpawnVfx(_shieldGainVfxPrefab, gainPosition, CurrentColor());
+                SpawnVfx(_shieldGainVfxPrefab, gainPosition, _currentColor);
             }
             else if (currentCount < _previousShieldCount)
             {
                 var direction = _model?.Direction ?? Vector3.up;
                 var rotation = Quaternion.LookRotation(Vector3.forward, direction);
-                SpawnVfxRotated(_shieldLoseVfxPrefab, transform.position, rotation, CurrentColor());
+                SpawnVfxRotated(_shieldLoseVfxPrefab, transform.position, rotation, _currentColor);
             }
         }
 
@@ -148,28 +241,10 @@ namespace BalloonParty.Projectile.View
 
         private void UpdateColor(string colorName)
         {
-            _currentColor = string.IsNullOrEmpty(colorName) ? Color.white : _palette.GetColor(colorName);
-            var targetColor = _currentColor.WithAlpha(_alpha);
-
-            foreach (var shield in _shields)
-            {
-                if (shield != null)
-                {
-                    shield.DOColor(targetColor, _colorDuration);
-                }
-            }
-        }
-
-        private void UpdateShieldVisuals(int count)
-        {
-            for (var i = 0; i < _shields.Count; i++)
-            {
-                var target = i < count
-                    ? Vector3.one + (Vector3.right * _scaleIncrements.x * i) + (Vector3.up * _scaleIncrements.y * i)
-                    : Vector3.zero;
-
-                _shields[i].transform.DOScale(target, _scaleDuration);
-            }
+            _currentColor = string.IsNullOrEmpty(colorName)
+                ? Color.white
+                : _palette.GetColor(colorName);
+            PushProperties();
         }
     }
 }
