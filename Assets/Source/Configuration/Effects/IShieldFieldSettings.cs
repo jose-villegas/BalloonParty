@@ -13,6 +13,7 @@ namespace BalloonParty.Configuration.Effects
         float MorphCloseDuration { get; }
         float MorphOpenDuration { get; }
         float MorphBraceDuration { get; }
+        float MorphCheckInterval { get; }
         float SquashFrequency { get; }
         float SquashDamping { get; }
         float SquashImpulseStrength { get; }

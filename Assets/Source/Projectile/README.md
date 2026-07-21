@@ -47,8 +47,10 @@ tip to the tail. When lost, the outermost layer crumbles away (starting from the
 
 While the ball is flying, the glow stretches into a comet shape with a tail trailing behind
 it. As the ball nears a wall, the glow smoothly tucks into a circle, holds that round shape
-through the bounce, then stretches back into the comet as it flies away. The field also
-ripples faster the quicker the ball moves.
+through the bounce, then stretches back into the comet as it flies away. On impact, the circle
+visually squashes against the surface — compressing along the wall normal and expanding
+sideways — then springs back. This works for both flat wall bounces and angled deflector
+bounces. The field also ripples faster the quicker the ball moves.
 
 A four-state cycle (Cruising → Closing → Bracing → Opening) drives the shape transition.
 The game predicts how far the next wall is; when it falls below a threshold, closing begins.
@@ -56,14 +58,14 @@ On bounce, the shield force-snaps to circle regardless of the current state.
 
 ### Implementation
 
-`ProjectileShieldView` feeds 7 uniforms to the `EMShieldField.shader` (a single-quad
+`ProjectileShieldView` feeds 10 uniforms to the `EMShieldField.shader` (a single-quad
 procedural shader — one draw call). All uniforms — per-layer dissolve/reveal arrays, active
-layers, color, velocity factor, noise scroll direction, and shape lerp — are written to a
-single `MaterialPropertyBlock` and pushed through `WriteAllProperties()`. Both tween callbacks
-and the per-frame `Update()` call this method, which writes **every** property before calling
-`SetPropertyBlock`. This single-push pattern prevents split-brain overwrites where one code
-path's push would erase properties written by another. Configuration lives in
-`IShieldFieldSettings` (injected, not serialized on the view).
+layers, color, velocity factor, noise scroll direction, shape lerp, noise intensity, squash
+amount, and squash axis — are written to a single `MaterialPropertyBlock` and pushed through
+`WriteAllProperties()`. Both tween callbacks and the per-frame `Update()` call this method,
+which writes **every** property before calling `SetPropertyBlock`. This single-push pattern
+prevents split-brain overwrites where one code path's push would erase properties written by
+another. Configuration lives in `IShieldFieldSettings` (injected, not serialized on the view).
 
 All VFX (gain/lose/bounce particles) are spawned via `ParticlePoolChannel` as world-space
 particles — they are not children of the projectile and survive recycling independently.
@@ -123,9 +125,9 @@ The model stores buffs in a plain list exposed via `HasBuff(ProjectileBuffId)` (
 - **`IWriteableProjectileModel`** — mutable interface extending `IProjectileModel`; re-declares reactive properties as `ReactiveProperty<T>` (via `new` keyword), adds setters, and adds `AddBuff`/`RemoveBuff`. Used by `ProjectileView`, `ThrowerController`, the buff service, and cheats that mutate state.
 - **`ProjectileModel`** — concrete class implementing `IWriteableProjectileModel`. Only referenced at creation sites (`ThrowerController.LoadProjectile`).
 - **`ProjectilePositionProvider`** — singleton holding the live projectile transform for systems that need its position without a reference to the view (set on load, cleared on reload).
-- **`ProjectileView`** — MonoBehaviour implementing `IPoolable`. Drives manual movement in `FixedUpdate` (skipped while `PauseService.IsAnyPaused`), checks bounds against `IGameConfiguration.LimitsClockwise`, reflects direction and clamps position on bounce. Handles `OnTriggerEnter2D` — resolves the `BalloonView` via `GetComponent<BalloonView>()` on the collider (O(1) when the collider lives on the same GameObject as `BalloonView`) and hands the collision to `ProjectileHitResolver`, playing the returned `ProjectileHitVisual`. On each surviving wall hit it also evaluates Sweep beside the existing Cruise entry check: if the segment popped at least one balloon, never touched a >1HP balloon on that leg, and the backward circle-cast to `LastBouncePosition` is now clear, it awards a Sweep tap using the shared Cruise tap value and restarts the same tap-beat ease, then resets the segment state for the next leg. Publishes `ProjectileDestroyedMessage` and `BalanceBalloonsMessage` when shields reach zero, and `ShieldLostMessage` on each shield-spending wall bounce. Calls `_shieldView.OnBounce(oldDir, newDir)` on wall bounces and balloon deflects to drive the shield field's lean dynamics. Neighbor nudging happens on the balloon side via `NudgeService`.
+- **`ProjectileView`** — MonoBehaviour implementing `IPoolable`. Drives manual movement in `FixedUpdate` (skipped while `PauseService.IsAnyPaused`), checks bounds against `IGameConfiguration.LimitsClockwise`, reflects direction and clamps position on bounce. Handles `OnTriggerEnter2D` — resolves the `BalloonView` via `GetComponent<BalloonView>()` on the collider (O(1) when the collider lives on the same GameObject as `BalloonView`) and hands the collision to `ProjectileHitResolver`, playing the returned `ProjectileHitVisual`. On each surviving wall hit it also evaluates Sweep beside the existing Cruise entry check: if the segment popped at least one balloon, never touched a >1HP balloon on that leg, and the backward circle-cast to `LastBouncePosition` is now clear, it awards a Sweep tap using the shared Cruise tap value and restarts the same tap-beat ease, then resets the segment state for the next leg. Publishes `ProjectileDestroyedMessage` and `BalanceBalloonsMessage` when shields reach zero, and `ShieldLostMessage` on each shield-spending wall bounce. Calls `_shieldView.OnBounce(oldDir, newDir, speed)` on wall bounces and balloon deflects to drive the shield field's squash dynamics. Neighbor nudging happens on the balloon side via `NudgeService`.
 - **`ProjectileTrail`** — child MonoBehaviour on the trail GameObject. `Enable()`/`Disable()` manage `TrailRenderer` emitting state using `async UniTaskVoid` with `destroyCancellationToken`. Not `IPoolable` — lifecycle follows the pooled projectile parent.
-- **`ProjectileShieldView`** — MonoBehaviour on the projectile prefab. Drives the `EMShieldField` shader via `MaterialPropertyBlock`: subscribes to `ShieldsRemaining` (reveal wipe on gain, noise dissolve on loss) and `ColorName` (tint) via UniRx. Per-frame `Update` steps a 3-point trailing spring system (fast dome / mid EMA / slow tail via `DampedSpring2D`) and a squash spring (`DampedSpring1D`), then pushes all properties through the unified `PushProperties()` method; tween callbacks use the same method, ensuring every `SetPropertyBlock` call writes the full property set. `OnBounce(oldDir, newDir)` injects lean impulses into the springs and a squash impulse proportional to the direction change. Spawns gain/lose/bounce VFX via `ParticlePoolChannel`.
+- **`ProjectileShieldView`** — MonoBehaviour on the projectile prefab. Drives the `EMShieldField` shader via `MaterialPropertyBlock`: subscribes to `ShieldsRemaining` (reveal wipe on gain, noise dissolve on loss) and `ColorName` (tint) via UniRx. Per-frame `Update` steps the noise-scroll spring (`DampedSpring2D`) and squash spring (`DampedSpring1D`), runs the morph FSM, computes velocity-driven uniforms, and pushes all properties through the unified `WriteAllProperties()` method; tween callbacks use the same method, ensuring every `SetPropertyBlock` call writes the full property set. `OnBounce(oldDir, newDir, speed)` force-snaps to Bracing (circle), computes the impact normal as `normalize(newDir - oldDir)`, transforms it to local UV space, and injects a speed-scaled impulse into the squash spring. Spawns gain/lose/bounce VFX via `ParticlePoolChannel`.
 
 ## Interactions
 

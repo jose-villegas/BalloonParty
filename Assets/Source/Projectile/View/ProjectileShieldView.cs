@@ -152,7 +152,7 @@ namespace BalloonParty.Projectile.View
                 case ShieldMorphState.Cruising:
                     _shapeLerp = 1f;
                     _morphTimer += dt;
-                    if (_morphTimer >= 0.05f)
+                    if (_morphTimer >= _settings.MorphCheckInterval)
                     {
                         _morphTimer = 0f;
                         var distance = ComputeWallDistance();
@@ -263,12 +263,18 @@ namespace BalloonParty.Projectile.View
             _morphTimer = 0f;
             _shapeLerp = 0f;
 
-            // Compute squash axis from reflection (wall normal = normalize(newDir - oldDir))
+            // Compute squash axis analytically in the post-bounce local frame
+            // (avoids stale transform — OnBounce fires before parent rotates)
             var wallNormal = (newDirection - oldDirection);
             if (wallNormal.sqrMagnitude > 0.001f)
             {
                 wallNormal.Normalize();
-                _squashAxis = (Vector2)transform.InverseTransformDirection(wallNormal);
+                // Rotate wallNormal into newDirection's local frame (newDirection = new "up")
+                var cos = newDirection.y;
+                var sin = -newDirection.x;
+                _squashAxis = new Vector2(
+                    wallNormal.x * cos - wallNormal.y * sin,
+                    wallNormal.x * sin + wallNormal.y * cos);
                 _squashAxis.Normalize();
 
                 // Impulse scaled by speed: faster = stronger squash

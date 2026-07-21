@@ -39,6 +39,9 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Seconds to hold full circle at bounce moment.")]
         [SerializeField] [Range(0f, 0.5f)] private float _morphBraceDuration = 0.05f;
 
+        [Tooltip("Interval in seconds between wall-distance checks during cruise.")]
+        [SerializeField] [Range(0.01f, 0.2f)] private float _morphCheckInterval = 0.05f;
+
         [Header("Performance")]
         [Tooltip("Maximum number of visual layers rendered.")]
         [SerializeField] [Range(1, 30)] private int _maxVisualLayers = 5;
@@ -63,6 +66,7 @@ namespace BalloonParty.Configuration.Effects
         public float MorphCloseDuration => _morphCloseDuration;
         public float MorphOpenDuration => _morphOpenDuration;
         public float MorphBraceDuration => _morphBraceDuration;
+        public float MorphCheckInterval => _morphCheckInterval;
         public int MaxVisualLayers => _maxVisualLayers;
         public float SquashFrequency => _squashFrequency;
         public float SquashDamping => _squashDamping;

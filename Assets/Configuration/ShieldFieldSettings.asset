@@ -23,6 +23,6 @@ MonoBehaviour:
   _morphOpenDuration: 0.15
   _morphBraceDuration: 0.15
   _maxVisualLayers: 10
-  _squashFrequency: 14
-  _squashDamping: 0.35
-  _squashImpulseStrength: 18
+  _squashFrequency: 15
+  _squashDamping: 0.25
+  _squashImpulseStrength: 35

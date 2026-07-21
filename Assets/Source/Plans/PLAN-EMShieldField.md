@@ -35,12 +35,12 @@ ProjectileShieldView (MonoBehaviour, subscribes via UniRx)
         │  │  • gain → tween dissolve[layer] 1→0              │
         │  │  • lose → tween dissolve[layer] 0→1              │
         │  │ Per frame:                                        │
-        │  │  • step noise spring + morph FSM                  │
+        │  │  • step noise spring + squash spring + morph FSM  │
         │  │  • WriteAllProperties() → SetPropertyBlock()      │
         │  └──────────────────────────────────────────────────┘
         │
         ▼
-MaterialPropertyBlock (7 uniforms pushed per frame)
+MaterialPropertyBlock (10 uniforms pushed per frame)
         │
         ▼
 EMShieldField.shader — single quad, 1 draw call
@@ -180,6 +180,8 @@ _RevealEdge
 ```hlsl
 _VelocityFactor      // sqrt-normalized speed (driven by MPB)
 _RippleAmplitude, _RippleFrequency, _RippleSpeed
+_SquashAmount        // 0–1, spring-driven compression (driven by MPB)
+_SquashAxis          // Vector2, impact surface normal in UV space (driven by MPB)
 ```
 
 ### Tip & Shape Mask
@@ -194,7 +196,7 @@ float _DissolveProgress[30];   // noise dissolve per layer (0 = solid, 1 = gone)
 float _RevealProgress[30];     // reveal wipe per layer (0 = hidden, 1 = shown)
 ```
 
-### MPB Uniforms (7 values pushed from C# each frame)
+### MPB Uniforms (10 values pushed from C# each frame)
 | Uniform | Type | Source |
 |---------|------|--------|
 | `_DissolveProgress[]` | float[30] | Tween-driven per-layer dissolve |
@@ -204,6 +206,9 @@ float _RevealProgress[30];     // reveal wipe per layer (0 = hidden, 1 = shown)
 | `_VelocityFactor` | float | `sqrt(speed / MaxVisualSpeed)` |
 | `_NoiseScrollDir` | Vector4 | Noise spring offset in quad-local space |
 | `_ShapeLerp` | float | Morph FSM output (0 = circle, 1 = comet) |
+| `_NoiseIntensity` | float | Velocity-scaled noise strength |
+| `_SquashAmount` | float | `abs(squashSpring.Position)`, clamped 0–1 |
+| `_SquashAxis` | Vector4 | Impact normal in local UV space |
 
 ### Pole Singularity Handling
 
@@ -232,8 +237,9 @@ thickness as `sin²(θ)` approaches zero via `smoothstep` to avoid visual pinchi
   `ComputeWallDistance` uses `WallLimits.TryFindCrossing` to predict how far the next wall is
   along the current heading. When that distance drops below `MorphCloseDistance`, the field
   begins closing from comet to circle.
-- **`OnBounce(Vector2 oldDir, Vector2 newDir)`** — called by `ProjectileView` on wall bounce and
-  balloon deflect. Force-snaps to **Bracing** (circle shape, `_ShapeLerp = 0`).
+- **`OnBounce(Vector2 oldDir, Vector2 newDir, float speed)`** — called by `ProjectileView` on
+  wall bounce and balloon deflect. Force-snaps to **Bracing** (circle shape, `_ShapeLerp = 0`)
+  and injects a squash impulse into the spring scaled by `speed / MaxVisualSpeed`.
 - Quad orientation: child of projectile (inherits rotation automatically)
 - **Color tinting**: subscribes to `model.ColorName`, pushes tint via `MPB.SetColor`
 - **Zero shields / initial state**: renderer disabled when shields = 0; re-enabled on first
@@ -259,6 +265,9 @@ internal interface IShieldFieldSettings
     float MorphCloseDuration { get; }      // seconds to morph from comet to circle
     float MorphOpenDuration { get; }       // seconds to morph from circle back to comet
     float MorphBraceDuration { get; }      // seconds to hold the circle shape after closing
+    float SquashFrequency { get; }         // spring oscillation Hz (default 14)
+    float SquashDamping { get; }           // underdamped for visible bounce-back (default 0.35)
+    float SquashImpulseStrength { get; }   // base impulse before speed scaling (default 18)
 }
 ```
 
@@ -311,8 +320,22 @@ Assets/
   upcoming walls. When the wall is closer than `MorphCloseDistance`, the field begins closing.
 - **Bounce snap**: `OnBounce` force-snaps to **Bracing** (circle) regardless of current state.
 - Max visual layers increased from 5 to 30.
-- Removed: 3-point trailing springs, squash-on-impact (`DampedSpring1D`), lean/deform
-  direction, dome overlay — replaced by the simpler morph approach.
+- Removed: 3-point trailing springs, lean/deform direction, dome overlay — replaced by the
+  simpler morph approach.
+
+### Phase 4b — Squash-on-Impact ✓
+- **Squash deformation**: on bounce, the circle-mode shield visually compresses against the
+  impact surface then springs back. A `DampedSpring1D` (underdamped, 14 Hz default) drives
+  `_SquashAmount`; the impact normal — transformed to local UV space — sets `_SquashAxis`.
+- **UV axis scaling** (shader): decomposes polar `p` into along/perpendicular components
+  relative to `_SquashAxis`, compresses along and expands perpendicular (area-preserving:
+  `compress × expand ≈ 1`). Max 25% compression; ~4 ALU cost.
+- **Circle-only guard**: squash fades by `(1 - sl)`, so it is only visible while the field is
+  in circle mode (Bracing state) and naturally disappears during comet morph.
+- **Speed-scaled impulse**: `OnBounce(oldDir, newDir, speed)` computes the wall/deflector
+  normal as `normalize(newDir - oldDir)`, scales the impulse by `speed / MaxVisualSpeed`, and
+  injects it into the spring. Works for both axis-aligned wall bounces and radial deflector
+  bounces — the formula naturally yields the correct surface normal in both cases.
 
 ### Phase 5 — Tuning & Polish
 - Author `ShieldFieldSettings.asset` with sensible defaults

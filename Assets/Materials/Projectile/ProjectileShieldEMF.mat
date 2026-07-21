@@ -86,17 +86,17 @@ Material:
     - _DstBlend: 0
     - _EdgeFade: 0.2
     - _EditorPreview: 0
-    - _FieldLineThickness: 0.0018
+    - _FieldLineThickness: 0.0075
     - _FlowFrequency: 20
     - _FlowSpeed: 8
     - _FlowStrength: 0.4
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _GlowIntensity: 1.6
-    - _GlowWidth: 0.0185
+    - _GlowIntensity: 0.35
+    - _GlowWidth: 0.025
     - _JunctionSmooth: 0.0512
-    - _LayerSpacing: 0.0082
+    - _LayerSpacing: 0.0069
     - _LeanBendPower: 4
     - _LeanStrength: 2.5
     - _LeanStrengthY: 0.3
