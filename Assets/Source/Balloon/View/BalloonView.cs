@@ -8,6 +8,7 @@ using BalloonParty.Nudge;
 using BalloonParty.Projectile;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Animation;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Rendering;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
@@ -256,8 +257,8 @@ namespace BalloonParty.Balloon.View
             var defaultPrefab = _balloonsConfig.DefaultPopVfxPrefab;
             if (defaultPrefab == null)
             {
-                Debug.LogWarning(
-                    "BalloonView.PlayHitVfxForOutcome: DefaultPopVfxPrefab is null in IBalloonsConfiguration.",
+                Log.Warn("BalloonView",
+                    "PlayHitVfxForOutcome: DefaultPopVfxPrefab is null in IBalloonsConfiguration.",
                     this);
                 return;
             }

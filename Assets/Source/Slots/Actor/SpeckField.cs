@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
@@ -132,14 +133,14 @@ namespace BalloonParty.Slots.Actor
             // by the graphics API — GLES3.0/2.0 lack them, so a mobile build must use Vulkan or Metal.
             if (!SystemInfo.supportsComputeShaders)
             {
-                Debug.LogWarning("SpeckField disabled: compute shaders unsupported (graphics API — use Vulkan/Metal).", this);
+                Log.Warn("SpeckField", "disabled: compute shaders unsupported (graphics API — use Vulkan/Metal).", this);
                 enabled = false;
                 return;
             }
 
             if (SystemInfo.maxComputeBufferInputsVertex < 1)
             {
-                Debug.LogWarning("SpeckField disabled: the vertex stage can't read compute buffers on this " +
+                Log.Warn("SpeckField", "disabled: the vertex stage can't read compute buffers on this " +
                     "device/API (use Vulkan/Metal, or a texture-based fallback).", this);
                 enabled = false;
                 return;

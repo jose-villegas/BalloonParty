@@ -3,6 +3,7 @@ using UnityEditor;
 #endif
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Capabilities;
 using UniRx;
@@ -96,8 +97,8 @@ namespace BalloonParty.Balloon.Type
         {
             if (_renderer == null)
             {
-                Debug.LogError(
-                    $"SoapBubbleClusterVariant.Bind: _renderer is not assigned on \"{gameObject.name}\" " +
+                Log.Error("SoapBubbleCluster",
+                    $"Bind: _renderer is not assigned on \"{gameObject.name}\" " +
                     "— bubble count visuals will be disabled. Fix the prefab.",
                     this);
                 return;

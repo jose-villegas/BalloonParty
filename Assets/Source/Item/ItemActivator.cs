@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using Cysharp.Threading.Tasks;
@@ -67,13 +68,14 @@ namespace BalloonParty.Item
 
             if (!_handlerMap.TryGetValue(itemSlot.Item.Value, out var handler))
             {
-                Debug.LogError(
-                    $"ItemActivator.OnActorHit: no handler registered for item type " +
+                Log.Error("ItemActivator",
+                    $"OnActorHit: no handler registered for item type " +
                     $"\"{itemSlot.Item.Value}\" — this is a configuration bug.");
                 return;
             }
 
             var context = new ItemActivationContext(balloon, msg.WorldPosition, msg.ProjectileDirection, msg.Context);
+            Log.Info("Item", $"{itemSlot.Item.Value} activated at ({msg.WorldPosition.x:F1}, {msg.WorldPosition.y:F1})");
             ActivateAsync(handler, context).Forget();
         }
 

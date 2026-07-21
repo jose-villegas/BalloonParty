@@ -6,8 +6,22 @@ Runtime diagnostic tools for performance monitoring and device configuration.
 
 | File | What it does |
 |---|---|
+| `Log` | Static logging facade — call `Log.Info(tag, msg)`, `Log.Warn(tag, msg)`, `Log.Error(tag, msg)`, or `Log.Assert(condition, tag, msg)` from anywhere. `Info` and `Assert` are decorated with `[Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]`, so they compile out of release builds automatically — no `#if` guards at call sites. `Warn` and `Error` remain in all builds. Each tag gets a deterministic color in the Unity Console via rich text. Static class, no DI needed |
 | `FPSCounter` | MonoBehaviour that displays average FPS and lowest frame rate per 0.5s interval as an `OnGUI` overlay. Color-coded: green (\f$\ge\f$ warn threshold), yellow (\f$\ge\f$ bad threshold), red (\f$<\f$ bad). Colors and thresholds are read live from the Inspector fields every `OnGUI`; font size is baked into the `GUIStyle` the first time it's built and never rebuilt after, so a font-size change needs a domain reload (entering/exiting Play mode) to take effect. **Dev-only** — the whole class is guarded by `UNITY_EDITOR \|\| DEVELOPMENT_BUILD`, so it compiles out of release builds (the scene component and its serialized settings drop with it) |
 | `FrameRateSettings` | MonoBehaviour that sets `Application.targetFrameRate` on `Awake`. Disables VSync (`vSyncCount = 0`) so the target takes effect. Three modes: **Default60** (fixed 60), **MatchDisplay** (device-dependent — see below), **Custom** (exposes a frame rate field, shown conditionally via `[ShowIf]`). Default mode is `MatchDisplay`. Ships in **all builds** — it's the only code setting the target frame rate, so release needs it |
+
+## Log — tagged logging
+
+Use `Log` instead of raw `Debug.Log` / `Debug.LogWarning` / `Debug.LogError` throughout the runtime codebase. The tag string groups related messages and gets a per-tag color in the Console.
+
+```csharp
+Log.Info("Spawner", $"Spawned {count} actors");   // stripped from release builds
+Log.Warn("Grid",    "Row overflow — clamping");    // survives in all builds
+Log.Error("Score",  "Negative attribution");       // survives in all builds
+Log.Assert(hp > 0,  "Health", "HP went negative"); // stripped from release builds
+```
+
+`Info` and `Assert` auto-strip via `[Conditional]` — callers don't need `#if` guards and the string interpolation arguments are also eliminated by the compiler. `Warn` and `Error` are unconditional because warnings and errors should be visible in release diagnostics. `Warn` and `Error` accept an optional `UnityEngine.Object context` parameter to highlight the source object in the Hierarchy on click.
 
 ## Usage
 

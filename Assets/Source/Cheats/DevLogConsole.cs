@@ -3,6 +3,7 @@
 // reference, keeping the console out of those builds entirely.
 #if UNITY_EDITOR || (DEVELOPMENT_BUILD && (UNITY_ANDROID || UNITY_IOS))
 
+using BalloonParty.Shared.Diagnostics;
 using UnityEngine;
 
 namespace BalloonParty.Cheats
@@ -26,7 +27,7 @@ namespace BalloonParty.Cheats
 
             if (_consolePrefab == null)
             {
-                Debug.LogWarning("DevLogConsole: no console prefab assigned — nothing to spawn.", this);
+                Log.Warn("DevLogConsole", "no console prefab assigned — nothing to spawn.", this);
                 return;
             }
 

@@ -5,6 +5,7 @@ using BalloonParty.Game.Health;
 using BalloonParty.Game.Run;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared.GameState;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UniRx;
@@ -194,10 +195,8 @@ namespace BalloonParty.Game.Level
             if (overflow > 0)
             {
                 _bankedExcess[color] = _bankedExcess.GetValueOrDefault(color) + overflow;
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-                Debug.Log($"[LevelController] Banked {overflow} excess {color} " +
+                Log.Info("LevelController", $"Banked {overflow} excess {color} " +
                     $"(colour bank {_bankedExcess[color]}, run bank {TotalExcessPoints()})");
-#endif
             }
 
             if (granted <= 0)
@@ -319,6 +318,9 @@ namespace BalloonParty.Game.Level
             _phase.Value = LevelUpPhase.Pending;
             _pendingNewLevel = _level.Value + 1;
 
+            Log.Info("Level", $"Level-up detected → pending level {_pendingNewLevel} " +
+                $"(colors completed: {string.Join(", ", completedColors)})");
+
             _levelUpPublisher.Publish(new ScoreLevelUpMessage(_pendingNewLevel, completedColors));
             _navigation.TransitionTo(NavigationState.LevelUp);
         }
@@ -335,6 +337,8 @@ namespace BalloonParty.Game.Level
             _level.Value = _pendingNewLevel;
             ResetColorProgress();
             _phase.Value = LevelUpPhase.Transitioning;
+
+            Log.Info("Level", $"Level {_level.Value} confirmed — progress reset, transitioning");
         }
 
         // Transitioning → Playing: the Ascent has settled, so scoring reopens.

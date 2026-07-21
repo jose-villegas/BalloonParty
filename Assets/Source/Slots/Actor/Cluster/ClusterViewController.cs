@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Slots.Grid;
+using BalloonParty.Shared.Diagnostics;
 using UniRx;
 using UnityEngine;
 using VContainer;
@@ -51,7 +52,7 @@ namespace BalloonParty.Slots.Actor.Cluster
             var prefab = GetPrefab(_settings);
             if (prefab == null)
             {
-                Debug.LogError(
+                Log.Error("ClusterView",
                     $"{GetType().Name}: Prefab is not assigned on {typeof(TSettings).Name}. " +
                     "Cluster views will not spawn.");
                 return;

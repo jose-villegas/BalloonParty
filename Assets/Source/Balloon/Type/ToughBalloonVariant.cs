@@ -3,6 +3,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
@@ -50,8 +51,8 @@ namespace BalloonParty.Balloon.Type
 
             if (_renderer == null)
             {
-                Debug.LogError(
-                    $"ToughBalloonVariant.Bind: _renderer is not assigned on \"{gameObject.name}\" " +
+                Log.Error("ToughBalloon",
+                    $"Bind: _renderer is not assigned on \"{gameObject.name}\" " +
                     "— crack damage visuals will be disabled. Fix the prefab.",
                     this);
                 return;

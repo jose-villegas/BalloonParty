@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using UnityEngine;
@@ -155,11 +156,9 @@ namespace BalloonParty.Game.Score.Behaviours
         // silently, since the default-trail fallback for a leftover 1 was removed as dead code.
         private static void AssertNoRemainder(IReadOnlyList<int> denominations)
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-            Debug.Assert(
-                denominations.Count == 0 || denominations[^1] != 1,
-                "BigScoreTrailBehaviour: Decompose left a terminal remainder of 1 — did 2 or 3 drop out of ShapeCatalog.Denominations?");
-#endif
+            Log.Assert(
+                denominations.Count == 0 || denominations[^1] != 1, "BigScoreTrail",
+                "Decompose left a terminal remainder of 1 — did 2 or 3 drop out of ShapeCatalog.Denominations?");
         }
 
         // Fills the grow-only cost tables for every t in [0, total]: the fewest pieces to build t and whether that

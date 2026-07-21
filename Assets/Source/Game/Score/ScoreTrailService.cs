@@ -4,6 +4,7 @@ using System.Threading;
 using BalloonParty.Game.Run;
 using BalloonParty.Game.Score.Behaviours;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Actor;
@@ -127,8 +128,8 @@ namespace BalloonParty.Game.Score
         {
             if (!_endpoints.TryGet(msg.ColorName, out var endpoint))
             {
-                Debug.LogWarning(
-                    $"ScoreTrailService: no target provider registered for " +
+                Log.Warn("ScoreTrail",
+                    $"no target provider registered for " +
                     $"color \"{msg.ColorName}\" — score trail skipped.");
                 return;
             }
@@ -182,18 +183,14 @@ namespace BalloonParty.Game.Score
                 // (an ownership bug upstream) — drop it rather than corrupt score/progress state.
                 if (_cumulative >= _total)
                 {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-                    Debug.LogError(
-                        $"ScoreTrail {_colorName}: arrival (score {score}, points {points}) reported " +
+                    Log.Error("ScoreTrail",
+                        $"{_colorName}: arrival (score {score}, points {points}) reported " +
                         $"after the group already summed to {_total} — dropped. Double-completion upstream?");
-#endif
                     return;
                 }
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-                Debug.Assert(_cumulative + points <= _total,
-                    $"ScoreTrail {_colorName}: reported points {_cumulative + points} exceed group total {_total}.");
-#endif
+                Log.Assert(_cumulative + points <= _total, "ScoreTrail",
+                    $"{_colorName}: reported points {_cumulative + points} exceed group total {_total}.");
                 _cumulative += points;
                 _publisher.Publish(new ScoreTrailArrivedMessage(_colorName, score, points, at));
             }

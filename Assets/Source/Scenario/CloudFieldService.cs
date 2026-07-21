@@ -1,6 +1,7 @@
 using System;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Effects;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Slots.Actor;
@@ -51,7 +52,7 @@ namespace BalloonParty.Scenario
         {
             if (_settings?.DensityMaterial == null || _display == null)
             {
-                Debug.LogWarning("CloudFieldService disabled: assign a density material on the CloudFieldSettings.");
+                Log.Warn("CloudField", "disabled: assign a density material on the CloudFieldSettings.");
                 return;
             }
 

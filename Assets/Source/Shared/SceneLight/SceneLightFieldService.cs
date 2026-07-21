@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Disturbance;
 using UniRx;
 using UnityEngine;
@@ -370,7 +371,7 @@ namespace BalloonParty.Shared.SceneLight
                 return;
             }
 
-            Debug.LogWarning($"SceneLightFieldService: more than {_maxLights} lights registered — the extras " +
+            Log.Warn("SceneLightField", $"more than {_maxLights} lights registered — the extras " +
                              "are dropped this render. Raise MaxLights in the settings (up to the shader's " +
                              $"{ShaderStampCapacity}) if this is real.");
             _warnedOverflow = true;

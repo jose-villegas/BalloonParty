@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Balloon.Type;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
@@ -87,7 +88,7 @@ namespace BalloonParty.Cheats
             var entry = FindEntry(type);
             if (entry == null)
             {
-                Debug.LogWarning($"SpawnBalloonCheat: no BalloonsConfiguration entry for type {type}.");
+                Log.Warn("SpawnBalloonCheat", $"no BalloonsConfiguration entry for type {type}.");
                 return;
             }
 

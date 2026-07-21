@@ -1,6 +1,7 @@
 using System;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UniRx;
@@ -74,6 +75,7 @@ namespace BalloonParty.Game.Health
             }
 
             _current.Value = Mathf.Max(0, _current.Value - amount);
+            Log.Info("Health", $"Damage {amount} → {_current.Value} HP remaining (spawn blocked)");
 
             if (_current.Value == 0)
             {

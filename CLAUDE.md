@@ -43,6 +43,9 @@ MessagePipe (`IPublisher<T>`/`ISubscriber<T>`), UniTask (`async UniTask`), DOTwe
 ### Comments
 - Comment the *why*, never the *what*. No block headers (`// =====`). No redundant comments (`// constructor`). XML docs only on non-obvious public API.
 
+### Logging
+- Use `Log.Info` / `.Warn` / `.Error` / `.Assert` (`Shared/Diagnostics/`) — never raw `Debug.Log`. `Info` and `Assert` auto-strip from release builds via `[Conditional]`; no `#if` guards needed.
+
 ### Naming & visibility
 - Namespaces mirror folder structure (`BalloonParty.Balloon.View`).
 - Cache animator params: `static readonly int Param = Animator.StringToHash("Param")`. Cache layer masks in static fields (lazy-init in MonoBehaviours — `NameToLayer` can't run in a static-field initializer there).

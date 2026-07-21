@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using MessagePipe;
@@ -137,6 +138,13 @@ namespace BalloonParty.Game.Score
             var multiplier = RecordStreakMultiplier(attributions, flags);
             ResolveAttributions(attributions, multiplier, resolved);
 
+            if (resolved.Count > 0)
+            {
+                Log.Info("Score", multiplier > 1
+                    ? $"Pop awarded {resolved.Count} color(s), ×{multiplier} streak"
+                    : $"Pop awarded {resolved.Count} color(s)");
+            }
+
             PublishPoints(resolved, multiplier, worldPosition, hitDirection);
         }
 
@@ -198,17 +206,15 @@ namespace BalloonParty.Game.Score
             IReadOnlyList<ScoreAttribution> attributions, int multiplier,
             List<(string Color, int Points, int BaseProgress)> resolved)
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
             for (var i = 0; i < attributions.Count; i++)
             {
                 for (var j = i + 1; j < attributions.Count; j++)
                 {
-                    Debug.Assert(attributions[i].ColorId != attributions[j].ColorId,
+                    Log.Assert(attributions[i].ColorId != attributions[j].ColorId, "ScoreController",
                         $"Duplicate colour '{attributions[i].ColorId}' in one attribution group — " +
                         "aggregate per colour at the source.");
                 }
             }
-#endif
             foreach (var attribution in attributions)
             {
                 var (baseProgress, granted) = _levelProgress.ClaimProgress(attribution.ColorId, attribution.Points * multiplier);

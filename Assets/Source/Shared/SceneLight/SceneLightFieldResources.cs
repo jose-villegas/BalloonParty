@@ -1,3 +1,4 @@
+using BalloonParty.Shared.Diagnostics;
 using UnityEngine;
 
 namespace BalloonParty.Shared.SceneLight
@@ -95,7 +96,7 @@ namespace BalloonParty.Shared.SceneLight
             var shader = serialized != null ? serialized : Shader.Find(shaderName);
             if (shader == null)
             {
-                Debug.LogError($"SceneLightFieldResources: shader '{shaderName}' not found (assign it on the " +
+                Log.Error("SceneLightField", $"shader '{shaderName}' not found (assign it on the " +
                                "Scene Light Field Settings asset for device builds) — the light field will not run.");
                 return null;
             }

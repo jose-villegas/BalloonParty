@@ -539,6 +539,21 @@ A runtime debug console in `Cheats/`. Press the **backtick** (`` ` ``) key to to
 
 ---
 
+## Logging
+
+Use `Log` (`Shared/Diagnostics/`) instead of raw `Debug.Log` / `Debug.LogWarning` / `Debug.LogError`.
+
+```csharp
+Log.Info("Spawner", $"Spawned {count} actors");
+Log.Warn("Grid",    "Row overflow");
+Log.Error("Score",  "Negative attribution");
+Log.Assert(hp > 0,  "Health", "HP went negative");
+```
+
+`Info` and `Assert` are `[Conditional]`-stripped from release builds — no `#if` guards needed at call sites. `Warn` and `Error` survive in all builds. The tag gives every call site a deterministic color in the Console and makes filtering easy.
+
+---
+
 ## Gizmos & Editor Drawing
 
 Two parallel drawing helpers provide identical method signatures and coordinate conventions across editor and runtime contexts:

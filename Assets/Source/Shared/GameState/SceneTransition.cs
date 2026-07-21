@@ -1,3 +1,4 @@
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Extensions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -39,7 +40,7 @@ namespace BalloonParty.Shared.GameState
         {
             if (string.IsNullOrWhiteSpace(_sceneName))
             {
-                Debug.LogWarning("[SceneTransition] No scene name configured.", this);
+                Log.Warn("SceneTransition", "No scene name configured.", this);
                 return;
             }
 
@@ -79,8 +80,8 @@ namespace BalloonParty.Shared.GameState
             }
 
             SceneManager.sceneLoaded -= OnSceneLoaded;
-            Debug.LogWarning(
-                $"[SceneTransition] Failed to preload scene \"{_sceneName}\".",
+            Log.Warn("SceneTransition",
+                $"Failed to preload scene \"{_sceneName}\".",
                 this);
         }
 

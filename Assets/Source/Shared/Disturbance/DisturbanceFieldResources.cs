@@ -1,4 +1,5 @@
 using BalloonParty.Configuration;
+using BalloonParty.Shared.Diagnostics;
 using UnityEngine;
 using UnityEngine.Rendering;
 using BalloonParty.Configuration.Effects;
@@ -92,7 +93,7 @@ namespace BalloonParty.Shared.Disturbance
         {
             if (shader == null)
             {
-                Debug.LogError($"DisturbanceFieldResources: {settingName} not assigned on IDisturbanceFieldSettings.");
+                Log.Error("DisturbanceField", $"{settingName} not assigned on IDisturbanceFieldSettings.");
                 return null;
             }
 

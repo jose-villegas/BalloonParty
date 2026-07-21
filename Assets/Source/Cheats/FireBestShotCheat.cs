@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Slots.Grid;
 using BalloonParty.Solver;
 using BalloonParty.Thrower;
@@ -51,7 +52,7 @@ namespace BalloonParty.Cheats
             var throwerView = Object.FindFirstObjectByType<ThrowerView>();
             if (throwerScope == null || throwerView == null)
             {
-                Debug.LogWarning("FireBestShotCheat: no thrower in the scene.");
+                Log.Warn("FireBestShotCheat", "no thrower in the scene.");
                 return;
             }
 
@@ -60,7 +61,7 @@ namespace BalloonParty.Cheats
                 _grid, _config, _balloonsConfig, throwerView, _throwerSettings, pulseDelay);
             if (context.Board.Count == 0)
             {
-                Debug.LogWarning("FireBestShotCheat: no targets on the board.");
+                Log.Warn("FireBestShotCheat", "no targets on the board.");
                 return;
             }
 
@@ -80,7 +81,7 @@ namespace BalloonParty.Cheats
 
             throwerScope.Container.Resolve<ThrowerController>()
                 .FireAt(ShotBoardGather.DirectionFromDegrees(bestAngle));
-            Debug.Log($"FireBestShotCheat: fired {bestAngle:F2}° (predicted score {bestScore}).");
+            Log.Info("FireBestShotCheat", $"fired {bestAngle:F2}° (predicted score {bestScore}).");
         }
     }
 }

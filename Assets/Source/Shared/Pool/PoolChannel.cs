@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading;
+using BalloonParty.Shared.Diagnostics;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -61,8 +62,8 @@ namespace BalloonParty.Shared.Pool
         {
             if (item == null)
             {
-                Debug.LogWarning(
-                    $"PoolChannel<{typeof(TItem).Name}>.Return: attempted to return a null item " +
+                Log.Warn("PoolChannel",
+                    $"<{typeof(TItem).Name}>.Return: attempted to return a null item " +
                     "— possible double-return.");
                 return;
             }

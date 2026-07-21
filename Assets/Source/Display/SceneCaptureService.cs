@@ -1,4 +1,5 @@
 using BalloonParty.Configuration;
+using BalloonParty.Shared.Diagnostics;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using VContainer;
@@ -46,7 +47,7 @@ namespace BalloonParty.Display
 
             if (_capturedLayers.value == 0)
             {
-                Debug.LogWarning("SceneCaptureService: captured layers mask is empty — " +
+                Log.Warn("SceneCapture", "captured layers mask is empty — " +
                                  "consumers will sample nothing.", this);
             }
 

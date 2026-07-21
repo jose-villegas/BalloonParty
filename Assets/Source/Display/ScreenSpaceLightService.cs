@@ -1,5 +1,6 @@
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Rendering;
 using UnityEngine;
 using VContainer;
@@ -162,7 +163,7 @@ namespace BalloonParty.Display
 
             if (smearShader == null || overlayShader == null)
             {
-                Debug.LogWarning("ScreenSpaceLightService: shader references missing — assign " +
+                Log.Warn("ScreenSpaceLight", "shader references missing — assign " +
                                  "them on the SceneLightFieldSettings asset; Shader.Find-only " +
                                  "shaders are stripped from builds. Disabling.", this);
                 return false;

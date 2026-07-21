@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
@@ -155,8 +156,8 @@ namespace BalloonParty.Item.Lightning
 
             if (effect is not IChainEffect chain)
             {
-                Debug.LogError(
-                    $"LightningItemHandler: pooled effect for \"{key}\" is not an IChainEffect — " +
+                Log.Error("LightningItem",
+                    $"pooled effect for \"{key}\" is not an IChainEffect — " +
                     "check the prefab's EffectView component.");
                 _poolManager.Return(key, effect);
                 return UniTask.CompletedTask;

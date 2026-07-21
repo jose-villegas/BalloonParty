@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UniRx;
@@ -60,7 +61,7 @@ namespace BalloonParty.Scenario.View
         {
             if (_netMaterial == null || _config == null)
             {
-                Debug.LogWarning("WallNetView disabled: net material or game configuration is missing.", this);
+                Log.Warn("WallNetView", "disabled: net material or game configuration is missing.", this);
                 enabled = false;
                 return;
             }

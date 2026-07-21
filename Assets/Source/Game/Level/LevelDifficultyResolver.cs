@@ -4,6 +4,7 @@ using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Actor.Archetype;
 using MessagePipe;
@@ -113,6 +114,10 @@ namespace BalloonParty.Game.Level
                 activeItems,
                 allowedColorNames);
 
+            Log.Info("LevelDifficulty", $"Resolved level {level}: " +
+                $"{allowedColorNames.Count} colors, {itemPickList.Count} item(s), " +
+                $"threshold {_pacing.ThresholdForLevel(level)} pts");
+
             PushRainbowBandGlobals(allowedColorNames);
         }
 
@@ -171,7 +176,7 @@ namespace BalloonParty.Game.Level
 
             if (level < 0)
             {
-                Debug.LogWarning($"[LevelDifficultyResolver] No fallback entry with FromLevel={level}; using default (-1) fallback.");
+                Log.Warn("LevelDifficulty", $"No fallback entry with FromLevel={level}; using default (-1) fallback.");
             }
 
             return fallback;

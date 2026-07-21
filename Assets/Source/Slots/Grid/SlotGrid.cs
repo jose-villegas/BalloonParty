@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using UniRx;
@@ -154,15 +155,15 @@ namespace BalloonParty.Slots.Grid
                 && _slots[col, row].Kind == SlotActorKind.Static
                 && !IsTraversable(col, row))
             {
-                Debug.LogWarning(
-                    $"SlotGrid.ComputePath: slot ({col},{row}) is not traversable. " +
+                Log.Warn("SlotGrid",
+                    $"ComputePath: slot ({col},{row}) is not traversable. " +
                     "Path passes through it — rerouting not yet implemented (Phase 9).");
             }
 
             if (_balancePathHolder.IsInTransit(col, row))
             {
-                Debug.LogWarning(
-                    $"SlotGrid.ComputePath: slot ({col},{row}) is in-transit from a balance move. " +
+                Log.Warn("SlotGrid",
+                    $"ComputePath: slot ({col},{row}) is in-transit from a balance move. " +
                     "Path crosses a relocating balloon — rerouting not yet implemented (Phase 9).");
             }
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
+using BalloonParty.Shared.Diagnostics;
 using UnityEngine;
 
 namespace BalloonParty.Balloon.Controller
@@ -54,12 +55,17 @@ namespace BalloonParty.Balloon.Controller
                 passes++;
                 if (passes >= maxPasses)
                 {
-                    Debug.LogError(
-                        $"BalancePlanner.Plan: no convergence after {passes} passes " +
+                    Log.Error("BalancePlanner",
+                        $"Plan: no convergence after {passes} passes " +
                         $"({movesOut.Count} moves) — aborting the run. A move cycle slipped past the " +
                         "revisit guard; the board is left mid-settle but consistent.");
                     break;
                 }
+            }
+
+            if (movesOut.Count > 0)
+            {
+                Log.Info("Balance", $"Settled in {passes} pass(es), {movesOut.Count} move(s)");
             }
 
             ReleaseVisited();

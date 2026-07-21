@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Capabilities;
@@ -97,8 +98,8 @@ namespace BalloonParty.Item.Paint
 
             if (effect is not ISplashEffect splash)
             {
-                Debug.LogError(
-                    $"PaintItemHandler: pooled effect for \"{key}\" is not an ISplashEffect — " +
+                Log.Error("PaintItem",
+                    $"pooled effect for \"{key}\" is not an ISplashEffect — " +
                     "check the prefab's EffectView component.");
                 _poolManager.Return(key, effect);
                 return UniTask.CompletedTask;

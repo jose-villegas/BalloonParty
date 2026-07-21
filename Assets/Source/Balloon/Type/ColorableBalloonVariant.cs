@@ -1,6 +1,7 @@
 using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Slots.Capabilities;
 using UnityEngine;
 using VContainer;
@@ -40,7 +41,7 @@ namespace BalloonParty.Balloon.Type
             var mask = _allowedColorsMask & levelAllowedColorsMask;
             if (mask == 0)
             {
-                Debug.LogWarning(
+                Log.Warn("ColorableBalloon",
                     $"{GetType().Name}.PickColor: the active level's allowed-color gate has no " +
                     "overlap with this prefab's color mask — falling back to the prefab mask alone.");
                 mask = _allowedColorsMask;
@@ -49,7 +50,7 @@ namespace BalloonParty.Balloon.Type
             var allowedCount = CountAllowedColors(mask);
             if (allowedCount == 0)
             {
-                Debug.LogError(
+                Log.Error("ColorableBalloon",
                     $"{GetType().Name}.PickColor: allowed-colors mask excludes all palette colors.");
                 return null;
             }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BalloonParty.Game.Level;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
@@ -90,6 +91,7 @@ namespace BalloonParty.Game.Run
             var level = _levelProgress.Level.Value;
             var score = _score.TotalScore.Value;
 
+            Log.Info("Run", $"Game over — level {level}, score {score}");
             _runMeta.RecordRun(level, score);
             _gameOverPublisher.Publish(new GameOverMessage(level, score));
             _navigation.TransitionTo(NavigationState.GameOver);
@@ -101,6 +103,8 @@ namespace BalloonParty.Game.Run
         {
             _lossPending = false;
             _generation++;
+
+            Log.Info("Run", $"Run started (generation {_generation})");
 
             foreach (var resettable in _resettables)
             {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Messages;
 using UnityEngine;
 
@@ -17,9 +18,7 @@ namespace BalloonParty.Game.Score.Behaviours
         private readonly IScoreTrailBehaviour _fallback;
         private readonly Entry[] _entries;
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
         private bool _warnedEmpty;
-#endif
 
         internal ScoreTrailBehaviourResolver(
             IScoreTrailBehaviourConfiguration config,
@@ -80,18 +79,16 @@ namespace BalloonParty.Game.Score.Behaviours
 
         private void WarnEmptyConfigOnce()
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (_warnedEmpty)
             {
                 return;
             }
 
             _warnedEmpty = true;
-            Debug.LogWarning(
-                "ScoreTrailBehaviourResolver: no ScoreTrailBehaviourConfiguration bound (or it has no " +
+            Log.Warn("ScoreTrailResolver",
+                "no ScoreTrailBehaviourConfiguration bound (or it has no " +
                 "entries) — falling back to DefaultScore. Assign the asset on GameLifetimeScope to enable " +
                 "score-magnitude discrimination.");
-#endif
         }
 
         private readonly struct Entry
