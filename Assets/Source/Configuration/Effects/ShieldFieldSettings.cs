@@ -19,20 +19,20 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Projectile speed that maps to full ripple amplitude.")]
         [SerializeField] [Range(1f, 30f)] private float _maxVisualSpeed = 15f;
 
-        [Tooltip("Fast spring frequency (dome region) — higher = quicker response.")]
-        [SerializeField] [Range(1f, 8f)] private float _springFrequency = 4f;
-
-        [Tooltip("Fast spring damping. 1 = critically damped, <1 = slight overshoot.")]
-        [SerializeField] [Range(0.5f, 1.2f)] private float _springDamping = 0.9f;
-
-        [Tooltip("Slow spring frequency (tail region) — lower = longer trail memory.")]
-        [SerializeField] [Range(0.3f, 4f)] private float _springFrequencySlow = 1.2f;
-
-        [Tooltip("Slow spring damping. Lower = more lag and overshoot on the tail.")]
-        [SerializeField] [Range(0.3f, 1.2f)] private float _springDampingSlow = 0.6f;
-
-        [Tooltip("Velocity impulse scale applied on direction change.")]
+        [Tooltip("Velocity impulse scale applied on bounce. Higher = more dramatic lean.")]
         [SerializeField] [Range(0.5f, 6f)] private float _leanImpulseScale = 1.5f;
+
+        [Tooltip("Power curve for lean impulse. >1 suppresses diagonals, keeping only strong reversals visible.")]
+        [SerializeField] [Range(0.1f, 4f)] private float _leanCurve = 1f;
+
+        [Tooltip("Lean spring frequency in Hz. Higher = faster oscillation and recovery.")]
+        [SerializeField] [Range(1f, 20f)] private float _leanFrequency = 5f;
+
+        [Tooltip("Lean spring damping. <1 = overshoot (bouncy feel), 1 = critical, >1 = overdamped.")]
+        [SerializeField] [Range(0.3f, 1.5f)] private float _leanDamping = 0.6f;
+
+        [Tooltip("Vertical bend strength (trailing behind). Independent of horizontal lean.")]
+        [SerializeField] [Range(0f, 2.5f)] private float _leanStrengthY = 0.3f;
 
         [Header("Noise Direction")]
         [Tooltip("Spring frequency for noise scroll direction — higher = faster tracking on direction change.")]
@@ -68,11 +68,11 @@ namespace BalloonParty.Configuration.Effects
         public float FinalDissolveSeconds => _finalDissolveSeconds;
         public float AppearSeconds => _appearSeconds;
         public float MaxVisualSpeed => _maxVisualSpeed;
-        public float SpringFrequency => _springFrequency;
-        public float SpringDamping => _springDamping;
-        public float SpringFrequencySlow => _springFrequencySlow;
-        public float SpringDampingSlow => _springDampingSlow;
         public float LeanImpulseScale => _leanImpulseScale;
+        public float LeanCurve => _leanCurve;
+        public float LeanFrequency => _leanFrequency;
+        public float LeanDamping => _leanDamping;
+        public float LeanStrengthY => _leanStrengthY;
         public float NoiseSpringFrequency => _noiseSpringFrequency;
         public float NoiseSpringDamping => _noiseSpringDamping;
         public float SquashStrength => _squashStrength;

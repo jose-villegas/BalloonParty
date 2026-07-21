@@ -15,19 +15,18 @@ namespace BalloonParty.Projectile.View
     internal class ProjectileShieldView : MonoBehaviour
     {
         private const int MaxLayers = 30;
-        private const int DeformPointCount = 3;
-        private const float SlowImpulseRatio = 0.6f;
 
         private static readonly int DissolveProgressId = Shader.PropertyToID("_DissolveProgress");
         private static readonly int RevealProgressId = Shader.PropertyToID("_RevealProgress");
         private static readonly int ActiveLayersId = Shader.PropertyToID("_ActiveLayers");
         private static readonly int ColorId = Shader.PropertyToID("_Color");
-        private static readonly int DeformPointsId = Shader.PropertyToID("_DeformPoints");
+        private static readonly int DeformDirId = Shader.PropertyToID("_DeformDir");
         private static readonly int VelocityFactorId = Shader.PropertyToID("_VelocityFactor");
         private static readonly int NoiseScrollDirId = Shader.PropertyToID("_NoiseScrollDir");
         private static readonly int SquashMagId = Shader.PropertyToID("_SquashMag");
         private static readonly int SquashStrengthId = Shader.PropertyToID("_SquashStrength");
         private static readonly int SquashNormalId = Shader.PropertyToID("_SquashNormal");
+        private static readonly int LeanStrengthYId = Shader.PropertyToID("_LeanStrengthY");
 
         [SerializeField] private SpriteRenderer _fieldRenderer;
 
@@ -44,7 +43,6 @@ namespace BalloonParty.Projectile.View
         private readonly CompositeDisposable _disposable = new();
         private readonly float[] _layerDissolve = new float[MaxLayers];
         private readonly float[] _layerReveal = new float[MaxLayers];
-        private readonly Vector4[] _deformPoints = new Vector4[DeformPointCount];
 
         private MaterialPropertyBlock _block;
 
@@ -53,15 +51,15 @@ namespace BalloonParty.Projectile.View
         private Color _currentColor = Color.white;
         private IProjectileModel _model;
 
-        private DampedSpring2D _springFast;
-        private Vector2 _trailMid;
-        private DampedSpring2D _springSlow;
+        private Vector2 _bounceDeform;
+        private DampedSpring2D _leanSpring;
         private DampedSpring2D _springNoise;
         private DampedSpring1D _springSquash;
         private Vector2 _squashNormal;
-        private bool _trailInitialized;
+        private bool _initialized;
         private float _velFactor;
         private Vector4 _noiseScrollDir;
+        private Vector4 _deformDir;
         private Vector4 _localSquashNormal;
         private float _squashDisplay;
 
@@ -93,24 +91,16 @@ namespace BalloonParty.Projectile.View
             Vector2 currentFacing = transform.up;
             var dt = Time.deltaTime;
 
-            if (!_trailInitialized)
+            if (!_initialized)
             {
-                _springFast.Reset(currentFacing);
-                _trailMid = currentFacing;
-                _springSlow.Reset(currentFacing);
                 _springNoise.Reset(currentFacing);
-                _trailInitialized = true;
+                _initialized = true;
             }
 
-            // Fast spring (dome) — settles quickly, tracks current direction
-            _springFast.Step(currentFacing, _settings.SpringFrequency, _settings.SpringDamping, dt);
-
-            // Mid EMA — smooth intermediate lag between fast and slow
-            var midTau = 1f / Mathf.Max(_settings.SpringFrequencySlow * 2f, 0.1f);
-            _trailMid = Vector2.Lerp(_trailMid, currentFacing, 1f - Mathf.Exp(-dt / midTau));
-
-            // Slow spring (tail) — lags the most, captures path history
-            _springSlow.Step(currentFacing, _settings.SpringFrequencySlow, _settings.SpringDampingSlow, dt);
+            // Lean spring: targets zero (rest = no deformation). Impulses from OnBounce
+            // kick it in local space; it oscillates and settles back to zero naturally.
+            _leanSpring.Step(Vector2.zero, _settings.LeanFrequency, _settings.LeanDamping, dt);
+            _bounceDeform = _leanSpring.Position;
 
             // Noise direction spring — fast response for scroll direction
             _springNoise.Step(currentFacing, _settings.NoiseSpringFrequency, _settings.NoiseSpringDamping, dt);
@@ -130,25 +120,13 @@ namespace BalloonParty.Projectile.View
                 _squashDisplay = Mathf.Lerp(_squashDisplay, rawSquash, alpha);
             }
 
-            // Project all three into local space
-            var localFast = (Vector2)transform.InverseTransformDirection(_springFast.Position - currentFacing);
-            var localMid = (Vector2)transform.InverseTransformDirection(_trailMid - currentFacing);
-            var localSlow = (Vector2)transform.InverseTransformDirection(_springSlow.Position - currentFacing);
-
-            // Clamp to prevent extreme UV warping
-            localFast = Vector2.ClampMagnitude(localFast, 1.2f);
-            localMid = Vector2.ClampMagnitude(localMid, 1.5f);
-            localSlow = Vector2.ClampMagnitude(localSlow, 2f);
-
-            // Pack into vector array: [0]=dome/fast, [1]=mid, [2]=tail/slow
-            _deformPoints[0] = new Vector4(localFast.x, localFast.y, 0f, 0f);
-            _deformPoints[1] = new Vector4(localMid.x, localMid.y, 0f, 0f);
-            _deformPoints[2] = new Vector4(localSlow.x, localSlow.y, 0f, 0f);
+            _deformDir = new Vector4(_bounceDeform.x, _bounceDeform.y, 0f, 0f);
 
             _velFactor = Mathf.Sqrt(
                 Mathf.Clamp01(_model.Speed / Mathf.Max(_settings.MaxVisualSpeed, 1f)));
 
-            var localNoise = (Vector2)transform.InverseTransformDirection(_springNoise.Position - currentFacing);
+            var localNoise = (Vector2)transform.InverseTransformDirection(_springNoise.Position)
+                             - Vector2.up;
             localNoise = Vector2.ClampMagnitude(localNoise, 1.5f);
             _noiseScrollDir = new Vector4(localNoise.x, localNoise.y, 0f, 0f);
 
@@ -204,13 +182,29 @@ namespace BalloonParty.Projectile.View
             var oldDir = oldDirection.normalized;
             var newDir = newDirection.normalized;
 
-            var worldDelta = oldDir - newDir;
-            _springFast.AddImpulse(worldDelta * _settings.LeanImpulseScale);
-            _springSlow.AddImpulse(worldDelta * (_settings.LeanImpulseScale * SlowImpulseRatio));
-            _springNoise.AddImpulse(worldDelta * _settings.LeanImpulseScale);
-
-            // Squash: magnitude 0 (same dir) to 1 (180° reversal), curved to boost grazing hits
+            // Impact magnitude: 0 (same dir) → 1 (180° reversal)
             var impactMagnitude = (1f - Vector2.Dot(oldDir, newDir)) * 0.5f;
+
+            // Lean direction in world space: from new toward old (backward kick)
+            var leanMag = Mathf.Pow(impactMagnitude, _settings.LeanCurve);
+            var worldLean = (oldDir - newDir).normalized;
+
+            // Project to local space using the NEW direction as reference frame.
+            // transform.up is still the OLD direction at this point (rotation updates after OnBounce),
+            // so we build the local frame from newDir manually.
+            var localX = new Vector2(newDir.y, -newDir.x);
+            var localLean = new Vector2(
+                Vector2.Dot(worldLean, localX),
+                Vector2.Dot(worldLean, newDir));
+
+            // Kick the lean spring in local space — it oscillates and settles to zero
+            _leanSpring.AddImpulse(Vector2.ClampMagnitude(
+                localLean * leanMag * _settings.LeanImpulseScale, 2f));
+
+            // Noise spring: kick for scroll direction variation
+            _springNoise.AddImpulse(worldLean * _settings.LeanImpulseScale * 2f);
+
+            // Squash: curved to boost grazing hits (SquashCurve < 1)
             var curvedMagnitude = Mathf.Pow(impactMagnitude, _settings.SquashCurve);
             _springSquash.AddImpulse(curvedMagnitude * _settings.SquashImpulseScale);
 
@@ -235,15 +229,15 @@ namespace BalloonParty.Projectile.View
             _model = null;
             _previousShieldCount = 0;
             _currentColor = Color.white;
-            _springFast = default;
-            _trailMid = Vector2.zero;
-            _springSlow = default;
+            _bounceDeform = Vector2.zero;
+            _leanSpring = default;
             _springNoise = default;
             _springSquash = default;
             _squashNormal = Vector2.up;
-            _trailInitialized = false;
+            _initialized = false;
             _velFactor = 0f;
             _noiseScrollDir = Vector4.zero;
+            _deformDir = Vector4.zero;
             _localSquashNormal = new Vector4(0f, 1f, 0f, 0f);
             _squashDisplay = 0f;
 
@@ -396,12 +390,13 @@ namespace BalloonParty.Projectile.View
             _block.SetFloatArray(RevealProgressId, _layerReveal);
             _block.SetFloat(ActiveLayersId, _settings.MaxVisualLayers);
             _block.SetColor(ColorId, _currentColor);
-            _block.SetVectorArray(DeformPointsId, _deformPoints);
+            _block.SetVector(DeformDirId, _deformDir);
             _block.SetFloat(VelocityFactorId, _velFactor);
             _block.SetVector(NoiseScrollDirId, _noiseScrollDir);
             _block.SetFloat(SquashMagId, _squashDisplay);
             _block.SetFloat(SquashStrengthId, _settings.SquashStrength);
             _block.SetVector(SquashNormalId, _localSquashNormal);
+            _block.SetFloat(LeanStrengthYId, _settings.LeanStrengthY);
         }
 
         private void PlayShieldChangeFx(int currentCount)

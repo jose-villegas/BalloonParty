@@ -65,6 +65,7 @@ Shader "BalloonParty/Display/EMShieldField"
         _RippleFrequency("Ripple Frequency", Range(1, 16)) = 5.0
         _RippleSpeed("Ripple Travel Speed", Range(0, 8)) = 2.0
         _LeanStrength("Lean Strength", Range(0, 2.5)) = 0.6
+        _LeanStrengthY("Lean Strength Y", Range(0, 2.5)) = 0.3
         _LeanBendPower("Lean Bend Curve", Range(1, 4)) = 2.0
 
         [Header(Squash)]
@@ -164,8 +165,9 @@ Shader "BalloonParty/Display/EMShieldField"
             float _RippleFrequency;
             float _RippleSpeed;
             float _LeanStrength;
+            float _LeanStrengthY;
             float _LeanBendPower;
-            float4 _DeformPoints[3];
+            float4 _DeformDir;
             float _TipFade;
             float _MaskCenterV;
             float _MaskWidth;
@@ -267,16 +269,10 @@ Shader "BalloonParty/Display/EMShieldField"
                 float ripple = (wave1 * 0.6 + wave2 * 0.4) * (0.7 + 0.3 * warpNoise);
                 float rippleX = ripple * bendWeight * _RippleAmplitude * _VelocityFactor;
 
-                // Directional bend: 3-point de Casteljau quadratic curve
-                // [0]=dome (fast spring), [1]=mid (EMA), [2]=tail (slow spring)
-                float2 p0 = _DeformPoints[0].xy;
-                float2 p1 = _DeformPoints[1].xy;
-                float2 p2 = _DeformPoints[2].xy;
-                float2 ab = lerp(p0, p1, bendT);
-                float2 bc = lerp(p1, p2, bendT);
-                float2 deformCurve = lerp(ab, bc, bendT);
-                float bendX = deformCurve.x * bendWeight * _LeanStrength;
-                float bendY = deformCurve.y * bendWeight * _LeanStrength * 0.5;
+                // Directional bend: single decay vector from bounce impulse
+                float2 deformDir = _DeformDir.xy;
+                float bendX = deformDir.x * bendWeight * _LeanStrength;
+                float bendY = deformDir.y * bendWeight * _LeanStrengthY;
 
                 float2 warpedUV = uv + float2(rippleX + bendX, bendY);
 

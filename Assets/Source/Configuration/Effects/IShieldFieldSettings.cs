@@ -7,11 +7,11 @@ namespace BalloonParty.Configuration.Effects
         float AppearSeconds { get; }
         int MaxVisualLayers { get; }
         float MaxVisualSpeed { get; }
-        float SpringFrequency { get; }
-        float SpringDamping { get; }
-        float SpringFrequencySlow { get; }
-        float SpringDampingSlow { get; }
         float LeanImpulseScale { get; }
+        float LeanCurve { get; }
+        float LeanFrequency { get; }
+        float LeanDamping { get; }
+        float LeanStrengthY { get; }
         float NoiseSpringFrequency { get; }
         float NoiseSpringDamping { get; }
         float SquashStrength { get; }

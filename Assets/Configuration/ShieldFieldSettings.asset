@@ -16,11 +16,11 @@ MonoBehaviour:
   _finalDissolveSeconds: 0.3
   _appearSeconds: 0.2
   _maxVisualSpeed: 10
-  _springFrequency: 7
-  _springDamping: 1.2
-  _springFrequencySlow: 1.2
-  _springDampingSlow: 0.6
-  _leanImpulseScale: 6
+  _leanImpulseScale: 1
+  _leanCurve: 2.5
+  _leanFrequency: 5
+  _leanDamping: 0.6
+  _leanStrengthY: 1.5
   _noiseSpringFrequency: 5
   _noiseSpringDamping: 0.85
   _squashStrength: 3
