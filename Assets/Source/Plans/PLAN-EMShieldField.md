@@ -63,6 +63,38 @@ Opening (sl: 0→1)  ◀──braceDuration elapsed──  Bracing (sl=0)
 always a circle at the moment of impact. Wall proximity is predicted each frame via
 `WallLimits.TryFindCrossing`.
 
+### Data-Flow: Inputs → Uniforms
+
+```mermaid
+graph LR
+    subgraph Reactive["Reactive Subscriptions"]
+        SR[ShieldsRemaining] -->|gain/lose| TW[DOTween dissolve/reveal]
+        CN[ColorName] -->|changed| COL[Color tint]
+    end
+
+    subgraph PerFrame["Per-Frame Update"]
+        NS[DampedSpring2D] -->|step| NSD[_NoiseScrollDir]
+        SQ[DampedSpring1D] -->|step| SQA[_SquashAmount + _SquashAxis]
+        FSM[Morph FSM] -->|tick| SL[_ShapeLerp]
+        VEL[speed] -->|sqrt normalize| VF[_VelocityFactor]
+    end
+
+    subgraph Events["Event Callbacks"]
+        OB[OnBounce] -->|snap Bracing| FSM
+        OB -->|inject impulse| SQ
+    end
+
+    TW --> WAP[WriteAllProperties]
+    COL --> WAP
+    NSD --> WAP
+    SQA --> WAP
+    SL --> WAP
+    VF --> WAP
+
+    WAP -->|SetPropertyBlock| MPB[MaterialPropertyBlock]
+    MPB -->|10 uniforms| SHADER[EMShieldField.shader]
+```
+
 ---
 
 ## Shader Design

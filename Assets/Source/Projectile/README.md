@@ -70,6 +70,29 @@ another. Configuration lives in `IShieldFieldSettings` (injected, not serialized
 All VFX (gain/lose/bounce particles) are spawned via `ParticlePoolChannel` as world-space
 particles — they are not children of the projectile and survive recycling independently.
 
+### Event Flow
+
+```mermaid
+sequenceDiagram
+    participant M as IProjectileModel
+    participant V as ProjectileShieldView
+    participant MPB as MaterialPropertyBlock
+    participant S as EMShieldField.shader
+
+    Note over M,S: Shield Lost
+    M->>V: ShieldsRemaining (n→n-1)
+    V->>V: DOTween _DissolveProgress[n-1] 0→1
+    V->>MPB: WriteAllProperties()
+    MPB->>S: SetPropertyBlock (all 10 uniforms)
+
+    Note over M,S: Wall Bounce
+    V->>V: OnBounce(oldDir, newDir, speed)
+    V->>V: Snap FSM → Bracing (_ShapeLerp=0)
+    V->>V: Inject squash impulse into DampedSpring1D
+    V->>MPB: WriteAllProperties()
+    MPB->>S: SetPropertyBlock (all 10 uniforms)
+```
+
 See @ref plan_em_shield_field for the full shader design and phase status.
 
 ## Pierce & Discharge Feel
