@@ -43,8 +43,12 @@ Shader "BalloonParty/Display/EMShieldField"
         [Header(Tip)]
         _TipFade("Tip Fade Radius", Range(0.01, 0.15)) = 0.05
 
-        [Header(Edge)]
-        _EdgeFade("Edge Fade Width", Range(0.01, 0.2)) = 0.08
+        [Header(Shape Mask)]
+        _MaskCenterV("Mask Center V", Range(0.1, 0.9)) = 0.5
+        _MaskWidth("Mask Half Width", Range(0.05, 0.5)) = 0.3
+        _MaskHeight("Mask Half Height", Range(0.1, 0.5)) = 0.45
+        _MaskRoundness("Mask Roundness", Range(0.01, 0.5)) = 0.2
+        _MaskFade("Mask Fade Softness", Range(0.01, 0.25)) = 0.08
     }
 
     SubShader
@@ -106,7 +110,11 @@ Shader "BalloonParty/Display/EMShieldField"
             float _NoiseScale;
             float _DirectionalBias;
             float _TipFade;
-            float _EdgeFade;
+            float _MaskCenterV;
+            float _MaskWidth;
+            float _MaskHeight;
+            float _MaskRoundness;
+            float _MaskFade;
 
             float _DomeOverlayAlpha;
             float _DomeOverlayWidth;
@@ -245,14 +253,17 @@ Shader "BalloonParty/Display/EMShieldField"
                     domeOverlay = domeFill * gradient * _DomeOverlayAlpha;
                 }
 
-                // Edge fade
-                float2 fromCenter = uv - 0.5;
-                float edgeDist = max(abs(fromCenter.x), abs(fromCenter.y));
-                float edgeFade = smoothstep(0.5, 0.5 - _EdgeFade, edgeDist);
+                // Shape mask: rounded-rect (capsule when roundness >= min(width, height))
+                float2 maskP = uv - float2(0.5, _MaskCenterV);
+                float2 maskHalf = float2(_MaskWidth, _MaskHeight);
+                float r = min(_MaskRoundness, min(maskHalf.x, maskHalf.y));
+                float2 mq = abs(maskP) - maskHalf + r;
+                float maskDist = length(max(mq, 0.0)) + min(max(mq.x, mq.y), 0.0) - r;
+                float shapeMask = smoothstep(_MaskFade, -_MaskFade, maskDist);
 
                 // Final compositing — glow purely additive RGB, only core affects alpha
-                float glowRGB = totalGlow * _GlowIntensity * 0.25 * edgeFade;
-                float coreRGB = (totalCore + domeOverlay) * edgeFade;
+                float glowRGB = totalGlow * _GlowIntensity * 0.25 * shapeMask;
+                float coreRGB = (totalCore + domeOverlay) * shapeMask;
 
                 if (coreRGB + glowRGB < 0.001)
                 {
