@@ -512,6 +512,7 @@ namespace BalloonParty.Tests.Game
             _thresholds.PointsRequiredForLevel(1).Returns(1);
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
+            _navState.Value = NavigationState.LevelUp;
             FireDismissed();
 
             FireTransitionComplete();
@@ -555,6 +556,7 @@ namespace BalloonParty.Tests.Game
 
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
+            _navState.Value = NavigationState.LevelUp;
             FireDismissed();
             FireTransitionComplete();
 
@@ -571,6 +573,7 @@ namespace BalloonParty.Tests.Game
             _thresholds.PointsRequiredForLevel(1).Returns(1);
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
+            _navState.Value = NavigationState.LevelUp;
 
             FireAborted();
 
