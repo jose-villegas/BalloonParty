@@ -193,7 +193,7 @@ namespace BalloonParty.Configuration.Level
 
         private void WarnOnFallbackIssues()
         {
-            var fallbackCount = 0;
+            var hasDefault = false;
             var seenIds = new System.Collections.Generic.HashSet<int>();
 
             for (var i = 0; i < _ranges.Length; i++)
@@ -203,7 +203,10 @@ namespace BalloonParty.Configuration.Level
                     continue;
                 }
 
-                fallbackCount++;
+                if (_ranges[i].FromLevel == -1)
+                {
+                    hasDefault = true;
+                }
 
                 if (!seenIds.Add(_ranges[i].FromLevel))
                 {
@@ -213,10 +216,11 @@ namespace BalloonParty.Configuration.Level
                 }
             }
 
-            if (fallbackCount == 0)
+            if (!hasDefault)
             {
                 Debug.LogWarning(
-                    $"LevelPacingConfiguration ({name}): expected at least one fallback range (either level bound < 0), found none.");
+                    $"LevelPacingConfiguration ({name}): missing default fallback (FromLevel = -1). " +
+                    "Normal gameplay requires exactly one entry with FromLevel = -1.");
             }
         }
 
