@@ -1,9 +1,9 @@
-// Procedural reentry-style shield: concentric field-line shells wrapping a comet shape.
-// Each layer = an onion shell of a single filled CometSDF (dome circle ∪ parabolic tail).
-// The field lines ARE the shield — no solid dome fill; optional dome overlay is separate.
-// Dissolve sweeps from dome apex downward. Reveal wipe sweeps apex→tail for layer gain.
-// UV warp: velocity ripple + directional lean on bounce. Per-layer flow + color shift.
-// Driven by MaterialPropertyBlock: _DissolveProgress[5], _RevealProgress[5], _Color, etc.
+// Procedural EM shield: concentric field-line shells wrapping a morphable SDF shape.
+// Shape morphs between a pure circle (_ShapeLerp=0) and a comet with tail (_ShapeLerp=1).
+// Each layer = an onion shell of MorphedSDF. The field lines ARE the shield.
+// Dissolve sweeps from apex downward. Reveal wipe sweeps apex→tail for layer gain.
+// UV warp: velocity ripple. Per-layer flow + color shift.
+// Driven by MaterialPropertyBlock: _DissolveProgress[], _RevealProgress[], _Color, etc.
 Shader "BalloonParty/Display/EMShieldField"
 {
     Properties
@@ -16,10 +16,13 @@ Shader "BalloonParty/Display/EMShieldField"
         [Header(Comet Shape)]
         _DomeCenter("Dome Center V", Range(0.3, 0.8)) = 0.6
         _DomeRadius("Dome Radius", Range(0.05, 0.4)) = 0.18
+        _CircleRadius("Circle Inner Radius", Range(0, 0.3)) = 0.05
+        _CircleCenter("Circle Center V", Range(0.3, 0.7)) = 0.5
         _TailLength("Tail Length", Range(0.05, 0.6)) = 0.3
         _TailWidth("Tail Base Width", Range(0, 0.4)) = 0.12
         _TailPower("Tail Convergence", Range(0.5, 4.0)) = 2.0
         _JunctionSmooth("Junction Smoothness", Range(0.005, 0.15)) = 0.04
+        _ShapeLerp("Shape Lerp (0=circle, 1=tail)", Range(0, 1)) = 1.0
 
         [Header(Shells)]
         _BaseRadius("Innermost Offset", Range(0.01, 0.2)) = 0.07
@@ -41,12 +44,6 @@ Shader "BalloonParty/Display/EMShieldField"
         _ColorShift("Color Shift (inner to outer)", Range(0, 1)) = 0.0
         _ColorPhase("Color Phase", Vector) = (0.55, 0.70, 0.90, 0)
 
-        [Header(Dome Overlay)]
-        _DomeOverlayAlpha("Dome Alpha", Range(0, 1)) = 0.0
-        _DomeOverlayWidth("Dome Width", Range(0.02, 0.4)) = 0.15
-        _DomeOverlayHeight("Dome Height", Range(0.02, 0.4)) = 0.2
-        _DomeOverlayRoundness("Dome Roundness", Range(0.01, 0.5)) = 0.12
-        _DomeOverlayFade("Dome Gradient Fade", Range(0, 1)) = 0.7
 
         [Header(Dissolve)]
         _NoiseScale("Noise Scale", Range(1, 40)) = 8.0
@@ -64,15 +61,6 @@ Shader "BalloonParty/Display/EMShieldField"
         _RippleAmplitude("Ripple Amplitude", Range(0, 0.05)) = 0.018
         _RippleFrequency("Ripple Frequency", Range(1, 16)) = 5.0
         _RippleSpeed("Ripple Travel Speed", Range(0, 8)) = 2.0
-        _LeanStrength("Lean Strength", Range(0, 2.5)) = 0.6
-        _LeanStrengthY("Lean Strength Y", Range(0, 2.5)) = 0.3
-        _LeanBendPower("Lean Bend Curve", Range(1, 4)) = 2.0
-
-        [Header(Squash)]
-        _SquashMag("Squash Magnitude", Float) = 0.0
-        _SquashStrength("Squash Strength", Range(0, 5)) = 0.25
-        _SquashNormal("Squash Normal", Vector) = (0,1,0,0)
-        _SquashDomeShift("Squash Dome Shift", Range(-0.3, 0.3)) = -0.05
 
         [Header(Tip)]
         _TipFade("Tip Fade Radius", Range(0.01, 0.15)) = 0.05
@@ -132,10 +120,13 @@ Shader "BalloonParty/Display/EMShieldField"
 
             float _DomeCenter;
             float _DomeRadius;
+            float _CircleRadius;
+            float _CircleCenter;
             float _TailLength;
             float _TailWidth;
             float _TailPower;
             float _JunctionSmooth;
+            float _ShapeLerp;
             float _BaseRadius;
             float _LayerSpacing;
             float _ActiveLayers;
@@ -154,20 +145,12 @@ Shader "BalloonParty/Display/EMShieldField"
             float _NoiseVelocityIntensity;
             float _NoiseStartLayer;
             float2 _NoiseScrollDir;
-            float _SquashMag;
-            float _SquashStrength;
-            float2 _SquashNormal;
-            float _SquashDomeShift;
             float _DirectionalBias;
             float _RevealEdge;
             float _VelocityFactor;
             float _RippleAmplitude;
             float _RippleFrequency;
             float _RippleSpeed;
-            float _LeanStrength;
-            float _LeanStrengthY;
-            float _LeanBendPower;
-            float4 _DeformDir;
             float _TipFade;
             float _MaskCenterV;
             float _MaskWidth;
@@ -175,11 +158,6 @@ Shader "BalloonParty/Display/EMShieldField"
             float _MaskRoundness;
             float _MaskFade;
 
-            float _DomeOverlayAlpha;
-            float _DomeOverlayWidth;
-            float _DomeOverlayHeight;
-            float _DomeOverlayRoundness;
-            float _DomeOverlayFade;
 
             float _DissolveProgress[EM_MAX_LAYERS];
             float _RevealProgress[EM_MAX_LAYERS];
@@ -217,24 +195,33 @@ Shader "BalloonParty/Display/EMShieldField"
             }
 
             // ── Filled comet SDF ───────────────────────────────────
-            // Smooth union of dome circle + parabolic converging tail.
-            // Negative inside the shape, positive outside.
-            // All layers derive from this single evaluation via the onion operator.
-            inline float CometSDF(float2 uv)
+            // Morphable SDF: interpolates between full circle (_ShapeLerp=0) and
+            // comet shape (_ShapeLerp=1) by smoothly retracting tail and expanding dome.
+            inline float MorphedSDF(float2 uv)
             {
-                float2 p = uv - float2(0.5, _DomeCenter);
+                // Morph: tail collapses, dome shrinks to circle radius
+                float sl = _ShapeLerp;
+                float morphedRadius = lerp(_CircleRadius, _DomeRadius, sl);
+                float morphedCenter = lerp(_CircleCenter, _DomeCenter, sl);
 
-                float dDome = length(p) - _DomeRadius;
+                float2 p = uv - float2(0.5, morphedCenter);
+                float dDome = length(p) - morphedRadius;
 
-                float tailTip = _DomeRadius + _TailLength;
+                // At sl=0 return pure circle; at sl=1 full comet with tail
+                float morphedTailLength = _TailLength * sl;
+                float morphedTailWidth  = _TailWidth * sl;
+                float tailTip = morphedRadius + morphedTailLength;
                 float t = saturate(-p.y / max(tailTip, 1e-4));
-                float w = _TailWidth * pow(max(1.0 - t, 0.0), _TailPower);
+                float w = morphedTailWidth * pow(max(1.0 - t, 0.0), _TailPower);
                 float dTail = abs(p.x) - w;
                 dTail = max(dTail, p.y);
 
                 float k = _JunctionSmooth;
                 float h = saturate(0.5 + 0.5 * (dTail - dDome) / max(k, 1e-5));
-                return lerp(dTail, dDome, h) - k * h * (1.0 - h);
+                float comet = lerp(dTail, dDome, h) - k * h * (1.0 - h);
+
+                // Blend: pure circle at sl=0, full comet at sl=1
+                return lerp(dDome, comet, sl);
             }
 
             fixed4 frag(v2f IN) : SV_Target
@@ -251,15 +238,20 @@ Shader "BalloonParty/Display/EMShieldField"
                 int _previewTopIndex = max(layers - 1, 0);
                 #endif
 
-                // Geometry anchors (shared by warp, dissolve, tip fade, reveal)
-                float apexV = _DomeCenter + _DomeRadius;
-                float tipY  = _DomeCenter - (_DomeRadius + _TailLength);
+                // Geometry anchors (use morphed center/radius for correct dissolve/reveal)
+                float sl = _ShapeLerp;
+                float morphedCenter = lerp(_CircleCenter, _DomeCenter, sl);
+                float morphedRadius = lerp(_CircleRadius, _DomeRadius, sl);
+                float morphedTailLength = _TailLength * sl;
+                // Use shell extent as minimum so anchors stay valid in circle mode
+                float shellExtent = _BaseRadius + max(float(layers) - 1.0, 0.0) * _LayerSpacing;
+                float apexV = morphedCenter + max(morphedRadius, shellExtent);
+                float tipY  = morphedCenter - max(morphedRadius + morphedTailLength, shellExtent);
                 float totalRange = max(apexV - tipY, 1e-4);
 
-                // ── UV warp: velocity ripple + directional bend ──
-                // Bend weight: 0 at dome apex, pow curve to 1 at tip — dome stays, tail bends
+                // ── UV warp: velocity ripple ──
                 float bendT      = saturate((apexV - uv.y) / totalRange);
-                float bendWeight = pow(bendT, _LeanBendPower);
+                float bendWeight = pow(bendT, 2.0);
 
                 // Velocity-driven organic ripple (two inharmonic sine waves × noise)
                 float warpNoise = ValueNoise(uv * float2(2.5, 1.8)
@@ -269,27 +261,10 @@ Shader "BalloonParty/Display/EMShieldField"
                 float ripple = (wave1 * 0.6 + wave2 * 0.4) * (0.7 + 0.3 * warpNoise);
                 float rippleX = ripple * bendWeight * _RippleAmplitude * _VelocityFactor;
 
-                // Directional bend: single decay vector from bounce impulse
-                float2 deformDir = _DeformDir.xy;
-                float bendX = deformDir.x * bendWeight * _LeanStrength;
-                float bendY = deformDir.y * bendWeight * _LeanStrengthY;
-
-                float2 warpedUV = uv + float2(rippleX + bendX, bendY);
-
-                // Squash: compress along impact normal, area-preserving stretch perpendicular
-                float2 squashN = normalize(_SquashNormal.xy + float2(0, 1e-5));
-                float2 squashP = float2(-squashN.y, squashN.x);
-                float2 fromPivot = warpedUV - float2(0.5, _DomeCenter);
-                float squashS = _SquashMag * _SquashStrength;
-                float2 squashedUV = float2(0.5, _DomeCenter)
-                    + squashN * dot(fromPivot, squashN) * (1.0 + squashS)
-                    + squashP * dot(fromPivot, squashP) * (1.0 - squashS * 0.5);
-
-                // Dome tip shifts vertically with squash intensity
-                squashedUV.y += squashS * _SquashDomeShift;
+                float2 warpedUV = uv + float2(rippleX, 0);
 
                 // One SDF evaluation for ALL layers (onion operator) — on warped UV
-                float filled = CometSDF(squashedUV);
+                float filled = MorphedSDF(warpedUV);
 
                 // Dissolve noise (on original uv so dissolve anchor stays world-stable)
                 // Noise scrolls along the deform curve direction, scaled by projectile speed
@@ -304,14 +279,14 @@ Shader "BalloonParty/Display/EMShieldField"
                 float noiseContrib = noiseVal * (1.0 - _DirectionalBias);
                 float dissolveBase = noiseContrib + belowApex * _DirectionalBias;
 
-                // Tip convergence fade (on original uv)
+                // Tip convergence fade (on original uv) — fades out in circle mode
                 float tipDist = length(uv - float2(0.5, tipY));
-                float tipFade = smoothstep(_TipFade * 0.3, _TipFade, tipDist);
+                float tipFade = lerp(1.0, smoothstep(_TipFade * 0.3, _TipFade, tipDist), sl);
 
                 // Flow tangent (from warped SDF — flow follows the deformed contour)
                 float2 grad = float2(ddx(filled), ddy(filled));
                 float2 tangent = float2(-grad.y, grad.x);
-                float flowCoord = dot(uv - float2(0.5, _DomeCenter), tangent);
+                float flowCoord = dot(uv - float2(0.5, morphedCenter), tangent);
 
                 float totalCore = 0.0;
                 float totalGlow = 0.0;
@@ -392,20 +367,6 @@ Shader "BalloonParty/Display/EMShieldField"
                     coloredGlow += glow * layerColor;
                 }
 
-                // Dome overlay: separate filled glow element over the top
-                float domeOverlay = 0.0;
-                if (_DomeOverlayAlpha > 0.001)
-                {
-                    float2 domeP = uv - float2(0.5, _DomeCenter + _DomeOverlayHeight * 0.3);
-                    float2 domeHalf = float2(_DomeOverlayWidth, _DomeOverlayHeight);
-                    float2 q = abs(domeP) - domeHalf + _DomeOverlayRoundness;
-                    float domeDist = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - _DomeOverlayRoundness;
-                    float domeFill = smoothstep(0.005, -0.005, domeDist);
-                    float gradientT = saturate((domeP.y + _DomeOverlayHeight) / max(_DomeOverlayHeight * 2.0, 1e-4));
-                    float gradient = lerp(1.0 - _DomeOverlayFade, 1.0, gradientT);
-                    domeOverlay = domeFill * gradient * _DomeOverlayAlpha;
-                }
-
                 // Shape mask: rounded-rect (capsule when roundness >= min(width, height))
                 float2 maskP = uv - float2(0.5, _MaskCenterV);
                 float2 maskHalf = float2(_MaskWidth, _MaskHeight);
@@ -419,7 +380,7 @@ Shader "BalloonParty/Display/EMShieldField"
                     ? coloredGlow / max(totalGlow, 1e-4)
                     : float3(1, 1, 1);
                 float glowVal = totalGlow * _GlowIntensity * 0.25 * shapeMask;
-                float coreVal = (totalCore + domeOverlay) * shapeMask;
+                float coreVal = totalCore * shapeMask;
 
                 if (coreVal + glowVal < 0.001)
                 {
