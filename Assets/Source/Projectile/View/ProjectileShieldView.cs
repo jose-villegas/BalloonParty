@@ -25,6 +25,9 @@ namespace BalloonParty.Projectile.View
         private static readonly int DeformPointsId = Shader.PropertyToID("_DeformPoints");
         private static readonly int VelocityFactorId = Shader.PropertyToID("_VelocityFactor");
         private static readonly int NoiseScrollDirId = Shader.PropertyToID("_NoiseScrollDir");
+        private static readonly int SquashMagId = Shader.PropertyToID("_SquashMag");
+        private static readonly int SquashStrengthId = Shader.PropertyToID("_SquashStrength");
+        private static readonly int SquashNormalId = Shader.PropertyToID("_SquashNormal");
 
         [SerializeField] private SpriteRenderer _fieldRenderer;
 
@@ -54,7 +57,13 @@ namespace BalloonParty.Projectile.View
         private Vector2 _trailMid;
         private DampedSpring2D _springSlow;
         private DampedSpring2D _springNoise;
+        private DampedSpring1D _springSquash;
+        private Vector2 _squashNormal;
         private bool _trailInitialized;
+        private float _velFactor;
+        private Vector4 _noiseScrollDir;
+        private Vector4 _localSquashNormal;
+        private float _squashDisplay;
 
         private void Awake()
         {
@@ -106,6 +115,21 @@ namespace BalloonParty.Projectile.View
             // Noise direction spring — fast response for scroll direction
             _springNoise.Step(currentFacing, _settings.NoiseSpringFrequency, _settings.NoiseSpringDamping, dt);
 
+            // Squash spring — decays toward zero (rest = no squash)
+            _springSquash.Step(0f, _settings.SquashFrequency, _settings.SquashDamping, dt);
+
+            // Asymmetric envelope: instant attack, configurable slow recovery
+            var rawSquash = _springSquash.Position;
+            if (Mathf.Abs(rawSquash) > Mathf.Abs(_squashDisplay))
+            {
+                _squashDisplay = rawSquash;
+            }
+            else
+            {
+                var alpha = 1f - Mathf.Exp(-dt / Mathf.Max(_settings.SquashRecoveryTau, 0.001f));
+                _squashDisplay = Mathf.Lerp(_squashDisplay, rawSquash, alpha);
+            }
+
             // Project all three into local space
             var localFast = (Vector2)transform.InverseTransformDirection(_springFast.Position - currentFacing);
             var localMid = (Vector2)transform.InverseTransformDirection(_trailMid - currentFacing);
@@ -121,15 +145,27 @@ namespace BalloonParty.Projectile.View
             _deformPoints[1] = new Vector4(localMid.x, localMid.y, 0f, 0f);
             _deformPoints[2] = new Vector4(localSlow.x, localSlow.y, 0f, 0f);
 
-            var velFactor = Mathf.Sqrt(
+            _velFactor = Mathf.Sqrt(
                 Mathf.Clamp01(_model.Speed / Mathf.Max(_settings.MaxVisualSpeed, 1f)));
 
             var localNoise = (Vector2)transform.InverseTransformDirection(_springNoise.Position - currentFacing);
             localNoise = Vector2.ClampMagnitude(localNoise, 1.5f);
+            _noiseScrollDir = new Vector4(localNoise.x, localNoise.y, 0f, 0f);
 
-            _block.SetVectorArray(DeformPointsId, _deformPoints);
-            _block.SetFloat(VelocityFactorId, velFactor);
-            _block.SetVector(NoiseScrollDirId, new Vector4(localNoise.x, localNoise.y, 0f, 0f));
+            var localSquashNormal = (Vector2)transform.InverseTransformDirection(_squashNormal);
+            if (localSquashNormal.sqrMagnitude < 0.001f)
+            {
+                localSquashNormal = Vector2.up;
+            }
+            else
+            {
+                localSquashNormal.Normalize();
+            }
+
+            _localSquashNormal = new Vector4(localSquashNormal.x, localSquashNormal.y, 0f, 0f);
+
+            // Single push point — all shader uniforms written here
+            WriteAllProperties();
             _fieldRenderer.SetPropertyBlock(_block);
         }
 
@@ -165,10 +201,25 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            var worldDelta = oldDirection.normalized - newDirection.normalized;
+            var oldDir = oldDirection.normalized;
+            var newDir = newDirection.normalized;
+
+            var worldDelta = oldDir - newDir;
             _springFast.AddImpulse(worldDelta * _settings.LeanImpulseScale);
             _springSlow.AddImpulse(worldDelta * (_settings.LeanImpulseScale * SlowImpulseRatio));
             _springNoise.AddImpulse(worldDelta * _settings.LeanImpulseScale);
+
+            // Squash: magnitude 0 (same dir) to 1 (180° reversal), curved to boost grazing hits
+            var impactMagnitude = (1f - Vector2.Dot(oldDir, newDir)) * 0.5f;
+            var curvedMagnitude = Mathf.Pow(impactMagnitude, _settings.SquashCurve);
+            _springSquash.AddImpulse(curvedMagnitude * _settings.SquashImpulseScale);
+
+            // Impact normal: average of incoming/outgoing ≈ wall normal
+            var normal = (oldDir - newDir).normalized;
+            if (normal.sqrMagnitude > 0.001f)
+            {
+                _squashNormal = normal;
+            }
         }
 
         public void PlayBounceVfx(Vector3 position, Color color)
@@ -188,7 +239,13 @@ namespace BalloonParty.Projectile.View
             _trailMid = Vector2.zero;
             _springSlow = default;
             _springNoise = default;
+            _springSquash = default;
+            _squashNormal = Vector2.up;
             _trailInitialized = false;
+            _velFactor = 0f;
+            _noiseScrollDir = Vector4.zero;
+            _localSquashNormal = new Vector4(0f, 1f, 0f, 0f);
+            _squashDisplay = 0f;
 
             for (var i = 0; i < MaxLayers; i++)
             {
@@ -196,7 +253,18 @@ namespace BalloonParty.Projectile.View
                 _layerReveal[i] = 0f;
             }
 
-            PushProperties();
+            // Final push before deactivation — Update() won't run after SetActive(false)
+            if (_fieldRenderer != null && _block != null)
+            {
+                _block.Clear();
+                if (_settings != null)
+                {
+                    WriteAllProperties();
+                }
+
+                _fieldRenderer.SetPropertyBlock(_block);
+            }
+
             gameObject.SetActive(false);
         }
 
@@ -222,8 +290,6 @@ namespace BalloonParty.Projectile.View
                 _layerReveal[i] = 0f;
             }
 
-            PushProperties();
-
             // Stagger each layer's reveal wipe with a small delay per layer
             var perLayer = _settings.AppearSeconds;
             var stagger = perLayer * 0.3f;
@@ -233,11 +299,7 @@ namespace BalloonParty.Projectile.View
                 var idx = i;
                 DOTween.To(
                         () => _layerReveal[idx],
-                        v =>
-                        {
-                            _layerReveal[idx] = v;
-                            PushProperties();
-                        },
+                        v => { _layerReveal[idx] = v; },
                         1f,
                         perLayer)
                     .SetTarget(this)
@@ -277,11 +339,7 @@ namespace BalloonParty.Projectile.View
 
                 _dissolveTween = DOTween.To(
                         () => _layerReveal[layerIndex],
-                        v =>
-                        {
-                            _layerReveal[layerIndex] = v;
-                            PushProperties();
-                        },
+                        v => { _layerReveal[layerIndex] = v; },
                         1f,
                         _settings.AppearSeconds)
                     .SetTarget(this)
@@ -299,11 +357,7 @@ namespace BalloonParty.Projectile.View
 
                 _dissolveTween = DOTween.To(
                         () => _layerDissolve[layerIndex],
-                        v =>
-                        {
-                            _layerDissolve[layerIndex] = v;
-                            PushProperties();
-                        },
+                        v => { _layerDissolve[layerIndex] = v; },
                         1f,
                         duration)
                     .SetTarget(this)
@@ -313,8 +367,6 @@ namespace BalloonParty.Projectile.View
                         _dissolveTween = null;
                     });
             }
-
-            PushProperties();
         }
 
         private void SetImmediateState(int count)
@@ -331,22 +383,25 @@ namespace BalloonParty.Projectile.View
                 _layerDissolve[i] = i < maxVisual ? 0f : 1f;
                 _layerReveal[i] = i < maxVisual ? 1f : 0f;
             }
-
-            PushProperties();
         }
 
-        private void PushProperties()
+        /// <summary>
+        /// Writes ALL shader uniforms to the property block.
+        /// Only <see cref="Update"/> and <see cref="Reset"/> call SetPropertyBlock;
+        /// tween callbacks and subscriptions mutate backing fields only.
+        /// </summary>
+        private void WriteAllProperties()
         {
-            if (_fieldRenderer == null || _settings == null || _block == null)
-            {
-                return;
-            }
-
             _block.SetFloatArray(DissolveProgressId, _layerDissolve);
             _block.SetFloatArray(RevealProgressId, _layerReveal);
             _block.SetFloat(ActiveLayersId, _settings.MaxVisualLayers);
             _block.SetColor(ColorId, _currentColor);
-            _fieldRenderer.SetPropertyBlock(_block);
+            _block.SetVectorArray(DeformPointsId, _deformPoints);
+            _block.SetFloat(VelocityFactorId, _velFactor);
+            _block.SetVector(NoiseScrollDirId, _noiseScrollDir);
+            _block.SetFloat(SquashMagId, _squashDisplay);
+            _block.SetFloat(SquashStrengthId, _settings.SquashStrength);
+            _block.SetVector(SquashNormalId, _localSquashNormal);
         }
 
         private void PlayShieldChangeFx(int currentCount)
@@ -392,7 +447,6 @@ namespace BalloonParty.Projectile.View
             _currentColor = string.IsNullOrEmpty(colorName)
                 ? Color.white
                 : _palette.GetColor(colorName);
-            PushProperties();
         }
     }
 }

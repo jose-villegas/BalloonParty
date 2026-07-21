@@ -14,5 +14,11 @@ namespace BalloonParty.Configuration.Effects
         float LeanImpulseScale { get; }
         float NoiseSpringFrequency { get; }
         float NoiseSpringDamping { get; }
+        float SquashStrength { get; }
+        float SquashFrequency { get; }
+        float SquashDamping { get; }
+        float SquashImpulseScale { get; }
+        float SquashRecoveryTau { get; }
+        float SquashCurve { get; }
     }
 }

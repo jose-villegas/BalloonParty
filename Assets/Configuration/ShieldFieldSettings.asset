@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ShieldFieldSettings
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.Effects.ShieldFieldSettings
   _dissolveSeconds: 0.3
-  _finalDissolveSeconds: 0.5
+  _finalDissolveSeconds: 0.3
   _appearSeconds: 0.2
   _maxVisualSpeed: 10
   _springFrequency: 7
@@ -21,4 +21,12 @@ MonoBehaviour:
   _springFrequencySlow: 1.2
   _springDampingSlow: 0.6
   _leanImpulseScale: 6
+  _noiseSpringFrequency: 5
+  _noiseSpringDamping: 0.85
+  _squashStrength: 3
+  _squashFrequency: 10
+  _squashDamping: 0.3
+  _squashImpulseScale: 30
+  _squashRecoveryTau: 1
+  _squashCurve: 0.5
   _maxVisualLayers: 10

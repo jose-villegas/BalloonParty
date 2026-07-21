@@ -66,7 +66,12 @@ Shader "BalloonParty/Display/EMShieldField"
         _RippleSpeed("Ripple Travel Speed", Range(0, 8)) = 2.0
         _LeanStrength("Lean Strength", Range(0, 2.5)) = 0.6
         _LeanBendPower("Lean Bend Curve", Range(1, 4)) = 2.0
-        _DeformDirection("Deform Direction", Vector) = (0,0,0,0)
+
+        [Header(Squash)]
+        _SquashMag("Squash Magnitude", Float) = 0.0
+        _SquashStrength("Squash Strength", Range(0, 5)) = 0.25
+        _SquashNormal("Squash Normal", Vector) = (0,1,0,0)
+        _SquashDomeShift("Squash Dome Shift", Range(-0.3, 0.3)) = -0.05
 
         [Header(Tip)]
         _TipFade("Tip Fade Radius", Range(0.01, 0.15)) = 0.05
@@ -148,6 +153,10 @@ Shader "BalloonParty/Display/EMShieldField"
             float _NoiseVelocityIntensity;
             float _NoiseStartLayer;
             float2 _NoiseScrollDir;
+            float _SquashMag;
+            float _SquashStrength;
+            float2 _SquashNormal;
+            float _SquashDomeShift;
             float _DirectionalBias;
             float _RevealEdge;
             float _VelocityFactor;
@@ -156,7 +165,6 @@ Shader "BalloonParty/Display/EMShieldField"
             float _RippleSpeed;
             float _LeanStrength;
             float _LeanBendPower;
-            float2 _DeformDirection;
             float4 _DeformPoints[3];
             float _TipFade;
             float _MaskCenterV;
@@ -272,8 +280,20 @@ Shader "BalloonParty/Display/EMShieldField"
 
                 float2 warpedUV = uv + float2(rippleX + bendX, bendY);
 
+                // Squash: compress along impact normal, area-preserving stretch perpendicular
+                float2 squashN = normalize(_SquashNormal.xy + float2(0, 1e-5));
+                float2 squashP = float2(-squashN.y, squashN.x);
+                float2 fromPivot = warpedUV - float2(0.5, _DomeCenter);
+                float squashS = _SquashMag * _SquashStrength;
+                float2 squashedUV = float2(0.5, _DomeCenter)
+                    + squashN * dot(fromPivot, squashN) * (1.0 + squashS)
+                    + squashP * dot(fromPivot, squashP) * (1.0 - squashS * 0.5);
+
+                // Dome tip shifts vertically with squash intensity
+                squashedUV.y += squashS * _SquashDomeShift;
+
                 // One SDF evaluation for ALL layers (onion operator) — on warped UV
-                float filled = CometSDF(warpedUV);
+                float filled = CometSDF(squashedUV);
 
                 // Dissolve noise (on original uv so dissolve anchor stays world-stable)
                 // Noise scrolls along the deform curve direction, scaled by projectile speed

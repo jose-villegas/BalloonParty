@@ -88,9 +88,22 @@ feel:
 3. **Noise scroll** — dissolve noise UV scrolls at `_NoiseScrollSpeed × _Time.y`, adding subtle
    turbulence independent of the warp.
 
-The `_DeformDirection` vector is pushed per frame by `ProjectileShieldView` in quad-local space.
-On bounce, a lean impulse is injected and decays exponentially over subsequent frames. The sqrt
-velocity-factor curve ensures the ripple activates quickly at low speeds but saturates gracefully.
+The deformation is driven by a **3-point trailing system** rather than a single lean vector:
+three `DampedSpring2D` instances (fast, mid, slow) track the projectile's heading at different
+spring frequencies. Each spring's offset from the current facing is projected into quad-local
+space, packed into a `_DeformPoints` vector array, and pushed per frame. The shader reads
+`[0]` = dome (fast settle), `[1]` = mid, `[2]` = tail (most lag) — this gives the field a
+physically convincing trailing shape rather than a uniform tilt.
+
+A **squash-on-impact** effect uses a `DampedSpring1D` (scalar spring, `Shared/Math/`) whose
+rest position is zero (no squash). `OnBounce` injects an impulse proportional to the direction
+change magnitude (`(1 − dot) × 0.5 × SquashImpulseScale`); the spring overshoots and oscillates
+back to rest, compressing the field along the impact normal. The shader reads `_SquashMag`,
+`_SquashStrength`, and `_SquashNormal` to apply an oriented UV compression.
+
+On bounce, lean impulses are injected into the fast and slow springs (slow receives a reduced
+fraction) and a separate noise-scroll spring. The sqrt velocity-factor curve ensures the ripple
+activates quickly at low speeds but saturates gracefully.
 
 ---
 
@@ -146,12 +159,16 @@ thickness as `sin²(θ)` approaches zero via `smoothstep` to avoid visual pinchi
   - **Gain**: sets dissolve to 0, tweens `_layerReveal[newLayer]` from 0→1 (reveal wipe, apex→tail)
   - **Lose**: tweens `_layerDissolve[oldLayer]` from 0→1 (noise dissolve)
 - Pushes MPB each tween frame: `SetFloatArray` for both `_DissolveProgress` and `_RevealProgress`
-- **Per-frame dynamics** (`Update`): decays `_leanVector` toward zero using `LeanDecayRate`,
-  computes `_VelocityFactor` from current speed vs `MaxVisualSpeed` (sqrt curve), transforms the
-  lean into quad-local space, and pushes `_DeformDirection` + `_VelocityFactor` via MPB
+- All shader properties are funnelled through `PushProperties()` — both tween callbacks and
+  `Update()` call it, guaranteeing every `SetPropertyBlock` writes the full uniform set
+  (see [Architectural Lesson](#architectural-lesson--single-push-materialpropertyblock))
+- **Per-frame dynamics** (`Update`): steps a 3-point trailing spring system
+  (`DampedSpring2D` × 3 at fast/mid/slow rates) and a scalar squash spring (`DampedSpring1D`),
+  transforms each into quad-local space, and pushes `_DeformPoints` + `_VelocityFactor` +
+  squash uniforms via the shared `PushProperties()` call
 - **`OnBounce(Vector2 oldDir, Vector2 newDir)`** — called by `ProjectileView` on wall bounce and
-  balloon deflect. Applies a lean impulse (`oldDir - newDir`, scaled by `LeanImpulseScale`) that the
-  shader renders as a directional UV bend; clamped to unit magnitude
+  balloon deflect. Injects lean impulses into the trailing springs and a squash impulse
+  proportional to direction change severity; clamped to unit magnitude
 - Quad orientation: child of projectile (inherits rotation automatically — no manual update)
 - **Color tinting**: subscribes to `model.ColorName`, pushes tint via `MPB.SetColor`
 - **Zero shields / initial state**: renderer disabled (`enabled = false`) when shields = 0;
@@ -167,11 +184,21 @@ thickness as `sin²(θ)` approaches zero via `smoothstep` to avoid visual pinchi
 internal interface IShieldFieldSettings
 {
     float DissolveSeconds { get; }
+    float FinalDissolveSeconds { get; }   // slower dissolve for the last shield
     float AppearSeconds { get; }
     int MaxVisualLayers { get; }
-    float MaxVisualSpeed { get; }      // speed ceiling for the velocity-factor curve
-    float LeanDecayRate { get; }       // how fast the lean impulse relaxes per second
-    float LeanImpulseScale { get; }    // multiplier on direction-change → lean push
+    float MaxVisualSpeed { get; }         // speed ceiling for the velocity-factor curve
+    float SpringFrequency { get; }        // fast (dome) spring Hz
+    float SpringDamping { get; }          // fast spring damping ratio
+    float SpringFrequencySlow { get; }    // slow (tail) spring Hz
+    float SpringDampingSlow { get; }      // slow spring damping ratio
+    float LeanImpulseScale { get; }       // multiplier on direction-change → lean push
+    float NoiseSpringFrequency { get; }   // noise-scroll spring Hz
+    float NoiseSpringDamping { get; }     // noise-scroll spring damping
+    float SquashStrength { get; }         // shader-side UV compression strength
+    float SquashFrequency { get; }        // squash spring Hz
+    float SquashDamping { get; }          // squash spring damping ratio
+    float SquashImpulseScale { get; }     // bounce severity → squash impulse
 }
 ```
 
@@ -208,25 +235,30 @@ Assets/
 - Wire DOTween dissolve/appear animations to `ShieldsRemaining` subscription
 - Preserve existing VFX spawning (gain/lose/bounce particles)
 
-### Phase 3 — Dynamics ✓ (tuning WIP)
+### Phase 3 — Dynamics ✓
+- **3-point trailing system**: three `DampedSpring2D` instances (fast dome / mid EMA / slow
+  tail) replaced the single lean-vector approach. Packed into `_DeformPoints` vector array
+  (pushed per frame via MPB). Gives the field a convincing trailing shape on direction change.
 - **UV warp system**: velocity-driven ripple + directional lean bend
   - `_VelocityFactor` (sqrt of normalized speed) modulates ripple amplitude
   - `_RippleAmplitude/Frequency/Speed` drive a sine warp along the V-axis
   - `_LeanStrength` + `_LeanBendPower` apply a progressive power-curve bend from dome to tail,
     stronger at the trailing edge — the field "trails behind" the projectile on direction change
-  - `_DeformDirection` carries the lean vector in quad-local space (pushed per frame via MPB)
 - **Reveal wipe**: layer gain now animates a directional wipe (apex→tail) via `_RevealProgress`
   array; layer loss still uses the existing noise dissolve via `_DissolveProgress`
-- **C# driving**: `ProjectileShieldView.Update()` decays lean and pushes velocity factor;
-  `OnBounce(oldDir, newDir)` injects the lean impulse on wall/deflect direction changes
 - **Editor preview toggle**: `_EditorPreview` property lets artists see deformation in Scene view
   without play mode
-- **Status**: architecture settled; deformation smoothness still being iterated
 
-### Phase 4 — Tuning & Polish
+### Phase 4 — Squash-on-Impact ✓
+- **`DampedSpring1D`** (`Shared/Math/`) — new scalar spring (mirrors `DampedSpring2D`'s API).
+  Rests at zero; `OnBounce` injects an impulse proportional to direction change severity.
+  The spring overshoots and oscillates back, compressing the field along the impact normal.
+- Shader reads `_SquashMag`, `_SquashStrength`, `_SquashNormal` for oriented UV compression.
+- `FinalDissolveSeconds` added to `IShieldFieldSettings` for a slower last-shield dissolve.
+
+### Phase 5 — Tuning & Polish
 - Author `ShieldFieldSettings.asset` with sensible defaults
 - Tune noise scale, directional bias, glow, pulse speed in editor
-- Smooth out deformation transitions (current lean decay may need easing curve)
 - Verify on target mobile GPU (requires in-editor playtest)
 
 ---
@@ -257,6 +289,25 @@ Assets/
 | Multi-pass shader | N draw calls, overdraw compounds |
 | Geometry shader | Not supported on mobile GPUs |
 | Shared material instance | Violates MPB convention for per-instance properties |
+
+---
+
+## Architectural Lesson — Single-Push MaterialPropertyBlock
+
+Early iterations had two independent code paths calling `SetPropertyBlock` on the same
+`MaterialPropertyBlock`: tween callbacks wrote dissolve/reveal/color, while `Update()` wrote
+deform/squash/velocity. Each path only set its own subset of properties before calling
+`SetPropertyBlock`, so whichever ran second would push a block missing the other's latest
+values — making new shader features (squash, deform points) silently invisible whenever a
+tween was active.
+
+**Fix:** a single `PushProperties()` method writes **every** uniform onto the block before
+calling `SetPropertyBlock`. Both `Update()` and all tween callbacks call `PushProperties()`
+instead of writing their own subset. This guarantees each push is a complete snapshot.
+
+**Rule:** when multiple code paths share a `MaterialPropertyBlock`, always funnel through one
+method that writes the full property set. Never let two paths each write a subset and race to
+`SetPropertyBlock`.
 
 ---
 
