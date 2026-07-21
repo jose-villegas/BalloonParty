@@ -13,6 +13,7 @@ using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Rendering;
 using BalloonParty.Shared.SceneLight;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Scenario;
 using BalloonParty.Slots.Actor;
 using DG.Tweening;
 using MessagePipe;
@@ -90,6 +91,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private ProjectileMotionResolver _motionResolver;
         [Inject] private PauseService _pauseService;
         [Inject] private DisturbanceFieldService _disturbanceField;
+        [Inject] private PaintingFieldService _paintingField;
         [Inject] private SceneLightFieldService _lightField;
         [Inject] private ISceneLightSettings _sceneLightSettings;
 
@@ -517,6 +519,12 @@ namespace BalloonParty.Projectile.View
             _hasFlown = true;
 
             _disturbanceField.Stamp(StampSource.Projectile, step.Position, step.Direction);
+
+            if (!string.IsNullOrEmpty(_model.ColorName.Value))
+            {
+                var profile = _disturbanceField.GetProfile(StampSource.Projectile);
+                _paintingField.Stamp(step.Position, profile.Radius, _palette.PaletteIndexOf(_model.ColorName.Value));
+            }
         }
 
         // The muzzle-exit force as a line of stamps marching along the fire heading — count = the ProjectileFire
@@ -559,6 +567,23 @@ namespace BalloonParty.Projectile.View
                 _model, transform.position, msg.BalloonWorldPosition, msg.SurfaceRadius + _contactRadius);
             transform.position = contact;
             _shieldView?.OnBounce(preDir, (Vector2)_model.Direction, speed);
+
+            // Deflection interrupts free roaming — reset all progress toward piercing
+            _model.Flight.SegmentPopCount = 0;
+            _model.Flight.SegmentSweepValid = true;
+            _model.Flight.LastBouncePosition = contact;
+            _model.Flight.ConsecutiveWallBounces = 0;
+            _model.Flight.TotalSweeps = 0;
+            _model.Flight.TotalCruiseTaps = 0;
+
+            if (_model.IsCruising.Value)
+            {
+                _model.IsCruising.Value = false;
+            }
+
+#if UNITY_EDITOR
+            ResetSweepGizmo();
+#endif
 
             // The same radial impact as a wall bounce, at the deflect point.
             _disturbanceField.Stamp(StampSource.ProjectileImpact, contact, Vector2.zero);
