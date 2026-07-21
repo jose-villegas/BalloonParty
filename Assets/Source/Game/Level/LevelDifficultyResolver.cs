@@ -71,11 +71,13 @@ namespace BalloonParty.Game.Level
             ResolveFor(StartLevel());
         }
 
-        // Dev "play from level N" override (CheatState.StartLevel); 1 in release.
+        // Dev "play from level N" override (CheatState.StartLevel); 1 in release. Negative values select a
+        // named fallback entry by its FromLevel id (e.g. -999).
         private static int StartLevel()
         {
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-            return Mathf.Max(1, BalloonParty.Cheats.CheatState.StartLevel);
+            var start = BalloonParty.Cheats.CheatState.StartLevel;
+            return start < 0 ? start : Mathf.Max(1, start);
 #else
             return 1;
 #endif
@@ -137,7 +139,8 @@ namespace BalloonParty.Game.Level
             return _palette.GetColor(colors[Mathf.Clamp(index, 0, colors.Count - 1)]);
         }
 
-        // Falls back to the entry marked with -1 in either level bound.
+        // Falls back to the entry marked with -1 in either level bound. When a negative level is passed
+        // (dev override), searches for the fallback whose FromLevel matches that specific id.
         private LevelRangeEntry ResolveRange(int level)
         {
             var ranges = _pacing.Ranges;
@@ -147,6 +150,11 @@ namespace BalloonParty.Game.Level
             {
                 if (ranges[i].IsFallback)
                 {
+                    if (level < 0 && ranges[i].FromLevel == level)
+                    {
+                        return ranges[i];
+                    }
+
                     fallback = ranges[i];
                     continue;
                 }
@@ -155,6 +163,11 @@ namespace BalloonParty.Game.Level
                 {
                     return ranges[i];
                 }
+            }
+
+            if (level < 0)
+            {
+                Debug.LogWarning($"[LevelDifficultyResolver] No fallback entry with FromLevel={level}; using generic fallback.");
             }
 
             return fallback;

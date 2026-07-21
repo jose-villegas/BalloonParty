@@ -37,7 +37,7 @@ namespace BalloonParty.Configuration.Level
         {
 #if UNITY_EDITOR
             WarnOnGapsAndOverlaps();
-            WarnOnMissingOrMultipleFallbacks();
+            WarnOnFallbackIssues();
             WarnOnEmptyWeightedSets();
             WarnOnNonMonotonicThreshold();
 #endif
@@ -191,21 +191,32 @@ namespace BalloonParty.Configuration.Level
             }
         }
 
-        private void WarnOnMissingOrMultipleFallbacks()
+        private void WarnOnFallbackIssues()
         {
             var fallbackCount = 0;
+            var seenIds = new System.Collections.Generic.HashSet<int>();
+
             for (var i = 0; i < _ranges.Length; i++)
             {
-                if (_ranges[i].IsFallback)
+                if (!_ranges[i].IsFallback)
                 {
-                    fallbackCount++;
+                    continue;
+                }
+
+                fallbackCount++;
+
+                if (!seenIds.Add(_ranges[i].FromLevel))
+                {
+                    Debug.LogWarning(
+                        $"LevelPacingConfiguration ({name}): duplicate fallback ID {_ranges[i].FromLevel} " +
+                        "— each fallback must have a unique FromLevel.");
                 }
             }
 
-            if (fallbackCount != 1)
+            if (fallbackCount == 0)
             {
                 Debug.LogWarning(
-                    $"LevelPacingConfiguration ({name}): expected exactly one fallback range (either level bound = -1), found {fallbackCount}.");
+                    $"LevelPacingConfiguration ({name}): expected at least one fallback range (either level bound < 0), found none.");
             }
         }
 

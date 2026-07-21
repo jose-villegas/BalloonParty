@@ -15,6 +15,8 @@ namespace BalloonParty.Shared
         Vector4 LimitsClockwise { get; }
         int CruiseWallBounceThreshold { get; }
         float CruiseSpeedPerShield { get; }
+        bool SweepEnabled { get; }
+        int SweepTapThreshold { get; }
         float MaxCruiseSpeedMultiplier { get; }
         AnimationCurve CruiseTapCurve { get; }
         float CruiseTapEaseDuration { get; }

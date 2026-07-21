@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Palette;
@@ -6,6 +8,7 @@ using BalloonParty.Game.Score;
 using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.Model;
+using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Actor;
@@ -28,6 +31,7 @@ namespace BalloonParty.Tests.Projectile
         private SlotGrid _grid;
         private ProjectileHitResolver _resolver;
         private ProjectileModel _projectile;
+        private readonly List<GameObject> _gameObjectsToDestroy = new();
 
         [SetUp]
         public void SetUp()
@@ -62,6 +66,20 @@ namespace BalloonParty.Tests.Projectile
             _resolver = new ProjectileHitResolver(
                 _hitDispatcher, _shieldGainedPublisher, _dischargedPublisher, _streakTracker, _grid);
             _projectile = new ProjectileModel { IsFree = true };
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            foreach (var gameObject in _gameObjectsToDestroy)
+            {
+                if (gameObject != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(gameObject);
+                }
+            }
+
+            _gameObjectsToDestroy.Clear();
         }
 
         [Test]
@@ -145,6 +163,86 @@ namespace BalloonParty.Tests.Projectile
             Assert.AreEqual(0, _projectile.Flight.PendingPierceHits.Count, "a normal balloon pops, it isn't recorded");
             _hitDispatcher.Received(1).Dispatch(Arg.Is<ActorHitMessage>(m =>
                 m.Actor == balloon && m.Outcome == HitOutcome.Pop));
+        }
+
+        [Test]
+        public void Resolve_Pop_IncrementsSegmentPopCount()
+        {
+            var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            balloon.Color.Value = "Red";
+
+            _resolver.Resolve(_projectile, balloon, Vector3.zero);
+
+            Assert.AreEqual(1, _projectile.Flight.SegmentPopCount);
+            Assert.IsTrue(_projectile.Flight.SegmentSweepValid,
+                "a 1HP one-shot pop keeps the segment sweep-eligible");
+        }
+
+        [Test]
+        public void Resolve_AbsorbingBalloon_DoesNotIncrementSegmentPopCount()
+        {
+            // An absorb kills the projectile on contact but is NOT a pop — it must not
+            // increment SegmentPopCount, or a Sweep tap would be falsely awarded at the next wall.
+            _resolver.Resolve(_projectile, AbsorbingBalloon(), Vector3.zero);
+
+            Assert.AreEqual(0, _projectile.Flight.SegmentPopCount);
+        }
+
+        [Test]
+        public void Resolve_PiercingTough_DoesNotIncrementSegmentPopCount()
+        {
+            // A piercing shot plows through a tough: the tough is recorded for the discharge
+            // but NOT popped on contact. SegmentPopCount must stay 0 — the tough is still live
+            // in the corridor at the moment of the wall hit, so no Sweep tap should be awarded.
+            _projectile.IsPiercing.Value = true;
+            var tough = new BalloonModel(new BalloonModelConfig(hitsToPop: 2));
+
+            _resolver.Resolve(_projectile, tough, Vector3.zero);
+
+            Assert.AreEqual(0, _projectile.Flight.SegmentPopCount,
+                "plowed toughs are recorded for discharge, not counted as segment pops");
+            Assert.IsFalse(_projectile.Flight.SegmentSweepValid,
+                "a >1HP contact invalidates Sweep even if the pierce later discharges it");
+        }
+
+        [Test]
+        public void Resolve_AllOneHitContactsOnSegment_AwardsSweepTapUsingCruiseSpeed()
+        {
+            var projectileView = CreateSweepView(cruiseSpeedPerShield: 0.25f);
+            _projectile.Flight.LastBouncePosition = Vector3.zero;
+            _projectile.Flight.CruiseTapElapsed = 99f;
+
+            _resolver.Resolve(_projectile, CreateBalloon(hitsToPop: 1, "Red"), Vector3.zero);
+            _resolver.Resolve(_projectile, CreateBalloon(hitsToPop: 1, "Blue"), Vector3.zero);
+
+            AwardSweepTap(projectileView, new Vector3(2f, 0f, 0f), Vector3.right);
+
+            Assert.AreEqual(0.25f, _projectile.Flight.SweepSpeedBonus, 1e-4f,
+                "Sweep now shares CruiseSpeedPerShield instead of its retired dedicated multiplier");
+            Assert.AreEqual(1, _projectile.Flight.TotalCruiseTaps);
+            Assert.AreEqual(0f, _projectile.Flight.CruiseTapElapsed,
+                "a sweep tap should replay the same tap-beat ease from t=0");
+        }
+
+        [Test]
+        public void Resolve_MultiHitContactOnSegment_DoesNotAwardSweepTap()
+        {
+            var projectileView = CreateSweepView(cruiseSpeedPerShield: 0.25f);
+            _projectile.Flight.LastBouncePosition = Vector3.zero;
+            _projectile.Flight.CruiseTapElapsed = 99f;
+
+            // The first contact struck a 2-HP balloon, so this segment is NOT a sweep even if a later
+            // 1-HP balloon pops and the corridor is otherwise clear at the wall.
+            _resolver.Resolve(_projectile, CreateBalloon(hitsToPop: 2, "Red"), Vector3.zero);
+            _resolver.Resolve(_projectile, CreateBalloon(hitsToPop: 1, "Blue"), Vector3.zero);
+
+            AwardSweepTap(projectileView, new Vector3(2f, 0f, 0f), Vector3.right);
+
+            Assert.AreEqual(0f, _projectile.Flight.SweepSpeedBonus, 1e-4f,
+                "any >1-HP contact on the segment should invalidate the sweep");
+            Assert.AreEqual(0, _projectile.Flight.TotalCruiseTaps);
+            Assert.AreEqual(99f, _projectile.Flight.CruiseTapElapsed, 1e-4f,
+                "no sweep awarded means the shared tap-beat should not restart");
         }
 
         [Test]
@@ -352,6 +450,31 @@ namespace BalloonParty.Tests.Projectile
             return buff;
         }
 
+        private ProjectileView CreateSweepView(float cruiseSpeedPerShield)
+        {
+            var gameObject = new GameObject(nameof(ProjectileView));
+            _gameObjectsToDestroy.Add(gameObject);
+
+            var projectileView = gameObject.AddComponent<ProjectileView>();
+            var config = Substitute.For<IGameConfiguration>();
+            config.SweepEnabled.Returns(true);
+            config.CruiseSpeedPerShield.Returns(cruiseSpeedPerShield);
+            config.CruisePiercingTapThreshold.Returns(0);
+
+            SetField(projectileView, "_config", config);
+            SetField(projectileView, "_model", _projectile);
+            SetField(projectileView, "_contactRadius", 0.1f);
+            SetStaticField(typeof(ProjectileView), "BalloonsLayer", 0);
+            return projectileView;
+        }
+
+        private static void AwardSweepTap(ProjectileView projectileView, Vector3 wallHitPosition, Vector3 travelDirection)
+        {
+            typeof(ProjectileView)
+                .GetMethod("TryAwardSweepTap", BindingFlags.NonPublic | BindingFlags.Instance)!
+                .Invoke(projectileView, new object[] { wallHitPosition, travelDirection });
+        }
+
         private BalloonModel PlaceBalloon(Vector2Int slot, string color)
         {
             var model = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
@@ -369,11 +492,32 @@ namespace BalloonParty.Tests.Projectile
             _resolver.Resolve(_projectile, tough, _grid.IndexToWorldPosition(slot));
         }
 
+        private static BalloonModel CreateBalloon(int hitsToPop, string color)
+        {
+            var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: hitsToPop));
+            balloon.Color.Value = color;
+            return balloon;
+        }
+
         private static IBalloonModel AbsorbingBalloon()
         {
             var balloon = Substitute.For<IBalloonModel>();
             balloon.EvaluateHit(Arg.Any<DamageContext>()).Returns(HitOutcome.Absorb);
             return balloon;
+        }
+
+        private static void SetField(object target, string fieldName, object value)
+        {
+            target.GetType()
+                .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance)!
+                .SetValue(target, value);
+        }
+
+        private static void SetStaticField(Type targetType, string fieldName, object value)
+        {
+            targetType
+                .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static)!
+                .SetValue(null, value);
         }
     }
 }

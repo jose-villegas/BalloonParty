@@ -93,14 +93,15 @@ namespace BalloonParty.Projectile.Controller
             model.Flight.ConsecutiveWallBounces++;
             if (model.IsCruising.Value)
             {
+                model.Flight.TotalCruiseTaps++;
+
                 // A new tap lands with this bounce — restart its freeze-then-pickup envelope.
                 model.Flight.CruiseTapElapsed = 0f;
 
                 // A long-enough cruise ARMS the shot: from this tap on it pierces everything it
                 // touches (unbreakables included) for the rest of its life.
-                var taps = model.Flight.CruiseStartShields - model.ShieldsRemaining.Value;
                 if (_cruisePiercingTapThreshold > 0
-                    && taps >= _cruisePiercingTapThreshold
+                    && model.Flight.TotalCruiseTaps >= _cruisePiercingTapThreshold
                     && !model.IsPiercing.Value)
                 {
                     model.IsPiercing.Value = true;
@@ -226,17 +227,19 @@ namespace BalloonParty.Projectile.Controller
             flight.DischargeScheduled = false;
             // Reset the bounce counter with the pierce end: TryEnterCruise gates on !IsPiercing, and the
             // counter is typically already past the cruise threshold here, so without this the shot would
-            // re-enter cruise the instant the pierce clears instead of coasting to base.
+            // re-enter cruise the instant the pierce clears instead of needing to bank fresh taps.
             flight.ConsecutiveWallBounces = 0;
+            flight.TotalCruiseTaps = 0;
             model.IsCruising.Value = false;
             model.IsPiercing.Value = false;
         }
 
-        // The flight speed for this step. A piercing shot (cruise-earned or Snipe-granted) rides at its
-        // full buffed speed until the discharge ends the pierce and drops it back to base.
+        // The flight speed for this step. Cruise still layers its shield-spend ramp on top, while
+        // Sweep contributes a flat tap bonus that persists for the rest of the shot.
         private float ResolveFlightSpeed(IWriteableProjectileModel model, float deltaTime)
         {
             var baseSpeed = model.ComputeBuffedValue(ProjectileBuffId.Speed, model.Speed);
+            var speedBonus = model.Flight.SweepSpeedBonus;
 
             // The earned long-flight reward: every cruise bounce adds a velocity TAP of
             // CruiseSpeedPerShield — cumulative, so a 13-shield bank accumulates 13 taps where a
@@ -248,20 +251,26 @@ namespace BalloonParty.Projectile.Controller
                 var startShields = Mathf.Max(model.Flight.CruiseStartShields, 1);
                 var taps = Mathf.Clamp(
                     model.Flight.CruiseStartShields - model.ShieldsRemaining.Value, 0, startShields);
-                var target = 1f + _cruiseSpeedPerShield * taps;
-                if (_maxCruiseSpeedMultiplier > 0f)
-                {
-                    target = Mathf.Min(target, _maxCruiseSpeedMultiplier);
-                }
-                var progress = _cruiseTapEaseDuration > 0f
-                    ? Mathf.Clamp01(model.Flight.CruiseTapElapsed / _cruiseTapEaseDuration)
-                    : 1f;
-
-                model.Flight.CruiseTapElapsed += deltaTime;
-                return baseSpeed * target * _cruiseTapCurve.Evaluate(progress);
+                speedBonus += _cruiseSpeedPerShield * taps;
             }
 
-            return baseSpeed;
+            if (speedBonus <= 0f)
+            {
+                return baseSpeed;
+            }
+
+            var target = 1f + speedBonus;
+            if (_maxCruiseSpeedMultiplier > 0f)
+            {
+                target = Mathf.Min(target, _maxCruiseSpeedMultiplier);
+            }
+
+            var progress = _cruiseTapEaseDuration > 0f
+                ? Mathf.Clamp01(model.Flight.CruiseTapElapsed / _cruiseTapEaseDuration)
+                : 1f;
+
+            model.Flight.CruiseTapElapsed += deltaTime;
+            return baseSpeed * target * _cruiseTapCurve.Evaluate(progress);
         }
     }
 }

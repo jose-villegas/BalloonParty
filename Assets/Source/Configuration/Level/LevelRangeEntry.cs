@@ -8,10 +8,10 @@ namespace BalloonParty.Configuration.Level
     [Serializable]
     public struct LevelRangeEntry
     {
-        [Tooltip("-1 in either field marks the fallback (default) range.")]
+        [Tooltip("Negative marks a fallback range; the value serves as a unique ID loadable via cheats (e.g. -999).")]
         [SerializeField] private int _fromLevel;
 
-        [Tooltip("-1 in either field marks the fallback (default) range.")]
+        [Tooltip("Negative marks a fallback range (use -1 as the 'to' bound).")]
         [SerializeField] private int _toLevel;
 
         [SerializeField] private RangedLevelParameters _parameters;
@@ -40,9 +40,14 @@ namespace BalloonParty.Configuration.Level
             return level >= _fromLevel && (IsOpenEnded || level <= _toLevel);
         }
 
-        /// <summary>0..1 position of <paramref name="level" /> within the range; 0 for the open-ended tail.</summary>
+        /// <summary>0..1 position of <paramref name="level" /> within the range; 0 for fallbacks and open-ended tails.</summary>
         public float PositionOf(int level)
         {
+            if (IsFallback)
+            {
+                return 0f;
+            }
+
             if (IsOpenEnded)
             {
                 return 0f;

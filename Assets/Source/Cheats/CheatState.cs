@@ -33,7 +33,12 @@ namespace BalloonParty.Cheats
             BlockLevelUp = false;
 #if UNITY_EDITOR
             // Pick up (and consume) the "play from here" level the pacing window stashed before entering play.
-            StartLevel = Mathf.Max(1, UnityEditor.EditorPrefs.GetInt(StartLevelPrefKey, 1));
+            StartLevel = UnityEditor.EditorPrefs.GetInt(StartLevelPrefKey, 1);
+            if (StartLevel >= 0)
+            {
+                StartLevel = Mathf.Max(1, StartLevel);
+            }
+
             UnityEditor.EditorPrefs.DeleteKey(StartLevelPrefKey);
 #else
             StartLevel = 1;

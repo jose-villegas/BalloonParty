@@ -18,7 +18,7 @@ The director does not know about level-ups, trails, or cameras. Producers define
 
 ## Level-Up Trail Flow
 
-`LevelUpCinematic` produces **one** cinematic per level-up (the runner's split-phase form: `TryBegin` … `EndPanIn` … gate). The pan-in zooms the camera onto the tipping trail; `EndPanIn` ends the cinematic but leaves the camera zoomed. On dismiss, `LevelUpCinematic` only resumes and hands off to navigation — the camera un-zoom is driven by the Ascent (`Game/Level/LevelTransitionController.cs`) via `CinematicCameraRig.RestoreTweened`, timed by the `LevelUpRestore` segment's own `TimeScaleCurve` duration — independent of the (concurrent) board-clear effect — not by this producer. The Ascent moves the incoming *scenario*, not the camera (see `LevelAscendCinematic.cs` below).
+`LevelUpCinematic` produces **one** cinematic per level-up (the runner's split-phase form: `TryBegin` … `EndPanIn` … gate). The pan-in zooms the camera onto the tipping trail; `EndPanIn` ends the cinematic but leaves the camera zoomed. On dismiss, `LevelUpCinematic` only resumes and cleans up its session — the camera un-zoom is driven by the Ascent (`Game/Level/LevelTransitionController.cs`) via `CinematicCameraRig.RestoreTweened`, timed by the `LevelUpRestore` segment's own `TimeScaleCurve` duration — independent of the (concurrent) board-clear effect — not by this producer. `LevelController` owns the navigation return to `Game` once the ceremony resolves. The Ascent moves the incoming *scenario*, not the camera (see `LevelAscendCinematic.cs` below).
 
 ### Cinematic 1 — Pan-In (`CinematicState.LevelUpPanIn`)
 
@@ -42,7 +42,7 @@ After the appear animation finishes, `LevelUpPopUp` publishes `LevelUpGlowTrails
 | Step | What happens |
 |---|---|
 | **Trigger** | `LevelUpDismissedMessage` (player pressed Continue) |
-| **`LevelUpCinematic.OnDismissed`** | `Resume(Cinematic)` and finalizes its own session (`NavigationState.Game`). It does **not** touch the camera — the un-zoom is the Ascent's. `CinematicState.LevelUpRestore` is no longer played (kept in the enum/settings for serialized-index stability) |
+| **`LevelUpCinematic.OnDismissed`** | `Resume(Cinematic)` and finalizes its own session state. It does **not** touch navigation or the camera — the nav return to `Game` is `LevelController`'s job after the transition completes, and the un-zoom is the Ascent's. `CinematicState.LevelUpRestore` is no longer played (kept in the enum/settings for serialized-index stability) |
 | **`LevelTransitionController`** | Driven by `ILevelProgress.Phase → Transitioning` (the dismissal advances the phase; the Ascent watches the phase, not the message). Waits for `!Cinematic.IsPlaying` (safety net) then for overflow drain, un-zooms the camera (`RestoreTweened`, timed by the `LevelUpRestore` segment's own `TimeScaleCurve` duration — independent of the concurrent board effect), and runs the Ascent. Runs an injected `IBoardEffect` to clear the old balloons — bound to `BoardFloatAwayEffect`, so level-up balloons float away rather than pop. Both halves of the old level travel with the descent: statics ride via `ITransitionOutgoingContent`, and the old balloons are detached off the grid + reparented under the `ScenarioContentRoot` (`BalloonControllerRegistry.DetachOutgoing`) by the float effect's `Collect()` — hence the root-reset happens *before* `Collect()` so their reparent lands at the right offset. The level-up's **frozen score trails** are outgoing content too: `ScoreTrailService.HoldOutgoing` resolves them here (`CompleteAll`) so they disappear under the Ascent (see *Pausing survivors through the ceremony*) |
 
 ### Pause Integration
@@ -78,9 +78,11 @@ Now that big scores fly as drawn constellations, snapping them away read as hars
    `LevelTransitionCompletedMessage` returns the phase to `Playing`, the arrivals (carrying the finished
    level's numbering) land in a non-`Playing` phase and are ignored by `LevelController`/`ColorProgressBar` —
    they can't step the **new** level's progress, bar, or watermark.
-3. **Abort/loss keep the old immediate cleanup.** A loss committing mid-pan-in (`AbortSession`) still
+3. **Abort/loss recover the controller too.** A loss committing mid-pan-in (`AbortSession`) still
    `CompleteAll()`s at once — that path never reaches a transition, so it must not leave anything frozen.
-   Every session exit disposes the freeze subscription; abort/dismiss/dispose are all leak-audited.
+   It also publishes `LevelUpAbortedMessage`, letting `LevelController` reset `Phase` back to `Playing`
+   and return navigation to `Game` while the level is still pending. Every session exit disposes the
+   freeze subscription; abort/dismiss/dispose are all leak-audited.
 
 ### Trail Identity
 
@@ -122,7 +124,7 @@ and reveal early. The explicit arm/open handshake closes that race.
 
 | File | Role |
 |---|---|
-| `LevelUpCinematic.cs` | Level-up producer (plain C# `IStartable`): intercepts the tipping trail and puppets it along the pan-in curve (gameplay paused — timeScale untouched), ends on the popup gate. The pan-in zooms the camera in; on dismiss it only resumes and hands off to nav — the camera un-zoom is the Ascent's job (`LevelTransitionController` calls `CinematicCameraRig.RestoreTweened`, timed by the `LevelUpRestore` segment's own curve). **The loss wins**: the show is gated on `Navigation == Game` + `ILossForecast.LossImminent` at every commit point and aborts mid-pan-in if the loss becomes certain (queued overflow charges \f$\ge\f$ remaining HP) |
+| `LevelUpCinematic.cs` | Level-up producer (plain C# `IStartable`): intercepts the tipping trail and puppets it along the pan-in curve (gameplay paused — timeScale untouched), ends on the popup gate. The pan-in zooms the camera in; on dismiss it only resumes and cleans up its own session — the camera un-zoom is the Ascent's job (`LevelTransitionController` calls `CinematicCameraRig.RestoreTweened`, timed by the `LevelUpRestore` segment's own curve), and `LevelController` owns the nav return to `Game`. **The loss wins**: the show is gated on `Navigation == Game` + `ILossForecast.LossImminent` at every commit point and aborts mid-pan-in if the loss becomes certain (queued overflow charges \f$\ge\f$ remaining HP), publishing `LevelUpAbortedMessage` so the pending ceremony can recover cleanly |
 | `CameraRigCinematicProducer.cs` | Thin `abstract` base for the runner-driven producers (`IStartable`/`IDisposable`): holds the four runner deps + the `CameraRigCinematic` (exposed as `Runner`), builds it from the subclass's `BuildConfig()` on `Start`, and aborts it on `Dispose`. Subclasses override `OnStart` (subscribe to the trigger) and `OnDispose` (dispose subscriptions / release pauses). Kills the begin/abort boilerplate the three producers used to repeat. Named `Runner`, not `Cinematic`, to avoid colliding with the static `Cinematic` state class. `LevelAscendCinematic` doesn't extend it (no camera runner) |
 | `CameraRigCinematic.cs` | **The reusable camera-rig cinematic runner** (plain C#): pan-in segment (per-tick timeScale drive + `Frame(focus, segment, dt)`) until an end condition, then a restore segment (timeScale eased to 1 from wherever it is + camera back to base). Owns begin/end pairing and teardown (`Abort`), guards concurrency via `CinematicDirector.TryBeginCinematic`. A producer = this + a trigger + a focus + an end condition. `LevelAscendCinematic` does **not** use this runner (see below) |
 | `HeartDrainCinematic.cs` | Overflow heart-drain producer (plain C# `IStartable`): on the first `OverflowHeartRequestedMessage`, runs the runner with `HeartDrain`/`HeartDrainRestore`, a `HeartTrailFocus`, and "pile drained or run over" as the end condition. Neither loss-blocking (the 0-HP game-over still fires) nor shake-blocking (each heart launch punches the camera through the pan, unscaled so slow-mo can't stretch it) |

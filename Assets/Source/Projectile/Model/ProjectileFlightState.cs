@@ -52,9 +52,31 @@ namespace BalloonParty.Projectile.Model
         // toward the max as the remaining shields spend down from this snapshot.
         public int CruiseStartShields { get; set; }
 
+        // Cruise-wall taps plus Sweep taps earned so far this shot — the shared piercing threshold.
+        public int TotalCruiseTaps { get; set; }
+
         // Seconds since the last cruise speed change (entry or bounce) — drives the per-tap
         // freeze-then-pickup animation envelope.
         public float CruiseTapElapsed { get; set; }
+
+        // Sweep taps add their speed gain outside the cruise-only shield-spend ramp, but the same
+        // max-speed cap and tap-beat easing still apply.
+        public float SweepSpeedBonus { get; set; }
+
+        // Total sweeps detected (clear-corridor passes). Compared against SweepTapThreshold to gate
+        // whether speed taps actually apply.
+        public int TotalSweeps { get; set; }
+
+        // Balloon pops since the last wall bounce — the Sweep gate on the current straight segment.
+        public int SegmentPopCount { get; set; }
+
+        // Starts true on each segment and is cleared by any contact that was not a 1HP one-shot pop,
+        // so Sweep only rewards a full corridor clear of instant kills.
+        public bool SegmentSweepValid { get; set; } = true;
+
+        // World position where the last wall bounce happened (or the muzzle on the first leg) — the
+        // Sweep back-trace origin.
+        public Vector3 LastBouncePosition { get; set; }
 
         // World position where the current flight segment began (last reflect/deflect, or the
         // muzzle) — the origin the last-shield ease traverses from.

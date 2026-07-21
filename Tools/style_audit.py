@@ -377,15 +377,17 @@ def check_member_ordering(path: Path, lines: list[str], result: AuditResult):
         # `#if UNITY_EDITOR` block below the class's methods is fine (still on top *within its clause*).
         # `#if` opens a fresh context; `#else`/`#elif` restart the branch; `#endif` restores the outer one.
         if stripped.startswith("#if"):
-            pp_stack.append(seen_method)
+            pp_stack.append((seen_method, last_group))
             seen_method = False
+            last_group = 0
             continue
         if stripped.startswith("#endif"):
             if pp_stack:
-                seen_method = pp_stack.pop()
+                seen_method, last_group = pp_stack.pop()
             continue
         if stripped.startswith("#el"):
             seen_method = False
+            last_group = 0
             continue
 
         # Skip methods, constructors, and property/field lines carrying a call — but record when a

@@ -36,6 +36,7 @@ namespace BalloonParty.Game
         [SerializeField] private SceneLightFieldSettings _sceneLightFieldSettings;
         [SerializeField] private CloudFieldSettings _cloudFieldSettings;
         [SerializeField] private SpeckFieldSettings _speckFieldSettings;
+        [SerializeField] private ShieldFieldSettings _shieldFieldSettings;
         [SerializeField] private LevelPacingConfiguration _levelPacingConfiguration;
         [SerializeField] private BuffConfiguration _buffConfiguration;
         [SerializeField] private ScoreTrailBehaviourConfiguration _scoreTrailBehaviourConfiguration;
@@ -84,6 +85,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance<ISceneLightSettings>(_sceneLightFieldSettings);
             builder.RegisterInstance<ICloudFieldSettings>(_cloudFieldSettings);
             builder.RegisterInstance<ISpeckFieldSettings>(_speckFieldSettings);
+            builder.RegisterInstance<IShieldFieldSettings>(_shieldFieldSettings);
             builder.RegisterInstance<ILevelPacingConfiguration>(_levelPacingConfiguration);
             builder.RegisterInstance<IBuffConfiguration>(_buffConfiguration);
 

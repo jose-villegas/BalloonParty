@@ -29,6 +29,15 @@ namespace BalloonParty.Configuration
                  "shields, so a 13-shield cruise tops out much faster than a 5-shield one.")]
         [SerializeField] [Min(0f)] private float _cruiseSpeedPerShield = 0.25f;
 
+        [Tooltip("Enables Sweep: a wall hit after popping at least one balloon this segment awards a tap " +
+                 "if the backward corridor is now clear.")]
+        [SerializeField] private bool _sweepEnabled = true;
+
+        [Tooltip("How many successful sweeps (clear-corridor detections) must occur before taps actually " +
+                 "start adding speed. Functions like CruiseWallBounceThreshold but for sweeps. 0 = " +
+                 "immediate (first sweep awards speed).")]
+        [SerializeField] [Min(0)] private int _sweepTapThreshold;
+
         [Tooltip("Hard ceiling on cruise speed as a multiple of the base speed. At extremely high " +
                  "shield counts the cumulative taps can push the shot fast enough to skip past wall " +
                  "geometry in a single fixed step — this cap prevents that. 0 = unlimited.")]
@@ -107,6 +116,8 @@ namespace BalloonParty.Configuration
         public float ShieldTrailDuration => _shieldTrailDuration;
         public int CruiseWallBounceThreshold => _cruiseWallBounceThreshold;
         public float CruiseSpeedPerShield => _cruiseSpeedPerShield;
+        public bool SweepEnabled => _sweepEnabled;
+        public int SweepTapThreshold => _sweepTapThreshold;
         public float MaxCruiseSpeedMultiplier => _maxCruiseSpeedMultiplier;
         public AnimationCurve CruiseTapCurve => _cruiseTapCurve;
         public float CruiseTapEaseDuration => _cruiseTapEaseDuration;

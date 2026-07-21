@@ -32,6 +32,7 @@ namespace BalloonParty.Tests.Game
         private IActiveProjectilePierce _pierce;
         private ReactiveProperty<bool> _isPiercing;
         private IMessageHandler<ScoreTrailArrivedMessage> _trailArrivedHandler;
+        private IMessageHandler<LevelUpAbortedMessage> _abortedHandler;
         private IMessageHandler<LevelUpDismissedMessage> _dismissedHandler;
         private IMessageHandler<LevelTransitionCompletedMessage> _completedHandler;
         private LevelController _controller;
@@ -84,6 +85,13 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<ScoreTrailArrivedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
+            var abortedSubscriber = Substitute.For<ISubscriber<LevelUpAbortedMessage>>();
+            abortedSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<LevelUpAbortedMessage>>(h => _abortedHandler = h),
+                    Arg.Any<MessageHandlerFilter<LevelUpAbortedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
             var dismissedSubscriber = Substitute.For<ISubscriber<LevelUpDismissedMessage>>();
             dismissedSubscriber
                 .Subscribe(
@@ -100,7 +108,7 @@ namespace BalloonParty.Tests.Game
 
             return new LevelController(
                 _levelParams, _thresholds, _palette, _navigation, _lossForecast, _levelUpPublisher,
-                trailArrivedSubscriber, dismissedSubscriber, completedSubscriber, _pierce);
+                trailArrivedSubscriber, abortedSubscriber, dismissedSubscriber, completedSubscriber, _pierce);
         }
 
         [Test]
@@ -499,6 +507,79 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void TransitionCompleted_NavigationReturnsToGame()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+            FireDismissed();
+
+            FireTransitionComplete();
+
+            _navigation.Received(1).TransitionTo(NavigationState.Game);
+            Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value);
+        }
+
+        [Test]
+        public void TransitionCompleted_WhileNavIsGameOver_DoesNotOverrideToGame()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+            FireDismissed();
+            _navState.Value = NavigationState.GameOver;
+
+            FireTransitionComplete();
+
+            _navigation.DidNotReceive().TransitionTo(NavigationState.Game);
+            Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value);
+        }
+
+        [Test]
+        public void Dismiss_DoesNotTransitionNavToGame()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+
+            FireDismissed();
+
+            _navigation.DidNotReceive().TransitionTo(NavigationState.Game);
+            Assert.AreEqual(LevelUpPhase.Transitioning, _controller.Phase.Value);
+        }
+
+        [Test]
+        public void FullCeremony_NavState_LevelUpThenGame()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
+
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+            FireDismissed();
+            FireTransitionComplete();
+
+            Received.InOrder(() =>
+            {
+                _navigation.TransitionTo(NavigationState.LevelUp);
+                _navigation.TransitionTo(NavigationState.Game);
+            });
+        }
+
+        [Test]
+        public void Abort_WhilePending_ResetsPhaseAndNavToGame()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+
+            FireAborted();
+
+            _navigation.Received(1).TransitionTo(NavigationState.Game);
+            Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value);
+            Assert.AreEqual(1, _controller.Level.Value, "abort before dismissal keeps the current level");
+        }
+
+        [Test]
         public void Dismiss_OutsidePending_Ignored()
         {
             // A stray dismissal while Playing must not advance the level.
@@ -678,6 +759,11 @@ namespace BalloonParty.Tests.Game
         private void FireDismissed()
         {
             _dismissedHandler.Handle(new LevelUpDismissedMessage());
+        }
+
+        private void FireAborted()
+        {
+            _abortedHandler.Handle(new LevelUpAbortedMessage());
         }
 
         private void FireTransitionComplete()

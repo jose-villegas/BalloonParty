@@ -36,6 +36,7 @@ namespace BalloonParty.Game.Cinematics
         private readonly ISubscriber<ScorePointsGroupMessage> _scoredSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
+        private readonly IPublisher<LevelUpAbortedMessage> _abortedPublisher;
         private readonly ILevelProgress _levelProgress;
         private readonly ILossForecast _lossForecast;
         private readonly ScoreTrailService _scoreTrailService;
@@ -67,6 +68,7 @@ namespace BalloonParty.Game.Cinematics
             ISubscriber<ScorePointsGroupMessage> scoredSubscriber,
             ISubscriber<LevelUpDismissedMessage> dismissedSubscriber,
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
+            IPublisher<LevelUpAbortedMessage> abortedPublisher,
             ILevelProgress levelProgress,
             ILossForecast lossForecast,
             ScoreTrailService scoreTrailService,
@@ -79,6 +81,7 @@ namespace BalloonParty.Game.Cinematics
             _scoredSubscriber = scoredSubscriber;
             _dismissedSubscriber = dismissedSubscriber;
             _trailArrivedSubscriber = trailArrivedSubscriber;
+            _abortedPublisher = abortedPublisher;
             _levelProgress = levelProgress;
             _lossForecast = lossForecast;
             _scoreTrailService = scoreTrailService;
@@ -261,7 +264,6 @@ namespace BalloonParty.Game.Cinematics
             // Pending has long since fired by any terminal, so the freeze hook has done its job; drop it.
             LifecycleHelper.DisposeAndClear(ref _freezeSubscription);
             _sessionActive = false;
-            Navigation.TransitionTo(NavigationState.Game);
         }
 
         // Curve value modulates the tipping trail's playback speed; timeScale stays untouched during pan-in.
@@ -339,6 +341,7 @@ namespace BalloonParty.Game.Cinematics
 
             Runner.Abort();
             _sessionActive = false;
+            _abortedPublisher.Publish(new LevelUpAbortedMessage());
         }
 
         private void EndPanIn()

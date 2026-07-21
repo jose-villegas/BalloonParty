@@ -235,44 +235,42 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void ShapeCatalog_OctagonalBipyramid_SingleInkedTwoWalks()
+        public void ShapeCatalog_ElongatedSquareDipyramid_SixFaceWalks()
         {
             Assert.IsTrue(ShapeCatalog.TryGet(10, out var shape));
 
             Assert.AreEqual(10, shape.Vertices.Length);
             Assert.AreEqual(10, new HashSet<Vector3>(shape.Vertices).Count, "ten distinct vertices");
-            Assert.AreEqual(2, shape.Walks.Length, "equator octagon + one pole-to-pole zigzag");
+            Assert.AreEqual(6, shape.Walks.Length, "two pyramid caps + four square lateral faces");
 
             var edges = InspectCircuits(shape);
-            Assert.AreEqual(24, edges.Multiplicity.Count, "a bipyramid over an octagon has 24 edges");
+            Assert.AreEqual(20, edges.Multiplicity.Count, "an elongated square dipyramid has 20 edges");
             CollectionAssert.AreEqual(
-                new[] { 1 }, DistinctValues(edges.Multiplicity), "every edge inked exactly once (single-inked)");
+                new[] { 2 }, DistinctValues(edges.Multiplicity), "every edge shared by two face walks");
             Assert.AreEqual(10, edges.Touched.Count, "all ten vertices covered");
 
             var degrees = DegreeHistogram(edges.Multiplicity);
-            Assert.AreEqual(8, CountByDegree(degrees, 4), "eight equator vertices of degree four");
-            Assert.AreEqual(2, CountByDegree(degrees, 8), "two apexes of degree eight");
+            Assert.AreEqual(10, CountByDegree(degrees, 4), "every vertex has degree four");
         }
 
         [Test]
-        public void ShapeCatalog_HexagonalPyramid_ApexHubOverHexagonBase()
+        public void ShapeCatalog_PentagonalDipyramid_DoubleInkedCaps()
         {
             Assert.IsTrue(ShapeCatalog.TryGet(7, out var shape));
 
             Assert.AreEqual(7, shape.Vertices.Length);
             Assert.AreEqual(7, new HashSet<Vector3>(shape.Vertices).Count, "seven distinct vertices");
-            Assert.AreEqual(4, shape.Walks.Length, "one weaving cycle + three base-edge shuttles");
+            Assert.AreEqual(2, shape.Walks.Length, "two apex-fan caps covering both hemispheres");
 
             var edges = InspectCircuits(shape);
-            Assert.AreEqual(12, edges.Multiplicity.Count, "six base edges + six slant edges");
+            Assert.AreEqual(15, edges.Multiplicity.Count, "a pentagonal bipyramid has 15 edges");
+            CollectionAssert.AreEqual(
+                new[] { 2 }, DistinctValues(edges.Multiplicity), "every edge double-inked by two cap fans");
             Assert.AreEqual(7, edges.Touched.Count, "all seven vertices covered");
 
-            // Six odd-degree base vertices forbid a pure single-inked cover (like the square pyramid): the
-            // three base shuttles are the minimal retraced edges, so multiplicities are 1s and 2s.
-            CollectionAssert.AreEqual(new[] { 1, 2 }, DistinctValues(edges.Multiplicity));
-
             var degrees = DegreeHistogram(edges.Multiplicity);
-            Assert.AreEqual(1, CountByDegree(degrees, 6), "one apex hub joined to all six base vertices");
+            Assert.AreEqual(5, CountByDegree(degrees, 4), "five equatorial vertices of degree four");
+            Assert.AreEqual(2, CountByDegree(degrees, 5), "two apex vertices of degree five");
         }
 
         [Test]
@@ -334,42 +332,61 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void ShapeCatalog_Torus_GridRingsSingleInked()
+        public void ShapeCatalog_J80_FortyTwoFaceWalks()
         {
             Assert.IsTrue(ShapeCatalog.TryGet(50, out var shape));
 
             Assert.AreEqual(50, shape.Vertices.Length);
             Assert.AreEqual(50, new HashSet<Vector3>(shape.Vertices).Count, "fifty distinct vertices");
-            Assert.AreEqual(15, shape.Walks.Length, "five major decagons + ten minor pentagons");
+            Assert.AreEqual(42, shape.Walks.Length, "42 faces of the parabidiminished rhombicosidodecahedron");
+
+            foreach (var vertex in shape.Vertices)
+            {
+                Assert.AreEqual(1f, vertex.magnitude, 1e-4f, "spherized onto the unit sphere");
+            }
 
             var edges = InspectCircuits(shape);
-            Assert.AreEqual(100, edges.Multiplicity.Count, "a 10x5 torus grid has 100 edges");
+            Assert.Less(edges.MaxLength - edges.MinLength, 1e-3f, "uniform edge length (Archimedean subset)");
+            Assert.AreEqual(90, edges.Multiplicity.Count, "J80 has 90 edges (Euler: 50-90+42=2)");
             CollectionAssert.AreEqual(
-                new[] { 1 }, DistinctValues(edges.Multiplicity), "every edge inked exactly once (single-inked)");
+                new[] { 2 }, DistinctValues(edges.Multiplicity), "each edge shared by exactly two faces");
             Assert.AreEqual(50, edges.Touched.Count, "all fifty vertices covered");
 
             var degrees = DegreeHistogram(edges.Multiplicity);
-            Assert.AreEqual(50, CountByDegree(degrees, 4), "every torus-grid vertex has degree four");
+            Assert.AreEqual(20, CountByDegree(degrees, 3), "twenty boundary vertices of degree three");
+            Assert.AreEqual(30, CountByDegree(degrees, 4), "thirty interior vertices of degree four");
         }
 
         [Test]
-        public void ShapeCatalog_YarnBall_OneClosedCoil()
+        public void ShapeCatalog_WavingSphere_LatLonGrid()
         {
             Assert.IsTrue(ShapeCatalog.TryGet(100, out var shape));
 
             Assert.AreEqual(100, shape.Vertices.Length);
             Assert.AreEqual(100, new HashSet<Vector3>(shape.Vertices).Count, "one hundred distinct vertices");
-            Assert.AreEqual(1, shape.Walks.Length, "a single continuous coil");
-            CollectionAssert.AreEqual(new[] { 100 }, shape.PensPerWalk, "all pens chase the one line");
+            Assert.AreEqual(20, shape.Walks.Length, "ten latitude rings + ten longitude meridians");
+
+            var expectedPens = new int[20];
+            for (var i = 0; i < 20; i++)
+            {
+                expectedPens[i] = 5;
+            }
+
+            CollectionAssert.AreEqual(expectedPens, shape.PensPerWalk, "five pens per ring (100/20)");
+
+            foreach (var vertex in shape.Vertices)
+            {
+                Assert.AreEqual(1f, vertex.magnitude, 1e-4f, "spherized onto the unit sphere");
+            }
 
             var edges = InspectCircuits(shape);
-            Assert.AreEqual(100, edges.Multiplicity.Count, "a 100-vertex simple cycle has 100 edges");
+            Assert.AreEqual(200, edges.Multiplicity.Count, "10x10 grid: 100 lat + 100 lon edges");
             CollectionAssert.AreEqual(
                 new[] { 1 }, DistinctValues(edges.Multiplicity), "every edge inked exactly once");
             Assert.AreEqual(100, edges.Touched.Count, "all vertices covered");
 
             var degrees = DegreeHistogram(edges.Multiplicity);
-            Assert.AreEqual(100, CountByDegree(degrees, 2), "a simple cycle: degree two everywhere");
+            Assert.AreEqual(100, CountByDegree(degrees, 4), "every grid vertex has degree four");
         }
 
         private static void AssertFiveDistinctPerWalk(FormationShape shape)

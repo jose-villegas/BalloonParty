@@ -9,7 +9,13 @@ namespace BalloonParty.Projectile.Model
     {
         int ConsecutiveWallBounces { get; }
         int CruiseStartShields { get; }
+        int TotalCruiseTaps { get; }
         float CruiseTapElapsed { get; }
+        float SweepSpeedBonus { get; }
+        int TotalSweeps { get; }
+        int SegmentPopCount { get; }
+        bool SegmentSweepValid { get; }
+        Vector3 LastBouncePosition { get; }
         Vector3 SegmentStartPosition { get; }
         float SegmentElapsed { get; }
     }

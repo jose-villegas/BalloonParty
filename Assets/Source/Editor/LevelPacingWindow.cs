@@ -840,11 +840,11 @@ namespace BalloonParty.Editor
             }
 
             // Start a run beginning at this range's first level (dev only — the cheat menu has the
-            // in-play equivalent). The fallback catch-all row has no concrete level, so it plays from
-            // just past the highest authored range — the first level that resolves to the fallback.
+            // in-play equivalent). Fallback rows pass their negative FromLevel as the ID so the
+            // difficulty resolver picks the correct named fallback.
             var playRect = CellRect(rowRect, 14);
-            var playLevel = isFallback ? FallbackStartLevel() : Mathf.Max(1, from);
-            var playTip = isFallback ? "Play the fallback range (level " + playLevel + ")" : "Play from this level";
+            var playLevel = isFallback ? from : Mathf.Max(1, from);
+            var playTip = isFallback ? $"Play fallback ID {from}" : "Play from this level";
             if (GUI.Button(playRect, IconButton("PlayButton", "▶", playTip)))
             {
                 StartFromLevel(playLevel);
@@ -885,32 +885,14 @@ namespace BalloonParty.Editor
             EditorApplication.isPlaying = true;
         }
 
-        // The first level that resolves to the fallback range: one past the highest level any authored
-        // (non-fallback) range covers, so ResolveRange finds no bounded match and returns the fallback.
-        private int FallbackStartLevel()
-        {
-            var highest = 0;
-            for (var i = 0; i < _rangesProp.arraySize; i++)
-            {
-                var entry = _rangesProp.GetArrayElementAtIndex(i);
-                var from = entry.FindPropertyRelative("_fromLevel").intValue;
-                var to = entry.FindPropertyRelative("_toLevel").intValue;
-                if (from < 0 || to < 0)
-                {
-                    continue;
-                }
-
-                highest = Mathf.Max(highest, Mathf.Max(from, to));
-            }
-
-            return highest + 1;
-        }
-
         private static void DrawRangeCell(Rect cell, SerializedProperty fromProp, SerializedProperty toProp, bool isFallback)
         {
             if (isFallback)
             {
-                EditorGUI.LabelField(cell, "Fallback", EditorStyles.miniLabel);
+                var labelRect = new Rect(cell.x, cell.y, 18f, cell.height);
+                EditorGUI.LabelField(labelRect, "FB", EditorStyles.miniLabel);
+                var idRect = new Rect(cell.x + 18f, cell.y + 2f, cell.width - 20f, cell.height - 4f);
+                fromProp.intValue = EditorGUI.IntField(idRect, fromProp.intValue);
                 return;
             }
 

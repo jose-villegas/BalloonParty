@@ -26,6 +26,7 @@ namespace BalloonParty.Game.Level
         private readonly ILossForecast _lossForecast;
         private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
+        private readonly ISubscriber<LevelUpAbortedMessage> _abortedSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         private readonly ISubscriber<LevelTransitionCompletedMessage> _transitionCompletedSubscriber;
         private readonly IActiveProjectilePierce _pierce;
@@ -38,6 +39,7 @@ namespace BalloonParty.Game.Level
         private readonly List<string> _colorKeys = new();
 
         private IDisposable _trailSubscription;
+        private IDisposable _abortedSubscription;
         private IDisposable _dismissedSubscription;
         private IDisposable _transitionCompletedSubscription;
         private IDisposable _pierceEndedSubscription;
@@ -53,6 +55,7 @@ namespace BalloonParty.Game.Level
             ILossForecast lossForecast,
             IPublisher<ScoreLevelUpMessage> levelUpPublisher,
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
+            ISubscriber<LevelUpAbortedMessage> abortedSubscriber,
             ISubscriber<LevelUpDismissedMessage> dismissedSubscriber,
             ISubscriber<LevelTransitionCompletedMessage> transitionCompletedSubscriber,
             IActiveProjectilePierce pierce)
@@ -64,6 +67,7 @@ namespace BalloonParty.Game.Level
             _lossForecast = lossForecast;
             _levelUpPublisher = levelUpPublisher;
             _trailArrivedSubscriber = trailArrivedSubscriber;
+            _abortedSubscriber = abortedSubscriber;
             _dismissedSubscriber = dismissedSubscriber;
             _transitionCompletedSubscriber = transitionCompletedSubscriber;
             _pierce = pierce;
@@ -81,6 +85,7 @@ namespace BalloonParty.Game.Level
             ClearRunState();
 
             _trailSubscription = _trailArrivedSubscriber.Subscribe(OnTrailArrived);
+            _abortedSubscription = _abortedSubscriber.Subscribe(_ => OnLevelUpAborted());
 
             // Level and progress advance only once the player dismisses the popup (Pending → Transitioning),
             // and scoring reopens only once the Ascent reports it has settled (Transitioning → Playing).
@@ -105,6 +110,7 @@ namespace BalloonParty.Game.Level
         public void Dispose()
         {
             _trailSubscription?.Dispose();
+            _abortedSubscription?.Dispose();
             _dismissedSubscription?.Dispose();
             _transitionCompletedSubscription?.Dispose();
             _pierceEndedSubscription?.Dispose();
@@ -340,6 +346,25 @@ namespace BalloonParty.Game.Level
             }
 
             _phase.Value = LevelUpPhase.Playing;
+
+            if (_navigation.Current.Value == NavigationState.LevelUp)
+            {
+                _navigation.TransitionTo(NavigationState.Game);
+            }
+        }
+
+        private void OnLevelUpAborted()
+        {
+            if (_phase.Value != LevelUpPhase.Pending)
+            {
+                return;
+            }
+
+            _phase.Value = LevelUpPhase.Playing;
+            if (_navigation.Current.Value == NavigationState.LevelUp)
+            {
+                _navigation.TransitionTo(NavigationState.Game);
+            }
         }
     }
 }

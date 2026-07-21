@@ -35,7 +35,9 @@ animations have a stable state to play against:
 2. **`Pending → Transitioning`** — the player dismisses the popup (`LevelUpDismissedMessage`). *Now*
    `Level` advances to the pending value and progress resets to zero.
 3. **`Transitioning → Playing`** — the Ascent reports it has settled (`LevelTransitionCompletedMessage`),
-   so scoring reopens.
+   so scoring reopens. `LevelController.OnTransitionCompleted` also owns the nav return to
+   `NavigationState.Game`, but only if nav is still `LevelUp`; a loss that reached `GameOver` during the
+   transition is left untouched.
 
 The `Playing → Pending` commit is also held while a shot is piercing — a pierce plows through many
 balloons in one flight, so firing the ceremony on a mid-flight confirming arrival would interrupt the
@@ -45,6 +47,14 @@ trails that arrived during the plow have already advanced progress.
 `Phase` is the cue the rest of the ceremony reads instead of inferring from nav/pause: the popup shows
 on `ScoreLevelUpMessage`, and the Ascent (`LevelTransitionController`) starts on
 `Phase → Transitioning` — deterministic, fires exactly once, no extra re-entrancy flag.
+
+### Abort recovery
+
+If the level-up cinematic bails before dismissal (for example, the loss becomes certain mid-pan-in),
+`LevelUpCinematic.AbortSession` publishes `LevelUpAbortedMessage`. `LevelController` treats that as the
+pending ceremony's recovery path: while `Phase == Pending`, it resets the phase to `Playing` and returns
+navigation from `LevelUp` to `Game`. Because this happens before dismissal, the current `Level` and
+confirmed progress stay on the pre-level-up state.
 
 ### Banked excess
 

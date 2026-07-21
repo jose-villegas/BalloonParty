@@ -301,6 +301,48 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
+        public void Step_SweepTap_UsesSameEasePathAsCruiseTap()
+        {
+            var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 1f);
+            var cruiseModel = NewModel(direction: Vector2.up, speed: 1f, shields: 1);
+            cruiseModel.Flight.CruiseStartShields = 2;
+            cruiseModel.IsCruising.Value = true;
+            cruiseModel.Flight.CruiseTapElapsed = 0f;
+
+            var sweepModel = NewModel(direction: Vector2.up, speed: 1f, shields: 1);
+            sweepModel.Flight.SweepSpeedBonus = 0.5f;
+            sweepModel.Flight.CruiseTapElapsed = 0f;
+
+            var cruiseFrozen = resolver.Step(cruiseModel, Vector3.zero, 0.5f);
+            var sweepFrozen = resolver.Step(sweepModel, Vector3.zero, 0.5f);
+            Assert.AreEqual(cruiseFrozen.Position.y, sweepFrozen.Position.y, 1e-4f,
+                "both tap types should hit the same freeze beat right after the tap");
+
+            var cruisePickup = resolver.Step(cruiseModel, cruiseFrozen.Position, 0.5f);
+            var sweepPickup = resolver.Step(sweepModel, sweepFrozen.Position, 0.5f);
+            Assert.AreEqual(cruisePickup.Position.y, sweepPickup.Position.y, 1e-4f,
+                "mid-window pickup should follow the same lerp path for sweep and cruise taps");
+
+            var cruiseTarget = resolver.Step(cruiseModel, cruisePickup.Position, 0.5f);
+            var sweepTarget = resolver.Step(sweepModel, sweepPickup.Position, 0.5f);
+            Assert.AreEqual(cruiseTarget.Position.y, sweepTarget.Position.y, 1e-4f,
+                "once the ease completes, both tap types should hold the same target speed");
+        }
+
+        [Test]
+        public void Step_CruiseBounce_IncrementsTotalCruiseTaps()
+        {
+            var resolver = CruiseResolver(perShield: 0.5f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
+            model.Flight.CruiseStartShields = 4;
+            model.IsCruising.Value = true;
+
+            resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
+
+            Assert.AreEqual(1, model.Flight.TotalCruiseTaps);
+        }
+
+        [Test]
         public void Step_LethalBounce_DoesNotCountACruiseBounce()
         {
             var resolver = CruiseResolver(perShield: 0.5f);
@@ -318,13 +360,17 @@ namespace BalloonParty.Tests.Projectile
             var resolver = CruiseResolver(perShield: 0f, piercingTapThreshold: 3);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 4);
             model.Flight.CruiseStartShields = 5;
+            // The model enters the test mid-cruise: one tap was already earned on a prior bounce (the
+            // CruiseStartShields=5 but shields=4 setup simulates a shot that has already bounced once).
+            // TotalCruiseTaps is an explicit counter — initialise it to match the pre-existing tap.
+            model.Flight.TotalCruiseTaps = 1;
             model.IsCruising.Value = true;
 
-            // This bounce spends shield 4 -> 3: taps = 5 - 3 = 2, still below the threshold.
+            // This bounce brings TotalCruiseTaps to 2 — still below the threshold of 3.
             resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
             Assert.IsFalse(model.IsPiercing.Value, "two taps — not armed yet");
 
-            // Next bounce: taps = 3 — the shot arms for the rest of its life.
+            // Next bounce: TotalCruiseTaps = 3 — the shot arms for the rest of its life.
             model.Direction = Vector2.up;
             resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
             Assert.IsTrue(model.IsPiercing.Value, "third tap arms piercing");
@@ -442,6 +488,22 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
+        public void Step_PierceDischarge_ResetsTotalCruiseTaps()
+        {
+            var resolver = CruiseResolver(perShield: 0.5f, pierceDischargeDelay: 0f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
+            model.IsPiercing.Value = true;
+            model.Flight.TotalCruiseTaps = 3;
+            model.Flight.DischargeArmed = true;
+
+            resolver.Step(model, Vector3.zero, 0.1f);
+            resolver.Step(model, Vector3.zero, 0.1f);
+
+            Assert.AreEqual(0, model.Flight.TotalCruiseTaps,
+                "the next cruise must bank fresh taps instead of re-arming off the old pierce");
+        }
+
+        [Test]
         public void Step_PiercingWithNoArm_NeverDischarges()
         {
             // A piercing shot that never plowed a tough is never armed, so the countdown stays idle and
@@ -492,6 +554,57 @@ namespace BalloonParty.Tests.Projectile
             Assert.AreEqual(ProjectileStepOutcome.Destroyed, step.Outcome, "the completed timer sends it into the wall");
         }
 
+        [Test]
+        public void Step_SweepSpeedBonus_AppliesOutsideCruise()
+        {
+            var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 0f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
+            model.Flight.SweepSpeedBonus = 0.5f;
+
+            var step = resolver.Step(model, Vector3.zero, 1f);
+
+            Assert.AreEqual(1.5f, step.Position.y, 1e-4f);
+        }
+
+        [Test]
+        public void Step_SweepBonus_StacksWithCruiseRamp()
+        {
+            // cruise ramp: perShield=0.5, CruiseStartShields=4, shields=2 → ramp = 0.5 × 2 = 1.0
+            // sweep bonus: 0.5
+            // combined speedBonus = 1.5 → target = 2.5 → over dt=1 at base=1 → position.y = 2.5.
+            // If the two contributions were separate, one could shadow the other; this verifies
+            // they both feed the shared accumulator.
+            var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 0f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
+            model.Flight.CruiseStartShields = 4;
+            model.IsCruising.Value = true;
+            model.Flight.SweepSpeedBonus = 0.5f;
+
+            var step = resolver.Step(model, Vector3.zero, 1f);
+
+            Assert.AreEqual(2.5f, step.Position.y, 1e-4f,
+                "sweep bonus (0.5) + cruise ramp (1.0) combine into a single accumulator");
+        }
+
+        [Test]
+        public void Step_MaxCruiseSpeedCap_ClampsCombinedBonus()
+        {
+            // Without a cap: cruise ramp (1.0) + sweep (0.5) = 1.5 → target x2.5 → y=2.5.
+            // With cap x2.0: target is clamped to x2.0 → y=2.0.
+            // The cap must apply to the combined total, not per-source — this verifies the
+            // restructured accumulator passes both through the same clamp gate.
+            var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 0f, maxSpeedMultiplier: 2.0f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
+            model.Flight.CruiseStartShields = 4;
+            model.IsCruising.Value = true;
+            model.Flight.SweepSpeedBonus = 0.5f;
+
+            var step = resolver.Step(model, Vector3.zero, 1f);
+
+            Assert.AreEqual(2.0f, step.Position.y, 1e-4f,
+                "max-speed cap applies to the combined sweep+cruise bonus, not per-source");
+        }
+
         private static ProjectileMotionResolver LastShieldResolver(AnimationCurve approachCurve, float durationSeconds)
         {
             var config = Substitute.For<IGameConfiguration>();
@@ -503,7 +616,8 @@ namespace BalloonParty.Tests.Projectile
         }
 
         private static ProjectileMotionResolver CruiseResolver(
-            float perShield, float tapEaseDuration = 0f, int piercingTapThreshold = 0, float pierceDischargeDelay = 0f)
+            float perShield, float tapEaseDuration = 0f, int piercingTapThreshold = 0,
+            float pierceDischargeDelay = 0f, float maxSpeedMultiplier = 0f)
         {
             var config = Substitute.For<IGameConfiguration>();
             config.LimitsClockwise.Returns(Walls);
@@ -511,6 +625,7 @@ namespace BalloonParty.Tests.Projectile
             config.CruiseTapEaseDuration.Returns(tapEaseDuration);
             config.CruisePiercingTapThreshold.Returns(piercingTapThreshold);
             config.PierceDischargeDelay.Returns(pierceDischargeDelay);
+            config.MaxCruiseSpeedMultiplier.Returns(maxSpeedMultiplier);
             config.CruiseTapCurve.Returns(AnimationCurve.Linear(0f, 0f, 1f, 1f));
             return new ProjectileMotionResolver(config);
         }

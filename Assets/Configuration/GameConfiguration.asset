@@ -23,6 +23,8 @@ MonoBehaviour:
   _shieldTrailDuration: 0.5
   _cruiseWallBounceThreshold: 1
   _cruiseSpeedPerShield: 0.22233333
+  _sweepEnabled: 1
+  _sweepTapThreshold: 5
   _maxCruiseSpeedMultiplier: 25
   _cruiseTapCurve:
     serializedVersion: 2

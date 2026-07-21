@@ -83,6 +83,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ShieldLostMessage>(options);
             builder.RegisterMessageBroker<PierceDischargedMessage>(options);
             builder.RegisterMessageBroker<ScoreTrailArrivedMessage>(options);
+            builder.RegisterMessageBroker<LevelUpAbortedMessage>(options);
             builder.RegisterMessageBroker<LevelUpDismissedMessage>(options);
             builder.RegisterMessageBroker<GameOverDismissedMessage>(options);
             builder.RegisterMessageBroker<LevelTransitionCompletedMessage>(options);

@@ -27,6 +27,7 @@ Source is organized into per-context subfolders: `Balloons/`, `Buffs/`, `Cinemat
 | `CloudFieldSettings` | `ICloudFieldSettings` (`Effects/`) | Shared cloud-noise field tuning — density blit material, RT resolution (`TexelsPerUnit`), and how much the Scenario Ascent/descent parallaxes the cloud roll |
 | `SceneLightFieldSettings` | `ISceneLightFieldSettings` / `IScreenSpaceLightSettings` / `ISceneLightSettings` (`Effects/`) | One asset backing three interfaces: the scene light's direction/colour/intensity, the light-field RT (resolution, cadence, per-light accumulation), and the screen-space GI march (smear distance/downscale, mip spread, shadow/bounce strength, shader references) |
 | `SpeckFieldSettings` | `ISpeckFieldSettings` | Ambient speck-field tuning — motion/disturbance response, per-speck look (size, trail, scale, fade, heat, color-lerp), and spawning/reduction: the spawn-all testing toggle, initial active count, per-source `SpeckProfile[]` (`SpeckSource` flags), and the reduction curve. The `SpeckField` component keeps only its own compute shader + material |
+| `ShieldFieldSettings` | `IShieldFieldSettings` (`Effects/`) | *(Planned — see @ref plan_em_shield_field)* Per-instance tuning for the procedural EM shield shader — layer spacing, dissolve/appear duration, noise scale, field-line density, pulse speed, glow intensity, tint alpha, base radius |
 | `BushVariantData` | — | Pre-baked bush variant asset (branch map texture + leaf attachment slots), created by the Bush Baker editor window, loaded at runtime by `BushView` |
 
 ### Data types

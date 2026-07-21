@@ -30,7 +30,7 @@ namespace BalloonParty.Cheats
 
         public void Execute()
         {
-            CheatState.StartLevel = Mathf.Max(1, _level);
+            CheatState.StartLevel = _level;
             _runController.RestartRun();
         }
 
@@ -38,7 +38,7 @@ namespace BalloonParty.Cheats
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label("Level", GUILayout.Width(44));
-            _level = CheatLayout.IntField("startlevel.level", _level, min: 1);
+            _level = CheatLayout.IntField("startlevel.level", _level);
 
             if (GUILayout.Button("Start From Level"))
             {

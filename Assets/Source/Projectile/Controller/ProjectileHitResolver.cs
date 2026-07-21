@@ -59,6 +59,7 @@ namespace BalloonParty.Projectile.Controller
             // discharge, not on contact. Normal balloons still pop as the shot passes through.
             if (isPiercing && balloon.IsTough())
             {
+                projectile.Flight.SegmentSweepValid = false;
                 projectile.Flight.PendingPierceHits.Add(new PendingPierceHit(balloon, balloonWorldPosition));
                 // Re-arm the discharge countdown: it fires this-many-seconds after the LAST tough, so a
                 // run of toughs holds it open and the whole line shatters together once the shot is clear.
@@ -127,6 +128,7 @@ namespace BalloonParty.Projectile.Controller
                         | (isPiercing ? DamageFlags.Piercing : DamageFlags.Normal)
                         | DamageFlags.DirectHit;
             var damageContext = new DamageContext(1, flags, projectile.ColorName.Value);
+            var wasOneHitBalloon = balloon is IHasDurability durable && durable.HitsRemaining.Value == 1;
             var outcome = balloon.EvaluateHit(damageContext);
 
             if (outcome == HitOutcome.Absorb)
@@ -155,6 +157,16 @@ namespace BalloonParty.Projectile.Controller
 
             _hitDispatcher.Dispatch(new ActorHitMessage(
                 balloon, balloonWorldPosition, projectile.Direction, outcome, damageContext));
+
+            if (outcome == HitOutcome.Pop)
+            {
+                projectile.Flight.SegmentPopCount++;
+                projectile.Flight.SegmentSweepValid &= wasOneHitBalloon;
+            }
+            else if (!wasOneHitBalloon)
+            {
+                projectile.Flight.SegmentSweepValid = false;
+            }
 
             // Dispatch runs the streak stage synchronously, so the tracker is already current here.
             if (outcome == HitOutcome.Pop && balloon is IHasColor &&

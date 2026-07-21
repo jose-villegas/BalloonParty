@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Projectile.Controller;
@@ -19,6 +20,9 @@ using UnityEngine;
 using VContainer;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using Light = BalloonParty.Shared.SceneLight.Light;
 
 namespace BalloonParty.Projectile.View
@@ -204,6 +208,8 @@ namespace BalloonParty.Projectile.View
                 // The muzzle is the first flight segment's origin — the last-shield ease measures
                 // approach progress from wherever the current segment began (updated on each bounce).
                 _model.Flight.SegmentStartPosition = transform.position;
+                _model.Flight.LastBouncePosition = transform.position;
+                _model.Flight.SegmentSweepValid = true;
 
                 // Colourless shots read as the Sparks tint; recoloured shots take their own colour
                 // (kept in step by UpdateGlowColor).
@@ -214,7 +220,6 @@ namespace BalloonParty.Projectile.View
                 // Sparks palette tint so the glow is always visible while the shot is in flight.
                 ActivateInitialGlow();
             }
-
             RevealShieldOnFirstFreeFrame();
             MoveAndBounce();
         }
@@ -284,6 +289,10 @@ namespace BalloonParty.Projectile.View
             LifecycleHelper.DisposeAndClear(ref _cruiseSubscription);
             LifecycleHelper.DisposeAndClear(ref _doomedSubscription);
 
+#if UNITY_EDITOR
+            ResetSweepGizmo();
+#endif
+
             // Mirror OnDespawned's cleanup: a pooled instance must never inherit a still-running
             // disappear tween from its previous life — that would scale the fresh projectile to zero
             // (and fire its destroy callback) mid-flight, in open space.
@@ -316,6 +325,10 @@ namespace BalloonParty.Projectile.View
             transform.rotation = Quaternion.identity;
             KillGlowTween();
             ApplyGlow(new Color(1f, 1f, 1f, 0f));
+
+#if UNITY_EDITOR
+            ResetSweepGizmo();
+#endif
 
             _projectileTrail?.Disable();
             if (_shieldView != null)
@@ -440,6 +453,7 @@ namespace BalloonParty.Projectile.View
                 _model.Flight.SegmentElapsed = 0f;
             }
 
+            var travelDirection = _model.Direction;
             var step = _motionResolver.Step(_model, transform.position, Time.fixedDeltaTime);
 
             if (step.Outcome != ProjectileStepOutcome.Moved)
@@ -459,6 +473,15 @@ namespace BalloonParty.Projectile.View
             if (step.Outcome == ProjectileStepOutcome.Bounced)
             {
                 _shieldLostPublisher.Publish(new ShieldLostMessage(step.WallContact));
+                TryAwardSweepTap(step.WallContact, travelDirection);
+
+#if UNITY_EDITOR
+                RecordSweepGizmoBounce(step.WallContact);
+#endif
+
+                _model.Flight.SegmentPopCount = 0;
+                _model.Flight.SegmentSweepValid = true;
+                _model.Flight.LastBouncePosition = step.WallContact;
                 TryEnterCruise(step.Position, step.Direction);
 
                 // Punctuate the bounce: a radial impact into the motion field at the wall, plus a
@@ -562,6 +585,56 @@ namespace BalloonParty.Projectile.View
             _model.IsCruising.Value = true;
         }
 
+        private void TryAwardSweepTap(Vector3 wallHitPosition, Vector3 travelDirection)
+        {
+            if (!_config.SweepEnabled || _model.Flight.SegmentPopCount <= 0 || !_model.Flight.SegmentSweepValid)
+            {
+                return;
+            }
+
+            var segmentLength = Vector3.Distance(_model.Flight.LastBouncePosition, wallHitPosition);
+            if (segmentLength <= 0f || travelDirection.sqrMagnitude < 1e-6f)
+            {
+                return;
+            }
+
+            var backward = -((Vector2)travelDirection).normalized;
+            var hit = Physics2D.CircleCast(wallHitPosition, _contactRadius, backward, segmentLength, 1 << BalloonsLayer);
+            if (hit.collider != null)
+            {
+                return;
+            }
+
+            _model.Flight.TotalSweeps++;
+
+#if UNITY_EDITOR
+            StartSweepGizmoTracking();
+#endif
+
+            if (_config.SweepTapThreshold > 0 && _model.Flight.TotalSweeps < _config.SweepTapThreshold)
+            {
+                return;
+            }
+
+#if UNITY_EDITOR
+            _sweepGizmoThresholdReached = true;
+            if (_sweepGizmoWarmupPath.Count > 0)
+            {
+                _sweepGizmoPostPath.Add(_sweepGizmoWarmupPath[_sweepGizmoWarmupPath.Count - 1]);
+            }
+#endif
+
+            _model.Flight.SweepSpeedBonus += _config.CruiseSpeedPerShield;
+            _model.Flight.TotalCruiseTaps++;
+            _model.Flight.CruiseTapElapsed = 0f;
+
+            var threshold = _config.CruisePiercingTapThreshold;
+            if (threshold > 0 && !_model.IsPiercing.Value && _model.Flight.TotalCruiseTaps >= threshold)
+            {
+                _model.IsPiercing.Value = true;
+            }
+        }
+
         private bool IsPathClearAhead(Vector3 position, Vector3 direction, int bounces)
         {
             // Cached once (this runs every fixed step) so the closure over the collider query isn't
@@ -588,7 +661,7 @@ namespace BalloonParty.Projectile.View
             // the aura hidden the whole time it's armed — dim toward the floor instead. Still hidden
             // entirely while doomed (drifting to its death): a flourish there reads as a power-up right
             // as it dies, and the clear path means there's nothing to pierce anyway.
-            var inTapBeat = _model.IsCruising.Value
+            var inTapBeat = (_model.IsCruising.Value || _model.Flight.SweepSpeedBonus > 0f)
                             && _model.Flight.CruiseTapElapsed < _config.CruiseTapEaseDuration;
             var pierceActive = _model.IsPiercing.Value && !_model.IsLastShieldApproach.Value;
             var target = pierceActive
@@ -895,5 +968,95 @@ namespace BalloonParty.Projectile.View
             var index = _palette.PaletteIndexOf(_model.ColorName.Value);
             return index >= 0 ? index : _sparksColorIndex;
         }
+
+#if UNITY_EDITOR
+        private const float SweepGizmoLineWidth = 10f;
+        private const float SweepGizmoBounceRadius = 0.12f;
+
+        private static readonly Color SweepCountingColor = new(0.8f, 0f, 0f, 1f);
+        private static readonly Color SweepPostThresholdColor = new(0f, 0.2f, 0.8f, 1f);
+
+        private readonly List<Vector3> _sweepGizmoWarmupPath = new();
+        private readonly List<Vector3> _sweepGizmoPostPath = new();
+
+        private bool _sweepGizmoTracking;
+        private bool _sweepGizmoThresholdReached;
+
+        private void OnDrawGizmos()
+        {
+            // Always draw the warm-up path in red once it exists.
+            if (_sweepGizmoWarmupPath.Count >= 2)
+            {
+                Handles.color = SweepCountingColor;
+                Handles.DrawAAPolyLine(SweepGizmoLineWidth, _sweepGizmoWarmupPath.ToArray());
+                Gizmos.color = SweepCountingColor;
+                for (var i = 0; i < _sweepGizmoWarmupPath.Count; i++)
+                {
+                    Gizmos.DrawSphere(_sweepGizmoWarmupPath[i], SweepGizmoBounceRadius);
+                }
+            }
+
+            // Draw the post-threshold path in blue.
+            if (_sweepGizmoPostPath.Count >= 2)
+            {
+                Handles.color = SweepPostThresholdColor;
+                Handles.DrawAAPolyLine(SweepGizmoLineWidth, _sweepGizmoPostPath.ToArray());
+                Gizmos.color = SweepPostThresholdColor;
+                for (var i = 0; i < _sweepGizmoPostPath.Count; i++)
+                {
+                    Gizmos.DrawSphere(_sweepGizmoPostPath[i], SweepGizmoBounceRadius);
+                }
+            }
+
+            // Live tail extending from the last recorded point.
+            if (_sweepGizmoTracking && _hasFlown)
+            {
+                var activePath = _sweepGizmoThresholdReached ? _sweepGizmoPostPath : _sweepGizmoWarmupPath;
+                if (activePath.Count > 0)
+                {
+                    var tailColor = _sweepGizmoThresholdReached ? SweepPostThresholdColor : SweepCountingColor;
+                    var liveEnd = (Vector3)transform.position;
+                    Handles.color = new Color(tailColor.r, tailColor.g, tailColor.b, 0.5f);
+                    Handles.DrawAAPolyLine(SweepGizmoLineWidth * 0.6f, activePath[activePath.Count - 1], liveEnd);
+                }
+            }
+        }
+
+        private void StartSweepGizmoTracking()
+        {
+            if (_sweepGizmoTracking)
+            {
+                return;
+            }
+
+            _sweepGizmoTracking = true;
+            _sweepGizmoWarmupPath.Add(_model.Flight.LastBouncePosition);
+        }
+
+        private void RecordSweepGizmoBounce(Vector3 wallHitPosition)
+        {
+            if (!_sweepGizmoTracking)
+            {
+                return;
+            }
+
+            if (_sweepGizmoThresholdReached)
+            {
+                _sweepGizmoPostPath.Add(wallHitPosition);
+            }
+            else
+            {
+                _sweepGizmoWarmupPath.Add(wallHitPosition);
+            }
+        }
+
+        private void ResetSweepGizmo()
+        {
+            _sweepGizmoWarmupPath.Clear();
+            _sweepGizmoPostPath.Clear();
+            _sweepGizmoTracking = false;
+            _sweepGizmoThresholdReached = false;
+        }
+#endif
     }
 }
