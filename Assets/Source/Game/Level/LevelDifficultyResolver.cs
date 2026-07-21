@@ -139,8 +139,8 @@ namespace BalloonParty.Game.Level
             return _palette.GetColor(colors[Mathf.Clamp(index, 0, colors.Count - 1)]);
         }
 
-        // Falls back to the entry marked with -1 in either level bound. When a negative level is passed
-        // (dev override), searches for the fallback whose FromLevel matches that specific id.
+        // The entry with FromLevel == -1 is the default gameplay fallback. Other negative IDs are
+        // debug presets reachable only when a negative level is explicitly requested (cheat override).
         private LevelRangeEntry ResolveRange(int level)
         {
             var ranges = _pacing.Ranges;
@@ -155,7 +155,11 @@ namespace BalloonParty.Game.Level
                         return ranges[i];
                     }
 
-                    fallback = ranges[i];
+                    if (ranges[i].FromLevel == -1)
+                    {
+                        fallback = ranges[i];
+                    }
+
                     continue;
                 }
 
@@ -167,7 +171,7 @@ namespace BalloonParty.Game.Level
 
             if (level < 0)
             {
-                Debug.LogWarning($"[LevelDifficultyResolver] No fallback entry with FromLevel={level}; using generic fallback.");
+                Debug.LogWarning($"[LevelDifficultyResolver] No fallback entry with FromLevel={level}; using default (-1) fallback.");
             }
 
             return fallback;
