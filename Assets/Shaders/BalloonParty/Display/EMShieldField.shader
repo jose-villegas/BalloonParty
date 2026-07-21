@@ -29,6 +29,15 @@ Shader "BalloonParty/Display/EMShieldField"
         _GlowIntensity("Glow Intensity", Range(0, 3)) = 1.2
         _PulseSpeed("Pulse Speed", Range(0, 10)) = 3.0
 
+        [Header(Flow)]
+        _FlowSpeed("Flow Speed", Range(0, 8)) = 2.0
+        _FlowFrequency("Flow Frequency", Range(1, 20)) = 8.0
+        _FlowStrength("Flow Strength", Range(0, 1)) = 0.4
+
+        [Header(Layer Color)]
+        _ColorShift("Color Shift (inner to outer)", Range(0, 1)) = 0.0
+        _ColorPhase("Color Phase", Vector) = (0.55, 0.70, 0.90, 0)
+
         [Header(Dome Overlay)]
         _DomeOverlayAlpha("Dome Alpha", Range(0, 1)) = 0.0
         _DomeOverlayWidth("Dome Width", Range(0.02, 0.4)) = 0.15
@@ -107,6 +116,11 @@ Shader "BalloonParty/Display/EMShieldField"
             float _GlowWidth;
             float _GlowIntensity;
             float _PulseSpeed;
+            float _FlowSpeed;
+            float _FlowFrequency;
+            float _FlowStrength;
+            float _ColorShift;
+            float4 _ColorPhase;
             float _NoiseScale;
             float _DirectionalBias;
             float _TipFade;
@@ -199,8 +213,14 @@ Shader "BalloonParty/Display/EMShieldField"
                 float tipDist = length(uv - float2(0.5, tipY));
                 float tipFade = smoothstep(_TipFade * 0.3, _TipFade, tipDist);
 
+                // Flow: tangent direction along the SDF contour (free via ddx/ddy)
+                float2 grad = float2(ddx(filled), ddy(filled));
+                float2 tangent = float2(-grad.y, grad.x);
+                float flowCoord = dot(uv - float2(0.5, _DomeCenter), tangent);
+
                 float totalCore = 0.0;
                 float totalGlow = 0.0;
+                float3 coloredGlow = float3(0, 0, 0);
 
                 [unroll]
                 for (int i = 0; i < EM_MAX_LAYERS; i++)
@@ -224,19 +244,35 @@ Shader "BalloonParty/Display/EMShieldField"
                     // Pulse
                     float pulse = 0.85 + 0.15 * sin(_Time.y * _PulseSpeed + i * 1.2);
 
+                    // Flow modulation: energy streaming along the contour
+                    float flow = sin(flowCoord * _FlowFrequency - _Time.y * _FlowSpeed + i * 2.1);
+                    float flowMask = 1.0 - _FlowStrength * 0.5 + _FlowStrength * 0.5 * flow;
+
                     // Core strand
                     float thickness = _FieldLineThickness * pulse;
-                    float core = smoothstep(thickness, thickness * 0.15, dist) * tipFade;
+                    float core = smoothstep(thickness, thickness * 0.15, dist) * tipFade * flowMask;
 
                     // Glow
-                    float glow = exp(-dist / max(_GlowWidth, 1e-4)) * pulse * tipFade;
+                    float glow = exp(-dist / max(_GlowWidth, 1e-4)) * pulse * tipFade * flowMask;
 
                     // Dissolve edge glow
                     float dissolveDist = saturate(1.0 - abs(_DissolveProgress[i] - dissolveBase) * 4.0);
                     glow += dissolveDist * 0.4;
 
+                    // Per-layer color shift (cosine palette)
+                    float layerT = float(i) / max(float(EM_MAX_LAYERS - 1), 1.0);
+                    float3 layerColor = float3(1, 1, 1);
+                    if (_ColorShift > 0.001)
+                    {
+                        float3 phase = _ColorPhase.xyz;
+                        layerColor = lerp(float3(1, 1, 1),
+                            0.5 + 0.5 * cos(6.283185 * (layerT + phase)),
+                            _ColorShift);
+                    }
+
                     totalCore = max(totalCore, core);
                     totalGlow = min(totalGlow + glow, 3.0);
+                    coloredGlow += glow * layerColor;
                 }
 
                 // Dome overlay: separate filled glow element over the top
@@ -262,17 +298,20 @@ Shader "BalloonParty/Display/EMShieldField"
                 float shapeMask = smoothstep(_MaskFade, -_MaskFade, maskDist);
 
                 // Final compositing — glow purely additive RGB, only core affects alpha
-                float glowRGB = totalGlow * _GlowIntensity * 0.25 * shapeMask;
-                float coreRGB = (totalCore + domeOverlay) * shapeMask;
+                float3 glowColor = (_ColorShift > 0.001)
+                    ? coloredGlow / max(totalGlow, 1e-4)
+                    : float3(1, 1, 1);
+                float glowVal = totalGlow * _GlowIntensity * 0.25 * shapeMask;
+                float coreVal = (totalCore + domeOverlay) * shapeMask;
 
-                if (coreRGB + glowRGB < 0.001)
+                if (coreVal + glowVal < 0.001)
                 {
                     return fixed4(0, 0, 0, 0);
                 }
 
                 fixed4 c;
-                c.rgb = IN.color.rgb * (coreRGB + glowRGB) * IN.color.a;
-                c.a = saturate(coreRGB * IN.color.a);
+                c.rgb = IN.color.rgb * (coreVal + glowVal * glowColor) * IN.color.a;
+                c.a = saturate(coreVal * IN.color.a);
                 return c;
             }
             ENDCG
