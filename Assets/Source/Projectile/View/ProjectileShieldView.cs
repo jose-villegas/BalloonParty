@@ -1,6 +1,7 @@
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Extensions;
+using BalloonParty.Shared.Math;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Grid;
 using DG.Tweening;
@@ -13,11 +14,17 @@ namespace BalloonParty.Projectile.View
 {
     internal class ProjectileShieldView : MonoBehaviour
     {
-        private const int MaxLayers = 5;
+        private const int MaxLayers = 30;
+        private const int DeformPointCount = 3;
+        private const float SlowImpulseRatio = 0.6f;
 
         private static readonly int DissolveProgressId = Shader.PropertyToID("_DissolveProgress");
+        private static readonly int RevealProgressId = Shader.PropertyToID("_RevealProgress");
         private static readonly int ActiveLayersId = Shader.PropertyToID("_ActiveLayers");
         private static readonly int ColorId = Shader.PropertyToID("_Color");
+        private static readonly int DeformPointsId = Shader.PropertyToID("_DeformPoints");
+        private static readonly int VelocityFactorId = Shader.PropertyToID("_VelocityFactor");
+        private static readonly int NoiseScrollDirId = Shader.PropertyToID("_NoiseScrollDir");
 
         [SerializeField] private SpriteRenderer _fieldRenderer;
 
@@ -33,6 +40,8 @@ namespace BalloonParty.Projectile.View
 
         private readonly CompositeDisposable _disposable = new();
         private readonly float[] _layerDissolve = new float[MaxLayers];
+        private readonly float[] _layerReveal = new float[MaxLayers];
+        private readonly Vector4[] _deformPoints = new Vector4[DeformPointCount];
 
         private MaterialPropertyBlock _block;
 
@@ -41,6 +50,12 @@ namespace BalloonParty.Projectile.View
         private Color _currentColor = Color.white;
         private IProjectileModel _model;
 
+        private DampedSpring2D _springFast;
+        private Vector2 _trailMid;
+        private DampedSpring2D _springSlow;
+        private DampedSpring2D _springNoise;
+        private bool _trailInitialized;
+
         private void Awake()
         {
             _block = new MaterialPropertyBlock();
@@ -48,14 +63,74 @@ namespace BalloonParty.Projectile.View
             for (var i = 0; i < MaxLayers; i++)
             {
                 _layerDissolve[i] = 1f;
-            }
-
-            if (_fieldRenderer != null)
-            {
-                _fieldRenderer.enabled = false;
+                _layerReveal[i] = 0f;
             }
 
             gameObject.SetActive(false);
+        }
+
+        private void Update()
+        {
+            if (_model == null || _fieldRenderer == null)
+            {
+                return;
+            }
+
+            if (_block == null || _settings == null)
+            {
+                return;
+            }
+
+            Vector2 currentFacing = transform.up;
+            var dt = Time.deltaTime;
+
+            if (!_trailInitialized)
+            {
+                _springFast.Reset(currentFacing);
+                _trailMid = currentFacing;
+                _springSlow.Reset(currentFacing);
+                _springNoise.Reset(currentFacing);
+                _trailInitialized = true;
+            }
+
+            // Fast spring (dome) — settles quickly, tracks current direction
+            _springFast.Step(currentFacing, _settings.SpringFrequency, _settings.SpringDamping, dt);
+
+            // Mid EMA — smooth intermediate lag between fast and slow
+            var midTau = 1f / Mathf.Max(_settings.SpringFrequencySlow * 2f, 0.1f);
+            _trailMid = Vector2.Lerp(_trailMid, currentFacing, 1f - Mathf.Exp(-dt / midTau));
+
+            // Slow spring (tail) — lags the most, captures path history
+            _springSlow.Step(currentFacing, _settings.SpringFrequencySlow, _settings.SpringDampingSlow, dt);
+
+            // Noise direction spring — fast response for scroll direction
+            _springNoise.Step(currentFacing, _settings.NoiseSpringFrequency, _settings.NoiseSpringDamping, dt);
+
+            // Project all three into local space
+            var localFast = (Vector2)transform.InverseTransformDirection(_springFast.Position - currentFacing);
+            var localMid = (Vector2)transform.InverseTransformDirection(_trailMid - currentFacing);
+            var localSlow = (Vector2)transform.InverseTransformDirection(_springSlow.Position - currentFacing);
+
+            // Clamp to prevent extreme UV warping
+            localFast = Vector2.ClampMagnitude(localFast, 1.2f);
+            localMid = Vector2.ClampMagnitude(localMid, 1.5f);
+            localSlow = Vector2.ClampMagnitude(localSlow, 2f);
+
+            // Pack into vector array: [0]=dome/fast, [1]=mid, [2]=tail/slow
+            _deformPoints[0] = new Vector4(localFast.x, localFast.y, 0f, 0f);
+            _deformPoints[1] = new Vector4(localMid.x, localMid.y, 0f, 0f);
+            _deformPoints[2] = new Vector4(localSlow.x, localSlow.y, 0f, 0f);
+
+            var velFactor = Mathf.Sqrt(
+                Mathf.Clamp01(_model.Speed / Mathf.Max(_settings.MaxVisualSpeed, 1f)));
+
+            var localNoise = (Vector2)transform.InverseTransformDirection(_springNoise.Position - currentFacing);
+            localNoise = Vector2.ClampMagnitude(localNoise, 1.5f);
+
+            _block.SetVectorArray(DeformPointsId, _deformPoints);
+            _block.SetFloat(VelocityFactorId, velFactor);
+            _block.SetVector(NoiseScrollDirId, new Vector4(localNoise.x, localNoise.y, 0f, 0f));
+            _fieldRenderer.SetPropertyBlock(_block);
         }
 
         private void OnDestroy()
@@ -78,11 +153,22 @@ namespace BalloonParty.Projectile.View
                 })
                 .AddTo(_disposable);
 
-            // A colourless projectile (fresh launch, or washed by soap) must reset the shield tint
-            // to neutral rather than keep the previous projectile's colour.
             model.ColorName
                 .Subscribe(UpdateColor)
                 .AddTo(_disposable);
+        }
+
+        public void OnBounce(Vector2 oldDirection, Vector2 newDirection)
+        {
+            if (_settings == null)
+            {
+                return;
+            }
+
+            var worldDelta = oldDirection.normalized - newDirection.normalized;
+            _springFast.AddImpulse(worldDelta * _settings.LeanImpulseScale);
+            _springSlow.AddImpulse(worldDelta * (_settings.LeanImpulseScale * SlowImpulseRatio));
+            _springNoise.AddImpulse(worldDelta * _settings.LeanImpulseScale);
         }
 
         public void PlayBounceVfx(Vector3 position, Color color)
@@ -93,20 +179,21 @@ namespace BalloonParty.Projectile.View
         public void Reset()
         {
             _disposable.Clear();
-            _dissolveTween?.Kill();
+            DOTween.Kill(this);
             _dissolveTween = null;
             _model = null;
             _previousShieldCount = 0;
             _currentColor = Color.white;
+            _springFast = default;
+            _trailMid = Vector2.zero;
+            _springSlow = default;
+            _springNoise = default;
+            _trailInitialized = false;
 
             for (var i = 0; i < MaxLayers; i++)
             {
                 _layerDissolve[i] = 1f;
-            }
-
-            if (_fieldRenderer != null)
-            {
-                _fieldRenderer.enabled = false;
+                _layerReveal[i] = 0f;
             }
 
             PushProperties();
@@ -116,37 +203,100 @@ namespace BalloonParty.Projectile.View
         public void Show()
         {
             gameObject.SetActive(true);
-            SetImmediateState(_previousShieldCount);
+            AnimateInitialReveal(_previousShieldCount);
+        }
+
+        private void AnimateInitialReveal(int count)
+        {
+            if (_settings == null)
+            {
+                SetImmediateState(count);
+                return;
+            }
+
+            var maxVisual = Mathf.Min(count, _settings.MaxVisualLayers);
+
+            for (var i = 0; i < MaxLayers; i++)
+            {
+                _layerDissolve[i] = i < maxVisual ? 0f : 1f;
+                _layerReveal[i] = 0f;
+            }
+
+            PushProperties();
+
+            // Stagger each layer's reveal wipe with a small delay per layer
+            var perLayer = _settings.AppearSeconds;
+            var stagger = perLayer * 0.3f;
+
+            for (var i = 0; i < maxVisual && i < MaxLayers; i++)
+            {
+                var idx = i;
+                DOTween.To(
+                        () => _layerReveal[idx],
+                        v =>
+                        {
+                            _layerReveal[idx] = v;
+                            PushProperties();
+                        },
+                        1f,
+                        perLayer)
+                    .SetTarget(this)
+                    .SetEase(Ease.OutQuad)
+                    .SetDelay(idx * stagger);
+            }
         }
 
         private void AnimateShieldChange(int newCount)
         {
-            _dissolveTween?.Kill();
+            DOTween.Kill(this);
             _dissolveTween = null;
 
-            var maxVisual = Mathf.Min(newCount, _settings.MaxVisualLayers);
-            var prevVisual = Mathf.Min(_previousShieldCount, _settings.MaxVisualLayers);
+            var maxVisual = Mathf.Clamp(newCount, 0, _settings.MaxVisualLayers);
+            var prevVisual = Mathf.Clamp(_previousShieldCount, 0, _settings.MaxVisualLayers);
+
+            // Snap all layers above the new count to fully dissolved
+            for (var i = maxVisual; i < MaxLayers; i++)
+            {
+                _layerDissolve[i] = 1f;
+                _layerReveal[i] = 0f;
+            }
+
+            // Ensure all layers below the new count are fully visible
+            for (var i = 0; i < maxVisual; i++)
+            {
+                _layerDissolve[i] = 0f;
+                _layerReveal[i] = 1f;
+            }
 
             if (newCount > _previousShieldCount)
             {
-                // Gained shield(s): appear from outermost new layer inward.
+                // Gained shield: reveal wipe from apex to tail
                 var layerIndex = Mathf.Clamp(maxVisual - 1, 0, MaxLayers - 1);
+                _layerDissolve[layerIndex] = 0f;
+                _layerReveal[layerIndex] = 0f;
+
                 _dissolveTween = DOTween.To(
-                        () => _layerDissolve[layerIndex],
+                        () => _layerReveal[layerIndex],
                         v =>
                         {
-                            _layerDissolve[layerIndex] = v;
+                            _layerReveal[layerIndex] = v;
                             PushProperties();
                         },
-                        0f,
+                        1f,
                         _settings.AppearSeconds)
                     .SetTarget(this)
                     .SetEase(Ease.OutQuad);
             }
             else if (newCount < _previousShieldCount)
             {
-                // Lost shield(s): dissolve the outermost former layer.
+                // Animate the outermost newly-lost layer
                 var layerIndex = Mathf.Clamp(prevVisual - 1, 0, MaxLayers - 1);
+                _layerDissolve[layerIndex] = 0f;
+                _layerReveal[layerIndex] = 1f;
+
+                var isFinal = newCount == 0;
+                var duration = isFinal ? _settings.FinalDissolveSeconds : _settings.DissolveSeconds;
+
                 _dissolveTween = DOTween.To(
                         () => _layerDissolve[layerIndex],
                         v =>
@@ -155,15 +305,16 @@ namespace BalloonParty.Projectile.View
                             PushProperties();
                         },
                         1f,
-                        _settings.DissolveSeconds)
+                        duration)
                     .SetTarget(this)
-                    .SetEase(Ease.InQuad);
+                    .SetEase(Ease.InQuad)
+                    .OnComplete(() =>
+                    {
+                        _dissolveTween = null;
+                    });
             }
 
-            if (_fieldRenderer != null)
-            {
-                _fieldRenderer.enabled = newCount > 0;
-            }
+            PushProperties();
         }
 
         private void SetImmediateState(int count)
@@ -178,11 +329,7 @@ namespace BalloonParty.Projectile.View
             for (var i = 0; i < MaxLayers; i++)
             {
                 _layerDissolve[i] = i < maxVisual ? 0f : 1f;
-            }
-
-            if (_fieldRenderer != null)
-            {
-                _fieldRenderer.enabled = count > 0;
+                _layerReveal[i] = i < maxVisual ? 1f : 0f;
             }
 
             PushProperties();
@@ -196,6 +343,7 @@ namespace BalloonParty.Projectile.View
             }
 
             _block.SetFloatArray(DissolveProgressId, _layerDissolve);
+            _block.SetFloatArray(RevealProgressId, _layerReveal);
             _block.SetFloat(ActiveLayersId, _settings.MaxVisualLayers);
             _block.SetColor(ColorId, _currentColor);
             _fieldRenderer.SetPropertyBlock(_block);

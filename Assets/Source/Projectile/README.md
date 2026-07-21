@@ -36,15 +36,30 @@ Trail management is handled by `ProjectileTrail`, a child component on the trail
 
 `ProjectileView` calls `Enable()` on the first `FixedUpdate` frame where `IsFree` is true (fired) and `Disable()` on death and despawn.
 
-Shield orbs are hidden until the projectile is fired. `ProjectileShieldView` starts inactive on `Awake()` and is shown via `Show()` on the first `FixedUpdate` frame where `IsFree` is true.
+The shield field is hidden until the projectile is fired. `ProjectileShieldView` starts inactive on `Awake()` and is shown via `Show()` on the first `FixedUpdate` frame where `IsFree` is true.
 
 ## Shield Visuals
 
-The projectile carries N shield orbs (`SpriteRenderer` children) managed by `ProjectileShieldView`. Each orb represents one remaining shield and is slightly larger than the previous one. On load all orbs start at zero scale and scale up to match the starting shield count. When a shield is lost (wall bounce) the topmost visible orb scales to zero and `PSVFX_ShieldLose` plays. When a shield is gained (2 same-color pops) a new orb scales up and `PSVFX_ShieldGain` plays. Shield orbs tint to the current balloon color via DOTween color lerp. Wall bounces also spawn `PSVFX_ShieldBounce` at the impact point.
+The projectile's shield appears as a glowing force field resembling magnetic field lines
+wrapping around the ball. Each remaining shield adds a visible concentric layer (up to
+`MaxVisualLayers`). When a shield is gained, it appears with a wipe sweeping from the leading
+tip to the tail. When lost, the outermost layer crumbles away (starting from the front).
 
-All VFX are spawned via `ParticlePoolChannel` as world-space orphans — they are not children of the projectile and survive recycling independently.
+The field reacts to motion: it ripples faster as the projectile speeds up, and when the ball
+bounces off a wall or deflects off a balloon, the field bends backward (like hair blowing in
+wind) then gradually settles. `ProjectileView` calls `_shieldView.OnBounce(oldDir, newDir)` on
+each direction change to trigger this lean impulse.
 
-> **Planned rework:** The sprite-stacking shield visual will be replaced by a single-quad procedural electromagnetic field shader (`EMShieldField.shader`) rendering dipole magnetic field lines that wrap around the projectile. See @ref plan_em_shield_field for full design.
+**Implementation:** `ProjectileShieldView` drives the `EMShieldField.shader` (a single-quad
+procedural shader — one draw call replacing the former N sprite stack). Per-layer `_DissolveProgress`
+and `_RevealProgress` float arrays plus per-frame `_VelocityFactor` / `_DeformDirection` are
+pushed via `MaterialPropertyBlock` (zero GC). Configuration lives in `IShieldFieldSettings`
+(injected, not serialized on the view).
+
+All VFX (gain/lose/bounce particles) are spawned via `ParticlePoolChannel` as world-space
+orphans — they are not children of the projectile and survive recycling independently.
+
+See @ref plan_em_shield_field for the full shader design and phase status.
 
 ## Pierce & Discharge Feel
 
@@ -99,9 +114,9 @@ The model stores buffs in a plain list exposed via `HasBuff(ProjectileBuffId)` (
 - **`IWriteableProjectileModel`** — mutable interface extending `IProjectileModel`; re-declares reactive properties as `ReactiveProperty<T>` (via `new` keyword), adds setters, and adds `AddBuff`/`RemoveBuff`. Used by `ProjectileView`, `ThrowerController`, the buff service, and cheats that mutate state.
 - **`ProjectileModel`** — concrete class implementing `IWriteableProjectileModel`. Only referenced at creation sites (`ThrowerController.LoadProjectile`).
 - **`ProjectilePositionProvider`** — singleton holding the live projectile transform for systems that need its position without a reference to the view (set on load, cleared on reload).
-- **`ProjectileView`** — MonoBehaviour implementing `IPoolable`. Drives manual movement in `FixedUpdate` (skipped while `PauseService.IsAnyPaused`), checks bounds against `IGameConfiguration.LimitsClockwise`, reflects direction and clamps position on bounce. Handles `OnTriggerEnter2D` — resolves the `BalloonView` via `GetComponent<BalloonView>()` on the collider (O(1) when the collider lives on the same GameObject as `BalloonView`) and hands the collision to `ProjectileHitResolver`, playing the returned `ProjectileHitVisual`. On each surviving wall hit it also evaluates Sweep beside the existing Cruise entry check: if the segment popped at least one balloon, never touched a >1HP balloon on that leg, and the backward circle-cast to `LastBouncePosition` is now clear, it awards a Sweep tap using the shared Cruise tap value and restarts the same tap-beat ease, then resets the segment state for the next leg. Publishes `ProjectileDestroyedMessage` and `BalanceBalloonsMessage` when shields reach zero, and `ShieldLostMessage` on each shield-spending wall bounce. Neighbor nudging happens on the balloon side via `NudgeService`.
+- **`ProjectileView`** — MonoBehaviour implementing `IPoolable`. Drives manual movement in `FixedUpdate` (skipped while `PauseService.IsAnyPaused`), checks bounds against `IGameConfiguration.LimitsClockwise`, reflects direction and clamps position on bounce. Handles `OnTriggerEnter2D` — resolves the `BalloonView` via `GetComponent<BalloonView>()` on the collider (O(1) when the collider lives on the same GameObject as `BalloonView`) and hands the collision to `ProjectileHitResolver`, playing the returned `ProjectileHitVisual`. On each surviving wall hit it also evaluates Sweep beside the existing Cruise entry check: if the segment popped at least one balloon, never touched a >1HP balloon on that leg, and the backward circle-cast to `LastBouncePosition` is now clear, it awards a Sweep tap using the shared Cruise tap value and restarts the same tap-beat ease, then resets the segment state for the next leg. Publishes `ProjectileDestroyedMessage` and `BalanceBalloonsMessage` when shields reach zero, and `ShieldLostMessage` on each shield-spending wall bounce. Calls `_shieldView.OnBounce(oldDir, newDir)` on wall bounces and balloon deflects to drive the shield field's lean dynamics. Neighbor nudging happens on the balloon side via `NudgeService`.
 - **`ProjectileTrail`** — child MonoBehaviour on the trail GameObject. `Enable()`/`Disable()` manage `TrailRenderer` emitting state using `async UniTaskVoid` with `destroyCancellationToken`. Not `IPoolable` — lifecycle follows the pooled projectile parent.
-- **`ProjectileShieldView`** — MonoBehaviour on the projectile prefab. Subscribes to `ShieldsRemaining` and `ColorName` via UniRx. Scales shield orb sprites, tints them to the current color, and spawns gain/lose/bounce VFX via `ParticlePoolChannel`.
+- **`ProjectileShieldView`** — MonoBehaviour on the projectile prefab. Drives the `EMShieldField` shader via `MaterialPropertyBlock`: subscribes to `ShieldsRemaining` (reveal wipe on gain, noise dissolve on loss) and `ColorName` (tint) via UniRx; per-frame `Update` decays the lean vector and pushes velocity factor + deform direction to the shader; `OnBounce(oldDir, newDir)` injects a lean impulse on direction change. Spawns gain/lose/bounce VFX via `ParticlePoolChannel`.
 
 ## Interactions
 

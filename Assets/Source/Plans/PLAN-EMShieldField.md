@@ -75,6 +75,23 @@ Directional noise dissolve biased by V-coordinate:
 `sin(_Time.y × PulseSpeed + layer × phaseOffset)` modulates line brightness/thickness per layer
 to convey "living energy."
 
+### Velocity-Driven Dynamics (Phase 3)
+
+The shader warps UVs before the field-line SDF evaluation, giving the field a reactive, physical
+feel:
+
+1. **Ripple** — `sin(V × RippleFrequency + _Time.y × RippleSpeed) × RippleAmplitude × VelocityFactor`
+   offsets U, creating velocity-gated sine waves along the heading axis.
+2. **Directional lean** — `_DeformDirection.xy × LeanStrength × pow(1 - V, LeanBendPower)` bends
+   the field toward the trailing edge. The progressive power curve (`LeanBendPower > 1`) means
+   the dome barely moves while the tail sweeps wide — like a flag trailing in wind.
+3. **Noise scroll** — dissolve noise UV scrolls at `_NoiseScrollSpeed × _Time.y`, adding subtle
+   turbulence independent of the warp.
+
+The `_DeformDirection` vector is pushed per frame by `ProjectileShieldView` in quad-local space.
+On bounce, a lean impulse is injected and decays exponentially over subsequent frames. The sqrt
+velocity-factor curve ensures the ripple activates quickly at low speeds but saturates gracefully.
+
 ---
 
 ## Shader Properties
@@ -90,12 +107,25 @@ _GlowIntensity ("Glow Intensity", Range(0, 3)) = 1.0
 _PulseSpeed ("Pulse Speed", Range(0, 10)) = 3.0
 _NoiseScale ("Dissolve Noise Scale", Range(1, 20)) = 8.0
 _DirectionalBias ("Dissolve Direction Bias", Range(0, 1)) = 0.6
-// Per-layer dissolve progress: float array [0..4] via MPB (not in Properties block)
+
+// Dynamics (Phase 3)
+_VelocityFactor ("Velocity Factor", Range(0, 1)) = 0
+_RippleAmplitude ("Ripple Amplitude", Range(0, 0.1)) = 0.02
+_RippleFrequency ("Ripple Frequency", Range(1, 20)) = 8.0
+_RippleSpeed ("Ripple Speed", Range(0, 20)) = 5.0
+_LeanStrength ("Lean Strength", Range(0, 1)) = 0.3
+_LeanBendPower ("Lean Bend Power", Range(1, 5)) = 2.0
+_DeformDirection ("Deform Direction", Vector) = (0, 0, 0, 0)
+_RevealEdge ("Reveal Edge Softness", Range(0.01, 0.3)) = 0.05
+_NoiseScrollSpeed ("Noise Scroll Speed", Range(0, 5)) = 1.0
+[Toggle] _EditorPreview ("Editor Preview", Float) = 0
+// Per-layer dissolve/reveal progress: float arrays [0..4] via MPB (not in Properties block)
 ```
 
-**Shader-side array declaration** (outside `Properties {}`, in the CGPROGRAM block):
+**Shader-side array declarations** (outside `Properties {}`, in the CGPROGRAM block):
 ```hlsl
 float _DissolveProgress[5];  // pushed via MPB.SetFloatArray — arrays cannot be in Properties{}
+float _RevealProgress[5];    // reveal wipe per layer (0 = hidden, 1 = fully revealed)
 ```
 
 ### Pole Singularity Handling
@@ -110,14 +140,20 @@ thickness as `sin²(θ)` approaches zero via `smoothstep` to avoid visual pinchi
 ### Reworked `ProjectileShieldView`
 
 - Replaces the `List<SpriteRenderer>` with a single `SpriteRenderer` + EM shield material
-- Caches a `MaterialPropertyBlock` and a `float[5]` dissolve array (no GC)
+- Caches a `MaterialPropertyBlock` and `float[5]` dissolve + reveal arrays (no GC)
 - Property IDs cached as `static readonly int` (e.g., `Shader.PropertyToID("_DissolveProgress")`)
 - On `ShieldsRemaining` change:
-  - **Gain**: tweens `_layerDissolve[newLayer]` from 1→0 (appear)
-  - **Lose**: tweens `_layerDissolve[oldLayer]` from 0→1 (dissolve)
-- Pushes MPB each tween frame: `SetFloatArray("_DissolveProgress", _layerDissolve)`
+  - **Gain**: sets dissolve to 0, tweens `_layerReveal[newLayer]` from 0→1 (reveal wipe, apex→tail)
+  - **Lose**: tweens `_layerDissolve[oldLayer]` from 0→1 (noise dissolve)
+- Pushes MPB each tween frame: `SetFloatArray` for both `_DissolveProgress` and `_RevealProgress`
+- **Per-frame dynamics** (`Update`): decays `_leanVector` toward zero using `LeanDecayRate`,
+  computes `_VelocityFactor` from current speed vs `MaxVisualSpeed` (sqrt curve), transforms the
+  lean into quad-local space, and pushes `_DeformDirection` + `_VelocityFactor` via MPB
+- **`OnBounce(Vector2 oldDir, Vector2 newDir)`** — called by `ProjectileView` on wall bounce and
+  balloon deflect. Applies a lean impulse (`oldDir - newDir`, scaled by `LeanImpulseScale`) that the
+  shader renders as a directional UV bend; clamped to unit magnitude
 - Quad orientation: child of projectile (inherits rotation automatically — no manual update)
-- **Color tinting**: subscribes to `model.ColorName`, pushes tint via `MPB.SetColor` (or vertex color)
+- **Color tinting**: subscribes to `model.ColorName`, pushes tint via `MPB.SetColor`
 - **Zero shields / initial state**: renderer disabled (`enabled = false`) when shields = 0;
   re-enabled on first shield gained. Avoids paying a draw call for a fully-transparent quad.
 - **`PlayBounceVfx(Vector3, Color)`** remains public — called externally by `ProjectileView`
@@ -128,17 +164,14 @@ thickness as `sin²(θ)` approaches zero via `smoothstep` to avoid visual pinchi
 
 ```csharp
 // Assets/Source/Configuration/Effects/IShieldFieldSettings.cs
-public interface IShieldFieldSettings
+internal interface IShieldFieldSettings
 {
-    float LayerSpacing { get; }
     float DissolveSeconds { get; }
     float AppearSeconds { get; }
-    float NoiseScale { get; }
-    float FieldLineDensity { get; }
-    float PulseSpeed { get; }
-    float GlowIntensity { get; }
-    float TintAlpha { get; }
-    float BaseRadius { get; }
+    int MaxVisualLayers { get; }
+    float MaxVisualSpeed { get; }      // speed ceiling for the velocity-factor curve
+    float LeanDecayRate { get; }       // how fast the lean impulse relaxes per second
+    float LeanImpulseScale { get; }    // multiplier on direction-change → lean push
 }
 ```
 
@@ -165,19 +198,35 @@ Assets/
 
 ## Phases
 
-### Phase 1 — Shader & Config Skeleton
+### Phase 1 — Shader & Config Skeleton ✓
 - Create `EMShieldField.shader` with the dipole field-line loop and dissolve logic
 - Create `IShieldFieldSettings` + `ShieldFieldSettings` SO
 - Register in `GameLifetimeScope`
 
-### Phase 2 — View Rework
+### Phase 2 — View Rework ✓
 - Rework `ProjectileShieldView` to use single SpriteRenderer + MPB
 - Wire DOTween dissolve/appear animations to `ShieldsRemaining` subscription
 - Preserve existing VFX spawning (gain/lose/bounce particles)
 
-### Phase 3 — Tuning & Polish
+### Phase 3 — Dynamics ✓ (tuning WIP)
+- **UV warp system**: velocity-driven ripple + directional lean bend
+  - `_VelocityFactor` (sqrt of normalized speed) modulates ripple amplitude
+  - `_RippleAmplitude/Frequency/Speed` drive a sine warp along the V-axis
+  - `_LeanStrength` + `_LeanBendPower` apply a progressive power-curve bend from dome to tail,
+    stronger at the trailing edge — the field "trails behind" the projectile on direction change
+  - `_DeformDirection` carries the lean vector in quad-local space (pushed per frame via MPB)
+- **Reveal wipe**: layer gain now animates a directional wipe (apex→tail) via `_RevealProgress`
+  array; layer loss still uses the existing noise dissolve via `_DissolveProgress`
+- **C# driving**: `ProjectileShieldView.Update()` decays lean and pushes velocity factor;
+  `OnBounce(oldDir, newDir)` injects the lean impulse on wall/deflect direction changes
+- **Editor preview toggle**: `_EditorPreview` property lets artists see deformation in Scene view
+  without play mode
+- **Status**: architecture settled; deformation smoothness still being iterated
+
+### Phase 4 — Tuning & Polish
 - Author `ShieldFieldSettings.asset` with sensible defaults
 - Tune noise scale, directional bias, glow, pulse speed in editor
+- Smooth out deformation transitions (current lean decay may need easing curve)
 - Verify on target mobile GPU (requires in-editor playtest)
 
 ---

@@ -12,17 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5b9d2e4a6c8403b8d1f3e5a7c9b0d2e, type: 3}
   m_Name: ShieldFieldSettings
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.Effects.ShieldFieldSettings
-  _baseRadius: 0.08
-  _layerSpacing: 0.035
-  _capsuleHeight: 0.15
-  _taperStrength: 0.7
-  _fieldLineThickness: 0.015
-  _glowWidth: 0.06
-  _glowIntensity: 1
-  _pulseSpeed: 3
-  _noiseScale: 8
-  _directionalBias: 0.6
-  _dissolveSeconds: 0.4
-  _appearSeconds: 0.3
-  _tintAlpha: 0.8
-  _maxVisualLayers: 5
+  _dissolveSeconds: 0.3
+  _finalDissolveSeconds: 0.5
+  _appearSeconds: 0.2
+  _maxVisualSpeed: 10
+  _springFrequency: 7
+  _springDamping: 1.2
+  _springFrequencySlow: 1.2
+  _springDampingSlow: 0.6
+  _leanImpulseScale: 6
+  _maxVisualLayers: 10
