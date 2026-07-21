@@ -32,6 +32,9 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
         _ShadowColor        ("Shadow Color",       Color)              = (0.06, 0.06, 0.14, 0.35)
         _ShadowDistance     ("Shadow Distance",    Range(0, 3.0))      = 0.6
         _ShadowSoftness     ("Shadow Softness",    Range(0, 0.10))     = 0.03
+
+        [Header(Paint)]
+        _PaintBlend         ("Paint Blend",        Range(0, 1))        = 0.6
     }
 
     SubShader
@@ -59,6 +62,7 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
             #include "../Include/BackgroundField.cginc"
+            #include "../Include/PaintingField.cginc"
 
             struct appdata_t
             {
@@ -98,6 +102,8 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
             float  _ShadowDistance;
             float  _ShadowSoftness;
             #endif
+
+            float  _PaintBlend;
 
             // Half-Lambert scene lighting from a pseudo-normal built out of the density gradient (the
             // GPU's screen-space derivatives), then the scene diffuse (colour x intensity) eased by
@@ -154,6 +160,11 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
 
                 float mainAlpha = cloud * _CloudColor.a * IN.color.a;
                 fixed3 mainRgb = _CloudColor.rgb * IN.color.rgb * CloudLighting(lightGradient, wp, cloud);
+
+                // Blend painting field color into the cloud where paint is present.
+                float4 paint = PaintingFieldSample(wp);
+                float paintStrength = paint.a * _PaintBlend * cloud;
+                mainRgb = lerp(mainRgb, paint.rgb, paintStrength);
 
                 #ifdef _SHADOW_ON
                 // Soft drop shadow composited BEHIND the cloud — an offset tap of the same density map,
