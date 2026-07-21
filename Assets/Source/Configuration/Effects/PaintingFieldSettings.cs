@@ -22,10 +22,14 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Seconds between decay blit ticks. 0 = every frame.")]
         [SerializeField] private float _decayTickInterval = 0.05f;
 
+        [Tooltip("World-space radius of each paint stamp from the projectile trail.")]
+        [SerializeField] private float _stampRadius = 0.15f;
+
         public Shader StampShader => _stampShader;
         public Shader DecayShader => _decayShader;
         public float TexelsPerUnit => _texelsPerUnit;
         public float DecayRate => _decayRate;
         public float DecayTickInterval => _decayTickInterval;
+        public float StampRadius => _stampRadius;
     }
 }

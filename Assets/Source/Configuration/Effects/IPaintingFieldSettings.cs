@@ -19,5 +19,8 @@ namespace BalloonParty.Configuration.Effects
 
         /// <summary>Seconds between decay blit ticks (0 = every frame).</summary>
         float DecayTickInterval { get; }
+
+        /// <summary>World-space radius of each paint stamp from the projectile trail.</summary>
+        float StampRadius { get; }
     }
 }

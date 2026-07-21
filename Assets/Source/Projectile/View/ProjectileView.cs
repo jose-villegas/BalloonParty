@@ -92,6 +92,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private PauseService _pauseService;
         [Inject] private DisturbanceFieldService _disturbanceField;
         [Inject] private PaintingFieldService _paintingField;
+        [Inject] private IPaintingFieldSettings _paintingSettings;
         [Inject] private SceneLightFieldService _lightField;
         [Inject] private ISceneLightSettings _sceneLightSettings;
 
@@ -522,8 +523,7 @@ namespace BalloonParty.Projectile.View
 
             if (!string.IsNullOrEmpty(_model.ColorName.Value))
             {
-                var profile = _disturbanceField.GetProfile(StampSource.Projectile);
-                _paintingField.Stamp(step.Position, profile.Radius, _palette.PaletteIndexOf(_model.ColorName.Value));
+                _paintingField.Stamp(step.Position, _paintingSettings.StampRadius, _palette.PaletteIndexOf(_model.ColorName.Value));
             }
         }
 
