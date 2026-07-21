@@ -468,12 +468,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7368155962941665963, guid: 5009292be55fb4a12afec084df651435,
-        type: 3}
-      propertyPath: _backgroundFieldSettings
-      value: 
-      objectReference: {fileID: 11400000, guid: cb9e304f94de349b7bd80e111384c682,
-        type: 2}
     - target: {fileID: 8121256251203489458, guid: 5009292be55fb4a12afec084df651435,
         type: 3}
       propertyPath: m_Name
@@ -546,36 +540,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8811000000000000001, guid: b87d2a91b2e8044649b32c3a684fd6d9,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8811000000000000003, guid: b87d2a91b2e8044649b32c3a684fd6d9,
-        type: 3}
-      propertyPath: _stripWidth
-      value: 0.525
-      objectReference: {fileID: 0}
-    - target: {fileID: 8811000000000000022, guid: b87d2a91b2e8044649b32c3a684fd6d9,
-        type: 3}
-      propertyPath: _camera
-      value: 
-      objectReference: {fileID: 253765506}
-    - target: {fileID: 8811000000000000022, guid: b87d2a91b2e8044649b32c3a684fd6d9,
-        type: 3}
-      propertyPath: _texelsPerUnit
-      value: 24
-      objectReference: {fileID: 0}
-    - target: {fileID: 8811000000000000022, guid: b87d2a91b2e8044649b32c3a684fd6d9,
-        type: 3}
-      propertyPath: _densityMaterial
-      value: 
-      objectReference: {fileID: 2100000, guid: 10b206cd4c4534fdaae61c2ccb5bb3d4, type: 2}
-    - target: {fileID: 8811000000000000022, guid: b87d2a91b2e8044649b32c3a684fd6d9,
-        type: 3}
-      propertyPath: _transitionParallax
-      value: -0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

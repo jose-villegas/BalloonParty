@@ -82,6 +82,7 @@ Material:
     - _NormalEpsilon: 0.05
     - _NormalStrength: 3
     - _OpenGain: 0.925
+    - _PaintBlend: 1
     - _RestOpen: 0.195
     - _ShadowDistance: 1.65
     - _ShadowSoftness: 0

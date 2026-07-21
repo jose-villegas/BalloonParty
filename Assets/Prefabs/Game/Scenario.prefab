@@ -618,7 +618,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _netMaterial: {fileID: 2100000, guid: 46acee787ab6549409b05c985c6e388f, type: 2}
-  _stripWidth: 0.9
+  _stripWidth: 0.525
   _cellsPerUnitAlong: 10
   _cellsAcross: 20
   _netCellsAcross: 128
