@@ -196,7 +196,9 @@ namespace BalloonParty.Game
             builder.RegisterComponentInHierarchy<CinematicCameraView>();
             builder.RegisterComponentInHierarchy<SpeckField>();
             builder.RegisterComponentInHierarchy<WallNetView>();
-            builder.Register<CloudFieldService>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<BackgroundFieldService>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<PaintingFieldService>(Lifetime.Singleton)
+                .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<LaunchDisturbanceStamp>();
             builder.Register<CinematicCameraRig>(Lifetime.Singleton);
 

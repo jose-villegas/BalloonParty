@@ -98,7 +98,7 @@ Shader "BalloonParty/Sprite/LightDriven"
             #pragma shader_feature_local _CLOUD_FADE_ON
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
-            #include "../Include/CloudField.cginc"
+            #include "../Include/BackgroundField.cginc"
 
             struct appdata_t
             {
@@ -285,7 +285,7 @@ Shader "BalloonParty/Sprite/LightDriven"
                 #ifdef _CLOUD_FADE_ON
                 // Shadow archetype: fade the (shadow) sprite by the shared cloud field so it sinks into
                 // the backdrop, dissolving on no-cloud texels. Floor keeps a base shadow.
-                c.a *= lerp(_CloudShadowFloor, 1.0, CloudFieldDensity(IN.cloudWorld));
+                c.a *= lerp(_CloudShadowFloor, 1.0, BackgroundFieldDensity(IN.cloudWorld));
                 #endif
 
                 c.rgb *= c.a;

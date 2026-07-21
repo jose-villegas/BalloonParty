@@ -41,7 +41,7 @@ namespace BalloonParty.Configuration.Effects
         /// <summary>Shadow darkening intensity (0 = no shadow, 1 = fully darkened).</summary>
         float ShadowStrength { get; }
 
-        /// <summary>How strongly the shared cloud field gates the GI shadow: 1 = shadow only survives on
+        /// <summary>How strongly the shared background field gates the GI shadow: 1 = shadow only survives on
         /// cloud (full gating), 0 = cloud ignored (shadow everywhere). No effect when no cloud field is in
         /// the scene.</summary>
         float CloudShadowGate { get; }

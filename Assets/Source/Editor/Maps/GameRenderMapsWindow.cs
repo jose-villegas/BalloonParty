@@ -23,10 +23,12 @@ namespace BalloonParty.Editor.Maps
         private static readonly int SceneCaptureTexId = Shader.PropertyToID("_SceneCaptureTex");
         private static readonly int DisturbanceTexId = Shader.PropertyToID("_DisturbanceTex");
         private static readonly int SceneLightTexId = Shader.PropertyToID("_SceneLightTex");
-        private static readonly int CloudDensityTexId = Shader.PropertyToID("_CloudDensityTex");
+        private static readonly int BackgroundDensityTexId = Shader.PropertyToID("_BackgroundDensityTex");
+        private static readonly int PaintingTexId = Shader.PropertyToID("_PaintingTex");
         private static readonly int ChannelMaskId = Shader.PropertyToID("_ChannelMask");
         private static readonly int PaletteColorsId = Shader.PropertyToID("_PaletteColors");
         private static readonly int DecodePaletteId = Shader.PropertyToID("_DecodePalette");
+        private static readonly int PaletteChannelId = Shader.PropertyToID("_PaletteChannel");
         private static readonly int MipLevelId = Shader.PropertyToID("_MipLevel");
         private static readonly string[] ChannelLabels = { "R", "G", "B", "A" };
         private static readonly MapDescriptor[] Descriptors = BuildDescriptors();
@@ -85,9 +87,10 @@ namespace BalloonParty.Editor.Maps
 
             if (descriptor.HasPaletteChannel)
             {
+                var channelName = ChannelLabels[descriptor.PaletteChannel];
                 _decodePalette = EditorGUILayout.ToggleLeft(
-                    new GUIContent("Decode A to palette color",
-                        "With only A selected, show the color each encoded index maps to (black = untagged) " +
+                    new GUIContent($"Decode {channelName} to palette color",
+                        $"With only {channelName} selected, show the color each encoded index maps to (black = untagged) " +
                         "instead of the raw grayscale code."),
                     _decodePalette);
             }
@@ -112,7 +115,7 @@ namespace BalloonParty.Editor.Maps
             }
 
             DrawInfoBar(texture);
-            DrawPreview(texture, descriptor.HasPaletteChannel && _decodePalette);
+            DrawPreview(texture, descriptor.HasPaletteChannel && _decodePalette, descriptor.PaletteChannel);
         }
 
         private void DrawMapSelector()
@@ -175,7 +178,7 @@ namespace BalloonParty.Editor.Maps
             EditorGUILayout.EndHorizontal();
         }
 
-        private void DrawPreview(Texture texture, bool decodePalette)
+        private void DrawPreview(Texture texture, bool decodePalette, int paletteChannel = 3)
         {
             var material = EnsureMaterial();
             float texAspect = (float)texture.width / texture.height;
@@ -221,6 +224,7 @@ namespace BalloonParty.Editor.Maps
             {
                 material.SetVector(ChannelMaskId, MaskVector());
                 material.SetFloat(DecodePaletteId, decodePalette ? 1f : 0f);
+                material.SetFloat(PaletteChannelId, paletteChannel);
                 material.SetFloat(MipLevelId, _mipLevel);
                 if (decodePalette)
                 {
@@ -408,9 +412,9 @@ namespace BalloonParty.Editor.Maps
                     "casters themselves so only the ground beside them darkens."),
 
                 new MapDescriptor(
-                    "Cloud Field",
-                    () => Application.isPlaying ? Shader.GetGlobalTexture(CloudDensityTexId) : null,
-                    "No cloud field bound — CloudFieldService binds it once the game scope starts.",
+                    "Background Field",
+                    () => Application.isPlaying ? Shader.GetGlobalTexture(BackgroundDensityTexId) : null,
+                    "No background field bound — BackgroundFieldService binds it once the game scope starts.",
                     "Cloud density — thresholded [0,1] cloud shape, baked from the scrolling three-octave " +
                     "noise (disturbance baked in). The backdrop, sprite drop-shadows, and the GI light smear " +
                     "tap this.",
@@ -418,6 +422,15 @@ namespace BalloonParty.Editor.Maps
                     "the gradient (the wall net's visibility) instead of the near-binary density.",
                     "Unused (RG map).",
                     "Unused (RG map)."),
+
+                new MapDescriptor(
+                    "Painting Field",
+                    () => Application.isPlaying ? Shader.GetGlobalTexture(PaintingTexId) : null,
+                    "No painting field bound — PaintingFieldService binds it once the game scope starts.",
+                    "Blended paint color — red channel.",
+                    "Blended paint color — green channel.",
+                    "Blended paint color — blue channel.",
+                    "Opacity — [0,1] stamp strength, decays linearly over time toward 0."),
 
                 new MapDescriptor("Custom…", null, null, null, null, null, null),
             };
@@ -433,6 +446,7 @@ namespace BalloonParty.Editor.Maps
             public readonly string ChannelB;
             public readonly string ChannelA;
             public readonly bool HasPaletteChannel;
+            public readonly int PaletteChannel; // 0=R, 1=G, 2=B, 3=A
             public readonly bool HasMipChain;
 
             public bool IsCustom => Fetch == null;
@@ -453,7 +467,7 @@ namespace BalloonParty.Editor.Maps
 
             public MapDescriptor(string name, Func<Texture> fetch, string unavailableHint,
                 string channelR, string channelG, string channelB, string channelA,
-                bool hasPaletteChannel = false, bool hasMipChain = false)
+                bool hasPaletteChannel = false, bool hasMipChain = false, int paletteChannel = 3)
             {
                 Name = name;
                 Fetch = fetch;
@@ -463,6 +477,7 @@ namespace BalloonParty.Editor.Maps
                 ChannelB = channelB;
                 ChannelA = channelA;
                 HasPaletteChannel = hasPaletteChannel;
+                PaletteChannel = paletteChannel;
                 HasMipChain = hasMipChain;
             }
         }

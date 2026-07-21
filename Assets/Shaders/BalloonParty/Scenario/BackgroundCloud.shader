@@ -1,7 +1,7 @@
 Shader "BalloonParty/Scenario/BackgroundCloud"
 {
     // The full-screen cloud backdrop. It no longer generates its own noise — it renders FROM the shared
-    // cloud-density RT (CloudFieldService bakes it; see CloudField.cginc), so the cloud SHAPE has a single
+    // cloud-density RT (BackgroundFieldService bakes it; see BackgroundField.cginc), so the cloud SHAPE has a single
     // source (the blit material) and this material only owns the LOOK: colour, scene lighting, drop shadow.
     // The shading normal is derived from the density's own gradient (screen-space derivatives), and the
     // soft drop shadow is an offset tap of the same map. Assign to a full-screen SpriteRenderer (the
@@ -58,7 +58,7 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
             #pragma shader_feature _SHADOW_ON
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
-            #include "../Include/CloudField.cginc"
+            #include "../Include/BackgroundField.cginc"
 
             struct appdata_t
             {
@@ -145,7 +145,7 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
 
                 // Cloud shape = the shared, baked density map. Computed before any discard so the
                 // screen-space derivatives below stay defined.
-                float cloud = CloudFieldDensity(wp);
+                float cloud = BackgroundFieldDensity(wp);
 
                 // Shading normal from the density's own gradient. Pixel world size assumes the camera
                 // never rotates (it doesn't).
@@ -162,7 +162,7 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
                 float shadowAlpha = 0.0;
                 if (mainAlpha < 0.999)
                 {
-                    float shadowCloud = CloudFieldDensity(shadowWp);
+                    float shadowCloud = BackgroundFieldDensity(shadowWp);
                     shadowAlpha = shadowCloud * _ShadowColor.a * IN.color.a;
                     shadowAlpha *= smoothstep(0.0, _ShadowSoftness + 0.01, shadowCloud);
                     shadowAlpha *= ShadowLightFadeAt(wp);

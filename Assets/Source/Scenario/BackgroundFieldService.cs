@@ -18,19 +18,19 @@ namespace BalloonParty.Scenario
     ///     <c>DisturbanceFieldService</c> / <c>SceneLightFieldService</c>: bounds come from
     ///     <see cref="IGameDisplayConfiguration" /> (entry-point-independent — no camera, so the Launcher's
     ///     additive-load dual-camera boot can't confuse it), the cloud roll is tuned on the blit material
-    ///     (<see cref="ICloudFieldSettings.DensityMaterial" />), and there is no scene GameObject to place or
-    ///     duplicate. GPU side: <c>Shaders/BalloonParty/Include/CloudField.cginc</c> (consumers) +
-    ///     <c>CloudFieldGen.cginc</c> and the <c>CloudFieldDensity</c> blit (generation).
+    ///     (<see cref="IBackgroundFieldSettings.DensityMaterial" />), and there is no scene GameObject to place or
+    ///     duplicate. GPU side: <c>Shaders/BalloonParty/Include/BackgroundField.cginc</c> (consumers) +
+    ///     <c>BackgroundFieldGen.cginc</c> and the <c>BackgroundFieldDensity</c> blit (generation).
     /// </summary>
-    internal sealed class CloudFieldService : IStartable, ITickable, IDisposable
+    internal sealed class BackgroundFieldService : IStartable, ITickable, IDisposable
     {
-        private static readonly int DensityTexId = Shader.PropertyToID("_CloudDensityTex");
-        private static readonly int BoundsMinId = Shader.PropertyToID("_CloudFieldBoundsMin");
-        private static readonly int BoundsSizeId = Shader.PropertyToID("_CloudFieldBoundsSize");
-        private static readonly int ActiveId = Shader.PropertyToID("_CloudFieldActive");
-        private static readonly int WorldOffsetId = Shader.PropertyToID("_CloudWorldOffset");
+        private static readonly int DensityTexId = Shader.PropertyToID("_BackgroundDensityTex");
+        private static readonly int BoundsMinId = Shader.PropertyToID("_BackgroundFieldBoundsMin");
+        private static readonly int BoundsSizeId = Shader.PropertyToID("_BackgroundFieldBoundsSize");
+        private static readonly int ActiveId = Shader.PropertyToID("_BackgroundFieldActive");
+        private static readonly int WorldOffsetId = Shader.PropertyToID("_BackgroundWorldOffset");
 
-        private readonly ICloudFieldSettings _settings;
+        private readonly IBackgroundFieldSettings _settings;
         private readonly IGameDisplayConfiguration _display;
         private readonly ScenarioContentRoot _scenarioRoot;
 
@@ -38,8 +38,8 @@ namespace BalloonParty.Scenario
         private Rect _bounds;
         private Vector2 _ascendOffset;
 
-        public CloudFieldService(
-            ICloudFieldSettings settings,
+        public BackgroundFieldService(
+            IBackgroundFieldSettings settings,
             IGameDisplayConfiguration display,
             ScenarioContentRoot scenarioRoot)
         {
@@ -52,7 +52,7 @@ namespace BalloonParty.Scenario
         {
             if (_settings?.DensityMaterial == null || _display == null)
             {
-                Log.Warn("CloudField", "disabled: assign a density material on the CloudFieldSettings.");
+                Log.Warn("BackgroundField", "disabled: assign a density material on the BackgroundFieldSettings.");
                 return;
             }
 
@@ -138,14 +138,14 @@ namespace BalloonParty.Scenario
         {
             width = Mathf.Max(4, width);
             height = Mathf.Max(4, height);
-            // RG: R = density (shape), G = smooth intensity (see CloudFieldGenerate).
+            // RG: R = density (shape), G = smooth intensity (see BackgroundFieldGenerate).
             var format = SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.RG16)
                 ? RenderTextureFormat.RG16
                 : RenderTextureFormat.ARGB32;
 
             _densityRT = new RenderTexture(width, height, 0, format)
             {
-                name = "CloudDensity",
+                name = "BackgroundDensity",
                 filterMode = FilterMode.Bilinear,
                 wrapMode = TextureWrapMode.Clamp
             };

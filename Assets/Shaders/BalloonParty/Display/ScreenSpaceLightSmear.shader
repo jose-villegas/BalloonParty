@@ -38,7 +38,7 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
             #pragma target 3.0
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
-            #include "../Include/CloudField.cginc"
+            #include "../Include/BackgroundField.cginc"
 
             #define TAP_COUNT 8
 
@@ -96,7 +96,7 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                     // Gate the shadow by the cloud field: the backdrop cloud is the surface shadows land
                     // on, so don't smear shadow onto no-cloud ground. _CloudGateStrength dials how strongly
                     // (1 = full, 0 = ignore cloud). No-op when the cloud field is absent.
-                    shadow *= lerp(1.0, CloudFieldGate(worldPos), _CloudGateStrength);
+                    shadow *= lerp(1.0, BackgroundFieldGate(worldPos), _CloudGateStrength);
                 }
 
                 // --- Bounce: 4 directions (primary + 3 secondary at 90° spacing) ---

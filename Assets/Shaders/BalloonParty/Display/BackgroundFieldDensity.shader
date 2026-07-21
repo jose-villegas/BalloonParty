@@ -1,10 +1,10 @@
-Shader "BalloonParty/Display/CloudFieldDensity"
+Shader "BalloonParty/Display/BackgroundFieldDensity"
 {
-    // Fills the shared cloud-density RT (see CloudFieldService): each texel is the procedural cloud
-    // intensity at the world position that texel covers. CloudFieldService blits this full-screen once
-    // per frame; consumers then tap the RT via CloudField.cginc's CloudFieldDensity() instead of
+    // Fills the shared cloud-density RT (see BackgroundFieldService): each texel is the procedural cloud
+    // intensity at the world position that texel covers. BackgroundFieldService blits this full-screen once
+    // per frame; consumers then tap the RT via BackgroundField.cginc's BackgroundFieldDensity() instead of
     // recomputing the noise. This material IS the cloud roll's tuning surface — the noise params are
-    // material properties here; world bounds arrive from the _CloudFieldBounds* globals the service pushes.
+    // material properties here; world bounds arrive from the _BackgroundFieldBounds* globals the service pushes.
     Properties
     {
         [NoScaleOffset] _NoiseTex ("Tileable Noise (R, linear)", 2D) = "gray" {}
@@ -37,12 +37,12 @@ Shader "BalloonParty/Display/CloudFieldDensity"
             #pragma fragment frag
             #pragma target 3.0
             #include "UnityCG.cginc"
-            #include "../Include/CloudFieldGen.cginc"
+            #include "../Include/BackgroundFieldGen.cginc"
 
-            // Runtime-derived world bounds, pushed as globals by CloudFieldService (NOT material props, so
-            // they aren't masked). Consumers read the same globals from CloudField.cginc.
-            float2 _CloudFieldBoundsMin;
-            float2 _CloudFieldBoundsSize;
+            // Runtime-derived world bounds, pushed as globals by BackgroundFieldService (NOT material props, so
+            // they aren't masked). Consumers read the same globals from BackgroundField.cginc.
+            float2 _BackgroundFieldBoundsMin;
+            float2 _BackgroundFieldBoundsSize;
 
             struct appdata
             {
@@ -68,8 +68,8 @@ Shader "BalloonParty/Display/CloudFieldDensity"
             {
                 // The texel's world position = field bounds mapped by the blit UV. R = density (shape),
                 // G = smooth intensity.
-                float2 worldPos = _CloudFieldBoundsMin + i.uv * _CloudFieldBoundsSize;
-                return float4(CloudFieldGenerate(worldPos), 0.0, 0.0);
+                float2 worldPos = _BackgroundFieldBoundsMin + i.uv * _BackgroundFieldBoundsSize;
+                return float4(BackgroundFieldGenerate(worldPos), 0.0, 0.0);
             }
             ENDCG
         }

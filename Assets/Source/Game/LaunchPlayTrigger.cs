@@ -9,7 +9,7 @@ namespace BalloonParty.Game
     ///     Play button for the launch screen: rolls the clouds (the ascend scroll) for
     ///     <see cref="_ascendDuration" /> and only THEN transitions to Game — so the game doesn't appear
     ///     until the initial scroll finishes. Wire this to the Play button's onClick in place of the plain
-    ///     <c>NavigationTrigger</c>. The cloud field (<c>CloudFieldService</c>) reflects the scroll from
+    ///     <c>NavigationTrigger</c>. The cloud field (<c>BackgroundFieldService</c>) reflects the scroll from
     ///     <see cref="LaunchAscend" />; it's held afterwards, so the game continues at the same scroll.
     /// </summary>
     public class LaunchPlayTrigger : MonoBehaviour

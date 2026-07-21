@@ -6,7 +6,7 @@ namespace BalloonParty.Shared.GameState
     ///     Static hand-off (like <see cref="Navigation" />) for the launch "ascend" cloud-scroll, so the
     ///     Launcher's Play trigger can drive the Game-scope cloud field without cross-scene DI: the trigger
     ///     <see cref="Begin" />s the roll, waits <see cref="Duration" />, then transitions to Game — so the
-    ///     game doesn't appear until the initial scroll finishes. <c>CloudFieldService</c> reflects this into
+    ///     game doesn't appear until the initial scroll finishes. <c>BackgroundFieldService</c> reflects this into
     ///     its cloud world offset; nothing else needs to know.
     /// </summary>
     internal static class LaunchAscend

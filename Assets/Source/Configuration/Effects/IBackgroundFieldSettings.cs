@@ -2,10 +2,10 @@ using UnityEngine;
 
 namespace BalloonParty.Configuration.Effects
 {
-    /// <summary>Read-only tuning for the shared cloud field (see <c>CloudFieldService</c>).</summary>
-    internal interface ICloudFieldSettings
+    /// <summary>Read-only tuning for the shared cloud field (see <c>BackgroundFieldService</c>).</summary>
+    internal interface IBackgroundFieldSettings
     {
-        /// <summary>Blit material (BalloonParty/Display/CloudFieldDensity) — the cloud roll's tuning
+        /// <summary>Blit material (BalloonParty/Display/BackgroundFieldDensity) — the cloud roll's tuning
         /// surface: noise texture, scale, scroll, thresholds all live on it.</summary>
         Material DensityMaterial { get; }
 

@@ -1,9 +1,9 @@
-#ifndef BALLOONPARTY_CLOUDFIELDGEN_INCLUDED
-#define BALLOONPARTY_CLOUDFIELDGEN_INCLUDED
+#ifndef BALLOONPARTY_BACKGROUNDFIELDGEN_INCLUDED
+#define BALLOONPARTY_BACKGROUNDFIELDGEN_INCLUDED
 
-// GENERATION side of the shared cloud field — used ONLY by the CloudFieldDensity blit that fills the RT.
+// GENERATION side of the shared cloud field — used ONLY by the BackgroundFieldDensity blit that fills the RT.
 // The parameters below are the blit MATERIAL's properties (the one tuning surface for the cloud roll);
-// consumers never see them — they tap the baked RT via CloudField.cginc. Kept separate from the consumer
+// consumers never see them — they tap the baked RT via BackgroundField.cginc. Kept separate from the consumer
 // include so a plain consumer doesn't drag in the noise params it has no business knowing.
 
 sampler2D _NoiseTex;
@@ -21,10 +21,10 @@ float  _AnimationSpeed;
 float  _TimeOffset;
 float  _DisplaceWorldScale;
 
-// World-space offset added to the noise sample position, pushed by CloudFieldService from the scenario
+// World-space offset added to the noise sample position, pushed by BackgroundFieldService from the scenario
 // root's transition displacement — so the clouds scroll in step with the Ascent / restart descent. Zero
 // at rest.
-float2 _CloudWorldOffset;
+float2 _BackgroundWorldOffset;
 
 // The disturbance field (globals set by DisturbanceFieldService) — baked INTO the density here so the
 // RT is "already disturbed" and every consumer reacts to bounces/pops for free. Equilibrium is
@@ -34,30 +34,30 @@ float2 _FieldBoundsMin;
 float2 _FieldBoundsSize;
 
 // Built-in _Time at runtime; _TimeOffset is only fed in edit mode, where _Time is frozen.
-float CloudGenTime()
+float BackgroundGenTime()
 {
     return _Time.y * _AnimationSpeed + _TimeOffset;
 }
 
 // One octave in [-1, 1] from the tileable baked noise (value in R), repeat-wrapped over _NoisePeriod.
-float CloudGenOctave(float2 p)
+float BackgroundGenOctave(float2 p)
 {
     return tex2Dlod(_NoiseTex, float4(p / max(_NoisePeriod, 0.0001), 0.0, 0.0)).r * 2.0 - 1.0;
 }
 
 // The smooth, un-thresholded cloud intensity in [0, 1] at a world position, from three scrolling octaves.
-float CloudGenRawNoise(float2 wp)
+float BackgroundGenRawNoise(float2 wp)
 {
     // Shift the whole field by the transition offset so the clouds scroll with the ascend/descend.
-    wp += _CloudWorldOffset;
+    wp += _BackgroundWorldOffset;
 
-    float t = CloudGenTime();
+    float t = BackgroundGenTime();
     float2 pBase   = wp * _BaseScale   * _NoiseScale + _ScrollSpeedBase.xy   * t;
     float2 pDetail = wp * _DetailScale * _NoiseScale + _ScrollSpeedDetail.xy * t;
     float2 pFine   = wp * _FineScale   * _NoiseScale + _ScrollSpeedFine.xy   * t;
 
-    float n = CloudGenOctave(pBase) * 0.50 + CloudGenOctave(pDetail) * 0.30
-            + CloudGenOctave(pFine) * 0.20;
+    float n = BackgroundGenOctave(pBase) * 0.50 + BackgroundGenOctave(pDetail) * 0.30
+            + BackgroundGenOctave(pFine) * 0.20;
     return n * 0.5 + 0.5;
 }
 
@@ -68,15 +68,15 @@ float CloudGenRawNoise(float2 wp)
 //   R = thresholded DENSITY (the cloud shape — backdrop, shadows, GI smear).
 //   G = smooth INTENSITY (for consumers that want to blend against the gradient, e.g. the wall net's
 //       visibility — thresholding it would segment the blend).
-float2 CloudFieldGenerate(float2 wp)
+float2 BackgroundFieldGenerate(float2 wp)
 {
     float3 field = tex2Dlod(_DisturbanceTex, float4((wp - _FieldBoundsMin) / _FieldBoundsSize, 0, 0)).rgb;
     float thin = saturate((1.0 - field.r) * 2.0);
     float2 displace = (field.gb - 0.5) * 2.0 * _DisplaceWorldScale;
     float disturbance = saturate(length(displace) / (_DisplaceWorldScale * 0.5 + 0.001));
 
-    float rawHere = CloudGenRawNoise(wp);
-    float raw = disturbance > 0.001 ? lerp(rawHere, CloudGenRawNoise(wp + displace), disturbance) : rawHere;
+    float rawHere = BackgroundGenRawNoise(wp);
+    float raw = disturbance > 0.001 ? lerp(rawHere, BackgroundGenRawNoise(wp + displace), disturbance) : rawHere;
     raw *= thin;
 
     float density = smoothstep(_EdgeLow, _EdgeHigh, raw);

@@ -30,8 +30,25 @@ Shader "Hidden/BalloonParty/Editor/ChannelPreview"
             SamplerState sampler_point_clamp;  // point-samples the palette tag so the index stays crisp
             float4 _ChannelMask;
             float4 _PaletteColors[16];
-            float _DecodePalette; // 1 = a solo-A view decodes the encoded palette index to its color
-            float _MipLevel;     // 0 = full res; higher = coarser mip (cone march preview)
+            float _DecodePalette;  // 1 = solo-channel view decodes the encoded palette index to its color
+            float _PaletteChannel; // 0=R, 1=G, 2=B, 3=A — which channel holds the palette index
+            float _MipLevel;       // 0 = full res; higher = coarser mip (cone march preview)
+
+            float SampleChannel(float4 tex, int ch)
+            {
+                if (ch == 0) return tex.r;
+                if (ch == 1) return tex.g;
+                if (ch == 2) return tex.b;
+                return tex.a;
+            }
+
+            float ChannelMaskValue(int ch)
+            {
+                if (ch == 0) return _ChannelMask.r;
+                if (ch == 1) return _ChannelMask.g;
+                if (ch == 2) return _ChannelMask.b;
+                return _ChannelMask.a;
+            }
 
             fixed4 frag(v2f_img i) : SV_Target
             {
@@ -41,13 +58,13 @@ Shader "Hidden/BalloonParty/Editor/ChannelPreview"
 
                 if (selectedCount <= 1.0)
                 {
-                    // Solo-A on a palette-tagged map: show the color the encoded index maps to
-                    // (black = untagged), instead of near-black grayscale codes.
-                    if (_DecodePalette > 0.5 && _ChannelMask.a > 0.5)
+                    // Solo view of the palette-tagged channel: decode index to its palette color.
+                    int palCh = (int)_PaletteChannel;
+                    if (_DecodePalette > 0.5 && ChannelMaskValue(palCh) > 0.5)
                     {
-                        // A packs (index + life) / 16 — dim the decoded color by the tag's remaining life.
                         // Point-sampled: bilinear blend of a quantized index bands into foreign slots.
-                        float v = _MainTex.Sample(sampler_point_clamp, i.uv).a * 16.0;
+                        float4 pointSample = _MainTex.Sample(sampler_point_clamp, i.uv);
+                        float v = SampleChannel(pointSample, palCh) * 16.0;
                         if (v <= 0.05)
                         {
                             return fixed4(0, 0, 0, 1);

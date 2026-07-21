@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eab913f0fee3433aa040d2adac44edf5, type: 3}
+  m_Name: PaintingFieldSettings
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.Effects.PaintingFieldSettings
+  _stampShader: {fileID: 4800000, guid: 24599d3206b242438a07e1f96fbbf7a3, type: 3}
+  _decayShader: {fileID: 4800000, guid: 3cac189d3ee64ff89d441e714d067826, type: 3}
+  _texelsPerUnit: 16
+  _decayRate: 0.15
+  _decayTickInterval: 0.05

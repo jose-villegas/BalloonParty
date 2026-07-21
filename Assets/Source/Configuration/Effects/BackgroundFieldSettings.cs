@@ -4,10 +4,10 @@ namespace BalloonParty.Configuration.Effects
 {
     /// <summary>Authored tuning for the shared cloud field; assign the blit material + resolution here and
     /// wire the asset into <c>GameLifetimeScope</c>.</summary>
-    [CreateAssetMenu(menuName = "Configuration/Cloud Field Settings", fileName = "CloudFieldSettings")]
-    internal sealed class CloudFieldSettings : ScriptableObject, ICloudFieldSettings
+    [CreateAssetMenu(menuName = "Configuration/Background Field Settings", fileName = "BackgroundFieldSettings")]
+    internal sealed class BackgroundFieldSettings : ScriptableObject, IBackgroundFieldSettings
     {
-        [Tooltip("Blit material using BalloonParty/Display/CloudFieldDensity — the cloud roll lives here.")]
+        [Tooltip("Blit material using BalloonParty/Display/BackgroundFieldDensity — the cloud roll lives here.")]
         [SerializeField] private Material _densityMaterial;
 
         [Tooltip("Density-RT resolution per world unit.")]

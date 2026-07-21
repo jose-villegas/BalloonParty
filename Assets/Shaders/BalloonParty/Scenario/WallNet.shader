@@ -7,7 +7,7 @@ Shader "BalloonParty/Scenario/WallNet"
     // the band UNFURLS inward to its full depth and BULGES along the impact direction, exposing the tennis
     // -net weave and its depth right at the contact point. Pure vertex work, no CPU sim (BushLeaf tap).
     // The dreamy glow leans on HDR + bloom, not saturation. Its VISIBILITY (and idle breathing) is driven
-    // by the shared CloudField (CloudField.cginc), so the net shows where there's cloud and fades where
+    // by the shared BackgroundField (BackgroundField.cginc), so the net shows where there's cloud and fades where
     // there isn't — it reads as part of the clouds rather than a separate frame.
     Properties
     {
@@ -50,7 +50,7 @@ Shader "BalloonParty/Scenario/WallNet"
         _BreatheNoiseAmount ("Breathe Cloud Amount", Range(0, 1)) = 0.6
         _BreatheNoisePhaseWarp ("Breathe Cloud Phase Warp", Float) = 2.0
 
-        [Header(Cloud visibility (shared CloudField))]
+        [Header(Cloud visibility (shared BackgroundField))]
         // Soft threshold on the cloud's smooth intensity: below Low the net is invisible (no-cloud), then
         // a smooth ramp to full by High — a wide band keeps it from segmenting.
         _FadeLow ("Cloud Fade-In Low", Range(0, 1)) = 0.35
@@ -80,7 +80,7 @@ Shader "BalloonParty/Scenario/WallNet"
             #pragma target 3.5
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
-            #include "../Include/CloudField.cginc"
+            #include "../Include/BackgroundField.cginc"
 
             struct appdata
             {
@@ -162,7 +162,7 @@ Shader "BalloonParty/Scenario/WallNet"
                 // resting line gently undulates away from the wall and never dips into the play area. The
                 // SHARED cloud field is sampled on the net here to make it organic — it warps the wave's
                 // phase and swells some segments more than others, all drifting with the clouds.
-                float breatheNoise = CloudFieldNoiseLOD(worldRest.xy);
+                float breatheNoise = BackgroundFieldNoiseLOD(worldRest.xy);
                 float phase = v.uv0.y * _BreatheWaves * UNITY_TWO_PI
                             + (breatheNoise - 0.5) * _BreatheNoisePhaseWarp;
                 float wave = 0.5 + 0.5 * sin(_Time.y * _BreatheFrequency + phase);
@@ -186,7 +186,7 @@ Shader "BalloonParty/Scenario/WallNet"
             // cloud field isn't in the scene, so the net stays fully visible without it.
             float CloudVisibility(float2 worldXY)
             {
-                float intensity = lerp(1.0, CloudFieldNoise(worldXY), _CloudFieldActive);
+                float intensity = lerp(1.0, BackgroundFieldNoise(worldXY), _BackgroundFieldActive);
                 float vis = smoothstep(_FadeLow, _FadeHigh, intensity);
                 return max(vis, _FadeFloor);
             }
