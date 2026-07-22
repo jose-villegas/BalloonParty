@@ -45,11 +45,14 @@ namespace BalloonParty.Editor
                 return;
             }
 
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+
             DrawRangeControls();
 
             var levelCount = _rangeTo - _rangeFrom + 1;
             if (levelCount < 1)
             {
+                EditorGUILayout.EndVertical();
                 return;
             }
 
@@ -85,6 +88,7 @@ namespace BalloonParty.Editor
             {
                 DrawSelectedLevelInfo(asset, serialized, levelCount);
                 DrawAddControlPointRow(serialized);
+                EditorGUILayout.EndVertical();
                 return;
             }
 
@@ -107,6 +111,8 @@ namespace BalloonParty.Editor
 
             DrawSelectedLevelInfo(asset, serialized, levelCount);
             DrawAddControlPointRow(serialized);
+
+            EditorGUILayout.EndVertical();
         }
 
         private static void DrawRangeControls()
@@ -137,7 +143,26 @@ namespace BalloonParty.Editor
             var colors = asset.ColorsForLevel(_selectedLevel);
             var cpIndex = FindControlPointIndex(serialized, _selectedLevel);
 
-            EditorGUILayout.LabelField($"Level {_selectedLevel}", EditorStyles.boldLabel);
+            // Navigation header: ◀ Level N ▶
+            EditorGUILayout.BeginHorizontal();
+            GUI.enabled = _selectedLevel > 1;
+            if (GUILayout.Button("◀", GUILayout.Width(24f)))
+            {
+                _selectedLevel--;
+            }
+
+            GUI.enabled = true;
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.LabelField($"Level {_selectedLevel}", EditorStyles.boldLabel, GUILayout.Width(70f));
+            GUILayout.FlexibleSpace();
+
+            if (GUILayout.Button("▶", GUILayout.Width(24f)))
+            {
+                _selectedLevel++;
+            }
+
+            EditorGUILayout.EndHorizontal();
+
             EditorGUILayout.LabelField($"Per-color threshold: {threshold}");
             EditorGUILayout.LabelField($"Colors: {colors}  |  Total: {threshold * colors}");
 
