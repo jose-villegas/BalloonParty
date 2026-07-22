@@ -1,10 +1,10 @@
 Shader "BalloonParty/Scenario/SmokeTrailDisplay"
 {
-    // Full-screen display of the painting field RT as a watercolor wash behind the cloud backdrop.
+    // Full-screen display of the painting field RT as animated smoke trails behind the cloud backdrop.
     // Placed on a quad spanning the viewport, sortingOrder below the clouds. It reads the global
-    // _PaintingTex (pushed by PaintingFieldService) and applies a suite of watercolor techniques:
-    // fBM-warped edges, anisotropic bleed, soft-light paper grain, pigment pooling, warm/cool
-    // temperature tint, shadow lift, and optional Voronoi granulation. Premultiplied alpha output.
+    // _PaintingTex (pushed by PaintingFieldService) and applies: curl-noise swirl, 5-tap bleed,
+    // sigmoid edges, wisp noise, paper grain, sky transmission, shadow lift, scene-light
+    // integration, interior density modulation, and age-gradient turbulence. Premultiplied alpha.
     Properties
     {
         _Color              ("Tint",                    Color)              = (1, 1, 1, 1)

@@ -55,7 +55,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AgeGradientStrength: 1.25
+    - _AgeGradientStrength: 3
     - _AnimationSpeed: 9
     - _BaseScale: 1.85
     - _BillowAmplitude: 0.815
@@ -75,8 +75,8 @@ Material:
     - _EdgeLow: 0.307
     - _EdgePow: 2.3
     - _EdgeSoftness: 0.975
-    - _EdgeWarpFreq: 3.5
-    - _EdgeWarpStrength: 0.006
+    - _EdgeWarpFreq: 6
+    - _EdgeWarpStrength: 0.02
     - _EnableDensity: 1
     - _EnableExternalAlpha: 0
     - _EnableShadow: 1
@@ -85,9 +85,9 @@ Material:
     - _FadeStrength: 1
     - _FineScale: 5
     - _GrainScale: 0.1
-    - _GrainStrength: 0.4
-    - _InternalDensityScale: 3
-    - _InternalDensityStrength: 0.8
+    - _GrainStrength: 0.25
+    - _InternalDensityScale: 4
+    - _InternalDensityStrength: 0.3
     - _LightColorRamp: 5
     - _LightGlow: 0.8
     - _LightInfluence: 1
@@ -111,18 +111,18 @@ Material:
     - _SkyTransmissionStrength: 0.5
     - _SlotBlend: 0.35
     - _SlotRadius: 0.45
-    - _SmokeEdgeSharpness: 3.5
+    - _SmokeEdgeSharpness: 3.95
     - _SpriteScale: 0.7
     - _StripWidth: 0.9
-    - _SwirlFreq: 3
+    - _SwirlFreq: 1.25
     - _SwirlSpeed: 0.3
-    - _SwirlStrength: 0.008
+    - _SwirlStrength: 0.004
     - _TemperatureRange: 0.712
     - _TimeOffset: 0
-    - _TurbFreq: 3
+    - _TurbFreq: 8
     - _TurbStrength: 0.008
-    - _WispNoiseFreq: 8
-    - _WispStrength: 0.7
+    - _WispNoiseFreq: 3
+    - _WispStrength: 1
     - _ZWrite: 0
     m_Colors:
     - _AmbientColor: {r: 0.9245283, g: 0.9245283, b: 0.9245283, a: 1}

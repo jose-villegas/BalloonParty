@@ -7,7 +7,7 @@ using VContainer;
 namespace BalloonParty.Scenario.View
 {
     /// <summary>
-    ///     Renders the painting field RT as a full-screen watercolor wash behind the cloud backdrop.
+    ///     Renders the painting field RT as animated smoke trails behind the cloud backdrop.
     ///     Place this on a GameObject with a <see cref="MeshRenderer" /> + <see cref="MeshFilter" />;
     ///     it creates a viewport-sized quad at startup and assigns the display material. The sorting
     ///     order is set below the Scenario Background so the paint layer sits behind the clouds.
