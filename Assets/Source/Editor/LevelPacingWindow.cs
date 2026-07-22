@@ -126,6 +126,8 @@ namespace BalloonParty.Editor
                 return;
             }
 
+            LevelPacingCurvePanel.Draw(_asset);
+            EditorGUILayout.Space(4f);
             DrawTable();
             _serialized.ApplyModifiedProperties();
         }
