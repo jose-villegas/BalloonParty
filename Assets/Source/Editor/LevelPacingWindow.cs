@@ -80,9 +80,6 @@ namespace BalloonParty.Editor
 
         private string[] _paletteNames;
         private Color[] _paletteColors;
-        private int[] _selectedBalloonPerRow = System.Array.Empty<int>();
-        private int[] _selectedItemPerRow = System.Array.Empty<int>();
-        private int[] _selectedActorPerRow = System.Array.Empty<int>();
 
         private LevelPacingConfiguration _asset;
         private SerializedObject _serialized;
@@ -96,6 +93,9 @@ namespace BalloonParty.Editor
         private float _collapsedBalloonColWidth = ColWidths[BalloonColIndex];
         private float _collapsedItemColWidth = ColWidths[ItemColIndex];
         private float _collapsedActorColWidth = ColWidths[ActorColIndex];
+        private TypedEntrySelectorCell<BalloonType> _balloonCell;
+        private TypedEntrySelectorCell<ItemType> _itemCell;
+        private TypedEntrySelectorCell<GridActorType> _actorCell;
 
         private float EffectiveBalloonColWidth => _balloonsExpanded ? BalloonExpandedWidth : _collapsedBalloonColWidth;
         private float EffectiveItemColWidth => _itemsExpanded ? ItemExpandedWidth : _collapsedItemColWidth;
@@ -121,6 +121,69 @@ namespace BalloonParty.Editor
                 _paletteNames = new[] { "0", "1", "2", "3", "4", "5", "6", "7" };
                 _paletteColors = System.Array.Empty<Color>();
             }
+
+            EnsureTypedEntryCells();
+        }
+
+        private void EnsureTypedEntryCells()
+        {
+            _balloonCell ??= new TypedEntrySelectorCell<BalloonType>(new CellConfig<BalloonType>
+            {
+                DropdownWidth = 70f,
+                Fields = new[]
+                {
+                    new FieldSpec("_weight", "Wt", 36f, FieldDrawMode.Float),
+                    new FieldSpec("_initialCountWeights", "Initial", CurveFieldWidth, FieldDrawMode.Curve),
+                    new FieldSpec("_waveCountWeights", "Wave", CurveFieldWidth, FieldDrawMode.Curve)
+                },
+                InitializeNewEntry = entryProp =>
+                {
+                    entryProp.FindPropertyRelative("_weight").floatValue = 1f;
+                },
+                GetThumbnail = enumIntValue => FindBalloonPreview(_balloonsConfigCache.Value, (BalloonType)enumIntValue),
+                IsEntryActive = entryProp =>
+                {
+                    var weightProp = entryProp.FindPropertyRelative("_weight");
+                    return weightProp != null && weightProp.floatValue > 0f;
+                }
+            });
+
+            _itemCell ??= new TypedEntrySelectorCell<ItemType>(new CellConfig<ItemType>
+            {
+                DropdownWidth = 70f,
+                Fields = new[]
+                {
+                    new FieldSpec("_weight", "Wt", 36f, FieldDrawMode.Float),
+                    new FieldSpec("_maximumAllowedOverride", "Max", 30f, FieldDrawMode.Int)
+                },
+                InitializeNewEntry = entryProp =>
+                {
+                    entryProp.FindPropertyRelative("_weight").floatValue = 1f;
+                    entryProp.FindPropertyRelative("_maximumAllowedOverride").intValue = 0;
+                },
+                IsEntryActive = entryProp =>
+                {
+                    var weightProp = entryProp.FindPropertyRelative("_weight");
+                    return weightProp != null && weightProp.floatValue > 0f;
+                }
+            });
+
+            _actorCell ??= new TypedEntrySelectorCell<GridActorType>(new CellConfig<GridActorType>
+            {
+                DropdownWidth = 70f,
+                Fields = new[]
+                {
+                    new FieldSpec("_count", "Count", 96f, FieldDrawMode.RangedInt),
+                    new FieldSpec("_maxPerCluster", "Cluster", 46f, FieldDrawMode.Int)
+                },
+                InitializeNewEntry = entryProp =>
+                {
+                    var countProp = entryProp.FindPropertyRelative("_count");
+                    countProp.FindPropertyRelative("_min").intValue = 1;
+                    countProp.FindPropertyRelative("_max").intValue = 3;
+                    entryProp.FindPropertyRelative("_maxPerCluster").intValue = 0;
+                }
+            });
         }
 
         private void OnGUI()
@@ -513,11 +576,11 @@ namespace BalloonParty.Editor
             var picked = EditorGUI.Popup(dropdownRect, 0, names);
             if (picked > 0)
             {
-                FocusBalloonTypeInAllRows(allTypes[picked - 1], picked - 1);
+                FocusBalloonTypeInAllRows(allTypes[picked - 1]);
             }
         }
 
-        private void FocusBalloonTypeInAllRows(BalloonType type, int typeIndex)
+        private void FocusBalloonTypeInAllRows(BalloonType type)
         {
             if (_rangesProp == null)
             {
@@ -539,10 +602,9 @@ namespace BalloonParty.Editor
                     continue;
                 }
 
-                if (FindBalloonEntryIndex(balloonsProp, type) >= 0)
+                if (_balloonCell.FindEntryIndex(balloonsProp, (int)type) >= 0)
                 {
-                    EnsureSelectionArraySize(ref _selectedBalloonPerRow, row);
-                    _selectedBalloonPerRow[row] = typeIndex;
+                    _balloonCell.SelectType(row, type);
                 }
             }
         }
@@ -570,7 +632,7 @@ namespace BalloonParty.Editor
             var picked = EditorGUI.Popup(dropdownRect, 0, names);
             if (picked > 0)
             {
-                FocusItemTypeInAllRows(allTypes[picked - 1], picked - 1);
+                FocusItemTypeInAllRows(allTypes[picked - 1]);
             }
         }
 
@@ -597,11 +659,11 @@ namespace BalloonParty.Editor
             var picked = EditorGUI.Popup(dropdownRect, 0, names);
             if (picked > 0)
             {
-                FocusActorTypeInAllRows(allTypes[picked - 1], picked - 1);
+                FocusActorTypeInAllRows(allTypes[picked - 1]);
             }
         }
 
-        private void FocusItemTypeInAllRows(ItemType type, int typeIndex)
+        private void FocusItemTypeInAllRows(ItemType type)
         {
             if (_rangesProp == null)
             {
@@ -623,15 +685,14 @@ namespace BalloonParty.Editor
                     continue;
                 }
 
-                if (FindItemEntryIndex(itemsProp, type) >= 0)
+                if (_itemCell.FindEntryIndex(itemsProp, (int)type) >= 0)
                 {
-                    EnsureSelectionArraySize(ref _selectedItemPerRow, row);
-                    _selectedItemPerRow[row] = typeIndex;
+                    _itemCell.SelectType(row, type);
                 }
             }
         }
 
-        private void FocusActorTypeInAllRows(GridActorType type, int typeIndex)
+        private void FocusActorTypeInAllRows(GridActorType type)
         {
             if (_rangesProp == null)
             {
@@ -653,24 +714,11 @@ namespace BalloonParty.Editor
                     continue;
                 }
 
-                if (FindActorEntryIndex(actorsProp, type) >= 0)
+                if (_actorCell.FindEntryIndex(actorsProp, (int)type) >= 0)
                 {
-                    EnsureSelectionArraySize(ref _selectedActorPerRow, row);
-                    _selectedActorPerRow[row] = typeIndex;
+                    _actorCell.SelectType(row, type);
                 }
             }
-        }
-
-        private static void EnsureSelectionArraySize(ref int[] array, int index)
-        {
-            if (array.Length > index)
-            {
-                return;
-            }
-
-            var newArr = new int[index + 16];
-            System.Array.Copy(array, newArr, array.Length);
-            array = newArr;
         }
 
         private void DrawHeaderCells(Rect rowRect)
@@ -701,7 +749,7 @@ namespace BalloonParty.Editor
 
                     if (_balloonsExpanded)
                     {
-                        DrawBalloonSubHeaders(cell);
+                        _balloonCell.DrawSubHeaders(cell);
                     }
                 }
                 else if (i == ItemColIndex)
@@ -715,7 +763,7 @@ namespace BalloonParty.Editor
 
                     if (_itemsExpanded)
                     {
-                        DrawItemSubHeaders(cell);
+                        _itemCell.DrawSubHeaders(cell);
                     }
                 }
                 else if (i == ActorColIndex)
@@ -729,7 +777,7 @@ namespace BalloonParty.Editor
 
                     if (_actorsExpanded)
                     {
-                        DrawActorSubHeaders(cell);
+                        _actorCell.DrawSubHeaders(cell);
                     }
                 }
                 else
@@ -748,24 +796,6 @@ namespace BalloonParty.Editor
             }
 
             DrawGroupBorderSeparators(rowRect);
-        }
-
-        private static void DrawBalloonSubHeaders(Rect cell)
-        {
-            var subStyle = StyleCache.Get("LevelPacingWindow.CenteredMiniLabel", () => new GUIStyle(EditorStyles.miniLabel)
-            {
-                alignment = TextAnchor.MiddleCenter
-            });
-
-            var x = cell.x + 74f;
-            var y = cell.y;
-            var h = cell.height;
-
-            EditorGUI.LabelField(new Rect(x, y, 36f, h), "Wt", subStyle);
-            x += 40f;
-            EditorGUI.LabelField(new Rect(x, y, CurveFieldWidth, h), "Initial", subStyle);
-            x += CurveFieldWidth + 2f;
-            EditorGUI.LabelField(new Rect(x, y, CurveFieldWidth, h), "Wave", subStyle);
         }
 
         private void DrawRow(int index)
@@ -851,11 +881,11 @@ namespace BalloonParty.Editor
 
                 if (_balloonsExpanded)
                 {
-                    DrawBalloonCellExpanded(CellRect(rowRect, BalloonColIndex), balloonsProp, index);
+                    _balloonCell.DrawExpanded(CellRect(rowRect, BalloonColIndex), balloonsProp, index);
                 }
                 else
                 {
-                    DrawBalloonCellCollapsed(CellRect(rowRect, BalloonColIndex), balloonsProp);
+                    _balloonCell.DrawCollapsed(CellRect(rowRect, BalloonColIndex), balloonsProp);
                 }
 
                 DrawRangedIntCell(CellRect(rowRect, 6), paramsProp, "_itemCadence");
@@ -865,21 +895,21 @@ namespace BalloonParty.Editor
                 var itemsProp = paramsProp.FindPropertyRelative("_itemWeights");
                 if (_itemsExpanded)
                 {
-                    DrawItemCellExpanded(CellRect(rowRect, ItemColIndex), itemsProp, index);
+                    _itemCell.DrawExpanded(CellRect(rowRect, ItemColIndex), itemsProp, index);
                 }
                 else
                 {
-                    DrawItemCellCollapsed(CellRect(rowRect, ItemColIndex), itemsProp);
+                    _itemCell.DrawCollapsed(CellRect(rowRect, ItemColIndex), itemsProp);
                 }
 
                 var actorsProp = paramsProp.FindPropertyRelative("_gridActorGates");
                 if (_actorsExpanded)
                 {
-                    DrawActorCellExpanded(CellRect(rowRect, ActorColIndex), actorsProp, index);
+                    _actorCell.DrawExpanded(CellRect(rowRect, ActorColIndex), actorsProp, index);
                 }
                 else
                 {
-                    DrawActorCellCollapsed(CellRect(rowRect, ActorColIndex), actorsProp);
+                    _actorCell.DrawCollapsed(CellRect(rowRect, ActorColIndex), actorsProp);
                 }
             }
 
@@ -1014,191 +1044,6 @@ namespace BalloonParty.Editor
             }
         }
 
-        private void DrawBalloonCellCollapsed(Rect cell, SerializedProperty balloonsProp)
-        {
-            if (balloonsProp == null || !balloonsProp.isArray)
-            {
-                return;
-            }
-
-            var count = balloonsProp.arraySize;
-            var activeCount = 0;
-            for (var i = 0; i < count; i++)
-            {
-                var weightProp = balloonsProp.GetArrayElementAtIndex(i).FindPropertyRelative("_weight");
-                if (weightProp != null && weightProp.floatValue > 0f)
-                {
-                    activeCount++;
-                }
-            }
-
-            // Count label
-            var labelRect = new Rect(cell.x + 2f, cell.y, 30f, cell.height);
-            EditorGUI.LabelField(labelRect, activeCount.ToString(), EditorStyles.miniLabel);
-
-            // Prefab thumbnails
-            var x = labelRect.xMax;
-            var thumbSize = cell.height - 4f;
-            var balloonsConfig = _balloonsConfigCache.Value;
-
-            for (var i = 0; i < count; i++)
-            {
-                var entryProp = balloonsProp.GetArrayElementAtIndex(i);
-                var weightProp = entryProp.FindPropertyRelative("_weight");
-                if (weightProp == null || weightProp.floatValue <= 0f)
-                {
-                    continue;
-                }
-
-                var typeProp = entryProp.FindPropertyRelative("_type");
-                if (typeProp == null)
-                {
-                    continue;
-                }
-
-                var balloonType = (BalloonType)typeProp.intValue;
-                var preview = FindBalloonPreview(balloonsConfig, balloonType);
-                var thumbRect = new Rect(x, cell.y + (cell.height - thumbSize) / 2f, thumbSize, thumbSize);
-
-                if (preview != null)
-                {
-                    GUI.DrawTexture(thumbRect, preview, ScaleMode.ScaleToFit);
-                }
-                else
-                {
-                    EditorGUI.DrawRect(thumbRect, new Color(0.4f, 0.4f, 0.4f, 0.6f));
-                    var initial = balloonType.ToString()[0].ToString();
-                    EditorGUI.LabelField(thumbRect, initial, StyleCache.Get("LevelPacingWindow.CenteredMiniLabel", () => new GUIStyle(EditorStyles.miniLabel)
-                    {
-                        alignment = TextAnchor.MiddleCenter
-                    }));
-                }
-
-                x += thumbSize + 2f;
-            }
-        }
-
-        private void DrawBalloonCellExpanded(Rect cell, SerializedProperty balloonsProp, int rowIndex)
-        {
-            if (balloonsProp == null || !balloonsProp.isArray)
-            {
-                return;
-            }
-
-            // Ensure selection array is large enough
-            if (_selectedBalloonPerRow.Length <= rowIndex)
-            {
-                var newArr = new int[rowIndex + 16];
-                System.Array.Copy(_selectedBalloonPerRow, newArr, _selectedBalloonPerRow.Length);
-                _selectedBalloonPerRow = newArr;
-            }
-
-            var count = balloonsProp.arraySize;
-            var allTypes = (BalloonType[])System.Enum.GetValues(typeof(BalloonType));
-            var typeNames = new string[allTypes.Length];
-            var selectedTypeIndex = _selectedBalloonPerRow[rowIndex];
-            selectedTypeIndex = Mathf.Clamp(selectedTypeIndex, 0, allTypes.Length - 1);
-
-            for (var i = 0; i < allTypes.Length; i++)
-            {
-                if (i == selectedTypeIndex)
-                {
-                    typeNames[i] = allTypes[i].ToString();
-                }
-                else
-                {
-                    var present = FindBalloonEntryIndex(balloonsProp, allTypes[i]) >= 0;
-                    typeNames[i] = present ? $"✓ {allTypes[i]}" : $"+ {allTypes[i]}";
-                }
-            }
-
-            var x = cell.x + 2f;
-            var y = cell.y + 2f;
-            var h = cell.height - 4f;
-            var dropdownW = 70f;
-
-            var newTypeIndex = EditorGUI.Popup(new Rect(x, y, dropdownW, h), selectedTypeIndex, typeNames);
-            if (newTypeIndex != selectedTypeIndex)
-            {
-                _selectedBalloonPerRow[rowIndex] = newTypeIndex;
-                selectedTypeIndex = newTypeIndex;
-
-                // If this type isn't in the list yet, add it
-                var selectedType = allTypes[selectedTypeIndex];
-                if (FindBalloonEntryIndex(balloonsProp, selectedType) < 0)
-                {
-                    balloonsProp.InsertArrayElementAtIndex(count);
-                    var newEntry = balloonsProp.GetArrayElementAtIndex(count);
-                    newEntry.FindPropertyRelative("_type").intValue = (int)selectedType;
-                    newEntry.FindPropertyRelative("_weight").floatValue = 1f;
-                    count++;
-                }
-            }
-
-            x += dropdownW + 4f;
-
-            // Find the entry for the currently selected type
-            var selectedBalloonType = allTypes[selectedTypeIndex];
-            var entryIndex = FindBalloonEntryIndex(balloonsProp, selectedBalloonType);
-
-            if (entryIndex >= 0)
-            {
-                var entryProp = balloonsProp.GetArrayElementAtIndex(entryIndex);
-                var weightProp = entryProp.FindPropertyRelative("_weight");
-                var initialCurveProp = entryProp.FindPropertyRelative("_initialCountWeights");
-                var waveCurveProp = entryProp.FindPropertyRelative("_waveCountWeights");
-
-                // Weight
-                var weightW = 36f;
-                if (weightProp != null)
-                {
-                    weightProp.floatValue = EditorGUI.FloatField(new Rect(x, y, weightW, h), weightProp.floatValue);
-                }
-
-                x += weightW + 4f;
-
-                // Initial count curve
-                if (initialCurveProp != null)
-                {
-                    EditorGUI.PropertyField(new Rect(x, y, CurveFieldWidth, h), initialCurveProp, GUIContent.none);
-                }
-
-                x += CurveFieldWidth + 2f;
-
-                // Wave count curve
-                if (waveCurveProp != null)
-                {
-                    EditorGUI.PropertyField(new Rect(x, y, CurveFieldWidth, h), waveCurveProp, GUIContent.none);
-                }
-
-                x += CurveFieldWidth + 2f;
-
-                // Remove button
-                if (GUI.Button(new Rect(x, y, 18f, h), "−", EditorStyles.miniButton))
-                {
-                    balloonsProp.DeleteArrayElementAtIndex(entryIndex);
-                }
-            }
-            else
-            {
-                EditorGUI.LabelField(new Rect(x, y, 120f, h), "Select a type", EditorStyles.miniLabel);
-            }
-        }
-
-        private static int FindBalloonEntryIndex(SerializedProperty balloonsProp, BalloonType type)
-        {
-            for (var i = 0; i < balloonsProp.arraySize; i++)
-            {
-                var typeProp = balloonsProp.GetArrayElementAtIndex(i).FindPropertyRelative("_type");
-                if (typeProp != null && typeProp.intValue == (int)type)
-                {
-                    return i;
-                }
-            }
-
-            return -1;
-        }
-
         private static Texture2D FindBalloonPreview(BalloonsConfiguration config, BalloonType type)
         {
             if (config == null)
@@ -1215,341 +1060,6 @@ namespace BalloonParty.Editor
             }
 
             return null;
-        }
-
-        private static void DrawItemSubHeaders(Rect cell)
-        {
-            var subStyle = StyleCache.Get("LevelPacingWindow.CenteredMiniLabel", () => new GUIStyle(EditorStyles.miniLabel)
-            {
-                alignment = TextAnchor.MiddleCenter
-            });
-
-            var x = cell.x + 74f;
-            var y = cell.y;
-            var h = cell.height;
-
-            EditorGUI.LabelField(new Rect(x, y, 36f, h), "Wt", subStyle);
-            x += 40f;
-            EditorGUI.LabelField(new Rect(x, y, 36f, h), "Max", subStyle);
-        }
-
-        private static void DrawItemCellCollapsed(Rect cell, SerializedProperty itemsProp)
-        {
-            if (itemsProp == null || !itemsProp.isArray)
-            {
-                return;
-            }
-
-            var count = itemsProp.arraySize;
-            var activeCount = 0;
-            for (var i = 0; i < count; i++)
-            {
-                var weightProp = itemsProp.GetArrayElementAtIndex(i).FindPropertyRelative("_weight");
-                if (weightProp != null && weightProp.floatValue > 0f)
-                {
-                    activeCount++;
-                }
-            }
-
-            var labelRect = new Rect(cell.x + 2f, cell.y, 30f, cell.height);
-            EditorGUI.LabelField(labelRect, activeCount.ToString(), EditorStyles.miniLabel);
-
-            // Item type initials as small labels
-            var x = labelRect.xMax;
-            var thumbSize = cell.height - 4f;
-
-            for (var i = 0; i < count; i++)
-            {
-                var entryProp = itemsProp.GetArrayElementAtIndex(i);
-                var weightProp = entryProp.FindPropertyRelative("_weight");
-                if (weightProp == null || weightProp.floatValue <= 0f)
-                {
-                    continue;
-                }
-
-                var typeProp = entryProp.FindPropertyRelative("_type");
-                if (typeProp == null)
-                {
-                    continue;
-                }
-
-                var itemType = (ItemType)typeProp.intValue;
-                var thumbRect = new Rect(x, cell.y + (cell.height - thumbSize) / 2f, thumbSize, thumbSize);
-                EditorGUI.DrawRect(thumbRect, new Color(0.4f, 0.4f, 0.4f, 0.6f));
-                EditorGUI.LabelField(thumbRect, itemType.ToString()[0].ToString(),
-                    StyleCache.Get("LevelPacingWindow.CenteredMiniLabel", () => new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleCenter }));
-                x += thumbSize + 2f;
-            }
-        }
-
-        private void DrawItemCellExpanded(Rect cell, SerializedProperty itemsProp, int rowIndex)
-        {
-            if (itemsProp == null || !itemsProp.isArray)
-            {
-                return;
-            }
-
-            // Ensure selection array is large enough
-            if (_selectedItemPerRow.Length <= rowIndex)
-            {
-                var newArr = new int[rowIndex + 16];
-                System.Array.Copy(_selectedItemPerRow, newArr, _selectedItemPerRow.Length);
-                _selectedItemPerRow = newArr;
-            }
-
-            var count = itemsProp.arraySize;
-            var allTypes = (ItemType[])System.Enum.GetValues(typeof(ItemType));
-            var typeNames = new string[allTypes.Length];
-            var selectedTypeIndex = _selectedItemPerRow[rowIndex];
-            selectedTypeIndex = Mathf.Clamp(selectedTypeIndex, 0, allTypes.Length - 1);
-
-            for (var i = 0; i < allTypes.Length; i++)
-            {
-                if (i == selectedTypeIndex)
-                {
-                    typeNames[i] = allTypes[i].ToString();
-                }
-                else
-                {
-                    var present = FindItemEntryIndex(itemsProp, allTypes[i]) >= 0;
-                    typeNames[i] = present ? $"✓ {allTypes[i]}" : $"+ {allTypes[i]}";
-                }
-            }
-
-            var x = cell.x + 2f;
-            var y = cell.y + 2f;
-            var h = cell.height - 4f;
-            var dropdownW = 70f;
-
-            var newTypeIndex = EditorGUI.Popup(new Rect(x, y, dropdownW, h), selectedTypeIndex, typeNames);
-            if (newTypeIndex != selectedTypeIndex)
-            {
-                _selectedItemPerRow[rowIndex] = newTypeIndex;
-                selectedTypeIndex = newTypeIndex;
-
-                var selectedType = allTypes[selectedTypeIndex];
-                if (FindItemEntryIndex(itemsProp, selectedType) < 0)
-                {
-                    itemsProp.InsertArrayElementAtIndex(count);
-                    var newEntry = itemsProp.GetArrayElementAtIndex(count);
-                    newEntry.FindPropertyRelative("_type").intValue = (int)selectedType;
-                    newEntry.FindPropertyRelative("_weight").floatValue = 1f;
-                    newEntry.FindPropertyRelative("_maximumAllowedOverride").intValue = 0;
-                    count++;
-                }
-            }
-
-            x += dropdownW + 4f;
-
-            var selectedItemType = allTypes[selectedTypeIndex];
-            var entryIndex = FindItemEntryIndex(itemsProp, selectedItemType);
-
-            if (entryIndex >= 0)
-            {
-                var entryProp = itemsProp.GetArrayElementAtIndex(entryIndex);
-                var weightProp = entryProp.FindPropertyRelative("_weight");
-                var maxProp = entryProp.FindPropertyRelative("_maximumAllowedOverride");
-
-                // Weight
-                var weightW = 36f;
-                if (weightProp != null)
-                {
-                    weightProp.floatValue = EditorGUI.FloatField(new Rect(x, y, weightW, h), weightProp.floatValue);
-                }
-
-                x += weightW + 4f;
-
-                // Max
-                if (maxProp != null)
-                {
-                    maxProp.intValue = EditorGUI.IntField(new Rect(x, y, 30f, h), maxProp.intValue);
-                }
-
-                x += 34f;
-
-                // Remove button
-                if (GUI.Button(new Rect(x, y, 18f, h), "−", EditorStyles.miniButton))
-                {
-                    itemsProp.DeleteArrayElementAtIndex(entryIndex);
-                }
-            }
-            else
-            {
-                EditorGUI.LabelField(new Rect(x, y, 120f, h), "Select a type", EditorStyles.miniLabel);
-            }
-        }
-
-        private static int FindItemEntryIndex(SerializedProperty itemsProp, ItemType type)
-        {
-            for (var i = 0; i < itemsProp.arraySize; i++)
-            {
-                var typeProp = itemsProp.GetArrayElementAtIndex(i).FindPropertyRelative("_type");
-                if (typeProp != null && typeProp.intValue == (int)type)
-                {
-                    return i;
-                }
-            }
-
-            return -1;
-        }
-
-        private static void DrawActorSubHeaders(Rect cell)
-        {
-            var subStyle = StyleCache.Get("LevelPacingWindow.CenteredMiniLabel", () => new GUIStyle(EditorStyles.miniLabel)
-            {
-                alignment = TextAnchor.MiddleCenter
-            });
-
-            var x = cell.x + 74f;
-            var y = cell.y;
-            var h = cell.height;
-
-            EditorGUI.LabelField(new Rect(x, y, 40f, h), "Count", subStyle);
-            x += 44f;
-            EditorGUI.LabelField(new Rect(x, y, 50f, h), "Mode", subStyle);
-            x += 54f;
-            EditorGUI.LabelField(new Rect(x, y, 46f, h), "Cluster", subStyle);
-        }
-
-        private static void DrawActorCellCollapsed(Rect cell, SerializedProperty actorsProp)
-        {
-            if (actorsProp == null || !actorsProp.isArray)
-            {
-                return;
-            }
-
-            var count = actorsProp.arraySize;
-            var labelRect = new Rect(cell.x + 2f, cell.y, 30f, cell.height);
-            EditorGUI.LabelField(labelRect, count.ToString(), EditorStyles.miniLabel);
-
-            var x = labelRect.xMax;
-            var thumbSize = cell.height - 4f;
-
-            for (var i = 0; i < count; i++)
-            {
-                var entryProp = actorsProp.GetArrayElementAtIndex(i);
-                var typeProp = entryProp.FindPropertyRelative("_type");
-                if (typeProp == null)
-                {
-                    continue;
-                }
-
-                var actorType = (GridActorType)typeProp.intValue;
-                var thumbRect = new Rect(x, cell.y + (cell.height - thumbSize) / 2f, thumbSize, thumbSize);
-                EditorGUI.DrawRect(thumbRect, new Color(0.4f, 0.4f, 0.4f, 0.6f));
-                EditorGUI.LabelField(thumbRect, actorType.ToString()[0].ToString(),
-                    StyleCache.Get("LevelPacingWindow.CenteredMiniLabel", () => new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleCenter }));
-                x += thumbSize + 2f;
-            }
-        }
-
-        private void DrawActorCellExpanded(Rect cell, SerializedProperty actorsProp, int rowIndex)
-        {
-            if (actorsProp == null || !actorsProp.isArray)
-            {
-                return;
-            }
-
-            EnsureSelectionArraySize(ref _selectedActorPerRow, rowIndex);
-
-            var count = actorsProp.arraySize;
-            var allTypes = (GridActorType[])System.Enum.GetValues(typeof(GridActorType));
-            var typeNames = new string[allTypes.Length];
-            var selectedTypeIndex = _selectedActorPerRow[rowIndex];
-            selectedTypeIndex = Mathf.Clamp(selectedTypeIndex, 0, allTypes.Length - 1);
-
-            for (var i = 0; i < allTypes.Length; i++)
-            {
-                if (i == selectedTypeIndex)
-                {
-                    typeNames[i] = allTypes[i].ToString();
-                }
-                else
-                {
-                    var present = FindActorEntryIndex(actorsProp, allTypes[i]) >= 0;
-                    typeNames[i] = present ? $"✓ {allTypes[i]}" : $"+ {allTypes[i]}";
-                }
-            }
-
-            var x = cell.x + 2f;
-            var y = cell.y + 2f;
-            var h = cell.height - 4f;
-            var dropdownW = 70f;
-
-            var newTypeIndex = EditorGUI.Popup(new Rect(x, y, dropdownW, h), selectedTypeIndex, typeNames);
-            if (newTypeIndex != selectedTypeIndex)
-            {
-                _selectedActorPerRow[rowIndex] = newTypeIndex;
-                selectedTypeIndex = newTypeIndex;
-
-                var selectedType = allTypes[selectedTypeIndex];
-                if (FindActorEntryIndex(actorsProp, selectedType) < 0)
-                {
-                    actorsProp.InsertArrayElementAtIndex(count);
-                    var newEntry = actorsProp.GetArrayElementAtIndex(count);
-                    newEntry.FindPropertyRelative("_type").intValue = (int)selectedType;
-                    var countProp = newEntry.FindPropertyRelative("_count");
-                    countProp.FindPropertyRelative("_min").intValue = 1;
-                    countProp.FindPropertyRelative("_max").intValue = 3;
-                    newEntry.FindPropertyRelative("_maxPerCluster").intValue = 0;
-                    count++;
-                }
-            }
-
-            x += dropdownW + 4f;
-
-            var selectedType2 = allTypes[selectedTypeIndex];
-            var entryIndex = FindActorEntryIndex(actorsProp, selectedType2);
-
-            if (entryIndex >= 0)
-            {
-                var entryProp = actorsProp.GetArrayElementAtIndex(entryIndex);
-                var countPropEntry = entryProp.FindPropertyRelative("_count");
-                var minProp = countPropEntry.FindPropertyRelative("_min");
-                var maxProp = countPropEntry.FindPropertyRelative("_max");
-                var clusterProp = entryProp.FindPropertyRelative("_maxPerCluster");
-
-                // Count: min/max + mode
-                var fieldW = 18f;
-                var modeW = 50f;
-                minProp.intValue = EditorGUI.IntField(new Rect(x, y, fieldW, h), minProp.intValue);
-                x += fieldW;
-                EditorGUI.LabelField(new Rect(x, y, 8f, h), "/");
-                x += 8f;
-                maxProp.intValue = EditorGUI.IntField(new Rect(x, y, fieldW, h), maxProp.intValue);
-                x += fieldW + 2f;
-                var modeProp = countPropEntry.FindPropertyRelative("_mode");
-                modeProp.enumValueIndex = EditorGUI.Popup(new Rect(x, y, modeW, h), modeProp.enumValueIndex, modeProp.enumDisplayNames);
-                x += modeW + 4f;
-
-                // MaxPerCluster
-                clusterProp.intValue = EditorGUI.IntField(new Rect(x, y, 24f, h), clusterProp.intValue);
-                x += 28f;
-
-                // Remove button
-                if (GUI.Button(new Rect(x, y, 18f, h), "−", EditorStyles.miniButton))
-                {
-                    actorsProp.DeleteArrayElementAtIndex(entryIndex);
-                }
-            }
-            else
-            {
-                EditorGUI.LabelField(new Rect(x, y, 120f, h), "Select a type", EditorStyles.miniLabel);
-            }
-        }
-
-        private static int FindActorEntryIndex(SerializedProperty actorsProp, GridActorType type)
-        {
-            for (var i = 0; i < actorsProp.arraySize; i++)
-            {
-                var typeProp = actorsProp.GetArrayElementAtIndex(i).FindPropertyRelative("_type");
-                if (typeProp != null && typeProp.intValue == (int)type)
-                {
-                    return i;
-                }
-            }
-
-            return -1;
         }
 
         private static void DrawExpandedDetails(SerializedProperty paramsProp)

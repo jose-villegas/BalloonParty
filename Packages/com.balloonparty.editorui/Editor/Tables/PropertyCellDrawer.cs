@@ -48,6 +48,19 @@ namespace BalloonParty.EditorUI.Tables
             EditorGUI.PropertyField(fieldRect, prop, GUIContent.none);
         }
 
+        /// <summary>Draws a single float field for a sub-property.</summary>
+        public static void FloatCell(Rect cell, SerializedProperty parent, string fieldName, float padding = 2f)
+        {
+            var prop = parent.FindPropertyRelative(fieldName);
+
+            if (prop == null)
+            {
+                return;
+            }
+
+            FloatCell(cell, prop, padding);
+        }
+
         /// <summary>Draws an int field directly on the provided property.</summary>
         public static void IntCell(Rect cell, SerializedProperty prop, float padding = 2f)
         {
