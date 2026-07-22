@@ -34,6 +34,13 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
         _GrainStrength      ("Grain Strength",          Range(0, 1))        = 0.2
         _GrainScale         ("Grain Scale",             Float)              = 8.0
 
+        [Header(Internal Density)]
+        _InternalDensityScale  ("Density Noise Scale",    Float)          = 3.0
+        _InternalDensityStrength ("Density Strength",     Range(0, 1))    = 0.4
+
+        [Header(Age Gradient)]
+        _AgeGradientStrength   ("Age Turbulence Boost",   Range(0, 3))    = 1.0
+
         [Header(Atmosphere)]
         _SkyTransmissionColor ("Sky Transmission",      Color)              = (0.7, 0.85, 1.0, 1)
         _SkyTransmissionStrength ("Transmission Strength", Range(0, 1))     = 0.5
@@ -105,6 +112,9 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
             sampler2D _GrainTex;
             float  _GrainStrength;
             float  _GrainScale;
+            float  _InternalDensityScale;
+            float  _InternalDensityStrength;
+            float  _AgeGradientStrength;
             fixed4 _SkyTransmissionColor;
             float  _SkyTransmissionStrength;
             fixed4 _ShadowLiftColor;
@@ -153,8 +163,11 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
                           + float2(_Time.y * _SwirlSpeed * 2.8, _Time.y * _SwirlSpeed * 1.9);
                 float2 curl3 = CurlNoise2D(p3) * (_SwirlStrength * 0.3);
 
-                float denseScale = 0.2 + paintDensity * 0.8;
-                float wispScale = 1.0 - paintDensity * 0.5;
+                // Age gradient: old smoke (low alpha, still present) swirls more aggressively.
+                float hasSmoke = step(0.01, paintDensity);
+                float ageBoost = (1.0 - paintDensity) * hasSmoke * _AgeGradientStrength;
+                float denseScale = (0.2 + paintDensity * 0.8) * (1.0 + ageBoost);
+                float wispScale = (1.0 - paintDensity * 0.5) * (1.0 + ageBoost * 0.5);
 
                 return curl1 * denseScale + curl2 * denseScale + curl3 * (denseScale + wispScale * 0.5);
             }
@@ -265,7 +278,15 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
 
                 finalRgb *= IN.color.rgb;
 
-                float finalAlpha = paint.a * _Opacity * grainAlphaMod * edgeFade * IN.color.a;
+                // 7. Interior density modulation: animated see-through patches inside body.
+                float2 densityUV = wp * _InternalDensityScale
+                                 + float2(_Time.y * 0.03, _Time.y * -0.02);
+                float densityNoise = tex2D(_GrainTex, densityUV).r;
+                float bodyRegion = saturate(paint.a * 3.0 - 0.5);
+                float densityMod = 1.0 - bodyRegion * densityNoise * _InternalDensityStrength;
+
+                float finalAlpha = paint.a * _Opacity * grainAlphaMod * edgeFade
+                                 * densityMod * IN.color.a;
 
                 // Premultiplied alpha output (Blend One OneMinusSrcAlpha).
                 return fixed4(finalRgb * finalAlpha, finalAlpha);
