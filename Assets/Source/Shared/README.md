@@ -19,7 +19,7 @@ Types and utilities used across multiple features.
 | `Diagnostics/` | Debug utilities — `FPSCounter`, `FrameRateSettings` |
 | `IGameConfiguration` | Read-only interface for core game data — projectile settings, slot grid dimensions, prediction trace params, score trail timing |
 | `IEffect` | Interface for poolable visual effects — `Play(position, tint)`, `Play(position, rotation, tint)`, `Stop()` |
-| `ConfigAssetCache<T>` | Editor-only lazy cache for a config `ScriptableObject` asset by type (`AssetDatabase.FindAssets` + `LoadAssetAtPath`, once) — editor config lookups go through this instead of inlining the search |
+| `EditorAssetCache<T>` | Editor-only lazy cache for a config `ScriptableObject` asset by type — lives in the `com.balloonparty.editorui` package (`EditorUI.Utilities`). Editor config lookups go through this instead of inlining `FindAssets` + `LoadAssetAtPath` |
 | `ImpactEventBus` | Frame-scoped list of impact events (position + radius); written via `Report`, cleared every `LateTick` |
 | `PathTrace` | Shared skeleton for tracing a projectile's wall-reflected path ahead (`IsClearAhead`) — reflects off each wall via `WallLimits`, leaving the per-segment occupancy test to the caller |
 | `WallLimits` | The four play-area walls unpacked from `IGameConfiguration.LimitsClockwise` — wall-crossing (`TryFindCrossing`), billiard mirror-reflect (`Reflect`), in-bounds clamp (`ClampInside`) |

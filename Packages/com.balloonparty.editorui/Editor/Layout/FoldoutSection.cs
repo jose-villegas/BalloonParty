@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 
 namespace BalloonParty.EditorUI.Layout
@@ -12,6 +13,20 @@ namespace BalloonParty.EditorUI.Layout
             if (newState != isOpen)
             {
                 EditorPrefs.SetBool(prefKey, newState);
+            }
+
+            return newState;
+        }
+
+        /// <summary>Draws a foldout with pluggable persistence via getter/setter delegates.</summary>
+        public static bool Draw(Func<bool> getExpanded, Action<bool> setExpanded, string label)
+        {
+            var isOpen = getExpanded();
+            var newState = EditorGUILayout.Foldout(isOpen, label, true);
+
+            if (newState != isOpen)
+            {
+                setExpanded(newState);
             }
 
             return newState;

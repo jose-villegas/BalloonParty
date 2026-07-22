@@ -3,6 +3,7 @@ using System.Diagnostics;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration.Balloons;
+using BalloonParty.EditorUI.Charts;
 using BalloonParty.Game;
 using BalloonParty.Nudge;
 using BalloonParty.Projectile;
@@ -185,17 +186,15 @@ namespace BalloonParty.Editor.ShotSolver
                 maxScore = Mathf.Max(maxScore, score);
             }
 
-            var barWidth = rect.width / _sweepScores.Length;
-            for (var i = 0; i < _sweepScores.Length; i++)
+            var targetScore = (float)_targetScore;
+            var options = new BarChartOptions
             {
-                var normalized = Mathf.Clamp01(_sweepScores[i] / maxScore);
-                var barHeight = rect.height * normalized;
-                var barRect = new Rect(rect.x + (i * barWidth), rect.yMax - barHeight, Mathf.Max(1f, barWidth), barHeight);
-                EditorGUI.DrawRect(barRect, _sweepScores[i] >= _targetScore ? QualifyingColor : NonQualifyingColor);
-            }
-
-            var targetY = rect.yMax - (rect.height * Mathf.Clamp01(_targetScore / maxScore));
-            EditorGUI.DrawRect(new Rect(rect.x, targetY, rect.width, 1f), TargetLineColor);
+                BarPadding = 0f,
+                MinBarWidth = 1f,
+                BarColorResolver = (_, score) => score >= targetScore ? QualifyingColor : NonQualifyingColor,
+                Threshold = new ThresholdLine { Value = targetScore, Color = TargetLineColor },
+            };
+            BarChart.Draw(rect, _sweepScores, maxScore, options);
         }
 
         private void DrawWindowList()

@@ -14,6 +14,9 @@ namespace BalloonParty.Configuration.Level
         [SerializeField] private ScoringControlPoint[] _controlPoints;
         [SerializeField] private TailGrowthConfig _tailGrowth;
 
+        [NonSerialized] private float[] _cachedTangents;
+        [NonSerialized] private int _cachedTangentsVersion;
+
         public IReadOnlyList<ScoringControlPoint> ControlPoints => _controlPoints;
         public TailGrowthConfig TailGrowth => _tailGrowth;
         public bool IsEmpty => _controlPoints == null || _controlPoints.Length == 0;
@@ -22,6 +25,8 @@ namespace BalloonParty.Configuration.Level
         {
             _controlPoints = points;
             _tailGrowth = tail;
+            _cachedTangents = null;
+            _cachedTangentsVersion = 0;
         }
 
         /// <summary>Cumulative milestone for a given level. Total function over [0, ∞):
@@ -124,11 +129,37 @@ namespace BalloonParty.Configuration.Level
             }
         }
 
-        /// <summary>Smooth (Fritsch–Carlson) evaluation for a single segment. Computes tangents globally
-        /// for monotonicity, then evaluates the cubic Hermite on the given segment.
-        /// Allocates temporary arrays — acceptable since runtime calls occur only on level-up.</summary>
+        /// <summary>Smooth (Fritsch–Carlson) evaluation for a single segment. Uses cached tangents
+        /// to avoid per-call allocations.</summary>
         private float EvaluateSmoothSegment(int seg, float t, float segH, float y0, float y1)
         {
+            var tangents = GetOrBuildTangents();
+
+            // Evaluate the cubic Hermite on the found segment.
+            var m0 = tangents[seg];
+            var m1 = tangents[seg + 1];
+
+            var t2 = t * t;
+            var t3 = t2 * t;
+
+            // Hermite basis functions.
+            var h00 = 2f * t3 - 3f * t2 + 1f;
+            var h10 = t3 - 2f * t2 + t;
+            var h01 = -2f * t3 + 3f * t2;
+            var h11 = t3 - t2;
+
+            return h00 * y0 + h10 * segH * m0 + h01 * y1 + h11 * segH * m1;
+        }
+
+        /// <summary>Returns cached Fritsch–Carlson tangents, rebuilding if control points changed.</summary>
+        private float[] GetOrBuildTangents()
+        {
+            var version = _controlPoints?.Length ?? 0;
+            if (_cachedTangents != null && _cachedTangentsVersion == version)
+            {
+                return _cachedTangents;
+            }
+
             var n = _controlPoints.Length;
 
             // Compute secant slopes (deltas) between adjacent CPs.
@@ -150,12 +181,10 @@ namespace BalloonParty.Configuration.Level
             {
                 if (deltas[i - 1] * deltas[i] <= 0f)
                 {
-                    // Sign change or zero — tangent must be zero for monotonicity.
                     tangents[i] = 0f;
                 }
                 else
                 {
-                    // Harmonic mean of adjacent deltas (Fritsch–Carlson formula).
                     tangents[i] = 2f * deltas[i - 1] * deltas[i] / (deltas[i - 1] + deltas[i]);
                 }
             }
@@ -173,8 +202,6 @@ namespace BalloonParty.Configuration.Level
                 var alpha = tangents[i] / deltas[i];
                 var beta = tangents[i + 1] / deltas[i];
 
-                // Region check: if (alpha, beta) falls outside the monotonicity region,
-                // restrict to ensure the cubic stays monotone.
                 var sqSum = alpha * alpha + beta * beta;
                 if (sqSum > 9f)
                 {
@@ -184,20 +211,9 @@ namespace BalloonParty.Configuration.Level
                 }
             }
 
-            // Evaluate the cubic Hermite on the found segment.
-            var m0 = tangents[seg];
-            var m1 = tangents[seg + 1];
-
-            var t2 = t * t;
-            var t3 = t2 * t;
-
-            // Hermite basis functions.
-            var h00 = 2f * t3 - 3f * t2 + 1f;
-            var h10 = t3 - 2f * t2 + t;
-            var h01 = -2f * t3 + 3f * t2;
-            var h11 = t3 - t2;
-
-            return h00 * y0 + h10 * segH * m0 + h01 * y1 + h11 * segH * m1;
+            _cachedTangents = tangents;
+            _cachedTangentsVersion = version;
+            return tangents;
         }
 
         /// <summary>Extrapolates beyond the last control point using the configured tail growth mode.
@@ -265,6 +281,9 @@ namespace BalloonParty.Configuration.Level
             {
                 return;
             }
+
+            // Invalidate tangent cache since control points may have changed.
+            _cachedTangents = null;
 
             // Sort by level (stable — preserves order for equal levels; last-wins via evaluation).
             Array.Sort(_controlPoints, (a, b) => a.Level.CompareTo(b.Level));

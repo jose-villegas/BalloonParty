@@ -7,12 +7,15 @@ namespace BalloonParty.EditorUI.Tables
 {
     public sealed class TypedEntrySelectorCell<TEnum> where TEnum : struct, Enum
     {
+        private static readonly Color ThumbnailFallbackColor = new(0.4f, 0.4f, 0.4f, 0.6f);
+
         private readonly CellConfig<TEnum> _config;
         private readonly TEnum[] _enumValues;
         private readonly string[] _enumNames;
         private readonly int[] _enumIntValues;
 
         private int[] _selectedPerRow = Array.Empty<int>();
+        private bool[] _presentBuffer = Array.Empty<bool>();
 
         private static GUIStyle CenteredMiniLabelStyle => StyleCache.Get(
             "TypedEntrySelectorCell.CenteredMiniLabel",
@@ -79,7 +82,7 @@ namespace BalloonParty.EditorUI.Tables
                 }
                 else
                 {
-                    EditorGUI.DrawRect(thumbRect, new Color(0.4f, 0.4f, 0.4f, 0.6f));
+                    EditorGUI.DrawRect(thumbRect, ThumbnailFallbackColor);
                     EditorGUI.LabelField(thumbRect, _enumNames[enumIndex][0].ToString(), CenteredMiniLabelStyle);
                 }
 
@@ -96,14 +99,18 @@ namespace BalloonParty.EditorUI.Tables
 
             EnsureSelectionArraySize(rowIndex);
 
-            var presentInArray = new bool[_enumValues.Length];
+            if (_presentBuffer.Length != _enumValues.Length)
+            {
+                _presentBuffer = new bool[_enumValues.Length];
+            }
+
             for (var i = 0; i < _enumValues.Length; i++)
             {
-                presentInArray[i] = FindEntryIndex(arrayProp, _enumIntValues[i]) >= 0;
+                _presentBuffer[i] = FindEntryIndex(arrayProp, _enumIntValues[i]) >= 0;
             }
 
             var selectedIndex = Mathf.Clamp(_selectedPerRow[rowIndex], 0, _enumValues.Length - 1);
-            var dropdownNames = BuildDropdownNames(_enumNames, presentInArray, selectedIndex);
+            var dropdownNames = BuildDropdownNames(_enumNames, _presentBuffer, selectedIndex);
             var dropdownRect = new Rect(cell.x + 2f, cell.y, _config.DropdownWidth, cell.height);
             var newSelectedIndex = EditorGUI.Popup(dropdownRect, selectedIndex, dropdownNames);
             if (newSelectedIndex != selectedIndex)

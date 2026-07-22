@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration.Level;
 using BalloonParty.EditorUI.Utilities;
@@ -29,6 +30,10 @@ namespace BalloonParty.Editor
         private static float _addCumulative;
         private static bool _showTotal = true;
 
+        private static int[] _thresholdsBuffer = Array.Empty<int>();
+        private static float[] _cumulativesBuffer = Array.Empty<float>();
+        private static Vector3[] _polylineBuffer = Array.Empty<Vector3>();
+
         /// <summary>The level currently selected/viewed in the curve panel.</summary>
         internal static int SelectedLevel => _selectedLevel;
 
@@ -42,10 +47,13 @@ namespace BalloonParty.Editor
             }
 
             var foldout = EditorPrefs.GetBool(FoldoutPrefKey, true);
-            foldout = EditorGUILayout.Foldout(foldout, "Scoring Curve", true, EditorStyles.foldoutHeader);
-            EditorPrefs.SetBool(FoldoutPrefKey, foldout);
+            var newFoldout = EditorGUILayout.Foldout(foldout, "Scoring Curve", true, EditorStyles.foldoutHeader);
+            if (newFoldout != foldout)
+            {
+                EditorPrefs.SetBool(FoldoutPrefKey, newFoldout);
+            }
 
-            if (!foldout)
+            if (!newFoldout)
             {
                 return;
             }
@@ -62,8 +70,14 @@ namespace BalloonParty.Editor
             }
 
             // Sample thresholds and capped cumulatives.
-            var thresholds = new int[levelCount];
-            var cumulatives = new float[levelCount];
+            if (_thresholdsBuffer.Length != levelCount)
+            {
+                _thresholdsBuffer = new int[levelCount];
+                _cumulativesBuffer = new float[levelCount];
+            }
+
+            var thresholds = _thresholdsBuffer;
+            var cumulatives = _cumulativesBuffer;
             var maxThreshold = 1f;
             var maxCumulative = 1f;
 
@@ -329,18 +343,22 @@ namespace BalloonParty.Editor
                 return;
             }
 
-            var points = new Vector3[cumulatives.Length];
+            if (_polylineBuffer.Length != cumulatives.Length)
+            {
+                _polylineBuffer = new Vector3[cumulatives.Length];
+            }
+
             var barWidth = plotRect.width / levelCount;
 
             for (var i = 0; i < cumulatives.Length; i++)
             {
                 var x = plotRect.x + (i + 0.5f) * barWidth;
                 var y = plotRect.y + plotRect.height * (1f - cumulatives[i] / maxCumulative);
-                points[i] = new Vector3(x, y, 0f);
+                _polylineBuffer[i] = new Vector3(x, y, 0f);
             }
 
             Handles.color = CumulativeColor;
-            Handles.DrawAAPolyLine(2f, points);
+            Handles.DrawAAPolyLine(2f, levelCount, _polylineBuffer);
         }
 
         private static void DrawGrid(Rect plotRect, float maxValue)

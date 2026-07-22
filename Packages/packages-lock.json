@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.balloonparty.editorui": {
+      "version": "file:com.balloonparty.editorui",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.coffee.ui-effect": {
       "version": "https://github.com/mob-sakai/UIEffect.git",
       "depth": 0,
