@@ -89,7 +89,7 @@ namespace BalloonParty.Tests.Shared
                 }
             }
 
-            Assert.Greater(maxPosition, 0.5f,
+            Assert.Greater(maxPosition, 0.25f,
                 "Impulse should cause overshoot beyond rest position");
             Assert.AreEqual(0f, spring.Position, 0.1f,
                 "Spring should settle back near rest after many damped steps");

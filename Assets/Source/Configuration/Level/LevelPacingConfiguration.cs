@@ -87,12 +87,12 @@ namespace BalloonParty.Configuration.Level
 
         internal int ColorsForLevel(int level)
         {
-            var mask = MaskForLevel(level);
+            var bits = (uint)MaskForLevel(level);
             var count = 0;
-            while (mask != 0)
+            while (bits != 0)
             {
-                count += mask & 1;
-                mask >>= 1;
+                count += (int)(bits & 1);
+                bits >>= 1;
             }
 
             return Mathf.Max(1, count);
