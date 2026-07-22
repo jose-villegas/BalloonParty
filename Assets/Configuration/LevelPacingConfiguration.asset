@@ -4334,3 +4334,26 @@ MonoBehaviour:
     _snapToRounding: 1
   _baseValue: 25
   _thresholdRounding: 50
+  _scoringCurve:
+    _controlPoints:
+    - _level: 1
+      _cumulativeScore: 700
+    - _level: 2
+      _cumulativeScore: 1100
+    - _level: 4
+      _cumulativeScore: 2400
+    - _level: 5
+      _cumulativeScore: 3000
+    - _level: 10
+      _cumulativeScore: 3850
+    - _level: 11
+      _cumulativeScore: 4250
+    - _level: 16
+      _cumulativeScore: 6650
+    - _level: 21
+      _cumulativeScore: 9650
+    - _level: 26
+      _cumulativeScore: 12650
+    _tailGrowth:
+      _mode: 0
+      _rate: 1.05

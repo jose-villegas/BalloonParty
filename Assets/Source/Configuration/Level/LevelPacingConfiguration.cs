@@ -5,36 +5,24 @@ using UnityEngine;
 
 namespace BalloonParty.Configuration.Level
 {
-    /// <summary>Per-colour points-required per level. A covering <see cref="_thresholdOverrides" /> entry sets the
-    /// level's cumulative run-score milestone and the per-colour bar is the delta from the previous level split
-    /// across that level's colours; uncovered levels use the formula (<see cref="_baseValue" /> + logarithmic
-    /// growth).</summary>
+    /// <summary>Per-colour points-required per level. The <see cref="_scoringCurve"/> defines cumulative score
+    /// milestones; the per-colour bar at each level is the delta from the previous milestone split across that
+    /// level's active colours, rounded to a clean multiple.</summary>
     [CreateAssetMenu(menuName = "Configuration/Level Pacing", fileName = "LevelPacingConfiguration")]
     internal class LevelPacingConfiguration : ScriptableObject, ILevelPacingConfiguration
     {
         [SerializeField] private LevelRangeEntry[] _ranges =
         {
-            // Construct Parameters explicitly — the struct default zero-initializes it to null.
             new(0, 0, new RangedLevelParameters()),
         };
-
-        [Tooltip("Overrides the formula for the levels each entry spans — the curve's Y is the cumulative " +
-                 "run-score milestone for that level, and the per-colour bar is (this milestone − the previous " +
-                 "level's) ÷ that level's colours. Any level not covered falls through to the formula below.")]
-        [SerializeField] private LevelThresholdOverride[] _thresholdOverrides = Array.Empty<LevelThresholdOverride>();
-
-        [Tooltip("Formula base points — the floor the logarithmic growth builds on. The log term is 0 at level 1, " +
-                 "so an un-overridden level 1 equals this value.")]
-        [SerializeField] private float _baseValue = 25f;
 
         [Tooltip("Cap each level's points-required DOWN to a multiple of this (e.g. 50 or 70) for clean " +
                  "targets — 732 caps to 700, not 750. 0 or 1 = no capping.")]
         [SerializeField] private int _thresholdRounding = 50;
 
-        [Tooltip("Unified scoring curve replacing the override+formula dual-path. When non-empty, this is the " +
-                 "sole source of per-level thresholds. Overrides and the formula are ignored.")]
+        [Tooltip("Unified scoring curve — authors cumulative milestones at key levels; intermediate levels are " +
+                 "interpolated via Fritsch–Carlson monotone cubic; beyond the last point the tail extrapolates.")]
         [SerializeField] private LevelScoringCurve _scoringCurve;
-
 
         public IReadOnlyList<LevelRangeEntry> Ranges => _ranges;
 
@@ -49,20 +37,7 @@ namespace BalloonParty.Configuration.Level
 #endif
         }
 
-        // When the scoring curve is authored (non-empty), it's the sole source: the cumulative milestone at this
-        // level minus the previous, divided by colour count, floored and rounded. Otherwise falls through to the
-        // legacy override+formula dual-path for backward compatibility during migration.
         public int ThresholdForLevel(int level)
-        {
-            if (!_scoringCurve.IsEmpty)
-            {
-                return ThresholdFromCurve(level);
-            }
-
-            return ThresholdFromLegacy(level);
-        }
-
-        private int ThresholdFromCurve(int level)
         {
             var cumThis = _scoringCurve.CumulativeMilestone(level);
             var cumPrev = _scoringCurve.CumulativeMilestone(level - 1);
@@ -71,21 +46,6 @@ namespace BalloonParty.Configuration.Level
             return Mathf.Max(1, RoundThreshold(perColor));
         }
 
-        private int ThresholdFromLegacy(int level)
-        {
-            if (TryGetOverride(level, out var entry))
-            {
-                var increment = entry.CumulativeScore(level) - CumulativeScoreForLevel(level - 1);
-                var perColor = Mathf.RoundToInt(increment / ColorsForLevel(level));
-                return Mathf.Max(1, entry.SnapToRounding ? RoundThreshold(perColor) : perColor);
-            }
-
-            var scaling = _baseValue + Mathf.Exp(2f) * Mathf.Log(Mathf.Pow(level, 2f * Mathf.PI));
-            return RoundThreshold(Mathf.RoundToInt(scaling));
-        }
-
-        // Cap DOWN to the multiple at or below (so 732 → 700, not 750), floored at one multiple so a
-        // level never caps to zero.
         private int RoundThreshold(int rawPoints)
         {
             if (_thresholdRounding <= 1)
@@ -114,7 +74,6 @@ namespace BalloonParty.Configuration.Level
                         continue;
                     }
 
-                    // 0 = uncapped in that range, so it can fill the range's whole board.
                     var cap = weight.MaxCount > 0
                         ? weight.MaxCount
                         : columns * parameters.BoardLines;
@@ -125,30 +84,7 @@ namespace BalloonParty.Configuration.Level
             return max;
         }
 
-        // The cumulative milestone an override pins at this level; 0 for levels with no override (the start of a
-        // fresh cumulative segment).
-        private float CumulativeScoreForLevel(int level)
-        {
-            return level >= 1 && TryGetOverride(level, out var entry) ? entry.CumulativeScore(level) : 0f;
-        }
-
-        private bool TryGetOverride(int level, out LevelThresholdOverride result)
-        {
-            foreach (var entry in _thresholdOverrides)
-            {
-                if (entry.Contains(level) && entry.HasCurve)
-                {
-                    result = entry;
-                    return true;
-                }
-            }
-
-            result = default;
-            return false;
-        }
-
-        // Popcount of the level's allowed-colour mask — the number of colours the win condition scores that level.
-        private int ColorsForLevel(int level)
+        internal int ColorsForLevel(int level)
         {
             var mask = MaskForLevel(level);
             var count = 0;
@@ -161,7 +97,6 @@ namespace BalloonParty.Configuration.Level
             return Mathf.Max(1, count);
         }
 
-        // Mirrors the resolver's lookup: the range containing the level, falling back to the open-ended tail.
         private int MaskForLevel(int level)
         {
             var fallbackMask = 0;
@@ -276,31 +211,28 @@ namespace BalloonParty.Configuration.Level
 
         private void WarnOnNonMonotonicThreshold()
         {
-            var lastOverrideLevel = 0;
-            foreach (var entry in _thresholdOverrides)
+            if (_scoringCurve.IsEmpty)
             {
-                lastOverrideLevel = Mathf.Max(lastOverrideLevel, entry.ToLevel);
+                return;
             }
 
-            // The formula tail is inherently increasing, so only the override ranges can break monotonicity —
-            // check across them and a couple levels past into the formula.
-            var lastLevel = Mathf.Max(2, lastOverrideLevel + 2);
             var previous = int.MinValue;
+            var checkLevels = 50;
 
-            for (var level = 1; level <= lastLevel; level++)
+            for (var level = 1; level <= checkLevels; level++)
             {
                 var composed = ThresholdForLevel(level);
                 if (composed <= 0)
                 {
                     Debug.LogWarning(
                         $"LevelPacingConfiguration ({name}): threshold at level {level} is non-positive " +
-                        $"({composed}) — check the override milestones.");
+                        $"({composed}) — check the scoring curve milestones.");
                 }
                 else if (composed < previous)
                 {
                     Debug.LogWarning(
                         $"LevelPacingConfiguration ({name}): threshold drops at level {level} " +
-                        $"({previous} → {composed}) — keep each override's cumulative curve increasing per level.");
+                        $"({previous} → {composed}) — ensure the cumulative curve is increasing.");
                 }
 
                 previous = composed;
