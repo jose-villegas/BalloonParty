@@ -523,10 +523,12 @@ namespace BalloonParty.Projectile.View
 
             _disturbanceField.Stamp(StampSource.Projectile, step.Position, step.Direction);
 
-            if (!string.IsNullOrEmpty(_model.ColorName.Value))
             {
                 var radius = _paintingSettings.StampRadius;
-                var paletteIdx = _palette.PaletteIndexOf(_model.ColorName.Value);
+                var colorName = _model.ColorName.Value;
+                var paletteIdx = !string.IsNullOrEmpty(colorName)
+                    ? _palette.PaletteIndexOf(colorName)
+                    : _palette.PaletteIndexOf(GamePalette.ProjectileColorId);
                 var pos = step.Position;
                 var prevPos = _lastPaintPos != Vector3.zero ? _lastPaintPos : pos;
 

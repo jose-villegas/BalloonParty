@@ -31,5 +31,8 @@ namespace BalloonParty.Configuration.Effects
 
         /// <summary>Power curve controlling how quickly decaying paint becomes wind-susceptible. Higher = stays put longer.</summary>
         float WindAgeBias { get; }
+
+        /// <summary>Normalized wind direction for smoke advection.</summary>
+        Vector2 WindDirection { get; }
     }
 }

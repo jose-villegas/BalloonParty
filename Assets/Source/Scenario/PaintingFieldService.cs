@@ -32,6 +32,7 @@ namespace BalloonParty.Scenario
         private static readonly int DeltaTimeId = Shader.PropertyToID("_DeltaTime");
         private static readonly int TimePhaseId = Shader.PropertyToID("_TimePhase");
         private static readonly int WindSpeedId = Shader.PropertyToID("_WindSpeed");
+        private static readonly int WindDirId = Shader.PropertyToID("_WindDir");
         private static readonly int WindAgeBiasId = Shader.PropertyToID("_WindAgeBias");
         private static readonly int PaintingTimeId = Shader.PropertyToID("_PaintingTime");
 
@@ -59,36 +60,6 @@ namespace BalloonParty.Scenario
             _settings = settings;
             _display = display;
             _palette = palette;
-        }
-
-        /// <summary>Stamps a palette color at the given world position with the given radius.</summary>
-        internal void Stamp(Vector3 worldPosition, float radius, int paletteIndex)
-        {
-            Stamp(worldPosition, worldPosition, radius, paletteIndex);
-        }
-
-        /// <summary>Stamps a capsule from <paramref name="prevWorldPosition"/> to <paramref name="worldPosition"/>.</summary>
-        internal void Stamp(Vector3 worldPosition, Vector3 prevWorldPosition, float radius, int paletteIndex)
-        {
-            if (!_resources.IsReady || paletteIndex < 0 || paletteIndex >= _palette.Colors.Count)
-            {
-                return;
-            }
-
-            var color = _palette.Colors[paletteIndex].Color;
-            _pendingStamps.Add(new PendingStamp
-            {
-                Center = _coords.WorldToUV(worldPosition),
-                PrevCenter = _coords.WorldToUV(prevWorldPosition),
-                Radius = _coords.WorldRadiusToUV(radius),
-                Color = new Vector4(color.r, color.g, color.b, 1f)
-            });
-        }
-
-        /// <summary>Sets a 0–1 factor that attenuates wind speed in the decay pass. 0 = no wind, 1 = full wind.</summary>
-        internal void SetWindDampen(float factor)
-        {
-            _windDampen = Mathf.Clamp01(factor);
         }
 
         void IStartable.Start()
@@ -127,7 +98,9 @@ namespace BalloonParty.Scenario
             bool stamped = FlushPendingStamps();
             bool decayed = TickDecay();
 
-            // If neither stamped nor decayed, no GPU work this frame — zero cost at rest.
+            // Reset wind dampen accumulator for next frame (min of all callers wins).
+            _windDampen = 1f;
+
             if (!stamped && !decayed)
             {
                 return;
@@ -138,6 +111,36 @@ namespace BalloonParty.Scenario
         {
             Shader.SetGlobalFloat(ActiveId, 0f);
             _resources.Dispose();
+        }
+
+        /// <summary>Stamps a palette color at the given world position with the given radius.</summary>
+        internal void Stamp(Vector3 worldPosition, float radius, int paletteIndex)
+        {
+            Stamp(worldPosition, worldPosition, radius, paletteIndex);
+        }
+
+        /// <summary>Stamps a capsule from <paramref name="prevWorldPosition"/> to <paramref name="worldPosition"/>.</summary>
+        internal void Stamp(Vector3 worldPosition, Vector3 prevWorldPosition, float radius, int paletteIndex)
+        {
+            if (!_resources.IsReady || paletteIndex < 0 || paletteIndex >= _palette.Colors.Count)
+            {
+                return;
+            }
+
+            var color = _palette.Colors[paletteIndex].Color;
+            _pendingStamps.Add(new PendingStamp
+            {
+                Center = _coords.WorldToUV(worldPosition),
+                PrevCenter = _coords.WorldToUV(prevWorldPosition),
+                Radius = _coords.WorldRadiusToUV(radius),
+                Color = new Vector4(color.r, color.g, color.b, 1f)
+            });
+        }
+
+        /// <summary>Contributes a wind dampen factor for this frame. The minimum of all callers is used.</summary>
+        internal void SetWindDampen(float factor)
+        {
+            _windDampen = Mathf.Min(_windDampen, Mathf.Clamp01(factor));
         }
 
         private bool FlushPendingStamps()
@@ -206,6 +209,7 @@ namespace BalloonParty.Scenario
             mat.SetFloat(DeltaTimeId, dt);
             mat.SetFloat(TimePhaseId, _timePhase);
             mat.SetFloat(WindSpeedId, _settings.WindSpeed * _settings.WindInfluence * _windDampen);
+            mat.SetVector(WindDirId, _settings.WindDirection);
             mat.SetFloat(WindAgeBiasId, _settings.WindAgeBias);
 
             _resources.BlitAndSwap(mat);

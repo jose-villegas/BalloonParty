@@ -34,6 +34,9 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Power curve for age-based wind. Higher = fresh paint stays put longer before wind takes hold.")]
         [SerializeField] [Range(0.1f, 4f)] private float _windAgeBias = 1.5f;
 
+        [Tooltip("Normalized wind direction for smoke advection.")]
+        [SerializeField] private Vector2 _windDirection = new(0.3f, 0.1f);
+
         public Shader StampShader => _stampShader;
         public Shader DecayShader => _decayShader;
         public float TexelsPerUnit => _texelsPerUnit;
@@ -43,5 +46,6 @@ namespace BalloonParty.Configuration.Effects
         public float WindSpeed => _windSpeed;
         public float WindInfluence => _windInfluence;
         public float WindAgeBias => _windAgeBias;
+        public Vector2 WindDirection => _windDirection.normalized;
     }
 }
