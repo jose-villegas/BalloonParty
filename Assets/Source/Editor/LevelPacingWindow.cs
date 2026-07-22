@@ -7,7 +7,7 @@ using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Palette;
-using BalloonParty.Editor.EditorUI;
+using BalloonParty.EditorUI.Tables;
 using BalloonParty.EditorUI.Utilities;
 using RowColorResolver = BalloonParty.EditorUI.Tables.RowColorResolver;
 using BalloonParty.Shared;
@@ -286,7 +286,7 @@ namespace BalloonParty.Editor
             DrawGroupTitles(groupTitleRect);
             DrawGroupBorderSeparators(groupTitleRect);
 
-            EditorUI.TableDrawHelper.DrawHorizontalSeparator(groupTitleRect, ColSepColor);
+            TableDrawHelper.DrawHorizontalSeparator(groupTitleRect, ColSepColor);
 
             // Header
             var headerRect = GUILayoutUtility.GetRect(TotalWidth(), RowHeight);
@@ -297,7 +297,7 @@ namespace BalloonParty.Editor
             DrawGroupBackground(headerRect, 6, 9, TitleBgColor);
             DrawGroupBackground(headerRect, 10, 10, TitleBgColor);
             DrawHeaderCells(headerRect);
-            EditorUI.TableDrawHelper.DrawHorizontalSeparator(headerRect, ColSepColor);
+            TableDrawHelper.DrawHorizontalSeparator(headerRect, ColSepColor);
 
             // Clear focused row when keyboard focus is lost entirely
             if (GUIUtility.keyboardControl == 0)
@@ -837,16 +837,16 @@ namespace BalloonParty.Editor
             DrawGroupBorderSeparators(rowRect);
 
             // Horizontal row separator at the bottom
-            EditorUI.TableDrawHelper.DrawHorizontalSeparator(rowRect);
+            TableDrawHelper.DrawHorizontalSeparator(rowRect);
 
             // Range (col 0)
             DrawRangeCell(CellRect(rowRect, 0), fromProp, toProp, isFallback);
 
             if (paramsProp != null)
             {
-                EditorUI.PropertyCellDrawer.IntCell(CellRect(rowRect, 1), paramsProp, "_spawnLines");
-                EditorUI.PropertyCellDrawer.IntCell(CellRect(rowRect, 2), paramsProp, "_boardLines");
-                EditorUI.PropertyCellDrawer.IntCell(CellRect(rowRect, 3), paramsProp, "_firstSpawnTurn");
+                PropertyCellDrawer.IntCell(CellRect(rowRect, 1), paramsProp, "_spawnLines");
+                PropertyCellDrawer.IntCell(CellRect(rowRect, 2), paramsProp, "_boardLines");
+                PropertyCellDrawer.IntCell(CellRect(rowRect, 3), paramsProp, "_firstSpawnTurn");
                 DrawMaskCell(CellRect(rowRect, 4), paramsProp);
 
                 if (_balloonsExpanded)
@@ -859,8 +859,8 @@ namespace BalloonParty.Editor
                 }
 
                 DrawRangedIntCell(CellRect(rowRect, 6), paramsProp, "_itemCadence");
-                EditorUI.PropertyCellDrawer.CurveCell(CellRect(rowRect, 7), paramsProp, "_initialItemCountWeights");
-                EditorUI.PropertyCellDrawer.CurveCell(CellRect(rowRect, 8), paramsProp, "_itemCountWeights");
+                PropertyCellDrawer.CurveCell(CellRect(rowRect, 7), paramsProp, "_initialItemCountWeights");
+                PropertyCellDrawer.CurveCell(CellRect(rowRect, 8), paramsProp, "_itemCountWeights");
 
                 var itemsProp = paramsProp.FindPropertyRelative("_itemWeights");
                 if (_itemsExpanded)
@@ -975,12 +975,12 @@ namespace BalloonParty.Editor
                 return;
             }
 
-            EditorUI.PropertyCellDrawer.IntRangeCell(cell, fromProp, toProp);
+            PropertyCellDrawer.IntRangeCell(cell, fromProp, toProp);
         }
 
         private static void DrawRangedIntCell(Rect cell, SerializedProperty paramsProp, string fieldName)
         {
-            EditorUI.PropertyCellDrawer.RangedIntCell(cell, paramsProp, fieldName);
+            PropertyCellDrawer.RangedIntCell(cell, paramsProp, fieldName);
         }
 
         private void DrawMaskCell(Rect cell, SerializedProperty paramsProp)

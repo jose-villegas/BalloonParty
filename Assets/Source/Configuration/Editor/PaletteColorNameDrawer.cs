@@ -1,5 +1,5 @@
 using System.Linq;
-using BalloonParty.Editor.EditorUI;
+using BalloonParty.EditorUI.Palette;
 using BalloonParty.Shared;
 using UnityEditor;
 using UnityEngine;

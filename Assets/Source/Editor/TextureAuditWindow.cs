@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BalloonParty.Editor.EditorUI;
+using BalloonParty.EditorUI.Layout;
+using BalloonParty.EditorUI.Tables;
+using BalloonParty.EditorUI.Utilities;
 using UnityEditor;
 using UnityEngine;
 
