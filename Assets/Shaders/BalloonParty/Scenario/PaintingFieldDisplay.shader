@@ -17,6 +17,7 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
         _TurbFreq           ("Turbulence Frequency",    Float)              = 6.0
 
         [Header(Swirl)]
+        _CurlTex            ("Curl Noise (RG)",         2D)                 = "gray" {}
         _SwirlFreq          ("Swirl Frequency",         Float)              = 2.5
         _SwirlStrength      ("Swirl Strength",          Range(0, 0.012))    = 0.004
         _SwirlSpeed         ("Swirl Speed",             Range(0, 0.3))      = 0.04
@@ -105,6 +106,7 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
             float  _BleedRadius;
             float  _TurbStrength;
             float  _TurbFreq;
+            sampler2D _CurlTex;
             float  _SwirlFreq;
             float  _SwirlStrength;
             float  _SwirlSpeed;
@@ -139,19 +141,13 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
                 return float2(tx, ty) * _TurbStrength;
             }
 
-            // Curl noise: divergence-free flow field that produces pure swirl (no stretching).
-            // Finite-difference curl of a scalar simplex noise field.
-            float2 CurlNoise2D(float2 p)
+            // Baked curl noise lookup: RG channels store pre-computed curl vector (biased 0.5).
+            float2 CurlNoise2D(float2 uv)
             {
-                const float eps = 0.003;
-                float n_py = SimplexNoise2D(float2(p.x, p.y + eps));
-                float n_my = SimplexNoise2D(float2(p.x, p.y - eps));
-                float n_px = SimplexNoise2D(float2(p.x + eps, p.y));
-                float n_mx = SimplexNoise2D(float2(p.x - eps, p.y));
-                return float2(n_py - n_my, -(n_px - n_mx)) / (2.0 * eps);
+                return tex2D(_CurlTex, uv).rg * 2.0 - 1.0;
             }
 
-            // 3-octave curl noise: large slow eddies + medium body + small domain-warped wisps.
+            // 3-octave curl noise via texture lookups (3 samples instead of 12 simplex calls).
             float2 FlowOffset(float2 wp)
             {
                 float paintDensity = PaintingFieldSample(wp).a;
