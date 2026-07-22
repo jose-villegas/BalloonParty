@@ -28,6 +28,9 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Base wind speed for smoke advection (world units/second).")]
         [SerializeField] private float _windSpeed = 0.4f;
 
+        [Tooltip("0–1 base wind influence at normal projectile speed.")]
+        [SerializeField] [Range(0f, 1f)] private float _windInfluence = 1f;
+
         public Shader StampShader => _stampShader;
         public Shader DecayShader => _decayShader;
         public float TexelsPerUnit => _texelsPerUnit;
@@ -35,5 +38,6 @@ namespace BalloonParty.Configuration.Effects
         public float DecayTickInterval => _decayTickInterval;
         public float StampRadius => _stampRadius;
         public float WindSpeed => _windSpeed;
+        public float WindInfluence => _windInfluence;
     }
 }

@@ -25,5 +25,8 @@ namespace BalloonParty.Configuration.Effects
 
         /// <summary>Base wind speed for smoke advection (world units/second).</summary>
         float WindSpeed { get; }
+
+        /// <summary>0–1 base wind influence at normal projectile speed. Controls how much wind affects the trail overall.</summary>
+        float WindInfluence { get; }
     }
 }

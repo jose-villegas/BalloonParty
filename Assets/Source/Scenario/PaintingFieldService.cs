@@ -193,7 +193,7 @@ namespace BalloonParty.Scenario
             mat.SetFloat(DecayRateId, _settings.DecayRate);
             mat.SetFloat(DeltaTimeId, dt);
             mat.SetFloat(TimePhaseId, _timePhase);
-            mat.SetFloat(WindSpeedId, _settings.WindSpeed * _windDampen);
+            mat.SetFloat(WindSpeedId, _settings.WindSpeed * _settings.WindInfluence * _windDampen);
 
             _resources.BlitAndSwap(mat);
             return true;
