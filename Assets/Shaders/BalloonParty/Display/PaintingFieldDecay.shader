@@ -1,13 +1,15 @@
 Shader "BalloonParty/Display/PaintingFieldDecay"
 {
     // Per-tick decay blit for the painting field: subtracts _DecayRate * _DeltaTime from the
-    // alpha channel each tick. When alpha drops below epsilon, clears RGB to black so dead
-    // texels don't carry stale color into future blends.
+    // alpha channel each tick. Edge texels (those with low-alpha neighbors) decay faster via
+    // _ErosionRate, causing paint stamps to shrink inward over time. When alpha drops below
+    // epsilon, clears RGB to black so dead texels don't carry stale color into future blends.
     Properties
     {
         [HideInInspector] _MainTex ("Source (read RT)", 2D) = "black" {}
-        _DecayRate  ("Decay Rate",  Float) = 0.15
-        _DeltaTime  ("Delta Time",  Float) = 0.05
+        _DecayRate    ("Decay Rate",    Float) = 0.08
+        _ErosionRate  ("Erosion Rate",  Float) = 0.12
+        _DeltaTime    ("Delta Time",    Float) = 0.05
     }
 
     SubShader
@@ -24,7 +26,9 @@ Shader "BalloonParty/Display/PaintingFieldDecay"
             #pragma target 3.0
 
             sampler2D _MainTex;
+            float4 _MainTex_TexelSize;
             float _DecayRate;
+            float _ErosionRate;
             float _DeltaTime;
 
             struct appdata
@@ -53,8 +57,20 @@ Shader "BalloonParty/Display/PaintingFieldDecay"
                 float3 color = data.rgb;
                 float alpha = data.a;
 
-                // Linear decay.
-                alpha = max(0.0, alpha - _DecayRate * _DeltaTime);
+                // Edge erosion: sample 4 neighbors to detect boundary texels.
+                float2 tx = _MainTex_TexelSize.xy;
+                float nAlpha = tex2D(_MainTex, i.uv + float2( tx.x, 0)).a
+                             + tex2D(_MainTex, i.uv + float2(-tx.x, 0)).a
+                             + tex2D(_MainTex, i.uv + float2(0,  tx.y)).a
+                             + tex2D(_MainTex, i.uv + float2(0, -tx.y)).a;
+                float avgNeighbor = nAlpha * 0.25;
+
+                // Erosion factor: 1 at edges (low neighbor avg), 0 at solid interior.
+                float edgeness = 1.0 - saturate(avgNeighbor / max(alpha, 0.001));
+                float erosion = edgeness * _ErosionRate * _DeltaTime;
+
+                // Linear decay + edge erosion.
+                alpha = max(0.0, alpha - _DecayRate * _DeltaTime - erosion);
 
                 // Clear color when invisible (avoids stale colors in future blends).
                 color *= step(0.001, alpha);

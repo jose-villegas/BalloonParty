@@ -19,7 +19,6 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
         [Header(Swirl)]
         _SwirlFreq          ("Swirl Frequency",         Float)              = 2.5
         _SwirlStrength      ("Swirl Strength",          Range(0, 0.012))    = 0.004
-        _SwirlSpeed         ("Swirl Speed",             Range(0, 0.3))      = 0.04
 
         [Header(Edges)]
         _EdgeSoftness       ("Edge Softness",           Range(0.01, 1))     = 0.3
@@ -95,7 +94,6 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
             float  _TurbFreq;
             float  _SwirlFreq;
             float  _SwirlStrength;
-            float  _SwirlSpeed;
             float  _EdgeSoftness;
             float  _EdgePow;
             float  _EdgeWarpStrength;
@@ -136,9 +134,7 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
             // Animated curl-based flow displacement — paint appears to swirl like wet pigment.
             float2 FlowOffset(float2 wp)
             {
-                float2 animP = wp * _SwirlFreq + float2(_Time.y * _SwirlSpeed * 0.7,
-                                                         _Time.y * _SwirlSpeed * 0.4);
-                float2 curl = CurlNoise2D(animP);
+                float2 curl = CurlNoise2D(wp * _SwirlFreq);
                 float paintDensity = PaintingFieldSample(wp).a;
                 return curl * _SwirlStrength * (0.3 + paintDensity * 0.7);
             }
