@@ -1,5 +1,7 @@
 using BalloonParty.Balloon.Type;
-using BalloonParty.Editor.EditorUI;
+using BalloonParty.Configuration.Palette;
+using BalloonParty.EditorUI.Palette;
+using BalloonParty.EditorUI.Utilities;
 using BalloonParty.Shared.Rendering;
 using UnityEditor;
 using UnityEngine;
@@ -9,6 +11,7 @@ namespace BalloonParty.Editor
     [CustomEditor(typeof(ColorableBalloonVariant), true)]
     internal sealed class ColorableBalloonVariantEditor : UnityEditor.Editor
     {
+        private readonly EditorAssetCache<GamePalette> _paletteCache = new();
         private readonly PaletteColorPicker _picker = new();
 
         public override void OnInspectorGUI()
@@ -18,7 +21,7 @@ namespace BalloonParty.Editor
             EditorGUILayout.Space(4f);
             EditorGUILayout.LabelField("Color Preview", EditorStyles.boldLabel);
 
-            if (!_picker.DrawLayout("Preview Color"))
+            if (!_picker.DrawLayout(new GamePaletteAdapter(_paletteCache.Value), "Preview Color"))
             {
                 return;
             }
@@ -30,7 +33,7 @@ namespace BalloonParty.Editor
 
                 foreach (var r in renderers)
                 {
-                    r.SetColor(_picker.SelectedColor);
+                    r.SetColor(_picker.GetSelectedColor(new GamePaletteAdapter(_paletteCache.Value)));
                     EditorUtility.SetDirty(r);
                 }
 

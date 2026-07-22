@@ -11,7 +11,7 @@ namespace BalloonParty.Configuration.Level
     {
         IReadOnlyList<LevelRangeEntry> Ranges { get; }
 
-        /// <summary>Points required to reach <paramref name="level" /> — a covering per-range override's milestone, or otherwise a base value plus logarithmic growth, snapped to a clean multiple.</summary>
+        /// <summary>Points required per colour to complete <paramref name="level" /> — derived from the scoring curve's cumulative milestones, divided by colour count, and snapped to a clean multiple.</summary>
         int ThresholdForLevel(int level);
 
         /// <summary>

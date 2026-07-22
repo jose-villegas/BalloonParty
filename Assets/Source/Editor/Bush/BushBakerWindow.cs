@@ -1,3 +1,4 @@
+using BalloonParty.EditorUI.Layout;
 using UnityEditor;
 using UnityEngine;
 using BalloonParty.Configuration.Cinematics;
@@ -131,8 +132,8 @@ namespace BalloonParty.Editor.Bush
 
             EditorGUILayout.Space(4);
 
-            State.BranchShapeFoldout = EditorGUILayout.Foldout(
-                State.BranchShapeFoldout, "Fractal Shape", true);
+            State.BranchShapeFoldout = FoldoutSection.Draw(
+                () => State.BranchShapeFoldout, v => State.BranchShapeFoldout = v, "Fractal Shape");
             if (State.BranchShapeFoldout)
             {
                 EditorGUI.indentLevel++;
@@ -148,8 +149,8 @@ namespace BalloonParty.Editor.Bush
                 EditorGUI.indentLevel--;
             }
 
-            State.BranchVisualFoldout = EditorGUILayout.Foldout(
-                State.BranchVisualFoldout, "Visual", true);
+            State.BranchVisualFoldout = FoldoutSection.Draw(
+                () => State.BranchVisualFoldout, v => State.BranchVisualFoldout = v, "Visual");
             if (State.BranchVisualFoldout)
             {
                 EditorGUI.indentLevel++;
@@ -160,8 +161,8 @@ namespace BalloonParty.Editor.Bush
                 EditorGUI.indentLevel--;
             }
 
-            State.BranchLeafFoldout = EditorGUILayout.Foldout(
-                State.BranchLeafFoldout, "Leaf Placement", true);
+            State.BranchLeafFoldout = FoldoutSection.Draw(
+                () => State.BranchLeafFoldout, v => State.BranchLeafFoldout = v, "Leaf Placement");
             if (State.BranchLeafFoldout)
             {
                 EditorGUI.indentLevel++;
@@ -525,7 +526,8 @@ namespace BalloonParty.Editor.Bush
 
             EditorGUILayout.Space(4);
 
-            State.LeafShapeFoldout = EditorGUILayout.Foldout(State.LeafShapeFoldout, "Gielis Superformula", true);
+            State.LeafShapeFoldout = FoldoutSection.Draw(
+                () => State.LeafShapeFoldout, v => State.LeafShapeFoldout = v, "Gielis Superformula");
             if (State.LeafShapeFoldout)
             {
                 EditorGUI.indentLevel++;
@@ -536,7 +538,8 @@ namespace BalloonParty.Editor.Bush
                 EditorGUI.indentLevel--;
             }
 
-            State.LeafSurfaceFoldout = EditorGUILayout.Foldout(State.LeafSurfaceFoldout, "Surface", true);
+            State.LeafSurfaceFoldout = FoldoutSection.Draw(
+                () => State.LeafSurfaceFoldout, v => State.LeafSurfaceFoldout = v, "Surface");
             if (State.LeafSurfaceFoldout)
             {
                 EditorGUI.indentLevel++;
@@ -546,7 +549,8 @@ namespace BalloonParty.Editor.Bush
                 EditorGUI.indentLevel--;
             }
 
-            State.LeafMidribFoldout = EditorGUILayout.Foldout(State.LeafMidribFoldout, "Midrib", true);
+            State.LeafMidribFoldout = FoldoutSection.Draw(
+                () => State.LeafMidribFoldout, v => State.LeafMidribFoldout = v, "Midrib");
             if (State.LeafMidribFoldout)
             {
                 EditorGUI.indentLevel++;
@@ -588,7 +592,8 @@ namespace BalloonParty.Editor.Bush
                 EditorGUI.indentLevel--;
             }
 
-            State.LeafPetioleFoldout = EditorGUILayout.Foldout(State.LeafPetioleFoldout, "Petiole", true);
+            State.LeafPetioleFoldout = FoldoutSection.Draw(
+                () => State.LeafPetioleFoldout, v => State.LeafPetioleFoldout = v, "Petiole");
             if (State.LeafPetioleFoldout)
             {
                 EditorGUI.indentLevel++;

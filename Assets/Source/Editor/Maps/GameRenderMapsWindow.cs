@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Display;
-using BalloonParty.Shared;
+using BalloonParty.EditorUI.Utilities;
 using UnityEditor;
 using UnityEngine;
 
@@ -35,7 +35,7 @@ namespace BalloonParty.Editor.Maps
         private static readonly string[] MapNames = Descriptors.Select(d => d.Name).ToArray();
 
         private readonly bool[] _channelEnabled = { true, true, true, true };
-        private readonly ConfigAssetCache<GamePalette> _paletteCache = new();
+        private readonly EditorAssetCache<GamePalette> _paletteCache = new();
         private readonly Vector4[] _paletteBuffer = new Vector4[16];
 
         private Material _channelMaterial;

@@ -3,7 +3,8 @@
     "rootNamespace": "BalloonParty.Configuration.Editor",
     "references": [
         "BalloonParty.Runtime",
-        "BalloonParty.Editor"
+        "BalloonParty.Editor",
+        "com.balloonparty.editorui.Editor"
     ],
     "includePlatforms": [
         "Editor"

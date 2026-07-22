@@ -1,5 +1,5 @@
 using BalloonParty.Editor;
-using BalloonParty.Shared;
+using BalloonParty.EditorUI.Utilities;
 using UnityEditor;
 using UnityEngine;
 
@@ -13,7 +13,7 @@ namespace BalloonParty.Configuration.Editor
     {
         private const string EditorPrefKey = "BalloonParty.ShowMapLimits";
 
-        private static readonly ConfigAssetCache<GameConfiguration> ConfigCache = new();
+        private static readonly EditorAssetCache<GameConfiguration> ConfigCache = new();
         private static readonly Color OutlineColor = new(1f, 0.6f, 0.2f, 0.9f);
         private static readonly Color FillColor = new(1f, 0.6f, 0.2f, 0.06f);
 
@@ -59,11 +59,11 @@ namespace BalloonParty.Configuration.Editor
                 OutlineColor,
                 FillColor);
 
-            var labelStyle = new GUIStyle(EditorStyles.boldLabel)
+            var labelStyle = StyleCache.Get("MapLimitsSceneOverlay.Label", () => new GUIStyle(EditorStyles.boldLabel)
             {
                 alignment = TextAnchor.MiddleCenter,
                 normal = { textColor = OutlineColor }
-            };
+            });
 
             var centerX = (left + right) / 2f;
             Handles.Label(
@@ -71,11 +71,11 @@ namespace BalloonParty.Configuration.Editor
                 "Map Limits",
                 labelStyle);
 
-            var edgeLabelStyle = new GUIStyle(EditorStyles.miniLabel)
+            var edgeLabelStyle = StyleCache.Get("MapLimitsSceneOverlay.EdgeLabel", () => new GUIStyle(EditorStyles.miniLabel)
             {
                 alignment = TextAnchor.MiddleCenter,
                 normal = { textColor = OutlineColor }
-            };
+            });
 
             Handles.Label(new Vector3(centerX, top + 0.1f, 0f),
                 $"T {top:F2}",

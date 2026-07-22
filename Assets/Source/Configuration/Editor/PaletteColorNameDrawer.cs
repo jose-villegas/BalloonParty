@@ -1,6 +1,6 @@
 using System.Linq;
-using BalloonParty.Editor.EditorUI;
-using BalloonParty.Shared;
+using BalloonParty.EditorUI.Palette;
+using BalloonParty.EditorUI.Utilities;
 using UnityEditor;
 using UnityEngine;
 using BalloonParty.Configuration.Palette;
@@ -13,7 +13,7 @@ namespace BalloonParty.Configuration.Editor
         private const float SwatchSize = 16f;
         private const float SwatchSpacing = 4f;
 
-        private readonly ConfigAssetCache<GamePalette> _paletteCache = new();
+        private readonly EditorAssetCache<GamePalette> _paletteCache = new();
 
         private bool _initialized;
         private string[] _paletteNames;

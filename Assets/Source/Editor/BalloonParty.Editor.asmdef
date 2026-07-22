@@ -8,7 +8,8 @@
         "Unity.2D.Sprite.Editor",
         "Unity.RenderPipelines.Universal.Runtime",
         "VContainer",
-        "UniRx"
+        "UniRx",
+        "com.balloonparty.editorui.Editor"
     ],
     "includePlatforms": [
         "Editor"

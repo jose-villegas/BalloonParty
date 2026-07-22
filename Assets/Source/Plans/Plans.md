@@ -13,3 +13,5 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_gameplay_telemetry
 - @subpage plan_sweep
 - @subpage plan_em_shield_field
+- @subpage plan_level_pacing_overhaul
+- @subpage plan_editor_ui_library

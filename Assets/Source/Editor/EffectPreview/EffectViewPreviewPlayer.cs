@@ -1,7 +1,8 @@
 using System;
 using BalloonParty.Configuration;
-using BalloonParty.Editor.EditorUI;
-using BalloonParty.Shared;
+using BalloonParty.Configuration.Palette;
+using BalloonParty.EditorUI.Palette;
+using BalloonParty.EditorUI.Utilities;
 using UnityEditor;
 using UnityEngine;
 using BalloonParty.Configuration.Items;
@@ -15,8 +16,9 @@ namespace BalloonParty.Editor.EffectPreview
     {
         private readonly EditorAnimationLoop _animLoop = new();
         private readonly PaletteColorPicker _colorPicker = new();
-        private readonly ConfigAssetCache<GameConfiguration> _gameConfigCache = new();
-        private readonly ConfigAssetCache<ItemConfiguration> _itemConfigCache = new();
+        private readonly EditorAssetCache<GameConfiguration> _gameConfigCache = new();
+        private readonly EditorAssetCache<ItemConfiguration> _itemConfigCache = new();
+        private readonly EditorAssetCache<GamePalette> _paletteCache = new();
 
         private readonly IEffectPreviewModule _module;
         private readonly string _headerLabel;
@@ -56,7 +58,7 @@ namespace BalloonParty.Editor.EffectPreview
             {
                 if (_module.UsesColorPicker)
                 {
-                    _colorPicker.DrawLayout();
+                    _colorPicker.DrawLayout(new GamePaletteAdapter(_paletteCache.Value));
                 }
 
                 _module.DrawGUI();
@@ -84,7 +86,9 @@ namespace BalloonParty.Editor.EffectPreview
         {
             var context = new EffectPreviewContext
             {
-                Tint = _module.UsesColorPicker ? _colorPicker.SelectedColor : Color.white,
+                Tint = _module.UsesColorPicker
+                    ? _colorPicker.GetSelectedColor(new GamePaletteAdapter(_paletteCache.Value))
+                    : Color.white,
                 Settings = Settings,
                 GameConfig = _gameConfigCache.Value
             };

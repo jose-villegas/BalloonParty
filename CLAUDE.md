@@ -44,7 +44,7 @@ MessagePipe (`IPublisher<T>`/`ISubscriber<T>`), UniTask (`async UniTask`), DOTwe
 - Comment the *why*, never the *what*. No block headers (`// =====`). No redundant comments (`// constructor`). XML docs only on non-obvious public API.
 
 ### Logging
-- Use `Log.Info` / `.Warn` / `.Error` / `.Assert` (`Shared/Diagnostics/`) — never raw `Debug.Log`. `Info` and `Assert` auto-strip from release builds via `[Conditional]`; no `#if` guards needed.
+- Use `Log.Info` / `.Warn` / `.Error` / `.Assert` (`Shared/Diagnostics/Log.cs`) — prefer over raw `Debug.Log` in runtime code. `Info` and `Assert` auto-strip from release builds via `[Conditional]`; no `#if` guards needed. Editor-only tooling (windows, bakers, migration tools) may use `Debug.Log` directly since it never ships.
 
 ### Naming & visibility
 - Namespaces mirror folder structure (`BalloonParty.Balloon.View`).
