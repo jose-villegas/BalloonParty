@@ -1,15 +1,25 @@
 Shader "BalloonParty/Display/PaintingFieldDecay"
 {
-    // Per-tick decay blit for the painting field: subtracts _DecayRate * _DeltaTime from the
-    // alpha channel each tick. Edge texels (those with low-alpha neighbors) decay faster via
-    // _ErosionRate, causing paint stamps to shrink inward over time. When alpha drops below
-    // epsilon, clears RGB to black so dead texels don't carry stale color into future blends.
+    // Per-tick decay + smoke dispersion blit for the painting field. Each tick:
+    // 1. Wind advection (semi-Lagrangian): shifts paint in wind direction
+    // 2. Turbulent perturbation: per-pixel random nudge so wisps diverge
+    // 3. Diffusion expansion: paint spreads outward into adjacent empty texels
+    // 4. Noise-modulated erosion: ragged, wispy edge breakup (not smooth shrink)
+    // 5. Linear alpha decay: overall opacity loss
     Properties
     {
         [HideInInspector] _MainTex ("Source (read RT)", 2D) = "black" {}
-        _DecayRate    ("Decay Rate",    Float) = 0.08
-        _ErosionRate  ("Erosion Rate",  Float) = 0.12
-        _DeltaTime    ("Delta Time",    Float) = 0.05
+        _DecayRate          ("Decay Rate",              Float)              = 0.08
+        _ErosionRate        ("Erosion Rate",            Float)              = 0.12
+        _ExpansionRate      ("Expansion Rate",          Range(0, 0.3))      = 0.06
+        _WindDir            ("Wind Direction",          Vector)             = (0.3, 0.1, 0, 0)
+        _WindSpeed          ("Wind Speed",              Float)              = 0.4
+        _TurbAdvectStrength ("Turb Advect Strength",    Range(0, 0.003))    = 0.0008
+        _TurbAdvectFreq     ("Turb Advect Freq",        Float)              = 8.0
+        _NoiseErosionFreq   ("Noise Erosion Freq",      Float)              = 12.0
+        _NoiseErosionContrast ("Noise Contrast",        Range(1, 6))        = 3.0
+        _TimePhase          ("Time Phase",              Float)              = 0.0
+        _DeltaTime          ("Delta Time",              Float)              = 0.05
     }
 
     SubShader
@@ -29,6 +39,14 @@ Shader "BalloonParty/Display/PaintingFieldDecay"
             float4 _MainTex_TexelSize;
             float _DecayRate;
             float _ErosionRate;
+            float _ExpansionRate;
+            float4 _WindDir;
+            float _WindSpeed;
+            float _TurbAdvectStrength;
+            float _TurbAdvectFreq;
+            float _NoiseErosionFreq;
+            float _NoiseErosionContrast;
+            float _TimePhase;
             float _DeltaTime;
 
             struct appdata
@@ -53,26 +71,58 @@ Shader "BalloonParty/Display/PaintingFieldDecay"
 
             fixed4 frag(v2f i) : SV_Target
             {
-                float4 data = tex2D(_MainTex, i.uv);
+                // 1. Wind advection: sample from upstream so paint flows downwind.
+                float2 windOffset = _WindDir.xy * _WindSpeed * _DeltaTime;
+
+                // 2. Turbulent perturbation: hash-based per-pixel nudge.
+                float2 noiseIn = i.uv * _TurbAdvectFreq + float2(_TimePhase * 0.37, _TimePhase * 0.13);
+                float nx = frac(sin(dot(noiseIn,       float2(127.1, 311.7))) * 43758.55);
+                float ny = frac(sin(dot(noiseIn + 0.5, float2(269.5, 183.3))) * 27385.23);
+                float2 turbOffset = (float2(nx, ny) - 0.5) * 2.0 * _TurbAdvectStrength * _DeltaTime;
+
+                float2 advUV = i.uv - windOffset - turbOffset;
+
+                float4 data = tex2D(_MainTex, advUV);
                 float3 color = data.rgb;
                 float alpha = data.a;
 
-                // Edge erosion: sample 4 neighbors to detect boundary texels.
+                // 3. Neighbor sampling for expansion + erosion.
                 float2 tx = _MainTex_TexelSize.xy;
-                float nAlpha = tex2D(_MainTex, i.uv + float2( tx.x, 0)).a
-                             + tex2D(_MainTex, i.uv + float2(-tx.x, 0)).a
-                             + tex2D(_MainTex, i.uv + float2(0,  tx.y)).a
-                             + tex2D(_MainTex, i.uv + float2(0, -tx.y)).a;
-                float avgNeighbor = nAlpha * 0.25;
+                float4 nN = tex2D(_MainTex, advUV + float2(0,     tx.y));
+                float4 nS = tex2D(_MainTex, advUV + float2(0,    -tx.y));
+                float4 nE = tex2D(_MainTex, advUV + float2(tx.x,  0));
+                float4 nW = tex2D(_MainTex, advUV + float2(-tx.x, 0));
+                float avgNeighborA = (nN.a + nS.a + nE.a + nW.a) * 0.25;
 
-                // Erosion factor: 1 at edges (low neighbor avg), 0 at solid interior.
-                float edgeness = 1.0 - saturate(avgNeighbor / max(alpha, 0.001));
-                float erosion = edgeness * _ErosionRate * _DeltaTime;
+                // 4. Diffusion expansion: empty texels next to paint receive color.
+                float expansionFill = max(0.0, avgNeighborA - alpha) * _ExpansionRate * _DeltaTime * 60.0;
+                float3 neighborColorSum = nN.rgb * nN.a + nS.rgb * nS.a + nE.rgb * nE.a + nW.rgb * nW.a;
+                float neighborAlphaSum = nN.a + nS.a + nE.a + nW.a;
+                float3 expandColor = neighborAlphaSum > 0.001
+                    ? neighborColorSum / neighborAlphaSum
+                    : color;
+                color = lerp(color, expandColor, expansionFill / max(alpha + expansionFill, 0.001));
+                alpha = alpha + expansionFill;
 
-                // Linear decay + edge erosion.
+                // 5. Noise-modulated erosion: ragged wispy edges.
+                float2 noiseUV = advUV * _NoiseErosionFreq;
+                float noiseA = frac(sin(dot(noiseUV,                    float2(127.1, 311.7))) * 43758.55);
+                float noiseB = frac(sin(dot(noiseUV * 1.7 + 0.5,       float2(269.5, 183.3))) * 27385.23);
+                float noiseProduct = noiseA * noiseB;
+
+                float2 animNoise = advUV * _NoiseErosionFreq + float2(_TimePhase * 0.2, _TimePhase * 0.07);
+                float noiseC = frac(sin(dot(animNoise,                  float2(127.1, 311.7))) * 43758.55);
+                float noiseD = frac(sin(dot(animNoise * 1.4 + 0.8,     float2(53.7, 251.1))) * 19483.29);
+                float erosionNoise = lerp(noiseProduct, noiseC * noiseD, 0.4);
+                float sharpNoise = saturate((erosionNoise - 0.25) * _NoiseErosionContrast + 0.25);
+
+                float edgeness = 1.0 - saturate(avgNeighborA / max(alpha, 0.001));
+                float erosion = edgeness * _ErosionRate * _DeltaTime * (0.2 + sharpNoise * 1.6);
+
+                // 6. Linear decay + erosion.
                 alpha = max(0.0, alpha - _DecayRate * _DeltaTime - erosion);
 
-                // Clear color when invisible (avoids stale colors in future blends).
+                // Clear color when invisible.
                 color *= step(0.001, alpha);
 
                 return float4(color, alpha);

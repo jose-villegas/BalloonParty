@@ -30,6 +30,7 @@ namespace BalloonParty.Scenario
         private static readonly int StampColorsId = Shader.PropertyToID("_StampColors");
         private static readonly int DecayRateId = Shader.PropertyToID("_DecayRate");
         private static readonly int DeltaTimeId = Shader.PropertyToID("_DeltaTime");
+        private static readonly int TimePhaseId = Shader.PropertyToID("_TimePhase");
 
         private readonly IPaintingFieldSettings _settings;
         private readonly IGameDisplayConfiguration _display;
@@ -43,6 +44,7 @@ namespace BalloonParty.Scenario
         private DisturbanceFieldCoordinates _coords;
         private Rect _bounds;
         private float _lastDecayTime;
+        private float _timePhase;
 
         public PaintingFieldService(
             IPaintingFieldSettings settings,
@@ -179,8 +181,10 @@ namespace BalloonParty.Scenario
             }
 
             float dt = _settings.DecayTickInterval > 0f ? _settings.DecayTickInterval : Time.deltaTime;
+            _timePhase += dt;
             mat.SetFloat(DecayRateId, _settings.DecayRate);
             mat.SetFloat(DeltaTimeId, dt);
+            mat.SetFloat(TimePhaseId, _timePhase);
 
             _resources.BlitAndSwap(mat);
             return true;

@@ -23,10 +23,11 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
 
         [Header(Edges)]
         _EdgeSoftness       ("Edge Softness",           Range(0.01, 1))     = 0.3
-        _EdgePow            ("Edge Curve Power",        Range(0.3, 3))      = 1.8
+        _SmokeEdgeSharpness ("Smoke Edge Sharpness",    Range(1, 10))       = 4.0
         _EdgeWarpStrength   ("Edge Warp Strength",      Range(0, 0.02))     = 0.006
         _EdgeWarpFreq       ("Edge Warp Frequency",     Float)              = 3.5
-        _PigmentPool        ("Pigment Pooling",         Range(0, 0.5))      = 0.18
+        _WispNoiseFreq      ("Wisp Noise Freq",         Float)              = 5.0
+        _WispStrength       ("Wisp Strength",           Range(0, 1))        = 0.6
 
         [Header(Paper Grain)]
         _GrainTex           ("Paper Grain",             2D)                 = "gray" {}
@@ -34,9 +35,8 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
         _GrainScale         ("Grain Scale",             Float)              = 8.0
 
         [Header(Atmosphere)]
-        _WarmCoreColor      ("Warm Core Tint",          Color)              = (1.0, 0.97, 0.88, 1)
-        _CoolEdgeColor      ("Cool Edge Tint",          Color)              = (0.82, 0.88, 1.0, 1)
-        _TemperatureRange   ("Temperature Range",       Range(0, 1))        = 0.12
+        _SkyTransmissionColor ("Sky Transmission",      Color)              = (0.7, 0.85, 1.0, 1)
+        _SkyTransmissionStrength ("Transmission Strength", Range(0, 1))     = 0.5
         _ShadowLiftColor    ("Shadow Lift Color",       Color)              = (0.88, 0.92, 0.98, 1)
     }
 
@@ -97,16 +97,16 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
             float  _SwirlStrength;
             float  _SwirlSpeed;
             float  _EdgeSoftness;
-            float  _EdgePow;
+            float  _SmokeEdgeSharpness;
             float  _EdgeWarpStrength;
             float  _EdgeWarpFreq;
-            float  _PigmentPool;
+            float  _WispNoiseFreq;
+            float  _WispStrength;
             sampler2D _GrainTex;
             float  _GrainStrength;
             float  _GrainScale;
-            fixed4 _WarmCoreColor;
-            fixed4 _CoolEdgeColor;
-            float  _TemperatureRange;
+            fixed4 _SkyTransmissionColor;
+            float  _SkyTransmissionStrength;
             fixed4 _ShadowLiftColor;
 
             // ────────────────────────────────────────────────────────────────
@@ -133,14 +133,30 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
                 return float2(n_py - n_my, -(n_px - n_mx)) / (2.0 * eps);
             }
 
-            // Curl-based flow displacement — paint continuously swirls like smoke.
+            // 3-octave curl noise: large slow eddies + medium body + small domain-warped wisps.
             float2 FlowOffset(float2 wp)
             {
-                float2 animP = wp * _SwirlFreq + float2(_Time.y * _SwirlSpeed * 0.7,
-                                                         _Time.y * _SwirlSpeed * 0.4);
-                float2 curl = CurlNoise2D(animP);
                 float paintDensity = PaintingFieldSample(wp).a;
-                return curl * _SwirlStrength * (0.3 + paintDensity * 0.7);
+
+                // Octave 1: large slow eddies — overall trail bow.
+                float2 p1 = wp * (_SwirlFreq * 0.25)
+                          + float2(_Time.y * _SwirlSpeed * 0.25, _Time.y * _SwirlSpeed * 0.12);
+                float2 curl1 = CurlNoise2D(p1) * (_SwirlStrength * 3.0);
+
+                // Octave 2: medium body undulation.
+                float2 p2 = wp * _SwirlFreq
+                          + float2(_Time.y * _SwirlSpeed * 0.7, _Time.y * _SwirlSpeed * 0.4);
+                float2 curl2 = CurlNoise2D(p2) * _SwirlStrength;
+
+                // Octave 3: small wisps, domain-warped by curl1 for detachment.
+                float2 p3 = (wp + curl1 * 0.4) * (_SwirlFreq * 3.5)
+                          + float2(_Time.y * _SwirlSpeed * 2.8, _Time.y * _SwirlSpeed * 1.9);
+                float2 curl3 = CurlNoise2D(p3) * (_SwirlStrength * 0.3);
+
+                float denseScale = 0.2 + paintDensity * 0.8;
+                float wispScale = 1.0 - paintDensity * 0.5;
+
+                return curl1 * denseScale + curl2 * denseScale + curl3 * (denseScale + wispScale * 0.5);
             }
 
             // fBM-warped position for organic edge alpha. Two octaves of simplex warp the lookup
@@ -198,7 +214,7 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
 
             fixed4 frag(v2f IN) : SV_Target
             {
-                // 1. Turbulent jitter + curl noise swirl for flowing wet-paint motion.
+                // 1. Turbulent jitter + 3-octave curl noise swirl.
                 float2 wp = IN.worldPos + TurbulentOffset(IN.worldPos) + FlowOffset(IN.worldPos);
 
                 // 2. Anisotropic alpha-weighted bleed.
@@ -209,11 +225,19 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
                     discard;
                 }
 
-                // 3. fBM-warped edge fade — organic, wiggly transparency boundary.
+                // 3. Smoke edge shaping: sigmoid core + wisp noise at edges.
                 float warpedA = PaintingFieldSample(WarpedEdgePos(wp)).a;
-                float edgeFade = pow(saturate(warpedA / max(_EdgeSoftness, 0.001)), _EdgePow);
+                float coreAlpha = saturate(warpedA / max(_EdgeSoftness, 0.001));
+                float smokeSigmoid = coreAlpha / (coreAlpha + (1.0 - coreAlpha) * _SmokeEdgeSharpness);
 
-                // 4. Two-scale paper grain with soft-light blending.
+                float edgeRegion = 1.0 - saturate(warpedA * 4.0);
+                float2 wispNoiseUV = WarpedEdgePos(wp) * _WispNoiseFreq
+                                   + float2(_Time.y * 0.04, _Time.y * 0.02);
+                float wispNoise = SimplexNoise2D(wispNoiseUV) * 0.5 + 0.5;
+                float wispMask = smoothstep(0.3, 0.5, wispNoise);
+                float edgeFade = lerp(smokeSigmoid, smokeSigmoid * wispMask, edgeRegion * _WispStrength);
+
+                // 4. Paper grain with soft-light blending.
                 float2 grainUV_coarse = wp * _GrainScale;
                 float2 grainUV_fine   = wp * _GrainScale * 4.7;
                 float grainCoarse = tex2D(_GrainTex, grainUV_coarse).r;
@@ -221,23 +245,21 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
                 float grain = grainCoarse * 0.7 + grainFine * 0.3;
                 float grainBlend = lerp(0.5, grain, _GrainStrength);
 
-                float3 grained = float3(
+                float3 finalRgb = float3(
                     SoftLight(paint.r, grainBlend),
                     SoftLight(paint.g, grainBlend),
                     SoftLight(paint.b, grainBlend)
                 );
                 float grainAlphaMod = lerp(1.0, grain * 0.8 + 0.2, _GrainStrength * 0.4);
 
-                // 5. Pigment pooling — darken the edge band where paint is pushed outward.
-                float edgeBand = paint.a * (1.0 - paint.a);
-                float poolDarken = 1.0 - edgeBand * _PigmentPool * 4.0;
-                grained *= poolDarken;
+                // 5. Sky transmission: edges lighten toward sky color (smoke thins out).
+                float densityFalloff = pow(1.0 - saturate(paint.a * 2.0), 2.0);
+                float3 transmitted = lerp(finalRgb, _SkyTransmissionColor.rgb * finalRgb,
+                                          densityFalloff * _SkyTransmissionStrength);
+                float rimLight = densityFalloff * 0.3 * _SkyTransmissionStrength;
+                finalRgb = transmitted + rimLight;
 
-                // 6. Warm-to-cool temperature tint by density.
-                float3 tempTint = lerp(_CoolEdgeColor.rgb, _WarmCoreColor.rgb, paint.a);
-                float3 finalRgb = lerp(grained, grained * tempTint, _TemperatureRange);
-
-                // 7. Shadow lift — watercolor never goes fully black; lift toward sky tint.
+                // 6. Shadow lift — smoke never goes fully black.
                 float lum = dot(finalRgb, float3(0.299, 0.587, 0.114));
                 finalRgb = lerp(_ShadowLiftColor.rgb * lum, finalRgb, saturate(lum * 3.0));
 
