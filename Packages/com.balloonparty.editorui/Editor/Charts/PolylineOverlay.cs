@@ -15,15 +15,12 @@ namespace BalloonParty.EditorUI.Charts
                 return System.Array.Empty<Vector2>();
             }
 
-            Vector2[] points = new Vector2[values.Count];
-            float xStep = values.Count > 1 ? plotArea.width / (values.Count - 1) : 0f;
+            var points3D = NormalizePolyline(plotArea, values, max);
+            var points = new Vector2[points3D.Length];
 
-            for (int i = 0; i < values.Count; i++)
+            for (var i = 0; i < points3D.Length; i++)
             {
-                float normalized = max > 0f ? Mathf.Clamp01(values[i] / max) : 0f;
-                float x = plotArea.xMin + (xStep * i);
-                float y = Mathf.Lerp(plotArea.yMax, plotArea.yMin, normalized);
-                points[i] = new Vector2(x, y);
+                points[i] = new Vector2(points3D[i].x, points3D[i].y);
             }
 
             return points;
@@ -51,14 +48,14 @@ namespace BalloonParty.EditorUI.Charts
                 return System.Array.Empty<Vector3>();
             }
 
-            Vector3[] points = new Vector3[values.Count];
-            float xStep = values.Count > 1 ? plotArea.width / (values.Count - 1) : 0f;
+            var points = new Vector3[values.Count];
+            var xStep = values.Count > 1 ? plotArea.width / (values.Count - 1) : 0f;
 
-            for (int i = 0; i < values.Count; i++)
+            for (var i = 0; i < values.Count; i++)
             {
-                float normalized = max > 0f ? Mathf.Clamp01(values[i] / max) : 0f;
-                float x = plotArea.xMin + (xStep * i);
-                float y = Mathf.Lerp(plotArea.yMax, plotArea.yMin, normalized);
+                var normalized = max > 0f ? Mathf.Clamp01(values[i] / max) : 0f;
+                var x = plotArea.xMin + (xStep * i);
+                var y = Mathf.Lerp(plotArea.yMax, plotArea.yMin, normalized);
                 points[i] = new Vector3(x, y, 0f);
             }
 

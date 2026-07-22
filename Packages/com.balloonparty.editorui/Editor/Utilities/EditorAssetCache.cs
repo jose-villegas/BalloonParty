@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace BalloonParty.EditorUI.Palette
+namespace BalloonParty.EditorUI.Utilities
 {
     /// <summary>
     /// Lazy-loading cache for a ScriptableObject asset found by type.

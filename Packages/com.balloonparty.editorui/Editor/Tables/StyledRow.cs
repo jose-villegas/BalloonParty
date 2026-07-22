@@ -1,3 +1,4 @@
+using BalloonParty.EditorUI.Utilities;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace BalloonParty.EditorUI.Tables
         public static void DrawStyledLabel(string text, bool bold, float width)
         {
             var style = bold
-                ? new GUIStyle(EditorStyles.label) { fontStyle = FontStyle.Bold }
+                ? StyleCache.Get("StyledRow.Bold", () => new GUIStyle(EditorStyles.label) { fontStyle = FontStyle.Bold })
                 : EditorStyles.label;
 
             EditorGUILayout.LabelField(text, style, GUILayout.Width(width));

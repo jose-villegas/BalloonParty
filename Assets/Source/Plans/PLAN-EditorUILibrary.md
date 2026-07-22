@@ -334,9 +334,9 @@ Create `NavigationHeader`, `IconButtonHelper`, `PlotLegend`, `PlotMarker`,
 ### Phase 2b — Palette Generalization
 Implement `IColorPalette` + `EditorAssetCache<T>` (with injectable finder
 for testability).  Migrate `PaletteColorPicker` to the package.
-Add `: IColorPalette` to `GamePalette` (3-line explicit impl).
-Delete `ConfigAssetCache<T>` from `Shared/` — all consumers switch to
-`EditorAssetCache<T>`.
+Project provides `GamePaletteAdapter : IColorPalette` (composition over
+modifying runtime type).  Mark `ConfigAssetCache<T>` as `[Obsolete]` —
+actual deletion deferred to Phase 5 (17+ consumers must migrate first).
 
 ### Phase 2c — Broad StyleCache Adoption
 Adopt `StyleCache` in all 11 eligible windows (mechanical, low-risk).
@@ -353,7 +353,8 @@ Adopt `ST`/`AL`/`SFT` in UnusedAssetsWindow.  Adopt `IBH` in
 GameRenderMapsWindow.
 
 ### Phase 5 — Cleanup + Publish
-Remove dead private methods from refactored windows.  Update package
+Remove dead private methods from refactored windows.  Delete
+`ConfigAssetCache<T>` (all consumers migrated by Phase 4).  Update package
 `README.md`.  Push package to standalone git repo.  Tag `v1.0.0`.
 
 ---
@@ -584,3 +585,39 @@ Tests/Editor/
 | TE-7 | `NavigationHeaderTests` cap at 3 cases | Annotated in test file list |
 | TE-8 | `PlotGrid` tests conditional on non-trivial formatting | Noted in testable-seams table |
 | TE-9 | `EditorAssetCacheTests` in `Utilities/` not `Palette/` | Placed in `Utilities/` folder |
+
+### Round 3 — Post-Merge Review (level-pacing-overhaul → editor-ui-library)
+
+| # | Finding | Priority | Resolution |
+|---|---------|----------|------------|
+| R3-1 | Group-border separator logic copy-pasted 3× (title/header/data rows) | High | Extract `DrawGroupBorderSeparators(Rect)` private method → Phase 2c candidate for `TableDrawHelper` |
+| R3-2 | `new Color(0.4f,…)` instantiated 9× per frame | High | Declare `static readonly Color GroupBorderColor` etc. at class level — immediate fix |
+| R3-3 | Package `StyledRow` allocates `new GUIStyle` per call | High | Self-medicate: use `StyleCache.Get` — immediate fix |
+| R3-4 | Old `EditorUI/` and package coexist without deprecation | Medium | Add `[Obsolete]` to old files before Phase 3; full deletion in Phase 3 |
+| R3-5 | `ConfigAssetCache` deletion blocked by 17+ consumers | Medium | Mark `[Obsolete]` in Phase 2b; delete in Phase 5 (updated above) |
+| R3-6 | `DrawGroupGaps` belongs in `TableDrawHelper` package | Medium | Extract in Phase 2c alongside `DrawGroupBorderSeparators` |
+| R3-7 | `GamePaletteAdapter` approach differs from plan text | Medium | Plan updated (composition over runtime modification) |
+| R3-8 | `PolylineOverlay` duplicate normalization logic | Low | Unify `NormalizePoints`/`NormalizePolyline` into single helper |
+| R3-9 | `EditorAssetCache<T>` in `Palette/` namespace but generic | Low | Move to `Utilities/` — test already there |
+
+### Round 3 — Post-Merge Test-Everything
+
+| # | Recommendation | Priority | Resolution |
+|---|----------------|----------|------------|
+| TE3-1 | Extract `RowColorResolver` (5-way priority cascade) + tests | P0 | Add to `Tables/` in package; 6-7 tests for priority + range boundary |
+| TE3-2 | Extract `ComputeColumnX` into `TableDrawHelper` + tests | P1 | Pure accumulation algorithm; 4 tests for gaps/boundaries |
+| TE3-3 | Add `FoldoutSection` state-persistence tests | P2 | Promised by plan but missing from filesystem |
+| TE3-4 | Add `SearchFilterToolbar` filter-logic tests | P3 | Promised by plan but missing from filesystem |
+| TE3-5 | `RowFocusTracker` extraction candidate (Phase 4) | Info | Keyboard-focus ↔ row highlight pattern is generic |
+
+### Quick-Fix Batch (immediate, before Phase 2c)
+
+These are low-risk fixes that should be applied immediately:
+
+1. **Color constants** — replace 9× inline `new Color(0.4f,0.4f,0.4f,0.9f)` with
+   `static readonly` fields in `LevelPacingWindow`.
+2. **`StyledRow` StyleCache** — use `StyleCache.Get` instead of per-call `new GUIStyle`.
+3. **Deduplicate separator loop** — extract `DrawGroupBorderSeparators(Rect rowRect)`
+   private method in `LevelPacingWindow` (3 call sites → 1 method).
+4. **`PolylineOverlay`** — unify duplicate normalization.
+5. **Move `EditorAssetCache<T>`** from `Palette/` to `Utilities/` namespace.
