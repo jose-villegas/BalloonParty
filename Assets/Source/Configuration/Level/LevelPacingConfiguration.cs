@@ -216,26 +216,30 @@ namespace BalloonParty.Configuration.Level
                 return;
             }
 
-            var previous = int.MinValue;
+            var previousTotal = int.MinValue;
             var checkLevels = 50;
 
             for (var level = 1; level <= checkLevels; level++)
             {
-                var composed = ThresholdForLevel(level);
-                if (composed <= 0)
+                var perColor = ThresholdForLevel(level);
+                var colors = ColorsForLevel(level);
+                var total = perColor * colors;
+
+                if (perColor <= 0)
                 {
                     Debug.LogWarning(
                         $"LevelPacingConfiguration ({name}): threshold at level {level} is non-positive " +
-                        $"({composed}) — check the scoring curve milestones.");
+                        $"({perColor}) — check the scoring curve milestones.");
                 }
-                else if (composed < previous)
+                else if (total < previousTotal)
                 {
                     Debug.LogWarning(
-                        $"LevelPacingConfiguration ({name}): threshold drops at level {level} " +
-                        $"({previous} → {composed}) — ensure the cumulative curve is increasing.");
+                        $"LevelPacingConfiguration ({name}): total difficulty drops at level {level} " +
+                        $"({previousTotal} → {total}, {colors} colors × {perColor}/color) — " +
+                        "ensure the cumulative curve increment grows with level.");
                 }
 
-                previous = composed;
+                previousTotal = total;
             }
         }
 #endif
