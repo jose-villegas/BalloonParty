@@ -126,7 +126,7 @@ namespace BalloonParty.Editor
                 return;
             }
 
-            LevelPacingCurvePanel.Draw(_asset);
+            LevelPacingCurvePanel.Draw(_asset, _serialized);
             EditorGUILayout.Space(4f);
             DrawTable();
             _serialized.ApplyModifiedProperties();
