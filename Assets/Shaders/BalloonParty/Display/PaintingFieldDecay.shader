@@ -20,6 +20,7 @@ Shader "BalloonParty/Display/PaintingFieldDecay"
         _NoiseErosionContrast ("Noise Contrast",        Range(1, 6))        = 3.0
         _TimePhase          ("Time Phase",              Float)              = 0.0
         _DeltaTime          ("Delta Time",              Float)              = 0.05
+        _WindAgeBias        ("Wind Age Bias",           Range(0.5, 4))      = 1.5
     }
 
     SubShader
@@ -48,6 +49,7 @@ Shader "BalloonParty/Display/PaintingFieldDecay"
             float _NoiseErosionContrast;
             float _TimePhase;
             float _DeltaTime;
+            float _WindAgeBias;
 
             struct appdata
             {
@@ -71,14 +73,18 @@ Shader "BalloonParty/Display/PaintingFieldDecay"
 
             fixed4 frag(v2f i) : SV_Target
             {
+                // Pre-sample to determine age: fresh paint (high alpha) resists wind.
+                float preAlpha = tex2D(_MainTex, i.uv).a;
+                float ageWindFactor = pow(1.0 - saturate(preAlpha), _WindAgeBias);
+
                 // 1. Wind advection: sample from upstream so paint flows downwind.
-                float2 windOffset = _WindDir.xy * _WindSpeed * _DeltaTime;
+                float2 windOffset = _WindDir.xy * _WindSpeed * _DeltaTime * ageWindFactor;
 
                 // 2. Turbulent perturbation: hash-based per-pixel nudge.
                 float2 noiseIn = i.uv * _TurbAdvectFreq + float2(_TimePhase * 0.37, _TimePhase * 0.13);
                 float nx = frac(sin(dot(noiseIn,       float2(127.1, 311.7))) * 43758.55);
                 float ny = frac(sin(dot(noiseIn + 0.5, float2(269.5, 183.3))) * 27385.23);
-                float2 turbOffset = (float2(nx, ny) - 0.5) * 2.0 * _TurbAdvectStrength * _DeltaTime;
+                float2 turbOffset = (float2(nx, ny) - 0.5) * 2.0 * _TurbAdvectStrength * _DeltaTime * ageWindFactor;
 
                 float2 advUV = i.uv - windOffset - turbOffset;
 
