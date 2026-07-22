@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Shared.Cadence;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Disturbance;
 using UniRx;
@@ -32,7 +33,7 @@ namespace BalloonParty.Shared.SceneLight
     ///     for the RT to resolve (sub-texel drift, a converged fade tail) — so "changed" means changed by
     ///     more than the field's own resolution, not merely written.
     /// </summary>
-    internal class SceneLightFieldService : IStartable, ITickable, IDisposable
+    internal class SceneLightFieldService : IStartable, ITickable, IDisposable, ICadencedEffect
     {
         // The accumulate shader's MAX_STAMPS: the compile-time size of its stamp arrays, so the batch
         // arrays here match it and the configured MaxLights is clamped to it (raising the runtime cap past
@@ -215,6 +216,14 @@ namespace BalloonParty.Shared.SceneLight
             _fieldOn = false;
             ClearLights();
             _resources.Dispose();
+        }
+
+        int ICadencedEffect.BlitWeight => 3;
+
+        void ICadencedEffect.ApplyPhaseOffset(float offset01)
+        {
+            var interval = _settings.FieldFrameInterval / 60f;
+            _renderAccumulator = offset01 * interval;
         }
 
         /// <summary>Turns <paramref name="light"/> on: the field composites it every render until the returned

@@ -1,4 +1,5 @@
 using BalloonParty.Configuration;
+using BalloonParty.Shared.Cadence;
 using BalloonParty.Shared.Diagnostics;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -8,7 +9,7 @@ namespace BalloonParty.Display
 {
     /// <summary>Shared low-res scene capture, bound globally as <c>_SceneCaptureTex</c>.</summary>
     [RequireComponent(typeof(Camera))]
-    public class SceneCaptureService : MonoBehaviour
+    public class SceneCaptureService : MonoBehaviour, ICadencedEffect
     {
         private static readonly int CaptureTexId = Shader.PropertyToID("_SceneCaptureTex");
 
@@ -103,6 +104,14 @@ namespace BalloonParty.Display
                 _texture.Release();
                 Destroy(_texture);
             }
+        }
+
+        int ICadencedEffect.BlitWeight => 3;
+
+        void ICadencedEffect.ApplyPhaseOffset(float offset01)
+        {
+            var interval = _displayConfig.SceneCaptureFrameInterval / 60f;
+            _captureAccumulator = offset01 * interval;
         }
 
         internal void Acquire()

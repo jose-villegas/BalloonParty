@@ -30,6 +30,7 @@ using BalloonParty.Projectile.Controller;
 using BalloonParty.Scenario;
 using BalloonParty.Scenario.View;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Cadence;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Pause;
@@ -190,7 +191,7 @@ namespace BalloonParty.Game
         {
             builder.RegisterComponentInHierarchy<OrthogonalSizeCameraController>();
             builder.RegisterComponentInHierarchy<CameraShakeService>();
-            builder.RegisterComponentInHierarchy<SceneCaptureService>();
+            builder.RegisterComponentInHierarchy<SceneCaptureService>().As<ICadencedEffect>();
             builder.RegisterComponentInHierarchy<ScreenSpaceLightService>();
             builder.RegisterComponentInHierarchy<CameraBackgroundTint>();
             builder.RegisterComponentInHierarchy<CinematicCameraView>();
@@ -202,6 +203,7 @@ namespace BalloonParty.Game
                 .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<LaunchDisturbanceStamp>();
             builder.Register<CinematicCameraRig>(Lifetime.Singleton);
+            builder.Register<EffectCadenceCoordinator>(Lifetime.Singleton).AsImplementedInterfaces();
 
             builder.Register<GameOverPresentationGate>(Lifetime.Singleton);
             builder.Register<BoardPopWave>(Lifetime.Singleton);

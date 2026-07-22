@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Shared.Cadence;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Messages;
@@ -19,7 +20,7 @@ namespace BalloonParty.Scenario
     ///     Architecture mirrors <c>DisturbanceFieldService</c> / <c>SceneLightFieldService</c>:
     ///     plain-C# DI singleton, no MonoBehaviour, ping-pong blit pipeline.
     /// </summary>
-    internal sealed class PaintingFieldService : IStartable, ITickable, IDisposable
+    internal sealed class PaintingFieldService : IStartable, ITickable, IDisposable, ICadencedEffect
     {
         private const int MaxStampsPerBatch = 32;
 
@@ -119,6 +120,19 @@ namespace BalloonParty.Scenario
             _levelUpDismissedSubscription?.Dispose();
             Shader.SetGlobalFloat(ActiveId, 0f);
             _resources.Dispose();
+        }
+
+        int ICadencedEffect.BlitWeight => 1;
+
+        void ICadencedEffect.ApplyPhaseOffset(float offset01)
+        {
+            // Decay uses Time.time - _lastDecayTime >= interval. Pre-advancing _lastDecayTime
+            // backward by offset01 × interval delays the first fire by (1-offset01) × interval,
+            // matching the accumulator semantics of the other services.
+            if (_settings.DecayTickInterval > 0f)
+            {
+                _lastDecayTime = Time.time - offset01 * _settings.DecayTickInterval;
+            }
         }
 
         /// <summary>Stamps a palette color at the given world position with the given radius.</summary>

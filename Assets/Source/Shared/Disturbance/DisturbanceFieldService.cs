@@ -5,12 +5,13 @@ using UnityEngine;
 using VContainer.Unity;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Shared.Cadence;
 using BalloonParty.Shared.Extensions;
 
 namespace BalloonParty.Shared.Disturbance
 {
     /// <summary>Screen-space disturbance field any system can stamp into; GPU resources live in <see cref="DisturbanceFieldResources"/>.</summary>
-    internal class DisturbanceFieldService : IStartable, ITickable, IDisposable
+    internal class DisturbanceFieldService : IStartable, ITickable, IDisposable, ICadencedEffect
     {
         private const int MaxStampsPerBatch = 32;
 
@@ -118,6 +119,15 @@ namespace BalloonParty.Shared.Disturbance
         void IDisposable.Dispose()
         {
             _resources.Dispose();
+        }
+
+        int ICadencedEffect.BlitWeight => 2;
+
+        void ICadencedEffect.ApplyPhaseOffset(float offset01)
+        {
+            // Pre-advance the diffusion timer so its periodic blit is staggered relative to
+            // other field services. Stamps are event-driven and unaffected.
+            _diffusionTimer = offset01 * _settings.DiffusionTickInterval;
         }
 
         /// <summary>Profile for a source, so callers needn't inject <see cref="IDisturbanceFieldSettings"/>.</summary>

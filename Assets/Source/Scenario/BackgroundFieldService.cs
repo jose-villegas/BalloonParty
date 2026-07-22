@@ -1,6 +1,7 @@
 using System;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Effects;
+using BalloonParty.Shared.Cadence;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.GameState;
@@ -22,7 +23,7 @@ namespace BalloonParty.Scenario
     ///     duplicate. GPU side: <c>Shaders/BalloonParty/Include/BackgroundField.cginc</c> (consumers) +
     ///     <c>BackgroundFieldGen.cginc</c> and the <c>BackgroundFieldDensity</c> blit (generation).
     /// </summary>
-    internal sealed class BackgroundFieldService : IStartable, ITickable, IDisposable
+    internal sealed class BackgroundFieldService : IStartable, ITickable, IDisposable, ICadencedEffect
     {
         private static readonly int DensityTexId = Shader.PropertyToID("_BackgroundDensityTex");
         private static readonly int BoundsMinId = Shader.PropertyToID("_BackgroundFieldBoundsMin");
@@ -102,6 +103,14 @@ namespace BalloonParty.Scenario
                 UnityEngine.Object.Destroy(_densityRT);
                 _densityRT = null;
             }
+        }
+
+        int ICadencedEffect.BlitWeight => 1;
+
+        void ICadencedEffect.ApplyPhaseOffset(float offset01)
+        {
+            var interval = Mathf.Max(_settings.BakeFrameInterval, 1f) / 60f;
+            _bakeAccumulator = offset01 * interval;
         }
 
         // Renders the scrolling cloud density into the RT. The source texture is unused — the blit material
