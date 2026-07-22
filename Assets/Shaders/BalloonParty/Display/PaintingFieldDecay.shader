@@ -20,7 +20,7 @@ Shader "BalloonParty/Display/PaintingFieldDecay"
         _NoiseErosionContrast ("Noise Contrast",        Range(1, 6))        = 3.0
         _TimePhase          ("Time Phase",              Float)              = 0.0
         _DeltaTime          ("Delta Time",              Float)              = 0.05
-        _WindAgeBias        ("Wind Age Bias",           Range(0.5, 4))      = 1.5
+        _WindAgeBias        ("Wind Age Bias",           Range(0.1, 4))      = 1.5
     }
 
     SubShader
