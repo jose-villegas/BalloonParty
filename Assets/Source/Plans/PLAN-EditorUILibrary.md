@@ -34,29 +34,28 @@ components as a reusable UPM package.
 
 ### P0 — Highest Impact
 
+**`StyleCache`** (~40 LOC)
+Lazy-init `GUIStyle` factory with `Get(string key, Func<GUIStyle>)`.
+Eliminates all per-frame `new GUIStyle()` allocations across 11 windows.
+
 **`TypedEntrySelectorCell<TEnum>`** (~120 LOC)
 Generic expand/collapse cell for an enum-typed weighted array.  Handles
 dropdown with ✓/+ prefixes, add-on-select, per-entry sub-fields via a
 `FieldSpec[]`, and remove button.  Eliminates ~660 LOC of triplicated code.
 
 **`BarChart`** (~60 LOC)
-Static method: `Draw(Rect, float[], float max, BarChartOptions)` → optional
-clicked index.  Selection highlight, padding.  Used by CurvePanel and
-ShotSolverWindow.
+Static method: `Draw(Rect, IReadOnlyList<float>, float max, in BarChartOptions)`
+→ optional clicked index.  Selection highlight, padding.
 
 **`PolylineOverlay`** (~30 LOC)
-`Draw(Rect, float[], float max, Color, float thickness)` — normalised polyline
-via `Handles.DrawAAPolyLine`.
+`Draw(Rect, IReadOnlyList<float>, float max, Color, float thickness)` —
+normalised polyline via `Handles.DrawAAPolyLine`.
 
 **`PlotGrid`** (~70 LOC)
 Horizontal grid lines, Y-axis labels, X-axis labels.  Parameterised by
 divisions and value range.
 
 ### P1
-
-**`StyleCache`** (~40 LOC)
-Lazy-init `GUIStyle` factory with `Get(string key, Func<GUIStyle>)`.
-Eliminates all per-frame `new GUIStyle()` allocations across 11 windows.
 
 **`NavigationHeader`** (~35 LOC)
 `Draw(string label, ref int value, int min)` → ◀ [Label] [IntField] ▶ row with
@@ -65,6 +64,11 @@ Eliminates all per-frame `new GUIStyle()` allocations across 11 windows.
 **`IconButtonHelper`** (~25 LOC)
 `Get(string iconName, string fallbackGlyph, string tooltip) → GUIContent`.
 Uses `EditorGUIUtility.FindTexture` with a static `Dictionary` cache.
+
+**`IColorPalette` + `EditorAssetCache<T>` + `PaletteColorPicker`** (~80 LOC)
+Generic palette interface + SO cache + colour picker widget.  Unlocks
+`PaletteColorPicker` for the package.  Project implements `IColorPalette`
+on `GamePalette`.
 
 ### P2
 
@@ -154,10 +158,10 @@ imports and depends only on `UnityEditor`/`UnityEngine`.
 | IconButtonHelper | ✅ | Pure `FindTexture` + cache |
 | StyleCache | ✅ | Pure lazy GUIStyle factory |
 | FoldoutSection | ✅ | Pure EditorPrefs-backed foldout |
-| PaletteColorPicker | ❌ | Imports `BalloonParty.Configuration.Palette` |
-| TypedEntrySelectorCell | ⚠️ | Mechanism is generic; keep project-specific initially |
+| PaletteColorPicker | ✅ | Moves to package once `IColorPalette` interface is introduced |
+| TypedEntrySelectorCell | ✅ | Mechanism is generic; no BalloonParty deps in `FieldSpec[]` |
 
-**17 package-eligible, 2 project-specific.**
+**19 package-eligible** (all components move to the package).
 
 ### Package Structure
 
@@ -181,43 +185,68 @@ Packages/com.balloonparty.editorui/
 │   │   ├── SelectionTracker.cs
 │   │   ├── StyledRow.cs
 │   │   ├── TableDrawHelper.cs
-│   │   └── PropertyCellDrawer.cs
+│   │   ├── PropertyCellDrawer.cs
+│   │   └── TypedEntrySelectorCell.cs
 │   ├── Layout/
 │   │   ├── FoldoutSection.cs
 │   │   ├── NavigationHeader.cs
 │   │   └── SearchFilterToolbar.cs
+│   ├── Palette/
+│   │   ├── IColorPalette.cs
+│   │   ├── EditorAssetCache.cs
+│   │   └── PaletteColorPicker.cs
 │   └── Utilities/
 │       ├── StyleCache.cs
 │       ├── IconButtonHelper.cs
 │       ├── AssetLinkLabel.cs
 │       └── EditorAnimationLoop.cs
+├── Tests/
+│   └── Editor/
+│       ├── com.balloonparty.editorui.Tests.Editor.asmdef
+│       ├── Charts/
+│       │   ├── BarChartLogicTests.cs
+│       │   ├── PolylineNormalizationTests.cs
+│       │   └── PlotGridComputationTests.cs
+│       ├── Tables/
+│       │   ├── SortableHeaderTests.cs
+│       │   └── SelectionTrackerTests.cs
+│       ├── Layout/
+│       │   └── NavigationHeaderTests.cs
+│       ├── Palette/
+│       │   └── PaletteColorPickerTests.cs
+│       └── Utilities/
+│           ├── StyleCacheTests.cs
+│           └── IconButtonHelperTests.cs
 └── Samples~/
     └── TableWindowExample/
         └── SampleTableWindow.cs
 ```
+
+### Namespace Strategy
+
+Root namespace: **`BalloonParty.EditorUI`** (collision-safe, matches package
+name `com.balloonparty.editorui`).  Sub-namespaces mirror folders:
+- `BalloonParty.EditorUI.Charts`
+- `BalloonParty.EditorUI.Tables`
+- `BalloonParty.EditorUI.Layout`
+- `BalloonParty.EditorUI.Utilities`
 
 ### Assembly Definition
 
 ```json
 {
   "name": "com.balloonparty.editorui.Editor",
-  "rootNamespace": "EditorUI",
+  "rootNamespace": "BalloonParty.EditorUI",
   "references": [],
   "includePlatforms": ["Editor"],
   "allowUnsafeCode": false,
-  "autoReferenced": true
+  "autoReferenced": false
 }
 ```
 
-**Key:** zero assembly references — the package depends only on
-`UnityEditor` and `UnityEngine` (implicit).
-
-### Namespace Strategy
-
-- Package root: `EditorUI` (not `BalloonParty.Editor.EditorUI`)
-- Sub-namespaces mirror folders: `EditorUI.Charts`, `EditorUI.Tables`,
-  `EditorUI.Layout`, `EditorUI.Utilities`
-- Project code: `BalloonParty.Editor` — adds `using EditorUI.Charts;` etc.
+`autoReferenced: false` — consumers must add an explicit reference.
+`BalloonParty.Editor.asmdef` and `BalloonParty.Configuration.Editor.asmdef`
+both add a reference to `com.balloonparty.editorui.Editor`.
 
 ### `package.json`
 
@@ -247,12 +276,19 @@ Packages/com.balloonparty.editorui/
 ### Migration Path
 
 1. Create `Packages/com.balloonparty.editorui/` with `package.json` + asmdef.
-2. Move the 17 eligible `.cs` files from `Assets/Source/Editor/EditorUI/`.
-3. Change namespace from `BalloonParty.Editor.EditorUI` to `EditorUI.*`.
-4. Update all consumers with new `using` statements.
-5. Keep `PaletteColorPicker` and `TypedEntrySelectorCell` in
-   `Assets/Source/Editor/EditorUI/` (project-specific layer).
-6. `dotnet build` + visual check in editor.
+2. **Move** (not copy) the 18 eligible `.cs` files **with their `.meta` files**
+   to preserve GUIDs and avoid orphaned references.
+3. Change namespace from `BalloonParty.Editor.EditorUI` to
+   `BalloonParty.EditorUI.*` (sub-namespace per folder).
+4. Update all consumers with new `using` statements — including
+   `BalloonParty.Configuration.Editor` consumers (drawers that use
+   `TableDrawHelper`, `PropertyCellDrawer`, etc.).
+5. Add `com.balloonparty.editorui.Editor` reference to both
+   `BalloonParty.Editor.asmdef` and `BalloonParty.Configuration.Editor.asmdef`.
+6. `dotnet build` all `.csproj` + visual check in editor.
+
+**GUID note:** moving `.meta` files alongside `.cs` preserves Unity's
+internal references.  No asset re-import needed.
 
 ---
 
@@ -274,18 +310,21 @@ and `IconButtonHelper`.
 
 ## Implementation Phases
 
-### Phase 1 — Package Scaffold + Charting (P0 charts + P1 StyleCache)
+### Phase 1 — Package Scaffold + P0 Core
 Create the embedded package at `Packages/com.balloonparty.editorui/`.
-Move existing eligible components.  Create `BarChart`, `PolylineOverlay`,
-`PlotGrid`, `StyleCache`.  Refactor `LevelPacingCurvePanel` to use them.
+Move existing eligible components (with `.meta` files).  Create `StyleCache`,
+`BarChart`, `PolylineOverlay`, `PlotGrid`.  Refactor `LevelPacingCurvePanel`
+to use them.  Write tests for computation logic.
 
-### Phase 2 — Helpers (P1 remaining + P2)
+### Phase 2 — Helpers + Palette (P1 + P2)
 Create `NavigationHeader`, `IconButtonHelper`, `PlotLegend`, `PlotMarker`,
-`FoldoutSection`.  Finish refactoring `LevelPacingCurvePanel` to ~200 LOC.
+`FoldoutSection`.  Implement `IColorPalette` + `EditorAssetCache<T>` +
+migrate `PaletteColorPicker`.  Add `: IColorPalette` to `GamePalette`.
+Finish refactoring `LevelPacingCurvePanel` to ~200 LOC.
 Adopt `StyleCache` in all 11 eligible windows.
 
-### Phase 3 — Generic Cell (P0 TypedEntrySelectorCell)
-Create `TypedEntrySelectorCell<TEnum>` (project-specific).  Refactor the
+### Phase 3 — Generic Cell (P0 TypedEntrySelectorCell) *(parallelisable with Phase 2)*
+Create `TypedEntrySelectorCell<TEnum>` in the package.  Refactor the
 three balloon/item/actor expanded + collapsed cell methods in
 `LevelPacingWindow`.  Collapse triplicated focus methods.
 
@@ -296,26 +335,162 @@ Adopt `ST`/`AL`/`SFT` in UnusedAssetsWindow.  Adopt `IBH` in
 GameRenderMapsWindow.
 
 ### Phase 5 — Cleanup + Publish
-Remove dead private methods from refactored windows.  Update
-`EditorUI/README.md` and package `README.md`.  Push package to standalone
-git repo.
+Remove dead private methods from refactored windows.  Update package
+`README.md`.  Push package to standalone git repo.  Tag `v1.0.0`.
 
 ---
 
 ## Design Decisions
 
-**Composition over inheritance** — all new types are static utility classes
-(matching the existing `EditorUI/` pattern), not a base class.  Windows
-compose them freely; no rigid lifecycle imposed.
+**Composition over inheritance** — most new types are static utility classes;
+some are stateful instances (`EditorAnimationLoop`, `EditorAssetCache<T>`,
+`PaletteColorPicker`).  No base class imposed; windows compose freely.
 
 **UI Toolkit deferred** — these windows rely heavily on absolute-positioned
 `Rect` layout and `Handles` drawing which have no UI Toolkit equivalents.
-The IMGUI extraction is the right move now; UI Toolkit can come later as a
-separate initiative.
+The IMGUI extraction is the right move now; UI Toolkit can come later — the
+`IColorPalette` interface and computed-rect separation make future migration
+straightforward.
 
-**No VContainer / DI** — editor utilities are stateless statics; no
-registration needed.
+**No VContainer / DI** — editor utilities need no DI registration.
 
 **Package-first** — build directly in `Packages/` from the start so the
 namespace and asmdef are correct from day one.  No intermediate step of
 building in `Assets/` and then moving.
+
+**`autoReferenced: false`** — consuming assemblies must explicitly reference
+the package, making dependencies visible (matches VContainer/UniRx pattern).
+
+---
+
+## Palette Generalization — `IColorPalette`
+
+### Problem
+
+`PaletteColorPicker` was previously marked project-specific because it
+depends on `GamePalette` (a concrete `ScriptableObject`).
+
+### Solution
+
+Introduce a 3-member interface in the package:
+
+```csharp
+namespace BalloonParty.EditorUI.Palette
+{
+    public interface IColorPalette
+    {
+        int Count { get; }
+        string GetName(int index);
+        Color GetColor(int index);
+    }
+}
+```
+
+**Package provides:**
+- `IColorPalette` — minimal read-only contract
+- `EditorAssetCache<T>` — finds any SO by type via `AssetDatabase`
+- `PaletteColorPicker` — draws any `IColorPalette` implementation
+
+**Project provides:**
+- `GamePalette : ScriptableObject, IGamePalette, IColorPalette`
+  (3-line explicit interface implementation)
+
+**Benefits:**
+- Picker becomes fully generic — any project implements `IColorPalette`
+- `GamePalette`'s rich API (`IGamePalette` — masks, rainbow, progress) is
+  unaffected
+- Consumer code unchanged (`DrawLayout`, `SelectedColor`)
+- `TypedEntrySelectorCell` also unlocks for the package (no remaining deps)
+
+---
+
+## Testability Strategy
+
+### Architecture: Separate Computation from Drawing
+
+Each component that does IMGUI drawing should expose its **pure logic** in
+testable methods.  The actual `EditorGUI.*` / `Handles.*` calls remain thin
+untested wrappers.
+
+```
+BarChart.ComputeBarRects(Rect, float[], float, BarChartOptions) → Rect[]  ← TESTABLE
+BarChart.Draw(Rect, float[], float, BarChartOptions) → int?               ← wrapper
+```
+
+### What IS testable (pure logic)
+
+| Component | Testable seam |
+|-----------|---------------|
+| BarChart | Rect computation, normalization, click-index-from-x |
+| PolylineOverlay | Point normalization to plot rect |
+| PlotGrid | Grid line Y positions, label values |
+| StyleCache | Cache-hit semantics (returns same instance) |
+| IconButtonHelper | Dictionary caching, fallback when icon missing |
+| SortableHeader | `ApplySort` sorting logic |
+| SelectionTracker | `GetSelected` filtering logic |
+| NavigationHeader | Value clamping, change detection |
+| EditorAnimationLoop | State machine (start/pause/stop/tick) |
+| PaletteColorPicker | Index clamping, `IColorPalette` stub driving |
+| EditorAssetCache | Lazy-init, invalidation |
+
+### What is NOT testable
+
+Pixel-level rendering, visual appearance, actual IMGUI draw calls.
+These are validated by in-editor visual inspection.
+
+### Test Assembly
+
+```json
+{
+  "name": "com.balloonparty.editorui.Tests.Editor",
+  "rootNamespace": "BalloonParty.EditorUI.Tests",
+  "references": ["com.balloonparty.editorui.Editor"],
+  "includePlatforms": ["Editor"],
+  "overrideReferences": true,
+  "precompiledReferences": ["nunit.framework.dll"],
+  "autoReferenced": false,
+  "defineConstraints": ["UNITY_INCLUDE_TESTS"]
+}
+```
+
+Tests live at `Packages/com.balloonparty.editorui/Tests/Editor/` —
+discovered automatically by Unity Test Runner.
+
+### Test Files
+
+```
+Tests/Editor/
+├── Charts/
+│   ├── BarChartLogicTests.cs       — rect computation, normalization, click index
+│   ├── PolylineNormalizationTests.cs — point mapping, empty/single-value edge cases
+│   └── PlotGridComputationTests.cs   — grid Y positions, label formatting
+├── Tables/
+│   ├── SortableHeaderTests.cs      — ApplySort ascending/descending, stable sort
+│   └── SelectionTrackerTests.cs    — GetSelected, toggle, select-all
+├── Layout/
+│   └── NavigationHeaderTests.cs    — clamping, boundary (min=1)
+├── Palette/
+│   └── PaletteColorPickerTests.cs  — mock IColorPalette, index bounds
+└── Utilities/
+    ├── StyleCacheTests.cs          — lazy-init, same-instance guarantee
+    └── IconButtonHelperTests.cs    — cache hit/miss, fallback glyph
+```
+
+---
+
+## Reviewer Fixes Incorporated
+
+| # | Finding | Resolution |
+|---|---------|------------|
+| 1 | `EditorAnimationLoop` is stateful | Acknowledged in Design Decisions — not all are statics |
+| 2 | Cross-asmdef breakage | Migration path now requires both asmdefs to add reference |
+| 3 | GUID orphaning | Migration path: move `.meta` files alongside `.cs` |
+| 5 | StyleCache priority mismatch | Promoted to P0 (it's in Phase 1 anyway) |
+| 6 | `BarChart` per-frame alloc | Use `IReadOnlyList<float>` + `in BarChartOptions` |
+| 7 | Namespace collision | Changed to `BalloonParty.EditorUI` |
+| 8 | No test strategy | Added full testability section above |
+| 9 | `autoReferenced: true` | Changed to `false` with explicit refs |
+| 10 | TypedEntrySelectorCell eligibility | Moved to package-eligible (no domain deps) |
+| 12 | Phase ordering | Phase 3 (TES) can run parallel with Phase 2 |
+| 13 | Samples need `package.json` entry | Already present in `package.json` above |
+| 14 | Min Unity version | Matches project version (2022.3) |

@@ -1912,101 +1912,6 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-      - _type: 5
-        _weight: 0.6
-        _initialCountWeights:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 0
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 34
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 2
-            value: 0
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 5
-            value: 1
-            inSlope: 0.33333334
-            outSlope: 0.33333334
-            tangentMode: 34
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-        _waveCountWeights:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 0.3
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 1
-            value: 0.8
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 2
-            value: 0.7
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 3
-            value: 0.3
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 4
-            value: 0.2
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 7
-            value: 0.1
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0.09085365
-            outWeight: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
       _itemWeights:
       - _type: 5
         _weight: 0.15
@@ -2340,7 +2245,7 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
       - _type: 4
-        _weight: 0.5
+        _weight: 0.3
         _initialCountWeights:
           serializedVersion: 2
           m_Curve:
@@ -2435,7 +2340,7 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
       - _type: 5
-        _weight: 0.3
+        _weight: 0.7
         _initialCountWeights:
           serializedVersion: 2
           m_Curve:
@@ -2916,7 +2821,7 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
       - _type: 4
-        _weight: 0.01
+        _weight: 0.1
         _initialCountWeights:
           serializedVersion: 2
           m_Curve:
@@ -3011,7 +2916,7 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
       - _type: 5
-        _weight: 0.0025
+        _weight: 0.025
         _initialCountWeights:
           serializedVersion: 2
           m_Curve:
@@ -4269,16 +4174,25 @@ MonoBehaviour:
       _cumulativeScore: 1100
       _segmentMode: 0
     - _level: 3
-      _cumulativeScore: 1900
+      _cumulativeScore: 2300
       _segmentMode: 0
     - _level: 4
-      _cumulativeScore: 3400
+      _cumulativeScore: 3900
       _segmentMode: 0
     - _level: 5
-      _cumulativeScore: 4500
+      _cumulativeScore: 5000
+      _segmentMode: 0
+    - _level: 6
+      _cumulativeScore: 6400
+      _segmentMode: 0
+    - _level: 7
+      _cumulativeScore: 8200
+      _segmentMode: 0
+    - _level: 8
+      _cumulativeScore: 10200
       _segmentMode: 0
     - _level: 9
-      _cumulativeScore: 10500
+      _cumulativeScore: 11900
       _segmentMode: 0
     _tailGrowth:
       _mode: 0
