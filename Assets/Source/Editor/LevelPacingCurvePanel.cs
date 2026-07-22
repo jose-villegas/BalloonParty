@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Configuration.Level;
+using BalloonParty.EditorUI.Utilities;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,10 +21,6 @@ namespace BalloonParty.Editor
         private static readonly Color GridColor = new(0.3f, 0.3f, 0.3f, 0.5f);
         private static readonly Color SelectedColor = new(1f, 0.8f, 0.2f, 0.8f);
         private static readonly Color ControlPointColor = new(1f, 0.4f, 0.3f, 1f);
-
-        private static GUIStyle _axisLabelStyle;
-        private static GUIStyle _levelLabelStyle;
-        private static GUIStyle _legendStyle;
 
         private static int _selectedLevel = 1;
         private static int _rangeFrom = 1;
@@ -359,14 +356,11 @@ namespace BalloonParty.Editor
 
         private static void DrawAxisLabels(Rect graphRect, Rect plotRect, float maxValue)
         {
-            if (_axisLabelStyle == null)
+            var axisLabelStyle = StyleCache.Get("LevelPacingCurvePanel.AxisLabel", () => new GUIStyle(EditorStyles.miniLabel)
             {
-                _axisLabelStyle = new GUIStyle(EditorStyles.miniLabel)
-                {
-                    alignment = TextAnchor.MiddleRight,
-                    normal = { textColor = Color.gray },
-                };
-            }
+                alignment = TextAnchor.MiddleRight,
+                normal = { textColor = Color.gray },
+            });
 
             const int gridLines = 4;
             for (var i = 0; i <= gridLines; i++)
@@ -374,20 +368,17 @@ namespace BalloonParty.Editor
                 var y = plotRect.y + plotRect.height * (1f - (float)i / gridLines);
                 var value = maxValue * i / gridLines;
                 var labelRect = new Rect(graphRect.x, y - 7f, AxisLabelWidth - 4f, 14f);
-                GUI.Label(labelRect, Mathf.RoundToInt(value).ToString(), _axisLabelStyle);
+                GUI.Label(labelRect, Mathf.RoundToInt(value).ToString(), axisLabelStyle);
             }
         }
 
         private static void DrawLevelLabels(Rect plotRect, int levelCount)
         {
-            if (_levelLabelStyle == null)
+            var levelLabelStyle = StyleCache.Get("LevelPacingCurvePanel.LevelLabel", () => new GUIStyle(EditorStyles.miniLabel)
             {
-                _levelLabelStyle = new GUIStyle(EditorStyles.miniLabel)
-                {
-                    alignment = TextAnchor.UpperCenter,
-                    normal = { textColor = Color.gray },
-                };
-            }
+                alignment = TextAnchor.UpperCenter,
+                normal = { textColor = Color.gray },
+            });
 
             var barWidth = plotRect.width / levelCount;
             var step = Mathf.Max(1, levelCount / 10);
@@ -396,7 +387,7 @@ namespace BalloonParty.Editor
             {
                 var x = plotRect.x + (i + 0.5f) * barWidth;
                 var labelRect = new Rect(x - 15f, plotRect.yMax + 1f, 30f, 14f);
-                GUI.Label(labelRect, (_rangeFrom + i).ToString(), _levelLabelStyle);
+                GUI.Label(labelRect, (_rangeFrom + i).ToString(), levelLabelStyle);
             }
         }
 
@@ -422,21 +413,18 @@ namespace BalloonParty.Editor
 
         private static void DrawLegend(Rect rect)
         {
-            if (_legendStyle == null)
+            var legendStyle = StyleCache.Get("LevelPacingCurvePanel.LegendLabel", () => new GUIStyle(EditorStyles.miniLabel)
             {
-                _legendStyle = new GUIStyle(EditorStyles.miniLabel)
-                {
-                    normal = { textColor = Color.gray },
-                };
-            }
+                normal = { textColor = Color.gray },
+            });
 
             var x = rect.x + AxisLabelWidth;
             EditorGUI.DrawRect(new Rect(x, rect.y + 4f, 12f, 6f), PerColorColor);
-            GUI.Label(new Rect(x + 14f, rect.y, 80f, 14f), _showTotal ? "Total" : "Per-color", _legendStyle);
+            GUI.Label(new Rect(x + 14f, rect.y, 80f, 14f), _showTotal ? "Total" : "Per-color", legendStyle);
 
             x += 90f;
             EditorGUI.DrawRect(new Rect(x, rect.y + 4f, 12f, 3f), CumulativeColor);
-            GUI.Label(new Rect(x + 14f, rect.y, 80f, 14f), "Cumulative", _legendStyle);
+            GUI.Label(new Rect(x + 14f, rect.y, 80f, 14f), "Cumulative", legendStyle);
 
             x += 100f;
             Handles.color = ControlPointColor;
@@ -446,7 +434,7 @@ namespace BalloonParty.Editor
                 new Vector3(x + 3f, rect.y + 12f, 0f),
                 new Vector3(x, rect.y + 7f, 0f),
                 new Vector3(x + 3f, rect.y + 2f, 0f));
-            GUI.Label(new Rect(x + 10f, rect.y, 90f, 14f), "Control Point", _legendStyle);
+            GUI.Label(new Rect(x + 10f, rect.y, 90f, 14f), "Control Point", legendStyle);
         }
 
         private static int FindControlPointIndex(SerializedObject serialized, int level)

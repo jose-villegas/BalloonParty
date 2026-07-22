@@ -1,4 +1,5 @@
 using BalloonParty.Editor;
+using BalloonParty.EditorUI.Utilities;
 using UnityEditor;
 using UnityEngine;
 
@@ -120,17 +121,17 @@ namespace BalloonParty.Configuration.Editor
                 var labelPos = center + new Vector3(visibleW / 2f, visibleH / 2f, 0f);
                 Handles.Label(labelPos,
                     label,
-                    new GUIStyle(EditorStyles.miniLabel)
+                    StyleCache.Get("GameDisplayConfigurationEditor.SceneDeviceLabel", () => new GUIStyle(EditorStyles.miniLabel)
                     {
                         normal = { textColor = new Color(1f, 1f, 1f, 0.5f) }
-                    });
+                    }));
             }
 
-            var refLabelStyle = new GUIStyle(EditorStyles.boldLabel)
+            var refLabelStyle = StyleCache.Get("GameDisplayConfigurationEditor.SceneReferenceLabel", () => new GUIStyle(EditorStyles.boldLabel)
             {
                 alignment = TextAnchor.MiddleCenter,
                 normal = { textColor = ReferenceBoxColor }
-            };
+            });
             Handles.Label(center + new Vector3(0f, (refHeight / 2f) + 0.3f, 0f),
                 $"Reference  {refWidth} × {refHeight}",
                 refLabelStyle);
@@ -183,11 +184,11 @@ namespace BalloonParty.Configuration.Editor
                 DrawRectOutline(devRect, new Color(1f, 1f, 1f, 0.25f));
             }
 
-            var style = new GUIStyle(EditorStyles.miniLabel)
+            var style = StyleCache.Get("GameDisplayConfigurationEditor.PreviewReferenceLabel", () => new GUIStyle(EditorStyles.miniLabel)
             {
                 alignment = TextAnchor.MiddleCenter,
                 normal = { textColor = new Color(0.6f, 0.85f, 1f) }
-            };
+            });
             GUI.Label(refRect, $"{refWidth} × {refHeight}", style);
         }
 

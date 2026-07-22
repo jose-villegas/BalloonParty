@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,6 +8,45 @@ namespace BalloonParty.EditorUI.Tables
     public static class TableDrawHelper
     {
         private static readonly Color DefaultSeparatorColor = new(0.35f, 0.35f, 0.35f, 0.5f);
+
+        /// <summary>
+        /// Computes the X offset for a column in a grouped table layout.
+        /// Accumulates column widths + separator widths, inserting gaps before specified columns.
+        /// </summary>
+        public static float ComputeColumnX(int col, IReadOnlyList<float> colWidths, int[] gapBeforeCols, float gapWidth, float separatorWidth)
+        {
+            var x = 0f;
+            for (var i = 0; i < col; i++)
+            {
+                if (HasGapBefore(i, gapBeforeCols))
+                {
+                    x += gapWidth;
+                }
+
+                x += colWidths[i] + separatorWidth;
+            }
+
+            if (HasGapBefore(col, gapBeforeCols))
+            {
+                x += gapWidth;
+            }
+
+            return x;
+        }
+
+        /// <summary>Returns true if the specified column has a group gap before it.</summary>
+        public static bool HasGapBefore(int col, int[] gapBeforeCols)
+        {
+            for (var i = 0; i < gapBeforeCols.Length; i++)
+            {
+                if (gapBeforeCols[i] == col)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         /// <summary>Inset a cell rect by padding on all sides.</summary>
         public static Rect InsetCell(Rect cell, float padding = 2f)

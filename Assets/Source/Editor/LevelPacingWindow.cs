@@ -8,6 +8,8 @@ using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Editor.EditorUI;
+using BalloonParty.EditorUI.Utilities;
+using RowColorResolver = BalloonParty.EditorUI.Tables.RowColorResolver;
 using BalloonParty.Shared;
 using BalloonParty.Slots.Actor.Archetype;
 using UnityEditor;
@@ -284,7 +286,7 @@ namespace BalloonParty.Editor
             DrawGroupTitles(groupTitleRect);
             DrawGroupBorderSeparators(groupTitleRect);
 
-            TableDrawHelper.DrawHorizontalSeparator(groupTitleRect, ColSepColor);
+            EditorUI.TableDrawHelper.DrawHorizontalSeparator(groupTitleRect, ColSepColor);
 
             // Header
             var headerRect = GUILayoutUtility.GetRect(TotalWidth(), RowHeight);
@@ -295,7 +297,7 @@ namespace BalloonParty.Editor
             DrawGroupBackground(headerRect, 6, 9, TitleBgColor);
             DrawGroupBackground(headerRect, 10, 10, TitleBgColor);
             DrawHeaderCells(headerRect);
-            TableDrawHelper.DrawHorizontalSeparator(headerRect, ColSepColor);
+            EditorUI.TableDrawHelper.DrawHorizontalSeparator(headerRect, ColSepColor);
 
             // Clear focused row when keyboard focus is lost entirely
             if (GUIUtility.keyboardControl == 0)
@@ -453,11 +455,11 @@ namespace BalloonParty.Editor
 
         private void DrawGroupTitles(Rect rowRect)
         {
-            var style = new GUIStyle(EditorStyles.boldLabel)
+            var style = StyleCache.Get("LevelPacingWindow.GroupTitle", () => new GUIStyle(EditorStyles.boldLabel)
             {
                 alignment = TextAnchor.MiddleCenter,
                 fontSize = 11
-            };
+            });
 
             // Group 1: Range (col 0)
             var g1Start = rowRect.x + ColX(0);
@@ -673,11 +675,11 @@ namespace BalloonParty.Editor
 
         private void DrawHeaderCells(Rect rowRect)
         {
-            var style = new GUIStyle(EditorStyles.boldLabel)
+            var style = StyleCache.Get("LevelPacingWindow.HeaderLabel", () => new GUIStyle(EditorStyles.boldLabel)
             {
                 alignment = TextAnchor.MiddleCenter,
                 fontSize = 10
-            };
+            });
 
             for (var i = 0; i < ColHeaders.Length; i++)
             {
@@ -750,10 +752,10 @@ namespace BalloonParty.Editor
 
         private static void DrawBalloonSubHeaders(Rect cell)
         {
-            var subStyle = new GUIStyle(EditorStyles.miniLabel)
+            var subStyle = StyleCache.Get("LevelPacingWindow.CenteredMiniLabel", () => new GUIStyle(EditorStyles.miniLabel)
             {
                 alignment = TextAnchor.MiddleCenter
-            };
+            });
 
             var x = cell.x + 74f;
             var y = cell.y;
@@ -785,30 +787,18 @@ namespace BalloonParty.Editor
 
             // Determine row background color
             var selectedLevel = LevelPacingCurvePanel.SelectedLevel;
-            var isActiveRow = !isFallback && selectedLevel >= from && selectedLevel <= to;
+            var isActiveRow = RowColorResolver.IsInRange(selectedLevel, from, to, isFallback);
             var isFocusedRow = _focusedRow == index;
-
-            Color rowBg;
-            if (isFocusedRow)
-            {
-                rowBg = FocusedRowColor;
-            }
-            else if (isActiveRow)
-            {
-                rowBg = ActiveRowColor;
-            }
-            else if (isFallback)
-            {
-                rowBg = FallbackRowColor;
-            }
-            else if (index % 2 == 1)
-            {
-                rowBg = OddRowColor;
-            }
-            else
-            {
-                rowBg = EvenRowColor;
-            }
+            var rowBg = RowColorResolver.Resolve(
+                isFocusedRow,
+                isActiveRow,
+                isFallback,
+                index,
+                FocusedRowColor,
+                ActiveRowColor,
+                FallbackRowColor,
+                OddRowColor,
+                EvenRowColor);
 
             // Paint full row background first (ensures cells + right area all match)
             EditorGUI.DrawRect(rowRect, rowBg);
@@ -847,16 +837,16 @@ namespace BalloonParty.Editor
             DrawGroupBorderSeparators(rowRect);
 
             // Horizontal row separator at the bottom
-            TableDrawHelper.DrawHorizontalSeparator(rowRect);
+            EditorUI.TableDrawHelper.DrawHorizontalSeparator(rowRect);
 
             // Range (col 0)
             DrawRangeCell(CellRect(rowRect, 0), fromProp, toProp, isFallback);
 
             if (paramsProp != null)
             {
-                PropertyCellDrawer.IntCell(CellRect(rowRect, 1), paramsProp, "_spawnLines");
-                PropertyCellDrawer.IntCell(CellRect(rowRect, 2), paramsProp, "_boardLines");
-                PropertyCellDrawer.IntCell(CellRect(rowRect, 3), paramsProp, "_firstSpawnTurn");
+                EditorUI.PropertyCellDrawer.IntCell(CellRect(rowRect, 1), paramsProp, "_spawnLines");
+                EditorUI.PropertyCellDrawer.IntCell(CellRect(rowRect, 2), paramsProp, "_boardLines");
+                EditorUI.PropertyCellDrawer.IntCell(CellRect(rowRect, 3), paramsProp, "_firstSpawnTurn");
                 DrawMaskCell(CellRect(rowRect, 4), paramsProp);
 
                 if (_balloonsExpanded)
@@ -869,8 +859,8 @@ namespace BalloonParty.Editor
                 }
 
                 DrawRangedIntCell(CellRect(rowRect, 6), paramsProp, "_itemCadence");
-                PropertyCellDrawer.CurveCell(CellRect(rowRect, 7), paramsProp, "_initialItemCountWeights");
-                PropertyCellDrawer.CurveCell(CellRect(rowRect, 8), paramsProp, "_itemCountWeights");
+                EditorUI.PropertyCellDrawer.CurveCell(CellRect(rowRect, 7), paramsProp, "_initialItemCountWeights");
+                EditorUI.PropertyCellDrawer.CurveCell(CellRect(rowRect, 8), paramsProp, "_itemCountWeights");
 
                 var itemsProp = paramsProp.FindPropertyRelative("_itemWeights");
                 if (_itemsExpanded)
@@ -985,12 +975,12 @@ namespace BalloonParty.Editor
                 return;
             }
 
-            PropertyCellDrawer.IntRangeCell(cell, fromProp, toProp);
+            EditorUI.PropertyCellDrawer.IntRangeCell(cell, fromProp, toProp);
         }
 
         private static void DrawRangedIntCell(Rect cell, SerializedProperty paramsProp, string fieldName)
         {
-            PropertyCellDrawer.RangedIntCell(cell, paramsProp, fieldName);
+            EditorUI.PropertyCellDrawer.RangedIntCell(cell, paramsProp, fieldName);
         }
 
         private void DrawMaskCell(Rect cell, SerializedProperty paramsProp)
@@ -1078,10 +1068,10 @@ namespace BalloonParty.Editor
                 {
                     EditorGUI.DrawRect(thumbRect, new Color(0.4f, 0.4f, 0.4f, 0.6f));
                     var initial = balloonType.ToString()[0].ToString();
-                    EditorGUI.LabelField(thumbRect, initial, new GUIStyle(EditorStyles.miniLabel)
+                    EditorGUI.LabelField(thumbRect, initial, StyleCache.Get("LevelPacingWindow.CenteredMiniLabel", () => new GUIStyle(EditorStyles.miniLabel)
                     {
                         alignment = TextAnchor.MiddleCenter
-                    });
+                    }));
                 }
 
                 x += thumbSize + 2f;
@@ -1229,10 +1219,10 @@ namespace BalloonParty.Editor
 
         private static void DrawItemSubHeaders(Rect cell)
         {
-            var subStyle = new GUIStyle(EditorStyles.miniLabel)
+            var subStyle = StyleCache.Get("LevelPacingWindow.CenteredMiniLabel", () => new GUIStyle(EditorStyles.miniLabel)
             {
                 alignment = TextAnchor.MiddleCenter
-            };
+            });
 
             var x = cell.x + 74f;
             var y = cell.y;
@@ -1287,7 +1277,7 @@ namespace BalloonParty.Editor
                 var thumbRect = new Rect(x, cell.y + (cell.height - thumbSize) / 2f, thumbSize, thumbSize);
                 EditorGUI.DrawRect(thumbRect, new Color(0.4f, 0.4f, 0.4f, 0.6f));
                 EditorGUI.LabelField(thumbRect, itemType.ToString()[0].ToString(),
-                    new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleCenter });
+                    StyleCache.Get("LevelPacingWindow.CenteredMiniLabel", () => new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleCenter }));
                 x += thumbSize + 2f;
             }
         }
@@ -1405,10 +1395,10 @@ namespace BalloonParty.Editor
 
         private static void DrawActorSubHeaders(Rect cell)
         {
-            var subStyle = new GUIStyle(EditorStyles.miniLabel)
+            var subStyle = StyleCache.Get("LevelPacingWindow.CenteredMiniLabel", () => new GUIStyle(EditorStyles.miniLabel)
             {
                 alignment = TextAnchor.MiddleCenter
-            };
+            });
 
             var x = cell.x + 74f;
             var y = cell.y;
@@ -1448,7 +1438,7 @@ namespace BalloonParty.Editor
                 var thumbRect = new Rect(x, cell.y + (cell.height - thumbSize) / 2f, thumbSize, thumbSize);
                 EditorGUI.DrawRect(thumbRect, new Color(0.4f, 0.4f, 0.4f, 0.6f));
                 EditorGUI.LabelField(thumbRect, actorType.ToString()[0].ToString(),
-                    new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleCenter });
+                    StyleCache.Get("LevelPacingWindow.CenteredMiniLabel", () => new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleCenter }));
                 x += thumbSize + 2f;
             }
         }
