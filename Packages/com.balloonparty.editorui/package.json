@@ -1,0 +1,16 @@
+{
+  "name": "com.balloonparty.editorui",
+  "version": "1.0.0",
+  "displayName": "Editor UI Library",
+  "description": "Reusable IMGUI building blocks for Unity editor windows.",
+  "unity": "2022.3",
+  "keywords": ["editor", "imgui", "tools", "charts", "tables"],
+  "type": "tool",
+  "samples": [
+    {
+      "displayName": "Table Window Example",
+      "description": "Demonstrates SortableHeader + SelectionTracker in an EditorWindow.",
+      "path": "Samples~/TableWindowExample"
+    }
+  ]
+}
