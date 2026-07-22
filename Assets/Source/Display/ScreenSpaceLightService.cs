@@ -172,6 +172,13 @@ namespace BalloonParty.Display
             _smearMaterial = new Material(smearShader);
             _overlayMaterial = new Material(overlayShader);
 
+#if !UNITY_EDITOR
+            if (Application.isMobilePlatform)
+            {
+                _smearMaterial.EnableKeyword("_LOW_QUALITY_SMEAR");
+            }
+#endif
+
             if (_overlayLayer < 0)
             {
                 _overlayLayer = LayerMask.NameToLayer("TransparentFX");

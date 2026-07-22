@@ -36,11 +36,18 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
             #pragma vertex vert_img
             #pragma fragment frag
             #pragma target 3.0
+            #pragma multi_compile_local _ _LOW_QUALITY_SMEAR
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
             #include "../Include/BackgroundField.cginc"
 
-            #define TAP_COUNT 8
+            #ifdef _LOW_QUALITY_SMEAR
+                #define TAP_COUNT 5
+                #define BOUNCE_DIR_COUNT 2
+            #else
+                #define TAP_COUNT 8
+                #define BOUNCE_DIR_COUNT 4
+            #endif
 
             sampler2D _MainTex;
             float4 _MainTex_TexelSize;
@@ -99,7 +106,7 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                     shadow *= lerp(1.0, BackgroundFieldGate(worldPos), _CloudGateStrength);
                 }
 
-                // --- Bounce: 4 directions (primary + 3 secondary at 90° spacing) ---
+                // --- Bounce: BOUNCE_DIR_COUNT directions (primary + secondary at 90° spacing) ---
                 float2 dirs[4] = {
                     stepBase,                                // 0°   (primary, down-light)
                     float2(-stepBase.y, stepBase.x),         // +90°
@@ -112,7 +119,7 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                 float  bounceWeightSum = 0;
 
                 [unroll]
-                for (int d = 0; d < 4; d++)
+                for (int d = 0; d < BOUNCE_DIR_COUNT; d++)
                 {
                     float dw = dirWeights[d];
                     if (dw < 0.001) continue;
