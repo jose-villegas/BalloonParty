@@ -31,6 +31,9 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("0–1 base wind influence at normal projectile speed.")]
         [SerializeField] [Range(0f, 1f)] private float _windInfluence = 1f;
 
+        [Tooltip("Power curve for age-based wind. Higher = fresh paint stays put longer before wind takes hold.")]
+        [SerializeField] [Range(0.5f, 4f)] private float _windAgeBias = 1.5f;
+
         public Shader StampShader => _stampShader;
         public Shader DecayShader => _decayShader;
         public float TexelsPerUnit => _texelsPerUnit;
@@ -39,5 +42,6 @@ namespace BalloonParty.Configuration.Effects
         public float StampRadius => _stampRadius;
         public float WindSpeed => _windSpeed;
         public float WindInfluence => _windInfluence;
+        public float WindAgeBias => _windAgeBias;
     }
 }

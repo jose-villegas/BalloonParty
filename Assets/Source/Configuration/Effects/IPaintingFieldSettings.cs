@@ -28,5 +28,8 @@ namespace BalloonParty.Configuration.Effects
 
         /// <summary>0–1 base wind influence at normal projectile speed. Controls how much wind affects the trail overall.</summary>
         float WindInfluence { get; }
+
+        /// <summary>Power curve controlling how quickly decaying paint becomes wind-susceptible. Higher = stays put longer.</summary>
+        float WindAgeBias { get; }
     }
 }

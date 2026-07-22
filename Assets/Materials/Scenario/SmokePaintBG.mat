@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PaintBG
+  m_Name: SmokePaintBG
   m_Shader: {fileID: 4800000, guid: a7c3e1b9d4f5684a8b2e19c0d7a6f3e1, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -85,8 +85,10 @@ Material:
     - _InternalDensityScale: 3
     - _InternalDensityStrength: 0.8
     - _LightColorRamp: 5
+    - _LightGlow: 0.8
     - _LightInfluence: 1
     - _LightIntensity: 1
+    - _LightResponse: 0.6
     - _LightWarpAmount: 0.35
     - _LineSoftness: 0.5
     - _LineWidth: 0.436

@@ -32,6 +32,7 @@ namespace BalloonParty.Scenario
         private static readonly int DeltaTimeId = Shader.PropertyToID("_DeltaTime");
         private static readonly int TimePhaseId = Shader.PropertyToID("_TimePhase");
         private static readonly int WindSpeedId = Shader.PropertyToID("_WindSpeed");
+        private static readonly int WindAgeBiasId = Shader.PropertyToID("_WindAgeBias");
         private static readonly int PaintingTimeId = Shader.PropertyToID("_PaintingTime");
 
         private readonly IPaintingFieldSettings _settings;
@@ -205,6 +206,7 @@ namespace BalloonParty.Scenario
             mat.SetFloat(DeltaTimeId, dt);
             mat.SetFloat(TimePhaseId, _timePhase);
             mat.SetFloat(WindSpeedId, _settings.WindSpeed * _settings.WindInfluence * _windDampen);
+            mat.SetFloat(WindAgeBiasId, _settings.WindAgeBias);
 
             _resources.BlitAndSwap(mat);
             return true;
