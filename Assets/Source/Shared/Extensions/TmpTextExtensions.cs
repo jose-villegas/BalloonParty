@@ -21,7 +21,7 @@ namespace BalloonParty.Shared.Extensions
             label.SetCharArray(CharBuffer, 0, length);
         }
 
-        internal static int FormatThousands(int value, char[] buffer)
+        internal static int FormatThousands(int value, char[] buffer, bool useSeparator = true)
         {
             if (value == 0)
             {
@@ -41,7 +41,7 @@ namespace BalloonParty.Shared.Extensions
 
             while (v > 0)
             {
-                if (digitCount > 0 && digitCount % 3 == 0)
+                if (useSeparator && digitCount > 0 && digitCount % 3 == 0)
                 {
                     DigitTemp[tempLen++] = ',';
                 }
