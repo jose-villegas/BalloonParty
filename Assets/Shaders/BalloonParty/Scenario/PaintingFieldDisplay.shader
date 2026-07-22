@@ -193,22 +193,25 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
                 return wp + warp;
             }
 
-            // Anisotropic bleed: 8-tap with alpha-driven radius and slight gravity bias.
+            // 5-tap bleed: center + cardinal directions with alpha-driven radius.
             float4 SampleBleeded(float2 wp)
             {
-                float4 center = PaintingFieldSample(wp);
+                float2 baseUV = PaintingFieldUV(wp);
+                float4 raw = tex2D(_PaintingTex, baseUV);
+                float4 center = float4(raw.rgb, raw.a * _PaintingFieldActive);
                 float r = _BleedRadius * (0.4 + center.a * 1.2);
+                float2 rUV = float2(r, 0) / max(_PaintingBoundsSize, 1e-4);
 
-                float4 s0 = PaintingFieldSample(wp + float2( r,        0));
-                float4 s1 = PaintingFieldSample(wp + float2(-r,        0));
-                float4 s2 = PaintingFieldSample(wp + float2( 0,    r * 1.3));
-                float4 s3 = PaintingFieldSample(wp + float2( 0,   -r));
-                float4 s4 = PaintingFieldSample(wp + float2( r*0.7,  r*0.7));
-                float4 s5 = PaintingFieldSample(wp + float2(-r*0.7,  r*0.7));
-                float4 s6 = PaintingFieldSample(wp + float2( r*0.7, -r*0.7));
-                float4 s7 = PaintingFieldSample(wp + float2(-r*0.7, -r*0.7));
+                float4 s0 = tex2D(_PaintingTex, baseUV + float2( rUV.x, 0));
+                float4 s1 = tex2D(_PaintingTex, baseUV + float2(-rUV.x, 0));
+                float4 s2 = tex2D(_PaintingTex, baseUV + float2(0,  rUV.x * 1.3));
+                float4 s3 = tex2D(_PaintingTex, baseUV + float2(0, -rUV.x));
+                s0.a *= _PaintingFieldActive;
+                s1.a *= _PaintingFieldActive;
+                s2.a *= _PaintingFieldActive;
+                s3.a *= _PaintingFieldActive;
 
-                return center * 0.35 + (s0+s1+s2+s3) * 0.10 + (s4+s5+s6+s7) * 0.0375;
+                return center * 0.45 + (s0 + s1 + s2 + s3) * 0.1375;
             }
 
             // Photoshop soft-light blend — models how pigment settles into paper grain valleys
@@ -235,10 +238,18 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
 
             fixed4 frag(v2f IN) : SV_Target
             {
+                // 0. Early discard: skip the vast majority of empty pixels cheaply.
+                float2 rawUV = PaintingFieldUV(IN.worldPos);
+                float quickAlpha = tex2D(_PaintingTex, rawUV).a * _PaintingFieldActive;
+                if (quickAlpha < 0.001)
+                {
+                    discard;
+                }
+
                 // 1. Turbulent jitter + 3-octave curl noise swirl.
                 float2 wp = IN.worldPos + TurbulentOffset(IN.worldPos) + FlowOffset(IN.worldPos);
 
-                // 2. Anisotropic alpha-weighted bleed.
+                // 2. Anisotropic alpha-weighted bleed (5-tap: center + cardinal).
                 float4 paint = SampleBleeded(wp);
 
                 if (paint.a < 0.001)
@@ -247,12 +258,13 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
                 }
 
                 // 3. Smoke edge shaping: sigmoid core + wisp noise at edges.
-                float warpedA = PaintingFieldSample(WarpedEdgePos(wp)).a;
+                float2 warpedWp = WarpedEdgePos(wp);
+                float warpedA = PaintingFieldSample(warpedWp).a;
                 float coreAlpha = saturate(warpedA / max(_EdgeSoftness, 0.001));
                 float smokeSigmoid = coreAlpha / (coreAlpha + (1.0 - coreAlpha) * _SmokeEdgeSharpness);
 
                 float edgeRegion = 1.0 - saturate(warpedA * 4.0);
-                float2 wispNoiseUV = WarpedEdgePos(wp) * _WispNoiseFreq
+                float2 wispNoiseUV = warpedWp * _WispNoiseFreq
                                    + float2(_PaintingTime * 0.04, _PaintingTime * 0.02);
                 float wispNoise = SimplexNoise2D(wispNoiseUV) * 0.5 + 0.5;
                 float wispMask = smoothstep(0.3, 0.5, wispNoise);
@@ -287,9 +299,20 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
                 finalRgb *= IN.color.rgb;
 
                 // 7. Scene light interaction: smoke is lit by the scene's lights.
-                float3 sceneTint = SceneLightTintAt(IN.worldPos);
+                float3 keyColor = _SceneLightColor.a > 0.5 ? _SceneLightColor.rgb : float3(1, 1, 1);
+                float ambient = SceneLightAmbientMagnitude();
+                float3 sceneTint = keyColor * ambient;
+                float3 localGlow = float3(0, 0, 0);
+                if (_SceneLightFieldOn > 0.5)
+                {
+                    float4 lightTap = SceneLightFieldSample(IN.worldPos);
+                    float local = lightTap.r;
+                    float2 lightUV = SceneLightFieldUV(IN.worldPos);
+                    float3 palette = SceneLightPaletteColorAt(lightUV, keyColor);
+                    sceneTint = lerp(keyColor, palette, saturate(local)) * (ambient + local);
+                    localGlow = palette * local;
+                }
                 finalRgb *= lerp(float3(1, 1, 1), sceneTint, _LightResponse);
-                float3 localGlow = SceneLightLocalAt(IN.worldPos);
                 finalRgb += localGlow * _LightGlow * paint.a;
 
                 // 8. Interior density modulation: animated see-through patches inside body.
