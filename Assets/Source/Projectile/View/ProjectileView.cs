@@ -531,6 +531,7 @@ namespace BalloonParty.Projectile.View
                 var prevPos = _lastPaintPos != Vector3.zero ? _lastPaintPos : pos;
 
                 _paintingField.Stamp(pos, prevPos, radius, paletteIdx);
+                _paintingField.SetWindDampen(1f - ComputeVelocityT(step.Speed) * 0.7f);
                 _lastPaintPos = pos;
             }
         }

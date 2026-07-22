@@ -22,5 +22,8 @@ namespace BalloonParty.Configuration.Effects
 
         /// <summary>World-space radius of each paint stamp from the projectile trail.</summary>
         float StampRadius { get; }
+
+        /// <summary>Base wind speed for smoke advection (world units/second).</summary>
+        float WindSpeed { get; }
     }
 }

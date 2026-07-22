@@ -31,6 +31,7 @@ namespace BalloonParty.Scenario
         private static readonly int DecayRateId = Shader.PropertyToID("_DecayRate");
         private static readonly int DeltaTimeId = Shader.PropertyToID("_DeltaTime");
         private static readonly int TimePhaseId = Shader.PropertyToID("_TimePhase");
+        private static readonly int WindSpeedId = Shader.PropertyToID("_WindSpeed");
 
         private readonly IPaintingFieldSettings _settings;
         private readonly IGameDisplayConfiguration _display;
@@ -45,6 +46,7 @@ namespace BalloonParty.Scenario
         private Rect _bounds;
         private float _lastDecayTime;
         private float _timePhase;
+        private float _windDampen = 1f;
 
         public PaintingFieldService(
             IPaintingFieldSettings settings,
@@ -78,6 +80,12 @@ namespace BalloonParty.Scenario
                 Radius = _coords.WorldRadiusToUV(radius),
                 Color = new Vector4(color.r, color.g, color.b, 1f)
             });
+        }
+
+        /// <summary>Sets a 0–1 factor that attenuates wind speed in the decay pass. 0 = no wind, 1 = full wind.</summary>
+        internal void SetWindDampen(float factor)
+        {
+            _windDampen = Mathf.Clamp01(factor);
         }
 
         void IStartable.Start()
@@ -185,6 +193,7 @@ namespace BalloonParty.Scenario
             mat.SetFloat(DecayRateId, _settings.DecayRate);
             mat.SetFloat(DeltaTimeId, dt);
             mat.SetFloat(TimePhaseId, _timePhase);
+            mat.SetFloat(WindSpeedId, _settings.WindSpeed * _windDampen);
 
             _resources.BlitAndSwap(mat);
             return true;

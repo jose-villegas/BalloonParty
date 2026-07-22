@@ -25,11 +25,15 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("World-space radius of each paint stamp from the projectile trail.")]
         [SerializeField] private float _stampRadius = 0.15f;
 
+        [Tooltip("Base wind speed for smoke advection (world units/second).")]
+        [SerializeField] private float _windSpeed = 0.4f;
+
         public Shader StampShader => _stampShader;
         public Shader DecayShader => _decayShader;
         public float TexelsPerUnit => _texelsPerUnit;
         public float DecayRate => _decayRate;
         public float DecayTickInterval => _decayTickInterval;
         public float StampRadius => _stampRadius;
+        public float WindSpeed => _windSpeed;
     }
 }
