@@ -229,6 +229,7 @@ name `com.balloonparty.editorui`).  Sub-namespaces mirror folders:
 - `BalloonParty.EditorUI.Charts`
 - `BalloonParty.EditorUI.Tables`
 - `BalloonParty.EditorUI.Layout`
+- `BalloonParty.EditorUI.Palette`
 - `BalloonParty.EditorUI.Utilities`
 
 ### Assembly Definition
@@ -258,9 +259,19 @@ both add a reference to `com.balloonparty.editorui.Editor`.
   "description": "Reusable IMGUI building blocks for Unity editor windows.",
   "unity": "2022.3",
   "keywords": ["editor", "imgui", "tools", "charts", "tables"],
-  "type": "tool"
+  "type": "tool",
+  "samples": [
+    {
+      "displayName": "Table Window Example",
+      "description": "Demonstrates SortableHeader + SelectionTracker in an EditorWindow.",
+      "path": "Samples~/TableWindowExample"
+    }
+  ]
 }
 ```
+
+Unity version `2022.3` matches the project's current version and is the
+minimum supported.
 
 ### Development Workflow
 
@@ -316,12 +327,19 @@ Move existing eligible components (with `.meta` files).  Create `StyleCache`,
 `BarChart`, `PolylineOverlay`, `PlotGrid`.  Refactor `LevelPacingCurvePanel`
 to use them.  Write tests for computation logic.
 
-### Phase 2 — Helpers + Palette (P1 + P2)
+### Phase 2a — Helper Components (P1 + P2)
 Create `NavigationHeader`, `IconButtonHelper`, `PlotLegend`, `PlotMarker`,
-`FoldoutSection`.  Implement `IColorPalette` + `EditorAssetCache<T>` +
-migrate `PaletteColorPicker`.  Add `: IColorPalette` to `GamePalette`.
-Finish refactoring `LevelPacingCurvePanel` to ~200 LOC.
-Adopt `StyleCache` in all 11 eligible windows.
+`FoldoutSection`.  Finish refactoring `LevelPacingCurvePanel` to ~200 LOC.
+
+### Phase 2b — Palette Generalization
+Implement `IColorPalette` + `EditorAssetCache<T>` (with injectable finder
+for testability).  Migrate `PaletteColorPicker` to the package.
+Add `: IColorPalette` to `GamePalette` (3-line explicit impl).
+Delete `ConfigAssetCache<T>` from `Shared/` — all consumers switch to
+`EditorAssetCache<T>`.
+
+### Phase 2c — Broad StyleCache Adoption
+Adopt `StyleCache` in all 11 eligible windows (mechanical, low-risk).
 
 ### Phase 3 — Generic Cell (P0 TypedEntrySelectorCell) *(parallelisable with Phase 2)*
 Create `TypedEntrySelectorCell<TEnum>` in the package.  Refactor the
@@ -345,6 +363,24 @@ Remove dead private methods from refactored windows.  Update package
 **Composition over inheritance** — most new types are static utility classes;
 some are stateful instances (`EditorAnimationLoop`, `EditorAssetCache<T>`,
 `PaletteColorPicker`).  No base class imposed; windows compose freely.
+
+**`EditorAssetCache<T>` replaces `ConfigAssetCache<T>`** — same lazy-load-by-type
+pattern, but lives in the package (editor-only assembly) with an injectable
+`Func<T[]>` finder for testability.  After migration, delete `ConfigAssetCache<T>`
+from `Shared/`.  **Contract:** assumes a single instance of `T` exists in the
+project; if multiple exist, logs a warning and returns the first found (`guids[0]`).
+
+```csharp
+public class EditorAssetCache<T> where T : Object
+{
+    private readonly Func<T[]> _finder;
+    private T[] _cache;
+
+    public EditorAssetCache() : this(DefaultFinder) { }
+    internal EditorAssetCache(Func<T[]> finder) { _finder = finder; }  // test seam
+    // ...
+}
+```
 
 **UI Toolkit deferred** — these windows rely heavily on absolute-positioned
 `Rect` layout and `Handles` drawing which have no UI Toolkit equivalents.
@@ -394,6 +430,8 @@ namespace BalloonParty.EditorUI.Palette
 **Project provides:**
 - `GamePalette : ScriptableObject, IGamePalette, IColorPalette`
   (3-line explicit interface implementation)
+- `PaletteColorMaskDrawer` / `PaletteColorNameDrawer` — **stay project-side**
+  (depend on full `IGamePalette` API: masks, rainbow mode, progress colors)
 
 **Benefits:**
 - Picker becomes fully generic — any project implements `IColorPalette`
@@ -423,15 +461,16 @@ BarChart.Draw(Rect, float[], float, BarChartOptions) → int?               ← 
 |-----------|---------------|
 | BarChart | Rect computation, normalization, click-index-from-x |
 | PolylineOverlay | Point normalization to plot rect |
-| PlotGrid | Grid line Y positions, label values |
-| StyleCache | Cache-hit semantics (returns same instance) |
-| IconButtonHelper | Dictionary caching, fallback when icon missing |
+| PlotGrid | Grid line Y positions, label values (only if non-trivial formatting) |
+| StyleCache | Cache-hit semantics (returns same instance) — factory accepts no EditorStyles base in tests |
+| IconButtonHelper | Dictionary caching, fallback when icon missing (integration-style: needs editor context) |
 | SortableHeader | `ApplySort` sorting logic |
 | SelectionTracker | `GetSelected` filtering logic |
-| NavigationHeader | Value clamping, change detection |
-| EditorAnimationLoop | State machine (start/pause/stop/tick) |
-| PaletteColorPicker | Index clamping, `IColorPalette` stub driving |
-| EditorAssetCache | Lazy-init, invalidation |
+| NavigationHeader | Value clamping, change detection — cap at 3 test cases |
+| EditorAnimationLoop | State machine (start/pause/stop/tick) — test via internal tick method directly |
+| PaletteColorPicker | Index clamping, `IColorPalette` stub driving (via NSubstitute) |
+| EditorAssetCache | Lazy-init, cache-hit, invalidation — injectable `Func<T[]>` finder seam |
+| TypedEntrySelectorCell | Enum parsing, selection toggle, boundary validation |
 
 ### What is NOT testable
 
@@ -447,7 +486,7 @@ These are validated by in-editor visual inspection.
   "references": ["com.balloonparty.editorui.Editor"],
   "includePlatforms": ["Editor"],
   "overrideReferences": true,
-  "precompiledReferences": ["nunit.framework.dll"],
+  "precompiledReferences": ["nunit.framework.dll", "NSubstitute.dll"],
   "autoReferenced": false,
   "defineConstraints": ["UNITY_INCLUDE_TESTS"]
 }
@@ -455,6 +494,10 @@ These are validated by in-editor visual inspection.
 
 Tests live at `Packages/com.balloonparty.editorui/Tests/Editor/` —
 discovered automatically by Unity Test Runner.
+
+**Test-authoring rule:** Test methods must **never** call `EditorGUI.*`,
+`GUILayout.*`, or `Handles.*` — those require an active `OnGUI` repaint
+context.  The computation/drawing split enforces this naturally.
 
 ### Test Files
 
@@ -466,19 +509,39 @@ Tests/Editor/
 │   └── PlotGridComputationTests.cs   — grid Y positions, label formatting
 ├── Tables/
 │   ├── SortableHeaderTests.cs      — ApplySort ascending/descending, stable sort
-│   └── SelectionTrackerTests.cs    — GetSelected, toggle, select-all
+│   ├── SelectionTrackerTests.cs    — GetSelected, toggle, select-all
+│   └── TypedEntrySelectorCellTests.cs — enum parsing, selection toggle, boundary
 ├── Layout/
-│   └── NavigationHeaderTests.cs    — clamping, boundary (min=1)
+│   └── NavigationHeaderTests.cs    — clamping, boundary (min=1) — capped at 3 cases
 ├── Palette/
-│   └── PaletteColorPickerTests.cs  — mock IColorPalette, index bounds
+│   └── PaletteColorPickerTests.cs  — mock IColorPalette, index bounds, Count=0
 └── Utilities/
-    ├── StyleCacheTests.cs          — lazy-init, same-instance guarantee
-    └── IconButtonHelperTests.cs    — cache hit/miss, fallback glyph
+    ├── StyleCacheTests.cs          — lazy-init, same-instance guarantee, batch-mode factory
+    ├── IconButtonHelperTests.cs    — cache hit/miss, fallback glyph (integration-style: needs editor context)
+    ├── EditorAssetCacheTests.cs    — lazy-init, cache-hit, invalidation, empty-result via injectable finder
+    └── EditorAnimationLoopTests.cs — state machine: Idle→Running→Paused, tick via internal method
 ```
 
----
+### Required Edge Cases (per test-everything analysis)
 
-## Reviewer Fixes Incorporated
+| Component | Edge Case | Expected |
+|-----------|-----------|----------|
+| BarChart | Empty `values` array | Return empty `Rect[]`, no throw |
+| BarChart | All-zero values with `max = 0` | No NaN/Inf — treat as flat |
+| BarChart | Single value | Full-width bar (minus padding) |
+| PolylineOverlay | Empty list | Return empty `Vector2[]` |
+| PolylineOverlay | Single point | Graceful handling (degenerate line) |
+| PolylineOverlay | All-same values (range = 0) | No division-by-zero |
+| PlotGrid | `divisions = 0` | Return empty, no division-by-zero |
+| PlotGrid | `minVal == maxVal` | Degenerate range — single line at center |
+| StyleCache | Null factory | Guard clause throws `ArgumentNullException` |
+| SelectionTracker | Empty source collection | Return empty, no throw |
+| SortableHeader | Equal-key items | Stable sort (preserve insertion order) |
+| PaletteColorPicker | `IColorPalette.Count = 0` | Clamp to -1 or no-op |
+| PaletteColorPicker | Null palette | Guard clause or graceful no-op |
+| EditorAssetCache | Finder returns empty | Return `null` / default, no throw |
+
+---
 
 | # | Finding | Resolution |
 |---|---------|------------|
@@ -492,5 +555,32 @@ Tests/Editor/
 | 9 | `autoReferenced: true` | Changed to `false` with explicit refs |
 | 10 | TypedEntrySelectorCell eligibility | Moved to package-eligible (no domain deps) |
 | 12 | Phase ordering | Phase 3 (TES) can run parallel with Phase 2 |
-| 13 | Samples need `package.json` entry | Already present in `package.json` above |
+| 13 | Samples need `package.json` entry | Added `"samples"` array to `package.json` |
 | 14 | Min Unity version | Matches project version (2022.3) |
+
+### Round 2 — Reviewer
+
+| # | Finding | Resolution |
+|---|---------|------------|
+| R2-1 | `PaletteColorMaskDrawer`/`NameDrawer` stay project-side | Noted in Palette Generalization section |
+| R2-2 | `EditorAssetCache` duplicates `ConfigAssetCache` | Plan states: delete `ConfigAssetCache` after migration |
+| R2-3 | `EditorAssetCache` picks `guids[0]` silently | Documented single-instance contract + warning on multiple |
+| R2-4 | `package.json` missing `"samples"` | Added to `package.json` example |
+| R2-5 | Phase 2 scope too broad | Split into 2a (helpers), 2b (palette), 2c (StyleCache adoption) |
+| R2-6 | `TypedEntrySelectorCell` missing test file | Added `TypedEntrySelectorCellTests.cs` to Tables/ |
+| R2-7 | `IconButtonHelper` tests need editor context | Annotated as integration-style in test file list |
+| R2-8 | `Palette/` sub-namespace missing | Added to namespace listing |
+
+### Round 2 — Test-Everything
+
+| # | Recommendation | Resolution |
+|---|----------------|------------|
+| TE-1 | Add `EditorAnimationLoopTests.cs` | Added to `Utilities/` test files |
+| TE-2 | Edge-case coverage (empty arrays, zero-max, null/0-count palette) | Noted in test file descriptions |
+| TE-3 | `StyleCache` batch-mode testability | Factory accepts no `EditorStyles` base in tests — noted in table |
+| TE-4 | Injectable `Func<T[]>` finder for `EditorAssetCache` | Added to Design Decisions with code snippet |
+| TE-5 | Add `NSubstitute.dll` to test asmdef | Added to `precompiledReferences` |
+| TE-6 | No `EditorGUI`/`Handles`/`GUILayout` in tests rule | Added explicit rule above test files |
+| TE-7 | `NavigationHeaderTests` cap at 3 cases | Annotated in test file list |
+| TE-8 | `PlotGrid` tests conditional on non-trivial formatting | Noted in testable-seams table |
+| TE-9 | `EditorAssetCacheTests` in `Utilities/` not `Palette/` | Placed in `Utilities/` folder |
