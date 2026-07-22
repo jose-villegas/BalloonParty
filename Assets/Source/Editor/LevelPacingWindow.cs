@@ -413,6 +413,17 @@ namespace BalloonParty.Editor
             EditorGUI.DrawRect(groupRect, bg);
         }
 
+        private void DrawGroupGaps(Rect rowRect, Color gapColor)
+        {
+            for (var i = 0; i < GapBeforeCols.Length; i++)
+            {
+                var col = GapBeforeCols[i];
+                var gapX = rowRect.x + ColX(col) - GroupGap;
+                var gapRect = new Rect(gapX, rowRect.y, GroupGap, rowRect.height);
+                EditorGUI.DrawRect(gapRect, gapColor);
+            }
+        }
+
         private void DrawGroupTitles(Rect rowRect)
         {
             var style = new GUIStyle(EditorStyles.boldLabel)
@@ -743,11 +754,8 @@ namespace BalloonParty.Editor
             // Track keyboard focus entering this row
             var controlBefore = GUIUtility.keyboardControl;
 
-            // Background — fill full row with gap color, then paint group panels on top
+            // Determine row background color
             var gapColor = new Color(0.15f, 0.15f, 0.15f, 1f);
-            EditorGUI.DrawRect(rowRect, gapColor);
-
-            // Determine if this row's range contains the curve panel's selected level
             var selectedLevel = LevelPacingCurvePanel.SelectedLevel;
             var isActiveRow = !isFallback && selectedLevel >= from && selectedLevel <= to;
             var isFocusedRow = _focusedRow == index;
@@ -771,14 +779,14 @@ namespace BalloonParty.Editor
             }
             else
             {
-                rowBg = new Color(0.21f, 0.21f, 0.21f, 1f);
+                rowBg = new Color(0.19f, 0.19f, 0.19f, 1f);
             }
 
-            DrawGroupBackground(rowRect, 0, 0, rowBg);
-            DrawGroupBackground(rowRect, 1, 3, rowBg);
-            DrawGroupBackground(rowRect, 4, 5, rowBg);
-            DrawGroupBackground(rowRect, 6, 9, rowBg);
-            DrawGroupBackground(rowRect, 10, 10, rowBg);
+            // Paint full row background first (ensures cells + right area all match)
+            EditorGUI.DrawRect(rowRect, rowBg);
+
+            // Paint gaps between column groups darker
+            DrawGroupGaps(rowRect, gapColor);
 
             // Left-edge accent for active or focused row
             if (isFocusedRow)
