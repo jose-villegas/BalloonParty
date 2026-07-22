@@ -191,7 +191,7 @@ namespace BalloonParty.Game
         {
             builder.RegisterComponentInHierarchy<OrthogonalSizeCameraController>();
             builder.RegisterComponentInHierarchy<CameraShakeService>();
-            builder.RegisterComponentInHierarchy<SceneCaptureService>().As<ICadencedEffect>();
+            builder.RegisterComponentInHierarchy<SceneCaptureService>().AsSelf().As<ICadencedEffect>();
             builder.RegisterComponentInHierarchy<ScreenSpaceLightService>();
             builder.RegisterComponentInHierarchy<CameraBackgroundTint>();
             builder.RegisterComponentInHierarchy<CinematicCameraView>();
