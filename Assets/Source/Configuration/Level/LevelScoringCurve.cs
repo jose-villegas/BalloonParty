@@ -62,7 +62,8 @@ namespace BalloonParty.Configuration.Level
         }
 
         /// <summary>Fritsch–Carlson monotone piecewise cubic interpolation. Guarantees the interpolated
-        /// values stay between adjacent control-point scores (no overshooting).</summary>
+        /// values stay between adjacent control-point scores (no overshooting).
+        /// Per-segment mode overrides allow Linear, Convex, or Concave interpolation.</summary>
         private float EvaluateFritschCarlson(int level)
         {
             var n = _controlPoints.Length;
@@ -90,6 +91,46 @@ namespace BalloonParty.Configuration.Level
             {
                 return _controlPoints[seg + 1].CumulativeScore;
             }
+
+            var x0 = (float)_controlPoints[seg].Level;
+            var x1 = (float)_controlPoints[seg + 1].Level;
+            var y0 = _controlPoints[seg].CumulativeScore;
+            var y1 = _controlPoints[seg + 1].CumulativeScore;
+            var segH = x1 - x0;
+            var t = (level - x0) / segH;
+
+            // Dispatch based on the segment mode defined on the starting CP.
+            var mode = _controlPoints[seg].SegmentMode;
+            switch (mode)
+            {
+                case SegmentMode.Linear:
+                    return y0 + (y1 - y0) * t;
+
+                case SegmentMode.Convex:
+                {
+                    // Quadratic ease-in: starts slow, ends fast.
+                    var t2 = t * t;
+                    return y0 + (y1 - y0) * t2;
+                }
+
+                case SegmentMode.Concave:
+                {
+                    // Quadratic ease-out: starts fast, ends slow.
+                    var tInv = 1f - t;
+                    return y0 + (y1 - y0) * (1f - tInv * tInv);
+                }
+
+                case SegmentMode.Smooth:
+                default:
+                    return EvaluateSmoothSegment(seg, t, segH, y0, y1);
+            }
+        }
+
+        /// <summary>Smooth (Fritsch–Carlson) evaluation for a single segment. Computes tangents globally
+        /// for monotonicity, then evaluates the cubic Hermite on the given segment.</summary>
+        private float EvaluateSmoothSegment(int seg, float t, float segH, float y0, float y1)
+        {
+            var n = _controlPoints.Length;
 
             // Compute secant slopes (deltas) between adjacent CPs.
             var deltas = new float[n - 1];
@@ -147,15 +188,9 @@ namespace BalloonParty.Configuration.Level
             }
 
             // Evaluate the cubic Hermite on the found segment.
-            var x0 = (float)_controlPoints[seg].Level;
-            var x1 = (float)_controlPoints[seg + 1].Level;
-            var y0 = _controlPoints[seg].CumulativeScore;
-            var y1 = _controlPoints[seg + 1].CumulativeScore;
             var m0 = tangents[seg];
             var m1 = tangents[seg + 1];
 
-            var segH = x1 - x0;
-            var t = (level - x0) / segH;
             var t2 = t * t;
             var t3 = t2 * t;
 

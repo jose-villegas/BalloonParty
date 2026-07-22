@@ -21,11 +21,12 @@ namespace BalloonParty.Editor
         private static readonly Color SelectedColor = new(1f, 0.8f, 0.2f, 0.8f);
         private static readonly Color ControlPointColor = new(1f, 0.4f, 0.3f, 1f);
 
-        private static int _selectedLevel = -1;
+        private static int _selectedLevel = 1;
         private static int _rangeFrom = 1;
         private static int _rangeTo = 30;
         private static int _addLevel = 1;
         private static float _addCumulative;
+        private static bool _showCapped = true;
 
         /// <summary>Draws the scoring curve section. Requires a <see cref="SerializedObject"/> for the asset
         /// to support adding control points with undo.</summary>
@@ -47,7 +48,7 @@ namespace BalloonParty.Editor
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
 
-            DrawRangeControls();
+            DrawRangeControls(serialized);
 
             var levelCount = _rangeTo - _rangeFrom + 1;
             if (levelCount < 1)
@@ -56,17 +57,21 @@ namespace BalloonParty.Editor
                 return;
             }
 
-            // Sample thresholds.
+            // Sample thresholds and capped cumulatives.
             var thresholds = new int[levelCount];
             var cumulatives = new float[levelCount];
             var maxThreshold = 1f;
             var maxCumulative = 1f;
 
+            var runningCumulative = 0f;
             for (var i = 0; i < levelCount; i++)
             {
                 var level = _rangeFrom + i;
-                thresholds[i] = asset.ThresholdForLevel(level);
-                cumulatives[i] = i > 0 ? cumulatives[i - 1] + thresholds[i] : thresholds[i];
+                var perColor = asset.ThresholdForLevel(level);
+                var colors = asset.ColorsForLevel(level);
+                thresholds[i] = _showCapped ? perColor * colors : perColor;
+                runningCumulative += perColor * colors;
+                cumulatives[i] = runningCumulative;
 
                 if (thresholds[i] > maxThreshold)
                 {
@@ -87,7 +92,7 @@ namespace BalloonParty.Editor
             if (graphRect.width < 100f || Event.current.type == EventType.Layout)
             {
                 DrawSelectedLevelInfo(asset, serialized, levelCount);
-                DrawAddControlPointRow(serialized);
+                DrawTailConfig(serialized);
                 EditorGUILayout.EndVertical();
                 return;
             }
@@ -110,12 +115,12 @@ namespace BalloonParty.Editor
             DrawLegend(new Rect(graphRect.x, graphRect.yMax - 14f, graphRect.width, 14f));
 
             DrawSelectedLevelInfo(asset, serialized, levelCount);
-            DrawAddControlPointRow(serialized);
+            DrawTailConfig(serialized);
 
             EditorGUILayout.EndVertical();
         }
 
-        private static void DrawRangeControls()
+        private static void DrawRangeControls(SerializedObject serialized)
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Range", GUILayout.Width(42f));
@@ -124,6 +129,21 @@ namespace BalloonParty.Editor
             _rangeTo = EditorGUILayout.IntField(_rangeTo, GUILayout.Width(40f));
             _rangeFrom = Mathf.Max(1, _rangeFrom);
             _rangeTo = Mathf.Max(_rangeFrom, _rangeTo);
+
+            GUILayout.Space(12f);
+            _showCapped = GUILayout.Toggle(_showCapped, _showCapped ? "Capped" : "Per-color",
+                EditorStyles.miniButton, GUILayout.Width(64f));
+
+            GUILayout.Space(12f);
+            EditorGUILayout.LabelField("CP:", GUILayout.Width(22f));
+            _addLevel = EditorGUILayout.IntField(_addLevel, GUILayout.Width(32f));
+            _addLevel = Mathf.Max(1, _addLevel);
+            _addCumulative = EditorGUILayout.FloatField(_addCumulative, GUILayout.Width(56f));
+            if (GUILayout.Button("+", GUILayout.Width(20f)))
+            {
+                AddControlPoint(serialized, _addLevel, _addCumulative);
+            }
+
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
         }
@@ -131,39 +151,63 @@ namespace BalloonParty.Editor
         private static void DrawSelectedLevelInfo(
             LevelPacingConfiguration asset, SerializedObject serialized, int levelCount)
         {
-            if (_selectedLevel < _rangeFrom || _selectedLevel > _rangeTo)
-            {
-                return;
-            }
-
             EditorGUILayout.Space(4f);
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
 
-            var threshold = asset.ThresholdForLevel(_selectedLevel);
-            var colors = asset.ColorsForLevel(_selectedLevel);
-            var cpIndex = FindControlPointIndex(serialized, _selectedLevel);
-
-            // Navigation header: ◀ Level N ▶
+            // Navigation header: ◀ Level [N] ▶
             EditorGUILayout.BeginHorizontal();
             GUI.enabled = _selectedLevel > 1;
             if (GUILayout.Button("◀", GUILayout.Width(24f)))
             {
                 _selectedLevel--;
+                GUIUtility.keyboardControl = 0;
             }
 
             GUI.enabled = true;
             GUILayout.FlexibleSpace();
-            EditorGUILayout.LabelField($"Level {_selectedLevel}", EditorStyles.boldLabel, GUILayout.Width(70f));
+
+            EditorGUI.BeginChangeCheck();
+            EditorGUILayout.LabelField("Level", EditorStyles.boldLabel, GUILayout.Width(38f));
+            var inputLevel = EditorGUILayout.IntField(_selectedLevel, GUILayout.Width(48f));
+            if (EditorGUI.EndChangeCheck())
+            {
+                _selectedLevel = Mathf.Max(1, inputLevel);
+                GUIUtility.keyboardControl = 0;
+            }
+
             GUILayout.FlexibleSpace();
 
             if (GUILayout.Button("▶", GUILayout.Width(24f)))
             {
                 _selectedLevel++;
+                GUIUtility.keyboardControl = 0;
             }
 
             EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.LabelField($"Per-color threshold: {threshold}");
+            if (_selectedLevel < 1)
+            {
+                EditorGUILayout.LabelField("Select a level or enter one above.", EditorStyles.miniLabel);
+                EditorGUILayout.EndVertical();
+                return;
+            }
+
+            var threshold = asset.ThresholdForLevel(_selectedLevel);
+            var colors = asset.ColorsForLevel(_selectedLevel);
+            var cumulative = asset.ScoringCurve.CumulativeMilestone(_selectedLevel);
+            var cumPrev = asset.ScoringCurve.CumulativeMilestone(_selectedLevel - 1);
+            var rawPerColor = (cumulative - cumPrev) / colors;
+            var cpIndex = FindControlPointIndex(serialized, _selectedLevel);
+
+            // Capped = sum of actual rounded thresholds × colors up to this level.
+            var capped = 0;
+            for (var l = 1; l <= _selectedLevel; l++)
+            {
+                capped += asset.ThresholdForLevel(l) * asset.ColorsForLevel(l);
+            }
+
+            EditorGUILayout.LabelField($"Cumulative: {capped}  ({cumulative:F1})");
+            EditorGUILayout.LabelField($"Per-color threshold: {threshold}  ({rawPerColor:F1})");
             EditorGUILayout.LabelField($"Colors: {colors}  |  Total: {threshold * colors}");
 
             if (cpIndex >= 0)
@@ -171,6 +215,7 @@ namespace BalloonParty.Editor
                 var pointsProp = GetControlPointsProperty(serialized);
                 var element = pointsProp.GetArrayElementAtIndex(cpIndex);
                 var cumProp = element.FindPropertyRelative("_cumulativeScore");
+                var modeProp = element.FindPropertyRelative("_segmentMode");
 
                 EditorGUILayout.Space(2f);
                 EditorGUI.BeginChangeCheck();
@@ -181,13 +226,20 @@ namespace BalloonParty.Editor
                     serialized.ApplyModifiedProperties();
                 }
 
+                EditorGUI.BeginChangeCheck();
+                var newMode = (SegmentMode)EditorGUILayout.EnumPopup("Segment Mode", (SegmentMode)modeProp.enumValueIndex);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    modeProp.enumValueIndex = (int)newMode;
+                    serialized.ApplyModifiedProperties();
+                }
+
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
                 if (GUILayout.Button("Remove Control Point", GUILayout.Width(160f)))
                 {
                     pointsProp.DeleteArrayElementAtIndex(cpIndex);
                     serialized.ApplyModifiedProperties();
-                    _selectedLevel = -1;
                 }
 
                 EditorGUILayout.EndHorizontal();
@@ -203,26 +255,6 @@ namespace BalloonParty.Editor
             }
 
             EditorGUILayout.EndVertical();
-        }
-
-        private static void DrawAddControlPointRow(SerializedObject serialized)
-        {
-            EditorGUILayout.Space(4f);
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Add CP:", GUILayout.Width(48f));
-            EditorGUILayout.LabelField("Level", GUILayout.Width(36f));
-            _addLevel = EditorGUILayout.IntField(_addLevel, GUILayout.Width(40f));
-            _addLevel = Mathf.Max(1, _addLevel);
-            EditorGUILayout.LabelField("Cumulative", GUILayout.Width(68f));
-            _addCumulative = EditorGUILayout.FloatField(_addCumulative, GUILayout.Width(70f));
-
-            if (GUILayout.Button("+", GUILayout.Width(24f)))
-            {
-                AddControlPoint(serialized, _addLevel, _addCumulative);
-            }
-
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
         }
 
         private static void DrawBars(Rect plotRect, int[] values, float maxValue, int levelCount)
@@ -372,6 +404,7 @@ namespace BalloonParty.Editor
             var index = Mathf.Clamp(
                 (int)((Event.current.mousePosition.x - plotRect.x) / barWidth), 0, levelCount - 1);
             _selectedLevel = _rangeFrom + index;
+            GUIUtility.keyboardControl = 0;
             Event.current.Use();
         }
 
@@ -384,7 +417,7 @@ namespace BalloonParty.Editor
 
             var x = rect.x + AxisLabelWidth;
             EditorGUI.DrawRect(new Rect(x, rect.y + 4f, 12f, 6f), PerColorColor);
-            GUI.Label(new Rect(x + 14f, rect.y, 80f, 14f), "Per-color", style);
+            GUI.Label(new Rect(x + 14f, rect.y, 80f, 14f), _showCapped ? "Capped" : "Per-color", style);
 
             x += 90f;
             EditorGUI.DrawRect(new Rect(x, rect.y + 4f, 12f, 3f), CumulativeColor);
@@ -450,7 +483,44 @@ namespace BalloonParty.Editor
             var newElement = pointsProp.GetArrayElementAtIndex(insertAt);
             newElement.FindPropertyRelative("_level").intValue = level;
             newElement.FindPropertyRelative("_cumulativeScore").floatValue = cumulative;
+            newElement.FindPropertyRelative("_segmentMode").enumValueIndex = (int)SegmentMode.Smooth;
             serialized.ApplyModifiedProperties();
+        }
+
+        private static void DrawTailConfig(SerializedObject serialized)
+        {
+            var tailProp = serialized.FindProperty("_scoringCurve._tailGrowth");
+            if (tailProp == null)
+            {
+                return;
+            }
+
+            var modeProp = tailProp.FindPropertyRelative("_mode");
+            var rateProp = tailProp.FindPropertyRelative("_rate");
+
+            EditorGUILayout.Space(4f);
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Tail:", EditorStyles.boldLabel, GUILayout.Width(34f));
+
+            EditorGUI.BeginChangeCheck();
+            var newMode = (TailGrowthMode)EditorGUILayout.EnumPopup((TailGrowthMode)modeProp.enumValueIndex, GUILayout.Width(90f));
+            if (EditorGUI.EndChangeCheck())
+            {
+                modeProp.enumValueIndex = (int)newMode;
+                serialized.ApplyModifiedProperties();
+            }
+
+            EditorGUILayout.LabelField("Rate", GUILayout.Width(32f));
+            EditorGUI.BeginChangeCheck();
+            var newRate = EditorGUILayout.FloatField(rateProp.floatValue, GUILayout.Width(60f));
+            if (EditorGUI.EndChangeCheck())
+            {
+                rateProp.floatValue = Mathf.Max(0f, newRate);
+                serialized.ApplyModifiedProperties();
+            }
+
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
         }
 
         private static float EstimateCumulative(LevelPacingConfiguration asset, int level)

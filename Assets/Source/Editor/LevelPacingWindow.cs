@@ -862,10 +862,10 @@ namespace BalloonParty.Editor
         // in this Unity version (so the button always renders something actionable).
         private static GUIContent IconButton(string iconName, string glyphFallback, string tooltip)
         {
-            var icon = EditorGUIUtility.IconContent(iconName);
-            if (icon?.image != null)
+            var texture = EditorGUIUtility.FindTexture(iconName);
+            if (texture != null)
             {
-                return new GUIContent(icon.image, tooltip);
+                return new GUIContent(texture, tooltip);
             }
 
             return new GUIContent(glyphFallback, tooltip);

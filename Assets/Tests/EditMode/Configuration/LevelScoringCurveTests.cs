@@ -218,6 +218,99 @@ namespace BalloonParty.Tests.Configuration
             Assert.That(value, Is.EqualTo(500f).Or.EqualTo(800f));
         }
 
+        [Test]
+        public void CumulativeMilestone_LinearMode_ProducesLinearInterpolation()
+        {
+            var curve = MakeCurve(
+                new ScoringControlPoint(1, 100f, SegmentMode.Linear),
+                new ScoringControlPoint(11, 1100f));
+
+            // Linear: value at midpoint (level 6, t=0.5) should be exactly halfway.
+            Assert.AreEqual(600f, curve.CumulativeMilestone(6), 0.01f);
+            // Level 4 (t=0.3): 100 + 1000*0.3 = 400.
+            Assert.AreEqual(400f, curve.CumulativeMilestone(4), 0.01f);
+        }
+
+        [Test]
+        public void CumulativeMilestone_ConvexMode_StartsSlowEndsFast()
+        {
+            var curve = MakeCurve(
+                new ScoringControlPoint(1, 0f, SegmentMode.Convex),
+                new ScoringControlPoint(11, 1000f));
+
+            var quarter = curve.CumulativeMilestone(3);  // t = 0.2
+            var mid = curve.CumulativeMilestone(6);      // t = 0.5
+            var threeQ = curve.CumulativeMilestone(9);   // t = 0.8
+
+            // Convex (ease-in): first half gains less than second half.
+            Assert.Less(mid, 500f, "midpoint should be below linear");
+            // Values should be monotone and below the linear path.
+            Assert.Less(quarter, mid);
+            Assert.Less(mid, threeQ);
+        }
+
+        [Test]
+        public void CumulativeMilestone_ConcaveMode_StartsFastEndsSlow()
+        {
+            var curve = MakeCurve(
+                new ScoringControlPoint(1, 0f, SegmentMode.Concave),
+                new ScoringControlPoint(11, 1000f));
+
+            var mid = curve.CumulativeMilestone(6);      // t = 0.5
+            var threeQ = curve.CumulativeMilestone(9);   // t = 0.8
+
+            // Concave (ease-out): first half gains more than second half.
+            Assert.Greater(mid, 500f, "midpoint should be above linear");
+            Assert.Less(mid, threeQ);
+        }
+
+        [Test]
+        public void CumulativeMilestone_MixedModes_AllMonotone()
+        {
+            var curve = MakeCurve(
+                new ScoringControlPoint(1, 100f, SegmentMode.Convex),
+                new ScoringControlPoint(5, 500f, SegmentMode.Linear),
+                new ScoringControlPoint(10, 1000f, SegmentMode.Concave),
+                new ScoringControlPoint(15, 2000f, SegmentMode.Smooth),
+                new ScoringControlPoint(20, 3500f));
+
+            var previous = 0f;
+            for (var level = 1; level <= 20; level++)
+            {
+                var value = curve.CumulativeMilestone(level);
+                Assert.GreaterOrEqual(value, previous, $"level {level} broke monotonicity");
+                previous = value;
+            }
+        }
+
+        [Test]
+        public void CumulativeMilestone_LinearMode_HitsEndpoints()
+        {
+            var curve = MakeCurve(
+                new ScoringControlPoint(5, 500f, SegmentMode.Linear),
+                new ScoringControlPoint(10, 1500f));
+
+            Assert.AreEqual(500f, curve.CumulativeMilestone(5));
+            Assert.AreEqual(1500f, curve.CumulativeMilestone(10));
+        }
+
+        [Test]
+        public void CumulativeMilestone_ConvexConcaveMode_HitEndpoints()
+        {
+            var convexCurve = MakeCurve(
+                new ScoringControlPoint(1, 100f, SegmentMode.Convex),
+                new ScoringControlPoint(10, 1000f));
+
+            var concaveCurve = MakeCurve(
+                new ScoringControlPoint(1, 100f, SegmentMode.Concave),
+                new ScoringControlPoint(10, 1000f));
+
+            Assert.AreEqual(100f, convexCurve.CumulativeMilestone(1));
+            Assert.AreEqual(1000f, convexCurve.CumulativeMilestone(10));
+            Assert.AreEqual(100f, concaveCurve.CumulativeMilestone(1));
+            Assert.AreEqual(1000f, concaveCurve.CumulativeMilestone(10));
+        }
+
         private static LevelScoringCurve MakeCurve(params ScoringControlPoint[] points)
         {
             return new LevelScoringCurve(points, DefaultTail());

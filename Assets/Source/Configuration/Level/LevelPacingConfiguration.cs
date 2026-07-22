@@ -25,6 +25,7 @@ namespace BalloonParty.Configuration.Level
         [SerializeField] private LevelScoringCurve _scoringCurve;
 
         public IReadOnlyList<LevelRangeEntry> Ranges => _ranges;
+        internal LevelScoringCurve ScoringCurve => _scoringCurve;
 
         private void OnValidate()
         {

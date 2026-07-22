@@ -4259,101 +4259,27 @@ MonoBehaviour:
           _mode: 2
         _maxPerCluster: 5
       _allowedColorsMask: 15
-  _thresholdOverrides:
-  - _fromLevel: 1
-    _toLevel: 1
-    _cumulativeScore:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 700
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    _snapToRounding: 1
-  - _fromLevel: 2
-    _toLevel: 4
-    _cumulativeScore:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1100
-        inSlope: 2909.5283
-        outSlope: 2909.5283
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.02208589
-      - serializedVersion: 3
-        time: 1
-        value: 2500
-        inSlope: 2
-        outSlope: 2
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    _snapToRounding: 1
-  - _fromLevel: 5
-    _toLevel: 10
-    _cumulativeScore:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 3100
-        inSlope: 1337.6184
-        outSlope: 1337.6184
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.026380368
-      - serializedVersion: 3
-        time: 1
-        value: 4000
-        inSlope: 2
-        outSlope: 2
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    _snapToRounding: 1
-  _baseValue: 25
   _thresholdRounding: 50
   _scoringCurve:
     _controlPoints:
     - _level: 1
       _cumulativeScore: 700
+      _segmentMode: 0
     - _level: 2
       _cumulativeScore: 1100
+      _segmentMode: 0
+    - _level: 3
+      _cumulativeScore: 2100
+      _segmentMode: 0
     - _level: 4
-      _cumulativeScore: 2400
+      _cumulativeScore: 3400
+      _segmentMode: 0
     - _level: 5
-      _cumulativeScore: 3000
-    - _level: 10
-      _cumulativeScore: 3850
-    - _level: 11
-      _cumulativeScore: 4250
-    - _level: 16
-      _cumulativeScore: 6650
-    - _level: 21
-      _cumulativeScore: 9650
-    - _level: 26
-      _cumulativeScore: 12650
+      _cumulativeScore: 4500
+      _segmentMode: 0
+    - _level: 9
+      _cumulativeScore: 10500
+      _segmentMode: 0
     _tailGrowth:
       _mode: 0
-      _rate: 1.05
+      _rate: 1.15
