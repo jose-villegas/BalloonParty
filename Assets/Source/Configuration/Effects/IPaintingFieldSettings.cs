@@ -34,5 +34,11 @@ namespace BalloonParty.Configuration.Effects
 
         /// <summary>Normalized wind direction for smoke advection.</summary>
         Vector2 WindDirection { get; }
+
+        /// <summary>Degrees the wind swings left/right from the base direction (0 = fixed).</summary>
+        float WindSwingAngle { get; }
+
+        /// <summary>How fast the wind swings back and forth (cycles per second).</summary>
+        float WindSwingSpeed { get; }
     }
 }

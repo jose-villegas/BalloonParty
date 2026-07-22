@@ -37,6 +37,12 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Normalized wind direction for smoke advection.")]
         [SerializeField] private Vector2 _windDirection = new(0.3f, 0.1f);
 
+        [Tooltip("Degrees the wind swings left/right from the base direction (0 = fixed).")]
+        [SerializeField] [Range(0f, 90f)] private float _windSwingAngle = 15f;
+
+        [Tooltip("How fast the wind swings back and forth (cycles per second).")]
+        [SerializeField] [Range(0.01f, 2f)] private float _windSwingSpeed = 0.1f;
+
         public Shader StampShader => _stampShader;
         public Shader DecayShader => _decayShader;
         public float TexelsPerUnit => _texelsPerUnit;
@@ -47,5 +53,7 @@ namespace BalloonParty.Configuration.Effects
         public float WindInfluence => _windInfluence;
         public float WindAgeBias => _windAgeBias;
         public Vector2 WindDirection => _windDirection.normalized;
+        public float WindSwingAngle => _windSwingAngle;
+        public float WindSwingSpeed => _windSwingSpeed;
     }
 }

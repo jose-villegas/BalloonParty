@@ -223,7 +223,7 @@ namespace BalloonParty.Scenario
             mat.SetFloat(DeltaTimeId, dt);
             mat.SetFloat(TimePhaseId, _timePhase);
             mat.SetFloat(WindSpeedId, _settings.WindSpeed * _settings.WindInfluence * _windDampen);
-            mat.SetVector(WindDirId, _settings.WindDirection);
+            mat.SetVector(WindDirId, ComputeSwungWindDirection());
             mat.SetFloat(WindAgeBiasId, _settings.WindAgeBias);
 
             _resources.BlitAndSwap(mat);
@@ -234,6 +234,26 @@ namespace BalloonParty.Scenario
         {
             Shader.SetGlobalVector(BoundsMinId, new Vector4(_bounds.xMin, _bounds.yMin, 0f, 0f));
             Shader.SetGlobalVector(BoundsSizeId, new Vector4(_bounds.width, _bounds.height, 0f, 0f));
+        }
+
+        private Vector4 ComputeSwungWindDirection()
+        {
+            var baseDir = _settings.WindDirection;
+            float swingAngle = _settings.WindSwingAngle;
+            if (swingAngle <= 0f)
+            {
+                return baseDir;
+            }
+
+            float t = Mathf.Sin(_paintingTime * _settings.WindSwingSpeed * Mathf.PI * 2f);
+            float angleDeg = t * swingAngle;
+            float rad = angleDeg * Mathf.Deg2Rad;
+            float cos = Mathf.Cos(rad);
+            float sin = Mathf.Sin(rad);
+            return new Vector4(
+                baseDir.x * cos - baseDir.y * sin,
+                baseDir.x * sin + baseDir.y * cos,
+                0f, 0f);
         }
 
         private struct PendingStamp
