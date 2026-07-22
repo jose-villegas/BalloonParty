@@ -4269,7 +4269,7 @@ MonoBehaviour:
       _cumulativeScore: 1100
       _segmentMode: 0
     - _level: 3
-      _cumulativeScore: 2100
+      _cumulativeScore: 1900
       _segmentMode: 0
     - _level: 4
       _cumulativeScore: 3400
