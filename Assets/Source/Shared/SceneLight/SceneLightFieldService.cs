@@ -235,7 +235,7 @@ namespace BalloonParty.Shared.SceneLight
 
             _lights.Add(new Registration(light, subscription));
 
-            return Disposable.Create(() => Unregister(light));
+            return new LightRegistrationHandle(this, light);
         }
 
         /// <summary>Turns every registered light off at once (each registration's own dispose still works).</summary>
@@ -421,6 +421,27 @@ namespace BalloonParty.Shared.SceneLight
             {
                 Light = light;
                 Subscription = subscription;
+            }
+        }
+
+        /// <summary>Lightweight disposable that calls Unregister directly — avoids the closure +
+        /// AnonymousDisposable allocation from <c>Disposable.Create</c>.</summary>
+        private sealed class LightRegistrationHandle : IDisposable
+        {
+            private SceneLightFieldService _service;
+            private Light _light;
+
+            public LightRegistrationHandle(SceneLightFieldService service, Light light)
+            {
+                _service = service;
+                _light = light;
+            }
+
+            public void Dispose()
+            {
+                _service?.Unregister(_light);
+                _service = null;
+                _light = null;
             }
         }
     }

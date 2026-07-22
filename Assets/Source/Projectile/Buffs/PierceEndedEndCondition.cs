@@ -19,7 +19,15 @@ namespace BalloonParty.Projectile.Buffs
 
         internal PierceEndedEndCondition(IReadOnlyReactiveProperty<bool> isPiercing)
         {
-            _subscription = isPiercing.Where(piercing => !piercing).Subscribe(_ => _expired.Value = true);
+            _subscription = isPiercing.Subscribe(OnPiercingChanged);
+        }
+
+        private void OnPiercingChanged(bool piercing)
+        {
+            if (!piercing)
+            {
+                _expired.Value = true;
+            }
         }
 
         public void Dispose()
