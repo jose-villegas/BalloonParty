@@ -32,6 +32,7 @@ namespace BalloonParty.Scenario
         private static readonly int DeltaTimeId = Shader.PropertyToID("_DeltaTime");
         private static readonly int TimePhaseId = Shader.PropertyToID("_TimePhase");
         private static readonly int WindSpeedId = Shader.PropertyToID("_WindSpeed");
+        private static readonly int PaintingTimeId = Shader.PropertyToID("_PaintingTime");
 
         private readonly IPaintingFieldSettings _settings;
         private readonly IGameDisplayConfiguration _display;
@@ -46,6 +47,7 @@ namespace BalloonParty.Scenario
         private Rect _bounds;
         private float _lastDecayTime;
         private float _timePhase;
+        private float _paintingTime;
         private float _windDampen = 1f;
 
         public PaintingFieldService(
@@ -111,6 +113,15 @@ namespace BalloonParty.Scenario
             {
                 return;
             }
+
+            float dt = Time.deltaTime;
+            if (dt <= 0f)
+            {
+                return;
+            }
+
+            _paintingTime += dt;
+            Shader.SetGlobalFloat(PaintingTimeId, _paintingTime);
 
             bool stamped = FlushPendingStamps();
             bool decayed = TickDecay();

@@ -118,6 +118,7 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
             fixed4 _SkyTransmissionColor;
             float  _SkyTransmissionStrength;
             fixed4 _ShadowLiftColor;
+            float  _PaintingTime;
 
             // ────────────────────────────────────────────────────────────────
             // Helpers
@@ -150,17 +151,17 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
 
                 // Octave 1: large slow eddies — overall trail bow.
                 float2 p1 = wp * (_SwirlFreq * 0.25)
-                          + float2(_Time.y * _SwirlSpeed * 0.25, _Time.y * _SwirlSpeed * 0.12);
+                          + float2(_PaintingTime * _SwirlSpeed * 0.25, _PaintingTime * _SwirlSpeed * 0.12);
                 float2 curl1 = CurlNoise2D(p1) * (_SwirlStrength * 3.0);
 
                 // Octave 2: medium body undulation.
                 float2 p2 = wp * _SwirlFreq
-                          + float2(_Time.y * _SwirlSpeed * 0.7, _Time.y * _SwirlSpeed * 0.4);
+                          + float2(_PaintingTime * _SwirlSpeed * 0.7, _PaintingTime * _SwirlSpeed * 0.4);
                 float2 curl2 = CurlNoise2D(p2) * _SwirlStrength;
 
                 // Octave 3: small wisps, domain-warped by curl1 for detachment.
                 float2 p3 = (wp + curl1 * 0.4) * (_SwirlFreq * 3.5)
-                          + float2(_Time.y * _SwirlSpeed * 2.8, _Time.y * _SwirlSpeed * 1.9);
+                          + float2(_PaintingTime * _SwirlSpeed * 2.8, _PaintingTime * _SwirlSpeed * 1.9);
                 float2 curl3 = CurlNoise2D(p3) * (_SwirlStrength * 0.3);
 
                 // Age gradient: old smoke (low alpha, still present) swirls more aggressively.
@@ -245,7 +246,7 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
 
                 float edgeRegion = 1.0 - saturate(warpedA * 4.0);
                 float2 wispNoiseUV = WarpedEdgePos(wp) * _WispNoiseFreq
-                                   + float2(_Time.y * 0.04, _Time.y * 0.02);
+                                   + float2(_PaintingTime * 0.04, _PaintingTime * 0.02);
                 float wispNoise = SimplexNoise2D(wispNoiseUV) * 0.5 + 0.5;
                 float wispMask = smoothstep(0.3, 0.5, wispNoise);
                 float edgeFade = lerp(smokeSigmoid, smokeSigmoid * wispMask, edgeRegion * _WispStrength);
@@ -280,7 +281,7 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
 
                 // 7. Interior density modulation: animated see-through patches inside body.
                 float2 densityUV = wp * _InternalDensityScale
-                                 + float2(_Time.y * 0.03, _Time.y * -0.02);
+                                 + float2(_PaintingTime * 0.03, _PaintingTime * -0.02);
                 float densityNoise = tex2D(_GrainTex, densityUV).r;
                 float bodyRegion = saturate(paint.a * 3.0 - 0.5);
                 float densityMod = 1.0 - bodyRegion * densityNoise * _InternalDensityStrength;
