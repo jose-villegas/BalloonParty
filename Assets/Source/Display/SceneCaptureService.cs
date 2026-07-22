@@ -66,6 +66,10 @@ namespace BalloonParty.Display
             if (_captureCamera.enabled)
             {
                 ContentVersion++;
+                // Mips generated here rather than via autoGenerateMips — avoids the implicit GPU pass
+                // after every camera render. This runs once per capture cadence (the camera was enabled
+                // last frame and has finished rendering by this point).
+                _texture.GenerateMips();
             }
 
             _captureAccumulator += Time.unscaledDeltaTime;
@@ -166,7 +170,10 @@ namespace BalloonParty.Display
                 name = "SceneCapture",
                 filterMode = FilterMode.Bilinear,
                 useMipMap = true,
-                autoGenerateMips = true
+                // Mips are generated manually per capture (when ContentVersion advances) to avoid the
+                // implicit GPU pass that autoGenerateMips triggers after every camera render — each
+                // auto-mip chain is a tile flush on Adreno that costs ~0.3ms.
+                autoGenerateMips = false
             };
 
             _captureCamera.targetTexture = _texture;

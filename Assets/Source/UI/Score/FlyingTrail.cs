@@ -259,20 +259,28 @@ namespace BalloonParty.UI.Score
             {
                 var offset = newCenter - oldCenter;
 
-                // Per-index writes: SetPositions takes its count from the ARRAY length, which would push
-                // scratch garbage past the ribbon's real point count.
                 for (var i = 0; i < count; i++)
                 {
-                    _trailRenderer.SetPosition(i, _ribbonScratch[i] + offset);
+                    _ribbonScratch[i] += offset;
                 }
-
-                return;
             }
-
-            for (var i = 0; i < count; i++)
+            else
             {
-                _trailRenderer.SetPosition(i, newCenter + delta * (_ribbonScratch[i] - oldCenter) * scaleRatio);
+                for (var i = 0; i < count; i++)
+                {
+                    _ribbonScratch[i] = newCenter + delta * (_ribbonScratch[i] - oldCenter) * scaleRatio;
+                }
             }
+
+            // Batch write: SetPositions reads array.Length, so resize the scratch to exactly count to
+            // avoid pushing stale data past the ribbon's real point count. The static array is re-grown
+            // on demand above, so the resize amortises across frames.
+            if (_ribbonScratch.Length != count)
+            {
+                System.Array.Resize(ref _ribbonScratch, count);
+            }
+
+            _trailRenderer.SetPositions(_ribbonScratch);
         }
 
         internal void ClearRibbon()

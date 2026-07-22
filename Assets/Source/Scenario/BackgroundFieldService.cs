@@ -37,6 +37,7 @@ namespace BalloonParty.Scenario
         private RenderTexture _densityRT;
         private Rect _bounds;
         private Vector2 _ascendOffset;
+        private float _bakeAccumulator;
 
         public BackgroundFieldService(
             IBackgroundFieldSettings settings,
@@ -77,7 +78,18 @@ namespace BalloonParty.Scenario
 
             UpdateAscend();
             PushTransitionOffset();
-            Bake();
+
+            // BakeFrameInterval is authored as "every N frames at 60 fps"; reinterpreted as seconds so
+            // the blit cost doesn't scale with display refresh — a 120 Hz panel would otherwise double it.
+            // Clamped to at most one interval so idle time can't bank multiple instant re-bakes.
+            var interval = Mathf.Max(_settings.BakeFrameInterval, 1f) / 60f;
+            _bakeAccumulator = Mathf.Min(_bakeAccumulator + Time.unscaledDeltaTime, interval);
+
+            if (_bakeAccumulator >= interval)
+            {
+                _bakeAccumulator -= interval;
+                Bake();
+            }
         }
 
         void IDisposable.Dispose()

@@ -17,8 +17,13 @@ namespace BalloonParty.Configuration.Effects
             "sign flips the direction.")]
         [SerializeField] private float _transitionParallax = 0.5f;
 
+        [Tooltip("Bake cadence: every N frames at 60 fps (1 = every frame, 3 = every 3rd). " +
+            "The slow-scrolling density is imperceptible at higher rates on mobile.")]
+        [SerializeField] private float _bakeFrameInterval = 3f;
+
         public Material DensityMaterial => _densityMaterial;
         public float TexelsPerUnit => _texelsPerUnit;
         public float TransitionParallax => _transitionParallax;
+        public float BakeFrameInterval => _bakeFrameInterval;
     }
 }

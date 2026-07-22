@@ -14,5 +14,10 @@ namespace BalloonParty.Configuration.Effects
 
         /// <summary>How much the scenario's Ascent/descent scrolls the clouds; sign flips the direction.</summary>
         float TransitionParallax { get; }
+
+        /// <summary>Bake cadence authored as "every N frames at 60 fps", reinterpreted as seconds so cost
+        /// doesn't scale with display refresh. 1 = every frame at 60 Hz (legacy), 3–4 = recommended for
+        /// mobile (the slow-scrolling density is imperceptible at higher rates).</summary>
+        float BakeFrameInterval { get; }
     }
 }
