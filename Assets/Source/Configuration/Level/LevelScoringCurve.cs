@@ -52,7 +52,7 @@ namespace BalloonParty.Configuration.Level
                 return ExtrapolateTail(level);
             }
 
-            // Exact match on a control point — fast path.
+            // Single CP: the only remaining case is level == first.Level.
             if (_controlPoints.Length == 1)
             {
                 return first.CumulativeScore;
@@ -68,8 +68,8 @@ namespace BalloonParty.Configuration.Level
         {
             var n = _controlPoints.Length;
 
-            // Find the segment [i, i+1] containing the level.
-            var seg = 0;
+            // Find the segment [seg, seg+1] containing the level.
+            var seg = n - 2;
             for (var i = 0; i < n - 1; i++)
             {
                 if (level <= _controlPoints[i + 1].Level)
@@ -77,8 +77,6 @@ namespace BalloonParty.Configuration.Level
                     seg = i;
                     break;
                 }
-
-                seg = i;
             }
 
             // If level lands exactly on a CP, return its value.
@@ -127,20 +125,19 @@ namespace BalloonParty.Configuration.Level
         }
 
         /// <summary>Smooth (Fritsch–Carlson) evaluation for a single segment. Computes tangents globally
-        /// for monotonicity, then evaluates the cubic Hermite on the given segment.</summary>
+        /// for monotonicity, then evaluates the cubic Hermite on the given segment.
+        /// Allocates temporary arrays — acceptable since runtime calls occur only on level-up.</summary>
         private float EvaluateSmoothSegment(int seg, float t, float segH, float y0, float y1)
         {
             var n = _controlPoints.Length;
 
             // Compute secant slopes (deltas) between adjacent CPs.
             var deltas = new float[n - 1];
-            var h = new float[n - 1];
-
             for (var i = 0; i < n - 1; i++)
             {
-                h[i] = _controlPoints[i + 1].Level - _controlPoints[i].Level;
-                deltas[i] = h[i] > 0
-                    ? (_controlPoints[i + 1].CumulativeScore - _controlPoints[i].CumulativeScore) / h[i]
+                var h = (float)(_controlPoints[i + 1].Level - _controlPoints[i].Level);
+                deltas[i] = h > 0
+                    ? (_controlPoints[i + 1].CumulativeScore - _controlPoints[i].CumulativeScore) / h
                     : 0f;
             }
 

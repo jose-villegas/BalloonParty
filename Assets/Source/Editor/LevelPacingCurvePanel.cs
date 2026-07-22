@@ -21,12 +21,16 @@ namespace BalloonParty.Editor
         private static readonly Color SelectedColor = new(1f, 0.8f, 0.2f, 0.8f);
         private static readonly Color ControlPointColor = new(1f, 0.4f, 0.3f, 1f);
 
+        private static GUIStyle _axisLabelStyle;
+        private static GUIStyle _levelLabelStyle;
+        private static GUIStyle _legendStyle;
+
         private static int _selectedLevel = 1;
         private static int _rangeFrom = 1;
         private static int _rangeTo = 30;
         private static int _addLevel = 1;
         private static float _addCumulative;
-        private static bool _showCapped = true;
+        private static bool _showTotal = true;
 
         /// <summary>Draws the scoring curve section. Requires a <see cref="SerializedObject"/> for the asset
         /// to support adding control points with undo.</summary>
@@ -69,7 +73,7 @@ namespace BalloonParty.Editor
                 var level = _rangeFrom + i;
                 var perColor = asset.ThresholdForLevel(level);
                 var colors = asset.ColorsForLevel(level);
-                thresholds[i] = _showCapped ? perColor * colors : perColor;
+                thresholds[i] = _showTotal ? perColor * colors : perColor;
                 runningCumulative += perColor * colors;
                 cumulatives[i] = runningCumulative;
 
@@ -107,7 +111,7 @@ namespace BalloonParty.Editor
 
             DrawGrid(plotRect, maxThreshold);
             DrawBars(plotRect, thresholds, maxThreshold, levelCount);
-            DrawControlPointMarkers(plotRect, asset, levelCount);
+            DrawControlPointMarkers(plotRect, serialized, levelCount);
             DrawCumulativeLine(plotRect, cumulatives, maxCumulative, levelCount);
             DrawAxisLabels(graphRect, plotRect, maxThreshold);
             DrawLevelLabels(plotRect, levelCount);
@@ -131,7 +135,7 @@ namespace BalloonParty.Editor
             _rangeTo = Mathf.Max(_rangeFrom, _rangeTo);
 
             GUILayout.Space(12f);
-            _showCapped = GUILayout.Toggle(_showCapped, _showCapped ? "Capped" : "Per-color",
+            _showTotal = GUILayout.Toggle(_showTotal, _showTotal ? "Total" : "Per-color",
                 EditorStyles.miniButton, GUILayout.Width(64f));
 
             GUILayout.Space(12f);
@@ -280,11 +284,10 @@ namespace BalloonParty.Editor
             }
         }
 
-        private static void DrawControlPointMarkers(Rect plotRect, LevelPacingConfiguration asset, int levelCount)
+        private static void DrawControlPointMarkers(Rect plotRect, SerializedObject serialized, int levelCount)
         {
             var barWidth = plotRect.width / levelCount;
-            var serialized = new SerializedObject(asset);
-            var pointsProp = serialized.FindProperty("_scoringCurve._controlPoints");
+            var pointsProp = GetControlPointsProperty(serialized);
 
             if (pointsProp == null)
             {
@@ -353,11 +356,14 @@ namespace BalloonParty.Editor
 
         private static void DrawAxisLabels(Rect graphRect, Rect plotRect, float maxValue)
         {
-            var style = new GUIStyle(EditorStyles.miniLabel)
+            if (_axisLabelStyle == null)
             {
-                alignment = TextAnchor.MiddleRight,
-                normal = { textColor = Color.gray },
-            };
+                _axisLabelStyle = new GUIStyle(EditorStyles.miniLabel)
+                {
+                    alignment = TextAnchor.MiddleRight,
+                    normal = { textColor = Color.gray },
+                };
+            }
 
             const int gridLines = 4;
             for (var i = 0; i <= gridLines; i++)
@@ -365,17 +371,20 @@ namespace BalloonParty.Editor
                 var y = plotRect.y + plotRect.height * (1f - (float)i / gridLines);
                 var value = maxValue * i / gridLines;
                 var labelRect = new Rect(graphRect.x, y - 7f, AxisLabelWidth - 4f, 14f);
-                GUI.Label(labelRect, Mathf.RoundToInt(value).ToString(), style);
+                GUI.Label(labelRect, Mathf.RoundToInt(value).ToString(), _axisLabelStyle);
             }
         }
 
         private static void DrawLevelLabels(Rect plotRect, int levelCount)
         {
-            var style = new GUIStyle(EditorStyles.miniLabel)
+            if (_levelLabelStyle == null)
             {
-                alignment = TextAnchor.UpperCenter,
-                normal = { textColor = Color.gray },
-            };
+                _levelLabelStyle = new GUIStyle(EditorStyles.miniLabel)
+                {
+                    alignment = TextAnchor.UpperCenter,
+                    normal = { textColor = Color.gray },
+                };
+            }
 
             var barWidth = plotRect.width / levelCount;
             var step = Mathf.Max(1, levelCount / 10);
@@ -384,7 +393,7 @@ namespace BalloonParty.Editor
             {
                 var x = plotRect.x + (i + 0.5f) * barWidth;
                 var labelRect = new Rect(x - 15f, plotRect.yMax + 1f, 30f, 14f);
-                GUI.Label(labelRect, (_rangeFrom + i).ToString(), style);
+                GUI.Label(labelRect, (_rangeFrom + i).ToString(), _levelLabelStyle);
             }
         }
 
@@ -410,18 +419,21 @@ namespace BalloonParty.Editor
 
         private static void DrawLegend(Rect rect)
         {
-            var style = new GUIStyle(EditorStyles.miniLabel)
+            if (_legendStyle == null)
             {
-                normal = { textColor = Color.gray },
-            };
+                _legendStyle = new GUIStyle(EditorStyles.miniLabel)
+                {
+                    normal = { textColor = Color.gray },
+                };
+            }
 
             var x = rect.x + AxisLabelWidth;
             EditorGUI.DrawRect(new Rect(x, rect.y + 4f, 12f, 6f), PerColorColor);
-            GUI.Label(new Rect(x + 14f, rect.y, 80f, 14f), _showCapped ? "Capped" : "Per-color", style);
+            GUI.Label(new Rect(x + 14f, rect.y, 80f, 14f), _showTotal ? "Total" : "Per-color", _legendStyle);
 
             x += 90f;
             EditorGUI.DrawRect(new Rect(x, rect.y + 4f, 12f, 3f), CumulativeColor);
-            GUI.Label(new Rect(x + 14f, rect.y, 80f, 14f), "Cumulative", style);
+            GUI.Label(new Rect(x + 14f, rect.y, 80f, 14f), "Cumulative", _legendStyle);
 
             x += 100f;
             Handles.color = ControlPointColor;
@@ -431,7 +443,7 @@ namespace BalloonParty.Editor
                 new Vector3(x + 3f, rect.y + 12f, 0f),
                 new Vector3(x, rect.y + 7f, 0f),
                 new Vector3(x + 3f, rect.y + 2f, 0f));
-            GUI.Label(new Rect(x + 10f, rect.y, 90f, 14f), "Control Point", style);
+            GUI.Label(new Rect(x + 10f, rect.y, 90f, 14f), "Control Point", _legendStyle);
         }
 
         private static int FindControlPointIndex(SerializedObject serialized, int level)

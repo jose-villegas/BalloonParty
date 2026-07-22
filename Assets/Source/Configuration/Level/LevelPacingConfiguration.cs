@@ -217,8 +217,10 @@ namespace BalloonParty.Configuration.Level
                 return;
             }
 
+            var cps = _scoringCurve.ControlPoints;
+            var lastCpLevel = cps[cps.Count - 1].Level;
+            var checkLevels = lastCpLevel + 5;
             var previousTotal = int.MinValue;
-            var checkLevels = 50;
 
             for (var level = 1; level <= checkLevels; level++)
             {
