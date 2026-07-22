@@ -271,6 +271,24 @@ namespace BalloonParty.Editor
             DrawGroupBackground(groupTitleRect, 6, 9, titleBg);
             DrawGroupBackground(groupTitleRect, 10, 10, titleBg);
             DrawGroupTitles(groupTitleRect);
+
+            // Group border separators at both edges of each gap
+            for (var i = 0; i < GapBeforeCols.Length; i++)
+            {
+                var col = GapBeforeCols[i];
+                var leftX = groupTitleRect.x + ColX(col);
+                var rightX = leftX - GroupGap;
+                EditorGUI.DrawRect(new Rect(rightX, groupTitleRect.y, SeparatorWidth, groupTitleRect.height),
+                    new Color(0.4f, 0.4f, 0.4f, 0.9f));
+                EditorGUI.DrawRect(new Rect(leftX, groupTitleRect.y, SeparatorWidth, groupTitleRect.height),
+                    new Color(0.4f, 0.4f, 0.4f, 0.9f));
+            }
+
+            // Right edge of Actors group
+            var actorRightX = groupTitleRect.x + ColX(ActorColIndex) + EffectiveActorColWidth;
+            EditorGUI.DrawRect(new Rect(actorRightX, groupTitleRect.y, SeparatorWidth, groupTitleRect.height),
+                new Color(0.4f, 0.4f, 0.4f, 0.9f));
+
             var hSepColor = new Color(0.35f, 0.35f, 0.35f, 0.5f);
             TableDrawHelper.DrawHorizontalSeparator(groupTitleRect, hSepColor);
 
@@ -708,8 +726,8 @@ namespace BalloonParty.Editor
                     EditorGUI.LabelField(cell, ColHeaders[i], style);
                 }
 
-                // Separator (skip right-anchored columns)
-                if (i >= 11)
+                // Separator (skip right-anchored columns and last col before gap)
+                if (i >= 11 || HasGapBefore(i + 1))
                 {
                     continue;
                 }
@@ -717,6 +735,23 @@ namespace BalloonParty.Editor
                 var sep = new Rect(cell.xMax, rowRect.y, SeparatorWidth, rowRect.height);
                 EditorGUI.DrawRect(sep, new Color(0.35f, 0.35f, 0.35f, 0.8f));
             }
+
+            // Group border separators at both edges of each gap
+            for (var i = 0; i < GapBeforeCols.Length; i++)
+            {
+                var col = GapBeforeCols[i];
+                var leftX = rowRect.x + ColX(col);
+                var rightX = leftX - GroupGap;
+                EditorGUI.DrawRect(new Rect(rightX, rowRect.y, SeparatorWidth, rowRect.height),
+                    new Color(0.4f, 0.4f, 0.4f, 0.9f));
+                EditorGUI.DrawRect(new Rect(leftX, rowRect.y, SeparatorWidth, rowRect.height),
+                    new Color(0.4f, 0.4f, 0.4f, 0.9f));
+            }
+
+            // Right edge of Actors group
+            var actorRightX = rowRect.x + ColX(ActorColIndex) + EffectiveActorColWidth;
+            EditorGUI.DrawRect(new Rect(actorRightX, rowRect.y, SeparatorWidth, rowRect.height),
+                new Color(0.4f, 0.4f, 0.4f, 0.9f));
         }
 
         private static void DrawBalloonSubHeaders(Rect cell)
@@ -803,13 +838,37 @@ namespace BalloonParty.Editor
                 EditorGUI.DrawRect(accent, new Color(0.3f, 0.8f, 0.3f, 0.9f));
             }
 
-            // Separators (only for left-anchored columns 0–9)
-            for (var i = 0; i < ColWidths.Length - 3; i++)
+            // Separators (only for left-anchored columns 0–10)
+            for (var i = 0; i < ColWidths.Length - 4; i++)
             {
+                if (HasGapBefore(i + 1))
+                {
+                    continue;
+                }
+
                 var colW = EffectiveColWidth(i);
                 var sep = new Rect(rowRect.x + ColX(i) + colW, rowRect.y, SeparatorWidth, rowRect.height);
                 EditorGUI.DrawRect(sep, new Color(0.35f, 0.35f, 0.35f, 0.5f));
             }
+
+            // Group border separators at both edges of each gap
+            for (var i = 0; i < GapBeforeCols.Length; i++)
+            {
+                var col = GapBeforeCols[i];
+                var leftX = rowRect.x + ColX(col);
+                var rightX = leftX - GroupGap;
+                // Right edge of previous group
+                EditorGUI.DrawRect(new Rect(rightX, rowRect.y, SeparatorWidth, rowRect.height),
+                    new Color(0.4f, 0.4f, 0.4f, 0.9f));
+                // Left edge of next group
+                EditorGUI.DrawRect(new Rect(leftX, rowRect.y, SeparatorWidth, rowRect.height),
+                    new Color(0.4f, 0.4f, 0.4f, 0.9f));
+            }
+
+            // Right edge of Actors group
+            var actorRightX = rowRect.x + ColX(ActorColIndex) + EffectiveActorColWidth;
+            EditorGUI.DrawRect(new Rect(actorRightX, rowRect.y, SeparatorWidth, rowRect.height),
+                new Color(0.4f, 0.4f, 0.4f, 0.9f));
 
             // Horizontal row separator at the bottom
             TableDrawHelper.DrawHorizontalSeparator(rowRect);
