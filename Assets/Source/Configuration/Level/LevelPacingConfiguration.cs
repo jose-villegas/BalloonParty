@@ -31,11 +31,17 @@ namespace BalloonParty.Configuration.Level
                  "targets — 732 caps to 700, not 750. 0 or 1 = no capping.")]
         [SerializeField] private int _thresholdRounding = 50;
 
+        [Tooltip("Unified scoring curve replacing the override+formula dual-path. When non-empty, this is the " +
+                 "sole source of per-level thresholds. Overrides and the formula are ignored.")]
+        [SerializeField] private LevelScoringCurve _scoringCurve;
+
+
         public IReadOnlyList<LevelRangeEntry> Ranges => _ranges;
 
         private void OnValidate()
         {
 #if UNITY_EDITOR
+            _scoringCurve.Validate(name);
             WarnOnGapsAndOverlaps();
             WarnOnFallbackIssues();
             WarnOnEmptyWeightedSets();
@@ -43,17 +49,34 @@ namespace BalloonParty.Configuration.Level
 #endif
         }
 
-        // An override sets this level's cumulative run-score milestone; the per-colour bar is the increment over
-        // the previous level's milestone, split across this level's colours. Uncovered levels use the formula:
-        // base + logarithmic growth, then snapped to a clean multiple.
+        // When the scoring curve is authored (non-empty), it's the sole source: the cumulative milestone at this
+        // level minus the previous, divided by colour count, floored and rounded. Otherwise falls through to the
+        // legacy override+formula dual-path for backward compatibility during migration.
         public int ThresholdForLevel(int level)
+        {
+            if (!_scoringCurve.IsEmpty)
+            {
+                return ThresholdFromCurve(level);
+            }
+
+            return ThresholdFromLegacy(level);
+        }
+
+        private int ThresholdFromCurve(int level)
+        {
+            var cumThis = _scoringCurve.CumulativeMilestone(level);
+            var cumPrev = _scoringCurve.CumulativeMilestone(level - 1);
+            var increment = cumThis - cumPrev;
+            var perColor = Mathf.RoundToInt(increment / ColorsForLevel(level));
+            return Mathf.Max(1, RoundThreshold(perColor));
+        }
+
+        private int ThresholdFromLegacy(int level)
         {
             if (TryGetOverride(level, out var entry))
             {
                 var increment = entry.CumulativeScore(level) - CumulativeScoreForLevel(level - 1);
                 var perColor = Mathf.RoundToInt(increment / ColorsForLevel(level));
-                // Floor at 1 either way — a flat/decreasing milestone (or rounding disabled) must never yield a
-                // non-positive bar, which would make the win check trivially true and insta-level.
                 return Mathf.Max(1, entry.SnapToRounding ? RoundThreshold(perColor) : perColor);
             }
 
