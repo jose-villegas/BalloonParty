@@ -15,5 +15,8 @@ MonoBehaviour:
   _stampShader: {fileID: 4800000, guid: 24599d3206b242438a07e1f96fbbf7a3, type: 3}
   _decayShader: {fileID: 4800000, guid: 3cac189d3ee64ff89d441e714d067826, type: 3}
   _texelsPerUnit: 16
-  _decayRate: 0.15
+  _decayRate: 0.025
   _decayTickInterval: 0.05
+  _stampRadius: 0.09
+  _windSpeed: 0.4
+  _windInfluence: 0.725

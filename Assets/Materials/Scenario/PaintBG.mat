@@ -21,7 +21,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties: _GrainTex _WispStrength
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -51,10 +51,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AgeGradientStrength: 1.25
     - _AnimationSpeed: 9
     - _BaseScale: 1.85
     - _BillowAmplitude: 0.815
-    - _BleedRadius: 0.005
+    - _BleedRadius: 0.02
     - _BorderSoftness: 0.15
     - _BreatheAmplitude: 0.06
     - _BreatheFrequency: 0.5
@@ -68,7 +69,10 @@ Material:
     - _EdgeFeather: 0.4
     - _EdgeHigh: 0.626
     - _EdgeLow: 0.307
-    - _EdgeSoftness: 0.3
+    - _EdgePow: 2.3
+    - _EdgeSoftness: 0.9
+    - _EdgeWarpFreq: 3.5
+    - _EdgeWarpStrength: 0.006
     - _EnableDensity: 1
     - _EnableExternalAlpha: 0
     - _EnableShadow: 1
@@ -76,8 +80,10 @@ Material:
     - _FadeFloor: 0
     - _FadeStrength: 1
     - _FineScale: 5
-    - _GrainScale: 8
-    - _GrainStrength: 0.15
+    - _GrainScale: 0.1
+    - _GrainStrength: 0.4
+    - _InternalDensityScale: 3
+    - _InternalDensityStrength: 0.8
     - _LightColorRamp: 5
     - _LightInfluence: 1
     - _LightIntensity: 1
@@ -89,22 +95,34 @@ Material:
     - _NoiseScale: 0.8
     - _NormalEpsilon: 0.05
     - _NormalStrength: 3
-    - _Opacity: 0.8
+    - _Opacity: 1
     - _OpenGain: 0.925
     - _PaintBlend: 1
+    - _PigmentPool: 0.13
     - _RestOpen: 0.195
     - _ShadowDistance: 1.65
     - _ShadowSoftness: 0
+    - _SkyTransmissionStrength: 0.5
     - _SlotBlend: 0.35
     - _SlotRadius: 0.45
+    - _SmokeEdgeSharpness: 3
     - _SpriteScale: 0.7
     - _StripWidth: 0.9
+    - _SwirlFreq: 2
+    - _SwirlSpeed: 0.2
+    - _SwirlStrength: 0.005
+    - _TemperatureRange: 0.712
     - _TimeOffset: 0
+    - _TurbFreq: 3
+    - _TurbStrength: 0.008
+    - _WispNoiseFreq: 8
+    - _WispStrength: 0.7
     - _ZWrite: 0
     m_Colors:
     - _AmbientColor: {r: 0.9245283, g: 0.9245283, b: 0.9245283, a: 1}
     - _CloudColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 0.627451}
+    - _CoolEdgeColor: {r: 0.82, g: 0.88, b: 1, a: 1}
     - _LightColor: {r: 1, g: 1, b: 1, a: 1}
     - _NoiseScroll: {r: 0.05, g: 0.12, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
@@ -112,5 +130,8 @@ Material:
     - _ScrollSpeedDetail: {r: 0.06, g: -0.04, b: 0, a: 0}
     - _ScrollSpeedFine: {r: -0.04, g: 0.08, b: 0, a: 0}
     - _ShadowColor: {r: 0.45523316, g: 0.50238675, b: 0.5849056, a: 0.28235295}
+    - _ShadowLiftColor: {r: 0.88, g: 0.92, b: 0.98, a: 1}
+    - _SkyTransmissionColor: {r: 0.7, g: 0.85, b: 1, a: 1}
+    - _WarmCoreColor: {r: 1, g: 0.97, b: 0.88, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

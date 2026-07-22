@@ -45,6 +45,10 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
         _SkyTransmissionColor ("Sky Transmission",      Color)              = (0.7, 0.85, 1.0, 1)
         _SkyTransmissionStrength ("Transmission Strength", Range(0, 1))     = 0.5
         _ShadowLiftColor    ("Shadow Lift Color",       Color)              = (0.88, 0.92, 0.98, 1)
+
+        [Header(Lighting)]
+        _LightResponse      ("Light Response",          Range(0, 1))        = 0.6
+        _LightGlow          ("Local Light Glow",        Range(0, 1))        = 0.3
     }
 
     SubShader
@@ -70,6 +74,7 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
             #pragma target 3.0
             #include "UnityCG.cginc"
             #include "../Include/PaintingField.cginc"
+            #include "../Include/SceneLight.cginc"
             #include "../Noise/SimplexNoise2D.cginc"
 
             struct appdata_t
@@ -118,6 +123,8 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
             fixed4 _SkyTransmissionColor;
             float  _SkyTransmissionStrength;
             fixed4 _ShadowLiftColor;
+            float  _LightResponse;
+            float  _LightGlow;
             float  _PaintingTime;
 
             // ────────────────────────────────────────────────────────────────
@@ -279,7 +286,13 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
 
                 finalRgb *= IN.color.rgb;
 
-                // 7. Interior density modulation: animated see-through patches inside body.
+                // 7. Scene light interaction: smoke is lit by the scene's lights.
+                float3 sceneTint = SceneLightTintAt(IN.worldPos);
+                finalRgb *= lerp(float3(1, 1, 1), sceneTint, _LightResponse);
+                float3 localGlow = SceneLightLocalAt(IN.worldPos);
+                finalRgb += localGlow * _LightGlow * paint.a;
+
+                // 8. Interior density modulation: animated see-through patches inside body.
                 float2 densityUV = wp * _InternalDensityScale
                                  + float2(_PaintingTime * 0.03, _PaintingTime * -0.02);
                 float densityNoise = tex2D(_GrainTex, densityUV).r;
