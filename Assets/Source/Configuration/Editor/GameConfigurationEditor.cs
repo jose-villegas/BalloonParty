@@ -1,5 +1,4 @@
 using BalloonParty.Editor;
-using BalloonParty.Shared;
 using BalloonParty.EditorUI.Utilities;
 using UnityEditor;
 using UnityEngine;
@@ -14,7 +13,7 @@ namespace BalloonParty.Configuration.Editor
     {
         private const string EditorPrefKey = "BalloonParty.ShowMapLimits";
 
-        private static readonly ConfigAssetCache<GameConfiguration> ConfigCache = new();
+        private static readonly EditorAssetCache<GameConfiguration> ConfigCache = new();
         private static readonly Color OutlineColor = new(1f, 0.6f, 0.2f, 0.9f);
         private static readonly Color FillColor = new(1f, 0.6f, 0.2f, 0.06f);
 

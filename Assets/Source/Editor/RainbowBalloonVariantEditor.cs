@@ -1,7 +1,7 @@
 using System.Linq;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Palette;
-using BalloonParty.Shared;
+using BalloonParty.EditorUI.Utilities;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,7 +15,7 @@ namespace BalloonParty.Editor
     [CustomEditor(typeof(RainbowBalloonVariant))]
     internal sealed class RainbowBalloonVariantEditor : UnityEditor.Editor
     {
-        private readonly ConfigAssetCache<GamePalette> _paletteCache = new();
+        private readonly EditorAssetCache<GamePalette> _paletteCache = new();
 
         // The four progress colours, matching a typical late-level allowed set.
         private int _previewMask = 0b1111;

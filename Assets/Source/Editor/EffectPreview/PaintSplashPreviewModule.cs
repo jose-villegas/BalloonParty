@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using BalloonParty.Configuration;
-using BalloonParty.Shared;
+using BalloonParty.EditorUI.Utilities;
 using BalloonParty.Item.Paint;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Rendering;
@@ -27,7 +27,7 @@ namespace BalloonParty.Editor.EffectPreview
             typeof(PaintSplashView).GetField("_splashParticlePrefab", BindingFlags.NonPublic | BindingFlags.Instance);
 
         private readonly PaintSplashView _view;
-        private readonly ConfigAssetCache<ItemConfiguration> _itemConfigCache = new();
+        private readonly EditorAssetCache<ItemConfiguration> _itemConfigCache = new();
 
         private float _previewDirectionDegrees = 90f;
         private List<FlightState> _flights;

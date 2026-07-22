@@ -22,7 +22,7 @@ namespace BalloonParty.UI.Score
         private static readonly int CompletedParam = Animator.StringToHash("Completed");
         private static readonly int TrailHitTrigger = Animator.StringToHash("TrailHit");
 #if UNITY_EDITOR
-        private static readonly ConfigAssetCache<GamePalette> PaletteCache = new();
+        private static GamePalette _cachedPalette;
 #endif
 
         [Header("Configuration")] [PaletteColorName] [SerializeField]
@@ -110,7 +110,7 @@ namespace BalloonParty.UI.Score
                 return;
             }
 
-            var palette = PaletteCache.Value;
+            var palette = FindPalette();
             if (palette == null)
             {
                 return;
@@ -131,6 +131,23 @@ namespace BalloonParty.UI.Score
             }
 #endif
         }
+
+#if UNITY_EDITOR
+        private static GamePalette FindPalette()
+        {
+            if (_cachedPalette == null)
+            {
+                var guids = UnityEditor.AssetDatabase.FindAssets("t:GamePalette");
+                if (guids.Length > 0)
+                {
+                    _cachedPalette = UnityEditor.AssetDatabase.LoadAssetAtPath<GamePalette>(
+                        UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]));
+                }
+            }
+
+            return _cachedPalette;
+        }
+#endif
 
         private void Start()
         {

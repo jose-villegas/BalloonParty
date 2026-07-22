@@ -10,7 +10,6 @@ using BalloonParty.Configuration.Palette;
 using BalloonParty.EditorUI.Tables;
 using BalloonParty.EditorUI.Utilities;
 using RowColorResolver = BalloonParty.EditorUI.Tables.RowColorResolver;
-using BalloonParty.Shared;
 using BalloonParty.Slots.Actor.Archetype;
 using UnityEditor;
 using UnityEngine;
@@ -74,9 +73,9 @@ namespace BalloonParty.Editor
             "Range", "Spawn", "Board", "1st Turn", "Colors", "Balloons", "Cadence", "Init Count", "Wave Count", "Items", "Actors", "Expand", "Dupe", "Delete", "Play"
         };
 
-        private readonly ConfigAssetCache<LevelPacingConfiguration> _assetCache = new();
-        private readonly ConfigAssetCache<GamePalette> _paletteCache = new();
-        private readonly ConfigAssetCache<BalloonsConfiguration> _balloonsConfigCache = new();
+        private readonly EditorAssetCache<LevelPacingConfiguration> _assetCache = new();
+        private readonly EditorAssetCache<GamePalette> _paletteCache = new();
+        private readonly EditorAssetCache<BalloonsConfiguration> _balloonsConfigCache = new();
 
         private string[] _paletteNames;
         private Color[] _paletteColors;

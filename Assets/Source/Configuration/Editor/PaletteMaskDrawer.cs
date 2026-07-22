@@ -1,6 +1,6 @@
 using System.Linq;
 using BalloonParty.Configuration.Palette;
-using BalloonParty.Shared;
+using BalloonParty.EditorUI.Utilities;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,7 +14,7 @@ namespace BalloonParty.Configuration.Editor
     /// </summary>
     public class PaletteMaskDrawer : MaterialPropertyDrawer
     {
-        private readonly ConfigAssetCache<GamePalette> _paletteCache = new();
+        private readonly EditorAssetCache<GamePalette> _paletteCache = new();
 
         private string[] _names;
 

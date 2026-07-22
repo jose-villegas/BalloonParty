@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using BalloonParty.Configuration;
-using BalloonParty.Shared;
+using BalloonParty.EditorUI.Utilities;
 using BalloonParty.Item.Lightning;
 using BalloonParty.Shared.Animation;
 using BalloonParty.Shared.Extensions;
@@ -26,7 +26,7 @@ namespace BalloonParty.Editor.EffectPreview
             typeof(ChainLightningView).GetField("_glowColorIntensity", BindingFlags.NonPublic | BindingFlags.Instance);
 
         private readonly ChainLightningView _view;
-        private readonly ConfigAssetCache<ItemConfiguration> _itemConfigCache = new();
+        private readonly EditorAssetCache<ItemConfiguration> _itemConfigCache = new();
 
         private int _targetCount = 5;
 

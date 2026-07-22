@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BalloonParty.EditorUI.Palette;
-using BalloonParty.Shared;
+using BalloonParty.EditorUI.Utilities;
 using UnityEditor;
 using UnityEngine;
 using BalloonParty.Configuration.Palette;
@@ -13,7 +13,7 @@ namespace BalloonParty.Configuration.Editor
     {
         private const float BoxPadding = 3f;
 
-        private readonly ConfigAssetCache<GamePalette> _paletteCache = new();
+        private readonly EditorAssetCache<GamePalette> _paletteCache = new();
 
         private bool _initialized;
         private string[] _paletteNames;

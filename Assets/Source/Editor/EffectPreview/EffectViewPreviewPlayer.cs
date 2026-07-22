@@ -3,7 +3,6 @@ using BalloonParty.Configuration;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.EditorUI.Palette;
 using BalloonParty.EditorUI.Utilities;
-using BalloonParty.Shared;
 using UnityEditor;
 using UnityEngine;
 using BalloonParty.Configuration.Items;
@@ -17,9 +16,9 @@ namespace BalloonParty.Editor.EffectPreview
     {
         private readonly EditorAnimationLoop _animLoop = new();
         private readonly PaletteColorPicker _colorPicker = new();
-        private readonly ConfigAssetCache<GameConfiguration> _gameConfigCache = new();
-        private readonly ConfigAssetCache<ItemConfiguration> _itemConfigCache = new();
-        private readonly ConfigAssetCache<GamePalette> _paletteCache = new();
+        private readonly EditorAssetCache<GameConfiguration> _gameConfigCache = new();
+        private readonly EditorAssetCache<ItemConfiguration> _itemConfigCache = new();
+        private readonly EditorAssetCache<GamePalette> _paletteCache = new();
 
         private readonly IEffectPreviewModule _module;
         private readonly string _headerLabel;

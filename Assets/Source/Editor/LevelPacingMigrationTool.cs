@@ -1,6 +1,6 @@
 using System.Reflection;
 using BalloonParty.Configuration.Level;
-using BalloonParty.Shared;
+using BalloonParty.EditorUI.Utilities;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,7 +12,7 @@ namespace BalloonParty.Editor
     {
         private const int MaxLevel = 50;
 
-        private static readonly ConfigAssetCache<LevelPacingConfiguration> AssetCache = new();
+        private static readonly EditorAssetCache<LevelPacingConfiguration> AssetCache = new();
 
         [MenuItem("Tools/BalloonParty/Show Scoring Curve Values")]
         private static void ShowCurveValues()
