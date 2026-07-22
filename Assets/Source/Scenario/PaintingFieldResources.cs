@@ -44,6 +44,19 @@ namespace BalloonParty.Scenario
             PushGlobalTexture();
         }
 
+        public void Clear()
+        {
+            if (_fieldA != null)
+            {
+                ClearToEmpty(_fieldA);
+            }
+
+            if (_fieldB != null)
+            {
+                ClearToEmpty(_fieldB);
+            }
+        }
+
         public void Dispose()
         {
             ReleaseRT(ref _fieldA);

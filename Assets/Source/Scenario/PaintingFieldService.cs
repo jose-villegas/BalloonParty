@@ -5,6 +5,8 @@ using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Disturbance;
+using BalloonParty.Shared.Messages;
+using MessagePipe;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -39,6 +41,7 @@ namespace BalloonParty.Scenario
         private readonly IPaintingFieldSettings _settings;
         private readonly IGameDisplayConfiguration _display;
         private readonly IGamePalette _palette;
+        private readonly ISubscriber<LevelUpDismissedMessage> _levelUpDismissedSubscriber;
         private readonly PaintingFieldResources _resources = new();
         private readonly List<PendingStamp> _pendingStamps = new();
         private readonly Vector4[] _batchCenters = new Vector4[MaxStampsPerBatch];
@@ -51,15 +54,18 @@ namespace BalloonParty.Scenario
         private float _timePhase;
         private float _paintingTime;
         private float _windDampen = 1f;
+        private IDisposable _levelUpDismissedSubscription;
 
         public PaintingFieldService(
             IPaintingFieldSettings settings,
             IGameDisplayConfiguration display,
-            IGamePalette palette)
+            IGamePalette palette,
+            ISubscriber<LevelUpDismissedMessage> levelUpDismissedSubscriber)
         {
             _settings = settings;
             _display = display;
             _palette = palette;
+            _levelUpDismissedSubscriber = levelUpDismissedSubscriber;
         }
 
         void IStartable.Start()
@@ -77,6 +83,7 @@ namespace BalloonParty.Scenario
             PushBoundsGlobals();
             Shader.SetGlobalFloat(ActiveId, 1f);
             _lastDecayTime = Time.time;
+            _levelUpDismissedSubscription = _levelUpDismissedSubscriber.Subscribe(_ => Clear());
         }
 
         void ITickable.Tick()
@@ -109,6 +116,7 @@ namespace BalloonParty.Scenario
 
         void IDisposable.Dispose()
         {
+            _levelUpDismissedSubscription?.Dispose();
             Shader.SetGlobalFloat(ActiveId, 0f);
             _resources.Dispose();
         }
@@ -141,6 +149,12 @@ namespace BalloonParty.Scenario
         internal void SetWindDampen(float factor)
         {
             _windDampen = Mathf.Min(_windDampen, Mathf.Clamp01(factor));
+        }
+
+        private void Clear()
+        {
+            _pendingStamps.Clear();
+            _resources.Clear();
         }
 
         private bool FlushPendingStamps()
