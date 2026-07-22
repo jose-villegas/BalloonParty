@@ -74,6 +74,7 @@ namespace BalloonParty.Editor
         private SerializedProperty _rangesProp;
         private Vector2 _scroll;
         private int _expandedRow = -1;
+        private int _focusedRow = -1;
         private bool _balloonsExpanded;
         private bool _itemsExpanded;
         private bool _actorsExpanded;
@@ -284,6 +285,12 @@ namespace BalloonParty.Editor
             DrawGroupBackground(headerRect, 10, 10, headerBg);
             DrawHeaderCells(headerRect);
             TableDrawHelper.DrawHorizontalSeparator(headerRect, hSepColor);
+
+            // Clear focused row when keyboard focus is lost entirely
+            if (GUIUtility.keyboardControl == 0)
+            {
+                _focusedRow = -1;
+            }
 
             // Rows
             for (var i = 0; i < _rangesProp.arraySize; i++)
@@ -733,6 +740,9 @@ namespace BalloonParty.Editor
             var balloonsProp = paramsProp?.FindPropertyRelative("_balloonWeights");
             var rowRect = GUILayoutUtility.GetRect(TotalWidth(), RowHeight);
 
+            // Track keyboard focus entering this row
+            var controlBefore = GUIUtility.keyboardControl;
+
             // Background — fill full row with gap color, then paint group panels on top
             var gapColor = new Color(0.15f, 0.15f, 0.15f, 1f);
             EditorGUI.DrawRect(rowRect, gapColor);
@@ -740,9 +750,14 @@ namespace BalloonParty.Editor
             // Determine if this row's range contains the curve panel's selected level
             var selectedLevel = LevelPacingCurvePanel.SelectedLevel;
             var isActiveRow = !isFallback && selectedLevel >= from && selectedLevel <= to;
+            var isFocusedRow = _focusedRow == index;
 
             Color rowBg;
-            if (isActiveRow)
+            if (isFocusedRow)
+            {
+                rowBg = new Color(0.28f, 0.26f, 0.18f, 1f);
+            }
+            else if (isActiveRow)
             {
                 rowBg = new Color(0.22f, 0.30f, 0.22f, 1f);
             }
@@ -765,8 +780,13 @@ namespace BalloonParty.Editor
             DrawGroupBackground(rowRect, 6, 9, rowBg);
             DrawGroupBackground(rowRect, 10, 10, rowBg);
 
-            // Left-edge accent for the active row
-            if (isActiveRow)
+            // Left-edge accent for active or focused row
+            if (isFocusedRow)
+            {
+                var accent = new Rect(rowRect.x, rowRect.y, 3f, rowRect.height);
+                EditorGUI.DrawRect(accent, new Color(0.9f, 0.7f, 0.2f, 0.9f));
+            }
+            else if (isActiveRow)
             {
                 var accent = new Rect(rowRect.x, rowRect.y, 3f, rowRect.height);
                 EditorGUI.DrawRect(accent, new Color(0.3f, 0.8f, 0.3f, 0.9f));
@@ -870,6 +890,12 @@ namespace BalloonParty.Editor
             if (_expandedRow == index && paramsProp != null)
             {
                 DrawExpandedDetails(paramsProp);
+            }
+
+            // Detect if keyboard focus entered this row's controls
+            if (GUIUtility.keyboardControl != 0 && GUIUtility.keyboardControl != controlBefore)
+            {
+                _focusedRow = index;
             }
         }
 
