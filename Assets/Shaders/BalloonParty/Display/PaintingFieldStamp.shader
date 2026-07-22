@@ -60,12 +60,18 @@ Shader "BalloonParty/Display/PaintingFieldStamp"
 
                 for (int s = 0; s < _StampCount; s++)
                 {
-                    float2 center = _StampCenters[s].xy;
+                    float2 b = _StampCenters[s].xy;
+                    float2 a = _StampCenters[s].zw;
                     float radius = _StampRadii[s];
                     float3 stampColor = _StampColors[s].rgb;
 
-                    float dist = length(i.uv - center);
-                    float mask = 1.0 - smoothstep(radius * 0.8, radius, dist);
+                    // Capsule SDF: distance from pixel to the line segment a→b.
+                    float2 pa = i.uv - a;
+                    float2 ba = b - a;
+                    float h = saturate(dot(pa, ba) / (dot(ba, ba) + 1e-6));
+                    float dist = length(pa - ba * h);
+
+                    float mask = 1.0 - smoothstep(radius * 0.7, radius, dist);
 
                     stampAccum += stampColor * mask;
                     stampWeight += mask;

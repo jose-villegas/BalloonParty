@@ -16,6 +16,11 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
         _TurbStrength       ("Turbulence Strength",     Range(0, 0.008))    = 0.003
         _TurbFreq           ("Turbulence Frequency",    Float)              = 6.0
 
+        [Header(Swirl)]
+        _SwirlFreq          ("Swirl Frequency",         Float)              = 2.5
+        _SwirlStrength      ("Swirl Strength",          Range(0, 0.012))    = 0.004
+        _SwirlSpeed         ("Swirl Speed",             Range(0, 0.3))      = 0.04
+
         [Header(Edges)]
         _EdgeSoftness       ("Edge Softness",           Range(0.01, 1))     = 0.3
         _EdgePow            ("Edge Curve Power",        Range(0.3, 3))      = 1.8
@@ -88,6 +93,9 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
             float  _BleedRadius;
             float  _TurbStrength;
             float  _TurbFreq;
+            float  _SwirlFreq;
+            float  _SwirlStrength;
+            float  _SwirlSpeed;
             float  _EdgeSoftness;
             float  _EdgePow;
             float  _EdgeWarpStrength;
@@ -111,6 +119,28 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
                 float tx = SimplexNoise2D(wp * _TurbFreq);
                 float ty = SimplexNoise2D(wp * _TurbFreq + float2(3.3, 7.1));
                 return float2(tx, ty) * _TurbStrength;
+            }
+
+            // Curl noise: divergence-free flow field that produces pure swirl (no stretching).
+            // Finite-difference curl of a scalar simplex noise field.
+            float2 CurlNoise2D(float2 p)
+            {
+                const float eps = 0.003;
+                float n_py = SimplexNoise2D(float2(p.x, p.y + eps));
+                float n_my = SimplexNoise2D(float2(p.x, p.y - eps));
+                float n_px = SimplexNoise2D(float2(p.x + eps, p.y));
+                float n_mx = SimplexNoise2D(float2(p.x - eps, p.y));
+                return float2(n_py - n_my, -(n_px - n_mx)) / (2.0 * eps);
+            }
+
+            // Animated curl-based flow displacement — paint appears to swirl like wet pigment.
+            float2 FlowOffset(float2 wp)
+            {
+                float2 animP = wp * _SwirlFreq + float2(_Time.y * _SwirlSpeed * 0.7,
+                                                         _Time.y * _SwirlSpeed * 0.4);
+                float2 curl = CurlNoise2D(animP);
+                float paintDensity = PaintingFieldSample(wp).a;
+                return curl * _SwirlStrength * (0.3 + paintDensity * 0.7);
             }
 
             // fBM-warped position for organic edge alpha. Two octaves of simplex warp the lookup
@@ -168,8 +198,8 @@ Shader "BalloonParty/Scenario/PaintingFieldDisplay"
 
             fixed4 frag(v2f IN) : SV_Target
             {
-                // 1. Turbulent position jitter for wet-on-wet diffusion haze.
-                float2 wp = IN.worldPos + TurbulentOffset(IN.worldPos);
+                // 1. Turbulent jitter + curl noise swirl for flowing wet-paint motion.
+                float2 wp = IN.worldPos + TurbulentOffset(IN.worldPos) + FlowOffset(IN.worldPos);
 
                 // 2. Anisotropic alpha-weighted bleed.
                 float4 paint = SampleBleeded(wp);

@@ -57,6 +57,12 @@ namespace BalloonParty.Scenario
         /// <summary>Stamps a palette color at the given world position with the given radius.</summary>
         internal void Stamp(Vector3 worldPosition, float radius, int paletteIndex)
         {
+            Stamp(worldPosition, worldPosition, radius, paletteIndex);
+        }
+
+        /// <summary>Stamps a capsule from <paramref name="prevWorldPosition"/> to <paramref name="worldPosition"/>.</summary>
+        internal void Stamp(Vector3 worldPosition, Vector3 prevWorldPosition, float radius, int paletteIndex)
+        {
             if (!_resources.IsReady || paletteIndex < 0 || paletteIndex >= _palette.Colors.Count)
             {
                 return;
@@ -66,6 +72,7 @@ namespace BalloonParty.Scenario
             _pendingStamps.Add(new PendingStamp
             {
                 Center = _coords.WorldToUV(worldPosition),
+                PrevCenter = _coords.WorldToUV(prevWorldPosition),
                 Radius = _coords.WorldRadiusToUV(radius),
                 Color = new Vector4(color.r, color.g, color.b, 1f)
             });
@@ -135,7 +142,7 @@ namespace BalloonParty.Scenario
                 for (int i = 0; i < batch; i++)
                 {
                     var s = _pendingStamps[offset + i];
-                    _batchCenters[i] = new Vector4(s.Center.x, s.Center.y, 0f, 0f);
+                    _batchCenters[i] = new Vector4(s.Center.x, s.Center.y, s.PrevCenter.x, s.PrevCenter.y);
                     _batchRadii[i] = s.Radius;
                     _batchColors[i] = s.Color;
                 }
@@ -188,6 +195,7 @@ namespace BalloonParty.Scenario
         private struct PendingStamp
         {
             public Vector2 Center;
+            public Vector2 PrevCenter;
             public float Radius;
             public Vector4 Color;
         }

@@ -528,24 +528,9 @@ namespace BalloonParty.Projectile.View
                 var radius = _paintingSettings.StampRadius;
                 var paletteIdx = _palette.PaletteIndexOf(_model.ColorName.Value);
                 var pos = step.Position;
+                var prevPos = _lastPaintPos != Vector3.zero ? _lastPaintPos : pos;
 
-                // Interpolate stamps along the trajectory to avoid gaps at high speeds.
-                if (_lastPaintPos != Vector3.zero)
-                {
-                    var gap = Vector3.Distance(_lastPaintPos, pos);
-                    var spacing = radius * 0.8f;
-                    if (gap > spacing)
-                    {
-                        var steps = Mathf.CeilToInt(gap / spacing);
-                        for (var s = 1; s < steps; s++)
-                        {
-                            var t = (float)s / steps;
-                            _paintingField.Stamp(Vector3.Lerp(_lastPaintPos, pos, t), radius, paletteIdx);
-                        }
-                    }
-                }
-
-                _paintingField.Stamp(pos, radius, paletteIdx);
+                _paintingField.Stamp(pos, prevPos, radius, paletteIdx);
                 _lastPaintPos = pos;
             }
         }
