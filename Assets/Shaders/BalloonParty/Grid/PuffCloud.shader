@@ -91,7 +91,7 @@ Shader "BalloonParty/Grid/PuffCloud"
         Cull Off
         Lighting Off
         ZWrite Off
-        Blend SrcAlpha OneMinusSrcAlpha
+        Blend One OneMinusSrcAlpha
 
         Pass
         {
@@ -448,7 +448,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 // Pure shadow pixel — main cloud absent
                 if (cloud < 0.001)
                 {
-                    return fixed4(_ShadowColor.rgb, shadowAlpha);
+                    return fixed4(_ShadowColor.rgb * shadowAlpha, shadowAlpha);
                 }
 
                 // Domain-warp the light-field lookup by the cloud's DETAIL-octave noise (two
@@ -457,22 +457,26 @@ Shader "BalloonParty/Grid/PuffCloud"
                 // Detail (not base) octave + a small amplitude keeps the warp high-frequency, so the
                 // stamp holds its geometric shape and only its boundary breaks up — a coarse/large warp
                 // snakes the whole beam into ribbons. Uniform-field regions (no local light) warp to an
-                // identical value, so the rest look is untouched.
-                float2 warpP = wpRest * _DetailScale * _NoiseScale + _ScrollSpeedDetail.xy * t;
-                float2 wpLight = wpRest + float2(
-                    NoiseOctave(warpP + float2(31.7, 12.3)),
-                    NoiseOctave(warpP + float2(-8.4, 47.1))) * _LightWarpAmount;
+                // identical value, so the rest look is untouched — skip the 2 noise taps entirely.
+                float localMagWarp = _SceneLightFieldOn > 0.5
+                    ? SceneLightFieldSample(wpRest).r : 0.0;
+                float2 wpLight = wpRest;
+                if (localMagWarp > 0.01)
+                {
+                    float2 warpP = wpRest * _DetailScale * _NoiseScale + _ScrollSpeedDetail.xy * t;
+                    wpLight += float2(
+                        NoiseOctave(warpP + float2(31.7, 12.3)),
+                        NoiseOctave(warpP + float2(-8.4, 47.1))) * _LightWarpAmount;
+                }
 
-                // Compose main cloud with shadow behind
+                // Compose main cloud with shadow behind (pre-multiplied: rgb already weighted by alpha)
                 fixed3 lighting = CloudLighting(lightGradient, wpLight, cloud);
                 fixed3 mainRgb  = _CloudColor.rgb * IN.color.rgb * lighting;
 
                 fixed  combinedA   = mainAlpha + shadowAlpha * (1.0 - mainAlpha);
-                fixed3 combinedRGB = combinedA > 0.0001
-                    ? (mainRgb * mainAlpha + _ShadowColor.rgb * shadowAlpha * (1.0 - mainAlpha)) / combinedA
-                    : mainRgb;
+                fixed3 combinedPM  = mainRgb * mainAlpha + _ShadowColor.rgb * shadowAlpha * (1.0 - mainAlpha);
 
-                return fixed4(combinedRGB, combinedA);
+                return fixed4(combinedPM, combinedA);
                 #else
                 if (cloud < 0.001) discard;
 
@@ -480,7 +484,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 fixed3 lighting = CloudLighting(lightGradient, wpRest, cloud);
                 fixed3 mainRgb  = _CloudColor.rgb * IN.color.rgb * lighting;
 
-                return fixed4(mainRgb, mainAlpha);
+                return fixed4(mainRgb * mainAlpha, mainAlpha);
                 #endif
             }
             ENDCG

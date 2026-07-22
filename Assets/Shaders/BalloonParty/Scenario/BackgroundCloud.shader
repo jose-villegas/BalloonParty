@@ -47,7 +47,7 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
         Cull Off
         Lighting Off
         ZWrite Off
-        Blend SrcAlpha OneMinusSrcAlpha
+        Blend One OneMinusSrcAlpha
 
         Pass
         {
@@ -175,22 +175,21 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
 
                 if (cloud < 0.001)
                 {
-                    return fixed4(_ShadowColor.rgb, shadowAlpha);
+                    return fixed4(_ShadowColor.rgb * shadowAlpha, shadowAlpha);
                 }
 
-                fixed  combinedA   = mainAlpha + shadowAlpha * (1.0 - mainAlpha);
-                fixed3 combinedRGB = combinedA > 0.0001
-                    ? (mainRgb * mainAlpha + _ShadowColor.rgb * shadowAlpha * (1.0 - mainAlpha)) / combinedA
-                    : mainRgb;
+                // Pre-multiplied composite: rgb already weighted by alpha
+                fixed  combinedA  = mainAlpha + shadowAlpha * (1.0 - mainAlpha);
+                fixed3 combinedPM = mainRgb * mainAlpha + _ShadowColor.rgb * shadowAlpha * (1.0 - mainAlpha);
 
-                return fixed4(combinedRGB, combinedA);
+                return fixed4(combinedPM, combinedA);
                 #else
                 if (cloud < 0.001)
                 {
                     discard;
                 }
 
-                return fixed4(mainRgb, mainAlpha);
+                return fixed4(mainRgb * mainAlpha, mainAlpha);
                 #endif
             }
             ENDCG
