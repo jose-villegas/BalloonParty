@@ -123,6 +123,7 @@ namespace BalloonParty.Projectile.View
         private bool _hasFlown;
         private float _pierceAlpha;
         private PathTrace.SegmentBlocked _segmentBlocked;
+        private Vector3 _lastPaintPos;
 
         /// <summary>True once the fired shot has taken at least one physics step.</summary>
         internal bool HasFlown => _hasFlown;
@@ -284,6 +285,7 @@ namespace BalloonParty.Projectile.View
             _shieldShown = false;
             _disappearing = false;
             _hasFlown = false;
+            _lastPaintPos = Vector3.zero;
             _rainbowGlowActive = false;
             _rainbowGlowTimer = 0f;
             ResetPierceSpiral();
@@ -523,7 +525,28 @@ namespace BalloonParty.Projectile.View
 
             if (!string.IsNullOrEmpty(_model.ColorName.Value))
             {
-                _paintingField.Stamp(step.Position, _paintingSettings.StampRadius, _palette.PaletteIndexOf(_model.ColorName.Value));
+                var radius = _paintingSettings.StampRadius;
+                var paletteIdx = _palette.PaletteIndexOf(_model.ColorName.Value);
+                var pos = step.Position;
+
+                // Interpolate stamps along the trajectory to avoid gaps at high speeds.
+                if (_lastPaintPos != Vector3.zero)
+                {
+                    var gap = Vector3.Distance(_lastPaintPos, pos);
+                    var spacing = radius * 0.8f;
+                    if (gap > spacing)
+                    {
+                        var steps = Mathf.CeilToInt(gap / spacing);
+                        for (var s = 1; s < steps; s++)
+                        {
+                            var t = (float)s / steps;
+                            _paintingField.Stamp(Vector3.Lerp(_lastPaintPos, pos, t), radius, paletteIdx);
+                        }
+                    }
+                }
+
+                _paintingField.Stamp(pos, radius, paletteIdx);
+                _lastPaintPos = pos;
             }
         }
 
