@@ -21,7 +21,7 @@ namespace BalloonParty.Shared.Extensions
             label.SetCharArray(CharBuffer, 0, length);
         }
 
-        private static int FormatThousands(int value, char[] buffer)
+        internal static int FormatThousands(int value, char[] buffer)
         {
             if (value == 0)
             {

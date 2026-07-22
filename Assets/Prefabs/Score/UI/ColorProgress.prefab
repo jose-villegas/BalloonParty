@@ -240,6 +240,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1120413920534219324}
   - component: {fileID: 9159033291817326827}
+  - component: {fileID: 7254290256092704521}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -321,6 +322,28 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7254290256092704521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6277398799839937644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87bc50994e404c7a8901b4cee11575c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Shared.Animation.TweenOscillator
+  _channels:
+  - Type: 0
+    Offset: {x: 0, y: -2, z: 0}
+    Pivot: 1
+    Delay: 0
+  _duration: 2
+  _delay: 2
+  _ease: 4
+  _playOnEnable: 1
+  _preview: 0
 --- !u!1 &6351415070400174121
 GameObject:
   m_ObjectHideFlags: 0

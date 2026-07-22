@@ -708,8 +708,28 @@ namespace BalloonParty.Projectile.View
             var target = pierceActive
                 ? (inTapBeat ? _pierceTapBeatAlpha : 1f)
                 : 0f;
-            var maxStep = _pierceFadeDuration > 0f ? Time.deltaTime / _pierceFadeDuration : 1f;
-            _pierceAlpha = Mathf.MoveTowards(_pierceAlpha, target, maxStep);
+
+            if (pierceActive && _pierceAlpha < target && TryFindToughAhead(out var toughPos))
+            {
+                // Distance-based fade-in: alpha tracks spatial progress toward the tough ahead. This
+                // guarantees full visibility at the moment of impact regardless of timeScale — the
+                // spiral materialises in slow-mo as the shot closes in. Never decreases alpha (a new
+                // segment resets SegmentStartPosition, but the aura shouldn't flicker off).
+                var segStart = (Vector3)_model.Flight.SegmentStartPosition;
+                var totalDist = Vector3.Distance(segStart, toughPos);
+                var traveled = Vector3.Distance(segStart, transform.position);
+                var progress = totalDist > 0f ? Mathf.Clamp01(traveled / totalDist) : 1f;
+                _pierceAlpha = Mathf.Max(_pierceAlpha, Mathf.Min(progress, target));
+            }
+            else
+            {
+                // No tough in sight, already at target, tap-beat duck, or fading out: lerp with
+                // unscaled time so slow-mo doesn't stall it.
+                var maxStep = _pierceFadeDuration > 0f
+                    ? Time.unscaledDeltaTime / _pierceFadeDuration
+                    : 1f;
+                _pierceAlpha = Mathf.MoveTowards(_pierceAlpha, target, maxStep);
+            }
 
             _pierceSpiralRenderer.enabled = _pierceAlpha > 0f;
             var color = _pierceSpiralRenderer.color;

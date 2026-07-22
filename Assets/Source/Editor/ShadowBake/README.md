@@ -1,6 +1,6 @@
 # Editor/ShadowBake
 
-Bake-time drop shadows for sprite prefabs. The runtime
+Bake-time drop shadows for sprite and UI Image prefabs. The runtime
 `SpriteShadow`/`SpriteBlur` shaders re-blur a static image every frame (up to 10 texture
 taps per pixel per layer); baking the shadow once replaces that with a single plain
 sprite — and since it's offline, the blur can be as soft as it wants.
@@ -10,6 +10,7 @@ sprite — and since it's offline, the blur can be as soft as it wants.
 | File | What it does |
 |---|---|
 | `SpriteShadowBakerEditor` | Custom inspector for `SpriteShadowBaker` (`Shared/Rendering/`) — the **Bake** button does everything below |
+| `ImageShadowBakerEditor` | Custom inspector for `ImageShadowBaker` (`Shared/Rendering/`) — same workflow adapted for UI `Image` hierarchies |
 
 ## Workflow
 
@@ -62,3 +63,19 @@ revert). Re-baking reuses the same shadow child and overwrites the same PNG.
   is never baked into the texture (it's the child's transform position), so direction and
   shape are independent by construction. Note the Unbreakable had no runtime shadow at all —
   its shaders never implemented one — so the bake is an addition there, not a swap.
+
+## ImageShadowBaker
+
+Same concept for UI `Image` hierarchies. Drop `ImageShadowBaker` on a prefab's
+RectTransform and press **Bake**.
+
+- Collects all enabled child `Image` components with sprites.
+- Renders their silhouettes as quads (using sprite atlas UVs and RectTransform corners)
+  into an ortho RT in the baker's local space.
+- Applies the same iterated separable box blur.
+- Outputs a shadow sprite at the same path convention.
+- Creates/updates a `BakedShadow` Image child (placed as first sibling so it renders
+  behind everything, positioned at the configured offset, `raycastTarget` disabled).
+
+Parameters match the sprite version — units are in UI (canvas) space rather than world
+units, and resolution multiplier is relative to the pixel coverage of the bounding rect.

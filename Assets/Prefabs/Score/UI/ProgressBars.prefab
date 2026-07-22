@@ -562,6 +562,26 @@ PrefabInstance:
       propertyPath: m_SortingLayer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 3825931131455510294, guid: 5759f9f8177e5499585f05d7e9d754de,
+        type: 3}
+      propertyPath: _preview
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3825931131455510294, guid: 5759f9f8177e5499585f05d7e9d754de,
+        type: 3}
+      propertyPath: _channels.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3825931131455510294, guid: 5759f9f8177e5499585f05d7e9d754de,
+        type: 3}
+      propertyPath: _channels.Array.data[0].Offset.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3825931131455510294, guid: 5759f9f8177e5499585f05d7e9d754de,
+        type: 3}
+      propertyPath: _channels.Array.data[1].Offset.y
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 4714902537992658511, guid: 5759f9f8177e5499585f05d7e9d754de,
         type: 3}
       propertyPath: m_Color.a
@@ -572,7 +592,8 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3825931131455510294, guid: 5759f9f8177e5499585f05d7e9d754de, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:

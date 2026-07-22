@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Material_PUShield
-  m_Shader: {fileID: 4800000, guid: 0a28c753d28342a2a9c834e6e25c7eb8, type: 3}
+  m_Shader: {fileID: 4800000, guid: 93e503029041f52468156c1e007976c3, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -79,8 +79,13 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _ShadowDistance: 0.0354
+    - _ShadowFromSceneLight: 0
     - _ShadowSoftness: 0.0209
+    - _ShineFromSceneLight: 0
+    - _ShineInterval: 3
     - _ShineLocation: 0
+    - _ShineSpeed: 1
     - _ShineWidth: 0.25
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -91,6 +96,7 @@ Material:
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
+    - _TimeOffset: 0
     - _UVSec: 0
     - _UseUIAlphaClip: 0
     - _ZTest: 4
