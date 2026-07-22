@@ -32,6 +32,9 @@ namespace BalloonParty.Editor
         private static float _addCumulative;
         private static bool _showTotal = true;
 
+        /// <summary>The level currently selected/viewed in the curve panel.</summary>
+        internal static int SelectedLevel => _selectedLevel;
+
         /// <summary>Draws the scoring curve section. Requires a <see cref="SerializedObject"/> for the asset
         /// to support adding control points with undo.</summary>
         internal static void Draw(LevelPacingConfiguration asset, SerializedObject serialized)

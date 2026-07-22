@@ -737,8 +737,16 @@ namespace BalloonParty.Editor
             var gapColor = new Color(0.15f, 0.15f, 0.15f, 1f);
             EditorGUI.DrawRect(rowRect, gapColor);
 
+            // Determine if this row's range contains the curve panel's selected level
+            var selectedLevel = LevelPacingCurvePanel.SelectedLevel;
+            var isActiveRow = !isFallback && selectedLevel >= from && selectedLevel <= to;
+
             Color rowBg;
-            if (isFallback)
+            if (isActiveRow)
+            {
+                rowBg = new Color(0.22f, 0.30f, 0.22f, 1f);
+            }
+            else if (isFallback)
             {
                 rowBg = new Color(0.25f, 0.32f, 0.38f, 1f);
             }
@@ -756,6 +764,13 @@ namespace BalloonParty.Editor
             DrawGroupBackground(rowRect, 4, 5, rowBg);
             DrawGroupBackground(rowRect, 6, 9, rowBg);
             DrawGroupBackground(rowRect, 10, 10, rowBg);
+
+            // Left-edge accent for the active row
+            if (isActiveRow)
+            {
+                var accent = new Rect(rowRect.x, rowRect.y, 3f, rowRect.height);
+                EditorGUI.DrawRect(accent, new Color(0.3f, 0.8f, 0.3f, 0.9f));
+            }
 
             // Separators (only for left-anchored columns 0–9)
             for (var i = 0; i < ColWidths.Length - 3; i++)
