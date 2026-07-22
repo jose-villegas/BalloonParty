@@ -102,6 +102,7 @@ Shader "BalloonParty/Grid/PuffCloud"
             #pragma shader_feature _SHADOW_ON
             #pragma shader_feature _DENSITY_ON
             #pragma shader_feature _NOISE_DEBUG
+            #pragma multi_compile_local _ _LOW_QUALITY_CLOUD
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
 
@@ -198,7 +199,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 return tex2D(_NoiseTex, p / max(_NoisePeriod, 0.0001)).r * 2.0 - 1.0;
             }
 
-            // Three-octave noise blend.
+            // Three-octave noise blend (two in _LOW_QUALITY_CLOUD).
             // Weights: base 0.50, detail 0.30, fine 0.20.
             // Returns [0, 1] (remapped from raw [-1, 1] per octave).
             // Sampled continuously at world position: one unbroken field across the whole
@@ -209,16 +210,21 @@ Shader "BalloonParty/Grid/PuffCloud"
             {
                 float2 pBase   = wp * _BaseScale   * _NoiseScale + _ScrollSpeedBase.xy   * t;
                 float2 pDetail = wp * _DetailScale  * _NoiseScale + _ScrollSpeedDetail.xy * t;
-                float2 pFine   = wp * _FineScale    * _NoiseScale + _ScrollSpeedFine.xy   * t;
 
                 float nLow  = NoiseOctave(pBase)   * 0.50;
                 nLow       += NoiseOctave(pDetail) * 0.30;
-                float n     = nLow + NoiseOctave(pFine) * 0.20;
 
-                // Base+detail partial, renormalized to [0,1] — the lighting normal derives from
-                // this via screen-space derivatives, where the fine octave would only sparkle.
+                #ifdef _LOW_QUALITY_CLOUD
+                // Skip fine octave — saves 1 texture fetch; renormalize to [0,1].
+                float n = nLow;
+                lowFrequency = nLow / 0.8 * 0.5 + 0.5;
+                return n / 0.8 * 0.5 + 0.5;
+                #else
+                float2 pFine = wp * _FineScale * _NoiseScale + _ScrollSpeedFine.xy * t;
+                float n = nLow + NoiseOctave(pFine) * 0.20;
                 lowFrequency = nLow / 0.8 * 0.5 + 0.5;
                 return n * 0.5 + 0.5;
+                #endif
             }
 
             // Two-octave variant for the shadow: its soft threshold blurs away the fine octave
@@ -287,6 +293,14 @@ Shader "BalloonParty/Grid/PuffCloud"
                 fixed3 lit = lerp(_AmbientColor.rgb, _LightColor.rgb, halfLambert);
                 fixed3 shading = lerp(fixed3(1, 1, 1), lit, _LightIntensity);
 
+                #ifdef _LOW_QUALITY_CLOUD
+                // Simplified tint: magnitude × key color only (skips 4-tap palette decode).
+                float3 keyColor = _SceneLightColor.a > 0.5 ? _SceneLightColor.rgb : float3(1,1,1);
+                float ambient = SceneLightAmbientMagnitude();
+                float local = _SceneLightFieldOn > 0.5 ? SceneLightFieldSample(worldPos).r : 0.0;
+                float3 sceneTint = keyColor * (ambient + local);
+                return shading * lerp(float3(1.0, 1.0, 1.0), sceneTint, _LightInfluence);
+                #else
                 // _ColorNoiseBias blends the scene colour into the cloud's noise shape: at 0 the
                 // tint applies uniformly; at 1 it tracks cloud density (strong in the core, absent
                 // at thin edges), making the colour feel integrated into the turbulence. The local
@@ -299,6 +313,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 float influence = lerp(_LightInfluence, _LightInfluence * cloudDensity, biasStrength);
                 float3 sceneTint = SceneLightTintAt(worldPos);
                 return shading * lerp(float3(1.0, 1.0, 1.0), sceneTint, influence);
+                #endif
             }
 
             v2f vert(appdata_t IN)
@@ -404,6 +419,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 #ifdef _DENSITY_ON
                 float cloudOrig = smoothstep(_EdgeLow, _EdgeHigh, noiseOrig);
                 float cloud = cloudOrig;
+                #ifndef _LOW_QUALITY_CLOUD
                 if (disturbance > 0.001)
                 {
                     float2 wpDisp = wpRest + displace;
@@ -412,6 +428,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                     float cloudDisp = smoothstep(_EdgeLow, _EdgeHigh, noiseDisp);
                     cloud = lerp(cloudOrig, cloudDisp, disturbance);
                 }
+                #endif
                 cloud *= density;
                 #else
                 float cloud = smoothstep(_EdgeLow, _EdgeHigh, noiseOrig);
