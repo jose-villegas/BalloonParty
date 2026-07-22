@@ -2,6 +2,9 @@
 
 # Level Pacing Overhaul — unified scoring curve replacing override+formula dual path
 
+> **Status: COMPLETE** (2026-07-20). All phases shipped. The legacy override+formula
+> system is deleted; `LevelScoringCurve` is the sole scoring path.
+
 > The level pacing system determines how many points a player needs to clear each level.
 > Today it uses two separate mechanisms stitched together: hand-authored overrides for
 > early levels and a logarithmic formula for everything after. This plan replaces both
@@ -67,10 +70,12 @@ by the number of colors active at that level to get the per-color bar size.
 {
     [Min(1)] [SerializeField] private int _level;
     [SerializeField] private float _cumulativeScore;
+    [SerializeField] private SegmentMode _segmentMode;
 
     public int Level { get; }
     public float CumulativeScore { get; }
-    internal ScoringControlPoint(int level, float cumulativeScore);
+    public SegmentMode SegmentMode { get; }
+    internal ScoringControlPoint(int level, float cumulativeScore, SegmentMode segmentMode = SegmentMode.Smooth);
 }
 
 [Serializable] internal struct TailGrowthConfig
@@ -84,6 +89,7 @@ by the number of colors active at that level to get the per-color bar size.
 }
 
 internal enum TailGrowthMode { Geometric, Linear }
+internal enum SegmentMode { Smooth, Linear, Convex, Concave }
 ```
 
 All structs (not classes) — matches existing `LevelRangeEntry`/`LevelThresholdOverride`
@@ -99,11 +105,22 @@ evaluated across four domains:
 ```
 level ≤ 0          → 0
 level < first CP   → linear ramp from (0, 0) to first control point
-level within CPs   → Fritsch-Carlson monotone cubic interpolation
+level within CPs   → per-segment interpolation (see below)
 level > last CP    → tail extrapolation (Geometric or Linear)
 ```
 
-### Why Fritsch-Carlson
+### Per-Segment Modes
+
+Each control point defines the interpolation mode for the segment that follows it:
+
+| Mode | Behaviour |
+|------|-----------|
+| **Smooth** | Fritsch–Carlson monotone cubic (default) — guaranteed no overshoots |
+| **Linear** | Straight line between adjacent CPs |
+| **Convex** | Quadratic ease-in — starts slow, ends fast |
+| **Concave** | Quadratic ease-out — starts fast, ends slow |
+
+### Why Fritsch-Carlson (Smooth mode)
 
 Standard cubic Hermite splines can overshoot between control points — the curve might
 dip below a previous value, producing negative per-level requirements. Fritsch-Carlson
@@ -190,7 +207,7 @@ LevelPacingWindow (Editor only)
 
 ## Migration Plan
 
-### Phase 1 — Add alongside old (non-breaking)
+### Phase 1 — Add alongside old (non-breaking) ✅ (2026-07-10)
 
 - Add `LevelScoringCurve`, `ScoringControlPoint`, `TailGrowthConfig`, `TailGrowthMode`
 - Add `[SerializeField] private LevelScoringCurve _scoringCurve` to
@@ -199,18 +216,20 @@ LevelPacingWindow (Editor only)
 - `ThresholdForLevel` checks `_scoringCurve.IsEmpty` → old path; else new path
 - Write `[MenuItem]` migration tool converting existing overrides+formula into CPs
 
-### Phase 2 — Validate + Editor
+### Phase 2 — Validate + Editor ✅ (2026-07-14)
 
 - Compare Curves validator (old vs new for levels 1–50)
 - Tune tail growth to fix level 11 discontinuity
 - Add `LevelPacingCurvePanel` to editor window
 - Run full test suite (29 cases)
 
-### Phase 3 — Remove old system
+### Phase 3 — Remove old system ✅ (2026-07-20)
 
 - Delete `_thresholdOverrides`, `_baseValue`, formula branch, `LevelThresholdOverride`
 - `OnValidate` validates curve monotonicity only
 - Update READMEs
+- Per-segment interpolation modes added (Smooth, Linear, Convex, Concave)
+- Tail extrapolation modes: Geometric, Linear
 
 ---
 
@@ -269,16 +288,18 @@ controller's comparison logic.
 ```
 Assets/Source/
 ├── Configuration/Level/
-│   ├── LevelPacingConfiguration.cs       (modified — adds _scoringCurve field)
+│   ├── LevelPacingConfiguration.cs       (modified — sole scoring path)
 │   ├── LevelScoringCurve.cs              (new)
 │   ├── ScoringControlPoint.cs            (new)
 │   ├── TailGrowthConfig.cs               (new)
-│   └── TailGrowthMode.cs                 (new)
+│   ├── TailGrowthMode.cs                 (new)
+│   └── SegmentMode.cs                    (new)
 ├── Game/Level/
 │   ├── LevelController.cs                (unchanged)
 │   └── LevelDifficultyResolver.cs        (unchanged)
-└── Editor/Configuration/
-    └── LevelPacingCurvePanel.cs          (new — editor visualization)
+└── Editor/
+    ├── LevelPacingCurvePanel.cs          (new — interactive curve editor)
+    └── LevelPacingMigrationTool.cs       (new — legacy → curve migration)
 ```
 
 ---

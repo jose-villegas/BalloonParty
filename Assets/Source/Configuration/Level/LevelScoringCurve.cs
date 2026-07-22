@@ -5,8 +5,9 @@ using UnityEngine;
 namespace BalloonParty.Configuration.Level
 {
     /// <summary>Monotone piecewise-cubic scoring curve. Authors cumulative score milestones at key levels;
-    /// intermediate levels are interpolated via Fritsch–Carlson monotone Hermite; levels beyond the last
-    /// control point extrapolate via <see cref="TailGrowthConfig"/>.
+    /// intermediate levels are interpolated via Fritsch–Carlson monotone Hermite (with cached tangents to
+    /// avoid per-call allocation); levels beyond the last control point extrapolate via
+    /// <see cref="TailGrowthConfig"/>. Per-segment mode overrides allow Linear, Convex, or Concave shapes.
     /// <para>A difficulty spike requires three control points: rise, peak, and return.</para></summary>
     [Serializable]
     internal struct LevelScoringCurve

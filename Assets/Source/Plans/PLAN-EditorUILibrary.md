@@ -321,41 +321,60 @@ and `IconButtonHelper`.
 
 ## Implementation Phases
 
-### Phase 1 — Package Scaffold + P0 Core
+### Phase 1 — Package Scaffold + P0 Core ✅ (2026-07-15)
 Create the embedded package at `Packages/com.balloonparty.editorui/`.
 Move existing eligible components (with `.meta` files).  Create `StyleCache`,
 `BarChart`, `PolylineOverlay`, `PlotGrid`.  Refactor `LevelPacingCurvePanel`
 to use them.  Write tests for computation logic.
 
-### Phase 2a — Helper Components (P1 + P2)
+### Phase 2a — Helper Components (P1 + P2) ✅ (2026-07-16)
 Create `NavigationHeader`, `IconButtonHelper`, `PlotLegend`, `PlotMarker`,
 `FoldoutSection`.  Finish refactoring `LevelPacingCurvePanel` to ~200 LOC.
 
-### Phase 2b — Palette Generalization
+### Phase 2b — Palette Generalization ✅ (2026-07-17)
 Implement `IColorPalette` + `EditorAssetCache<T>` (with injectable finder
 for testability).  Migrate `PaletteColorPicker` to the package.
 Project provides `GamePaletteAdapter : IColorPalette` (composition over
 modifying runtime type).  Mark `ConfigAssetCache<T>` as `[Obsolete]` —
 actual deletion deferred to Phase 5 (17+ consumers must migrate first).
 
-### Phase 2c — Broad StyleCache Adoption
+### Phase 2c — Broad StyleCache Adoption ✅ (2026-07-17)
 Adopt `StyleCache` in all 11 eligible windows (mechanical, low-risk).
 
-### Phase 3 — Generic Cell (P0 TypedEntrySelectorCell) *(parallelisable with Phase 2)*
+### Phase 3 — Generic Cell (P0 TypedEntrySelectorCell) ✅ (2026-07-18)
 Create `TypedEntrySelectorCell<TEnum>` in the package.  Refactor the
 three balloon/item/actor expanded + collapsed cell methods in
 `LevelPacingWindow`.  Collapse triplicated focus methods.
 
-### Phase 4 — Broad Adoption
+### Phase 4 — Broad Adoption ✅ (2026-07-20)
 Adopt `FoldoutSection` in BushBakerWindow, ShadowBakerEditor,
 SpriteLayerCombinerEditor.  Adopt `BarChart` in ShotSolverWindow.
 Adopt `ST`/`AL`/`SFT` in UnusedAssetsWindow.  Adopt `IBH` in
-GameRenderMapsWindow.
+GameRenderMapsWindow.  Phase 4b additions: `FoldoutSection` delegate
+overload, `IconButtonHelper.DrawButton`, `BarChart` ThresholdLine +
+BarColorResolver, `StyleCache` domain-reload hook, `RowColorResolver`,
+`TableDrawHelper.ComputeColumnX`/`HasGapBefore`.
 
-### Phase 5 — Cleanup + Publish
+### Phase 5 — Cleanup + Publish ✅ (2026-07-22)
 Remove dead private methods from refactored windows.  Delete
-`ConfigAssetCache<T>` (all consumers migrated by Phase 4).  Update package
-`README.md`.  Push package to standalone git repo.  Tag `v1.0.0`.
+`ConfigAssetCache<T>` (all consumers migrated).  Delete old `EditorUI/`
+folder.  Update package `README.md`.
+
+---
+
+## Final State
+
+The package is complete and embedded at `Packages/com.balloonparty.editorui/`.
+
+| Metric | Value |
+|--------|-------|
+| Public types | 25+ (across 5 namespaces) |
+| Test files | 15 |
+| Consumer windows migrated | LevelPacingWindow, LevelPacingCurvePanel, BushBakerWindow, ShotSolverWindow, TextureAuditWindow, GameConfigurationEditor |
+| Deleted | `ConfigAssetCache<T>`, old `Assets/Source/Editor/EditorUI/` |
+
+The package has no `using BalloonParty.*` dependencies — it is fully
+portable to other Unity projects via the `IColorPalette` interface pattern.
 
 ---
 
