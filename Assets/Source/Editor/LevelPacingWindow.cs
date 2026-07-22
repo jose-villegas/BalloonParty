@@ -785,8 +785,11 @@ namespace BalloonParty.Editor
             // Paint full row background first (ensures cells + right area all match)
             EditorGUI.DrawRect(rowRect, rowBg);
 
-            // Paint gaps between column groups darker
-            DrawGroupGaps(rowRect, gapColor);
+            // Paint gaps between column groups darker (skip on highlighted rows for uniform tint)
+            if (!isFocusedRow && !isActiveRow)
+            {
+                DrawGroupGaps(rowRect, gapColor);
+            }
 
             // Left-edge accent for active or focused row
             if (isFocusedRow)

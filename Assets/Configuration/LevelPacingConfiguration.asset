@@ -4174,25 +4174,25 @@ MonoBehaviour:
       _cumulativeScore: 1100
       _segmentMode: 0
     - _level: 3
-      _cumulativeScore: 2300
+      _cumulativeScore: 2100
       _segmentMode: 0
     - _level: 4
-      _cumulativeScore: 3900
+      _cumulativeScore: 3300
       _segmentMode: 0
     - _level: 5
-      _cumulativeScore: 5000
+      _cumulativeScore: 4200
       _segmentMode: 0
     - _level: 6
-      _cumulativeScore: 6400
+      _cumulativeScore: 5400
       _segmentMode: 0
     - _level: 7
-      _cumulativeScore: 8200
+      _cumulativeScore: 6900
       _segmentMode: 0
     - _level: 8
-      _cumulativeScore: 10200
+      _cumulativeScore: 8700
       _segmentMode: 0
     - _level: 9
-      _cumulativeScore: 11900
+      _cumulativeScore: 9900
       _segmentMode: 0
     _tailGrowth:
       _mode: 0
