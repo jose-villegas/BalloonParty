@@ -538,7 +538,17 @@ namespace BalloonParty.Game.Score.Behaviours
             var localT = segLength > Mathf.Epsilon ? (d - cumulative[seg]) / segLength : 0f;
             var a = state.Shape.Vertices[walk.Vertices[seg]];
             var b = state.Shape.Vertices[walk.Vertices[(seg + 1) % m]];
-            return walk.Arc ? Vector3.Slerp(a, b, localT) : Vector3.Lerp(a, b, localT);
+            return walk.Arc ? NormalizedLerp(a, b, localT) : Vector3.LerpUnclamped(a, b, localT);
+        }
+
+        // Fast great-circle interpolation: Lerp + normalize replaces Slerp's trig (acos + 2 sin)
+        // with a single normalize (rsqrt). On unit-radius vertices this traces the same arc with
+        // a mild speed nonlinearity at wide angles — imperceptible at gameplay pen speeds.
+        private static Vector3 NormalizedLerp(Vector3 a, Vector3 b, float t)
+        {
+            var v = Vector3.LerpUnclamped(a, b, t);
+            var mag = v.magnitude;
+            return mag > 1e-6f ? v * (a.magnitude / mag) : a;
         }
 
         private static void ScaleVertices(FormationState state, float scale)
