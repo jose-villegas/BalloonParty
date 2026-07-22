@@ -1,4 +1,4 @@
-Shader "BalloonParty/Scenario/PaintingFieldDisplay"
+Shader "BalloonParty/Scenario/SmokeTrailDisplay"
 {
     // Full-screen display of the painting field RT as a watercolor wash behind the cloud backdrop.
     // Placed on a quad spanning the viewport, sortingOrder below the clouds. It reads the global
