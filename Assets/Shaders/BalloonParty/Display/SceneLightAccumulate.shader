@@ -1,13 +1,14 @@
 Shader "Hidden/BalloonParty/SceneLightAccumulate"
 {
-    // Pass 2 of the light-field chain (see @ref plan_lighting "Milestone 3"): reads the rest-filled
-    // field and ADDS every registered light's magnitude into R, tagging A with the palette index of the
-    // light that contributes most at each texel. GB (the rest direction) is passed through untouched —
-    // the gradient pass recomputes it from R afterwards.
+    // Pass 1 of the light-field chain (Fill merged in): starts from a hardcoded rest state
+    // (R=0, GB=0.5, A=0) and ADDS every registered light's magnitude into R, tagging A with the
+    // palette index of the light that contributes most at each texel. GB outputs the neutral
+    // direction constant (0.5) — the gradient pass recomputes it from R afterwards. This eliminates
+    // the prior Fill blit (which only wrote the constant rest state), saving one tile flush.
     //
     // Mirrors Grid/DisturbanceStampBatched: up to 32 lights per blit, aspect-corrected radial
-    // falloff, (index+1)/16 palette encoding. With _StampCount = 0 the loop is skipped and the pass
-    // is an exact identity on R, GB and A (the rest field survives bit-for-bit).
+    // falloff, (index+1)/16 palette encoding. With _StampCount = 0 the loop is skipped and the
+    // output is the pure rest state (identical to what Fill produced).
     Properties
     {
         _MainTex     ("Field (read)",   2D)    = "black" {}
@@ -30,7 +31,7 @@ Shader "Hidden/BalloonParty/SceneLightAccumulate"
 
             #define MAX_STAMPS 32
 
-            sampler2D _MainTex;
+            sampler2D _MainTex; // required by Graphics.Blit binding; not sampled (rest state hardcoded)
             float     _MaxBoost;    // ceiling on the summed additive boost above rest (soft-clamped)
             float     _StampAspect; // field height/width; corrects UV anisotropy so stamps stay circular
             int       _StampCount;
@@ -65,12 +66,11 @@ Shader "Hidden/BalloonParty/SceneLightAccumulate"
             float4 frag(v2f i) : SV_Target
             {
                 float2 uv = i.uv;
-                float4 current = tex2D(_MainTex, uv);
 
-                float rRest = current.r;
-                // Palette index is written hard (dominant source wins), never blended — averaging
-                // two indices would decode to a wrong color. Default: keep whatever's there (rest = 0).
-                float bestIndex = current.a;
+                // Rest state hardcoded — eliminates the prior Fill blit (which only wrote this
+                // constant). R=0: no local boost. GB=0.5: neutral direction. A=0: no palette tag.
+                float rRest = 0.0;
+                float bestIndex = 0.0;
 
                 float summedBoost = 0.0;
                 float bestContribution = 0.0;
@@ -118,7 +118,7 @@ Shader "Hidden/BalloonParty/SceneLightAccumulate"
                 // summedBoost = 0 this is exactly 0, leaving rRest untouched (the count-0 identity).
                 float boost = _MaxBoost * (1.0 - exp(-summedBoost / _MaxBoost));
 
-                return float4(rRest + boost, current.g, current.b, bestIndex);
+                return float4(rRest + boost, 0.5, 0.5, bestIndex);
             }
             ENDCG
         }

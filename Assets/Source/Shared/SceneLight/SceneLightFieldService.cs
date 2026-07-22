@@ -181,7 +181,6 @@ namespace BalloonParty.Shared.SceneLight
                 return;
             }
 
-            _resources.Fill();
             RunAccumulate(count);
             PushGradientParams();
             _resources.Gradient();
@@ -218,7 +217,7 @@ namespace BalloonParty.Shared.SceneLight
             _resources.Dispose();
         }
 
-        int ICadencedEffect.BlitWeight => 3;
+        int ICadencedEffect.BlitWeight => 2;
 
         void ICadencedEffect.ApplyPhaseOffset(float offset01)
         {
@@ -347,21 +346,20 @@ namespace BalloonParty.Shared.SceneLight
 
         private void RunAccumulate(int count)
         {
-            if (count == 0)
-            {
-                return;
-            }
-
             var material = _resources.AccumulateMaterial;
             material.SetInt(StampCountId, count);
-            material.SetVectorArray(StampCentersId, _batchCenters);
-            material.SetFloatArray(StampRadiiId, _batchRadii);
-            material.SetFloatArray(StampEndRadiiId, _batchEndRadii);
-            material.SetFloatArray(StampMagnitudesId, _batchMagnitudes);
-            material.SetFloatArray(StampFalloffsId, _batchFalloffs);
-            material.SetFloatArray(StampColorIndicesId, _batchColorIndices);
-            material.SetFloat(MaxBoostId, _settings.AccumulationCeiling);
-            material.SetFloat(StampAspectId, _stampAspect);
+
+            if (count > 0)
+            {
+                material.SetVectorArray(StampCentersId, _batchCenters);
+                material.SetFloatArray(StampRadiiId, _batchRadii);
+                material.SetFloatArray(StampEndRadiiId, _batchEndRadii);
+                material.SetFloatArray(StampMagnitudesId, _batchMagnitudes);
+                material.SetFloatArray(StampFalloffsId, _batchFalloffs);
+                material.SetFloatArray(StampColorIndicesId, _batchColorIndices);
+                material.SetFloat(MaxBoostId, _settings.AccumulationCeiling);
+                material.SetFloat(StampAspectId, _stampAspect);
+            }
 
             _resources.BlitAndSwap(material);
         }
