@@ -74,6 +74,7 @@ namespace BalloonParty.Editor
         private SerializedProperty _rangesProp;
         private Vector2 _scroll;
         private int _expandedRow = -1;
+        private int _focusedRow = -1;
         private bool _balloonsExpanded;
         private bool _itemsExpanded;
         private bool _actorsExpanded;
@@ -270,6 +271,24 @@ namespace BalloonParty.Editor
             DrawGroupBackground(groupTitleRect, 6, 9, titleBg);
             DrawGroupBackground(groupTitleRect, 10, 10, titleBg);
             DrawGroupTitles(groupTitleRect);
+
+            // Group border separators at both edges of each gap
+            for (var i = 0; i < GapBeforeCols.Length; i++)
+            {
+                var col = GapBeforeCols[i];
+                var leftX = groupTitleRect.x + ColX(col);
+                var rightX = leftX - GroupGap;
+                EditorGUI.DrawRect(new Rect(rightX, groupTitleRect.y, SeparatorWidth, groupTitleRect.height),
+                    new Color(0.4f, 0.4f, 0.4f, 0.9f));
+                EditorGUI.DrawRect(new Rect(leftX, groupTitleRect.y, SeparatorWidth, groupTitleRect.height),
+                    new Color(0.4f, 0.4f, 0.4f, 0.9f));
+            }
+
+            // Right edge of Actors group
+            var actorRightX = groupTitleRect.x + ColX(ActorColIndex) + EffectiveActorColWidth;
+            EditorGUI.DrawRect(new Rect(actorRightX, groupTitleRect.y, SeparatorWidth, groupTitleRect.height),
+                new Color(0.4f, 0.4f, 0.4f, 0.9f));
+
             var hSepColor = new Color(0.35f, 0.35f, 0.35f, 0.5f);
             TableDrawHelper.DrawHorizontalSeparator(groupTitleRect, hSepColor);
 
@@ -284,6 +303,12 @@ namespace BalloonParty.Editor
             DrawGroupBackground(headerRect, 10, 10, headerBg);
             DrawHeaderCells(headerRect);
             TableDrawHelper.DrawHorizontalSeparator(headerRect, hSepColor);
+
+            // Clear focused row when keyboard focus is lost entirely
+            if (GUIUtility.keyboardControl == 0)
+            {
+                _focusedRow = -1;
+            }
 
             // Rows
             for (var i = 0; i < _rangesProp.arraySize; i++)
@@ -404,6 +429,17 @@ namespace BalloonParty.Editor
             var xEnd = rowRect.x + ColX(toCol) + EffectiveColWidth(toCol);
             var groupRect = new Rect(x, rowRect.y, xEnd - x, rowRect.height);
             EditorGUI.DrawRect(groupRect, bg);
+        }
+
+        private void DrawGroupGaps(Rect rowRect, Color gapColor)
+        {
+            for (var i = 0; i < GapBeforeCols.Length; i++)
+            {
+                var col = GapBeforeCols[i];
+                var gapX = rowRect.x + ColX(col) - GroupGap;
+                var gapRect = new Rect(gapX, rowRect.y, GroupGap, rowRect.height);
+                EditorGUI.DrawRect(gapRect, gapColor);
+            }
         }
 
         private void DrawGroupTitles(Rect rowRect)
@@ -690,8 +726,8 @@ namespace BalloonParty.Editor
                     EditorGUI.LabelField(cell, ColHeaders[i], style);
                 }
 
-                // Separator (skip right-anchored columns)
-                if (i >= 11)
+                // Separator (skip right-anchored columns and last col before gap)
+                if (i >= 11 || HasGapBefore(i + 1))
                 {
                     continue;
                 }
@@ -699,6 +735,23 @@ namespace BalloonParty.Editor
                 var sep = new Rect(cell.xMax, rowRect.y, SeparatorWidth, rowRect.height);
                 EditorGUI.DrawRect(sep, new Color(0.35f, 0.35f, 0.35f, 0.8f));
             }
+
+            // Group border separators at both edges of each gap
+            for (var i = 0; i < GapBeforeCols.Length; i++)
+            {
+                var col = GapBeforeCols[i];
+                var leftX = rowRect.x + ColX(col);
+                var rightX = leftX - GroupGap;
+                EditorGUI.DrawRect(new Rect(rightX, rowRect.y, SeparatorWidth, rowRect.height),
+                    new Color(0.4f, 0.4f, 0.4f, 0.9f));
+                EditorGUI.DrawRect(new Rect(leftX, rowRect.y, SeparatorWidth, rowRect.height),
+                    new Color(0.4f, 0.4f, 0.4f, 0.9f));
+            }
+
+            // Right edge of Actors group
+            var actorRightX = rowRect.x + ColX(ActorColIndex) + EffectiveActorColWidth;
+            EditorGUI.DrawRect(new Rect(actorRightX, rowRect.y, SeparatorWidth, rowRect.height),
+                new Color(0.4f, 0.4f, 0.4f, 0.9f));
         }
 
         private static void DrawBalloonSubHeaders(Rect cell)
@@ -733,12 +786,25 @@ namespace BalloonParty.Editor
             var balloonsProp = paramsProp?.FindPropertyRelative("_balloonWeights");
             var rowRect = GUILayoutUtility.GetRect(TotalWidth(), RowHeight);
 
-            // Background — fill full row with gap color, then paint group panels on top
+            // Track keyboard focus entering this row
+            var controlBefore = GUIUtility.keyboardControl;
+
+            // Determine row background color
             var gapColor = new Color(0.15f, 0.15f, 0.15f, 1f);
-            EditorGUI.DrawRect(rowRect, gapColor);
+            var selectedLevel = LevelPacingCurvePanel.SelectedLevel;
+            var isActiveRow = !isFallback && selectedLevel >= from && selectedLevel <= to;
+            var isFocusedRow = _focusedRow == index;
 
             Color rowBg;
-            if (isFallback)
+            if (isFocusedRow)
+            {
+                rowBg = new Color(0.28f, 0.26f, 0.18f, 1f);
+            }
+            else if (isActiveRow)
+            {
+                rowBg = new Color(0.22f, 0.30f, 0.22f, 1f);
+            }
+            else if (isFallback)
             {
                 rowBg = new Color(0.25f, 0.32f, 0.38f, 1f);
             }
@@ -748,22 +814,61 @@ namespace BalloonParty.Editor
             }
             else
             {
-                rowBg = new Color(0.21f, 0.21f, 0.21f, 1f);
+                rowBg = new Color(0.19f, 0.19f, 0.19f, 1f);
             }
 
-            DrawGroupBackground(rowRect, 0, 0, rowBg);
-            DrawGroupBackground(rowRect, 1, 3, rowBg);
-            DrawGroupBackground(rowRect, 4, 5, rowBg);
-            DrawGroupBackground(rowRect, 6, 9, rowBg);
-            DrawGroupBackground(rowRect, 10, 10, rowBg);
+            // Paint full row background first (ensures cells + right area all match)
+            EditorGUI.DrawRect(rowRect, rowBg);
 
-            // Separators (only for left-anchored columns 0–9)
-            for (var i = 0; i < ColWidths.Length - 3; i++)
+            // Paint gaps between column groups darker (skip on highlighted rows for uniform tint)
+            if (!isFocusedRow && !isActiveRow)
             {
+                DrawGroupGaps(rowRect, gapColor);
+            }
+
+            // Left-edge accent for active or focused row
+            if (isFocusedRow)
+            {
+                var accent = new Rect(rowRect.x, rowRect.y, 3f, rowRect.height);
+                EditorGUI.DrawRect(accent, new Color(0.9f, 0.7f, 0.2f, 0.9f));
+            }
+            else if (isActiveRow)
+            {
+                var accent = new Rect(rowRect.x, rowRect.y, 3f, rowRect.height);
+                EditorGUI.DrawRect(accent, new Color(0.3f, 0.8f, 0.3f, 0.9f));
+            }
+
+            // Separators (only for left-anchored columns 0–10)
+            for (var i = 0; i < ColWidths.Length - 4; i++)
+            {
+                if (HasGapBefore(i + 1))
+                {
+                    continue;
+                }
+
                 var colW = EffectiveColWidth(i);
                 var sep = new Rect(rowRect.x + ColX(i) + colW, rowRect.y, SeparatorWidth, rowRect.height);
                 EditorGUI.DrawRect(sep, new Color(0.35f, 0.35f, 0.35f, 0.5f));
             }
+
+            // Group border separators at both edges of each gap
+            for (var i = 0; i < GapBeforeCols.Length; i++)
+            {
+                var col = GapBeforeCols[i];
+                var leftX = rowRect.x + ColX(col);
+                var rightX = leftX - GroupGap;
+                // Right edge of previous group
+                EditorGUI.DrawRect(new Rect(rightX, rowRect.y, SeparatorWidth, rowRect.height),
+                    new Color(0.4f, 0.4f, 0.4f, 0.9f));
+                // Left edge of next group
+                EditorGUI.DrawRect(new Rect(leftX, rowRect.y, SeparatorWidth, rowRect.height),
+                    new Color(0.4f, 0.4f, 0.4f, 0.9f));
+            }
+
+            // Right edge of Actors group
+            var actorRightX = rowRect.x + ColX(ActorColIndex) + EffectiveActorColWidth;
+            EditorGUI.DrawRect(new Rect(actorRightX, rowRect.y, SeparatorWidth, rowRect.height),
+                new Color(0.4f, 0.4f, 0.4f, 0.9f));
 
             // Horizontal row separator at the bottom
             TableDrawHelper.DrawHorizontalSeparator(rowRect);
@@ -855,6 +960,12 @@ namespace BalloonParty.Editor
             if (_expandedRow == index && paramsProp != null)
             {
                 DrawExpandedDetails(paramsProp);
+            }
+
+            // Detect if keyboard focus entered this row's controls
+            if (GUIUtility.keyboardControl != 0 && GUIUtility.keyboardControl != controlBefore)
+            {
+                _focusedRow = index;
             }
         }
 
