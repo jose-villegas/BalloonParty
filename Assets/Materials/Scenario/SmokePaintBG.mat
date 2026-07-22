@@ -29,6 +29,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _CurlTex:
+        m_Texture: {fileID: 2800000, guid: d37b37669ef1d43f695dc333051843c1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _GrainTex:
         m_Texture: {fileID: 2800000, guid: 4a84eb7a963384b7380589ed6109f688, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -70,7 +74,7 @@ Material:
     - _EdgeHigh: 0.626
     - _EdgeLow: 0.307
     - _EdgePow: 2.3
-    - _EdgeSoftness: 0.9
+    - _EdgeSoftness: 0.975
     - _EdgeWarpFreq: 3.5
     - _EdgeWarpStrength: 0.006
     - _EnableDensity: 1
@@ -107,12 +111,12 @@ Material:
     - _SkyTransmissionStrength: 0.5
     - _SlotBlend: 0.35
     - _SlotRadius: 0.45
-    - _SmokeEdgeSharpness: 3
+    - _SmokeEdgeSharpness: 3.5
     - _SpriteScale: 0.7
     - _StripWidth: 0.9
-    - _SwirlFreq: 2
-    - _SwirlSpeed: 0.2
-    - _SwirlStrength: 0.005
+    - _SwirlFreq: 3
+    - _SwirlSpeed: 0.3
+    - _SwirlStrength: 0.008
     - _TemperatureRange: 0.712
     - _TimeOffset: 0
     - _TurbFreq: 3

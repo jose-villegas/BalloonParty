@@ -19,5 +19,6 @@ MonoBehaviour:
   _decayTickInterval: 0.05
   _stampRadius: 0.09
   _windSpeed: 0.4
-  _windInfluence: 0.725
-  _windAgeBias: 0.3
+  _windInfluence: 0.3
+  _windAgeBias: 0.4
+  _windDirection: {x: 0.3, y: 0.1}
