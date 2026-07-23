@@ -9,13 +9,14 @@ using VContainer.Unity;
 namespace BalloonParty.Game.Danger
 {
     /// <summary>0→1 "how close are we to dying" signal: next turn's spawn overflow relative to hearts left to absorb it.</summary>
-    internal class SpaceDanger : IStartable, IDisposable, IDangerLevel
+    internal class SpaceDanger : IStartable, ILateTickable, IDisposable, IDangerLevel
     {
         private readonly SlotGrid _grid;
         private readonly IPlayerHealth _health;
         private readonly IActiveLevelParameters _levelParams;
         private readonly ReactiveProperty<float> _level = new(0f);
         private readonly CompositeDisposable _subscriptions = new();
+        private bool _dirty;
 
         public IReadOnlyReactiveProperty<float> Level => _level;
 
@@ -28,9 +29,19 @@ namespace BalloonParty.Game.Danger
 
         public void Start()
         {
-            _grid.OnChanged.Subscribe(_ => Recompute()).AddTo(_subscriptions);
-            _health.Current.Subscribe(_ => Recompute()).AddTo(_subscriptions);
+            // A bomb pop or balance sweep can fire OnChanged a dozen+ times in one frame; only the
+            // settled end-of-frame state matters, so mark dirty here and recompute once in LateTick.
+            _grid.OnChanged.Subscribe(_ => _dirty = true).AddTo(_subscriptions);
+            _health.Current.Subscribe(_ => _dirty = true).AddTo(_subscriptions);
             Recompute();
+        }
+
+        public void LateTick()
+        {
+            if (_dirty)
+            {
+                Recompute();
+            }
         }
 
         public void Dispose()
@@ -52,6 +63,8 @@ namespace BalloonParty.Game.Danger
 
         private void Recompute()
         {
+            _dirty = false;
+
             // Must read the resolved per-level value — the catalog misreports on ramped levels.
             var spawnPerTurn = _levelParams.Current.SpawnLines * _grid.Columns;
             _level.Value = Evaluate(_health.Current.Value, CountEmptySlots(), spawnPerTurn);
