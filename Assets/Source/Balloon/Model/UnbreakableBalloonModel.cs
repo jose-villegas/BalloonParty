@@ -7,8 +7,10 @@ using UnityEngine;
 
 namespace BalloonParty.Balloon.Model
 {
-    internal class UnbreakableBalloonModel : BalloonModelBase, IHasScore, IHasScoreColor, IPreBalanceRelocatable
+    internal class UnbreakableBalloonModel : BalloonModelBase, IHasDeflectStamp, IHasScore, IHasScoreColor,
+        IPreBalanceRelocatable
     {
+        public float DeflectStampScale { get; }
         public int ScoreValue { get; }
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
 
@@ -16,6 +18,7 @@ namespace BalloonParty.Balloon.Model
 
         internal UnbreakableBalloonModel(BalloonModelConfig config) : base(config)
         {
+            DeflectStampScale = config.DeflectStampScale;
             ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
         }

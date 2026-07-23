@@ -100,7 +100,6 @@ namespace BalloonParty.Projectile.View
         [Inject] private PauseService _pauseService;
         [Inject] private DisturbanceFieldService _disturbanceField;
         [Inject] private PaintingFieldService _paintingField;
-        [Inject] private IPaintingFieldSettings _paintingSettings;
         [Inject] private SceneLightFieldService _lightField;
         [Inject] private ISceneLightSettings _sceneLightSettings;
 
@@ -550,7 +549,6 @@ namespace BalloonParty.Projectile.View
             _disturbanceField.Stamp(StampSource.Projectile, step.Position, step.Direction);
 
             {
-                var radius = _paintingSettings.StampRadius;
                 var colorName = _model.ColorName.Value;
                 var paletteIdx = !string.IsNullOrEmpty(colorName)
                     ? _palette.PaletteIndexOf(colorName)
@@ -558,7 +556,7 @@ namespace BalloonParty.Projectile.View
                 var pos = step.Position;
                 var prevPos = _lastPaintPos != Vector3.zero ? _lastPaintPos : pos;
 
-                _paintingField.Stamp(pos, prevPos, radius, paletteIdx);
+                _paintingField.Paint(PaintSource.ProjectileTrail, pos, prevPos, paletteIdx);
                 _paintingField.SetWindDampen(1f - ComputeVelocityT(step.Speed) * 0.7f);
                 _lastPaintPos = pos;
             }

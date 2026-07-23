@@ -9,8 +9,7 @@ using UnityEngine;
 
 namespace BalloonParty.Balloon.Model
 {
-    internal abstract class BalloonModelBase : IWriteableBalloonModel, IPressureMovable, IBalanceInfluence,
-        IHasDeflectStamp
+    internal abstract class BalloonModelBase : IWriteableBalloonModel, IPressureMovable, IBalanceInfluence
     {
         public BalloonType TypeName { get; }
         public int RegistryHandle { get; set; } = -1;
@@ -18,7 +17,6 @@ namespace BalloonParty.Balloon.Model
         public int BalancePriority { get; }
         public bool DirectBalanceMotion { get; }
         public bool OmnidirectionalBalance { get; }
-        public float DeflectStampScale { get; }
         public ReactiveProperty<int> HitsRemaining { get; }
         public ReactiveProperty<Vector2Int> SlotIndex { get; } = new();
         public ReactiveProperty<bool> IsStable { get; } = new(true);
@@ -52,7 +50,6 @@ namespace BalloonParty.Balloon.Model
             BalancePriority = config.BalancePriority;
             DirectBalanceMotion = config.DirectBalanceMotion;
             OmnidirectionalBalance = config.OmnidirectionalBalance;
-            DeflectStampScale = config.DeflectStampScale;
         }
 
         // Subclasses override to apply their own bias strategy using config.BalanceBias.

@@ -8,6 +8,7 @@ using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Scenario;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
@@ -35,6 +36,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly IPublisher<TransformCapturedMessage> _transformCapturedPublisher;
         private readonly BalloonView _view;
         private readonly DisturbanceFieldService _disturbanceField;
+        private readonly PaintingFieldService _paintingField;
         private readonly IGamePalette _palette;
 
         private Action _onReturned;
@@ -62,6 +64,7 @@ namespace BalloonParty.Balloon.Controller
             _grid = context.Grid;
             _poolManager = context.PoolManager;
             _disturbanceField = context.DisturbanceField;
+            _paintingField = context.PaintingField;
             _palette = context.Palette;
         }
 
@@ -104,9 +107,17 @@ namespace BalloonParty.Balloon.Controller
 
             if (playPopVfx)
             {
+                var paletteIndex = _palette.PaletteIndexOf(PopColorId());
+
                 _disturbanceField.Stamp(
                     StampSource.BalloonPop, _view.transform.position, Vector2.zero,
-                    paletteIndex: _palette.PaletteIndexOf(PopColorId()));
+                    paletteIndex: paletteIndex);
+
+                if (_model is ToughBalloonModel)
+                {
+                    _paintingField.Paint(PaintSource.ToughPop,
+                        _view.transform.position);
+                }
 
                 // Parent the pop VFX under whatever the view rides, so it moves with the level transition.
                 _view.PlayHitVfxForOutcome(HitOutcome.Pop, _view.transform.parent);
@@ -180,9 +191,11 @@ namespace BalloonParty.Balloon.Controller
 
             if (_model is IHasDeflectStamp stamper && stamper.DeflectStampScale > 0f)
             {
+                var deflectPaletteIndex = _palette.PaletteIndexOf(ImpactColorId());
+
                 _disturbanceField.Stamp(
                     StampSource.BalloonDeflect, viewPos, Vector2.zero, stamper.DeflectStampScale,
-                    _palette.PaletteIndexOf(ImpactColorId()));
+                    deflectPaletteIndex);
             }
 
             // NudgeMessage origin uses the slot world position: NudgeService computes direction as
@@ -234,9 +247,16 @@ namespace BalloonParty.Balloon.Controller
             _popped = true;
 
             var popWorldPos = _view.transform.position;
+            var paletteIndex = _palette.PaletteIndexOf(PopColorId());
+
             _disturbanceField.Stamp(
                 StampSource.BalloonPop, popWorldPos, Vector2.zero,
-                paletteIndex: _palette.PaletteIndexOf(PopColorId()));
+                paletteIndex: paletteIndex);
+
+            if (_model is ToughBalloonModel)
+            {
+                _paintingField.Paint(PaintSource.ToughPop, popWorldPos);
+            }
 
             _view.PlayHitVfxForOutcome(HitOutcome.Pop);
             _grid.Remove(_model.SlotIndex.Value);

@@ -10,11 +10,13 @@ using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Balloon.Model
 {
-    internal class ToughBalloonModel : BalloonModelBase, IHasDurability, IHasScore, IHasScoreColor
+    internal class ToughBalloonModel : BalloonModelBase, IHasDeflectStamp, IHasDurability, IHasScore,
+        IHasScoreColor
     {
         private readonly ColorSource _colorSource;
         private readonly float _balanceBias;
 
+        public float DeflectStampScale { get; }
         public int ScoreValue { get; }
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
 
@@ -28,6 +30,7 @@ namespace BalloonParty.Balloon.Model
         {
             _colorSource = new ColorSource(palette, allowedColors);
             _balanceBias = config.BalanceBias;
+            DeflectStampScale = config.DeflectStampScale;
             ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
         }

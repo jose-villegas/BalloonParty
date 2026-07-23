@@ -1,5 +1,6 @@
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Nudge;
+using BalloonParty.Scenario;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
@@ -20,6 +21,7 @@ namespace BalloonParty.Balloon.Controller
         public SlotGrid Grid { get; }
         public PoolManager PoolManager { get; }
         public DisturbanceFieldService DisturbanceField { get; }
+        public PaintingFieldService PaintingField { get; }
         public IGamePalette Palette { get; }
 
         [Inject]
@@ -32,6 +34,7 @@ namespace BalloonParty.Balloon.Controller
             SlotGrid grid,
             PoolManager poolManager,
             DisturbanceFieldService disturbanceField,
+            PaintingFieldService paintingField,
             IGamePalette palette)
         {
             ItemActivatedSubscriber = itemActivatedSubscriber;
@@ -42,6 +45,7 @@ namespace BalloonParty.Balloon.Controller
             Grid = grid;
             PoolManager = poolManager;
             DisturbanceField = disturbanceField;
+            PaintingField = paintingField;
             Palette = palette;
         }
     }

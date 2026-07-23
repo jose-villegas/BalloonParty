@@ -32,6 +32,14 @@ namespace BalloonParty.Tests.Scenario
             _settings.WindInfluence.Returns(1f);
             _settings.WindAgeBias.Returns(1.5f);
             _settings.WindDirection.Returns(new Vector2(1f, 0f));
+            _settings.GetProfile(Arg.Any<PaintSource>()).Returns(new PaintProfile
+            {
+                Sources = PaintSource.ProjectileTrail,
+                Radius = 0.15f,
+                Opacity = 1f,
+                ColorMode = PaintColorMode.Palette,
+                CustomColor = Color.white
+            });
 
             _display = Substitute.For<IGameDisplayConfiguration>();
             _palette = Substitute.For<IGamePalette>();
@@ -90,31 +98,31 @@ namespace BalloonParty.Tests.Scenario
             Assert.AreEqual(1f, GetWindDampen(), 0.001f);
         }
 
-        // --- Stamp rejection (resources not ready) ---
+        // --- Paint rejection (resources not ready) ---
 
         [Test]
-        public void Stamp_WhenResourcesNotReady_DoesNotQueue()
+        public void Paint_WhenResourcesNotReady_DoesNotQueue()
         {
             // Resources are never initialized so IsReady == false.
-            _service.Stamp(Vector3.zero, 1f, 0);
+            _service.Paint(PaintSource.ProjectileTrail, Vector3.zero, 0);
 
             Assert.AreEqual(0, GetPendingStampCount());
         }
 
         [Test]
-        public void Stamp_NegativePaletteIndex_DoesNotQueue()
+        public void Paint_NegativePaletteIndex_DoesNotQueue()
         {
             // Even if resources were ready, invalid index should reject.
-            _service.Stamp(Vector3.zero, 1f, -1);
+            _service.Paint(PaintSource.ProjectileTrail, Vector3.zero, -1);
 
             Assert.AreEqual(0, GetPendingStampCount());
         }
 
         [Test]
-        public void Stamp_PaletteIndexOutOfRange_DoesNotQueue()
+        public void Paint_PaletteIndexOutOfRange_DoesNotQueue()
         {
             // Palette has 3 entries (indices 0-2); index 3 is OOB.
-            _service.Stamp(Vector3.zero, 1f, 3);
+            _service.Paint(PaintSource.ProjectileTrail, Vector3.zero, 3);
 
             Assert.AreEqual(0, GetPendingStampCount());
         }

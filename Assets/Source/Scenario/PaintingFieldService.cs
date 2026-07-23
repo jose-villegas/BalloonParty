@@ -6,6 +6,7 @@ using BalloonParty.Configuration.Palette;
 using BalloonParty.Shared.Cadence;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Disturbance;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UnityEngine;
@@ -135,28 +136,68 @@ namespace BalloonParty.Scenario
             }
         }
 
-        /// <summary>Stamps a palette color at the given world position with the given radius.</summary>
-        internal void Stamp(Vector3 worldPosition, float radius, int paletteIndex)
+        /// <summary>Paints at the given world position using the source's profile. Pass <paramref name="paletteIndex"/>
+        /// when the profile's <see cref="PaintColorMode"/> is <c>Palette</c>; ignored for <c>Custom</c>.</summary>
+        internal void Paint(PaintSource source, Vector3 worldPosition, int paletteIndex = -1)
         {
-            Stamp(worldPosition, worldPosition, radius, paletteIndex);
+            Paint(source, worldPosition, worldPosition, paletteIndex);
         }
 
-        /// <summary>Stamps a capsule from <paramref name="prevWorldPosition"/> to <paramref name="worldPosition"/>.</summary>
-        internal void Stamp(Vector3 worldPosition, Vector3 prevWorldPosition, float radius, int paletteIndex)
+        /// <summary>Paints a capsule from <paramref name="prevWorldPosition"/> to <paramref name="worldPosition"/>
+        /// using the source's profile.</summary>
+        internal void Paint(PaintSource source, Vector3 worldPosition, Vector3 prevWorldPosition,
+            int paletteIndex = -1)
         {
-            if (!_resources.IsReady || paletteIndex < 0 || paletteIndex >= _palette.Colors.Count)
+            if (!_resources.IsReady)
             {
                 return;
             }
 
-            var color = _palette.Colors[paletteIndex].Color;
+            var profile = _settings.GetProfile(source);
+            var color = ResolveColor(profile, paletteIndex);
+            if (!color.HasValue)
+            {
+                return;
+            }
+
+            var c = color.Value;
             _pendingStamps.Add(new PendingStamp
             {
                 Center = _coords.WorldToUV(worldPosition),
                 PrevCenter = _coords.WorldToUV(prevWorldPosition),
-                Radius = _coords.WorldRadiusToUV(radius),
-                Color = new Vector4(color.r, color.g, color.b, 1f)
+                Radius = _coords.WorldRadiusToUV(profile.Radius),
+                Color = new Vector4(c.r, c.g, c.b, Mathf.Clamp01(profile.Opacity))
             });
+        }
+
+        private Color? ResolveColor(PaintProfile profile, int paletteIndex)
+        {
+            switch (profile.ColorMode)
+            {
+                case PaintColorMode.Custom:
+                    return profile.CustomColor;
+
+                case PaintColorMode.Palette:
+                {
+                    var idx = _palette.PaletteIndexOf(profile.PaletteColorName);
+                    if (idx < 0 || idx >= _palette.Colors.Count)
+                    {
+                        return null;
+                    }
+
+                    return _palette.Colors[idx].Color;
+                }
+
+                default:
+                {
+                    if (paletteIndex < 0 || paletteIndex >= _palette.Colors.Count)
+                    {
+                        return null;
+                    }
+
+                    return _palette.Colors[paletteIndex].Color;
+                }
+            }
         }
 
         /// <summary>Contributes a wind dampen factor for this frame. The minimum of all callers is used.</summary>
