@@ -3,7 +3,7 @@ using UnityEngine;
 namespace BalloonParty.Shared
 {
     /// <summary>
-    ///     The four play-area walls unpacked from <see cref="IGameConfiguration.LimitsClockwise" />
+    ///     The four play-area walls unpacked from <see cref="IProjectileFlightConfig.LimitsClockwise" />
     ///     (x = top, y = right, z = bottom, w = left).
     /// </summary>
     internal readonly struct WallLimits

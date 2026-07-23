@@ -198,7 +198,7 @@ namespace BalloonParty.Tests.Balloon
 
         private void BuildGrid(int columns, int rows)
         {
-            var gameConfig = Substitute.For<IGameConfiguration>();
+            var gameConfig = Substitute.For<ISlotGridConfig>();
             gameConfig.SlotsSize.Returns(new Vector2Int(columns, rows));
             var pathHolder = new BalancePathHolder();
             _grid = new SlotGrid(gameConfig, pathHolder);

@@ -145,7 +145,7 @@ namespace BalloonParty.Tests.Balloon
 
         private void CreateGrid(int columns, int rows)
         {
-            var config = Substitute.For<IGameConfiguration>();
+            var config = Substitute.For<ISlotGridConfig>();
             config.SlotsSize.Returns(new Vector2Int(columns, rows));
             // Non-zero separation: zero degenerates every world-space shove direction to zero.
             config.SlotSeparation.Returns(new Vector2(1f, 1f));

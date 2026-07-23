@@ -78,7 +78,7 @@ namespace BalloonParty.Solver
     /// <summary>The cruise knobs, mirroring <c>ProjectileMotionResolver</c>/<c>ProjectileView</c>
     /// exactly (see <see cref="ShotSimulator" />'s cruise handling). Default (all-zero) disables cruise
     /// entirely — <see cref="WallBounceThreshold" /> &lt;= 0 is the same "0 disables" convention
-    /// <c>IGameConfiguration.CruiseWallBounceThreshold</c> uses. The per-bounce tap ANIMATION (target
+    /// <c>IProjectileFlightConfig.CruiseWallBounceThreshold</c> uses. The per-bounce tap ANIMATION (target
     /// speed scaled by curve(elapsed/duration), the freeze-then-pickup beat) never bends the path, so
     /// the event sim folds it into <see cref="TapLagSeconds" /> — the time an eased startup loses
     /// versus flying the whole segment at the target speed: duration × (1 − mean curve value) —

@@ -17,13 +17,13 @@ namespace BalloonParty.Tests.Slots
     [TestFixture]
     public class StaticActorSpawnerTests
     {
-        private IGameConfiguration _config;
+        private ISlotGridConfig _config;
         private SlotGrid _grid;
 
         [SetUp]
         public void SetUp()
         {
-            _config = Substitute.For<IGameConfiguration>();
+            _config = Substitute.For<ISlotGridConfig>();
             _config.SlotsSize.Returns(new Vector2Int(6, 10));
             _config.SlotSeparation.Returns(new Vector2(1f, 0.85f));
             _config.SlotsOffset.Returns(new Vector2(2.5f, 4f));

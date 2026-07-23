@@ -4,7 +4,7 @@ namespace BalloonParty.Shared
 {
     /// <summary>
     /// Read-only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning.
-    /// Extracted from <see cref="IGameConfiguration"/> to give consumers a focused contract.
+    /// A focused contract split out of the former umbrella game-configuration asset.
     /// </summary>
     public interface IProjectileFlightConfig
     {

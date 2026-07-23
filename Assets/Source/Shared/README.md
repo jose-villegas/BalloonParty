@@ -17,12 +17,12 @@ Types and utilities used across multiple features.
 | `Extensions/` | Extension methods — `ColorableRendererExtensions` (`BindColor` overloads for reactive color subscriptions), `WeightedPickExtensions` (`PickRandom<T>()` for `IWeightedEntry` collections — shared weighted random selection used for balloon and item spawning, over the resolver's resolved pick lists), `SlotActorExtensions` (actor query helpers), `SceneExtensions` (`SuppressRendering()` / `SceneRenderingHandle.Restore()`), `AnimationCurveExtensions` |
 | `Messages/` | MessagePipe signal structs that decouple systems from one another |
 | `Diagnostics/` | Debug utilities — `FPSCounter`, `FrameRateSettings` |
-| `IGameConfiguration` | Read-only interface for core game data — projectile settings, slot grid dimensions, prediction trace params, score trail timing |
+| `IProjectileFlightConfig` / `ISlotGridConfig` / `IPredictionTraceConfig` / `IRunConfig` / `IScoreTrailConfig` | The focused read-only config contracts consumed across assemblies — projectile flight tuning, slot-grid layout, prediction-trace params, run rules, and score-trail timing respectively. Backed by the `ProjectileFlightConfig` / `SlotGridConfig` / `PredictionTraceConfig` / `RunConfig` / `ScoreTrailBehaviourConfiguration` SOs (they replaced the former single `IGameConfiguration` umbrella) |
 | `IEffect` | Interface for poolable visual effects — `Play(position, tint)`, `Play(position, rotation, tint)`, `Stop()` |
 | `EditorAssetCache<T>` | Editor-only lazy cache for a config `ScriptableObject` asset by type — lives in the `com.balloonparty.editorui` package (`EditorUI.Utilities`). Editor config lookups go through this instead of inlining `FindAssets` + `LoadAssetAtPath` |
 | `ImpactEventBus` | Frame-scoped list of impact events (position + radius); written via `Report`, cleared every `LateTick` |
 | `PathTrace` | Shared skeleton for tracing a projectile's wall-reflected path ahead (`IsClearAhead`) — reflects off each wall via `WallLimits`, leaving the per-segment occupancy test to the caller |
-| `WallLimits` | The four play-area walls unpacked from `IGameConfiguration.LimitsClockwise` — wall-crossing (`TryFindCrossing`), billiard mirror-reflect (`Reflect`), in-bounds clamp (`ClampInside`) |
+| `WallLimits` | The four play-area walls unpacked from `IProjectileFlightConfig.LimitsClockwise` — wall-crossing (`TryFindCrossing`), billiard mirror-reflect (`Reflect`), in-bounds clamp (`ClampInside`) |
 | `EnumIndexedAttribute` | `PropertyAttribute` that labels a serialized array indexed by enum ordinal with the enum value's name instead of "Element N" |
 
 This table covers the folders and the types other features reach for most; a few small editor-only attributes living alongside these files aren't broken out separately.

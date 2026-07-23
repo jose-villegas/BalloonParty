@@ -28,7 +28,7 @@ namespace BalloonParty.Tests.Balloon
         [SetUp]
         public void SetUp()
         {
-            var gameConfig = Substitute.For<IGameConfiguration>();
+            var gameConfig = Substitute.For<ISlotGridConfig>();
             gameConfig.SlotsSize.Returns(new Vector2Int(3, 3));
             var pathHolder = new BalancePathHolder();
             _grid = new SlotGrid(gameConfig, pathHolder);

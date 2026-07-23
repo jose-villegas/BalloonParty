@@ -23,7 +23,7 @@ namespace BalloonParty.Tests.Balloon
         [SetUp]
         public void SetUp()
         {
-            var config = Substitute.For<IGameConfiguration>();
+            var config = Substitute.For<ISlotGridConfig>();
             config.SlotsSize.Returns(new Vector2Int(3, 3));
             // Non-zero separation: zero degenerates every world-space shove direction to zero.
             config.SlotSeparation.Returns(new Vector2(1f, 1f));

@@ -385,7 +385,7 @@ namespace BalloonParty.Tests.ShotSolver
             var slot1 = (Vector2)HexCoordinates.IndexToWorldPosition(new Vector2Int(0, 1), separation, offset);
             Assert.AreNotEqual(slot0.x, slot1.x, "sanity: the hex stagger must offset the rows horizontally");
 
-            var gameConfig = Substitute.For<IGameConfiguration>();
+            var gameConfig = Substitute.For<ISlotGridConfig>();
             gameConfig.SlotsSize.Returns(new Vector2Int(1, 2));
             gameConfig.SlotSeparation.Returns(separation);
             gameConfig.SlotsOffset.Returns(offset);
@@ -432,7 +432,7 @@ namespace BalloonParty.Tests.ShotSolver
             var slot0 = (Vector2)HexCoordinates.IndexToWorldPosition(new Vector2Int(0, 0), separation, offset);
             var slot1 = (Vector2)HexCoordinates.IndexToWorldPosition(new Vector2Int(0, 1), separation, offset);
 
-            var gameConfig = Substitute.For<IGameConfiguration>();
+            var gameConfig = Substitute.For<ISlotGridConfig>();
             gameConfig.SlotsSize.Returns(new Vector2Int(1, 2));
             gameConfig.SlotSeparation.Returns(separation);
             gameConfig.SlotsOffset.Returns(offset);

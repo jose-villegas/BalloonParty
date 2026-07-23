@@ -13,19 +13,22 @@ namespace BalloonParty.Tests.Prediction
         private static readonly Vector4 DefaultLimits = new(5f, 3f, -5f, -3f);
 
         private PredictionTraceCalculator _calculator;
-        private IGameConfiguration _config;
+        private IPredictionTraceConfig _config;
+        private IProjectileFlightConfig _flightConfig;
         private List<Vector3> _results;
 
         [SetUp]
         public void SetUp()
         {
-            _config = Substitute.For<IGameConfiguration>();
-            _config.LimitsClockwise.Returns(DefaultLimits);
+            _config = Substitute.For<IPredictionTraceConfig>();
             _config.PredictionTraceStep.Returns(0.5f);
             _config.PredictionTraceMaxBounces.Returns(3);
             _config.PredictionTraceMaxSteps.Returns(100);
 
-            _calculator = new PredictionTraceCalculator(_config, _config);
+            _flightConfig = Substitute.For<IProjectileFlightConfig>();
+            _flightConfig.LimitsClockwise.Returns(DefaultLimits);
+
+            _calculator = new PredictionTraceCalculator(_config, _flightConfig);
             _results = new List<Vector3>();
         }
 

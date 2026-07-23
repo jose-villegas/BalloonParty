@@ -17,7 +17,7 @@ namespace BalloonParty.Tests.Slots
         [SetUp]
         public void SetUp()
         {
-            var config = Substitute.For<IGameConfiguration>();
+            var config = Substitute.For<ISlotGridConfig>();
             config.SlotsSize.Returns(new Vector2Int(3, 3));
             // Non-zero separation so world-space move directions (and shove dot products) are meaningful.
             config.SlotSeparation.Returns(new Vector2(1f, 1f));

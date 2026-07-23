@@ -40,7 +40,7 @@ namespace BalloonParty.Tests.Projectile
             _shieldGainedPublisher = Substitute.For<IPublisher<ShieldGainedMessage>>();
             _dischargedPublisher = Substitute.For<IPublisher<PierceDischargedMessage>>();
 
-            var gameConfig = Substitute.For<IGameConfiguration>();
+            var gameConfig = Substitute.For<ISlotGridConfig>();
             gameConfig.SlotsSize.Returns(new Vector2Int(6, 10));
             gameConfig.SlotSeparation.Returns(new Vector2(1f, 0.85f));
             gameConfig.SlotsOffset.Returns(new Vector2(2.5f, 4f));
@@ -453,12 +453,12 @@ namespace BalloonParty.Tests.Projectile
             _gameObjectsToDestroy.Add(gameObject);
 
             var projectileView = gameObject.AddComponent<ProjectileView>();
-            var config = Substitute.For<IGameConfiguration>();
+            var config = Substitute.For<IProjectileFlightConfig>();
             config.SweepEnabled.Returns(true);
             config.CruiseSpeedPerShield.Returns(cruiseSpeedPerShield);
             config.CruisePiercingTapThreshold.Returns(0);
 
-            SetField(projectileView, "_config", config);
+            SetField(projectileView, "_flightConfig", config);
             SetField(projectileView, "_model", _projectile);
             SetField(projectileView, "_contactRadius", 0.1f);
             SetStaticField(typeof(ProjectileView), "BalloonsLayer", 0);

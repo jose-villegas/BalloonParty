@@ -40,17 +40,19 @@ namespace BalloonParty.Tests.Projectile
             var shieldGainedPublisher = Substitute.For<IPublisher<ShieldGainedMessage>>();
             var dischargedPublisher = Substitute.For<IPublisher<PierceDischargedMessage>>();
 
-            var gameConfig = Substitute.For<IGameConfiguration>();
-            gameConfig.LimitsClockwise.Returns(Walls);
-            gameConfig.SlotsSize.Returns(new Vector2Int(6, 10));
-            gameConfig.SlotSeparation.Returns(new Vector2(1f, 0.85f));
-            gameConfig.SlotsOffset.Returns(new Vector2(2.5f, 4f));
-            gameConfig.CruiseSpeedPerShield.Returns(0.5f);
-            gameConfig.CruiseTapEaseDuration.Returns(0f);
-            gameConfig.CruisePiercingTapThreshold.Returns(0);
-            gameConfig.CruiseTapCurve.Returns(AnimationCurve.Linear(0f, 0f, 1f, 1f));
+            var gridConfig = Substitute.For<ISlotGridConfig>();
+            gridConfig.SlotsSize.Returns(new Vector2Int(6, 10));
+            gridConfig.SlotSeparation.Returns(new Vector2(1f, 0.85f));
+            gridConfig.SlotsOffset.Returns(new Vector2(2.5f, 4f));
 
-            var grid = new SlotGrid(gameConfig, new BalancePathHolder());
+            var flightConfig = Substitute.For<IProjectileFlightConfig>();
+            flightConfig.LimitsClockwise.Returns(Walls);
+            flightConfig.CruiseSpeedPerShield.Returns(0.5f);
+            flightConfig.CruiseTapEaseDuration.Returns(0f);
+            flightConfig.CruisePiercingTapThreshold.Returns(0);
+            flightConfig.CruiseTapCurve.Returns(AnimationCurve.Linear(0f, 0f, 1f, 1f));
+
+            var grid = new SlotGrid(gridConfig, new BalancePathHolder());
 
             var levelUpSubscriber = Substitute.For<ISubscriber<ScoreLevelUpMessage>>();
             levelUpSubscriber
@@ -71,7 +73,7 @@ namespace BalloonParty.Tests.Projectile
 
             _hitResolver = new ProjectileHitResolver(
                 _hitDispatcher, shieldGainedPublisher, dischargedPublisher, streakTracker, grid);
-            _motionResolver = new ProjectileMotionResolver(gameConfig);
+            _motionResolver = new ProjectileMotionResolver(flightConfig);
             _projectile = new ProjectileModel { IsFree = true };
             _projectile.ShieldsRemaining.Value = 10;
         }
@@ -305,7 +307,7 @@ namespace BalloonParty.Tests.Projectile
             _gameObjectsToDestroy.Add(gameObject);
 
             var projectileView = gameObject.AddComponent<ProjectileView>();
-            var config = Substitute.For<IGameConfiguration>();
+            var config = Substitute.For<IProjectileFlightConfig>();
             config.SweepEnabled.Returns(true);
             config.CruiseSpeedPerShield.Returns(0.5f);
             config.CruisePiercingTapThreshold.Returns(0);
@@ -313,7 +315,7 @@ namespace BalloonParty.Tests.Projectile
 
             var visual = Substitute.For<IProjectileVisualConfig>();
 
-            SetField(projectileView, "_config", config);
+            SetField(projectileView, "_flightConfig", config);
             SetField(projectileView, "_visual", visual);
             SetField(projectileView, "_model", _projectile);
             SetField(projectileView, "_contactRadius", 0.1f);

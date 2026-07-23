@@ -33,7 +33,7 @@ namespace BalloonParty.Tests.PlayMode
             yield return LoadGameScene();
 
             var health = Resolve<PlayerHealthController>();
-            var config = Resolve<IGameConfiguration>();
+            var config = Resolve<IRunConfig>();
 
             Assert.AreEqual(config.StartingHitPoints, health.Current.Value,
                 "Player HP should initialise to the configured starting value.");

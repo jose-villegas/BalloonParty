@@ -13,7 +13,7 @@ namespace BalloonParty.Scenario.View
 {
     /// <summary>
     ///     Builds and owns the four procedural net-strip meshes that frame the play area — one per edge
-    ///     of the logical play rectangle (<see cref="IGameConfiguration.LimitsClockwise" />, the same
+    ///     of the logical play rectangle (<see cref="IProjectileFlightConfig.LimitsClockwise" />, the same
     ///     rectangle the projectile billiard reflects off). Each strip is a flat quad band laid OUTWARD
     ///     from its wall (away from the play area, so its reveal never covers the balloons), tessellated
     ///     finely enough that the shared net material can billow it in the vertex stage without a CPU sim.
