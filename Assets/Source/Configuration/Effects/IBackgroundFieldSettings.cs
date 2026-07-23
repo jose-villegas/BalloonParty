@@ -9,6 +9,10 @@ namespace BalloonParty.Configuration.Effects
         /// surface: noise texture, scale, scroll, thresholds all live on it.</summary>
         Material DensityMaterial { get; }
 
+        /// <summary>Display material (BalloonParty/Scenario/BackgroundCloud) on the backdrop SpriteRenderer.
+        /// Used to enable per-material shader keywords at runtime (e.g. <c>_LOW_QUALITY_CLOUD</c>).</summary>
+        Material CloudDisplayMaterial { get; }
+
         /// <summary>Density-RT resolution per world unit.</summary>
         float TexelsPerUnit { get; }
 

@@ -60,9 +60,9 @@ namespace BalloonParty.Scenario
             }
 
 #if !UNITY_EDITOR
-            if (Application.isMobilePlatform)
+            if (Application.isMobilePlatform && _settings.CloudDisplayMaterial != null)
             {
-                Shader.EnableKeyword("_LOW_QUALITY_CLOUD");
+                _settings.CloudDisplayMaterial.EnableKeyword("_LOW_QUALITY_CLOUD");
             }
 #endif
 

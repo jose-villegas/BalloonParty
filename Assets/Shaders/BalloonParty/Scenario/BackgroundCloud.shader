@@ -56,7 +56,7 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
             #pragma fragment frag
             #pragma target 3.0
             #pragma shader_feature _SHADOW_ON
-            #pragma multi_compile _ _LOW_QUALITY_CLOUD
+            #pragma multi_compile_local _ _LOW_QUALITY_CLOUD
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
             #include "../Include/BackgroundField.cginc"

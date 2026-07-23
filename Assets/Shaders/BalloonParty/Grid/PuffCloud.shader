@@ -102,7 +102,7 @@ Shader "BalloonParty/Grid/PuffCloud"
             #pragma shader_feature _SHADOW_ON
             #pragma shader_feature _DENSITY_ON
             #pragma shader_feature _NOISE_DEBUG
-            #pragma multi_compile _ _LOW_QUALITY_CLOUD
+            #pragma multi_compile_local _ _LOW_QUALITY_CLOUD
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
 
