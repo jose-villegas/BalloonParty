@@ -22,7 +22,7 @@ namespace BalloonParty.Shared.Animation
     [RequireComponent(typeof(TMP_Text))]
     internal class RollingTextAnimator : MonoBehaviour
     {
-        private static readonly char[] FormattingBuffer = new char[16];
+        private static readonly char[] FormattingBuffer = new char[32];
         private static readonly int[] Pow10 =
             { 1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000 };
 
@@ -38,6 +38,8 @@ namespace BalloonParty.Shared.Animation
         [SerializeField, Range(0.1f, 2f)] private float _rollHeight = 1f;
         [Tooltip("Insert commas as thousands separators (off for arcade style).")]
         [SerializeField] private bool _useThousandsSeparator;
+        [Tooltip("If > 0, wraps digits in <mspace=X> for uniform character widths (prevents jumpiness with proportional fonts).")]
+        [SerializeField] private float _monospaceWidth;
 
         private TMP_Text _text;
         private Sequence _sequence;
@@ -56,10 +58,12 @@ namespace BalloonParty.Shared.Animation
         private bool _odometerActive;
         private bool _hasDisplayedText;
         private bool _hasValue;
+        private int _mspaceTagLength;
 
         private void Awake()
         {
             _text = GetComponent<TMP_Text>();
+            _mspaceTagLength = BuildMspacePrefix();
         }
 
         private void Update()
@@ -89,7 +93,7 @@ namespace BalloonParty.Shared.Animation
                 _previousDisplayedInt = currentInt;
                 _displayedValue = currentInt;
 
-                int len = TmpTextExtensions.FormatThousands(currentInt, FormattingBuffer, _useThousandsSeparator);
+                int len = FormatValue(currentInt);
                 _text.SetCharArray(FormattingBuffer, 0, len);
                 _text.ForceMeshUpdate();
                 _cachedMeshInfo = _text.textInfo.CopyMeshInfoVertexData();
@@ -119,7 +123,7 @@ namespace BalloonParty.Shared.Animation
 
             if (!_hasValue)
             {
-                int len = TmpTextExtensions.FormatThousands(value, FormattingBuffer, _useThousandsSeparator);
+                int len = FormatValue(value);
                 ApplyTextDirect(FormattingBuffer, len);
                 _displayedValue = value;
                 _displayedFloat = value;
@@ -242,7 +246,8 @@ namespace BalloonParty.Shared.Animation
             float lineHeight = textInfo.lineCount > 0
                 ? textInfo.lineInfo[0].lineHeight
                 : _text.fontSize;
-            float dirSign = _direction == RollDirection.Down ? 1f : -1f;
+            // Digits roll up when value increases, down when it decreases.
+            float dirSign = _odometerTarget >= _displayedFloat ? -1f : 1f;
 
             int digitPos = 0;
             for (int i = textInfo.characterCount - 1; i >= 0; i--)
@@ -477,7 +482,7 @@ namespace BalloonParty.Shared.Animation
             _displayedValue = _odometerTarget;
             _displayedFloat = _odometerTarget;
 
-            int len = TmpTextExtensions.FormatThousands(_odometerTarget, FormattingBuffer, _useThousandsSeparator);
+            int len = FormatValue(_odometerTarget);
             _text.SetCharArray(FormattingBuffer, 0, len);
             _text.ForceMeshUpdate();
             _cachedMeshInfo = null;
@@ -498,7 +503,7 @@ namespace BalloonParty.Shared.Animation
 
                 if (_text != null)
                 {
-                    int len = TmpTextExtensions.FormatThousands(_odometerTarget, FormattingBuffer, _useThousandsSeparator);
+                    int len = FormatValue(_odometerTarget);
                     _text.SetCharArray(FormattingBuffer, 0, len);
                     _text.ForceMeshUpdate();
                 }
@@ -515,6 +520,32 @@ namespace BalloonParty.Shared.Animation
             }
 
             _sequence = null;
+        }
+
+        /// <summary>
+        ///     Writes the <c>&lt;mspace=X&gt;</c> tag into <see cref="FormattingBuffer"/> once so
+        ///     subsequent <see cref="FormatValue"/> calls can format the number after the prefix.
+        /// </summary>
+        private int BuildMspacePrefix()
+        {
+            if (_monospaceWidth <= 0f)
+            {
+                return 0;
+            }
+
+            var tag = $"<mspace={_monospaceWidth:0.#}>";
+            for (int i = 0; i < tag.Length; i++)
+            {
+                FormattingBuffer[i] = tag[i];
+            }
+
+            return tag.Length;
+        }
+
+        private int FormatValue(int value)
+        {
+            int numLen = TmpTextExtensions.FormatThousands(value, FormattingBuffer, _useThousandsSeparator, _mspaceTagLength);
+            return _mspaceTagLength + numLen;
         }
     }
 }
