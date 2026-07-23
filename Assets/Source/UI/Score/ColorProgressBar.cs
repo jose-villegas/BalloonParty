@@ -17,19 +17,10 @@ using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.UI.Score
 {
-    // Both feedback effects (the per-arrival pulse and the settled completed glow) are DOTween now, so the
-    // ColorProgress.controller and both its clips (ScoreTrailHit.anim, ColorProgressCompleted.anim) are dead
-    // assets — deleted in-editor together with the Animator component on the bar prefab.
     public class ColorProgressBar : MonoBehaviour, ITrailEndpoint
     {
-        private const float PulseScalePeak = 3f;
-        private const float PulsePpuPeak = 5f;
-        private const float PulsePpuRest = 0.01f;
-        private const float CompletedAlphaPeak = 0.502f;
-        private const float CompletedPpuPeak = 50f;
-        private const float CompletedDuration = 1f;
-
-        private static readonly Vector2 CompletedSizeGrowth = new Vector2(7.5f, 7f);
+        private static readonly int CompletedParam = Animator.StringToHash("Completed");
+        private static readonly int TrailHitTrigger = Animator.StringToHash("TrailHit");
 #if UNITY_EDITOR
         private static GamePalette _cachedPalette;
 #endif
@@ -52,17 +43,7 @@ namespace BalloonParty.UI.Score
 
         [Header("Progress")] [SerializeField] private Slider _progressSlider;
 
-        [Header("Feedback")]
-        [Tooltip("Glow-flashed once per frame on arrival, a DOTween port of the retired ScoreTrailHit clip. " +
-                 "The outline is invisible at rest (alpha 0, PPU 0.01) — the pulse flashes it in as it expands.")]
-        [SerializeField] private RectTransform _pulseOutline;
-        [SerializeField] private Image _pulseOutlineImage;
-        [SerializeField] private RectTransform _pulseBackground;
-        [SerializeField] private RectTransform _pulseFillArea;
-        [SerializeField] private float _pulseRise = 0.1667f;
-        [SerializeField] private float _pulseTail = 0.8333f;
-        [SerializeField] private float _pulseBulge = 2f;
-        [SerializeField] private float _pulseAlphaPeak = 0.349f;
+        [Header("Feedback")] [SerializeField] private Animator _animator;
 
         [SerializeField] private ParticleSystem _completionParticleSystem;
         [SerializeField] private ProgressNotice _pointNoticePrefab;
@@ -89,19 +70,7 @@ namespace BalloonParty.UI.Score
         private int _stashedMaxValue;
         private int _shownStreak;
         private bool _active;
-        private bool _pulseQueued;
-        private bool _pulseRestCaptured;
-        private bool _completed;
-        private float _bgRestSizeY;
-        private float _fillRestSizeY;
-        private Vector2 _outlineRestSizeDelta;
-        private float _builtPulseRise;
-        private float _builtPulseTail;
-        private float _builtPulseBulge;
-        private float _builtPulseAlphaPeak;
         private Tween _flexTween;
-        private Sequence _pulseSequence;
-        private Sequence _completedSequence;
 
         public Vector3 Center => RectAnchorMath.Center((RectTransform)transform);
 
@@ -219,28 +188,6 @@ namespace BalloonParty.UI.Score
             _resetSubscriber.Subscribe(_ => OnRunReset()).AddTo(this);
         }
 
-        // Coalesce a burst of arrivals into one pulse per frame — the storm this replaces re-triggered an
-        // Animator clip every arrival. The reused sequence Restart()s (rewinding to rest) so overlapping
-        // pulses never drift.
-        private void LateUpdate()
-        {
-            if (!_pulseQueued)
-            {
-                return;
-            }
-
-            _pulseQueued = false;
-
-            // Pulses are swallowed while the bar sits completed — the retired FSM had no TrailHit exit from
-            // its Completed state, and the settled glow ring owns the outline until the level-up drains it.
-            if (_completed)
-            {
-                return;
-            }
-
-            Pulse();
-        }
-
         // Driven by the streak signal (any colour), so we also catch this colour's streak being lost when a
         // different colour is popped — not just its own pops. The notice persists until the streak grows
         // into a new value (re-pop) or drops out of multiplier range (dismiss).
@@ -350,7 +297,6 @@ namespace BalloonParty.UI.Score
             ClearCompletionVfx();
             _notices.DismissAllNotices();
             _shownStreak = 0;
-            KillAndResetPulse();
             ApplyVisibility(animate: false);
         }
 
@@ -358,7 +304,7 @@ namespace BalloonParty.UI.Score
         {
             _completionParticleSystem.Stop();
             _completionParticleSystem.gameObject.SetActive(false);
-            SetCompleted(false);
+            _animator.SetBool(CompletedParam, false);
         }
 
         private void OnGlowTrails(LevelUpGlowTrailsMessage msg)
@@ -408,7 +354,7 @@ namespace BalloonParty.UI.Score
                 return;
             }
 
-            _pulseQueued = true;
+            _animator.SetTrigger(TrailHitTrigger);
             _progressSlider.value = Mathf.Min(_progressSlider.value + msg.Points, _progressSlider.maxValue);
 
             var anchored = RectAnchorMath.WorldToAnchoredPosition((RectTransform)transform, msg.WorldPosition);
@@ -418,234 +364,13 @@ namespace BalloonParty.UI.Score
             {
                 _completionParticleSystem.gameObject.SetActive(true);
                 _completionParticleSystem.Play();
-                SetCompleted(true);
+                _animator.SetBool(CompletedParam, true);
             }
         }
 
         public Vector3 RandomPosition()
         {
             return RectAnchorMath.RandomPosition((RectTransform)transform);
-        }
-
-        // A clamped non-looping Animator state re-applies its bound properties every frame, so a full bar
-        // rebuilt its canvas every frame for the whole pre-level-up stretch. This DOTween port of the retired
-        // Assets/Animation/Progress/ColorProgressCompleted.anim lights the outline glow ring over 1s and then
-        // goes quiet — no writes once it settles. Values mirror the clip (alpha 0→0.502, PPU →50,
-        // sizeDelta →rest+(7.5,7)); flat tangents are approximated with Ease.InOutSine. A no-op change is
-        // ignored so it stays idempotent like the old SetBool.
-        private void SetCompleted(bool completed)
-        {
-            if (completed == _completed)
-            {
-                return;
-            }
-
-            _completed = completed;
-
-            if (!completed)
-            {
-                // The old controller exited Completed to a motionless Empty state, so snap the outline back
-                // to rest rather than tweening.
-                _completedSequence?.Kill();
-                _completedSequence = null;
-
-                if (_pulseOutline != null)
-                {
-                    _pulseOutline.localScale = Vector3.one;
-                    _pulseOutline.sizeDelta = _outlineRestSizeDelta;
-                }
-
-                if (_pulseOutlineImage != null)
-                {
-                    _pulseOutlineImage.color = _pulseOutlineImage.color.WithAlpha(0f);
-                    _pulseOutlineImage.pixelsPerUnitMultiplier = PulsePpuRest;
-                }
-
-                return;
-            }
-
-            CapturePulseRest();
-            KillAndResetPulse();
-
-            _completedSequence?.Kill();
-            _completedSequence = DOTween.Sequence();
-
-            if (_pulseOutlineImage != null)
-            {
-                _completedSequence.Join(
-                    _pulseOutlineImage.DOFade(CompletedAlphaPeak, CompletedDuration).SetEase(Ease.InOutSine));
-                _completedSequence.Join(DOTween.To(
-                    () => _pulseOutlineImage.pixelsPerUnitMultiplier,
-                    v => _pulseOutlineImage.pixelsPerUnitMultiplier = v, CompletedPpuPeak, CompletedDuration)
-                    .SetEase(Ease.InOutSine));
-            }
-
-            if (_pulseOutline != null)
-            {
-                _completedSequence.Join(DOTween.To(
-                    () => _pulseOutline.sizeDelta, v => _pulseOutline.sizeDelta = v,
-                    _outlineRestSizeDelta + CompletedSizeGrowth, CompletedDuration).SetEase(Ease.InOutSine));
-            }
-
-            // Unscaled to match the retired clip's UnscaledTime; SetLink kills it if this bar is destroyed.
-            // The lit ring persists at rest once this completes — no per-frame writes.
-            _completedSequence.SetUpdate(true).SetLink(gameObject);
-        }
-
-        // A hand-built DOTween port of the retired Assets/Animation/Progress/ScoreTrailHit.anim — the
-        // constants above (rise 0.1667s, scale peak 3, alpha peak 0.349, PPU 5↔0.01, bulge 2, tail 0.8333s)
-        // mirror that clip's keyframes so it can be deleted. Every piece is null-guarded independently, so an
-        // unwired reference just skips its part of the pulse. The clip's flat tangents (Unity smooth in-out)
-        // are approximated with Ease.InOutSine. Ends exactly on rest so nothing drifts across many pulses.
-        private void Pulse()
-        {
-            CapturePulseRest();
-
-            // Reuse one sequence across a burst instead of rebuilding (~10 closures) per arrival: build once
-            // from rest (so its captured start values stay at rest), then Restart() on every retrigger. Only
-            // rebuild when a serialized knob changed, so live inspector tuning still takes effect.
-            if (_pulseSequence == null || PulseKnobsChanged())
-            {
-                BuildPulseSequence();
-                return;
-            }
-
-            _pulseSequence.Restart();
-        }
-
-        private void BuildPulseSequence()
-        {
-            _pulseSequence?.Kill();
-            ResetPulseProperties();
-
-            _pulseSequence = DOTween.Sequence();
-
-            if (_pulseOutline != null)
-            {
-                _pulseSequence.Insert(0f, _pulseOutline.DOScale(PulseScalePeak, _pulseRise).SetEase(Ease.InOutSine));
-                _pulseSequence.Insert(_pulseRise, _pulseOutline.DOScale(1f, _pulseRise).SetEase(Ease.InOutSine));
-            }
-
-            if (_pulseOutlineImage != null)
-            {
-                _pulseSequence.Insert(0f,
-                    _pulseOutlineImage.DOFade(_pulseAlphaPeak, _pulseRise).SetEase(Ease.InOutSine));
-                _pulseSequence.Insert(_pulseRise,
-                    _pulseOutlineImage.DOFade(0f, _pulseTail).SetEase(Ease.InOutSine));
-                _pulseSequence.Insert(0f, DOTween.To(
-                    () => _pulseOutlineImage.pixelsPerUnitMultiplier,
-                    v => _pulseOutlineImage.pixelsPerUnitMultiplier = v, PulsePpuPeak, _pulseRise)
-                    .SetEase(Ease.InOutSine));
-                _pulseSequence.Insert(_pulseRise, DOTween.To(
-                    () => _pulseOutlineImage.pixelsPerUnitMultiplier,
-                    v => _pulseOutlineImage.pixelsPerUnitMultiplier = v, PulsePpuRest, _pulseRise)
-                    .SetEase(Ease.InOutSine));
-            }
-
-            if (_pulseBackground != null)
-            {
-                _pulseSequence.Insert(0f, DOTween.To(
-                    () => _pulseBackground.sizeDelta.y,
-                    v => _pulseBackground.sizeDelta = _pulseBackground.sizeDelta.WithY(v),
-                    _bgRestSizeY + _pulseBulge, _pulseRise).SetEase(Ease.InOutSine));
-                _pulseSequence.Insert(_pulseRise, DOTween.To(
-                    () => _pulseBackground.sizeDelta.y,
-                    v => _pulseBackground.sizeDelta = _pulseBackground.sizeDelta.WithY(v),
-                    _bgRestSizeY, _pulseTail).SetEase(Ease.InOutSine));
-            }
-
-            if (_pulseFillArea != null)
-            {
-                _pulseSequence.Insert(0f, DOTween.To(
-                    () => _pulseFillArea.sizeDelta.y,
-                    v => _pulseFillArea.sizeDelta = _pulseFillArea.sizeDelta.WithY(v),
-                    _fillRestSizeY + _pulseBulge, _pulseRise).SetEase(Ease.InOutSine));
-                _pulseSequence.Insert(_pulseRise, DOTween.To(
-                    () => _pulseFillArea.sizeDelta.y,
-                    v => _pulseFillArea.sizeDelta = _pulseFillArea.sizeDelta.WithY(v),
-                    _fillRestSizeY, _pulseRise).SetEase(Ease.InOutSine));
-            }
-
-            // Unscaled to match the retired clip's UnscaledTime; AutoKill off so the sequence is reused across
-            // pulses; SetLink kills it if this bar is destroyed.
-            _pulseSequence.SetUpdate(true).SetAutoKill(false).SetLink(gameObject);
-
-            _builtPulseRise = _pulseRise;
-            _builtPulseTail = _pulseTail;
-            _builtPulseBulge = _pulseBulge;
-            _builtPulseAlphaPeak = _pulseAlphaPeak;
-        }
-
-        private bool PulseKnobsChanged()
-        {
-            return _builtPulseRise != _pulseRise
-                || _builtPulseTail != _pulseTail
-                || _builtPulseBulge != _pulseBulge
-                || _builtPulseAlphaPeak != _pulseAlphaPeak;
-        }
-
-        // The +2 bulge is relative to each rect's authored rest height, captured once before any pulse has
-        // touched it so retriggers reset to the true rest rather than an in-flight value. The outline rest
-        // sizeDelta is the base the completed glow grows from.
-        private void CapturePulseRest()
-        {
-            if (_pulseRestCaptured)
-            {
-                return;
-            }
-
-            _pulseRestCaptured = true;
-            if (_pulseOutline != null)
-            {
-                _outlineRestSizeDelta = _pulseOutline.sizeDelta;
-            }
-
-            if (_pulseBackground != null)
-            {
-                _bgRestSizeY = _pulseBackground.sizeDelta.y;
-            }
-
-            if (_pulseFillArea != null)
-            {
-                _fillRestSizeY = _pulseFillArea.sizeDelta.y;
-            }
-        }
-
-        // The reused sequence is rewound (which also pauses it) and every pulse property hard-reset to rest,
-        // so a run reset or a completion taking over the outline never leaves an in-flight value behind.
-        private void KillAndResetPulse()
-        {
-            _pulseSequence?.Rewind();
-            ResetPulseProperties();
-        }
-
-        private void ResetPulseProperties()
-        {
-            if (!_pulseRestCaptured)
-            {
-                return;
-            }
-
-            if (_pulseOutline != null)
-            {
-                _pulseOutline.localScale = Vector3.one;
-            }
-
-            if (_pulseOutlineImage != null)
-            {
-                _pulseOutlineImage.color = _pulseOutlineImage.color.WithAlpha(0f);
-                _pulseOutlineImage.pixelsPerUnitMultiplier = PulsePpuRest;
-            }
-
-            if (_pulseBackground != null)
-            {
-                _pulseBackground.sizeDelta = _pulseBackground.sizeDelta.WithY(_bgRestSizeY);
-            }
-
-            if (_pulseFillArea != null)
-            {
-                _pulseFillArea.sizeDelta = _pulseFillArea.sizeDelta.WithY(_fillRestSizeY);
-            }
         }
     }
 }
