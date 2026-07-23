@@ -2,17 +2,21 @@
 
 Runtime cheat console for testing and debugging without modifying game state manually.
 
-Toggle the console window in Play Mode with the **backtick** (`` ` ``) key, or — on touch devices — a **3-finger tap** (three simultaneous touches; fires once on the rising edge, so it can't retrigger while held). The 3-finger tap only registers in a **development build** (or via Unity Remote): the whole cheat system compiles out otherwise (see below), and legacy `Input.touchCount` reads 0 in the editor Game view. The console GameObject is created automatically at runtime — no scene setup required. The console discovers all registered cheats automatically and organises them by section and tag.
+Toggle the console window in Play Mode with the **backtick** (`` ` ``) key, or — on touch devices — a **3-finger tap** (three simultaneous touches; fires once on the rising edge, so it can't retrigger while held). The 3-finger tap only registers in a build that compiles the cheat system in — a **development build**, or a release build made with cheats enabled (see below) — and legacy `Input.touchCount` reads 0 in the editor Game view. The console GameObject is created automatically at runtime — no scene setup required. The console discovers all registered cheats automatically and organises them by section and tag.
 
 ## In-game log console (on-device logs)
 
 `Debug.Log` output isn't visible on a device without a wired-up console. The project depends on yasirkula's [In-game Debug Console](https://github.com/yasirkula/UnityIngameDebugConsole) (`com.yasirkula.ingamedebugconsole`, a UPM git dependency in `Packages/manifest.json`) for this.
 
-`DevLogConsole` (a `MonoBehaviour`) spawns the console prefab at startup and `DontDestroyOnLoad`s it — **mobile development builds only**. Its guard, `UNITY_EDITOR || (DEVELOPMENT_BUILD && (UNITY_ANDROID || UNITY_IOS))`, keeps the component wireable in the editor but strips it from desktop dev builds and all release builds (the serialized prefab reference goes with it, so the console never ships there). At runtime it no-ops in the editor (the editor has its own Console window). Place one `DevLogConsole` in the **Launch scene** and assign the package's `IngameDebugConsole` prefab to its field.
+`DevLogConsole` (a `MonoBehaviour`) spawns the console prefab at startup and `DontDestroyOnLoad`s it — **mobile development builds only** (plus mobile release builds made with `CHEATS_IN_RELEASE`). Its guard, `UNITY_EDITOR || ((DEVELOPMENT_BUILD || CHEATS_IN_RELEASE) && (UNITY_ANDROID || UNITY_IOS))`, keeps the component wireable in the editor but strips it from desktop dev builds and ordinary release builds (the serialized prefab reference goes with it, so the console never ships there). At runtime it no-ops in the editor (the editor has its own Console window). Place one `DevLogConsole` in the **Launch scene** and assign the package's `IngameDebugConsole` prefab to its field.
 
 ## Build visibility
 
-The entire `Cheats/` system — console, `ICheat`, and all cheat implementations — is wrapped in `#if UNITY_EDITOR || DEVELOPMENT_BUILD`. It compiles out completely in release builds. Registration in `GameLifetimeScope` is guarded by the same directive.
+The entire `Cheats/` system — console, `ICheat`, and all cheat implementations — is wrapped in `#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE`. It compiles out completely in ordinary release builds. Registration in `GameLifetimeScope` and the `CheatState` checks sprinkled through gameplay controllers are guarded by the same directive.
+
+### Release builds with cheats (`CHEATS_IN_RELEASE`)
+
+**Tools → BalloonParty → Cheats In Release Builds** toggles the `CHEATS_IN_RELEASE` scripting define on the active build target (checkmark shows current state). While on, a normal release build includes the full cheat system — without paying the other development-build costs (`Log.Info`/`Log.Assert` stay stripped, no dev-build profiler/overlay overhead), so the build stays performance-representative. The define lives in ProjectSettings and **persists until toggled off** — turn it off before building anything meant to ship (the enable path logs a warning as a reminder).
 
 ## VContainer registration
 

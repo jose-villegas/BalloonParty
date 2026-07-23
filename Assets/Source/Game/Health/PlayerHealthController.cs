@@ -60,7 +60,7 @@ namespace BalloonParty.Game.Health
 
         private void Damage(int amount)
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
             // Dev cheat (BlockLevelUpCheat) is a level lock: don't drain hearts while it's on (so the run
             // can't creep toward loss either). RunController.EndRun is also guarded as a backstop.
             if (BalloonParty.Cheats.CheatState.BlockLevelUp)

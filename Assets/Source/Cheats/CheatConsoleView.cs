@@ -1,4 +1,4 @@
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
 
 using System.Collections.Generic;
 using System.Linq;

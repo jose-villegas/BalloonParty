@@ -145,7 +145,7 @@ namespace BalloonParty.Game.Level
 
         public bool WillLevelUp()
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
             // Dev cheat (BlockLevelUpCheat): report "not levelling up" so the projected level-up cinematic
             // (which gates on this) never starts — the earliest blocking state, before the ceremony.
             if (BalloonParty.Cheats.CheatState.BlockLevelUp)
@@ -176,7 +176,7 @@ namespace BalloonParty.Game.Level
 
             var baseProgress = _projectedProgress[color];
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
             // Dev cheat (BlockLevelUpCheat) — level lock: grant the points for the VISUAL (so score trails still
             // fly on a pop) but DON'T advance progress — no projected mutation here, and both OnTrailArrived
             // handlers skip their commit, so score, bars and level all stay put while the trails play. Not
@@ -211,7 +211,7 @@ namespace BalloonParty.Game.Level
         private void ClearRunState()
         {
             var startLevel = 1;
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
             startLevel = Mathf.Max(1, BalloonParty.Cheats.CheatState.StartLevel);
 #endif
             _level.Value = startLevel;
@@ -239,7 +239,7 @@ namespace BalloonParty.Game.Level
                 return;
             }
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
             // Level lock (BlockLevelUpCheat): the trail still arrived (and played), but don't confirm progress
             // or check for a level-up — the level stays where it was.
             if (BalloonParty.Cheats.CheatState.BlockLevelUp)
@@ -277,7 +277,7 @@ namespace BalloonParty.Game.Level
 
         private void CheckLevelUp()
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
             // Dev cheat (BlockLevelUpCheat): hold the current level — never complete it — while testing.
             if (BalloonParty.Cheats.CheatState.BlockLevelUp)
             {

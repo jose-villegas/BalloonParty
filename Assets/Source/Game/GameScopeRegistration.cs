@@ -1,4 +1,4 @@
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
 using BalloonParty.Cheats;
 #endif
 
@@ -237,7 +237,7 @@ namespace BalloonParty.Game
             return new ScoreTrailBehaviourResolver(container.Resolve<IScoreTrailBehaviourConfiguration>(), handlers);
         }
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
         internal static void RegisterCheats(this IContainerBuilder builder)
         {
             builder.Register<SpawnBalloonLineCheat>(Lifetime.Singleton).AsImplementedInterfaces();

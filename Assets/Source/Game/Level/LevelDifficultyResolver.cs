@@ -76,7 +76,7 @@ namespace BalloonParty.Game.Level
         // named fallback entry by its FromLevel id (e.g. -999).
         private static int StartLevel()
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
             var start = BalloonParty.Cheats.CheatState.StartLevel;
             return start < 0 ? start : Mathf.Max(1, start);
 #else

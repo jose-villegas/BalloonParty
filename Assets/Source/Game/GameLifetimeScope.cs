@@ -64,7 +64,7 @@ namespace BalloonParty.Game
             builder.RegisterItems();
             builder.RegisterPresentation();
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
             builder.RegisterCheats();
 #endif
         }
