@@ -609,6 +609,28 @@ proves the interop AND the second camera's cull shows up in Step-0 captures.
 
 ---
 
+## Quality vetoes — 2026-07-23 device pass (José)
+
+After seeing the first build containing the shader work, José vetoed every change with a
+visible quality cost. The standing principle: **visual quality beats modest GPU savings
+in this game; any quality-reducing shader change needs his on-device A/B *before* it
+ships, not after.**
+
+- **G4** (bake fine octave) — reverted `76e36d3c` (see its section).
+- **G3** (tent blur in smear Pass 1) — reverted `cb712a1b`; the box look is the wanted
+  one. **G6's fp16 stays** — Pass 0 is where the ALU win lives and it passed his eye.
+- **Display `_LOW_QUALITY_CLOUD` gates** (PuffCloud 20→12 taps from `6f738ca8`,
+  BackgroundCloud simplified lighting from `1094b867` — Phase 1 table rows now
+  historical) — disabled at the source in `6bff4d9a` (both device-only `EnableKeyword`
+  sites removed; shader variants left dormant for a possible A4 tier decision). The
+  gradient-normal lighting interacts with the scene-light direction for shadows and
+  noise normal-mapping — it's part of the look, not overhead. Note these variants likely
+  never engaged in release builds before `b0f9ad83` fixed the keyword mechanism, so
+  their "shipped impact" rows were partly theoretical.
+- Bonus refactor from the investigation: `2597da4c` extracts the duplicated cloud-noise
+  octave sampler into `Include/CloudNoise.cginc` (the copies had drifted quality gates
+  apart — the root of this whole incident). Blends deliberately not unified.
+
 ## Dropped in the 2026-07-23 revision
 
 - **F1 (Native RenderPass toggle)** — confirmed irrelevant on Unity 6.3 (Render Graph
