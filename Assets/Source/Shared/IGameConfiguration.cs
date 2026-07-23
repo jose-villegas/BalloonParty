@@ -22,10 +22,6 @@ namespace BalloonParty.Shared
         float CruiseTapEaseDuration { get; }
         int CruisePiercingTapThreshold { get; }
 
-        // Seconds after the last tough/unbreakable a piercing shot plows before it discharges — shatters
-        // the recorded toughs and slows to base. Re-armed by each plow, so a run of toughs holds it open.
-        float PierceDischargeDelay { get; }
-
         // Slow-mo dip at the discharge: the time scale it drops to, and for how long (unscaled seconds).
         float PierceDischargeTimeScale { get; }
         float PierceDischargeTimeScaleDuration { get; }

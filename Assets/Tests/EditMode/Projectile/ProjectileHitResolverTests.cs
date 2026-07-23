@@ -147,7 +147,6 @@ namespace BalloonParty.Tests.Projectile
             Assert.AreEqual(ProjectileHitVisual.None, result);
             Assert.AreEqual(1, _projectile.Flight.PendingPierceHits.Count, "the plowed tough is recorded");
             Assert.AreEqual(new Vector3(1f, 2f, 0f), _projectile.Flight.PendingPierceHits[0].Position);
-            Assert.IsTrue(_projectile.Flight.DischargeArmed, "the plow arms the discharge debounce");
             _hitDispatcher.DidNotReceive().Dispatch(Arg.Any<ActorHitMessage>());
         }
 

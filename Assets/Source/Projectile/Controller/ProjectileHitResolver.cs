@@ -56,14 +56,12 @@ namespace BalloonParty.Projectile.Controller
 
             // A piercing shot plows through a TOUGH actor (one that would take more than one hit)
             // WITHOUT popping it: the tough is recorded and shattered together with the rest at the
-            // discharge, not on contact. Normal balloons still pop as the shot passes through.
+            // next wall bounce (wall-discharge), not on contact. Normal balloons still pop as the shot
+            // passes through.
             if (isPiercing && balloon.IsTough())
             {
                 projectile.Flight.SegmentSweepValid = false;
                 projectile.Flight.PendingPierceHits.Add(new PendingPierceHit(balloon, balloonWorldPosition));
-                // Re-arm the discharge countdown: it fires this-many-seconds after the LAST tough, so a
-                // run of toughs holds it open and the whole line shatters together once the shot is clear.
-                projectile.Flight.DischargeArmed = true;
                 // Capture rainbow now, while the buff is live — the discharge ends the pierce (dropping
                 // the buff) before it resolves, so HasBuff would read false there.
                 projectile.Flight.PierceWasRainbow = projectile.HasBuff(ProjectileBuffId.RainbowShield);

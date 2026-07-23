@@ -1,4 +1,5 @@
 using System;
+using BalloonParty.Balloon.Model;
 using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.Model;
@@ -384,7 +385,7 @@ namespace BalloonParty.Tests.Projectile
         public void Step_PiercingWallBounce_BeforeAnyToughKeepsCruising()
         {
             // A cruising, armed shot rides a corridor wall without losing cruise or its pierce — a wall
-            // never consumes a pierce; only the discharge ends it.
+            // with no pending tough hits never ends the pierce.
             var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
             model.IsCruising.Value = true;
@@ -394,116 +395,78 @@ namespace BalloonParty.Tests.Projectile
 
             Assert.IsTrue(model.IsCruising.Value, "an armed shot keeps cruising off empty corridor walls");
             Assert.IsTrue(model.IsPiercing.Value,
-                "a wall never spends a pierce — only the discharge does");
+                "a wall with no pending toughs never ends the pierce");
         }
 
         [Test]
         public void Step_PiercingNotCruising_BeforeAnyTough_KeepsPiercing()
         {
             // A non-cruising Snipe lance: a wall costs a shield but never spends the pierce — only the
-            // discharge (covered by the Step_PierceDischarge_* tests) ends it.
+            // wall-discharge (when pending toughs exist) ends it.
             var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
             model.IsPiercing.Value = true;
 
             resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
 
-            Assert.IsTrue(model.IsPiercing.Value, "a wall never spends a pierce");
+            Assert.IsTrue(model.IsPiercing.Value, "a wall with no pending toughs never ends the pierce");
             Assert.AreEqual(2, model.ShieldsRemaining.Value, "the wall still costs a shield");
         }
 
         [Test]
-        public void Step_PierceDischarge_FiresAfterDelayFromLastArm()
+        public void Step_WallBounceDischarge_EndsPierceWhenPendingHitsExist()
         {
-            // The arming step only SETS the countdown (no decrement), so it starts ticking the NEXT
-            // step: with a 0.2 delay at 0.1/step the discharge fires two ticks after the arm, ending
-            // the pierce and dropping the shot to base.
-            var resolver = CruiseResolver(perShield: 0.5f, pierceDischargeDelay: 0.2f);
+            // A piercing shot that plowed a tough and then hits a wall: the pierce ends at the wall,
+            // and the view resolves the pending toughs (tested in the view/hit resolver tests).
+            var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
             model.IsPiercing.Value = true;
-            model.Flight.DischargeArmed = true;
+            model.IsCruising.Value = true;
+            model.Flight.PendingPierceHits.Add(
+                new PendingPierceHit(Substitute.For<IBalloonModel>(), Vector3.zero));
 
-            resolver.Step(model, Vector3.zero, 0.1f);
-            Assert.IsTrue(model.IsPiercing.Value, "the arming step only starts the countdown");
+            var step = resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
 
-            resolver.Step(model, Vector3.zero, 0.1f);
-            Assert.IsTrue(model.IsPiercing.Value, "0.1 of a 0.2 delay elapsed — not yet");
-
-            resolver.Step(model, Vector3.zero, 0.1f);
-            Assert.IsFalse(model.IsPiercing.Value, "delay elapsed — the discharge ends the pierce");
+            Assert.AreEqual(ProjectileStepOutcome.Bounced, step.Outcome);
+            Assert.IsFalse(model.IsPiercing.Value, "pierce ends at the wall when toughs were plowed");
+            Assert.IsFalse(model.IsCruising.Value, "cruise resets with the pierce");
         }
 
         [Test]
-        public void Step_PierceDischarge_NewArmMidWindowResetsTheDebounce()
+        public void Step_WallBounceDischarge_ResetsCruiseState()
         {
-            // A fresh plow re-arms mid-countdown; the debounce restarts, so the discharge holds off
-            // until the delay elapses again from the LAST arm — it must NOT fire at the original time.
-            var resolver = CruiseResolver(perShield: 0.5f, pierceDischargeDelay: 0.2f);
+            var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
             model.IsPiercing.Value = true;
-            model.Flight.DischargeArmed = true;
+            model.IsCruising.Value = true;
+            model.Flight.TotalCruiseTaps = 5;
+            model.Flight.ConsecutiveWallBounces = 10;
+            model.Flight.PendingPierceHits.Add(
+                new PendingPierceHit(Substitute.For<IBalloonModel>(), Vector3.zero));
 
-            resolver.Step(model, Vector3.zero, 0.1f); // countdown ← 0.2
-            resolver.Step(model, Vector3.zero, 0.1f); // countdown → 0.1
-
-            model.Flight.DischargeArmed = true; // a new tough plow re-arms
-            resolver.Step(model, Vector3.zero, 0.1f); // countdown ← 0.2 again, not fired
-            Assert.IsTrue(model.IsPiercing.Value, "re-arming reset the debounce — no early discharge");
-
-            resolver.Step(model, Vector3.zero, 0.1f); // countdown → 0.1
-            resolver.Step(model, Vector3.zero, 0.1f); // countdown → 0 — fires
-            Assert.IsFalse(model.IsPiercing.Value, "the discharge fires a full delay after the last arm");
-        }
-
-        [Test]
-        public void Step_PierceDischarge_ZeroDelayFiresTheTickAfterArming()
-        {
-            // A 0 delay means "discharge the moment the plow run ends" — the tick after the last arm.
-            // The countdown parks at 0, so a fire gate keyed on "countdown > 0" swallows it and the
-            // pierce never ends (toughs plowed but never shattered). DischargeScheduled must carry it.
-            var resolver = CruiseResolver(perShield: 0.5f, pierceDischargeDelay: 0f);
-            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
-            model.IsPiercing.Value = true;
-            model.Flight.DischargeArmed = true;
-
-            resolver.Step(model, Vector3.zero, 0.1f);
-            Assert.IsTrue(model.IsPiercing.Value, "the arming tick only schedules — the run may continue");
-
-            resolver.Step(model, Vector3.zero, 0.1f);
-            Assert.IsFalse(model.IsPiercing.Value, "with no delay the discharge fires the very next tick");
-        }
-
-        [Test]
-        public void Step_PierceDischarge_ResetsTotalCruiseTaps()
-        {
-            var resolver = CruiseResolver(perShield: 0.5f, pierceDischargeDelay: 0f);
-            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
-            model.IsPiercing.Value = true;
-            model.Flight.TotalCruiseTaps = 3;
-            model.Flight.DischargeArmed = true;
-
-            resolver.Step(model, Vector3.zero, 0.1f);
-            resolver.Step(model, Vector3.zero, 0.1f);
+            resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
 
             Assert.AreEqual(0, model.Flight.TotalCruiseTaps,
                 "the next cruise must bank fresh taps instead of re-arming off the old pierce");
+            Assert.AreEqual(0, model.Flight.ConsecutiveWallBounces,
+                "wall bounce counter resets so cruise re-entry requires fresh empty bounces");
         }
 
         [Test]
-        public void Step_PiercingWithNoArm_NeverDischarges()
+        public void Step_PiercingNoPendingHits_NeverDischarges()
         {
-            // A piercing shot that never plowed a tough is never armed, so the countdown stays idle and
-            // the discharge never fires — the pierce persists.
-            var resolver = CruiseResolver(perShield: 0.5f, pierceDischargeDelay: 0.2f);
-            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
+            // A piercing shot that never plowed a tough has no pending hits, so the discharge never
+            // fires at walls — the pierce persists indefinitely.
+            var resolver = CruiseResolver(perShield: 0.5f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 5);
             model.IsPiercing.Value = true;
+            model.IsCruising.Value = true;
 
-            for (var i = 0; i < 6; i++)
-            {
-                resolver.Step(model, Vector3.zero, 0.1f);
-            }
+            // Bounce off a wall with no pending hits:
+            resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
 
-            Assert.IsTrue(model.IsPiercing.Value, "no arm ever set — nothing discharges");
+            Assert.IsTrue(model.IsPiercing.Value, "no toughs plowed — pierce persists");
+            Assert.IsTrue(model.IsCruising.Value, "cruising continues through empty walls");
         }
 
         [Test]
@@ -593,14 +556,13 @@ namespace BalloonParty.Tests.Projectile
 
         private static ProjectileMotionResolver CruiseResolver(
             float perShield, float tapEaseDuration = 0f, int piercingTapThreshold = 0,
-            float pierceDischargeDelay = 0f, float maxSpeedMultiplier = 0f)
+            float maxSpeedMultiplier = 0f)
         {
             var config = Substitute.For<IGameConfiguration>();
             config.LimitsClockwise.Returns(Walls);
             config.CruiseSpeedPerShield.Returns(perShield);
             config.CruiseTapEaseDuration.Returns(tapEaseDuration);
             config.CruisePiercingTapThreshold.Returns(piercingTapThreshold);
-            config.PierceDischargeDelay.Returns(pierceDischargeDelay);
             config.MaxCruiseSpeedMultiplier.Returns(maxSpeedMultiplier);
             config.CruiseTapCurve.Returns(AnimationCurve.Linear(0f, 0f, 1f, 1f));
             return new ProjectileMotionResolver(config);

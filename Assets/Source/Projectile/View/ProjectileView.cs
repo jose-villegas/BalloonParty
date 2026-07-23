@@ -47,6 +47,14 @@ namespace BalloonParty.Projectile.View
         [Tooltip("Seconds for the spiral to lerp in/out when the piercing state flips.")]
         [SerializeField] [Min(0f)] private float _pierceFadeDuration = 0.35f;
 
+        [Tooltip("Power curve exponent for distance-based fade-in (< 1 = faster roll-in). " +
+                 "0.5 means the aura reaches ~70 % alpha at half the distance to the tough.")]
+        [SerializeField] [Range(0.1f, 1f)] private float _pierceFadeInPower = 0.45f;
+
+        [Tooltip("Fraction of the segment distance at which the aura reaches full alpha. " +
+                 "0.75 means the spiral is fully visible 25 % before the actual impact.")]
+        [SerializeField] [Range(0.3f, 1f)] private float _pierceFadeInReach = 0.75f;
+
         [Tooltip("How far the piercing aura DUCKS (not off) during each cruise tap beat. A piercing " +
                  "shot re-taps faster than the tap-ease window, so ducking fully to 0 would keep the " +
                  "aura permanently hidden exactly while it's armed.")]
@@ -508,9 +516,9 @@ namespace BalloonParty.Projectile.View
                 }
             }
 
-            // The motion resolver ends the pierce when the discharge countdown elapses; the plowed toughs
-            // are still pending, so shatter them now (at their strike positions). DestroyProjectile handles
-            // the same flush on a shot that dies before the countdown fires.
+            // The motion resolver ends the pierce at a wall bounce when pending toughs exist; the plowed
+            // toughs are still pending, so shatter them now (at their strike positions). DestroyProjectile
+            // handles the same flush on a shot that dies before the next wall.
             if (!_model.IsPiercing.Value && _model.Flight.PendingPierceHits.Count > 0)
             {
                 _hitResolver.DischargePending(_model);
@@ -709,14 +717,15 @@ namespace BalloonParty.Projectile.View
 
             if (pierceActive && _pierceAlpha < target && TryFindToughAhead(out var toughPos))
             {
-                // Distance-based fade-in: alpha tracks spatial progress toward the tough ahead. This
-                // guarantees full visibility at the moment of impact regardless of timeScale — the
-                // spiral materialises in slow-mo as the shot closes in. Never decreases alpha (a new
-                // segment resets SegmentStartPosition, but the aura shouldn't flicker off).
+                // Distance-based fade-in: alpha tracks spatial progress toward the tough ahead.
+                // _pierceFadeInReach shrinks the effective distance so full alpha arrives before
+                // impact, and _pierceFadeInPower (< 1) front-loads the curve so early travel
+                // already shows significant aura. Never decreases alpha.
                 var segStart = (Vector3)_model.Flight.SegmentStartPosition;
-                var totalDist = Vector3.Distance(segStart, toughPos);
+                var totalDist = Vector3.Distance(segStart, toughPos) * _pierceFadeInReach;
                 var traveled = Vector3.Distance(segStart, transform.position);
-                var progress = totalDist > 0f ? Mathf.Clamp01(traveled / totalDist) : 1f;
+                var linear = totalDist > 0f ? Mathf.Clamp01(traveled / totalDist) : 1f;
+                var progress = Mathf.Pow(linear, _pierceFadeInPower);
                 _pierceAlpha = Mathf.Max(_pierceAlpha, Mathf.Min(progress, target));
             }
             else

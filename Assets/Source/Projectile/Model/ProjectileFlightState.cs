@@ -23,27 +23,13 @@ namespace BalloonParty.Projectile.Model
     public class ProjectileFlightState : IProjectileFlightState
     {
         // hits>1 balloons the piercing shot has plowed through (not yet popped), and their strike
-        // positions — shattered together at the discharge. Count doubles as the rainbow charge.
+        // positions — shattered together at the wall-discharge. Count doubles as the rainbow charge.
         public List<PendingPierceHit> PendingPierceHits { get; } = new();
-
-        // Set by the hit resolver on each tough plow so the motion resolver (re)starts the discharge
-        // countdown — a run of toughs keeps re-arming it, so the discharge fires after the LAST one.
-        public bool DischargeArmed { get; set; }
 
         // Whether the shot was rainbow-buffed when it plowed a tough — captured at plow time because the
         // discharge ends the pierce (dropping the RainbowShield buff) BEFORE the discharge is resolved,
         // so HasBuff would already read false by then.
         public bool PierceWasRainbow { get; set; }
-
-        // While a discharge is scheduled, counts down each tick; the discharge fires when it reaches 0.
-        // The value alone can't say "scheduled" — a 0 delay is a legitimate fire-next-tick, so
-        // DischargeScheduled is the authority (see below).
-        public float DischargeCountdown { get; set; }
-
-        // Whether a discharge is scheduled: set when the debounce (re)arms, cleared when it fires. This
-        // is what gates the countdown — NOT DischargeCountdown > 0, which would swallow a 0-delay config
-        // (the countdown would park at 0 and never tick down past it).
-        public bool DischargeScheduled { get; set; }
 
         // Wall bounces since the last balloon contact — the cruise detector's counter.
         public int ConsecutiveWallBounces { get; set; }

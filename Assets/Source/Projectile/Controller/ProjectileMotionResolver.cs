@@ -14,7 +14,6 @@ namespace BalloonParty.Projectile.Controller
         private readonly float _maxCruiseSpeedMultiplier;
         private readonly float _cruiseTapEaseDuration;
         private readonly int _cruisePiercingTapThreshold;
-        private readonly float _pierceDischargeDelay;
         private readonly AnimationCurve _cruiseTapCurve;
         private readonly AnimationCurve _lastShieldApproachCurve;
         private readonly float _lastShieldApproachDuration;
@@ -30,7 +29,6 @@ namespace BalloonParty.Projectile.Controller
             _maxCruiseSpeedMultiplier = config.MaxCruiseSpeedMultiplier;
             _cruiseTapEaseDuration = config.CruiseTapEaseDuration;
             _cruisePiercingTapThreshold = config.CruisePiercingTapThreshold;
-            _pierceDischargeDelay = config.PierceDischargeDelay;
             _cruiseTapCurve = config.CruiseTapCurve ?? AnimationCurve.Linear(0f, 0f, 1f, 1f);
             // An un-authored (newly-added) serialized curve deserializes empty and evaluates to 0,
             // which would crawl the shot — fall back to a constant-1 no-op until it's authored.
@@ -43,12 +41,6 @@ namespace BalloonParty.Projectile.Controller
         /// <summary>Advances one fixed step, mutating direction/shield count on a wall bounce.</summary>
         internal ProjectileStep Step(IWriteableProjectileModel model, Vector3 position, float deltaTime)
         {
-            // Run the discharge countdown FIRST so, on the step it fires, the slow-to-base already shows
-            // in this step's speed: ending the pierce drops the Speed buff (PierceEndedEndCondition), and
-            // ResolveFlightSpeed below then reads the un-buffed base. The view pops the plowed toughs once
-            // it sees the pierce ended with hits still pending.
-            TickPierceDischarge(model, deltaTime);
-
             var speed = ResolveFlightSpeed(model, deltaTime);
 
             // The 'last breath': on a doomed 0-shield segment (flagged by the view once the path to
@@ -85,6 +77,22 @@ namespace BalloonParty.Projectile.Controller
             {
                 // A dead shot stops AT the wall — the mirrored continuation is for survivors.
                 return ProjectileStep.Destroyed(wallContact, model.Direction, speed);
+            }
+
+            // Wall-discharge: a piercing shot that plowed through at least one tough on this segment
+            // discharges at the wall — the view resolves the pending toughs, and the pierce (with its
+            // speed buff) ends. If the segment had no toughs, piercing continues indefinitely.
+            if (model.IsPiercing.Value && model.Flight.PendingPierceHits.Count > 0)
+            {
+                model.Flight.ConsecutiveWallBounces = 0;
+                model.Flight.TotalCruiseTaps = 0;
+                model.IsCruising.Value = false;
+                model.IsPiercing.Value = false;
+
+                model.Direction = Vector2.Reflect(model.Direction, reflect.normalized);
+                model.Flight.SegmentStartPosition = wallContact;
+                model.Flight.SegmentElapsed = 0f;
+                return ProjectileStep.Bounced(position, wallContact, model.Direction, speed);
             }
 
             // Consecutive wall bounces with no balloon contact = the shot may be ping-ponging empty
@@ -195,43 +203,6 @@ namespace BalloonParty.Projectile.Controller
 
             normal = (toPosition - travel * backtrack) / radius;
             return true;
-        }
-
-        // Debounce the discharge: each plowed tough re-arms the countdown (via Flight.DischargeArmed), so
-        // a run of toughs keeps it open; once no new tough arrives for _pierceDischargeDelay the shot
-        // discharges — the pierce (and, for a Snipe, its speed buff) end, dropping it to base. The view
-        // then shatters the plowed toughs. A run with no plowed toughs never arms, so nothing fires.
-        private void TickPierceDischarge(IWriteableProjectileModel model, float deltaTime)
-        {
-            var flight = model.Flight;
-            if (flight.DischargeArmed)
-            {
-                flight.DischargeCountdown = _pierceDischargeDelay;
-                flight.DischargeScheduled = true;
-                flight.DischargeArmed = false;
-                return;
-            }
-
-            if (!flight.DischargeScheduled)
-            {
-                return;
-            }
-
-            flight.DischargeCountdown -= deltaTime;
-            if (flight.DischargeCountdown > 0f)
-            {
-                return;
-            }
-
-            flight.DischargeCountdown = 0f;
-            flight.DischargeScheduled = false;
-            // Reset the bounce counter with the pierce end: TryEnterCruise gates on !IsPiercing, and the
-            // counter is typically already past the cruise threshold here, so without this the shot would
-            // re-enter cruise the instant the pierce clears instead of needing to bank fresh taps.
-            flight.ConsecutiveWallBounces = 0;
-            flight.TotalCruiseTaps = 0;
-            model.IsCruising.Value = false;
-            model.IsPiercing.Value = false;
         }
 
         // The flight speed for this step. Both cruise wall-bounces and sweep corridor-clears feed a
