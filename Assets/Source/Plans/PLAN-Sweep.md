@@ -115,7 +115,7 @@ No new controller or service; logic stays in the view alongside Cruise.
 
 ## Configuration
 
-Keep in `IGameConfiguration` (and the backing `GameConfiguration` SO):
+Keep in `IProjectileFlightConfig` (and the backing `ProjectileFlightConfig` SO):
 
 | Field | Type | Purpose |
 |---|---|---|

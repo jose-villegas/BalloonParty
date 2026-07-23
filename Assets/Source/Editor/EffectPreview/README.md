@@ -14,7 +14,7 @@ EffectViewPreviewPlayer          ← owns animation loop, color picker, config c
 The **player** handles everything shared across all effect previews:
 - `EditorAnimationLoop` (play/pause/stop, speed slider, delta-time ticking)
 - `PaletteColorPicker` (color selection from `GamePalette`)
-- `ConfigAssetCache<GameConfiguration>` and `ConfigAssetCache<ItemConfiguration>`
+- `EditorAssetCache<SlotGridConfig>` and `EditorAssetCache<ItemConfiguration>`
 - Inspector GUI layout (header, disabled scope during playback, controls)
 - Repaint scheduling (`SceneView.RepaintAll` + inspector `Repaint`)
 

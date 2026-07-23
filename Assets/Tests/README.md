@@ -62,7 +62,7 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 ### Conventions
 
 - **Most tests are EditMode** — pure C#, run in milliseconds. A small **PlayMode** suite (`Assets/Tests/PlayMode/`) covers behaviour EditMode can't drive — the async/pooling/scene paths (see the PlayMode section below). Reach for PlayMode only when a test genuinely needs the player loop or a live scene.
-- **Real objects over mocks** — use real `BalloonModel`, `SlotGrid`, etc. when the class is a plain C# type. Reserve NSubstitute for interfaces (`IGameConfiguration`, `IPublisher<T>`, `ISubscriber<T>`) and ScriptableObjects that need reflection setup.
+- **Real objects over mocks** — use real `BalloonModel`, `SlotGrid`, etc. when the class is a plain C# type. Reserve NSubstitute for interfaces (`ISlotGridConfig`, `IProjectileFlightConfig`, `IPublisher<T>`, `ISubscriber<T>`) and ScriptableObjects that need reflection setup.
 - **MessagePipe subscriber capture** — `ISubscriber<T>.Subscribe(Action<T>)` is an extension method that wraps the action in `AnonymousMessageHandler<T>` and calls the interface's `Subscribe(IMessageHandler<T>, ...)`. Capture the handler via NSubstitute:
   ```csharp
   IMessageHandler<MyMessage> handler;

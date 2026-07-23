@@ -1250,7 +1250,7 @@ a text-entry/parameterized cheat; otherwise preset targets like "Jump to 10/25/5
 
 `LevelPacingConfiguration.OnValidate` (editor-only warnings) and the "resolve levels 1..50 without
 throwing" EditMode test check the same invariants two different ways and can drift. Extract a plain
-`LevelPacingValidator.Validate(ILevelPacingConfiguration, IGameConfiguration) : IReadOnlyList<string>`
+`LevelPacingValidator.Validate(ILevelPacingConfiguration, ISlotGridConfig) : IReadOnlyList<string>`
 (issue messages, no Unity/editor dependency): `OnValidate` logs each issue, the EditMode test asserts the
 list is empty. Also the seam a future "test a hypothetical config" editor tool would call.
 

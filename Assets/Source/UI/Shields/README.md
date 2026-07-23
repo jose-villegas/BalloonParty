@@ -22,7 +22,7 @@ It also drives an Animator: `"Ready"` on load, `"Lost"` when `ShieldsRemaining` 
 - **`ShieldGainedMessage`** (published by `ShieldItemHandler` when a shield item is activated, and by `ProjectileHitResolver` when a same-color pop streak of 2+ awards a bonus shield): resolves the granting balloon's world position from its slot index via `SlotGrid.IndexToWorldPosition` and flies an orb *up to* the HUD.
 - **`ShieldLostMessage`** (published by `ProjectileView` when a wall bounce spends a shield — i.e. `ShieldsRemaining` stays `>= 0` after the decrement; below that the projectile is destroyed instead): flies an orb *from* the HUD down to the bounce point carried in the message.
 
-Both use `IGameConfiguration.ShieldTrailDuration`; the spawner handles pool return on completion.
+Both use `IProjectileFlightConfig.ShieldTrailDuration`; the spawner handles pool return on completion.
 
 ## Interactions
 
@@ -30,6 +30,6 @@ Both use `IGameConfiguration.ShieldTrailDuration`; the spawner handles pool retu
 - **ProjectileLoadedMessage** — triggers "Ready" state and binds the labels to the new projectile
 - **ProjectileDestroyedMessage** — triggers "Waiting" state and unbinds the labels
 - **ShieldGainedMessage** — published by `ShieldItemHandler` (item activation) and `ProjectileHitResolver` (streak shield award); triggers trail spawn from balloon slot to shield HUD
-- **IGameConfiguration** — `ShieldTrailDuration` used by trail controller
+- **IProjectileFlightConfig** — `ShieldTrailDuration` used by trail controller
 - **SlotGrid** — resolves slot index to world position for trail origin
 - **PoolManager** — `ShieldTrail` pool for `FlyingTrail`; consumer handles return

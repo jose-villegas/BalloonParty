@@ -41,6 +41,6 @@ When a `ProjectileDestroyedMessage` or a `LevelUpDismissedMessage` arrives, `Thr
 - **BoardClearMessage / RunResetMessage** — trigger a synchronous reload so a cleared board or a fresh run starts with a fresh projectile
 - **PauseService** — any paused source blocks `Tick` (aim/fire)
 - **ProjectileLoadedMessage** — published after each load so shield UI can self-bind
-- **IGameConfiguration** — provides `LimitsClockwise`, `ProjectileSpeed`, `ProjectileStartingShields`, `ProjectileLoadDuration`, `PredictionTraceColor`
+- **IProjectileFlightConfig** — provides `LimitsClockwise`, `ProjectileSpeed`, `ProjectileStartingShields`, `ProjectileLoadDuration`; **IPredictionTraceConfig** — provides `PredictionTraceColor`
 - **PredictionTraceCalculator / ThrowerView** — calculates and renders the aim trajectory line while the player holds the mouse button
 - **PredictionTraceProvider** — written each `Tick` alongside the view (set on aim, cleared on fire/release/reload) so non-Thrower readers can find where the trace currently sits

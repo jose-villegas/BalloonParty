@@ -90,7 +90,7 @@ These drawers extend `PropertyDrawer` directly and handle their own rendering wi
 |---|---|---|
 | `PaintSplashViewEditor` | `PaintSplashView` | Constructs an `EffectViewPreviewPlayer` with a `PaintSplashPreviewModule`. The module handles radial blob flights, arc/scale/shadow/sprite curves, spin, MPB updates, blob particle simulation, and splash particle spawning (prefab-stage-aware). The player manages the animation loop, palette color picker, and config caches. All preview logic is in `EffectPreview/PaintSplashPreviewModule` |
 | `ChainLightningViewEditor` | `ChainLightningView` | Constructs an `EffectViewPreviewPlayer` with a `ChainLightningPreviewModule`. The module generates random slot positions via `EditorGridHelper`, fills jagged bolt segments into the view's `LineRenderer`s, and animates forward growth + retraction via a delta-time state machine. All preview logic is in `EffectPreview/ChainLightningPreviewModule` |
-| `GameConfigurationEditor` | `GameConfiguration` | Adds a "Show Limits In Scene" toggle below the default inspector that controls `MapLimitsSceneOverlay` |
+| `ProjectileFlightConfigEditor` | `ProjectileFlightConfig` | Adds a "Show Limits In Scene" toggle below the default inspector that controls `MapLimitsSceneOverlay` |
 | `GameDisplayConfigurationEditor` | `GameDisplayConfiguration` | (in `Configuration/Editor/GameDisplayConfigurationDrawer.cs`) Draws reference world dimensions, the Scene Capture fields, per-aspect-ratio ortho-size previews, and a Scene-view overlay of the reference box + device frames |
 | `SceneCaptureServiceEditor` | `SceneCaptureService` | Live play-mode preview of the shared scene-capture RT |
 | `ScreenSpaceLightServiceEditor` | `ScreenSpaceLightService` | Live play-mode preview of the light buffer (RGB = bounce, A = shadow) |
@@ -104,7 +104,7 @@ These drawers extend `PropertyDrawer` directly and handle their own rendering wi
 
 | Overlay | What it draws |
 |---|---|
-| `MapLimitsSceneOverlay` | `[InitializeOnLoad]` static class — draws the `GameConfiguration.LimitsClockwise` map boundary as an orange rectangle with edge-value labels in the Scene view. Active in both edit and play mode regardless of inspector selection. Uses `ConfigAssetCache<GameConfiguration>` to locate the asset. Toggle persisted via `EditorPrefs` and controllable from the `GameConfigurationEditor` inspector |
+| `MapLimitsSceneOverlay` | `[InitializeOnLoad]` static class — draws the `ProjectileFlightConfig.LimitsClockwise` map boundary as an orange rectangle with edge-value labels in the Scene view. Active in both edit and play mode regardless of inspector selection. Uses an `EditorAssetCache<ProjectileFlightConfig>` to locate the asset. Toggle persisted via `EditorPrefs` and controllable from the `ProjectileFlightConfigEditor` inspector |
 
 ## Menu tools
 

@@ -22,12 +22,12 @@ MonoBehaviour view for a circular actor (e.g. a balloon) that shows a marker whe
 
 ### Integration
 
-`ThrowerController` owns a `PredictionTraceCalculator`; `ThrowerView` finds the `PredictionTraceView` via `GetComponentInChildren` in `Awake` and exposes `SetTrace`/`SetTraceColor`/`ClearTrace`. Each `Tick`, while the player is aiming and the projectile hasn't been fired, the controller calculates the trace, pushes it through the view, and mirrors it into `PredictionTraceProvider` for any `TraceHitMarker` readers. On fire, release, or reload, both the view and the provider are cleared. The line's color comes from `IGameConfiguration.PredictionTraceColor`, pushed once in `ThrowerController.Start`. The line deliberately casts NO scene-light — an aim telegraph relighting the actors it crosses read as noise (a light-field version was tried and removed; see branch backup/gi-normals-spherize for the era).
+`ThrowerController` owns a `PredictionTraceCalculator`; `ThrowerView` finds the `PredictionTraceView` via `GetComponentInChildren` in `Awake` and exposes `SetTrace`/`SetTraceColor`/`ClearTrace`. Each `Tick`, while the player is aiming and the projectile hasn't been fired, the controller calculates the trace, pushes it through the view, and mirrors it into `PredictionTraceProvider` for any `TraceHitMarker` readers. On fire, release, or reload, both the view and the provider are cleared. The line's color comes from `IPredictionTraceConfig.PredictionTraceColor`, pushed once in `ThrowerController.Start`. The line deliberately casts NO scene-light — an aim telegraph relighting the actors it crosses read as noise (a light-field version was tried and removed; see branch backup/gi-normals-spherize for the era).
 
 ## Unity Setup
 
 1. Add a child GameObject to the Thrower prefab
 2. Add `LineRenderer` + `PredictionTraceView` components
-3. Configure the `LineRenderer` material and width; color is driven at runtime from `IGameConfiguration.PredictionTraceColor`
+3. Configure the `LineRenderer` material and width; color is driven at runtime from `IPredictionTraceConfig.PredictionTraceColor`
 4. For a hit marker on a circular actor prefab (e.g. a balloon): add a small child sprite (e.g. "HitMarker"), add `TraceHitMarker` to the actor, and assign `_marker` (the child sprite's `Transform`), `_circleRadius` (the actor's world-unit circle radius), and `_markerOffset` (distance from the actor origin the marker sits at)
 

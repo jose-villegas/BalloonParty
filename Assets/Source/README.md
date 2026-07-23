@@ -46,7 +46,7 @@ public class GameLifetimeScope : LifetimeScope
     protected override void Configure(IContainerBuilder builder)
     {
         builder.Register<SlotGrid>(Lifetime.Singleton);
-        builder.RegisterInstance<IGameConfiguration>(_gameConfigSO);
+        builder.RegisterInstance<IProjectileFlightConfig>(_projectileFlightConfig);
         builder.RegisterEntryPoint<BalloonBalancer>();
 
         var options = builder.RegisterMessagePipe();
@@ -76,7 +76,11 @@ public class GameLifetimeScope : LifetimeScope
 
 | Asset | Type | Injected as |
 |---|---|---|
-| `GameConfiguration` | `ScriptableObject` | `IGameConfiguration` |
+| `ProjectileFlightConfig` | `ScriptableObject` | `IProjectileFlightConfig` |
+| `SlotGridConfig` | `ScriptableObject` | `ISlotGridConfig` |
+| `PredictionTraceConfig` | `ScriptableObject` | `IPredictionTraceConfig` |
+| `RunConfig` | `ScriptableObject` | `IRunConfig` |
+| `ProjectileVisualConfig` | `ScriptableObject` | `IProjectileVisualConfig` |
 | `BalloonsConfiguration` | `ScriptableObject` | `IBalloonsConfiguration` |
 | `GamePalette` | `ScriptableObject` | `IGamePalette` |
 | `GameDisplayConfiguration` | `ScriptableObject` | `IGameDisplayConfiguration` |
@@ -305,7 +309,11 @@ Game data is split across focused ScriptableObjects, each registered as a single
 
 | Asset | Interface | What it holds |
 |---|---|---|
-| `GameConfiguration` | `IGameConfiguration` | Projectile settings, slot dimensions, timing values, prediction trace params, score trail timing, score points scatter delay, points formula |
+| `ProjectileFlightConfig` | `IProjectileFlightConfig` | Projectile flight behavior — initial velocity, gravity, deflection, feel params |
+| `SlotGridConfig` | `ISlotGridConfig` | Slot grid layout — play-area dimensions and slot positioning |
+| `PredictionTraceConfig` | `IPredictionTraceConfig` | Prediction trace visualization — path rendering params and styling |
+| `RunConfig` | `IRunConfig` | Run rules — starting hit points |
+| `ProjectileVisualConfig` | `IProjectileVisualConfig` | Projectile visual tuning — glow, pierce spiral, scene light, shield-loss/pierce flash FX, death presentation |
 | `BalloonsConfiguration` | `IBalloonsConfiguration` | Balloon prefab entries (weight, cap, nudge overrides, pop VFX), spawn line counts, animation range, balance delay, global nudge defaults |
 | `GridActorConfiguration` | `IGridActorConfiguration` | Grid actor prefab entries (weight, max-count cap, `HitsToPop` for Gatekeeper) — read by procedural grid spawner (Phase 8.3) |
 | `GamePalette` | `IGamePalette` | Named color entries — the single source for all balloon colors; `GetColor(name)` resolves to `UnityEngine.Color` |
@@ -323,7 +331,7 @@ Rules:
 - **Never hardcode** values that exist in a configuration asset.
 - **Never duplicate** configuration data via `[SerializeField]` on individual systems. If a system needs a value, it injects the relevant configuration interface.
 - **Always inject the read-only interface**, not the concrete SO type. Every SO implements an `I`-prefixed interface exposing only read-only properties. This prevents accidental mutation of SO fields at runtime.
-- `IGameConfiguration` lives in `Shared/` (consumed by assemblies outside `Configuration`). All other interfaces live in `Configuration/` alongside their SO.
+- `IProjectileFlightConfig` / `ISlotGridConfig` / `IPredictionTraceConfig` / `IRunConfig` / `IScoreTrailConfig` live in `Shared/` (consumed by assemblies outside `Configuration`). All other interfaces live in `Configuration/` alongside their SO.
 - New configuration fields are added to the appropriate asset type. If a new domain of settings grows large enough to stand alone, extract it into its own ScriptableObject rather than bloating an existing one.
 - Collection properties on interfaces use `IReadOnlyList<T>` to prevent element assignment.
 
@@ -333,7 +341,7 @@ Rules:
 
 All tween animations must reproduce the authored values **exactly**:
 
-1. Read the target tween values from `IGameConfiguration` — never hardcode durations or distances.
+1. Read the target tween values from the relevant configuration interface (e.g. `IProjectileFlightConfig`, `IProjectileVisualConfig`) — never hardcode durations or distances.
 2. Match the ease type. If no `SetEase` is specified, DOTween's default (`InOutQuad`) applies — do not add eases that weren't there.
 3. `Time.timeScale = 0` freezes DOTween and physics. Animators that must play while paused need `updateMode = AnimatorUpdateMode.UnscaledTime`. UniTask delays that must resolve during pause need `ignoreTimeScale: true`.
 
@@ -580,7 +588,7 @@ public class SlotGridView : MonoBehaviour
 #if UNITY_EDITOR
     private static readonly Color EmptySlotColor = new(1f, 1f, 1f, 0.2f);
 
-    [Inject] private IGameConfiguration _config;
+    [Inject] private IProjectileFlightConfig _config;
 
     private void OnDrawGizmos()
     {

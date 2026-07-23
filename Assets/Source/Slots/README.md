@@ -127,7 +127,7 @@ Spawners are injected as `IEnumerable<IGridSpawner>` via VContainer's collection
 - **BalloonBalancer** — reads occupancy to find gaps; skips `Static` actors (or actors that are not `IDynamicSlotActor`); calls `Remove` + `Place` to relocate dynamic actors; uses `ViewAt` to reach views for animation. `Balance()` is `internal` for synchronous pre-spawn consolidation
 - **NudgeService** — uses `GetNeighbors` and `IndexToWorldPosition` to direct nudge animations; filters by `IHasNudge`
 - **PaintItemHandler** — buckets paintable slots to the nearest of the splash's covering blobs (not hex neighbors); casts `At()` result to `IPaintable` for painting
-- **IGameConfiguration** — provides `SlotsSize`, `SlotSeparation`, `SlotsOffset` for grid construction and position calculations
+- **ISlotGridConfig** — provides `SlotsSize`, `SlotSeparation`, `SlotsOffset` for grid construction and position calculations
 
 ## Slot Selection Strategies
 

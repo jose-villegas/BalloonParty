@@ -89,7 +89,7 @@ color). `GetProfile(PaintSource)` resolves the active profile for a given source
 
 `View/WallNetView.cs` — a `MonoBehaviour` that builds the four **net-strip** meshes framing the play
 area, one per edge of the logical play rectangle. It reads that rectangle from the injected
-`IGameConfiguration.LimitsClockwise` (unpacked via `WallLimits`), so the visible frame is sourced from
+`IProjectileFlightConfig.LimitsClockwise` (unpacked via `WallLimits`), so the visible frame is sourced from
 the same rectangle the projectile billiard reflects off — no hand-syncing a separate visual frame.
 
 Each strip is a flat quad band laid **outward** from its wall by `_stripWidth` (away from the play area,
@@ -105,7 +105,7 @@ vertex the view bakes:
 
 The strips render through generated child `MeshRenderer`s sharing `_netMaterial`, on the configured
 sorting layer. Registered with `RegisterComponentInHierarchy<WallNetView>()` in `GameScopeRegistration`
-so its `IGameConfiguration` injection resolves; the GameObject lives as a static child of the Scenario
+so its `IProjectileFlightConfig` injection resolves; the GameObject lives as a static child of the Scenario
 prefab (identity transform, so mesh world coordinates map straight through).
 
 The net's motion and look now read two shared fields, not just one:
