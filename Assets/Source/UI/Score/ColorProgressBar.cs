@@ -49,7 +49,7 @@ namespace BalloonParty.UI.Score
         [SerializeField] private ProgressNotice _pointNoticePrefab;
         [SerializeField] private ProgressNotice _streakNoticePrefab;
 
-        [Inject] private IGameConfiguration _config;
+        [Inject] private IScoreTrailConfig _config;
         [Inject] private IGamePalette _palette;
         [Inject] private IActiveLevelParameters _levelParams;
         [Inject] private ILevelThresholds _thresholds;

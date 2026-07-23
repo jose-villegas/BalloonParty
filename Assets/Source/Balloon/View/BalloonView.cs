@@ -54,7 +54,7 @@ namespace BalloonParty.Balloon.View
 
         [Inject] private IBalloonsConfiguration _balloonsConfig;
         [Inject] private IGamePalette _palette;
-        [Inject] private IGameConfiguration _config;
+        [Inject] private ISlotGridConfig _config;
         [Inject] private IItemConfiguration _itemConfig;
         [Inject] private PoolManager _poolManager;
         [Inject] private BalloonMotionTicker _motionTicker;

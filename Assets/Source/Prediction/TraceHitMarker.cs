@@ -35,7 +35,7 @@ namespace BalloonParty.Prediction
         [SerializeField] private float _minIntensity = 0.25f;
 
         [Inject] private PredictionTraceProvider _traceProvider;
-        [Inject] private IGameConfiguration _config;
+        [Inject] private IPredictionTraceConfig _config;
 
         private bool _isVisible;
         private int _lastVersion;

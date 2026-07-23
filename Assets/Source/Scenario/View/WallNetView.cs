@@ -50,7 +50,7 @@ namespace BalloonParty.Scenario.View
         private readonly List<Mesh> _meshes = new();
         private readonly CompositeDisposable _subscriptions = new();
 
-        private IGameConfiguration _config;
+        private IProjectileFlightConfig _config;
         private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private ISubscriber<RunResetMessage> _runResetSubscriber;
         private ISubscriber<ProjectileFiredMessage> _firedSubscriber;
@@ -114,7 +114,7 @@ namespace BalloonParty.Scenario.View
 
         [Inject]
         private void Construct(
-            IGameConfiguration config,
+            IProjectileFlightConfig config,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             ISubscriber<RunResetMessage> runResetSubscriber,
             ISubscriber<ProjectileFiredMessage> firedSubscriber)

@@ -12,7 +12,7 @@ namespace BalloonParty.Slots.Grid
     internal class SlotGrid
     {
         private readonly BalancePathHolder _balancePathHolder;
-        private readonly IGameConfiguration _config;
+        private readonly ISlotGridConfig _config;
         private readonly Subject<SlotGridChangedEvent> _onChanged = new();
         private readonly IWriteableSlotActor[,] _slots;
         private readonly ISlotActorView[,] _views;
@@ -23,7 +23,7 @@ namespace BalloonParty.Slots.Grid
         public int Columns => _slots.GetLength(0);
         public int Rows => _slots.GetLength(1);
 
-        public SlotGrid(IGameConfiguration config, BalancePathHolder balancePathHolder)
+        public SlotGrid(ISlotGridConfig config, BalancePathHolder balancePathHolder)
         {
             _config = config;
             _balancePathHolder = balancePathHolder;

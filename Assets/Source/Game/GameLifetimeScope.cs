@@ -73,6 +73,9 @@ namespace BalloonParty.Game
         {
             builder.RegisterInstance<IGameConfiguration>(_gameConfiguration);
             builder.RegisterInstance<IProjectileFlightConfig>(_gameConfiguration);
+            builder.RegisterInstance<ISlotGridConfig>(_gameConfiguration);
+            builder.RegisterInstance<IPredictionTraceConfig>(_gameConfiguration);
+            builder.RegisterInstance<IScoreTrailConfig>(_gameConfiguration);
             builder.RegisterInstance<IGameDisplayConfiguration>(_displayConfiguration);
             builder.RegisterInstance<IItemConfiguration>(_itemConfiguration);
             builder.RegisterInstance<IGamePalette>(_gamePalette);

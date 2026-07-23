@@ -15,7 +15,7 @@ namespace BalloonParty.UI.Shields
     {
         private const string TrailPoolKey = "ShieldTrail";
 
-        private readonly IGameConfiguration _config;
+        private readonly IProjectileFlightConfig _config;
         private readonly FlyingTrail _prefab;
         private readonly PoolManager _poolManager;
         private readonly ISubscriber<ShieldGainedMessage> _shieldGainedSubscriber;
@@ -29,7 +29,7 @@ namespace BalloonParty.UI.Shields
 
         [Inject]
         internal ShieldTrailController(
-            IGameConfiguration config,
+            IProjectileFlightConfig config,
             ISubscriber<ShieldGainedMessage> shieldGainedSubscriber,
             ISubscriber<ShieldLostMessage> shieldLostSubscriber,
             PoolManager poolManager,

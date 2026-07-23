@@ -32,7 +32,7 @@ namespace BalloonParty.Game.Cinematics
         private const float PanInTimeoutFactor = 3f;
         private const float TrailRegisterTimeoutFactor = 3f;
 
-        private readonly IGameConfiguration _config;
+        private readonly IScoreTrailConfig _config;
         private readonly ISubscriber<ScorePointsGroupMessage> _scoredSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
@@ -64,7 +64,7 @@ namespace BalloonParty.Game.Cinematics
             CinematicCameraRig rig,
             TimeScaleService timeScale,
             ICinematicsSettings settings,
-            IGameConfiguration config,
+            IScoreTrailConfig config,
             ISubscriber<ScorePointsGroupMessage> scoredSubscriber,
             ISubscriber<LevelUpDismissedMessage> dismissedSubscriber,
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,

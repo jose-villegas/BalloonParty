@@ -16,7 +16,7 @@ namespace BalloonParty.Slots.Grid
         private static readonly Color OccupiedSlotColor = new(0f, 1f, 0f, 0.4f);
 
         [Inject] private SlotGrid _grid;
-        [Inject] private IGameConfiguration _config;
+        [Inject] private IProjectileFlightConfig _config;
         [Inject] private IBalloonsConfiguration _balloonsConfig;
 
         private float _cachedRadius;

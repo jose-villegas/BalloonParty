@@ -21,7 +21,7 @@ namespace BalloonParty.Item
         private ITransformCapture _activeCapture;
         private int _balloonRendererCount;
         private int _baseSortingOffset;
-        private IGameConfiguration _config;
+        private ISlotGridConfig _config;
         private IGamePalette _palette;
         private IItemConfiguration _itemConfig;
         private PoolManager _poolManager;
@@ -39,7 +39,7 @@ namespace BalloonParty.Item
             IReadOnlyReactiveProperty<ItemType> item,
             IReadOnlyReactiveProperty<string> colorName,
             IReadOnlyReactiveProperty<Vector2Int> slotIndex,
-            IGameConfiguration config,
+            ISlotGridConfig config,
             IItemConfiguration itemConfig,
             IGamePalette palette,
             int baseSortingOffset,
