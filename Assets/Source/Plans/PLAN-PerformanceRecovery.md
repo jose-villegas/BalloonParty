@@ -252,6 +252,28 @@ after a drop" question:
   (16.7/8.3 mix). The lever pair remains: A4 tiers + UnityMain CPU reduction (~6.6ms/
   frame today; every ms of headroom delays the judder onset under throttle).
 
+### Findings — fourth pass, 2026-07-23 night (simpleperf callstacks, dev build)
+
+60s / 129k samples during heavy play (recipe: `simpleperf record --app <pkg>` on a
+debuggable build; symbolize host-side with Unity's NDK simpleperf + the build-id-matched
+`Library/Bee/artifacts/objcopy_*/libil2cpp.dbg.so`). UnityMain decomposition:
+
+- **No hot spot exists.** libunity 46.7% (largest single symbols 1-3%: render-loop draw
+  dispatch, job-queue pumping, shader property lookup, RectTransform updates); libil2cpp
+  36.6% with **no C# function above ~0.5%** (top entries: RectMask2D clipping, TMP
+  rebuilds, DOTween TweenManager 0.3%, RenderGraph record); libc ~15% (present/vsync
+  syscall paths). `GC_mark_from` at 0.29% — steady-state GC pressure is effectively gone;
+  the zero-alloc program worked.
+- ~6-7% of this build was profiler/debug instrumentation (MethodEnter/Exit, sequence
+  points — Script Debugging was enabled; disable it for future captures).
+- **Implication**: main-thread CPU reduction means reducing WORK COUNTS (draw calls,
+  canvas element counts, live tween counts, active behaviours) — there is no function to
+  optimize. Combined with the thermal verdict, **A4 is the lever**; count-reduction items
+  need their own discovery pass and are secondary.
+- Burst-frame costs (balance-tween allocation) average away in a flat 60s profile —
+  judging that item still needs a windowed capture around a spawn moment or a Unity
+  profiler marker session.
+
 ### Decision tree
 
 ```mermaid
