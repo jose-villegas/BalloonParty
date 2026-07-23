@@ -20,7 +20,6 @@ namespace BalloonParty.UI.Score
     public class ColorProgressBar : MonoBehaviour, ITrailEndpoint
     {
         private static readonly int CompletedParam = Animator.StringToHash("Completed");
-        private static readonly int TrailHitTrigger = Animator.StringToHash("TrailHit");
 #if UNITY_EDITOR
         private static GamePalette _cachedPalette;
 #endif
@@ -44,6 +43,12 @@ namespace BalloonParty.UI.Score
         [Header("Progress")] [SerializeField] private Slider _progressSlider;
 
         [Header("Feedback")] [SerializeField] private Animator _animator;
+
+        [Tooltip("Punch-scaled once per frame on arrival, replacing the retired ScoreTrailHit clip.")]
+        [SerializeField] private RectTransform _pulseOutline;
+        [SerializeField] private RectTransform _pulseBackground;
+        [SerializeField] private float _pulseScale = 3f;
+        [SerializeField] private float _pulseDuration = 0.333f;
 
         [SerializeField] private ParticleSystem _completionParticleSystem;
         [SerializeField] private ProgressNotice _pointNoticePrefab;
@@ -70,6 +75,7 @@ namespace BalloonParty.UI.Score
         private int _stashedMaxValue;
         private int _shownStreak;
         private bool _active;
+        private bool _pulseQueued;
         private Tween _flexTween;
 
         public Vector3 Center => RectAnchorMath.Center((RectTransform)transform);
@@ -186,6 +192,21 @@ namespace BalloonParty.UI.Score
             _dismissedSubscriber.Subscribe(_ => OnDismissed()).AddTo(this);
             _transitionCompletedSubscriber.Subscribe(_ => OnTransitionCompleted()).AddTo(this);
             _resetSubscriber.Subscribe(_ => OnRunReset()).AddTo(this);
+        }
+
+        // Coalesce a burst of arrivals into one pulse per frame — the storm this replaces re-triggered
+        // an Animator clip every arrival. Unscaled to match the retired clip's UnscaledTime; DOKill + reset
+        // prevents scale drift when pulses overlap.
+        private void LateUpdate()
+        {
+            if (!_pulseQueued)
+            {
+                return;
+            }
+
+            _pulseQueued = false;
+            PunchPulse(_pulseOutline);
+            PunchPulse(_pulseBackground);
         }
 
         // Driven by the streak signal (any colour), so we also catch this colour's streak being lost when a
@@ -354,7 +375,7 @@ namespace BalloonParty.UI.Score
                 return;
             }
 
-            _animator.SetTrigger(TrailHitTrigger);
+            _pulseQueued = true;
             _progressSlider.value = Mathf.Min(_progressSlider.value + msg.Points, _progressSlider.maxValue);
 
             var anchored = RectAnchorMath.WorldToAnchoredPosition((RectTransform)transform, msg.WorldPosition);
@@ -371,6 +392,22 @@ namespace BalloonParty.UI.Score
         public Vector3 RandomPosition()
         {
             return RectAnchorMath.RandomPosition((RectTransform)transform);
+        }
+
+        // Null-guarded so an unwired prefab degrades to no pulse rather than throwing.
+        private void PunchPulse(RectTransform target)
+        {
+            if (target == null)
+            {
+                return;
+            }
+
+            target.DOKill();
+            target.localScale = Vector3.one;
+            target
+                .DOPunchScale(Vector3.one * (_pulseScale - 1f), _pulseDuration, vibrato: 0, elasticity: 0f)
+                .SetUpdate(true)
+                .SetLink(gameObject);
         }
     }
 }
