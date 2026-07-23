@@ -1,4 +1,6 @@
 #if UNITY_ANDROID && !UNITY_EDITOR
+using System;
+using BalloonParty.Shared.Diagnostics;
 using UnityEngine;
 
 namespace BalloonParty.Shared.Thermal
@@ -14,7 +16,7 @@ namespace BalloonParty.Shared.Thermal
     ///     defines <c>UNITY_EDITOR</c>) skips it, so the JNI interop below is validated only by an
     ///     in-editor Android build or on the device — never by the headless compile check.
     /// </remarks>
-    internal sealed class AndroidThermalSource : IThermalSource
+    internal sealed class AndroidThermalSource : IThermalSource, IDisposable
     {
         private const int ForecastSeconds = 10;
         private const float PollMinIntervalSeconds = 2f;
@@ -35,9 +37,16 @@ namespace BalloonParty.Shared.Thermal
             }
             catch (System.Exception e)
             {
-                Debug.LogWarning($"[ThermalGovernor] PowerManager unavailable: {e.Message}");
+                Log.Warn("ThermalGovernor", $"PowerManager unavailable: {e.Message}");
                 _powerManager = null;
             }
+        }
+
+        // The JNI global ref is scope-owned; VContainer disposes singletons on scope teardown, so
+        // release deterministically instead of leaning on AndroidJavaObject's finalizer.
+        public void Dispose()
+        {
+            _powerManager?.Dispose();
         }
 
         public float Headroom

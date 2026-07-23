@@ -174,6 +174,9 @@ namespace BalloonParty.UI.Score
 
             // Amortized over frames (destroyCancellationToken ties it to this bar's lifetime) so a bar
             // built at level setup never spikes into a hitch.
+            // Must run before the arrival subscriptions below: PrewarmAsync registers the notice pool
+            // with the bar as its container synchronously at its top — a spawn racing ahead of it would
+            // fall back to GetOrRegister's un-homed [Pool]-root channel and reintroduce per-spawn reparents.
             _notices.PrewarmAsync(
                 _config.ProgressNoticePrewarmPerColor,
                 _config.ProgressNoticePrewarmPerColor,
