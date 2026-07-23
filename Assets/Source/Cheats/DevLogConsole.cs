@@ -1,10 +1,7 @@
-// Compiles in the editor (so the component stays wireable in the inspector) and in mobile development
-// builds. Desktop dev builds and all release builds strip it — and with it the serialized prefab
-// reference, keeping the console out of those builds entirely.
-#if UNITY_EDITOR || (DEVELOPMENT_BUILD && (UNITY_ANDROID || UNITY_IOS))
-
-using BalloonParty.Shared.Diagnostics;
 using UnityEngine;
+#if UNITY_EDITOR || (DEVELOPMENT_BUILD && (UNITY_ANDROID || UNITY_IOS))
+using BalloonParty.Shared.Diagnostics;
+#endif
 
 namespace BalloonParty.Cheats
 {
@@ -17,9 +14,9 @@ namespace BalloonParty.Cheats
     {
         [SerializeField] private GameObject _consolePrefab;
 
+#if UNITY_EDITOR || (DEVELOPMENT_BUILD && (UNITY_ANDROID || UNITY_IOS))
         private void Awake()
         {
-            // The editor has its own Console window; this is for on-device logs, so skip it in-editor.
             if (Application.isEditor)
             {
                 return;
@@ -33,6 +30,6 @@ namespace BalloonParty.Cheats
 
             DontDestroyOnLoad(Instantiate(_consolePrefab));
         }
+#endif
     }
 }
-#endif

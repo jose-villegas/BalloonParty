@@ -1,5 +1,3 @@
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-
 using UnityEngine;
 
 namespace BalloonParty.Shared.Diagnostics
@@ -15,6 +13,7 @@ namespace BalloonParty.Shared.Diagnostics
         [SerializeField] private int _warnThreshold = 45;
         [SerializeField] private int _badThreshold = 30;
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
         private float _elapsed;
         private int _frames;
         private int _currentFps;
@@ -75,6 +74,6 @@ namespace BalloonParty.Shared.Diagnostics
             var rect = new Rect(8, 8, _labelSize.x + 4, _labelSize.y);
             GUI.Label(rect, _labelContent, _style);
         }
+#endif
     }
 }
-#endif
