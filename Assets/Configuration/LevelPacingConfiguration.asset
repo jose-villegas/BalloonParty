@@ -154,10 +154,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-      _itemWeights:
-      - _type: 0
-        _weight: 1
-        _maximumAllowedOverride: 0
+      _itemWeights: []
       _gridActorGates: []
       _allowedColorsMask: 1
   - _fromLevel: 2
@@ -167,7 +164,7 @@ MonoBehaviour:
       _boardLines: 5
       _itemCadence:
         _min: 1
-        _max: 0
+        _max: 1
         _mode: 0
       _firstSpawnTurn: 1
       _initialItemCountWeights:
@@ -499,9 +496,6 @@ MonoBehaviour:
       - _type: 5
         _weight: 2
         _maximumAllowedOverride: 5
-      - _type: 0
-        _weight: 0
-        _maximumAllowedOverride: 0
       - _type: 1
         _weight: 1
         _maximumAllowedOverride: 3
@@ -514,7 +508,7 @@ MonoBehaviour:
       _boardLines: 5
       _itemCadence:
         _min: 1
-        _max: 0
+        _max: 1
         _mode: 0
       _firstSpawnTurn: 1
       _initialItemCountWeights:
@@ -843,9 +837,6 @@ MonoBehaviour:
       - _type: 2
         _weight: 2
         _maximumAllowedOverride: 3
-      - _type: 0
-        _weight: 0
-        _maximumAllowedOverride: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -861,7 +852,7 @@ MonoBehaviour:
       _boardLines: 5
       _itemCadence:
         _min: 1
-        _max: 0
+        _max: 1
         _mode: 0
       _firstSpawnTurn: 1
       _initialItemCountWeights:
@@ -1172,9 +1163,6 @@ MonoBehaviour:
       - _type: 2
         _weight: 1
         _maximumAllowedOverride: 2
-      - _type: 0
-        _weight: 1
-        _maximumAllowedOverride: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -1190,8 +1178,8 @@ MonoBehaviour:
       _boardLines: 4
       _itemCadence:
         _min: 1
-        _max: 2
-        _mode: 2
+        _max: 1
+        _mode: 0
       _firstSpawnTurn: 2
       _initialItemCountWeights:
         serializedVersion: 2
@@ -1501,9 +1489,6 @@ MonoBehaviour:
       - _type: 2
         _weight: 0.8
         _maximumAllowedOverride: 2
-      - _type: 0
-        _weight: 1
-        _maximumAllowedOverride: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -1519,8 +1504,8 @@ MonoBehaviour:
       _boardLines: 4
       _itemCadence:
         _min: 1
-        _max: 2
-        _mode: 2
+        _max: 1
+        _mode: 0
       _firstSpawnTurn: 2
       _initialItemCountWeights:
         serializedVersion: 2
@@ -1928,9 +1913,6 @@ MonoBehaviour:
       - _type: 4
         _weight: 1
         _maximumAllowedOverride: 2
-      - _type: 0
-        _weight: 1
-        _maximumAllowedOverride: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -1946,8 +1928,8 @@ MonoBehaviour:
       _boardLines: 4
       _itemCadence:
         _min: 1
-        _max: 2
-        _mode: 2
+        _max: 1
+        _mode: 0
       _firstSpawnTurn: 2
       _initialItemCountWeights:
         serializedVersion: 2
@@ -2450,9 +2432,6 @@ MonoBehaviour:
       - _type: 4
         _weight: 0.7
         _maximumAllowedOverride: 2
-      - _type: 0
-        _weight: 2
-        _maximumAllowedOverride: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -3026,9 +3005,6 @@ MonoBehaviour:
       - _type: 4
         _weight: 0.01
         _maximumAllowedOverride: 1
-      - _type: 0
-        _weight: 2
-        _maximumAllowedOverride: 0
       - _type: 6
         _weight: 2.25
         _maximumAllowedOverride: 5
@@ -3747,9 +3723,6 @@ MonoBehaviour:
       - _type: 6
         _weight: 1.2
         _maximumAllowedOverride: 4
-      - _type: 0
-        _weight: 1
-        _maximumAllowedOverride: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -4465,9 +4438,6 @@ MonoBehaviour:
       - _type: 6
         _weight: 1.2
         _maximumAllowedOverride: 4
-      - _type: 0
-        _weight: 1
-        _maximumAllowedOverride: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -4714,9 +4684,6 @@ MonoBehaviour:
       - _type: 6
         _weight: 0
         _maximumAllowedOverride: 4
-      - _type: 0
-        _weight: 1
-        _maximumAllowedOverride: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -4868,9 +4835,6 @@ MonoBehaviour:
       - _type: 6
         _weight: 0
         _maximumAllowedOverride: 4
-      - _type: 0
-        _weight: 1
-        _maximumAllowedOverride: 0
       _gridActorGates:
       - _type: 0
         _count:
