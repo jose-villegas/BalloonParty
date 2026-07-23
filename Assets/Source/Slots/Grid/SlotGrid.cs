@@ -23,6 +23,12 @@ namespace BalloonParty.Slots.Grid
         public int Columns => _slots.GetLength(0);
         public int Rows => _slots.GetLength(1);
 
+        // Bumped at the grid's only two occupancy write sites (Place/Remove). Occupancy-derived
+        // caches (e.g. MoveWeightEvaluator's support-cone memo) compare against this to persist
+        // across evaluations over unchanged state and invalidate exactly when the grid mutates —
+        // caller-agnostic, so any mutation path invalidates without having to signal explicitly.
+        internal int MutationVersion { get; private set; }
+
         public SlotGrid(ISlotGridConfig config, BalancePathHolder balancePathHolder)
         {
             _config = config;
@@ -42,6 +48,7 @@ namespace BalloonParty.Slots.Grid
             _slots[index.x, index.y] = actor;
             _views[index.x, index.y] = view;
             actor.SlotIndex = index;
+            MutationVersion++;
             _onChanged.OnNext(new SlotGridChangedEvent(index, SlotGridChangeType.Placed));
         }
 
@@ -49,6 +56,7 @@ namespace BalloonParty.Slots.Grid
         {
             _slots[index.x, index.y] = null;
             _views[index.x, index.y] = null;
+            MutationVersion++;
             _onChanged.OnNext(new SlotGridChangedEvent(index, SlotGridChangeType.Removed));
         }
 

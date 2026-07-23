@@ -20,6 +20,9 @@ namespace BalloonParty.Slots.Grid
         private readonly Dictionary<int, int> _weightMemo = new();
         private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
 
+        // Grid version the memo was built at; -1 forces a rebuild on first use.
+        private int _memoVersion = -1;
+
         public MoveWeightEvaluator(SlotGrid grid)
         {
             _grid = grid;
@@ -34,8 +37,7 @@ namespace BalloonParty.Slots.Grid
         /// <summary>Best-scoring empty neighbour of (col,row) under an optional shove, or null.</summary>
         public Vector2Int? BestMove(int col, int row, in ShoveVector shove)
         {
-            // Memo is only valid for the current grid state.
-            _weightMemo.Clear();
+            EnsureMemoFresh();
 
             var from = new Vector2Int(col, row);
             var influence = InfluenceAt(from);
@@ -62,8 +64,24 @@ namespace BalloonParty.Slots.Grid
         /// <summary>Scores a single hex-neighbour move; false when <paramref name="to" /> is no candidate.</summary>
         public bool TryScoreMove(Vector2Int from, Vector2Int to, in ShoveVector shove, out int weight)
         {
-            _weightMemo.Clear();
+            EnsureMemoFresh();
             return ScoreMove(from, to, InfluenceAt(from), shove, out weight);
+        }
+
+        // CalculateWeight is a pure function of grid occupancy, so the memo stays valid until the grid
+        // mutates. A balance sweep evaluates BestMove/TryScoreMove O(passes × candidates) times over
+        // identical state between moves; gating the clear on SlotGrid.MutationVersion (bumped only at
+        // Place/Remove) lets the memo persist across those calls instead of rebuilding every time,
+        // while still invalidating exactly — and only — when occupancy changes.
+        private void EnsureMemoFresh()
+        {
+            if (_memoVersion == _grid.MutationVersion)
+            {
+                return;
+            }
+
+            _weightMemo.Clear();
+            _memoVersion = _grid.MutationVersion;
         }
 
         private bool ScoreMove(
