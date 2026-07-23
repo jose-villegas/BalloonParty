@@ -8,7 +8,7 @@ Runtime diagnostic tools for performance monitoring and device configuration.
 |---|---|
 | `Log` | Static logging facade — call `Log.Info(tag, msg)`, `Log.Warn(tag, msg)`, `Log.Error(tag, msg)`, or `Log.Assert(condition, tag, msg)` from anywhere. `Info` and `Assert` are decorated with `[Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]`, so they compile out of release builds automatically — no `#if` guards at call sites. `Warn` and `Error` remain in all builds. Each tag gets a deterministic color in the Unity Console via rich text. Static class, no DI needed |
 | `FPSCounter` | MonoBehaviour that displays average FPS and lowest frame rate per 0.5s interval as an `OnGUI` overlay. Color-coded: green (\f$\ge\f$ warn threshold), yellow (\f$\ge\f$ bad threshold), red (\f$<\f$ bad). Colors and thresholds are read live from the Inspector fields every `OnGUI`; font size is baked into the `GUIStyle` the first time it's built and never rebuilt after, so a font-size change needs a domain reload (entering/exiting Play mode) to take effect. **Dev-only** — the whole class is guarded by `UNITY_EDITOR \|\| DEVELOPMENT_BUILD`, so it compiles out of release builds (the scene component and its serialized settings drop with it) |
-| `FrameRateSettings` | MonoBehaviour that sets `Application.targetFrameRate` on `Awake`. Disables VSync (`vSyncCount = 0`) so the target takes effect. Three modes: **Default60** (fixed 60), **MatchDisplay** (device-dependent — see below), **Custom** (exposes a frame rate field, shown conditionally via `[ShowIf]`). Default mode is `MatchDisplay`. Ships in **all builds** — it's the only code setting the target frame rate, so release needs it |
+| `FrameRateSettings` | MonoBehaviour that sets `Application.targetFrameRate` on `Awake`. Disables VSync (`vSyncCount = 0`) so the target takes effect. Three modes: **Default60** (fixed 60), **MatchDisplay** (device-dependent — see below), **Custom** (exposes a frame rate field, shown conditionally via `[ShowIf]`). Default mode is `MatchDisplay`. Ships in **all builds** — it's the only code setting the target frame rate, so release needs it. Exposes `ApplyGovernedRate(int)` — a static seam any other system can call to change the target after boot (see below) |
 
 ## Log — tagged logging
 
@@ -54,4 +54,18 @@ on a real device; this is the whole diagnosis loop. Related device-level setting
 Swappy / Optimized Frame Pacing is enabled (`androidUseSwappy` in Player Settings), and
 the Android manifest declares `android:appCategory="game"` — both feed into how the
 platform paces and schedules this app's frames.
+
+## `ApplyGovernedRate` — the thermal governor seam
+
+`FrameRateSettings.ApplyGovernedRate(int)` is the single static method that clears VSync
+and assigns `Application.targetFrameRate`. `Awake`'s own `Apply()` calls it for the boot
+vote, and `ThermalFrameRateGovernor` (`Shared/Thermal/`) calls it later to step the rate
+down (or back up) as the device heats or cools — see `Shared/Thermal/README.md`.
+
+This is a **deliberate** down-vote, not the `MatchDisplay` echo loop described above: the
+echo loop happens when the code *reads back* the per-app arbitrated refresh rate and votes
+it straight to itself, self-pinning at whatever it last asked for. The governor never
+reads a refresh rate — it decides purely from thermal headroom/status — so there's nothing
+to echo. It also only ever climbs back toward the ladder's top rung on its up-steps,
+mirroring `MatchDisplay`'s own rule of never down-correcting from a reading.
 

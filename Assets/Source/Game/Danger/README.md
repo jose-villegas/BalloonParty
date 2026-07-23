@@ -7,7 +7,7 @@ gradient so the player can feel the board getting dangerous before they actually
 
 | File | What it does |
 |---|---|
-| `SpaceDanger` | Plain C# entry point (`IStartable`, `IDisposable`). Exposes `IReadOnlyReactiveProperty<float> Level` and recomputes it whenever the grid (`SlotGrid.OnChanged`) or hit points (`IPlayerHealth.Current`) change. `Evaluate` is a pure, unit-tested function so the curve can be reasoned about in isolation |
+| `SpaceDanger` | Plain C# entry point (`IStartable`, `ILateTickable`, `IDisposable`). Exposes `IReadOnlyReactiveProperty<float> Level`. Grid changes (`SlotGrid.OnChanged`) and hit-point changes (`IPlayerHealth.Current`) only flag it dirty — a bomb pop or balance sweep can fire `OnChanged` a dozen+ times in one frame, so the actual recompute is debounced to once per frame in `LateTick`, after the frame's mutations have settled. `Evaluate` is a pure, unit-tested function so the curve can be reasoned about in isolation |
 | `IDangerLevel` | Read-only seam (`Level`) consumers bind against — registered alongside `SpaceDanger` in `GameLifetimeScope` |
 
 ## The danger curve

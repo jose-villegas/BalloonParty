@@ -9,7 +9,7 @@
 // their call sites: PuffCloud's CloudNoise/CloudNoiseSoft carry a lowFrequency out-param, a
 // low-quality branch, and take t as a parameter; BackgroundGenRawNoise instead shifts wp by
 // _BackgroundWorldOffset and pulls t from BackgroundGenTime() internally. Same weights
-// (0.50 / 0.30 / 0.20), different structure — see CloudNoise.cginc report for the full diff.
+// (0.50 / 0.30 / 0.20), different structure, so each stays at its call site.
 
 // Uniforms shared verbatim by both call sites (identical name + type in both originals).
 sampler2D _NoiseTex;

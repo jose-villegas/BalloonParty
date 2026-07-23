@@ -86,11 +86,11 @@ The grid is a two-dimensional space of slots arranged in a staggered pattern (od
 
 `IsTraversable(col, row)` returns true if the slot is empty or the occupant implements `IPassThrough` — used by `ComputePath` to build spawn animation waypoints.
 
-`ComputePath(source, target)` returns world-space waypoints along the straight-line grid path between two slot indices. Either endpoint may be outside grid bounds. Non-traversable in-bounds slots and in-transit balance slots emit warnings; rerouting is deferred.
+`ComputePath(source, target)` returns world-space waypoints along the straight-line grid path between two slot indices. Either endpoint may be outside grid bounds. Non-traversable in-bounds slots and in-transit balance slots log a diagnostic (`Log.Info`, stripped from release builds — spawn-burst storms can hit this path often enough to matter at 120 Hz); rerouting is deferred.
 
 ## Balance Path Holder
 
-`BalancePathHolder` tracks grid slots that are in-transit due to balance animations. When the balancer relocates a balloon from slot A to slot B, both A and B are reserved as in-transit under that actor. This lets `ComputePath` warn when a spawn animation path crosses a slot that a balance animation is currently traversing — even if the grid data already reflects the post-balance state.
+`BalancePathHolder` tracks grid slots that are in-transit due to balance animations. When the balancer relocates a balloon from slot A to slot B, both A and B are reserved as in-transit under that actor. This lets `ComputePath` flag when a spawn animation path crosses a slot that a balance animation is currently traversing — even if the grid data already reflects the post-balance state.
 
 Transit slots are tracked per-actor and released via `Release(actor)` when the balance animation's `OnComplete` fires. This means transit data persists across multiple balance passes — a second balance triggered after spawning does not erase transit from the first balance's still-running animations.
 

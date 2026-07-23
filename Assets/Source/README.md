@@ -317,6 +317,7 @@ Game data is split across focused ScriptableObjects, each registered as a single
 | `BushSettings` | `IBushSettings` | Bush visual tuning — prefab, variants, branch/leaf materials, sizes, sorting, animation speed |
 | `DisturbanceFieldSettings` | `IDisturbanceFieldSettings` | Disturbance field tuning — RT resolution, diffusion, wind, displacement, performance thresholds, shader references, `StampProfile[]` |
 | `SpeckFieldSettings` | `ISpeckFieldSettings` | Ambient speck-field tuning — motion/disturbance response, per-speck look, spawning/reduction (`SpeckProfile[]`, reduction curve). `SpeckField` keeps only its compute shader + material |
+| `ThermalGovernorSettings` | `IThermalGovernorSettings` | Thermal frame-rate governor tuning — rate ladder, hysteresis thresholds/windows, poll cadence, `Enabled` flag. Null-safe: an unassigned asset falls back to a default instance so the governor works with no scene wiring (see `Shared/Thermal/README.md`) |
 
 Rules:
 - **Never hardcode** values that exist in a configuration asset.

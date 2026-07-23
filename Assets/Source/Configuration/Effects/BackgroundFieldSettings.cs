@@ -10,8 +10,7 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Blit material using BalloonParty/Display/BackgroundFieldDensity — the cloud roll lives here.")]
         [SerializeField] private Material _densityMaterial;
 
-        [Tooltip("Display material (BalloonParty/Scenario/BackgroundCloud) on the backdrop SpriteRenderer. " +
-            "Used to enable _LOW_QUALITY_CLOUD on mobile.")]
+        [Tooltip("Display material (BalloonParty/Scenario/BackgroundCloud) on the backdrop SpriteRenderer.")]
         [SerializeField] private Material _cloudDisplayMaterial;
 
         [Tooltip("Density-RT resolution per world unit.")]

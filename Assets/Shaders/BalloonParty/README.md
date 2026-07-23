@@ -84,6 +84,7 @@ Shared logic lives in `.cginc` files under `Include/` (or `Noise/` for procedura
 | Include | Location | What it provides |
 |---|---|---|
 | `SceneLight.cginc` | `Include/` | All scene-light access — direction, tint, magnitude, field sampling, palette decode, shadow fade. The single source of truth for lighting uniforms and helpers |
+| `CloudNoise.cginc` | `Include/` | Single-octave sampler (`CloudNoiseOctaveTex2D`/`CloudNoiseOctaveTex2Dlod`) over the shared tileable baked noise texture (`_NoiseTex`, `_NoisePeriod`), used by both `BackgroundFieldGen.cginc` (the density bake) and `PuffCloud.shader` (per-fragment puffs). Only the octave fetch is shared — each call site keeps its own three-octave blend, since they differ in structure (world-offset/time source, low-quality branch) |
 | `SimplexNoise2D.cginc` | `Noise/` | 2D simplex noise `SimplexNoise2D(float2 p)` → `[-1, 1]` |
 | `GielisSDF.cginc` | `Grid/Editor/` | Gielis superformula SDF for procedural leaf/petal shapes |
 | `LeafVeins.cginc` | `Grid/Editor/` | Procedural leaf vein pattern for bake shaders |
