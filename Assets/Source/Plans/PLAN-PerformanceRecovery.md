@@ -308,22 +308,24 @@ toughs still discharges all of them; array alloc gone from the profiler.
 
 ---
 
-## Tier 1: UI arrival storm — **DOWNGRADED 2026-07-23** (shipped, but not the big win)
+## Tier 1: UI arrival storm — **RESOLVED 2026-07-23: U1 reverted, U2 kept**
 
 **José's correction, verified in the prefab**: each color bar is its own Canvas
 (`ColorProgress.prefab` — 1 Canvas, 8 GameObjects), so bar-triggered rebuilds are scoped
 to ~8 elements, and during bursts the notices animate every frame anyway (that canvas is
 dirty regardless). The `Canvas.SendWillRenderCanvases` marker in the original capture
 **aggregates all dirty canvases** — Tier 1 pattern-matched it to the bar pulse without
-knowing which canvas was actually burning. U1/U1b/U2 shipped (`9cde7513`, `e6bcd4ab`,
-`28d29139`, `0adf8140`; U1b also removed the bar Animator entirely — a clamped
-non-looping state re-applies properties every frame, so full bars kept their canvas
-dirty through the whole pre-level-up stretch) and retain their non-perf value (Animator
-+ 3 anim assets deletable, DontDestroyOnLoad leak fixed, ~150 hierarchy ops/s removed,
-zero-alloc prebuilt pulse), but expect a modest A/B, and **do no further UI
-scrap-hunting until the dev-build 250-burst A/B identifies the actual dominant canvas**
-— it may be the top bar, the aggregate of many small canvases, or nothing at all.
-Measure U1+U2 together on that one A/B so wins aren't double-counted.
+knowing which canvas was actually burning.
+
+- **U1 (pulse/Completed de-Animator): REVERTED** (`4e3e0c40` undoes `9cde7513`,
+  `e6bcd4ab`, `28d29139`). Only 4 bars on tiny canvases → negligible overhead, and the
+  Animator's clip-restart-on-SetTrigger is the wanted feel. Per-frame trigger coalescing
+  is also unnecessary: repeated SetTrigger within a frame is consumed once by design.
+  Do not re-propose without profiler evidence naming these canvases.
+- **U2 (notice pool homed under the bar): KEPT** (`0adf8140`) — fixed a real
+  DontDestroyOnLoad leak + ~150 cross-canvas hierarchy ops/s; behavior-preserving.
+- **No further UI scrap-hunting** until the dev-build 250-burst A/B identifies the
+  actually-dominant canvas (top bar? aggregate of many small canvases? nothing?).
 
 ### U1 — De-Animator the progress-bar hit pulse · **opus**
 
