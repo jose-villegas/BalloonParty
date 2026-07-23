@@ -84,10 +84,7 @@ namespace BalloonParty.Projectile.Controller
             // speed buff) ends. If the segment had no toughs, piercing continues indefinitely.
             if (model.IsPiercing.Value && model.Flight.PendingPierceHits.Count > 0)
             {
-                model.Flight.ConsecutiveWallBounces = 0;
-                model.Flight.TotalCruiseTaps = 0;
-                model.IsCruising.Value = false;
-                model.IsPiercing.Value = false;
+                model.EndPierce();
 
                 model.Direction = Vector2.Reflect(model.Direction, reflect.normalized);
                 model.Flight.SegmentStartPosition = wallContact;

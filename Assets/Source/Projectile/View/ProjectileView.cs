@@ -530,10 +530,7 @@ namespace BalloonParty.Projectile.View
                 // just found toughs — end the pierce now so the discharge below fires.
                 if (_model.IsPiercing.Value && _model.Flight.PendingPierceHits.Count > 0)
                 {
-                    _model.Flight.ConsecutiveWallBounces = 0;
-                    _model.Flight.TotalCruiseTaps = 0;
-                    _model.IsCruising.Value = false;
-                    _model.IsPiercing.Value = false;
+                    _model.EndPierce();
                 }
             }
 
@@ -936,6 +933,10 @@ namespace BalloonParty.Projectile.View
                 }
 
                 pending.Add(new PendingPierceHit(balloonModel, hit.collider.transform.position));
+            }
+
+            if (pending.Count > 0)
+            {
                 _model.Flight.PierceWasRainbow = _model.HasBuff(ProjectileBuffId.RainbowShield);
             }
         }
