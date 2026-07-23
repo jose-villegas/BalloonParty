@@ -1,13 +1,13 @@
 #ifndef BALLOONPARTY_BACKGROUNDFIELDGEN_INCLUDED
 #define BALLOONPARTY_BACKGROUNDFIELDGEN_INCLUDED
 
+#include "CloudNoise.cginc"
+
 // GENERATION side of the shared cloud field — used ONLY by the BackgroundFieldDensity blit that fills the RT.
 // The parameters below are the blit MATERIAL's properties (the one tuning surface for the cloud roll);
 // consumers never see them — they tap the baked RT via BackgroundField.cginc. Kept separate from the consumer
 // include so a plain consumer doesn't drag in the noise params it has no business knowing.
 
-sampler2D _NoiseTex;
-float  _NoisePeriod;
 float  _NoiseScale;
 float  _BaseScale;
 float  _DetailScale;
@@ -39,12 +39,6 @@ float BackgroundGenTime()
     return _Time.y * _AnimationSpeed + _TimeOffset;
 }
 
-// One octave in [-1, 1] from the tileable baked noise (value in R), repeat-wrapped over _NoisePeriod.
-float BackgroundGenOctave(float2 p)
-{
-    return tex2Dlod(_NoiseTex, float4(p / max(_NoisePeriod, 0.0001), 0.0, 0.0)).r * 2.0 - 1.0;
-}
-
 // The smooth, un-thresholded cloud intensity in [0, 1] at a world position, from three scrolling octaves.
 float BackgroundGenRawNoise(float2 wp)
 {
@@ -56,8 +50,8 @@ float BackgroundGenRawNoise(float2 wp)
     float2 pDetail = wp * _DetailScale * _NoiseScale + _ScrollSpeedDetail.xy * t;
     float2 pFine   = wp * _FineScale   * _NoiseScale + _ScrollSpeedFine.xy   * t;
 
-    float n = BackgroundGenOctave(pBase) * 0.50 + BackgroundGenOctave(pDetail) * 0.30
-            + BackgroundGenOctave(pFine) * 0.20;
+    float n = CloudNoiseOctaveTex2Dlod(pBase) * 0.50 + CloudNoiseOctaveTex2Dlod(pDetail) * 0.30
+            + CloudNoiseOctaveTex2Dlod(pFine) * 0.20;
     return n * 0.5 + 0.5;
 }
 

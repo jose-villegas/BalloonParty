@@ -105,6 +105,7 @@ Shader "BalloonParty/Grid/PuffCloud"
             #pragma multi_compile_local _ _LOW_QUALITY_CLOUD
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
+            #include "../Include/CloudNoise.cginc"
 
             // Max slot centers for merged clusters (P3); P1 uses 1.
             #define MAX_SLOTS 16
@@ -134,8 +135,6 @@ Shader "BalloonParty/Grid/PuffCloud"
             #endif
 
             fixed4 _Color;
-            sampler2D _NoiseTex;
-            float  _NoisePeriod;
             float  _NoiseScale;
             float  _BaseScale;
             float  _DetailScale;
@@ -191,14 +190,6 @@ Shader "BalloonParty/Grid/PuffCloud"
             float  _ShadowSoftness;
             #endif
 
-            // One octave in [-1, 1]. The baked texture stores value in R over one tile of
-            // _NoisePeriod noise units — repeat wrap makes p/_NoisePeriod seamless. The tile
-            // is histogram-matched to the simplex the cloud thresholds were tuned against.
-            float NoiseOctave(float2 p)
-            {
-                return tex2D(_NoiseTex, p / max(_NoisePeriod, 0.0001)).r * 2.0 - 1.0;
-            }
-
             // Three-octave noise blend (two in _LOW_QUALITY_CLOUD).
             // Weights: base 0.50, detail 0.30, fine 0.20.
             // Returns [0, 1] (remapped from raw [-1, 1] per octave).
@@ -211,8 +202,8 @@ Shader "BalloonParty/Grid/PuffCloud"
                 float2 pBase   = wp * _BaseScale   * _NoiseScale + _ScrollSpeedBase.xy   * t;
                 float2 pDetail = wp * _DetailScale  * _NoiseScale + _ScrollSpeedDetail.xy * t;
 
-                float nLow  = NoiseOctave(pBase)   * 0.50;
-                nLow       += NoiseOctave(pDetail) * 0.30;
+                float nLow  = CloudNoiseOctaveTex2D(pBase)   * 0.50;
+                nLow       += CloudNoiseOctaveTex2D(pDetail) * 0.30;
 
                 #ifdef _LOW_QUALITY_CLOUD
                 // Skip fine octave — saves 1 texture fetch; renormalize to [0,1].
@@ -221,7 +212,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 return n / 0.8 * 0.5 + 0.5;
                 #else
                 float2 pFine = wp * _FineScale * _NoiseScale + _ScrollSpeedFine.xy * t;
-                float n = nLow + NoiseOctave(pFine) * 0.20;
+                float n = nLow + CloudNoiseOctaveTex2D(pFine) * 0.20;
                 lowFrequency = nLow / 0.8 * 0.5 + 0.5;
                 return n * 0.5 + 0.5;
                 #endif
@@ -234,8 +225,8 @@ Shader "BalloonParty/Grid/PuffCloud"
                 float2 pBase   = wp * _BaseScale   * _NoiseScale + _ScrollSpeedBase.xy   * t;
                 float2 pDetail = wp * _DetailScale  * _NoiseScale + _ScrollSpeedDetail.xy * t;
 
-                float n  = NoiseOctave(pBase)   * 0.50;
-                n       += NoiseOctave(pDetail) * 0.30;
+                float n  = CloudNoiseOctaveTex2D(pBase)   * 0.50;
+                n       += CloudNoiseOctaveTex2D(pDetail) * 0.30;
 
                 return n / 0.8 * 0.5 + 0.5;
             }
@@ -482,8 +473,8 @@ Shader "BalloonParty/Grid/PuffCloud"
                 {
                     float2 warpP = wpRest * _DetailScale * _NoiseScale + _ScrollSpeedDetail.xy * t;
                     wpLight += float2(
-                        NoiseOctave(warpP + float2(31.7, 12.3)),
-                        NoiseOctave(warpP + float2(-8.4, 47.1))) * _LightWarpAmount;
+                        CloudNoiseOctaveTex2D(warpP + float2(31.7, 12.3)),
+                        CloudNoiseOctaveTex2D(warpP + float2(-8.4, 47.1))) * _LightWarpAmount;
                 }
 
                 // Compose main cloud with shadow behind (pre-multiplied: rgb already weighted by alpha)
