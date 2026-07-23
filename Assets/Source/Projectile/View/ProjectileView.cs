@@ -60,6 +60,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private PaintingFieldService _paintingField;
         [Inject] private SceneLightFieldService _lightField;
         [Inject] private ISceneLightSettings _sceneLightSettings;
+        [Inject] private IShieldFieldSettings _shieldSettings;
 
         private IWriteableProjectileModel _model;
         private Light _light;
@@ -140,9 +141,17 @@ namespace BalloonParty.Projectile.View
                 else
                 {
                     // Back to a point light as it moves — else the segment would stretch from a stale end.
+                    // Radius ramps toward MaxShieldsLightRadius as shields stack, capping at MaxVisualLayers
+                    // shields; Mathf.Max guards an unauthored (0) asset value, which degrades to the old
+                    // constant radius instead of shrinking the light.
                     _light.EndPosition.Value = transform.position;
-                    _light.Radius.Value = _visual.LightRadius;
-                    _light.EndRadius.Value = _visual.LightRadius;
+                    var maxRadius = Mathf.Max(_visual.MaxShieldsLightRadius, _visual.LightRadius);
+                    var shieldT = _shieldSettings.MaxVisualLayers > 0
+                        ? Mathf.Clamp01(_model.ShieldsRemaining.Value / (float)_shieldSettings.MaxVisualLayers)
+                        : 0f;
+                    var radius = Mathf.Lerp(_visual.LightRadius, maxRadius, shieldT);
+                    _light.Radius.Value = radius;
+                    _light.EndRadius.Value = radius;
                     _light.Intensity.Value = _visual.LightIntensity;
                 }
             }

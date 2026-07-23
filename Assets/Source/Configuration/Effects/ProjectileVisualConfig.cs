@@ -25,6 +25,8 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Radius of the light this shot casts into the scene-light field.")]
         [SerializeField] [Min(0f)] private float _lightRadius = 1.3f;
         [SerializeField] [Min(0f)] private float _lightIntensity = 0.65f;
+        [Tooltip("Light radius when shields reach the visual layer cap; values at or below LightRadius disable the ramp.")]
+        [SerializeField] [Min(0f)] private float _maxShieldsLightRadius = 0f;
 
         [Header("Shield-Loss Flash")]
         [Tooltip("A brief sparks-colour light popped at the wall each time a bounce spends a shield.")]
@@ -52,6 +54,7 @@ namespace BalloonParty.Configuration.Effects
         public float PierceTapBeatAlpha => _pierceTapBeatAlpha;
         public float LightRadius => _lightRadius;
         public float LightIntensity => _lightIntensity;
+        public float MaxShieldsLightRadius => _maxShieldsLightRadius;
         public float ShieldFlashIntensity => _shieldFlashIntensity;
         public float ShieldFlashRadius => _shieldFlashRadius;
         public float ShieldFlashDuration => _shieldFlashDuration;

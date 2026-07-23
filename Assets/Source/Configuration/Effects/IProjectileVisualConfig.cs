@@ -20,6 +20,7 @@ namespace BalloonParty.Configuration.Effects
         // Scene light
         float LightRadius { get; }
         float LightIntensity { get; }
+        float MaxShieldsLightRadius { get; }
 
         // Shield-loss flash
         float ShieldFlashIntensity { get; }
