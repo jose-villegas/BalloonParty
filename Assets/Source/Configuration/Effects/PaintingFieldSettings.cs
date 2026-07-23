@@ -10,7 +10,6 @@ namespace BalloonParty.Configuration.Effects
         ToughPop         = 1 << 1,
         ToughBreathing   = 1 << 2,
         ToughDeflect     = 1 << 3,
-        Bomb             = 1 << 4,
     }
 
     internal enum PaintColorMode
@@ -98,7 +97,6 @@ namespace BalloonParty.Configuration.Effects
             new PaintProfile { Sources = PaintSource.ToughPop, Radius = 0.35f, Opacity = 0.4f, ColorMode = PaintColorMode.Palette, PaletteColorName = "Tough", CustomColor = Color.white },
             new PaintProfile { Sources = PaintSource.ToughBreathing, Radius = 0.25f, Opacity = 0.15f, ColorMode = PaintColorMode.Palette, PaletteColorName = "Tough", CustomColor = Color.white },
             new PaintProfile { Sources = PaintSource.ToughDeflect, Radius = 0.3f, Opacity = 0.5f, ColorMode = PaintColorMode.Palette, PaletteColorName = "Tough", CustomColor = Color.white },
-            new PaintProfile { Sources = PaintSource.Bomb, Radius = 0.8f, Opacity = 0.6f, ColorMode = PaintColorMode.Dynamic, PaletteColorName = "", CustomColor = Color.white },
         };
 
         public Shader StampShader => _stampShader;

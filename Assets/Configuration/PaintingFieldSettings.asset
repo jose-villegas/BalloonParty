@@ -17,10 +17,34 @@ MonoBehaviour:
   _texelsPerUnit: 16
   _decayRate: 0.04
   _decayTickInterval: 0.05
-  _stampRadius: 0.09
   _windSpeed: 0.4
   _windInfluence: 0.165
   _windAgeBias: 0.4
   _windDirection: {x: 0, y: 0.1}
   _windSwingAngle: 15
   _windSwingSpeed: 0.1
+  _stampProfiles:
+  - Sources: 1
+    Radius: 0.1
+    Opacity: 1
+    ColorMode: 0
+    PaletteColorName: 
+    CustomColor: {r: 1, g: 1, b: 1, a: 1}
+  - Sources: 2
+    Radius: 0.35
+    Opacity: 0.2
+    ColorMode: 1
+    PaletteColorName: Tough
+    CustomColor: {r: 1, g: 1, b: 1, a: 1}
+  - Sources: 4
+    Radius: 0.25
+    Opacity: 0.3
+    ColorMode: 1
+    PaletteColorName: Tough
+    CustomColor: {r: 1, g: 1, b: 1, a: 1}
+  - Sources: 8
+    Radius: 0.2
+    Opacity: 0.1
+    ColorMode: 1
+    PaletteColorName: Tough
+    CustomColor: {r: 1, g: 1, b: 1, a: 1}

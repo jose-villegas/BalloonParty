@@ -176,6 +176,45 @@ namespace BalloonParty.Scenario
             });
         }
 
+        /// <summary>Scatters <paramref name="count"/> stamps in a random ring of <paramref name="scatterRadius"/>
+        /// around <paramref name="worldPosition"/>. Each stamp uses the source profile's radius, opacity, and color.</summary>
+        internal void PaintScatter(PaintSource source, Vector3 worldPosition, int count, float scatterRadius,
+            int paletteIndex = -1)
+        {
+            if (!_resources.IsReady || count <= 0)
+            {
+                return;
+            }
+
+            var profile = _settings.GetProfile(source);
+            var color = ResolveColor(profile, paletteIndex);
+            if (!color.HasValue)
+            {
+                return;
+            }
+
+            var c = color.Value;
+            var stampColor = new Vector4(c.r, c.g, c.b, Mathf.Clamp01(profile.Opacity));
+            var stampRadius = _coords.WorldRadiusToUV(profile.Radius);
+
+            for (var i = 0; i < count; i++)
+            {
+                var angle = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
+                var dist = UnityEngine.Random.Range(0f, scatterRadius);
+                var offset = new Vector3(Mathf.Cos(angle) * dist, Mathf.Sin(angle) * dist, 0f);
+                var pos = worldPosition + offset;
+                var uv = _coords.WorldToUV(pos);
+
+                _pendingStamps.Add(new PendingStamp
+                {
+                    Center = uv,
+                    PrevCenter = uv,
+                    Radius = stampRadius,
+                    Color = stampColor
+                });
+            }
+        }
+
         private Color? ResolveColor(PaintProfile profile, int paletteIndex)
         {
             switch (profile.ColorMode)
