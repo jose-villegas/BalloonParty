@@ -25,7 +25,7 @@ namespace BalloonParty.Tests.Prediction
             _config.PredictionTraceMaxBounces.Returns(3);
             _config.PredictionTraceMaxSteps.Returns(100);
 
-            _calculator = new PredictionTraceCalculator(_config);
+            _calculator = new PredictionTraceCalculator(_config, _config);
             _results = new List<Vector3>();
         }
 

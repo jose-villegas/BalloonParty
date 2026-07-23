@@ -1,6 +1,7 @@
 using BalloonParty.Configuration;
 using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Thrower;
 using BalloonParty.UI.Score;
 using DG.Tweening;
@@ -23,6 +24,7 @@ namespace BalloonParty.Game
     public class GameLifetimeScope : LifetimeScope
     {
         [SerializeField] private GameConfiguration _gameConfiguration;
+        [SerializeField] private ProjectileFlightConfig _projectileFlightConfig;
         [SerializeField] private GameDisplayConfiguration _displayConfiguration;
         [SerializeField] private ItemConfiguration _itemConfiguration;
         [SerializeField] private GamePalette _gamePalette;
@@ -73,7 +75,7 @@ namespace BalloonParty.Game
         private void RegisterConfiguration(IContainerBuilder builder)
         {
             builder.RegisterInstance<IGameConfiguration>(_gameConfiguration);
-            builder.RegisterInstance<IProjectileFlightConfig>(_gameConfiguration);
+            builder.RegisterInstance<IProjectileFlightConfig>(ResolveProjectileFlightConfig());
             builder.RegisterInstance<ISlotGridConfig>(_gameConfiguration);
             builder.RegisterInstance<IPredictionTraceConfig>(_gameConfiguration);
             builder.RegisterInstance<IScoreTrailConfig>(_gameConfiguration);
@@ -113,6 +115,20 @@ namespace BalloonParty.Game
                 _thermalGovernorSettings != null
                     ? _thermalGovernorSettings
                     : ScriptableObject.CreateInstance<ThermalGovernorSettings>());
+        }
+
+        // Transitional (config-split P1): an unwired field falls back to the umbrella GameConfiguration,
+        // which still implements this interface — so the game keeps running until the dedicated asset
+        // is wired onto this prefab.
+        private IProjectileFlightConfig ResolveProjectileFlightConfig()
+        {
+            if (_projectileFlightConfig != null)
+            {
+                return _projectileFlightConfig;
+            }
+
+            Log.Warn("GameLifetimeScope", "ProjectileFlightConfig not wired — falling back to GameConfiguration.");
+            return _gameConfiguration;
         }
     }
 }

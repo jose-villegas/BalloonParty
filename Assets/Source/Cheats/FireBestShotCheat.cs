@@ -26,7 +26,8 @@ namespace BalloonParty.Cheats
         private const float ArcMaxDegrees = 170f;
 
         private readonly SlotGrid _grid;
-        private readonly IGameConfiguration _config;
+        private readonly IProjectileFlightConfig _config;
+        private readonly ISlotGridConfig _gridConfig;
         private readonly IBalloonsConfiguration _balloonsConfig;
         private readonly ThrowerSettings _throwerSettings;
 
@@ -36,12 +37,14 @@ namespace BalloonParty.Cheats
 
         public FireBestShotCheat(
             SlotGrid grid,
-            IGameConfiguration config,
+            IProjectileFlightConfig config,
+            ISlotGridConfig gridConfig,
             IBalloonsConfiguration balloonsConfig,
             ThrowerSettings throwerSettings)
         {
             _grid = grid;
             _config = config;
+            _gridConfig = gridConfig;
             _balloonsConfig = balloonsConfig;
             _throwerSettings = throwerSettings;
         }
@@ -58,7 +61,7 @@ namespace BalloonParty.Cheats
 
             var pulseDelay = Mathf.Clamp(1.5f * Time.smoothDeltaTime, 0f, 0.1f);
             var context = ShotBoardGather.Gather(
-                _grid, _config, _balloonsConfig, throwerView, _throwerSettings, pulseDelay);
+                _grid, _config, _gridConfig, _balloonsConfig, throwerView, _throwerSettings, pulseDelay);
             if (context.Board.Count == 0)
             {
                 Log.Warn("FireBestShotCheat", "no targets on the board.");

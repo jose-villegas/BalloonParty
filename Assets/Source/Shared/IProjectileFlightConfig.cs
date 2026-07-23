@@ -10,6 +10,7 @@ namespace BalloonParty.Shared
     {
         int ProjectileStartingShields { get; }
         float ProjectileSpeed { get; }
+        float ProjectileLoadDuration { get; }
         Vector4 LimitsClockwise { get; }
         int CruiseWallBounceThreshold { get; }
         float CruiseSpeedPerShield { get; }

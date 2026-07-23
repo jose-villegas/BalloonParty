@@ -602,7 +602,8 @@ namespace BalloonParty.Editor.ShotSolver
             var pulseDelay = Mathf.Clamp(1.5f * Time.smoothDeltaTime, 0f, 0.1f);
             context = ShotBoardGather.Gather(
                 scope.Container.Resolve<SlotGrid>(),
-                scope.Container.Resolve<IGameConfiguration>(),
+                scope.Container.Resolve<IProjectileFlightConfig>(),
+                scope.Container.Resolve<ISlotGridConfig>(),
                 scope.Container.Resolve<IBalloonsConfiguration>(),
                 thrower,
                 scope.Container.Resolve<ThrowerSettings>(),

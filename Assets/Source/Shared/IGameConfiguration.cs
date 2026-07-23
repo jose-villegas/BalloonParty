@@ -6,7 +6,6 @@ namespace BalloonParty.Shared
         IPredictionTraceConfig, IScoreTrailConfig
     {
         int StartingHitPoints { get; }
-        float ProjectileLoadDuration { get; }
         float ProjectileDisappearDuration { get; }
         Ease ProjectileDisappearEase { get; }
         float ProjectileDeadDriftFactor { get; }

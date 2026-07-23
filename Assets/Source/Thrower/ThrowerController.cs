@@ -21,6 +21,7 @@ namespace BalloonParty.Thrower
     internal class ThrowerController : IStartable, ITickable, IDisposable
     {
         private readonly IGameConfiguration _config;
+        private readonly IProjectileFlightConfig _flightConfig;
         private readonly IPublisher<ProjectileLoadedMessage> _loadedPublisher;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly ISubscriber<RunResetMessage> _resetSubscriber;
@@ -54,6 +55,7 @@ namespace BalloonParty.Thrower
         internal ThrowerController(
             ThrowerView view,
             IGameConfiguration config,
+            IProjectileFlightConfig flightConfig,
             PoolManager poolManager,
             IObjectResolver resolver,
             ThrowerSettings settings,
@@ -70,6 +72,7 @@ namespace BalloonParty.Thrower
         {
             _view = view;
             _config = config;
+            _flightConfig = flightConfig;
             _poolManager = poolManager;
             _resolver = resolver;
             _settings = settings;
@@ -88,7 +91,7 @@ namespace BalloonParty.Thrower
 
         public void Start()
         {
-            _traceCalculator = new PredictionTraceCalculator(_config);
+            _traceCalculator = new PredictionTraceCalculator(_config, _flightConfig);
             _view.SetTraceColor(_config.PredictionTraceColor);
 
             _poolManager.Register(_projectilePoolKey,
@@ -180,18 +183,18 @@ namespace BalloonParty.Thrower
 
             _activeProjectile = new ProjectileModel
             {
-                Speed = _config.ProjectileSpeed,
+                Speed = _flightConfig.ProjectileSpeed,
                 IsFree = false,
                 Direction = _direction
             };
-            _activeProjectile.ShieldsRemaining.Value = _config.ProjectileStartingShields;
+            _activeProjectile.ShieldsRemaining.Value = _flightConfig.ProjectileStartingShields;
 
             _activeView.Bind(_activeProjectile);
             _positionProvider.Set(_activeView.transform);
             _loadedPublisher.Publish(new ProjectileLoadedMessage(_activeProjectile));
 
             _loadElapsed = 0f;
-            _loadDuration = _config.ProjectileLoadDuration;
+            _loadDuration = _flightConfig.ProjectileLoadDuration;
         }
 
         private void UnfireIfNeverFlown()

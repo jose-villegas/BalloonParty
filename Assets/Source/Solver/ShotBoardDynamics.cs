@@ -46,14 +46,14 @@ namespace BalloonParty.Solver
         internal IReadOnlyList<ShotSimDynamicActor> TargetActors => _targetActors;
 
         internal ShotBoardDynamics(
-            IGameConfiguration gameConfig,
+            ISlotGridConfig gridConfig,
             IBalloonsConfiguration balloonsConfig,
             IReadOnlyList<ShotBalloonSnapshot> targets,
             IReadOnlyList<ShotDynamicActorSnapshot> otherDynamicActors,
             IReadOnlyList<ShotStaticActorSnapshot> staticActors,
             float pulseExecutionDelay = 0f)
         {
-            _grid = new SlotGrid(gameConfig, new BalancePathHolder());
+            _grid = new SlotGrid(gridConfig, new BalancePathHolder());
             _balanceQuery = new GridBalanceQuery(_grid);
             _planner = new BalancePlanner(_grid, _balanceQuery);
             _nudgeResolver = new NudgeOverrideResolver(balloonsConfig);

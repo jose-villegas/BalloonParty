@@ -53,8 +53,9 @@ namespace BalloonParty.Solver
         /// <summary>Snapshots the live game. <paramref name="pulseExecutionDelay" /> models the
         /// balancer's render-frame lag (callers estimate ~1.5 × frame time).</summary>
         internal static ShotSolveContext Gather(
-            SlotGrid grid, IGameConfiguration config, IBalloonsConfiguration balloonsConfig,
-            ThrowerView thrower, ThrowerSettings throwerSettings, float pulseExecutionDelay)
+            SlotGrid grid, IProjectileFlightConfig config, ISlotGridConfig gridConfig,
+            IBalloonsConfiguration balloonsConfig, ThrowerView thrower, ThrowerSettings throwerSettings,
+            float pulseExecutionDelay)
         {
             var targets = new List<ShotBalloonSnapshot>();
             var otherDynamicActors = new List<ShotDynamicActorSnapshot>();
@@ -62,7 +63,7 @@ namespace BalloonParty.Solver
             CollectBoard(grid, targets, otherDynamicActors, staticActors);
 
             var dynamics = new ShotBoardDynamics(
-                config, balloonsConfig, targets, otherDynamicActors, staticActors, pulseExecutionDelay);
+                gridConfig, balloonsConfig, targets, otherDynamicActors, staticActors, pulseExecutionDelay);
             var cruiseConfig = new ShotCruiseConfig(
                 config.CruiseWallBounceThreshold, config.CruiseSpeedPerShield,
                 config.MaxCruiseSpeedMultiplier,

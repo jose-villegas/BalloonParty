@@ -7,10 +7,12 @@ namespace BalloonParty.Prediction
     internal class PredictionTraceCalculator
     {
         private readonly IGameConfiguration _config;
+        private readonly IProjectileFlightConfig _flightConfig;
 
-        public PredictionTraceCalculator(IGameConfiguration config)
+        public PredictionTraceCalculator(IGameConfiguration config, IProjectileFlightConfig flightConfig)
         {
             _config = config;
+            _flightConfig = flightConfig;
         }
 
         /// <summary>Calculates the prediction trace, bouncing off the left/right/top walls.</summary>
@@ -19,7 +21,7 @@ namespace BalloonParty.Prediction
             results.Clear();
             results.Add(origin);
 
-            var walls = new WallLimits(_config.LimitsClockwise);
+            var walls = new WallLimits(_flightConfig.LimitsClockwise);
             var stepsLeft = _config.PredictionTraceMaxSteps;
             var maxBounces = _config.PredictionTraceMaxBounces;
 

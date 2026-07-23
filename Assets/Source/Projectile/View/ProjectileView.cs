@@ -41,6 +41,7 @@ namespace BalloonParty.Projectile.View
         [SerializeField] private SpriteRenderer _pierceSpiralRenderer;
 
         [Inject] private IProjectileVisualConfig _visual;
+        [Inject] private IProjectileFlightConfig _flightConfig;
         [Inject] private IGameConfiguration _config;
         [Inject] private IGamePalette _palette;
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
@@ -597,7 +598,7 @@ namespace BalloonParty.Projectile.View
         // bounce, so a corridor that opens up mid-flight can still trigger it.
         private void TryEnterCruise(Vector3 position, Vector3 direction)
         {
-            var threshold = _config.CruiseWallBounceThreshold;
+            var threshold = _flightConfig.CruiseWallBounceThreshold;
             // A shot already piercing without cruising is a Snipe lance — it must not enter cruise, which
             // would layer on the per-shield speed tap it deliberately excludes. (A cruise-earned pierce is
             // always already cruising, so this only gates the Snipe case.)
@@ -618,7 +619,7 @@ namespace BalloonParty.Projectile.View
 
         private void TryAwardSweepTap(Vector3 wallHitPosition, Vector3 travelDirection)
         {
-            if (!_config.SweepEnabled || _model.Flight.SegmentPopCount <= 0 || !_model.Flight.SegmentSweepValid)
+            if (!_flightConfig.SweepEnabled || _model.Flight.SegmentPopCount <= 0 || !_model.Flight.SegmentSweepValid)
             {
                 return;
             }
@@ -642,7 +643,7 @@ namespace BalloonParty.Projectile.View
             StartSweepGizmoTracking();
 #endif
 
-            if (_config.SweepTapThreshold > 0 && _model.Flight.TotalSweeps < _config.SweepTapThreshold)
+            if (_flightConfig.SweepTapThreshold > 0 && _model.Flight.TotalSweeps < _flightConfig.SweepTapThreshold)
             {
                 return;
             }
@@ -658,7 +659,7 @@ namespace BalloonParty.Projectile.View
             _model.Flight.TotalCruiseTaps++;
             _model.Flight.CruiseTapElapsed = 0f;
 
-            var threshold = _config.CruisePiercingTapThreshold;
+            var threshold = _flightConfig.CruisePiercingTapThreshold;
             if (threshold > 0 && !_model.IsPiercing.Value && _model.Flight.TotalCruiseTaps >= threshold)
             {
                 _model.IsPiercing.Value = true;
@@ -692,7 +693,7 @@ namespace BalloonParty.Projectile.View
             // entirely while doomed (drifting to its death): a flourish there reads as a power-up right
             // as it dies, and the clear path means there's nothing to pierce anyway.
             var inTapBeat = (_model.IsCruising.Value || _model.Flight.TotalCruiseTaps > 0)
-                            && _model.Flight.CruiseTapElapsed < _config.CruiseTapEaseDuration;
+                            && _model.Flight.CruiseTapElapsed < _flightConfig.CruiseTapEaseDuration;
             var pierceActive = _model.IsPiercing.Value && !_model.IsLastShieldApproach.Value;
             var target = pierceActive
                 ? (inTapBeat ? _visual.PierceTapBeatAlpha : 1f)
@@ -760,8 +761,8 @@ namespace BalloonParty.Projectile.View
         // breaking the curve lookup.
         private float ComputeVelocityT(float speed)
         {
-            var normalSpeed = _config.ProjectileSpeed;
-            var maxSpeed = normalSpeed * _config.MaxCruiseSpeedMultiplier;
+            var normalSpeed = _flightConfig.ProjectileSpeed;
+            var maxSpeed = normalSpeed * _flightConfig.MaxCruiseSpeedMultiplier;
             return maxSpeed > normalSpeed ? Mathf.Clamp01((speed - normalSpeed) / (maxSpeed - normalSpeed)) : 0f;
         }
 
