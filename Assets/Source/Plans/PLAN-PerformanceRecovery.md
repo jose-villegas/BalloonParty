@@ -447,7 +447,14 @@ Sampler requirement verified: both smear RTs are `FilterMode.Bilinear`
 
 **Verify (José)**: visual A/B of light-buffer softness; sign off the tent look.
 
-### G4 — BackgroundField bake fine-octave skip · **sonnet**
+### G4 — BackgroundField bake fine-octave skip · **SHIPPED THEN REVERTED 2026-07-23**
+
+Implemented in `143a9057`, reverted in `76e36d3c` after José's device check: the clouds
+visibly lost detail — the fine octave carries far more of the look than its 0.2 blend
+weight suggests. **Do not re-propose.** Half-weighting is not an alternative (the cost
+is *computing* the octave — one tap + noise math — not blending it, so half weight pays
+full cost for a diluted look). The bake is cadence-gated, so the forfeited win was
+modest. Original spec kept below for the record.
 
 `BackgroundGenRawNoise` (`BackgroundFieldGen.cginc:49-62`) unconditionally sums base
 ×0.50 + detail ×0.30 + fine ×0.20; the display shaders already gate their fine work via
