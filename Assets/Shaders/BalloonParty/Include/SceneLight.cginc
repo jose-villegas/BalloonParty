@@ -367,7 +367,13 @@ bool SceneLightTagInMaskAtLOD(float2 worldPos, float excludeMask)
         return false;
     }
 
-    float index = SceneLightPaletteIndex(SceneLightFieldSampleLOD(worldPos).a);
+    // Point-sample A at the nearest texel CENTRE — never a bilinear tap (see SceneLightDecodeColor's
+    // warning): an interpolated (index+1)/16 between two lights decodes to a third, unrelated slot.
+    // _SceneLightTexelSize is published precisely so consumers can snap to a centre and read back the
+    // exact argmax index the accumulate pass wrote, with no extra taps.
+    float2 texel = _SceneLightTexelSize.xy;
+    float2 centre = (floor(SceneLightFieldUV(worldPos) / texel) + 0.5) * texel;
+    float index = SceneLightPaletteIndex(tex2Dlod(_SceneLightTex, float4(centre, 0.0, 0.0)).a);
     if (index < 0.0)
     {
         return false;
