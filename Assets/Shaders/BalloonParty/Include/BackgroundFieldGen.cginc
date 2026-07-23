@@ -54,10 +54,16 @@ float BackgroundGenRawNoise(float2 wp)
     float t = BackgroundGenTime();
     float2 pBase   = wp * _BaseScale   * _NoiseScale + _ScrollSpeedBase.xy   * t;
     float2 pDetail = wp * _DetailScale * _NoiseScale + _ScrollSpeedDetail.xy * t;
-    float2 pFine   = wp * _FineScale   * _NoiseScale + _ScrollSpeedFine.xy   * t;
 
+#ifdef _LOW_QUALITY_CLOUD
+    // Fine octave dropped; renormalize survivors to sum to 1 (0.625/0.375) so the density DC doesn't
+    // shift — an unnormalized sum would visibly change smoothstep(_EdgeLow, _EdgeHigh, ...) coverage.
+    float n = BackgroundGenOctave(pBase) * 0.625 + BackgroundGenOctave(pDetail) * 0.375;
+#else
+    float2 pFine   = wp * _FineScale   * _NoiseScale + _ScrollSpeedFine.xy   * t;
     float n = BackgroundGenOctave(pBase) * 0.50 + BackgroundGenOctave(pDetail) * 0.30
             + BackgroundGenOctave(pFine) * 0.20;
+#endif
     return n * 0.5 + 0.5;
 }
 
