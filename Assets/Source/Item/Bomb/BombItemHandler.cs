@@ -5,6 +5,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
+using BalloonParty.Scenario;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
@@ -34,6 +35,7 @@ namespace BalloonParty.Item.Bomb
         private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly SceneLightFieldService _lightField;
+        private readonly PaintingFieldService _paintingField;
         private readonly CancellationTokenSource _lifetime = new();
 
         public ItemType Type => ItemType.Bomb;
@@ -47,7 +49,8 @@ namespace BalloonParty.Item.Bomb
             ItemEffectPlayer effectPlayer,
             BalloonOverlapQuery overlap,
             DisturbanceFieldService disturbanceField,
-            SceneLightFieldService lightField)
+            SceneLightFieldService lightField,
+            PaintingFieldService paintingField)
         {
             _itemConfig = itemConfig;
             _hitDispatcher = hitDispatcher;
@@ -57,6 +60,7 @@ namespace BalloonParty.Item.Bomb
             _overlap = overlap;
             _disturbanceField = disturbanceField;
             _lightField = lightField;
+            _paintingField = paintingField;
         }
 
         public void Dispose()
@@ -116,6 +120,8 @@ namespace BalloonParty.Item.Bomb
 
             // The normal outward repulsion (ramped Bomb profile).
             _disturbanceField.Stamp(StampSource.Bomb, worldPosition, Vector2.zero, paletteIndex: paletteIndex);
+
+            _paintingField.Paint(PaintSource.Bomb, worldPosition, paletteIndex);
 
             // A blast-coloured flash light scaled off the blast radius (visual scale for a rainbow bomb),
             // held for the effect then released.
