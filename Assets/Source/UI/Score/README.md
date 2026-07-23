@@ -50,7 +50,7 @@ Bar reset is a two-phase process synchronised with the glow trail ceremony:
 - **Streak notices** (`_streakNoticePrefab`, pool key `StreakNotice_{color}`) — shown immediately on balloon hit at bar centre, tinted with the bar's color. Tracked by `ProgressNoticePresenter` for dismiss-on-replace
 - **Point notices** (`_pointNoticePrefab`, pool key `PointNotice_{color}`) — shown on trail arrival at the trail's world-space landing position (converted to local anchored coordinates). Untracked (returned to pool on animation complete)
 
-Both pools are prewarmed per color to `IGameConfiguration.ProgressNoticePrewarmPerColor` (default 16 each) when the bar starts.
+Both pools are prewarmed per color to `IScoreTrailConfig.ProgressNoticePrewarmPerColor` (default 16 each) when the bar starts.
 
 `OnValidate()` provides editor-time color preview — it loads `GamePalette` via `AssetDatabase`, finds the matching entry, and tints `_graphicsToSetColor` while preserving each graphic's existing alpha.
 
@@ -65,6 +65,6 @@ When the slider reaches its maximum, a completion particle plays and the bar ent
 - **LevelUpPopUp** — publishes `LevelUpGlowTrailsMessage` (drain trigger) and `LevelUpDismissedMessage` (final reset)
 - **PoolManager** — separate per-color pools for streak notices, point notices, and `FlyingTrail`; consumer handles return
 - **ILevelThresholds** — `PointsRequiredForLevel`, read by `ColorProgressBar` to size the slider and stash the next goal
-- **IGameConfiguration** — `ProgressNoticePrewarmPerColor`
+- **IScoreTrailConfig** — `ProgressNoticePrewarmPerColor`
 - **GamePalette** — resolves color name → `Color` for tinting graphics and trail orbs
 - **ScoreUILifetimeScope** — injects all bars via `RegisterBuildCallback`; binds labels in `Start()`

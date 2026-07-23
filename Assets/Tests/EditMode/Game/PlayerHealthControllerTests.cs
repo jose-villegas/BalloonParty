@@ -13,7 +13,7 @@ namespace BalloonParty.Tests.Game
     {
         private const int StartingHitPoints = 3;
 
-        private IGameConfiguration _config;
+        private IRunConfig _config;
         private ISubscriber<SpawnBlockedMessage> _spawnBlockedSubscriber;
         private IMessageHandler<SpawnBlockedMessage> _spawnBlockedHandler;
         private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
@@ -25,7 +25,7 @@ namespace BalloonParty.Tests.Game
         [SetUp]
         public void SetUp()
         {
-            _config = Substitute.For<IGameConfiguration>();
+            _config = Substitute.For<IRunConfig>();
             _config.StartingHitPoints.Returns(StartingHitPoints);
 
             _spawnBlockedSubscriber = Substitute.For<ISubscriber<SpawnBlockedMessage>>();

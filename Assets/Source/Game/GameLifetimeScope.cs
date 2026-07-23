@@ -27,6 +27,7 @@ namespace BalloonParty.Game
         [SerializeField] private ProjectileFlightConfig _projectileFlightConfig;
         [SerializeField] private SlotGridConfig _slotGridConfig;
         [SerializeField] private PredictionTraceConfig _predictionTraceConfig;
+        [SerializeField] private RunConfig _runConfig;
         [SerializeField] private GameDisplayConfiguration _displayConfiguration;
         [SerializeField] private ItemConfiguration _itemConfiguration;
         [SerializeField] private GamePalette _gamePalette;
@@ -80,7 +81,8 @@ namespace BalloonParty.Game
             builder.RegisterInstance<IProjectileFlightConfig>(ResolveProjectileFlightConfig());
             builder.RegisterInstance<ISlotGridConfig>(ResolveSlotGridConfig());
             builder.RegisterInstance<IPredictionTraceConfig>(ResolvePredictionTraceConfig());
-            builder.RegisterInstance<IScoreTrailConfig>(_gameConfiguration);
+            builder.RegisterInstance<IRunConfig>(ResolveRunConfig());
+            builder.RegisterInstance<IScoreTrailConfig>(ResolveScoreTrailConfig());
             builder.RegisterInstance<IGameDisplayConfiguration>(_displayConfiguration);
             builder.RegisterInstance<IItemConfiguration>(_itemConfiguration);
             builder.RegisterInstance<IGamePalette>(_gamePalette);
@@ -158,6 +160,35 @@ namespace BalloonParty.Game
             }
 
             Log.Warn("GameLifetimeScope", "PredictionTraceConfig not wired — falling back to GameConfiguration.");
+            return _gameConfiguration;
+        }
+
+        // Transitional (config-split P3): an unwired field falls back to the umbrella GameConfiguration,
+        // which still implements this interface — so the game keeps running until the dedicated asset
+        // is wired onto this prefab.
+        private IRunConfig ResolveRunConfig()
+        {
+            if (_runConfig != null)
+            {
+                return _runConfig;
+            }
+
+            Log.Warn("GameLifetimeScope", "RunConfig not wired — falling back to GameConfiguration.");
+            return _gameConfiguration;
+        }
+
+        // Transitional (config-split P3): the score-trail choreography SO already carries the timing
+        // fields (merged in this phase); an unwired field falls back to the umbrella GameConfiguration,
+        // which still implements this interface too.
+        private IScoreTrailConfig ResolveScoreTrailConfig()
+        {
+            if (_scoreTrailBehaviourConfiguration != null)
+            {
+                return _scoreTrailBehaviourConfiguration;
+            }
+
+            Log.Warn("GameLifetimeScope",
+                "ScoreTrailBehaviourConfiguration not wired — falling back to GameConfiguration for score-trail timing.");
             return _gameConfiguration;
         }
     }

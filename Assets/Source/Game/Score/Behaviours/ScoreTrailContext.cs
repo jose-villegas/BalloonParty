@@ -1,5 +1,6 @@
 using System.Threading;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
 using UnityEngine;
 
@@ -22,7 +23,9 @@ namespace BalloonParty.Game.Score.Behaviours
         internal readonly TrailSpawner Spawner;
         internal readonly TrailFlightRegistry<TrailId> Flights;
         internal readonly IScoreTrailReporter Reporter;
-        internal readonly IGameConfiguration Config;
+        internal readonly IScoreTrailConfig ScoreConfig;
+        internal readonly ISlotGridConfig GridConfig;
+        internal readonly IProjectileFlightConfig FlightConfig;
         internal readonly CancellationToken CancellationToken;
 
         internal ScoreTrailContext(
@@ -37,7 +40,9 @@ namespace BalloonParty.Game.Score.Behaviours
             TrailSpawner spawner,
             TrailFlightRegistry<TrailId> flights,
             IScoreTrailReporter reporter,
-            IGameConfiguration config,
+            IScoreTrailConfig scoreConfig,
+            ISlotGridConfig gridConfig,
+            IProjectileFlightConfig flightConfig,
             CancellationToken cancellationToken)
         {
             ColorName = colorName;
@@ -51,8 +56,28 @@ namespace BalloonParty.Game.Score.Behaviours
             Spawner = spawner;
             Flights = flights;
             Reporter = reporter;
-            Config = config;
+            ScoreConfig = scoreConfig;
+            GridConfig = gridConfig;
+            FlightConfig = flightConfig;
             CancellationToken = cancellationToken;
+        }
+
+        internal ScoreTrailContext(
+            in ScorePointsGroupMessage msg,
+            Color color,
+            ITrailEndpoint target,
+            TrailSpawner spawner,
+            TrailFlightRegistry<TrailId> flights,
+            IScoreTrailReporter reporter,
+            IScoreTrailConfig scoreConfig,
+            ISlotGridConfig gridConfig,
+            IProjectileFlightConfig flightConfig,
+            CancellationToken cancellationToken)
+            : this(
+                msg.ColorName, color, msg.WorldPosition, msg.HitDirection, msg.Points, msg.FirstScore,
+                msg.LastScore, target, spawner, flights, reporter, scoreConfig, gridConfig, flightConfig,
+                cancellationToken)
+        {
         }
     }
 }

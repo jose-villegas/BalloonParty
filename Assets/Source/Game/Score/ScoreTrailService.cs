@@ -21,7 +21,9 @@ namespace BalloonParty.Game.Score
     {
         private readonly IPublisher<ScoreTrailArrivedMessage> _arrivedPublisher;
         private readonly Dictionary<string, Color> _colorLookup = new();
-        private readonly IGameConfiguration _config;
+        private readonly IScoreTrailConfig _scoreConfig;
+        private readonly ISlotGridConfig _gridConfig;
+        private readonly IProjectileFlightConfig _flightConfig;
         private readonly CancellationTokenSource _cts = new();
         private readonly TrailFlightRegistry<TrailId> _flights = new();
         private readonly PoolManager _poolManager;
@@ -42,7 +44,9 @@ namespace BalloonParty.Game.Score
 
         [Inject]
         internal ScoreTrailService(
-            IGameConfiguration config,
+            IScoreTrailConfig scoreConfig,
+            ISlotGridConfig gridConfig,
+            IProjectileFlightConfig flightConfig,
             ISubscriber<ScorePointsGroupMessage> scoredSubscriber,
             IPublisher<ScoreTrailArrivedMessage> arrivedPublisher,
             PoolManager poolManager,
@@ -50,7 +54,9 @@ namespace BalloonParty.Game.Score
             ScoreTrailBehaviourResolver resolver,
             FlyingTrail trailPrefab)
         {
-            _config = config;
+            _scoreConfig = scoreConfig;
+            _gridConfig = gridConfig;
+            _flightConfig = flightConfig;
             _scoredSubscriber = scoredSubscriber;
             _arrivedPublisher = arrivedPublisher;
             _poolManager = poolManager;
@@ -121,7 +127,7 @@ namespace BalloonParty.Game.Score
             _spawners[colorName] = spawner;
 
             // Amortized over frames so registering a color at level setup never spikes into a hitch.
-            spawner.PrewarmAsync(_config.ScoreTrailPrewarmPerColor, _cts.Token).Forget();
+            spawner.PrewarmAsync(_scoreConfig.ScoreTrailPrewarmPerColor, _cts.Token).Forget();
         }
 
         private void OnScorePointsGroup(ScorePointsGroupMessage msg)
@@ -137,18 +143,15 @@ namespace BalloonParty.Game.Score
             var color = _colorLookup.TryGetValue(msg.ColorName, out var c) ? c : Color.white;
             var reporter = new ScoreTrailReporter(_arrivedPublisher, msg.ColorName, msg.Points);
             var context = new ScoreTrailContext(
-                msg.ColorName,
+                in msg,
                 color,
-                msg.WorldPosition,
-                msg.HitDirection,
-                msg.Points,
-                msg.FirstScore,
-                msg.LastScore,
                 endpoint,
                 _spawners[msg.ColorName],
                 _flights,
                 reporter,
-                _config,
+                _scoreConfig,
+                _gridConfig,
+                _flightConfig,
                 _groupCts.Token);
 
             _resolver.Resolve(msg.Points).Begin(context);

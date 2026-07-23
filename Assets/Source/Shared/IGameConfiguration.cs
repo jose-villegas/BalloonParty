@@ -2,10 +2,9 @@ using DG.Tweening;
 
 namespace BalloonParty.Shared
 {
-    public interface IGameConfiguration : IProjectileFlightConfig, ISlotGridConfig,
+    public interface IGameConfiguration : IRunConfig, IProjectileFlightConfig, ISlotGridConfig,
         IPredictionTraceConfig, IScoreTrailConfig
     {
-        int StartingHitPoints { get; }
         float ProjectileDisappearDuration { get; }
         Ease ProjectileDisappearEase { get; }
         float ProjectileDeadDriftFactor { get; }

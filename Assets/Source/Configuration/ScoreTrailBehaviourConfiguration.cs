@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Game.Score.Behaviours;
+using BalloonParty.Shared;
 using UnityEngine;
 
 namespace BalloonParty.Configuration
@@ -90,7 +91,7 @@ namespace BalloonParty.Configuration
     }
 
     [CreateAssetMenu(menuName = "Configuration/Score Trail Behaviours", fileName = "ScoreTrailBehaviourConfiguration")]
-    internal class ScoreTrailBehaviourConfiguration : ScriptableObject, IScoreTrailBehaviourConfiguration
+    internal class ScoreTrailBehaviourConfiguration : ScriptableObject, IScoreTrailBehaviourConfiguration, IScoreTrailConfig
     {
         [Tooltip("Choreography handlers keyed by score magnitude, evaluated highest MinPoints first. " +
                  "A DefaultScore entry at MinPoints 0 is the catch-all.")]
@@ -99,8 +100,26 @@ namespace BalloonParty.Configuration
         [Tooltip("Global BigScore formation timing/size/spin knobs shared by every decomposed shape.")]
         [SerializeField] private BigScoreFormationSettings _bigScoreSettings = DefaultSettings();
 
+        [Header("Score")]
+        [SerializeField] private float _scorePointTraceDuration;
+        [SerializeField] private float _scorePointsScatterDelay = 0.08f;
+        [SerializeField] private float _scorePointBurstDuration = 0.12f;
+
+        [Tooltip("Per-color trail pool size prewarmed at level setup — a big pop or level-up ceremony " +
+                 "can burst 20-40 live trails for one color.")]
+        [SerializeField] private int _scoreTrailPrewarmPerColor = 64;
+
+        [Tooltip("Per-color prewarm size for EACH of the point/streak notice pools — these rarely have " +
+                 "more than a handful live at once, hence the lower default than the trail pool.")]
+        [SerializeField] private int _progressNoticePrewarmPerColor = 16;
+
         public IReadOnlyList<ScoreTrailBehaviourEntry> Entries => _entries;
         public BigScoreFormationSettings BigScoreSettings => _bigScoreSettings;
+        public float ScorePointTraceDuration => _scorePointTraceDuration;
+        public float ScorePointsScatterDelay => _scorePointsScatterDelay;
+        public float ScorePointBurstDuration => _scorePointBurstDuration;
+        public int ScoreTrailPrewarmPerColor => _scoreTrailPrewarmPerColor;
+        public int ProgressNoticePrewarmPerColor => _progressNoticePrewarmPerColor;
 
         private static ScoreTrailBehaviourEntry[] DefaultEntries()
         {

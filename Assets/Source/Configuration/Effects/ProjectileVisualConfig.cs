@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 namespace BalloonParty.Configuration.Effects
@@ -10,6 +11,12 @@ namespace BalloonParty.Configuration.Effects
         [SerializeField] [Min(0f)] private float _glowColorDuration = 1.25f;
         [Tooltip("Full palette loops per second the glow cycles through while the rainbow buff is active.")]
         [SerializeField] [Min(0f)] private float _rainbowGlowSpeed = 0.35f;
+
+        [Header("Death")]
+        [SerializeField] private float _projectileDisappearDuration = 0.2f;
+        [SerializeField] private Ease _projectileDisappearEase = Ease.InBack;
+        [Tooltip("How far a dead shot drifts along its heading as it shrinks, as a multiple of speed×duration. 0 = stop in place.")]
+        [SerializeField] private float _projectileDeadDriftFactor = 1f;
 
         [Header("Pierce Spiral")]
         [Tooltip("Seconds for the spiral to lerp in/out when the piercing state flips.")]
@@ -48,6 +55,9 @@ namespace BalloonParty.Configuration.Effects
         public float GlowAlpha => _glowAlpha;
         public float GlowColorDuration => _glowColorDuration;
         public float RainbowGlowSpeed => _rainbowGlowSpeed;
+        public float ProjectileDisappearDuration => _projectileDisappearDuration;
+        public Ease ProjectileDisappearEase => _projectileDisappearEase;
+        public float ProjectileDeadDriftFactor => _projectileDeadDriftFactor;
         public float PierceFadeDuration => _pierceFadeDuration;
         public float PierceFadeInPower => _pierceFadeInPower;
         public float PierceFadeInReach => _pierceFadeInReach;

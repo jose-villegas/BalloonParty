@@ -35,7 +35,7 @@ namespace BalloonParty.Game.Score.Behaviours
         {
             var center = context.Origin;
             var count = context.Points;
-            var delay = context.Config.ScorePointsScatterDelay;
+            var delay = context.ScoreConfig.ScorePointsScatterDelay;
             var start = Time.time;
 
             for (var i = 0; i < count; i++)
@@ -60,7 +60,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 return center;
             }
 
-            var radius = Mathf.Min(context.Config.SlotSeparation.x, context.Config.SlotSeparation.y) * 1.5f;
+            var radius = Mathf.Min(context.GridConfig.SlotSeparation.x, context.GridConfig.SlotSeparation.y) * 1.5f;
             var angle = 2f * Mathf.PI * index / count;
             Vector3 direction = VectorMathExtensions.DirectionFromAngle(angle);
             return center + direction * radius;
@@ -73,7 +73,7 @@ namespace BalloonParty.Game.Score.Behaviours
             var spawner = context.Spawner;
             var flights = context.Flights;
             var reporter = context.Reporter;
-            var config = context.Config;
+            var config = context.ScoreConfig;
             var hasBurst = scatterOrigin != center;
 
             Action onArrived = () =>

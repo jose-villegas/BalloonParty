@@ -10,12 +10,12 @@ Source is organized into per-context subfolders: `Balloons/`, `Buffs/`, `Cinemat
 
 | Asset | Interface | What it holds |
 |---|---|---|
-| `GameConfiguration` | `IGameConfiguration` (in `Shared/`, deprecated) | *(Transitional — being decomposed into `ProjectileFlightConfig`, `SlotGridConfig`, `PredictionTraceConfig`, `RunConfig`, and integrations with `ProjectileVisualConfig` and `ScoreTrailBehaviourConfiguration`; see below.)* |
+| `GameConfiguration` | `IGameConfiguration` (in `Shared/`, deprecated) | *(Transitional — being decomposed into `ProjectileFlightConfig`, `SlotGridConfig`, `PredictionTraceConfig`, and `RunConfig`; the score-trail and projectile-death fields are already merged into `ScoreTrailBehaviourConfiguration` and `ProjectileVisualConfig` respectively, see below. Every split SO falls back to this umbrella via a `GameLifetimeScope.Resolve*Config()` helper until its dedicated field is wired onto the scene prefab.)* |
 | `ProjectileFlightConfig` | `IProjectileFlightConfig` (in `Shared/`) | Projectile flight behavior — initial velocity, gravity, deflection, and feel params, plus launch load duration. |
 | `SlotGridConfig` | `ISlotGridConfig` (in `Shared/`) | Slot grid layout — play-area dimensions and slot positioning. |
 | `PredictionTraceConfig` | `IPredictionTraceConfig` (in `Shared/`) | Prediction trace visualization — path rendering params and styling. |
-| `RunConfig` | `IRunConfig` (in `Shared/`) | Run rules — starting hit points and loss thresholds. *(In progress)* |
-| `ProjectileVisualConfig` | `IProjectileVisualConfig` (in `Shared/`) | Projectile visual tuning — trail/death VFX, sprite sheet, animation params, and shader references. |
+| `RunConfig` | `IRunConfig` (in `Shared/`) | Run rules — starting hit points (consumed by `PlayerHealthController`). |
+| `ProjectileVisualConfig` | `IProjectileVisualConfig` (in `Shared/`) | Projectile visual tuning — glow, pierce spiral, scene light, shield-loss/pierce flash FX, and the death (disappear) presentation (`ProjectileDisappearDuration`/`Ease`/`DeadDriftFactor`). |
 | `BalloonsConfiguration` | `IBalloonsConfiguration` | Balloon-specific configuration — `BalloonPrefabEntry` entries with per-type weight/cap/nudge/VFX, default pop VFX, spawn line counts, spawn animation range, balance delay, global nudge defaults |
 | `GridActorConfiguration` | `IGridActorConfiguration` | Grid actor entries with per-type weight, max-count cap, and `HitsToPop` for destructible actors (Gatekeeper). Used by `StaticActorSpawner` and the procedural `GridSpawner` |
 | `GamePalette` | `IGamePalette` | Array of `PaletteEntry` (name + `Color`) — the single source for all balloon colors; `GetColor(name)` resolves name → `UnityEngine.Color` |

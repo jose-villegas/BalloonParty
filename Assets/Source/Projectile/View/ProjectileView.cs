@@ -42,7 +42,6 @@ namespace BalloonParty.Projectile.View
 
         [Inject] private IProjectileVisualConfig _visual;
         [Inject] private IProjectileFlightConfig _flightConfig;
-        [Inject] private IGameConfiguration _config;
         [Inject] private IGamePalette _palette;
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
@@ -395,18 +394,18 @@ namespace BalloonParty.Projectile.View
 
             transform.DOKill();
 
-            var duration = _config.ProjectileDisappearDuration;
+            var duration = _visual.ProjectileDisappearDuration;
 
             // A dead shot keeps drifting along its heading (fired shots only) instead of freezing in place.
-            if (_model != null && _model.IsFree && _config.ProjectileDeadDriftFactor > 0f)
+            if (_model != null && _model.IsFree && _visual.ProjectileDeadDriftFactor > 0f)
             {
                 Vector3 heading = _model.Direction;
-                var target = transform.position + heading.normalized * (_model.Speed * duration * _config.ProjectileDeadDriftFactor);
+                var target = transform.position + heading.normalized * (_model.Speed * duration * _visual.ProjectileDeadDriftFactor);
                 transform.DOMove(target, duration).SetUpdate(true);
             }
 
             transform.DOScale(Vector3.zero, duration)
-                .SetEase(_config.ProjectileDisappearEase)
+                .SetEase(_visual.ProjectileDisappearEase)
                 .SetUpdate(true)
                 .OnComplete(() => onComplete?.Invoke());
         }

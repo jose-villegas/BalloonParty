@@ -1,8 +1,11 @@
+using DG.Tweening;
+
 namespace BalloonParty.Configuration.Effects
 {
     /// <summary>
-    /// Read-only visual tuning for the projectile: glow, pierce spiral, scene light, and flash FX.
-    /// Extracted from ProjectileView [SerializeField] fields into a designer-editable SO.
+    /// Read-only visual tuning for the projectile: glow, pierce spiral, scene light, flash FX, and
+    /// death (disappear) presentation. Extracted from ProjectileView [SerializeField] fields into a
+    /// designer-editable SO.
     /// </summary>
     internal interface IProjectileVisualConfig
     {
@@ -10,6 +13,11 @@ namespace BalloonParty.Configuration.Effects
         float GlowAlpha { get; }
         float GlowColorDuration { get; }
         float RainbowGlowSpeed { get; }
+
+        // Death
+        float ProjectileDisappearDuration { get; }
+        Ease ProjectileDisappearEase { get; }
+        float ProjectileDeadDriftFactor { get; }
 
         // Pierce spiral
         float PierceFadeDuration { get; }

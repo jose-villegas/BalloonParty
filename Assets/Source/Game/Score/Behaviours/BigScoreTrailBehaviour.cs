@@ -72,7 +72,7 @@ namespace BalloonParty.Game.Score.Behaviours
             var settings = _config != null ? _config.BigScoreSettings : FallbackSettings;
             var formationCount = _denominations.Count;
 
-            var limits = new WallLimits(context.Config.LimitsClockwise);
+            var limits = new WallLimits(context.FlightConfig.LimitsClockwise);
             var fitScale = FitScale(settings.BaseRadius, limits);
             var fittedMaxRadius = settings.BaseRadius * fitScale * ShapeCatalog.MaxRadiusScale;
             var spacing = 2f * fittedMaxRadius;

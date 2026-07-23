@@ -15,7 +15,7 @@ namespace BalloonParty.Game.Health
     {
         private const int MaxHitPoints = 999;
 
-        private readonly IGameConfiguration _config;
+        private readonly IRunConfig _config;
         private readonly ISubscriber<SpawnBlockedMessage> _spawnBlockedSubscriber;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private readonly IPublisher<EndRunRequestedMessage> _endRunPublisher;
@@ -25,7 +25,7 @@ namespace BalloonParty.Game.Health
         private IDisposable _levelUpSubscription;
 
         public PlayerHealthController(
-            IGameConfiguration config,
+            IRunConfig config,
             ISubscriber<SpawnBlockedMessage> spawnBlockedSubscriber,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             IPublisher<EndRunRequestedMessage> endRunPublisher)

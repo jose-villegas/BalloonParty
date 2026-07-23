@@ -132,23 +132,6 @@ namespace BalloonParty.UI.Score
 #endif
         }
 
-#if UNITY_EDITOR
-        private static GamePalette FindPalette()
-        {
-            if (_cachedPalette == null)
-            {
-                var guids = UnityEditor.AssetDatabase.FindAssets("t:GamePalette");
-                if (guids.Length > 0)
-                {
-                    _cachedPalette = UnityEditor.AssetDatabase.LoadAssetAtPath<GamePalette>(
-                        UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]));
-                }
-            }
-
-            return _cachedPalette;
-        }
-#endif
-
         private void Start()
         {
             _colorConfig = _palette.GetEntry(_colorName);
@@ -190,6 +173,23 @@ namespace BalloonParty.UI.Score
             _transitionCompletedSubscriber.Subscribe(_ => OnTransitionCompleted()).AddTo(this);
             _resetSubscriber.Subscribe(_ => OnRunReset()).AddTo(this);
         }
+
+#if UNITY_EDITOR
+        private static GamePalette FindPalette()
+        {
+            if (_cachedPalette == null)
+            {
+                var guids = UnityEditor.AssetDatabase.FindAssets("t:GamePalette");
+                if (guids.Length > 0)
+                {
+                    _cachedPalette = UnityEditor.AssetDatabase.LoadAssetAtPath<GamePalette>(
+                        UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]));
+                }
+            }
+
+            return _cachedPalette;
+        }
+#endif
 
         // Driven by the streak signal (any colour), so we also catch this colour's streak being lost when a
         // different colour is popped — not just its own pops. The notice persists until the streak grows
