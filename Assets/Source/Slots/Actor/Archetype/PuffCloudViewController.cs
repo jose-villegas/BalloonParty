@@ -3,7 +3,7 @@ using BalloonParty.Slots.Grid;
 using VContainer;
 using BalloonParty.Configuration.Effects;
 #if !UNITY_EDITOR
-using UnityEngine.Application;
+using UnityEngine;
 #endif
 
 namespace BalloonParty.Slots.Actor.Archetype

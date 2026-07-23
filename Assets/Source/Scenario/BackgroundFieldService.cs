@@ -39,6 +39,7 @@ namespace BalloonParty.Scenario
         private Rect _bounds;
         private Vector2 _ascendOffset;
         private float _bakeAccumulator;
+        private Vector3 _lastRootPosition;
 
         public BackgroundFieldService(
             IBackgroundFieldSettings settings,
@@ -83,10 +84,16 @@ namespace BalloonParty.Scenario
             // BakeFrameInterval is authored as "every N frames at 60 fps"; reinterpreted as seconds so
             // the blit cost doesn't scale with display refresh — a 120 Hz panel would otherwise double it.
             // Clamped to at most one interval so idle time can't bank multiple instant re-bakes.
+            // During any transition (ascend, level-up, game-over descent) bypass the cadence gate to avoid
+            // the density texture visibly lagging behind the scrolling camera.
             var interval = Mathf.Max(_settings.BakeFrameInterval, 1f) / 60f;
             _bakeAccumulator = Mathf.Min(_bakeAccumulator + Time.unscaledDeltaTime, interval);
 
-            if (_bakeAccumulator >= interval)
+            var rootPos = _scenarioRoot?.Transform != null ? _scenarioRoot.Transform.position : Vector3.zero;
+            bool isTransitioning = LaunchAscend.IsActive || rootPos != _lastRootPosition;
+            _lastRootPosition = rootPos;
+
+            if (_bakeAccumulator >= interval || isTransitioning)
             {
                 _bakeAccumulator -= interval;
                 Bake();
