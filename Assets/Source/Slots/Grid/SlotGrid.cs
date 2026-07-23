@@ -138,13 +138,15 @@ namespace BalloonParty.Slots.Grid
                 var col = Mathf.RoundToInt(Mathf.Lerp(source.x, target.x, t));
                 var row = Mathf.RoundToInt(Mathf.Lerp(source.y, target.y, t));
 
-                WarnIfPathBlocked(col, row);
+                LogIfPathBlocked(col, row);
                 results.Add(IndexToWorldPosition(new Vector2Int(col, row)));
             }
         }
 
         // Diagnostics only — rerouting around blockers isn't implemented yet (Phase 9).
-        private void WarnIfPathBlocked(int col, int row)
+        // Log.Info so release builds strip the calls: these fired in spawn-burst storms with
+        // stack traces on device, a real cost at 120Hz for a known-unimplemented path.
+        private void LogIfPathBlocked(int col, int row)
         {
             if (!InBounds(col, row))
             {
@@ -155,14 +157,14 @@ namespace BalloonParty.Slots.Grid
                 && _slots[col, row].Kind == SlotActorKind.Static
                 && !IsTraversable(col, row))
             {
-                Log.Warn("SlotGrid",
+                Log.Info("SlotGrid",
                     $"ComputePath: slot ({col},{row}) is not traversable. " +
                     "Path passes through it — rerouting not yet implemented (Phase 9).");
             }
 
             if (_balancePathHolder.IsInTransit(col, row))
             {
-                Log.Warn("SlotGrid",
+                Log.Info("SlotGrid",
                     $"ComputePath: slot ({col},{row}) is in-transit from a balance move. " +
                     "Path crosses a relocating balloon — rerouting not yet implemented (Phase 9).");
             }
