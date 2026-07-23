@@ -35,17 +35,33 @@ namespace BalloonParty.Shared.Diagnostics
         }
 #endif
 
-        private void Apply()
+        // Single seam for writing the app's target frame rate: clears VSync (required for
+        // targetFrameRate to take effect) then assigns. ThermalFrameRateGovernor calls this to apply
+        // a DELIBERATE down-vote (e.g. 120 -> 80) under sustained thermal pressure.
+        //
+        // This is NOT the ARR echo-loop the MatchDisplay path guards against. The echo loop happens
+        // when you READ Screen.currentResolution's per-app arbitrated rate and vote it straight back,
+        // self-pinning the target. The governor never reads a refresh rate — it decides the rung
+        // purely from thermal headroom/status — so there is nothing to re-pin and no feedback loop.
+        // Its up-steps only ever climb back toward the ladder's top, mirroring MatchDisplay's
+        // "never down-correct from a reading" rule.
+        internal static void ApplyGovernedRate(int fps)
         {
             QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = fps;
+        }
 
-            Application.targetFrameRate = _mode switch
+        private void Apply()
+        {
+            var target = _mode switch
             {
                 FrameRateMode.Default60 => 60,
                 FrameRateMode.MatchDisplay => MatchDisplayTarget(),
                 FrameRateMode.Custom => _customFrameRate,
                 _ => 60
             };
+
+            ApplyGovernedRate(target);
         }
 
         private int MatchDisplayTarget()

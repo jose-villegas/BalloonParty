@@ -42,6 +42,7 @@ namespace BalloonParty.Game
         [SerializeField] private LevelPacingConfiguration _levelPacingConfiguration;
         [SerializeField] private BuffConfiguration _buffConfiguration;
         [SerializeField] private ScoreTrailBehaviourConfiguration _scoreTrailBehaviourConfiguration;
+        [SerializeField] private ThermalGovernorSettings _thermalGovernorSettings;
         [SerializeField] private ProjectileView _projectilePrefab;
         [SerializeField] private FlyingTrail _scoreTrailPrefab;
 
@@ -105,6 +106,13 @@ namespace BalloonParty.Game
                     : ScriptableObject.CreateInstance<ScoreTrailBehaviourConfiguration>());
             builder.RegisterInstance(new ThrowerSettings(_projectilePrefab));
             builder.RegisterInstance(_scoreTrailPrefab);
+
+            // An unassigned asset degrades to a default instance carrying the sensible defaults, so the
+            // governor works out of the box; wire an authored asset in the scene only to tune it.
+            builder.RegisterInstance<IThermalGovernorSettings>(
+                _thermalGovernorSettings != null
+                    ? _thermalGovernorSettings
+                    : ScriptableObject.CreateInstance<ThermalGovernorSettings>());
         }
     }
 }

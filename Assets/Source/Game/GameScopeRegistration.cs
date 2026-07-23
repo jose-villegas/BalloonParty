@@ -37,6 +37,7 @@ using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.SceneLight;
+using BalloonParty.Shared.Thermal;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Spawner;
@@ -118,6 +119,14 @@ namespace BalloonParty.Game
             builder.Register<INavigation, NavigationService>(Lifetime.Singleton);
             builder.Register<ICinematicState, CinematicStateService>(Lifetime.Singleton);
             builder.Register<RunMeta>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+            builder.Register<IThermalSource, AndroidThermalSource>(Lifetime.Singleton);
+#else
+            builder.Register<IThermalSource, StubThermalSource>(Lifetime.Singleton);
+#endif
+            builder.RegisterEntryPoint<ThermalFrameRateGovernor>();
+
             builder.RegisterComponentInHierarchy<SlotGridView>();
 #if UNITY_EDITOR
             // Scene-view debug overlay only; hierarchy registration throws if the component is absent,
