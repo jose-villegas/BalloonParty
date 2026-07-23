@@ -117,6 +117,13 @@ namespace BalloonParty.Solver
 
             TapLagSeconds = tapEaseDuration * (1f - (sum / (CurveAverageSamples + 1)));
         }
+
+        public ShotCruiseConfig(IProjectileFlightConfig config)
+            : this(
+                config.CruiseWallBounceThreshold, config.CruiseSpeedPerShield, config.MaxCruiseSpeedMultiplier,
+                config.CruiseTapEaseDuration, config.CruiseTapCurve, config.CruisePiercingTapThreshold)
+        {
+        }
     }
 
     /// <summary>Outcome of one deterministic flight — see <see cref="ShotSimulator.Simulate" />.</summary>
@@ -246,21 +253,9 @@ namespace BalloonParty.Solver
 
                 var hasWallEvent = TryFindWallCrossing(walls, position, direction, out var wallDistance, out var wallNormal);
 
-                bool hasBalloonEvent;
-                float balloonDistance;
-                int balloonIndex;
-                if (dynamics != null)
-                {
-                    hasBalloonEvent = TryFindNearestBalloonEntryDynamic(
-                        workingSet, activeCount, position, direction, speed, elapsed, projectileContactRadius,
-                        out balloonDistance, out balloonIndex);
-                }
-                else
-                {
-                    hasBalloonEvent = TryFindNearestBalloonEntry(
-                        workingSet, activeCount, position, direction, projectileContactRadius,
-                        out balloonDistance, out balloonIndex);
-                }
+                var hasBalloonEvent = TryFindNearestBalloonEntryAny(
+                    workingSet, activeCount, position, direction, speed, elapsed, projectileContactRadius,
+                    dynamics, out var balloonDistance, out var balloonIndex);
 
                 if (!hasWallEvent && !hasBalloonEvent)
                 {
@@ -270,17 +265,10 @@ namespace BalloonParty.Solver
                 var eventIsBalloon = hasBalloonEvent && (!hasWallEvent || balloonDistance < wallDistance);
                 var eventDistance = eventIsBalloon ? balloonDistance : wallDistance;
 
-                if (dynamics != null)
+                if (TryHandleDuePulse(
+                    dynamics, eventDistance, speed, direction, pathOut, timestampsOut, ref position, ref elapsed))
                 {
-                    var candidateEventTime = elapsed + (eventDistance / speed);
-                    if (dynamics.TryRunPulseIfDue(candidateEventTime, out var pulseTime))
-                    {
-                        position += direction * ((pulseTime - elapsed) * speed);
-                        elapsed = pulseTime;
-                        pathOut?.Add(position);
-                        timestampsOut?.Add(elapsed);
-                        continue;
-                    }
+                    continue;
                 }
 
                 events++;
@@ -303,53 +291,112 @@ namespace BalloonParty.Solver
                 position += direction * wallDistance;
                 pathOut?.Add(position);
                 timestampsOut?.Add(elapsed);
-                shields--;
-                if (shields < 0)
+
+                died = HandleWallBounce(
+                    wallNormal, walls, position, projectileContactRadius, workingSet, activeCount, cruiseConfig,
+                    dynamics, ref shields, ref direction, ref consecutiveWallBounces, ref isCruising,
+                    ref cruiseStartShields, ref pierceSpeedScale, ref isPiercing, ref elapsed);
+                if (died)
                 {
-                    died = true;
                     break;
-                }
-
-                direction = Vector2.Reflect(direction, wallNormal.normalized);
-                consecutiveWallBounces++;
-
-                if (isCruising && pierceSpeedScale < 1f)
-                {
-                    // Only after plowing a tough (scale decayed) does a wall end the run: cruise
-                    // ends, speed returns to base, and the earned piercing is consumed — mirrors
-                    // ProjectileMotionResolver. An armed shot cruising empty space keeps both.
-                    isCruising = false;
-                    consecutiveWallBounces = 0;
-                    pierceSpeedScale = 1f;
-                    isPiercing = false;
-                }
-                else if (cruiseConfig.WallBounceThreshold > 0 && !isCruising
-                    && consecutiveWallBounces >= cruiseConfig.WallBounceThreshold
-                    && IsPathClearAhead(
-                        walls, position, direction, cruiseConfig.WallBounceThreshold, projectileContactRadius,
-                        workingSet, activeCount, elapsed, dynamics))
-                {
-                    cruiseStartShields = shields;
-                    isCruising = true;
-                }
-
-                // Every cruise bounce (entry included) replays the tap animation — on the event
-                // timeline that's a pure time cost, never a path change.
-                if (isCruising)
-                {
-                    elapsed += cruiseConfig.TapLagSeconds;
-
-                    // Mirrors ProjectileMotionResolver's piercing grant: a long-enough cruise arms
-                    // the shot for the rest of its life — contacts end the cruise, never the buff.
-                    if (cruiseConfig.PiercingTapThreshold > 0
-                        && cruiseStartShields - shields >= cruiseConfig.PiercingTapThreshold)
-                    {
-                        isPiercing = true;
-                    }
                 }
             }
 
             return new ShotSimulationResult(rawScore, pops, toughsCleared, activeCount == 0, events, died, capped);
+        }
+
+        private static bool TryFindNearestBalloonEntryAny(
+            ShotBalloonState[] workingSet, int activeCount, Vector2 position, Vector2 direction, float speed,
+            float elapsed, float projectileContactRadius, ShotBoardDynamics dynamics,
+            out float balloonDistance, out int balloonIndex)
+        {
+            return dynamics != null
+                ? TryFindNearestBalloonEntryDynamic(
+                    workingSet, activeCount, position, direction, speed, elapsed, projectileContactRadius,
+                    out balloonDistance, out balloonIndex)
+                : TryFindNearestBalloonEntry(
+                    workingSet, activeCount, position, direction, projectileContactRadius,
+                    out balloonDistance, out balloonIndex);
+        }
+
+        // A due flight-rebalance pulse pre-empts the next path event: the flight jumps to the pulse's
+        // moment in place (no path change) so later events see the post-pulse board.
+        private static bool TryHandleDuePulse(
+            ShotBoardDynamics dynamics, float eventDistance, float speed, Vector2 direction,
+            List<Vector2> pathOut, List<float> timestampsOut, ref Vector2 position, ref float elapsed)
+        {
+            if (dynamics == null)
+            {
+                return false;
+            }
+
+            var candidateEventTime = elapsed + (eventDistance / speed);
+            if (!dynamics.TryRunPulseIfDue(candidateEventTime, out var pulseTime))
+            {
+                return false;
+            }
+
+            position += direction * ((pulseTime - elapsed) * speed);
+            elapsed = pulseTime;
+            pathOut?.Add(position);
+            timestampsOut?.Add(elapsed);
+            return true;
+        }
+
+        // Resolves a wall-contact event: consumes a shield (returns true if that kills the run),
+        // reflects the flight, and updates cruise state exactly as ProjectileMotionResolver.Step does.
+        private static bool HandleWallBounce(
+            Vector2 wallNormal, in WallLimits walls, Vector2 position, float projectileContactRadius,
+            ShotBalloonState[] workingSet, int activeCount, in ShotCruiseConfig cruiseConfig,
+            ShotBoardDynamics dynamics, ref int shields, ref Vector2 direction, ref int consecutiveWallBounces,
+            ref bool isCruising, ref int cruiseStartShields, ref float pierceSpeedScale, ref bool isPiercing,
+            ref float elapsed)
+        {
+            shields--;
+            if (shields < 0)
+            {
+                return true;
+            }
+
+            direction = Vector2.Reflect(direction, wallNormal.normalized);
+            consecutiveWallBounces++;
+
+            if (isCruising && pierceSpeedScale < 1f)
+            {
+                // Only after plowing a tough (scale decayed) does a wall end the run: cruise
+                // ends, speed returns to base, and the earned piercing is consumed — mirrors
+                // ProjectileMotionResolver. An armed shot cruising empty space keeps both.
+                isCruising = false;
+                consecutiveWallBounces = 0;
+                pierceSpeedScale = 1f;
+                isPiercing = false;
+            }
+            else if (cruiseConfig.WallBounceThreshold > 0 && !isCruising
+                && consecutiveWallBounces >= cruiseConfig.WallBounceThreshold
+                && IsPathClearAhead(
+                    walls, position, direction, cruiseConfig.WallBounceThreshold, projectileContactRadius,
+                    workingSet, activeCount, elapsed, dynamics))
+            {
+                cruiseStartShields = shields;
+                isCruising = true;
+            }
+
+            // Every cruise bounce (entry included) replays the tap animation — on the event
+            // timeline that's a pure time cost, never a path change.
+            if (isCruising)
+            {
+                elapsed += cruiseConfig.TapLagSeconds;
+
+                // Mirrors ProjectileMotionResolver's piercing grant: a long-enough cruise arms
+                // the shot for the rest of its life — contacts end the cruise, never the buff.
+                if (cruiseConfig.PiercingTapThreshold > 0
+                    && cruiseStartShields - shields >= cruiseConfig.PiercingTapThreshold)
+                {
+                    isPiercing = true;
+                }
+            }
+
+            return false;
         }
 
         // Mirrors ProjectileMotionResolver.Step's cruise ramp exactly: every cruise bounce adds a

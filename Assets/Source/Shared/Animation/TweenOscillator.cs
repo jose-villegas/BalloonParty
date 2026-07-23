@@ -78,6 +78,25 @@ namespace BalloonParty.Shared.Animation
 #endif
         }
 
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (Application.isPlaying)
+            {
+                return;
+            }
+
+            if (_preview && !_previewing)
+            {
+                StartPreview();
+            }
+            else if (!_preview && _previewing)
+            {
+                StopPreview();
+            }
+        }
+#endif
+
         public void Play()
         {
             Kill();
@@ -178,23 +197,6 @@ namespace BalloonParty.Shared.Animation
         private Vector3 _previewRotation;
         private bool _previewing;
         private double _previewStartTime;
-
-        private void OnValidate()
-        {
-            if (Application.isPlaying)
-            {
-                return;
-            }
-
-            if (_preview && !_previewing)
-            {
-                StartPreview();
-            }
-            else if (!_preview && _previewing)
-            {
-                StopPreview();
-            }
-        }
 
         private void StartPreview()
         {

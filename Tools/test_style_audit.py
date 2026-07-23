@@ -401,6 +401,70 @@ namespace N
 }
 """, [5])
 
+expect_lines("mutable-param: passed through as an argument to another call is not flagged", "mutable-param", """\
+namespace N
+{
+    internal class C
+    {
+        private void M(List<int> items)
+        {
+            Helper(items);
+        }
+
+        private void Helper(List<int> items)
+        {
+            items.Add(1);
+        }
+    }
+}
+""", [])
+
+expect_lines("mutable-param: null-conditional mutator call is not flagged", "mutable-param", """\
+namespace N
+{
+    internal class C
+    {
+        private void M(List<int> items)
+        {
+            items?.Add(1);
+        }
+    }
+}
+""", [])
+
+
+# ── repeated accessor ──────────────────────────────────────────────────────────
+
+expect_lines("repeated-accessor: 5+ same-prefix args at a call site is flagged", "repeated-accessor", """\
+namespace N
+{
+    internal class C
+    {
+        private void M(Context context)
+        {
+            Helper(context.A, context.B, context.C, context.D, context.E);
+        }
+    }
+}
+""", [7])
+
+expect_lines("repeated-accessor: delegating constructor unpacking is not flagged", "repeated-accessor", """\
+namespace N
+{
+    internal readonly struct S
+    {
+        public S(int a, int b, int c, int d, int e)
+        {
+        }
+
+        public S(Context context)
+            : this(context.A, context.B, context.C, context.D, context.E)
+        {
+        }
+    }
+}
+""", [])
+
 
 # ── cognitive complexity ──────────────────────────────────────────────────────
 

@@ -64,10 +64,7 @@ namespace BalloonParty.Solver
 
             var dynamics = new ShotBoardDynamics(
                 gridConfig, balloonsConfig, targets, otherDynamicActors, staticActors, pulseExecutionDelay);
-            var cruiseConfig = new ShotCruiseConfig(
-                config.CruiseWallBounceThreshold, config.CruiseSpeedPerShield,
-                config.MaxCruiseSpeedMultiplier,
-                config.CruiseTapEaseDuration, config.CruiseTapCurve, config.CruisePiercingTapThreshold);
+            var cruiseConfig = new ShotCruiseConfig(config);
 
             // Un-rotate the spawn point back into the thrower's aim-neutral frame so per-angle
             // simulation can re-rotate it — the launch origin orbits the pivot with the aim.

@@ -185,29 +185,41 @@ namespace BalloonParty.Shared.Extensions
 
             for (var ring = 1; ring <= maxRadius; ring++)
             {
-                // Start corner: center + direction[4] * ring (south-west in cube coords).
-                var q = centerQ + CubeDirections[4].dq * ring;
-                var r = centerR + CubeDirections[4].dr * ring;
-
-                for (var side = 0; side < 6; side++)
+                found = SearchRing(grid, centerQ, centerR, ring, exclude, palette);
+                if (found != null)
                 {
-                    for (var step = 0; step < ring; step++)
+                    return found;
+                }
+            }
+
+            return null;
+        }
+
+        private static string SearchRing(
+            SlotGrid grid, int centerQ, int centerR, int ring, IBalloonModel exclude, IGamePalette palette)
+        {
+            // Start corner: center + direction[4] * ring (south-west in cube coords).
+            var q = centerQ + CubeDirections[4].dq * ring;
+            var r = centerR + CubeDirections[4].dr * ring;
+
+            for (var side = 0; side < 6; side++)
+            {
+                for (var step = 0; step < ring; step++)
+                {
+                    var col = q + (r - (r & 1)) / 2;
+                    var slot = new Vector2Int(col, r);
+
+                    if (grid.InBounds(slot))
                     {
-                        var col = q + (r - (r & 1)) / 2;
-                        var slot = new Vector2Int(col, r);
-
-                        if (grid.InBounds(slot))
+                        var found = TryGetColorAt(grid, slot, exclude, palette);
+                        if (found != null)
                         {
-                            found = TryGetColorAt(grid, slot, exclude, palette);
-                            if (found != null)
-                            {
-                                return found;
-                            }
+                            return found;
                         }
-
-                        q += CubeDirections[side].dq;
-                        r += CubeDirections[side].dr;
                     }
+
+                    q += CubeDirections[side].dq;
+                    r += CubeDirections[side].dr;
                 }
             }
 

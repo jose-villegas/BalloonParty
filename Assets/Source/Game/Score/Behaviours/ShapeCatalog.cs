@@ -607,6 +607,14 @@ namespace BalloonParty.Game.Score.Behaviours
             var twoPlusPhi = 2f + Phi;
 
             var verts = new List<Vector3>(60);
+            AddEvenPermutationVertices(verts, phi2, phi3, twoPhi);
+            AddAxisAlignedVertices(verts, twoPlusPhi, phi2);
+
+            return verts.ToArray();
+        }
+
+        private static void AddEvenPermutationVertices(List<Vector3> verts, float phi2, float phi3, float twoPhi)
+        {
             for (var sx = -1; sx <= 1; sx += 2)
             {
                 for (var sy = -1; sy <= 1; sy += 2)
@@ -621,7 +629,10 @@ namespace BalloonParty.Game.Score.Behaviours
                     }
                 }
             }
+        }
 
+        private static void AddAxisAlignedVertices(List<Vector3> verts, float twoPlusPhi, float phi2)
+        {
             for (var sx = -1; sx <= 1; sx += 2)
             {
                 for (var sz = -1; sz <= 1; sz += 2)
@@ -632,8 +643,6 @@ namespace BalloonParty.Game.Score.Behaviours
                     }
                 }
             }
-
-            return verts.ToArray();
         }
 
         // Builds adjacency for a polyhedron with uniform edge length: edges are all pairs at the
@@ -687,15 +696,18 @@ namespace BalloonParty.Game.Score.Behaviours
                 refDir = (refDir - Vector3.Dot(refDir, normal) * normal).normalized;
                 var binormal = Vector3.Cross(normal, refDir);
                 var localV = v;
-                adj[v].Sort((a, b) =>
-                {
-                    var da = verts[a] - verts[localV];
-                    var db = verts[b] - verts[localV];
-                    var angleA = Mathf.Atan2(Vector3.Dot(da, binormal), Vector3.Dot(da, refDir));
-                    var angleB = Mathf.Atan2(Vector3.Dot(db, binormal), Vector3.Dot(db, refDir));
-                    return angleA.CompareTo(angleB);
-                });
+                adj[v].Sort((a, b) => CompareNeighborAngle(verts, localV, refDir, binormal, a, b));
             }
+        }
+
+        private static int CompareNeighborAngle(
+            Vector3[] verts, int localV, Vector3 refDir, Vector3 binormal, int a, int b)
+        {
+            var da = verts[a] - verts[localV];
+            var db = verts[b] - verts[localV];
+            var angleA = Mathf.Atan2(Vector3.Dot(da, binormal), Vector3.Dot(da, refDir));
+            var angleB = Mathf.Atan2(Vector3.Dot(db, binormal), Vector3.Dot(db, refDir));
+            return angleA.CompareTo(angleB);
         }
 
         // Traces every face of a convex polyhedron via the half-edge successor rule: for directed

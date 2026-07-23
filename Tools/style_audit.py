@@ -1385,6 +1385,11 @@ def check_repeated_accessor(path: Path, lines: list[str], result: AuditResult):
     IGNORE_PREFIXES = {"position", "rect", "c", "color", "col", "row", "v", "p"}
 
     for line_no, text in joined:
+        # A delegating constructor initializer (": this(...)" / ": base(...)") IS the
+        # designated place to unpack one type's fields into another — not a lazy call site.
+        if re.match(r':\s*(this|base)\b', text.strip()):
+            continue
+
         m = call_re.search(text)
         if not m:
             continue
@@ -1586,7 +1591,8 @@ def check_mutable_collection_param(path: Path, lines: list[str], result: AuditRe
         for param_line, param_name, suggestion, mutators in all_params:
             mutated = False
             for mut in mutators:
-                if f'{param_name}{mut}' in body_text:
+                # Allow a null-conditional receiver (param?.Add(...)) to count too.
+                if f'{param_name}{mut}' in body_text or f'{param_name}?{mut}' in body_text:
                     mutated = True
                     break
             # Indexed assignment: param[...] = (but not ==)
@@ -1597,8 +1603,18 @@ def check_mutable_collection_param(path: Path, lines: list[str], result: AuditRe
                 mutated = True
             # Receiver of a non-read-only method/extension call (e.g. list.SwapRemoveAt(...)).
             if not mutated:
-                for call in re.finditer(rf'\b{re.escape(param_name)}\.(\w+)\s*\(', body_text):
+                for call in re.finditer(rf'\b{re.escape(param_name)}\??\.(\w+)\s*\(', body_text):
                     if call.group(1) not in readonly_methods:
+                        mutated = True
+                        break
+            # Passed through as a bare argument/return value to another call in this method —
+            # the callee may mutate it, and we can't see into it here, so don't assume read-only.
+            if not mutated:
+                for m in re.finditer(rf'\b{re.escape(param_name)}\b', body_text):
+                    start, end = m.span()
+                    if start > 0 and body_text[start - 1] == '.':
+                        continue
+                    if body_text[end:end + 3].lstrip()[:1] in (',', ')', ';'):
                         mutated = True
                         break
             # IReadOnlyCollection lacks .Contains() — skip ICollection params that use it.
