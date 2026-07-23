@@ -126,15 +126,17 @@ While the game reads ~80 FPS:
 ```bash
 adb shell dumpsys display | grep -iE "mActiveModeId|refreshRate|fps|FrameRateOverride"
 adb shell dumpsys SurfaceFlinger | grep -iE "refresh|present|mode|Scheduler|frame rate"
-adb shell dumpsys gfxinfo <package> reset        # zero, then play ~30 s
-adb shell dumpsys gfxinfo <package> | grep -iE "Janky|percentile|Number Missed Vsync|Total frames"
 adb logcat -d | grep "\[FrameRateSettings\]"
+# Frame timing (CORRECTED 2026-07-23: dumpsys gfxinfo tracks HWUI only — it reports
+# 0 frames for Unity's SurfaceView. Use SurfaceFlinger frame latency instead):
+adb shell dumpsys SurfaceFlinger --list | grep -i balloon   # get the BLAST layer name
+adb shell "dumpsys SurfaceFlinger --latency '<layer name>'"
+# line 1 = vsync period (ns); rows = desiredPresent/actualPresent/frameReady triples for
+# the last ~64 frames. Present-to-present deltas of column 2 = delivered frame cadence.
 ```
 Read: `mActiveModeId` → is the panel in a 120 Hz mode? SurfaceFlinger Scheduler → the
-app's **arbitrated** frame rate (the unverified ARR path on Pixel 9). `gfxinfo` gives
-P50/P90/P95/P99 frame times + missed-vsync count directly — this covers the FPSCounter
-percentile gap with zero code. Cross-check the `[FrameRateSettings]` request/settle lines
-(`FrameRateSettings.cs:79,96,105,127`).
+app's **arbitrated** frame rate (the unverified ARR path on Pixel 9). Cross-check the
+`[FrameRateSettings]` request/settle lines (`FrameRateSettings.cs:79,96,105,127`).
 
 **Signature**: targetFrameRate logs 120, frame time < 8.3 ms, but arbitrated rate ~80 with
 high missed-vsync → **pacing/ARR artifact**; route to the FrameRateSettings vote path /
@@ -178,6 +180,27 @@ adb shell dumpsys thermalservice | grep -iE "Temperature|status"
 ```
 Play from cold; log FPS at 0/2/5/10/15 min. 120→80 correlating with thermal status →
 **A4** (thermal-driven tiers). 80 from a cold first frame → not thermal, return to §2/§4.
+
+### Findings — first pass, 2026-07-23 (cool device, release build, live gameplay)
+
+- Panel in the 120 Hz mode (`mActiveModeId=3`, 960×2142@120); SurfaceFlinger arbitrated
+  the app to **renderRate = 120 Hz** — no ARR echo-loop in this session.
+- **The Pixel 9 panel natively supports 80.0 Hz** (`supportedRefreshRates` includes
+  80.000015). New leading hypothesis for "occasions on the 80fps": Android's display-mode
+  director downshifting the render rate to the 80 Hz mode (thermal/power policy), not the
+  game plateauing at a GPU-bound 80. **Re-run the §1 dumpsys sequence the moment the 80
+  state reproduces** — if `renderRate` reads 80, it's arbitration, and the fix is the
+  vote path / A4 ladder, not shader work.
+- Frame delivery on a cool device: locked ~120 (62/63 frames = exactly 1 vsync), with
+  occasional single 2-vsync frames (16.7 ms) — the burst-spike tail for U1/U2/F2 to eat.
+- Thermal status 0 at session start; the 15-min heat-soak measurement is still pending.
+- **Incidental**: `[SlotGrid] ComputePath` warnings spam logcat with full stack traces
+  during gameplay bursts (3 in 2 ms observed) on the release build — `Debug.LogWarning`
+  is not stripped and Android stack capture is expensive. Gate or demote it.
+- Still pending: backend confirmation from a fresh launch's `GfxDevice` log line (buffer
+  was cleared), heat-soak repro, and the §2 profiler classification (needs a
+  **Development Build + Autoconnect Profiler** — not yet installed; current device build
+  is release, which is fine for §1/§5 and more representative for delivery cadence).
 
 ### Decision tree
 
