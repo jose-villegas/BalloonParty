@@ -48,6 +48,30 @@ namespace BalloonParty.Tests.Slots
         }
 
         [Test]
+        public void OptimalBalanceMove_GridChangesBetweenCalls_MemoReflectsMutation()
+        {
+            PlaceBalloon(1, 2);
+            var removable = new Vector2Int(2, 0);
+            _grid.Place(new BalloonModel(), null, removable);
+
+            // (2,0) sits in the support cone of straight-up (1,1) only, so it wins over the
+            // shift tie-break (mirrors OptimalBalanceMove_HigherSupport_BeatsTheShiftTieBreak).
+            // This first call also populates MoveWeightEvaluator's support-cone memo.
+            Assert.AreEqual(new Vector2Int(1, 1), _evaluator.OptimalBalanceMove(1, 2));
+
+            _grid.Remove(removable);
+
+            // The memo now persists across calls instead of clearing every time (gated on
+            // SlotGrid.MutationVersion), so this second call only stays correct if Remove bumps
+            // the version and forces a rebuild. Before that persistence landed the memo was
+            // cleared unconditionally on every call, so this scenario alone wouldn't have caught
+            // a missing invalidation — it now guards the seam against a future regression (e.g.
+            // a mutation path added later that forgets to bump MutationVersion).
+            // (2,0) is empty again: (1,1) and (0,1) tie on weight, so the shift tie-break wins.
+            Assert.AreEqual(new Vector2Int(0, 1), _evaluator.OptimalBalanceMove(1, 2));
+        }
+
+        [Test]
         public void OptimalBalanceMove_WallBias_PrefersLineExtension()
         {
             // Tough balloons at (0,2) and (2,2) form a horizontal line; a third tough at (1,2) should

@@ -256,6 +256,24 @@ namespace BalloonParty.Tests.Slots
         }
 
         [Test]
+        public void MutationVersion_IncrementsOnPlaceAndRemove()
+        {
+            // MoveWeightEvaluator's memo persists across calls and only rebuilds when this
+            // counter changes; it must bump on every occupancy write or the memo goes stale.
+            var index = new Vector2Int(1, 1);
+            var before = _grid.MutationVersion;
+
+            _grid.Place(CreateModel(), null, index);
+            var afterPlace = _grid.MutationVersion;
+
+            _grid.Remove(index);
+            var afterRemove = _grid.MutationVersion;
+
+            Assert.Greater(afterPlace, before);
+            Assert.Greater(afterRemove, afterPlace);
+        }
+
+        [Test]
         public void IsKind_EmptySlot_ReturnsFalse()
         {
             Assert.IsFalse(_grid.IsKind(0, 0, SlotActorKind.Dynamic));

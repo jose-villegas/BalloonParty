@@ -142,6 +142,38 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void Plan_LaterActorChoiceDependsOnEarlierMove_LandsOnWeightCorrectSlot()
+        {
+            BuildGrid(3, 3);
+
+            // actorA (higher priority, so it always moves first) is the only occupant below row 0
+            // and its sole candidate is (2,0). actorB's two up-candidates from (1,2) — straight-up
+            // (1,1) and shifted (0,1) — tie at weight 0 before actorA moves, so the shift tie-break
+            // would pick (0,1). Once actorA lands on (2,0), (1,1)'s support-cone weight rises to 1
+            // (it recurses through (2,0)), so the weight-correct pick flips to (1,1). This only
+            // happens if the evaluator re-reads the grid after actorA's move within the same Plan
+            // call — a stale memo would still see the tie and land actorB on (0,1).
+            var actorA = new BalloonModel(new BalloonModelConfig(hitsToPop: 1, balancePriority: 1));
+            var actorB = new BalloonModel();
+            _grid.Place(actorA, null, new Vector2Int(2, 1));
+            _grid.Place(actorB, null, new Vector2Int(1, 2));
+
+            _planner.Plan(_turnSteps, _moves);
+
+            // actorB keeps cascading (1,1) is still unbalanced toward (2,0), now blocked by actorA)
+            // until it settles at (1,0); the weight-correct first hop is what this test guards.
+            Assert.AreEqual(3, _moves.Count);
+            Assert.AreSame(actorA, _moves[0].Actor);
+            Assert.AreEqual(new Vector2Int(2, 0), _moves[0].To);
+            Assert.AreSame(actorB, _moves[1].Actor);
+            Assert.AreEqual(new Vector2Int(1, 1), _moves[1].To);
+            Assert.AreSame(actorB, _moves[2].Actor);
+            Assert.AreEqual(new Vector2Int(1, 0), _moves[2].To);
+            Assert.AreSame(actorA, _grid.At(new Vector2Int(2, 0)));
+            Assert.AreSame(actorB, _grid.At(new Vector2Int(1, 0)));
+        }
+
+        [Test]
         public void Plan_UncappedOmnidirectionalActor_TerminatesInsteadOfPingPonging()
         {
             // The fallback-level crash: an uncapped omnidirectional actor (the Unbreakable profile)
