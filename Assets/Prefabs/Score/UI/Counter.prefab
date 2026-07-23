@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 685736587317643456}
   - component: {fileID: 8437867317669011009}
   - component: {fileID: 2456631218318942136}
+  - component: {fileID: 3871366778039598005}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -107,10 +108,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 16
+  m_fontSize: 16.65
   m_fontSizeBase: 16
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 1
   m_fontSizeMax: 40
   m_fontStyle: 0
@@ -165,13 +166,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Shared.Animation.RollingTextAnimator
   _rollDuration: 0.075
-  _staggerDelay: 0.2
-  _direction: 0
-  _ease: 9
-  _smoothTime: 0.8
+  _smoothTime: 0.2
   _digitRollScale: 2
   _rollHeight: 0.2
   _useThousandsSeparator: 0
+  _monospaceWidth: 10.7
+--- !u!114 &3871366778039598005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1750963533283300128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34e1ef40f0394a7c9e0012a9f7b2aa5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.RollingCounterDisplay
 --- !u!1 &4755484381710767115
 GameObject:
   m_ObjectHideFlags: 0

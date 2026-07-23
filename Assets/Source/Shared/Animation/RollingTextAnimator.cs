@@ -1,35 +1,23 @@
+using System.Globalization;
 using BalloonParty.Shared.Extensions;
-using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
 namespace BalloonParty.Shared.Animation
 {
-    internal enum RollDirection
-    {
-        /// <summary>New characters enter from above and slide downward into place.</summary>
-        Down,
-        /// <summary>New characters enter from below and slide upward into place.</summary>
-        Up
-    }
-
     /// <summary>
-    ///     Animates character changes on a <see cref="TMP_Text"/> with a rolling flipboard
-    ///     effect. <see cref="SetThousands"/> gives an odometer roll where each digit spins
-    ///     independently (ones fastest, higher digits slower). <see cref="SetText(string)"/>
-    ///     and <see cref="SetText(char[],int)"/> apply a single-step per-character roll.
+    ///     Animates numeric changes on a <see cref="TMP_Text"/> with a rolling odometer effect.
+    ///     Each digit spins independently (ones fastest, higher digits slower). The display smoothly
+    ///     chases the target via SmoothDamp. Digits roll up when the value increases, down when it
+    ///     decreases.
     /// </summary>
     [RequireComponent(typeof(TMP_Text))]
     internal class RollingTextAnimator : MonoBehaviour
     {
-        private static readonly char[] FormattingBuffer = new char[32];
         private static readonly int[] Pow10 =
             { 1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000 };
 
         [SerializeField] private float _rollDuration = 0.15f;
-        [SerializeField] private float _staggerDelay = 0.03f;
-        [SerializeField] private RollDirection _direction = RollDirection.Down;
-        [SerializeField] private Ease _ease = Ease.OutCubic;
         [Tooltip("SmoothDamp time — how quickly the display chases the target value.")]
         [SerializeField] private float _smoothTime = 0.4f;
         [Tooltip("Per-digit roll speed multiplier per digit position (ones=1x, tens=2x, hundreds=4x...).")]
@@ -41,12 +29,9 @@ namespace BalloonParty.Shared.Animation
         [Tooltip("If > 0, wraps digits in <mspace=X> for uniform character widths (prevents jumpiness with proportional fonts).")]
         [SerializeField] private float _monospaceWidth;
 
+        private readonly char[] _formattingBuffer = new char[32];
+
         private TMP_Text _text;
-        private Sequence _sequence;
-        private char[] _prevChars;
-        private int _prevLength;
-        private float[] _charProgress;
-        private bool[] _charAnimating;
         private TMP_MeshInfo[] _cachedMeshInfo;
         private float[] _digitRollProgress;
         private float _displayedFloat;
@@ -56,7 +41,6 @@ namespace BalloonParty.Shared.Animation
         private int _odometerTarget;
         private int _odometerDigitCount;
         private bool _odometerActive;
-        private bool _hasDisplayedText;
         private bool _hasValue;
         private int _mspaceTagLength;
 
@@ -94,7 +78,7 @@ namespace BalloonParty.Shared.Animation
                 _displayedValue = currentInt;
 
                 int len = FormatValue(currentInt);
-                _text.SetCharArray(FormattingBuffer, 0, len);
+                _text.text = new string(_formattingBuffer, 0, len);
                 _text.ForceMeshUpdate();
                 _cachedMeshInfo = _text.textInfo.CopyMeshInfoVertexData();
             }
@@ -119,12 +103,16 @@ namespace BalloonParty.Shared.Animation
         /// </summary>
         public void SetThousands(int value)
         {
-            EnsureText();
+            if (_text == null)
+            {
+                _text = GetComponent<TMP_Text>();
+            }
 
             if (!_hasValue)
             {
                 int len = FormatValue(value);
-                ApplyTextDirect(FormattingBuffer, len);
+                _text.text = new string(_formattingBuffer, 0, len);
+                _text.ForceMeshUpdate();
                 _displayedValue = value;
                 _displayedFloat = value;
                 _odometerTarget = value;
@@ -150,40 +138,12 @@ namespace BalloonParty.Shared.Animation
                 _displayedFloat = _displayedValue;
                 _previousDisplayedInt = _displayedValue;
                 EnsureDigitCapacity(digitCount);
-                KillSequence();
             }
             else if (digitCount > _odometerDigitCount)
             {
                 EnsureDigitCapacity(digitCount);
                 _odometerDigitCount = digitCount;
             }
-        }
-
-        /// <summary>Sets text from a char array (zero-alloc) and animates changed characters.</summary>
-        public void SetText(char[] chars, int length)
-        {
-            EnsureText();
-            ApplyTextAnimated(chars, length);
-        }
-
-        /// <summary>Sets text from a string and animates changed characters.</summary>
-        public void SetText(string newText)
-        {
-            EnsureText();
-
-            if (!_hasDisplayedText)
-            {
-                _text.text = newText;
-                _text.ForceMeshUpdate();
-                SnapshotCurrent();
-                _hasDisplayedText = true;
-                return;
-            }
-
-            SnapshotCurrent();
-            _text.text = newText;
-            _text.ForceMeshUpdate();
-            AnimateChanges();
         }
 
         private void AdvanceDigitRolls()
@@ -296,185 +256,6 @@ namespace BalloonParty.Shared.Animation
             _text.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices | TMP_VertexDataUpdateFlags.Colors32);
         }
 
-        private void ApplyTextDirect(char[] chars, int length)
-        {
-            _text.SetCharArray(chars, 0, length);
-            _text.ForceMeshUpdate();
-            SnapshotCurrent();
-            _hasDisplayedText = true;
-        }
-
-        private void ApplyTextAnimated(char[] chars, int length)
-        {
-            if (!_hasDisplayedText)
-            {
-                ApplyTextDirect(chars, length);
-                return;
-            }
-
-            SnapshotCurrent();
-            _text.SetCharArray(chars, 0, length);
-            _text.ForceMeshUpdate();
-            AnimateChanges();
-        }
-
-        private void EnsureText()
-        {
-            if (_text == null)
-            {
-                _text = GetComponent<TMP_Text>();
-            }
-        }
-
-        private void SnapshotCurrent()
-        {
-            var textInfo = _text.textInfo;
-            int count = textInfo.characterCount;
-
-            if (_prevChars == null || _prevChars.Length < count)
-            {
-                _prevChars = new char[Mathf.Max(count, 16)];
-            }
-
-            for (int i = 0; i < count; i++)
-            {
-                _prevChars[i] = textInfo.characterInfo[i].character;
-            }
-
-            _prevLength = count;
-        }
-
-        private void AnimateChanges()
-        {
-            var textInfo = _text.textInfo;
-            int charCount = textInfo.characterCount;
-
-            _cachedMeshInfo = textInfo.CopyMeshInfoVertexData();
-
-            if (_charProgress == null || _charProgress.Length < charCount)
-            {
-                _charProgress = new float[Mathf.Max(charCount, 16)];
-                _charAnimating = new bool[Mathf.Max(charCount, 16)];
-            }
-
-            for (int i = 0; i < charCount; i++)
-            {
-                _charProgress[i] = 1f;
-                _charAnimating[i] = false;
-            }
-
-            KillSequence();
-            _sequence = DOTween.Sequence();
-            int staggerIdx = 0;
-            bool anyChanged = false;
-
-            for (int i = charCount - 1; i >= 0; i--)
-            {
-                var charInfo = textInfo.characterInfo[i];
-                if (!charInfo.isVisible)
-                {
-                    continue;
-                }
-
-                bool changed = i >= _prevLength || _prevChars[i] != charInfo.character;
-                if (!changed)
-                {
-                    continue;
-                }
-
-                _charProgress[i] = 0f;
-                _charAnimating[i] = true;
-                anyChanged = true;
-
-                int captured = i;
-                float delay = staggerIdx * _staggerDelay;
-                _sequence.Insert(delay,
-                    DOVirtual.Float(0f, 1f, _rollDuration, p => _charProgress[captured] = p)
-                        .SetEase(_ease));
-                staggerIdx++;
-            }
-
-            if (!anyChanged)
-            {
-                _sequence.Kill();
-                _sequence = null;
-                SnapshotCurrent();
-                return;
-            }
-
-            ApplyVertexModifications();
-
-            _sequence.OnUpdate(ApplyVertexModifications);
-            _sequence.OnComplete(OnAnimationComplete);
-            _sequence.SetUpdate(true);
-            _sequence.SetLink(gameObject);
-        }
-
-        private void ApplyVertexModifications()
-        {
-            if (_cachedMeshInfo == null)
-            {
-                return;
-            }
-
-            var textInfo = _text.textInfo;
-            float lineHeight = textInfo.lineCount > 0
-                ? textInfo.lineInfo[0].lineHeight
-                : _text.fontSize;
-            float dirSign = _direction == RollDirection.Down ? 1f : -1f;
-
-            for (int i = 0; i < textInfo.characterCount; i++)
-            {
-                if (!_charAnimating[i])
-                {
-                    continue;
-                }
-
-                var charInfo = textInfo.characterInfo[i];
-                if (!charInfo.isVisible)
-                {
-                    continue;
-                }
-
-                int matIdx = charInfo.materialReferenceIndex;
-                int vertIdx = charInfo.vertexIndex;
-                float progress = Mathf.Clamp01(_charProgress[i]);
-                float yOffset = lineHeight * _rollHeight * (1f - progress) * dirSign;
-                byte alpha = (byte)(progress * 255f);
-
-                var dstVerts = textInfo.meshInfo[matIdx].vertices;
-                var srcVerts = _cachedMeshInfo[matIdx].vertices;
-                var colors = textInfo.meshInfo[matIdx].colors32;
-
-                for (int v = 0; v < 4; v++)
-                {
-                    dstVerts[vertIdx + v] = srcVerts[vertIdx + v] + new Vector3(0f, yOffset, 0f);
-                    var c = colors[vertIdx + v];
-                    c.a = alpha;
-                    colors[vertIdx + v] = c;
-                }
-            }
-
-            _text.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices | TMP_VertexDataUpdateFlags.Colors32);
-        }
-
-        private void OnAnimationComplete()
-        {
-            _cachedMeshInfo = null;
-            _sequence = null;
-
-            if (_charAnimating != null)
-            {
-                for (int i = 0; i < _charAnimating.Length; i++)
-                {
-                    _charAnimating[i] = false;
-                    _charProgress[i] = 1f;
-                }
-            }
-
-            SnapshotCurrent();
-        }
-
         private void OnOdometerComplete()
         {
             _odometerActive = false;
@@ -483,16 +264,13 @@ namespace BalloonParty.Shared.Animation
             _displayedFloat = _odometerTarget;
 
             int len = FormatValue(_odometerTarget);
-            _text.SetCharArray(FormattingBuffer, 0, len);
+            _text.text = new string(_formattingBuffer, 0, len);
             _text.ForceMeshUpdate();
             _cachedMeshInfo = null;
-
-            SnapshotCurrent();
         }
 
         private void FinishImmediately()
         {
-            KillSequence();
             _odometerActive = false;
             _smoothVelocity = 0f;
 
@@ -504,7 +282,7 @@ namespace BalloonParty.Shared.Animation
                 if (_text != null)
                 {
                     int len = FormatValue(_odometerTarget);
-                    _text.SetCharArray(FormattingBuffer, 0, len);
+                    _text.text = new string(_formattingBuffer, 0, len);
                     _text.ForceMeshUpdate();
                 }
             }
@@ -512,18 +290,8 @@ namespace BalloonParty.Shared.Animation
             _cachedMeshInfo = null;
         }
 
-        private void KillSequence()
-        {
-            if (_sequence != null && _sequence.IsActive())
-            {
-                _sequence.Kill();
-            }
-
-            _sequence = null;
-        }
-
         /// <summary>
-        ///     Writes the <c>&lt;mspace=X&gt;</c> tag into <see cref="FormattingBuffer"/> once so
+        ///     Writes the <c>&lt;mspace=X&gt;</c> tag into <see cref="_formattingBuffer"/> once so
         ///     subsequent <see cref="FormatValue"/> calls can format the number after the prefix.
         /// </summary>
         private int BuildMspacePrefix()
@@ -533,10 +301,10 @@ namespace BalloonParty.Shared.Animation
                 return 0;
             }
 
-            var tag = $"<mspace={_monospaceWidth:0.#}>";
+            var tag = string.Format(CultureInfo.InvariantCulture, "<mspace={0:0.###}>", _monospaceWidth);
             for (int i = 0; i < tag.Length; i++)
             {
-                FormattingBuffer[i] = tag[i];
+                _formattingBuffer[i] = tag[i];
             }
 
             return tag.Length;
@@ -544,7 +312,7 @@ namespace BalloonParty.Shared.Animation
 
         private int FormatValue(int value)
         {
-            int numLen = TmpTextExtensions.FormatThousands(value, FormattingBuffer, _useThousandsSeparator, _mspaceTagLength);
+            int numLen = TmpTextExtensions.FormatThousands(value, _formattingBuffer, _useThousandsSeparator, _mspaceTagLength);
             return _mspaceTagLength + numLen;
         }
     }

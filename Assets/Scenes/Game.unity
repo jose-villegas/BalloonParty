@@ -779,6 +779,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1134275662493062683, guid: 66f9708a0b9b044198e0f57d389d660f,
+        type: 3}
+      propertyPath: m_text
+      value: 99
+      objectReference: {fileID: 0}
     - target: {fileID: 1319504623350562942, guid: 66f9708a0b9b044198e0f57d389d660f,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1233,26 +1238,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0.29542542
-      objectReference: {fileID: 0}
-    - target: {fileID: 7199526715336287466, guid: 66f9708a0b9b044198e0f57d389d660f,
-        type: 3}
-      propertyPath: _rollHeight
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7199526715336287466, guid: 66f9708a0b9b044198e0f57d389d660f,
-        type: 3}
-      propertyPath: _smoothTime
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 7199526715336287466, guid: 66f9708a0b9b044198e0f57d389d660f,
-        type: 3}
-      propertyPath: _rollDuration
-      value: 0.075
-      objectReference: {fileID: 0}
-    - target: {fileID: 7199526715336287466, guid: 66f9708a0b9b044198e0f57d389d660f,
-        type: 3}
-      propertyPath: _staggerDelay
-      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 7428696338354854984, guid: 66f9708a0b9b044198e0f57d389d660f,
         type: 3}

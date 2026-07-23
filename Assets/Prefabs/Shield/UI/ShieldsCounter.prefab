@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 8838311259376744496}
   - component: {fileID: 7301219470222850554}
   - component: {fileID: 5338344730468363925}
+  - component: {fileID: 7840698020288885369}
+  - component: {fileID: 4139728267622027685}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -151,6 +153,36 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7840698020288885369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724061895529414117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f7e21c5b8d4a9e8012c6d4f38b72e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Shared.Animation.RollingTextAnimator
+  _rollDuration: 0.25
+  _smoothTime: 0.4
+  _digitRollScale: 2
+  _rollHeight: 0.2
+  _useThousandsSeparator: 0
+  _monospaceWidth: 6.2
+--- !u!114 &4139728267622027685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724061895529414117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34e1ef40f0394a7c9e0012a9f7b2aa5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.RollingCounterDisplay
 --- !u!1 &2886338620979713248
 GameObject:
   m_ObjectHideFlags: 0

@@ -21,11 +21,11 @@ namespace BalloonParty.Shared.Extensions
             label.SetCharArray(CharBuffer, 0, length);
         }
 
-        internal static int FormatThousands(int value, char[] buffer, bool useSeparator = true)
+        internal static int FormatThousands(int value, char[] buffer, bool useSeparator = true, int startIndex = 0)
         {
             if (value == 0)
             {
-                buffer[0] = '0';
+                buffer[startIndex] = '0';
                 return 1;
             }
 
@@ -51,7 +51,7 @@ namespace BalloonParty.Shared.Extensions
                 digitCount++;
             }
 
-            var bufLen = 0;
+            var bufLen = startIndex;
             if (negative)
             {
                 buffer[bufLen++] = '-';
@@ -62,7 +62,7 @@ namespace BalloonParty.Shared.Extensions
                 buffer[bufLen++] = DigitTemp[i];
             }
 
-            return bufLen;
+            return bufLen - startIndex;
         }
     }
 }
