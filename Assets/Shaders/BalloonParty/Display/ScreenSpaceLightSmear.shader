@@ -18,7 +18,7 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
     //     collapses to the old single-direction march, bit-identical to the pre-RSM shader.
     //   The march direction is PER-FRAGMENT from the light field (SceneLight.cginc), so
     //   local lights bend all four directions around them.
-    // Pass 1 — 3x3 box soften to remove smear streaks.
+    // Pass 1 — 4-tap bilinear tent soften to remove smear streaks.
     Properties
     {
         _MainTex ("Source", 2D) = "black" {}
@@ -51,21 +51,22 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
 
             sampler2D _MainTex;
             float4 _MainTex_TexelSize;
-            float  _TapStepScale;
-            float  _TapAspect;
-            float  _TapDecay;
-            float  _TapStart;
+            half   _TapStepScale;
+            half   _TapAspect;
+            half   _TapDecay;
+            half   _TapStart;
+            // _MipSpread/_ShadowMipSpread stay float — they feed log2/lod.
             float  _MipSpread;
             float  _ShadowMipSpread;
-            float  _SecondaryWeight;
-            float  _CloudGateStrength;
+            half   _SecondaryWeight;
+            half   _CloudGateStrength;
 
             fixed4 frag(v2f_img IN) : SV_Target
             {
                 // Coverage at this pixel — casters have ~1, open ground/sky ~0.
-                float ownCoverage = tex2Dlod(_MainTex, float4(IN.uv, 0, 0)).a;
+                half ownCoverage = tex2Dlod(_MainTex, float4(IN.uv, 0, 0)).a;
 
-                // Per-fragment march direction from the light field.
+                // Per-fragment march direction from the light field. UV-space, so float.
                 float2 worldPos = _SceneLightFieldBoundsMin.xy + IN.uv * _SceneLightFieldBoundsSize.xy;
                 float2 downLight = -SceneLightDirectionAt(worldPos);
                 float2 stepBase = float2(downLight.x / _TapAspect, downLight.y) * _TapStepScale;
@@ -84,16 +85,17 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                 [branch]
                 if (ownCoverage < 0.999)
                 {
-                    float shadowAcc = 0;
-                    float shadowWeightSum = 0;
+                    half shadowAcc = 0;
+                    half shadowWeightSum = 0;
 
                     [unroll]
                     for (int s = 0; s < TAP_COUNT; s++)
                     {
+                        // offset stays float: it scales a UV step below.
                         float offset = _TapStart + s;
-                        float w = pow(_TapDecay, s);
+                        half w = pow(_TapDecay, s);
                         float shadowMip = min(_ShadowMipSpread * log2(1.0 + (float)s), maxMip);
-                        float4 occluder = tex2Dlod(_MainTex, float4(IN.uv - stepBase * offset, 0, shadowMip));
+                        half4 occluder = tex2Dlod(_MainTex, float4(IN.uv - stepBase * offset, 0, shadowMip));
                         shadowAcc += occluder.a * w;
                         shadowWeightSum += w;
                     }
@@ -107,30 +109,31 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                 }
 
                 // --- Bounce: BOUNCE_DIR_COUNT directions (primary + secondary at 90° spacing) ---
-                float2 dirs[4] = {
+                half2 dirs[4] = {
                     stepBase,                                // 0°   (primary, down-light)
                     float2(-stepBase.y, stepBase.x),         // +90°
                     -stepBase,                               // 180° (up-light)
                     float2(stepBase.y, -stepBase.x)          // -90°
                 };
-                float dirWeights[4] = { 1.0, _SecondaryWeight, _SecondaryWeight, _SecondaryWeight };
+                half dirWeights[4] = { 1.0, _SecondaryWeight, _SecondaryWeight, _SecondaryWeight };
 
-                float3 bounceAcc = 0;
-                float  bounceWeightSum = 0;
+                half3 bounceAcc = 0;
+                half  bounceWeightSum = 0;
 
                 [unroll]
                 for (int d = 0; d < BOUNCE_DIR_COUNT; d++)
                 {
-                    float dw = dirWeights[d];
+                    half dw = dirWeights[d];
                     if (dw < 0.001) continue;
 
                     [unroll]
                     for (int t = 0; t < TAP_COUNT; t++)
                     {
+                        // offset stays float: it scales a UV step below.
                         float offset = _TapStart + t;
-                        float w = pow(_TapDecay, t) * dw;
+                        half w = pow(_TapDecay, t) * dw;
                         float mip = min(_MipSpread * log2(1.0 + (float)t), maxMip);
-                        float4 lit = tex2Dlod(_MainTex, float4(IN.uv + dirs[d] * offset, 0, mip));
+                        half4 lit = tex2Dlod(_MainTex, float4(IN.uv + (float2)dirs[d] * offset, 0, mip));
                         bounceAcc += lit.rgb * w;
                         bounceWeightSum += w;
                     }
@@ -153,20 +156,15 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
 
             fixed4 frag(v2f_img IN) : SV_Target
             {
+                // 4 bilinear taps at ±0.5-texel diagonals = a [1 2 1]⊗[1 2 1]/16 tent via the RT's
+                // hardware bilinear filter — deliberately softer than the old flat 3x3 box, not identical.
                 float2 texel = _MainTex_TexelSize.xy;
-                float4 acc = 0;
-
-                [unroll]
-                for (int y = -1; y <= 1; y++)
-                {
-                    [unroll]
-                    for (int x = -1; x <= 1; x++)
-                    {
-                        acc += tex2D(_MainTex, IN.uv + texel * float2(x, y));
-                    }
-                }
-
-                return acc / 9.0;
+                half4 acc = 0;
+                acc += tex2D(_MainTex, IN.uv + texel * float2( 0.5,  0.5));
+                acc += tex2D(_MainTex, IN.uv + texel * float2(-0.5,  0.5));
+                acc += tex2D(_MainTex, IN.uv + texel * float2( 0.5, -0.5));
+                acc += tex2D(_MainTex, IN.uv + texel * float2(-0.5, -0.5));
+                return acc * 0.25;
             }
             ENDCG
         }
