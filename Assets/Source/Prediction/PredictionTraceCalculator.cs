@@ -6,10 +6,10 @@ namespace BalloonParty.Prediction
 {
     internal class PredictionTraceCalculator
     {
-        private readonly IGameConfiguration _config;
+        private readonly IPredictionTraceConfig _config;
         private readonly IProjectileFlightConfig _flightConfig;
 
-        public PredictionTraceCalculator(IGameConfiguration config, IProjectileFlightConfig flightConfig)
+        public PredictionTraceCalculator(IPredictionTraceConfig config, IProjectileFlightConfig flightConfig)
         {
             _config = config;
             _flightConfig = flightConfig;

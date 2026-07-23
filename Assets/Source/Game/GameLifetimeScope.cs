@@ -25,6 +25,8 @@ namespace BalloonParty.Game
     {
         [SerializeField] private GameConfiguration _gameConfiguration;
         [SerializeField] private ProjectileFlightConfig _projectileFlightConfig;
+        [SerializeField] private SlotGridConfig _slotGridConfig;
+        [SerializeField] private PredictionTraceConfig _predictionTraceConfig;
         [SerializeField] private GameDisplayConfiguration _displayConfiguration;
         [SerializeField] private ItemConfiguration _itemConfiguration;
         [SerializeField] private GamePalette _gamePalette;
@@ -76,8 +78,8 @@ namespace BalloonParty.Game
         {
             builder.RegisterInstance<IGameConfiguration>(_gameConfiguration);
             builder.RegisterInstance<IProjectileFlightConfig>(ResolveProjectileFlightConfig());
-            builder.RegisterInstance<ISlotGridConfig>(_gameConfiguration);
-            builder.RegisterInstance<IPredictionTraceConfig>(_gameConfiguration);
+            builder.RegisterInstance<ISlotGridConfig>(ResolveSlotGridConfig());
+            builder.RegisterInstance<IPredictionTraceConfig>(ResolvePredictionTraceConfig());
             builder.RegisterInstance<IScoreTrailConfig>(_gameConfiguration);
             builder.RegisterInstance<IGameDisplayConfiguration>(_displayConfiguration);
             builder.RegisterInstance<IItemConfiguration>(_itemConfiguration);
@@ -128,6 +130,34 @@ namespace BalloonParty.Game
             }
 
             Log.Warn("GameLifetimeScope", "ProjectileFlightConfig not wired — falling back to GameConfiguration.");
+            return _gameConfiguration;
+        }
+
+        // Transitional (config-split P2): an unwired field falls back to the umbrella GameConfiguration,
+        // which still implements this interface — so the game keeps running until the dedicated asset
+        // is wired onto this prefab.
+        private ISlotGridConfig ResolveSlotGridConfig()
+        {
+            if (_slotGridConfig != null)
+            {
+                return _slotGridConfig;
+            }
+
+            Log.Warn("GameLifetimeScope", "SlotGridConfig not wired — falling back to GameConfiguration.");
+            return _gameConfiguration;
+        }
+
+        // Transitional (config-split P2): an unwired field falls back to the umbrella GameConfiguration,
+        // which still implements this interface — so the game keeps running until the dedicated asset
+        // is wired onto this prefab.
+        private IPredictionTraceConfig ResolvePredictionTraceConfig()
+        {
+            if (_predictionTraceConfig != null)
+            {
+                return _predictionTraceConfig;
+            }
+
+            Log.Warn("GameLifetimeScope", "PredictionTraceConfig not wired — falling back to GameConfiguration.");
             return _gameConfiguration;
         }
     }

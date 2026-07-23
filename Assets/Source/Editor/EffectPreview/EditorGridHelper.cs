@@ -15,7 +15,7 @@ namespace BalloonParty.Editor.EffectPreview
         /// </summary>
         internal static List<Vector3> RandomSlotPositions(
             int count,
-            IGameConfiguration config,
+            ISlotGridConfig config,
             Vector3 origin)
         {
             var gridSize = config.SlotsSize;

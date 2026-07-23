@@ -11,6 +11,6 @@ namespace BalloonParty.Editor.EffectPreview
     {
         public Color Tint;
         public ItemSettings Settings;
-        public GameConfiguration GameConfig;
+        public SlotGridConfig GameConfig;
     }
 }

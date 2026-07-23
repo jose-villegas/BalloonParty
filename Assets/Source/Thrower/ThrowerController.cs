@@ -20,7 +20,7 @@ namespace BalloonParty.Thrower
 {
     internal class ThrowerController : IStartable, ITickable, IDisposable
     {
-        private readonly IGameConfiguration _config;
+        private readonly IPredictionTraceConfig _traceConfig;
         private readonly IProjectileFlightConfig _flightConfig;
         private readonly IPublisher<ProjectileLoadedMessage> _loadedPublisher;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
@@ -54,7 +54,7 @@ namespace BalloonParty.Thrower
         [Inject]
         internal ThrowerController(
             ThrowerView view,
-            IGameConfiguration config,
+            IPredictionTraceConfig traceConfig,
             IProjectileFlightConfig flightConfig,
             PoolManager poolManager,
             IObjectResolver resolver,
@@ -71,7 +71,7 @@ namespace BalloonParty.Thrower
             PredictionTraceProvider traceProvider)
         {
             _view = view;
-            _config = config;
+            _traceConfig = traceConfig;
             _flightConfig = flightConfig;
             _poolManager = poolManager;
             _resolver = resolver;
@@ -91,8 +91,8 @@ namespace BalloonParty.Thrower
 
         public void Start()
         {
-            _traceCalculator = new PredictionTraceCalculator(_config, _flightConfig);
-            _view.SetTraceColor(_config.PredictionTraceColor);
+            _traceCalculator = new PredictionTraceCalculator(_traceConfig, _flightConfig);
+            _view.SetTraceColor(_traceConfig.PredictionTraceColor);
 
             _poolManager.Register(_projectilePoolKey,
                 new ProjectilePoolChannel(_resolver, _settings.ProjectilePrefab));

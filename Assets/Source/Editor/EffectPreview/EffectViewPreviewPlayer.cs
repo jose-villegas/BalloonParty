@@ -16,7 +16,7 @@ namespace BalloonParty.Editor.EffectPreview
     {
         private readonly EditorAnimationLoop _animLoop = new();
         private readonly PaletteColorPicker _colorPicker = new();
-        private readonly EditorAssetCache<GameConfiguration> _gameConfigCache = new();
+        private readonly EditorAssetCache<SlotGridConfig> _gameConfigCache = new();
         private readonly EditorAssetCache<ItemConfiguration> _itemConfigCache = new();
         private readonly EditorAssetCache<GamePalette> _paletteCache = new();
 
@@ -26,7 +26,7 @@ namespace BalloonParty.Editor.EffectPreview
         private readonly Action _repaint;
 
         internal bool IsPlaying => _animLoop.IsPlaying;
-        internal GameConfiguration GameConfig => _gameConfigCache.Value;
+        internal SlotGridConfig GameConfig => _gameConfigCache.Value;
 
         internal ItemSettings Settings
         {
