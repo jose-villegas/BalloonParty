@@ -35,54 +35,12 @@ namespace BalloonParty.Projectile.View
 
         [Header("Glow")] [SerializeField] private ColorableRenderer[] _glowRenderers;
 
-        [SerializeField] [Range(0f, 1f)] private float _glowAlpha = 0.5f;
-        [SerializeField] private float _glowColorDuration = 0.2f;
-        [Tooltip("Full palette loops per second the glow cycles through while the rainbow buff is active.")]
-        [SerializeField] [Min(0f)] private float _rainbowGlowSpeed = 1.5f;
-
         [Header("Pierce Spiral")]
         [Tooltip("Child renderer carrying the PierceConeSpiral material — fades in once the shot earns " +
                  "the piercing state (cruise taps), fades out with it or during the doomed last breath.")]
         [SerializeField] private SpriteRenderer _pierceSpiralRenderer;
-        [Tooltip("Seconds for the spiral to lerp in/out when the piercing state flips.")]
-        [SerializeField] [Min(0f)] private float _pierceFadeDuration = 0.35f;
 
-        [Tooltip("Power curve exponent for distance-based fade-in (< 1 = faster roll-in). " +
-                 "0.5 means the aura reaches ~70 % alpha at half the distance to the tough.")]
-        [SerializeField] [Range(0.1f, 1f)] private float _pierceFadeInPower = 0.45f;
-
-        [Tooltip("Fraction of the segment distance at which the aura reaches full alpha. " +
-                 "0.75 means the spiral is fully visible 25 % before the actual impact.")]
-        [SerializeField] [Range(0.3f, 1f)] private float _pierceFadeInReach = 0.75f;
-
-        [Tooltip("How far the piercing aura DUCKS (not off) during each cruise tap beat. A piercing " +
-                 "shot re-taps faster than the tap-ease window, so ducking fully to 0 would keep the " +
-                 "aura permanently hidden exactly while it's armed.")]
-        [SerializeField] [Range(0f, 1f)] private float _pierceTapBeatAlpha = 0.5f;
-
-        [Header("Scene Light")]
-        [Tooltip("Radius of the light this shot casts into the scene-light field. Keep small — it's a bullet.")]
-        [SerializeField] [Min(0f)] private float _lightRadius = 0.6f;
-        [SerializeField] [Min(0f)] private float _lightIntensity = 1.5f;
-
-        [Header("Shield-Loss Flash")]
-        [Tooltip("A brief Sparks-colour light popped at the wall each time a bounce spends a shield.")]
-        [SerializeField] [Min(0f)] private float _shieldFlashIntensity = 2f;
-        [SerializeField] [Min(0f)] private float _shieldFlashRadius = 0.9f;
-        [SerializeField] [Min(0f)] private float _shieldFlashDuration = 0.12f;
-
-        [Header("Pierce Telegraph")]
-        [Tooltip("While piercing toward a tough, the shot's light stretches into an area line from the " +
-                 "shot to that tough — telegraphing the armor it's about to punch. Its half-width and intensity.")]
-        [SerializeField] [Min(0f)] private float _pierceTelegraphHalfWidth = 0.4f;
-        [SerializeField] [Min(0f)] private float _pierceTelegraphIntensity = 2f;
-
-        [Header("Pierce Spark")]
-        [Tooltip("A brief Sparks-colour light popped at each tough the piercing shot plows through.")]
-        [SerializeField] [Min(0f)] private float _pierceSparkIntensity = 2.5f;
-        [SerializeField] [Min(0f)] private float _pierceSparkRadius = 0.7f;
-        [SerializeField] [Min(0f)] private float _pierceSparkDuration = 0.12f;
-
+        [Inject] private IProjectileVisualConfig _visual;
         [Inject] private IGameConfiguration _config;
         [Inject] private IGamePalette _palette;
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
@@ -175,17 +133,17 @@ namespace BalloonParty.Projectile.View
                     // Telegraph: stretch the shot's light into an area line reaching the tough it's about
                     // to punch through, so the armored contact reads a beat before it happens.
                     _light.EndPosition.Value = toughAhead;
-                    _light.Radius.Value = _pierceTelegraphHalfWidth;
-                    _light.EndRadius.Value = _pierceTelegraphHalfWidth;
-                    _light.Intensity.Value = _pierceTelegraphIntensity;
+                    _light.Radius.Value = _visual.PierceTelegraphHalfWidth;
+                    _light.EndRadius.Value = _visual.PierceTelegraphHalfWidth;
+                    _light.Intensity.Value = _visual.PierceTelegraphIntensity;
                 }
                 else
                 {
                     // Back to a point light as it moves — else the segment would stretch from a stale end.
                     _light.EndPosition.Value = transform.position;
-                    _light.Radius.Value = _lightRadius;
-                    _light.EndRadius.Value = _lightRadius;
-                    _light.Intensity.Value = _lightIntensity;
+                    _light.Radius.Value = _visual.LightRadius;
+                    _light.EndRadius.Value = _visual.LightRadius;
+                    _light.Intensity.Value = _visual.LightIntensity;
                 }
             }
 
@@ -225,7 +183,7 @@ namespace BalloonParty.Projectile.View
 
                 // Colourless shots read as the Sparks tint; recoloured shots take their own colour
                 // (kept in step by UpdateGlowColor).
-                _light = new Light(transform.position, _lightRadius, _lightIntensity, LightColorIndex());
+                _light = new Light(transform.position, _visual.LightRadius, _visual.LightIntensity, LightColorIndex());
                 _lightRegistration = _lightField.RegisterLight(_light);
 
                 // Fade the glow in on fire, even before a colour hit — colourless shots use the
@@ -711,7 +669,7 @@ namespace BalloonParty.Projectile.View
         // The earned-piercing aura eases in rather than popping on — the buff lands mid-flight at a
         // wall bounce, and an instant full-strength spiral there reads as a glitch, not a power-up.
         // While armed it stays lit; each tap beat (the freeze-then-pickup window every cruise bounce
-        // replays) only DUCKS it toward _pierceTapBeatAlpha and it re-flourishes after — the aura
+        // replays) only DUCKS it toward PierceTapBeatAlpha and it re-flourishes after — the aura
         // winding back up with the shot.
         private void TickPierceSpiral()
         {
@@ -728,28 +686,28 @@ namespace BalloonParty.Projectile.View
                             && _model.Flight.CruiseTapElapsed < _config.CruiseTapEaseDuration;
             var pierceActive = _model.IsPiercing.Value && !_model.IsLastShieldApproach.Value;
             var target = pierceActive
-                ? (inTapBeat ? _pierceTapBeatAlpha : 1f)
+                ? (inTapBeat ? _visual.PierceTapBeatAlpha : 1f)
                 : 0f;
 
             if (pierceActive && _pierceAlpha < target && TryFindToughAhead(out var toughPos))
             {
                 // Distance-based fade-in: alpha tracks spatial progress toward the tough ahead.
-                // _pierceFadeInReach shrinks the effective distance so full alpha arrives before
-                // impact, and _pierceFadeInPower (< 1) front-loads the curve so early travel
+                // PierceFadeInReach shrinks the effective distance so full alpha arrives before
+                // impact, and PierceFadeInPower (< 1) front-loads the curve so early travel
                 // already shows significant aura. Never decreases alpha.
                 var segStart = (Vector3)_model.Flight.SegmentStartPosition;
-                var totalDist = Vector3.Distance(segStart, toughPos) * _pierceFadeInReach;
+                var totalDist = Vector3.Distance(segStart, toughPos) * _visual.PierceFadeInReach;
                 var traveled = Vector3.Distance(segStart, transform.position);
                 var linear = totalDist > 0f ? Mathf.Clamp01(traveled / totalDist) : 1f;
-                var progress = Mathf.Pow(linear, _pierceFadeInPower);
+                var progress = Mathf.Pow(linear, _visual.PierceFadeInPower);
                 _pierceAlpha = Mathf.Max(_pierceAlpha, Mathf.Min(progress, target));
             }
             else
             {
                 // No tough in sight, already at target, tap-beat duck, or fading out: lerp with
                 // unscaled time so slow-mo doesn't stall it.
-                var maxStep = _pierceFadeDuration > 0f
-                    ? Time.unscaledDeltaTime / _pierceFadeDuration
+                var maxStep = _visual.PierceFadeDuration > 0f
+                    ? Time.unscaledDeltaTime / _visual.PierceFadeDuration
                     : 1f;
                 _pierceAlpha = Mathf.MoveTowards(_pierceAlpha, target, maxStep);
             }
@@ -809,8 +767,8 @@ namespace BalloonParty.Projectile.View
             }
 
             var curve = _sceneLightSettings.ShieldLossLightVelocityCurve;
-            var radius = curve.ScaleByVelocity(_shieldFlashRadius, velocityT);
-            var intensity = curve.ScaleByVelocity(_shieldFlashIntensity, velocityT);
+            var radius = curve.ScaleByVelocity(_visual.ShieldFlashRadius, velocityT);
+            var intensity = curve.ScaleByVelocity(_visual.ShieldFlashIntensity, velocityT);
 
             _shieldFlashLight ??= new Light(position, radius, intensity, _sparksColorIndex);
             _shieldFlashLight.Position.Value = position;
@@ -820,7 +778,7 @@ namespace BalloonParty.Projectile.View
             _shieldFlashLight.Intensity.Value = intensity;
             _shieldFlashLight.PaletteIndex.Value = _sparksColorIndex;
             _shieldFlashRegistration ??= _lightField.RegisterLight(_shieldFlashLight);
-            _shieldFlashOffTime = Time.time + _shieldFlashDuration;
+            _shieldFlashOffTime = Time.time + _visual.ShieldFlashDuration;
         }
 
         private void EndShieldFlash()
@@ -837,15 +795,15 @@ namespace BalloonParty.Projectile.View
                 _sparksColorIndex = _palette.PaletteIndexOf(GamePalette.SparksColorId);
             }
 
-            _sparkFlashLight ??= new Light(position, _pierceSparkRadius, _pierceSparkIntensity, _sparksColorIndex);
+            _sparkFlashLight ??= new Light(position, _visual.PierceSparkRadius, _visual.PierceSparkIntensity, _sparksColorIndex);
             _sparkFlashLight.Position.Value = position;
             _sparkFlashLight.EndPosition.Value = position;
-            _sparkFlashLight.Radius.Value = _pierceSparkRadius;
-            _sparkFlashLight.EndRadius.Value = _pierceSparkRadius;
-            _sparkFlashLight.Intensity.Value = _pierceSparkIntensity;
+            _sparkFlashLight.Radius.Value = _visual.PierceSparkRadius;
+            _sparkFlashLight.EndRadius.Value = _visual.PierceSparkRadius;
+            _sparkFlashLight.Intensity.Value = _visual.PierceSparkIntensity;
             _sparkFlashLight.PaletteIndex.Value = _sparksColorIndex;
             _sparkFlashRegistration ??= _lightField.RegisterLight(_sparkFlashLight);
-            _sparkFlashOffTime = Time.time + _pierceSparkDuration;
+            _sparkFlashOffTime = Time.time + _visual.PierceSparkDuration;
         }
 
         private void EndSparkFlash()
@@ -1036,15 +994,15 @@ namespace BalloonParty.Projectile.View
             }
 
             _rainbowGlowTimer += Time.deltaTime;
-            var t = Mathf.Repeat(_rainbowGlowTimer * _rainbowGlowSpeed, 1f);
-            ApplyGlow(ColorCycle.Sample(_paletteColors, t).WithAlpha(_glowAlpha));
+            var t = Mathf.Repeat(_rainbowGlowTimer * _visual.RainbowGlowSpeed, 1f);
+            ApplyGlow(ColorCycle.Sample(_paletteColors, t).WithAlpha(_visual.GlowAlpha));
         }
 
         private void ActivateInitialGlow()
         {
             var target = string.IsNullOrEmpty(_model.ColorName.Value)
-                ? _palette.GetColor(GamePalette.SparksColorId).WithAlpha(_glowAlpha)
-                : _palette.GetColor(_model.ColorName.Value).WithAlpha(_glowAlpha);
+                ? _palette.GetColor(GamePalette.SparksColorId).WithAlpha(_visual.GlowAlpha)
+                : _palette.GetColor(_model.ColorName.Value).WithAlpha(_visual.GlowAlpha);
             TweenGlow(target);
         }
 
@@ -1058,8 +1016,8 @@ namespace BalloonParty.Projectile.View
 
             // Colourless shots fall back to the Sparks palette tint so the glow stays visible.
             var target = string.IsNullOrEmpty(_model.ColorName.Value)
-                ? _palette.GetColor(GamePalette.SparksColorId).WithAlpha(_glowAlpha)
-                : _palette.GetColor(_model.ColorName.Value).WithAlpha(_glowAlpha);
+                ? _palette.GetColor(GamePalette.SparksColorId).WithAlpha(_visual.GlowAlpha)
+                : _palette.GetColor(_model.ColorName.Value).WithAlpha(_visual.GlowAlpha);
             TweenGlow(target);
         }
 
@@ -1074,7 +1032,7 @@ namespace BalloonParty.Projectile.View
         private void TweenGlow(Color target)
         {
             KillGlowTween();
-            _glowTween = DOTween.To(() => _glowColor, ApplyGlow, target, _glowColorDuration);
+            _glowTween = DOTween.To(() => _glowColor, ApplyGlow, target, _visual.GlowColorDuration);
         }
 
         private void KillGlowTween()

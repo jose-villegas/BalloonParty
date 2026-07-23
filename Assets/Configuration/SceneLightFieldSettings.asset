@@ -39,7 +39,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _texelsPerUnit: 32
+  _texelsPerUnit: 16
   _fieldFrameInterval: 1
   _maxLights: 32
   _accumulationCeiling: 3

@@ -38,6 +38,7 @@ namespace BalloonParty.Game
         [SerializeField] private PaintingFieldSettings _paintingFieldSettings;
         [SerializeField] private SpeckFieldSettings _speckFieldSettings;
         [SerializeField] private ShieldFieldSettings _shieldFieldSettings;
+        [SerializeField] private ProjectileVisualConfig _projectileVisualConfig;
         [SerializeField] private LevelPacingConfiguration _levelPacingConfiguration;
         [SerializeField] private BuffConfiguration _buffConfiguration;
         [SerializeField] private ScoreTrailBehaviourConfiguration _scoreTrailBehaviourConfiguration;
@@ -89,6 +90,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance<IPaintingFieldSettings>(_paintingFieldSettings);
             builder.RegisterInstance<ISpeckFieldSettings>(_speckFieldSettings);
             builder.RegisterInstance<IShieldFieldSettings>(_shieldFieldSettings);
+            builder.RegisterInstance<IProjectileVisualConfig>(_projectileVisualConfig);
             builder.RegisterInstance<ILevelPacingConfiguration>(_levelPacingConfiguration);
             builder.RegisterInstance<IBuffConfiguration>(_buffConfiguration);
 

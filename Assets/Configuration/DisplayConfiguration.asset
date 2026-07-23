@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Configuration.GameDisplayConfiguration
   _referenceWorldWidth: 5.2
   _referenceWorldHeight: 9.6
-  _sceneCaptureDownscale: 5
+  _sceneCaptureDownscale: 7
   _sceneCaptureFrameInterval: 1

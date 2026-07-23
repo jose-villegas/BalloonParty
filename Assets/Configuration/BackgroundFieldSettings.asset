@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: BackgroundFieldSettings
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.Effects.CloudFieldSettings
   _densityMaterial: {fileID: 2100000, guid: 10b206cd4c4534fdaae61c2ccb5bb3d4, type: 2}
-  _texelsPerUnit: 24
+  _texelsPerUnit: 16
   _transitionParallax: -0.95
+  _bakeFrameInterval: 3
