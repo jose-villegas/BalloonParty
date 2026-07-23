@@ -129,11 +129,12 @@ namespace BalloonParty.Projectile.View
             if (_light != null)
             {
                 _light.Position.Value = transform.position;
-                if (_model.IsPiercing.Value && TryFindToughAhead(out var toughAhead))
+                if (_model.IsPiercing.Value && TryFindToughAhead(out _, out var wallCrossing))
                 {
-                    // Telegraph: stretch the shot's light into an area line reaching the tough it's about
-                    // to punch through, so the armored contact reads a beat before it happens.
-                    _light.EndPosition.Value = toughAhead;
+                    // Telegraph: stretch the shot's light into an area line along the whole doomed path —
+                    // out to the next WALL hit, punching THROUGH the tough it's about to plow — so the
+                    // full trajectory reads a beat before impact.
+                    _light.EndPosition.Value = wallCrossing;
                     _light.Radius.Value = _visual.PierceTelegraphHalfWidth;
                     _light.EndRadius.Value = _visual.PierceTelegraphHalfWidth;
                     _light.Intensity.Value = _visual.PierceTelegraphIntensity;
@@ -143,12 +144,16 @@ namespace BalloonParty.Projectile.View
                     // Back to a point light as it moves — else the segment would stretch from a stale end.
                     // Radius ramps toward MaxShieldsLightRadius as shields stack, capping at MaxVisualLayers
                     // shields; Mathf.Max guards an unauthored (0) asset value, which degrades to the old
-                    // constant radius instead of shrinking the light.
+                    // constant radius instead of shrinking the light. A piercing shot drives the same ramp
+                    // by the pierce spiral's own alpha (one frame stale — updated in TickPierceSpiral below),
+                    // so the light grows to full radius in lockstep with the pierce visual fading in.
                     _light.EndPosition.Value = transform.position;
                     var maxRadius = Mathf.Max(_visual.MaxShieldsLightRadius, _visual.LightRadius);
-                    var shieldT = _shieldSettings.MaxVisualLayers > 0
-                        ? Mathf.Clamp01(_model.ShieldsRemaining.Value / (float)_shieldSettings.MaxVisualLayers)
-                        : 0f;
+                    var shieldT = _model.IsPiercing.Value
+                        ? _pierceAlpha
+                        : _shieldSettings.MaxVisualLayers > 0
+                            ? Mathf.Clamp01(_model.ShieldsRemaining.Value / (float)_shieldSettings.MaxVisualLayers)
+                            : 0f;
                     var radius = Mathf.Lerp(_visual.LightRadius, maxRadius, shieldT);
                     _light.Radius.Value = radius;
                     _light.EndRadius.Value = radius;
@@ -698,7 +703,7 @@ namespace BalloonParty.Projectile.View
                 ? (inTapBeat ? _visual.PierceTapBeatAlpha : 1f)
                 : 0f;
 
-            if (pierceActive && _pierceAlpha < target && TryFindToughAhead(out var toughPos))
+            if (pierceActive && _pierceAlpha < target && TryFindToughAhead(out var toughPos, out _))
             {
                 // Distance-based fade-in: alpha tracks spatial progress toward the tough ahead.
                 // PierceFadeInReach shrinks the effective distance so full alpha arrives before
@@ -823,14 +828,17 @@ namespace BalloonParty.Projectile.View
         // The next tough (hits>1) on the current flight segment, if any — a bounded forward cast up to the
         // wall the shot is heading for. Drives the telegraph. TryGetHitBalloon skips the just-plowed
         // balloon (LastHitBalloon), so the telegraph reaches the NEXT tough, not the one behind the shot.
-        private bool TryFindToughAhead(out Vector3 position)
+        private bool TryFindToughAhead(out Vector3 position, out Vector3 wallCrossing)
         {
             position = default;
             var origin = transform.position;
+            wallCrossing = origin;
             if (!_motionResolver.Walls.TryFindCrossing(origin, _model.Direction, out var crossing, out _))
             {
                 return false;
             }
+
+            wallCrossing = crossing;
 
             var direction = ((Vector2)_model.Direction).normalized;
             var length = Vector2.Distance(origin, crossing);
