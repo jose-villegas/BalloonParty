@@ -2,11 +2,11 @@
 
 # Performance Recovery Plan — BalloonParty (Phase 2, revised 2026-07-23)
 
-**Status**: Phase 1 complete (merged to main). Phase 2 fully re-audited 2026-07-23 by a
-four-agent challenge (optimizer / reviewer / researcher / scribe) plus main-session
-review. Several items were dropped as stale or factually wrong, shader priorities were
-inverted for the real target GPU, and a mandatory diagnosis step was added before any
-further optimization.
+**Status**: Phase 1 complete (merged to main). Phase 2 re-audited 2026-07-23 by a
+four-agent challenge (optimizer / reviewer / researcher / scribe), then expanded the same
+day with two architect deep-spec passes (CPU/UI + GPU/architectural) and a per-task model
+delegation matrix. Each item below carries an implementation-ready spec; subagents should
+be able to execute without further investigation.
 
 **Problem**: Game sits at ~80 FPS on device where 120 FPS was previously reached, after
 a wave of new visual features (wall nets, shared cloud field, painting field, velocity
@@ -18,6 +18,11 @@ device sustains.
 "Pixel 10 (Adreno 750)" line was wrong twice over: Adreno 750 is Snapdragon 8 Gen 3 and
 has never shipped in a Pixel, and Pixel 10 is Tensor G5 with an Imagination PowerVR GPU.
 Mali-specific reasoning below does **not** transfer to a Pixel 10 test device.
+
+**Graphics backend**: Android is **Vulkan-first, GLES3 fallback**
+(`ProjectSettings.asset` `m_APIs: 150000000b000000`, verified 2026-07-23 — a transient
+GLES3-only edit was reverted). F4's variant capture and AGI counter reads depend on which
+backend is live; always confirm at runtime (Step 0 §0).
 
 **Root cause (revised)**: The prior claim of "8-10 unmerged render passes every frame" is
 stale. After the 2026-07-18 sweep, all five field services are cadence- or dirty-gated and
@@ -33,6 +38,40 @@ fix was validated on different hardware than the Pixel 9).
 
 **Unity version**: 6000.3.15f1 (Unity 6.3) — URP 2D Renderer, Render Graph is the default
 pipeline.
+
+---
+
+## Execution model & delegation matrix
+
+Orchestration contract: the main loop (Fable) runs **review and investigation only** —
+Step 0, per-wave reviewer/optimizer passes, consensus, and commits. All implementation is
+delegated by task shape (haiku = checklist sweeps, sonnet = anchored implementation with
+an exact spec, opus = design-heavy or judgment-sensitive work). José owns everything
+requiring the Unity Editor or the device: prefab/asset wiring, playtests, visual A/Bs,
+on-device captures.
+
+| Task | Executor | Why |
+|------|----------|-----|
+| Step 0 diagnosis | **fable** (+ José on device) | Investigation by definition |
+| F2 FlyingTrail resize | sonnet | 1-line delete + comment, exact spec below |
+| F3 RollingTextAnimator | haiku | 4-site mechanical conversion, interactions pre-verified |
+| F4 shader warmup | sonnet | New Launcher MonoBehaviour, exact shape below; SVC capture = José |
+| C1 + C3 projectile | sonnet (one session) | Same file — must not be parallelized |
+| U1 progress-bar pulse | **opus** | Feel-sensitive de-Animator redesign; prefab implications |
+| U2 notice reparenting | sonnet | Exact spec, but touches shared pool code → mandatory fable review sweep after |
+| G6 + G3 smear shader | **opus** (one session) | Same file/commit; precision judgment + banding fallbacks mid-flight |
+| G4 bake octave skip | sonnet | Exact edits below incl. renormalization |
+| G1 blit budget | **opus** | Contract redesign across 6 services + registration ordering |
+| G5 gradient skip | **opus**, deferred | Two-shader temporal-coupling change (see spec — riskier than it looks) |
+| A4 quality tiers + ADPF | **opus** | New subsystem, package integration |
+| A1 RG prototype | **opus** | Novel RenderGraph interop, go/no-go experiment |
+| A2 capture feature | parked | Behind A1 evidence |
+| Per-wave review | **fable** (reviewer + optimizer agents) | User mandate |
+| Docs per wave | scribe agent | Existing pipeline |
+| Tests (G1 `IBlitBudget` is pure C# — unit-testable) | test-everything agent | Existing pipeline |
+
+Every shader task additionally requires José's in-editor compile + on-device visual check
+(`dotnet build` cannot validate HLSL).
 
 ---
 
@@ -64,73 +103,466 @@ Phase 2 items were partially or fully subsumed by that sweep — reflected below
 
 ---
 
-## Phase 2 — Revised
+## Step 0: Diagnose before optimizing (mandatory, do first)
 
-### Step 0: Diagnose before optimizing (NEW — mandatory, do first)
+Everything below is a hypothesis until this attributes the sustained-80. All device steps
+are read-only except an optional one-line backend log.
 
-The plan previously jumped straight to fixes; every impact estimate below is a hypothesis
-until this step attributes the sustained-80.
+### 0. Preconditions — record backend and build type
 
-1. **Pacing / ARR check** — while the game reads ~80 FPS on the Pixel 9, run
-   `adb shell dumpsys display` and check SurfaceFlinger: is the panel actually in 120 Hz
-   mode, and what render rate did Android arbitrate for the app? Cross-check
-   `[FrameRateSettings]` startup diagnostics. The ARR echo-loop lesson (memory) was
-   validated on other hardware — the Pixel 9 vote path is unverified. If the app is being
-   arbitrated to a sub-120 rate, no shader work will fix it.
-2. **CPU vs GPU classification** — one Unity Profiler capture (development build, on
-   device) during normal play and during a BigScore burst. If CPU-bound: look at
-   `Canvas.SendWillRenderCanvases`/`BuildBatch` (known dominator from José's prior
-   capture) and GC spikes. If GPU-bound: capture with Android GPU Inspector (AGI supports
-   Mali) — fragment-bound vs bandwidth-bound counters decide between Tier G items and
-   overdraw work.
-3. **Overdraw look** — the new features (wall nets, cloud backdrop, danger gradients,
-   specks) are layered transparencies; use the editor overdraw view + Frame Debugger dump
-   tool (Tools > BalloonParty > Dump Frame Debugger) to count fullscreen-ish transparent
-   layers. Fill rate on a 7-core Mali at native res is a prime sustained-cost suspect and
-   **no current plan item addresses it** — if this dominates, resolution scaling of the
-   render target (URP Render Scale) becomes the lever, feeding A4.
-4. **Thermal baseline** — is 80 FPS from a cold start or only after minutes of play?
-   Tensor G4 3DMark stress stability is ~59%; if 120→80 correlates with heat, A4 (tiers)
-   is the fix, not micro-optimizations.
+```bash
+adb logcat -d | grep -iE "GfxDevice|Vulkan|OpenGL ES|graphicsDeviceType"
+adb shell pm list packages | grep -i balloon     # get the package name
+```
+Unity logs the selected device at startup. Record Vulkan vs GLES3 — F4's SVC capture and
+AGI counter interpretation depend on it. Optionally add a one-line
+`Debug.Log($"[Gfx] {SystemInfo.graphicsDeviceType} / {SystemInfo.graphicsDeviceName}")`
+next to the `[FrameRateSettings]` boot logs. Build must be a **Development Build** with
+profiler autoconnect for §2.
 
-### Tier 0: Free / Near-Free Wins
+### 1. Pacing / ARR check
 
-| # | Fix | File(s) | Effort | Notes |
-|---|-----|---------|--------|-------|
-| **F2** | **Remove the shrink `Array.Resize` in `TransformRibbon`** — the shared static `_ribbonScratch` is grown via `NextPowerOfTwo` then shrunk back to `count` every call; because pens have differing `positionCount`, consecutive calls thrash the buffer → a fresh `Vector3[]` alloc on nearly every call, up to ~100 pens/frame during formations. `TrailRenderer.positionCount` is read-only, so an oversized scratch is safe (`SetPositions` clamps). | `FlyingTrail.cs:278-281` | 1 line | **Top GC item.** In-editor verify: no ghost tail points on a tumbling formation |
-| **F3** | **`SetCharArray` instead of `new string`** in `RollingTextAnimator` — the zero-alloc path already exists (`TmpTextExtensions`, `323cf79f`); this animator was never converted. Fix the hot site `:81` (per frame while an odometer rolls) and the cold sites `:114`, `:267`, `:285` in the same pass. | `RollingTextAnimator.cs` | 4 lines | Same code path as the shipped counter fix — finishing the job |
-| **F4** | **Shader variant warmup** — author a `ShaderVariantCollection` and call **`ShaderVariantCollection.WarmUp()`** (or `WarmUpProgressively`) on the load screen. The previously named `WarmupAllShaders()` API doesn't exist on SVC. Vulkan gotcha: PSOs depend on vertex layout/blend/RT formats, so **capture the SVC from a real on-device play session** (Graphics Settings → Save to asset), don't hand-author. | New asset + loader call | Low | Fixes first-use hitches, not sustained rate |
-| **C1** | Dedupe `TryFindToughAhead` — called from both `Update` (light telegraph) and `TickPierceSpiral` in the same frame during pierce fade-in. Compute once, pass down. | `ProjectileView.cs:131, 692, 828` | Small | Cleanup; ~1 extra CircleCast/frame for a few frames per pierce — no FPS claim |
-| **C3** | Non-allocating cast — replace `Physics2D.CircleCastAll` with the `ContactFilter2D` + reusable `List<RaycastHit2D>` overload (copy `LaserItemHandler._castResults` pattern). | `ProjectileView.cs:872` | Small | GC hygiene; fires per wall-bounce while piercing, not per frame |
+While the game reads ~80 FPS:
+```bash
+adb shell dumpsys display | grep -iE "mActiveModeId|refreshRate|fps|FrameRateOverride"
+adb shell dumpsys SurfaceFlinger | grep -iE "refresh|present|mode|Scheduler|frame rate"
+adb shell dumpsys gfxinfo <package> reset        # zero, then play ~30 s
+adb shell dumpsys gfxinfo <package> | grep -iE "Janky|percentile|Number Missed Vsync|Total frames"
+adb logcat -d | grep "\[FrameRateSettings\]"
+```
+Read: `mActiveModeId` → is the panel in a 120 Hz mode? SurfaceFlinger Scheduler → the
+app's **arbitrated** frame rate (the unverified ARR path on Pixel 9). `gfxinfo` gives
+P50/P90/P95/P99 frame times + missed-vsync count directly — this covers the FPSCounter
+percentile gap with zero code. Cross-check the `[FrameRateSettings]` request/settle lines
+(`FrameRateSettings.cs:79,96,105,127`).
 
-### Tier 1: UI arrival storm (NEW — likely the biggest sustained CPU win)
+**Signature**: targetFrameRate logs 120, frame time < 8.3 ms, but arbitrated rate ~80 with
+high missed-vsync → **pacing/ARR artifact**; route to the FrameRateSettings vote path /
+A4 ladder — no shader or UI code will fix it.
 
-José's own profiler capture named `Canvas.SendWillRenderCanvases`/`BuildBatch` as the peak
-dominator; the previous plan had nothing aimed at it.
+### 2. CPU vs GPU classification
 
-| # | Fix | File(s) | Effort | Notes |
-|---|-----|---------|--------|-------|
-| **U1** | **Coalesce the progress-bar hit pulse** — `OnTrailArrived` fires `_animator.SetTrigger(TrailHitTrigger)` per arrival (up to ~50/s sustained), each retriggering a ~1s animation on sliced Images → canvas relayout every arrival. Throttle to one pulse per frame regardless of arrival count, or drive the pulse without an Animator (shared tween / material property). | `ColorProgressBar.cs:357` | Small-Med | Profiler A/B: canvas rebuild ms during a 250-point burst, before/after |
-| **U2** | **Stop reparenting `ProgressNotice` per spawn** — `SetParent` on spawn (`:108`) + again via presenter (`:123`) dirties the canvas each time, ~50/s during streaks. Parent once at prewarm; move only `anchoredPosition` on spawn. Verify the pool doesn't reparent on return. | `ProgressNotice.cs:108,123`, `ProgressNoticePresenter.cs:59,80` | Small | Compounds with U1 |
+Unity Profiler (Timeline view, Deep Profile OFF), two windows: **A** normal play,
+**B** BigScore burst (~50 arrivals/s on the bars). Route by dominant main-thread marker:
 
-### Tier 2: GPU / Shader (re-prioritized for Mali-G715)
+| Dominant marker | Meaning | Route |
+|---|---|---|
+| `Canvas.SendWillRenderCanvases` / `BuildBatch` | UI rebuild storm | **U1 + U2** |
+| `GC.Collect` / `GC.Alloc` in trail/text/notice paths | GC hitch | **F2 + F3** |
+| `Gfx.WaitForPresentOnGfxThread` | GPU-bound | **§4 AGI** |
+| Render-thread waits + high blit count | Blit coincidence | **G1**, re-check §3 |
+| None dominant, frame < 8.3 ms, FPS < 120 | Pacing | **§1 / A4** |
 
-| # | Fix | File(s) | Effort | Notes |
-|---|-----|---------|--------|-------|
-| **G6** | **Half-precision in the smear (and other heavy) shaders** — PROMOTED. Valhall does 2× fp16 (512 fp16 vs 256 fp32 ops/cy); this is a top shader lever on the actual device, not the "marginal" afterthought the Adreno framing implied. UV deltas, weights, color fetches → `half`. ~30-40% ALU on this shader is plausible (texture/bandwidth don't halve). | `ScreenSpaceLightSmear.shader` (then other field shaders) | 2 hours | Watch for banding on accumulating values; in-editor + on-device visual check |
-| **G3** | **4-tap bilinear box blur** — replace the unrolled 9-tap 3×3 box in Pass 1 with 4 bilinear samples at half-texel offsets. Identical output only for a uniform box with correct half-texel centering — verify. | `ScreenSpaceLightSmear.shader` Pass 1 (`:144-172`) | 15 min | Low risk |
-| **G4** | **Skip fine noise octave in the BackgroundField bake shader** — `BackgroundGenRawNoise` computes all 3 octaves unconditionally; display shaders already gate via `_LOW_QUALITY_CLOUD`. **Must** follow the `multi_compile_local` + per-material `EnableKeyword` pattern — a global keyword reproduces the release crash `b0f9ad83` just fixed. | `Include/BackgroundFieldGen.cginc:49-62`, bake material | Small | ~25% bake cost; bake is cadence-gated so absolute win is modest |
-| **G1** | **Blit budget cap** (rescoped) — the coordinator only assigns one-time phase offsets; independent accumulators can drift back into coincidence, and `ScreenSpaceLightService` (2 blits) isn't registered at all. Step 1: register it (`ICadencedEffect` or at least a weight the coordinator sees). Step 2: upgrade to an active per-frame budget (max N weighted blits; over-budget effects defer a frame). Honest estimate: **smooths coincidence spikes; will not fix a sustained 80** — the old "+15-25 FPS" claim assumed the pre-2026-07-18 ungated world. | `EffectCadenceCoordinator.cs`, field services | Medium | Do after Step 0 confirms spike frames matter |
-| **G5** | **Gradient-skip residual** — the 2026-07-18 cadence cap + batch absorption already covers the idle case; what remains is the literal item: a magnitude-only change (fade in/out) still pays Accumulate **and** Gradient. Track direction-dirty separately, skip the Gradient blit when only magnitudes moved. | `SceneLightFieldService.cs:184-186, 308-345` | Small | Opportunistic |
+### 3. Overdraw look (editor)
 
-### Tier 3: Architectural (gated on Step 0 evidence)
+Rendering Debugger → Overdraw view during a busy frame: count stacked fullscreen-ish
+transparent layers (wall nets, BackgroundCloud, danger gradient, PuffCloud, specks). Run
+`Tools > BalloonParty > Dump Frame Debugger` on a normal frame and a BigScore frame; diff
+for blit counts and fullscreen transparent passes. If fill rate dominates, **URP Render
+Scale is the lever** (feeds A4) — no other plan item addresses raw fill rate.
 
-| # | Fix | File(s) | Effort | Notes |
-|---|-----|---------|--------|-------|
-| **A4** | **Quality tiers + ADPF thermal** — PROMOTED to required-for-ship, and earlier. Use the Adaptive Performance package + Google Android provider (`com.unity.adaptiveperformance.google.android`): thermal headroom / hint sessions, GameMode integration. Drive tier switches from **thermal status, not an FPS counter** (thermal precedes the drop). Tiers: smear resolution & taps, field cadences, speck/trail counts, URP Render Scale, target frame rate ladder (120→90→60 — confirm which panel modes the Pixel 9 exposes rather than assuming vsync divisors). Sustained 120 on a Tensor G4 without this is unrealistic (~59% GPU stress stability). | New system + package | 1-2 days | The strategic fix for "80 where we had 120" if Step 0 shows thermal |
-| **A1** | **Migrate field blits into Render Graph** (rewritten) — `Graphics.Blit` from `LateUpdate`/`Tick` does bypass the render graph, but the old justification was wrong: RG native-pass merging only fuses passes sharing the same attachments/dimensions that don't sample previous attachments — the field services write **separate, differently-sized, persistent ping-pong RTs**, which can never merge, and as cross-frame resources they'd have to be imported as external anyway. The '~470 MB/s per pass' figure was fabricated (the RTs are small texel grids, not 1080p). Real, smaller benefits: `RenderBufferLoadAction.DontCare` (skip tile restore), in-frame scheduling, dead-pass culling. Also unverified: `AddBlitPass` interop with the LateUpdate-driven, ContentVersion-gated architecture (Display/README.md documents RG rejecting blits from `beginCameraRendering`), and 2D-Renderer native-pass behavior. | Field services | 1-2 days | **Demoted**: only if Step-0 GPU capture shows pass load/store overhead is real; prototype on ONE service first |
-| **A2** | **SceneCapture → Renderer Feature** — still valid: it's still a second full camera render per cadence tick (weight 3, the heaviest single consumer). `12df3c37` only gated the downstream smear, not the capture's own cost. | `SceneCaptureService.cs` | High | After A1 evidence; same RG caveats |
-| **A5** | **Merge Disturbance + Painting RTs** — DEFERRED. Blockers the old plan missed: texel density mismatch (8 vs 16 texels/unit — packing forces a resolution compromise) and structurally different math (neighbor-sampling diffusion PDE vs local-only decay), so "single pass handles both" is a risky shader unification, not an RT-format change. | — | High | Only if Step 0 shows both fields hot in the same frames |
+### 4. AGI — Mali fragment vs bandwidth
+
+Android GPU Inspector system profile during a burst:
+
+| Counters | Reading | Classification → route |
+|---|---|---|
+| Fragment vs non-fragment active cycles | Fragment ≈ GPU active | Fragment-bound → **G6, G3, G4** |
+| External memory read/write stall cycles | High stall, low ALU util | Bandwidth-bound → Render Scale, **G1, A1/A2** |
+| Fragments per pixel, tile buffer writes | High | Overdraw → Render Scale + layer review |
+
+### 5. Thermal baseline
+
+```bash
+adb shell dumpsys thermalservice | grep -iE "Temperature|status"
+```
+Play from cold; log FPS at 0/2/5/10/15 min. 120→80 correlating with thermal status →
+**A4** (thermal-driven tiers). 80 from a cold first frame → not thermal, return to §2/§4.
+
+### Decision tree
+
+```mermaid
+graph TD
+    S[record backend + build] --> P{arbitrated <120 +<br/>missed vsync, frame <8.3ms?}
+    P -->|yes| PAC[Pacing/ARR: vote path / A4 ladder]
+    P -->|no| C{Profiler dominant marker}
+    C -->|Canvas rebuilds| UI[U1 + U2]
+    C -->|GC spikes| GC[F2 + F3]
+    C -->|GPU wait| G{AGI counters}
+    G -->|Fragment/ALU| FRAG[G6 + G3 + G4]
+    G -->|Bandwidth| BW[Render Scale + G1 + A1]
+    G -->|Overdraw| OD[Render Scale + layer review]
+    C -->|none dominant| T{Thermal correlated?}
+    T -->|yes| A4[A4 tiers + ADPF]
+    T -->|no| R[re-capture longer window]
+```
+
+---
+
+## Tier 0: Free / Near-Free Wins
+
+### F2 — Remove the shrink `Array.Resize` in `TransformRibbon` · **sonnet**
+
+`FlyingTrail.cs`: the static scratch `_ribbonScratch` (line 42) grows to
+`NextPowerOfTwo(count)` when small (:249-252) but is then **shrunk back to exactly `count`
+via `Array.Resize` on every call** (:278-281). Pens have differing `positionCount`, so
+consecutive calls thrash → a fresh `Vector3[]` on nearly every call, up to ~100 pens/frame
+during formations. **Top GC item.**
+
+The defensive comment ("SetPositions reads array.Length") is wrong, and the repo proves
+it: `ChainLightningView.cs:267-270` and `PredictionTraceView.cs:35-36` already pass
+oversized buffers after setting `positionCount` and render correctly. `positionCount` is
+read-only; `SetPositions` clamps to it.
+
+**Change**: delete the resize block (:278-281), replace the stale comment with one stating
+the clamp guarantee. Keep the grow path — the static settles at the largest ribbon seen
+and stops allocating.
+
+**Verify**: Profiler — `GC.Alloc` in `TransformRibbon` → ~0 during a formation. In-editor
+ghost-tail check (José): trigger a tumbling, shrinking formation (the delta≠identity +
+scaleRatio≠1 branch at :269-273); ink must stay glued to the figure, no stray tail points.
+
+### F3 — `SetCharArray` in `RollingTextAnimator` · **haiku**
+
+Four sites build a heap string from the reused `_formattingBuffer`:
+`RollingTextAnimator.cs:81` (hot — per frame while an odometer rolls), plus cold :114,
+:267, :285. Replace each `_text.text = new string(_formattingBuffer, 0, len)` with
+`_text.SetCharArray(_formattingBuffer, 0, len)`. This finishes the `323cf79f` zero-alloc
+conversion that skipped this file.
+
+Pre-verified interactions (no further checks needed): `SetCharArray` runs the same
+rich-text parser, so the `<mspace=…>` prefix in the buffer still parses as a tag; it
+populates `textInfo` identically, so the following `ForceMeshUpdate()` +
+`CopyMeshInfoVertexData()` calls keep working — **keep them**; TMP copies the span, so
+buffer reuse is safe; len ≥ 1 always (`FormatThousands` writes '0' for zero).
+
+**Verify**: `dotnet build`; in-editor — identical digit spin, mspace column alignment,
+thousands separators (test 12,345 with monospace on and off).
+
+### F4 — Shader variant warmup · **sonnet** (capture = José)
+
+No SVC asset or warmup call exists today. The warmup window is the **Launcher scene**
+while `SceneTransition.Preload()` loads the Game scene additively (`SceneTransition.cs:
+67-99`) — before `ActivatePreloadedScene` (:107-112).
+
+**Change**: new MonoBehaviour on the Launcher canvas with
+`[SerializeField] ShaderVariantCollection _variants`; in `Start`, fire-and-forget a
+UniTask loop over **`WarmUpProgressively(8)`** (returns `IEnumerator`; `MoveNext()` +
+`await UniTask.Yield(destroyCancellationToken)` per step). Progressive, not blocking
+`WarmUp()` — a single call concentrates all PSO builds in one frame and stalls the
+concurrent preload. (`WarmupAllShaders()` does not exist on SVC — the old plan's API was
+wrong.)
+
+**Capture (José, on device)**: backend is **Vulkan-first** — PSOs key on vertex layout /
+blend / RT formats / backend, so capture from a real Vulkan device session (Project
+Settings → Graphics → "Save to asset…" after exercising every effect: fields, level-up,
+laser/lightning/pierce, wall nets, specks). Let Unity generate the `.meta`. Re-capture
+when shader keywords change. If the team ever drops to GLES3-only, re-capture — not
+interchangeable.
+
+Scope note: fixes first-use hitches, not sustained-80. Sequence late.
+
+### C1 + C3 — Projectile cleanups · **sonnet, one session** (same file)
+
+**C1**: `TryFindToughAhead` (`ProjectileView.cs:817-843`, CircleCast at :828) is called
+from `Update` (:131, light telegraph) and again in `TickPierceSpiral` (:692) in the same
+frame during pierce fade-in. Compute once at the top of `Update` gated on
+`_model.IsPiercing.Value`, pass `(bool toughAhead, Vector3 toughPos)` into
+`TickPierceSpiral` (signature change; one caller at :151). Position is stable across
+`Update` reads (movement is FixedUpdate), so behavior is identical. No FPS claim.
+
+**C3**: `SweepPierceMisses` (:862-898) uses allocating `Physics2D.CircleCastAll` (:872),
+fired per wall-bounce while piercing. Copy the `LaserItemHandler` pattern
+(`LaserItemHandler.cs:37,228`): add `private readonly List<RaycastHit2D>
+_pierceCastResults = new(8);` + a `ContactFilter2D _pierceFilter` built in `Awake` right
+after `BalloonsLayer` resolves (:99-101) — `SetLayerMask(1 << BalloonsLayer)`,
+`useTriggers = true` (balloons are trigger colliders; reproduces `CircleCastAll`'s
+default). Replace the cast + loop with the filter overload; hit order is irrelevant
+(dedup via `AlreadyPlowed`).
+
+**Verify**: pierce telegraph + spiral ramp unchanged; fast piercing shot through several
+toughs still discharges all of them; array alloc gone from the profiler.
+
+---
+
+## Tier 1: UI arrival storm (likely biggest sustained CPU win)
+
+José's profiler capture named `Canvas.SendWillRenderCanvases`/`BuildBatch` the peak
+dominator. Measure U1+U2 **together** on one 250-point-burst A/B so wins aren't
+double-counted.
+
+### U1 — De-Animator the progress-bar hit pulse · **opus**
+
+**Path**: `ColorProgressBar.OnTrailArrived` (:348-369) fires
+`_animator.SetTrigger(TrailHitTrigger)` per arrival (:357), up to ~50/s. The
+`ScoreTrailHit.anim` clip animates `localScale` 1→3→1 over 0.333 s on `Slider/Outline` +
+`Slider/Background`, plus color/PPU/anchoredPosition/sizeDelta — **then sits flat until
+t=1.0 s while still writing constants every frame**. Under a sustained stream the state is
+perpetually re-entered → the HUD canvas rebuilds every frame. Trigger-coalescing alone
+would NOT fix this — the running clip's per-frame writes and the 0.67 s dead tail are the
+dominant cost. **Decision: replace the Animator pulse with a coalesced DOTween punch.**
+
+**Change** (in `ColorProgressBar.cs`):
+- New serialized fields: `RectTransform _pulseOutline`, `_pulseBackground`;
+  `float _pulseScale = 3f`, `_pulseDuration = 0.333f`; mutable `bool _pulseQueued`.
+- Replace :357 with `_pulseQueued = true;`.
+- Drain once per frame in `LateUpdate`: if queued → clear flag →
+  `DOKill()` + reset `localScale = one` + `DOPunchScale(one * (_pulseScale - 1f),
+  _pulseDuration, vibrato: 0, elasticity: 0f).SetUpdate(true).SetLink(gameObject)` on both
+  targets. Unscaled matches the retired clip's UnscaledTime; `DOKill`+reset prevents scale
+  drift on overlap; `SetLink` handles teardown.
+- Keep the `Completed` bool path (:307, :367) — separate state, not the storm. Delete the
+  now-unused `TrailHitTrigger` (:23). Drop the sizeDelta/PPU micro-bulge — dominated by
+  the 3× punch; José confirms in the feel check.
+- Level-up safety: `OnTrailArrived` early-returns during `LevelUpInProgress` (:352), so no
+  pulses queue behind the popup.
+
+**Structural complement (José, in-editor)**: put the two pulsed transforms (or a small
+wrapper) on a **nested Canvas** so punch rebuilds are isolated from the whole score HUD —
+the largest remaining win here.
+
+**Verify**: canvas-rebuild ms during a 250-point burst, before/after; feel check — single
+arrival still pops visibly, a burst reads lively (≤1 pulse/frame by construction); tune
+`_pulseScale`/`_pulseDuration` against the old clip.
+
+### U2 — Eliminate `ProgressNotice` reparenting · **sonnet** (+ mandatory fable review of pool consumers)
+
+**Worse than first audited — three `SetParent` per lifecycle, two cross-canvas**: the pool
+container lives under `[Pool]` (DontDestroyOnLoad, no canvas) via `PoolManager.Register`
+(`PoolManager.cs:48-51`), so each spawn does `[Pool]`→bar (`ProgressNotice.cs:106-109`),
+then a redundant same-parent `SetParent` via the presenter (`ProgressNoticePresenter.cs:59`
+→ `ProgressNotice.cs:120-124`), and each return goes bar→`[Pool]`
+(`PoolChannel.cs:73-76`). ~150 canvas-dirtying reparents/s during streaks.
+
+**Change** (three coordinated edits):
+1. **`PoolManager`**: additive overload `Register<TItem>(string key, PoolChannel<TItem>
+   channel, Transform container)` that uses the caller's parent instead of creating one
+   under `[Pool]`. `ProgressNoticePresenter.RegisterChannel` (:96-102) passes `_parent`
+   (the bar RectTransform) — notices are created and prewarmed under the bar and never
+   leave.
+2. **Spawn path**: `ProgressNotice.OnSpawned` keeps only the state resets (drop the
+   reparent); presenter drops `notice.SetParent(_parent)` in `SpawnPointNotice` (:59) and
+   `ShowStreak` (:80); delete the now-unused `ProgressNotice.SetParent` + `_parent` field.
+3. **Return path**: guard `PoolChannel.Return` (:73-76) and `PushWarm` (:112-115) with
+   `item.transform.parent != Container` before reparenting — behavior-preserving (items
+   genuinely moved while active still snap back).
+
+**Edge cases**: draw order — notices now sit at fixed sibling positions; José verifies
+point/streak numbers render **above** the bar fill (fix once at prewarm via sibling index
+or the U1 nested canvas if not). Lifetime — notices no longer persist under `[Pool]`
+across reloads; they're re-prewarmed by `ColorProgressBar.Start` (:177-180); this also
+removes a per-run DontDestroyOnLoad leak. `GetOrRegister` fallback stays (channel is
+always pre-registered synchronously at the top of `PrewarmAsync` before any spawn).
+
+**Blast radius warning**: the `PoolChannel` guard touches **every pooled type**. Land U2
+independently (own commit) and run a fable regression review over pooled consumers
+(trails, VFX, particles) — items reparented while active must still snap back (they do:
+`parent != Container`).
+
+---
+
+## Tier 2: GPU / Shader (re-prioritized for Mali-G715)
+
+### G6 — fp16 in `ScreenSpaceLightSmear.shader` · **opus, same session as G3**
+
+Valhall Gen4 does 2× fp16 (512 vs 256 ops/cy) — top shader lever on the actual device.
+RTs are tiny (capture÷SmearDownscale, e.g. ~135×60) and output is ARGB32 (8-bit), so
+accumulation only has to resolve ~1/256.
+
+**Precision discipline (the spec)**:
+- → `half`: the small uniforms (`_TapStepScale/_TapAspect/_TapDecay/_TapStart/
+  _SecondaryWeight/_CloudGateStrength`); fetch destinations (`half ownCoverage`,
+  `half4 occluder`, `half4 lit`) — the main win, Mali fetches into fp16 registers
+  natively; weights/decay (`w`, `dw`, `dirWeights[4]`, `half2 dirs[4]`); accumulators
+  (`shadowAcc/shadowWeightSum`, `half3 bounceAcc`, `bounceWeightSum` — bounded ≤ ~8,
+  fp16 resolves ~0.004 there ≈ the output's 1/256 step).
+- → **stay `float`**: ALL sample coordinates and UV offsets (`worldPos`, `stepBase`,
+  `IN.uv ± stepBase*offset` — one texel ≈ 0.0074 on a 135-wide RT, fp16 resolves ~0.0005
+  near 1.0: borderline, the classic fp16 trap); ALL lod args (`maxMip`, `shadowMip`,
+  `mip` — half lod snaps to integer mips on some drivers); `_MipSpread`/`_ShadowMipSpread`
+  (feed log2/lod); `_MainTex_TexelSize`.
+- Banding fallback: if the A/B shows banding, promote **only the two weight-sum divisors**
+  back to float and re-test.
+- Don't touch the `_LOW_QUALITY_SMEAR` keyword logic. Pass 1 converts alongside G3
+  (`half4 acc`; `texel` stays float).
+
+**Verify (José)**: A/B BOTH variants — the `_LOW_QUALITY_SMEAR` variant is the device
+one (`ScreenSpaceLightService.cs:175-179` enables it mobile-only). Watch shadow gradients
+on a dense cluster + a lone light for stair-stepping. On device: smear-pass GPU time on
+capture-refresh frames should drop ~30-40% ALU (texture/bandwidth won't halve).
+
+**fp16 candidate list after this ships** (same rules): 1. `PuffCloud.shader` (overdrawn
+noise, best next), 2. `BackgroundCloud.shader`, 3. `WallNet`/`SpeckField` after Step 0
+confirms fill-bound. Skip the tiny SceneLight field shaders.
+
+### G3 — 4-tap bilinear blur (Pass 1) · with G6
+
+Pass 1 (:144-172) is an unrolled 9-tap 3×3 flat box. **Correction to the old plan: 4
+bilinear taps CANNOT reproduce a flat 1/9 box** — taps at ±0.5-texel diagonal offsets
+produce the [1 2 1]⊗[1 2 1]/16 **tent**. That's a slightly softer, better-centered blur —
+arguably preferable for a pass whose job is smear-streak removal + upsample filtering, but
+it is a visible output change requiring sign-off, not a free swap.
+
+Sampler requirement verified: both smear RTs are `FilterMode.Bilinear`
+(`ScreenSpaceLightService.cs:291`) — the trick is valid.
+
+**Change**: replace the 9-tap loop with 4 samples at
+`texel * (±0.5, ±0.5)`, `return acc * 0.25`. `acc` → `half4` (G6), `texel` stays float.
+
+**Verify (José)**: visual A/B of light-buffer softness; sign off the tent look.
+
+### G4 — BackgroundField bake fine-octave skip · **sonnet**
+
+`BackgroundGenRawNoise` (`BackgroundFieldGen.cginc:49-62`) unconditionally sums base
+×0.50 + detail ×0.30 + fine ×0.20; the display shaders already gate their fine work via
+`_LOW_QUALITY_CLOUD` but the bake (`BackgroundFieldDensity.shader`) does not.
+
+**Change** (b0f9ad83-safe pattern, mandatory):
+1. `BackgroundFieldDensity.shader`: add `#pragma multi_compile_local _ _LOW_QUALITY_CLOUD`.
+2. `BackgroundFieldGen.cginc`: under the keyword, drop the fine octave **and renormalize
+   the two survivors to sum to 1** (×0.625 / ×0.375) — without renorm the density DC
+   shifts and the `smoothstep(_EdgeLow,_EdgeHigh,…)` cloud coverage visibly changes. Skip
+   computing `pFine` under the keyword.
+3. `BackgroundFieldService.Start` (:63-68): it already enables the keyword on the display
+   material mobile-only — add the same **per-material `EnableKeyword`** on
+   `_settings.DensityMaterial`. Never `Shader.EnableKeyword` (global) — that is the
+   b0f9ad83 release crash. (A4 later relocates these enable sites into the tier system.)
+
+**Verify (José)**: cloud coverage/silhouette unchanged, only fine wisps lost; bake-pass
+GPU time on bake frames ~-25%. Note: bake is cadence-gated, so absolute win is modest.
+
+**Coordination**: José currently has uncommitted edits in `BackgroundField.cginc`
+(display include — different file, same feature). Sync before starting.
+
+### G1 — Blit budget controller · **opus**, after Step 0 confirms spikes matter
+
+Today the coordinator is a one-shot phase assigner; effects self-decide in their own
+`Tick`/`LateUpdate`, offsets drift, and `ScreenSpaceLightService` (2 blits,
+`ScreenSpaceLightService.cs:112-113`) isn't registered at all
+(`GameScopeRegistration.cs:195` lacks `.As<ICadencedEffect>()`). Worst-case coincidence
+~9 weighted blits.
+
+**Design — pull-based permits, not coordinator-driven rendering** (least invasive;
+cadence stays the effects' own):
+- New `IBlitBudget` (plain C#, `Shared/Cadence/`): `BeginFrame()`,
+  `TryAcquire(int weight, ICadencedEffect effect)`. Cap from a small config value
+  (default 4, matching the ≤4 checkpoint). Per-effect starve counter; at
+  `starve >= MaxDeferFrames` (≈2) the acquire force-grants regardless of cap —
+  **starvation guarantee**.
+- `ICadencedEffect` gains `bool WantsToRender()` (each effect's existing due/dirty check,
+  ~3 lines each). Coordinator becomes `IStartable + ITickable`: `Start` keeps the phase
+  offsets; `Tick` does `BeginFrame` → poll wanters → sort by (starve desc, weight desc) →
+  grant in priority order → effects check their granted flag at the blit site.
+- **Transition bypass preserved** (`83a91af6`): transitioning effects are treated as
+  starve-maxed (always granted).
+- `ScreenSpaceLightService` registers as `ICadencedEffect` (weight 2);
+  `WantsToRender()` = ContentVersion advanced. Budget layers ON TOP of its capture-version
+  gate — it never renders without a fresh capture (wasteful), and if deferred it simply
+  smears a fresher capture next grant (one-frame staleness already tolerated).
+- Accumulators are untouched on defer (services already clamp to one interval) — no lost
+  work, only delay. Cadence decides *if*; budget decides *whether this frame or next*.
+
+**Ordering risk**: coordinator's `Tick` must precede effect ticks — VContainer `ITickable`
+order = registration order; register the coordinator first and assert frame order in dev.
+`Tick` must stay zero-alloc (no LINQ; reusable sort list).
+
+**Tests**: `IBlitBudget` is pure C# — unit-test grants/deferrals/starvation
+(test-everything agent).
+
+**Verify**: Frame Debugger dump — force a coincidence (spawn burst + moving light +
+transition); no frame exceeds cap except transition force-grants. Measure spike P99, not
+P50 — **this smooths spikes; it will not fix a sustained 80**.
+
+**Blast radius**: `ICadencedEffect`, coordinator, new budget, `GameScopeRegistration`,
++ ~3 lines in each of 6 effect services.
+
+### G5 — Gradient-skip · **DEFERRED — riskier than it looks** (opus if ever done)
+
+Architect finding that invalidates the naive skip: `SceneLightAccumulate.shader:121`
+hardcodes GB = 0.5 (neutral direction) every accumulate and **depends on the Gradient
+pass to reconstruct direction from grad(R)** — skipping Gradient after an Accumulate
+flattens all local-light direction bending. A safe G5 needs: (1) the accumulate shader to
+pass through the previous GB (`tex2D(_MainTex, uv).gb`) instead of neutral, and (2) the
+service to split `BatchUnchanged` (:308-345) into ShapeChanged (position/radius/falloff/
+color → full path) vs MagnitudeOnlyChanged (accumulate only, skip gradient). Even then the
+fringe weight `saturate(R * _DirectionResponse)` (`SceneLightGradient.shader:77`) lags one
+render during fades — needs a visual A/B for shimmer.
+
+All that machinery saves **one blit on a ~135×60 RT**. Do this only if Step 0 shows the
+light-field chain hot, and never ship the naive skip.
+
+---
+
+## Tier 3: Architectural (gated on Step 0 evidence)
+
+### A4 — Quality tiers + ADPF · **opus** — required for ship, promoted earlier
+
+Sustained raw 120 on Tensor G4 is thermally unrealistic (~59% GPU stress stability).
+Package status: the adaptiveperformance module is present, but the **Google Android
+provider (`com.unity.adaptiveperformance.google.android`) is NOT in the manifest** — add
+via Package Manager (José, in-editor).
+
+**Architecture** (new `Shared/Quality/`):
+- `QualityTierService` (plain C#, `IStartable + ITickable`, RegisterEntryPoint in
+  `GameLifetimeScope`): polls an `IThermalSource` adapter — a Ports-and-Adapters wrapper
+  over `AdaptivePerformance.Holder.Instance` so game code never touches the package type
+  and it stubs in editor/tests. Publishes `ReactiveProperty<QualityTier>` (High/Mid/Low).
+  **Thermal-driven, never FPS-driven** (thermal precedes the drop). Hysteresis: short
+  down-timer (headroom < 0.15), long up-timer (headroom > 0.40), minimum dwell — prevents
+  RT-reallocation thrash.
+- `IRuntimeQualityKnobs` facade (the never-duplicate-config seam): combines base config
+  (injected read-only interfaces) × the active tier's **scales/deltas** from a new
+  `QualityTierConfiguration` SO (stores scales and the fps ladder, never copies of base
+  values). Consumers read the facade instead of raw config:
+
+| Knob | Consumer change |
+|---|---|
+| `SmearDownscale` | `ScreenSpaceLightService.EnsureTargets` (:215) reads `_knobs` |
+| Field/bake intervals | the 5 field services' `X/60f` lines × `FieldIntervalScale` |
+| Speck count | `SpeckField` cap |
+| URP `renderScale` | written by the service on tier change — the fill-rate lever |
+| `Application.targetFrameRate` | 120→90→60 ladder (confirm actual Pixel 9 panel modes; don't assume vsync divisors) |
+| `_LOW_QUALITY_*` keywords | the per-material EnableKeyword sites (currently `ScreenSpaceLightService.cs:175`, `BackgroundFieldService.cs:63`, +G4's) relocate here, re-applied on tier change |
+
+- Editor/dev override: `_forceTierInEditor` + forced tier on the SO
+  (`#if UNITY_EDITOR || DEVELOPMENT_BUILD`), plus a cheat to cycle tiers on device.
+- No provider (editor / non-Google device) → default High, honor override, no crash path.
+
+**Verify (José)**: 15-min continuous play — tier steps down *before* frame time degrades;
+tier-residency histogram stable (no oscillation); cheat-cycle each tier and confirm every
+knob propagates (smear RT size, speck count, target rate, render scale, keyword state).
+
+### A1 — Render Graph prototype · **opus** — go/no-go, only on Step-0 GPU evidence
+
+**Prototype on `BackgroundFieldService` ONLY**: the simplest chain (single
+`Graphics.Blit`, :137, no ping-pong, no capture dependency) whose output is globally
+sampled — it proves the import-external-RT pattern the others would need.
+
+**Shape**: `FieldBlitRendererFeature : ScriptableRendererFeature` on the 2D renderer data
+asset (asset edit — José). Service keeps deciding (cadence + transition in `Tick`) but
+sets a request flag + material on the feature instead of blitting; `AddRenderPasses`
+enqueues only when flagged, then clears. `RecordRenderGraph`: `ImportTexture` the
+persistent RT (cross-frame external — RG must never own it),
+`SetRenderAttachment`, **`LoadAction.DontCare`** (the bake overwrites every texel — this
+is the entire win), `StoreAction.Store`, `Blitter.BlitTexture`. Global binding unchanged
+(same RT instance). Guard `AddRenderPasses` to the main game camera only (2D Renderer runs
+it per-camera — capture camera + scene view would multi-bake).
+
+**Go/no-go measurement**: AGI tile load/store cost on the density RT, before vs after. The
+RT is small — the delta may be within noise; if so, **do not migrate the rest** — the
+effort goes to A4 + overdraw instead. Reminder of the audit: RG pass *merging* can never
+apply here (different-sized persistent RTs); DontCare/scheduling is the only prize.
+
+### A2 — SceneCapture → Renderer Feature · **parked** behind A1
+
+Still a second full camera render per cadence tick (weight 3, heaviest consumer;
+`12df3c37` only gated the downstream smear). A feature pass on the main camera would reuse
+the main cull but must: re-issue the capture-layer draws into the small RT (the draw cost
+stays), reproduce the alpha-0 coverage clear + live background tint (:92-93, :149-156),
+conditionally enqueue to preserve cadence, satisfy the RG depth-attachment requirement
+(Display/README.md), reconcile capture vs main culling masks, and relocate manual
+`GenerateMips` (:73). Strictly harder than A1 with the same caveats — pursue only if A1
+proves the interop AND the second camera's cull shows up in Step-0 captures.
 
 ---
 
@@ -160,6 +592,9 @@ dominator; the previous plan had nothing aimed at it.
   legibility pass) and by the plan's own admission that the bottleneck isn't CPU math.
   Job-scheduling overhead for ≤100 small point sets would eat the win. F2 captures the
   real cost for one line.
+- **A5 (merge Disturbance + Painting RTs)** — deferred indefinitely: texel-density
+  mismatch (8 vs 16/unit) + structurally different math (diffusion PDE vs local decay);
+  not a channel-packing change. Only if Step 0 shows both fields hot in the same frames.
 
 ## Investigated and Skipped (carried over)
 
@@ -173,36 +608,48 @@ dominator; the previous plan had nothing aimed at it.
 
 ---
 
-## Verification Protocol
+## Dependency map & execution waves
 
-**All shader changes need on-device visual verification** (dotnet build does not compile
-shaders): G6 banding, G3 blur softness, G4 cloud detail.
+```mermaid
+graph TD
+    S0[Step 0] --> G1
+    S0 --> A1
+    S0 -.priority.-> G5
+    G6 --- G3
+    A1 --> A2
+    A4 -.absorbs keyword sites.-> G4
+    A4 -.drives SmearDownscale.-> G6
+    G1 -.GameScopeRegistration.-> A4
+    A1 -.BackgroundFieldService.Tick.-> G4
+```
 
-**Profiling checkpoints** (Pixel 9, after each tier):
-- P50 frame time < 8.33 ms (120 FPS)
-- P99 frame time < 11.11 ms (allows 1-frame dips to 90 FPS — the previous "12 ms = 90 FPS"
-  was arithmetically wrong; 12 ms ≈ 83 FPS)
-- Off-graph blit count: ≤ 4 per frame worst case (Frame Debugger dump / AGI)
-- Thermal: 15 min continuous play without dropping a tier (once A4 exists, tier residency
-  is the metric — sustained raw 120 is not achievable on this SoC without tiers)
-
-**Tooling gap**: `FPSCounter` reports rolling average + worst-frame-in-window, not
-percentiles — extend it with a small frame-time histogram (P50/P99 readout) or use
-Perfetto traces for the checkpoint numbers. The Frame Debugger dump tool is editor-only
-(structure, not timing).
+- **Same file ⇒ same session**: G6+G3 (`ScreenSpaceLightSmear.shader`, one commit);
+  C1+C3 (`ProjectileView.cs`).
+- **Serialize**: G4 → A1 → A4 all touch `BackgroundFieldService` (G4 `Start` keyword;
+  A1 `Tick` blit→feature; A4 relocates keyword sites — G4 before A4 or the site lands
+  where A4 moves it). G1 → A4 both edit `GameScopeRegistration` + multiple services.
+- **Independent**: F2, F3, F4, U1 (disjoint files). U2 lands in its own commit (shared
+  pool code, regression review). José's in-flight `BackgroundField.cginc` edits — sync
+  before G4.
+- **Waves**: (1) F2+F3 · (2) U1+U2 with joint A/B · (3) G6+G3, then G4 · (4) re-profile ·
+  (5) G1 if spikes matter · (6) F4 · (7) A4 · (8) A1 go/no-go → A2 only on evidence.
+  G5 stays deferred.
 
 ---
 
-## Recommended Implementation Order
+## Verification Protocol
 
-1. **Step 0** — pacing/ARR check, CPU-vs-GPU capture, overdraw look, thermal baseline.
-   Everything below re-ranks on its outcome.
-2. **F2 + F3** — trivial GC fixes, commit together.
-3. **U1 + U2** — arrival-storm canvas fixes, with a profiler A/B on a 250-point burst.
-4. **G6 + G3** — Mali fp16 pass + bilinear blur, commit together, on-device visual check.
-5. **Re-profile on device** — measure where we stand.
-6. **G4 + G5 + C1 + C3** — mop-up round.
-7. **F4** — shader warmup (SVC captured on device).
-8. **A4** — quality tiers + ADPF; required before shipping any high-refresh target.
-9. **A1 prototype on one service** — only if step 5's GPU capture justifies it; A2/A5
-   remain parked behind that evidence.
+**All shader changes need on-device visual verification** (dotnet build does not compile
+shaders): G6 banding, G3 tent softness sign-off, G4 cloud coverage.
+
+**Profiling checkpoints** (Pixel 9, after each wave):
+- P50 frame time < 8.33 ms (120 FPS)
+- P99 frame time < 11.11 ms (allows 1-frame dips to 90 FPS — the previous "12 ms = 90 FPS"
+  was arithmetically wrong; 12 ms ≈ 83 FPS)
+- Off-graph blit count: ≤ 4 weighted per frame worst case (Frame Debugger dump / AGI)
+- Thermal: 15 min continuous play without dropping a tier (once A4 exists, tier residency
+  is the metric — sustained raw 120 is not achievable on this SoC without tiers)
+
+**Percentile sources**: `adb shell dumpsys gfxinfo <package>` gives P50/P90/P95/P99 +
+missed-vsync with zero code (Step 0 §1). `FPSCounter` remains rolling-average only —
+extend with a histogram only if gfxinfo/Perfetto prove insufficient.
