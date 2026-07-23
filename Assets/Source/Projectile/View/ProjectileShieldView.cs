@@ -38,7 +38,7 @@ namespace BalloonParty.Projectile.View
 
         [Inject] private IGamePalette _palette;
         [Inject] private IShieldFieldSettings _settings;
-        [Inject] private IGameConfiguration _gameConfig;
+        [Inject] private IProjectileFlightConfig _gameConfig;
         [Inject] private PoolManager _poolManager;
         [Inject] private SlotGrid _grid;
         [Inject] private ProjectileMotionResolver _motionResolver;

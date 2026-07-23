@@ -23,7 +23,7 @@ namespace BalloonParty.Projectile.Controller
         private readonly ISubscriber<PierceDischargedMessage> _dischargedSubscriber;
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly TimeScaleService _timeScale;
-        private readonly IGameConfiguration _config;
+        private readonly IProjectileFlightConfig _config;
 
         private IDisposable _subscription;
         private CancellationTokenSource _dipCts;
@@ -32,7 +32,7 @@ namespace BalloonParty.Projectile.Controller
             ISubscriber<PierceDischargedMessage> dischargedSubscriber,
             DisturbanceFieldService disturbanceField,
             TimeScaleService timeScale,
-            IGameConfiguration config)
+            IProjectileFlightConfig config)
         {
             _dischargedSubscriber = dischargedSubscriber;
             _disturbanceField = disturbanceField;

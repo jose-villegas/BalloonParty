@@ -24,7 +24,7 @@ namespace BalloonParty.Tests.Projectile
         [SetUp]
         public void SetUp()
         {
-            var config = Substitute.For<IGameConfiguration>();
+            var config = Substitute.For<IProjectileFlightConfig>();
             config.LimitsClockwise.Returns(Walls);
             _resolver = new ProjectileMotionResolver(config);
         }
@@ -546,7 +546,7 @@ namespace BalloonParty.Tests.Projectile
 
         private static ProjectileMotionResolver LastShieldResolver(AnimationCurve approachCurve, float durationSeconds)
         {
-            var config = Substitute.For<IGameConfiguration>();
+            var config = Substitute.For<IProjectileFlightConfig>();
             config.LimitsClockwise.Returns(Walls);
             config.CruiseTapCurve.Returns(AnimationCurve.Linear(0f, 0f, 1f, 1f));
             config.LastShieldApproachCurve.Returns(approachCurve);
@@ -558,7 +558,7 @@ namespace BalloonParty.Tests.Projectile
             float perShield, float tapEaseDuration = 0f, int piercingTapThreshold = 0,
             float maxSpeedMultiplier = 0f)
         {
-            var config = Substitute.For<IGameConfiguration>();
+            var config = Substitute.For<IProjectileFlightConfig>();
             config.LimitsClockwise.Returns(Walls);
             config.CruiseSpeedPerShield.Returns(perShield);
             config.CruiseTapEaseDuration.Returns(tapEaseDuration);

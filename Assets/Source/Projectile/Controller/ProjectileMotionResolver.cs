@@ -22,7 +22,7 @@ namespace BalloonParty.Projectile.Controller
         internal WallLimits Walls => _walls;
 
         [Inject]
-        internal ProjectileMotionResolver(IGameConfiguration config)
+        internal ProjectileMotionResolver(IProjectileFlightConfig config)
         {
             _walls = new WallLimits(config.LimitsClockwise);
             _cruiseSpeedPerShield = config.CruiseSpeedPerShield;

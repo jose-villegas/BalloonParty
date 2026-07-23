@@ -19,7 +19,7 @@ namespace BalloonParty.Projectile.Controller
     /// </summary>
     internal sealed class ProjectileDoomedTimeScaleController : IStartable, ITickable, IDisposable
     {
-        private readonly IGameConfiguration _config;
+        private readonly IProjectileFlightConfig _config;
         private readonly TimeScaleService _timeScale;
         private readonly ISubscriber<ProjectileDoomedStartedMessage> _doomedStartedSubscriber;
         private readonly ISubscriber<ProjectileDoomedEndedMessage> _doomedEndedSubscriber;
@@ -30,7 +30,7 @@ namespace BalloonParty.Projectile.Controller
 
         [Inject]
         internal ProjectileDoomedTimeScaleController(
-            IGameConfiguration config,
+            IProjectileFlightConfig config,
             TimeScaleService timeScale,
             ISubscriber<ProjectileDoomedStartedMessage> doomedStartedSubscriber,
             ISubscriber<ProjectileDoomedEndedMessage> doomedEndedSubscriber)

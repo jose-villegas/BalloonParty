@@ -3,32 +3,13 @@ using UnityEngine;
 
 namespace BalloonParty.Shared
 {
-    public interface IGameConfiguration
+    public interface IGameConfiguration : IProjectileFlightConfig
     {
-        int ProjectileStartingShields { get; }
         int StartingHitPoints { get; }
-        float ProjectileSpeed { get; }
         float ProjectileLoadDuration { get; }
         float ProjectileDisappearDuration { get; }
         Ease ProjectileDisappearEase { get; }
         float ProjectileDeadDriftFactor { get; }
-        Vector4 LimitsClockwise { get; }
-        int CruiseWallBounceThreshold { get; }
-        float CruiseSpeedPerShield { get; }
-        bool SweepEnabled { get; }
-        int SweepTapThreshold { get; }
-        float MaxCruiseSpeedMultiplier { get; }
-        AnimationCurve CruiseTapCurve { get; }
-        float CruiseTapEaseDuration { get; }
-        int CruisePiercingTapThreshold { get; }
-
-        // Slow-mo dip at the discharge: the time scale it drops to, and for how long (unscaled seconds).
-        float PierceDischargeTimeScale { get; }
-        float PierceDischargeTimeScaleDuration { get; }
-        AnimationCurve LastShieldApproachCurve { get; }
-        float LastShieldApproachDuration { get; }
-        AnimationCurve LastShieldTimeScaleCurve { get; }
-        float ShieldTrailDuration { get; }
 
         Vector2Int SlotsSize { get; }
         Vector2 SlotSeparation { get; }

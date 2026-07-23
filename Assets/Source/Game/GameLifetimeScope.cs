@@ -71,6 +71,7 @@ namespace BalloonParty.Game
         private void RegisterConfiguration(IContainerBuilder builder)
         {
             builder.RegisterInstance<IGameConfiguration>(_gameConfiguration);
+            builder.RegisterInstance<IProjectileFlightConfig>(_gameConfiguration);
             builder.RegisterInstance<IGameDisplayConfiguration>(_displayConfiguration);
             builder.RegisterInstance<IItemConfiguration>(_itemConfiguration);
             builder.RegisterInstance<IGamePalette>(_gamePalette);
