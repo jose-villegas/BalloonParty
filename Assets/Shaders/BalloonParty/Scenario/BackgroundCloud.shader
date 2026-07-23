@@ -56,6 +56,7 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
             #pragma fragment frag
             #pragma target 3.0
             #pragma shader_feature _SHADOW_ON
+            #pragma multi_compile _ _LOW_QUALITY_CLOUD
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
             #include "../Include/BackgroundField.cginc"
@@ -105,6 +106,15 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
             // baked density instead of a raw noise octave.
             fixed3 CloudLighting(float2 worldGradient, float2 worldPos, float cloudDensity)
             {
+                #ifdef _LOW_QUALITY_CLOUD
+                // Simplified: skip gradient normal, use magnitude × key color.
+                float3 keyColor = _SceneLightColor.a > 0.5 ? _SceneLightColor.rgb : float3(1, 1, 1);
+                float mag = _SceneLightFieldOn > 0.5
+                    ? saturate(SceneLightFieldSampleLOD(worldPos).r)
+                    : 0.0;
+                fixed3 shading = lerp(_AmbientColor.rgb, _LightColor.rgb, 0.5 + cloudDensity * 0.25);
+                return shading * lerp(float3(1, 1, 1), keyColor * (mag + SceneLightAmbientMagnitude()), _LightInfluence);
+                #else
                 float dX = clamp(worldGradient.x * 2.0 * _NormalEpsilon * _NormalStrength, -1.5, 1.5);
                 float dY = clamp(worldGradient.y * 2.0 * _NormalEpsilon * _NormalStrength, -1.5, 1.5);
 
@@ -126,6 +136,7 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
                 float influence = lerp(_LightInfluence, _LightInfluence * cloudDensity, biasStrength);
                 float3 sceneTint = SceneLightTintAt(worldPos);
                 return shading * lerp(float3(1.0, 1.0, 1.0), sceneTint, influence);
+                #endif
             }
 
             v2f vert(appdata_t IN)
@@ -158,14 +169,20 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
                 #ifdef _SHADOW_ON
                 // Soft drop shadow composited BEHIND the cloud — an offset tap of the same density map,
                 // down-light of the fragment (rotates with the scene light).
+                #ifdef _LOW_QUALITY_CLOUD
+                float2 shadowWp = wp + SceneLightDirectionAtLOD(wp) * _ShadowDistance;
+                #else
                 float2 shadowWp = wp + SceneLightDirectionAt(wp) * _ShadowDistance;
+                #endif
                 float shadowAlpha = 0.0;
                 if (mainAlpha < 0.999)
                 {
                     float shadowCloud = BackgroundFieldDensity(shadowWp);
                     shadowAlpha = shadowCloud * _ShadowColor.a * IN.color.a;
+                    #ifndef _LOW_QUALITY_CLOUD
                     shadowAlpha *= smoothstep(0.0, _ShadowSoftness + 0.01, shadowCloud);
-                    shadowAlpha *= ShadowLightFadeAt(wp);
+                    #endif
+                    shadowAlpha *= ShadowLightFadeAtLOD(wp);
                 }
 
                 if (cloud < 0.001 && shadowAlpha < 0.001)

@@ -59,6 +59,13 @@ namespace BalloonParty.Scenario
                 return;
             }
 
+#if !UNITY_EDITOR
+            if (Application.isMobilePlatform)
+            {
+                Shader.EnableKeyword("_LOW_QUALITY_CLOUD");
+            }
+#endif
+
             // Origin-centered ortho viewport, same as the disturbance / scene-light fields — reuse their
             // coordinate helper so the cloud field aligns with them and needs no camera.
             var coords = new DisturbanceFieldCoordinates(_display, _settings.TexelsPerUnit);
