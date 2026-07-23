@@ -50,6 +50,23 @@ namespace BalloonParty.Shared.Pool
             channel.SetParent(container.transform);
         }
 
+        /// <summary>
+        ///     Throws if the key is already taken. Homes the channel under <paramref name="container"/>
+        ///     instead of creating one under <c>[Pool]</c> — for pools whose items should live where
+        ///     they're consumed (e.g. UI notices under their bar) rather than reparenting per lifecycle.
+        /// </summary>
+        public void Register<TItem>(string key, PoolChannel<TItem> channel, Transform container)
+            where TItem : Component, IPoolable
+        {
+            if (!_channels.TryAdd(key, channel))
+            {
+                throw new InvalidOperationException(
+                    $"Pool channel '{key}' is already registered.");
+            }
+
+            channel.SetParent(container);
+        }
+
         public void Register<TItem>(PoolChannel<TItem> channel)
             where TItem : Component, IPoolable
         {

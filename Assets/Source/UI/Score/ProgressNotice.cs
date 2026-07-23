@@ -40,7 +40,6 @@ namespace BalloonParty.UI.Score
 
         private RectTransform _rect;
         private Action _onComplete;
-        private Transform _parent;
         private Phase _phase;
         private float _phaseElapsed;
         private float _shownElapsed;
@@ -102,11 +101,6 @@ namespace BalloonParty.UI.Score
             IsFullyShown = false;
             _onComplete = null;
             _phase = Phase.Idle;
-
-            if (_parent != null)
-            {
-                transform.SetParent(_parent, false);
-            }
         }
 
         public void OnDespawned() { }
@@ -115,12 +109,6 @@ namespace BalloonParty.UI.Score
         {
             var rect = (RectTransform)transform;
             rect.anchoredPosition = position;
-        }
-
-        public void SetParent(Transform parent)
-        {
-            _parent = parent;
-            transform.SetParent(parent, false);
         }
 
         public void Show(int score, Action onComplete, Color? color = null)

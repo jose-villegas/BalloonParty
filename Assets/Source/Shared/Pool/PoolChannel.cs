@@ -70,7 +70,7 @@ namespace BalloonParty.Shared.Pool
 
             item.OnDespawned();
             item.gameObject.SetActive(false);
-            if (Container != null)
+            if (Container != null && item.transform.parent != Container)
             {
                 item.transform.SetParent(Container, false);
             }
@@ -109,7 +109,7 @@ namespace BalloonParty.Shared.Pool
         private void PushWarm(TItem item)
         {
             item.gameObject.SetActive(false);
-            if (Container != null)
+            if (Container != null && item.transform.parent != Container)
             {
                 item.transform.SetParent(Container, false);
             }
