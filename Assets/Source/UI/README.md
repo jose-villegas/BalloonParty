@@ -25,9 +25,9 @@ Each self-contained UI section has its own VContainer child scope, inheriting al
 | `Health/` | Hit-point counter label and heart trails to overflow pops | `HealthUILifetimeScope` (child of `GameLifetimeScope`) |
 | `Danger/` | Space-danger gradient overlay (`DangerGradientView`) | `DangerUILifetimeScope` (child of `GameLifetimeScope`) |
 | `GameOver/` | Loss screen (`GameOverScreen`) — see `GameOver/README.md` | `GameOverLifetimeScope` (child of `GameLifetimeScope`) |
-| `Binding/` | Shared reactive binding helpers — `IReactiveBindable<T>`, `ReactivePropertyBinder`, and the `RegisterBoundViews` scope extension used by the Health and Danger scopes | — |
+| `Binding/` | Shared reactive binding helpers — `IReactiveBindable<T>`, `ICounterDisplay` (strategy interface for counter rendering), `ReactivePropertyBinder`, and the `RegisterBoundViews` scope extension used by the Health and Danger scopes | — |
 
-Root-level helpers: `ReactiveCounterLabel` (base for TMP counter labels bound to an `int` reactive property), `FormattedLabel` (captures a label's authored text as a `{0}` template), and `RectAnchorMath` (static `RectTransform` position math).
+Root-level helpers: `ReactiveCounterLabel` (abstract base for counter labels — subscribes a reactive `int` property and delegates rendering to an `ICounterDisplay` sibling resolved via `GetComponent`), `RollingCounterDisplay` (rolling-odometer `ICounterDisplay` backed by `RollingTextAnimator`), `PlainCounterDisplay` (plain thousands-formatted `ICounterDisplay`), `FormattedLabel` (captures a label's authored text as a `{0}` template), and `RectAnchorMath` (static `RectTransform` position math).
 
 ## Game start
 

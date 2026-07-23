@@ -7,7 +7,7 @@ Displays the projectile's remaining shields, animates state changes, and spawns 
 | File | What it does |
 |---|---|
 | `ShieldUILifetimeScope` | VContainer child scope on the shield HUD root; registers `ShieldCounterLabel[]`, `ShieldCounterAnimation`, trail prefab, the HUD anchor as the `Shield` trail endpoint, and `ShieldTrailController` entry point |
-| `ShieldCounterLabel` | `ReactiveCounterLabel` subclass showing the shield count — "--" until bound and between turns; bound to the live projectile's `ShieldsRemaining` by `ShieldCounterAnimation` on each load |
+| `ShieldCounterLabel` | Marker subclass of `ReactiveCounterLabel` — rendering delegated to a `RollingCounterDisplay` sibling component. Shows "--" until bound and between turns; bound to the live projectile's `ShieldsRemaining` by `ShieldCounterAnimation` on each load |
 | `ShieldCounterAnimation` | Drives Animator triggers (`Ready`, `Lost`, `Gain`, `Waiting`) based on `ShieldsRemaining` changes; binds/unbinds the labels on projectile load/destroy |
 | `ShieldTrailController` | Plain C# `IStartable` — subscribes to `ShieldGainedMessage` (balloon → HUD) and `ShieldLostMessage` (HUD → wall bounce); composes a `TrailSpawner` (pool key `ShieldTrail`, which builds its own `SimplePoolChannel<FlyingTrail>` internally) to fly `FlyingTrail` orbs between the balloon/bounce point and the shield HUD endpoint |
 

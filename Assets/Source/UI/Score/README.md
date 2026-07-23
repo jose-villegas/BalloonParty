@@ -15,7 +15,7 @@ Tracks and displays player progress toward the next level — one bar per balloo
 | `GraphicColorableRenderer` | `ColorableRenderer<Graphic>` — enables `ColorableRenderer`-based tinting for UI `Graphic` components |
 | `FlyingTrail` | Pooled orb that flies from balloon world position → bar position via DOTween. Supports single-phase (`Setup`), two-phase burst (`SetupBurst`), and live-target follow (`SetupFollow` — homes on a target provider re-read every frame, so a drifting endpoint is still hit exactly) flight modes. `SetSortingOrder` overrides the default UI sorting order for glow trails. Also doubles as the orbiting "pen" for BigScore shape formations (`Game/Score/Behaviours/`) — `SetRibbonTime`/`SetRibbonEmitting`/`ClearRibbon`/`TransformRibbon`/`FreezeRibbon`/`ThawRibbon` let `ShapeFormationTicker` drive its `TrailRenderer` directly instead of via `DOTween` |
 | `SimplePoolChannel<FlyingTrail>` | per-color pool keyed by `ScoreTrail_{colorName}` |
-| `ScoreCounterLabel` | Binds total-score `TMP_Text` to `ScoreController.TotalScore` |
+| `ScoreCounterLabel` | Empty marker subclass of `ReactiveCounterLabel`; rendering delegated to a `RollingCounterDisplay` sibling component. Bound to `ScoreController.TotalScore` by the scope |
 | `LevelLabel` | Binds level `TMP_Text` to `LevelController.Level`; `_showNextLevel` toggle |
 
 ## How it works
