@@ -2,6 +2,9 @@ using BalloonParty.Slots.Actor.Cluster;
 using BalloonParty.Slots.Grid;
 using VContainer;
 using BalloonParty.Configuration.Effects;
+#if !UNITY_EDITOR
+using UnityEngine.Application;
+#endif
 
 namespace BalloonParty.Slots.Actor.Archetype
 {

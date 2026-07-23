@@ -846,7 +846,7 @@ MonoBehaviour:
       _gridActorGates:
       - _type: 0
         _count:
-          _min: 9
+          _min: 7
           _max: 0
           _mode: 0
         _maxPerCluster: 3
@@ -1175,7 +1175,7 @@ MonoBehaviour:
       _gridActorGates:
       - _type: 0
         _count:
-          _min: 12
+          _min: 9
           _max: 0
           _mode: 0
         _maxPerCluster: 4
@@ -1504,10 +1504,10 @@ MonoBehaviour:
       _gridActorGates:
       - _type: 0
         _count:
-          _min: 13
-          _max: 14
+          _min: 10
+          _max: 12
           _mode: 2
-        _maxPerCluster: 6
+        _maxPerCluster: 5
       _allowedColorsMask: 7
   - _fromLevel: 6
     _toLevel: 6
@@ -1931,10 +1931,10 @@ MonoBehaviour:
       _gridActorGates:
       - _type: 0
         _count:
-          _min: 15
-          _max: 16
+          _min: 11
+          _max: 13
           _mode: 2
-        _maxPerCluster: 7
+        _maxPerCluster: 6
       _allowedColorsMask: 7
   - _fromLevel: 7
     _toLevel: 7
@@ -2453,10 +2453,10 @@ MonoBehaviour:
       _gridActorGates:
       - _type: 0
         _count:
-          _min: 16
-          _max: 17
+          _min: 12
+          _max: 15
           _mode: 2
-        _maxPerCluster: 7
+        _maxPerCluster: 6
       _allowedColorsMask: 7
   - _fromLevel: 8
     _toLevel: 8
@@ -3032,8 +3032,8 @@ MonoBehaviour:
       _gridActorGates:
       - _type: 0
         _count:
-          _min: 17
-          _max: 18
+          _min: 14
+          _max: 16
           _mode: 2
         _maxPerCluster: 8
       _allowedColorsMask: 7
@@ -3751,7 +3751,7 @@ MonoBehaviour:
       - _type: 0
         _count:
           _min: 3
-          _max: 14
+          _max: 9
           _mode: 2
         _maxPerCluster: 5
       - _type: 1
@@ -4171,28 +4171,28 @@ MonoBehaviour:
       _cumulativeScore: 700
       _segmentMode: 0
     - _level: 2
-      _cumulativeScore: 1100
+      _cumulativeScore: 1200
       _segmentMode: 0
     - _level: 3
       _cumulativeScore: 2100
       _segmentMode: 0
     - _level: 4
-      _cumulativeScore: 3300
+      _cumulativeScore: 3200
       _segmentMode: 0
     - _level: 5
       _cumulativeScore: 4200
       _segmentMode: 0
     - _level: 6
-      _cumulativeScore: 5400
+      _cumulativeScore: 5300
       _segmentMode: 0
     - _level: 7
-      _cumulativeScore: 6900
+      _cumulativeScore: 6500
       _segmentMode: 0
     - _level: 8
-      _cumulativeScore: 8700
+      _cumulativeScore: 7900
       _segmentMode: 0
     - _level: 9
-      _cumulativeScore: 9900
+      _cumulativeScore: 9000
       _segmentMode: 0
     _tailGrowth:
       _mode: 0

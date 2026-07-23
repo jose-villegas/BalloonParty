@@ -32,19 +32,19 @@ MonoBehaviour:
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
   - Sources: 2
     Radius: 0.35
-    Opacity: 0.2
+    Opacity: 0.85
     ColorMode: 1
     PaletteColorName: Tough
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
   - Sources: 4
-    Radius: 0.25
-    Opacity: 0.3
+    Radius: 0.3
+    Opacity: 0.75
     ColorMode: 1
     PaletteColorName: Tough
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
   - Sources: 8
     Radius: 0.2
-    Opacity: 0.1
+    Opacity: 0.8
     ColorMode: 1
     PaletteColorName: Tough
     CustomColor: {r: 1, g: 1, b: 1, a: 1}

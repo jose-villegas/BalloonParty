@@ -72,6 +72,7 @@ Shader "BalloonParty/Display/PaintingFieldStamp"
                     float dist = length(pa - ba * h);
 
                     float mask = 1.0 - smoothstep(radius * 0.7, radius, dist);
+                    mask *= _StampColors[s].a;
 
                     stampAccum += stampColor * mask;
                     stampWeight += mask;
