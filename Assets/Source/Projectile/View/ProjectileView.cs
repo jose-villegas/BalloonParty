@@ -468,6 +468,8 @@ namespace BalloonParty.Projectile.View
             }
 
             var travelDirection = _model.Direction;
+            var wasPiercing = _model.IsPiercing.Value;
+            var segmentOrigin = (Vector3)_model.Flight.SegmentStartPosition;
             var step = _motionResolver.Step(_model, transform.position, Time.fixedDeltaTime);
 
             if (step.Outcome != ProjectileStepOutcome.Moved)
@@ -513,6 +515,25 @@ namespace BalloonParty.Projectile.View
                 {
                     _speckPublisher.Publish(new SpeckSpawnRequestMessage(
                         SpeckSource.ProjectileCruise, step.WallContact, velocityT));
+                }
+            }
+
+            // Tunneling safety net: at any wall bounce while piercing, sweep the segment with a
+            // CircleCastAll to catch toughs that OnTriggerEnter2D missed at high speed. Two cases:
+            // 1. Resolver already ended pierce (pending > 0 detected) — we add any extras before discharge.
+            // 2. ALL toughs were tunneled (pending was 0 at Step) — sweep finds them, then we end pierce.
+            if (wasPiercing && step.Outcome == ProjectileStepOutcome.Bounced)
+            {
+                SweepPierceMisses(segmentOrigin, step.WallContact);
+
+                // Case 2: the resolver left pierce active because it saw no pending hits, but our sweep
+                // just found toughs — end the pierce now so the discharge below fires.
+                if (_model.IsPiercing.Value && _model.Flight.PendingPierceHits.Count > 0)
+                {
+                    _model.Flight.ConsecutiveWallBounces = 0;
+                    _model.Flight.TotalCruiseTaps = 0;
+                    _model.IsCruising.Value = false;
+                    _model.IsPiercing.Value = false;
                 }
             }
 
@@ -880,6 +901,43 @@ namespace BalloonParty.Projectile.View
             }
 
             return false;
+        }
+
+        // Tunneling safety net: a full-segment CircleCastAll from the previous wall to the current
+        // wall, catching any tough balloons OnTriggerEnter2D missed at high speed. Adds them to
+        // PendingPierceHits so the discharge that follows includes every tough in the path.
+        private void SweepPierceMisses(Vector3 segmentStart, Vector3 wallHit)
+        {
+            var direction = (Vector2)(wallHit - segmentStart);
+            var length = direction.magnitude;
+            if (length < 1e-4f)
+            {
+                return;
+            }
+
+            direction /= length;
+            var hits = Physics2D.CircleCastAll(segmentStart, _contactRadius, direction, length, 1 << BalloonsLayer);
+            if (hits.Length == 0)
+            {
+                return;
+            }
+
+            var pending = _model.Flight.PendingPierceHits;
+            foreach (var hit in hits)
+            {
+                if (!TryGetHitBalloon(hit.collider, out _, out var balloonModel))
+                {
+                    continue;
+                }
+
+                if (!balloonModel.IsTough() || AlreadyPlowed(balloonModel))
+                {
+                    continue;
+                }
+
+                pending.Add(new PendingPierceHit(balloonModel, hit.collider.transform.position));
+                _model.Flight.PierceWasRainbow = _model.HasBuff(ProjectileBuffId.RainbowShield);
+            }
         }
 
         private void OnDoomedChanged(bool doomed)

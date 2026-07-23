@@ -106,6 +106,8 @@ The discharge itself plays a shared shockwave-and-slow-mo beat, owned by `Contro
 
 The discharge fires at the **next wall bounce** after the shot plows at least one tough — every tough plowed on a single wall-to-wall segment is collected and shattered together when the shot hits the wall (`ProjectileMotionResolver.Step`, wall-discharge branch). If the shot dies at the wall (no shields), `DestroyProjectile` flushes pending hits as a safety net. Piercing persists indefinitely across empty-corridor walls (no toughs plowed = no discharge), so the buff only ends when the shot actually encounters a tough line.
 
+**Tunneling safety net** — at high cruise/pierce speeds the projectile can tunnel through balloons (Unity's `OnTriggerEnter2D` fires per-fixed-step and can skip thin colliders). On every wall bounce while piercing, `SweepPierceMisses` runs a `CircleCastAll` from the segment's start to the wall hit. Any tough balloon in the swept path that wasn't already registered via trigger is added to `PendingPierceHits` before the discharge resolves — guaranteeing every tough in the flight line is shattered.
+
 ## Buffs (`Buffs/`)
 
 A **projectile buff** is a temporary stat modifier on the active projectile following the
