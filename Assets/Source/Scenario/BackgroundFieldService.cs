@@ -65,11 +65,6 @@ namespace BalloonParty.Scenario
             {
                 _settings.CloudDisplayMaterial.EnableKeyword("_LOW_QUALITY_CLOUD");
             }
-
-            if (Application.isMobilePlatform && _settings.DensityMaterial != null)
-            {
-                _settings.DensityMaterial.EnableKeyword("_LOW_QUALITY_CLOUD");
-            }
 #endif
 
             // Origin-centered ortho viewport, same as the disturbance / scene-light fields — reuse their

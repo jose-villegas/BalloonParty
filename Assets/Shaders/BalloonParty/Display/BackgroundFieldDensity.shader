@@ -36,7 +36,6 @@ Shader "BalloonParty/Display/BackgroundFieldDensity"
             #pragma vertex   vert
             #pragma fragment frag
             #pragma target 3.0
-            #pragma multi_compile_local _ _LOW_QUALITY_CLOUD
             #include "UnityCG.cginc"
             #include "../Include/BackgroundFieldGen.cginc"
 
