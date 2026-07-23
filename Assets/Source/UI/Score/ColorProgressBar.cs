@@ -19,6 +19,10 @@ namespace BalloonParty.UI.Score
 {
     public class ColorProgressBar : MonoBehaviour, ITrailEndpoint
     {
+        private const float PulseScalePeak = 3f;
+        private const float PulsePpuPeak = 5f;
+        private const float PulsePpuRest = 0.01f;
+
         private static readonly int CompletedParam = Animator.StringToHash("Completed");
 #if UNITY_EDITOR
         private static GamePalette _cachedPalette;
@@ -44,11 +48,16 @@ namespace BalloonParty.UI.Score
 
         [Header("Feedback")] [SerializeField] private Animator _animator;
 
-        [Tooltip("Punch-scaled once per frame on arrival, replacing the retired ScoreTrailHit clip.")]
+        [Tooltip("Glow-flashed once per frame on arrival, a DOTween port of the retired ScoreTrailHit clip. " +
+                 "The outline is invisible at rest (alpha 0, PPU 0.01) — the pulse flashes it in as it expands.")]
         [SerializeField] private RectTransform _pulseOutline;
+        [SerializeField] private Image _pulseOutlineImage;
         [SerializeField] private RectTransform _pulseBackground;
-        [SerializeField] private float _pulseScale = 3f;
-        [SerializeField] private float _pulseDuration = 0.333f;
+        [SerializeField] private RectTransform _pulseFillArea;
+        [SerializeField] private float _pulseRise = 0.1667f;
+        [SerializeField] private float _pulseTail = 0.8333f;
+        [SerializeField] private float _pulseBulge = 2f;
+        [SerializeField] private float _pulseAlphaPeak = 0.349f;
 
         [SerializeField] private ParticleSystem _completionParticleSystem;
         [SerializeField] private ProgressNotice _pointNoticePrefab;
@@ -76,7 +85,11 @@ namespace BalloonParty.UI.Score
         private int _shownStreak;
         private bool _active;
         private bool _pulseQueued;
+        private bool _pulseRestCaptured;
+        private float _bgRestSizeY;
+        private float _fillRestSizeY;
         private Tween _flexTween;
+        private Sequence _pulseSequence;
 
         public Vector3 Center => RectAnchorMath.Center((RectTransform)transform);
 
@@ -205,8 +218,7 @@ namespace BalloonParty.UI.Score
             }
 
             _pulseQueued = false;
-            PunchPulse(_pulseOutline);
-            PunchPulse(_pulseBackground);
+            Pulse();
         }
 
         // Driven by the streak signal (any colour), so we also catch this colour's streak being lost when a
@@ -318,6 +330,7 @@ namespace BalloonParty.UI.Score
             ClearCompletionVfx();
             _notices.DismissAllNotices();
             _shownStreak = 0;
+            KillAndResetPulse();
             ApplyVisibility(animate: false);
         }
 
@@ -394,20 +407,121 @@ namespace BalloonParty.UI.Score
             return RectAnchorMath.RandomPosition((RectTransform)transform);
         }
 
-        // Null-guarded so an unwired prefab degrades to no pulse rather than throwing.
-        private void PunchPulse(RectTransform target)
+        // A hand-built DOTween port of the retired Assets/Animation/Progress/ScoreTrailHit.anim — the
+        // constants above (rise 0.1667s, scale peak 3, alpha peak 0.349, PPU 5↔0.01, bulge 2, tail 0.8333s)
+        // mirror that clip's keyframes so it can be deleted. Every piece is null-guarded independently, so an
+        // unwired reference just skips its part of the pulse. The clip's flat tangents (Unity smooth in-out)
+        // are approximated with Ease.InOutSine. Ends exactly on rest so nothing drifts across many pulses.
+        private void Pulse()
         {
-            if (target == null)
+            CapturePulseRest();
+            KillAndResetPulse();
+
+            _pulseSequence = DOTween.Sequence();
+
+            if (_pulseOutline != null)
+            {
+                _pulseSequence.Insert(0f, _pulseOutline.DOScale(PulseScalePeak, _pulseRise).SetEase(Ease.InOutSine));
+                _pulseSequence.Insert(_pulseRise, _pulseOutline.DOScale(1f, _pulseRise).SetEase(Ease.InOutSine));
+            }
+
+            if (_pulseOutlineImage != null)
+            {
+                _pulseSequence.Insert(0f,
+                    _pulseOutlineImage.DOFade(_pulseAlphaPeak, _pulseRise).SetEase(Ease.InOutSine));
+                _pulseSequence.Insert(_pulseRise,
+                    _pulseOutlineImage.DOFade(0f, _pulseTail).SetEase(Ease.InOutSine));
+                _pulseSequence.Insert(0f, DOTween.To(
+                    () => _pulseOutlineImage.pixelsPerUnitMultiplier,
+                    v => _pulseOutlineImage.pixelsPerUnitMultiplier = v, PulsePpuPeak, _pulseRise)
+                    .SetEase(Ease.InOutSine));
+                _pulseSequence.Insert(_pulseRise, DOTween.To(
+                    () => _pulseOutlineImage.pixelsPerUnitMultiplier,
+                    v => _pulseOutlineImage.pixelsPerUnitMultiplier = v, PulsePpuRest, _pulseRise)
+                    .SetEase(Ease.InOutSine));
+            }
+
+            if (_pulseBackground != null)
+            {
+                _pulseSequence.Insert(0f, DOTween.To(
+                    () => _pulseBackground.sizeDelta.y,
+                    v => _pulseBackground.sizeDelta = _pulseBackground.sizeDelta.WithY(v),
+                    _bgRestSizeY + _pulseBulge, _pulseRise).SetEase(Ease.InOutSine));
+                _pulseSequence.Insert(_pulseRise, DOTween.To(
+                    () => _pulseBackground.sizeDelta.y,
+                    v => _pulseBackground.sizeDelta = _pulseBackground.sizeDelta.WithY(v),
+                    _bgRestSizeY, _pulseTail).SetEase(Ease.InOutSine));
+            }
+
+            if (_pulseFillArea != null)
+            {
+                _pulseSequence.Insert(0f, DOTween.To(
+                    () => _pulseFillArea.sizeDelta.y,
+                    v => _pulseFillArea.sizeDelta = _pulseFillArea.sizeDelta.WithY(v),
+                    _fillRestSizeY + _pulseBulge, _pulseRise).SetEase(Ease.InOutSine));
+                _pulseSequence.Insert(_pulseRise, DOTween.To(
+                    () => _pulseFillArea.sizeDelta.y,
+                    v => _pulseFillArea.sizeDelta = _pulseFillArea.sizeDelta.WithY(v),
+                    _fillRestSizeY, _pulseRise).SetEase(Ease.InOutSine));
+            }
+
+            // Unscaled to match the retired clip's UnscaledTime; SetLink kills it if this bar is destroyed.
+            _pulseSequence.SetUpdate(true).SetLink(gameObject);
+        }
+
+        // The +2 bulge is relative to each rect's authored rest height, captured once before any pulse has
+        // touched it so retriggers reset to the true rest rather than an in-flight value.
+        private void CapturePulseRest()
+        {
+            if (_pulseRestCaptured)
             {
                 return;
             }
 
-            target.DOKill();
-            target.localScale = Vector3.one;
-            target
-                .DOPunchScale(Vector3.one * (_pulseScale - 1f), _pulseDuration, vibrato: 0, elasticity: 0f)
-                .SetUpdate(true)
-                .SetLink(gameObject);
+            _pulseRestCaptured = true;
+            if (_pulseBackground != null)
+            {
+                _bgRestSizeY = _pulseBackground.sizeDelta.y;
+            }
+
+            if (_pulseFillArea != null)
+            {
+                _fillRestSizeY = _pulseFillArea.sizeDelta.y;
+            }
+        }
+
+        // A retrigger mid-pulse kills the running sequence and hard-resets all five properties to rest before
+        // the next one starts (the Animator restarted its state the same way), so values never accumulate.
+        private void KillAndResetPulse()
+        {
+            _pulseSequence?.Kill();
+            _pulseSequence = null;
+
+            if (!_pulseRestCaptured)
+            {
+                return;
+            }
+
+            if (_pulseOutline != null)
+            {
+                _pulseOutline.localScale = Vector3.one;
+            }
+
+            if (_pulseOutlineImage != null)
+            {
+                _pulseOutlineImage.color = _pulseOutlineImage.color.WithAlpha(0f);
+                _pulseOutlineImage.pixelsPerUnitMultiplier = PulsePpuRest;
+            }
+
+            if (_pulseBackground != null)
+            {
+                _pulseBackground.sizeDelta = _pulseBackground.sizeDelta.WithY(_bgRestSizeY);
+            }
+
+            if (_pulseFillArea != null)
+            {
+                _pulseFillArea.sizeDelta = _pulseFillArea.sizeDelta.WithY(_fillRestSizeY);
+            }
         }
     }
 }
