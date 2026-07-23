@@ -38,6 +38,7 @@ namespace BalloonParty.Configuration.Level
         private readonly int _allowedColorsMask = ~0;
 
         private IReadOnlyList<ResolvedBalloonEntry> _balloonPickList = Array.Empty<ResolvedBalloonEntry>();
+        private IReadOnlyList<ResolvedBalloonEntry> _simpleBalloonPickList = Array.Empty<ResolvedBalloonEntry>();
         private IReadOnlyList<ResolvedItemEntry> _itemPickList = Array.Empty<ResolvedItemEntry>();
         private IReadOnlyList<ItemSettings> _items = Array.Empty<ItemSettings>();
         private IReadOnlyList<string> _allowedColorNames = Array.Empty<string>();
@@ -91,12 +92,30 @@ namespace BalloonParty.Configuration.Level
             _itemPickList = itemPickList;
             _items = items;
             _allowedColorNames = allowedColorNames;
+
+            // Extra pop-spawns draw only from the simple family this level already gates in, so silver/gold
+            // appear here exactly when the range allows them — precomputed once to keep the per-pop pick allocation-free.
+            var simple = new List<ResolvedBalloonEntry>();
+            foreach (var entry in balloonPickList)
+            {
+                if (entry.Source.BalloonType.IsSimpleFamily())
+                {
+                    simple.Add(entry);
+                }
+            }
+
+            _simpleBalloonPickList = simple;
         }
 
         public BalloonPrefabEntry PickBalloonEntry(
             IReadOnlyDictionary<string, int> activeCounts, IReadOnlyDictionary<string, int> waveQuotas = null)
         {
             return _balloonPickList.PickRandom(activeCounts, waveQuotas)?.Source;
+        }
+
+        public BalloonPrefabEntry PickSimpleBalloonEntry(IReadOnlyDictionary<string, int> activeCounts)
+        {
+            return _simpleBalloonPickList.PickRandom(activeCounts)?.Source;
         }
 
         // Rolls each curve-bearing type's allowance for the upcoming wave (absent key = unlimited).

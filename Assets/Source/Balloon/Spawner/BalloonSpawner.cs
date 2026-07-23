@@ -393,7 +393,7 @@ namespace BalloonParty.Balloon.Spawner
 
         // Spawns up to count balloons at their columns' own entries — no rehoming, no pressure, no
         // overflow charge; columns without room are skipped. Kept out of the item check: these are
-        // per-pop extras, not a wave.
+        // per-pop extras, not a wave, and only ever the simple family so a pop can't gift a tough type.
         private void SpawnLooseBalloons(int count)
         {
             _popSpawnColumns.Clear();
@@ -418,7 +418,7 @@ namespace BalloonParty.Balloon.Spawner
                     continue;
                 }
 
-                var entry = _levelParams.Current.PickBalloonEntry(_activeCounts);
+                var entry = _levelParams.Current.PickSimpleBalloonEntry(_activeCounts);
                 if (entry == null)
                 {
                     break;

@@ -27,6 +27,9 @@ namespace BalloonParty.Configuration.Level
         BalloonPrefabEntry PickBalloonEntry(
             IReadOnlyDictionary<string, int> activeCounts, IReadOnlyDictionary<string, int> waveQuotas = null);
 
+        /// <summary>Weighted pick restricted to the level's simple-family entries (plain/silver/gold) — used for extra pop-spawns.</summary>
+        BalloonPrefabEntry PickSimpleBalloonEntry(IReadOnlyDictionary<string, int> activeCounts);
+
         /// <summary>Rolls each curve-bearing type's spawn allowance for the upcoming wave into <paramref name="quotas" /> (absent key = unlimited).</summary>
         void RollWaveQuotas(Dictionary<string, int> quotas, bool isInitial);
         ItemSettings PickItemEntry(IReadOnlyDictionary<string, int> activeCounts);
