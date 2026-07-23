@@ -14,6 +14,9 @@ namespace BalloonParty.UI
         private TMP_Text _label;
         private RollingTextAnimator _animator;
 
+        private TMP_Text Label => _label ??= GetComponent<TMP_Text>();
+        private RollingTextAnimator Animator => _animator ??= GetComponent<RollingTextAnimator>();
+
         private void Awake()
         {
             _label = GetComponent<TMP_Text>();
@@ -22,12 +25,12 @@ namespace BalloonParty.UI
 
         public void Display(int value)
         {
-            _animator.SetThousands(value);
+            Animator.SetThousands(value);
         }
 
         public void ShowPlaceholder()
         {
-            _label.text = "--";
+            Label.text = "--";
         }
     }
 }
