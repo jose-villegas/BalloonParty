@@ -62,16 +62,18 @@ namespace BalloonParty.Shared.Thermal
 
         void ITickable.Tick()
         {
-            if (!_enabled)
-            {
-                return;
-            }
-
             Advance(Time.unscaledDeltaTime);
         }
 
         internal void Advance(float dt)
         {
+            // Gate here, not in Tick: Advance is the sanctioned seam (tests and any future caller),
+            // so the Enabled flag must hold no matter who drives the state machine.
+            if (!_enabled)
+            {
+                return;
+            }
+
             _pollAccumulator += dt;
             if (_pollAccumulator < _settings.PollIntervalSeconds)
             {
