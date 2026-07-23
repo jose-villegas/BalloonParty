@@ -18,7 +18,7 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
     //     collapses to the old single-direction march, bit-identical to the pre-RSM shader.
     //   The march direction is PER-FRAGMENT from the light field (SceneLight.cginc), so
     //   local lights bend all four directions around them.
-    // Pass 1 — 4-tap bilinear tent soften to remove smear streaks.
+    // Pass 1 — 3x3 box soften to remove smear streaks.
     Properties
     {
         _MainTex ("Source", 2D) = "black" {}
@@ -156,15 +156,20 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
 
             fixed4 frag(v2f_img IN) : SV_Target
             {
-                // 4 bilinear taps at ±0.5-texel diagonals = a [1 2 1]⊗[1 2 1]/16 tent via the RT's
-                // hardware bilinear filter — deliberately softer than the old flat 3x3 box, not identical.
                 float2 texel = _MainTex_TexelSize.xy;
-                half4 acc = 0;
-                acc += tex2D(_MainTex, IN.uv + texel * float2( 0.5,  0.5));
-                acc += tex2D(_MainTex, IN.uv + texel * float2(-0.5,  0.5));
-                acc += tex2D(_MainTex, IN.uv + texel * float2( 0.5, -0.5));
-                acc += tex2D(_MainTex, IN.uv + texel * float2(-0.5, -0.5));
-                return acc * 0.25;
+                float4 acc = 0;
+
+                [unroll]
+                for (int y = -1; y <= 1; y++)
+                {
+                    [unroll]
+                    for (int x = -1; x <= 1; x++)
+                    {
+                        acc += tex2D(_MainTex, IN.uv + texel * float2(x, y));
+                    }
+                }
+
+                return acc / 9.0;
             }
             ENDCG
         }
