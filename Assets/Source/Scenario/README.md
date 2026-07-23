@@ -26,12 +26,22 @@ the `BackgroundFieldDensity` blit shader. See `Shared/Disturbance/README.md`.
 ## PaintingFieldService
 
 `PaintingFieldService.cs` — the smoke trail field: a persistent screen-space RT that accumulates
-palette-colored capsule stamps from the projectile trail and decays them into animated smoke wisps.
-The 4th field service alongside Disturbance, SceneLight, and Background.
+palette-colored capsule stamps and decays them into animated smoke wisps. The 4th field service
+alongside Disturbance, SceneLight, and Background.
 
-**Pipeline:** Each frame the projectile is moving, `ProjectileView` stamps a capsule SDF (current +
-previous position → elongated trail segment) with the projectile's palette color. The service batches
-up to 32 stamps per blit pass into `PaintingFieldStamp.shader`, then runs a decay pass
+**Profile-based stamping:** every stamp originates from a `PaintSource` (`ProjectileTrail`,
+`ToughPop`, `ToughBreathing`, `ToughDeflect`). The service resolves the source to a `PaintProfile`
+(via `IPaintingFieldSettings.GetProfile`) that defines radius, opacity, and how color is chosen
+(`PaintColorMode.Dynamic` — caller supplies a palette index, `Palette` — profile names a fixed
+palette entry, `Custom` — profile carries a fixed RGB color). The public API is:
+
+- `Paint(PaintSource, Vector3, int paletteIndex = -1)` — single stamp.
+- `PaintScatter(PaintSource, Vector3, int count, float scatterRadius, int paletteIndex = -1)` —
+  multiple stamps scattered in a random ring.
+
+**Pipeline:** each frame the projectile is moving, `ProjectileView` calls `Paint` with
+`PaintSource.ProjectileTrail` (capsule from previous → current position). The service batches up to
+32 stamps per blit pass into `PaintingFieldStamp.shader`, then runs a decay pass
 (`PaintingFieldDecay.shader`) that advects, expands, erodes, and fades the accumulated paint. The
 result is published as the global `_PaintingTex`, sampled by the display shader.
 
@@ -40,7 +50,8 @@ radius expansion, noise erosion, and linear alpha decay — all driven by `_Pain
 respects `TimeScaleService` pause/slow-mo). Fresh stamps resist wind (age-based bias); fast projectile
 stamps get dampened wind so they don't smear.
 
-**Lifecycle:** clears the RT on `LevelUpDismissedMessage` (new level = blank canvas).
+**Lifecycle:** clears the RT on `LevelUpDismissedMessage` (new level = blank canvas) and on
+`GameOverMessage` (descend/game-over = blank canvas).
 
 ### PaintingFieldResources
 
@@ -67,7 +78,9 @@ material, and sits on the Default sorting layer at order −1 (behind the clouds
 ### Configuration
 
 `IPaintingFieldSettings` / `PaintingFieldSettings` SO — stamps shader, decay shader, texels-per-unit,
-decay rate, decay tick interval, stamp radius, wind speed/influence/age-bias/direction/swing.
+decay rate, decay tick interval, wind speed/influence/age-bias/direction/swing, and a `PaintProfile[]`
+array (each entry maps `PaintSource` flags → radius, opacity, `PaintColorMode`, palette name / custom
+color). `GetProfile(PaintSource)` resolves the active profile for a given source.
 
 ## WallNetView
 

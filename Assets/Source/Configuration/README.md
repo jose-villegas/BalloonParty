@@ -27,6 +27,7 @@ Source is organized into per-context subfolders: `Balloons/`, `Buffs/`, `Cinemat
 | `CloudFieldSettings` | `ICloudFieldSettings` (`Effects/`) | Shared cloud-noise field tuning — density blit material, RT resolution (`TexelsPerUnit`), and how much the Scenario Ascent/descent parallaxes the cloud roll |
 | `SceneLightFieldSettings` | `ISceneLightFieldSettings` / `IScreenSpaceLightSettings` / `ISceneLightSettings` (`Effects/`) | One asset backing three interfaces: the scene light's direction/colour/intensity, the light-field RT (resolution, cadence, per-light accumulation), and the screen-space GI march (smear distance/downscale, mip spread, shadow/bounce strength, shader references) |
 | `SpeckFieldSettings` | `ISpeckFieldSettings` | Ambient speck-field tuning — motion/disturbance response, per-speck look (size, trail, scale, fade, heat, color-lerp), and spawning/reduction: the spawn-all testing toggle, initial active count, per-source `SpeckProfile[]` (`SpeckSource` flags), and the reduction curve. The `SpeckField` component keeps only its own compute shader + material |
+| `PaintingFieldSettings` | `IPaintingFieldSettings` (`Effects/`) | Painting field tuning — stamp/decay shaders, RT resolution (`TexelsPerUnit`), decay rate/tick interval, wind speed/influence/age-bias/direction/swing, and per-source `PaintProfile[]` with `PaintSource` flags. `GetProfile(PaintSource)` resolves the active profile for a given source |
 | `ShieldFieldSettings` | `IShieldFieldSettings` (`Effects/`) | *(Planned — see @ref plan_em_shield_field)* Per-instance tuning for the procedural EM shield shader — layer spacing, dissolve/appear duration, noise scale, field-line density, pulse speed, glow intensity, tint alpha, base radius |
 | `BushVariantData` | — | Pre-baked bush variant asset (branch map texture + leaf attachment slots), created by the Bush Baker editor window, loaded at runtime by `BushView` |
 
@@ -52,6 +53,9 @@ Source is organized into per-context subfolders: `Balloons/`, `Buffs/`, `Cinemat
 | `PaletteColorNameAttribute` | `PropertyAttribute` that marks a `string` field as a palette color name — rendered in the Inspector as a popup dropdown with color swatch via `PaletteColorNameDrawer` |
 | `StampProfile` | Serializable struct in `DisturbanceFieldSettings` — `StampSource` flags, `Radius`, `Strength`, `Duration`. Defines per-source disturbance parameters |
 | `StampSource` | `[Flags]` enum — `Projectile`, `BalloonPath`, `BalloonPop`, `Bomb`, `Laser`, `Paint`. Identifies which game system a `StampProfile` applies to |
+| `PaintProfile` | Serializable struct in `PaintingFieldSettings` (`Effects/`) — `PaintSource` flags, `Radius`, `Opacity`, `PaintColorMode`, optional `PaletteColorName` or `CustomColor`. Defines per-source painting parameters |
+| `PaintSource` | `[Flags]` enum (`Effects/`) — `ProjectileTrail`, `ToughPop`, `ToughBreathing`, `ToughDeflect`. Identifies which game system a `PaintProfile` applies to |
+| `PaintColorMode` | Enum (`Effects/`) — `Dynamic` (caller supplies palette index), `Palette` (profile names a fixed entry), `Custom` (profile carries an authored RGB) |
 
 ### Editor
 
@@ -68,6 +72,7 @@ All custom `PropertyDrawer` implementations in this folder extend `AutoFieldProp
 | `PaletteMaskDrawer` | `MaterialPropertyDrawer` for a shader's `[PaletteMask]` Float property — same bitmask idea as `PaletteColorMaskDrawer`, but for a material Inspector field a shader reads directly (e.g. `SceneLight.cginc`'s masked-light helpers) |
 | `PaletteColorNameDrawer` | Custom `PropertyDrawer` for `PaletteColorNameAttribute` — renders a string field as a popup listing all `GamePalette` color names with a color swatch beside the selected entry. Uses `ConfigAssetCache<GamePalette>` for lazy-cached palette lookup |
 | `StampProfileDrawer` | Custom `PropertyDrawer` for `StampProfile` — foldout header shows `StampSource` flags label; expanded view shows Sources, Radius, Strength, Duration fields |
+| `PaintProfileDrawer` | Custom `PropertyDrawer` for `PaintProfile` — foldout header shows `PaintSource` flags label; expanded view shows Sources, Radius, Opacity, Color Mode, and conditionally Palette Color (dropdown with swatch) or Custom Color based on `PaintColorMode` |
 
 ## Design rules
 

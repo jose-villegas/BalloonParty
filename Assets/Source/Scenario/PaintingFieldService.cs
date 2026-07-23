@@ -177,7 +177,8 @@ namespace BalloonParty.Scenario
         }
 
         /// <summary>Scatters <paramref name="count"/> stamps in a random ring of <paramref name="scatterRadius"/>
-        /// around <paramref name="worldPosition"/>. Each stamp uses the source profile's radius, opacity, and color.</summary>
+        /// around <paramref name="worldPosition"/>. Each stamp uses the source profile's radius, opacity, and color.
+        /// Currently unused; reserved for future scatter sources.</summary>
         internal void PaintScatter(PaintSource source, Vector3 worldPosition, int count, float scatterRadius,
             int paletteIndex = -1)
         {

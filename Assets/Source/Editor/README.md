@@ -78,6 +78,7 @@ These drawers extend `PropertyDrawer` directly and handle their own rendering wi
 |---|---|---|
 | `PaletteColorMaskDrawer` | `Configuration/Editor/` | Renders a bitmask `int` as labeled per-color checkboxes from `GamePalette` |
 | `PaletteColorNameDrawer` | `Configuration/Editor/` | Renders a `string` field as a popup of `GamePalette` color names with a color swatch |
+| `PaintProfileDrawer` | `Configuration/Editor/` | Renders a `PaintProfile` struct with a foldout (labelled by `PaintSource` flags); conditionally shows Palette Color dropdown or Custom Color field based on `PaintColorMode` |
 | `SortingLayerNameDrawer` | `Editor/` | Renders a `[SortingLayerName]` string field as a popup of the project's sorting layers |
 | `UnitCircleDrawer` | `Editor/` | Renders a `[UnitCircle]` `Vector2` field as a click-or-drag disc for aiming a normalized direction |
 | `LevelRangeEntryDrawer` | `Editor/` | Relabels `LevelRangeEntry` array elements as "Level N" / "Level N–M" / "Fallback" |

@@ -1,4 +1,5 @@
 using System;
+using BalloonParty.Configuration.Palette;
 using UnityEngine;
 
 namespace BalloonParty.Configuration.Effects
@@ -35,6 +36,7 @@ namespace BalloonParty.Configuration.Effects
                  "Custom = use the fixed RGB color below.")]
         public PaintColorMode ColorMode;
 
+        [PaletteColorName]
         [Tooltip("Palette entry name (used when ColorMode is Palette).")]
         public string PaletteColorName;
 
