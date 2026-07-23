@@ -202,6 +202,30 @@ Play from cold; log FPS at 0/2/5/10/15 min. 120→80 correlating with thermal st
   **Development Build + Autoconnect Profiler** — not yet installed; current device build
   is release, which is fine for §1/§5 and more representative for delivery cadence).
 
+### Findings — second pass, 2026-07-23 evening (90s perfetto capture during live play)
+
+Headless perfetto (frametimeline + sched + freq, streamed to file — ring buffers wrap in
+seconds with atrace gfx on a Unity game; see scratchpad recipe) classified ~9,870 frames:
+
+- **Gameplay is a locked ~120 fps and 99.9% jank-free on a warm device**: in the pure-
+  gameplay window, 7,696 frames with **8 janky**. Across the whole capture: 98.1% clean,
+  168 buffer-stuffing frames (167 of them in ONE post-interruption catch-up episode),
+  and 9 "App Deadline Missed".
+- **The worst hitches were not the game**: around the 135ms and 22-24ms misses, Unity
+  threads had ZERO scheduler slices — SystemUI/system_server/OomAdjuster owned the CPU
+  (notification/shade/gesture interruptions). Only two misses (~14ms, ~12ms — one vsync
+  each) happened with UnityMain actually saturated, during a burst.
+- **The GPU is loafing**: ~490-560 MHz of a 950 MHz ceiling during gameplay (avg 392
+  across the capture). **Not GPU-bound — G1/A1/A2 and further shader micro-opts cannot
+  move the sustained number.**
+- **UnityMain is the constraint**: ~80% of one core sustained (~6.6ms of the 8.33ms
+  budget per frame). This is the cliff: a thermal clock drop of ~25% pushes it past the
+  vsync deadline → and the panel has a native 80Hz mode to fall to.
+- **Thermal confirmed moving**: status 0 at session start → **status 2 (MODERATE) after
+  this play session**. The 120→80 story is: heat → big-core clock drop → UnityMain
+  misses deadline → arbitration lands on the 80Hz panel mode. A4 (thermal tiers) + CPU
+  work are the levers; catching the actual 80fps state live remains the final proof.
+
 ### Decision tree
 
 ```mermaid
