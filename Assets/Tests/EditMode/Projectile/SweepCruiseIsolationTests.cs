@@ -105,7 +105,7 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
-        public void TryAwardSweepTap_EmptySegmentNoPops_DoesNotIncrementSweepSpeedBonus()
+        public void TryAwardSweepTap_EmptySegmentNoPops_DoesNotIncrementTotalCruiseTaps()
         {
             var view = CreateSweepView();
             _projectile.Flight.SegmentPopCount = 0;
@@ -113,8 +113,8 @@ namespace BalloonParty.Tests.Projectile
 
             AwardSweepTap(view, new Vector3(3f, 0f, 0f), Vector3.right);
 
-            Assert.AreEqual(0f, _projectile.Flight.SweepSpeedBonus, 1e-4f,
-                "no pops on the segment means no sweep speed bonus contribution");
+            Assert.AreEqual(0, _projectile.Flight.TotalCruiseTaps,
+                "no pops on the segment means no shared speed tap is awarded");
         }
 
         [Test]
@@ -124,7 +124,6 @@ namespace BalloonParty.Tests.Projectile
             // on each wall bounce — confirming cruise CAN trigger on empty segments.
             _projectile.Direction = Vector2.up;
             _projectile.Speed = 1f;
-            _projectile.Flight.CruiseStartShields = 10;
             _projectile.IsCruising.Value = true;
 
             _motionResolver.Step(_projectile, new Vector3(0f, 4.5f, 0f), 1f);
@@ -201,8 +200,8 @@ namespace BalloonParty.Tests.Projectile
 
             Assert.AreEqual(0, _projectile.Flight.TotalSweeps,
                 "SegmentSweepValid == false prevents any sweep count");
-            Assert.AreEqual(0f, _projectile.Flight.SweepSpeedBonus, 1e-4f,
-                "no sweep bonus when the path wasn't a clean corridor clear");
+            Assert.AreEqual(0, _projectile.Flight.TotalCruiseTaps,
+                "no shared speed tap when the path wasn't a clean corridor clear");
             Assert.IsFalse(_projectile.IsCruising.Value,
                 "the segment had pops, so ConsecutiveWallBounces was already reset — no cruise either");
         }
@@ -223,8 +222,6 @@ namespace BalloonParty.Tests.Projectile
 
             Assert.AreEqual(1, _projectile.Flight.TotalSweeps,
                 "sweep is counted (toward threshold progress)");
-            Assert.AreEqual(0f, _projectile.Flight.SweepSpeedBonus, 1e-4f,
-                "below the threshold — no speed bonus awarded yet");
             Assert.AreEqual(0, _projectile.Flight.TotalCruiseTaps,
                 "below-threshold sweeps don't contribute to the shared cruise-tap counter");
         }
@@ -252,12 +249,10 @@ namespace BalloonParty.Tests.Projectile
         [Test]
         public void AlternatingSegments_TotalSpeedMatchesSumOfIndividualSources()
         {
-            // Scenario: two cruise bounces (each incrementing TotalCruiseTaps) then a segment with
-            // a pop that earns a sweep bonus. The total TotalCruiseTaps should be exactly the sum:
-            // 2 (cruise) + 1 (sweep) = 3, and the SweepSpeedBonus reflects only the sweep contrib.
+            // Scenario: two cruise bounces then a sweep tap. The shared TotalCruiseTaps counter
+            // should land at exactly 3 with no double-counting.
             _projectile.Direction = Vector2.up;
             _projectile.Speed = 1f;
-            _projectile.Flight.CruiseStartShields = 10;
             _projectile.IsCruising.Value = true;
 
             // Two cruise bounces on an empty segment.
@@ -266,8 +261,6 @@ namespace BalloonParty.Tests.Projectile
             _motionResolver.Step(_projectile, new Vector3(0f, 4.5f, 0f), 1f);
 
             Assert.AreEqual(2, _projectile.Flight.TotalCruiseTaps, "two cruise-bounce taps");
-            Assert.AreEqual(0f, _projectile.Flight.SweepSpeedBonus, 1e-4f,
-                "no sweep bonus from empty segments");
 
             // Now a balloon contact breaks the cruise and resets the counter.
             var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
@@ -285,22 +278,6 @@ namespace BalloonParty.Tests.Projectile
             // The sweep contributes its own tap to the shared counter.
             Assert.AreEqual(3, _projectile.Flight.TotalCruiseTaps,
                 "shared counter = 2 (cruise) + 1 (sweep) — no double-count");
-            Assert.AreEqual(0.5f, _projectile.Flight.SweepSpeedBonus, 1e-4f,
-                "sweep bonus accrues only from the sweep source");
-        }
-
-        [Test]
-        public void CruiseBounce_NeverIncrementsSweepSpeedBonus()
-        {
-            _projectile.Direction = Vector2.up;
-            _projectile.Speed = 1f;
-            _projectile.Flight.CruiseStartShields = 10;
-            _projectile.IsCruising.Value = true;
-
-            _motionResolver.Step(_projectile, new Vector3(0f, 4.5f, 0f), 1f);
-
-            Assert.AreEqual(0f, _projectile.Flight.SweepSpeedBonus, 1e-4f,
-                "cruise taps only feed the cruise ramp — never the sweep bonus accumulator");
         }
 
         [Test]

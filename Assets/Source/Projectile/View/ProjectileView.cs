@@ -621,7 +621,6 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            _model.Flight.CruiseStartShields = _model.ShieldsRemaining.Value;
             _model.Flight.CruiseTapElapsed = 0f;
             _model.IsCruising.Value = true;
         }
@@ -665,7 +664,6 @@ namespace BalloonParty.Projectile.View
             }
 #endif
 
-            _model.Flight.SweepSpeedBonus += _config.CruiseSpeedPerShield;
             _model.Flight.TotalCruiseTaps++;
             _model.Flight.CruiseTapElapsed = 0f;
 
@@ -702,7 +700,7 @@ namespace BalloonParty.Projectile.View
             // the aura hidden the whole time it's armed — dim toward the floor instead. Still hidden
             // entirely while doomed (drifting to its death): a flourish there reads as a power-up right
             // as it dies, and the clear path means there's nothing to pierce anyway.
-            var inTapBeat = (_model.IsCruising.Value || _model.Flight.SweepSpeedBonus > 0f)
+            var inTapBeat = (_model.IsCruising.Value || _model.Flight.TotalCruiseTaps > 0)
                             && _model.Flight.CruiseTapElapsed < _config.CruiseTapEaseDuration;
             var pierceActive = _model.IsPiercing.Value && !_model.IsLastShieldApproach.Value;
             var target = pierceActive

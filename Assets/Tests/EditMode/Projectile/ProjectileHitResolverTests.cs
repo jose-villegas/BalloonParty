@@ -217,9 +217,8 @@ namespace BalloonParty.Tests.Projectile
 
             AwardSweepTap(projectileView, new Vector3(2f, 0f, 0f), Vector3.right);
 
-            Assert.AreEqual(0.25f, _projectile.Flight.SweepSpeedBonus, 1e-4f,
-                "Sweep now shares CruiseSpeedPerShield instead of its retired dedicated multiplier");
-            Assert.AreEqual(1, _projectile.Flight.TotalCruiseTaps);
+            Assert.AreEqual(1, _projectile.Flight.TotalCruiseTaps,
+                "a valid sweep should bank one shared cruise tap");
             Assert.AreEqual(0f, _projectile.Flight.CruiseTapElapsed,
                 "a sweep tap should replay the same tap-beat ease from t=0");
         }
@@ -238,9 +237,8 @@ namespace BalloonParty.Tests.Projectile
 
             AwardSweepTap(projectileView, new Vector3(2f, 0f, 0f), Vector3.right);
 
-            Assert.AreEqual(0f, _projectile.Flight.SweepSpeedBonus, 1e-4f,
-                "any >1-HP contact on the segment should invalidate the sweep");
-            Assert.AreEqual(0, _projectile.Flight.TotalCruiseTaps);
+            Assert.AreEqual(0, _projectile.Flight.TotalCruiseTaps,
+                "any >1-HP contact on the segment should invalidate the sweep tap");
             Assert.AreEqual(99f, _projectile.Flight.CruiseTapElapsed, 1e-4f,
                 "no sweep awarded means the shared tap-beat should not restart");
         }

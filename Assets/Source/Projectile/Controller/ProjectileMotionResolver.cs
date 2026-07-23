@@ -234,31 +234,19 @@ namespace BalloonParty.Projectile.Controller
             model.IsPiercing.Value = false;
         }
 
-        // The flight speed for this step. Cruise still layers its shield-spend ramp on top, while
-        // Sweep contributes a flat tap bonus that persists for the rest of the shot.
+        // The flight speed for this step. Both cruise wall-bounces and sweep corridor-clears feed a
+        // single TotalCruiseTaps counter; speed scales with that count × CruiseSpeedPerShield.
         private float ResolveFlightSpeed(IWriteableProjectileModel model, float deltaTime)
         {
             var baseSpeed = model.ComputeBuffedValue(ProjectileBuffId.Speed, model.Speed);
-            var speedBonus = model.Flight.SweepSpeedBonus;
+            var taps = model.Flight.TotalCruiseTaps;
 
-            // The earned long-flight reward: every cruise bounce adds a velocity TAP of
-            // CruiseSpeedPerShield — cumulative, so a 13-shield bank accumulates 13 taps where a
-            // 2-shield bank gets 2. Each tap replays the animation envelope from t=0: the new target
-            // speed scaled by curve(elapsed/duration), so a curve starting at 0 freezes the shot for a
-            // beat before it picks up.
-            if (model.IsCruising.Value)
-            {
-                var startShields = Mathf.Max(model.Flight.CruiseStartShields, 1);
-                var taps = Mathf.Clamp(
-                    model.Flight.CruiseStartShields - model.ShieldsRemaining.Value, 0, startShields);
-                speedBonus += _cruiseSpeedPerShield * taps;
-            }
-
-            if (speedBonus <= 0f)
+            if (taps <= 0)
             {
                 return baseSpeed;
             }
 
+            var speedBonus = _cruiseSpeedPerShield * taps;
             var target = 1f + speedBonus;
             if (_maxCruiseSpeedMultiplier > 0f)
             {

@@ -48,20 +48,12 @@ namespace BalloonParty.Projectile.Model
         // Wall bounces since the last balloon contact — the cruise detector's counter.
         public int ConsecutiveWallBounces { get; set; }
 
-        // Shield count captured at cruise entry: the ramp's denominator, so speed climbs from base
-        // toward the max as the remaining shields spend down from this snapshot.
-        public int CruiseStartShields { get; set; }
-
         // Cruise-wall taps plus Sweep taps earned so far this shot — the shared piercing threshold.
         public int TotalCruiseTaps { get; set; }
 
         // Seconds since the last cruise speed change (entry or bounce) — drives the per-tap
         // freeze-then-pickup animation envelope.
         public float CruiseTapElapsed { get; set; }
-
-        // Sweep taps add their speed gain outside the cruise-only shield-spend ramp, but the same
-        // max-speed cap and tap-beat easing still apply.
-        public float SweepSpeedBonus { get; set; }
 
         // Total sweeps detected (clear-corridor passes). Compared against SweepTapThreshold to gate
         // whether speed taps actually apply.

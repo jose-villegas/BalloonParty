@@ -213,27 +213,25 @@ namespace BalloonParty.Tests.Projectile
         {
             var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 4);
-            model.Flight.CruiseStartShields = 4;
             model.IsCruising.Value = true;
 
             var step = resolver.Step(model, Vector3.zero, 1f);
 
             Assert.AreEqual(ProjectileStepOutcome.Moved, step.Outcome);
-            Assert.AreEqual(1f, step.Position.y, 1e-4f, "no shields spent yet — still at base speed");
+            Assert.AreEqual(1f, step.Position.y, 1e-4f, "0 taps means cruise starts at base speed");
         }
 
         [Test]
         public void Step_CruiseRamp_SpeedsUpAsShieldsSpend()
         {
-            // Entry bank 4 at 0.5/shield -> max x3; half the bounces spent, linear ramp -> x2.
+            // Two taps at 0.5/tap -> +1.0 speed bonus -> x2 target.
             var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
-            model.Flight.CruiseStartShields = 4;
-            model.IsCruising.Value = true;
+            model.Flight.TotalCruiseTaps = 2;
 
             var step = resolver.Step(model, Vector3.zero, 1f);
 
-            Assert.AreEqual(2f, step.Position.y, 1e-4f, "half the shields spent, linear ramp → halfway to x3");
+            Assert.AreEqual(2f, step.Position.y, 1e-4f, "2 taps at 0.5/tap produce an x2 cruise speed");
         }
 
         [Test]
@@ -241,23 +239,20 @@ namespace BalloonParty.Tests.Projectile
         {
             var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 0);
-            model.Flight.CruiseStartShields = 4;
-            model.IsCruising.Value = true;
+            model.Flight.TotalCruiseTaps = 4;
 
             var step = resolver.Step(model, Vector3.zero, 1f);
 
-            Assert.AreEqual(3f, step.Position.y, 1e-4f, "all entry shields spent — 1 + 0.5 x 4 = x3");
+            Assert.AreEqual(3f, step.Position.y, 1e-4f, "4 taps at 0.5/tap produce 1 + 2.0 = x3");
         }
 
         [Test]
         public void Step_CruiseTopSpeed_ScalesWithEntryShields()
         {
-            // The whole point of the shield-scaled cap: a bigger bank tops out faster. Entry 8 at
-            // 0.5/shield fully spent -> x5, where entry 4 gave x3.
+            // More taps should scale the multiplier directly: 8 taps at 0.5/tap -> x5.
             var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 0);
-            model.Flight.CruiseStartShields = 8;
-            model.IsCruising.Value = true;
+            model.Flight.TotalCruiseTaps = 8;
 
             var step = resolver.Step(model, Vector3.zero, 1f);
 
@@ -272,8 +267,7 @@ namespace BalloonParty.Tests.Projectile
             // window completes it holds the full target.
             var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 1f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
-            model.Flight.CruiseStartShields = 4;
-            model.IsCruising.Value = true;
+            model.Flight.TotalCruiseTaps = 2;
             model.Flight.CruiseTapElapsed = 0f;
 
             var frozen = resolver.Step(model, Vector3.zero, 0.5f);
@@ -291,7 +285,6 @@ namespace BalloonParty.Tests.Projectile
         {
             var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 1f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
-            model.Flight.CruiseStartShields = 4;
             model.IsCruising.Value = true;
             model.Flight.CruiseTapElapsed = 99f;
 
@@ -305,12 +298,11 @@ namespace BalloonParty.Tests.Projectile
         {
             var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 1f);
             var cruiseModel = NewModel(direction: Vector2.up, speed: 1f, shields: 1);
-            cruiseModel.Flight.CruiseStartShields = 2;
-            cruiseModel.IsCruising.Value = true;
+            cruiseModel.Flight.TotalCruiseTaps = 1;
             cruiseModel.Flight.CruiseTapElapsed = 0f;
 
             var sweepModel = NewModel(direction: Vector2.up, speed: 1f, shields: 1);
-            sweepModel.Flight.SweepSpeedBonus = 0.5f;
+            sweepModel.Flight.TotalCruiseTaps = 1;
             sweepModel.Flight.CruiseTapElapsed = 0f;
 
             var cruiseFrozen = resolver.Step(cruiseModel, Vector3.zero, 0.5f);
@@ -334,7 +326,6 @@ namespace BalloonParty.Tests.Projectile
         {
             var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
-            model.Flight.CruiseStartShields = 4;
             model.IsCruising.Value = true;
 
             resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
@@ -359,10 +350,7 @@ namespace BalloonParty.Tests.Projectile
         {
             var resolver = CruiseResolver(perShield: 0f, piercingTapThreshold: 3);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 4);
-            model.Flight.CruiseStartShields = 5;
-            // The model enters the test mid-cruise: one tap was already earned on a prior bounce (the
-            // CruiseStartShields=5 but shields=4 setup simulates a shot that has already bounced once).
-            // TotalCruiseTaps is an explicit counter — initialise it to match the pre-existing tap.
+            // The model enters the test mid-cruise with one tap already banked.
             model.Flight.TotalCruiseTaps = 1;
             model.IsCruising.Value = true;
 
@@ -381,7 +369,6 @@ namespace BalloonParty.Tests.Projectile
         {
             var resolver = CruiseResolver(perShield: 0f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 10);
-            model.Flight.CruiseStartShields = 10;
             model.IsCruising.Value = true;
 
             for (var i = 0; i < 6; i++)
@@ -400,7 +387,6 @@ namespace BalloonParty.Tests.Projectile
             // never consumes a pierce; only the discharge ends it.
             var resolver = CruiseResolver(perShield: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
-            model.Flight.CruiseStartShields = 5;
             model.IsCruising.Value = true;
             model.IsPiercing.Value = true;
 
@@ -555,11 +541,11 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
-        public void Step_SweepSpeedBonus_AppliesOutsideCruise()
+        public void Step_TotalCruiseTaps_AppliesOutsideCruise()
         {
             var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 0f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
-            model.Flight.SweepSpeedBonus = 0.5f;
+            model.Flight.TotalCruiseTaps = 1;
 
             var step = resolver.Step(model, Vector3.zero, 1f);
 
@@ -567,42 +553,32 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
-        public void Step_SweepBonus_StacksWithCruiseRamp()
+        public void Step_TotalCruiseTaps_CombineIntoUnifiedSpeed()
         {
-            // cruise ramp: perShield=0.5, CruiseStartShields=4, shields=2 → ramp = 0.5 × 2 = 1.0
-            // sweep bonus: 0.5
-            // combined speedBonus = 1.5 → target = 2.5 → over dt=1 at base=1 → position.y = 2.5.
-            // If the two contributions were separate, one could shadow the other; this verifies
-            // they both feed the shared accumulator.
+            // The refactor collapsed cruise and sweep into one tap counter. Three taps at 0.5/tap
+            // give +1.5 bonus -> x2.5 target.
             var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 0f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
-            model.Flight.CruiseStartShields = 4;
-            model.IsCruising.Value = true;
-            model.Flight.SweepSpeedBonus = 0.5f;
+            model.Flight.TotalCruiseTaps = 3;
 
             var step = resolver.Step(model, Vector3.zero, 1f);
 
             Assert.AreEqual(2.5f, step.Position.y, 1e-4f,
-                "sweep bonus (0.5) + cruise ramp (1.0) combine into a single accumulator");
+                "the unified tap counter should drive the full combined speed");
         }
 
         [Test]
-        public void Step_MaxCruiseSpeedCap_ClampsCombinedBonus()
+        public void Step_MaxCruiseSpeedCap_ClampsUnifiedTapSpeed()
         {
-            // Without a cap: cruise ramp (1.0) + sweep (0.5) = 1.5 → target x2.5 → y=2.5.
-            // With cap x2.0: target is clamped to x2.0 → y=2.0.
-            // The cap must apply to the combined total, not per-source — this verifies the
-            // restructured accumulator passes both through the same clamp gate.
+            // Without a cap: 3 taps at 0.5/tap -> +1.5 -> x2.5. With a x2.0 cap, clamp to 2.0.
             var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 0f, maxSpeedMultiplier: 2.0f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
-            model.Flight.CruiseStartShields = 4;
-            model.IsCruising.Value = true;
-            model.Flight.SweepSpeedBonus = 0.5f;
+            model.Flight.TotalCruiseTaps = 3;
 
             var step = resolver.Step(model, Vector3.zero, 1f);
 
             Assert.AreEqual(2.0f, step.Position.y, 1e-4f,
-                "max-speed cap applies to the combined sweep+cruise bonus, not per-source");
+                "max-speed cap applies to the unified tap total");
         }
 
         private static ProjectileMotionResolver LastShieldResolver(AnimationCurve approachCurve, float durationSeconds)

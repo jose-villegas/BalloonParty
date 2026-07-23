@@ -70,7 +70,8 @@ namespace BalloonParty.Shared.Animation
             }
 
             _displayedFloat = Mathf.SmoothDamp(
-                _displayedFloat, _odometerTarget, ref _smoothVelocity, _smoothTime);
+                _displayedFloat, _odometerTarget, ref _smoothVelocity, _smoothTime,
+                Mathf.Infinity, Time.unscaledDeltaTime);
 
             int currentInt = Mathf.RoundToInt(_displayedFloat);
 
@@ -183,7 +184,7 @@ namespace BalloonParty.Shared.Animation
 
         private void AdvanceDigitRolls()
         {
-            float dt = Time.deltaTime;
+            float dt = Time.unscaledDeltaTime;
             for (int d = 0; d < _odometerDigitCount; d++)
             {
                 if (_digitRollProgress[d] < 1f)
@@ -400,6 +401,7 @@ namespace BalloonParty.Shared.Animation
 
             _sequence.OnUpdate(ApplyVertexModifications);
             _sequence.OnComplete(OnAnimationComplete);
+            _sequence.SetUpdate(true);
             _sequence.SetLink(gameObject);
         }
 

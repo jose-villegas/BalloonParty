@@ -8,10 +8,8 @@ namespace BalloonParty.Projectile.Model
     public interface IProjectileFlightState
     {
         int ConsecutiveWallBounces { get; }
-        int CruiseStartShields { get; }
         int TotalCruiseTaps { get; }
         float CruiseTapElapsed { get; }
-        float SweepSpeedBonus { get; }
         int TotalSweeps { get; }
         int SegmentPopCount { get; }
         bool SegmentSweepValid { get; }
