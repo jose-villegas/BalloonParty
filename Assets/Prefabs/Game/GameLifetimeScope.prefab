@@ -50,6 +50,12 @@ MonoBehaviour:
   autoRun: 1
   autoInjectGameObjects: []
   _gameConfiguration: {fileID: 11400000, guid: cb5eb9b399cb65f4cbc8875a2f79715c, type: 2}
+  _projectileFlightConfig: {fileID: 11400000, guid: 4f8bcc06cbc44ce9ad22dac2d15559c7,
+    type: 2}
+  _slotGridConfig: {fileID: 11400000, guid: ffa53c785e3e4c29b94729b88ea8b579, type: 2}
+  _predictionTraceConfig: {fileID: 11400000, guid: 5e5f149233cc4031a25da6fba034815d,
+    type: 2}
+  _runConfig: {fileID: 11400000, guid: e61722ff405c947f5a297c493e47d729, type: 2}
   _displayConfiguration: {fileID: 11400000, guid: d49451b27c31244c7af3bd85cc6f1cd2,
     type: 2}
   _itemConfiguration: {fileID: 11400000, guid: 96695d3f4e4804c36a07426bdef377c3, type: 2}
@@ -82,6 +88,7 @@ MonoBehaviour:
   _buffConfiguration: {fileID: 11400000, guid: 728ca45d06ca84d878604fa7f93c2357, type: 2}
   _scoreTrailBehaviourConfiguration: {fileID: 11400000, guid: f5a3059bd63343178e49c2a90c9a8f91,
     type: 2}
+  _thermalGovernorSettings: {fileID: 0}
   _projectilePrefab: {fileID: 7317932863533360661, guid: 514e1ddc348a5498aa3edae2404ff130,
     type: 3}
   _scoreTrailPrefab: {fileID: 1429749022553535108, guid: 17e678e81b22a4d3481d8307861019b8,
