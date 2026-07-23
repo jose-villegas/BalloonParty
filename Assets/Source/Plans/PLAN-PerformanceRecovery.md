@@ -226,6 +226,32 @@ seconds with atrace gfx on a Unity game; see scratchpad recipe) classified ~9,87
   misses deadline → arbitration lands on the 80Hz panel mode. A4 (thermal tiers) + CPU
   work are the levers; catching the actual 80fps state live remains the final proof.
 
+### Findings — third pass, 2026-07-23 night (20-min longitudinal monitor, 15s cadence)
+
+CSV columns: thermal status, arbitrated render rate, panel mode, PSS/Java/native/graphics
+memory, frame pacing (recipe: scratchpad `monitor.sh`). Verdict on the "hard to recover
+after a drop" question:
+
+- **Thermal throttling is THE degradation mechanism, and it tracks perfectly**: status 0
+  (first ~2.5 min) → avg ~9-11ms frames; status 1 (from ~2.5 min!) → 11-16ms; status 2
+  (from ~10 min, never recovered while playing) → 12-22ms with growing 3-vsync stalls.
+  Frame time degrades monotonically with thermal status and does not recover while play
+  continues — that IS the "can't get back to launch smoothness" feeling. Tensor G4
+  starts pulling clocks at status 1, far earlier than expected.
+- **NO ARR latch**: `renderRate` stayed 120.00 and the panel never left mode 3 for the
+  entire 20 minutes, through all the degradation. The "80fps" perception in this session
+  = 120Hz with every-other-frame vsync misses (juddery 8.3/16.7ms mix), not a mode
+  switch. (A latched-80 session may still exist — re-check if ever observed — but it is
+  not required to explain the symptom.)
+- **NO leak**: Java heap flat at 9MB for 20 minutes; native 42-48MB; graphics 156-164MB;
+  PSS 677→750MB with one ~50MB step (content load) then flat. Memory is exonerated.
+- **Design consequence for A4**: degradation starts at thermal status 1 after ~2.5 min
+  of play, so a status-triggered tier ladder would fire very early — use thermal
+  HEADROOM + hysteresis, and consider that a deliberate switch to the panel's stable
+  80Hz mode under sustained throttle would look SMOOTHER than juddery half-missed 120
+  (16.7/8.3 mix). The lever pair remains: A4 tiers + UnityMain CPU reduction (~6.6ms/
+  frame today; every ms of headroom delays the judder onset under throttle).
+
 ### Decision tree
 
 ```mermaid
