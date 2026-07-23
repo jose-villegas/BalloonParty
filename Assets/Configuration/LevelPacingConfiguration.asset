@@ -3731,7 +3731,7 @@ MonoBehaviour:
           _mode: 2
         _maxPerCluster: 5
       _allowedColorsMask: 15
-  - _fromLevel: -2
+  - _fromLevel: -100
     _toLevel: -1
     _parameters:
       _spawnLines: 3
@@ -4452,7 +4452,7 @@ MonoBehaviour:
           _mode: 2
         _maxPerCluster: 5
       _allowedColorsMask: 15
-  - _fromLevel: -10
+  - _fromLevel: -101
     _toLevel: -1
     _parameters:
       _spawnLines: 4
@@ -4698,7 +4698,7 @@ MonoBehaviour:
           _mode: 2
         _maxPerCluster: 5
       _allowedColorsMask: 15
-  - _fromLevel: -11
+  - _fromLevel: -102
     _toLevel: -1
     _parameters:
       _spawnLines: 4
