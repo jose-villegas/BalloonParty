@@ -196,6 +196,11 @@ namespace BalloonParty.Balloon.Controller
                 _disturbanceField.Stamp(
                     StampSource.BalloonDeflect, viewPos, Vector2.zero, stamper.DeflectStampScale,
                     deflectPaletteIndex);
+
+                if (_model is ToughBalloonModel)
+                {
+                    _paintingField.Paint(PaintSource.ToughDeflect, viewPos);
+                }
             }
 
             // NudgeMessage origin uses the slot world position: NudgeService computes direction as

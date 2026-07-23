@@ -44,6 +44,7 @@ namespace BalloonParty.Scenario
         private readonly IGameDisplayConfiguration _display;
         private readonly IGamePalette _palette;
         private readonly ISubscriber<LevelUpDismissedMessage> _levelUpDismissedSubscriber;
+        private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
         private readonly PaintingFieldResources _resources = new();
         private readonly List<PendingStamp> _pendingStamps = new();
         private readonly Vector4[] _batchCenters = new Vector4[MaxStampsPerBatch];
@@ -57,17 +58,20 @@ namespace BalloonParty.Scenario
         private float _paintingTime;
         private float _windDampen = 1f;
         private IDisposable _levelUpDismissedSubscription;
+        private IDisposable _gameOverSubscription;
 
         public PaintingFieldService(
             IPaintingFieldSettings settings,
             IGameDisplayConfiguration display,
             IGamePalette palette,
-            ISubscriber<LevelUpDismissedMessage> levelUpDismissedSubscriber)
+            ISubscriber<LevelUpDismissedMessage> levelUpDismissedSubscriber,
+            ISubscriber<GameOverMessage> gameOverSubscriber)
         {
             _settings = settings;
             _display = display;
             _palette = palette;
             _levelUpDismissedSubscriber = levelUpDismissedSubscriber;
+            _gameOverSubscriber = gameOverSubscriber;
         }
 
         void IStartable.Start()
@@ -86,6 +90,7 @@ namespace BalloonParty.Scenario
             Shader.SetGlobalFloat(ActiveId, 1f);
             _lastDecayTime = Time.time;
             _levelUpDismissedSubscription = _levelUpDismissedSubscriber.Subscribe(_ => Clear());
+            _gameOverSubscription = _gameOverSubscriber.Subscribe(_ => Clear());
         }
 
         void ITickable.Tick()
@@ -119,6 +124,7 @@ namespace BalloonParty.Scenario
         void IDisposable.Dispose()
         {
             _levelUpDismissedSubscription?.Dispose();
+            _gameOverSubscription?.Dispose();
             Shader.SetGlobalFloat(ActiveId, 0f);
             _resources.Dispose();
         }

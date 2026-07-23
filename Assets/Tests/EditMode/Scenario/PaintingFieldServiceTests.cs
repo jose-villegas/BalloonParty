@@ -53,7 +53,12 @@ namespace BalloonParty.Tests.Scenario
                 .Subscribe(Arg.Any<IMessageHandler<LevelUpDismissedMessage>>(), Arg.Any<MessageHandlerFilter<LevelUpDismissedMessage>[]>())
                 .Returns(Substitute.For<System.IDisposable>());
 
-            _service = new PaintingFieldService(_settings, _display, _palette, _levelUpDismissedSubscriber);
+            var gameOverSubscriber = Substitute.For<ISubscriber<GameOverMessage>>();
+            gameOverSubscriber
+                .Subscribe(Arg.Any<IMessageHandler<GameOverMessage>>(), Arg.Any<MessageHandlerFilter<GameOverMessage>[]>())
+                .Returns(Substitute.For<System.IDisposable>());
+
+            _service = new PaintingFieldService(_settings, _display, _palette, _levelUpDismissedSubscriber, gameOverSubscriber);
         }
 
         // --- SetWindDampen min-accumulator ---

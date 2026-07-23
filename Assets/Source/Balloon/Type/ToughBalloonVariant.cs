@@ -3,6 +3,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Scenario;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
@@ -26,6 +27,7 @@ namespace BalloonParty.Balloon.Type
         [SerializeField] private float _crackAnimDuration = 0.5f;
 
         [Inject] private DisturbanceFieldService _disturbanceField;
+        [Inject] private PaintingFieldService _paintingField;
         [Inject] private IGamePalette _palette;
         [Inject] private IPublisher<SpeckSpawnRequestMessage> _speckPublisher;
 
@@ -123,6 +125,11 @@ namespace BalloonParty.Balloon.Type
             _disturbanceField.Stamp(
                 transform.position, profile.Radius, strength, Vector2.zero, profile.Duration,
                 _palette.PaletteIndexOf(GamePalette.ToughColorId), reportImpact: false);
+
+            if (!_repelPulse)
+            {
+                _paintingField.Paint(PaintSource.ToughBreathing, transform.position);
+            }
 
             _speckPublisher?.Publish(new SpeckSpawnRequestMessage(SpeckSource.ToughWarning, transform.position));
         }
