@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Score;
 using BalloonParty.Projectile.Controller;
@@ -310,7 +311,10 @@ namespace BalloonParty.Tests.Projectile
             config.CruisePiercingTapThreshold.Returns(0);
             config.SweepTapThreshold.Returns(sweepTapThreshold);
 
+            var visual = Substitute.For<IProjectileVisualConfig>();
+
             SetField(projectileView, "_config", config);
+            SetField(projectileView, "_visual", visual);
             SetField(projectileView, "_model", _projectile);
             SetField(projectileView, "_contactRadius", 0.1f);
             SetStaticField(typeof(ProjectileView), "BalloonsLayer", 0);

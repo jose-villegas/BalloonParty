@@ -75,6 +75,8 @@ MonoBehaviour:
     type: 2}
   _shieldFieldSettings: {fileID: 11400000, guid: 1eff39af3dde94011a0a826b12242ce2,
     type: 2}
+  _projectileVisualConfig: {fileID: 11400000, guid: c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1,
+    type: 2}
   _levelPacingConfiguration: {fileID: 11400000, guid: 1e1fe4e6ad3a04cc6aed58b832dbbf17,
     type: 2}
   _buffConfiguration: {fileID: 11400000, guid: 728ca45d06ca84d878604fa7f93c2357, type: 2}
