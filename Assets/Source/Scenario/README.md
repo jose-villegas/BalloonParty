@@ -5,9 +5,12 @@ projectile bounces off.
 
 ## BackgroundFieldService
 
-`BackgroundFieldService.cs` — owns the shared cloud field: an RT (`_CloudDensityTex`) blitted once per
-frame from the `BackgroundFieldDensity` material, with the disturbance field baked in so clouds part
-around a wall hit or a pop. It publishes the RT plus its world bounds as global shader properties, so
+`BackgroundFieldService.cs` — owns the shared cloud field: an RT (`_BackgroundDensityTex`) blitted from
+the `BackgroundFieldDensity` material on a cadence timer rather than every frame (`ICadencedEffect`,
+weight 1 — see `Shared/Cadence/README.md`), with the disturbance field baked in so clouds part around a
+wall hit or a pop. The cadence gate is bypassed while the scenario root is moving (launch ascend,
+level-up, game-over descent), so the density texture never visibly lags the scrolling camera during a
+transition. It publishes the RT plus its world bounds as global shader properties, so
 every consumer reads the SAME clouds with a single tap rather than each running its own noise. It is
 the ONE cloud generator in the project; consumers only sample, never roll their own — currently the
 `BackgroundCloud` backdrop, sprite drop-shadows (`SpriteLightDriven`), the GI light smear

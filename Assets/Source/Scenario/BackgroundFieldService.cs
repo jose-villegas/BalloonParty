@@ -12,10 +12,11 @@ using VContainer.Unity;
 namespace BalloonParty.Scenario
 {
     /// <summary>
-    ///     Owns the shared cloud field: bakes one scrolling cloud-density map into a camera-sized RT once
-    ///     per frame and publishes it — plus its world bounds — as global shader properties, so every
-    ///     consumer reads the SAME map with a single tap (the BackgroundCloud backdrop, sprite drop-shadows,
-    ///     the GI/light smear, the wall net). A plain-C# DI singleton exactly like its siblings
+    ///     Owns the shared cloud field: bakes one scrolling cloud-density map into a camera-sized RT on a
+    ///     cadence timer (<see cref="ICadencedEffect" />, bypassed during camera transitions) and publishes
+    ///     it — plus its world bounds — as global shader properties, so every consumer reads the SAME map
+    ///     with a single tap (the BackgroundCloud backdrop, sprite drop-shadows, the GI/light smear, the
+    ///     wall net). A plain-C# DI singleton exactly like its siblings
     ///     <c>DisturbanceFieldService</c> / <c>SceneLightFieldService</c>: bounds come from
     ///     <see cref="IGameDisplayConfiguration" /> (entry-point-independent — no camera, so the Launcher's
     ///     additive-load dual-camera boot can't confuse it), the cloud roll is tuned on the blit material

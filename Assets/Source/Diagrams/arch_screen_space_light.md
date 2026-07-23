@@ -183,7 +183,9 @@ clusters.
 
 Two blits at `SmearDownscale` below capture resolution per *unique* capture (the chain
 skips entirely between `ContentVersion` advances) + one fullscreen alpha-blended quad
-with a single low-res fetch every frame. Pass 0 does up to 4×8 + 8 = 40 taps per pixel,
-minus the shadow march on sprite-covered fragments; at the default downscale of 2 the
-fragment count is a quarter of the capture's — trivial on mobile at the time-paced
-cadence.
+with a single low-res fetch every frame. Pass 0's tap count is quality-gated
+(`_LOW_QUALITY_SMEAR`, mobile-only): desktop runs the full 4×8 + 8 + 1 = 41 fetches per
+pixel (minus the skipped shadow march on sprite-covered fragments); mobile drops to 2
+bounce directions and 5 taps per direction (2×5 + 5 + 1 = 16 fetches, a 61% cut). At the
+default downscale of 2 the fragment count is also a quarter of the capture's — trivial on
+mobile at the time-paced cadence.
