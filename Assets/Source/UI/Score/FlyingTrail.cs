@@ -272,14 +272,8 @@ namespace BalloonParty.UI.Score
                 }
             }
 
-            // Batch write: SetPositions reads array.Length, so resize the scratch to exactly count to
-            // avoid pushing stale data past the ribbon's real point count. The static array is re-grown
-            // on demand above, so the resize amortises across frames.
-            if (_ribbonScratch.Length != count)
-            {
-                System.Array.Resize(ref _ribbonScratch, count);
-            }
-
+            // SetPositions applies only positionCount entries (== count) and ignores any surplus, so the
+            // oversized shared scratch never needs shrinking (see ChainLightningView/PredictionTraceView).
             _trailRenderer.SetPositions(_ribbonScratch);
         }
 

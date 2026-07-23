@@ -78,7 +78,7 @@ namespace BalloonParty.Shared.Animation
                 _displayedValue = currentInt;
 
                 int len = FormatValue(currentInt);
-                _text.text = new string(_formattingBuffer, 0, len);
+                _text.SetCharArray(_formattingBuffer, 0, len);
                 _text.ForceMeshUpdate();
                 _cachedMeshInfo = _text.textInfo.CopyMeshInfoVertexData();
             }
@@ -111,7 +111,7 @@ namespace BalloonParty.Shared.Animation
             if (!_hasValue)
             {
                 int len = FormatValue(value);
-                _text.text = new string(_formattingBuffer, 0, len);
+                _text.SetCharArray(_formattingBuffer, 0, len);
                 _text.ForceMeshUpdate();
                 _displayedValue = value;
                 _displayedFloat = value;
@@ -264,7 +264,7 @@ namespace BalloonParty.Shared.Animation
             _displayedFloat = _odometerTarget;
 
             int len = FormatValue(_odometerTarget);
-            _text.text = new string(_formattingBuffer, 0, len);
+            _text.SetCharArray(_formattingBuffer, 0, len);
             _text.ForceMeshUpdate();
             _cachedMeshInfo = null;
         }
@@ -282,7 +282,7 @@ namespace BalloonParty.Shared.Animation
                 if (_text != null)
                 {
                     int len = FormatValue(_odometerTarget);
-                    _text.text = new string(_formattingBuffer, 0, len);
+                    _text.SetCharArray(_formattingBuffer, 0, len);
                     _text.ForceMeshUpdate();
                 }
             }
