@@ -66,9 +66,14 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                 // Coverage at this pixel — casters have ~1, open ground/sky ~0.
                 half ownCoverage = tex2Dlod(_MainTex, float4(IN.uv, 0, 0)).a;
 
-                // Per-fragment march direction from the light field. UV-space, so float.
+                // Per-fragment march direction from the light field, as non-normalizing FLOW rather
+                // than SceneLightDirectionAt: the normalized decode snaps ~180° where a local light
+                // cancels the ambient or its peak crosses the sample, and the single-direction shadow
+                // march below turns that snap into a hard border around each mapped light. Flow shrinks
+                // toward 0 at a cancellation (the step shrinks, so the shadow fades THROUGH rest instead
+                // of flipping); its length is exactly 1 at rest / field-off, leaving those unchanged.
                 float2 worldPos = _SceneLightFieldBoundsMin.xy + IN.uv * _SceneLightFieldBoundsSize.xy;
-                float2 downLight = -SceneLightDirectionAt(worldPos);
+                float2 downLight = -SceneLightFlowAtLOD(worldPos, 0.0);
                 float2 stepBase = float2(downLight.x / _TapAspect, downLight.y) * _TapStepScale;
 
                 // Mip count for clamping.

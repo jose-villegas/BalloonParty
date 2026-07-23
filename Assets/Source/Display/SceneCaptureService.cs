@@ -174,6 +174,10 @@ namespace BalloonParty.Display
             {
                 name = "SceneCapture",
                 filterMode = FilterMode.Bilinear,
+                // Clamp, not the RenderTexture default (Repeat): the GI cone-march walks sample UVs
+                // off the edge, and wrapping would fold the opposite side of the screen back in as a
+                // seam. Matches the field RTs' convention.
+                wrapMode = TextureWrapMode.Clamp,
                 useMipMap = true,
                 // Auto, never a script-side GenerateMips(): that command can reach the gfx worker
                 // outside the frame's command buffer and crashes Vulkan release builds (null

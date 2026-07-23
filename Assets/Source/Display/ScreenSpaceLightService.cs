@@ -288,7 +288,11 @@ namespace BalloonParty.Display
             return new RenderTexture(width, height, 0, RenderTextureFormat.ARGB32)
             {
                 name = name,
-                filterMode = FilterMode.Bilinear
+                filterMode = FilterMode.Bilinear,
+                // Clamp, not the RenderTexture default (Repeat): the cone-march (Pass 0) and 3×3
+                // soften (Pass 1) both sample past the edge, and wrapping would bleed the opposite
+                // border back in. Matches the capture and the field RTs.
+                wrapMode = TextureWrapMode.Clamp
             };
         }
 
