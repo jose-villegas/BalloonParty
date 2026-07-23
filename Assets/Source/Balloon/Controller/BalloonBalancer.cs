@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Run;
 using BalloonParty.Projectile.Model;
+using BalloonParty.Balloon.View;
 using BalloonParty.Shared.Disturbance;
-using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Slots.Actor;
@@ -41,6 +41,8 @@ namespace BalloonParty.Balloon.Controller
         private readonly ISubscriber<ProjectileDestroyedMessage> _projectileDestroyedSubscriber;
         private readonly PauseService _pauseService;
         private readonly DisturbanceFieldService _disturbanceField;
+        private readonly BalloonMotionTicker _motionTicker;
+        private readonly Action<object> _finalizeBalanceMove;
         private readonly PressurePropagation _pressurePropagation;
         private readonly BalancePlanner _balancePlanner;
         private readonly Dictionary<IWriteableDynamicSlotActor, List<Vector3>> _paths = new();
@@ -73,6 +75,7 @@ namespace BalloonParty.Balloon.Controller
             ISubscriber<ProjectileDestroyedMessage> projectileDestroyedSubscriber,
             PauseService pauseService,
             DisturbanceFieldService disturbanceField,
+            BalloonMotionTicker motionTicker,
             BalanceDebugRecorder debugRecorder = null)
         {
             _grid = grid;
@@ -84,6 +87,8 @@ namespace BalloonParty.Balloon.Controller
             _projectileDestroyedSubscriber = projectileDestroyedSubscriber;
             _pauseService = pauseService;
             _disturbanceField = disturbanceField;
+            _motionTicker = motionTicker;
+            _finalizeBalanceMove = FinalizeBalanceMove;
             _pressurePropagation = new PressurePropagation(grid, balanceQuery.Evaluator, debugRecorder);
             _balancePlanner = new BalancePlanner(grid, balanceQuery);
         }
@@ -114,6 +119,7 @@ namespace BalloonParty.Balloon.Controller
             _activeProjectile = null;
             _flightRebalanceElapsed = 0f;
             _turnSteps.Clear();
+            _motionTicker.CancelAllBalanceMoves();
             ReleasePaths();
         }
 
@@ -133,25 +139,25 @@ namespace BalloonParty.Balloon.Controller
                 view.TweenTracker.Kill();
                 view.transform.DOKill();
 
-                StartBalanceTween(actor, path, view);
+                StartBalanceMove(actor, path, view);
             }
         }
 
-        private void StartBalanceTween(
+        private void StartBalanceMove(
             IWriteableDynamicSlotActor actor, List<Vector3> path, ISlotActorView view)
         {
-            var currentScale = view.transform.localScale;
             var viewTransform = view.transform;
+            var currentScale = viewTransform.localScale;
 
+            // Sever any in-flight spawn tween (DOPath/DOScale) so it doesn't fight the ticker's drive.
             view.TweenTracker.Kill();
             viewTransform.DOKill();
 
-            // Direct movers skip the resolve's intermediate waypoints and tween straight to the end.
+            // Direct movers skip the resolve's intermediate waypoints and glide straight to the end.
             var directMotion = actor is IBalanceInfluence { DirectBalanceMotion: true } && path.Count > 1;
 
-            // A (near-)zero-length path NaNs inside DOTween: ConvertToConstantPathPerc's lengths
-            // table is all zeros, its percent lookup divides 0/0, and the NaN propagates into the
-            // position setter. Skip the tween and complete the move inline instead.
+            // A (near-)zero-length move has nothing to animate — complete it inline. (The old DOTween
+            // path also NaN'd here, but a zero-length Catmull-Rom is simply a stationary point.)
             var travelSqr = directMotion
                 ? (path[^1] - viewTransform.position).sqrMagnitude
                 : PolylineSqrLength(viewTransform.position, path);
@@ -166,22 +172,29 @@ namespace BalloonParty.Balloon.Controller
                     ? FinalWaypointBuffer(viewTransform.position, path)
                     : WaypointBuffer(viewTransform.position, path);
 
-                var tween = viewTransform
-                    .DOPath(waypoints, _balloonsConfig.TimeForBalloonsBalance, PathType.CatmullRom)
-                    .StampDisturbanceAlongPath(viewTransform, _disturbanceField, StampSource.BalloonPath)
-                    .OnComplete(() =>
-                    {
-                        actor.IsStable.Value = true;
-                        _balancePathHolder.Release(actor);
-                    });
-
-                view.TweenTracker.Append(tween);
+                _motionTicker.StartBalanceMove(
+                    (IBalloonMotionView)view,
+                    waypoints,
+                    _balloonsConfig.TimeForBalloonsBalance,
+                    _disturbanceField,
+                    _disturbanceField.GetProfile(StampSource.BalloonPath),
+                    _finalizeBalanceMove,
+                    actor);
             }
 
             if (currentScale != Vector3.one)
             {
                 viewTransform.DOScale(Vector3.one, _balloonsConfig.TimeForBalloonsBalance);
             }
+        }
+
+        // Cached completion for a ticker balance move: settle the actor and free its reserved transit
+        // slots. Cached as a field delegate so a move schedules no per-move closure.
+        private void FinalizeBalanceMove(object payload)
+        {
+            var actor = (IWriteableDynamicSlotActor)payload;
+            actor.IsStable.Value = true;
+            _balancePathHolder.Release(actor);
         }
 
         // relocateRoamers: true only at the turn boundary (pre-spawn), so roaming types jump once per turn,

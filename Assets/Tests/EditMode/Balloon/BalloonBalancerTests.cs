@@ -46,7 +46,7 @@ namespace BalloonParty.Tests.Balloon
                 _grid, balanceQuery, _balloonsConfig, pathHolder,
                 CaptureBalanceRequests(),
                 CaptureLoaded(), StubSubscriber<ProjectileDestroyedMessage>(),
-                _pauseService, null);
+                _pauseService, null, new BalloonMotionTicker());
             _balancer.Start();
         }
 
