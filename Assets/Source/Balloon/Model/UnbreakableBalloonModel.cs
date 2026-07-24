@@ -8,7 +8,7 @@ using UnityEngine;
 namespace BalloonParty.Balloon.Model
 {
     internal class UnbreakableBalloonModel : BalloonModelBase, IHasDeflectStamp, IHasScore, IHasScoreColor,
-        IPreBalanceRelocatable
+        IPreBalanceRelocatable, IResistsPaint
     {
         public float DeflectStampScale { get; }
         public int ScoreValue { get; }

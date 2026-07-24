@@ -4,6 +4,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using Cysharp.Threading.Tasks;
@@ -131,17 +132,17 @@ namespace BalloonParty.Item.Paint
                     StampSource.Paint, landing, direction,
                     paletteIndex: _palette.PaletteIndexOf(paintColor));
 
-                Recolor(paintColor, targetsByBlob[index]);
+                ApplyPaint(targetsByBlob[index], paintColor, tint);
             }
         }
 
-        // Buckets align 1:1 with blobPositions; each is applied as its blob lands. Targets already at
-        // the paint colour are skipped (a pointless recolour) — including balloons already rainbow when
-        // the holder is rainbow, since both carry the same wildcard id.
-        private List<IPaintable>[] CollectPaintTargets(
+        // Buckets align 1:1 with blobPositions; each is applied as its blob lands. Each covered slot is
+        // classified once: paintable+different-colour = accept (recolour + drip), resists-paint = reject
+        // (drip only, no recolour), everything else (empty, already-that-colour, non-balloon) = ignored.
+        private List<PaintTarget>[] CollectPaintTargets(
             IReadOnlyList<Vector2> blobPositions, float blobRadius, string paintColor)
         {
-            var buckets = new List<IPaintable>[blobPositions.Count];
+            var buckets = new List<PaintTarget>[blobPositions.Count];
             var radiusSqr = blobRadius * blobRadius;
 
             for (var col = 0; col < _grid.Columns; col++)
@@ -149,8 +150,7 @@ namespace BalloonParty.Item.Paint
                 for (var row = 0; row < _grid.Rows; row++)
                 {
                     var slot = new Vector2Int(col, row);
-                    var paintable = ResolvePaintTarget(slot, paintColor);
-                    if (paintable == null)
+                    if (!TryClassify(slot, paintColor, out var target))
                     {
                         continue;
                     }
@@ -162,33 +162,45 @@ namespace BalloonParty.Item.Paint
                         continue;
                     }
 
-                    (buckets[nearest] ??= new List<IPaintable>()).Add(paintable);
+                    (buckets[nearest] ??= new List<PaintTarget>()).Add(target);
                 }
             }
 
             return buckets;
         }
 
-        // Not a target if the slot is empty, non-paintable, or already the paint colour (a pointless
-        // recolour — this also skips already-rainbow balloons when the holder is rainbow).
-        private IPaintable ResolvePaintTarget(Vector2Int slot, string paintColor)
+        // Accept: paintable, not already the paint colour (skips already-rainbow balloons when the holder
+        // is rainbow — same wildcard id). Reject: an IResistsPaint balloon (tough/unbreakable) — the drip
+        // still plays and slides off, but no colour commits. Empty / non-balloon slots yield no target.
+        private bool TryClassify(Vector2Int slot, string paintColor, out PaintTarget target)
         {
+            target = default;
+
             if (_grid.IsEmpty(slot.x, slot.y))
             {
-                return null;
+                return false;
             }
 
-            if (_grid.At(slot) is not IPaintable paintable)
+            var actor = _grid.At(slot);
+
+            if (actor is IPaintable paintable)
             {
-                return null;
+                if (paintable.Color.Value == paintColor)
+                {
+                    return false;
+                }
+
+                target = new PaintTarget(slot, paintable);
+                return true;
             }
 
-            if (paintable.Color.Value == paintColor)
+            if (actor is IResistsPaint)
             {
-                return null;
+                target = new PaintTarget(slot, null);
+                return true;
             }
 
-            return paintable;
+            return false;
         }
 
         private static int NearestBlob(IReadOnlyList<Vector2> blobPositions, Vector2 position, out float bestSqr)
@@ -208,7 +220,10 @@ namespace BalloonParty.Item.Paint
             return best;
         }
 
-        private static void Recolor(string paintColor, IReadOnlyList<IPaintable> targets)
+        // Accepts commit the new colour on the model; rejects don't. Both play the drip on the balloon's
+        // view (resolved off the grid) with the incoming paint colour — layering makes an accept read as
+        // paint settling over the just-committed colour and a reject as paint sliding off the unchanged body.
+        private void ApplyPaint(IReadOnlyList<PaintTarget> targets, string paintColor, Color tint)
         {
             if (targets == null)
             {
@@ -217,7 +232,27 @@ namespace BalloonParty.Item.Paint
 
             foreach (var target in targets)
             {
-                target.Color.Value = paintColor;
+                if (target.Accept)
+                {
+                    target.Paintable.Color.Value = paintColor;
+                }
+
+                _grid.ActorViewAt<IPaintReactive>(target.Slot)?.PlayPaintDrip(tint);
+            }
+        }
+
+        // Paintable != null = accept (recolour); null = reject (drip slides off, no recolour).
+        private readonly struct PaintTarget
+        {
+            public readonly Vector2Int Slot;
+            public readonly IPaintable Paintable;
+
+            public bool Accept => Paintable != null;
+
+            public PaintTarget(Vector2Int slot, IPaintable paintable)
+            {
+                Slot = slot;
+                Paintable = paintable;
             }
         }
     }

@@ -11,7 +11,7 @@ using BalloonParty.Configuration.Palette;
 namespace BalloonParty.Balloon.Model
 {
     internal class ToughBalloonModel : BalloonModelBase, IHasDeflectStamp, IHasDurability, IHasScore,
-        IHasScoreColor
+        IHasScoreColor, IResistsPaint
     {
         private readonly ColorSource _colorSource;
         private readonly float _balanceBias;

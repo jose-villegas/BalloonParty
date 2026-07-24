@@ -25,7 +25,7 @@ using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Balloon.View
 {
-    public class BalloonView : MonoBehaviour, IPoolable, ISlotActorView, INudgeable, IBalloonMotionView
+    public class BalloonView : MonoBehaviour, IPoolable, ISlotActorView, IPaintReactive, INudgeable, IBalloonMotionView
     {
         private static readonly int IsStableParam = Animator.StringToHash("IsStable");
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
@@ -41,6 +41,9 @@ namespace BalloonParty.Balloon.View
 
         [Tooltip("The colourable body sprite — the only renderer swapped to the rainbow material.")]
         [SerializeField] private SpriteRenderer _bodyRenderer;
+
+        [Tooltip("Optional paint-splash drip overlay, played when the Paint item hits this balloon.")]
+        [SerializeField] private PaintDripOverlay _paintDrip;
 
         [Tooltip("Renderers that must sort above a hosted item (e.g. a foreground overlay); ordered above " +
                  "the item when one is present, just above the body when not.")]
@@ -131,8 +134,17 @@ namespace BalloonParty.Balloon.View
             _bindDisposables.Clear();
             _itemService?.Unbind();
             SetBodyMaterial(_originalBodyMaterial);
+            _paintDrip?.Stop();
             Model = null;
             _hitVfxOverrides = null;
+        }
+
+        // The Paint item plays this on both accepted and resisting balloons; the body underneath has
+        // already committed the new colour (accept) or not (reject), so the same drip reads as paint
+        // settling or sliding off. A no-op when the prefab has no overlay wired.
+        public void PlayPaintDrip(Color paintColor)
+        {
+            _paintDrip?.Play(paintColor);
         }
 
         // Stops the idle animator so a board effect's tween owns the balloon's rotation without the idle
@@ -197,8 +209,9 @@ namespace BalloonParty.Balloon.View
                     _lightField,
                     _projectileFacing,
                     // The item's sorting footprint just changed (added/removed) — re-layer our
-                    // above-item renderers over the item's new top order (or the body, if it's gone).
-                    () => ApplyAboveItemSorting(Model.SlotIndex.Value));
+                    // above-item renderers (and the paint drip, which sits above them) over the item's
+                    // new top order (or the body, if it's gone).
+                    () => ApplyItemDependentSorting(Model.SlotIndex.Value));
             }
         }
 
@@ -316,12 +329,20 @@ namespace BalloonParty.Balloon.View
         {
             var baseOrder = SortingHelper.SlotBaseSortingOrder(slotIndex, _config.SlotsSize, _baseSortingLayer);
             SortingHelper.ApplySortingOrder(_spriteLayerRenderers, baseOrder);
+            ApplyItemDependentSorting(slotIndex);
+        }
+
+        // Renderers whose order depends on the hosted item's footprint: the above-item layer and the
+        // paint drip on top of it. Re-run on slot moves (here) and on item add/remove (via
+        // ItemDisplayService's footprint callback) — the item service owns the item's slot count.
+        private void ApplyItemDependentSorting(Vector2Int slotIndex)
+        {
             ApplyAboveItemSorting(slotIndex);
+            ApplyPaintDripSorting(slotIndex);
         }
 
         // Orders the above-item renderers over the hosted item's top slot (or just above the body when
-        // no item is present). Re-run on slot moves (here) and on item add/remove (via ItemDisplayService's
-        // footprint callback) — ItemDisplayService is the only component that knows the item's slot count.
+        // no item is present).
         private void ApplyAboveItemSorting(Vector2Int slotIndex)
         {
             if (_aboveItemRenderers == null || _aboveItemRenderers.Length == 0)
@@ -332,6 +353,22 @@ namespace BalloonParty.Balloon.View
             var baseOrder = SortingHelper.SlotBaseSortingOrder(slotIndex, _config.SlotsSize, _baseSortingLayer);
             var itemCount = _itemService != null ? _itemService.ActiveItemSortingCount : 0;
             SortingHelper.ApplySortingOrder(_aboveItemRenderers, baseOrder + _spriteLayerRenderers.Length + itemCount);
+        }
+
+        // The paint drip sits above everything the balloon owns — body, hosted item, and the above-item
+        // layer — so the splash always reads on top. Placed programmatically (not wired into
+        // _aboveItemRenderers) so a prefab without a drip overlay simply skips it.
+        private void ApplyPaintDripSorting(Vector2Int slotIndex)
+        {
+            if (_paintDrip == null)
+            {
+                return;
+            }
+
+            var baseOrder = SortingHelper.SlotBaseSortingOrder(slotIndex, _config.SlotsSize, _baseSortingLayer);
+            var itemCount = _itemService != null ? _itemService.ActiveItemSortingCount : 0;
+            var aboveCount = _aboveItemRenderers?.Length ?? 0;
+            _paintDrip.ApplySortingOrder(baseOrder + _spriteLayerRenderers.Length + itemCount + aboveCount + 1);
         }
 
         // Rainbow mode replaces the normal per-colour tint with the banded material — the tint would
