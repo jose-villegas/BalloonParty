@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
@@ -39,9 +38,6 @@ namespace BalloonParty.Item.Laser
         private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly SceneLightFieldService _lightField;
-
-        // Cancels pending beam-light expiries when the run ends (the field also clears on its own dispose).
-        private readonly CancellationTokenSource _lifetime = new();
 
         // Cross-activation: rotation arrives via TransformCapturedMessage before activation.
         private readonly Dictionary<ISlotActor, Quaternion> _capturedRotations = new();
@@ -88,8 +84,6 @@ namespace BalloonParty.Item.Laser
         {
             _captureSubscription?.Dispose();
             _boardClearSubscription?.Dispose();
-            _lifetime.Cancel();
-            _lifetime.Dispose();
         }
 
         public UniTask Activate(ItemActivationContext activation)
@@ -142,30 +136,13 @@ namespace BalloonParty.Item.Laser
             var intensity = laserSettings.BeamLightIntensity;
             var falloff = laserSettings.BeamLightFalloff;
 
-            var horizontal = _lightField.RegisterLight(
-                Light.Segment(worldPosition - right, worldPosition + right, halfWidth, intensity, paletteIndex, falloff));
-            var vertical = _lightField.RegisterLight(
-                Light.Segment(worldPosition - up, worldPosition + up, halfWidth, intensity, paletteIndex, falloff));
-
             var seconds = effect != null && effect.Duration > 0f ? effect.Duration : laserSettings.BeamLightFallbackSeconds;
-            ExpireLights(seconds, horizontal, vertical).Forget();
-        }
-
-        private async UniTaskVoid ExpireLights(float seconds, IDisposable horizontal, IDisposable vertical)
-        {
-            try
-            {
-                await UniTask.Delay(TimeSpan.FromSeconds(seconds), cancellationToken: _lifetime.Token);
-            }
-            catch (OperationCanceledException)
-            {
-                // Run ended mid-beam — the field clears its own lights on dispose; still release below.
-            }
-            finally
-            {
-                horizontal.Dispose();
-                vertical.Dispose();
-            }
+            _lightField.Flash(
+                Light.Segment(worldPosition - right, worldPosition + right, halfWidth, intensity, paletteIndex, falloff),
+                seconds);
+            _lightField.Flash(
+                Light.Segment(worldPosition - up, worldPosition + up, halfWidth, intensity, paletteIndex, falloff),
+                seconds);
         }
 
         // A rainbow holder converts every surviving balloon bordering the blasted cross — the hex

@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Shared.Cadence;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Disturbance;
+using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 using VContainer.Unity;
@@ -59,6 +61,7 @@ namespace BalloonParty.Shared.SceneLight
         private readonly IGamePalette _palette;
         private readonly ISceneLightFieldSettings _settings;
         private readonly SceneLightFieldResources _resources = new();
+        private readonly CancellationTokenSource _lifetime = new();
         private readonly Vector4[] _paletteBuffer = new Vector4[PaletteChannelEncoding.Slots];
         private readonly List<Registration> _lights = new();
         private readonly Vector4[] _batchCenters = new Vector4[ShaderStampCapacity];
@@ -197,6 +200,8 @@ namespace BalloonParty.Shared.SceneLight
 
         void IDisposable.Dispose()
         {
+            _lifetime.Cancel();
+            _lifetime.Dispose();
             Shader.SetGlobalFloat(FieldOnId, 0f);
             _fieldOn = false;
             ClearLights();
@@ -232,6 +237,28 @@ namespace BalloonParty.Shared.SceneLight
             return new LightRegistrationHandle(this, light);
         }
 
+        /// <summary>Fire-and-forget one-shot flash of a point light — see <see cref="Flash(Light,float)"/>.
+        /// -1 palette = key-light (neutral) flash.</summary>
+        internal void Flash(Vector3 position, float radius, float intensity, float seconds, int paletteIndex = -1)
+        {
+            Flash(new Light(position, radius, intensity, paletteIndex), seconds);
+        }
+
+        /// <summary>Fire-and-forget one-shot flash: registers <paramref name="light"/> (point or segment) held for
+        /// <paramref name="seconds"/> then removes it. Owns its own timing on the service lifetime, so the caller
+        /// needn't keep the registration — useful when the emitter (a pooled balloon, an item whose effect
+        /// outlives it) is gone before the flash ends. A non-positive <paramref name="seconds"/> is a no-op.</summary>
+        internal void Flash(Light light, float seconds)
+        {
+            if (seconds <= 0f)
+            {
+                return;
+            }
+
+            var registration = RegisterLight(light);
+            ExpireAsync(registration, seconds).Forget();
+        }
+
         /// <summary>Turns every registered light off at once (each registration's own dispose still works).</summary>
         internal void ClearLights()
         {
@@ -257,6 +284,22 @@ namespace BalloonParty.Shared.SceneLight
                 _lights.RemoveAt(i);
                 _dirty = true;
                 return;
+            }
+        }
+
+        private async UniTaskVoid ExpireAsync(IDisposable registration, float seconds)
+        {
+            try
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(seconds), cancellationToken: _lifetime.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                // Service disposed mid-flash — ClearLights already released it; the dispose below is a no-op.
+            }
+            finally
+            {
+                registration.Dispose();
             }
         }
 

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Threading;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
@@ -22,7 +20,7 @@ using Light = BalloonParty.Shared.SceneLight.Light;
 
 namespace BalloonParty.Item.Bomb
 {
-    internal class BombItemHandler : IBalloonItem, IDisposable
+    internal class BombItemHandler : IBalloonItem
     {
         private readonly ItemEffectPlayer _effectPlayer;
         private readonly BalloonOverlapQuery _overlap;
@@ -34,7 +32,6 @@ namespace BalloonParty.Item.Bomb
         private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly SceneLightFieldService _lightField;
-        private readonly CancellationTokenSource _lifetime = new();
 
         public ItemType Type => ItemType.Bomb;
 
@@ -57,12 +54,6 @@ namespace BalloonParty.Item.Bomb
             _overlap = overlap;
             _disturbanceField = disturbanceField;
             _lightField = lightField;
-        }
-
-        public void Dispose()
-        {
-            _lifetime.Cancel();
-            _lifetime.Dispose();
         }
 
         public UniTask Activate(ItemActivationContext activation)
@@ -120,13 +111,13 @@ namespace BalloonParty.Item.Bomb
             // A blast-coloured flash light scaled off the blast radius (visual scale for a rainbow bomb),
             // held for the effect then released.
             var lightRadius = settings.Bomb.Radius * (isRainbow ? settings.Bomb.RainbowEffectScale : 1f);
-            var registration = _lightField.RegisterLight(
-                new Light(worldPosition,
-                    lightRadius * settings.Bomb.BlastLightRadiusScale,
-                    settings.Bomb.BlastLightIntensity,
-                    _palette.PaletteIndexOf(sourceColorId)));
             var lightSeconds = effectDuration > 0f ? effectDuration : settings.Bomb.BlastLightFallbackSeconds;
-            ExpireLight(lightSeconds, registration).Forget();
+            _lightField.Flash(
+                worldPosition,
+                lightRadius * settings.Bomb.BlastLightRadiusScale,
+                settings.Bomb.BlastLightIntensity,
+                lightSeconds,
+                _palette.PaletteIndexOf(sourceColorId));
 
             if (converts != null)
             {
@@ -229,20 +220,5 @@ namespace BalloonParty.Item.Bomb
             }
         }
 
-        private async UniTaskVoid ExpireLight(float seconds, IDisposable registration)
-        {
-            try
-            {
-                await UniTask.Delay(TimeSpan.FromSeconds(seconds), cancellationToken: _lifetime.Token);
-            }
-            catch (OperationCanceledException)
-            {
-                // Run ended before the flash faded — the field clears its own lights; still release below.
-            }
-            finally
-            {
-                registration.Dispose();
-            }
-        }
     }
 }

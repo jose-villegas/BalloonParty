@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Diagnostics;
@@ -45,7 +44,6 @@ namespace BalloonParty.Item.Lightning
         private readonly PoolManager _poolManager;
         private readonly SlotGrid _grid;
         private readonly SceneLightFieldService _lightField;
-        private readonly CancellationTokenSource _lifetime = new();
 
         // Safe to share: set and consumed synchronously within one CollectSortedTargets call.
         private readonly ByDistanceComparer _distanceComparer = new();
@@ -82,8 +80,6 @@ namespace BalloonParty.Item.Lightning
         public void Dispose()
         {
             _subscription?.Dispose();
-            _lifetime.Cancel();
-            _lifetime.Dispose();
         }
 
         public UniTask Activate(ItemActivationContext activation)
@@ -194,26 +190,10 @@ namespace BalloonParty.Item.Lightning
                 // state, not a single-frame stamp). positions is per-activation, so capturing it here
                 // is safe even though jumps arrive after Activate returns.
                 var lightning = settings.Lightning;
-                var registration = _lightField.RegisterLight(
+                _lightField.Flash(
                     Light.Segment(positions[index], pos, lightning.PopLightRadius, lightning.PopLightIntensity,
-                        _palette.PaletteIndexOf(matchColor)));
-                ExpireLight(lightning.PopLightSeconds, registration).Forget();
-            }
-        }
-
-        private async UniTaskVoid ExpireLight(float seconds, IDisposable registration)
-        {
-            try
-            {
-                await UniTask.Delay(TimeSpan.FromSeconds(seconds), cancellationToken: _lifetime.Token);
-            }
-            catch (OperationCanceledException)
-            {
-                // Run ended before the flash faded — the field clears its own lights; still release below.
-            }
-            finally
-            {
-                registration.Dispose();
+                        _palette.PaletteIndexOf(matchColor)),
+                    lightning.PopLightSeconds);
             }
         }
 
