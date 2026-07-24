@@ -1,4 +1,3 @@
-using System;
 using System.Reflection;
 using BalloonParty.Audio;
 using BalloonParty.Audio.Configuration;
@@ -98,7 +97,7 @@ namespace BalloonParty.Tests.Audio
 
         private void SetEntry(GameSoundId id, SfxEntry entry)
         {
-            var entries = new SfxEntry[Enum.GetValues(typeof(GameSoundId)).Length];
+            var entries = new SfxEntry[System.Enum.GetValues(typeof(GameSoundId)).Length];
             entries[(int)id] = entry;
             SetField(_config, "_entries", entries);
         }
