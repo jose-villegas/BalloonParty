@@ -7,6 +7,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
@@ -55,6 +56,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly List<BalloonPrefabEntry> _spawnBatch = new();
         private readonly List<int> _lineColumns = new();
         private readonly List<int> _popSpawnColumns = new();
+        private readonly List<int> _fillCapacityDiag = new();
         private readonly Comparison<int> _byColumnKey;
 
         private int[] _columnSortKeys;
@@ -238,16 +240,64 @@ namespace BalloonParty.Balloon.Spawner
 
         private void PopulateInitialGrid()
         {
-            // Starts empty and is sized to fit, so it never rejects a balloon.
+            // Static actors are placed in an earlier spawn stage, so the board is NOT empty here on tight
+            // boards. Rehoming redistributes a blocked column's allotment into columns that still have
+            // reachable room, so the total reaches lines*Columns whenever the board's reachable capacity
+            // allows. LogInitialFillDiagnostics reports any remaining shortfall (editor/dev builds only).
             var lines = _levelParams.Current.BoardLines;
             PrepareSpawnBatch(lines, isInitial: true);
 
+            CaptureFillCapacity();
+
             for (var i = 0; i < lines; i++)
             {
-                SpawnLineInternal(allowReject: false);
+                SpawnLineInternal(PlacementReach.Rehome);
             }
 
+            LogInitialFillDiagnostics(lines);
             ReleaseUnspawnedBatch();
+        }
+
+        // Snapshot each column's reachable capacity BEFORE the fill — afterwards the board is full and the
+        // probe reads ~0. Stripped from release with LogInitialFillDiagnostics.
+        [System.Diagnostics.Conditional("UNITY_EDITOR"), System.Diagnostics.Conditional("DEVELOPMENT_BUILD")]
+        private void CaptureFillCapacity()
+        {
+            _fillCapacityDiag.Clear();
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                _fillCapacityDiag.Add(_placement.ReachableCapacity(col));
+            }
+        }
+
+        [System.Diagnostics.Conditional("UNITY_EDITOR"), System.Diagnostics.Conditional("DEVELOPMENT_BUILD")]
+        private void LogInitialFillDiagnostics(int lines)
+        {
+            var expected = lines * _grid.Columns;
+            var spawned = _newlySpawnedBalloons.Count;
+
+            var achievable = 0;
+            var breakdown = new System.Text.StringBuilder();
+            for (var col = 0; col < _fillCapacityDiag.Count; col++)
+            {
+                var capacity = _fillCapacityDiag[col];
+                var placeable = Mathf.Min(lines, capacity);
+                achievable += placeable;
+                breakdown.Append($"\n  col {col}: reachable={capacity}, placeable={placeable}");
+            }
+
+            var summary =
+                $"initial fill: expected={expected} (lines={lines}×cols={_grid.Columns}), " +
+                $"achievable={achievable}, spawned={spawned}{breakdown}";
+
+            if (spawned < expected)
+            {
+                Log.Warn(nameof(BalloonSpawner), $"under-filled — {summary}");
+            }
+            else
+            {
+                Log.Info(nameof(BalloonSpawner), summary);
+            }
         }
 
         private void PublishItemCheck(bool isInitial)
@@ -286,13 +336,13 @@ namespace BalloonParty.Balloon.Spawner
         {
             _balancer.Balance(relocateRoamers: true);
             PrepareSpawnBatch(lineCount: 1);
-            SpawnLineInternal(allowReject: true);
+            SpawnLineInternal(PlacementReach.Pressure);
             ReleaseUnspawnedBatch();
             PublishItemCheck(isInitial: false);
             _balancePublisher.Publish(default);
         }
 
-        private void SpawnLineInternal(bool allowReject)
+        private void SpawnLineInternal(PlacementReach reach)
         {
             // Shallowest columns first: consuming the ascending (light→heavy) batch in depth order pairs
             // the heaviest entries with the lowest slots. Resolve + spawn stay sequential, so each placed
@@ -302,7 +352,7 @@ namespace BalloonParty.Balloon.Spawner
 
             for (var i = 0; i < _lineColumns.Count; i++)
             {
-                var slot = _placement.Resolve(_lineColumns[i], allowReject);
+                var slot = _placement.Resolve(_lineColumns[i], reach);
                 if (slot.HasValue)
                 {
                     var entry = NextBatchEntry();
@@ -314,9 +364,9 @@ namespace BalloonParty.Balloon.Spawner
                     continue;
                 }
 
-                if (allowReject)
+                // Only turn spawns overflow below the grid; initial fill just stops at the board's capacity.
+                if (reach == PlacementReach.Pressure)
                 {
-                    // No room anywhere — queue an overflow balloon below the grid.
                     _rejectedBalloon.Play(_lineColumns[i], rejectIndex++, _activeCounts);
                 }
             }
@@ -412,7 +462,7 @@ namespace BalloonParty.Balloon.Spawner
             var spawned = 0;
             for (var i = 0; i < _popSpawnColumns.Count && spawned < count; i++)
             {
-                var slot = _placement.Resolve(_popSpawnColumns[i], allowReject: false);
+                var slot = _placement.Resolve(_popSpawnColumns[i], PlacementReach.OwnColumn);
                 if (!slot.HasValue)
                 {
                     continue;
@@ -460,7 +510,7 @@ namespace BalloonParty.Balloon.Spawner
                         return;
                     }
 
-                    SpawnLineInternal(allowReject: true);
+                    SpawnLineInternal(PlacementReach.Pressure);
                     await UniTask.Delay(
                         (int)(_balloonsConfig.NewBalloonLinesTimeInterval * 1000),
                         cancellationToken: ct);

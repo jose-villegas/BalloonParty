@@ -6,6 +6,19 @@ using VContainer;
 
 namespace BalloonParty.Balloon.Spawner
 {
+    /// <summary>How far placement may reach when a column's own entry is blocked.</summary>
+    internal enum PlacementReach
+    {
+        /// <summary>Only the column's own reachable entry; skip when it is blocked (pop-spawn extras).</summary>
+        OwnColumn,
+
+        /// <summary>Own entry, else rehome into the nearest column with an open entry (initial fill).</summary>
+        Rehome,
+
+        /// <summary>Rehome, then shove existing balloons aside to open a slot (turn spawns).</summary>
+        Pressure,
+    }
+
     /// <summary>Picks the slot a column's new balloon should take, falling back to nearby columns under pressure.</summary>
     internal class BalloonPlacementResolver
     {
@@ -31,8 +44,24 @@ namespace BalloonParty.Balloon.Spawner
             return FindFirstReachableEmptyRow(col);
         }
 
-        /// <summary><paramref name="allowReject"/> false (initial fill) restricts to the column's own entry.</summary>
-        public Vector2Int? Resolve(int col, bool allowReject)
+        /// <summary>How many empty rows a rising balloon can still reach in this column (all empties below the
+        /// lowest non-traversable actor, or every empty row when the column is unblocked). Diagnostics only.</summary>
+        public int ReachableCapacity(int col)
+        {
+            var count = 0;
+            for (var row = LowestBlockingRow(col) + 1; row < _grid.Rows; row++)
+            {
+                if (_grid.IsEmpty(col, row))
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        /// <summary>Resolves the slot for <paramref name="col"/>, reaching beyond it per <paramref name="reach"/>.</summary>
+        public Vector2Int? Resolve(int col, PlacementReach reach)
         {
             var ownRow = FindFirstReachableEmptyRow(col);
             if (ownRow.HasValue)
@@ -40,8 +69,7 @@ namespace BalloonParty.Balloon.Spawner
                 return new Vector2Int(col, ownRow.Value);
             }
 
-            // Initial fill never saturates, so only turn spawns search beyond the column.
-            if (!allowReject)
+            if (reach == PlacementReach.OwnColumn)
             {
                 return null;
             }
@@ -51,7 +79,9 @@ namespace BalloonParty.Balloon.Spawner
                 return rehome;
             }
 
-            if (TryNearestColumn(col, startDistance: 0, _resolvePressureOpen, out var pressured))
+            // Only turn spawns may shove balloons aside; initial fill takes what is genuinely reachable.
+            if (reach == PlacementReach.Pressure
+                && TryNearestColumn(col, startDistance: 0, _resolvePressureOpen, out var pressured))
             {
                 return pressured;
             }
@@ -75,16 +105,7 @@ namespace BalloonParty.Balloon.Spawner
         /// <summary>Topmost empty row reachable from below without passing a non-traversable actor (e.g. a bush).</summary>
         private int? FindFirstReachableEmptyRow(int col)
         {
-            var ceilingRow = -1;
-            for (var row = _grid.Rows - 1; row >= 0; row--)
-            {
-                if (!_grid.IsEmpty(col, row) && !_grid.IsTraversable(col, row))
-                {
-                    ceilingRow = row;
-                    break;
-                }
-            }
-
+            var ceilingRow = LowestBlockingRow(col);
             if (ceilingRow < 0)
             {
                 return FindFirstEmptyRowFromTop(col);
@@ -99,6 +120,20 @@ namespace BalloonParty.Balloon.Spawner
             }
 
             return null;
+        }
+
+        // Lowest row holding a non-traversable actor (a bush caps the column here); -1 when unblocked.
+        private int LowestBlockingRow(int col)
+        {
+            for (var row = _grid.Rows - 1; row >= 0; row--)
+            {
+                if (!_grid.IsEmpty(col, row) && !_grid.IsTraversable(col, row))
+                {
+                    return row;
+                }
+            }
+
+            return -1;
         }
 
         // Scans columns nearest-first from fromCol; startDistance 0 includes the column itself, 1 skips it.

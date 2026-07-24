@@ -69,7 +69,7 @@ Material:
     - _OpenGain: 3
     - _RestOpen: 0.3
     - _StripWidth: 0.525
-    - _TransitionFade: 1
+    - _TransitionFade: 0.007270661
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 0.9411765, g: 0.9725491, b: 1, a: 0.5019608}

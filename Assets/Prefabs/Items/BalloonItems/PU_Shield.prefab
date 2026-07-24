@@ -627,3 +627,4 @@ MonoBehaviour:
   _pulseScale: 0.12
   _frequency: 3
   _smoothTime: 0.15
+  _delay: 1

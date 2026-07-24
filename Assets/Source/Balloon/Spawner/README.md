@@ -40,7 +40,11 @@ A blocked column isn't lost immediately. `BalloonPlacementResolver.Resolve` pick
 3. **Pressure-open** — the nearest column `BalloonBalancer.TryRelievePressure` can shove open by pulling a balloon into a gap *anywhere* on the board (`ResolvePressureOpen`), including interior pockets no entry reaches directly.
 4. **Reject** — only when nothing frees a slot: `RejectedBalloonEffect.Play` queues the would-be balloon into the overflow pile below the grid; it lingers, then a heart trail is sent to it — the hit point is charged at the launch, and the balloon pops when the heart lands.
 
-The initial grid fill never saturates, so it skips steps 2–4 (passes `allowReject: false`).
+Placement reach is a `PlacementReach` argument to `Resolve`:
+
+- **Turn spawns** pass `PlacementReach.Pressure` — all four steps above.
+- **Initial grid fill** passes `PlacementReach.Rehome` — steps 1–2 only. On tight boards (static actors occupying cells) a column can be blocked at level start, so rehoming redistributes its allotment into columns that still have reachable room, keeping the total at `BoardLines × columns` whenever the board's reachable capacity allows. It never shoves (no step 3) or overflows below the grid (no step 4). `LogInitialFillDiagnostics` logs expected/achievable/spawned per column in editor and development builds.
+- **Pop-spawn extras** (`SpawnLooseBalloons`) pass `PlacementReach.OwnColumn` — step 1 only; a blocked column is skipped.
 
 ## Interactions
 
