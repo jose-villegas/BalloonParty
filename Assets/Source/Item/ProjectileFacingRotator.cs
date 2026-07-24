@@ -10,8 +10,11 @@ namespace BalloonParty.Item
     ///     the strike point while it's in flight, an idle spin otherwise. Sits on a pooled item visual
     ///     (like <see cref="LaserItemRotation"/>), so it isn't DI-injected: the host (ItemDisplayService)
     ///     hands it an <see cref="IProjectileFacingSource"/> via <see cref="Configure"/> after activation.
+    ///     For AlignPredictionHit it prefers a composed <see cref="PredictionSightProbe"/> (the shared
+    ///     per-item trace) when one is present, falling back to its own trace otherwise — so a rotator
+    ///     without a probe still aligns exactly as before.
     /// </summary>
-    public class ProjectileFacingRotator : MonoBehaviour
+    internal class ProjectileFacingRotator : MonoBehaviour
     {
         [Tooltip("Transform to rotate. Defaults to this object if left unset.")]
         [SerializeField] private Transform _target;
@@ -22,8 +25,8 @@ namespace BalloonParty.Item
         [Tooltip("World radius for the Proximity align-timing gate — only aligns while the shot is within this distance.")]
         [SerializeField] private float _proximityRadius;
 
-        [Tooltip("World radius of the circle tested against the aim prediction trace for AlignPredictionHit — " +
-                 "the aim must pass within this of the target to align.")]
+        [Tooltip("AlignPredictionHit radius, used ONLY as the fallback when no PredictionSightProbe is " +
+                 "present — otherwise the probe's own radius drives sighting.")]
         [SerializeField] private float _predictionHitRadius;
 
         [Tooltip("Idle spin rate in degrees/second (Spin uses it directly; SpinRandom jitters sign and magnitude around it).")]
@@ -40,6 +43,10 @@ namespace BalloonParty.Item
         [SerializeField] private IdleMode _idleMode;
         [SerializeField] private SpinSpace _spinSpace;
 
+        [Tooltip("Optional shared sighting source for AlignPredictionHit — auto-found on Awake; when absent " +
+                 "the rotator runs its own trace.")]
+        [SerializeField] private PredictionSightProbe _sightProbe;
+
         private IProjectileFacingSource _source;
         private float _currentAngleDeg;
         private float _angleVelocity;
@@ -52,6 +59,11 @@ namespace BalloonParty.Item
             if (_target == null)
             {
                 _target = transform;
+            }
+
+            if (_sightProbe == null)
+            {
+                _sightProbe = GetComponentInParent<PredictionSightProbe>();
             }
         }
 
@@ -130,10 +142,17 @@ namespace BalloonParty.Item
             }
         }
 
-        // The hit test reports both WHERE the trace crosses our circle and the exact travel direction of
-        // the segment it struck, so we align straight to that strike direction — no separate lookup.
+        // Prefer the shared probe (a single prediction-trace test drives facing and any sight-driven
+        // feedback) when the item has one; fall back to computing the hit here otherwise. Either path
+        // yields the strike travel direction we align to; a zero direction means "no crossing this frame".
         private bool TryGetPredictionHitDirection(out Vector2 direction)
         {
+            if (_sightProbe != null)
+            {
+                direction = _sightProbe.SightDirection;
+                return direction.sqrMagnitude > Mathf.Epsilon;
+            }
+
             return TraceHitGeometry.TryFindSurfaceHit(
                 _source.PredictionPoints, _target.position, _predictionHitRadius, out _, out _, out direction);
         }
