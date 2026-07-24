@@ -11,6 +11,10 @@ namespace BalloonParty.Audio
         ShotFired,
         ShotReload,
         CruiseLoopStart,
+
+        // Reserved, not currently played: the cruise loop ends via ISoundPlayer.Stop() on the
+        // CruiseLoopStart handle, not by playing a distinct cue. Kept so a proper stop sound can
+        // be authored later without renumbering the bank.
         CruiseLoopStop,
         DoomedWarn,
         PierceDischarge,

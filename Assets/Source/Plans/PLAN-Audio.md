@@ -48,10 +48,18 @@ Assets/Source/Audio/
 ├── GameSoundId.cs                 ← semantic sound identity (enum), decoupled from messages
 ├── ISoundPlayer.cs                ← Play(GameSoundId, Vector3?) → SoundHandle; Stop(SoundHandle)
 ├── SoundHandle.cs                 ← readonly struct; only way to stop a loop
+├── IMelodicContext.cs             ← narrow SfxService facet: SetStreak(int) feeds the pop scale-walk
+├── IAudioMixerRouter.cs           ← seam to the mixer: GroupFor(channel), SetChannelDucked(channel, bool)
+├── NullAudioMixerRouter.cs        ← stand-in impl until a real AudioMixer is wired (see Deferred)
 ├── SfxService.cs                  ← Controller: resolve → select → throttle → cap → play
+├── AudioChannelController.cs      ← IStartable: Paused/Resumed duck the Gameplay channel; GameOver stops it
 ├── VoiceLimiter.cs                ← per-id + global voice accounting, priority steal/drop
 ├── SfxThrottleGate.cs             ← wall-clock cooldown + burst coalescing per id
-├── VariationPicker.cs             ← clip round-robin (no immediate repeat) + pitch/volume RNG
+├── VariationPicker.cs             ← clip round-robin (no immediate repeat) + pitch/volume RNG (plain or melodic)
+├── VoicePlayback.cs               ← readonly struct: resolved clip/pitch/volume/pan/semitone for one play
+├── PickContext.cs                 ← readonly struct: picker inputs (streak, current semitone, burst index, pan)
+├── SoundIds.cs                    ← cached GameSoundId enum length; sizes the per-id ordinal arrays above
+├── AudioPoolKeys.cs               ← PoolManager key for the voice pool
 ├── SfxVoicePoolBootstrap.cs       ← IStartable: register + pre-warm the voice pool
 ├── View/
 │   └── AudioSourceVoice.cs        ← View (MonoBehaviour): the only Unity-audio type; poolable
@@ -60,12 +68,16 @@ Assets/Source/Audio/
 │   ├── ProgressionSoundRouter.cs  ← streak/score-chime/level-up/transition/board-clear/game-over
 │   └── ItemSoundRouter.cs         ← per-ItemType activation, overflow, spawn-blocked
 ├── Configuration/
-│   ├── ISoundBankConfiguration.cs ← read-only interface (TryGet(id, out entry))
-│   ├── SoundBankConfiguration.cs  ← ScriptableObject catalog
-│   ├── SfxEntry.cs                ← [Serializable] clips[] + pitch/vol ranges + cap + cooldown + channel
+│   ├── ISoundBankConfiguration.cs ← read-only interface (TryGet(id, out entry), GlobalVoiceCap, MelodicScale/Root)
+│   ├── SoundBankConfiguration.cs  ← ScriptableObject catalog — [EnumIndexed] entries, self-heals on OnValidate
+│   ├── SfxEntry.cs                ← [Serializable] clips[] + pitch/vol ranges + cap + cooldown + channel + melodic mode
 │   └── SfxChannel.cs             ← enum: Gameplay / UI / Stinger (→ AudioMixerGroup)
 └── README.md
 ```
+
+`MusicalPitchExtensions` (semitone ↔ pitch-multiplier math) lives in `Shared/Extensions/` —
+it is generic equal-temperament math, not audio-specific, so it follows the "extension
+methods in `Shared/Extensions/`" convention rather than living in this folder.
 
 **Namespace:** `BalloonParty.Audio` (routing `BalloonParty.Audio.Routing`, view
 `BalloonParty.Audio.View`, config `BalloonParty.Audio.Configuration`).
@@ -95,12 +107,25 @@ classDiagram
         +Play(GameSoundId id, Vector3? pos) SoundHandle
         +Stop(SoundHandle)
     }
+    class IMelodicContext {
+        <<interface>>
+        +SetStreak(int streak)
+    }
+    class IAudioMixerRouter {
+        <<interface>>
+        +GroupFor(SfxChannel) AudioMixerGroup
+        +SetChannelDucked(SfxChannel, bool)
+    }
+    class NullAudioMixerRouter {
+        <<stand-in, no real AudioMixer yet>>
+    }
     class SfxService {
         -VoiceLimiter _limiter
         -SfxThrottleGate _throttle
         -VariationPicker _picker
         +Play(...)
         +Stop(...)
+        +SetStreak(int)
     }
     class VoiceLimiter
     class SfxThrottleGate
@@ -121,18 +146,28 @@ classDiagram
     class ItemSoundRouter {
         <<IStartable>>
     }
+    class AudioChannelController {
+        <<IStartable>>
+        ducks Gameplay channel on pause/resume, stops it on GameOver
+    }
 
     SoundBankConfiguration ..|> ISoundBankConfiguration
+    NullAudioMixerRouter ..|> IAudioMixerRouter
     SfxService ..|> ISoundPlayer
+    SfxService ..|> IMelodicContext
     SfxService --> ISoundBankConfiguration : reads
+    SfxService --> IAudioMixerRouter : GroupFor(channel)
     SfxService --> VoiceLimiter : owns
     SfxService --> SfxThrottleGate : owns
     SfxService --> VariationPicker : owns
     SfxService --> AudioSourceVoice : Get/Return via PoolManager
     CombatSoundRouter --> ISoundPlayer
     ProgressionSoundRouter --> ISoundPlayer
+    ProgressionSoundRouter --> IMelodicContext : SetStreak on StreakChangedMessage
     ItemSoundRouter --> ISoundPlayer
     CombatSoundRouter ..> GameSoundId : maps message to
+    AudioChannelController --> IAudioMixerRouter : SetChannelDucked
+    AudioChannelController --> SfxService : StopChannel(Gameplay) on GameOver
 ```
 
 ### Sequence diagram — event to sound
@@ -167,23 +202,36 @@ sequenceDiagram
 ```mermaid
 graph TD
     Scope[GameScopeRegistration.RegisterAudio] -->|RegisterInstance| Bank[ISoundBankConfiguration]
-    Scope -->|Register singleton As ISoundPlayer + AsSelf| Svc[SfxService]
+    Scope -->|Register singleton| Router[IAudioMixerRouter = NullAudioMixerRouter]
+    Scope -->|Register singleton As ISoundPlayer + IMelodicContext + IRunResettable + AsSelf| Svc[SfxService]
     Scope -->|RegisterEntryPoint| Boot[SfxVoicePoolBootstrap]
     Scope -->|RegisterEntryPoint| CR[CombatSoundRouter]
     Scope -->|RegisterEntryPoint| PR[ProgressionSoundRouter]
     Scope -->|RegisterEntryPoint| IR[ItemSoundRouter]
+    Scope -->|RegisterEntryPoint| ACC[AudioChannelController]
 
     Svc --> Bank
+    Svc --> Router
     Svc --> PM[PoolManager - existing singleton]
-    Svc --> Pause[PauseService - existing singleton]
+    Svc --> Flight[IProjectileFlightConfig - existing singleton, wall limits for pan]
     Boot --> PM
     CR --> Svc
     PR --> Svc
+    PR --> Svc2[IMelodicContext facet of Svc]
     IR --> Svc
+    ACC --> Router
+    ACC --> Svc
     CR -.subscribes.-> MP[(existing MessagePipe brokers)]
     PR -.subscribes.-> MP
     IR -.subscribes.-> MP
+    ACC -.subscribes.-> MP2[(PausedMessage / ResumedMessage / GameOverMessage)]
 ```
+
+`SfxService` is deliberately **bus-free** — it never injects `ISubscriber<T>` or
+`PauseService` itself. Pause/duck/game-over reactions live entirely in
+`AudioChannelController`, which calls `SfxService.StopChannel` and
+`IAudioMixerRouter.SetChannelDucked` from the outside. This keeps the orchestrator a pure
+`Play`/`Stop` surface and the pause policy independently swappable.
 
 ### Voice lifecycle
 
@@ -203,13 +251,16 @@ stateDiagram-v2
 |---|---|---|---|---|---|
 | `GameSoundId` | Model | Semantic sound identity, decoupled from message types | Reference clips or Unity | — | (type) |
 | `SoundHandle` | Model | `readonly struct` referencing an active voice; the only way to stop a loop | Touch Unity | — | (type) |
-| `SfxEntry` | Model/config | `AudioClip[]` variations, pitch/volume ranges, `cooldownSeconds`, `maxConcurrentVoices`, `priority`, `channel`, 2D pan flag, editor-only fetch prompt | Play anything | — | (serializable) |
-| `SoundBankConfiguration` → `ISoundBankConfiguration` | Model/config | Maps `GameSoundId → SfxEntry`; `TryGet` | Touch runtime state | — | `RegisterInstance` |
-| `SfxService : ISoundPlayer` | **Controller** | Resolve id → entry, pick variation, enforce cooldown + per-id + global voice cap + priority, `Get()`/`Return()` pooled voice, own loop `SoundHandle`s | Touch `AudioSource`; subscribe to messages | `ISoundBankConfiguration`, `PoolManager`, `PauseService` | `Register` singleton |
+| `SfxEntry` | Model/config | `AudioClip[]` variations, pitch/volume ranges, `cooldownSeconds`, `maxConcurrentVoices`, `priority`, `channel`, `loop`, 2D pan flag, `MelodicMode` + tension semitones, editor-only fetch prompt | Play anything | — | (serializable) |
+| `SoundBankConfiguration` → `ISoundBankConfiguration` | Model/config | `[EnumIndexed(typeof(GameSoundId))]` entries (one slot per id, no per-entry id field, no duplicates possible); `TryGet`; `MelodicScale`/`MelodicRootSemitone`; `GlobalVoiceCap`; `OnValidate` self-heals the entry array when a `GameSoundId` is appended | Touch runtime state | — | `RegisterInstance` |
+| `IMelodicContext` | Model-facing interface | Narrow facet of `SfxService` — `SetStreak(int)` | Anything else on `SfxService` | — | (interface, implemented by `SfxService`) |
+| `IAudioMixerRouter` → `NullAudioMixerRouter` | Controller/config seam | `GroupFor(channel)` resolves an `AudioMixerGroup`; `SetChannelDucked(channel, bool)` applies (or, in the null stand-in, no-ops) the duck | Own pause/game-over policy | — | `Register` singleton |
+| `SfxService : ISoundPlayer, IMelodicContext, IRunResettable` | **Controller** | Resolve id → entry, pick variation, enforce cooldown + per-id + global voice cap + priority, `Get()`/`Return()` pooled voice, own loop `SoundHandle`s, remember current melodic semitone/streak, flush all voices on `ResetRun` | Touch `AudioSource`; subscribe to any message; know about pause | `ISoundBankConfiguration`, `PoolManager`, `IAudioMixerRouter`, `IProjectileFlightConfig` (wall limits, for X→pan), `VoiceLimiter`, `SfxThrottleGate`, `VariationPicker` | `Register` singleton |
+| `AudioChannelController` | Controller (IStartable) | Subscribes `PausedMessage`/`ResumedMessage` → duck/un-duck the `Gameplay` channel; `GameOverMessage` → `SfxService.StopChannel(Gameplay)` | Touch `UI`/`Stinger` channels; pick sounds | `ISubscriber<…>`, `IAudioMixerRouter`, `SfxService` | `RegisterEntryPoint` |
 | `VoiceLimiter` | Controller | Per-id + global active-voice accounting; priority steal/drop | Selection, pooling | — | owned field |
 | `SfxThrottleGate` | Controller | Wall-clock cooldown per id; coalesce a burst into N pitch-spread voices | — | — | owned field |
-| `VariationPicker` | Controller | Clip round-robin (no immediate repeat) + pitch/volume RNG | Throttle, pooling | — | owned field |
-| `*SoundRouter` (×3) | Controller (IStartable) | Translate messages → `(GameSoundId, position)` and call `ISoundPlayer` | Pick clips, compute volume, throttle | `ISubscriber<…>`, `ISoundPlayer` | `RegisterEntryPoint` |
+| `VariationPicker` | Controller | Clip round-robin (no immediate repeat) + pitch/volume RNG, or melodic scale-walk/tension semitone resolution | Throttle, pooling | — | owned field |
+| `*SoundRouter` (×3) | Controller (IStartable) | Translate messages → `(GameSoundId, position)` and call `ISoundPlayer` (`ProgressionSoundRouter` also forwards the streak to `IMelodicContext`) | Pick clips, compute volume, throttle | `ISubscriber<…>`, `ISoundPlayer` (`ProgressionSoundRouter` also: `IMelodicContext`) | `RegisterEntryPoint` |
 | `AudioSourceVoice` | **View** | Wrap one `AudioSource`; `Play`/`Stop`; schedule own real-time return; `OnDespawned` cleanup | Selection, throttle, subscribe | — (no `[Inject]`) | pooled |
 | `SfxVoicePoolBootstrap` | Controller (IStartable) | Register `SimplePoolChannel<AudioSourceVoice>` and pre-warm N voices | Play anything | `PoolManager`, voice prefab | `RegisterEntryPoint` |
 
@@ -226,16 +277,22 @@ Every `SfxEntry` names an `SfxChannel`, which maps to an `AudioMixerGroup` on on
 `AudioMixer`. Freeze/pause behavior is then **per-channel**, not a blunt
 `AudioListener.pause`:
 
-| Channel | Mixer group | On gameplay freeze (`PausedMessage`, level-up, cinematic) |
-|---|---|---|
-| `Gameplay` | Gameplay | **Ducks/pauses** — pops, shots, shields, items stop bleeding over the ceremony |
-| `UI` | UI | Keeps playing — button taps, confirms |
-| `Stinger` | Stinger/Music | Keeps playing — the level-up fanfare, game-over sting play through |
+| Channel | Mixer group | On gameplay freeze (`PausedMessage`) | On `GameOverMessage` |
+|---|---|---|---|
+| `Gameplay` | Gameplay | **Ducked** — pops, shots, shields, items stop bleeding over the ceremony | **Stopped outright** (every active `Gameplay` voice) |
+| `UI` | UI | Keeps playing — button taps, confirms | Keeps playing |
+| `Stinger` | Stinger/Music | Keeps playing — the level-up fanfare, game-over sting play through | Keeps playing |
 
-Because audio ignores `Time.timeScale`, this is explicit: `SfxService` subscribes to
-`PausedMessage`/`ResumedMessage` (and cinematic start/stop) and applies a mixer snapshot
-or per-group pause to the `Gameplay` group only. The mixer also gives us a master-volume
-control and a music-under-stinger duck seam for free later, without a refactor.
+Because audio ignores `Time.timeScale`, this is explicit: `AudioChannelController` — a small,
+dedicated `IStartable`, not `SfxService` itself — subscribes to `PausedMessage`/
+`ResumedMessage` and calls `IAudioMixerRouter.SetChannelDucked(Gameplay, …)`, and subscribes
+to `GameOverMessage` to call `SfxService.StopChannel(Gameplay)`. Keeping this policy off
+`SfxService` means the orchestrator stays a pure `Play`/`Stop` surface with no bus
+dependency, and the duck/stop policy is swappable independently. `IAudioMixerRouter` is
+currently `NullAudioMixerRouter` (see *Deferred*), so today the duck call is a no-op and
+`Gameplay` audio simply keeps playing through a pause — only the `GameOver` stop is live
+end-to-end. The mixer also gives us a master-volume control and a music-under-stinger duck
+seam for free later, without a refactor.
 
 ---
 
@@ -310,9 +367,11 @@ heard before it's parsed.
 - **Scale-degree source is the streak, not random.** `VariationPicker` gains a melodic
   mode: instead of pitch RNG, it computes `semitone = scale[streak mod scale.Length]`
   (with octave rollover as the streak exceeds the scale length) and sets the voice pitch
-  from that. The streak value already arrives via `StreakChangedMessage`
-  (`Game/Score/ColorStreakTracker.cs:94`) — the `CombatSoundRouter` (or a small shared
-  streak cache the audio side reads) supplies the current degree at pop time.
+  from that. **Shipped as designed:** the streak arrives via `StreakChangedMessage`
+  (`Game/Score/ColorStreakTracker.cs:94`); `ProgressionSoundRouter` forwards it to
+  `SfxService` through the narrow `IMelodicContext.SetStreak(int)` facet on every change, and
+  `SfxService` remembers the resulting semitone so a same-frame `Tension` entry (deflect/wall
+  hit) can react against it.
 - **Negative events lean into the semitone — with distinct tension notes per event.**
   `BalloonDeflect` and the wall-hit / shield loss on bounce (`ShieldLostMessage`,
   `ProjectileView.cs:463`) each play a *different* dissonant interval against the current
@@ -335,28 +394,38 @@ core loop feels right).
 
 ---
 
-## Phase 1 — Core loop, no message changes
+## Phase 1 — Core loop, no message changes — SHIPPED (Steps 1-6)
 
 Ships the spine plus the first-pass core sounds. Everything uses signals already on the
-bus; the only gameplay-code change is the `RegisterAudio` line.
+bus; the only gameplay-code change is the `RegisterAudio` line. All six steps below are
+code-complete, reviewed, and committed:
 
-### Deliverables
+1. **Foundation + config layer** — `GameSoundId`, `SoundHandle`, `SfxEntry`,
+   `SoundBankConfiguration`/`ISoundBankConfiguration`, `SfxChannel`.
+2. **Variation/limiting/throttle helpers** — `VariationPicker`, `VoiceLimiter`,
+   `SfxThrottleGate`.
+3. **Pooled voice** — `AudioSourceVoice` + `SfxVoicePoolBootstrap`.
+4. **Orchestrator + channel controller** — `SfxService`, `AudioChannelController`,
+   `IAudioMixerRouter`/`NullAudioMixerRouter`, `IMelodicContext`.
+5. **Routers + wiring** — `CombatSoundRouter`, `ProgressionSoundRouter`, `ItemSoundRouter`,
+   `RegisterAudio` in `GameScopeRegistration`, called from `GameLifetimeScope.Configure`
+   after `RegisterPresentation()`.
+6. **Registration guard-branch coverage** — `RegisterAudioTests` (null-prefab / null-bank
+   fallback paths).
 
-- `GameSoundId` enum (all ~24 moments; unauthored ones have empty clip arrays and are
-  silent no-ops).
-- `SoundBankConfiguration` SO + `ISoundBankConfiguration` + `SfxEntry` + `SfxChannel`.
-- `SfxService` + `VoiceLimiter` + `SfxThrottleGate` + `VariationPicker`.
-- `AudioSourceVoice` View + prefab + `SfxVoicePoolBootstrap`.
-- `CombatSoundRouter`, `ProgressionSoundRouter`, `ItemSoundRouter`.
-- One `AudioMixer` with `Gameplay` / `UI` / `Stinger` groups; channel duck-on-pause.
-- `RegisterAudio(this IContainerBuilder)` in `GameScopeRegistration`, called from
-  `GameLifetimeScope.Configure` after `RegisterPresentation()`.
+**Still open (not part of the code deliverable):** a real `AudioMixer` asset with
+`Gameplay`/`UI`/`Stinger` groups — `IAudioMixerRouter` is `NullAudioMixerRouter` until that
+asset exists and a real router implementation is wired in — and authoring the actual
+`SfxEntry` clips on the `SoundBankConfiguration` asset (an editor/content task; every id
+plays silently until its entry has clips). See *Deferred* in the README and below.
 
-### First-pass authored sounds
+### First-pass sounds to author
 
 `BalloonPop` (hot path), `ShotFired`, `ShotReload`, `ShieldGained`, `ShieldLost`,
 per-item (×6), `StreakStep`, `LevelUp`, `GameOver`. The rest are enum entries authored
-later.
+later. (The enum, routing, and playback machinery for all of these already ship in code —
+this list is purely the content/authoring backlog against the `SoundBankConfiguration`
+asset.)
 
 ### Voice management
 
@@ -380,8 +449,12 @@ per-voice polling) — mirrors the `BalloonMotionTicker` central-ticker preceden
 null the completion callback, and cancel the pending-return `CancellationTokenSource`.
 The voice holds no UniRx subscriptions, so there is no `CompositeDisposable` to clear (the
 pooled-view `AddTo(this)`-never-fires rule only applies when a pooled view subscribes).
-`SfxService` implements `IRunResettable` to flush all voices and stop loops on
-`RunResetMessage`/`GameOverMessage` so a dropped `Stop` can't strand a loop.
+`SfxService` implements `IRunResettable` (`ResetOrder = RunResetOrder.Quiesce`, the earliest
+stage) so `RunController.RestartRun` flushes every active voice and loop before any other
+system resets — a dropped `Stop` from the previous run can't strand a loop into the next one.
+`GameOverMessage` is handled separately, by `AudioChannelController`, which only stops the
+`Gameplay` channel (see *Channels*) — it does not touch `UI`/`Stinger` voices or reset the
+picker/throttle state the way a full run reset does.
 
 ### Clip import settings (device)
 
@@ -433,20 +506,36 @@ delegate (no per-call closure), pass settings by `in`.
 
 ## Test strategy
 
+Shipped, per `Assets/Tests/README.md`:
+
 ```
 Assets/Tests/EditMode/Audio/
-├── SfxServiceTests.cs        ← resolve → select → cap/throttle → play (ISoundPlayer via mock voice sink)
-├── VoiceLimiterTests.cs      ← per-id + global cap, priority steal/drop, release accounting
-├── SfxThrottleGateTests.cs   ← wall-clock cooldown, burst coalescing (injected clock)
-└── VariationPickerTests.cs   ← no-immediate-repeat round-robin, pitch/volume range bounds
+├── SoundHandleTests.cs             ← equality/validity on (voiceId, generation)
+├── SoundBankConfigurationTests.cs  ← TryGet: authored/empty/unauthored/None/out-of-range id
+├── VariationPickerTests.cs         ← plain range, ScaleWalk/Tension semitone math, burst spread, no-repeat
+├── VoiceLimiterTests.cs            ← per-id + global cap, priority steal/drop, release accounting
+├── SfxThrottleGateTests.cs         ← wall-clock cooldown, burst coalescing (injected clock)
+├── AudioSourceVoiceTests.cs        ← null-clip synchronous-completion guard (EditMode-safe slice only)
+├── MusicalPitchExtensionsTests.cs  ← semitone ↔ pitch-multiplier math (Shared/Extensions)
+├── CombatSoundRouterTests.cs       ← ActorHitMessage/fired/loaded/cruise → (GameSoundId, position)
+├── ProgressionSoundRouterTests.cs  ← streak → IMelodicContext + StreakStep
+└── ItemSoundRouterTests.cs         ← per-ItemType id mapping, non-item-slot guard
+
+Assets/Tests/EditMode/Game/
+└── RegisterAudioTests.cs           ← RegisterAudio null-prefab / null-bank guard branches
+
+Assets/Tests/PlayMode/
+└── SfxServiceGenerationGuardPlayModeTests.cs  ← Stop(stale handle) after a slot steal is a no-op
 ```
 
-- **Routers are unit-testable without an `AudioSource`:** publish a message, assert the
+- **Routers are unit-tested without an `AudioSource`:** publish a message, assert the
   `(GameSoundId, position)` call on a mocked `ISoundPlayer`.
-- **`VoiceLimiter` / `SfxThrottleGate` are pure plain C#** with an injected `Func<float>`
-  clock → deterministic, no wall-clock or Unity dependency.
-- **`SfxService`** takes its voice-acquisition via an interface (pool wrapper) so tests
-  run without instantiating a `MonoBehaviour`.
+- **`VoiceLimiter` / `SfxThrottleGate` / `VariationPicker` are pure plain C#** with an
+  injected `Func<float>` clock (throttle gate) or `System.Random` (picker) →
+  deterministic, no wall-clock or Unity dependency.
+- **The slot-generation guard is a PlayMode test**, not EditMode: reaching the
+  "steal a slot in place" branch needs a real, non-null-clip `AudioSourceVoice.Play()` so
+  the voice doesn't complete synchronously — real `AudioSource.Play()` needs the player loop.
 - Actual audio behavior — Android latency (AAudio/OpenSL), voice-cap feel, coalescing
   tuning, pan — **requires an on-device (Pixel 9) playtest**; `dotnet build` and the
   editor cannot validate it. Bias DSP buffer toward *Good/Best Latency* and measure.

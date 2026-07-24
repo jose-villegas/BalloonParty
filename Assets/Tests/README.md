@@ -547,13 +547,145 @@ Tests the heart-drain camera focus contract: centre on the **oldest** in-flight 
 
 `List<T>.SwapRemoveAt` — moves the last element into the removed slot (order not preserved); last-index just removes; single element empties.
 
+### `SoundHandleTests` — 11 tests
+
+Tests the `readonly struct` equality/validity contract that gates `SfxService.Stop()`.
+
+| Area | Tests | What could break |
+|---|---|---|
+| `Equals` — same/different voice id, generation, non-`SoundHandle` object | 4 | Struct equality only checks one field, or throws on a type mismatch |
+| `IsValid` — zero vs non-zero generation, `None` | 3 | A default/uninitialized handle reads as valid and stops the wrong voice |
+| `==`/`!=` operators | 2 | Operator overloads drift from `Equals` |
+| `GetHashCode` — equal handles match | 1 | Handles can't be used as dictionary keys |
+| `None` equals `default` | 1 | `SoundHandle.None` isn't actually the zero value callers expect |
+
+### `SoundBankConfigurationTests` — 5 tests
+
+Tests `SoundBankConfiguration.TryGet` — the runtime gate between an authored `GameSoundId` and a silent no-op.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Authored entry with clips → found | 1 | Lookup or ordinal indexing wrong |
+| Entry without clips → not found | 1 | An unauthored slot (Unity's default-constructed entry) plays a null clip instead of a no-op |
+| Unauthored slot → not found | 1 | Out-of-author-order id incorrectly resolves |
+| `None` id → not found | 1 | `GameSoundId.None` accidentally maps to a real entry |
+| Out-of-range ordinal → not found, no throw | 1 | A stale/appended enum value indexes past the array |
+
+### `VariationPickerTests` — 10 tests
+
+Tests clip/pitch/volume selection — plain random ranges, the two melodic modes (`ScaleWalk`/`Tension`), burst spread, and pan gating.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Plain mode pitch/volume within configured range | 1 | Random range math out of bounds |
+| ScaleWalk — streak 0 → root pitch | 1 | Degree-zero mapping wrong |
+| ScaleWalk — streak rolls past scale length → octave up | 1 | Octave rollover math wrong |
+| ScaleWalk — mid-streak → correct scale degree | 1 | Modulo/index-into-scale wrong |
+| ScaleWalk — empty scale → falls back without throwing | 1 | Divide-by-zero on `degree % scale.Count` |
+| Tension — adds tension semitones to current semitone | 1 | Tension offset not applied against the live pop degree |
+| Burst index > 0 → pitch up, volume down | 1 | Burst-spread math missing or inverted |
+| Multi-clip entry never repeats the same clip consecutively | 1 | No-immediate-repeat guard broken |
+| `Pan2D = false` → pan forced to zero | 1 | Pan gate bypassed for non-panned entries |
+| `Pan2D = true` → pan equals the normalized input | 1 | Pan value dropped or transformed |
+
+### `VoiceLimiterTests` — 8 tests
+
+Tests per-id and global concurrent-voice accounting and the priority steal/drop rule.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Under caps → distinct slot ids | 1 | Slot allocation collides |
+| Per-id cap reached → steals the oldest same-id voice | 1 | Wrong voice stolen, or per-id count not adjusted |
+| Global cap, equal priority → steals the lowest-priority slot | 1 | `>=` vs `>` on the steal comparison (an equal-priority request must still win) |
+| Global cap, strictly lower priority → dropped, not stolen | 1 | The pop-can't-starve-a-stinger guarantee — low priority steals a high-priority voice |
+| `Release` frees the slot and decrements counts | 1 | Slot leaks or double-counts |
+| Released slot is reused by the next acquire | 1 | Free-list not replenished |
+| `Release` on an invalid id is a no-op | 1 | Negative/out-of-range id corrupts state |
+| `Clear` restores full capacity | 1 | Stale slots block every id after a reset |
+
+### `SfxThrottleGateTests` — 7 tests
+
+Tests the wall-clock cooldown and burst-coalescing window (deterministic via an injected clock).
+
+| Area | Tests | What could break |
+|---|---|---|
+| First call passes | 1 | Cooldown wrongly blocks the very first play |
+| Within cooldown → blocked | 1 | Cooldown window off by a frame/epsilon |
+| After cooldown elapses → passes | 1 | Cooldown never releases |
+| Within coalesce window → burst index increments | 1 | Burst counting wrong, breaks the pitch-spread "chord" effect |
+| Burst cap reached → overflow dropped | 1 | Unbounded burst spam past the configured max |
+| After window elapses → burst index resets | 1 | Stale burst count leaks into the next window |
+| `Reset` clears cooldown and burst state | 1 | A run restart inherits cooldown from the previous run |
+
+### `AudioSourceVoiceTests` — 2 tests
+
+Tests only the synchronous null-clip guard; the real `AudioSource.Play()` + timed-return path needs the player loop and is covered by `SfxServiceGenerationGuardPlayModeTests` (PlayMode) instead.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Null clip → completion callback invoked synchronously | 1 | An unauthored `GameSoundId` silently occupies a voice forever instead of returning immediately |
+| Null clip → no return timer scheduled | 1 | A `CancellationTokenSource` leaks for a play that never actually started |
+
+### `MusicalPitchExtensionsTests` — 4 tests
+
+Tests the `Shared/Extensions` semitone ↔ pitch-multiplier helper the melodic pop system and `VariationPicker` share.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Zero semitones → multiplier 1 | 1 | Formula offset wrong |
+| +12 semitones → doubles pitch | 1 | Equal-temperament octave math wrong |
+| -12 semitones → halves pitch | 1 | Sign handling wrong |
+| `int` overload matches the `float` overload | 1 | Overload drift |
+
+### `CombatSoundRouterTests` — 8 tests
+
+Tests message → `(GameSoundId, position)` translation for hits, shots, reload, and the cruise loop handle.
+
+| Area | Tests | What could break |
+|---|---|---|
+| `Pop` outcome → `BalloonPop` at world position | 1 | Wrong id or dropped position |
+| `Deflect` outcome → `BalloonDeflect`, not `Pop` | 1 | Outcome branch misrouted |
+| `Absorb` / `PassThrough` outcomes → `BalloonResist` | 2 | Missing flag check drops a resist sound |
+| `Pop` combined with `Deflect` → resolves to `Pop` | 1 | Branch precedence order flips, changing which sound wins on a combined outcome |
+| Fired → `ShotFired` at world position | 1 | Position not forwarded |
+| Loaded → `ShotReload` with null position | 1 | Non-positional sound wrongly spatialized |
+| Cruise started then ended → stops the stored handle | 1 | Loop handle not retained across start/end, leaking the cruise loop |
+
+### `ItemSoundRouterTests` — 10 tests
+
+Tests per-`ItemType` sound mapping and the item-slot downcast guard.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Each `ItemType` → its matching `GameSoundId` | 6 | New item type ships without a sound, or maps to the wrong one |
+| `ItemType.None` → no play | 1 | An empty item slot plays a spurious activation sound |
+| Balloon not `IHasItemSlot` (e.g. `ToughBalloonModel`) → no play, no throw | 1 | Downcast guard missing — router crashes on a non-item-eligible balloon |
+| Overflow heart → `HeartDrain` at target position | 1 | Danger-beat sound dropped or mispositioned |
+| Spawn blocked → `OverflowThud` at position | 1 | Column-keyed thud not forwarded |
+
+### `ProgressionSoundRouterTests` — 1 test
+
+| Area | Tests | What could break |
+|---|---|---|
+| Streak changed → forwards to `IMelodicContext.SetStreak` and plays `StreakStep` | 1 | Melodic pop system never learns the current streak, freezing the scale-walk at the root |
+
+### `RegisterAudioTests` — 3 tests
+
+Lives in `Assets/Tests/EditMode/Game/` (paired with `GameScopeRegistration`, not the Audio folder). Scoped to the two conditional branches `RegisterAudio` owns — registration existence only, never a full `Build()` (see the fixture's own header comment for why).
+
+| Area | Tests | What could break |
+|---|---|---|
+| Null voice prefab → registers nothing | 1 | A half-wired scene throws later instead of degrading to "audio disabled" |
+| Valid prefab → registers `ISoundPlayer`/`IMelodicContext`/`IAudioMixerRouter` | 1 | Registration graph incomplete |
+| Null sound bank → still registers a working fallback bank | 1 | Missing bank null-refs every voice-cap reader instead of degrading to silence |
+
 ---
 
-## PlayMode tests — 5 tests
+## PlayMode tests — 7 tests
 
 `Assets/Tests/PlayMode/` (assembly `BalloonParty.Tests.PlayMode`). For behaviour EditMode can't exercise: the async/pooling/scene paths that only run under the player loop. Uses `[UnityTest]` coroutines.
 
-All fixtures derive from **`PlayModeGameTest`** — the shared base that loads the real Game scene, resolves services from `GameLifetimeScope.Container`, and waits on conditions with a timeout. Its `[SetUp]` resets the static `Navigation` to `Launch` (PlayMode shares static state — no domain reload between tests; a test ending in `GameOver` would otherwise leave the spawn gate shut for the next one).
+Most fixtures derive from **`PlayModeGameTest`** — the shared base that loads the real Game scene, resolves services from `GameLifetimeScope.Container`, and waits on conditions with a timeout. Its `[SetUp]` resets the static `Navigation` to `Launch` (PlayMode shares static state — no domain reload between tests; a test ending in `GameOver` would otherwise leave the spawn gate shut for the next one). `SfxServiceGenerationGuardPlayModeTests` is the one exception — it builds its own standalone `PoolManager`/prefab/bank rather than riding the shared Game scene (see its own section below).
 
 ### `RunRestartPlayModeTests` — 1 test
 
@@ -581,6 +713,15 @@ Drives the spawn-saturation loss loop in the real Game scene — the pressure-ba
 | Area | Tests | What could break |
 |---|---|---|
 | Bomb activation pops neighbouring balloons | 1 | `Physics2D.OverlapCircle` path (real colliders) — radius, layer mask, or hit routing regress. Settles the board first (overflow hold released + no `BalancePathHolder` in-transit slots): the grid registers a balloon at its slot while its collider is still flying there, so a blast during transit overlaps nothing |
+
+### `SfxServiceGenerationGuardPlayModeTests` — 2 tests
+
+Exercises `SfxService`'s slot-generation guard — the one piece of novel, safety-critical logic in the orchestrator: when the global/per-id voice cap forces a slot to be stolen and replayed in place, a `Stop()` carrying the original (now-stale) `SoundHandle` must no-op rather than tearing down the newer play sitting in the same slot. Reaching the "steal in place" branch needs a real, non-null-clip `AudioSourceVoice.Play()` so the voice doesn't complete synchronously — per `AudioSourceVoiceTests`' own EditMode/PlayMode split, that's PlayMode territory.
+
+| Area | Tests | What could break |
+|---|---|---|
+| `Stop(stale handle)` after a slot steal does not tear down the reused voice | 1 | The generation check is missing or wrong — a late `Stop` from a stolen-away sound silently kills an unrelated voice |
+| `Stop(current handle)` after a slot steal still stops it | 1 | The guard over-corrects and blocks legitimate stops on the voice that actually owns the slot |
 
 ---
 
