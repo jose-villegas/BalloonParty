@@ -36,13 +36,12 @@ namespace BalloonParty.Display
 #if UNITY_EDITOR
         private void Update()
         {
-            // Edit mode has no DI, and the base colour/light influence/light settings asset may be
-            // under live authoring, so keep re-applying every frame there. Play mode already
-            // applied once in OnEnable — its inputs never change afterwards.
-            if (!Application.isPlaying)
-            {
-                Apply();
-            }
+            // Keep re-applying every frame in the editor — edit OR play mode — so live tuning of the
+            // base colour, light influence, or the light settings asset previews instantly (the light
+            // field service re-pushes its globals per-tick in-editor for the same reason; the sky must
+            // track the sprites it sits behind). Device builds apply once in OnEnable: there the
+            // inputs really are static.
+            Apply();
         }
 #endif
 
