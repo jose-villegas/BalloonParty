@@ -163,7 +163,7 @@ namespace BalloonParty.Game
                 .AsImplementedInterfaces().AsSelf();
             builder.Register<TimeOfDayService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
-            builder.RegisterEntryPoint<TimeOfDayClock>();
+            builder.RegisterEntryPoint<TimeOfDayClock>().AsSelf();
             builder.Register<SceneLightFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<BalloonMotionTicker>().AsSelf();
@@ -301,6 +301,7 @@ namespace BalloonParty.Game
             builder.Register<FireBestShotCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<StartFromLevelCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<AddShieldCheat>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<TimeOfDayCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.RegisterComponentOnNewGameObject<BalloonRemoverCheat>(Lifetime.Singleton, "BalloonRemoverCheat")
                 .AsImplementedInterfaces()
                 .AsSelf();
