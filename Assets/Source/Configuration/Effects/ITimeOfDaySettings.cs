@@ -12,6 +12,13 @@ namespace BalloonParty.Configuration.Effects
         /// Phase-1 look).</summary>
         bool NightModeEnabled { get; }
 
+        /// <summary>What drives the angle — the level-paced sweep or a continuous wall-clock.</summary>
+        TimeOfDaySource Source { get; }
+
+        /// <summary><see cref="TimeOfDaySource.Realtime"/> only: seconds for one full circle (a whole
+        /// day). 1800 = 30 min. Advanced on unscaled time, so it runs regardless of pause/time-scale.</summary>
+        float SecondsPerCycle { get; }
+
         /// <summary>Degrees the toward-light direction advances per level, counter-clockwise (the
         /// gradient's <c>t = angle / 360</c>). A full day spans <c>360 / this</c> levels; it wraps
         /// continuously, so the cycle never reverses.</summary>

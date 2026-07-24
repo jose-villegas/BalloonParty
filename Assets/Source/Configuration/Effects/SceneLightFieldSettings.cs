@@ -46,16 +46,28 @@ namespace BalloonParty.Configuration.Effects
                  "day/night colour shift.")]
         [SerializeField] private bool _nightModeEnabled;
 
-        [Tooltip("Degrees the direction advances per level, counter-clockwise (the gradient's " +
-                 "t = angle / 360). A full day spans 360 / this levels; level 1 sits at the authored " +
-                 "Light Direction above.")]
+        [Tooltip("What drives the time of day: LevelSweep = one step per level + a sweep on level-up; " +
+                 "Realtime = rotates continuously on a wall-clock (Seconds Per Cycle below).")]
+        [SerializeField] private TimeOfDaySource _timeOfDaySource = TimeOfDaySource.LevelSweep;
+
+        [Tooltip("Realtime source only: seconds for one full day (a full circle). 1800 = 30 min. " +
+                 "Unscaled, so it keeps running through pause and the level-up freeze.")]
+        [ShowIfEnum(nameof(_timeOfDaySource), (int)TimeOfDaySource.Realtime)]
+        [SerializeField] private float _secondsPerCycle = 1800f;
+
+        [Tooltip("LevelSweep only: degrees the direction advances per level, counter-clockwise (the " +
+                 "gradient's t = angle / 360). A full day spans 360 / this levels; level 1 sits at the " +
+                 "authored Light Direction above.")]
+        [ShowIfEnum(nameof(_timeOfDaySource), (int)TimeOfDaySource.LevelSweep)]
         [SerializeField] private float _degreesPerLevel = 15f;
 
-        [Tooltip("Seconds the level-up sweep takes to reach the new level's angle (unscaled, so it " +
-                 "plays through the transition pause).")]
-        [Range(0.1f, 10f)] [SerializeField] private float _sweepDuration = 1.5f;
+        [Tooltip("LevelSweep only: seconds the level-up sweep takes to reach the new level's angle " +
+                 "(unscaled, so it plays through the transition pause). Keep ~0.1–10.")]
+        [ShowIfEnum(nameof(_timeOfDaySource), (int)TimeOfDaySource.LevelSweep)]
+        [SerializeField] private float _sweepDuration = 1.5f;
 
-        [Tooltip("Eases the sweep 0→1 over its duration.")]
+        [Tooltip("LevelSweep only: eases the sweep 0→1 over its duration.")]
+        [ShowIfEnum(nameof(_timeOfDaySource), (int)TimeOfDaySource.LevelSweep)]
         [SerializeField] private AnimationCurve _sweepEase = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
         [Tooltip("Multiplier on GI shadow strength over the direction circle (x = angle/360, matched " +
@@ -188,6 +200,8 @@ namespace BalloonParty.Configuration.Effects
 
         // ITimeOfDaySettings
         public bool NightModeEnabled => _nightModeEnabled;
+        public TimeOfDaySource Source => _timeOfDaySource;
+        public float SecondsPerCycle => _secondsPerCycle;
         public float DegreesPerLevel => _degreesPerLevel;
         public float SweepDuration => _sweepDuration;
         public AnimationCurve SweepEase => _sweepEase;

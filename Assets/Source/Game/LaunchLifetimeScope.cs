@@ -30,8 +30,10 @@ namespace BalloonParty.Game
             // RegisterEntryPoint (not plain Register): the launcher scope has no other entry points, so
             // without this the IStartable/ITickable dispatcher is never set up and Start would never run.
             // No TimeOfDayCycle here — the launcher has no levels, so it shows level 1 (the authored
-            // direction), which is exactly what the game opens on.
+            // direction), which is exactly what the game opens on. TimeOfDayClock IS registered though: the
+            // Realtime source has no level dependency, so the menu cycles too when that source is chosen.
             builder.RegisterEntryPoint<TimeOfDayService>();
+            builder.RegisterEntryPoint<TimeOfDayClock>();
         }
     }
 }

@@ -163,6 +163,7 @@ namespace BalloonParty.Game
                 .AsImplementedInterfaces().AsSelf();
             builder.Register<TimeOfDayService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
+            builder.RegisterEntryPoint<TimeOfDayClock>();
             builder.Register<SceneLightFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<BalloonMotionTicker>().AsSelf();

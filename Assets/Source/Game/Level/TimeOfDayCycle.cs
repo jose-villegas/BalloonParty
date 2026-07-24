@@ -37,6 +37,9 @@ namespace BalloonParty.Game.Level
         // be > 1 via the StartLevel dev cheat, so we must read the reset value, not assume level 1.
         public int ResetOrder => RunResetOrder.Respawn;
 
+        // Only the level-paced source drives here; Realtime is handled by TimeOfDayClock instead.
+        private bool IsActive => _settings.NightModeEnabled && _settings.Source == TimeOfDaySource.LevelSweep;
+
         internal TimeOfDayCycle(
             ITimeOfDaySettings settings, ISceneLightSettings lightSettings,
             ILevelProgress levelProgress, TimeOfDayService service)
@@ -49,7 +52,7 @@ namespace BalloonParty.Game.Level
 
         void IStartable.Start()
         {
-            if (!_settings.NightModeEnabled)
+            if (!IsActive)
             {
                 return;
             }
@@ -84,7 +87,7 @@ namespace BalloonParty.Game.Level
 
         public void ResetRun(int generation)
         {
-            if (!_settings.NightModeEnabled)
+            if (!IsActive)
             {
                 return;
             }

@@ -87,6 +87,12 @@ over `SweepDuration` on unscaled time so it plays through the transition pause.
 off is a true no-op. Follow-up: a multi-tick test of an interrupting level-up mid-sweep (behaviour
 verified by review; not yet regression-pinned).
 
+**Sources (`ITimeOfDaySettings.Source`):** `LevelSweep` (above) or `Realtime` — a wall-clock driver
+(`TimeOfDayClock`, `Shared/SceneLight`) that rotates the direction continuously, one full circle per
+`SecondsPerCycle` (30 min default) on unscaled time. It has no level dependency, so it's registered in
+both the game and launcher scopes (the menu cycles too); the two drivers guard on `Source` so exactly
+one is ever live. The inspector hides the params irrelevant to the chosen source via `[ShowIfEnum]`.
+
 ### Phase 3 — GI shadow over angle DONE; intensity PARKED (2026-07-24)
 **Intensity: PARKED.** Stays at 1 — the colour gradient alone carries day/night and looks good, so
 per-angle intensity isn't worth wiring. Reserved as a future hook for **weather / special drama** (a
