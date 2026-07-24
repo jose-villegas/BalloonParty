@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace BalloonParty.Scenario
 {
-    /// <summary>Holds the painting field's GPU resources: ping-pong RTs and blit-and-swap,
-    /// separate from <see cref="PaintingFieldService"/>'s stamp/decay logic.</summary>
-    internal sealed class PaintingFieldResources
+    /// <summary>Holds the smoke field's GPU resources: ping-pong RTs and blit-and-swap,
+    /// separate from <see cref="SmokeFieldService"/>'s stamp/decay logic.</summary>
+    internal sealed class SmokeFieldResources
     {
-        private static readonly int GlobalPaintingTexId = Shader.PropertyToID("_PaintingTex");
+        private static readonly int GlobalSmokeTexId = Shader.PropertyToID("_SmokeTex");
 
         private RenderTexture _fieldA;
         private RenderTexture _fieldB;
@@ -23,7 +23,7 @@ namespace BalloonParty.Scenario
 
         private RenderTexture WriteTexture => _readFromA ? _fieldB : _fieldA;
 
-        public void Initialize(IPaintingFieldSettings settings, int width, int height)
+        public void Initialize(ISmokeFieldSettings settings, int width, int height)
         {
             _fieldA = CreateRT(width, height);
             _fieldB = CreateRT(width, height);
@@ -70,7 +70,7 @@ namespace BalloonParty.Scenario
             var tex = ReadTexture;
             if (tex != null)
             {
-                Shader.SetGlobalTexture(GlobalPaintingTexId, tex);
+                Shader.SetGlobalTexture(GlobalSmokeTexId, tex);
             }
         }
 
@@ -78,7 +78,7 @@ namespace BalloonParty.Scenario
         {
             if (shader == null)
             {
-                Log.Error("PaintingField", $"{settingName} not assigned on IPaintingFieldSettings.");
+                Log.Error("SmokeField", $"{settingName} not assigned on ISmokeFieldSettings.");
                 return null;
             }
 
@@ -93,7 +93,7 @@ namespace BalloonParty.Scenario
 
             var rt = new RenderTexture(width, height, 0, format)
             {
-                name = "PaintingField",
+                name = "SmokeField",
                 filterMode = FilterMode.Bilinear,
                 wrapMode = TextureWrapMode.Clamp
             };

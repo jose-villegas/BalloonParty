@@ -1,8 +1,8 @@
 Shader "BalloonParty/Scenario/SmokeTrailDisplay"
 {
-    // Full-screen display of the painting field RT as animated smoke trails behind the cloud backdrop.
+    // Full-screen display of the smoke field RT as animated smoke trails behind the cloud backdrop.
     // Placed on a quad spanning the viewport, sortingOrder below the clouds. It reads the global
-    // _PaintingTex (pushed by PaintingFieldService) and applies: curl-noise swirl, 5-tap bleed,
+    // _SmokeTex (pushed by SmokeFieldService) and applies: curl-noise swirl, 5-tap bleed,
     // sigmoid edges, wisp noise, paper grain, sky transmission, shadow lift, scene-light
     // integration, interior density modulation, and age-gradient turbulence. Premultiplied alpha.
     Properties
@@ -74,7 +74,7 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
             #pragma fragment frag
             #pragma target 3.0
             #include "UnityCG.cginc"
-            #include "../Include/PaintingField.cginc"
+            #include "../Include/SmokeField.cginc"
             #include "../Include/SceneLight.cginc"
             #include "../Noise/SimplexNoise2D.cginc"
 
@@ -127,7 +127,7 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
             fixed4 _ShadowLiftColor;
             float  _LightResponse;
             float  _LightGlow;
-            float  _PaintingTime;
+            float  _SmokeTime;
 
             // ────────────────────────────────────────────────────────────────
             // Helpers
@@ -150,21 +150,21 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
             // 3-octave curl noise via texture lookups (3 samples instead of 12 simplex calls).
             float2 FlowOffset(float2 wp)
             {
-                float paintDensity = PaintingFieldSample(wp).a;
+                float paintDensity = SmokeFieldSample(wp).a;
 
                 // Octave 1: large slow eddies — overall trail bow.
                 float2 p1 = wp * (_SwirlFreq * 0.25)
-                          + float2(_PaintingTime * _SwirlSpeed * 0.25, _PaintingTime * _SwirlSpeed * 0.12);
+                          + float2(_SmokeTime * _SwirlSpeed * 0.25, _SmokeTime * _SwirlSpeed * 0.12);
                 float2 curl1 = CurlNoise2D(p1) * (_SwirlStrength * 3.0);
 
                 // Octave 2: medium body undulation.
                 float2 p2 = wp * _SwirlFreq
-                          + float2(_PaintingTime * _SwirlSpeed * 0.7, _PaintingTime * _SwirlSpeed * 0.4);
+                          + float2(_SmokeTime * _SwirlSpeed * 0.7, _SmokeTime * _SwirlSpeed * 0.4);
                 float2 curl2 = CurlNoise2D(p2) * _SwirlStrength;
 
                 // Octave 3: small wisps, domain-warped by curl1 for detachment.
                 float2 p3 = (wp + curl1 * 0.4) * (_SwirlFreq * 3.5)
-                          + float2(_PaintingTime * _SwirlSpeed * 2.8, _PaintingTime * _SwirlSpeed * 1.9);
+                          + float2(_SmokeTime * _SwirlSpeed * 2.8, _SmokeTime * _SwirlSpeed * 1.9);
                 float2 curl3 = CurlNoise2D(p3) * (_SwirlStrength * 0.3);
 
                 // Age gradient: old smoke (low alpha, still present) swirls more aggressively.
@@ -192,20 +192,20 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
             // 5-tap bleed: center + cardinal directions with alpha-driven radius.
             float4 SampleBleeded(float2 wp)
             {
-                float2 baseUV = PaintingFieldUV(wp);
-                float4 raw = tex2D(_PaintingTex, baseUV);
-                float4 center = float4(raw.rgb, raw.a * _PaintingFieldActive);
+                float2 baseUV = SmokeFieldUV(wp);
+                float4 raw = tex2D(_SmokeTex, baseUV);
+                float4 center = float4(raw.rgb, raw.a * _SmokeFieldActive);
                 float r = _BleedRadius * (0.4 + center.a * 1.2);
-                float2 rUV = float2(r, 0) / max(_PaintingBoundsSize, 1e-4);
+                float2 rUV = float2(r, 0) / max(_SmokeBoundsSize, 1e-4);
 
-                float4 s0 = tex2D(_PaintingTex, baseUV + float2( rUV.x, 0));
-                float4 s1 = tex2D(_PaintingTex, baseUV + float2(-rUV.x, 0));
-                float4 s2 = tex2D(_PaintingTex, baseUV + float2(0,  rUV.x * 1.3));
-                float4 s3 = tex2D(_PaintingTex, baseUV + float2(0, -rUV.x));
-                s0.a *= _PaintingFieldActive;
-                s1.a *= _PaintingFieldActive;
-                s2.a *= _PaintingFieldActive;
-                s3.a *= _PaintingFieldActive;
+                float4 s0 = tex2D(_SmokeTex, baseUV + float2( rUV.x, 0));
+                float4 s1 = tex2D(_SmokeTex, baseUV + float2(-rUV.x, 0));
+                float4 s2 = tex2D(_SmokeTex, baseUV + float2(0,  rUV.x * 1.3));
+                float4 s3 = tex2D(_SmokeTex, baseUV + float2(0, -rUV.x));
+                s0.a *= _SmokeFieldActive;
+                s1.a *= _SmokeFieldActive;
+                s2.a *= _SmokeFieldActive;
+                s3.a *= _SmokeFieldActive;
 
                 return center * 0.45 + (s0 + s1 + s2 + s3) * 0.1375;
             }
@@ -235,8 +235,8 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
             fixed4 frag(v2f IN) : SV_Target
             {
                 // 0. Early discard: skip the vast majority of empty pixels cheaply.
-                float2 rawUV = PaintingFieldUV(IN.worldPos);
-                float quickAlpha = tex2D(_PaintingTex, rawUV).a * _PaintingFieldActive;
+                float2 rawUV = SmokeFieldUV(IN.worldPos);
+                float quickAlpha = tex2D(_SmokeTex, rawUV).a * _SmokeFieldActive;
                 if (quickAlpha < 0.001)
                 {
                     discard;
@@ -255,13 +255,13 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
 
                 // 3. Smoke edge shaping: sigmoid core + wisp noise at edges.
                 float2 warpedWp = WarpedEdgePos(wp);
-                float warpedA = PaintingFieldSample(warpedWp).a;
+                float warpedA = SmokeFieldSample(warpedWp).a;
                 float coreAlpha = saturate(warpedA / max(_EdgeSoftness, 0.001));
                 float smokeSigmoid = coreAlpha / (coreAlpha + (1.0 - coreAlpha) * _SmokeEdgeSharpness);
 
                 float edgeRegion = 1.0 - saturate(warpedA * 4.0);
                 float2 wispNoiseUV = warpedWp * _WispNoiseFreq
-                                   + float2(_PaintingTime * 0.04, _PaintingTime * 0.02);
+                                   + float2(_SmokeTime * 0.04, _SmokeTime * 0.02);
                 float wispNoise = SimplexNoise2D(wispNoiseUV) * 0.5 + 0.5;
                 float wispMask = smoothstep(0.3, 0.5, wispNoise);
                 float edgeFade = lerp(smokeSigmoid, smokeSigmoid * wispMask, edgeRegion * _WispStrength);
@@ -313,7 +313,7 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
 
                 // 8. Interior density modulation: animated see-through patches inside body.
                 float2 densityUV = wp * _InternalDensityScale
-                                 + float2(_PaintingTime * 0.03, _PaintingTime * -0.02);
+                                 + float2(_SmokeTime * 0.03, _SmokeTime * -0.02);
                 float densityNoise = tex2D(_GrainTex, densityUV).r;
                 float bodyRegion = saturate(paint.a * 3.0 - 0.5);
                 float densityMod = 1.0 - bodyRegion * densityNoise * _InternalDensityStrength;

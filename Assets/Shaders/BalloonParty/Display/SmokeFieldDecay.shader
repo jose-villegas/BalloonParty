@@ -1,6 +1,6 @@
-Shader "BalloonParty/Display/PaintingFieldDecay"
+Shader "BalloonParty/Display/SmokeFieldDecay"
 {
-    // Per-tick decay + smoke dispersion blit for the painting field. Each tick:
+    // Per-tick decay + smoke dispersion blit for the smoke field. Each tick:
     // 1. Wind advection (semi-Lagrangian): shifts paint in wind direction
     // 2. Turbulent perturbation: per-pixel random nudge so wisps diverge
     // 3. Diffusion expansion: paint spreads outward into adjacent empty texels

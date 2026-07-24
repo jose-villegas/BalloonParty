@@ -27,7 +27,7 @@ namespace BalloonParty.Balloon.Type
         [SerializeField] private float _crackAnimDuration = 0.5f;
 
         [Inject] private DisturbanceFieldService _disturbanceField;
-        [Inject] private PaintingFieldService _paintingField;
+        [Inject] private SmokeFieldService _smokeField;
         [Inject] private IGamePalette _palette;
         [Inject] private IPublisher<SpeckSpawnRequestMessage> _speckPublisher;
 
@@ -128,7 +128,7 @@ namespace BalloonParty.Balloon.Type
 
             if (!_repelPulse)
             {
-                _paintingField.Paint(PaintSource.ToughBreathing, transform.position);
+                _smokeField.Paint(PaintSource.ToughBreathing, transform.position);
             }
 
             _speckPublisher?.Publish(new SpeckSpawnRequestMessage(SpeckSource.ToughWarning, transform.position));

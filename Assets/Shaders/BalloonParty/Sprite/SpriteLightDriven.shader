@@ -85,7 +85,7 @@ Shader "BalloonParty/Sprite/LightDriven"
         // no-cloud texels. Leave off for glints and non-shadow accessories.
         [Toggle(_CLOUD_FADE_ON)] _CloudShadowFade ("Fade By Cloud Field", Float) = 0
         _CloudShadowFloor ("Cloud Fade Floor", Range(0, 1)) = 0.0
-        // Smoke opacity from the painting field acts as a second shadow-receiving surface;
+        // Smoke opacity from the smoke field acts as a second shadow-receiving surface;
         // 0 = old behavior (clouds only).
         _SmokeReceiveWeight ("Smoke Shadow Receive", Range(0, 1)) = 0
 
@@ -120,7 +120,7 @@ Shader "BalloonParty/Sprite/LightDriven"
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
             #include "../Include/BackgroundField.cginc"
-            #include "../Include/PaintingField.cginc"
+            #include "../Include/SmokeField.cginc"
 
             struct appdata_t
             {
@@ -336,7 +336,7 @@ Shader "BalloonParty/Sprite/LightDriven"
                 // sinks into whichever receiving surface is denser at the texel — cloud density or
                 // weighted smoke opacity (max avoids double-darkening where they overlap).
                 float receive = BackgroundFieldDensity(IN.cloudWorld);
-                receive = max(receive, PaintingFieldSample(IN.cloudWorld).a * _SmokeReceiveWeight);
+                receive = max(receive, SmokeFieldSample(IN.cloudWorld).a * _SmokeReceiveWeight);
                 c.a *= lerp(_CloudShadowFloor, 1.0, receive);
                 #endif
 

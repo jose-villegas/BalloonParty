@@ -7,7 +7,7 @@ using VContainer;
 namespace BalloonParty.Scenario.View
 {
     /// <summary>
-    ///     Renders the painting field RT as animated smoke trails behind the cloud backdrop.
+    ///     Renders the smoke field RT as animated smoke trails behind the cloud backdrop.
     ///     Place this on a GameObject with a <see cref="MeshRenderer" /> + <see cref="MeshFilter" />;
     ///     it creates a viewport-sized quad at startup and assigns the display material. The sorting
     ///     order is set below the Scenario Background so the paint layer sits behind the clouds.
@@ -15,7 +15,7 @@ namespace BalloonParty.Scenario.View
     [RequireComponent(typeof(MeshRenderer))]
     [RequireComponent(typeof(MeshFilter))]
     [DisallowMultipleComponent]
-    internal sealed class PaintingFieldView : MonoBehaviour
+    internal sealed class SmokeFieldView : MonoBehaviour
     {
         [SerializeField] private Material _displayMaterial;
 
@@ -33,14 +33,14 @@ namespace BalloonParty.Scenario.View
         {
             if (_displayMaterial == null)
             {
-                Log.Warn("PaintingFieldView", "disabled: no display material assigned.", this);
+                Log.Warn("SmokeFieldView", "disabled: no display material assigned.", this);
                 enabled = false;
                 return;
             }
 
             if (_display == null)
             {
-                Log.Warn("PaintingFieldView", "disabled: display configuration not injected.", this);
+                Log.Warn("SmokeFieldView", "disabled: display configuration not injected.", this);
                 enabled = false;
                 return;
             }
@@ -70,7 +70,7 @@ namespace BalloonParty.Scenario.View
 
             _quad = new Mesh
             {
-                name = "PaintingFieldQuad",
+                name = "SmokeFieldQuad",
                 vertices = new[]
                 {
                     new Vector3(-halfW, -halfH, 0f),

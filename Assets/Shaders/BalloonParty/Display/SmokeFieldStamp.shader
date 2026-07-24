@@ -1,6 +1,6 @@
-Shader "BalloonParty/Display/PaintingFieldStamp"
+Shader "BalloonParty/Display/SmokeFieldStamp"
 {
-    // Batched stamp blit for the painting field: writes RGB colors into the RT at stamp positions.
+    // Batched stamp blit for the smoke field: writes RGB colors into the RT at stamp positions.
     // Up to 32 stamps per pass. Colors blend additively weighted by stamp mask — overlapping colors
     // mix naturally (blue + yellow → green-ish). RT layout: RGB = accumulated color, A = opacity.
     Properties

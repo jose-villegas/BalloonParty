@@ -14,18 +14,18 @@ using VContainer.Unity;
 namespace BalloonParty.Tests.Scenario
 {
     [TestFixture]
-    public class PaintingFieldServiceTests
+    public class SmokeFieldServiceTests
     {
-        private IPaintingFieldSettings _settings;
+        private ISmokeFieldSettings _settings;
         private IGameDisplayConfiguration _display;
         private IGamePalette _palette;
         private ISubscriber<LevelUpDismissedMessage> _levelUpDismissedSubscriber;
-        private PaintingFieldService _service;
+        private SmokeFieldService _service;
 
         [SetUp]
         public void SetUp()
         {
-            _settings = Substitute.For<IPaintingFieldSettings>();
+            _settings = Substitute.For<ISmokeFieldSettings>();
             _settings.DecayTickInterval.Returns(0.05f);
             _settings.DecayRate.Returns(0.08f);
             _settings.WindSpeed.Returns(0.4f);
@@ -58,7 +58,7 @@ namespace BalloonParty.Tests.Scenario
                 .Subscribe(Arg.Any<IMessageHandler<GameOverMessage>>(), Arg.Any<MessageHandlerFilter<GameOverMessage>[]>())
                 .Returns(Substitute.For<System.IDisposable>());
 
-            _service = new PaintingFieldService(_settings, _display, _palette, _levelUpDismissedSubscriber, gameOverSubscriber);
+            _service = new SmokeFieldService(_settings, _display, _palette, _levelUpDismissedSubscriber, gameOverSubscriber);
         }
 
         // --- SetWindDampen min-accumulator ---
@@ -135,33 +135,33 @@ namespace BalloonParty.Tests.Scenario
         // --- Tick early-exit when resources not ready ---
 
         [Test]
-        public void Tick_WhenResourcesNotReady_DoesNotAccumulatePaintingTime()
+        public void Tick_WhenResourcesNotReady_DoesNotAccumulateSmokeTime()
         {
             ((ITickable)_service).Tick();
 
-            Assert.AreEqual(0f, GetPaintingTime(), 0.001f);
+            Assert.AreEqual(0f, GetSmokeTime(), 0.001f);
         }
 
         // --- Helpers ---
 
         private float GetWindDampen()
         {
-            var field = typeof(PaintingFieldService).GetField("_windDampen", BindingFlags.NonPublic | BindingFlags.Instance);
+            var field = typeof(SmokeFieldService).GetField("_windDampen", BindingFlags.NonPublic | BindingFlags.Instance);
             return (float)field!.GetValue(_service);
         }
 
         private int GetPendingStampCount()
         {
-            var field = typeof(PaintingFieldService).GetField("_pendingStamps", BindingFlags.NonPublic | BindingFlags.Instance);
+            var field = typeof(SmokeFieldService).GetField("_pendingStamps", BindingFlags.NonPublic | BindingFlags.Instance);
             var list = (List<object>)null;
             var raw = field!.GetValue(_service);
             // Use IList to get count from the generic list regardless of inner type.
             return ((System.Collections.IList)raw).Count;
         }
 
-        private float GetPaintingTime()
+        private float GetSmokeTime()
         {
-            var field = typeof(PaintingFieldService).GetField("_paintingTime", BindingFlags.NonPublic | BindingFlags.Instance);
+            var field = typeof(SmokeFieldService).GetField("_smokeTime", BindingFlags.NonPublic | BindingFlags.Instance);
             return (float)field!.GetValue(_service);
         }
 

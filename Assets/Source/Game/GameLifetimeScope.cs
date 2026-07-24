@@ -6,6 +6,7 @@ using BalloonParty.UI.Score;
 using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VContainer;
 using VContainer.Unity;
 using BalloonParty.Configuration.Balloons;
@@ -40,7 +41,8 @@ namespace BalloonParty.Game
         [SerializeField] private DisturbanceFieldSettings _disturbanceFieldSettings;
         [SerializeField] private SceneLightFieldSettings _sceneLightFieldSettings;
         [SerializeField] private BackgroundFieldSettings _backgroundFieldSettings;
-        [SerializeField] private PaintingFieldSettings _paintingFieldSettings;
+        [FormerlySerializedAs("_paintingFieldSettings")]
+        [SerializeField] private SmokeFieldSettings _smokeFieldSettings;
         [SerializeField] private SpeckFieldSettings _speckFieldSettings;
         [SerializeField] private ShieldFieldSettings _shieldFieldSettings;
         [SerializeField] private ProjectileVisualConfig _projectileVisualConfig;
@@ -99,7 +101,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance<ISceneLightSettings>(_sceneLightFieldSettings);
             builder.RegisterInstance<ITimeOfDaySettings>(_sceneLightFieldSettings);
             builder.RegisterInstance<IBackgroundFieldSettings>(_backgroundFieldSettings);
-            builder.RegisterInstance<IPaintingFieldSettings>(_paintingFieldSettings);
+            builder.RegisterInstance<ISmokeFieldSettings>(_smokeFieldSettings);
             builder.RegisterInstance<ISpeckFieldSettings>(_speckFieldSettings);
             builder.RegisterInstance<IShieldFieldSettings>(_shieldFieldSettings);
             builder.RegisterInstance<IProjectileVisualConfig>(_projectileVisualConfig);

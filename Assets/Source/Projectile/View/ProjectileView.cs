@@ -57,7 +57,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private ProjectileMotionResolver _motionResolver;
         [Inject] private PauseService _pauseService;
         [Inject] private DisturbanceFieldService _disturbanceField;
-        [Inject] private PaintingFieldService _paintingField;
+        [Inject] private SmokeFieldService _smokeField;
         [Inject] private SceneLightFieldService _lightField;
         [Inject] private ISceneLightSettings _sceneLightSettings;
         [Inject] private IShieldFieldSettings _shieldSettings;
@@ -528,8 +528,8 @@ namespace BalloonParty.Projectile.View
                 var pos = step.Position;
                 var prevPos = _lastPaintPos != Vector3.zero ? _lastPaintPos : pos;
 
-                _paintingField.Paint(PaintSource.ProjectileTrail, pos, prevPos, paletteIdx);
-                _paintingField.SetWindDampen(1f - ComputeVelocityT(step.Speed) * 0.7f);
+                _smokeField.Paint(PaintSource.ProjectileTrail, pos, prevPos, paletteIdx);
+                _smokeField.SetWindDampen(1f - ComputeVelocityT(step.Speed) * 0.7f);
                 _lastPaintPos = pos;
             }
         }

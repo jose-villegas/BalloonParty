@@ -44,10 +44,10 @@ namespace BalloonParty.Configuration.Effects
         public Color CustomColor;
     }
 
-    /// <summary>Authored tuning for the painting field; assign stamp/decay shaders + resolution here and
+    /// <summary>Authored tuning for the smoke field; assign stamp/decay shaders + resolution here and
     /// wire the asset into <c>GameLifetimeScope</c>.</summary>
-    [CreateAssetMenu(menuName = "Configuration/Painting Field Settings", fileName = "PaintingFieldSettings")]
-    internal sealed class PaintingFieldSettings : ScriptableObject, IPaintingFieldSettings
+    [CreateAssetMenu(menuName = "Configuration/Smoke Field Settings", fileName = "SmokeFieldSettings")]
+    internal sealed class SmokeFieldSettings : ScriptableObject, ISmokeFieldSettings
     {
         private static readonly PaintProfile DefaultProfile = new()
         {
@@ -59,13 +59,13 @@ namespace BalloonParty.Configuration.Effects
             CustomColor = Color.white
         };
 
-        [Tooltip("Blit shader (BalloonParty/Display/PaintingFieldStamp) for batched color stamps.")]
+        [Tooltip("Blit shader (BalloonParty/Display/SmokeFieldStamp) for batched color stamps.")]
         [SerializeField] private Shader _stampShader;
 
-        [Tooltip("Blit shader (BalloonParty/Display/PaintingFieldDecay) for per-tick opacity decay.")]
+        [Tooltip("Blit shader (BalloonParty/Display/SmokeFieldDecay) for per-tick opacity decay.")]
         [SerializeField] private Shader _decayShader;
 
-        [Tooltip("Painting-RT resolution per world unit.")]
+        [Tooltip("Smoke-RT resolution per world unit.")]
         [SerializeField] private float _texelsPerUnit = 16f;
 
         [Tooltip("Opacity units lost per second (linear decay). Higher = faster fade.")]
@@ -113,7 +113,7 @@ namespace BalloonParty.Configuration.Effects
         public float WindSwingAngle => _windSwingAngle;
         public float WindSwingSpeed => _windSwingSpeed;
 
-        PaintProfile IPaintingFieldSettings.GetProfile(PaintSource source)
+        PaintProfile ISmokeFieldSettings.GetProfile(PaintSource source)
         {
             foreach (var profile in _stampProfiles)
             {

@@ -26,15 +26,15 @@ from the Launcher's additive load and from Game directly). Its tuning lives on `
 `Assets/Shaders/BalloonParty/Include/BackgroundField.cginc`; generation is `BackgroundFieldGen.cginc` +
 the `BackgroundFieldDensity` blit shader. See `Shared/Disturbance/README.md`.
 
-## PaintingFieldService
+## SmokeFieldService
 
-`PaintingFieldService.cs` — the smoke trail field: a persistent screen-space RT that accumulates
+`SmokeFieldService.cs` — the smoke trail field: a persistent screen-space RT that accumulates
 palette-colored capsule stamps and decays them into animated smoke wisps. The 4th field service
 alongside Disturbance, SceneLight, and Background.
 
 **Profile-based stamping:** every stamp originates from a `PaintSource` (`ProjectileTrail`,
 `ToughPop`, `ToughBreathing`, `ToughDeflect`). The service resolves the source to a `PaintProfile`
-(via `IPaintingFieldSettings.GetProfile`) that defines radius, opacity, and how color is chosen
+(via `ISmokeFieldSettings.GetProfile`) that defines radius, opacity, and how color is chosen
 (`PaintColorMode.Dynamic` — caller supplies a palette index, `Palette` — profile names a fixed
 palette entry, `Custom` — profile carries a fixed RGB color). The public API is:
 
@@ -44,43 +44,43 @@ palette entry, `Custom` — profile carries a fixed RGB color). The public API i
 
 **Pipeline:** each frame the projectile is moving, `ProjectileView` calls `Paint` with
 `PaintSource.ProjectileTrail` (capsule from previous → current position). The service batches up to
-32 stamps per blit pass into `PaintingFieldStamp.shader`, then runs a decay pass
-(`PaintingFieldDecay.shader`) that advects, expands, erodes, and fades the accumulated paint. The
-result is published as the global `_PaintingTex`, sampled by the display shader.
+32 stamps per blit pass into `SmokeFieldStamp.shader`, then runs a decay pass
+(`SmokeFieldDecay.shader`) that advects, expands, erodes, and fades the accumulated paint. The
+result is published as the global `_SmokeTex`, sampled by the display shader.
 
 **Decay model:** wind advection (swinging direction via sin oscillation), turbulent perturbation,
-radius expansion, noise erosion, and linear alpha decay — all driven by `_PaintingTime` (which
+radius expansion, noise erosion, and linear alpha decay — all driven by `_SmokeTime` (which
 respects `TimeScaleService` pause/slow-mo). Fresh stamps resist wind (age-based bias); fast projectile
 stamps get dampened wind so they don't smear.
 
 **Lifecycle:** clears the RT on `LevelUpDismissedMessage` (new level = blank canvas) and on
 `GameOverMessage` (descend/game-over = blank canvas).
 
-### PaintingFieldResources
+### SmokeFieldResources
 
-`PaintingFieldResources.cs` — owns the GPU resources: two `ARGBHalf` ping-pong RTs and the stamp +
-decay materials (instantiated from the shaders on `IPaintingFieldSettings`). Handles blit-and-swap;
+`SmokeFieldResources.cs` — owns the GPU resources: two `ARGBHalf` ping-pong RTs and the stamp +
+decay materials (instantiated from the shaders on `ISmokeFieldSettings`). Handles blit-and-swap;
 separated from the service so resource lifecycle is testable independently.
 
-### PaintingFieldView
+### SmokeFieldView
 
-`View/PaintingFieldView.cs` — a `MonoBehaviour` that renders the painting field RT as visible smoke
+`View/SmokeFieldView.cs` — a `MonoBehaviour` that renders the smoke field RT as visible smoke
 behind the cloud backdrop. Builds a viewport-sized quad at startup, assigns the `SmokeTrailDisplay`
 material, and sits on the Default sorting layer at order −1 (behind the clouds at 0). Registered via
-`RegisterComponentInHierarchy<PaintingFieldView>()`.
+`RegisterComponentInHierarchy<SmokeFieldView>()`.
 
 ### Shaders
 
 | Shader | Role |
 |---|---|
-| `PaintingFieldStamp` | Capsule SDF batched blit (32 stamps/pass) |
-| `PaintingFieldDecay` | Smoke dispersion: wind + turbulence + expansion + erosion + decay |
+| `SmokeFieldStamp` | Capsule SDF batched blit (32 stamps/pass) |
+| `SmokeFieldDecay` | Smoke dispersion: wind + turbulence + expansion + erosion + decay |
 | `SmokeTrailDisplay` | Display: curl-noise swirl, 5-tap bleed, sigmoid edges, wisp noise, paper grain, sky transmission, shadow lift, scene-light integration |
-| `PaintingField.cginc` | Consumer include — exposes global `_PaintingTex` |
+| `SmokeField.cginc` | Consumer include — exposes global `_SmokeTex` |
 
 ### Configuration
 
-`IPaintingFieldSettings` / `PaintingFieldSettings` SO — stamps shader, decay shader, texels-per-unit,
+`ISmokeFieldSettings` / `SmokeFieldSettings` SO — stamps shader, decay shader, texels-per-unit,
 decay rate, decay tick interval, wind speed/influence/age-bias/direction/swing, and a `PaintProfile[]`
 array (each entry maps `PaintSource` flags → radius, opacity, `PaintColorMode`, palette name / custom
 color). `GetProfile(PaintSource)` resolves the active profile for a given source.

@@ -15,19 +15,19 @@ using VContainer.Unity;
 namespace BalloonParty.Scenario
 {
     /// <summary>
-    ///     Owns the painting field: a persistent screen-space RT that accumulates palette-colored stamps
+    ///     Owns the smoke field: a persistent screen-space RT that accumulates palette-colored stamps
     ///     and decays them over time. Publishes the RT as global shader properties
-    ///     (<c>_PaintingTex</c>, <c>_PaintingBoundsMin/Size</c>) so any consumer can sample it.
+    ///     (<c>_SmokeTex</c>, <c>_SmokeBoundsMin/Size</c>) so any consumer can sample it.
     ///     Architecture mirrors <c>DisturbanceFieldService</c> / <c>SceneLightFieldService</c>:
     ///     plain-C# DI singleton, no MonoBehaviour, ping-pong blit pipeline.
     /// </summary>
-    internal sealed class PaintingFieldService : IStartable, ITickable, IDisposable, ICadencedEffect
+    internal sealed class SmokeFieldService : IStartable, ITickable, IDisposable, ICadencedEffect
     {
         private const int MaxStampsPerBatch = 32;
 
-        private static readonly int BoundsMinId = Shader.PropertyToID("_PaintingBoundsMin");
-        private static readonly int BoundsSizeId = Shader.PropertyToID("_PaintingBoundsSize");
-        private static readonly int ActiveId = Shader.PropertyToID("_PaintingFieldActive");
+        private static readonly int BoundsMinId = Shader.PropertyToID("_SmokeBoundsMin");
+        private static readonly int BoundsSizeId = Shader.PropertyToID("_SmokeBoundsSize");
+        private static readonly int ActiveId = Shader.PropertyToID("_SmokeFieldActive");
         private static readonly int StampCountId = Shader.PropertyToID("_StampCount");
         private static readonly int StampCentersId = Shader.PropertyToID("_StampCenters");
         private static readonly int StampRadiiId = Shader.PropertyToID("_StampRadii");
@@ -38,14 +38,14 @@ namespace BalloonParty.Scenario
         private static readonly int WindSpeedId = Shader.PropertyToID("_WindSpeed");
         private static readonly int WindDirId = Shader.PropertyToID("_WindDir");
         private static readonly int WindAgeBiasId = Shader.PropertyToID("_WindAgeBias");
-        private static readonly int PaintingTimeId = Shader.PropertyToID("_PaintingTime");
+        private static readonly int SmokeTimeId = Shader.PropertyToID("_SmokeTime");
 
-        private readonly IPaintingFieldSettings _settings;
+        private readonly ISmokeFieldSettings _settings;
         private readonly IGameDisplayConfiguration _display;
         private readonly IGamePalette _palette;
         private readonly ISubscriber<LevelUpDismissedMessage> _levelUpDismissedSubscriber;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
-        private readonly PaintingFieldResources _resources = new();
+        private readonly SmokeFieldResources _resources = new();
         private readonly List<PendingStamp> _pendingStamps = new();
         private readonly Vector4[] _batchCenters = new Vector4[MaxStampsPerBatch];
         private readonly float[] _batchRadii = new float[MaxStampsPerBatch];
@@ -55,13 +55,13 @@ namespace BalloonParty.Scenario
         private Rect _bounds;
         private float _lastDecayTime;
         private float _timePhase;
-        private float _paintingTime;
+        private float _smokeTime;
         private float _windDampen = 1f;
         private IDisposable _levelUpDismissedSubscription;
         private IDisposable _gameOverSubscription;
 
-        public PaintingFieldService(
-            IPaintingFieldSettings settings,
+        public SmokeFieldService(
+            ISmokeFieldSettings settings,
             IGameDisplayConfiguration display,
             IGamePalette palette,
             ISubscriber<LevelUpDismissedMessage> levelUpDismissedSubscriber,
@@ -78,7 +78,7 @@ namespace BalloonParty.Scenario
         {
             if (_settings?.StampShader == null || _settings.DecayShader == null || _display == null)
             {
-                Log.Warn("PaintingField", "disabled: assign stamp + decay shaders on PaintingFieldSettings.");
+                Log.Warn("SmokeField", "disabled: assign stamp + decay shaders on SmokeFieldSettings.");
                 return;
             }
 
@@ -106,8 +106,8 @@ namespace BalloonParty.Scenario
                 return;
             }
 
-            _paintingTime += dt;
-            Shader.SetGlobalFloat(PaintingTimeId, _paintingTime);
+            _smokeTime += dt;
+            Shader.SetGlobalFloat(SmokeTimeId, _smokeTime);
 
             bool stamped = FlushPendingStamps();
             bool decayed = TickDecay();
@@ -346,7 +346,7 @@ namespace BalloonParty.Scenario
                 return baseDir;
             }
 
-            float t = Mathf.Sin(_paintingTime * _settings.WindSwingSpeed * Mathf.PI * 2f);
+            float t = Mathf.Sin(_smokeTime * _settings.WindSwingSpeed * Mathf.PI * 2f);
             float angleDeg = t * swingAngle;
             float rad = angleDeg * Mathf.Deg2Rad;
             float cos = Mathf.Cos(rad);

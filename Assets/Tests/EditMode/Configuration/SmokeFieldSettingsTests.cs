@@ -6,14 +6,14 @@ using UnityEngine;
 namespace BalloonParty.Tests.Configuration
 {
     [TestFixture]
-    public class PaintingFieldSettingsTests
+    public class SmokeFieldSettingsTests
     {
-        private PaintingFieldSettings _settings;
+        private SmokeFieldSettings _settings;
 
         [SetUp]
         public void SetUp()
         {
-            _settings = ScriptableObject.CreateInstance<PaintingFieldSettings>();
+            _settings = ScriptableObject.CreateInstance<SmokeFieldSettings>();
         }
 
         [TearDown]

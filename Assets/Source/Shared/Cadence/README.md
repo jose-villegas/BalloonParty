@@ -45,7 +45,7 @@ coincidence would cost), not a literal cap on blits per frame.
 | `SceneLightFieldService` (`Shared/SceneLight/`) | 2 |
 | `DisturbanceFieldService` (`Shared/Disturbance/`) | 2 |
 | `BackgroundFieldService` (`Scenario/`) | 1 |
-| `PaintingFieldService` (`Scenario/`) | 1 |
+| `SmokeFieldService` (`Scenario/`) | 1 |
 
 ## Known gap
 

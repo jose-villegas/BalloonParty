@@ -24,7 +24,7 @@ namespace BalloonParty.Editor.Maps
         private static readonly int DisturbanceTexId = Shader.PropertyToID("_DisturbanceTex");
         private static readonly int SceneLightTexId = Shader.PropertyToID("_SceneLightTex");
         private static readonly int BackgroundDensityTexId = Shader.PropertyToID("_BackgroundDensityTex");
-        private static readonly int PaintingTexId = Shader.PropertyToID("_PaintingTex");
+        private static readonly int SmokeTexId = Shader.PropertyToID("_SmokeTex");
         private static readonly int ChannelMaskId = Shader.PropertyToID("_ChannelMask");
         private static readonly int PaletteColorsId = Shader.PropertyToID("_PaletteColors");
         private static readonly int DecodePaletteId = Shader.PropertyToID("_DecodePalette");
@@ -424,9 +424,9 @@ namespace BalloonParty.Editor.Maps
                     "Unused (RG map)."),
 
                 new MapDescriptor(
-                    "Painting Field",
-                    () => Application.isPlaying ? Shader.GetGlobalTexture(PaintingTexId) : null,
-                    "No painting field bound — PaintingFieldService binds it once the game scope starts.",
+                    "Smoke Field",
+                    () => Application.isPlaying ? Shader.GetGlobalTexture(SmokeTexId) : null,
+                    "No smoke field bound — SmokeFieldService binds it once the game scope starts.",
                     "Blended paint color — red channel.",
                     "Blended paint color — green channel.",
                     "Blended paint color — blue channel.",

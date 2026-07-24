@@ -7,6 +7,7 @@ using BalloonParty.Nudge;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Shared.SceneLight;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Scenario;
 using BalloonParty.Slots.Actor;
@@ -36,8 +37,10 @@ namespace BalloonParty.Balloon.Controller
         private readonly IPublisher<TransformCapturedMessage> _transformCapturedPublisher;
         private readonly BalloonView _view;
         private readonly DisturbanceFieldService _disturbanceField;
-        private readonly PaintingFieldService _paintingField;
+        private readonly SmokeFieldService _smokeField;
+        private readonly SceneLightFieldService _sceneLightField;
         private readonly IGamePalette _palette;
+        private readonly IBalloonsConfiguration _balloonsConfig;
 
         private Action _onReturned;
         private IDisposable _itemActivatedSubscription;
@@ -64,8 +67,10 @@ namespace BalloonParty.Balloon.Controller
             _grid = context.Grid;
             _poolManager = context.PoolManager;
             _disturbanceField = context.DisturbanceField;
-            _paintingField = context.PaintingField;
+            _smokeField = context.SmokeField;
+            _sceneLightField = context.SceneLightField;
             _palette = context.Palette;
+            _balloonsConfig = context.BalloonsConfiguration;
         }
 
         public void Start()
@@ -115,7 +120,7 @@ namespace BalloonParty.Balloon.Controller
 
                 if (_model is ToughBalloonModel)
                 {
-                    _paintingField.Paint(PaintSource.ToughPop,
+                    _smokeField.Paint(PaintSource.ToughPop,
                         _view.transform.position);
                 }
 
@@ -199,7 +204,7 @@ namespace BalloonParty.Balloon.Controller
 
                 if (_model is ToughBalloonModel)
                 {
-                    _paintingField.Paint(PaintSource.ToughDeflect, viewPos);
+                    _smokeField.Paint(PaintSource.ToughDeflect, viewPos);
                 }
             }
 
@@ -258,9 +263,18 @@ namespace BalloonParty.Balloon.Controller
                 StampSource.BalloonPop, popWorldPos, Vector2.zero,
                 paletteIndex: paletteIndex);
 
+            // A rainbow is a wildcard with no single colour, so it flashes a neutral key-light burst — a beat
+            // of light to sell the whole-palette payout. Radius/intensity/duration authored on the config.
+            if (_palette.IsRainbow(PopColorId()))
+            {
+                _sceneLightField.Flash(
+                    popWorldPos, _balloonsConfig.RainbowPopFlashRadius,
+                    _balloonsConfig.RainbowPopFlashIntensity, _balloonsConfig.RainbowPopFlashSeconds);
+            }
+
             if (_model is ToughBalloonModel)
             {
-                _paintingField.Paint(PaintSource.ToughPop, popWorldPos);
+                _smokeField.Paint(PaintSource.ToughPop, popWorldPos);
             }
 
             _view.PlayHitVfxForOutcome(HitOutcome.Pop);

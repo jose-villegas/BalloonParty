@@ -9,7 +9,7 @@ delegation matrix. Each item below carries an implementation-ready spec; subagen
 be able to execute without further investigation.
 
 **Problem**: Game sits at ~80 FPS on device where 120 FPS was previously reached, after
-a wave of new visual features (wall nets, shared cloud field, painting field, velocity
+a wave of new visual features (wall nets, shared cloud field, smoke field, velocity
 stamps, cruise specks). Target is stable, smooth frame delivery at the highest rate the
 device sustains.
 
@@ -729,7 +729,7 @@ ships, not after.**
   legibility pass) and by the plan's own admission that the bottleneck isn't CPU math.
   Job-scheduling overhead for ≤100 small point sets would eat the win. F2 captures the
   real cost for one line.
-- **A5 (merge Disturbance + Painting RTs)** — deferred indefinitely: texel-density
+- **A5 (merge Disturbance + Smoke RTs)** — deferred indefinitely: texel-density
   mismatch (8 vs 16/unit) + structurally different math (diffusion PDE vs local decay);
   not a channel-packing change. Only if Step 0 shows both fields hot in the same frames.
 

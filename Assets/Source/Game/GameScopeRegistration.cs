@@ -221,9 +221,9 @@ namespace BalloonParty.Game
             builder.RegisterComponentInHierarchy<CinematicCameraView>();
             builder.RegisterComponentInHierarchy<SpeckField>();
             builder.RegisterComponentInHierarchy<WallNetView>();
-            builder.RegisterComponentInHierarchy<PaintingFieldView>();
+            builder.RegisterComponentInHierarchy<SmokeFieldView>();
             builder.Register<BackgroundFieldService>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<PaintingFieldService>(Lifetime.Singleton)
+            builder.Register<SmokeFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<LaunchDisturbanceStamp>();
             builder.Register<CinematicCameraRig>(Lifetime.Singleton);
