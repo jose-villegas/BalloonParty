@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Score;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Shared.Rendering;
 using BalloonParty.UI.Score;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -34,7 +36,12 @@ namespace BalloonParty.UI.LevelUp
         [Header("Glow Trails")] [SerializeField] private int _glowTrailsPerBar = 8;
         [SerializeField] private float _glowTrailStaggerDelay = 0.08f;
         [SerializeField] private float _glowTrailDuration = 0.8f;
+
+        [Header("Glow Target (fractions of the glow fill's half-width; angles CCW from +x)")]
         [SerializeField] [Range(0f, 1f)] private float _glowTargetRadiusMultiplier = 0.8f;
+        [SerializeField] [Range(0f, 1f)] private float _glowTargetInnerRadiusMultiplier;
+        [SerializeField] private float _glowTargetMinAngle;
+        [SerializeField] private float _glowTargetMaxAngle = 360f;
 
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         [Inject] private IPublisher<LevelUpDismissedMessage> _dismissedPublisher;
@@ -112,11 +119,13 @@ namespace BalloonParty.UI.LevelUp
         // Takes completed colors as a param — live AllowedColors may already reflect the new level.
         private async UniTaskVoid SpawnGlowTrailsAsync(IReadOnlyList<string> completedColors)
         {
-            var glowRect = _levelGlowFill.rectTransform;
-            var glowCenter = glowRect.TransformPoint(glowRect.rect.center);
-            var glowEdge = glowRect.TransformPoint(
-                new Vector3(glowRect.rect.xMax, glowRect.rect.center.y, 0f));
-            var glowRadius = Vector3.Distance(glowCenter, glowEdge) * _glowTargetRadiusMultiplier;
+            if (!TryGetGlowTargetGeometry(out var glowCenter, out var innerRadius, out var outerRadius))
+            {
+                return;
+            }
+
+            var minAngleRad = _glowTargetMinAngle * Mathf.Deg2Rad;
+            var maxAngleRad = _glowTargetMaxAngle * Mathf.Deg2Rad;
             var staggerMs = Mathf.RoundToInt(_glowTrailStaggerDelay * 1000f);
 
             for (var i = 0; i < _glowTrailsPerBar; i++)
@@ -127,7 +136,8 @@ namespace BalloonParty.UI.LevelUp
                     var target = _scoreTrailService.GetTarget(entry.Name);
                     var spawner = GetOrCreateSpawner(entry.Name);
 
-                    var offset = Random.insideUnitCircle * glowRadius;
+                    var offset = VectorMathExtensions.RandomPointInAnnulusSector(
+                        innerRadius, outerRadius, minAngleRad, maxAngleRad);
                     var destination = glowCenter + new Vector3(offset.x, offset.y, 0f);
 
                     spawner.Spawn(target.RandomPosition(), destination,
@@ -161,6 +171,29 @@ namespace BalloonParty.UI.LevelUp
             }
         }
 
+        // World-space arrival disc derived from the glow fill's rect: center plus inner/outer radii
+        // scaled off its half-width. Shared by trail spawning and the editor gizmo so both agree.
+        private bool TryGetGlowTargetGeometry(out Vector3 center, out float innerRadius, out float outerRadius)
+        {
+            center = default;
+            innerRadius = 0f;
+            outerRadius = 0f;
+
+            if (_levelGlowFill == null)
+            {
+                return false;
+            }
+
+            var glowRect = _levelGlowFill.rectTransform;
+            center = glowRect.TransformPoint(glowRect.rect.center);
+            var edge = glowRect.TransformPoint(
+                new Vector3(glowRect.rect.xMax, glowRect.rect.center.y, 0f));
+            var halfWidth = Vector3.Distance(center, edge);
+            outerRadius = halfWidth * _glowTargetRadiusMultiplier;
+            innerRadius = halfWidth * _glowTargetInnerRadiusMultiplier;
+            return true;
+        }
+
         private TrailSpawner GetOrCreateSpawner(string colorName)
         {
             if (_trailSpawners.TryGetValue(colorName, out var spawner))
@@ -192,5 +225,19 @@ namespace BalloonParty.UI.LevelUp
                 () => _animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f,
                 cancellationToken: destroyCancellationToken);
         }
+
+#if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
+        {
+            if (!TryGetGlowTargetGeometry(out var center, out var innerRadius, out var outerRadius))
+            {
+                return;
+            }
+
+            GizmoDrawingHelper.DrawWorldRingSegment(
+                center, innerRadius, outerRadius,
+                _glowTargetMinAngle, _glowTargetMaxAngle, Color.cyan);
+        }
+#endif
     }
 }

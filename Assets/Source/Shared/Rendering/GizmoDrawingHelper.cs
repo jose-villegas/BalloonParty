@@ -93,6 +93,44 @@ namespace BalloonParty.Shared.Rendering
             Gizmos.DrawWireSphere(position, radius);
         }
 
+        /// <summary>
+        ///     Draws a world-space annulus sector (ring segment) in the XY plane: an inner and outer arc
+        ///     joined by two radial edges. Angles are in degrees, CCW from +x. A zero inner radius
+        ///     collapses the inner arc to the center point.
+        /// </summary>
+        public static void DrawWorldRingSegment(
+            Vector3 center,
+            float innerRadius,
+            float outerRadius,
+            float startAngleDegrees,
+            float endAngleDegrees,
+            Color color)
+        {
+            const int arcSegments = 48;
+            var startRad = startAngleDegrees * Mathf.Deg2Rad;
+            var endRad = endAngleDegrees * Mathf.Deg2Rad;
+
+            Gizmos.color = color;
+            for (var i = 0; i < arcSegments; i++)
+            {
+                var a0 = Mathf.Lerp(startRad, endRad, (float)i / arcSegments);
+                var a1 = Mathf.Lerp(startRad, endRad, (float)(i + 1) / arcSegments);
+                var d0 = new Vector3(Mathf.Cos(a0), Mathf.Sin(a0), 0f);
+                var d1 = new Vector3(Mathf.Cos(a1), Mathf.Sin(a1), 0f);
+
+                Gizmos.DrawLine(center + (d0 * outerRadius), center + (d1 * outerRadius));
+                if (innerRadius > 0f)
+                {
+                    Gizmos.DrawLine(center + (d0 * innerRadius), center + (d1 * innerRadius));
+                }
+            }
+
+            var startDir = new Vector3(Mathf.Cos(startRad), Mathf.Sin(startRad), 0f);
+            var endDir = new Vector3(Mathf.Cos(endRad), Mathf.Sin(endRad), 0f);
+            Gizmos.DrawLine(center + (startDir * innerRadius), center + (startDir * outerRadius));
+            Gizmos.DrawLine(center + (endDir * innerRadius), center + (endDir * outerRadius));
+        }
+
         private static void DrawWorldQuad(
             Vector3 bl,
             Vector3 br,

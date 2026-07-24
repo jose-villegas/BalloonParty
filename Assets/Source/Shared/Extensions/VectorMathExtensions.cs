@@ -25,6 +25,19 @@ namespace BalloonParty.Shared.Extensions
             return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
         }
 
+        /// <summary>A uniformly random point in the annulus sector bounded by radii
+        /// [<paramref name="innerRadius" />, <paramref name="outerRadius" />] and the angular span
+        /// [<paramref name="minAngleRadians" />, <paramref name="maxAngleRadians" />] (CCW from +x).
+        /// The radius is area-weighted, so points scatter evenly across the ring instead of clumping
+        /// toward the center. Inner radius 0 and a full 2π span reproduce a uniform disc.</summary>
+        public static Vector2 RandomPointInAnnulusSector(
+            float innerRadius, float outerRadius, float minAngleRadians, float maxAngleRadians)
+        {
+            var angle = Random.Range(minAngleRadians, maxAngleRadians);
+            var radius = Mathf.Sqrt(Random.Range(innerRadius * innerRadius, outerRadius * outerRadius));
+            return DirectionFromAngle(angle) * radius;
+        }
+
         /// <summary>The direction's angle mapped once around the full circle to <c>[0,1)</c>: 0 = +x (east),
         /// increasing counter-clockwise (0.25 = +y/up). Inverse of <see cref="DirectionFromAngle" />; useful
         /// for indexing a full-circle gradient by direction. A zero vector returns 0.</summary>
