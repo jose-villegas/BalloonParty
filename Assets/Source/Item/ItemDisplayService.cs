@@ -137,6 +137,14 @@ namespace BalloonParty.Item
                 facingRotator.Configure(_projectileFacing);
             }
 
+            // Same non-injection path for the standalone sight probe (drives the Snipe's spiral speed, etc.),
+            // handed the same facing source so it can run its own prediction-trace test.
+            var sightProbe = _activeView.GetComponentInChildren<PredictionSightProbe>();
+            if (_projectileFacing != null && sightProbe != null)
+            {
+                sightProbe.Configure(_projectileFacing);
+            }
+
             ApplySorting(_slotIndex.Value);
             _onSortingFootprintChanged?.Invoke();
         }
