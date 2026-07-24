@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 9161632677401763229}
   - component: {fileID: 9005570582913282314}
   - component: {fileID: 8572197533499886978}
-  - component: {fileID: 8512367537215613866}
   - component: {fileID: 6166827907043377765}
   - component: {fileID: 9185101207980489252}
   - component: {fileID: 8597041690689265888}
   - component: {fileID: 8093058153975969621}
   - component: {fileID: 4698789767988275823}
+  - component: {fileID: 977641122217208972}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -113,25 +113,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Display.OrthogonalSizeCameraController
   _camera: {fileID: 9161632677401763229}
   _continuous: 0
---- !u!114 &8512367537215613866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4370083120234301038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 174fbedff5e54461b445c71b21b17a47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Display.CameraShakeService
-  _camera: {fileID: 9161632677401763229}
-  _duration: 0.25
-  _strength: 0.18
-  _vibrato: 14
-  _recoilStrength: 0.08
-  _recoilDuration: 0.15
-  _recoilVibrato: 8
 --- !u!114 &6166827907043377765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,7 +140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Display.SceneCaptureService
   _capturedLayers:
     serializedVersion: 2
-    m_Bits: 126592
+    m_Bits: 130688
   _matchMainCameraBackground: 1
   _backgroundColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &8597041690689265888
@@ -234,3 +215,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Display.CameraBackgroundTint
   _baseColor: {r: 0.5294118, g: 0.80784315, b: 0.92156863, a: 1}
   _lightInfluence: 1
+--- !u!114 &977641122217208972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4370083120234301038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e40b8a35ccdf447c8b4c42006ed22a2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Display.NavigationCameraReveal
+  _camera: {fileID: 9161632677401763229}
+  _launchMask:
+    serializedVersion: 2
+    m_Bits: 4192
+  _gameMask:
+    serializedVersion: 2
+    m_Bits: 4294967295

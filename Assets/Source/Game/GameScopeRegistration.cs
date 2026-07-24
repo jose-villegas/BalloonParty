@@ -161,9 +161,6 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<BushViewController>().AsSelf().As<ITransitionOutgoingContent>();
             builder.Register<DisturbanceFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
-            builder.Register<TimeOfDayService>(Lifetime.Singleton)
-                .AsImplementedInterfaces().AsSelf();
-            builder.RegisterEntryPoint<TimeOfDayClock>().AsSelf();
             builder.Register<SceneLightFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<BalloonMotionTicker>().AsSelf();
@@ -213,12 +210,10 @@ namespace BalloonParty.Game
 
         internal static void RegisterPresentation(this IContainerBuilder builder)
         {
-            builder.RegisterComponentInHierarchy<OrthogonalSizeCameraController>();
-            builder.RegisterComponentInHierarchy<CameraShakeService>();
-            builder.RegisterComponentInHierarchy<SceneCaptureService>().AsSelf().As<ICadencedEffect>();
-            builder.RegisterComponentInHierarchy<ScreenSpaceLightService>();
-            builder.RegisterComponentInHierarchy<CameraBackgroundTint>();
-            builder.RegisterComponentInHierarchy<CinematicCameraView>();
+            // The camera pipeline now lives on the single persistent camera owned by AppLifetimeScope; this
+            // scope resolves those from the parent. Only the run-scoped shake CONTROLLER lives here — it
+            // drives the App-owned CameraShakeView and holds the gameplay subscriptions that reset per run.
+            builder.RegisterEntryPoint<CameraShakeController>();
             builder.RegisterComponentInHierarchy<SpeckField>();
             builder.RegisterComponentInHierarchy<WallNetView>();
             builder.RegisterComponentInHierarchy<SmokeFieldView>();

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8187966232504476264}
   - component: {fileID: 1343998992160269322}
   - component: {fileID: 1195222582281107715}
+  - component: {fileID: 1977451057870494148}
   m_Layer: 5
   m_Name: GameCanvas
   m_TagString: Untagged
@@ -104,6 +105,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &1977451057870494148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4432430876179120212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ecb83d59d1a4c5f9af521ca3a688347, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.CanvasCameraBinder
 --- !u!1001 &73217485083207722
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -406,6 +419,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5235954529689038795, guid: 4a32d51f61f22427e898e3636e5511cc,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.29542542
+      objectReference: {fileID: 0}
     - target: {fileID: 6094324510328881488, guid: 4a32d51f61f22427e898e3636e5511cc,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -546,15 +564,20 @@ PrefabInstance:
       propertyPath: m_SortingLayer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 8364425213678486825, guid: 4a32d51f61f22427e898e3636e5511cc,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.29541683
+      objectReference: {fileID: 0}
     - target: {fileID: 8682397168436483451, guid: 4a32d51f61f22427e898e3636e5511cc,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.0464716
+      value: 1.0955935
       objectReference: {fileID: 0}
     - target: {fileID: 8682397168436483451, guid: 4a32d51f61f22427e898e3636e5511cc,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.0464716
+      value: 1.0955935
       objectReference: {fileID: 0}
     - target: {fileID: 8785533213775660599, guid: 4a32d51f61f22427e898e3636e5511cc,
         type: 3}
@@ -565,6 +588,16 @@ PrefabInstance:
         type: 3}
       propertyPath: _distance
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8835415862024508220, guid: 4a32d51f61f22427e898e3636e5511cc,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.29541683
+      objectReference: {fileID: 0}
+    - target: {fileID: 9084471837757168209, guid: 4a32d51f61f22427e898e3636e5511cc,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.29541683
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

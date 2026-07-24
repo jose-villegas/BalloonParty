@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 1648295896144469879}
   - component: {fileID: 1827487983935383960}
   - component: {fileID: 1429749022553535108}
-  - component: {fileID: 1197975605745586589}
   m_Layer: 7
   m_Name: HeartTrail
   m_TagString: Untagged
@@ -82,7 +81,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -15235107
   m_SortingLayer: 5
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 504156799b2164bd9907e127b7f67d5a, type: 3}
   m_Color: {r: 1, g: 0.4117647, b: 0.38039216, a: 1}
@@ -316,23 +315,3 @@ MonoBehaviour:
       m_ColorSpace: 0
       m_NumColorKeys: 3
       m_NumAlphaKeys: 2
---- !u!114 &1197975605745586589
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6940768656151960116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0045c7b0150fb477aa1a0b0f9b17302b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Shared.Rendering.SpriteLayerCombiner
-  _layers:
-  - {fileID: 1648295896144469879}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  _neutralizeTint: 0
-  _resolutionMultiplier: 4
-  _outputSuffix: Combined

@@ -71,6 +71,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _nightModeEnabled: 1
+  _timeOfDaySource: 1
+  _secondsPerCycle: 1570.5
   _degreesPerLevel: -30
   _sweepDuration: 10
   _sweepEase:

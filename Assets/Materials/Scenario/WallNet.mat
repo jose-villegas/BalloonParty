@@ -45,6 +45,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AmbientInfluence: 1
     - _BillowAmplitude: 0.125
     - _BreatheAmplitude: 0.075
     - _BreatheFrequency: 2

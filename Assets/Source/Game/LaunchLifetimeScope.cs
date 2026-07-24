@@ -1,7 +1,3 @@
-using BalloonParty.Configuration;
-using BalloonParty.Configuration.Effects;
-using BalloonParty.Display;
-using BalloonParty.Shared.SceneLight;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -11,31 +7,12 @@ namespace BalloonParty.Game
     [DefaultExecutionOrder(-5001)]
     public class LaunchLifetimeScope : LifetimeScope
     {
-        [SerializeField] private GameDisplayConfiguration _displayConfiguration;
-        [SerializeField] private SceneLightFieldSettings _sceneLightFieldSettings;
-
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.RegisterInstance<IGameDisplayConfiguration>(_displayConfiguration);
-            builder.RegisterComponentInHierarchy<OrthogonalSizeCameraController>();
-            builder.RegisterComponentInHierarchy<SceneCaptureService>();
-
-            // Push the ambient scene-light globals in the launcher too, so its backdrop shows the same
-            // time-of-day tint as gameplay instead of the neutral no-owner fallback. No light field or GI
-            // here — with no SceneLightFieldService, _SceneLightFieldOn stays 0 and consumers use the flat
-            // ambient path, which is all the launcher needs.
-            builder.RegisterInstance<ISceneLightSettings>(_sceneLightFieldSettings);
-            builder.RegisterInstance<ITimeOfDaySettings>(_sceneLightFieldSettings);
-
-            // RegisterEntryPoint (not plain Register): the launcher scope has no other entry points, so
-            // without this the IStartable/ITickable dispatcher is never set up and Start would never run.
-            // TimeOfDayService needs AsSelf so TimeOfDayClock can inject the concrete type (the entry-point
-            // registration alone exposes only its interfaces). No TimeOfDayCycle here — the launcher has no
-            // levels, so it shows level 1 (the authored direction), which is exactly what the game opens on.
-            // TimeOfDayClock IS registered though: the Realtime source has no level dependency, so the menu
-            // cycles too when that source is chosen.
-            builder.RegisterEntryPoint<TimeOfDayService>().AsSelf();
-            builder.RegisterEntryPoint<TimeOfDayClock>();
+            // Empty: AppLifetimeScope (the persistent project root) now owns the display config, the ambient
+            // time-of-day, and the single shared camera pipeline — all resolved from the parent. The launcher
+            // scene has no injected consumers of its own (its begin-screen interactivity is driven by the
+            // Game scope's fields and by static hand-offs), so this scope only parents to the app root.
         }
     }
 }

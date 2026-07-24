@@ -107,6 +107,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
 --- !u!114 &5822253737736993656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,6 +228,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 881599055088884422, guid: 0e8fc96d29721431898bfdbebeb4e41d,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: bc73862463fa04588b9c1221056c0d69, type: 2}
     - target: {fileID: 1947199329108356482, guid: 0e8fc96d29721431898bfdbebeb4e41d,
         type: 3}
       propertyPath: playOnAwake

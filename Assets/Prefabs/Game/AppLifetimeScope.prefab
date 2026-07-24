@@ -1,0 +1,164 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3266977409773025202
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 727079776877605245}
+  - component: {fileID: 7526419151965298252}
+  m_Layer: 0
+  m_Name: AppLifetimeScope
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &727079776877605245
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3266977409773025202}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4106898882621449044}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7526419151965298252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3266977409773025202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93046975b4d24ab18063388cd6bd01e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Game.AppLifetimeScope
+  parentReference:
+    TypeName: 
+  autoRun: 1
+  autoInjectGameObjects: []
+  _displayConfiguration: {fileID: 11400000, guid: d49451b27c31244c7af3bd85cc6f1cd2,
+    type: 2}
+  _sceneLightFieldSettings: {fileID: 11400000, guid: 6f1c8ceaec67e46bba09250d145ce93e,
+    type: 2}
+--- !u!1001 &5010516512641034158
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 727079776877605245}
+    m_Modifications:
+    - target: {fileID: 4370083120234301038, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: m_Name
+      value: Main Camera
+      objectReference: {fileID: 0}
+    - target: {fileID: 9040497959794050298, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9040497959794050298, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9040497959794050298, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -100
+      objectReference: {fileID: 0}
+    - target: {fileID: 9040497959794050298, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9040497959794050298, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9040497959794050298, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9040497959794050298, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9040497959794050298, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9040497959794050298, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9040497959794050298, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4370083120234301038, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      insertIndex: 9
+      addedObject: {fileID: 8598025849177555153}
+  m_SourcePrefab: {fileID: 100100000, guid: 45a679b1438e74a72a716351daa7ff29, type: 3}
+--- !u!4 &4106898882621449044 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9040497959794050298, guid: 45a679b1438e74a72a716351daa7ff29,
+    type: 3}
+  m_PrefabInstance: {fileID: 5010516512641034158}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &4227831500912343603 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 9161632677401763229, guid: 45a679b1438e74a72a716351daa7ff29,
+    type: 3}
+  m_PrefabInstance: {fileID: 5010516512641034158}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8731715830847218112 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4370083120234301038, guid: 45a679b1438e74a72a716351daa7ff29,
+    type: 3}
+  m_PrefabInstance: {fileID: 5010516512641034158}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8598025849177555153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8731715830847218112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 389e81741c764d659c388f205035880a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Display.CameraShakeView
+  _camera: {fileID: 4227831500912343603}
+  _duration: 0.25
+  _strength: 0.18
+  _vibrato: 14
+  _recoilStrength: 0.08
+  _recoilDuration: 0.15
+  _recoilVibrato: 8

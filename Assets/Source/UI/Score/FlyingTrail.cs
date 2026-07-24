@@ -374,8 +374,8 @@ namespace BalloonParty.UI.Score
 
         private void ApplySortingOrder(int order)
         {
-            _renderer.sortingOrder = order;
-            _trailRenderer.sortingOrder = order;
+            _renderer.sortingOrder += order;
+            _trailRenderer.sortingOrder += order;
         }
 
         [Serializable]

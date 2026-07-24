@@ -46,10 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Game.GameLifetimeScope
   parentReference:
-    TypeName: 
+    TypeName: BalloonParty.Game.AppLifetimeScope
   autoRun: 1
   autoInjectGameObjects: []
-  _gameConfiguration: {fileID: 11400000, guid: cb5eb9b399cb65f4cbc8875a2f79715c, type: 2}
   _projectileFlightConfig: {fileID: 11400000, guid: 4f8bcc06cbc44ce9ad22dac2d15559c7,
     type: 2}
   _slotGridConfig: {fileID: 11400000, guid: ffa53c785e3e4c29b94729b88ea8b579, type: 2}
@@ -75,7 +74,7 @@ MonoBehaviour:
     type: 2}
   _backgroundFieldSettings: {fileID: 11400000, guid: cb9e304f94de349b7bd80e111384c682,
     type: 2}
-  _paintingFieldSettings: {fileID: 11400000, guid: f4ebc4f997264403480e15e52ac20534,
+  _smokeFieldSettings: {fileID: 11400000, guid: f4ebc4f997264403480e15e52ac20534,
     type: 2}
   _speckFieldSettings: {fileID: 11400000, guid: 9cafb02834084e8c8db437da292e5a10,
     type: 2}
@@ -89,10 +88,12 @@ MonoBehaviour:
   _scoreTrailBehaviourConfiguration: {fileID: 11400000, guid: f5a3059bd63343178e49c2a90c9a8f91,
     type: 2}
   _thermalGovernorSettings: {fileID: 0}
+  _soundBank: {fileID: 0}
   _projectilePrefab: {fileID: 7317932863533360661, guid: 514e1ddc348a5498aa3edae2404ff130,
     type: 3}
   _scoreTrailPrefab: {fileID: 1429749022553535108, guid: 17e678e81b22a4d3481d8307861019b8,
     type: 3}
+  _sfxVoicePrefab: {fileID: 0}
 --- !u!114 &5521832732712766469
 MonoBehaviour:
   m_ObjectHideFlags: 0
