@@ -30,6 +30,11 @@ namespace BalloonParty.Cheats
         /// the cheat menu sets it directly and restarts.</summary>
         public static int StartLevel = 1;
 
+        /// <summary>Speed multiplier for the Realtime time-of-day clock (see <c>TimeOfDayClock</c>):
+        /// 1 = the authored <c>SecondsPerCycle</c>, 0 = frozen, higher = faster. Set by
+        /// <see cref="TimeOfDayCheat" />; read (under this guard) by the clock each tick.</summary>
+        public static float TimeOfDaySpeedScale = 1f;
+
         internal const string StartLevelPrefKey = "BalloonParty.Cheats.StartLevel";
 
         // With Enter Play Mode Options disabling domain reload, statics survive between play sessions — reset
@@ -39,6 +44,7 @@ namespace BalloonParty.Cheats
         {
             BlockLevelUp = false;
             InstantScoreTrails = false;
+            TimeOfDaySpeedScale = 1f;
 #if UNITY_EDITOR
             // Pick up (and consume) the "play from here" level the pacing window stashed before entering play.
             StartLevel = UnityEditor.EditorPrefs.GetInt(StartLevelPrefKey, 1);

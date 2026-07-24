@@ -26,6 +26,8 @@ namespace BalloonParty.Shared.SceneLight
         private float _angleDegrees;
         private bool _active;
 
+        internal float CurrentAngleDegrees => _angleDegrees;
+
         internal TimeOfDayClock(
             ITimeOfDaySettings settings, ISceneLightSettings lightSettings, TimeOfDayService service)
         {
@@ -56,11 +58,26 @@ namespace BalloonParty.Shared.SceneLight
             var period = _settings.SecondsPerCycle;
             if (period > 0f)
             {
+                var speedScale = 1f;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
+                // Dev cheat can speed up, slow, or freeze (0) the advance — see TimeOfDayCheat.
+                speedScale = BalloonParty.Cheats.CheatState.TimeOfDaySpeedScale;
+#endif
                 // Clockwise (decreasing angle) so the day runs the natural way; wrapped to [0,360) so a
                 // long session never drifts on float precision (the direction is identical either way).
-                _angleDegrees = Mathf.Repeat(_angleDegrees - Time.unscaledDeltaTime * (360f / period), 360f);
+                var step = Time.unscaledDeltaTime * (360f / period) * speedScale;
+                _angleDegrees = Mathf.Repeat(_angleDegrees - step, 360f);
             }
 
+            Apply();
+        }
+
+        /// <summary>Jumps the clock to a specific angle (scrub the time of day) and republishes — the dev
+        /// cheat's write path. Works even when this driver is idle (non-Realtime source): it sets the
+        /// direction once, which then holds until the active driver next writes.</summary>
+        internal void SetAngleDegrees(float degrees)
+        {
+            _angleDegrees = Mathf.Repeat(degrees, 360f);
             Apply();
         }
 
