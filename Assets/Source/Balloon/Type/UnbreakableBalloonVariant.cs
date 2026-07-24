@@ -286,7 +286,7 @@ namespace BalloonParty.Balloon.Type
 
         private void EmitPulse(StampSource source)
         {
-            if (_disturbanceField == null || _palette == null)
+            if (this == null || _disturbanceField == null || _palette == null)
             {
                 return;
             }

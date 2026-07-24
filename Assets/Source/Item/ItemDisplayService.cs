@@ -130,16 +130,17 @@ namespace BalloonParty.Item
                 laser.ConfigureLightField(_lightField, _palette, settings.Laser);
             }
 
-            // Same non-injection problem for a projectile-facing icon (e.g. Snipe) — it's a separate
-            // component from the transform capture, so it's looked up independently.
+            // Same non-injection problem for a projectile-facing icon (e.g. the thrower, Snipe) — a
+            // separate component from the transform capture, looked up independently.
             var facingRotator = _activeView.GetComponentInChildren<ProjectileFacingRotator>();
             if (_projectileFacing != null && facingRotator != null)
             {
                 facingRotator.Configure(_projectileFacing);
             }
 
-            // Same non-injection path for the standalone sight probe (drives the Snipe's spiral speed, etc.),
-            // handed the same facing source so it can run its own prediction-trace test.
+            // A sight probe (the shared per-item prediction-trace test feeding sight reactions, and the
+            // rotator's own AlignPredictionHit) — configured with the same source. Independent of the
+            // rotator so an item can react to sighting without one.
             var sightProbe = _activeView.GetComponentInChildren<PredictionSightProbe>();
             if (_projectileFacing != null && sightProbe != null)
             {

@@ -49,7 +49,7 @@ MonoBehaviour:
     _nudgeOverrides: []
     _hitVfxOverrides: []
     _hitsToPop: 1
-    _scoreValue: 5
+    _scoreValue: 7
     _itemActivationWeight: 0
     _balanceBias: 3
     _maxBalanceSteps: -1
@@ -114,9 +114,12 @@ MonoBehaviour:
       _distance: 0.02
       _duration: 0.25
       _falloff: 0
-    _hitVfxOverrides: []
+    _hitVfxOverrides:
+    - _appliesTo: 4
+      _prefab: {fileID: 2148469744637963286, guid: 677ff4ecafb494a93a03ce29999a47bc,
+        type: 3}
     _hitsToPop: -1
-    _scoreValue: 20
+    _scoreValue: 15
     _itemActivationWeight: 0
     _balanceBias: 2
     _maxBalanceSteps: 0
@@ -131,7 +134,7 @@ MonoBehaviour:
     _nudgeOverrides: []
     _hitVfxOverrides: []
     _hitsToPop: 1
-    _scoreValue: 1
+    _scoreValue: 2
     _itemActivationWeight: 0.1
     _balanceBias: 3
     _maxBalanceSteps: 0

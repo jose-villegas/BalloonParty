@@ -14,7 +14,7 @@ namespace BalloonParty.Cheats
     {
         [SerializeField] private GameObject _consolePrefab;
 
-#if UNITY_EDITOR || ((DEVELOPMENT_BUILD || CHEATS_IN_RELEASE) && (UNITY_ANDROID || UNITY_IOS))
+#if UNITY_EDITOR || (DEVELOPMENT_BUILD && (UNITY_ANDROID || UNITY_IOS))
         private void Awake()
         {
             if (Application.isEditor)

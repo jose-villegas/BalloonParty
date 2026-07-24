@@ -15,13 +15,16 @@ MonoBehaviour:
   _glowAlpha: 0.5
   _glowColorDuration: 1.25
   _rainbowGlowSpeed: 0.35
+  _projectileDisappearDuration: 0.2
+  _projectileDisappearEase: 26
+  _projectileDeadDriftFactor: 1
   _pierceFadeDuration: 0.35
   _pierceFadeInPower: 0.45
   _pierceFadeInReach: 0.75
   _pierceTapBeatAlpha: 0.1
   _lightRadius: 1.3
   _lightIntensity: 0.65
-  _maxShieldsLightRadius: 2.5
+  _maxShieldsLightRadius: 4.336314
   _shieldFlashIntensity: 3
   _shieldFlashRadius: 1.3
   _shieldFlashDuration: 0.1

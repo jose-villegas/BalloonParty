@@ -24,13 +24,13 @@ MonoBehaviour:
     _bomb:
       _bombRadius: 1.25
       _bombRainbowEffectScale: 1.7
-      _bombRainbowConversionRange: 0.3
+      _bombRainbowConversionRange: 0.4
       _nudgeOverrides:
       - _appliesTo: 4
         _distance: 3
         _duration: 0.4
         _falloff: 0.75
-      _blastLightRadiusScale: 3
+      _blastLightRadiusScale: 7
       _blastLightIntensity: 3
       _blastLightFallbackSeconds: 0.4
       _implosionRadiusScale: 1.5
@@ -166,7 +166,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       _paintBlobSpinSpeed: 720
-      _paintBlobColorCycles: 2
+      _paintBlobRainbowScrollSpeed: 4
       _spreadOffset: 0
       _spreadLength: 3
       _spreadBaseWidth: 2.5
@@ -178,10 +178,6 @@ MonoBehaviour:
       _bloomRadiusPerCharge: 0.5
       _bloomRadiusCap: 4
       _snipeColorCycles: 2
-      _tracerLightHalfWidth: 0.4
-      _tracerLightIntensity: 2
-      _dischargeLightIntensity: 3
-      _lightFallbackSeconds: 0.3
   - _type: 3
     _maximumAllowed: 2
     _visualPrefab: {fileID: 6897192337968396076, guid: db265edefece34cbf86ee0995069bbbf,
@@ -331,7 +327,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       _paintBlobSpinSpeed: 720
-      _paintBlobColorCycles: 2
+      _paintBlobRainbowScrollSpeed: 4
       _spreadOffset: 0
       _spreadLength: 3
       _spreadBaseWidth: 2.5
@@ -343,10 +339,6 @@ MonoBehaviour:
       _bloomRadiusPerCharge: 0.5
       _bloomRadiusCap: 4
       _snipeColorCycles: 2
-      _tracerLightHalfWidth: 0.4
-      _tracerLightIntensity: 2
-      _dischargeLightIntensity: 3
-      _lightFallbackSeconds: 0.3
   - _type: 4
     _maximumAllowed: 2
     _visualPrefab: {fileID: 868192500419445839, guid: ad757d902f90141549750e28fe439d82,
@@ -386,7 +378,7 @@ MonoBehaviour:
       _lightningFractalDecay: 0.7
       _lightningGlowColorCycles: 2
       _popLightRadius: 1
-      _popLightIntensity: 2
+      _popLightIntensity: 5
       _popLightSeconds: 0.2
     _paint:
       _paintBlobFlightDuration: 0.35
@@ -496,7 +488,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       _paintBlobSpinSpeed: 720
-      _paintBlobColorCycles: 2
+      _paintBlobRainbowScrollSpeed: 4
       _spreadOffset: 0
       _spreadLength: 3
       _spreadBaseWidth: 2.5
@@ -508,10 +500,6 @@ MonoBehaviour:
       _bloomRadiusPerCharge: 0.5
       _bloomRadiusCap: 4
       _snipeColorCycles: 2
-      _tracerLightHalfWidth: 0.4
-      _tracerLightIntensity: 2
-      _dischargeLightIntensity: 3
-      _lightFallbackSeconds: 0.3
   - _type: 1
     _maximumAllowed: 3
     _visualPrefab: {fileID: 8514083812438296857, guid: f951c5e126eee4e2da2094bbdc729ced,
@@ -661,7 +649,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       _paintBlobSpinSpeed: 720
-      _paintBlobColorCycles: 2
+      _paintBlobRainbowScrollSpeed: 4
       _spreadOffset: 0
       _spreadLength: 3
       _spreadBaseWidth: 2.5
@@ -673,10 +661,6 @@ MonoBehaviour:
       _bloomRadiusPerCharge: 0.5
       _bloomRadiusCap: 4
       _snipeColorCycles: 2
-      _tracerLightHalfWidth: 0.4
-      _tracerLightIntensity: 2
-      _dischargeLightIntensity: 3
-      _lightFallbackSeconds: 0.3
   - _type: 5
     _maximumAllowed: 3
     _visualPrefab: {fileID: 5155374104672875301, guid: caddd14ec47634b779cdad172791812c,
@@ -862,7 +846,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       _paintBlobSpinSpeed: 120
-      _paintBlobColorCycles: 2
+      _paintBlobRainbowScrollSpeed: 12
       _spreadOffset: 1.65
       _spreadLength: -3.125
       _spreadBaseWidth: 4.25
@@ -874,10 +858,6 @@ MonoBehaviour:
       _bloomRadiusPerCharge: 0.5
       _bloomRadiusCap: 4
       _snipeColorCycles: 2
-      _tracerLightHalfWidth: 0.4
-      _tracerLightIntensity: 2
-      _dischargeLightIntensity: 3
-      _lightFallbackSeconds: 0.3
   - _type: 6
     _maximumAllowed: 3
     _visualPrefab: {fileID: 5155374104672875301, guid: 5e584528ec8b54477804361a90b025e2,
@@ -1062,7 +1042,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       _paintBlobSpinSpeed: 120
-      _paintBlobColorCycles: 2
+      _paintBlobRainbowScrollSpeed: 4
       _spreadOffset: 1.65
       _spreadLength: -3.125
       _spreadBaseWidth: 4.25
@@ -1074,7 +1054,3 @@ MonoBehaviour:
       _bloomRadiusPerCharge: 0.5
       _bloomRadiusCap: 4
       _snipeColorCycles: 2
-      _tracerLightHalfWidth: 0.4
-      _tracerLightIntensity: 2
-      _dischargeLightIntensity: 3
-      _lightFallbackSeconds: 0.3
