@@ -5,11 +5,13 @@ namespace BalloonParty.Item
 {
     /// <summary>
     ///     A <see cref="SightRampReaction"/> that orbits a transform around a pivot — a local-space offset
-    ///     from its rest position — spinning freely when off-aim and settling on a damper as the shot's aim
-    ///     centres on the item. Two settle styles (<see cref="_returnToRestOnSight"/>): HALT eases the spin
-    ///     rate to zero so it stops wherever it is; RETURN eases the orbit angle home so it unwinds to its
-    ///     original rotation. The object turns rigidly about the pivot (its position circles it and its
-    ///     orientation turns with it); a zero offset spins it in place.
+    ///     from its rest position — spinning at one end of the aim and settling on a damper at the other:
+    ///     by default it free-spins off-aim and settles as the shot's aim centres, or set
+    ///     <see cref="_spinOnSight"/> to invert (still off-aim, spins up as the aim centres). Two settle
+    ///     styles (<see cref="_returnToRest"/>): HALT eases the spin rate to zero so it stops wherever it
+    ///     is; RETURN eases the orbit angle home so it unwinds to its original rotation. The object turns
+    ///     rigidly about the pivot (position circles it, orientation turns with it); a zero offset spins in
+    ///     place.
     /// </summary>
     internal sealed class SightSpinReaction : SightRampReaction
     {
@@ -19,18 +21,21 @@ namespace BalloonParty.Item
         [Tooltip("Pivot as a local-space offset from the target's rest position (0 = spins in place).")]
         [SerializeField] private Vector2 _pivotOffset;
 
-        [Tooltip("Free spin rate in degrees/second when off-aim.")]
+        [Tooltip("Spin rate in degrees/second at full spin authority.")]
         [SerializeField] private float _spinSpeed = 90f;
 
-        [Tooltip("Seconds to ease the spin rate to a halt as the aim centres (SmoothDamp).")]
-        [HideIf(nameof(_returnToRestOnSight))]
+        [Tooltip("Spin WHEN sighted instead of when off-aim — inverts which end of the aim spins vs settles.")]
+        [SerializeField] private bool _spinOnSight;
+
+        [Tooltip("While settling, unwind to the ORIGINAL rotation (return) instead of halting wherever it is (off).")]
+        [SerializeField] private bool _returnToRest;
+
+        [Tooltip("Seconds to ease the spin rate to a halt while settling (SmoothDamp).")]
+        [HideIf(nameof(_returnToRest))]
         [SerializeField] private float _smoothTime = 0.25f;
 
-        [Tooltip("On sight, unwind to the ORIGINAL rotation (return) instead of halting wherever it is (off).")]
-        [SerializeField] private bool _returnToRestOnSight;
-
-        [Tooltip("Seconds to ease the unwind home to the original rotation (SmoothDamp) — the return time.")]
-        [ShowIf(nameof(_returnToRestOnSight))]
+        [Tooltip("Seconds to ease the unwind home to the original rotation while settling (SmoothDamp).")]
+        [ShowIf(nameof(_returnToRest))]
         [SerializeField] private float _returnTime = 0.4f;
 
         private Vector3 _restLocalPosition;
@@ -60,25 +65,29 @@ namespace BalloonParty.Item
                 return;
             }
 
-            if (_returnToRestOnSight)
+            // Spin authority: how much it should be spinning right now (1 = full, 0 = settled). Off-aim by
+            // default, inverted to spin-on-sight by _spinOnSight; `settle` is the complement.
+            var authority = _spinOnSight ? centrality : 1f - centrality;
+            var settle = 1f - authority;
+
+            if (_returnToRest)
             {
-                // Free advance fades out as the aim centres, and the accumulated angle eases home to rest —
-                // so a sighted item unwinds to its original rotation rather than freezing mid-orbit.
-                _angle += _spinSpeed * (1f - centrality) * Time.unscaledDeltaTime;
+                // Advance fades out as it settles, and the accumulated angle eases home to rest — so it
+                // unwinds to its original rotation rather than freezing mid-orbit.
+                _angle += _spinSpeed * authority * Time.unscaledDeltaTime;
                 _angle = WrapAngle(_angle);
 
-                // Home over _returnTime when dead-centre; scale the time UP (weaker homing) as the aim
-                // drifts off so it fades toward the free spin. _returnTime governs the pace directly
-                // instead of being swamped by a fixed slack — a small value snaps home as authored.
-                if (centrality > 1e-4f)
+                // Home over _returnTime at full settle; scale the time UP (weaker homing) as spin authority
+                // returns, so it fades toward the free spin. _returnTime governs the pace directly.
+                if (settle > 1e-4f)
                 {
-                    _angle = Mathf.SmoothDamp(_angle, 0f, ref _angleVelocity, _returnTime / centrality);
+                    _angle = Mathf.SmoothDamp(_angle, 0f, ref _angleVelocity, _returnTime / settle);
                 }
             }
             else
             {
-                // Halt: the spin RATE damps to zero as the aim centres — it stops wherever it is.
-                var targetSpeed = _spinSpeed * (1f - centrality);
+                // Halt: the spin RATE damps to zero as it settles — it stops wherever it is.
+                var targetSpeed = _spinSpeed * authority;
                 _currentSpeed = Mathf.SmoothDamp(_currentSpeed, targetSpeed, ref _speedVelocity, _smoothTime);
                 _angle = WrapAngle(_angle + _currentSpeed * Time.unscaledDeltaTime);
             }

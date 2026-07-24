@@ -211,7 +211,15 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6226077097571664370}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7402881001233824042, guid: ef986049aad6e40dcb0027158268936d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1123005086188560583}
+    - targetCorrespondingSourceObject: {fileID: 7402881001233824042, guid: ef986049aad6e40dcb0027158268936d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3302288970260709155}
   m_SourcePrefab: {fileID: 100100000, guid: ef986049aad6e40dcb0027158268936d, type: 3}
 --- !u!212 &521225372952105024 stripped
 SpriteRenderer:
@@ -219,6 +227,48 @@ SpriteRenderer:
     type: 3}
   m_PrefabInstance: {fileID: 2393593260422564367}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5155374104672875301 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7402881001233824042, guid: ef986049aad6e40dcb0027158268936d,
+    type: 3}
+  m_PrefabInstance: {fileID: 2393593260422564367}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1123005086188560583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5155374104672875301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec05a31a2b7b247e4b054a1b11556e5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Item.SightSpinReaction
+  _probe: {fileID: 3302288970260709155}
+  _spinTarget: {fileID: 7123329532252406162}
+  _pivotOffset: {x: 0, y: 0}
+  _spinSpeed: 180
+  _spinOnSight: 1
+  _returnToRest: 1
+  _smoothTime: 0.25
+  _returnTime: 0.4
+--- !u!114 &3302288970260709155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5155374104672875301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6134d1d0840af43ac9238ebc21e36558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Item.PredictionSightProbe
+  _target: {fileID: 7123329532252406162}
+  _hitRadius: 1
+  _sightEnter: 0.2
+  _sightExit: 0.05
 --- !u!212 &6187239203940332260 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 8424754020425038059, guid: ef986049aad6e40dcb0027158268936d,
