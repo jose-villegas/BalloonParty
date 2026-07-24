@@ -17,6 +17,13 @@ namespace BalloonParty.Cheats
         /// <see cref="BlockLevelUpCheat" />.</summary>
         public static bool BlockLevelUp;
 
+        /// <summary>While true, <c>ScoreTrailService</c> resolves each score group INSTANTLY — it publishes the
+        /// arrival immediately with the group's full points instead of spawning flying pen-trails. Set only for
+        /// the span of a bulk progress fill (see <see cref="ScoreCheatHelper.FillColor" />): filling a whole
+        /// level's threshold through the real pipeline would otherwise spawn one pen per point (a level's worth
+        /// in a single frame). Score, bars and progress still update through their normal arrival handlers.</summary>
+        public static bool InstantScoreTrails;
+
         /// <summary>The level a fresh run BEGINS at (dev "play from level N"). 1 = normal. Read by
         /// LevelController/LevelDifficultyResolver on run reset. The Level Pacing window stashes it in
         /// EditorPrefs under <see cref="StartLevelPrefKey" /> to carry it across the enter-play reload;
@@ -31,6 +38,7 @@ namespace BalloonParty.Cheats
         private static void ResetOnPlay()
         {
             BlockLevelUp = false;
+            InstantScoreTrails = false;
 #if UNITY_EDITOR
             // Pick up (and consume) the "play from here" level the pacing window stashed before entering play.
             StartLevel = UnityEditor.EditorPrefs.GetInt(StartLevelPrefKey, 1);

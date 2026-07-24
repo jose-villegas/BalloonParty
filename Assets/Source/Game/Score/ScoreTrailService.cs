@@ -140,6 +140,19 @@ namespace BalloonParty.Game.Score
                 return;
             }
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
+            // Bulk cheat fill (ScoreCheatHelper): confirm the whole group at once instead of spawning one
+            // flying pen per point. This is the exact arrival a landed trail would publish (LastScore is the
+            // colour's cumulative progress the LevelController watermark reads), so score, bars and progress
+            // all update through their normal handlers — just with no visual.
+            if (BalloonParty.Cheats.CheatState.InstantScoreTrails)
+            {
+                _arrivedPublisher.Publish(new ScoreTrailArrivedMessage(
+                    msg.ColorName, msg.LastScore, msg.Points, msg.WorldPosition));
+                return;
+            }
+#endif
+
             var color = _colorLookup.TryGetValue(msg.ColorName, out var c) ? c : Color.white;
             var reporter = new ScoreTrailReporter(_arrivedPublisher, msg.ColorName, msg.Points);
             var context = new ScoreTrailContext(
