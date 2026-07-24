@@ -25,6 +25,20 @@ namespace BalloonParty.Shared.Extensions
             return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
         }
 
+        /// <summary>The direction's angle mapped once around the full circle to <c>[0,1)</c>: 0 = +x (east),
+        /// increasing counter-clockwise (0.25 = +y/up). Inverse of <see cref="DirectionFromAngle" />; useful
+        /// for indexing a full-circle gradient by direction. A zero vector returns 0.</summary>
+        public static float Angle01(this Vector2 direction)
+        {
+            if (direction.sqrMagnitude < 1e-8f)
+            {
+                return 0f;
+            }
+
+            var t = Mathf.Atan2(direction.y, direction.x) / (2f * Mathf.PI);
+            return t < 0f ? t + 1f : t;
+        }
+
         public static bool WithinRadius(this Vector2 a, Vector2 b, float radius)
         {
             return a.SqrDistance2D(b) <= radius * radius;

@@ -1,4 +1,5 @@
 using BalloonParty.Shared;
+using BalloonParty.Shared.Extensions;
 using UnityEngine;
 
 namespace BalloonParty.Configuration.Effects
@@ -13,8 +14,21 @@ namespace BalloonParty.Configuration.Effects
         [SerializeField] private Vector2 _lightDirection = new(-0.707f, 0.707f);
 
         [Tooltip("The light's tint — multiplies into each consumer's authored response colour " +
-                 "(cloud highlight, speculars). White = neutral, no look change.")]
+                 "(cloud highlight, speculars). White = neutral, no look change. Ignored when " +
+                 "Colour From Direction is on.")]
         [SerializeField] private Color _lightColor = Color.white;
+
+        [Tooltip("Drive the light colour from the direction instead of the solid tint above — the " +
+                 "day/night source: as the direction sweeps a full circle the colour walks the gradient " +
+                 "(see Colour Over Direction).")]
+        [SerializeField] private bool _lightColorFromDirection;
+
+        [Tooltip("A full circle mapped to the light direction: t=0 is +x (east), advancing " +
+                 "counter-clockwise (0.25 = straight up, 0.5 = west, 0.75 = straight down), wrapping at " +
+                 "t=1 back to east — so author matching endpoints for a seamless loop. Only used when " +
+                 "Colour From Direction is on.")]
+        [GradientUsage(false)]
+        [SerializeField] private Gradient _lightColorOverDirection = CreateDefaultDayNightGradient();
 
         [Tooltip("Scales the light's contribution in every consumer (diffuse contrast, specular " +
                  "brightness). 1 = neutral, authored look.")]
@@ -145,8 +159,35 @@ namespace BalloonParty.Configuration.Effects
         // ISceneLightSettings
         public Vector2 LightDirection =>
             _lightDirection.sqrMagnitude > 0.0001f ? _lightDirection.normalized : Vector2.up;
-        public Color LightColor => _lightColor;
+        public Color LightColor =>
+            _lightColorFromDirection ? _lightColorOverDirection.Evaluate(LightDirection.Angle01()) : _lightColor;
         public float Intensity => _intensity;
         public AnimationCurve ShieldLossLightVelocityCurve => _shieldLossLightVelocityCurve;
+
+        // A believable day/night loop over the direction circle, phased 45° left (+0.125 in t) so bright
+        // noon lands on the canonical upper-left light direction (135° = t=0.375): warm dawn up-right
+        // (t=0.125), noon upper-left (0.375), sunset down-left (0.625), deep-blue midnight down-right
+        // (0.875). The wrap endpoints (t=0 and t=1) share the dusk tone midway between midnight and dawn so
+        // the full-circle sweep loops seamlessly.
+        private static Gradient CreateDefaultDayNightGradient()
+        {
+            var gradient = new Gradient();
+            gradient.SetKeys(
+                new[]
+                {
+                    new GradientColorKey(new Color(0.64f, 0.53f, 0.56f), 0f),
+                    new GradientColorKey(new Color(1.00f, 0.68f, 0.45f), 0.125f),
+                    new GradientColorKey(Color.white, 0.375f),
+                    new GradientColorKey(new Color(1.00f, 0.60f, 0.42f), 0.625f),
+                    new GradientColorKey(new Color(0.28f, 0.38f, 0.66f), 0.875f),
+                    new GradientColorKey(new Color(0.64f, 0.53f, 0.56f), 1f)
+                },
+                new[]
+                {
+                    new GradientAlphaKey(1f, 0f),
+                    new GradientAlphaKey(1f, 1f)
+                });
+            return gradient;
+        }
     }
 }

@@ -12,7 +12,9 @@ namespace BalloonParty.Configuration.Effects
         Vector2 LightDirection { get; }
 
         /// <summary>The main light's colour tint — multiplies into every specular/diffuse consumer.
-        /// White = neutral, no look change.</summary>
+        /// White = neutral, no look change. May be a solid authored tint or, in the night-mode
+        /// day/night source, sampled from a full-circle gradient indexed by <see cref="LightDirection"/>;
+        /// which one is an implementation detail of the settings asset.</summary>
         Color LightColor { get; }
 
         /// <summary>Scales the light's contribution (diffuse contrast, specular brightness).
