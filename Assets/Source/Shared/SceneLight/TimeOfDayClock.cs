@@ -56,9 +56,9 @@ namespace BalloonParty.Shared.SceneLight
             var period = _settings.SecondsPerCycle;
             if (period > 0f)
             {
-                // Wrapped to [0,360) so a long session never drifts on float precision — the direction is
-                // identical either way, and it still advances forward every frame (never reverses).
-                _angleDegrees = Mathf.Repeat(_angleDegrees + Time.unscaledDeltaTime * (360f / period), 360f);
+                // Clockwise (decreasing angle) so the day runs the natural way; wrapped to [0,360) so a
+                // long session never drifts on float precision (the direction is identical either way).
+                _angleDegrees = Mathf.Repeat(_angleDegrees - Time.unscaledDeltaTime * (360f / period), 360f);
             }
 
             Apply();
