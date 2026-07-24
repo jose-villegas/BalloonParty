@@ -17,6 +17,15 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Swapped onto a balloon's body renderer while it's in rainbow mode.")]
         [SerializeField] private Material _rainbowMaterial;
 
+        [Tooltip("World-space radius of the neutral flash light emitted when a rainbow balloon pops. 0 = no flash.")]
+        [SerializeField] [Min(0f)] private float _rainbowPopFlashRadius = 1.5f;
+
+        [Tooltip("Peak intensity of the rainbow-pop flash light.")]
+        [SerializeField] [Min(0f)] private float _rainbowPopFlashIntensity = 3f;
+
+        [Tooltip("Seconds the rainbow-pop flash is held before it cuts. 0 = no flash.")]
+        [SerializeField] [Min(0f)] private float _rainbowPopFlashSeconds = 0.2f;
+
         [Header("Spawning")]
         [SerializeField] private float _newBalloonLinesTimeInterval;
         [SerializeField] private Vector2 _balloonSpawnAnimationSpeedRange;
@@ -54,6 +63,9 @@ namespace BalloonParty.Configuration.Balloons
         public IReadOnlyList<BalloonPrefabEntry> Entries => _entries;
         public ParticleSystem DefaultPopVfxPrefab => _defaultPopVfxPrefab;
         public Material RainbowMaterial => _rainbowMaterial;
+        public float RainbowPopFlashRadius => _rainbowPopFlashRadius;
+        public float RainbowPopFlashIntensity => _rainbowPopFlashIntensity;
+        public float RainbowPopFlashSeconds => _rainbowPopFlashSeconds;
         public float NewBalloonLinesTimeInterval => _newBalloonLinesTimeInterval;
         public Vector2 BalloonSpawnAnimationDurationRange => _balloonSpawnAnimationSpeedRange;
         public int SpawnEntryRowOffset => _spawnEntryRowOffset;

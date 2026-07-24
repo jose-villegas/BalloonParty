@@ -13,6 +13,15 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>Swapped onto a balloon's body renderer while it's in rainbow mode — see BalloonView.</summary>
         Material RainbowMaterial { get; }
 
+        /// <summary>World-space radius of the neutral flash light emitted when a rainbow balloon pops. 0 = no flash.</summary>
+        float RainbowPopFlashRadius { get; }
+
+        /// <summary>Peak intensity of the rainbow-pop flash light.</summary>
+        float RainbowPopFlashIntensity { get; }
+
+        /// <summary>Seconds the rainbow-pop flash is held before it cuts. 0 = no flash.</summary>
+        float RainbowPopFlashSeconds { get; }
+
         float NewBalloonLinesTimeInterval { get; }
         Vector2 BalloonSpawnAnimationDurationRange { get; }
         int SpawnEntryRowOffset { get; }
