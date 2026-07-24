@@ -56,10 +56,28 @@ Shader "BalloonParty/Sprite/LightDriven"
         // (neutral until a point/area light is near, then it brightens/tints toward it — the glint
         // ignores the global light entirely). Only matters when Tint By Scene Light is on.
         [Enum(Full, 0, Ambient, 1, Local, 2)] _LightMode ("Tint Light Mode", Float) = 0
-        // Local mode only: the glint's opacity at rest (no nearby light), fading up to full as a local
-        // light approaches. 0 = invisible until a light sweeps over it (a spark that flares in); 1 = the
-        // classic always-visible glint. No effect in Full/Ambient modes.
-        _RestAlpha ("Resting Alpha (Local)", Range(0, 1)) = 0
+        // The opacity floor at minimal light — used by both Local mode (opacity at rest, no nearby
+        // light) and Alpha Follows Light below (opacity where the scene is darkest). 0 = invisible
+        // until light arrives (a spark that flares in); 1 = always-visible. No effect in Full/Ambient
+        // modes unless Alpha Follows Light is on.
+        _RestAlpha ("Resting Alpha (floor)", Range(0, 1)) = 0
+        // OPT-IN (specular/glint archetype): ramp opacity with the MAGNITUDE of the light colour — the
+        // tint selected by Tint Light Mode. Low light -> Resting Alpha, bright light -> full. Unlike
+        // Fade With Light Intensity (which keys off the scalar intensity), this reads the colour
+        // vector's length, so it darkens as the day/night gradient darkens and, in Full mode, ramps up
+        // near local lights. For a baked specular highlight, pair with Tint Light Mode = Full.
+        [ToggleUI] _AlphaFollowsLight ("Alpha Follows Light Magnitude", Float) = 0
+        // The light-colour magnitude that maps to FULL alpha (~1.73 = white daylight at intensity 1).
+        // Normalizing against this means daylight always saturates to full regardless of the falloff
+        // below — lower it so the highlight reaches full in dimmer light, raise it to need brighter.
+        _AlphaFullAt ("Alpha Full-Light Level", Range(0.1, 3)) = 1.73
+        // Shapes the ramp BELOW full without touching the ceiling: 1 = linear, >1 = the highlight stays
+        // concentrated in bright light and drops off fast toward dusk, <1 = it lingers into dim light.
+        _AlphaFalloff ("Alpha Falloff", Range(0.25, 4)) = 1
+        // Extra alpha ramp from LOCAL lights only, ON TOP of the base colour magnitude — raise so a
+        // passing point/area light flares the highlight harder than daylight alone (which saturates
+        // the base ramp and so can't push it further). 0 = local counts only via the combined tint.
+        _LocalAlphaBoost ("Local Light Alpha Boost", Range(0, 8)) = 0
 
         [Header(Cloud Field)]
         // OPT-IN (shadow archetype): fade this sprite's alpha by the shared cloud field so a baked ground
@@ -124,6 +142,9 @@ Shader "BalloonParty/Sprite/LightDriven"
                 float  shadowFade  : TEXCOORD2;
                 // 0..1 "how much local light" — drives the resting-alpha fade in Local mode; 1 otherwise.
                 float  localAmount : TEXCOORD3;
+                // Local-light magnitude above ambient, for Alpha Follows Light's local boost; 0 when the
+                // feature is off (sampled only then, so ordinary uses pay nothing).
+                float  localBoost  : TEXCOORD5;
                 #ifdef _CLOUD_FADE_ON
                 float2 cloudWorld  : TEXCOORD4;
                 #endif
@@ -150,6 +171,10 @@ Shader "BalloonParty/Sprite/LightDriven"
             float _FadeWithSceneLight;
             float _LightMode;
             float _RestAlpha;
+            float _AlphaFollowsLight;
+            float _AlphaFullAt;
+            float _AlphaFalloff;
+            float _LocalAlphaBoost;
             float _CloudShadowFloor;
             float _SmokeReceiveWeight;
 
@@ -218,6 +243,10 @@ Shader "BalloonParty/Sprite/LightDriven"
                     OUT.localAmount = 1.0;
                 }
 
+                // Extra alpha sensitivity to LOCAL lights (Alpha Follows Light): the local boost above
+                // ambient, sampled here only when the feature is on so shadows/glints pay nothing.
+                OUT.localBoost = (_AlphaFollowsLight > 0.5) ? length(SceneLightLocalAtLOD(anchorWorld)) : 0.0;
+
                 // Rotation is optional: a baked ground shadow keeps its authored shape (orbit
                 // only) and behaves like a plain sprite here.
                 // dirAmount fades the swing by the flow's own confidence in ALL modes (generalized from
@@ -281,6 +310,20 @@ Shader "BalloonParty/Sprite/LightDriven"
                 if (_FadeWithSceneLight > 0.5)
                 {
                     c.a *= IN.shadowFade;
+                }
+
+                // Alpha Follows Light (specular archetype): ramp opacity by the light COLOUR's magnitude
+                // (length of the tint selected by _LightMode) — low light -> _RestAlpha floor, bright ->
+                // full. Reads the colour vector, not the scalar intensity, so it dims with the day/night
+                // gradient and (Full mode) rises near local lights. Meant for Full/Ambient tint mode; in
+                // Local mode the localAmount line below already handles the rest-fade.
+                if (_AlphaFollowsLight > 0.5)
+                {
+                    // Normalize so full daylight (magnitude _AlphaFullAt) reaches 1 before the falloff
+                    // curve, so the curve shapes the low end without ever capping the daylight ceiling.
+                    float lit = saturate(length(IN.lightTint) / _AlphaFullAt);
+                    float alphaDrive = pow(lit, _AlphaFalloff) + IN.localBoost * _LocalAlphaBoost;
+                    c.a *= lerp(_RestAlpha, 1.0, saturate(alphaDrive));
                 }
 
                 // Local mode: rest at _RestAlpha, fade up to full as a local light nears (localAmount is 1
