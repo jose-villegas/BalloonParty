@@ -7,6 +7,7 @@ namespace BalloonParty.Audio.Configuration
     {
         IReadOnlyList<int> MelodicScale { get; }
         int MelodicRootSemitone { get; }
+        int GlobalVoiceCap { get; }
         bool TryGet(GameSoundId id, out SfxEntry entry);
     }
 }

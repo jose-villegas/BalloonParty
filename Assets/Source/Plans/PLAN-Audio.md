@@ -377,10 +377,11 @@ per-voice polling) — mirrors the `BalloonMotionTicker` central-ticker preceden
 ### Teardown
 
 `OnDespawned()` must `_source.Stop()`, null the clip (a held `AudioClip` pins memory),
-cancel the pending-return `CancellationTokenSource`, and clear the `CompositeDisposable`
-(pooled-view rule — never `AddTo(this)`). `SfxService` implements `IRunResettable` to
-flush all voices and stop loops on `RunResetMessage`/`GameOverMessage` so a dropped
-`Stop` can't strand a loop.
+null the completion callback, and cancel the pending-return `CancellationTokenSource`.
+The voice holds no UniRx subscriptions, so there is no `CompositeDisposable` to clear (the
+pooled-view `AddTo(this)`-never-fires rule only applies when a pooled view subscribes).
+`SfxService` implements `IRunResettable` to flush all voices and stop loops on
+`RunResetMessage`/`GameOverMessage` so a dropped `Stop` can't strand a loop.
 
 ### Clip import settings (device)
 

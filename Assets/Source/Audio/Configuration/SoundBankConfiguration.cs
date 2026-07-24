@@ -20,8 +20,25 @@ namespace BalloonParty.Audio.Configuration
         [Tooltip("Root semitone offset applied to every degree (transposes the key).")]
         [SerializeField] private int _melodicRootSemitone;
 
+        [Header("Voices")]
+        [Tooltip("Global concurrent-voice cap, and the pooled-voice prewarm count. Keep under Android's real-voice budget.")]
+        [SerializeField] [Min(1)] private int _globalVoiceCap = 16;
+
         public IReadOnlyList<int> MelodicScale => _melodicScale;
         public int MelodicRootSemitone => _melodicRootSemitone;
+        public int GlobalVoiceCap => _globalVoiceCap;
+
+        private void OnValidate()
+        {
+#if UNITY_EDITOR
+            // Self-heals an asset saved before a new GameSoundId was appended.
+            var count = Enum.GetValues(typeof(GameSoundId)).Length;
+            if (_entries == null || _entries.Length != count)
+            {
+                Array.Resize(ref _entries, count);
+            }
+#endif
+        }
 
         public bool TryGet(GameSoundId id, out SfxEntry entry)
         {
@@ -38,18 +55,6 @@ namespace BalloonParty.Audio.Configuration
 
             entry = null;
             return false;
-        }
-
-        private void OnValidate()
-        {
-#if UNITY_EDITOR
-            // Self-heals an asset saved before a new GameSoundId was appended.
-            var count = Enum.GetValues(typeof(GameSoundId)).Length;
-            if (_entries == null || _entries.Length != count)
-            {
-                Array.Resize(ref _entries, count);
-            }
-#endif
         }
     }
 }
