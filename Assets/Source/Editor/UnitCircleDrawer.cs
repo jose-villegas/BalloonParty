@@ -1,4 +1,5 @@
 using BalloonParty.Shared;
+using BalloonParty.Shared.Extensions;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,13 +7,19 @@ namespace BalloonParty.Editor
 {
     /// <summary>Unit-circle direction picker for <c>[UnitCircle]</c> Vector2 fields: click or drag
     /// inside the disc to aim the vector (written back normalized; GUI y-down is flipped to the
-    /// world's y-up). The numeric row above stays editable for exact values.</summary>
+    /// world's y-up). The numeric row above and the angle field beside the disc stay editable for
+    /// exact values — the angle is degrees CCW from +x (0° = right, 90° = up), matching the
+    /// full-circle gradient mapping (<see cref="VectorMathExtensions.Angle01"/>).</summary>
     [CustomPropertyDrawer(typeof(UnitCircleAttribute))]
     internal class UnitCircleDrawer : PropertyDrawer
     {
         private const float DiscSize = 84f;
         private const float DiscPadding = 4f;
         private const float NeedleDotRadius = 3.5f;
+
+        private static readonly GUIContent AngleLabel = new(
+            "Angle°", "Direction in degrees, counter-clockwise from +x (0° = right, 90° = up). " +
+                      "Matches the full-circle gradient mapping (t = angle / 360).");
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -54,6 +61,7 @@ namespace BalloonParty.Editor
             var radius = DiscSize * 0.5f - DiscPadding;
 
             HandleDiscInput(discRect, center, radius, property);
+            DrawAngleField(position, discRect, property);
 
             if (Event.current.type == EventType.Repaint)
             {
@@ -98,6 +106,42 @@ namespace BalloonParty.Editor
 
                     break;
             }
+        }
+
+        // A degrees field in the empty gutter left of the disc — the exact-value counterpart to dragging
+        // the needle. Degrees CCW from +x so it reads as the gradient's t × 360; the vector is written back
+        // from the angle (already unit-length), keeping every entry point normalized.
+        private static void DrawAngleField(Rect position, Rect discRect, SerializedProperty property)
+        {
+            const float labelWidth = 44f;
+
+            var gutter = discRect.x - position.x - EditorGUIUtility.standardVerticalSpacing;
+            if (gutter <= labelWidth + EditorGUIUtility.fieldWidth)
+            {
+                return;
+            }
+
+            var angleRect = new Rect(
+                position.x,
+                discRect.y + (DiscSize - EditorGUIUtility.singleLineHeight) * 0.5f,
+                gutter,
+                EditorGUIUtility.singleLineHeight);
+
+            // FloatField aligns its edit box to the global label column, which sits under the disc — shrink
+            // the label width so the label and box both stay inside the gutter, then restore it.
+            var previousLabelWidth = EditorGUIUtility.labelWidth;
+            EditorGUIUtility.labelWidth = labelWidth;
+
+            var degrees = property.vector2Value.Angle01() * 360f;
+            EditorGUI.BeginChangeCheck();
+            var typed = EditorGUI.FloatField(angleRect, AngleLabel, degrees);
+            if (EditorGUI.EndChangeCheck())
+            {
+                property.vector2Value = VectorMathExtensions.DirectionFromAngle(typed * Mathf.Deg2Rad);
+                GUI.changed = true;
+            }
+
+            EditorGUIUtility.labelWidth = previousLabelWidth;
         }
 
         private static void ApplyDirection(Vector2 center, Vector2 mouse, SerializedProperty property)
