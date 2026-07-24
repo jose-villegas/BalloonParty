@@ -24,6 +24,11 @@ namespace BalloonParty.Configuration.Balloons
             "How many rows below the target slot the balloon enters from. Can exceed the grid bounds — the world position is still computed correctly.")]
         [SerializeField] private int _spawnEntryRowOffset = 4;
 
+        [Tooltip("Initial fill divides the board into vertical segments this many lines tall; the bottom " +
+                 "line of each segment becomes a heavy (positive spawn-weight) layer, with lighter types " +
+                 "filling the rest. 0 or 1 disables layering — heavy types pool at the bottom as one gradient.")]
+        [SerializeField] private int _toughLayerSpacing = 3;
+
         [Header("Balancing")]
         [SerializeField] private float _timeForBalloonsBalance;
 
@@ -52,6 +57,7 @@ namespace BalloonParty.Configuration.Balloons
         public float NewBalloonLinesTimeInterval => _newBalloonLinesTimeInterval;
         public Vector2 BalloonSpawnAnimationDurationRange => _balloonSpawnAnimationSpeedRange;
         public int SpawnEntryRowOffset => _spawnEntryRowOffset;
+        public int ToughLayerSpacing => _toughLayerSpacing;
         public float TimeForBalloonsBalance => _timeForBalloonsBalance;
         public float FlightRebalanceInterval => _flightRebalanceInterval;
         public float PopSpawnChance => _popSpawnChance;

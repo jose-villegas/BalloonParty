@@ -16,6 +16,9 @@ namespace BalloonParty.Configuration.Balloons
         float NewBalloonLinesTimeInterval { get; }
         Vector2 BalloonSpawnAnimationDurationRange { get; }
         int SpawnEntryRowOffset { get; }
+
+        /// <summary>Vertical segment height (in lines) for initial-fill heavy layering; 0/1 disables it.</summary>
+        int ToughLayerSpacing { get; }
         float TimeForBalloonsBalance { get; }
 
         /// <summary>Interval between board re-balances while a projectile is in flight. 0 disables.</summary>

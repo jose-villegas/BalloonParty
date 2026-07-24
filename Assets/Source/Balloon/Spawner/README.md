@@ -46,6 +46,12 @@ Placement reach is a `PlacementReach` argument to `Resolve`:
 - **Initial grid fill** passes `PlacementReach.Rehome` — steps 1–2 only. On tight boards (static actors occupying cells) a column can be blocked at level start, so rehoming redistributes its allotment into columns that still have reachable room, keeping the total at `BoardLines × columns` whenever the board's reachable capacity allows. It never shoves (no step 3) or overflows below the grid (no step 4). `LogInitialFillDiagnostics` logs expected/achievable/spawned per column in editor and development builds.
 - **Pop-spawn extras** (`SpawnLooseBalloons`) pass `PlacementReach.OwnColumn` — step 1 only; a blocked column is skipped.
 
+### Spawn depth & tough layering
+
+`BalloonPrefabEntry.SpawnWeight` controls *depth*, never *which* types spawn or *how many* (those come from the range pick weights and the `InitialCountWeights`/`WaveCountWeights` quota curves). Each wave's picked batch is dealt into the topmost open rows first, so the deal order is the vertical order. `PrepareSpawnBatch` sorts the batch **lightest-first** (`BySpawnWeightAscending`), so heavier types (Tough, weight `+3`) settle below lighter ones — one bottom-heavy gradient.
+
+The **initial fill** overrides that with vertical layering (`ArrangeInitialLayers` + the pure `InitialLayerPlan.HeavyPerLine`). The board is split into segments `BalloonsConfiguration.ToughLayerSpacing` lines tall; the bottom line of each segment collects the heavy (positive-weight) types, and lighter types fill the rest. With spacing `3` that reads as *two light lines, one part-tough line, repeating*. Heavies are round-robined onto the layer lines deepest-first (an uneven count settles lower), capped at one board line each; any surplus beyond the layers' capacity sinks to the bottom as the plain gradient would place it. This is **arrangement-only** — the tough *count* is unchanged, just its depth. Spacing `0`/`1`, no heavies, or a board too short for a full segment all fall back to the plain gradient. The mapping is exact on an empty board (one pass ≈ one row) and approximate on tight boards where static actors offset a column's entry row.
+
 ## Interactions
 
 - **SlotGrid** — queried for empty slots; all placed balloons registered here

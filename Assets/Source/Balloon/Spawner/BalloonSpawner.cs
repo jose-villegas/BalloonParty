@@ -57,6 +57,8 @@ namespace BalloonParty.Balloon.Spawner
         private readonly List<int> _lineColumns = new();
         private readonly List<int> _popSpawnColumns = new();
         private readonly List<int> _fillCapacityDiag = new();
+        private readonly List<BalloonPrefabEntry> _layerHeavies = new();
+        private readonly List<BalloonPrefabEntry> _layerLights = new();
         private readonly Comparison<int> _byColumnKey;
 
         private int[] _columnSortKeys;
@@ -372,10 +374,11 @@ namespace BalloonParty.Balloon.Spawner
             }
         }
 
-        // Picks the whole wave's entries upfront and orders them lightest-first: earlier (higher) lines
-        // spawn the light types and heavier ones enter below — spawn-weight ordering, never a restriction
-        // on what spawns. Active counts are taken here so MaxCount holds across the wave, and each type's
-        // rolled wave quota (its count-weights curve) caps how many this wave may add.
+        // Picks the whole wave's entries upfront, then orders them for depth. The plain order is
+        // lightest-first (earlier/higher lines take light types, heavier ones enter below); the initial
+        // fill instead arranges heavy types into repeating vertical layers (see ArrangeInitialLayers).
+        // Neither reorders which types spawn: active counts are taken here so MaxCount holds across the
+        // wave, and each type's rolled wave quota (its count-weights curve) caps how many this wave adds.
         private void PrepareSpawnBatch(int lineCount, bool isInitial = false)
         {
             ReleaseUnspawnedBatch();
@@ -399,7 +402,70 @@ namespace BalloonParty.Balloon.Spawner
                 _spawnBatch.Add(entry);
             }
 
-            _spawnBatch.Sort(BySpawnWeightAscending);
+            if (isInitial && _balloonsConfig.ToughLayerSpacing >= 2)
+            {
+                ArrangeInitialLayers(lineCount, _balloonsConfig.ToughLayerSpacing);
+            }
+            else
+            {
+                _spawnBatch.Sort(BySpawnWeightAscending);
+            }
+        }
+
+        // Reorders the freshly-picked initial batch into vertical layers instead of one bottom-heavy
+        // gradient: the board splits into segments `spacing` lines tall, and the bottom line of each
+        // segment collects the heavy (positive spawn-weight) types while lighter types fill the rest.
+        // Heavy counts are unchanged — only their depth. Approximate on tight boards, where a pass no
+        // longer maps cleanly to a single row. Falls back to the plain gradient with no heavies or no
+        // full segment. Deal order runs top→bottom, so lights keep their own lightest-first sub-gradient.
+        private void ArrangeInitialLayers(int lineCount, int spacing)
+        {
+            _layerHeavies.Clear();
+            _layerLights.Clear();
+            foreach (var entry in _spawnBatch)
+            {
+                (entry.SpawnWeight > 0 ? _layerHeavies : _layerLights).Add(entry);
+            }
+
+            var heavyPerLine = InitialLayerPlan.HeavyPerLine(
+                _layerHeavies.Count, lineCount, _grid.Columns, spacing);
+
+            var banded = 0;
+            foreach (var count in heavyPerLine)
+            {
+                banded += count;
+            }
+
+            if (banded == 0)
+            {
+                _spawnBatch.Sort(BySpawnWeightAscending);
+                return;
+            }
+
+            _layerLights.Sort(BySpawnWeightAscending);
+
+            _spawnBatch.Clear();
+            var heavyCursor = 0;
+            var lightCursor = 0;
+            for (var line = 0; line < lineCount; line++)
+            {
+                var heavyHere = heavyPerLine[line];
+                for (var i = 0; i < heavyHere; i++)
+                {
+                    _spawnBatch.Add(_layerHeavies[heavyCursor++]);
+                }
+
+                for (var i = heavyHere; i < _grid.Columns && lightCursor < _layerLights.Count; i++)
+                {
+                    _spawnBatch.Add(_layerLights[lightCursor++]);
+                }
+            }
+
+            // Heavies past the layers' capacity sink to the bottom, as the plain gradient would place them.
+            while (heavyCursor < _layerHeavies.Count)
+            {
+                _spawnBatch.Add(_layerHeavies[heavyCursor++]);
+            }
         }
 
         private BalloonPrefabEntry NextBatchEntry()
