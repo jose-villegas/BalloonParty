@@ -39,6 +39,9 @@ Shader "BalloonParty/Display/PierceConeSpiral"
         [Header(Masking)]
         _SpriteMask("Sprite Alpha Mask", Range(0, 1)) = 0
         _ApexFade("Apex Fade", Range(0, 0.5)) = 0.1
+        _CircleMask("Circle Mask", Range(0, 1)) = 0
+        _CircleRadius("Circle Radius", Range(0, 0.75)) = 0.5
+        _CircleFeather("Circle Feather", Range(0.001, 0.5)) = 0.1
     }
 
     SubShader
@@ -97,6 +100,9 @@ Shader "BalloonParty/Display/PierceConeSpiral"
             float _GlowWidth;
             float _SpriteMask;
             float _ApexFade;
+            float _CircleMask;
+            float _CircleRadius;
+            float _CircleFeather;
 
             v2f vert(appdata_t IN)
             {
@@ -167,6 +173,12 @@ Shader "BalloonParty/Display/PierceConeSpiral"
 
                 fixed spriteAlpha = tex2D(_MainTex, IN.texcoord).a;
                 float mask = lerp(1.0, spriteAlpha, _SpriteMask);
+
+                // Radial aperture centered on the quad: fade the strands out past _CircleRadius so the
+                // effect reads as a disc rather than filling the whole sprite.
+                float radial = length(IN.texcoord - 0.5);
+                float circle = smoothstep(_CircleRadius, _CircleRadius - max(_CircleFeather, 1e-4), radial);
+                mask *= lerp(1.0, circle, _CircleMask);
 
                 fixed4 c;
                 c.rgb = IN.color.rgb * (core + glow * _Glow * 0.25) * IN.color.a * mask;
