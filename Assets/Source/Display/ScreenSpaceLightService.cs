@@ -2,6 +2,7 @@ using BalloonParty.Configuration.Effects;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Rendering;
+using BalloonParty.Shared.SceneLight;
 using UnityEngine;
 using VContainer;
 
@@ -36,7 +37,7 @@ namespace BalloonParty.Display
         [SerializeField] private int _sortingOrder = 32000;
 
         [Inject] private IScreenSpaceLightSettings _settings;
-        [Inject] private ISceneLightSettings _lightSettings;
+        [Inject] private ISceneLightRuntime _lightRuntime;
 
         private static int _overlayLayer = -1;
 
@@ -260,7 +261,7 @@ namespace BalloonParty.Display
             // the overlay's relative shadow coupling — field-off (magnitude == reference) it
             // resolves to 1, leaving the authored shadow strength bit-identical to today.
             _overlayMaterial.SetFloat(BounceStrengthId, _settings.BounceStrength);
-            _overlayMaterial.SetFloat(MagnitudeRefId, Mathf.Max(_lightSettings.Intensity, 1e-4f));
+            _overlayMaterial.SetFloat(MagnitudeRefId, Mathf.Max(_lightRuntime.CurrentIntensity, 1e-4f));
 
             // Measured against the capture's clear color so open sky nets to neutral. Outside
             // the editor this (and MagnitudeRefId above) now update in lockstep with capture

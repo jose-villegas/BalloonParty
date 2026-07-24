@@ -1,4 +1,4 @@
-using BalloonParty.Configuration.Effects;
+using BalloonParty.Shared.SceneLight;
 using UnityEngine;
 using VContainer;
 
@@ -24,7 +24,7 @@ namespace BalloonParty.Display
         [Tooltip("0 = unlit (authored colour always), 1 = full albedo × light response.")]
         [Range(0f, 1f)] [SerializeField] private float _lightInfluence = 1f;
 
-        [Inject] private ISceneLightSettings _lightSettings;
+        [Inject] private ISceneLightRuntime _lightRuntime;
 
         private Camera _camera;
 
@@ -37,8 +37,8 @@ namespace BalloonParty.Display
         private void Update()
         {
             // Keep re-applying every frame in the editor — edit OR play mode — so live tuning of the
-            // base colour, light influence, or the light settings asset previews instantly (the light
-            // field service re-pushes its globals per-tick in-editor for the same reason; the sky must
+            // base colour, light influence, or the light settings asset previews instantly (the
+            // TimeOfDayService re-pushes its globals per-tick in-editor for the same reason; the sky must
             // track the sprites it sits behind). Device builds apply once in OnEnable: there the
             // inputs really are static.
             Apply();
@@ -61,8 +61,8 @@ namespace BalloonParty.Display
 
             // In edit mode (no DI) fall back to neutral — shaders handle the same fallback via
             // their alpha-validity flag, so the sky won't be mis-tinted.
-            var tint = _lightSettings != null
-                ? _lightSettings.LightColor * _lightSettings.Intensity
+            var tint = _lightRuntime != null
+                ? _lightRuntime.CurrentColor * _lightRuntime.CurrentIntensity
                 : Color.white;
 
             var lit = Color.Lerp(Color.white, tint, _lightInfluence);

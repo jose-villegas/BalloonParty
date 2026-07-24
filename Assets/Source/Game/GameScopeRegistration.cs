@@ -3,6 +3,10 @@ using BalloonParty.Cheats;
 #endif
 
 using System.Collections.Generic;
+using BalloonParty.Audio;
+using BalloonParty.Audio.Configuration;
+using BalloonParty.Audio.Routing;
+using BalloonParty.Audio.View;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Balloon.View;
@@ -31,6 +35,7 @@ using BalloonParty.Scenario;
 using BalloonParty.Scenario.View;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Cadence;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Pause;
@@ -44,6 +49,7 @@ using BalloonParty.Slots.Spawner;
 using BalloonParty.UI.GameOver;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -54,6 +60,11 @@ namespace BalloonParty.Game
     /// </summary>
     internal static class GameScopeRegistration
     {
+        // Audio coalescing tuning — device-audition feel values (Pixel 9). Consts for now because
+        // the Step-1 SoundBankConfiguration is frozen; migrate onto the SO in Phase 2.
+        private const float CoalesceWindowSeconds = 0.06f;
+        private const int MaxBurstPerWindow = 4;
+
         internal static void RegisterMessages(this IContainerBuilder builder, MessagePipeOptions options)
         {
             builder.RegisterMessageBroker<BalanceBalloonsMessage>(options);
@@ -150,6 +161,8 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<BushViewController>().AsSelf().As<ITransitionOutgoingContent>();
             builder.Register<DisturbanceFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
+            builder.Register<TimeOfDayService>(Lifetime.Singleton)
+                .AsImplementedInterfaces().AsSelf();
             builder.Register<SceneLightFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<BalloonMotionTicker>().AsSelf();
@@ -163,6 +176,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<BalloonSpawner>().As<IGridSpawner>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<ScoreController>().AsSelf().As<IRunScore>().As<IRunResettable>();
             builder.RegisterEntryPoint<LevelController>().AsSelf().As<ILevelProgress>().As<IRunResettable>();
+            builder.RegisterEntryPoint<TimeOfDayCycle>().As<IRunResettable>();
             builder.Register<HitPipeline>(Lifetime.Singleton).As<IHitDispatcher>();
             builder.RegisterEntryPoint<RunController>().AsSelf();
             builder.Register<BoardClearController>(Lifetime.Singleton).As<IRunResettable>();
@@ -224,6 +238,41 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<GameOverLossCinematic>();
             builder.RegisterEntryPoint<LevelTransitionController>();
             builder.RegisterComponentInHierarchy<GameOverScreen>();
+        }
+
+        internal static void RegisterAudio(this IContainerBuilder builder, SoundBankConfiguration soundBank,
+            AudioSourceVoice voicePrefab)
+        {
+            if (voicePrefab == null)
+            {
+                Log.Warn("Audio", "SfxVoice prefab unassigned on GameLifetimeScope — audio disabled.");
+                return;
+            }
+
+            // An unassigned bank degrades to an empty table (every sound a silent no-op) so a
+            // half-wired scene still loads; only the prefab is load-bearing for registration.
+            var bank = soundBank != null ? soundBank : ScriptableObject.CreateInstance<SoundBankConfiguration>();
+
+            builder.RegisterInstance<ISoundBankConfiguration>(bank);
+            builder.RegisterInstance(voicePrefab);
+            builder.Register<IAudioMixerRouter, NullAudioMixerRouter>(Lifetime.Singleton);
+
+            // The one bank instance feeds every voice-cap reader (limiter cap, SfxService slots,
+            // pool prewarm), so they cannot drift.
+            builder.RegisterInstance(new VoiceLimiter(bank.GlobalVoiceCap));
+            builder.RegisterInstance(new SfxThrottleGate(() => Time.unscaledTime, CoalesceWindowSeconds, MaxBurstPerWindow));
+            builder.RegisterInstance(new VariationPicker(new System.Random(), bank.MelodicScale,
+                bank.MelodicRootSemitone));
+
+            builder.Register<SfxService>(Lifetime.Singleton)
+                .As<ISoundPlayer>().As<IMelodicContext>().As<IRunResettable>().AsSelf();
+
+            // Bootstrap first — it registers + prewarms the voice pool the routers Get() from.
+            builder.RegisterEntryPoint<SfxVoicePoolBootstrap>();
+            builder.RegisterEntryPoint<CombatSoundRouter>();
+            builder.RegisterEntryPoint<ProgressionSoundRouter>();
+            builder.RegisterEntryPoint<ItemSoundRouter>();
+            builder.RegisterEntryPoint<AudioChannelController>();
         }
 
         // The dictionary is the choreography seam: the resolver maps each ScoreTrailBehaviourId to its handler.

@@ -16,6 +16,8 @@ using BalloonParty.Configuration.GridActors;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Audio.Configuration;
+using BalloonParty.Audio.View;
 
 namespace BalloonParty.Game
 {
@@ -46,8 +48,10 @@ namespace BalloonParty.Game
         [SerializeField] private BuffConfiguration _buffConfiguration;
         [SerializeField] private ScoreTrailBehaviourConfiguration _scoreTrailBehaviourConfiguration;
         [SerializeField] private ThermalGovernorSettings _thermalGovernorSettings;
+        [SerializeField] private SoundBankConfiguration _soundBank;
         [SerializeField] private ProjectileView _projectilePrefab;
         [SerializeField] private FlyingTrail _scoreTrailPrefab;
+        [SerializeField] private AudioSourceVoice _sfxVoicePrefab;
 
         protected override void Awake()
         {
@@ -66,6 +70,7 @@ namespace BalloonParty.Game
             builder.RegisterGameplaySystems();
             builder.RegisterItems();
             builder.RegisterPresentation();
+            builder.RegisterAudio(_soundBank, _sfxVoicePrefab);
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
             builder.RegisterCheats();
@@ -92,6 +97,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance<ISceneLightFieldSettings>(_sceneLightFieldSettings);
             builder.RegisterInstance<IScreenSpaceLightSettings>(_sceneLightFieldSettings);
             builder.RegisterInstance<ISceneLightSettings>(_sceneLightFieldSettings);
+            builder.RegisterInstance<ITimeOfDaySettings>(_sceneLightFieldSettings);
             builder.RegisterInstance<IBackgroundFieldSettings>(_backgroundFieldSettings);
             builder.RegisterInstance<IPaintingFieldSettings>(_paintingFieldSettings);
             builder.RegisterInstance<ISpeckFieldSettings>(_speckFieldSettings);

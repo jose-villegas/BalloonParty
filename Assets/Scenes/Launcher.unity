@@ -279,6 +279,8 @@ MonoBehaviour:
   autoInjectGameObjects: []
   _displayConfiguration: {fileID: 11400000, guid: d49451b27c31244c7af3bd85cc6f1cd2,
     type: 2}
+  _sceneLightFieldSettings: {fileID: 11400000, guid: 6f1c8ceaec67e46bba09250d145ce93e,
+    type: 2}
 --- !u!4 &449096537
 Transform:
   m_ObjectHideFlags: 0

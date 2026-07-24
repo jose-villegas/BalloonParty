@@ -74,7 +74,7 @@ namespace BalloonParty.Tests.Item
             // per-jump light path exercises without a full render setup.
             var lightField = new SceneLightFieldService(
                 Substitute.For<IGameDisplayConfiguration>(), palette,
-                Substitute.For<ISceneLightFieldSettings>(), Substitute.For<ISceneLightSettings>());
+                Substitute.For<ISceneLightFieldSettings>());
 
             _handler = new LightningItemHandler(
                 itemConfig,
@@ -215,8 +215,7 @@ namespace BalloonParty.Tests.Item
             var lightField = new SceneLightFieldService(
                 Substitute.For<IGameDisplayConfiguration>(),
                 Substitute.For<IGamePalette>(),
-                Substitute.For<ISceneLightFieldSettings>(),
-                Substitute.For<ISceneLightSettings>());
+                Substitute.For<ISceneLightFieldSettings>());
             var handler = new LightningItemHandler(
                 itemConfig, dispatcher, Substitute.For<IGamePalette>(),
                 Substitute.For<ISubscriber<ProjectileLoadedMessage>>(), _grid, new PoolManager(), lightField);

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BalloonParty.Configuration.Effects
 {
     [CreateAssetMenu(menuName = "Configuration/Scene Light Settings", fileName = "SceneLightFieldSettings")]
-    internal class SceneLightFieldSettings : ScriptableObject, ISceneLightFieldSettings, IScreenSpaceLightSettings, ISceneLightSettings
+    internal class SceneLightFieldSettings : ScriptableObject, ISceneLightFieldSettings, IScreenSpaceLightSettings, ISceneLightSettings, ITimeOfDaySettings
     {
         [Header("Main Light")]
         [Tooltip("Points TOWARD the light (normalized on read); shadows extend the opposite way. " +
@@ -39,6 +39,24 @@ namespace BalloonParty.Configuration.Effects
                  "base*(curve.Evaluate(t)+1); author y≈0 at t=0 so a base-speed hit matches the flash's " +
                  "unscaled radius/intensity. NEEDS AUTHORING.")]
         [SerializeField] private AnimationCurve _shieldLossLightVelocityCurve = new();
+
+        [Header("Night Mode — Time of Day")]
+        [Tooltip("Walk the light direction around the circle as the player climbs levels. Off = the " +
+                 "light holds its authored rest direction. Pair with Colour From Direction for the " +
+                 "day/night colour shift.")]
+        [SerializeField] private bool _nightModeEnabled;
+
+        [Tooltip("Degrees the direction advances per level, counter-clockwise (the gradient's " +
+                 "t = angle / 360). A full day spans 360 / this levels; level 1 sits at the authored " +
+                 "Light Direction above.")]
+        [SerializeField] private float _degreesPerLevel = 15f;
+
+        [Tooltip("Seconds the level-up sweep takes to reach the new level's angle (unscaled, so it " +
+                 "plays through the transition pause).")]
+        [Range(0.1f, 10f)] [SerializeField] private float _sweepDuration = 1.5f;
+
+        [Tooltip("Eases the sweep 0→1 over its duration.")]
+        [SerializeField] private AnimationCurve _sweepEase = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
         [Header("Field — Resolution")]
         [Tooltip("Field RT density (texels per world unit). Higher = smoother colour/light regions; the RT " +
@@ -159,10 +177,18 @@ namespace BalloonParty.Configuration.Effects
         // ISceneLightSettings
         public Vector2 LightDirection =>
             _lightDirection.sqrMagnitude > 0.0001f ? _lightDirection.normalized : Vector2.up;
-        public Color LightColor =>
-            _lightColorFromDirection ? _lightColorOverDirection.Evaluate(LightDirection.Angle01()) : _lightColor;
+        public Color LightColor => EvaluateColor(LightDirection);
         public float Intensity => _intensity;
         public AnimationCurve ShieldLossLightVelocityCurve => _shieldLossLightVelocityCurve;
+
+        // ITimeOfDaySettings
+        public bool NightModeEnabled => _nightModeEnabled;
+        public float DegreesPerLevel => _degreesPerLevel;
+        public float SweepDuration => _sweepDuration;
+        public AnimationCurve SweepEase => _sweepEase;
+
+        public Color EvaluateColor(Vector2 direction) =>
+            _lightColorFromDirection ? _lightColorOverDirection.Evaluate(direction.Angle01()) : _lightColor;
 
         // A believable day/night loop over the direction circle, phased 45° left (+0.125 in t) so bright
         // noon lands on the canonical upper-left light direction (135° = t=0.375): warm dawn up-right

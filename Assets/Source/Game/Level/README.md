@@ -16,6 +16,7 @@ scoring only tallies points and hands them to `ILevelProgress`.
 | `IActiveLevelParameters.cs` | Single read surface for the live difficulty mix (`Current`). Never read `ILevelPacingConfiguration` directly. |
 | `ILevelThresholds.cs` | The per-level score goal (`PointsRequiredForLevel(level)`) for any level, not just the active one. |
 | `LevelTransitionController.cs` | The **Ascent** — the level-transition cinematic. Phase-driven (see below); holds `PauseSource.LevelTransition` for the whole sequence. |
+| `TimeOfDayCycle.cs` | Night-mode's time-of-day *policy*: picks the ambient light angle for the current level (level 1 = the authored rest direction, each further level adds a fixed step) and pushes it to `TimeOfDayService`, which owns the actual light globals (see `Shared/SceneLight/README.md`). Snaps to the level's angle on start and on a run reset; sweeps to the new angle only on `Phase → Transitioning`, over unscaled time so it plays through the transition pause. The angle is never wrapped, so the sweep always goes forward, even across the midnight→dawn seam. Its reset order deliberately runs *after* `LevelController`'s, so a restart's snap reads the run's actual start level (which can be > 1 via the dev cheat), not an assumed level 1. A no-op entirely when night mode is off. |
 
 ## The level-up ceremony (two-phase commit)
 
