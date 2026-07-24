@@ -191,8 +191,9 @@ namespace BalloonParty.Configuration.Items
 
         [SerializeField] private float _paintBlobSpinSpeed = 720f;
 
-        [Tooltip("Rainbow holder only: how many times each blob lerps through the allowed colours over its flight.")]
-        [SerializeField] [Min(0f)] private float _paintBlobColorCycles = 2f;
+        [Tooltip("Rainbow holder only: how fast the flung blobs' palette rings scroll while in flight. " +
+                 "The held item icon keeps the material's own (slower) scroll speed.")]
+        [SerializeField] private float _paintBlobRainbowScrollSpeed = 4f;
 
         [Tooltip("Shifts the triangle along the travel axis from the hit point, in world units. " +
                  "Negative pulls it back toward the launcher.")]
@@ -214,7 +215,7 @@ namespace BalloonParty.Configuration.Items
         public AnimationCurve ShadowScaleCurve => _paintBlobShadowScaleCurve;
         public AnimationCurve SpriteScaleCurve => _paintBlobSpriteScaleCurve;
         public float SpinSpeed => _paintBlobSpinSpeed;
-        public float BlobColorCycles => _paintBlobColorCycles;
+        public float RainbowScrollSpeed => _paintBlobRainbowScrollSpeed;
 
         public float SpreadOffset => _spreadOffset;
         public float SpreadLength => _spreadLength;

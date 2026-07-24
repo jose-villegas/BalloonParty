@@ -32,6 +32,15 @@ Shader "BalloonParty/Paint/PaintBlob"
         // 0 = unlit (authored look always), 1 = fully lit.
         _LightInfluence ("Light Influence", Range(0, 1)) = 1
 
+        [Header(Rainbow)]
+        // Rainbow holder: radial colour rings drawn from the level's allowed palette (the same
+        // global bands the rainbow balloon uses) instead of a flat tint. Toggled per-blob via MPB
+        // (_RainbowEnabled) so pooled blobs switch without a material variant. Off = plain tint.
+        [Toggle] _RainbowEnabled ("Rainbow Rings", Float) = 0
+        _RainbowRingCount   ("Ring Count",     Range(1, 12))   = 6.0
+        _RainbowScrollSpeed ("Ring Scroll",    Range(-5, 5))   = 1.0
+        _RainbowBandBlend   ("Ring Softness",  Range(0, 0.5))  = 0.15
+
         [Header(Shadow)]
         [Toggle(_SHADOW_ON)] _EnableShadow ("Enable Shadow", Float) = 0
         _ShadowColor        ("Shadow Color",   Color)              = (0.15, 0.15, 0.15, 0.6)
@@ -66,6 +75,7 @@ Shader "BalloonParty/Paint/PaintBlob"
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
             #include "../Include/Composite.cginc"
+            #include "../Include/RainbowBand.cginc"
 
             struct appdata_t
             {
@@ -121,6 +131,11 @@ Shader "BalloonParty/Paint/PaintBlob"
             float  _SpecularSharpness;
             float  _SpecularDistance;
             float  _LightInfluence;
+
+            float  _RainbowEnabled;
+            float  _RainbowRingCount;
+            float  _RainbowScrollSpeed;
+            float  _RainbowBandBlend;
 
             #ifdef _SHADOW_ON
             fixed4 _ShadowColor;
@@ -232,10 +247,20 @@ Shader "BalloonParty/Paint/PaintBlob"
                 float wobble   = _WobbleAmplitude * w1 + _WobbleAmplitude2 * w2;
                 float boundary = _BlobRadius + wobble;
 
+                // Albedo: flat holder tint, or — for a rainbow holder — radial rings cycling the
+                // level's allowed palette (same global bands as the rainbow balloon), scrolling
+                // outward from the blob centre. innerT below still shades the rim over either.
+                fixed3 albedo = IN.color.rgb;
+                if (_RainbowEnabled > 0.5)
+                {
+                    float s = r * _RainbowRingCount + _Time.y * _RainbowScrollSpeed + _TimeOffset;
+                    albedo = RainbowBandColor(s, _RainbowBandBlend);
+                }
+
                 // Radial gradient for rim darkening
                 float innerT  = saturate(r / max(boundary, 0.0001));
                 float rimMask = pow(innerT, 1.0 / max(_RimWidth, 0.001));
-                fixed3 col    = IN.color.rgb * (1.0 - rimMask * _RimDarkness);
+                fixed3 col    = albedo * (1.0 - rimMask * _RimDarkness);
 
                 // Diffuse term: the blob body is albedo, lit by the scene light — same response
                 // as Sprite/Diffuse. Without this the blob reads self-illuminated when the light

@@ -28,6 +28,8 @@ namespace BalloonParty.Item.Paint
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
         private static readonly int ShadowScaleId = Shader.PropertyToID("_ShadowScale");
         private static readonly int SpriteScaleId = Shader.PropertyToID("_SpriteScale");
+        private static readonly int RainbowEnabledId = Shader.PropertyToID("_RainbowEnabled");
+        private static readonly int RainbowScrollSpeedId = Shader.PropertyToID("_RainbowScrollSpeed");
 
         [Header("Blobs")]
         [Tooltip("Seed blob ColorableRenderers. The pool clones the first entry when the packed splash " +
@@ -43,9 +45,9 @@ namespace BalloonParty.Item.Paint
         private List<BlobFlight> _activeFlights;
         private List<ColorableRenderer> _blobPool;
         private Color _color;
-        private ColorCycleState _cycleState;
         private Action<int> _onTargetHit;
         private bool _playing;
+        private bool _rainbow;
         private PoolManager _poolManager;
         private ItemSettings _settings;
 
@@ -97,9 +99,9 @@ namespace BalloonParty.Item.Paint
             }
         }
 
-        void ISplashEffect.SetCycleColors(IReadOnlyList<Color> colors, float cycles)
+        void ISplashEffect.SetRainbow()
         {
-            _cycleState.Set(colors, cycles);
+            _rainbow = true;
         }
 
         public override void OnSpawned()
@@ -111,8 +113,8 @@ namespace BalloonParty.Item.Paint
         public override void OnDespawned()
         {
             _playing = false;
+            _rainbow = false;
             _activeFlights = null;
-            _cycleState.Clear();
             HideAllBlobs();
             base.OnDespawned();
         }
@@ -198,15 +200,10 @@ namespace BalloonParty.Item.Paint
                 flight.Blob.transform.position = snapshot.Position;
                 flight.Blob.transform.localScale = Vector3.one * snapshot.Scale;
 
-                // Rainbow holder: each blob lerps through the allowed colours over its own flight.
-                if (_cycleState.HasColors)
-                {
-                    flight.Blob.SetColor(_cycleState.Sample(flight.Progress));
-                }
-
                 if (flight.BlobRenderer != null)
                 {
-                    ApplyBlobMaterial(flight.BlobRenderer, flight.TimeOffset, snapshot);
+                    ApplyBlobMaterial(flight.BlobRenderer, flight.TimeOffset, snapshot,
+                        _rainbow, _settings.Paint.RainbowScrollSpeed);
                 }
 
                 flight.Blob.transform.Rotate(0f, 0f, -_settings.Paint.SpinSpeed * delta);
@@ -289,13 +286,19 @@ namespace BalloonParty.Item.Paint
         internal static void ApplyBlobMaterial(
             Renderer renderer,
             float timeOffset,
-            BlobFlightSnapshot snapshot)
+            BlobFlightSnapshot snapshot,
+            bool rainbow = false,
+            float rainbowScrollSpeed = 0f)
         {
-            // Reused scratch block — avoids a per-blob, per-frame allocation.
+            // Reused scratch block — avoids a per-blob, per-frame allocation. SetPropertyBlock
+            // replaces the whole block, so every property is written every frame. Rainbow blobs
+            // scroll their rings faster than the held icon (which keeps the material's own speed).
             _blobBlock ??= new MaterialPropertyBlock();
             _blobBlock.SetFloat(TimeOffsetId, timeOffset);
             _blobBlock.SetFloat(ShadowScaleId, snapshot.ShadowScale);
             _blobBlock.SetFloat(SpriteScaleId, snapshot.SpriteScale);
+            _blobBlock.SetFloat(RainbowEnabledId, rainbow ? 1f : 0f);
+            _blobBlock.SetFloat(RainbowScrollSpeedId, rainbowScrollSpeed);
             renderer.SetPropertyBlock(_blobBlock);
         }
 

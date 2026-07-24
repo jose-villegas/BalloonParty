@@ -121,6 +121,7 @@ namespace BalloonParty.Item
 
             var color = _palette.GetColor(colorName);
             _activeView.Activate(color);
+            _activeView.SetRainbow(!string.IsNullOrEmpty(colorName) && _palette.IsRainbow(colorName));
 
             // The pooled icon isn't DI-injected; hand a laser its light-field access so the idle
             // telegraph can register (it's the capture we already resolved above).
@@ -157,6 +158,7 @@ namespace BalloonParty.Item
             }
 
             _activeView.SetColor(_palette.GetColor(colorName));
+            _activeView.SetRainbow(_palette.IsRainbow(colorName));
         }
 
         private void ReturnActiveVisual()

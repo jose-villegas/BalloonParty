@@ -107,10 +107,10 @@ namespace BalloonParty.Item.Paint
 
             splash.PrepareDisplay(flights, settings, _poolManager, PaintBlob);
 
-            // A rainbow holder's blobs lerp through the palette's colours as they fly.
+            // A rainbow holder's blobs draw radial palette rings (the global rainbow bands) as they fly.
             if (_palette.IsRainbow(paintColor))
             {
-                splash.SetCycleColors(_palette.ColorValues(), settings.Paint.BlobColorCycles);
+                splash.SetRainbow();
             }
 
             effect.Play(worldPosition, tint, () => _poolManager.Return(key, effect));

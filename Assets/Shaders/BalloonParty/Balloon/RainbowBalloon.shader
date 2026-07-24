@@ -104,6 +104,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
             #include "../Include/MathConst.cginc"
+            #include "../Include/RainbowBand.cginc"
             #include "../Include/Glitter.cginc"
             #include "../Include/ShineSweep.cginc"
 
@@ -141,13 +142,8 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             float     _GlitterBrightness;
             float     _GlitterShineBind;
 
-            // GLOBAL band data — fed by Shader.SetGlobalColor/Float once per level (see header). Not
-            // in Properties, so never shadowed by a serialized material value.
-            fixed4 _RainbowBandColor0;
-            fixed4 _RainbowBandColor1;
-            fixed4 _RainbowBandColor2;
-            fixed4 _RainbowBandColor3;
-            float  _RainbowBandCount;
+            // Band colours + count (_RainbowBandColor0..3 / _RainbowBandCount) are GLOBAL, declared in
+            // RainbowBand.cginc and fed by Shader.SetGlobalColor/Float once per level (see header).
             float  _StripeCount;
             float  _ScrollSpeed;
             float  _BandBlend;
@@ -193,14 +189,6 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 return OUT;
             }
 
-            inline fixed3 ColorAt(int i)
-            {
-                if (i <= 0) { return _RainbowBandColor0.rgb; }
-                if (i == 1) { return _RainbowBandColor1.rgb; }
-                if (i == 2) { return _RainbowBandColor2.rgb; }
-                return _RainbowBandColor3.rgb;
-            }
-
             // Swirly seams: a dual-frequency sine along the seam direction (perpendicular to
             // the scroll axis) displaces the band coordinate, bending straight boundaries into
             // animated waves. Shared by the colour seams AND the shine so both wave together.
@@ -244,17 +232,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 // pattern wraps the balloon coherently.
                 float s = (projection + swirl + bulge) * _StripeCount
                           + _Time.y * _ScrollSpeed + _TimeOffset;
-                float cell = floor(s);
-                float t = frac(s);
-
-                float n = max(_RainbowBandCount, 1.0);
-                float m = fmod(fmod(cell, n) + n, n); // always in [0, n), even for negative scroll
-                int i0 = (int)m;
-                int i1 = (int)fmod(m + 1.0, n);
-
-                float edge = max(_BandBlend, 1e-4);
-                float blend = smoothstep(1.0 - edge, 1.0, t);
-                return lerp(ColorAt(i0), ColorAt(i1), blend);
+                return RainbowBandColor(s, _BandBlend);
             }
 
             // 1 inside [_MaskMin, _MaskMax] (band excluded there), 0 outside, soft edge in between.

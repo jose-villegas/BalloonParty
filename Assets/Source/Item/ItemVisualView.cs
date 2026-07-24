@@ -9,10 +9,14 @@ namespace BalloonParty.Item
 {
     public class ItemVisualView : MonoBehaviour, IItemView, IPoolable
     {
+        private static readonly int RainbowEnabledId = Shader.PropertyToID("_RainbowEnabled");
+
         [SerializeField] private ItemType _type;
         [SerializeField] private SpriteRenderer[] _spritesToSetColor;
         [SerializeField] private Renderer[] _sortingRenderers;
         [SerializeField] [Range(0f, 1f)] private float _spritesAlpha;
+
+        private static MaterialPropertyBlock _rainbowBlock;
 
         private Animator _animator;
 
@@ -37,6 +41,24 @@ namespace BalloonParty.Item
             foreach (var sr in _spritesToSetColor)
             {
                 sr.color = balloonColor.WithAlpha(_spritesAlpha);
+            }
+        }
+
+        /// <summary>
+        ///     Rainbow holder: flips PaintBlob-shaded sprites to their radial palette rings (the
+        ///     global rainbow bands) instead of a flat tint. A no-op on sprites whose shader lacks
+        ///     <c>_RainbowEnabled</c>; the flag is per-renderer so pooled reuse resets cleanly.
+        /// </summary>
+        public void SetRainbow(bool enabled)
+        {
+            _rainbowBlock ??= new MaterialPropertyBlock();
+            var value = enabled ? 1f : 0f;
+
+            foreach (var sr in _spritesToSetColor)
+            {
+                sr.GetPropertyBlock(_rainbowBlock);
+                _rainbowBlock.SetFloat(RainbowEnabledId, value);
+                sr.SetPropertyBlock(_rainbowBlock);
             }
         }
 

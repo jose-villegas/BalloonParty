@@ -169,8 +169,8 @@ namespace BalloonParty.Configuration.Editor
                     y = PropertyDrawerHelper.DrawNamedField(position,
                         y,
                         paint,
-                        "_paintBlobColorCycles",
-                        "Blob Color Cycles");
+                        "_paintBlobRainbowScrollSpeed",
+                        "Rainbow Ring Scroll (flight)");
                     y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Spread");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, paint, "_spreadOffset", "Offset");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, paint, "_spreadLength", "Length");

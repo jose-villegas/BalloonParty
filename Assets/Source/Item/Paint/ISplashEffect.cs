@@ -18,7 +18,7 @@ namespace BalloonParty.Item.Paint
             PoolManager poolManager,
             Action<int> onTargetHit);
 
-        /// <summary>Rainbow holder: lerp each blob through these colours over its flight, <paramref name="cycles" /> loops. A single colour is static.</summary>
-        void SetCycleColors(IReadOnlyList<Color> colors, float cycles);
+        /// <summary>Rainbow holder: the blobs draw radial rings of the level's palette (the global rainbow bands) instead of a flat tint.</summary>
+        void SetRainbow();
     }
 }
