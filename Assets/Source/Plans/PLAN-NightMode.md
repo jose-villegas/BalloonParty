@@ -87,12 +87,14 @@ over `SweepDuration` on unscaled time so it plays through the transition pause.
 off is a true no-op. Follow-up: a multi-tick test of an interrupting level-up mid-sweep (behaviour
 verified by review; not yet regression-pinned).
 
-### Phase 3 — Intensity + GI shadow over angle
-Add an intensity-over-angle curve and a shadow-strength(-multiplier)-over-angle curve (authored
-against `Angle01`, matched endpoints for the wrap). `TimeOfDayService` evaluates both at
-`CurrentAngle` and exposes them on `ISceneLightRuntime`; it pushes `_SceneLightIntensity`,
-`ScreenSpaceLightService` reads the shadow strength. Night reads as *darker*, not just bluer.
-*Acceptance:* midnight is dim with heavier shadows; noon matches the Phase-1 baseline.
+### Phase 3 — Intensity + GI shadow over angle — PARKED (2026-07-24)
+Decision: **intensity stays at 1** for now — the colour gradient alone carries day/night and looks
+good, so per-angle intensity isn't worth wiring. It's reserved as a future hook for **weather effects
+or special drama** (a storm dimming the scene), not the routine day/night cycle. This is *why* the
+alpha-follows-light feature keys off the colour-vector magnitude, not the scalar intensity — with
+intensity flat, colour magnitude is the only day/night signal. If revived: an intensity-over-angle
+curve + a shadow-strength(-multiplier)-over-angle curve, evaluated in `TimeOfDayService`, exposed on
+`ISceneLightRuntime`, pushed as `_SceneLightIntensity` / read by `ScreenSpaceLightService`.
 
 ### Phase 4 — Readability + atmosphere polish
 Verify balloons stay legible across a full cycle (audit `_LightInfluence` on balloon materials vs
