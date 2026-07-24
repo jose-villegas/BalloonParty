@@ -6638,22 +6638,22 @@ PrefabInstance:
     - target: {fileID: 4894539870962568093, guid: ef986049aad6e40dcb0027158268936d,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.95
+      value: 0.925
       objectReference: {fileID: 0}
     - target: {fileID: 4894539870962568093, guid: ef986049aad6e40dcb0027158268936d,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.95
+      value: 0.925
       objectReference: {fileID: 0}
     - target: {fileID: 4894539870962568093, guid: ef986049aad6e40dcb0027158268936d,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.95
+      value: 0.925
       objectReference: {fileID: 0}
     - target: {fileID: 4894539870962568093, guid: ef986049aad6e40dcb0027158268936d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.03
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4894539870962568093, guid: ef986049aad6e40dcb0027158268936d,
         type: 3}
@@ -6795,8 +6795,57 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 9144519000277681991}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7402881001233824042, guid: ef986049aad6e40dcb0027158268936d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4124724379787403961}
+    - targetCorrespondingSourceObject: {fileID: 7402881001233824042, guid: ef986049aad6e40dcb0027158268936d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 212393921738244168}
   m_SourcePrefab: {fileID: 100100000, guid: ef986049aad6e40dcb0027158268936d, type: 3}
+--- !u!1 &868192500419445839 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7402881001233824042, guid: ef986049aad6e40dcb0027158268936d,
+    type: 3}
+  m_PrefabInstance: {fileID: 7687681358255062373}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4124724379787403961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868192500419445839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec05a31a2b7b247e4b054a1b11556e5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Item.SightSpinReaction
+  _probe: {fileID: 212393921738244168}
+  _spinTarget: {fileID: 2980476278519019256}
+  _pivotOffset: {x: 0, y: 0}
+  _spinSpeed: 25
+  _smoothTime: 0.75
+  _returnToRestOnSight: 1
+  _returnTime: 0.25
+--- !u!114 &212393921738244168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868192500419445839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6134d1d0840af43ac9238ebc21e36558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Item.PredictionSightProbe
+  _target: {fileID: 2980476278519019256}
+  _hitRadius: 1
+  _sightEnter: 0.2
+  _sightExit: 0.05
 --- !u!212 &2187232453269456270 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 8424754020425038059, guid: ef986049aad6e40dcb0027158268936d,

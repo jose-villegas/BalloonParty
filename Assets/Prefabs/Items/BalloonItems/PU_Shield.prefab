@@ -554,7 +554,15 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5790204926762370954}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7402881001233824042, guid: ef986049aad6e40dcb0027158268936d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4773694944674559241}
+    - targetCorrespondingSourceObject: {fileID: 7402881001233824042, guid: ef986049aad6e40dcb0027158268936d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1070566948042036151}
   m_SourcePrefab: {fileID: 100100000, guid: ef986049aad6e40dcb0027158268936d, type: 3}
 --- !u!212 &3933974290549238396 stripped
 SpriteRenderer:
@@ -580,3 +588,42 @@ SpriteRenderer:
     type: 3}
   m_PrefabInstance: {fileID: 1194662343004287027}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8514083812438296857 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7402881001233824042, guid: ef986049aad6e40dcb0027158268936d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1194662343004287027}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4773694944674559241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8514083812438296857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6134d1d0840af43ac9238ebc21e36558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Item.PredictionSightProbe
+  _target: {fileID: 6014747547107310510}
+  _hitRadius: 1
+  _sightEnter: 0.2
+  _sightExit: 0.05
+--- !u!114 &1070566948042036151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8514083812438296857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89bb0a13e03d14d5cb1cb999386d68e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Item.SightScalePulseReaction
+  _probe: {fileID: 4773694944674559241}
+  _pulseTarget: {fileID: 6014747547107310510}
+  _pulseScale: 0.12
+  _frequency: 3
+  _smoothTime: 0.15
