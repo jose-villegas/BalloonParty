@@ -2,8 +2,12 @@ using BalloonParty.Configuration;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Display;
 using BalloonParty.Game.Cinematics;
+using BalloonParty.Scenario;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Cadence;
+using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.SceneLight;
+using BalloonParty.Slots.Actor;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -19,15 +23,20 @@ namespace BalloonParty.Game
     ///     (<c>VContainerSettings.RootLifetimeScope</c>); it is instantiated once, before any scene scope
     ///     builds, so scene scopes resolve its registrations as a parent.
     ///
-    ///     Grows across the migration: this first slice owns the display config and the ambient time-of-day
-    ///     owner (<see cref="TimeOfDayService" />/<see cref="TimeOfDayClock" />). Later slices add the camera
-    ///     pipeline (ortho sizing, scene capture, screen-space light, background tint) and the
-    ///     camera-independent, interactive backdrop fields (disturbance + background cloud).
+    ///     Owns: the display config; the ambient time-of-day owner
+    ///     (<see cref="TimeOfDayService" />/<see cref="TimeOfDayClock" />); the camera pipeline (ortho sizing,
+    ///     scene capture, screen-space light, background tint, cinematic view, camera-shake view); and the
+    ///     camera-independent, interactive backdrop fields (disturbance + background cloud, plus the launch
+    ///     finger-poke), so the launch begin-screen's live clouds no longer depend on the Game scene's
+    ///     preload. Per-run gameplay — the local light field, smoke, and everything under RegisterGameplaySystems
+    ///     — stays in the Game scope, which resolves these singletons from this parent.
     /// </summary>
     public class AppLifetimeScope : LifetimeScope
     {
         [SerializeField] private GameDisplayConfiguration _displayConfiguration;
         [SerializeField] private SceneLightFieldSettings _sceneLightFieldSettings;
+        [SerializeField] private DisturbanceFieldSettings _disturbanceFieldSettings;
+        [SerializeField] private BackgroundFieldSettings _backgroundFieldSettings;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -58,6 +67,20 @@ namespace BalloonParty.Game
             builder.RegisterComponentInHierarchy<CameraBackgroundTint>();
             builder.RegisterComponentInHierarchy<CinematicCameraView>();
             builder.RegisterComponentInHierarchy<CameraShakeView>();
+
+            // The interactive backdrop fields — camera-independent, global-shader-driven. Hoisted here (out of
+            // the Game scope) so the launcher's live/pokeable clouds are a first-class app-root guarantee
+            // rather than a side effect of the Game scene being preloaded. Gameplay consumers of these
+            // (balloons, projectile, items) resolve them from this parent. ScenarioContentRoot moves too since
+            // BackgroundFieldService reads its transform; ImpactEventBus, since the field reports impacts to it
+            // and the bush rustle (Game) listens — one bus, resolved from this parent.
+            builder.RegisterInstance<IDisturbanceFieldSettings>(_disturbanceFieldSettings);
+            builder.RegisterInstance<IBackgroundFieldSettings>(_backgroundFieldSettings);
+            builder.Register<ImpactEventBus>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<ScenarioContentRoot>(Lifetime.Singleton);
+            builder.Register<DisturbanceFieldService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<BackgroundFieldService>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.RegisterEntryPoint<LaunchDisturbanceStamp>();
         }
     }
 }

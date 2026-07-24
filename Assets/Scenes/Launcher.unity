@@ -545,7 +545,7 @@ PrefabInstance:
     - target: {fileID: 4080085344867501247, guid: 84766d500463b40e08fff853642a0c08,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4080085344867501247, guid: 84766d500463b40e08fff853642a0c08,
         type: 3}
@@ -586,7 +586,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_Target
       value: 
-      objectReference: {fileID: 6813767043358403394}
+      objectReference: {fileID: 0}
     - target: {fileID: 4080085344867501247, guid: 84766d500463b40e08fff853642a0c08,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_CallState
@@ -863,10 +863,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6813767043358403389}
-    - targetCorrespondingSourceObject: {fileID: 4080085344867501241, guid: 84766d500463b40e08fff853642a0c08,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6813767043358403394}
   m_SourcePrefab: {fileID: 100100000, guid: 84766d500463b40e08fff853642a0c08, type: 3}
 --- !u!1 &6813767043358403383 stripped
 GameObject:
@@ -901,22 +897,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Shared.NavigationTrigger
   _targetState: 1
---- !u!114 &6813767043358403394
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6813767043358403383}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1edeb7ee7764f878d6e2c972d11251d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.ButtonDisturbanceStamp
-  _radius: 1
-  _strength: 0.9
-  _duration: 2.35
-  _camera: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

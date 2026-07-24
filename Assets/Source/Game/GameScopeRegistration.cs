@@ -109,7 +109,6 @@ namespace BalloonParty.Game
         {
             builder.Register<BalancePathHolder>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.Register<SlotGrid>(Lifetime.Singleton);
-            builder.Register<ScenarioContentRoot>(Lifetime.Singleton);
             builder.Register<GridBalanceQuery>(Lifetime.Singleton);
             // Recording is editor-only ([Conditional]); at runtime this is an inert empty instance.
             builder.Register<BalanceDebugRecorder>(Lifetime.Singleton);
@@ -121,8 +120,6 @@ namespace BalloonParty.Game
             builder.Register<ProjectilePositionProvider>(Lifetime.Singleton);
             builder.Register<PredictionTraceProvider>(Lifetime.Singleton);
             builder.RegisterEntryPoint<ProjectileFacingSource>().As<IProjectileFacingSource>();
-            builder.Register<ImpactEventBus>(Lifetime.Singleton)
-                .AsImplementedInterfaces().AsSelf();
             builder.Register<NudgeOverrideResolver>(Lifetime.Singleton);
             builder.Register<ColorStreakTracker>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<ProjectileHitResolver>(Lifetime.Singleton);
@@ -159,8 +156,6 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<PuffCloudViewController>().As<ITransitionOutgoingContent>();
             builder.RegisterEntryPoint<BushClusterRegistry>().AsSelf();
             builder.RegisterEntryPoint<BushViewController>().AsSelf().As<ITransitionOutgoingContent>();
-            builder.Register<DisturbanceFieldService>(Lifetime.Singleton)
-                .AsImplementedInterfaces().AsSelf();
             builder.Register<SceneLightFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<BalloonMotionTicker>().AsSelf();
@@ -217,11 +212,8 @@ namespace BalloonParty.Game
             builder.RegisterComponentInHierarchy<SpeckField>();
             builder.RegisterComponentInHierarchy<WallNetView>();
             builder.RegisterComponentInHierarchy<SmokeFieldView>();
-            builder.Register<BackgroundFieldService>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<SmokeFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
-            builder.RegisterEntryPoint<LaunchDisturbanceStamp>();
-            builder.RegisterEntryPoint<DisturbanceStampRequestReader>();
             builder.Register<CinematicCameraRig>(Lifetime.Singleton);
             builder.Register<EffectCadenceCoordinator>(Lifetime.Singleton).AsImplementedInterfaces();
 
