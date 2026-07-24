@@ -41,13 +41,22 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _EdgeSoft: 0.3
+    - _DropCount: 5
+    - _DropEndScale: 0.1
+    - _DropFall: 0.892
+    - _DropGloss: 26.5
+    - _DropShine: 2.14
+    - _DropSize: 0.15
+    - _DropStagger: 0.109
+    - _DropStartY: 0.783
+    - _DropStretch: 3.74
+    - _EdgeSoft: 0.055
     - _EnableExternalAlpha: 0
     - _FillShade: 0.945
     - _LightZ: 0.1
     - _Progress: 0
     - _RippleAmp: 5
-    - _RippleContrast: 0.218
+    - _RippleContrast: 0.226
     - _RippleFreq: 5.5
     - _RippleSpeed: 6
     - _Seed: 0
@@ -56,11 +65,12 @@ Material:
     - _WaveAmp: 0.066
     - _WaveFreq: 2.9
     - _WaveSpeed: 1.87
-    - _WetGloss: 8
-    - _WetWidth: 0.33
+    - _WetGloss: 2.1
+    - _WetWidth: 0.234
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DropSpread: {r: 0.1, g: 0.9, b: 0, a: 0}
     - _PaintColor: {r: 1, g: 0.2, b: 0.2, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _WetColor: {r: 1, g: 1, b: 1, a: 1}
