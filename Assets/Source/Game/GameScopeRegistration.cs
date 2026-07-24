@@ -226,6 +226,7 @@ namespace BalloonParty.Game
             builder.Register<SmokeFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<LaunchDisturbanceStamp>();
+            builder.RegisterEntryPoint<DisturbanceStampRequestReader>();
             builder.Register<CinematicCameraRig>(Lifetime.Singleton);
             builder.Register<EffectCadenceCoordinator>(Lifetime.Singleton).AsImplementedInterfaces();
 
