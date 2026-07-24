@@ -25,6 +25,9 @@ Shader "BalloonParty/Scenario/WallNet"
         // How strongly the light field's R (local magnitude) drives the colour replacement — higher
         // reaches full replacement with less light.
         _LightColorRamp ("Light Color Ramp (R gain)", Float) = 1.0
+        // OPT-IN time-of-day tint: multiply the net toward the ambient scene-light colour x intensity, so
+        // it dims/cools at night and reads full at noon. 0 = authored HDR colour, independent of the sun.
+        _AmbientInfluence ("Ambient Light Influence (time of day)", Range(0, 1)) = 0
 
         [Header(Reveal (driven by the disturbance field))]
         // The net colour shifts from _Color (at rest) toward this as it gets more strongly disturbed —
@@ -116,6 +119,7 @@ Shader "BalloonParty/Scenario/WallNet"
             float _DepthShade;
             float _LightInfluence;
             float _LightColorRamp;
+            float _AmbientInfluence;
             float _OpenGain;
             float _RestOpen;
             float _BillowAmplitude;
@@ -222,6 +226,10 @@ Shader "BalloonParty/Scenario/WallNet"
                 // R (local light magnitude) drives the replacement intensity, scaled by the tunable ramp.
                 float presence = saturate(SceneLightFieldSampleLOD(i.worldXY).r * _LightColorRamp);
                 col.rgb = lerp(col.rgb, palette, presence * _LightInfluence);
+                // Opt-in time-of-day tint: scale toward the ambient scene-light colour x intensity so the
+                // net belongs to the day/night. SceneLightTint() is 1.0 before the owner pushes, so
+                // influence 0 (and edit-time) leaves the authored HDR colour untouched.
+                col.rgb *= lerp(float3(1.0, 1.0, 1.0), SceneLightTint(), _AmbientInfluence);
                 // Darken toward the inner lip for a curled-depth read as the band opens.
                 col.rgb *= lerp(1.0, _DepthShade, u * i.open);
                 // Cloud-driven visibility, blended toward the disturbance target by how disturbed this
