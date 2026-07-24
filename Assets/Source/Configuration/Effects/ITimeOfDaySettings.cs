@@ -23,5 +23,11 @@ namespace BalloonParty.Configuration.Effects
 
         /// <summary>Eases the sweep 0→1 over its duration. Linear when unauthored.</summary>
         AnimationCurve SweepEase { get; }
+
+        /// <summary>Multiplier on the authored GI shadow strength as a function of the light direction
+        /// (indexed by <c>Angle01</c>, matched endpoints for the wrap) — deepen shadows toward
+        /// dusk/night, lighten at noon. Flat 1 = the base strength unchanged; only applied while night
+        /// mode is on.</summary>
+        AnimationCurve ShadowStrengthOverAngle { get; }
     }
 }

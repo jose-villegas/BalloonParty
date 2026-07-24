@@ -19,5 +19,10 @@ namespace BalloonParty.Shared.SceneLight
 
         /// <summary>The current light intensity multiplier.</summary>
         float CurrentIntensity { get; }
+
+        /// <summary>Multiplier to apply to the authored GI shadow strength for the current light
+        /// direction — the night-mode day/night shadow deepening (1 when night mode is off or the curve
+        /// is unauthored, so the base strength is unchanged).</summary>
+        float ShadowStrengthScale { get; }
     }
 }

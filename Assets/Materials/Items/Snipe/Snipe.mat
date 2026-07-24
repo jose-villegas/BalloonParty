@@ -42,11 +42,14 @@ Material:
     m_Ints: []
     m_Floats:
     - PixelSnap: 0
-    - _ApexFade: 0.146
+    - _ApexFade: 0.056
     - _ApexV: 1
     - _BackDim: 0.5
     - _BackThickness: 0.01
     - _BaseV: 0.15
+    - _CircleFeather: 0.027
+    - _CircleMask: 1
+    - _CircleRadius: 0.5
     - _ConeWidth: 0.225
     - _EnableExternalAlpha: 0
     - _FrontThickness: 0.02

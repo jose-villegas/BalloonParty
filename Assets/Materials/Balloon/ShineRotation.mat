@@ -62,9 +62,15 @@ Material:
     m_Ints: []
     m_Floats:
     - PixelSnap: 0
+    - _AlphaFalloff: 0.25
+    - _AlphaFollowsLight: 1
+    - _AlphaFullAt: 1.73
+    - _AlphaLightGain: 0.4
     - _BakedAngle: -45
     - _BlurAmount: 16
     - _BumpScale: 1
+    - _CloudShadowFade: 0
+    - _CloudShadowFloor: 0
     - _ColorMask: 15
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
@@ -74,7 +80,8 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _IgnoredPaletteLight: 8
-    - _LightMode: 1
+    - _LightMode: 0
+    - _LocalAlphaBoost: 4
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -85,6 +92,7 @@ Material:
     - _RotateArt: 1
     - _RotateLightMode: 1
     - _ShadowSoftness: 0.03
+    - _SmokeReceiveWeight: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SpriteScale: 0.921

@@ -252,7 +252,11 @@ namespace BalloonParty.Display
             _smearMaterial.SetFloat(CloudGateStrengthId, _settings.CloudShadowGate);
 
             _overlayMaterial.SetColor(ShadowTintId, _settings.ShadowTint);
-            _overlayMaterial.SetFloat(ShadowStrengthId, _settings.ShadowStrength);
+
+            // Night mode deepens/lightens the shadow with the time-of-day angle (scale is 1 when off, so
+            // this is the authored strength unchanged). Clamped so a >1 multiplier can't push past full.
+            _overlayMaterial.SetFloat(ShadowStrengthId,
+                Mathf.Clamp01(_settings.ShadowStrength * _lightRuntime.ShadowStrengthScale));
 
             // Intensity coupling now lives per-fragment in the overlay via the field magnitude,
             // not here: bounce scales by the absolute local magnitude (field-off that equals

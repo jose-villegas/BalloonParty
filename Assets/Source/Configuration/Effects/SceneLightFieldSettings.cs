@@ -58,6 +58,11 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Eases the sweep 0→1 over its duration.")]
         [SerializeField] private AnimationCurve _sweepEase = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
+        [Tooltip("Multiplier on GI shadow strength over the direction circle (x = angle/360, matched " +
+                 "endpoints for the wrap) — raise toward dusk/night to deepen shadows, keep ~1 at noon. " +
+                 "Flat 1 = unchanged. Only applied while Night Mode Enabled.")]
+        [SerializeField] private AnimationCurve _shadowStrengthOverAngle = AnimationCurve.Constant(0f, 1f, 1f);
+
         [Header("Field — Resolution")]
         [Tooltip("Field RT density (texels per world unit). Higher = smoother colour/light regions; the RT " +
                  "stays small and only re-renders when a light or the owner changes, so this can be far " +
@@ -186,6 +191,7 @@ namespace BalloonParty.Configuration.Effects
         public float DegreesPerLevel => _degreesPerLevel;
         public float SweepDuration => _sweepDuration;
         public AnimationCurve SweepEase => _sweepEase;
+        public AnimationCurve ShadowStrengthOverAngle => _shadowStrengthOverAngle;
 
         public Color EvaluateColor(Vector2 direction) =>
             _lightColorFromDirection ? _lightColorOverDirection.Evaluate(direction.Angle01()) : _lightColor;

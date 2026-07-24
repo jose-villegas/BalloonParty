@@ -1,4 +1,5 @@
 using BalloonParty.Configuration.Effects;
+using BalloonParty.Shared.Extensions;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -28,6 +29,7 @@ namespace BalloonParty.Shared.SceneLight
         public Vector2 CurrentDirection => _currentDirection;
         public Color CurrentColor => _settings.EvaluateColor(_currentDirection);
         public float CurrentIntensity => _settings.Intensity;
+        public float ShadowStrengthScale => _timeOfDay.NightModeEnabled ? EvaluateShadowScale() : 1f;
 
         internal TimeOfDayService(ISceneLightSettings settings, ITimeOfDaySettings timeOfDay)
         {
@@ -80,6 +82,13 @@ namespace BalloonParty.Shared.SceneLight
             color.a = 1f;
             Shader.SetGlobalColor(SceneLightColorId, color);
             Shader.SetGlobalFloat(SceneLightIntensityId, _settings.Intensity);
+        }
+
+        // Curve sampled at the current direction's angle; unauthored/empty means no deepening (1).
+        private float EvaluateShadowScale()
+        {
+            var curve = _timeOfDay.ShadowStrengthOverAngle;
+            return curve != null && curve.length > 0 ? curve.Evaluate(_currentDirection.Angle01()) : 1f;
         }
     }
 }
