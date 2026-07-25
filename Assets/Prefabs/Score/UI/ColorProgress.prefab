@@ -117,6 +117,8 @@ MonoBehaviour:
   _nightBadgeSweepSpeed: 0.5
   _nightBadgeBlend: 2
   _nightBadgeFadeDuration: 0.8
+  _nightFadeExtras:
+  - {fileID: 6330437539617345100}
   _nightBadgeAlphaRange: {x: 0.3, y: 1}
   _nightBadgeScaleRange: {x: 0.315, y: 0.325}
 --- !u!223 &7363056953030294436
@@ -248,6 +250,7 @@ GameObject:
   - component: {fileID: 1217067034602027654}
   - component: {fileID: 5078989472072387670}
   - component: {fileID: 7718852027012142698}
+  - component: {fileID: 6330437539617345100}
   m_Layer: 5
   m_Name: Shadow (1)
   m_TagString: Untagged
@@ -295,7 +298,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: c1889e5e42d2a4e658b99f2bcee7a0e4, type: 2}
-  m_Color: {r: 0.8274511, g: 0.8274511, b: 0.8274511, a: 0.3764706}
+  m_Color: {r: 0.8274511, g: 0.8274511, b: 0.8274511, a: 0.2509804}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -312,6 +315,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 15
+--- !u!225 &6330437539617345100
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3710843896802831088}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6277398799839937644
 GameObject:
   m_ObjectHideFlags: 0
@@ -343,8 +358,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1328561995927617365}
-  - {fileID: 1217067034602027654}
   - {fileID: 725618164765549082}
+  - {fileID: 1217067034602027654}
   - {fileID: 6889529361528792491}
   - {fileID: 4966838369794784222}
   m_Father: {fileID: 1420386209631446183}
@@ -5744,6 +5759,11 @@ PrefabInstance:
     - target: {fileID: 5975162263570056898, guid: 63365c0c62261461bb90cf809110e2d0,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8695025231240788432, guid: 63365c0c62261461bb90cf809110e2d0,
+        type: 3}
+      propertyPath: m_Alpha
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:

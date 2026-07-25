@@ -67,6 +67,11 @@ namespace BalloonParty.UI.Score
                  "ease on rather than popping. 0 = instant.")]
         [SerializeField] private float _nightBadgeFadeDuration = 0.8f;
 
+        [Tooltip("Extra CanvasGroups (e.g. a night background) that fade in/out with night mode alongside " +
+                 "the badge but take no part in the sweep. For elements that must live outside the badge " +
+                 "hierarchy — e.g. on a different sorting layer a child of the badge couldn't reach.")]
+        [SerializeField] private CanvasGroup[] _nightFadeExtras;
+
         [Tooltip("Night badge alpha away from the highlight (x) and at it (y).")]
         [SerializeField] private Vector2 _nightBadgeAlphaRange = new(0.15f, 1f);
 
@@ -205,16 +210,32 @@ namespace BalloonParty.UI.Score
 
         private void Update()
         {
-            if (_nightBonusBadge == null)
+            var hasExtras = _nightFadeExtras != null && _nightFadeExtras.Length > 0;
+            if (_nightBonusBadge == null && !hasExtras)
             {
                 return;
             }
 
-            // Ease the whole badge in when night begins and out when it ends (unscaled), so it fades on
-            // rather than popping. The badge stays inactive until the intro leaves 0 and after it returns.
+            // Ease everything in when night begins and out when it ends (unscaled), so it fades on rather
+            // than popping. Elements stay inactive until the intro leaves 0 and after it returns.
             var target = _timeOfDayNight.IsNight ? 1f : 0f;
             var fadeStep = _nightBadgeFadeDuration > 0f ? Time.unscaledDeltaTime / _nightBadgeFadeDuration : 1f;
             _nightIntro = Mathf.MoveTowards(_nightIntro, target, fadeStep);
+
+            // Extras (e.g. a night background) fade flat with the intro — no sweep — so they can sit on a
+            // different sorting layer than the badge instead of inside its hierarchy.
+            if (hasExtras)
+            {
+                for (var i = 0; i < _nightFadeExtras.Length; i++)
+                {
+                    ApplyNightFade(_nightFadeExtras[i], _nightIntro);
+                }
+            }
+
+            if (_nightBonusBadge == null)
+            {
+                return;
+            }
 
             if (_nightIntro <= 0f)
             {
@@ -242,6 +263,27 @@ namespace BalloonParty.UI.Score
             var closeness = Mathf.SmoothStep(1f, 0f, Mathf.Clamp01(reach));
             _nightBonusBadge.alpha = Mathf.Lerp(_nightBadgeAlphaRange.x, _nightBadgeAlphaRange.y, closeness) * _nightIntro;
             _nightBonusBadge.transform.localScale = Vector3.one * Mathf.Lerp(_nightBadgeScaleRange.x, _nightBadgeScaleRange.y, closeness);
+        }
+
+        // Fades a flat night element to the intro factor and drops it out of the canvas once fully faded,
+        // so it eases in/out with night mode without taking part in the badge sweep.
+        private static void ApplyNightFade(CanvasGroup group, float intro)
+        {
+            if (group == null)
+            {
+                return;
+            }
+
+            var showing = intro > 0f;
+            if (group.gameObject.activeSelf != showing)
+            {
+                group.gameObject.SetActive(showing);
+            }
+
+            if (showing)
+            {
+                group.alpha = intro;
+            }
         }
 
         // This bar's position among its ColorProgressBar siblings, and their total — so the highlight can
