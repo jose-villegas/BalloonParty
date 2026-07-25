@@ -120,6 +120,16 @@ two concrete end conditions only).
   green is the field-mapping test.
 
 ### Phase A — Interactive static geometry (G1) — depends on 0b
+
+**Reachability note (architect design pass, 2026-07-25):** the three archetypes are code-complete
+but NOT live-reachable today — `StaticActorSpawner` registers only Puff/Bush, no
+Deflector/Absorber/Gatekeeper prefabs exist, `GridActorView` has no collider, and
+`ProjectileView.TryGetHitBalloon` only recognizes `BalloonView` on the Balloons layer. Phase A is
+therefore EditMode-verifiable only; its Fire Best acceptance batch is N/A until the live wiring
+(PLAN-GridActorExpansion §8.3-ish) ships, and G1's practical impact is deferred until then.
+Also fix in Phase A: the 0b scaffolding calls `OnBalloonHitAt` on every static contact, but live
+statics never nudge neighbours (`NudgeService` requires `IHasNudge`) — drop the call and pin it
+with a test.
 - Gather: static archetypes implementing `IHitable`/`IHasDurability` become collision targets
   while still occupying their slot for the planner (`CollectBoard` currently `continue`s on
   `Kind == Static` before `TryBuildTargetSnapshot`; routing changes). New static snapshot factory
