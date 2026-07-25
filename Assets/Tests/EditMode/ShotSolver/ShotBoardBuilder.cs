@@ -47,9 +47,9 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         public static ShotBalloonSnapshot Static(
-            Vector2 position, float radius, ShotContactKind kind, int hitsRemaining = 1)
+            Vector2Int slotIndex, Vector2 position, float radius, ShotContactKind kind, int hitsRemaining = 1)
         {
-            return ShotBalloonSnapshot.ForStaticContact(position, radius, kind, hitsRemaining);
+            return ShotBalloonSnapshot.ForStaticContact(slotIndex, position, radius, kind, hitsRemaining);
         }
     }
 }

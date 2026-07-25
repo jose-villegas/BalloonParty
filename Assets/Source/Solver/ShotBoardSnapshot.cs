@@ -61,12 +61,14 @@ namespace BalloonParty.Solver
         }
     }
 
-    /// <summary>How a contact resolves once the ray reaches it — data-only until Phase A wires the
-    /// Deflector/Gatekeeper/Absorber behaviours; every snapshot today is (and stays) <see cref="Poppable" />.</summary>
+    /// <summary>How a contact resolves once the ray reaches it. <see cref="Poppable" /> covers both a
+    /// plain scoring target and a durable static (Deflector/Gatekeeper) — durability, not this enum,
+    /// decides whether a given hit deflects or pops (an int.MaxValue <see cref="ShotBalloonSnapshot.HitsRemaining" />
+    /// deflects forever, exactly like the existing Unbreakable-target pattern). <see cref="Absorb" />
+    /// (Phase A's Absorber) ends the flight outright instead.</summary>
     internal enum ShotContactKind
     {
         Poppable,
-        DeflectForever,
         Absorb
     }
 
@@ -88,13 +90,21 @@ namespace BalloonParty.Solver
         public readonly ShotContactKind ContactKind;
         public readonly ItemType Item;
 
+        /// <summary>The static archetype's own slot — set only by <see cref="ForStaticContact" />.
+        /// A static never carries a <see cref="Balance" /> (statics never enter the balance grid as
+        /// movers), so this is the sole source of slot identity for <see cref="ShotBalloonState.SlotIndex" />
+        /// on a static entry; without it, every static would default to (0,0) and corrupt whatever
+        /// legitimately occupies that slot on <c>RemoveFromGridAt</c>/<c>OnBalloonHitAt</c> (the 0b-review
+        /// landmine).</summary>
+        public readonly Vector2Int? StaticSlotIndex;
+
         /// <summary>Passthrough so downstream reads stay tidy — null/empty means colourless, exactly as
         /// <see cref="ColorProfile.ColorId" /> does.</summary>
         public string ColorId => Color.ColorId;
 
         private ShotBalloonSnapshot(
             Vector2 position, float radius, int scoreValue, int hitsRemaining, ColorProfile color,
-            BalanceProfile? balance, ShotContactKind contactKind, ItemType item)
+            BalanceProfile? balance, ShotContactKind contactKind, ItemType item, Vector2Int? staticSlotIndex)
         {
             Position = position;
             Radius = radius;
@@ -104,6 +114,7 @@ namespace BalloonParty.Solver
             Balance = balance;
             ContactKind = contactKind;
             Item = item;
+            StaticSlotIndex = staticSlotIndex;
         }
 
         /// <summary>A poppable/deflectable colour-scoring target — mirrors a live balloon with
@@ -114,7 +125,7 @@ namespace BalloonParty.Solver
         {
             return new ShotBalloonSnapshot(
                 position, radius, scoreValue, hitsRemaining, new ColorProfile(colorId, false, null), balance,
-                ShotContactKind.Poppable, ItemType.None);
+                ShotContactKind.Poppable, ItemType.None, null);
         }
 
         /// <summary>A colourless target scored via the flat/streak-breaking tough rule — mirrors
@@ -125,18 +136,20 @@ namespace BalloonParty.Solver
         {
             return new ShotBalloonSnapshot(
                 position, radius, scoreValue, hitsRemaining, default, balance, ShotContactKind.Poppable,
-                ItemType.None);
+                ItemType.None, null);
         }
 
         /// <summary>A collision-only archetype with no score and no balance-grid presence — Phase A's
         /// interactive statics (Deflector/Gatekeeper/Absorber). Balance is always null: statics never
         /// enter the balance grid as movers, so no dynamic stub backs them (see the null-<c>Actor</c>
-        /// gating in <see cref="ShotBoardDynamics" />/<see cref="ShotSimulator" />). Unused by the live
-        /// gather until Phase A wires static archetypes into the collision board.</summary>
+        /// gating in <see cref="ShotBoardDynamics" />/<see cref="ShotSimulator" />); <paramref name="slotIndex" />
+        /// is the actor's REAL grid slot, carried via <see cref="StaticSlotIndex" /> so a pop/deflect can
+        /// still address the right cell.</summary>
         public static ShotBalloonSnapshot ForStaticContact(
-            Vector2 position, float radius, ShotContactKind kind, int hitsRemaining = 1)
+            Vector2Int slotIndex, Vector2 position, float radius, ShotContactKind kind, int hitsRemaining = 1)
         {
-            return new ShotBalloonSnapshot(position, radius, 0, hitsRemaining, default, null, kind, ItemType.None);
+            return new ShotBalloonSnapshot(
+                position, radius, 0, hitsRemaining, default, null, kind, ItemType.None, slotIndex);
         }
     }
 
@@ -158,6 +171,7 @@ namespace BalloonParty.Solver
         public ShotContactKind ContactKind;
         public ItemType Item;
         public bool IsRainbow;
+        public bool IsStatic;
         public ShotSimDynamicActor Actor;
 
         public ShotBalloonState(in ShotBalloonSnapshot snapshot)
@@ -167,10 +181,11 @@ namespace BalloonParty.Solver
             ColorId = snapshot.ColorId;
             ScoreValue = snapshot.ScoreValue;
             HitsRemaining = snapshot.HitsRemaining;
-            SlotIndex = snapshot.Balance?.SlotIndex ?? default;
+            SlotIndex = snapshot.Balance?.SlotIndex ?? snapshot.StaticSlotIndex ?? default;
             ContactKind = snapshot.ContactKind;
             Item = snapshot.Item;
             IsRainbow = snapshot.Color.IsRainbow;
+            IsStatic = snapshot.StaticSlotIndex.HasValue;
             Actor = null;
         }
     }

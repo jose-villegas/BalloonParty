@@ -550,11 +550,14 @@ namespace BalloonParty.Tests.ShotSolver
         [Test]
         public void CopyIntoWorkingSet_StaticSnapshotWithoutBalanceProfile_LeavesActorNull()
         {
-            // A static contact (Phase A's future Deflector/Gatekeeper/Absorber shape) has no
-            // BalanceProfile, so ShotBoardDynamics builds no dynamic stub for it — the sim must still
-            // resolve the contact at the snapshot's own fixed Position, with no NRE anywhere along the
-            // null-Actor path (CopyIntoWorkingSet, CurrentBalloonCenter, ResolveBalloonContact).
-            var board = new[] { ShotBoardBuilder.Static(new Vector2(0f, 2f), 0.2f, ShotContactKind.Poppable) };
+            // A static contact (Phase A's Deflector/Gatekeeper/Absorber shape) has no BalanceProfile,
+            // so ShotBoardDynamics builds no dynamic stub for it — the sim must still resolve the
+            // contact at the snapshot's own fixed Position, with no NRE anywhere along the null-Actor
+            // path (CopyIntoWorkingSet, CurrentBalloonCenter, ResolveBalloonContact).
+            var board = new[]
+            {
+                ShotBoardBuilder.Static(Vector2Int.zero, new Vector2(0f, 2f), 0.2f, ShotContactKind.Poppable),
+            };
             var workingSet = new ShotBalloonState[board.Length];
 
             var gridConfig = Substitute.For<ISlotGridConfig>();

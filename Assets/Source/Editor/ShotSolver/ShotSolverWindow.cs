@@ -215,10 +215,11 @@ namespace BalloonParty.Editor.ShotSolver
                 var window = _windows[i];
                 var marker = i == _bestWindowIndex ? "   ★ best" : string.Empty;
                 var robustness = !_checkRobustness ? string.Empty : window.Robust ? "   ✓robust" : "   ±fragile";
+                var absorbedTag = window.CenterAbsorbed ? "   ⊘absorbed" : string.Empty;
                 EditorGUILayout.LabelField(
                     $"{window.FromDegrees:F2}°  →  {window.ToDegrees:F2}°   width {window.WidthDegrees:F2}°   " +
                     $"score {window.CenterScore}   pops {window.CenterPops}   toughs {window.CenterToughsCleared}" +
-                    $"{robustness}{marker}");
+                    $"{robustness}{absorbedTag}{marker}");
             }
 
             EditorGUILayout.EndScrollView();
@@ -258,6 +259,7 @@ namespace BalloonParty.Editor.ShotSolver
             _sweepScores = new float[_sampleCount];
             var qualifies = new bool[_sampleCount];
             var cappedCount = 0;
+            var absorbedCount = 0;
 
             var bestSampleIndex = 0;
             for (var i = 0; i < _sampleCount; i++)
@@ -276,6 +278,11 @@ namespace BalloonParty.Editor.ShotSolver
                 {
                     cappedCount++;
                 }
+
+                if (result.Absorbed)
+                {
+                    absorbedCount++;
+                }
             }
 
             BuildWindows(qualifies, context, workingSet);
@@ -293,7 +300,7 @@ namespace BalloonParty.Editor.ShotSolver
 
             _lastRunSummary =
                 $"{_sampleCount} angles in {stopwatch.ElapsedMilliseconds} ms — {_windows.Count} window(s) " +
-                $"≥ {_minWindowWidthDegrees:F2}°, {cappedCount} capped run(s)" +
+                $"≥ {_minWindowWidthDegrees:F2}°, {cappedCount} capped run(s), {absorbedCount} absorbed run(s)" +
                 (usedFallback
                     ? $"; no window qualifies — drawing best single angle {SampleAngle(bestSampleIndex):F2}° " +
                       $"(score {_sweepScores[bestSampleIndex]:F0})"
@@ -374,7 +381,7 @@ namespace BalloonParty.Editor.ShotSolver
 
             _windows.Add(new ShotSolverWindowEntry(
                 fromDegrees, toDegrees, widthDegrees, centerResult.RawScore, centerResult.Pops,
-                centerResult.ToughsCleared, robust));
+                centerResult.ToughsCleared, robust, centerResult.Absorbed));
 
             if (widthDegrees > bestWidth)
             {
@@ -620,10 +627,11 @@ namespace BalloonParty.Editor.ShotSolver
             public readonly int CenterPops;
             public readonly int CenterToughsCleared;
             public readonly bool Robust;
+            public readonly bool CenterAbsorbed;
 
             public ShotSolverWindowEntry(
                 float fromDegrees, float toDegrees, float widthDegrees, int centerScore, int centerPops,
-                int centerToughsCleared, bool robust)
+                int centerToughsCleared, bool robust, bool centerAbsorbed)
             {
                 FromDegrees = fromDegrees;
                 ToDegrees = toDegrees;
@@ -632,6 +640,7 @@ namespace BalloonParty.Editor.ShotSolver
                 CenterPops = centerPops;
                 CenterToughsCleared = centerToughsCleared;
                 Robust = robust;
+                CenterAbsorbed = centerAbsorbed;
             }
         }
     }

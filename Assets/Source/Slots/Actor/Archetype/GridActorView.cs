@@ -6,11 +6,16 @@ namespace BalloonParty.Slots.Actor.Archetype
 {
     public class GridActorView : MonoBehaviour, IPoolable, ISlotActorView
     {
+        [SerializeField] private Collider2D _collider;
         [SerializeField] private TweenTracker _tweenTracker;
 
         public TweenTracker TweenTracker => _tweenTracker;
         public SlotActorKind ActorKind => SlotActorKind.Static;
         public Transform RotationPivot => transform;
+
+        // Feeds the shot solver's Phase A static-archetype collision geometry (Deflector/Gatekeeper/
+        // Absorber) — zero (collision-inert) until a collider is authored on the prefab.
+        public float ContactRadius => BalloonParty.Shared.ContactRadius.FromCollider(_collider, transform.lossyScale.x);
 
         public void OnSpawned()
         {

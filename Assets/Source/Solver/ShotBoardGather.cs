@@ -4,6 +4,7 @@ using BalloonParty.Balloon.View;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Shared;
 using BalloonParty.Slots.Actor;
+using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using BalloonParty.Thrower;
@@ -132,7 +133,16 @@ namespace BalloonParty.Solver
 
                     if (actor.Kind == SlotActorKind.Static)
                     {
+                        // A static always occupies its slot for the balance planner; an interactive
+                        // archetype (Deflector/Gatekeeper/Absorber — IHitable) ADDITIONALLY becomes a
+                        // collision target, still at that same slot (Phase A).
                         staticActors.Add(new ShotStaticActorSnapshot(index));
+                        if (actor is IHitable hitable
+                            && TryBuildStaticContactSnapshot(grid, index, hitable, out var staticTarget))
+                        {
+                            targets.Add(staticTarget);
+                        }
+
                         continue;
                     }
 
@@ -212,6 +222,40 @@ namespace BalloonParty.Solver
             return true;
         }
 
+        // Interactive static archetypes (Deflector/Gatekeeper/Absorber) collide with the shot while
+        // still occupying their slot for the planner (staticActors, in CollectBoard) — durability comes
+        // from IHasDurability when present (Gatekeeper), else the deflect-forever convention
+        // (int.MaxValue, mirroring TryBuildTargetSnapshot's Unbreakable case) for a static with no
+        // durability capability at all (Deflector, Absorber).
+        private static bool TryBuildStaticContactSnapshot(
+            SlotGrid grid, Vector2Int index, IHitable hitable, out ShotBalloonSnapshot snapshot)
+        {
+            var hitsRemaining = hitable is IHasDurability durable ? durable.HitsRemaining.Value : int.MaxValue;
+
+            // Mirrors TryBuildTargetSnapshot's view-position preference — a static's own view has no
+            // balance tween to displace it, but this keeps both paths identical in shape.
+            var view = grid.ActorViewAt<GridActorView>(index);
+            var radius = view != null ? view.ContactRadius : 0f;
+            var position = view != null
+                ? (Vector2)view.transform.position
+                : (Vector2)grid.IndexToWorldPosition(index);
+
+            snapshot = ShotBalloonSnapshot.ForStaticContact(index, position, radius, ClassifyContactKind(hitable), hitsRemaining);
+            return true;
+        }
+
+        // A damage-0 probe is non-mutating for all three archetypes: AbsorberActorModel/
+        // DeflectorActorModel ignore damage entirely, and GatekeeperActorModel's
+        // Math.Max(0, HitsRemaining - 0) writes back the same value — safe to call at gather time.
+        // DeflectForever isn't a separate case: durability (HitsRemaining) alone decides whether a
+        // Poppable-kind contact deflects forever (int.MaxValue) or eventually pops.
+        internal static ShotContactKind ClassifyContactKind(IHitable actor)
+        {
+            return actor.EvaluateHit(new DamageContext(0)) == HitOutcome.Absorb
+                ? ShotContactKind.Absorb
+                : ShotContactKind.Poppable;
+        }
+
         // Mirrors ProjectileView.Awake's own (private) contact-radius derivation — a capsule's
         // cross-section half-extent, or a circle's radius, scaled by the prefab's world scale.
         private static float ResolveProjectileContactRadius(ThrowerSettings settings)
@@ -223,13 +267,7 @@ namespace BalloonParty.Solver
             }
 
             var collider = prefabView.GetComponent<Collider2D>();
-            return collider switch
-            {
-                CircleCollider2D circle => circle.radius * prefabView.transform.lossyScale.x,
-                CapsuleCollider2D capsule =>
-                    Mathf.Min(capsule.size.x, capsule.size.y) * 0.5f * prefabView.transform.lossyScale.x,
-                _ => 0f,
-            };
+            return ContactRadius.FromCollider(collider, prefabView.transform.lossyScale.x);
         }
     }
 }

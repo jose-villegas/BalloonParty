@@ -26,6 +26,7 @@ namespace BalloonParty.Solver
         public int Events;
         public bool Died;
         public bool Capped;
+        public bool Absorbed;
 
         public ShotFlightState(Vector2 position, Vector2 direction, int shields)
         {
@@ -47,6 +48,7 @@ namespace BalloonParty.Solver
             Events = 0;
             Died = false;
             Capped = false;
+            Absorbed = false;
         }
     }
 }

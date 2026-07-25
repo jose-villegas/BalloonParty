@@ -67,9 +67,11 @@ namespace BalloonParty.Solver
         public readonly int Events;
         public readonly bool Died;
         public readonly bool Capped;
+        public readonly bool Absorbed;
 
         public ShotSimulationResult(
-            int rawScore, int pops, int toughsCleared, bool boardCleared, int events, bool died, bool capped)
+            int rawScore, int pops, int toughsCleared, bool boardCleared, int events, bool died, bool capped,
+            bool absorbed)
         {
             RawScore = rawScore;
             Pops = pops;
@@ -78,6 +80,7 @@ namespace BalloonParty.Solver
             Events = events;
             Died = died;
             Capped = capped;
+            Absorbed = absorbed;
         }
     }
 
@@ -193,6 +196,11 @@ namespace BalloonParty.Solver
                     ResolveBalloonContact(
                         workingSet, ref activeCount, balloonIndex, state.Position, projectileContactRadius,
                         state.Elapsed, dynamics, targetColorId, ref state);
+                    if (state.Absorbed)
+                    {
+                        break;
+                    }
+
                     continue;
                 }
 
@@ -211,7 +219,7 @@ namespace BalloonParty.Solver
 
             return new ShotSimulationResult(
                 state.RawScore, state.Pops, state.ToughsCleared, activeCount == 0, state.Events, state.Died,
-                state.Capped);
+                state.Capped, state.Absorbed);
         }
 
         private static bool TryFindNearestBalloonEntryAny(
@@ -439,6 +447,15 @@ namespace BalloonParty.Solver
         {
             ref var balloon = ref workingSet[index];
 
+            // Absorb ends the flight outright, before anything else runs — no score, no streak
+            // mutation, no removal (the live Absorber stays on the grid forever). The main loop's
+            // `if (state.Absorbed) break;` stops the rest of the flight from resolving.
+            if (balloon.ContactKind == ShotContactKind.Absorb)
+            {
+                state.Absorbed = true;
+                return;
+            }
+
             // Any contact ends an empty-corridor cruise and resets its bounce counter — mirrors
             // ProjectileHitResolver.Resolve — UNLESS the shot has earned piercing, which rides the
             // cruise (and its stacking speed ramp) on through the pop instead of dropping to base.
@@ -448,17 +465,15 @@ namespace BalloonParty.Solver
                 state.IsCruising = false;
             }
 
-            // No Actor ⇒ no BalanceProfile backed this entry (a static contact) — fall back to the
-            // slot-based dynamics entry points, which nudge/remove by SlotIndex instead of an actor
-            // backref the entry never had.
+            // No Actor ⇒ no BalanceProfile backed this entry (a static contact). Unlike a live balloon,
+            // a live static NEVER nudges its neighbours — NudgeService.OnActorHit requires IHasNudge,
+            // which no static archetype implements — so this branch deliberately does NOT call
+            // ShotBoardDynamics.OnBalloonHitAt for a static. That method stays defined, unreachable
+            // today, for a future IHasNudge static.
             var incomingDirection = state.Direction;
             if (balloon.Actor != null)
             {
                 dynamics?.OnBalloonHit(balloon.Actor, tHit);
-            }
-            else
-            {
-                dynamics?.OnBalloonHitAt(balloon.SlotIndex, tHit);
             }
 
             var center = CurrentBalloonCenter(workingSet, index, tHit, dynamics);
@@ -486,6 +501,19 @@ namespace BalloonParty.Solver
             if (state.IsPiercing && balloon.HitsRemaining > 1)
             {
                 state.PierceSpeedScale *= 0.5f;
+            }
+
+            // A Gatekeeper's final hit pops it — but it has no IHasScoreColor, so ScoreController
+            // ignores its live pop entirely: no score, no ToughsCleared, and (unlike a tough pop) the
+            // streak must NOT reset, since the game never touches it either. Discriminate on IsStatic,
+            // not Actor == null (the fast/no-dynamics path nulls Actor for every entry) or ContactKind
+            // (Absorb is orthogonal — already handled above).
+            if (balloon.IsStatic)
+            {
+                state.Pops++;
+                dynamics?.RemoveFromGridAt(balloon.SlotIndex);
+                RemoveActive(workingSet, ref activeCount, index);
+                return;
             }
 
             // A colour filter scopes SCORE attribution only (milestone masks count one colour's
