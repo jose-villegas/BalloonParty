@@ -41,8 +41,10 @@ namespace BalloonParty.Audio.Routing
                     _launchHandle = _player.Play(GameSoundId.LaunchMusic, null);
                 }
             }
-            else if (_launchHandle.IsValid)
+            else if (state == NavigationState.Game && _launchHandle.IsValid)
             {
+                // Stop specifically on entering Game (pressing Play). LevelUp/GameOver only follow Game,
+                // by which point it's already stopped, so they need no handling here.
                 _player.Stop(_launchHandle);
                 _launchHandle = SoundHandle.None;
             }
