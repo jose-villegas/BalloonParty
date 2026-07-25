@@ -27,6 +27,7 @@ namespace BalloonParty.Thrower
         private readonly ISubscriber<RunResetMessage> _resetSubscriber;
         private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _levelUpDismissedSubscriber;
+        private readonly ISubscriber<LevelTransitionCompletedMessage> _levelTransitionCompletedSubscriber;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
         private readonly PauseService _pauseService;
@@ -64,6 +65,7 @@ namespace BalloonParty.Thrower
             ISubscriber<RunResetMessage> resetSubscriber,
             ISubscriber<BoardClearMessage> boardClearSubscriber,
             ISubscriber<LevelUpDismissedMessage> levelUpDismissedSubscriber,
+            ISubscriber<LevelTransitionCompletedMessage> levelTransitionCompletedSubscriber,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             ISubscriber<GameOverMessage> gameOverSubscriber,
             PauseService pauseService,
@@ -81,6 +83,7 @@ namespace BalloonParty.Thrower
             _resetSubscriber = resetSubscriber;
             _boardClearSubscriber = boardClearSubscriber;
             _levelUpDismissedSubscriber = levelUpDismissedSubscriber;
+            _levelTransitionCompletedSubscriber = levelTransitionCompletedSubscriber;
             _levelUpSubscriber = levelUpSubscriber;
             _gameOverSubscriber = gameOverSubscriber;
             _pauseService = pauseService;
@@ -102,7 +105,12 @@ namespace BalloonParty.Thrower
             // The spent shot scales away (returns to the pool only when that finishes) while a fresh instance
             // loads at once — so the thrower never reuses a shot still mid-disappear.
             _destroyedSubscriber.Subscribe(_ => SwapActiveProjectile()).AddTo(_subscriptions);
-            _levelUpDismissedSubscriber.Subscribe(_ => SwapActiveProjectile()).AddTo(_subscriptions);
+
+            // On a level-up the old shot scales away at dismiss, but the fresh one loads only once the level
+            // transition completes — so the new projectile (and its reload cue) arrives with the new level,
+            // not mid-ascent while the transition pause has the Gameplay channel ducked.
+            _levelUpDismissedSubscriber.Subscribe(_ => ScaleAwayActiveProjectile()).AddTo(_subscriptions);
+            _levelTransitionCompletedSubscriber.Subscribe(_ => LoadProjectile()).AddTo(_subscriptions);
 
             // A shot fired in the very frame the level-up triggers never takes a physics step before the
             // freeze — un-fire it, or the dismissal swap scale-drifts it from the muzzle like a phantom.
