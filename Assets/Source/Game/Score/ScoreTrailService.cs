@@ -19,6 +19,10 @@ namespace BalloonParty.Game.Score
 {
     internal class ScoreTrailService : IStartable, IDisposable, IRunResettable, ITransitionOutgoingContent
     {
+        // Above the level-up popup canvases (root 3000 / content 3100) and its glow trails (3200) so score
+        // trails stay on top of the popup while flying to the score bars during the level-up transition.
+        private const int ScoreTrailSortingOrder = 3300;
+
         private readonly IPublisher<ScoreTrailArrivedMessage> _arrivedPublisher;
         private readonly Dictionary<string, Color> _colorLookup = new();
         private readonly IScoreTrailConfig _scoreConfig;
@@ -123,7 +127,8 @@ namespace BalloonParty.Game.Score
                 return;
             }
 
-            var spawner = new TrailSpawner(_poolManager, $"ScoreTrail_{colorName}", _trailPrefab);
+            var spawner = new TrailSpawner(
+                _poolManager, $"ScoreTrail_{colorName}", _trailPrefab, ScoreTrailSortingOrder);
             _spawners[colorName] = spawner;
 
             // Amortized over frames so registering a color at level setup never spikes into a hitch.

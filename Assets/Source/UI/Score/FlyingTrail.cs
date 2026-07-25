@@ -374,8 +374,10 @@ namespace BalloonParty.UI.Score
 
         private void ApplySortingOrder(int order)
         {
-            _renderer.sortingOrder += order;
-            _trailRenderer.sortingOrder += order;
+            // Assign, never accumulate: these orbs are pooled, so += drifted the order up on every
+            // recycle (the level-up render-ordering bug). The ribbon sits one step above the head sprite.
+            _renderer.sortingOrder = order;
+            _trailRenderer.sortingOrder = order + 1;
         }
 
         [Serializable]
