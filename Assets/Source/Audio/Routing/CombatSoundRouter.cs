@@ -22,9 +22,11 @@ namespace BalloonParty.Audio.Routing
         private readonly ISubscriber<PierceDischargedMessage> _pierceSubscriber;
         private readonly ISubscriber<ShieldGainedMessage> _shieldGainedSubscriber;
         private readonly ISubscriber<ShieldLostMessage> _shieldLostSubscriber;
+        private readonly ISubscriber<WallHitMessage> _wallHitSubscriber;
         private readonly CompositeDisposable _subscriptions = new();
 
         private SoundHandle _cruiseHandle = SoundHandle.None;
+        private int _shieldLossStreak;
 
         [Inject]
         public CombatSoundRouter(ISoundPlayer player,
@@ -36,7 +38,8 @@ namespace BalloonParty.Audio.Routing
             ISubscriber<ProjectileDoomedStartedMessage> doomedSubscriber,
             ISubscriber<PierceDischargedMessage> pierceSubscriber,
             ISubscriber<ShieldGainedMessage> shieldGainedSubscriber,
-            ISubscriber<ShieldLostMessage> shieldLostSubscriber)
+            ISubscriber<ShieldLostMessage> shieldLostSubscriber,
+            ISubscriber<WallHitMessage> wallHitSubscriber)
         {
             _player = player;
             _hitSubscriber = hitSubscriber;
@@ -48,6 +51,7 @@ namespace BalloonParty.Audio.Routing
             _pierceSubscriber = pierceSubscriber;
             _shieldGainedSubscriber = shieldGainedSubscriber;
             _shieldLostSubscriber = shieldLostSubscriber;
+            _wallHitSubscriber = wallHitSubscriber;
         }
 
         public void Start()
@@ -61,6 +65,7 @@ namespace BalloonParty.Audio.Routing
             _pierceSubscriber.Subscribe(OnPierceDischarged).AddTo(_subscriptions);
             _shieldGainedSubscriber.Subscribe(OnShieldGained).AddTo(_subscriptions);
             _shieldLostSubscriber.Subscribe(OnShieldLost).AddTo(_subscriptions);
+            _wallHitSubscriber.Subscribe(OnWallHit).AddTo(_subscriptions);
         }
 
         public void Dispose()
@@ -132,12 +137,21 @@ namespace BalloonParty.Audio.Routing
 
         private void OnShieldGained(ShieldGainedMessage message)
         {
+            _shieldLossStreak = 0;
             _player.Play(GameSoundId.ShieldGained, null);
         }
 
         private void OnShieldLost(ShieldLostMessage message)
         {
-            _player.Play(GameSoundId.ShieldLost, message.Position);
+            // Consecutive shield losses walk the ShieldLost pop further down its scale (author it as
+            // ScaleWalkDown); gaining a shield resets the descent. This streak is independent of the
+            // colour-pop streak, so it's supplied per-play rather than through the ambient key.
+            _player.Play(GameSoundId.ShieldLost, message.Position, ++_shieldLossStreak);
+        }
+
+        private void OnWallHit(WallHitMessage message)
+        {
+            _player.Play(GameSoundId.WallHit, message.Position);
         }
     }
 }

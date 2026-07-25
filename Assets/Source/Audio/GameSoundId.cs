@@ -39,6 +39,9 @@ namespace BalloonParty.Audio
 
         // Per-balloon-type pops (append only, like the rest). Simple balloons use BalloonPop;
         // specific kinds map to their own id via CombatSoundRouter.PopSoundFor.
-        BalloonPopTough
+        BalloonPopTough,
+
+        // Physical wall-bounce impact, driven by WallHitMessage (distinct from the ShieldLost cue).
+        WallHit
     }
 }

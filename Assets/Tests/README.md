@@ -571,17 +571,26 @@ Tests `SoundBankConfiguration.TryGet` — the runtime gate between an authored `
 | `None` id → not found | 1 | `GameSoundId.None` accidentally maps to a real entry |
 | Out-of-range ordinal → not found, no throw | 1 | A stale/appended enum value indexes past the array |
 
-### `VariationPickerTests` — 10 tests
+### `VariationPickerTests` — 17 tests
 
-Tests clip/pitch/volume selection — plain random ranges, the two melodic modes (`ScaleWalk`/`Tension`), burst spread, and pan gating.
+Tests clip/pitch/volume selection — plain random ranges, the three melodic modes
+(`ScaleWalkUp`/`ScaleWalkDown`/`Tension`), the per-`SfxEntry` octave-cap/skip-step knobs,
+burst spread, and pan gating.
 
 | Area | Tests | What could break |
 |---|---|---|
 | Plain mode pitch/volume within configured range | 1 | Random range math out of bounds |
-| ScaleWalk — streak 0 → root pitch | 1 | Degree-zero mapping wrong |
-| ScaleWalk — streak rolls past scale length → octave up | 1 | Octave rollover math wrong |
-| ScaleWalk — mid-streak → correct scale degree | 1 | Modulo/index-into-scale wrong |
-| ScaleWalk — empty scale → falls back without throwing | 1 | Divide-by-zero on `degree % scale.Count` |
+| ScaleWalkUp — streak 0 → root pitch | 1 | Degree-zero mapping wrong |
+| ScaleWalkUp — first ascent peaks an octave up | 1 | Octave rollover math wrong |
+| ScaleWalkUp — `MelodicSkipSteps = 0` loops within one octave | 1 | Yoyo dip math wrong at the no-climb boundary |
+| ScaleWalkUp — default skip net-climbs across cycles | 1 | Skip-step advance not applied per cycle |
+| ScaleWalkUp — skip equal to scale length climbs without dipping | 1 | Full-skip special case not treated as a plain climb |
+| ScaleWalkUp — `MelodicMaxOctaves` shrinks the ceiling | 1 | Per-entry octave cap ignored or shared globally |
+| One shared picker honours each entry's own range | 1 | `MelodicMaxOctaves`/`MelodicSkipSteps` bleed between entries instead of reading per-`SfxEntry` |
+| ScaleWalkDown mirrors the up walk below the root | 1 | Mirrored sign flip missing or inverted |
+| ScaleWalkUp — runaway streak stays bounded | 1 | Ceiling not enforced past many cycles |
+| ScaleWalkUp — mid-streak → correct scale degree | 1 | Modulo/index-into-scale wrong |
+| ScaleWalkUp — empty scale → falls back without throwing | 1 | Divide-by-zero on `degree % scale.Count` |
 | Tension — adds tension semitones to current semitone | 1 | Tension offset not applied against the live pop degree |
 | Burst index > 0 → pitch up, volume down | 1 | Burst-spread math missing or inverted |
 | Multi-clip entry never repeats the same clip consecutively | 1 | No-immediate-repeat guard broken |

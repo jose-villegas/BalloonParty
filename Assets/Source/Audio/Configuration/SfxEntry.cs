@@ -31,12 +31,20 @@ namespace BalloonParty.Audio.Configuration
         [Tooltip("Derive a subtle stereo pan from world-X. spatialBlend stays 0 (no rolloff).")]
         [SerializeField] private bool _pan2D = true;
 
-        [Tooltip("None = plain variation. ScaleWalk = streak-driven pentatonic climb (unbounded octave " +
-                 "rollover). ScaleWalkCapped = net-climbing yoyo (rise an octave, dip MelodicSkipSteps back, " +
-                 "repeat) ceilinged at MelodicMaxOctaves so pitch can't run away. ScaleWalkCappedDown = the " +
-                 "same yoyo mirrored below the root (dips down first, then works up). Tension = fixed " +
-                 "dissonant offset against the pop key.")]
+        [Tooltip("None = plain variation. ScaleWalkUp = streak-driven net-climbing yoyo (rise a scale " +
+                 "octave, dip MelodicSkipSteps back, repeat) ceilinged at MelodicMaxOctaves. ScaleWalkDown = " +
+                 "the same yoyo mirrored below the root (dips down first, then works up). Tension = fixed " +
+                 "dissonant offset against the current pop key.")]
         [SerializeField] private MelodicMode _melodicMode = MelodicMode.None;
+
+        [Tooltip("Octaves the walk spans before it stops drifting. Bounds the pitch so a long " +
+                 "streak can't run away into a squeak; keep it low (1-2). Only used by ScaleWalkUp/Down.")]
+        [SerializeField] [Min(1)] private int _melodicMaxOctaves = 2;
+
+        [Tooltip("Net climb per yoyo cycle, in scale steps. Each cycle rises one scale octave then dips " +
+                 "back, advancing this many steps. 0 = loop within one octave (no net climb); equal to the " +
+                 "scale length = plain climb, no dip. 1-2 stays tonal. Only used by ScaleWalkUp/Down.")]
+        [SerializeField] [Min(0)] private int _melodicSkipSteps = 1;
 
         [Tooltip("Semitone offset against the current pop degree when MelodicMode = Tension. " +
                  "e.g. deflect = +1 (minor-2nd rub), wall hit = -2 (dropped-it step).")]
@@ -52,6 +60,8 @@ namespace BalloonParty.Audio.Configuration
         public bool Loop => _loop;
         public bool Pan2D => _pan2D;
         public MelodicMode MelodicMode => _melodicMode;
+        public int MelodicMaxOctaves => _melodicMaxOctaves;
+        public int MelodicSkipSteps => _melodicSkipSteps;
         public int TensionSemitones => _tensionSemitones;
         public bool HasClips => _clips is { Length: > 0 };
 
@@ -64,13 +74,12 @@ namespace BalloonParty.Audio.Configuration
 #endif
     }
 
-    // Append only — serialized by ordinal on SfxEntry. Never reorder or insert.
+    // Serialized by ordinal on SfxEntry — reorder only while nothing authored depends on the old values.
     internal enum MelodicMode
     {
         None,
-        ScaleWalk,
-        Tension,
-        ScaleWalkCapped,
-        ScaleWalkCappedDown
+        ScaleWalkUp,
+        ScaleWalkDown,
+        Tension
     }
 }

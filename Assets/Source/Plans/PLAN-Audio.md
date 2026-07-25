@@ -390,31 +390,41 @@ heard before it's parsed.
   speed. This replaces the earlier "C major vs pentatonic" open question: pentatonic wins
   because the reward sound must never land a clash.
 - **Scale-degree source is the streak, not random.** Melodic modes map the streak to a
-  scale degree: **`ScaleWalk`** climbs with plain octave rollover (unbounded);
-  **`ScaleWalkCapped`** is a **net-climbing yoyo** — each cycle rises one scale octave then
-  dips back down, advancing **`MelodicSkipSteps`** scale steps per cycle so the pitch trends
-  up without the jarring octave drop a hard reset gives. `MelodicSkipSteps` is the knob:
-  **`0`** loops within one octave (no net climb), **`1`–`2`** give a tonal upward drift, and
-  **equal to the scale length** removes the dip entirely (a plain climb). The climb is
-  ceilinged by `MelodicMaxOctaves` (default 2) so a long streak can't run away into a squeak.
-  **`ScaleWalkCappedDown`** is the same yoyo mirrored below the root (dips an octave down
-  first, then works back up). Each sets the voice pitch from the resolved degree.
-  **Shipped as designed:** the streak arrives via `StreakChangedMessage`
+  scale degree: **`ScaleWalkUp`** is a **net-climbing yoyo** — each cycle rises one scale
+  octave then dips back down, advancing **`MelodicSkipSteps`** scale steps per cycle so the
+  pitch trends up without the jarring octave drop a hard reset gives. `MelodicSkipSteps` is
+  the knob: **`0`** loops within one octave (no net climb), **`1`–`2`** give a tonal upward
+  drift, and **equal to the scale length** removes the dip entirely (a plain climb). The
+  climb is ceilinged by `MelodicMaxOctaves` (default 2) so a long streak can't run away into
+  a squeak. Both `MelodicMaxOctaves` and `MelodicSkipSteps` are per-`SfxEntry` fields, so
+  each melodic sound tunes its own climb. **`ScaleWalkDown`** is the same yoyo mirrored below
+  the root (dips an octave down first, then works back up). Each sets the voice pitch from
+  the resolved degree. **Shipped as designed:** the streak arrives via `StreakChangedMessage`
   (`Game/Score/ColorStreakTracker.cs:94`); `ProgressionSoundRouter` forwards it to
   `SfxService` through the narrow `IMelodicContext.SetStreak(int)` facet on every change, and
   `SfxService` remembers the resulting semitone so a same-frame `Tension` entry (deflect/wall
   hit) can react against it.
 - **Negative events lean into the semitone — with distinct tension notes per event.**
-  `BalloonDeflect` and the wall-hit / shield loss on bounce (`ShieldLostMessage`,
-  `ProjectileView.cs:463`) each play a *different* dissonant interval against the current
-  pop key, so the two failures are audibly distinguishable, not one generic "wrong" buzz.
-  E.g. deflect = a minor-2nd rub above the current degree (a near-miss "so close" bite);
+  `BalloonDeflect` and the wall hit each play a *different* dissonant interval against the
+  current pop key, so the two failures are audibly distinguishable, not one generic "wrong"
+  buzz. E.g. deflect = a minor-2nd rub above the current degree (a near-miss "so close" bite);
   wall hit = a flat/downward step below the root (a heavier "dropped it" thud). This is
   the *purpose* of the semitone, not a defect to tune out.
+- **Shield loss walks DOWN its own streak.** `ShieldLost` (`ShieldLostMessage`) is authored as
+  `ScaleWalkDown` — a descending mirror of the pop walk. It's driven by a **shield-loss
+  streak owned by `CombatSoundRouter`** (`++` per consecutive loss, reset to 0 on
+  `ShieldGainedMessage`), independent of the colour-pop streak: each successive shield lost
+  drops the cue further down the scale, and gaining a shield resets the descent. Because it's a
+  separate progression, the router supplies it per-play via the optional `melodicStreak`
+  argument on `ISoundPlayer.Play` rather than the ambient `IMelodicContext.SetStreak`; an
+  overridden play deliberately does **not** move `_currentSemitone`, so deflect/wall-hit
+  `Tension` cues keep rubbing against the pop key, not the shield note.
 - **Scale is config, not hardcoded.** The key + the positive scale (pentatonic default)
   plus a per-event tension interval (deflect's rub, wall hit's drop) all live on the
   `SoundBankConfiguration` as semitone offsets, so key/mode and each dissonance flavor are
-  tunable (per-level key possible later).
+  tunable (per-level key possible later). The octave cap/skip-step knobs (`MelodicMaxOctaves`/
+  `MelodicSkipSteps`) live per-`SfxEntry` instead, so each `ScaleWalkUp`/`ScaleWalkDown` sound
+  can be capped/skipped independently.
 - **Reset on streak break.** Degree returns to the root when the streak resets, so the
   phrase restarts cleanly rather than jumping mid-scale.
 
@@ -564,7 +574,7 @@ Shipped, per `Assets/Tests/README.md`:
 Assets/Tests/EditMode/Audio/
 ├── SoundHandleTests.cs             ← equality/validity on (voiceId, generation)
 ├── SoundBankConfigurationTests.cs  ← TryGet: authored/empty/unauthored/None/out-of-range id
-├── VariationPickerTests.cs         ← plain range, ScaleWalk/Tension semitone math, burst spread, no-repeat
+├── VariationPickerTests.cs         ← plain range, ScaleWalkUp/Tension semitone math, burst spread, no-repeat
 ├── VoiceLimiterTests.cs            ← per-id + global cap, priority steal/drop, release accounting
 ├── SfxThrottleGateTests.cs         ← wall-clock cooldown, burst coalescing (injected clock)
 ├── AudioSourceVoiceTests.cs        ← null-clip synchronous-completion guard (EditMode-safe slice only)

@@ -25,6 +25,7 @@ namespace BalloonParty.Audio.Editor
         private readonly Dictionary<GameSoundId, List<SfxCandidate>> _candidates = new();
         private readonly HashSet<GameSoundId> _busy = new();
         private readonly HashSet<GameSoundId> _fetchExpanded = new();
+        private readonly HashSet<GameSoundId> _melodicWarningDismissed = new();
 
         private ISfxProvider _provider;
         private string _tokenInput = string.Empty;
@@ -82,11 +83,13 @@ namespace BalloonParty.Audio.Editor
 
         private void DrawEntry(SoundBankConfiguration bank, GameSoundId soundId, SerializedProperty entry)
         {
-            EditorGUILayout.PropertyField(entry, new GUIContent(soundId.ToString()), true);
+            DrawEntryFields(entry, soundId);
             if (!entry.isExpanded)
             {
                 return;
             }
+
+            DrawMelodicSupportWarning(entry, soundId);
 
             // Fetching appends to the clip list, so it stays available even once a clip is assigned —
             // you can pull in more variations. Only a token is required.
@@ -138,6 +141,75 @@ namespace BalloonParty.Audio.Editor
                         DrawCandidateRow(bank, soundId, candidate);
                     }
                 }
+            }
+        }
+
+        // Draws the entry as its own foldout, hiding fields that don't apply to the chosen MelodicMode:
+        // the octave-cap/skip knobs only for the walk modes, TensionSemitones only for Tension.
+        // (_fetchPrompt is [HideInInspector] and drawn separately inside the Fetch panel.)
+        private static void DrawEntryFields(SerializedProperty entry, GameSoundId soundId)
+        {
+            var clipCount = entry.FindPropertyRelative("_clips")?.arraySize ?? 0;
+            entry.isExpanded = EditorGUILayout.Foldout(entry.isExpanded, $"{soundId} ({clipCount})", true);
+            if (!entry.isExpanded)
+            {
+                return;
+            }
+
+            var mode = (MelodicMode)entry.FindPropertyRelative("_melodicMode").enumValueIndex;
+            var isWalk = mode is MelodicMode.ScaleWalkUp or MelodicMode.ScaleWalkDown;
+            var isTension = mode == MelodicMode.Tension;
+
+            using (new EditorGUI.IndentLevelScope())
+            {
+                var iterator = entry.Copy();
+                var end = entry.GetEndProperty();
+                var enterChildren = true;
+                while (iterator.NextVisible(enterChildren) && !SerializedProperty.EqualContents(iterator, end))
+                {
+                    enterChildren = false;
+                    switch (iterator.name)
+                    {
+                        case "_melodicMaxOctaves":
+                        case "_melodicSkipSteps":
+                            if (!isWalk)
+                            {
+                                continue;
+                            }
+
+                            break;
+                        case "_tensionSemitones":
+                            if (!isTension)
+                            {
+                                continue;
+                            }
+
+                            break;
+                    }
+
+                    EditorGUILayout.PropertyField(iterator, true);
+                }
+            }
+        }
+
+        // A melodic mode is inert unless code feeds this sound's context (a router driving its streak,
+        // or a Tension key from a preceding pop). Warn when one is set so an author knows it needs
+        // wiring; dismissable per session.
+        private void DrawMelodicSupportWarning(SerializedProperty entry, GameSoundId soundId)
+        {
+            var mode = (MelodicMode)entry.FindPropertyRelative("_melodicMode").enumValueIndex;
+            if (mode == MelodicMode.None || _melodicWarningDismissed.Contains(soundId))
+            {
+                return;
+            }
+
+            EditorGUILayout.HelpBox(
+                $"{mode} only moves pitch when code drives this sound's melodic context — a router feeding " +
+                "its streak (pops, shield loss) or a Tension key from a preceding pop. On a sound with no " +
+                "such wiring it just stays on the root.", MessageType.Warning);
+            if (GUILayout.Button("Dismiss", GUILayout.Width(70)))
+            {
+                _melodicWarningDismissed.Add(soundId);
             }
         }
 

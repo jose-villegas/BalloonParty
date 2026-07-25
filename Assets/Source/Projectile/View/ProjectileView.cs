@@ -46,6 +46,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
         [Inject] private IPublisher<ShieldLostMessage> _shieldLostPublisher;
+        [Inject] private IPublisher<WallHitMessage> _wallHitPublisher;
         [Inject] private IPublisher<ProjectileFiredMessage> _firedPublisher;
         [Inject] private IPublisher<ProjectileCruiseStartedMessage> _cruiseStartedPublisher;
         [Inject] private IPublisher<ProjectileCruiseEndedMessage> _cruiseEndedPublisher;
@@ -461,6 +462,7 @@ namespace BalloonParty.Projectile.View
             {
                 _shieldView?.OnBounce((Vector2)travelDirection, (Vector2)step.Direction, step.Speed);
                 _shieldLostPublisher.Publish(new ShieldLostMessage(step.WallContact));
+                _wallHitPublisher.Publish(new WallHitMessage(step.WallContact));
                 TryAwardSweepTap(step.WallContact, travelDirection);
 
 #if UNITY_EDITOR

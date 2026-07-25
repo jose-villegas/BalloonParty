@@ -13,18 +13,13 @@ namespace BalloonParty.Audio
         private readonly System.Random _rng;
         private readonly IReadOnlyList<int> _scale;
         private readonly int _root;
-        private readonly int _maxOctaves;
-        private readonly int _skipSteps;
         private readonly int[] _lastClipIndex;
 
-        public VariationPicker(System.Random rng, IReadOnlyList<int> melodicScale, int melodicRootSemitone,
-            int melodicMaxOctaves = 2, int melodicSkipSteps = 1)
+        public VariationPicker(System.Random rng, IReadOnlyList<int> melodicScale, int melodicRootSemitone)
         {
             _rng = rng;
             _scale = melodicScale;
             _root = melodicRootSemitone;
-            _maxOctaves = melodicMaxOctaves;
-            _skipSteps = melodicSkipSteps;
             _lastClipIndex = new int[SoundIds.Count];
             Reset();
         }
@@ -37,16 +32,12 @@ namespace BalloonParty.Audio
             var melodicSemitone = 0;
             switch (entry.MelodicMode)
             {
-                case MelodicMode.ScaleWalk when _scale.Count > 0:
-                    melodicSemitone = ResolveScaleWalkSemitone(ctx.Streak);
+                case MelodicMode.ScaleWalkUp when _scale.Count > 0:
+                    melodicSemitone = _root + ResolveWalkOffset(ctx.Streak, entry.MelodicMaxOctaves, entry.MelodicSkipSteps);
                     pitch = melodicSemitone.SemitonesToPitchMultiplier();
                     break;
-                case MelodicMode.ScaleWalkCapped when _scale.Count > 0:
-                    melodicSemitone = _root + ResolveCappedScaleWalkOffset(ctx.Streak);
-                    pitch = melodicSemitone.SemitonesToPitchMultiplier();
-                    break;
-                case MelodicMode.ScaleWalkCappedDown when _scale.Count > 0:
-                    melodicSemitone = _root - ResolveCappedScaleWalkOffset(ctx.Streak);
+                case MelodicMode.ScaleWalkDown when _scale.Count > 0:
+                    melodicSemitone = _root - ResolveWalkOffset(ctx.Streak, entry.MelodicMaxOctaves, entry.MelodicSkipSteps);
                     pitch = melodicSemitone.SemitonesToPitchMultiplier();
                     break;
                 case MelodicMode.Tension:
@@ -78,30 +69,22 @@ namespace BalloonParty.Audio
             }
         }
 
-        private int ResolveScaleWalkSemitone(int streak)
-        {
-            // Unbounded climb: each streak step is the next scale degree, rolling up one octave per lap.
-            var degree = Mathf.Max(0, streak);
-            var steps = _scale.Count;
-            return _root + _scale[degree % steps] + 12 * (degree / steps);
-        }
-
-        private int ResolveCappedScaleWalkOffset(int streak)
+        private int ResolveWalkOffset(int streak, int maxOctaves, int skipSteps)
         {
             // Magnitude (>= 0) of a net-climbing yoyo: each cycle ascends one scale octave then dips back
-            // down, advancing _skipSteps scale steps per cycle so it trends further from the root (the
-            // reward) without the jarring octave jump a hard reset gives. _skipSteps == 0 loops within one
-            // octave (no net drift); _skipSteps == the scale length removes the dip entirely (a plain
-            // ramp). The drift is ceilinged by _maxOctaves so a runaway streak can't squeak away. A step
-            // back down the pentatonic is a whole tone/third, so every dip stays tonal. ScaleWalkCapped
-            // adds this above the root; ScaleWalkCappedDown mirrors it below.
+            // down, advancing skipSteps scale steps per cycle so it trends further from the root (the
+            // reward) without the jarring octave jump a hard reset gives. skipSteps == 0 loops within one
+            // octave (no net drift); skipSteps == the scale length removes the dip entirely (a plain
+            // ramp). The drift is ceilinged by maxOctaves so a runaway streak can't squeak away. A step
+            // back down the pentatonic is a whole tone/third, so every dip stays tonal. ScaleWalkUp adds
+            // this above the root; ScaleWalkDown mirrors it below.
             var degree = Mathf.Max(0, streak);
             var steps = _scale.Count;
             var up = steps;
-            var skip = Mathf.Clamp(_skipSteps, 0, up);
+            var skip = Mathf.Clamp(skipSteps, 0, up);
             var down = up - skip;
             var cycleLen = Mathf.Max(1, up + down);
-            var windowTop = steps * Mathf.Max(1, _maxOctaves) - 1;
+            var windowTop = steps * Mathf.Max(1, maxOctaves) - 1;
             var driftCap = Mathf.Max(0, windowTop - up);
 
             var baseStep = Mathf.Min(degree / cycleLen * skip, driftCap);

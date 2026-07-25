@@ -94,6 +94,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<TransformCapturedMessage>(options);
             builder.RegisterMessageBroker<ShieldGainedMessage>(options);
             builder.RegisterMessageBroker<ShieldLostMessage>(options);
+            builder.RegisterMessageBroker<WallHitMessage>(options);
             builder.RegisterMessageBroker<PierceDischargedMessage>(options);
             builder.RegisterMessageBroker<ScoreTrailArrivedMessage>(options);
             builder.RegisterMessageBroker<LevelUpAbortedMessage>(options);
@@ -257,7 +258,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance(new VoiceLimiter(bank.GlobalVoiceCap));
             builder.RegisterInstance(new SfxThrottleGate(() => Time.unscaledTime, CoalesceWindowSeconds, MaxBurstPerWindow));
             builder.RegisterInstance(new VariationPicker(new System.Random(), bank.MelodicScale,
-                bank.MelodicRootSemitone, bank.MelodicMaxOctaves, bank.MelodicSkipSteps));
+                bank.MelodicRootSemitone));
 
             builder.Register<SfxService>(Lifetime.Singleton)
                 .As<ISoundPlayer>().As<IMelodicContext>().As<IRunResettable>().AsSelf();

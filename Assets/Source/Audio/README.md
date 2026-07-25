@@ -90,16 +90,23 @@ different from each other, and different from every pop, and you register "that 
 before you've even seen why.
 
 Mechanically: `SfxEntry.MelodicMode` selects between `None` (plain random pitch — most
-sounds), `ScaleWalk` (the simple-balloon pop; `VariationPicker` maps the current streak to a
-scale degree read from `SoundBankConfiguration.MelodicScale`/`MelodicRootSemitone`, climbing
-with plain octave rollover — unbounded), `ScaleWalkCapped` (a net-climbing yoyo — each cycle
-rises one scale octave then dips `MelodicSkipSteps` back, so the pitch trends up without a
-jarring reset, ceilinged at `MelodicMaxOctaves`), `ScaleWalkCappedDown` (the same yoyo
-mirrored below the root — dips down first, then works up), and
-`Tension` (deflect/wall-hit; offsets `SfxEntry.TensionSemitones` against whatever semitone
-the pop system is currently on). `ProgressionSoundRouter` feeds the streak in via
+sounds), `ScaleWalkUp` (the simple-balloon pop; a net-climbing yoyo — `VariationPicker` maps
+the current streak to a scale degree read from `SoundBankConfiguration.MelodicScale`/
+`MelodicRootSemitone`, each cycle rising one scale octave then dipping back the entry's own
+`MelodicSkipSteps`, so the pitch trends up without a jarring reset, ceilinged at the entry's
+own `MelodicMaxOctaves`), `ScaleWalkDown` (the same yoyo mirrored below the root — dips down
+first, then works up), and `Tension` (deflect/wall-hit; offsets `SfxEntry.TensionSemitones`
+against whatever semitone the pop system is currently on). `MelodicMaxOctaves` and
+`MelodicSkipSteps` are per-`SfxEntry` fields, so each `ScaleWalkUp`/`ScaleWalkDown` sound
+tunes its own climb independently. `ProgressionSoundRouter` feeds the pop streak in via
 `IMelodicContext.SetStreak` on every `StreakChangedMessage`; `SfxService` remembers the last
-melodic semitone so a `Tension` entry can react against it. **The melodic pop entries ship
+melodic semitone so a `Tension` entry can react against it.
+
+`ShieldLost` uses `ScaleWalkDown` on a *separate* progression: `CombatSoundRouter` keeps
+a shield-loss streak (`++` per consecutive loss, reset on `ShieldGainedMessage`) and passes it
+straight to `ISoundPlayer.Play(..., melodicStreak)`, so each shield lost steps the cue further
+down and a regained shield resets it. A play with an explicit `melodicStreak` never updates the
+ambient pop key, so it can't disturb the `Tension` cues. **The melodic pop entries ship
 dormant** — see *Deferred*.
 
 ## Channels and duck-on-pause
@@ -162,9 +169,10 @@ not by playing a separate "stop" cue; the enum value exists so a distinct stop *
 None of this feature makes a sound until it is wired in the Unity Editor:
 
 - **`SoundBankConfiguration` asset** (`Configuration/Sound Bank Configuration` menu) — one
-  `SfxEntry` per `GameSoundId`, plus `MelodicScale`/`MelodicRootSemitone`/`MelodicMaxOctaves`
-  (the streak-walk pitch soft cap) and `GlobalVoiceCap`. `OnValidate` auto-resizes the entry array when a new `GameSoundId` is
-  appended, but clips must be dragged in by hand per entry.
+  `SfxEntry` per `GameSoundId` (each with its own `MelodicMaxOctaves`/`MelodicSkipSteps` when
+  its mode is `ScaleWalkUp`/`ScaleWalkDown`), plus the shared `MelodicScale`/
+  `MelodicRootSemitone` (the key) and `GlobalVoiceCap`. `OnValidate` auto-resizes the entry
+  array when a new `GameSoundId` is appended, but clips must be dragged in by hand per entry.
 - **The `SfxVoice` prefab** — a `GameObject` with `AudioSourceVoice` + a plain `AudioSource`.
   Recommended `AudioSource` settings: **Play On Awake off**, **Loop off** (both are set by
   code on every `Play()`), spatial blend 0 (2D — `AudioSourceVoice` also forces this at
@@ -199,7 +207,7 @@ None of this feature makes a sound until it is wired in the Unity Editor:
   change is needed to activate it, only in-editor authoring. A smooth snapshot-transition
   duck (instead of the instant `SetFloat` shipped now) is a possible later refinement behind
   the same `IAudioMixerRouter` seam, not a commitment.
-- **Melodic pops are dormant.** The `ScaleWalk`/`Tension` machinery is code-complete and
+- **Melodic pops are dormant.** The `ScaleWalkUp`/`ScaleWalkDown`/`Tension` machinery is code-complete and
   tested, but ships live only once a sound designer authors `SfxEntry`s with those modes set
   and the scale/tension semitones tuned by ear — until then every pop plays with plain random
   pitch.

@@ -21,6 +21,9 @@ namespace BalloonParty.Tests.Audio
         private IMessageHandler<ProjectileLoadedMessage> _loadedHandler;
         private IMessageHandler<ProjectileCruiseStartedMessage> _cruiseStartedHandler;
         private IMessageHandler<ProjectileCruiseEndedMessage> _cruiseEndedHandler;
+        private IMessageHandler<ShieldGainedMessage> _shieldGainedHandler;
+        private IMessageHandler<ShieldLostMessage> _shieldLostHandler;
+        private IMessageHandler<WallHitMessage> _wallHitHandler;
 
         [SetUp]
         public void SetUp()
@@ -34,13 +37,14 @@ namespace BalloonParty.Tests.Audio
             var cruiseEndedSubscriber = CaptureSubscriber<ProjectileCruiseEndedMessage>(h => _cruiseEndedHandler = h);
             var doomedSubscriber = CaptureSubscriber<ProjectileDoomedStartedMessage>(_ => { });
             var pierceSubscriber = CaptureSubscriber<PierceDischargedMessage>(_ => { });
-            var shieldGainedSubscriber = CaptureSubscriber<ShieldGainedMessage>(_ => { });
-            var shieldLostSubscriber = CaptureSubscriber<ShieldLostMessage>(_ => { });
+            var shieldGainedSubscriber = CaptureSubscriber<ShieldGainedMessage>(h => _shieldGainedHandler = h);
+            var shieldLostSubscriber = CaptureSubscriber<ShieldLostMessage>(h => _shieldLostHandler = h);
+            var wallHitSubscriber = CaptureSubscriber<WallHitMessage>(h => _wallHitHandler = h);
 
             var router = new CombatSoundRouter(
                 _player, hitSubscriber, firedSubscriber, loadedSubscriber,
                 cruiseStartedSubscriber, cruiseEndedSubscriber, doomedSubscriber,
-                pierceSubscriber, shieldGainedSubscriber, shieldLostSubscriber);
+                pierceSubscriber, shieldGainedSubscriber, shieldLostSubscriber, wallHitSubscriber);
             router.Start();
         }
 
@@ -142,6 +146,47 @@ namespace BalloonParty.Tests.Audio
             _cruiseEndedHandler.Handle(new ProjectileCruiseEndedMessage(Vector3.zero));
 
             _player.Received(1).Stop(handle);
+        }
+
+        [Test]
+        public void OnShieldLost_ConsecutiveLosses_PassAnAscendingMelodicStreak()
+        {
+            var position = new Vector3(1f, 2f, 0f);
+
+            _shieldLostHandler.Handle(new ShieldLostMessage(position));
+            _shieldLostHandler.Handle(new ShieldLostMessage(position));
+            _shieldLostHandler.Handle(new ShieldLostMessage(position));
+
+            // Each loss steps the descending walk one further via an increasing melodicStreak.
+            _player.Received(1).Play(GameSoundId.ShieldLost, position, 1);
+            _player.Received(1).Play(GameSoundId.ShieldLost, position, 2);
+            _player.Received(1).Play(GameSoundId.ShieldLost, position, 3);
+        }
+
+        [Test]
+        public void OnShieldGained_ResetsTheShieldLossStreak()
+        {
+            var position = new Vector3(1f, 2f, 0f);
+
+            _shieldLostHandler.Handle(new ShieldLostMessage(position));
+            _shieldLostHandler.Handle(new ShieldLostMessage(position));
+            _shieldGainedHandler.Handle(new ShieldGainedMessage(Vector2Int.zero));
+            _shieldLostHandler.Handle(new ShieldLostMessage(position));
+
+            // The gain resets the descent, so the next loss walks from 1 again rather than reaching 3.
+            _player.Received(2).Play(GameSoundId.ShieldLost, position, 1);
+            _player.DidNotReceive().Play(GameSoundId.ShieldLost, position, 3);
+            _player.Received(1).Play(GameSoundId.ShieldGained, null);
+        }
+
+        [Test]
+        public void OnWallHit_PlaysWallHitAtContactPosition()
+        {
+            var position = new Vector3(3f, -1f, 0f);
+
+            _wallHitHandler.Handle(new WallHitMessage(position));
+
+            _player.Received(1).Play(GameSoundId.WallHit, position);
         }
 
         private static ISubscriber<T> CaptureSubscriber<T>(Action<IMessageHandler<T>> capture)
