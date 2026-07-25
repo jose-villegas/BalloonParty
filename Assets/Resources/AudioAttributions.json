@@ -388,5 +388,75 @@
     "LicenseName": "Creative Commons 0",
     "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
     "RequiresAttribution": false
+  },
+  {
+    "SoundId": "BalloonPopGold",
+    "ProviderId": 62985,
+    "Name": "Chime 0010.wav",
+    "Author": "radian",
+    "SoundUrl": "https://freesound.org/people/radian/sounds/62985/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "http://creativecommons.org/licenses/by/3.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "BalloonPopGold",
+    "ProviderId": 491666,
+    "Name": "Chimes 8.wav",
+    "Author": "_bliind",
+    "SoundUrl": "https://freesound.org/people/_bliind/sounds/491666/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "BalloonPopSilver",
+    "ProviderId": 684169,
+    "Name": "The sound of silver coins falling",
+    "Author": "AKkingStudio",
+    "SoundUrl": "https://freesound.org/people/AKkingStudio/sounds/684169/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "BalloonPopGold",
+    "ProviderId": 575582,
+    "Name": "Pouch of Gold Coins Place Down on Wood_02.wav",
+    "Author": "The_Frisbee_of_Peace",
+    "SoundUrl": "https://freesound.org/people/The_Frisbee_of_Peace/sounds/575582/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "BalloonPopSilver",
+    "ProviderId": 369139,
+    "Name": "VSH-37-pop-metal pipe-short.wav",
+    "Author": "newagesoup",
+    "SoundUrl": "https://freesound.org/people/newagesoup/sounds/369139/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "BalloonPopGold",
+    "ProviderId": 725469,
+    "Name": "Balloon Pop 5",
+    "Author": "Geoff-Bremner-Audio",
+    "SoundUrl": "https://freesound.org/people/Geoff-Bremner-Audio/sounds/725469/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "BalloonPopSilver",
+    "ProviderId": 757479,
+    "Name": "Popping Bubble Wrap 11",
+    "Author": "Geoff-Bremner-Audio",
+    "SoundUrl": "https://freesound.org/people/Geoff-Bremner-Audio/sounds/757479/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
   }
 ]

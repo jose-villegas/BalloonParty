@@ -9,7 +9,7 @@ namespace BalloonParty.Tests.Game
         // Night is the small arc 275 deg-315 deg (the sun sweeps 315 down to 275).
         [TestCase(315f, true)]    // start of the arc
         [TestCase(295f, true)]    // middle
-        [TestCase(275f, true)]    // end of the arc
+        [TestCase(270f, true)]    // end of the arc
         [TestCase(316f, false)]   // just outside
         [TestCase(274f, false)]   // just outside
         [TestCase(135f, false)]   // far from the arc

@@ -18,9 +18,9 @@ namespace BalloonParty.Shared.SceneLight
     internal sealed class TimeOfDayService : IStartable, ITickable, ISceneLightRuntime, ITimeOfDayNight
     {
         // Night is the small arc the sun sweeps as the day's angle DECREASES (TimeOfDayClock): from
-        // NightStartAngle down to NightEndAngle (~315° → 275°).
+        // NightStartAngle down to NightEndAngle (~315° → 270°).
         private const float NightStartAngle = 315f;
-        private const float NightEndAngle = 275f;
+        private const float NightEndAngle = 270f;
 
         private static readonly int SceneLightDirId = Shader.PropertyToID("_SceneLightDir");
         private static readonly int SceneLightColorId = Shader.PropertyToID("_SceneLightColor");
