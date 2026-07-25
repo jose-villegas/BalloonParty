@@ -20,12 +20,18 @@ namespace BalloonParty.Audio.Configuration
         [Tooltip("Root semitone offset applied to every degree (transposes the key).")]
         [SerializeField] private int _melodicRootSemitone;
 
+        [Tooltip("Octaves the streak-driven pop walk climbs before looping back a semitone higher. " +
+                 "Bounds the pitch so a long streak can't run away into a squeak. Soft cap — the per-loop " +
+                 "semitone shift can sit slightly above this; keep it low (1-2) to keep pops sane.")]
+        [SerializeField] [Min(1)] private int _melodicMaxOctaves = 2;
+
         [Header("Voices")]
         [Tooltip("Global concurrent-voice cap, and the pooled-voice prewarm count. Keep under Android's real-voice budget.")]
         [SerializeField] [Min(1)] private int _globalVoiceCap = 16;
 
         public IReadOnlyList<int> MelodicScale => _melodicScale;
         public int MelodicRootSemitone => _melodicRootSemitone;
+        public int MelodicMaxOctaves => _melodicMaxOctaves;
         public int GlobalVoiceCap => _globalVoiceCap;
 
         private void OnValidate()

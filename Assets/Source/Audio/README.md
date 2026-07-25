@@ -158,8 +158,8 @@ not by playing a separate "stop" cue; the enum value exists so a distinct stop *
 None of this feature makes a sound until it is wired in the Unity Editor:
 
 - **`SoundBankConfiguration` asset** (`Configuration/Sound Bank Configuration` menu) — one
-  `SfxEntry` per `GameSoundId`, plus `MelodicScale`/`MelodicRootSemitone` and
-  `GlobalVoiceCap`. `OnValidate` auto-resizes the entry array when a new `GameSoundId` is
+  `SfxEntry` per `GameSoundId`, plus `MelodicScale`/`MelodicRootSemitone`/`MelodicMaxOctaves`
+  (the streak-walk pitch soft cap) and `GlobalVoiceCap`. `OnValidate` auto-resizes the entry array when a new `GameSoundId` is
   appended, but clips must be dragged in by hand per entry.
 - **The `SfxVoice` prefab** — a `GameObject` with `AudioSourceVoice` + a plain `AudioSource`.
   Recommended `AudioSource` settings: **Play On Awake off**, **Loop off** (both are set by

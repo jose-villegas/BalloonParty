@@ -74,6 +74,59 @@ namespace BalloonParty.Tests.Audio
         }
 
         [Test]
+        public void Pick_ScaleWalkMode_StreakBeyondWindow_LoopsBackASemitoneHigher()
+        {
+            // maxOctaves 2 × 5-note scale = a 10-step window; streak 10 restarts the climb at the
+            // root shifted +1 semitone instead of continuing to climb.
+            var entry = CreateEntry(Vector2.one, Vector2.one, new[] { CreateClip() }, MelodicMode.ScaleWalk);
+            var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 0,
+                melodicMaxOctaves: 2);
+            var ctx = new PickContext(streak: 10, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f);
+
+            var playback = picker.Pick(GameSoundId.BalloonPop, entry, ctx);
+
+            Assert.AreEqual(1, playback.MelodicSemitone);
+        }
+
+        [Test]
+        public void Pick_ScaleWalkMode_MaxOctavesOne_ShrinksWindowAndLoopsEarlier()
+        {
+            // Same streak as StreakRollsOverOctave (which climbs to semitone 12 at maxOctaves 2)
+            // already exhausts the 1-octave window here and loops back to root+1 instead — proves
+            // _maxOctaves actually resizes the window rather than defaulting through unused.
+            var entry = CreateEntry(Vector2.one, Vector2.one, new[] { CreateClip() }, MelodicMode.ScaleWalk);
+            var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 0,
+                melodicMaxOctaves: 1);
+            var ctx = new PickContext(streak: 5, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f);
+
+            var playback = picker.Pick(GameSoundId.BalloonPop, entry, ctx);
+
+            Assert.AreEqual(1, playback.MelodicSemitone);
+        }
+
+        [Test]
+        public void Pick_ScaleWalkMode_RunawayStreak_StaysBounded()
+        {
+            // The point of the cap: no exponential runaway. Even a massive streak stays within the
+            // octave window (top note + one octave) plus the wrapped per-loop semitone shift.
+            var entry = CreateEntry(Vector2.one, Vector2.one, new[] { CreateClip() }, MelodicMode.ScaleWalk);
+            var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 0,
+                melodicMaxOctaves: 2);
+            const int windowTop = 9 + 12; // pentatonic top note, one octave up in a 2-octave window
+            const int ceiling = 11 + windowTop; // + max wrapped loop shift
+
+            for (var streak = 0; streak < 500; streak++)
+            {
+                var ctx = new PickContext(streak, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f);
+
+                var playback = picker.Pick(GameSoundId.BalloonPop, entry, ctx);
+
+                Assert.GreaterOrEqual(playback.MelodicSemitone, 0);
+                Assert.LessOrEqual(playback.MelodicSemitone, ceiling);
+            }
+        }
+
+        [Test]
         public void Pick_ScaleWalkMode_MidStreak_MapsToScaleDegree()
         {
             // Degree 2 of {0,2,4,7,9} is 4 semitones, no octave rollover.

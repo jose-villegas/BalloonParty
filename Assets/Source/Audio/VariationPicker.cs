@@ -13,13 +13,16 @@ namespace BalloonParty.Audio
         private readonly System.Random _rng;
         private readonly IReadOnlyList<int> _scale;
         private readonly int _root;
+        private readonly int _maxOctaves;
         private readonly int[] _lastClipIndex;
 
-        public VariationPicker(System.Random rng, IReadOnlyList<int> melodicScale, int melodicRootSemitone)
+        public VariationPicker(System.Random rng, IReadOnlyList<int> melodicScale, int melodicRootSemitone,
+            int melodicMaxOctaves = 2)
         {
             _rng = rng;
             _scale = melodicScale;
             _root = melodicRootSemitone;
+            _maxOctaves = melodicMaxOctaves;
             _lastClipIndex = new int[SoundIds.Count];
             Reset();
         }
@@ -69,8 +72,15 @@ namespace BalloonParty.Audio
         {
             var degree = Mathf.Max(0, streak);
             var steps = _scale.Count;
-            var octave = degree / steps;
-            return _root + _scale[degree % steps] + 12 * octave;
+
+            // Climb the scale across _maxOctaves, then loop back near the root a semitone higher each
+            // cycle (wrapping at 12) — bounded, so a runaway streak can't squeak up forever. Within the
+            // first window this is identical to a plain octave-rollover walk.
+            var windowSteps = steps * Mathf.Max(1, _maxOctaves);
+            var loop = degree / windowSteps;
+            var position = degree % windowSteps;
+            var walk = _scale[position % steps] + 12 * (position / steps);
+            return _root + loop % 12 + walk;
         }
 
         private int SelectClipIndex(GameSoundId id, SfxEntry entry)

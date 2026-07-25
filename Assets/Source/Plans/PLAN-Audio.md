@@ -390,8 +390,10 @@ heard before it's parsed.
   speed. This replaces the earlier "C major vs pentatonic" open question: pentatonic wins
   because the reward sound must never land a clash.
 - **Scale-degree source is the streak, not random.** `VariationPicker` gains a melodic
-  mode: instead of pitch RNG, it computes `semitone = scale[streak mod scale.Length]`
-  (with octave rollover as the streak exceeds the scale length) and sets the voice pitch
+  mode: instead of pitch RNG, it maps the streak to a scale degree that climbs
+  `MelodicMaxOctaves` octaves, then **loops back near the root a semitone higher each cycle
+  (wrapping at 12)** so a long streak stays bounded instead of running away into a squeak —
+  a soft cap, tunable by ear via `MelodicMaxOctaves` (default 2). It sets the voice pitch
   from that. **Shipped as designed:** the streak arrives via `StreakChangedMessage`
   (`Game/Score/ColorStreakTracker.cs:94`); `ProgressionSoundRouter` forwards it to
   `SfxService` through the narrow `IMelodicContext.SetStreak(int)` facet on every change, and
@@ -411,7 +413,8 @@ heard before it's parsed.
 - **Reset on streak break.** Degree returns to the root when the streak resets, so the
   phrase restarts cleanly rather than jumping mid-scale.
 
-**Open feel questions (device audition):** octave-rollover vs cap at the top of the scale;
+**Open feel questions (device audition):** the `MelodicMaxOctaves` value (the pitch soft cap
+— resolved as a bounded loop-a-semitone-up walk, just tune the octave count by ear);
 the exact intervals for deflect vs wall hit (they're distinct — just which two land best);
 whether per-color streaks each get their own voice/register. Slot: Phase 2 (the pop itself
 ships in Phase 1 with plain variation; the melodic walk + tension notes layer on once the
