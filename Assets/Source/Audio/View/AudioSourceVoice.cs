@@ -3,6 +3,7 @@ using System.Threading;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -23,6 +24,7 @@ namespace BalloonParty.Audio.View
 
         public void OnDespawned()
         {
+            _source.DOKill();
             _source.Stop();
             _source.clip = null;
             _onComplete = null;
@@ -34,11 +36,12 @@ namespace BalloonParty.Audio.View
             _source.outputAudioMixerGroup = group;
         }
 
-        internal void Play(in VoicePlayback playback, bool loop, Action<AudioSourceVoice> onComplete)
+        internal void Play(in VoicePlayback playback, bool loop, float fadeInSeconds, Action<AudioSourceVoice> onComplete)
         {
             // Kill any return still pending from a prior play on this voice (e.g. a stolen
-            // slot replayed in place) before starting the new one.
+            // slot replayed in place) — and any in-flight fade — before starting the new one.
             LifecycleHelper.CancelAndDispose(ref _returnCts);
+            _source.DOKill();
             _onComplete = onComplete;
 
             if (playback.Clip == null)
@@ -49,10 +52,20 @@ namespace BalloonParty.Audio.View
 
             _source.clip = playback.Clip;
             _source.pitch = playback.Pitch;
-            _source.volume = playback.Volume;
             _source.panStereo = playback.Pan;
             _source.spatialBlend = 0f;
             _source.loop = loop;
+
+            if (fadeInSeconds > 0f)
+            {
+                _source.volume = 0f;
+                _source.DOFade(playback.Volume, fadeInSeconds).SetUpdate(true).SetLink(gameObject);
+            }
+            else
+            {
+                _source.volume = playback.Volume;
+            }
+
             _source.Play();
 
             if (!loop)
@@ -64,6 +77,7 @@ namespace BalloonParty.Audio.View
 
         internal void Stop()
         {
+            _source.DOKill();
             _source.Stop();
             LifecycleHelper.CancelAndDispose(ref _returnCts);
             _onComplete = null;

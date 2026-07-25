@@ -92,7 +92,7 @@ namespace BalloonParty.Audio
             _slots[voiceId].Channel = entry.Channel;
 
             voice.SetOutputGroup(_mixerRouter.GroupFor(entry.Channel));
-            voice.Play(in playback, entry.Loop, _onVoiceComplete);
+            voice.Play(in playback, entry.Loop, entry.FadeInSeconds, _onVoiceComplete);
 
             return new SoundHandle(voiceId, generation);
         }

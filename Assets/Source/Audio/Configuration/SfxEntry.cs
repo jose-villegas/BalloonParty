@@ -31,6 +31,10 @@ namespace BalloonParty.Audio.Configuration
         [Tooltip("Derive a subtle stereo pan from world-X. spatialBlend stays 0 (no rolloff).")]
         [SerializeField] private bool _pan2D = true;
 
+        [Tooltip("Seconds to ramp volume from 0 up to the target at play start. 0 = full volume at once. " +
+                 "Applies to one-shots and loops.")]
+        [SerializeField] [Min(0f)] private float _fadeInSeconds;
+
         [Tooltip("None = plain variation. ScaleWalkUp = streak-driven net-climbing yoyo (rise a scale " +
                  "octave, dip MelodicSkipSteps back, repeat) ceilinged at MelodicMaxOctaves. ScaleWalkDown = " +
                  "the same yoyo mirrored below the root (dips down first, then works up). Tension = fixed " +
@@ -59,6 +63,7 @@ namespace BalloonParty.Audio.Configuration
         public int Priority => _priority;
         public bool Loop => _loop;
         public bool Pan2D => _pan2D;
+        public float FadeInSeconds => _fadeInSeconds;
         public MelodicMode MelodicMode => _melodicMode;
         public int MelodicMaxOctaves => _melodicMaxOctaves;
         public int MelodicSkipSteps => _melodicSkipSteps;
