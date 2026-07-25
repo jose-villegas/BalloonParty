@@ -55,8 +55,13 @@ namespace BalloonParty.UI.Score
                  "and breathe move together bar to bar. Supersedes any TweenOscillator on the badge itself.")]
         [SerializeField] private CanvasGroup _nightBonusBadge;
 
-        [Tooltip("How fast the night badge highlight sweeps across the bars, in bars per second.")]
-        [SerializeField] private float _nightBadgeSweepSpeed = 1.5f;
+        [Tooltip("Full highlight sweeps across the whole row per second — normalized by bar count, so the " +
+                 "tempo stays the same whether two bars are showing or five.")]
+        [SerializeField] private float _nightBadgeSweepSpeed = 0.4f;
+
+        [Tooltip("Highlight falloff width in bars. Larger blends neighbours together, so the sweep reads " +
+                 "as a soft travelling wave rather than one bar lighting at a time.")]
+        [SerializeField] private float _nightBadgeBlend = 1.6f;
 
         [Tooltip("Night badge alpha away from the highlight (x) and at it (y).")]
         [SerializeField] private Vector2 _nightBadgeAlphaRange = new(0.15f, 1f);
@@ -215,12 +220,15 @@ namespace BalloonParty.UI.Score
                 _nightBonusBadge.gameObject.SetActive(true);
             }
 
-            // Unscaled so the sweep keeps moving through the level-up freeze, like the notices. One bright
-            // badge ping-pongs across the row: each bar peaks as the sweep passes it, dims as it leaves.
-            // Alpha and scale ride the same closeness, so brightness and breathe peak together per bar.
-            var maxIndex = Mathf.Max(1, _barCount - 1);
-            var position = Mathf.PingPong(Time.unscaledTime * _nightBadgeSweepSpeed, maxIndex);
-            var closeness = Mathf.Clamp01(1f - Mathf.Abs(_barIndex - position));
+            // Unscaled so the sweep keeps moving through the level-up freeze, like the notices. A soft
+            // highlight ping-pongs across the row (velocity scaled by the span so a full sweep takes the
+            // same time at any bar count). The falloff is wide and smoothstepped, so adjacent bars share
+            // the glow and it reads as a blended wave; alpha and scale ride the same value so brightness
+            // and breathe move together.
+            var span = Mathf.Max(1, _barCount - 1);
+            var position = Mathf.PingPong(Time.unscaledTime * _nightBadgeSweepSpeed * span * 2f, span);
+            var reach = Mathf.Abs(_barIndex - position) / Mathf.Max(0.01f, _nightBadgeBlend);
+            var closeness = Mathf.SmoothStep(1f, 0f, Mathf.Clamp01(reach));
             _nightBonusBadge.alpha = Mathf.Lerp(_nightBadgeAlphaRange.x, _nightBadgeAlphaRange.y, closeness);
             _nightBonusBadge.transform.localScale = Vector3.one * Mathf.Lerp(_nightBadgeScaleRange.x, _nightBadgeScaleRange.y, closeness);
         }
