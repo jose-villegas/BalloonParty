@@ -20,16 +20,6 @@ namespace BalloonParty.UI.Score
 {
     public class ColorProgressBar : MonoBehaviour, ITrailEndpoint
     {
-        // Night 2x badge: a single bright badge ping-pongs across the colour bars — brightness hands off
-        // bar to bar and bounces back at the ends — with the streak notice showing through the dim beats.
-        // The badge also breathes (scales) off the same sweep value, so each one swells as the highlight
-        // reaches it; this supersedes any TweenOscillator on the badge (they'd both drive localScale).
-        private const float NightBadgeSweepSpeed = 1.5f;
-        private const float NightBadgeMinAlpha = 0.15f;
-        private const float NightBadgeMaxAlpha = 1f;
-        private const float NightBadgeMinScale = 0.85f;
-        private const float NightBadgeMaxScale = 1.15f;
-
         private static readonly int CompletedParam = Animator.StringToHash("Completed");
         private static readonly int TrailHitTrigger = Animator.StringToHash("TrailHit");
 #if UNITY_EDITOR
@@ -60,8 +50,19 @@ namespace BalloonParty.UI.Score
         [SerializeField] private ProgressNotice _pointNoticePrefab;
         [SerializeField] private ProgressNotice _streakNoticePrefab;
 
-        [Tooltip("The persistent '2x' badge shown while it's night; its alpha waves across the colour bars.")]
+        [Tooltip("The persistent '2x' badge shown while it's night. A single highlight ping-pongs across " +
+                 "the colour bars: each badge's alpha and scale peak as the sweep reaches it, so brightness " +
+                 "and breathe move together bar to bar. Supersedes any TweenOscillator on the badge itself.")]
         [SerializeField] private CanvasGroup _nightBonusBadge;
+
+        [Tooltip("How fast the night badge highlight sweeps across the bars, in bars per second.")]
+        [SerializeField] private float _nightBadgeSweepSpeed = 1.5f;
+
+        [Tooltip("Night badge alpha away from the highlight (x) and at it (y).")]
+        [SerializeField] private Vector2 _nightBadgeAlphaRange = new(0.15f, 1f);
+
+        [Tooltip("Night badge scale (breathe) away from the highlight (x) and at it (y).")]
+        [SerializeField] private Vector2 _nightBadgeScaleRange = new(0.85f, 1.15f);
 
         [Inject] private IScoreTrailConfig _config;
         [Inject] private IGamePalette _palette;
@@ -218,10 +219,10 @@ namespace BalloonParty.UI.Score
             // badge ping-pongs across the row: each bar peaks as the sweep passes it, dims as it leaves.
             // Alpha and scale ride the same closeness, so brightness and breathe peak together per bar.
             var maxIndex = Mathf.Max(1, _barCount - 1);
-            var position = Mathf.PingPong(Time.unscaledTime * NightBadgeSweepSpeed, maxIndex);
+            var position = Mathf.PingPong(Time.unscaledTime * _nightBadgeSweepSpeed, maxIndex);
             var closeness = Mathf.Clamp01(1f - Mathf.Abs(_barIndex - position));
-            _nightBonusBadge.alpha = Mathf.Lerp(NightBadgeMinAlpha, NightBadgeMaxAlpha, closeness);
-            _nightBonusBadge.transform.localScale = Vector3.one * Mathf.Lerp(NightBadgeMinScale, NightBadgeMaxScale, closeness);
+            _nightBonusBadge.alpha = Mathf.Lerp(_nightBadgeAlphaRange.x, _nightBadgeAlphaRange.y, closeness);
+            _nightBonusBadge.transform.localScale = Vector3.one * Mathf.Lerp(_nightBadgeScaleRange.x, _nightBadgeScaleRange.y, closeness);
         }
 
         // This bar's position among its ColorProgressBar siblings, and their total — so the highlight can
