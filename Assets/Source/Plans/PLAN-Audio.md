@@ -410,15 +410,17 @@ heard before it's parsed.
   buzz. E.g. deflect = a minor-2nd rub above the current degree (a near-miss "so close" bite);
   wall hit = a flat/downward step below the root (a heavier "dropped it" thud). This is
   the *purpose* of the semitone, not a defect to tune out.
-- **Shield loss walks DOWN its own streak.** `ShieldLost` (`ShieldLostMessage`) is authored as
-  `ScaleWalkDown` — a descending mirror of the pop walk. It's driven by a **shield-loss
-  streak owned by `CombatSoundRouter`** (`++` per consecutive loss, reset to 0 on
-  `ShieldGainedMessage`), independent of the colour-pop streak: each successive shield lost
-  drops the cue further down the scale, and gaining a shield resets the descent. Because it's a
-  separate progression, the router supplies it per-play via the optional `melodicStreak`
-  argument on `ISoundPlayer.Play` rather than the ambient `IMelodicContext.SetStreak`; an
-  overridden play deliberately does **not** move `_currentSemitone`, so deflect/wall-hit
-  `Tension` cues keep rubbing against the pop key, not the shield note.
+- **Wall hits walk DOWN a shield-depth axis; shields win it back UP.** `WallHit`
+  (`WallHitMessage`) and `ShieldGained` (`ShieldGainedMessage`) share a `_shieldDepth` counter
+  owned by `CombatSoundRouter` (0 = root = full shields): each wall hit steps it up (deeper
+  below root), each shield won steps it back down, clamped at 0 so the tone never rises above
+  the root. Both are authored as `ScaleWalkDown`, so the pitch tracks how far below full the
+  shield stack sits — dropping on consecutive hits, climbing back toward the root as you
+  recover. `ShieldLost` itself plays plain. This axis is independent of the colour-pop streak,
+  so the router supplies it per-play via the optional `melodicStreak` argument on
+  `ISoundPlayer.Play` rather than the ambient `IMelodicContext.SetStreak`; an overridden play
+  deliberately does **not** move `_currentSemitone`, so the deflect/wall `Tension` cues keep
+  rubbing against the pop key, not the shield note.
 - **Scale is config, not hardcoded.** The key + the positive scale (pentatonic default)
   plus a per-event tension interval (deflect's rub, wall hit's drop) all live on the
   `SoundBankConfiguration` as semitone offsets, so key/mode and each dissonance flavor are

@@ -102,12 +102,14 @@ tunes its own climb independently. `ProgressionSoundRouter` feeds the pop streak
 `IMelodicContext.SetStreak` on every `StreakChangedMessage`; `SfxService` remembers the last
 melodic semitone so a `Tension` entry can react against it.
 
-`ShieldLost` uses `ScaleWalkDown` on a *separate* progression: `CombatSoundRouter` keeps
-a shield-loss streak (`++` per consecutive loss, reset on `ShieldGainedMessage`) and passes it
-straight to `ISoundPlayer.Play(..., melodicStreak)`, so each shield lost steps the cue further
-down and a regained shield resets it. A play with an explicit `melodicStreak` never updates the
-ambient pop key, so it can't disturb the `Tension` cues. **The melodic pop entries ship
-dormant** — see *Deferred*.
+`WallHit` and `ShieldGained` share a *shield-depth* axis on a separate progression:
+`CombatSoundRouter` keeps a `_shieldDepth` (0 = root = full shields), steps it up on each
+`WallHitMessage` and back down (clamped at 0) on each `ShieldGainedMessage`, and passes it to
+`ISoundPlayer.Play(..., melodicStreak)`. Author both as `ScaleWalkDown`, so each consecutive
+wall hit drops the tone one degree below the root and each shield won walks it back up toward
+the root — never above it. `ShieldLost` itself just plays plain. A play with an explicit
+`melodicStreak` never updates the ambient pop key, so it can't disturb the `Tension` cues.
+**The melodic pop entries ship dormant** — see *Deferred*.
 
 ## Channels and duck-on-pause
 

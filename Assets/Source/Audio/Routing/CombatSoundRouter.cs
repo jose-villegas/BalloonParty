@@ -26,7 +26,7 @@ namespace BalloonParty.Audio.Routing
         private readonly CompositeDisposable _subscriptions = new();
 
         private SoundHandle _cruiseHandle = SoundHandle.None;
-        private int _shieldLossStreak;
+        private int _shieldDepth;
 
         [Inject]
         public CombatSoundRouter(ISoundPlayer player,
@@ -137,21 +137,27 @@ namespace BalloonParty.Audio.Routing
 
         private void OnShieldGained(ShieldGainedMessage message)
         {
-            _shieldLossStreak = 0;
-            _player.Play(GameSoundId.ShieldGained, null);
+            // Winning a shield walks the tone one step back UP toward the root, never above it (depth
+            // clamped at 0 = root = full). Pitch tracks how far below full the shield stack sits.
+            if (_shieldDepth > 0)
+            {
+                _shieldDepth--;
+            }
+
+            _player.Play(GameSoundId.ShieldGained, null, _shieldDepth);
         }
 
         private void OnShieldLost(ShieldLostMessage message)
         {
-            // Consecutive shield losses walk the ShieldLost pop further down its scale (author it as
-            // ScaleWalkDown); gaining a shield resets the descent. This streak is independent of the
-            // colour-pop streak, so it's supplied per-play rather than through the ambient key.
-            _player.Play(GameSoundId.ShieldLost, message.Position, ++_shieldLossStreak);
+            _player.Play(GameSoundId.ShieldLost, message.Position);
         }
 
         private void OnWallHit(WallHitMessage message)
         {
-            _player.Play(GameSoundId.WallHit, message.Position);
+            // Each consecutive wall hit steps the tone one further DOWN the scale from the root; a shield
+            // gain walks it back up (author WallHit + ShieldGained as ScaleWalkDown). The shared depth is
+            // supplied per-play, independent of the colour-pop streak, so it never touches the pop key.
+            _player.Play(GameSoundId.WallHit, message.Position, ++_shieldDepth);
         }
     }
 }

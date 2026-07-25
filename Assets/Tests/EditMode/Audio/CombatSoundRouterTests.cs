@@ -149,44 +149,45 @@ namespace BalloonParty.Tests.Audio
         }
 
         [Test]
-        public void OnShieldLost_ConsecutiveLosses_PassAnAscendingMelodicStreak()
+        public void OnShieldLost_PlaysPlainWithoutAMelodicOverride()
         {
             var position = new Vector3(1f, 2f, 0f);
 
             _shieldLostHandler.Handle(new ShieldLostMessage(position));
-            _shieldLostHandler.Handle(new ShieldLostMessage(position));
-            _shieldLostHandler.Handle(new ShieldLostMessage(position));
 
-            // Each loss steps the descending walk one further via an increasing melodicStreak.
-            _player.Received(1).Play(GameSoundId.ShieldLost, position, 1);
-            _player.Received(1).Play(GameSoundId.ShieldLost, position, 2);
-            _player.Received(1).Play(GameSoundId.ShieldLost, position, 3);
+            // The melodic descent lives on WallHit now, so ShieldLost just plays (no streak override).
+            _player.Received(1).Play(GameSoundId.ShieldLost, position);
         }
 
         [Test]
-        public void OnShieldGained_ResetsTheShieldLossStreak()
+        public void OnShieldGained_WalksTheShieldDepthBackUp_ClampedAtRoot()
         {
             var position = new Vector3(1f, 2f, 0f);
 
-            _shieldLostHandler.Handle(new ShieldLostMessage(position));
-            _shieldLostHandler.Handle(new ShieldLostMessage(position));
-            _shieldGainedHandler.Handle(new ShieldGainedMessage(Vector2Int.zero));
-            _shieldLostHandler.Handle(new ShieldLostMessage(position));
+            _wallHitHandler.Handle(new WallHitMessage(position));   // depth 1
+            _wallHitHandler.Handle(new WallHitMessage(position));   // depth 2
+            _shieldGainedHandler.Handle(new ShieldGainedMessage(Vector2Int.zero));  // depth 1
+            _shieldGainedHandler.Handle(new ShieldGainedMessage(Vector2Int.zero));  // depth 0 (root)
+            _shieldGainedHandler.Handle(new ShieldGainedMessage(Vector2Int.zero));  // stays 0
 
-            // The gain resets the descent, so the next loss walks from 1 again rather than reaching 3.
-            _player.Received(2).Play(GameSoundId.ShieldLost, position, 1);
-            _player.DidNotReceive().Play(GameSoundId.ShieldLost, position, 3);
-            _player.Received(1).Play(GameSoundId.ShieldGained, null);
+            // Each gain steps the tone one back up toward the root; depth never goes below 0 (root).
+            _player.Received(1).Play(GameSoundId.ShieldGained, null, 1);
+            _player.Received(2).Play(GameSoundId.ShieldGained, null, 0);
         }
 
         [Test]
-        public void OnWallHit_PlaysWallHitAtContactPosition()
+        public void OnWallHit_ConsecutiveHits_StepTheDepthDownAtContactPosition()
         {
             var position = new Vector3(3f, -1f, 0f);
 
             _wallHitHandler.Handle(new WallHitMessage(position));
+            _wallHitHandler.Handle(new WallHitMessage(position));
+            _wallHitHandler.Handle(new WallHitMessage(position));
 
-            _player.Received(1).Play(GameSoundId.WallHit, position);
+            // Each hit steps the shield-depth one further down the scale (author WallHit as ScaleWalkDown).
+            _player.Received(1).Play(GameSoundId.WallHit, position, 1);
+            _player.Received(1).Play(GameSoundId.WallHit, position, 2);
+            _player.Received(1).Play(GameSoundId.WallHit, position, 3);
         }
 
         private static ISubscriber<T> CaptureSubscriber<T>(Action<IMessageHandler<T>> capture)
