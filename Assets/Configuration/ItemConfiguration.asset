@@ -185,7 +185,7 @@ MonoBehaviour:
     _activationEffectPrefab: {fileID: 6370257692819509042, guid: 09e04fef865adae47bf118af97e3e371,
       type: 3}
     _damage: 3
-    _damageFlags: -1
+    _damageFlags: 1
     _bomb:
       _bombRadius: 1.25
       _bombRainbowEffectScale: 1.5
