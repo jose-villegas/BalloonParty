@@ -193,11 +193,14 @@ namespace BalloonParty.Solver
                 ? (Vector2)view.transform.position
                 : (Vector2)grid.IndexToWorldPosition(index);
 
-            snapshot = new ShotBalloonSnapshot(
-                position, radius, colorId, scored.ScoreValue, hitsRemaining, index,
-                influence?.BalancePriority ?? 0, influence?.MaxBalanceSteps ?? 0,
+            var balance = new BalanceProfile(
+                index, influence?.BalancePriority ?? 0, influence?.MaxBalanceSteps ?? 0,
                 balloonsConfig.ResolveMoveSpeed(influence?.MoveSpeed ?? 0f),
                 influence?.DirectBalanceMotion ?? false, nudgeOverrides);
+
+            snapshot = string.IsNullOrEmpty(colorId)
+                ? ShotBalloonSnapshot.ForToughTarget(position, radius, scored.ScoreValue, hitsRemaining, balance)
+                : ShotBalloonSnapshot.ForColorTarget(position, radius, colorId, scored.ScoreValue, hitsRemaining, balance);
             return true;
         }
 

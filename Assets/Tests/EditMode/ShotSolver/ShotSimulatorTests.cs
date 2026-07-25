@@ -22,9 +22,9 @@ namespace BalloonParty.Tests.ShotSolver
         {
             var board = new[]
             {
-                new ShotBalloonSnapshot(new Vector2(0f, 1f), 0.1f, "Red", 1, 1),
-                new ShotBalloonSnapshot(new Vector2(0f, 2f), 0.1f, "Red", 1, 1),
-                new ShotBalloonSnapshot(new Vector2(0f, 3f), 0.1f, "Red", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.1f, "Red", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 2f), 0.1f, "Red", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 3f), 0.1f, "Red", 1, 1),
             };
             var workingSet = new ShotBalloonState[board.Length];
 
@@ -46,7 +46,7 @@ namespace BalloonParty.Tests.ShotSolver
             // along -X, reaching a balloon sitting on the far (negative-X) side — the unfolded-wall
             // shot the plan's §2 "walls unfold" intuition describes.
             var walls = new Vector4(5f, 5f, -5f, -5f);
-            var board = new[] { new ShotBalloonSnapshot(new Vector2(-3f, 0f), 0.3f, "Blue", 5, 1) };
+            var board = new[] { ShotBoardBuilder.Green(new Vector2(-3f, 0f), 0.3f, "Blue", 5, 1) };
             var workingSet = new ShotBalloonState[board.Length];
 
             var result = ShotSimulator.Simulate(
@@ -67,7 +67,7 @@ namespace BalloonParty.Tests.ShotSolver
             // a shield-costing bottom-wall bounce sends it straight back up onto the SAME tough for the
             // second (fatal) contact, which pops it via the flat/streak-reset tough rule.
             var walls = new Vector4(1000f, 1000f, -1f, -1000f);
-            var board = new[] { new ShotBalloonSnapshot(new Vector2(0f, 2f), 0.3f, null, 4, 2) };
+            var board = new[] { ShotBoardBuilder.Tough(new Vector2(0f, 2f), 0.3f, 4, 2) };
             var workingSet = new ShotBalloonState[board.Length];
 
             var result = ShotSimulator.Simulate(
@@ -89,7 +89,7 @@ namespace BalloonParty.Tests.ShotSolver
             // stops early once the board clears) without ever being reachable, so the death comes
             // purely from consecutive wall bounces outrunning the shield budget.
             var walls = new Vector4(1000f, 1f, -1000f, -1f);
-            var board = new[] { new ShotBalloonSnapshot(new Vector2(0f, 500f), 0.2f, "Red", 1, 1) };
+            var board = new[] { ShotBoardBuilder.Green(new Vector2(0f, 500f), 0.2f, "Red", 1, 1) };
             var workingSet = new ShotBalloonState[board.Length];
 
             var result = ShotSimulator.Simulate(
@@ -112,9 +112,9 @@ namespace BalloonParty.Tests.ShotSolver
             var walls = new Vector4(3f, 1000f, -1000f, -1000f);
             var refundingBoard = new[]
             {
-                new ShotBalloonSnapshot(new Vector2(0f, 1f), 0.1f, "Red", 1, 1),
-                new ShotBalloonSnapshot(new Vector2(0f, 2f), 0.1f, "Red", 1, 1),
-                new ShotBalloonSnapshot(new Vector2(0f, -0.5f), 0.1f, "Green", 1, 1), // on the return path
+                ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.1f, "Red", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 2f), 0.1f, "Red", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, -0.5f), 0.1f, "Green", 1, 1), // on the return path
             };
             var refundingWorkingSet = new ShotBalloonState[refundingBoard.Length];
 
@@ -127,9 +127,9 @@ namespace BalloonParty.Tests.ShotSolver
 
             var nonRefundingBoard = new[]
             {
-                new ShotBalloonSnapshot(new Vector2(0f, 1f), 0.1f, "Red", 1, 1),
-                new ShotBalloonSnapshot(new Vector2(0f, 2f), 0.1f, "Blue", 1, 1), // breaks the streak
-                new ShotBalloonSnapshot(new Vector2(0f, -0.5f), 0.1f, "Green", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.1f, "Red", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 2f), 0.1f, "Blue", 1, 1), // breaks the streak
+                ShotBoardBuilder.Green(new Vector2(0f, -0.5f), 0.1f, "Green", 1, 1),
             };
             var nonRefundingWorkingSet = new ShotBalloonState[nonRefundingBoard.Length];
 
@@ -147,7 +147,7 @@ namespace BalloonParty.Tests.ShotSolver
             // wall at x=-1 after 2 more units (t=1.5), where the shot dies. The filler balloon keeps
             // the board non-empty without ever being reachable.
             var walls = new Vector4(1000f, 1f, -1000f, -1f);
-            var board = new[] { new ShotBalloonSnapshot(new Vector2(0f, 500f), 0.2f, "Red", 1, 1) };
+            var board = new[] { ShotBoardBuilder.Green(new Vector2(0f, 500f), 0.2f, "Red", 1, 1) };
             var workingSet = new ShotBalloonState[board.Length];
             var timestamps = new List<float>();
 
@@ -170,7 +170,7 @@ namespace BalloonParty.Tests.ShotSolver
             // it lifts progress to 1, so the final wall-to-wall crossing runs at 1 + 1x1 = x2 speed:
             // timestamps 0, 1, 3 (still x1), 4 (2 units at x2).
             var walls = new Vector4(1000f, 1f, -1000f, -1f);
-            var board = new[] { new ShotBalloonSnapshot(new Vector2(0f, 500f), 0.2f, "Red", 1, 1) };
+            var board = new[] { ShotBoardBuilder.Green(new Vector2(0f, 500f), 0.2f, "Red", 1, 1) };
             var workingSet = new ShotBalloonState[board.Length];
             var timestamps = new List<float>();
             var cruise = new ShotCruiseConfig(wallBounceThreshold: 1, speedPerShield: 1f);
@@ -195,8 +195,8 @@ namespace BalloonParty.Tests.ShotSolver
             var walls = new Vector4(1000f, 1f, -1000f, -1f);
             var board = new[]
             {
-                new ShotBalloonSnapshot(new Vector2(-0.5f, 0f), 0.1f, "Red", 1, 1),
-                new ShotBalloonSnapshot(new Vector2(0f, 500f), 0.2f, "Red", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(-0.5f, 0f), 0.1f, "Red", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 500f), 0.2f, "Red", 1, 1),
             };
             var workingSet = new ShotBalloonState[board.Length];
             var timestamps = new List<float>();
@@ -227,7 +227,7 @@ namespace BalloonParty.Tests.ShotSolver
             // pushes the base-speed crossing to 3.5, then the second lag plus 2 units at the x2
             // target (1s) lands the death bounce at 5.0.
             var walls = new Vector4(1000f, 1f, -1000f, -1f);
-            var board = new[] { new ShotBalloonSnapshot(new Vector2(0f, 500f), 0.2f, "Red", 1, 1) };
+            var board = new[] { ShotBoardBuilder.Green(new Vector2(0f, 500f), 0.2f, "Red", 1, 1) };
             var workingSet = new ShotBalloonState[board.Length];
             var timestamps = new List<float>();
             var cruise = new ShotCruiseConfig(
@@ -252,9 +252,9 @@ namespace BalloonParty.Tests.ShotSolver
             // but never triggerable (threshold higher than the flight's bounce count) and no dynamics.
             var board = new[]
             {
-                new ShotBalloonSnapshot(new Vector2(0f, 1f), 0.1f, "Red", 1, 1),
-                new ShotBalloonSnapshot(new Vector2(0f, 2f), 0.1f, "Red", 1, 1),
-                new ShotBalloonSnapshot(new Vector2(0f, 3f), 0.1f, "Red", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.1f, "Red", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 2f), 0.1f, "Red", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 3f), 0.1f, "Red", 1, 1),
             };
             var workingSet = new ShotBalloonState[board.Length];
             var cruise = new ShotCruiseConfig(wallBounceThreshold: 99, speedPerShield: 5f);
@@ -401,7 +401,7 @@ namespace BalloonParty.Tests.ShotSolver
             var balanceSpeed = Vector2.Distance(slot0, slot1) / 0.1f;
             var board = new[]
             {
-                new ShotBalloonSnapshot(
+                ShotBoardBuilder.Green(
                     slot1, 0.2f, "Red", 1, 1,
                     slotIndex: new Vector2Int(0, 1), balancePriority: 0, maxBalanceSteps: 0,
                     moveSpeed: balanceSpeed, directBalanceMotion: false, nudgeOverrides: null),
@@ -448,7 +448,7 @@ namespace BalloonParty.Tests.ShotSolver
             var balanceSpeed = Vector2.Distance(slot0, slot1) / 0.1f;
             var board = new[]
             {
-                new ShotBalloonSnapshot(
+                ShotBoardBuilder.Green(
                     slot1, 0.2f, "Red", 1, 1,
                     slotIndex: new Vector2Int(0, 1), balancePriority: 0, maxBalanceSteps: 0,
                     moveSpeed: balanceSpeed, directBalanceMotion: false, nudgeOverrides: null),
@@ -478,8 +478,8 @@ namespace BalloonParty.Tests.ShotSolver
             var walls = new Vector4(1000f, 1f, -1000f, -1f);
             var board = new[]
             {
-                new ShotBalloonSnapshot(new Vector2(0f, 2f), 0.15f, null, 7, 999),
-                new ShotBalloonSnapshot(new Vector2(0f, 500f), 0.2f, "Red", 1, 1),
+                ShotBoardBuilder.Tough(new Vector2(0f, 2f), 0.15f, 7, 999),
+                ShotBoardBuilder.Green(new Vector2(0f, 500f), 0.2f, "Red", 1, 1),
             };
             var workingSet = new ShotBalloonState[board.Length];
 
@@ -508,9 +508,9 @@ namespace BalloonParty.Tests.ShotSolver
             // still runs unfiltered, so the second red lands at streak 3 (1 + 3 = 4), not streak 2.
             var board = new[]
             {
-                new ShotBalloonSnapshot(new Vector2(0f, 1f), 0.1f, "Red", 1, 1),
-                new ShotBalloonSnapshot(new Vector2(0f, 2f), 0.1f, "Red", 1, 1),
-                new ShotBalloonSnapshot(new Vector2(0f, 3f), 0.1f, "Red", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.1f, "Red", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 2f), 0.1f, "Red", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 3f), 0.1f, "Red", 1, 1),
             };
             var workingSet = new ShotBalloonState[board.Length];
 
@@ -533,7 +533,7 @@ namespace BalloonParty.Tests.ShotSolver
         {
             // The ray passes 0.15 from a radius-0.1 balloon: a miss — until the +0.1 robustness bias
             // fattens the contact circle past the gap.
-            var board = new[] { new ShotBalloonSnapshot(new Vector2(0.15f, 2f), 0.1f, "Red", 1, 1) };
+            var board = new[] { ShotBoardBuilder.Green(new Vector2(0.15f, 2f), 0.1f, "Red", 1, 1) };
             var workingSet = new ShotBalloonState[board.Length];
 
             var unbiased = ShotSimulator.Simulate(
@@ -545,6 +545,71 @@ namespace BalloonParty.Tests.ShotSolver
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
                 workingSet: workingSet, radiusBias: 0.1f);
             Assert.AreEqual(1, biased.Pops, "the fattened circle covers the wobble band");
+        }
+
+        [Test]
+        public void CopyIntoWorkingSet_StaticSnapshotWithoutBalanceProfile_LeavesActorNull()
+        {
+            // A static contact (Phase A's future Deflector/Gatekeeper/Absorber shape) has no
+            // BalanceProfile, so ShotBoardDynamics builds no dynamic stub for it — the sim must still
+            // resolve the contact at the snapshot's own fixed Position, with no NRE anywhere along the
+            // null-Actor path (CopyIntoWorkingSet, CurrentBalloonCenter, ResolveBalloonContact).
+            var board = new[] { ShotBoardBuilder.Static(new Vector2(0f, 2f), 0.2f, ShotContactKind.Poppable) };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var gridConfig = Substitute.For<ISlotGridConfig>();
+            gridConfig.SlotsSize.Returns(new Vector2Int(1, 1));
+            gridConfig.SlotSeparation.Returns(new Vector2(1f, 1f));
+            gridConfig.SlotsOffset.Returns(Vector2.zero);
+            var balloonsConfig = Substitute.For<IBalloonsConfiguration>();
+            balloonsConfig.FlightRebalanceInterval.Returns(0f);
+
+            var dynamics = new ShotBoardDynamics(
+                gridConfig, balloonsConfig, board, Array.Empty<ShotDynamicActorSnapshot>(),
+                Array.Empty<ShotStaticActorSnapshot>());
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
+                workingSet: workingSet, dynamics: dynamics);
+
+            Assert.AreEqual(1, result.Pops, "the static contact still pops at its literal snapshot position");
+            Assert.IsTrue(result.BoardCleared);
+            Assert.IsNull(workingSet[0].Actor, "no BalanceProfile means no dynamic stub backs this entry");
+        }
+
+        [Test]
+        public void CopyIntoWorkingSet_ColorSnapshotWithBalanceProfile_Unaffected()
+        {
+            // The common (today, only) case a live gather produces: a colour target WITH a
+            // BalanceProfile still gets a live dynamic stub — the null-gating added for statics must
+            // not regress it.
+            var gridConfig = Substitute.For<ISlotGridConfig>();
+            gridConfig.SlotsSize.Returns(new Vector2Int(1, 1));
+            gridConfig.SlotSeparation.Returns(new Vector2(1f, 1f));
+            gridConfig.SlotsOffset.Returns(Vector2.zero);
+            var balloonsConfig = Substitute.For<IBalloonsConfiguration>();
+            balloonsConfig.FlightRebalanceInterval.Returns(0f);
+
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 2f), 0.2f, "Red", 1, 1,
+                    slotIndex: Vector2Int.zero, balancePriority: 0, maxBalanceSteps: 0, moveSpeed: 1f,
+                    directBalanceMotion: false, nudgeOverrides: null),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var dynamics = new ShotBoardDynamics(
+                gridConfig, balloonsConfig, board, Array.Empty<ShotDynamicActorSnapshot>(),
+                Array.Empty<ShotStaticActorSnapshot>());
+
+            // maxEvents: 0 stops the flight before any event resolves — CopyIntoWorkingSet already ran
+            // (once, up front), which is the only thing this test needs to have happened.
+            ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
+                workingSet: workingSet, dynamics: dynamics, maxEvents: 0);
+
+            Assert.IsNotNull(workingSet[0].Actor, "a BalanceProfile-carrying snapshot still gets a live stub");
         }
     }
 }

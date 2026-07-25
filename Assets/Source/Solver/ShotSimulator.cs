@@ -1,82 +1,11 @@
 using System;
 using System.Collections.Generic;
-using BalloonParty.Nudge;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared;
 using UnityEngine;
 
 namespace BalloonParty.Solver
 {
-    /// <summary>One board actor as the solver sees it — enough to reproduce pop/deflect/score rules
-    /// without a live <c>IBalloonModel</c>. <see cref="ColorId" /> null/empty means colourless
-    /// (mirrors a balloon that does NOT implement <c>IHasColor</c>, e.g. <c>ToughBalloonModel</c>) —
-    /// that flag, not <see cref="HitsRemaining" />, is what the simulator uses to choose flat
-    /// streak-breaking tough scoring over multiplied green scoring. The dynamic-board fields
-    /// (<see cref="SlotIndex" /> onward) are only meaningful when the sim is given a
-    /// <see cref="ShotBoardDynamics" /> — the legacy 5-arg constructor zeroes them, which is exactly
-    /// what the static (no-dynamics) code path ignores.</summary>
-    internal readonly struct ShotBalloonSnapshot
-    {
-        public readonly Vector2 Position;
-        public readonly float Radius;
-        public readonly string ColorId;
-        public readonly int ScoreValue;
-        public readonly int HitsRemaining;
-        public readonly Vector2Int SlotIndex;
-        public readonly int BalancePriority;
-        public readonly int MaxBalanceSteps;
-        public readonly float MoveSpeed;
-        public readonly bool DirectBalanceMotion;
-        public readonly IReadOnlyList<NudgeOverride> NudgeOverrides;
-
-        public ShotBalloonSnapshot(Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining)
-            : this(position, radius, colorId, scoreValue, hitsRemaining, default, 0, 0, 0f, false, null)
-        {
-        }
-
-        public ShotBalloonSnapshot(
-            Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining,
-            Vector2Int slotIndex, int balancePriority, int maxBalanceSteps, float moveSpeed,
-            bool directBalanceMotion, IReadOnlyList<NudgeOverride> nudgeOverrides)
-        {
-            Position = position;
-            Radius = radius;
-            ColorId = colorId;
-            ScoreValue = scoreValue;
-            HitsRemaining = hitsRemaining;
-            SlotIndex = slotIndex;
-            BalancePriority = balancePriority;
-            MaxBalanceSteps = maxBalanceSteps;
-            MoveSpeed = moveSpeed;
-            DirectBalanceMotion = directBalanceMotion;
-            NudgeOverrides = nudgeOverrides;
-        }
-    }
-
-    /// <summary>Mutable per-simulation copy of a <see cref="ShotBalloonSnapshot" /> — <see cref="HitsRemaining" />
-    /// decrements on a deflect; a popped entry is swap-removed from the caller's active count.
-    /// <see cref="Actor" /> is null unless the sim was given a <see cref="ShotBoardDynamics" />, in
-    /// which case it is the persistent stub backing this entry's position/nudge state.</summary>
-    internal struct ShotBalloonState
-    {
-        public Vector2 Position;
-        public float Radius;
-        public string ColorId;
-        public int ScoreValue;
-        public int HitsRemaining;
-        public ShotSimDynamicActor Actor;
-
-        public ShotBalloonState(in ShotBalloonSnapshot snapshot)
-        {
-            Position = snapshot.Position;
-            Radius = snapshot.Radius;
-            ColorId = snapshot.ColorId;
-            ScoreValue = snapshot.ScoreValue;
-            HitsRemaining = snapshot.HitsRemaining;
-            Actor = null;
-        }
-    }
-
     /// <summary>The cruise knobs, mirroring <c>ProjectileMotionResolver</c>/<c>ProjectileView</c>
     /// exactly (see <see cref="ShotSimulator" />'s cruise handling). Default (all-zero) disables cruise
     /// entirely — <see cref="WallBounceThreshold" /> &lt;= 0 is the same "0 disables" convention
@@ -211,31 +140,13 @@ namespace BalloonParty.Solver
             dynamics?.ResetForNewFlight();
             var activeCount = CopyIntoWorkingSet(board, workingSet, dynamics, radiusBias);
 
-            var position = origin;
             var direction = aimDirection.sqrMagnitude > AxisEpsilon ? aimDirection.normalized : Vector2.right;
-            var shields = startingShields;
-            var elapsed = 0f;
-            var consecutiveWallBounces = 0;
-            var isCruising = false;
-            var isPiercing = false;
-            var pierceSpeedScale = 1f;
-            var cruiseStartShields = 0;
-
-            string streakColor = null;
-            var streakCount = 0;
-            string projectileColor = null;
-
-            var rawScore = 0;
-            var pops = 0;
-            var toughsCleared = 0;
-            var events = 0;
-            var died = false;
-            var capped = false;
+            var state = new ShotFlightState(origin, direction, startingShields);
 
             if (pathOut != null)
             {
                 pathOut.Clear();
-                pathOut.Add(position);
+                pathOut.Add(state.Position);
             }
 
             timestampsOut?.Clear();
@@ -243,21 +154,20 @@ namespace BalloonParty.Solver
 
             while (activeCount > 0)
             {
-                if (events >= maxEvents)
+                if (state.Events >= maxEvents)
                 {
-                    capped = true;
+                    state.Capped = true;
                     break;
                 }
 
-                var speed = Mathf.Max(
-                    CurrentSpeed(projectileSpeed, isCruising, cruiseStartShields, shields, pierceSpeedScale, cruiseConfig),
-                    MinSpeed);
+                var speed = Mathf.Max(CurrentSpeed(projectileSpeed, in state, cruiseConfig), MinSpeed);
 
-                var hasWallEvent = TryFindWallCrossing(walls, position, direction, out var wallDistance, out var wallNormal);
+                var hasWallEvent = TryFindWallCrossing(
+                    walls, state.Position, state.Direction, out var wallDistance, out var wallNormal);
 
                 var hasBalloonEvent = TryFindNearestBalloonEntryAny(
-                    workingSet, activeCount, position, direction, speed, elapsed, projectileContactRadius,
-                    dynamics, out var balloonDistance, out var balloonIndex);
+                    workingSet, activeCount, state.Position, state.Direction, speed, state.Elapsed,
+                    projectileContactRadius, dynamics, out var balloonDistance, out var balloonIndex);
 
                 if (!hasWallEvent && !hasBalloonEvent)
                 {
@@ -267,44 +177,41 @@ namespace BalloonParty.Solver
                 var eventIsBalloon = hasBalloonEvent && (!hasWallEvent || balloonDistance < wallDistance);
                 var eventDistance = eventIsBalloon ? balloonDistance : wallDistance;
 
-                if (TryHandleDuePulse(
-                    dynamics, eventDistance, speed, direction, pathOut, timestampsOut, ref position, ref elapsed))
+                if (TryHandleDuePulse(dynamics, eventDistance, speed, pathOut, timestampsOut, ref state))
                 {
                     continue;
                 }
 
-                events++;
-                elapsed += eventDistance / speed;
+                state.Events++;
+                state.Elapsed += eventDistance / speed;
 
                 if (eventIsBalloon)
                 {
-                    position += direction * balloonDistance;
-                    pathOut?.Add(position);
-                    timestampsOut?.Add(elapsed);
+                    state.Position += state.Direction * balloonDistance;
+                    pathOut?.Add(state.Position);
+                    timestampsOut?.Add(state.Elapsed);
                     ResolveBalloonContact(
-                        workingSet, ref activeCount, balloonIndex, position, projectileContactRadius,
-                        ref direction, ref streakColor, ref streakCount, ref projectileColor,
-                        ref rawScore, ref pops, ref toughsCleared, ref shields, elapsed, dynamics,
-                        ref consecutiveWallBounces, ref isCruising, targetColorId, isPiercing,
-                        ref pierceSpeedScale);
+                        workingSet, ref activeCount, balloonIndex, state.Position, projectileContactRadius,
+                        state.Elapsed, dynamics, targetColorId, ref state);
                     continue;
                 }
 
-                position += direction * wallDistance;
-                pathOut?.Add(position);
-                timestampsOut?.Add(elapsed);
+                state.Position += state.Direction * wallDistance;
+                pathOut?.Add(state.Position);
+                timestampsOut?.Add(state.Elapsed);
 
-                died = HandleWallBounce(
-                    wallNormal, walls, position, projectileContactRadius, workingSet, activeCount, cruiseConfig,
-                    dynamics, ref shields, ref direction, ref consecutiveWallBounces, ref isCruising,
-                    ref cruiseStartShields, ref pierceSpeedScale, ref isPiercing, ref elapsed);
-                if (died)
+                state.Died = HandleWallBounce(
+                    wallNormal, walls, state.Position, projectileContactRadius, workingSet, activeCount,
+                    cruiseConfig, dynamics, ref state);
+                if (state.Died)
                 {
                     break;
                 }
             }
 
-            return new ShotSimulationResult(rawScore, pops, toughsCleared, activeCount == 0, events, died, capped);
+            return new ShotSimulationResult(
+                state.RawScore, state.Pops, state.ToughsCleared, activeCount == 0, state.Events, state.Died,
+                state.Capped);
         }
 
         private static bool TryFindNearestBalloonEntryAny(
@@ -324,24 +231,24 @@ namespace BalloonParty.Solver
         // A due flight-rebalance pulse pre-empts the next path event: the flight jumps to the pulse's
         // moment in place (no path change) so later events see the post-pulse board.
         private static bool TryHandleDuePulse(
-            ShotBoardDynamics dynamics, float eventDistance, float speed, Vector2 direction,
-            List<Vector2> pathOut, List<float> timestampsOut, ref Vector2 position, ref float elapsed)
+            ShotBoardDynamics dynamics, float eventDistance, float speed, List<Vector2> pathOut,
+            List<float> timestampsOut, ref ShotFlightState state)
         {
             if (dynamics == null)
             {
                 return false;
             }
 
-            var candidateEventTime = elapsed + (eventDistance / speed);
+            var candidateEventTime = state.Elapsed + (eventDistance / speed);
             if (!dynamics.TryRunPulseIfDue(candidateEventTime, out var pulseTime))
             {
                 return false;
             }
 
-            position += direction * ((pulseTime - elapsed) * speed);
-            elapsed = pulseTime;
-            pathOut?.Add(position);
-            timestampsOut?.Add(elapsed);
+            state.Position += state.Direction * ((pulseTime - state.Elapsed) * speed);
+            state.Elapsed = pulseTime;
+            pathOut?.Add(state.Position);
+            timestampsOut?.Add(state.Elapsed);
             return true;
         }
 
@@ -350,51 +257,49 @@ namespace BalloonParty.Solver
         private static bool HandleWallBounce(
             Vector2 wallNormal, in WallLimits walls, Vector2 position, float projectileContactRadius,
             ShotBalloonState[] workingSet, int activeCount, in ShotCruiseConfig cruiseConfig,
-            ShotBoardDynamics dynamics, ref int shields, ref Vector2 direction, ref int consecutiveWallBounces,
-            ref bool isCruising, ref int cruiseStartShields, ref float pierceSpeedScale, ref bool isPiercing,
-            ref float elapsed)
+            ShotBoardDynamics dynamics, ref ShotFlightState state)
         {
-            shields--;
-            if (shields < 0)
+            state.Shields--;
+            if (state.Shields < 0)
             {
                 return true;
             }
 
-            direction = Vector2.Reflect(direction, wallNormal.normalized);
-            consecutiveWallBounces++;
+            state.Direction = Vector2.Reflect(state.Direction, wallNormal.normalized);
+            state.ConsecutiveWallBounces++;
 
-            if (isCruising && pierceSpeedScale < 1f)
+            if (state.IsCruising && state.PierceSpeedScale < 1f)
             {
                 // Only after plowing a tough (scale decayed) does a wall end the run: cruise
                 // ends, speed returns to base, and the earned piercing is consumed — mirrors
                 // ProjectileMotionResolver. An armed shot cruising empty space keeps both.
-                isCruising = false;
-                consecutiveWallBounces = 0;
-                pierceSpeedScale = 1f;
-                isPiercing = false;
+                state.IsCruising = false;
+                state.ConsecutiveWallBounces = 0;
+                state.PierceSpeedScale = 1f;
+                state.IsPiercing = false;
             }
-            else if (cruiseConfig.WallBounceThreshold > 0 && !isCruising
-                && consecutiveWallBounces >= cruiseConfig.WallBounceThreshold
+            else if (cruiseConfig.WallBounceThreshold > 0 && !state.IsCruising
+                && state.ConsecutiveWallBounces >= cruiseConfig.WallBounceThreshold
                 && IsPathClearAhead(
-                    walls, position, direction, cruiseConfig.WallBounceThreshold, projectileContactRadius,
-                    workingSet, activeCount, elapsed, dynamics))
+                    walls, position, state.Direction, cruiseConfig.WallBounceThreshold, projectileContactRadius,
+                    workingSet, activeCount, state.Elapsed, dynamics))
             {
-                cruiseStartShields = shields;
-                isCruising = true;
+                state.CruiseStartShields = state.Shields;
+                state.IsCruising = true;
             }
 
             // Every cruise bounce (entry included) replays the tap animation — on the event
             // timeline that's a pure time cost, never a path change.
-            if (isCruising)
+            if (state.IsCruising)
             {
-                elapsed += cruiseConfig.TapLagSeconds;
+                state.Elapsed += cruiseConfig.TapLagSeconds;
 
                 // Mirrors ProjectileMotionResolver's piercing grant: a long-enough cruise arms
                 // the shot for the rest of its life — contacts end the cruise, never the buff.
                 if (cruiseConfig.PiercingTapThreshold > 0
-                    && cruiseStartShields - shields >= cruiseConfig.PiercingTapThreshold)
+                    && state.CruiseStartShields - state.Shields >= cruiseConfig.PiercingTapThreshold)
                 {
-                    isPiercing = true;
+                    state.IsPiercing = true;
                 }
             }
 
@@ -405,17 +310,15 @@ namespace BalloonParty.Solver
         // velocity TAP of SpeedPerShield (cumulative — a 13-shield bank accumulates 13 taps, a
         // 2-shield bank 2). This is the steady-state target; the per-tap animation envelope is
         // folded into ShotCruiseConfig.TapLagSeconds on the timeline instead.
-        private static float CurrentSpeed(
-            float baseSpeed, bool isCruising, int cruiseStartShields, int shieldsRemaining,
-            float pierceSpeedScale, in ShotCruiseConfig cruiseConfig)
+        private static float CurrentSpeed(float baseSpeed, in ShotFlightState state, in ShotCruiseConfig cruiseConfig)
         {
-            if (!isCruising)
+            if (!state.IsCruising)
             {
                 return baseSpeed;
             }
 
-            var startShields = Mathf.Max(cruiseStartShields, 1);
-            var taps = Mathf.Clamp(cruiseStartShields - shieldsRemaining, 0, startShields);
+            var startShields = Mathf.Max(state.CruiseStartShields, 1);
+            var taps = Mathf.Clamp(state.CruiseStartShields - state.Shields, 0, startShields);
             var target = 1f + cruiseConfig.SpeedPerShield * taps;
             if (cruiseConfig.MaxSpeedMultiplier > 0f)
             {
@@ -423,7 +326,7 @@ namespace BalloonParty.Solver
             }
 
             // Pierce scale bleeds the ramp down through tough plows; floor at base speed.
-            var speed = baseSpeed * target * pierceSpeedScale;
+            var speed = baseSpeed * target * state.PierceSpeedScale;
             return Mathf.Max(speed, baseSpeed);
         }
 
@@ -491,10 +394,14 @@ namespace BalloonParty.Solver
             return false;
         }
 
+        // A null Actor (no BalanceProfile backed this entry — today only reachable from a hand-built
+        // static-contact snapshot, never the live gather) has no moving centre to evaluate; it holds
+        // its snapshot Position exactly like the no-dynamics path.
         private static Vector2 CurrentBalloonCenter(
             ShotBalloonState[] workingSet, int index, float t, ShotBoardDynamics dynamics)
         {
-            return dynamics != null ? workingSet[index].Actor.EvaluateCenter(t) : workingSet[index].Position;
+            var actor = workingSet[index].Actor;
+            return dynamics != null && actor != null ? actor.EvaluateCenter(t) : workingSet[index].Position;
         }
 
         // radiusBias fattens/thins every contact circle uniformly — the robustness band's positional-
@@ -508,7 +415,11 @@ namespace BalloonParty.Solver
             {
                 workingSet[i] = new ShotBalloonState(board[i]);
                 workingSet[i].Radius = Mathf.Max(0f, workingSet[i].Radius + radiusBias);
-                if (dynamics != null)
+
+                // No BalanceProfile ⇒ no dynamic stub was built for this entry (ShotBoardDynamics
+                // leaves the matching TargetActors slot null) — Actor stays null, exactly as it already
+                // is from the ShotBalloonState constructor above.
+                if (dynamics != null && board[i].Balance.HasValue)
                 {
                     workingSet[i].Actor = dynamics.TargetActors[i];
                 }
@@ -523,43 +434,58 @@ namespace BalloonParty.Solver
         // entry — the ray pierces on, unbent.
         private static void ResolveBalloonContact(
             ShotBalloonState[] workingSet, ref int activeCount, int index, Vector2 contactPosition,
-            float projectileContactRadius, ref Vector2 direction,
-            ref string streakColor, ref int streakCount, ref string projectileColor,
-            ref int rawScore, ref int pops, ref int toughsCleared, ref int shields,
-            float tHit, ShotBoardDynamics dynamics, ref int consecutiveWallBounces, ref bool isCruising,
-            string targetColorId, bool isPiercing, ref float pierceSpeedScale)
+            float projectileContactRadius, float tHit, ShotBoardDynamics dynamics, string targetColorId,
+            ref ShotFlightState state)
         {
             ref var balloon = ref workingSet[index];
 
             // Any contact ends an empty-corridor cruise and resets its bounce counter — mirrors
             // ProjectileHitResolver.Resolve — UNLESS the shot has earned piercing, which rides the
             // cruise (and its stacking speed ramp) on through the pop instead of dropping to base.
-            if (!isPiercing)
+            if (!state.IsPiercing)
             {
-                consecutiveWallBounces = 0;
-                isCruising = false;
+                state.ConsecutiveWallBounces = 0;
+                state.IsCruising = false;
             }
 
-            var incomingDirection = direction;
-            dynamics?.OnBalloonHit(balloon.Actor, tHit);
+            // No Actor ⇒ no BalanceProfile backed this entry (a static contact) — fall back to the
+            // slot-based dynamics entry points, which nudge/remove by SlotIndex instead of an actor
+            // backref the entry never had.
+            var incomingDirection = state.Direction;
+            if (balloon.Actor != null)
+            {
+                dynamics?.OnBalloonHit(balloon.Actor, tHit);
+            }
+            else
+            {
+                dynamics?.OnBalloonHitAt(balloon.SlotIndex, tHit);
+            }
 
-            var center = dynamics != null ? balloon.Actor.EvaluateCenter(tHit) : balloon.Position;
+            var center = CurrentBalloonCenter(workingSet, index, tHit, dynamics);
 
             // A piercing shot pops EVERYTHING it touches (DamageFlags.Piercing — unbreakables
             // included) and flies on unbent; only unarmed shots deflect off durable actors.
-            if (!isPiercing && balloon.HitsRemaining > 1)
+            if (!state.IsPiercing && balloon.HitsRemaining > 1)
             {
                 balloon.HitsRemaining--;
-                DeflectOffBalloon(center, balloon.Radius + projectileContactRadius, contactPosition, ref direction);
-                dynamics?.OnBalloonDeflected(balloon.Actor, incomingDirection, tHit);
+                DeflectOffBalloon(
+                    center, balloon.Radius + projectileContactRadius, contactPosition, ref state.Direction);
+
+                // Deflected statics do NOT self-shove — they are immovable and a live static never
+                // wobbles, unlike a deflected balloon (OnBalloonDeflected).
+                if (balloon.Actor != null)
+                {
+                    dynamics?.OnBalloonDeflected(balloon.Actor, incomingDirection, tHit);
+                }
+
                 return;
             }
 
             // Plowing a tough (>1-hit) actor while piercing halves the cruise speed (floored at base
             // in CurrentSpeed) — mirrors ProjectileHitResolver.
-            if (isPiercing && balloon.HitsRemaining > 1)
+            if (state.IsPiercing && balloon.HitsRemaining > 1)
             {
-                pierceSpeedScale *= 0.5f;
+                state.PierceSpeedScale *= 0.5f;
             }
 
             // A colour filter scopes SCORE attribution only (milestone masks count one colour's
@@ -567,21 +493,25 @@ namespace BalloonParty.Solver
             if (string.IsNullOrEmpty(balloon.ColorId))
             {
                 var counts = string.IsNullOrEmpty(targetColorId);
-                ResolveToughPop(
-                    counts ? balloon.ScoreValue : 0, ref streakColor, ref streakCount, ref rawScore,
-                    ref toughsCleared);
+                ResolveToughPop(counts ? balloon.ScoreValue : 0, ref state);
             }
             else
             {
                 var counts = string.IsNullOrEmpty(targetColorId)
                     || string.Equals(balloon.ColorId, targetColorId, StringComparison.Ordinal);
-                ResolveGreenPop(
-                    balloon.ColorId, counts ? balloon.ScoreValue : 0, ref streakColor, ref streakCount,
-                    ref projectileColor, ref rawScore, ref shields);
+                ResolveGreenPop(balloon.ColorId, counts ? balloon.ScoreValue : 0, ref state);
             }
 
-            pops++;
-            dynamics?.RemoveFromGrid(balloon.Actor);
+            state.Pops++;
+            if (balloon.Actor != null)
+            {
+                dynamics?.RemoveFromGrid(balloon.Actor);
+            }
+            else
+            {
+                dynamics?.RemoveFromGridAt(balloon.SlotIndex);
+            }
+
             RemoveActive(workingSet, ref activeCount, index);
         }
 
@@ -602,34 +532,33 @@ namespace BalloonParty.Solver
         // Tough pops always reset the streak and score their flat ScoreValue — mirrors
         // ScoreController.RecordStreakMultiplier collapsing ToughBalloonModel's per-point
         // breaksStreak:true attributions to a locked ×1 multiplier regardless of ScoreValue.
-        private static void ResolveToughPop(
-            int scoreValue, ref string streakColor, ref int streakCount, ref int rawScore, ref int toughsCleared)
+        private static void ResolveToughPop(int scoreValue, ref ShotFlightState state)
         {
-            rawScore += scoreValue;
-            toughsCleared++;
-            streakColor = null;
-            streakCount = 0;
+            state.RawScore += scoreValue;
+            state.ToughsCleared++;
+            state.StreakColor = null;
+            state.StreakCount = 0;
         }
 
         // Mirrors ProjectileHitResolver: colour adoption (ApplyColorChange) off the projectile's OLD
         // colour first, then the streak record (ColorStreakTracker.Record) off the balloon's own
         // colour, then the shield refund (streak >= 2 of the projectile's now-current colour).
-        private static void ResolveGreenPop(
-            string colorId, int scoreValue, ref string streakColor, ref int streakCount, ref string projectileColor,
-            ref int rawScore, ref int shields)
+        private static void ResolveGreenPop(string colorId, int scoreValue, ref ShotFlightState state)
         {
-            if (!string.Equals(projectileColor, colorId, StringComparison.Ordinal))
+            if (!string.Equals(state.ProjectileColor, colorId, StringComparison.Ordinal))
             {
-                projectileColor = colorId;
+                state.ProjectileColor = colorId;
             }
 
-            streakCount = string.Equals(streakColor, colorId, StringComparison.Ordinal) ? streakCount + 1 : 1;
-            streakColor = colorId;
-            rawScore += scoreValue * streakCount;
+            state.StreakCount = string.Equals(state.StreakColor, colorId, StringComparison.Ordinal)
+                ? state.StreakCount + 1
+                : 1;
+            state.StreakColor = colorId;
+            state.RawScore += scoreValue * state.StreakCount;
 
-            if (streakCount >= 2 && string.Equals(streakColor, projectileColor, StringComparison.Ordinal))
+            if (state.StreakCount >= 2 && string.Equals(state.StreakColor, state.ProjectileColor, StringComparison.Ordinal))
             {
-                shields++;
+                state.Shields++;
             }
         }
 
@@ -641,9 +570,10 @@ namespace BalloonParty.Solver
 
         // Nearest analytic line-circle entry among the active set — same family as
         // TraceHitGeometry.TryFindSurfaceHit / ProjectileMotionResolver.TryComputeContactNormal, solved
-        // here for the smallest positive entry distance rather than a backtrack. UNCHANGED from before
-        // task 4b/4c — this is the fast, exact path a dynamics-free call always takes, so the no-motion
-        // regression case is byte-for-byte the pre-existing code.
+        // here for the smallest positive entry distance rather than a backtrack. This is the fast,
+        // exact path a dynamics-free call always takes; the per-circle solve lives in
+        // TryFindStaticBalloonEntry (shared with the dynamic path's null-Actor fallback) and computes
+        // the identical result the pre-task-4b/4c inline formula did.
         private static bool TryFindNearestBalloonEntry(
             ShotBalloonState[] workingSet, int activeCount, Vector2 position, Vector2 direction,
             float projectileContactRadius, out float bestT, out int bestIndex)
@@ -654,15 +584,11 @@ namespace BalloonParty.Solver
             for (var i = 0; i < activeCount; i++)
             {
                 var combinedRadius = workingSet[i].Radius + projectileContactRadius;
-                var toCenter = position - workingSet[i].Position;
-                var along = Vector2.Dot(toCenter, direction);
-                var discriminant = (along * along) - toCenter.sqrMagnitude + (combinedRadius * combinedRadius);
-                if (discriminant < 0f)
+                if (!TryFindStaticBalloonEntry(workingSet[i].Position, position, direction, combinedRadius, out var entryT))
                 {
                     continue;
                 }
 
-                var entryT = -along - Mathf.Sqrt(discriminant);
                 if (entryT <= EventEpsilon || entryT >= bestT)
                 {
                     continue;
@@ -675,9 +601,30 @@ namespace BalloonParty.Solver
             return bestIndex >= 0;
         }
 
+        // The plain line-circle solve shared by the static path above and, per-entry, by the dynamic
+        // path below for any working-set slot with a null Actor (no BalanceProfile ⇒ a fixed centre —
+        // see the null-Actor gating in CopyIntoWorkingSet/CurrentBalloonCenter).
+        private static bool TryFindStaticBalloonEntry(
+            Vector2 center, Vector2 position, Vector2 direction, float combinedRadius, out float entryT)
+        {
+            var toCenter = position - center;
+            var along = Vector2.Dot(toCenter, direction);
+            var discriminant = (along * along) - toCenter.sqrMagnitude + (combinedRadius * combinedRadius);
+            if (discriminant < 0f)
+            {
+                entryT = 0f;
+                return false;
+            }
+
+            entryT = -along - Mathf.Sqrt(discriminant);
+            return true;
+        }
+
         // The dynamic-board counterpart of TryFindNearestBalloonEntry: each balloon's centre is a
         // function of time (see ShotSimDynamicActor.EvaluateCenter), so its entry is found by the
-        // two-pass fixed point in TryFindMovingBalloonEntry rather than the plain static formula.
+        // two-pass fixed point in TryFindMovingBalloonEntry rather than the plain static formula — UNLESS
+        // the entry's Actor is null (a static contact with no BalanceProfile), which falls back to the
+        // same fixed-centre solve the no-dynamics path uses.
         private static bool TryFindNearestBalloonEntryDynamic(
             ShotBalloonState[] workingSet, int activeCount, Vector2 position, Vector2 direction, float speed,
             float segmentStartTime, float projectileContactRadius, out float bestT, out int bestIndex)
@@ -688,9 +635,14 @@ namespace BalloonParty.Solver
             for (var i = 0; i < activeCount; i++)
             {
                 var combinedRadius = workingSet[i].Radius + projectileContactRadius;
-                if (!TryFindMovingBalloonEntry(
-                        workingSet[i].Actor, position, direction, speed, segmentStartTime, combinedRadius,
-                        out var entryDistance))
+                var actor = workingSet[i].Actor;
+                float entryDistance;
+                var found = actor != null
+                    ? TryFindMovingBalloonEntry(
+                        actor, position, direction, speed, segmentStartTime, combinedRadius, out entryDistance)
+                    : TryFindStaticBalloonEntry(workingSet[i].Position, position, direction, combinedRadius, out entryDistance);
+
+                if (!found)
                 {
                     continue;
                 }

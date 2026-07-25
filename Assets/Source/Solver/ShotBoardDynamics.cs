@@ -41,7 +41,9 @@ namespace BalloonParty.Solver
         private int _pulsesRun;
 
         /// <summary>Same order as the <c>board</c> list passed to <see cref="ShotSimulator.Simulate" /> —
-        /// <c>TargetActors[i]</c> is the actor backing <c>board[i]</c>.</summary>
+        /// <c>TargetActors[i]</c> is the actor backing <c>board[i]</c>, or null when that entry's
+        /// snapshot carries no <see cref="BalanceProfile" /> (a static contact — see the null-Actor
+        /// gating in <see cref="ShotSimulator" />).</summary>
         internal IReadOnlyList<ShotSimDynamicActor> TargetActors => _targetActors;
 
         internal ShotBoardDynamics(
@@ -72,14 +74,23 @@ namespace BalloonParty.Solver
             for (var i = 0; i < targets.Count; i++)
             {
                 var snapshot = targets[i];
+                if (!snapshot.Balance.HasValue)
+                {
+                    // No BalanceProfile ⇒ this target never enters the balance grid as a mover — leave
+                    // TargetActors[i] null (see ShotSimulator's null-Actor gating). Unreachable from the
+                    // live gather today; every current target carries balance data.
+                    continue;
+                }
+
+                var balance = snapshot.Balance.Value;
                 _targetActors[i] = new ShotSimDynamicActor
                 {
                     IsShotTarget = true,
-                    BalancePriority = snapshot.BalancePriority,
-                    MaxBalanceSteps = snapshot.MaxBalanceSteps,
-                    MoveSpeed = snapshot.MoveSpeed,
-                    DirectBalanceMotion = snapshot.DirectBalanceMotion,
-                    NudgeOverrides = snapshot.NudgeOverrides,
+                    BalancePriority = balance.BalancePriority,
+                    MaxBalanceSteps = balance.MaxBalanceSteps,
+                    MoveSpeed = balance.MoveSpeed,
+                    DirectBalanceMotion = balance.DirectBalanceMotion,
+                    NudgeOverrides = balance.NudgeOverrides,
                 };
             }
 
@@ -113,9 +124,17 @@ namespace BalloonParty.Solver
 
             for (var i = 0; i < _targets.Count; i++)
             {
+                // A null entry (no BalanceProfile) has no slot data to place on this grid — deferred
+                // to Phase A, whose static-archetype gather will carry real slot identity.
+                if (_targetActors[i] == null)
+                {
+                    continue;
+                }
+
                 var snapshot = _targets[i];
-                _targetActors[i].ResetTo(snapshot.SlotIndex, snapshot.Position);
-                _grid.Place(_targetActors[i], null, snapshot.SlotIndex);
+                var slotIndex = snapshot.Balance.Value.SlotIndex;
+                _targetActors[i].ResetTo(slotIndex, snapshot.Position);
+                _grid.Place(_targetActors[i], null, slotIndex);
             }
 
             for (var i = 0; i < _otherDynamicSnapshots.Count; i++)
@@ -162,7 +181,14 @@ namespace BalloonParty.Solver
         /// the view.</summary>
         internal void OnBalloonHit(ShotSimDynamicActor hitActor, float tHit)
         {
-            var hitSlot = hitActor.SlotIndex.Value;
+            OnBalloonHitAt(hitActor.SlotIndex.Value, tHit);
+        }
+
+        /// <summary>Slot-based counterpart of <see cref="OnBalloonHit" /> for a hit entry with no Actor
+        /// backref (a static contact — see <see cref="ShotSimulator" />'s null-Actor gating), sharing the
+        /// same neighbour-nudge loop.</summary>
+        internal void OnBalloonHitAt(Vector2Int hitSlot, float tHit)
+        {
             var hitSlotPos = _grid.IndexToWorldPosition(hitSlot);
 
             HexCoordinates.HexNeighborIndices(hitSlot.x, hitSlot.y, _neighborBuffer);
@@ -191,7 +217,8 @@ namespace BalloonParty.Solver
         /// <summary>The deflected balloon shoves itself along the projectile's INCOMING heading —
         /// mirrors <c>BalloonController.Deflect</c>'s <c>NudgeMessage</c> origin math
         /// (<c>slotPos − incomingDirection</c>), which <c>NudgeService.HandleSingleActor</c> turns back
-        /// into direction == incoming direction.</summary>
+        /// into direction == incoming direction. Statics have no counterpart call — they are immovable
+        /// and never self-shove (see <see cref="ShotSimulator" />'s null-Actor gating).</summary>
         internal void OnBalloonDeflected(ShotSimDynamicActor actor, Vector2 incomingDirection, float tHit)
         {
             _nudgeResolver.Resolve(actor.NudgeOverrides, null, NudgeType.Deflect, out var distance, out var duration);
@@ -202,7 +229,14 @@ namespace BalloonParty.Solver
         /// balance rules for real rather than freezing the board.</summary>
         internal void RemoveFromGrid(ShotSimDynamicActor actor)
         {
-            _grid.Remove(actor.SlotIndex.Value);
+            RemoveFromGridAt(actor.SlotIndex.Value);
+        }
+
+        /// <summary>Slot-based counterpart of <see cref="RemoveFromGrid" /> for a popped entry with no
+        /// Actor backref (a static contact — see <see cref="ShotSimulator" />'s null-Actor gating).</summary>
+        internal void RemoveFromGridAt(Vector2Int slot)
+        {
+            _grid.Remove(slot);
         }
 
         private static void AddImpulse(
