@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Configuration.Items;
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Nudge;
 using BalloonParty.Slots.Actor;
 using UnityEngine;
@@ -7,20 +8,22 @@ using UnityEngine;
 namespace BalloonParty.Solver
 {
     /// <summary>Colour identity of a snapshot target — split out of the geometry/scoring core so
-    /// rainbow/wildcard fields (Phase D) slot in without perturbing every other factory.
-    /// <see cref="IsRainbow" />/<see cref="AllowedColors" /> are gather-populated from Phase D onward;
-    /// today they are always false/null.</summary>
+    /// rainbow/wildcard fields slot in without perturbing every other factory. The allowed-colour
+    /// list a rainbow pays out is board-global (Phase D-core), not per-balloon — it lives on
+    /// <see cref="ShotSolveContext" />/<see cref="ShotSimulator.Simulate" /> instead.
+    /// <see cref="WashesProjectileColor" /> mirrors <c>IWashesProjectileColor</c> (the soap-bubble
+    /// cluster) — only ever true on a colourless (Tough-shaped) target today.</summary>
     internal readonly struct ColorProfile
     {
         public readonly string ColorId;
         public readonly bool IsRainbow;
-        public readonly IReadOnlyList<string> AllowedColors;
+        public readonly bool WashesProjectileColor;
 
-        public ColorProfile(string colorId, bool isRainbow, IReadOnlyList<string> allowedColors)
+        public ColorProfile(string colorId, bool isRainbow, bool washesProjectileColor)
         {
             ColorId = colorId;
             IsRainbow = isRainbow;
-            AllowedColors = allowedColors;
+            WashesProjectileColor = washesProjectileColor;
         }
     }
 
@@ -124,19 +127,35 @@ namespace BalloonParty.Solver
             BalanceProfile? balance = null)
         {
             return new ShotBalloonSnapshot(
-                position, radius, scoreValue, hitsRemaining, new ColorProfile(colorId, false, null), balance,
+                position, radius, scoreValue, hitsRemaining, new ColorProfile(colorId, false, false), balance,
                 ShotContactKind.Poppable, ItemType.None, null);
         }
 
         /// <summary>A colourless target scored via the flat/streak-breaking tough rule — mirrors
-        /// <c>ToughBalloonModel</c> (durable) or an Unbreakable (<c>hitsRemaining == int.MaxValue</c>,
-        /// forever-deflecting).</summary>
+        /// <c>ToughBalloonModel</c> (durable), an Unbreakable (<c>hitsRemaining == int.MaxValue</c>,
+        /// forever-deflecting), or a soap-washing cluster (<paramref name="washesProjectileColor" /> —
+        /// mirrors <c>BubbleClusterModel</c>'s <c>IWashesProjectileColor</c>).</summary>
         public static ShotBalloonSnapshot ForToughTarget(
-            Vector2 position, float radius, int scoreValue, int hitsRemaining, BalanceProfile? balance = null)
+            Vector2 position, float radius, int scoreValue, int hitsRemaining, BalanceProfile? balance = null,
+            bool washesProjectileColor = false)
         {
             return new ShotBalloonSnapshot(
-                position, radius, scoreValue, hitsRemaining, default, balance, ShotContactKind.Poppable,
-                ItemType.None, null);
+                position, radius, scoreValue, hitsRemaining, new ColorProfile(null, false, washesProjectileColor),
+                balance, ShotContactKind.Poppable, ItemType.None, null);
+        }
+
+        /// <summary>A poppable rainbow/wildcard target — mirrors a live balloon whose colour is the
+        /// reserved <c>GamePalette.RainbowColorId</c> marker (<see cref="IGamePalette.IsRainbow" />).
+        /// Scoring pays every board-allowed colour (see <see cref="ShotSimulator.Simulate" />'s
+        /// <c>allowedColors</c>); the streak rule depends on the shot's own state (wildcard-buffed,
+        /// colourless-deferred, or colour-anchored) — see <c>ShotSimulator.ResolvePopScore</c>.</summary>
+        public static ShotBalloonSnapshot ForRainbowTarget(
+            Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining,
+            BalanceProfile? balance = null)
+        {
+            return new ShotBalloonSnapshot(
+                position, radius, scoreValue, hitsRemaining, new ColorProfile(colorId, true, false), balance,
+                ShotContactKind.Poppable, ItemType.None, null);
         }
 
         /// <summary>A collision-only archetype with no score and no balance-grid presence — Phase A's
@@ -172,6 +191,7 @@ namespace BalloonParty.Solver
         public ItemType Item;
         public bool IsRainbow;
         public bool IsStatic;
+        public bool WashesProjectileColor;
         public ShotSimDynamicActor Actor;
 
         public ShotBalloonState(in ShotBalloonSnapshot snapshot)
@@ -184,6 +204,7 @@ namespace BalloonParty.Solver
             SlotIndex = snapshot.Balance?.SlotIndex ?? snapshot.StaticSlotIndex ?? default;
             ContactKind = snapshot.ContactKind;
             Item = snapshot.Item;
+            WashesProjectileColor = snapshot.Color.WashesProjectileColor;
             IsRainbow = snapshot.Color.IsRainbow;
             IsStatic = snapshot.StaticSlotIndex.HasValue;
             Actor = null;

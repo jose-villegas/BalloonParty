@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.Palette;
+using BalloonParty.Game.Level;
 using BalloonParty.Shared;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Actor.Archetype;
@@ -28,11 +30,21 @@ namespace BalloonParty.Solver
         public readonly ShotBoardDynamics Dynamics;
         public readonly float NudgeAmplitude;
 
+        /// <summary>The board-global colours a rainbow pays/counts under (Phase D-core) — the live
+        /// active level's <see cref="ILevelParameters.AllowedColors" />. Was per-balloon on
+        /// <c>ColorProfile</c>; hoisted here since it's board-global, not per-target.</summary>
+        public readonly IReadOnlyList<string> AllowedColors;
+
+        /// <summary>The reserved rainbow/wildcard colour marker (<c>GamePalette.RainbowColorId</c>) —
+        /// threaded through so <c>ShotSimulator</c>'s pop-neighbour conversion can write it without
+        /// depending on <see cref="IGamePalette" /> itself (a plain string is all the sim needs).</summary>
+        public readonly string RainbowColorId;
+
         public ShotSolveContext(
             IReadOnlyList<ShotBalloonSnapshot> board, Vector4 wallLimitsClockwise, Vector2 throwerPivot,
             Vector3 spawnLocalOffset, int startingShields, float projectileContactRadius,
             float projectileSpeed, ShotCruiseConfig cruiseConfig, ShotBoardDynamics dynamics,
-            float nudgeAmplitude)
+            float nudgeAmplitude, IReadOnlyList<string> allowedColors, string rainbowColorId)
         {
             Board = board;
             WallLimitsClockwise = wallLimitsClockwise;
@@ -44,6 +56,8 @@ namespace BalloonParty.Solver
             CruiseConfig = cruiseConfig;
             Dynamics = dynamics;
             NudgeAmplitude = nudgeAmplitude;
+            AllowedColors = allowedColors;
+            RainbowColorId = rainbowColorId;
         }
     }
 
@@ -56,12 +70,12 @@ namespace BalloonParty.Solver
         internal static ShotSolveContext Gather(
             SlotGrid grid, IProjectileFlightConfig config, ISlotGridConfig gridConfig,
             IBalloonsConfiguration balloonsConfig, ThrowerView thrower, ThrowerSettings throwerSettings,
-            float pulseExecutionDelay)
+            IGamePalette palette, IActiveLevelParameters levelParams, float pulseExecutionDelay)
         {
             var targets = new List<ShotBalloonSnapshot>();
             var otherDynamicActors = new List<ShotDynamicActorSnapshot>();
             var staticActors = new List<ShotStaticActorSnapshot>();
-            CollectBoard(grid, balloonsConfig, targets, otherDynamicActors, staticActors);
+            CollectBoard(grid, balloonsConfig, palette, targets, otherDynamicActors, staticActors);
 
             var dynamics = new ShotBoardDynamics(
                 gridConfig, balloonsConfig, targets, otherDynamicActors, staticActors, pulseExecutionDelay);
@@ -82,7 +96,9 @@ namespace BalloonParty.Solver
                 config.ProjectileSpeed,
                 cruiseConfig,
                 dynamics,
-                balloonsConfig.NudgeDistance);
+                balloonsConfig.NudgeDistance,
+                levelParams.Current.AllowedColors,
+                GamePalette.RainbowColorId);
         }
 
         internal static ShotSimulationResult SimulateAt(
@@ -95,7 +111,8 @@ namespace BalloonParty.Solver
                 DirectionFromDegrees(angleDegrees), context.StartingShields, context.ProjectileContactRadius,
                 workingSet, pathOut: pathOut, projectileSpeed: context.ProjectileSpeed,
                 cruiseConfig: context.CruiseConfig, dynamics: context.Dynamics, timestampsOut: timesOut,
-                targetColorId: targetColorId, radiusBias: radiusBias);
+                targetColorId: targetColorId, radiusBias: radiusBias, allowedColors: context.AllowedColors,
+                rainbowColorId: context.RainbowColorId);
         }
 
         // The thrower rotates around its pivot to aim (ThrowerView.RotateTo: fire-direction angle − 90°),
@@ -116,8 +133,9 @@ namespace BalloonParty.Solver
         // targets — including never-popping Unbreakables — carry geometry + balance/nudge properties;
         // any other Dynamic occupant carries balance properties only; Static occupants their slot only.
         private static void CollectBoard(
-            SlotGrid grid, IBalloonsConfiguration balloonsConfig, List<ShotBalloonSnapshot> targets,
-            List<ShotDynamicActorSnapshot> otherDynamicActors, List<ShotStaticActorSnapshot> staticActors)
+            SlotGrid grid, IBalloonsConfiguration balloonsConfig, IGamePalette palette,
+            List<ShotBalloonSnapshot> targets, List<ShotDynamicActorSnapshot> otherDynamicActors,
+            List<ShotStaticActorSnapshot> staticActors)
         {
             for (var col = 0; col < grid.Columns; col++)
             {
@@ -146,7 +164,7 @@ namespace BalloonParty.Solver
                         continue;
                     }
 
-                    if (TryBuildTargetSnapshot(grid, balloonsConfig, index, actor, out var target))
+                    if (TryBuildTargetSnapshot(grid, balloonsConfig, palette, index, actor, out var target))
                     {
                         targets.Add(target);
                         continue;
@@ -169,8 +187,8 @@ namespace BalloonParty.Solver
         // so they enter as never-popping deflect geometry — int.MaxValue durability keeps the sim's
         // HitsRemaining > 1 branch permanently deflecting (deflects score nothing, matching the game).
         private static bool TryBuildTargetSnapshot(
-            SlotGrid grid, IBalloonsConfiguration balloonsConfig, Vector2Int index, IWriteableSlotActor actor,
-            out ShotBalloonSnapshot snapshot)
+            SlotGrid grid, IBalloonsConfiguration balloonsConfig, IGamePalette palette, Vector2Int index,
+            IWriteableSlotActor actor, out ShotBalloonSnapshot snapshot)
         {
             snapshot = default;
 
@@ -194,6 +212,7 @@ namespace BalloonParty.Solver
             }
 
             var colorId = actor is IHasColor colorable ? colorable.Color.Value : null;
+            var washesProjectileColor = actor is IWashesProjectileColor;
             var influence = actor as IBalanceInfluence;
             var biasSource = actor as IBalanceBiasSource;
             var nudgeOverrides = actor is IHasNudge nudgeable ? nudgeable.NudgeOverrides : null;
@@ -216,9 +235,26 @@ namespace BalloonParty.Solver
                 biasValue: biasSource?.BiasValue ?? 0f,
                 biasTypeId: biasSource?.BiasTypeId ?? 0);
 
-            snapshot = string.IsNullOrEmpty(colorId)
-                ? ShotBalloonSnapshot.ForToughTarget(position, radius, scored.ScoreValue, hitsRemaining, balance)
-                : ShotBalloonSnapshot.ForColorTarget(position, radius, colorId, scored.ScoreValue, hitsRemaining, balance);
+            // A rainbow balloon's colour IS a real (non-empty) IHasColor value — the reserved
+            // GamePalette.RainbowColorId marker — so it must be classified BEFORE the colored/tough
+            // branch below, or it silently mis-scores as an ordinary green target (the latent bug
+            // this factory closes).
+            if (!string.IsNullOrEmpty(colorId) && palette.IsRainbow(colorId))
+            {
+                snapshot = ShotBalloonSnapshot.ForRainbowTarget(
+                    position, radius, colorId, scored.ScoreValue, hitsRemaining, balance);
+            }
+            else if (string.IsNullOrEmpty(colorId))
+            {
+                snapshot = ShotBalloonSnapshot.ForToughTarget(
+                    position, radius, scored.ScoreValue, hitsRemaining, balance, washesProjectileColor);
+            }
+            else
+            {
+                snapshot = ShotBalloonSnapshot.ForColorTarget(
+                    position, radius, colorId, scored.ScoreValue, hitsRemaining, balance);
+            }
+
             return true;
         }
 

@@ -41,9 +41,30 @@ namespace BalloonParty.Tests.ShotSolver
             return ShotBalloonSnapshot.ForColorTarget(position, radius, colorId, scoreValue, hitsRemaining, balance);
         }
 
-        public static ShotBalloonSnapshot Tough(Vector2 position, float radius, int scoreValue, int hitsRemaining)
+        public static ShotBalloonSnapshot Tough(
+            Vector2 position, float radius, int scoreValue, int hitsRemaining, bool washes = false)
         {
-            return ShotBalloonSnapshot.ForToughTarget(position, radius, scoreValue, hitsRemaining);
+            return ShotBalloonSnapshot.ForToughTarget(
+                position, radius, scoreValue, hitsRemaining, washesProjectileColor: washes);
+        }
+
+        public static ShotBalloonSnapshot Rainbow(
+            Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining = 1)
+        {
+            return ShotBalloonSnapshot.ForRainbowTarget(position, radius, colorId, scoreValue, hitsRemaining);
+        }
+
+        /// <summary>The SlotIndex-carrying overload — needed by any test exercising the rainbow-buff
+        /// hex-neighbour conversion, which addresses the working set by <see cref="Vector2Int" /> slot,
+        /// not array index.</summary>
+        public static ShotBalloonSnapshot Rainbow(
+            Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining,
+            Vector2Int slotIndex, int balancePriority, int maxBalanceSteps, float moveSpeed,
+            bool directBalanceMotion, IReadOnlyList<NudgeOverride> nudgeOverrides)
+        {
+            var balance = new BalanceProfile(
+                slotIndex, balancePriority, maxBalanceSteps, moveSpeed, directBalanceMotion, nudgeOverrides);
+            return ShotBalloonSnapshot.ForRainbowTarget(position, radius, colorId, scoreValue, hitsRemaining, balance);
         }
 
         public static ShotBalloonSnapshot Static(

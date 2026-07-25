@@ -16,10 +16,22 @@ namespace BalloonParty.Solver
         public bool IsCruising;
         public bool IsPiercing;
         public float PierceSpeedScale;
+
+        // Phase D-core in-sim buff state (@ref plan_shot_solver_accuracy Phase D-core): both end on
+        // one of two concrete conditions only — a wall bounce that spends a shield (HasRainbowBuff;
+        // mirrors WallBounceEndCondition) or a cruise-pierce end (SpeedBuffMultiplier reset to 1;
+        // mirrors PierceEndedEndCondition) — see HandleWallBounce. Grants (Snipe/Shield item
+        // activations) are Phase C, not modeled here.
+        public bool HasRainbowBuff;
+        public float SpeedBuffMultiplier;
         public int CruiseStartShields;
         public string StreakColor;
         public int StreakCount;
         public string ProjectileColor;
+
+        // Banks a colourless-projectile rainbow pop until the streak next anchors on a real colour
+        // (ColorStreakTracker.RecordDeferred/Record's fold) — see ShotSimulator.RecordColor.
+        public int DeferredPops;
         public int RawScore;
         public int Pops;
         public int ToughsCleared;
@@ -38,10 +50,13 @@ namespace BalloonParty.Solver
             IsCruising = false;
             IsPiercing = false;
             PierceSpeedScale = 1f;
+            HasRainbowBuff = false;
+            SpeedBuffMultiplier = 1f;
             CruiseStartShields = 0;
             StreakColor = null;
             StreakCount = 0;
             ProjectileColor = null;
+            DeferredPops = 0;
             RawScore = 0;
             Pops = 0;
             ToughsCleared = 0;

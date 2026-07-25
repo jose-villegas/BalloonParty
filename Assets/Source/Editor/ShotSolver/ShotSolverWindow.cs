@@ -3,8 +3,10 @@ using System.Diagnostics;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.Palette;
 using BalloonParty.EditorUI.Charts;
 using BalloonParty.Game;
+using BalloonParty.Game.Level;
 using BalloonParty.Nudge;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.View;
@@ -614,6 +616,8 @@ namespace BalloonParty.Editor.ShotSolver
                 scope.Container.Resolve<IBalloonsConfiguration>(),
                 thrower,
                 scope.Container.Resolve<ThrowerSettings>(),
+                scope.Container.Resolve<IGamePalette>(),
+                scope.Container.Resolve<IActiveLevelParameters>(),
                 pulseDelay);
             return true;
         }

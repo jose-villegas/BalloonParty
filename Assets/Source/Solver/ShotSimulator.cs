@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared;
+using BalloonParty.Slots.Grid;
 using UnityEngine;
 
 namespace BalloonParty.Solver
@@ -111,6 +112,11 @@ namespace BalloonParty.Solver
         // divide time by zero when converting a solved distance into a timestamp.
         private const float MinSpeed = 0.0001f;
 
+        // Reused across a rainbow-buffed pop's hex-neighbour conversion (@ref
+        // plan_shot_solver_accuracy Phase D-core) — the sim runs single-threaded (editor sweeps, the
+        // Fire Best cheat), so a shared scratch buffer never aliases across concurrent calls.
+        private static readonly Vector2Int[] NeighborBuffer = new Vector2Int[6];
+
         /// <summary>Simulates one aim direction to completion. <paramref name="workingSet" /> is a
         /// caller-owned scratch buffer (sized to at least <paramref name="board" />.Count) reused
         /// across calls — with <paramref name="dynamics" /> null the only per-call cost is copying the
@@ -137,7 +143,13 @@ namespace BalloonParty.Solver
             ShotBoardDynamics dynamics = null,
             List<float> timestampsOut = null,
             string targetColorId = null,
-            float radiusBias = 0f)
+            float radiusBias = 0f,
+            IReadOnlyList<string> allowedColors = null,
+            string rainbowColorId = null,
+            bool startingRainbowBuff = false,
+            string startingProjectileColor = null,
+            string startingStreakColor = null,
+            int startingStreakCount = 0)
         {
             var walls = new WallLimits(wallLimitsClockwise);
             dynamics?.ResetForNewFlight();
@@ -145,6 +157,16 @@ namespace BalloonParty.Solver
 
             var direction = aimDirection.sqrMagnitude > AxisEpsilon ? aimDirection.normalized : Vector2.right;
             var state = new ShotFlightState(origin, direction, startingShields);
+
+            // No live gather sets any of these yet (buff GRANTS, and a streak already in progress
+            // when one lands mid-flight, are Phase C's item layer) — this is the seam that lets
+            // D-core's own scoring/end-condition mirrors (including a refund firing through an
+            // already-established streak once a buff takes over) be exercised by tests, and later
+            // a headless scenario, without a full item layer in place.
+            state.HasRainbowBuff = startingRainbowBuff;
+            state.ProjectileColor = startingProjectileColor;
+            state.StreakColor = startingStreakColor;
+            state.StreakCount = startingStreakCount;
 
             if (pathOut != null)
             {
@@ -195,7 +217,7 @@ namespace BalloonParty.Solver
                     timestampsOut?.Add(state.Elapsed);
                     ResolveBalloonContact(
                         workingSet, ref activeCount, balloonIndex, state.Position, projectileContactRadius,
-                        state.Elapsed, dynamics, targetColorId, ref state);
+                        state.Elapsed, dynamics, targetColorId, allowedColors, rainbowColorId, ref state);
                     if (state.Absorbed)
                     {
                         break;
@@ -268,6 +290,11 @@ namespace BalloonParty.Solver
             ShotBoardDynamics dynamics, ref ShotFlightState state)
         {
             state.Shields--;
+            // Mirrors WallBounceEndCondition (the Shield-item grant): a wall bounce that spends a
+            // shield ends the RainbowShield buff, regardless of whether the shot survives it. The
+            // Snipe-granted variant live-ends via PierceEndedEndCondition at the DISCHARGE wall only —
+            // approximated here until Phase E2 models PendingPierceHits.
+            state.HasRainbowBuff = false;
             if (state.Shields < 0)
             {
                 return true;
@@ -285,6 +312,9 @@ namespace BalloonParty.Solver
                 state.ConsecutiveWallBounces = 0;
                 state.PierceSpeedScale = 1f;
                 state.IsPiercing = false;
+                // Mirrors PierceEndedEndCondition: a Snipe-granted speed buff rides the pierce, so
+                // it ends here too.
+                state.SpeedBuffMultiplier = 1f;
             }
             else if (cruiseConfig.WallBounceThreshold > 0 && !state.IsCruising
                 && state.ConsecutiveWallBounces >= cruiseConfig.WallBounceThreshold
@@ -320,9 +350,13 @@ namespace BalloonParty.Solver
         // folded into ShotCruiseConfig.TapLagSeconds on the timeline instead.
         private static float CurrentSpeed(float baseSpeed, in ShotFlightState state, in ShotCruiseConfig cruiseConfig)
         {
+            // Mirrors ProjectileMotionResolver.ResolveFlightSpeed: the buff multiplies the base speed
+            // BEFORE the cruise ramp, and is still the floor when the shot isn't cruising at all —
+            // default 1f keeps this byte-identical until Phase C ever grants the buff.
+            var buffedBase = baseSpeed * state.SpeedBuffMultiplier;
             if (!state.IsCruising)
             {
-                return baseSpeed;
+                return buffedBase;
             }
 
             var startShields = Mathf.Max(state.CruiseStartShields, 1);
@@ -333,9 +367,9 @@ namespace BalloonParty.Solver
                 target = Mathf.Min(target, cruiseConfig.MaxSpeedMultiplier);
             }
 
-            // Pierce scale bleeds the ramp down through tough plows; floor at base speed.
-            var speed = baseSpeed * target * state.PierceSpeedScale;
-            return Mathf.Max(speed, baseSpeed);
+            // Pierce scale bleeds the ramp down through tough plows; floor at (buffed) base speed.
+            var speed = buffedBase * target * state.PierceSpeedScale;
+            return Mathf.Max(speed, buffedBase);
         }
 
         // The event-timeline mirror of the live path-clear check (Shared.PathTrace / the predicate
@@ -443,7 +477,7 @@ namespace BalloonParty.Solver
         private static void ResolveBalloonContact(
             ShotBalloonState[] workingSet, ref int activeCount, int index, Vector2 contactPosition,
             float projectileContactRadius, float tHit, ShotBoardDynamics dynamics, string targetColorId,
-            ref ShotFlightState state)
+            IReadOnlyList<string> allowedColors, string rainbowColorId, ref ShotFlightState state)
         {
             ref var balloon = ref workingSet[index];
 
@@ -454,6 +488,14 @@ namespace BalloonParty.Solver
             {
                 state.Absorbed = true;
                 return;
+            }
+
+            // Soap washes the projectile colourless on ANY contact (deflect or pop alike) — mirrors
+            // ApplyColorChange running ahead of/independent from the deflect-vs-pop branch below
+            // (ProjectileHitResolver.cs:193-201).
+            if (balloon.WashesProjectileColor && !string.IsNullOrEmpty(state.ProjectileColor))
+            {
+                state.ProjectileColor = null;
             }
 
             // Any contact ends an empty-corridor cruise and resets its bounce counter — mirrors
@@ -518,16 +560,14 @@ namespace BalloonParty.Solver
 
             // A colour filter scopes SCORE attribution only (milestone masks count one colour's
             // points); streaks, refunds and board effects run unfiltered, exactly as the game would.
-            if (string.IsNullOrEmpty(balloon.ColorId))
+            ResolvePopScore(balloon, targetColorId, allowedColors, ref state);
+
+            // A rainbow-buffed shot converts nearby paintable balloons on every pop it lands, not
+            // just a rainbow-target one — mirrors ProjectileHitResolver.ConvertNeighborsToRainbow,
+            // run over the ACTIVE WORKING SET (SlotIndex-addressed) so it works with dynamics: null.
+            if (state.HasRainbowBuff)
             {
-                var counts = string.IsNullOrEmpty(targetColorId);
-                ResolveToughPop(counts ? balloon.ScoreValue : 0, ref state);
-            }
-            else
-            {
-                var counts = string.IsNullOrEmpty(targetColorId)
-                    || string.Equals(balloon.ColorId, targetColorId, StringComparison.Ordinal);
-                ResolveGreenPop(balloon.ColorId, counts ? balloon.ScoreValue : 0, ref state);
+                ConvertNeighborsToRainbow(workingSet, activeCount, balloon.SlotIndex, rainbowColorId);
             }
 
             state.Pops++;
@@ -560,33 +600,159 @@ namespace BalloonParty.Solver
         // Tough pops always reset the streak and score their flat ScoreValue — mirrors
         // ScoreController.RecordStreakMultiplier collapsing ToughBalloonModel's per-point
         // breaksStreak:true attributions to a locked ×1 multiplier regardless of ScoreValue.
+        // Only reached when NOT rainbow-buffed (see ResolvePopScore) — under a buff the WildcardStreak
+        // flag pre-empts this reset entirely, live-side too (RecordStreakMultiplier checks flags
+        // before it ever looks at an attribution's own BreaksStreak).
         private static void ResolveToughPop(int scoreValue, ref ShotFlightState state)
         {
             state.RawScore += scoreValue;
             state.ToughsCleared++;
             state.StreakColor = null;
             state.StreakCount = 0;
+            state.DeferredPops = 0;
         }
 
-        // Mirrors ProjectileHitResolver: colour adoption (ApplyColorChange) off the projectile's OLD
-        // colour first, then the streak record (ColorStreakTracker.Record) off the balloon's own
-        // colour, then the shield refund (streak >= 2 of the projectile's now-current colour).
-        private static void ResolveGreenPop(string colorId, int scoreValue, ref ShotFlightState state)
+        // Dispatches a real (non-static, non-absorb) pop's colour adoption + streak + payout, mirroring
+        // ScoreController.RecordStreakMultiplier's precedence (ProjectileHitResolver.cs:124-152) and
+        // BalloonModel.ResolveRainbowAttribution's payout (pre-cap product only — never
+        // ILevelProgress.ClaimProgress's cap, which the sim doesn't model). Guard, then two
+        // orthogonal concerns, then the streak-multiplier dispatch (in live precedence order):
+        // - Guard: a rainbow with no board-allowed colours pays/records nothing (mirrors
+        //   ResolveRainbowAttribution's own early return — ScoreController's group-publish exits
+        //   before RecordStreakMultiplier ever runs).
+        // - Adoption (ApplyColorChange): an ordinary (non-rainbow) coloured pop always steals the
+        //   projectile's colour, regardless of the shot's own rainbow buff — only a wildcard
+        //   (rainbow) TARGET suppresses it.
+        // - Dispatch: (1) HasRainbowBuff scores colour-agnostically — even an otherwise
+        //   streak-breaking tough pop just keeps the multiplier climbing; (2) absent a buff, a
+        //   colourless non-rainbow pop takes the flat/streak-breaking tough rule and RETURNS —
+        //   it never reaches the shared payout/refund step below, matching live's IHasColor-gated
+        //   refund; (3) a rainbow target defers the streak while the projectile is colourless;
+        //   (4) else anchors on the projectile's own colour if still allowed, else the balloon's
+        //   first allowed one; (5) an ordinary coloured pop just records its own colour.
+        // The shield refund is hoisted out of every surviving branch (never the tough-rule return):
+        // ColorId non-empty && streak >= 2 of the projectile's now-current colour.
+        private static void ResolvePopScore(
+            in ShotBalloonState balloon, string targetColorId, IReadOnlyList<string> allowedColors,
+            ref ShotFlightState state)
         {
-            if (!string.Equals(state.ProjectileColor, colorId, StringComparison.Ordinal))
+            if (balloon.IsRainbow && (allowedColors == null || allowedColors.Count == 0))
             {
-                state.ProjectileColor = colorId;
+                return;
             }
 
-            state.StreakCount = string.Equals(state.StreakColor, colorId, StringComparison.Ordinal)
-                ? state.StreakCount + 1
-                : 1;
-            state.StreakColor = colorId;
-            state.RawScore += scoreValue * state.StreakCount;
+            if (!balloon.IsRainbow && !string.IsNullOrEmpty(balloon.ColorId)
+                && !string.Equals(state.ProjectileColor, balloon.ColorId, StringComparison.Ordinal))
+            {
+                state.ProjectileColor = balloon.ColorId;
+            }
 
-            if (state.StreakCount >= 2 && string.Equals(state.StreakColor, state.ProjectileColor, StringComparison.Ordinal))
+            int multiplier;
+            if (state.HasRainbowBuff)
+            {
+                state.DeferredPops = 0;
+                multiplier = ++state.StreakCount;
+            }
+            else if (string.IsNullOrEmpty(balloon.ColorId))
+            {
+                var countsTough = string.IsNullOrEmpty(targetColorId);
+                ResolveToughPop(countsTough ? balloon.ScoreValue : 0, ref state);
+                return;
+            }
+            else if (balloon.IsRainbow && string.IsNullOrEmpty(state.ProjectileColor))
+            {
+                state.DeferredPops++;
+                multiplier = 1;
+            }
+            else if (balloon.IsRainbow)
+            {
+                var primary = ContainsColor(allowedColors, state.ProjectileColor)
+                    ? state.ProjectileColor
+                    : allowedColors[0];
+                multiplier = RecordColor(primary, ref state);
+            }
+            else
+            {
+                multiplier = RecordColor(balloon.ColorId, ref state);
+            }
+
+            // A rainbow target pays every allowed colour at full ScoreValue — a target-colour filter
+            // only narrows which score GROUP counts toward the milestone, never which colours a
+            // rainbow pays (BalloonModel.ResolveRainbowAttribution isn't filter-aware at all).
+            var payColors = balloon.IsRainbow
+                ? (string.IsNullOrEmpty(targetColorId) ? allowedColors.Count : 1)
+                : 1;
+            var counts = balloon.IsRainbow
+                || string.IsNullOrEmpty(targetColorId)
+                || string.Equals(balloon.ColorId, targetColorId, StringComparison.Ordinal);
+            state.RawScore += (counts ? balloon.ScoreValue * payColors : 0) * multiplier;
+
+            if (!string.IsNullOrEmpty(balloon.ColorId) && state.StreakCount >= 2
+                && string.Equals(state.StreakColor, state.ProjectileColor, StringComparison.Ordinal))
             {
                 state.Shields++;
+            }
+        }
+
+        // Mirrors ColorStreakTracker.Record's non-breaking branch, including the deferred-pop fold:
+        // repeating the same colour just increments, a new colour starts at 1 plus any banked
+        // deferred rainbow pops — either way the deferred bank clears.
+        private static int RecordColor(string colorId, ref ShotFlightState state)
+        {
+            state.StreakCount = string.Equals(state.StreakColor, colorId, StringComparison.Ordinal)
+                ? state.StreakCount + 1
+                : 1 + state.DeferredPops;
+            state.StreakColor = colorId;
+            state.DeferredPops = 0;
+            return state.StreakCount;
+        }
+
+        private static bool ContainsColor(IReadOnlyList<string> colors, string colorId)
+        {
+            if (colors == null || string.IsNullOrEmpty(colorId))
+            {
+                return false;
+            }
+
+            for (var i = 0; i < colors.Count; i++)
+            {
+                if (string.Equals(colors[i], colorId, StringComparison.Ordinal))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        // Mirrors ProjectileHitResolver.ConvertNeighborsToRainbow — a rainbow-buffed pop spreads onto
+        // its hex neighbours, but over the ACTIVE WORKING SET (SlotIndex-addressed linear scan, not
+        // the dynamics grid), so it works with dynamics: null too. Only a poppable, still-coloured,
+        // non-rainbow, non-static target converts — IPaintable is "poppable, coloured" today.
+        private static void ConvertNeighborsToRainbow(
+            ShotBalloonState[] workingSet, int activeCount, Vector2Int slot, string rainbowColorId)
+        {
+            HexCoordinates.HexNeighborIndices(slot.x, slot.y, NeighborBuffer);
+
+            for (var n = 0; n < 6; n++)
+            {
+                var neighbor = NeighborBuffer[n];
+                for (var i = 0; i < activeCount; i++)
+                {
+                    if (workingSet[i].SlotIndex != neighbor)
+                    {
+                        continue;
+                    }
+
+                    if (!workingSet[i].IsStatic && !workingSet[i].IsRainbow
+                        && !string.IsNullOrEmpty(workingSet[i].ColorId))
+                    {
+                        workingSet[i].ColorId = rainbowColorId;
+                        workingSet[i].IsRainbow = true;
+                    }
+
+                    break;
+                }
             }
         }
 

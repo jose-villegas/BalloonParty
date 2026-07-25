@@ -213,7 +213,13 @@ with a test.
   respected; rainbow holder paints rainbow) → **C6 Snipe** (DirectHit host → arm pierce + a
   non-stacking speed buff; folds into E2).
 
-### Phase E — Flight residuals (G5, G6, G7) — depends on 0a; E2 folds C6
+### Phase E — Flight residuals (G5, G6, G7 + E4) — depends on 0a; E2 folds C6
+- **E4 (found during the D-core review, pre-existing gap):** the sim's non-piercing
+  `HitsRemaining > 1` branch always DEFLECTS, but live only `ToughBalloonModel`/
+  `UnbreakableBalloonModel` return `HitOutcome.Deflect` — a surviving multi-HP
+  `BubbleClusterModel` returns `PassThrough` (no physical redirect; `BalloonController` only
+  redirects on Deflect). The snapshot needs a survive-outcome discriminator (Deflect vs
+  PassThrough) so soap contacts fly straight through, as live.
 - **E1 Sweep taps:** mirror `SegmentSweepValid` (a single tough/deflect anywhere invalidates the
   whole segment). Requires unifying wall taps + sweep taps into one `TotalCruiseTaps`-style
   counter feeding speed — the sim currently derives speed from the bounce count alone.
