@@ -1,0 +1,22 @@
+{
+    "name": "BalloonParty.Audio.Editor",
+    "rootNamespace": "BalloonParty.Audio.Editor",
+    "references": [
+        "BalloonParty.Runtime",
+        "UniTask",
+        "com.balloonparty.editorui.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Newtonsoft.Json.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

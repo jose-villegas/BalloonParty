@@ -202,8 +202,12 @@ None of this feature makes a sound until it is wired in the Unity Editor:
 - **Coalesce window/burst cap are `const`s** on `GameScopeRegistration`
   (`CoalesceWindowSeconds`, `MaxBurstPerWindow`) rather than fields on the sound bank SO —
   they were frozen at Step-1 authoring time; migrating them onto the SO is a Phase-2 task.
-- **Automated SFX fetching.** An editor-only `ISfxProvider` seam that could auto-fill empty
-  `SfxEntry` clip slots from a text prompt is designed but not built. Any such source needs
-  its licensing cleared before it ships in a commercial build.
+- **Automated SFX fetching — SHIPPED (editor-only).** `Tools ▸ BalloonParty ▸ SFX Fetcher`
+  (in `Audio/Editor/`, never ships) fills empty `SfxEntry` clip slots from each entry's fetch
+  prompt via Freesound, filtered to CC0 + CC-BY, recording CC-BY attribution to
+  `Resources/AudioAttributions.json`. Needs a free Freesound token (`FREESOUND_API_TOKEN` env
+  var, or paste it in the window — stored per-machine, never committed). Before shipping any
+  fetched CC-BY audio: clear Freesound's API TOS and confirm a credits screen shows the
+  recorded TASL attribution.
 - **Full spatial 3D, a Launcher-scene voice, and a dedicated music/ambience bus** are all
   out of scope for now — see `Assets/Source/Plans/PLAN-Audio.md` for the fuller reasoning.

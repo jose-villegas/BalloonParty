@@ -4,5 +4,6 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("BalloonParty.Tests.PlayMode")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: InternalsVisibleTo("BalloonParty.Editor")]
+[assembly: InternalsVisibleTo("BalloonParty.Audio.Editor")]
 [assembly: InternalsVisibleTo("BalloonParty.Configuration.Editor")]
 [assembly: InternalsVisibleTo("BalloonParty.Nudge.Editor")]

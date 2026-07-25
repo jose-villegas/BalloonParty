@@ -533,12 +533,15 @@ delegate (no per-call closure), pass settings by `in`.
 
 ## Phase 3 — Deferred
 
-- **Automated SFX asset fetching.** An **editor-only** `ISfxProvider` seam fills empty
-  clip slots at author time from a per-`SfxEntry` description prompt. The runtime stays
-  fully independent. Provider candidates: an internal library, a Freesound-style API, or a
-  text-to-SFX API (e.g. ElevenLabs). **Licensing must be cleared before any fetched or
-  generated audio ships in a commercial build** — this is the gating concern, not the
-  integration.
+- **Automated SFX asset fetching — SHIPPED (editor-only).** The `ISfxProvider` seam +
+  `FreesoundSfxProvider` + `SfxFetcherWindow` (`Tools ▸ BalloonParty ▸ SFX Fetcher`, in
+  `Audio/Editor/`) fill empty clip slots at author time from each `SfxEntry`'s fetch prompt.
+  Source is Freesound, filtered to CC0 + CC-BY (allowlist); CC-BY attribution recorded to
+  `Resources/AudioAttributions.json`. Runtime stays fully independent (editor-only assembly);
+  token via `FREESOUND_API_TOKEN` env / EditorPrefs, never committed. **Remaining gating
+  concern:** clear Freesound's API TOS + confirm the credits screen displays the recorded
+  attribution before shipping fetched CC-BY audio. `ISfxProvider` is the seam for a future
+  text-to-SFX provider (e.g. ElevenLabs).
 - **Full spatial 3D** (`spatialBlend = 1` + rolloff), if the board ever needs distance
   cues.
 - **Launcher-scene SFX** (menu button taps). This design is scoped to `GameLifetimeScope`;
