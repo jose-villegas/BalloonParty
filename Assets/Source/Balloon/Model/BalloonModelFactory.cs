@@ -14,9 +14,10 @@ namespace BalloonParty.Balloon.Model
         // every BalloonModel (a plain balloon can be converted to rainbow mode later by Paint, and needs
         // its own colour pool at that point — it isn't re-threaded after spawn).
         internal static IWriteableBalloonModel Create(
-            BalloonPrefabEntry entry, IGamePalette palette, IReadOnlyList<string> allowedColors = null)
+            BalloonPrefabEntry entry, IGamePalette palette, IReadOnlyList<string> allowedColors = null,
+            float moveSpeed = 0f)
         {
-            var config = new BalloonModelConfig(entry);
+            var config = new BalloonModelConfig(entry, moveSpeed);
 
             return entry.BalloonType switch
             {

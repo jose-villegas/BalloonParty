@@ -14,6 +14,7 @@ namespace BalloonParty.Balloon.Model
         public BalloonType TypeName { get; }
         public int RegistryHandle { get; set; } = -1;
         public int MaxBalanceSteps { get; }
+        public float MoveSpeed { get; }
         public int BalancePriority { get; }
         public bool DirectBalanceMotion { get; }
         public bool OmnidirectionalBalance { get; }
@@ -47,6 +48,7 @@ namespace BalloonParty.Balloon.Model
             TypeName = config.TypeName;
             HitsRemaining = new ReactiveProperty<int>(config.HitsToPop);
             MaxBalanceSteps = config.MaxBalanceSteps;
+            MoveSpeed = config.MoveSpeed;
             BalancePriority = config.BalancePriority;
             DirectBalanceMotion = config.DirectBalanceMotion;
             OmnidirectionalBalance = config.OmnidirectionalBalance;

@@ -67,9 +67,11 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
 - **Balance & nudge (dynamic board)** — when the window supplies `ShotBoardDynamics`, rebalance
   pulses fire at \f$k \times \text{FlightRebalanceInterval}\f$ running the REAL `BalancePlanner` over a real
   `SlotGrid` (no mirrored rules — rule drift is impossible); moved balloons follow their hop
-  waypoints as an arc-length polyline with OutQuad-eased progress over `TimeForBalloonsBalance`
-  (mirroring `DOPath`'s constant-speed percentage under the project's DOTween default ease —
-  `DOTweenSettings.asset`), and contacts against them solve the moving-circle quadratic
+  waypoints as an arc-length polyline with OutQuad-eased progress over a per-move duration of
+  path length ÷ the balloon's resolved `MoveSpeed` (per-type `BalloonPrefabEntry.MoveSpeed`, or
+  `DefaultBalloonMoveSpeed`) — mirroring the live `BalloonBalancer`'s speed-based duration and
+  `DOPath`'s constant-speed percentage under the project's DOTween default ease
+  (`DOTweenSettings.asset`); contacts against them solve the moving-circle quadratic
   linearized at the instantaneous eased velocity. Every contact nudges the target's occupied hex neighbours and deflects
   additionally shove the hit balloon, with the exact `Reach` impulse envelope; centres become
   \f$\text{balancePosition}(t) + \sum \text{impulses}(t)\f$, and a pulse landing mid-wobble seeds its path from the

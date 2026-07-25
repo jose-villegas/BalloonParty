@@ -52,6 +52,24 @@ namespace BalloonParty.Shared.Extensions
             return t < 0f ? t + 1f : t;
         }
 
+        /// <summary>True length of the open polyline through every point — the sum of consecutive segment
+        /// lengths (unlike a sum of <em>squared</em> segments, this is the real distance travelled).</summary>
+        public static float PolylineLength(this IReadOnlyList<Vector3> points)
+        {
+            if (points == null || points.Count < 2)
+            {
+                return 0f;
+            }
+
+            var total = 0f;
+            for (var i = 1; i < points.Count; i++)
+            {
+                total += Vector3.Distance(points[i - 1], points[i]);
+            }
+
+            return total;
+        }
+
         public static bool WithinRadius(this Vector2 a, Vector2 b, float radius)
         {
             return a.SqrDistance2D(b) <= radius * radius;

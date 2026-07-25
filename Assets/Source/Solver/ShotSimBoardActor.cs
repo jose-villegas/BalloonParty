@@ -17,14 +17,17 @@ namespace BalloonParty.Solver
         public readonly Vector2Int SlotIndex;
         public readonly int BalancePriority;
         public readonly int MaxBalanceSteps;
+        public readonly float MoveSpeed;
         public readonly bool DirectBalanceMotion;
 
         public ShotDynamicActorSnapshot(
-            Vector2Int slotIndex, int balancePriority, int maxBalanceSteps, bool directBalanceMotion)
+            Vector2Int slotIndex, int balancePriority, int maxBalanceSteps, float moveSpeed,
+            bool directBalanceMotion)
         {
             SlotIndex = slotIndex;
             BalancePriority = balancePriority;
             MaxBalanceSteps = maxBalanceSteps;
+            MoveSpeed = moveSpeed;
             DirectBalanceMotion = directBalanceMotion;
         }
     }
@@ -78,6 +81,7 @@ namespace BalloonParty.Solver
         public ReactiveProperty<Vector2Int> SlotIndex { get; } = new();
         public ReactiveProperty<bool> IsStable { get; } = new(true);
         public int MaxBalanceSteps { get; internal set; }
+        public float MoveSpeed { get; internal set; }
         public int BalancePriority { get; internal set; }
         public bool DirectBalanceMotion { get; internal set; }
         public bool OmnidirectionalBalance => false;
@@ -129,7 +133,7 @@ namespace BalloonParty.Solver
         /// <c>RecordPath</c> building the multi-waypoint DOPath — except for direct movers, whose live
         /// tween skips intermediates (<c>FinalWaypointBuffer</c>), so the last waypoint is overwritten
         /// instead.</summary>
-        internal void BeginBalanceMove(float startTime, Vector2 toPosition, float duration)
+        internal void BeginBalanceMove(float startTime, Vector2 toPosition)
         {
             var samePulse = startTime == _segmentStartTime;
             if (!samePulse)
@@ -137,7 +141,6 @@ namespace BalloonParty.Solver
                 _waypoints[0] = EvaluateCenter(startTime);
                 _waypointCount = 1;
                 _segmentStartTime = startTime;
-                _segmentDuration = Mathf.Max(duration, 0.0001f);
             }
 
             if (samePulse && (DirectBalanceMotion || _waypointCount >= MaxWaypoints))
@@ -158,6 +161,10 @@ namespace BalloonParty.Solver
             }
 
             _pathLength = _cumulativeLengths[_waypointCount - 1];
+
+            // Distance ÷ speed, recomputed as chained hops extend the path so the whole pulse settles at
+            // a constant speed — mirrors the live BalloonBalancer's speed-based duration.
+            _segmentDuration = Mathf.Max(_pathLength / Mathf.Max(MoveSpeed, 0.0001f), 0.0001f);
         }
 
         /// <summary>Balance position plus the summed nudge-impulse offset — the sim's full moving

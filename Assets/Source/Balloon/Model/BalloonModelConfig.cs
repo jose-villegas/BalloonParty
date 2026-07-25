@@ -15,6 +15,7 @@ namespace BalloonParty.Balloon.Model
         public readonly float ItemActivationWeight;
         public readonly float BalanceBias;
         public readonly int MaxBalanceSteps;
+        public readonly float MoveSpeed;
         public readonly int BalancePriority;
         public readonly float DeflectStampScale;
         public readonly bool DirectBalanceMotion;
@@ -29,6 +30,7 @@ namespace BalloonParty.Balloon.Model
             float itemActivationWeight = 1f,
             float balanceBias = 0f,
             int maxBalanceSteps = 0,
+            float moveSpeed = 0f,
             int balancePriority = 0,
             float deflectStampScale = 0f,
             bool directBalanceMotion = false,
@@ -41,13 +43,16 @@ namespace BalloonParty.Balloon.Model
             ItemActivationWeight = itemActivationWeight;
             BalanceBias = balanceBias;
             MaxBalanceSteps = maxBalanceSteps;
+            MoveSpeed = moveSpeed;
             BalancePriority = balancePriority;
             DeflectStampScale = deflectStampScale;
             DirectBalanceMotion = directBalanceMotion;
             OmnidirectionalBalance = omnidirectionalBalance;
         }
 
-        internal BalloonModelConfig(BalloonPrefabEntry entry)
+        // moveSpeed is the resolved, spawn-time-jittered speed (see BalloonFactory) — NOT entry.MoveSpeed,
+        // which is the raw per-type value before the config fallback and per-instance variation.
+        internal BalloonModelConfig(BalloonPrefabEntry entry, float moveSpeed)
         {
             TypeName = entry.BalloonType;
             ScoreValue = entry.ScoreValue;
@@ -56,6 +61,7 @@ namespace BalloonParty.Balloon.Model
             ItemActivationWeight = entry.ItemActivationWeight;
             BalanceBias = entry.BalanceBias;
             MaxBalanceSteps = entry.MaxBalanceSteps;
+            MoveSpeed = moveSpeed;
             BalancePriority = entry.BalancePriority;
             DeflectStampScale = entry.DeflectStampScale;
             DirectBalanceMotion = entry.DirectBalanceMotion;

@@ -321,7 +321,8 @@ namespace BalloonParty.Tests.ShotSolver
             // DOTweenSettings.asset): at half the duration the balloon has covered 75% of its path.
             var actor = new ShotSimDynamicActor();
             actor.ResetTo(Vector2Int.zero, Vector2.zero);
-            actor.BeginBalanceMove(startTime: 0f, toPosition: new Vector2(10f, 0f), duration: 1f);
+            actor.MoveSpeed = 10f; // path length 10 ÷ speed 10 = 1s duration
+            actor.BeginBalanceMove(startTime: 0f, toPosition: new Vector2(10f, 0f));
 
             Assert.AreEqual(0f, actor.EvaluateBalancePosition(0f).x, 1e-4f);
             Assert.AreEqual(7.5f, actor.EvaluateBalancePosition(0.5f).x, 1e-4f, "OutQuad(0.5) = 0.75");
@@ -338,8 +339,9 @@ namespace BalloonParty.Tests.ShotSolver
             // path = 1.5 units in — halfway up the vertical leg, NOT on the straight chord to (1,1).
             var actor = new ShotSimDynamicActor();
             actor.ResetTo(Vector2Int.zero, Vector2.zero);
-            actor.BeginBalanceMove(startTime: 0f, toPosition: new Vector2(1f, 0f), duration: 1f);
-            actor.BeginBalanceMove(startTime: 0f, toPosition: new Vector2(1f, 1f), duration: 1f);
+            actor.MoveSpeed = 2f; // L-path length 2 ÷ speed 2 = 1s duration
+            actor.BeginBalanceMove(startTime: 0f, toPosition: new Vector2(1f, 0f));
+            actor.BeginBalanceMove(startTime: 0f, toPosition: new Vector2(1f, 1f));
 
             var midway = actor.EvaluateBalancePosition(0.5f);
 
@@ -364,7 +366,8 @@ namespace BalloonParty.Tests.ShotSolver
             });
 
             // t = 0.5 is the Reach envelope's peak — the wobble is exactly the full offset.
-            actor.BeginBalanceMove(startTime: 0.5f, toPosition: new Vector2(0f, 5f), duration: 1f);
+            actor.MoveSpeed = 1f; // asserted at the path start, so the derived duration is irrelevant here
+            actor.BeginBalanceMove(startTime: 0.5f, toPosition: new Vector2(0f, 5f));
 
             Assert.AreEqual(1f, actor.EvaluateBalancePosition(0.5f).x, 1e-4f,
                 "path departs from the wobbled position, not the lattice home");
@@ -392,14 +395,16 @@ namespace BalloonParty.Tests.ShotSolver
 
             var balloonsConfig = Substitute.For<IBalloonsConfiguration>();
             balloonsConfig.FlightRebalanceInterval.Returns(1f);
-            balloonsConfig.TimeForBalloonsBalance.Returns(0.1f);
 
+            // Speed chosen so a single-cell drop still takes ~0.1s (settled by t≈1.1), matching the
+            // former fixed balance duration this test was written against.
+            var balanceSpeed = Vector2.Distance(slot0, slot1) / 0.1f;
             var board = new[]
             {
                 new ShotBalloonSnapshot(
                     slot1, 0.2f, "Red", 1, 1,
                     slotIndex: new Vector2Int(0, 1), balancePriority: 0, maxBalanceSteps: 0,
-                    directBalanceMotion: false, nudgeOverrides: null),
+                    moveSpeed: balanceSpeed, directBalanceMotion: false, nudgeOverrides: null),
             };
             var dynamics = new ShotBoardDynamics(
                 gameConfig, balloonsConfig, board,
@@ -439,14 +444,14 @@ namespace BalloonParty.Tests.ShotSolver
 
             var balloonsConfig = Substitute.For<IBalloonsConfiguration>();
             balloonsConfig.FlightRebalanceInterval.Returns(1f);
-            balloonsConfig.TimeForBalloonsBalance.Returns(0.1f);
 
+            var balanceSpeed = Vector2.Distance(slot0, slot1) / 0.1f;
             var board = new[]
             {
                 new ShotBalloonSnapshot(
                     slot1, 0.2f, "Red", 1, 1,
                     slotIndex: new Vector2Int(0, 1), balancePriority: 0, maxBalanceSteps: 0,
-                    directBalanceMotion: false, nudgeOverrides: null),
+                    moveSpeed: balanceSpeed, directBalanceMotion: false, nudgeOverrides: null),
             };
             var delayedDynamics = new ShotBoardDynamics(
                 gameConfig, balloonsConfig, board,

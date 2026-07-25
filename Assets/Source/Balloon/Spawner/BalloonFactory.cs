@@ -60,7 +60,12 @@ namespace BalloonParty.Balloon.Spawner
             var view = _poolManager.Get<BalloonView>(poolKey);
             view.transform.position = spawnPath[0];
 
-            var model = BalloonModelFactory.Create(entry, _palette, _levelParams.Current.AllowedColors);
+            // Rolled once here so the balloon keeps one stable pace across spawn entry, balance settles,
+            // and shot-solver prediction (which reads MoveSpeed off the model).
+            var moveSpeed = _balloonsConfig.RollMoveSpeed(entry.MoveSpeed);
+
+            var model = BalloonModelFactory.Create(
+                entry, _palette, _levelParams.Current.AllowedColors, moveSpeed);
             view.Variant.Initialize(model, _levelParams.Current.AllowedColorsMask);
 
             var controller = new BalloonController(
@@ -68,19 +73,20 @@ namespace BalloonParty.Balloon.Spawner
             controller.Start();
 
             _grid.Place(model, view, slot);
-            AnimateSpawn(view, spawnPath, model);
+            AnimateSpawn(view, spawnPath, model, moveSpeed);
 
             return model;
         }
 
-        private void AnimateSpawn(BalloonView view, IReadOnlyList<Vector3> spawnPath, IWriteableBalloonModel model)
+        // Duration is the path length ÷ the resolved speed, so a balloon entering from farther down
+        // takes proportionally longer instead of racing to keep a fixed duration.
+        private void AnimateSpawn(
+            BalloonView view, IReadOnlyList<Vector3> spawnPath, IWriteableBalloonModel model, float moveSpeed)
         {
             model.IsStable.Value = false;
             view.transform.localScale = Vector3.zero;
 
-            var duration = UnityEngine.Random.Range(
-                _balloonsConfig.BalloonSpawnAnimationDurationRange.x,
-                _balloonsConfig.BalloonSpawnAnimationDurationRange.y);
+            var duration = spawnPath.PolylineLength() / moveSpeed;
 
             var waypointCount = spawnPath.Count - 1;
 

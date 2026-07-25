@@ -59,6 +59,6 @@ The **initial fill** overrides that with vertical layering (`ArrangeInitialLayer
 - **ItemAssigner** — notified via `ItemCheckMessage` carrying the list of newly spawned balloon models
 - **SpawnBalloonLineMessage** — triggers a single-line spawn (used by `SceneTransition` at game start and by cheats)
 - **ProjectileDestroyedMessage** — triggers multi-line spawning after each turn
-- **BalloonsConfiguration** — `Entries`, `NewBalloonLinesTimeInterval`, `BalloonSpawnAnimationDurationRange`, `SpawnEntryRowOffset`
+- **BalloonsConfiguration** — `Entries`, `NewBalloonLinesTimeInterval`, `DefaultBalloonMoveSpeed`, `SpawnEntryRowOffset`. Spawn entry travels at a constant speed (per-type `BalloonPrefabEntry.MoveSpeed`, or this fallback): duration = path length ÷ speed, so a balloon entering from farther down takes proportionally longer instead of racing a fixed duration.
 - **IActiveLevelParameters** — `BoardLines`, `SpawnLines`, `PickBalloonEntry` (the per-level resolved spawn counts + weighted balloon pick)
 - **DisturbanceFieldService** — stamps `Stamp()` along each spawn path using the `BalloonPath` stamp profile from `DisturbanceFieldSettings`; creates visible wakes through Puff clouds during spawn animations

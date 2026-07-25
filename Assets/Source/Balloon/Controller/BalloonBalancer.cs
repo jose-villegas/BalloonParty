@@ -5,6 +5,7 @@ using BalloonParty.Game.Run;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Shared.Disturbance;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Slots.Actor;
@@ -172,10 +173,15 @@ namespace BalloonParty.Balloon.Controller
                     ? FinalWaypointBuffer(viewTransform.position, path)
                     : WaypointBuffer(viewTransform.position, path);
 
+                // Distance ÷ speed keeps the settle at a constant speed: a three-cell rise takes three
+                // times as long as a one-cell hop instead of both racing to a fixed duration.
+                var speed = _balloonsConfig.ResolveMoveSpeed(
+                    actor is IBalanceInfluence influence ? influence.MoveSpeed : 0f);
+
                 _motionTicker.StartBalanceMove(
                     (IBalloonMotionView)view,
                     waypoints,
-                    _balloonsConfig.TimeForBalloonsBalance,
+                    waypoints.PolylineLength() / speed,
                     _disturbanceField,
                     _disturbanceField.GetProfile(StampSource.BalloonPath),
                     _finalizeBalanceMove,

@@ -28,7 +28,15 @@ namespace BalloonParty.Configuration.Balloons
 
         [Header("Spawning")]
         [SerializeField] private float _newBalloonLinesTimeInterval;
-        [SerializeField] private Vector2 _balloonSpawnAnimationSpeedRange;
+
+        [Tooltip("Fallback travel speed (world units/sec) for balloons whose per-type Move Speed is 0. " +
+                 "Movement duration is distance ÷ speed, so every balloon moves at a constant speed " +
+                 "instead of a fixed duration — no distance-driven speed jump on spawn.")]
+        [SerializeField] [Min(0.01f)] private float _defaultBalloonMoveSpeed = 8f;
+
+        [Tooltip("Per-balloon ± speed spread rolled once at spawn (0.15 = ±15%) so a wave of identical " +
+                 "balloons drifts in at slightly different paces instead of in lockstep. 0 = uniform.")]
+        [SerializeField] [Range(0f, 1f)] private float _moveSpeedVariation = 0.15f;
         [Tooltip(
             "How many rows below the target slot the balloon enters from. Can exceed the grid bounds — the world position is still computed correctly.")]
         [SerializeField] private int _spawnEntryRowOffset = 4;
@@ -67,7 +75,8 @@ namespace BalloonParty.Configuration.Balloons
         public float RainbowPopFlashIntensity => _rainbowPopFlashIntensity;
         public float RainbowPopFlashSeconds => _rainbowPopFlashSeconds;
         public float NewBalloonLinesTimeInterval => _newBalloonLinesTimeInterval;
-        public Vector2 BalloonSpawnAnimationDurationRange => _balloonSpawnAnimationSpeedRange;
+        public float DefaultBalloonMoveSpeed => _defaultBalloonMoveSpeed;
+        public float MoveSpeedVariation => _moveSpeedVariation;
         public int SpawnEntryRowOffset => _spawnEntryRowOffset;
         public int ToughLayerSpacing => _toughLayerSpacing;
         public float TimeForBalloonsBalance => _timeForBalloonsBalance;

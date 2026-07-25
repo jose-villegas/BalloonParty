@@ -23,7 +23,15 @@ namespace BalloonParty.Configuration.Balloons
         float RainbowPopFlashSeconds { get; }
 
         float NewBalloonLinesTimeInterval { get; }
-        Vector2 BalloonSpawnAnimationDurationRange { get; }
+
+        /// <summary>Fallback spawn/balance travel speed (world units/sec) for entries whose own
+        /// <see cref="BalloonPrefabEntry.MoveSpeed" /> is 0. Movement duration is distance ÷ speed, so
+        /// every balloon travels at a constant speed regardless of how far it must go.</summary>
+        float DefaultBalloonMoveSpeed { get; }
+
+        /// <summary>Fractional ± spread applied once per balloon at spawn to its resolved move speed, so a
+        /// wave of identical balloons drifts in at slightly different paces. 0 = every balloon identical.</summary>
+        float MoveSpeedVariation { get; }
         int SpawnEntryRowOffset { get; }
 
         /// <summary>Vertical segment height (in lines) for initial-fill heavy layering; 0/1 disables it.</summary>

@@ -27,7 +27,6 @@ namespace BalloonParty.Solver
         private readonly NudgeOverrideResolver _nudgeResolver;
         private readonly float _flightRebalanceInterval;
         private readonly float _pulseExecutionDelay;
-        private readonly float _balanceDuration;
         private readonly IReadOnlyList<ShotBalloonSnapshot> _targets;
         private readonly IReadOnlyList<ShotDynamicActorSnapshot> _otherDynamicSnapshots;
         private readonly IReadOnlyList<ShotStaticActorSnapshot> _staticSnapshots;
@@ -64,7 +63,6 @@ namespace BalloonParty.Solver
             // Balance() one more frame (BalanceNextFrameAsync) — the caller estimates that lag from
             // its real frame time so the sim's moves start when the game's tweens actually do.
             _pulseExecutionDelay = Mathf.Max(pulseExecutionDelay, 0f);
-            _balanceDuration = Mathf.Max(balloonsConfig.TimeForBalloonsBalance, 0.0001f);
 
             _targets = targets;
             _otherDynamicSnapshots = otherDynamicActors;
@@ -79,6 +77,7 @@ namespace BalloonParty.Solver
                     IsShotTarget = true,
                     BalancePriority = snapshot.BalancePriority,
                     MaxBalanceSteps = snapshot.MaxBalanceSteps,
+                    MoveSpeed = snapshot.MoveSpeed,
                     DirectBalanceMotion = snapshot.DirectBalanceMotion,
                     NudgeOverrides = snapshot.NudgeOverrides,
                 };
@@ -93,6 +92,7 @@ namespace BalloonParty.Solver
                     IsShotTarget = false,
                     BalancePriority = snapshot.BalancePriority,
                     MaxBalanceSteps = snapshot.MaxBalanceSteps,
+                    MoveSpeed = snapshot.MoveSpeed,
                     DirectBalanceMotion = snapshot.DirectBalanceMotion,
                 };
             }
@@ -300,7 +300,7 @@ namespace BalloonParty.Solver
             {
                 if (move.Actor is ShotSimDynamicActor simActor)
                 {
-                    simActor.BeginBalanceMove(pulseTime, _grid.IndexToWorldPosition(move.To), _balanceDuration);
+                    simActor.BeginBalanceMove(pulseTime, _grid.IndexToWorldPosition(move.To));
                 }
             }
         }

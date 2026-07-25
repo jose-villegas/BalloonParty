@@ -33,6 +33,9 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Max slots this balloon rises per balance window (the turn's spawn cluster, or each in-flight pulse) — lower reads heavier/slower. 0 = unlimited.")]
         [SerializeField] private int _maxBalanceSteps;
 
+        [Tooltip("Travel speed (world units/sec) for this type's spawn entry and balance moves — heavier types author a lower value to move slower. 0 = use the config's Default Balloon Move Speed.")]
+        [SerializeField] [Min(0f)] private float _moveSpeed;
+
         [Tooltip("Intervention order in each rebalance round: higher acts first and wins contested slots (the race). Negative = acts after neutral types.")]
         [SerializeField] private int _balancePriority;
 
@@ -59,6 +62,7 @@ namespace BalloonParty.Configuration.Balloons
         public float ItemActivationWeight => _itemActivationWeight;
         public float BalanceBias => _balanceBias;
         public int MaxBalanceSteps => _maxBalanceSteps;
+        public float MoveSpeed => _moveSpeed;
         public int BalancePriority => _balancePriority;
         public bool DirectBalanceMotion => _directBalanceMotion;
         public bool OmnidirectionalBalance => _omnidirectionalBalance;

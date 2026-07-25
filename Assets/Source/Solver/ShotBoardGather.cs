@@ -60,7 +60,7 @@ namespace BalloonParty.Solver
             var targets = new List<ShotBalloonSnapshot>();
             var otherDynamicActors = new List<ShotDynamicActorSnapshot>();
             var staticActors = new List<ShotStaticActorSnapshot>();
-            CollectBoard(grid, targets, otherDynamicActors, staticActors);
+            CollectBoard(grid, balloonsConfig, targets, otherDynamicActors, staticActors);
 
             var dynamics = new ShotBoardDynamics(
                 gridConfig, balloonsConfig, targets, otherDynamicActors, staticActors, pulseExecutionDelay);
@@ -115,8 +115,8 @@ namespace BalloonParty.Solver
         // targets — including never-popping Unbreakables — carry geometry + balance/nudge properties;
         // any other Dynamic occupant carries balance properties only; Static occupants their slot only.
         private static void CollectBoard(
-            SlotGrid grid, List<ShotBalloonSnapshot> targets, List<ShotDynamicActorSnapshot> otherDynamicActors,
-            List<ShotStaticActorSnapshot> staticActors)
+            SlotGrid grid, IBalloonsConfiguration balloonsConfig, List<ShotBalloonSnapshot> targets,
+            List<ShotDynamicActorSnapshot> otherDynamicActors, List<ShotStaticActorSnapshot> staticActors)
         {
             for (var col = 0; col < grid.Columns; col++)
             {
@@ -136,7 +136,7 @@ namespace BalloonParty.Solver
                         continue;
                     }
 
-                    if (TryBuildTargetSnapshot(grid, index, actor, out var target))
+                    if (TryBuildTargetSnapshot(grid, balloonsConfig, index, actor, out var target))
                     {
                         targets.Add(target);
                         continue;
@@ -145,6 +145,7 @@ namespace BalloonParty.Solver
                     var influence = actor as IBalanceInfluence;
                     otherDynamicActors.Add(new ShotDynamicActorSnapshot(
                         index, influence?.BalancePriority ?? 0, influence?.MaxBalanceSteps ?? 0,
+                        balloonsConfig.ResolveMoveSpeed(influence?.MoveSpeed ?? 0f),
                         influence?.DirectBalanceMotion ?? false));
                 }
             }
@@ -155,7 +156,8 @@ namespace BalloonParty.Solver
         // so they enter as never-popping deflect geometry — int.MaxValue durability keeps the sim's
         // HitsRemaining > 1 branch permanently deflecting (deflects score nothing, matching the game).
         private static bool TryBuildTargetSnapshot(
-            SlotGrid grid, Vector2Int index, IWriteableSlotActor actor, out ShotBalloonSnapshot snapshot)
+            SlotGrid grid, IBalloonsConfiguration balloonsConfig, Vector2Int index, IWriteableSlotActor actor,
+            out ShotBalloonSnapshot snapshot)
         {
             snapshot = default;
 
@@ -194,6 +196,7 @@ namespace BalloonParty.Solver
             snapshot = new ShotBalloonSnapshot(
                 position, radius, colorId, scored.ScoreValue, hitsRemaining, index,
                 influence?.BalancePriority ?? 0, influence?.MaxBalanceSteps ?? 0,
+                balloonsConfig.ResolveMoveSpeed(influence?.MoveSpeed ?? 0f),
                 influence?.DirectBalanceMotion ?? false, nudgeOverrides);
             return true;
         }

@@ -14,6 +14,11 @@ namespace BalloonParty.Slots.Actor
         /// <summary>Max slots this actor moves per rebalance; 0 = unlimited.</summary>
         int MaxBalanceSteps { get; }
 
+        /// <summary>This actor's resolved travel speed (world units/sec) for balance moves — the per-type
+        /// value (or config fallback) with its one-off spawn-time variation already applied. Heavier types
+        /// author a lower base so they visibly settle slower.</summary>
+        float MoveSpeed { get; }
+
         /// <summary>Order this actor acts within each rebalance round; higher moves first (the race).</summary>
         int BalancePriority { get; }
 

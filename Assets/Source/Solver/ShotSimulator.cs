@@ -25,18 +25,19 @@ namespace BalloonParty.Solver
         public readonly Vector2Int SlotIndex;
         public readonly int BalancePriority;
         public readonly int MaxBalanceSteps;
+        public readonly float MoveSpeed;
         public readonly bool DirectBalanceMotion;
         public readonly IReadOnlyList<NudgeOverride> NudgeOverrides;
 
         public ShotBalloonSnapshot(Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining)
-            : this(position, radius, colorId, scoreValue, hitsRemaining, default, 0, 0, false, null)
+            : this(position, radius, colorId, scoreValue, hitsRemaining, default, 0, 0, 0f, false, null)
         {
         }
 
         public ShotBalloonSnapshot(
             Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining,
-            Vector2Int slotIndex, int balancePriority, int maxBalanceSteps, bool directBalanceMotion,
-            IReadOnlyList<NudgeOverride> nudgeOverrides)
+            Vector2Int slotIndex, int balancePriority, int maxBalanceSteps, float moveSpeed,
+            bool directBalanceMotion, IReadOnlyList<NudgeOverride> nudgeOverrides)
         {
             Position = position;
             Radius = radius;
@@ -46,6 +47,7 @@ namespace BalloonParty.Solver
             SlotIndex = slotIndex;
             BalancePriority = balancePriority;
             MaxBalanceSteps = maxBalanceSteps;
+            MoveSpeed = moveSpeed;
             DirectBalanceMotion = directBalanceMotion;
             NudgeOverrides = nudgeOverrides;
         }
