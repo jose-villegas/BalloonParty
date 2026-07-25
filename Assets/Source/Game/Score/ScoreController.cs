@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using BalloonParty.Balloon.Model;
-using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
@@ -19,9 +17,8 @@ namespace BalloonParty.Game.Score
     /// <summary>Score keeping only — level progression lives in <c>LevelController</c>.</summary>
     internal class ScoreController : IStartable, IDisposable, IRunResettable, IRunScore
     {
-        // Silver/gold pops at night add this to the streak multiplier (raise the ceiling, e.g. 3 x (2 + streak))
-        // rather than multiplying — a separate x2 would compound with the streak and get out of hand.
-        private const int NightSilverGoldBonus = 2;
+        // At night, all pops score double — a flat x2 on the awarded points.
+        private const int NightScoreMultiplier = 2;
 
         private readonly ILevelProgress _levelProgress;
         private readonly IGamePalette _palette;
@@ -117,14 +114,7 @@ namespace BalloonParty.Game.Score
             using var incompletePool = UnityEngine.Pool.ListPool<string>.Get(out var incompleteColors);
             CollectIncompleteColors(incompleteColors);
             scoreColor.ResolveScoreAttribution(in msg.Context, incompleteColors, attributions);
-
-            var nightBonus = _timeOfDayNight.IsNight
-                             && msg.Actor is IBalloonModel balloon
-                             && balloon.TypeName is BalloonType.SimpleSilver or BalloonType.SimpleGold
-                ? NightSilverGoldBonus
-                : 0;
-            PublishAttributionGroup(
-                attributions, msg.WorldPosition, msg.Context.Flags, msg.ProjectileDirection, nightBonus);
+            PublishAttributionGroup(attributions, msg.WorldPosition, msg.Context.Flags, msg.ProjectileDirection);
         }
 
         // Colours still short of the level's threshold — a scatter pop confines its split to these, so
@@ -143,7 +133,7 @@ namespace BalloonParty.Game.Score
 
         private void PublishAttributionGroup(
             IReadOnlyList<ScoreAttribution> attributions, Vector3 worldPosition, DamageFlags flags,
-            Vector3 hitDirection, int nightBonus)
+            Vector3 hitDirection)
         {
             if (attributions.Count == 0)
             {
@@ -153,7 +143,11 @@ namespace BalloonParty.Game.Score
             using var resolvedPool =
                 UnityEngine.Pool.ListPool<(string Color, int Points, int BaseProgress)>.Get(out var resolved);
 
-            var multiplier = RecordStreakMultiplier(attributions, flags) + nightBonus;
+            var multiplier = RecordStreakMultiplier(attributions, flags);
+            if (_timeOfDayNight.IsNight)
+            {
+                multiplier *= NightScoreMultiplier;
+            }
             ResolveAttributions(attributions, multiplier, resolved);
 
             if (resolved.Count > 0)

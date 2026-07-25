@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using BalloonParty.Balloon.Model;
-using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Score;
@@ -102,35 +101,23 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void OnActorHit_SilverAtNight_AddsNightBonusToTheMultiplier()
+        public void OnActorHit_AtNight_DoublesTheAwardedPoints()
         {
             _timeOfDayNight.IsNight.Returns(true);
 
-            // ScoreValue 3, first pop (streak 1) + night bonus 2 = ×3 → 9.
-            FireHit(CreateTypedModel(Red, BalloonType.SimpleSilver, 3), 1);
+            // 3 x streak(1) x2 night = 6.
+            FireHit(CreateModel(Red, 1, 3), 1);
 
             _scoredPublisher.Received(1).Publish(
-                Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 9));
+                Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 6));
         }
 
         [Test]
-        public void OnActorHit_GoldByDay_NoNightBonus()
+        public void OnActorHit_ByDay_AwardsBasePoints()
         {
             _timeOfDayNight.IsNight.Returns(false);
 
-            FireHit(CreateTypedModel(Red, BalloonType.SimpleGold, 3), 1);
-
-            _scoredPublisher.Received(1).Publish(
-                Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 3));
-        }
-
-        [Test]
-        public void OnActorHit_SimpleAtNight_NoNightBonus()
-        {
-            _timeOfDayNight.IsNight.Returns(true);
-
-            // Night lifts only silver/gold; a plain balloon still scores its base.
-            FireHit(CreateTypedModel(Red, BalloonType.Simple, 3), 1);
+            FireHit(CreateModel(Red, 1, 3), 1);
 
             _scoredPublisher.Received(1).Publish(
                 Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 3));
@@ -422,13 +409,6 @@ namespace BalloonParty.Tests.Game
         private static IBalloonModel CreateModel(string color, int hitsRemaining, int scoreValue = 1)
         {
             var model = new BalloonModel(new BalloonModelConfig(scoreValue: scoreValue, hitsToPop: hitsRemaining));
-            model.Color.Value = color;
-            return model;
-        }
-
-        private static IBalloonModel CreateTypedModel(string color, BalloonType type, int scoreValue)
-        {
-            var model = new BalloonModel(new BalloonModelConfig(typeName: type, scoreValue: scoreValue, hitsToPop: 1));
             model.Color.Value = color;
             return model;
         }

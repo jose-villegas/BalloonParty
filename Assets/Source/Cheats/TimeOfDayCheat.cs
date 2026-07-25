@@ -19,6 +19,7 @@ namespace BalloonParty.Cheats
         private static readonly Color NightBandColor = new Color(0.25f, 0.3f, 0.6f, 0.45f);
 
         private readonly TimeOfDayClock _clock;
+        private readonly ITimeOfDayNight _night;
 
         private float _angle;
 
@@ -27,9 +28,10 @@ namespace BalloonParty.Cheats
         public IReadOnlyList<string> Tags => new[] { "lighting", "time of day", "night" };
         public bool Compact => false;
 
-        public TimeOfDayCheat(TimeOfDayClock clock)
+        public TimeOfDayCheat(TimeOfDayClock clock, ITimeOfDayNight night)
         {
             _clock = clock;
+            _night = night;
         }
 
         public void Execute()
@@ -40,7 +42,9 @@ namespace BalloonParty.Cheats
         public void DrawControls()
         {
             GUILayout.BeginHorizontal();
-            GUILayout.Label($"Angle {_angle:0}° (now {_clock.CurrentAngleDegrees:0}°)", GUILayout.Width(150));
+            GUILayout.Label(
+                $"Angle {_angle:0}° (now {_clock.CurrentAngleDegrees:0}° · {(_night.IsNight ? "NIGHT" : "day")})",
+                GUILayout.Width(190));
             var sliderRect =
                 GUILayoutUtility.GetRect(GUIContent.none, GUI.skin.horizontalSlider, GUILayout.ExpandWidth(true));
             DrawNightBand(sliderRect);
