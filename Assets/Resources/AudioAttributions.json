@@ -1,0 +1,142 @@
+[
+  {
+    "SoundId": "ShotReload",
+    "ProviderId": 592767,
+    "Name": "Sharpener w Pitch, Phaser and Tremolo effects",
+    "Author": "AntoineRomo",
+    "SoundUrl": "https://freesound.org/people/AntoineRomo/sounds/592767/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "http://creativecommons.org/licenses/by/3.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "ShotReload",
+    "ProviderId": 371465,
+    "Name": "pencil sharpner 4.wav",
+    "Author": "Plutoniumisotop",
+    "SoundUrl": "https://freesound.org/people/Plutoniumisotop/sounds/371465/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "ShotReload",
+    "ProviderId": 371468,
+    "Name": "pencil sharpner 1.wav",
+    "Author": "Plutoniumisotop",
+    "SoundUrl": "https://freesound.org/people/Plutoniumisotop/sounds/371468/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "ShotReload",
+    "ProviderId": 371467,
+    "Name": "pencil sharpner 2.wav",
+    "Author": "Plutoniumisotop",
+    "SoundUrl": "https://freesound.org/people/Plutoniumisotop/sounds/371467/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "ShotReload",
+    "ProviderId": 371466,
+    "Name": "pencil sharpner 3.wav",
+    "Author": "Plutoniumisotop",
+    "SoundUrl": "https://freesound.org/people/Plutoniumisotop/sounds/371466/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "PierceDischarge",
+    "ProviderId": 787802,
+    "Name": "Quick Pen Stroke",
+    "Author": "Cpfcfan10",
+    "SoundUrl": "https://freesound.org/people/Cpfcfan10/sounds/787802/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "ItemPaint",
+    "ProviderId": 200371,
+    "Name": "Spray Paint Shake Once.wav",
+    "Author": "cbakos",
+    "SoundUrl": "https://freesound.org/people/cbakos/sounds/200371/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "ItemPaint",
+    "ProviderId": 200375,
+    "Name": "Spray paint Cap Off.wav",
+    "Author": "cbakos",
+    "SoundUrl": "https://freesound.org/people/cbakos/sounds/200375/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "ItemSnipe",
+    "ProviderId": 742999,
+    "Name": "Woosh - Ukulele 1 Slow",
+    "Author": "Sadiquecat",
+    "SoundUrl": "https://freesound.org/people/Sadiquecat/sounds/742999/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "ItemSnipe",
+    "ProviderId": 743003,
+    "Name": "Woosh - Ukulele 5",
+    "Author": "Sadiquecat",
+    "SoundUrl": "https://freesound.org/people/Sadiquecat/sounds/743003/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "ItemShield",
+    "ProviderId": 563169,
+    "Name": "Raise_Sword_For_Blocking.wav",
+    "Author": "gronnie",
+    "SoundUrl": "https://freesound.org/people/gronnie/sounds/563169/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "ItemBomb",
+    "ProviderId": 155235,
+    "Name": "Bomb - Small",
+    "Author": "Zangrutz",
+    "SoundUrl": "https://freesound.org/people/Zangrutz/sounds/155235/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "http://creativecommons.org/licenses/by/3.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "ItemLightning",
+    "ProviderId": 833071,
+    "Name": "spell_lightning_c",
+    "Author": "ZeltBolt",
+    "SoundUrl": "https://freesound.org/people/ZeltBolt/sounds/833071/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "ItemLaser",
+    "ProviderId": 35677,
+    "Name": "Laser1.wav",
+    "Author": "jobro",
+    "SoundUrl": "https://freesound.org/people/jobro/sounds/35677/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "http://creativecommons.org/licenses/by/3.0/",
+    "RequiresAttribution": true
+  }
+]

@@ -23,12 +23,14 @@ MonoBehaviour:
     _loop: 0
     _pan2D: 1
     _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
     _tensionSemitones: 0
     _fetchPrompt: 
   - _channel: 0
     _clips:
     - {fileID: 8300000, guid: dcc20f6c0d0b342d3a52815f0974d288, type: 3}
-    _pitchRange: {x: 1, y: 1}
+    _pitchRange: {x: 0, y: 1}
     _volumeRange: {x: 1, y: 1}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
@@ -36,6 +38,84 @@ MonoBehaviour:
     _loop: 0
     _pan2D: 1
     _melodicMode: 1
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: ef55f17fce4a54a2ebcc23082aea68f3, type: 3}
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1.5, y: 1.5}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 3
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 3
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: a0637fe114e2e49a0b82c5aac4dd482d, type: 3}
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 0.6, y: 0.8}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 2
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: 636dae6f091904028a843ea4a5317125, type: 3}
+    - {fileID: 8300000, guid: 5fe87858d5942483b96359fdb06297a8, type: 3}
+    - {fileID: 8300000, guid: 48f3f0eaed6744e05a96320c7720196f, type: 3}
+    - {fileID: 8300000, guid: 0928551e19e7148099a7aa81e2755d2c, type: 3}
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 0.6, y: 0.8}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _fetchPrompt: sharpener
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
     _tensionSemitones: 0
     _fetchPrompt: 
   - _channel: 0
@@ -48,6 +128,8 @@ MonoBehaviour:
     _loop: 0
     _pan2D: 1
     _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
     _tensionSemitones: 0
     _fetchPrompt: 
   - _channel: 0
@@ -60,6 +142,37 @@ MonoBehaviour:
     _loop: 0
     _pan2D: 1
     _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: 0e813cf3745174aa7b2ec023bba6b77a, type: 3}
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _fetchPrompt: pencil stroke
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
     _tensionSemitones: 0
     _fetchPrompt: 
   - _channel: 0
@@ -72,6 +185,114 @@ MonoBehaviour:
     _loop: 0
     _pan2D: 1
     _melodicMode: 0
+    _melodicMaxOctaves: 3
+    _melodicSkipSteps: 1
+    _tensionSemitones: 1
+    _fetchPrompt: 
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: a98a83929735c4bf4b745b81d32f634e, type: 3}
+    _pitchRange: {x: 0.9, y: 1.3}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _fetchPrompt: bomb
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: 8e637bea94c694bcfac0ad7803fb1c8c, type: 3}
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _fetchPrompt: laser
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: fc3fda448bf214688b577d1b33ee1e25, type: 3}
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _fetchPrompt: lightning
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: 657a7f6533bdf4068864a77d3c1d78fa, type: 3}
+    - {fileID: 8300000, guid: c52205d533c874e2ab65406e4d8a1857, type: 3}
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _fetchPrompt: painting
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: 376bad7db9d8e42feb48bccd8d5d8bcd, type: 3}
+    - {fileID: 8300000, guid: e40b7eecef47a497e8c850a897b55709, type: 3}
+    _pitchRange: {x: 0.8, y: 1.2}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _fetchPrompt: wosh
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: 951b47c940f73466e9ff224728b69c08, type: 3}
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _fetchPrompt: block
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
     _tensionSemitones: 0
     _fetchPrompt: 
   - _channel: 0
@@ -84,6 +305,8 @@ MonoBehaviour:
     _loop: 0
     _pan2D: 1
     _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
     _tensionSemitones: 0
     _fetchPrompt: 
   - _channel: 0
@@ -96,6 +319,8 @@ MonoBehaviour:
     _loop: 0
     _pan2D: 1
     _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
     _tensionSemitones: 0
     _fetchPrompt: 
   - _channel: 0
@@ -108,6 +333,8 @@ MonoBehaviour:
     _loop: 0
     _pan2D: 1
     _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
     _tensionSemitones: 0
     _fetchPrompt: 
   - _channel: 0
@@ -120,6 +347,8 @@ MonoBehaviour:
     _loop: 0
     _pan2D: 1
     _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
     _tensionSemitones: 0
     _fetchPrompt: 
   - _channel: 0
@@ -132,6 +361,8 @@ MonoBehaviour:
     _loop: 0
     _pan2D: 1
     _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
     _tensionSemitones: 0
     _fetchPrompt: 
   - _channel: 0
@@ -144,6 +375,8 @@ MonoBehaviour:
     _loop: 0
     _pan2D: 1
     _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
     _tensionSemitones: 0
     _fetchPrompt: 
   - _channel: 0
@@ -156,6 +389,8 @@ MonoBehaviour:
     _loop: 0
     _pan2D: 1
     _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
     _tensionSemitones: 0
     _fetchPrompt: 
   - _channel: 0
@@ -168,6 +403,8 @@ MonoBehaviour:
     _loop: 0
     _pan2D: 1
     _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
     _tensionSemitones: 0
     _fetchPrompt: 
   - _channel: 0
@@ -180,10 +417,28 @@ MonoBehaviour:
     _loop: 0
     _pan2D: 1
     _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
     _tensionSemitones: 0
     _fetchPrompt: 
   - _channel: 0
-    _clips: []
+    _clips:
+    - {fileID: 8300000, guid: 471eac240877c45ebba2485367778f53, type: 3}
+    _pitchRange: {x: 1, y: 3}
+    _volumeRange: {x: 5, y: 5}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: c1486b83bd3e3422db22f1283185dd83, type: 3}
     _pitchRange: {x: 1, y: 1}
     _volumeRange: {x: 1, y: 1}
     _cooldownSeconds: 0
@@ -191,165 +446,11 @@ MonoBehaviour:
     _priority: 128
     _loop: 0
     _pan2D: 1
-    _melodicMode: 0
-    _tensionSemitones: 0
-    _fetchPrompt: 
-  - _channel: 0
-    _clips: []
-    _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 1, y: 1}
-    _cooldownSeconds: 0
-    _maxConcurrentVoices: 4
-    _priority: 128
-    _loop: 0
-    _pan2D: 1
-    _melodicMode: 0
-    _tensionSemitones: 0
-    _fetchPrompt: 
-  - _channel: 0
-    _clips: []
-    _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 1, y: 1}
-    _cooldownSeconds: 0
-    _maxConcurrentVoices: 4
-    _priority: 128
-    _loop: 0
-    _pan2D: 1
-    _melodicMode: 0
-    _tensionSemitones: 0
-    _fetchPrompt: 
-  - _channel: 0
-    _clips: []
-    _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 1, y: 1}
-    _cooldownSeconds: 0
-    _maxConcurrentVoices: 4
-    _priority: 128
-    _loop: 0
-    _pan2D: 1
-    _melodicMode: 0
-    _tensionSemitones: 0
-    _fetchPrompt: 
-  - _channel: 0
-    _clips: []
-    _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 1, y: 1}
-    _cooldownSeconds: 0
-    _maxConcurrentVoices: 4
-    _priority: 128
-    _loop: 0
-    _pan2D: 1
-    _melodicMode: 0
-    _tensionSemitones: 0
-    _fetchPrompt: 
-  - _channel: 0
-    _clips: []
-    _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 1, y: 1}
-    _cooldownSeconds: 0
-    _maxConcurrentVoices: 4
-    _priority: 128
-    _loop: 0
-    _pan2D: 1
-    _melodicMode: 0
-    _tensionSemitones: 0
-    _fetchPrompt: 
-  - _channel: 0
-    _clips: []
-    _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 1, y: 1}
-    _cooldownSeconds: 0
-    _maxConcurrentVoices: 4
-    _priority: 128
-    _loop: 0
-    _pan2D: 1
-    _melodicMode: 0
-    _tensionSemitones: 0
-    _fetchPrompt: 
-  - _channel: 0
-    _clips: []
-    _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 1, y: 1}
-    _cooldownSeconds: 0
-    _maxConcurrentVoices: 4
-    _priority: 128
-    _loop: 0
-    _pan2D: 1
-    _melodicMode: 0
-    _tensionSemitones: 0
-    _fetchPrompt: 
-  - _channel: 0
-    _clips: []
-    _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 1, y: 1}
-    _cooldownSeconds: 0
-    _maxConcurrentVoices: 4
-    _priority: 128
-    _loop: 0
-    _pan2D: 1
-    _melodicMode: 0
-    _tensionSemitones: 0
-    _fetchPrompt: 
-  - _channel: 0
-    _clips: []
-    _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 1, y: 1}
-    _cooldownSeconds: 0
-    _maxConcurrentVoices: 4
-    _priority: 128
-    _loop: 0
-    _pan2D: 1
-    _melodicMode: 0
-    _tensionSemitones: 0
-    _fetchPrompt: 
-  - _channel: 0
-    _clips: []
-    _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 1, y: 1}
-    _cooldownSeconds: 0
-    _maxConcurrentVoices: 4
-    _priority: 128
-    _loop: 0
-    _pan2D: 1
-    _melodicMode: 0
-    _tensionSemitones: 0
-    _fetchPrompt: 
-  - _channel: 0
-    _clips: []
-    _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 1, y: 1}
-    _cooldownSeconds: 0
-    _maxConcurrentVoices: 4
-    _priority: 128
-    _loop: 0
-    _pan2D: 1
-    _melodicMode: 0
-    _tensionSemitones: 0
-    _fetchPrompt: 
-  - _channel: 0
-    _clips: []
-    _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 1, y: 1}
-    _cooldownSeconds: 0
-    _maxConcurrentVoices: 4
-    _priority: 128
-    _loop: 0
-    _pan2D: 1
-    _melodicMode: 0
-    _tensionSemitones: 0
-    _fetchPrompt: 
-  - _channel: 0
-    _clips: []
-    _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 1, y: 1}
-    _cooldownSeconds: 0
-    _maxConcurrentVoices: 4
-    _priority: 128
-    _loop: 0
-    _pan2D: 1
-    _melodicMode: 0
+    _melodicMode: 2
+    _melodicMaxOctaves: 3
+    _melodicSkipSteps: 5
     _tensionSemitones: 0
     _fetchPrompt: 
   _melodicScale: 0000000002000000040000000700000009000000
   _melodicRootSemitone: 0
-  _globalVoiceCap: 16
+  _globalVoiceCap: 32

@@ -12,19 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b73e543c88440e6b873b5656df6a019, type: 3}
   m_Name: ProjectileFlightConfig
   m_EditorClassIdentifier: 
-  _startingHitPoints: 5
   _projectileStartingShields: 1
+  _shieldToneThreshold: 7
   _projectileSpeed: 8
   _projectileLoadDuration: 0
-  _projectileDisappearDuration: 0.2
-  _projectileDisappearEase: 26
-  _projectileDeadDriftFactor: 0.225
   _limitsClockwise: {x: 4, y: 2.25, z: -4.5, w: -2.25}
-  _shieldTrailDuration: 0.5
   _cruiseWallBounceThreshold: 1
   _cruiseSpeedPerShield: 0.22233333
-  _sweepEnabled: 1
-  _sweepTapThreshold: 4
   _maxCruiseSpeedMultiplier: 25
   _cruiseTapCurve:
     serializedVersion: 2
@@ -60,10 +54,12 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _cruiseTapEaseDuration: 0.25
+  _sweepEnabled: 1
+  _sweepTapThreshold: 4
   _cruisePiercingTapThreshold: 5
-  _pierceDischargeDelay: 0.075
   _pierceDischargeTimeScale: 0.2
   _pierceDischargeTimeScaleDuration: 1
+  _shieldTrailDuration: 0.5
   _lastShieldApproachCurve:
     serializedVersion: 2
     m_Curve:
@@ -140,15 +136,3 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _slotsSize: {x: 6, y: 11}
-  _slotSeparation: {x: 0.375, y: 0.65}
-  _slotsOffset: {x: 5, y: 3.25}
-  _initialPredictionLength: 1
-  _predictionTraceMaxBounces: 2
-  _predictionTraceMaxSteps: 15
-  _predictionTraceColor: {r: 1, g: 0.3882353, b: 0.2784314, a: 0.2509804}
-  _scorePointTraceDuration: 1
-  _scorePointsScatterDelay: 0.02
-  _scorePointBurstDuration: 0.12
-  _scoreTrailPrewarmPerColor: 128
-  _progressNoticePrewarmPerColor: 64
