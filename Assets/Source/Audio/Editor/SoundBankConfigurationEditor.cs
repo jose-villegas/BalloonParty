@@ -24,7 +24,6 @@ namespace BalloonParty.Audio.Editor
         private readonly FreesoundTokenSource _tokenSource = new();
         private readonly Dictionary<GameSoundId, List<SfxCandidate>> _candidates = new();
         private readonly HashSet<GameSoundId> _busy = new();
-        private readonly HashSet<GameSoundId> _expanded = new();
 
         private ISfxProvider _provider;
         private string _tokenInput = string.Empty;
@@ -84,13 +83,20 @@ namespace BalloonParty.Audio.Editor
         {
             EditorGUILayout.PropertyField(entry, new GUIContent(soundId.ToString()), true);
 
+            // The fetch UI lives inside the entry's own foldout, right under its Fetch Prompt field —
+            // no separate dropdown. Collapsed entries hide it along with the rest of their fields.
+            if (!entry.isExpanded)
+            {
+                return;
+            }
+
             var promptProp = entry.FindPropertyRelative("_fetchPrompt");
             var clipsProp = entry.FindPropertyRelative("_clips");
             var prompt = promptProp != null ? promptProp.stringValue : string.Empty;
             var hasClips = clipsProp != null && clipsProp.arraySize > 0;
 
-            // The fetch foldout only appears where it's useful: a prompt to search with, no clip yet,
-            // and a token to search with.
+            // The button only appears where it's useful: a prompt to search with, no clip yet, and a
+            // token available.
             if (string.IsNullOrWhiteSpace(prompt) || hasClips || !_tokenSource.HasToken)
             {
                 return;
@@ -98,27 +104,11 @@ namespace BalloonParty.Audio.Editor
 
             using (new EditorGUI.IndentLevelScope())
             {
-                var wasExpanded = _expanded.Contains(soundId);
-                var expanded = EditorGUILayout.Foldout(wasExpanded, "Fetch clips (Freesound)", true);
-                if (expanded && !wasExpanded)
-                {
-                    _expanded.Add(soundId);
-                }
-                else if (!expanded && wasExpanded)
-                {
-                    _expanded.Remove(soundId);
-                }
-
-                if (!expanded)
-                {
-                    return;
-                }
-
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     using (new EditorGUI.DisabledScope(_busy.Contains(soundId)))
                     {
-                        if (GUILayout.Button("Fetch candidates"))
+                        if (GUILayout.Button("Fetch Candidates (Freesound)"))
                         {
                             FetchAsync(soundId, prompt);
                         }
@@ -227,7 +217,6 @@ namespace BalloonParty.Audio.Editor
                 SoundBankClipAssigner.Assign(bank, soundId, clip);
                 RecordAttribution(soundId, candidate);
                 _candidates.Remove(soundId);
-                _expanded.Remove(soundId);
                 serializedObject.Update();
             }
             catch (Exception e)
