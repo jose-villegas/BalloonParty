@@ -138,5 +138,255 @@
     "LicenseName": "Attribution",
     "LicenseUrl": "http://creativecommons.org/licenses/by/3.0/",
     "RequiresAttribution": true
+  },
+  {
+    "SoundId": "ItemShield",
+    "ProviderId": 161594,
+    "Name": "Very soft hit wooden block and sandish noise",
+    "Author": "jorickhoofd",
+    "SoundUrl": "https://freesound.org/people/jorickhoofd/sounds/161594/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "ItemBomb",
+    "ProviderId": 547132,
+    "Name": "mortar  grenade shell 005.wav",
+    "Author": "klankbeeld",
+    "SoundUrl": "https://freesound.org/people/klankbeeld/sounds/547132/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "HeartDrain",
+    "ProviderId": 267066,
+    "Name": "Stress Heart Beat.wav",
+    "Author": "BrainClaim",
+    "SoundUrl": "https://freesound.org/people/BrainClaim/sounds/267066/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "HeartDrain",
+    "ProviderId": 267065,
+    "Name": "Agressive Heart Beat.wav",
+    "Author": "BrainClaim",
+    "SoundUrl": "https://freesound.org/people/BrainClaim/sounds/267065/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "CruiseLoopStart",
+    "ProviderId": 104078,
+    "Name": "Wind Low Short.aif",
+    "Author": "RutgerMuller",
+    "SoundUrl": "https://freesound.org/people/RutgerMuller/sounds/104078/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "CruiseLoopStop",
+    "ProviderId": 742833,
+    "Name": "Woosh - Metal tea strainer 4 - slowed down",
+    "Author": "Sadiquecat",
+    "SoundUrl": "https://freesound.org/people/Sadiquecat/sounds/742833/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "DoomedWarn",
+    "ProviderId": 488827,
+    "Name": "heartbeat.loop.ogg",
+    "Author": "xUMR",
+    "SoundUrl": "https://freesound.org/people/xUMR/sounds/488827/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "CruiseLoopStart",
+    "ProviderId": 115759,
+    "Name": "windloop.wav",
+    "Author": "warwickallison",
+    "SoundUrl": "https://freesound.org/people/warwickallison/sounds/115759/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "CruiseLoopStart",
+    "ProviderId": 420314,
+    "Name": "wind20.m4a",
+    "Author": "tonik-95",
+    "SoundUrl": "https://freesound.org/people/tonik-95/sounds/420314/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "ProjectileDeath",
+    "ProviderId": 553342,
+    "Name": "Pencil 15.wav",
+    "Author": "Julian_Eftei",
+    "SoundUrl": "https://freesound.org/people/Julian_Eftei/sounds/553342/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "ProjectileDeath",
+    "ProviderId": 553341,
+    "Name": "Pencil 13.wav",
+    "Author": "Julian_Eftei",
+    "SoundUrl": "https://freesound.org/people/Julian_Eftei/sounds/553341/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "ProjectileDeath",
+    "ProviderId": 553340,
+    "Name": "Pencil 11.wav",
+    "Author": "Julian_Eftei",
+    "SoundUrl": "https://freesound.org/people/Julian_Eftei/sounds/553340/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "ProjectileDeath",
+    "ProviderId": 607073,
+    "Name": "Pencil dropping.wav",
+    "Author": "radioscoopfi",
+    "SoundUrl": "https://freesound.org/people/radioscoopfi/sounds/607073/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "ProjectileDeath",
+    "ProviderId": 31330,
+    "Name": "pencil-drop01.wav",
+    "Author": "andre.nascimento",
+    "SoundUrl": "https://freesound.org/people/andre.nascimento/sounds/31330/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "PierceDischarge",
+    "ProviderId": 632473,
+    "Name": "Pencil writing on paper (1 stroke, Take A)",
+    "Author": "ani_music",
+    "SoundUrl": "https://freesound.org/people/ani_music/sounds/632473/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "BalloonPopRainbow",
+    "ProviderId": 545200,
+    "Name": "Pop 2",
+    "Author": "theplax",
+    "SoundUrl": "https://freesound.org/people/theplax/sounds/545200/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "BalloonPopUnbreakable",
+    "ProviderId": 657811,
+    "Name": "Tech Glitch 13 Short Event",
+    "Author": "The-Sacha-Rush",
+    "SoundUrl": "https://freesound.org/people/The-Sacha-Rush/sounds/657811/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "BalloonDeflectUnbreakable",
+    "ProviderId": 63000,
+    "Name": "Chime 0023.wav",
+    "Author": "radian",
+    "SoundUrl": "https://freesound.org/people/radian/sounds/63000/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "http://creativecommons.org/licenses/by/3.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "BalloonDeflectUnbreakable",
+    "ProviderId": 62999,
+    "Name": "Chime 0022.wav",
+    "Author": "radian",
+    "SoundUrl": "https://freesound.org/people/radian/sounds/62999/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "http://creativecommons.org/licenses/by/3.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "BalloonDeflectUnbreakable",
+    "ProviderId": 62998,
+    "Name": "Chime 0021.wav",
+    "Author": "radian",
+    "SoundUrl": "https://freesound.org/people/radian/sounds/62998/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "http://creativecommons.org/licenses/by/3.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "BalloonDeflectUnbreakable",
+    "ProviderId": 62996,
+    "Name": "Chime 0019.wav",
+    "Author": "radian",
+    "SoundUrl": "https://freesound.org/people/radian/sounds/62996/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "http://creativecommons.org/licenses/by/3.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "BalloonDeflectUnbreakable",
+    "ProviderId": 62988,
+    "Name": "Chime 0013.wav",
+    "Author": "radian",
+    "SoundUrl": "https://freesound.org/people/radian/sounds/62988/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "http://creativecommons.org/licenses/by/3.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "BalloonDeflectUnbreakable",
+    "ProviderId": 62986,
+    "Name": "Chime 0011.wav",
+    "Author": "radian",
+    "SoundUrl": "https://freesound.org/people/radian/sounds/62986/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "http://creativecommons.org/licenses/by/3.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "BalloonDeflectUnbreakable",
+    "ProviderId": 62987,
+    "Name": "Chime 0012.wav",
+    "Author": "radian",
+    "SoundUrl": "https://freesound.org/people/radian/sounds/62987/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "http://creativecommons.org/licenses/by/3.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "BalloonPop",
+    "ProviderId": 776443,
+    "Name": "pop out, bubble, soft bursting",
+    "Author": "chaferwitt",
+    "SoundUrl": "https://freesound.org/people/chaferwitt/sounds/776443/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
   }
 ]
