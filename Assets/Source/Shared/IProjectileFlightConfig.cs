@@ -9,6 +9,7 @@ namespace BalloonParty.Shared
     public interface IProjectileFlightConfig
     {
         int ProjectileStartingShields { get; }
+        int ShieldToneThreshold { get; }
         float ProjectileSpeed { get; }
         float ProjectileLoadDuration { get; }
         Vector4 LimitsClockwise { get; }

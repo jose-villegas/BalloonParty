@@ -1,6 +1,7 @@
 using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using MessagePipe;
@@ -23,10 +24,10 @@ namespace BalloonParty.Audio.Routing
         private readonly ISubscriber<ShieldGainedMessage> _shieldGainedSubscriber;
         private readonly ISubscriber<ShieldLostMessage> _shieldLostSubscriber;
         private readonly ISubscriber<WallHitMessage> _wallHitSubscriber;
+        private readonly IProjectileFlightConfig _flightConfig;
         private readonly CompositeDisposable _subscriptions = new();
 
         private SoundHandle _cruiseHandle = SoundHandle.None;
-        private int _shieldDepth;
 
         [Inject]
         public CombatSoundRouter(ISoundPlayer player,
@@ -39,7 +40,8 @@ namespace BalloonParty.Audio.Routing
             ISubscriber<PierceDischargedMessage> pierceSubscriber,
             ISubscriber<ShieldGainedMessage> shieldGainedSubscriber,
             ISubscriber<ShieldLostMessage> shieldLostSubscriber,
-            ISubscriber<WallHitMessage> wallHitSubscriber)
+            ISubscriber<WallHitMessage> wallHitSubscriber,
+            IProjectileFlightConfig flightConfig)
         {
             _player = player;
             _hitSubscriber = hitSubscriber;
@@ -52,6 +54,7 @@ namespace BalloonParty.Audio.Routing
             _shieldGainedSubscriber = shieldGainedSubscriber;
             _shieldLostSubscriber = shieldLostSubscriber;
             _wallHitSubscriber = wallHitSubscriber;
+            _flightConfig = flightConfig;
         }
 
         public void Start()
@@ -111,8 +114,6 @@ namespace BalloonParty.Audio.Routing
 
         private void OnLoaded(ProjectileLoadedMessage message)
         {
-            // A fresh shot starts at the root: reloading resets the shield-depth descent.
-            _shieldDepth = 0;
             _player.Play(GameSoundId.ShotReload, null);
         }
 
@@ -139,14 +140,7 @@ namespace BalloonParty.Audio.Routing
 
         private void OnShieldGained(ShieldGainedMessage message)
         {
-            // Winning a shield walks the tone one step back UP toward the root, never above it (depth
-            // clamped at 0 = root = full). Pitch tracks how far below full the shield stack sits.
-            if (_shieldDepth > 0)
-            {
-                _shieldDepth--;
-            }
-
-            _player.Play(GameSoundId.ShieldGained, null, _shieldDepth);
+            _player.Play(GameSoundId.ShieldGained, null);
         }
 
         private void OnShieldLost(ShieldLostMessage message)
@@ -156,10 +150,12 @@ namespace BalloonParty.Audio.Routing
 
         private void OnWallHit(WallHitMessage message)
         {
-            // Each consecutive wall hit steps the tone one further DOWN the scale from the root; a shield
-            // gain walks it back up (author WallHit + ShieldGained as ScaleWalkDown). The shared depth is
-            // supplied per-play, independent of the colour-pop streak, so it never touches the pop key.
-            _player.Play(GameSoundId.WallHit, message.Position, ++_shieldDepth);
+            // The tone tracks shields left: at/above the config threshold it stays on the root, and each
+            // shield below steps it one degree DOWN the scale (author WallHit as ScaleWalkDown). Depth is
+            // a pure function of the live count, so recovery happens on the next hit as shields climb back
+            // — no counter to reset. Supplied per-play, so it never touches the ambient pop key.
+            var depth = Math.Max(0, _flightConfig.ShieldToneThreshold - message.ShieldsRemaining);
+            _player.Play(GameSoundId.WallHit, message.Position, depth);
         }
     }
 }

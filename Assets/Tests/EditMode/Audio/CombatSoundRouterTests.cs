@@ -3,6 +3,7 @@ using BalloonParty.Audio;
 using BalloonParty.Audio.Routing;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using MessagePipe;
@@ -41,10 +42,14 @@ namespace BalloonParty.Tests.Audio
             var shieldLostSubscriber = CaptureSubscriber<ShieldLostMessage>(h => _shieldLostHandler = h);
             var wallHitSubscriber = CaptureSubscriber<WallHitMessage>(h => _wallHitHandler = h);
 
+            var flightConfig = Substitute.For<IProjectileFlightConfig>();
+            flightConfig.ShieldToneThreshold.Returns(5);
+
             var router = new CombatSoundRouter(
                 _player, hitSubscriber, firedSubscriber, loadedSubscriber,
                 cruiseStartedSubscriber, cruiseEndedSubscriber, doomedSubscriber,
-                pierceSubscriber, shieldGainedSubscriber, shieldLostSubscriber, wallHitSubscriber);
+                pierceSubscriber, shieldGainedSubscriber, shieldLostSubscriber, wallHitSubscriber,
+                flightConfig);
             router.Start();
         }
 
@@ -160,48 +165,36 @@ namespace BalloonParty.Tests.Audio
         }
 
         [Test]
-        public void OnProjectileLoaded_ResetsTheShieldDepth()
+        public void OnShieldGained_PlaysPlain()
         {
-            var position = new Vector3(1f, 2f, 0f);
+            _shieldGainedHandler.Handle(new ShieldGainedMessage(Vector2Int.zero));
 
-            _wallHitHandler.Handle(new WallHitMessage(position));   // depth 1
-            _wallHitHandler.Handle(new WallHitMessage(position));   // depth 2
-            _loadedHandler.Handle(new ProjectileLoadedMessage(null));  // reset to 0
-            _wallHitHandler.Handle(new WallHitMessage(position));   // depth 1 again
-
-            _player.Received(2).Play(GameSoundId.WallHit, position, 1);
-            _player.DidNotReceive().Play(GameSoundId.WallHit, position, 3);
+            _player.Received(1).Play(GameSoundId.ShieldGained, null);
         }
 
         [Test]
-        public void OnShieldGained_WalksTheShieldDepthBackUp_ClampedAtRoot()
+        public void OnWallHit_BelowThreshold_StepsDownByShieldsBelowThreshold()
         {
-            var position = new Vector3(1f, 2f, 0f);
-
-            _wallHitHandler.Handle(new WallHitMessage(position));   // depth 1
-            _wallHitHandler.Handle(new WallHitMessage(position));   // depth 2
-            _shieldGainedHandler.Handle(new ShieldGainedMessage(Vector2Int.zero));  // depth 1
-            _shieldGainedHandler.Handle(new ShieldGainedMessage(Vector2Int.zero));  // depth 0 (root)
-            _shieldGainedHandler.Handle(new ShieldGainedMessage(Vector2Int.zero));  // stays 0
-
-            // Each gain steps the tone one back up toward the root; depth never goes below 0 (root).
-            _player.Received(1).Play(GameSoundId.ShieldGained, null, 1);
-            _player.Received(2).Play(GameSoundId.ShieldGained, null, 0);
-        }
-
-        [Test]
-        public void OnWallHit_ConsecutiveHits_StepTheDepthDownAtContactPosition()
-        {
+            // Threshold is 5: depth = threshold - shieldsRemaining. 4 left = one step down, 2 left = three.
             var position = new Vector3(3f, -1f, 0f);
 
-            _wallHitHandler.Handle(new WallHitMessage(position));
-            _wallHitHandler.Handle(new WallHitMessage(position));
-            _wallHitHandler.Handle(new WallHitMessage(position));
+            _wallHitHandler.Handle(new WallHitMessage(position, 4));
+            _wallHitHandler.Handle(new WallHitMessage(position, 2));
 
-            // Each hit steps the shield-depth one further down the scale (author WallHit as ScaleWalkDown).
             _player.Received(1).Play(GameSoundId.WallHit, position, 1);
-            _player.Received(1).Play(GameSoundId.WallHit, position, 2);
             _player.Received(1).Play(GameSoundId.WallHit, position, 3);
+        }
+
+        [Test]
+        public void OnWallHit_AtOrAboveThreshold_StaysAtRoot()
+        {
+            // At or above 5 shields the tone stays on the root (depth 0) — the descent hasn't started.
+            var position = new Vector3(3f, -1f, 0f);
+
+            _wallHitHandler.Handle(new WallHitMessage(position, 5));
+            _wallHitHandler.Handle(new WallHitMessage(position, 9));
+
+            _player.Received(2).Play(GameSoundId.WallHit, position, 0);
         }
 
         private static ISubscriber<T> CaptureSubscriber<T>(Action<IMessageHandler<T>> capture)

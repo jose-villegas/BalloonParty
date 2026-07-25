@@ -8,6 +8,11 @@ namespace BalloonParty.Configuration
     {
         [Header("Loadout")]
         [SerializeField] private int _projectileStartingShields;
+
+        [Tooltip("Wall-hit cue: with shields remaining at or above this, the tone stays on the root; each " +
+                 "shield below steps it one degree down the scale (author WallHit as ScaleWalkDown). " +
+                 "e.g. 5 = the descent begins once you drop below 5 shields.")]
+        [SerializeField] [Min(0)] private int _shieldToneThreshold = 5;
         [SerializeField] private float _projectileSpeed;
         [SerializeField] private float _projectileLoadDuration;
 
@@ -82,6 +87,7 @@ namespace BalloonParty.Configuration
         [SerializeField] private AnimationCurve _lastShieldTimeScaleCurve = AnimationCurve.Constant(0f, 1f, 0.3f);
 
         public int ProjectileStartingShields => _projectileStartingShields;
+        public int ShieldToneThreshold => _shieldToneThreshold;
         public float ProjectileSpeed => _projectileSpeed;
         public float ProjectileLoadDuration => _projectileLoadDuration;
         public Vector4 LimitsClockwise => _limitsClockwise;

@@ -462,7 +462,7 @@ namespace BalloonParty.Projectile.View
             {
                 _shieldView?.OnBounce((Vector2)travelDirection, (Vector2)step.Direction, step.Speed);
                 _shieldLostPublisher.Publish(new ShieldLostMessage(step.WallContact));
-                _wallHitPublisher.Publish(new WallHitMessage(step.WallContact));
+                _wallHitPublisher.Publish(new WallHitMessage(step.WallContact, _model.ShieldsRemaining.Value));
                 TryAwardSweepTap(step.WallContact, travelDirection);
 
 #if UNITY_EDITOR

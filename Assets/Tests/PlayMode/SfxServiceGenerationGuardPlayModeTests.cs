@@ -133,6 +133,7 @@ namespace BalloonParty.Tests.PlayMode
         private sealed class StubFlightConfig : IProjectileFlightConfig
         {
             public int ProjectileStartingShields => 0;
+            public int ShieldToneThreshold => 0;
             public float ProjectileSpeed => 0f;
             public float ProjectileLoadDuration => 0f;
             public Vector4 LimitsClockwise { get; }

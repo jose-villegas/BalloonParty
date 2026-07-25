@@ -410,17 +410,18 @@ heard before it's parsed.
   buzz. E.g. deflect = a minor-2nd rub above the current degree (a near-miss "so close" bite);
   wall hit = a flat/downward step below the root (a heavier "dropped it" thud). This is
   the *purpose* of the semitone, not a defect to tune out.
-- **Wall hits walk DOWN a shield-depth axis; shields win it back UP.** `WallHit`
-  (`WallHitMessage`) and `ShieldGained` (`ShieldGainedMessage`) share a `_shieldDepth` counter
-  owned by `CombatSoundRouter` (0 = root = full shields): each wall hit steps it up (deeper
-  below root), each shield won steps it back down (clamped at 0 so the tone never rises above
-  the root), and a projectile reload resets it to 0 (a fresh shot starts at the root). Both are authored as `ScaleWalkDown`, so the pitch tracks how far below full the
-  shield stack sits — dropping on consecutive hits, climbing back toward the root as you
-  recover. `ShieldLost` itself plays plain. This axis is independent of the colour-pop streak,
-  so the router supplies it per-play via the optional `melodicStreak` argument on
-  `ISoundPlayer.Play` rather than the ambient `IMelodicContext.SetStreak`; an overridden play
-  deliberately does **not** move `_currentSemitone`, so the deflect/wall `Tension` cues keep
-  rubbing against the pop key, not the shield note.
+- **Wall hits walk DOWN the scale as shields run low.** `WallHitMessage` carries the
+  shields-remaining count; `CombatSoundRouter` plays `WallHit` as `ScaleWalkDown` at
+  `depth = max(0, ShieldToneThreshold - shieldsRemaining)`, with the threshold on the flight
+  config (`IProjectileFlightConfig.ShieldToneThreshold`, default 5 — the "shields config",
+  beside `ProjectileStartingShields`). At or above the threshold the tone stays on the root;
+  each shield below steps it one degree down. Depth is a pure function of the live shield count,
+  so regaining shields lifts the tone back toward the root on the next hit — no counter, nothing
+  to reset on reload. `ShieldLost` and `ShieldGained` play plain. The descent is independent of
+  the colour-pop streak: the router supplies it per-play via the optional `melodicStreak`
+  argument on `ISoundPlayer.Play` rather than the ambient `IMelodicContext.SetStreak`; an
+  overridden play deliberately does **not** move `_currentSemitone`, so the deflect `Tension`
+  cue keeps rubbing against the pop key, not the wall note.
 - **Scale is config, not hardcoded.** The key + the positive scale (pentatonic default)
   plus a per-event tension interval (deflect's rub, wall hit's drop) all live on the
   `SoundBankConfiguration` as semitone offsets, so key/mode and each dissonance flavor are
