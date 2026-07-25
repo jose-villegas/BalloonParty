@@ -25,6 +25,7 @@ namespace BalloonParty.Tests.Audio
         private IMessageHandler<ShieldGainedMessage> _shieldGainedHandler;
         private IMessageHandler<ShieldLostMessage> _shieldLostHandler;
         private IMessageHandler<WallHitMessage> _wallHitHandler;
+        private IMessageHandler<ProjectileDestroyedMessage> _destroyedHandler;
 
         [SetUp]
         public void SetUp()
@@ -37,6 +38,7 @@ namespace BalloonParty.Tests.Audio
             var cruiseStartedSubscriber = CaptureSubscriber<ProjectileCruiseStartedMessage>(h => _cruiseStartedHandler = h);
             var cruiseEndedSubscriber = CaptureSubscriber<ProjectileCruiseEndedMessage>(h => _cruiseEndedHandler = h);
             var doomedSubscriber = CaptureSubscriber<ProjectileDoomedStartedMessage>(_ => { });
+            var destroyedSubscriber = CaptureSubscriber<ProjectileDestroyedMessage>(h => _destroyedHandler = h);
             var pierceSubscriber = CaptureSubscriber<PierceDischargedMessage>(_ => { });
             var shieldGainedSubscriber = CaptureSubscriber<ShieldGainedMessage>(h => _shieldGainedHandler = h);
             var shieldLostSubscriber = CaptureSubscriber<ShieldLostMessage>(h => _shieldLostHandler = h);
@@ -47,7 +49,7 @@ namespace BalloonParty.Tests.Audio
 
             var router = new CombatSoundRouter(
                 _player, hitSubscriber, firedSubscriber, loadedSubscriber,
-                cruiseStartedSubscriber, cruiseEndedSubscriber, doomedSubscriber,
+                cruiseStartedSubscriber, cruiseEndedSubscriber, doomedSubscriber, destroyedSubscriber,
                 pierceSubscriber, shieldGainedSubscriber, shieldLostSubscriber, wallHitSubscriber,
                 flightConfig);
             router.Start();
@@ -121,6 +123,14 @@ namespace BalloonParty.Tests.Audio
 
             _player.Received(1).Play(GameSoundId.BalloonPop, Vector3.zero);
             _player.DidNotReceive().Play(GameSoundId.BalloonDeflect, Arg.Any<Vector3?>());
+        }
+
+        [Test]
+        public void OnProjectileDestroyed_PlaysProjectileDeath()
+        {
+            _destroyedHandler.Handle(new ProjectileDestroyedMessage());
+
+            _player.Received(1).Play(GameSoundId.ProjectileDeath, null);
         }
 
         [Test]

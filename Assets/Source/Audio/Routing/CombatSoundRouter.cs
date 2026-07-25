@@ -20,6 +20,7 @@ namespace BalloonParty.Audio.Routing
         private readonly ISubscriber<ProjectileCruiseStartedMessage> _cruiseStartedSubscriber;
         private readonly ISubscriber<ProjectileCruiseEndedMessage> _cruiseEndedSubscriber;
         private readonly ISubscriber<ProjectileDoomedStartedMessage> _doomedSubscriber;
+        private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly ISubscriber<PierceDischargedMessage> _pierceSubscriber;
         private readonly ISubscriber<ShieldGainedMessage> _shieldGainedSubscriber;
         private readonly ISubscriber<ShieldLostMessage> _shieldLostSubscriber;
@@ -37,6 +38,7 @@ namespace BalloonParty.Audio.Routing
             ISubscriber<ProjectileCruiseStartedMessage> cruiseStartedSubscriber,
             ISubscriber<ProjectileCruiseEndedMessage> cruiseEndedSubscriber,
             ISubscriber<ProjectileDoomedStartedMessage> doomedSubscriber,
+            ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             ISubscriber<PierceDischargedMessage> pierceSubscriber,
             ISubscriber<ShieldGainedMessage> shieldGainedSubscriber,
             ISubscriber<ShieldLostMessage> shieldLostSubscriber,
@@ -50,6 +52,7 @@ namespace BalloonParty.Audio.Routing
             _cruiseStartedSubscriber = cruiseStartedSubscriber;
             _cruiseEndedSubscriber = cruiseEndedSubscriber;
             _doomedSubscriber = doomedSubscriber;
+            _destroyedSubscriber = destroyedSubscriber;
             _pierceSubscriber = pierceSubscriber;
             _shieldGainedSubscriber = shieldGainedSubscriber;
             _shieldLostSubscriber = shieldLostSubscriber;
@@ -65,6 +68,7 @@ namespace BalloonParty.Audio.Routing
             _cruiseStartedSubscriber.Subscribe(OnCruiseStarted).AddTo(_subscriptions);
             _cruiseEndedSubscriber.Subscribe(OnCruiseEnded).AddTo(_subscriptions);
             _doomedSubscriber.Subscribe(OnDoomedStarted).AddTo(_subscriptions);
+            _destroyedSubscriber.Subscribe(OnProjectileDestroyed).AddTo(_subscriptions);
             _pierceSubscriber.Subscribe(OnPierceDischarged).AddTo(_subscriptions);
             _shieldGainedSubscriber.Subscribe(OnShieldGained).AddTo(_subscriptions);
             _shieldLostSubscriber.Subscribe(OnShieldLost).AddTo(_subscriptions);
@@ -131,6 +135,11 @@ namespace BalloonParty.Audio.Routing
         private void OnDoomedStarted(ProjectileDoomedStartedMessage message)
         {
             _player.Play(GameSoundId.DoomedWarn, message.WorldPosition);
+        }
+
+        private void OnProjectileDestroyed(ProjectileDestroyedMessage message)
+        {
+            _player.Play(GameSoundId.ProjectileDeath, null);
         }
 
         private void OnPierceDischarged(PierceDischargedMessage message)

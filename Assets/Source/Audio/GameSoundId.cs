@@ -45,6 +45,9 @@ namespace BalloonParty.Audio
         WallHit,
 
         // Sustained warning while the board sits in the danger (future-overflow) state; author as a loop.
-        DangerWarn
+        DangerWarn,
+
+        // One-shot: the shot actually died (last shield spent at the death wall), via ProjectileDestroyedMessage.
+        ProjectileDeath
     }
 }
