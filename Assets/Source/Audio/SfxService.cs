@@ -54,6 +54,13 @@ namespace BalloonParty.Audio
                 return SoundHandle.None;
             }
 
+            // A single-instance loop that's already sounding ignores the retrigger and hands back the
+            // live handle, rather than starting or stealing-to-restart a second voice.
+            if (entry.Loop && entry.SingleInstance && TryGetActiveHandle(id, out var active))
+            {
+                return active;
+            }
+
             if (!_throttle.TryPass(id, entry.CooldownSeconds, out var burstIndex))
             {
                 return SoundHandle.None;
@@ -164,6 +171,21 @@ namespace BalloonParty.Audio
             _limiter.Release(voiceId);
             _poolManager.Return(AudioPoolKeys.VoicePoolKey, voice);
             _slots[voiceId].Voice = null;
+        }
+
+        private bool TryGetActiveHandle(GameSoundId id, out SoundHandle handle)
+        {
+            for (var i = 0; i < _slots.Length; i++)
+            {
+                if (_slots[i].Voice != null && _slots[i].Id == id)
+                {
+                    handle = new SoundHandle(i, _slots[i].Generation);
+                    return true;
+                }
+            }
+
+            handle = SoundHandle.None;
+            return false;
         }
 
         private int IndexOfSlot(AudioSourceVoice voice)

@@ -29,6 +29,10 @@ namespace BalloonParty.Audio.Configuration
         [Tooltip("Sustained loop (cruise). Play returns a SoundHandle the caller must Stop.")]
         [SerializeField] private bool _loop;
 
+        [Tooltip("Loop only: while a voice for this sound is already playing, ignore new Play calls (keep " +
+                 "the one instance) instead of starting or restarting another. Play returns the live handle.")]
+        [SerializeField] private bool _singleInstance;
+
         [Tooltip("Derive a subtle stereo pan from world-X. spatialBlend stays 0 (no rolloff).")]
         [SerializeField] private bool _pan2D = true;
 
@@ -71,6 +75,7 @@ namespace BalloonParty.Audio.Configuration
         public int MaxConcurrentVoices => _maxConcurrentVoices;
         public int Priority => _priority;
         public bool Loop => _loop;
+        public bool SingleInstance => _singleInstance;
         public bool Pan2D => _pan2D;
         public float FadeInSeconds => _fadeInSeconds;
         public float FadeOutSeconds => _fadeOutSeconds;

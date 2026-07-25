@@ -144,8 +144,8 @@ namespace BalloonParty.Audio.Editor
             }
         }
 
-        // Draws the entry as its own foldout, hiding fields that don't apply to the chosen MelodicMode:
-        // the octave-cap/skip knobs only for the walk modes, TensionSemitones only for Tension.
+        // Draws the entry as its own foldout, hiding fields that don't apply: the octave-cap/skip knobs
+        // only for the walk modes, TensionSemitones only for Tension, SingleInstance only for loops.
         // (_fetchPrompt is [HideInInspector] and drawn separately inside the Fetch panel.)
         private static void DrawEntryFields(SerializedProperty entry, GameSoundId soundId)
         {
@@ -159,6 +159,8 @@ namespace BalloonParty.Audio.Editor
             var mode = (MelodicMode)entry.FindPropertyRelative("_melodicMode").enumValueIndex;
             var isWalk = mode is MelodicMode.ScaleWalkUp or MelodicMode.ScaleWalkDown;
             var isTension = mode == MelodicMode.Tension;
+            var loopProp = entry.FindPropertyRelative("_loop");
+            var isLoop = loopProp != null && loopProp.boolValue;
 
             using (new EditorGUI.IndentLevelScope())
             {
@@ -180,6 +182,13 @@ namespace BalloonParty.Audio.Editor
                             break;
                         case "_tensionSemitones":
                             if (!isTension)
+                            {
+                                continue;
+                            }
+
+                            break;
+                        case "_singleInstance":
+                            if (!isLoop)
                             {
                                 continue;
                             }
