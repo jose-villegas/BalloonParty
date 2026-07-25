@@ -127,6 +127,55 @@ namespace BalloonParty.Tests.ShotSolver
             return new ShotItemLayer(effectParams, in resolvedLattice);
         }
 
+        // Phase C6 (Snipe): a real Snipe config entry — same one-item-type-worth-of-settings convention
+        // as the sibling factories above. Snipe has no core/effect board, so only SpeedBuffMultiplier
+        // ever matters to a test; the charge/bloom fields (rainbow-holder discharge presentation, folds
+        // into a later phase) are left at inert zeros.
+        private static ShotItemLayer CreateSnipeItemLayer(float speedBuffMultiplier)
+        {
+            var effectParams = new Dictionary<ItemType, ItemEffectParams>
+            {
+                {
+                    ItemType.Snipe,
+                    new ItemEffectParams(
+                        default, default, default, default,
+                        new SnipeEffectParams(
+                            speedBuffMultiplier, chargePerToughHit: 0, bloomBaseRadius: 0f, bloomRadiusPerCharge: 0f,
+                            bloomRadiusCap: 0f),
+                        damage: 0, flags: DamageFlags.Normal)
+                },
+            };
+            var lattice = default(ShotSlotLattice);
+            return new ShotItemLayer(effectParams, in lattice);
+        }
+
+        // Needed only by the chained-arm gap test below (the C6 "no DirectHit gate" ruling) — a Bomb
+        // and a Snipe config entry BOTH active in the same flight, since that test needs a Bomb blast
+        // to pop a Snipe-carrying balloon the projectile never touches directly.
+        private static ShotItemLayer CreateBombAndSnipeItemLayer(float bombRadius, float snipeSpeedBuffMultiplier)
+        {
+            var effectParams = new Dictionary<ItemType, ItemEffectParams>
+            {
+                {
+                    ItemType.Bomb,
+                    new ItemEffectParams(
+                        new BombEffectParams(bombRadius, rainbowEffectScale: 1f, rainbowConversionRange: 0f), default,
+                        default, default, default, damage: 1, flags: DamageFlags.Normal)
+                },
+                {
+                    ItemType.Snipe,
+                    new ItemEffectParams(
+                        default, default, default, default,
+                        new SnipeEffectParams(
+                            snipeSpeedBuffMultiplier, chargePerToughHit: 0, bloomBaseRadius: 0f,
+                            bloomRadiusPerCharge: 0f, bloomRadiusCap: 0f),
+                        damage: 0, flags: DamageFlags.Normal)
+                },
+            };
+            var lattice = default(ShotSlotLattice);
+            return new ShotItemLayer(effectParams, in lattice);
+        }
+
         // Shared by the fast-path lock test below — a full-tuple comparison, not just the four fields
         // the original Shield-era locks checked (see their own comment for why the complete tuple
         // matters: a stray item-plumbing side effect could easily land in a field neither of them read).
@@ -1648,6 +1697,369 @@ namespace BalloonParty.Tests.ShotSolver
 
             Assert.IsTrue(control.Died, "without an item to preserve, nothing grants the shield the same bounce needs");
             Assert.AreEqual(2, control.Pops, "the flight dies at the wall, never reaching the return-path filler");
+        }
+
+        [Test]
+        public void ResolveBalloonContact_SnipeHostArmsPierce_SubsequentContactsPopEverythingUnbent()
+        {
+            // Mirrors SnipeItemHandler.Activate's IsPiercing.Value = true grant (@ref
+            // plan_shot_solver_accuracy Phase C6): the host's own direct-hit pop arms the lance BEFORE
+            // the main loop resolves its next event (RunItemEffects/ApplyItemOutcome run synchronously
+            // inside ResolveBalloonContact), so the very next contact already flows through the
+            // piercing branch. A colourless int.MaxValue "deflector" (the existing Deflector-durability
+            // pattern @ref plan_shot_solver_accuracy Phase A) would normally deflect FOREVER — piercing
+            // instead pops it outright and unbent (no DeflectOffBalloon call at all — the ray keeps
+            // travelling straight up), reaching a THIRD balloon directly behind it that a bent ray could
+            // never hit.
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.05f, "Red", 1, 1, item: ItemType.Snipe),
+                ShotBoardBuilder.Tough(new Vector2(0f, 2f), 0.05f, 5, int.MaxValue),
+                ShotBoardBuilder.Green(new Vector2(0f, 3f), 0.05f, "Blue", 10, 1),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet, items: CreateSnipeItemLayer(speedBuffMultiplier: 1.5f));
+
+            Assert.AreEqual(
+                3, result.Pops,
+                "host + the int.MaxValue deflector (piercing pops it outright) + the balloon directly behind it");
+            Assert.IsTrue(result.BoardCleared);
+            // Red (Host, streak1: 1*1=1) + the deflector's flat/streak-breaking tough rule (5, no
+            // multiplier, colourless target) + Blue's fresh streak-of-1 (10*1=10) = 1 + 5 + 10 = 16.
+            Assert.AreEqual(1 + 5 + 10, result.RawScore);
+
+            // A control WITHOUT the item layer proves the deflector really would otherwise block the
+            // shot forever (never reaching Blue) — the contrast that makes "unbent" observable.
+            var controlBoard = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.05f, "Red", 1, 1),
+                ShotBoardBuilder.Tough(new Vector2(0f, 2f), 0.05f, 5, int.MaxValue),
+                ShotBoardBuilder.Green(new Vector2(0f, 3f), 0.05f, "Blue", 10, 1),
+            };
+            var controlWorkingSet = new ShotBalloonState[controlBoard.Length];
+            var control = ShotSimulator.Simulate(
+                controlBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: controlWorkingSet);
+
+            Assert.AreEqual(1, control.Pops, "without piercing, the deflector bounces the ray away — Blue is never reached");
+            Assert.IsFalse(control.BoardCleared);
+        }
+
+        [Test]
+        public void ResolveBalloonContact_SnipeSpeedBuff_AppliesAndIsNonStacking()
+        {
+            // The speed-buff half of Phase C6: CurrentSpeed multiplies baseSpeed by
+            // state.SpeedBuffMultiplier BEFORE any cruise ramp — no cruise config needed to observe it.
+            // Host1 grants the buff (multiplier 2x); Host2 is a SECOND Snipe pickup mid-flight with the
+            // SAME configured multiplier — non-stacking means it must be a no-op (ApplyItemOutcome's
+            // `!HasSpeedBuff` guard), so the final segment still runs at exactly 2x, not 2x*2x=4x. A
+            // compounding regression would land the final timestamp at 2.0 instead of 2.5 (see the
+            // per-segment hand-trace below) — the two are far enough apart that rounding can't hide it.
+            //
+            // Hand-trace (speed 1, multiplier 2.0): origin->Host1 distance 1 @ base speed 1 -> t=1.
+            // Host1 grants the buff. Host1->Host2 distance 1 @ 2x -> t=1.5. Host2's OWN grant attempt is
+            // swallowed (non-stacking) -> multiplier stays 2.0. Host2->Target distance 2 @ 2x (NOT 4x)
+            // -> t=1.5+2/2=2.5.
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.05f, "Red", 1, 1, item: ItemType.Snipe),
+                ShotBoardBuilder.Green(new Vector2(0f, 2f), 0.05f, "Blue", 1, 1, item: ItemType.Snipe),
+                ShotBoardBuilder.Green(new Vector2(0f, 4f), 0.05f, "Green", 1, 1),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+            var timestamps = new List<float>();
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet, projectileSpeed: 1f, timestampsOut: timestamps,
+                items: CreateSnipeItemLayer(speedBuffMultiplier: 2.0f));
+
+            Assert.AreEqual(3, result.Pops);
+            Assert.IsTrue(result.BoardCleared);
+            Assert.AreEqual(4, timestamps.Count);
+            Assert.AreEqual(1f, timestamps[1], 1e-4f, "origin -> Host1 at base speed, before any buff exists");
+            Assert.AreEqual(1.5f, timestamps[2], 1e-4f, "Host1 -> Host2 already at the 2x buff Host1 just granted");
+            Assert.AreEqual(
+                2.5f, timestamps[3], 1e-4f,
+                "Host2 -> Target still at 2x, NOT 4x — Host2's own re-grant was swallowed by the non-stacking guard");
+
+            // A no-snipe control on the identical geometry proves the buff is genuinely what shrinks the
+            // timeline above, not some property of the geometry itself.
+            var controlBoard = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.05f, "Red", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 2f), 0.05f, "Blue", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 4f), 0.05f, "Green", 1, 1),
+            };
+            var controlWorkingSet = new ShotBalloonState[controlBoard.Length];
+            var controlTimestamps = new List<float>();
+            ShotSimulator.Simulate(
+                controlBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: controlWorkingSet, projectileSpeed: 1f, timestampsOut: controlTimestamps);
+
+            Assert.AreEqual(
+                3f, controlTimestamps[3], 1e-4f,
+                "without any buff every segment runs at base speed — 1 + 1 + 2 = 4 units at speed 1");
+        }
+
+        [Test]
+        public void ResolveBalloonContact_RainbowSnipeHost_GrantedBuffSurvivesAShieldSpendingWallBounce()
+        {
+            // The buff-split's whole point (@ref plan_shot_solver_accuracy Phase C6): this is the SAME
+            // board shape as the sibling Shield test above
+            // (ResolveBalloonContact_RainbowShieldHost_GrantsColorAgnosticBuffThatEndsAtTheSpendingWall)
+            // with item: Snipe substituted for item: Shield — HandleWallBounce unconditionally clears
+            // ONLY RainbowBuffUntilWall on every bounce, leaving RainbowBuffUntilPierceEnd (the Snipe
+            // grant) untouched, so the buff (and the color-agnostic streak it drives) SURVIVES the exact
+            // same wall bounce that kills the Shield-granted sibling's — the opposite assertion from
+            // that test, on identical geometry.
+            //
+            // Red anchors a real streak of 1 -> Rainbow+Snipe host continues it to 2 (refund fires:
+            // streak>=2, same colour -> +1 shield) THEN arms pierce + the until-pierce-end buff -> Blue
+            // (buff active, streak climbs color-agnostically to 3, no refund — adopted colour now
+            // "Blue" != streak colour "Red") -> wall bounce (spends the ONE shield the refund banked;
+            // it survives, RainbowBuffUntilWall was never set so clearing it is a no-op,
+            // RainbowBuffUntilPierceEnd is untouched) -> Green (buff STILL active: streak keeps
+            // climbing to 4, unlike the sibling test's reset to 1).
+            var walls = new Vector4(1000f, 3.5f, -1000f, -1000f);
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(0.5f, 0f), 0.1f, "Red", 5, 1),
+                ShotBoardBuilder.Rainbow(new Vector2(1.5f, 0f), 0.1f, GamePalette.RainbowColorId, 1, 1, item: ItemType.Snipe),
+                ShotBoardBuilder.Green(new Vector2(2.5f, 0f), 0.1f, "Blue", 10, 1),
+                ShotBoardBuilder.Green(new Vector2(-0.5f, 0f), 0.1f, "Green", 100, 1),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, walls, Vector2.zero, Vector2.right, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet, items: CreateSnipeItemLayer(speedBuffMultiplier: 1.5f),
+                allowedColors: new[] { "Red" });
+
+            // Red(5*1) + rainbow anchors "Red"(1*2, +1 refund) + Blue buffed(10*3, no refund) + Green
+            // POST-WALL buffed(100*4, NOT reset — the sibling Shield test resets this pop to streak1
+            // instead, scoring 100 there vs 400 here).
+            Assert.AreEqual((5 * 1) + (1 * 2) + (10 * 3) + (100 * 4), result.RawScore);
+            Assert.AreEqual(4, result.Pops);
+            Assert.IsFalse(result.Died, "the streak-of-2 refund's single shield covers the one bounce");
+            Assert.IsTrue(result.BoardCleared);
+        }
+
+        [Test]
+        public void Simulate_SnipeArmedShot_NeverEntersCruise_UnlikeAnUnarmedControl()
+        {
+            // Mirrors ProjectileView.TryEnterCruise's own bar (@ref plan_shot_solver_accuracy Phase C6):
+            // "a shot already piercing without cruising is a Snipe lance — it must not enter cruise".
+            // A tiny Snipe-carrying balloon sits almost exactly at the origin so it's the flight's very
+            // first event, arming IsPiercing before any wall is ever reached; the empty corridor beyond
+            // it then bounces repeatedly with threshold=1 trivially satisfied every time, yet cruise
+            // must never engage — every wall-to-wall crossing keeps the SAME 4-unit/4-second interval
+            // (base speed), never the accelerating ramp a plain (unarmed) shot on the IDENTICAL corridor
+            // exhibits (mirrors Simulate_CruiseRamp_AcceleratesTimelineBounceToBounce's own mechanism).
+            var walls = new Vector4(1000f, 2f, -1000f, -2f);
+            var cruise = new ShotCruiseConfig(wallBounceThreshold: 1, speedPerShield: 1f);
+
+            // The main loop only runs `while (activeCount > 0)` — an otherwise-empty corridor would
+            // never even reach a wall crossing, so every board below carries an off-ray filler (never
+            // on the +x ray, so never an event candidate) purely to keep the flight alive through the
+            // repeated bounces this test observes.
+            var armedBoard = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(0.05f, 0f), 0.01f, "Red", 1, 1, item: ItemType.Snipe),
+                ShotBoardBuilder.Green(new Vector2(500f, 500f), 0.05f, "Blue", 1, 1),
+            };
+            var armedWorkingSet = new ShotBalloonState[armedBoard.Length];
+            var armedTimestamps = new List<float>();
+
+            ShotSimulator.Simulate(
+                armedBoard, walls, Vector2.zero, Vector2.right, startingShields: 10, projectileContactRadius: 0f,
+                workingSet: armedWorkingSet, projectileSpeed: 1f, cruiseConfig: cruise, timestampsOut: armedTimestamps,
+                items: CreateSnipeItemLayer(speedBuffMultiplier: 1f));
+
+            // [0]=origin, [1]=Snipe contact (t~0.05), [2..4]=wall bounces at constant +4s intervals.
+            Assert.GreaterOrEqual(armedTimestamps.Count, 5);
+            var firstInterval = armedTimestamps[3] - armedTimestamps[2];
+            var secondInterval = armedTimestamps[4] - armedTimestamps[3];
+            Assert.AreEqual(4f, firstInterval, 1e-3f, "piercing bars cruise entry — no acceleration on the first post-arm bounce");
+            Assert.AreEqual(4f, secondInterval, 1e-3f, "still no acceleration on the next bounce either — cruise never engages");
+
+            // Unarmed control: identical corridor and filler, no Snipe item anywhere — the FIRST
+            // crossing (index 1) is the cruise-ENTRY bounce (still base speed, no shield spent yet
+            // within the cruise); the SECOND (index 2) is where the ramp becomes observable, proving
+            // this geometry/threshold combination is genuinely capable of engaging cruise when nothing
+            // bars it.
+            var controlBoard = new[] { ShotBoardBuilder.Green(new Vector2(500f, 500f), 0.05f, "Blue", 1, 1) };
+            var controlWorkingSet = new ShotBalloonState[controlBoard.Length];
+            var controlTimestamps = new List<float>();
+            ShotSimulator.Simulate(
+                controlBoard, walls, Vector2.zero, Vector2.right, startingShields: 10,
+                projectileContactRadius: 0f, workingSet: controlWorkingSet, projectileSpeed: 1f, cruiseConfig: cruise,
+                timestampsOut: controlTimestamps);
+
+            var controlFirstInterval = controlTimestamps[2] - controlTimestamps[1];
+            var controlSecondInterval = controlTimestamps[3] - controlTimestamps[2];
+            Assert.AreEqual(4f, controlFirstInterval, 1e-3f, "cruise entry bounce — no shield spent yet, still base speed");
+            Assert.AreEqual(2f, controlSecondInterval, 1e-3f, "one shield spent within cruise — the ramp accelerates, unlike the armed shot above");
+        }
+
+        [Test]
+        public void ResolveBalloonContact_SnipeCarryingBoard_ItemsNullOrConfigMissing_MatchesPlainBoard()
+        {
+            // The Snipe-specific fast-path lock (mirrors the Shield/Bomb/Paint locks above) — a
+            // Snipe-carrying host that never gets to activate (items:null) or whose item layer has no
+            // Snipe entry in its config dict must behave byte-identically to a board with no item at
+            // all.
+            var plainBoard = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.05f, "Red", 3, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 2f), 0.05f, "Blue", 1, 1),
+            };
+            var snipeBoard = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.05f, "Red", 3, 1, item: ItemType.Snipe),
+                ShotBoardBuilder.Green(new Vector2(0f, 2f), 0.05f, "Blue", 1, 1),
+            };
+
+            var plainWorkingSet = new ShotBalloonState[plainBoard.Length];
+            var plainResult = ShotSimulator.Simulate(
+                plainBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: plainWorkingSet);
+
+            var itemsNullWorkingSet = new ShotBalloonState[snipeBoard.Length];
+            var itemsNullResult = ShotSimulator.Simulate(
+                snipeBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: itemsNullWorkingSet);
+
+            var missingConfigWorkingSet = new ShotBalloonState[snipeBoard.Length];
+            var missingConfigResult = ShotSimulator.Simulate(
+                snipeBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: missingConfigWorkingSet, items: CreateItemLayer());
+
+            AssertResultsMatch(plainResult, itemsNullResult);
+            AssertResultsMatch(plainResult, missingConfigResult);
+        }
+
+        [Test]
+        public void ResolveBalloonContact_BombChainsIntoASnipeHost_ArmsPierceTheSameAsADirectHit()
+        {
+            // The "no DirectHit gate" ruling (José, 2026-07-25 — see ShotItemLayer.ResolveSnipe's own
+            // comment): Resolve never reads activation.IsDirectHit for Snipe, so a Snipe host popped by
+            // an AoE effect must arm the lance exactly like the direct-hit case
+            // ResolveBalloonContact_SnipeHostArmsPierce...Unbent above already covers. Here the ray's
+            // ONLY direct hit is the Bomb host; its blast (radius 0.5) reaches a Snipe-carrying balloon
+            // 0.3 units away that the projectile never touches — PopItemHit's own chaining (the popped
+            // carrier's item re-enqueues onto the SAME FIFO RunItemEffects drains, @ref
+            // plan_shot_solver_accuracy Phase C2) resolves the chained Snipe activation before the main
+            // loop ever searches for its next event. The downstream int.MaxValue deflector is the same
+            // "unbent-through" proof test 1 uses: an unarmed shot deflects off it forever.
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0.05f, "Red", 1, 1, new Vector2Int(0, 0), 0, 0, 0f, false, null,
+                    item: ItemType.Bomb),
+                ShotBoardBuilder.Green(
+                    new Vector2(0.3f, 1f), 0.05f, "Blue", 1, 1, new Vector2Int(5, 5), 0, 0, 0f, false, null,
+                    item: ItemType.Snipe),
+                ShotBoardBuilder.Tough(
+                    new Vector2(0f, 3f), 0.05f, 5, int.MaxValue, new Vector2Int(9, 9), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 4f), 0.05f, "Green", 1, 1, new Vector2Int(20, 20), 0, 0, 0f, false, null),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet,
+                items: CreateBombAndSnipeItemLayer(bombRadius: 0.5f, snipeSpeedBuffMultiplier: 1.5f));
+
+            Assert.AreEqual(
+                4, result.Pops,
+                "bomb host + the chained Snipe host (its own blast target) + the piercing-popped deflector + the balloon behind it");
+            Assert.IsTrue(result.BoardCleared);
+
+            // A control WITHOUT the item layer proves the deflector really would otherwise block the shot
+            // forever, and that the Snipe host is never touched at all without the bomb wiring — the
+            // contrast that makes "the chain actually armed piercing" observable.
+            var controlWorkingSet = new ShotBalloonState[board.Length];
+            var control = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: controlWorkingSet);
+
+            Assert.AreEqual(
+                1, control.Pops, "without items, only the bomb host's own direct hit pops — no blast, no chain, no pierce");
+            Assert.IsFalse(control.BoardCleared);
+        }
+
+        [Test]
+        public void ResolveBalloonContact_SnipeReGrantsAfterACruiseEarnedPierceDischargesAtAWall()
+        {
+            // Traces reachability the C6 reviewer flagged: the NEW clearing lines in HandleWallBounce's
+            // cruise-ending branch (state.HasSpeedBuff = false; state.SpeedBuffMultiplier = 1f;
+            // state.RainbowBuffUntilPierceEnd = false;) exist specifically so a stale grant from an
+            // EARLIER Snipe pop can't permanently block a LATER one. This drives the sequence that
+            // reaches that branch WITHOUT needing E2's pierce-discharge machinery: cruise-earned piercing
+            // (not Snipe's own arm) means that by the time this flight reaches its first Snipe host, the
+            // shot is ALREADY piercing — so the early "any contact cancels an un-pierced cruise" guard
+            // (ResolveBalloonContact's own `if (!state.IsPiercing) { ConsecutiveWallBounces = 0;
+            // IsCruising = false; }`) never fires, and the Snipe grant rides alongside the ongoing ramp
+            // instead of being blocked from ever landing. Plowing a Tough while piercing then decays
+            // PierceSpeedScale below 1, so the next wall bounce takes the cruise-ending branch and clears
+            // everything. A SECOND Snipe host afterward proves the clear actually re-opened the
+            // non-stacking guard — deliberately NOT asserting anything about the intermediate "cruising
+            // AND Snipe-buffed" segment's own speed (whether the two should multiplicatively stack is an
+            // open design question the C6 reviewer still needs to settle, not something this test should
+            // ossify as a contract).
+            //
+            // Geometry: a box (Right=2.1, Bottom=-2, Left=-0.9, Top effectively open) with an initial
+            // 3-4-5 diagonal (0.6,-0.8) so each bounce reflects off a DIFFERENT wall — unlike an
+            // axis-aligned corridor (where every leg after the first retraces the same span), this sweeps
+            // fresh territory each leg, letting every balloon below sit on the ONE leg it's meant for
+            // without ever crossing an earlier leg's path (verified by direct reflection-math trace, not
+            // just by construction). Bounce1 (Bottom, cruise entry) -> bounce2 (Right, one more shield
+            // spent since entry == PiercingTapThreshold -> cruise-earned piercing) -> leg3 carries the
+            // first Snipe host (t=1, buff grants) then a 2-hit Tough (t=3, piercing plows it straight
+            // through, PierceSpeedScale *= 0.5) -> bounce3 (Left, PierceSpeedScale < 1 -> ends
+            // cruise+pierce+ALL buffs) -> leg4 carries the reset proof (a base-speed segment) then a
+            // second Snipe host (t=1 along leg4, re-grants) then a final target (t=4) whose approach speed
+            // proves the re-grant actually applied.
+            var walls = new Vector4(1000000f, 2.1f, -2f, -0.9f);
+            var cruise = new ShotCruiseConfig(wallBounceThreshold: 1, speedPerShield: 1f, piercingTapThreshold: 1);
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(1.5f, -0.4f), 0.05f, "Red", 1, 1, item: ItemType.Snipe),
+                ShotBoardBuilder.Tough(new Vector2(0.3f, 1.2f), 0.05f, 5, 2),
+                ShotBoardBuilder.Green(new Vector2(-0.3f, 3.6f), 0.05f, "Red", 1, 1, item: ItemType.Snipe),
+                ShotBoardBuilder.Green(new Vector2(1.5f, 6.0f), 0.05f, "Red", 1, 1),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+            var timestamps = new List<float>();
+
+            var result = ShotSimulator.Simulate(
+                board, walls, Vector2.zero, new Vector2(0.6f, -0.8f), startingShields: 10, projectileContactRadius: 0f,
+                workingSet: workingSet, projectileSpeed: 1f, cruiseConfig: cruise, timestampsOut: timestamps,
+                items: CreateSnipeItemLayer(speedBuffMultiplier: 2.0f));
+
+            Assert.AreEqual(4, result.Pops);
+            Assert.IsTrue(result.BoardCleared);
+            Assert.IsFalse(result.Died, "10 starting shields comfortably covers the 3 real wall bounces");
+
+            // [0]=origin, [1]=bounce1 (Bottom, cruise entry), [2]=bounce2 (Right, piercing earned),
+            // [3]=first Snipe host, [4]=Tough (piercing plow), [5]=bounce3 (Left, ends cruise+pierce+
+            // buffs), [6]=second Snipe host, [7]=final target.
+            Assert.AreEqual(8, timestamps.Count);
+
+            var resetSegment = timestamps[6] - timestamps[5];
+            Assert.AreEqual(
+                1f, resetSegment, 1e-3f,
+                "bounce3 -> the second host at BASE speed (distance 1, speed 1) — a SpeedBuffMultiplier left stuck at 2x would halve this to 0.5");
+
+            var regrantSegment = timestamps[7] - timestamps[6];
+            Assert.AreEqual(
+                1.5f, regrantSegment, 1e-3f,
+                "second host -> target at 2x again (distance 3, speed 2) — a HasSpeedBuff left stuck true would silently swallow the re-grant and leave this at base speed (3.0) instead");
         }
     }
 }

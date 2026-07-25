@@ -336,11 +336,23 @@ namespace BalloonParty.Solver
                 state.ConsecutiveWallBounces = 0;
                 state.PierceSpeedScale = 1f;
                 state.IsPiercing = false;
-                // Mirrors PierceEndedEndCondition: a Snipe-granted speed buff rides the pierce, so
-                // it ends here too.
+                // Mirrors PierceEndedEndCondition firing on IsPiercing going false: BOTH concrete
+                // pierce-riding grants end here, not just the multiplier — leaving HasSpeedBuff/
+                // RainbowBuffUntilPierceEnd stuck true would wrongly block a LATER Snipe re-grant
+                // (ApplyItemOutcome's non-stacking guard) and leave a stale buff flag set forever.
+                state.HasSpeedBuff = false;
                 state.SpeedBuffMultiplier = 1f;
+                state.RainbowBuffUntilPierceEnd = false;
             }
-            else if (cruiseConfig.WallBounceThreshold > 0 && !state.IsCruising
+            // Mirrors ProjectileView.TryEnterCruise's own bar (@ref plan_shot_solver_accuracy Phase
+            // C6): a shot already piercing without cruising is a Snipe lance and must never enter
+            // cruise, which would layer on the per-shield speed tap it deliberately excludes. Without
+            // this, a Snipe-armed shot could accumulate bounces (a piercing contact never resets the
+            // counter — see the `!state.IsPiercing` guard above it) and wrongly slip into the
+            // IsCruising branch above on a later bounce, ending its pierce/buffs early through a
+            // proxy live never applies to it. A cruise-earned pierce is always already cruising when
+            // granted (below), so this only ever gates the Snipe case.
+            else if (cruiseConfig.WallBounceThreshold > 0 && !state.IsCruising && !state.IsPiercing
                 && state.ConsecutiveWallBounces >= cruiseConfig.WallBounceThreshold
                 && IsPathClearAhead(
                     walls, position, state.Direction, cruiseConfig.WallBounceThreshold, projectileContactRadius,

@@ -186,12 +186,35 @@ namespace BalloonParty.Solver
                 case ItemType.Paint:
                     return ResolvePaint(in activation, workingSet, activeCount, hitsOut);
 
-                // Snipe is plumbing-only until Phase C6 wires ArmsPierce/SpeedBuffMultiplier against
-                // _effectParams — it has no core and never touches _effectBoard at all.
                 case ItemType.Snipe:
+                    return ResolveSnipe(in activation);
+
                 default:
                     return default;
             }
+        }
+
+        // Mirrors SnipeItemHandler.Activate's selection (verified 2026-07-25): arms the lance
+        // (ArmsPierce — piercing WITHOUT entering cruise, unlike a cruise-earned pierce) and always
+        // requests the configured speed multiplier; the non-stacking "refresh, don't add" rule lives
+        // entirely on the APPLY side (ApplyItemOutcome's !HasSpeedBuff guard), mirroring live's own
+        // !HasBuff(Speed) check — Resolve itself never needs to know the current flight state. A
+        // rainbow host ADDITIONALLY grants the until-pierce-end buff, tied to the SAME pierce. No
+        // DirectHit gate (José's ruling, 2026-07-25 — live has none; Item/README.md's claim is stale
+        // and corrected by a later scribe pass) — a chained (bomb/laser/etc-popped) Snipe host arms
+        // the lance exactly like a direct hit. No core, no EffectHits — Snipe is a pure state grant,
+        // same shape as Shield.
+        private ShotItemOutcome ResolveSnipe(in ShotItemActivation activation)
+        {
+            if (!_effectParams.TryGetValue(ItemType.Snipe, out var settings))
+            {
+                return default;
+            }
+
+            return new ShotItemOutcome(
+                shieldDelta: 0, grantsRainbowBuffUntilWall: false,
+                grantsRainbowBuffUntilPierceEnd: activation.IsRainbowHost, armsPierce: true,
+                speedBuffMultiplier: settings.Snipe.SpeedBuffMultiplier);
         }
 
         // Mirrors ShieldItemHandler.Activate (verified 2026-07-25): +1 shield on the projectile
