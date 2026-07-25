@@ -93,9 +93,20 @@ namespace BalloonParty.Solver
                 // `!IsRainbow &&` guard that silently mismatched GridEffectBoard for a rainbow neighbour.
                 var isPaintable = !string.IsNullOrEmpty(workingSet[i].ColorId);
 
+                // Mirrors `model is IResistsPaint` (@ref plan_shot_solver_accuracy Phase C5, verified
+                // 2026-07-25): only ToughBalloonModel/UnbreakableBalloonModel implement it, and both
+                // gather as a colourless ForToughTarget entry with WashesProjectileColor false.
+                // BubbleClusterModel is ALSO a colourless ForToughTarget entry (soap) but does NOT
+                // implement IResistsPaint — WashesProjectileColor true is exactly its own marker, so a
+                // colourless, non-washing entry resists paint and a colourless washing one doesn't, with
+                // no new snapshot field needed. Failure mode: a FUTURE colourless model that is neither
+                // IResistsPaint nor IWashesProjectileColor would incorrectly resist here — revisit this
+                // inference (or add a real snapshot flag) if one is ever added.
+                var resistsPaint = !isPaintable && !workingSet[i].WashesProjectileColor;
+
                 _occupants.Add(new EffectOccupant(
                     _occupants.Count, workingSet[i].SlotIndex, workingSet[i].Position, slotPosition,
-                    workingSet[i].Radius, workingSet[i].ColorId, isPaintable, resistsPaint: false));
+                    workingSet[i].Radius, workingSet[i].ColorId, isPaintable, resistsPaint));
             }
         }
 

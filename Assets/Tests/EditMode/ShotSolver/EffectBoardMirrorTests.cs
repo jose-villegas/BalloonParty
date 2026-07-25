@@ -6,6 +6,7 @@ using BalloonParty.Item.Bomb;
 using BalloonParty.Item.Effects;
 using BalloonParty.Item.Laser;
 using BalloonParty.Item.Lightning;
+using BalloonParty.Item.Paint;
 using BalloonParty.Shared;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
@@ -39,7 +40,12 @@ namespace BalloonParty.Tests.ShotSolver
             Green,
             Tough,
             Unbreakable,
-            Rainbow
+            Rainbow,
+
+            // Soap: colourless like Tough/Unbreakable, but IWashesProjectileColor, NOT IResistsPaint
+            // (BubbleClusterModel implements neither IPaintable nor IResistsPaint) — see
+            // ResistsPaint_ToughUnbreakableAndSoapOccupants_MatchesLiveFormulaOnBothBoards.
+            Soap
         }
 
         private readonly struct OccupantSpec
@@ -470,6 +476,141 @@ namespace BalloonParty.Tests.ShotSolver
             Assert.IsNull(LightningChain.FindNearestConcreteColor(simBoard, center, rainbowColorId));
         }
 
+        [Test]
+        public void PaintResolve_MixedClusterAgreesBetweenBoards_AcceptsSkipsResistsAndGapsCorrectly()
+        {
+            // Row 0 only (HexCoordinates world.x = 2*col - 0.5, world.y = 0 for sep=(1,1)/offset=0):
+            // col0=-0.5, col1=1.5, col2=3.5, col5=9.5, col6=11.5. Two blobs at (0,0) and (10,0), radius
+            // 2.0 (radiusSqr 4.0): col0 (dist 0.5 from blobA) and col5 (dist 0.5 from blobB) are the
+            // only DIFFERENT-colour paintable occupants in range — they accept. col1 (dist 1.5 from
+            // blobA, well within range) shares the paint colour ("Red") and must skip regardless of
+            // distance — mirrors TryClassify's own colour-equality gate running BEFORE any distance
+            // check. col6 (dist 1.5 from blobB) is a Tough (ResistsPaint, not IsPaintable) and must skip
+            // despite sitting in range — PaintSpread never emits a hit for a resist occupant (the drip
+            // is live-only presentation this core never models). col2 (dist 3.5/6.5 from A/B) sits
+            // outside BOTH blobs' reach — the gap case (@ref plan_shot_solver_accuracy Phase C5).
+            var occupants = new[]
+            {
+                new OccupantSpec(new Vector2Int(0, 0), OccupantKind.Green, "Blue"),
+                new OccupantSpec(new Vector2Int(1, 0), OccupantKind.Green, "Red"),
+                new OccupantSpec(new Vector2Int(2, 0), OccupantKind.Green, "Purple"),
+                new OccupantSpec(new Vector2Int(5, 0), OccupantKind.Green, "Green"),
+                new OccupantSpec(new Vector2Int(6, 0), OccupantKind.Tough),
+            };
+
+            var grid = BuildGrid(7, 1);
+            PlaceOnGrid(grid, occupants);
+            var gridBoard = new GridEffectBoard(grid, OccupantRadius);
+            gridBoard.Rebuild();
+
+            var workingSet = BuildWorkingSet(grid, occupants);
+            var simBoard = new ShotSimEffectBoard(BuildLattice(grid));
+            simBoard.Bind(workingSet, workingSet.Length);
+
+            var blobPositions = new[] { new Vector2(0f, 0f), new Vector2(10f, 0f) };
+            const float blobRadius = 2.0f;
+            const string paintColorId = "Red";
+
+            var gridHits = new List<EffectHit>();
+            PaintSpread.Resolve(gridBoard, blobPositions, blobRadius, paintColorId, gridHits);
+
+            var simHits = new List<EffectHit>();
+            PaintSpread.Resolve(simBoard, blobPositions, blobRadius, paintColorId, simHits);
+
+            AssertSameHitSet(gridBoard, gridHits, simBoard, simHits);
+
+            Assert.AreEqual(2, gridHits.Count, "only the two different-colour, in-range, paintable occupants accept");
+            AssertHit(gridBoard, gridHits, new Vector2Int(0, 0), EffectHitKind.Recolor, paintColorId);
+            AssertHit(gridBoard, gridHits, new Vector2Int(5, 0), EffectHitKind.Recolor, paintColorId);
+            AssertNoHit(gridBoard, gridHits, new Vector2Int(1, 0));
+            AssertNoHit(gridBoard, gridHits, new Vector2Int(2, 0));
+            AssertNoHit(gridBoard, gridHits, new Vector2Int(6, 0));
+
+            AssertPaintGroup(gridBoard, gridHits, new Vector2Int(0, 0), 0);
+            AssertPaintGroup(gridBoard, gridHits, new Vector2Int(5, 0), 1);
+            AssertPaintGroup(simBoard, simHits, new Vector2Int(0, 0), 0);
+            AssertPaintGroup(simBoard, simHits, new Vector2Int(5, 0), 1);
+        }
+
+        [Test]
+        public void ResistsPaint_ToughUnbreakableAndSoapOccupants_MatchesLiveFormulaOnBothBoards()
+        {
+            // A direct pin for EffectOccupant.ResistsPaint itself (@ref plan_shot_solver_accuracy Phase
+            // C5) — PaintSpread never actually READS this field yet (only IsPaintable gates its own
+            // selection; a resist occupant is already excluded by IsPaintable alone, since Tough/
+            // Unbreakable are colourless — see PaintSpread's own doc for the documented future repoint
+            // that would read it), so nothing else in the suite asserts its VALUE on either board.
+            // Tough/Unbreakable resist (colourless AND not a washer); a Soap (BubbleClusterModel) is
+            // ALSO colourless but is NOT IResistsPaint — IWashesProjectileColor is its own distinct
+            // marker — so it must compute false, identically to an ordinary paintable green. Getting
+            // this formula wrong on either board (GridEffectBoard's `model is IResistsPaint` or
+            // ShotSimEffectBoard's `!isPaintable && !washesProjectileColor`) would silently diverge live
+            // from the sim the day something starts reading it.
+            var occupants = new[]
+            {
+                new OccupantSpec(new Vector2Int(0, 0), OccupantKind.Green, "Red"),
+                new OccupantSpec(new Vector2Int(1, 0), OccupantKind.Tough),
+                new OccupantSpec(new Vector2Int(2, 0), OccupantKind.Unbreakable),
+                new OccupantSpec(new Vector2Int(3, 0), OccupantKind.Soap),
+            };
+
+            var grid = BuildGrid(4, 1);
+            PlaceOnGrid(grid, occupants);
+            var gridBoard = new GridEffectBoard(grid, OccupantRadius);
+            gridBoard.Rebuild();
+
+            var workingSet = BuildWorkingSet(grid, occupants);
+            var simBoard = new ShotSimEffectBoard(BuildLattice(grid));
+            simBoard.Bind(workingSet, workingSet.Length);
+
+            AssertResistsPaint(gridBoard, new Vector2Int(0, 0), expectedPaintable: true, expectedResists: false);
+            AssertResistsPaint(gridBoard, new Vector2Int(1, 0), expectedPaintable: false, expectedResists: true);
+            AssertResistsPaint(gridBoard, new Vector2Int(2, 0), expectedPaintable: false, expectedResists: true);
+            AssertResistsPaint(gridBoard, new Vector2Int(3, 0), expectedPaintable: false, expectedResists: false);
+
+            AssertResistsPaint(simBoard, new Vector2Int(0, 0), expectedPaintable: true, expectedResists: false);
+            AssertResistsPaint(simBoard, new Vector2Int(1, 0), expectedPaintable: false, expectedResists: true);
+            AssertResistsPaint(simBoard, new Vector2Int(2, 0), expectedPaintable: false, expectedResists: true);
+            AssertResistsPaint(simBoard, new Vector2Int(3, 0), expectedPaintable: false, expectedResists: false);
+        }
+
+        private static void AssertResistsPaint(
+            IEffectBoard board, Vector2Int slot, bool expectedPaintable, bool expectedResists)
+        {
+            for (var i = 0; i < board.Occupants.Count; i++)
+            {
+                if (board.Occupants[i].Slot != slot)
+                {
+                    continue;
+                }
+
+                Assert.AreEqual(expectedPaintable, board.Occupants[i].IsPaintable, $"IsPaintable mismatch at {slot}");
+                Assert.AreEqual(expectedResists, board.Occupants[i].ResistsPaint, $"ResistsPaint mismatch at {slot}");
+                return;
+            }
+
+            Assert.Fail($"expected an occupant at {slot}");
+        }
+
+        // Group carries the accepted occupant's nearest-blob index (see EffectHit's own doc) —
+        // independent of AssertHit's (slot, kind, colour) check above.
+        private static void AssertPaintGroup(
+            IEffectBoard board, IReadOnlyList<EffectHit> hits, Vector2Int slot, int expectedGroup)
+        {
+            for (var i = 0; i < hits.Count; i++)
+            {
+                if (board.Occupants[hits[i].Handle].Slot != slot)
+                {
+                    continue;
+                }
+
+                Assert.AreEqual(expectedGroup, hits[i].Group, $"unexpected blob group at slot {slot}");
+                return;
+            }
+
+            Assert.Fail($"expected a hit at slot {slot}");
+        }
+
         // Verifies a chain's OWN claimed jump order — Group is the core's own per-hit ordering index
         // (see EffectHit's doc), so this checks BOTH that the hit list itself is nearest-first AND that
         // Group matches each hit's position in that list, independent of raw Handle numbering (which may
@@ -496,6 +637,9 @@ namespace BalloonParty.Tests.ShotSolver
                         new BalloonModelConfig(typeName: BalloonType.Tough, hitsToPop: 5)),
                     OccupantKind.Unbreakable => new UnbreakableBalloonModel(
                         new BalloonModelConfig(typeName: BalloonType.Unbreakable)),
+                    OccupantKind.Soap => new BubbleClusterModel(
+                        new BalloonModelConfig(typeName: BalloonType.BubbleCluster, hitsToPop: 5),
+                        Substitute.For<IGamePalette>()),
                     _ => BuildGreen(spec.ColorId),
                 };
                 grid.Place(actor, null, spec.Slot);
@@ -525,6 +669,8 @@ namespace BalloonParty.Tests.ShotSolver
                         paysSourceColor: true),
                     OccupantKind.Rainbow => ShotBoardBuilder.Rainbow(
                         position, OccupantRadius, spec.ColorId, 1, 1, spec.Slot, 0, 0, 0f, false, null),
+                    OccupantKind.Soap => ShotBoardBuilder.Tough(
+                        position, OccupantRadius, 1, int.MaxValue, spec.Slot, 0, 0, 0f, false, null, washes: true),
                     _ => ShotBoardBuilder.Green(
                         position, OccupantRadius, spec.ColorId, 1, 1, spec.Slot, 0, 0, 0f, false, null),
                 };

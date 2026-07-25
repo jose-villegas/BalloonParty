@@ -3,6 +3,7 @@ using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Item.Effects;
+using BalloonParty.Item.Paint;
 using BalloonParty.Shared;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Solver;
@@ -100,6 +101,30 @@ namespace BalloonParty.Tests.ShotSolver
             };
             var lattice = new ShotSlotLattice(new Vector2(1f, 1f), Vector2.zero, 2000, 2000);
             return new ShotItemLayer(effectParams, in lattice, rainbowColorId);
+        }
+
+        // Phase C5 (Paint): a real Paint config entry — same one-item-type-worth-of-settings
+        // convention as the sibling factories above. UNLIKE Bomb/Laser, Paint's selection sorts over
+        // the LATTICE SlotPosition (topology, not physical overlap — same reasoning as Lightning's own
+        // comment), so a real lattice matters here too; an optional override lets a boundary test tune
+        // Separation/Offset so a convenient slot lands at an EXACT distance from a packed blob (see
+        // ShotSlotLattice.SlotPosition's formula) instead of only "within" a coarse unit grid.
+        private static ShotItemLayer CreatePaintItemLayer(
+            float spreadOffset, float spreadLength, float spreadBaseWidth, float spreadBlobRadius,
+            ShotSlotLattice? lattice = null, int damage = 1, DamageFlags flags = DamageFlags.Normal)
+        {
+            var effectParams = new Dictionary<ItemType, ItemEffectParams>
+            {
+                {
+                    ItemType.Paint,
+                    new ItemEffectParams(
+                        default, default, default,
+                        new PaintEffectParams(spreadOffset, spreadLength, spreadBaseWidth, spreadBlobRadius), default,
+                        damage, flags)
+                },
+            };
+            var resolvedLattice = lattice ?? new ShotSlotLattice(new Vector2(1f, 1f), Vector2.zero, 2000, 2000);
+            return new ShotItemLayer(effectParams, in resolvedLattice);
         }
 
         // Shared by the fast-path lock test below — a full-tuple comparison, not just the four fields
@@ -1271,6 +1296,358 @@ namespace BalloonParty.Tests.ShotSolver
                 result.Died,
                 "the Shield-carrier's own chained activation was rejected by the exhausted budget, so its +1 grant never applied — 0 shields dies on the very first bounce");
             Assert.IsFalse(result.BoardCleared, "the trailing Blue filler, past the fatal bounce, is never reached");
+        }
+
+        [Test]
+        public void ApplyEffectHits_PaintRecolorsDownstreamBalloon_LaterPopScoresUnderTheNewColour()
+        {
+            // THE headline case (@ref plan_shot_solver_accuracy Phase C5's "paint recolors the balloon
+            // the shot is already flying toward"): the Paint host pops FIRST (adopts "Red", streak 1),
+            // recolouring the downstream balloon (originally "Blue") to "Red" via ApplyEffectHits'
+            // EXISTING Recolor branch — BEFORE the ray's own continuing flight resolves the downstream
+            // contact. A stale snapshot (the recolour landing too late) would have the downstream pop
+            // still see "Blue", adopt IT instead, and RESET the streak to 1; recolouring in time
+            // instead EXTENDS the "Red" streak to 2. The two outcomes diverge by 2x (201 vs 101), so
+            // this total is itself the proof — no need to separately re-run a "buggy" variant.
+            //
+            // Host at (0,1), downstream at (0,2): SpreadOffset 0 + SpreadLength == SpreadBlobRadius
+            // collapses PaintTriangle.PackBlobs to exactly ONE blob, landing at host.Position + up*1 =
+            // (0,2). The downstream's LATTICE position (-0.5,2) — slot (0,-2), sep=(1,1)/offset=0, see
+            // ShotSlotLattice.SlotPosition's formula — sits 0.5 from that blob, inside the 1.0 radius.
+            const float r = 1.0f;
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0.05f, "Red", 1, 1, new Vector2Int(50, 50), 0, 0, 0f, false, null,
+                    item: ItemType.Paint),
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 2f), 0.05f, "Blue", 100, 1, new Vector2Int(0, -2), 0, 0, 0f, false, null),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet,
+                items: CreatePaintItemLayer(spreadOffset: 0f, spreadLength: r, spreadBaseWidth: 4f * r, spreadBlobRadius: r));
+
+            Assert.AreEqual(2, result.Pops);
+            Assert.IsTrue(result.BoardCleared);
+            Assert.AreEqual(
+                (1 * 1) + (100 * 2), result.RawScore,
+                "the downstream pop must score under the NEW colour (\"Red\", streak 2) — the stale \"Blue\" would instead score 100*1=100, total 101");
+        }
+
+        [Test]
+        public void ApplyEffectHits_PaintRainbowHost_PaintsDownstreamRainbowWhichThenScoresViaTheRainbowBranch()
+        {
+            // A rainbow host's colour IS the rainbow marker (PaintItemHandler.cs:63-71) — the SAME
+            // recolour path Paint always runs converts a normal downstream balloon to rainbow too. A
+            // real coloured seed pop establishes a non-null, non-rainbow ProjectileColor FIRST, so
+            // neither the host's own pop nor the downstream's takes the DEFERRED branch (see
+            // ResolvePopScore's isRainbowTargetDeferred guard) — letting the downstream's LATER pop
+            // exercise the ordinary rainbow-attribution branch (item 4 in ResolvePopScore, not
+            // Wildcard/Deferred): primary = allowed("Green") -> RecordColor("Green"), extending the
+            // SAME streak the seed and host built.
+            //
+            // Hand-trace: seed (5*streak1=5) -> host (rainbow, primary "Green", streak1->2: 10*2=20) ->
+            // paint converts downstream to rainbow -> downstream (rainbow, primary "Green",
+            // streak2->3: 100*3=300). Total 5+20+300=325.
+            const float r = 1.0f;
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 0.5f), 0.05f, "Green", 5, 1, new Vector2Int(100, 100), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Rainbow(
+                    new Vector2(0f, 1f), 0.05f, GamePalette.RainbowColorId, 10, 1, new Vector2Int(50, 50), 0, 0, 0f,
+                    false, null, item: ItemType.Paint),
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 2f), 0.05f, "Blue", 100, 1, new Vector2Int(0, -2), 0, 0, 0f, false, null),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet,
+                items: CreatePaintItemLayer(spreadOffset: 0f, spreadLength: r, spreadBaseWidth: 4f * r, spreadBlobRadius: r),
+                rainbowColorId: GamePalette.RainbowColorId, allowedColors: new[] { "Green" });
+
+            Assert.AreEqual(3, result.Pops);
+            Assert.IsTrue(result.BoardCleared);
+            Assert.AreEqual(
+                5 + 20 + 300, result.RawScore,
+                "the painted-rainbow downstream must score via the rainbow attribution branch, not an ordinary colour pop");
+        }
+
+        [Test]
+        public void ApplyEffectHits_PaintGreenOnRainbowTarget_ClearsIsRainbow()
+        {
+            // The other direction of the C5 headline pair: a normal (non-rainbow) host paints an
+            // ALREADY-rainbow survivor back to an ordinary colour — TryClassify accepts any IPaintable
+            // whose colour differs from the paint colour, rainbow included, and ApplyRecolor's plain
+            // assignment clears IsRainbow with no separate branch (mirrors ApplyColorChange writing
+            // IHasColor.Color.Value directly, live-side). The target sits off the flight's ray entirely
+            // (only ever reachable via Paint) so it survives to inspect afterward.
+            const float r = 1.0f;
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0.05f, "Green", 2, 1, new Vector2Int(50, 50), 0, 0, 0f, false, null,
+                    item: ItemType.Paint),
+                ShotBoardBuilder.Rainbow(
+                    new Vector2(300f, 300f), 0.05f, GamePalette.RainbowColorId, 1, 1, new Vector2Int(0, -2), 0, 0,
+                    0f, false, null),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet,
+                items: CreatePaintItemLayer(spreadOffset: 0f, spreadLength: r, spreadBaseWidth: 4f * r, spreadBlobRadius: r),
+                rainbowColorId: GamePalette.RainbowColorId);
+
+            Assert.AreEqual(1, result.Pops, "only the host pops — the target survives, reachable only via paint");
+            Assert.IsFalse(result.BoardCleared);
+
+            var target = FindByPosition(workingSet, new Vector2(300f, 300f));
+            Assert.IsFalse(target.IsRainbow, "green paint clears IsRainbow on a previously-rainbow target");
+            Assert.AreEqual("Green", target.ColorId);
+        }
+
+        [Test]
+        public void ApplyEffectHits_ChainedPaintActivation_FansUpwardRegardlessOfTheShotsRealDirection()
+        {
+            // A CHAINED activation (a popped item's own item pop, not a direct hit) always passes
+            // Vector2.zero as ProjectileDirection (@ref plan_shot_solver_accuracy Phase C §3's
+            // ShotItemActivation doc) — PaintTriangle.Build's own direction fallback treats that as
+            // "fan upward", regardless of the shot's REAL travel direction. The shot here travels
+            // along +x (RIGHT) so "up" is geometrically distinguishable from it: a Bomb-carrying host
+            // pops a Paint-carrying balloon B (off the flight's ray, only ever reached via the blast),
+            // and B's own chained Paint activation must fan UP from B's position, not rightward along
+            // the shot's actual travel.
+            //
+            // A single blob lands at B.Position(5,5) + up*1 = (5,6) (SpreadOffset 0 + SpreadLength ==
+            // SpreadBlobRadius, same one-blob recipe as the other Paint tests). Target T's LATTICE
+            // position is placed at (5.5,6) via slot (3,-6) — distance 0.5 from that blob, inside the
+            // 1.0 radius. Had the fan wrongly used the shot's real direction (right) instead, the blob
+            // would land at (6,5) — distance ~1.118 from T, OUTSIDE the radius — so T recolouring at
+            // all is itself the proof the zero-direction fallback fired.
+            const float r = 1.0f;
+            var effectParams = new Dictionary<ItemType, ItemEffectParams>
+            {
+                {
+                    ItemType.Bomb,
+                    new ItemEffectParams(
+                        new BombEffectParams(10f, rainbowEffectScale: 1f, rainbowConversionRange: 0f), default,
+                        default, default, default, 1, DamageFlags.Normal)
+                },
+                {
+                    ItemType.Paint,
+                    new ItemEffectParams(
+                        default, default, default, new PaintEffectParams(0f, r, 4f * r, r), default, 1,
+                        DamageFlags.Normal)
+                },
+            };
+            var lattice = new ShotSlotLattice(new Vector2(1f, 1f), Vector2.zero, 2000, 2000);
+            var items = new ShotItemLayer(effectParams, in lattice);
+
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(1f, 0f), 0.05f, "Yellow", 1, 1, new Vector2Int(0, 0), 0, 0, 0f, false, null,
+                    item: ItemType.Bomb),
+                ShotBoardBuilder.Green(
+                    new Vector2(5f, 5f), 0.05f, "Red", 1, 1, new Vector2Int(99, 99), 0, 0, 0f, false, null,
+                    item: ItemType.Paint),
+                ShotBoardBuilder.Green(
+                    new Vector2(400f, 400f), 0.05f, "Blue", 1, 1, new Vector2Int(3, -6), 0, 0, 0f, false, null),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.right, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet, items: items);
+
+            Assert.AreEqual(2, result.Pops, "host (direct) and B (bomb-triggered) pop; T survives untouched by either");
+            Assert.IsFalse(result.BoardCleared);
+
+            var target = FindByPosition(workingSet, new Vector2(400f, 400f));
+            Assert.AreEqual(
+                "Red", target.ColorId,
+                "the chained paint fanned UP from B's position, not along the shot's real rightward travel");
+        }
+
+        [Test]
+        public void ApplyEffectHits_PaintBlobRadiusBoundary_JustInsideRecolorsJustOutsideSurvives()
+        {
+            // Host at (0,1) firing straight up: SpreadOffset 0 + SpreadLength == SpreadBlobRadius (1.0)
+            // collapses PaintTriangle.PackBlobs to exactly ONE blob, landing at host.Position + up*1 =
+            // (0,2) (same derivation as the other Paint tests). The target's LATTICE position (its real
+            // Position sits off the ray entirely) is placed at EXACTLY blobRadius +/- 0.01 from that
+            // blob by tuning the lattice's own Separation.x/Offset so slot (0,0) lands there precisely:
+            // ShotSlotLattice.SlotPosition's formula gives slot (0,0) at (-Separation.x/2, Offset.y)
+            // when Offset.x is 0.
+            const float r = 1.0f;
+
+            var insideLattice = new ShotSlotLattice(new Vector2(-2f * (r - 0.01f), 1f), new Vector2(0f, 2f), 10, 10);
+            var insideBoard = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0.05f, "Yellow", 2, 1, new Vector2Int(50, 50), 0, 0, 0f, false, null,
+                    item: ItemType.Paint),
+                ShotBoardBuilder.Green(
+                    new Vector2(200f, 200f), 0.05f, "Blue", 1, 1, new Vector2Int(0, 0), 0, 0, 0f, false, null),
+            };
+            var insideWorkingSet = new ShotBalloonState[insideBoard.Length];
+            var insideResult = ShotSimulator.Simulate(
+                insideBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: insideWorkingSet,
+                items: CreatePaintItemLayer(
+                    spreadOffset: 0f, spreadLength: r, spreadBaseWidth: 4f * r, spreadBlobRadius: r,
+                    lattice: insideLattice));
+
+            Assert.AreEqual(1, insideResult.Pops, "only the host pops — the target is off the ray, only ever reachable via paint");
+            var insideTarget = FindByPosition(insideWorkingSet, new Vector2(200f, 200f));
+            Assert.AreEqual("Yellow", insideTarget.ColorId, "distance r-0.01 sits inside the blob radius — the target recolors");
+
+            var outsideLattice = new ShotSlotLattice(new Vector2(-2f * (r + 0.01f), 1f), new Vector2(0f, 2f), 10, 10);
+            var outsideBoard = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0.05f, "Yellow", 2, 1, new Vector2Int(50, 50), 0, 0, 0f, false, null,
+                    item: ItemType.Paint),
+                ShotBoardBuilder.Green(
+                    new Vector2(200f, 200f), 0.05f, "Blue", 1, 1, new Vector2Int(0, 0), 0, 0, 0f, false, null),
+            };
+            var outsideWorkingSet = new ShotBalloonState[outsideBoard.Length];
+            var outsideResult = ShotSimulator.Simulate(
+                outsideBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: outsideWorkingSet,
+                items: CreatePaintItemLayer(
+                    spreadOffset: 0f, spreadLength: r, spreadBaseWidth: 4f * r, spreadBlobRadius: r,
+                    lattice: outsideLattice));
+
+            Assert.AreEqual(1, outsideResult.Pops);
+            var outsideTarget = FindByPosition(outsideWorkingSet, new Vector2(200f, 200f));
+            Assert.AreEqual("Blue", outsideTarget.ColorId, "distance r+0.01 sits outside the blob radius — no hit, no recolor");
+        }
+
+        [Test]
+        public void ResolveBalloonContact_PaintCarryingBoard_ItemsNullOrConfigMissing_MatchesPlainBoard()
+        {
+            // The Paint-specific fast-path lock (mirrors the Shield/Bomb locks above) — a
+            // Paint-carrying host that never gets to activate (items:null) or whose item layer has no
+            // Paint entry in its config dict must behave byte-identically to a board with no item at
+            // all.
+            var plainBoard = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.05f, "Red", 3, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 2f), 0.05f, "Blue", 1, 1),
+            };
+            var paintBoard = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.05f, "Red", 3, 1, item: ItemType.Paint),
+                ShotBoardBuilder.Green(new Vector2(0f, 2f), 0.05f, "Blue", 1, 1),
+            };
+
+            var plainWorkingSet = new ShotBalloonState[plainBoard.Length];
+            var plainResult = ShotSimulator.Simulate(
+                plainBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: plainWorkingSet);
+
+            var itemsNullWorkingSet = new ShotBalloonState[paintBoard.Length];
+            var itemsNullResult = ShotSimulator.Simulate(
+                paintBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: itemsNullWorkingSet);
+
+            var missingConfigWorkingSet = new ShotBalloonState[paintBoard.Length];
+            var missingConfigResult = ShotSimulator.Simulate(
+                paintBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: missingConfigWorkingSet, items: CreateItemLayer());
+
+            AssertResultsMatch(plainResult, itemsNullResult);
+            AssertResultsMatch(plainResult, missingConfigResult);
+        }
+
+        [Test]
+        public void PackBlobs_CandidatesExceedTheCap_StopsExactlyAtItAndNeverOverflows()
+        {
+            // Direct pin on PaintTriangle.PackBlobs' own loop-termination boundary — no test anywhere
+            // exercises the cap itself (ShotItemLayer.MaxPaintBlobs (@ref plan_shot_solver_accuracy Phase
+            // C5) mirrors PaintItemHandler.MaxBlobs at 64; every Paint test above deliberately collapses
+            // to exactly ONE blob, which never comes close to exercising `results.Count < maxBlobs`).
+            // A wide/long triangle (length 20, base width 40, blob radius 0.5) packs FAR more than 4 rows
+            // worth of candidates — comfortably enough to overflow a small cap — so a cap of 4 stopping
+            // at exactly 4 (never 3, never 5+) proves the boundary check itself (`<` not `<=`, and
+            // re-checked inside the inner loop too, per PackBlobs' own two count-guarded loops).
+            var triangle = PaintTriangle.Build(
+                Vector2.zero, Vector2.up, new PaintSpreadParams(spreadOffset: 0f, spreadLength: 20f, spreadBaseWidth: 40f));
+
+            var results = new List<Vector2>();
+            triangle.PackBlobs(blobRadius: 0.5f, maxBlobs: 4, results);
+
+            Assert.AreEqual(4, results.Count, "the cap must stop generation at exactly maxBlobs, never over- or under-shoot it");
+
+            // Sanity: the SAME triangle with no meaningful cap packs many more rows worth of blobs —
+            // proving the 4-blob result above was actually cap-limited, not just what the geometry
+            // happens to produce on its own.
+            var uncapped = new List<Vector2>();
+            triangle.PackBlobs(blobRadius: 0.5f, maxBlobs: 1000, uncapped);
+            Assert.Greater(uncapped.Count, 4, "the geometry alone produces more than 4 blobs — the capped run above was genuinely limited by maxBlobs");
+        }
+
+        [Test]
+        public void ApplyEffectHits_PaintRecolorsAnItemCarryingBalloon_TheItemSurvivesAndLaterFiresOnItsOwnPop()
+        {
+            // Cross-item interaction (@ref plan_shot_solver_accuracy Phase C5's cross-cutting list):
+            // ApplyRecolor only ever writes ColorId/IsRainbow (see its own doc) — a balloon's Item field
+            // must ride through a repaint untouched. Proven the same INDIRECT way the Shield grant is
+            // already pinned elsewhere in this file (ResolveBalloonContact_ShieldItem_Grants...): a
+            // downstream Shield-carrying balloon B is repainted by the Paint host's own splash (same
+            // one-blob geometry as the headline Paint test), then popped DIRECTLY by the continuing ray;
+            // if the repaint had wiped B's Item, its own Shield grant would never fire, and a wall bounce
+            // immediately behind it — otherwise fatal at 0 starting shields — would kill the flight
+            // before it ever reaches the return-path filler balloon.
+            const float r = 1.0f;
+            var walls = new Vector4(2.5f, 1000f, -1000f, -1000f);
+
+            ShotBalloonSnapshot[] BuildBoard(ItemType targetItem)
+            {
+                return new[]
+                {
+                    ShotBoardBuilder.Green(
+                        new Vector2(0f, 1f), 0.05f, "Yellow", 1, 1, new Vector2Int(50, 50), 0, 0, 0f, false, null,
+                        item: ItemType.Paint),
+                    ShotBoardBuilder.Green(
+                        new Vector2(0f, 2f), 0.05f, "Blue", 1, 1, new Vector2Int(0, -2), 0, 0, 0f, false, null,
+                        item: targetItem),
+                    ShotBoardBuilder.Green(
+                        new Vector2(0f, -5f), 0.05f, "Purple", 1, 1, new Vector2Int(500, 500), 0, 0, 0f, false, null),
+                };
+            }
+
+            var grantingBoard = BuildBoard(ItemType.Shield);
+            var grantingWorkingSet = new ShotBalloonState[grantingBoard.Length];
+            var granted = ShotSimulator.Simulate(
+                grantingBoard, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: grantingWorkingSet,
+                items: CreatePaintItemLayer(spreadOffset: 0f, spreadLength: r, spreadBaseWidth: 4f * r, spreadBlobRadius: r));
+
+            Assert.IsFalse(granted.Died, "B's own Shield item survived the repaint and covered the immediate wall bounce");
+            Assert.IsTrue(granted.BoardCleared, "the reflected ray goes on to clear the return-path filler");
+            Assert.AreEqual(3, granted.Pops);
+
+            // Control: same repaint, but B carries no item at all — nothing can grant the shield, so the
+            // identical bounce is fatal. This isolates the survival above to B's OWN preserved item,
+            // not some other side effect of the repaint or the board layout.
+            var controlBoard = BuildBoard(ItemType.None);
+            var controlWorkingSet = new ShotBalloonState[controlBoard.Length];
+            var control = ShotSimulator.Simulate(
+                controlBoard, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: controlWorkingSet,
+                items: CreatePaintItemLayer(spreadOffset: 0f, spreadLength: r, spreadBaseWidth: 4f * r, spreadBlobRadius: r));
+
+            Assert.IsTrue(control.Died, "without an item to preserve, nothing grants the shield the same bounce needs");
+            Assert.AreEqual(2, control.Pops, "the flight dies at the wall, never reaching the return-path filler");
         }
     }
 }

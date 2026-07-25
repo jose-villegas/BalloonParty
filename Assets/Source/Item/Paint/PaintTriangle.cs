@@ -4,6 +4,24 @@ using UnityEngine;
 
 namespace BalloonParty.Item.Paint
 {
+    /// <summary>Config-free scalars <see cref="PaintTriangle.Build" /> itself reads (@ref
+    /// plan_shot_solver_accuracy Phase C5) — mirrors <see cref="PaintSettings" />'s triangle-shape
+    /// fields only; <c>SpreadBlobRadius</c> is a <see cref="PaintTriangle.PackBlobs" /> input, not a
+    /// <see cref="PaintTriangle.Build" /> one, so it doesn't ride here.</summary>
+    internal readonly struct PaintSpreadParams
+    {
+        public readonly float SpreadOffset;
+        public readonly float SpreadLength;
+        public readonly float SpreadBaseWidth;
+
+        public PaintSpreadParams(float spreadOffset, float spreadLength, float spreadBaseWidth)
+        {
+            SpreadOffset = spreadOffset;
+            SpreadLength = spreadLength;
+            SpreadBaseWidth = spreadBaseWidth;
+        }
+    }
+
     /// <summary>
     ///     The paint splash's target region: an isosceles triangle along the projectile's travel direction.
     /// </summary>
@@ -28,8 +46,10 @@ namespace BalloonParty.Item.Paint
             BaseWidth = baseWidth;
         }
 
-        // No direction defaults to up so the shape doesn't collapse to a line.
-        public static PaintTriangle Build(Vector2 hit, Vector2 direction, PaintSettings paint)
+        // No direction defaults to up so the shape doesn't collapse to a line — also the CHAINED-
+        // activation fallback (@ref plan_shot_solver_accuracy Phase C5): a popped item's own item pop
+        // (never a direct hit) always passes Vector2.zero here, live and in the sim alike.
+        public static PaintTriangle Build(Vector2 hit, Vector2 direction, PaintSpreadParams paint)
         {
             var travel = direction.sqrMagnitude < DirectionEpsilon ? Vector2.up : direction.normalized;
             var toBase = paint.SpreadLength >= 0f ? travel : -travel;
@@ -43,6 +63,15 @@ namespace BalloonParty.Item.Paint
 
             return new PaintTriangle(apex, baseCenter - (perp * halfWidth), baseCenter + (perp * halfWidth),
                 toBase, length, baseWidth);
+        }
+
+        // One-line forwarder (@ref plan_shot_solver_accuracy Phase C5) — PaintSettings is a plain
+        // [Serializable] class with no public constructor a test can build, so the solver's
+        // ShotItemLayer builds a PaintSpreadParams directly instead; every LIVE call site keeps passing
+        // its config PaintSettings unchanged (zero churn).
+        public static PaintTriangle Build(Vector2 hit, Vector2 direction, PaintSettings paint)
+        {
+            return Build(hit, direction, new PaintSpreadParams(paint.SpreadOffset, paint.SpreadLength, paint.SpreadBaseWidth));
         }
 
         // Hex-packs circles into the triangle, capped at maxBlobs; always yields at least one.

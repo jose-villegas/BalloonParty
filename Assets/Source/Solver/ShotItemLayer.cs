@@ -5,6 +5,7 @@ using BalloonParty.Item.Bomb;
 using BalloonParty.Item.Effects;
 using BalloonParty.Item.Laser;
 using BalloonParty.Item.Lightning;
+using BalloonParty.Item.Paint;
 using BalloonParty.Slots.Capabilities;
 using UnityEngine;
 
@@ -92,10 +93,19 @@ namespace BalloonParty.Solver
     {
         internal const int MaxActivationsPerFlight = 32;
 
+        // Mirrors PaintItemHandler.MaxBlobs (@ref plan_shot_solver_accuracy Phase C5) — the same
+        // packed-splash density cap, config-free like every other cap in this layer.
+        private const int MaxPaintBlobs = 64;
+
         private readonly IReadOnlyDictionary<ItemType, ItemEffectParams> _effectParams;
         private readonly ShotSimEffectBoard _effectBoard;
         private readonly string _rainbowColorId;
         private readonly Queue<ShotItemActivation> _queue = new();
+
+        // Reused across a Paint activation's blob-packing pass (@ref plan_shot_solver_accuracy Phase
+        // C5) — same single-threaded scratch-buffer convention as ShotSimulator's
+        // NeighborBuffer/ItemHitsScratch.
+        private readonly List<Vector2> _paintBlobPositions = new();
 
         private int _activationCount;
 
@@ -173,9 +183,11 @@ namespace BalloonParty.Solver
                 case ItemType.Lightning:
                     return ResolveLightning(in activation, projectileColorId, workingSet, activeCount, hitsOut);
 
-                // Every other item type is plumbing-only until its own sub-phase (C5 Paint .. C6
-                // Snipe) wires the real effect against _effectParams/_effectBoard.
                 case ItemType.Paint:
+                    return ResolvePaint(in activation, workingSet, activeCount, hitsOut);
+
+                // Snipe is plumbing-only until Phase C6 wires ArmsPierce/SpeedBuffMultiplier against
+                // _effectParams — it has no core and never touches _effectBoard at all.
                 case ItemType.Snipe:
                 default:
                     return default;
@@ -283,6 +295,40 @@ namespace BalloonParty.Solver
             LightningChain.Resolve(
                 _effectBoard, activation.Origin, activation.Slot, matchColorId, activation.IsRainbowHost,
                 _rainbowColorId, hitsOut);
+
+            return new ShotItemOutcome(
+                shieldDelta: 0, grantsRainbowBuffUntilWall: false, grantsRainbowBuffUntilPierceEnd: false,
+                armsPierce: false, speedBuffMultiplier: 0f, damage: settings.Damage, flags: settings.Flags);
+        }
+
+        // Mirrors PaintItemHandler.Activate's selection (verified 2026-07-25): the paint colour is the
+        // HOST's OWN colour at contact time (activation.SourceColorId) — never the projectile's
+        // travelling colour; a rainbow host's colour IS the rainbow marker, so the same recolour
+        // converts targets to rainbow (PaintItemHandler.cs:63-71), and painting an already-rainbow
+        // target back to an ordinary colour clears it right back (ApplyRecolor's own doc). The splash/
+        // drip/disturbance-stamp presentation is unmodeled; the triangle-packed blob bucketing itself is
+        // PaintSpread, run over the bound effect board. PaintTriangle.Build's own direction fallback
+        // (Vector2.zero -> Vector2.up) handles a CHAINED activation for free — Paint never needs its own
+        // zero-direction branch here. No config known for Paint this flight (an empty test dictionary),
+        // or a colourless host (never reachable live — ItemProfile only rides a coloured/rainbow
+        // snapshot), is a no-op, same as items:null upstream.
+        private ShotItemOutcome ResolvePaint(
+            in ShotItemActivation activation, ShotBalloonState[] workingSet, int activeCount, List<EffectHit> hitsOut)
+        {
+            if (!_effectParams.TryGetValue(ItemType.Paint, out var settings)
+                || string.IsNullOrEmpty(activation.SourceColorId))
+            {
+                return default;
+            }
+
+            var spreadParams = new PaintSpreadParams(
+                settings.Paint.SpreadOffset, settings.Paint.SpreadLength, settings.Paint.SpreadBaseWidth);
+            var triangle = PaintTriangle.Build(activation.Origin, activation.ProjectileDirection, spreadParams);
+            triangle.PackBlobs(settings.Paint.SpreadBlobRadius, MaxPaintBlobs, _paintBlobPositions);
+
+            _effectBoard.Bind(workingSet, activeCount, activation.Slot);
+            PaintSpread.Resolve(
+                _effectBoard, _paintBlobPositions, settings.Paint.SpreadBlobRadius, activation.SourceColorId, hitsOut);
 
             return new ShotItemOutcome(
                 shieldDelta: 0, grantsRainbowBuffUntilWall: false, grantsRainbowBuffUntilPierceEnd: false,
