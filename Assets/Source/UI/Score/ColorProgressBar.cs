@@ -14,11 +14,19 @@ using UnityEngine.UI;
 using VContainer;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Configuration.Cinematics;
+using BalloonParty.Shared.SceneLight;
 
 namespace BalloonParty.UI.Score
 {
     public class ColorProgressBar : MonoBehaviour, ITrailEndpoint
     {
+        // Night 2x badge: pulses alpha, phase-offset by sibling index so the bars ripple as a wave —
+        // one fading down while the next fades up — and the streak notice shows through the dim beats.
+        private const float NightBadgeWaveSpeed = 3f;
+        private const float NightBadgeWavePhase = 1.2f;
+        private const float NightBadgeMinAlpha = 0.15f;
+        private const float NightBadgeMaxAlpha = 1f;
+
         private static readonly int CompletedParam = Animator.StringToHash("Completed");
         private static readonly int TrailHitTrigger = Animator.StringToHash("TrailHit");
 #if UNITY_EDITOR
@@ -49,6 +57,9 @@ namespace BalloonParty.UI.Score
         [SerializeField] private ProgressNotice _pointNoticePrefab;
         [SerializeField] private ProgressNotice _streakNoticePrefab;
 
+        [Tooltip("The persistent '2x' badge shown while it's night; its alpha waves across the colour bars.")]
+        [SerializeField] private CanvasGroup _nightBonusBadge;
+
         [Inject] private IScoreTrailConfig _config;
         [Inject] private IGamePalette _palette;
         [Inject] private IActiveLevelParameters _levelParams;
@@ -64,6 +75,7 @@ namespace BalloonParty.UI.Score
         [Inject] private ILevelProgress _levelProgress;
         [Inject] private IColorStreak _streakTracker;
         [Inject] private ScoreTrailService _scoreTrailService;
+        [Inject] private ITimeOfDayNight _timeOfDayNight;
 
         private ProgressNoticePresenter _notices;
         private PaletteEntry _colorConfig;
@@ -172,6 +184,34 @@ namespace BalloonParty.UI.Score
             _dismissedSubscriber.Subscribe(_ => OnDismissed()).AddTo(this);
             _transitionCompletedSubscriber.Subscribe(_ => OnTransitionCompleted()).AddTo(this);
             _resetSubscriber.Subscribe(_ => OnRunReset()).AddTo(this);
+        }
+
+        private void Update()
+        {
+            if (_nightBonusBadge == null)
+            {
+                return;
+            }
+
+            if (!_timeOfDayNight.IsNight)
+            {
+                if (_nightBonusBadge.gameObject.activeSelf)
+                {
+                    _nightBonusBadge.gameObject.SetActive(false);
+                }
+
+                return;
+            }
+
+            if (!_nightBonusBadge.gameObject.activeSelf)
+            {
+                _nightBonusBadge.gameObject.SetActive(true);
+            }
+
+            // Unscaled so the wave keeps rippling through the level-up freeze, like the notices.
+            var phase = transform.GetSiblingIndex() * NightBadgeWavePhase;
+            var wave = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * NightBadgeWaveSpeed - phase);
+            _nightBonusBadge.alpha = Mathf.Lerp(NightBadgeMinAlpha, NightBadgeMaxAlpha, wave);
         }
 
 #if UNITY_EDITOR
