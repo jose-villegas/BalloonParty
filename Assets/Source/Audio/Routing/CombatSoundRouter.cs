@@ -1,4 +1,6 @@
 using System;
+using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using MessagePipe;
@@ -71,7 +73,10 @@ namespace BalloonParty.Audio.Routing
             var outcome = message.Outcome;
             if ((outcome & HitOutcome.Pop) != 0)
             {
-                _player.Play(GameSoundId.BalloonPop, message.WorldPosition);
+                var popId = message.Actor is IBalloonModel balloon
+                    ? PopSoundFor(balloon.TypeName)
+                    : GameSoundId.BalloonPop;
+                _player.Play(popId, message.WorldPosition);
             }
             else if ((outcome & HitOutcome.Deflect) != 0)
             {
@@ -81,6 +86,17 @@ namespace BalloonParty.Audio.Routing
             {
                 _player.Play(GameSoundId.BalloonResist, message.WorldPosition);
             }
+        }
+
+        // Simple balloons use the melodic BalloonPop; specific kinds get their own pop id (with their
+        // own SfxEntry/MelodicMode). Default keeps any unmapped/future type on BalloonPop, never silent.
+        private static GameSoundId PopSoundFor(BalloonType type)
+        {
+            return type switch
+            {
+                BalloonType.Tough => GameSoundId.BalloonPopTough,
+                _ => GameSoundId.BalloonPop,
+            };
         }
 
         private void OnFired(ProjectileFiredMessage message)

@@ -1,6 +1,8 @@
 using System;
 using BalloonParty.Audio;
 using BalloonParty.Audio.Routing;
+using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using MessagePipe;
@@ -50,6 +52,29 @@ namespace BalloonParty.Tests.Audio
             _hitHandler.Handle(new ActorHitMessage(null, position, Vector3.zero, HitOutcome.Pop));
 
             _player.Received(1).Play(GameSoundId.BalloonPop, position);
+        }
+
+        [Test]
+        public void OnActorHit_ToughBalloonPop_PlaysToughPopId()
+        {
+            var position = new Vector3(1f, 2f, 0f);
+            var tough = Substitute.For<IBalloonModel>();
+            tough.TypeName.Returns(BalloonType.Tough);
+
+            _hitHandler.Handle(new ActorHitMessage(tough, position, Vector3.zero, HitOutcome.Pop));
+
+            _player.Received(1).Play(GameSoundId.BalloonPopTough, position);
+        }
+
+        [Test]
+        public void OnActorHit_UnmappedBalloonType_FallsBackToBalloonPop()
+        {
+            var cluster = Substitute.For<IBalloonModel>();
+            cluster.TypeName.Returns(BalloonType.BubbleCluster);
+
+            _hitHandler.Handle(new ActorHitMessage(cluster, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+
+            _player.Received(1).Play(GameSoundId.BalloonPop, Vector3.zero);
         }
 
         [Test]

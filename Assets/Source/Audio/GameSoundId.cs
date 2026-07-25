@@ -35,6 +35,10 @@ namespace BalloonParty.Audio
         GameOver,
         HeartDrain,
         OverflowThud,
-        UiConfirm
+        UiConfirm,
+
+        // Per-balloon-type pops (append only, like the rest). Simple balloons use BalloonPop;
+        // specific kinds map to their own id via CombatSoundRouter.PopSoundFor.
+        BalloonPopTough
     }
 }
