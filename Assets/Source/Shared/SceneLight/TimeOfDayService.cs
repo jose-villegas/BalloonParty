@@ -15,8 +15,15 @@ namespace BalloonParty.Shared.SceneLight
     ///     (sky tint, GI) that can't read the globals. Replaces the ambient push formerly bolted onto
     ///     <see cref="SceneLightFieldService"/>, which now owns only the local light field.
     /// </summary>
-    internal sealed class TimeOfDayService : IStartable, ITickable, ISceneLightRuntime
+    internal sealed class TimeOfDayService : IStartable, ITickable, ISceneLightRuntime, ITimeOfDayNight
     {
+        // Time-of-day angle convention: 12 AM sits at MidnightAngle and time DECREASES the angle
+        // (TimeOfDayClock), one hour per 360/24 degrees. Night is 5 PM–4 AM (end exclusive).
+        private const float MidnightAngleDegrees = 135f;
+        private const float DegreesPerHour = 360f / 24f;
+        private const float NightStartHour = 17f;
+        private const float NightEndHour = 4f;
+
         private static readonly int SceneLightDirId = Shader.PropertyToID("_SceneLightDir");
         private static readonly int SceneLightColorId = Shader.PropertyToID("_SceneLightColor");
         private static readonly int SceneLightIntensityId = Shader.PropertyToID("_SceneLightIntensity");
@@ -30,6 +37,7 @@ namespace BalloonParty.Shared.SceneLight
         public Color CurrentColor => _settings.EvaluateColor(_currentDirection);
         public float CurrentIntensity => _settings.Intensity;
         public float ShadowStrengthScale => _timeOfDay.NightModeEnabled ? EvaluateShadowScale() : 1f;
+        public bool IsNight => _timeOfDay.NightModeEnabled && IsNightAngle(_currentDirection.Angle01() * 360f);
 
         internal TimeOfDayService(ISceneLightSettings settings, ITimeOfDaySettings timeOfDay)
         {
@@ -82,6 +90,13 @@ namespace BalloonParty.Shared.SceneLight
             color.a = 1f;
             Shader.SetGlobalColor(SceneLightColorId, color);
             Shader.SetGlobalFloat(SceneLightIntensityId, _settings.Intensity);
+        }
+
+        // Angle → clock hour (12 AM at MidnightAngle, time decreasing the angle), then night = 5 PM–4 AM.
+        internal static bool IsNightAngle(float angleDegrees)
+        {
+            var hour = Mathf.Repeat((MidnightAngleDegrees - angleDegrees) / DegreesPerHour, 24f);
+            return hour >= NightStartHour || hour < NightEndHour;
         }
 
         // Curve sampled at the current direction's angle; unauthored/empty means no deepening (1).

@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.SceneLight;
 using BalloonParty.Slots.Capabilities;
 using MessagePipe;
 using UniRx;
@@ -16,6 +19,10 @@ namespace BalloonParty.Game.Score
     /// <summary>Score keeping only — level progression lives in <c>LevelController</c>.</summary>
     internal class ScoreController : IStartable, IDisposable, IRunResettable, IRunScore
     {
+        // Silver/gold pops at night add this to the streak multiplier (raise the ceiling, e.g. 3 x (2 + streak))
+        // rather than multiplying — a separate x2 would compound with the streak and get out of hand.
+        private const int NightSilverGoldBonus = 2;
+
         private readonly ILevelProgress _levelProgress;
         private readonly IGamePalette _palette;
         private readonly Dictionary<string, int> _persistentScore = new();
@@ -24,6 +31,7 @@ namespace BalloonParty.Game.Score
         private readonly ReactiveProperty<int> _totalScore = new(0);
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
+        private readonly ITimeOfDayNight _timeOfDayNight;
         private readonly List<string> _colorKeys = new();
 
         // The score the run WILL show once every in-flight trail lands — summed at publish time (when points
@@ -47,7 +55,8 @@ namespace BalloonParty.Game.Score
             IPublisher<ScorePointsGroupMessage> scoredPublisher,
             ILevelProgress levelProgress,
             IGamePalette palette,
-            ColorStreakTracker streakTracker)
+            ColorStreakTracker streakTracker,
+            ITimeOfDayNight timeOfDayNight)
         {
             _trailArrivedSubscriber = trailArrivedSubscriber;
             _levelUpSubscriber = levelUpSubscriber;
@@ -55,6 +64,7 @@ namespace BalloonParty.Game.Score
             _levelProgress = levelProgress;
             _palette = palette;
             _streakTracker = streakTracker;
+            _timeOfDayNight = timeOfDayNight;
         }
 
         public void Dispose()
@@ -107,7 +117,14 @@ namespace BalloonParty.Game.Score
             using var incompletePool = UnityEngine.Pool.ListPool<string>.Get(out var incompleteColors);
             CollectIncompleteColors(incompleteColors);
             scoreColor.ResolveScoreAttribution(in msg.Context, incompleteColors, attributions);
-            PublishAttributionGroup(attributions, msg.WorldPosition, msg.Context.Flags, msg.ProjectileDirection);
+
+            var nightBonus = _timeOfDayNight.IsNight
+                             && msg.Actor is IBalloonModel balloon
+                             && balloon.TypeName is BalloonType.SimpleSilver or BalloonType.SimpleGold
+                ? NightSilverGoldBonus
+                : 0;
+            PublishAttributionGroup(
+                attributions, msg.WorldPosition, msg.Context.Flags, msg.ProjectileDirection, nightBonus);
         }
 
         // Colours still short of the level's threshold — a scatter pop confines its split to these, so
@@ -125,7 +142,8 @@ namespace BalloonParty.Game.Score
         }
 
         private void PublishAttributionGroup(
-            IReadOnlyList<ScoreAttribution> attributions, Vector3 worldPosition, DamageFlags flags, Vector3 hitDirection)
+            IReadOnlyList<ScoreAttribution> attributions, Vector3 worldPosition, DamageFlags flags,
+            Vector3 hitDirection, int nightBonus)
         {
             if (attributions.Count == 0)
             {
@@ -135,7 +153,7 @@ namespace BalloonParty.Game.Score
             using var resolvedPool =
                 UnityEngine.Pool.ListPool<(string Color, int Points, int BaseProgress)>.Get(out var resolved);
 
-            var multiplier = RecordStreakMultiplier(attributions, flags);
+            var multiplier = RecordStreakMultiplier(attributions, flags) + nightBonus;
             ResolveAttributions(attributions, multiplier, resolved);
 
             if (resolved.Count > 0)

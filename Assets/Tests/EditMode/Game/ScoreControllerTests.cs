@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.SceneLight;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Actor;
 using MessagePipe;
@@ -25,6 +27,7 @@ namespace BalloonParty.Tests.Game
         private ILevelProgress _levelProgress;
         private IGamePalette _palette;
         private IPublisher<ScorePointsGroupMessage> _scoredPublisher;
+        private ITimeOfDayNight _timeOfDayNight;
         private ScoreController _controller;
         private ColorStreakTracker _streakTracker;
         private IMessageHandler<ScoreTrailArrivedMessage> _trailArrivedHandler;
@@ -66,6 +69,7 @@ namespace BalloonParty.Tests.Game
                 .Returns(Substitute.For<IDisposable>());
 
             _scoredPublisher = Substitute.For<IPublisher<ScorePointsGroupMessage>>();
+            _timeOfDayNight = Substitute.For<ITimeOfDayNight>();
 
             var levelUpSubscriber = Substitute.For<ISubscriber<ScoreLevelUpMessage>>();
             levelUpSubscriber
@@ -93,7 +97,43 @@ namespace BalloonParty.Tests.Game
                 _scoredPublisher,
                 _levelProgress,
                 _palette,
-                _streakTracker);
+                _streakTracker,
+                _timeOfDayNight);
+        }
+
+        [Test]
+        public void OnActorHit_SilverAtNight_AddsNightBonusToTheMultiplier()
+        {
+            _timeOfDayNight.IsNight.Returns(true);
+
+            // ScoreValue 3, first pop (streak 1) + night bonus 2 = ×3 → 9.
+            FireHit(CreateTypedModel(Red, BalloonType.SimpleSilver, 3), 1);
+
+            _scoredPublisher.Received(1).Publish(
+                Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 9));
+        }
+
+        [Test]
+        public void OnActorHit_GoldByDay_NoNightBonus()
+        {
+            _timeOfDayNight.IsNight.Returns(false);
+
+            FireHit(CreateTypedModel(Red, BalloonType.SimpleGold, 3), 1);
+
+            _scoredPublisher.Received(1).Publish(
+                Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 3));
+        }
+
+        [Test]
+        public void OnActorHit_SimpleAtNight_NoNightBonus()
+        {
+            _timeOfDayNight.IsNight.Returns(true);
+
+            // Night lifts only silver/gold; a plain balloon still scores its base.
+            FireHit(CreateTypedModel(Red, BalloonType.Simple, 3), 1);
+
+            _scoredPublisher.Received(1).Publish(
+                Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 3));
         }
 
         private static void ClearScorePrefs()
@@ -382,6 +422,13 @@ namespace BalloonParty.Tests.Game
         private static IBalloonModel CreateModel(string color, int hitsRemaining, int scoreValue = 1)
         {
             var model = new BalloonModel(new BalloonModelConfig(scoreValue: scoreValue, hitsToPop: hitsRemaining));
+            model.Color.Value = color;
+            return model;
+        }
+
+        private static IBalloonModel CreateTypedModel(string color, BalloonType type, int scoreValue)
+        {
+            var model = new BalloonModel(new BalloonModelConfig(typeName: type, scoreValue: scoreValue, hitsToPop: 1));
             model.Color.Value = color;
             return model;
         }
