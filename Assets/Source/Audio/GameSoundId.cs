@@ -51,6 +51,9 @@ namespace BalloonParty.Audio
         ProjectileDeath,
 
         // Loop whose volume tracks cruise speed (WindSoundRouter drives it via SetVolumeFactor).
-        WindLoop
+        WindLoop,
+
+        // Ambient loop for the Launch state; MusicSoundRouter stops it (fading out) on the move to Game.
+        LaunchMusic
     }
 }

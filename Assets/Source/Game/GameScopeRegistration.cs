@@ -270,6 +270,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ItemSoundRouter>();
             builder.RegisterEntryPoint<DangerSoundRouter>();
             builder.RegisterEntryPoint<WindSoundRouter>();
+            builder.RegisterEntryPoint<MusicSoundRouter>();
             builder.RegisterEntryPoint<AudioChannelController>();
         }
 

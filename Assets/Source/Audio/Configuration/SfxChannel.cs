@@ -5,6 +5,7 @@ namespace BalloonParty.Audio.Configuration
     {
         Gameplay,
         UI,
-        Stinger
+        Stinger,
+        Music
     }
 }
