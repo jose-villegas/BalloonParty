@@ -32,20 +32,31 @@ namespace BalloonParty.Tests.Audio
             router.Start();
         }
 
-        [TestCase(ItemType.Bomb, GameSoundId.ItemBomb)]
-        [TestCase(ItemType.Laser, GameSoundId.ItemLaser)]
-        [TestCase(ItemType.Lightning, GameSoundId.ItemLightning)]
-        [TestCase(ItemType.Paint, GameSoundId.ItemPaint)]
-        [TestCase(ItemType.Snipe, GameSoundId.ItemSnipe)]
-        [TestCase(ItemType.Shield, GameSoundId.ItemShield)]
-        internal void OnItemActivated_ItemType_PlaysMatchingSoundId(ItemType itemType, GameSoundId expectedId)
+        // Not a [TestCase]-parameterized method: NUnit only runs public test methods, but a public
+        // method can't take the internal GameSoundId as a parameter (CS0051). Looping the pairs in a
+        // public [Test] keeps full coverage — a mismatch still names the missing Play(id) call.
+        [Test]
+        public void OnItemActivated_ItemType_PlaysMatchingSoundId()
         {
-            var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
-            balloon.Item.Value = itemType;
+            (ItemType Item, GameSoundId Expected)[] cases =
+            {
+                (ItemType.Bomb, GameSoundId.ItemBomb),
+                (ItemType.Laser, GameSoundId.ItemLaser),
+                (ItemType.Lightning, GameSoundId.ItemLightning),
+                (ItemType.Paint, GameSoundId.ItemPaint),
+                (ItemType.Snipe, GameSoundId.ItemSnipe),
+                (ItemType.Shield, GameSoundId.ItemShield),
+            };
 
-            _itemActivatedHandler.Handle(new ItemActivatedMessage(balloon));
+            foreach (var (item, expected) in cases)
+            {
+                var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+                balloon.Item.Value = item;
 
-            _player.Received(1).Play(expectedId, null);
+                _itemActivatedHandler.Handle(new ItemActivatedMessage(balloon));
+
+                _player.Received(1).Play(expected, null);
+            }
         }
 
         [Test]
