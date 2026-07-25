@@ -3,6 +3,7 @@ using System.Diagnostics;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.EditorUI.Charts;
 using BalloonParty.Game;
@@ -614,6 +615,7 @@ namespace BalloonParty.Editor.ShotSolver
                 scope.Container.Resolve<IProjectileFlightConfig>(),
                 scope.Container.Resolve<ISlotGridConfig>(),
                 scope.Container.Resolve<IBalloonsConfiguration>(),
+                scope.Container.Resolve<IItemConfiguration>(),
                 thrower,
                 scope.Container.Resolve<ThrowerSettings>(),
                 scope.Container.Resolve<IGamePalette>(),

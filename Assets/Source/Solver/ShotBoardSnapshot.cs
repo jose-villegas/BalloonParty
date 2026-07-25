@@ -64,6 +64,26 @@ namespace BalloonParty.Solver
         }
     }
 
+    /// <summary>A hosted item's data-only identity + spin state — rides only <see cref="ShotBalloonSnapshot.ForColorTarget" />/
+    /// <see cref="ShotBalloonSnapshot.ForRainbowTarget" /> (only <c>BalloonModel</c> implements
+    /// <c>IHasItemSlot</c>, and even then only a coloured/rainbow one is scoped to carry an item this
+    /// phase — a tough/static target never does). <see cref="SpinDegrees" />/<see cref="SpinDegreesPerSecond" />
+    /// are 0 for every item but a spinning Laser (see <c>ISpinningItemVisual</c>) — inert data until
+    /// Phase C3 reads them.</summary>
+    internal readonly struct ItemProfile
+    {
+        public readonly ItemType Type;
+        public readonly float SpinDegrees;
+        public readonly float SpinDegreesPerSecond;
+
+        public ItemProfile(ItemType type, float spinDegrees, float spinDegreesPerSecond)
+        {
+            Type = type;
+            SpinDegrees = spinDegrees;
+            SpinDegreesPerSecond = spinDegreesPerSecond;
+        }
+    }
+
     /// <summary>How a contact resolves once the ray reaches it. <see cref="Poppable" /> covers both a
     /// plain scoring target and a durable static (Deflector/Gatekeeper) — durability, not this enum,
     /// decides whether a given hit deflects or pops (an int.MaxValue <see cref="ShotBalloonSnapshot.HitsRemaining" />
@@ -79,7 +99,8 @@ namespace BalloonParty.Solver
     /// without a live <c>IBalloonModel</c>. Grown by composition (@ref plan_shot_solver_accuracy §3):
     /// a geometry/scoring core, a <see cref="ColorProfile" />, an optional <see cref="BalanceProfile" />
     /// (null ⇒ no dynamic stub backs this entry — see <see cref="ShotBoardDynamics" />'s null-<c>Actor</c>
-    /// gating), a <see cref="ShotContactKind" />, and an <see cref="ItemType" /> (data-only in this phase).
+    /// gating), a <see cref="ShotContactKind" />, and an optional <see cref="ItemProfile" /> (data-only
+    /// in this phase — the item layer reads it starting Phase C1).
     /// Construct via the named factories, never the (private) field-order constructor directly — that is
     /// what keeps every caller's field mapping honest as the struct grows.</summary>
     internal readonly struct ShotBalloonSnapshot
@@ -91,7 +112,7 @@ namespace BalloonParty.Solver
         public readonly ColorProfile Color;
         public readonly BalanceProfile? Balance;
         public readonly ShotContactKind ContactKind;
-        public readonly ItemType Item;
+        public readonly ItemProfile? Item;
 
         /// <summary>The static archetype's own slot — set only by <see cref="ForStaticContact" />.
         /// A static never carries a <see cref="Balance" /> (statics never enter the balance grid as
@@ -107,7 +128,7 @@ namespace BalloonParty.Solver
 
         private ShotBalloonSnapshot(
             Vector2 position, float radius, int scoreValue, int hitsRemaining, ColorProfile color,
-            BalanceProfile? balance, ShotContactKind contactKind, ItemType item, Vector2Int? staticSlotIndex)
+            BalanceProfile? balance, ShotContactKind contactKind, ItemProfile? item, Vector2Int? staticSlotIndex)
         {
             Position = position;
             Radius = radius;
@@ -124,11 +145,11 @@ namespace BalloonParty.Solver
         /// <c>IHasColor</c> (streak + colour adoption rules apply).</summary>
         public static ShotBalloonSnapshot ForColorTarget(
             Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining,
-            BalanceProfile? balance = null)
+            BalanceProfile? balance = null, ItemProfile? item = null)
         {
             return new ShotBalloonSnapshot(
                 position, radius, scoreValue, hitsRemaining, new ColorProfile(colorId, false, false), balance,
-                ShotContactKind.Poppable, ItemType.None, null);
+                ShotContactKind.Poppable, item, null);
         }
 
         /// <summary>A colourless target scored via the flat/streak-breaking tough rule — mirrors
@@ -141,7 +162,7 @@ namespace BalloonParty.Solver
         {
             return new ShotBalloonSnapshot(
                 position, radius, scoreValue, hitsRemaining, new ColorProfile(null, false, washesProjectileColor),
-                balance, ShotContactKind.Poppable, ItemType.None, null);
+                balance, ShotContactKind.Poppable, null, null);
         }
 
         /// <summary>A poppable rainbow/wildcard target — mirrors a live balloon whose colour is the
@@ -151,11 +172,11 @@ namespace BalloonParty.Solver
         /// colourless-deferred, or colour-anchored) — see <c>ShotSimulator.ResolvePopScore</c>.</summary>
         public static ShotBalloonSnapshot ForRainbowTarget(
             Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining,
-            BalanceProfile? balance = null)
+            BalanceProfile? balance = null, ItemProfile? item = null)
         {
             return new ShotBalloonSnapshot(
                 position, radius, scoreValue, hitsRemaining, new ColorProfile(colorId, true, false), balance,
-                ShotContactKind.Poppable, ItemType.None, null);
+                ShotContactKind.Poppable, item, null);
         }
 
         /// <summary>A collision-only archetype with no score and no balance-grid presence — Phase A's
@@ -168,7 +189,7 @@ namespace BalloonParty.Solver
             Vector2Int slotIndex, Vector2 position, float radius, ShotContactKind kind, int hitsRemaining = 1)
         {
             return new ShotBalloonSnapshot(
-                position, radius, 0, hitsRemaining, default, null, kind, ItemType.None, slotIndex);
+                position, radius, 0, hitsRemaining, default, null, kind, null, slotIndex);
         }
     }
 
@@ -189,6 +210,8 @@ namespace BalloonParty.Solver
         public Vector2Int SlotIndex;
         public ShotContactKind ContactKind;
         public ItemType Item;
+        public float ItemSpinDegrees;
+        public float ItemSpinRate;
         public bool IsRainbow;
         public bool IsStatic;
         public bool WashesProjectileColor;
@@ -203,7 +226,9 @@ namespace BalloonParty.Solver
             HitsRemaining = snapshot.HitsRemaining;
             SlotIndex = snapshot.Balance?.SlotIndex ?? snapshot.StaticSlotIndex ?? default;
             ContactKind = snapshot.ContactKind;
-            Item = snapshot.Item;
+            Item = snapshot.Item?.Type ?? ItemType.None;
+            ItemSpinDegrees = snapshot.Item?.SpinDegrees ?? 0f;
+            ItemSpinRate = snapshot.Item?.SpinDegreesPerSecond ?? 0f;
             WashesProjectileColor = snapshot.Color.WashesProjectileColor;
             IsRainbow = snapshot.Color.IsRainbow;
             IsStatic = snapshot.StaticSlotIndex.HasValue;

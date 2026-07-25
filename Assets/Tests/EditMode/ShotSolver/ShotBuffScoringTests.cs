@@ -19,8 +19,8 @@ namespace BalloonParty.Tests.ShotSolver
     /// mirroring <c>ProjectileHitResolver.ResolveContactPop</c>, <c>ScoreController.RecordStreakMultiplier</c>,
     /// <c>ColorStreakTracker</c>, and <c>BalloonModel.ResolveRainbowAttribution</c>. Buff GRANTS
     /// (item layer) are Phase C — out of scope here; <c>ShotSimulator.Simulate</c>'s
-    /// <c>startingRainbowBuff</c>/<c>startingProjectileColor</c>/<c>startingStreakColor</c>/
-    /// <c>startingStreakCount</c> parameters are this phase's test seam standing in for a grant.</summary>
+    /// <c>seed</c> parameter (a <c>ShotFlightSeed</c>) is this phase's test seam standing in for a
+    /// grant.</summary>
     [TestFixture]
     public class ShotBuffScoringTests
     {
@@ -142,7 +142,8 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet, startingRainbowBuff: true, rainbowColorId: GamePalette.RainbowColorId);
+                workingSet: workingSet, rainbowColorId: GamePalette.RainbowColorId,
+                seed: ShotFlightSeed.WithRainbowBuff(untilWall: true));
 
             // multiplier climbs 1 (Blue), 2 (tough — NOT reset), 3 (Green) — RawScore reflects it.
             var expectedScore = (3 * 1) + (7 * 2) + (2 * 3);
@@ -296,7 +297,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.right, startingShields: 1, projectileContactRadius: 0f,
-                workingSet: workingSet, startingRainbowBuff: true);
+                workingSet: workingSet, seed: ShotFlightSeed.WithRainbowBuff(untilWall: true));
 
             Assert.AreEqual((2 * 1) + (3 * 1), result.RawScore, "the buff ended at the wall — the colour change resets the streak");
             Assert.AreEqual(2, result.Pops);
@@ -324,8 +325,9 @@ namespace BalloonParty.Tests.ShotSolver
             var refundingWorkingSet = new ShotBalloonState[refundingBoard.Length];
             var refunding = ShotSimulator.Simulate(
                 refundingBoard, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: refundingWorkingSet, startingRainbowBuff: true, startingProjectileColor: "Red",
-                startingStreakColor: "Red", startingStreakCount: 1);
+                workingSet: refundingWorkingSet,
+                seed: ShotFlightSeed.WithRainbowBuff(
+                    untilWall: true, projectileColor: "Red", streakColor: "Red", streakCount: 1));
 
             Assert.IsFalse(refunding.Died, "the pre-established streak's refund covers the top-wall bounce");
             Assert.IsTrue(refunding.BoardCleared);
@@ -346,8 +348,8 @@ namespace BalloonParty.Tests.ShotSolver
             var nonRefundingWorkingSet = new ShotBalloonState[nonRefundingBoard.Length];
             var nonRefunding = ShotSimulator.Simulate(
                 nonRefundingBoard, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
-                workingSet: nonRefundingWorkingSet, startingRainbowBuff: true, startingProjectileColor: "Red",
-                startingStreakColor: "Red", startingStreakCount: 0);
+                workingSet: nonRefundingWorkingSet,
+                seed: ShotFlightSeed.WithRainbowBuff(untilWall: true, projectileColor: "Red", streakColor: "Red"));
 
             Assert.IsTrue(nonRefunding.Died, "without an already-established streak of two, no refund covers the bounce");
         }

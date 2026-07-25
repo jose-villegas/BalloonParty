@@ -84,6 +84,10 @@ namespace BalloonParty.Balloon.View
             ? circle.radius * transform.lossyScale.x
             : _collider != null ? _collider.bounds.extents.x : 0f;
 
+        // Item effect boards (@ref plan_shot_solver_accuracy Phase C §2.3) must skip a balloon mid-
+        // despawn — its collider is disabled before the view actually returns to the pool.
+        internal bool HasActiveCollider => _collider != null && _collider.enabled;
+
         Vector3 IBalloonMotionView.Position
         {
             get => transform.position;

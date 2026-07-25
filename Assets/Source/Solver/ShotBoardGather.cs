@@ -2,8 +2,11 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
+using BalloonParty.Item;
+using BalloonParty.Item.Effects;
 using BalloonParty.Shared;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Actor.Archetype;
@@ -40,11 +43,15 @@ namespace BalloonParty.Solver
         /// depending on <see cref="IGamePalette" /> itself (a plain string is all the sim needs).</summary>
         public readonly string RainbowColorId;
 
+        /// <summary>Item-carrier selection + params (Phase C) — a peer of <see cref="Dynamics" />: both
+        /// are opt-in board-scoped services <c>ShotSimulator.Simulate</c> accepts nullable.</summary>
+        public readonly ShotItemLayer Items;
+
         public ShotSolveContext(
             IReadOnlyList<ShotBalloonSnapshot> board, Vector4 wallLimitsClockwise, Vector2 throwerPivot,
             Vector3 spawnLocalOffset, int startingShields, float projectileContactRadius,
             float projectileSpeed, ShotCruiseConfig cruiseConfig, ShotBoardDynamics dynamics,
-            float nudgeAmplitude, IReadOnlyList<string> allowedColors, string rainbowColorId)
+            float nudgeAmplitude, IReadOnlyList<string> allowedColors, string rainbowColorId, ShotItemLayer items)
         {
             Board = board;
             WallLimitsClockwise = wallLimitsClockwise;
@@ -58,6 +65,7 @@ namespace BalloonParty.Solver
             NudgeAmplitude = nudgeAmplitude;
             AllowedColors = allowedColors;
             RainbowColorId = rainbowColorId;
+            Items = items;
         }
     }
 
@@ -69,8 +77,9 @@ namespace BalloonParty.Solver
         /// balancer's render-frame lag (callers estimate ~1.5 × frame time).</summary>
         internal static ShotSolveContext Gather(
             SlotGrid grid, IProjectileFlightConfig config, ISlotGridConfig gridConfig,
-            IBalloonsConfiguration balloonsConfig, ThrowerView thrower, ThrowerSettings throwerSettings,
-            IGamePalette palette, IActiveLevelParameters levelParams, float pulseExecutionDelay)
+            IBalloonsConfiguration balloonsConfig, IItemConfiguration itemConfig, ThrowerView thrower,
+            ThrowerSettings throwerSettings, IGamePalette palette, IActiveLevelParameters levelParams,
+            float pulseExecutionDelay)
         {
             var targets = new List<ShotBalloonSnapshot>();
             var otherDynamicActors = new List<ShotDynamicActorSnapshot>();
@@ -80,6 +89,8 @@ namespace BalloonParty.Solver
             var dynamics = new ShotBoardDynamics(
                 gridConfig, balloonsConfig, targets, otherDynamicActors, staticActors, pulseExecutionDelay);
             var cruiseConfig = new ShotCruiseConfig(config);
+            var lattice = ShotSlotLattice.From(gridConfig);
+            var items = new ShotItemLayer(ItemEffectParams.FromConfiguration(itemConfig), in lattice);
 
             // Un-rotate the spawn point back into the thrower's aim-neutral frame so per-angle
             // simulation can re-rotate it — the launch origin orbits the pivot with the aim.
@@ -98,13 +109,14 @@ namespace BalloonParty.Solver
                 dynamics,
                 balloonsConfig.NudgeDistance,
                 levelParams.Current.AllowedColors,
-                GamePalette.RainbowColorId);
+                GamePalette.RainbowColorId,
+                items);
         }
 
         internal static ShotSimulationResult SimulateAt(
             float angleDegrees, in ShotSolveContext context, ShotBalloonState[] workingSet,
             List<Vector2> pathOut = null, List<float> timesOut = null, float radiusBias = 0f,
-            string targetColorId = null)
+            string targetColorId = null, in ShotFlightSeed seed = default)
         {
             return ShotSimulator.Simulate(
                 context.Board, context.WallLimitsClockwise, OriginForAngle(angleDegrees, context),
@@ -112,7 +124,7 @@ namespace BalloonParty.Solver
                 workingSet, pathOut: pathOut, projectileSpeed: context.ProjectileSpeed,
                 cruiseConfig: context.CruiseConfig, dynamics: context.Dynamics, timestampsOut: timesOut,
                 targetColorId: targetColorId, radiusBias: radiusBias, allowedColors: context.AllowedColors,
-                rainbowColorId: context.RainbowColorId);
+                rainbowColorId: context.RainbowColorId, seed: seed, items: context.Items);
         }
 
         // The thrower rotates around its pivot to aim (ThrowerView.RotateTo: fire-direction angle − 90°),
@@ -235,6 +247,8 @@ namespace BalloonParty.Solver
                 biasValue: biasSource?.BiasValue ?? 0f,
                 biasTypeId: biasSource?.BiasTypeId ?? 0);
 
+            var item = BuildItemProfile(actor, view);
+
             // A rainbow balloon's colour IS a real (non-empty) IHasColor value — the reserved
             // GamePalette.RainbowColorId marker — so it must be classified BEFORE the colored/tough
             // branch below, or it silently mis-scores as an ordinary green target (the latent bug
@@ -242,7 +256,7 @@ namespace BalloonParty.Solver
             if (!string.IsNullOrEmpty(colorId) && palette.IsRainbow(colorId))
             {
                 snapshot = ShotBalloonSnapshot.ForRainbowTarget(
-                    position, radius, colorId, scored.ScoreValue, hitsRemaining, balance);
+                    position, radius, colorId, scored.ScoreValue, hitsRemaining, balance, item);
             }
             else if (string.IsNullOrEmpty(colorId))
             {
@@ -252,10 +266,25 @@ namespace BalloonParty.Solver
             else
             {
                 snapshot = ShotBalloonSnapshot.ForColorTarget(
-                    position, radius, colorId, scored.ScoreValue, hitsRemaining, balance);
+                    position, radius, colorId, scored.ScoreValue, hitsRemaining, balance, item);
             }
 
             return true;
+        }
+
+        // Only BalloonModel implements IHasItemSlot — a hosted item's spin is data-only until Phase C
+        // reads it; only the Laser's held icon spins (ISpinningItemVisual), so every other item type
+        // (or no item at all) gathers 0 for both spin fields. LaserItemRotation.CaptureSnapshot is
+        // destructive (stops the spin) — this reads the same component through TransformCapture instead.
+        private static ItemProfile? BuildItemProfile(IWriteableSlotActor actor, BalloonView view)
+        {
+            if (actor is not IHasItemSlot itemSlot || itemSlot.Item.Value == ItemType.None)
+            {
+                return null;
+            }
+
+            var spinning = view?.TransformCapture as ISpinningItemVisual;
+            return new ItemProfile(itemSlot.Item.Value, spinning?.AngleDegrees ?? 0f, spinning?.SpinDegreesPerSecond ?? 0f);
         }
 
         // Interactive static archetypes (Deflector/Gatekeeper/Absorber) collide with the shot while

@@ -548,6 +548,34 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         [Test]
+        public void Simulate_ExplicitDefaultSeed_MatchesOmittedSeed()
+        {
+            // Phase C0 (@ref plan_shot_solver_accuracy Phase C §5): ShotFlightSeed folds the four
+            // dropped starting* test params into one struct — default(ShotFlightSeed) must reproduce
+            // the pre-fold "no starting state" behavior exactly, on the suite's own streak-climb board.
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.1f, "Red", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 2f), 0.1f, "Red", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 3f), 0.1f, "Red", 1, 1),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var omitted = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
+                workingSet: workingSet);
+
+            var explicitDefault = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
+                workingSet: workingSet, seed: default(ShotFlightSeed));
+
+            Assert.AreEqual(omitted.RawScore, explicitDefault.RawScore);
+            Assert.AreEqual(omitted.Pops, explicitDefault.Pops);
+            Assert.AreEqual(omitted.BoardCleared, explicitDefault.BoardCleared);
+            Assert.AreEqual(1 + 2 + 3, explicitDefault.RawScore, "unchanged from pre-fold: streak still climbs 1, 2, 3");
+        }
+
+        [Test]
         public void CopyIntoWorkingSet_StaticSnapshotWithoutBalanceProfile_LeavesActorNull()
         {
             // A static contact (Phase A's Deflector/Gatekeeper/Absorber shape) has no BalanceProfile,

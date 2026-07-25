@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 
 namespace BalloonParty.Item
 {
-    public class LaserItemRotation : MonoBehaviour, ITransformCapture
+    public class LaserItemRotation : MonoBehaviour, ITransformCapture, ISpinningItemVisual
     {
         [SerializeField] private float _rotationSpeed;
 
@@ -24,6 +24,11 @@ namespace BalloonParty.Item
         private Light _vertical;
         private IDisposable _horizontalRegistration;
         private IDisposable _verticalRegistration;
+
+        // Non-destructive spin read for the shot solver's gather (@ref plan_shot_solver_accuracy
+        // Phase C §4) — CaptureSnapshot stops the spin, so gather must use this instead.
+        float ISpinningItemVisual.AngleDegrees => transform.eulerAngles.z;
+        float ISpinningItemVisual.SpinDegreesPerSecond => _rotationSpeed;
 
         private void OnEnable()
         {

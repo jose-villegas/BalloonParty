@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
 using BalloonParty.Shared;
@@ -31,6 +32,7 @@ namespace BalloonParty.Cheats
         private readonly IProjectileFlightConfig _config;
         private readonly ISlotGridConfig _gridConfig;
         private readonly IBalloonsConfiguration _balloonsConfig;
+        private readonly IItemConfiguration _itemConfig;
         private readonly ThrowerSettings _throwerSettings;
         private readonly IGamePalette _palette;
         private readonly IActiveLevelParameters _levelParams;
@@ -44,6 +46,7 @@ namespace BalloonParty.Cheats
             IProjectileFlightConfig config,
             ISlotGridConfig gridConfig,
             IBalloonsConfiguration balloonsConfig,
+            IItemConfiguration itemConfig,
             ThrowerSettings throwerSettings,
             IGamePalette palette,
             IActiveLevelParameters levelParams)
@@ -52,6 +55,7 @@ namespace BalloonParty.Cheats
             _config = config;
             _gridConfig = gridConfig;
             _balloonsConfig = balloonsConfig;
+            _itemConfig = itemConfig;
             _throwerSettings = throwerSettings;
             _palette = palette;
             _levelParams = levelParams;
@@ -69,7 +73,7 @@ namespace BalloonParty.Cheats
 
             var pulseDelay = Mathf.Clamp(1.5f * Time.smoothDeltaTime, 0f, 0.1f);
             var context = ShotBoardGather.Gather(
-                _grid, _config, _gridConfig, _balloonsConfig, throwerView, _throwerSettings, _palette,
+                _grid, _config, _gridConfig, _balloonsConfig, _itemConfig, throwerView, _throwerSettings, _palette,
                 _levelParams, pulseDelay);
             if (context.Board.Count == 0)
             {
