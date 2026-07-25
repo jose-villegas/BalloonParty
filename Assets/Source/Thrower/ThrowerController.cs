@@ -25,6 +25,7 @@ namespace BalloonParty.Thrower
         private readonly IPublisher<ProjectileLoadedMessage> _loadedPublisher;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly ISubscriber<RunResetMessage> _resetSubscriber;
+        private readonly ISubscriber<RunRestartCompletedMessage> _restartCompletedSubscriber;
         private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _levelUpDismissedSubscriber;
         private readonly ISubscriber<LevelTransitionCompletedMessage> _levelTransitionCompletedSubscriber;
@@ -63,6 +64,7 @@ namespace BalloonParty.Thrower
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             IPublisher<ProjectileLoadedMessage> loadedPublisher,
             ISubscriber<RunResetMessage> resetSubscriber,
+            ISubscriber<RunRestartCompletedMessage> restartCompletedSubscriber,
             ISubscriber<BoardClearMessage> boardClearSubscriber,
             ISubscriber<LevelUpDismissedMessage> levelUpDismissedSubscriber,
             ISubscriber<LevelTransitionCompletedMessage> levelTransitionCompletedSubscriber,
@@ -81,6 +83,7 @@ namespace BalloonParty.Thrower
             _destroyedSubscriber = destroyedSubscriber;
             _loadedPublisher = loadedPublisher;
             _resetSubscriber = resetSubscriber;
+            _restartCompletedSubscriber = restartCompletedSubscriber;
             _boardClearSubscriber = boardClearSubscriber;
             _levelUpDismissedSubscriber = levelUpDismissedSubscriber;
             _levelTransitionCompletedSubscriber = levelTransitionCompletedSubscriber;
@@ -116,8 +119,10 @@ namespace BalloonParty.Thrower
             // freeze — un-fire it, or the dismissal swap scale-drifts it from the muzzle like a phantom.
             _levelUpSubscriber.Subscribe(_ => UnfireIfNeverFlown()).AddTo(_subscriptions);
 
-            // Restart carries over the old projectile; reload so it resets to config defaults.
-            _resetSubscriber.Subscribe(_ => Reload()).AddTo(_subscriptions);
+            // An immediate restart reloads now; a cinematic-deferred one (the loss→restart camera-down)
+            // reloads on RunRestartCompletedMessage instead, so the shot arrives with the settled board.
+            _resetSubscriber.Subscribe(OnRunReset).AddTo(_subscriptions);
+            _restartCompletedSubscriber.Subscribe(_ => LoadProjectile()).AddTo(_subscriptions);
             _boardClearSubscriber.Subscribe(_ => Reload()).AddTo(_subscriptions);
 
             // A projectile fired just before loss keeps flying on physics alone; scale it away.
@@ -238,6 +243,16 @@ namespace BalloonParty.Thrower
             _activeProjectile = null;
             _activeView = null;
             view.PlayDisappear(() => _poolManager.Return(_projectilePoolKey, view));
+        }
+
+        private void OnRunReset(RunResetMessage message)
+        {
+            // Only an immediate restart reloads here; a cinematic-deferred board waits for
+            // RunRestartCompletedMessage so the shot lands with the settled board, not mid-transition.
+            if (message.BoardReset)
+            {
+                Reload();
+            }
         }
 
         private void Reload()

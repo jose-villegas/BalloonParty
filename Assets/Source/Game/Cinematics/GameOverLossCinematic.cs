@@ -39,6 +39,7 @@ namespace BalloonParty.Game.Cinematics
         private readonly IReadOnlyList<ITransitionOutgoingContent> _outgoingContent;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
         private readonly ISubscriber<GameOverDismissedMessage> _dismissedSubscriber;
+        private readonly IPublisher<RunRestartCompletedMessage> _restartCompletedPublisher;
         private readonly CancellationTokenSource _cts = new();
 
         private IDisposable _gameOverSubscription;
@@ -64,7 +65,8 @@ namespace BalloonParty.Game.Cinematics
             StaticActorSpawner staticActorSpawner,
             IReadOnlyList<ITransitionOutgoingContent> outgoingContent,
             ISubscriber<GameOverMessage> gameOverSubscriber,
-            ISubscriber<GameOverDismissedMessage> dismissedSubscriber)
+            ISubscriber<GameOverDismissedMessage> dismissedSubscriber,
+            IPublisher<RunRestartCompletedMessage> restartCompletedPublisher)
             : base(director, rig, timeScale, settings)
         {
             _pauseService = pauseService;
@@ -77,6 +79,7 @@ namespace BalloonParty.Game.Cinematics
             _outgoingContent = outgoingContent;
             _gameOverSubscriber = gameOverSubscriber;
             _dismissedSubscriber = dismissedSubscriber;
+            _restartCompletedPublisher = restartCompletedPublisher;
         }
 
         protected override CameraRigCinematicConfig BuildConfig()
@@ -218,6 +221,10 @@ namespace BalloonParty.Game.Cinematics
             // Settled — drop the scenery snapshots (the wave pooled its own balloons).
             ReleaseOutgoingContent();
             ResumeCinematicPause();
+
+            // Board swapped and play resumed: the deferred-board restart loads its projectile now, so the
+            // fresh shot (and its reload cue) arrives with the new board rather than at the transition start.
+            _restartCompletedPublisher.Publish(default);
 
             void SpawnNewBalloons()
             {

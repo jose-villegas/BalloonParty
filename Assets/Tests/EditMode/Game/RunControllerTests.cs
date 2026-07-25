@@ -221,6 +221,22 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void RestartRun_ResetBoardTrue_PublishesRunResetWithBoardResetTrue()
+        {
+            CreateController().RestartRun(resetBoard: true);
+
+            _resetPublisher.Received(1).Publish(Arg.Is<RunResetMessage>(m => m.BoardReset));
+        }
+
+        [Test]
+        public void RestartRun_ResetBoardFalse_PublishesRunResetWithBoardResetFalse()
+        {
+            CreateController().RestartRun(resetBoard: false);
+
+            _resetPublisher.Received(1).Publish(Arg.Is<RunResetMessage>(m => !m.BoardReset));
+        }
+
+        [Test]
         public void RestartRun_DoesNotRecordMeta()
         {
             CreateController().RestartRun();

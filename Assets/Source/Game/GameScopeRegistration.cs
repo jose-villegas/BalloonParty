@@ -81,6 +81,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<OverflowHeartRequestedMessage>(options);
             builder.RegisterMessageBroker<EndRunRequestedMessage>(options);
             builder.RegisterMessageBroker<RunResetMessage>(options);
+            builder.RegisterMessageBroker<RunRestartCompletedMessage>(options);
             builder.RegisterMessageBroker<BoardClearMessage>(options);
             builder.RegisterMessageBroker<ProjectileLoadedMessage>(options);
             builder.RegisterMessageBroker<ProjectileFiredMessage>(options);

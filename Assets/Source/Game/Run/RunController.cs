@@ -116,8 +116,9 @@ namespace BalloonParty.Game.Run
                 resettable.ResetRun(_generation);
             }
 
-            // For views that can't reset reactively or live outside the reset graph's scope.
-            _resetPublisher.Publish(default);
+            // For views that can't reset reactively or live outside the reset graph's scope. BoardReset
+            // tells them whether the board was swapped now (immediate) or is deferred to a cinematic.
+            _resetPublisher.Publish(new RunResetMessage(resetBoard));
 
             _navigation.TransitionTo(NavigationState.Game);
         }
