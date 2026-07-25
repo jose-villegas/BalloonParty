@@ -1,4 +1,5 @@
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
@@ -17,6 +18,29 @@ namespace BalloonParty.Shared.Extensions
         internal static string GetColorId(this IBalloonModel model)
         {
             return (model as IHasColor)?.Color.Value ?? "";
+        }
+
+        /// <summary>The reserved presentation color for a heavy type's impacts: metallic sparks for the
+        /// unbreakable, the tough entry otherwise.</summary>
+        internal static string GetImpactColorId(this IBalloonModel model)
+        {
+            return model.TypeName == BalloonType.Unbreakable
+                ? GamePalette.SparksColorId
+                : GamePalette.ToughColorId;
+        }
+
+        /// <summary>The palette color a pop stamps with: the balloon's own color when it has one, the reserved
+        /// impact color for colorless heavies (Tough/Unbreakable), and empty for other colorless types.</summary>
+        internal static string GetPopColorId(this IBalloonModel model)
+        {
+            var color = model.GetColorId();
+            if (!string.IsNullOrEmpty(color))
+            {
+                return color;
+            }
+
+            var isHeavy = model.TypeName is BalloonType.Tough or BalloonType.Unbreakable;
+            return isHeavy ? model.GetImpactColorId() : color;
         }
 
         /// <summary>Whether a piercing shot plows this actor rather than one-shotting it — a durable

@@ -194,8 +194,10 @@ MonoBehaviour:
   _glowTrailsPerBar: 24
   _glowTrailStaggerDelay: 0.04
   _glowTrailDuration: 0.5
-  _glowTargetRadiusMultiplier: 0.4
-  _continueUnpauseDelay: 0.5
+  _glowTargetRadiusMultiplier: 0.848
+  _glowTargetInnerRadiusMultiplier: 0.759
+  _glowTargetMinAngle: 0
+  _glowTargetMaxAngle: 180
 --- !u!114 &409988817038131457
 MonoBehaviour:
   m_ObjectHideFlags: 0

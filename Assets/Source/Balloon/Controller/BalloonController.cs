@@ -1,13 +1,11 @@
 using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
-using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
-using BalloonParty.Shared.SceneLight;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Scenario;
 using BalloonParty.Slots.Actor;
@@ -16,10 +14,10 @@ using BalloonParty.Slots.Grid;
 using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
-using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Configuration.Balloons;
 
 namespace BalloonParty.Balloon.Controller
 {
@@ -38,9 +36,8 @@ namespace BalloonParty.Balloon.Controller
         private readonly BalloonView _view;
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly SmokeFieldService _smokeField;
-        private readonly SceneLightFieldService _sceneLightField;
         private readonly IGamePalette _palette;
-        private readonly IBalloonsConfiguration _balloonsConfig;
+        private readonly BalloonPopPresenter _popPresenter;
 
         private Action _onReturned;
         private IDisposable _itemActivatedSubscription;
@@ -68,9 +65,8 @@ namespace BalloonParty.Balloon.Controller
             _poolManager = context.PoolManager;
             _disturbanceField = context.DisturbanceField;
             _smokeField = context.SmokeField;
-            _sceneLightField = context.SceneLightField;
             _palette = context.Palette;
-            _balloonsConfig = context.BalloonsConfiguration;
+            _popPresenter = context.PopPresenter;
         }
 
         public void Start()
@@ -112,20 +108,9 @@ namespace BalloonParty.Balloon.Controller
 
             if (playPopVfx)
             {
-                var paletteIndex = _palette.PaletteIndexOf(PopColorId());
-
-                _disturbanceField.Stamp(
-                    StampSource.BalloonPop, _view.transform.position, Vector2.zero,
-                    paletteIndex: paletteIndex);
-
-                if (_model is ToughBalloonModel)
-                {
-                    _smokeField.Paint(PaintSource.ToughPop,
-                        _view.transform.position);
-                }
-
                 // Parent the pop VFX under whatever the view rides, so it moves with the level transition.
-                _view.PlayHitVfxForOutcome(HitOutcome.Pop, _view.transform.parent);
+                _popPresenter.Present(
+                    _model, _view.transform.position, _view, _view.transform.parent);
             }
 
             var slot = _model.SlotIndex.Value;
@@ -196,7 +181,7 @@ namespace BalloonParty.Balloon.Controller
 
             if (_model is IHasDeflectStamp stamper && stamper.DeflectStampScale > 0f)
             {
-                var deflectPaletteIndex = _palette.PaletteIndexOf(ImpactColorId());
+                var deflectPaletteIndex = _palette.PaletteIndexOf(_model.GetImpactColorId());
 
                 _disturbanceField.Stamp(
                     StampSource.BalloonDeflect, viewPos, Vector2.zero, stamper.DeflectStampScale,
@@ -216,29 +201,6 @@ namespace BalloonParty.Balloon.Controller
                 NudgeType.Deflect));
         }
 
-        // Colorless heavies stamp their reserved palette entry; colored balloons stamp their own, and
-        // other colorless types stay neutral.
-        private string PopColorId()
-        {
-            var color = _model.GetColorId();
-            if (!string.IsNullOrEmpty(color))
-            {
-                return color;
-            }
-
-            var isHeavy = _model.TypeName is BalloonType.Tough or BalloonType.Unbreakable;
-            return isHeavy ? ImpactColorId() : color;
-        }
-
-        // The reserved presentation color for a heavy type's impacts: metallic sparks for the
-        // unbreakable, the tough entry otherwise.
-        private string ImpactColorId()
-        {
-            return _model.TypeName == BalloonType.Unbreakable
-                ? GamePalette.SparksColorId
-                : GamePalette.ToughColorId;
-        }
-
         private void OnItemActivated(ItemActivatedMessage msg)
         {
             if (msg.Balloon != _model)
@@ -256,28 +218,7 @@ namespace BalloonParty.Balloon.Controller
         {
             _popped = true;
 
-            var popWorldPos = _view.transform.position;
-            var paletteIndex = _palette.PaletteIndexOf(PopColorId());
-
-            _disturbanceField.Stamp(
-                StampSource.BalloonPop, popWorldPos, Vector2.zero,
-                paletteIndex: paletteIndex);
-
-            // A rainbow is a wildcard with no single colour, so it flashes a neutral key-light burst — a beat
-            // of light to sell the whole-palette payout. Radius/intensity/duration authored on the config.
-            if (_palette.IsRainbow(PopColorId()))
-            {
-                _sceneLightField.Flash(
-                    popWorldPos, _balloonsConfig.RainbowPopFlashRadius,
-                    _balloonsConfig.RainbowPopFlashIntensity, _balloonsConfig.RainbowPopFlashSeconds);
-            }
-
-            if (_model is ToughBalloonModel)
-            {
-                _smokeField.Paint(PaintSource.ToughPop, popWorldPos);
-            }
-
-            _view.PlayHitVfxForOutcome(HitOutcome.Pop);
+            _popPresenter.Present(_model, _view.transform.position, _view);
             _grid.Remove(_model.SlotIndex.Value);
 
             if (_model is not IHasItemSlot itemSlot || itemSlot.Item.Value == ItemType.None)

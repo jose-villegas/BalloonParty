@@ -1,23 +1,21 @@
 using System.Collections.Generic;
+using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
-using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
-using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using BalloonParty.Configuration.Palette;
-using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Balloon.Spawner
 {
@@ -28,7 +26,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly IOverflowSettings _settings;
         private readonly IGamePalette _palette;
         private readonly PoolManager _poolManager;
-        private readonly DisturbanceFieldService _disturbanceField;
+        private readonly BalloonPopPresenter _popPresenter;
         private readonly IPublisher<SpawnBlockedMessage> _spawnBlockedPublisher;
         private readonly IPublisher<OverflowHeartRequestedMessage> _heartRequestPublisher;
         private readonly SlotGrid _grid;
@@ -74,7 +72,7 @@ namespace BalloonParty.Balloon.Spawner
             IOverflowSettings settings,
             IGamePalette palette,
             PoolManager poolManager,
-            DisturbanceFieldService disturbanceField,
+            BalloonPopPresenter popPresenter,
             IPublisher<SpawnBlockedMessage> spawnBlockedPublisher,
             IPublisher<OverflowHeartRequestedMessage> heartRequestPublisher,
             PauseService pauseService)
@@ -84,7 +82,7 @@ namespace BalloonParty.Balloon.Spawner
             _settings = settings;
             _palette = palette;
             _poolManager = poolManager;
-            _disturbanceField = disturbanceField;
+            _popPresenter = popPresenter;
             _spawnBlockedPublisher = spawnBlockedPublisher;
             _heartRequestPublisher = heartRequestPublisher;
             _pauseService = pauseService;
@@ -151,13 +149,17 @@ namespace BalloonParty.Balloon.Spawner
             var view = _poolManager.Get<BalloonView>(entry.PoolKey);
             var model = BalloonModelFactory.Create(entry, _palette, _levelParams.Current.AllowedColors);
             view.Variant.Initialize(model, _levelParams.Current.AllowedColorsMask);
+
+            // Wire the per-type pop VFX so colorless heavies (Tough/Unbreakable) play their authored burst
+            // on drain — without overrides the view falls back to the IHasColor-gated default and shows nothing.
+            view.SetHitVfxOverrides(entry.HitVfxOverrides);
             view.Bind(model);
 
             // One row below target so the tick eases it up into place.
             view.transform.position = RowPosition(col, rowOffset + 1);
             view.transform.localScale = Vector3.zero;
 
-            queue.Add(new OverflowBalloon(entry.PoolKey, view, col, _nextId++, staggerIndex * _settings.AppearStaggerSeconds));
+            queue.Add(new OverflowBalloon(entry.PoolKey, view, model, col, _nextId++, staggerIndex * _settings.AppearStaggerSeconds));
             BeginOverflowHold();
         }
 
@@ -255,13 +257,11 @@ namespace BalloonParty.Balloon.Spawner
             _spawnBlockedPublisher.Publish(new SpawnBlockedMessage(balloon.Column, position));
         }
 
-        // Visual burst only — the hit point and shake were already charged in LaunchHeart.
+        // Visual burst only — the hit point and shake were already charged in LaunchHeart. Shares the same
+        // presenter as projectile pops and board clears, so colorless heavies burst identically here.
         private void Pop(OverflowBalloon balloon)
         {
-            var position = balloon.View.transform.position;
-
-            balloon.View.PlayHitVfxForOutcome(HitOutcome.Pop);
-            _disturbanceField.Stamp(StampSource.BalloonPop, position, Vector2.zero);
+            _popPresenter.Present(balloon.Model, balloon.View.transform.position, balloon.View);
 
             QueueFor(balloon.Column).Remove(balloon);
             _poolManager.Return(balloon.PoolKey, balloon.View);
@@ -336,10 +336,12 @@ namespace BalloonParty.Balloon.Spawner
 
         private sealed class OverflowBalloon
         {
-            public OverflowBalloon(string poolKey, BalloonView view, int column, int id, float appearDelay)
+            public OverflowBalloon(
+                string poolKey, BalloonView view, IBalloonModel model, int column, int id, float appearDelay)
             {
                 PoolKey = poolKey;
                 View = view;
+                Model = model;
                 Column = column;
                 Id = id;
                 AppearDelay = appearDelay;
@@ -347,6 +349,7 @@ namespace BalloonParty.Balloon.Spawner
 
             public string PoolKey { get; }
             public BalloonView View { get; }
+            public IBalloonModel Model { get; }
             public int Column { get; }
             public int Id { get; }
             public float AppearDelay { get; set; }

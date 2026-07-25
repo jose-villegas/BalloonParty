@@ -161,6 +161,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<BalloonMotionTicker>().AsSelf();
             builder.RegisterEntryPoint<RejectedBalloonEffect>().AsSelf().As<IRunResettable>().As<IPendingHealthCharges>();
             builder.RegisterEntryPoint<BalloonControllerRegistry>().AsSelf();
+            builder.Register<BalloonPopPresenter>(Lifetime.Singleton);
             builder.Register<BalloonControllerContext>(Lifetime.Singleton);
             builder.Register<BalloonPlacementResolver>(Lifetime.Singleton);
             builder.Register<BalloonFactory>(Lifetime.Singleton);

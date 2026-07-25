@@ -55,8 +55,6 @@ MonoBehaviour:
   _predictionTraceConfig: {fileID: 11400000, guid: 5e5f149233cc4031a25da6fba034815d,
     type: 2}
   _runConfig: {fileID: 11400000, guid: e61722ff405c947f5a297c493e47d729, type: 2}
-  _displayConfiguration: {fileID: 11400000, guid: d49451b27c31244c7af3bd85cc6f1cd2,
-    type: 2}
   _itemConfiguration: {fileID: 11400000, guid: 96695d3f4e4804c36a07426bdef377c3, type: 2}
   _gamePalette: {fileID: 11400000, guid: 5000030a039a46e8807ca639499df679, type: 2}
   _balloonsConfiguration: {fileID: 11400000, guid: 61708d778c4e342aa9841e216cc88726,
@@ -68,11 +66,7 @@ MonoBehaviour:
     type: 2}
   _puffCloudSettings: {fileID: 11400000, guid: ad969212547fb4aa28442e6f190431fc, type: 2}
   _bushSettings: {fileID: 11400000, guid: 13458cde8e4a74aec9240bbfad8e8f2f, type: 2}
-  _disturbanceFieldSettings: {fileID: 11400000, guid: 07be6148b095f45018867507725bccd8,
-    type: 2}
   _sceneLightFieldSettings: {fileID: 11400000, guid: 6f1c8ceaec67e46bba09250d145ce93e,
-    type: 2}
-  _backgroundFieldSettings: {fileID: 11400000, guid: cb9e304f94de349b7bd80e111384c682,
     type: 2}
   _smokeFieldSettings: {fileID: 11400000, guid: f4ebc4f997264403480e15e52ac20534,
     type: 2}
@@ -87,13 +81,15 @@ MonoBehaviour:
   _buffConfiguration: {fileID: 11400000, guid: 728ca45d06ca84d878604fa7f93c2357, type: 2}
   _scoreTrailBehaviourConfiguration: {fileID: 11400000, guid: f5a3059bd63343178e49c2a90c9a8f91,
     type: 2}
-  _thermalGovernorSettings: {fileID: 0}
-  _soundBank: {fileID: 0}
+  _thermalGovernorSettings: {fileID: 11400000, guid: f19fc68a72ffb4b00af1a0690911bab8,
+    type: 2}
+  _soundBank: {fileID: 11400000, guid: 9c284084ced24491880c598ac7e35607, type: 2}
   _projectilePrefab: {fileID: 7317932863533360661, guid: 514e1ddc348a5498aa3edae2404ff130,
     type: 3}
   _scoreTrailPrefab: {fileID: 1429749022553535108, guid: 17e678e81b22a4d3481d8307861019b8,
     type: 3}
-  _sfxVoicePrefab: {fileID: 0}
+  _sfxVoicePrefab: {fileID: 3556449806259486447, guid: 63acbe5bdda2f4582826f289b4c2f5bd,
+    type: 3}
 --- !u!114 &5521832732712766469
 MonoBehaviour:
   m_ObjectHideFlags: 0
