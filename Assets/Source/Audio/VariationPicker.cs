@@ -39,6 +39,10 @@ namespace BalloonParty.Audio
                     melodicSemitone = ResolveScaleWalkSemitone(ctx.Streak);
                     pitch = melodicSemitone.SemitonesToPitchMultiplier();
                     break;
+                case MelodicMode.ScaleWalkCapped when _scale.Count > 0:
+                    melodicSemitone = ResolveCappedScaleWalkSemitone(ctx.Streak);
+                    pitch = melodicSemitone.SemitonesToPitchMultiplier();
+                    break;
                 case MelodicMode.Tension:
                     melodicSemitone = ctx.CurrentSemitone + entry.TensionSemitones;
                     pitch = melodicSemitone.SemitonesToPitchMultiplier();
@@ -70,12 +74,19 @@ namespace BalloonParty.Audio
 
         private int ResolveScaleWalkSemitone(int streak)
         {
+            // Unbounded climb: each streak step is the next scale degree, rolling up one octave per lap.
             var degree = Mathf.Max(0, streak);
             var steps = _scale.Count;
+            return _root + _scale[degree % steps] + 12 * (degree / steps);
+        }
 
+        private int ResolveCappedScaleWalkSemitone(int streak)
+        {
             // Climb the scale across _maxOctaves, then loop back near the root a semitone higher each
             // cycle (wrapping at 12) — bounded, so a runaway streak can't squeak up forever. Within the
-            // first window this is identical to a plain octave-rollover walk.
+            // first window this matches the plain octave-rollover walk.
+            var degree = Mathf.Max(0, streak);
+            var steps = _scale.Count;
             var windowSteps = steps * Mathf.Max(1, _maxOctaves);
             var loop = degree / windowSteps;
             var position = degree % windowSteps;

@@ -389,12 +389,12 @@ heard before it's parsed.
   no adjacent half-steps, so consecutive pops sound consonant in any order or at any burst
   speed. This replaces the earlier "C major vs pentatonic" open question: pentatonic wins
   because the reward sound must never land a clash.
-- **Scale-degree source is the streak, not random.** `VariationPicker` gains a melodic
-  mode: instead of pitch RNG, it maps the streak to a scale degree that climbs
-  `MelodicMaxOctaves` octaves, then **loops back near the root a semitone higher each cycle
-  (wrapping at 12)** so a long streak stays bounded instead of running away into a squeak —
-  a soft cap, tunable by ear via `MelodicMaxOctaves` (default 2). It sets the voice pitch
-  from that. **Shipped as designed:** the streak arrives via `StreakChangedMessage`
+- **Scale-degree source is the streak, not random.** Two melodic modes map the streak to a
+  scale degree: **`ScaleWalk`** climbs with plain octave rollover (unbounded), and
+  **`ScaleWalkCapped`** climbs `MelodicMaxOctaves` then **loops back near the root a semitone
+  higher each cycle (wrapping at 12)** so a long streak stays bounded instead of running away
+  into a squeak — a soft cap tunable by ear via `MelodicMaxOctaves` (default 2). Either sets
+  the voice pitch from the resolved degree. **Shipped as designed:** the streak arrives via `StreakChangedMessage`
   (`Game/Score/ColorStreakTracker.cs:94`); `ProgressionSoundRouter` forwards it to
   `SfxService` through the narrow `IMelodicContext.SetStreak(int)` facet on every change, and
   `SfxService` remembers the resulting semitone so a same-frame `Tension` entry (deflect/wall

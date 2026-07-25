@@ -31,8 +31,9 @@ namespace BalloonParty.Audio.Configuration
         [Tooltip("Derive a subtle stereo pan from world-X. spatialBlend stays 0 (no rolloff).")]
         [SerializeField] private bool _pan2D = true;
 
-        [Tooltip("None = plain variation. ScaleWalk = streak-driven pentatonic degree (simple-balloon pop). " +
-                 "Tension = fixed dissonant offset against the current pop key (deflect rub / wall-hit drop).")]
+        [Tooltip("None = plain variation. ScaleWalk = streak-driven pentatonic climb (unbounded octave " +
+                 "rollover). ScaleWalkCapped = same but bounded to MelodicMaxOctaves, looping a semitone up " +
+                 "per cycle so pitch can't run away. Tension = fixed dissonant offset against the current pop key.")]
         [SerializeField] private MelodicMode _melodicMode = MelodicMode.None;
 
         [Tooltip("Semitone offset against the current pop degree when MelodicMode = Tension. " +
@@ -65,6 +66,7 @@ namespace BalloonParty.Audio.Configuration
     {
         None,
         ScaleWalk,
-        Tension
+        Tension,
+        ScaleWalkCapped
     }
 }

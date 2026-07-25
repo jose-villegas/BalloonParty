@@ -74,11 +74,25 @@ namespace BalloonParty.Tests.Audio
         }
 
         [Test]
-        public void Pick_ScaleWalkMode_StreakBeyondWindow_LoopsBackASemitoneHigher()
+        public void Pick_ScaleWalk_Unbounded_KeepsClimbingPastOctaves()
+        {
+            // Uncapped ScaleWalk has no ceiling — streak 10 on a 5-note scale is 2 octaves up
+            // (scale[0] + 24), unlike ScaleWalkCapped which loops back near the root.
+            var entry = CreateEntry(Vector2.one, Vector2.one, new[] { CreateClip() }, MelodicMode.ScaleWalk);
+            var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 0);
+            var ctx = new PickContext(streak: 10, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f);
+
+            var playback = picker.Pick(GameSoundId.BalloonPop, entry, ctx);
+
+            Assert.AreEqual(24, playback.MelodicSemitone);
+        }
+
+        [Test]
+        public void Pick_ScaleWalkCapped_StreakBeyondWindow_LoopsBackASemitoneHigher()
         {
             // maxOctaves 2 × 5-note scale = a 10-step window; streak 10 restarts the climb at the
             // root shifted +1 semitone instead of continuing to climb.
-            var entry = CreateEntry(Vector2.one, Vector2.one, new[] { CreateClip() }, MelodicMode.ScaleWalk);
+            var entry = CreateEntry(Vector2.one, Vector2.one, new[] { CreateClip() }, MelodicMode.ScaleWalkCapped);
             var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 0,
                 melodicMaxOctaves: 2);
             var ctx = new PickContext(streak: 10, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f);
@@ -89,12 +103,12 @@ namespace BalloonParty.Tests.Audio
         }
 
         [Test]
-        public void Pick_ScaleWalkMode_MaxOctavesOne_ShrinksWindowAndLoopsEarlier()
+        public void Pick_ScaleWalkCapped_MaxOctavesOne_ShrinksWindowAndLoopsEarlier()
         {
             // Same streak as StreakRollsOverOctave (which climbs to semitone 12 at maxOctaves 2)
             // already exhausts the 1-octave window here and loops back to root+1 instead — proves
             // _maxOctaves actually resizes the window rather than defaulting through unused.
-            var entry = CreateEntry(Vector2.one, Vector2.one, new[] { CreateClip() }, MelodicMode.ScaleWalk);
+            var entry = CreateEntry(Vector2.one, Vector2.one, new[] { CreateClip() }, MelodicMode.ScaleWalkCapped);
             var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 0,
                 melodicMaxOctaves: 1);
             var ctx = new PickContext(streak: 5, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f);
@@ -105,11 +119,11 @@ namespace BalloonParty.Tests.Audio
         }
 
         [Test]
-        public void Pick_ScaleWalkMode_RunawayStreak_StaysBounded()
+        public void Pick_ScaleWalkCapped_RunawayStreak_StaysBounded()
         {
             // The point of the cap: no exponential runaway. Even a massive streak stays within the
             // octave window (top note + one octave) plus the wrapped per-loop semitone shift.
-            var entry = CreateEntry(Vector2.one, Vector2.one, new[] { CreateClip() }, MelodicMode.ScaleWalk);
+            var entry = CreateEntry(Vector2.one, Vector2.one, new[] { CreateClip() }, MelodicMode.ScaleWalkCapped);
             var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 0,
                 melodicMaxOctaves: 2);
             const int windowTop = 9 + 12; // pentatonic top note, one octave up in a 2-octave window

@@ -64,7 +64,7 @@ namespace BalloonParty.Audio
             var context = new PickContext(_currentStreak, _currentSemitone, burstIndex, pan);
             var playback = _picker.Pick(id, entry, in context);
 
-            if (entry.MelodicMode == MelodicMode.ScaleWalk)
+            if (entry.MelodicMode == MelodicMode.ScaleWalk || entry.MelodicMode == MelodicMode.ScaleWalkCapped)
             {
                 _currentSemitone = playback.MelodicSemitone;
             }
