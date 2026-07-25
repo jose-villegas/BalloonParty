@@ -160,6 +160,20 @@ namespace BalloonParty.Tests.Audio
         }
 
         [Test]
+        public void OnProjectileLoaded_ResetsTheShieldDepth()
+        {
+            var position = new Vector3(1f, 2f, 0f);
+
+            _wallHitHandler.Handle(new WallHitMessage(position));   // depth 1
+            _wallHitHandler.Handle(new WallHitMessage(position));   // depth 2
+            _loadedHandler.Handle(new ProjectileLoadedMessage(null));  // reset to 0
+            _wallHitHandler.Handle(new WallHitMessage(position));   // depth 1 again
+
+            _player.Received(2).Play(GameSoundId.WallHit, position, 1);
+            _player.DidNotReceive().Play(GameSoundId.WallHit, position, 3);
+        }
+
+        [Test]
         public void OnShieldGained_WalksTheShieldDepthBackUp_ClampedAtRoot()
         {
             var position = new Vector3(1f, 2f, 0f);

@@ -111,6 +111,8 @@ namespace BalloonParty.Audio.Routing
 
         private void OnLoaded(ProjectileLoadedMessage message)
         {
+            // A fresh shot starts at the root: reloading resets the shield-depth descent.
+            _shieldDepth = 0;
             _player.Play(GameSoundId.ShotReload, null);
         }
 
