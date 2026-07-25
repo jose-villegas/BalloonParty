@@ -85,7 +85,13 @@ namespace BalloonParty.Solver
                 }
 
                 var slotPosition = _lattice.SlotPosition(workingSet[i].SlotIndex);
-                var isPaintable = !workingSet[i].IsRainbow && !string.IsNullOrEmpty(workingSet[i].ColorId);
+
+                // Mirrors `model is IPaintable`, which BalloonModel implements unconditionally
+                // regardless of its CURRENT colour (@ref plan_shot_solver_accuracy Phase C2 review) — a
+                // rainbow-coloured entry is still a paintable BalloonModel underneath, only Tough/
+                // Unbreakable (colourless, ColorId null) are excluded. Fixed from an earlier
+                // `!IsRainbow &&` guard that silently mismatched GridEffectBoard for a rainbow neighbour.
+                var isPaintable = !string.IsNullOrEmpty(workingSet[i].ColorId);
 
                 _occupants.Add(new EffectOccupant(
                     _occupants.Count, workingSet[i].SlotIndex, workingSet[i].Position, slotPosition,

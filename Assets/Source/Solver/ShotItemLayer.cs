@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using BalloonParty.Configuration.Items;
+using BalloonParty.Item.Bomb;
 using BalloonParty.Item.Effects;
+using BalloonParty.Slots.Capabilities;
 using UnityEngine;
 
 namespace BalloonParty.Solver
@@ -42,7 +44,12 @@ namespace BalloonParty.Solver
     /// <see cref="EffectHit" />s against the board are returned separately, via <c>Resolve</c>'s
     /// <c>hitsOut</c>). <see cref="SpeedBuffMultiplier" /> of 0 means "grants none" — <c>1f</c> can't
     /// express that (it's also the buffless multiplier), mirroring why
-    /// <see cref="ShotFlightState.HasSpeedBuff" /> exists.</summary>
+    /// <see cref="ShotFlightState.HasSpeedBuff" /> exists. <see cref="Damage" />/<see cref="Flags" />
+    /// (@ref plan_shot_solver_accuracy Phase C2) are this activation's OWN item-type config — every
+    /// <see cref="EffectHitKind.Damage" /> hit <c>ApplyEffectHits</c> applies for THIS activation reads
+    /// them (a <see cref="EffectHitKind.PiercingDamage" /> hit ignores <see cref="Flags" /> entirely and
+    /// always pops with <c>DamageFlags.Piercing</c> alone — see the class's own Bomb-case doc); 0/
+    /// <c>Normal</c> for Shield/Snipe, which never emit hits at all.</summary>
     internal readonly struct ShotItemOutcome
     {
         public readonly int ShieldDelta;
@@ -50,16 +57,20 @@ namespace BalloonParty.Solver
         public readonly bool GrantsRainbowBuffUntilPierceEnd;
         public readonly bool ArmsPierce;
         public readonly float SpeedBuffMultiplier;
+        public readonly int Damage;
+        public readonly DamageFlags Flags;
 
         public ShotItemOutcome(
             int shieldDelta, bool grantsRainbowBuffUntilWall, bool grantsRainbowBuffUntilPierceEnd, bool armsPierce,
-            float speedBuffMultiplier)
+            float speedBuffMultiplier, int damage = 0, DamageFlags flags = DamageFlags.Normal)
         {
             ShieldDelta = shieldDelta;
             GrantsRainbowBuffUntilWall = grantsRainbowBuffUntilWall;
             GrantsRainbowBuffUntilPierceEnd = grantsRainbowBuffUntilPierceEnd;
             ArmsPierce = armsPierce;
             SpeedBuffMultiplier = speedBuffMultiplier;
+            Damage = damage;
+            Flags = flags;
         }
     }
 
@@ -80,14 +91,18 @@ namespace BalloonParty.Solver
 
         private readonly IReadOnlyDictionary<ItemType, ItemEffectParams> _effectParams;
         private readonly ShotSimEffectBoard _effectBoard;
+        private readonly string _rainbowColorId;
         private readonly Queue<ShotItemActivation> _queue = new();
 
         private int _activationCount;
 
-        internal ShotItemLayer(IReadOnlyDictionary<ItemType, ItemEffectParams> effectParams, in ShotSlotLattice lattice)
+        internal ShotItemLayer(
+            IReadOnlyDictionary<ItemType, ItemEffectParams> effectParams, in ShotSlotLattice lattice,
+            string rainbowColorId = null)
         {
             _effectParams = effectParams;
             _effectBoard = new ShotSimEffectBoard(in lattice);
+            _rainbowColorId = rainbowColorId;
         }
 
         internal void ResetForNewFlight()
@@ -123,6 +138,15 @@ namespace BalloonParty.Solver
             return true;
         }
 
+        /// <summary>Resolves an <see cref="EffectHit.Handle" /> the most recent <see cref="Resolve" />
+        /// call produced back into the working-set <see cref="ShotBalloonState.SlotIndex" /> it
+        /// identifies — a thin passthrough onto the bound effect board (@ref plan_shot_solver_accuracy
+        /// Phase C2's handle-boxing reconciliation; <c>ApplyEffectHits</c> is the caller).</summary>
+        internal Vector2Int SlotOf(int handle)
+        {
+            return _effectBoard.SlotOf(handle);
+        }
+
         /// <summary><paramref name="hitsOut" />, when non-null, is cleared and filled with this
         /// activation's <see cref="EffectHit" />s (caller-owned scratch list, same convention as
         /// <c>ShotSimulator.Simulate</c>'s <c>pathOut</c>).</summary>
@@ -137,9 +161,11 @@ namespace BalloonParty.Solver
                 case ItemType.Shield:
                     return ResolveShield(in activation);
 
-                // Every other item type is plumbing-only until its own sub-phase (C2 Bomb .. C6
-                // Snipe) wires the real effect against _effectParams/_effectBoard.
                 case ItemType.Bomb:
+                    return ResolveBomb(in activation, workingSet, activeCount, hitsOut);
+
+                // Every other item type is plumbing-only until its own sub-phase (C3 Laser .. C6
+                // Snipe) wires the real effect against _effectParams/_effectBoard.
                 case ItemType.Laser:
                 case ItemType.Lightning:
                 case ItemType.Paint:
@@ -158,6 +184,30 @@ namespace BalloonParty.Solver
             return new ShotItemOutcome(
                 shieldDelta: 1, grantsRainbowBuffUntilWall: activation.IsRainbowHost,
                 grantsRainbowBuffUntilPierceEnd: false, armsPierce: false, speedBuffMultiplier: 0f);
+        }
+
+        // Mirrors BombItemHandler.Activate's selection (verified 2026-07-25): the shockwave/light/
+        // disturbance-field presentation is unmodeled (Risk R5 — document-first), but the kill-radius
+        // geometry itself is BombBlast, run over the bound effect board — every active, non-static,
+        // non-host occupant (see ShotSimEffectBoard.Bind's own exclusion). No config known for this
+        // flight's item set (an empty test dictionary) is a no-op, same as items:null upstream.
+        private ShotItemOutcome ResolveBomb(
+            in ShotItemActivation activation, ShotBalloonState[] workingSet, int activeCount, List<EffectHit> hitsOut)
+        {
+            if (!_effectParams.TryGetValue(ItemType.Bomb, out var settings))
+            {
+                return default;
+            }
+
+            _effectBoard.Bind(workingSet, activeCount, activation.Slot);
+            var blastParams = new BombBlastParams(settings.Bomb.Radius, settings.Bomb.RainbowConversionRange);
+            BombBlast.Resolve(
+                _effectBoard, activation.Origin, activation.Slot, activation.IsRainbowHost, _rainbowColorId,
+                in blastParams, hitsOut);
+
+            return new ShotItemOutcome(
+                shieldDelta: 0, grantsRainbowBuffUntilWall: false, grantsRainbowBuffUntilPierceEnd: false,
+                armsPierce: false, speedBuffMultiplier: 0f, damage: settings.Damage, flags: settings.Flags);
         }
     }
 }

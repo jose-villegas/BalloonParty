@@ -1,3 +1,4 @@
+using BalloonParty.Slots.Capabilities;
 using UnityEngine;
 
 namespace BalloonParty.Solver
@@ -58,6 +59,54 @@ namespace BalloonParty.Solver
         public static ShotFlightSeed WithStreak(string streakColor, int streakCount, string projectileColor = null)
         {
             return new ShotFlightSeed(false, false, projectileColor, streakColor, streakCount, false, false, 1f);
+        }
+    }
+
+    /// <summary>One pop's scoring identity — replaces the ad-hoc bool seams <c>ResolvePopScore</c> used
+    /// to read straight off <see cref="ShotFlightState" /> (@ref plan_shot_solver_accuracy Phase C §1.5).
+    /// <see cref="IsProjectileContact" /> gates BOTH colour adoption and the shield refund — an item-
+    /// triggered pop (Bomb/Laser/Lightning) never steals the projectile's colour and never refunds,
+    /// mirroring <c>ProjectileHitResolver</c>'s adoption/refund running only off its own direct-contact
+    /// path (an item's <c>DamageContext</c> dispatch never touches <c>projectile.ColorName</c> or the
+    /// streak tracker's refund gate). <see cref="SourceColorId" /> is the PRE-adoption projectile colour
+    /// for a projectile contact, or the item's own host balloon's colour for an item-triggered one
+    /// (mirrors <c>BombItemHandler</c>'s <c>balloon.GetColorId()</c> becoming every dispatched hit's
+    /// <c>DamageContext.SourceColorId</c>) — the anchor a rainbow target or a source-colour-paying
+    /// (Unbreakable) target both read.</summary>
+    internal readonly struct ShotPopCause
+    {
+        public readonly bool IsProjectileContact;
+        public readonly string SourceColorId;
+        public readonly DamageFlags Flags;
+
+        private ShotPopCause(bool isProjectileContact, string sourceColorId, DamageFlags flags)
+        {
+            IsProjectileContact = isProjectileContact;
+            SourceColorId = sourceColorId;
+            Flags = flags;
+        }
+
+        /// <summary>Mirrors <c>ProjectileHitResolver.ResolveContactPop</c>'s own flag composition —
+        /// <see cref="DamageFlags.DirectHit" /> always; <see cref="DamageFlags.WildcardStreak" /> plus
+        /// <see cref="DamageFlags.Piercing" /> under a rainbow buff; <see cref="DamageFlags.Piercing" />
+        /// alone under an armed (non-buffed) shot; <see cref="DamageFlags.DeferredStreak" /> for a
+        /// colourless projectile popping a rainbow target absent a buff.</summary>
+        public static ShotPopCause ProjectileContact(
+            bool hasRainbowBuff, bool isPiercing, bool isRainbowTargetDeferred, string projectileColor)
+        {
+            var flags = DamageFlags.DirectHit
+                | (hasRainbowBuff ? DamageFlags.WildcardStreak | DamageFlags.Piercing : DamageFlags.Normal)
+                | (isPiercing ? DamageFlags.Piercing : DamageFlags.Normal)
+                | (isRainbowTargetDeferred ? DamageFlags.DeferredStreak : DamageFlags.Normal);
+            return new ShotPopCause(true, projectileColor, flags);
+        }
+
+        /// <summary>An item's own AOE/effect pop (@ref plan_shot_solver_accuracy Phase C2) — never
+        /// adopts the projectile's colour, never refunds a shield (see <see cref="IsProjectileContact" />'s
+        /// doc).</summary>
+        public static ShotPopCause ItemEffect(string sourceColorId, DamageFlags flags)
+        {
+            return new ShotPopCause(false, sourceColorId, flags);
         }
     }
 

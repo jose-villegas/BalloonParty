@@ -12,18 +12,24 @@ namespace BalloonParty.Solver
     /// list a rainbow pays out is board-global (Phase D-core), not per-balloon — it lives on
     /// <see cref="ShotSolveContext" />/<see cref="ShotSimulator.Simulate" /> instead.
     /// <see cref="WashesProjectileColor" /> mirrors <c>IWashesProjectileColor</c> (the soap-bubble
-    /// cluster) — only ever true on a colourless (Tough-shaped) target today.</summary>
+    /// cluster) — only ever true on a colourless (Tough-shaped) target today. <see cref="PaysSourceColor" />
+    /// (@ref plan_shot_solver_accuracy Phase C2a) mirrors <c>UnbreakableBalloonModel.ResolveScoreAttribution</c>
+    /// paying <c>context.SourceColorId</c> with an implicit <c>breaksStreak: false</c> — an Unbreakable is
+    /// colourless (no <c>IHasColor</c>) yet still extends the streak on whatever colour struck it, unlike
+    /// an ordinary Tough's flat/streak-breaking rule; only ever true on a colourless target too.</summary>
     internal readonly struct ColorProfile
     {
         public readonly string ColorId;
         public readonly bool IsRainbow;
         public readonly bool WashesProjectileColor;
+        public readonly bool PaysSourceColor;
 
-        public ColorProfile(string colorId, bool isRainbow, bool washesProjectileColor)
+        public ColorProfile(string colorId, bool isRainbow, bool washesProjectileColor, bool paysSourceColor = false)
         {
             ColorId = colorId;
             IsRainbow = isRainbow;
             WashesProjectileColor = washesProjectileColor;
+            PaysSourceColor = paysSourceColor;
         }
     }
 
@@ -154,14 +160,16 @@ namespace BalloonParty.Solver
 
         /// <summary>A colourless target scored via the flat/streak-breaking tough rule — mirrors
         /// <c>ToughBalloonModel</c> (durable), an Unbreakable (<c>hitsRemaining == int.MaxValue</c>,
-        /// forever-deflecting), or a soap-washing cluster (<paramref name="washesProjectileColor" /> —
-        /// mirrors <c>BubbleClusterModel</c>'s <c>IWashesProjectileColor</c>).</summary>
+        /// forever-deflecting, <paramref name="paysSourceColor" /> true — see <see cref="ColorProfile.PaysSourceColor" />'s
+        /// doc), or a soap-washing cluster (<paramref name="washesProjectileColor" /> — mirrors
+        /// <c>BubbleClusterModel</c>'s <c>IWashesProjectileColor</c>).</summary>
         public static ShotBalloonSnapshot ForToughTarget(
             Vector2 position, float radius, int scoreValue, int hitsRemaining, BalanceProfile? balance = null,
-            bool washesProjectileColor = false)
+            bool washesProjectileColor = false, bool paysSourceColor = false)
         {
             return new ShotBalloonSnapshot(
-                position, radius, scoreValue, hitsRemaining, new ColorProfile(null, false, washesProjectileColor),
+                position, radius, scoreValue, hitsRemaining,
+                new ColorProfile(null, false, washesProjectileColor, paysSourceColor),
                 balance, ShotContactKind.Poppable, null, null);
         }
 
@@ -215,6 +223,7 @@ namespace BalloonParty.Solver
         public bool IsRainbow;
         public bool IsStatic;
         public bool WashesProjectileColor;
+        public bool PaysSourceColor;
         public ShotSimDynamicActor Actor;
 
         public ShotBalloonState(in ShotBalloonSnapshot snapshot)
@@ -230,6 +239,7 @@ namespace BalloonParty.Solver
             ItemSpinDegrees = snapshot.Item?.SpinDegrees ?? 0f;
             ItemSpinRate = snapshot.Item?.SpinDegreesPerSecond ?? 0f;
             WashesProjectileColor = snapshot.Color.WashesProjectileColor;
+            PaysSourceColor = snapshot.Color.PaysSourceColor;
             IsRainbow = snapshot.Color.IsRainbow;
             IsStatic = snapshot.StaticSlotIndex.HasValue;
             Actor = null;

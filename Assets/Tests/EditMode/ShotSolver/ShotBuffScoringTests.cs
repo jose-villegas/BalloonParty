@@ -391,5 +391,79 @@ namespace BalloonParty.Tests.ShotSolver
             var primary = results.Single(r => r.IsPrimary);
             Assert.AreEqual("Red", primary.ColorId, "falls back to the first allowed colour when the projectile's own isn't allowed");
         }
+
+        [Test]
+        public void ResolvePopScore_PaysSourceColorTarget_ExtendsStreakButNeverRefunds_C2ARegressionGuard()
+        {
+            // C2a regression guard (@ref plan_shot_solver_accuracy Phase C2a): the sim used to score an
+            // Unbreakable exactly like an ordinary Tough (flat ScoreValue, streak-breaking) — it must
+            // instead pay whatever colour struck it and EXTEND the streak
+            // (UnbreakableBalloonModel.ResolveScoreAttribution pays context.SourceColorId with an
+            // implicit breaksStreak:false), yet never refund a shield off its OWN pop (the live refund
+            // gate requires `balloon is IHasColor`, which Unbreakable never satisfies). This is a plain
+            // PROJECTILE CONTACT test — no item layer involved — so it belongs here, not
+            // ShotItemEffectTests.
+            //
+            // Sequence (both boards): Red (streak1, no refund yet — needs streak >= 2) -> the target
+            // under test (streak2, pays "Red") -> Red#3 (streak3, pays "Red") -> a far-off filler that's
+            // never reached, keeping the working set non-empty through the wall bounces below.
+            // RawScore is IDENTICAL in both boards (2*1 + 7*2 + 3*3 = 25) — this test isn't about
+            // scoring differing, only about the refund.
+            var walls = new Vector4(3.5f, 1000f, -3.5f, -1000f);
+
+            var paysSourceColorBoard = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.1f, "Red", 2, 1),
+                ShotBoardBuilder.Tough(new Vector2(0f, 2f), 0.1f, 7, 1, paysSourceColor: true),
+                ShotBoardBuilder.Green(new Vector2(0f, 3f), 0.1f, "Red", 3, 1),
+                ShotBoardBuilder.Green(new Vector2(500f, 500f), 0.1f, "Blue", 1, 1),
+            };
+            var paysSourceColorWorkingSet = new ShotBalloonState[paysSourceColorBoard.Length];
+            var paysSourceColorResult = ShotSimulator.Simulate(
+                paysSourceColorBoard, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: paysSourceColorWorkingSet);
+
+            Assert.AreEqual(
+                (2 * 1) + (7 * 2) + (3 * 3), paysSourceColorResult.RawScore,
+                "pays out on the streak colour, extending it — not a flat/reset tough payout");
+            Assert.AreEqual(3, paysSourceColorResult.Pops);
+
+            // Unlike the WildcardStreak-routed-tough precedent (ResolvePopScore_RainbowBuff_
+            // ScoresColorAgnosticallyAndConvertsHexNeighbour, above, which stays 0 — a buffed pop never
+            // ticks ToughsCleared for ANY colour shape), the plain (non-buffed) PaysSourceColor branch
+            // DOES still increment it: ToughsCleared counts "a colourless target popped" as a tally
+            // orthogonal to which payout/streak rule scored it (@ref plan_shot_solver_accuracy Phase C2a
+            // — the memo calls this out explicitly: "RecordColor(SourceColorId) payout ... ToughsCleared++
+            // still").
+            Assert.AreEqual(1, paysSourceColorResult.ToughsCleared);
+            Assert.IsTrue(paysSourceColorResult.Died);
+
+            // Only Red#3's own pop refunds (shields 0 -> 1) — surviving exactly ONE of the two
+            // close-wall bounces before dying on the second: Events == 3 contacts + 2 walls == 5.
+            Assert.AreEqual(
+                5, paysSourceColorResult.Events, "exactly one shield (from Red#3 alone) survives one bounce, not two");
+
+            // Control: the SAME streak position against an ORDINARY colour-scoring balloon (same
+            // ScoreValue) in place of the PaysSourceColor target — its pop ALSO refunds (ColorId is
+            // non-empty), stacking a SECOND shield and surviving one bounce further before dying —
+            // proving the suppression above is real, not just "no refund ever fires in this setup".
+            var ordinaryBoard = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.1f, "Red", 2, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 2f), 0.1f, "Red", 7, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 3f), 0.1f, "Red", 3, 1),
+                ShotBoardBuilder.Green(new Vector2(500f, 500f), 0.1f, "Blue", 1, 1),
+            };
+            var ordinaryWorkingSet = new ShotBalloonState[ordinaryBoard.Length];
+            var ordinaryResult = ShotSimulator.Simulate(
+                ordinaryBoard, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: ordinaryWorkingSet);
+
+            Assert.AreEqual(
+                paysSourceColorResult.RawScore, ordinaryResult.RawScore, "identical scoring — only the refund differs");
+            Assert.AreEqual(
+                6, ordinaryResult.Events, "two shields (both pops refund) survive two bounces, dying on the third");
+            Assert.IsTrue(ordinaryResult.Died);
+        }
     }
 }

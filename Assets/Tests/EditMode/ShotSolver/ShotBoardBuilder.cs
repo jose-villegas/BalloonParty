@@ -48,10 +48,27 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         public static ShotBalloonSnapshot Tough(
-            Vector2 position, float radius, int scoreValue, int hitsRemaining, bool washes = false)
+            Vector2 position, float radius, int scoreValue, int hitsRemaining, bool washes = false,
+            bool paysSourceColor = false)
         {
             return ShotBalloonSnapshot.ForToughTarget(
-                position, radius, scoreValue, hitsRemaining, washesProjectileColor: washes);
+                position, radius, scoreValue, hitsRemaining, washesProjectileColor: washes,
+                paysSourceColor: paysSourceColor);
+        }
+
+        /// <summary>The SlotIndex-carrying overload — needed by any Bomb-effect test placing more than
+        /// one Tough/Unbreakable-shaped occupant in the same activation (the plain overload above always
+        /// defaults to slot (0,0), colliding two such entries into the same working-set slot).</summary>
+        public static ShotBalloonSnapshot Tough(
+            Vector2 position, float radius, int scoreValue, int hitsRemaining, Vector2Int slotIndex,
+            int balancePriority, int maxBalanceSteps, float moveSpeed, bool directBalanceMotion,
+            IReadOnlyList<NudgeOverride> nudgeOverrides, bool washes = false, bool paysSourceColor = false)
+        {
+            var balance = new BalanceProfile(
+                slotIndex, balancePriority, maxBalanceSteps, moveSpeed, directBalanceMotion, nudgeOverrides);
+            return ShotBalloonSnapshot.ForToughTarget(
+                position, radius, scoreValue, hitsRemaining, balance, washesProjectileColor: washes,
+                paysSourceColor: paysSourceColor);
         }
 
         public static ShotBalloonSnapshot Rainbow(

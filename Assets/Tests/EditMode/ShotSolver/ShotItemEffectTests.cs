@@ -1,8 +1,12 @@
 using System.Collections.Generic;
+using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Item.Effects;
+using BalloonParty.Shared;
+using BalloonParty.Slots.Capabilities;
 using BalloonParty.Solver;
+using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -33,6 +37,41 @@ namespace BalloonParty.Tests.ShotSolver
         {
             var lattice = default(ShotSlotLattice);
             return new ShotItemLayer(new Dictionary<ItemType, ItemEffectParams>(), in lattice);
+        }
+
+        // Phase C2 (Bomb): a real Bomb config entry, rather than the empty dict above — every test
+        // below reads exactly one item type's worth of settings, so damage/flags/radius are the only
+        // knobs a test needs to vary.
+        private static ShotItemLayer CreateBombItemLayer(
+            float radius, int damage, float rainbowConversionRange = 0f, string rainbowColorId = null,
+            DamageFlags flags = DamageFlags.Normal)
+        {
+            var effectParams = new Dictionary<ItemType, ItemEffectParams>
+            {
+                {
+                    ItemType.Bomb,
+                    new ItemEffectParams(
+                        new BombEffectParams(radius, rainbowEffectScale: 1f, rainbowConversionRange), default, default,
+                        default, default, damage, flags)
+                },
+            };
+            var lattice = default(ShotSlotLattice);
+            return new ShotItemLayer(effectParams, in lattice, rainbowColorId);
+        }
+
+        // Shared by the fast-path lock test below — a full-tuple comparison, not just the four fields
+        // the original Shield-era locks checked (see their own comment for why the complete tuple
+        // matters: a stray item-plumbing side effect could easily land in a field neither of them read).
+        private static void AssertResultsMatch(ShotSimulationResult expected, ShotSimulationResult actual)
+        {
+            Assert.AreEqual(expected.RawScore, actual.RawScore);
+            Assert.AreEqual(expected.Pops, actual.Pops);
+            Assert.AreEqual(expected.Died, actual.Died);
+            Assert.AreEqual(expected.BoardCleared, actual.BoardCleared);
+            Assert.AreEqual(expected.ToughsCleared, actual.ToughsCleared);
+            Assert.AreEqual(expected.Events, actual.Events);
+            Assert.AreEqual(expected.Capped, actual.Capped);
+            Assert.AreEqual(expected.Absorbed, actual.Absorbed);
         }
 
         [Test]
@@ -224,6 +263,459 @@ namespace BalloonParty.Tests.ShotSolver
             Assert.AreEqual(5, result.Pops);
             Assert.IsFalse(result.Died);
             Assert.IsTrue(result.BoardCleared);
+        }
+
+        [Test]
+        public void ApplyEffectHits_BombBlast_RadiusBoundary_JustInsideHitsJustOutsideSurvives()
+        {
+            // Bomb radius 1.0 + the target's own 0.2 contact radius = 1.2 combined kill radius (mirrors
+            // BombBlast.ResolveNormal's Physics2D.OverlapCircle-equivalent circle-vs-circle test) — off
+            // the shot's straight-up flight line (x offset) so only the host is ever hit directly. Two
+            // separate single-occupant scenarios isolate the boundary cleanly.
+            var effectParams = CreateBombItemLayer(radius: 1.0f, damage: 1);
+
+            var insideBoard = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0.05f, "Red", 1, 1, new Vector2Int(0, 0), 0, 0, 0f, false, null,
+                    item: ItemType.Bomb),
+                ShotBoardBuilder.Green(
+                    new Vector2(1.19f, 1f), 0.2f, "Blue", 1, 1, new Vector2Int(1, 0), 0, 0, 0f, false, null),
+            };
+            var insideWorkingSet = new ShotBalloonState[insideBoard.Length];
+            var insideResult = ShotSimulator.Simulate(
+                insideBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: insideWorkingSet, items: CreateBombItemLayer(radius: 1.0f, damage: 1));
+
+            Assert.AreEqual(2, insideResult.Pops, "distance 1.19 is inside the 1.2 combined radius — the target dies");
+            Assert.IsTrue(insideResult.BoardCleared);
+
+            var outsideBoard = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0.05f, "Red", 1, 1, new Vector2Int(0, 0), 0, 0, 0f, false, null,
+                    item: ItemType.Bomb),
+                ShotBoardBuilder.Green(
+                    new Vector2(1.21f, 1f), 0.2f, "Blue", 1, 1, new Vector2Int(1, 0), 0, 0, 0f, false, null),
+            };
+            var outsideWorkingSet = new ShotBalloonState[outsideBoard.Length];
+            var outsideResult = ShotSimulator.Simulate(
+                outsideBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: outsideWorkingSet, items: CreateBombItemLayer(radius: 1.0f, damage: 1));
+
+            Assert.AreEqual(1, outsideResult.Pops, "distance 1.21 is outside the 1.2 combined radius — no hit at all");
+            Assert.IsFalse(outsideResult.BoardCleared);
+        }
+
+        [Test]
+        public void ApplyEffectHits_HexNeighbourWithinRadius_GuaranteedKillVsPlainDamageDecrement()
+        {
+            // Slot identity (hex-neighbour classification) and world position (radius selection) are
+            // independent snapshot fields — this test isolates each axis: a hex-neighbour SLOT of the
+            // host placed CLOSE dies outright regardless of hitsRemaining (PiercingDamage — a guaranteed
+            // kill); the SAME hex-neighbour SLOT placed FAR away takes no hit at all; a non-neighbour
+            // SLOT placed close (Damage-kind) merely decrements — surviving the identical hitsRemaining
+            // (5) the close neighbour dies to.
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0.05f, "Red", 1, 1, new Vector2Int(3, 3), 0, 0, 0f, false, null,
+                    item: ItemType.Bomb),
+                ShotBoardBuilder.Green(
+                    new Vector2(0.5f, 1f), 0.05f, "Blue", 1, 5, new Vector2Int(2, 3), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Green(
+                    new Vector2(100f, 100f), 0.05f, "Green", 1, 5, new Vector2Int(4, 3), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Green(
+                    new Vector2(0.3f, 1.3f), 0.05f, "Purple", 1, 5, new Vector2Int(10, 10), 0, 0, 0f, false, null),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet, items: CreateBombItemLayer(radius: 1.0f, damage: 1));
+
+            Assert.AreEqual(2, result.Pops, "host + the near hex-neighbour only — the far neighbour and the near non-neighbour both survive");
+            Assert.IsFalse(result.BoardCleared);
+        }
+
+        [Test]
+        public void ApplyEffectHits_RainbowBombRing_ConvertsWithoutKilling()
+        {
+            // Rainbow-host classification drops the occupant-radius term (centre distance alone): kill
+            // radius 1.0, conversion ring out to 2.0 (radius 1.0 + range 1.0). The ring target sits at
+            // 1.5 — inside the ring, outside the kill zone — so it must survive and simply recolor.
+            // Host at the LAST board index so its own swap-remove is a self-copy no-op (RemoveActive
+            // copies the last active element into the removed slot — removing the last element is
+            // always a no-op), leaving the ring target's index (0) untouched to inspect after the flight.
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(1.5f, 1f), 0.05f, "Blue", 1, 1),
+                ShotBoardBuilder.Rainbow(
+                    new Vector2(0f, 1f), 0.05f, GamePalette.RainbowColorId, 1, 1, new Vector2Int(5, 5), 0, 0, 0f,
+                    false, null, item: ItemType.Bomb),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet,
+                items: CreateBombItemLayer(
+                    radius: 1.0f, damage: 1, rainbowConversionRange: 1.0f, rainbowColorId: GamePalette.RainbowColorId),
+                rainbowColorId: GamePalette.RainbowColorId, allowedColors: new[] { "Blue" });
+
+            Assert.AreEqual(1, result.Pops, "only the rainbow host itself pops — the ring target survives");
+            Assert.IsFalse(result.BoardCleared);
+            Assert.IsTrue(workingSet[0].IsRainbow, "the ring converts the surviving target to rainbow");
+            Assert.AreEqual(GamePalette.RainbowColorId, workingSet[0].ColorId);
+        }
+
+        [Test]
+        public void ApplyEffectHits_RainbowBombRing_OuterBoundary_JustInsideRecolorsJustOutsideUntouched()
+        {
+            // Companion boundary test to the normal-radius one above, but for the rainbow ring's OUTER
+            // edge — kill radius 1.0, conversion range 1.0, outer radius exactly 2.0, centre-distance
+            // ONLY (no added occupant radius — BombBlast.ResolveRainbow's own doc). Two isolated
+            // single-occupant scenarios with the same ±0.01 margin convention as the normal-radius
+            // boundary test above; host at the LAST board index (self-copy no-op) so the ring target's
+            // index (0) is stable to inspect afterward.
+            var insideBoard = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(1.99f, 1f), 0.2f, "Blue", 1, 1),
+                ShotBoardBuilder.Rainbow(
+                    new Vector2(0f, 1f), 0.05f, GamePalette.RainbowColorId, 1, 1, new Vector2Int(5, 5), 0, 0, 0f,
+                    false, null, item: ItemType.Bomb),
+            };
+            var insideWorkingSet = new ShotBalloonState[insideBoard.Length];
+            var insideResult = ShotSimulator.Simulate(
+                insideBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: insideWorkingSet,
+                items: CreateBombItemLayer(
+                    radius: 1.0f, damage: 1, rainbowConversionRange: 1.0f, rainbowColorId: GamePalette.RainbowColorId),
+                rainbowColorId: GamePalette.RainbowColorId, allowedColors: new[] { "Blue" });
+
+            Assert.AreEqual(1, insideResult.Pops, "only the rainbow host pops — 1.99 sits inside the 2.0 outer radius, it survives");
+            Assert.IsTrue(insideWorkingSet[0].IsRainbow, "1.99 is inside the ring — it converts");
+
+            var outsideBoard = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(2.01f, 1f), 0.2f, "Blue", 1, 1),
+                ShotBoardBuilder.Rainbow(
+                    new Vector2(0f, 1f), 0.05f, GamePalette.RainbowColorId, 1, 1, new Vector2Int(5, 5), 0, 0, 0f,
+                    false, null, item: ItemType.Bomb),
+            };
+            var outsideWorkingSet = new ShotBalloonState[outsideBoard.Length];
+            var outsideResult = ShotSimulator.Simulate(
+                outsideBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: outsideWorkingSet,
+                items: CreateBombItemLayer(
+                    radius: 1.0f, damage: 1, rainbowConversionRange: 1.0f, rainbowColorId: GamePalette.RainbowColorId),
+                rainbowColorId: GamePalette.RainbowColorId, allowedColors: new[] { "Blue" });
+
+            Assert.AreEqual(1, outsideResult.Pops, "only the rainbow host pops — 2.01 sits outside the ring entirely");
+            Assert.IsFalse(outsideWorkingSet[0].IsRainbow, "2.01 is outside the 2.0 outer radius — no hit at all, no conversion");
+        }
+
+        [Test]
+        public void ApplyEffectHits_Damage3_PopsATwoHitTough_FlatScoreNoStreak()
+        {
+            // A non-neighbour Tough within the blast, damage:3 against hitsRemaining:2 — pops (3 >= 2),
+            // via the flat/streak-breaking ResolveToughPop rule (an ordinary colourless Tough, not
+            // PaysSourceColor): host(2*streak1=2) + tough's own flat ScoreValue(5, no multiplier) = 7.
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0.05f, "Red", 2, 1, new Vector2Int(3, 3), 0, 0, 0f, false, null,
+                    item: ItemType.Bomb),
+                ShotBoardBuilder.Tough(
+                    new Vector2(0.5f, 1f), 0.05f, 5, 2, new Vector2Int(9, 9), 0, 0, 0f, false, null),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet, items: CreateBombItemLayer(radius: 1.0f, damage: 3));
+
+            Assert.AreEqual(2, result.Pops);
+            Assert.AreEqual(1, result.ToughsCleared, "the item pop still routes an ordinary Tough through the flat rule");
+            Assert.AreEqual(2 + 5, result.RawScore);
+            Assert.IsTrue(result.BoardCleared);
+        }
+
+        [Test]
+        public void ApplyEffectHits_SurvivingDamageHit_StillNudgesItsHexNeighbour()
+        {
+            // Mirrors BalanceBiasFidelityTests.RunFlight's dynamics rig: a real ShotBoardDynamics over a
+            // headless SlotGrid, no rebalance pulses (interval 0) so nothing else moves the board
+            // mid-flight. The Tough survives (hitsRemaining 5 - damage 3 = 2) yet ApplyEffectHits nudges
+            // its hex-neighbour regardless — NudgeService has no outcome filter for item hits, mirroring
+            // a pop's own unconditional nudge.
+            var gridConfig = Substitute.For<ISlotGridConfig>();
+            gridConfig.SlotsSize.Returns(new Vector2Int(5, 3));
+            gridConfig.SlotSeparation.Returns(new Vector2(1f, 1f));
+            gridConfig.SlotsOffset.Returns(Vector2.zero);
+
+            var balloonsConfig = Substitute.For<IBalloonsConfiguration>();
+            balloonsConfig.FlightRebalanceInterval.Returns(0f);
+
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0.05f, "Red", 2, 1, new Vector2Int(0, 0), 0, 0, 0f, false, null,
+                    item: ItemType.Bomb),
+                ShotBoardBuilder.Tough(
+                    new Vector2(0.5f, 1f), 0.05f, 9, 5, new Vector2Int(3, 1), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Green(
+                    new Vector2(100f, 100f), 0.05f, "Blue", 1, 1, new Vector2Int(2, 1), 0, 0, 0f, false, null),
+            };
+            var dynamics = new ShotBoardDynamics(
+                gridConfig, balloonsConfig, board, new ShotDynamicActorSnapshot[0], new ShotStaticActorSnapshot[0]);
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet, dynamics: dynamics, items: CreateBombItemLayer(radius: 1.0f, damage: 3));
+
+            Assert.AreEqual(1, result.Pops, "only the host itself pops — the tough survives the damage-3 hit");
+            Assert.IsFalse(result.BoardCleared);
+            Assert.AreEqual(2, workingSet[1].HitsRemaining, "5 - damage(3) = 2 — survived, but was still hit");
+            Assert.Greater(
+                dynamics.TargetActors[2].NudgeImpulses.Count, 0,
+                "the surviving Damage hit still nudges its hex-neighbour, same as a pop would");
+        }
+
+        [Test]
+        public void ApplyEffectHits_Damage3AgainstFourHitTough_LeavesExactlyOneHitRemaining()
+        {
+            // Boundary companion to the two tests above: damage(3) against hitsRemaining(4) leaves
+            // EXACTLY 1 (4-3=1, still > 0) rather than the comfortable margins those exercise (2-3
+            // overshoots to a pop; 5-3=2 survives with room to spare) — pins the `<= 0` pop threshold
+            // against an off-by-one that would treat a small positive remainder as a kill.
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0.05f, "Red", 1, 1, new Vector2Int(0, 0), 0, 0, 0f, false, null,
+                    item: ItemType.Bomb),
+                ShotBoardBuilder.Tough(
+                    new Vector2(0.5f, 1f), 0.05f, 5, 4, new Vector2Int(9, 9), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Green(
+                    new Vector2(100f, 100f), 0.05f, "Blue", 1, 1, new Vector2Int(2, 1), 0, 0, 0f, false, null),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet, items: CreateBombItemLayer(radius: 1.0f, damage: 3));
+
+            Assert.AreEqual(1, result.Pops, "only the host pops — the tough survives with exactly 1 hit remaining");
+            Assert.IsFalse(result.BoardCleared);
+            Assert.AreEqual(1, workingSet[1].HitsRemaining, "4 - damage(3) = 1 — the exact boundary, must not pop");
+        }
+
+        [Test]
+        public void ApplyEffectHits_BombPopsAShieldCarryingNeighbour_ChainsTheShieldGrant()
+        {
+            // Cross-item chaining (@ref plan_shot_solver_accuracy Phase C2 memo §7): PopItemHit's own
+            // chained-activation construction never discriminates by ItemType — a Bomb-popped Shield
+            // carrier must still grant its shield exactly like a direct-contact Shield pop does
+            // (ResolveBalloonContact_ShieldItem_GrantsAShieldASubsequentWallBounceSpends, above, is the
+            // direct-contact baseline this test extends into a chain). A far-off filler keeps the
+            // working set non-empty through the one wall bounce that proves the grant: without it, the
+            // shot dies on that SAME bounce (0 shields); with it, 1 shield survives the bounce.
+            var walls = new Vector4(1.5f, 1000f, -1000f, -1000f);
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0.05f, "Red", 1, 1, new Vector2Int(0, 0), 0, 0, 0f, false, null,
+                    item: ItemType.Bomb),
+                ShotBoardBuilder.Green(
+                    new Vector2(0.5f, 1f), 0.05f, "Blue", 1, 1, new Vector2Int(1, 0), 0, 0, 0f, false, null,
+                    item: ItemType.Shield),
+                ShotBoardBuilder.Green(
+                    new Vector2(500f, 500f), 0.05f, "Green", 1, 1, new Vector2Int(20, 20), 0, 0, 0f, false, null),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet, items: CreateBombItemLayer(radius: 1.0f, damage: 1));
+
+            Assert.AreEqual(2, result.Pops, "host (direct) and the Shield carrier (bomb-triggered) both pop");
+            Assert.IsFalse(result.BoardCleared, "the far-off filler survives untouched");
+            Assert.AreEqual(2, result.Events, "host contact + the one wall bounce the grant survives");
+            Assert.IsFalse(
+                result.Died, "the chained Shield grant survives the wall bounce that would otherwise kill it (0 shields)");
+        }
+
+        [Test]
+        public void ApplyEffectHits_BombHexNeighbourUnbreakable_GuaranteedKillPaysSourceColorNoRefund()
+        {
+            // The C2a payout path through an ITEM-triggered pop (companion to ShotBuffScoringTests'
+            // pure-projectile-contact C2a guard): a hex-neighbour Unbreakable (hitsRemaining ==
+            // int.MaxValue) within the blast radius is a guaranteed kill regardless of its durability
+            // (PiercingDamage always pops), and its pop still routes through the PaysSourceColor branch
+            // even though the cause is an item effect — paying the host's own colour (cause.SourceColorId)
+            // and EXTENDING the established streak (not resetting it, unlike an ordinary Tough), yet
+            // never refunding (IsProjectileContact is false for an item pop). A far-off filler keeps the
+            // flight alive to the one wall bounce that proves the missing refund.
+            var walls = new Vector4(1.5f, 1000f, -1000f, -1000f);
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0.05f, "Red", 2, 1, new Vector2Int(0, 0), 0, 0, 0f, false, null,
+                    item: ItemType.Bomb),
+                ShotBoardBuilder.Tough(
+                    new Vector2(0.5f, 1f), 0.05f, 9, int.MaxValue, new Vector2Int(1, 0), 0, 0, 0f, false, null,
+                    paysSourceColor: true),
+                ShotBoardBuilder.Green(
+                    new Vector2(500f, 500f), 0.05f, "Green", 1, 1, new Vector2Int(20, 20), 0, 0, 0f, false, null),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet, items: CreateBombItemLayer(radius: 1.0f, damage: 1));
+
+            // Host(2*streak1=2) + the Unbreakable's item pop, paying "Red" and EXTENDING the same streak
+            // to 2 (RecordColor, not ResolveToughPop's flat/reset rule): 9*2=18. Total 2+18=20.
+            Assert.AreEqual(2 + 18, result.RawScore);
+            Assert.AreEqual(2, result.Pops, "the guaranteed-kill hex-neighbour pops despite int.MaxValue durability");
+            Assert.AreEqual(1, result.ToughsCleared, "PaysSourceColor still tallies as a tough popped");
+            Assert.IsFalse(result.BoardCleared, "the far-off filler survives untouched");
+
+            // No refund fired for the Unbreakable's own pop (IsProjectileContact is false for an item
+            // pop) — 0 shields dies on the very next bounce; a wrongly-fired refund would survive it.
+            Assert.AreEqual(2, result.Events, "host contact + the one wall bounce that exposes the missing refund");
+            Assert.IsTrue(result.Died, "0 shields — the item pop never refunded");
+        }
+
+        [Test]
+        public void ApplyEffectHits_ChainedBombIntoBomb_StopsAtTheActivationBudget()
+        {
+            // 40 Bomb-carrying dominoes spread along +x at y=1 (distance 1.0 apart) — only domino[0]
+            // sits on the vertical flight ray (x=0); every other domino is far enough off-ray (x>=1) to
+            // never be hit directly, so every pop past domino[0] can ONLY happen via the bomb chain.
+            // Bomb radius 1.0 + the uniform 0.05 occupant radius = 1.05 combined — covers each domino's
+            // IMMEDIATE next neighbour (distance 1.0) but not the one after that (distance 2.0 > 1.05),
+            // so the chain can only ever cascade forward one hop at a time.
+            //
+            // Activation-budget hand-trace (MaxActivationsPerFlight = 32): domino[0]'s direct-hit pop
+            // enqueues Activation #1 (its OWN bomb — the host's own direct-hit activation counts toward
+            // the budget). Draining Activation #k (domino[k-1]'s bomb, k = 1..32) pops domino[k] and
+            // chains Activation #(k+1) (domino[k]'s own bomb). TryBeginActivation accepts while
+            // _activationCount < 32, so Activations #1..#32 all succeed (the 32nd bringing the count to
+            // exactly 32); domino[32]'s pop then tries to chain Activation #33, which TryBeginActivation
+            // rejects (count already at 32) — domino[32]'s own bomb never fires, so domino[33] onward are
+            // never touched. Total popped: domino[0] (direct) plus domino[1..32] (32 chained pops) = 33;
+            // domino[33..39] (7 dominoes) survive.
+            const int dominoCount = 40;
+            var board = new ShotBalloonSnapshot[dominoCount];
+            board[0] = ShotBoardBuilder.Green(
+                new Vector2(0f, 1f), 0.05f, "Red", 1, 1, new Vector2Int(0, 0), 0, 0, 0f, false, null,
+                item: ItemType.Bomb);
+            for (var k = 1; k < dominoCount; k++)
+            {
+                board[k] = ShotBoardBuilder.Green(
+                    new Vector2(k, 1f), 0.05f, "Red", 1, 1, new Vector2Int(k, 0), 0, 0, 0f, false, null,
+                    item: ItemType.Bomb);
+            }
+
+            var workingSet = new ShotBalloonState[board.Length];
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet, items: CreateBombItemLayer(radius: 1.0f, damage: 1));
+
+            Assert.AreEqual(33, result.Pops, "domino[0] direct + 32 chained pops (the budget's own cap), then the chain starves");
+            Assert.IsFalse(result.BoardCleared, "the 7 dominoes past the budget's reach never get blasted");
+        }
+
+        [Test]
+        public void ApplyEffectHits_BombPopContinuesAnEstablishedStreak_NoRefundNoNeighbourConversion()
+        {
+            // A pre-established "Red" streak-of-1 (mirrors ShotBuffScoringTests' refund-gate seeding
+            // technique — the WildcardStreak branch never itself writes StreakColor, so the seed pins it
+            // directly) plus a rainbow buff kept active throughout (so a hypothetical PopItemHit
+            // regression that copies the direct-contact path's ConvertNeighborsToRainbow call — gated on
+            // the buff or not — would still be exercised): B's own direct hit extends the streak to 2 (an
+            // ordinary direct-hit refund fires here — the BASELINE this test is not questioning), then
+            // B's Bomb blast pops C (same colour, off the flight's ray) via an ITEM effect — continuing
+            // the SAME streak to 3 for its own scoring (not resetting), but never refunding
+            // (IsProjectileContact is false for an item pop) and never touching D, C's real
+            // hex-neighbour, which must stay un-rainbow.
+            var walls = new Vector4(1000f, 1.5f, -1000f, -1.5f);
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(1.0f, 0f), 0.05f, "Red", 1, 1, new Vector2Int(6, 6), 0, 0, 0f, false, null,
+                    item: ItemType.Bomb),
+                ShotBoardBuilder.Green(
+                    new Vector2(1.0f, 0.3f), 0.05f, "Red", 100, 1, new Vector2Int(0, 0), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Green(
+                    new Vector2(50f, 50f), 0.05f, "Red", 1, 1, new Vector2Int(1, 0), 0, 0, 0f, false, null),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, walls, Vector2.zero, Vector2.right, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet,
+                items: CreateBombItemLayer(radius: 1.0f, damage: 1, rainbowColorId: GamePalette.RainbowColorId),
+                rainbowColorId: GamePalette.RainbowColorId,
+                seed: ShotFlightSeed.WithRainbowBuff(
+                    untilWall: true, projectileColor: "Red", streakColor: "Red", streakCount: 1));
+
+            // B(1*streak2) + C's item pop(100*streak3, continuing — NOT reset to 1) = 2 + 300 = 302.
+            Assert.AreEqual(2 + 300, result.RawScore);
+            Assert.AreEqual(2, result.Pops, "B (direct) and C (bomb-triggered) pop; D survives untouched");
+            Assert.IsFalse(result.BoardCleared);
+
+            // Shields: 0 -> +1 (B's own direct-hit refund) only; C's item pop must NOT refund a second
+            // time. 1 shield survives exactly one bounce (right wall) then dies on the second (left
+            // wall) — Events == 3 (contact + 2 walls). A wrongly-doubled refund (2 shields) would
+            // survive a THIRD bounce too, dying only on a 4th event instead.
+            Assert.AreEqual(3, result.Events);
+            Assert.IsTrue(result.Died);
+
+            // D is C's real hex-neighbour (slot (1,0) neighbours slot (0,0)) and shares its colour — an
+            // item pop must never call ConvertNeighborsToRainbow (wired only into the direct-contact
+            // path), even though the buff is still active when C pops.
+            Assert.IsFalse(workingSet[0].IsRainbow, "an item-triggered pop must never convert its neighbours to rainbow");
+            Assert.AreEqual("Red", workingSet[0].ColorId);
+        }
+
+        [Test]
+        public void ResolveBalloonContact_BombCarryingBoard_ItemsNullOrConfigMissing_MatchesPlainBoard()
+        {
+            // The Bomb-specific fast-path lock (Shield's own lock lives above) — a Bomb-carrying host
+            // that never gets to activate (items:null) or whose item layer has no Bomb entry in its
+            // config dict must behave byte-identically to a board with no item at all; a nearby off-ray
+            // balloon within what WOULD be blast range proves nothing gets blasted either way.
+            var plainBoard = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.05f, "Red", 3, 1),
+                ShotBoardBuilder.Green(new Vector2(0.5f, 1f), 0.05f, "Blue", 1, 1),
+            };
+            var bombBoard = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.05f, "Red", 3, 1, item: ItemType.Bomb),
+                ShotBoardBuilder.Green(new Vector2(0.5f, 1f), 0.05f, "Blue", 1, 1),
+            };
+
+            var plainWorkingSet = new ShotBalloonState[plainBoard.Length];
+            var plainResult = ShotSimulator.Simulate(
+                plainBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: plainWorkingSet);
+
+            var itemsNullWorkingSet = new ShotBalloonState[bombBoard.Length];
+            var itemsNullResult = ShotSimulator.Simulate(
+                bombBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: itemsNullWorkingSet);
+
+            var missingConfigWorkingSet = new ShotBalloonState[bombBoard.Length];
+            var missingConfigResult = ShotSimulator.Simulate(
+                bombBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: missingConfigWorkingSet, items: CreateItemLayer());
+
+            AssertResultsMatch(plainResult, itemsNullResult);
+            AssertResultsMatch(plainResult, missingConfigResult);
         }
     }
 }

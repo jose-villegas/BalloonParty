@@ -4,7 +4,7 @@ using BalloonParty.Configuration.Items;
 using BalloonParty.Item.Effects;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared;
-using BalloonParty.Shared.Diagnostics;
+using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using UnityEngine;
 
@@ -141,6 +141,10 @@ namespace BalloonParty.Solver
         // Reused across an item activation's EffectHit list (@ref plan_shot_solver_accuracy Phase C1
         // onward) — same single-threaded scratch-buffer convention as NeighborBuffer above.
         private static readonly List<EffectHit> ItemHitsScratch = new();
+
+        // Reused across ApplyEffectHits' handle→slot resolution pass (@ref plan_shot_solver_accuracy
+        // Phase C2) — same single-threaded scratch-buffer convention as NeighborBuffer/ItemHitsScratch.
+        private static readonly List<Vector2Int> EffectHitSlotsScratch = new();
 
         /// <summary>Simulates one aim direction to completion. <paramref name="workingSet" /> is a
         /// caller-owned scratch buffer (sized to at least <paramref name="board" />.Count) reused
@@ -580,7 +584,15 @@ namespace BalloonParty.Solver
 
             // A colour filter scopes SCORE attribution only (milestone masks count one colour's
             // points); streaks, refunds and board effects run unfiltered, exactly as the game would.
-            ResolvePopScore(balloon, in scoreRules, ref state);
+            // Built from the CURRENT (pre-adoption) projectile colour — ResolvePopScore's own adoption
+            // step mutates state.ProjectileColor, so the cause must snapshot it first (@ref
+            // plan_shot_solver_accuracy Phase C §1.5).
+            var cause = ShotPopCause.ProjectileContact(
+                state.HasRainbowBuff, state.IsPiercing,
+                isRainbowTargetDeferred: balloon.IsRainbow && !state.HasRainbowBuff
+                    && string.IsNullOrEmpty(state.ProjectileColor),
+                projectileColor: state.ProjectileColor);
+            ResolvePopScore(balloon, in scoreRules, in cause, ref state);
 
             // A rainbow-buffed shot converts nearby paintable balloons on every pop it lands, not
             // just a rainbow-target one — mirrors ProjectileHitResolver.ConvertNeighborsToRainbow,
@@ -641,7 +653,9 @@ namespace BalloonParty.Solver
             {
                 var outcome = items.Resolve(next, state.ProjectileColor, workingSet, activeCount, ItemHitsScratch);
                 ApplyItemOutcome(in outcome, ref state);
-                ApplyEffectHits(ItemHitsScratch, workingSet, ref activeCount, dynamics, in scoreRules, ref state);
+                ApplyEffectHits(
+                    ItemHitsScratch, items, in next, in outcome, workingSet, ref activeCount, dynamics, tHit,
+                    in scoreRules, ref state);
             }
         }
 
@@ -665,16 +679,141 @@ namespace BalloonParty.Solver
             }
         }
 
-        // Stub through Phase C1 — Shield has no effect core, so it never enqueues an EffectHit. Phase
-        // C2 wires the real per-kind dispatch here (PiercingDamage/Damage popping, Recolor never
-        // popping, every Damage/PiercingDamage hit nudging even on a surviving hit, a chained-item
-        // enqueue per pop) — see @ref plan_shot_solver_accuracy Phase C's "EffectHit application"
-        // section.
+        // Per-kind dispatch (@ref plan_shot_solver_accuracy Phase C2 "EffectHit application"):
+        // PiercingDamage always pops (cause flags = Piercing ONLY — live REPLACES flags, never ORs
+        // them); Damage pops when the activation's own configured flags carry Piercing, else decrements
+        // HitsRemaining by the activation's own Damage and pops at/below zero — NEVER deflects/redirects,
+        // unlike a projectile contact. Recolor never pops and never nudges. Every hit's target slot is
+        // resolved from the effect board's frozen bind-time occupant snapshot BEFORE any hit below can
+        // swap-remove a popped entry and scramble workingSet's own array indices — the board itself
+        // never mutates, only workingSet does, so this one-shot resolution pass is always safe.
         private static void ApplyEffectHits(
-            IReadOnlyList<EffectHit> hits, ShotBalloonState[] workingSet, ref int activeCount,
-            ShotBoardDynamics dynamics, in ShotScoreRules scoreRules, ref ShotFlightState state)
+            List<EffectHit> hits, ShotItemLayer items, in ShotItemActivation activation, in ShotItemOutcome outcome,
+            ShotBalloonState[] workingSet, ref int activeCount, ShotBoardDynamics dynamics, float tHit,
+            in ShotScoreRules scoreRules, ref ShotFlightState state)
         {
-            Log.Assert(hits == null || hits.Count == 0, "ShotItemLayer", "C1 items never emit an EffectHit");
+            if (hits == null || hits.Count == 0)
+            {
+                return;
+            }
+
+            EffectHitSlotsScratch.Clear();
+            for (var i = 0; i < hits.Count; i++)
+            {
+                EffectHitSlotsScratch.Add(items.SlotOf(hits[i].Handle));
+            }
+
+            for (var i = 0; i < hits.Count; i++)
+            {
+                var hit = hits[i];
+                var index = FindActiveIndex(workingSet, activeCount, EffectHitSlotsScratch[i]);
+                if (index < 0)
+                {
+                    continue; // already popped by an earlier hit in this same batch
+                }
+
+                if (hit.Kind == EffectHitKind.Recolor)
+                {
+                    ApplyRecolor(ref workingSet[index], hit.ColorId, scoreRules.RainbowColorId);
+                    continue;
+                }
+
+                // NudgeService has no outcome filter — a surviving Damage hit nudges its neighbours
+                // exactly like a pop does.
+                NudgeItemHit(dynamics, workingSet[index], tHit);
+
+                var flags = hit.Kind == EffectHitKind.PiercingDamage ? DamageFlags.Piercing : outcome.Flags;
+                var pops = hit.Kind == EffectHitKind.PiercingDamage || flags.HasFlag(DamageFlags.Piercing);
+                if (!pops)
+                {
+                    workingSet[index].HitsRemaining -= outcome.Damage;
+                    pops = workingSet[index].HitsRemaining <= 0;
+                }
+
+                if (pops)
+                {
+                    PopItemHit(
+                        items, workingSet, ref activeCount, index, tHit, dynamics, in scoreRules,
+                        activation.SourceColorId, flags, ref state);
+                }
+            }
+        }
+
+        private static int FindActiveIndex(ShotBalloonState[] workingSet, int activeCount, Vector2Int slot)
+        {
+            for (var i = 0; i < activeCount; i++)
+            {
+                if (workingSet[i].SlotIndex == slot)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        private static void NudgeItemHit(ShotBoardDynamics dynamics, in ShotBalloonState balloon, float tHit)
+        {
+            if (balloon.Actor != null)
+            {
+                dynamics?.OnBalloonHit(balloon.Actor, tHit);
+            }
+            else
+            {
+                dynamics?.OnBalloonHitAt(balloon.SlotIndex, tHit);
+            }
+        }
+
+        // An item-effect pop: scores via its own cause (ShotPopCause.ItemEffect — never adopts the
+        // projectile's colour, never refunds a shield), then removes exactly like a projectile-contact
+        // pop, chaining the popped carrier's own item (if any) onto the SAME FIFO queue — a bomb-popped
+        // balloon carrying another Bomb resolves on a LATER iteration of RunItemEffects' drain, not
+        // nested recursion (mirrors the live frame cadence). Item pops never touch
+        // ConvertNeighborsToRainbow/IsCruising/ConsecutiveWallBounces — those are projectile-contact-only.
+        private static void PopItemHit(
+            ShotItemLayer items, ShotBalloonState[] workingSet, ref int activeCount, int index, float tHit,
+            ShotBoardDynamics dynamics, in ShotScoreRules scoreRules, string sourceColorId, DamageFlags flags,
+            ref ShotFlightState state)
+        {
+            var cause = ShotPopCause.ItemEffect(sourceColorId, flags);
+            ResolvePopScore(workingSet[index], in scoreRules, in cause, ref state);
+
+            state.Pops++;
+
+            // Copy BY VALUE before RemoveActive's swap-remove reassigns this index (R6 ref-aliasing) —
+            // the chained activation below needs the popped balloon's OWN item/colour/slot identity.
+            var popped = workingSet[index];
+
+            if (popped.Actor != null)
+            {
+                dynamics?.RemoveFromGrid(popped.Actor);
+            }
+            else
+            {
+                dynamics?.RemoveFromGridAt(popped.SlotIndex);
+            }
+
+            RemoveActive(workingSet, ref activeCount, index);
+
+            if (items != null && popped.Item != ItemType.None)
+            {
+                var chained = new ShotItemActivation(
+                    popped.Item, popped.Position, Vector2.zero, popped.SlotIndex, popped.ColorId, popped.IsRainbow,
+                    popped.ItemSpinDegrees + (popped.ItemSpinRate * tHit), isDirectHit: false);
+                items.TryBeginActivation(in chained);
+            }
+        }
+
+        // Shared by ApplyEffectHits' Recolor case and ConvertNeighborsToRainbow's rainbow-buff
+        // conversion — a plain assignment mirrors ApplyColorChange writing IHasColor.Color.Value
+        // directly: setting a balloon's colour to the reserved rainbow marker makes it rainbow; painting
+        // a rainbow balloon back to an ordinary colour (Paint's green-on-rainbow case, Phase C5) clears
+        // IsRainbow just as naturally, with no separate branch needed.
+        private static void ApplyRecolor(ref ShotBalloonState balloon, string colorId, string rainbowColorId)
+        {
+            balloon.ColorId = colorId;
+            balloon.IsRainbow = !string.IsNullOrEmpty(rainbowColorId)
+                && string.Equals(colorId, rainbowColorId, StringComparison.Ordinal);
         }
 
         private static void DeflectOffBalloon(
@@ -706,28 +845,37 @@ namespace BalloonParty.Solver
             state.DeferredPops = 0;
         }
 
-        // Dispatches a real (non-static, non-absorb) pop's colour adoption + streak + payout, mirroring
-        // ScoreController.RecordStreakMultiplier's precedence (ProjectileHitResolver.cs:124-152) and
-        // BalloonModel.ResolveRainbowAttribution's payout (pre-cap product only — never
-        // ILevelProgress.ClaimProgress's cap, which the sim doesn't model). Guard, then two
-        // orthogonal concerns, then the streak-multiplier dispatch (in live precedence order):
+        // Dispatches a pop's colour adoption + streak + payout, mirroring ScoreController.
+        // RecordStreakMultiplier's precedence (ProjectileHitResolver.cs:124-152) and BalloonModel.
+        // ResolveRainbowAttribution's payout (pre-cap product only — never ILevelProgress.ClaimProgress's
+        // cap, which the sim doesn't model), re-keyed on cause.Flags (@ref plan_shot_solver_accuracy
+        // Phase C §1.5's ShotPopCause seam) instead of reading state.HasRainbowBuff/IsRainbow-deferred
+        // conditions directly — the same dispatch now serves both a projectile contact AND an item
+        // effect's own AOE pop. Guard, then two orthogonal concerns gated on cause.IsProjectileContact,
+        // then the streak-multiplier dispatch (in live precedence order):
         // - Guard: a rainbow with no board-allowed colours pays/records nothing (mirrors
         //   ResolveRainbowAttribution's own early return — ScoreController's group-publish exits
         //   before RecordStreakMultiplier ever runs).
-        // - Adoption (ApplyColorChange): an ordinary (non-rainbow) coloured pop always steals the
-        //   projectile's colour, regardless of the shot's own rainbow buff — only a wildcard
-        //   (rainbow) TARGET suppresses it.
-        // - Dispatch: (1) HasRainbowBuff scores colour-agnostically — even an otherwise
-        //   streak-breaking tough pop just keeps the multiplier climbing; (2) absent a buff, a
-        //   colourless non-rainbow pop takes the flat/streak-breaking tough rule and RETURNS —
-        //   it never reaches the shared payout/refund step below, matching live's IHasColor-gated
-        //   refund; (3) a rainbow target defers the streak while the projectile is colourless;
-        //   (4) else anchors on the projectile's own colour if still allowed, else the balloon's
-        //   first allowed one; (5) an ordinary coloured pop just records its own colour.
-        // The shield refund is hoisted out of every surviving branch (never the tough-rule return):
-        // ColorId non-empty && streak >= 2 of the projectile's now-current colour.
+        // - Adoption (ApplyColorChange) only ever runs for a projectile's own DIRECT contact — an item's
+        //   AOE dispatch never touches projectile.ColorName live, so a Bomb/Laser/Lightning pop must
+        //   never steal the shot's travelling colour.
+        // - Dispatch: (1) WildcardStreak scores colour-agnostically — even an otherwise streak-breaking
+        //   tough/Unbreakable pop just keeps the multiplier climbing; (2) DeferredStreak banks a
+        //   colourless-projectile rainbow pop; (3) absent both flags, a colourless target that doesn't
+        //   PaysSourceColor (an ordinary Tough) takes the flat/streak-breaking rule and RETURNS — never
+        //   reaching the shared payout/refund step below, matching live's IHasColor-gated refund;
+        //   (4) a rainbow target anchors on cause.SourceColorId if still allowed, else the balloon's
+        //   first allowed one (mirrors ResolveRainbowAttribution reading context.SourceColorId, not the
+        //   projectile's own live colour field, as its primary candidate); (5) a source-colour-paying
+        //   colourless target (Unbreakable, Phase C2a) records cause.SourceColorId instead of its own
+        //   (empty) ColorId; (6) an ordinary coloured pop just records its own colour.
+        // The shield refund is hoisted out of every surviving branch (never the tough-rule return),
+        // gated on cause.IsProjectileContact same as adoption: ColorId non-empty && streak >= 2 of the
+        // projectile's now-current colour — an Unbreakable's empty ColorId already excludes it from ever
+        // refunding on its own pop, live-faithfully (balloon is IHasColor gates the live refund, and
+        // UnbreakableBalloonModel implements neither IHasColor nor IPaintable).
         private static void ResolvePopScore(
-            in ShotBalloonState balloon, in ShotScoreRules scoreRules, ref ShotFlightState state)
+            in ShotBalloonState balloon, in ShotScoreRules scoreRules, in ShotPopCause cause, ref ShotFlightState state)
         {
             var allowedColors = scoreRules.AllowedColors;
             var targetColorId = scoreRules.TargetColorId;
@@ -737,39 +885,54 @@ namespace BalloonParty.Solver
                 return;
             }
 
-            if (!balloon.IsRainbow && !string.IsNullOrEmpty(balloon.ColorId)
+            if (cause.IsProjectileContact && !balloon.IsRainbow && !string.IsNullOrEmpty(balloon.ColorId)
                 && !string.Equals(state.ProjectileColor, balloon.ColorId, StringComparison.Ordinal))
             {
                 state.ProjectileColor = balloon.ColorId;
             }
 
             int multiplier;
-            if (state.HasRainbowBuff)
+            string attributedColorId;
+            if (cause.Flags.HasFlag(DamageFlags.WildcardStreak))
             {
                 state.DeferredPops = 0;
                 multiplier = ++state.StreakCount;
+                attributedColorId = balloon.PaysSourceColor ? cause.SourceColorId : balloon.ColorId;
             }
-            else if (string.IsNullOrEmpty(balloon.ColorId))
+            else if (cause.Flags.HasFlag(DamageFlags.DeferredStreak))
+            {
+                state.DeferredPops++;
+                multiplier = 1;
+                attributedColorId = balloon.ColorId;
+            }
+            else if (string.IsNullOrEmpty(balloon.ColorId) && !balloon.PaysSourceColor)
             {
                 var countsTough = string.IsNullOrEmpty(targetColorId);
                 ResolveToughPop(countsTough ? balloon.ScoreValue : 0, ref state);
                 return;
             }
-            else if (balloon.IsRainbow && string.IsNullOrEmpty(state.ProjectileColor))
-            {
-                state.DeferredPops++;
-                multiplier = 1;
-            }
             else if (balloon.IsRainbow)
             {
-                var primary = ContainsColor(allowedColors, state.ProjectileColor)
-                    ? state.ProjectileColor
+                var primary = ContainsColor(allowedColors, cause.SourceColorId)
+                    ? cause.SourceColorId
                     : allowedColors[0];
                 multiplier = RecordColor(primary, ref state);
+                attributedColorId = primary;
+            }
+            else if (balloon.PaysSourceColor)
+            {
+                // Still a colourless (Tough-shaped) target for the ToughsCleared tally even though its
+                // PAYOUT rides the colour-record path instead of ResolveToughPop's flat rule (@ref
+                // plan_shot_solver_accuracy Phase C2a) — the two are orthogonal: one counts "a tough
+                // popped", the other decides how the streak reacts.
+                state.ToughsCleared++;
+                multiplier = RecordColor(cause.SourceColorId, ref state);
+                attributedColorId = cause.SourceColorId;
             }
             else
             {
                 multiplier = RecordColor(balloon.ColorId, ref state);
+                attributedColorId = balloon.ColorId;
             }
 
             // A rainbow target pays every allowed colour at full ScoreValue — a target-colour filter
@@ -780,10 +943,10 @@ namespace BalloonParty.Solver
                 : 1;
             var counts = balloon.IsRainbow
                 || string.IsNullOrEmpty(targetColorId)
-                || string.Equals(balloon.ColorId, targetColorId, StringComparison.Ordinal);
+                || string.Equals(attributedColorId, targetColorId, StringComparison.Ordinal);
             state.RawScore += (counts ? balloon.ScoreValue * payColors : 0) * multiplier;
 
-            if (!string.IsNullOrEmpty(balloon.ColorId) && state.StreakCount >= 2
+            if (cause.IsProjectileContact && !string.IsNullOrEmpty(balloon.ColorId) && state.StreakCount >= 2
                 && string.Equals(state.StreakColor, state.ProjectileColor, StringComparison.Ordinal))
             {
                 state.Shields++;
@@ -843,8 +1006,7 @@ namespace BalloonParty.Solver
                     if (!workingSet[i].IsStatic && !workingSet[i].IsRainbow
                         && !string.IsNullOrEmpty(workingSet[i].ColorId))
                     {
-                        workingSet[i].ColorId = rainbowColorId;
-                        workingSet[i].IsRainbow = true;
+                        ApplyRecolor(ref workingSet[i], rainbowColorId, rainbowColorId);
                     }
 
                     break;

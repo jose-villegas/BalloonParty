@@ -90,7 +90,8 @@ namespace BalloonParty.Solver
                 gridConfig, balloonsConfig, targets, otherDynamicActors, staticActors, pulseExecutionDelay);
             var cruiseConfig = new ShotCruiseConfig(config);
             var lattice = ShotSlotLattice.From(gridConfig);
-            var items = new ShotItemLayer(ItemEffectParams.FromConfiguration(itemConfig), in lattice);
+            var items = new ShotItemLayer(
+                ItemEffectParams.FromConfiguration(itemConfig), in lattice, GamePalette.RainbowColorId);
 
             // Un-rotate the spawn point back into the thrower's aim-neutral frame so per-angle
             // simulation can re-rotate it — the launch origin orbits the pivot with the aim.
@@ -225,6 +226,11 @@ namespace BalloonParty.Solver
 
             var colorId = actor is IHasColor colorable ? colorable.Color.Value : null;
             var washesProjectileColor = actor is IWashesProjectileColor;
+
+            // An Unbreakable has no IHasColor (colorId stays null, the Tough branch below), yet still
+            // pays out on whatever colour struck it and extends the streak instead of breaking it — see
+            // ColorProfile.PaysSourceColor's doc (Phase C2a).
+            var paysSourceColor = actor is UnbreakableBalloonModel;
             var influence = actor as IBalanceInfluence;
             var biasSource = actor as IBalanceBiasSource;
             var nudgeOverrides = actor is IHasNudge nudgeable ? nudgeable.NudgeOverrides : null;
@@ -261,7 +267,8 @@ namespace BalloonParty.Solver
             else if (string.IsNullOrEmpty(colorId))
             {
                 snapshot = ShotBalloonSnapshot.ForToughTarget(
-                    position, radius, scored.ScoreValue, hitsRemaining, balance, washesProjectileColor);
+                    position, radius, scored.ScoreValue, hitsRemaining, balance, washesProjectileColor,
+                    paysSourceColor);
             }
             else
             {
