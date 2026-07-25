@@ -20,10 +20,9 @@ namespace BalloonParty.UI.Score
 {
     public class ColorProgressBar : MonoBehaviour, ITrailEndpoint
     {
-        // Night 2x badge: pulses alpha, phase-offset by sibling index so the bars ripple as a wave —
-        // one fading down while the next fades up — and the streak notice shows through the dim beats.
-        private const float NightBadgeWaveSpeed = 3f;
-        private const float NightBadgeWavePhase = 1.2f;
+        // Night 2x badge: a single bright badge ping-pongs across the colour bars — brightness hands off
+        // bar to bar and bounces back at the ends — with the streak notice showing through the dim beats.
+        private const float NightBadgeSweepSpeed = 1.5f;
         private const float NightBadgeMinAlpha = 0.15f;
         private const float NightBadgeMaxAlpha = 1f;
 
@@ -82,6 +81,8 @@ namespace BalloonParty.UI.Score
         private int _stashedMaxValue;
         private int _shownStreak;
         private bool _active;
+        private int _barIndex;
+        private int _barCount = 1;
         private Tween _flexTween;
 
         public Vector3 Center => RectAnchorMath.Center((RectTransform)transform);
@@ -146,6 +147,7 @@ namespace BalloonParty.UI.Score
 
         private void Start()
         {
+            CacheBarPosition();
             _colorConfig = _palette.GetEntry(_colorName);
             _notices = new ProgressNoticePresenter(
                 _poolManager,
@@ -208,10 +210,40 @@ namespace BalloonParty.UI.Score
                 _nightBonusBadge.gameObject.SetActive(true);
             }
 
-            // Unscaled so the wave keeps rippling through the level-up freeze, like the notices.
-            var phase = transform.GetSiblingIndex() * NightBadgeWavePhase;
-            var wave = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * NightBadgeWaveSpeed - phase);
-            _nightBonusBadge.alpha = Mathf.Lerp(NightBadgeMinAlpha, NightBadgeMaxAlpha, wave);
+            // Unscaled so the sweep keeps moving through the level-up freeze, like the notices. One bright
+            // badge ping-pongs across the row: each bar peaks as the sweep passes it, dims as it leaves.
+            var maxIndex = Mathf.Max(1, _barCount - 1);
+            var position = Mathf.PingPong(Time.unscaledTime * NightBadgeSweepSpeed, maxIndex);
+            var closeness = Mathf.Clamp01(1f - Mathf.Abs(_barIndex - position));
+            _nightBonusBadge.alpha = Mathf.Lerp(NightBadgeMinAlpha, NightBadgeMaxAlpha, closeness);
+        }
+
+        // This bar's position among its ColorProgressBar siblings, and their total — so the highlight can
+        // ping-pong across the row even if non-bar siblings sit between the bars.
+        private void CacheBarPosition()
+        {
+            var parent = transform.parent;
+            if (parent == null)
+            {
+                return;
+            }
+
+            var count = 0;
+            for (var i = 0; i < parent.childCount; i++)
+            {
+                var child = parent.GetChild(i);
+                if (child == transform)
+                {
+                    _barIndex = count;
+                }
+
+                if (child.GetComponent<ColorProgressBar>() != null)
+                {
+                    count++;
+                }
+            }
+
+            _barCount = Mathf.Max(1, count);
         }
 
 #if UNITY_EDITOR
