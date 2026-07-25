@@ -63,6 +63,10 @@ namespace BalloonParty.UI.Score
                  "as a soft travelling wave rather than one bar lighting at a time.")]
         [SerializeField] private float _nightBadgeBlend = 1.6f;
 
+        [Tooltip("Seconds to fade the whole badge in when night begins (and out when it ends), so they " +
+                 "ease on rather than popping. 0 = instant.")]
+        [SerializeField] private float _nightBadgeFadeDuration = 0.8f;
+
         [Tooltip("Night badge alpha away from the highlight (x) and at it (y).")]
         [SerializeField] private Vector2 _nightBadgeAlphaRange = new(0.15f, 1f);
 
@@ -93,6 +97,7 @@ namespace BalloonParty.UI.Score
         private bool _active;
         private int _barIndex;
         private int _barCount = 1;
+        private float _nightIntro;
         private Tween _flexTween;
 
         public Vector3 Center => RectAnchorMath.Center((RectTransform)transform);
@@ -205,7 +210,13 @@ namespace BalloonParty.UI.Score
                 return;
             }
 
-            if (!_timeOfDayNight.IsNight)
+            // Ease the whole badge in when night begins and out when it ends (unscaled), so it fades on
+            // rather than popping. The badge stays inactive until the intro leaves 0 and after it returns.
+            var target = _timeOfDayNight.IsNight ? 1f : 0f;
+            var fadeStep = _nightBadgeFadeDuration > 0f ? Time.unscaledDeltaTime / _nightBadgeFadeDuration : 1f;
+            _nightIntro = Mathf.MoveTowards(_nightIntro, target, fadeStep);
+
+            if (_nightIntro <= 0f)
             {
                 if (_nightBonusBadge.gameObject.activeSelf)
                 {
@@ -224,12 +235,12 @@ namespace BalloonParty.UI.Score
             // highlight ping-pongs across the row (velocity scaled by the span so a full sweep takes the
             // same time at any bar count). The falloff is wide and smoothstepped, so adjacent bars share
             // the glow and it reads as a blended wave; alpha and scale ride the same value so brightness
-            // and breathe move together.
+            // and breathe move together. The intro factor fades the alpha up/down over the transition.
             var span = Mathf.Max(1, _barCount - 1);
             var position = Mathf.PingPong(Time.unscaledTime * _nightBadgeSweepSpeed * span * 2f, span);
             var reach = Mathf.Abs(_barIndex - position) / Mathf.Max(0.01f, _nightBadgeBlend);
             var closeness = Mathf.SmoothStep(1f, 0f, Mathf.Clamp01(reach));
-            _nightBonusBadge.alpha = Mathf.Lerp(_nightBadgeAlphaRange.x, _nightBadgeAlphaRange.y, closeness);
+            _nightBonusBadge.alpha = Mathf.Lerp(_nightBadgeAlphaRange.x, _nightBadgeAlphaRange.y, closeness) * _nightIntro;
             _nightBonusBadge.transform.localScale = Vector3.one * Mathf.Lerp(_nightBadgeScaleRange.x, _nightBadgeScaleRange.y, closeness);
         }
 
