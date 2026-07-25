@@ -48,6 +48,9 @@ namespace BalloonParty.Audio
         DangerWarn,
 
         // One-shot: the shot actually died (last shield spent at the death wall), via ProjectileDestroyedMessage.
-        ProjectileDeath
+        ProjectileDeath,
+
+        // Loop whose volume tracks cruise speed (WindSoundRouter drives it via SetVolumeFactor).
+        WindLoop
     }
 }

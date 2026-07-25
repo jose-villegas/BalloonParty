@@ -75,6 +75,20 @@ namespace BalloonParty.Audio.View
             }
         }
 
+        // Ramps volume to a new target over seconds (0 = snap). Kills any in-flight fade first, so a
+        // stream of these (a live-driven loop) each supersedes the last.
+        internal void FadeVolumeTo(float targetVolume, float seconds)
+        {
+            _source.DOKill();
+            if (seconds <= 0f)
+            {
+                _source.volume = targetVolume;
+                return;
+            }
+
+            _source.DOFade(targetVolume, seconds).SetUpdate(true).SetLink(gameObject);
+        }
+
         internal void Stop()
         {
             _source.DOKill();

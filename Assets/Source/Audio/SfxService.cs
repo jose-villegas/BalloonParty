@@ -108,6 +108,31 @@ namespace BalloonParty.Audio
             return new SoundHandle(voiceId, generation);
         }
 
+        public void SetVolumeFactor(SoundHandle handle, float factor)
+        {
+            if (!handle.IsValid)
+            {
+                return;
+            }
+
+            var voiceId = handle.VoiceId;
+            if (voiceId < 0 || voiceId >= _slots.Length || _slots[voiceId].Generation != handle.Generation)
+            {
+                return;
+            }
+
+            var voice = _slots[voiceId].Voice;
+            if (voice == null || !_bank.TryGet(_slots[voiceId].Id, out var entry))
+            {
+                return;
+            }
+
+            // VolumeRange is the min→max envelope; the caller's 0-1 factor picks along it. Ramps over the
+            // entry's FadeInSeconds so each step (e.g. a speed tap) glides rather than snaps.
+            var target = Mathf.Lerp(entry.VolumeRange.x, entry.VolumeRange.y, Mathf.Clamp01(factor));
+            voice.FadeVolumeTo(target, entry.FadeInSeconds);
+        }
+
         public void Stop(SoundHandle handle)
         {
             if (!handle.IsValid)

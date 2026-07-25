@@ -269,6 +269,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ProgressionSoundRouter>();
             builder.RegisterEntryPoint<ItemSoundRouter>();
             builder.RegisterEntryPoint<DangerSoundRouter>();
+            builder.RegisterEntryPoint<WindSoundRouter>();
             builder.RegisterEntryPoint<AudioChannelController>();
         }
 
