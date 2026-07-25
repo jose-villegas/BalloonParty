@@ -6,8 +6,9 @@ The entry point that starts and runs the game.
 
 | File | What it does |
 |---|---|
-| `GameLifetimeScope` | VContainer composition root — registers all game services, entry points, MessagePipe brokers, configuration assets, and (in dev builds) cheats. `Awake()` pre-allocates DOTween capacity (`SetTweensCapacity(2048, 256)`) before building the container to avoid GC from array resizing during the initial balloon spawn burst |
-| `LaunchLifetimeScope` | VContainer root for the Launcher scene — registers `GameDisplayConfiguration`, `OrthogonalSizeCameraController`, and `SceneCaptureService` for the launch camera |
+| `AppLifetimeScope` | The VContainer **project root** — a persistent (`DontDestroyOnLoad`), single-instance scope that parents both `LaunchLifetimeScope` and `GameLifetimeScope`. Owns the display config, the ambient time-of-day owner, the whole camera pipeline (there is only one camera for the entire session), and the camera-independent backdrop fields (disturbance, background cloud, the shared impact bus). See Architecture below |
+| `GameLifetimeScope` | VContainer composition root for per-run gameplay — registers all game services, entry points, MessagePipe brokers, configuration assets, and (in dev builds) cheats. Child of `AppLifetimeScope`. `Awake()` pre-allocates DOTween capacity (`SetTweensCapacity(2048, 256)`) before building the container to avoid GC from array resizing during the initial balloon spawn burst |
+| `LaunchLifetimeScope` | VContainer root for the Launcher scene — essentially empty; the app root already provides everything the launch screen needs (display config, camera, live backdrop). Child of `AppLifetimeScope` |
 | `LaunchDisturbanceStamp` | `ITickable`, registered in `GameScopeRegistration` — lets the player poke the shared disturbance field with a finger on the launch screen while the game pre-warms, using the same stamp the projectile wake uses. Only active while `NavigationState.Launch` is current |
 | `LaunchPlayTrigger` | Launch screen's Play button `MonoBehaviour` (wired in the Launcher scene in place of the plain `NavigationTrigger`). Starts the `LaunchAscend` cloud scroll, waits for it to finish, then transitions to `NavigationState.Game` — so the game doesn't appear mid-scroll |
 | `HitPipeline` | `IHitDispatcher` — the single entry point for actor hits; runs the order-dependent stages before broadcasting `ActorHitMessage` (see Architecture) |
@@ -19,7 +20,21 @@ The entry point that starts and runs the game.
 
 ## Architecture
 
-`GameLifetimeScope` is the sole composition root. All systems — spawner, balancer, nudge, thrower, score, score trails, cinematics, items — are wired here and inherit into child scopes automatically.
+`AppLifetimeScope` is the VContainer **project root**: a single persistent scope (set as
+`VContainerSettings.RootLifetimeScope`, instantiated once as `DontDestroyOnLoad`) that parents both
+`LaunchLifetimeScope` and `GameLifetimeScope`. It exists so the game renders through **one camera** for
+the whole session instead of each scene owning its own — Launch and Game share the same camera,
+rendering pipeline, and ambient light, so there's no backdrop/lighting jump at Play. It owns the display
+config, the ambient time-of-day owner (`TimeOfDayService`/`TimeOfDayClock`), the camera pipeline
+(ortho sizing, scene capture, screen-space light, background tint, cinematic view, camera-shake view),
+and the camera-independent backdrop fields (disturbance field, background cloud, the shared impact bus,
+`ScenarioContentRoot`, and the launch finger-poke `LaunchDisturbanceStamp`) — so the launch begin-screen's
+live, pokeable clouds don't depend on the Game scene being preloaded.
+
+`GameLifetimeScope` is the composition root for **per-run** gameplay: spawner, balancer, nudge, thrower,
+score, score trails, cinematics, items. All wired here and inherited into child scopes automatically,
+resolving `AppLifetimeScope`'s registrations from the parent where needed (e.g. the run-scoped
+`CameraShakeController` drives the App-owned `CameraShakeView`).
 
 Scene-placed child scopes (`ScoreUILifetimeScope`, `LevelUpLifetimeScope`, `ShieldUILifetimeScope`, `HealthUILifetimeScope`, `DangerUILifetimeScope`, `GameOverLifetimeScope`, `ThrowerLifetimeScope`) extend `LifetimeScope` directly. Parent scope is wired via VContainer's `parentReference` field in the Inspector.
 

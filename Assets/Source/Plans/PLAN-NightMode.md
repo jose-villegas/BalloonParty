@@ -70,8 +70,9 @@ acceptance bar the field used (field-off is bit-identical).
 Introduce `TimeOfDayService` + `ISceneLightRuntime`. Move the `_SceneLightDir`/`_SceneLightColor`/
 `_SceneLightIntensity` push and the gradient evaluation to the service. Default `CurrentAngle` =
 the authored `_lightDirection`'s angle, static — **look is identical to today**. Rewire
-`SceneLightFieldService` and `ScreenSpaceLightService` onto `ISceneLightRuntime`. Register in the
-game scope; keep the editor live-tuning affordance (per-tick re-push under `UNITY_EDITOR`).
+`SceneLightFieldService` and `ScreenSpaceLightService` onto `ISceneLightRuntime`. Registered in the
+game scope at the time (later hoisted to the persistent `AppLifetimeScope` — see the single-camera
+migration); keep the editor live-tuning affordance (per-tick re-push under `UNITY_EDITOR`).
 *Acceptance:* night mode off ⇒ pixel-identical; the `[UnitCircle]` + angle field still relight live.
 
 ### Phase 2 — Procedural time-of-day + level sweep — SHIPPED (pending in-editor playtest)
@@ -89,9 +90,10 @@ verified by review; not yet regression-pinned).
 
 **Sources (`ITimeOfDaySettings.Source`):** `LevelSweep` (above) or `Realtime` — a wall-clock driver
 (`TimeOfDayClock`, `Shared/SceneLight`) that rotates the direction continuously, one full circle per
-`SecondsPerCycle` (30 min default) on unscaled time. It has no level dependency, so it's registered in
-both the game and launcher scopes (the menu cycles too); the two drivers guard on `Source` so exactly
-one is ever live. The inspector hides the params irrelevant to the chosen source via `[ShowIfEnum]`.
+`SecondsPerCycle` (30 min default) on unscaled time. It has no level dependency, so it's registered once
+in the persistent `AppLifetimeScope` and cycles the launch begin-screen too; the two drivers guard on
+`Source` so exactly one is ever live. The inspector hides the params irrelevant to the chosen source via
+`[ShowIfEnum]`.
 
 ### Phase 3 — GI shadow over angle DONE; intensity PARKED (2026-07-24)
 **Intensity: PARKED.** Stays at 1 — the colour gradient alone carries day/night and looks good, so
@@ -122,11 +124,12 @@ projectile) read strongly against night. Full-cycle in-editor playtest.
   pushes after the refactor.
 - **`dotnet build` can't validate the look** — every phase needs an in-editor playtest (relight,
   sweep timing, night dimming, legibility). GI shadow changes especially.
-- The launcher previews the ambient light too: Phase 1 registers `TimeOfDayService` +
-  `ISceneLightSettings` in `LaunchLifetimeScope` so it pushes the ambient globals there. No field or
-  GI in the launcher (no `SceneLightFieldService`), so `_SceneLightFieldOn` stays 0 and shaders take
-  the flat ambient path — enough to keep launch→game seamless. Only launcher materials that opt into
-  the scene light change; flat art is unaffected.
+- The launcher previews the ambient light too: `TimeOfDayService` + `ISceneLightSettings` are registered
+  once in the persistent `AppLifetimeScope` (parent of both the Launcher and Game scopes), so the same
+  instance pushes the ambient globals throughout — no separate launcher copy to keep in sync. No local
+  light field in the launcher (`SceneLightFieldService` is per-run, Game-scope only), so
+  `_SceneLightFieldOn` stays 0 there and shaders take the flat ambient path — enough to keep launch→game
+  seamless. Only launcher materials that opt into the scene light change; flat art is unaffected.
 
 ## Out of scope (later)
 

@@ -118,7 +118,7 @@ and reveal early. The explicit arm/open handshake closes that race.
 
 ## Camera Reference
 
-`CinematicCameraView` (on the Main Camera) is the single scene holder of the camera the shared rig drives — serialized reference with a lazy `Camera.main` fallback (avoids `Camera.main` fragility on Android when wired).
+`CinematicCameraView` (on the persistent Main Camera, registered by `AppLifetimeScope`) is the single holder of the camera the shared rig drives — serialized reference with a lazy `Camera.main` fallback (avoids `Camera.main` fragility on Android when wired).
 
 ## Files
 

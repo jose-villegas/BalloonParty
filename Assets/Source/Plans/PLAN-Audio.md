@@ -499,7 +499,8 @@ delegate (no per-call closure), pass settings by `in`.
 - **Full spatial 3D** (`spatialBlend = 1` + rolloff), if the board ever needs distance
   cues.
 - **Launcher-scene SFX** (menu button taps). This design is scoped to `GameLifetimeScope`;
-  if the Launcher needs audio, promote the service to a shared/persistent scope.
+  if the Launcher needs audio, promote the service to `AppLifetimeScope` (the persistent app
+  root that now parents both scenes — see the single-camera migration).
 - **Music / ambience bus** beyond the `Stinger` channel already reserved.
 
 ---

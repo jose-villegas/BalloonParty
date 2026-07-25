@@ -60,8 +60,9 @@ public class GameLifetimeScope : LifetimeScope
 
 | Scope | Base | Lives on |
 |---|---|---|
-| `LaunchLifetimeScope` | `LifetimeScope` | Launcher scene root |
-| `GameLifetimeScope` | `LifetimeScope` | Game scene root |
+| `AppLifetimeScope` | `LifetimeScope` | The VContainer **project root** (`VContainerSettings.asset`) — a `DontDestroyOnLoad` prefab instantiated once for the whole session, before any scene scope builds. Parents both `LaunchLifetimeScope` and `GameLifetimeScope` |
+| `LaunchLifetimeScope` | `LifetimeScope` | Launcher scene root (child of `AppLifetimeScope`) — essentially empty; the app root already provides everything the launch screen needs |
+| `GameLifetimeScope` | `LifetimeScope` | Game scene root (child of `AppLifetimeScope`) |
 | `ThrowerLifetimeScope` | `LifetimeScope` | Thrower GameObject |
 | `ScoreUILifetimeScope` | `LifetimeScope` | Score HUD canvas root |
 | `LevelUpLifetimeScope` | `LifetimeScope` | LevelUp popup root |
@@ -71,6 +72,14 @@ public class GameLifetimeScope : LifetimeScope
 | `GameOverLifetimeScope` | `LifetimeScope` | Game-over screen root |
 
 > **Note:** Balloon and projectile prefabs do not use child scopes. Their `[Inject]` fields are populated via `InjectingPoolChannel` (flat `IObjectResolver` injection without container creation).
+
+`AppLifetimeScope` owns everything the single, persistent camera and the interactive backdrop need
+regardless of navigation state: the display config, the ambient time-of-day owner
+(`TimeOfDayService`/`TimeOfDayClock`), the whole camera pipeline (ortho sizing, scene capture,
+screen-space light, background tint, cinematic view, camera-shake view), and the camera-independent
+backdrop fields (disturbance, background cloud, the shared impact bus, `ScenarioContentRoot`, and the
+launch finger-poke). Per-run gameplay — the local light field, smoke, and everything under
+`GameScopeRegistration` — stays in `GameLifetimeScope`, resolving those singletons from the parent.
 
 **Configuration assets registered in `GameLifetimeScope`:**
 
@@ -83,7 +92,7 @@ public class GameLifetimeScope : LifetimeScope
 | `ProjectileVisualConfig` | `ScriptableObject` | `IProjectileVisualConfig` |
 | `BalloonsConfiguration` | `ScriptableObject` | `IBalloonsConfiguration` |
 | `GamePalette` | `ScriptableObject` | `IGamePalette` |
-| `GameDisplayConfiguration` | `ScriptableObject` | `IGameDisplayConfiguration` |
+| `GameDisplayConfiguration` | `ScriptableObject` | `IGameDisplayConfiguration` (also registered by `AppLifetimeScope`, whose copy backs the persistent camera pipeline — both serialized fields must reference the same asset) |
 | `ItemConfiguration` | `ScriptableObject` | `IItemConfiguration` |
 | `GridActorConfiguration` | `ScriptableObject` | `IGridActorConfiguration` |
 | `OverflowSettings` | `ScriptableObject` | `IOverflowSettings` |
@@ -222,10 +231,20 @@ Navigation.TransitionTo(NavigationState.LevelUp);
 
 ### Scene preloading flow
 
-1. **Launcher `Start`** — `SceneTransition` loads the Game scene additively with rendering suppressed (layer-based camera isolation + `SuppressRendering`). VContainer resolves, pools pre-warm asynchronously.
-2. **Player taps Play** — `NavigationTrigger.Transition()` sets state to `Game`. `SceneTransition.Load()` restores rendering and unloads the Launcher.
+There is only **one** camera for the whole session (owned by `AppLifetimeScope`, the persistent app
+root), so Launch and Game always render through the same camera and pipeline — no compositing pop at
+Play. `SceneTransition` still additively preloads the Game scene ahead of time for prewarm (pools,
+VContainer resolution), but the transition no longer swaps or suppresses a camera; it just reveals
+gameplay on the one that's already rendering.
+
+1. **Launcher `Start`** — `SceneTransition` loads the Game scene additively (rendering of its own cameras/canvases/listeners suppressed via `SuppressRendering`, since the Game scene still carries UI canvases that must not show yet). VContainer resolves, pools pre-warm asynchronously.
+2. **Player taps Play** — `NavigationTrigger.Transition()` sets state to `Game`. `SceneTransition.Load()` restores the preloaded scene's suppressed components and unloads the Launcher. `NavigationCameraReveal` (`Display/`) reacts to the same `Navigation` state change by widening the persistent camera's culling mask from the Launch mask (backdrop + launch UI) to the full gameplay mask — the reveal, not a camera swap, is what makes gameplay visible.
 3. **`GridSpawnerCoordinator`** — waits on `NavigationReadyGate(Game)` (`IReadyGate`), then runs all `IGridSpawner` implementations in `SpawnStage` order: `StaticActors(0)` → `DynamicActors(50)` → `BalloonActors(100)`. Spawners within the same stage run in parallel via `UniTask.WhenAll`.
 4. **`ThrowerController`** — observes state reactively; plays entrance animation on `Game`, blocks input during `LevelUp`.
+
+`CanvasCameraBinder` (`UI/`) binds each Screen Space - Camera canvas (Game/Launcher HUD) to the
+persistent camera at runtime — that camera lives on a `DontDestroyOnLoad` prefab, so it doesn't exist
+yet when a canvas would normally be wired to it at edit time.
 
 ### Editor standalone play
 

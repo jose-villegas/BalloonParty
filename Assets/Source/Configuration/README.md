@@ -1,6 +1,12 @@
 # Configuration
 
-All game data is split across focused ScriptableObjects. Each is registered as a singleton in `GameLifetimeScope` and injected wherever needed.
+All game data is split across focused ScriptableObjects. Most are registered as singletons in
+`GameLifetimeScope` and injected wherever needed. A handful that the single persistent camera and its
+always-on backdrop fields need — `GameDisplayConfiguration`, `DisturbanceFieldSettings`,
+`BackgroundFieldSettings`, and the direction/GI-facing interfaces of `SceneLightFieldSettings`
+(`ISceneLightSettings`/`ITimeOfDaySettings`/`IScreenSpaceLightSettings`) — are instead owned by
+`AppLifetimeScope`, the persistent app root that parents both the Launcher and Game scopes; see
+`Assets/Source/README.md`.
 
 Source is organized into per-context subfolders: `Balloons/`, `Buffs/`, `Cinematics/`, `Effects/`, `GridActors/`, `Items/`, `Level/`, `Palette/`, `Ranges/`, and `Editor/` (drawers). The tables below note the subfolder where it isn't obvious.
 

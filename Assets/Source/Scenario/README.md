@@ -19,10 +19,11 @@ the ONE cloud generator in the project; consumers only sample, never roll their 
 It is a **plain-C# DI singleton** — `IStartable/ITickable/IDisposable`, no `MonoBehaviour` and no scene
 GameObject — exactly like its siblings `DisturbanceFieldService` / `SceneLightFieldService`. Its bounds
 come from `IGameDisplayConfiguration` via the shared `DisturbanceFieldCoordinates` (origin-centered, so
-it aligns with the disturbance/light fields and needs no camera — this is what makes it boot identically
-from the Launcher's additive load and from Game directly). Its tuning lives on `BackgroundFieldSettings`
-(`IBackgroundFieldSettings`: the density blit material + resolution + transition parallax), wired into
-`GameLifetimeScope` and registered in `GameScopeRegistration`. The GPU-side tap is
+it aligns with the disturbance/light fields and needs no camera). It is registered in `AppLifetimeScope`
+— the persistent app root, not the per-run `GameLifetimeScope` — so it exists before either scene loads,
+which is what makes the launch begin-screen's clouds live from the first frame rather than depending on
+the Game scene's preload. Its tuning lives on `BackgroundFieldSettings` (`IBackgroundFieldSettings`: the
+density blit material + resolution + transition parallax). The GPU-side tap is
 `Assets/Shaders/BalloonParty/Include/BackgroundField.cginc`; generation is `BackgroundFieldGen.cginc` +
 the `BackgroundFieldDensity` blit shader. See `Shared/Disturbance/README.md`.
 

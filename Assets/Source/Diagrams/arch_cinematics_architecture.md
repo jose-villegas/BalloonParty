@@ -45,8 +45,9 @@ through `TimeScaleService`, and `Abort()` teardown so producers carry no repair 
 Consumers never enumerate states. `ICinematicState.Has(trait)` reads the current state's
 declared traits from the SO: `RunController` gates `EndRun` on `BlocksLoss` (level-up
 blocks; the heart-drain lets the 0-HP game-over fire through — it *is* the loss
-happening), `CameraShakeService` stands down on `BlocksShake` (its additive-offset shake
-composes with the heart-drain pan, so it punches per heart launch), and
+happening), `CameraShakeController` stands down on `BlocksShake` (the `CameraShakeView` it
+drives is an additive-offset shake that composes with the heart-drain pan, so it punches
+per heart launch), and
 `CinematicEndGate` holds the popup until `LevelUpPanIn` ends.
 
 **Time is claim-based:**

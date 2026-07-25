@@ -27,7 +27,7 @@ Each self-contained UI section has its own VContainer child scope, inheriting al
 | `GameOver/` | Loss screen (`GameOverScreen`) — see `GameOver/README.md` | `GameOverLifetimeScope` (child of `GameLifetimeScope`) |
 | `Binding/` | Shared reactive binding helpers — `IReactiveBindable<T>`, `ICounterDisplay` (strategy interface for counter rendering), `ReactivePropertyBinder`, and the `RegisterBoundViews` scope extension used by the Health and Danger scopes | — |
 
-Root-level helpers: `ReactiveCounterLabel` (abstract base for counter labels — subscribes a reactive `int` property and delegates rendering to an `ICounterDisplay` sibling resolved via `GetComponent`), `RollingCounterDisplay` (rolling-odometer `ICounterDisplay` backed by `RollingTextAnimator`), `PlainCounterDisplay` (plain thousands-formatted `ICounterDisplay`), `FormattedLabel` (captures a label's authored text as a `{0}` template), and `RectAnchorMath` (static `RectTransform` position math).
+Root-level helpers: `ReactiveCounterLabel` (abstract base for counter labels — subscribes a reactive `int` property and delegates rendering to an `ICounterDisplay` sibling resolved via `GetComponent`), `RollingCounterDisplay` (rolling-odometer `ICounterDisplay` backed by `RollingTextAnimator`), `PlainCounterDisplay` (plain thousands-formatted `ICounterDisplay`), `FormattedLabel` (captures a label's authored text as a `{0}` template), `RectAnchorMath` (static `RectTransform` position math), and `CanvasCameraBinder` (binds a Screen Space - Camera canvas's root to the single persistent camera at runtime via `Camera.main`, since that camera lives on a `DontDestroyOnLoad` prefab and can't be wired to a canvas at edit time — place it alongside each HUD's root `Canvas`).
 
 ## Game start
 
