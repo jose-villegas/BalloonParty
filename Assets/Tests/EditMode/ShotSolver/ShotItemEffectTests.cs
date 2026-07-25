@@ -79,6 +79,29 @@ namespace BalloonParty.Tests.ShotSolver
             return new ShotItemLayer(effectParams, in lattice, rainbowColorId);
         }
 
+        // Phase C4 (Lightning): a real Lightning config entry — same one-item-type-worth-of-settings
+        // convention as CreateBombItemLayer/CreateLaserItemLayer above. UNLIKE Bomb/Laser (which read
+        // the occupant's live/time-evaluated Position and never touch SlotPosition), Lightning's
+        // selection sorts over the LATTICE SlotPosition (topology, not physical overlap) — a
+        // default(ShotSlotLattice) collapses every occupant's SlotPosition to the same point (zero
+        // Separation), which would silently defeat every distance-ordering assertion below. A real
+        // 2000x2000 lattice comfortably covers every SlotIndex these tests use, for both the chain's
+        // own sort and FindNearestConcreteColor's ring-walk SearchRadius.
+        private static ShotItemLayer CreateLightningItemLayer(
+            int damage, DamageFlags flags = DamageFlags.Normal, string rainbowColorId = null)
+        {
+            var effectParams = new Dictionary<ItemType, ItemEffectParams>
+            {
+                {
+                    ItemType.Lightning,
+                    new ItemEffectParams(
+                        default, default, new LightningEffectParams(0f, 0f, 0f), default, default, damage, flags)
+                },
+            };
+            var lattice = new ShotSlotLattice(new Vector2(1f, 1f), Vector2.zero, 2000, 2000);
+            return new ShotItemLayer(effectParams, in lattice, rainbowColorId);
+        }
+
         // Shared by the fast-path lock test below — a full-tuple comparison, not just the four fields
         // the original Shield-era locks checked (see their own comment for why the complete tuple
         // matters: a stray item-plumbing side effect could easily land in a field neither of them read).
@@ -981,6 +1004,273 @@ namespace BalloonParty.Tests.ShotSolver
 
             Assert.AreEqual(1, outsideResult.Pops, "distance 1.01 is outside castDistance 1.0 — no hit at all");
             Assert.IsFalse(outsideResult.BoardCleared);
+        }
+
+        [Test]
+        public void ApplyEffectHits_LightningNormalHost_DistanceOrderedChainClimbsTheStreakSequentially()
+        {
+            // Same-row slots (0,0)/(1,0)/(3,0)/(6,0), sep=(1,1)/offset=0: hIndex = 2*col (row 0 is
+            // even), so world.x = 2*col - 0.5 — distances from the host's slot are 2/6/12, strictly
+            // increasing (Near < Mid < Far), independent of the targets' (deliberately far off-ray)
+            // physical Position, which only keeps them out of the projectile's own path.
+            //
+            // Hand-trace: host (normal, non-rainbow) pops via direct contact first — adopts
+            // ProjectileColor "Red", RecordColor("Red") on a fresh streak (0 -> 1): score 1000*1=1000.
+            // The chain then pops Near/Mid/Far, in that DISTANCE order, each via an ITEM cause
+            // (RecordColor("Red") — same colour as the just-adopted streak, so it just keeps
+            // climbing, never resets): Near 1*2=2, Mid 10*3=30, Far 100*4=400. Total
+            // 1000+2+30+400=1432 — a DIFFERENT distance order would climb the SAME multipliers against
+            // DIFFERENT scoreValues, producing a different total, so this total is itself proof the
+            // chain resolved nearest-first.
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0.05f, "Red", 1000, 1, new Vector2Int(0, 0), 0, 0, 0f, false, null,
+                    item: ItemType.Lightning),
+                ShotBoardBuilder.Green(
+                    new Vector2(50f, 50f), 0.05f, "Red", 1, 1, new Vector2Int(1, 0), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Green(
+                    new Vector2(60f, 60f), 0.05f, "Red", 10, 1, new Vector2Int(3, 0), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Green(
+                    new Vector2(70f, 70f), 0.05f, "Red", 100, 1, new Vector2Int(6, 0), 0, 0, 0f, false, null),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet, items: CreateLightningItemLayer(damage: 1));
+
+            Assert.AreEqual(4, result.Pops);
+            Assert.AreEqual(1000 + 2 + 30 + 400, result.RawScore);
+            Assert.IsTrue(result.BoardCleared);
+        }
+
+        [Test]
+        public void ApplyEffectHits_LightningRainbowHost_ConvertsTheColourGroupInsteadOfPopping()
+        {
+            // A seeded "Red" projectile colour (mirrors an earlier real pop, standing in for one here so
+            // the matchColor precedence resolves DIRECTLY off the projectile's own colour, not the
+            // FindNearestConcreteColor fallback — that fallback gets its own dedicated test below) — a
+            // rainbow host converts every same-coloured occupant to rainbow instead of destroying it;
+            // Pops must stay at exactly 1 (the host's own pop only), and a colourless Tough among the
+            // matched slot set must never be touched (it never satisfies the ColorId equality gate at
+            // all, since a Tough has no colour).
+            var board = new[]
+            {
+                ShotBoardBuilder.Rainbow(
+                    new Vector2(0f, 1f), 0.05f, GamePalette.RainbowColorId, 50, 1, new Vector2Int(10, 10), 0, 0, 0f,
+                    false, null, item: ItemType.Lightning),
+                ShotBoardBuilder.Green(
+                    new Vector2(50f, 50f), 0.05f, "Red", 1, 1, new Vector2Int(11, 10), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Green(
+                    new Vector2(60f, 60f), 0.05f, "Red", 1, 1, new Vector2Int(13, 10), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Tough(
+                    new Vector2(70f, 70f), 0.05f, 1, 5, new Vector2Int(15, 10), 0, 0, 0f, false, null),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet,
+                items: CreateLightningItemLayer(damage: 1, rainbowColorId: GamePalette.RainbowColorId),
+                rainbowColorId: GamePalette.RainbowColorId, allowedColors: new[] { "Red" },
+                seed: ShotFlightSeed.Fresh(projectileColor: "Red"));
+
+            Assert.AreEqual(1, result.Pops, "only the rainbow host itself pops — the chain converts, never destroys");
+            Assert.IsFalse(result.BoardCleared);
+
+            var first = FindByPosition(workingSet, new Vector2(50f, 50f));
+            Assert.IsTrue(first.IsRainbow, "the matched Red occupant converts to rainbow");
+            Assert.AreEqual(GamePalette.RainbowColorId, first.ColorId);
+
+            var second = FindByPosition(workingSet, new Vector2(60f, 60f));
+            Assert.IsTrue(second.IsRainbow, "the SECOND matched Red occupant converts too — the whole group, not just the nearest");
+            Assert.AreEqual(GamePalette.RainbowColorId, second.ColorId);
+
+            var tough = FindByPosition(workingSet, new Vector2(70f, 70f));
+            Assert.IsFalse(tough.IsRainbow, "a colourless Tough never satisfies the ColorId match gate — untouched");
+            Assert.AreEqual(5, tough.HitsRemaining, "untouched means untouched — durability unchanged too");
+        }
+
+        [Test]
+        public void ApplyEffectHits_LightningRainbowHostColorlessProjectile_FallsBackToNearestConcreteColor()
+        {
+            // No seed this time — the rainbow host IS the flight's very first contact, so
+            // state.ProjectileColor is still empty when RunItemEffects reads it (rainbow adoption never
+            // touches ProjectileColor either — see ResolvePopScore's own adoption guard). That empties
+            // matchColor's primary source, forcing the LightningChain.FindNearestConcreteColor fallback
+            // (mirrors LightningItemHandler.cs:96-100's own SlotGrid.FindNearestColorId call).
+            // HexCoordinates.HexNeighborIndices(5,5) (row 5 is odd, shiftedCol=6) gives the host's ring-1
+            // neighbours as {(4,5),(6,5),(5,4),(6,4),(5,6),(6,6)} — (4,5) is the ONLY concrete-coloured
+            // occupant among them ("Green"), so the ring walk returns "Green" deterministically
+            // regardless of its own internal side-traversal order. (2,5) sits further out (not a ring-1
+            // neighbour of (5,5) at all) yet still shares that SAME "Green" colour, proving the fallback
+            // colour propagates to the WHOLE chain selection, not just the ring-found anchor itself; the
+            // "Blue" occupant proves a different colour is excluded from both the fallback and the chain.
+            var board = new[]
+            {
+                ShotBoardBuilder.Rainbow(
+                    new Vector2(0f, 1f), 0.05f, GamePalette.RainbowColorId, 20, 1, new Vector2Int(5, 5), 0, 0, 0f,
+                    false, null, item: ItemType.Lightning),
+                ShotBoardBuilder.Green(
+                    new Vector2(50f, 50f), 0.05f, "Green", 1, 1, new Vector2Int(4, 5), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Green(
+                    new Vector2(60f, 60f), 0.05f, "Green", 1, 1, new Vector2Int(2, 5), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Green(
+                    new Vector2(70f, 70f), 0.05f, "Blue", 1, 1, new Vector2Int(0, 0), 0, 0, 0f, false, null),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet,
+                items: CreateLightningItemLayer(damage: 1, rainbowColorId: GamePalette.RainbowColorId),
+                rainbowColorId: GamePalette.RainbowColorId, allowedColors: new[] { "Green" });
+
+            Assert.AreEqual(1, result.Pops, "only the rainbow host pops — the fallback-resolved colour still converts, never destroys");
+
+            var near = FindByPosition(workingSet, new Vector2(50f, 50f));
+            Assert.IsTrue(near.IsRainbow, "the ring-1 neighbour that seeded the fallback converts");
+            Assert.AreEqual(GamePalette.RainbowColorId, near.ColorId);
+
+            var far = FindByPosition(workingSet, new Vector2(60f, 60f));
+            Assert.IsTrue(far.IsRainbow, "a same-coloured occupant OUTSIDE ring 1 converts too — the fallback colour, not just its anchor slot");
+            Assert.AreEqual(GamePalette.RainbowColorId, far.ColorId);
+
+            var blue = FindByPosition(workingSet, new Vector2(70f, 70f));
+            Assert.IsFalse(blue.IsRainbow, "a different colour never matches the fallback-resolved \"Green\"");
+            Assert.AreEqual("Blue", blue.ColorId);
+        }
+
+        [Test]
+        public void ApplyEffectHits_LightningRainbowHostRainbowProjectileColor_FallsBackToNearestConcreteColor()
+        {
+            // The OTHER half of ResolveLightning's rainbow-host guard — the sibling test above covers
+            // the `IsNullOrEmpty(projectileColorId)` disjunct; this one covers the SECOND disjunct
+            // (`!string.Equals(projectileColorId, _rainbowColorId)`). Here the seeded "active
+            // projectile" colour is itself the rainbow MARKER (mirrors a rainbow projectile having
+            // been the last one loaded) — non-empty, so it would wrongly pass the first disjunct on
+            // its own, but must still be rejected because it equals the rainbow marker, forcing the
+            // SAME LightningChain.FindNearestConcreteColor fallback an empty colour would (same
+            // ring-1 cluster/derivation as the sibling test above).
+            var board = new[]
+            {
+                ShotBoardBuilder.Rainbow(
+                    new Vector2(0f, 1f), 0.05f, GamePalette.RainbowColorId, 20, 1, new Vector2Int(5, 5), 0, 0, 0f,
+                    false, null, item: ItemType.Lightning),
+                ShotBoardBuilder.Green(
+                    new Vector2(50f, 50f), 0.05f, "Green", 1, 1, new Vector2Int(4, 5), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Green(
+                    new Vector2(70f, 70f), 0.05f, "Blue", 1, 1, new Vector2Int(0, 0), 0, 0, 0f, false, null),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet,
+                items: CreateLightningItemLayer(damage: 1, rainbowColorId: GamePalette.RainbowColorId),
+                rainbowColorId: GamePalette.RainbowColorId, allowedColors: new[] { "Green" },
+                seed: ShotFlightSeed.Fresh(projectileColor: GamePalette.RainbowColorId));
+
+            Assert.AreEqual(1, result.Pops, "only the rainbow host pops — the fallback-resolved colour still converts, never destroys");
+
+            var near = FindByPosition(workingSet, new Vector2(50f, 50f));
+            Assert.IsTrue(
+                near.IsRainbow,
+                "a rainbow-coloured seeded projectile colour must still trigger the fallback, never get used directly as matchColorId");
+            Assert.AreEqual(GamePalette.RainbowColorId, near.ColorId);
+
+            var blue = FindByPosition(workingSet, new Vector2(70f, 70f));
+            Assert.IsFalse(blue.IsRainbow, "a different colour never matches the fallback-resolved \"Green\"");
+            Assert.AreEqual("Blue", blue.ColorId);
+        }
+
+        [Test]
+        public void ApplyEffectHits_LightningHost_ChainNeverReSelectsTheAlreadyPoppedHost()
+        {
+            // The host's own colour equals matchColorId for a normal host — if the effect board (or the
+            // chain itself) ever re-included the already-popped host, it would take a SECOND Damage hit
+            // on top of its own direct-contact pop, double-counting Pops. ShotSimEffectBoard.Bind
+            // excludes the host's slot up front, and by the time RunItemEffects runs the host is already
+            // swap-removed from the active working set regardless (ShotSimulator.ResolveBalloonContact's
+            // own ordering) — a single same-colour chain target proves the count stays exactly 2 (host +
+            // the one real target), never 3.
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0.05f, "Red", 10, 1, new Vector2Int(5, 5), 0, 0, 0f, false, null,
+                    item: ItemType.Lightning),
+                ShotBoardBuilder.Green(
+                    new Vector2(50f, 50f), 0.05f, "Red", 1, 1, new Vector2Int(7, 5), 0, 0, 0f, false, null),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet, items: CreateLightningItemLayer(damage: 1));
+
+            Assert.AreEqual(
+                2, result.Pops,
+                "host + the single chain target — never a phantom third pop from the host re-selecting itself");
+            Assert.IsTrue(result.BoardCleared);
+        }
+
+        [Test]
+        public void ApplyEffectHits_LightningChainExhaustsBudget_LaterChainedCarrierGrantNeverFires()
+        {
+            // Cross-item chain (@ref plan_shot_solver_accuracy Phase C2 memo's own term) exercised for
+            // Lightning specifically: unlike Bomb's physical-radius hop-by-hop domino chain, a NORMAL
+            // Lightning host's own re-chained activation always re-searches its OWN (already-exhausted)
+            // colour — a same-colour Lightning sweep hits EVERY matching occupant in ONE Resolve() call,
+            // so Damage APPLICATION itself is never budget-gated; only each hit's OWN chained
+            // continuation (PopItemHit's TryBeginActivation call) is. 31 filler "Red" Lightning-carriers
+            // are placed NEARER (lower SlotIndex column) than a trailing Shield-carrying "Red" occupant,
+            // so the fillers are always processed FIRST in the chain's nearest-first order — exactly
+            // exhausting the budget (host's own activation begins the count at 1; the 31 fillers'
+            // chained activations bring it to exactly 32) before the Shield-carrier's own hit is even
+            // applied. TryBeginActivation rejects the Shield-carrier's chained activation outright
+            // (count already at 32), so its own +1 grant never fires — even though the Shield-carrier
+            // itself still POPS (popping happens unconditionally, before the chain-continuation check).
+            // A tight, close right wall with 0 starting shields is the only way to OBSERVE the missing
+            // grant: with it, the wall bounce would have survived; without it, the very first bounce
+            // kills the flight before the trailing "Blue" filler (kept off the flight's ray, at x<0) is
+            // ever reached — proving BoardCleared stays false and the grant truly never applied.
+            const int fillerCount = 31;
+            var walls = new Vector4(1000f, 1.5f, -1000f, -1000f);
+            var board = new ShotBalloonSnapshot[1 + fillerCount + 1 + 1];
+            board[0] = ShotBoardBuilder.Green(
+                new Vector2(0.5f, 0f), 0.05f, "Red", 1, 1, new Vector2Int(0, 0), 0, 0, 0f, false, null,
+                item: ItemType.Lightning);
+
+            for (var k = 0; k < fillerCount; k++)
+            {
+                board[1 + k] = ShotBoardBuilder.Green(
+                    new Vector2(500f + k, 500f), 0.05f, "Red", 1, 1, new Vector2Int(1 + k, 0), 0, 0, 0f, false, null,
+                    item: ItemType.Lightning);
+            }
+
+            // Slot column 1000 guarantees this sorts LAST (farthest) in the chain's nearest-first order,
+            // however many fillers precede it.
+            board[1 + fillerCount] = ShotBoardBuilder.Green(
+                new Vector2(9000f, 9000f), 0.05f, "Red", 1, 1, new Vector2Int(1000, 0), 0, 0, 0f, false, null,
+                item: ItemType.Shield);
+
+            // Off the flight's ray (negative x, the shot travels +x) and only reachable AFTER a
+            // surviving wall bounce reflects it back — the one observable the missing grant denies.
+            board[board.Length - 1] = ShotBoardBuilder.Green(new Vector2(-0.5f, 0f), 0.1f, "Blue", 1, 1);
+
+            var workingSet = new ShotBalloonState[board.Length];
+            var result = ShotSimulator.Simulate(
+                board, walls, Vector2.zero, Vector2.right, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet, items: CreateLightningItemLayer(damage: 1));
+
+            Assert.AreEqual(
+                1 + fillerCount + 1, result.Pops,
+                "every Red occupant pops in the host's single sweep — Lightning's own hit APPLICATION is never budget-gated, only each hit's own chained continuation is");
+            Assert.IsTrue(
+                result.Died,
+                "the Shield-carrier's own chained activation was rejected by the exhausted budget, so its +1 grant never applied — 0 shields dies on the very first bounce");
+            Assert.IsFalse(result.BoardCleared, "the trailing Blue filler, past the fatal bounce, is never reached");
         }
     }
 }

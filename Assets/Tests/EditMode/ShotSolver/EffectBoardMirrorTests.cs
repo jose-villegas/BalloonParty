@@ -5,6 +5,7 @@ using BalloonParty.Configuration.Palette;
 using BalloonParty.Item.Bomb;
 using BalloonParty.Item.Effects;
 using BalloonParty.Item.Laser;
+using BalloonParty.Item.Lightning;
 using BalloonParty.Shared;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
@@ -291,6 +292,197 @@ namespace BalloonParty.Tests.ShotSolver
             AssertHit(gridBoard, gridHits, new Vector2Int(4, 2), EffectHitKind.Damage);
             AssertHit(gridBoard, gridHits, new Vector2Int(2, 1), EffectHitKind.Recolor, rainbowColorId);
             AssertNoHit(gridBoard, gridHits, new Vector2Int(3, 1));
+        }
+
+        [Test]
+        public void LightningResolve_NormalHostMixedColours_GridAndSimAgreeOnDistanceOrderedChain()
+        {
+            // Distances from hostSlot (3,3), sep=(1,1)/offset=0 (hand-derived via
+            // grid.IndexToWorldPosition): (3,2) is nearest (~1.414), (2,3) is mid (2.0), (0,0) is
+            // farthest (~7.615) — all three "Red". (4,3) sits at the SAME distance as (2,3) (2.0) but is
+            // "Blue" (must never match, regardless of distance); (4,2) sits at the SAME distance as (3,2)
+            // (~1.414) but is a colourless Tough (must never match either — LightningChain's gate is a
+            // plain ColorId equality, and a Tough has none).
+            var hostSlot = new Vector2Int(3, 3);
+            var occupants = new[]
+            {
+                new OccupantSpec(new Vector2Int(3, 2), OccupantKind.Green, "Red"),
+                new OccupantSpec(new Vector2Int(2, 3), OccupantKind.Green, "Red"),
+                new OccupantSpec(new Vector2Int(0, 0), OccupantKind.Green, "Red"),
+                new OccupantSpec(new Vector2Int(4, 3), OccupantKind.Green, "Blue"),
+                new OccupantSpec(new Vector2Int(4, 2), OccupantKind.Tough),
+            };
+
+            var grid = BuildGrid(6, 7);
+            PlaceOnGrid(grid, occupants);
+            var gridBoard = new GridEffectBoard(grid, OccupantRadius);
+            gridBoard.Rebuild(hostSlot);
+
+            var workingSet = BuildWorkingSet(grid, occupants);
+            var simBoard = new ShotSimEffectBoard(BuildLattice(grid));
+            simBoard.Bind(workingSet, workingSet.Length, hostSlot);
+
+            var origin = (Vector2)grid.IndexToWorldPosition(hostSlot);
+
+            var gridHits = new List<EffectHit>();
+            LightningChain.Resolve(gridBoard, origin, hostSlot, "Red", false, null, gridHits);
+
+            var simHits = new List<EffectHit>();
+            LightningChain.Resolve(simBoard, origin, hostSlot, "Red", false, null, simHits);
+
+            AssertSameHitSet(gridBoard, gridHits, simBoard, simHits);
+            Assert.AreEqual(3, gridHits.Count, "only the three same-colour matches — the wrong-colour and colourless occupants never match");
+
+            var nearestFirst = new[] { new Vector2Int(3, 2), new Vector2Int(2, 3), new Vector2Int(0, 0) };
+            AssertLightningOrder(gridBoard, gridHits, nearestFirst);
+            AssertLightningOrder(simBoard, simHits, nearestFirst);
+
+            for (var i = 0; i < gridHits.Count; i++)
+            {
+                Assert.AreEqual(EffectHitKind.Damage, gridHits[i].Kind, "a normal host damages, never recolors");
+            }
+        }
+
+        [Test]
+        public void LightningResolve_RainbowHostMixedColours_GridAndSimConvertTheSameGroupInOrder()
+        {
+            // Same cluster as the normal-host test above, but a rainbow host — every match CONVERTS
+            // (Recolor to the rainbow marker) instead of taking damage, in the identical nearest-first
+            // order; the wrong-colour and colourless occupants stay excluded for the same reason.
+            var hostSlot = new Vector2Int(3, 3);
+            var occupants = new[]
+            {
+                new OccupantSpec(new Vector2Int(3, 2), OccupantKind.Green, "Red"),
+                new OccupantSpec(new Vector2Int(2, 3), OccupantKind.Green, "Red"),
+                new OccupantSpec(new Vector2Int(0, 0), OccupantKind.Green, "Red"),
+                new OccupantSpec(new Vector2Int(4, 3), OccupantKind.Green, "Blue"),
+                new OccupantSpec(new Vector2Int(4, 2), OccupantKind.Tough),
+            };
+
+            var grid = BuildGrid(6, 7);
+            PlaceOnGrid(grid, occupants);
+            var gridBoard = new GridEffectBoard(grid, OccupantRadius);
+            gridBoard.Rebuild(hostSlot);
+
+            var workingSet = BuildWorkingSet(grid, occupants);
+            var simBoard = new ShotSimEffectBoard(BuildLattice(grid));
+            simBoard.Bind(workingSet, workingSet.Length, hostSlot);
+
+            var origin = (Vector2)grid.IndexToWorldPosition(hostSlot);
+            var rainbowColorId = GamePalette.RainbowColorId;
+
+            var gridHits = new List<EffectHit>();
+            LightningChain.Resolve(gridBoard, origin, hostSlot, "Red", true, rainbowColorId, gridHits);
+
+            var simHits = new List<EffectHit>();
+            LightningChain.Resolve(simBoard, origin, hostSlot, "Red", true, rainbowColorId, simHits);
+
+            AssertSameHitSet(gridBoard, gridHits, simBoard, simHits);
+            Assert.AreEqual(3, gridHits.Count);
+
+            var nearestFirst = new[] { new Vector2Int(3, 2), new Vector2Int(2, 3), new Vector2Int(0, 0) };
+            AssertLightningOrder(gridBoard, gridHits, nearestFirst);
+            AssertLightningOrder(simBoard, simHits, nearestFirst);
+
+            for (var i = 0; i < gridHits.Count; i++)
+            {
+                Assert.AreEqual(EffectHitKind.Recolor, gridHits[i].Kind, "a rainbow host converts, never damages");
+                Assert.AreEqual(rainbowColorId, gridHits[i].ColorId);
+            }
+        }
+
+        [Test]
+        public void LightningFindNearestConcreteColor_RingWalk_GridAndSimAgree()
+        {
+            // Ring-1 neighbours of (3,3) via HexCoordinates.HexNeighborIndices(3,3) (row 3 is odd,
+            // shiftedCol=4): {(2,3),(4,3),(3,2),(4,2),(3,4),(4,4)}. (3,2) is ALREADY rainbow-coloured
+            // (skipped — the ring walk excludes the rainbow marker exactly like BalloonModelExtensions.
+            // FindNearestColorId's own palette.IsRainbow guard); (4,2) is a colourless Tough (skipped —
+            // no concrete colour at all); (3,4) is the ONLY concrete colour in ring 1 ("Purple") — found
+            // regardless of the ring walk's own side-traversal order, since it's the sole valid
+            // candidate among six ring-1 cells.
+            var center = new Vector2Int(3, 3);
+            var occupants = new[]
+            {
+                new OccupantSpec(new Vector2Int(3, 2), OccupantKind.Rainbow, GamePalette.RainbowColorId),
+                new OccupantSpec(new Vector2Int(4, 2), OccupantKind.Tough),
+                new OccupantSpec(new Vector2Int(3, 4), OccupantKind.Green, "Purple"),
+            };
+
+            var grid = BuildGrid(8, 8);
+            PlaceOnGrid(grid, occupants);
+            var gridBoard = new GridEffectBoard(grid, OccupantRadius);
+            gridBoard.Rebuild(center);
+
+            var workingSet = BuildWorkingSet(grid, occupants);
+            var simBoard = new ShotSimEffectBoard(BuildLattice(grid));
+            simBoard.Bind(workingSet, workingSet.Length, center);
+
+            var rainbowColorId = GamePalette.RainbowColorId;
+            Assert.AreEqual("Purple", LightningChain.FindNearestConcreteColor(gridBoard, center, rainbowColorId));
+            Assert.AreEqual("Purple", LightningChain.FindNearestConcreteColor(simBoard, center, rainbowColorId));
+        }
+
+        [Test]
+        public void LightningFindNearestConcreteColor_ColourExactlyAtSearchRadius_GridAndSimBothFindIt()
+        {
+            // SearchRadius = Mathf.Max(Columns, Rows) = 3 on a 3x3 board — the ring walk's own
+            // `ring <= maxRadius` loop boundary (an off-by-one `<` instead of `<=` would silently
+            // exclude the LAST ring the loop is supposed to check). Hand-derived via the same
+            // corner/side/step cube-math as the ring-1 test above, from center (0,0): rings 1 and 2
+            // never reach (2,2) at all (hex rings partition the board into disjoint concentric
+            // shells), and ring 3's own side-1 walk lands on (2,2) at its second step — the sole
+            // occupant on the board — so finding it at all proves ring 3 (the boundary ring itself)
+            // was actually searched, not silently skipped.
+            var center = new Vector2Int(0, 0);
+            var occupants = new[]
+            {
+                new OccupantSpec(new Vector2Int(2, 2), OccupantKind.Green, "Purple"),
+            };
+
+            var grid = BuildGrid(3, 3);
+            PlaceOnGrid(grid, occupants);
+            var gridBoard = new GridEffectBoard(grid, OccupantRadius);
+            gridBoard.Rebuild();
+
+            var workingSet = BuildWorkingSet(grid, occupants);
+            var simBoard = new ShotSimEffectBoard(BuildLattice(grid));
+            simBoard.Bind(workingSet, workingSet.Length);
+
+            var rainbowColorId = GamePalette.RainbowColorId;
+            Assert.AreEqual("Purple", LightningChain.FindNearestConcreteColor(gridBoard, center, rainbowColorId));
+            Assert.AreEqual("Purple", LightningChain.FindNearestConcreteColor(simBoard, center, rainbowColorId));
+        }
+
+        [Test]
+        public void LightningFindNearestConcreteColor_NoConcreteColourAnywhere_GridAndSimBothReturnNull()
+        {
+            var grid = BuildGrid(4, 4);
+            var gridBoard = new GridEffectBoard(grid, OccupantRadius);
+            gridBoard.Rebuild();
+
+            var simBoard = new ShotSimEffectBoard(BuildLattice(grid));
+            simBoard.Bind(new ShotBalloonState[0], 0);
+
+            var rainbowColorId = GamePalette.RainbowColorId;
+            var center = new Vector2Int(1, 1);
+            Assert.IsNull(LightningChain.FindNearestConcreteColor(gridBoard, center, rainbowColorId));
+            Assert.IsNull(LightningChain.FindNearestConcreteColor(simBoard, center, rainbowColorId));
+        }
+
+        // Verifies a chain's OWN claimed jump order — Group is the core's own per-hit ordering index
+        // (see EffectHit's doc), so this checks BOTH that the hit list itself is nearest-first AND that
+        // Group matches each hit's position in that list, independent of raw Handle numbering (which may
+        // legitimately differ between the two board adapters — see AssertSameHitSet's own doc).
+        private static void AssertLightningOrder(
+            IEffectBoard board, IReadOnlyList<EffectHit> hits, IReadOnlyList<Vector2Int> expectedNearestFirst)
+        {
+            Assert.AreEqual(expectedNearestFirst.Count, hits.Count);
+            for (var i = 0; i < hits.Count; i++)
+            {
+                Assert.AreEqual(expectedNearestFirst[i], board.Occupants[hits[i].Handle].Slot, $"jump {i} slot mismatch");
+                Assert.AreEqual(i, hits[i].Group, $"jump {i} group mismatch");
+            }
         }
 
         private static void PlaceOnGrid(SlotGrid grid, IReadOnlyList<OccupantSpec> occupants)

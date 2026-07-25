@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Item.Bomb;
 using BalloonParty.Item.Effects;
 using BalloonParty.Item.Laser;
+using BalloonParty.Item.Lightning;
 using BalloonParty.Slots.Capabilities;
 using UnityEngine;
 
@@ -168,9 +170,11 @@ namespace BalloonParty.Solver
                 case ItemType.Laser:
                     return ResolveLaser(in activation, workingSet, activeCount, hitsOut);
 
-                // Every other item type is plumbing-only until its own sub-phase (C4 Lightning .. C6
-                // Snipe) wires the real effect against _effectParams/_effectBoard.
                 case ItemType.Lightning:
+                    return ResolveLightning(in activation, projectileColorId, workingSet, activeCount, hitsOut);
+
+                // Every other item type is plumbing-only until its own sub-phase (C5 Paint .. C6
+                // Snipe) wires the real effect against _effectParams/_effectBoard.
                 case ItemType.Paint:
                 case ItemType.Snipe:
                 default:
@@ -233,6 +237,52 @@ namespace BalloonParty.Solver
             LaserCross.Resolve(
                 _effectBoard, activation.Origin, activation.SpinDegrees, activation.IsRainbowHost, _rainbowColorId,
                 in crossParams, hitsOut);
+
+            return new ShotItemOutcome(
+                shieldDelta: 0, grantsRainbowBuffUntilWall: false, grantsRainbowBuffUntilPierceEnd: false,
+                armsPierce: false, speedBuffMultiplier: 0f, damage: settings.Damage, flags: settings.Flags);
+        }
+
+        // Mirrors LightningItemHandler.Activate's selection (verified 2026-07-25): the chain/glow/light
+        // presentation is unmodeled, but the same-colour chain geometry itself is LightningChain, run
+        // over the bound effect board. matchColor precedence mirrors LightningItemHandler.cs:96-100
+        // exactly: a rainbow host matches PROJECTILE colour (projectileColorId — the sim's own mirror of
+        // the live "last-loaded ProjectileLoadedMessage" state, _activeProjectile?.ColorName.Value) when
+        // it's non-empty and itself not rainbow; otherwise it falls back to
+        // LightningChain.FindNearestConcreteColor (mirrors SlotGrid.FindNearestColorId's ring walk). A
+        // normal host always matches its OWN colour (activation.SourceColorId) — it never reads the
+        // projectile at all. An empty resolved matchColor (an empty board, or an empty/rainbow
+        // projectile colour with no concrete colour anywhere) is a no-op, same as live's own early
+        // return. No config known for Lightning this flight (an empty test dictionary) is a no-op, same
+        // as items:null upstream.
+        private ShotItemOutcome ResolveLightning(
+            in ShotItemActivation activation, string projectileColorId, ShotBalloonState[] workingSet,
+            int activeCount, List<EffectHit> hitsOut)
+        {
+            if (!_effectParams.TryGetValue(ItemType.Lightning, out var settings))
+            {
+                return default;
+            }
+
+            _effectBoard.Bind(workingSet, activeCount, activation.Slot);
+
+            var matchColorId = activation.SourceColorId;
+            if (activation.IsRainbowHost)
+            {
+                matchColorId = !string.IsNullOrEmpty(projectileColorId)
+                    && !string.Equals(projectileColorId, _rainbowColorId, StringComparison.Ordinal)
+                    ? projectileColorId
+                    : LightningChain.FindNearestConcreteColor(_effectBoard, activation.Slot, _rainbowColorId);
+            }
+
+            if (string.IsNullOrEmpty(matchColorId))
+            {
+                return default;
+            }
+
+            LightningChain.Resolve(
+                _effectBoard, activation.Origin, activation.Slot, matchColorId, activation.IsRainbowHost,
+                _rainbowColorId, hitsOut);
 
             return new ShotItemOutcome(
                 shieldDelta: 0, grantsRainbowBuffUntilWall: false, grantsRainbowBuffUntilPierceEnd: false,

@@ -117,6 +117,11 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
 
 ## Accepted approximations (plan §7)
 
+- `ShotItemLayer.MaxActivationsPerFlight` (32) is a sim-only safety valve — live's `ItemActivator`
+  has no cap, so a flight that would chain past it in-game keeps granting effects the sim silently
+  drops from that point. Related edge: chained activations enqueue in the chain's hit order, and
+  two EXACTLY equidistant lightning targets can receive swapped jump indices between sim and live
+  (unstable sort) — observable only when a tie sits right at the budget wall.
 - The live balancer notices an interval crossing on a render frame and defers the actual
   Balance() one more — modeled as a pulse execution delay the window estimates from the live
   frame time (~1.5 × `Time.smoothDeltaTime`), an estimate rather than the exact per-frame lag.
