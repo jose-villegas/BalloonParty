@@ -26,9 +26,15 @@ namespace BalloonParty.Audio.Configuration
         [Tooltip("Global concurrent-voice cap, and the pooled-voice prewarm count. Keep under Android's real-voice budget.")]
         [SerializeField] [Min(1)] private int _globalVoiceCap = 16;
 
+        [Header("Danger")]
+        [Tooltip("Danger level (0-1) at or above which the DangerWarn loop plays; it stops when the level " +
+                 "falls back below. IDangerLevel is the source (health + board fill).")]
+        [SerializeField] [Range(0f, 1f)] private float _dangerLevelThreshold = 0.6f;
+
         public IReadOnlyList<int> MelodicScale => _melodicScale;
         public int MelodicRootSemitone => _melodicRootSemitone;
         public int GlobalVoiceCap => _globalVoiceCap;
+        public float DangerLevelThreshold => _dangerLevelThreshold;
 
         private void OnValidate()
         {

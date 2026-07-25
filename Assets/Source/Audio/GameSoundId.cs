@@ -42,6 +42,9 @@ namespace BalloonParty.Audio
         BalloonPopTough,
 
         // Physical wall-bounce impact, driven by WallHitMessage (distinct from the ShieldLost cue).
-        WallHit
+        WallHit,
+
+        // Sustained warning while the board sits in the danger (future-overflow) state; author as a loop.
+        DangerWarn
     }
 }

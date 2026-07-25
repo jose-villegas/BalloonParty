@@ -27,6 +27,7 @@ Unity audio only (`AudioSource` + `AudioMixer`), no middleware.
 | `Routing/CombatSoundRouter` | Hits, shots, reload, cruise loop, doomed warning, pierce, shield gained/lost |
 | `Routing/ProgressionSoundRouter` | Streak, score chime, level-up (+ glow, dismiss), level transition, board clear, game-over (+ dismiss) |
 | `Routing/ItemSoundRouter` | Per-item activation, overflow heart, spawn-blocked thud |
+| `Routing/DangerSoundRouter` | Starts/stops the `DangerWarn` loop as `IDangerLevel` crosses `DangerLevelThreshold` |
 | `Configuration/GameSoundId`, `SfxChannel`, `SfxEntry`, `ISoundBankConfiguration`, `SoundBankConfiguration` | The data side — see *Configuration* below |
 
 **Namespace:** `BalloonParty.Audio` (`.Routing`, `.View`, `.Configuration` for their folders).
