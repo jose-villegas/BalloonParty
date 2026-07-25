@@ -29,7 +29,6 @@ namespace BalloonParty.Game
         [SerializeField] private SlotGridConfig _slotGridConfig;
         [SerializeField] private PredictionTraceConfig _predictionTraceConfig;
         [SerializeField] private RunConfig _runConfig;
-        [SerializeField] private GameDisplayConfiguration _displayConfiguration;
         [SerializeField] private ItemConfiguration _itemConfiguration;
         [SerializeField] private GamePalette _gamePalette;
         [SerializeField] private BalloonsConfiguration _balloonsConfiguration;
@@ -38,9 +37,7 @@ namespace BalloonParty.Game
         [SerializeField] private GridActorConfiguration _gridActorConfiguration;
         [SerializeField] private PuffCloudSettings _puffCloudSettings;
         [SerializeField] private BushSettings _bushSettings;
-        [SerializeField] private DisturbanceFieldSettings _disturbanceFieldSettings;
         [SerializeField] private SceneLightFieldSettings _sceneLightFieldSettings;
-        [SerializeField] private BackgroundFieldSettings _backgroundFieldSettings;
         [FormerlySerializedAs("_paintingFieldSettings")]
         [SerializeField] private SmokeFieldSettings _smokeFieldSettings;
         [SerializeField] private SpeckFieldSettings _speckFieldSettings;
@@ -86,7 +83,6 @@ namespace BalloonParty.Game
             builder.RegisterInstance<ISlotGridConfig>(_slotGridConfig);
             builder.RegisterInstance<IPredictionTraceConfig>(_predictionTraceConfig);
             builder.RegisterInstance<IRunConfig>(_runConfig);
-            builder.RegisterInstance<IGameDisplayConfiguration>(_displayConfiguration);
             builder.RegisterInstance<IItemConfiguration>(_itemConfiguration);
             builder.RegisterInstance<IGamePalette>(_gamePalette);
             builder.RegisterInstance<IBalloonsConfiguration>(_balloonsConfiguration);
@@ -95,12 +91,12 @@ namespace BalloonParty.Game
             builder.RegisterInstance<IGridActorConfiguration>(_gridActorConfiguration);
             builder.RegisterInstance<IPuffCloudSettings>(_puffCloudSettings);
             builder.RegisterInstance<IBushSettings>(_bushSettings);
-            builder.RegisterInstance<IDisturbanceFieldSettings>(_disturbanceFieldSettings);
+
+            // Display config, the ambient (scene-light / time-of-day), screen-space light, disturbance, and
+            // background-field settings are owned by AppLifetimeScope now; this scope resolves them from the
+            // parent. Only the LOCAL light field's settings stay here, feeding the Game-scope
+            // SceneLightFieldService.
             builder.RegisterInstance<ISceneLightFieldSettings>(_sceneLightFieldSettings);
-            builder.RegisterInstance<IScreenSpaceLightSettings>(_sceneLightFieldSettings);
-            builder.RegisterInstance<ISceneLightSettings>(_sceneLightFieldSettings);
-            builder.RegisterInstance<ITimeOfDaySettings>(_sceneLightFieldSettings);
-            builder.RegisterInstance<IBackgroundFieldSettings>(_backgroundFieldSettings);
             builder.RegisterInstance<ISmokeFieldSettings>(_smokeFieldSettings);
             builder.RegisterInstance<ISpeckFieldSettings>(_speckFieldSettings);
             builder.RegisterInstance<IShieldFieldSettings>(_shieldFieldSettings);
