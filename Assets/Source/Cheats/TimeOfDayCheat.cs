@@ -16,6 +16,7 @@ namespace BalloonParty.Cheats
     {
         private static readonly string[] SpeedPresets = { "Freeze", "1x", "8x", "30x" };
         private static readonly float[] SpeedPresetValues = { 0f, 1f, 8f, 30f };
+        private static readonly Color NightBandColor = new Color(0.25f, 0.3f, 0.6f, 0.45f);
 
         private readonly TimeOfDayClock _clock;
 
@@ -40,7 +41,10 @@ namespace BalloonParty.Cheats
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label($"Angle {_angle:0}° (now {_clock.CurrentAngleDegrees:0}°)", GUILayout.Width(150));
-            var newAngle = GUILayout.HorizontalSlider(_angle, 0f, 360f);
+            var sliderRect =
+                GUILayoutUtility.GetRect(GUIContent.none, GUI.skin.horizontalSlider, GUILayout.ExpandWidth(true));
+            DrawNightBand(sliderRect);
+            var newAngle = GUI.HorizontalSlider(sliderRect, _angle, 0f, 360f);
             if (!Mathf.Approximately(newAngle, _angle))
             {
                 _angle = newAngle;
@@ -60,6 +64,34 @@ namespace BalloonParty.Cheats
             {
                 CheatState.TimeOfDaySpeedScale = SpeedPresetValues[preset];
             }
+        }
+
+        // Tints the slider region that maps to night (sampled from TimeOfDayService.IsNightAngle, so it
+        // tracks the real 5 PM–4 AM window) behind the thumb, so the scrubber shows where night sits.
+        private static void DrawNightBand(Rect sliderRect)
+        {
+            const int steps = 360;
+            var previous = GUI.color;
+            GUI.color = NightBandColor;
+
+            var runStart = -1;
+            for (var i = 0; i <= steps; i++)
+            {
+                var isNight = i < steps && TimeOfDayService.IsNightAngle(i);
+                if (isNight && runStart < 0)
+                {
+                    runStart = i;
+                }
+                else if (!isNight && runStart >= 0)
+                {
+                    var x = sliderRect.x + (float)runStart / steps * sliderRect.width;
+                    var width = (float)(i - runStart) / steps * sliderRect.width;
+                    GUI.DrawTexture(new Rect(x, sliderRect.y, width, sliderRect.height), Texture2D.whiteTexture);
+                    runStart = -1;
+                }
+            }
+
+            GUI.color = previous;
         }
     }
 }
