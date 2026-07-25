@@ -129,33 +129,57 @@ namespace BalloonParty.Projectile.Controller
         internal Vector3 Deflect(
             IWriteableProjectileModel model, Vector3 projectilePosition, Vector3 balloonPosition, float contactRadius)
         {
-            if (!TryComputeContactNormal(
-                    projectilePosition, model.Direction, balloonPosition, contactRadius, out var surfaceNormal))
+            Vector3 contactPoint;
+            float remainder;
+
+            var penetrated = TryComputeContactNormal(
+                projectilePosition, model.Direction, balloonPosition, contactRadius, out var surfaceNormal);
+
+            if (penetrated
+                || TryComputeForwardContactNormal(
+                    projectilePosition, model.Direction, balloonPosition, contactRadius, out surfaceNormal))
             {
-                // Degenerate trigger (zero direction, no ray-circle crossing) — the penetrated radial
-                // normal is still a sane reflection, from where the shot actually is.
+                model.Direction = Vector2.Reflect(model.Direction, surfaceNormal);
+
+                // Snap to the analytic contact point, then carry the already-travelled penetration
+                // distance along the REFLECTED heading — the exact billiard continuation, losing
+                // neither geometry nor time. Reflecting from the penetrated trigger position would
+                // exit along a chord displaced by up to a fixed step — an error the Sinai dispersion
+                // law (@ref plan_shot_geometry §3) amplifies ×10–20 per subsequent deflect.
+                contactPoint = balloonPosition + (Vector3)(surfaceNormal * contactRadius);
+                contactPoint.z = projectilePosition.z;
+
+                // A balloon in an edge column can sit within its own collider radius of a wall, putting
+                // the contact point (and the reflected continuation) OUTSIDE the field. Left un-clamped,
+                // the next Step reads the out-of-bounds position as a wall crossing and spends a shield
+                // — a phantom bounce that can kill a 0-shield shot at the deflect. Clamp so a deflect
+                // never starts a step out of bounds; genuine wall hits still resolve on later steps.
+                contactPoint = _walls.ClampInside(contactPoint);
+
+                // Only a PENETRATED contact has surplus travel to re-route: its remainder is distance
+                // already spent past the surface this frame. A forward (capsule-nose, still-short)
+                // contact never reached the surface — snapping to the contact point compensates the
+                // nose bias, and carrying the shortfall onward too would manufacture free travel.
+                remainder = penetrated ? (projectilePosition - contactPoint).magnitude : 0f;
+            }
+            else
+            {
+                // Truly degenerate trigger (zero direction, or the ray's infinite line never crosses
+                // the circle at all) — the penetrated radial normal is still a sane reflection, from
+                // where the shot actually is.
                 surfaceNormal = ((Vector2)projectilePosition - (Vector2)balloonPosition).normalized;
                 model.Direction = Vector2.Reflect(model.Direction, surfaceNormal);
-                return _walls.ClampInside(projectilePosition);
+                contactPoint = _walls.ClampInside(projectilePosition);
+                remainder = 0f;
             }
 
-            model.Direction = Vector2.Reflect(model.Direction, surfaceNormal);
-
-            // Snap to the analytic contact point, then carry the already-travelled penetration
-            // distance along the REFLECTED heading — the exact billiard continuation, losing neither
-            // geometry nor time. Reflecting from the penetrated trigger position would exit along a
-            // chord displaced by up to a fixed step — an error the Sinai dispersion law
-            // (@ref plan_shot_geometry §3) amplifies ×10–20 per subsequent deflect.
-            var contactPoint = balloonPosition + (Vector3)(surfaceNormal * contactRadius);
-            contactPoint.z = projectilePosition.z;
-
-            // A balloon in an edge column can sit within its own collider radius of a wall, putting the
-            // contact point (and the reflected continuation) OUTSIDE the field. Left un-clamped, the
-            // next Step reads the out-of-bounds position as a wall crossing and spends a shield — a
-            // phantom bounce that can kill a 0-shield shot at the deflect. Clamp so a deflect never
-            // starts a step out of bounds; genuine wall hits still resolve on later steps.
-            contactPoint = _walls.ClampInside(contactPoint);
-            var remainder = (projectilePosition - contactPoint).magnitude;
+            // Every deflect re-anchors the flight segment HERE, unconditionally — Step's
+            // last-shield-approach branch recomputes position ABSOLUTELY from this anchor, so a path
+            // that skipped this write (the degenerate branch used to) left it pointing at whatever wall
+            // contact started the previous segment. The next Step then relocated the shot from that
+            // stale, long-past anchor using the just-reflected heading — the graze-deflect teleport
+            // (investigation H1). Re-anchoring on every path makes "a deflect starts a new segment" an
+            // unconditional invariant instead of an analytic-path-only one.
             model.Flight.SegmentStartPosition = contactPoint;
             model.Flight.SegmentElapsed = 0f;
             return _walls.ClampInside(contactPoint + (Vector3)(model.Direction * remainder));
@@ -199,6 +223,48 @@ namespace BalloonParty.Projectile.Controller
             }
 
             normal = (toPosition - travel * backtrack) / radius;
+            return true;
+        }
+
+        // Only ever consulted after TryComputeContactNormal has already returned false. The
+        // projectile's swept CapsuleCollider2D extends past the sampled centre point (its nose sits up
+        // to ~0.105 units ahead of transform.position along the heading), so OnTriggerEnter2D can fire
+        // while the reported centre still sits a hair OUTSIDE the combined circle — on ~47% of live
+        // deflects (graze-deflect investigation, H1/H3) that pushes TryComputeContactNormal's backtrack
+        // negative and it bails, even though the ray plainly enters the circle a fraction of a unit
+        // further along direction. This solves the SAME quadratic's other root — the entry ahead of
+        // position instead of behind it — recovering the true tangent normal there instead of the
+        // penetrated-radial one the degenerate fallback used to supply.
+        private static bool TryComputeForwardContactNormal(
+            Vector2 position, Vector2 direction, Vector2 center, float radius, out Vector2 normal)
+        {
+            normal = default;
+            if (radius <= 0f || direction.sqrMagnitude < 1e-8f)
+            {
+                return false;
+            }
+
+            var travel = direction.normalized;
+            var toPosition = position - center;
+            var along = Vector2.Dot(toPosition, travel);
+            var discriminant = along * along - toPosition.sqrMagnitude + radius * radius;
+            if (discriminant < 0f)
+            {
+                if (discriminant < -1e-6f)
+                {
+                    return false;
+                }
+
+                discriminant = 0f;
+            }
+
+            var entryDistance = -along - Mathf.Sqrt(discriminant);
+            if (entryDistance <= 0f)
+            {
+                return false;
+            }
+
+            normal = (toPosition + travel * entryDistance) / radius;
             return true;
         }
 

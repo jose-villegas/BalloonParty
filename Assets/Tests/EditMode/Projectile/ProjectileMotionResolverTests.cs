@@ -544,6 +544,110 @@ namespace BalloonParty.Tests.Projectile
                 "max-speed cap applies to the unified tap total");
         }
 
+        // --- Graze-deflect teleport bug (investigation dated 2026-07-25; José's report) ---
+        // A grazing OnTriggerEnter2D reports a position OUTSIDE the combined circle (the projectile's
+        // CapsuleCollider2D extends past the point the resolver is handed) up to ~46.8% of live
+        // deflects, so `TryComputeContactNormal`'s `backtrack < 0f` check bails and `Deflect` falls
+        // back to a "degenerate" branch that (a) never re-anchors the flight segment and (b) reflects
+        // off the penetrated radial normal instead of the true tangent-entry normal.
+
+        [Test]
+        public void Step_AfterFallbackDeflectOnLastShieldApproach_DoesNotTeleportPastOneStepDistance()
+        {
+            // The bug's actual symptom (H1): the fallback branch in Deflect leaves
+            // model.Flight.SegmentStartPosition/SegmentElapsed pointing at the PREVIOUS wall bounce.
+            // The very next Step, on a doomed 0-shield last-shield-approach segment, recomputes
+            // position ABSOLUTELY from that stale anchor plus the just-reflected heading — relocating
+            // the shot several units in one 0.02s fixed step instead of the honest speed*dt travel.
+            var resolver = GrazeDeflectResolver();
+            var model = NewModel(direction: new Vector2(0.29996f, 0.95395f), speed: 8f, shields: 0);
+            model.IsLastShieldApproach.Value = true;
+            model.Flight.SegmentStartPosition = new Vector3(0.5f, -4.5f, 0f); // previous bottom-wall bounce
+            model.Flight.SegmentElapsed = 0.32f;
+
+            var projectilePosition = new Vector3(1.2f, -2.274f, 0f);
+            var balloonPosition = new Vector3(1.5992f, -2.0938f, 0f);
+            const float contactRadius = 0.4375f; // 0.3125 (balloon) + 0.125 (reported projectile radius)
+
+            // Confirms the repro sits on the epsilon-scale branch flip that forces the fallback:
+            // |p-c| = 0.43799 is a hair OUTSIDE R = 0.4375, so the analytic backtrack goes negative.
+            Assert.IsFalse(
+                ProjectileMotionResolver.TryComputeContactNormal(
+                    projectilePosition, model.Direction, balloonPosition, contactRadius, out _),
+                "repro requires the outside-the-circle graze that forces Deflect's fallback branch");
+
+            var deflectedPosition = resolver.Deflect(model, projectilePosition, balloonPosition, contactRadius);
+            var step = resolver.Step(model, deflectedPosition, 0.02f);
+
+            var moved = Vector3.Distance(deflectedPosition, step.Position);
+            Assert.LessOrEqual(moved, 8f * 0.02f * 1.5f,
+                "a single fixed step must never relocate the shot farther than ~1.5x its per-step travel " +
+                "distance — today this jumps ~2.5 units (~15x a step) because the fallback deflect never " +
+                "starts a new flight segment");
+        }
+
+        [Test]
+        public void Deflect_ContactReportedOutsideCircle_HeadingDivergesFromAnalyticTangentReflection()
+        {
+            // Same fallback branch, isolated to its OTHER live consequence (H3): reflecting off the
+            // penetrated radial normal instead of the true forward-entry tangent normal the solver
+            // (ShotSimulator.DeflectOffBalloon) computes for the identical contact. The investigation
+            // measured this fallback path diverging from the solver's outgoing angle by a median 6.4°,
+            // p90 15.7°, max ~21.8° across live contacts. This is a concrete instance (~20.6°),
+            // constructed with clean numbers so both the analytic and buggy outcomes are exact:
+            // p=(-0.6, 0.3) outside a radius-0.5 circle at the origin, travelling +X.
+            // Analytic forward entry: t = -along - sqrt(disc) = 0.2 -> contact (-0.4, 0.3) ->
+            // normal (-0.8, 0.6) -> reflected direction (-0.28, 0.96).
+            // Today's fallback instead uses the penetrated radial normal (-0.8944, 0.4472) -> reflected
+            // direction (-0.6, 0.8) — a ~20.6° divergence from the correct billiard outcome.
+            var model = NewModel(direction: Vector2.right, speed: 1f, shields: 3);
+
+            var result = _resolver.Deflect(model, new Vector3(-0.6f, 0.3f, 0f), Vector3.zero, 0.5f);
+
+            Assert.AreEqual(-0.28f, model.Direction.x, 1e-3f,
+                "outgoing heading should match the analytic forward-entry tangent reflection");
+            Assert.AreEqual(0.96f, model.Direction.y, 1e-3f);
+
+            // A forward (still-short-of-the-surface) contact has no already-travelled surplus to carry
+            // past the contact point — the shot must land ON the entry point, not entryDistance beyond
+            // it along the reflected heading (that would manufacture free travel every grazing deflect).
+            Assert.AreEqual(-0.4f, result.x, 1e-3f,
+                "forward-entry deflect must snap to the contact point with zero carried remainder");
+            Assert.AreEqual(0.3f, result.y, 1e-3f);
+        }
+
+        [Test]
+        public void Deflect_ContactExactlyOnCircle_ProducesExactTangentNormalAndZeroRelocation()
+        {
+            // Regression lock for any H1/H3 fix: a contact exactly ON the combined circle — the
+            // construction ShotSimulator.DeflectOffBalloon relies on (it advances the flight to the
+            // exact circle entry via TryFindStaticBalloonEntry before deflecting, ShotSimulator.cs) —
+            // must keep taking the analytic path with the exact radial tangent normal and ZERO
+            // relocation. TryComputeContactNormal is shared verbatim between the live resolver and the
+            // solver; a fix that regresses this boundary would re-baseline the solver's bias seam too.
+            var model = NewModel(direction: Vector2.right, speed: 1f, shields: 3);
+            var projectilePosition = new Vector3(0f, 0.4f, 0f);
+
+            var contact = _resolver.Deflect(model, projectilePosition, Vector3.zero, 0.4f);
+
+            Assert.AreEqual(projectilePosition, contact, "an exact-tangent contact carries zero remainder");
+            Assert.AreEqual(1f, model.Direction.x, 1e-4f, "tangent normal is straight up; horizontal travel unchanged");
+            Assert.AreEqual(0f, model.Direction.y, 1e-4f);
+            Assert.AreEqual(projectilePosition, model.Flight.SegmentStartPosition,
+                "the new flight segment anchors at the contact point");
+            Assert.AreEqual(0f, model.Flight.SegmentElapsed, "a fresh segment starts its clock at zero");
+        }
+
+        private static ProjectileMotionResolver GrazeDeflectResolver()
+        {
+            var config = Substitute.For<IProjectileFlightConfig>();
+            config.LimitsClockwise.Returns(new Vector4(4f, 2.25f, -4.5f, -2.25f));
+            config.CruiseTapCurve.Returns(AnimationCurve.Linear(0f, 0f, 1f, 1f));
+            config.LastShieldApproachCurve.Returns(AnimationCurve.Linear(0f, 0f, 1f, 1f));
+            config.LastShieldApproachDuration.Returns(0.8f);
+            return new ProjectileMotionResolver(config);
+        }
+
         private static ProjectileMotionResolver LastShieldResolver(AnimationCurve approachCurve, float durationSeconds)
         {
             var config = Substitute.For<IProjectileFlightConfig>();
