@@ -22,9 +22,13 @@ namespace BalloonParty.UI.Score
     {
         // Night 2x badge: a single bright badge ping-pongs across the colour bars — brightness hands off
         // bar to bar and bounces back at the ends — with the streak notice showing through the dim beats.
+        // The badge also breathes (scales) off the same sweep value, so each one swells as the highlight
+        // reaches it; this supersedes any TweenOscillator on the badge (they'd both drive localScale).
         private const float NightBadgeSweepSpeed = 1.5f;
         private const float NightBadgeMinAlpha = 0.15f;
         private const float NightBadgeMaxAlpha = 1f;
+        private const float NightBadgeMinScale = 0.85f;
+        private const float NightBadgeMaxScale = 1.15f;
 
         private static readonly int CompletedParam = Animator.StringToHash("Completed");
         private static readonly int TrailHitTrigger = Animator.StringToHash("TrailHit");
@@ -212,10 +216,12 @@ namespace BalloonParty.UI.Score
 
             // Unscaled so the sweep keeps moving through the level-up freeze, like the notices. One bright
             // badge ping-pongs across the row: each bar peaks as the sweep passes it, dims as it leaves.
+            // Alpha and scale ride the same closeness, so brightness and breathe peak together per bar.
             var maxIndex = Mathf.Max(1, _barCount - 1);
             var position = Mathf.PingPong(Time.unscaledTime * NightBadgeSweepSpeed, maxIndex);
             var closeness = Mathf.Clamp01(1f - Mathf.Abs(_barIndex - position));
             _nightBonusBadge.alpha = Mathf.Lerp(NightBadgeMinAlpha, NightBadgeMaxAlpha, closeness);
+            _nightBonusBadge.transform.localScale = Vector3.one * Mathf.Lerp(NightBadgeMinScale, NightBadgeMaxScale, closeness);
         }
 
         // This bar's position among its ColorProgressBar siblings, and their total — so the highlight can
