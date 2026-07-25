@@ -111,6 +111,28 @@ namespace BalloonParty.Tests.Audio
         }
 
         [Test]
+        public void OnActorHit_SilverBalloonPop_PlaysSilverPop()
+        {
+            var silver = Substitute.For<IBalloonModel>();
+            silver.TypeName.Returns(BalloonType.SimpleSilver);
+
+            _hitHandler.Handle(new ActorHitMessage(silver, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+
+            _player.Received(1).Play(GameSoundId.BalloonPopSilver, Vector3.zero);
+        }
+
+        [Test]
+        public void OnActorHit_GoldBalloonPop_PlaysGoldPop()
+        {
+            var gold = Substitute.For<IBalloonModel>();
+            gold.TypeName.Returns(BalloonType.SimpleGold);
+
+            _hitHandler.Handle(new ActorHitMessage(gold, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+
+            _player.Received(1).Play(GameSoundId.BalloonPopGold, Vector3.zero);
+        }
+
+        [Test]
         public void OnActorHit_UnmappedBalloonType_FallsBackToBalloonPop()
         {
             var cluster = Substitute.For<IBalloonModel>();

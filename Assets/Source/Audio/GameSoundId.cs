@@ -60,6 +60,8 @@ namespace BalloonParty.Audio
         // unmapped types fall back to BalloonPop / BalloonDeflect.
         BalloonPopRainbow,
         BalloonPopUnbreakable,
-        BalloonDeflectUnbreakable
+        BalloonDeflectUnbreakable,
+        BalloonPopSilver,
+        BalloonPopGold
     }
 }
