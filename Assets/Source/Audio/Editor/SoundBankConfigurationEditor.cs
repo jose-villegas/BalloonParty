@@ -88,11 +88,9 @@ namespace BalloonParty.Audio.Editor
                 return;
             }
 
-            var clipsProp = entry.FindPropertyRelative("_clips");
-            var hasClips = clipsProp != null && clipsProp.arraySize > 0;
-
-            // Fetching only makes sense for an unfilled slot, and only with a token to search with.
-            if (hasClips || !_tokenSource.HasToken)
+            // Fetching appends to the clip list, so it stays available even once a clip is assigned —
+            // you can pull in more variations. Only a token is required.
+            if (!_tokenSource.HasToken)
             {
                 return;
             }
