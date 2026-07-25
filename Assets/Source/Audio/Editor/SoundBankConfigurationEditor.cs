@@ -40,7 +40,9 @@ namespace BalloonParty.Audio.Editor
             var entries = serializedObject.FindProperty("_entries");
             if (entries != null)
             {
-                EditorGUILayout.LabelField("Sounds", EditorStyles.boldLabel);
+                // Show the element count the way a default list header would — the array is
+                // EnumIndexed (fixed to the GameSoundId count), so it isn't user-resizable.
+                EditorGUILayout.LabelField($"Sounds ({entries.arraySize})", EditorStyles.boldLabel);
                 for (var i = 0; i < entries.arraySize; i++)
                 {
                     DrawEntry((SoundBankConfiguration)target, (GameSoundId)i, entries.GetArrayElementAtIndex(i));

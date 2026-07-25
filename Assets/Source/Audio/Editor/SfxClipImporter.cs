@@ -13,7 +13,7 @@ namespace BalloonParty.Audio.Editor
     // the plan wants (ADPCM / Decompress-On-Load / 22 kHz), and returns the imported AudioClip.
     internal static class SfxClipImporter
     {
-        private const string FetchedFolder = "Assets/Source/Audio/Fetched";
+        private const string FetchedFolder = "Assets/Audio/Fetched";
 
         public static async UniTask<AudioClip> ImportAsync(SfxCandidate candidate, GameSoundId soundId,
             CancellationToken cancellationToken)
