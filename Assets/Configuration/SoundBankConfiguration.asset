@@ -12,7 +12,344 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de2110793fcf44f95b321fe1317000da, type: 3}
   m_Name: SoundBankConfiguration
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Audio.Configuration.SoundBankConfiguration
-  _entries: []
+  _entries:
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: dcc20f6c0d0b342d3a52815f0974d288, type: 3}
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 1
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
+  - _channel: 0
+    _clips: []
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _pan2D: 1
+    _melodicMode: 0
+    _tensionSemitones: 0
+    _fetchPrompt: 
   _melodicScale: 0000000002000000040000000700000009000000
   _melodicRootSemitone: 0
   _globalVoiceCap: 16
