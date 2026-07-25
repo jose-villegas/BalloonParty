@@ -20,7 +20,6 @@ namespace BalloonParty.Audio.Routing
         private readonly ISubscriber<ProjectileCruiseStartedMessage> _cruiseStartedSubscriber;
         private readonly ISubscriber<ProjectileCruiseEndedMessage> _cruiseEndedSubscriber;
         private readonly ISubscriber<ProjectileDoomedStartedMessage> _doomedSubscriber;
-        private readonly ISubscriber<ProjectileDoomedEndedMessage> _doomedEndedSubscriber;
         private readonly ISubscriber<PierceDischargedMessage> _pierceSubscriber;
         private readonly ISubscriber<ShieldGainedMessage> _shieldGainedSubscriber;
         private readonly ISubscriber<ShieldLostMessage> _shieldLostSubscriber;
@@ -29,7 +28,6 @@ namespace BalloonParty.Audio.Routing
         private readonly CompositeDisposable _subscriptions = new();
 
         private SoundHandle _cruiseHandle = SoundHandle.None;
-        private SoundHandle _doomedHandle = SoundHandle.None;
 
         [Inject]
         public CombatSoundRouter(ISoundPlayer player,
@@ -39,7 +37,6 @@ namespace BalloonParty.Audio.Routing
             ISubscriber<ProjectileCruiseStartedMessage> cruiseStartedSubscriber,
             ISubscriber<ProjectileCruiseEndedMessage> cruiseEndedSubscriber,
             ISubscriber<ProjectileDoomedStartedMessage> doomedSubscriber,
-            ISubscriber<ProjectileDoomedEndedMessage> doomedEndedSubscriber,
             ISubscriber<PierceDischargedMessage> pierceSubscriber,
             ISubscriber<ShieldGainedMessage> shieldGainedSubscriber,
             ISubscriber<ShieldLostMessage> shieldLostSubscriber,
@@ -53,7 +50,6 @@ namespace BalloonParty.Audio.Routing
             _cruiseStartedSubscriber = cruiseStartedSubscriber;
             _cruiseEndedSubscriber = cruiseEndedSubscriber;
             _doomedSubscriber = doomedSubscriber;
-            _doomedEndedSubscriber = doomedEndedSubscriber;
             _pierceSubscriber = pierceSubscriber;
             _shieldGainedSubscriber = shieldGainedSubscriber;
             _shieldLostSubscriber = shieldLostSubscriber;
@@ -69,7 +65,6 @@ namespace BalloonParty.Audio.Routing
             _cruiseStartedSubscriber.Subscribe(OnCruiseStarted).AddTo(_subscriptions);
             _cruiseEndedSubscriber.Subscribe(OnCruiseEnded).AddTo(_subscriptions);
             _doomedSubscriber.Subscribe(OnDoomedStarted).AddTo(_subscriptions);
-            _doomedEndedSubscriber.Subscribe(OnDoomedEnded).AddTo(_subscriptions);
             _pierceSubscriber.Subscribe(OnPierceDischarged).AddTo(_subscriptions);
             _shieldGainedSubscriber.Subscribe(OnShieldGained).AddTo(_subscriptions);
             _shieldLostSubscriber.Subscribe(OnShieldLost).AddTo(_subscriptions);
@@ -135,15 +130,7 @@ namespace BalloonParty.Audio.Routing
 
         private void OnDoomedStarted(ProjectileDoomedStartedMessage message)
         {
-            // A sustained warning (author DoomedWarn as a loop): held by a handle and stopped — fading out
-            // per its FadeOutSeconds — when the shot leaves the doomed state, mirroring the cruise loop.
-            _doomedHandle = _player.Play(GameSoundId.DoomedWarn, message.WorldPosition);
-        }
-
-        private void OnDoomedEnded(ProjectileDoomedEndedMessage message)
-        {
-            _player.Stop(_doomedHandle);
-            _doomedHandle = SoundHandle.None;
+            _player.Play(GameSoundId.DoomedWarn, message.WorldPosition);
         }
 
         private void OnPierceDischarged(PierceDischargedMessage message)

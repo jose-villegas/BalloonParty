@@ -22,8 +22,6 @@ namespace BalloonParty.Tests.Audio
         private IMessageHandler<ProjectileLoadedMessage> _loadedHandler;
         private IMessageHandler<ProjectileCruiseStartedMessage> _cruiseStartedHandler;
         private IMessageHandler<ProjectileCruiseEndedMessage> _cruiseEndedHandler;
-        private IMessageHandler<ProjectileDoomedStartedMessage> _doomedStartedHandler;
-        private IMessageHandler<ProjectileDoomedEndedMessage> _doomedEndedHandler;
         private IMessageHandler<ShieldGainedMessage> _shieldGainedHandler;
         private IMessageHandler<ShieldLostMessage> _shieldLostHandler;
         private IMessageHandler<WallHitMessage> _wallHitHandler;
@@ -38,8 +36,7 @@ namespace BalloonParty.Tests.Audio
             var loadedSubscriber = CaptureSubscriber<ProjectileLoadedMessage>(h => _loadedHandler = h);
             var cruiseStartedSubscriber = CaptureSubscriber<ProjectileCruiseStartedMessage>(h => _cruiseStartedHandler = h);
             var cruiseEndedSubscriber = CaptureSubscriber<ProjectileCruiseEndedMessage>(h => _cruiseEndedHandler = h);
-            var doomedSubscriber = CaptureSubscriber<ProjectileDoomedStartedMessage>(h => _doomedStartedHandler = h);
-            var doomedEndedSubscriber = CaptureSubscriber<ProjectileDoomedEndedMessage>(h => _doomedEndedHandler = h);
+            var doomedSubscriber = CaptureSubscriber<ProjectileDoomedStartedMessage>(_ => { });
             var pierceSubscriber = CaptureSubscriber<PierceDischargedMessage>(_ => { });
             var shieldGainedSubscriber = CaptureSubscriber<ShieldGainedMessage>(h => _shieldGainedHandler = h);
             var shieldLostSubscriber = CaptureSubscriber<ShieldLostMessage>(h => _shieldLostHandler = h);
@@ -50,7 +47,7 @@ namespace BalloonParty.Tests.Audio
 
             var router = new CombatSoundRouter(
                 _player, hitSubscriber, firedSubscriber, loadedSubscriber,
-                cruiseStartedSubscriber, cruiseEndedSubscriber, doomedSubscriber, doomedEndedSubscriber,
+                cruiseStartedSubscriber, cruiseEndedSubscriber, doomedSubscriber,
                 pierceSubscriber, shieldGainedSubscriber, shieldLostSubscriber, wallHitSubscriber,
                 flightConfig);
             router.Start();
@@ -152,18 +149,6 @@ namespace BalloonParty.Tests.Audio
 
             _cruiseStartedHandler.Handle(new ProjectileCruiseStartedMessage(Vector3.zero, Vector3.right, 1));
             _cruiseEndedHandler.Handle(new ProjectileCruiseEndedMessage(Vector3.zero));
-
-            _player.Received(1).Stop(handle);
-        }
-
-        [Test]
-        public void OnDoomedStarted_ThenEnded_StopsTheStoredHandle()
-        {
-            var handle = new SoundHandle(9, 1u);
-            _player.Play(GameSoundId.DoomedWarn, Arg.Any<Vector3?>()).Returns(handle);
-
-            _doomedStartedHandler.Handle(new ProjectileDoomedStartedMessage(Vector3.zero));
-            _doomedEndedHandler.Handle(new ProjectileDoomedEndedMessage());
 
             _player.Received(1).Stop(handle);
         }
