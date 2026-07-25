@@ -57,6 +57,7 @@ namespace BalloonParty.Audio.Configuration
 
 #if UNITY_EDITOR
         [Tooltip("Editor-only: description handed to an ISfxProvider to auto-fill empty clip slots (Phase 3). Never read at runtime.")]
+        [HideInInspector]
         [SerializeField] [TextArea] private string _fetchPrompt;
 
         internal string FetchPrompt => _fetchPrompt;
