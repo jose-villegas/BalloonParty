@@ -166,7 +166,6 @@ GameObject:
   - component: {fileID: 5975162263570056898}
   - component: {fileID: 8695025231240788432}
   - component: {fileID: 2197602858574390071}
-  - component: {fileID: 4368996523590272923}
   m_Layer: 5
   m_Name: NightBonus
   m_TagString: Untagged
@@ -183,7 +182,7 @@ RectTransform:
   m_GameObject: {fileID: 4398058092325372606}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -2.6228}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalScale: {x: 0.35, y: 0.35, z: 0.35}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6650401340006023979}
@@ -203,7 +202,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4398058092325372606}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -230,28 +229,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &4368996523590272923
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4398058092325372606}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87bc50994e404c7a8901b4cee11575c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Shared.Animation.TweenOscillator
-  _channels:
-  - Type: 1
-    Offset: {x: 0.025, y: 0.025, z: 0}
-    Pivot: 0
-    Delay: 0
-  _duration: 1
-  _delay: 0
-  _ease: 4
-  _playOnEnable: 1
-  _preview: 0
 --- !u!1 &5049648050948234212
 GameObject:
   m_ObjectHideFlags: 0
