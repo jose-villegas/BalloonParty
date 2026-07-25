@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Shared;
 using BalloonParty.Slots.Actor.Archetype;
@@ -41,6 +42,38 @@ namespace BalloonParty.Tests.ShotSolver
             Assert.AreEqual(0, result.Pops, "the balloon behind the absorber is never reached");
             Assert.AreEqual(0, result.RawScore);
             Assert.IsFalse(result.BoardCleared);
+
+            // Pops==0 alone would also pass if the absorb branch mistakenly fell through to
+            // RemoveActive without incrementing Pops — check the working-set entries directly: the
+            // Absorber's own slot is untouched, and the swap-compaction RemoveActive would have
+            // performed never ran (index 1 still holds the untouched green behind it).
+            Assert.AreEqual(
+                ShotContactKind.Absorb, workingSet[0].ContactKind, "the absorber's own entry is never removed");
+            Assert.AreEqual(
+                "Red", workingSet[1].ColorId, "the balloon behind the absorber is never swap-compacted either");
+        }
+
+        [Test]
+        public void Simulate_Absorber_AfterAColorPop_PreservesTheBankedScoreInsteadOfResettingIt()
+        {
+            // Task 2 gap: every other absorb test scores 0 because nothing was popped before the
+            // absorber — that can't distinguish "absorb preserves RawScore" from "absorb resets it to
+            // 0 and 0 just happens to already be the value". Pop a real green first so RawScore is
+            // non-zero, then absorb immediately after.
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.1f, "Red", 3, 1),
+                ShotBoardBuilder.Static(Vector2Int.zero, new Vector2(0f, 2f), 0.2f, ShotContactKind.Absorb),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
+                workingSet: workingSet);
+
+            Assert.IsTrue(result.Absorbed);
+            Assert.AreEqual(1, result.Pops, "only the green before the absorber counts");
+            Assert.AreEqual(3, result.RawScore, "the banked score from before the absorber survives — absorb doesn't zero it");
         }
 
         [Test]
@@ -51,23 +84,45 @@ namespace BalloonParty.Tests.ShotSolver
             // cruise engages on the very first bounce's clear-ahead check (nothing blocks that first
             // pass), and the absorber sits squarely on the SECOND pass, well after that one-time
             // check — so the contact genuinely lands while state.IsCruising is true.
+            //
+            // Events/Absorbed/RawScore/Pops/Died are driven by GEOMETRY (wall reflections + the
+            // absorber's fixed position), never by the cruise flag itself — cruise only changes
+            // SPEED, not direction — so none of those alone prove cruise was actually engaged at
+            // contact. With speedPerShield=1, CruiseStartShields is pinned to the shield count right
+            // after the first bounce (9), so by the third segment (the one ending at the absorber)
+            // taps = 9 − 8 = 1 → CurrentSpeed's target = 2× base — provably faster than the same
+            // geometry run with cruise disabled, which is what the final assertion below checks.
             var walls = new Vector4(1000f, 5f, -1000f, -5f);
             var board = new[]
             {
                 ShotBoardBuilder.Static(Vector2Int.zero, new Vector2(0f, 2f), 0.3f, ShotContactKind.Absorb),
             };
             var workingSet = new ShotBalloonState[board.Length];
-            var cruiseConfig = new ShotCruiseConfig(wallBounceThreshold: 1, speedPerShield: 0f);
+            var cruiseConfig = new ShotCruiseConfig(wallBounceThreshold: 1, speedPerShield: 1f);
+            var timestampsWithCruise = new List<float>();
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, new Vector2(1f, 0.1f), startingShields: 10, projectileContactRadius: 0f,
-                workingSet: workingSet, cruiseConfig: cruiseConfig);
+                workingSet: workingSet, cruiseConfig: cruiseConfig, timestampsOut: timestampsWithCruise);
 
             Assert.IsTrue(result.Absorbed, "the absorber ends the flight even while cruising");
             Assert.AreEqual(0, result.RawScore);
             Assert.AreEqual(0, result.Pops);
             Assert.IsFalse(result.Died);
             Assert.AreEqual(3, result.Events, "bounce, bounce, absorb contact — cruise engaged on the first bounce");
+
+            // Same geometry, cruise disabled (a zero threshold never arms it) — every segment runs at
+            // base speed, so this is the "no cruise" baseline arrival time at the same contact.
+            var baselineWorkingSet = new ShotBalloonState[board.Length];
+            var timestampsWithoutCruise = new List<float>();
+            ShotSimulator.Simulate(
+                board, walls, Vector2.zero, new Vector2(1f, 0.1f), startingShields: 10, projectileContactRadius: 0f,
+                workingSet: baselineWorkingSet, timestampsOut: timestampsWithoutCruise);
+
+            Assert.Less(
+                timestampsWithCruise[^1], timestampsWithoutCruise[^1],
+                "the cruise-armed run reaches the absorber strictly faster — proof the speed ramp was genuinely " +
+                "applied on the segment ending at the contact, not just a flag nobody reads");
         }
 
         [Test]
@@ -134,6 +189,22 @@ namespace BalloonParty.Tests.ShotSolver
             Assert.AreEqual(
                 ShotContactKind.Poppable, ShotBoardGather.ClassifyContactKind(new GatekeeperActorModel(2)),
                 "Gatekeeper returns Deflect while HitsRemaining > 0 — a damage-0 probe never pops it");
+        }
+
+        [Test]
+        public void ClassifyContactKind_GatekeeperProbe_DoesNotMutateHitsRemaining()
+        {
+            // Pins the gather-time safety assumption the classify probe relies on (@ref
+            // plan_shot_solver_accuracy Phase A memo): GatekeeperActorModel.EvaluateHit computes
+            // Math.Max(0, HitsRemaining − damage), so a damage-0 probe writes back the SAME value —
+            // it must never actually consume a hit. If a future rewrite of EvaluateHit broke that
+            // identity (e.g. an unconditional decrement), gather would silently pop every gatekeeper
+            // one hit early.
+            var gatekeeper = new GatekeeperActorModel(2);
+
+            ShotBoardGather.ClassifyContactKind(gatekeeper);
+
+            Assert.AreEqual(2, gatekeeper.HitsRemaining.Value, "the classification probe must not consume a hit");
         }
 
         [Test]
