@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Configuration.Items;
+using BalloonParty.Item.Effects;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Slots.Grid;
 using UnityEngine;
 
@@ -135,6 +138,10 @@ namespace BalloonParty.Solver
         // Fire Best cheat), so a shared scratch buffer never aliases across concurrent calls.
         private static readonly Vector2Int[] NeighborBuffer = new Vector2Int[6];
 
+        // Reused across an item activation's EffectHit list (@ref plan_shot_solver_accuracy Phase C1
+        // onward) — same single-threaded scratch-buffer convention as NeighborBuffer above.
+        private static readonly List<EffectHit> ItemHitsScratch = new();
+
         /// <summary>Simulates one aim direction to completion. <paramref name="workingSet" /> is a
         /// caller-owned scratch buffer (sized to at least <paramref name="board" />.Count) reused
         /// across calls — with <paramref name="dynamics" /> null the only per-call cost is copying the
@@ -230,7 +237,7 @@ namespace BalloonParty.Solver
                     timestampsOut?.Add(state.Elapsed);
                     ResolveBalloonContact(
                         workingSet, ref activeCount, balloonIndex, state.Position, projectileContactRadius,
-                        state.Elapsed, dynamics, in scoreRules, ref state);
+                        state.Elapsed, dynamics, in scoreRules, items, ref state);
                     if (state.Absorbed)
                     {
                         break;
@@ -490,7 +497,7 @@ namespace BalloonParty.Solver
         private static void ResolveBalloonContact(
             ShotBalloonState[] workingSet, ref int activeCount, int index, Vector2 contactPosition,
             float projectileContactRadius, float tHit, ShotBoardDynamics dynamics, in ShotScoreRules scoreRules,
-            ref ShotFlightState state)
+            ShotItemLayer items, ref ShotFlightState state)
         {
             ref var balloon = ref workingSet[index];
 
@@ -584,6 +591,13 @@ namespace BalloonParty.Solver
             }
 
             state.Pops++;
+
+            // Copy the host BY VALUE before RemoveActive's swap-remove reassigns whatever `balloon`
+            // refs into (R6 ref-aliasing, @ref plan_shot_solver_accuracy Phase C1) — RunItemEffects
+            // needs the host's own item/colour/slot identity, which the post-removal `balloon` ref no
+            // longer holds.
+            var host = balloon;
+
             if (balloon.Actor != null)
             {
                 dynamics?.RemoveFromGrid(balloon.Actor);
@@ -594,6 +608,73 @@ namespace BalloonParty.Solver
             }
 
             RemoveActive(workingSet, ref activeCount, index);
+
+            // Statics/the gatekeeper path never reach here — ItemProfile only ever rides the colour/
+            // rainbow snapshot factories (see ShotBalloonSnapshot), never ForStaticContact.
+            if (items != null && host.Item != ItemType.None)
+            {
+                RunItemEffects(
+                    items, in host, center, state.Direction, tHit, workingSet, ref activeCount, dynamics,
+                    in scoreRules, ref state);
+            }
+        }
+
+        // Pop-site item hook (@ref plan_shot_solver_accuracy Phase C1): the host's own item is the
+        // FIRST activation into the FIFO queue — draining it breadth-first mirrors ItemActivator's
+        // per-frame cadence (a popped item's own effect enqueuing another item resolves on a LATER
+        // iteration here, not nested recursion, exactly like the live frame cadence).
+        private static void RunItemEffects(
+            ShotItemLayer items, in ShotBalloonState host, Vector2 hostCenter, Vector2 hostDirection, float tHit,
+            ShotBalloonState[] workingSet, ref int activeCount, ShotBoardDynamics dynamics,
+            in ShotScoreRules scoreRules, ref ShotFlightState state)
+        {
+            var activation = new ShotItemActivation(
+                host.Item, hostCenter, hostDirection, host.SlotIndex, host.ColorId, host.IsRainbow,
+                host.ItemSpinDegrees + (host.ItemSpinRate * tHit), isDirectHit: true);
+
+            if (!items.TryBeginActivation(in activation))
+            {
+                return;
+            }
+
+            while (items.TryDequeue(out var next))
+            {
+                var outcome = items.Resolve(next, state.ProjectileColor, workingSet, activeCount, ItemHitsScratch);
+                ApplyItemOutcome(in outcome, ref state);
+                ApplyEffectHits(ItemHitsScratch, workingSet, ref activeCount, dynamics, in scoreRules, ref state);
+            }
+        }
+
+        // Only Shield (C1, ShieldDelta/GrantsRainbowBuffUntilWall) and Snipe (C6, the remaining three
+        // fields) ever populate a non-default ShotItemOutcome — Bomb/Laser/Lightning/Paint always
+        // return default. Wiring every field's apply-side plumbing now, while it's free, means C6
+        // only has to fill in ShotItemLayer.Resolve's own Snipe case.
+        private static void ApplyItemOutcome(in ShotItemOutcome outcome, ref ShotFlightState state)
+        {
+            state.Shields += outcome.ShieldDelta;
+            state.RainbowBuffUntilWall |= outcome.GrantsRainbowBuffUntilWall;
+            state.RainbowBuffUntilPierceEnd |= outcome.GrantsRainbowBuffUntilPierceEnd;
+            state.IsPiercing |= outcome.ArmsPierce;
+
+            // 0 means "grants no speed buff" (1f can't express that — it's also the buffless
+            // multiplier); the guard doubles as Phase C6's non-stacking re-pickup rule for free.
+            if (outcome.SpeedBuffMultiplier > 0f && !state.HasSpeedBuff)
+            {
+                state.HasSpeedBuff = true;
+                state.SpeedBuffMultiplier = outcome.SpeedBuffMultiplier;
+            }
+        }
+
+        // Stub through Phase C1 — Shield has no effect core, so it never enqueues an EffectHit. Phase
+        // C2 wires the real per-kind dispatch here (PiercingDamage/Damage popping, Recolor never
+        // popping, every Damage/PiercingDamage hit nudging even on a surviving hit, a chained-item
+        // enqueue per pop) — see @ref plan_shot_solver_accuracy Phase C's "EffectHit application"
+        // section.
+        private static void ApplyEffectHits(
+            IReadOnlyList<EffectHit> hits, ShotBalloonState[] workingSet, ref int activeCount,
+            ShotBoardDynamics dynamics, in ShotScoreRules scoreRules, ref ShotFlightState state)
+        {
+            Log.Assert(hits == null || hits.Count == 0, "ShotItemLayer", "C1 items never emit an EffectHit");
         }
 
         private static void DeflectOffBalloon(

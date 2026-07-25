@@ -71,9 +71,9 @@ namespace BalloonParty.Solver
     /// later iteration, breadth-first, exactly like <c>ItemActivator</c>'s per-frame draining).
     /// <see cref="MaxActivationsPerFlight" /> bounds a pathological chain (e.g. bomb-chains-into-bomb)
     /// so a sweep of thousands of angles can never spin forever.
-    /// C0 (this phase) is plumbing only: <see cref="Resolve" /> dispatches on <see cref="ItemType" />
-    /// but every branch returns a no-op outcome and no hits — each item's own sub-phase (C1 Shield ..
-    /// C6 Snipe) wires its real effect in.</summary>
+    /// Wired per sub-phase (C1 Shield .. C6 Snipe) — an item type with no core (Shield, Snipe) never
+    /// touches <see cref="_effectParams" />/<see cref="_effectBoard" /> at all; every other branch
+    /// still returns a no-op outcome and no hits until its own sub-phase lands.</summary>
     internal sealed class ShotItemLayer
     {
         internal const int MaxActivationsPerFlight = 32;
@@ -132,11 +132,13 @@ namespace BalloonParty.Solver
         {
             hitsOut?.Clear();
 
-            // C0 plumbing only — every item type resolves to a no-op outcome/no hits until its own
-            // sub-phase wires the real effect against _effectParams/_effectBoard.
             switch (activation.Item)
             {
                 case ItemType.Shield:
+                    return ResolveShield(in activation);
+
+                // Every other item type is plumbing-only until its own sub-phase (C2 Bomb .. C6
+                // Snipe) wires the real effect against _effectParams/_effectBoard.
                 case ItemType.Bomb:
                 case ItemType.Laser:
                 case ItemType.Lightning:
@@ -145,6 +147,17 @@ namespace BalloonParty.Solver
                 default:
                     return default;
             }
+        }
+
+        // Mirrors ShieldItemHandler.Activate (verified 2026-07-25): +1 shield on the projectile
+        // always; a rainbow host ADDITIONALLY grants the RainbowShield buff (there, a
+        // WallBounceEndCondition-gated ProjectileBuff; here, ShotFlightState.RainbowBuffUntilWall).
+        // No core, no EffectHits — Shield is a pure state grant.
+        private static ShotItemOutcome ResolveShield(in ShotItemActivation activation)
+        {
+            return new ShotItemOutcome(
+                shieldDelta: 1, grantsRainbowBuffUntilWall: activation.IsRainbowHost,
+                grantsRainbowBuffUntilPierceEnd: false, armsPierce: false, speedBuffMultiplier: 0f);
         }
     }
 }

@@ -39,9 +39,10 @@ namespace BalloonParty.Solver
     /// <summary>Solver-side <see cref="IEffectBoard" /> — runs purely over the working set +
     /// <see cref="ShotSlotLattice" /> (@ref plan_shot_solver_accuracy Phase C: "runs on the working set
     /// + HexCoordinates only — NOT the dynamics grid"), so an item core selects identically whether or
-    /// not <c>ShotBoardDynamics</c> is present. A handle is the occupant's stable <c>SlotIndex</c>
-    /// (boxed) rather than a working-set array index — swap-remove reorders the array between
-    /// activations, but a <see cref="ShotBalloonState.SlotIndex" /> survives it.</summary>
+    /// not <c>ShotBoardDynamics</c> is present. A handle is the occupant's own index into
+    /// <see cref="Occupants" /> (see <see cref="EffectOccupant.Handle" />'s doc) — <see cref="SlotOf" />
+    /// resolves it back to the stable <see cref="ShotBalloonState.SlotIndex" /> the caller actually
+    /// needs to re-find the occupant in a working set a prior hit's swap-remove may have reordered.</summary>
     internal sealed class ShotSimEffectBoard : IEffectBoard
     {
         private readonly ShotSlotLattice _lattice;
@@ -87,16 +88,16 @@ namespace BalloonParty.Solver
                 var isPaintable = !workingSet[i].IsRainbow && !string.IsNullOrEmpty(workingSet[i].ColorId);
 
                 _occupants.Add(new EffectOccupant(
-                    workingSet[i].SlotIndex, workingSet[i].SlotIndex, workingSet[i].Position, slotPosition,
+                    _occupants.Count, workingSet[i].SlotIndex, workingSet[i].Position, slotPosition,
                     workingSet[i].Radius, workingSet[i].ColorId, isPaintable, resistsPaint: false));
             }
         }
 
-        /// <summary>Unboxes an <see cref="EffectHit.Handle" /> this board produced back into the
+        /// <summary>Resolves an <see cref="EffectHit.Handle" /> this board produced back into the
         /// working-set slot it identifies.</summary>
-        public Vector2Int SlotOf(object handle)
+        public Vector2Int SlotOf(int handle)
         {
-            return (Vector2Int)handle;
+            return _occupants[handle].Slot;
         }
     }
 }

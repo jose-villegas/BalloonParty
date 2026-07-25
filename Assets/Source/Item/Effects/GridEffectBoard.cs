@@ -20,6 +20,10 @@ namespace BalloonParty.Item.Effects
         private readonly float _viewlessRadius;
         private readonly List<EffectOccupant> _occupants = new();
 
+        // Parallel to _occupants (same index) — EffectOccupant deliberately carries no model
+        // reference (see its Handle doc), so the live model a handle resolves to lives here instead.
+        private readonly List<IBalloonModel> _models = new();
+
         public IReadOnlyList<EffectOccupant> Occupants => _occupants;
         public int SearchRadius => Mathf.Max(_grid.Columns, _grid.Rows);
 
@@ -51,6 +55,7 @@ namespace BalloonParty.Item.Effects
         public void Rebuild(Vector2Int? exclude = null)
         {
             _occupants.Clear();
+            _models.Clear();
 
             for (var col = 0; col < _grid.Columns; col++)
             {
@@ -78,18 +83,19 @@ namespace BalloonParty.Item.Effects
                     var radius = view != null ? view.ContactRadius : _viewlessRadius;
                     var colorId = model is IHasColor colorable ? colorable.Color.Value : null;
 
+                    _models.Add(model);
                     _occupants.Add(new EffectOccupant(
-                        model, index, position, slotPosition, radius, colorId, model is IPaintable,
+                        _occupants.Count, index, position, slotPosition, radius, colorId, model is IPaintable,
                         model is IResistsPaint));
                 }
             }
         }
 
-        /// <summary>Unboxes an <see cref="EffectHit.Handle" /> this board produced back into the live
+        /// <summary>Resolves an <see cref="EffectHit.Handle" /> this board produced back into the live
         /// model it identifies.</summary>
-        public IBalloonModel ModelAt(object handle)
+        public IBalloonModel ModelAt(int handle)
         {
-            return handle as IBalloonModel;
+            return _models[handle];
         }
     }
 }
