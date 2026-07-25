@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BalloonParty.Audio.Configuration;
 using BalloonParty.Audio.View;
 using BalloonParty.Game.Run;
@@ -90,9 +91,12 @@ namespace BalloonParty.Audio
             var generation = NextGeneration(voiceId);
             _slots[voiceId].Voice = voice;
             _slots[voiceId].Channel = entry.Channel;
+            _slots[voiceId].Id = id;
 
             voice.SetOutputGroup(_mixerRouter.GroupFor(entry.Channel));
             voice.Play(in playback, entry.Loop, entry.FadeInSeconds, _onVoiceComplete);
+
+            StopVoicesFor(entry.StopsOnPlay, voiceId);
 
             return new SoundHandle(voiceId, generation);
         }
@@ -116,7 +120,7 @@ namespace BalloonParty.Audio
                 return;
             }
 
-            StopSlot(voiceId);
+            FadeOutSlot(voiceId);
         }
 
         public void SetStreak(int streak)
@@ -214,6 +218,47 @@ namespace BalloonParty.Audio
             _slots[voiceId].Voice = null;
         }
 
+        // Stops a voice with its entry's fade-out. The fade's completion runs OnVoiceComplete, which
+        // releases the limiter and returns the voice — so, unlike StopSlot, this must not do that itself
+        // (a zero fade completes synchronously through that same path).
+        private void FadeOutSlot(int voiceId)
+        {
+            var voice = _slots[voiceId].Voice;
+            if (voice == null)
+            {
+                return;
+            }
+
+            var fadeOut = _bank.TryGet(_slots[voiceId].Id, out var entry) ? entry.FadeOutSeconds : 0f;
+            voice.FadeOutAndComplete(fadeOut);
+        }
+
+        // On play, an entry can silence still-active voices of other ids (each fading per its own entry).
+        private void StopVoicesFor(IReadOnlyList<GameSoundId> ids, int exceptVoiceId)
+        {
+            if (ids == null || ids.Count == 0)
+            {
+                return;
+            }
+
+            for (var i = 0; i < _slots.Length; i++)
+            {
+                if (i == exceptVoiceId || _slots[i].Voice == null)
+                {
+                    continue;
+                }
+
+                for (var j = 0; j < ids.Count; j++)
+                {
+                    if (_slots[i].Id == ids[j])
+                    {
+                        FadeOutSlot(i);
+                        break;
+                    }
+                }
+            }
+        }
+
         private void StopAllVoices()
         {
             for (var i = 0; i < _slots.Length; i++)
@@ -237,6 +282,7 @@ namespace BalloonParty.Audio
             public AudioSourceVoice Voice;
             public uint Generation;
             public SfxChannel Channel;
+            public GameSoundId Id;
         }
     }
 }

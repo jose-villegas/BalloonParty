@@ -83,6 +83,23 @@ namespace BalloonParty.Audio.View
             _onComplete = null;
         }
 
+        // Ramps volume to 0 over fadeOutSeconds, then invokes the completion callback so the owner
+        // returns the voice through the normal path. A zero/idle fade completes immediately. The pending
+        // natural-return timer is cancelled so it can't also fire.
+        internal void FadeOutAndComplete(float fadeOutSeconds)
+        {
+            LifecycleHelper.CancelAndDispose(ref _returnCts);
+            _source.DOKill();
+
+            if (fadeOutSeconds <= 0f || _source.clip == null || !_source.isPlaying)
+            {
+                InvokeComplete();
+                return;
+            }
+
+            _source.DOFade(0f, fadeOutSeconds).SetUpdate(true).SetLink(gameObject).OnComplete(InvokeComplete);
+        }
+
         private async UniTaskVoid ScheduleReturnAsync(float clipLength, float pitch, CancellationToken ct)
         {
             var seconds = clipLength / Mathf.Max(Mathf.Abs(pitch), MinPitchMagnitude);

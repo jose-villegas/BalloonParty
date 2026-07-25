@@ -75,6 +75,18 @@ An unauthored `GameSoundId` (empty clip array) is a silent no-op — `TryGet` re
 and `Play` returns `SoundHandle.None` — so shipping the enum ahead of the art asset never
 breaks anything.
 
+### Volume envelope & stop routing
+
+`SfxEntry` carries a small envelope: `FadeInSeconds` ramps volume 0→target at play start (one-shots
+and loops), and `FadeOutSeconds` ramps it target→0 when the sound is *stopped* — via `Stop(handle)`
+or another entry's stop routing. Both are DOTween fades on the voice's `AudioSource`, unscaled, and
+0 means instant. A faded stop returns the voice through the normal completion path once the fade
+finishes; scope resets (`ResetRun`/`Dispose`) and channel stops still cut immediately.
+
+`StopsOnPlay` lets one entry silence others: when it plays, `SfxService` fades out any active voice
+whose `GameSoundId` is in the list (each per *its own* `FadeOutSeconds`). Use it for a resolve cue
+that should cut a still-playing loop — e.g. a warning loop silenced once the danger passes.
+
 ## Melodic pops (streak-driven scale)
 
 The pop sound for an ordinary balloon is not one fixed clip — it climbs a musical scale as

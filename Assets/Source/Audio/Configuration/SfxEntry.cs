@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Audio;
 using UnityEngine;
 
 namespace BalloonParty.Audio.Configuration
@@ -35,6 +36,14 @@ namespace BalloonParty.Audio.Configuration
                  "Applies to one-shots and loops.")]
         [SerializeField] [Min(0f)] private float _fadeInSeconds;
 
+        [Tooltip("Seconds to ramp volume down to 0 when this sound is stopped (via Stop or another " +
+                 "entry's Stops On Play). 0 = cut instantly. Scope resets always cut instantly.")]
+        [SerializeField] [Min(0f)] private float _fadeOutSeconds;
+
+        [Tooltip("When this sound plays, stop any active voices of these ids (each fading out per its own " +
+                 "FadeOutSeconds). e.g. a resolve cue silencing a still-playing loop.")]
+        [SerializeField] private GameSoundId[] _stopsOnPlay = Array.Empty<GameSoundId>();
+
         [Tooltip("None = plain variation. ScaleWalkUp = streak-driven net-climbing yoyo (rise a scale " +
                  "octave, dip MelodicSkipSteps back, repeat) ceilinged at MelodicMaxOctaves. ScaleWalkDown = " +
                  "the same yoyo mirrored below the root (dips down first, then works up). Tension = fixed " +
@@ -64,6 +73,8 @@ namespace BalloonParty.Audio.Configuration
         public bool Loop => _loop;
         public bool Pan2D => _pan2D;
         public float FadeInSeconds => _fadeInSeconds;
+        public float FadeOutSeconds => _fadeOutSeconds;
+        public IReadOnlyList<GameSoundId> StopsOnPlay => _stopsOnPlay;
         public MelodicMode MelodicMode => _melodicMode;
         public int MelodicMaxOctaves => _melodicMaxOctaves;
         public int MelodicSkipSteps => _melodicSkipSteps;
