@@ -1,11 +1,9 @@
-using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Nudge;
 using BalloonParty.Scenario;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
-using BalloonParty.Shared.SceneLight;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
 using VContainer;
@@ -24,9 +22,8 @@ namespace BalloonParty.Balloon.Controller
         public PoolManager PoolManager { get; }
         public DisturbanceFieldService DisturbanceField { get; }
         public SmokeFieldService SmokeField { get; }
-        public SceneLightFieldService SceneLightField { get; }
         public IGamePalette Palette { get; }
-        public IBalloonsConfiguration BalloonsConfiguration { get; }
+        public BalloonPopPresenter PopPresenter { get; }
 
         [Inject]
         public BalloonControllerContext(
@@ -39,9 +36,8 @@ namespace BalloonParty.Balloon.Controller
             PoolManager poolManager,
             DisturbanceFieldService disturbanceField,
             SmokeFieldService smokeField,
-            SceneLightFieldService sceneLightField,
             IGamePalette palette,
-            IBalloonsConfiguration balloonsConfiguration)
+            BalloonPopPresenter popPresenter)
         {
             ItemActivatedSubscriber = itemActivatedSubscriber;
             Registry = registry;
@@ -52,9 +48,8 @@ namespace BalloonParty.Balloon.Controller
             PoolManager = poolManager;
             DisturbanceField = disturbanceField;
             SmokeField = smokeField;
-            SceneLightField = sceneLightField;
             Palette = palette;
-            BalloonsConfiguration = balloonsConfiguration;
+            PopPresenter = popPresenter;
         }
     }
 }
