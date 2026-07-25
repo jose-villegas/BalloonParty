@@ -227,7 +227,8 @@ namespace BalloonParty.Audio.Editor
 
                 SoundBankClipAssigner.Assign(bank, soundId, clip);
                 RecordAttribution(soundId, candidate);
-                _candidates.Remove(soundId);
+                // Keep the candidate list and the open dropdown so more clips can be added in one go —
+                // closing is left to the user.
                 serializedObject.Update();
             }
             catch (Exception e)
