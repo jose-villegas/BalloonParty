@@ -14,10 +14,12 @@ namespace BalloonParty.Audio.Configuration
         [SerializeField] private SfxEntry[] _entries;
 
         [Header("Melodic pops")]
-        [Tooltip("Positive scale as semitone offsets from the root. Pentatonic (no adjacent semitones) so pops never clash.")]
+        [Tooltip("Positive scale as note offsets from the root. Pentatonic (no adjacent semitones) so pops never clash.")]
+        [MusicalNote]
         [SerializeField] private int[] _melodicScale = { 0, 2, 4, 7, 9 };
 
-        [Tooltip("Root semitone offset applied to every degree (transposes the key).")]
+        [Tooltip("Root note applied to every degree (transposes the key).")]
+        [MusicalNote]
         [SerializeField] private int _melodicRootSemitone;
 
         [Tooltip("Octaves the streak-driven pop walk climbs before looping back a semitone higher. " +
