@@ -50,11 +50,47 @@ namespace BalloonParty.Audio.Editor
             }
 
             Directory.CreateDirectory(FetchedFolder);
-            var assetPath = $"{FetchedFolder}/{soundId}__{candidate.ProviderId}.mp3";
+            var assetPath = BuildAssetPath(candidate, soundId);
             File.WriteAllBytes(assetPath, bytes);
             AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceSynchronousImport);
             ApplyImportSettings(assetPath);
             return AssetDatabase.LoadAssetAtPath<AudioClip>(assetPath);
+        }
+
+        // "{original filename}_{enum name}.mp3", keeping the Freesound name recognisable. A numeric
+        // suffix is only appended if that exact file already exists, so adding more clips to a slot
+        // never clobbers an earlier download.
+        private static string BuildAssetPath(SfxCandidate candidate, GameSoundId soundId)
+        {
+            var original = SafeFileName(Path.GetFileNameWithoutExtension(candidate.Name));
+            if (string.IsNullOrEmpty(original))
+            {
+                original = candidate.ProviderId.ToString();
+            }
+
+            var stem = $"{FetchedFolder}/{original}_{soundId}";
+            var assetPath = $"{stem}.mp3";
+            for (var counter = 1; File.Exists(assetPath); counter++)
+            {
+                assetPath = $"{stem}_{counter}.mp3";
+            }
+
+            return assetPath;
+        }
+
+        private static string SafeFileName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return string.Empty;
+            }
+
+            foreach (var invalid in Path.GetInvalidFileNameChars())
+            {
+                name = name.Replace(invalid, '_');
+            }
+
+            return name.Trim();
         }
 
         private static void ApplyImportSettings(string assetPath)
