@@ -231,7 +231,7 @@ namespace BalloonParty.Game
         }
 
         internal static void RegisterAudio(this IContainerBuilder builder, SoundBankConfiguration soundBank,
-            AudioSourceVoice voicePrefab)
+            AudioSourceVoice voicePrefab, AudioMixerSettings mixerSettings)
         {
             if (voicePrefab == null)
             {
@@ -243,9 +243,14 @@ namespace BalloonParty.Game
             // half-wired scene still loads; only the prefab is load-bearing for registration.
             var bank = soundBank != null ? soundBank : ScriptableObject.CreateInstance<SoundBankConfiguration>();
 
+            // An unassigned mixer degrades AudioMixerRouter to master output + no-op ducking (identical
+            // to the old NullAudioMixerRouter); authoring the AudioMixer asset activates ducking, no code.
+            var mixer = mixerSettings != null ? mixerSettings : ScriptableObject.CreateInstance<AudioMixerSettings>();
+
             builder.RegisterInstance<ISoundBankConfiguration>(bank);
             builder.RegisterInstance(voicePrefab);
-            builder.Register<IAudioMixerRouter, NullAudioMixerRouter>(Lifetime.Singleton);
+            builder.RegisterInstance<IAudioMixerSettings>(mixer);
+            builder.Register<IAudioMixerRouter, AudioMixerRouter>(Lifetime.Singleton);
 
             // The one bank instance feeds every voice-cap reader (limiter cap, SfxService slots,
             // pool prewarm), so they cannot drift.

@@ -50,7 +50,8 @@ Assets/Source/Audio/
 ├── SoundHandle.cs                 ← readonly struct; only way to stop a loop
 ├── IMelodicContext.cs             ← narrow SfxService facet: SetStreak(int) feeds the pop scale-walk
 ├── IAudioMixerRouter.cs           ← seam to the mixer: GroupFor(channel), SetChannelDucked(channel, bool)
-├── NullAudioMixerRouter.cs        ← stand-in impl until a real AudioMixer is wired (see Deferred)
+├── AudioMixerRouter.cs            ← registered impl: adapter over an AudioMixer via IAudioMixerSettings
+├── NullAudioMixerRouter.cs        ← test double only (no longer registered; hand-built by PlayMode tests)
 ├── SfxService.cs                  ← Controller: resolve → select → throttle → cap → play
 ├── AudioChannelController.cs      ← IStartable: Paused/Resumed duck the Gameplay channel; GameOver stops it
 ├── VoiceLimiter.cs                ← per-id + global voice accounting, priority steal/drop
@@ -71,7 +72,9 @@ Assets/Source/Audio/
 │   ├── ISoundBankConfiguration.cs ← read-only interface (TryGet(id, out entry), GlobalVoiceCap, MelodicScale/Root)
 │   ├── SoundBankConfiguration.cs  ← ScriptableObject catalog — [EnumIndexed] entries, self-heals on OnValidate
 │   ├── SfxEntry.cs                ← [Serializable] clips[] + pitch/vol ranges + cap + cooldown + channel + melodic mode
-│   └── SfxChannel.cs             ← enum: Gameplay / UI / Stinger (→ AudioMixerGroup)
+│   ├── SfxChannel.cs             ← enum: Gameplay / UI / Stinger (→ AudioMixerGroup)
+│   ├── IAudioMixerSettings.cs     ← read-only interface: Mixer, DuckVolumeDb, GroupFor/ExposedVolumeParamFor(channel)
+│   └── AudioMixerSettings.cs     ← ScriptableObject: AudioMixer ref + [EnumIndexed] groups/param names, self-heals
 └── README.md
 ```
 
@@ -116,8 +119,22 @@ classDiagram
         +GroupFor(SfxChannel) AudioMixerGroup
         +SetChannelDucked(SfxChannel, bool)
     }
+    class AudioMixerRouter {
+        <<registered impl>>
+        -IAudioMixerSettings _settings
+    }
     class NullAudioMixerRouter {
-        <<stand-in, no real AudioMixer yet>>
+        <<test double only>>
+    }
+    class IAudioMixerSettings {
+        <<interface>>
+        +Mixer AudioMixer
+        +DuckVolumeDb float
+        +GroupFor(SfxChannel) AudioMixerGroup
+        +ExposedVolumeParamFor(SfxChannel) string
+    }
+    class AudioMixerSettings {
+        <<ScriptableObject>>
     }
     class SfxService {
         -VoiceLimiter _limiter
@@ -152,6 +169,9 @@ classDiagram
     }
 
     SoundBankConfiguration ..|> ISoundBankConfiguration
+    AudioMixerRouter ..|> IAudioMixerRouter
+    AudioMixerRouter --> IAudioMixerSettings : reads
+    AudioMixerSettings ..|> IAudioMixerSettings
     NullAudioMixerRouter ..|> IAudioMixerRouter
     SfxService ..|> ISoundPlayer
     SfxService ..|> IMelodicContext
@@ -202,7 +222,9 @@ sequenceDiagram
 ```mermaid
 graph TD
     Scope[GameScopeRegistration.RegisterAudio] -->|RegisterInstance| Bank[ISoundBankConfiguration]
-    Scope -->|Register singleton| Router[IAudioMixerRouter = NullAudioMixerRouter]
+    Scope -->|RegisterInstance| MixerSettings[IAudioMixerSettings = AudioMixerSettings asset]
+    Scope -->|Register singleton| Router[IAudioMixerRouter = AudioMixerRouter]
+    Router --> MixerSettings
     Scope -->|Register singleton As ISoundPlayer + IMelodicContext + IRunResettable + AsSelf| Svc[SfxService]
     Scope -->|RegisterEntryPoint| Boot[SfxVoicePoolBootstrap]
     Scope -->|RegisterEntryPoint| CR[CombatSoundRouter]
@@ -254,7 +276,8 @@ stateDiagram-v2
 | `SfxEntry` | Model/config | `AudioClip[]` variations, pitch/volume ranges, `cooldownSeconds`, `maxConcurrentVoices`, `priority`, `channel`, `loop`, 2D pan flag, `MelodicMode` + tension semitones, editor-only fetch prompt | Play anything | — | (serializable) |
 | `SoundBankConfiguration` → `ISoundBankConfiguration` | Model/config | `[EnumIndexed(typeof(GameSoundId))]` entries (one slot per id, no per-entry id field, no duplicates possible); `TryGet`; `MelodicScale`/`MelodicRootSemitone`; `GlobalVoiceCap`; `OnValidate` self-heals the entry array when a `GameSoundId` is appended | Touch runtime state | — | `RegisterInstance` |
 | `IMelodicContext` | Model-facing interface | Narrow facet of `SfxService` — `SetStreak(int)` | Anything else on `SfxService` | — | (interface, implemented by `SfxService`) |
-| `IAudioMixerRouter` → `NullAudioMixerRouter` | Controller/config seam | `GroupFor(channel)` resolves an `AudioMixerGroup`; `SetChannelDucked(channel, bool)` applies (or, in the null stand-in, no-ops) the duck | Own pause/game-over policy | — | `Register` singleton |
+| `IAudioMixerRouter` → `AudioMixerRouter` | Controller/config seam | `GroupFor(channel)` resolves an `AudioMixerGroup`; `SetChannelDucked(channel, bool)` sets the channel's exposed volume param via `IAudioMixerSettings` (degrades to no-op group/duck when the settings asset has no mixer/param assigned). `NullAudioMixerRouter` (identical no-op behavior) survives only as a test double | Own pause/game-over policy | `IAudioMixerSettings` | `Register` singleton |
+| `AudioMixerSettings` → `IAudioMixerSettings` | Model/config | `AudioMixer` ref, one `AudioMixerGroup` + exposed volume param name per `SfxChannel`, `DuckVolumeDb`; `OnValidate` self-heals the per-channel arrays | Touch runtime state | — | `RegisterInstance` |
 | `SfxService : ISoundPlayer, IMelodicContext, IRunResettable` | **Controller** | Resolve id → entry, pick variation, enforce cooldown + per-id + global voice cap + priority, `Get()`/`Return()` pooled voice, own loop `SoundHandle`s, remember current melodic semitone/streak, flush all voices on `ResetRun` | Touch `AudioSource`; subscribe to any message; know about pause | `ISoundBankConfiguration`, `PoolManager`, `IAudioMixerRouter`, `IProjectileFlightConfig` (wall limits, for X→pan), `VoiceLimiter`, `SfxThrottleGate`, `VariationPicker` | `Register` singleton |
 | `AudioChannelController` | Controller (IStartable) | Subscribes `PausedMessage`/`ResumedMessage` → duck/un-duck the `Gameplay` channel; `GameOverMessage` → `SfxService.StopChannel(Gameplay)` | Touch `UI`/`Stinger` channels; pick sounds | `ISubscriber<…>`, `IAudioMixerRouter`, `SfxService` | `RegisterEntryPoint` |
 | `VoiceLimiter` | Controller | Per-id + global active-voice accounting; priority steal/drop | Selection, pooling | — | owned field |
@@ -288,11 +311,13 @@ dedicated `IStartable`, not `SfxService` itself — subscribes to `PausedMessage
 `ResumedMessage` and calls `IAudioMixerRouter.SetChannelDucked(Gameplay, …)`, and subscribes
 to `GameOverMessage` to call `SfxService.StopChannel(Gameplay)`. Keeping this policy off
 `SfxService` means the orchestrator stays a pure `Play`/`Stop` surface with no bus
-dependency, and the duck/stop policy is swappable independently. `IAudioMixerRouter` is
-currently `NullAudioMixerRouter` (see *Deferred*), so today the duck call is a no-op and
-`Gameplay` audio simply keeps playing through a pause — only the `GameOver` stop is live
-end-to-end. The mixer also gives us a master-volume control and a music-under-stinger duck
-seam for free later, without a refactor.
+dependency, and the duck/stop policy is swappable independently. `IAudioMixerRouter`'s
+registered implementation is `AudioMixerRouter`, so the duck call is live end-to-end once an
+`AudioMixerSettings` asset with a real `AudioMixer` and exposed volume params is authored and
+assigned to `GameLifetimeScope` — until then it degrades to the same no-op the design
+originally shipped with, so `Gameplay` audio simply keeps playing through a pause and only
+the `GameOver` stop is live. The mixer also gives us a master-volume control and a
+music-under-stinger duck seam for free later, without a refactor.
 
 ---
 
@@ -406,18 +431,30 @@ code-complete, reviewed, and committed:
    `SfxThrottleGate`.
 3. **Pooled voice** — `AudioSourceVoice` + `SfxVoicePoolBootstrap`.
 4. **Orchestrator + channel controller** — `SfxService`, `AudioChannelController`,
-   `IAudioMixerRouter`/`NullAudioMixerRouter`, `IMelodicContext`.
+   `IAudioMixerRouter` (shipped with `NullAudioMixerRouter` as the placeholder impl, later
+   replaced by `AudioMixerRouter` — see below), `IMelodicContext`.
 5. **Routers + wiring** — `CombatSoundRouter`, `ProgressionSoundRouter`, `ItemSoundRouter`,
    `RegisterAudio` in `GameScopeRegistration`, called from `GameLifetimeScope.Configure`
    after `RegisterPresentation()`.
 6. **Registration guard-branch coverage** — `RegisterAudioTests` (null-prefab / null-bank
    fallback paths).
 
-**Still open (not part of the code deliverable):** a real `AudioMixer` asset with
-`Gameplay`/`UI`/`Stinger` groups — `IAudioMixerRouter` is `NullAudioMixerRouter` until that
-asset exists and a real router implementation is wired in — and authoring the actual
-`SfxEntry` clips on the `SoundBankConfiguration` asset (an editor/content task; every id
-plays silently until its entry has clips). See *Deferred* in the README and below.
+**Also shipped (Phase 2 pulled forward):** the real mixer router. `AudioMixerRouter` +
+`AudioMixerSettings`/`IAudioMixerSettings` are code-complete, reviewed, and registered in
+place of `NullAudioMixerRouter` (which now survives only as a test double for
+`SfxServiceGenerationGuardPlayModeTests`). `AudioMixerRouter` reads the settings asset to
+resolve `GroupFor(channel)` and to `SetFloat` the channel's exposed volume param on duck;
+`Log.Assert` catches a mistyped param name in dev builds. With no `AudioMixerSettings` asset
+assigned it degrades to master output and a no-op duck — identical to the old null router —
+so ducking activates the moment the asset is authored, with zero further code.
+
+**Still open (not part of the code deliverable):** building the actual `AudioMixer` asset
+itself — `Gameplay`/`UI`/`Stinger` groups with matching exposed volume params — and an
+`AudioMixerSettings` asset pointing at it, then assigning both to
+`GameLifetimeScope._audioMixerSettings`. Until that asset exists, the shipped router runs in
+its degraded (no-op) mode. Also still open: authoring the actual `SfxEntry` clips on the
+`SoundBankConfiguration` asset (an editor/content task; every id plays silently until its
+entry has clips). See *Deferred* in the README and below.
 
 ### First-pass sounds to author
 
@@ -475,6 +512,9 @@ delegate (no per-call closure), pass settings by `in`.
 
 ## Phase 2 — Fill-out + optional signals
 
+- ~~The real mixer router (`AudioMixerRouter`/`AudioMixerSettings`)~~ — **shipped**, see
+  Phase 1's "Also shipped" note above. Only the `AudioMixer` asset itself and its
+  `AudioMixerSettings` need in-editor authoring before ducking is audible.
 - Author the remaining inventory sounds (cruise/doomed loops, pierce, board-clear, level
   transition, overflow, score chime, UI confirms).
 - **Melodic pops** — layer the streak-driven scale walk onto simple-balloon `BalloonPop`

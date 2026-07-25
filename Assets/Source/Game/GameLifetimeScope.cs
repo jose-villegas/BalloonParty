@@ -48,6 +48,7 @@ namespace BalloonParty.Game
         [SerializeField] private ScoreTrailBehaviourConfiguration _scoreTrailBehaviourConfiguration;
         [SerializeField] private ThermalGovernorSettings _thermalGovernorSettings;
         [SerializeField] private SoundBankConfiguration _soundBank;
+        [SerializeField] private AudioMixerSettings _audioMixerSettings;
         [SerializeField] private ProjectileView _projectilePrefab;
         [SerializeField] private FlyingTrail _scoreTrailPrefab;
         [SerializeField] private AudioSourceVoice _sfxVoicePrefab;
@@ -69,7 +70,7 @@ namespace BalloonParty.Game
             builder.RegisterGameplaySystems();
             builder.RegisterItems();
             builder.RegisterPresentation();
-            builder.RegisterAudio(_soundBank, _sfxVoicePrefab);
+            builder.RegisterAudio(_soundBank, _sfxVoicePrefab, _audioMixerSettings);
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
             builder.RegisterCheats();

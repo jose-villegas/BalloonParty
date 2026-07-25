@@ -13,7 +13,8 @@ Unity audio only (`AudioSource` + `AudioMixer`), no middleware.
 | `SoundHandle` | Readonly struct returned by `Play()` for loops — the only way to `Stop()` a specific playing voice. See *The `SoundHandle` generation guard* below |
 | `ISoundPlayer` / `SfxService` | The orchestrator (Controller). `Play(id, position)` resolves the id to clips/tuning, throttles, caps voices, and plays; `Stop(handle)` ends a loop |
 | `IMelodicContext` | Narrow interface `SfxService` also implements — `SetStreak(int)` feeds the current combo streak into the melodic pop system |
-| `IAudioMixerRouter` / `NullAudioMixerRouter` | Seam between `SfxService` and a real `AudioMixer` — resolves a channel to an `AudioMixerGroup` and ducks a channel on pause. `NullAudioMixerRouter` is the current stand-in (see *Deferred*) |
+| `IAudioMixerRouter` / `AudioMixerRouter` | Seam between `SfxService` and the real `AudioMixer` — resolves a channel to an `AudioMixerGroup` and ducks a channel on pause. `AudioMixerRouter` is the registered implementation; `NullAudioMixerRouter` survives only as a test double |
+| `Configuration/AudioMixerSettings`, `IAudioMixerSettings` | The mixer's own config asset — `AudioMixer` reference, one `AudioMixerGroup` and one exposed volume-param name per `SfxChannel`, and the duck volume in dB |
 | `AudioChannelController` | Subscribes to `PausedMessage`/`ResumedMessage` (ducks the `Gameplay` channel) and `GameOverMessage` (stops all `Gameplay` voices) |
 | `VoiceLimiter` | Per-id and global concurrent-voice accounting; steals the oldest same-id voice or the lowest-priority voice when a cap is hit |
 | `SfxThrottleGate` | Wall-clock cooldown per id, plus burst coalescing (collapses a rapid-fire burst into a few voices instead of dozens) |
@@ -22,7 +23,7 @@ Unity audio only (`AudioSource` + `AudioMixer`), no middleware.
 | `SoundIds` | One cached `Enum.GetValues(...).Length` — sizes every per-id array the helpers above key by `(int)GameSoundId` |
 | `AudioPoolKeys` | The `PoolManager` key string for the voice pool |
 | `SfxVoicePoolBootstrap` | `IStartable` — registers and pre-warms the `AudioSourceVoice` pool before any router can play a sound |
-| `View/AudioSourceVoice` | **View** — the only type in this feature that touches a Unity audio API. Wraps one `AudioSource`; pooled; schedules its own real-time return |
+| `View/AudioSourceVoice` | **View** — the only `MonoBehaviour` in this feature, and the only type that touches `AudioSource` directly. Wraps one `AudioSource`; pooled; schedules its own real-time return |
 | `Routing/CombatSoundRouter` | Hits, shots, reload, cruise loop, doomed warning, pierce, shield gained/lost |
 | `Routing/ProgressionSoundRouter` | Streak, score chime, level-up (+ glow, dismiss), level transition, board clear, game-over (+ dismiss) |
 | `Routing/ItemSoundRouter` | Per-item activation, overflow heart, spawn-blocked thud |
@@ -51,10 +52,12 @@ downstream needs to know a sound was skipped.
 ## MVC split
 
 Every class in this folder except `AudioSourceVoice` is plain C# — no `MonoBehaviour`, no
-`transform`. `AudioSourceVoice` (`View/`) is the single exception: it is a pooled
-`MonoBehaviour` wrapping one `AudioSource`, and it is the *only* place in the feature that
-calls into a Unity audio API. Routers and `SfxService` are Controllers; `SfxEntry` /
-`SoundBankConfiguration` are the config-flavored Model.
+`transform`. `AudioSourceVoice` (`View/`) is the single **View**: a pooled `MonoBehaviour`
+wrapping one `AudioSource`. `AudioMixerRouter` is a plain-C# adapter that also touches
+`UnityEngine.Audio` (mixer asset references, `SetFloat`) — an accepted ports-and-adapters
+carve-out, not a View, since it has no `MonoBehaviour`/`transform` and exists purely to hide
+the mixer asset behind `IAudioMixerRouter`. Routers and `SfxService` are Controllers;
+`SfxEntry` / `SoundBankConfiguration` / `AudioMixerSettings` are the config-flavored Model.
 
 ## Adding a new sound
 
@@ -109,9 +112,13 @@ every currently-playing `Gameplay` voice outright (`SfxService.StopChannel`). `U
 `Stinger` are left alone in both cases, so a level-up fanfare or a button tap is never cut
 off by the freeze that silences pop spam.
 
-Today `IAudioMixerRouter` is `NullAudioMixerRouter` — every channel resolves to the mixer's
-default output group and ducking is a no-op, so gameplay audio plays but nothing actually
-quiets down yet. See *Deferred*.
+`IAudioMixerRouter`'s registered implementation is `AudioMixerRouter`, a plain-C# adapter
+over an `AudioMixer` asset described by `AudioMixerSettings`: `GroupFor` looks up the
+group assigned to that channel, `SetChannelDucked` sets the channel's exposed volume
+param to `AudioMixerSettings.DuckVolumeDb` (or back to 0 dB). Until the `AudioMixerSettings`
+asset is authored and assigned, it degrades to exactly the old no-op behavior — every
+channel resolves to the mixer's default output group and ducking does nothing — so nothing
+breaks while the asset is missing. See *Configuration* for what to author to turn ducking on.
 
 ## Voice limiting, throttling, and coalescing
 
@@ -158,11 +165,18 @@ None of this feature makes a sound until it is wired in the Unity Editor:
   Recommended `AudioSource` settings: **Play On Awake off**, **Loop off** (both are set by
   code on every `Play()`), spatial blend 0 (2D — `AudioSourceVoice` also forces this at
   runtime).
-- **Scene wiring** — `GameLifetimeScope` needs the `SoundBankConfiguration` asset and the
-  `SfxVoice` prefab dragged into its `_soundBank`/`_sfxVoicePrefab` fields. Either left
+- **`AudioMixerSettings` asset** (`Configuration/Audio Mixer Settings` menu) — the `AudioMixer`
+  reference, one `AudioMixerGroup` per `SfxChannel` (`Gameplay`/`UI`/`Stinger`), the matching
+  exposed volume param name per channel (must match the name exposed on the `AudioMixer`
+  itself), and `DuckVolumeDb` (default -12). `OnValidate` auto-resizes the per-channel arrays
+  when a new `SfxChannel` is appended.
+- **Scene wiring** — `GameLifetimeScope` needs the `SoundBankConfiguration` asset, the
+  `SfxVoice` prefab, and the `AudioMixerSettings` asset dragged into its
+  `_soundBank`/`_sfxVoicePrefab`/`_audioMixerSettings` fields. Any of the three left
   unassigned degrades gracefully (`RegisterAudio` logs a warning and skips registration if
-  the voice prefab is missing; a missing bank falls back to an empty in-memory one), but no
-  sound plays until both are set.
+  the voice prefab is missing; a missing bank falls back to an empty in-memory one; a missing
+  mixer settings asset falls back to master output with ducking as a no-op), but no sound
+  plays until the prefab and bank are set, and ducking stays inert until the mixer asset is.
 - **Project Settings → Audio** — set **Max Real Voices** deliberately, comfortably above
   `GlobalVoiceCap` (Android budgets are tight, ~32 real voices); DSP buffer size should bias
   toward **Good/Best Latency** on target devices.
@@ -173,9 +187,14 @@ None of this feature makes a sound until it is wired in the Unity Editor:
 
 ## Deferred / not yet live
 
-- **Real `AudioMixer` + ducking.** `IAudioMixerRouter` is `NullAudioMixerRouter` — channels
-  don't route anywhere distinct and ducking is a no-op. Swapping in a real mixer-backed
-  implementation is a drop-in replacement; nothing else in the feature needs to change.
+- **The `AudioMixer` asset itself is not yet authored.** The router and its config type
+  (`AudioMixerRouter`/`AudioMixerSettings`) are shipped and registered — routing and ducking
+  work end-to-end once someone builds the `AudioMixer` asset (Gameplay/UI/Stinger groups,
+  matching exposed volume params) and assigns it and an `AudioMixerSettings` asset to
+  `GameLifetimeScope`. Until then it degrades to master output with a no-op duck; no code
+  change is needed to activate it, only in-editor authoring. A smooth snapshot-transition
+  duck (instead of the instant `SetFloat` shipped now) is a possible later refinement behind
+  the same `IAudioMixerRouter` seam, not a commitment.
 - **Melodic pops are dormant.** The `ScaleWalk`/`Tension` machinery is code-complete and
   tested, but ships live only once a sound designer authors `SfxEntry`s with those modes set
   and the scale/tension semitones tuned by ear — until then every pop plays with plain random
