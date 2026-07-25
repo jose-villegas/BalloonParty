@@ -17,6 +17,7 @@ namespace BalloonParty.Slots.Actor
         internal ScenarioContentRoot()
         {
             Transform = new GameObject("ScenarioContentRoot").transform;
+            UnityEngine.Object.DontDestroyOnLoad(Transform.gameObject);
             OutgoingBalloons = new GameObject("OutgoingBalloons").transform;
             OutgoingBalloons.SetParent(Transform, worldPositionStays: false);
         }
