@@ -36,7 +36,8 @@ namespace BalloonParty.Audio.View
             _source.outputAudioMixerGroup = group;
         }
 
-        internal void Play(in VoicePlayback playback, bool loop, float fadeInSeconds, Action<AudioSourceVoice> onComplete)
+        internal void Play(in VoicePlayback playback, bool loop, float delaySeconds, float fadeInSeconds,
+            Action<AudioSourceVoice> onComplete)
         {
             // Kill any return still pending from a prior play on this voice (e.g. a stolen
             // slot replayed in place) — and any in-flight fade — before starting the new one.
@@ -59,19 +60,27 @@ namespace BalloonParty.Audio.View
             if (fadeInSeconds > 0f)
             {
                 _source.volume = 0f;
-                _source.DOFade(playback.Volume, fadeInSeconds).SetUpdate(true).SetLink(gameObject);
+                _source.DOFade(playback.Volume, fadeInSeconds).SetDelay(delaySeconds).SetUpdate(true)
+                    .SetLink(gameObject);
             }
             else
             {
                 _source.volume = playback.Volume;
             }
 
-            _source.Play();
+            if (delaySeconds > 0f)
+            {
+                _source.PlayDelayed(delaySeconds);
+            }
+            else
+            {
+                _source.Play();
+            }
 
             if (!loop)
             {
                 _returnCts = new CancellationTokenSource();
-                ScheduleReturnAsync(playback.Clip.length, playback.Pitch, _returnCts.Token).Forget();
+                ScheduleReturnAsync(delaySeconds, playback.Clip.length, playback.Pitch, _returnCts.Token).Forget();
             }
         }
 
@@ -114,9 +123,10 @@ namespace BalloonParty.Audio.View
             _source.DOFade(0f, fadeOutSeconds).SetUpdate(true).SetLink(gameObject).OnComplete(InvokeComplete);
         }
 
-        private async UniTaskVoid ScheduleReturnAsync(float clipLength, float pitch, CancellationToken ct)
+        private async UniTaskVoid ScheduleReturnAsync(float delaySeconds, float clipLength, float pitch,
+            CancellationToken ct)
         {
-            var seconds = clipLength / Mathf.Max(Mathf.Abs(pitch), MinPitchMagnitude);
+            var seconds = delaySeconds + clipLength / Mathf.Max(Mathf.Abs(pitch), MinPitchMagnitude);
             var canceled = await UniTask
                 .Delay(TimeSpan.FromSeconds(seconds), ignoreTimeScale: true, cancellationToken: ct)
                 .SuppressCancellationThrow();

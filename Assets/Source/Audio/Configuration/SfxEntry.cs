@@ -36,6 +36,11 @@ namespace BalloonParty.Audio.Configuration
         [Tooltip("Derive a subtle stereo pan from world-X. spatialBlend stays 0 (no rolloff).")]
         [SerializeField] private bool _pan2D = true;
 
+        [Tooltip("Seconds between the Play call and the sound actually starting (DSP-scheduled, ignores " +
+                 "timeScale). 0 = immediate. The voice is claimed up front, so a Stop during the delay " +
+                 "cancels it cleanly.")]
+        [SerializeField] [Min(0f)] private float _delaySeconds;
+
         [Tooltip("Seconds to ramp volume from 0 up to the target at play start. 0 = full volume at once. " +
                  "Applies to one-shots and loops.")]
         [SerializeField] [Min(0f)] private float _fadeInSeconds;
@@ -77,6 +82,7 @@ namespace BalloonParty.Audio.Configuration
         public bool Loop => _loop;
         public bool SingleInstance => _singleInstance;
         public bool Pan2D => _pan2D;
+        public float DelaySeconds => _delaySeconds;
         public float FadeInSeconds => _fadeInSeconds;
         public float FadeOutSeconds => _fadeOutSeconds;
         public IReadOnlyList<GameSoundId> StopsOnPlay => _stopsOnPlay;

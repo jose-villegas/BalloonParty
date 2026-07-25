@@ -80,11 +80,15 @@ breaks anything.
 
 ### Volume envelope & stop routing
 
-`SfxEntry` carries a small envelope: `FadeInSeconds` ramps volume 0→target at play start (one-shots
-and loops), and `FadeOutSeconds` ramps it target→0 when the sound is *stopped* — via `Stop(handle)`
-or another entry's stop routing. Both are DOTween fades on the voice's `AudioSource`, unscaled, and
-0 means instant. A faded stop returns the voice through the normal completion path once the fade
-finishes; scope resets (`ResetRun`/`Dispose`) and channel stops still cut immediately.
+`SfxEntry` carries a small envelope: `DelaySeconds` pushes the audible start past the `Play` call
+(DSP-scheduled via `AudioSource.PlayDelayed`, so it ignores `timeScale`), `FadeInSeconds` ramps
+volume 0→target at play start (one-shots and loops), and `FadeOutSeconds` ramps it target→0 when
+the sound is *stopped* — via `Stop(handle)` or another entry's stop routing. The fades are DOTween
+fades on the voice's `AudioSource`, unscaled, and 0 means instant. The voice, its limiter slot, and
+the throttle stamp are all claimed at `Play` time, not when the delay elapses — a delayed sound can
+still be stopped or stolen during its wait, and the natural return fires at delay + clip length. A
+faded stop returns the voice through the normal completion path once the fade finishes; scope
+resets (`ResetRun`/`Dispose`) and channel stops still cut immediately.
 
 `StopsOnPlay` lets one entry silence others: when it plays, `SfxService` fades out any active voice
 whose `GameSoundId` is in the list (each per *its own* `FadeOutSeconds`). Use it for a resolve cue
