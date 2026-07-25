@@ -257,7 +257,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance(new VoiceLimiter(bank.GlobalVoiceCap));
             builder.RegisterInstance(new SfxThrottleGate(() => Time.unscaledTime, CoalesceWindowSeconds, MaxBurstPerWindow));
             builder.RegisterInstance(new VariationPicker(new System.Random(), bank.MelodicScale,
-                bank.MelodicRootSemitone, bank.MelodicMaxOctaves));
+                bank.MelodicRootSemitone, bank.MelodicMaxOctaves, bank.MelodicSkipSteps));
 
             builder.Register<SfxService>(Lifetime.Singleton)
                 .As<ISoundPlayer>().As<IMelodicContext>().As<IRunResettable>().AsSelf();

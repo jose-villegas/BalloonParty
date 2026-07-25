@@ -92,8 +92,10 @@ before you've even seen why.
 Mechanically: `SfxEntry.MelodicMode` selects between `None` (plain random pitch — most
 sounds), `ScaleWalk` (the simple-balloon pop; `VariationPicker` maps the current streak to a
 scale degree read from `SoundBankConfiguration.MelodicScale`/`MelodicRootSemitone`, climbing
-with plain octave rollover — unbounded), `ScaleWalkCapped` (same climb but bounded to
-`MelodicMaxOctaves`, looping a semitone up per cycle so the pitch can't run away), and
+with plain octave rollover — unbounded), `ScaleWalkCapped` (a net-climbing yoyo — each cycle
+rises one scale octave then dips `MelodicSkipSteps` back, so the pitch trends up without a
+jarring reset, ceilinged at `MelodicMaxOctaves`), `ScaleWalkCappedDown` (the same yoyo
+mirrored below the root — dips down first, then works up), and
 `Tension` (deflect/wall-hit; offsets `SfxEntry.TensionSemitones` against whatever semitone
 the pop system is currently on). `ProgressionSoundRouter` feeds the streak in via
 `IMelodicContext.SetStreak` on every `StreakChangedMessage`; `SfxService` remembers the last

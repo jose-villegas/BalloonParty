@@ -32,8 +32,10 @@ namespace BalloonParty.Audio.Configuration
         [SerializeField] private bool _pan2D = true;
 
         [Tooltip("None = plain variation. ScaleWalk = streak-driven pentatonic climb (unbounded octave " +
-                 "rollover). ScaleWalkCapped = same but bounded to MelodicMaxOctaves, looping a semitone up " +
-                 "per cycle so pitch can't run away. Tension = fixed dissonant offset against the current pop key.")]
+                 "rollover). ScaleWalkCapped = net-climbing yoyo (rise an octave, dip MelodicSkipSteps back, " +
+                 "repeat) ceilinged at MelodicMaxOctaves so pitch can't run away. ScaleWalkCappedDown = the " +
+                 "same yoyo mirrored below the root (dips down first, then works up). Tension = fixed " +
+                 "dissonant offset against the pop key.")]
         [SerializeField] private MelodicMode _melodicMode = MelodicMode.None;
 
         [Tooltip("Semitone offset against the current pop degree when MelodicMode = Tension. " +
@@ -67,6 +69,7 @@ namespace BalloonParty.Audio.Configuration
         None,
         ScaleWalk,
         Tension,
-        ScaleWalkCapped
+        ScaleWalkCapped,
+        ScaleWalkCappedDown
     }
 }

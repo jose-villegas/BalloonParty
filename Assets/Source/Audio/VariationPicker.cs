@@ -14,15 +14,17 @@ namespace BalloonParty.Audio
         private readonly IReadOnlyList<int> _scale;
         private readonly int _root;
         private readonly int _maxOctaves;
+        private readonly int _skipSteps;
         private readonly int[] _lastClipIndex;
 
         public VariationPicker(System.Random rng, IReadOnlyList<int> melodicScale, int melodicRootSemitone,
-            int melodicMaxOctaves = 2)
+            int melodicMaxOctaves = 2, int melodicSkipSteps = 1)
         {
             _rng = rng;
             _scale = melodicScale;
             _root = melodicRootSemitone;
             _maxOctaves = melodicMaxOctaves;
+            _skipSteps = melodicSkipSteps;
             _lastClipIndex = new int[SoundIds.Count];
             Reset();
         }
@@ -40,7 +42,11 @@ namespace BalloonParty.Audio
                     pitch = melodicSemitone.SemitonesToPitchMultiplier();
                     break;
                 case MelodicMode.ScaleWalkCapped when _scale.Count > 0:
-                    melodicSemitone = ResolveCappedScaleWalkSemitone(ctx.Streak);
+                    melodicSemitone = _root + ResolveCappedScaleWalkOffset(ctx.Streak);
+                    pitch = melodicSemitone.SemitonesToPitchMultiplier();
+                    break;
+                case MelodicMode.ScaleWalkCappedDown when _scale.Count > 0:
+                    melodicSemitone = _root - ResolveCappedScaleWalkOffset(ctx.Streak);
                     pitch = melodicSemitone.SemitonesToPitchMultiplier();
                     break;
                 case MelodicMode.Tension:
@@ -80,18 +86,29 @@ namespace BalloonParty.Audio
             return _root + _scale[degree % steps] + 12 * (degree / steps);
         }
 
-        private int ResolveCappedScaleWalkSemitone(int streak)
+        private int ResolveCappedScaleWalkOffset(int streak)
         {
-            // Climb the scale across _maxOctaves, then loop back near the root a semitone higher each
-            // cycle (wrapping at 12) — bounded, so a runaway streak can't squeak up forever. Within the
-            // first window this matches the plain octave-rollover walk.
+            // Magnitude (>= 0) of a net-climbing yoyo: each cycle ascends one scale octave then dips back
+            // down, advancing _skipSteps scale steps per cycle so it trends further from the root (the
+            // reward) without the jarring octave jump a hard reset gives. _skipSteps == 0 loops within one
+            // octave (no net drift); _skipSteps == the scale length removes the dip entirely (a plain
+            // ramp). The drift is ceilinged by _maxOctaves so a runaway streak can't squeak away. A step
+            // back down the pentatonic is a whole tone/third, so every dip stays tonal. ScaleWalkCapped
+            // adds this above the root; ScaleWalkCappedDown mirrors it below.
             var degree = Mathf.Max(0, streak);
             var steps = _scale.Count;
-            var windowSteps = steps * Mathf.Max(1, _maxOctaves);
-            var loop = degree / windowSteps;
-            var position = degree % windowSteps;
-            var walk = _scale[position % steps] + 12 * (position / steps);
-            return _root + loop % 12 + walk;
+            var up = steps;
+            var skip = Mathf.Clamp(_skipSteps, 0, up);
+            var down = up - skip;
+            var cycleLen = Mathf.Max(1, up + down);
+            var windowTop = steps * Mathf.Max(1, _maxOctaves) - 1;
+            var driftCap = Mathf.Max(0, windowTop - up);
+
+            var baseStep = Mathf.Min(degree / cycleLen * skip, driftCap);
+            var phase = degree % cycleLen;
+            var rise = phase <= up ? phase : up - (phase - up);
+            var position = Mathf.Clamp(baseStep + rise, 0, windowTop);
+            return _scale[position % steps] + 12 * (position / steps);
         }
 
         private int SelectClipIndex(GameSoundId id, SfxEntry entry)

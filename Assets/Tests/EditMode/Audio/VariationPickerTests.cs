@@ -88,46 +88,119 @@ namespace BalloonParty.Tests.Audio
         }
 
         [Test]
-        public void Pick_ScaleWalkCapped_StreakBeyondWindow_LoopsBackASemitoneHigher()
+        public void Pick_ScaleWalkCapped_ZeroSkip_LoopsWithinOneOctave()
         {
-            // maxOctaves 2 × 5-note scale = a 10-step window; streak 10 restarts the climb at the
-            // root shifted +1 semitone instead of continuing to climb.
+            // skipSteps 0 = down equals up, so each cycle climbs a full scale octave then falls all the
+            // way back: a symmetric yoyo with no net drift. Streak 5 peaks one octave up (semitone 12);
+            // streak 10 is back at the root; nothing ever leaves the [root, +1 octave] band.
             var entry = CreateEntry(Vector2.one, Vector2.one, new[] { CreateClip() }, MelodicMode.ScaleWalkCapped);
             var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 0,
-                melodicMaxOctaves: 2);
-            var ctx = new PickContext(streak: 10, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f);
+                melodicMaxOctaves: 2, melodicSkipSteps: 0);
 
-            var playback = picker.Pick(GameSoundId.BalloonPop, entry, ctx);
+            int Pick(int streak) => picker.Pick(GameSoundId.BalloonPop, entry,
+                new PickContext(streak, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f)).MelodicSemitone;
 
-            Assert.AreEqual(1, playback.MelodicSemitone);
+            Assert.AreEqual(12, Pick(5));
+            Assert.AreEqual(0, Pick(10));
+            for (var streak = 0; streak < 200; streak++)
+            {
+                Assert.That(Pick(streak), Is.InRange(0, 12));
+            }
         }
 
         [Test]
-        public void Pick_ScaleWalkCapped_MaxOctavesOne_ShrinksWindowAndLoopsEarlier()
+        public void Pick_ScaleWalkCapped_DefaultSkip_NetClimbsAcrossCycles()
         {
-            // Same streak as StreakRollsOverOctave (which climbs to semitone 12 at maxOctaves 2)
-            // already exhausts the 1-octave window here and loops back to root+1 instead — proves
-            // _maxOctaves actually resizes the window rather than defaulting through unused.
+            // skipSteps 1 advances one scale step per yoyo cycle, so later cycles sit higher than earlier
+            // ones. First peak (streak 5) is one octave = 12; the next cycle's peak (streak 14) is a step
+            // higher = 14; and the trough rises too (streak 9 = 2, up from the streak-0 root).
             var entry = CreateEntry(Vector2.one, Vector2.one, new[] { CreateClip() }, MelodicMode.ScaleWalkCapped);
             var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 0,
-                melodicMaxOctaves: 1);
-            var ctx = new PickContext(streak: 5, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f);
+                melodicMaxOctaves: 2, melodicSkipSteps: 1);
 
-            var playback = picker.Pick(GameSoundId.BalloonPop, entry, ctx);
+            int Pick(int streak) => picker.Pick(GameSoundId.BalloonPop, entry,
+                new PickContext(streak, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f)).MelodicSemitone;
 
-            Assert.AreEqual(1, playback.MelodicSemitone);
+            Assert.AreEqual(0, Pick(0));
+            Assert.AreEqual(12, Pick(5));
+            Assert.AreEqual(2, Pick(9));
+            Assert.AreEqual(14, Pick(14));
+        }
+
+        [Test]
+        public void Pick_ScaleWalkCapped_FullSkip_ClimbsWithoutDipping()
+        {
+            // skipSteps equal to the scale length = no descent leg, so the walk only ever climbs (until
+            // the ceiling) — a plain ramp. Across the first window it never steps down.
+            var entry = CreateEntry(Vector2.one, Vector2.one, new[] { CreateClip() }, MelodicMode.ScaleWalkCapped);
+            var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 0,
+                melodicMaxOctaves: 2, melodicSkipSteps: PentatonicScale.Length);
+
+            int Pick(int streak) => picker.Pick(GameSoundId.BalloonPop, entry,
+                new PickContext(streak, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f)).MelodicSemitone;
+
+            var previous = Pick(0);
+            for (var streak = 1; streak <= 9; streak++)
+            {
+                var current = Pick(streak);
+                Assert.GreaterOrEqual(current, previous);
+                previous = current;
+            }
+        }
+
+        [Test]
+        public void Pick_ScaleWalkCapped_MaxOctavesShrinksTheCeiling()
+        {
+            // The ceiling scales with maxOctaves: at maxOctaves 1 the climb is clamped a full octave
+            // lower than at maxOctaves 2. Streak 5 tops out at semitone 9 here vs 12 in the wider window.
+            var entry = CreateEntry(Vector2.one, Vector2.one, new[] { CreateClip() }, MelodicMode.ScaleWalkCapped);
+            var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 0,
+                melodicMaxOctaves: 1, melodicSkipSteps: 1);
+
+            int Pick(int streak) => picker.Pick(GameSoundId.BalloonPop, entry,
+                new PickContext(streak, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f)).MelodicSemitone;
+
+            Assert.AreEqual(9, Pick(5));
+            for (var streak = 0; streak < 200; streak++)
+            {
+                Assert.That(Pick(streak), Is.InRange(0, 9));
+            }
+        }
+
+        [Test]
+        public void Pick_ScaleWalkCappedDown_MirrorsTheCappedWalkBelowTheRoot()
+        {
+            // ScaleWalkCappedDown is the exact mirror of ScaleWalkCapped: same magnitude, negated. Where
+            // the up walk peaks an octave ABOVE the root at streak 5 (+12), the down walk dips an octave
+            // BELOW (-12), then works back up (streak 9 = -2), all measured from a non-zero root.
+            var up = CreateEntry(Vector2.one, Vector2.one, new[] { CreateClip() }, MelodicMode.ScaleWalkCapped);
+            var down = CreateEntry(Vector2.one, Vector2.one, new[] { CreateClip() }, MelodicMode.ScaleWalkCappedDown);
+            var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 5,
+                melodicMaxOctaves: 2, melodicSkipSteps: 1);
+
+            int PickUp(int streak) => picker.Pick(GameSoundId.BalloonPop, up,
+                new PickContext(streak, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f)).MelodicSemitone;
+            int PickDown(int streak) => picker.Pick(GameSoundId.BalloonPop, down,
+                new PickContext(streak, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f)).MelodicSemitone;
+
+            foreach (var streak in new[] { 0, 5, 9, 14, 100 })
+            {
+                Assert.AreEqual(2 * 5 - PickUp(streak), PickDown(streak));
+            }
+
+            Assert.AreEqual(5 - 12, PickDown(5));
+            Assert.AreEqual(5 - 2, PickDown(9));
         }
 
         [Test]
         public void Pick_ScaleWalkCapped_RunawayStreak_StaysBounded()
         {
-            // The point of the cap: no exponential runaway. Even a massive streak stays within the
-            // octave window (top note + one octave) plus the wrapped per-loop semitone shift.
+            // The point of the cap: no runaway. The net-climbing yoyo never exceeds the window top, so a
+            // massive streak stays within [root, top-of-window] = [0, pentatonic top + one octave = 21].
             var entry = CreateEntry(Vector2.one, Vector2.one, new[] { CreateClip() }, MelodicMode.ScaleWalkCapped);
             var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 0,
-                melodicMaxOctaves: 2);
-            const int windowTop = 9 + 12; // pentatonic top note, one octave up in a 2-octave window
-            const int ceiling = 11 + windowTop; // + max wrapped loop shift
+                melodicMaxOctaves: 2, melodicSkipSteps: 1);
+            const int ceiling = 9 + 12; // pentatonic top note, one octave up in a 2-octave window
 
             for (var streak = 0; streak < 500; streak++)
             {
