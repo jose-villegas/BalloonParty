@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace BalloonParty.Audio.Editor
 {
     // Pure record store for the shippable attribution file. Dedups by provider id so re-fetching a
-    // sound updates rather than duplicates. File I/O lives in the window; this only merges + (de)serializes.
+    // sound updates rather than duplicates. File I/O lives in the inspector editor; this only merges + (de)serializes.
     internal sealed class AttributionLedger
     {
         private readonly List<AttributionRecord> _records;

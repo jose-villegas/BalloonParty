@@ -1,7 +1,7 @@
 namespace BalloonParty.Audio.Editor
 {
     // Provider-neutral search result — never a Freesound-shaped DTO — so a future provider
-    // (e.g. a text-to-SFX generator) can slot in behind ISfxProvider without touching the window.
+    // (e.g. a text-to-SFX generator) can slot in behind ISfxProvider without touching the UI.
     internal readonly struct SfxCandidate
     {
         public readonly long ProviderId;

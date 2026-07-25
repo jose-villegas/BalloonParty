@@ -4,68 +4,50 @@ using System.IO;
 using System.Threading;
 using BalloonParty.Audio;
 using BalloonParty.Audio.Configuration;
-using BalloonParty.EditorUI.Utilities;
 using UnityEditor;
 using UnityEngine;
 
 namespace BalloonParty.Audio.Editor
 {
-    // Author-time tool: fills empty SfxEntry clip slots from each entry's fetch prompt via Freesound,
-    // with a human accept-per-clip gate (the license/quality review) and attribution recording.
-    internal sealed class SfxFetcherWindow : EditorWindow
+    // Fetch UI lives on the SoundBankConfiguration inspector itself: each sound entry gets an inline
+    // "Fetch clips (Freesound)" foldout hanging off it (shown only when the entry has a fetch prompt and
+    // no clips yet). Fills the slot from the prompt via Freesound (CC0 + CC-BY), auditions in-editor,
+    // and records attribution. Editor-only; reuses the provider/importer/assigner/ledger unchanged.
+    [CustomEditor(typeof(SoundBankConfiguration))]
+    internal sealed class SoundBankConfigurationEditor : UnityEditor.Editor
     {
         private const string AttributionAssetPath = "Assets/Resources/AudioAttributions.json";
         private const int MaxResults = 12;
         private const float MinDuration = 0.05f;
         private const float MaxDuration = 3f;
 
-        private readonly EditorAssetCache<SoundBankConfiguration> _bankCache = new();
         private readonly FreesoundTokenSource _tokenSource = new();
         private readonly Dictionary<GameSoundId, List<SfxCandidate>> _candidates = new();
         private readonly HashSet<GameSoundId> _busy = new();
+        private readonly HashSet<GameSoundId> _expanded = new();
 
         private ISfxProvider _provider;
         private string _tokenInput = string.Empty;
-        private Vector2 _scroll;
 
-        [MenuItem("Tools/BalloonParty/SFX Fetcher")]
-        private static void Open()
+        public override void OnInspectorGUI()
         {
-            GetWindow<SfxFetcherWindow>("SFX Fetcher");
-        }
-
-        private void OnGUI()
-        {
-            DrawTokenSection();
-
-            var bank = _bankCache.Value;
-            if (bank == null)
-            {
-                EditorGUILayout.HelpBox("No SoundBankConfiguration asset found in the project.", MessageType.Warning);
-                return;
-            }
-
-            if (!_tokenSource.HasToken)
-            {
-                EditorGUILayout.HelpBox("Set a Freesound token above to enable fetching.", MessageType.Info);
-                return;
-            }
+            serializedObject.Update();
+            DrawPropertiesExcluding(serializedObject, "m_Script", "_entries");
 
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Sounds with a fetch prompt and no clips", EditorStyles.boldLabel);
+            DrawTokenSection();
 
-            _scroll = EditorGUILayout.BeginScrollView(_scroll);
-            var serialized = new SerializedObject(bank);
-            var entries = serialized.FindProperty("_entries");
+            var entries = serializedObject.FindProperty("_entries");
             if (entries != null)
             {
+                EditorGUILayout.LabelField("Sounds", EditorStyles.boldLabel);
                 for (var i = 0; i < entries.arraySize; i++)
                 {
-                    DrawEntryRow(bank, (GameSoundId)i, entries.GetArrayElementAtIndex(i));
+                    DrawEntry((SoundBankConfiguration)target, (GameSoundId)i, entries.GetArrayElementAtIndex(i));
                 }
             }
 
-            EditorGUILayout.EndScrollView();
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawTokenSection()
@@ -77,8 +59,8 @@ namespace BalloonParty.Audio.Editor
             }
 
             EditorGUILayout.HelpBox(
-                "No Freesound token. Set the FREESOUND_API_TOKEN environment variable, or paste one below " +
-                "(stored per-machine in EditorPrefs, never committed).", MessageType.Warning);
+                "No Freesound token — fetch is disabled. Set the FREESOUND_API_TOKEN environment variable, " +
+                "or paste one below (stored per-machine in EditorPrefs, never committed).", MessageType.Info);
 
             using (new EditorGUILayout.HorizontalScope())
             {
@@ -96,28 +78,53 @@ namespace BalloonParty.Audio.Editor
             }
         }
 
-        private void DrawEntryRow(SoundBankConfiguration bank, GameSoundId soundId, SerializedProperty entry)
+        private void DrawEntry(SoundBankConfiguration bank, GameSoundId soundId, SerializedProperty entry)
         {
+            EditorGUILayout.PropertyField(entry, new GUIContent(soundId.ToString()), true);
+
             var promptProp = entry.FindPropertyRelative("_fetchPrompt");
             var clipsProp = entry.FindPropertyRelative("_clips");
             var prompt = promptProp != null ? promptProp.stringValue : string.Empty;
             var hasClips = clipsProp != null && clipsProp.arraySize > 0;
 
-            if (string.IsNullOrWhiteSpace(prompt) || hasClips)
+            // The fetch foldout only appears where it's useful: a prompt to search with, no clip yet,
+            // and a token to search with.
+            if (string.IsNullOrWhiteSpace(prompt) || hasClips || !_tokenSource.HasToken)
             {
                 return;
             }
 
-            using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
+            using (new EditorGUI.IndentLevelScope())
             {
-                EditorGUILayout.LabelField(soundId.ToString(), EditorStyles.boldLabel);
-                EditorGUILayout.LabelField(prompt, EditorStyles.wordWrappedMiniLabel);
-
-                using (new EditorGUI.DisabledScope(_busy.Contains(soundId)))
+                var wasExpanded = _expanded.Contains(soundId);
+                var expanded = EditorGUILayout.Foldout(wasExpanded, "Fetch clips (Freesound)", true);
+                if (expanded && !wasExpanded)
                 {
-                    if (GUILayout.Button("Fetch candidates"))
+                    _expanded.Add(soundId);
+                }
+                else if (!expanded && wasExpanded)
+                {
+                    _expanded.Remove(soundId);
+                }
+
+                if (!expanded)
+                {
+                    return;
+                }
+
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    using (new EditorGUI.DisabledScope(_busy.Contains(soundId)))
                     {
-                        FetchAsync(soundId, prompt);
+                        if (GUILayout.Button("Fetch candidates"))
+                        {
+                            FetchAsync(soundId, prompt);
+                        }
+                    }
+
+                    if (GUILayout.Button("■ Stop", GUILayout.Width(60)))
+                    {
+                        StopPreview();
                     }
                 }
 
@@ -138,7 +145,12 @@ namespace BalloonParty.Audio.Editor
                 var label = $"{candidate.Name} · {candidate.Author} · {candidate.LicenseName} · {candidate.Duration:0.0}s";
                 EditorGUILayout.LabelField(label, EditorStyles.miniLabel);
 
-                if (GUILayout.Button("Listen", GUILayout.Width(60)))
+                if (GUILayout.Button("▶", GUILayout.Width(28)))
+                {
+                    PreviewAsync(candidate.PreviewUrl);
+                }
+
+                if (GUILayout.Button("Site", GUILayout.Width(44)))
                 {
                     Application.OpenURL(candidate.SoundUrl);
                 }
@@ -150,6 +162,18 @@ namespace BalloonParty.Audio.Editor
                         AcceptAsync(bank, soundId, candidate);
                     }
                 }
+            }
+        }
+
+        private static void StopPreview()
+        {
+            try
+            {
+                SfxPreviewAuditioner.Stop();
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[SFX Fetch] stop preview failed: {e.Message}");
             }
         }
 
@@ -175,6 +199,18 @@ namespace BalloonParty.Audio.Editor
             }
         }
 
+        private async void PreviewAsync(string previewUrl)
+        {
+            try
+            {
+                await SfxPreviewAuditioner.PlayAsync(previewUrl, CancellationToken.None);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[SFX Fetch] preview failed: {e.Message}");
+            }
+        }
+
         private async void AcceptAsync(SoundBankConfiguration bank, GameSoundId soundId, SfxCandidate candidate)
         {
             _busy.Add(soundId);
@@ -189,8 +225,8 @@ namespace BalloonParty.Audio.Editor
                 SoundBankClipAssigner.Assign(bank, soundId, clip);
                 RecordAttribution(soundId, candidate);
                 _candidates.Remove(soundId);
-                EditorUtility.SetDirty(bank);
-                AssetDatabase.SaveAssets();
+                _expanded.Remove(soundId);
+                serializedObject.Update();
             }
             catch (Exception e)
             {

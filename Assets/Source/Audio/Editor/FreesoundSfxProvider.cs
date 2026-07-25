@@ -21,7 +21,7 @@ namespace BalloonParty.Audio.Editor
         {
             if (!_tokenSource.TryResolve(out var token, out _))
             {
-                Debug.LogWarning("[SFX Fetch] No Freesound token — set FREESOUND_API_TOKEN or paste one in the window.");
+                Debug.LogWarning("[SFX Fetch] No Freesound token — set FREESOUND_API_TOKEN or paste one in the sound-bank inspector.");
                 return Array.Empty<SfxCandidate>();
             }
 

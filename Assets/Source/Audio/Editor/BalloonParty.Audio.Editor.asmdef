@@ -3,8 +3,7 @@
     "rootNamespace": "BalloonParty.Audio.Editor",
     "references": [
         "BalloonParty.Runtime",
-        "UniTask",
-        "com.balloonparty.editorui.Editor"
+        "UniTask"
     ],
     "includePlatforms": [
         "Editor"
