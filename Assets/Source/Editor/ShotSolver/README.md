@@ -13,7 +13,9 @@ unit-testable outside the editor.
 | File | Location | What it does |
 |---|---|---|
 | `ShotSolverWindow` | `Editor/ShotSolver/` | `Tools > BalloonParty > Shot Solver` — play-mode-only window. Snapshots the live board (`SlotGrid`, resolved via `GameLifetimeScope.Container`), thrower origin, and projectile contact radius; sweeps N angles across a configurable arc; refines qualifying-window edges by bisection; plots score vs. angle as a strip of `EditorGUI` rect fills; lists qualifying windows; can draw the best window's centre-angle flight path into the Scene view; **Fire Best** re-sweeps and forces the shot via `ThrowerController.FireAt` |
-| `ShotSimulator` | `Solver/` | Pure, headless, static class — simulates one aim direction to completion, event-to-event (next analytic wall crossing, next analytic balloon-corridor entry, or next due balance pulse), never fixed-step. Reuses `ProjectileMotionResolver.TryComputeContactNormal` for deflect contacts. Mirrors the runtime's pop/deflect/shield/streak rules (see below) on a `ShotBalloonSnapshot` board — no `MonoBehaviour`, no live model, no allocation beyond the caller-owned working-set buffer. Events carry timestamps (`t += distance / speed(segment)`), and speed mirrors the cruise ramp exactly |
+| `ShotSimulator` | `Solver/` | Pure, headless, static class — simulates one aim direction to completion, event-to-event (next analytic wall crossing, next analytic balloon-corridor entry, or next due balance pulse), never fixed-step. Reuses `ProjectileMotionResolver.TryComputeContactNormal` for deflect contacts. Mirrors the runtime's pop/deflect/shield/streak/rainbow rules, including Phase A's interactive statics (see below), on a `ShotBalloonSnapshot` board — no `MonoBehaviour`, no live model, no allocation beyond the caller-owned working-set buffer. Events carry timestamps (`t += distance / speed(segment)`), and speed mirrors the cruise ramp exactly |
+| `ShotBoardSnapshot` | `Solver/` | The board's data types: `ShotBalloonSnapshot` (one target's geometry, `ColorProfile` colour identity, optional `BalanceProfile`, `ShotContactKind`, item), built only via its named factories (`ForColorTarget`/`ForToughTarget`/`ForRainbowTarget`/`ForStaticContact`) so every caller's field mapping stays honest as the struct grows; `ShotBalloonState`, its mutable per-simulation copy |
+| `ShotFlightState` | `Solver/` | Mutable per-flight state passed by `ref` through `Simulate` — position/direction/shields/elapsed, cruise/pierce state, and the Phase D-core buff/streak/colour fields (`HasRainbowBuff`, `SpeedBuffMultiplier`, `StreakColor`/`StreakCount`, `DeferredPops`, `ProjectileColor`) |
 | `ShotBoardGather` | `Solver/` | Snapshots the live board/thrower/projectile into the sim's input structs (`ShotBoardGather.Gather`), and converts sweep angles to world directions (`DirectionFromDegrees`). Called by `ShotSolverWindow` |
 | `ShotBoardDynamics` | `Solver/` | The dynamic-board half (plan §7): owns a real headless `SlotGrid` + `GridBalanceQuery` + `BalancePlanner` over stub actors, schedules flight-rebalance pulses on the sim timeline, and keeps per-balloon nudge-impulse state. Built once per gather, reset per simulated flight |
 | `ShotSimBoardActor` | `Solver/` | The stub actors (`ShotSimDynamicActor`/`ShotSimStaticActor`) the dynamics grid is populated with, plus the per-flight snapshot structs for non-target actors |
@@ -30,11 +32,27 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   resolves to zero and returns the exact contact normal, not an approximation. Unbreakables enter
   the board as `int.MaxValue`-durability targets: permanent deflectors that never pop and score
   nothing on deflect, exactly like the game.
+- **Interactive statics** (Deflector/Gatekeeper/Absorber, Phase A) — collide with the shot while
+  still occupying their balance-grid slot. A Deflector has no durability capability at all, so it
+  gets the same `int.MaxValue` permanent-deflect treatment as an Unbreakable balloon. A
+  Gatekeeper pops on its final hit but scores nothing AND leaves the streak untouched — not merely
+  "no score": the live `ScoreController` never even sees a Gatekeeper's pop (no `IHasScoreColor`),
+  so nothing resets the streak either, unlike an ordinary tough pop. An Absorber ends the flight
+  outright (`ShotContactKind.Absorb`, from a live `EvaluateHit` returning `HitOutcome.Absorb`) —
+  no score, no streak mutation, no removal, exactly like the live Absorber staying on the grid
+  forever; the solver window surfaces this as a distinct `Absorbed` outcome, never conflated with
+  `Died`. A static never nudges its neighbours on a hit, mirroring `NudgeService.OnActorHit`'s
+  `IHasNudge` requirement — no static archetype implements it. None of the three are live-reachable
+  yet (no prefab/collider/spawner wires one onto a real board), so this path is verified only by
+  `ShotStaticContactTests` (EditMode) — flag it if the solver is ever pointed at a board that
+  actually has one.
 - **Radii, never hardcoded** — each target's contact circle is its live view's `ContactRadius`
   (`CircleCollider2D.radius × lossyScale.x`), plus the projectile's own contact radius per test.
   The differing collider setups (coloured 0.3125 at prefab scale ~0.866 ≈ 0.271 world; tough 0.325
   at scale 1; unbreakable 0.325 at scale ~1.097 ≈ 0.357 world) flow through per view — the same
   `ContactRadius` the deflect message itself carries, so game and sim can't disagree per balloon.
+  Both that derivation and a static archetype's own collider now share one helper,
+  `ContactRadius.FromCollider` (`Shared/`), so the two paths can't drift apart.
 - **Colourless vs. coloured scoring** — a `ShotBalloonSnapshot.ColorId` of null/empty models a
   balloon that does NOT implement `IHasColor` (`ToughBalloonModel`); non-null models one that does
   (`BalloonModel`). Tough pops score a flat `ScoreValue` and reset the streak — mirrors
@@ -49,9 +67,27 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
 - **Walls** — analytic per-axis crossing time, then `Vector2.Reflect` off the (possibly summed, for
   an exact corner hit) wall normal — same rectangle and reflect convention as `WallLimits`. Each
   bounce costs a shield; shields dropping below zero ends the flight (`Died`).
-- **Rainbow / wildcard balloons and buffs are out of scope** — the board snapshot has no wildcard
-  flag, matching the plan's own scope (§1: pops, tough deflects, shields). Note this if the solver is
-  ever pointed at a board with rainbow balloons or an active rainbow-buffed shot.
+- **Rainbow / wildcard scoring** (Phase D-core) — `ResolvePopScore` mirrors
+  `ScoreController.RecordStreakMultiplier`'s own precedence: a rainbow-buffed shot scores every
+  pop colour-agnostically (even an otherwise streak-breaking tough pop just keeps the multiplier
+  climbing); absent that buff, a colourless pop still takes the flat/streak-breaking tough rule
+  and skips the refund entirely; a rainbow target hit by a still-colourless projectile defers the
+  streak instead of resetting it (a banked count that folds in as `1 + deferred` the next time the
+  streak anchors on a real colour, mirroring `ColorStreakTracker`'s deferred-pop fold); an
+  anchoring rainbow pop uses the projectile's own colour if the board still allows it, else the
+  board's first allowed colour. Colour adoption always gates on the POPPED balloon being rainbow,
+  never on the shot's own buff — an ordinary coloured pop steals the projectile's colour
+  regardless of an active rainbow buff, and only a rainbow TARGET suppresses adoption. A rainbow
+  pays `ScoreValue` × every board-allowed colour, pre-cap (mirrors
+  `BalloonModel.ResolveRainbowAttribution`'s product — the sim never models
+  `ILevelProgress.ClaimProgress`'s level cap); a Target Colour filter only narrows which score
+  GROUP counts toward the milestone — it never zeroes a rainbow's count (a rainbow always counts
+  under any filter), only how many colours it pays. Soap (`IWashesProjectileColor`) washes the
+  projectile colourless on ANY contact outcome, deflects included — mirrors `ApplyColorChange`
+  running ahead of, and independent from, the deflect-vs-pop branch in `ProjectileHitResolver`. A
+  rainbow-buffed shot also converts its hex neighbours to rainbow on every pop it lands (mirrors
+  `ProjectileHitResolver.ConvertNeighborsToRainbow`), scanned over the active working set so it
+  works whether or not a dynamic board is supplied.
 - **Cruise** — entry mirrors `ProjectileView.TryEnterCruise`: past the wall-bounce threshold, a
   walls-only lookahead of `threshold` more segments must be balloon-free (tested against
   time-evaluated centres) before the ramp engages. Speed mirrors `ProjectileMotionResolver.Step`:
@@ -95,6 +131,26 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   and the small, smooth nudge envelope are both absorbed by the refinement, not modeled exactly.
 - (The live flight itself is now the exact billiard: walls mirror the overshoot and deflects carry
   the penetration remainder, so no truncation gap exists between game and sim at bounces.)
+- `HasRainbowBuff` always ends in the sim on the very next shield-losing wall bounce
+  (`HandleWallBounce` resets it unconditionally) — exact for the Shield item's grant
+  (`WallBounceEndCondition`, which really does end on the first wall bounce), but an
+  approximation for a Snipe-granted RainbowShield riding pierce: live only ends that one at the
+  pierce DISCHARGE wall (`PierceEndedEndCondition`), which can be several bounces later. No
+  buff-grant seam exists yet (that's Phase C) to tell the sim which end condition actually backs a
+  live grant, so this is declared until Phase E2 models `PendingPierceHits`/discharge.
+- `Simulate`'s four `starting*` parameters (`startingRainbowBuff`, `startingProjectileColor`,
+  `startingStreakColor`, `startingStreakCount`) are a test seam, not a live-gather input — no
+  gather populates them yet (buff GRANTS, and a streak already in progress when one lands
+  mid-flight, are Phase C). They exist so tests exercise D-core's scoring/end-condition mirrors
+  ahead of the item layer, and will fold into a proper seed struct once Phase C lands.
+- Pre-existing gap (E4, found during the D-core review): the sim's non-piercing
+  `HitsRemaining > 1` branch always deflects a surviving multi-hit target, but live only
+  `ToughBalloonModel`/`UnbreakableBalloonModel` actually return `HitOutcome.Deflect` — a surviving
+  multi-HP soap cluster (`BubbleClusterModel`) returns `PassThrough` and flies through unbent
+  instead. Planned fix is Phase E4 (a survive-outcome discriminator on the snapshot).
+- Balance fidelity honours `WeightBias`/`OmnidirectionalBalance` only — `ShoveVector` pop-pressure
+  shoves are never exercised by a flight-rebalance pulse, so a board effect that leans on pressure
+  propagation diverges from the sim.
 
 ## Sweep and refine
 
@@ -113,10 +169,14 @@ list and draws it via `SceneDrawingHelper.DrawWorldPolyline`.
 4. **Run Sweep** — reads the live board/thrower/projectile once, sweeps, refines, and lists windows.
 5. Toggle **Draw Best** to see the widest qualifying window's flight path in the Scene view.
 6. **Target Colour** (empty = all): when set, only pops of that colour id count toward the target
-   score — milestone-mask style; streaks/refunds still run unfiltered.
+   score — milestone-mask style; streaks/refunds still run unfiltered. A rainbow pop always counts
+   under any filter (only how many colours it pays narrows).
 7. **±Nudge robustness**: each window's centre is re-simulated with every contact circle fattened
    AND thinned by the nudge amplitude; windows that survive both are tagged ✓robust.
-8. **Fire Best** freezes the prediction, forces the shot, and samples the real projectile against
+8. A window whose centre shot ends by hitting an Absorber is tagged **⊘absorbed** in the list, and
+   the run summary counts absorbed runs alongside capped ones — the flight ended early, so read its
+   score/pops with that in mind.
+9. **Fire Best** freezes the prediction, forces the shot, and samples the real projectile against
    the predicted timeline every editor update — live divergence readout in the window, actual path
    drawn in yellow next to the red prediction.
 
