@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
 using BalloonParty.Shared.Extensions;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using UniRx;
@@ -38,13 +39,7 @@ namespace BalloonParty.Balloon.Model
         // drift together from any direction.
         public override int WeightBias(SlotGrid grid, Vector2Int candidate)
         {
-            if (_balanceBias == 0f)
-            {
-                return 0;
-            }
-
-            var sqrDistance = this.NearestSameTypeSqrDistance(grid, candidate);
-            return sqrDistance < float.MaxValue ? Mathf.RoundToInt(-_balanceBias * sqrDistance) : 0;
+            return this.Evaluate(BalanceBiasKind.Clump, grid, candidate, _balanceBias);
         }
 
         public void ResolveScoreAttribution(

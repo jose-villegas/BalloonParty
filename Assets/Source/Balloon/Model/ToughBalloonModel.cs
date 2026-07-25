@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
 using BalloonParty.Shared.Extensions;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using UniRx;
@@ -39,12 +40,7 @@ namespace BalloonParty.Balloon.Model
         // three hex axes score higher — steering tough balloons into walls rather than lumps.
         public override int WeightBias(SlotGrid grid, Vector2Int candidate)
         {
-            if (_balanceBias <= 0f)
-            {
-                return 0;
-            }
-
-            return Mathf.RoundToInt(_balanceBias * this.BestLineCountSameType(grid, candidate));
+            return this.Evaluate(BalanceBiasKind.Line, grid, candidate, _balanceBias);
         }
 
         public void ResolveScoreAttribution(

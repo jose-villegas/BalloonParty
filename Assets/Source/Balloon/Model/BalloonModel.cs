@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
 using BalloonParty.Shared.Extensions;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using UniRx;
@@ -44,12 +45,7 @@ namespace BalloonParty.Balloon.Model
         // rebalances same-color balloons drift into diagonal lines.
         public override int WeightBias(SlotGrid grid, Vector2Int candidate)
         {
-            if (_balanceBias <= 0f)
-            {
-                return 0;
-            }
-
-            return Mathf.RoundToInt(_balanceBias * this.CountSameColorDiagonals(grid, candidate));
+            return this.Evaluate(BalanceBiasKind.ColorDiagonal, grid, candidate, _balanceBias);
         }
 
         // Single-colour attribution — ignores incompleteColors (only scatter pops avoid a completed bar;

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Nudge;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
@@ -9,7 +10,8 @@ using UnityEngine;
 
 namespace BalloonParty.Balloon.Model
 {
-    internal abstract class BalloonModelBase : IWriteableBalloonModel, IPressureMovable, IBalanceInfluence
+    internal abstract class BalloonModelBase :
+        IWriteableBalloonModel, IPressureMovable, IBalanceInfluence, IBalanceBiasSource
     {
         public BalloonType TypeName { get; }
         public int RegistryHandle { get; set; } = -1;
@@ -34,6 +36,12 @@ namespace BalloonParty.Balloon.Model
 
         IReadOnlyReactiveProperty<bool> IDynamicSlotActor.IsStable => IsStable;
         IReadOnlyReactiveProperty<Vector2Int> IDynamicSlotActor.SlotIndex => SlotIndex;
+
+        // IBalanceBiasSource: the read-set the shared bias formulas (Shared/Extensions/BalanceBiasExtensions)
+        // need from a neighbour. BiasTypeId is TypeName's ordinal, not the enum — Slots must not reference
+        // Balloon.Type.
+        string IBalanceBiasSource.ColorId => this.GetColorId();
+        int IBalanceBiasSource.BiasTypeId => (int)TypeName;
 
         Vector2Int ISlotActor.SlotIndex => SlotIndex.Value;
 
