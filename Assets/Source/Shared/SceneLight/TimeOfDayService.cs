@@ -17,12 +17,10 @@ namespace BalloonParty.Shared.SceneLight
     /// </summary>
     internal sealed class TimeOfDayService : IStartable, ITickable, ISceneLightRuntime, ITimeOfDayNight
     {
-        // Time-of-day angle convention: 12 AM sits at MidnightAngle and time DECREASES the angle
-        // (TimeOfDayClock), one hour per 360/24 degrees. Night is 5 PM–4 AM (end exclusive).
-        private const float MidnightAngleDegrees = 135f;
-        private const float DegreesPerHour = 360f / 24f;
-        private const float NightStartHour = 17f;
-        private const float NightEndHour = 4f;
+        // Night is the small arc the sun sweeps as the day's angle DECREASES (TimeOfDayClock): from
+        // NightStartAngle down to NightEndAngle (~315° → 275°).
+        private const float NightStartAngle = 315f;
+        private const float NightEndAngle = 275f;
 
         private static readonly int SceneLightDirId = Shader.PropertyToID("_SceneLightDir");
         private static readonly int SceneLightColorId = Shader.PropertyToID("_SceneLightColor");
@@ -92,11 +90,14 @@ namespace BalloonParty.Shared.SceneLight
             Shader.SetGlobalFloat(SceneLightIntensityId, _settings.Intensity);
         }
 
-        // Angle → clock hour (12 AM at MidnightAngle, time decreasing the angle), then night = 5 PM–4 AM.
+        // True inside the night arc [NightEndAngle, NightStartAngle]; the ternary also covers a window
+        // authored to wrap past 0 (end > start).
         internal static bool IsNightAngle(float angleDegrees)
         {
-            var hour = Mathf.Repeat((MidnightAngleDegrees - angleDegrees) / DegreesPerHour, 24f);
-            return hour >= NightStartHour || hour < NightEndHour;
+            var deg = Mathf.Repeat(angleDegrees, 360f);
+            return NightEndAngle <= NightStartAngle
+                ? deg >= NightEndAngle && deg <= NightStartAngle
+                : deg >= NightEndAngle || deg <= NightStartAngle;
         }
 
         // Curve sampled at the current direction's angle; unauthored/empty means no deepening (1).
