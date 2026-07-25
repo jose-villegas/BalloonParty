@@ -54,6 +54,12 @@ namespace BalloonParty.Audio
         WindLoop,
 
         // Ambient loop for the Launch state; MusicSoundRouter stops it (fading out) on the move to Game.
-        LaunchMusic
+        LaunchMusic,
+
+        // Per-balloon-type cues (append only), mapped in CombatSoundRouter.PopSoundFor / DeflectSoundFor;
+        // unmapped types fall back to BalloonPop / BalloonDeflect.
+        BalloonPopRainbow,
+        BalloonPopUnbreakable,
+        BalloonDeflectUnbreakable
     }
 }

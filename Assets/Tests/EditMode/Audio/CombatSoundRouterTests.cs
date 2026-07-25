@@ -78,6 +78,39 @@ namespace BalloonParty.Tests.Audio
         }
 
         [Test]
+        public void OnActorHit_RainbowBalloonPop_PlaysRainbowPop()
+        {
+            var rainbow = Substitute.For<IBalloonModel>();
+            rainbow.TypeName.Returns(BalloonType.Rainbow);
+
+            _hitHandler.Handle(new ActorHitMessage(rainbow, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+
+            _player.Received(1).Play(GameSoundId.BalloonPopRainbow, Vector3.zero);
+        }
+
+        [Test]
+        public void OnActorHit_UnbreakablePop_PlaysUnbreakablePop()
+        {
+            var unbreakable = Substitute.For<IBalloonModel>();
+            unbreakable.TypeName.Returns(BalloonType.Unbreakable);
+
+            _hitHandler.Handle(new ActorHitMessage(unbreakable, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+
+            _player.Received(1).Play(GameSoundId.BalloonPopUnbreakable, Vector3.zero);
+        }
+
+        [Test]
+        public void OnActorHit_UnbreakableDeflect_PlaysUnbreakableDeflect()
+        {
+            var unbreakable = Substitute.For<IBalloonModel>();
+            unbreakable.TypeName.Returns(BalloonType.Unbreakable);
+
+            _hitHandler.Handle(new ActorHitMessage(unbreakable, Vector3.zero, Vector3.zero, HitOutcome.Deflect));
+
+            _player.Received(1).Play(GameSoundId.BalloonDeflectUnbreakable, Vector3.zero);
+        }
+
+        [Test]
         public void OnActorHit_UnmappedBalloonType_FallsBackToBalloonPop()
         {
             var cluster = Substitute.For<IBalloonModel>();

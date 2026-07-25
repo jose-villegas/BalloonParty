@@ -92,7 +92,10 @@ namespace BalloonParty.Audio.Routing
             }
             else if ((outcome & HitOutcome.Deflect) != 0)
             {
-                _player.Play(GameSoundId.BalloonDeflect, message.WorldPosition);
+                var deflectId = message.Actor is IBalloonModel balloon
+                    ? DeflectSoundFor(balloon.TypeName)
+                    : GameSoundId.BalloonDeflect;
+                _player.Play(deflectId, message.WorldPosition);
             }
             else if ((outcome & (HitOutcome.Absorb | HitOutcome.PassThrough)) != 0)
             {
@@ -107,7 +110,19 @@ namespace BalloonParty.Audio.Routing
             return type switch
             {
                 BalloonType.Tough => GameSoundId.BalloonPopTough,
+                BalloonType.Rainbow => GameSoundId.BalloonPopRainbow,
+                BalloonType.Unbreakable => GameSoundId.BalloonPopUnbreakable,
                 _ => GameSoundId.BalloonPop,
+            };
+        }
+
+        // Unbreakables get their own deflect cue; everything else uses the generic deflect.
+        private static GameSoundId DeflectSoundFor(BalloonType type)
+        {
+            return type switch
+            {
+                BalloonType.Unbreakable => GameSoundId.BalloonDeflectUnbreakable,
+                _ => GameSoundId.BalloonDeflect,
             };
         }
 
