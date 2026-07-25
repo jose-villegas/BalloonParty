@@ -104,7 +104,8 @@ melodic semitone so a `Tension` entry can react against it.
 
 `WallHit` and `ShieldGained` share a *shield-depth* axis on a separate progression:
 `CombatSoundRouter` keeps a `_shieldDepth` (0 = root = full shields), steps it up on each
-`WallHitMessage` and back down (clamped at 0) on each `ShieldGainedMessage`, and passes it to
+`WallHitMessage`, back down (clamped at 0) on each `ShieldGainedMessage`, and to 0 on a
+`ProjectileLoadedMessage` (a fresh shot starts at the root); it passes the depth to
 `ISoundPlayer.Play(..., melodicStreak)`. Author both as `ScaleWalkDown`, so each consecutive
 wall hit drops the tone one degree below the root and each shield won walks it back up toward
 the root — never above it. `ShieldLost` itself just plays plain. A play with an explicit

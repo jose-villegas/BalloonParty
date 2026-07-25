@@ -413,8 +413,8 @@ heard before it's parsed.
 - **Wall hits walk DOWN a shield-depth axis; shields win it back UP.** `WallHit`
   (`WallHitMessage`) and `ShieldGained` (`ShieldGainedMessage`) share a `_shieldDepth` counter
   owned by `CombatSoundRouter` (0 = root = full shields): each wall hit steps it up (deeper
-  below root), each shield won steps it back down, clamped at 0 so the tone never rises above
-  the root. Both are authored as `ScaleWalkDown`, so the pitch tracks how far below full the
+  below root), each shield won steps it back down (clamped at 0 so the tone never rises above
+  the root), and a projectile reload resets it to 0 (a fresh shot starts at the root). Both are authored as `ScaleWalkDown`, so the pitch tracks how far below full the
   shield stack sits — dropping on consecutive hits, climbing back toward the root as you
   recover. `ShieldLost` itself plays plain. This axis is independent of the colour-pop streak,
   so the router supplies it per-play via the optional `melodicStreak` argument on
