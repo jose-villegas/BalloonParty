@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Item.Bomb;
 using BalloonParty.Item.Effects;
+using BalloonParty.Item.Laser;
 using BalloonParty.Slots.Capabilities;
 using UnityEngine;
 
@@ -164,9 +165,11 @@ namespace BalloonParty.Solver
                 case ItemType.Bomb:
                     return ResolveBomb(in activation, workingSet, activeCount, hitsOut);
 
-                // Every other item type is plumbing-only until its own sub-phase (C3 Laser .. C6
-                // Snipe) wires the real effect against _effectParams/_effectBoard.
                 case ItemType.Laser:
+                    return ResolveLaser(in activation, workingSet, activeCount, hitsOut);
+
+                // Every other item type is plumbing-only until its own sub-phase (C4 Lightning .. C6
+                // Snipe) wires the real effect against _effectParams/_effectBoard.
                 case ItemType.Lightning:
                 case ItemType.Paint:
                 case ItemType.Snipe:
@@ -204,6 +207,32 @@ namespace BalloonParty.Solver
             BombBlast.Resolve(
                 _effectBoard, activation.Origin, activation.Slot, activation.IsRainbowHost, _rainbowColorId,
                 in blastParams, hitsOut);
+
+            return new ShotItemOutcome(
+                shieldDelta: 0, grantsRainbowBuffUntilWall: false, grantsRainbowBuffUntilPierceEnd: false,
+                armsPierce: false, speedBuffMultiplier: 0f, damage: settings.Damage, flags: settings.Flags);
+        }
+
+        // Mirrors LaserItemHandler.CastCross/ConvertBorderingNeighbors's selection (verified
+        // 2026-07-25): the beam/light/telegraph presentation is unmodeled, but the four-arm cross
+        // geometry itself is LaserCross, run over the bound effect board at this activation's own
+        // rotation — activation.SpinDegrees is already extrapolated to contact time (host.ItemSpinDegrees
+        // + host.ItemSpinRate * tHit, built by ShotSimulator.RunItemEffects/PopItemHit), so the core
+        // never needs a live clock. No config known for Laser this flight (an empty test dictionary) is
+        // a no-op, same as items:null upstream.
+        private ShotItemOutcome ResolveLaser(
+            in ShotItemActivation activation, ShotBalloonState[] workingSet, int activeCount, List<EffectHit> hitsOut)
+        {
+            if (!_effectParams.TryGetValue(ItemType.Laser, out var settings))
+            {
+                return default;
+            }
+
+            _effectBoard.Bind(workingSet, activeCount, activation.Slot);
+            var crossParams = new LaserCrossParams(settings.Laser.CircleCastRadius, settings.Laser.RaycastDistance);
+            LaserCross.Resolve(
+                _effectBoard, activation.Origin, activation.SpinDegrees, activation.IsRainbowHost, _rainbowColorId,
+                in crossParams, hitsOut);
 
             return new ShotItemOutcome(
                 shieldDelta: 0, grantsRainbowBuffUntilWall: false, grantsRainbowBuffUntilPierceEnd: false,

@@ -4,6 +4,7 @@ using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Item.Bomb;
 using BalloonParty.Item.Effects;
+using BalloonParty.Item.Laser;
 using BalloonParty.Shared;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
@@ -194,6 +195,102 @@ namespace BalloonParty.Tests.ShotSolver
             AssertSameHitSet(gridBoard, gridHits, simBoard, simHits);
             Assert.AreEqual(1, gridHits.Count);
             AssertHit(gridBoard, gridHits, new Vector2Int(2, 2), EffectHitKind.Recolor, rainbowColorId);
+        }
+
+        [Test]
+        public void LaserResolve_NormalCrossAgainstMixedCluster_GridAndSimAgreeOnHitSet()
+        {
+            // Distances from hostSlot (2,2), sep=(1,1)/offset=0 (hand-derived via HexCoordinates): the
+            // four arm targets (3,2)/(1,2)/(2,0)/(2,4) each sit exactly 2.0 along one of the four cast
+            // axes; (4,2) sits a further 4.0 along the SAME right arm as (3,2) — proving one arm can
+            // hit two occupants in a single pass; (0,0) sits ~4.47 away, off every axis entirely.
+            var hostSlot = new Vector2Int(2, 2);
+            var occupants = new[]
+            {
+                new OccupantSpec(new Vector2Int(3, 2), OccupantKind.Green, "Red"),
+                new OccupantSpec(new Vector2Int(4, 2), OccupantKind.Tough),
+                new OccupantSpec(new Vector2Int(1, 2), OccupantKind.Unbreakable),
+                new OccupantSpec(new Vector2Int(2, 4), OccupantKind.Green, "Blue"),
+                new OccupantSpec(new Vector2Int(2, 0), OccupantKind.Green, "Green"),
+                new OccupantSpec(new Vector2Int(0, 0), OccupantKind.Green, "Purple"),
+            };
+
+            var grid = BuildGrid(6, 6);
+            PlaceOnGrid(grid, occupants);
+            var gridBoard = new GridEffectBoard(grid, OccupantRadius);
+            gridBoard.Rebuild(hostSlot);
+
+            var workingSet = BuildWorkingSet(grid, occupants);
+            var simBoard = new ShotSimEffectBoard(BuildLattice(grid));
+            simBoard.Bind(workingSet, workingSet.Length, hostSlot);
+
+            // castRadius 0.1 + the uniform 0.1 occupant radius = 0.2 combined — the farthest target
+            // (distance 4.0) needs an entry distance of 3.8, so castDistance 4.5 comfortably reaches
+            // every arm target while (0,0) (~4.47 away, off-axis) still misses every arm.
+            var crossParams = new LaserCrossParams(castRadius: 0.1f, castDistance: 4.5f);
+            var origin = (Vector2)grid.IndexToWorldPosition(hostSlot);
+
+            var gridHits = new List<EffectHit>();
+            LaserCross.Resolve(gridBoard, origin, rotationDegrees: 0f, false, null, in crossParams, gridHits);
+
+            var simHits = new List<EffectHit>();
+            LaserCross.Resolve(simBoard, origin, rotationDegrees: 0f, false, null, in crossParams, simHits);
+
+            AssertSameHitSet(gridBoard, gridHits, simBoard, simHits);
+
+            Assert.AreEqual(5, gridHits.Count);
+            AssertHit(gridBoard, gridHits, new Vector2Int(3, 2), EffectHitKind.Damage);
+            AssertHit(gridBoard, gridHits, new Vector2Int(4, 2), EffectHitKind.Damage);
+            AssertHit(gridBoard, gridHits, new Vector2Int(1, 2), EffectHitKind.Damage);
+            AssertHit(gridBoard, gridHits, new Vector2Int(2, 4), EffectHitKind.Damage);
+            AssertHit(gridBoard, gridHits, new Vector2Int(2, 0), EffectHitKind.Damage);
+            AssertNoHit(gridBoard, gridHits, new Vector2Int(0, 0));
+        }
+
+        [Test]
+        public void LaserResolve_RainbowHostBorderingConversion_GridAndSimAgreeOnHitSet()
+        {
+            // (3,2) and (4,2) both sit on the host's right arm (distances 2.0/4.0, same technique as
+            // the normal-cross test above) — (4,2) doubles as an ALREADY-HIT hex neighbour of (3,2), so
+            // the conversion pass must skip it rather than emit a redundant Recolor. (3,1) is a
+            // NON-paintable (Tough) neighbour of both (never converts); (2,1) is a paintable, never-hit
+            // neighbour of (3,2) (converts). Neither (3,1) nor (2,1) sits on any cast axis, so neither
+            // is ever a candidate for a direct hit.
+            var hostSlot = new Vector2Int(2, 2);
+            var occupants = new[]
+            {
+                new OccupantSpec(new Vector2Int(3, 2), OccupantKind.Green, "Blue"),
+                new OccupantSpec(new Vector2Int(4, 2), OccupantKind.Green, "Green"),
+                new OccupantSpec(new Vector2Int(3, 1), OccupantKind.Tough),
+                new OccupantSpec(new Vector2Int(2, 1), OccupantKind.Green, "Yellow"),
+            };
+
+            var grid = BuildGrid(6, 6);
+            PlaceOnGrid(grid, occupants);
+            var gridBoard = new GridEffectBoard(grid, OccupantRadius);
+            gridBoard.Rebuild(hostSlot);
+
+            var workingSet = BuildWorkingSet(grid, occupants);
+            var simBoard = new ShotSimEffectBoard(BuildLattice(grid));
+            simBoard.Bind(workingSet, workingSet.Length, hostSlot);
+
+            var crossParams = new LaserCrossParams(castRadius: 0.1f, castDistance: 4.5f);
+            var origin = (Vector2)grid.IndexToWorldPosition(hostSlot);
+            var rainbowColorId = GamePalette.RainbowColorId;
+
+            var gridHits = new List<EffectHit>();
+            LaserCross.Resolve(gridBoard, origin, rotationDegrees: 0f, true, rainbowColorId, in crossParams, gridHits);
+
+            var simHits = new List<EffectHit>();
+            LaserCross.Resolve(simBoard, origin, rotationDegrees: 0f, true, rainbowColorId, in crossParams, simHits);
+
+            AssertSameHitSet(gridBoard, gridHits, simBoard, simHits);
+
+            Assert.AreEqual(3, gridHits.Count, "two direct hits plus exactly one conversion — no redundant recolor of the already-hit neighbour, no conversion of the non-paintable one");
+            AssertHit(gridBoard, gridHits, new Vector2Int(3, 2), EffectHitKind.Damage);
+            AssertHit(gridBoard, gridHits, new Vector2Int(4, 2), EffectHitKind.Damage);
+            AssertHit(gridBoard, gridHits, new Vector2Int(2, 1), EffectHitKind.Recolor, rainbowColorId);
+            AssertNoHit(gridBoard, gridHits, new Vector2Int(3, 1));
         }
 
         private static void PlaceOnGrid(SlotGrid grid, IReadOnlyList<OccupantSpec> occupants)

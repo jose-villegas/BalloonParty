@@ -59,6 +59,26 @@ namespace BalloonParty.Tests.ShotSolver
             return new ShotItemLayer(effectParams, in lattice, rainbowColorId);
         }
 
+        // Phase C3 (Laser): a real Laser config entry — same one-item-type-worth-of-settings
+        // convention as CreateBombItemLayer above (castRadius/castDistance map onto
+        // LaserEffectParams's CircleCastRadius/RaycastDistance).
+        private static ShotItemLayer CreateLaserItemLayer(
+            float castRadius, float castDistance, int damage, DamageFlags flags = DamageFlags.Normal,
+            string rainbowColorId = null)
+        {
+            var effectParams = new Dictionary<ItemType, ItemEffectParams>
+            {
+                {
+                    ItemType.Laser,
+                    new ItemEffectParams(
+                        default, new LaserEffectParams(castDistance, castRadius, colorCycles: 0f), default, default,
+                        default, damage, flags)
+                },
+            };
+            var lattice = default(ShotSlotLattice);
+            return new ShotItemLayer(effectParams, in lattice, rainbowColorId);
+        }
+
         // Shared by the fast-path lock test below — a full-tuple comparison, not just the four fields
         // the original Shield-era locks checked (see their own comment for why the complete tuple
         // matters: a stray item-plumbing side effect could easily land in a field neither of them read).
@@ -716,6 +736,251 @@ namespace BalloonParty.Tests.ShotSolver
 
             AssertResultsMatch(plainResult, itemsNullResult);
             AssertResultsMatch(plainResult, missingConfigResult);
+        }
+
+        [Test]
+        public void ApplyEffectHits_LaserFlagsPiercing_PopsAnUnbreakableAndFollowsOrdinaryPerColorStreak()
+        {
+            // Design ruling 2026-07-25: the laser's ItemConfiguration.asset _damageFlags was a CONFIG
+            // ERROR (previously -1), now fixed to 1 (DamageFlags.Piercing only) — no WildcardStreak, no
+            // DirectHit, no DeferredStreak. Piercing alone still pops EVERYTHING in the corridor
+            // (unbreakables included, HitsRemaining == int.MaxValue), but every item pop otherwise
+            // follows the ORDINARY per-hit streak rule (adoption/refund are suppressed for any item
+            // cause regardless of flags — see ShotPopCause.IsProjectileContact's own doc): each pop
+            // records its OWN colour, so two DIFFERENT colours in a row reset the streak rather than
+            // climbing color-agnostically.
+            //
+            // Host (LAST board index, so its own pop is a swap-remove self-copy — RemoveActive copies
+            // the last active element into the removed slot, a no-op when that slot IS the last one —
+            // leaving the two right-arm targets at their original indices/order) pops via direct
+            // contact (Red, streak 1, score 2*1=2). The right arm then hits, in board order: Blue
+            // (ordinary Green, streak resets "Red"->"Blue"=1, score 3*1=3), then the Unbreakable
+            // (PaysSourceColor pays the host's OWN colour "Red", streak resets "Blue"->"Red"=1, ToughsCleared++,
+            // score 5*1=5). Total = 2+3+5 = 10.
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(1f, 1f), 0.05f, "Blue", 3, 1, new Vector2Int(1, 0), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Tough(
+                    new Vector2(2f, 1f), 0.05f, 5, int.MaxValue, new Vector2Int(2, 0), 0, 0, 0f, false, null,
+                    paysSourceColor: true),
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0.05f, "Red", 2, 1, new Vector2Int(9, 9), 0, 0, 0f, false, null,
+                    item: ItemType.Laser),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet,
+                items: CreateLaserItemLayer(castRadius: 0.1f, castDistance: 3f, damage: 1, flags: DamageFlags.Piercing));
+
+            Assert.AreEqual(3, result.Pops, "host + both right-arm targets, including the int.MaxValue unbreakable");
+            Assert.AreEqual(1, result.ToughsCleared, "the Unbreakable's PaysSourceColor pop still tallies as a tough");
+            Assert.AreEqual(2 + 3 + 5, result.RawScore);
+            Assert.IsTrue(result.BoardCleared);
+        }
+
+        [Test]
+        public void ApplyEffectHits_LaserFlagsFlow_NonPiercingDamageMerelyDecrementsATough()
+        {
+            // Proves the activation's OWN configured Flags/Damage actually reach ApplyEffectHits (not
+            // just a hard-coded Piercing path) — a contrived non-Piercing flags value against
+            // damage:3 leaves a 5-HP tough at 2 (survives), rather than popping it outright.
+            var board = new[]
+            {
+                ShotBoardBuilder.Tough(
+                    new Vector2(1f, 1f), 0.05f, 9, 5, new Vector2Int(1, 0), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0.05f, "Red", 2, 1, new Vector2Int(9, 9), 0, 0, 0f, false, null,
+                    item: ItemType.Laser),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet,
+                items: CreateLaserItemLayer(castRadius: 0.1f, castDistance: 3f, damage: 3, flags: DamageFlags.Normal));
+
+            Assert.AreEqual(1, result.Pops, "only the host pops — the tough merely takes damage");
+            Assert.IsFalse(result.BoardCleared);
+            Assert.AreEqual(2, workingSet[0].HitsRemaining, "5 - damage(3) = 2 — hit, but survives (self-copy keeps its index stable)");
+        }
+
+        [Test]
+        public void ApplyEffectHits_LaserOriginOverlap_HitsAnOccupantAlreadyTouchingTheHost()
+        {
+            // Unity's own CircleCast reports a start-overlap as an immediate hit — mirrored by
+            // SegmentHitsCircle's own overlap branch. An occupant placed a negligible distance from
+            // the host's own centre is also, incidentally, the "straddles two arms" case the mirror
+            // test calls out: since all four arms share the same origin, a point essentially AT that
+            // origin is within reach of every arm simultaneously — the per-arm dedup (HitScratch) is
+            // what keeps it a SINGLE hit rather than four.
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1.0001f), 0.05f, "Blue", 4, 1, new Vector2Int(1, 0), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0.05f, "Red", 2, 1, new Vector2Int(9, 9), 0, 0, 0f, false, null,
+                    item: ItemType.Laser),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet,
+                items: CreateLaserItemLayer(castRadius: 0.3f, castDistance: 1f, damage: 1, flags: DamageFlags.Normal));
+
+            Assert.AreEqual(2, result.Pops, "the overlap-at-origin occupant pops exactly once, not once per arm");
+            Assert.IsTrue(result.BoardCleared);
+        }
+
+        [Test]
+        public void ApplyEffectHits_LaserSpinExtrapolation_DifferentSpinRatesProduceDifferentHitSets()
+        {
+            // Host radius 0 (a point target) with the default projectileSpeed(1)/no cruise makes tHit
+            // exactly 1.0 (distance 1 / speed 1) — so activation.SpinDegrees (host.ItemSpinDegrees(0) +
+            // host.ItemSpinRate * tHit) equals the configured spin rate EXACTLY. spin:0 keeps the cross
+            // axis-aligned, hitting the target sitting on the +x arm (distance 1, combined radius 0.1:
+            // entry 1-0.1=0.9 <= castDistance 1.0). spin:45 rotates every arm 45° off that axis — the
+            // target's perpendicular distance from each rotated ray becomes sqrt(0.5)>0.1 (hand-derived:
+            // toCenter=(-1,0), |along|=cos45=0.7071 on every arm by symmetry, discriminant =
+            // along^2 - |toCenter|^2 + combinedRadius^2 = 0.5 - 1 + 0.01 < 0 on all four — a clean miss),
+            // so the SAME board geometry produces a different hit set purely from the spin rate.
+            var target = ShotBoardBuilder.Green(
+                new Vector2(1f, 1f), 0.05f, "Blue", 3, 1, new Vector2Int(1, 0), 0, 0, 0f, false, null);
+            var itemLayer = CreateLaserItemLayer(castRadius: 0.05f, castDistance: 1.0f, damage: 1, flags: DamageFlags.Normal);
+
+            var axisAlignedBoard = new[]
+            {
+                target,
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0f, "Red", 2, 1, new Vector2Int(9, 9), 0, 0, 0f, false, null,
+                    item: ItemType.Laser, spin: 0f),
+            };
+            var axisAlignedWorkingSet = new ShotBalloonState[axisAlignedBoard.Length];
+            var axisAlignedResult = ShotSimulator.Simulate(
+                axisAlignedBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0,
+                projectileContactRadius: 0f, workingSet: axisAlignedWorkingSet, items: itemLayer);
+
+            Assert.AreEqual(2, axisAlignedResult.Pops, "spin 0 keeps the arm on-axis — the target is hit");
+            Assert.IsTrue(axisAlignedResult.BoardCleared);
+
+            var rotatedBoard = new[]
+            {
+                target,
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0f, "Red", 2, 1, new Vector2Int(9, 9), 0, 0, 0f, false, null,
+                    item: ItemType.Laser, spin: 45f),
+            };
+            var rotatedWorkingSet = new ShotBalloonState[rotatedBoard.Length];
+            var rotatedResult = ShotSimulator.Simulate(
+                rotatedBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: rotatedWorkingSet, items: CreateLaserItemLayer(castRadius: 0.05f, castDistance: 1.0f, damage: 1, flags: DamageFlags.Normal));
+
+            Assert.AreEqual(1, rotatedResult.Pops, "spin 45 rotates every arm off-axis — the identical target now misses");
+            Assert.IsFalse(rotatedResult.BoardCleared);
+        }
+
+        [Test]
+        public void ApplyEffectHits_LaserRainbowHost_BorderingConversionSkipsToughConvertsGreen()
+        {
+            // Mirrors LaserItemHandler.ConvertBorderingNeighbors at the loop level (the CORE-level
+            // already-hit-exclusion/dedup is pinned directly against both IEffectBoard adapters in
+            // EffectBoardMirrorTests.LaserResolve_RainbowHostBorderingConversion_GridAndSimAgreeOnHitSet).
+            // The hit target sits at slot (2,3); its hex neighbours (1,3) [paintable Green, parked far
+            // off any cast arm at (50,50) so it only ever converts, never gets a direct hit] and (3,3)
+            // [non-paintable Tough, parked at (60,60)] are addressed purely by SLOT, independent of
+            // their (deliberately off-axis) positions.
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(1f, 1f), 0.05f, "Blue", 1, 1, new Vector2Int(2, 3), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Green(
+                    new Vector2(50f, 50f), 0.05f, "Green", 1, 1, new Vector2Int(1, 3), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Tough(
+                    new Vector2(60f, 60f), 0.05f, 1, 5, new Vector2Int(3, 3), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Rainbow(
+                    new Vector2(0f, 1f), 0.05f, GamePalette.RainbowColorId, 1, 1, new Vector2Int(5, 5), 0, 0, 0f,
+                    false, null, item: ItemType.Laser),
+            };
+            var workingSet = new ShotBalloonState[board.Length];
+
+            var result = ShotSimulator.Simulate(
+                board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: workingSet,
+                items: CreateLaserItemLayer(
+                    castRadius: 0.1f, castDistance: 2f, damage: 1, flags: DamageFlags.Normal,
+                    rainbowColorId: GamePalette.RainbowColorId),
+                rainbowColorId: GamePalette.RainbowColorId, allowedColors: new[] { "Blue" });
+
+            Assert.AreEqual(2, result.Pops, "host + the one right-arm target; both neighbours survive untouched by geometry");
+            Assert.IsFalse(result.BoardCleared);
+
+            var green = FindByPosition(workingSet, new Vector2(50f, 50f));
+            Assert.IsTrue(green.IsRainbow, "the surviving paintable neighbour converts");
+            Assert.AreEqual(GamePalette.RainbowColorId, green.ColorId);
+
+            var tough = FindByPosition(workingSet, new Vector2(60f, 60f));
+            Assert.IsFalse(tough.IsRainbow, "a non-paintable (tough) neighbour is never converted");
+        }
+
+        // Entries a pop's own swap-remove leaves reordered are still findable by their (untouched)
+        // world position — a plain linear scan, since this test only cares about the two survivors'
+        // final colour state, not their array index.
+        private static ShotBalloonState FindByPosition(ShotBalloonState[] workingSet, Vector2 position)
+        {
+            for (var i = 0; i < workingSet.Length; i++)
+            {
+                if (workingSet[i].Position == position)
+                {
+                    return workingSet[i];
+                }
+            }
+
+            Assert.Fail($"no working-set entry at {position}");
+            return default;
+        }
+
+        [Test]
+        public void ApplyEffectHits_LaserArmLengthBoundary_JustInsideHitsJustOutsideSurvives()
+        {
+            // castRadius 0 + the target's own 0 radius = a point target, so the entry distance equals
+            // the raw offset exactly — a clean ±0.01 margin around castDistance 1.0, same convention as
+            // BombBlast's own radius-boundary test.
+            var insideBoard = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(0.99f, 1f), 0f, "Blue", 3, 1, new Vector2Int(1, 0), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0f, "Red", 2, 1, new Vector2Int(9, 9), 0, 0, 0f, false, null,
+                    item: ItemType.Laser),
+            };
+            var insideWorkingSet = new ShotBalloonState[insideBoard.Length];
+            var insideResult = ShotSimulator.Simulate(
+                insideBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: insideWorkingSet,
+                items: CreateLaserItemLayer(castRadius: 0f, castDistance: 1.0f, damage: 1, flags: DamageFlags.Normal));
+
+            Assert.AreEqual(2, insideResult.Pops, "distance 0.99 is inside castDistance 1.0 — the target dies");
+            Assert.IsTrue(insideResult.BoardCleared);
+
+            var outsideBoard = new[]
+            {
+                ShotBoardBuilder.Green(
+                    new Vector2(1.01f, 1f), 0f, "Blue", 3, 1, new Vector2Int(1, 0), 0, 0, 0f, false, null),
+                ShotBoardBuilder.Green(
+                    new Vector2(0f, 1f), 0f, "Red", 2, 1, new Vector2Int(9, 9), 0, 0, 0f, false, null,
+                    item: ItemType.Laser),
+            };
+            var outsideWorkingSet = new ShotBalloonState[outsideBoard.Length];
+            var outsideResult = ShotSimulator.Simulate(
+                outsideBoard, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
+                workingSet: outsideWorkingSet,
+                items: CreateLaserItemLayer(castRadius: 0f, castDistance: 1.0f, damage: 1, flags: DamageFlags.Normal));
+
+            Assert.AreEqual(1, outsideResult.Pops, "distance 1.01 is outside castDistance 1.0 — no hit at all");
+            Assert.IsFalse(outsideResult.BoardCleared);
         }
     }
 }
