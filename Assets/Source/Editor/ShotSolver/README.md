@@ -20,6 +20,8 @@ unit-testable outside the editor.
 | `ShotBoardDynamics` | `Solver/` | The dynamic-board half (plan §7): owns a real headless `SlotGrid` + `GridBalanceQuery` + `BalancePlanner` over stub actors, schedules flight-rebalance pulses on the sim timeline, and keeps per-balloon nudge-impulse state. Built once per gather, reset per simulated flight |
 | `ShotSimBoardActor` | `Solver/` | The stub actors (`ShotSimDynamicActor`/`ShotSimStaticActor`) the dynamics grid is populated with, plus the per-flight snapshot structs for non-target actors |
 | `ShotMotionMath` | `Solver/` | Pure math: the nudge `Reach` envelope (mirrors `BalloonMotionTicker` exactly) and the moving-circle entry solve (relative-velocity quadratic, reduces to the exact static solve at zero velocity) |
+| `ShotItemLayer` | `Solver/` | Item-carrier layer (plan Phase C) — resolves a popped host's `ItemType` into a `ShotItemOutcome` (shield/pierce/speed-buff grants) plus a list of `EffectHit`s against a bound `ShotSimEffectBoard`, draining chained activations breadth-first up to `MaxActivationsPerFlight` |
+| `ShotSimEffectBoard` | `Solver/` | The sim's `IEffectBoard` adapter (`Item/Effects/`) — rebuilds `EffectOccupant`s from the active working set (statics and the popped host excluded) over a `ShotSlotLattice` (`HexCoordinates` math only, no live grid/dynamics reference), so an item core selects identically whether or not a dynamic board is present |
 
 ## Rule mirroring
 
@@ -31,7 +33,12 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   analytic entry point already sits exactly on the contact circle, so that method's backtrack
   resolves to zero and returns the exact contact normal, not an approximation. Unbreakables enter
   the board as `int.MaxValue`-durability targets: permanent deflectors that never pop and score
-  nothing on deflect, exactly like the game.
+  nothing on deflect, exactly like the game. Live itself used to disagree with this on grazing
+  contacts — the swept capsule collider's nose reaches past the analytic circle on ~47% of live
+  deflects, sending them down a degenerate fallback that never re-anchored the flight segment and
+  could teleport the shot; fixed in `5d401097`, so the analytic path above is now what live
+  actually takes on every deflect, closing what had been the dominant accuracy gap on
+  deflect-heavy shots.
 - **Interactive statics** (Deflector/Gatekeeper/Absorber, Phase A) — collide with the shot while
   still occupying their balance-grid slot. A Deflector has no durability capability at all, so it
   gets the same `int.MaxValue` permanent-deflect treatment as an Unbreakable balloon. A
@@ -114,6 +121,26 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   WOBBLED centre (waypoint 0 = view position in the live `StartBalanceTween`, with the ticker
   re-adding impulses on top of tween writes — the brief start-offset double-carry is faithful).
   Pops `Remove` from the dynamics grid so later pulses see the gaps. With no dynamics supplied the loop takes the original static fast path unchanged.
+- **Items** (Phase C) — an item carrier is opt-in: `ShotItemLayer` is a nullable peer of
+  `dynamics` on `Simulate` (`items: null` ⇒ the original loop runs byte-for-byte unchanged).
+  Assignment is spawn-time (`ItemAssigner`), so which balloon carries what is a deterministic fact
+  of the gather, never something the flight itself rolls. On a host pop the layer resolves the
+  item's effect by running the same pure per-item core a future live repoint would share
+  (`BombBlast`/`LaserCross`/`LightningChain`/`PaintSpread`, behind `IEffectBoard`'s two adapters —
+  `GridEffectBoard`, live-side, and `ShotSimEffectBoard` here), draining a FIFO queue
+  breadth-first — a popped item's own effect chaining into another item resolves on a LATER
+  iteration, mirroring `ItemActivator`'s per-frame cadence — bounded by `MaxActivationsPerFlight`
+  (32). Item pops score through the SAME pop-scoring dispatch a projectile contact uses, with
+  colour adoption and the shield refund gated OFF (verified: both live only in
+  `ProjectileHitResolver.ResolveContactPop`, which an item handler never reaches); they nudge
+  their hit neighbours and chain their own carried item exactly like a direct pop would. Shield
+  grants +1 projectile shield (a rainbow host additionally grants the until-wall rainbow buff);
+  Snipe arms the lance (piercing, without entering cruise) plus the non-stacking speed buff (a
+  rainbow host additionally grants the until-pierce-end rainbow buff) — there is deliberately
+  **no `DamageFlags.DirectHit` gate** (José's ruling, 2026-07-25: the lance is recoverable off an
+  AoE pop too, matching the live code, which has none). An armed lance is barred from later
+  entering cruise (`ProjectileView.TryEnterCruise`'s own bar, mirrored by `HandleWallBounce`'s
+  `!state.IsPiercing` guard), so it can never layer cruise's per-shield speed tap on top.
 
 ## Accepted approximations (plan §7)
 
@@ -122,6 +149,14 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   drops from that point. Related edge: chained activations enqueue in the chain's hit order, and
   two EXACTLY equidistant lightning targets can receive swapped jump indices between sim and live
   (unstable sort) — observable only when a tie sits right at the budget wall.
+- Item effects apply INSTANTANEOUSLY on the same event as the host's pop; live's `ItemActivator`
+  yields one frame before calling `Activate()`. The sim has no per-frame concept to skip past — it's
+  event-to-event, not framed — so this is a structural gap rather than a fidelity one: the eventual
+  outcome is identical, only the (unmodeled) one-frame stagger between pop and effect is missing.
+- A Laser's captured spin rate is extrapolated LINEARLY to the predicted contact time
+  (`host.ItemSpinDegrees + host.ItemSpinRate × tHit`) — live's `LaserItemRotation` angle is sampled
+  once at gather (a snapshot of an `Update`-driven rotation), never re-queried at hit time, so this
+  is an estimate rather than the exact angle a live cast would read.
 - The live balancer notices an interval crossing on a render frame and defers the actual
   Balance() one more — modeled as a pulse execution delay the window estimates from the live
   frame time (~1.5 × `Time.smoothDeltaTime`), an estimate rather than the exact per-frame lag.
@@ -136,18 +171,22 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   and the small, smooth nudge envelope are both absorbed by the refinement, not modeled exactly.
 - (The live flight itself is now the exact billiard: walls mirror the overshoot and deflects carry
   the penetration remainder, so no truncation gap exists between game and sim at bounces.)
-- `HasRainbowBuff` always ends in the sim on the very next shield-losing wall bounce
+- `RainbowBuffUntilWall` always ends in the sim on the very next shield-losing wall bounce
   (`HandleWallBounce` resets it unconditionally) — exact for the Shield item's grant
-  (`WallBounceEndCondition`, which really does end on the first wall bounce), but an
-  approximation for a Snipe-granted RainbowShield riding pierce: live only ends that one at the
-  pierce DISCHARGE wall (`PierceEndedEndCondition`), which can be several bounces later. No
-  buff-grant seam exists yet (that's Phase C) to tell the sim which end condition actually backs a
-  live grant, so this is declared until Phase E2 models `PendingPierceHits`/discharge.
-- `Simulate`'s four `starting*` parameters (`startingRainbowBuff`, `startingProjectileColor`,
-  `startingStreakColor`, `startingStreakCount`) are a test seam, not a live-gather input — no
-  gather populates them yet (buff GRANTS, and a streak already in progress when one lands
-  mid-flight, are Phase C). They exist so tests exercise D-core's scoring/end-condition mirrors
-  ahead of the item layer, and will fold into a proper seed struct once Phase C lands.
+  (`WallBounceEndCondition`, which really does end on the first wall bounce). Phase C's buff-grant
+  seam now DOES tell the sim which end condition backs a grant (a separate
+  `RainbowBuffUntilPierceEnd` field for the Snipe/pierce-riding case), but the sim can't yet act on
+  it: `HandleWallBounce` only clears `IsPiercing`/`HasSpeedBuff`/`RainbowBuffUntilPierceEnd` on a
+  bounce where `IsCruising` is ALSO true (the cruise-earned-pierce case) — a pure Snipe grant never
+  sets `IsCruising`, so today it (and its riding speed/rainbow buffs) rides for the rest of the
+  simulated flight instead of ending at the live pierce DISCHARGE wall
+  (`PierceEndedEndCondition`). Phase E2's `PendingPierceHits`/discharge model is the fix.
+- `Simulate`'s `in ShotFlightSeed seed` parameter (folded from four separate `starting*` params in
+  Phase C0) is a test seam, not a live-gather input — `ShotBoardGather.Gather` always passes
+  `default`, since a freshly loaded shot is a `new ProjectileModel` at config defaults with no
+  buffs and no in-progress streak (G8). It exists so tests exercise D-core's scoring/end-condition
+  mirrors and the item layer's mid-flight buff grants without needing a live projectile to seed
+  from.
 - Pre-existing gap (E4, found during the D-core review): the sim's non-piercing
   `HitsRemaining > 1` branch always deflects a surviving multi-hit target, but live only
   `ToughBalloonModel`/`UnbreakableBalloonModel` actually return `HitOutcome.Deflect` — a surviving

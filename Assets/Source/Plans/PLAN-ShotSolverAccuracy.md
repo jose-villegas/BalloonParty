@@ -29,7 +29,7 @@ spawn-rolled move speeds, full nudge-impulse mirroring, pops opening grid gaps.
 |---|-----|---------------|--------------------|
 | G1 | Interactive statics invisible | `AbsorberActorModel` ends the turn; `DeflectorActorModel` deflects forever; `GatekeeperActorModel` deflects until `HitsRemaining==0` then pops (scoreless, streak-neutral — see Phase A) | No collision geometry — the sim flies through; Absorber is worst (phantom pops after the turn already ended) |
 | G2 | Weight system stubbed | Color-diagonal / line-forming / clumping `WeightBias` (config: bias 2–3 on every type) + `OmnidirectionalBalance` feed `MoveWeightEvaluator` | Stub returns 0 / false → balance moves can diverge from the live planner, compounding per pulse |
-| G3 | Item carriers unmodeled | Items are assigned at spawn (`ItemAssigner`) — knowable at gather. On host pop: Shield +1 projectile shield; Bomb blast (hex neighbours guaranteed-kill within overlap); Laser 4 casts at captured spin; Lightning same-color chain; Paint triangle recolor; Snipe arms pierce+speed on DirectHit; rainbow-host variants convert to rainbow | Nothing |
+| G3 | Item carriers unmodeled | Items are assigned at spawn (`ItemAssigner`) — knowable at gather. On host pop: Shield +1 projectile shield; Bomb blast (hex neighbours guaranteed-kill within overlap); Laser 4 casts at captured spin; Lightning same-color chain; Paint triangle recolor; Snipe arms pierce+speed on ANY pop, no DirectHit gate (José's ruling, 2026-07-25 — corrected from this row's earlier claim); rainbow-host variants convert to rainbow | Nothing (diagnostic predates Phase C — see §4 Phase C, now shipped) |
 | G4 | Rainbow/wildcard out of scope | Wildcard pop keeps projectile color; colorless-projectile rainbow pop defers streak; rainbow-buffed shot streaks color-agnostically + converts pop neighbours; rainbow attribution pays every allowed color; soap washes projectile colorless | Rainbow = ordinary color string; soap wash unmodeled |
 | G5 | Pierce discharge timing | Plowed toughs stay ON the grid until wall-bounce discharge — and a death wall never discharges them (death check precedes the discharge branch, `ProjectileMotionResolver.Step`) | Sim pops+removes at contact → balance pulses see a different grid |
 | G6 | Sweep taps missing | A straight segment whose corridor holds only 1-HP pops awards a cruise tap (same speed/pierce counter as wall taps) | Only wall-bounce taps |
@@ -180,7 +180,10 @@ with a test.
 - Rainbow scoring is CORE (always on — a rainbow balloon on the board scores correctly with
   `items: null`); effect-driven conversions and buff GRANTS live in the item layer.
 
-### Phase C — Item carriers (G3) — depends on B + D-core
+### ✅ Phase C — Item carriers (G3) — depends on B + D-core
+
+**Status: Complete** (C0–C6, `235fc04a..289d90d3`).
+
 - Gather reads `IHasItemSlot.Item` per balloon → snapshot `ItemType`; `ItemEffectParams`
   snapshotted once from `IItemConfiguration` (+ `IGamePalette` for rainbow ids) — both already
   registered in `GameLifetimeScope`.
@@ -210,8 +213,8 @@ with a test.
   host converts the group — colorless-projectile fallback mirrors `FindNearestColorId`)
   → **C5 Paint** (reuse `PaintTriangle.Build`/`PackBlobs` + shared `PaintSpread` bucketing;
   recolor the working set instantly and BEFORE the next contact resolves; `IResistsPaint`
-  respected; rainbow holder paints rainbow) → **C6 Snipe** (DirectHit host → arm pierce + a
-  non-stacking speed buff; folds into E2).
+  respected; rainbow holder paints rainbow) → **C6 Snipe** (host arms pierce + a non-stacking
+  speed buff on ANY pop — no DirectHit gate, matching live; folds into E2).
 
 ### Phase E — Flight residuals (G5, G6, G7 + E4) — depends on 0a; E2 folds C6
 - **E4 (found during the D-core review, pre-existing gap):** the sim's non-piercing
@@ -311,5 +314,74 @@ including E2's death-wall quirk verbatim).
    divergence data.
 2. Live Bomb/Laser repoint onto analytic cores: gated by the PlayMode equivalence tests; fall
    back to sim-only cores + documented delta if unsettled-board behavior differs.
-3. Phase B helper placement: `Shared/Extensions` (repo rule, default) vs `Slots/Grid` co-location
-   with `MoveWeightEvaluator`.
+3. ~~Phase B helper placement~~ RESOLVED: `Shared/Extensions/BalanceBiasExtensions.cs` (repo rule
+   won; shipped in fdc74b8b).
+
+## 8. Remaining work — detailed status (2026-07-26)
+
+Shipped: Phases 0/A/B/D-core ✅, Phase C ✅ (C0–C6, 235fc04a..289d90d3), plus two live fixes the
+work surfaced — the graze-deflect teleport (5d401097: capsule-nose mismatch sent ~47% of deflects
+down a never-re-anchoring fallback diverging up to 21.8° from the exact billiard; the sim was
+immune) and the laser `_damageFlags: -1` config error (9d99272a → Piercing only). The trio
+cadence (architect memo → implement → test audit + review → commit) applies to everything below.
+
+### E — flight residuals (next; ONE architect memo for all four, they interact)
+- **E1 sweep taps:** mirror `TryAwardSweepTap`/`SegmentSweepValid`; REQUIRES unifying wall +
+  sweep taps into one `TotalCruiseTaps` counter (the sim derives speed from bounce count today);
+  item pops must not count toward sweep validity.
+- **E2 pierce discharge:** pending plowed toughs stay on the grid until the surviving wall, then
+  discharge together (strike order; `+WildcardStreak` if the pierce was rainbow — mirror
+  `PierceWasRainbow`); balance pulses must see pending toughs; KEEP the death-wall-never-
+  discharges quirk (test cites `ProjectileMotionResolver.Step`); C6's pierce-end flag clears
+  move/extend here; retires the snipe-pierce-never-ends approximation; verify the doomed-shot
+  pending-flush (`DestroyProjectile`) interaction with E3; good moment to split ShotSimulator's
+  over-complexity methods (advisory WARNs).
+- **E3 last-shield glide:** `IsLastShieldApproach` mirror — suppress `TryRunPulseIfDue` + switch
+  the final segment to the fixed eased timeline (gather Duration/Curve; TapLagSeconds technique);
+  negative case: blocked lookahead keeps pulsing.
+- **E4 soap pass-through:** survive-outcome discriminator on the snapshot (surviving multi-HP
+  cluster = PassThrough, unbent; tough/unbreakable = Deflect); wash still applies; mirror-test
+  against live `SurviveOutcome` values.
+
+### F — instrumentation + acceptance (after E)
+Pure diff-two-timelines function (unit-tested) surfaced in the window; final README divergence
+sweep (add the shockwave decision outcome); the §5 20-shot acceptance protocol (statics rows N/A
+until live wiring); per-phase 3–5-shot batches for E first; optional ≥1-balloon robustness tag.
+
+### Live repoint track (any time; separable commits)
+(1) test-everything WRITES the PlayMode set-equality tests (specced in §5, not yet written);
+(2) José runs them in-editor; (3) green ⇒ one revertable commit per handler (Bomb/Laser
+selection → core + `GridEffectBoard`; VFX/timing/dispatch untouched); red on unsettled boards ⇒
+cores stay sim-only, delta documented; (4) then repoint `FindNearestColorId`'s single caller
+onto `LightningChain.FindNearestConcreteColor`.
+
+### José's gates (accumulated)
+1. EditMode suite run (~150 new tests since the last green run; the two graze-deflect tests flip
+   red→green). 2. Play-mode graze check + device test (5d401097). 3. B3 decision: projectile
+   CircleCollider2D swap — eliminates the capsule-nose mismatch class but changes contact feel;
+   optional post-fix. 4. Laser scoring feel sanity (Piercing-only flags change streak behavior
+   around laser clears). 5. Statics live wiring (GridActorExpansion: prefabs + colliders on
+   `GridActorView._collider` + spawner registration + projectile→IHitable routing) — Phase A is
+   sim-only until then.
+
+### Deferred code follow-ups (small, none blocking)
+Factor `ProjectileMotionResolver`'s duplicated quadratic setup (reviewer MEDIUM); hoist the
+segment-vs-circle formula (`SegmentHitsAnyBalloon` + `LaserCross.SegmentHitsCircle`) to Shared;
+H2 cruise-remainder clamp (only if playtests show pop-skipping at high cruise speed); **H6
+hex-seam double-deflect** (adjacent contact circles overlap 0.75 vs 0.875 ⇒ two synchronous
+deflects, ~145° heading corruption — needs its own investigation; predates all this work);
+cosmetics (always-true Try-pattern flatten in gather, `ResolveSnipe` declaration order,
+`ResolvePaint` Bind ordering, `GridActorView.ContactRadius` visibility pass, older lock test →
+`AssertResultsMatch`); optional careful `BalloonView.ContactRadius` unification (behavior
+change — feel check required). `ShotItemActivation.IsDirectHit` is stored-but-unread (kept as
+the seam for E2 discharge bookkeeping / a future pop-spawn model).
+
+### G — headless level diagnostics (follow-up tier; unchanged spec in §4 Phase G)
+G-local prereqs first: `ItemAssignmentPlanner` + `SpawnPlanner` pure-core extractions with an
+injectable `IRandomSource`, and `RollMoveSpeed` through the seed. Biggest risk stays
+turn-SEQUENCING drift — pin the turn-sequence contract against a play-mode-captured trace before
+trusting any aggregate metric.
+
+### Design questions parked for José
+Cruise ramp × snipe speed buff stacking multiplicatively (live behavior; sim mirrors it —
+intended?); statics wiring priority; whether pop-spawn deserves more than documentation in F.
