@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Nudge;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Solver;
 using UnityEngine;
 
@@ -23,6 +24,20 @@ namespace BalloonParty.Tests.ShotSolver
         {
             var balance = new BalanceProfile(
                 slotIndex, balancePriority, maxBalanceSteps, moveSpeed, directBalanceMotion, nudgeOverrides);
+            return ShotBalloonSnapshot.ForColorTarget(position, radius, colorId, scoreValue, hitsRemaining, balance);
+        }
+
+        /// <summary>The full-fidelity overload — carries the Phase B bias fields a bias-flip test needs
+        /// (the plain balance overload leaves them at their None/0 inert defaults).</summary>
+        public static ShotBalloonSnapshot Green(
+            Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining,
+            Vector2Int slotIndex, int balancePriority, int maxBalanceSteps, float moveSpeed,
+            bool directBalanceMotion, IReadOnlyList<NudgeOverride> nudgeOverrides, bool omnidirectional,
+            BalanceBiasKind biasKind, float biasValue, int biasTypeId)
+        {
+            var balance = new BalanceProfile(
+                slotIndex, balancePriority, maxBalanceSteps, moveSpeed, directBalanceMotion, nudgeOverrides,
+                omnidirectional, biasKind, biasValue, biasTypeId);
             return ShotBalloonSnapshot.ForColorTarget(position, radius, colorId, scoreValue, hitsRemaining, balance);
         }
 

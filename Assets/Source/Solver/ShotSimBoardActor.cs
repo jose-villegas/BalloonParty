@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Nudge;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
 using UniRx;
@@ -19,16 +20,27 @@ namespace BalloonParty.Solver
         public readonly int MaxBalanceSteps;
         public readonly float MoveSpeed;
         public readonly bool DirectBalanceMotion;
+        public readonly bool Omnidirectional;
+        public readonly string ColorId;
+        public readonly BalanceBiasKind BiasKind;
+        public readonly float BiasValue;
+        public readonly int BiasTypeId;
 
         public ShotDynamicActorSnapshot(
             Vector2Int slotIndex, int balancePriority, int maxBalanceSteps, float moveSpeed,
-            bool directBalanceMotion)
+            bool directBalanceMotion, bool omnidirectional = false, string colorId = "",
+            BalanceBiasKind biasKind = BalanceBiasKind.None, float biasValue = 0f, int biasTypeId = 0)
         {
             SlotIndex = slotIndex;
             BalancePriority = balancePriority;
             MaxBalanceSteps = maxBalanceSteps;
             MoveSpeed = moveSpeed;
             DirectBalanceMotion = directBalanceMotion;
+            Omnidirectional = omnidirectional;
+            ColorId = colorId;
+            BiasKind = biasKind;
+            BiasValue = biasValue;
+            BiasTypeId = biasTypeId;
         }
     }
 
@@ -53,14 +65,14 @@ namespace BalloonParty.Solver
     }
 
     /// <summary>Stub grid actor standing in for a live balloon in the dynamic-board sim — enough of
-    /// <see cref="IWriteableDynamicSlotActor" /> and <see cref="IBalanceInfluence" /> for the real
-    /// <c>BalancePlanner</c> to move it exactly as the live balancer would (@ref plan_shot_geometry
-    /// §7b). Also carries the balance-motion segment and nudge-impulse list the moving-circle contact
-    /// solve reads (§7c). <see cref="WeightBias" /> always returns 0 and
-    /// <see cref="OmnidirectionalBalance" /> is always false — the per-type balance-bias/omnidirectional
-    /// behaviour some balloon configs opt into isn't in the plan's snapshot list; logged as an
-    /// approximation in the ShotSolver README.</summary>
-    internal sealed class ShotSimDynamicActor : IWriteableDynamicSlotActor, IBalanceInfluence
+    /// <see cref="IWriteableDynamicSlotActor" />, <see cref="IBalanceInfluence" /> and
+    /// <see cref="IBalanceBiasSource" /> for the real <c>BalancePlanner</c> to move it exactly as the
+    /// live balancer would (@ref plan_shot_geometry §7b), including the gathered actor's per-type
+    /// balance-bias/omnidirectional behaviour (@ref plan_shot_solver_accuracy §3 "Weight-bias
+    /// sharing" — <see cref="WeightBias" /> runs the identical shared formula a live model would).
+    /// Also carries the balance-motion segment and nudge-impulse list the moving-circle contact
+    /// solve reads (§7c).</summary>
+    internal sealed class ShotSimDynamicActor : IWriteableDynamicSlotActor, IBalanceInfluence, IBalanceBiasSource
     {
         internal const int MaxImpulses = 8; // mirrors BalloonMotionTicker.MaxImpulsesPerView
 
@@ -84,7 +96,15 @@ namespace BalloonParty.Solver
         public float MoveSpeed { get; internal set; }
         public int BalancePriority { get; internal set; }
         public bool DirectBalanceMotion { get; internal set; }
-        public bool OmnidirectionalBalance => false;
+        public bool OmnidirectionalBalance { get; internal set; }
+
+        // IBalanceBiasSource: gathered from the live actor at CollectBoard time (ShotBoardGather) and
+        // plumbed through the actor's BalanceProfile (ShotBoardDynamics) — empty/None/0 for a stub with
+        // no bias strategy, exactly mirroring BalloonModelBase's default.
+        public string ColorId { get; internal set; } = "";
+        public int BiasTypeId { get; internal set; }
+        public BalanceBiasKind BiasKind { get; internal set; }
+        public float BiasValue { get; internal set; }
 
         /// <summary>Whether this actor also carries collision geometry in the working set (a poppable/
         /// deflectable balloon) — false for a Dynamic-but-excluded actor like an Unbreakable roamer.</summary>
@@ -105,7 +125,7 @@ namespace BalloonParty.Solver
 
         public int WeightBias(SlotGrid grid, Vector2Int candidate)
         {
-            return 0;
+            return this.Evaluate(BiasKind, grid, candidate, BiasValue);
         }
 
         /// <summary>Resets to the gathered state for a fresh flight — reused across an entire sweep's

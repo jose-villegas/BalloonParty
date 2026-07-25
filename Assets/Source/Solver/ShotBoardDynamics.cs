@@ -91,6 +91,11 @@ namespace BalloonParty.Solver
                     MoveSpeed = balance.MoveSpeed,
                     DirectBalanceMotion = balance.DirectBalanceMotion,
                     NudgeOverrides = balance.NudgeOverrides,
+                    OmnidirectionalBalance = balance.Omnidirectional,
+                    ColorId = snapshot.ColorId ?? "",
+                    BiasKind = balance.BiasKind,
+                    BiasValue = balance.BiasValue,
+                    BiasTypeId = balance.BiasTypeId,
                 };
             }
 
@@ -105,6 +110,11 @@ namespace BalloonParty.Solver
                     MaxBalanceSteps = snapshot.MaxBalanceSteps,
                     MoveSpeed = snapshot.MoveSpeed,
                     DirectBalanceMotion = snapshot.DirectBalanceMotion,
+                    OmnidirectionalBalance = snapshot.Omnidirectional,
+                    ColorId = snapshot.ColorId ?? "",
+                    BiasKind = snapshot.BiasKind,
+                    BiasValue = snapshot.BiasValue,
+                    BiasTypeId = snapshot.BiasTypeId,
                 };
             }
 

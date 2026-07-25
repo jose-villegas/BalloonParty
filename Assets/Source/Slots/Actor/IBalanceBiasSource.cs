@@ -14,5 +14,13 @@ namespace BalloonParty.Slots.Actor
         /// <summary>Opaque per-type identifier (NOT <c>BalloonType</c> — Slots must not reference Balloon);
         /// equal for two occupants a live model would consider the "same type" for line/clump bias.</summary>
         int BiasTypeId { get; }
+
+        /// <summary>Which shared formula this occupant's <c>WeightBias</c> applies —
+        /// <see cref="BalanceBiasKind.None" /> for an occupant with no bias strategy.</summary>
+        BalanceBiasKind BiasKind { get; }
+
+        /// <summary>The bias magnitude the formula named by <see cref="BiasKind" /> scales by (a live
+        /// model's config-authored balance bias).</summary>
+        float BiasValue { get; }
     }
 }

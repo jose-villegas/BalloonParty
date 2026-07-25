@@ -27,8 +27,8 @@ namespace BalloonParty.Solver
     /// <summary>Balance-grid identity/behaviour for a snapshot target — absent (null on the owning
     /// <see cref="ShotBalloonSnapshot" />) for a target with no live dynamic stub (e.g. a Phase A
     /// interactive static). <see cref="Omnidirectional" />/<see cref="BiasKind" />/<see cref="BiasValue" />/
-    /// <see cref="BiasTypeId" /> are Phase B fields — gather leaves them at their inert defaults
-    /// (false/None/0/0) until the weight-bias sharing work reads them for real.</summary>
+    /// <see cref="BiasTypeId" /> are gather-populated from the actor's <c>IBalanceInfluence</c>/
+    /// <c>IBalanceBiasSource</c> (Phase B) so the sim's stub actors reproduce the live weight system.</summary>
     internal readonly struct BalanceProfile
     {
         public readonly Vector2Int SlotIndex;

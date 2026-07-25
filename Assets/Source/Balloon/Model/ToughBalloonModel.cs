@@ -4,9 +4,7 @@ using BalloonParty.Nudge;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
-using BalloonParty.Slots.Grid;
 using UniRx;
-using UnityEngine;
 using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Balloon.Model
@@ -21,6 +19,11 @@ namespace BalloonParty.Balloon.Model
         public int ScoreValue { get; }
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
 
+        // Candidates that extend the longest straight line of same-type neighbours along one of the
+        // three hex axes score higher — steering tough balloons into walls rather than lumps.
+        public override BalanceBiasKind BiasKind => BalanceBiasKind.Line;
+        public override float BiasValue => _balanceBias;
+
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
 
         protected override HitOutcome SurviveOutcome => HitOutcome.Deflect;
@@ -34,13 +37,6 @@ namespace BalloonParty.Balloon.Model
             DeflectStampScale = config.DeflectStampScale;
             ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
-        }
-
-        // Candidates that extend the longest straight line of same-type neighbours along one of the
-        // three hex axes score higher — steering tough balloons into walls rather than lumps.
-        public override int WeightBias(SlotGrid grid, Vector2Int candidate)
-        {
-            return this.Evaluate(BalanceBiasKind.Line, grid, candidate, _balanceBias);
         }
 
         public void ResolveScoreAttribution(

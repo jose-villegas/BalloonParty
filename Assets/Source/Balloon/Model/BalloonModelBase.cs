@@ -43,6 +43,11 @@ namespace BalloonParty.Balloon.Model
         string IBalanceBiasSource.ColorId => this.GetColorId();
         int IBalanceBiasSource.BiasTypeId => (int)TypeName;
 
+        // Overridden per subclass with its config-authored bias kind/value; None/0 (this default) is
+        // exactly Unbreakable's pre-Phase-B WeightBias behavior — Evaluate(None, ...) is always 0.
+        public virtual BalanceBiasKind BiasKind => BalanceBiasKind.None;
+        public virtual float BiasValue => 0f;
+
         Vector2Int ISlotActor.SlotIndex => SlotIndex.Value;
 
         Vector2Int IWriteableSlotActor.SlotIndex
@@ -62,10 +67,11 @@ namespace BalloonParty.Balloon.Model
             OmnidirectionalBalance = config.OmnidirectionalBalance;
         }
 
-        // Subclasses override to apply their own bias strategy using config.BalanceBias.
-        public virtual int WeightBias(SlotGrid grid, Vector2Int candidate)
+        // Shared across every subclass: BiasKind picks the formula, BiasValue its magnitude — a
+        // subclass opts in purely by overriding those two properties (Evaluate(None, ...) is always 0).
+        public int WeightBias(SlotGrid grid, Vector2Int candidate)
         {
-            return 0;
+            return this.Evaluate(BiasKind, grid, candidate, BiasValue);
         }
 
         public virtual HitOutcome EvaluateHit(DamageContext context)

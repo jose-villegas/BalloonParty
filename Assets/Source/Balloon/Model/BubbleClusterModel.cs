@@ -4,9 +4,7 @@ using BalloonParty.Nudge;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
-using BalloonParty.Slots.Grid;
 using UniRx;
-using UnityEngine;
 using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Balloon.Model
@@ -20,6 +18,12 @@ namespace BalloonParty.Balloon.Model
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
         public int ScoreValue { get; }
 
+        // Clumping: candidates nearer to a same-type sibling score higher (negative bias × distance²
+        // means shorter distance = less negative = preferred). Over many balance rounds soap clusters
+        // drift together from any direction.
+        public override BalanceBiasKind BiasKind => BalanceBiasKind.Clump;
+        public override float BiasValue => _balanceBias;
+
         public override PressureResponse PushResponse => PressureResponse.RelocateNearest;
 
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
@@ -32,14 +36,6 @@ namespace BalloonParty.Balloon.Model
             _balanceBias = config.BalanceBias;
             ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
-        }
-
-        // Clumping: candidates nearer to a same-type sibling score higher (negative bias × distance²
-        // means shorter distance = less negative = preferred). Over many balance rounds soap clusters
-        // drift together from any direction.
-        public override int WeightBias(SlotGrid grid, Vector2Int candidate)
-        {
-            return this.Evaluate(BalanceBiasKind.Clump, grid, candidate, _balanceBias);
         }
 
         public void ResolveScoreAttribution(

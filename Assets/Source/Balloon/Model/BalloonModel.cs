@@ -4,9 +4,7 @@ using BalloonParty.Nudge;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
-using BalloonParty.Slots.Grid;
 using UniRx;
-using UnityEngine;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
 
@@ -24,6 +22,11 @@ namespace BalloonParty.Balloon.Model
         public float ItemActivationWeight { get; }
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
 
+        // Prefer candidates with this color nearby off-row (hex radius 2, own row excluded) — over many
+        // rebalances same-color balloons drift into diagonal lines.
+        public override BalanceBiasKind BiasKind => BalanceBiasKind.ColorDiagonal;
+        public override float BiasValue => _balanceBias;
+
         IReadOnlyReactiveProperty<string> IHasColor.Color => Color;
         IReadOnlyReactiveProperty<ItemType> IHasItemSlot.Item => Item;
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
@@ -39,13 +42,6 @@ namespace BalloonParty.Balloon.Model
             ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
             ItemActivationWeight = config.ItemActivationWeight;
-        }
-
-        // Prefer candidates with this color nearby off-row (hex radius 2, own row excluded) — over many
-        // rebalances same-color balloons drift into diagonal lines.
-        public override int WeightBias(SlotGrid grid, Vector2Int candidate)
-        {
-            return this.Evaluate(BalanceBiasKind.ColorDiagonal, grid, candidate, _balanceBias);
         }
 
         // Single-colour attribution — ignores incompleteColors (only scatter pops avoid a completed bar;

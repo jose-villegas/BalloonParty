@@ -143,10 +143,13 @@ namespace BalloonParty.Solver
                     }
 
                     var influence = actor as IBalanceInfluence;
+                    var biasSource = actor as IBalanceBiasSource;
                     otherDynamicActors.Add(new ShotDynamicActorSnapshot(
                         index, influence?.BalancePriority ?? 0, influence?.MaxBalanceSteps ?? 0,
                         balloonsConfig.ResolveMoveSpeed(influence?.MoveSpeed ?? 0f),
-                        influence?.DirectBalanceMotion ?? false));
+                        influence?.DirectBalanceMotion ?? false, influence?.OmnidirectionalBalance ?? false,
+                        biasSource?.ColorId ?? "", biasSource?.BiasKind ?? BalanceBiasKind.None,
+                        biasSource?.BiasValue ?? 0f, biasSource?.BiasTypeId ?? 0));
                 }
             }
         }
@@ -182,6 +185,7 @@ namespace BalloonParty.Solver
 
             var colorId = actor is IHasColor colorable ? colorable.Color.Value : null;
             var influence = actor as IBalanceInfluence;
+            var biasSource = actor as IBalanceBiasSource;
             var nudgeOverrides = actor is IHasNudge nudgeable ? nudgeable.NudgeOverrides : null;
 
             // The view's live position, not the slot's lattice home: balance tweens and nudge wobble
@@ -196,7 +200,11 @@ namespace BalloonParty.Solver
             var balance = new BalanceProfile(
                 index, influence?.BalancePriority ?? 0, influence?.MaxBalanceSteps ?? 0,
                 balloonsConfig.ResolveMoveSpeed(influence?.MoveSpeed ?? 0f),
-                influence?.DirectBalanceMotion ?? false, nudgeOverrides);
+                influence?.DirectBalanceMotion ?? false, nudgeOverrides,
+                omnidirectional: influence?.OmnidirectionalBalance ?? false,
+                biasKind: biasSource?.BiasKind ?? BalanceBiasKind.None,
+                biasValue: biasSource?.BiasValue ?? 0f,
+                biasTypeId: biasSource?.BiasTypeId ?? 0);
 
             snapshot = string.IsNullOrEmpty(colorId)
                 ? ShotBalloonSnapshot.ForToughTarget(position, radius, scored.ScoreValue, hitsRemaining, balance)
