@@ -1450,14 +1450,12 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         [Test]
-        public void ApplyEffectHits_PaintGreenOnRainbowTarget_ClearsIsRainbow()
+        public void ApplyEffectHits_PaintGreenOnRainbowTarget_DoesNotRecolor()
         {
-            // The other direction of the C5 headline pair: a normal (non-rainbow) host paints an
-            // ALREADY-rainbow survivor back to an ordinary colour — TryClassify accepts any IPaintable
-            // whose colour differs from the paint colour, rainbow included, and ApplyRecolor's plain
-            // assignment clears IsRainbow with no separate branch (mirrors ApplyColorChange writing
-            // IHasColor.Color.Value directly, live-side). The target sits off the flight's ray entirely
-            // (only ever reachable via Paint) so it survives to inspect afterward.
+            // A normal (non-rainbow) host paints toward an ALREADY-rainbow survivor — the rainbow
+            // balloon is immune to concrete paint (its identity is the rainbow wildcard), so the
+            // solver must skip it (no Recolor hit emitted). The target sits off the flight's ray
+            // entirely (only ever reachable via Paint) so it survives to inspect afterward.
             const float r = 1.0f;
             var board = new[]
             {
@@ -1476,12 +1474,12 @@ namespace BalloonParty.Tests.ShotSolver
                 items: CreatePaintItemLayer(spreadOffset: 0f, spreadLength: r, spreadBaseWidth: 4f * r, spreadBlobRadius: r),
                 rainbowColorId: GamePalette.RainbowColorId);
 
-            Assert.AreEqual(1, result.Pops, "only the host pops — the target survives, reachable only via paint");
+            Assert.AreEqual(1, result.Pops, "only the host pops — the target survives, immune to concrete paint");
             Assert.IsFalse(result.BoardCleared);
 
             var target = FindByPosition(workingSet, new Vector2(300f, 300f));
-            Assert.IsFalse(target.IsRainbow, "green paint clears IsRainbow on a previously-rainbow target");
-            Assert.AreEqual("Green", target.ColorId);
+            Assert.IsTrue(target.IsRainbow, "rainbow target remains rainbow — concrete paint cannot recolor it");
+            Assert.AreEqual(GamePalette.RainbowColorId, target.ColorId);
         }
 
         [Test]
