@@ -27,7 +27,9 @@ namespace BalloonParty.UI.Score
         protected override void Configure(IContainerBuilder builder)
         {
             var bars = GetComponentsInChildren<ColorProgressBar>(true);
-            var rotators = GetComponentsInChildren<TimeOfDayOrbit>(true);
+            var orbits = GetComponentsInChildren<TimeOfDayOrbit>(true);
+            var tints = GetComponentsInChildren<TimeOfDayTint>(true);
+            var swaps = GetComponentsInChildren<TimeOfDaySwap>(true);
             builder.RegisterBuildCallback(InjectChildren);
             return;
 
@@ -38,9 +40,19 @@ namespace BalloonParty.UI.Score
                     resolver.Inject(bar);
                 }
 
-                foreach (var rotator in rotators)
+                foreach (var orbit in orbits)
                 {
-                    resolver.Inject(rotator);
+                    resolver.Inject(orbit);
+                }
+
+                foreach (var tint in tints)
+                {
+                    resolver.Inject(tint);
+                }
+
+                foreach (var swap in swaps)
+                {
+                    resolver.Inject(swap);
                 }
             }
         }
