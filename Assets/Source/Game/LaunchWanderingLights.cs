@@ -5,42 +5,48 @@ using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.SceneLight;
 using UnityEngine;
-using VContainer.Unity;
+using VContainer;
 using Light = BalloonParty.Shared.SceneLight.Light;
 using Random = UnityEngine.Random;
 
 namespace BalloonParty.Game
 {
     /// <summary>
-    ///     Launch-screen ambience: a handful of soft point lights in the primary palette colours wander the
+    ///     Launch-screen ambience: a set of soft point lights in the primary palette colours wander the
     ///     play area in Brownian drift, free to roam in and out past the scenario walls (a light springs
     ///     back only once it strays a margin beyond them). Alive ONLY on the launch screen
     ///     (<see cref="NavigationState.Launch" />) — like <see cref="LaunchDisturbanceStamp" /> it drives a
     ///     Game-scope field service while the game pre-warms. The moment Play is pressed
     ///     (<see cref="LaunchAscend.IsActive" />) they fade out early, so they're gone before the game appears.
     /// </summary>
-    internal sealed class LaunchWanderingLights : IStartable, ITickable, IDisposable
+    internal sealed class LaunchWanderingLights : MonoBehaviour
     {
-        private const int LightCount = 4;
-        private const float LightRadius = 2.6f;
-        private const float LightIntensity = 2.5f;
-        private const float LightFalloffPower = 2f;
+        [Tooltip("How many lights wander. Each takes a palette colour in turn, cycling the first Color Count.")]
+        [SerializeField] private int _lightCount = 8;
 
-        // Brownian wander: a random acceleration each frame, damped by drag and capped, so the lights
-        // meander rather than run away. WallMargin is how far past the walls they may drift before the
-        // spring pulls them back — that slack is what reads as drifting "in and out" of the walls.
-        private const float BrownianAcceleration = 6f;
-        private const float Drag = 1.4f;
-        private const float MaxSpeed = 2.2f;
-        private const float WallMargin = 1.75f;
-        private const float BoundarySpring = 5f;
+        [Tooltip("How many leading palette colours the lights cycle through — the primaries.")]
+        [SerializeField] private int _colorCount = 4;
 
-        // Seconds to fade to black once Play is pressed; kept below the launch ascend so they clear early.
-        private const float FadeOutSeconds = 0.6f;
+        [SerializeField] private float _lightRadius = 2.6f;
+        [SerializeField] private float _lightIntensity = 2.5f;
+        [SerializeField] private float _lightFalloffPower = 2f;
 
-        private readonly SceneLightFieldService _lightField;
-        private readonly IGamePalette _palette;
-        private readonly IProjectileFlightConfig _flightConfig;
+        [Tooltip("Brownian wander: random acceleration applied each second, before drag and the speed cap.")]
+        [SerializeField] private float _brownianAcceleration = 6f;
+        [SerializeField] private float _drag = 1.4f;
+        [SerializeField] private float _maxSpeed = 2.2f;
+
+        [Tooltip("How far past a wall a light may drift before the spring reels it back — the slack that " +
+                 "reads as drifting in and out of the walls.")]
+        [SerializeField] private float _wallMargin = 1.75f;
+        [SerializeField] private float _boundarySpring = 5f;
+
+        [Tooltip("Seconds to fade out once Play is pressed; keep it below the launch ascend so they clear early.")]
+        [SerializeField] private float _fadeOutSeconds = 0.6f;
+
+        [Inject] private SceneLightFieldService _lightField;
+        [Inject] private IGamePalette _palette;
+        [Inject] private IProjectileFlightConfig _flightConfig;
 
         private readonly List<Light> _lights = new();
         private readonly List<IDisposable> _registrations = new();
@@ -50,15 +56,7 @@ namespace BalloonParty.Game
         private float _fade = 1f;
         private bool _done;
 
-        public LaunchWanderingLights(SceneLightFieldService lightField, IGamePalette palette,
-            IProjectileFlightConfig flightConfig)
-        {
-            _lightField = lightField;
-            _palette = palette;
-            _flightConfig = flightConfig;
-        }
-
-        void IStartable.Start()
+        private void Start()
         {
             // Only decorate the launch screen; a session that boots straight into the game gets nothing.
             if (Navigation.Current.Value != NavigationState.Launch)
@@ -69,17 +67,17 @@ namespace BalloonParty.Game
 
             _walls = new WallLimits(_flightConfig.LimitsClockwise);
 
-            var count = Mathf.Min(LightCount, _palette.Colors.Count);
-            for (var i = 0; i < count; i++)
+            var colors = Mathf.Clamp(_colorCount, 1, Mathf.Max(1, _palette.Colors.Count));
+            for (var i = 0; i < _lightCount; i++)
             {
-                var light = new Light(RandomFieldPoint(), LightRadius, LightIntensity, i, LightFalloffPower);
+                var light = new Light(RandomFieldPoint(), _lightRadius, _lightIntensity, i % colors, _lightFalloffPower);
                 _lights.Add(light);
                 _registrations.Add(_lightField.RegisterLight(light));
-                _velocities.Add(Random.insideUnitCircle * MaxSpeed);
+                _velocities.Add(Random.insideUnitCircle * _maxSpeed);
             }
         }
 
-        void ITickable.Tick()
+        private void Update()
         {
             if (_done || _lights.Count == 0)
             {
@@ -96,7 +94,7 @@ namespace BalloonParty.Game
             // down once dark — so the lights are gone before the game scene appears.
             if (LaunchAscend.IsActive || Navigation.Current.Value != NavigationState.Launch)
             {
-                _fade = Mathf.Max(0f, _fade - dt / FadeOutSeconds);
+                _fade = Mathf.Max(0f, _fade - dt / Mathf.Max(0.0001f, _fadeOutSeconds));
             }
 
             for (var i = 0; i < _lights.Count; i++)
@@ -104,10 +102,10 @@ namespace BalloonParty.Game
                 var position = (Vector2)_lights[i].Position.Value;
                 var velocity = _velocities[i];
 
-                velocity += Random.insideUnitCircle * (BrownianAcceleration * dt);
+                velocity += Random.insideUnitCircle * (_brownianAcceleration * dt);
                 velocity += InwardPull(position) * dt;
-                velocity *= Mathf.Max(0f, 1f - Drag * dt);
-                velocity = Vector2.ClampMagnitude(velocity, MaxSpeed);
+                velocity *= Mathf.Max(0f, 1f - _drag * dt);
+                velocity = Vector2.ClampMagnitude(velocity, _maxSpeed);
                 position += velocity * dt;
 
                 _velocities[i] = velocity;
@@ -115,7 +113,7 @@ namespace BalloonParty.Game
                 // Point light: keep both ends together (a diverging EndPosition would stretch it to a capsule).
                 _lights[i].Position.Value = position;
                 _lights[i].EndPosition.Value = position;
-                _lights[i].Intensity.Value = LightIntensity * _fade;
+                _lights[i].Intensity.Value = _lightIntensity * _fade;
             }
 
             if (_fade <= 0f)
@@ -124,7 +122,7 @@ namespace BalloonParty.Game
             }
         }
 
-        void IDisposable.Dispose()
+        private void OnDestroy()
         {
             Teardown();
         }
@@ -133,22 +131,22 @@ namespace BalloonParty.Game
         private Vector2 InwardPull(Vector2 position)
         {
             var pull = Vector2.zero;
-            if (position.x < _walls.Left - WallMargin)
+            if (position.x < _walls.Left - _wallMargin)
             {
-                pull.x += BoundarySpring;
+                pull.x += _boundarySpring;
             }
-            else if (position.x > _walls.Right + WallMargin)
+            else if (position.x > _walls.Right + _wallMargin)
             {
-                pull.x -= BoundarySpring;
+                pull.x -= _boundarySpring;
             }
 
-            if (position.y < _walls.Bottom - WallMargin)
+            if (position.y < _walls.Bottom - _wallMargin)
             {
-                pull.y += BoundarySpring;
+                pull.y += _boundarySpring;
             }
-            else if (position.y > _walls.Top + WallMargin)
+            else if (position.y > _walls.Top + _wallMargin)
             {
-                pull.y -= BoundarySpring;
+                pull.y -= _boundarySpring;
             }
 
             return pull;
