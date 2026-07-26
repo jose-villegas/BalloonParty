@@ -8,10 +8,11 @@ namespace BalloonParty.Display
     ///     The scene light's diffuse term for the camera's solid clear colour — the same
     ///     albedo × light response Sprite/Diffuse gives sprites, applied to the background. Owns
     ///     the AUTHORED base colour (the camera's backgroundColor becomes derived state, so the
-    ///     multiply can never compound on itself). All inputs (the authored colour, the light
-    ///     influence, and the scene light settings asset) are static once injected, so the tint is
-    ///     applied once in OnEnable; only the editor keeps re-applying every frame, so inspector
-    ///     tweaks still preview live in edit mode.
+    ///     multiply can never compound on itself). Re-applies every frame but only writes the camera
+    ///     when the derived colour actually changes, so it tracks the night-mode time-of-day sweep
+    ///     (<see cref="TimeOfDayService.CurrentColor"/> shifts at runtime as the level-up transition
+    ///     sweeps the light) yet costs a colour compare — no camera write — while the light is static.
+    ///     The same per-frame pass previews inspector tweaks live in edit mode.
     /// </summary>
     [ExecuteAlways]
     [RequireComponent(typeof(Camera))]
@@ -27,23 +28,19 @@ namespace BalloonParty.Display
         [Inject] private ISceneLightRuntime _lightRuntime;
 
         private Camera _camera;
+        private Color _lastApplied;
+        private bool _hasApplied;
 
         private void OnEnable()
         {
+            _hasApplied = false;
             Apply();
         }
 
-#if UNITY_EDITOR
         private void Update()
         {
-            // Keep re-applying every frame in the editor — edit OR play mode — so live tuning of the
-            // base colour, light influence, or the light settings asset previews instantly (the
-            // TimeOfDayService re-pushes its globals per-tick in-editor for the same reason; the sky must
-            // track the sprites it sits behind). Device builds apply once in OnEnable: there the
-            // inputs really are static.
             Apply();
         }
-#endif
 
         private void Reset()
         {
@@ -68,7 +65,15 @@ namespace BalloonParty.Display
             var lit = Color.Lerp(Color.white, tint, _lightInfluence);
             var background = _baseColor * lit;
             background.a = _baseColor.a;
+
+            if (_hasApplied && background == _lastApplied)
+            {
+                return;
+            }
+
             _camera.backgroundColor = background;
+            _lastApplied = background;
+            _hasApplied = true;
         }
     }
 }
