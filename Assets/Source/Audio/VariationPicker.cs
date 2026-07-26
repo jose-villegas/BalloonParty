@@ -14,6 +14,8 @@ namespace BalloonParty.Audio
         private readonly IReadOnlyList<int> _scale;
         private readonly int _root;
         private readonly int[] _lastClipIndex;
+        private readonly int[] _sequencePosition;
+        private readonly bool[] _sequenceForward;
 
         public VariationPicker(System.Random rng, IReadOnlyList<int> melodicScale, int melodicRootSemitone)
         {
@@ -21,6 +23,8 @@ namespace BalloonParty.Audio
             _scale = melodicScale;
             _root = melodicRootSemitone;
             _lastClipIndex = new int[SoundIds.Count];
+            _sequencePosition = new int[SoundIds.Count];
+            _sequenceForward = new bool[SoundIds.Count];
             Reset();
         }
 
@@ -66,6 +70,8 @@ namespace BalloonParty.Audio
             for (var i = 0; i < _lastClipIndex.Length; i++)
             {
                 _lastClipIndex[i] = -1;
+                _sequencePosition[i] = -1;
+                _sequenceForward[i] = true;
             }
         }
 
@@ -103,10 +109,29 @@ namespace BalloonParty.Audio
             }
 
             var ordinal = (int)id;
-            var last = _lastClipIndex[ordinal];
 
-            // Pick uniformly from the count-1 clips other than the last one played (no
-            // immediate repeat). On the first play (last < 0) the full range is fair game.
+            switch (entry.ClipPickMode)
+            {
+                case ClipPickMode.Incremental:
+                    return AdvanceSequence(ordinal, count, forward: true, entry.ClipWrapMode);
+                case ClipPickMode.Decrease:
+                    return AdvanceSequence(ordinal, count, forward: false, entry.ClipWrapMode);
+                case ClipPickMode.Unison:
+                case ClipPickMode.Random:
+                default:
+                    return SelectRandom(ordinal, count);
+            }
+        }
+
+        // Unison mode: returns the clip index for a specific layer (0..clipCount-1).
+        internal int SelectClipForLayer(int layer, SfxEntry entry)
+        {
+            return Mathf.Clamp(layer, 0, entry.Clips.Count - 1);
+        }
+
+        private int SelectRandom(int ordinal, int count)
+        {
+            var last = _lastClipIndex[ordinal];
             var index = _rng.Next(last >= 0 ? count - 1 : count);
             if (last >= 0 && index >= last)
             {
@@ -115,6 +140,58 @@ namespace BalloonParty.Audio
 
             _lastClipIndex[ordinal] = index;
             return index;
+        }
+
+        private int AdvanceSequence(int ordinal, int count, bool forward, ClipWrapMode wrapMode)
+        {
+            var pos = _sequencePosition[ordinal];
+            var isForward = _sequenceForward[ordinal];
+
+            // First call: initialize position based on direction.
+            if (pos < 0)
+            {
+                pos = forward ? 0 : count - 1;
+                isForward = true;
+            }
+
+            // On Decrease mode, invert the direction.
+            if (!forward)
+            {
+                isForward = !isForward;
+            }
+
+            var result = Mathf.Clamp(pos, 0, count - 1);
+
+            // Advance for next call.
+            var next = isForward ? pos + 1 : pos - 1;
+
+            switch (wrapMode)
+            {
+                case ClipWrapMode.Loop:
+                    next = ((next % count) + count) % count;
+                    break;
+                case ClipWrapMode.Clamp:
+                    next = Mathf.Clamp(next, 0, count - 1);
+                    break;
+                case ClipWrapMode.PingPong:
+                    if (next >= count)
+                    {
+                        next = count - 2;
+                        isForward = !isForward;
+                    }
+                    else if (next < 0)
+                    {
+                        next = 1;
+                        isForward = !isForward;
+                    }
+
+                    break;
+            }
+
+            _sequencePosition[ordinal] = next;
+            // Store the canonical direction (undo the Decrease inversion for storage).
+            _sequenceForward[ordinal] = forward ? isForward : !isForward;
+            return result;
         }
 
         private float RandomRange(Vector2 range)

@@ -319,6 +319,163 @@ namespace BalloonParty.Tests.Audio
             Assert.AreEqual(0.75f, playback.Pan);
         }
 
+        // ─── ClipPickMode / ClipWrapMode tests ───────────────────────────────────────
+
+        [Test]
+        public void Pick_IncrementalLoop_CyclesThroughClipsForward()
+        {
+            var clips = new[] { CreateClip(), CreateClip(), CreateClip() };
+            var entry = CreateEntry(Vector2.one, Vector2.one, clips,
+                clipPickMode: ClipPickMode.Incremental, clipWrapMode: ClipWrapMode.Loop);
+            var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 0);
+            var ctx = new PickContext(streak: 0, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f);
+
+            // Expected: 0, 1, 2, 0, 1, 2, 0, 1, 2 ...
+            var expected = new[] { 0, 1, 2, 0, 1, 2, 0, 1, 2 };
+            for (var i = 0; i < expected.Length; i++)
+            {
+                var playback = picker.Pick(GameSoundId.BalloonPop, entry, ctx);
+                Assert.AreSame(clips[expected[i]], playback.Clip, $"Iteration {i}");
+            }
+        }
+
+        [Test]
+        public void Pick_IncrementalClamp_StopsAtLastClip()
+        {
+            var clips = new[] { CreateClip(), CreateClip(), CreateClip() };
+            var entry = CreateEntry(Vector2.one, Vector2.one, clips,
+                clipPickMode: ClipPickMode.Incremental, clipWrapMode: ClipWrapMode.Clamp);
+            var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 0);
+            var ctx = new PickContext(streak: 0, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f);
+
+            // Expected: 0, 1, 2, 2, 2, 2
+            var expected = new[] { 0, 1, 2, 2, 2, 2 };
+            for (var i = 0; i < expected.Length; i++)
+            {
+                var playback = picker.Pick(GameSoundId.BalloonPop, entry, ctx);
+                Assert.AreSame(clips[expected[i]], playback.Clip, $"Iteration {i}");
+            }
+        }
+
+        [Test]
+        public void Pick_IncrementalPingPong_ReversesAtBoundaries()
+        {
+            var clips = new[] { CreateClip(), CreateClip(), CreateClip() };
+            var entry = CreateEntry(Vector2.one, Vector2.one, clips,
+                clipPickMode: ClipPickMode.Incremental, clipWrapMode: ClipWrapMode.PingPong);
+            var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 0);
+            var ctx = new PickContext(streak: 0, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f);
+
+            // Expected: 0, 1, 2, 1, 0, 1, 2, 1, 0
+            var expected = new[] { 0, 1, 2, 1, 0, 1, 2, 1, 0 };
+            for (var i = 0; i < expected.Length; i++)
+            {
+                var playback = picker.Pick(GameSoundId.BalloonPop, entry, ctx);
+                Assert.AreSame(clips[expected[i]], playback.Clip, $"Iteration {i}");
+            }
+        }
+
+        [Test]
+        public void Pick_DecreaseLoop_CyclesThroughClipsBackward()
+        {
+            var clips = new[] { CreateClip(), CreateClip(), CreateClip() };
+            var entry = CreateEntry(Vector2.one, Vector2.one, clips,
+                clipPickMode: ClipPickMode.Decrease, clipWrapMode: ClipWrapMode.Loop);
+            var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 0);
+            var ctx = new PickContext(streak: 0, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f);
+
+            // Expected: 2, 1, 0, 2, 1, 0, 2, 1, 0
+            var expected = new[] { 2, 1, 0, 2, 1, 0, 2, 1, 0 };
+            for (var i = 0; i < expected.Length; i++)
+            {
+                var playback = picker.Pick(GameSoundId.BalloonPop, entry, ctx);
+                Assert.AreSame(clips[expected[i]], playback.Clip, $"Iteration {i}");
+            }
+        }
+
+        [Test]
+        public void Pick_DecreaseClamp_StopsAtFirstClip()
+        {
+            var clips = new[] { CreateClip(), CreateClip(), CreateClip() };
+            var entry = CreateEntry(Vector2.one, Vector2.one, clips,
+                clipPickMode: ClipPickMode.Decrease, clipWrapMode: ClipWrapMode.Clamp);
+            var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 0);
+            var ctx = new PickContext(streak: 0, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f);
+
+            // Expected: 2, 1, 0, 0, 0, 0
+            var expected = new[] { 2, 1, 0, 0, 0, 0 };
+            for (var i = 0; i < expected.Length; i++)
+            {
+                var playback = picker.Pick(GameSoundId.BalloonPop, entry, ctx);
+                Assert.AreSame(clips[expected[i]], playback.Clip, $"Iteration {i}");
+            }
+        }
+
+        [Test]
+        public void Pick_DecreasePingPong_ReversesAtBoundaries()
+        {
+            var clips = new[] { CreateClip(), CreateClip(), CreateClip() };
+            var entry = CreateEntry(Vector2.one, Vector2.one, clips,
+                clipPickMode: ClipPickMode.Decrease, clipWrapMode: ClipWrapMode.PingPong);
+            var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 0);
+            var ctx = new PickContext(streak: 0, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f);
+
+            // Expected: 2, 1, 0, 1, 2, 1, 0, 1, 2
+            var expected = new[] { 2, 1, 0, 1, 2, 1, 0, 1, 2 };
+            for (var i = 0; i < expected.Length; i++)
+            {
+                var playback = picker.Pick(GameSoundId.BalloonPop, entry, ctx);
+                Assert.AreSame(clips[expected[i]], playback.Clip, $"Iteration {i}");
+            }
+        }
+
+        [Test]
+        public void Pick_SingleClip_AllModesReturnIndexZero()
+        {
+            var clips = new[] { CreateClip() };
+            var ctx = new PickContext(streak: 0, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f);
+
+            var modes = new[]
+            {
+                ClipPickMode.Random, ClipPickMode.Incremental, ClipPickMode.Decrease, ClipPickMode.Unison
+            };
+
+            foreach (var mode in modes)
+            {
+                var entry = CreateEntry(Vector2.one, Vector2.one, clips, clipPickMode: mode);
+                var picker = new VariationPicker(new System.Random(1), PentatonicScale, melodicRootSemitone: 0);
+
+                for (var i = 0; i < 5; i++)
+                {
+                    var playback = picker.Pick(GameSoundId.BalloonPop, entry, ctx);
+                    Assert.AreSame(clips[0], playback.Clip, $"Mode {mode}, iteration {i}");
+                }
+            }
+        }
+
+        [Test]
+        public void Pick_DefaultRandomMode_NeverRepeatsSameClipConsecutively()
+        {
+            // Confirms existing no-repeat behavior still works with the explicit enum default.
+            var clips = new[] { CreateClip(), CreateClip(), CreateClip() };
+            var entry = CreateEntry(Vector2.one, Vector2.one, clips,
+                clipPickMode: ClipPickMode.Random, clipWrapMode: ClipWrapMode.Loop);
+            var picker = new VariationPicker(new System.Random(42), PentatonicScale, melodicRootSemitone: 0);
+            var ctx = new PickContext(streak: 0, currentSemitone: 0, burstIndex: 0, normalizedPan: 0f);
+
+            AudioClip previous = null;
+            for (var i = 0; i < 200; i++)
+            {
+                var playback = picker.Pick(GameSoundId.BalloonPop, entry, ctx);
+                if (previous != null)
+                {
+                    Assert.AreNotSame(previous, playback.Clip);
+                }
+
+                previous = playback.Clip;
+            }
+        }
+
         private AudioClip CreateClip()
         {
             var clip = AudioClip.Create($"clip{_clips.Count}", 1, 1, 44100, false);
@@ -334,7 +491,9 @@ namespace BalloonParty.Tests.Audio
             int melodicMaxOctaves = 2,
             int melodicSkipSteps = 1,
             int tensionSemitones = 0,
-            bool pan2D = true)
+            bool pan2D = true,
+            ClipPickMode clipPickMode = ClipPickMode.Random,
+            ClipWrapMode clipWrapMode = ClipWrapMode.Loop)
         {
             var entry = new SfxEntry();
             SetField(entry, "_pitchRange", pitchRange);
@@ -345,6 +504,8 @@ namespace BalloonParty.Tests.Audio
             SetField(entry, "_melodicSkipSteps", melodicSkipSteps);
             SetField(entry, "_tensionSemitones", tensionSemitones);
             SetField(entry, "_pan2D", pan2D);
+            SetField(entry, "_clipPickMode", clipPickMode);
+            SetField(entry, "_clipWrapMode", clipWrapMode);
             return entry;
         }
 

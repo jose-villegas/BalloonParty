@@ -11,6 +11,14 @@ namespace BalloonParty.Audio.Configuration
         [SerializeField] private SfxChannel _channel = SfxChannel.Gameplay;
         [SerializeField] private AudioClip[] _clips = Array.Empty<AudioClip>();
 
+        [Tooltip("How to select from the clip list. Random = no-repeat random, Unison = all clips " +
+                 "layered simultaneously, Incremental = walk forward, Decrease = walk backward.")]
+        [SerializeField] private ClipPickMode _clipPickMode = ClipPickMode.Random;
+
+        [Tooltip("What happens when Incremental/Decrease reaches the boundary. Loop = wrap, Clamp = " +
+                 "stay on last/first, PingPong = reverse direction. Ignored for Random/Unison.")]
+        [SerializeField] private ClipWrapMode _clipWrapMode = ClipWrapMode.Loop;
+
         [Tooltip("Random pitch multiplier range (x = min, y = max). 1..1 = no variation. Ignored when MelodicMode is not None.")]
         [SerializeField] private Vector2 _pitchRange = Vector2.one;
 
@@ -72,8 +80,14 @@ namespace BalloonParty.Audio.Configuration
                  "e.g. deflect = +1 (minor-2nd rub), wall hit = -2 (dropped-it step).")]
         [SerializeField] private int _tensionSemitones;
 
+        [Tooltip("Additional layers fired simultaneously with this entry. Each layer is a full SfxEntry " +
+                 "with its own clips, pitch, volume, and pick mode.")]
+        [SerializeField] private SfxEntry[] _layers = Array.Empty<SfxEntry>();
+
         public SfxChannel Channel => _channel;
         public IReadOnlyList<AudioClip> Clips => _clips;
+        public ClipPickMode ClipPickMode => _clipPickMode;
+        public ClipWrapMode ClipWrapMode => _clipWrapMode;
         public Vector2 PitchRange => _pitchRange;
         public Vector2 VolumeRange => _volumeRange;
         public float CooldownSeconds => _cooldownSeconds;
@@ -90,6 +104,7 @@ namespace BalloonParty.Audio.Configuration
         public int MelodicMaxOctaves => _melodicMaxOctaves;
         public int MelodicSkipSteps => _melodicSkipSteps;
         public int TensionSemitones => _tensionSemitones;
+        public IReadOnlyList<SfxEntry> Layers => _layers;
         public bool HasClips => _clips is { Length: > 0 };
 
 #if UNITY_EDITOR
