@@ -44,6 +44,9 @@ namespace BalloonParty.UI.Score
 
         [Header("Progress")] [SerializeField] private Slider _progressSlider;
 
+        [Tooltip("Seconds the fill lerps over when points arrive. 0 = snap.")]
+        [SerializeField] [Min(0f)] private float _fillLerpDuration = 0.25f;
+
         [Header("Feedback")] [SerializeField] private Animator _animator;
 
         [SerializeField] private ParticleSystem _completionParticleSystem;
@@ -115,6 +118,8 @@ namespace BalloonParty.UI.Score
         private RectTransform _nightBadgeRect;
         private Vector2 _nightBadgeBasePos;
         private Tween _flexTween;
+        private Tween _fillTween;
+        private float _targetFill;
 
         public Vector3 Center => RectAnchorMath.Center((RectTransform)transform);
 
@@ -197,6 +202,7 @@ namespace BalloonParty.UI.Score
             var required = _levelProgress.GetRequiredPoints();
             _progressSlider.maxValue = required;
             _progressSlider.value = _levelProgress.GetProgress(_colorConfig.Name);
+            _targetFill = _progressSlider.value;
 
             _scoreTrailService.RegisterTarget(_colorConfig.Name, this, _colorConfig.Color);
             ApplyVisibility(animate: false);
@@ -399,6 +405,8 @@ namespace BalloonParty.UI.Score
             // can read low. Snap it full (maxValue is still this level's requirement) so the popup shows the
             // score that was actually reached, and the glow drain starts from a completed bar.
             _progressSlider.value = _progressSlider.maxValue;
+            _targetFill = _progressSlider.maxValue;
+            _fillTween?.Kill();
 
             ClearCompletionVfx();
             // Animate existing notices out (not a hard snap) as the popup takes over. New ones stay
@@ -427,6 +435,7 @@ namespace BalloonParty.UI.Score
             var targetAlpha = active ? 1f : 0f;
 
             _flexTween?.Kill();
+            _fillTween?.Kill();
             _visibilityGroup.DOKill();
 
             if (!animate)
@@ -467,8 +476,10 @@ namespace BalloonParty.UI.Score
 
         private void OnRunReset()
         {
+            _fillTween?.Kill();
             _progressSlider.maxValue = _levelProgress.GetRequiredPoints();
             _progressSlider.value = _levelProgress.GetProgress(_colorConfig.Name);
+            _targetFill = _progressSlider.value;
             ClearCompletionVfx();
             _notices.DismissAllNotices();
             _shownStreak = 0;
@@ -489,8 +500,10 @@ namespace BalloonParty.UI.Score
 
         private void OnDismissed()
         {
+            _fillTween?.Kill();
             _progressSlider.maxValue = _stashedMaxValue;
             _progressSlider.value = 0;
+            _targetFill = 0f;
             ClearCompletionVfx();
         }
 
@@ -503,12 +516,16 @@ namespace BalloonParty.UI.Score
 
         private async UniTaskVoid DrainSliderAsync(int steps, float staggerDelay)
         {
+            _fillTween?.Kill();
+            _targetFill = _progressSlider.value;
+
             var staggerMs = Mathf.RoundToInt(staggerDelay * 1000f);
-            var drainPerStep = _progressSlider.value / steps;
+            var drainPerStep = _targetFill / steps;
 
             for (var i = 0; i < steps; i++)
             {
-                _progressSlider.value = Mathf.Max(0f, _progressSlider.value - drainPerStep);
+                _targetFill = Mathf.Max(0f, _targetFill - drainPerStep);
+                LerpFillTo(_targetFill);
 
                 if (i < steps - 1)
                 {
@@ -517,7 +534,8 @@ namespace BalloonParty.UI.Score
                 }
             }
 
-            _progressSlider.value = 0f;
+            _targetFill = 0f;
+            LerpFillTo(0f);
         }
 
         private void OnTrailArrived(ScoreTrailArrivedMessage msg)
@@ -530,12 +548,13 @@ namespace BalloonParty.UI.Score
             }
 
             _animator.SetTrigger(TrailHitTrigger);
-            _progressSlider.value = Mathf.Min(_progressSlider.value + msg.Points, _progressSlider.maxValue);
+            _targetFill = Mathf.Min(_targetFill + msg.Points, _progressSlider.maxValue);
+            LerpFillTo(_targetFill);
 
             var anchored = RectAnchorMath.WorldToAnchoredPosition((RectTransform)transform, msg.WorldPosition);
             _notices.SpawnPointNotice(anchored, msg.Points);
 
-            if (_progressSlider.value >= _progressSlider.maxValue)
+            if (_targetFill >= _progressSlider.maxValue)
             {
                 _completionParticleSystem.gameObject.SetActive(true);
                 _completionParticleSystem.Play();
@@ -546,6 +565,19 @@ namespace BalloonParty.UI.Score
         public Vector3 RandomPosition()
         {
             return RectAnchorMath.RandomPosition((RectTransform)transform);
+        }
+
+        private void LerpFillTo(float target)
+        {
+            _fillTween?.Kill();
+            if (_fillLerpDuration <= 0f)
+            {
+                _progressSlider.value = target;
+                return;
+            }
+
+            _fillTween = DOTween.To(() => _progressSlider.value, x => _progressSlider.value = x, target,
+                _fillLerpDuration).SetEase(Ease.OutCubic).SetUpdate(true).SetLink(gameObject);
         }
     }
 }

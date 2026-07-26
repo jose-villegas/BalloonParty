@@ -74,10 +74,10 @@ Material:
     - _Falloff: 3
     - _GlitterAmount: 1.5
     - _GlitterBrightness: 3
-    - _GlitterChance: 0.15
-    - _GlitterDensity: 20
+    - _GlitterChance: 0.25
+    - _GlitterDensity: 40
     - _GlitterSharpness: 9
-    - _GlitterSize: 0.25
+    - _GlitterSize: 0.5
     - _GlitterSpeed: 4
     - _GlitterThreshold: 0.7
     - _GlossMapScale: 1

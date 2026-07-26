@@ -278,7 +278,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 40, y: 20}
+  m_SizeDelta: {x: 24, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5078989472072387670
 CanvasRenderer:
@@ -300,8 +300,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: c1889e5e42d2a4e658b99f2bcee7a0e4, type: 2}
-  m_Color: {r: 0.8274511, g: 0.8274511, b: 0.8274511, a: 0.2509804}
+  m_Material: {fileID: 2100000, guid: ca77c6eb501e841fa83bda8956ee2467, type: 2}
+  m_Color: {r: 0.8274511, g: 0.8274511, b: 0.8274511, a: 0.3764706}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -309,7 +309,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: d543f6d3a653bda438e98fb9f3d2062c, type: 3}
-  m_Type: 1
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -535,6 +535,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.TimeOfDayTint
   _graphics:
   - {fileID: 5192779575027639720}
+  _spriteRenderers: []
   _intensity: 1
 --- !u!1 &6500482626430559297
 GameObject:

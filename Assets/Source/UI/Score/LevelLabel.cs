@@ -1,5 +1,6 @@
 using DG.Tweening;
 using BalloonParty.Game.Level;
+using BalloonParty.Shared.Extensions;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -170,7 +171,7 @@ namespace BalloonParty.UI.Score
             {
                 if (_disableDuringFlip[i] is Image image)
                 {
-                    _imageBaseAlphas[i] = image.color.a;
+                    _imageBaseAlphas[i] = image.GetAlphaAuto();
                 }
             }
         }
@@ -182,7 +183,7 @@ namespace BalloonParty.UI.Score
             {
                 if (_disableDuringFlip[i] is Image image)
                 {
-                    var tween = image.DOFade(targetAlpha, duration).SetEase(Ease.InSine);
+                    var tween = image.DOFadeAuto(targetAlpha, duration).SetEase(Ease.InSine);
                     if (first)
                     {
                         sequence.Append(tween);
@@ -204,7 +205,7 @@ namespace BalloonParty.UI.Score
                 if (_disableDuringFlip[i] is Image image)
                 {
                     var alpha = targetAlphas != null && i < targetAlphas.Length ? targetAlphas[i] : 1f;
-                    var tween = image.DOFade(alpha, duration).SetEase(Ease.OutCubic);
+                    var tween = image.DOFadeAuto(alpha, duration).SetEase(Ease.OutCubic);
                     if (first)
                     {
                         sequence.Append(tween);
@@ -236,9 +237,7 @@ namespace BalloonParty.UI.Score
                 {
                     if (enabled && _imageBaseAlphas != null && i < _imageBaseAlphas.Length)
                     {
-                        var color = image.color;
-                        color.a = _imageBaseAlphas[i];
-                        image.color = color;
+                        image.SetAlphaAuto(_imageBaseAlphas[i]);
                     }
 
                     continue;

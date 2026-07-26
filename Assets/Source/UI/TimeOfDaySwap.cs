@@ -1,3 +1,4 @@
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.SceneLight;
 using UnityEngine;
 using UnityEngine.UI;
@@ -66,14 +67,11 @@ namespace BalloonParty.UI
                 : (_swapTimer - half) / half;
 
             alpha = Mathf.Clamp01(alpha);
-            var c = _target.color;
-            c.a = alpha;
-            _target.color = c;
+            _target.SetAlphaAuto(alpha);
 
             if (_swapTimer >= _swapDuration)
             {
-                c.a = 1f;
-                _target.color = c;
+                _target.SetAlphaAuto(1f);
                 _swapping = false;
             }
         }

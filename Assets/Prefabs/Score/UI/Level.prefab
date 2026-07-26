@@ -75,6 +75,117 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &1859827611716557794
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2927752661317107606}
+  - component: {fileID: 8851172484655198665}
+  - component: {fileID: 1345324237431795336}
+  - component: {fileID: 5199886768894008898}
+  - component: {fileID: 8401158701247043100}
+  m_Layer: 5
+  m_Name: Rays
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2927752661317107606
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1859827611716557794}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2251211141866946808}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 6, y: 6}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8851172484655198665
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1859827611716557794}
+  m_CullTransparentMesh: 1
+--- !u!114 &1345324237431795336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1859827611716557794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 2100000, guid: 4ee5c968c662f49fe973eebe65f23dce, type: 2}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: a21041c776e5e384fbf321d6076182f6, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5199886768894008898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1859827611716557794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87bc50994e404c7a8901b4cee11575c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Shared.Animation.TweenOscillator
+  _channels:
+  - Type: 0
+    Offset: {x: 0, y: 1, z: 0}
+    Pivot: 0
+    Delay: 0
+  _duration: 1
+  _delay: 0
+  _ease: 4
+  _playOnEnable: 1
+  _preview: 0
+--- !u!225 &8401158701247043100
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1859827611716557794}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2729361282585208828
 GameObject:
   m_ObjectHideFlags: 0
@@ -274,10 +385,11 @@ MonoBehaviour:
   _flipCount: 3
   _disableDuringFlip:
   - {fileID: 2454902569270793827}
-  - {fileID: 5824382302345840948}
-  - {fileID: 6895038504542885687}
   - {fileID: 5290011093641197016}
-  - {fileID: 3724258222771082685}
+  - {fileID: 5199886768894008898}
+  - {fileID: 1345324237431795336}
+  - {fileID: 6895038504542885687}
+  - {fileID: 5824382302345840948}
   _lerpImages: 1
 --- !u!114 &5022413936853635052
 MonoBehaviour:
@@ -666,6 +778,7 @@ MonoBehaviour:
   _graphics:
   - {fileID: 8658601110163820774}
   - {fileID: 5824382302345840948}
+  - {fileID: 1345324237431795336}
   _spriteRenderers: []
   _intensity: 1
 --- !u!1 &5210607992054251108
@@ -680,6 +793,7 @@ GameObject:
   - component: {fileID: 3574517842621354303}
   - component: {fileID: 5290011093641197016}
   - component: {fileID: 3689521696065375540}
+  - component: {fileID: 1202677092848101354}
   m_Layer: 5
   m_Name: TODBadge
   m_TagString: Untagged
@@ -699,13 +813,14 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2927752661317107606}
   - {fileID: 1556290537057713181}
   m_Father: {fileID: 6040275269336953111}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 10}
-  m_SizeDelta: {x: 5, y: 5}
+  m_SizeDelta: {x: 7, y: 7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3574517842621354303
 CanvasRenderer:
@@ -744,6 +859,22 @@ MonoBehaviour:
   _daySprite: {fileID: 21300000, guid: 648e4e2739f174c808815517d088a81c, type: 3}
   _nightSprite: {fileID: 21300000, guid: 4d8e4fce381384033aec8cba3a810aff, type: 3}
   _swapDuration: 3
+--- !u!114 &1202677092848101354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5210607992054251108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79fbed222e90a4a6e98349645013b14c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.TimeOfDaySwap
+  _target: {fileID: 1345324237431795336}
+  _daySprite: {fileID: 21300000, guid: a21041c776e5e384fbf321d6076182f6, type: 3}
+  _nightSprite: {fileID: 21300000, guid: a21041c776e5e384fbf321d6076182f6, type: 3}
+  _swapDuration: 3
 --- !u!1 &6591686467089291635
 GameObject:
   m_ObjectHideFlags: 0
@@ -755,7 +886,6 @@ GameObject:
   - component: {fileID: 1556290537057713181}
   - component: {fileID: 5410812639231072888}
   - component: {fileID: 6895038504542885687}
-  - component: {fileID: 3724258222771082685}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -770,7 +900,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6591686467089291635}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -810,8 +940,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8302495911754944352, guid: 648e4e2739f174c808815517d088a81c,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: 648e4e2739f174c808815517d088a81c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -821,25 +950,3 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3724258222771082685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6591686467089291635}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87bc50994e404c7a8901b4cee11575c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Shared.Animation.TweenOscillator
-  _channels:
-  - Type: 0
-    Offset: {x: 0, y: 1, z: 0}
-    Pivot: 0
-    Delay: 0
-  _duration: 1
-  _delay: 0
-  _ease: 4
-  _playOnEnable: 1
-  _preview: 0
