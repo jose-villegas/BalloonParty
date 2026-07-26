@@ -17,7 +17,7 @@ namespace BalloonParty.Game.Level
     ///     midnight→dawn seam) and on unscaled time so it plays through the transition pause. Does nothing
     ///     unless <see cref="ITimeOfDaySettings.NightModeEnabled"/>, leaving the light at its authored
     ///     direction. Owns only the cycle policy; the ambient state/push lives on
-    ///     <see cref="TimeOfDayService"/> (see @ref plan_night_mode).
+    ///     <see cref="TimeOfDayService"/>.
     /// </summary>
     internal sealed class TimeOfDayCycle : IStartable, ITickable, IRunResettable, IDisposable
     {

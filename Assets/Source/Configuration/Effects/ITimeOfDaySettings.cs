@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BalloonParty.Configuration.Effects
 {
-    /// <summary>Read-only tuning for the night-mode time-of-day cycle (see @ref plan_night_mode). The
+    /// <summary>Read-only tuning for the night-mode time-of-day cycle. The
     /// ambient light direction walks the circle as the player climbs: level 1 sits at the authored
     /// <see cref="ISceneLightSettings.LightDirection"/>, each further level advances by
     /// <see cref="DegreesPerLevel"/>, and the level-up transition sweeps between them.</summary>

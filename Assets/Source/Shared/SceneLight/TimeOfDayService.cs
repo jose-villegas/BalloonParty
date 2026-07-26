@@ -10,7 +10,7 @@ namespace BalloonParty.Shared.SceneLight
     ///     (<c>_SceneLightDir</c>/<c>_SceneLightColor</c>/<c>_SceneLightIntensity</c>). A passive holder:
     ///     it publishes whichever toward-light direction it's given — the authored rest value, or the
     ///     swept target that the Game-layer <c>TimeOfDayCycle</c> pushes via <see cref="SetDirection"/>
-    ///     while night mode is on (see @ref plan_night_mode) — deriving the colour/intensity and exposing
+    ///     while night mode is on — deriving the colour/intensity and exposing
     ///     them both as globals and through <see cref="ISceneLightRuntime"/> for the CPU-side consumers
     ///     (sky tint, GI) that can't read the globals. Replaces the ambient push formerly bolted onto
     ///     <see cref="SceneLightFieldService"/>, which now owns only the local light field.

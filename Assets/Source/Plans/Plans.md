@@ -17,5 +17,4 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_editor_ui_library
 - @subpage plan_performance_recovery
 - @subpage plan_audio
-- @subpage plan_night_mode
 - @subpage plan_shot_solver_accuracy

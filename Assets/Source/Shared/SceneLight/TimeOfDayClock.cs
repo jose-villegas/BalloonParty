@@ -12,7 +12,7 @@ namespace BalloonParty.Shared.SceneLight
     ///     direction and rotates forward from there. Inert unless night mode is on AND the source is
     ///     Realtime — the level-paced alternative is <c>TimeOfDayCycle</c> (<c>Game/Level</c>); only one is
     ///     ever live, gated by the source. Owns policy only; the ambient state/push lives on
-    ///     <see cref="TimeOfDayService"/> (see @ref plan_night_mode).
+    ///     <see cref="TimeOfDayService"/>.
     ///
     ///     The angle is per-scope: it resets to the rest direction whenever this scope loads (game or
     ///     launcher), rather than persisting a single clock across scene loads.

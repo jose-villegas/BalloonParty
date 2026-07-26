@@ -62,3 +62,4 @@ A cheat that needs inputs (dropdowns, counters) also implements `ICheatControls.
 | Start From Level | Run | Sets the dev start-level override then restarts the run so it begins at the chosen level — the in-play equivalent of the Level Pacing window's "play from here" |
 | Stamp Disturbance | Grid | Toggle on, then mouse-drag to stamp disturbances into the shared disturbance field. Uses `DisturbanceFieldService.Stamp()` at the mouse world position with drag direction |
 | Place Light | Lighting | Toggle on, pick a palette colour from the dropdown, then tap the board to drop a light into the shared light field there; "Clear" removes every light placed so far |
+| Time of Day | Lighting | Scrub the day/night angle directly (drives whichever source is active) — the slider tints the arc that counts as night — and set how fast the Realtime source advances it (Freeze/1x/8x/30x presets) |

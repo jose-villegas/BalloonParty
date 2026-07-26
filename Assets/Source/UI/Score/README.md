@@ -7,7 +7,7 @@ Tracks and displays player progress toward the next level — one bar per balloo
 | File | What it does |
 |---|---|
 | `ScoreUILifetimeScope` | VContainer child scope on the Score UI Canvas root; injects all scene-placed `ColorProgressBar` instances via `RegisterBuildCallback`; binds `ScoreCounterLabel` and `LevelLabel` in `Start()` |
-| `ColorProgressBar` | Per-color progress slider placed directly in the scene. Listens for `StreakChangedMessage` (streak notice, streak read from `IColorStreak`), `ScoreTrailArrivedMessage` (slider advancement by `msg.Points`, point notice spawning, trail-hit feedback), `ScoreLevelUpMessage` (stash new max, reset completion state, dismiss all notices as the popup appears), `LevelUpGlowTrailsMessage` (drain slider in sync with glow trail waves), `LevelUpDismissedMessage` (apply stashed max, reset slider to zero), `LevelTransitionCompletedMessage` (animate the bar reveal/hide — deferred to when the board has settled and the player can fire again), and `RunResetMessage` (reset for a fresh run). Registers itself as the `ITrailEndpoint` for its colour with `ScoreTrailService` (which forwards to the shared `TrailEndpointRegistry`) for randomised trail destinations. Delegates notice spawning/dismissal to `ProgressNoticePresenter` and rect-position math to `RectAnchorMath`. Uses `[PaletteColorName]` to select its color from `GamePalette` in the Inspector |
+| `ColorProgressBar` | Per-color progress slider placed directly in the scene. Listens for `StreakChangedMessage` (streak notice, streak read from `IColorStreak`), `ScoreTrailArrivedMessage` (slider advancement by `msg.Points`, point notice spawning, trail-hit feedback), `ScoreLevelUpMessage` (stash new max, reset completion state, dismiss all notices as the popup appears), `LevelUpGlowTrailsMessage` (drain slider in sync with glow trail waves), `LevelUpDismissedMessage` (apply stashed max, reset slider to zero), `LevelTransitionCompletedMessage` (animate the bar reveal/hide — deferred to when the board has settled and the player can fire again), and `RunResetMessage` (reset for a fresh run). Registers itself as the `ITrailEndpoint` for its colour with `ScoreTrailService` (which forwards to the shared `TrailEndpointRegistry`) for randomised trail destinations. Delegates notice spawning/dismissal to `ProgressNoticePresenter` and rect-position math to `RectAnchorMath`. Uses `[PaletteColorName]` to select its color from `GamePalette` in the Inspector. Also drives the night "2x" badge (see Night Badge below) |
 | `ProgressNoticePresenter` | Plain C# helper owning a bar's notice lifecycle: the two `SimplePoolChannel<ProgressNotice>` pools, the active-notice list (point **and** streak notices), and `SpawnPointNotice`/`ShowStreak`/`DismissAllAnimated` (plays each notice's disappear)/`DismissAllNotices` (immediate — snaps straight to completed, safe during the level-up freeze). Constructed by `ColorProgressBar` in `Start()` |
 | `RectAnchorMath` | Static `RectTransform` position math (`UI/` root, no Score knowledge): `Center`, `RandomPosition` (for `ITrailEndpoint`), and `WorldToAnchoredPosition` (world → local anchored, for placing pooled notices) |
 | `ProgressNotice` | Pooled floating TMP popup at the bar. Hand-ticked rise-in/hold/rise-out on unscaled time (no Animator — with dozens alive during trail storms an Animator would re-write and canvas-dirty every frame even through the hold; the ticker writes nothing once settled). Timings mirror the retired ScoreUp/ScoreDisappear clips; a negative `_holdDuration` holds until `Dismiss()`. Uses `ColorableRenderer` for tinting. Label scale driven by `AnimationCurve`; `_labelOffsetXCurve` compensates for scale-induced horizontal drift. Two prefab variants: streak notices ("x3", hold-until-dismissed) shown immediately on hit, and point notices ("+1") shown on trail arrival |
@@ -58,6 +58,19 @@ When the slider reaches its maximum, a completion particle plays and the bar ent
 
 `ScoreCounterLabel` and `LevelLabel` are bound imperatively from `ScoreUILifetimeScope.Start()` — they receive `ScoreController.TotalScore` and `LevelController.Level` respectively and subscribe with UniRx.
 
+### Night badge
+
+While it's night (`ITimeOfDayNight.IsNight`), every bar shows a "2x" badge reminding the player that
+`ScoreController` is doubling every pop's points (see `Game/Score/README.md#night-multiplier`). Rather
+than every badge lighting independently, a single highlight travels back and forth across the whole
+row (`Mathf.PingPong`, its speed normalized by bar count so a full sweep takes the same time whether
+two colors or five are showing). Each bar's badge brightens and grows as the highlight passes over it,
+with a wide smoothstepped falloff so neighbours blend into one soft traveling wave instead of bars
+blinking on one at a time. The whole badge eases in when night begins and out when it ends
+(`_nightBadgeFadeDuration`) rather than popping, and stays deactivated while fully faded. Optional
+`_nightFadeExtras` (e.g. a night backdrop that must sit on a different sorting layer, outside the
+badge's own hierarchy) fade in/out on the same schedule but take no part in the sweep.
+
 ## Interactions
 
 - **ScoreController** — source of `ScorePointsGroupMessage` and `TotalScore`; score mutation deferred to `ScoreTrailArrivedMessage`. `Level` and `ScoreLevelUpMessage` belong to `LevelController` instead (`Game/Level/`)
@@ -68,3 +81,4 @@ When the slider reaches its maximum, a completion particle plays and the bar ent
 - **IScoreTrailConfig** — `ProgressNoticePrewarmPerColor`
 - **GamePalette** — resolves color name → `Color` for tinting graphics and trail orbs
 - **ScoreUILifetimeScope** — injects all bars via `RegisterBuildCallback`; binds labels in `Start()`
+- **ITimeOfDayNight** (`Shared/SceneLight/`) — `ColorProgressBar` reads `IsNight` each frame to drive the night badge's fade/sweep (see Night Badge above), matching `ScoreController`'s night score multiplier

@@ -1,6 +1,6 @@
 namespace BalloonParty.Configuration.Effects
 {
-    /// <summary>What drives the night-mode time-of-day angle (see @ref plan_night_mode).</summary>
+    /// <summary>What drives the night-mode time-of-day angle.</summary>
     internal enum TimeOfDaySource
     {
         /// <summary>The light steps forward one notch per level and sweeps during the level-up
