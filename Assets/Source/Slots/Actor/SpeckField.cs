@@ -104,7 +104,6 @@ namespace BalloonParty.Slots.Actor
         private int _kernel;
         private Vector2 _lastRootPos;
         private Vector2 _motionDelta;
-        private Vector2 _regionOffset;
         private bool _motionSeeded;
         private bool _ready;
         private int _activeCount;
@@ -282,7 +281,7 @@ namespace BalloonParty.Slots.Actor
             _compute.SetFloat(DragId, motion.Drag);
             _compute.SetFloat(MaxSpeedId, motion.MaxSpeed);
             _compute.SetFloat(MotionInfluenceId, motion.MotionInfluence);
-            // RegionMin is NOT static: it travels with the specks (see Dispatch). Only the extent is.
+            _compute.SetVector(RegionMinId, region * -0.5f);
             _compute.SetVector(RegionSizeId, region);
             _compute.SetFloat(MinLifetimeId, lifetime.x);
             _compute.SetFloat(MaxLifetimeId, lifetime.y);
@@ -571,9 +570,6 @@ namespace BalloonParty.Slots.Actor
 
         private void SeedSpecks()
         {
-            // Seeding places specks around the origin, so the region has to be back there too.
-            _regionOffset = Vector2.zero;
-
             var specks = new Speck[_count];
             var region = _settings.RegionSize;
             var min = region * -0.5f;
@@ -627,10 +623,6 @@ namespace BalloonParty.Slots.Actor
             // Reject teleports (the Ascent snaps the root to its start height on frame 0) — match only
             // real per-frame movement, not the snap.
             _motionDelta = delta.magnitude <= _settings.Motion.TeleportThreshold ? delta : Vector2.zero;
-
-            // Carried at the base influence, which is what the region tracks. Per-colour profiles override
-            // MotionInfluence, so a heated speck drifts against the region — bounded by how long it stays hot.
-            _regionOffset += _motionDelta * _settings.Motion.MotionInfluence;
         }
 
         private Vector2 RootPosition()
@@ -653,11 +645,6 @@ namespace BalloonParty.Slots.Actor
             _compute.SetFloat(DeltaTimeId, dt);
             _compute.SetFloat(TimeId, Time.time);
             _compute.SetVector(MotionDeltaId, _motionDelta);
-
-            // The wrap region travels by the same accumulated motion the specks do. A region pinned to the
-            // world origin meant a travelling scenario dragged every speck out of a stationary box, and the
-            // toroidal wrap teleported them a full region span back — read on screen as specks flying across it.
-            _compute.SetVector(RegionMinId, _settings.RegionSize * -0.5f + _regionOffset);
 
             var hasField = _disturbance != null && _disturbance.FieldTexture != null;
             _compute.SetFloat(DisturbanceInfluenceId, hasField ? _settings.Motion.DisturbanceInfluence : 0f);
