@@ -1,0 +1,7 @@
+<map id="BalloonParty.UI.TimeOfDayTint" name="BalloonParty.UI.TimeOfDayTint">
+<area shape="rect" id="Node000001" title="Tints a collection of graphics and/or sprite renderers to match the current time&#45;of&#45;day light color." alt="" coords="48,108,271,133"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,129,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,46,150,106,146,110,87,50"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ISceneLightRuntime.html" title="Read surface for the LIVE ambient scene light — the current time&#45;of&#45;day state the runtime owner (Time..." alt="" coords="154,5,349,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="225,57,173,110,169,106,221,53"/>
+</map>

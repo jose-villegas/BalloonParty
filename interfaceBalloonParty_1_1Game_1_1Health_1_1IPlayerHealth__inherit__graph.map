@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Health.IPlayerHealth" name="BalloonParty.Game.Health.IPlayerHealth">
+<area shape="rect" id="Node000001" title="Read&#45;only view of the player&#39;s hit&#45;point pool." alt="" coords="5,5,201,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html" title="The player&#39;s hit&#45;point pool — the only loss trigger under the spawn&#45;saturation model." alt="" coords="5,93,201,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,59,106,93,101,93,101,59"/>
+</map>

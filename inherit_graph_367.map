@@ -1,0 +1,25 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,349,141,374"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Audio_1_1Editor_1_1SoundBankConfigurationEditor.html" title=" " alt="" coords="209,5,429,45"/>
+<area shape="poly" id="edge524_Node000000_Node000001" title=" " alt="" coords="74,335,82,277,101,202,116,162,135,123,158,87,188,55,207,42,210,46,191,59,163,90,139,126,121,164,106,203,87,278,79,336"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1GameDisplayConfigurationEditor.html" title=" " alt="" coords="199,70,438,125"/>
+<area shape="poly" id="edge525_Node000000_Node000002" title=" " alt="" coords="78,335,92,291,114,238,145,183,165,158,188,135,206,123,209,127,191,139,169,161,150,186,118,240,97,293,83,336"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1ProjectileFlightConfigEditor.html" title=" " alt="" coords="199,149,439,189"/>
+<area shape="poly" id="edge526_Node000000_Node000003" title=" " alt="" coords="83,335,123,267,152,230,188,199,210,187,213,192,191,204,156,234,127,270,88,337"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Editor_1_1ColorableBalloonVariantEditor.html" title=" " alt="" coords="214,213,423,253"/>
+<area shape="poly" id="edge527_Node000000_Node000004" title=" " alt="" coords="94,337,135,299,188,263,217,251,219,256,191,268,138,303,97,341"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Editor_1_1PaintDripOverlayEditor.html" title="Adds an in&#45;editor preview to PaintDripOverlay: scrub the drip with a slider or press Play to run it o..." alt="" coords="229,277,408,317"/>
+<area shape="poly" id="edge528_Node000000_Node000005" title=" " alt="" coords="131,342,189,327,235,315,236,320,190,332,133,348"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Editor_1_1RainbowBalloonVariantEditor.html" title="Replaces the inherited single&#45;colour preview (meaningless for a rainbow — it has no concrete colour) ..." alt="" coords="217,341,420,381"/>
+<area shape="poly" id="edge529_Node000000_Node000006" title=" " alt="" coords="155,359,217,359,217,364,155,364"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Editor_1_1SceneCaptureServiceEditor.html" title="Live play&#45;mode preview of the shared scene&#45;capture RT on the SceneCaptureService inspector — for judg..." alt="" coords="225,405,412,445"/>
+<area shape="poly" id="edge530_Node000000_Node000007" title=" " alt="" coords="133,375,190,391,236,403,235,408,189,396,131,380"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Editor_1_1ScreenSpaceLightServiceEditor.html" title="Live play&#45;mode preview of the screen&#45;space light buffer: RGB is bounce color, A is shadow amount." alt="" coords="223,469,414,509"/>
+<area shape="poly" id="edge531_Node000000_Node000008" title=" " alt="" coords="97,382,138,420,191,455,224,469,222,474,188,460,135,424,94,386"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Editor_1_1ShadowBake_1_1ImageShadowBakerEditor.html" title="Inspector for ImageShadowBaker: bakes a blurred silhouette sprite and wires it into a shadow Image ch..." alt="" coords="206,533,431,573"/>
+<area shape="poly" id="edge532_Node000000_Node000009" title=" " alt="" coords="88,385,127,453,156,489,191,519,213,531,210,536,188,524,152,493,123,456,83,388"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor.html" title="Inspector for SpriteShadowBaker: bakes a blurred silhouette sprite and wires it into the prefab." alt="" coords="207,597,430,637"/>
+<area shape="poly" id="edge533_Node000000_Node000010" title=" " alt="" coords="83,387,96,430,117,484,149,538,168,562,191,583,209,595,207,599,188,587,164,566,144,541,113,486,91,432,78,388"/>
+<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html" title="Bake logic for SpriteLayerCombiner: flattens the assigned sprite layers into one straight&#45;alpha PNG s..." alt="" coords="189,661,448,701"/>
+<area shape="poly" id="edge534_Node000000_Node000011" title=" " alt="" coords="80,388,89,442,108,513,123,550,141,586,164,619,191,647,208,659,205,663,188,651,160,622,137,588,118,552,103,514,84,444,75,388"/>
+</map>

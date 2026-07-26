@@ -1,0 +1,9 @@
+<map id="BalloonParty.Projectile.Buffs.ProjectileBuffService" name="BalloonParty.Projectile.Buffs.ProjectileBuffService">
+<area shape="rect" id="Node000001" title="Owns projectile&#45;buff storage and lifecycle: applies buffs onto the active projectile and drops one th..." alt="" coords="145,93,340,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Projectile_1_1Buffs_1_1IProjectileBuffs.html" title="Applies a buff to the active projectile." alt="" coords="5,5,176,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,50,211,91,208,96,135,54"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="200,13,285,38"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="245,52,245,93,240,93,240,52"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="309,13,408,38"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="334,48,270,95,267,91,330,44"/>
+</map>

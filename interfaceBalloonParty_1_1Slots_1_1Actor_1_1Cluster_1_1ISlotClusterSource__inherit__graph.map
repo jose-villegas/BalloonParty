@@ -1,0 +1,9 @@
+<map id="BalloonParty.Slots.Actor.Cluster.ISlotClusterSource" name="BalloonParty.Slots.Actor.Cluster.ISlotClusterSource">
+<area shape="rect" id="Node000001" title="Non&#45;generic read&#45;only facade so consumers can access cluster geometry without knowing the model type." alt="" coords="5,37,196,77"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html" title="When setupOnly is true, builds once at startup and never subscribes to grid changes." alt="" coords="244,30,440,85"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="210,55,244,55,244,60,210,60"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushClusterRegistry.html" title="Bush slots never change at runtime, so the grid subscription is dormant after initial placement." alt="" coords="488,5,712,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="453,41,487,37,488,42,454,46"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html" title="Subscribes to grid changes (not setup&#45;only) because Puff slots can be added/removed at runtime." alt="" coords="491,69,709,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="454,69,492,73,491,79,453,74"/>
+</map>

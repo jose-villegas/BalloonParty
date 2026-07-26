@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.Disturbance.DisturbanceFieldResources" name="BalloonParty.Shared.Disturbance.DisturbanceFieldResources">
+<area shape="rect" id="Node000001" title="Holds the disturbance field&#39;s GPU resources and blit&#45;and&#45;swap, separate from DisturbanceFieldService&#39;..." alt="" coords="5,108,243,148"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IDisturbanceFieldSettings.html" title=" " alt="" coords="6,5,242,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,59,127,108,121,108,121,59"/>
+</map>

@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['8_0',['8',['../plan_grid_actor_expansion.html',1,'Grid Actor Expansion — Phase 8+'],['../plan_grid_actor_expansion.html#autotoc_md487',1,'Grid Actor Expansion — Phase 8+']]],
+  ['8_20—_20timed_20release_3a_20balloon_20pass_20through_20delay_1',['8 — Timed Release: Balloon Pass-Through Delay',['../plan_future_ideas.html#autotoc_md389',1,'']]],
+  ['8_200_20—_20spawner_20coordination_2',['✅ Phase 8.0 — Spawner Coordination',['../plan_grid_actor_expansion.html#autotoc_md498',1,'']]],
+  ['8_201_20current_20behaviour_3',['8.1 Current Behaviour',['../plan_future_ideas.html#autotoc_md390',1,'']]],
+  ['8_201a_20—_20absorb_20routing_4',['✅ Phase 8.1a — Absorb Routing',['../plan_grid_actor_expansion.html#autotoc_md501',1,'']]],
+  ['8_201b_20—_20damagecontext_20api_20migration_5',['✅ Phase 8.1b — DamageContext API Migration',['../plan_grid_actor_expansion.html#autotoc_md504',1,'']]],
+  ['8_201c_20—_20unbreakableballoonmodel_20balloonmodelbase_20cleanup_6',['Phase 8.1c — UnbreakableBalloonModel + BalloonModelBase Cleanup',['../plan_grid_actor_expansion.html#autotoc_md507',1,'']]],
+  ['8_202_20proposed_20flow_7',['8.2 Proposed Flow',['../plan_future_ideas.html#autotoc_md391',1,'']]],
+  ['8_202a_20—_20structural_20actors_20puff_20bush_8',['Phase 8.2a — Structural Actors (Puff + Bush)',['../plan_grid_actor_expansion.html#autotoc_md512',1,'']]],
+  ['8_202b_20—_20indestructible_20hitable_20actors_20deflector_20absorber_9',['Phase 8.2b — Indestructible Hitable Actors (Deflector + Absorber)',['../plan_grid_actor_expansion.html#autotoc_md517',1,'']]],
+  ['8_202c_10',['NudgeService decoupling (done alongside 8.2c)',['../plan_grid_actor_expansion.html#autotoc_md526',1,'']]],
+  ['8_202c_20—_20gatekeeper_20gridactorhitcontroller_11',['Phase 8.2c — Gatekeeper + GridActorHitController',['../plan_grid_actor_expansion.html#autotoc_md521',1,'']]],
+  ['8_203_20—_20procedural_20placement_20engine_12',['Phase 8.3 — Procedural Placement Engine',['../plan_grid_actor_expansion.html#autotoc_md529',1,'']]],
+  ['8_203_20assets_13',['8 3 Assets',['../plan_content_production.html',1,'Content Production Plan — Pre-8.3 Assets'],['../plan_content_production.html#autotoc_md315',1,'Content Production Plan — Pre-8.3 Assets']]],
+  ['8_203_20model_20sketch_14',['8.3 Model Sketch',['../plan_future_ideas.html#autotoc_md392',1,'']]],
+  ['8_204_20—_20difficulty_20level_20coupling_15',['Phase 8.4 — Difficulty + Level Coupling',['../plan_grid_actor_expansion.html#autotoc_md534',1,'']]],
+  ['8_204_20balancer_20changes_16',['8.4 Balancer Changes',['../plan_future_ideas.html#autotoc_md393',1,'']]],
+  ['8_205_20visual_20feedback_17',['8.5 Visual Feedback',['../plan_future_ideas.html#autotoc_md394',1,'']]],
+  ['8_206_20relationship_20to_20existing_20pass_20through_20ideas_18',['8.6 Relationship to Existing Pass-Through Ideas',['../plan_future_ideas.html#autotoc_md395',1,'']]],
+  ['8_207_20open_20questions_19',['8.7 Open Questions',['../plan_future_ideas.html#autotoc_md396',1,'']]],
+  ['8_20open_20questions_20',['13.8 Open questions',['../plan_future_ideas.html#autotoc_md434',1,'']]],
+  ['8_20remaining_20work_20—_20detailed_20status_202026_2007_2026_21',['8. Remaining work — detailed status (2026-07-26)',['../plan_shot_solver_accuracy.html#autotoc_md627',1,'']]]
+];

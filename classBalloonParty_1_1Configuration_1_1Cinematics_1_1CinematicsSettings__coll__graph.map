@@ -1,0 +1,17 @@
+<map id="BalloonParty.Configuration.Cinematics.CinematicsSettings" name="BalloonParty.Configuration.Cinematics.CinematicsSettings">
+<area shape="rect" id="Node000001" title="Entries are authored in the editor, one per CinematicState, indexed by its ordinal." alt="" coords="855,119,1080,159"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="495,5,625,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="639,29,690,41,813,79,917,117,915,122,811,84,689,46,638,34"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Cinematics_1_1ICinematicsSettings.html" title="The single setup point for cinematics: one composed entry per CinematicState." alt="" coords="445,55,675,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="689,93,855,119,854,124,688,98"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicStateEntry.html" title="Everything one CinematicState declares, indexed by its ordinal in CinematicsSettings." alt="" coords="443,119,677,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="690,137,855,137,855,142,690,142"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html" title="One camera&#45;rig segment: a TimeScaleCurve plus how the camera frames it." alt="" coords="5,87,296,127"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="310,117,443,128,442,133,310,122"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Configuration_1_1Cinematics_1_1TrackedTrailSettings.html" title="Tuning for a trail the cinematic tracks/puppets during its flight." alt="" coords="37,151,265,191"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="278,159,443,146,443,151,279,164"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html" title="The Ascent&#39;s tuning — a transform&#45;descent of the staging root, not a camera move, so it has its own h..." alt="" coords="443,183,677,223"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="691,180,854,154,855,160,691,185"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html" title="Tuning for the float&#45;away board effect: balloons float up on their own while swaying on a sine and ti..." alt="" coords="431,247,689,287"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="654,241,689,233,760,217,830,197,924,157,926,162,832,202,761,222,690,238,655,247"/>
+</map>

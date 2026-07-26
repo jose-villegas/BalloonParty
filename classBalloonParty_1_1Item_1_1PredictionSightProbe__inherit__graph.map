@@ -1,0 +1,5 @@
+<map id="BalloonParty.Item.PredictionSightProbe" name="BalloonParty.Item.PredictionSightProbe">
+<area shape="rect" id="Node000001" title="Single per&#45;item producer of the &quot;is the loaded shot&#39;s aim&#45;prediction line sighted on this item,..." alt="" coords="5,79,211,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="46,5,170,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,44,111,79,105,79,105,44"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="BalloonParty.Shared.Animation.TweenOscillator" name="BalloonParty.Shared.Animation.TweenOscillator">
+<area shape="rect" id="Node000001" title="General&#45;purpose oscillation effect." alt="" coords="54,108,281,148"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,129,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,46,150,106,147,110,86,50"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Shared_1_1Animation_1_1OscillationChannel.html" title=" " alt="" coords="154,5,381,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="241,57,188,110,184,106,237,53"/>
+</map>

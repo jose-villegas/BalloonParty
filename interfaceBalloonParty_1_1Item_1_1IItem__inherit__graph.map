@@ -1,0 +1,17 @@
+<map id="BalloonParty.Item.IItem" name="BalloonParty.Item.IItem">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,173,180,198"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Item_1_1IBalloonItem.html" title=" " alt="" coords="228,173,451,198"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,183,228,183,228,188,194,188"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler.html" title=" " alt="" coords="499,5,719,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="361,161,419,108,457,80,497,55,525,43,527,48,500,60,460,84,423,112,364,165"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Item_1_1Laser_1_1LaserItemHandler.html" title=" " alt="" coords="519,69,698,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="381,165,498,119,535,107,537,112,500,124,383,170"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Item_1_1Lightning_1_1LightningItemHandler.html" title="Handles the Lightning item: chains through same&#45;color balloons nearest&#45;first and destroys them." alt="" coords="507,133,711,173"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="460,168,506,163,507,168,460,174"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler.html" title="Handles the Paint item: recolours balloons within landed blob radii of a packed splash triangle to th..." alt="" coords="521,197,697,237"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="460,197,521,204,520,210,459,202"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Item_1_1Shield_1_1ShieldItemHandler.html" title=" " alt="" coords="517,261,701,301"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="383,201,500,247,537,259,535,264,498,252,381,206"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html" title="Handles the Snipe item: arms the active projectile as a piercing lance — it plows through balloons li..." alt="" coords="519,325,699,365"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="364,206,423,258,460,287,500,311,527,323,525,328,497,316,457,291,419,263,361,210"/>
+</map>

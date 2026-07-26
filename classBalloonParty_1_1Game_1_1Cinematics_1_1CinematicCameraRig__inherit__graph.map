@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Cinematics.CinematicCameraRig" name="BalloonParty.Game.Cinematics.CinematicCameraRig">
+<area shape="rect" id="Node000001" title="The shared cinematic camera driver — all tweens run in unscaled time since segments warp Time...." alt="" coords="5,79,232,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="69,5,168,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,44,121,79,116,79,116,44"/>
+</map>

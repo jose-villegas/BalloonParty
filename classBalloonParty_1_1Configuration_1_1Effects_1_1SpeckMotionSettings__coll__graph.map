@@ -1,0 +1,9 @@
+<map id="BalloonParty.Configuration.Effects.SpeckMotionSettings" name="BalloonParty.Configuration.Effects.SpeckMotionSettings">
+<area shape="rect" id="Node000001" title=" " alt="" coords="609,37,816,77"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html" title="How specks move — Brownian drift, drag, and their response to scenario motion and the disturbance fie..." alt="" coords="259,5,469,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="484,34,609,45,609,51,483,39"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html" title="A motion override for a set of palette colours." alt="" coords="265,69,463,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="476,76,609,64,609,69,477,82"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html" title="Base contract for a config entry keyed to a set of palette colours by a PaletteColorMaskAttribute bit..." alt="" coords="5,69,209,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="223,87,265,87,265,92,223,92"/>
+</map>

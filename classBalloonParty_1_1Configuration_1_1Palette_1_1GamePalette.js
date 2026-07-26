@@ -1,0 +1,24 @@
+var classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette =
+[
+    [ "BuildLookup", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#afe98ac3340ddeb1bd314559924b96984", null ],
+    [ "BuildNames", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ae39b60a027595d542c58860144bdb217", null ],
+    [ "BuildProgressNames", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a66a515a3b35b5f0e94459112dd8c9bca", null ],
+    [ "ColorNamesForMask", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#aef3dc229dd3ded67f2e414e9c4d28470", null ],
+    [ "GetColor", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a6d6d7d4251561bf03ce4ec9eee25fc71", null ],
+    [ "GetEntry", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a130895b754a403c50873b2fb8ed9b9cf", null ],
+    [ "IsRainbow", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#abdda03026a02335a7f9a7328d443b61a", null ],
+    [ "OnEnable", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a89a2564101d0084224508983faac7942", null ],
+    [ "_byName", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ad65133b25d5698a00cbf193f573f8b83", null ],
+    [ "_colors", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a599e71a7812782a6743b3047658b9521", null ],
+    [ "_names", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#aa9dcbd6dc5c7e443948774f9dfafd622", null ],
+    [ "_namesByMask", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a40850ecccdc6706f0e37b73a50ce4576", null ],
+    [ "_progressNames", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a136de7759a508251fc2873ccdc4e7605", null ],
+    [ "ProjectileColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a855a2e34e0fe446574122d182d3909f0", null ],
+    [ "RainbowColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ab1c22d1c348537d6dc9985e1c5728746", null ],
+    [ "SparksColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ac2aeb10121b120e25a3001f97dc0e1d3", null ],
+    [ "ToughColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a56633d10adabd807d96626b1d565ff82", null ],
+    [ "UnbreakableColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#aa61b2d2440310f309a83750f92d8d401", null ],
+    [ "ColorNames", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a9268b98c4b44f137a295c83d4925ed81", null ],
+    [ "Colors", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ae107af9a44f594acec3593aff7b19a1b", null ],
+    [ "ProgressColorNames", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ad7bd2b810534c1c29e2ea11dfa83bd6a", null ]
+];

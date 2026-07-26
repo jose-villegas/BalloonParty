@@ -1,0 +1,13 @@
+<map id="BalloonParty.Slots.Capabilities.IPressureMovable" name="BalloonParty.Slots.Capabilities.IPressureMovable">
+<area shape="rect" id="Node000001" title="Actors without this capability are immovable and halt the pressure&#45;push cascade." alt="" coords="5,101,228,141"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html" title=" " alt="" coords="276,101,479,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="242,119,276,119,276,124,242,124"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" title=" " alt="" coords="527,5,729,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="434,93,526,55,560,43,562,48,528,60,436,98"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" title="At destruction, distributes one ScoreAttribution per remaining bubble to a random palette colour...." alt="" coords="527,69,729,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="492,104,526,100,527,105,493,109"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html" title=" " alt="" coords="527,133,729,173"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="493,133,527,138,526,143,492,139"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html" title=" " alt="" coords="527,197,729,237"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="436,145,528,183,562,195,560,200,526,188,434,150"/>
+</map>

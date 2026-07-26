@@ -1,0 +1,32 @@
+<map id="BalloonParty.Editor.LevelPacingWindow" name="BalloonParty.Editor.LevelPacingWindow">
+<area shape="rect" id="Node000001" title="Spreadsheet&#45;style view of LevelPacingConfiguration: each range is a row, parameters are columns." alt="" coords="1733,56,1916,96"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="1470,35,1582,61"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1596,52,1733,65,1733,70,1595,57"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html" title="Per&#45;colour points&#45;required per level." alt="" coords="1413,85,1639,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1652,90,1733,82,1733,88,1653,96"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="1089,18,1218,43"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1232,43,1426,83,1425,88,1230,49"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html" title="Level&#45;range difficulty authoring; read by LevelDifficultyResolver (and by the balloon spawner&#39;s pool ..." alt="" coords="1039,68,1268,108"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="1282,91,1413,97,1413,103,1282,97"/>
+<area shape="rect" id="Node000006" href="$structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html" title="One contiguous span of levels sharing a RangedLevelParameters mix." alt="" coords="1055,132,1252,172"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="1266,135,1413,117,1414,122,1266,141"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html" title="The range&#45;authored form of a level&#39;s difficulty mix; Resolve is a pure function, so it&#39;s EditMode&#45;tes..." alt="" coords="675,132,893,172"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="907,149,1054,149,1054,155,907,155"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html" title="Base contract for a config entry keyed to a set of palette colours by a PaletteColorMaskAttribute bit..." alt="" coords="305,5,509,45"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="523,32,588,43,652,63,712,95,760,130,757,134,709,99,650,68,586,49,522,37"/>
+<area shape="rect" id="Node000009" href="$structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html" title="Pure — resolved once when a level begins, never re&#45;rolled per turn." alt="" coords="5,97,203,137"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="216,110,227,109,346,108,439,109,532,116,651,129,675,132,674,138,650,135,532,121,439,115,346,113,227,115,216,115"/>
+<area shape="rect" id="Node000012" href="$structBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorTypeGate.html" title="Presence in a range&#39;s array gates one GridActorType for that level." alt="" coords="299,132,515,172"/>
+<area shape="poly" id="edge12_Node000012_Node000009" title=" " alt="" coords="217,127,299,137,298,142,216,133"/>
+<area shape="rect" id="Node000010" href="$structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html" title="One entry of a range&#39;s static WeightedSet&lt;BalloonType&gt;; membership is the type gate." alt="" coords="303,196,510,236"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="523,194,674,168,675,173,524,199"/>
+<area shape="rect" id="Node000011" href="$structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html" title="Item counterpart of BalloonTypeWeight — same gate/override semantics." alt="" coords="308,260,505,300"/>
+<area shape="poly" id="edge10_Node000007_Node000011" title=" " alt="" coords="518,263,586,244,619,230,649,213,656,206,660,198,665,190,673,182,695,170,698,174,676,186,669,193,665,201,661,209,652,217,621,235,587,249,520,268"/>
+<area shape="poly" id="edge11_Node000007_Node000012" title=" " alt="" coords="529,149,674,149,674,155,529,155"/>
+<area shape="rect" id="Node000013" href="$structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html" title="Monotone piecewise&#45;cubic scoring curve." alt="" coords="1055,196,1252,236"/>
+<area shape="poly" id="edge13_Node000003_Node000013" title=" " alt="" coords="1252,190,1389,152,1472,123,1474,128,1390,157,1254,195"/>
+<area shape="rect" id="Node000014" href="$structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint.html" title="One authored milestone on the scoring curve." alt="" coords="685,196,883,236"/>
+<area shape="poly" id="edge14_Node000013_Node000014" title=" " alt="" coords="897,213,1054,213,1054,219,897,219"/>
+<area shape="rect" id="Node000015" href="$structBalloonParty_1_1Configuration_1_1Level_1_1TailGrowthConfig.html" title="Tail extrapolation configuration for LevelScoringCurve." alt="" coords="685,260,883,300"/>
+<area shape="poly" id="edge15_Node000013_Node000015" title=" " alt="" coords="896,258,1054,230,1055,236,897,263"/>
+</map>

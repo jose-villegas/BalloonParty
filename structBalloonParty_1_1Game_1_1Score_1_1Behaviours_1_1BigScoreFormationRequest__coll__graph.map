@@ -1,0 +1,7 @@
+<map id="BalloonParty.Game.Score.Behaviours.BigScoreFormationRequest" name="BalloonParty.Game.Score.Behaviours.BigScoreFormationRequest">
+<area shape="rect" id="Node000001" title="One shape inside a group: its catalog geometry, score value + range, sub&#45;centre, fitted radius." alt="" coords="5,211,228,265"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html" title="A drawable formation: its vertex count (== its score denomination == its trail count),..." alt="" coords="14,108,219,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,161,119,211,114,211,114,161"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationWalk.html" title="A CLOSED WALK a pen orbits forever: an ordered cyclic list of vertex indices whose consecutive pairs ..." alt="" coords="18,5,215,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="119,59,119,108,114,108,114,59"/>
+</map>

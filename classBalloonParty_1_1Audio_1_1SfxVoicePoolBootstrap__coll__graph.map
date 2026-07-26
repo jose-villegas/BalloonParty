@@ -1,0 +1,15 @@
+<map id="BalloonParty.Audio.SfxVoicePoolBootstrap" name="BalloonParty.Audio.SfxVoicePoolBootstrap">
+<area shape="rect" id="Node000001" title=" " alt="" coords="625,78,828,118"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="318,5,403,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="418,25,602,62,655,75,653,81,601,67,417,30"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="267,55,454,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="468,79,625,89,625,94,468,85"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html" title=" " alt="" coords="269,119,452,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="466,125,625,107,626,112,466,130"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="37,99,161,124"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="175,117,269,127,269,132,174,122"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="5,149,192,189"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="206,154,269,147,270,152,206,159"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Audio_1_1Configuration_1_1ISoundBankConfiguration.html" title=" " alt="" coords="241,183,480,223"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="464,178,601,141,673,116,675,121,602,146,465,183"/>
+</map>

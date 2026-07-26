@@ -1,0 +1,14 @@
+<map id="BalloonParty.UI.Shields.ShieldCounterAnimation" name="BalloonParty.UI.Shields.ShieldCounterAnimation">
+<area shape="rect" id="Node000001" title=" " alt="" coords="795,22,975,62"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="33,5,157,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="170,16,435,22,771,33,794,34,794,39,771,38,435,27,170,22"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1UI_1_1ReactiveCounterLabel.html" title="Subscribes to a reactive int and delegates rendering to an ICounterDisplay on the same GameObject." alt="" coords="291,55,472,95"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="171,30,291,55,290,60,170,36"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterLabel.html" title="The loaded projectile&#39;s remaining&#45;shields counter; behaviour lives in ReactiveCounterLabel." alt="" coords="521,51,696,91"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="709,58,794,49,795,54,710,63"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="485,71,521,70,521,76,486,76"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1UI_1_1Binding_1_1IReactiveBindable-1-g.html" title="A view that binds itself to a reactive source of T ." alt="" coords="5,61,184,101"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="198,76,290,74,290,80,198,81"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1UI_1_1Binding_1_1ICounterDisplay.html" title="Strategy for how a counter label renders its numeric value." alt="" coords="6,125,183,165"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="191,119,297,93,299,98,192,124"/>
+</map>

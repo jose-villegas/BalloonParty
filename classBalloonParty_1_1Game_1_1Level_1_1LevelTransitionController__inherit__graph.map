@@ -1,0 +1,7 @@
+<map id="BalloonParty.Game.Level.LevelTransitionController" name="BalloonParty.Game.Level.LevelTransitionController">
+<area shape="rect" id="Node000001" title="Holds PauseSource.LevelTransition for the whole Ascent sequence so the thrower and spawn&#45;loss checks ..." alt="" coords="11,79,199,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,91,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="67,40,94,77,89,80,62,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="115,5,213,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="149,43,122,80,117,77,145,40"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="BalloonParty.Editor.GradientTextureDrawer" name="BalloonParty.Editor.GradientTextureDrawer">
+<area shape="rect" id="Node000001" title="Replaces the default texture slot for any 2D shader property with Unity&#39;s native gradient picker." alt="" coords="5,79,189,120"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="18,5,176,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,44,99,80,95,78,95,48"/>
+</map>

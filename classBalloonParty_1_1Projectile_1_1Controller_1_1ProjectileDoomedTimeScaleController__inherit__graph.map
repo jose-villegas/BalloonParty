@@ -1,0 +1,9 @@
+<map id="BalloonParty.Projectile.Controller.ProjectileDoomedTimeScaleController" name="BalloonParty.Projectile.Controller.ProjectileDoomedTimeScaleController">
+<area shape="rect" id="Node000001" title="Claims a global slow&#45;motion time scale for the duration of a shot&#39;s doomed &#39;last breath&#39; (see Project..." alt="" coords="35,79,274,133"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,91,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,37,124,77,120,81,71,42"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="115,5,195,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="157,44,157,79,152,79,152,44"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="219,5,317,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="243,41,191,81,188,77,240,37"/>
+</map>

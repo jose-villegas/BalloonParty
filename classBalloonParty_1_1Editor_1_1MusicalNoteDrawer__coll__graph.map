@@ -1,0 +1,5 @@
+<map id="BalloonParty.Editor.MusicalNoteDrawer" name="BalloonParty.Editor.MusicalNoteDrawer">
+<area shape="rect" id="Node000001" title="Draws a MusicalNoteAttribute int field as a note&#45;name dropdown." alt="" coords="5,79,203,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="42,5,166,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,44,107,79,101,79,101,44"/>
+</map>

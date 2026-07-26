@@ -1,0 +1,11 @@
+<map id="BalloonParty.Balloon.Type.RainbowBalloonVariant" name="BalloonParty.Balloon.Type.RainbowBalloonVariant">
+<area shape="rect" id="Node000001" title="A colourable balloon that starts in rainbow mode and pushes the level&#39;s allowed colours into the band..." alt="" coords="489,58,683,98"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Type_1_1ColorableBalloonVariant.html" title=" " alt="" coords="247,26,441,66"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="455,58,490,63,489,68,454,63"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="40,5,164,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="178,24,247,32,247,37,177,29"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Balloon_1_1Type_1_1IBalloonVariant.html" title=" " alt="" coords="5,55,199,95"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="212,59,247,55,248,60,213,65"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding.html" title="Implemented by prefab MonoBehaviours that react to model binding; BalloonView discovers and calls the..." alt="" coords="247,90,441,130"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="455,93,489,88,490,93,455,98"/>
+</map>

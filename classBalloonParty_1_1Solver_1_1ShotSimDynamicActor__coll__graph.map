@@ -1,0 +1,16 @@
+<map id="BalloonParty.Solver.ShotSimDynamicActor" name="BalloonParty.Solver.ShotSimDynamicActor">
+<area shape="rect" id="Node000001" title="Stub grid actor standing in for a live balloon in the dynamic&#45;board sim — enough of IWriteableDynamic..." alt="" coords="713,101,892,141"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html" title=" " alt="" coords="459,37,665,77"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="652,78,728,99,726,104,650,84"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IDynamicSlotActor.html" title=" " alt="" coords="232,5,411,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="425,36,459,41,458,46,424,42"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="5,37,184,77"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="197,40,231,35,232,41,198,45"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="232,69,411,109"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="198,69,232,74,231,79,197,75"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="424,73,458,68,459,74,425,78"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence.html" title="Lets a dynamic actor shape how the balancer moves it: a per&#45;candidate weight offset added to the supp..." alt="" coords="473,101,651,141"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="665,119,713,119,713,124,665,124"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceBiasSource.html" title="The read&#45;set the balance&#45;bias formulas (BalloonParty.Shared.Extensions.BalanceBiasExtensions) need fr..." alt="" coords="473,165,651,205"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="650,159,726,139,728,144,652,164"/>
+</map>

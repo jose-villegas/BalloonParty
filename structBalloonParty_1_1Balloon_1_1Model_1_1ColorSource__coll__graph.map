@@ -1,0 +1,5 @@
+<map id="BalloonParty.Balloon.Model.ColorSource" name="BalloonParty.Balloon.Model.ColorSource">
+<area shape="rect" id="Node000001" title="Shared colour resolution for score&#45;scatter models (Tough/Cluster/rainbow&#45;mode BalloonModel)." alt="" coords="5,108,208,148"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="8,5,205,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,59,109,108,104,108,104,59"/>
+</map>

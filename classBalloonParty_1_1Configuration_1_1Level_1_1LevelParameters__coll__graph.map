@@ -1,0 +1,11 @@
+<map id="BalloonParty.Configuration.Level.LevelParameters" name="BalloonParty.Configuration.Level.LevelParameters">
+<area shape="rect" id="Node000001" title="Field defaults are the parameterless fallback (Simple&#45;only) used when no authored range contains a le..." alt="" coords="412,101,609,141"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html" title="The read surface of a fully&#45;resolved level; cross&#45;level queries stay on the resolver instead." alt="" coords="30,5,227,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="242,45,389,80,451,99,449,104,387,85,241,50"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html" title="One entry of a range&#39;s static WeightedSet&lt;BalloonType&gt;; membership is the type gate." alt="" coords="25,69,232,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="246,96,412,110,411,116,245,102"/>
+<area shape="rect" id="Node000004" href="$structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html" title="Item counterpart of BalloonTypeWeight — same gate/override semantics." alt="" coords="30,133,227,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="241,142,388,129,412,127,412,133,388,135,241,147"/>
+<area shape="rect" id="Node000005" href="$structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate.html" title="Resolved counterpart of GridActorTypeGate — Count is an already&#45;rolled plain int, not an unresolved R..." alt="" coords="5,197,252,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="247,192,387,159,452,139,453,144,389,164,248,197"/>
+</map>

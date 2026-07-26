@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.Level.RangedLevelParameters" name="BalloonParty.Configuration.Level.RangedLevelParameters">
+<area shape="rect" id="Node000001" title="The range&#45;authored form of a level&#39;s difficulty mix; Resolve is a pure function, so it&#39;s EditMode&#45;tes..." alt="" coords="5,93,224,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html" title="Base contract for a config entry keyed to a set of palette colours by a PaletteColorMaskAttribute bit..." alt="" coords="13,5,217,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,59,117,93,112,93,112,59"/>
+</map>

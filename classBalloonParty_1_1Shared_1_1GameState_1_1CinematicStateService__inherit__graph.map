@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.GameState.CinematicStateService" name="BalloonParty.Shared.GameState.CinematicStateService">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,93,213,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Shared_1_1GameState_1_1ICinematicState.html" title="Injectable seam over the static Cinematic state, testable without global state." alt="" coords="12,5,207,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,59,112,93,107,93,107,59"/>
+</map>

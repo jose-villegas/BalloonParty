@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.Effects.IProjectileVisualConfig" name="BalloonParty.Configuration.Effects.IProjectileVisualConfig">
+<area shape="rect" id="Node000001" title="Read&#45;only visual tuning for the projectile: glow, pierce spiral, scene light, flash FX,..." alt="" coords="5,5,221,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html" title=" " alt="" coords="7,93,219,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="116,59,116,93,111,93,111,59"/>
+</map>

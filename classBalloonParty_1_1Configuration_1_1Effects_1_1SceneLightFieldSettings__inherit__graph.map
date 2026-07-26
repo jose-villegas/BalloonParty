@@ -1,0 +1,13 @@
+<map id="BalloonParty.Configuration.Effects.SceneLightFieldSettings" name="BalloonParty.Configuration.Effects.SceneLightFieldSettings">
+<area shape="rect" id="Node000001" title=" " alt="" coords="296,119,521,159"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="62,5,191,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="205,28,249,41,322,78,382,117,379,121,320,83,247,46,204,33"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings.html" title="Read&#45;only tuning for the scene&#45;light field (see Milestone 3)." alt="" coords="12,55,241,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="229,96,321,117,319,122,228,101"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IScreenSpaceLightSettings.html" title="Read&#45;only tuning for the screen&#45;space GI approximation (see Screen&#45;Space Light (2D GI))." alt="" coords="5,119,248,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="261,137,296,137,296,142,261,142"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightSettings.html" title="Read&#45;only ambient/main scene&#45;light configuration — direction, colour, intensity." alt="" coords="27,183,226,223"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="228,178,319,157,321,162,229,183"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html" title="Read&#45;only tuning for the night&#45;mode time&#45;of&#45;day cycle." alt="" coords="26,247,227,287"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="227,241,247,233,319,195,378,157,381,162,322,200,249,238,228,246"/>
+</map>

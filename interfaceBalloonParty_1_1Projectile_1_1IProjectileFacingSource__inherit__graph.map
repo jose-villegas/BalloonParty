@@ -1,0 +1,5 @@
+<map id="BalloonParty.Projectile.IProjectileFacingSource" name="BalloonParty.Projectile.IProjectileFacingSource">
+<area shape="rect" id="Node000001" title="Read&#45;only facing surface for the loaded/flying shot, exposed to a pooled (non&#45;injected) item visual —..." alt="" coords="5,5,177,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Projectile_1_1ProjectileFacingSource.html" title="Aggregates the DI&#45;only projectile providers (ProjectilePositionProvider, PredictionTraceProvider) wit..." alt="" coords="6,93,177,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,59,94,93,89,93,89,59"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="BalloonParty.Audio.AudioMixerRouter" name="BalloonParty.Audio.AudioMixerRouter">
+<area shape="rect" id="Node000001" title=" " alt="" coords="356,37,540,77"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Audio_1_1IAudioMixerRouter.html" title=" " alt="" coords="31,5,219,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="232,33,356,46,356,51,232,39"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Audio_1_1Configuration_1_1IAudioMixerSettings.html" title=" " alt="" coords="5,69,244,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="257,74,356,64,356,69,258,79"/>
+</map>

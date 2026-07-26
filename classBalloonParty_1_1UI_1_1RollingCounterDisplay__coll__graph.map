@@ -1,0 +1,10 @@
+<map id="BalloonParty.UI.RollingCounterDisplay" name="BalloonParty.UI.RollingCounterDisplay">
+<area shape="rect" id="Node000001" title="Renders a counter value via RollingTextAnimator (per&#45;digit odometer roll)." alt="" coords="524,26,744,66"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,129,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,9,155,9,280,7,406,11,500,23,524,27,523,32,500,29,405,17,280,13,155,14,143,14"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Shared_1_1Animation_1_1RollingTextAnimator.html" title="Animates numeric changes on a TMP_Text with a rolling odometer effect." alt="" coords="179,26,405,66"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="144,25,179,29,178,34,143,30"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1UI_1_1Binding_1_1ICounterDisplay.html" title="Strategy for how a counter label renders its numeric value." alt="" coords="203,90,381,130"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="393,88,526,63,527,69,394,94"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="419,43,524,43,524,49,419,49"/>
+</map>

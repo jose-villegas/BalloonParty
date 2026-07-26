@@ -1,0 +1,13 @@
+<map id="BalloonParty.UI.Binding.IReactiveBindable&lt; T &gt;" name="BalloonParty.UI.Binding.IReactiveBindable&lt; T &gt;">
+<area shape="rect" id="Node000001" title="A view that binds itself to a reactive source of T ." alt="" coords="5,37,184,77"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html" title="Drives the early&#45;warning effect from the danger level (0→1): tints sprites, grows the top/bottom grad..." alt="" coords="232,5,453,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,41,231,37,232,42,198,47"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1ReactiveCounterLabel.html" title="Subscribes to a reactive int and delegates rendering to an ICounterDisplay on the same GameObject." alt="" coords="252,69,433,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="198,68,252,75,251,80,197,73"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1UI_1_1Health_1_1HealthCounterLabel.html" title="The player&#39;s current&#45;HP counter; behaviour lives in ReactiveCounterLabel." alt="" coords="501,5,716,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="439,63,524,43,526,48,440,69"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html" title="Score counter — behaviour lives in ReactiveCounterLabel." alt="" coords="509,69,709,109"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="447,87,509,87,509,92,447,92"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterLabel.html" title="The loaded projectile&#39;s remaining&#45;shields counter; behaviour lives in ReactiveCounterLabel." alt="" coords="521,133,696,173"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="440,110,526,131,524,136,439,115"/>
+</map>

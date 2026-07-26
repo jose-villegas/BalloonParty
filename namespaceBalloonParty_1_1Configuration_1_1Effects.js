@@ -1,0 +1,66 @@
+var namespaceBalloonParty_1_1Configuration_1_1Effects =
+[
+    [ "BackgroundFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings" ],
+    [ "BushSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings" ],
+    [ "BushVariantData", "classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData" ],
+    [ "DisturbanceFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings" ],
+    [ "IBackgroundFieldSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBackgroundFieldSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBackgroundFieldSettings" ],
+    [ "IBushSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings" ],
+    [ "IDisturbanceFieldSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IDisturbanceFieldSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IDisturbanceFieldSettings" ],
+    [ "IProjectileVisualConfig", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig" ],
+    [ "IPuffCloudSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings" ],
+    [ "ISceneLightFieldSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings" ],
+    [ "ISceneLightSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightSettings" ],
+    [ "IScreenSpaceLightSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IScreenSpaceLightSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IScreenSpaceLightSettings" ],
+    [ "IShieldFieldSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IShieldFieldSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IShieldFieldSettings" ],
+    [ "ISmokeFieldSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISmokeFieldSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISmokeFieldSettings" ],
+    [ "ISpeckAppearanceSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckAppearanceSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckAppearanceSettings" ],
+    [ "ISpeckFieldSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckFieldSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckFieldSettings" ],
+    [ "ISpeckMotionSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings" ],
+    [ "ISpeckSpawnSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings" ],
+    [ "ITimeOfDaySettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings" ],
+    [ "LeafSlotData", "structBalloonParty_1_1Configuration_1_1Effects_1_1LeafSlotData.html", "structBalloonParty_1_1Configuration_1_1Effects_1_1LeafSlotData" ],
+    [ "PaintProfile", "structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html", "structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile" ],
+    [ "ProjectileVisualConfig", "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig" ],
+    [ "PuffCloudSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings" ],
+    [ "SceneLightFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings" ],
+    [ "ShieldFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings" ],
+    [ "SmokeFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings" ],
+    [ "SpeckAppearanceSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckAppearanceSettings.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckAppearanceSettings" ],
+    [ "SpeckFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckFieldSettings.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckFieldSettings" ],
+    [ "SpeckLookProfile", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile" ],
+    [ "SpeckMotionProfile", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile" ],
+    [ "SpeckMotionSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionSettings.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionSettings" ],
+    [ "SpeckSpawnSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings" ],
+    [ "StampProfile", "structBalloonParty_1_1Configuration_1_1Effects_1_1StampProfile.html", "structBalloonParty_1_1Configuration_1_1Effects_1_1StampProfile" ],
+    [ "PaintColorMode", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#acd622b71fc538338a703329872e54688", [
+      [ "Dynamic", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#acd622b71fc538338a703329872e54688a971fd8cc345d8bd9f92e9f7d88fdf20c", null ],
+      [ "Palette", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#acd622b71fc538338a703329872e54688a278f9a3d3077c522e71022e302b9e0e4", null ],
+      [ "Custom", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#acd622b71fc538338a703329872e54688a90589c47f06eb971d548591f23c285af", null ]
+    ] ],
+    [ "PaintSource", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bd", [
+      [ "ProjectileTrail", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda87950d62eb5a4df533e10c0411199f3c", null ],
+      [ "ToughPop", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda238dd854590fed6a9209a36c2c22f5ed", null ],
+      [ "ToughBreathing", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda81552e14e7348edf29e81ad2596d9133", null ],
+      [ "ToughDeflect", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda4925b41d0df91ae83e84e0ca1fedecf6", null ]
+    ] ],
+    [ "StampSource", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0e", [
+      [ "Projectile", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0eaae7968d26b598ce434958b0825b7a4ac", null ],
+      [ "ProjectileFire", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea6111722f15c613a723c91bec33c27995", null ],
+      [ "BalloonPath", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea46dcecb991c80b271ecca21b7f3d27fd", null ],
+      [ "BalloonPop", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea8e42741ff46f887bb0109738fbae034d", null ],
+      [ "Bomb", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0eacd3abfc2f377a4c3fd9181f919d9de82", null ],
+      [ "Laser", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ead47bda86cb76322c22950e84e9cd109d", null ],
+      [ "Paint", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea4802a5ac6005a6ab9c68a2fb29e30a3e", null ],
+      [ "BalloonDeflect", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea52a73816ddba85a5c058741fbfd761e5", null ],
+      [ "ToughWarning", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea3e4d3aabf5def7503b63d4e246745370", null ],
+      [ "RainbowColor", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0eaeeb8d0dd6adba29f1af768ccb23a0a79", null ],
+      [ "ProjectileImpact", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea1f4a87dac642b8064a663eb742408cb2", null ],
+      [ "UnbreakableBurst", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea52557e239f11db73b54f27817dac5aac", null ],
+      [ "PierceDischarge", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0eae1eb86b5a3508b638909eaf2544ca4ab", null ]
+    ] ],
+    [ "TimeOfDaySource", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac49e29688fd680d7d4b970212051ce95", [
+      [ "LevelSweep", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac49e29688fd680d7d4b970212051ce95af82b70e009a9e33bfaa99ab4ddb9a426", null ],
+      [ "Realtime", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac49e29688fd680d7d4b970212051ce95aa5ff58bda67e2160b5e5d5a47a4333c3", null ]
+    ] ]
+];

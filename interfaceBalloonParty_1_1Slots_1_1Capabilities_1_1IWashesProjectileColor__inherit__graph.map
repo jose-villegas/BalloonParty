@@ -1,0 +1,5 @@
+<map id="BalloonParty.Slots.Capabilities.IWashesProjectileColor" name="BalloonParty.Slots.Capabilities.IWashesProjectileColor">
+<area shape="rect" id="Node000001" title="Marks a balloon that &quot;washes&quot; a projectile on contact — resetting its stolen colour back to none,..." alt="" coords="5,5,228,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" title="At destruction, distributes one ScoreAttribution per remaining bubble to a random palette colour...." alt="" coords="15,93,218,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,59,119,93,114,93,114,59"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="BalloonParty.Item.Paint.PaintSplashView.BlobFlight" name="BalloonParty.Item.Paint.PaintSplashView.BlobFlight">
+<area shape="rect" id="Node000001" title=" " alt="" coords="67,197,265,237"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Shared_1_1Rendering_1_1ColorableRenderer.html" title="Non&#45;generic base so Unity can serialise ColorableRenderer[] fields — [SerializeField] doesn&#39;t work on..." alt="" coords="53,95,279,135"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="169,149,169,197,163,197,163,149"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,13,129,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="93,45,146,93,143,97,89,49"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1Rendering_1_1IColorableRenderer.html" title=" " alt="" coords="153,5,379,45"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="236,57,189,97,186,93,232,53"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="BalloonParty.Configuration.Effects.DisturbanceFieldSettings" name="BalloonParty.Configuration.Effects.DisturbanceFieldSettings">
+<area shape="rect" id="Node000001" title=" " alt="" coords="387,55,619,95"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="59,5,188,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="202,27,387,55,386,60,201,32"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IDisturbanceFieldSettings.html" title=" " alt="" coords="5,55,241,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="255,73,386,73,386,78,255,78"/>
+<area shape="rect" id="Node000004" href="$structBalloonParty_1_1Configuration_1_1Effects_1_1StampProfile.html" title=" " alt="" coords="25,119,222,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="235,126,362,107,428,93,429,98,363,113,236,131"/>
+</map>

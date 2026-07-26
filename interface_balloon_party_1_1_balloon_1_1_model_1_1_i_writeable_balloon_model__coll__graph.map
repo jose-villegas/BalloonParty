@@ -1,0 +1,19 @@
+<map id="BalloonParty.Balloon.Model.IWriteableBalloonModel" name="BalloonParty.Balloon.Model.IWriteableBalloonModel">
+<area shape="rect" id="Node000001" title=" " alt="" coords="703,104,887,145"/>
+<area shape="rect" id="Node000002" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_writeable_dynamic_slot_actor.html" title=" " alt="" coords="470,136,655,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="670,139,706,137,700,137,671,144"/>
+<area shape="rect" id="Node000003" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_dynamic_slot_actor.html" title=" " alt="" coords="238,136,403,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="418,154,472,156,467,157,419,159"/>
+<area shape="rect" id="Node000006" href="$interface_balloon_party_1_1_balloon_1_1_model_1_1_i_balloon_model.html" title=" " alt="" coords="471,71,654,111"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="412,129,482,113,487,111,414,134"/>
+<area shape="rect" id="Node000004" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_slot_actor.html" title=" " alt="" coords="5,169,171,210"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="185,173,240,167,235,169,186,178"/>
+<area shape="rect" id="Node000005" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_writeable_slot_actor.html" title=" " alt="" coords="238,201,403,242"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="186,200,240,210,235,211,186,206"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="412,194,482,178,487,177,414,199"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="670,104,705,111,700,111,670,109"/>
+<area shape="rect" id="Node000007" href="$interface_balloon_party_1_1_slots_1_1_capabilities_1_1_i_hitable.html" title=" " alt="" coords="219,5,422,46"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="413,48,487,70,482,70,413,53"/>
+<area shape="rect" id="Node000008" href="$interface_balloon_party_1_1_slots_1_1_capabilities_1_1_i_has_nudge.html" title=" " alt="" coords="219,71,422,111"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="438,88,473,91,468,91,438,94"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="BalloonParty.UI.CanvasCameraBinder" name="BalloonParty.UI.CanvasCameraBinder">
+<area shape="rect" id="Node000001" title="Binds a Screen Space &#45; Camera canvas to the single persistent camera at runtime." alt="" coords="5,79,228,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="55,5,179,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,44,119,79,114,79,114,44"/>
+</map>

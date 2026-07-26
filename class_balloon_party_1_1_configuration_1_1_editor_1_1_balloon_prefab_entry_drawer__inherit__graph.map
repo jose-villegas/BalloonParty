@@ -1,0 +1,7 @@
+<map id="BalloonParty.Configuration.Editor.BalloonPrefabEntryDrawer" name="BalloonParty.Configuration.Editor.BalloonPrefabEntryDrawer">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,168,218,208"/>
+<area shape="rect" id="Node000002" href="$class_balloon_party_1_1_editor_1_1_auto_field_property_drawer.html" title="Base class for property drawers that want common fields drawn automatically via serialized&#45;property r..." alt="" coords="31,79,192,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,133,114,168,109,166,110,137"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="55,5,168,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="113,44,114,79,109,78,110,49"/>
+</map>

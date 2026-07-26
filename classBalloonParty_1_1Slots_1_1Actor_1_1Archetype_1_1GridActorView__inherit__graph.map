@@ -1,0 +1,9 @@
+<map id="BalloonParty.Slots.Actor.Archetype.GridActorView" name="BalloonParty.Slots.Actor.Archetype.GridActorView">
+<area shape="rect" id="Node000001" title=" " alt="" coords="240,55,425,95"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="37,5,161,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,31,251,53,250,58,164,37"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="5,55,192,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="205,73,240,73,240,78,205,78"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="9,119,188,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="185,113,258,93,260,98,186,118"/>
+</map>

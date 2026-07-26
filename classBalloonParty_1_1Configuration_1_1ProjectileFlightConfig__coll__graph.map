@@ -1,0 +1,7 @@
+<map id="BalloonParty.Configuration.ProjectileFlightConfig" name="BalloonParty.Configuration.ProjectileFlightConfig">
+<area shape="rect" id="Node000001" title=" " alt="" coords="70,93,267,133"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,135,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,45,149,91,145,95,92,49"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="159,5,379,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="238,56,193,95,189,91,234,52"/>
+</map>

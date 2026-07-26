@@ -1,0 +1,13 @@
+<map id="BalloonParty.Game.Score.Behaviours.BigScoreTrailBehaviour" name="BalloonParty.Game.Score.Behaviours.BigScoreTrailBehaviour">
+<area shape="rect" id="Node000001" title="Decomposes a big score into a catalog of 3D shapes and launches them all at once." alt="" coords="565,92,815,132"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailBehaviour.html" title="A per&#45;group choreography handler: it owns everything between the group&#39;s spawn and its arrivals." alt="" coords="169,5,401,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="397,45,542,76,602,89,600,95,541,81,396,51"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html" title="Global knobs shared by every BigScore formation: radius, pen speed, coverage, spin and the scale&#45;over..." alt="" coords="185,69,384,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="398,93,565,102,565,108,398,98"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html" title="Pooled, zero&#45;allocation per&#45;frame driver for every in&#45;flight shape formation." alt="" coords="163,133,407,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="420,137,565,122,565,127,421,142"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,141,113,166"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="127,151,162,151,162,156,127,156"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Configuration_1_1IScoreTrailBehaviourConfiguration.html" title="Read&#45;only view of the score&#45;trail choreography table — the ordered ScoreTrailBehaviourEntry list the ..." alt="" coords="163,197,406,237"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="394,192,541,156,628,130,630,135,542,161,395,197"/>
+</map>

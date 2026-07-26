@@ -1,0 +1,5 @@
+<map id="BalloonParty.Editor.EffectPreview.LaserPreviewModule" name="BalloonParty.Editor.EffectPreview.LaserPreviewModule">
+<area shape="rect" id="Node000001" title="Preview module for LaserView." alt="" coords="9,93,221,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Editor_1_1EffectPreview_1_1IEffectPreviewModule.html" title="Pluggable preview module for EffectViewPreviewPlayer; handles per&#45;effect rendering while the player m..." alt="" coords="5,5,224,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,59,117,93,112,93,112,59"/>
+</map>

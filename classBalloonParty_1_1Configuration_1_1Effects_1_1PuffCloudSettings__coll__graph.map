@@ -1,0 +1,15 @@
+<map id="BalloonParty.Configuration.Effects.PuffCloudSettings" name="BalloonParty.Configuration.Effects.PuffCloudSettings">
+<area shape="rect" id="Node000001" title=" " alt="" coords="769,55,967,95"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="469,5,598,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="612,29,770,56,769,61,611,34"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html" title=" " alt="" coords="435,55,632,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="645,73,769,73,769,78,645,78"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1IClusterViewSettings.html" title="Shared visual configuration for cluster&#45;based renderers (clouds, bushes, etc.)." alt="" coords="179,55,385,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="399,73,435,73,435,78,399,78"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView.html" title="Cloud renderer for Puff clusters; inherits all behaviour from ClusterView." alt="" coords="440,119,627,159"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="639,116,769,91,770,97,640,122"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterView.html" title="Expects the shader to declare _SlotCentersWorld (Vector4[]), _SlotCount (int), and _TimeOffset (float..." alt="" coords="193,119,371,159"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="385,137,440,137,440,142,385,142"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="5,127,129,152"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="143,137,193,137,193,142,143,142"/>
+</map>

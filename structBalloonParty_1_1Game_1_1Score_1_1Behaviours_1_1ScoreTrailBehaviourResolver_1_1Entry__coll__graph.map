@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Score.Behaviours.ScoreTrailBehaviourResolver.Entry" name="BalloonParty.Game.Score.Behaviours.ScoreTrailBehaviourResolver.Entry">
+<area shape="rect" id="Node000001" title=" " alt="" coords="7,108,235,163"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailBehaviour.html" title="A per&#45;group choreography handler: it owns everything between the group&#39;s spawn and its arrivals." alt="" coords="5,5,237,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,59,124,108,119,108,119,59"/>
+</map>

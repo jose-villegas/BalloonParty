@@ -1,0 +1,7 @@
+<map id="BalloonParty.Configuration.Cinematics.CinematicStateEntry" name="BalloonParty.Configuration.Cinematics.CinematicStateEntry">
+<area shape="rect" id="Node000001" title="Everything one CinematicState declares, indexed by its ordinal in CinematicsSettings." alt="" coords="431,37,664,77"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html" title="One camera&#45;rig segment: a TimeScaleCurve plus how the camera frames it." alt="" coords="5,5,296,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="310,36,431,45,430,51,310,41"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Configuration_1_1Cinematics_1_1TrackedTrailSettings.html" title="Tuning for a trail the cinematic tracks/puppets during its flight." alt="" coords="37,69,265,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="278,76,430,64,431,69,279,82"/>
+</map>

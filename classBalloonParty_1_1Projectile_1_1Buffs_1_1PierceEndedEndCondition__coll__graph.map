@@ -1,0 +1,7 @@
+<map id="BalloonParty.Projectile.Buffs.PierceEndedEndCondition" name="BalloonParty.Projectile.Buffs.PierceEndedEndCondition">
+<area shape="rect" id="Node000001" title="Ends the buff when the projectile stops piercing — the wall that spends the pierce after a tough plow..." alt="" coords="14,167,239,207"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html" title="Decides when a projectile buff ends." alt="" coords="5,79,248,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,133,129,166,124,166,124,133"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="77,5,176,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="129,44,129,79,124,79,124,44"/>
+</map>

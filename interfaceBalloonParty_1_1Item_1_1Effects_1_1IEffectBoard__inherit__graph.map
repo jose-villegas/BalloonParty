@@ -1,0 +1,7 @@
+<map id="BalloonParty.Item.Effects.IEffectBoard" name="BalloonParty.Item.Effects.IEffectBoard">
+<area shape="rect" id="Node000001" title="The occupant read&#45;set an item&#45;effect core selects against — implemented by GridEffectBoard (live) and..." alt="" coords="109,5,297,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Item_1_1Effects_1_1GridEffectBoard.html" title="Live IEffectBoard over a real SlotGrid — occupants are every IBalloonModel on the grid (statics are n..." alt="" coords="5,93,193,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,56,124,95,121,91,168,52"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Solver_1_1ShotSimEffectBoard.html" title="Solver&#45;side IEffectBoard — runs purely over the working set + ShotSlotLattice (Shot Solver Accuracy P..." alt="" coords="218,93,397,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="239,52,286,91,283,95,235,56"/>
+</map>

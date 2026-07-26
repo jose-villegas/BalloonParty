@@ -1,0 +1,5 @@
+<map id="BalloonParty.Editor.ScreenSpaceLightServiceEditor" name="BalloonParty.Editor.ScreenSpaceLightServiceEditor">
+<area shape="rect" id="Node000001" title="Live play&#45;mode preview of the screen&#45;space light buffer: RGB is bounce color, A is shadow amount." alt="" coords="5,79,196,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="33,5,169,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,44,103,79,98,79,98,44"/>
+</map>

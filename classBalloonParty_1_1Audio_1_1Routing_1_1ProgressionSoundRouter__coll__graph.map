@@ -1,0 +1,11 @@
+<map id="BalloonParty.Audio.Routing.ProgressionSoundRouter" name="BalloonParty.Audio.Routing.ProgressionSoundRouter">
+<area shape="rect" id="Node000001" title=" " alt="" coords="320,77,521,117"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="64,5,149,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="163,28,209,39,297,61,347,74,346,79,295,66,207,45,162,34"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="57,55,156,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="170,70,320,85,320,90,169,76"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html" title=" " alt="" coords="11,105,202,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="215,112,320,103,320,108,216,118"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Audio_1_1IMelodicContext.html" title=" " alt="" coords="5,169,208,209"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="190,162,295,131,353,114,354,119,297,137,192,167"/>
+</map>

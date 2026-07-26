@@ -1,0 +1,21 @@
+var namespaceBalloonParty_1_1Configuration_1_1Items =
+[
+    [ "BombSettings", "classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html", "classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings" ],
+    [ "IItemConfiguration", "interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration" ],
+    [ "ItemConfiguration", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemConfiguration.html", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemConfiguration" ],
+    [ "ItemSettings", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings" ],
+    [ "ItemTypeWeight", "structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html", "structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight" ],
+    [ "LaserSettings", "classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html", "classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings" ],
+    [ "LightningSettings", "classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html", "classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings" ],
+    [ "PaintSettings", "classBalloonParty_1_1Configuration_1_1Items_1_1PaintSettings.html", "classBalloonParty_1_1Configuration_1_1Items_1_1PaintSettings" ],
+    [ "SnipeSettings", "classBalloonParty_1_1Configuration_1_1Items_1_1SnipeSettings.html", "classBalloonParty_1_1Configuration_1_1Items_1_1SnipeSettings" ],
+    [ "ItemType", "namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2b", [
+      [ "None", "namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2ba6adf97f83acf6453d4a6a4b1070f3754", null ],
+      [ "Shield", "namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2ba970da5f1f2e32aeb9e488dd017160ab4", null ],
+      [ "Bomb", "namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2bacd3abfc2f377a4c3fd9181f919d9de82", null ],
+      [ "Laser", "namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2bad47bda86cb76322c22950e84e9cd109d", null ],
+      [ "Lightning", "namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2ba457ba641340a812b28f949a26fca3e7b", null ],
+      [ "Paint", "namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2ba4802a5ac6005a6ab9c68a2fb29e30a3e", null ],
+      [ "Snipe", "namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2ba82a0147abe0fb08bde142ccf08ae65f7", null ]
+    ] ]
+];

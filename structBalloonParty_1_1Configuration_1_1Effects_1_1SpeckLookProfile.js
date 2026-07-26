@@ -1,0 +1,27 @@
+var structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile =
+[
+    [ "_colorMask", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a4ac1bac998bd8ec7009d03d5334df1a6", null ],
+    [ "_fadeIn", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#ac62bd8ae9d5dae1076fb75b99b60851f", null ],
+    [ "_fadeOut", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a7c4b80a4474b9b62b45cf3eab946cf65", null ],
+    [ "_lifetimeRange", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a16fb6745c6dc547a23a59863db7886ef", null ],
+    [ "_lightInfluence", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a1ee3863a9ca441cf102bf9319e13762a", null ],
+    [ "_lightMode", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a2fa0cbd9b8a67fcc4e3942e992538324", null ],
+    [ "_scaleHold", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#ab455510189d12b4b93b28fb0eea52f44", null ],
+    [ "_scalePulses", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#ad4cc7d9b49f0085a99df53dd63204e4c", null ],
+    [ "_scaleRange", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#ad5f1a2f3f2e282df2d8c0e68ddb846bf", null ],
+    [ "_speckSize", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#ae1f1922b6b757906ef19fed2e288ebdd", null ],
+    [ "_trailLength", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#add174f54ffabc43ab27b19c968fd78ea", null ],
+    [ "_trailMax", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a06b1bcd62162a3fc19971b0ed36838d6", null ],
+    [ "ColorMask", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#ae6e01f6cf6bd5f39d94812c2ee578620", null ],
+    [ "FadeIn", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#ac402d9445e6a9ab335b1963d09ed88ae", null ],
+    [ "FadeOut", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#afec96ce756ed93036bf3a66e0f0e9a4e", null ],
+    [ "LifetimeRange", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#acff100fd06b31d07571cb2e7870f54f9", null ],
+    [ "LightInfluence", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#afdc7cbc648c166bc4a124cee64fe1268", null ],
+    [ "LightMode", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a98d1988dcba9da94a74ea164d2006823", null ],
+    [ "ScaleHold", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a4f61e2233f24ecbbad463efeec0425c8", null ],
+    [ "ScalePulses", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a773dd6e5c010e964e4af4d6b9825516a", null ],
+    [ "ScaleRange", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a274acaa798fbf4c85b2847cdb174da73", null ],
+    [ "SpeckSize", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a39b9d7f094bf97dce35bf070c425c436", null ],
+    [ "TrailLength", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a0bdede36bc9557fb9d8de953ba9f78bf", null ],
+    [ "TrailMax", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a3d4989fd70cc0b2fafffdad0d2912ba2", null ]
+];

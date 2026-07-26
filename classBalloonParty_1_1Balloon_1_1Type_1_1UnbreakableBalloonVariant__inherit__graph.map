@@ -1,0 +1,9 @@
+<map id="BalloonParty.Balloon.Type.UnbreakableBalloonVariant" name="BalloonParty.Balloon.Type.UnbreakableBalloonVariant">
+<area shape="rect" id="Node000001" title="Pushes sphere center/radius and clock phase to every quadrant renderer so the shader computes effects..." alt="" coords="248,55,447,95"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="41,5,165,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,31,262,53,261,58,170,36"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Balloon_1_1Type_1_1IBalloonVariant.html" title=" " alt="" coords="6,55,199,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="213,73,248,73,248,78,213,78"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding.html" title="Implemented by prefab MonoBehaviours that react to model binding; BalloonView discovers and calls the..." alt="" coords="5,119,200,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="192,113,270,93,271,98,194,118"/>
+</map>

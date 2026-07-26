@@ -1,0 +1,9 @@
+<map id="BalloonParty.UI.Danger.DangerGradientView" name="BalloonParty.UI.Danger.DangerGradientView">
+<area shape="rect" id="Node000001" title="Drives the early&#45;warning effect from the danger level (0→1): tints sprites, grows the top/bottom grad..." alt="" coords="344,55,565,95"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="41,5,165,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,28,344,55,343,60,178,33"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1UI_1_1Binding_1_1IReactiveBindable-1-g.html" title="A view that binds itself to a reactive source of T ." alt="" coords="13,55,192,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="206,73,344,73,344,78,206,78"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ISceneLightRuntime.html" title="Read surface for the LIVE ambient scene light — the current time&#45;of&#45;day state the runtime owner (Time..." alt="" coords="5,119,200,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="213,117,343,93,344,98,214,122"/>
+</map>

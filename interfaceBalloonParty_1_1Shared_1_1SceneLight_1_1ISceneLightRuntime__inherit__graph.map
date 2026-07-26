@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.SceneLight.ISceneLightRuntime" name="BalloonParty.Shared.SceneLight.ISceneLightRuntime">
+<area shape="rect" id="Node000001" title="Read surface for the LIVE ambient scene light — the current time&#45;of&#45;day state the runtime owner (Time..." alt="" coords="5,5,200,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayService.html" title="Owns the LIVE ambient scene light and is the single writer of its shader globals (_SceneLightDir/_Sce..." alt="" coords="5,93,200,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,59,105,93,100,93,100,59"/>
+</map>

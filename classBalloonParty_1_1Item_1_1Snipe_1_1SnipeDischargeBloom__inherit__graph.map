@@ -1,0 +1,7 @@
+<map id="BalloonParty.Item.Snipe.SnipeDischargeBloom" name="BalloonParty.Item.Snipe.SnipeDischargeBloom">
+<area shape="rect" id="Node000001" title="The rainbow Snipe&#39;s discharge payoff: when a rainbow lance discharges, converts every paintable ballo..." alt="" coords="15,79,195,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,91,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="67,40,94,77,89,80,62,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="115,5,213,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="149,43,122,80,117,77,145,40"/>
+</map>

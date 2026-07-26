@@ -1,0 +1,13 @@
+<map id="BalloonParty.Game.Health.PlayerHealthController" name="BalloonParty.Game.Health.PlayerHealthController">
+<area shape="rect" id="Node000001" title="The player&#39;s hit&#45;point pool — the only loss trigger under the spawn&#45;saturation model." alt="" coords="311,113,507,153"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="66,5,151,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,27,213,41,298,75,370,110,368,115,296,80,211,46,164,32"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,55,212,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="226,95,311,111,310,117,225,100"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="59,120,158,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="172,130,310,130,310,135,172,135"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html" title="Read&#45;only view of the player&#39;s hit&#45;point pool." alt="" coords="11,170,207,210"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="220,166,310,149,311,154,221,171"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Shared_1_1IRunConfig.html" title="Run&#45;level rules — starting hit points and (future) loss thresholds." alt="" coords="17,234,201,274"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="190,227,211,220,294,184,366,150,368,155,297,189,213,224,192,232"/>
+</map>

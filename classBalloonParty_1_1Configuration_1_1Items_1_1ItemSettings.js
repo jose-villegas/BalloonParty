@@ -1,0 +1,25 @@
+var classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings =
+[
+    [ "_activationEffectPrefab", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a6ff111aa485585075852487c29660202", null ],
+    [ "_bomb", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#ac23c6ecb62ca8db77db0839dd259268f", null ],
+    [ "_damage", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#aaa720de1fb6912f0cfee2fe1cd5a1304", null ],
+    [ "_damageFlags", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a7454ffffc3392ac56da727d2620d9585", null ],
+    [ "_laser", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a2b095d93278097c9fcce0501593a4c82", null ],
+    [ "_lightning", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a2e6263b1cb5109291646277d172d4e85", null ],
+    [ "_maximumAllowed", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#aa3f1c28a0d51837dec38d4b8b92d4259", null ],
+    [ "_paint", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a45d98401723006aa9a36e697497016ae", null ],
+    [ "_snipe", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a1952ddfb585745764ffb169468deebeb", null ],
+    [ "_type", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a9a3e18b3c9302d864e922b3dfd956795", null ],
+    [ "_visualPrefab", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a347ce3021d852020d97d696dfdc8ee72", null ],
+    [ "ActivationEffectPrefab", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a6cc8525b4ca99e8cc83ef702e36a178c", null ],
+    [ "Bomb", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#ab133f98f0072c93f96f9cb5545377afd", null ],
+    [ "Damage", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a5d79ec1537fbcd479a39c3ecc032768a", null ],
+    [ "Flags", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a92608410bb52a38a8b721e78407a4ec2", null ],
+    [ "Laser", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#acb1fc9c9aa0e81ff6428ff40d65e94ab", null ],
+    [ "Lightning", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a0f66f69994649704fa7a5b2fbe6e050d", null ],
+    [ "MaximumAllowed", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a8296b730b0b997e0ea64ec1cfbde0f8c", null ],
+    [ "Paint", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#ac77da00238f9d5b57343490b11524490", null ],
+    [ "Snipe", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a146f9079602cd7f719a6aa2d88804de0", null ],
+    [ "Type", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a7234212931ae1db0d1ab9902dfb63ee6", null ],
+    [ "VisualPrefab", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#ae7340b8c676b75d5b85fbd9991a06994", null ]
+];

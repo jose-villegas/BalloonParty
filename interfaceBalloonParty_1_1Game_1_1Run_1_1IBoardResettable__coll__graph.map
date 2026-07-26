@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Run.IBoardResettable" name="BalloonParty.Game.Run.IBoardResettable">
+<area shape="rect" id="Node000001" title="Marks a resettable whose work is board population/teardown (clearing or respawning actors),..." alt="" coords="5,93,225,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="12,5,219,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,59,118,93,113,93,113,59"/>
+</map>

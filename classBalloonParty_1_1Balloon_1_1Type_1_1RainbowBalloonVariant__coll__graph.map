@@ -1,0 +1,40 @@
+<map id="BalloonParty.Balloon.Type.RainbowBalloonVariant" name="BalloonParty.Balloon.Type.RainbowBalloonVariant">
+<area shape="rect" id="Node000001" title="A colourable balloon that starts in rainbow mode and pushes the level&#39;s allowed colours into the band..." alt="" coords="1144,207,1337,247"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Type_1_1ColorableBalloonVariant.html" title=" " alt="" coords="762,87,955,127"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="937,129,1176,205,1175,210,935,134"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="410,5,534,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="547,31,591,41,777,85,776,90,590,46,546,36"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Balloon_1_1Type_1_1IBalloonVariant.html" title=" " alt="" coords="375,55,569,95"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="582,82,762,97,762,102,582,87"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="373,119,571,159"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="584,127,761,113,762,118,585,133"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding.html" title="Implemented by prefab MonoBehaviours that react to model binding; BalloonView discovers and calls the..." alt="" coords="761,175,956,215"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="970,202,1144,217,1144,222,969,207"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html" title="Single read surface for the live per&#45;level difficulty mix; never read ILevelPacingConfiguration direc..." alt="" coords="765,239,953,279"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="966,248,1120,235,1143,233,1144,239,1120,241,967,253"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html" title="Screen&#45;space disturbance field any system can stamp into; GPU resources live in DisturbanceFieldResou..." alt="" coords="740,391,977,431"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="912,383,1197,245,1199,250,915,388"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="429,184,515,209"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="529,202,591,218,657,244,718,281,787,338,841,389,837,393,784,342,714,286,655,249,590,223,527,207"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="432,233,512,259"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="527,252,591,267,661,295,727,327,829,389,826,393,724,332,659,299,590,273,525,257"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="423,283,521,308"/>
+<area shape="poly" id="edge10_Node000008_Node000011" title=" " alt="" coords="536,305,591,318,706,354,805,389,803,394,705,359,590,323,534,310"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html" title="Implemented by field services that perform periodic RT blits on a cadence timer." alt="" coords="365,333,579,373"/>
+<area shape="poly" id="edge11_Node000008_Node000012" title=" " alt="" coords="594,368,740,391,739,396,593,374"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IDisturbanceFieldSettings.html" title=" " alt="" coords="5,410,241,450"/>
+<area shape="poly" id="edge12_Node000008_Node000013" title=" " alt="" coords="255,424,740,412,740,417,255,429"/>
+<area shape="rect" id="Node000017" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldResources.html" title="Holds the disturbance field&#39;s GPU resources and blit&#45;and&#45;swap, separate from DisturbanceFieldService&#39;..." alt="" coords="353,459,591,499"/>
+<area shape="poly" id="edge17_Node000017_Node000013" title=" " alt="" coords="256,446,353,460,353,465,255,451"/>
+<area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html" title=" " alt="" coords="371,523,573,563"/>
+<area shape="poly" id="edge13_Node000008_Node000014" title=" " alt="" coords="585,518,650,501,715,480,772,455,821,429,824,434,774,460,717,484,652,506,587,523"/>
+<area shape="rect" id="Node000015" href="$classBalloonParty_1_1Shared_1_1ImpactEventBus.html" title="Frame&#45;scoped impact events, written via Report and cleared each end&#45;of&#45;frame." alt="" coords="372,587,572,627"/>
+<area shape="poly" id="edge14_Node000008_Node000015" title=" " alt="" coords="585,581,651,560,715,530,751,507,784,480,837,430,840,434,788,484,754,511,717,535,653,565,586,586"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="69,595,177,620"/>
+<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="191,605,372,605,372,610,191,610"/>
+<area shape="poly" id="edge16_Node000008_Node000017" title=" " alt="" coords="604,460,716,442,777,429,779,434,716,447,605,465"/>
+<area shape="rect" id="Node000018" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldCoordinates.html" title="Converts world positions/radii to the normalised UV space the stamp shaders expect." alt="" coords="353,651,591,691"/>
+<area shape="poly" id="edge18_Node000008_Node000018" title=" " alt="" coords="599,645,659,623,714,592,758,553,795,508,845,430,849,433,799,511,762,557,718,596,661,628,601,650"/>
+<area shape="rect" id="Node000019" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1LerpStampScheduler.html" title="Spreads a stamp&#39;s strength over its duration as sub&#45;stamps; evicts the oldest ramp when maxStamps is ..." alt="" coords="353,715,591,755"/>
+<area shape="poly" id="edge19_Node000008_Node000019" title=" " alt="" coords="603,714,662,693,689,679,714,661,742,635,766,605,806,540,833,478,849,430,854,432,838,480,810,542,771,608,746,639,718,665,692,683,664,698,605,719"/>
+</map>

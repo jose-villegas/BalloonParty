@@ -1,0 +1,5 @@
+<map id="BalloonParty.Audio.SoundHandle" name="BalloonParty.Audio.SoundHandle">
+<area shape="rect" id="Node000001" title="Identifies one play of a voice slot — the only way to ISoundPlayer.Stop a loop." alt="" coords="15,79,202,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,212,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,44,111,79,106,79,106,44"/>
+</map>

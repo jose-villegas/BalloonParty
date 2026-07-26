@@ -1,0 +1,49 @@
+<map id="BalloonParty.Balloon.Type.ToughBalloonVariant" name="BalloonParty.Balloon.Type.ToughBalloonVariant">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1144,303,1337,343"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="797,171,921,197"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="935,195,978,207,1041,228,1102,253,1202,300,1199,305,1100,258,1039,233,977,212,933,201"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Balloon_1_1Type_1_1IBalloonVariant.html" title=" " alt="" coords="762,221,955,261"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="970,261,1121,293,1151,300,1150,305,1119,299,969,267"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding.html" title="Implemented by prefab MonoBehaviours that react to model binding; BalloonView discovers and calls the..." alt="" coords="761,285,956,325"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="970,308,1144,316,1144,321,969,313"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html" title="Screen&#45;space disturbance field any system can stamp into; GPU resources live in DisturbanceFieldResou..." alt="" coords="740,349,977,389"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="990,351,1143,332,1144,337,991,356"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="429,411,515,437"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="528,414,739,383,740,389,528,419"/>
+<area shape="rect" id="Node000017" href="$classBalloonParty_1_1Scenario_1_1SmokeFieldService.html" title="Owns the smoke field: a persistent screen&#45;space RT that accumulates palette&#45;colored stamps and decays..." alt="" coords="753,607,964,647"/>
+<area shape="poly" id="edge18_Node000017_Node000006" title=" " alt="" coords="529,425,563,435,593,455,602,469,606,482,605,507,605,532,608,544,616,555,636,565,674,578,772,604,771,609,672,583,634,570,613,559,603,546,599,533,600,507,601,483,597,471,589,459,561,440,528,430"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="432,306,512,331"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="525,307,632,294,682,294,717,302,727,310,731,319,734,327,742,335,763,347,760,352,738,339,730,330,726,321,722,313,715,306,681,299,632,300,526,312"/>
+<area shape="poly" id="edge19_Node000017_Node000007" title=" " alt="" coords="526,323,559,331,592,343,631,362,660,380,718,433,759,478,796,526,848,605,843,608,791,529,755,481,714,437,657,385,628,367,590,348,557,336,525,329"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="423,358,521,383"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="535,368,740,367,740,372,535,373"/>
+<area shape="poly" id="edge20_Node000017_Node000008" title=" " alt="" coords="536,370,566,379,593,397,604,413,608,429,606,461,604,492,607,507,617,522,639,540,661,547,686,550,717,559,817,604,815,609,715,564,685,556,660,552,636,545,613,526,602,509,598,492,601,460,603,430,599,415,589,401,564,384,535,375"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html" title="Implemented by field services that perform periodic RT blits on a cadence timer." alt="" coords="365,469,579,509"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="545,462,590,446,614,435,696,408,774,387,775,392,697,413,616,440,592,450,547,467"/>
+<area shape="poly" id="edge21_Node000017_Node000009" title=" " alt="" coords="559,513,593,537,602,551,604,565,607,577,616,589,639,599,672,608,753,618,753,624,671,613,637,604,613,593,602,580,599,566,597,553,589,541,556,518"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IDisturbanceFieldSettings.html" title=" " alt="" coords="5,63,241,103"/>
+<area shape="poly" id="edge9_Node000005_Node000010" title=" " alt="" coords="197,56,311,30,379,20,451,16,524,21,594,35,660,62,690,82,718,105,729,124,733,152,732,221,730,290,733,317,742,336,755,347,751,351,738,339,728,318,725,290,727,221,728,152,724,126,714,108,687,86,657,67,593,40,523,26,451,22,380,26,312,35,198,61"/>
+<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldResources.html" title="Holds the disturbance field&#39;s GPU resources and blit&#45;and&#45;swap, separate from DisturbanceFieldService&#39;..." alt="" coords="353,112,591,152"/>
+<area shape="poly" id="edge14_Node000014_Node000010" title=" " alt="" coords="256,99,353,113,353,118,255,104"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html" title=" " alt="" coords="371,648,573,688"/>
+<area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="524,639,589,600,664,545,734,485,835,388,839,392,737,489,667,549,592,605,527,644"/>
+<area shape="poly" id="edge23_Node000017_Node000011" title=" " alt="" coords="580,687,647,692,715,685,772,667,821,644,823,649,774,672,717,691,647,697,580,693"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Shared_1_1ImpactEventBus.html" title="Frame&#45;scoped impact events, written via Report and cleared each end&#45;of&#45;frame." alt="" coords="372,176,572,216"/>
+<area shape="poly" id="edge11_Node000005_Node000012" title=" " alt="" coords="586,182,621,185,656,192,689,206,718,226,729,240,733,254,732,282,730,310,733,323,742,336,756,347,753,351,738,339,728,325,724,310,726,282,728,255,724,242,714,230,686,210,654,197,620,190,586,187"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="69,183,177,209"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="191,193,372,193,372,199,191,199"/>
+<area shape="poly" id="edge13_Node000005_Node000014" title=" " alt="" coords="605,122,636,127,666,136,694,149,718,169,733,190,738,211,736,232,732,253,725,295,729,315,742,336,755,347,752,351,738,339,724,317,720,295,726,252,731,232,732,212,728,192,714,172,691,154,664,141,635,132,604,127"/>
+<area shape="rect" id="Node000015" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldCoordinates.html" title="Converts world positions/radii to the normalised UV space the stamp shaders expect." alt="" coords="353,551,591,591"/>
+<area shape="poly" id="edge15_Node000005_Node000015" title=" " alt="" coords="552,543,589,519,596,510,600,501,604,491,613,481,639,467,663,462,687,460,715,452,777,420,828,387,831,392,779,425,717,457,688,466,664,468,641,472,616,485,609,493,605,503,601,513,592,523,554,547"/>
+<area shape="poly" id="edge26_Node000017_Node000015" title=" " alt="" coords="515,596,562,621,615,640,650,646,686,648,756,644,757,649,686,653,650,651,614,645,560,626,513,600"/>
+<area shape="rect" id="Node000016" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1LerpStampScheduler.html" title="Spreads a stamp&#39;s strength over its duration as sub&#45;stamps; evicts the oldest ramp when maxStamps is ..." alt="" coords="353,240,591,280"/>
+<area shape="poly" id="edge16_Node000005_Node000016" title=" " alt="" coords="605,244,664,254,692,264,718,279,729,293,731,308,733,322,742,335,759,347,756,351,738,339,728,324,726,309,724,295,714,283,689,269,662,259,604,250"/>
+<area shape="poly" id="edge17_Node000001_Node000017" title=" " alt="" coords="894,596,1212,341,1216,345,898,600"/>
+<area shape="rect" id="Node000018" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISmokeFieldSettings.html" title="Read&#45;only tuning for the smoke field (see SmokeFieldService)." alt="" coords="371,777,573,817"/>
+<area shape="poly" id="edge22_Node000017_Node000018" title=" " alt="" coords="586,786,652,773,715,750,753,726,787,698,839,645,843,649,791,702,756,731,717,754,653,778,587,792"/>
+<area shape="rect" id="Node000019" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="373,844,571,884"/>
+<area shape="poly" id="edge27_Node000001_Node000019" title=" " alt="" coords="584,867,650,862,715,847,790,819,851,790,902,758,946,723,987,683,1027,635,1118,516,1182,420,1226,341,1231,344,1186,423,1122,519,1031,639,991,686,950,727,905,763,854,794,792,824,717,852,651,867,585,872"/>
+<area shape="poly" id="edge24_Node000017_Node000019" title=" " alt="" coords="584,849,651,831,684,817,715,800,758,765,795,722,824,680,845,646,849,648,829,683,800,725,762,768,717,805,686,822,653,836,585,854"/>
+<area shape="rect" id="Node000020" href="$classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html" title="Holds the smoke field&#39;s GPU resources: ping&#45;pong RTs and blit&#45;and&#45;swap, separate from SmokeFieldServi..." alt="" coords="367,713,577,753"/>
+<area shape="poly" id="edge25_Node000017_Node000020" title=" " alt="" coords="591,732,653,725,715,711,748,697,780,680,831,645,834,649,782,685,750,702,717,716,654,731,591,737"/>
+</map>

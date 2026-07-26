@@ -1,0 +1,11 @@
+<map id="BalloonParty.Slots.Actor.Cluster.IClusterViewSettings" name="BalloonParty.Slots.Actor.Cluster.IClusterViewSettings">
+<area shape="rect" id="Node000001" title="Shared visual configuration for cluster&#45;based renderers (clouds, bushes, etc.)." alt="" coords="5,37,212,77"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html" title=" " alt="" coords="260,5,457,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="225,40,260,35,260,41,226,45"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html" title=" " alt="" coords="260,69,457,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="226,70,260,74,260,79,225,75"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html" title=" " alt="" coords="505,5,703,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="471,23,505,23,505,28,471,28"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html" title=" " alt="" coords="505,69,703,109"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="471,87,505,87,505,92,471,92"/>
+</map>

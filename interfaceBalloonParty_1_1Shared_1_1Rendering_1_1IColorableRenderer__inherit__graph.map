@@ -1,0 +1,15 @@
+<map id="BalloonParty.Shared.Rendering.IColorableRenderer" name="BalloonParty.Shared.Rendering.IColorableRenderer">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,101,231,141"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Shared_1_1Rendering_1_1ColorableRenderer.html" title="Non&#45;generic base so Unity can serialise ColorableRenderer[] fields — [SerializeField] doesn&#39;t work on..." alt="" coords="279,101,504,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="244,119,279,119,279,124,244,124"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Shared_1_1Rendering_1_1ColorableRenderer-1-g.html" title="Fetches the required T &#160;component on Awake." alt="" coords="552,69,777,109"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="517,104,552,100,552,105,518,109"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Shared_1_1Rendering_1_1CompositeColorableRenderer.html" title=" " alt="" coords="552,133,777,173"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="518,133,552,138,552,143,517,139"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1View_1_1ParticleColorableRenderer.html" title=" " alt="" coords="835,5,1030,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="762,63,848,43,849,48,763,69"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1View_1_1SpriteColorableRenderer.html" title=" " alt="" coords="835,69,1030,109"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="791,87,835,87,835,92,791,92"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1UI_1_1Score_1_1GraphicColorableRenderer.html" title=" " alt="" coords="825,133,1040,173"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="763,110,849,131,848,136,762,115"/>
+</map>

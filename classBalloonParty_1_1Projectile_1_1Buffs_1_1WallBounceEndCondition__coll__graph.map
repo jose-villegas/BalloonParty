@@ -1,0 +1,7 @@
+<map id="BalloonParty.Projectile.Buffs.WallBounceEndCondition" name="BalloonParty.Projectile.Buffs.WallBounceEndCondition">
+<area shape="rect" id="Node000001" title="Ends the buff when the projectile loses a shield to a wall (a ShieldLostMessage)." alt="" coords="16,167,237,207"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html" title="Decides when a projectile buff ends." alt="" coords="5,79,248,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,133,129,166,124,166,124,133"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="77,5,176,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="129,44,129,79,124,79,124,44"/>
+</map>

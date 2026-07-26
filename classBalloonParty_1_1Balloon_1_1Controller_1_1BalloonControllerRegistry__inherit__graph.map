@@ -1,0 +1,7 @@
+<map id="BalloonParty.Balloon.Controller.BalloonControllerRegistry" name="BalloonParty.Balloon.Controller.BalloonControllerRegistry">
+<area shape="rect" id="Node000001" title="Routes each balloon&#39;s hit reaction to its owning controller via a flat&#45;array index,..." alt="" coords="5,79,232,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="19,5,104,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="80,40,107,77,103,80,76,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="128,5,227,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="163,43,135,80,131,77,158,40"/>
+</map>

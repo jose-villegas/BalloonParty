@@ -1,0 +1,18 @@
+<map id="BalloonParty.Audio.Routing.DangerSoundRouter" name="BalloonParty.Audio.Routing.DangerSoundRouter">
+<area shape="rect" id="Node000001" title=" " alt="" coords="640,137,841,177"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="338,5,423,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="437,24,501,39,559,61,616,86,707,134,705,139,614,91,557,66,499,45,436,29"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="331,55,430,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="444,78,501,90,617,115,680,134,678,139,615,121,499,95,443,83"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html" title=" " alt="" coords="285,105,476,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="490,132,640,145,639,150,490,137"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Danger_1_1IDangerLevel.html" title="Read&#45;only 0→1 &quot;how close are we to dying&quot; signal, consumed by the danger gradient HUD." alt="" coords="281,169,480,209"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="493,176,639,163,640,168,494,181"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Audio_1_1Configuration_1_1ISoundBankConfiguration.html" title=" " alt="" coords="261,233,500,273"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="485,227,615,194,680,174,681,179,617,199,487,232"/>
+<area shape="rect" id="Node000007" href="$structBalloonParty_1_1Audio_1_1SoundHandle.html" title="Identifies one play of a voice slot — the only way to ISoundPlayer.Stop a loop." alt="" coords="287,335,474,375"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="439,327,523,287,615,238,711,175,714,179,617,243,526,292,441,332"/>
+<area shape="poly" id="edge8_Node000007_Node000007" title=" " alt="" coords="354,319,363,312,381,309,396,311,406,317,410,326,409,335,403,334,405,327,402,320,394,316,381,314,365,317,357,323"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="5,343,212,368"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="226,353,287,353,287,358,226,358"/>
+</map>

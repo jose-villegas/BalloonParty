@@ -1,0 +1,25 @@
+<map id="BalloonParty.Configuration.Items.ItemSettings" name="BalloonParty.Configuration.Items.ItemSettings">
+<area shape="rect" id="Node000001" title=" " alt="" coords="765,301,963,341"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Shared_1_1Pool_1_1EffectView.html" title="Abstract base for poolable effect MonoBehaviours; pool via SimplePoolChannel&lt;TItem&gt;." alt="" coords="369,113,556,153"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="559,154,650,184,743,225,798,262,843,298,839,302,795,266,740,230,648,189,557,159"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="41,5,165,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="169,32,202,41,341,83,412,110,411,115,339,89,201,46,167,37"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="10,55,197,95"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="211,90,369,115,368,120,210,95"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1IEffect.html" title="A tintable, positionable visual effect, agnostic to the underlying rendering technology." alt="" coords="5,120,201,145"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="215,130,369,130,369,135,215,135"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="10,170,197,210"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="210,171,340,150,369,145,370,151,340,155,211,176"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html" title=" " alt="" coords="364,205,561,245"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="576,240,742,277,810,298,808,303,741,282,574,246"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Nudge_1_1NudgeOverride.html" title=" " alt="" coords="6,234,201,274"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="214,242,364,230,364,235,215,248"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html" title=" " alt="" coords="364,269,561,309"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="575,295,765,310,765,315,575,300"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html" title=" " alt="" coords="364,333,561,373"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="575,342,741,329,765,327,766,332,742,334,575,347"/>
+<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Configuration_1_1Items_1_1PaintSettings.html" title=" " alt="" coords="364,397,561,437"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="575,397,657,381,741,361,810,338,811,343,742,366,658,386,576,402"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Configuration_1_1Items_1_1SnipeSettings.html" title=" " alt="" coords="364,461,561,501"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="575,464,658,445,740,414,770,398,797,378,841,339,845,343,801,382,772,402,742,419,659,450,576,469"/>
+</map>

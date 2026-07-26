@@ -1,0 +1,13 @@
+<map id="BalloonParty.Slots.Capabilities.IHasDurability" name="BalloonParty.Slots.Capabilities.IHasDurability">
+<area shape="rect" id="Node000001" title=" " alt="" coords="276,101,499,141"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" title=" " alt="" coords="566,5,769,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="446,93,546,55,585,43,586,48,548,60,448,98"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" title="At destruction, distributes one ScoreAttribution per remaining bubble to a random palette colour...." alt="" coords="566,69,769,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="512,104,565,98,566,104,513,110"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html" title=" " alt="" coords="566,133,769,173"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="513,133,566,139,565,144,512,138"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GatekeeperActorModel.html" title=" " alt="" coords="547,197,788,237"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="448,144,548,183,586,195,585,200,546,188,446,149"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHitable.html" title=" " alt="" coords="5,101,228,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="242,119,276,119,276,124,242,124"/>
+</map>

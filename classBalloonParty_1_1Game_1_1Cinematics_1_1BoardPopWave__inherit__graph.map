@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Cinematics.BoardPopWave" name="BalloonParty.Game.Cinematics.BoardPopWave">
+<area shape="rect" id="Node000001" title="Detaches every balloon into the transition&#39;s outgoing group so they ride the fake&#45;camera travel out,..." alt="" coords="5,93,232,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Cinematics_1_1IBoardEffect.html" title="A board&#45;wide clear effect — the pop wave, the float&#45;away dissolve, and future variants." alt="" coords="5,5,232,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,59,121,93,116,93,116,59"/>
+</map>

@@ -1,0 +1,38 @@
+var classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker =
+[
+    [ "FormationGroup", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup" ],
+    [ "FormationState", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState" ],
+    [ "FormationPhase", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a58402d3cd9ac1d9358b618890bc428a7", [
+      [ "Travel", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a58402d3cd9ac1d9358b618890bc428a7a1fb0f99b55e6c2be35aed72ebe38c245", null ],
+      [ "SnapFade", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a58402d3cd9ac1d9358b618890bc428a7a8d4d60912514a7a5716c2b4131aaa227", null ]
+    ] ],
+    [ "AcquireAnchor", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#aa3c7dc1e77d36280fd1e8bc6d3a859d8", null ],
+    [ "AdvanceFormation", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a0a6fdbcbd41182ebc7e43f547430b257", null ],
+    [ "AdvanceSnapFade", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a52786fd20e75a404d8cc1aeabd511de8", null ],
+    [ "BeginGroup", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a36e0a4b3582de28cc27a56132d2afcfc", null ],
+    [ "DecrementGroup", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#ad2a941d66f5f6cce7d1b9b1b6ffb2aba", null ],
+    [ "FreezeRibbons", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a24f02fe3963fb8d22bc1ecda96d33e90", null ],
+    [ "LateTick", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a9b5265a68f17599c45fe481742a53331", null ],
+    [ "LaunchFormation", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a1845eee893251097e4ab1043914fce83", null ],
+    [ "LocalToWorld", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a8a7e3e63f022b0bc1f2a3264348162eb", null ],
+    [ "NormalizedLerp", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a3dcfd45e7478326161ae327d7bbe1bb2", null ],
+    [ "PenOrbitLocal", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a77fddd3b67c12875b8a5a30591f2a820", null ],
+    [ "ReleaseAnchor", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a302edcb8c857d78dac122165a2636fbd", null ],
+    [ "ReleaseGroup", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#af858c1e188653e4b515eca634419b30b", null ],
+    [ "ReleaseStateAt", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a18ad0c3f51b71efcf22783aecf6dfc9b", null ],
+    [ "ReleaseVertices", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#ad39dc15102dda59b470edf16d94ebb74", null ],
+    [ "ReportOnce", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a40dae36f11c985be48705aaa29d0701c", null ],
+    [ "ScaleVertices", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#adc1b91fe097c06c91973e2acc1889ef4", null ],
+    [ "Snap", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a3151ac661b3555936df5c7259894cf9f", null ],
+    [ "ThawRibbons", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#affa1c884806e355c68fdc79d56372661", null ],
+    [ "WriteAnchor", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#ad8c655f2b9262afc78dbfb0c0629d655", null ],
+    [ "_anchorPool", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#af394f17997663a15d026df6d51d9a06c", null ],
+    [ "_groupPool", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#ab9c8d15c629ef4b0ff298600bd4fc579", null ],
+    [ "_pool", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#ac8f15b70d1758bf374f19a30b58497d6", null ],
+    [ "_states", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a52bad5e7bddcf00ce7babd5e2084a1a3", null ],
+    [ "FreezeRibbonTime", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#ac3699aa7d5640bb1e7aea96d14c9104e", null ],
+    [ "MaxVertexCount", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a66774b0b4bff3c5c745300e3c4ca309a", null ],
+    [ "MinDuration", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a29474076fcd198329a4de8f3257b08a5", null ],
+    [ "SnapFadeDuration", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#adec6901ed367f27c5050c82f7b9894f0", null ],
+    [ "SpinRampRate", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#ad86478fb044ab55d5ac89aaa2be1881c", null ]
+];

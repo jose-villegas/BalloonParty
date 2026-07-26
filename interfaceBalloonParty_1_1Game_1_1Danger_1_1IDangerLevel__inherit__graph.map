@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Danger.IDangerLevel" name="BalloonParty.Game.Danger.IDangerLevel">
+<area shape="rect" id="Node000001" title="Read&#45;only 0→1 &quot;how close are we to dying&quot; signal, consumed by the danger gradient HUD." alt="" coords="5,5,204,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html" title="0→1 &quot;how close are we to dying&quot; signal: next turn&#39;s spawn overflow relative to hearts left to absorb ..." alt="" coords="5,93,204,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,59,107,93,102,93,102,59"/>
+</map>

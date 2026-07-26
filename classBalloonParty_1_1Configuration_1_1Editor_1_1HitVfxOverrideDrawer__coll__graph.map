@@ -1,0 +1,7 @@
+<map id="BalloonParty.Configuration.Editor.HitVfxOverrideDrawer" name="BalloonParty.Configuration.Editor.HitVfxOverrideDrawer">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,167,212,207"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html" title="Base class for property drawers that auto&#45;draw common fields, with a manual section for fields needin..." alt="" coords="20,79,197,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,133,111,166,106,166,106,133"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="47,5,171,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="111,44,111,79,106,79,106,44"/>
+</map>

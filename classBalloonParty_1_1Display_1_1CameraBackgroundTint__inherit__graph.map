@@ -1,0 +1,5 @@
+<map id="BalloonParty.Display.CameraBackgroundTint" name="BalloonParty.Display.CameraBackgroundTint">
+<area shape="rect" id="Node000001" title="The scene light&#39;s diffuse term for the camera&#39;s solid clear colour — the same albedo × light response..." alt="" coords="5,79,213,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="47,5,171,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,44,112,79,107,79,107,44"/>
+</map>

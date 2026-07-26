@@ -1,0 +1,49 @@
+<map id="BalloonParty.Balloon.Model.BalloonModel" name="BalloonParty.Balloon.Model.BalloonModel">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1851,328,2053,368"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html" title=" " alt="" coords="1502,199,1705,239"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1674,241,1716,256,1899,325,1897,330,1714,261,1672,246"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableBalloonModel.html" title=" " alt="" coords="1009,71,1211,111"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1225,108,1343,133,1469,165,1555,196,1553,201,1467,171,1342,138,1224,113"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html" title=" " alt="" coords="513,137,720,177"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="734,139,1008,102,1009,107,734,144"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IDynamicSlotActor.html" title=" " alt="" coords="255,135,434,175"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="448,153,513,154,513,159,448,158"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html" title=" " alt="" coords="515,71,718,111"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="443,129,531,108,532,113,444,134"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="5,168,184,208"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="198,172,255,164,255,169,198,177"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="255,199,434,239"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="198,198,255,205,255,210,198,203"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="447,193,527,175,528,180,448,198"/>
+<area shape="poly" id="edge8_Node000003_Node000008" title=" " alt="" coords="732,88,1008,88,1008,93,732,93"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHitable.html" title=" " alt="" coords="233,5,456,45"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="442,46,533,68,532,73,441,51"/>
+<area shape="rect" id="Node000018" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasDurability.html" title=" " alt="" coords="752,8,975,48"/>
+<area shape="poly" id="edge21_Node000018_Node000009" title=" " alt="" coords="470,23,752,25,752,30,470,29"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html" title=" " alt="" coords="233,71,456,111"/>
+<area shape="poly" id="edge11_Node000008_Node000010" title=" " alt="" coords="470,88,515,88,515,93,470,93"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IPressureMovable.html" title="Actors without this capability are immovable and halt the pressure&#45;push cascade." alt="" coords="999,135,1221,175"/>
+<area shape="poly" id="edge12_Node000002_Node000011" title=" " alt="" coords="1235,167,1468,197,1502,202,1501,207,1468,203,1235,173"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence.html" title="Lets a dynamic actor shape how the balancer moves it: a per&#45;candidate weight offset added to the supp..." alt="" coords="1021,199,1199,239"/>
+<area shape="poly" id="edge13_Node000002_Node000012" title=" " alt="" coords="1213,216,1502,216,1502,221,1213,221"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceBiasSource.html" title="The read&#45;set the balance&#45;bias formulas (BalloonParty.Shared.Extensions.BalanceBiasExtensions) need fr..." alt="" coords="1021,263,1199,303"/>
+<area shape="poly" id="edge14_Node000002_Node000013" title=" " alt="" coords="1213,267,1501,229,1502,234,1213,272"/>
+<area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IPaintable.html" title="An actor whose color identity can be overwritten." alt="" coords="1245,372,1468,412"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="1481,372,1492,371,1682,356,1850,348,1850,354,1683,362,1492,376,1482,377"/>
+<area shape="rect" id="Node000015" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasColor.html" title=" " alt="" coords="505,361,728,401"/>
+<area shape="poly" id="edge16_Node000014_Node000015" title=" " alt="" coords="742,380,1245,388,1245,393,742,386"/>
+<area shape="rect" id="Node000017" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasItemSlot.html" title="Extends IHasColor because item visuals are always tinted to the host&#39;s color." alt="" coords="999,327,1221,367"/>
+<area shape="poly" id="edge19_Node000017_Node000015" title=" " alt="" coords="741,370,998,352,999,357,742,375"/>
+<area shape="rect" id="Node000016" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot.html" title=" " alt="" coords="1502,271,1705,311"/>
+<area shape="poly" id="edge17_Node000001_Node000016" title=" " alt="" coords="1719,307,1851,329,1850,334,1718,312"/>
+<area shape="poly" id="edge18_Node000016_Node000017" title=" " alt="" coords="1235,330,1502,299,1502,305,1235,335"/>
+<area shape="poly" id="edge20_Node000001_Node000018" title=" " alt="" coords="988,30,1140,43,1325,70,1424,90,1524,115,1622,146,1716,184,1779,218,1839,257,1929,325,1925,330,1836,261,1776,222,1714,189,1620,151,1522,120,1423,95,1324,75,1139,48,988,35"/>
+<area shape="rect" id="Node000019" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html" title=" " alt="" coords="1492,385,1715,425"/>
+<area shape="poly" id="edge22_Node000001_Node000019" title=" " alt="" coords="1728,382,1850,362,1851,367,1729,387"/>
+<area shape="rect" id="Node000020" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScoreColor.html" title=" " alt="" coords="1492,449,1715,489"/>
+<area shape="poly" id="edge23_Node000001_Node000020" title=" " alt="" coords="1689,443,1714,435,1900,366,1902,371,1716,440,1691,448"/>
+<area shape="rect" id="Node000021" href="$structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource.html" title="Shared colour resolution for score&#45;scatter models (Tough/Cluster/rainbow&#45;mode BalloonModel)." alt="" coords="1502,513,1705,553"/>
+<area shape="poly" id="edge24_Node000001_Node000021" title=" " alt="" coords="1692,507,1714,499,1771,477,1825,447,1882,406,1928,366,1931,370,1885,410,1828,452,1774,481,1716,504,1693,512"/>
+<area shape="rect" id="Node000022" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="1011,513,1209,553"/>
+<area shape="poly" id="edge25_Node000021_Node000022" title=" " alt="" coords="1223,531,1502,531,1502,536,1223,536"/>
+</map>

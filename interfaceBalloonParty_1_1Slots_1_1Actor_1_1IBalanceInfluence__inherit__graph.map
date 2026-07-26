@@ -1,0 +1,15 @@
+<map id="BalloonParty.Slots.Actor.IBalanceInfluence" name="BalloonParty.Slots.Actor.IBalanceInfluence">
+<area shape="rect" id="Node000001" title="Lets a dynamic actor shape how the balancer moves it: a per&#45;candidate weight offset added to the supp..." alt="" coords="5,133,184,173"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html" title=" " alt="" coords="232,101,435,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,137,232,132,232,138,198,142"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html" title="Stub grid actor standing in for a live balloon in the dynamic&#45;board sim — enough of IWriteableDynamic..." alt="" coords="244,165,423,205"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="198,164,244,171,244,176,197,170"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" title=" " alt="" coords="483,5,685,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="390,93,482,55,516,43,518,48,484,60,392,98"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" title="At destruction, distributes one ScoreAttribution per remaining bubble to a random palette colour...." alt="" coords="483,69,685,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="448,104,482,100,483,105,449,109"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html" title=" " alt="" coords="483,133,685,173"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="449,133,483,138,482,143,448,139"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html" title=" " alt="" coords="483,197,685,237"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="420,144,436,151,460,167,484,183,512,195,510,200,481,188,457,172,433,156,418,149"/>
+</map>

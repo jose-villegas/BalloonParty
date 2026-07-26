@@ -1,0 +1,17 @@
+<map id="BalloonParty.Shared.Pool.PoolChannel&lt; TItem &gt;" name="BalloonParty.Shared.Pool.PoolChannel&lt; TItem &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="226,136,398,177"/>
+<area shape="rect" id="Node000003" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_injecting_pool_channel-1-g.html" title="Pool channel that instantiates prefabs and injects [Inject] fields from a parent IObjectResolver — wi..." alt="" coords="446,71,648,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="401,129,469,113,474,111,403,134"/>
+<area shape="rect" id="Node000007" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_particle_pool_channel.html" title="Pool channel for effects driven exclusively by a ParticleSystem." alt="" coords="461,136,633,177"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="413,154,463,156,458,157,414,159"/>
+<area shape="rect" id="Node000008" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_simple_pool_channel-1-g.html" title="Pool channel for prefabs that need no VContainer injection: instantiates the prefab under PoolChannel..." alt="" coords="450,201,644,242"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="402,179,474,201,468,201,402,184"/>
+<area shape="rect" id="Node000002" href="$interface_balloon_party_1_1_shared_1_1_pool_1_1_i_pool_channel.html" title="Non&#45;generic marker so we can store any PoolChannel in a typed dictionary." alt="" coords="5,136,178,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="193,154,228,156,223,157,194,159"/>
+<area shape="rect" id="Node000004" href="$class_balloon_party_1_1_balloon_1_1_spawner_1_1_balloon_pool_channel.html" title=" " alt="" coords="704,5,902,46"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="644,64,723,46,718,47,645,69"/>
+<area shape="rect" id="Node000005" href="$class_balloon_party_1_1_projectile_1_1_projectile_pool_channel.html" title=" " alt="" coords="725,71,881,111"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="664,88,727,91,722,91,664,94"/>
+<area shape="rect" id="Node000006" href="$class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_grid_actor_pool_channel.html" title=" " alt="" coords="696,136,910,177"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="644,113,723,135,718,135,644,118"/>
+</map>

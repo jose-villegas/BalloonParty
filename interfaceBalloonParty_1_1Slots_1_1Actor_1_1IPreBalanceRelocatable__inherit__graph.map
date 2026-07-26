@@ -1,0 +1,5 @@
+<map id="BalloonParty.Slots.Actor.IPreBalanceRelocatable" name="BalloonParty.Slots.Actor.IPreBalanceRelocatable">
+<area shape="rect" id="Node000001" title="A dynamic actor that repositions itself before the turn&#39;s rebalance." alt="" coords="17,5,196,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html" title=" " alt="" coords="5,93,208,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,59,109,93,104,93,104,59"/>
+</map>

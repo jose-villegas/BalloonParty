@@ -1,0 +1,7 @@
+<map id="BalloonParty.Shared.Messages.ActorHitMessage" name="BalloonParty.Shared.Messages.ActorHitMessage">
+<area shape="rect" id="Node000001" title=" " alt="" coords="95,108,319,148"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="5,5,184,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,52,187,106,184,110,124,56"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html" title=" " alt="" coords="209,5,431,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="290,56,230,110,226,106,287,52"/>
+</map>

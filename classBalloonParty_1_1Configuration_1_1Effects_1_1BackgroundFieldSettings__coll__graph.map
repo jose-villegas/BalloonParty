@@ -1,0 +1,7 @@
+<map id="BalloonParty.Configuration.Effects.BackgroundFieldSettings" name="BalloonParty.Configuration.Effects.BackgroundFieldSettings">
+<area shape="rect" id="Node000001" title="Authored tuning for the shared cloud field; assign the blit material + resolution here and wire the a..." alt="" coords="57,93,288,133"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,135,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,45,152,91,148,95,93,49"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBackgroundFieldSettings.html" title="Read&#45;only tuning for the shared cloud field (see BackgroundFieldService)." alt="" coords="159,5,394,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="245,56,197,95,194,91,241,52"/>
+</map>

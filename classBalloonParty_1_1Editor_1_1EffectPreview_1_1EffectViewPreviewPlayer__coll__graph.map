@@ -1,0 +1,5 @@
+<map id="BalloonParty.Editor.EffectPreview.EffectViewPreviewPlayer" name="BalloonParty.Editor.EffectPreview.EffectViewPreviewPlayer">
+<area shape="rect" id="Node000001" title="Reusable editor preview player for Shared.Pool.EffectView subclasses." alt="" coords="5,108,244,148"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Editor_1_1EffectPreview_1_1IEffectPreviewModule.html" title="Pluggable preview module for EffectViewPreviewPlayer; handles per&#45;effect rendering while the player m..." alt="" coords="15,5,234,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,59,127,108,122,108,122,59"/>
+</map>

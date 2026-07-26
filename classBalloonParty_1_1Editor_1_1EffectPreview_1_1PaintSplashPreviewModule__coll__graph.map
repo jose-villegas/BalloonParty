@@ -1,0 +1,49 @@
+<map id="BalloonParty.Editor.EffectPreview.PaintSplashPreviewModule" name="BalloonParty.Editor.EffectPreview.PaintSplashPreviewModule">
+<area shape="rect" id="Node000001" title="Preview module for PaintSplashView." alt="" coords="1463,309,1715,349"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Editor_1_1EffectPreview_1_1IEffectPreviewModule.html" title="Pluggable preview module for EffectViewPreviewPlayer; handles per&#45;effect rendering while the player m..." alt="" coords="1153,245,1372,285"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1379,285,1487,307,1486,312,1378,291"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Item_1_1Paint_1_1PaintSplashView.html" title="Poolable paint&#45;splash effect." alt="" coords="1175,472,1351,512"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1315,463,1546,347,1549,352,1317,468"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Shared_1_1Pool_1_1EffectView.html" title="Abstract base for poolable effect MonoBehaviours; pool via SimplePoolChannel&lt;TItem&gt;." alt="" coords="413,443,599,483"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="613,464,1175,486,1174,491,613,469"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html" title=" " alt="" coords="823,309,1020,349"/>
+<area shape="poly" id="edge14_Node000012_Node000004" title=" " alt="" coords="612,443,704,423,798,394,846,371,888,347,891,352,848,376,800,398,705,428,614,448"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="56,478,180,503"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="194,483,412,467,413,472,194,488"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Shared_1_1Rendering_1_1ColorableRenderer.html" title="Non&#45;generic base so Unity can serialise ColorableRenderer[] fields — [SerializeField] doesn&#39;t work on..." alt="" coords="393,559,619,599"/>
+<area shape="poly" id="edge10_Node000010_Node000005" title=" " alt="" coords="194,490,279,499,370,516,423,535,469,556,467,561,421,540,369,521,279,504,194,496"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="25,356,211,396"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="226,395,370,427,426,440,424,445,369,432,225,400"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Shared_1_1IEffect.html" title="A tintable, positionable visual effect, agnostic to the underlying rendering technology." alt="" coords="20,421,216,446"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="230,439,413,453,412,458,229,444"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="25,623,211,663"/>
+<area shape="poly" id="edge12_Node000003_Node000008" title=" " alt="" coords="225,640,380,637,579,629,799,614,1020,589,1075,582,1128,567,1185,539,1232,510,1235,514,1187,544,1130,572,1076,587,1020,595,799,619,579,634,381,642,225,645"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="209,616,230,608,299,577,366,542,472,480,474,485,369,547,301,582,232,613,211,621"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Item_1_1Paint_1_1ISplashEffect.html" title="Lets the handler configure a pooled effect without a hard downcast to the concrete view." alt="" coords="833,501,1009,541"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="1023,510,1174,497,1174,502,1023,515"/>
+<area shape="poly" id="edge9_Node000003_Node000010" title=" " alt="" coords="632,583,816,584,919,578,1020,565,1123,540,1211,510,1213,515,1124,545,1020,571,919,583,816,589,632,589"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Shared_1_1Rendering_1_1IColorableRenderer.html" title=" " alt="" coords="5,559,231,599"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="244,576,393,576,393,581,244,581"/>
+<area shape="poly" id="edge13_Node000003_Node000012" title=" " alt="" coords="978,353,1221,470,1218,474,975,358"/>
+<area shape="rect" id="Node000019" href="$classBalloonParty_1_1Editor_1_1EffectPreview_1_1EffectPreviewContext.html" title="Shared context passed to IEffectPreviewModule.Start when the user clicks Play." alt="" coords="1154,309,1371,349"/>
+<area shape="poly" id="edge22_Node000019_Node000012" title=" " alt="" coords="1034,327,1154,327,1154,332,1034,332"/>
+<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html" title=" " alt="" coords="407,248,605,288"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="619,281,799,308,823,312,822,317,798,313,618,287"/>
+<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Nudge_1_1NudgeOverride.html" title=" " alt="" coords="21,248,215,288"/>
+<area shape="poly" id="edge16_Node000013_Node000014" title=" " alt="" coords="229,265,407,265,407,271,229,271"/>
+<area shape="rect" id="Node000015" href="$classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html" title=" " alt="" coords="407,312,605,352"/>
+<area shape="poly" id="edge17_Node000012_Node000015" title=" " alt="" coords="618,329,823,327,823,333,618,334"/>
+<area shape="rect" id="Node000016" href="$classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html" title=" " alt="" coords="407,376,605,416"/>
+<area shape="poly" id="edge18_Node000012_Node000016" title=" " alt="" coords="618,378,798,349,822,345,823,351,799,355,619,383"/>
+<area shape="rect" id="Node000017" href="$classBalloonParty_1_1Configuration_1_1Items_1_1PaintSettings.html" title=" " alt="" coords="407,120,605,160"/>
+<area shape="poly" id="edge19_Node000012_Node000017" title=" " alt="" coords="619,149,710,170,756,186,800,207,833,230,863,257,907,307,903,311,859,260,830,234,797,212,754,191,708,175,618,155"/>
+<area shape="rect" id="Node000018" href="$classBalloonParty_1_1Configuration_1_1Items_1_1SnipeSettings.html" title=" " alt="" coords="407,184,605,224"/>
+<area shape="poly" id="edge20_Node000012_Node000018" title=" " alt="" coords="619,220,708,240,800,267,845,286,886,307,884,312,843,291,798,272,707,245,618,225"/>
+<area shape="poly" id="edge21_Node000001_Node000019" title=" " alt="" coords="1385,327,1462,327,1462,332,1385,332"/>
+<area shape="rect" id="Node000020" href="$classBalloonParty_1_1Configuration_1_1SlotGridConfig.html" title=" " alt="" coords="823,63,1020,103"/>
+<area shape="poly" id="edge23_Node000019_Node000020" title=" " alt="" coords="949,112,986,153,1034,202,1092,252,1155,295,1180,307,1178,312,1152,300,1088,256,1031,206,982,157,945,115"/>
+<area shape="rect" id="Node000021" title=" " alt="" coords="441,70,571,95"/>
+<area shape="poly" id="edge24_Node000020_Node000021" title=" " alt="" coords="584,80,823,80,823,85,584,85"/>
+<area shape="rect" id="Node000022" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="414,5,598,45"/>
+<area shape="poly" id="edge25_Node000020_Node000022" title=" " alt="" coords="612,36,799,61,822,65,822,70,798,67,612,41"/>
+</map>

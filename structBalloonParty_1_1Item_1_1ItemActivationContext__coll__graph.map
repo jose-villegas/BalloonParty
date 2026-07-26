@@ -1,0 +1,15 @@
+<map id="BalloonParty.Item.ItemActivationContext" name="BalloonParty.Item.ItemActivationContext">
+<area shape="rect" id="Node000001" title="Passed as one value so adding hit info later doesn&#39;t churn every handler&#39;s signature." alt="" coords="887,111,1123,151"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html" title=" " alt="" coords="515,69,718,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="732,99,887,115,886,121,731,104"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IDynamicSlotActor.html" title=" " alt="" coords="255,5,434,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="444,46,532,67,531,72,443,51"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="5,5,184,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="198,23,255,23,255,28,198,28"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHitable.html" title=" " alt="" coords="233,69,456,109"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="470,87,515,87,515,92,470,92"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html" title=" " alt="" coords="233,133,456,173"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="443,128,531,107,532,112,444,133"/>
+<area shape="rect" id="Node000007" href="$structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html" title=" " alt="" coords="505,133,728,173"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="742,146,863,140,886,138,886,144,863,145,742,152"/>
+</map>

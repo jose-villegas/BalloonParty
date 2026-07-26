@@ -1,0 +1,5 @@
+<map id="BalloonParty.UI.TimeOfDayOrbit" name="BalloonParty.UI.TimeOfDayOrbit">
+<area shape="rect" id="Node000001" title="Positions a RectTransform around a center to match the current time&#45;of&#45;day angle." alt="" coords="5,79,204,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="43,5,167,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,44,107,79,102,79,102,44"/>
+</map>

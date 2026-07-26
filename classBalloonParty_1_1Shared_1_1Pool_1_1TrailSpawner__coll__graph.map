@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.Pool.TrailSpawner" name="BalloonParty.Shared.Pool.TrailSpawner">
+<area shape="rect" id="Node000001" title="Handles the pool lifecycle for trail orbs: get, position, setup, return on arrival." alt="" coords="5,108,192,148"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="5,5,192,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,59,101,108,96,108,96,59"/>
+</map>

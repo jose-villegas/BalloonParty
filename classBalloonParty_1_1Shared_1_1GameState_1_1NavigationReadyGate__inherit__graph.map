@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.GameState.NavigationReadyGate" name="BalloonParty.Shared.GameState.NavigationReadyGate">
+<area shape="rect" id="Node000001" title=" " alt="" coords="19,79,222,119"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Shared_1_1IReadyGate.html" title="Blocks a caller until some external condition allows it to proceed; &quot;ready&quot; is implementation&#45;defined..." alt="" coords="5,5,236,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,44,123,79,118,79,118,44"/>
+</map>

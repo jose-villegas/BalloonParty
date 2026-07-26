@@ -1,0 +1,5 @@
+<map id="BalloonParty.Editor.ShotSolver.ShotSolverWindow" name="BalloonParty.Editor.ShotSolver.ShotSolverWindow">
+<area shape="rect" id="Node000001" title="Sweeps aim angle against the live board (see plan_shot_geometry) and reports the windows that reach a..." alt="" coords="5,79,193,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="43,5,155,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,44,102,79,97,79,97,44"/>
+</map>

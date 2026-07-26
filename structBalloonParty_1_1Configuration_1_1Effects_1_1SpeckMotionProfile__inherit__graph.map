@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.Effects.SpeckMotionProfile" name="BalloonParty.Configuration.Effects.SpeckMotionProfile">
+<area shape="rect" id="Node000001" title="A motion override for a set of palette colours." alt="" coords="9,93,206,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html" title="Base contract for a config entry keyed to a set of palette colours by a PaletteColorMaskAttribute bit..." alt="" coords="5,5,209,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,59,110,93,105,93,105,59"/>
+</map>

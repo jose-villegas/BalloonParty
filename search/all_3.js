@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['3_20—_20custom_20level_20editor_0',['3 — Custom Level Editor',['../plan_future_ideas.html#autotoc_md361',1,'']]],
+  ['3_20—_20deferred_1',['3 — Deferred',['../plan_audio.html#autotoc_md279',1,'Phase 3 — Deferred'],['../plan_gameplay_telemetry.html#autotoc_md473',1,'Phase 3 — Deferred']]],
+  ['3_20—_20procedural_20placement_20engine_2',['Phase 8.3 — Procedural Placement Engine',['../plan_grid_actor_expansion.html#autotoc_md529',1,'']]],
+  ['3_201_20level_20sequence_20model_3',['3.1 Level Sequence Model',['../plan_future_ideas.html#autotoc_md362',1,'']]],
+  ['3_202_20tt_20leveldefinition_20tt_20scriptableobject_4',['3.2 &lt;tt&gt;LevelDefinition&lt;/tt&gt; ScriptableObject',['../plan_future_ideas.html#autotoc_md363',1,'']]],
+  ['3_203_20custom_20level_20editor_20window_20unity_20editor_5',['3.3 Custom Level Editor Window (Unity Editor)',['../plan_future_ideas.html#autotoc_md364',1,'']]],
+  ['3_204_20level_20sequence_20integration_6',['3.4 Level Sequence Integration',['../plan_future_ideas.html#autotoc_md365',1,'']]],
+  ['3_20architecture_20decisions_20settled_7',['3. Architecture decisions (settled)',['../plan_shot_solver_accuracy.html#autotoc_md614',1,'']]],
+  ['3_20assets_8',['3 Assets',['../plan_content_production.html',1,'Content Production Plan — Pre-8.3 Assets'],['../plan_content_production.html#autotoc_md315',1,'Content Production Plan — Pre-8.3 Assets']]],
+  ['3_20clock_20turn_20pressure_20—_20score_20attack_20flavor_9',['12.3 Clock / turn pressure — score-attack flavor',['../plan_future_ideas.html#autotoc_md422',1,'']]],
+  ['3_20color_20streak_20balancing_10',['2.3 Color Streak Balancing',['../plan_future_ideas.html#autotoc_md358',1,'']]],
+  ['3_20custom_20level_20editor_20window_20unity_20editor_11',['3.3 Custom Level Editor Window (Unity Editor)',['../plan_future_ideas.html#autotoc_md364',1,'']]],
+  ['3_20deflector_20bounce_20vfx_12',['1.3 Deflector Bounce VFX',['../plan_future_ideas.html#autotoc_md351',1,'']]],
+  ['3_20edge_20cases_13',['6.3 Edge Cases',['../plan_future_ideas.html#autotoc_md385',1,'']]],
+  ['3_20escalate_20tt_20leveldifficultyresolver_20fallbackparameters_20tt_20to_20a_20hard_20failure_14',['14.3 Escalate &lt;tt&gt;LevelDifficultyResolver.FallbackParameters&lt;/tt&gt; to a hard failure',['../plan_future_ideas.html#autotoc_md439',1,'']]],
+  ['3_20model_20sketch_15',['8.3 Model Sketch',['../plan_future_ideas.html#autotoc_md392',1,'']]],
+  ['3_20model_20sketch_16',['13.3 Model sketch',['../plan_future_ideas.html#autotoc_md429',1,'']]],
+  ['3_20new_20balloon_20archetypes_20em_20from_20plan_20gridactorexpansion_20em_17',['5.3 New Balloon Archetypes &lt;em&gt;(from PLAN-GridActorExpansion)&lt;/em&gt;',['../plan_future_ideas.html#autotoc_md377',1,'']]],
+  ['3_20overdraw_20look_20editor_18',['3. Overdraw look (editor)',['../plan_performance_recovery.html#autotoc_md572',1,'']]],
+  ['3_20pacing_20—_20suggested_20actor_20introduction_20order_19',['4.3 Pacing — Suggested Actor Introduction Order',['../plan_future_ideas.html#autotoc_md370',1,'']]],
+  ['3_20suggested_20tier_20thresholds_20',['9.3 Suggested Tier Thresholds',['../plan_future_ideas.html#autotoc_md411',1,'']]],
+  ['3_20view_20—_20tt_20terrainview_20tt_20monobehaviour_20runtime_20shader_21',['3. View — &lt;tt&gt;TerrainView&lt;/tt&gt; (MonoBehaviour) + runtime shader',['../plan_terrain_biomes.html#autotoc_md642',1,'']]],
+  ['3_3a_20architectural_20gated_20on_20step_200_20evidence_22',['Tier 3: Architectural (gated on Step 0 evidence)',['../plan_performance_recovery.html#autotoc_md598',1,'']]]
+];

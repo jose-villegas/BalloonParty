@@ -1,0 +1,9 @@
+<map id="BalloonParty.Solver.ShotBalloonSnapshot" name="BalloonParty.Solver.ShotBalloonSnapshot">
+<area shape="rect" id="Node000001" title="One board actor as the solver sees it — enough to reproduce pop/deflect/score rules without a live IB..." alt="" coords="313,69,492,109"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Solver_1_1ColorProfile.html" title="Colour identity of a snapshot target — split out of the geometry/scoring core so rainbow/wildcard fie..." alt="" coords="15,5,199,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="213,45,314,67,312,73,212,51"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Solver_1_1BalanceProfile.html" title="Balance&#45;grid identity/behaviour for a snapshot target — absent (null on the owning ShotBalloonSnapsho..." alt="" coords="5,69,208,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="222,87,313,87,313,92,222,92"/>
+<area shape="rect" id="Node000004" href="$structBalloonParty_1_1Solver_1_1ItemProfile.html" title="A hosted item&#39;s data&#45;only identity + spin state — rides only ShotBalloonSnapshot.ForColorTarget/ Shot..." alt="" coords="17,133,197,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="209,128,312,106,313,111,211,134"/>
+</map>

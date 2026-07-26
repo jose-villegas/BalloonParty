@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.GameState.NavigationService" name="BalloonParty.Shared.GameState.NavigationService">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,93,200,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Shared_1_1GameState_1_1INavigation.html" title="Injectable seam over the static Navigation, testable without global state." alt="" coords="5,5,200,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,59,105,93,100,93,100,59"/>
+</map>

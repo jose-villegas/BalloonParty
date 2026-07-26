@@ -1,0 +1,16 @@
+<map id="BalloonParty.Audio.Routing.MusicSoundRouter" name="BalloonParty.Audio.Routing.MusicSoundRouter">
+<area shape="rect" id="Node000001" title=" " alt="" coords="605,105,807,145"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="316,5,401,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="415,29,457,39,520,55,582,74,657,102,656,107,580,79,518,61,455,45,414,34"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="309,55,408,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="422,75,605,105,605,111,422,80"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html" title=" " alt="" coords="263,105,454,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="468,122,605,122,605,127,468,127"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1GameState_1_1INavigation.html" title="Injectable seam over the static Navigation, testable without global state." alt="" coords="261,169,456,209"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="469,166,604,141,605,146,470,171"/>
+<area shape="rect" id="Node000006" href="$structBalloonParty_1_1Audio_1_1SoundHandle.html" title="Identifies one play of a voice slot — the only way to ISoundPlayer.Stop a loop." alt="" coords="265,271,452,311"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="415,263,580,185,665,142,667,147,583,190,417,268"/>
+<area shape="poly" id="edge7_Node000006_Node000006" title=" " alt="" coords="336,255,344,248,359,245,372,247,380,253,384,262,382,271,377,271,378,262,376,256,370,252,359,250,346,252,340,259"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="5,279,212,304"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="226,289,265,289,265,294,226,294"/>
+</map>

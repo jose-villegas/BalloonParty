@@ -1,0 +1,7 @@
+<map id="BalloonParty.Display.SceneCaptureService" name="BalloonParty.Display.SceneCaptureService">
+<area shape="rect" id="Node000001" title="Shared low&#45;res scene capture, bound globally as _SceneCaptureTex." alt="" coords="65,93,261,133"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,129,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,45,144,91,140,95,88,49"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html" title="Implemented by field services that perform periodic RT blits on a cadence timer." alt="" coords="153,5,368,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="231,56,187,95,183,91,227,52"/>
+</map>

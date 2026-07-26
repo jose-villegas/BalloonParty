@@ -1,0 +1,5 @@
+<map id="BalloonParty.Slots.Actor.Archetype.SlotRenderData" name="BalloonParty.Slots.Actor.Archetype.SlotRenderData">
+<area shape="rect" id="Node000001" title="Per&#45;slot branch material/matrix plus the slot&#39;s two leaf tiers." alt="" coords="5,123,200,163"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafTier.html" title="One depth tier of leaf instances for a single slot." alt="" coords="13,5,192,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,59,105,122,100,122,100,59"/>
+</map>

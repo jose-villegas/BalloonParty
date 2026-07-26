@@ -1,0 +1,5 @@
+<map id="BalloonParty.Editor.GamePaletteAdapter" name="BalloonParty.Editor.GamePaletteAdapter">
+<area shape="rect" id="Node000001" title="Adapts GamePalette to the package&#39;s IColorPalette interface." alt="" coords="5,79,192,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="46,5,151,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,44,101,79,96,79,96,44"/>
+</map>

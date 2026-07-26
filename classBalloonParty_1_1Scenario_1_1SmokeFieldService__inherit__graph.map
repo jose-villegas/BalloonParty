@@ -1,0 +1,11 @@
+<map id="BalloonParty.Scenario.SmokeFieldService" name="BalloonParty.Scenario.SmokeFieldService">
+<area shape="rect" id="Node000001" title="Owns the smoke field: a persistent screen&#45;space RT that accumulates palette&#45;colored stamps and decays..." alt="" coords="105,93,316,133"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,91,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,42,176,91,174,96,81,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="115,13,195,38"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="172,48,200,91,196,94,167,51"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="219,13,317,38"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="255,51,226,94,221,91,250,48"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html" title="Implemented by field services that perform periodic RT blits on a cadence timer." alt="" coords="342,5,557,45"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="385,53,264,96,262,91,383,48"/>
+</map>

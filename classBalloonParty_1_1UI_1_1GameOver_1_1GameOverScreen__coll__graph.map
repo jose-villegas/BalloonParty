@@ -1,0 +1,13 @@
+<map id="BalloonParty.UI.GameOver.GameOverScreen" name="BalloonParty.UI.GameOver.GameOverScreen">
+<area shape="rect" id="Node000001" title="Placeholder loss screen; visibility is driven by a CanvasGroup so the GameObject can stay active and ..." alt="" coords="699,70,896,110"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="343,5,467,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="481,24,574,36,675,54,730,67,728,73,674,59,573,41,481,29"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunMeta.html" title="Persisted cross&#45;run record — best level and best score." alt="" coords="285,55,525,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="540,72,698,82,698,87,539,78"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html" title="Holds the GameOver screen shut until the loss cinematic finishes." alt="" coords="297,105,514,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="528,113,674,101,698,98,698,104,675,106,528,118"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1IReadyGate.html" title="Blocks a caller until some external condition allows it to proceed; &quot;ready&quot; is implementation&#45;defined..." alt="" coords="5,112,236,137"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="250,122,296,122,296,127,250,127"/>
+<area shape="rect" id="Node000006" href="$structBalloonParty_1_1UI_1_1FormattedLabel.html" title="Wraps a TMP_Text whose authored text is a string.Format template; construct it before the label&#39;s tex..." alt="" coords="310,182,501,222"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="515,203,594,197,635,189,674,177,703,163,731,145,775,108,778,112,734,149,706,167,676,182,636,194,595,202,515,209"/>
+</map>

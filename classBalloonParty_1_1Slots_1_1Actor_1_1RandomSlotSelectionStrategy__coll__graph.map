@@ -1,0 +1,5 @@
+<map id="BalloonParty.Slots.Actor.RandomSlotSelectionStrategy" name="BalloonParty.Slots.Actor.RandomSlotSelectionStrategy">
+<area shape="rect" id="Node000001" title="Shuffles all empty slots and picks the first N." alt="" coords="5,93,221,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotSelectionStrategy.html" title="Lets each actor type provide its own slot&#45;picking logic (e.g. adjacency vs. isolation)." alt="" coords="24,5,203,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="116,59,116,93,111,93,111,59"/>
+</map>

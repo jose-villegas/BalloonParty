@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.Effects.IPuffCloudSettings" name="BalloonParty.Configuration.Effects.IPuffCloudSettings">
+<area shape="rect" id="Node000001" title=" " alt="" coords="10,93,207,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1IClusterViewSettings.html" title="Shared visual configuration for cluster&#45;based renderers (clouds, bushes, etc.)." alt="" coords="5,5,212,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,59,111,93,106,93,106,59"/>
+</map>

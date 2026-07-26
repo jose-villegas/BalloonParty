@@ -1,0 +1,13 @@
+<map id="BalloonParty.UI.Health.HealthUILifetimeScope" name="BalloonParty.UI.Health.HealthUILifetimeScope">
+<area shape="rect" id="Node000001" title="Child scope for the health UI; binds HealthCounterLabel to live HP and drives HeartTrailController." alt="" coords="689,26,904,66"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="367,5,482,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="496,21,689,35,689,41,495,26"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html" title=" " alt="" coords="323,55,527,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="540,64,665,54,689,52,689,57,666,59,541,69"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="45,5,169,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="183,29,323,54,322,60,182,34"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="14,55,201,95"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="215,73,322,73,322,78,215,78"/>
+<area shape="rect" id="Node000006" href="$structBalloonParty_1_1UI_1_1Score_1_1FlyingTrail_1_1MotionStyle.html" title=" " alt="" coords="5,119,209,159"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="220,114,324,93,326,98,221,119"/>
+</map>

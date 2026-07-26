@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Cinematics.HeartTrailFocus" name="BalloonParty.Game.Cinematics.HeartTrailFocus">
+<area shape="rect" id="Node000001" title="Focus centre is the oldest (soonest&#45;landing) heart trail; the bounding box still spans all of them." alt="" coords="5,93,232,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Cinematics_1_1ICinematicFocus.html" title="Return false when there is currently nothing to frame — the rig holds its position." alt="" coords="5,5,232,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,59,121,93,116,93,116,59"/>
+</map>

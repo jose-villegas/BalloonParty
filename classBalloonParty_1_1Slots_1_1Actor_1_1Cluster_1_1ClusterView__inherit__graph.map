@@ -1,0 +1,9 @@
+<map id="BalloonParty.Slots.Actor.Cluster.ClusterView" name="BalloonParty.Slots.Actor.Cluster.ClusterView">
+<area shape="rect" id="Node000001" title="Expects the shader to declare _SlotCentersWorld (Vector4[]), _SlotCount (int), and _TimeOffset (float..." alt="" coords="177,37,356,77"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html" title="Cluster renderer for bush obstacles; falls back to per&#45;leaf DrawMesh when GPU instancing is unavailab..." alt="" coords="408,5,587,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="369,40,407,35,408,40,370,46"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView.html" title="Cloud renderer for Puff clusters; inherits all behaviour from ClusterView." alt="" coords="404,69,591,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="370,69,404,74,404,79,369,74"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,45,129,70"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,55,177,55,177,60,143,60"/>
+</map>

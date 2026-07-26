@@ -1,0 +1,39 @@
+<map id="BalloonParty.Audio.AudioChannelController" name="BalloonParty.Audio.AudioChannelController">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1255,82,1439,122"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="976,5,1061,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1075,20,1150,29,1231,47,1272,62,1309,80,1307,84,1270,67,1230,53,1149,35,1074,25"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="591,59,689,84"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="703,71,1255,95,1255,101,703,77"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Audio_1_1SfxService.html" title=" " alt="" coords="911,344,1127,369"/>
+<area shape="poly" id="edge8_Node000005_Node000003" title=" " alt="" coords="703,78,748,89,796,105,845,128,888,159,933,206,969,259,1014,342,1009,345,965,262,929,210,885,163,842,133,794,110,746,94,702,83"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Audio_1_1IAudioMixerRouter.html" title=" " alt="" coords="546,113,734,153"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="748,126,1127,110,1254,104,1255,109,1127,115,748,131"/>
+<area shape="poly" id="edge11_Node000005_Node000004" title=" " alt="" coords="747,155,766,162,844,205,913,256,970,306,1007,342,1003,346,966,309,910,260,841,209,764,167,745,160"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1046,333,1318,120,1321,124,1049,337"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html" title=" " alt="" coords="545,177,735,217"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="742,218,766,226,834,255,899,287,997,341,995,346,897,292,832,260,764,231,741,223"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Audio_1_1IMelodicContext.html" title=" " alt="" coords="539,241,741,281"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="733,281,968,341,967,346,732,287"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="537,305,743,345"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="757,332,911,345,910,350,757,337"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Audio_1_1Configuration_1_1ISoundBankConfiguration.html" title=" " alt="" coords="521,369,759,409"/>
+<area shape="poly" id="edge9_Node000005_Node000009" title=" " alt="" coords="773,375,910,363,911,368,774,380"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="547,433,733,473"/>
+<area shape="poly" id="edge10_Node000005_Node000010" title=" " alt="" coords="746,428,886,394,977,367,979,372,887,399,748,433"/>
+<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Audio_1_1VoiceLimiter.html" title=" " alt="" coords="549,497,731,537"/>
+<area shape="poly" id="edge12_Node000005_Node000011" title=" " alt="" coords="736,490,765,482,826,463,885,438,949,401,999,367,1002,372,952,406,888,443,828,468,766,487,738,496"/>
+<area shape="rect" id="Node000012" href="$structBalloonParty_1_1Audio_1_1VoiceLimiter_1_1Slot.html" title=" " alt="" coords="241,497,424,537"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="438,514,548,514,548,519,438,519"/>
+<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Audio_1_1SfxThrottleGate.html" title=" " alt="" coords="515,561,765,587"/>
+<area shape="poly" id="edge14_Node000005_Node000013" title=" " alt="" coords="738,556,813,533,851,516,885,496,924,464,958,428,1006,368,1010,371,962,432,928,468,888,500,853,521,815,538,739,561"/>
+<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Audio_1_1VariationPicker.html" title=" " alt="" coords="537,611,743,651"/>
+<area shape="poly" id="edge15_Node000005_Node000014" title=" " alt="" coords="756,615,823,595,855,580,885,561,910,539,932,514,969,459,995,407,1010,369,1015,371,1000,409,974,462,937,517,914,543,888,565,858,585,825,600,757,620"/>
+<area shape="rect" id="Node000015" href="$structBalloonParty_1_1Audio_1_1SfxService_1_1VoiceSlot.html" title=" " alt="" coords="530,675,750,715"/>
+<area shape="poly" id="edge16_Node000005_Node000015" title=" " alt="" coords="763,681,827,661,858,646,885,627,915,597,940,562,960,525,977,487,1001,418,1012,369,1018,370,1006,419,982,489,965,528,944,565,919,600,888,631,860,650,829,666,764,686"/>
+<area shape="rect" id="Node000016" href="$classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html" title=" " alt="" coords="241,675,424,715"/>
+<area shape="poly" id="edge17_Node000015_Node000016" title=" " alt="" coords="438,693,530,693,530,698,438,698"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="37,653,161,679"/>
+<area shape="poly" id="edge18_Node000016_Node000017" title=" " alt="" coords="175,673,241,681,241,687,174,678"/>
+<area shape="rect" id="Node000018" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="5,703,192,743"/>
+<area shape="poly" id="edge19_Node000016_Node000018" title=" " alt="" coords="205,708,241,704,241,709,206,713"/>
+</map>

@@ -1,0 +1,29 @@
+<map id="BalloonParty.Balloon.Model.IWriteableBalloonModel" name="BalloonParty.Balloon.Model.IWriteableBalloonModel">
+<area shape="rect" id="Node000001" title=" " alt="" coords="757,101,960,141"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html" title=" " alt="" coords="1008,101,1211,141"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="974,119,1008,119,1008,124,974,124"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html" title=" " alt="" coords="503,133,709,173"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="722,136,757,132,758,137,723,141"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IDynamicSlotActor.html" title=" " alt="" coords="254,133,433,173"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="447,151,502,151,502,156,447,156"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html" title=" " alt="" coords="505,69,707,109"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="439,127,523,107,524,112,440,133"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="5,165,184,205"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="197,169,253,162,254,167,198,175"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="254,197,433,237"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="198,196,254,203,253,208,197,201"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="439,191,523,171,524,176,440,197"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="721,101,757,106,757,111,721,107"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHitable.html" title=" " alt="" coords="232,5,455,45"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="440,46,524,67,523,72,439,51"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html" title=" " alt="" coords="232,69,455,109"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="469,87,505,87,505,92,469,92"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" title=" " alt="" coords="1259,5,1461,45"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="1166,93,1258,55,1292,43,1294,48,1260,60,1168,98"/>
+<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" title="At destruction, distributes one ScoreAttribution per remaining bubble to a random palette colour...." alt="" coords="1259,69,1461,109"/>
+<area shape="poly" id="edge12_Node000009_Node000011" title=" " alt="" coords="1224,104,1258,100,1259,105,1225,109"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html" title=" " alt="" coords="1259,133,1461,173"/>
+<area shape="poly" id="edge13_Node000009_Node000012" title=" " alt="" coords="1225,133,1259,138,1258,143,1224,139"/>
+<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html" title=" " alt="" coords="1259,197,1461,237"/>
+<area shape="poly" id="edge14_Node000009_Node000013" title=" " alt="" coords="1168,145,1260,183,1294,195,1292,200,1258,188,1166,150"/>
+</map>

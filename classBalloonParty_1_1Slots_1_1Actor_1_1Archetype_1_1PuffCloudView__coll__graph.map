@@ -1,0 +1,7 @@
+<map id="BalloonParty.Slots.Actor.Archetype.PuffCloudView" name="BalloonParty.Slots.Actor.Archetype.PuffCloudView">
+<area shape="rect" id="Node000001" title="Cloud renderer for Puff clusters; inherits all behaviour from ClusterView." alt="" coords="5,167,192,207"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterView.html" title="Expects the shader to declare _SlotCentersWorld (Vector4[]), _SlotCount (int), and _TimeOffset (float..." alt="" coords="9,79,188,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,133,101,166,96,166,96,133"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="37,5,161,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="101,44,101,79,96,79,96,44"/>
+</map>

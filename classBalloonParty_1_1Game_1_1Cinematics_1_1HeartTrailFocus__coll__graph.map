@@ -1,0 +1,9 @@
+<map id="BalloonParty.Game.Cinematics.HeartTrailFocus" name="BalloonParty.Game.Cinematics.HeartTrailFocus">
+<area shape="rect" id="Node000001" title="Focus centre is the oldest (soonest&#45;landing) heart trail; the bounding box still spans all of them." alt="" coords="593,37,820,77"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Cinematics_1_1ICinematicFocus.html" title="Return false when there is currently nothing to frame — the rig holds its position." alt="" coords="261,5,488,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="502,35,593,44,593,49,502,40"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html" title="Heart trails currently in flight; launch order preserved so [0] is the next to land." alt="" coords="277,69,473,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="486,76,593,66,593,71,487,81"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,69,212,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="226,87,276,87,276,92,226,92"/>
+</map>

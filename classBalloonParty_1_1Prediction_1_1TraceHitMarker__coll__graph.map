@@ -1,0 +1,9 @@
+<map id="BalloonParty.Prediction.TraceHitMarker" name="BalloonParty.Prediction.TraceHitMarker">
+<area shape="rect" id="Node000001" title="View&#45;only marker showing where the aim&#45;prediction trace crosses this actor&#39;s circle." alt="" coords="376,55,551,95"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="55,5,179,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,27,352,53,376,57,375,62,352,58,193,32"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html" title="Shared reference to the current aim&#45;prediction trace, decoupled from direct access — mirrors BalloonP..." alt="" coords="30,55,205,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="219,73,376,73,376,78,219,78"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html" title="Prediction trace settings: step size, bounce/step limits, and line colour." alt="" coords="5,119,229,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="239,114,375,89,376,94,240,119"/>
+</map>

@@ -1,0 +1,21 @@
+<map id="BalloonParty.Shared.SceneLight.SceneLightFieldService" name="BalloonParty.Shared.SceneLight.SceneLightFieldService">
+<area shape="rect" id="Node000001" title="Owns the scene&#45;light FIELD — a small screen/world&#45;space RT (the disturbance&#45;field architecture applie..." alt="" coords="391,218,599,258"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="81,5,167,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,23,243,39,309,65,368,104,402,132,432,162,479,216,475,219,429,166,398,136,365,108,307,70,242,45,180,29"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="84,55,164,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="179,73,243,89,308,113,368,146,423,182,469,216,466,220,420,186,365,151,305,118,242,94,177,78"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="75,104,173,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="188,126,243,139,355,178,448,215,446,220,353,183,242,145,186,131"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html" title="Implemented by field services that perform periodic RT blits on a cadence timer." alt="" coords="17,154,231,194"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="246,192,391,217,390,223,245,198"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html" title=" " alt="" coords="23,218,225,258"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="238,235,390,235,390,241,238,241"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="25,282,223,322"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="236,280,390,253,391,259,237,285"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings.html" title="Read&#45;only tuning for the scene&#45;light field (see Milestone 3)." alt="" coords="9,346,239,386"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="212,340,242,331,304,314,366,294,452,256,455,261,368,299,306,320,243,337,214,345"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldResources.html" title="Holds the scene&#45;light field&#39;s GPU resources (two ping&#45;pong RTs + the fill/accumulate/gradient materia..." alt="" coords="11,410,237,450"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="216,404,242,395,306,375,365,345,425,300,472,256,476,260,429,304,368,350,308,380,243,401,218,409"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldCoordinates.html" title="Converts world positions/radii to the normalised UV space the stamp shaders expect." alt="" coords="5,474,243,514"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="243,468,307,444,337,428,365,409,404,372,437,330,481,257,486,260,441,334,408,376,368,413,340,433,309,449,245,473"/>
+</map>

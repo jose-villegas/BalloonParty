@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.Thermal.IThermalSource" name="BalloonParty.Shared.Thermal.IThermalSource">
+<area shape="rect" id="Node000001" title="Latest polled thermal readings for ThermalFrameRateGovernor." alt="" coords="5,5,219,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Shared_1_1Thermal_1_1StubThermalSource.html" title="Always&#45;cool IThermalSource for the editor and non&#45;Android platforms, where no thermal API exists." alt="" coords="5,93,219,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,59,115,93,109,93,109,59"/>
+</map>

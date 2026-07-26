@@ -1,0 +1,7 @@
+<map id="BalloonParty.Shared.Pool.InjectingPoolChannel&lt; TItem &gt;" name="BalloonParty.Shared.Pool.InjectingPoolChannel&lt; TItem &gt;">
+<area shape="rect" id="Node000001" title="Injects [Inject] fields from a parent IObjectResolver without a VContainer child scope per instance." alt="" coords="5,181,232,221"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolChannel-1-g.html" title=" " alt="" coords="25,93,212,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,147,121,181,116,181,116,147"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolChannel.html" title="Non&#45;generic marker so any PoolChannel can be stored in a typed dictionary." alt="" coords="25,5,212,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="121,59,121,93,116,93,116,59"/>
+</map>

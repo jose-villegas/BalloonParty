@@ -1,0 +1,5 @@
+<map id="BalloonParty.UI.Health.HealthUILifetimeScope" name="BalloonParty.UI.Health.HealthUILifetimeScope">
+<area shape="rect" id="Node000001" title="Child scope for the health UI; binds HealthCounterLabel to live HP and drives HeartTrailController." alt="" coords="5,79,220,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="55,5,170,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,44,115,79,110,79,110,44"/>
+</map>

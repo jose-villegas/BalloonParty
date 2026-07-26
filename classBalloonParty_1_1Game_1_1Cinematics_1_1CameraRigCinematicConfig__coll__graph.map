@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Cinematics.CameraRigCinematicConfig" name="BalloonParty.Game.Cinematics.CameraRigCinematicConfig">
+<area shape="rect" id="Node000001" title="How one CameraRigCinematic composes the shared shape." alt="" coords="5,108,232,148"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Cinematics_1_1ICinematicFocus.html" title="Return false when there is currently nothing to frame — the rig holds its position." alt="" coords="5,5,232,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,59,121,108,116,108,116,59"/>
+</map>

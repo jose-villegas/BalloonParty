@@ -1,0 +1,17 @@
+<map id="BalloonParty.Slots.Spawner.GridSpawnerCoordinator" name="BalloonParty.Slots.Spawner.GridSpawnerCoordinator">
+<area shape="rect" id="Node000001" title=" " alt="" coords="675,65,876,105"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="433,5,518,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="532,28,586,39,686,62,685,67,585,45,531,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="426,55,525,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="539,68,675,76,674,82,538,74"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable.html" title="Marks a resettable whose work is board population/teardown (clearing or respawning actors),..." alt="" coords="365,105,585,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="599,106,674,95,675,101,599,111"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="17,105,224,145"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="238,122,365,122,365,127,238,127"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Shared_1_1GameState_1_1NavigationReadyGate.html" title=" " alt="" coords="374,169,577,209"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="560,162,584,154,724,102,726,107,586,159,562,167"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Shared_1_1IReadyGate.html" title="Blocks a caller until some external condition allows it to proceed; &quot;ready&quot; is implementation&#45;defined..." alt="" coords="5,172,236,197"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="250,183,374,185,374,190,250,189"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Shared_1_1GameState_1_1INavigation.html" title="Injectable seam over the static Navigation, testable without global state." alt="" coords="23,222,218,262"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="231,223,373,201,374,207,232,228"/>
+</map>

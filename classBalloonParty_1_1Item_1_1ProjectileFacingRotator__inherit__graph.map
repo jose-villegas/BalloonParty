@@ -1,0 +1,5 @@
+<map id="BalloonParty.Item.ProjectileFacingRotator" name="BalloonParty.Item.ProjectileFacingRotator">
+<area shape="rect" id="Node000001" title="Rotates an item icon to face the loaded/flying shot — aim direction while it&#39;s being lined up,..." alt="" coords="5,79,207,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="44,5,168,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,44,109,79,103,79,103,44"/>
+</map>

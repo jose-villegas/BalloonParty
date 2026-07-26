@@ -1,0 +1,7 @@
+<map id="BalloonParty.Item.ItemEffectPlayer" name="BalloonParty.Item.ItemEffectPlayer">
+<area shape="rect" id="Node000001" title="Plays an item&#39;s one&#45;shot activation effect, pooled and tinted by the popped balloon&#39;s colour." alt="" coords="348,37,555,77"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="11,5,197,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="212,33,348,45,347,50,211,38"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="5,69,203,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="216,76,347,64,348,70,216,82"/>
+</map>

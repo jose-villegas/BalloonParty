@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.IScoreTrailConfig" name="BalloonParty.Shared.IScoreTrailConfig">
+<area shape="rect" id="Node000001" title="Score trail presentation: timing, scatter, burst, and pool prewarm sizes." alt="" coords="27,5,222,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html" title=" " alt="" coords="5,93,244,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,59,127,93,122,93,122,59"/>
+</map>

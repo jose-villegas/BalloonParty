@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.Rendering.SpriteShadowBaker" name="BalloonParty.Shared.Rendering.SpriteShadowBaker">
+<area shape="rect" id="Node000001" title="Authoring component for baked drop shadows; data&#45;only at runtime, all bake logic lives in SpriteShado..." alt="" coords="5,79,231,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="56,5,180,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,44,121,79,115,79,115,44"/>
+</map>

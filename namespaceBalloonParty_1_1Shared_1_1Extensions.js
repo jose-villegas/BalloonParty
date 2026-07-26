@@ -1,0 +1,27 @@
+var namespaceBalloonParty_1_1Shared_1_1Extensions =
+[
+    [ "AnimationCurveExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1AnimationCurveExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1AnimationCurveExtensions" ],
+    [ "BalanceBiasExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalanceBiasExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalanceBiasExtensions" ],
+    [ "BalloonModelExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonModelExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonModelExtensions" ],
+    [ "BalloonTypeExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonTypeExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonTypeExtensions" ],
+    [ "ColorableRendererExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1ColorableRendererExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1ColorableRendererExtensions" ],
+    [ "ColorExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1ColorExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1ColorExtensions" ],
+    [ "DisturbancePulseExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1DisturbancePulseExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1DisturbancePulseExtensions" ],
+    [ "DisturbanceTweenExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1DisturbanceTweenExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1DisturbanceTweenExtensions" ],
+    [ "ImageExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1ImageExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1ImageExtensions" ],
+    [ "InputHelper", "classBalloonParty_1_1Shared_1_1Extensions_1_1InputHelper.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1InputHelper" ],
+    [ "LifecycleHelper", "classBalloonParty_1_1Shared_1_1Extensions_1_1LifecycleHelper.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1LifecycleHelper" ],
+    [ "ListExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1ListExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1ListExtensions" ],
+    [ "MusicalPitchExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1MusicalPitchExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1MusicalPitchExtensions" ],
+    [ "PoolManagerExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1PoolManagerExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1PoolManagerExtensions" ],
+    [ "RendererExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1RendererExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1RendererExtensions" ],
+    [ "SceneExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1SceneExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1SceneExtensions" ],
+    [ "SceneRenderingHandle", "classBalloonParty_1_1Shared_1_1Extensions_1_1SceneRenderingHandle.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1SceneRenderingHandle" ],
+    [ "SlotActorExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1SlotActorExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1SlotActorExtensions" ],
+    [ "SpriteRendererExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1SpriteRendererExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1SpriteRendererExtensions" ],
+    [ "TmpTextExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1TmpTextExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1TmpTextExtensions" ],
+    [ "TransformExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1TransformExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1TransformExtensions" ],
+    [ "VectorExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1VectorExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1VectorExtensions" ],
+    [ "VectorMathExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1VectorMathExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1VectorMathExtensions" ],
+    [ "WeightedPickExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1WeightedPickExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1WeightedPickExtensions" ]
+];

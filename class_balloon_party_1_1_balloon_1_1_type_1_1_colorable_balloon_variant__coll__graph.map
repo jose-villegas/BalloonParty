@@ -1,0 +1,9 @@
+<map id="BalloonParty.Balloon.Type.ColorableBalloonVariant" name="BalloonParty.Balloon.Type.ColorableBalloonVariant">
+<area shape="rect" id="Node000001" title=" " alt="" coords="286,55,462,96"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="39,5,150,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,30,288,56,283,59,165,35"/>
+<area shape="rect" id="Node000003" href="$interface_balloon_party_1_1_balloon_1_1_type_1_1_i_balloon_variant.html" title=" " alt="" coords="6,55,183,96"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="198,73,288,75,283,76,198,78"/>
+<area shape="rect" id="Node000004" href="$interface_balloon_party_1_1_configuration_1_1_i_game_palette.html" title=" " alt="" coords="5,120,184,161"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="198,116,261,101,289,97,295,96,262,106,200,121"/>
+</map>

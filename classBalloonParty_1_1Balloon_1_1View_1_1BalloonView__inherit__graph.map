@@ -1,0 +1,16 @@
+<map id="BalloonParty.Balloon.View.BalloonView" name="BalloonParty.Balloon.View.BalloonView">
+<area shape="rect" id="Node000001" title=" " alt="" coords="507,142,701,182"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="283,5,407,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="422,27,460,41,498,63,533,90,586,140,582,144,529,94,495,68,458,46,420,32"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="252,55,439,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="420,97,544,139,542,144,418,102"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="5,142,184,182"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="198,156,232,155,459,155,507,156,507,162,459,161,232,161,198,161"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IPaintReactive.html" title="A slot&#45;actor view that can play the paint&#45;splash drip reaction." alt="" coords="256,170,435,210"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="198,171,256,177,255,183,198,176"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="448,176,506,170,507,175,449,182"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Nudge_1_1INudgeable.html" title="Decouples NudgeService from BalloonView specifically." alt="" coords="232,235,459,260"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="424,229,458,219,559,180,561,185,460,225,426,234"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonMotionView.html" title="Position surface BalloonMotionTicker reads (base reconciliation) and writes (base + impulses)." alt="" coords="248,285,443,325"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="442,277,457,270,493,249,527,225,580,180,584,184,530,230,496,254,460,275,444,282"/>
+</map>

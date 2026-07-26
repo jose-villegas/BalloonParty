@@ -1,0 +1,7 @@
+<map id="BalloonParty.Shared.GameState.CinematicStateService" name="BalloonParty.Shared.GameState.CinematicStateService">
+<area shape="rect" id="Node000001" title=" " alt="" coords="347,37,555,77"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Shared_1_1GameState_1_1ICinematicState.html" title="Injectable seam over the static Cinematic state, testable without global state." alt="" coords="23,5,217,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="231,33,347,45,346,50,231,39"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Cinematics_1_1ICinematicsSettings.html" title="The single setup point for cinematics: one composed entry per CinematicState." alt="" coords="5,69,235,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="248,74,346,65,347,70,248,80"/>
+</map>

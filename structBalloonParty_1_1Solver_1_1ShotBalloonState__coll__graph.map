@@ -1,0 +1,18 @@
+<map id="BalloonParty.Solver.ShotBalloonState" name="BalloonParty.Solver.ShotBalloonState">
+<area shape="rect" id="Node000001" title="Mutable per&#45;simulation copy of a ShotBalloonSnapshot — HitsRemaining decrements on a deflect; a poppe..." alt="" coords="983,97,1161,137"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html" title="Stub grid actor standing in for a live balloon in the dynamic&#45;board sim — enough of IWriteableDynamic..." alt="" coords="717,97,896,137"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="910,115,982,115,982,120,910,120"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html" title=" " alt="" coords="461,33,668,73"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="655,74,731,95,730,100,653,79"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IDynamicSlotActor.html" title=" " alt="" coords="233,5,412,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="426,35,462,39,461,44,425,40"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="5,39,184,79"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="197,41,233,36,234,41,198,46"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="233,69,412,109"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="198,70,234,75,233,80,197,75"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="425,71,461,66,462,71,426,77"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence.html" title="Lets a dynamic actor shape how the balancer moves it: a per&#45;candidate weight offset added to the supp..." alt="" coords="475,97,654,137"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="668,115,717,115,717,120,668,120"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceBiasSource.html" title="The read&#45;set the balance&#45;bias formulas (BalloonParty.Shared.Extensions.BalanceBiasExtensions) need fr..." alt="" coords="475,161,654,201"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="653,155,730,135,731,140,655,160"/>
+</map>

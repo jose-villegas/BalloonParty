@@ -1,0 +1,7 @@
+<map id="BalloonParty.Shared.GameState.NavigationReadyGate" name="BalloonParty.Shared.GameState.NavigationReadyGate">
+<area shape="rect" id="Node000001" title=" " alt="" coords="138,108,341,148"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Shared_1_1IReadyGate.html" title="Blocks a caller until some external condition allows it to proceed; &quot;ready&quot; is implementation&#45;defined..." alt="" coords="5,13,236,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="147,45,219,106,215,110,143,49"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1GameState_1_1INavigation.html" title="Injectable seam over the static Navigation, testable without global state." alt="" coords="261,5,455,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="327,56,263,110,260,106,323,52"/>
+</map>

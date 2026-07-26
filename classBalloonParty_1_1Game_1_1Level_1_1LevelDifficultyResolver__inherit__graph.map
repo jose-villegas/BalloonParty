@@ -1,0 +1,13 @@
+<map id="BalloonParty.Game.Level.LevelDifficultyResolver" name="BalloonParty.Game.Level.LevelDifficultyResolver">
+<area shape="rect" id="Node000001" title="Resolves and caches the live per&#45;level difficulty mix, bridging range weights onto the balloon/item c..." alt="" coords="260,105,448,145"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="66,5,151,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,25,213,40,275,70,326,102,323,107,272,75,211,44,164,30"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="59,55,158,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="172,79,268,102,267,107,171,85"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,105,212,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="226,122,260,122,260,127,226,127"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html" title="Single read surface for the live per&#45;level difficulty mix; never read ILevelPacingConfiguration direc..." alt="" coords="15,169,203,209"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="199,163,276,142,278,147,200,168"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelThresholds.html" title="The per&#45;level score goal each colour must reach while playing that level — answers for any level,..." alt="" coords="15,233,203,273"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="195,225,211,218,275,181,327,143,330,147,278,185,213,223,197,230"/>
+</map>

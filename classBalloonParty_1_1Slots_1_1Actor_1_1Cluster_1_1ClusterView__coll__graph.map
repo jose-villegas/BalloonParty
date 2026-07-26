@@ -1,0 +1,5 @@
+<map id="BalloonParty.Slots.Actor.Cluster.ClusterView" name="BalloonParty.Slots.Actor.Cluster.ClusterView">
+<area shape="rect" id="Node000001" title="Expects the shader to declare _SlotCentersWorld (Vector4[]), _SlotCount (int), and _TimeOffset (float..." alt="" coords="5,79,184,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="33,5,157,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,44,97,79,92,79,92,44"/>
+</map>

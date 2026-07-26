@@ -1,0 +1,11 @@
+<map id="BalloonParty.Slots.Actor.Archetype.PuffCloudViewController" name="BalloonParty.Slots.Actor.Archetype.PuffCloudViewController">
+<area shape="rect" id="Node000001" title="Provides the cloud prefab from IPuffCloudSettings." alt="" coords="517,47,768,87"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterViewController-3-g.html" title="Manages a single TView &#160;rendering all clusters of TModel &#160;actors." alt="" coords="252,40,469,95"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="483,65,517,65,517,70,483,70"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="62,5,147,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="162,26,252,44,251,49,161,31"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="55,55,154,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="168,65,252,65,252,70,168,70"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ITransitionOutgoingContent.html" title="Keeps outgoing visuals on screen during a level transition so the Ascent&#39;s board clear doesn&#39;t blink ..." alt="" coords="5,105,204,145"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="207,99,251,89,252,94,208,104"/>
+</map>

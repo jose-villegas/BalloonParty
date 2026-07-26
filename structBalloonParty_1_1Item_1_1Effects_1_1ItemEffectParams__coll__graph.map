@@ -1,0 +1,13 @@
+<map id="BalloonParty.Item.Effects.ItemEffectParams" name="BalloonParty.Item.Effects.ItemEffectParams">
+<area shape="rect" id="Node000001" title="One item type&#39;s config&#45;free effect snapshot — ItemSettings and PaintSettings etc." alt="" coords="307,133,495,173"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Item_1_1Effects_1_1BombEffectParams.html" title="Bomb&#45;core scalars — mirrors BombSettings&#39;s kill&#45;radius fields only (the nudge/light/implosion fields ..." alt="" coords="5,5,193,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="175,48,194,55,285,94,361,131,359,136,283,99,192,60,173,53"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Item_1_1Effects_1_1LaserEffectParams.html" title="Laser&#45;core scalars — mirrors LaserSettings&#39;s geometry fields only." alt="" coords="5,69,193,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="207,109,307,131,306,136,206,115"/>
+<area shape="rect" id="Node000004" href="$structBalloonParty_1_1Item_1_1Effects_1_1LightningEffectParams.html" title="Lightning&#45;core scalars — mirrors LightningSettings&#39;s selection fields only (glow/visual fields exclud..." alt="" coords="5,133,193,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="207,151,307,151,307,156,207,156"/>
+<area shape="rect" id="Node000005" href="$structBalloonParty_1_1Item_1_1Effects_1_1PaintEffectParams.html" title="Paint&#45;core scalars — mirrors PaintSettings&#39;s spread&#45;triangle fields (PaintTriangle...." alt="" coords="5,197,193,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="206,192,306,171,307,176,207,197"/>
+<area shape="rect" id="Node000006" href="$structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html" title="Snipe scalars — no core (Shield/Snipe are pure state grants), so these ride here unused until Phase C..." alt="" coords="5,261,193,301"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="173,254,192,247,282,210,360,171,362,176,284,214,194,252,174,259"/>
+</map>

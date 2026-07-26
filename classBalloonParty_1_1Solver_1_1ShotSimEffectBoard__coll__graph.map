@@ -1,0 +1,7 @@
+<map id="BalloonParty.Solver.ShotSimEffectBoard" name="BalloonParty.Solver.ShotSimEffectBoard">
+<area shape="rect" id="Node000001" title="Solver&#45;side IEffectBoard — runs purely over the working set + ShotSlotLattice (Shot Solver Accuracy P..." alt="" coords="114,108,293,148"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Item_1_1Effects_1_1IEffectBoard.html" title="The occupant read&#45;set an item&#45;effect core selects against — implemented by GridEffectBoard (live) and..." alt="" coords="5,5,193,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="131,53,186,106,182,110,127,57"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Solver_1_1ShotSlotLattice.html" title="The hex&#45;lattice geometry an item effect core needs, snapshotted once — no SlotGrid/dynamics reference..." alt="" coords="218,5,397,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="280,57,225,110,221,106,276,53"/>
+</map>

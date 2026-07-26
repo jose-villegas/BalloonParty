@@ -1,0 +1,4 @@
+var _i_has_color_8cs =
+[
+    [ "BalloonParty.Slots.Capabilities.IHasColor", "interface_balloon_party_1_1_slots_1_1_capabilities_1_1_i_has_color.html", "interface_balloon_party_1_1_slots_1_1_capabilities_1_1_i_has_color" ]
+];

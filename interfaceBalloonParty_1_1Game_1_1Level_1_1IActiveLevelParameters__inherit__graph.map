@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Level.IActiveLevelParameters" name="BalloonParty.Game.Level.IActiveLevelParameters">
+<area shape="rect" id="Node000001" title="Single read surface for the live per&#45;level difficulty mix; never read ILevelPacingConfiguration direc..." alt="" coords="5,5,193,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html" title="Resolves and caches the live per&#45;level difficulty mix, bridging range weights onto the balloon/item c..." alt="" coords="5,93,193,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,59,102,93,97,93,97,59"/>
+</map>

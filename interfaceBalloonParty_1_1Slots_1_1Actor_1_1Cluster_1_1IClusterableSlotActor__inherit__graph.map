@@ -1,0 +1,11 @@
+<map id="BalloonParty.Slots.Actor.Cluster.IClusterableSlotActor" name="BalloonParty.Slots.Actor.Cluster.IClusterableSlotActor">
+<area shape="rect" id="Node000001" title="The registry assigns ClusterId during flood&#45;fill." alt="" coords="459,37,667,77"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushObstacleModel.html" title=" " alt="" coords="715,5,936,45"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="680,40,714,36,715,41,680,46"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html" title=" " alt="" coords="718,69,933,109"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="681,69,718,74,717,79,680,74"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="232,37,411,77"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="424,55,459,55,459,60,424,60"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="5,37,184,77"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="198,55,232,55,232,60,198,60"/>
+</map>

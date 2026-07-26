@@ -1,0 +1,13 @@
+<map id="BalloonParty.Shared.Pool.AnimatorEffectView" name="BalloonParty.Shared.Pool.AnimatorEffectView">
+<area shape="rect" id="Node000001" title="Poolable effect driven by an Animator; completion is timer&#45;based off the first clip&#39;s length." alt="" coords="525,85,712,125"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Shared_1_1Pool_1_1EffectView.html" title="Abstract base for poolable effect MonoBehaviours; pool via SimplePoolChannel&lt;TItem&gt;." alt="" coords="289,85,476,125"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="490,102,525,102,525,107,490,107"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="41,5,165,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="170,32,202,41,327,82,325,87,201,46,168,37"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="10,55,197,95"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="210,84,289,92,289,98,210,89"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1IEffect.html" title="A tintable, positionable visual effect, agnostic to the underlying rendering technology." alt="" coords="5,120,201,145"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="215,119,289,111,290,117,215,124"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="10,170,197,210"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="183,163,265,138,316,122,318,127,266,143,184,168"/>
+</map>

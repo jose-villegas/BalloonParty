@@ -1,0 +1,7 @@
+<map id="BalloonParty.Shared.GameState.SceneTransition" name="BalloonParty.Shared.GameState.SceneTransition">
+<area shape="rect" id="Node000001" title="Scene transition component; wire Load to a Button&#39;s onClick. If _preload is set, the scene loads addi..." alt="" coords="70,108,265,148"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,129,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,46,150,106,147,110,86,50"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Shared_1_1Extensions_1_1SceneRenderingHandle.html" title=" " alt="" coords="153,5,384,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="242,57,188,110,184,106,238,53"/>
+</map>

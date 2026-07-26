@@ -1,0 +1,27 @@
+var classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties =
+[
+    [ "AOColor", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#a391725082be512d3fc87c5d1c689865f", null ],
+    [ "AOIntensity", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#a02b008674c98d01ca838b3874ebb88b9", null ],
+    [ "AORadius", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#ac71caa55b977d4bcef8e6d96e400e375", null ],
+    [ "AOSoftness", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#a4aafec7c871580fffc4ae97534ecb1fd", null ],
+    [ "BranchColor", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#af9fbeb29b8480592c0435c16c4713b96", null ],
+    [ "BranchGradient", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#ab8efb8bcac6dab5d32f6501a82e4a0d6", null ],
+    [ "LeafColor", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#ad9dc92c4ca3130edf24649cd0ff5b8b7", null ],
+    [ "LeafTint", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#a488fbb057e9956387ec544dd41192d6c", null ],
+    [ "LeafWind", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#afa948473b885b42659407c060bd649a0", null ],
+    [ "PivotOffset", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#a66f9eadee908fbfa376b0e9ff4543762", null ],
+    [ "RattleAmplitude", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#a8357a558f3347e2285dfdfec63f83393", null ],
+    [ "RattleDamping", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#a88d667a9f2d4ff89c2c7acbce69b1f1d", null ],
+    [ "RattleFrequency", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#a3c3214867f7eb6c41b158f1d61b15764", null ],
+    [ "RattleKeyword", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#adf7e6fbe8e39fdcb9507ab058bc5f461", null ],
+    [ "ShadowColor", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#a11e27b0a9629adc7e50699d1de83943e", null ],
+    [ "ShadowDistance", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#ae925f1820d5ea95c06a82cab079061d1", null ],
+    [ "ShadowSoftness", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#af2a3b0af9573be63ce0efee9936531db", null ],
+    [ "ShadowSpread", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#abbca447b5d54a283ccd4c44963b050b3", null ],
+    [ "SpriteScale", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#a135a875fe2f98264279d852f5f7cbf1c", null ],
+    [ "UVRect", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#a003609fe38c7de2b48faa97389342510", null ],
+    [ "WindAmplitude", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#a8fda4e9c2e6a22c511c940fce783e342", null ],
+    [ "WindFrequency", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#a0a6599c2cb6ea6f485a66f4bbd185235", null ],
+    [ "WindNoiseAmplitude", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#a69b83e943a9e1b2d4dbad51103bf88c2", null ],
+    [ "WindScalePulse", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#a52774cb17a68f062bac79ce2d48eca72", null ]
+];

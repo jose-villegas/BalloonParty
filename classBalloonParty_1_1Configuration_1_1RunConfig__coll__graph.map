@@ -1,0 +1,7 @@
+<map id="BalloonParty.Configuration.RunConfig" name="BalloonParty.Configuration.RunConfig">
+<area shape="rect" id="Node000001" title=" " alt="" coords="62,93,259,133"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,135,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,46,142,91,139,95,90,49"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1IRunConfig.html" title="Run&#45;level rules — starting hit points and (future) loss thresholds." alt="" coords="159,5,343,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="223,57,183,95,179,91,220,53"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="BalloonParty.Slots.Actor.Archetype.AbsorberActorModel" name="BalloonParty.Slots.Actor.Archetype.AbsorberActorModel">
+<area shape="rect" id="Node000001" title=" " alt="" coords="503,37,727,77"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="254,5,433,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="447,35,503,41,502,47,446,40"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="5,5,184,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="198,23,254,23,254,28,198,28"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHitable.html" title=" " alt="" coords="232,69,455,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="468,72,502,68,503,73,468,77"/>
+</map>

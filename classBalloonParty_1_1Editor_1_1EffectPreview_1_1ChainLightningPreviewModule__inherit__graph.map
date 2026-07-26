@@ -1,0 +1,5 @@
+<map id="BalloonParty.Editor.EffectPreview.ChainLightningPreviewModule" name="BalloonParty.Editor.EffectPreview.ChainLightningPreviewModule">
+<area shape="rect" id="Node000001" title="Preview module for ChainLightningView." alt="" coords="5,93,280,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Editor_1_1EffectPreview_1_1IEffectPreviewModule.html" title="Pluggable preview module for EffectViewPreviewPlayer; handles per&#45;effect rendering while the player m..." alt="" coords="33,5,252,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="145,59,145,93,140,93,140,59"/>
+</map>

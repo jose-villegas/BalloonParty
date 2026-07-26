@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.Level.ILevelParameters" name="BalloonParty.Configuration.Level.ILevelParameters">
+<area shape="rect" id="Node000001" title="The read surface of a fully&#45;resolved level; cross&#45;level queries stay on the resolver instead." alt="" coords="5,5,203,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html" title="Field defaults are the parameterless fallback (Simple&#45;only) used when no authored range contains a le..." alt="" coords="5,93,203,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,59,107,93,101,93,101,59"/>
+</map>

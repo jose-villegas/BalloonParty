@@ -1,0 +1,7 @@
+<map id="BalloonParty.UI.Binding.ICounterDisplay" name="BalloonParty.UI.Binding.ICounterDisplay">
+<area shape="rect" id="Node000001" title="Strategy for how a counter label renders its numeric value." alt="" coords="139,5,316,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1UI_1_1PlainCounterDisplay.html" title="Renders a counter value as plain thousands&#45;separated text (no animation)." alt="" coords="5,93,212,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="191,56,136,95,133,91,188,51"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1RollingCounterDisplay.html" title="Renders a counter value via RollingTextAnimator (per&#45;digit odometer roll)." alt="" coords="236,93,456,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="266,51,321,91,318,95,263,56"/>
+</map>

@@ -1,0 +1,26 @@
+<map id="BalloonParty.Editor.EffectPreview.LaserPreviewModule" name="BalloonParty.Editor.EffectPreview.LaserPreviewModule">
+<area shape="rect" id="Node000001" title="Preview module for LaserView." alt="" coords="1256,80,1468,120"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Editor_1_1EffectPreview_1_1IEffectPreviewModule.html" title="Pluggable preview module for EffectViewPreviewPlayer; handles per&#45;effect rendering while the player m..." alt="" coords="947,48,1165,88"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1179,78,1256,86,1255,92,1179,83"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Item_1_1Laser_1_1LaserView.html" title="Animator&#45;driven laser effect that tints its wired renderers to the colour it receives — the host ball..." alt="" coords="967,112,1145,152"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1159,119,1255,108,1256,114,1159,124"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Shared_1_1Pool_1_1AnimatorEffectView.html" title="Poolable effect driven by an Animator; completion is timer&#45;based off the first clip&#39;s length." alt="" coords="613,112,799,152"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="813,129,966,129,966,135,813,135"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Shared_1_1Pool_1_1EffectView.html" title="Abstract base for poolable effect MonoBehaviours; pool via SimplePoolChannel&lt;TItem&gt;." alt="" coords="338,112,525,152"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="538,129,612,129,612,135,538,135"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="56,70,180,95"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="194,92,338,115,337,120,194,97"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Shared_1_1Rendering_1_1ColorableRenderer.html" title="Non&#45;generic base so Unity can serialise ColorableRenderer[] fields — [SerializeField] doesn&#39;t work on..." alt="" coords="319,44,544,84"/>
+<area shape="poly" id="edge10_Node000010_Node000006" title=" " alt="" coords="193,76,318,68,318,73,194,81"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="25,233,211,273"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="207,227,230,219,315,184,389,150,391,154,318,189,232,224,209,232"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Shared_1_1IEffect.html" title="A tintable, positionable visual effect, agnostic to the underlying rendering technology." alt="" coords="20,119,216,145"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="230,129,338,129,338,135,230,135"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="25,169,211,209"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="225,167,338,146,338,152,225,172"/>
+<area shape="poly" id="edge9_Node000003_Node000010" title=" " alt="" coords="558,72,819,97,923,111,967,117,966,122,922,116,818,103,557,77"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Shared_1_1Rendering_1_1IColorableRenderer.html" title=" " alt="" coords="5,5,231,45"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="245,38,319,47,318,53,244,44"/>
+<area shape="rect" id="Node000012" href="$structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html" title="Encapsulates the colour&#45;cycling state shared by rainbow laser, lightning, and paint effects." alt="" coords="593,176,819,216"/>
+<area shape="poly" id="edge12_Node000003_Node000012" title=" " alt="" coords="829,171,966,146,967,151,830,176"/>
+</map>

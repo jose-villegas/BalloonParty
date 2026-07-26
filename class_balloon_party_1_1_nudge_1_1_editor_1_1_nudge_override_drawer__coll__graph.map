@@ -1,0 +1,7 @@
+<map id="BalloonParty.Nudge.Editor.NudgeOverrideDrawer" name="BalloonParty.Nudge.Editor.NudgeOverrideDrawer">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,168,182,208"/>
+<area shape="rect" id="Node000002" href="$class_balloon_party_1_1_editor_1_1_auto_field_property_drawer.html" title="Base class for property drawers that want common fields drawn automatically via serialized&#45;property r..." alt="" coords="13,79,174,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,133,96,168,91,166,92,137"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="37,5,150,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,44,96,79,91,78,93,49"/>
+</map>

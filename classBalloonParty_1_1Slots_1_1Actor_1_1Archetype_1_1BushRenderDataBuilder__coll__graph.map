@@ -1,0 +1,10 @@
+<map id="BalloonParty.Slots.Actor.Archetype.BushRenderDataBuilder" name="BalloonParty.Slots.Actor.Archetype.BushRenderDataBuilder">
+<area shape="rect" id="Node000001" title="Assembles a bush&#39;s BushRenderData, merging every slot&#39;s leaves into ≤1023&#45;instance batches so the bus..." alt="" coords="891,9,1137,49"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html" title=" " alt="" coords="261,9,459,49"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="473,20,483,20,567,17,867,21,890,22,890,27,867,27,567,23,483,25,473,26"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushMaterialSet.html" title="Owns the bush&#39;s materials: two leaf instances (inner/outer render queue) and one branch material per ..." alt="" coords="571,44,769,84"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="473,39,570,50,570,56,472,45"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1IClusterViewSettings.html" title="Shared visual configuration for cluster&#45;based renderers (clouds, bushes, etc.)." alt="" coords="5,9,212,49"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="226,27,261,27,261,32,226,32"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="783,50,890,39,890,44,783,55"/>
+</map>

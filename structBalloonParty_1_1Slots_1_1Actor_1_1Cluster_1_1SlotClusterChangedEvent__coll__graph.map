@@ -1,0 +1,5 @@
+<map id="BalloonParty.Slots.Actor.Cluster.SlotClusterChangedEvent" name="BalloonParty.Slots.Actor.Cluster.SlotClusterChangedEvent">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,108,241,148"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotCluster.html" title="A group of hex&#45;adjacent IClusterableSlotActor slots sharing one merged visual." alt="" coords="34,5,213,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,59,126,108,121,108,121,59"/>
+</map>

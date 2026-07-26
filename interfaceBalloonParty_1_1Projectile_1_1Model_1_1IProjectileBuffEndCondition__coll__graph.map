@@ -1,0 +1,5 @@
+<map id="BalloonParty.Projectile.Model.IProjectileBuffEndCondition" name="BalloonParty.Projectile.Model.IProjectileBuffEndCondition">
+<area shape="rect" id="Node000001" title="Decides when a projectile buff ends." alt="" coords="5,79,248,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="77,5,176,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,44,129,79,124,79,124,44"/>
+</map>

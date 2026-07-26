@@ -1,0 +1,5 @@
+<map id="BalloonParty.Item.IItemView" name="BalloonParty.Item.IItemView">
+<area shape="rect" id="Node000001" title=" " alt="" coords="23,5,230,31"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Item_1_1ItemVisualView.html" title=" " alt="" coords="5,79,248,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,44,129,79,124,79,124,44"/>
+</map>

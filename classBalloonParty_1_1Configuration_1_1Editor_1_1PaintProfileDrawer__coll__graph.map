@@ -1,0 +1,7 @@
+<map id="BalloonParty.Configuration.Editor.PaintProfileDrawer" name="BalloonParty.Configuration.Editor.PaintProfileDrawer">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,167,203,207"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html" title="Base class for property drawers that auto&#45;draw common fields, with a manual section for fields needin..." alt="" coords="15,79,193,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,133,107,166,101,166,101,133"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="42,5,166,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="107,44,107,79,101,79,101,44"/>
+</map>

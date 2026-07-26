@@ -1,0 +1,5 @@
+<map id="BalloonParty.Projectile.Controller.IActiveProjectilePierce" name="BalloonParty.Projectile.Controller.IActiveProjectilePierce">
+<area shape="rect" id="Node000001" title="Whether the active shot is currently piercing." alt="" coords="23,5,218,60"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html" title="Mirrors the currently&#45;loaded projectile&#39;s piercing state as one shared signal, so systems that must h..." alt="" coords="5,108,236,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,74,123,108,118,108,118,74"/>
+</map>

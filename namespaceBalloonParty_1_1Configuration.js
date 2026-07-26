@@ -1,0 +1,27 @@
+var namespaceBalloonParty_1_1Configuration =
+[
+    [ "Balloons", "namespaceBalloonParty_1_1Configuration_1_1Balloons.html", "namespaceBalloonParty_1_1Configuration_1_1Balloons" ],
+    [ "Buffs", "namespaceBalloonParty_1_1Configuration_1_1Buffs.html", "namespaceBalloonParty_1_1Configuration_1_1Buffs" ],
+    [ "Cinematics", "namespaceBalloonParty_1_1Configuration_1_1Cinematics.html", "namespaceBalloonParty_1_1Configuration_1_1Cinematics" ],
+    [ "Editor", "namespaceBalloonParty_1_1Configuration_1_1Editor.html", "namespaceBalloonParty_1_1Configuration_1_1Editor" ],
+    [ "Effects", "namespaceBalloonParty_1_1Configuration_1_1Effects.html", "namespaceBalloonParty_1_1Configuration_1_1Effects" ],
+    [ "GridActors", "namespaceBalloonParty_1_1Configuration_1_1GridActors.html", "namespaceBalloonParty_1_1Configuration_1_1GridActors" ],
+    [ "Items", "namespaceBalloonParty_1_1Configuration_1_1Items.html", "namespaceBalloonParty_1_1Configuration_1_1Items" ],
+    [ "Level", "namespaceBalloonParty_1_1Configuration_1_1Level.html", "namespaceBalloonParty_1_1Configuration_1_1Level" ],
+    [ "Palette", "namespaceBalloonParty_1_1Configuration_1_1Palette.html", "namespaceBalloonParty_1_1Configuration_1_1Palette" ],
+    [ "Ranges", "namespaceBalloonParty_1_1Configuration_1_1Ranges.html", "namespaceBalloonParty_1_1Configuration_1_1Ranges" ],
+    [ "BigScoreFormationSettings", "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html", "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings" ],
+    [ "GameDisplayConfiguration", "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html", "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration" ],
+    [ "IGameDisplayConfiguration", "interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration" ],
+    [ "IOverflowSettings", "interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html", "interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings" ],
+    [ "IScoreTrailBehaviourConfiguration", "interfaceBalloonParty_1_1Configuration_1_1IScoreTrailBehaviourConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1IScoreTrailBehaviourConfiguration" ],
+    [ "IThermalGovernorSettings", "interfaceBalloonParty_1_1Configuration_1_1IThermalGovernorSettings.html", "interfaceBalloonParty_1_1Configuration_1_1IThermalGovernorSettings" ],
+    [ "OverflowSettings", "classBalloonParty_1_1Configuration_1_1OverflowSettings.html", "classBalloonParty_1_1Configuration_1_1OverflowSettings" ],
+    [ "PredictionTraceConfig", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig" ],
+    [ "ProjectileFlightConfig", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig" ],
+    [ "RunConfig", "classBalloonParty_1_1Configuration_1_1RunConfig.html", "classBalloonParty_1_1Configuration_1_1RunConfig" ],
+    [ "ScoreTrailBehaviourConfiguration", "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html", "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration" ],
+    [ "ScoreTrailBehaviourEntry", "structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html", "structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry" ],
+    [ "SlotGridConfig", "classBalloonParty_1_1Configuration_1_1SlotGridConfig.html", "classBalloonParty_1_1Configuration_1_1SlotGridConfig" ],
+    [ "ThermalGovernorSettings", "classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html", "classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings" ]
+];

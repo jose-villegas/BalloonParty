@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.Effects.ITimeOfDaySettings" name="BalloonParty.Configuration.Effects.ITimeOfDaySettings">
+<area shape="rect" id="Node000001" title="Read&#45;only tuning for the night&#45;mode time&#45;of&#45;day cycle." alt="" coords="17,5,219,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html" title=" " alt="" coords="5,93,231,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,59,121,93,115,93,115,59"/>
+</map>

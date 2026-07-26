@@ -1,0 +1,15 @@
+<map id="BalloonParty.Shared.Rendering.IColorableRenderer" name="BalloonParty.Shared.Rendering.IColorableRenderer">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,104,211,145"/>
+<area shape="rect" id="Node000002" href="$class_balloon_party_1_1_shared_1_1_rendering_1_1_colorable_renderer.html" title="Non&#45;generic MonoBehaviour base that implements IColorableRenderer." alt="" coords="259,104,464,145"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="226,122,261,124,255,125,227,127"/>
+<area shape="rect" id="Node000003" href="$class_balloon_party_1_1_shared_1_1_rendering_1_1_colorable_renderer-1-g.html" title="Generic layer that fetches the required T &#160;component on Awake." alt="" coords="512,71,717,111"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="479,106,514,104,509,105,480,111"/>
+<area shape="rect" id="Node000007" href="$class_balloon_party_1_1_shared_1_1_rendering_1_1_composite_colorable_renderer.html" title=" " alt="" coords="512,136,717,177"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="480,137,514,143,509,143,479,142"/>
+<area shape="rect" id="Node000004" href="$class_balloon_party_1_1_balloon_1_1_view_1_1_particle_colorable_renderer.html" title=" " alt="" coords="777,5,952,46"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="709,64,781,47,787,46,710,69"/>
+<area shape="rect" id="Node000005" href="$class_balloon_party_1_1_balloon_1_1_view_1_1_sprite_colorable_renderer.html" title=" " alt="" coords="777,71,952,111"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="733,88,779,91,774,91,733,94"/>
+<area shape="rect" id="Node000006" href="$class_balloon_party_1_1_u_i_1_1_score_1_1_graphic_colorable_renderer.html" title=" " alt="" coords="765,136,964,177"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="710,113,787,136,781,135,709,118"/>
+</map>

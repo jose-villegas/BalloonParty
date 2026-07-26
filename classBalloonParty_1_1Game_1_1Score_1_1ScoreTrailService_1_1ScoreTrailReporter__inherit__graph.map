@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Score.ScoreTrailService.ScoreTrailReporter" name="BalloonParty.Game.Score.ScoreTrailService.ScoreTrailReporter">
+<area shape="rect" id="Node000001" title=" " alt="" coords="17,93,217,148"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailReporter.html" title="Service&#45;owned sink a handler reports group arrivals through." alt="" coords="5,5,228,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,59,119,93,114,93,114,59"/>
+</map>

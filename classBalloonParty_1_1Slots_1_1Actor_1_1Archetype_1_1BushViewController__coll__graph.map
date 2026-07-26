@@ -1,0 +1,39 @@
+<map id="BalloonParty.Slots.Actor.Archetype.BushViewController" name="BalloonParty.Slots.Actor.Archetype.BushViewController">
+<area shape="rect" id="Node000001" title="Adds gap&#45;fill circles at midpoints between adjacent bush slots so the rendered shape spans the gaps." alt="" coords="1584,292,1804,332"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterViewController-3-g.html" title="Manages a single TView &#160;rendering all clusters of TModel &#160;actors." alt="" coords="1255,178,1472,233"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1463,234,1632,289,1630,294,1461,240"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="679,197,765,222"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="778,206,1254,203,1254,209,778,212"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html" title="When setupOnly is true, builds once at startup and never subscribes to grid changes." alt="" coords="908,243,1104,298"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="779,219,908,247,907,252,778,224"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="673,126,771,151"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="785,141,984,158,1231,184,1255,187,1254,192,1230,189,983,164,785,146"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="765,155,947,241,945,246,762,160"/>
+<area shape="rect" id="Node000015" href="$classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html" title="Parent transform for scenario static content; the Ascent transition moves this root,..." alt="" coords="917,69,1095,109"/>
+<area shape="poly" id="edge18_Node000015_Node000004" title=" " alt="" coords="785,125,916,102,917,107,786,130"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ITransitionOutgoingContent.html" title="Keeps outgoing visuals on screen during a level transition so the Ascent&#39;s board clear doesn&#39;t blink ..." alt="" coords="907,5,1105,45"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="1120,41,1177,58,1232,82,1264,103,1294,127,1341,176,1337,179,1291,131,1261,107,1229,86,1175,63,1118,46"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="1118,255,1230,236,1258,230,1259,235,1231,241,1118,260"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ISlotClusterSource.html" title="Non&#45;generic read&#45;only facade so consumers can access cluster geometry without knowing the model type." alt="" coords="627,252,817,292"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="831,269,908,268,908,274,831,274"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="635,323,809,363"/>
+<area shape="poly" id="edge16_Node000002_Node000008" title=" " alt="" coords="822,346,959,344,1035,337,1109,323,1167,304,1224,280,1317,230,1320,235,1226,285,1169,309,1110,328,1036,342,960,350,822,352"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="814,317,907,293,908,298,815,322"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="267,236,440,276"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="454,271,603,304,659,320,658,325,602,309,453,277"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,236,212,276"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="226,253,267,253,267,259,226,259"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="261,300,445,340"/>
+<area shape="poly" id="edge12_Node000008_Node000011" title=" " alt="" coords="459,324,635,335,635,340,459,329"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="264,364,443,404"/>
+<area shape="poly" id="edge13_Node000008_Node000012" title=" " alt="" coords="456,370,635,350,635,355,456,375"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,364,198,404"/>
+<area shape="poly" id="edge14_Node000012_Node000013" title=" " alt="" coords="212,381,264,381,264,387,212,387"/>
+<area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="264,428,443,468"/>
+<area shape="poly" id="edge15_Node000008_Node000014" title=" " alt="" coords="455,425,602,387,673,360,675,365,603,392,457,430"/>
+<area shape="poly" id="edge17_Node000002_Node000015" title=" " alt="" coords="1110,96,1171,108,1232,126,1281,149,1325,175,1322,180,1279,153,1230,130,1169,113,1109,102"/>
+<area shape="rect" id="Node000016" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html" title=" " alt="" coords="1265,328,1462,368"/>
+<area shape="poly" id="edge19_Node000001_Node000016" title=" " alt="" coords="1476,333,1583,321,1584,327,1476,338"/>
+<area shape="rect" id="Node000017" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1IClusterViewSettings.html" title="Shared visual configuration for cluster&#45;based renderers (clouds, bushes, etc.)." alt="" coords="903,399,1109,439"/>
+<area shape="poly" id="edge20_Node000016_Node000017" title=" " alt="" coords="1121,393,1264,365,1265,370,1122,399"/>
+</map>

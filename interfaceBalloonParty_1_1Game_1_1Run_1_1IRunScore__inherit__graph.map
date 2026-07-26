@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Run.IRunScore" name="BalloonParty.Game.Run.IRunScore">
+<area shape="rect" id="Node000001" title="Read&#45;only view of the live run score, snapshotted by RunController when a run ends." alt="" coords="5,5,212,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html" title="Score keeping only — level progression lives in LevelController." alt="" coords="14,93,203,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,59,111,93,106,93,106,59"/>
+</map>

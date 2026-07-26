@@ -1,0 +1,27 @@
+var classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour =
+[
+    [ "BigScoreTrailBehaviour", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#af2ce2463a643f0b82f8e0ce0aadfe1ed", null ],
+    [ "AssertNoRemainder", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a4cd728b1563b5d9033dedbd92c147095", null ],
+    [ "Begin", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a969d83503a75f378177b475bad608a30", null ],
+    [ "ClampAxis", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a9a34aac678669c5d220c52448e27724b", null ],
+    [ "ClampCenter", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a86a1c0a93689ca8304f791617f0ce464", null ],
+    [ "ComputeDpCosts", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#aa2802d17c8832b2788c1a2c099330c00", null ],
+    [ "Decompose", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#aaf3d75670e0ab8eeac5b9dcb487ba78c", null ],
+    [ "EnsureDpCapacity", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a12303d81b6adc3d11558f2b94d905ba7", null ],
+    [ "FitScale", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#aba384954d8c15c25cd96fbf966e142ed", null ],
+    [ "GetPrincipalId", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a26d356caee288b4f61670248fb998393", null ],
+    [ "IsBetterDp", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#aff7ab0dcff98194e0b05585c4500b78e", null ],
+    [ "ReconstructLargestFirst", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a220cd9edce85db8d17750dc7e01dff8c", null ],
+    [ "SubCenter", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a2490afce189176a21f036dda96ead5e8", null ],
+    [ "TumbleAxis", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#aaf7498b3e41d5c7c8f77dc9b6594abf1", null ],
+    [ "_config", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a738a95616497b4c161b53c6d06f38092", null ],
+    [ "_denominations", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a8d16826270dd7eee0e15bd85ff34856e", null ],
+    [ "_dpPieces", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a39481fd4d2114f206ce61df2760e6cc4", null ],
+    [ "_dpRemainder", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#abd507b54cad22ff5dc8bf0801c1bf145", null ],
+    [ "_ticker", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a2c8a4bc9816c65e04a5193e16f0b17b2", null ],
+    [ "ConeHalfAngleDegrees", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#ae80d4a108934247fc28ca907a89f4f86", null ],
+    [ "FallbackSettings", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a2fcc6808f45b7ba8e8a020e9358b2a37", null ],
+    [ "GoldenAngle", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a005de21f32ef896af2c807a785d2f4e7", null ],
+    [ "MaxRadiusExtent", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a8563587c842e327041f8ef03211066f8", null ],
+    [ "ScreenTwirl", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#ad11e963f406e9022c04a7551efaa9bf0", null ]
+];

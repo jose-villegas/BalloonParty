@@ -1,0 +1,9 @@
+<map id="BalloonParty.Configuration.ScoreTrailBehaviourConfiguration" name="BalloonParty.Configuration.ScoreTrailBehaviourConfiguration">
+<area shape="rect" id="Node000001" title=" " alt="" coords="296,55,535,95"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="62,5,191,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="205,31,315,53,314,58,204,36"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1IScoreTrailBehaviourConfiguration.html" title="Read&#45;only view of the score&#45;trail choreography table — the ordered ScoreTrailBehaviourEntry list the ..." alt="" coords="5,55,248,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="261,73,296,73,296,78,261,78"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html" title="Score trail presentation: timing, scatter, burst, and pool prewarm sizes." alt="" coords="29,119,224,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="231,114,324,93,325,98,232,119"/>
+</map>

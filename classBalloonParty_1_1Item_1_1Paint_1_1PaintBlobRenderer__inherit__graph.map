@@ -1,0 +1,5 @@
+<map id="BalloonParty.Item.Paint.PaintBlobRenderer" name="BalloonParty.Item.Paint.PaintBlobRenderer">
+<area shape="rect" id="Node000001" title="Assigns a random _TimeOffset via MaterialPropertyBlock so blobs vary without breaking SRP batching." alt="" coords="5,79,181,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="31,5,155,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,44,96,79,91,79,91,44"/>
+</map>
