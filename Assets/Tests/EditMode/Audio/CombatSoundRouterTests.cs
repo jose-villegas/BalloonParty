@@ -3,12 +3,14 @@ using BalloonParty.Audio;
 using BalloonParty.Audio.Routing;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
+using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
+using UniRx;
 using UnityEngine;
 
 namespace BalloonParty.Tests.Audio
@@ -47,11 +49,14 @@ namespace BalloonParty.Tests.Audio
             var flightConfig = Substitute.For<IProjectileFlightConfig>();
             flightConfig.ShieldToneThreshold.Returns(5);
 
+            var activePierce = Substitute.For<IActiveProjectilePierce>();
+            activePierce.IsPiercing.Returns(new ReactiveProperty<bool>(false));
+
             var router = new CombatSoundRouter(
                 _player, hitSubscriber, firedSubscriber, loadedSubscriber,
                 cruiseStartedSubscriber, cruiseEndedSubscriber, doomedSubscriber, destroyedSubscriber,
                 pierceSubscriber, shieldGainedSubscriber, shieldLostSubscriber, wallHitSubscriber,
-                flightConfig);
+                flightConfig, activePierce);
             router.Start();
         }
 

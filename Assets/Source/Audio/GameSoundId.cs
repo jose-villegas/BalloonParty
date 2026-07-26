@@ -68,6 +68,10 @@ namespace BalloonParty.Audio
         LevelAscend,
 
         // Whoosh/sweep played as the camera descends during the game-over transition.
-        LevelDescend
+        LevelDescend,
+
+        // Looping drone that plays while the projectile is in pierce state; fades in on pierce-gained,
+        // fades out on pierce-discharged. Author with Loop=true and long FadeIn/FadeOutSeconds.
+        PierceLoop
     }
 }

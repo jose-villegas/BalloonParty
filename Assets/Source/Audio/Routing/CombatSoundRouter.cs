@@ -1,6 +1,7 @@
 using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
+using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
@@ -29,9 +30,11 @@ namespace BalloonParty.Audio.Routing
         private readonly ISubscriber<ShieldLostMessage> _shieldLostSubscriber;
         private readonly ISubscriber<WallHitMessage> _wallHitSubscriber;
         private readonly IProjectileFlightConfig _flightConfig;
+        private readonly IActiveProjectilePierce _activePierce;
         private readonly CompositeDisposable _subscriptions = new();
 
         private SoundHandle _cruiseHandle = SoundHandle.None;
+        private SoundHandle _pierceLoopHandle = SoundHandle.None;
         private int _bounceCount;
         private int _rainbowPopsThisFlight;
         private int _toughPopsThisFlight;
@@ -50,7 +53,8 @@ namespace BalloonParty.Audio.Routing
             ISubscriber<ShieldGainedMessage> shieldGainedSubscriber,
             ISubscriber<ShieldLostMessage> shieldLostSubscriber,
             ISubscriber<WallHitMessage> wallHitSubscriber,
-            IProjectileFlightConfig flightConfig)
+            IProjectileFlightConfig flightConfig,
+            IActiveProjectilePierce activePierce)
         {
             _player = player;
             _hitSubscriber = hitSubscriber;
@@ -65,6 +69,7 @@ namespace BalloonParty.Audio.Routing
             _shieldLostSubscriber = shieldLostSubscriber;
             _wallHitSubscriber = wallHitSubscriber;
             _flightConfig = flightConfig;
+            _activePierce = activePierce;
         }
 
         public void Start()
@@ -80,6 +85,7 @@ namespace BalloonParty.Audio.Routing
             _shieldGainedSubscriber.Subscribe(OnShieldGained).AddTo(_subscriptions);
             _shieldLostSubscriber.Subscribe(OnShieldLost).AddTo(_subscriptions);
             _wallHitSubscriber.Subscribe(OnWallHit).AddTo(_subscriptions);
+            _activePierce.IsPiercing.Subscribe(OnPierceStateChanged).AddTo(_subscriptions);
         }
 
         public void Dispose()
@@ -215,6 +221,19 @@ namespace BalloonParty.Audio.Routing
             }
 
             _player.Play(GameSoundId.WallHit, message.Position, depth, semitoneOffset: offset);
+        }
+
+        private void OnPierceStateChanged(bool piercing)
+        {
+            if (piercing)
+            {
+                _pierceLoopHandle = _player.Play(GameSoundId.PierceLoop, null);
+            }
+            else if (_pierceLoopHandle != SoundHandle.None)
+            {
+                _player.Stop(_pierceLoopHandle);
+                _pierceLoopHandle = SoundHandle.None;
+            }
         }
 
         private int PopSemitoneOffset(GameSoundId popId)
