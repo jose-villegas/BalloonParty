@@ -179,9 +179,9 @@ namespace BalloonParty.Game.Cinematics
             }
 
             // Skip path (no beat played) — nothing to unwind, so restart the whole board immediately.
-            _descendStartedPublisher.Publish(default);
             ResumeCinematicPause();
             _runController.RestartRun();
+            _descendStartedPublisher.Publish(default);
         }
 
         // Camera-down transition, the mirror of the level-up ascend: the lost level becomes the outgoing
@@ -192,8 +192,6 @@ namespace BalloonParty.Game.Cinematics
         private async UniTaskVoid RestoreAndRestartAsync()
         {
             var height = Settings.LevelAscend.Height;
-
-            _descendStartedPublisher.Publish(default);
 
             _restoreDone = new UniTaskCompletionSource();
             if (!Runner.TryBeginRestore())
@@ -210,6 +208,7 @@ namespace BalloonParty.Game.Cinematics
             // Reset run state only — the board swap is ours. Clear the live scenery (the snapshots carry it
             // out) and stage the new scenery below view; the grid is empty now, so it fills fully.
             _runController.RestartRun(resetBoard: false);
+            _descendStartedPublisher.Publish(default);
             _pauseService.Pause(PauseSource.Cinematic);
             _staticActorSpawner.ClearStaticActors();
 
