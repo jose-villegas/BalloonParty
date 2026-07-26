@@ -128,20 +128,25 @@ namespace BalloonParty.UI.Score
             var edgeDuration = _flipDuration * EdgeFraction;
 
             _flipSequence = DOTween.Sequence().SetUpdate(true).SetLink(gameObject);
-            _flipSequence.Append(_flipContainer.DOLocalRotate(new Vector3(90f, 0f, 0f), edgeDuration)
-                .SetEase(Ease.InSine));
 
             if (_lerpImages)
             {
                 CacheImageAlphas();
-                JoinImageFades(_flipSequence, 0f, edgeDuration);
-                InsertImageFades(_flipSequence, _flipDuration - edgeDuration, edgeDuration);
+                AppendImageFades(_flipSequence, 0f, edgeDuration);
             }
 
+            _flipSequence.Append(_flipContainer.DOLocalRotate(new Vector3(90f, 0f, 0f), edgeDuration)
+                .SetEase(Ease.InSine));
             _flipSequence.AppendCallback(() => _label.text = newText);
             _flipSequence.Append(_flipContainer
                 .DOLocalRotate(new Vector3(totalAngle, 0f, 0f), _flipDuration - edgeDuration, RotateMode.FastBeyond360)
                 .SetEase(Ease.OutCubic));
+
+            if (_lerpImages)
+            {
+                AppendImageFades(_flipSequence, _imageBaseAlphas, edgeDuration);
+            }
+
             _flipSequence.OnComplete(() =>
             {
                 _flipContainer.localRotation = _baseRotation;
@@ -170,27 +175,45 @@ namespace BalloonParty.UI.Score
             }
         }
 
-        private void JoinImageFades(Sequence sequence, float targetAlpha, float duration)
+        private void AppendImageFades(Sequence sequence, float targetAlpha, float duration)
         {
+            var first = true;
             for (var i = 0; i < _disableDuringFlip.Length; i++)
             {
                 if (_disableDuringFlip[i] is Image image)
                 {
-                    sequence.Join(image.DOFade(targetAlpha, duration).SetEase(Ease.InSine));
+                    var tween = image.DOFade(targetAlpha, duration).SetEase(Ease.InSine);
+                    if (first)
+                    {
+                        sequence.Append(tween);
+                        first = false;
+                    }
+                    else
+                    {
+                        sequence.Join(tween);
+                    }
                 }
             }
         }
 
-        private void InsertImageFades(Sequence sequence, float atPosition, float duration)
+        private void AppendImageFades(Sequence sequence, float[] targetAlphas, float duration)
         {
+            var first = true;
             for (var i = 0; i < _disableDuringFlip.Length; i++)
             {
                 if (_disableDuringFlip[i] is Image image)
                 {
-                    var alpha = _imageBaseAlphas != null && i < _imageBaseAlphas.Length
-                        ? _imageBaseAlphas[i]
-                        : 1f;
-                    sequence.Insert(atPosition, image.DOFade(alpha, duration).SetEase(Ease.OutCubic));
+                    var alpha = targetAlphas != null && i < targetAlphas.Length ? targetAlphas[i] : 1f;
+                    var tween = image.DOFade(alpha, duration).SetEase(Ease.OutCubic);
+                    if (first)
+                    {
+                        sequence.Append(tween);
+                        first = false;
+                    }
+                    else
+                    {
+                        sequence.Join(tween);
+                    }
                 }
             }
         }

@@ -91,6 +91,7 @@ namespace BalloonParty.Projectile.View
         private float _pierceAlpha;
         private PathTrace.SegmentBlocked _segmentBlocked;
         private Vector3 _lastPaintPos;
+        private float _stampScale = 1f;
 
         /// <summary>True once the fired shot has taken at least one physics step.</summary>
         internal bool HasFlown => _hasFlown;
@@ -520,7 +521,13 @@ namespace BalloonParty.Projectile.View
             transform.up = step.Direction;
             _hasFlown = true;
 
-            _disturbanceField.Stamp(StampSource.Projectile, step.Position, step.Direction);
+            {
+                var targetScale = step.Speed / _flightConfig.ProjectileSpeed;
+                _stampScale = Mathf.Lerp(_stampScale, targetScale, 10f * Time.fixedDeltaTime);
+                var profile = _disturbanceField.GetProfile(StampSource.Projectile);
+                _disturbanceField.Stamp(step.Position, profile.Radius * _stampScale,
+                    profile.Strength * _stampScale, step.Direction, profile.Duration);
+            }
 
             {
                 var colorName = _model.ColorName.Value;

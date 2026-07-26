@@ -70,7 +70,7 @@ MonoBehaviour:
     StrengthFalloff: 1
   - Sources: 2
     Radius: 0.3
-    Strength: 0.005
+    Strength: 0.4
     Duration: 0
     Interval: 0
     Spacing: 0

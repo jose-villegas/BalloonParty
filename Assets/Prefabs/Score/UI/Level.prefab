@@ -181,6 +181,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.TimeOfDayTint
   _graphics:
   - {fileID: 5824382302345840948}
+  _spriteRenderers: []
   _intensity: 1
 --- !u!225 &7577819002686539164
 CanvasGroup:
@@ -277,6 +278,7 @@ MonoBehaviour:
   - {fileID: 6895038504542885687}
   - {fileID: 5290011093641197016}
   - {fileID: 3724258222771082685}
+  _lerpImages: 1
 --- !u!114 &5022413936853635052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -462,6 +464,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.TimeOfDayTint
   _graphics:
   - {fileID: 2666106660243181176}
+  _spriteRenderers: []
   _intensity: 0.75
 --- !u!1 &4231835625811527028
 GameObject:
@@ -663,6 +666,7 @@ MonoBehaviour:
   _graphics:
   - {fileID: 8658601110163820774}
   - {fileID: 5824382302345840948}
+  _spriteRenderers: []
   _intensity: 1
 --- !u!1 &5210607992054251108
 GameObject:
