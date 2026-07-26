@@ -636,8 +636,25 @@ namespace BalloonParty.Tests.ShotSolver
             // carrier must still grant its shield exactly like a direct-contact Shield pop does
             // (ResolveBalloonContact_ShieldItem_GrantsAShieldASubsequentWallBounceSpends, above, is the
             // direct-contact baseline this test extends into a chain). A far-off filler keeps the
-            // working set non-empty through the one wall bounce that proves the grant: without it, the
-            // shot dies on that SAME bounce (0 shields); with it, 1 shield survives the bounce.
+            // working set non-empty for the rest of the flight (BoardCleared must stay false), but it
+            // can never itself be reached — the flight's x stays 0 forever (a straight-up aim), so the
+            // filler at x=500 is only ever a "don't let activeCount hit 0" prop, not a destination.
+            //
+            // Full hand-trace (walls: Vector4(Top,Right,Bottom,Left) = (1.5, 1000, -1000, -1000) — Top
+            // is the only close wall on a straight-up aim):
+            // Event 1 (balloon): host at (0,1) r0.05, combined radius 0.05 -> entry 1-0.05=0.95. Host
+            // pops (direct hit). Its Bomb (radius 1.0) fires from the host's own centre (0,1); the
+            // Shield carrier at (0.5,1) is 0.5 away, well inside the 1.0+0.05 combined kill radius ->
+            // Damage hit, hitsRemaining 1-1=0 -> pops via the item chain -> its OWN Shield activation
+            // grants +1 (shields 0->1). Only the untouchable filler remains active.
+            // Event 2 (wall): Top at y=1.5, 0.55 further up (y=0.95->1.5) -> bounce spends the granted
+            // shield (1->0, survives) and reflects the flight back down (0,-1).
+            // Event 3 (wall): heading down from y=1.5, the only wall ahead is the far Bottom (y=-1000,
+            // 1501.5 away) — the filler is never on this ray, so nothing interrupts the flight before it
+            // gets there. That bounce finds 0 shields left (0-1=-1) and kills the flight.
+            // Pops=2, BoardCleared=false (filler survives), Events=3, Died=true. A BROKEN chain (no
+            // grant) would instead die at Event 2 itself (0 shields there too) — Events==2 — so Events is
+            // the real discriminator here, not Died (which is true either way in this closed wall box).
             var walls = new Vector4(1.5f, 1000f, -1000f, -1000f);
             var board = new[]
             {
@@ -658,9 +675,14 @@ namespace BalloonParty.Tests.ShotSolver
 
             Assert.AreEqual(2, result.Pops, "host (direct) and the Shield carrier (bomb-triggered) both pop");
             Assert.IsFalse(result.BoardCleared, "the far-off filler survives untouched");
-            Assert.AreEqual(2, result.Events, "host contact + the one wall bounce the grant survives");
-            Assert.IsFalse(
-                result.Died, "the chained Shield grant survives the wall bounce that would otherwise kill it (0 shields)");
+            Assert.AreEqual(
+                3, result.Events,
+                "host contact + the survived Top bounce (grant spent) + the fatal far Bottom bounce (0 shields left) — " +
+                "a broken chain would instead die at the SECOND event already, so 3 vs 2 is what proves the grant");
+            Assert.IsTrue(
+                result.Died,
+                "the flight eventually dies once its single granted shield is spent — Events (3), not Died, is what " +
+                "distinguishes a working chain from a broken one here");
         }
 
         [Test]
@@ -1656,6 +1678,20 @@ namespace BalloonParty.Tests.ShotSolver
             // if the repaint had wiped B's Item, its own Shield grant would never fire, and a wall bounce
             // immediately behind it — otherwise fatal at 0 starting shields — would kill the flight
             // before it ever reaches the return-path filler balloon.
+            //
+            // The host MUST be a rainbow carrier (not an ordinary coloured one, as an earlier revision of
+            // this test used): Paint always repaints B to the host's own colour, and the projectile's
+            // first-ever pop always adopts that same colour as ProjectileColor — so an ordinary host
+            // would hand B a pop that EXTENDS the same-colour streak to 2, firing a same-colour REFUND
+            // (ResolvePopScore's `StreakCount >= 2 && StreakColor == ProjectileColor` gate) regardless of
+            // whether B carries an item. That refund alone supplies the one shield B's own repaint-
+            // preserved Shield grant was supposed to be tested against, so the control would ALSO survive
+            // the bounce — the bug an earlier hand-trace missed (verified against a standalone run of the
+            // current code: both the granting AND control boards then report Died=false, an unusable
+            // discriminator). A rainbow host sidesteps this cleanly: with no allowedColors configured,
+            // BOTH the host's own pop and B's post-repaint (now also rainbow) pop hit
+            // ResolvePopScore's `balloon.IsRainbow && allowedColors empty` early return — no streak, no
+            // refund, ever — isolating the discriminator to B's own carried item, exactly as intended.
             const float r = 1.0f;
             var walls = new Vector4(2.5f, 1000f, -1000f, -1000f);
 
@@ -1663,9 +1699,9 @@ namespace BalloonParty.Tests.ShotSolver
             {
                 return new[]
                 {
-                    ShotBoardBuilder.Green(
-                        new Vector2(0f, 1f), 0.05f, "Yellow", 1, 1, new Vector2Int(50, 50), 0, 0, 0f, false, null,
-                        item: ItemType.Paint),
+                    ShotBoardBuilder.Rainbow(
+                        new Vector2(0f, 1f), 0.05f, GamePalette.RainbowColorId, 1, 1, new Vector2Int(50, 50), 0, 0,
+                        0f, false, null, item: ItemType.Paint),
                     ShotBoardBuilder.Green(
                         new Vector2(0f, 2f), 0.05f, "Blue", 1, 1, new Vector2Int(0, -2), 0, 0, 0f, false, null,
                         item: targetItem),
@@ -1679,21 +1715,24 @@ namespace BalloonParty.Tests.ShotSolver
             var granted = ShotSimulator.Simulate(
                 grantingBoard, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
                 workingSet: grantingWorkingSet,
-                items: CreatePaintItemLayer(spreadOffset: 0f, spreadLength: r, spreadBaseWidth: 4f * r, spreadBlobRadius: r));
+                items: CreatePaintItemLayer(spreadOffset: 0f, spreadLength: r, spreadBaseWidth: 4f * r, spreadBlobRadius: r),
+                rainbowColorId: GamePalette.RainbowColorId);
 
             Assert.IsFalse(granted.Died, "B's own Shield item survived the repaint and covered the immediate wall bounce");
             Assert.IsTrue(granted.BoardCleared, "the reflected ray goes on to clear the return-path filler");
             Assert.AreEqual(3, granted.Pops);
 
-            // Control: same repaint, but B carries no item at all — nothing can grant the shield, so the
-            // identical bounce is fatal. This isolates the survival above to B's OWN preserved item,
-            // not some other side effect of the repaint or the board layout.
+            // Control: same repaint, but B carries no item at all — with the rainbow host removing the
+            // refund from the picture, nothing else can grant a shield, so the identical bounce is fatal.
+            // This isolates the survival above to B's OWN preserved item, not some other side effect of
+            // the repaint or the board layout.
             var controlBoard = BuildBoard(ItemType.None);
             var controlWorkingSet = new ShotBalloonState[controlBoard.Length];
             var control = ShotSimulator.Simulate(
                 controlBoard, walls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
                 workingSet: controlWorkingSet,
-                items: CreatePaintItemLayer(spreadOffset: 0f, spreadLength: r, spreadBaseWidth: 4f * r, spreadBlobRadius: r));
+                items: CreatePaintItemLayer(spreadOffset: 0f, spreadLength: r, spreadBaseWidth: 4f * r, spreadBlobRadius: r),
+                rainbowColorId: GamePalette.RainbowColorId);
 
             Assert.IsTrue(control.Died, "without an item to preserve, nothing grants the shield the same bounce needs");
             Assert.AreEqual(2, control.Pops, "the flight dies at the wall, never reaching the return-path filler");
@@ -1759,10 +1798,17 @@ namespace BalloonParty.Tests.ShotSolver
             // compounding regression would land the final timestamp at 2.0 instead of 2.5 (see the
             // per-segment hand-trace below) — the two are far enough apart that rounding can't hide it.
             //
-            // Hand-trace (speed 1, multiplier 2.0): origin->Host1 distance 1 @ base speed 1 -> t=1.
-            // Host1 grants the buff. Host1->Host2 distance 1 @ 2x -> t=1.5. Host2's OWN grant attempt is
-            // swallowed (non-stacking) -> multiplier stays 2.0. Host2->Target distance 2 @ 2x (NOT 4x)
-            // -> t=1.5+2/2=2.5.
+            // Hand-trace (speed 1, multiplier 2.0, every balloon r=0.05, projectileContactRadius=0) —
+            // Simulate's timestamps land on the CONTACT-CIRCLE ENTRY, not the target's centre: entry =
+            // centre distance − combinedRadius (here just the target's own 0.05, since the projectile is
+            // a point). origin is a bare point (no radius of its own), so ONLY the very first segment is
+            // shortened by that 0.05; every later segment runs balloon-contact to balloon-contact, and
+            // since every balloon here shares the SAME 0.05 radius, the −0.05 at a segment's start and
+            // the −0.05 at its end cancel, reproducing the naive centre-to-centre distance exactly.
+            // origin->Host1: centre distance 1, entry 1-0.05=0.95, @ base speed 1 -> t=0.95. Host1 grants
+            // the buff. Host1->Host2: 1 (radii cancel) @ 2x -> +0.5 -> t=1.45. Host2's OWN grant attempt
+            // is swallowed (non-stacking) -> multiplier stays 2.0. Host2->Target: 2 (radii cancel) @ 2x
+            // (NOT 4x) -> +1.0 -> t=2.45.
             var board = new[]
             {
                 ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.05f, "Red", 1, 1, item: ItemType.Snipe),
@@ -1780,10 +1826,12 @@ namespace BalloonParty.Tests.ShotSolver
             Assert.AreEqual(3, result.Pops);
             Assert.IsTrue(result.BoardCleared);
             Assert.AreEqual(4, timestamps.Count);
-            Assert.AreEqual(1f, timestamps[1], 1e-4f, "origin -> Host1 at base speed, before any buff exists");
-            Assert.AreEqual(1.5f, timestamps[2], 1e-4f, "Host1 -> Host2 already at the 2x buff Host1 just granted");
             Assert.AreEqual(
-                2.5f, timestamps[3], 1e-4f,
+                0.95f, timestamps[1], 1e-4f,
+                "origin -> Host1 at base speed, before any buff exists — entry is centre distance 1 minus Host1's own 0.05 radius");
+            Assert.AreEqual(1.45f, timestamps[2], 1e-4f, "Host1 -> Host2 already at the 2x buff Host1 just granted");
+            Assert.AreEqual(
+                2.45f, timestamps[3], 1e-4f,
                 "Host2 -> Target still at 2x, NOT 4x — Host2's own re-grant was swallowed by the non-stacking guard");
 
             // A no-snipe control on the identical geometry proves the buff is genuinely what shrinks the
@@ -1801,8 +1849,10 @@ namespace BalloonParty.Tests.ShotSolver
                 workingSet: controlWorkingSet, projectileSpeed: 1f, timestampsOut: controlTimestamps);
 
             Assert.AreEqual(
-                3f, controlTimestamps[3], 1e-4f,
-                "without any buff every segment runs at base speed — 1 + 1 + 2 = 4 units at speed 1");
+                3.95f, controlTimestamps[3], 1e-4f,
+                "without any buff every segment runs at base speed 1 — origin->Host1 is shortened to 0.95 by " +
+                "Host1's own radius (no buff to speed it up either), then 1 + 2 at the same-radius-cancels naive " +
+                "distance = 3.95");
         }
 
         [Test]
@@ -2022,9 +2072,10 @@ namespace BalloonParty.Tests.ShotSolver
             // spent since entry == PiercingTapThreshold -> cruise-earned piercing) -> leg3 carries the
             // first Snipe host (t=1, buff grants) then a 2-hit Tough (t=3, piercing plows it straight
             // through, PierceSpeedScale *= 0.5) -> bounce3 (Left, PierceSpeedScale < 1 -> ends
-            // cruise+pierce+ALL buffs) -> leg4 carries the reset proof (a base-speed segment) then a
-            // second Snipe host (t=1 along leg4, re-grants) then a final target (t=4) whose approach speed
-            // proves the re-grant actually applied.
+            // cruise+pierce+ALL buffs) -> leg4 carries the reset proof (a base-speed segment, shortened to
+            // 0.95 by the second Snipe host's own 0.05 radius — a wall bounce has no radius of its own to
+            // cancel it, unlike a balloon-to-balloon leg) then a second Snipe host (re-grants) then a
+            // final target (t=4) whose approach speed proves the re-grant actually applied.
             var walls = new Vector4(1000000f, 2.1f, -2f, -0.9f);
             var cruise = new ShotCruiseConfig(wallBounceThreshold: 1, speedPerShield: 1f, piercingTapThreshold: 1);
             var board = new[]
@@ -2051,10 +2102,13 @@ namespace BalloonParty.Tests.ShotSolver
             // buffs), [6]=second Snipe host, [7]=final target.
             Assert.AreEqual(8, timestamps.Count);
 
+            // bounce3 is a WALL contact (no radius of its own), so unlike a balloon-to-balloon leg the
+            // second host's own 0.05 radius doesn't get cancelled here — entry = centre distance 1 minus
+            // 0.05 = 0.95, at BASE speed (1) since the reset already cleared the buff.
             var resetSegment = timestamps[6] - timestamps[5];
             Assert.AreEqual(
-                1f, resetSegment, 1e-3f,
-                "bounce3 -> the second host at BASE speed (distance 1, speed 1) — a SpeedBuffMultiplier left stuck at 2x would halve this to 0.5");
+                0.95f, resetSegment, 1e-3f,
+                "bounce3 -> the second host at BASE speed (distance 1 minus the host's own 0.05 radius, speed 1) — a SpeedBuffMultiplier left stuck at 2x would halve this to ~0.475");
 
             var regrantSegment = timestamps[7] - timestamps[6];
             Assert.AreEqual(
