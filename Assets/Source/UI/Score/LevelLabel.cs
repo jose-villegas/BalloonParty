@@ -1,7 +1,10 @@
 using DG.Tweening;
+using BalloonParty.Game.Level;
 using TMPro;
 using UniRx;
 using UnityEngine;
+using UnityEngine.UI;
+using VContainer;
 
 namespace BalloonParty.UI.Score
 {
@@ -22,12 +25,19 @@ namespace BalloonParty.UI.Score
         [Tooltip("Full vertical flips before it settles (each is a 360° turn around X).")]
         [SerializeField] private int _flipCount = 2;
 
+        [Tooltip("Components disabled for the duration of the flip and re-enabled on completion.")]
+        [SerializeField] private Behaviour[] _disableDuringFlip;
+
+        [Tooltip("When enabled, Image components in the list fade their alpha instead of hard-disabling.")]
+        [SerializeField] private bool _lerpImages = true;
+
         private TMP_Text _label;
         private Quaternion _baseRotation;
         private Vector3 _baseScale;
         private Sequence _flipSequence;
         private int _lastLevel = int.MinValue;
         private bool _pivotCentered;
+        private float[] _imageBaseAlphas;
 
         private void Awake()
         {
@@ -39,6 +49,12 @@ namespace BalloonParty.UI.Score
 
             _baseRotation = _flipContainer.localRotation;
             _baseScale = _flipContainer.localScale;
+        }
+
+        [Inject]
+        private void Inject(LevelController levelController)
+        {
+            levelController.Level.Subscribe(OnLevelChanged).AddTo(this);
         }
 
         public void Bind(IReadOnlyReactiveProperty<int> level)
@@ -94,6 +110,7 @@ namespace BalloonParty.UI.Score
             _flipContainer.localRotation = _baseRotation;
             _flipContainer.localScale = _baseScale;
             _label.text = text;
+            SetFlipComponentsEnabled(true);
         }
 
         // Vertical card-flip reveal: a quick tip to the 90° edge (where the label is a line and
@@ -105,6 +122,7 @@ namespace BalloonParty.UI.Score
 
             _flipSequence?.Kill();
             _flipContainer.localRotation = _baseRotation;
+            SetFlipComponentsEnabled(false);
 
             var totalAngle = 360f * Mathf.Max(1, _flipCount);
             var edgeDuration = _flipDuration * EdgeFraction;
@@ -112,11 +130,99 @@ namespace BalloonParty.UI.Score
             _flipSequence = DOTween.Sequence().SetUpdate(true).SetLink(gameObject);
             _flipSequence.Append(_flipContainer.DOLocalRotate(new Vector3(90f, 0f, 0f), edgeDuration)
                 .SetEase(Ease.InSine));
+
+            if (_lerpImages)
+            {
+                CacheImageAlphas();
+                JoinImageFades(_flipSequence, 0f, edgeDuration);
+                InsertImageFades(_flipSequence, _flipDuration - edgeDuration, edgeDuration);
+            }
+
             _flipSequence.AppendCallback(() => _label.text = newText);
             _flipSequence.Append(_flipContainer
                 .DOLocalRotate(new Vector3(totalAngle, 0f, 0f), _flipDuration - edgeDuration, RotateMode.FastBeyond360)
                 .SetEase(Ease.OutCubic));
-            _flipSequence.OnComplete(() => _flipContainer.localRotation = _baseRotation);
+            _flipSequence.OnComplete(() =>
+            {
+                _flipContainer.localRotation = _baseRotation;
+                SetFlipComponentsEnabled(true);
+            });
+        }
+
+        private void CacheImageAlphas()
+        {
+            if (_disableDuringFlip == null)
+            {
+                return;
+            }
+
+            if (_imageBaseAlphas == null || _imageBaseAlphas.Length != _disableDuringFlip.Length)
+            {
+                _imageBaseAlphas = new float[_disableDuringFlip.Length];
+            }
+
+            for (var i = 0; i < _disableDuringFlip.Length; i++)
+            {
+                if (_disableDuringFlip[i] is Image image)
+                {
+                    _imageBaseAlphas[i] = image.color.a;
+                }
+            }
+        }
+
+        private void JoinImageFades(Sequence sequence, float targetAlpha, float duration)
+        {
+            for (var i = 0; i < _disableDuringFlip.Length; i++)
+            {
+                if (_disableDuringFlip[i] is Image image)
+                {
+                    sequence.Join(image.DOFade(targetAlpha, duration).SetEase(Ease.InSine));
+                }
+            }
+        }
+
+        private void InsertImageFades(Sequence sequence, float atPosition, float duration)
+        {
+            for (var i = 0; i < _disableDuringFlip.Length; i++)
+            {
+                if (_disableDuringFlip[i] is Image image)
+                {
+                    var alpha = _imageBaseAlphas != null && i < _imageBaseAlphas.Length
+                        ? _imageBaseAlphas[i]
+                        : 1f;
+                    sequence.Insert(atPosition, image.DOFade(alpha, duration).SetEase(Ease.OutCubic));
+                }
+            }
+        }
+
+        private void SetFlipComponentsEnabled(bool enabled)
+        {
+            if (_disableDuringFlip == null)
+            {
+                return;
+            }
+
+            for (var i = 0; i < _disableDuringFlip.Length; i++)
+            {
+                if (_disableDuringFlip[i] == null)
+                {
+                    continue;
+                }
+
+                if (_lerpImages && _disableDuringFlip[i] is Image image)
+                {
+                    if (enabled && _imageBaseAlphas != null && i < _imageBaseAlphas.Length)
+                    {
+                        var color = image.color;
+                        color.a = _imageBaseAlphas[i];
+                        image.color = color;
+                    }
+
+                    continue;
+                }
+
+                _disableDuringFlip[i].enabled = enabled;
+            }
         }
     }
 }

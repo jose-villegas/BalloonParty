@@ -121,6 +121,9 @@ MonoBehaviour:
   - {fileID: 6330437539617345100}
   _nightBadgeAlphaRange: {x: 0.3, y: 1}
   _nightBadgeScaleRange: {x: 0.315, y: 0.325}
+  _nightBadgeBobAmplitude: 3
+  _nightBadgeBobSpeed: 3
+  _nightBadgeBobPhase: 0.9
 --- !u!223 &7363056953030294436
 Canvas:
   m_ObjectHideFlags: 0
@@ -453,6 +456,7 @@ GameObject:
   - component: {fileID: 725618164765549082}
   - component: {fileID: 2820323740452903714}
   - component: {fileID: 5192779575027639720}
+  - component: {fileID: 1315684961901319456}
   m_Layer: 5
   m_Name: Shadow
   m_TagString: Untagged
@@ -517,6 +521,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 15
+--- !u!114 &1315684961901319456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6351415070400174121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03b47546bbffa412099844beb9b7a60a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.TimeOfDayTint
+  _graphics:
+  - {fileID: 5192779575027639720}
+  _intensity: 1
 --- !u!1 &6500482626430559297
 GameObject:
   m_ObjectHideFlags: 0

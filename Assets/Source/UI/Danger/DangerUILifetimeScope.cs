@@ -13,7 +13,19 @@ namespace BalloonParty.UI.Danger
     {
         protected override void Configure(IContainerBuilder builder)
         {
+            var gradients = GetComponentsInChildren<DangerGradientView>(true);
             builder.RegisterBoundViews<DangerGradientView, IDangerLevel, float>(this, danger => danger.Level);
+
+            builder.RegisterBuildCallback(InjectChildren);
+            return;
+
+            void InjectChildren(IObjectResolver resolver)
+            {
+                foreach (var gradient in gradients)
+                {
+                    resolver.Inject(gradient);
+                }
+            }
         }
     }
 }

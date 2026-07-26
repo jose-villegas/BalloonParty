@@ -1,5 +1,4 @@
 using BalloonParty.Game;
-using BalloonParty.Game.Level;
 using BalloonParty.Game.Score;
 using VContainer;
 using VContainer.Unity;
@@ -11,16 +10,10 @@ namespace BalloonParty.UI.Score
         private void Start()
         {
             var scoreController = Container.Resolve<ScoreController>();
-            var levelController = Container.Resolve<LevelController>();
 
             foreach (var label in GetComponentsInChildren<ScoreCounterLabel>(true))
             {
                 label.Bind(scoreController.TotalScore);
-            }
-
-            foreach (var label in GetComponentsInChildren<LevelLabel>(true))
-            {
-                label.Bind(levelController.Level);
             }
         }
 
@@ -30,6 +23,8 @@ namespace BalloonParty.UI.Score
             var orbits = GetComponentsInChildren<TimeOfDayOrbit>(true);
             var tints = GetComponentsInChildren<TimeOfDayTint>(true);
             var swaps = GetComponentsInChildren<TimeOfDaySwap>(true);
+            var visibilities = GetComponentsInChildren<TimeOfDayVisibility>(true);
+            var levelLabels = GetComponentsInChildren<LevelLabel>(true);
             builder.RegisterBuildCallback(InjectChildren);
             return;
 
@@ -53,6 +48,16 @@ namespace BalloonParty.UI.Score
                 foreach (var swap in swaps)
                 {
                     resolver.Inject(swap);
+                }
+
+                foreach (var visibility in visibilities)
+                {
+                    resolver.Inject(visibility);
+                }
+
+                foreach (var label in levelLabels)
+                {
+                    resolver.Inject(label);
                 }
             }
         }

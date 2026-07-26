@@ -72,7 +72,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   _nightModeEnabled: 1
   _timeOfDaySource: 1
-  _secondsPerCycle: 1570.5
+  _secondsPerCycle: 1177.875
   _degreesPerLevel: -30
   _sweepDuration: 10
   _sweepEase:
@@ -99,6 +99,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _nightStartAngle: 0
+  _nightEndAngle: 270
   _shadowStrengthOverAngle:
     serializedVersion: 2
     m_Curve:

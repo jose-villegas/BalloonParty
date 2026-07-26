@@ -48,6 +48,7 @@ using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Spawner;
 using BalloonParty.UI.GameOver;
 using BalloonParty.Slots.Grid;
+using BalloonParty.UI;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
@@ -230,6 +231,18 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<GameOverLossCinematic>();
             builder.RegisterEntryPoint<LevelTransitionController>();
             builder.RegisterComponentInHierarchy<GameOverScreen>();
+
+            builder.RegisterBuildCallback(InjectTints);
+            return;
+
+            void InjectTints(IObjectResolver resolver)
+            {
+                foreach (var tint in UnityEngine.Object.FindObjectsByType<TimeOfDayTint>(
+                             UnityEngine.FindObjectsSortMode.None))
+                {
+                    resolver.Inject(tint);
+                }
+            }
         }
 
         internal static void RegisterAudio(this IContainerBuilder builder, SoundBankConfiguration soundBank,

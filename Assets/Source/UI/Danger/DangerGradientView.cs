@@ -1,8 +1,10 @@
 using System;
 using BalloonParty.Shared.Extensions;
+using BalloonParty.Shared.SceneLight;
 using BalloonParty.UI.Binding;
 using UniRx;
 using UnityEngine;
+using VContainer;
 
 namespace BalloonParty.UI.Danger
 {
@@ -31,6 +33,13 @@ namespace BalloonParty.UI.Danger
 
         [Header("Easing")]
         [SerializeField] private float _lerpSpeed = 8f;
+
+        [Header("Time of Day")]
+        [Tooltip("Multiply the gradient color by the time-of-day light color at this intensity.")]
+        [SerializeField] private bool _tintByTimeOfDay;
+        [SerializeField] [Range(0f, 1f)] private float _timeOfDayIntensity = 0.5f;
+
+        [Inject] private ISceneLightRuntime _lightRuntime;
 
         private Vector3[] _topRestPositions;
         private Vector2[] _topRestSizes;
@@ -61,19 +70,22 @@ namespace BalloonParty.UI.Danger
 
         private void Update()
         {
-            if (Mathf.Approximately(_currentLevel, _targetLevel))
+            var levelSettled = Mathf.Approximately(_currentLevel, _targetLevel);
+
+            if (!levelSettled)
             {
-                return;
+                // Frame-rate-independent ease; snap once effectively there.
+                _currentLevel = Mathf.Lerp(_currentLevel, _targetLevel, 1f - Mathf.Exp(-_lerpSpeed * Time.deltaTime));
+                if (Mathf.Abs(_currentLevel - _targetLevel) <= SettleEpsilon)
+                {
+                    _currentLevel = _targetLevel;
+                }
             }
 
-            // Frame-rate-independent ease; snap once effectively there.
-            _currentLevel = Mathf.Lerp(_currentLevel, _targetLevel, 1f - Mathf.Exp(-_lerpSpeed * Time.deltaTime));
-            if (Mathf.Abs(_currentLevel - _targetLevel) <= SettleEpsilon)
+            if (!levelSettled || _tintByTimeOfDay)
             {
-                _currentLevel = _targetLevel;
+                ApplyVisual(_currentLevel);
             }
-
-            ApplyVisual(_currentLevel);
         }
 
         private void OnDestroy()
@@ -99,6 +111,12 @@ namespace BalloonParty.UI.Danger
         private void ApplyVisual(float level)
         {
             var color = _gradient.Evaluate(level);
+
+            if (_tintByTimeOfDay && _lightRuntime != null)
+            {
+                color = Color.Lerp(color, color * _lightRuntime.CurrentColor, _timeOfDayIntensity);
+            }
+
             _targets.SetColor(color);
             _topGradients.SetColor(color);
             _bottomGradients.SetColor(color);
