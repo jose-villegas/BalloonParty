@@ -78,6 +78,15 @@ namespace BalloonParty.UI.Score
         [Tooltip("Night badge scale (breathe) away from the highlight (x) and at it (y).")]
         [SerializeField] private Vector2 _nightBadgeScaleRange = new(0.85f, 1.15f);
 
+        [Tooltip("Night badge vertical bob amplitude in canvas units; 0 = no bob.")]
+        [SerializeField] private float _nightBadgeBobAmplitude = 6f;
+
+        [Tooltip("Night badge bob speed, in radians per second.")]
+        [SerializeField] private float _nightBadgeBobSpeed = 3f;
+
+        [Tooltip("Bob phase lag per bar (radians) — what makes the bob travel across the bars as a wave.")]
+        [SerializeField] private float _nightBadgeBobPhase = 0.9f;
+
         [Inject] private IScoreTrailConfig _config;
         [Inject] private IGamePalette _palette;
         [Inject] private IActiveLevelParameters _levelParams;
@@ -103,6 +112,8 @@ namespace BalloonParty.UI.Score
         private int _barIndex;
         private int _barCount = 1;
         private float _nightIntro;
+        private RectTransform _nightBadgeRect;
+        private Vector2 _nightBadgeBasePos;
         private Tween _flexTween;
 
         public Vector3 Center => RectAnchorMath.Center((RectTransform)transform);
@@ -168,6 +179,7 @@ namespace BalloonParty.UI.Score
         private void Start()
         {
             CacheBarPosition();
+            CacheNightBadgeBase();
             _colorConfig = _palette.GetEntry(_colorName);
             _notices = new ProgressNoticePresenter(
                 _poolManager,
@@ -263,6 +275,15 @@ namespace BalloonParty.UI.Score
             var closeness = Mathf.SmoothStep(1f, 0f, Mathf.Clamp01(reach));
             _nightBonusBadge.alpha = Mathf.Lerp(_nightBadgeAlphaRange.x, _nightBadgeAlphaRange.y, closeness) * _nightIntro;
             _nightBonusBadge.transform.localScale = Vector3.one * Mathf.Lerp(_nightBadgeScaleRange.x, _nightBadgeScaleRange.y, closeness);
+
+            // Vertical bob, phase-lagged by bar index so the row bobs as a travelling wave; eased by the
+            // intro so it settles to rest as the badge fades out.
+            if (_nightBadgeRect != null)
+            {
+                var bob = Mathf.Sin(Time.unscaledTime * _nightBadgeBobSpeed + _barIndex * _nightBadgeBobPhase)
+                    * _nightBadgeBobAmplitude * _nightIntro;
+                _nightBadgeRect.anchoredPosition = _nightBadgeBasePos + new Vector2(0f, bob);
+            }
         }
 
         // Fades a flat night element to the intro factor and drops it out of the canvas once fully faded,
@@ -283,6 +304,17 @@ namespace BalloonParty.UI.Score
             if (showing)
             {
                 group.alpha = intro;
+            }
+        }
+
+        // Captures the badge's resting anchored position once, so the per-frame bob offsets from it rather
+        // than drifting. Null rect (a non-UI badge) simply disables the bob.
+        private void CacheNightBadgeBase()
+        {
+            _nightBadgeRect = _nightBonusBadge != null ? _nightBonusBadge.transform as RectTransform : null;
+            if (_nightBadgeRect != null)
+            {
+                _nightBadgeBasePos = _nightBadgeRect.anchoredPosition;
             }
         }
 
