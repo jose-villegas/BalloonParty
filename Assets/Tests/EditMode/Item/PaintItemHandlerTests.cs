@@ -42,6 +42,7 @@ namespace BalloonParty.Tests.Item
                 CreatePaletteEntry("Blue", Color.blue)
             };
             palette.Colors.Returns(colors);
+            palette.IsRainbow(GamePalette.RainbowColorId).Returns(true);
 
             var itemConfig = Substitute.For<IItemConfiguration>();
             var paintSettings = CreateItemSettings(ItemType.Paint);
@@ -115,6 +116,17 @@ namespace BalloonParty.Tests.Item
 
             Assert.DoesNotThrow(() => _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2))));
             Assert.AreEqual(GamePalette.RainbowColorId, target.Color.Value);
+        }
+
+        [Test]
+        public void Activate_NormalHolder_DoesNotPaintRainbowTarget()
+        {
+            var source = PlaceBalloon(2, 2, "Red");
+            var rainbow = PlaceBalloon(1, 2, GamePalette.RainbowColorId);
+
+            _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2)));
+
+            Assert.AreEqual(GamePalette.RainbowColorId, rainbow.Color.Value);
         }
 
         [Test]

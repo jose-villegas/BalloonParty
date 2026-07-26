@@ -169,9 +169,9 @@ namespace BalloonParty.Item.Paint
             return buckets;
         }
 
-        // Accept: paintable, not already the paint colour (skips already-rainbow balloons when the holder
-        // is rainbow — same wildcard id). Reject: an IResistsPaint balloon (tough/unbreakable) — the drip
-        // still plays and slides off, but no colour commits. Empty / non-balloon slots yield no target.
+        // Accept: paintable, not already the paint colour, not rainbow. Reject: an IResistsPaint balloon
+        // (tough/unbreakable) OR a rainbow balloon hit by non-rainbow paint — the drip still plays and
+        // slides off, but no colour commits. Empty / non-balloon slots yield no target.
         private bool TryClassify(Vector2Int slot, string paintColor, out PaintTarget target)
         {
             target = default;
@@ -188,6 +188,14 @@ namespace BalloonParty.Item.Paint
                 if (paintable.Color.Value == paintColor)
                 {
                     return false;
+                }
+
+                // A rainbow balloon resists concrete paint — its identity is the rainbow wildcard,
+                // so only another rainbow holder (same id) would match above and short-circuit.
+                if (_palette.IsRainbow(paintable.Color.Value))
+                {
+                    target = new PaintTarget(slot, null);
+                    return true;
                 }
 
                 target = new PaintTarget(slot, paintable);

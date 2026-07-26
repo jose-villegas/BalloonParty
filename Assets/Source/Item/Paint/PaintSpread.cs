@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Item.Effects;
 using UnityEngine;
 
@@ -28,12 +29,14 @@ namespace BalloonParty.Item.Paint
     {
         /// <summary>Every paintable occupant whose colour differs from <paramref name="paintColorId" />
         /// (mirrors <c>TryClassify</c>'s accept branch — the same plain-string-equality check that also
-        /// skips an already-rainbow balloon when the holder itself paints rainbow) is bucketed to its
-        /// SINGLE nearest blob centre in <paramref name="blobPositions" />; a bucket farther than
-        /// <paramref name="blobRadius" /> from every blob is dropped entirely (mirrors
-        /// <c>CollectPaintTargets</c>'s own <c>nearestSqr &gt; radiusSqr</c> gate). Emits one
-        /// <see cref="EffectHitKind.Recolor" /> per accepted occupant to <paramref name="paintColorId" />,
-        /// with <see cref="EffectHit.Group" /> set to that nearest blob's index.</summary>
+        /// skips an already-rainbow balloon when the holder itself paints rainbow) AND whose colour is NOT
+        /// the rainbow wildcard (a rainbow balloon resists concrete paint — only a rainbow holder, having
+        /// the same id, matches above and short-circuits) is bucketed to its SINGLE nearest blob centre in
+        /// <paramref name="blobPositions" />; a bucket farther than <paramref name="blobRadius" /> from
+        /// every blob is dropped entirely (mirrors <c>CollectPaintTargets</c>'s own
+        /// <c>nearestSqr &gt; radiusSqr</c> gate). Emits one <see cref="EffectHitKind.Recolor" /> per
+        /// accepted occupant to <paramref name="paintColorId" />, with <see cref="EffectHit.Group" /> set
+        /// to that nearest blob's index.</summary>
         internal static void Resolve(
             IEffectBoard board, IReadOnlyList<Vector2> blobPositions, float blobRadius, string paintColorId,
             List<EffectHit> hitsOut)
@@ -57,7 +60,8 @@ namespace BalloonParty.Item.Paint
             {
                 var occupant = occupants[i];
                 if (!occupant.IsPaintable
-                    || string.Equals(occupant.ColorId, paintColorId, StringComparison.Ordinal))
+                    || string.Equals(occupant.ColorId, paintColorId, StringComparison.Ordinal)
+                    || string.Equals(occupant.ColorId, GamePalette.RainbowColorId, StringComparison.Ordinal))
                 {
                     continue;
                 }
