@@ -17,11 +17,6 @@ namespace BalloonParty.Shared.SceneLight
     /// </summary>
     internal sealed class TimeOfDayService : IStartable, ITickable, ISceneLightRuntime, ITimeOfDayNight
     {
-        // Night is the small arc the sun sweeps as the day's angle DECREASES (TimeOfDayClock): from
-        // NightStartAngle down to NightEndAngle (~315° → 270°).
-        private const float NightStartAngle = 315f;
-        private const float NightEndAngle = 270f;
-
         private static readonly int SceneLightDirId = Shader.PropertyToID("_SceneLightDir");
         private static readonly int SceneLightColorId = Shader.PropertyToID("_SceneLightColor");
         private static readonly int SceneLightIntensityId = Shader.PropertyToID("_SceneLightIntensity");
@@ -35,7 +30,8 @@ namespace BalloonParty.Shared.SceneLight
         public Color CurrentColor => _settings.EvaluateColor(_currentDirection);
         public float CurrentIntensity => _settings.Intensity;
         public float ShadowStrengthScale => _timeOfDay.NightModeEnabled ? EvaluateShadowScale() : 1f;
-        public bool IsNight => _timeOfDay.NightModeEnabled && IsNightAngle(_currentDirection.Angle01() * 360f);
+        public bool IsNight => _timeOfDay.NightModeEnabled
+            && IsNightAngle(_currentDirection.Angle01() * 360f, _timeOfDay.NightStartAngle, _timeOfDay.NightEndAngle);
 
         internal TimeOfDayService(ISceneLightSettings settings, ITimeOfDaySettings timeOfDay)
         {
@@ -90,14 +86,14 @@ namespace BalloonParty.Shared.SceneLight
             Shader.SetGlobalFloat(SceneLightIntensityId, _settings.Intensity);
         }
 
-        // True inside the night arc [NightEndAngle, NightStartAngle]; the ternary also covers a window
-        // authored to wrap past 0 (end > start).
-        internal static bool IsNightAngle(float angleDegrees)
+        // True inside the night arc [endAngle, startAngle]; the ternary also covers a window authored to
+        // wrap past 0 (end > start). The arc is the sun's sweep as the day's angle DECREASES (~315° → 270°).
+        internal static bool IsNightAngle(float angleDegrees, float startAngle, float endAngle)
         {
             var deg = Mathf.Repeat(angleDegrees, 360f);
-            return NightEndAngle <= NightStartAngle
-                ? deg >= NightEndAngle && deg <= NightStartAngle
-                : deg >= NightEndAngle || deg <= NightStartAngle;
+            return endAngle <= startAngle
+                ? deg >= endAngle && deg <= startAngle
+                : deg >= endAngle || deg <= startAngle;
         }
 
         // Curve sampled at the current direction's angle; unauthored/empty means no deepening (1).

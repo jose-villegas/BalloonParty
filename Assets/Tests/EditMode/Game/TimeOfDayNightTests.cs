@@ -17,7 +17,7 @@ namespace BalloonParty.Tests.Game
         [TestCase(200f, false)]
         public void IsNightAngle_MapsAngleToTheNightWindow(float angleDegrees, bool expectedNight)
         {
-            Assert.AreEqual(expectedNight, TimeOfDayService.IsNightAngle(angleDegrees));
+            Assert.AreEqual(expectedNight, TimeOfDayService.IsNightAngle(angleDegrees, 315f, 270f));
         }
     }
 }

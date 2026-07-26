@@ -31,6 +31,15 @@ namespace BalloonParty.Configuration.Effects
         /// <summary>Eases the sweep 0→1 over its duration. Linear when unauthored.</summary>
         AnimationCurve SweepEase { get; }
 
+        /// <summary>Start of the night arc, in degrees on the direction circle (default 315). The window
+        /// runs from here down to <see cref="NightEndAngle"/>; the light sitting inside it is what
+        /// <c>IsNight</c> reports — driving night scoring and the progress-bar night badge.</summary>
+        float NightStartAngle { get; }
+
+        /// <summary>End of the night arc, in degrees (default 270). A window authored to wrap past 0
+        /// (end &gt; start) is handled.</summary>
+        float NightEndAngle { get; }
+
         /// <summary>Multiplier on the authored GI shadow strength as a function of the light direction
         /// (indexed by <c>Angle01</c>, matched endpoints for the wrap) — deepen shadows toward
         /// dusk/night, lighten at noon. Flat 1 = the base strength unchanged; only applied while night

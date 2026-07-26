@@ -70,6 +70,14 @@ namespace BalloonParty.Configuration.Effects
         [ShowIfEnum(nameof(_timeOfDaySource), (int)TimeOfDaySource.LevelSweep)]
         [SerializeField] private AnimationCurve _sweepEase = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
+        [Tooltip("The night arc on the direction circle, in degrees: the window runs from Night Start Angle " +
+                 "down to Night End Angle (default 315 → 270). While the light's angle sits inside it the " +
+                 "game counts as night — double score and the progress-bar night badge. A window that wraps " +
+                 "past 0 (end > start) works too.")]
+        [SerializeField] [Range(0f, 360f)] private float _nightStartAngle = 315f;
+
+        [SerializeField] [Range(0f, 360f)] private float _nightEndAngle = 270f;
+
         [Tooltip("Multiplier on GI shadow strength over the direction circle (x = angle/360, matched " +
                  "endpoints for the wrap) — raise toward dusk/night to deepen shadows, keep ~1 at noon. " +
                  "Flat 1 = unchanged. Only applied while Night Mode Enabled.")]
@@ -205,6 +213,8 @@ namespace BalloonParty.Configuration.Effects
         public float DegreesPerLevel => _degreesPerLevel;
         public float SweepDuration => _sweepDuration;
         public AnimationCurve SweepEase => _sweepEase;
+        public float NightStartAngle => _nightStartAngle;
+        public float NightEndAngle => _nightEndAngle;
         public AnimationCurve ShadowStrengthOverAngle => _shadowStrengthOverAngle;
 
         public Color EvaluateColor(Vector2 direction) =>

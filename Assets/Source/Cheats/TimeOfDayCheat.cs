@@ -1,6 +1,7 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
 
 using System.Collections.Generic;
+using BalloonParty.Configuration.Effects;
 using BalloonParty.Shared.SceneLight;
 using UnityEngine;
 
@@ -20,6 +21,7 @@ namespace BalloonParty.Cheats
 
         private readonly TimeOfDayClock _clock;
         private readonly ITimeOfDayNight _night;
+        private readonly ITimeOfDaySettings _settings;
 
         private float _angle;
 
@@ -28,10 +30,11 @@ namespace BalloonParty.Cheats
         public IReadOnlyList<string> Tags => new[] { "lighting", "time of day", "night" };
         public bool Compact => false;
 
-        public TimeOfDayCheat(TimeOfDayClock clock, ITimeOfDayNight night)
+        public TimeOfDayCheat(TimeOfDayClock clock, ITimeOfDayNight night, ITimeOfDaySettings settings)
         {
             _clock = clock;
             _night = night;
+            _settings = settings;
         }
 
         public void Execute()
@@ -47,7 +50,7 @@ namespace BalloonParty.Cheats
                 GUILayout.Width(190));
             var sliderRect =
                 GUILayoutUtility.GetRect(GUIContent.none, GUI.skin.horizontalSlider, GUILayout.ExpandWidth(true));
-            DrawNightBand(sliderRect);
+            DrawNightBand(sliderRect, _settings.NightStartAngle, _settings.NightEndAngle);
             var newAngle = GUI.HorizontalSlider(sliderRect, _angle, 0f, 360f);
             if (!Mathf.Approximately(newAngle, _angle))
             {
@@ -70,9 +73,9 @@ namespace BalloonParty.Cheats
             }
         }
 
-        // Tints the slider region that maps to night (sampled from TimeOfDayService.IsNightAngle, so it
-        // tracks the real 5 PM–4 AM window) behind the thumb, so the scrubber shows where night sits.
-        private static void DrawNightBand(Rect sliderRect)
+        // Tints the slider region that maps to night (sampled from TimeOfDayService.IsNightAngle with the
+        // authored arc bounds) behind the thumb, so the scrubber shows where night sits.
+        private static void DrawNightBand(Rect sliderRect, float startAngle, float endAngle)
         {
             const int steps = 360;
             var previous = GUI.color;
@@ -81,7 +84,7 @@ namespace BalloonParty.Cheats
             var runStart = -1;
             for (var i = 0; i <= steps; i++)
             {
-                var isNight = i < steps && TimeOfDayService.IsNightAngle(i);
+                var isNight = i < steps && TimeOfDayService.IsNightAngle(i, startAngle, endAngle);
                 if (isNight && runStart < 0)
                 {
                     runStart = i;
