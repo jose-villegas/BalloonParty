@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Nudge;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
@@ -10,27 +11,29 @@ namespace BalloonParty.Balloon.Model
     internal class UnbreakableBalloonModel : BalloonModelBase, IHasDeflectStamp, IHasScore, IHasScoreColor,
         IPreBalanceRelocatable, IResistsPaint
     {
+        private readonly ColorSource _colorSource;
+
         public float DeflectStampScale { get; }
         public int ScoreValue { get; }
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
 
         public override PressureResponse PushResponse => PressureResponse.RelocateFarthest;
 
-        internal UnbreakableBalloonModel(BalloonModelConfig config) : base(config)
+        internal UnbreakableBalloonModel(
+            BalloonModelConfig config, IGamePalette palette = null, IReadOnlyList<string> allowedColors = null)
+            : base(config)
         {
+            _colorSource = new ColorSource(palette, allowedColors);
             DeflectStampScale = config.DeflectStampScale;
             ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
         }
 
-        // Single-colour attribution — ignores incompleteColors (see BalloonModel's ResolveScoreAttribution).
         public void ResolveScoreAttribution(
             in DamageContext context, IReadOnlyList<string> incompleteColors, IList<ScoreAttribution> results)
         {
-            if (!string.IsNullOrEmpty(context.SourceColorId))
-            {
-                results.Add(new ScoreAttribution(context.SourceColorId, ScoreValue));
-            }
+            ScoreAttributions.AddRandomPerColor(
+                results, _colorSource.Resolve(), incompleteColors, ScoreValue, breaksStreak: true);
         }
 
         public override HitOutcome EvaluateHit(DamageContext context)

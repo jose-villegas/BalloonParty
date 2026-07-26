@@ -27,7 +27,7 @@ namespace BalloonParty.Balloon.Model
                 BalloonType.Rainbow => new BalloonModel(config, palette, allowedColors),
                 BalloonType.BubbleCluster => new BubbleClusterModel(config, palette, allowedColors),
                 BalloonType.Tough => new ToughBalloonModel(config, palette, allowedColors),
-                BalloonType.Unbreakable => new UnbreakableBalloonModel(config),
+                BalloonType.Unbreakable => new UnbreakableBalloonModel(config, palette, allowedColors),
                 _ => throw new ArgumentOutOfRangeException(nameof(entry), entry.BalloonType, null)
             };
         }
