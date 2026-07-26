@@ -38,18 +38,12 @@ namespace BalloonParty.UI.Score
         private Sequence _flipSequence;
         private int _lastLevel = int.MinValue;
         private bool _pivotCentered;
+        private bool _initialized;
         private float[] _imageBaseAlphas;
 
         private void Awake()
         {
-            _label = GetComponent<TMP_Text>();
-            if (_flipContainer == null)
-            {
-                _flipContainer = transform;
-            }
-
-            _baseRotation = _flipContainer.localRotation;
-            _baseScale = _flipContainer.localScale;
+            EnsureInitialized();
         }
 
         [Inject]
@@ -61,6 +55,26 @@ namespace BalloonParty.UI.Score
         public void Bind(IReadOnlyReactiveProperty<int> level)
         {
             level.Subscribe(OnLevelChanged).AddTo(this);
+        }
+
+        // [Inject] can fire before Awake when VContainer builds during its own Awake, and UniRx's
+        // Subscribe immediately emits the current value — so all state must be ready before first use.
+        private void EnsureInitialized()
+        {
+            if (_initialized)
+            {
+                return;
+            }
+
+            _initialized = true;
+            _label = GetComponent<TMP_Text>();
+            if (_flipContainer == null)
+            {
+                _flipContainer = transform;
+            }
+
+            _baseRotation = _flipContainer.localRotation;
+            _baseScale = _flipContainer.localScale;
         }
 
         private void OnLevelChanged(int level)
@@ -107,6 +121,7 @@ namespace BalloonParty.UI.Score
 
         private void SnapToText(string text)
         {
+            EnsureInitialized();
             _flipSequence?.Kill();
             _flipContainer.localRotation = _baseRotation;
             _flipContainer.localScale = _baseScale;
@@ -119,6 +134,7 @@ namespace BalloonParty.UI.Score
         // out to rest. Full turns land back at identity, so no un-mirror is needed.
         private void PlayFlip(string newText)
         {
+            EnsureInitialized();
             EnsurePivotCentered();
 
             _flipSequence?.Kill();
