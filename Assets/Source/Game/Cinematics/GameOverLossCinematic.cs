@@ -40,6 +40,7 @@ namespace BalloonParty.Game.Cinematics
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
         private readonly ISubscriber<GameOverDismissedMessage> _dismissedSubscriber;
         private readonly IPublisher<RunRestartCompletedMessage> _restartCompletedPublisher;
+        private readonly IPublisher<LevelDescendStartedMessage> _descendStartedPublisher;
         private readonly CancellationTokenSource _cts = new();
 
         private IDisposable _gameOverSubscription;
@@ -66,7 +67,8 @@ namespace BalloonParty.Game.Cinematics
             IReadOnlyList<ITransitionOutgoingContent> outgoingContent,
             ISubscriber<GameOverMessage> gameOverSubscriber,
             ISubscriber<GameOverDismissedMessage> dismissedSubscriber,
-            IPublisher<RunRestartCompletedMessage> restartCompletedPublisher)
+            IPublisher<RunRestartCompletedMessage> restartCompletedPublisher,
+            IPublisher<LevelDescendStartedMessage> descendStartedPublisher)
             : base(director, rig, timeScale, settings)
         {
             _pauseService = pauseService;
@@ -80,6 +82,7 @@ namespace BalloonParty.Game.Cinematics
             _gameOverSubscriber = gameOverSubscriber;
             _dismissedSubscriber = dismissedSubscriber;
             _restartCompletedPublisher = restartCompletedPublisher;
+            _descendStartedPublisher = descendStartedPublisher;
         }
 
         protected override CameraRigCinematicConfig BuildConfig()
@@ -176,6 +179,7 @@ namespace BalloonParty.Game.Cinematics
             }
 
             // Skip path (no beat played) — nothing to unwind, so restart the whole board immediately.
+            _descendStartedPublisher.Publish(default);
             ResumeCinematicPause();
             _runController.RestartRun();
         }
@@ -188,6 +192,8 @@ namespace BalloonParty.Game.Cinematics
         private async UniTaskVoid RestoreAndRestartAsync()
         {
             var height = Settings.LevelAscend.Height;
+
+            _descendStartedPublisher.Publish(default);
 
             _restoreDone = new UniTaskCompletionSource();
             if (!Runner.TryBeginRestore())

@@ -468,5 +468,25 @@
     "LicenseName": "Creative Commons 0",
     "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
     "RequiresAttribution": false
+  },
+  {
+    "SoundId": "LevelAscend",
+    "ProviderId": 683096,
+    "Name": "Woosh",
+    "Author": "florianreichelt",
+    "SoundUrl": "https://freesound.org/people/florianreichelt/sounds/683096/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "LevelDescend",
+    "ProviderId": 353611,
+    "Name": "Swish",
+    "Author": "NightiKnight",
+    "SoundUrl": "https://freesound.org/people/NightiKnight/sounds/353611/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
   }
 ]

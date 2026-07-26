@@ -103,6 +103,8 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<LevelUpDismissedMessage>(options);
             builder.RegisterMessageBroker<GameOverDismissedMessage>(options);
             builder.RegisterMessageBroker<LevelTransitionCompletedMessage>(options);
+            builder.RegisterMessageBroker<LevelAscendStartedMessage>(options);
+            builder.RegisterMessageBroker<LevelDescendStartedMessage>(options);
             builder.RegisterMessageBroker<LevelUpGlowTrailsMessage>(options);
             builder.RegisterMessageBroker<PausedMessage>(options);
             builder.RegisterMessageBroker<ResumedMessage>(options);

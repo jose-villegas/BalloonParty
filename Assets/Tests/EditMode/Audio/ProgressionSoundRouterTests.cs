@@ -30,11 +30,14 @@ namespace BalloonParty.Tests.Audio
             var boardClearSubscriber = CaptureSubscriber<BoardClearMessage>(_ => { });
             var gameOverSubscriber = CaptureSubscriber<GameOverMessage>(_ => { });
             var gameOverDismissedSubscriber = CaptureSubscriber<GameOverDismissedMessage>(_ => { });
+            var ascendStartedSubscriber = CaptureSubscriber<LevelAscendStartedMessage>(_ => { });
+            var descendStartedSubscriber = CaptureSubscriber<LevelDescendStartedMessage>(_ => { });
 
             var router = new ProgressionSoundRouter(
                 _player, _melodic, streakSubscriber, scoreTrailSubscriber, levelUpSubscriber,
                 levelUpGlowSubscriber, levelUpDismissedSubscriber, levelTransitionSubscriber,
-                boardClearSubscriber, gameOverSubscriber, gameOverDismissedSubscriber);
+                boardClearSubscriber, gameOverSubscriber, gameOverDismissedSubscriber,
+                ascendStartedSubscriber, descendStartedSubscriber);
             router.Start();
         }
 

@@ -62,6 +62,12 @@ namespace BalloonParty.Audio
         BalloonPopUnbreakable,
         BalloonDeflectUnbreakable,
         BalloonPopSilver,
-        BalloonPopGold
+        BalloonPopGold,
+
+        // Whoosh/sweep played as the camera ascends during the level-up transition.
+        LevelAscend,
+
+        // Whoosh/sweep played as the camera descends during the game-over transition.
+        LevelDescend
     }
 }

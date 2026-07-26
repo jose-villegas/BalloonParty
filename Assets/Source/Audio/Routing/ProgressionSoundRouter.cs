@@ -20,6 +20,8 @@ namespace BalloonParty.Audio.Routing
         private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
         private readonly ISubscriber<GameOverDismissedMessage> _gameOverDismissedSubscriber;
+        private readonly ISubscriber<LevelAscendStartedMessage> _ascendStartedSubscriber;
+        private readonly ISubscriber<LevelDescendStartedMessage> _descendStartedSubscriber;
         private readonly CompositeDisposable _subscriptions = new();
 
         [Inject]
@@ -32,7 +34,9 @@ namespace BalloonParty.Audio.Routing
             ISubscriber<LevelTransitionCompletedMessage> levelTransitionSubscriber,
             ISubscriber<BoardClearMessage> boardClearSubscriber,
             ISubscriber<GameOverMessage> gameOverSubscriber,
-            ISubscriber<GameOverDismissedMessage> gameOverDismissedSubscriber)
+            ISubscriber<GameOverDismissedMessage> gameOverDismissedSubscriber,
+            ISubscriber<LevelAscendStartedMessage> ascendStartedSubscriber,
+            ISubscriber<LevelDescendStartedMessage> descendStartedSubscriber)
         {
             _player = player;
             _melodic = melodic;
@@ -45,6 +49,8 @@ namespace BalloonParty.Audio.Routing
             _boardClearSubscriber = boardClearSubscriber;
             _gameOverSubscriber = gameOverSubscriber;
             _gameOverDismissedSubscriber = gameOverDismissedSubscriber;
+            _ascendStartedSubscriber = ascendStartedSubscriber;
+            _descendStartedSubscriber = descendStartedSubscriber;
         }
 
         public void Start()
@@ -58,6 +64,8 @@ namespace BalloonParty.Audio.Routing
             _boardClearSubscriber.Subscribe(OnBoardClear).AddTo(_subscriptions);
             _gameOverSubscriber.Subscribe(OnGameOver).AddTo(_subscriptions);
             _gameOverDismissedSubscriber.Subscribe(OnGameOverDismissed).AddTo(_subscriptions);
+            _ascendStartedSubscriber.Subscribe(OnAscendStarted).AddTo(_subscriptions);
+            _descendStartedSubscriber.Subscribe(OnDescendStarted).AddTo(_subscriptions);
         }
 
         public void Dispose()
@@ -109,6 +117,16 @@ namespace BalloonParty.Audio.Routing
         private void OnGameOverDismissed(GameOverDismissedMessage message)
         {
             _player.Play(GameSoundId.UiConfirm, null);
+        }
+
+        private void OnAscendStarted(LevelAscendStartedMessage message)
+        {
+            _player.Play(GameSoundId.LevelAscend, null);
+        }
+
+        private void OnDescendStarted(LevelDescendStartedMessage message)
+        {
+            _player.Play(GameSoundId.LevelDescend, null);
         }
     }
 }

@@ -40,6 +40,7 @@ namespace BalloonParty.Game.Level
         private readonly PauseService _pauseService;
         private readonly ILevelProgress _levelProgress;
         private readonly IPublisher<LevelTransitionCompletedMessage> _completedPublisher;
+        private readonly IPublisher<LevelAscendStartedMessage> _ascendStartedPublisher;
         private readonly CancellationTokenSource _cts = new();
 
         private LevelAscendCinematic _ascendCinematic;
@@ -59,7 +60,8 @@ namespace BalloonParty.Game.Level
             RejectedBalloonEffect overflow,
             PauseService pauseService,
             ILevelProgress levelProgress,
-            IPublisher<LevelTransitionCompletedMessage> completedPublisher)
+            IPublisher<LevelTransitionCompletedMessage> completedPublisher,
+            IPublisher<LevelAscendStartedMessage> ascendStartedPublisher)
         {
             _cinematicDirector = cinematicDirector;
             _cameraRig = cameraRig;
@@ -74,6 +76,7 @@ namespace BalloonParty.Game.Level
             _pauseService = pauseService;
             _levelProgress = levelProgress;
             _completedPublisher = completedPublisher;
+            _ascendStartedPublisher = ascendStartedPublisher;
         }
 
         public void Start()
@@ -141,6 +144,7 @@ namespace BalloonParty.Game.Level
                 // New level's balloons spawn from the descent's cue (fired at LevelAscend.BalloonSpawnCue),
                 // so they reveal near the end of the Ascent. The run reopens the moment this lands, whether
                 // or not the detached board effect is still playing out.
+                _ascendStartedPublisher.Publish(default);
                 await _ascendCinematic.PlayAsync(_scenarioRoot.Transform, SpawnNewLevelBalloons, ct);
             }
             finally
