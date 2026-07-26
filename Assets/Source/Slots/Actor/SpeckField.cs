@@ -5,6 +5,7 @@ using BalloonParty.Configuration.Palette;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
+using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.SceneLight;
 using BalloonParty.Slots.Capabilities;
@@ -26,7 +27,9 @@ namespace BalloonParty.Slots.Actor
     ///     (each burst seeded at the pop point), rather than all being present from the start. A reduction
     ///     curve runs continuously, lowering the active ceiling to drain the field; every burst restarts it
     ///     from zero (snapping the ceiling back up) — so a flurry of pops keeps the field full and reads as
-    ///     chaos, a lull lets it thin back down.
+    ///     chaos, a lull lets it thin back down. On the launch screen (<see cref="NavigationState.Launch" />)
+    ///     the field is instead held at full capacity; entering the game plays the reduction curve once from
+    ///     full, draining into that pop-driven baseline.
     /// </summary>
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     internal sealed class SpeckField : MonoBehaviour
@@ -167,7 +170,11 @@ namespace BalloonParty.Slots.Actor
             PushStaticParams();
 
             _burst = new Speck[Mathf.Clamp(MaxProfileCount(), 1, _count)];
-            _activeCount = _settings.Spawning.SpawnAllImmediately ? _count : Mathf.Clamp(_settings.Spawning.InitialActiveCount, 0, _count);
+
+            // Full on the launch screen (drained once we enter the game — see UpdateReduction) or in the
+            // spawn-all testing mode; otherwise it builds up from InitialActiveCount as pops enable bursts.
+            var startFull = _settings.Spawning.SpawnAllImmediately || Navigation.Current.Value == NavigationState.Launch;
+            _activeCount = startFull ? _count : Mathf.Clamp(_settings.Spawning.InitialActiveCount, 0, _count);
             _ceiling = _count;
 
             // Pops (and explicit spawn requests) enable bursts and restart the reduction curve; between
@@ -486,6 +493,17 @@ namespace BalloonParty.Slots.Actor
             if (_settings.Spawning.SpawnAllImmediately)
             {
                 _ceiling = _count;
+                return;
+            }
+
+            // The launch screen holds a full, lively field. Pinning _reductionElapsed at 0 while we're in
+            // Launch means the first game frame runs the reduction curve from the top, so entering the game
+            // drains the field from full down to the pop-driven baseline.
+            if (Navigation.Current.Value == NavigationState.Launch)
+            {
+                _ceiling = _count;
+                _activeCount = _count;
+                _reductionElapsed = 0f;
                 return;
             }
 
