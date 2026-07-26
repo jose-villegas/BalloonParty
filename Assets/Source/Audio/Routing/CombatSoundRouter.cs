@@ -30,6 +30,7 @@ namespace BalloonParty.Audio.Routing
         private readonly CompositeDisposable _subscriptions = new();
 
         private SoundHandle _cruiseHandle = SoundHandle.None;
+        private int _bounceCount;
 
         [Inject]
         public CombatSoundRouter(ISoundPlayer player,
@@ -86,6 +87,7 @@ namespace BalloonParty.Audio.Routing
             var outcome = message.Outcome;
             if ((outcome & HitOutcome.Pop) != 0)
             {
+                _bounceCount = 0;
                 var popId = message.Actor is IBalloonModel balloon
                     ? PopSoundFor(balloon.TypeName)
                     : GameSoundId.BalloonPop;
@@ -93,13 +95,15 @@ namespace BalloonParty.Audio.Routing
             }
             else if ((outcome & HitOutcome.Deflect) != 0)
             {
+                _bounceCount++;
                 var deflectId = message.Actor is IBalloonModel balloon
                     ? DeflectSoundFor(balloon.TypeName)
                     : GameSoundId.BalloonDeflect;
-                _player.Play(deflectId, message.WorldPosition);
+                _player.Play(deflectId, message.WorldPosition, semitoneOffset: -_bounceCount);
             }
             else if ((outcome & (HitOutcome.Absorb | HitOutcome.PassThrough)) != 0)
             {
+                _bounceCount = 0;
                 _player.Play(GameSoundId.BalloonResist, message.WorldPosition);
             }
         }
@@ -131,6 +135,7 @@ namespace BalloonParty.Audio.Routing
 
         private void OnFired(ProjectileFiredMessage message)
         {
+            _bounceCount = 0;
             _player.Play(GameSoundId.ShotFired, message.WorldPosition);
         }
 
@@ -159,7 +164,7 @@ namespace BalloonParty.Audio.Routing
         {
             _player.Play(GameSoundId.ProjectileDeath, null);
             var depth = _flightConfig.ShieldToneThreshold;
-            _player.Play(GameSoundId.WallHit, null, melodicStreak: depth, semitoneOffset: -MusicalPitchExtensions.TritoneSemitones, volumeScale: 3f);
+            _player.Play(GameSoundId.WallHit, null, melodicStreak: depth, semitoneOffset: -MusicalPitchExtensions.TritoneSemitones, volumeScale: 5f);
         }
 
         private void OnPierceDischarged(PierceDischargedMessage message)
@@ -179,12 +184,16 @@ namespace BalloonParty.Audio.Routing
 
         private void OnWallHit(WallHitMessage message)
         {
-            // The tone tracks shields left: at/above the config threshold it stays on the root, and each
-            // shield below steps it one degree DOWN the scale (author WallHit as ScaleWalkDown). Depth is
-            // a pure function of the live count, so recovery happens on the next hit as shields climb back
-            // — no counter to reset. Supplied per-play, so it never touches the ambient pop key.
             var depth = Math.Max(0, _flightConfig.ShieldToneThreshold - message.ShieldsRemaining);
-            _player.Play(GameSoundId.WallHit, message.Position, depth);
+            var offset = 0;
+
+            if (_bounceCount > 0)
+            {
+                _bounceCount++;
+                offset = -_bounceCount;
+            }
+
+            _player.Play(GameSoundId.WallHit, message.Position, depth, semitoneOffset: offset);
         }
     }
 }

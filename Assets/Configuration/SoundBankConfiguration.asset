@@ -729,14 +729,9 @@ MonoBehaviour:
     _fetchPrompt: glitch short
   - _channel: 0
     _clips:
-    - {fileID: 8300000, guid: 23eea93a0a17b423184da103d7ee0211, type: 3}
-    - {fileID: 8300000, guid: 36325704cb8c4478797acd6f1ef9a353, type: 3}
-    - {fileID: 8300000, guid: 3359fbebfa53b4d9fb4a1b1cc5eaed99, type: 3}
-    - {fileID: 8300000, guid: 10d4647ac6e884e3784671af7ed203d7, type: 3}
-    - {fileID: 8300000, guid: 6ebff6839146e40e694d7479ba889fb2, type: 3}
     - {fileID: 8300000, guid: 0370e279dcf51485896dad01ce536809, type: 3}
-    - {fileID: 8300000, guid: 1e0097843bd504a9b8b76c32640e38bc, type: 3}
-    _pitchRange: {x: 0.7, y: 0.9}
+    - {fileID: 8300000, guid: 45154af47b38f4a6086fbbea099153dc, type: 3}
+    _pitchRange: {x: 0.7, y: 1}
     _volumeRange: {x: 0.3, y: 0.4}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 8
@@ -752,7 +747,7 @@ MonoBehaviour:
     _melodicMaxOctaves: 2
     _melodicSkipSteps: 1
     _tensionSemitones: 0
-    _fetchPrompt: chime short
+    _fetchPrompt: glass ding
   - _channel: 0
     _clips:
     - {fileID: 8300000, guid: b7011c2ebb3484756ab72fa085a9c8a0, type: 3}
@@ -793,6 +788,46 @@ MonoBehaviour:
     _melodicSkipSteps: 1
     _tensionSemitones: 0
     _fetchPrompt: air pop
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: 83477bc1046c542209f158aa18e12627, type: 3}
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _singleInstance: 0
+    _pan2D: 1
+    _delaySeconds: 0
+    _fadeInSeconds: 0
+    _fadeOutSeconds: 0
+    _stopsOnPlay: 
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _fetchPrompt: 'flight '
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: 7ba78a0dff9d94cf18f67115f729b616, type: 3}
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _singleInstance: 0
+    _pan2D: 1
+    _delaySeconds: 0
+    _fadeInSeconds: 0
+    _fadeOutSeconds: 0
+    _stopsOnPlay: 
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _fetchPrompt: fast wind
   _melodicScale: 0000000002000000040000000700000009000000
   _melodicRootSemitone: 0
   _globalVoiceCap: 32
