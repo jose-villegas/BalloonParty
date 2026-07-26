@@ -17,5 +17,8 @@ namespace BalloonParty.Configuration.Effects
         float SquashFrequency { get; }
         float SquashDamping { get; }
         float SquashImpulseStrength { get; }
+        float ScalePerShield { get; }
+        float MaxScaleMultiplier { get; }
+        float ScaleTweenDuration { get; }
     }
 }

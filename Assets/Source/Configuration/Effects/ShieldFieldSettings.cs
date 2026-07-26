@@ -56,6 +56,16 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Impulse strength injected into the squash spring on impact.")]
         [SerializeField] [Range(1f, 50f)] private float _squashImpulseStrength = 18f;
 
+        [Header("Shield Collection Scale")]
+        [Tooltip("Additional scale multiplier added per shield collected during the flight.")]
+        [SerializeField] [Range(0f, 0.5f)] private float _scalePerShield = 0.08f;
+
+        [Tooltip("Maximum scale multiplier (relative to base). 1.5 = 50% bigger at most.")]
+        [SerializeField] [Range(1f, 3f)] private float _maxScaleMultiplier = 1.4f;
+
+        [Tooltip("Duration of the scale tween when a new shield is collected.")]
+        [SerializeField] [Range(0.05f, 1f)] private float _scaleTweenDuration = 0.3f;
+
         public float DissolveSeconds => _dissolveSeconds;
         public float FinalDissolveSeconds => _finalDissolveSeconds;
         public float AppearSeconds => _appearSeconds;
@@ -71,5 +81,8 @@ namespace BalloonParty.Configuration.Effects
         public float SquashFrequency => _squashFrequency;
         public float SquashDamping => _squashDamping;
         public float SquashImpulseStrength => _squashImpulseStrength;
+        public float ScalePerShield => _scalePerShield;
+        public float MaxScaleMultiplier => _maxScaleMultiplier;
+        public float ScaleTweenDuration => _scaleTweenDuration;
     }
 }

@@ -66,6 +66,9 @@ namespace BalloonParty.Projectile.View
 
         private DampedSpring1D _squashSpring;
         private Vector2 _squashAxis;
+        private Tween _scaleTween;
+        private Transform _projectileRoot;
+        private Vector3 _projectileBaseScale;
 
         private enum ShieldMorphState
         {
@@ -293,6 +296,8 @@ namespace BalloonParty.Projectile.View
         {
             _disposable.Clear();
             DOTween.Kill(this);
+            _scaleTween?.Kill();
+            _scaleTween = null;
             _dissolveTween = null;
             _model = null;
             _previousShieldCount = 0;
@@ -307,6 +312,8 @@ namespace BalloonParty.Projectile.View
             _noiseIntensity = 0f;
             _squashSpring = default;
             _squashAxis = Vector2.zero;
+            _projectileRoot = null;
+            _projectileBaseScale = Vector3.one;
 
             for (var i = 0; i < MaxLayers; i++)
             {
@@ -331,6 +338,12 @@ namespace BalloonParty.Projectile.View
         internal void Show()
         {
             gameObject.SetActive(true);
+            _projectileRoot = transform.parent;
+            if (_projectileRoot != null)
+            {
+                _projectileBaseScale = _projectileRoot.localScale;
+            }
+
             AnimateInitialReveal(_previousShieldCount);
         }
 
@@ -422,6 +435,8 @@ namespace BalloonParty.Projectile.View
                         _dissolveTween = null;
                     });
             }
+
+            ApplyShieldScale(newCount);
         }
 
         private void SetImmediateState(int count)
@@ -470,6 +485,22 @@ namespace BalloonParty.Projectile.View
                 var rotation = Quaternion.LookRotation(Vector3.forward, direction);
                 SpawnVfxRotated(_shieldLoseVfxPrefab, transform.position, rotation, _currentColor);
             }
+        }
+
+        private void ApplyShieldScale(int shieldCount)
+        {
+            if (_projectileRoot == null || _settings == null)
+            {
+                return;
+            }
+
+            var multiplier = Mathf.Min(1f + shieldCount * _settings.ScalePerShield, _settings.MaxScaleMultiplier);
+            var targetScale = _projectileBaseScale * multiplier;
+
+            _scaleTween?.Kill();
+            _scaleTween = _projectileRoot.DOScale(targetScale, _settings.ScaleTweenDuration)
+                .SetEase(Ease.OutBack)
+                .SetUpdate(true);
         }
 
         private void UpdateColor(string colorName)
