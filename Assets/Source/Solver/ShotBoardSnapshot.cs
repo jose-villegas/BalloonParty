@@ -13,10 +13,8 @@ namespace BalloonParty.Solver
     /// <see cref="ShotSolveContext" />/<see cref="ShotSimulator.Simulate" /> instead.
     /// <see cref="WashesProjectileColor" /> mirrors <c>IWashesProjectileColor</c> (the soap-bubble
     /// cluster) — only ever true on a colourless (Tough-shaped) target today. <see cref="PaysSourceColor" />
-    /// (@ref plan_shot_solver_accuracy Phase C2a) mirrors <c>UnbreakableBalloonModel.ResolveScoreAttribution</c>
-    /// paying <c>context.SourceColorId</c> with an implicit <c>breaksStreak: false</c> — an Unbreakable is
-    /// colourless (no <c>IHasColor</c>) yet still extends the streak on whatever colour struck it, unlike
-    /// an ordinary Tough's flat/streak-breaking rule; only ever true on a colourless target too.</summary>
+    /// is currently unused (no balloon type sets it to true); retained for future types that may need
+    /// source-color streak continuation on a colourless target.</summary>
     internal readonly struct ColorProfile
     {
         public readonly string ColorId;

@@ -227,10 +227,10 @@ namespace BalloonParty.Solver
             var colorId = actor is IHasColor colorable ? colorable.Color.Value : null;
             var washesProjectileColor = actor is IWashesProjectileColor;
 
-            // An Unbreakable has no IHasColor (colorId stays null, the Tough branch below), yet still
-            // pays out on whatever colour struck it and extends the streak instead of breaking it — see
-            // ColorProfile.PaysSourceColor's doc (Phase C2a).
-            var paysSourceColor = actor is UnbreakableBalloonModel;
+            // Unbreakable scatters its score across palette colors and breaks the streak (same as
+            // ToughBalloonModel). The solver approximates this via ResolveToughPop (flat score, streak
+            // reset) — no PaysSourceColor override needed.
+            var paysSourceColor = false;
             var influence = actor as IBalanceInfluence;
             var biasSource = actor as IBalanceBiasSource;
             var nudgeOverrides = actor is IHasNudge nudgeable ? nudgeable.NudgeOverrides : null;

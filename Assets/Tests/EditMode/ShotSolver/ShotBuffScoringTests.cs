@@ -395,14 +395,12 @@ namespace BalloonParty.Tests.ShotSolver
         [Test]
         public void ResolvePopScore_PaysSourceColorTarget_ExtendsStreakButNeverRefunds_C2ARegressionGuard()
         {
-            // C2a regression guard (@ref plan_shot_solver_accuracy Phase C2a): the sim used to score an
-            // Unbreakable exactly like an ordinary Tough (flat ScoreValue, streak-breaking) — it must
-            // instead pay whatever colour struck it and EXTEND the streak
-            // (UnbreakableBalloonModel.ResolveScoreAttribution pays context.SourceColorId with an
-            // implicit breaksStreak:false), yet never refund a shield off its OWN pop (the live refund
-            // gate requires `balloon is IHasColor`, which Unbreakable never satisfies). This is a plain
-            // PROJECTILE CONTACT test — no item layer involved — so it belongs here, not
-            // ShotItemEffectTests.
+            // C2a regression guard (@ref plan_shot_solver_accuracy Phase C2a): the sim models an
+            // Unbreakable as a colourless Tough (flat ScoreValue, streak-breaking via ResolveToughPop) —
+            // matching UnbreakableBalloonModel.ResolveScoreAttribution's breaksStreak:true random scatter.
+            // The sim approximates the scatter as a flat score (no per-color tracking needed for the AI's
+            // coarse heuristic). This is a plain PROJECTILE CONTACT test — no item layer involved — so it
+            // belongs here, not ShotItemEffectTests.
             //
             // Sequence (both boards): Red (streak1, no refund yet — needs streak >= 2) -> the target
             // under test (streak2, pays "Red") -> Red#3 (streak3, pays "Red") -> a far-off filler that's
