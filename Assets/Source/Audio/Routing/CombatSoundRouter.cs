@@ -95,11 +95,11 @@ namespace BalloonParty.Audio.Routing
             }
             else if ((outcome & HitOutcome.Deflect) != 0)
             {
-                _bounceCount++;
                 var deflectId = message.Actor is IBalloonModel balloon
                     ? DeflectSoundFor(balloon.TypeName)
                     : GameSoundId.BalloonDeflect;
                 _player.Play(deflectId, message.WorldPosition, semitoneOffset: -_bounceCount);
+                _bounceCount++;
             }
             else if ((outcome & (HitOutcome.Absorb | HitOutcome.PassThrough)) != 0)
             {
@@ -189,8 +189,8 @@ namespace BalloonParty.Audio.Routing
 
             if (_bounceCount > 0)
             {
-                _bounceCount++;
                 offset = -_bounceCount;
+                _bounceCount++;
             }
 
             _player.Play(GameSoundId.WallHit, message.Position, depth, semitoneOffset: offset);

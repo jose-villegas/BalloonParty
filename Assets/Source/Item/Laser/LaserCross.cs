@@ -130,12 +130,12 @@ namespace BalloonParty.Item.Laser
 
             var along = Vector2.Dot(toCenter, direction);
             var discriminant = (along * along) - toCenter.sqrMagnitude + (combinedRadius * combinedRadius);
-            if (discriminant < 0f)
+            if (discriminant < -1e-6f)
             {
                 return false;
             }
 
-            var entryDistance = -along - Mathf.Sqrt(discriminant);
+            var entryDistance = -along - Mathf.Sqrt(Mathf.Max(0f, discriminant));
             return entryDistance >= 0f && entryDistance <= segmentLength;
         }
 
