@@ -29,6 +29,7 @@ namespace BalloonParty.Balloon.Model
 
         IReadOnlyReactiveProperty<string> IHasColor.Color => Color;
         IReadOnlyReactiveProperty<ItemType> IHasItemSlot.Item => Item;
+        int IHasDurability.MaxHitPoints => MaxHitPoints;
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
 
         internal BalloonModel() : this(new BalloonModelConfig(hitsToPop: 1)) { }

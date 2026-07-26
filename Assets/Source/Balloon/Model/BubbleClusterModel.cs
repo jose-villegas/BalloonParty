@@ -26,6 +26,7 @@ namespace BalloonParty.Balloon.Model
 
         public override PressureResponse PushResponse => PressureResponse.RelocateNearest;
 
+        int IHasDurability.MaxHitPoints => MaxHitPoints;
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
 
         internal BubbleClusterModel(

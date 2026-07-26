@@ -5,6 +5,7 @@ namespace BalloonParty.Shared.Extensions
     /// <summary>Equal-temperament pitch math: a semitone offset as an <c>AudioSource.pitch</c> multiplier.</summary>
     internal static class MusicalPitchExtensions
     {
+        internal const int WholeToneSemitones = 2;
         internal const int TritoneSemitones = 6;
 
         internal static float SemitonesToPitchMultiplier(this float semitones)

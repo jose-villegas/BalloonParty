@@ -78,6 +78,7 @@ namespace BalloonParty.Tests.Slots
 
             public Vector2Int SlotIndex => default;
             public SlotActorKind Kind => SlotActorKind.Static;
+            public int MaxHitPoints => _hits.Value;
             public IReadOnlyReactiveProperty<int> HitsRemaining => _hits;
 
             public HitOutcome EvaluateHit(DamageContext context)

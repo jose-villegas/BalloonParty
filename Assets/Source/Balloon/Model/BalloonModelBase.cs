@@ -20,6 +20,7 @@ namespace BalloonParty.Balloon.Model
         public int BalancePriority { get; }
         public bool DirectBalanceMotion { get; }
         public bool OmnidirectionalBalance { get; }
+        public int MaxHitPoints { get; }
         public ReactiveProperty<int> HitsRemaining { get; }
         public ReactiveProperty<Vector2Int> SlotIndex { get; } = new();
         public ReactiveProperty<bool> IsStable { get; } = new(true);
@@ -59,6 +60,7 @@ namespace BalloonParty.Balloon.Model
         protected BalloonModelBase(BalloonModelConfig config)
         {
             TypeName = config.TypeName;
+            MaxHitPoints = config.HitsToPop;
             HitsRemaining = new ReactiveProperty<int>(config.HitsToPop);
             MaxBalanceSteps = config.MaxBalanceSteps;
             MoveSpeed = config.MoveSpeed;

@@ -24,6 +24,7 @@ namespace BalloonParty.Balloon.Model
         public override BalanceBiasKind BiasKind => BalanceBiasKind.Line;
         public override float BiasValue => _balanceBias;
 
+        int IHasDurability.MaxHitPoints => MaxHitPoints;
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
 
         protected override HitOutcome SurviveOutcome => HitOutcome.Deflect;

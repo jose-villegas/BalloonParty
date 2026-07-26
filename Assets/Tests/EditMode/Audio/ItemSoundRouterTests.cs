@@ -3,6 +3,7 @@ using BalloonParty.Audio;
 using BalloonParty.Audio.Routing;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration.Items;
+using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 using NSubstitute;
@@ -18,6 +19,7 @@ namespace BalloonParty.Tests.Audio
         private IMessageHandler<ItemActivatedMessage> _itemActivatedHandler;
         private IMessageHandler<OverflowHeartRequestedMessage> _overflowHeartHandler;
         private IMessageHandler<SpawnBlockedMessage> _spawnBlockedHandler;
+        private IMessageHandler<ProjectileLoadedMessage> _loadedHandler;
 
         [SetUp]
         public void SetUp()
@@ -27,14 +29,16 @@ namespace BalloonParty.Tests.Audio
             var itemActivatedSubscriber = CaptureSubscriber<ItemActivatedMessage>(h => _itemActivatedHandler = h);
             var overflowHeartSubscriber = CaptureSubscriber<OverflowHeartRequestedMessage>(h => _overflowHeartHandler = h);
             var spawnBlockedSubscriber = CaptureSubscriber<SpawnBlockedMessage>(h => _spawnBlockedHandler = h);
+            var loadedSubscriber = CaptureSubscriber<ProjectileLoadedMessage>(h => _loadedHandler = h);
 
-            var router = new ItemSoundRouter(_player, itemActivatedSubscriber, overflowHeartSubscriber, spawnBlockedSubscriber);
+            var router = new ItemSoundRouter(_player, itemActivatedSubscriber, overflowHeartSubscriber, spawnBlockedSubscriber, loadedSubscriber);
             router.Start();
         }
 
         // Not a [TestCase]-parameterized method: NUnit only runs public test methods, but a public
         // method can't take the internal GameSoundId as a parameter (CS0051). Looping the pairs in a
         // public [Test] keeps full coverage — a mismatch still names the missing Play(id) call.
+        // Each item type is tested in isolation (fresh flight) so the pitch-ramp counter is always 0.
         [Test]
         public void OnItemActivated_ItemType_PlaysMatchingSoundId()
         {
@@ -50,13 +54,95 @@ namespace BalloonParty.Tests.Audio
 
             foreach (var (item, expected) in cases)
             {
+                // Reset the per-flight counter so each type is tested at offset 0.
+                _loadedHandler.Handle(new ProjectileLoadedMessage(null));
+
                 var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
                 balloon.Item.Value = item;
 
                 _itemActivatedHandler.Handle(new ItemActivatedMessage(balloon));
 
-                _player.Received(1).Play(expected, null);
+                _player.Received().Play(expected, null, null, 0, 1f);
             }
+        }
+
+        [Test]
+        public void OnItemActivated_PitchRamps_FirstPickupAtZeroSemitones()
+        {
+            var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            balloon.Item.Value = ItemType.Bomb;
+
+            _itemActivatedHandler.Handle(new ItemActivatedMessage(balloon));
+
+            _player.Received(1).Play(GameSoundId.ItemBomb, null, null, 0, 1f);
+        }
+
+        [Test]
+        public void OnItemActivated_PitchRamps_SecondPickupAtTwoSemitones()
+        {
+            var b1 = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            b1.Item.Value = ItemType.Bomb;
+            var b2 = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            b2.Item.Value = ItemType.Laser;
+
+            _itemActivatedHandler.Handle(new ItemActivatedMessage(b1));
+            _itemActivatedHandler.Handle(new ItemActivatedMessage(b2));
+
+            _player.Received(1).Play(GameSoundId.ItemLaser, null, null, 2, 1f);
+        }
+
+        [Test]
+        public void OnItemActivated_PitchRamps_ThirdPickupAtFourSemitones()
+        {
+            var b1 = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            b1.Item.Value = ItemType.Bomb;
+            var b2 = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            b2.Item.Value = ItemType.Laser;
+            var b3 = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            b3.Item.Value = ItemType.Lightning;
+
+            _itemActivatedHandler.Handle(new ItemActivatedMessage(b1));
+            _itemActivatedHandler.Handle(new ItemActivatedMessage(b2));
+            _itemActivatedHandler.Handle(new ItemActivatedMessage(b3));
+
+            _player.Received(1).Play(GameSoundId.ItemLightning, null, null, 4, 1f);
+        }
+
+        [Test]
+        public void OnItemActivated_PitchRamps_ResetsOnProjectileLoaded()
+        {
+            var b1 = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            b1.Item.Value = ItemType.Bomb;
+            var b2 = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            b2.Item.Value = ItemType.Laser;
+
+            _itemActivatedHandler.Handle(new ItemActivatedMessage(b1));
+            _itemActivatedHandler.Handle(new ItemActivatedMessage(b2));
+
+            // New flight — counter resets.
+            _loadedHandler.Handle(new ProjectileLoadedMessage(null));
+
+            var b3 = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            b3.Item.Value = ItemType.Paint;
+            _itemActivatedHandler.Handle(new ItemActivatedMessage(b3));
+
+            _player.Received(1).Play(GameSoundId.ItemPaint, null, null, 0, 1f);
+        }
+
+        [Test]
+        public void OnItemActivated_PitchRamps_DifferentItemTypesShareCounter()
+        {
+            // Shield then Bomb — both increment the same counter.
+            var b1 = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            b1.Item.Value = ItemType.Shield;
+            var b2 = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            b2.Item.Value = ItemType.Bomb;
+
+            _itemActivatedHandler.Handle(new ItemActivatedMessage(b1));
+            _itemActivatedHandler.Handle(new ItemActivatedMessage(b2));
+
+            _player.Received(1).Play(GameSoundId.ItemShield, null, null, 0, 1f);
+            _player.Received(1).Play(GameSoundId.ItemBomb, null, null, 2, 1f);
         }
 
         [Test]

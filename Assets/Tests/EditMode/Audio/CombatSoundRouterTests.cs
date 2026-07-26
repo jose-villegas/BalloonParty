@@ -262,6 +262,106 @@ namespace BalloonParty.Tests.Audio
             _player.Received(2).Play(GameSoundId.WallHit, position, 0);
         }
 
+        // --- Pitch-ramp per-flight counters ---
+
+        [Test]
+        public void OnActorHit_RainbowPop_PitchRampsAcrossConsecutivePops()
+        {
+            var rainbow = Substitute.For<IBalloonModel>();
+            rainbow.TypeName.Returns(BalloonType.Rainbow);
+
+            _hitHandler.Handle(new ActorHitMessage(rainbow, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+            _hitHandler.Handle(new ActorHitMessage(rainbow, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+            _hitHandler.Handle(new ActorHitMessage(rainbow, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+
+            _player.Received(1).Play(GameSoundId.BalloonPopRainbow, Vector3.zero, null, 0, 1f);
+            _player.Received(1).Play(GameSoundId.BalloonPopRainbow, Vector3.zero, null, 2, 1f);
+            _player.Received(1).Play(GameSoundId.BalloonPopRainbow, Vector3.zero, null, 4, 1f);
+        }
+
+        [Test]
+        public void OnActorHit_ToughPop_PitchRampsAcrossConsecutivePops()
+        {
+            var tough = Substitute.For<IBalloonModel>();
+            tough.TypeName.Returns(BalloonType.Tough);
+
+            _hitHandler.Handle(new ActorHitMessage(tough, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+            _hitHandler.Handle(new ActorHitMessage(tough, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+
+            _player.Received(1).Play(GameSoundId.BalloonPopTough, Vector3.zero, null, 0, 1f);
+            _player.Received(1).Play(GameSoundId.BalloonPopTough, Vector3.zero, null, 2, 1f);
+        }
+
+        [Test]
+        public void OnActorHit_UnbreakablePop_PitchRampsAcrossConsecutivePops()
+        {
+            var unbreakable = Substitute.For<IBalloonModel>();
+            unbreakable.TypeName.Returns(BalloonType.Unbreakable);
+
+            _hitHandler.Handle(new ActorHitMessage(unbreakable, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+            _hitHandler.Handle(new ActorHitMessage(unbreakable, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+
+            _player.Received(1).Play(GameSoundId.BalloonPopUnbreakable, Vector3.zero, null, 0, 1f);
+            _player.Received(1).Play(GameSoundId.BalloonPopUnbreakable, Vector3.zero, null, 2, 1f);
+        }
+
+        [Test]
+        public void OnActorHit_PopCounters_AreIndependentPerType()
+        {
+            var rainbow = Substitute.For<IBalloonModel>();
+            rainbow.TypeName.Returns(BalloonType.Rainbow);
+            var tough = Substitute.For<IBalloonModel>();
+            tough.TypeName.Returns(BalloonType.Tough);
+
+            // Rainbow pop, then Tough pop — each starts at offset 0.
+            _hitHandler.Handle(new ActorHitMessage(rainbow, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+            _hitHandler.Handle(new ActorHitMessage(tough, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+
+            _player.Received(1).Play(GameSoundId.BalloonPopRainbow, Vector3.zero, null, 0, 1f);
+            _player.Received(1).Play(GameSoundId.BalloonPopTough, Vector3.zero, null, 0, 1f);
+        }
+
+        [Test]
+        public void OnLoaded_ResetsAllPopPitchCounters()
+        {
+            var rainbow = Substitute.For<IBalloonModel>();
+            rainbow.TypeName.Returns(BalloonType.Rainbow);
+            var tough = Substitute.For<IBalloonModel>();
+            tough.TypeName.Returns(BalloonType.Tough);
+
+            _hitHandler.Handle(new ActorHitMessage(rainbow, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+            _hitHandler.Handle(new ActorHitMessage(rainbow, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+            _hitHandler.Handle(new ActorHitMessage(tough, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+
+            // New flight — all counters reset.
+            _loadedHandler.Handle(new ProjectileLoadedMessage(null));
+
+            _hitHandler.Handle(new ActorHitMessage(rainbow, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+            _hitHandler.Handle(new ActorHitMessage(tough, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+
+            // After reset, the third rainbow call and the second tough call should be at offset 0.
+            _player.Received().Play(GameSoundId.BalloonPopRainbow, Vector3.zero, null, 0, 1f);
+            _player.Received().Play(GameSoundId.BalloonPopTough, Vector3.zero, null, 0, 1f);
+        }
+
+        [Test]
+        public void OnActorHit_NonTrackedPopType_AlwaysPlaysAtOffsetZero()
+        {
+            // Silver, Gold, and generic BalloonPop are NOT pitch-ramped.
+            var silver = Substitute.For<IBalloonModel>();
+            silver.TypeName.Returns(BalloonType.SimpleSilver);
+            var gold = Substitute.For<IBalloonModel>();
+            gold.TypeName.Returns(BalloonType.SimpleGold);
+
+            _hitHandler.Handle(new ActorHitMessage(silver, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+            _hitHandler.Handle(new ActorHitMessage(silver, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+            _hitHandler.Handle(new ActorHitMessage(gold, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+
+            // Both silver pops at offset 0 (no ramp).
+            _player.Received(2).Play(GameSoundId.BalloonPopSilver, Vector3.zero, null, 0, 1f);
+            _player.Received(1).Play(GameSoundId.BalloonPopGold, Vector3.zero, null, 0, 1f);
+        }
+
         private static ISubscriber<T> CaptureSubscriber<T>(Action<IMessageHandler<T>> capture)
         {
             var subscriber = Substitute.For<ISubscriber<T>>();

@@ -7,8 +7,10 @@ namespace BalloonParty.Slots.Actor.Archetype
     // Deflects until HitsRemaining reaches zero, then pops.
     internal class GatekeeperActorModel : IWriteableSlotActor, IHasDurability
     {
+        public int MaxHitPoints { get; }
         public ReactiveProperty<int> HitsRemaining { get; }
 
+        int IHasDurability.MaxHitPoints => MaxHitPoints;
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
 
         public Vector2Int SlotIndex { get; private set; }
@@ -23,6 +25,7 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         internal GatekeeperActorModel(int hitsToPop)
         {
+            MaxHitPoints = hitsToPop;
             HitsRemaining = new ReactiveProperty<int>(hitsToPop);
         }
 
