@@ -327,6 +327,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scenario
       objectReference: {fileID: 0}
+    - target: {fileID: 5965394924472436751, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6003813002264364553, guid: b87d2a91b2e8044649b32c3a684fd6d9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -375,6 +380,21 @@ PrefabInstance:
     - target: {fileID: 6003813002264364553, guid: b87d2a91b2e8044649b32c3a684fd6d9,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7145486617881593725, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7145486617881593725, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8811000000000000001, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

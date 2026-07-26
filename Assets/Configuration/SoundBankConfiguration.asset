@@ -23,6 +23,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -42,6 +43,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -61,6 +63,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -79,6 +82,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -98,6 +102,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -120,6 +125,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -138,6 +144,7 @@ MonoBehaviour:
     _loop: 1
     _singleInstance: 1
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 3
     _fadeOutSeconds: 1
     _stopsOnPlay: 
@@ -156,6 +163,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 06000000
@@ -174,6 +182,7 @@ MonoBehaviour:
     _loop: 1
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -193,6 +202,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -211,6 +221,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -229,6 +240,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -249,6 +261,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -268,6 +281,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -287,6 +301,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -307,6 +322,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -327,6 +343,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -346,6 +363,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -364,6 +382,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -382,6 +401,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -400,6 +420,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -418,6 +439,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -436,6 +458,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -454,6 +477,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -472,6 +496,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -492,6 +517,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -510,6 +536,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -528,6 +555,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -535,7 +563,7 @@ MonoBehaviour:
     _melodicMaxOctaves: 2
     _melodicSkipSteps: 1
     _tensionSemitones: 0
-    _fetchPrompt: 
+    _fetchPrompt: menu
   - _channel: 0
     _clips:
     - {fileID: 8300000, guid: 471eac240877c45ebba2485367778f53, type: 3}
@@ -547,6 +575,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -566,6 +595,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -585,6 +615,7 @@ MonoBehaviour:
     _loop: 1
     _singleInstance: 1
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -606,6 +637,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -625,8 +657,9 @@ MonoBehaviour:
     _loop: 1
     _singleInstance: 1
     _pan2D: 1
-    _fadeInSeconds: 1
-    _fadeOutSeconds: 3
+    _delaySeconds: 0
+    _fadeInSeconds: 3
+    _fadeOutSeconds: 1
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -644,8 +677,9 @@ MonoBehaviour:
     _loop: 1
     _singleInstance: 1
     _pan2D: 1
-    _fadeInSeconds: 30
-    _fadeOutSeconds: 5
+    _delaySeconds: 7
+    _fadeInSeconds: 15
+    _fadeOutSeconds: 10
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -663,6 +697,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -674,6 +709,7 @@ MonoBehaviour:
   - _channel: 0
     _clips:
     - {fileID: 8300000, guid: 6e0cff43fed924b66b3e8cae39081886, type: 3}
+    - {fileID: 8300000, guid: 0d7ed1c140a4b42de9c729d0bb335cf7, type: 3}
     _pitchRange: {x: 1, y: 1}
     _volumeRange: {x: 1, y: 1}
     _cooldownSeconds: 0
@@ -682,6 +718,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -699,14 +736,15 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 6ebff6839146e40e694d7479ba889fb2, type: 3}
     - {fileID: 8300000, guid: 0370e279dcf51485896dad01ce536809, type: 3}
     - {fileID: 8300000, guid: 1e0097843bd504a9b8b76c32640e38bc, type: 3}
-    _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 1, y: 1}
+    _pitchRange: {x: 0.7, y: 0.9}
+    _volumeRange: {x: 0.3, y: 0.4}
     _cooldownSeconds: 0
-    _maxConcurrentVoices: 4
+    _maxConcurrentVoices: 8
     _priority: 128
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -726,6 +764,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
@@ -745,6 +784,7 @@ MonoBehaviour:
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
+    _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 

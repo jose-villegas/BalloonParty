@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 8597041690689265888}
   - component: {fileID: 8093058153975969621}
   - component: {fileID: 4698789767988275823}
+  - component: {fileID: 9034052619022030905}
   - component: {fileID: 977641122217208972}
   m_Layer: 0
   m_Name: Main Camera
@@ -215,6 +216,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Display.CameraBackgroundTint
   _baseColor: {r: 0.5294118, g: 0.80784315, b: 0.92156863, a: 1}
   _lightInfluence: 1
+--- !u!114 &9034052619022030905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4370083120234301038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 389e81741c764d659c388f205035880a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Display.CameraShakeView
+  _camera: {fileID: 9161632677401763229}
+  _duration: 0.25
+  _strength: 0.18
+  _vibrato: 14
+  _recoilStrength: 0.08
+  _recoilDuration: 0.15
+  _recoilVibrato: 8
 --- !u!114 &977641122217208972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -230,7 +250,7 @@ MonoBehaviour:
   _camera: {fileID: 9161632677401763229}
   _launchMask:
     serializedVersion: 2
-    m_Bits: 4192
+    m_Bits: 69730
   _gameMask:
     serializedVersion: 2
     m_Bits: 4294967295

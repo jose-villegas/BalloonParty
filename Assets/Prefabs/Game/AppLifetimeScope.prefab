@@ -65,11 +65,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 727079776877605245}
     m_Modifications:
-    - target: {fileID: 977641122217208972, guid: 45a679b1438e74a72a716351daa7ff29,
-        type: 3}
-      propertyPath: _launchMask.m_Bits
-      value: 4194
-      objectReference: {fileID: 0}
     - target: {fileID: 4370083120234301038, guid: 45a679b1438e74a72a716351daa7ff29,
         type: 3}
       propertyPath: m_Name
@@ -128,11 +123,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4370083120234301038, guid: 45a679b1438e74a72a716351daa7ff29,
-        type: 3}
-      insertIndex: 9
-      addedObject: {fileID: 8598025849177555153}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45a679b1438e74a72a716351daa7ff29, type: 3}
 --- !u!4 &4106898882621449044 stripped
 Transform:
@@ -140,34 +131,3 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5010516512641034158}
   m_PrefabAsset: {fileID: 0}
---- !u!20 &4227831500912343603 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 9161632677401763229, guid: 45a679b1438e74a72a716351daa7ff29,
-    type: 3}
-  m_PrefabInstance: {fileID: 5010516512641034158}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8731715830847218112 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4370083120234301038, guid: 45a679b1438e74a72a716351daa7ff29,
-    type: 3}
-  m_PrefabInstance: {fileID: 5010516512641034158}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8598025849177555153
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8731715830847218112}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 389e81741c764d659c388f205035880a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Display.CameraShakeView
-  _camera: {fileID: 4227831500912343603}
-  _duration: 0.25
-  _strength: 0.18
-  _vibrato: 14
-  _recoilStrength: 0.08
-  _recoilDuration: 0.15
-  _recoilVibrato: 8

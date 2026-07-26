@@ -95,7 +95,7 @@ Material:
     m_Colors:
     - _AmbientColor: {r: 0.9245283, g: 0.9245283, b: 0.9245283, a: 1}
     - _CloudColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 0.627451}
+    - _Color: {r: 1, g: 1, b: 1, a: 0.8}
     - _LightColor: {r: 1, g: 1, b: 1, a: 1}
     - _NoiseScroll: {r: 0.05, g: 0.12, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
