@@ -67,7 +67,7 @@ namespace BalloonParty.Game
 
             _walls = new WallLimits(_flightConfig.LimitsClockwise);
 
-            var colors = Mathf.Clamp(_colorCount, 1, Mathf.Max(1, _palette.Colors.Count));
+            var colors = ColorCycleCount();
             for (var i = 0; i < _lightCount; i++)
             {
                 var light = new Light(RandomFieldPoint(), _lightRadius, _lightIntensity, i % colors, _lightFalloffPower);
@@ -97,6 +97,11 @@ namespace BalloonParty.Game
                 _fade = Mathf.Max(0f, _fade - dt / Mathf.Max(0.0001f, _fadeOutSeconds));
             }
 
+            // Re-push the per-light appearance each frame so Inspector edits during play take effect live;
+            // ReactiveProperty ignores unchanged writes, so a steady value costs nothing. (Light COUNT is
+            // structural — it's fixed at Start; only the per-light fields update here.)
+            var colors = ColorCycleCount();
+
             for (var i = 0; i < _lights.Count; i++)
             {
                 var position = (Vector2)_lights[i].Position.Value;
@@ -110,10 +115,15 @@ namespace BalloonParty.Game
 
                 _velocities[i] = velocity;
 
+                var light = _lights[i];
                 // Point light: keep both ends together (a diverging EndPosition would stretch it to a capsule).
-                _lights[i].Position.Value = position;
-                _lights[i].EndPosition.Value = position;
-                _lights[i].Intensity.Value = _lightIntensity * _fade;
+                light.Position.Value = position;
+                light.EndPosition.Value = position;
+                light.Radius.Value = _lightRadius;
+                light.EndRadius.Value = _lightRadius;
+                light.FalloffPower.Value = _lightFalloffPower;
+                light.PaletteIndex.Value = i % colors;
+                light.Intensity.Value = _lightIntensity * _fade;
             }
 
             if (_fade <= 0f)
@@ -125,6 +135,12 @@ namespace BalloonParty.Game
         private void OnDestroy()
         {
             Teardown();
+        }
+
+        // How many leading palette colours the lights cycle through, clamped to what the palette holds.
+        private int ColorCycleCount()
+        {
+            return Mathf.Clamp(_colorCount, 1, Mathf.Max(1, _palette.Colors.Count));
         }
 
         // A soft inward spring once a light strays past the wall margin — bounded roaming, not escape.
