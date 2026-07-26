@@ -2,6 +2,7 @@ using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using MessagePipe;
@@ -157,6 +158,8 @@ namespace BalloonParty.Audio.Routing
         private void OnProjectileDestroyed(ProjectileDestroyedMessage message)
         {
             _player.Play(GameSoundId.ProjectileDeath, null);
+            var depth = _flightConfig.ShieldToneThreshold;
+            _player.Play(GameSoundId.WallHit, null, melodicStreak: depth, semitoneOffset: -MusicalPitchExtensions.TritoneSemitones, volumeScale: 3f);
         }
 
         private void OnPierceDischarged(PierceDischargedMessage message)

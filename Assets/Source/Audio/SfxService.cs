@@ -5,6 +5,7 @@ using BalloonParty.Audio.View;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Diagnostics;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using UnityEngine;
 using VContainer;
@@ -47,7 +48,7 @@ namespace BalloonParty.Audio
             _panRight = walls.Right;
         }
 
-        public SoundHandle Play(GameSoundId id, Vector3? position, int? melodicStreak = null)
+        public SoundHandle Play(GameSoundId id, Vector3? position, int? melodicStreak = null, int semitoneOffset = 0, float volumeScale = 1f)
         {
             if (!_bank.TryGet(id, out var entry))
             {
@@ -71,6 +72,17 @@ namespace BalloonParty.Audio
             var pan = ComputePan(position);
             var context = new PickContext(melodicStreak ?? _currentStreak, _currentSemitone, burstIndex, pan);
             var playback = _picker.Pick(id, entry, in context);
+
+            if (semitoneOffset != 0)
+            {
+                var offsetPitch = (playback.MelodicSemitone + semitoneOffset).SemitonesToPitchMultiplier();
+                playback = new VoicePlayback(playback.Clip, offsetPitch, playback.Volume, playback.Pan, playback.MelodicSemitone);
+            }
+
+            if (volumeScale != 1f)
+            {
+                playback = new VoicePlayback(playback.Clip, playback.Pitch, playback.Volume * volumeScale, playback.Pan, playback.MelodicSemitone);
+            }
 
             // Only the ambient pop walk establishes the key that Tension entries rub against. A caller
             // that overrides the streak (the shield-loss walk) plays its note without hijacking that key.

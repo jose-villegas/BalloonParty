@@ -4,7 +4,7 @@ namespace BalloonParty.Audio
 {
     internal interface ISoundPlayer
     {
-        SoundHandle Play(GameSoundId id, Vector3? position, int? melodicStreak = null);
+        SoundHandle Play(GameSoundId id, Vector3? position, int? melodicStreak = null, int semitoneOffset = 0, float volumeScale = 1f);
 
         // Ramps a playing voice's volume to lerp(VolumeRange, factor) over the entry's FadeInSeconds.
         // For continuously-driven loops (e.g. speed-tracking wind); no-op on a stale/ended handle.
