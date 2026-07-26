@@ -13,16 +13,14 @@ on:
       - '.github/workflows/doxygen.yml'
   workflow_dispatch:
 
-# Publishes to the gh-pages branch (Pages source = branch, not Actions artifact) so the
-# WebGL player can live at /play on the same site — a repo only serves one Pages site.
+# Publishes by pushing the gh-pages branch, so Pages must be sourced from that branch
+# rather than from an Actions artifact.
 permissions:
   contents: write
 
-# Shared with the WebGL deploy so the two never push to gh-pages at once. Cancelling is
-# off: a queued docs run must not kill an in-flight player build.
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -51,11 +49,11 @@ jobs:
       - name: Generate Doxygen
         run: doxygen Doxyfile
 
-      # keep_files preserves /play, which this workflow does not build.
+      # Docs are the only occupant of the branch, so the publish replaces its contents
+      # outright — deleted pages get pruned instead of lingering on the live site.
       - name: Publish to gh-pages root
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: Docs/doxygen/html
-          keep_files: true
           commit_message: 'Deploy Doxygen from ${{ github.sha }}'

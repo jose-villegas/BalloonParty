@@ -18,7 +18,7 @@ MonoBehaviour:
     _brownianStrength: 0.6
     _drag: 2
     _motionInfluence: 1.25
-    _disturbanceInfluence: 23.5
+    _disturbanceInfluence: 15
     _disturbanceDamping: 0.25
     _swirlAngle: {x: -120, y: 120}
     _flowInfluence: 0.35

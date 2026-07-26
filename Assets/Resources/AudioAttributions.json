@@ -498,5 +498,25 @@
     "LicenseName": "Attribution",
     "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
     "RequiresAttribution": true
+  },
+  {
+    "SoundId": "ItemShield",
+    "ProviderId": 374237,
+    "Name": "Tuba - staccato - D3 (Tuba3_stac_D2_v1_rr4_Sum.wav)",
+    "Author": "sgossner",
+    "SoundUrl": "https://freesound.org/people/sgossner/sounds/374237/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "ItemBomb",
+    "ProviderId": 376324,
+    "Name": "tam1.wav",
+    "Author": "BodoboBits",
+    "SoundUrl": "https://freesound.org/people/BodoboBits/sounds/376324/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
   }
 ]

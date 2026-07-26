@@ -15,7 +15,7 @@ MonoBehaviour:
   _glowAlpha: 0.5
   _glowColorDuration: 1.25
   _rainbowGlowSpeed: 0.35
-  _projectileDisappearDuration: 0.2
+  _projectileDisappearDuration: 0.5
   _projectileDisappearEase: 26
   _projectileDeadDriftFactor: 1
   _pierceFadeDuration: 0.35

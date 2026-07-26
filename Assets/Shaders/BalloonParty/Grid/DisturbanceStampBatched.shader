@@ -59,7 +59,9 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceStampBatched"
                 return o;
             }
 
-            fixed4 frag(v2f i) : SV_Target
+            // float4, not fixed4: SpeckField reads R's *derivative* at high gain, so lowp's coarse
+            // steps on mobile turn a shallow stamp's gradient into a staircase and fling specks.
+            float4 frag(v2f i) : SV_Target
             {
                 float2 uv = i.uv;
                 float4 current = tex2D(_MainTex, uv);
@@ -123,7 +125,7 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceStampBatched"
                     }
                 }
 
-                return fixed4(density, saturate(displace), colorIndex);
+                return float4(density, saturate(displace), colorIndex);
             }
             ENDCG
         }

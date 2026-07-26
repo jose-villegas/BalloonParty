@@ -93,7 +93,9 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceDiffusion"
                 return o;
             }
 
-            fixed4 frag(v2f i) : SV_Target
+            // float4, not fixed4 — see DisturbanceStampBatched: lowp quantization on mobile wrecks
+            // the R gradient the speck field reads.
+            float4 frag(v2f i) : SV_Target
             {
                 float2 uv = i.uv;
                 float2 tx = _MainTex_TexelSize.xy;
@@ -211,7 +213,7 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceDiffusion"
                 result = float3(density, saturate(displace));
                 #endif
 
-                return fixed4(saturate(result), colorIndex);
+                return float4(saturate(result), colorIndex);
             }
             ENDCG
         }
