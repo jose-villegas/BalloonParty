@@ -14,7 +14,7 @@ namespace BalloonParty.Projectile.Model
         SpeedTransitionKind TransitionKind { get; }
         float TransitionElapsed { get; }
         float CurrentSpeed { get; }
-        int TotalSweeps { get; }
+        int ConsecutiveSweeps { get; }
         int SegmentPopCount { get; }
         bool SegmentSweepValid { get; }
         Vector3 LastBouncePosition { get; }

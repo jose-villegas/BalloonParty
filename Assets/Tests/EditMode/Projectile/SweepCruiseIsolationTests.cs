@@ -95,7 +95,7 @@ namespace BalloonParty.Tests.Projectile
         // ──────────────────────────────────────────────────────────────────────────────────────
 
         [Test]
-        public void TryAwardSweepTap_EmptySegmentNoPops_DoesNotIncrementTotalSweeps()
+        public void TryAwardSweepTap_EmptySegmentNoPops_DoesNotIncrementConsecutiveSweeps()
         {
             var view = CreateSweepView();
             _projectile.Flight.SegmentPopCount = 0;
@@ -103,8 +103,8 @@ namespace BalloonParty.Tests.Projectile
 
             AwardSweepTap(view, new Vector3(3f, 0f, 0f), Vector3.right);
 
-            Assert.AreEqual(0, _projectile.Flight.TotalSweeps,
-                "SegmentPopCount == 0 → the sweep guard bails, TotalSweeps stays unchanged");
+            Assert.AreEqual(0, _projectile.Flight.ConsecutiveSweeps,
+                "SegmentPopCount == 0 → the sweep guard bails, ConsecutiveSweeps stays unchanged");
         }
 
         [Test]
@@ -142,7 +142,7 @@ namespace BalloonParty.Tests.Projectile
         // ──────────────────────────────────────────────────────────────────────────────────────
 
         [Test]
-        public void TryAwardSweepTap_SegmentWithPops_IncrementsTotalSweeps()
+        public void TryAwardSweepTap_SegmentWithPops_IncrementsConsecutiveSweeps()
         {
             var view = CreateSweepView();
             var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
@@ -155,7 +155,7 @@ namespace BalloonParty.Tests.Projectile
 
             AwardSweepTap(view, new Vector3(3f, 0f, 0f), Vector3.right);
 
-            Assert.AreEqual(1, _projectile.Flight.TotalSweeps,
+            Assert.AreEqual(1, _projectile.Flight.ConsecutiveSweeps,
                 "pops on the segment allow a sweep to be counted");
         }
 
@@ -201,7 +201,7 @@ namespace BalloonParty.Tests.Projectile
 
             AwardSweepTap(view, new Vector3(3f, 0f, 0f), Vector3.right);
 
-            Assert.AreEqual(0, _projectile.Flight.TotalSweeps,
+            Assert.AreEqual(0, _projectile.Flight.ConsecutiveSweeps,
                 "SegmentSweepValid == false prevents any sweep count");
             Assert.AreEqual(0, _projectile.Flight.TotalCruiseTaps,
                 "no shared speed tap when the path wasn't a clean corridor clear");
@@ -223,7 +223,7 @@ namespace BalloonParty.Tests.Projectile
 
             AwardSweepTap(view, new Vector3(3f, 0f, 0f), Vector3.right);
 
-            Assert.AreEqual(1, _projectile.Flight.TotalSweeps,
+            Assert.AreEqual(1, _projectile.Flight.ConsecutiveSweeps,
                 "sweep is counted (toward threshold progress)");
             Assert.AreEqual(0, _projectile.Flight.TotalCruiseTaps,
                 "below-threshold sweeps don't contribute to the shared cruise-tap counter");
@@ -285,6 +285,30 @@ namespace BalloonParty.Tests.Projectile
             Assert.AreEqual(2, _projectile.Flight.TotalCruiseTaps, "the guard is per wall hit, not a latch");
         }
 
+        // A Sweep is a RUN: SweepTapThreshold consecutive segments spent breezing through 1-HP balloons
+        // (José, 2026-07-27). So a wall reached without a clean clearing pass — an empty traversal, which is
+        // cruise's territory — restarts the count, symmetric with a balloon contact breaking cruise's own
+        // run. Before this the counter was a lifetime tally, so sweep/cruise/sweep banked two sweeps with no
+        // continuous clearing run at all (and the editor gizmo drew a line implying one).
+        [Test]
+        public void TryAwardSweepTap_EmptySegmentAfterAClearOne_BreaksTheSweepRun()
+        {
+            var view = CreateSweepView();
+            _projectile.Flight.SegmentPopCount = 1;
+            _projectile.Flight.SegmentSweepValid = true;
+            _projectile.Flight.LastBouncePosition = Vector3.zero;
+
+            AwardSweepTap(view, new Vector3(3f, 0f, 0f), Vector3.right);
+            Assert.AreEqual(1, _projectile.Flight.ConsecutiveSweeps, "one clean clearing pass banked");
+
+            // The next segment pops nothing — an empty wall-to-wall traversal.
+            _projectile.Flight.SegmentPopCount = 0;
+            AwardSweepTap(view, new Vector3(3f, 0f, 0f), Vector3.right);
+
+            Assert.AreEqual(
+                0, _projectile.Flight.ConsecutiveSweeps, "the run is broken, so the count starts over");
+        }
+
         [Test]
         public void TryAwardSweepTap_ArmedShot_StillAwardsItsTap()
         {
@@ -299,7 +323,7 @@ namespace BalloonParty.Tests.Projectile
 
             AwardSweepTap(view, new Vector3(3f, 0f, 0f), Vector3.right);
 
-            Assert.AreEqual(1, _projectile.Flight.TotalSweeps, "the sweep is credited while armed");
+            Assert.AreEqual(1, _projectile.Flight.ConsecutiveSweeps, "the sweep is credited while armed");
             Assert.AreEqual(1, _projectile.Flight.TotalCruiseTaps, "and it mints its speed tap");
         }
 

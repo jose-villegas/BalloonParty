@@ -6,9 +6,18 @@ The projectile is the ball fired by the thrower. It travels in a straight line, 
 
 Each shot starts loaded on the thrower. When fired it moves freely across the screen, reflecting off the top, left, and right boundaries. Each bounce costs one shield. When shields are exhausted the projectile is destroyed, the grid rebalances, and the thrower reloads.
 
-Cruise and Sweep both feed the projectile's tap system. Cruise still comes from long empty-corridor wall runs; Sweep adds a tap at a wall hit when the current segment popped at least one balloon, every balloon hit on that segment was at exactly 1 HP when struck, and the backward circle-cast to the previous bounce finds the corridor now clear. Sweep reuses Cruise's `SpeedGainPerTap` value, the same tap-beat easing, and the same piercing threshold.
+Cruise and Sweep both feed the projectile's tap system, and both are **runs** — each pays out only once the shot has strung enough of its own kind of segment together, and any segment of the other kind breaks the streak:
 
-**A wall hit mints at most one tap.** The two rules are two ways to *earn* one — never two. Both go through `ProjectileModelExtensions.TryGrantTap`, which stamps the `WallHitSequence` the resolver bumps on each surviving bounce and refuses (with a `Log.Assert`) a second claim on the same hit. That used to hold only because a pop cancelled the cruise in a third file, and it was silently violated for armed shots, which collected both taps on one wall and compounded from there. Note the currency is the *wall hit*, not the shield: shields only enter because the wall bounce is today the one place a shield is spent (`ProjectileMotionResolver` is the only `ShieldsRemaining` decrement).
+| | Cruise | Sweep |
+|---|---|---|
+| A qualifying segment | wall-to-wall with **no** balloon contact | popped at least one balloon, every contact on it a 1-HP one-shot kill, and the corridor behind it clear at the wall (backward circle-cast to `LastBouncePosition`) |
+| Run counter | `ConsecutiveWallBounces` | `ConsecutiveSweeps` |
+| Run length required | `CruiseWallBounceThreshold` | `SweepTapThreshold` |
+| What breaks the run | any balloon contact | any wall reached without a clean clearing pass — including an empty traversal, which is cruise's business |
+
+Sweep reuses Cruise's `SpeedGainPerTap` value, the same tap-beat easing, and the same piercing threshold. A deflect resets **both** runs (and the tap total) outright: `ProjectileView.OnBalloonDeflected` treats it as interrupting the whole flight.
+
+**A wall hit mints at most one tap.** The two rules are two ways to *earn* one — never two. Both go through `ProjectileModelExtensions.TryGrantTap`, which stamps the `WallHitSequence` the resolver bumps on each surviving bounce and refuses a second claim on the same hit. It used to hold only because a pop cancelled the cruise in a third file — and was silently violated for armed shots, which collected both taps on one wall and compounded from there. While piercing both rules can now *legitimately* qualify on the same wall (a pop doesn't end an armed shot's cruise), so the refusal is a real first-come race with a harmless outcome: both claims are worth the same one tap. Note the currency is the *wall hit*, not the shield: shields only enter because the wall bounce is today the one place a shield is spent (`ProjectileMotionResolver` is the only `ShieldsRemaining` decrement).
 
 **Taps never stop.** A wall hit is a wall hit, so an armed shot goes on earning them and goes on getting faster — the only thing that bounds it is the speed rail (see below). What piercing changes is *how* each tap's speed change is played:
 
@@ -183,4 +192,4 @@ The model stores buffs in a plain list exposed via `HasBuff(ProjectileBuffId)` (
 
 ## Editor Gizmos
 
-- **Sweep counting gizmo** (`ProjectileView`, `#if UNITY_EDITOR`) — visualizes the sweep warm-up progress toward `SweepTapThreshold`. Each time a sweep condition passes, a wire sphere is drawn at the wall-hit position; successive markers are linked by a line whose alpha ramps from dim (first) to bright (threshold). While counting, markers are orange; once the threshold is reached they turn green and remain visible for the rest of the shot (or until the next counting session begins). A faint line also connects the first marker back to `LastBouncePosition` to show the segment origin. Resets on despawn/spawn (new shot).
+- **Sweep counting gizmo** (`ProjectileView`, `#if UNITY_EDITOR`) — visualizes the current sweep RUN toward `SweepTapThreshold`. Tracking starts on the first clean clearing pass, drawing a wire sphere at each subsequent wall hit and linking them into a polyline, with a faint tail from the last marker to the shot's live position. Markers are **red** while the run is still short of the threshold and **blue** once it is reached. Because the line is the run, it clears the moment the run breaks (a wall reached without a clean pass, or a deflect) as well as on despawn/spawn — otherwise it would draw a continuous clearing streak the rule never required.

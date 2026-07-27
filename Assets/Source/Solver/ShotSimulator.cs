@@ -381,6 +381,14 @@ namespace BalloonParty.Solver
                 && TrySweepSegment(
                     position, projectileContactRadius, workingSet, activeCount, dynamics, ref state);
 
+            // A Sweep is a RUN of consecutive clean clearing passes (ProjectileView.TryAwardSweepTap), so
+            // any wall reached without one — an empty segment, a tougher contact, an occupied corridor —
+            // starts the count over.
+            if (!sweptClean)
+            {
+                state.ConsecutiveSweeps = 0;
+            }
+
             var mintedTap = false;
             if (state.IsCruising)
             {
@@ -401,7 +409,7 @@ namespace BalloonParty.Solver
             return false;
         }
 
-        // The corridor check, and the sweep credit that comes with passing it. TotalSweeps counts every
+        // The corridor check, and the sweep credit that comes with passing it. ConsecutiveSweeps counts every
         // clean sweep (it is the warm-up SweepTapThreshold gates), whether or not this one pays a tap.
         private static bool TrySweepSegment(
             Vector2 wallContact, float projectileContactRadius, ShotBalloonState[] workingSet, int activeCount,
@@ -421,7 +429,7 @@ namespace BalloonParty.Solver
                 return false;
             }
 
-            state.TotalSweeps++;
+            state.ConsecutiveSweeps++;
             return true;
         }
 
@@ -430,7 +438,8 @@ namespace BalloonParty.Solver
         // piercing threshold exactly as a cruise tap would.
         private static void CountSweepTap(in ShotCruiseConfig cruiseConfig, ref ShotFlightState state)
         {
-            if (cruiseConfig.SweepTapThreshold > 0 && state.TotalSweeps < cruiseConfig.SweepTapThreshold)
+            if (cruiseConfig.SweepTapThreshold > 0
+                && state.ConsecutiveSweeps < cruiseConfig.SweepTapThreshold)
             {
                 return;
             }
@@ -734,7 +743,7 @@ namespace BalloonParty.Solver
                 // `else if (!wasOneHitBalloon)` invalidation is what this overwrites: the view's reset runs
                 // after the hit resolver in the same frame, so the reset is the net live behaviour.)
                 state.TotalTaps = 0;
-                state.TotalSweeps = 0;
+                state.ConsecutiveSweeps = 0;
                 state.ConsecutiveWallBounces = 0;
                 state.SegmentPopCount = 0;
                 state.SegmentSweepValid = true;

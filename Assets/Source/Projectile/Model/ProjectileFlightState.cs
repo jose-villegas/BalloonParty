@@ -82,9 +82,11 @@ namespace BalloonParty.Projectile.Model
         // the constant base speed).
         public float CurrentSpeed { get; set; }
 
-        // Total sweeps detected (clear-corridor passes). Compared against SweepTapThreshold to gate
-        // whether speed taps actually apply.
-        public int TotalSweeps { get; set; }
+        // Length of the CURRENT run of clean clearing passes — segments spent breezing through 1-HP
+        // balloons with the corridor clear behind. SweepTapThreshold is the run length that earns taps, so
+        // any wall reached without one resets this (mirroring how a balloon contact breaks cruise's own run
+        // in ConsecutiveWallBounces).
+        public int ConsecutiveSweeps { get; set; }
 
         // Balloon pops since the last wall bounce — the Sweep gate on the current straight segment.
         public int SegmentPopCount { get; set; }

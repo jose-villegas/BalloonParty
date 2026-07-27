@@ -132,12 +132,13 @@ namespace BalloonParty.Solver
         // only MaxSpeedMultiplier bounds where the speed ends up.
         public int TotalTaps;
 
-        // Per-segment Sweep bookkeeping, mirroring the live fields of the same names: pops landed since
-        // the last wall, whether every contact on the segment was a one-shot kill, how many clean sweeps
-        // the shot has banked (the warm-up counter SweepTapThreshold gates), and where the segment began.
+        // Per-segment Sweep bookkeeping, mirroring the live fields of the same names: pops landed since the
+        // last wall, whether every contact on the segment was a one-shot kill, the length of the current run
+        // of clean clearing passes (SweepTapThreshold is the run length that earns taps), and where the
+        // segment began.
         public int SegmentPopCount;
         public bool SegmentSweepValid;
-        public int TotalSweeps;
+        public int ConsecutiveSweeps;
         public Vector2 LastBouncePosition;
 
         // Snipe pickups taken while the shot was already piercing (mirrors
@@ -189,7 +190,7 @@ namespace BalloonParty.Solver
             TotalTaps = 0;
             SegmentPopCount = 0;
             SegmentSweepValid = true;
-            TotalSweeps = 0;
+            ConsecutiveSweeps = 0;
             LastBouncePosition = position;
             BankedPierceCharges = 0;
             BankedRainbowPierceCharges = 0;

@@ -30,8 +30,8 @@ namespace BalloonParty.Configuration
         [Tooltip("Top-speed gain per earned TAP, as a fraction of base speed: speed = base x (1 + this x " +
                  "taps), cumulatively. Taps are minted by qualifying WALL HITS — an empty-corridor cruise " +
                  "bounce, or a clean Sweep past its threshold — never by shields (shields only happen to " +
-                 "be spent at the same wall). Taps stop once piercing arms, so the reachable ceiling is " +
-                 "1 + this x Cruise Piercing Tap Threshold.")]
+                 "be spent at the same wall). Taps keep accruing for the whole flight, piercing included — " +
+                 "Max Speed Multiplier is what bounds the result.")]
         [FormerlySerializedAs("_cruiseSpeedPerShield")]
         [SerializeField] [Min(0f)] private float _speedGainPerTap = 0.25f;
 
@@ -57,9 +57,11 @@ namespace BalloonParty.Configuration
                  "if the backward corridor is now clear.")]
         [SerializeField] private bool _sweepEnabled = true;
 
-        [Tooltip("How many successful sweeps (clear-corridor detections) must occur before taps actually " +
-                 "start adding speed. Functions like CruiseWallBounceThreshold but for sweeps. 0 = " +
-                 "immediate (first sweep awards speed).")]
+        [Tooltip("How many CONSECUTIVE segments the shot must spend breezing through 1-HP balloons (each " +
+                 "leaving the corridor behind it clear) before sweeps start paying taps — a run length, the " +
+                 "Sweep counterpart to Cruise Wall Bounce Threshold. Any wall reached without a clean pass " +
+                 "breaks the run and restarts the count, exactly as a balloon contact breaks a cruise. " +
+                 "0/1 = every clean pass pays.")]
         [SerializeField] [Min(0)] private int _sweepTapThreshold;
 
         [Header("Piercing")]
@@ -67,9 +69,10 @@ namespace BalloonParty.Configuration
                  "then pops everything it touches, unbreakables included. 0 disables.")]
         [SerializeField] [Min(0)] private int _cruisePiercingTapThreshold = 3;
 
-        [Tooltip("Seconds the shot takes to accelerate into its (now frozen) top speed when piercing arms. " +
-                 "Taps stop paying out once armed, so without this ramp the shot holds full speed from the " +
-                 "arming bounce on and reads as snapping to it. 0 = instant.")]
+        [Tooltip("Seconds an ARMED shot takes to accelerate into each new target speed. Armed taps use this " +
+                 "ramp instead of the per-tap beat: it starts from the speed the shot already has, so the " +
+                 "lance accelerates smoothly instead of dipping to a standstill every bounce. The arming tap " +
+                 "is the first of these. 0 = instant.")]
         [SerializeField] [Min(0f)] private float _pierceArmRampDuration = 0.75f;
 
         [Tooltip("Shape of that acceleration, sampled over the ramp duration: 0 = the speed the shot armed " +

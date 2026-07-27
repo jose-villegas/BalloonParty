@@ -599,7 +599,7 @@ namespace BalloonParty.Projectile.View
             _model.Flight.SegmentSweepValid = true;
             _model.Flight.LastBouncePosition = contact;
             _model.Flight.ConsecutiveWallBounces = 0;
-            _model.Flight.TotalSweeps = 0;
+            _model.Flight.ConsecutiveSweeps = 0;
             _model.Flight.TotalCruiseTaps = 0;
 
             if (_model.IsCruising.Value)
@@ -643,34 +643,30 @@ namespace BalloonParty.Projectile.View
             _model.IsCruising.Value = true;
         }
 
+        // A Sweep is a RUN: SweepTapThreshold consecutive segments spent breezing through 1-HP balloons.
+        // So any wall this shot reaches without having cleanly cleared the segment behind it — a segment
+        // with no pops at all (empty, which is cruise's business), one holding a tougher contact, or one
+        // whose corridor is still occupied — breaks the run and starts the count over. Symmetric with
+        // cruise, whose own run (ConsecutiveWallBounces) any balloon contact breaks.
         private void TryAwardSweepTap(Vector3 wallHitPosition, Vector3 travelDirection)
         {
-            if (!_flightConfig.SweepEnabled || _model.Flight.SegmentPopCount <= 0
-                || !_model.Flight.SegmentSweepValid)
+            if (!ClearedTheSegment(wallHitPosition, travelDirection))
             {
+                _model.Flight.ConsecutiveSweeps = 0;
+#if UNITY_EDITOR
+                ResetSweepGizmo();
+#endif
                 return;
             }
 
-            var segmentLength = Vector3.Distance(_model.Flight.LastBouncePosition, wallHitPosition);
-            if (segmentLength <= 0f || travelDirection.sqrMagnitude < 1e-6f)
-            {
-                return;
-            }
-
-            var backward = -((Vector2)travelDirection).normalized;
-            var hit = Physics2D.CircleCast(wallHitPosition, _contactRadius, backward, segmentLength, 1 << BalloonsLayer);
-            if (hit.collider != null)
-            {
-                return;
-            }
-
-            _model.Flight.TotalSweeps++;
+            _model.Flight.ConsecutiveSweeps++;
 
 #if UNITY_EDITOR
             StartSweepGizmoTracking();
 #endif
 
-            if (_flightConfig.SweepTapThreshold > 0 && _model.Flight.TotalSweeps < _flightConfig.SweepTapThreshold)
+            if (_flightConfig.SweepTapThreshold > 0
+                && _model.Flight.ConsecutiveSweeps < _flightConfig.SweepTapThreshold)
             {
                 return;
             }
@@ -686,6 +682,28 @@ namespace BalloonParty.Projectile.View
             // A cleared corridor is the other rule that earns a tap. Through the same funnel as the
             // resolver's cruise bounce, so this wall hit can only ever mint one of the two.
             _model.TryGrantTap(_flightConfig.CruisePiercingTapThreshold);
+        }
+
+        // Did the segment just finished qualify as a clean clearing pass? It has to have popped something,
+        // every contact on it has to have been a one-shot kill (SegmentSweepValid), and the corridor it flew
+        // has to be clear NOW — cast backward from the wall over the span it covered.
+        private bool ClearedTheSegment(Vector3 wallHitPosition, Vector3 travelDirection)
+        {
+            if (!_flightConfig.SweepEnabled || _model.Flight.SegmentPopCount <= 0
+                || !_model.Flight.SegmentSweepValid)
+            {
+                return false;
+            }
+
+            var segmentLength = Vector3.Distance(_model.Flight.LastBouncePosition, wallHitPosition);
+            if (segmentLength <= 0f || travelDirection.sqrMagnitude < 1e-6f)
+            {
+                return false;
+            }
+
+            var backward = -((Vector2)travelDirection).normalized;
+            return Physics2D.CircleCast(
+                wallHitPosition, _contactRadius, backward, segmentLength, 1 << BalloonsLayer).collider == null;
         }
 
         private bool IsPathClearAhead(Vector3 position, Vector3 direction, int bounces)
