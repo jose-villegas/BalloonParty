@@ -110,10 +110,10 @@ $(function(){initNavTree('disturbance_field.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">Disturbance Field Service</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md783"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md804"></a>
 Disturbance Field Service</h1>
 <p>Shared screen-space disturbance field that any game system can stamp into. Puff cloud shaders and future effects sample from it.</p>
-<h2><a class="anchor" id="autotoc_md784"></a>
+<h2><a class="anchor" id="autotoc_md805"></a>
 Contents</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -127,13 +127,13 @@ Contents</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>LerpStampScheduler</code>   </td><td class="markdownTableBodyNone">Plain C# — ramps <code>duration &gt; 0</code> stamps into a sequence of instant sub-stamps (see "Lerp stamp lifecycle" below). Capped at <code>MaxLerpStamps</code>; the oldest ramp is evicted when full   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md785"></a>
+<h2><a class="anchor" id="autotoc_md806"></a>
 Architecture</h2>
 <div class="dotgraph">
 <iframe scrolling="no" frameborder="0" src="dot_inline_dotgraph_5.svg" width="2714" height="938"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-<h2><a class="anchor" id="autotoc_md786"></a>
+<h2><a class="anchor" id="autotoc_md807"></a>
 How it works</h2>
-<h3><a class="anchor" id="autotoc_md787"></a>
+<h3><a class="anchor" id="autotoc_md808"></a>
 RT layout</h3>
 <p>Two <code>RenderTexture</code> instances (<code>_fieldA</code>, <code>_fieldB</code>) ping-pong as read/write targets. Format is <code>ARGBHalf</code> where supported (falls back to <code>ARGB32</code> on hardware without half-float RT support), with equilibrium clear color <code>(0.5, 0.5, 0.5, 0)</code>:</p>
 <ul>
@@ -143,7 +143,7 @@ RT layout</h3>
 <li><b>A</b> = palette-colour tag — encodes which registered colour last stamped this texel (<code>PaletteChannelEncoding.Encode(paletteIndex)</code>, uploaded as <code>_StampColorIndices</code>), decayed each diffusion tick by <code>_ColorDecay</code> (<code>DisturbanceFieldSettings.ColorTagDecay</code>). A <code>strength == 0</code> stamp ("colour-only") writes just this channel — a colour tag with no force</li>
 </ul>
 <p>Resolution is derived from <code>GameDisplayConfiguration.GetOrthogonalSize()</code> × <code>DisturbanceFieldSettings.TexelsPerUnit</code>.</p>
-<h3><a class="anchor" id="autotoc_md788"></a>
+<h3><a class="anchor" id="autotoc_md809"></a>
 Stamp API</h3>
 <ul>
 <li><b><code>Stamp(source, worldPos, direction, paletteIndex = -1)</code></b> — the overload most callers use: resolves the <code>StampProfile</code> configured for the <code>StampSource</code> (radius, strength, duration) and forwards to the explicit overload. <code>GetProfile(source)</code> is also exposed for callers that need to scale the profile themselves (e.g. <code>DisturbanceTweenExtensions.StampDisturbanceAlongPath</code>, which gates on distance travelled — one stamp per <code>Spacing</code> (fallback <code>Radius</code>) of the target's scaled movement — rather than once per rendered frame, so along-path wake density is frame-rate independent).</li>
@@ -151,7 +151,7 @@ Stamp API</h3>
 <li><b><code>StampCone(source, origin, direction, paletteIndex = -1)</code></b> — marches <code>Interval</code>-many stamps from <code>origin</code> along <code>direction</code> (spaced by <code>Spacing</code>, fallback <code>Radius</code>), the radius growing (<code>RadiusGrowth</code>) and the strength fading (<code>StrengthFalloff</code>) toward the tip — used for the projectile's muzzle-exit force. Only the first (muzzle) stamp reports impact.</li>
 <li><b><code>Stamp(worldPos, radius, strength, direction, duration = 0, paletteIndex = -1, reportImpact = true)</code></b> — the explicit overload every overload above funnels through. World coordinates are converted to field UV space internally. When <code>duration</code> is zero (default), the stamp is applied instantly — stamps accumulate in a pending list and are flushed in batches each frame. When <code>duration</code> is greater than zero, queues a lerp stamp that ramps from 0 to full strength over that many seconds, spreading the effect smoothly across multiple frames. Useful for pop bursts, bomb detonations, and paint splashes. <code>paletteIndex</code> ( \(\ge 0\)) tags the stamped region with a palette colour in the A channel; a <code>strength == 0</code> stamp writes only that colour tag, with no force. Only stamps that repel (<code>strength &gt; 0</code>) with <code>reportImpact: true</code> (the default) report to <code>ImpactEventBus</code> — colour-only stamps, attracting stamps, and constant emitters that opt out never do.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md789"></a>
+<h3><a class="anchor" id="autotoc_md810"></a>
 Diffusion tick</h3>
 <p>Runs at a configurable interval (<code>DiffusionTickInterval</code>). Each tick:</p><ol type="1">
 <li>Semi-Lagrangian wind advection shifts the sample origin</li>
@@ -160,10 +160,10 @@ Diffusion tick</h3>
 <li>Density trends back toward 0.5, the signed-density rest (reform)</li>
 </ol>
 <p>Wind direction is set dynamically from stamp directions (opposite to the disturbance velocity), smoothed and decaying — so the reform flows from behind the moving object.</p>
-<h3><a class="anchor" id="autotoc_md790"></a>
+<h3><a class="anchor" id="autotoc_md811"></a>
 Lerp stamp lifecycle</h3>
 <p>When <code>Stamp()</code> is called with <code>duration &gt; 0</code>, the stamp is queued on <code>LerpStampScheduler</code> (<code>_lerpScheduler</code>) instead of flushed immediately. Each diffusion tick the scheduler advances all active lerp stamps by the elapsed time, computes the normalized progress \(t \in [0,1]\), and emits an instant <code>Stamp()</code> with \(\text{strength} \times \text{delta}\) (only the new progress delta since last tick). The stamp radius also expands from <code>0.3×</code> to <code>1.0×</code> of the configured radius as <code>t</code> increases — this creates an expanding shockwave shape rather than a flat-radius pop. When \(t \ge 1\), the stamp is removed. The pool is capped at <code>MaxLerpStamps</code> to bound memory; oldest stamps are evicted when the cap is exceeded.</p>
-<h3><a class="anchor" id="autotoc_md791"></a>
+<h3><a class="anchor" id="autotoc_md812"></a>
 Combined pass</h3>
 <p>When a diffusion tick and pending stamps coincide in the same frame (the common case during gameplay), both operations are folded into <b>a single blit</b> via the <code>_STAMPS_ON</code> shader keyword on the diffusion shader. The diffusion fragment shader runs its normal 3×3 blur + reform + wind pipeline, then applies the stamp loop on top of the result — all in one draw call.</p>
 <p>Three routing paths handle every frame:</p>
@@ -180,13 +180,13 @@ Combined pass</h3>
 <td class="markdownTableBodyNone">Neither   </td><td class="markdownTableBodyNone">(skip)   </td><td class="markdownTableBodyNone">0   </td></tr>
 </table>
 <p>When stamps exceed 32 in a frame (extremely rare — e.g. simultaneous bomb + laser + paint), the overflow is flushed as standalone stamp blits before the diffusion blit.</p>
-<h3><a class="anchor" id="autotoc_md792"></a>
+<h3><a class="anchor" id="autotoc_md813"></a>
 Batched flush (stamp-only path)</h3>
 <p>On frames where stamps arrive but diffusion is not due, all instant stamps are flushed via the standalone <code>DisturbanceStampBatched</code> shader in batches of up to 32. Pre-allocated <code>Vector4[]</code> and <code>float[]</code> arrays (<code>_batchCenters</code>, <code>_batchRadii</code>, <code>_batchStrengths</code>, <code>_batchDirections</code>) avoid per-frame allocation. The shader receives the batch count via <code>_StampCount</code> and loops internally.</p>
-<h3><a class="anchor" id="autotoc_md793"></a>
+<h3><a class="anchor" id="autotoc_md814"></a>
 World → UV conversion</h3>
 <p><code>DisturbanceFieldCoordinates.WorldToUV</code> maps world-space positions to UV coordinates using the field bounds rect computed at <code>Start()</code> from <code>GameDisplayConfiguration.GetOrthogonalSize()</code>. The field covers the full screen-space orthographic viewport. <code>WorldRadiusToUV</code> normalises radius against the average of bounds width and height so a world-unit radius is consistent regardless of aspect ratio.</p>
-<h2><a class="anchor" id="autotoc_md794"></a>
+<h2><a class="anchor" id="autotoc_md815"></a>
 Consumers</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -213,10 +213,10 @@ Consumers</h2>
 <td class="markdownTableBodyNone"><code>DisturbanceStampCheat</code>   </td><td class="markdownTableBodyNone">Mouse drag (debug only)   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Direct explicit-parameter <code>Stamp()</code> call for testing   </td></tr>
 </table>
 <p>Callers use the <code>Stamp(StampSource, …)</code> overload, which resolves the source's <code>StampProfile</code> (radius, strength, duration) inside the service; the tween extension scales the profile by the moving transform's size. Whether a given stamp becomes a lerp stamp or an instant stamp is purely a config decision — set <code>Duration &gt; 0</code> in the SO to get an expanding shockwave, leave it at 0 for a sharp single-frame stamp.</p>
-<h2><a class="anchor" id="autotoc_md795"></a>
+<h2><a class="anchor" id="autotoc_md816"></a>
 Configuration</h2>
 <p>All tuning lives on <code>DisturbanceFieldSettings</code> SO (in <code>Configuration/</code>). See <code><a class="el" href="Configuration_2README_8md.html">Configuration/README.md</a></code> for field details.</p>
-<h2><a class="anchor" id="autotoc_md796"></a>
+<h2><a class="anchor" id="autotoc_md817"></a>
 Interactions</h2>
 <ul>
 <li><b><code>PuffCloudView</code></b> — reads <code>_DisturbanceTex</code>, <code>_FieldBoundsMin</code>, <code>_FieldBoundsSize</code> from global shader properties (set by the service each tick). Only pushes <code>_TimeOffset</code> per-instance via <code>MaterialPropertyBlock</code>. No direct reference to the service</li>

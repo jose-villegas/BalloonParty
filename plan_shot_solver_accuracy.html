@@ -110,12 +110,12 @@ $(function(){initNavTree('plan_shot_solver_accuracy.html',''); initResizable(tru
   <div class="headertitle"><div class="title">Shot Solver Accuracy</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md610"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md631"></a>
 Shot Solver Accuracy</h1>
 <p>Close the fidelity gaps between the shot solver (<code>Assets/Source/Solver/</code>, rule-mirroring doc in <code><a class="el" href="Editor_2ShotSolver_2README_8md.html">Assets/Source/Editor/ShotSolver/README.md</a></code>) and the live game — interactive statics, the balance weight system, item carriers, rainbow/wildcard rules, and flight residuals — then open the sim to headless level diagnostics. Produced 2026-07-25 from a four-way pass: code diagnostic → architect refinement → reviewer feasibility (with code diagnostics) → test plan. Assumes the uncommitted speed-based-balance-duration WIP lands first.</p>
 <p><b>Governing principle (non-negotiable, inherited from the dynamic-board work):</b> every new sim behavior either reuses a live pure core, or is a documented mirror with a fidelity test — never a third, independently re-implemented copy.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md612"></a>
+<h2><a class="anchor" id="autotoc_md633"></a>
 1. Diagnostic</h2>
 <p><b>Already faithful:</b> event-to-event billiard (exact wall mirror; analytic deflect normals via the real <code>ProjectileMotionResolver.TryComputeContactNormal</code>), deflect/pop durability, streak scoring + color adoption + shield refunds, cruise ramp/lookahead/tap-lag/piercing arm, dynamic board running the REAL <code>BalancePlanner</code> over a headless <code>SlotGrid</code> with flight-rebalance pulses, per-type + spawn-rolled move speeds, full nudge-impulse mirroring, pops opening grid gaps.</p>
 <p><b>Gap list (impact-ordered):</b></p>
@@ -142,12 +142,12 @@ Shot Solver Accuracy</h1>
 <td class="markdownTableBodyNone">G9   </td><td class="markdownTableBodyNone">Mid-flight RNG   </td><td class="markdownTableBodyNone">Direct pops roll pop-spawn (adds a balloon mid-flight); spawned balloons may later receive items   </td><td class="markdownTableBodyNone">Unmodelable — policy, not simulation   </td></tr>
 </table>
 <p><b>Nondeterminism boundary (declared, never simulated exactly):</b> pop-spawn RNG; items arriving with mid-flight loose spawns (policy decision 2026-07-25: ignored — items already on the board at solve time are deterministic facts and are modeled fully); time-staged item application (bomb rainbow ring at effectDuration×0.5, paint blob flight, lightning per-jump); laser idle-spin capture (extrapolated estimate); tough/cluster score color-attribution RNG (display-only); pop-pressure shoves (<code>ShoveVector</code> — never exercised by flight pulses, unsimulated; README note).</p>
-<h2><a class="anchor" id="autotoc_md613"></a>
+<h2><a class="anchor" id="autotoc_md634"></a>
 2. Goals &amp; non-goals</h2>
 <p><b>Goal:</b> predicted (score, pops, death/absorb, timeline) matches live outcomes on boards with statics, item carriers, and rainbows. Acceptance: 20 mixed-board Fire Best shots, ≤1 shot with an <em>unexplained</em> divergence (not attributable to a declared RNG boundary).</p>
 <p><b>Follow-up goal (Phase G):</b> the same sim, run outside play mode, brute-tests level configs for pacing metrics (max/avg color streak, shots-to-clear distribution, score-per-shot, absorb/death rates).</p>
 <p><b>Non-goals:</b> predicting pop-spawn RNG; exact per-blob paint timing; visual-only motion (idle sway, Catmull-Rom corner rounding); v2 exact tangency enumeration; a general buff framework (the two concrete end conditions only).</p>
-<h2><a class="anchor" id="autotoc_md614"></a>
+<h2><a class="anchor" id="autotoc_md635"></a>
 3. Architecture decisions (settled)</h2>
 <ul>
 <li><b>Snapshot growth by composition:</b> <code>ShotBalloonSnapshot</code> = geometry/scoring core + <code>ColorProfile { ColorId, IsRainbow, AllowedColors }</code> + optional <code>BalanceProfile { SlotIndex, BalancePriority, MaxBalanceSteps, MoveSpeed, DirectBalanceMotion, Omnidirectional, BiasKind, BiasValue, TypeTag, NudgeOverrides }</code> + scalars <code>ShotContactKind ContactKind</code>, <code>ItemType Item</code>. Named factories (<code>ForColorTarget</code>, <code>ForToughTarget</code>, <code>ForStaticContact</code>) replace telescoping ctors. Rejected: parallel arrays (index-fragile), tagged union (god-struct/boxing).</li>
@@ -159,15 +159,15 @@ Shot Solver Accuracy</h1>
 <li><b><code>ShotFlightState</code>:</b> collapse <code>Simulate</code>'s 15 params / ~18 threaded ref locals into one mutable struct, passed by <code>ref</code> (by-value would silently drop mutations). Inputs/outputs (board, workingSet, walls, dynamics, cruiseConfig, pathOut, timestampsOut) stay OUT of it.</li>
 <li><b>Shared radius helper:</b> extract <code>ContactRadius.FromCollider(Collider2D, lossyScaleX)</code> from <code>ResolveProjectileContactRadius</code> — used by live gather, Phase A statics, and Phase G's synthetic gather.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md615"></a>
+<h2><a class="anchor" id="autotoc_md636"></a>
 4. Phases</h2>
-<h3><a class="anchor" id="autotoc_md616"></a>
+<h3><a class="anchor" id="autotoc_md637"></a>
 Phase 0 — Prerequisite refactors (no behavior change; the existing 22-test suite stays green)</h3>
 <ul>
 <li><b>0a <code>ShotFlightState</code></b> (see §3). The cruise/pierce multi-event tests are the tripwire for a dropped-<code>ref</code> bug.</li>
 <li><b>0b Snapshot composition</b> (see §3) + <code>ShotBalloonState.SlotIndex</code> + the null-<code>Actor</code> gating and slot-based dynamics variants + <code>TargetActors</code> 1:1-with-nulls extension. Add the <code>ShotBoardBuilder</code> test helper FIRST (forwards to the production factories — never re-implements construction) and migrate the existing board literals onto it; the suite staying green is the field-mapping test.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md617"></a>
+<h3><a class="anchor" id="autotoc_md638"></a>
 Phase A — Interactive static geometry (G1) — depends on 0b</h3>
 <p><b>Reachability note (architect design pass, 2026-07-25):</b> the three archetypes are code-complete but NOT live-reachable today — <code>StaticActorSpawner</code> registers only Puff/Bush, no Deflector/Absorber/Gatekeeper prefabs exist, <code>GridActorView</code> has no collider, and <code>ProjectileView.TryGetHitBalloon</code> only recognizes <code>BalloonView</code> on the Balloons layer. Phase A is therefore EditMode-verifiable only; its Fire Best acceptance batch is N/A until the live wiring (PLAN-GridActorExpansion §8.3-ish) ships, and G1's practical impact is deferred until then. Also fix in Phase A: the 0b scaffolding calls <code>OnBalloonHitAt</code> on every static contact, but live statics never nudge neighbours (<code>NudgeService</code> requires <code>IHasNudge</code>) — drop the call and pin it with a test.</p><ul>
 <li>Gather: static archetypes implementing <code>IHitable</code>/<code>IHasDurability</code> become collision targets while still occupying their slot for the planner (<code>CollectBoard</code> currently <code>continue</code>s on <code>Kind == Static</code> before <code>TryBuildTargetSnapshot</code>; routing changes). New static snapshot factory WITHOUT the <code>IHasScore</code> requirement (Gatekeeper isn't <code>IHasScore</code>).</li>
@@ -176,7 +176,7 @@ Phase A — Interactive static geometry (G1) — depends on 0b</h3>
 <li>Extract <code>ClassifyContactKind(actor)</code> as a pure function so archetype→kind is EditMode-testable without grid/views.</li>
 <li><b>Landmine to close (from the 0b review):</b> <code>ForStaticContact</code> currently carries no slot, so a Balance-less <code>ShotBalloonState.SlotIndex</code> defaults to (0,0) and the snapshot is NOT placed on the dynamics grid. Phase A must add a real <code>SlotIndex</code> param to <code>ForStaticContact</code>, place the static occupant on the dynamics grid at it, and only then may static contacts share a board with real movers — otherwise <code>RemoveFromGridAt(default)</code>/<code>OnBalloonHitAt(default)</code> would corrupt whatever legitimately occupies slot (0,0).</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md618"></a>
+<h3><a class="anchor" id="autotoc_md639"></a>
 Phase B — Weight-system fidelity (G2) — depends on 0b; parallel to A</h3>
 <ul>
 <li>The confirmed silent-drift trap: the three count helpers test <code>grid.At(pos) is IBalloonModel</code> — sim stubs aren't, so "shared" code would return 0/<code>MaxValue</code> while looking shared. Fix via <code>IBalanceBiasSource</code> (§3). Only three callers exist (the three <code>WeightBias</code> overrides).</li>
@@ -184,7 +184,7 @@ Phase B — Weight-system fidelity (G2) — depends on 0b; parallel to A</h3>
 <li>Mirror-fidelity tests: live model vs stub bit-identical per formula on a shared headless <code>SlotGrid</code>; plus a <code>MoveWeightEvaluator</code> tie-break test (bias flips which equal-support neighbour wins) and a <code>ShotBoardDynamics</code>-level test (bias changes which balloon enters the shot's path).</li>
 <li>Pre-phase lock: pin today's non-<code>IBalloonModel</code>-neighbour = 0 behavior as a failing-then- inverted test (bug protocol).</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md619"></a>
+<h3><a class="anchor" id="autotoc_md640"></a>
 Phase D-core — Rainbow scoring + in-sim buff state (G4-scoring, G8) — depends on 0a</h3>
 <ul>
 <li><code>ShotFlightState</code> gains pierce/speed-buff/RainbowShield fields, initialized from config defaults (gather does NOT read the live projectile — impossible and unnecessary; reviewer).</li>
@@ -192,7 +192,7 @@ Phase D-core — Rainbow scoring + in-sim buff state (G4-scoring, G8) — depend
 <li>Buff end conditions, two concrete cases only: RainbowShield ends on a wall bounce that costs a shield; Snipe-granted variants end on pierce end.</li>
 <li>Rainbow scoring is CORE (always on — a rainbow balloon on the board scores correctly with <code>items: null</code>); effect-driven conversions and buff GRANTS live in the item layer.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md620"></a>
+<h3><a class="anchor" id="autotoc_md641"></a>
 ✅ Phase C — Item carriers (G3) — depends on B + D-core</h3>
 <p><b>Status: Complete</b> (C0–C6, <code>235fc04a..289d90d3</code>).</p>
 <ul>
@@ -203,7 +203,7 @@ Phase D-core — Rainbow scoring + in-sim buff state (G4-scoring, G8) — depend
 <li><b>Repointing the LIVE handlers onto the analytic cores is a live behavior change</b> — gated by PlayMode equivalence tests (extend <code>BombActivationPlayModeTests</code>; add <code>LaserActivationPlayModeTests</code>) + an in-editor playtest; <code>dotnet build</code> cannot catch it. If equivalence fails on unsettled boards, live keeps Physics2D and only the sim uses the core, with the delta documented.</li>
 <li>Sub-order: <b>C1 Shield</b> (host pop → shields++; rainbow host grants RainbowShield via D-core) → <b>C2 Bomb</b> → <b>C3 Laser</b> → <b>C4 Lightning</b> (distance-ordered same-color chain; rainbow host converts the group — colorless-projectile fallback mirrors <code>FindNearestColorId</code>) → <b>C5 Paint</b> (reuse <code>PaintTriangle.Build</code>/<code>PackBlobs</code> + shared <code>PaintSpread</code> bucketing; recolor the working set instantly and BEFORE the next contact resolves; <code>IResistsPaint</code> respected; rainbow holder paints rainbow) → <b>C6 Snipe</b> (host arms pierce + a non-stacking speed buff on ANY pop — no DirectHit gate, matching live; a pop taken while ALREADY piercing banks the whole grant for the discharge instead of applying it — mirrored 2026-07-27; folds into E2).</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md621"></a>
+<h3><a class="anchor" id="autotoc_md642"></a>
 Phase E — Flight residuals (G5, G6, G7 + E4) — depends on 0a; E2 folds C6</h3>
 <ul>
 <li><b>E4 (found during the D-core review, pre-existing gap):</b> the sim's non-piercing <code>HitsRemaining &gt; 1</code> branch always DEFLECTS, but live only <code>ToughBalloonModel</code>/ <code>UnbreakableBalloonModel</code> return <code>HitOutcome.Deflect</code> — a surviving multi-HP <code>BubbleClusterModel</code> returns <code>PassThrough</code> (no physical redirect; <code>BalloonController</code> only redirects on Deflect). The snapshot needs a survive-outcome discriminator (Deflect vs PassThrough) so soap contacts fly straight through, as live.</li>
@@ -211,14 +211,14 @@ Phase E — Flight residuals (G5, G6, G7 + E4) — depends on 0a; E2 folds C6</h
 <li><b>E2 Pierce discharge:</b> plowed toughs stay in the grid marked <code>PendingPierce</code> until the next wall bounce; discharge pops all pending at once; pierce + buffs end there. <b>Faithful quirk (verified live, keep it):</b> shields&ndash; and the death check run BEFORE the discharge branch — a death wall never discharges; pending toughs stay unpopped. Cite <code><a class="el" href="ProjectileMotionResolver_8cs.html">ProjectileMotionResolver.cs</a></code> in the test so nobody "fixes" it.</li>
 <li><b>E3 Last-shield glide:</b> shields==0 + clear lookahead ⇒ suppress <code>TryRunPulseIfDue</code> and run the final segment on the fixed-duration eased timeline (same technique as <code>TapLagSeconds</code>).</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md622"></a>
+<h3><a class="anchor" id="autotoc_md643"></a>
 Phase F — Nondeterminism policy + instrumentation (G9) — last</h3>
 <ul>
 <li>README: accepted-divergence list gains pop-spawn, loose-spawn items, staged item timing, laser spin estimate, shockwave (if undecided), pop-pressure shoves.</li>
 <li>Fire Best divergence readout: per-event breakdown (first divergent event kind + time) — implemented as a pure diff-two-timelines function (unit-testable) surfaced by the editor window (the cheat lacks path/timestamp capture; instrumentation is the window's job).</li>
 <li>Acceptance run per §2 and the manual protocol in §5.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md623"></a>
+<h3><a class="anchor" id="autotoc_md644"></a>
 Phase G — Headless level diagnostics (follow-up tier; scoped 2026-07-25)</h3>
 <p>Purpose: brute-test level configurations outside play mode → pacing metrics (max/avg streak, shots-to-clear avg/distribution, score-per-shot, absorb/death rates) for level-pacing tuning.</p><ul>
 <li>Placement: <code>Solver/Headless/</code> (runtime asmdef — runs under <code>-executeMethod</code> batch mode / CI; editor GUI is only an entry point in <code>Editor/ShotSolver/LevelDiagnosticsWindow.cs</code>). Types: <code>SyntheticBoardGather</code>, <code>ShotTurnRunner</code>, <code>PacingMetrics</code>.</li>
@@ -229,7 +229,7 @@ Phase G — Headless level diagnostics (follow-up tier; scoped 2026-07-25)</h3>
 <li><b>Biggest G risk — turn SEQUENCING drift, not per-shot fidelity:</b> a hardcoded "flight→apply→spawn→assign" loop silently diverges from the live MessagePipe choreography (item cadence turns, level-up fills + streak resets, doomed-shot gating), corrupting exactly the metrics G produces. Mitigation: extract/pin the turn-sequence contract and assert the runner against a play-mode-captured turn trace before trusting any aggregate.</li>
 <li>Phases 0–F keep this door open via the layering constraint; the only early door-openers are <code>ShotBalloonState.SlotIndex</code> (0b) and <code>ContactRadius.FromCollider</code> (A) — both already required.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md624"></a>
+<h2><a class="anchor" id="autotoc_md645"></a>
 5. Test plan (per test-everything; full detail in the review transcript)</h2>
 <ul>
 <li><b>Helper first:</b> <code>ShotBoardBuilder</code> in <code>Assets/Tests/EditMode/ShotSolver/</code> forwarding to the production factories; migrate existing literals in 0b (suite-green = the mapping test).</li>
@@ -240,20 +240,20 @@ Phase G — Headless level diagnostics (follow-up tier; scoped 2026-07-25)</h3>
 <li><b>Rubric exclusions:</b> no tests for inert profile fields before Phase B reads them, the deflector path (identical to the existing max-durability pattern), the buff abstraction (two concrete cases only), or RNG-boundary outcomes.</li>
 <li><b>Manual protocol (acceptance):</b> 20-shot Fire Best run over a gap-tagged board matrix (each shot tagged with which gaps it exercises); per-shot log of predicted vs live timeline, first divergence (kind + Δt), divergence class (declared-RNG vs unexplained), outcome match. Pass: ≤1 unexplained divergence; any unexplained divergence → failing EditMode repro first, then fix. Per-phase: a 3–5-shot targeted batch as the early-warning checkpoint.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md625"></a>
+<h2><a class="anchor" id="autotoc_md646"></a>
 6. Verification workflow</h2>
 <p>Per phase: <code>dotnet build BalloonParty.Runtime.csproj</code> (+ Tests.EditMode) → EditMode suite → <code>python3 Tools/style_audit.py</code> on touched files (field order on the new structs!) → targeted Fire Best batch in-editor → scribe updates the ShotSolver README (accurate today; stale from Phase A onward — the rule-mirroring + accepted-approximations sections gain entries per phase, including E2's death-wall quirk verbatim).</p>
-<h2><a class="anchor" id="autotoc_md626"></a>
+<h2><a class="anchor" id="autotoc_md647"></a>
 7. Open decisions</h2>
 <ol type="1">
 <li>Bomb shockwave nudge: document-first (default) vs model an impulse pass — decide on Phase F divergence data.</li>
 <li>Live Bomb/Laser repoint onto analytic cores: gated by the PlayMode equivalence tests; fall back to sim-only cores + documented delta if unsettled-board behavior differs.</li>
 <li><strike>Phase B helper placement</strike> RESOLVED: <code><a class="el" href="BalanceBiasExtensions_8cs.html">Shared/Extensions/BalanceBiasExtensions.cs</a></code> (repo rule won; shipped in fdc74b8b).</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md627"></a>
+<h2><a class="anchor" id="autotoc_md648"></a>
 8. Remaining work — detailed status (2026-07-26)</h2>
 <p>Shipped: Phases 0/A/B/D-core ✅, Phase C ✅ (C0–C6, 235fc04a..289d90d3), plus two live fixes the work surfaced — the graze-deflect teleport (5d401097: capsule-nose mismatch sent ~47% of deflects down a never-re-anchoring fallback diverging up to 21.8° from the exact billiard; the sim was immune) and the laser <code>_damageFlags: -1</code> config error (9d99272a → Piercing only). The trio cadence (architect memo → implement → test audit + review → commit) applies to everything below.</p>
-<h3><a class="anchor" id="autotoc_md628"></a>
+<h3><a class="anchor" id="autotoc_md649"></a>
 E — flight residuals (next; ONE architect memo for all four, they interact)</h3>
 <ul>
 <li><b>E1a counted taps — DONE 2026-07-27.</b> <code>ShotFlightState.TotalTaps</code> replaces the <code>CruiseStartShields - Shields</code> derivation (both those fields are gone, along with the <code>PierceArmedTaps</code> freeze snapshot the derivation needed). The derivation only held while "a wall
@@ -269,24 +269,24 @@ E — flight residuals (next; ONE architect memo for all four, they interact)</h
 <li><b>E3 last-shield glide:</b> <code>IsLastShieldApproach</code> mirror — suppress <code>TryRunPulseIfDue</code> + switch the final segment to the fixed eased timeline (gather Duration/Curve; TapLagSeconds technique); negative case: blocked lookahead keeps pulsing.</li>
 <li><b>E4 soap pass-through:</b> survive-outcome discriminator on the snapshot (surviving multi-HP cluster = PassThrough, unbent; tough/unbreakable = Deflect); wash still applies; mirror-test against live <code>SurviveOutcome</code> values.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md629"></a>
+<h3><a class="anchor" id="autotoc_md650"></a>
 F — instrumentation + acceptance (after E)</h3>
 <p>Pure diff-two-timelines function (unit-tested) surfaced in the window; final README divergence sweep (add the shockwave decision outcome); the §5 20-shot acceptance protocol (statics rows N/A until live wiring); per-phase 3–5-shot batches for E first; optional ≥1-balloon robustness tag.</p>
-<h3><a class="anchor" id="autotoc_md630"></a>
+<h3><a class="anchor" id="autotoc_md651"></a>
 Live repoint track (any time; separable commits)</h3>
 <p>(1) test-everything WRITES the PlayMode set-equality tests (specced in §5, not yet written); (2) José runs them in-editor; (3) green ⇒ one revertable commit per handler (Bomb/Laser selection → core + <code>GridEffectBoard</code>; VFX/timing/dispatch untouched); red on unsettled boards ⇒ cores stay sim-only, delta documented; (4) then repoint <code>FindNearestColorId</code>'s single caller onto <code>LightningChain.FindNearestConcreteColor</code>.</p>
-<h3><a class="anchor" id="autotoc_md631"></a>
+<h3><a class="anchor" id="autotoc_md652"></a>
 José's gates (accumulated)</h3>
 <ol type="1">
 <li>EditMode suite run (~150 new tests since the last green run; the two graze-deflect tests flip red→green). 2. Play-mode graze check + device test (5d401097). 3. B3 decision: projectile CircleCollider2D swap — eliminates the capsule-nose mismatch class but changes contact feel; optional post-fix. 4. Laser scoring feel sanity (Piercing-only flags change streak behavior around laser clears). 5. Statics live wiring (GridActorExpansion: prefabs + colliders on <code>GridActorView._collider</code> + spawner registration + projectile→IHitable routing) — Phase A is sim-only until then.</li>
 </ol>
-<h3><a class="anchor" id="autotoc_md632"></a>
+<h3><a class="anchor" id="autotoc_md653"></a>
 Deferred code follow-ups (small, none blocking)</h3>
 <p>Factor <code>ProjectileMotionResolver</code>'s duplicated quadratic setup (reviewer MEDIUM); hoist the segment-vs-circle formula (<code>SegmentHitsAnyBalloon</code> + <code>LaserCross.SegmentHitsCircle</code>) to Shared; H2 cruise-remainder clamp (only if playtests show pop-skipping at high cruise speed); <b>H6 hex-seam double-deflect</b> (adjacent contact circles overlap 0.75 vs 0.875 ⇒ two synchronous deflects, ~145° heading corruption — needs its own investigation; predates all this work); cosmetics (always-true Try-pattern flatten in gather, <code>ResolveSnipe</code> declaration order, <code>ResolvePaint</code> Bind ordering, <code>GridActorView.ContactRadius</code> visibility pass, older lock test → <code>AssertResultsMatch</code>); optional careful <code>BalloonView.ContactRadius</code> unification (behavior change — feel check required). <code>ShotItemActivation.IsDirectHit</code> is stored-but-unread (kept as the seam for E2 discharge bookkeeping / a future pop-spawn model).</p>
-<h3><a class="anchor" id="autotoc_md633"></a>
+<h3><a class="anchor" id="autotoc_md654"></a>
 G — headless level diagnostics (follow-up tier; unchanged spec in §4 Phase G)</h3>
 <p>G-local prereqs first: <code>ItemAssignmentPlanner</code> + <code>SpawnPlanner</code> pure-core extractions with an injectable <code>IRandomSource</code>, and <code>RollMoveSpeed</code> through the seed. Biggest risk stays turn-SEQUENCING drift — pin the turn-sequence contract against a play-mode-captured trace before trusting any aggregate metric.</p>
-<h3><a class="anchor" id="autotoc_md634"></a>
+<h3><a class="anchor" id="autotoc_md655"></a>
 Design questions parked for José</h3>
 <p>Cruise ramp × snipe speed buff stacking multiplicatively (live behavior; sim mirrors it — intended?); statics wiring priority; whether pop-spawn deserves more than documentation in F. </p>
 </div></div><!-- contents -->

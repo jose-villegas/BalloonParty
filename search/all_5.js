@@ -12,8 +12,10 @@ var searchData=
   ['5_20how_20these_20compose_9',['12.5 How these compose',['../plan_future_ideas.html#autotoc_md424',1,'']]],
   ['5_20open_20questions_10',['9.5 Open Questions',['../plan_future_ideas.html#autotoc_md413',1,'']]],
   ['5_20persistence_11',['4.5 Persistence',['../plan_future_ideas.html#autotoc_md372',1,'']]],
-  ['5_20test_20plan_20per_20test_20everything_20full_20detail_20in_20the_20review_20transcript_12',['5. Test plan (per test-everything; full detail in the review transcript)',['../plan_shot_solver_accuracy.html#autotoc_md624',1,'']]],
-  ['5_20thermal_20baseline_13',['5. Thermal baseline',['../plan_performance_recovery.html#autotoc_md574',1,'']]],
-  ['5_20tt_20ipassthrough_20tt_20behaviour_20extensions_20em_20from_20plan_20gridactorexpansion_20em_14',['5.5 &lt;tt&gt;IPassThrough&lt;/tt&gt; Behaviour Extensions &lt;em&gt;(from PLAN-GridActorExpansion)&lt;/em&gt;',['../plan_future_ideas.html#autotoc_md379',1,'']]],
-  ['5_20visual_20feedback_15',['8.5 Visual Feedback',['../plan_future_ideas.html#autotoc_md394',1,'']]]
+  ['5_20test_20plan_20per_20test_20everything_20full_20detail_20in_20the_20review_20transcript_12',['5. Test plan (per test-everything; full detail in the review transcript)',['../plan_shot_solver_accuracy.html#autotoc_md645',1,'']]],
+  ['5_20the_20holds_20—_20predicate_20is_20tt_20phase_20playing_20tt_20never_20tt_20completing_20tt_13',['6.5 The holds — predicate is &lt;tt&gt;Phase != Playing&lt;/tt&gt;, NEVER &lt;tt&gt;== Completing&lt;/tt&gt;',['../plan_level_up_timing.html#autotoc_md575',1,'']]],
+  ['5_20the_20orchestrator_20is_20the_20existing_20phase_20machine_14',['5. The orchestrator IS the existing phase machine',['../plan_level_up_timing.html#autotoc_md569',1,'']]],
+  ['5_20thermal_20baseline_15',['5. Thermal baseline',['../plan_performance_recovery.html#autotoc_md595',1,'']]],
+  ['5_20tt_20ipassthrough_20tt_20behaviour_20extensions_20em_20from_20plan_20gridactorexpansion_20em_16',['5.5 &lt;tt&gt;IPassThrough&lt;/tt&gt; Behaviour Extensions &lt;em&gt;(from PLAN-GridActorExpansion)&lt;/em&gt;',['../plan_future_ideas.html#autotoc_md379',1,'']]],
+  ['5_20visual_20feedback_17',['8.5 Visual Feedback',['../plan_future_ideas.html#autotoc_md394',1,'']]]
 ];

@@ -129,10 +129,10 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>The grid that holds all actors in play. Actors are anything that can occupy a slot — balloons today, static obstacles and spawners in the future.</p>
-<h1><a class="anchor" id="autotoc_md857"></a>
+<h1><a class="anchor" id="autotoc_md878"></a>
 Actor abstraction</h1>
 <p>Every grid occupant is an <code>ISlotActor</code>. The grid never speaks directly in balloon types.</p>
-<h2><a class="anchor" id="autotoc_md858"></a>
+<h2><a class="anchor" id="autotoc_md879"></a>
 Core interfaces</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -150,7 +150,7 @@ Core interfaces</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>SlotActorKind</code>   </td><td class="markdownTableBodyNone">Enum — <code>Dynamic</code> (balancer can relocate, contributes weight) or <code>Static</code> (fixed, contributes weight, balancer skips)   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md859"></a>
+<h2><a class="anchor" id="autotoc_md880"></a>
 Capability interfaces</h2>
 <p>Optional traits actors can advertise to consumers:</p>
 <table class="markdownTable">
@@ -177,7 +177,7 @@ Capability interfaces</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>IWashesProjectileColor</code>   </td><td class="markdownTableBodyNone">Marker — a projectile that contacts this actor has its stolen colour reset to none, like a fresh launch (the soap-bubble cluster). Checked in <code>ProjectileHitResolver</code>   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md860"></a>
+<h2><a class="anchor" id="autotoc_md881"></a>
 Hit types</h2>
 <p><code>DamageContext</code> wraps damage with optional flags:</p>
 <table class="markdownTable">
@@ -213,7 +213,7 @@ Hit types</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>PuffObstacleModel</code>   </td><td class="markdownTableBodyNone">neither   </td><td class="markdownTableBodyNone">Structural obstacle; <code>IPassThrough</code> — animation paths can cross it. <code>IClusterableSlotActor</code> — gains <code>ClusterId</code> linking to a visual <code>SlotCluster</code>.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md861"></a>
+<h1><a class="anchor" id="autotoc_md882"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -231,7 +231,7 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Spawner/</code>   </td><td class="markdownTableBodyNone">Spawner coordination — <code>IGridSpawner</code>, <code>SpawnStage</code>, <code>GridSpawnerCoordinator</code> (namespace <code><a class="el" href="namespaceBalloonParty_1_1Slots_1_1Spawner.html">BalloonParty.Slots.Spawner</a></code>)   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md862"></a>
+<h1><a class="anchor" id="autotoc_md883"></a>
 How it works</h1>
 <p>The grid is a two-dimensional space of slots arranged in a staggered pattern (odd rows offset by half a column). Each slot is either empty or occupied by an actor model and its view. <code>SlotGrid</code> itself only converts a slot coordinate into a world position (<code>IndexToWorldPosition</code>); balance queries — which slots are unbalanced (missing support from below) and what the best empty slot is for an actor to move into — live on <code>GridBalanceQuery</code>.</p>
 <p><code>GridBalanceQuery.IsUnbalanced</code> flags a slot missing support from below. <code>GridBalanceQuery.OptimalNextEmptySlot</code> delegates to <code>MoveWeightEvaluator.OptimalBalanceMove</code>, which uses a recursive weight algorithm to decide between two candidate slots (directly above and diagonally above). The weight of a candidate = count of occupied slots in the tree above it. Higher weight = more support = preferred. On tie, the diagonal candidate wins (via <code>&gt;=</code> comparison).</p>
@@ -240,11 +240,11 @@ How it works</h1>
 <p><code>AllEmptySlots</code> yields every empty slot across the full grid — used by <code>StaticActorSpawner</code>.</p>
 <p><code>IsTraversable(col, row)</code> returns true if the slot is empty or the occupant implements <code>IPassThrough</code> — used by <code>ComputePath</code> to build spawn animation waypoints.</p>
 <p><code>ComputePath(source, target)</code> returns world-space waypoints along the straight-line grid path between two slot indices. Either endpoint may be outside grid bounds. Non-traversable in-bounds slots and in-transit balance slots log a diagnostic (<code>Log.Info</code>, stripped from release builds — spawn-burst storms can hit this path often enough to matter at 120 Hz); rerouting is deferred.</p>
-<h1><a class="anchor" id="autotoc_md863"></a>
+<h1><a class="anchor" id="autotoc_md884"></a>
 Balance Path Holder</h1>
 <p><code>BalancePathHolder</code> tracks grid slots that are in-transit due to balance animations. When the balancer relocates a balloon from slot A to slot B, both A and B are reserved as in-transit under that actor. This lets <code>ComputePath</code> flag when a spawn animation path crosses a slot that a balance animation is currently traversing — even if the grid data already reflects the post-balance state.</p>
 <p>Transit slots are tracked per-actor and released via <code>Release(actor)</code> when the balance animation's <code>OnComplete</code> fires. This means transit data persists across multiple balance passes — a second balance triggered after spawning does not erase transit from the first balance's still-running animations.</p>
-<h1><a class="anchor" id="autotoc_md864"></a>
+<h1><a class="anchor" id="autotoc_md885"></a>
 Spawner Coordination</h1>
 <p><code>GridSpawnerCoordinator</code> owns the sequencing of all grid population. Individual spawners (<code>StaticActorSpawner</code>, <code>BalloonSpawner</code>) implement <code>IGridSpawner</code> and declare their priority via <code>SpawnStage</code>. The coordinator:</p>
 <ol type="1">
@@ -264,7 +264,7 @@ Spawner Coordination</h1>
 <div class="line">SpawnStage.BalloonActors (100) ──→  BalloonSpawner.SpawnAsync</div>
 </div><!-- fragment --><p>Spawners are injected as <code>IEnumerable&lt;IGridSpawner&gt;</code> via VContainer's collection injection — each registered with <code>.As&lt;IGridSpawner&gt;()</code> in <code>GameLifetimeScope</code>.</p>
 <p><code>StaticActorSpawner.Start()</code> registers the pool immediately (synchronous, runs at scene start before the gate opens). <code>BalloonSpawner.Start()</code> starts pre-warming pools asynchronously and stores the task; <code>SpawnAsync</code> awaits it before populating the grid — so pre-warm and navigation wait overlap rather than serialize.</p>
-<h1><a class="anchor" id="autotoc_md865"></a>
+<h1><a class="anchor" id="autotoc_md886"></a>
 Interactions</h1>
 <ul>
 <li><b>BalloonSpawner</b> — calls <code>Balance()</code> once before all line spawns so existing balloons consolidate upward first; then calls <code>Place</code> for each new balloon into remaining empty slots; uses <code>ComputePath</code> for spawn animation waypoints; publishes <code>BalanceBalloonsMessage</code> after spawning for a final settling pass</li>
@@ -275,7 +275,7 @@ Interactions</h1>
 <li><b>PaintItemHandler</b> — buckets paintable slots to the nearest of the splash's covering blobs (not hex neighbors); casts <code>At()</code> result to <code>IPaintable</code> for painting</li>
 <li><b>ISlotGridConfig</b> — provides <code>SlotsSize</code>, <code>SlotSeparation</code>, <code>SlotsOffset</code> for grid construction and position calculations</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md866"></a>
+<h1><a class="anchor" id="autotoc_md887"></a>
 Slot Selection Strategies</h1>
 <p><code>ISlotSelectionStrategy</code> abstracts how <code>StaticActorSpawner</code> picks which empty slots an actor type should occupy. Each <code>GridActorPrefabEntry</code> declares a <code>SlotPlacementMode</code> enum that maps to a strategy. Strategies are lazily cached — one instance per mode.</p>
 <table class="markdownTable">

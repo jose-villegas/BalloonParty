@@ -21,5 +21,6 @@ var searchData=
   ['8_206_20relationship_20to_20existing_20pass_20through_20ideas_18',['8.6 Relationship to Existing Pass-Through Ideas',['../plan_future_ideas.html#autotoc_md395',1,'']]],
   ['8_207_20open_20questions_19',['8.7 Open Questions',['../plan_future_ideas.html#autotoc_md396',1,'']]],
   ['8_20open_20questions_20',['13.8 Open questions',['../plan_future_ideas.html#autotoc_md434',1,'']]],
-  ['8_20remaining_20work_20—_20detailed_20status_202026_2007_2026_21',['8. Remaining work — detailed status (2026-07-26)',['../plan_shot_solver_accuracy.html#autotoc_md627',1,'']]]
+  ['8_20remaining_20work_20—_20detailed_20status_202026_2007_2026_21',['8. Remaining work — detailed status (2026-07-26)',['../plan_shot_solver_accuracy.html#autotoc_md648',1,'']]],
+  ['8_20sequencing_22',['8. Sequencing',['../plan_level_up_timing.html#autotoc_md579',1,'']]]
 ];
