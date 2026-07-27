@@ -638,5 +638,85 @@
     "LicenseName": "Attribution",
     "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
     "RequiresAttribution": true
+  },
+  {
+    "SoundId": "BalloonPopSilver",
+    "ProviderId": 533090,
+    "Name": "Mambo Bell - Mouth",
+    "Author": "Sassaby",
+    "SoundUrl": "https://freesound.org/people/Sassaby/sounds/533090/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "BalloonPopGold",
+    "ProviderId": 250353,
+    "Name": "tri_stp_1.wav",
+    "Author": "tartina",
+    "SoundUrl": "https://freesound.org/people/tartina/sounds/250353/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "http://creativecommons.org/licenses/by/3.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "BalloonPopGold",
+    "ProviderId": 373053,
+    "Name": "Solo Contrabass - pizzicato - C2 (BKCtbss_Pizz_C1_v3_rr2.wav)",
+    "Author": "sgossner",
+    "SoundUrl": "https://freesound.org/people/sgossner/sounds/373053/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "BalloonPopSilver",
+    "ProviderId": 372744,
+    "Name": "Cello Section - tight pizzicato - E4 (pizzT_E3_v1_RR2.wav)",
+    "Author": "sgossner",
+    "SoundUrl": "https://freesound.org/people/sgossner/sounds/372744/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "BalloonPopSilver",
+    "ProviderId": 373050,
+    "Name": "Solo Contrabass - pizzicato - G3 (BKCtbss_Pizz_G#2_v1_rr2.wav)",
+    "Author": "sgossner",
+    "SoundUrl": "https://freesound.org/people/sgossner/sounds/373050/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "BalloonPopGold",
+    "ProviderId": 373900,
+    "Name": "Solo Violin - pizzicato - C4 (LLVln_Pizz_C4_f_RR2.wav)",
+    "Author": "sgossner",
+    "SoundUrl": "https://freesound.org/people/sgossner/sounds/373900/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "BalloonPopGold",
+    "ProviderId": 373901,
+    "Name": "Solo Violin - pizzicato - C5 (LLVln_Pizz_C5_f_RR2.wav)",
+    "Author": "sgossner",
+    "SoundUrl": "https://freesound.org/people/sgossner/sounds/373901/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "BalloonPopGold",
+    "ProviderId": 148761,
+    "Name": "piano_string_hit_short_11",
+    "Author": "Daphne_in_Wonderland",
+    "SoundUrl": "https://freesound.org/people/Daphne_in_Wonderland/sounds/148761/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
   }
 ]

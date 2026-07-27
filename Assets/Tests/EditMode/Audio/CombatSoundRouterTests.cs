@@ -3,6 +3,7 @@ using BalloonParty.Audio;
 using BalloonParty.Audio.Routing;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
@@ -47,6 +48,7 @@ namespace BalloonParty.Tests.Audio
             var shieldLostSubscriber = CaptureSubscriber<ShieldLostMessage>(h => _shieldLostHandler = h);
             var wallHitSubscriber = CaptureSubscriber<WallHitMessage>(h => _wallHitHandler = h);
             var speedTapSubscriber = CaptureSubscriber<SpeedTapMintedMessage>(h => _speedTapHandler = h);
+            var streakChangedSubscriber = CaptureSubscriber<StreakChangedMessage>(_ => { });
 
             var flightConfig = Substitute.For<IProjectileFlightConfig>();
             flightConfig.ShieldToneThreshold.Returns(5);
@@ -54,11 +56,14 @@ namespace BalloonParty.Tests.Audio
             var activePierce = Substitute.For<IActiveProjectilePierce>();
             activePierce.IsPiercing.Returns(new ReactiveProperty<bool>(false));
 
+            var palette = Substitute.For<IGamePalette>();
+            palette.ProgressColorNames.Returns(new[] { "Red", "Blue", "Green", "Yellow", "Purple" });
+
             var router = new CombatSoundRouter(
                 _player, hitSubscriber, firedSubscriber, loadedSubscriber,
                 cruiseStartedSubscriber, cruiseEndedSubscriber, doomedSubscriber, destroyedSubscriber,
                 pierceSubscriber, shieldGainedSubscriber, shieldLostSubscriber, wallHitSubscriber,
-                speedTapSubscriber, flightConfig, activePierce);
+                speedTapSubscriber, streakChangedSubscriber, flightConfig, activePierce, palette);
             router.Start();
         }
 

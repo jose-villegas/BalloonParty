@@ -26,21 +26,21 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0.0012207031
-      inSlope: 1.5563639
-      outSlope: 1.5563639
+      inSlope: 0.55623776
+      outSlope: 0.55623776
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.04912895
+      outWeight: 0.07641753
     - serializedVersion: 3
-      time: 0.39959946
-      value: 0.29625577
-      inSlope: 2.7147102
-      outSlope: 2.7147102
+      time: 0.40204403
+      value: 0.20825922
+      inSlope: 2.6827674
+      outSlope: 2.6827674
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.046591327
-      outWeight: 0.33333334
+      inWeight: 0.061633483
+      outWeight: 0.02809075
     - serializedVersion: 3
       time: 1
       value: 1
@@ -57,7 +57,7 @@ MonoBehaviour:
   _sweepEnabled: 1
   _sweepTapThreshold: 4
   _cruisePiercingTapThreshold: 5
-  _pierceArmRampDuration: 0.75
+  _pierceArmRampDuration: 0.5
   _pierceArmRampCurve:
     serializedVersion: 2
     m_Curve:
@@ -82,8 +82,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _pierceDischargeTimeScale: 0.175
-  _pierceDischargeTimeScaleDuration: 1.25
+  _pierceDischargeTimeScale: 0.4
+  _pierceDischargeTimeScaleDuration: 0.5
   _shieldTrailDuration: 0.5
   _lastShieldApproachCurve:
     serializedVersion: 2

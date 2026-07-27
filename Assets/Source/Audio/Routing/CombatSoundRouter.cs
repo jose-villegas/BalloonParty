@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
@@ -16,6 +18,7 @@ namespace BalloonParty.Audio.Routing
     internal sealed class CombatSoundRouter : IStartable, IDisposable
     {
         private const int MaxRampSemitones = 12;
+        private static readonly int[] ColorRootSemitones = { 0, 4, 7, 11 };
 
         private readonly ISoundPlayer _player;
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
@@ -30,9 +33,12 @@ namespace BalloonParty.Audio.Routing
         private readonly ISubscriber<ShieldLostMessage> _shieldLostSubscriber;
         private readonly ISubscriber<WallHitMessage> _wallHitSubscriber;
         private readonly ISubscriber<SpeedTapMintedMessage> _speedTapSubscriber;
+        private readonly ISubscriber<StreakChangedMessage> _streakChangedSubscriber;
         private readonly IProjectileFlightConfig _flightConfig;
         private readonly IActiveProjectilePierce _activePierce;
+        private readonly IGamePalette _palette;
         private readonly CompositeDisposable _subscriptions = new();
+        private readonly Dictionary<string, int> _colorPopsThisFlight = new();
 
         private SoundHandle _cruiseHandle = SoundHandle.None;
         private SoundHandle _pierceLoopHandle = SoundHandle.None;
@@ -58,8 +64,10 @@ namespace BalloonParty.Audio.Routing
             ISubscriber<ShieldLostMessage> shieldLostSubscriber,
             ISubscriber<WallHitMessage> wallHitSubscriber,
             ISubscriber<SpeedTapMintedMessage> speedTapSubscriber,
+            ISubscriber<StreakChangedMessage> streakChangedSubscriber,
             IProjectileFlightConfig flightConfig,
-            IActiveProjectilePierce activePierce)
+            IActiveProjectilePierce activePierce,
+            IGamePalette palette)
         {
             _player = player;
             _hitSubscriber = hitSubscriber;
@@ -74,8 +82,10 @@ namespace BalloonParty.Audio.Routing
             _shieldLostSubscriber = shieldLostSubscriber;
             _wallHitSubscriber = wallHitSubscriber;
             _speedTapSubscriber = speedTapSubscriber;
+            _streakChangedSubscriber = streakChangedSubscriber;
             _flightConfig = flightConfig;
             _activePierce = activePierce;
+            _palette = palette;
         }
 
         public void Start()
@@ -92,6 +102,7 @@ namespace BalloonParty.Audio.Routing
             _shieldLostSubscriber.Subscribe(OnShieldLost).AddTo(_subscriptions);
             _wallHitSubscriber.Subscribe(OnWallHit).AddTo(_subscriptions);
             _speedTapSubscriber.Subscribe(OnSpeedTapMinted).AddTo(_subscriptions);
+            _streakChangedSubscriber.Subscribe(OnStreakChanged).AddTo(_subscriptions);
             _activePierce.IsPiercing.Subscribe(OnPierceStateChanged).AddTo(_subscriptions);
         }
 
@@ -109,9 +120,21 @@ namespace BalloonParty.Audio.Routing
                     ? PopSoundFor(balloon.TypeName)
                     : GameSoundId.BalloonPop;
 
-                var offset = PopSemitoneOffset(popId);
-                _player.Play(popId, message.WorldPosition, semitoneOffset: offset);
-                IncrementPopCounter(popId);
+                if (popId == GameSoundId.BalloonPop && message.Actor is IHasColor colored)
+                {
+                    var color = colored.Color.Value;
+                    _colorPopsThisFlight.TryGetValue(color, out var count);
+                    var rootOffset = ColorRootOffset(color);
+                    var ramp = Math.Min(count * MusicalPitchExtensions.WholeToneSemitones, MaxRampSemitones);
+                    _player.Play(popId, message.WorldPosition, semitoneOffset: rootOffset + ramp);
+                    _colorPopsThisFlight[color] = count + 1;
+                }
+                else
+                {
+                    var offset = PopSemitoneOffset(popId);
+                    _player.Play(popId, message.WorldPosition, semitoneOffset: offset);
+                    IncrementPopCounter(popId);
+                }
             }
             else if ((outcome & HitOutcome.Deflect) != 0)
             {
@@ -181,6 +204,7 @@ namespace BalloonParty.Audio.Routing
             _silverPopsThisFlight = 0;
             _goldPopsThisFlight = 0;
             _unbreakableDeflectsThisFlight = 0;
+            _colorPopsThisFlight.Clear();
             _player.Play(GameSoundId.ShotReload, null);
         }
 
@@ -229,6 +253,14 @@ namespace BalloonParty.Audio.Routing
         private void OnSpeedTapMinted(SpeedTapMintedMessage message)
         {
             _player.Play(GameSoundId.SpeedTap, message.Position, message.TotalTaps);
+        }
+
+        private void OnStreakChanged(StreakChangedMessage message)
+        {
+            if (message.Streak == 0)
+            {
+                _colorPopsThisFlight.Clear();
+            }
         }
 
         private void OnWallHit(WallHitMessage message)
@@ -293,6 +325,22 @@ namespace BalloonParty.Audio.Routing
                     _goldPopsThisFlight++;
                     break;
             }
+        }
+
+        private int ColorRootOffset(string color)
+        {
+            var names = _palette.ProgressColorNames;
+            for (var i = 0; i < names.Count; i++)
+            {
+                if (string.Equals(names[i], color, StringComparison.Ordinal))
+                {
+                    return i < ColorRootSemitones.Length
+                        ? ColorRootSemitones[i]
+                        : ColorRootSemitones[ColorRootSemitones.Length - 1];
+                }
+            }
+
+            return 0;
         }
     }
 }

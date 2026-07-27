@@ -41,7 +41,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 7c17adf0654b347e8928bd8e442f1daa, type: 3}
     _clipPickMode: 0
     _clipWrapMode: 0
-    _pitchRange: {x: 0, y: 1}
+    _pitchRange: {x: 1, y: 1}
     _volumeRange: {x: 1, y: 1}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
@@ -51,11 +51,11 @@ MonoBehaviour:
     _pan2D: 1
     _delaySeconds: 0
     _fadeInSeconds: 0
-    _fadeOutSeconds: 0
-    _maxPlaySeconds: 0
+    _fadeOutSeconds: 1
+    _maxPlaySeconds: 0.5
     _stopsOnPlay: 
     _melodicMode: 1
-    _melodicMaxOctaves: 2
+    _melodicMaxOctaves: 4
     _melodicSkipSteps: 1
     _tensionSemitones: 0
     _layers: []
@@ -893,11 +893,11 @@ MonoBehaviour:
     _fetchPrompt: glass ding
   - _channel: 0
     _clips:
-    - {fileID: 8300000, guid: b7011c2ebb3484756ab72fa085a9c8a0, type: 3}
+    - {fileID: 8300000, guid: d5456b01d9667446c8f9818a7d6fa348, type: 3}
     _clipPickMode: 0
     _clipWrapMode: 0
     _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 1, y: 1}
+    _volumeRange: {x: 100, y: 100}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
     _priority: 128
@@ -914,10 +914,10 @@ MonoBehaviour:
     _melodicSkipSteps: 1
     _tensionSemitones: 0
     _layers: []
-    _fetchPrompt: pop air
+    _fetchPrompt: cello pizz
   - _channel: 0
     _clips:
-    - {fileID: 8300000, guid: 4220e1908470941a98f453c7cd0d2267, type: 3}
+    - {fileID: 8300000, guid: a8be14a2d166e4967af5241db0524b8c, type: 3}
     _clipPickMode: 0
     _clipWrapMode: 0
     _pitchRange: {x: 1, y: 1}
@@ -938,7 +938,7 @@ MonoBehaviour:
     _melodicSkipSteps: 1
     _tensionSemitones: 0
     _layers: []
-    _fetchPrompt: air pop
+    _fetchPrompt: string harp
   - _channel: 0
     _clips:
     - {fileID: 8300000, guid: 83477bc1046c542209f158aa18e12627, type: 3}
