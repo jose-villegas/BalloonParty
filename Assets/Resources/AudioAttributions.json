@@ -608,5 +608,35 @@
     "LicenseName": "Creative Commons 0",
     "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
     "RequiresAttribution": false
+  },
+  {
+    "SoundId": "SpeedTap",
+    "ProviderId": 86263,
+    "Name": "BASS_BOOM_001.wav",
+    "Author": "JoelAudio",
+    "SoundUrl": "https://freesound.org/people/JoelAudio/sounds/86263/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "SpeedTap",
+    "ProviderId": 233800,
+    "Name": "low thump.wav",
+    "Author": "tim.kahn",
+    "SoundUrl": "https://freesound.org/people/tim.kahn/sounds/233800/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "SpeedTap",
+    "ProviderId": 122119,
+    "Name": "Thud_1_Dry.wav",
+    "Author": "zimbot",
+    "SoundUrl": "https://freesound.org/people/zimbot/sounds/122119/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
   }
 ]

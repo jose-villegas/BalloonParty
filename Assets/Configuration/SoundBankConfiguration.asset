@@ -1037,11 +1037,11 @@ MonoBehaviour:
     _fetchPrompt: 
   - _channel: 0
     _clips:
-    - {fileID: 8300000, guid: 625f4f13193544e53aad4e3e4ccc1d7c, type: 3}
+    - {fileID: 8300000, guid: 5891122117dcf4d0380a9699075bd97b, type: 3}
     _clipPickMode: 0
     _clipWrapMode: 0
     _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 0.6, y: 0.6}
+    _volumeRange: {x: 1, y: 1}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
     _priority: 128
@@ -1054,11 +1054,11 @@ MonoBehaviour:
     _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 1
-    _melodicMaxOctaves: 2
-    _melodicSkipSteps: 5
+    _melodicMaxOctaves: 6
+    _melodicSkipSteps: 1
     _tensionSemitones: 0
     _layers: []
-    _fetchPrompt: piano c
+    _fetchPrompt: low boom
   _melodicScale: 0000000002000000040000000700000009000000
   _melodicRootSemitone: 0
   _globalVoiceCap: 32

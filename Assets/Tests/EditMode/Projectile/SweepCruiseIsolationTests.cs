@@ -88,6 +88,9 @@ namespace BalloonParty.Tests.Projectile
             }
 
             _gameObjectsToDestroy.Clear();
+
+            // Back to the sentinel so the next Awake resolves the real Balloons layer (see CreateSweepView).
+            SetStaticField(typeof(ProjectileView), "BalloonsLayer", -1);
         }
 
         // ──────────────────────────────────────────────────────────────────────────────────────
@@ -406,9 +409,14 @@ namespace BalloonParty.Tests.Projectile
             var visual = Substitute.For<IProjectileVisualConfig>();
 
             SetField(projectileView, "_flightConfig", config);
+            SetField(projectileView, "_tapResolver", new ProjectileTapResolver(config));
             SetField(projectileView, "_visual", visual);
             SetField(projectileView, "_model", _projectile);
             SetField(projectileView, "_contactRadius", 0.1f);
+            // Poked so the layer gate accepts the test colliders (layer 0). MUST be restored in TearDown:
+            // it is static, and its -1 sentinel is what makes Awake re-resolve the real layer — leaving 0
+            // here makes every balloon collider fail TryGetHitBalloon's gate for the rest of the editor
+            // session, i.e. the projectile stops colliding with balloons until Unity is restarted.
             SetStaticField(typeof(ProjectileView), "BalloonsLayer", 0);
             return projectileView;
         }
