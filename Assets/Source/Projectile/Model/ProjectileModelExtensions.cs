@@ -1,14 +1,5 @@
-using BalloonParty.Shared.Diagnostics;
-
 namespace BalloonParty.Projectile.Model
 {
-    /// <summary>Which rule earned a tap. Carried for diagnostics — the speed it buys is identical.</summary>
-    internal enum ProjectileTapSource
-    {
-        CruiseBounce,
-        SweepClear,
-    }
-
     internal static class ProjectileModelExtensions
     {
         /// <summary>
@@ -18,18 +9,20 @@ namespace BalloonParty.Projectile.Model
         ///     tap was minted. Also owns what a tap does — arm the lance at the threshold, otherwise
         ///     restart the beat — so the two callers can't drift apart on it.
         /// </summary>
-        public static bool TryGrantTap(
-            this IWriteableProjectileModel model, ProjectileTapSource source, int piercingTapThreshold)
+        public static bool TryGrantTap(this IWriteableProjectileModel model, int piercingTapThreshold)
         {
             var flight = model.Flight;
 
-            // An invariant. A second claim on the same wall means some rule that used to keep the two
-            // sources exclusive (a pop ending the cruise, say) changed — which is exactly how an armed
-            // cruising shot once collected both taps on one bounce and compounded from there.
+            // One tap per wall hit, whichever rule gets there first — and while piercing BOTH genuinely
+            // can. A pop doesn't end the cruise for an armed shot (ProjectileHitResolver's `!isPiercing`
+            // guard), so an armed shot that pops 1-HP balloons reaches the wall with a cruise bounce AND a
+            // clean sweep to its name; unarmed, the pop would have cancelled the cruise and only the sweep
+            // could claim it. Refusing the second claim here is what keeps that from paying twice — which
+            // is exactly what an armed cruising shot used to do, compounding from there. Both claims are
+            // worth the same one tap, so first-come costs the player nothing (and a refused sweep is still
+            // credited toward its own warm-up counter, which the caller bumps before asking).
             if (flight.LastTapWallHit == flight.WallHitSequence)
             {
-                Log.Assert(false, "Projectile",
-                    $"wall hit {flight.WallHitSequence} already minted a tap; {source} claimed it too");
                 return false;
             }
 

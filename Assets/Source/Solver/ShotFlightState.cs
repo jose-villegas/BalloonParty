@@ -132,6 +132,14 @@ namespace BalloonParty.Solver
         // only MaxSpeedMultiplier bounds where the speed ends up.
         public int TotalTaps;
 
+        // Per-segment Sweep bookkeeping, mirroring the live fields of the same names: pops landed since
+        // the last wall, whether every contact on the segment was a one-shot kill, how many clean sweeps
+        // the shot has banked (the warm-up counter SweepTapThreshold gates), and where the segment began.
+        public int SegmentPopCount;
+        public bool SegmentSweepValid;
+        public int TotalSweeps;
+        public Vector2 LastBouncePosition;
+
         // Snipe pickups taken while the shot was already piercing (mirrors
         // ProjectileFlightState.BankedPierceCharges): banked whole — pierce, speed and rainbow — and
         // activated one per discharge that spends the running pierce. Rainbow charges are spent first.
@@ -179,6 +187,10 @@ namespace BalloonParty.Solver
             IsPiercing = seed.IsPiercing;
             PierceSpeedScale = 1f;
             TotalTaps = 0;
+            SegmentPopCount = 0;
+            SegmentSweepValid = true;
+            TotalSweeps = 0;
+            LastBouncePosition = position;
             BankedPierceCharges = 0;
             BankedRainbowPierceCharges = 0;
             BankedPierceMultiplier = 1f;

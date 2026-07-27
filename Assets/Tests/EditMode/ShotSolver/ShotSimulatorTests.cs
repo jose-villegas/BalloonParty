@@ -301,6 +301,56 @@ namespace BalloonParty.Tests.ShotSolver
                 "and STILL x3 after it — the pop ends the cruise but not the taps; base speed would be ~1.72");
         }
 
+        // E1b: Sweep taps in the sim. A sweep was worth nothing here, so the sim could never arm a pierce
+        // through sweeps — and since piercing turns a tough contact from DEFLECT into plow-and-continue,
+        // that was a trajectory divergence, not a timing one. Same board and aim, sweeps on vs off:
+        //
+        // Diagonal legs in a narrow tall box, one 1-HP balloon mid-leg on each of the first two legs (each
+        // a clean sweep: a pop, all one-shot kills, corridor clear at the wall), then a 2-HP tough mid-leg
+        // three. Two sweep taps arm the shot, so it plows the tough and carries on to the next wall; unarmed
+        // it deflects off the tough and is sent back the way it came.
+        [Test]
+        public void Simulate_SweepTapsArmPiercing_ForkingTheTrajectoryAtATough()
+        {
+            var walls = new Vector4(40f, 1f, -40f, -1f);
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(0.5f, 0.667f), 0.05f, "Red", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(0f, 2.667f), 0.05f, "Red", 1, 1),
+                ShotBoardBuilder.Tough(new Vector2(0f, 5.333f), 0.05f, 5, 2),
+                ShotBoardBuilder.Green(new Vector2(500f, 500f), 0.05f, "Red", 1, 1),
+            };
+
+            // WallBounceThreshold 99 keeps cruise out of it entirely, so every tap here is a sweep's.
+            var sweptPath = new List<Vector2>();
+            var swept = ShotSimulator.Simulate(
+                board, walls, Vector2.zero, new Vector2(0.6f, 0.8f), startingShields: 6,
+                projectileContactRadius: 0f, workingSet: new ShotBalloonState[board.Length],
+                projectileSpeed: 1f,
+                cruiseConfig: new ShotCruiseConfig(
+                    wallBounceThreshold: 99, speedGainPerTap: 1f, piercingTapThreshold: 2, sweepEnabled: true,
+                    sweepTapThreshold: 1),
+                pathOut: sweptPath);
+
+            var controlPath = new List<Vector2>();
+            var control = ShotSimulator.Simulate(
+                board, walls, Vector2.zero, new Vector2(0.6f, 0.8f), startingShields: 6,
+                projectileContactRadius: 0f, workingSet: new ShotBalloonState[board.Length],
+                projectileSpeed: 1f,
+                cruiseConfig: new ShotCruiseConfig(
+                    wallBounceThreshold: 99, speedGainPerTap: 1f, piercingTapThreshold: 2, sweepEnabled: false,
+                    sweepTapThreshold: 1),
+                pathOut: controlPath);
+
+            Assert.AreEqual(3, swept.Pops, "armed by its sweeps, the shot plows the tough as a third pop");
+            Assert.AreEqual(2, control.Pops, "never armed, it only pops the two 1-HP balloons");
+            Assert.AreEqual(
+                6.667f, sweptPath[6].y, 1e-2f, "the armed shot carries on THROUGH the tough to the next wall");
+            Assert.Less(
+                controlPath[6].y, 5f,
+                "the unarmed one is deflected back down instead — the paths have forked, not just the clock");
+        }
+
         [Test]
         public void Simulate_DeflectWipesTheTaps_UnlikeAPop()
         {

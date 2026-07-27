@@ -27,6 +27,8 @@ namespace BalloonParty.Solver
         public readonly float MaxSpeedMultiplier;
         public readonly float TapLagSeconds;
         public readonly int PiercingTapThreshold;
+        public readonly bool SweepEnabled;
+        public readonly int SweepTapThreshold;
 
         // The arming bounce's own lag, in the same "duration not spent at full speed" form as
         // TapLagSeconds. Live replaces the per-tap beat there with one ramp from the arming speed into the
@@ -37,12 +39,15 @@ namespace BalloonParty.Solver
         public ShotCruiseConfig(int wallBounceThreshold, float speedGainPerTap,
             float maxSpeedMultiplier = 0f, float tapEaseDuration = 0f,
             AnimationCurve tapCurve = null, int piercingTapThreshold = 0,
-            float armRampDuration = 0f, AnimationCurve armRampCurve = null)
+            float armRampDuration = 0f, AnimationCurve armRampCurve = null, bool sweepEnabled = false,
+            int sweepTapThreshold = 0)
         {
             WallBounceThreshold = wallBounceThreshold;
             SpeedGainPerTap = speedGainPerTap;
             MaxSpeedMultiplier = maxSpeedMultiplier;
             PiercingTapThreshold = piercingTapThreshold;
+            SweepEnabled = sweepEnabled;
+            SweepTapThreshold = sweepTapThreshold;
             TapLagSeconds = EnvelopeLagSeconds(tapEaseDuration, tapCurve);
             ArmRampLagSeconds = EnvelopeLagSeconds(armRampDuration, armRampCurve);
         }
@@ -51,7 +56,8 @@ namespace BalloonParty.Solver
             : this(
                 config.CruiseWallBounceThreshold, config.SpeedGainPerTap, config.MaxSpeedMultiplier,
                 config.CruiseTapEaseDuration, config.CruiseTapCurve, config.CruisePiercingTapThreshold,
-                config.PierceArmRampDuration, config.PierceArmRampCurve)
+                config.PierceArmRampDuration, config.PierceArmRampCurve, config.SweepEnabled,
+                config.SweepTapThreshold)
         {
         }
 
@@ -365,36 +371,106 @@ namespace BalloonParty.Solver
                 enteredCruiseHere = true;
             }
 
+            // Sweep: the OTHER rule that mints a tap, evaluated at this wall exactly as
+            // ProjectileView.TryAwardSweepTap does — a segment that popped at least one balloon, every
+            // contact on it a one-shot kill, and the corridor it just flew now clear. Live casts backward
+            // from the wall over the segment; SegmentHitsAnyBalloon walks the same span analytically.
+            // Exclusive with the cruise tap by construction (a pop clears IsCruising), and only one of the
+            // two can mint per wall hit — the live funnel's invariant.
+            var sweptClean = cruiseConfig.SweepEnabled && state.SegmentPopCount > 0 && state.SegmentSweepValid
+                && TrySweepSegment(
+                    position, projectileContactRadius, workingSet, activeCount, dynamics, ref state);
+
+            var mintedTap = false;
             if (state.IsCruising)
             {
-                CountCruiseTap(enteredCruiseHere, in cruiseConfig, ref state);
+                mintedTap = CountCruiseTap(enteredCruiseHere, in cruiseConfig, ref state);
             }
 
+            if (sweptClean && !mintedTap)
+            {
+                CountSweepTap(in cruiseConfig, ref state);
+            }
+
+            // This wall closes the segment: the next one starts here, with a fresh pop count and its
+            // sweep validity restored (ProjectileView.MoveAndBounce resets the same three).
+            state.SegmentPopCount = 0;
+            state.SegmentSweepValid = true;
+            state.LastBouncePosition = position;
+
             return false;
+        }
+
+        // The corridor check, and the sweep credit that comes with passing it. TotalSweeps counts every
+        // clean sweep (it is the warm-up SweepTapThreshold gates), whether or not this one pays a tap.
+        private static bool TrySweepSegment(
+            Vector2 wallContact, float projectileContactRadius, ShotBalloonState[] workingSet, int activeCount,
+            ShotBoardDynamics dynamics, ref ShotFlightState state)
+        {
+            var span = wallContact - state.LastBouncePosition;
+            var length = span.magnitude;
+            if (length <= EventEpsilon)
+            {
+                return false;
+            }
+
+            if (SegmentHitsAnyBalloon(
+                    state.LastBouncePosition, span / length, length, projectileContactRadius, workingSet,
+                    activeCount, state.Elapsed, dynamics))
+            {
+                return false;
+            }
+
+            state.TotalSweeps++;
+            return true;
+        }
+
+        // Mirrors the tail of ProjectileView.TryAwardSweepTap: below the warm-up threshold a sweep is
+        // counted but buys no speed; at or past it every sweep mints a tap, which arms piercing at the
+        // piercing threshold exactly as a cruise tap would.
+        private static void CountSweepTap(in ShotCruiseConfig cruiseConfig, ref ShotFlightState state)
+        {
+            if (cruiseConfig.SweepTapThreshold > 0 && state.TotalSweeps < cruiseConfig.SweepTapThreshold)
+            {
+                return;
+            }
+
+            state.TotalTaps++;
+            if (cruiseConfig.PiercingTapThreshold > 0 && state.TotalTaps >= cruiseConfig.PiercingTapThreshold)
+            {
+                state.IsPiercing = true;
+            }
+
+            state.Elapsed += state.IsPiercing ? cruiseConfig.ArmRampLagSeconds : cruiseConfig.TapLagSeconds;
         }
 
         // A cruise bounce's tap, and the time its speed change costs the timeline (a pure time cost on the
         // event timeline, never a path change). Armed shots keep tapping — a wall hit is a wall hit — and
         // pay the ramp's cost rather than the beat's, mirroring ProjectileModelExtensions.TryGrantTap
         // handing every armed tap to the ramp.
-        private static void CountCruiseTap(
+        private static bool CountCruiseTap(
             bool enteredCruiseHere, in ShotCruiseConfig cruiseConfig, ref ShotFlightState state)
         {
             // Taps are COUNTED, exactly as live counts them (ProjectileModelExtensions.TryGrantTap) — not
             // derived from shields spent since cruise entry. The entry bounce isn't a tap itself (live
             // mints one only on a bounce taken while ALREADY cruising), but it still replays the envelope,
             // so it falls through to the beat below.
-            if (!enteredCruiseHere)
+            if (enteredCruiseHere)
             {
-                state.TotalTaps++;
+                // Entry replays the envelope but isn't itself a tap (live mints one only on a bounce taken
+                // while ALREADY cruising), so it never blocks this wall's sweep from paying instead.
+                state.Elapsed += cruiseConfig.TapLagSeconds;
+                return false;
             }
+
+            state.TotalTaps++;
 
             // Mirrors ProjectileMotionResolver's piercing grant: a long-enough cruise arms the shot for
             // the rest of its life — contacts end the cruise, never the buff.
             if (cruiseConfig.PiercingTapThreshold <= 0 || state.TotalTaps < cruiseConfig.PiercingTapThreshold)
             {
                 state.Elapsed += cruiseConfig.TapLagSeconds;
-                return;
+                return true;
             }
 
             state.IsPiercing = true;
@@ -407,6 +483,7 @@ namespace BalloonParty.Solver
             var from = CruiseTargetMultiplier(state.TotalTaps - 1, cruiseConfig);
             var to = CruiseTargetMultiplier(state.TotalTaps, cruiseConfig);
             state.Elapsed += cruiseConfig.ArmRampLagSeconds * (1f - (from / to));
+            return true;
         }
 
         // Only after plowing a tough (PierceSpeedScale decayed) does a wall end the run: cruise ends,
@@ -651,7 +728,17 @@ namespace BalloonParty.Solver
                 // ProjectileView.OnBalloonDeflected ("deflection interrupts free roaming"). Reachable only
                 // now that taps are counted rather than derived: the old derivation was moot here, since
                 // the same contact cleared IsCruising and the speed read bailed on that instead.
+                // ...and it restarts the segment from the contact, exactly as that method does: "deflection
+                // interrupts free roaming" resets EVERY piece of progress — both counters to zero, a fresh
+                // pop count, sweep validity restored, and the segment re-anchored here. (The resolver's own
+                // `else if (!wasOneHitBalloon)` invalidation is what this overwrites: the view's reset runs
+                // after the hit resolver in the same frame, so the reset is the net live behaviour.)
                 state.TotalTaps = 0;
+                state.TotalSweeps = 0;
+                state.ConsecutiveWallBounces = 0;
+                state.SegmentPopCount = 0;
+                state.SegmentSweepValid = true;
+                state.LastBouncePosition = contactPosition;
 
                 // Deflected statics do NOT self-shove — they are immovable and a live static never
                 // wobbles, unlike a deflected balloon (OnBalloonDeflected).
@@ -662,6 +749,12 @@ namespace BalloonParty.Solver
 
                 return;
             }
+
+            // Sweep bookkeeping for the pop about to happen, mirroring ResolveContactPop: the pop counts
+            // toward the segment, and only a target that was at 1 HP when struck leaves the segment
+            // sweepable — so a piercing tough plow disqualifies it, as live's plow does.
+            state.SegmentPopCount++;
+            state.SegmentSweepValid &= balloon.HitsRemaining <= 1;
 
             // Plowing a tough (>1-hit) actor while piercing halves the cruise speed (floored at base
             // in CurrentSpeed) — mirrors ProjectileHitResolver.

@@ -125,7 +125,7 @@ namespace BalloonParty.Projectile.Controller
             // whether it actually mints one (at most one per wall hit) and what the tap does.
             if (model.IsCruising.Value)
             {
-                model.TryGrantTap(ProjectileTapSource.CruiseBounce, _cruisePiercingTapThreshold);
+                model.TryGrantTap(_cruisePiercingTapThreshold);
             }
 
             model.Direction = Vector2.Reflect(model.Direction, reflect.normalized);

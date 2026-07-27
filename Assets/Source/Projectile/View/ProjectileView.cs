@@ -685,7 +685,7 @@ namespace BalloonParty.Projectile.View
 
             // A cleared corridor is the other rule that earns a tap. Through the same funnel as the
             // resolver's cruise bounce, so this wall hit can only ever mint one of the two.
-            _model.TryGrantTap(ProjectileTapSource.SweepClear, _flightConfig.CruisePiercingTapThreshold);
+            _model.TryGrantTap(_flightConfig.CruisePiercingTapThreshold);
         }
 
         private bool IsPathClearAhead(Vector3 position, Vector3 direction, int bounces)

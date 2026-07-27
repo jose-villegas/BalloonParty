@@ -336,12 +336,21 @@ cadence (architect memo → implement → test audit + review → commit) applie
   the sim used to drop to base speed for every post-pop segment) and a deflect now wipes them
   (mirroring `ProjectileView.OnBalloonDeflected`). Both pinned by tests whose numbers came from
   headless execution.
-- **E1b sweep taps:** mirror `TryAwardSweepTap`/`SegmentSweepValid`; item pops must not count
-  toward sweep validity. Now that live funnels both grant rules through
-  `ProjectileModelExtensions.TryGrantTap` and the sim counts taps the same way, this is the
-  remaining half: the sim awards a sweep tap nothing, so it can never arm a pierce through sweeps —
-  and since piercing turns tough contacts from deflect into plow-and-continue, that is a
-  **trajectory** divergence, not just a timing one.
+- **E1b sweep taps — DONE 2026-07-27.** `SegmentPopCount`/`SegmentSweepValid`/`TotalSweeps`/
+  `LastBouncePosition` mirror the live per-segment fields; the sweep is evaluated at each wall
+  (`TrySweepSegment` walks the just-flown span with `SegmentHitsAnyBalloon`, the analytic twin of
+  live's backward `CircleCast`) and pays through `CountSweepTap`, which mirrors the warm-up
+  threshold. A documented mirror rather than a shared core: the corridor probe differs by
+  construction (Physics2D vs analytic). One tap per wall hit holds here too — the cruise tap is
+  offered first and a sweep only pays if it didn't. A deflect resets the segment exactly as
+  `ProjectileView.OnBalloonDeflected` does (fresh anchor, validity restored, both counters zeroed);
+  getting that backwards on the first pass was caught by running the scenario headless. Fidelity
+  test forks a trajectory at a tough: sweeps on ⇒ armed ⇒ plowed (3 pops), sweeps off ⇒ deflected
+  (2 pops).
+  - Item pops correctly do NOT count toward sweep validity, in both engines by construction:
+    `SegmentPopCount` is touched only on the projectile-contact path (live
+    `ProjectileHitResolver.ResolveContactPop`, sim `ResolveBalloonContact`), never by an item's
+    effect hits (`ApplyEffectHits`). Verified 2026-07-27, no change needed.
 - **E2 pierce discharge:** pending plowed toughs stay on the grid until the surviving wall, then
   discharge together (strike order; `+WildcardStreak` if the pierce was rainbow — mirror
   `PierceWasRainbow`); balance pulses must see pending toughs; KEEP the death-wall-never-

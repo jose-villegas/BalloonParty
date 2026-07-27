@@ -1,6 +1,5 @@
 using System;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
@@ -16,7 +15,6 @@ using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.TestTools;
 
 namespace BalloonParty.Tests.Projectile
 {
@@ -266,8 +264,6 @@ namespace BalloonParty.Tests.Projectile
             _projectile.Flight.SegmentPopCount = 1;
             _projectile.Flight.SegmentSweepValid = true;
             _projectile.Flight.LastBouncePosition = Vector3.zero;
-            LogAssert.Expect(LogType.Assert, new Regex("already minted a tap"));
-
             AwardSweepTap(view, new Vector3(3f, 0f, 0f), Vector3.right);
 
             Assert.AreEqual(
