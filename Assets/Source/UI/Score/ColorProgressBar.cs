@@ -106,6 +106,7 @@ namespace BalloonParty.UI.Score
         [Inject] private IColorStreak _streakTracker;
         [Inject] private ScoreTrailService _scoreTrailService;
         [Inject] private ITimeOfDayNight _timeOfDayNight;
+        [Inject] private IPublisher<ProgressBarCompletedMessage> _progressBarCompletedPublisher;
 
         private ProgressNoticePresenter _notices;
         private PaletteEntry _colorConfig;
@@ -125,7 +126,8 @@ namespace BalloonParty.UI.Score
 
         // The level-up ceremony is running (popup + Ascent) until the FSM returns to Playing — during it
         // scoring is closed, so trail arrivals / score points shouldn't spawn notices or move the slider.
-        private bool LevelUpInProgress => _levelProgress.Phase.Value != LevelUpPhase.Playing;
+        private bool LevelUpInProgress => _levelProgress.Phase.Value == LevelUpPhase.Pending
+                                          || _levelProgress.Phase.Value == LevelUpPhase.Transitioning;
 
         private void Awake()
         {
@@ -559,6 +561,7 @@ namespace BalloonParty.UI.Score
                 _completionParticleSystem.gameObject.SetActive(true);
                 _completionParticleSystem.Play();
                 _animator.SetBool(CompletedParam, true);
+                _progressBarCompletedPublisher.Publish(new ProgressBarCompletedMessage(_colorConfig.Name));
             }
         }
 

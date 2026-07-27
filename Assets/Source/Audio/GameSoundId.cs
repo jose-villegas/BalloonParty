@@ -79,6 +79,9 @@ namespace BalloonParty.Audio
         // One rung of the speed ladder: played whenever a wall hit mints a speed tap, whichever rule
         // earned it (a cruise bounce or a clean sweep). Author with MelodicMode.ScaleWalkUp — the router
         // passes the running tap count as the melodic step, so each tap climbs a degree.
-        SpeedTap
+        SpeedTap,
+
+        // UI cue when a color progress bar fills completely (before the level-up sequence fires).
+        UiProgressComplete
     }
 }

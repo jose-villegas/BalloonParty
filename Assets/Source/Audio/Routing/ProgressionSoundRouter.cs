@@ -1,4 +1,5 @@
 using System;
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UniRx;
@@ -9,8 +10,11 @@ namespace BalloonParty.Audio.Routing
 {
     internal sealed class ProgressionSoundRouter : IStartable, IDisposable
     {
+        private static readonly int[] ColorRootSemitones = { 0, 4, 7, 11 };
+
         private readonly ISoundPlayer _player;
         private readonly IMelodicContext _melodic;
+        private readonly IGamePalette _palette;
         private readonly ISubscriber<StreakChangedMessage> _streakSubscriber;
         private readonly ISubscriber<ScoreTrailArrivedMessage> _scoreTrailSubscriber;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
@@ -22,10 +26,11 @@ namespace BalloonParty.Audio.Routing
         private readonly ISubscriber<GameOverDismissedMessage> _gameOverDismissedSubscriber;
         private readonly ISubscriber<LevelAscendStartedMessage> _ascendStartedSubscriber;
         private readonly ISubscriber<LevelDescendStartedMessage> _descendStartedSubscriber;
+        private readonly ISubscriber<ProgressBarCompletedMessage> _progressBarCompletedSubscriber;
         private readonly CompositeDisposable _subscriptions = new();
 
         [Inject]
-        public ProgressionSoundRouter(ISoundPlayer player, IMelodicContext melodic,
+        public ProgressionSoundRouter(ISoundPlayer player, IMelodicContext melodic, IGamePalette palette,
             ISubscriber<StreakChangedMessage> streakSubscriber,
             ISubscriber<ScoreTrailArrivedMessage> scoreTrailSubscriber,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
@@ -36,10 +41,12 @@ namespace BalloonParty.Audio.Routing
             ISubscriber<GameOverMessage> gameOverSubscriber,
             ISubscriber<GameOverDismissedMessage> gameOverDismissedSubscriber,
             ISubscriber<LevelAscendStartedMessage> ascendStartedSubscriber,
-            ISubscriber<LevelDescendStartedMessage> descendStartedSubscriber)
+            ISubscriber<LevelDescendStartedMessage> descendStartedSubscriber,
+            ISubscriber<ProgressBarCompletedMessage> progressBarCompletedSubscriber)
         {
             _player = player;
             _melodic = melodic;
+            _palette = palette;
             _streakSubscriber = streakSubscriber;
             _scoreTrailSubscriber = scoreTrailSubscriber;
             _levelUpSubscriber = levelUpSubscriber;
@@ -51,6 +58,7 @@ namespace BalloonParty.Audio.Routing
             _gameOverDismissedSubscriber = gameOverDismissedSubscriber;
             _ascendStartedSubscriber = ascendStartedSubscriber;
             _descendStartedSubscriber = descendStartedSubscriber;
+            _progressBarCompletedSubscriber = progressBarCompletedSubscriber;
         }
 
         public void Start()
@@ -66,6 +74,7 @@ namespace BalloonParty.Audio.Routing
             _gameOverDismissedSubscriber.Subscribe(OnGameOverDismissed).AddTo(_subscriptions);
             _ascendStartedSubscriber.Subscribe(OnAscendStarted).AddTo(_subscriptions);
             _descendStartedSubscriber.Subscribe(OnDescendStarted).AddTo(_subscriptions);
+            _progressBarCompletedSubscriber.Subscribe(OnProgressBarCompleted).AddTo(_subscriptions);
         }
 
         public void Dispose()
@@ -127,6 +136,27 @@ namespace BalloonParty.Audio.Routing
         private void OnDescendStarted(LevelDescendStartedMessage message)
         {
             _player.Play(GameSoundId.LevelDescend, null);
+        }
+
+        private void OnProgressBarCompleted(ProgressBarCompletedMessage message)
+        {
+            _player.Play(GameSoundId.UiProgressComplete, null, semitoneOffset: ColorRootOffset(message.ColorName));
+        }
+
+        private int ColorRootOffset(string color)
+        {
+            var names = _palette.ProgressColorNames;
+            for (var i = 0; i < names.Count; i++)
+            {
+                if (string.Equals(names[i], color, StringComparison.Ordinal))
+                {
+                    return i < ColorRootSemitones.Length
+                        ? ColorRootSemitones[i]
+                        : ColorRootSemitones[ColorRootSemitones.Length - 1];
+                }
+            }
+
+            return 0;
         }
     }
 }

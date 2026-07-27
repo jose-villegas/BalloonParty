@@ -84,6 +84,8 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<RunResetMessage>(options);
             builder.RegisterMessageBroker<RunRestartCompletedMessage>(options);
             builder.RegisterMessageBroker<BoardClearMessage>(options);
+            builder.RegisterMessageBroker<BoardDepletedMessage>(options);
+            builder.RegisterMessageBroker<ForceDestroyProjectileMessage>(options);
             builder.RegisterMessageBroker<ProjectileLoadedMessage>(options);
             builder.RegisterMessageBroker<ProjectileFiredMessage>(options);
             builder.RegisterMessageBroker<ProjectileCruiseStartedMessage>(options);
@@ -108,6 +110,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<LevelAscendStartedMessage>(options);
             builder.RegisterMessageBroker<LevelDescendStartedMessage>(options);
             builder.RegisterMessageBroker<LevelUpGlowTrailsMessage>(options);
+            builder.RegisterMessageBroker<ProgressBarCompletedMessage>(options);
             builder.RegisterMessageBroker<PausedMessage>(options);
             builder.RegisterMessageBroker<ResumedMessage>(options);
         }
