@@ -107,5 +107,94 @@ namespace BalloonParty.Tests.Shared
 
             Assert.AreEqual(1f, Time.timeScale, 0.001f);
         }
+
+        // --- Exclusivity tests ---
+
+        [Test]
+        public void ExclusiveClaim_IgnoresLowerCompetingClaim()
+        {
+            _service.Claim(TimeScaleSource.LastShield, 0.25f);
+            _service.ClaimExclusive(TimeScaleSource.LevelUpCeremony, 0.6f);
+
+            Assert.AreEqual(0.6f, Time.timeScale, 0.001f);
+        }
+
+        [Test]
+        public void ReleaseExclusive_RestoresMinimumOfStillRecordedClaims()
+        {
+            _service.Claim(TimeScaleSource.LastShield, 0.25f);
+            _service.ClaimExclusive(TimeScaleSource.LevelUpCeremony, 0.6f);
+
+            _service.ReleaseExclusive(TimeScaleSource.LevelUpCeremony);
+
+            Assert.AreEqual(0.25f, Time.timeScale, 0.001f);
+        }
+
+        [Test]
+        public void ClaimArrivingDuringExclusivity_IsRecordedAndAppliesAfterRelease()
+        {
+            _service.ClaimExclusive(TimeScaleSource.LevelUpCeremony, 0.6f);
+            _service.Claim(TimeScaleSource.PierceDischarge, 0.1f);
+
+            // During exclusivity, the exclusive value wins.
+            Assert.AreEqual(0.6f, Time.timeScale, 0.001f);
+
+            _service.ReleaseExclusive(TimeScaleSource.LevelUpCeremony);
+
+            // After release, the recorded claim applies.
+            Assert.AreEqual(0.1f, Time.timeScale, 0.001f);
+        }
+
+        [Test]
+        public void Release_OnExclusiveOwner_ClearsOwnerToo()
+        {
+            _service.Claim(TimeScaleSource.LastShield, 0.25f);
+            _service.ClaimExclusive(TimeScaleSource.LevelUpCeremony, 0.6f);
+
+            // Using plain Release on the exclusive owner should clear both the claim and the owner.
+            _service.Release(TimeScaleSource.LevelUpCeremony);
+
+            Assert.AreEqual(0.25f, Time.timeScale, 0.001f);
+        }
+
+        [Test]
+        public void ResetRun_ClearsExclusiveOwner_PlainClaimAppliesNormally()
+        {
+            _service.ClaimExclusive(TimeScaleSource.LevelUpCeremony, 0.6f);
+
+            _service.ResetRun(1);
+
+            // After reset, a plain claim should apply normally (no stale exclusive owner).
+            _service.Claim(TimeScaleSource.Cinematic, 0.4f);
+
+            Assert.AreEqual(0.4f, Time.timeScale, 0.001f);
+        }
+
+        [Test]
+        public void ReleaseExclusive_ByNonOwner_IsANoOp()
+        {
+            _service.Claim(TimeScaleSource.LastShield, 0.25f);
+            _service.ClaimExclusive(TimeScaleSource.LevelUpCeremony, 0.6f);
+
+            // A non-owner trying to release exclusivity should be ignored.
+            _service.ReleaseExclusive(TimeScaleSource.LastShield);
+
+            Assert.AreEqual(0.6f, Time.timeScale, 0.001f);
+        }
+
+        [Test]
+        public void ClaimExclusive_OverridesExistingExclusiveOwner()
+        {
+            _service.ClaimExclusive(TimeScaleSource.LevelUpCeremony, 0.6f);
+            _service.ClaimExclusive(TimeScaleSource.Cinematic, 0.5f);
+
+            // Latest exclusive owner wins.
+            Assert.AreEqual(0.5f, Time.timeScale, 0.001f);
+
+            _service.ReleaseExclusive(TimeScaleSource.Cinematic);
+
+            // The previous owner's claim is still in the dict — it participates in min().
+            Assert.AreEqual(0.6f, Time.timeScale, 0.001f);
+        }
     }
 }

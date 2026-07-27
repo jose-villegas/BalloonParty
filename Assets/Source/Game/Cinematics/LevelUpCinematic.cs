@@ -5,7 +5,6 @@ using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Score;
 using BalloonParty.Game.Score.Behaviours;
-using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
@@ -19,7 +18,6 @@ using UniRx;
 using UnityEngine;
 using VContainer;
 using BalloonParty.Configuration.Cinematics;
-using Navigation = BalloonParty.Shared.GameState.Navigation;
 
 namespace BalloonParty.Game.Cinematics
 {
@@ -42,7 +40,6 @@ namespace BalloonParty.Game.Cinematics
         private readonly ScoreTrailService _scoreTrailService;
         private readonly ScoreTrailBehaviourResolver _resolver;
         private readonly PauseService _pauseService;
-        private readonly IActiveProjectilePierce _pierce;
         private readonly CancellationTokenSource _cts = new();
 
         private TrackedTrailSettings _trackedTrailSettings;
@@ -73,8 +70,7 @@ namespace BalloonParty.Game.Cinematics
             ILossForecast lossForecast,
             ScoreTrailService scoreTrailService,
             ScoreTrailBehaviourResolver resolver,
-            PauseService pauseService,
-            IActiveProjectilePierce pierce)
+            PauseService pauseService)
             : base(director, rig, timeScale, settings)
         {
             _config = config;
@@ -87,7 +83,6 @@ namespace BalloonParty.Game.Cinematics
             _scoreTrailService = scoreTrailService;
             _resolver = resolver;
             _pauseService = pauseService;
-            _pierce = pierce;
         }
 
         protected override CameraRigCinematicConfig BuildConfig()
@@ -131,21 +126,7 @@ namespace BalloonParty.Game.Cinematics
                 return;
             }
 
-            // No level-up show on a run that is over or already certain to be lost.
-            if (Navigation.Current.Value != NavigationState.Game || _lossForecast.LossImminent)
-            {
-                return;
-            }
-
-            // Hold the pan-in while a shot is piercing so the ceremony never pauses the game mid-flight.
-            // The pierce ends by DISCHARGING (IsPiercing cleared BEFORE the plowed toughs are popped), so
-            // those tough pops re-enter here not-piercing and start the ceremony then — after the plow.
-            if (_pierce.IsPiercing.Value)
-            {
-                return;
-            }
-
-            if (!_levelProgress.WillLevelUp())
+            if (_levelProgress.Phase.Value != LevelUpPhase.Completing)
             {
                 return;
             }
@@ -202,15 +183,11 @@ namespace BalloonParty.Game.Cinematics
             _lastTrailPosition = _trailOrigin;
             _trailTargetWorld = _scoreTrailService.GetTarget(_tippingTrailId.Color).Center;
 
-            // Re-check after the async trail wait: the loss may have committed since the tipping pop.
-            if (Navigation.Current.Value != NavigationState.Game || _lossForecast.LossImminent
-                || !Runner.TryBegin())
+            if (!Runner.TryBegin())
             {
                 _sessionActive = false;
                 return;
             }
-
-            _pauseService.Pause(PauseSource.Cinematic);
 
             // Formation principals are bare anchor Transforms with no FlyingTrail — only tween-driven trails
             // (DefaultScore) need their move tween killed before we puppet the transform along the pan-in.
@@ -255,7 +232,6 @@ namespace BalloonParty.Game.Cinematics
         private void OnDismissed()
         {
             DisposeSessionSubscription();
-            _pauseService.Resume(PauseSource.Cinematic);
             OnCinematicEnded();
         }
 

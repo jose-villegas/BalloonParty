@@ -15,6 +15,11 @@ namespace BalloonParty.Shared.Pause
         LastShield,
 
         /// <summary>A brief slow-mo dip as a piercing shot discharges — shattering the toughs it plowed.</summary>
-        PierceDischarge
+        PierceDischarge,
+
+        /// <summary>The level-up ceremony's tipping beat and its hand-off to the popup. Claimed
+        /// EXCLUSIVELY for the beat so a doomed shot's LastShield curve can't drag it slower than the
+        /// ceremony asked for.</summary>
+        LevelUpCeremony
     }
 }

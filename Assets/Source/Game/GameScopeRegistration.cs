@@ -101,6 +101,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<PierceDischargedMessage>(options);
             builder.RegisterMessageBroker<ScoreTrailArrivedMessage>(options);
             builder.RegisterMessageBroker<LevelUpAbortedMessage>(options);
+            builder.RegisterMessageBroker<LevelUpAbandonedMessage>(options);
             builder.RegisterMessageBroker<LevelUpDismissedMessage>(options);
             builder.RegisterMessageBroker<GameOverDismissedMessage>(options);
             builder.RegisterMessageBroker<LevelTransitionCompletedMessage>(options);
@@ -121,7 +122,7 @@ namespace BalloonParty.Game
             builder.Register<PoolManager>(Lifetime.Singleton);
             builder.Register<TrailEndpointRegistry>(Lifetime.Singleton);
             builder.Register<PauseService>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
-            builder.RegisterEntryPoint<TimeScaleService>().AsSelf().As<IRunResettable>();
+            builder.RegisterEntryPoint<TimeScaleService>().AsSelf().As<ITimeScaleClaims>().As<IRunResettable>();
             builder.RegisterEntryPoint<ProjectileDoomedTimeScaleController>();
             builder.Register<ProjectilePositionProvider>(Lifetime.Singleton);
             builder.Register<PredictionTraceProvider>(Lifetime.Singleton);

@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Configuration.Cinematics;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
-using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.Pause;
 using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
@@ -29,13 +30,17 @@ namespace BalloonParty.Tests.Game
         private INavigation _navigation;
         private ReactiveProperty<NavigationState> _navState;
         private ILossForecast _lossForecast;
+        private ITimeScaleClaims _timeScale;
+        private ICinematicsSettings _cinematics;
         private IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
-        private IActiveProjectilePierce _pierce;
-        private ReactiveProperty<bool> _isPiercing;
+        private IPublisher<LevelUpAbandonedMessage> _abandonedPublisher;
         private IMessageHandler<ScoreTrailArrivedMessage> _trailArrivedHandler;
         private IMessageHandler<LevelUpAbortedMessage> _abortedHandler;
         private IMessageHandler<LevelUpDismissedMessage> _dismissedHandler;
         private IMessageHandler<LevelTransitionCompletedMessage> _completedHandler;
+        private IMessageHandler<WallHitMessage> _wallHitHandler;
+        private IMessageHandler<ProjectileDestroyedMessage> _destroyedHandler;
+        private IMessageHandler<GameOverMessage> _gameOverHandler;
         private LevelController _controller;
 
         [SetUp]
@@ -60,11 +65,22 @@ namespace BalloonParty.Tests.Game
             _lossForecast = Substitute.For<ILossForecast>();
             _lossForecast.LossImminent.Returns(false);
 
-            _levelUpPublisher = Substitute.For<IPublisher<ScoreLevelUpMessage>>();
+            _timeScale = Substitute.For<ITimeScaleClaims>();
 
-            _isPiercing = new ReactiveProperty<bool>(false);
-            _pierce = Substitute.For<IActiveProjectilePierce>();
-            _pierce.IsPiercing.Returns(_isPiercing);
+            _cinematics = Substitute.For<ICinematicsSettings>();
+            var entry = new CinematicStateEntry();
+            // Set the private _rig field to contain a TimeScaleCurve for the beat.
+            var rigField = typeof(CinematicStateEntry).GetField("_rig",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var rig = new CameraRigCinematicSettings();
+            var curveField = typeof(CameraRigCinematicSettings).GetField("_timeScaleCurve",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            curveField.SetValue(rig, AnimationCurve.Constant(0f, 0.3f, 0.5f));
+            rigField.SetValue(entry, rig);
+            _cinematics.EntryOf(CinematicState.LevelUpPanIn).Returns(entry);
+
+            _levelUpPublisher = Substitute.For<IPublisher<ScoreLevelUpMessage>>();
+            _abandonedPublisher = Substitute.For<IPublisher<LevelUpAbandonedMessage>>();
 
             _controller = BuildController();
             _controller.Start();
@@ -74,7 +90,6 @@ namespace BalloonParty.Tests.Game
         public void TearDown()
         {
             _controller.Dispose();
-            _isPiercing.Dispose();
         }
 
         private LevelController BuildController()
@@ -107,10 +122,33 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<LevelTransitionCompletedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
+            var wallHitSubscriber = Substitute.For<ISubscriber<WallHitMessage>>();
+            wallHitSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<WallHitMessage>>(h => _wallHitHandler = h),
+                    Arg.Any<MessageHandlerFilter<WallHitMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
+            var destroyedSubscriber = Substitute.For<ISubscriber<ProjectileDestroyedMessage>>();
+            destroyedSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<ProjectileDestroyedMessage>>(h => _destroyedHandler = h),
+                    Arg.Any<MessageHandlerFilter<ProjectileDestroyedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
+            var gameOverSubscriber = Substitute.For<ISubscriber<GameOverMessage>>();
+            gameOverSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<GameOverMessage>>(h => _gameOverHandler = h),
+                    Arg.Any<MessageHandlerFilter<GameOverMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
             return new LevelController(
                 _levelParams, _thresholds, _palette, _navigation, _lossForecast,
-                Substitute.For<IRetryState>(), _levelUpPublisher,
-                trailArrivedSubscriber, abortedSubscriber, dismissedSubscriber, completedSubscriber, _pierce);
+                Substitute.For<IRetryState>(), _timeScale, _cinematics,
+                _levelUpPublisher, _abandonedPublisher,
+                trailArrivedSubscriber, abortedSubscriber, dismissedSubscriber, completedSubscriber,
+                wallHitSubscriber, destroyedSubscriber, gameOverSubscriber);
         }
 
         [Test]
@@ -196,6 +234,7 @@ namespace BalloonParty.Tests.Game
 
             ScoreColor(Red, 5);  // 2 granted, 3 banked
             ScoreColor(Blue, 2); // completes level 1
+            FireFlightEnded();
             FireDismissed();     // → level 2, progress resets, bank untouched
             FireTransitionComplete();
 
@@ -255,28 +294,58 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void TrailArrived_AllColorsConfirmed_PublishesOnceAndDefersLevel()
+        public void TrailArrived_AllColorsConfirmed_GoesToCompleting()
         {
             _thresholds.PointsRequiredForLevel(1).Returns(2);
 
             ScoreColor(Red, 2);
             ScoreColor(Blue, 2);
 
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
+            _timeScale.Received(1).ClaimExclusive(TimeScaleSource.LevelUpCeremony, Arg.Any<float>());
+            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
+        }
+
+        [Test]
+        public void FlightEnded_WhileCompleting_PublishesAndGoesPending()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
+
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
+            FireFlightEnded();
+
             _levelUpPublisher.Received(1).Publish(Arg.Is<ScoreLevelUpMessage>(m => m.NewLevel == 2));
             _navigation.Received(1).TransitionTo(NavigationState.LevelUp);
+            Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value);
             Assert.AreEqual(1, _controller.Level.Value, "level advances only on dismissal");
         }
 
         [Test]
-        public void FurtherTrailsWhilePending_DoNotPublishAgain()
+        public void FurtherTrailsWhileCompleting_DoNotRePublish()
         {
             _thresholds.PointsRequiredForLevel(1).Returns(2);
             ScoreColor(Red, 2);
             ScoreColor(Blue, 2);
 
-            // A straggler arriving during the ceremony must not fire a second level-up.
+            // A straggler arriving during Completing must not fire anything — the ceremony hasn't presented yet.
             FireTrailArrived(Red, 2);
             FireTrailArrived(Blue, 2);
+
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
+            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
+        }
+
+        [Test]
+        public void SecondFlightEnded_WhilePending_DoesNotRePublish()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
+            FireFlightEnded();
+
+            // Every ordinary shot fires ProjectileDestroyedMessage — Pending must reject it.
+            FireFlightEnded();
 
             _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
         }
@@ -287,6 +356,7 @@ namespace BalloonParty.Tests.Game
             _thresholds.PointsRequiredForLevel(1).Returns(2);
             ScoreColor(Red, 2);
             ScoreColor(Blue, 2);
+            FireFlightEnded();
             Assert.AreEqual(1, _controller.Level.Value);
 
             FireDismissed();
@@ -301,34 +371,46 @@ namespace BalloonParty.Tests.Game
 
             ScoreColor(Red, 2);
             ScoreColor(Blue, 2);
+            FireFlightEnded();
 
             _levelUpPublisher.Received(1).Publish(Arg.Is<ScoreLevelUpMessage>(m => m.CompletedColors.Count == 2));
         }
 
         [Test]
-        public void LevelUp_WhenLossImminent_DoesNotLevelUp()
+        public void LevelUp_WhenLossImminentAtFlightEnd_StillPresents()
         {
+            // THE PINNED REGRESSION: LossImminent going true before end-of-flight used to permanently
+            // block the ceremony. The new model evaluates navigation ONCE at the boundary and deliberately
+            // does NOT gate on LossImminent — it is a prediction, and gating on it is the bug.
             _thresholds.PointsRequiredForLevel(1).Returns(1);
-            _lossForecast.LossImminent.Returns(true);
 
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
 
-            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
-            Assert.AreEqual(1, _controller.Level.Value);
+            // Loss becomes imminent between tipping claim and end-of-flight.
+            _lossForecast.LossImminent.Returns(true);
+            FireFlightEnded();
+
+            _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
+            Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value);
         }
 
         [Test]
-        public void LevelUp_WhenNotInGame_DoesNotLevelUp()
+        public void FlightEnded_WhenNotInGame_AbandonsCeremony()
         {
             _thresholds.PointsRequiredForLevel(1).Returns(1);
-            _navState.Value = NavigationState.GameOver;
 
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
+
+            // Run leaves gameplay before the flight ends.
+            _navState.Value = NavigationState.GameOver;
+            FireFlightEnded();
 
             _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
-            Assert.AreEqual(1, _controller.Level.Value);
+            Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value);
+            _abandonedPublisher.Received(1).Publish(Arg.Any<LevelUpAbandonedMessage>());
         }
 
         [Test]
@@ -339,6 +421,7 @@ namespace BalloonParty.Tests.Game
             _thresholds.PointsRequiredForLevel(1).Returns(1);
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
+            FireFlightEnded();
             FireDismissed();
             Assert.AreEqual(LevelUpPhase.Transitioning, _controller.Phase.Value);
 
@@ -365,6 +448,7 @@ namespace BalloonParty.Tests.Game
             _thresholds.PointsRequiredForLevel(1).Returns(2);
             ScoreColor(Red, 2);
             ScoreColor(Blue, 2);
+            FireFlightEnded();
 
             // Progress holds through the ceremony, then resets on dismissal.
             Assert.AreEqual(2, _controller.GetProgress(Red), "progress persists while pending");
@@ -383,6 +467,7 @@ namespace BalloonParty.Tests.Game
 
             ScoreColor(Red, 10); // 7 granted + confirmed, 3 banked
             ScoreColor(Blue, 7);
+            FireFlightEnded();
 
             FireDismissed();
 
@@ -396,6 +481,7 @@ namespace BalloonParty.Tests.Game
             _thresholds.PointsRequiredForLevel(1).Returns(7);
             ScoreColor(Red, 10); // 3 banked
             ScoreColor(Blue, 7);
+            FireFlightEnded();
 
             FireDismissed();
 
@@ -442,6 +528,7 @@ namespace BalloonParty.Tests.Game
             _thresholds.PointsRequiredForLevel(1).Returns(1);
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
+            FireFlightEnded();
             FireDismissed();
             Assert.AreEqual(2, _controller.Level.Value);
 
@@ -458,6 +545,7 @@ namespace BalloonParty.Tests.Game
             _thresholds.PointsRequiredForLevel(1).Returns(1);
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
+            FireFlightEnded();
             FireDismissed();          // → Transitioning (level advances, progress resets)
             FireTransitionComplete(); // → Playing (scoring reopens)
             Assert.AreEqual(2, _controller.Level.Value);
@@ -476,12 +564,11 @@ namespace BalloonParty.Tests.Game
         {
             // The level-up ceremony freezes its surviving score trails behind the popup, then resolves them
             // (CompleteAll) as outgoing-level content when the transition runs — while the phase is still
-            // Transitioning, AFTER progress has reset for the new level. Those arrivals carry the finished
-            // level's cumulative score; landing them now must not step the reset numbering (the invariant the
-            // resolve point rests on: the transition runs before the phase returns to Playing).
+            // Transitioning, AFTER progress has reset for the new level.
             _thresholds.PointsRequiredForLevel(Arg.Any<int>()).Returns(2);
             ScoreColor(Red, 2);
             ScoreColor(Blue, 2);
+            FireFlightEnded();
             FireDismissed();
             Assert.AreEqual(LevelUpPhase.Transitioning, _controller.Phase.Value);
             Assert.AreEqual(0, _controller.GetProgress(Red), "progress reset for the new level on dismissal");
@@ -499,7 +586,10 @@ namespace BalloonParty.Tests.Game
 
             ScoreColor(Red, 2);
             ScoreColor(Blue, 2);
-            Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value, "detected → Pending");
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value, "tipping claim → Completing");
+
+            FireFlightEnded();
+            Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value, "flight ended → Pending");
 
             FireDismissed();
             Assert.AreEqual(LevelUpPhase.Transitioning, _controller.Phase.Value, "dismissed → Transitioning");
@@ -514,6 +604,7 @@ namespace BalloonParty.Tests.Game
             _thresholds.PointsRequiredForLevel(1).Returns(1);
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
+            FireFlightEnded();
             _navState.Value = NavigationState.LevelUp;
             FireDismissed();
 
@@ -529,6 +620,7 @@ namespace BalloonParty.Tests.Game
             _thresholds.PointsRequiredForLevel(1).Returns(1);
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
+            FireFlightEnded();
             FireDismissed();
             _navState.Value = NavigationState.GameOver;
 
@@ -544,6 +636,7 @@ namespace BalloonParty.Tests.Game
             _thresholds.PointsRequiredForLevel(1).Returns(1);
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
+            FireFlightEnded();
 
             FireDismissed();
 
@@ -558,6 +651,7 @@ namespace BalloonParty.Tests.Game
 
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
+            FireFlightEnded();
             _navState.Value = NavigationState.LevelUp;
             FireDismissed();
             FireTransitionComplete();
@@ -575,6 +669,7 @@ namespace BalloonParty.Tests.Game
             _thresholds.PointsRequiredForLevel(1).Returns(1);
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
+            FireFlightEnded();
             _navState.Value = NavigationState.LevelUp;
 
             FireAborted();
@@ -594,156 +689,128 @@ namespace BalloonParty.Tests.Game
             Assert.AreEqual(1, _controller.Level.Value);
         }
 
-        [Test]
-        public void CheckLevelUp_WhilePiercing_HoldsCommit()
-        {
-            // A confirming arrival that completes every colour mid-pierce must not fire the ceremony:
-            // the commit is held so the plowing shot isn't interrupted mid-flight.
-            _thresholds.PointsRequiredForLevel(1).Returns(2);
-            SetPiercing(true);
-
-            ScoreColor(Red, 2);
-            ScoreColor(Blue, 2);
-
-            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
-            Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value, "phase stays Playing while held");
-        }
+        // Pierce-gate tests removed: the pierce mechanism is deleted by this plan. The Completing phase
+        // replaces it by holding the ceremony until end-of-flight regardless of pierce state.
 
         [Test]
-        public void PierceEnded_WithRequirementMet_PublishesOnceAndGoesPending()
+        public void FlightEnded_WhilePlaying_DoesNothing()
         {
-            // The pierce discharges after the confirming trails landed — that's where the held commit fires.
-            _thresholds.PointsRequiredForLevel(1).Returns(2);
-            SetPiercing(true);
-            ScoreColor(Red, 2);
-            ScoreColor(Blue, 2);
+            // Every ordinary shot fires ProjectileDestroyedMessage — when not Completing it must be ignored.
+            _thresholds.PointsRequiredForLevel(1).Returns(10);
 
-            SetPiercing(false);
-
-            _levelUpPublisher.Received(1).Publish(Arg.Is<ScoreLevelUpMessage>(m => m.NewLevel == 2));
-            Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value);
-        }
-
-        [Test]
-        public void NotPiercing_ConfirmingArrival_FiresImmediately()
-        {
-            // Regression guard: a not-piercing shot behaves exactly as before the pierce gate — the
-            // confirming arrival commits on the spot, no pierce-end needed.
-            _thresholds.PointsRequiredForLevel(1).Returns(2);
-
-            ScoreColor(Red, 2);
-            ScoreColor(Blue, 2);
-
-            _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
-            Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value);
-        }
-
-        [Test]
-        public void PierceEnded_RequirementNotMet_DoesNotPublish()
-        {
-            // The pierce ended but only one colour reached the threshold — nothing to commit.
-            _thresholds.PointsRequiredForLevel(1).Returns(5);
-            SetPiercing(true);
-            ScoreColor(Red, 5); // Blue still short
-
-            SetPiercing(false);
+            FireFlightEnded();
 
             _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
             Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value);
         }
 
         [Test]
-        public void MultipleArrivalsDuringPierce_ThenPierceEnds_PublishesOnce()
+        public void TrailArrival_DuringCompleting_KeepsConfirmingProgress()
         {
-            // Many confirming arrivals plow past during one flight; the single discharge fires the ceremony once.
-            _thresholds.PointsRequiredForLevel(1).Returns(2);
-            SetPiercing(true);
-            ScoreColor(Red, 2);
-            ScoreColor(Blue, 2);
+            // Bars must keep filling while the flight plays out.
+            _thresholds.PointsRequiredForLevel(1).Returns(3);
+            _controller.ClaimProgress(Red, 3);
+            _controller.ClaimProgress(Blue, 3);
+            // Now in Completing.
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
+
             FireTrailArrived(Red, 2);
-            FireTrailArrived(Blue, 2);
 
-            SetPiercing(false);
+            Assert.AreEqual(2, _controller.GetProgress(Red));
+        }
 
+        [Test]
+        public void DroppedTrail_StillReachesPendingAtFlightEnd()
+        {
+            // Claims with no arrivals (trail lost) still present the ceremony at end-of-flight.
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
+            _controller.ClaimProgress(Red, 2);
+            _controller.ClaimProgress(Blue, 2);
+            // Completing entered but no trails ever arrive.
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
+
+            FireFlightEnded();
+
+            Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value);
             _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
         }
 
         [Test]
-        public void ClaimProgress_WhilePiercing_StillBanksExcess()
+        public void WallHit_DuringCompleting_ClosesWindowA()
         {
-            // Only the COMMIT is held mid-pierce; ClaimProgress isn't gated, so overflow still banks
-            // and confirmed progress still advances during the plow.
-            _thresholds.PointsRequiredForLevel(1).Returns(7);
-            SetPiercing(true);
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
 
-            ScoreColor(Red, 10); // 7 confirmed, 3 banked
+            _timeScale.Received(1).ClaimExclusive(TimeScaleSource.LevelUpCeremony, Arg.Any<float>());
 
-            Assert.AreEqual(3, _controller.ExcessPoints(Red), "the bank fills regardless of the pierce hold");
-            Assert.AreEqual(7, _controller.GetProgress(Red), "confirmed progress advances mid-pierce");
+            FireWallHit();
+
+            _timeScale.Received(1).ReleaseExclusive(TimeScaleSource.LevelUpCeremony);
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value, "wall hit closes Window A but phase stays Completing");
         }
 
         [Test]
-        public void PierceEnded_WhenLossImminent_DoesNotPublish()
+        public void GameOver_DuringCompleting_AbandonsCeremony()
         {
-            _thresholds.PointsRequiredForLevel(1).Returns(2);
-            _lossForecast.LossImminent.Returns(true);
-            SetPiercing(true);
-            ScoreColor(Red, 2);
-            ScoreColor(Blue, 2);
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
 
-            SetPiercing(false);
+            FireGameOver();
 
-            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
             Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value);
+            _abandonedPublisher.Received(1).Publish(Arg.Any<LevelUpAbandonedMessage>());
+            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
         }
 
         [Test]
-        public void PierceEnded_WhenNotInGame_DoesNotPublish()
+        public void Abort_WhileCompleting_AbandonsCeremony()
         {
-            _thresholds.PointsRequiredForLevel(1).Returns(2);
-            _navState.Value = NavigationState.GameOver;
-            SetPiercing(true);
-            ScoreColor(Red, 2);
-            ScoreColor(Blue, 2);
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
 
-            SetPiercing(false);
+            FireAborted();
 
-            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
             Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value);
+            _abandonedPublisher.Received(1).Publish(Arg.Any<LevelUpAbandonedMessage>());
         }
 
         [Test]
-        public void PierceEnded_WhileAlreadyPending_DoesNotRePublish()
+        public void Dismiss_WhileCompleting_IsIgnored()
         {
-            // A pierce cycle after the ceremony is already Pending must not re-fire it — the phase guard holds.
-            _thresholds.PointsRequiredForLevel(1).Returns(2);
-            ScoreColor(Red, 2);
-            ScoreColor(Blue, 2);
-            _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
 
-            SetPiercing(true);
-            SetPiercing(false);
+            FireDismissed();
 
-            _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
+            Assert.AreEqual(1, _controller.Level.Value, "dismiss during Completing must not advance the level");
         }
 
         [Test]
-        public void PierceEnded_AfterDispose_DoesNotFireOrThrow()
+        public void Tick_PastCompletingCap_PresentsWithoutFlightEnd()
         {
-            _thresholds.PointsRequiredForLevel(1).Returns(2);
-            SetPiercing(true);
-            ScoreColor(Red, 2);
-            ScoreColor(Blue, 2);
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
 
-            _controller.Dispose();
+            // Force the internal elapsed past the cap (Time.unscaledDeltaTime is 0 in EditMode).
+            var field = typeof(LevelController).GetField("_completingElapsed",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            field.SetValue(_controller, 8.01f);
 
-            Assert.DoesNotThrow(() => SetPiercing(false));
-            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
-        }
+            _controller.Tick();
 
-        private void SetPiercing(bool piercing)
-        {
-            _isPiercing.Value = piercing;
+            Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value);
+            _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
         }
 
         // Mirrors production: claim each point (advancing projected), then confirm it as its trail lands.
@@ -759,6 +826,21 @@ namespace BalloonParty.Tests.Game
         private void FireTrailArrived(string color, int score)
         {
             _trailArrivedHandler.Handle(new ScoreTrailArrivedMessage(color, score, points: 1, Vector3.zero));
+        }
+
+        private void FireWallHit()
+        {
+            _wallHitHandler.Handle(new WallHitMessage(Vector3.zero, 0));
+        }
+
+        private void FireFlightEnded()
+        {
+            _destroyedHandler.Handle(new ProjectileDestroyedMessage());
+        }
+
+        private void FireGameOver()
+        {
+            _gameOverHandler.Handle(new GameOverMessage(1, 0));
         }
 
         private void FireDismissed()

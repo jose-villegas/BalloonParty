@@ -5,7 +5,7 @@ namespace BalloonParty.Game.Level
     ///     the scattered guard flags (pending / transitioning / nav / pause) that had to be kept in sync:
     ///     a level-up is only detected in <see cref="Playing" />, and every out-of-phase input (a second
     ///     detection, a straggler trail, a duplicate dismissal) is rejected because no transition exists
-    ///     for it. Cycles <c>Playing → Pending → Transitioning → Playing</c>.
+    ///     for it. Cycles <c>Playing → Completing → Pending → Transitioning → Playing</c>.
     /// </summary>
     internal enum LevelUpPhase
     {
@@ -18,6 +18,10 @@ namespace BalloonParty.Game.Level
 
         /// <summary>Dismissed: the level has advanced and the Ascent is running. Ends when the Ascent
         /// reports completion.</summary>
-        Transitioning
+        Transitioning,
+
+        /// <summary>The tipping claim landed — holding for the shot's flight to end before presenting
+        /// the ceremony. Progress keeps confirming (bars fill), spawns/reload are held.</summary>
+        Completing
     }
 }

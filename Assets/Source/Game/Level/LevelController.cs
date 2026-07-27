@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Configuration.Cinematics;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Run;
-using BalloonParty.Projectile.Controller;
-using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Diagnostics;
+using BalloonParty.Shared.Extensions;
+using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.Pause;
 using MessagePipe;
 using UniRx;
 using UnityEngine;
@@ -18,20 +20,27 @@ namespace BalloonParty.Game.Level
     ///     Owns the player's progression through levels — current level, per-colour progress, and the
     ///     level-up trigger.
     /// </summary>
-    internal sealed class LevelController : IStartable, IDisposable, IRunResettable, ILevelProgress
+    internal sealed class LevelController : IStartable, ITickable, IDisposable, IRunResettable, ILevelProgress
     {
+        private const float CompletingCapSeconds = 8f;
+
         private readonly IActiveLevelParameters _levelParams;
         private readonly ILevelThresholds _thresholds;
         private readonly IGamePalette _palette;
         private readonly INavigation _navigation;
         private readonly ILossForecast _lossForecast;
         private readonly IRetryState _retryState;
+        private readonly ITimeScaleClaims _timeScale;
+        private readonly ICinematicsSettings _cinematics;
         private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
+        private readonly IPublisher<LevelUpAbandonedMessage> _abandonedPublisher;
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         private readonly ISubscriber<LevelUpAbortedMessage> _abortedSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         private readonly ISubscriber<LevelTransitionCompletedMessage> _transitionCompletedSubscriber;
-        private readonly IActiveProjectilePierce _pierce;
+        private readonly ISubscriber<WallHitMessage> _wallHitSubscriber;
+        private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
+        private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
 
         private readonly ReactiveProperty<int> _level = new(1);
         private readonly ReactiveProperty<LevelUpPhase> _phase = new(LevelUpPhase.Playing);
@@ -44,7 +53,12 @@ namespace BalloonParty.Game.Level
         private IDisposable _abortedSubscription;
         private IDisposable _dismissedSubscription;
         private IDisposable _transitionCompletedSubscription;
-        private IDisposable _pierceEndedSubscription;
+        private IDisposable _wallHitSubscription;
+        private IDisposable _destroyedSubscription;
+        private IDisposable _gameOverSubscription;
+        private AnimationCurve _beatCurve;
+        private float _completingElapsed;
+        private bool _windowAOpen;
 
         // The target level for the deferred increment; applied when the popup is dismissed.
         private int _pendingNewLevel;
@@ -56,12 +70,17 @@ namespace BalloonParty.Game.Level
             INavigation navigation,
             ILossForecast lossForecast,
             IRetryState retryState,
+            ITimeScaleClaims timeScale,
+            ICinematicsSettings cinematics,
             IPublisher<ScoreLevelUpMessage> levelUpPublisher,
+            IPublisher<LevelUpAbandonedMessage> abandonedPublisher,
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
             ISubscriber<LevelUpAbortedMessage> abortedSubscriber,
             ISubscriber<LevelUpDismissedMessage> dismissedSubscriber,
             ISubscriber<LevelTransitionCompletedMessage> transitionCompletedSubscriber,
-            IActiveProjectilePierce pierce)
+            ISubscriber<WallHitMessage> wallHitSubscriber,
+            ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
+            ISubscriber<GameOverMessage> gameOverSubscriber)
         {
             _levelParams = levelParams;
             _thresholds = thresholds;
@@ -69,12 +88,17 @@ namespace BalloonParty.Game.Level
             _navigation = navigation;
             _lossForecast = lossForecast;
             _retryState = retryState;
+            _timeScale = timeScale;
+            _cinematics = cinematics;
             _levelUpPublisher = levelUpPublisher;
+            _abandonedPublisher = abandonedPublisher;
             _trailArrivedSubscriber = trailArrivedSubscriber;
             _abortedSubscriber = abortedSubscriber;
             _dismissedSubscriber = dismissedSubscriber;
             _transitionCompletedSubscriber = transitionCompletedSubscriber;
-            _pierce = pierce;
+            _wallHitSubscriber = wallHitSubscriber;
+            _destroyedSubscriber = destroyedSubscriber;
+            _gameOverSubscriber = gameOverSubscriber;
         }
 
         public IReadOnlyReactiveProperty<int> Level => _level;
@@ -88,6 +112,7 @@ namespace BalloonParty.Game.Level
             _colorKeys.AddRange(_palette.ProgressColorNames);
             ClearRunState();
 
+            _beatCurve = _cinematics.EntryOf(CinematicState.LevelUpPanIn).Rig.TimeScaleCurve;
             _trailSubscription = _trailArrivedSubscriber.Subscribe(OnTrailArrived);
             _abortedSubscription = _abortedSubscriber.Subscribe(_ => OnLevelUpAborted());
 
@@ -96,14 +121,9 @@ namespace BalloonParty.Game.Level
             _dismissedSubscription = _dismissedSubscriber.Subscribe(_ => OnLevelUpDismissed());
             _transitionCompletedSubscription = _transitionCompletedSubscriber.Subscribe(_ => OnTransitionCompleted());
 
-            // A level-up is DETECTED mid-pierce (WillLevelUp stays true the moment we know), but the
-            // COMMIT is held while a shot is piercing so the ceremony doesn't fire mid-flight — see
-            // CheckLevelUp's guard. When the pierce ends (its discharge), re-check: the confirming trails
-            // that arrived during the plow have already advanced progress, so this is where it commits.
-            _pierceEndedSubscription = _pierce.IsPiercing
-                .SkipLatestValueOnSubscribe()
-                .Where(piercing => !piercing)
-                .Subscribe(_ => CheckLevelUp());
+            _wallHitSubscription = _wallHitSubscriber.Subscribe(_ => CloseWindowA());
+            _destroyedSubscription = _destroyedSubscriber.Subscribe(_ => OnFlightEnded());
+            _gameOverSubscription = _gameOverSubscriber.Subscribe(_ => AbandonCeremony("game over"));
         }
 
         public void ResetRun(int generation)
@@ -113,11 +133,14 @@ namespace BalloonParty.Game.Level
 
         public void Dispose()
         {
+            ReleaseCeremonyTimeScale();
             _trailSubscription?.Dispose();
             _abortedSubscription?.Dispose();
             _dismissedSubscription?.Dispose();
             _transitionCompletedSubscription?.Dispose();
-            _pierceEndedSubscription?.Dispose();
+            _wallHitSubscription?.Dispose();
+            _destroyedSubscription?.Dispose();
+            _gameOverSubscription?.Dispose();
         }
 
         public int GetProgress(string colorName)
@@ -208,7 +231,40 @@ namespace BalloonParty.Game.Level
             }
 
             _projectedProgress[color] = baseProgress + granted;
+
+            // Detect on PROJECTED progress: the claim is authoritative the instant the pop happens, so a
+            // lost trail can no longer withhold the ceremony. The BlockLevelUp cheat returns at the guard
+            // above, before this, so it still cannot complete a level.
+            TryBeginCompleting();
+
             return (baseProgress, granted);
+        }
+
+        public void Tick()
+        {
+            if (_phase.Value != LevelUpPhase.Completing)
+            {
+                return;
+            }
+
+            // Unscaled: this beat is warping the very clock the ramp is measured against.
+            _completingElapsed += Time.unscaledDeltaTime;
+
+            if (_windowAOpen)
+            {
+                var duration = _beatCurve.Duration();
+                var t = duration > 0f ? Mathf.Clamp01(_completingElapsed / duration) : 1f;
+                _timeScale.ClaimExclusive(TimeScaleSource.LevelUpCeremony, _beatCurve.Evaluate(t));
+            }
+
+            if (_completingElapsed >= CompletingCapSeconds)
+            {
+                // The boundary never arrived: the shot left play without dying (game over, board clear),
+                // or the tipping claim came from a delayed source (chain lightning, a cheat) with nothing
+                // in flight. Present anyway rather than soft-lock the run.
+                Log.Warn("Level", $"Completing timed out after {CompletingCapSeconds:0.#}s");
+                OnFlightEnded();
+            }
         }
 
         private void ClearRunState()
@@ -223,6 +279,9 @@ namespace BalloonParty.Game.Level
             _level.Value = startLevel;
             _phase.Value = LevelUpPhase.Playing;
             _pendingNewLevel = 0;
+            _windowAOpen = false;
+            _completingElapsed = 0f;
+            ReleaseCeremonyTimeScale();
             // The excess bank is run-scoped — cleared here (fresh run), but NOT at level-up, where it keeps
             // accumulating across the run.
             _bankedExcess.Clear();
@@ -254,9 +313,9 @@ namespace BalloonParty.Game.Level
             }
 #endif
 
-            // Outside Playing (a ceremony or its Ascent is running), any in-flight trail belongs to the
-            // finished level — ignore it.
-            if (_phase.Value != LevelUpPhase.Playing)
+            // Allow confirming progress during Completing (bars must keep filling while the flight plays
+            // out) but reject during Pending/Transitioning — those trails belong to the finished level.
+            if (_phase.Value == LevelUpPhase.Pending || _phase.Value == LevelUpPhase.Transitioning)
             {
                 return;
             }
@@ -264,8 +323,6 @@ namespace BalloonParty.Game.Level
             // Capped at this level's claim so a previous-level straggler can't re-inflate progress.
             var confirmable = Math.Min(msg.Score, _projectedProgress[msg.ColorName]);
             _levelProgress[msg.ColorName] = Math.Max(_levelProgress[msg.ColorName], confirmable);
-
-            CheckLevelUp();
         }
 
         private bool AllColorsConfirmed(int required)
@@ -281,56 +338,6 @@ namespace BalloonParty.Game.Level
             return true;
         }
 
-        private void CheckLevelUp()
-        {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
-            // Dev cheat (BlockLevelUpCheat): hold the current level — never complete it — while testing.
-            if (BalloonParty.Cheats.CheatState.BlockLevelUp)
-            {
-                return;
-            }
-#endif
-
-            // Only detect while Playing — Pending/Transitioning already own the ceremony, so this is the
-            // single reentrancy guard (no second message until the current one resolves). nav/loss stay
-            // to suppress on a run that's ending, which the phase doesn't model.
-            if (_phase.Value != LevelUpPhase.Playing)
-            {
-                return;
-            }
-
-            // Hold the commit while a shot is piercing: it plows many balloons across one flight, so
-            // firing the ceremony on a mid-flight confirming arrival would interrupt the shot. The
-            // pierce-ended subscription re-runs this once the shot discharges.
-            if (_pierce.IsPiercing.Value)
-            {
-                return;
-            }
-
-            if (_navigation.Current.Value != NavigationState.Game || _lossForecast.LossImminent)
-            {
-                return;
-            }
-
-            var required = _thresholds.PointsRequiredForLevel(_level.Value);
-            if (!AllColorsConfirmed(required))
-            {
-                return;
-            }
-
-            // Snapshot before publishing — the resolver reacts to the same message and re-resolves AllowedColors.
-            var completedColors = _levelParams.Current.AllowedColors;
-
-            _phase.Value = LevelUpPhase.Pending;
-            _pendingNewLevel = _level.Value + 1;
-
-            Log.Info("Level", $"Level-up detected → pending level {_pendingNewLevel} " +
-                $"(colors completed: {string.Join(", ", completedColors)})");
-
-            _levelUpPublisher.Publish(new ScoreLevelUpMessage(_pendingNewLevel, completedColors));
-            _navigation.TransitionTo(NavigationState.LevelUp);
-        }
-
         // Pending → Transitioning: the player dismissed the popup, so the level and progress advance now
         // and the Ascent (which watches Phase) kicks off.
         private void OnLevelUpDismissed()
@@ -340,6 +347,7 @@ namespace BalloonParty.Game.Level
                 return;
             }
 
+            ReleaseCeremonyTimeScale();
             _level.Value = _pendingNewLevel;
             ResetColorProgress();
             _phase.Value = LevelUpPhase.Transitioning;
@@ -365,6 +373,12 @@ namespace BalloonParty.Game.Level
 
         private void OnLevelUpAborted()
         {
+            if (_phase.Value == LevelUpPhase.Completing)
+            {
+                AbandonCeremony("cinematic aborted");
+                return;
+            }
+
             if (_phase.Value != LevelUpPhase.Pending)
             {
                 return;
@@ -375,6 +389,98 @@ namespace BalloonParty.Game.Level
             {
                 _navigation.TransitionTo(NavigationState.Game);
             }
+        }
+
+        private void TryBeginCompleting()
+        {
+            if (_phase.Value != LevelUpPhase.Playing)
+            {
+                return;
+            }
+
+            var required = _thresholds.PointsRequiredForLevel(_level.Value);
+            foreach (var color in _levelParams.Current.AllowedColors)
+            {
+                if (_projectedProgress.GetValueOrDefault(color) < required)
+                {
+                    return;
+                }
+            }
+
+            _phase.Value = LevelUpPhase.Completing;
+            _completingElapsed = 0f;
+            _windowAOpen = true;
+            _timeScale.ClaimExclusive(TimeScaleSource.LevelUpCeremony, _beatCurve.Evaluate(0f));
+
+            Log.Info("Level", $"Level {_level.Value} completed at claim time — holding for end of flight");
+        }
+
+        private void CloseWindowA()
+        {
+            if (_phase.Value != LevelUpPhase.Completing || !_windowAOpen)
+            {
+                return;
+            }
+
+            // Hand the clock back completely: the rest of the flight plays at normal rules, including its
+            // own slow-mos (a pierce discharge dip, a doomed last breath).
+            _windowAOpen = false;
+            _timeScale.ReleaseExclusive(TimeScaleSource.LevelUpCeremony);
+        }
+
+        private void OnFlightEnded()
+        {
+            if (_phase.Value != LevelUpPhase.Completing)
+            {
+                return;
+            }
+
+            // The run leaving gameplay wins over the level it completed — evaluated ONCE, here, instead of
+            // racing a forecast. LossImminent is deliberately NOT the test: it is a prediction, and gating
+            // on it is the bug this plan removes.
+            if (_navigation.Current.Value != NavigationState.Game)
+            {
+                AbandonCeremony("run left gameplay");
+                return;
+            }
+
+            _windowAOpen = false;
+            _timeScale.ReleaseExclusive(TimeScaleSource.LevelUpCeremony);
+            // Plain, not exclusive: the popup's own freeze (0) must win by the minimum rule.
+            _timeScale.Claim(TimeScaleSource.LevelUpCeremony, _beatCurve.Evaluate(_beatCurve.Duration()));
+
+            var completedColors = _levelParams.Current.AllowedColors;
+            _phase.Value = LevelUpPhase.Pending;
+            _pendingNewLevel = _level.Value + 1;
+
+            Log.Info("Level", $"Level-up presented → pending level {_pendingNewLevel} " +
+                $"(colors completed: {string.Join(", ", completedColors)})");
+
+            _levelUpPublisher.Publish(new ScoreLevelUpMessage(_pendingNewLevel, completedColors));
+            _navigation.TransitionTo(NavigationState.LevelUp);
+        }
+
+        // Leaves Completing without a ceremony. Progress stays complete so nothing re-detects — fine,
+        // because every path here means the run is ending or restarting.
+        private void AbandonCeremony(string reason)
+        {
+            if (_phase.Value != LevelUpPhase.Completing)
+            {
+                return;
+            }
+
+            Log.Warn("Level", $"Level-up abandoned ({reason})");
+
+            _windowAOpen = false;
+            ReleaseCeremonyTimeScale();
+            _phase.Value = LevelUpPhase.Playing;
+            _abandonedPublisher.Publish(new LevelUpAbandonedMessage());
+        }
+
+        private void ReleaseCeremonyTimeScale()
+        {
+            _timeScale.ReleaseExclusive(TimeScaleSource.LevelUpCeremony);
+            _timeScale.Release(TimeScaleSource.LevelUpCeremony);
         }
     }
 }
