@@ -21,9 +21,13 @@ namespace BalloonParty.UI.GameOver
         [SerializeField] private TMP_Text _finalScoreLabel;
         [SerializeField] private TMP_Text _bestLevelLabel;
         [SerializeField] private TMP_Text _bestScoreLabel;
+        [SerializeField] private UnityEngine.UI.Button _retryButton;
+        [SerializeField] private TMP_Text _retryLabel;
 
         [Inject] private ISubscriber<GameOverMessage> _gameOverSubscriber;
         [Inject] private IRunMeta _runMeta;
+        [Inject] private IRetryState _retryState;
+        [Inject] private RetryTracker _retryTracker;
         [Inject] private IPublisher<GameOverDismissedMessage> _dismissedPublisher;
         [Inject] private GameOverPresentationGate _presentationGate;
 
@@ -32,6 +36,7 @@ namespace BalloonParty.UI.GameOver
         private FormattedLabel _finalScore;
         private FormattedLabel _bestLevel;
         private FormattedLabel _bestScore;
+        private int _deathLevel;
 
         private void Awake()
         {
@@ -65,13 +70,23 @@ namespace BalloonParty.UI.GameOver
             _dismissedPublisher.Publish(new GameOverDismissedMessage());
         }
 
+        // Wired to the Try Again button's onClick. Prepares a retry at the death level then dismisses.
+        public void OnRetryPressed()
+        {
+            _retryTracker.PrepareRetry(_deathLevel);
+            SetVisible(false);
+            _dismissedPublisher.Publish(new GameOverDismissedMessage());
+        }
+
         // Labels are filled now; the reveal waits for the loss cinematic to open the gate.
         private void OnGameOver(GameOverMessage msg)
         {
+            _deathLevel = msg.FinalLevel;
             _finalLevel.Set(msg.FinalLevel);
             _finalScore.Set(msg.FinalScore);
             _bestLevel.Set(_runMeta.BestLevel.Value);
             _bestScore.Set(_runMeta.BestScore.Value);
+            SetRetryButtonVisible(_retryState.RetriesRemaining > 0);
             RevealAfterGateAsync().Forget();
         }
 
@@ -86,6 +101,21 @@ namespace BalloonParty.UI.GameOver
             _canvasGroup.alpha = visible ? 1f : 0f;
             _canvasGroup.interactable = visible;
             _canvasGroup.blocksRaycasts = visible;
+        }
+
+        private void SetRetryButtonVisible(bool visible)
+        {
+            if (_retryButton == null)
+            {
+                return;
+            }
+
+            _retryButton.interactable = visible;
+
+            if (_retryLabel != null)
+            {
+                _retryLabel.text = $"Retry ({_retryState.RetriesRemaining})";
+            }
         }
     }
 }

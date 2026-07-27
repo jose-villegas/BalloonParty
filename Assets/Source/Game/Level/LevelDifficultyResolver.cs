@@ -35,6 +35,7 @@ namespace BalloonParty.Game.Level
         private readonly IBalloonsConfiguration _balloonsConfig;
         private readonly IItemConfiguration _itemConfig;
         private readonly IGamePalette _palette;
+        private readonly IRetryState _retryState;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
 
         private System.Random _rng = new();
@@ -46,12 +47,14 @@ namespace BalloonParty.Game.Level
             IBalloonsConfiguration balloonsConfig,
             IItemConfiguration itemConfig,
             IGamePalette palette,
+            IRetryState retryState,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber)
         {
             _pacing = pacing;
             _balloonsConfig = balloonsConfig;
             _itemConfig = itemConfig;
             _palette = palette;
+            _retryState = retryState;
             _levelUpSubscriber = levelUpSubscriber;
         }
 
@@ -73,9 +76,14 @@ namespace BalloonParty.Game.Level
         }
 
         // Dev "play from level N" override (CheatState.StartLevel); 1 in release. Negative values select a
-        // named fallback entry by its FromLevel id (e.g. -999).
-        private static int StartLevel()
+        // named fallback entry by its FromLevel id (e.g. -999). A pending retry overrides both.
+        private int StartLevel()
         {
+            if (_retryState.RetryLevel > 0)
+            {
+                return _retryState.RetryLevel;
+            }
+
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
             var start = BalloonParty.Cheats.CheatState.StartLevel;
             return start < 0 ? start : Mathf.Max(1, start);

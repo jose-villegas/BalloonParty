@@ -25,6 +25,7 @@ namespace BalloonParty.Game.Level
         private readonly IGamePalette _palette;
         private readonly INavigation _navigation;
         private readonly ILossForecast _lossForecast;
+        private readonly IRetryState _retryState;
         private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         private readonly ISubscriber<LevelUpAbortedMessage> _abortedSubscriber;
@@ -54,6 +55,7 @@ namespace BalloonParty.Game.Level
             IGamePalette palette,
             INavigation navigation,
             ILossForecast lossForecast,
+            IRetryState retryState,
             IPublisher<ScoreLevelUpMessage> levelUpPublisher,
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
             ISubscriber<LevelUpAbortedMessage> abortedSubscriber,
@@ -66,6 +68,7 @@ namespace BalloonParty.Game.Level
             _palette = palette;
             _navigation = navigation;
             _lossForecast = lossForecast;
+            _retryState = retryState;
             _levelUpPublisher = levelUpPublisher;
             _trailArrivedSubscriber = trailArrivedSubscriber;
             _abortedSubscriber = abortedSubscriber;
@@ -210,9 +213,12 @@ namespace BalloonParty.Game.Level
 
         private void ClearRunState()
         {
-            var startLevel = 1;
+            var startLevel = _retryState.RetryLevel > 0 ? _retryState.RetryLevel : 1;
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
-            startLevel = Mathf.Max(1, BalloonParty.Cheats.CheatState.StartLevel);
+            if (_retryState.RetryLevel <= 0)
+            {
+                startLevel = Mathf.Max(1, BalloonParty.Cheats.CheatState.StartLevel);
+            }
 #endif
             _level.Value = startLevel;
             _phase.Value = LevelUpPhase.Playing;

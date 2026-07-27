@@ -548,5 +548,55 @@
     "LicenseName": "Attribution",
     "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
     "RequiresAttribution": true
+  },
+  {
+    "SoundId": "ItemShield",
+    "ProviderId": 608986,
+    "Name": "F.mp3",
+    "Author": "smstrahan",
+    "SoundUrl": "https://freesound.org/people/smstrahan/sounds/608986/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "ItemShield",
+    "ProviderId": 536550,
+    "Name": "Kalimba C2",
+    "Author": "dvdfu",
+    "SoundUrl": "https://freesound.org/people/dvdfu/sounds/536550/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "ItemShield",
+    "ProviderId": 155852,
+    "Name": "Upright Piano Pizz E Dull 2.wav",
+    "Author": "day_tripper13",
+    "SoundUrl": "https://freesound.org/people/day_tripper13/sounds/155852/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "ItemShield",
+    "ProviderId": 608987,
+    "Name": "G.mp3",
+    "Author": "smstrahan",
+    "SoundUrl": "https://freesound.org/people/smstrahan/sounds/608987/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "ItemShield",
+    "ProviderId": 175570,
+    "Name": "Kalimba (note E)",
+    "Author": "sergeeo",
+    "SoundUrl": "https://freesound.org/people/sergeeo/sounds/175570/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "http://creativecommons.org/licenses/by/3.0/",
+    "RequiresAttribution": true
   }
 ]

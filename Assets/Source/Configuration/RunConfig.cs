@@ -8,7 +8,9 @@ namespace BalloonParty.Configuration
     {
         [Header("Run")]
         [SerializeField] private int _startingHitPoints = 5;
+        [SerializeField] private int _maxRetries = 1;
 
         public int StartingHitPoints => _startingHitPoints;
+        public int MaxRetries => _maxRetries;
     }
 }

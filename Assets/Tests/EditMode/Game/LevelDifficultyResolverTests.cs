@@ -5,6 +5,7 @@ using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Level;
+using BalloonParty.Game.Run;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Actor.Archetype;
@@ -279,7 +280,7 @@ namespace BalloonParty.Tests.Game
 
         private LevelDifficultyResolver BuildResolver()
         {
-            return new LevelDifficultyResolver(_pacing, _balloonsConfig, _itemConfig, _palette, _levelUpSubscriber);
+            return new LevelDifficultyResolver(_pacing, _balloonsConfig, _itemConfig, _palette, Substitute.For<IRetryState>(), _levelUpSubscriber);
         }
 
         private void SetSingleRange(

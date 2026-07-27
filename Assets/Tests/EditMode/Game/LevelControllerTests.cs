@@ -4,6 +4,7 @@ using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
+using BalloonParty.Game.Run;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
@@ -107,7 +108,8 @@ namespace BalloonParty.Tests.Game
                 .Returns(Substitute.For<IDisposable>());
 
             return new LevelController(
-                _levelParams, _thresholds, _palette, _navigation, _lossForecast, _levelUpPublisher,
+                _levelParams, _thresholds, _palette, _navigation, _lossForecast,
+                Substitute.For<IRetryState>(), _levelUpPublisher,
                 trailArrivedSubscriber, abortedSubscriber, dismissedSubscriber, completedSubscriber, _pierce);
         }
 
