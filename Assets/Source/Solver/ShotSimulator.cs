@@ -28,36 +28,50 @@ namespace BalloonParty.Solver
         public readonly float TapLagSeconds;
         public readonly int PiercingTapThreshold;
 
+        // The arming bounce's own lag, in the same "duration not spent at full speed" form as
+        // TapLagSeconds. Live replaces the per-tap beat there with one ramp from the arming speed into the
+        // frozen top speed, and the ramp only loses time in proportion to the gap between those two —
+        // HandleWallBounce scales this by that gap.
+        public readonly float ArmRampLagSeconds;
+
         public ShotCruiseConfig(int wallBounceThreshold, float speedPerShield,
             float maxSpeedMultiplier = 0f, float tapEaseDuration = 0f,
-            AnimationCurve tapCurve = null, int piercingTapThreshold = 0)
+            AnimationCurve tapCurve = null, int piercingTapThreshold = 0,
+            float armRampDuration = 0f, AnimationCurve armRampCurve = null)
         {
             WallBounceThreshold = wallBounceThreshold;
             SpeedPerShield = speedPerShield;
             MaxSpeedMultiplier = maxSpeedMultiplier;
             PiercingTapThreshold = piercingTapThreshold;
-
-            if (tapEaseDuration <= 0f)
-            {
-                TapLagSeconds = 0f;
-                return;
-            }
-
-            var curve = tapCurve ?? AnimationCurve.Linear(0f, 0f, 1f, 1f);
-            var sum = 0f;
-            for (var i = 0; i <= CurveAverageSamples; i++)
-            {
-                sum += curve.Evaluate(i / (float)CurveAverageSamples);
-            }
-
-            TapLagSeconds = tapEaseDuration * (1f - (sum / (CurveAverageSamples + 1)));
+            TapLagSeconds = EnvelopeLagSeconds(tapEaseDuration, tapCurve);
+            ArmRampLagSeconds = EnvelopeLagSeconds(armRampDuration, armRampCurve);
         }
 
         public ShotCruiseConfig(IProjectileFlightConfig config)
             : this(
                 config.CruiseWallBounceThreshold, config.CruiseSpeedPerShield, config.MaxCruiseSpeedMultiplier,
-                config.CruiseTapEaseDuration, config.CruiseTapCurve, config.CruisePiercingTapThreshold)
+                config.CruiseTapEaseDuration, config.CruiseTapCurve, config.CruisePiercingTapThreshold,
+                config.PierceArmRampDuration, config.PierceArmRampCurve)
         {
+        }
+
+        // Seconds of an eased envelope NOT spent at its target value — the curve's mean sampled over the
+        // duration. On the event timeline that is a pure time cost, never a path change.
+        private static float EnvelopeLagSeconds(float duration, AnimationCurve curve)
+        {
+            if (duration <= 0f)
+            {
+                return 0f;
+            }
+
+            var resolved = curve is { length: > 0 } ? curve : AnimationCurve.Linear(0f, 0f, 1f, 1f);
+            var sum = 0f;
+            for (var i = 0; i <= CurveAverageSamples; i++)
+            {
+                sum += resolved.Evaluate(i / (float)CurveAverageSamples);
+            }
+
+            return duration * (1f - (sum / (CurveAverageSamples + 1)));
         }
     }
 
@@ -329,20 +343,7 @@ namespace BalloonParty.Solver
 
             if (state.IsCruising && state.PierceSpeedScale < 1f)
             {
-                // Only after plowing a tough (scale decayed) does a wall end the run: cruise
-                // ends, speed returns to base, and the earned piercing is consumed — mirrors
-                // ProjectileMotionResolver. An armed shot cruising empty space keeps both.
-                state.IsCruising = false;
-                state.ConsecutiveWallBounces = 0;
-                state.PierceSpeedScale = 1f;
-                state.IsPiercing = false;
-                // Mirrors PierceEndedEndCondition firing on IsPiercing going false: BOTH concrete
-                // pierce-riding grants end here, not just the multiplier — leaving HasSpeedBuff/
-                // RainbowBuffUntilPierceEnd stuck true would wrongly block a LATER Snipe re-grant
-                // (ApplyItemOutcome's non-stacking guard) and leave a stale buff flag set forever.
-                state.HasSpeedBuff = false;
-                state.SpeedBuffMultiplier = 1f;
-                state.RainbowBuffUntilPierceEnd = false;
+                SpendPierceAtDischarge(ref state);
             }
             // Mirrors ProjectileView.TryEnterCruise's own bar (@ref plan_shot_solver_accuracy Phase
             // C6): a shot already piercing without cruising is a Snipe lance and must never enter
@@ -363,21 +364,89 @@ namespace BalloonParty.Solver
             }
 
             // Every cruise bounce (entry included) replays the tap animation — on the event
-            // timeline that's a pure time cost, never a path change.
-            if (state.IsCruising)
+            // timeline that's a pure time cost, never a path change. An ARMED shot no longer taps
+            // (ProjectileMotionResolver.Step), so it no longer pays the envelope's time either; the
+            // arming bounce below is still a real tap and keeps its own lag.
+            if (state.IsCruising && !state.IsPiercing)
             {
-                state.Elapsed += cruiseConfig.TapLagSeconds;
-
                 // Mirrors ProjectileMotionResolver's piercing grant: a long-enough cruise arms
                 // the shot for the rest of its life — contacts end the cruise, never the buff.
-                if (cruiseConfig.PiercingTapThreshold > 0
-                    && state.CruiseStartShields - state.Shields >= cruiseConfig.PiercingTapThreshold)
+                var taps = state.CruiseStartShields - state.Shields;
+                if (cruiseConfig.PiercingTapThreshold > 0 && taps >= cruiseConfig.PiercingTapThreshold)
                 {
                     state.IsPiercing = true;
+                    state.PierceArmedTaps = taps;
+
+                    // The arming bounce pays the arm ramp instead of the tap beat (live hands the
+                    // transition to ProjectileMotionResolver's ramp there). The ramp starts from the speed
+                    // the shot armed at, so it only loses the fraction of the ramp the remaining speed gap
+                    // accounts for — approximated with the previous tap's steady target, the sim carrying
+                    // no envelope state of its own to know how far into a dip the arming bounce landed.
+                    var from = CruiseTargetMultiplier(taps - 1, cruiseConfig);
+                    var to = CruiseTargetMultiplier(taps, cruiseConfig);
+                    state.Elapsed += cruiseConfig.ArmRampLagSeconds * (1f - (from / to));
+                }
+                else
+                {
+                    state.Elapsed += cruiseConfig.TapLagSeconds;
                 }
             }
 
             return false;
+        }
+
+        // Only after plowing a tough (PierceSpeedScale decayed) does a wall end the run: cruise ends,
+        // speed returns to base, and the earned piercing is consumed — mirrors ProjectileMotionResolver.
+        // An armed shot cruising empty space keeps both.
+        private static void SpendPierceAtDischarge(ref ShotFlightState state)
+        {
+            state.IsCruising = false;
+            state.ConsecutiveWallBounces = 0;
+            state.PierceSpeedScale = 1f;
+            state.PierceArmedTaps = -1;
+            state.IsPiercing = false;
+
+            // Mirrors PierceEndedEndCondition firing on IsPiercing going false: BOTH concrete
+            // pierce-riding grants end here, not just the multiplier — leaving HasSpeedBuff/
+            // RainbowBuffUntilPierceEnd stuck true would wrongly block a LATER Snipe re-grant
+            // (ApplyItemOutcome's non-stacking guard) and leave a stale buff flag set forever.
+            state.HasSpeedBuff = false;
+            state.SpeedBuffMultiplier = 1f;
+            state.RainbowBuffUntilPierceEnd = false;
+
+            // Mirrors ProjectileModelExtensions.SpendPierce: a Snipe banked mid-pierce activates on this
+            // discharge, so the shot stays armed (live never dips the flag — the level-up commit gates on
+            // it) but restarts from base speed, the cruise ramp above already dropped. Live re-applies the
+            // grant through SnipeItemHandler.ArmLance, whose non-stacking guard is moot here since the
+            // lines above just cleared the outgoing pierce's own buff. Rainbow charges spend first.
+            var isRainbowCharge = state.BankedRainbowPierceCharges > 0;
+            if (!isRainbowCharge && state.BankedPierceCharges <= 0)
+            {
+                return;
+            }
+
+            if (isRainbowCharge)
+            {
+                state.BankedRainbowPierceCharges--;
+                state.RainbowBuffUntilPierceEnd = true;
+            }
+            else
+            {
+                state.BankedPierceCharges--;
+            }
+
+            state.IsPiercing = true;
+            state.HasSpeedBuff = true;
+            state.SpeedBuffMultiplier = state.BankedPierceMultiplier;
+        }
+
+        // The steady-state cruise speed multiplier for a given tap count, capped as live caps it.
+        private static float CruiseTargetMultiplier(int taps, in ShotCruiseConfig cruiseConfig)
+        {
+            var target = 1f + (cruiseConfig.SpeedPerShield * Mathf.Max(taps, 0));
+            return cruiseConfig.MaxSpeedMultiplier > 0f
+                ? Mathf.Min(target, cruiseConfig.MaxSpeedMultiplier)
+                : target;
         }
 
         // Mirrors ProjectileMotionResolver.Step's cruise ramp exactly: every cruise bounce adds a
@@ -396,12 +465,14 @@ namespace BalloonParty.Solver
             }
 
             var startShields = Mathf.Max(state.CruiseStartShields, 1);
-            var taps = Mathf.Clamp(state.CruiseStartShields - state.Shields, 0, startShields);
-            var target = 1f + cruiseConfig.SpeedPerShield * taps;
-            if (cruiseConfig.MaxSpeedMultiplier > 0f)
-            {
-                target = Mathf.Min(target, cruiseConfig.MaxSpeedMultiplier);
-            }
+
+            // An armed shot's ramp is frozen at the tap that armed it — cruise stops paying out once
+            // piercing (ProjectileMotionResolver.Step), and the sim's derived count would otherwise keep
+            // climbing with every further shield the shot spends.
+            var spentTaps = state.IsPiercing && state.PierceArmedTaps >= 0
+                ? state.PierceArmedTaps
+                : state.CruiseStartShields - state.Shields;
+            var target = CruiseTargetMultiplier(Mathf.Clamp(spentTaps, 0, startShields), cruiseConfig);
 
             // Pierce scale bleeds the ramp down through tough plows; floor at (buffed) base speed.
             var speed = buffedBase * target * state.PierceSpeedScale;
@@ -679,6 +750,28 @@ namespace BalloonParty.Solver
         {
             state.Shields += outcome.ShieldDelta;
             state.RainbowBuffUntilWall |= outcome.GrantsRainbowBuffUntilWall;
+
+            // A pierce-arming pickup (Snipe) landing on an ALREADY-armed shot is banked whole rather than
+            // applied — two pierces can't overlap, so it activates at the discharge that spends the
+            // running one (HandleWallBounce). Mirrors SnipeItemHandler.Activate: the speed and rainbow
+            // grants defer with it, so they can't compound onto the pierce already in flight.
+            if (outcome.ArmsPierce && state.IsPiercing)
+            {
+                if (outcome.GrantsRainbowBuffUntilPierceEnd)
+                {
+                    state.BankedRainbowPierceCharges++;
+                }
+                else
+                {
+                    state.BankedPierceCharges++;
+                }
+
+                state.BankedPierceMultiplier = outcome.SpeedBuffMultiplier > 0f
+                    ? outcome.SpeedBuffMultiplier
+                    : 1f;
+                return;
+            }
+
             state.RainbowBuffUntilPierceEnd |= outcome.GrantsRainbowBuffUntilPierceEnd;
             state.IsPiercing |= outcome.ArmsPierce;
 

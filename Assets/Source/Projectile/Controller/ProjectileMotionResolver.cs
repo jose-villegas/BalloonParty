@@ -14,7 +14,9 @@ namespace BalloonParty.Projectile.Controller
         private readonly float _maxCruiseSpeedMultiplier;
         private readonly float _cruiseTapEaseDuration;
         private readonly int _cruisePiercingTapThreshold;
+        private readonly float _pierceArmRampDuration;
         private readonly AnimationCurve _cruiseTapCurve;
+        private readonly AnimationCurve _pierceArmRampCurve;
         private readonly AnimationCurve _lastShieldApproachCurve;
         private readonly float _lastShieldApproachDuration;
 
@@ -30,6 +32,12 @@ namespace BalloonParty.Projectile.Controller
             _cruiseTapEaseDuration = config.CruiseTapEaseDuration;
             _cruisePiercingTapThreshold = config.CruisePiercingTapThreshold;
             _cruiseTapCurve = config.CruiseTapCurve ?? AnimationCurve.Linear(0f, 0f, 1f, 1f);
+            _pierceArmRampDuration = config.PierceArmRampDuration;
+            // Blends between two real speeds (see ResolveFlightSpeed), so an empty curve is harmless
+            // here — it just holds the arming speed — but a linear fallback keeps it accelerating.
+            _pierceArmRampCurve = config.PierceArmRampCurve is { length: > 0 }
+                ? config.PierceArmRampCurve
+                : AnimationCurve.Linear(0f, 0f, 1f, 1f);
             // An un-authored (newly-added) serialized curve deserializes empty and evaluates to 0,
             // which would crawl the shot — fall back to a constant-1 no-op until it's authored.
             _lastShieldApproachCurve = config.LastShieldApproachCurve is { length: > 0 }
@@ -81,10 +89,11 @@ namespace BalloonParty.Projectile.Controller
 
             // Wall-discharge: a piercing shot that plowed through at least one tough on this segment
             // discharges at the wall — the view resolves the pending toughs, and the pierce (with its
-            // speed buff) ends. If the segment had no toughs, piercing continues indefinitely.
+            // speed buff) ends unless a banked Snipe charge re-arms it. If the segment had no toughs,
+            // piercing continues indefinitely.
             if (model.IsPiercing.Value && model.Flight.PendingPierceHits.Count > 0)
             {
-                model.EndPierce();
+                model.SpendPierce();
 
                 model.Direction = Vector2.Reflect(model.Direction, reflect.normalized);
                 model.Flight.SegmentStartPosition = wallContact;
@@ -96,20 +105,29 @@ namespace BalloonParty.Projectile.Controller
             // space (HitResolver resets the counter on any balloon touch). Entry into cruise is the
             // VIEW's call — it confirms with a physics lookahead the plain resolver can't run.
             model.Flight.ConsecutiveWallBounces++;
-            if (model.IsCruising.Value)
+
+            // Cruise stops paying out the moment the shot is armed: an already-piercing shot sits at the
+            // top speed its taps earned, and further taps would ramp it past what the pierce was awarded
+            // for. Its freeze-then-pickup envelope stops too — with no speed change left to sell, the
+            // per-bounce dip would read as a hitch (and would keep ducking the pierce aura).
+            if (model.IsCruising.Value && !model.IsPiercing.Value)
             {
                 model.Flight.TotalCruiseTaps++;
 
-                // A new tap lands with this bounce — restart its freeze-then-pickup envelope.
-                model.Flight.CruiseTapElapsed = 0f;
-
                 // A long-enough cruise ARMS the shot: from this tap on it pierces everything it
-                // touches (unbreakables included) for the rest of its life.
+                // touches (unbreakables included) for the rest of its life. The arming tap skips the
+                // per-tap envelope and hands the transition to the arm ramp instead (see
+                // ResolveFlightSpeed) — stalling on the beat and then holding full speed forever reads
+                // as jumping to top speed rather than accelerating into it.
                 if (_cruisePiercingTapThreshold > 0
-                    && model.Flight.TotalCruiseTaps >= _cruisePiercingTapThreshold
-                    && !model.IsPiercing.Value)
+                    && model.Flight.TotalCruiseTaps >= _cruisePiercingTapThreshold)
                 {
-                    model.IsPiercing.Value = true;
+                    model.ArmPierce(speed);
+                }
+                else
+                {
+                    // A new tap lands with this bounce — restart its freeze-then-pickup envelope.
+                    model.Flight.CruiseTapElapsed = 0f;
                 }
             }
 
@@ -287,12 +305,28 @@ namespace BalloonParty.Projectile.Controller
                 target = Mathf.Min(target, _maxCruiseSpeedMultiplier);
             }
 
+            var topSpeed = baseSpeed * target;
+
+            // Armed: the tap count is frozen, so there are no further taps for the per-tap envelope to
+            // sell. One ramp carries the shot from the speed it armed at into that frozen top speed —
+            // blending between two real speeds, so an unauthored (or 0-start) curve holds the old speed
+            // instead of stalling the shot, and a shot armed with no anchor recorded just runs at top.
+            if (model.IsPiercing.Value && _pierceArmRampDuration > 1e-4f
+                && model.Flight.PierceArmFromSpeed > 1e-4f)
+            {
+                var armProgress = Mathf.Clamp01(model.Flight.PierceArmElapsed / _pierceArmRampDuration);
+                model.Flight.PierceArmElapsed += deltaTime;
+                return Mathf.Lerp(
+                    model.Flight.PierceArmFromSpeed, topSpeed,
+                    Mathf.Clamp01(_pierceArmRampCurve.Evaluate(armProgress)));
+            }
+
             var progress = _cruiseTapEaseDuration > 0f
                 ? Mathf.Clamp01(model.Flight.CruiseTapElapsed / _cruiseTapEaseDuration)
                 : 1f;
 
             model.Flight.CruiseTapElapsed += deltaTime;
-            return baseSpeed * target * _cruiseTapCurve.Evaluate(progress);
+            return topSpeed * _cruiseTapCurve.Evaluate(progress);
         }
     }
 }

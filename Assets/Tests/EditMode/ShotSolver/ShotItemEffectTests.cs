@@ -1790,11 +1790,13 @@ namespace BalloonParty.Tests.ShotSolver
         {
             // The speed-buff half of Phase C6: CurrentSpeed multiplies baseSpeed by
             // state.SpeedBuffMultiplier BEFORE any cruise ramp — no cruise config needed to observe it.
-            // Host1 grants the buff (multiplier 2x); Host2 is a SECOND Snipe pickup mid-flight with the
-            // SAME configured multiplier — non-stacking means it must be a no-op (ApplyItemOutcome's
-            // `!HasSpeedBuff` guard), so the final segment still runs at exactly 2x, not 2x*2x=4x. A
-            // compounding regression would land the final timestamp at 2.0 instead of 2.5 (see the
-            // per-segment hand-trace below) — the two are far enough apart that rounding can't hide it.
+            // Host1 arms the lance and grants the buff (multiplier 2x); Host2 is a SECOND Snipe pickup
+            // taken while that lance is still armed, so it BANKS whole (ApplyItemOutcome's ArmsPierce +
+            // IsPiercing branch) and grants nothing here — the final segment still runs at exactly 2x, not
+            // 2x*2x=4x. A compounding regression would land the final timestamp at 2.0 instead of 2.5 (see
+            // the per-segment hand-trace below) — the two are far enough apart that rounding can't hide
+            // it. The banked charge's own activation (at the discharge that spends Host1's pierce) is
+            // covered by the banking test further down; this board never plows a tough, so it never fires.
             //
             // Hand-trace (speed 1, multiplier 2.0, every balloon r=0.05, projectileContactRadius=0) —
             // Simulate's timestamps land on the CONTACT-CIRCLE ENTRY, not the target's centre: entry =
@@ -1830,7 +1832,7 @@ namespace BalloonParty.Tests.ShotSolver
             Assert.AreEqual(1.45f, timestamps[2], 1e-4f, "Host1 -> Host2 already at the 2x buff Host1 just granted");
             Assert.AreEqual(
                 2.45f, timestamps[3], 1e-4f,
-                "Host2 -> Target still at 2x, NOT 4x — Host2's own re-grant was swallowed by the non-stacking guard");
+                "Host2 -> Target still at 2x, NOT 4x — Host2's grant was banked for the discharge, not applied here");
 
             // A no-snipe control on the identical geometry proves the buff is genuinely what shrinks the
             // timeline above, not some property of the geometry itself.
@@ -2042,24 +2044,21 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         [Test]
-        public void ResolveBalloonContact_SnipeReGrantsAfterACruiseEarnedPierceDischargesAtAWall()
+        public void ResolveBalloonContact_SnipeBankedMidPierce_ActivatesAtTheDischargeThatSpendsIt()
         {
-            // Traces reachability the C6 reviewer flagged: the NEW clearing lines in HandleWallBounce's
-            // cruise-ending branch (state.HasSpeedBuff = false; state.SpeedBuffMultiplier = 1f;
-            // state.RainbowBuffUntilPierceEnd = false;) exist specifically so a stale grant from an
-            // EARLIER Snipe pop can't permanently block a LATER one. This drives the sequence that
-            // reaches that branch WITHOUT needing E2's pierce-discharge machinery: cruise-earned piercing
-            // (not Snipe's own arm) means that by the time this flight reaches its first Snipe host, the
-            // shot is ALREADY piercing — so the early "any contact cancels an un-pierced cruise" guard
-            // (ResolveBalloonContact's own `if (!state.IsPiercing) { ConsecutiveWallBounces = 0;
-            // IsCruising = false; }`) never fires, and the Snipe grant rides alongside the ongoing ramp
-            // instead of being blocked from ever landing. Plowing a Tough while piercing then decays
-            // PierceSpeedScale below 1, so the next wall bounce takes the cruise-ending branch and clears
-            // everything. A SECOND Snipe host afterward proves the clear actually re-opened the
-            // non-stacking guard — deliberately NOT asserting anything about the intermediate "cruising
-            // AND Snipe-buffed" segment's own speed (whether the two should multiplicatively stack is an
-            // open design question the C6 reviewer still needs to settle, not something this test should
-            // ossify as a contract).
+            // The banking rule (José, 2026-07-27), which also settles the stacking question this test
+            // used to leave open: a Snipe taken while the shot is ALREADY piercing can't start a second
+            // overlapping pierce, so its whole grant — pierce, speed and rainbow — is saved and activates
+            // at the discharge that spends the running one. Two consequences this drives end to end:
+            //   1. The pickup is INERT while the first pierce runs (no speed buff riding the ramp — that
+            //      compounding is exactly what banking avoids), so every leg up to the discharge matches
+            //      an item-less control on the same geometry, leg for leg.
+            //   2. At the discharge wall the charge activates: HandleWallBounce clears the cruise ramp and
+            //      RearmBankedLance re-applies the grant, so the shot leaves that wall as a fresh lance at
+            //      base x 2, never base x ramp x 2.
+            // Cruise-earned piercing (not Snipe's own arm) is what gets the shot armed BEFORE its first
+            // Snipe host, and plowing a Tough while piercing decays PierceSpeedScale below 1 so the next
+            // wall takes the cruise-ending branch at all.
             //
             // Geometry: a box (Right=2.1, Bottom=-2, Left=-0.9, Top effectively open) with an initial
             // 3-4-5 diagonal (0.6,-0.8) so each bounce reflects off a DIFFERENT wall — unlike an
@@ -2068,12 +2067,10 @@ namespace BalloonParty.Tests.ShotSolver
             // without ever crossing an earlier leg's path (verified by direct reflection-math trace, not
             // just by construction). Bounce1 (Bottom, cruise entry) -> bounce2 (Right, one more shield
             // spent since entry == PiercingTapThreshold -> cruise-earned piercing) -> leg3 carries the
-            // first Snipe host (t=1, buff grants) then a 2-hit Tough (t=3, piercing plows it straight
-            // through, PierceSpeedScale *= 0.5) -> bounce3 (Left, PierceSpeedScale < 1 -> ends
-            // cruise+pierce+ALL buffs) -> leg4 carries the reset proof (a base-speed segment, shortened to
-            // 0.95 by the second Snipe host's own 0.05 radius — a wall bounce has no radius of its own to
-            // cancel it, unlike a balloon-to-balloon leg) then a second Snipe host (re-grants) then a
-            // final target (t=4) whose approach speed proves the re-grant actually applied.
+            // first Snipe host (t~3.975, BANKED) then a 2-hit Tough (t~4.975, piercing plows it straight
+            // through, PierceSpeedScale *= 0.5) -> bounce3 (Left, PierceSpeedScale < 1 -> spends the
+            // pierce, and the banked charge re-arms the lance) -> leg4 carries a second Snipe host
+            // (banked again — the shot is armed once more) then a final target.
             var walls = new Vector4(1000000f, 2.1f, -2f, -0.9f);
             var cruise = new ShotCruiseConfig(wallBounceThreshold: 1, speedPerShield: 1f, piercingTapThreshold: 1);
             var board = new[]
@@ -2096,22 +2093,37 @@ namespace BalloonParty.Tests.ShotSolver
             Assert.IsFalse(result.Died, "10 starting shields comfortably covers the 3 real wall bounces");
 
             // [0]=origin, [1]=bounce1 (Bottom, cruise entry), [2]=bounce2 (Right, piercing earned),
-            // [3]=first Snipe host, [4]=Tough (piercing plow), [5]=bounce3 (Left, ends cruise+pierce+
-            // buffs), [6]=second Snipe host, [7]=final target.
+            // [3]=first Snipe host (banked), [4]=Tough (piercing plow), [5]=bounce3 (Left, discharge —
+            // the banked charge re-arms), [6]=second Snipe host, [7]=final target.
             Assert.AreEqual(8, timestamps.Count);
 
-            // bounce3 is a WALL contact (no radius of its own), so unlike a balloon-to-balloon leg the
-            // second host's own 0.05 radius doesn't get cancelled here — entry = centre distance 1 minus
-            // 0.05 = 0.95, at BASE speed (1) since the reset already cleared the buff.
-            var resetSegment = timestamps[6] - timestamps[5];
-            Assert.AreEqual(
-                0.95f, resetSegment, 1e-3f,
-                "bounce3 -> the second host at BASE speed (distance 1 minus the host's own 0.05 radius, speed 1) — a SpeedBuffMultiplier left stuck at 2x would halve this to ~0.475");
+            // Consequence 1: while the first pierce runs, the banked pickup changes nothing — the same
+            // board with NO item layer produces identical timestamps right up to the discharge.
+            var controlWorkingSet = new ShotBalloonState[board.Length];
+            var controlTimestamps = new List<float>();
+            ShotSimulator.Simulate(
+                board, walls, Vector2.zero, new Vector2(0.6f, -0.8f), startingShields: 10,
+                projectileContactRadius: 0f, workingSet: controlWorkingSet, projectileSpeed: 1f,
+                cruiseConfig: cruise, timestampsOut: controlTimestamps);
 
-            var regrantSegment = timestamps[7] - timestamps[6];
+            for (var i = 0; i <= 5; i++)
+            {
+                Assert.AreEqual(
+                    controlTimestamps[i], timestamps[i], 1e-3f,
+                    $"event {i} runs at the item-less pace — a banked Snipe must not speed up the pierce it " +
+                    "was picked up during (that is the compounding banking exists to avoid)");
+            }
+
+            // Consequence 2: bounce3 is a WALL contact (no radius of its own), so unlike a
+            // balloon-to-balloon leg the second host's own 0.05 radius isn't cancelled — entry = centre
+            // distance 1 minus 0.05 = 0.95, covered at base x 2 by the charge that just activated.
+            var rearmedSegment = timestamps[6] - timestamps[5];
             Assert.AreEqual(
-                1.5f, regrantSegment, 1e-3f,
-                "second host -> target at 2x again (distance 3, speed 2) — a HasSpeedBuff left stuck true would silently swallow the re-grant and leave this at base speed (3.0) instead");
+                0.475f, rearmedSegment, 1e-3f,
+                "discharge -> the second host at the re-armed 2x (0.95 at speed 2) — an unspent charge would leave this at base speed (0.95), and a ramp that survived the discharge would be faster still");
+            Assert.AreEqual(
+                0.95f, controlTimestamps[6] - controlTimestamps[5], 1e-3f,
+                "the same leg with no Snipe anywhere: base speed, i.e. exactly what the charge halves");
         }
     }
 }

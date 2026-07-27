@@ -7,6 +7,8 @@ namespace BalloonParty.Projectile.Model
     /// <see cref="ProjectileFlightState" /> is exposed only on <see cref="IWriteableProjectileModel" />.</summary>
     public interface IProjectileFlightState
     {
+        int BankedPierceCharges { get; }
+        int BankedRainbowPierceCharges { get; }
         int ConsecutiveWallBounces { get; }
         int TotalCruiseTaps { get; }
         float CruiseTapElapsed { get; }

@@ -21,6 +21,8 @@ namespace BalloonParty.Shared
         bool SweepEnabled { get; }
         int SweepTapThreshold { get; }
         int CruisePiercingTapThreshold { get; }
+        float PierceArmRampDuration { get; }
+        AnimationCurve PierceArmRampCurve { get; }
         float PierceDischargeTimeScale { get; }
         float PierceDischargeTimeScaleDuration { get; }
         AnimationCurve LastShieldApproachCurve { get; }

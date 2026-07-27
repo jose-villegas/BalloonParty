@@ -245,6 +245,24 @@ namespace BalloonParty.Tests.Projectile
                 "cruise is killed by balloon contact even if sweep didn't award speed");
         }
 
+        [Test]
+        public void TryAwardSweepTap_ArmedShot_AwardsNeitherSweepNorTap()
+        {
+            // Taps stop once the shot is piercing (José, 2026-07-27) — it already sits at the top speed its
+            // taps earned. Sweeps are the same counter, so they stop too; without this gate a Snipe lance,
+            // which deliberately never enters cruise, would still collect the cruise ramp through sweeps.
+            var view = CreateSweepView();
+            _projectile.IsPiercing.Value = true;
+            _projectile.Flight.SegmentPopCount = 1;
+            _projectile.Flight.SegmentSweepValid = true;
+            _projectile.Flight.LastBouncePosition = Vector3.zero;
+
+            AwardSweepTap(view, new Vector3(3f, 0f, 0f), Vector3.right);
+
+            Assert.AreEqual(0, _projectile.Flight.TotalSweeps, "an armed shot earns no sweep credit");
+            Assert.AreEqual(0, _projectile.Flight.TotalCruiseTaps, "and no speed tap from one");
+        }
+
         // ──────────────────────────────────────────────────────────────────────────────────────
         // 5. No double speed accumulation — alternating segments sum correctly
         // ──────────────────────────────────────────────────────────────────────────────────────

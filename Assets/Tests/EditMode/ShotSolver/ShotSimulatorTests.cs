@@ -187,6 +187,82 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         [Test]
+        public void Simulate_CruiseRampFreezesOncePiercingArms_LegsStayEvenlyPaced()
+        {
+            // Cruise stops paying out the moment the shot is armed (José, 2026-07-27): an armed shot sits
+            // at the top speed its taps earned, so further bounces add neither a tap nor its envelope.
+            // A vertical corridor of equal-length legs makes that visible as timing alone — every leg
+            // AFTER the arming bounce takes the same time. Without the freeze each further tap would keep
+            // shrinking them (4 units at x4, x5, x6 = 1.0, 0.8, 0.667 instead of a flat 1.333).
+            var walls = new Vector4(2f, 0.5f, -2f, -0.5f);
+
+            // Far off the corridor: never hit, but a non-empty board keeps the flight going to the end of
+            // its shields instead of stopping the moment the board reads as cleared.
+            var board = new[] { ShotBoardBuilder.Green(new Vector2(100f, 100f), 0.05f, "Red", 1, 1) };
+            var workingSet = new ShotBalloonState[board.Length];
+            var timestamps = new List<float>();
+            var cruise = new ShotCruiseConfig(wallBounceThreshold: 1, speedPerShield: 1f, piercingTapThreshold: 2);
+
+            var result = ShotSimulator.Simulate(
+                board, walls, Vector2.zero, Vector2.up, startingShields: 6, projectileContactRadius: 0f,
+                workingSet: workingSet, projectileSpeed: 1f, cruiseConfig: cruise, timestampsOut: timestamps);
+
+            Assert.IsTrue(result.Died);
+            Assert.AreEqual(8, timestamps.Count);
+
+            // [1] first wall = cruise entry (0 taps spent, so [1]->[2] is 4 units at base speed) ->
+            // [2] one tap, x2 -> [3] the second tap, which arms piercing -> every leg from there at x3.
+            Assert.AreEqual(4f, timestamps[2] - timestamps[1], 1e-4f, "cruise entered, no tap spent yet");
+            Assert.AreEqual(2f, timestamps[3] - timestamps[2], 1e-4f, "one tap -> x2");
+            Assert.AreEqual(4f / 3f, timestamps[4] - timestamps[3], 1e-4f, "armed at the second tap -> x3");
+            Assert.AreEqual(
+                timestamps[4] - timestamps[3], timestamps[5] - timestamps[4], 1e-4f,
+                "frozen: the leg after the arming leg is paced identically");
+            Assert.AreEqual(
+                timestamps[4] - timestamps[3], timestamps[7] - timestamps[6], 1e-4f,
+                "still frozen four legs later — the ramp never resumes while armed");
+        }
+
+        [Test]
+        public void Simulate_PierceArmRamp_CostsTheArmingBounceTimeInProportionToTheSpeedGap()
+        {
+            // Live hands the arming bounce's transition to a ramp from the arming speed into the frozen top
+            // speed instead of the per-tap beat. On the event timeline that ramp is a pure time cost: it
+            // only loses the part of the ramp the remaining speed gap accounts for. Here the shot arms on
+            // its second tap, so it ramps from x2 to x3 over 1s with a linear curve (mean 0.5) ⇒
+            // 1 x 0.5 x (1 - 2/3) = 1/6s added at that bounce, and every later event carries the offset.
+            var walls = new Vector4(2f, 0.5f, -2f, -0.5f);
+            var board = new[] { ShotBoardBuilder.Green(new Vector2(100f, 100f), 0.05f, "Red", 1, 1) };
+            var linear = AnimationCurve.Linear(0f, 0f, 1f, 1f);
+            var withRamp = new ShotCruiseConfig(
+                wallBounceThreshold: 1, speedPerShield: 1f, piercingTapThreshold: 2, armRampDuration: 1f,
+                armRampCurve: linear);
+            var noRamp = new ShotCruiseConfig(
+                wallBounceThreshold: 1, speedPerShield: 1f, piercingTapThreshold: 2);
+
+            var rampTimestamps = new List<float>();
+            ShotSimulator.Simulate(
+                board, walls, Vector2.zero, Vector2.up, startingShields: 6, projectileContactRadius: 0f,
+                workingSet: new ShotBalloonState[board.Length], projectileSpeed: 1f, cruiseConfig: withRamp,
+                timestampsOut: rampTimestamps);
+
+            var plainTimestamps = new List<float>();
+            ShotSimulator.Simulate(
+                board, walls, Vector2.zero, Vector2.up, startingShields: 6, projectileContactRadius: 0f,
+                workingSet: new ShotBalloonState[board.Length], projectileSpeed: 1f, cruiseConfig: noRamp,
+                timestampsOut: plainTimestamps);
+
+            Assert.AreEqual(plainTimestamps.Count, rampTimestamps.Count, "the ramp costs time, never a path");
+            Assert.AreEqual(
+                plainTimestamps[2], rampTimestamps[2], 1e-4f, "bounces before the arming one are unaffected");
+            Assert.AreEqual(
+                1f / 6f, rampTimestamps[3] - plainTimestamps[3], 1e-3f, "the arming bounce pays the ramp");
+            Assert.AreEqual(
+                1f / 6f, rampTimestamps[7] - plainTimestamps[7], 1e-3f,
+                "and it is a one-off — later legs run at the same frozen speed, just shifted");
+        }
+
+        [Test]
         public void Simulate_CruiseLookahead_BalloonInCorridorBlocksEntry()
         {
             // Identical corridor, but a balloon sits ON the ping-pong line: the lookahead sees it, so

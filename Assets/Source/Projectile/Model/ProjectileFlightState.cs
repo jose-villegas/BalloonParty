@@ -31,6 +31,14 @@ namespace BalloonParty.Projectile.Model
         // so HasBuff would already read false by then.
         public bool PierceWasRainbow { get; set; }
 
+        // Snipe pickups taken while the shot was ALREADY piercing. Two pierces can't overlap, so the
+        // grant is saved instead of wasted: each charge re-arms the lance at the discharge that spends
+        // the current pierce (see ProjectileModelExtensions.SpendPierce). Rainbow charges are counted
+        // separately and spent first, since a rainbow host's grant is the stronger one.
+        public int BankedPierceCharges { get; set; }
+
+        public int BankedRainbowPierceCharges { get; set; }
+
         // Wall bounces since the last balloon contact — the cruise detector's counter.
         public int ConsecutiveWallBounces { get; set; }
 
@@ -40,6 +48,13 @@ namespace BalloonParty.Projectile.Model
         // Seconds since the last cruise speed change (entry or bounce) — drives the per-tap
         // freeze-then-pickup animation envelope.
         public float CruiseTapElapsed { get; set; }
+
+        // The one-shot acceleration into the frozen top speed when piercing arms: seconds since the arm,
+        // and the speed the shot was actually travelling at that instant (the ramp's starting point, so
+        // the transition is continuous instead of a snap). 0 fromSpeed = no ramp was started.
+        public float PierceArmElapsed { get; set; }
+
+        public float PierceArmFromSpeed { get; set; }
 
         // Total sweeps detected (clear-corridor passes). Compared against SweepTapThreshold to gate
         // whether speed taps actually apply.

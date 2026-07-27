@@ -58,6 +58,16 @@ namespace BalloonParty.Configuration
                  "then pops everything it touches, unbreakables included. 0 disables.")]
         [SerializeField] [Min(0)] private int _cruisePiercingTapThreshold = 3;
 
+        [Tooltip("Seconds the shot takes to accelerate into its (now frozen) top speed when piercing arms. " +
+                 "Taps stop paying out once armed, so without this ramp the shot holds full speed from the " +
+                 "arming bounce on and reads as snapping to it. 0 = instant.")]
+        [SerializeField] [Min(0f)] private float _pierceArmRampDuration = 0.75f;
+
+        [Tooltip("Shape of that acceleration, sampled over the ramp duration: 0 = the speed the shot armed " +
+                 "at, 1 = its frozen top speed. Unlike the per-tap curve this blends between two real " +
+                 "speeds, so a curve starting at 0 holds the old speed rather than stalling the shot.")]
+        [SerializeField] private AnimationCurve _pierceArmRampCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+
         [Tooltip("Slow-mo dip at the pierce discharge: the time scale it drops to (1 = no dip).")]
         [SerializeField] [Range(0f, 1f)] private float _pierceDischargeTimeScale = 0.35f;
 
@@ -99,6 +109,8 @@ namespace BalloonParty.Configuration
         public bool SweepEnabled => _sweepEnabled;
         public int SweepTapThreshold => _sweepTapThreshold;
         public int CruisePiercingTapThreshold => _cruisePiercingTapThreshold;
+        public float PierceArmRampDuration => _pierceArmRampDuration;
+        public AnimationCurve PierceArmRampCurve => _pierceArmRampCurve;
         public float PierceDischargeTimeScale => _pierceDischargeTimeScale;
         public float PierceDischargeTimeScaleDuration => _pierceDischargeTimeScaleDuration;
         public AnimationCurve LastShieldApproachCurve => _lastShieldApproachCurve;

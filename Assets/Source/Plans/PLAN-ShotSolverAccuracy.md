@@ -214,7 +214,9 @@ with a test.
   → **C5 Paint** (reuse `PaintTriangle.Build`/`PackBlobs` + shared `PaintSpread` bucketing;
   recolor the working set instantly and BEFORE the next contact resolves; `IResistsPaint`
   respected; rainbow holder paints rainbow) → **C6 Snipe** (host arms pierce + a non-stacking
-  speed buff on ANY pop — no DirectHit gate, matching live; folds into E2).
+  speed buff on ANY pop — no DirectHit gate, matching live; a pop taken while ALREADY piercing
+  banks the whole grant for the discharge instead of applying it, and an armed shot's cruise ramp
+  freezes at the arming tap — both mirrored 2026-07-27; folds into E2).
 
 ### Phase E — Flight residuals (G5, G6, G7 + E4) — depends on 0a; E2 folds C6
 - **E4 (found during the D-core review, pre-existing gap):** the sim's non-piercing
@@ -336,6 +338,13 @@ cadence (architect memo → implement → test audit + review → commit) applie
   move/extend here; retires the snipe-pierce-never-ends approximation; verify the doomed-shot
   pending-flush (`DestroyProjectile`) interaction with E3; good moment to split ShotSimulator's
   over-complexity methods (advisory WARNs).
+  - **Inherited by the 2026-07-27 pierce-banking rule:** a Snipe taken mid-pierce banks a charge
+    that activates at the discharge (`BankedPierceCharges`/`BankedRainbowPierceCharges`, mirrored
+    in `ShotFlightState`). The sim spends a charge in `HandleWallBounce`'s cruise-ending branch —
+    its ONLY pierce end — so a charge banked on a *Snipe lance* (piercing without cruising) never
+    activates in prediction, and a second charge never activates at all (the re-armed lance isn't
+    cruising either). E2 is what makes both reachable; until then the divergence is one-sided
+    (the sim under-predicts a banked lance, never over-predicts it).
 - **E3 last-shield glide:** `IsLastShieldApproach` mirror — suppress `TryRunPulseIfDue` + switch
   the final segment to the fixed eased timeline (gather Duration/Curve; TapLagSeconds technique);
   negative case: blocked lookahead keeps pulsing.

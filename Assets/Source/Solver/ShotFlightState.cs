@@ -125,6 +125,19 @@ namespace BalloonParty.Solver
         public bool IsPiercing;
         public float PierceSpeedScale;
 
+        // Cruise taps frozen at the moment piercing armed (-1 = not armed through cruise). An armed shot
+        // stops earning taps in live (ProjectileMotionResolver.Step), and the sim DERIVES its tap count
+        // from shields spent since cruise entry rather than counting them — so the freeze has to be a
+        // snapshot, else the derived count would keep climbing past what live pays out.
+        public int PierceArmedTaps;
+
+        // Snipe pickups taken while the shot was already piercing (mirrors
+        // ProjectileFlightState.BankedPierceCharges): banked whole — pierce, speed and rainbow — and
+        // activated one per discharge that spends the running pierce. Rainbow charges are spent first.
+        public int BankedPierceCharges;
+        public int BankedRainbowPierceCharges;
+        public float BankedPierceMultiplier;
+
         // Phase D-core in-sim buff state (@ref plan_shot_solver_accuracy Phase D-core), split per
         // Phase C's item layer (@ref plan_shot_solver_accuracy Phase C §5) into its two concrete grant
         // sources so each can end independently: RainbowBuffUntilWall is the Shield-item grant (ends on
@@ -165,6 +178,10 @@ namespace BalloonParty.Solver
             IsCruising = false;
             IsPiercing = seed.IsPiercing;
             PierceSpeedScale = 1f;
+            PierceArmedTaps = -1;
+            BankedPierceCharges = 0;
+            BankedRainbowPierceCharges = 0;
+            BankedPierceMultiplier = 1f;
             RainbowBuffUntilWall = seed.RainbowBuffUntilWall;
             RainbowBuffUntilPierceEnd = seed.RainbowBuffUntilPierceEnd;
             HasSpeedBuff = seed.HasSpeedBuff;

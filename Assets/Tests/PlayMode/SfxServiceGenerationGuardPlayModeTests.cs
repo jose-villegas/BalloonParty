@@ -145,6 +145,8 @@ namespace BalloonParty.Tests.PlayMode
             public bool SweepEnabled => false;
             public int SweepTapThreshold => 0;
             public int CruisePiercingTapThreshold => 0;
+            public float PierceArmRampDuration => 0f;
+            public AnimationCurve PierceArmRampCurve => null;
             public float PierceDischargeTimeScale => 0f;
             public float PierceDischargeTimeScaleDuration => 0f;
             public AnimationCurve LastShieldApproachCurve => null;

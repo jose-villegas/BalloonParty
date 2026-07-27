@@ -464,7 +464,7 @@ namespace BalloonParty.Projectile.View
                 _shieldView?.OnBounce((Vector2)travelDirection, (Vector2)step.Direction, step.Speed);
                 _shieldLostPublisher.Publish(new ShieldLostMessage(step.WallContact));
                 _wallHitPublisher.Publish(new WallHitMessage(step.WallContact, _model.ShieldsRemaining.Value));
-                TryAwardSweepTap(step.WallContact, travelDirection);
+                TryAwardSweepTap(step.WallContact, travelDirection, step.Speed);
 
 #if UNITY_EDITOR
                 RecordSweepGizmoBounce(step.WallContact);
@@ -492,30 +492,7 @@ namespace BalloonParty.Projectile.View
                 }
             }
 
-            // Tunneling safety net: at any wall bounce while piercing, sweep the segment with a
-            // CircleCastAll to catch toughs that OnTriggerEnter2D missed at high speed. Two cases:
-            // 1. Resolver already ended pierce (pending > 0 detected) — we add any extras before discharge.
-            // 2. ALL toughs were tunneled (pending was 0 at Step) — sweep finds them, then we end pierce.
-            if (wasPiercing && step.Outcome == ProjectileStepOutcome.Bounced)
-            {
-                SweepPierceMisses(segmentOrigin, step.WallContact);
-
-                // Case 2: the resolver left pierce active because it saw no pending hits, but our sweep
-                // just found toughs — end the pierce now so the discharge below fires.
-                if (_model.IsPiercing.Value && _model.Flight.PendingPierceHits.Count > 0)
-                {
-                    _model.EndPierce();
-                }
-            }
-
-            // The motion resolver ends the pierce at a wall bounce when pending toughs exist; the plowed
-            // toughs are still pending, so shatter them now (at their strike positions). DestroyProjectile
-            // handles the same flush on a shot that dies before the next wall.
-            if (!_model.IsPiercing.Value && _model.Flight.PendingPierceHits.Count > 0)
-            {
-                _hitResolver.DischargePending(_model);
-                _projectileTrail?.Boost();
-            }
+            ResolvePierceAtBounce(step, segmentOrigin, wasPiercing);
 
             transform.position = step.Position;
             transform.up = step.Direction;
@@ -568,6 +545,39 @@ namespace BalloonParty.Projectile.View
                 _palette.PaletteIndexOf(GamePalette.ProjectileColorId));
 
             _firedPublisher.Publish(new ProjectileFiredMessage(transform.position, heading));
+        }
+
+        // Everything the pierce owes a wall bounce: the tunneling safety net, spending the pierce when the
+        // net is what found the toughs, and the discharge itself.
+        private void ResolvePierceAtBounce(in ProjectileStep step, Vector3 segmentOrigin, bool wasPiercing)
+        {
+            // Tunneling safety net: at any wall bounce while piercing, sweep the segment with a
+            // CircleCastAll to catch toughs that OnTriggerEnter2D missed at high speed. Two cases:
+            // 1. Resolver already spent the pierce (pending > 0 detected) — we add any extras before discharge.
+            // 2. ALL toughs were tunneled (pending was 0 at Step) — sweep finds them, then we spend it here.
+            if (wasPiercing && step.Outcome == ProjectileStepOutcome.Bounced)
+            {
+                SweepPierceMisses(segmentOrigin, step.WallContact);
+
+                // Case 2: the resolver left pierce active because it saw no pending hits, but our sweep
+                // just found toughs — spend the pierce now so the discharge below fires.
+                if (_model.IsPiercing.Value && _model.Flight.PendingPierceHits.Count > 0)
+                {
+                    _model.SpendPierce();
+                }
+            }
+
+            // The motion resolver spends the pierce at a wall bounce when pending toughs exist; the plowed
+            // toughs are still pending, so shatter them now (at their strike positions). A banked Snipe
+            // charge leaves IsPiercing armed through that discharge, so the bounce — not the flag — is
+            // what says one happened. DestroyProjectile handles the same flush on a shot that dies before
+            // the next wall.
+            if (_model.Flight.PendingPierceHits.Count > 0
+                && (step.Outcome == ProjectileStepOutcome.Bounced || !_model.IsPiercing.Value))
+            {
+                _hitResolver.DischargePending(_model);
+                _projectileTrail?.Boost();
+            }
         }
 
         private void OnBalloonDeflected(BalloonDeflectedMessage msg)
@@ -630,9 +640,13 @@ namespace BalloonParty.Projectile.View
             _model.IsCruising.Value = true;
         }
 
-        private void TryAwardSweepTap(Vector3 wallHitPosition, Vector3 travelDirection)
+        private void TryAwardSweepTap(Vector3 wallHitPosition, Vector3 travelDirection, float stepSpeed)
         {
-            if (!_flightConfig.SweepEnabled || _model.Flight.SegmentPopCount <= 0 || !_model.Flight.SegmentSweepValid)
+            // Sweeps feed the same tap counter cruise bounces do, so they stop paying out while the shot
+            // is armed for the same reason (ProjectileMotionResolver.Step) — otherwise a Snipe lance,
+            // which deliberately skips cruise entirely, would still pick up the cruise ramp sideways.
+            if (!_flightConfig.SweepEnabled || _model.IsPiercing.Value
+                || _model.Flight.SegmentPopCount <= 0 || !_model.Flight.SegmentSweepValid)
             {
                 return;
             }
@@ -670,12 +684,18 @@ namespace BalloonParty.Projectile.View
 #endif
 
             _model.Flight.TotalCruiseTaps++;
-            _model.Flight.CruiseTapElapsed = 0f;
 
+            // Same split as the resolver's cruise tap: the tap that ARMS hands its transition to the arm
+            // ramp (anchored at the speed the shot is travelling now) rather than replaying the per-tap
+            // freeze-then-pickup beat.
             var threshold = _flightConfig.CruisePiercingTapThreshold;
-            if (threshold > 0 && !_model.IsPiercing.Value && _model.Flight.TotalCruiseTaps >= threshold)
+            if (threshold > 0 && _model.Flight.TotalCruiseTaps >= threshold)
             {
-                _model.IsPiercing.Value = true;
+                _model.ArmPierce(stepSpeed);
+            }
+            else
+            {
+                _model.Flight.CruiseTapElapsed = 0f;
             }
         }
 
@@ -902,6 +922,7 @@ namespace BalloonParty.Projectile.View
             }
 
             var pending = _model.Flight.PendingPierceHits;
+            var sweptAny = false;
             foreach (var hit in hits)
             {
                 if (!TryGetHitBalloon(hit.collider, out _, out var balloonModel))
@@ -915,11 +936,19 @@ namespace BalloonParty.Projectile.View
                 }
 
                 pending.Add(new PendingPierceHit(balloonModel, hit.collider.transform.position));
+                sweptAny = true;
             }
 
-            if (pending.Count > 0)
+            // Only a tough this sweep actually ADDED gets a capture, and it may only ever turn the flag ON
+            // (`|=`). Both matter: the cast re-finds the toughs the triggers already recorded (they stay on
+            // the board until the discharge), and this runs at the wall AFTER Step spent the pierce and
+            // after the shield-lost publish — so a plain read here sees both rainbow grants already
+            // expired. Overwriting on that read clobbered the plow-time capture to false and silently ate
+            // the rainbow discharge bloom. A tunneled-only discharge still captures correctly: the
+            // resolver saw no pending hits then, so the pierce (and its buff) is still live at this point.
+            if (sweptAny)
             {
-                _model.Flight.PierceWasRainbow = _model.HasBuff(ProjectileBuffId.RainbowShield);
+                _model.Flight.PierceWasRainbow |= _model.HasBuff(ProjectileBuffId.RainbowShield);
             }
         }
 

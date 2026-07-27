@@ -453,6 +453,112 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
+        public void Step_ArmedShot_EarnsNoFurtherCruiseTapsAndKeepsItsEnvelope()
+        {
+            // Cruise stops paying out once the shot is armed: it already sits at the top speed its taps
+            // earned, and a tap it can't use would only ramp it further and re-trigger the
+            // freeze-then-pickup envelope (which, with no speed change left to sell, reads as a hitch).
+            var resolver = CruiseResolver(perShield: 0.5f, piercingTapThreshold: 3);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
+            model.IsCruising.Value = true;
+            model.IsPiercing.Value = true;
+            model.Flight.TotalCruiseTaps = 5;
+            model.Flight.CruiseTapElapsed = 0.2f;
+
+            resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
+
+            Assert.AreEqual(5, model.Flight.TotalCruiseTaps, "an armed shot banks no further taps");
+            Assert.GreaterOrEqual(
+                model.Flight.CruiseTapElapsed, 0.2f,
+                "the envelope is never restarted at the bounce — a reset would zero this");
+        }
+
+        [Test]
+        public void Step_PiercingArms_RampsIntoTheFrozenTopSpeedInsteadOfSnappingToIt()
+        {
+            // Taps stop at the arming bounce, so nothing is left for the per-tap beat to sell and the shot
+            // would otherwise hold its frozen top speed from that bounce on — reading as a jump to full
+            // speed. One ramp carries it there from the speed it armed at (José's playtest, 2026-07-27).
+            // perShield 1 + 1 tap ⇒ top speed = base x 2; a linear ramp curve (the resolver's fallback for
+            // an unauthored one) over 1s makes the expected speeds exact.
+            var resolver = CruiseResolver(perShield: 1f, piercingTapThreshold: 1, armRampDuration: 1f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
+            model.IsCruising.Value = true;
+
+            var armStep = resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
+
+            Assert.IsTrue(model.IsPiercing.Value, "one tap at threshold 1 arms the shot");
+            Assert.AreEqual(1f, armStep.Speed, 1e-4f, "it arms while still travelling at base speed");
+            Assert.AreEqual(
+                1f, model.Flight.PierceArmFromSpeed, 1e-4f,
+                "the ramp is anchored at that actual speed, so the transition is continuous");
+
+            // The ramp walks from 1 to 2 over 1s. The step right after arming is the one that would betray
+            // a snap: it must still be at the arming speed, not already at the top.
+            model.Direction = Vector2.up;
+            Assert.AreEqual(1f, resolver.Step(model, Vector3.zero, 0.25f).Speed, 1e-3f, "no jump at t=0");
+            Assert.AreEqual(1.25f, resolver.Step(model, Vector3.zero, 0.25f).Speed, 1e-3f, "quarter way");
+            Assert.AreEqual(1.5f, resolver.Step(model, Vector3.zero, 0.25f).Speed, 1e-3f, "half way");
+            Assert.AreEqual(1.75f, resolver.Step(model, Vector3.zero, 0.25f).Speed, 1e-3f, "three quarters");
+            Assert.AreEqual(2f, resolver.Step(model, Vector3.zero, 0.25f).Speed, 1e-3f, "top speed reached");
+            Assert.AreEqual(2f, resolver.Step(model, Vector3.zero, 0.25f).Speed, 1e-3f, "and held there");
+        }
+
+        [Test]
+        public void Step_PiercingArmsWithNoRampConfigured_HoldsTopSpeedImmediately()
+        {
+            // 0 duration disables the ramp — the pre-ramp behaviour, kept reachable for tuning.
+            var resolver = CruiseResolver(perShield: 1f, piercingTapThreshold: 1);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
+            model.IsCruising.Value = true;
+
+            resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
+            model.Direction = Vector2.up;
+
+            Assert.AreEqual(2f, resolver.Step(model, Vector3.zero, 0.25f).Speed, 1e-3f);
+        }
+
+        [Test]
+        public void Step_WallBounceDischarge_WithABankedSnipe_KeepsPiercingButStillEndsTheCruise()
+        {
+            // A Snipe taken mid-pierce is banked and re-arms the lance at this discharge, so IsPiercing
+            // never dips (LevelController releases its level-up hold on that edge — a dip would fire the
+            // ceremony mid-flight). The cruise still ends: the re-armed lance starts from base speed, so
+            // the old ramp can never compound with the grant the charge is about to re-apply. Spending the
+            // charge itself belongs to SnipeItemHandler, which owns the grant.
+            var resolver = CruiseResolver(perShield: 0.5f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
+            model.IsPiercing.Value = true;
+            model.IsCruising.Value = true;
+            model.Flight.TotalCruiseTaps = 5;
+            model.Flight.BankedPierceCharges = 1;
+            model.Flight.PendingPierceHits.Add(
+                new PendingPierceHit(Substitute.For<IBalloonModel>(), Vector3.zero));
+
+            resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
+
+            Assert.IsTrue(model.IsPiercing.Value, "the banked charge re-arms the lance in place");
+            Assert.IsFalse(model.IsCruising.Value, "the cruise that fed the spent pierce still ends");
+            Assert.AreEqual(0, model.Flight.TotalCruiseTaps, "back to base speed for the fresh lance");
+            Assert.AreEqual(1, model.Flight.BankedPierceCharges, "the resolver peeks; the handler spends");
+        }
+
+        [Test]
+        public void Step_WallBounceDischarge_WithABankedRainbowSnipe_KeepsPiercing()
+        {
+            var resolver = CruiseResolver(perShield: 0.5f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
+            model.IsPiercing.Value = true;
+            model.Flight.BankedRainbowPierceCharges = 1;
+            model.Flight.PendingPierceHits.Add(
+                new PendingPierceHit(Substitute.For<IBalloonModel>(), Vector3.zero));
+
+            resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
+
+            Assert.IsTrue(model.IsPiercing.Value, "a rainbow charge re-arms exactly like a plain one");
+        }
+
+        [Test]
         public void Step_PiercingNoPendingHits_NeverDischarges()
         {
             // A piercing shot that never plowed a tough has no pending hits, so the discharge never
@@ -660,9 +766,10 @@ namespace BalloonParty.Tests.Projectile
 
         private static ProjectileMotionResolver CruiseResolver(
             float perShield, float tapEaseDuration = 0f, int piercingTapThreshold = 0,
-            float maxSpeedMultiplier = 0f)
+            float maxSpeedMultiplier = 0f, float armRampDuration = 0f)
         {
             var config = Substitute.For<IProjectileFlightConfig>();
+            config.PierceArmRampDuration.Returns(armRampDuration);
             config.LimitsClockwise.Returns(Walls);
             config.CruiseSpeedPerShield.Returns(perShield);
             config.CruiseTapEaseDuration.Returns(tapEaseDuration);
