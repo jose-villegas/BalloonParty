@@ -598,5 +598,15 @@
     "LicenseName": "Attribution",
     "LicenseUrl": "http://creativecommons.org/licenses/by/3.0/",
     "RequiresAttribution": true
+  },
+  {
+    "SoundId": "SpeedTap",
+    "ProviderId": 608981,
+    "Name": "C.mp3",
+    "Author": "smstrahan",
+    "SoundUrl": "https://freesound.org/people/smstrahan/sounds/608981/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
   }
 ]
