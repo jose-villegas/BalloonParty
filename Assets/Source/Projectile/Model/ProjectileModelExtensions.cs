@@ -2,51 +2,6 @@ namespace BalloonParty.Projectile.Model
 {
     internal static class ProjectileModelExtensions
     {
-        /// <summary>
-        ///     The single funnel for minting a speed tap: both grant rules (a cruising wall bounce, in the
-        ///     motion resolver, and a cleared sweep corridor, in the view where the physics lives) come
-        ///     through here, so "one tap per wall hit" is enforced rather than inferred. Returns whether a
-        ///     tap was minted. Also owns what a tap does — arm the lance at the threshold, otherwise
-        ///     restart the beat — so the two callers can't drift apart on it.
-        /// </summary>
-        public static bool TryGrantTap(this IWriteableProjectileModel model, int piercingTapThreshold)
-        {
-            var flight = model.Flight;
-
-            // One tap per wall hit, whichever rule gets there first — and while piercing BOTH genuinely
-            // can. A pop doesn't end the cruise for an armed shot (ProjectileHitResolver's `!isPiercing`
-            // guard), so an armed shot that pops 1-HP balloons reaches the wall with a cruise bounce AND a
-            // clean sweep to its name; unarmed, the pop would have cancelled the cruise and only the sweep
-            // could claim it. Refusing the second claim here is what keeps that from paying twice — which
-            // is exactly what an armed cruising shot used to do, compounding from there. Both claims are
-            // worth the same one tap, so first-come costs the player nothing (and a refused sweep is still
-            // credited toward its own warm-up counter, which the caller bumps before asking).
-            if (flight.LastTapWallHit == flight.WallHitSequence)
-            {
-                return false;
-            }
-
-            flight.LastTapWallHit = flight.WallHitSequence;
-            flight.TotalCruiseTaps++;
-
-            // A long-enough run ARMS the shot: from this tap on it pierces everything it touches
-            // (unbreakables included) for the rest of its life. Taps keep accruing past that point — a
-            // wall hit is a wall hit — but an armed shot rides the RAMP rather than the beat: it
-            // accelerates from the speed it is already travelling into the new target, instead of dipping
-            // to a standstill first. Re-arming is idempotent, so each further tap simply re-anchors that
-            // ramp; only the speed rail (MaxSpeedMultiplier) bounds where this ends up.
-            if (piercingTapThreshold > 0 && flight.TotalCruiseTaps >= piercingTapThreshold)
-            {
-                model.ArmPierce();
-            }
-            else
-            {
-                model.BeginTapBeat();
-            }
-
-            return true;
-        }
-
         /// <summary>Ends the piercing state and the cruise that fed it — called at wall-discharge.</summary>
         public static void EndPierce(this IWriteableProjectileModel model)
         {
@@ -79,7 +34,8 @@ namespace BalloonParty.Projectile.Model
         ///     Arms piercing (idempotently) and starts the acceleration into the tap count's new target,
         ///     anchored at the speed the shot is actually travelling right now — so arming, and every armed
         ///     tap after it, is continuous rather than a snap or a dip. Both rules that earn a tap (the
-        ///     resolver's cruise bounce and the view's sweep) come through <see cref="TryGrantTap" />.
+        ///     resolver's cruise bounce and the view's sweep) come through
+        ///     <c>ProjectileTapResolver.TryGrantTap</c>.
         /// </summary>
         public static void ArmPierce(this IWriteableProjectileModel model)
         {

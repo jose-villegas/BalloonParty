@@ -57,6 +57,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
         [Inject] private ProjectileHitResolver _hitResolver;
         [Inject] private ProjectileMotionResolver _motionResolver;
+        [Inject] private ProjectileTapResolver _tapResolver;
         [Inject] private PauseService _pauseService;
         [Inject] private DisturbanceFieldService _disturbanceField;
         [Inject] private SmokeFieldService _smokeField;
@@ -91,6 +92,7 @@ namespace BalloonParty.Projectile.View
         private bool _hasFlown;
         private float _pierceAlpha;
         private PathTrace.SegmentBlocked _segmentBlocked;
+        private PathTrace.SegmentBlocked _corridorBlocked;
         private Vector3 _lastPaintPos;
         private float _stampScale = 1f;
 
@@ -654,67 +656,37 @@ namespace BalloonParty.Projectile.View
             _model.IsCruising.Value = true;
         }
 
-        // A Sweep is a RUN: SweepTapThreshold consecutive segments spent breezing through 1-HP balloons.
-        // So any wall this shot reaches without having cleanly cleared the segment behind it — a segment
-        // with no pops at all (empty, which is cruise's business), one holding a tougher contact, or one
-        // whose corridor is still occupied — breaks the run and starts the count over. Symmetric with
-        // cruise, whose own run (ConsecutiveWallBounces) any balloon contact breaks.
+        // The Sweep rule itself lives in ProjectileTapResolver; the view supplies the one thing it
+        // can't have — a Physics2D corridor probe — and translates the outcome for the editor gizmo.
         private void TryAwardSweepTap(Vector3 wallHitPosition, Vector3 travelDirection)
         {
-            if (!ClearedTheSegment(wallHitPosition, travelDirection))
-            {
-                _model.Flight.ConsecutiveSweeps = 0;
-#if UNITY_EDITOR
-                ResetSweepGizmo();
-#endif
-                return;
-            }
+            _corridorBlocked ??= (from, dir, length) =>
+                Physics2D.CircleCast(from, _contactRadius, dir, length, 1 << BalloonsLayer).collider != null;
 
-            _model.Flight.ConsecutiveSweeps++;
+            var outcome = _tapResolver.TryAwardSweepTap(
+                _model, wallHitPosition, travelDirection, _corridorBlocked);
 
 #if UNITY_EDITOR
-            StartSweepGizmoTracking();
+            switch (outcome)
+            {
+                case ProjectileSweepOutcome.RunBroken:
+                    // The line IS the run, so it goes when the run does.
+                    ResetSweepGizmo();
+                    break;
+                case ProjectileSweepOutcome.Credited:
+                    StartSweepGizmoTracking();
+                    break;
+                case ProjectileSweepOutcome.Paid:
+                    StartSweepGizmoTracking();
+                    _sweepGizmoThresholdReached = true;
+                    if (_sweepGizmoWarmupPath.Count > 0)
+                    {
+                        _sweepGizmoPostPath.Add(_sweepGizmoWarmupPath[_sweepGizmoWarmupPath.Count - 1]);
+                    }
+
+                    break;
+            }
 #endif
-
-            if (_flightConfig.SweepTapThreshold > 0
-                && _model.Flight.ConsecutiveSweeps < _flightConfig.SweepTapThreshold)
-            {
-                return;
-            }
-
-#if UNITY_EDITOR
-            _sweepGizmoThresholdReached = true;
-            if (_sweepGizmoWarmupPath.Count > 0)
-            {
-                _sweepGizmoPostPath.Add(_sweepGizmoWarmupPath[_sweepGizmoWarmupPath.Count - 1]);
-            }
-#endif
-
-            // A cleared corridor is the other rule that earns a tap. Through the same funnel as the
-            // resolver's cruise bounce, so this wall hit can only ever mint one of the two.
-            _model.TryGrantTap(_flightConfig.CruisePiercingTapThreshold);
-        }
-
-        // Did the segment just finished qualify as a clean clearing pass? It has to have popped something,
-        // every contact on it has to have been a one-shot kill (SegmentSweepValid), and the corridor it flew
-        // has to be clear NOW — cast backward from the wall over the span it covered.
-        private bool ClearedTheSegment(Vector3 wallHitPosition, Vector3 travelDirection)
-        {
-            if (!_flightConfig.SweepEnabled || _model.Flight.SegmentPopCount <= 0
-                || !_model.Flight.SegmentSweepValid)
-            {
-                return false;
-            }
-
-            var segmentLength = Vector3.Distance(_model.Flight.LastBouncePosition, wallHitPosition);
-            if (segmentLength <= 0f || travelDirection.sqrMagnitude < 1e-6f)
-            {
-                return false;
-            }
-
-            var backward = -((Vector2)travelDirection).normalized;
-            return Physics2D.CircleCast(
-                wallHitPosition, _contactRadius, backward, segmentLength, 1 << BalloonsLayer).collider == null;
         }
 
         private bool IsPathClearAhead(Vector3 position, Vector3 direction, int bounces)
@@ -743,8 +715,7 @@ namespace BalloonParty.Projectile.View
             // the aura hidden the whole time it's armed — dim toward the floor instead. Still hidden
             // entirely while doomed (drifting to its death): a flourish there reads as a power-up right
             // as it dies, and the clear path means there's nothing to pierce anyway.
-            var inTapBeat = _model.Flight.TransitionKind == SpeedTransitionKind.TapBeat
-                            && _model.Flight.TransitionElapsed < _flightConfig.CruiseTapEaseDuration;
+            var inTapBeat = _tapResolver.IsInTapBeat(_model);
             var pierceActive = _model.IsPiercing.Value && !_model.IsLastShieldApproach.Value;
             var target = pierceActive
                 ? (inTapBeat ? _visual.PierceTapBeatAlpha : 1f)
@@ -817,7 +788,7 @@ namespace BalloonParty.Projectile.View
             // Against the configured cap this band is unreachable — taps freeze at the arming one, so a
             // shot can never approach it and every velocity-scaled effect would live in the first tenth
             // of its curve. Normalize against what the shot can actually reach.
-            var maxSpeed = normalSpeed * _motionResolver.ReachableTopSpeedMultiplier;
+            var maxSpeed = normalSpeed * _tapResolver.ReachableTopSpeedMultiplier;
             return maxSpeed > normalSpeed ? Mathf.Clamp01((speed - normalSpeed) / (maxSpeed - normalSpeed)) : 0f;
         }
 

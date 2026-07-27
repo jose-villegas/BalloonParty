@@ -26,7 +26,7 @@ namespace BalloonParty.Tests.Projectile
         {
             var config = Substitute.For<IProjectileFlightConfig>();
             config.LimitsClockwise.Returns(Walls);
-            _resolver = new ProjectileMotionResolver(config);
+            _resolver = new ProjectileMotionResolver(config, new ProjectileTapResolver(config));
         }
 
         [Test]
@@ -770,7 +770,7 @@ namespace BalloonParty.Tests.Projectile
             config.CruiseTapCurve.Returns(AnimationCurve.Linear(0f, 0f, 1f, 1f));
             config.LastShieldApproachCurve.Returns(AnimationCurve.Linear(0f, 0f, 1f, 1f));
             config.LastShieldApproachDuration.Returns(0.8f);
-            return new ProjectileMotionResolver(config);
+            return new ProjectileMotionResolver(config, new ProjectileTapResolver(config));
         }
 
         private static ProjectileMotionResolver LastShieldResolver(AnimationCurve approachCurve, float durationSeconds)
@@ -780,7 +780,7 @@ namespace BalloonParty.Tests.Projectile
             config.CruiseTapCurve.Returns(AnimationCurve.Linear(0f, 0f, 1f, 1f));
             config.LastShieldApproachCurve.Returns(approachCurve);
             config.LastShieldApproachDuration.Returns(durationSeconds);
-            return new ProjectileMotionResolver(config);
+            return new ProjectileMotionResolver(config, new ProjectileTapResolver(config));
         }
 
         private static ProjectileMotionResolver CruiseResolver(
@@ -795,7 +795,7 @@ namespace BalloonParty.Tests.Projectile
             config.CruisePiercingTapThreshold.Returns(piercingTapThreshold);
             config.MaxSpeedMultiplier.Returns(maxSpeedMultiplier);
             config.CruiseTapCurve.Returns(AnimationCurve.Linear(0f, 0f, 1f, 1f));
-            return new ProjectileMotionResolver(config);
+            return new ProjectileMotionResolver(config, new ProjectileTapResolver(config));
         }
 
         private static ISubscriber<ShieldLostMessage> NeverFiringWallBounces()

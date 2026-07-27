@@ -10,44 +10,20 @@ namespace BalloonParty.Projectile.Controller
     internal sealed class ProjectileMotionResolver
     {
         private readonly WallLimits _walls;
-        private readonly float _speedGainPerTap;
-        private readonly float _maxSpeedMultiplier;
-        private readonly float _cruiseTapEaseDuration;
-        private readonly int _cruisePiercingTapThreshold;
-        private readonly float _pierceArmRampDuration;
-        private readonly AnimationCurve _cruiseTapCurve;
-        private readonly AnimationCurve _pierceArmRampCurve;
+        private readonly ProjectileTapResolver _taps;
         private readonly AnimationCurve _lastShieldApproachCurve;
         private readonly float _lastShieldApproachDuration;
 
         // The view needs the same wall geometry for its cruise lookahead trace.
         internal WallLimits Walls => _walls;
 
-        /// <summary>
-        ///     The fastest a shot can actually travel, as a multiple of base speed — what feedback scaling
-        ///     with velocity normalizes against. Taps accrue for the whole flight (piercing included), so
-        ///     the speed rail is the real ceiling; with the rail disabled there is no bound at all, and the
-        ///     arming tap's multiplier is the best available reference point.
-        /// </summary>
-        internal float ReachableTopSpeedMultiplier => _maxSpeedMultiplier > 0f
-            ? _maxSpeedMultiplier
-            : Mathf.Max(TargetMultiplier(_cruisePiercingTapThreshold), 1f);
-
         [Inject]
-        internal ProjectileMotionResolver(IProjectileFlightConfig config)
+        internal ProjectileMotionResolver(IProjectileFlightConfig config, ProjectileTapResolver taps)
         {
             _walls = new WallLimits(config.LimitsClockwise);
-            _speedGainPerTap = config.SpeedGainPerTap;
-            _maxSpeedMultiplier = config.MaxSpeedMultiplier;
-            _cruiseTapEaseDuration = config.CruiseTapEaseDuration;
-            _cruisePiercingTapThreshold = config.CruisePiercingTapThreshold;
-            _cruiseTapCurve = config.CruiseTapCurve ?? AnimationCurve.Linear(0f, 0f, 1f, 1f);
-            _pierceArmRampDuration = config.PierceArmRampDuration;
+            _taps = taps;
             // Blends between two real speeds (see ResolveFlightSpeed), so an empty curve is harmless
             // here — it just holds the arming speed — but a linear fallback keeps it accelerating.
-            _pierceArmRampCurve = config.PierceArmRampCurve is { length: > 0 }
-                ? config.PierceArmRampCurve
-                : AnimationCurve.Linear(0f, 0f, 1f, 1f);
             // An un-authored (newly-added) serialized curve deserializes empty and evaluates to 0,
             // which would crawl the shot — fall back to a constant-1 no-op until it's authored.
             _lastShieldApproachCurve = config.LastShieldApproachCurve is { length: > 0 }
@@ -59,7 +35,7 @@ namespace BalloonParty.Projectile.Controller
         /// <summary>Advances one fixed step, mutating direction/shield count on a wall bounce.</summary>
         internal ProjectileStep Step(IWriteableProjectileModel model, Vector3 position, float deltaTime)
         {
-            var speed = ResolveFlightSpeed(model, deltaTime);
+            var speed = _taps.ResolveSpeed(model, deltaTime);
 
             // The 'last breath': on a doomed 0-shield segment (flagged by the view once the path to
             // the death wall is clear of any shield source), traverse origin -> wall over a FIXED
@@ -125,7 +101,7 @@ namespace BalloonParty.Projectile.Controller
             // whether it actually mints one (at most one per wall hit) and what the tap does.
             if (model.IsCruising.Value)
             {
-                model.TryGrantTap(_cruisePiercingTapThreshold);
+                _taps.TryGrantTap(model);
             }
 
             model.Direction = Vector2.Reflect(model.Direction, reflect.normalized);
@@ -283,65 +259,5 @@ namespace BalloonParty.Projectile.Controller
             return true;
         }
 
-        // The flight speed for this step: the tap count sets the target, and whichever speed transition
-        // is in flight eases toward it from its own anchor. A tap beat anchors at a standstill and an arm
-        // ramp at the speed the shot armed with, which is the only difference between them — for a beat,
-        // Lerp(0, target, curve) is exactly the old "target × curve" envelope.
-        private float ResolveFlightSpeed(IWriteableProjectileModel model, float deltaTime)
-        {
-            var flight = model.Flight;
-            var target = model.ComputeBuffedValue(ProjectileBuffId.Speed, model.Speed)
-                         * TargetMultiplier(flight.TotalCruiseTaps);
-
-            // The safety rail, applied to the FINAL speed: one fixed step has to stay short enough that
-            // the shot can't skip straight past a balloon (or the play area) between steps. It clamps
-            // against the UNBUFFED base so it's an absolute ceiling — a speed buff multiplies the target
-            // and would otherwise sail through a cap that only wrapped the tap part.
-            if (_maxSpeedMultiplier > 0f)
-            {
-                target = Mathf.Min(target, model.Speed * _maxSpeedMultiplier);
-            }
-
-            // With no taps banked there is nothing above base speed to blend toward, so an unspent
-            // transition (cruise entry before its first tap) stays inert rather than dipping the shot.
-            if (flight.TotalCruiseTaps <= 0)
-            {
-                flight.CurrentSpeed = target;
-                return target;
-            }
-
-            var duration = TransitionDuration(flight.TransitionKind);
-            if (duration <= 1e-4f)
-            {
-                flight.CurrentSpeed = target;
-                return target;
-            }
-
-            var curve = flight.TransitionKind == SpeedTransitionKind.ArmRamp
-                ? _pierceArmRampCurve
-                : _cruiseTapCurve;
-            var progress = Mathf.Clamp01(flight.TransitionElapsed / duration);
-            flight.TransitionElapsed += deltaTime;
-            flight.CurrentSpeed = Mathf.Lerp(
-                flight.TransitionFromSpeed, target, Mathf.Clamp01(curve.Evaluate(progress)));
-            return flight.CurrentSpeed;
-        }
-
-        // Cumulative: every tap is worth SpeedGainPerTap of base speed. Unclamped — the speed rail is
-        // applied to the final speed in ResolveFlightSpeed, so buffs fall inside it too.
-        private float TargetMultiplier(int taps)
-        {
-            return taps <= 0 ? 1f : 1f + (_speedGainPerTap * taps);
-        }
-
-        private float TransitionDuration(SpeedTransitionKind kind)
-        {
-            return kind switch
-            {
-                SpeedTransitionKind.TapBeat => _cruiseTapEaseDuration,
-                SpeedTransitionKind.ArmRamp => _pierceArmRampDuration,
-                _ => 0f,
-            };
-        }
     }
 }
