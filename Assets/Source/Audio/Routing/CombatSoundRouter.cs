@@ -40,6 +40,8 @@ namespace BalloonParty.Audio.Routing
         private int _rainbowPopsThisFlight;
         private int _toughPopsThisFlight;
         private int _unbreakablePopsThisFlight;
+        private int _silverPopsThisFlight;
+        private int _goldPopsThisFlight;
         private int _unbreakableDeflectsThisFlight;
 
         [Inject]
@@ -176,6 +178,8 @@ namespace BalloonParty.Audio.Routing
             _rainbowPopsThisFlight = 0;
             _toughPopsThisFlight = 0;
             _unbreakablePopsThisFlight = 0;
+            _silverPopsThisFlight = 0;
+            _goldPopsThisFlight = 0;
             _unbreakableDeflectsThisFlight = 0;
             _player.Play(GameSoundId.ShotReload, null);
         }
@@ -261,6 +265,8 @@ namespace BalloonParty.Audio.Routing
                 GameSoundId.BalloonPopRainbow => _rainbowPopsThisFlight * MusicalPitchExtensions.WholeToneSemitones,
                 GameSoundId.BalloonPopTough => _toughPopsThisFlight * MusicalPitchExtensions.WholeToneSemitones,
                 GameSoundId.BalloonPopUnbreakable => _unbreakablePopsThisFlight * MusicalPitchExtensions.WholeToneSemitones,
+                GameSoundId.BalloonPopSilver => _silverPopsThisFlight * MusicalPitchExtensions.WholeToneSemitones,
+                GameSoundId.BalloonPopGold => _goldPopsThisFlight * MusicalPitchExtensions.WholeToneSemitones,
                 _ => 0
             };
 
@@ -279,6 +285,12 @@ namespace BalloonParty.Audio.Routing
                     break;
                 case GameSoundId.BalloonPopUnbreakable:
                     _unbreakablePopsThisFlight++;
+                    break;
+                case GameSoundId.BalloonPopSilver:
+                    _silverPopsThisFlight++;
+                    break;
+                case GameSoundId.BalloonPopGold:
+                    _goldPopsThisFlight++;
                     break;
             }
         }
