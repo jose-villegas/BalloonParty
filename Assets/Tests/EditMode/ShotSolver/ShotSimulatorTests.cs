@@ -224,11 +224,12 @@ namespace BalloonParty.Tests.ShotSolver
         [Test]
         public void Simulate_PierceArmRamp_CostsTheArmingBounceTimeInProportionToTheSpeedGap()
         {
-            // Live hands the arming bounce's transition to a ramp from the arming speed into the frozen top
-            // speed instead of the per-tap beat. On the event timeline that ramp is a pure time cost: it
-            // only loses the part of the ramp the remaining speed gap accounts for. Here the shot arms on
-            // its second tap, so it ramps from x2 to x3 over 1s with a linear curve (mean 0.5) ⇒
-            // 1 x 0.5 x (1 - 2/3) = 1/6s added at that bounce, and every later event carries the offset.
+            // An ARMED tap hands its transition to the ramp rather than the per-tap beat: it accelerates
+            // from the speed the shot already has into the new target. On the event timeline that ramp is a
+            // pure time cost, and only the part the remaining speed gap accounts for. Here the shot arms on
+            // its second tap, ramping x2 -> x3 over 1s with a linear curve (mean 0.5) ⇒
+            // 1 x 0.5 x (1 - 2/3) = 1/6s charged at that bounce, with every later event carrying it — and
+            // each armed tap after it charging its own, smaller share.
             var walls = new Vector4(2f, 0.5f, -2f, -0.5f);
             var board = new[] { ShotBoardBuilder.Green(new Vector2(100f, 100f), 0.05f, "Red", 1, 1) };
             var linear = AnimationCurve.Linear(0f, 0f, 1f, 1f);
@@ -262,9 +263,13 @@ namespace BalloonParty.Tests.ShotSolver
             Assert.AreEqual(
                 1f / 6f, rampTimestamps[4] - plainTimestamps[4], 1e-3f,
                 "the first leg after arming carries the ramp's cost");
+            // NOT a one-off: taps keep accruing while armed, so every armed tap re-anchors the ramp and
+            // pays its own share — each smaller than the last as the relative gap closes, since the lag is
+            // ArmRampLagSeconds x (1 - from/to). By event 7 the shot has taken four of them: the arming tap
+            // (x2 -> x3) plus three more (x3 -> x4, x4 -> x5, x5 -> x6).
             Assert.AreEqual(
-                1f / 6f, rampTimestamps[7] - plainTimestamps[7], 1e-3f,
-                "and it is a one-off — later legs run at the same frozen speed, just shifted");
+                (1f / 6f) + 0.125f + 0.1f + (1f / 12f), rampTimestamps[7] - plainTimestamps[7], 1e-3f,
+                "every armed tap pays its own ramp, so the offset accumulates down the flight");
         }
 
         // Taps are COUNTED now, not derived from shields spent since cruise entry. The derivation was
