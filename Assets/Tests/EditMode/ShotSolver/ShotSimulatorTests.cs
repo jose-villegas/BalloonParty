@@ -262,6 +262,78 @@ namespace BalloonParty.Tests.ShotSolver
                 "and it is a one-off — later legs run at the same frozen speed, just shifted");
         }
 
+        // Taps are COUNTED now, not derived from shields spent since cruise entry. The derivation was
+        // pinned to "a wall hit is the only way to lose a shield", and it made the sim drop to base speed
+        // the moment a pop ended the cruise — where live keeps the speed its taps bought
+        // (ResolveFlightSpeed reads the tap count, never IsCruising).
+        //
+        // Geometry: a narrow tall box with a 3-4-5 diagonal, so x-bounces bank taps while the shot climbs.
+        // Bounces land at (1,1.333) t=1.667 [cruise entry], (-1,4) t=5 [tap 1], (1,6.667) t=6.667 [tap 2,
+        // so the shot is now at x3], then a balloon sitting mid-leg at (0,8) pops.
+        [Test]
+        public void Simulate_PopEndsTheCruise_ButTheTapsItEarnedKeepTheirSpeed()
+        {
+            var walls = new Vector4(40f, 1f, -40f, -1f);
+            var cruise = new ShotCruiseConfig(wallBounceThreshold: 1, speedGainPerTap: 1f);
+            var board = new[]
+            {
+                ShotBoardBuilder.Green(new Vector2(0f, 8f), 0.05f, "Red", 1, 1),
+                ShotBoardBuilder.Green(new Vector2(500f, 500f), 0.05f, "Red", 1, 1),
+            };
+            var timestamps = new List<float>();
+
+            var result = ShotSimulator.Simulate(
+                board, walls, Vector2.zero, new Vector2(0.6f, 0.8f), startingShields: 5,
+                projectileContactRadius: 0f, workingSet: new ShotBalloonState[board.Length],
+                projectileSpeed: 1f, cruiseConfig: cruise, timestampsOut: timestamps);
+
+            Assert.AreEqual(1, result.Pops, "the mid-leg balloon pops");
+            Assert.AreEqual(8, timestamps.Count);
+            Assert.AreEqual(
+                0.539f, timestamps[4] - timestamps[3], 1e-2f, "approach to the pop at the earned x3");
+            Assert.AreEqual(
+                0.572f, timestamps[5] - timestamps[4], 1e-2f,
+                "and STILL x3 after it — the pop ends the cruise but not the taps; base speed would be ~1.72");
+        }
+
+        [Test]
+        public void Simulate_DeflectWipesTheTaps_UnlikeAPop()
+        {
+            // Same board with the blocker as a 2-HP tough, so it deflects instead of popping. Live treats
+            // a deflect as interrupting the whole run (ProjectileView.OnBalloonDeflected zeroes the taps),
+            // so the legs after it must run at BASE speed — identical to the same board with cruise
+            // disabled entirely, which is what the control run pins.
+            var walls = new Vector4(40f, 1f, -40f, -1f);
+            var board = new[]
+            {
+                ShotBoardBuilder.Tough(new Vector2(0f, 8f), 0.05f, 5, 2),
+                ShotBoardBuilder.Green(new Vector2(500f, 500f), 0.05f, "Red", 1, 1),
+            };
+
+            var cruised = new List<float>();
+            ShotSimulator.Simulate(
+                board, walls, Vector2.zero, new Vector2(0.6f, 0.8f), startingShields: 5,
+                projectileContactRadius: 0f, workingSet: new ShotBalloonState[board.Length],
+                projectileSpeed: 1f, cruiseConfig: new ShotCruiseConfig(wallBounceThreshold: 1, speedGainPerTap: 1f),
+                timestampsOut: cruised);
+
+            var control = new List<float>();
+            ShotSimulator.Simulate(
+                board, walls, Vector2.zero, new Vector2(0.6f, 0.8f), startingShields: 5,
+                projectileContactRadius: 0f, workingSet: new ShotBalloonState[board.Length],
+                projectileSpeed: 1f, cruiseConfig: new ShotCruiseConfig(wallBounceThreshold: 0, speedGainPerTap: 1f),
+                timestampsOut: control);
+
+            Assert.AreEqual(
+                0.539f, cruised[4] - cruised[3], 1e-2f, "it reached the tough at the earned x3");
+            Assert.AreEqual(
+                control[5] - control[4], cruised[5] - cruised[4], 1e-3f,
+                "the leg straight off the deflect is back to base speed — the taps were wiped, not kept");
+            Assert.AreEqual(
+                control[6] - control[5], cruised[6] - cruised[5], 1e-3f,
+                "and so is the next one, up to cruise legitimately re-entering after it");
+        }
+
         [Test]
         public void Simulate_CruiseLookahead_BalloonInCorridorBlocksEntry()
         {

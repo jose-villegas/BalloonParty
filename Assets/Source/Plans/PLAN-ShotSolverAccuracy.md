@@ -328,9 +328,20 @@ immune) and the laser `_damageFlags: -1` config error (9d99272a → Piercing onl
 cadence (architect memo → implement → test audit + review → commit) applies to everything below.
 
 ### E — flight residuals (next; ONE architect memo for all four, they interact)
-- **E1 sweep taps:** mirror `TryAwardSweepTap`/`SegmentSweepValid`; REQUIRES unifying wall +
-  sweep taps into one `TotalCruiseTaps` counter (the sim derives speed from bounce count today);
-  item pops must not count toward sweep validity.
+- **E1a counted taps — DONE 2026-07-27.** `ShotFlightState.TotalTaps` replaces the
+  `CruiseStartShields - Shields` derivation (both those fields are gone, along with the
+  `PierceArmedTaps` freeze snapshot the derivation needed). The derivation only held while "a wall
+  hit is the only way to lose a shield" did; counting also fixed two live divergences it hid:
+  a pop now keeps the taps it earned (`CurrentSpeed` gates on the tap count, not `IsCruising` —
+  the sim used to drop to base speed for every post-pop segment) and a deflect now wipes them
+  (mirroring `ProjectileView.OnBalloonDeflected`). Both pinned by tests whose numbers came from
+  headless execution.
+- **E1b sweep taps:** mirror `TryAwardSweepTap`/`SegmentSweepValid`; item pops must not count
+  toward sweep validity. Now that live funnels both grant rules through
+  `ProjectileModelExtensions.TryGrantTap` and the sim counts taps the same way, this is the
+  remaining half: the sim awards a sweep tap nothing, so it can never arm a pierce through sweeps —
+  and since piercing turns tough contacts from deflect into plow-and-continue, that is a
+  **trajectory** divergence, not just a timing one.
 - **E2 pierce discharge:** pending plowed toughs stay on the grid until the surviving wall, then
   discharge together (strike order; `+WildcardStreak` if the pierce was rainbow — mirror
   `PierceWasRainbow`); balance pulses must see pending toughs; KEEP the death-wall-never-

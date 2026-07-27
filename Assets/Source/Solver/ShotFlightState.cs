@@ -125,11 +125,12 @@ namespace BalloonParty.Solver
         public bool IsPiercing;
         public float PierceSpeedScale;
 
-        // Cruise taps frozen at the moment piercing armed (-1 = not armed through cruise). An armed shot
-        // stops earning taps in live (ProjectileMotionResolver.Step), and the sim DERIVES its tap count
-        // from shields spent since cruise entry rather than counting them — so the freeze has to be a
-        // snapshot, else the derived count would keep climbing past what live pays out.
-        public int PierceArmedTaps;
+        // Speed taps earned so far, COUNTED exactly as live counts them rather than derived from shields
+        // spent since cruise entry. The derivation only held while "a wall hit is the only way to lose a
+        // shield" stayed true, and it silently mis-counted whenever a shield moved for any other reason
+        // (a streak refund mid-cruise lowered it). Freezing while armed needs no snapshot now: no tap is
+        // counted while piercing, same as live.
+        public int TotalTaps;
 
         // Snipe pickups taken while the shot was already piercing (mirrors
         // ProjectileFlightState.BankedPierceCharges): banked whole — pierce, speed and rainbow — and
@@ -150,7 +151,6 @@ namespace BalloonParty.Solver
         // non-stacking Snipe grant ("refresh, don't add") needs this bool to tell the two apart.
         public bool HasSpeedBuff;
         public float SpeedBuffMultiplier;
-        public int CruiseStartShields;
         public string StreakColor;
         public int StreakCount;
         public string ProjectileColor;
@@ -178,7 +178,7 @@ namespace BalloonParty.Solver
             IsCruising = false;
             IsPiercing = seed.IsPiercing;
             PierceSpeedScale = 1f;
-            PierceArmedTaps = -1;
+            TotalTaps = 0;
             BankedPierceCharges = 0;
             BankedRainbowPierceCharges = 0;
             BankedPierceMultiplier = 1f;
@@ -188,7 +188,6 @@ namespace BalloonParty.Solver
             // A seed with no speed buff must reproduce the pre-fold default of 1x exactly — only a
             // HasSpeedBuff seed may override it away from that floor.
             SpeedBuffMultiplier = seed.HasSpeedBuff ? seed.SpeedBuffMultiplier : 1f;
-            CruiseStartShields = 0;
             StreakColor = seed.StreakColor;
             StreakCount = seed.StreakCount;
             ProjectileColor = seed.ProjectileColor;

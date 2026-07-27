@@ -341,6 +341,8 @@ namespace BalloonParty.Solver
             state.Direction = Vector2.Reflect(state.Direction, wallNormal.normalized);
             state.ConsecutiveWallBounces++;
 
+            var enteredCruiseHere = false;
+
             if (state.IsCruising && state.PierceSpeedScale < 1f)
             {
                 SpendPierceAtDischarge(ref state);
@@ -359,40 +361,51 @@ namespace BalloonParty.Solver
                     walls, position, state.Direction, cruiseConfig.WallBounceThreshold, projectileContactRadius,
                     workingSet, activeCount, state.Elapsed, dynamics))
             {
-                state.CruiseStartShields = state.Shields;
                 state.IsCruising = true;
+                enteredCruiseHere = true;
             }
 
-            // Every cruise bounce (entry included) replays the tap animation — on the event
-            // timeline that's a pure time cost, never a path change. An ARMED shot no longer taps
-            // (ProjectileMotionResolver.Step), so it no longer pays the envelope's time either; the
-            // arming bounce below is still a real tap and keeps its own lag.
             if (state.IsCruising && !state.IsPiercing)
             {
-                // Mirrors ProjectileMotionResolver's piercing grant: a long-enough cruise arms
-                // the shot for the rest of its life — contacts end the cruise, never the buff.
-                var taps = state.CruiseStartShields - state.Shields;
-                if (cruiseConfig.PiercingTapThreshold > 0 && taps >= cruiseConfig.PiercingTapThreshold)
-                {
-                    state.IsPiercing = true;
-                    state.PierceArmedTaps = taps;
-
-                    // The arming bounce pays the arm ramp instead of the tap beat (live hands the
-                    // transition to ProjectileMotionResolver's ramp there). The ramp starts from the speed
-                    // the shot armed at, so it only loses the fraction of the ramp the remaining speed gap
-                    // accounts for — approximated with the previous tap's steady target, the sim carrying
-                    // no envelope state of its own to know how far into a dip the arming bounce landed.
-                    var from = CruiseTargetMultiplier(taps - 1, cruiseConfig);
-                    var to = CruiseTargetMultiplier(taps, cruiseConfig);
-                    state.Elapsed += cruiseConfig.ArmRampLagSeconds * (1f - (from / to));
-                }
-                else
-                {
-                    state.Elapsed += cruiseConfig.TapLagSeconds;
-                }
+                CountCruiseTap(enteredCruiseHere, in cruiseConfig, ref state);
             }
 
             return false;
+        }
+
+        // A cruise bounce's tap, and the time its speed change costs the timeline (a pure time cost on the
+        // event timeline, never a path change). An ARMED shot never gets here — it stops earning taps, so
+        // it stops paying the envelope too (ProjectileMotionResolver.Step).
+        private static void CountCruiseTap(
+            bool enteredCruiseHere, in ShotCruiseConfig cruiseConfig, ref ShotFlightState state)
+        {
+            // Taps are COUNTED, exactly as live counts them (ProjectileModelExtensions.TryGrantTap) — not
+            // derived from shields spent since cruise entry. The entry bounce isn't a tap itself (live
+            // mints one only on a bounce taken while ALREADY cruising), but it still replays the envelope,
+            // so it falls through to the beat below.
+            if (!enteredCruiseHere)
+            {
+                state.TotalTaps++;
+            }
+
+            // Mirrors ProjectileMotionResolver's piercing grant: a long-enough cruise arms the shot for
+            // the rest of its life — contacts end the cruise, never the buff.
+            if (cruiseConfig.PiercingTapThreshold <= 0 || state.TotalTaps < cruiseConfig.PiercingTapThreshold)
+            {
+                state.Elapsed += cruiseConfig.TapLagSeconds;
+                return;
+            }
+
+            state.IsPiercing = true;
+
+            // The arming bounce pays the arm ramp instead of the tap beat (live hands the transition to
+            // ProjectileMotionResolver's ramp there). The ramp starts from the speed the shot armed at, so
+            // it only loses the fraction of the ramp the remaining speed gap accounts for — approximated
+            // with the previous tap's steady target, the sim carrying no envelope state of its own to know
+            // how far into a dip the arming bounce landed.
+            var from = CruiseTargetMultiplier(state.TotalTaps - 1, cruiseConfig);
+            var to = CruiseTargetMultiplier(state.TotalTaps, cruiseConfig);
+            state.Elapsed += cruiseConfig.ArmRampLagSeconds * (1f - (from / to));
         }
 
         // Only after plowing a tough (PierceSpeedScale decayed) does a wall end the run: cruise ends,
@@ -403,7 +416,10 @@ namespace BalloonParty.Solver
             state.IsCruising = false;
             state.ConsecutiveWallBounces = 0;
             state.PierceSpeedScale = 1f;
-            state.PierceArmedTaps = -1;
+
+            // Mirrors ProjectileModelExtensions.EndCruise: the taps that fed the spent pierce go with it,
+            // so a re-armed lance restarts from base speed.
+            state.TotalTaps = 0;
             state.IsPiercing = false;
 
             // Mirrors PierceEndedEndCondition firing on IsPiercing going false: BOTH concrete
@@ -449,30 +465,25 @@ namespace BalloonParty.Solver
                 : target;
         }
 
-        // Mirrors ProjectileMotionResolver.Step's cruise ramp exactly: every cruise bounce adds a
-        // velocity TAP of SpeedGainPerTap (cumulative — a 13-shield bank accumulates 13 taps, a
-        // 2-shield bank 2). This is the steady-state target; the per-tap animation envelope is
-        // folded into ShotCruiseConfig.TapLagSeconds on the timeline instead.
+        // Mirrors ProjectileMotionResolver.Step's cruise ramp exactly: every qualifying wall hit adds a
+        // velocity TAP of SpeedGainPerTap, cumulatively. This is the steady-state target; the per-tap
+        // animation envelope is folded into ShotCruiseConfig.TapLagSeconds on the timeline instead.
         private static float CurrentSpeed(float baseSpeed, in ShotFlightState state, in ShotCruiseConfig cruiseConfig)
         {
             // Mirrors ProjectileMotionResolver.ResolveFlightSpeed: the buff multiplies the base speed
-            // BEFORE the cruise ramp, and is still the floor when the shot isn't cruising at all —
+            // BEFORE the cruise ramp, and is still the floor when the shot has no taps at all —
             // default 1f keeps this byte-identical until Phase C ever grants the buff.
             var buffedBase = baseSpeed * state.SpeedBuffMultiplier;
-            if (!state.IsCruising)
+
+            // Gated on the TAP COUNT, not on IsCruising: live reads TotalCruiseTaps regardless, so a shot
+            // that pops something (ending its cruise but keeping its taps) holds the speed it earned. The
+            // old !IsCruising gate dropped it to base and under-predicted every post-pop segment.
+            if (state.TotalTaps <= 0)
             {
                 return buffedBase;
             }
 
-            var startShields = Mathf.Max(state.CruiseStartShields, 1);
-
-            // An armed shot's ramp is frozen at the tap that armed it — cruise stops paying out once
-            // piercing (ProjectileMotionResolver.Step), and the sim's derived count would otherwise keep
-            // climbing with every further shield the shot spends.
-            var spentTaps = state.IsPiercing && state.PierceArmedTaps >= 0
-                ? state.PierceArmedTaps
-                : state.CruiseStartShields - state.Shields;
-            var target = CruiseTargetMultiplier(Mathf.Clamp(spentTaps, 0, startShields), cruiseConfig);
+            var target = CruiseTargetMultiplier(state.TotalTaps, cruiseConfig);
 
             // Pierce scale bleeds the ramp down through tough plows; floor at (buffed) base speed.
             var speed = buffedBase * target * state.PierceSpeedScale;
@@ -634,6 +645,12 @@ namespace BalloonParty.Solver
                 balloon.HitsRemaining--;
                 DeflectOffBalloon(
                     center, balloon.Radius + projectileContactRadius, contactPosition, ref state.Direction);
+
+                // A DEFLECT wipes the taps earned so far, unlike a pop — mirrors
+                // ProjectileView.OnBalloonDeflected ("deflection interrupts free roaming"). Reachable only
+                // now that taps are counted rather than derived: the old derivation was moot here, since
+                // the same contact cleared IsCruising and the speed read bailed on that instead.
+                state.TotalTaps = 0;
 
                 // Deflected statics do NOT self-shove — they are immovable and a live static never
                 // wobbles, unlike a deflected balloon (OnBalloonDeflected).
