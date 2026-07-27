@@ -95,7 +95,7 @@
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html" target="_top" xlink:title="Run&#45;level rules — starting hit points and (future) loss thresholds.">
+<g id="a_Node000006"><a xlink:href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html" target="_top" xlink:title="Run&#45;level rules — starting hit points, retry allowance, and (future) loss thresholds.">
 <polygon fill="white" stroke="#666666" points="146.5,-30 8.5,-30 8.5,0 146.5,0 146.5,-30"/>
 <text text-anchor="start" x="16.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.IRun</text>
 <text text-anchor="middle" x="77.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Config</text>

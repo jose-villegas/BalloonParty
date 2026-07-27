@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver =
 [
-    [ "LevelDifficultyResolver", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a1aa8dc0338ac1d63fe6c2f11ad4dfe75", null ],
+    [ "LevelDifficultyResolver", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a44b20442a6ec5a1e6c30d13dcadc4ed6", null ],
     [ "BuildBalloonPickList", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a4c484dea875655215b8ef8dd05babe67", null ],
     [ "BuildItemPickList", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a10930deff97d5d364ea60c4a519c0138", null ],
     [ "Dispose", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a1278e85bb94ff3eda67fddf77e655455", null ],
@@ -11,7 +11,7 @@ var classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver =
     [ "ResolveFor", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a374a0fe9b4769c3303b297c2ac001755", null ],
     [ "ResolveRange", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#aa8b52875e9a1669d9539834ee1bbe8f3", null ],
     [ "Start", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a89c507cf0999c56ec120492ee467e93d", null ],
-    [ "StartLevel", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a3d9dd22bbb3c75f7a28b950fd23759c3", null ],
+    [ "StartLevel", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a7e490dd6a1383f974e851bd9f5cc0191", null ],
     [ "TryFindActiveItemWeight", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a0ba69a4bb3bf54cc62b967ecb39f10d9", null ],
     [ "TryFindActiveWeight", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a44c2353d3ec2b29c64af32d8cb770df1", null ],
     [ "_balloonsConfig", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a948b710a55336caad47c7ce6137c852b", null ],
@@ -20,6 +20,7 @@ var classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver =
     [ "_levelUpSubscriber", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#af698c100085881e06c196d401c043cc5", null ],
     [ "_pacing", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#ad85647863b09f26da7628d3433398bba", null ],
     [ "_palette", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#aa3043977978509fa7b0f02ab9f7cfb77", null ],
+    [ "_retryState", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#ab9e4cdbabcaffea678d09171e49a7e0c", null ],
     [ "_rng", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a3118f862f10a4ef72cfb629d7fce61aa", null ],
     [ "_subscription", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a9b82965df9b92fc243cddd2566fc2d48", null ],
     [ "RainbowBandColor0Id", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#adf96e9780cbf11c80265a9ff9a04cfe6", null ],

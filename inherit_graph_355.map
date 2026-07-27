@@ -1,17 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,205,117,230"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerWindow.html" title=" " alt="" coords="172,5,355,45"/>
-<area shape="poly" id="edge473_Node000000_Node000001" title=" " alt="" coords="70,191,105,124,131,87,164,55,183,43,186,48,167,59,135,90,109,126,75,193"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Editor_1_1LevelPacingWindow.html" title="Spreadsheet&#45;style view of LevelPacingConfiguration: each range is a row, parameters are columns." alt="" coords="172,69,355,109"/>
-<area shape="poly" id="edge474_Node000000_Node000002" title=" " alt="" coords="80,192,117,155,164,119,189,107,191,112,167,124,120,159,84,196"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html" title="Unified play&#45;mode preview for the project&#39;s shared render&#45;target &quot;maps&quot; — scene capture,..." alt="" coords="166,133,361,173"/>
-<area shape="poly" id="edge475_Node000000_Node000003" title=" " alt="" coords="115,198,199,171,200,176,116,203"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Editor_1_1ScriptSearchPopup.html" title=" " alt="" coords="171,197,355,237"/>
-<area shape="poly" id="edge476_Node000000_Node000004" title=" " alt="" coords="131,215,171,215,171,220,131,220"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html" title="Sweeps aim angle against the live board (see plan_shot_geometry) and reports the windows that reach a..." alt="" coords="169,261,357,301"/>
-<area shape="poly" id="edge477_Node000000_Node000005" title=" " alt="" coords="116,232,200,259,199,264,115,237"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Editor_1_1TextureAuditWindow.html" title=" " alt="" coords="166,325,361,365"/>
-<area shape="poly" id="edge478_Node000000_Node000006" title=" " alt="" coords="84,239,120,276,167,311,191,323,189,328,164,316,117,280,80,243"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Editor_1_1UnusedAssetsWindow.html" title="Lists assets that no root can reach — candidates for deletion, not verdicts." alt="" coords="165,389,361,429"/>
-<area shape="poly" id="edge479_Node000000_Node000007" title=" " alt="" coords="75,241,109,308,135,344,167,375,186,387,183,391,164,379,131,348,105,311,70,244"/>
+<area shape="rect" id="Node000000" href="$classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html" title="Owns a progress bar&#39;s floating notices, split out of ColorProgressBar to keep the view lean." alt="" coords="5,5,225,45"/>
 </map>

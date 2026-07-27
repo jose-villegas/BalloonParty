@@ -17,7 +17,7 @@ var classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker =
     [ "OverwriteMostComplete", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html#a690fd1fd5f2430e560b7b08466fafc82", null ],
     [ "Reach", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html#ad86df58810090f82085afc2ed579b931", null ],
     [ "ReleaseStateAt", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html#aaaca9ff4beaafc619088ee0f9d74e032", null ],
-    [ "StampBalanceWake", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html#ab3eb00316e4ebefc577c5715464be5b5", null ],
+    [ "StampBalanceWake", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html#a458244e57fc15eb4c9d57e79f52194ef", null ],
     [ "StartBalanceMove", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html#a845270cd1f242ec094b4c02286d32407", null ],
     [ "_lookup", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html#a6954d387db7500b170a0d6dbaff2d222", null ],
     [ "_pool", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html#a0b79a2a507f5f198ad0ef3d068473ac2", null ],

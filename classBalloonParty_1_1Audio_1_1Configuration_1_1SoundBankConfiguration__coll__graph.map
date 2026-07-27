@@ -1,10 +1,11 @@
 <map id="BalloonParty.Audio.Configuration.SoundBankConfiguration" name="BalloonParty.Audio.Configuration.SoundBankConfiguration">
-<area shape="rect" id="Node000001" title=" " alt="" coords="349,55,588,95"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="60,5,189,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,28,349,53,349,58,203,34"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Audio_1_1Configuration_1_1ISoundBankConfiguration.html" title=" " alt="" coords="5,55,244,95"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="258,73,349,73,349,78,258,78"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html" title=" " alt="" coords="5,158,244,198"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="205,151,400,93,401,98,206,157"/>
-<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="93,142,104,134,125,131,142,133,154,139,159,148,157,158,152,157,154,149,150,143,141,139,125,137,106,139,96,146"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="688,55,927,95"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="399,5,528,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="542,28,688,53,687,58,541,34"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Audio_1_1Configuration_1_1ISoundBankConfiguration.html" title=" " alt="" coords="344,55,583,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="597,73,688,73,688,78,597,78"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html" title=" " alt="" coords="344,119,583,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="585,114,699,93,700,98,586,119"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html" title="A flattened layer entry without its own nested layers, breaking the recursive serialization that SfxE..." alt="" coords="5,119,244,159"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="258,137,343,137,343,142,258,142"/>
 </map>

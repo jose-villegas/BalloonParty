@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Game_1_1Level_1_1LevelController =
 [
-    [ "LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a5771776851b17a9ae957dbdaf588f4be", null ],
+    [ "LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ac74d9fed733173ad9e4ed3f66d81659e", null ],
     [ "AllColorsConfirmed", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a64bdbc61147c78df68cc2a2806792f71", null ],
     [ "CheckLevelUp", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#aa78b81a99f6b79157456c7146a8def55", null ],
     [ "ClaimProgress", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a2682e9e30b387143a284c0682cccca06", null ],
@@ -36,6 +36,7 @@ var classBalloonParty_1_1Game_1_1Level_1_1LevelController =
     [ "_pierce", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#abc5b7d69fa69475dcad9f85c555486b4", null ],
     [ "_pierceEndedSubscription", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ab4f6d4eba2a87e29aaf01faceba22c93", null ],
     [ "_projectedProgress", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a98cbe9137809c40006cc00d023d75496", null ],
+    [ "_retryState", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a74e4b04b6df467a0a0ccc8f3988499b6", null ],
     [ "_thresholds", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a72148a10018f547b54ab58f0f2c30459", null ],
     [ "_trailArrivedSubscriber", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a57cf421a358c5c744f5f8eb266de6dd7", null ],
     [ "_trailSubscription", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a8445cc0b79b333ae642499790ccf2198", null ],

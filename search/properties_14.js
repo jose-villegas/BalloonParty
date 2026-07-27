@@ -7,5 +7,5 @@ var searchData=
   ['view_4',['View',['../classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect_1_1OverflowBalloon.html#a94823976f4d5667926cae9265c710d28',1,'BalloonParty::Balloon::Spawner::RejectedBalloonEffect::OverflowBalloon']]],
   ['visualprefab_5',['VisualPrefab',['../classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#ae7340b8c676b75d5b85fbd9991a06994',1,'BalloonParty::Configuration::Items::ItemSettings']]],
   ['voiceid_6',['VoiceId',['../structBalloonParty_1_1Audio_1_1SoundHandle.html#afa83540b5dac8e5a0800685ea1435985',1,'BalloonParty::Audio::SoundHandle']]],
-  ['volumerange_7',['VolumeRange',['../classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3687bbf9b9c25e40dfe23768ad0fbbce',1,'BalloonParty::Audio::Configuration::SfxEntry']]]
+  ['volumerange_7',['VolumeRange',['../classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3687bbf9b9c25e40dfe23768ad0fbbce',1,'BalloonParty.Audio.Configuration.SfxEntry.VolumeRange'],['../classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a03cecc02b282be5535a164c6881d47ad',1,'BalloonParty.Audio.Configuration.SfxLayerEntry.VolumeRange']]]
 ];

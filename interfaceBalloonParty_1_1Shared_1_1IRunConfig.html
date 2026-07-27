@@ -114,7 +114,7 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Shared_1_1IRunConfig.html',''
 </div><!--header-->
 <div class="contents">
 
-<p>Run-level rules — starting hit points and (future) loss thresholds.  
+<p>Run-level rules — starting hit points, retry allowance, and (future) loss thresholds.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Shared.IRunConfig:</div>
@@ -126,12 +126,41 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Shared_1_1IRunConfig.html',''
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:aff5e95c5f910f536e2097bb24245f350" id="r_aff5e95c5f910f536e2097bb24245f350"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff5e95c5f910f536e2097bb24245f350">MaxRetries</a><code> [get]</code></td></tr>
+<tr class="memdesc:aff5e95c5f910f536e2097bb24245f350"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many times the player may retry at the same level per run (0 = disabled).  <br /></td></tr>
+<tr class="separator:aff5e95c5f910f536e2097bb24245f350"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05e7a059dd6f744faf423f2be72cbfca" id="r_a05e7a059dd6f744faf423f2be72cbfca"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a05e7a059dd6f744faf423f2be72cbfca">StartingHitPoints</a><code> [get]</code></td></tr>
 <tr class="separator:a05e7a059dd6f744faf423f2be72cbfca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Run-level rules — starting hit points and (future) loss thresholds. </p>
+<div class="textblock"><p>Run-level rules — starting hit points, retry allowance, and (future) loss thresholds. </p>
 </div><h2 class="groupheader">Property Documentation</h2>
+<a id="aff5e95c5f910f536e2097bb24245f350" name="aff5e95c5f910f536e2097bb24245f350"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff5e95c5f910f536e2097bb24245f350">&#9670;&#160;</a></span>MaxRetries</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Shared.IRunConfig.MaxRetries</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How many times the player may retry at the same level per run (0 = disabled). </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1RunConfig.html#a978c69652a6c2acc182bcc1a91e63c5b">BalloonParty.Configuration.RunConfig</a>.</p>
+
+</div>
+</div>
 <a id="a05e7a059dd6f744faf423f2be72cbfca" name="a05e7a059dd6f744faf423f2be72cbfca"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a05e7a059dd6f744faf423f2be72cbfca">&#9670;&#160;</a></span>StartingHitPoints</h2>
 

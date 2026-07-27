@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Item_1_1Bomb_1_1BombBlastParams.html" target="_top" xlink:title="Bomb&#39;s config&#45;free blast&#45;selection scalars (Shot Solver Accuracy Phase C2) — mirrors BombSettings&#39;s k...">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Item_1_1Bomb_1_1BombBlast.html" target="_top" xlink:title="Config&#45;free Bomb blast&#45;selection core (Shot Solver Accuracy Phase C2) — runs identically over GridEff...">
 <polygon fill="white" stroke="#666666" points="165,-30 0,-30 0,0 165,0 165,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Bomb.Bomb</text>
-<text text-anchor="middle" x="82.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">BlastParams</text>
+<text text-anchor="middle" x="82.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Blast</text>
 </a>
 </g>
 </g>

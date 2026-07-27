@@ -124,6 +124,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable.html">IBoardResettable</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marks a resettable whose work is board population/teardown (clearing or respawning actors), as opposed to run state (score, level, health).  <a href="interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html">IRetryState</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read-only retry state — how many retries remain this run and the level to retry at (zero when the next restart is a fresh run).  <a href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunMeta.html">IRunMeta</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Persisted cross-run record — best level and best score.  <a href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunMeta.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,6 +135,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html">IRunScore</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read-only view of the live run score, snapshotted by <a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunController.html" title="Owns the run lifecycle — a loss is suppressed unless in NavigationState.Game with no loss-blocking ci...">RunController</a> when a run ends.  <a href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html">RetryTracker</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tracks per-run retry state.  <a href="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunController.html">RunController</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Owns the run lifecycle — a loss is suppressed unless in NavigationState.Game with no loss-blocking cinematic playing, so GameOver and the level-up cinematic never overlap.  <a href="classBalloonParty_1_1Game_1_1Run_1_1RunController.html#details">More...</a><br /></td></tr>

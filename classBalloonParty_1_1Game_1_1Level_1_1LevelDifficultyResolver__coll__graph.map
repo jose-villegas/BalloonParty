@@ -1,31 +1,33 @@
 <map id="BalloonParty.Game.Level.LevelDifficultyResolver" name="BalloonParty.Game.Level.LevelDifficultyResolver">
-<area shape="rect" id="Node000001" title="Resolves and caches the live per&#45;level difficulty mix, bridging range weights onto the balloon/item c..." alt="" coords="797,265,985,305"/>
+<area shape="rect" id="Node000001" title="Resolves and caches the live per&#45;level difficulty mix, bridging range weights onto the balloon/item c..." alt="" coords="797,297,985,337"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="484,5,569,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="583,23,642,39,714,72,742,91,775,120,809,156,839,196,881,263,877,266,835,199,805,160,771,124,739,95,711,76,640,45,582,28"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="583,23,642,39,715,72,743,93,775,123,812,167,843,215,884,295,879,298,839,218,808,170,771,126,740,97,712,77,640,45,582,28"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="477,55,576,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="591,75,642,90,715,129,781,176,835,224,874,263,870,266,832,228,778,181,712,133,640,95,589,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="590,74,642,90,683,109,713,127,775,179,834,240,877,295,873,298,830,243,772,183,710,132,681,114,640,95,589,79"/>
 <area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="423,105,630,145"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="620,146,642,154,704,180,763,209,858,262,856,267,761,214,701,185,640,159,618,151"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="622,146,642,154,709,187,772,226,867,294,864,299,769,230,707,192,640,159,620,151"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html" title="Single read surface for the live per&#45;level difficulty mix; never read ILevelPacingConfiguration direc..." alt="" coords="433,169,621,209"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="623,209,774,249,822,262,820,267,773,254,621,215"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="616,210,642,218,751,257,844,294,842,299,749,262,640,223,614,215"/>
 <area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelThresholds.html" title="The per&#45;level score goal each colour must reach while playing that level — answers for any level,..." alt="" coords="433,233,621,273"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="635,259,797,274,797,279,634,265"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="635,269,797,298,796,303,634,274"/>
 <area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html" title="Level&#45;range difficulty authoring; read by LevelDifficultyResolver (and by the balloon spawner&#39;s pool ..." alt="" coords="412,297,641,337"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="655,303,773,293,797,291,797,296,774,298,655,308"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="655,314,797,314,797,319,655,319"/>
 <area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html" title=" " alt="" coords="412,361,641,401"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="644,355,773,323,837,302,838,307,774,329,645,360"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="655,356,796,331,797,336,656,361"/>
 <area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration.html" title=" " alt="" coords="428,425,625,465"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="638,420,706,399,772,372,825,338,867,303,871,307,828,342,775,376,707,404,640,425"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="630,419,701,399,772,374,854,334,857,339,774,379,702,404,631,424"/>
 <area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="428,489,625,529"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="638,488,707,466,741,451,772,432,807,402,836,367,877,303,882,306,841,370,810,405,775,436,743,455,709,471,640,493"/>
-<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html" title="Field defaults are the parameterless fallback (Simple&#45;only) used when no authored range contains a le..." alt="" coords="428,553,625,593"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="638,558,708,537,741,522,772,501,795,479,815,454,847,399,869,346,882,304,888,306,874,348,852,402,819,457,799,483,775,505,744,526,710,542,640,563"/>
-<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html" title="The read surface of a fully&#45;resolved level; cross&#45;level queries stay on the resolver instead." alt="" coords="30,457,227,497"/>
-<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="240,497,389,531,455,550,454,555,387,537,239,502"/>
-<area shape="rect" id="Node000013" href="$structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html" title="One entry of a range&#39;s static WeightedSet&lt;BalloonType&gt;; membership is the type gate." alt="" coords="25,521,232,561"/>
-<area shape="poly" id="edge12_Node000011_Node000013" title=" " alt="" coords="246,547,428,562,428,567,245,553"/>
-<area shape="rect" id="Node000014" href="$structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html" title="Item counterpart of BalloonTypeWeight — same gate/override semantics." alt="" coords="30,585,227,625"/>
-<area shape="poly" id="edge13_Node000011_Node000014" title=" " alt="" coords="241,593,427,578,428,583,241,598"/>
-<area shape="rect" id="Node000015" href="$structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate.html" title="Resolved counterpart of GridActorTypeGate — Count is an already&#45;rolled plain int, not an unresolved R..." alt="" coords="5,649,252,689"/>
-<area shape="poly" id="edge14_Node000011_Node000015" title=" " alt="" coords="243,643,387,610,459,590,461,595,389,615,244,648"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="638,484,706,462,772,430,802,408,830,383,873,335,877,338,834,386,806,412,775,435,708,467,640,489"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html" title="Read&#45;only retry state — how many retries remain this run and the level to retry at (zero when the nex..." alt="" coords="418,553,635,593"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="648,552,712,530,743,515,772,496,810,458,841,414,865,370,880,336,885,338,869,373,846,416,814,461,775,500,746,519,714,535,649,557"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html" title="Field defaults are the parameterless fallback (Simple&#45;only) used when no authored range contains a le..." alt="" coords="428,617,625,657"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="638,625,708,605,742,589,772,568,797,542,819,512,852,447,873,384,884,336,889,338,878,385,857,449,824,515,801,546,775,572,744,593,710,610,640,630"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html" title="The read surface of a fully&#45;resolved level; cross&#45;level queries stay on the resolver instead." alt="" coords="30,521,227,561"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="240,561,389,595,455,614,454,619,387,601,239,566"/>
+<area shape="rect" id="Node000014" href="$structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html" title="One entry of a range&#39;s static WeightedSet&lt;BalloonType&gt;; membership is the type gate." alt="" coords="25,585,232,625"/>
+<area shape="poly" id="edge13_Node000012_Node000014" title=" " alt="" coords="246,611,428,626,428,631,245,617"/>
+<area shape="rect" id="Node000015" href="$structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html" title="Item counterpart of BalloonTypeWeight — same gate/override semantics." alt="" coords="30,649,227,689"/>
+<area shape="poly" id="edge14_Node000012_Node000015" title=" " alt="" coords="241,657,427,642,428,647,241,662"/>
+<area shape="rect" id="Node000016" href="$structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate.html" title="Resolved counterpart of GridActorTypeGate — Count is an already&#45;rolled plain int, not an unresolved R..." alt="" coords="5,713,252,753"/>
+<area shape="poly" id="edge15_Node000012_Node000016" title=" " alt="" coords="243,707,387,674,459,654,461,659,389,679,244,712"/>
 </map>

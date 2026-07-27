@@ -145,8 +145,8 @@ Package Functions</h2></td></tr>
 <tr class="separator:a1b318f44ec411ff96ca8ad8f8b9b2963"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a496ddc7d68331e5ff3455db7898f52ac" id="r_a496ddc7d68331e5ff3455db7898f52ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a496ddc7d68331e5ff3455db7898f52ac">FadeVolumeTo</a> (float targetVolume, float seconds)</td></tr>
 <tr class="separator:a496ddc7d68331e5ff3455db7898f52ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afbf712aea2bb7a649dd24470cf07dbf6" id="r_afbf712aea2bb7a649dd24470cf07dbf6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afbf712aea2bb7a649dd24470cf07dbf6">Play</a> (in <a class="el" href="structBalloonParty_1_1Audio_1_1VoicePlayback.html">VoicePlayback</a> playback, bool loop, float delaySeconds, float fadeInSeconds, Action&lt; <a class="el" href="classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html">AudioSourceVoice</a> &gt; onComplete)</td></tr>
-<tr class="separator:afbf712aea2bb7a649dd24470cf07dbf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31670d350c5a827d21037df6b1bfcede" id="r_a31670d350c5a827d21037df6b1bfcede"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31670d350c5a827d21037df6b1bfcede">Play</a> (in <a class="el" href="structBalloonParty_1_1Audio_1_1VoicePlayback.html">VoicePlayback</a> playback, bool loop, float delaySeconds, float fadeInSeconds, float maxPlaySeconds, float fadeOutSeconds, Action&lt; <a class="el" href="classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html">AudioSourceVoice</a> &gt; onComplete)</td></tr>
+<tr class="separator:a31670d350c5a827d21037df6b1bfcede"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f76429c8a6692c47972c91252ca6857" id="r_a2f76429c8a6692c47972c91252ca6857"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f76429c8a6692c47972c91252ca6857">SetOutputGroup</a> (AudioMixerGroup group)</td></tr>
 <tr class="separator:a2f76429c8a6692c47972c91252ca6857"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfecebd7dfb13567189003f1896914a2" id="r_acfecebd7dfb13567189003f1896914a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acfecebd7dfb13567189003f1896914a2">Stop</a> ()</td></tr>
@@ -156,8 +156,8 @@ Package Functions</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:aa963074126d1c9125538acb140caeda3" id="r_aa963074126d1c9125538acb140caeda3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa963074126d1c9125538acb140caeda3">InvokeComplete</a> ()</td></tr>
 <tr class="separator:aa963074126d1c9125538acb140caeda3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afecb7b1ca6a341d5a769826ce52941d6" id="r_afecb7b1ca6a341d5a769826ce52941d6"><td class="memItemLeft" align="right" valign="top">async UniTaskVoid&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afecb7b1ca6a341d5a769826ce52941d6">ScheduleReturnAsync</a> (float delaySeconds, float clipLength, float pitch, CancellationToken ct)</td></tr>
-<tr class="separator:afecb7b1ca6a341d5a769826ce52941d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbc1562f4ac326463ec775a5ea5dc1bf" id="r_afbc1562f4ac326463ec775a5ea5dc1bf"><td class="memItemLeft" align="right" valign="top">async UniTaskVoid&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afbc1562f4ac326463ec775a5ea5dc1bf">ScheduleReturnAsync</a> (float delaySeconds, float duration, bool fadeOut, float fadeOutSeconds, CancellationToken ct)</td></tr>
+<tr class="separator:afbc1562f4ac326463ec775a5ea5dc1bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -291,8 +291,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="afbf712aea2bb7a649dd24470cf07dbf6" name="afbf712aea2bb7a649dd24470cf07dbf6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afbf712aea2bb7a649dd24470cf07dbf6">&#9670;&#160;</a></span>Play()</h2>
+<a id="a31670d350c5a827d21037df6b1bfcede" name="a31670d350c5a827d21037df6b1bfcede"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31670d350c5a827d21037df6b1bfcede">&#9670;&#160;</a></span>Play()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -323,6 +323,16 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>maxPlaySeconds</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>fadeOutSeconds</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">Action&lt; <a class="el" href="classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html">AudioSourceVoice</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>onComplete</em></span>&#160;)</td>
         </tr>
       </table>
@@ -335,8 +345,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="afecb7b1ca6a341d5a769826ce52941d6" name="afecb7b1ca6a341d5a769826ce52941d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afecb7b1ca6a341d5a769826ce52941d6">&#9670;&#160;</a></span>ScheduleReturnAsync()</h2>
+<a id="afbc1562f4ac326463ec775a5ea5dc1bf" name="afbc1562f4ac326463ec775a5ea5dc1bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbc1562f4ac326463ec775a5ea5dc1bf">&#9670;&#160;</a></span>ScheduleReturnAsync()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -352,12 +362,17 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>clipLength</em></span>, </td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>duration</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>pitch</em></span>, </td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>fadeOut</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>fadeOutSeconds</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

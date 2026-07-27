@@ -4,6 +4,7 @@ var namespaceBalloonParty_1_1Audio_1_1Configuration =
     [ "IAudioMixerSettings", "interfaceBalloonParty_1_1Audio_1_1Configuration_1_1IAudioMixerSettings.html", "interfaceBalloonParty_1_1Audio_1_1Configuration_1_1IAudioMixerSettings" ],
     [ "ISoundBankConfiguration", "interfaceBalloonParty_1_1Audio_1_1Configuration_1_1ISoundBankConfiguration.html", "interfaceBalloonParty_1_1Audio_1_1Configuration_1_1ISoundBankConfiguration" ],
     [ "SfxEntry", "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html", "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry" ],
+    [ "SfxLayerEntry", "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html", "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry" ],
     [ "SoundBankConfiguration", "classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html", "classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration" ],
     [ "ClipPickMode", "namespaceBalloonParty_1_1Audio_1_1Configuration.html#ae8f0ef2b834660670f48bf240227810f", [
       [ "Random", "namespaceBalloonParty_1_1Audio_1_1Configuration.html#ae8f0ef2b834660670f48bf240227810fa64663f4646781c9c0110838b905daa23", null ],

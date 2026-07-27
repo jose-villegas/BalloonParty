@@ -74,7 +74,7 @@ var searchData=
   ['voiceslot_71',['VoiceSlot',['../structBalloonParty_1_1Audio_1_1SfxService_1_1VoiceSlot.html',1,'BalloonParty::Audio::SfxService']]],
   ['volume_72',['Volume',['../structBalloonParty_1_1Audio_1_1VoicePlayback.html#a50ca1a96aadcd857d431c2f319ae9c44',1,'BalloonParty::Audio::VoicePlayback']]],
   ['volume_20envelope_20stop_20routing_73',['Volume envelope &amp; stop routing',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Audio/README.md#autotoc_md10',1,'']]],
-  ['volumerange_74',['VolumeRange',['../classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3687bbf9b9c25e40dfe23768ad0fbbce',1,'BalloonParty::Audio::Configuration::SfxEntry']]],
+  ['volumerange_74',['VolumeRange',['../classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3687bbf9b9c25e40dfe23768ad0fbbce',1,'BalloonParty.Audio.Configuration.SfxEntry.VolumeRange'],['../classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a03cecc02b282be5535a164c6881d47ad',1,'BalloonParty.Audio.Configuration.SfxLayerEntry.VolumeRange']]],
   ['voronoiseedid_75',['VoronoiSeedId',['../classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html#a364515ecc55af24da827938ab4871fec',1,'BalloonParty::Balloon::Type::ToughBalloonVariant']]],
   ['vs_20bandwidth_76',['4. AGI — Mali fragment vs bandwidth',['../plan_performance_recovery.html#autotoc_md573',1,'']]],
   ['vs_20gpu_20classification_77',['2. CPU vs GPU classification',['../plan_performance_recovery.html#autotoc_md571',1,'']]]

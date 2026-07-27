@@ -2,7 +2,7 @@ var searchData=
 [
   ['hasactivecollider_0',['HasActiveCollider',['../classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a6816100f6c8cc89dc1e6c72355c9f6f6',1,'BalloonParty::Balloon::View::BalloonView']]],
   ['hascamera_1',['HasCamera',['../classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraRig.html#a28ba2710f0fb74c5be49d8fb31d35ba3',1,'BalloonParty::Game::Cinematics::CinematicCameraRig']]],
-  ['hasclips_2',['HasClips',['../classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a2c295f843d145eacc821fd22e140b410',1,'BalloonParty::Audio::Configuration::SfxEntry']]],
+  ['hasclips_2',['HasClips',['../classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a2c295f843d145eacc821fd22e140b410',1,'BalloonParty.Audio.Configuration.SfxEntry.HasClips'],['../classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a7fe0ecd8a857a3c52a5342430653b6d2',1,'BalloonParty.Audio.Configuration.SfxLayerEntry.HasClips']]],
   ['hascolors_3',['HasColors',['../structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html#ae51dc491c864ba2b7a70ca66d07290da',1,'BalloonParty::Shared::Rendering::ColorCycleState']]],
   ['hasflown_4',['HasFlown',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#aa2a67112f40c7a9ec77f82628b436e9c',1,'BalloonParty::Projectile::View::ProjectileView']]],
   ['hasoverride_5',['HasOverride',['../classBalloonParty_1_1Editor_1_1TextureAuditWindow_1_1Entry.html#abd68d3170587dba777f4c1e0e3784995',1,'BalloonParty::Editor::TextureAuditWindow::Entry']]],

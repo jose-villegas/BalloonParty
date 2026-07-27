@@ -20,13 +20,14 @@ var searchData=
   ['result_17',['Result',['../classBalloonParty_1_1Audio_1_1Editor_1_1FreesoundResponseParser_1_1Result.html',1,'BalloonParty::Audio::Editor::FreesoundResponseParser']]],
   ['resultwriter_18',['ResultWriter',['../classBalloonParty_1_1Editor_1_1TestRunner_1_1EditModeTestRunner_1_1ResultWriter.html',1,'BalloonParty::Editor::TestRunner::EditModeTestRunner']]],
   ['resumedmessage_19',['ResumedMessage',['../structBalloonParty_1_1Shared_1_1Pause_1_1ResumedMessage.html',1,'BalloonParty::Shared::Pause']]],
-  ['roamcandidate_20',['RoamCandidate',['../structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html',1,'BalloonParty::Balloon::Controller::BalloonBalancer']]],
-  ['rollingcounterdisplay_21',['RollingCounterDisplay',['../classBalloonParty_1_1UI_1_1RollingCounterDisplay.html',1,'BalloonParty::UI']]],
-  ['rollingtextanimator_22',['RollingTextAnimator',['../classBalloonParty_1_1Shared_1_1Animation_1_1RollingTextAnimator.html',1,'BalloonParty::Shared::Animation']]],
-  ['runconfig_23',['RunConfig',['../classBalloonParty_1_1Configuration_1_1RunConfig.html',1,'BalloonParty::Configuration']]],
-  ['runcontroller_24',['RunController',['../classBalloonParty_1_1Game_1_1Run_1_1RunController.html',1,'BalloonParty::Game::Run']]],
-  ['runmeta_25',['RunMeta',['../classBalloonParty_1_1Game_1_1Run_1_1RunMeta.html',1,'BalloonParty::Game::Run']]],
-  ['runresetmessage_26',['RunResetMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html',1,'BalloonParty::Shared::Messages']]],
-  ['runresetorder_27',['RunResetOrder',['../classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html',1,'BalloonParty::Game::Run']]],
-  ['runrestartcompletedmessage_28',['RunRestartCompletedMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1RunRestartCompletedMessage.html',1,'BalloonParty::Shared::Messages']]]
+  ['retrytracker_20',['RetryTracker',['../classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html',1,'BalloonParty::Game::Run']]],
+  ['roamcandidate_21',['RoamCandidate',['../structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html',1,'BalloonParty::Balloon::Controller::BalloonBalancer']]],
+  ['rollingcounterdisplay_22',['RollingCounterDisplay',['../classBalloonParty_1_1UI_1_1RollingCounterDisplay.html',1,'BalloonParty::UI']]],
+  ['rollingtextanimator_23',['RollingTextAnimator',['../classBalloonParty_1_1Shared_1_1Animation_1_1RollingTextAnimator.html',1,'BalloonParty::Shared::Animation']]],
+  ['runconfig_24',['RunConfig',['../classBalloonParty_1_1Configuration_1_1RunConfig.html',1,'BalloonParty::Configuration']]],
+  ['runcontroller_25',['RunController',['../classBalloonParty_1_1Game_1_1Run_1_1RunController.html',1,'BalloonParty::Game::Run']]],
+  ['runmeta_26',['RunMeta',['../classBalloonParty_1_1Game_1_1Run_1_1RunMeta.html',1,'BalloonParty::Game::Run']]],
+  ['runresetmessage_27',['RunResetMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html',1,'BalloonParty::Shared::Messages']]],
+  ['runresetorder_28',['RunResetOrder',['../classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html',1,'BalloonParty::Game::Run']]],
+  ['runrestartcompletedmessage_29',['RunRestartCompletedMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1RunRestartCompletedMessage.html',1,'BalloonParty::Shared::Messages']]]
 ];

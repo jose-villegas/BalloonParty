@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"ProjectileLoadedMessage_8cs.html":[7,0,14,7,24],
 "ProjectileModelExtensions_8cs.html":[7,0,12,2,9],
 "ProjectileModel_8cs.html":[7,0,12,2,8],
 "ProjectileMotionResolver_8cs.html":[7,0,12,1,5],
@@ -31,13 +32,14 @@ var NAVTREEINDEX2 =
 "RendererExtensions_8cs.html":[7,0,14,4,14],
 "ResolvedGridActorGate_8cs.html":[7,0,3,5,4],
 "ResumedMessage_8cs.html":[7,0,14,8,3],
+"RetryTracker_8cs.html":[7,0,7,4,7],
 "RollingCounterDisplay_8cs.html":[7,0,18,13],
 "RollingTextAnimator_8cs.html":[7,0,14,0,1],
 "RunConfig_8cs.html":[7,0,3,18],
-"RunController_8cs.html":[7,0,7,4,6],
-"RunMeta_8cs.html":[7,0,7,4,7],
+"RunController_8cs.html":[7,0,7,4,8],
+"RunMeta_8cs.html":[7,0,7,4,9],
 "RunResetMessage_8cs.html":[7,0,14,7,25],
-"RunResetOrder_8cs.html":[7,0,7,4,8],
+"RunResetOrder_8cs.html":[7,0,7,4,10],
 "RunRestartCompletedMessage_8cs.html":[7,0,14,7,26],
 "ScaleDownButton_8cs.html":[7,0,18,14],
 "ScenarioContentRoot_8cs.html":[7,0,15,0,17],
@@ -76,6 +78,7 @@ var NAVTREEINDEX2 =
 "SfxClipImporter_8cs.html":[7,0,0,1,8],
 "SfxEntry_8cs.html":[7,0,0,0,6],
 "SfxFetchRequest_8cs.html":[7,0,0,1,9],
+"SfxLayerEntry_8cs.html":[7,0,0,0,7],
 "SfxLicense_8cs.html":[7,0,0,1,10],
 "SfxPreviewAuditioner_8cs.html":[7,0,0,1,11],
 "SfxService_8cs.html":[7,0,0,13],
@@ -134,7 +137,7 @@ var NAVTREEINDEX2 =
 "SortingLayerNameDrawer_8cs.html":[7,0,6,34],
 "SoundBankClipAssigner_8cs.html":[7,0,0,1,12],
 "SoundBankConfigurationEditor_8cs.html":[7,0,0,1,13],
-"SoundBankConfiguration_8cs.html":[7,0,0,0,7],
+"SoundBankConfiguration_8cs.html":[7,0,0,0,8],
 "SoundHandle_8cs.html":[7,0,0,16],
 "SoundIds_8cs.html":[7,0,0,17],
 "SpaceDanger_8cs.html":[7,0,7,1,1],
@@ -246,8 +249,5 @@ var NAVTREEINDEX2 =
 "arch_light_field.html#autotoc_md66":[2,17,0],
 "arch_light_field.html#autotoc_md67":[2,17,0,0],
 "arch_light_field.html#autotoc_md68":[2,17,0,1],
-"arch_light_field.html#autotoc_md69":[2,17,0,2],
-"arch_light_field.html#autotoc_md70":[2,17,0,3],
-"arch_light_field.html#autotoc_md71":[2,17,0,4],
-"arch_light_field.html#autotoc_md72":[2,17,0,5]
+"arch_light_field.html#autotoc_md69":[2,17,0,2]
 };

@@ -537,6 +537,9 @@ var hierarchy =
       [ "BalloonParty.Balloon.Model.ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", null ],
       [ "BalloonParty.Balloon.Model.UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", null ]
     ] ],
+    [ "BalloonParty.Game.Run.IRetryState", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html", [
+      [ "BalloonParty.Game.Run.RetryTracker", "classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html", null ]
+    ] ],
     [ "BalloonParty.Shared.IRunConfig", "interfaceBalloonParty_1_1Shared_1_1IRunConfig.html", [
       [ "BalloonParty.Configuration.RunConfig", "classBalloonParty_1_1Configuration_1_1RunConfig.html", null ]
     ] ],
@@ -557,6 +560,7 @@ var hierarchy =
         [ "BalloonParty.Game.Run.BoardClearController", "classBalloonParty_1_1Game_1_1Run_1_1BoardClearController.html", null ],
         [ "BalloonParty.Slots.Spawner.GridSpawnerCoordinator", "classBalloonParty_1_1Slots_1_1Spawner_1_1GridSpawnerCoordinator.html", null ]
       ] ],
+      [ "BalloonParty.Game.Run.RetryTracker", "classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html", null ],
       [ "BalloonParty.Game.Score.ScoreController", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html", null ],
       [ "BalloonParty.Game.Score.ScoreTrailService", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html", null ],
       [ "BalloonParty.Shared.Pause.PauseService", "classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html", null ],
@@ -1067,6 +1071,7 @@ var hierarchy =
     [ "BalloonParty.Audio.Editor.SfxClipImporter", "classBalloonParty_1_1Audio_1_1Editor_1_1SfxClipImporter.html", null ],
     [ "BalloonParty.Audio.Configuration.SfxEntry", "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html", null ],
     [ "BalloonParty.Audio.Editor.SfxFetchRequest", "structBalloonParty_1_1Audio_1_1Editor_1_1SfxFetchRequest.html", null ],
+    [ "BalloonParty.Audio.Configuration.SfxLayerEntry", "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html", null ],
     [ "BalloonParty.Audio.Editor.SfxPreviewAuditioner", "classBalloonParty_1_1Audio_1_1Editor_1_1SfxPreviewAuditioner.html", null ],
     [ "BalloonParty.Audio.SfxThrottleGate", "classBalloonParty_1_1Audio_1_1SfxThrottleGate.html", null ],
     [ "BalloonParty.Editor.ShadowBake.ShadowBakeUtility", "classBalloonParty_1_1Editor_1_1ShadowBake_1_1ShadowBakeUtility.html", null ],

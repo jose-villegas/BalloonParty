@@ -1,5 +1,5 @@
 <map id="BalloonParty.Shared.IRunConfig" name="BalloonParty.Shared.IRunConfig">
-<area shape="rect" id="Node000001" title="Run&#45;level rules — starting hit points and (future) loss thresholds." alt="" coords="12,5,196,45"/>
+<area shape="rect" id="Node000001" title="Run&#45;level rules — starting hit points, retry allowance, and (future) loss thresholds." alt="" coords="12,5,196,45"/>
 <area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1RunConfig.html" title=" " alt="" coords="5,93,203,133"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,59,107,93,101,93,101,59"/>
 </map>

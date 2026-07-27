@@ -22,7 +22,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Run&#45;level rules — starting hit points and (future) loss thresholds.">
+<g id="a_Node000001"><a xlink:title="Run&#45;level rules — starting hit points, retry allowance, and (future) loss thresholds.">
 <polygon fill="#999999" stroke="#666666" points="143,-96 5,-96 5,-66 143,-66 143,-96"/>
 <text text-anchor="start" x="13" y="-84" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.IRun</text>
 <text text-anchor="middle" x="74" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">Config</text>
