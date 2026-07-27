@@ -31,29 +31,43 @@ namespace BalloonParty.Audio
         public VoicePlayback Pick(GameSoundId id, SfxEntry entry, in PickContext ctx)
         {
             var clip = entry.Clips[SelectClipIndex(id, entry)];
+            return BuildPlayback(clip, entry.MelodicMode, entry.MelodicMaxOctaves, entry.MelodicSkipSteps,
+                entry.TensionSemitones, entry.PitchRange, entry.VolumeRange, entry.Pan2D, in ctx);
+        }
 
+        public VoicePlayback PickLayer(GameSoundId id, SfxLayerEntry layer, in PickContext ctx)
+        {
+            var clip = layer.Clips[SelectLayerClipIndex(id, layer)];
+            return BuildPlayback(clip, layer.MelodicMode, layer.MelodicMaxOctaves, layer.MelodicSkipSteps,
+                layer.TensionSemitones, layer.PitchRange, layer.VolumeRange, true, in ctx);
+        }
+
+        private VoicePlayback BuildPlayback(AudioClip clip, MelodicMode melodicMode, int maxOctaves,
+            int skipSteps, int tensionSemitones, Vector2 pitchRange, Vector2 volumeRange, bool pan2D,
+            in PickContext ctx)
+        {
             float pitch;
             var melodicSemitone = 0;
-            switch (entry.MelodicMode)
+            switch (melodicMode)
             {
                 case MelodicMode.ScaleWalkUp when _scale.Count > 0:
-                    melodicSemitone = _root + ResolveWalkOffset(ctx.Streak, entry.MelodicMaxOctaves, entry.MelodicSkipSteps);
+                    melodicSemitone = _root + ResolveWalkOffset(ctx.Streak, maxOctaves, skipSteps);
                     pitch = melodicSemitone.SemitonesToPitchMultiplier();
                     break;
                 case MelodicMode.ScaleWalkDown when _scale.Count > 0:
-                    melodicSemitone = _root - ResolveWalkOffset(ctx.Streak, entry.MelodicMaxOctaves, entry.MelodicSkipSteps);
+                    melodicSemitone = _root - ResolveWalkOffset(ctx.Streak, maxOctaves, skipSteps);
                     pitch = melodicSemitone.SemitonesToPitchMultiplier();
                     break;
                 case MelodicMode.Tension:
-                    melodicSemitone = ctx.CurrentSemitone + entry.TensionSemitones;
+                    melodicSemitone = ctx.CurrentSemitone + tensionSemitones;
                     pitch = melodicSemitone.SemitonesToPitchMultiplier();
                     break;
                 default:
-                    pitch = RandomRange(entry.PitchRange);
+                    pitch = RandomRange(pitchRange);
                     break;
             }
 
-            var volume = RandomRange(entry.VolumeRange);
+            var volume = RandomRange(volumeRange);
 
             if (ctx.BurstIndex > 0)
             {
@@ -61,7 +75,7 @@ namespace BalloonParty.Audio
                 volume *= 1f / (1f + ctx.BurstIndex * BurstVolumeFalloff);
             }
 
-            var pan = entry.Pan2D ? ctx.NormalizedPan : 0f;
+            var pan = pan2D ? ctx.NormalizedPan : 0f;
             return new VoicePlayback(clip, pitch, volume, pan, melodicSemitone);
         }
 
@@ -127,6 +141,29 @@ namespace BalloonParty.Audio
         internal int SelectClipForLayer(int layer, SfxEntry entry)
         {
             return Mathf.Clamp(layer, 0, entry.Clips.Count - 1);
+        }
+
+        private int SelectLayerClipIndex(GameSoundId id, SfxLayerEntry layer)
+        {
+            var count = layer.Clips.Count;
+            if (count <= 1)
+            {
+                return 0;
+            }
+
+            var ordinal = (int)id;
+
+            switch (layer.ClipPickMode)
+            {
+                case ClipPickMode.Incremental:
+                    return AdvanceSequence(ordinal, count, forward: true, layer.ClipWrapMode);
+                case ClipPickMode.Decrease:
+                    return AdvanceSequence(ordinal, count, forward: false, layer.ClipWrapMode);
+                case ClipPickMode.Unison:
+                case ClipPickMode.Random:
+                default:
+                    return SelectRandom(ordinal, count);
+            }
         }
 
         private int SelectRandom(int ordinal, int count)

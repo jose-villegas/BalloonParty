@@ -254,7 +254,7 @@ namespace BalloonParty.Audio
 
                 var pan = ComputePan(position);
                 var ctx = new PickContext(melodicStreak ?? _currentStreak, _currentSemitone, 0, pan);
-                var layerPlayback = _picker.Pick(id, layer, in ctx);
+                var layerPlayback = _picker.PickLayer(id, layer, in ctx);
 
                 if (semitoneOffset != 0)
                 {
@@ -267,7 +267,7 @@ namespace BalloonParty.Audio
                     layerPlayback = new VoicePlayback(layerPlayback.Clip, layerPlayback.Pitch, layerPlayback.Volume * volumeScale, layerPlayback.Pan, layerPlayback.MelodicSemitone);
                 }
 
-                AllocateAndPlay(id, layer, in layerPlayback);
+                AllocateAndPlay(id, entry, in layerPlayback);
             }
         }
 

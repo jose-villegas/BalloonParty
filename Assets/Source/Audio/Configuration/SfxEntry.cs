@@ -80,9 +80,9 @@ namespace BalloonParty.Audio.Configuration
                  "e.g. deflect = +1 (minor-2nd rub), wall hit = -2 (dropped-it step).")]
         [SerializeField] private int _tensionSemitones;
 
-        [Tooltip("Additional layers fired simultaneously with this entry. Each layer is a full SfxEntry " +
-                 "with its own clips, pitch, volume, and pick mode.")]
-        [SerializeField] private SfxEntry[] _layers = Array.Empty<SfxEntry>();
+        [Tooltip("Additional layers fired simultaneously with this entry. Each layer is a flat entry " +
+                 "with its own clips, pitch, volume, and pick mode (no recursive nesting).")]
+        [SerializeField] private SfxLayerEntry[] _layers = Array.Empty<SfxLayerEntry>();
 
         public SfxChannel Channel => _channel;
         public IReadOnlyList<AudioClip> Clips => _clips;
@@ -104,7 +104,7 @@ namespace BalloonParty.Audio.Configuration
         public int MelodicMaxOctaves => _melodicMaxOctaves;
         public int MelodicSkipSteps => _melodicSkipSteps;
         public int TensionSemitones => _tensionSemitones;
-        public IReadOnlyList<SfxEntry> Layers => _layers;
+        public IReadOnlyList<SfxLayerEntry> Layers => _layers;
         public bool HasClips => _clips is { Length: > 0 };
 
 #if UNITY_EDITOR
