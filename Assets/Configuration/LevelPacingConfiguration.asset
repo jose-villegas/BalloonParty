@@ -3298,13 +3298,7 @@ MonoBehaviour:
       - _type: 6
         _weight: 2.25
         _maximumAllowedOverride: 5
-      _gridActorGates:
-      - _type: 0
-        _count:
-          _min: 9
-          _max: 11
-          _mode: 2
-        _maxPerCluster: 8
+      _gridActorGates: []
       _allowedColorsMask: 7
   - _fromLevel: 9
     _toLevel: 9
