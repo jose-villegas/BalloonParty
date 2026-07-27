@@ -19,3 +19,4 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_audio
 - @subpage plan_shot_solver_accuracy
 - @subpage plan_web_demo_hosting
+- @subpage plan_level_up_timing
