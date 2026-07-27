@@ -8,6 +8,8 @@ namespace BalloonParty.Shared.Extensions
 {
     internal static class DisturbanceTweenExtensions
     {
+        private const int MaxStepsPerFrame = 8;
+
         internal static T StampDisturbanceAlongPath<T>(
             this T tween, Transform target, DisturbanceFieldService field, StampSource source)
             where T : Tween
@@ -18,12 +20,14 @@ namespace BalloonParty.Shared.Extensions
             return tween;
         }
 
-        // The pure gate (seam for tests): true once travel since the last stamp clears one step, handing back
-        // the new anchor (the current point) and the heading. Frame-rate independent — N sub-step frames stamp
-        // the same as one step of equal total travel. A frame that covers several steps still stamps once and
-        // snaps the anchor forward (no back-fill), which only under-stamps if a target outruns `spacing` in a
-        // frame — not the case for the gentle spawn/balance paths this serves.
-        internal static bool TryGateStamp(
+        // The pure gate (seam for tests): how many whole steps of travel have accrued since the last stamp,
+        // with the anchor advanced by exactly that many — NOT snapped to the current point. Snapping left
+        // consecutive deposits as far apart as the frame happened to travel, so an eased path scattered a
+        // sparse trail while it was fast and laid a solid one only once it slowed. At one step per radius the
+        // stamp falloffs sum to a flat ridge, but only if every step is actually placed; an isolated deposit
+        // is a steep lone bump, and the speck field reads that gradient at high gain.
+        // Frame-rate independent: N sub-step frames deposit the same as one frame of equal total travel.
+        internal static int GateStampSteps(
             Vector3 currentPos, Vector3 lastStampPos, float spacing, out Vector3 newAnchor, out Vector2 direction)
         {
             var delta = currentPos - lastStampPos;
@@ -32,12 +36,17 @@ namespace BalloonParty.Shared.Extensions
             {
                 newAnchor = lastStampPos;
                 direction = Vector2.zero;
-                return false;
+                return 0;
             }
 
-            newAnchor = currentPos;
             direction = new Vector2(delta.x, delta.y).normalized;
-            return true;
+
+            // Capped so a teleporting or very fast target can't monopolise the shared per-frame stamp batch;
+            // the leftover distance is dropped rather than carried, which only shows on motion this gentle
+            // path stamping never sees.
+            var steps = Mathf.Min(Mathf.FloorToInt(delta.magnitude / spacing), MaxStepsPerFrame);
+            newAnchor = lastStampPos + delta.normalized * (spacing * steps);
+            return steps;
         }
 
         // Distance-gated, not per-frame: OnUpdate fires every rendered frame, so stamping each call scaled the
@@ -50,12 +59,22 @@ namespace BalloonParty.Shared.Extensions
             var scale = target.localScale.x * target.localScale.x;
             var spacing = (profile.Spacing > 0f ? profile.Spacing : profile.Radius) * scale;
 
-            if (!TryGateStamp(pos, lastStampPos, spacing, out var anchor, out var dir))
+            var steps = GateStampSteps(pos, lastStampPos, spacing, out var anchor, out var dir);
+
+            if (steps <= 0)
             {
                 return anchor;
             }
 
-            field.Stamp(pos, profile.Radius * scale, profile.Strength * scale, dir, profile.Duration);
+            var step = (anchor - lastStampPos) / steps;
+
+            for (var i = 1; i <= steps; i++)
+            {
+                field.Stamp(
+                    lastStampPos + step * i, profile.Radius * scale, profile.Strength * scale, dir,
+                    profile.Duration);
+            }
+
             return anchor;
         }
     }

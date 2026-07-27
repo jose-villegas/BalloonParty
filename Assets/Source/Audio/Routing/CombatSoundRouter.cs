@@ -39,6 +39,7 @@ namespace BalloonParty.Audio.Routing
         private int _rainbowPopsThisFlight;
         private int _toughPopsThisFlight;
         private int _unbreakablePopsThisFlight;
+        private int _unbreakableDeflectsThisFlight;
 
         [Inject]
         public CombatSoundRouter(ISoundPlayer player,
@@ -98,7 +99,6 @@ namespace BalloonParty.Audio.Routing
             var outcome = message.Outcome;
             if ((outcome & HitOutcome.Pop) != 0)
             {
-                _bounceCount = 0;
                 var popId = message.Actor is IBalloonModel balloon
                     ? PopSoundFor(balloon.TypeName)
                     : GameSoundId.BalloonPop;
@@ -119,15 +119,18 @@ namespace BalloonParty.Audio.Routing
                     var offset = -(hitsLost - 1) * MusicalPitchExtensions.WholeToneSemitones;
                     _player.Play(deflectId, message.WorldPosition, semitoneOffset: offset);
                 }
+                else if (deflectId == GameSoundId.BalloonDeflectUnbreakable)
+                {
+                    _player.Play(deflectId, message.WorldPosition, semitoneOffset: _unbreakableDeflectsThisFlight);
+                    _unbreakableDeflectsThisFlight++;
+                }
                 else
                 {
-                    _player.Play(deflectId, message.WorldPosition, semitoneOffset: -_bounceCount);
-                    _bounceCount++;
+                    _player.Play(deflectId, message.WorldPosition);
                 }
             }
             else if ((outcome & (HitOutcome.Absorb | HitOutcome.PassThrough)) != 0)
             {
-                _bounceCount = 0;
                 _player.Play(GameSoundId.BalloonResist, message.WorldPosition);
             }
         }
@@ -168,6 +171,7 @@ namespace BalloonParty.Audio.Routing
             _rainbowPopsThisFlight = 0;
             _toughPopsThisFlight = 0;
             _unbreakablePopsThisFlight = 0;
+            _unbreakableDeflectsThisFlight = 0;
             _player.Play(GameSoundId.ShotReload, null);
         }
 

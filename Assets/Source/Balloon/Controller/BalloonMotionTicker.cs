@@ -224,13 +224,24 @@ namespace BalloonParty.Balloon.Controller
             var profile = state.BalanceProfile;
             var spacing = profile.Spacing > 0f ? profile.Spacing : profile.Radius;
 
-            if (!DisturbanceTweenExtensions.TryGateStamp(pos, state.BalanceLastStamp, spacing, out var anchor, out var dir))
+            var steps = DisturbanceTweenExtensions.GateStampSteps(
+                pos, state.BalanceLastStamp, spacing, out var anchor, out var dir);
+
+            if (steps <= 0)
             {
                 state.BalanceLastStamp = anchor;
                 return;
             }
 
-            field.Stamp(pos, profile.Radius, profile.Strength, dir, profile.Duration);
+            // Back-filled: the eased path outruns one step per frame while it's fast, and a single stamp per
+            // frame would scatter the trail exactly where the balloon moves quickest.
+            var step = (anchor - state.BalanceLastStamp) / steps;
+
+            for (var i = 1; i <= steps; i++)
+            {
+                field.Stamp(state.BalanceLastStamp + step * i, profile.Radius, profile.Strength, dir, profile.Duration);
+            }
+
             state.BalanceLastStamp = anchor;
         }
 

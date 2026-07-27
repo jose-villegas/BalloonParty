@@ -75,7 +75,7 @@ MonoBehaviour:
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
-    _melodicMode: 3
+    _melodicMode: 2
     _melodicMaxOctaves: 2
     _melodicSkipSteps: 1
     _tensionSemitones: 3
@@ -836,7 +836,6 @@ MonoBehaviour:
   - _channel: 0
     _clips:
     - {fileID: 8300000, guid: 0370e279dcf51485896dad01ce536809, type: 3}
-    - {fileID: 8300000, guid: 45154af47b38f4a6086fbbea099153dc, type: 3}
     _clipPickMode: 0
     _clipWrapMode: 0
     _pitchRange: {x: 0.7, y: 1}
@@ -851,9 +850,9 @@ MonoBehaviour:
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _stopsOnPlay: 
-    _melodicMode: 0
+    _melodicMode: 1
     _melodicMaxOctaves: 2
-    _melodicSkipSteps: 1
+    _melodicSkipSteps: 2
     _tensionSemitones: 0
     _layers: []
     _fetchPrompt: glass ding
