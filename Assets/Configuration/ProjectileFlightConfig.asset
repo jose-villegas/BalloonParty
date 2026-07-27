@@ -18,8 +18,8 @@ MonoBehaviour:
   _projectileLoadDuration: 0
   _limitsClockwise: {x: 4, y: 2.25, z: -4.5, w: -2.25}
   _cruiseWallBounceThreshold: 1
-  _speedGainPerTap: 0.3926874
-  _maxCruiseSpeedMultiplier: 17.5
+  _speedGainPerTap: 0.19634375
+  _maxSpeedMultiplier: 6.283
   _cruiseTapCurve:
     serializedVersion: 2
     m_Curve:
@@ -55,7 +55,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   _cruiseTapEaseDuration: 0.25
   _sweepEnabled: 1
-  _sweepTapThreshold: 2
+  _sweepTapThreshold: 1
   _cruisePiercingTapThreshold: 5
   _pierceArmRampDuration: 0.75
   _pierceArmRampCurve:
@@ -82,8 +82,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _pierceDischargeTimeScale: 0.2
-  _pierceDischargeTimeScaleDuration: 1
+  _pierceDischargeTimeScale: 0.175
+  _pierceDischargeTimeScaleDuration: 1.25
   _shieldTrailDuration: 0.5
   _lastShieldApproachCurve:
     serializedVersion: 2
