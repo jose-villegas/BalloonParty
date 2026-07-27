@@ -19,7 +19,7 @@ MonoBehaviour:
   _limitsClockwise: {x: 4, y: 2.25, z: -4.5, w: -2.25}
   _cruiseWallBounceThreshold: 1
   _speedGainPerTap: 0.19634375
-  _maxSpeedMultiplier: 6.283
+  _maxSpeedMultiplier: 4.71225
   _cruiseTapCurve:
     serializedVersion: 2
     m_Curve:
@@ -55,7 +55,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   _cruiseTapEaseDuration: 0.25
   _sweepEnabled: 1
-  _sweepTapThreshold: 1
+  _sweepTapThreshold: 4
   _cruisePiercingTapThreshold: 5
   _pierceArmRampDuration: 0.75
   _pierceArmRampCurve:
