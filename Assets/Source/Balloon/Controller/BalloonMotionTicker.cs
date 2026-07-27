@@ -194,7 +194,7 @@ namespace BalloonParty.Balloon.Controller
             var progress = Mathf.Clamp01(state.BalanceElapsed / state.BalanceDuration);
             state.BasePosition = EvaluatePath(state.BalanceWaypoints, EaseOutQuad(progress));
 
-            StampBalanceWake(state);
+            StampBalanceWake(state, progress);
 
             if (progress < 1f)
             {
@@ -212,7 +212,7 @@ namespace BalloonParty.Balloon.Controller
         // view's localScale, which is 1 for a settled balloon (the norm) — a balloon still scaling in as it
         // balances stamps at full size a touch early. Uses the balance base, not base+impulse, matching the
         // old DOPath OnUpdate (impulses applied later in the frame).
-        private static void StampBalanceWake(MotionState state)
+        private static void StampBalanceWake(MotionState state, float progress)
         {
             var field = state.BalanceField;
             if (field == null)
@@ -237,9 +237,14 @@ namespace BalloonParty.Balloon.Controller
             // frame would scatter the trail exactly where the balloon moves quickest.
             var step = (anchor - state.BalanceLastStamp) / steps;
 
+            // Deposit with the balloon's speed, so the wake fades out as it settles instead of ending in a
+            // full-height cap where it stops. EaseOutQuad's derivative is 2(1 - t), so this IS the speed
+            // curve. Below MinStampStrength the field drops the stamp, which is the tail ending itself.
+            var strength = profile.Strength * (1f - progress);
+
             for (var i = 1; i <= steps; i++)
             {
-                field.Stamp(state.BalanceLastStamp + step * i, profile.Radius, profile.Strength, dir, profile.Duration);
+                field.Stamp(state.BalanceLastStamp + step * i, profile.Radius, strength, dir, profile.Duration);
             }
 
             state.BalanceLastStamp = anchor;

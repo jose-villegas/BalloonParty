@@ -518,5 +518,35 @@
     "LicenseName": "Creative Commons 0",
     "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
     "RequiresAttribution": false
+  },
+  {
+    "SoundId": "BalloonPopRainbow",
+    "ProviderId": 785494,
+    "Name": "Munich Guitar note 9",
+    "Author": "oliverharlan",
+    "SoundUrl": "https://freesound.org/people/oliverharlan/sounds/785494/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "BalloonPopRainbow",
+    "ProviderId": 374245,
+    "Name": "Tuba - staccato - D3 (Tuba3_stac_D2_v2_rr4_Sum.wav)",
+    "Author": "sgossner",
+    "SoundUrl": "https://freesound.org/people/sgossner/sounds/374245/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "BalloonPopRainbow",
+    "ProviderId": 255687,
+    "Name": "Marimba E5",
+    "Author": "sgossner",
+    "SoundUrl": "https://freesound.org/people/sgossner/sounds/255687/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
   }
 ]

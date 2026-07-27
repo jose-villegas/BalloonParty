@@ -380,11 +380,11 @@ MonoBehaviour:
     _fetchPrompt: painting
   - _channel: 0
     _clips:
-    - {fileID: 8300000, guid: 16b05d833abcc40ff9dd56139d02000b, type: 3}
-    _clipPickMode: 1
+    - {fileID: 8300000, guid: 70b491e4c228342a5843d24aff184b00, type: 3}
+    _clipPickMode: 0
     _clipWrapMode: 0
-    _pitchRange: {x: 0.8, y: 1.2}
-    _volumeRange: {x: 1, y: 1}
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 0.8, y: 0.8}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
     _priority: 128
@@ -400,10 +400,10 @@ MonoBehaviour:
     _melodicSkipSteps: 1
     _tensionSemitones: 0
     _layers: []
-    _fetchPrompt: Harp C6
+    _fetchPrompt: Harmonic_d4
   - _channel: 0
     _clips:
-    - {fileID: 8300000, guid: 98a97ba903e18451ea56406ab25d5f27, type: 3}
+    - {fileID: 8300000, guid: 91c47bca9c9f144f6873223335b00855, type: 3}
     _clipPickMode: 0
     _clipWrapMode: 0
     _pitchRange: {x: 1, y: 1}
@@ -788,7 +788,7 @@ MonoBehaviour:
     _fetchPrompt: 
   - _channel: 0
     _clips:
-    - {fileID: 8300000, guid: 4586b8682ea614521936b145ad46d62b, type: 3}
+    - {fileID: 8300000, guid: 96c2dd557c0b243658d7c65302e324e1, type: 3}
     _clipPickMode: 0
     _clipWrapMode: 0
     _pitchRange: {x: 1, y: 1}
@@ -812,7 +812,6 @@ MonoBehaviour:
   - _channel: 0
     _clips:
     - {fileID: 8300000, guid: 6e0cff43fed924b66b3e8cae39081886, type: 3}
-    - {fileID: 8300000, guid: 0d7ed1c140a4b42de9c729d0bb335cf7, type: 3}
     _clipPickMode: 0
     _clipWrapMode: 0
     _pitchRange: {x: 1, y: 1}
@@ -838,8 +837,8 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 0370e279dcf51485896dad01ce536809, type: 3}
     _clipPickMode: 0
     _clipWrapMode: 0
-    _pitchRange: {x: 0.7, y: 1}
-    _volumeRange: {x: 0.3, y: 0.4}
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 0.2, y: 0.3}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 8
     _priority: 128
