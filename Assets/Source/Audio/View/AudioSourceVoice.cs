@@ -37,7 +37,7 @@ namespace BalloonParty.Audio.View
         }
 
         internal void Play(in VoicePlayback playback, bool loop, float delaySeconds, float fadeInSeconds,
-            Action<AudioSourceVoice> onComplete)
+            float maxPlaySeconds, float fadeOutSeconds, Action<AudioSourceVoice> onComplete)
         {
             // Kill any return still pending from a prior play on this voice (e.g. a stolen
             // slot replayed in place) — and any in-flight fade — before starting the new one.
@@ -80,7 +80,11 @@ namespace BalloonParty.Audio.View
             if (!loop)
             {
                 _returnCts = new CancellationTokenSource();
-                ScheduleReturnAsync(delaySeconds, playback.Clip.length, playback.Pitch, _returnCts.Token).Forget();
+                var duration = maxPlaySeconds > 0f
+                    ? maxPlaySeconds
+                    : playback.Clip.length / Mathf.Max(Mathf.Abs(playback.Pitch), MinPitchMagnitude);
+                var useFadeOut = maxPlaySeconds > 0f;
+                ScheduleReturnAsync(delaySeconds, duration, useFadeOut, fadeOutSeconds, _returnCts.Token).Forget();
             }
         }
 
@@ -123,10 +127,10 @@ namespace BalloonParty.Audio.View
             _source.DOFade(0f, fadeOutSeconds).SetUpdate(true).SetLink(gameObject).OnComplete(InvokeComplete);
         }
 
-        private async UniTaskVoid ScheduleReturnAsync(float delaySeconds, float clipLength, float pitch,
-            CancellationToken ct)
+        private async UniTaskVoid ScheduleReturnAsync(float delaySeconds, float duration,
+            bool fadeOut, float fadeOutSeconds, CancellationToken ct)
         {
-            var seconds = delaySeconds + clipLength / Mathf.Max(Mathf.Abs(pitch), MinPitchMagnitude);
+            var seconds = delaySeconds + duration;
             var canceled = await UniTask
                 .Delay(TimeSpan.FromSeconds(seconds), ignoreTimeScale: true, cancellationToken: ct)
                 .SuppressCancellationThrow();
@@ -135,7 +139,14 @@ namespace BalloonParty.Audio.View
                 return;
             }
 
-            InvokeComplete();
+            if (fadeOut && fadeOutSeconds > 0f)
+            {
+                FadeOutAndComplete(fadeOutSeconds);
+            }
+            else
+            {
+                InvokeComplete();
+            }
         }
 
         private void InvokeComplete()

@@ -57,6 +57,10 @@ namespace BalloonParty.Audio.Configuration
                  "entry's Stops On Play). 0 = cut instantly. Scope resets always cut instantly.")]
         [SerializeField] [Min(0f)] private float _fadeOutSeconds;
 
+        [Tooltip("Maximum seconds the voice plays before auto-triggering fadeout. 0 = play the full " +
+                 "clip (default). Useful for clips with long tails you want to cut short.")]
+        [SerializeField] [Min(0f)] private float _maxPlaySeconds;
+
         [Tooltip("When this sound plays, stop any active voices of these ids (each fading out per its own " +
                  "FadeOutSeconds). e.g. a resolve cue silencing a still-playing loop.")]
         [SerializeField] private GameSoundId[] _stopsOnPlay = Array.Empty<GameSoundId>();
@@ -99,6 +103,7 @@ namespace BalloonParty.Audio.Configuration
         public float DelaySeconds => _delaySeconds;
         public float FadeInSeconds => _fadeInSeconds;
         public float FadeOutSeconds => _fadeOutSeconds;
+        public float MaxPlaySeconds => _maxPlaySeconds;
         public IReadOnlyList<GameSoundId> StopsOnPlay => _stopsOnPlay;
         public MelodicMode MelodicMode => _melodicMode;
         public int MelodicMaxOctaves => _melodicMaxOctaves;

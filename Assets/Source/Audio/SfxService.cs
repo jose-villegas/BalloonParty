@@ -294,7 +294,8 @@ namespace BalloonParty.Audio
             _slots[voiceId].Id = id;
 
             voice.SetOutputGroup(_mixerRouter.GroupFor(entry.Channel));
-            voice.Play(in playback, entry.Loop, entry.DelaySeconds, entry.FadeInSeconds, _onVoiceComplete);
+            voice.Play(in playback, entry.Loop, entry.DelaySeconds, entry.FadeInSeconds,
+                entry.MaxPlaySeconds, entry.FadeOutSeconds, _onVoiceComplete);
 
             StopVoicesFor(entry.StopsOnPlay, voiceId);
 

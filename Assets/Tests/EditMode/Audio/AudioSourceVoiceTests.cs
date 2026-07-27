@@ -38,7 +38,8 @@ namespace BalloonParty.Tests.Audio
         {
             var completedVoices = new List<AudioSourceVoice>();
 
-            _voice.Play(default, loop: false, delaySeconds: 0f, fadeInSeconds: 0f, onComplete: v => completedVoices.Add(v));
+            _voice.Play(default, loop: false, delaySeconds: 0f, fadeInSeconds: 0f,
+                maxPlaySeconds: 0f, fadeOutSeconds: 0f, onComplete: v => completedVoices.Add(v));
 
             Assert.AreEqual(1, completedVoices.Count);
             Assert.AreSame(_voice, completedVoices[0]);
@@ -47,7 +48,8 @@ namespace BalloonParty.Tests.Audio
         [Test]
         public void Play_NullClip_DoesNotScheduleAReturnTimer()
         {
-            _voice.Play(default, loop: false, delaySeconds: 0f, fadeInSeconds: 0f, onComplete: _ => { });
+            _voice.Play(default, loop: false, delaySeconds: 0f, fadeInSeconds: 0f,
+                maxPlaySeconds: 0f, fadeOutSeconds: 0f, onComplete: _ => { });
 
             var cts = GetField(_voice, "_returnCts") as CancellationTokenSource;
 
