@@ -27,6 +27,7 @@ namespace BalloonParty.Tests.Audio
         private IMessageHandler<ShieldGainedMessage> _shieldGainedHandler;
         private IMessageHandler<ShieldLostMessage> _shieldLostHandler;
         private IMessageHandler<WallHitMessage> _wallHitHandler;
+        private IMessageHandler<SpeedTapMintedMessage> _speedTapHandler;
         private IMessageHandler<ProjectileDestroyedMessage> _destroyedHandler;
 
         [SetUp]
@@ -45,6 +46,7 @@ namespace BalloonParty.Tests.Audio
             var shieldGainedSubscriber = CaptureSubscriber<ShieldGainedMessage>(h => _shieldGainedHandler = h);
             var shieldLostSubscriber = CaptureSubscriber<ShieldLostMessage>(h => _shieldLostHandler = h);
             var wallHitSubscriber = CaptureSubscriber<WallHitMessage>(h => _wallHitHandler = h);
+            var speedTapSubscriber = CaptureSubscriber<SpeedTapMintedMessage>(h => _speedTapHandler = h);
 
             var flightConfig = Substitute.For<IProjectileFlightConfig>();
             flightConfig.ShieldToneThreshold.Returns(5);
@@ -56,8 +58,20 @@ namespace BalloonParty.Tests.Audio
                 _player, hitSubscriber, firedSubscriber, loadedSubscriber,
                 cruiseStartedSubscriber, cruiseEndedSubscriber, doomedSubscriber, destroyedSubscriber,
                 pierceSubscriber, shieldGainedSubscriber, shieldLostSubscriber, wallHitSubscriber,
-                flightConfig, activePierce);
+                speedTapSubscriber, flightConfig, activePierce);
             router.Start();
+        }
+
+        [Test]
+        public void SpeedTapMinted_PlaysTheLadderCueWithTheTapCountAsItsMelodicStep()
+        {
+            // Authored as MelodicMode.ScaleWalkUp, so the tap count IS the scale degree — each rung of the
+            // speed ladder sounds a degree higher than the last.
+            _speedTapHandler.Handle(new SpeedTapMintedMessage(Vector3.zero, 1));
+            _speedTapHandler.Handle(new SpeedTapMintedMessage(Vector3.zero, 2));
+
+            _player.Received(1).Play(GameSoundId.SpeedTap, Arg.Any<Vector3?>(), 1, 0, 1f);
+            _player.Received(1).Play(GameSoundId.SpeedTap, Arg.Any<Vector3?>(), 2, 0, 1f);
         }
 
         [Test]

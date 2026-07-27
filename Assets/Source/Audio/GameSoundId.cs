@@ -74,6 +74,11 @@ namespace BalloonParty.Audio
         // fades out on pierce-discharged. Author with Loop=true and long FadeIn/FadeOutSeconds.
         PierceLoop,
 
-        BalloonDeflectTough
+        BalloonDeflectTough,
+
+        // One rung of the speed ladder: played whenever a wall hit mints a speed tap, whichever rule
+        // earned it (a cruise bounce or a clean sweep). Author with MelodicMode.ScaleWalkUp — the router
+        // passes the running tap count as the melodic step, so each tap climbs a degree.
+        SpeedTap
     }
 }

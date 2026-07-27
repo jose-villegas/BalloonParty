@@ -47,6 +47,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
         [Inject] private IPublisher<ShieldLostMessage> _shieldLostPublisher;
         [Inject] private IPublisher<WallHitMessage> _wallHitPublisher;
+        [Inject] private IPublisher<SpeedTapMintedMessage> _speedTapPublisher;
         [Inject] private IPublisher<ProjectileFiredMessage> _firedPublisher;
         [Inject] private IPublisher<ProjectileCruiseStartedMessage> _cruiseStartedPublisher;
         [Inject] private IPublisher<ProjectileCruiseEndedMessage> _cruiseEndedPublisher;
@@ -442,6 +443,7 @@ namespace BalloonParty.Projectile.View
 
             var travelDirection = _model.Direction;
             var wasPiercing = _model.IsPiercing.Value;
+            var tapsBefore = _model.Flight.TotalCruiseTaps;
             var segmentOrigin = (Vector3)_model.Flight.SegmentStartPosition;
             var step = _motionResolver.Step(_model, transform.position, Time.fixedDeltaTime);
 
@@ -465,6 +467,15 @@ namespace BalloonParty.Projectile.View
                 _shieldLostPublisher.Publish(new ShieldLostMessage(step.WallContact));
                 _wallHitPublisher.Publish(new WallHitMessage(step.WallContact, _model.ShieldsRemaining.Value));
                 TryAwardSweepTap(step.WallContact, travelDirection);
+
+                // One rung of the speed ladder was earned at this wall — by either rule, and at most once
+                // (TryGrantTap's per-wall guard). The running total is the melodic step a ScaleWalkUp cue
+                // climbs, so the ladder is audible as a rising figure.
+                if (_model.Flight.TotalCruiseTaps > tapsBefore)
+                {
+                    _speedTapPublisher.Publish(
+                        new SpeedTapMintedMessage(step.WallContact, _model.Flight.TotalCruiseTaps));
+                }
 
 #if UNITY_EDITOR
                 RecordSweepGizmoBounce(step.WallContact);

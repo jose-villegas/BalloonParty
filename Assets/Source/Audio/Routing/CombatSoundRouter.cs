@@ -29,6 +29,7 @@ namespace BalloonParty.Audio.Routing
         private readonly ISubscriber<ShieldGainedMessage> _shieldGainedSubscriber;
         private readonly ISubscriber<ShieldLostMessage> _shieldLostSubscriber;
         private readonly ISubscriber<WallHitMessage> _wallHitSubscriber;
+        private readonly ISubscriber<SpeedTapMintedMessage> _speedTapSubscriber;
         private readonly IProjectileFlightConfig _flightConfig;
         private readonly IActiveProjectilePierce _activePierce;
         private readonly CompositeDisposable _subscriptions = new();
@@ -54,6 +55,7 @@ namespace BalloonParty.Audio.Routing
             ISubscriber<ShieldGainedMessage> shieldGainedSubscriber,
             ISubscriber<ShieldLostMessage> shieldLostSubscriber,
             ISubscriber<WallHitMessage> wallHitSubscriber,
+            ISubscriber<SpeedTapMintedMessage> speedTapSubscriber,
             IProjectileFlightConfig flightConfig,
             IActiveProjectilePierce activePierce)
         {
@@ -69,6 +71,7 @@ namespace BalloonParty.Audio.Routing
             _shieldGainedSubscriber = shieldGainedSubscriber;
             _shieldLostSubscriber = shieldLostSubscriber;
             _wallHitSubscriber = wallHitSubscriber;
+            _speedTapSubscriber = speedTapSubscriber;
             _flightConfig = flightConfig;
             _activePierce = activePierce;
         }
@@ -86,6 +89,7 @@ namespace BalloonParty.Audio.Routing
             _shieldGainedSubscriber.Subscribe(OnShieldGained).AddTo(_subscriptions);
             _shieldLostSubscriber.Subscribe(OnShieldLost).AddTo(_subscriptions);
             _wallHitSubscriber.Subscribe(OnWallHit).AddTo(_subscriptions);
+            _speedTapSubscriber.Subscribe(OnSpeedTapMinted).AddTo(_subscriptions);
             _activePierce.IsPiercing.Subscribe(OnPierceStateChanged).AddTo(_subscriptions);
         }
 
@@ -212,6 +216,15 @@ namespace BalloonParty.Audio.Routing
         private void OnShieldLost(ShieldLostMessage message)
         {
             _player.Play(GameSoundId.ShieldLost, message.Position);
+        }
+
+        // Each earned tap is one rung of the speed ladder, so the cue climbs with the tap count: authored
+        // as MelodicMode.ScaleWalkUp, the count IS the melodic step (VariationPicker walks the scale from
+        // it). Every rung sounds a degree higher than the last, and a fresh shot starts from the root
+        // because the count resets with the projectile.
+        private void OnSpeedTapMinted(SpeedTapMintedMessage message)
+        {
+            _player.Play(GameSoundId.SpeedTap, message.Position, message.TotalTaps);
         }
 
         private void OnWallHit(WallHitMessage message)
