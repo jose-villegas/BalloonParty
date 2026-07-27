@@ -158,7 +158,7 @@ Files</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>All HUD and menu elements. Each sub-folder owns one distinct player-facing feature.</p>
 <p>Each self-contained UI section has its own VContainer child scope, inheriting all game services from <code>GameLifetimeScope</code> while keeping its registrations local.</p>
-<h1><a class="anchor" id="autotoc_md877"></a>
+<h1><a class="anchor" id="autotoc_md886"></a>
 Scopes</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -176,7 +176,7 @@ Scopes</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>GameOverLifetimeScope</code>   </td><td class="markdownTableBodyNone">Game-over screen root   </td><td class="markdownTableBodyNone">Empty child scope on the screen root (<code>GameOverScreen</code> itself is injected by <code>GameLifetimeScope</code>)   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md878"></a>
+<h1><a class="anchor" id="autotoc_md887"></a>
 Feature folders</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -197,10 +197,10 @@ Feature folders</h1>
 <td class="markdownTableBodyNone"><code>Binding/</code>   </td><td class="markdownTableBodyNone">Shared reactive binding helpers — <code>IReactiveBindable&lt;T&gt;</code>, <code>ICounterDisplay</code> (strategy interface for counter rendering), <code>ReactivePropertyBinder</code>, and the <code>RegisterBoundViews</code> scope extension used by the Health and Danger scopes   </td><td class="markdownTableBodyNone">—   </td></tr>
 </table>
 <p>Root-level helpers: <code>ReactiveCounterLabel</code> (abstract base for counter labels — subscribes a reactive <code>int</code> property and delegates rendering to an <code>ICounterDisplay</code> sibling resolved via <code>GetComponent</code>), <code>RollingCounterDisplay</code> (rolling-odometer <code>ICounterDisplay</code> backed by <code>RollingTextAnimator</code>), <code>PlainCounterDisplay</code> (plain thousands-formatted <code>ICounterDisplay</code>), <code>FormattedLabel</code> (captures a label's authored text as a <code>{0}</code> template), <code>RectAnchorMath</code> (static <code>RectTransform</code> position math), and <code>CanvasCameraBinder</code> (binds a Screen Space - Camera canvas's root to the single persistent camera at runtime via <code>Camera.main</code>, since that camera lives on a <code>DontDestroyOnLoad</code> prefab and can't be wired to a canvas at edit time — place it alongside each HUD's root <code>Canvas</code>).</p>
-<h1><a class="anchor" id="autotoc_md879"></a>
+<h1><a class="anchor" id="autotoc_md888"></a>
 Game start</h1>
 <p>Scene loading is handled by <code>SceneTransition</code> (in <code>Shared/</code>) — a MonoBehaviour wired directly to the start button's <code>onClick</code> in the Inspector. No dedicated start-screen component is needed.</p>
-<h1><a class="anchor" id="autotoc_md880"></a>
+<h1><a class="anchor" id="autotoc_md889"></a>
 Interactions</h1>
 <ul>
 <li><b>ScoreController</b> — all score UI subscribes to its <code>TotalScore</code> / <code>Level</code> reactive properties and <code>ScorePointsGroupMessage</code> / <code>ScoreLevelUpMessage</code> events; <code>ColorProgressBar</code> reads the current streak via <code>GetStreak</code> for displaying streak notices</li>

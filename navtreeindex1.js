@@ -1,5 +1,7 @@
 var NAVTREEINDEX1 =
 {
+"IDisturbanceFieldSettings_8cs.html":[7,0,3,4,6],
+"IDynamicSlotActor_8cs.html":[7,0,15,0,7],
 "IEffectBoard_8cs.html":[7,0,8,1,1],
 "IEffectPreviewModule_8cs.html":[7,0,6,1,4],
 "IEffect_8cs.html":[7,0,14,15],
@@ -72,7 +74,7 @@ var NAVTREEINDEX1 =
 "ISlotGridConfig_8cs.html":[7,0,14,22],
 "ISlotSelectionStrategy_8cs.html":[7,0,15,0,12],
 "ISmokeFieldSettings_8cs.html":[7,0,3,4,13],
-"ISoundBankConfiguration_8cs.html":[7,0,0,0,2],
+"ISoundBankConfiguration_8cs.html":[7,0,0,0,4],
 "ISoundPlayer_8cs.html":[7,0,0,10],
 "ISpeckFieldSettings_8cs.html":[7,0,3,4,14],
 "ISpinningItemVisual_8cs.html":[7,0,8,15],
@@ -247,7 +249,5 @@ var NAVTREEINDEX1 =
 "ProjectileFlightState_8cs.html":[7,0,12,2,7],
 "ProjectileHitResolver_8cs.html":[7,0,12,1,3],
 "ProjectileHitVisual_8cs.html":[7,0,12,1,4],
-"ProjectileLoadedMessage_8cs.html":[7,0,14,7,24],
-"ProjectileModelExtensions_8cs.html":[7,0,12,2,9],
-"ProjectileModel_8cs.html":[7,0,12,2,8]
+"ProjectileLoadedMessage_8cs.html":[7,0,14,7,24]
 };

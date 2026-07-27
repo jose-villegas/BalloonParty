@@ -135,11 +135,11 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Broadcast architecture for pausing and resuming gameplay systems.</p>
-<h1><a class="anchor" id="autotoc_md789"></a>
+<h1><a class="anchor" id="autotoc_md798"></a>
 Why not <code>Time.timeScale</code>?</h1>
 <p><code>Time.timeScale</code> is a global scalar — every system must opt out individually (<code>SetUpdate(true)</code>, <code>ignoreTimeScale: true</code>, etc.). A missed annotation is a silent bug. It also conflates two distinct concerns: the <b>visual slow-motion</b> of a cinematic and the <b>logical freeze</b> of gameplay.</p>
 <p>This package separates those concerns.</p>
-<h1><a class="anchor" id="autotoc_md790"></a>
+<h1><a class="anchor" id="autotoc_md799"></a>
 Core types</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -155,15 +155,15 @@ Core types</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>TimeScaleService</code> / <code>TimeScaleSource</code>   </td><td class="markdownTableBodyNone">The only legal writer of <code>Time.timeScale</code> (audit-enforced): claim/release, lowest active claim wins, run-reset clears   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md791"></a>
+<h1><a class="anchor" id="autotoc_md800"></a>
 Usage</h1>
-<h2><a class="anchor" id="autotoc_md792"></a>
+<h2><a class="anchor" id="autotoc_md801"></a>
 Signalling a pause</h2>
 <div class="fragment"><div class="line"><span class="comment">// Inject PauseService, then:</span></div>
 <div class="line">_pauseService.Pause(PauseSource.Cinematic);   <span class="comment">// begin</span></div>
 <div class="line">_pauseService.Resume(PauseSource.Cinematic);  <span class="comment">// end</span></div>
 </div><!-- fragment --><p>Calls nest safely — a second <code>Pause</code> without a matching <code>Resume</code> won't broadcast twice.</p>
-<h2><a class="anchor" id="autotoc_md793"></a>
+<h2><a class="anchor" id="autotoc_md802"></a>
 Reacting to a pause</h2>
 <p>Live systems don't subscribe to <code>PausedMessage</code>/<code>ResumedMessage</code> — they gate on the reactive <code>IsAnyPaused</code> property instead, so a single check covers every active source:</p>
 <div class="fragment"><div class="line"><span class="comment">// Inject PauseService, then read it wherever the system already ticks:</span></div>
@@ -172,7 +172,7 @@ Reacting to a pause</h2>
 <div class="line">    <span class="keywordflow">return</span>;</div>
 <div class="line">}</div>
 </div><!-- fragment --><p><code>ThrowerController</code>, <code>BalloonBalancer</code>, and <code>ProjectileView</code> all gate this way. Use <code>IsPaused(source)</code> instead when a caller cares about one specific source (e.g. a cinematic checking only <code>PauseSource.Cinematic</code>, ignoring other pauses in flight). <code>PausedMessage</code>/<code>ResumedMessage</code> remain available for a future subscriber that needs the edge transition itself (e.g. "do X once, exactly when pausing begins") rather than a per-tick level check.</p>
-<h1><a class="anchor" id="autotoc_md794"></a>
+<h1><a class="anchor" id="autotoc_md803"></a>
 <code>TimeScaleService</code> — the only writer of <code>Time.timeScale</code></h1>
 <p>Direct <code>Time.timeScale</code> writes are <b>banned by a style-audit rule</b> (<code>timescale-writes</code>, <code>[ERROR]</code>) everywhere except <code>TimeScaleService</code>. Callers claim a value under their <code>TimeScaleSource</code> and release it when done:</p>
 <div class="fragment"><div class="line">_timeScaleService.Claim(TimeScaleSource.LevelUpPopup, 0f);   <span class="comment">// freeze while the popup shows</span></div>

@@ -127,7 +127,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>The full-screen level-up ceremony that plays when all color bars complete.</p>
-<h1><a class="anchor" id="autotoc_md869"></a>
+<h1><a class="anchor" id="autotoc_md878"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -137,9 +137,9 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>LevelUpPopUp</code>   </td><td class="markdownTableBodyNone">Holds a <code>PauseService</code> pause while it waits for the pan-in cinematic to end (via an injected <code>CinematicEndGate</code>), then freezes time via <code>TimeScaleService</code>, shows the popup, spawns glow trails from each <code>ColorProgressBar</code> to the glow fill, and publishes <code>LevelUpDismissedMessage</code> on Continue   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md870"></a>
+<h1><a class="anchor" id="autotoc_md879"></a>
 How it works</h1>
-<h2><a class="anchor" id="autotoc_md871"></a>
+<h2><a class="anchor" id="autotoc_md880"></a>
 Sequence</h2>
 <ol type="1">
 <li><b>Pan-in ends</b> — <code>LevelUpCinematic</code> ends the pan-in phase after the tipping trail arrives (completing all remaining in-flight trails), setting <code>CinematicState</code> to <code>None</code>.</li>
@@ -152,21 +152,21 @@ Sequence</h2>
 <li><b>Ascent + navigate</b> — the phase flip to <code>Transitioning</code> triggers <code>LevelTransitionController</code> (the Ascent), which un-zooms the camera (<code>CinematicCameraRig.RestoreTweened</code>, synced to its pop wave) and slides the new level in. <code>LevelUpCinematic.OnDismissed</code> resumes (<code>PauseSource.Cinematic</code>) and calls <code>Navigation.TransitionTo(Game)</code>. There is <b>no</b> <code>LevelUpRestore</code> cinematic — it's kept in the enum only for serialized-index stability.</li>
 </ol>
 <p>The Animator's <code>updateMode</code> is set to <code>UnscaledTime</code> in <code>Start()</code>, so animations play even while the game is paused.</p>
-<h2><a class="anchor" id="autotoc_md872"></a>
+<h2><a class="anchor" id="autotoc_md881"></a>
 Glow trail spawning</h2>
 <p><code>LevelUpPopUp</code> owns a per-color dictionary of <code>TrailSpawner</code> instances (pool key <code>GlowTrail_{colorName}</code>, sorting order 3200). For each wave, it iterates the message's completed colors, reads the bar's position via <code>_scoreTrailService.GetTarget(colorName).RandomPosition()</code>, picks a random offset within <code>_glowTargetRadiusMultiplier</code> of the glow fill radius, and calls <code>Spawn</code> with <code>useUnscaledTime: true</code>. Arrival increments <code>_glowTrailArrivedCount</code> and fills the glow proportionally. Trails reuse the same <code>SimplePoolChannel&lt;FlyingTrail&gt;</code> factory as score trails but are pooled under separate keys.</p>
-<h2><a class="anchor" id="autotoc_md873"></a>
+<h2><a class="anchor" id="autotoc_md882"></a>
 Gate pattern</h2>
 <p><code>LevelUpLifetimeScope</code> registers <code>CinematicEndGate(CinematicState.LevelUpPanIn)</code> <b>by concrete type</b>, and <code>LevelUpPopUp</code> injects <code>CinematicEndGate</code> directly — not <code>IReadyGate</code>. That keeps the dependency explicit and stops the popup from silently resolving the parent scope's <code>NavigationReadyGate(Game)</code> if this registration ever went missing. Both are <code>IReadyGate</code> implementations over <code>UniTask.WaitUntil</code> on a reactive property, just on different state machines — though no current consumer actually injects the interface; every gate, including <code>GridSpawnerCoordinator</code>'s <code>NavigationReadyGate</code>, is injected by concrete type.</p>
 <div class="fragment"><div class="line">CinematicEndGate(LevelUpPanIn) → opens when Cinematic.Current != LevelUpPanIn</div>
 <div class="line">NavigationReadyGate(Game)      → opens when Navigation.Current == Game</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md874"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md883"></a>
 Wiring requirements</h1>
 <ul>
 <li>The popup GameObject must be <b>active</b> in the scene at all times — visibility is controlled by CanvasGroup alpha (animated by the <code>LevelUp</code> animator), not by <code>SetActive</code>. If the object is disabled, <code>Start()</code> never runs and <code>ScoreLevelUpMessage</code> is never subscribed.</li>
 <li>Registered in <code>LevelUpLifetimeScope</code> via <code>RegisterComponentInHierarchy&lt;LevelUpPopUp&gt;()</code>.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md875"></a>
+<h1><a class="anchor" id="autotoc_md884"></a>
 Interactions</h1>
 <ul>
 <li><b><code>LevelController</code></b> (<code>Game/Level/</code>) — publishes <code>ScoreLevelUpMessage</code> (triggers <code>ShowAfterGateAsync</code>) and transitions navigation to <code>LevelUp</code>; on dismissal advances the level (two-phase commit) and flips <code>LevelUpPhase</code> to drive the Ascent</li>

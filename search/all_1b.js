@@ -3,7 +3,7 @@ var searchData=
   ['quadpivot_0',['QuadPivot',['../namespaceBalloonParty_1_1Shared_1_1Rendering.html#a63cfabf5179e57786c7237e9ce726787',1,'BalloonParty::Shared::Rendering']]],
   ['qualifyingcolor_1',['QualifyingColor',['../classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#aca120322334c34c932c50ae21e8b6943',1,'BalloonParty::Editor::ShotSolver::ShotSolverWindow']]],
   ['quality_2',['Animation Quality',['../plan_future_ideas.html#autotoc_md409',1,'']]],
-  ['quality_20constraints_3',['Code Quality Constraints',['../style_guide.html#autotoc_md724',1,'']]],
+  ['quality_20constraints_3',['Code Quality Constraints',['../style_guide.html#autotoc_md733',1,'']]],
   ['quality_20settings_20system_4',['9 — Quality Settings System',['../plan_future_ideas.html#autotoc_md400',1,'']]],
   ['quality_20sign_20off_20perf_20sanity_5',['A-gate — parity/quality sign-off + perf sanity',['../plan_hdr_color_pipeline.html#autotoc_md551',1,'']]],
   ['quality_20tiers_20adpf_20·_20strong_20opus_20strong_20—_20required_20for_20ship_20promoted_20earlier_6',['A4 — Quality tiers + ADPF · &lt;strong&gt;opus&lt;/strong&gt; — required for ship, promoted earlier',['../plan_performance_recovery.html#autotoc_md599',1,'']]],
@@ -18,6 +18,6 @@ var searchData=
   ['questions_20parked_20for_20josé_15',['Design questions parked for José',['../plan_shot_solver_accuracy.html#autotoc_md634',1,'']]],
   ['queuefor_16',['QueueFor',['../classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#afa9c95ec80101b4324a8692454836078',1,'BalloonParty::Balloon::Spawner::RejectedBalloonEffect']]],
   ['quick_20links_17',['Quick Links',['../index.html#autotoc_md237',1,'']]],
-  ['quick_20reference_18',['Quick reference',['../style_guide.html#autotoc_md751',1,'']]],
+  ['quick_20reference_18',['Quick reference',['../style_guide.html#autotoc_md760',1,'']]],
   ['quiesce_19',['Quiesce',['../classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html#a2642e704750e459bb8e344a1ff936279',1,'BalloonParty::Game::Run::RunResetOrder']]]
 ];

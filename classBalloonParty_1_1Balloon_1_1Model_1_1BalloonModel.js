@@ -25,6 +25,7 @@ var classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel =
     [ "ItemActivationWeight", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html#a655be3db1ef715b828ce87de157425ab", null ],
     [ "Kind", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html#a62c9013b13683f11b5fdbcf41755e20d", null ],
     [ "MaxBalanceSteps", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html#a201b02378868a9c2c481f0debafded33", null ],
+    [ "MaxHitPoints", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html#a430e3b7d53abd46e1564a84f99965905", null ],
     [ "MoveSpeed", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html#afa7e2b113fb717b2ad20b67e2a4bf623", null ],
     [ "NudgeOverrides", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html#a3510783164fa220e5a2044404ac18a7a", null ],
     [ "OmnidirectionalBalance", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html#a22f8ea549452a62da8d27eb109d28ee7", null ],

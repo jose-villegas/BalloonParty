@@ -2,6 +2,7 @@ var classBalloonParty_1_1Audio_1_1SfxService =
 [
     [ "VoiceSlot", "structBalloonParty_1_1Audio_1_1SfxService_1_1VoiceSlot.html", "structBalloonParty_1_1Audio_1_1SfxService_1_1VoiceSlot" ],
     [ "SfxService", "classBalloonParty_1_1Audio_1_1SfxService.html#acf3f7416436a5b6026610d41b44aa820", null ],
+    [ "AllocateAndPlay", "classBalloonParty_1_1Audio_1_1SfxService.html#afcaa2b696df7cbb3617a597e542ab33a", null ],
     [ "ComputePan", "classBalloonParty_1_1Audio_1_1SfxService.html#a849eff35537816381c6ae67ea3a1361a", null ],
     [ "Dispose", "classBalloonParty_1_1Audio_1_1SfxService.html#ab6f5408022bd46fddf09897313dd10cc", null ],
     [ "FadeOutSlot", "classBalloonParty_1_1Audio_1_1SfxService.html#a4d65cc5c5288c8bdbf4e7d34fb077312", null ],
@@ -9,6 +10,9 @@ var classBalloonParty_1_1Audio_1_1SfxService =
     [ "NextGeneration", "classBalloonParty_1_1Audio_1_1SfxService.html#a36be3c1f4bd0da5f6524b072e8e47aa4", null ],
     [ "OnVoiceComplete", "classBalloonParty_1_1Audio_1_1SfxService.html#a53c61976e35766db6a0b0d8f22398132", null ],
     [ "Play", "classBalloonParty_1_1Audio_1_1SfxService.html#a4083eaae2a5f3b640ac9dd9d9766f989", null ],
+    [ "PlayLayers", "classBalloonParty_1_1Audio_1_1SfxService.html#a10b1384d951d61bcc96e9f47fe973817", null ],
+    [ "PlayUnison", "classBalloonParty_1_1Audio_1_1SfxService.html#a3244d065a3f86cee05fa1ddf8a449cf6", null ],
+    [ "RandomRange", "classBalloonParty_1_1Audio_1_1SfxService.html#a4d80eabf7b7609ce478af55d3cbdc842", null ],
     [ "ResetRun", "classBalloonParty_1_1Audio_1_1SfxService.html#a4f4e72f0f52024f3c5641c58b11ec94f", null ],
     [ "SetStreak", "classBalloonParty_1_1Audio_1_1SfxService.html#a7fedde6a768f39976e4d4265d3d4e54e", null ],
     [ "SetVolumeFactor", "classBalloonParty_1_1Audio_1_1SfxService.html#a1b302673737e90a6fb7fdda33fbe54fe", null ],
@@ -28,7 +32,10 @@ var classBalloonParty_1_1Audio_1_1SfxService =
     [ "_panRight", "classBalloonParty_1_1Audio_1_1SfxService.html#af463f5c103db39822f1cc1d1de2e2092", null ],
     [ "_picker", "classBalloonParty_1_1Audio_1_1SfxService.html#ab17cbd0a4396929c2dc5dda6fb4fadfa", null ],
     [ "_poolManager", "classBalloonParty_1_1Audio_1_1SfxService.html#a0b4e90260a3fc7dd156870e95b2a313f", null ],
+    [ "_rng", "classBalloonParty_1_1Audio_1_1SfxService.html#a5f05511366c6c32d2cb345201047262a", null ],
     [ "_slots", "classBalloonParty_1_1Audio_1_1SfxService.html#ae1fb0af6f2af0cf47dc1372c41652903", null ],
     [ "_throttle", "classBalloonParty_1_1Audio_1_1SfxService.html#aa27b8261c300dbddb9e1b120a5d7564a", null ],
+    [ "BurstSpreadSemitones", "classBalloonParty_1_1Audio_1_1SfxService.html#a947058cc38f03a2f6bd8eb331a113a98", null ],
+    [ "BurstVolumeFalloff", "classBalloonParty_1_1Audio_1_1SfxService.html#a32ee1963f42bc8c2d67ae80d64733d3d", null ],
     [ "ResetOrder", "classBalloonParty_1_1Audio_1_1SfxService.html#af1e1329cdfb28606b8541950ec61a6eb", null ]
 ];

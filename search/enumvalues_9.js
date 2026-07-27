@@ -16,5 +16,6 @@ var searchData=
   ['lightning_13',['Lightning',['../namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2ba457ba641340a812b28f949a26fca3e7b',1,'BalloonParty::Configuration::Items']]],
   ['line_14',['Line',['../namespaceBalloonParty_1_1Slots_1_1Actor.html#abf97dbdfa7dd43a6769e73afa51a0f7fa4803e6b9e63dabf04de980788d6a13c4',1,'BalloonParty::Slots::Actor']]],
   ['linear_15',['Linear',['../namespaceBalloonParty_1_1Configuration_1_1Level.html#a6f10485b2af91bced864457369fdcd4ba32a843da6ea40ab3b17a3421ccdf671b',1,'BalloonParty.Configuration.Level.Linear'],['../namespaceBalloonParty_1_1Configuration_1_1Level.html#a0724b6aad57e87a18201dbc9ad074527a32a843da6ea40ab3b17a3421ccdf671b',1,'BalloonParty.Configuration.Level.Linear'],['../namespaceBalloonParty_1_1Configuration_1_1Ranges.html#a1eab69ce6d844600af9e15366672f94ba32a843da6ea40ab3b17a3421ccdf671b',1,'BalloonParty.Configuration.Ranges.Linear']]],
-  ['local_16',['Local',['../namespaceBalloonParty_1_1Shared_1_1SceneLight.html#aba1f92fb89a50c3bfb7903105772e9b9a509820290d57f333403f490dde7316f4',1,'BalloonParty::Shared::SceneLight']]]
+  ['local_16',['Local',['../namespaceBalloonParty_1_1Shared_1_1SceneLight.html#aba1f92fb89a50c3bfb7903105772e9b9a509820290d57f333403f490dde7316f4',1,'BalloonParty::Shared::SceneLight']]],
+  ['loop_17',['Loop',['../namespaceBalloonParty_1_1Audio_1_1Configuration.html#af53e11c7f7a3d0fa1790cf92c971b06fa89d7b10cb4238977d2b523dfd9ea7745',1,'BalloonParty::Audio::Configuration']]]
 ];

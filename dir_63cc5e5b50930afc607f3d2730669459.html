@@ -131,7 +131,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Displays the projectile's remaining shields, animates state changes, and spawns visual trails when shields are gained.</p>
-<h1><a class="anchor" id="autotoc_md890"></a>
+<h1><a class="anchor" id="autotoc_md899"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -145,7 +145,7 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ShieldTrailController</code>   </td><td class="markdownTableBodyNone">Plain C# <code>IStartable</code> — subscribes to <code>ShieldGainedMessage</code> (balloon → HUD) and <code>ShieldLostMessage</code> (HUD → wall bounce); composes a <code>TrailSpawner</code> (pool key <code>ShieldTrail</code>, which builds its own <code>SimplePoolChannel&lt;FlyingTrail&gt;</code> internally) to fly <code>FlyingTrail</code> orbs between the balloon/bounce point and the shield HUD endpoint   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md891"></a>
+<h1><a class="anchor" id="autotoc_md900"></a>
 How it works</h1>
 <p><code>ShieldCounterAnimation</code> subscribes to <code>ProjectileLoadedMessage</code> / <code>ProjectileDestroyedMessage</code> and owns the labels' binding: on load it binds every <code>ShieldCounterLabel</code> to the new projectile's <code>ShieldsRemaining</code> (the labels show "--" until then); on destroy it unbinds them, returning the display to "--" for the between-turns wait.</p>
 <p>It also drives an Animator: <code>"Ready"</code> on load, <code>"Lost"</code> when <code>ShieldsRemaining</code> decrements, <code>"Gain"</code> when it increments (streak shield awards), and <code>"Waiting"</code> from projectile death until the next load. It binds directly to the live projectile's <code>ShieldsRemaining</code> reactive property carried in <code>ProjectileLoadedMessage</code>.</p>
@@ -155,7 +155,7 @@ How it works</h1>
 <li><b><code>ShieldLostMessage</code></b> (published by <code>ProjectileView</code> when a wall bounce spends a shield — i.e. <code>ShieldsRemaining</code> stays <code>&gt;= 0</code> after the decrement; below that the projectile is destroyed instead): flies an orb <em>from</em> the HUD down to the bounce point carried in the message.</li>
 </ul>
 <p>Both use <code>IProjectileFlightConfig.ShieldTrailDuration</code>; the spawner handles pool return on completion.</p>
-<h1><a class="anchor" id="autotoc_md892"></a>
+<h1><a class="anchor" id="autotoc_md901"></a>
 Interactions</h1>
 <ul>
 <li><b>ProjectileModel.ShieldsRemaining</b> — <code>ReactiveProperty&lt;int&gt;</code> subscribed by <code>ShieldCounterAnimation</code> and the labels</li>

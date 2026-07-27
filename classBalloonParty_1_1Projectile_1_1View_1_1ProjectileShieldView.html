@@ -160,6 +160,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a8173bb0e7e9951fb296250d14d1fdd9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf84737e42f32d83b6ddf29e5d156936" id="r_acf84737e42f32d83b6ddf29e5d156936"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf84737e42f32d83b6ddf29e5d156936">AnimateShieldChange</a> (int newCount)</td></tr>
 <tr class="separator:acf84737e42f32d83b6ddf29e5d156936"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd1d3567fbcf49a29aff2ce5c5182ded" id="r_afd1d3567fbcf49a29aff2ce5c5182ded"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd1d3567fbcf49a29aff2ce5c5182ded">ApplyShieldScale</a> (int shieldCount)</td></tr>
+<tr class="separator:afd1d3567fbcf49a29aff2ce5c5182ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c5e559a70c6eb14b6ea0a592f87760e" id="r_a1c5e559a70c6eb14b6ea0a592f87760e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c5e559a70c6eb14b6ea0a592f87760e">Awake</a> ()</td></tr>
 <tr class="separator:a1c5e559a70c6eb14b6ea0a592f87760e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a638c32752a79b9bea2065eda192f4951" id="r_a638c32752a79b9bea2065eda192f4951"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a638c32752a79b9bea2065eda192f4951">ComputeWallDistance</a> ()</td></tr>
@@ -223,6 +225,12 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ad9304324d65e40220a4137985f17d8a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30418e08725d70d2a96900c752b61c7d" id="r_a30418e08725d70d2a96900c752b61c7d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a30418e08725d70d2a96900c752b61c7d">_previousShieldCount</a></td></tr>
 <tr class="separator:a30418e08725d70d2a96900c752b61c7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb48b19858d312008ad9da59f8a6362a" id="r_abb48b19858d312008ad9da59f8a6362a"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abb48b19858d312008ad9da59f8a6362a">_projectileBaseScale</a></td></tr>
+<tr class="separator:abb48b19858d312008ad9da59f8a6362a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecc46b2c1a31d0c5fa3d3ec32b2275d8" id="r_aecc46b2c1a31d0c5fa3d3ec32b2275d8"><td class="memItemLeft" align="right" valign="top">Transform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aecc46b2c1a31d0c5fa3d3ec32b2275d8">_projectileRoot</a></td></tr>
+<tr class="separator:aecc46b2c1a31d0c5fa3d3ec32b2275d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac6ef5c10de3c12e2524a3e40bd7f07a" id="r_aac6ef5c10de3c12e2524a3e40bd7f07a"><td class="memItemLeft" align="right" valign="top">Tween&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aac6ef5c10de3c12e2524a3e40bd7f07a">_scaleTween</a></td></tr>
+<tr class="separator:aac6ef5c10de3c12e2524a3e40bd7f07a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a72f0d7631eec8ec500e1e651390a28" id="r_a8a72f0d7631eec8ec500e1e651390a28"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IShieldFieldSettings.html">IShieldFieldSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a72f0d7631eec8ec500e1e651390a28">_settings</a></td></tr>
 <tr class="separator:a8a72f0d7631eec8ec500e1e651390a28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ff8dd9bf0d461deb006e73a99711d36" id="r_a1ff8dd9bf0d461deb006e73a99711d36"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ff8dd9bf0d461deb006e73a99711d36">_shapeLerp</a> = 1f</td></tr>
@@ -335,6 +343,31 @@ Static Private Attributes</h2></td></tr>
           <td class="memname">void BalloonParty.Projectile.View.ProjectileShieldView.AnimateShieldChange </td>
           <td>(</td>
           <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>newCount</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afd1d3567fbcf49a29aff2ce5c5182ded" name="afd1d3567fbcf49a29aff2ce5c5182ded"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd1d3567fbcf49a29aff2ce5c5182ded">&#9670;&#160;</a></span>ApplyShieldScale()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Projectile.View.ProjectileShieldView.ApplyShieldScale </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>shieldCount</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1191,6 +1224,72 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Projectile.View.ProjectileShieldView._previousShieldCount</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abb48b19858d312008ad9da59f8a6362a" name="abb48b19858d312008ad9da59f8a6362a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb48b19858d312008ad9da59f8a6362a">&#9670;&#160;</a></span>_projectileBaseScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector3 BalloonParty.Projectile.View.ProjectileShieldView._projectileBaseScale</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aecc46b2c1a31d0c5fa3d3ec32b2275d8" name="aecc46b2c1a31d0c5fa3d3ec32b2275d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aecc46b2c1a31d0c5fa3d3ec32b2275d8">&#9670;&#160;</a></span>_projectileRoot</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Transform BalloonParty.Projectile.View.ProjectileShieldView._projectileRoot</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aac6ef5c10de3c12e2524a3e40bd7f07a" name="aac6ef5c10de3c12e2524a3e40bd7f07a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac6ef5c10de3c12e2524a3e40bd7f07a">&#9670;&#160;</a></span>_scaleTween</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Tween BalloonParty.Projectile.View.ProjectileShieldView._scaleTween</td>
         </tr>
       </table>
   </td>

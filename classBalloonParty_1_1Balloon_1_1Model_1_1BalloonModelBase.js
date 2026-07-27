@@ -15,6 +15,7 @@ var classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase =
     [ "IsStable", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a4317e4eba6bbe3ecc25b2cf82c48d935", null ],
     [ "Kind", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a62c9013b13683f11b5fdbcf41755e20d", null ],
     [ "MaxBalanceSteps", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a201b02378868a9c2c481f0debafded33", null ],
+    [ "MaxHitPoints", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a9d8d116c99c312e03850149c950f73aa", null ],
     [ "MoveSpeed", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#afa7e2b113fb717b2ad20b67e2a4bf623", null ],
     [ "NudgeOverrides", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#aac0692d8fb9a3de1f3dc70d03c307829", null ],
     [ "OmnidirectionalBalance", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a22f8ea549452a62da8d27eb109d28ee7", null ],

@@ -146,6 +146,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a99335eb559b40ea9aeb7b9317f942bfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9db70ec148e5cb569d7ad280a5013bd4" id="r_a9db70ec148e5cb569d7ad280a5013bd4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9db70ec148e5cb569d7ad280a5013bd4">CacheImageAlphas</a> ()</td></tr>
 <tr class="separator:a9db70ec148e5cb569d7ad280a5013bd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bbc3f9377416f85b1f65ee4040dd2fd" id="r_a9bbc3f9377416f85b1f65ee4040dd2fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9bbc3f9377416f85b1f65ee4040dd2fd">EnsureInitialized</a> ()</td></tr>
+<tr class="separator:a9bbc3f9377416f85b1f65ee4040dd2fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a429d605a909ab916801d454cd5ba7451" id="r_a429d605a909ab916801d454cd5ba7451"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a429d605a909ab916801d454cd5ba7451">EnsurePivotCentered</a> ()</td></tr>
 <tr class="separator:a429d605a909ab916801d454cd5ba7451"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5781ea970169949f56cb48d64afc97a" id="r_af5781ea970169949f56cb48d64afc97a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af5781ea970169949f56cb48d64afc97a">Inject</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Level_1_1LevelController.html">LevelController</a> levelController)</td></tr>
@@ -177,6 +179,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a94316daea5e2ccfa3e249e40e91bdcfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16e31263bc0eabd716e56b901fea0fe6" id="r_a16e31263bc0eabd716e56b901fea0fe6"><td class="memItemLeft" align="right" valign="top">float[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a16e31263bc0eabd716e56b901fea0fe6">_imageBaseAlphas</a></td></tr>
 <tr class="separator:a16e31263bc0eabd716e56b901fea0fe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16f12bc878c98118919088bc7b35f8cb" id="r_a16f12bc878c98118919088bc7b35f8cb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a16f12bc878c98118919088bc7b35f8cb">_initialized</a></td></tr>
+<tr class="separator:a16f12bc878c98118919088bc7b35f8cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a724597aabb377485301b3c0e0bf1d35b" id="r_a724597aabb377485301b3c0e0bf1d35b"><td class="memItemLeft" align="right" valign="top">TMP_Text&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a724597aabb377485301b3c0e0bf1d35b">_label</a></td></tr>
 <tr class="separator:a724597aabb377485301b3c0e0bf1d35b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a322db18edc7a26664aa4b2cf6d55b156" id="r_a322db18edc7a26664aa4b2cf6d55b156"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a322db18edc7a26664aa4b2cf6d55b156">_lastLevel</a> = int.MinValue</td></tr>
@@ -315,6 +319,31 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">void BalloonParty.UI.Score.LevelLabel.CacheImageAlphas </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9bbc3f9377416f85b1f65ee4040dd2fd" name="a9bbc3f9377416f85b1f65ee4040dd2fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bbc3f9377416f85b1f65ee4040dd2fd">&#9670;&#160;</a></span>EnsureInitialized()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.Score.LevelLabel.EnsureInitialized </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -645,6 +674,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float [] BalloonParty.UI.Score.LevelLabel._imageBaseAlphas</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a16f12bc878c98118919088bc7b35f8cb" name="a16f12bc878c98118919088bc7b35f8cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16f12bc878c98118919088bc7b35f8cb">&#9670;&#160;</a></span>_initialized</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.UI.Score.LevelLabel._initialized</td>
         </tr>
       </table>
   </td>

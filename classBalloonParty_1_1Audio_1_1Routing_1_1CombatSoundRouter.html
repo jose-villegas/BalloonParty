@@ -112,6 +112,7 @@ $(function(){initNavTree('classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRo
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Audio.Routing.CombatSoundRouter Class Reference<span class="mlabels"><span class="mlabel sealed">sealed</span></span></div></div>
 </div><!--header-->
@@ -128,13 +129,13 @@ $(function(){initNavTree('classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRo
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter__coll__graph.svg" width="100%" height="538"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter__coll__graph.svg" width="100%" height="598"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a8f35c6509102c6836339c8ccf2d881bf" id="r_a8f35c6509102c6836339c8ccf2d881bf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8f35c6509102c6836339c8ccf2d881bf">CombatSoundRouter</a> (<a class="el" href="interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html">ISoundPlayer</a> player, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html">ActorHitMessage</a> &gt; hitSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileFiredMessage.html">ProjectileFiredMessage</a> &gt; firedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html">ProjectileLoadedMessage</a> &gt; loadedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html">ProjectileCruiseStartedMessage</a> &gt; cruiseStartedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseEndedMessage.html">ProjectileCruiseEndedMessage</a> &gt; cruiseEndedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedStartedMessage.html">ProjectileDoomedStartedMessage</a> &gt; doomedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html">ProjectileDestroyedMessage</a> &gt; destroyedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html">PierceDischargedMessage</a> &gt; pierceSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html">ShieldGainedMessage</a> &gt; shieldGainedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html">ShieldLostMessage</a> &gt; shieldLostSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html">WallHitMessage</a> &gt; wallHitSubscriber, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a> flightConfig)</td></tr>
-<tr class="separator:a8f35c6509102c6836339c8ccf2d881bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af288caa7201ab57fa49300fd5758ec82" id="r_af288caa7201ab57fa49300fd5758ec82"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af288caa7201ab57fa49300fd5758ec82">CombatSoundRouter</a> (<a class="el" href="interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html">ISoundPlayer</a> player, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html">ActorHitMessage</a> &gt; hitSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileFiredMessage.html">ProjectileFiredMessage</a> &gt; firedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html">ProjectileLoadedMessage</a> &gt; loadedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html">ProjectileCruiseStartedMessage</a> &gt; cruiseStartedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseEndedMessage.html">ProjectileCruiseEndedMessage</a> &gt; cruiseEndedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedStartedMessage.html">ProjectileDoomedStartedMessage</a> &gt; doomedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html">ProjectileDestroyedMessage</a> &gt; destroyedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html">PierceDischargedMessage</a> &gt; pierceSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html">ShieldGainedMessage</a> &gt; shieldGainedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html">ShieldLostMessage</a> &gt; shieldLostSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html">WallHitMessage</a> &gt; wallHitSubscriber, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a> flightConfig, <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html">IActiveProjectilePierce</a> activePierce)</td></tr>
+<tr class="separator:af288caa7201ab57fa49300fd5758ec82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3994946f4836829d573659a39293cb9a" id="r_a3994946f4836829d573659a39293cb9a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3994946f4836829d573659a39293cb9a">Dispose</a> ()</td></tr>
 <tr class="separator:a3994946f4836829d573659a39293cb9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ed623c02dd669f8fe8b16138335f48b" id="r_a8ed623c02dd669f8fe8b16138335f48b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ed623c02dd669f8fe8b16138335f48b">Start</a> ()</td></tr>
@@ -142,6 +143,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:abf81c768ef26f86019a9835e9215c21e" id="r_abf81c768ef26f86019a9835e9215c21e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abf81c768ef26f86019a9835e9215c21e">IncrementPopCounter</a> (<a class="el" href="namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13">GameSoundId</a> popId)</td></tr>
+<tr class="separator:abf81c768ef26f86019a9835e9215c21e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a226e3497ad48ef4ceb32713baab80cdf" id="r_a226e3497ad48ef4ceb32713baab80cdf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a226e3497ad48ef4ceb32713baab80cdf">OnActorHit</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html">ActorHitMessage</a> message)</td></tr>
 <tr class="separator:a226e3497ad48ef4ceb32713baab80cdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5731a1b9438f53aa51fc88a85a3e5770" id="r_a5731a1b9438f53aa51fc88a85a3e5770"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5731a1b9438f53aa51fc88a85a3e5770">OnCruiseEnded</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseEndedMessage.html">ProjectileCruiseEndedMessage</a> message)</td></tr>
@@ -156,6 +159,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:ab34eb0423950a08c9f25dd01b94af966"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca3b588cde40e2b828231d2cd5c97753" id="r_aca3b588cde40e2b828231d2cd5c97753"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aca3b588cde40e2b828231d2cd5c97753">OnPierceDischarged</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html">PierceDischargedMessage</a> message)</td></tr>
 <tr class="separator:aca3b588cde40e2b828231d2cd5c97753"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fc51a20797c50ec644f0b20e0586288" id="r_a4fc51a20797c50ec644f0b20e0586288"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4fc51a20797c50ec644f0b20e0586288">OnPierceStateChanged</a> (bool piercing)</td></tr>
+<tr class="separator:a4fc51a20797c50ec644f0b20e0586288"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87fdcfe736d49c1c7bdf053980c286f4" id="r_a87fdcfe736d49c1c7bdf053980c286f4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a87fdcfe736d49c1c7bdf053980c286f4">OnProjectileDestroyed</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html">ProjectileDestroyedMessage</a> message)</td></tr>
 <tr class="separator:a87fdcfe736d49c1c7bdf053980c286f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06476eb146878d66ad4af62a911d7419" id="r_a06476eb146878d66ad4af62a911d7419"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a06476eb146878d66ad4af62a911d7419">OnShieldGained</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html">ShieldGainedMessage</a> message)</td></tr>
@@ -164,6 +169,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a82c4c945aef6fc0607771dcc3e1ef93c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1467053f46fe387af71f67b066f7da4b" id="r_a1467053f46fe387af71f67b066f7da4b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1467053f46fe387af71f67b066f7da4b">OnWallHit</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html">WallHitMessage</a> message)</td></tr>
 <tr class="separator:a1467053f46fe387af71f67b066f7da4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11eee163200e55f1aba08e8872f680c0" id="r_a11eee163200e55f1aba08e8872f680c0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a11eee163200e55f1aba08e8872f680c0">PopSemitoneOffset</a> (<a class="el" href="namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13">GameSoundId</a> popId)</td></tr>
+<tr class="separator:a11eee163200e55f1aba08e8872f680c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -174,6 +181,8 @@ Static Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a697aa29336ef9f890705997068eb8a7b" id="r_a697aa29336ef9f890705997068eb8a7b"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html">IActiveProjectilePierce</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a697aa29336ef9f890705997068eb8a7b">_activePierce</a></td></tr>
+<tr class="separator:a697aa29336ef9f890705997068eb8a7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee686bb02b390049032167a355e10d49" id="r_aee686bb02b390049032167a355e10d49"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aee686bb02b390049032167a355e10d49">_bounceCount</a></td></tr>
 <tr class="separator:aee686bb02b390049032167a355e10d49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aefb6e346759e88ce45383fc465a13680" id="r_aefb6e346759e88ce45383fc465a13680"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseEndedMessage.html">ProjectileCruiseEndedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aefb6e346759e88ce45383fc465a13680">_cruiseEndedSubscriber</a></td></tr>
@@ -194,22 +203,37 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a8b238fe2e81bd19eb8ac6fe9f0d99c05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5d13ab9a8bb3d64b8303a5fea791c5c" id="r_ac5d13ab9a8bb3d64b8303a5fea791c5c"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html">ProjectileLoadedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac5d13ab9a8bb3d64b8303a5fea791c5c">_loadedSubscriber</a></td></tr>
 <tr class="separator:ac5d13ab9a8bb3d64b8303a5fea791c5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ee14a6929b366e8a7f56c2e1e8ed030" id="r_a4ee14a6929b366e8a7f56c2e1e8ed030"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Audio_1_1SoundHandle.html">SoundHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ee14a6929b366e8a7f56c2e1e8ed030">_pierceLoopHandle</a> = <a class="el" href="structBalloonParty_1_1Audio_1_1SoundHandle.html#a35b1629b72b4624f91c6e376616bc6f4">SoundHandle.None</a></td></tr>
+<tr class="separator:a4ee14a6929b366e8a7f56c2e1e8ed030"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a4fc9d74b8576f11d8e9ce581490173" id="r_a2a4fc9d74b8576f11d8e9ce581490173"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html">PierceDischargedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a4fc9d74b8576f11d8e9ce581490173">_pierceSubscriber</a></td></tr>
 <tr class="separator:a2a4fc9d74b8576f11d8e9ce581490173"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b18a93aae2cd76434e807d90cca5f9d" id="r_a0b18a93aae2cd76434e807d90cca5f9d"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html">ISoundPlayer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b18a93aae2cd76434e807d90cca5f9d">_player</a></td></tr>
 <tr class="separator:a0b18a93aae2cd76434e807d90cca5f9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a939b382d1d40f40d64f29f1c4c89653b" id="r_a939b382d1d40f40d64f29f1c4c89653b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a939b382d1d40f40d64f29f1c4c89653b">_rainbowPopsThisFlight</a></td></tr>
+<tr class="separator:a939b382d1d40f40d64f29f1c4c89653b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a675d71e3913e6da5c5b370ad79d7b8d8" id="r_a675d71e3913e6da5c5b370ad79d7b8d8"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html">ShieldGainedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a675d71e3913e6da5c5b370ad79d7b8d8">_shieldGainedSubscriber</a></td></tr>
 <tr class="separator:a675d71e3913e6da5c5b370ad79d7b8d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4fb3cf05afc12a5ec80493d1363328c" id="r_ab4fb3cf05afc12a5ec80493d1363328c"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html">ShieldLostMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab4fb3cf05afc12a5ec80493d1363328c">_shieldLostSubscriber</a></td></tr>
 <tr class="separator:ab4fb3cf05afc12a5ec80493d1363328c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fd9edd666bcae882f8d7f18771a05cd" id="r_a1fd9edd666bcae882f8d7f18771a05cd"><td class="memItemLeft" align="right" valign="top">readonly CompositeDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1fd9edd666bcae882f8d7f18771a05cd">_subscriptions</a> = new()</td></tr>
 <tr class="separator:a1fd9edd666bcae882f8d7f18771a05cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c6ab7f8f7e98db10e89e816c6597cc6" id="r_a4c6ab7f8f7e98db10e89e816c6597cc6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4c6ab7f8f7e98db10e89e816c6597cc6">_toughPopsThisFlight</a></td></tr>
+<tr class="separator:a4c6ab7f8f7e98db10e89e816c6597cc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64c3b923cb476f2602ec5c3164217102" id="r_a64c3b923cb476f2602ec5c3164217102"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a64c3b923cb476f2602ec5c3164217102">_unbreakableDeflectsThisFlight</a></td></tr>
+<tr class="separator:a64c3b923cb476f2602ec5c3164217102"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dbaf0ef315c106c418736da5bb78c3e" id="r_a7dbaf0ef315c106c418736da5bb78c3e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7dbaf0ef315c106c418736da5bb78c3e">_unbreakablePopsThisFlight</a></td></tr>
+<tr class="separator:a7dbaf0ef315c106c418736da5bb78c3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f5e37323f7ce1f77e44e557e389b872" id="r_a1f5e37323f7ce1f77e44e557e389b872"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html">WallHitMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f5e37323f7ce1f77e44e557e389b872">_wallHitSubscriber</a></td></tr>
 <tr class="separator:a1f5e37323f7ce1f77e44e557e389b872"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:af1442ee0d9d920823c2c4ec789548310" id="r_af1442ee0d9d920823c2c4ec789548310"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af1442ee0d9d920823c2c4ec789548310">MaxRampSemitones</a> = 12</td></tr>
+<tr class="separator:af1442ee0d9d920823c2c4ec789548310"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a8f35c6509102c6836339c8ccf2d881bf" name="a8f35c6509102c6836339c8ccf2d881bf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8f35c6509102c6836339c8ccf2d881bf">&#9670;&#160;</a></span>CombatSoundRouter()</h2>
+<a id="af288caa7201ab57fa49300fd5758ec82" name="af288caa7201ab57fa49300fd5758ec82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af288caa7201ab57fa49300fd5758ec82">&#9670;&#160;</a></span>CombatSoundRouter()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -277,7 +301,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a></td>          <td class="paramname"><span class="paramname"><em>flightConfig</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a></td>          <td class="paramname"><span class="paramname"><em>flightConfig</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html">IActiveProjectilePierce</a></td>          <td class="paramname"><span class="paramname"><em>activePierce</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -323,6 +352,31 @@ Private Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abf81c768ef26f86019a9835e9215c21e" name="abf81c768ef26f86019a9835e9215c21e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf81c768ef26f86019a9835e9215c21e">&#9670;&#160;</a></span>IncrementPopCounter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Audio.Routing.CombatSoundRouter.IncrementPopCounter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13">GameSoundId</a></td>          <td class="paramname"><span class="paramname"><em>popId</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -502,6 +556,31 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4fc51a20797c50ec644f0b20e0586288" name="a4fc51a20797c50ec644f0b20e0586288"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fc51a20797c50ec644f0b20e0586288">&#9670;&#160;</a></span>OnPierceStateChanged()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Audio.Routing.CombatSoundRouter.OnPierceStateChanged </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>piercing</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a87fdcfe736d49c1c7bdf053980c286f4" name="a87fdcfe736d49c1c7bdf053980c286f4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a87fdcfe736d49c1c7bdf053980c286f4">&#9670;&#160;</a></span>OnProjectileDestroyed()</h2>
 
@@ -602,6 +681,31 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a11eee163200e55f1aba08e8872f680c0" name="a11eee163200e55f1aba08e8872f680c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11eee163200e55f1aba08e8872f680c0">&#9670;&#160;</a></span>PopSemitoneOffset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Audio.Routing.CombatSoundRouter.PopSemitoneOffset </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13">GameSoundId</a></td>          <td class="paramname"><span class="paramname"><em>popId</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="af5dd0038b4e023887ff9885ff89ab02d" name="af5dd0038b4e023887ff9885ff89ab02d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af5dd0038b4e023887ff9885ff89ab02d">&#9670;&#160;</a></span>PopSoundFor()</h2>
 
@@ -645,6 +749,28 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a697aa29336ef9f890705997068eb8a7b" name="a697aa29336ef9f890705997068eb8a7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a697aa29336ef9f890705997068eb8a7b">&#9670;&#160;</a></span>_activePierce</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html">IActiveProjectilePierce</a> BalloonParty.Audio.Routing.CombatSoundRouter._activePierce</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aee686bb02b390049032167a355e10d49" name="aee686bb02b390049032167a355e10d49"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aee686bb02b390049032167a355e10d49">&#9670;&#160;</a></span>_bounceCount</h2>
 
@@ -865,6 +991,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4ee14a6929b366e8a7f56c2e1e8ed030" name="a4ee14a6929b366e8a7f56c2e1e8ed030"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ee14a6929b366e8a7f56c2e1e8ed030">&#9670;&#160;</a></span>_pierceLoopHandle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structBalloonParty_1_1Audio_1_1SoundHandle.html">SoundHandle</a> BalloonParty.Audio.Routing.CombatSoundRouter._pierceLoopHandle = <a class="el" href="structBalloonParty_1_1Audio_1_1SoundHandle.html#a35b1629b72b4624f91c6e376616bc6f4">SoundHandle.None</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a2a4fc9d74b8576f11d8e9ce581490173" name="a2a4fc9d74b8576f11d8e9ce581490173"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2a4fc9d74b8576f11d8e9ce581490173">&#9670;&#160;</a></span>_pierceSubscriber</h2>
 
@@ -898,6 +1046,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html">ISoundPlayer</a> BalloonParty.Audio.Routing.CombatSoundRouter._player</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a939b382d1d40f40d64f29f1c4c89653b" name="a939b382d1d40f40d64f29f1c4c89653b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a939b382d1d40f40d64f29f1c4c89653b">&#9670;&#160;</a></span>_rainbowPopsThisFlight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Audio.Routing.CombatSoundRouter._rainbowPopsThisFlight</td>
         </tr>
       </table>
   </td>
@@ -975,6 +1145,72 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4c6ab7f8f7e98db10e89e816c6597cc6" name="a4c6ab7f8f7e98db10e89e816c6597cc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c6ab7f8f7e98db10e89e816c6597cc6">&#9670;&#160;</a></span>_toughPopsThisFlight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Audio.Routing.CombatSoundRouter._toughPopsThisFlight</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a64c3b923cb476f2602ec5c3164217102" name="a64c3b923cb476f2602ec5c3164217102"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64c3b923cb476f2602ec5c3164217102">&#9670;&#160;</a></span>_unbreakableDeflectsThisFlight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Audio.Routing.CombatSoundRouter._unbreakableDeflectsThisFlight</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7dbaf0ef315c106c418736da5bb78c3e" name="a7dbaf0ef315c106c418736da5bb78c3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dbaf0ef315c106c418736da5bb78c3e">&#9670;&#160;</a></span>_unbreakablePopsThisFlight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Audio.Routing.CombatSoundRouter._unbreakablePopsThisFlight</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a1f5e37323f7ce1f77e44e557e389b872" name="a1f5e37323f7ce1f77e44e557e389b872"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1f5e37323f7ce1f77e44e557e389b872">&#9670;&#160;</a></span>_wallHitSubscriber</h2>
 
@@ -991,6 +1227,28 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af1442ee0d9d920823c2c4ec789548310" name="af1442ee0d9d920823c2c4ec789548310"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1442ee0d9d920823c2c4ec789548310">&#9670;&#160;</a></span>MaxRampSemitones</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int BalloonParty.Audio.Routing.CombatSoundRouter.MaxRampSemitones = 12</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

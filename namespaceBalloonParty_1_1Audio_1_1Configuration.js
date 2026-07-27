@@ -5,6 +5,17 @@ var namespaceBalloonParty_1_1Audio_1_1Configuration =
     [ "ISoundBankConfiguration", "interfaceBalloonParty_1_1Audio_1_1Configuration_1_1ISoundBankConfiguration.html", "interfaceBalloonParty_1_1Audio_1_1Configuration_1_1ISoundBankConfiguration" ],
     [ "SfxEntry", "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html", "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry" ],
     [ "SoundBankConfiguration", "classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html", "classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration" ],
+    [ "ClipPickMode", "namespaceBalloonParty_1_1Audio_1_1Configuration.html#ae8f0ef2b834660670f48bf240227810f", [
+      [ "Random", "namespaceBalloonParty_1_1Audio_1_1Configuration.html#ae8f0ef2b834660670f48bf240227810fa64663f4646781c9c0110838b905daa23", null ],
+      [ "Unison", "namespaceBalloonParty_1_1Audio_1_1Configuration.html#ae8f0ef2b834660670f48bf240227810fa634a6ceed2dff57f563b54a769e64db9", null ],
+      [ "Incremental", "namespaceBalloonParty_1_1Audio_1_1Configuration.html#ae8f0ef2b834660670f48bf240227810fa482be0da5798aaaecbf7416714e6607f", null ],
+      [ "Decrease", "namespaceBalloonParty_1_1Audio_1_1Configuration.html#ae8f0ef2b834660670f48bf240227810fa9e661cc6f7c72b95abfd6b372aacbfa1", null ]
+    ] ],
+    [ "ClipWrapMode", "namespaceBalloonParty_1_1Audio_1_1Configuration.html#af53e11c7f7a3d0fa1790cf92c971b06f", [
+      [ "Loop", "namespaceBalloonParty_1_1Audio_1_1Configuration.html#af53e11c7f7a3d0fa1790cf92c971b06fa89d7b10cb4238977d2b523dfd9ea7745", null ],
+      [ "Clamp", "namespaceBalloonParty_1_1Audio_1_1Configuration.html#af53e11c7f7a3d0fa1790cf92c971b06fa08825280e3f8137556325061ba67ff8c", null ],
+      [ "PingPong", "namespaceBalloonParty_1_1Audio_1_1Configuration.html#af53e11c7f7a3d0fa1790cf92c971b06fa99e52704462d3580db3528cad7ea9660", null ]
+    ] ],
     [ "MelodicMode", "namespaceBalloonParty_1_1Audio_1_1Configuration.html#ad1a442ffeafa0ee2c74551f3016cb7fc", [
       [ "None", "namespaceBalloonParty_1_1Audio_1_1Configuration.html#ad1a442ffeafa0ee2c74551f3016cb7fca6adf97f83acf6453d4a6a4b1070f3754", null ],
       [ "ScaleWalkUp", "namespaceBalloonParty_1_1Audio_1_1Configuration.html#ad1a442ffeafa0ee2c74551f3016cb7fca73e2cc3f377a36d2098e193f4553f3c8", null ],

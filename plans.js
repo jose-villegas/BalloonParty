@@ -1,6 +1,6 @@
 var plans =
 [
-    [ "Plans", "plans.html#autotoc_md666", null ],
+    [ "Plans", "plans.html#autotoc_md675", null ],
     [ "Bubble Cluster Hit Feedback", "plan_bubble_cluster_hit_feedback.html", [
       [ "Bubble Cluster Hit Feedback", "plan_bubble_cluster_hit_feedback.html#autotoc_md284", [
         [ "Goals", "plan_bubble_cluster_hit_feedback.html#autotoc_md286", null ],
@@ -410,6 +410,17 @@ var plans =
           [ "G — headless level diagnostics (follow-up tier; unchanged spec in §4 Phase G)", "plan_shot_solver_accuracy.html#autotoc_md633", null ],
           [ "Design questions parked for José", "plan_shot_solver_accuracy.html#autotoc_md634", null ]
         ] ]
+      ] ]
+    ] ],
+    [ "Web Demo Hosting", "plan_web_demo_hosting.html", [
+      [ "Web Demo Hosting", "plan_web_demo_hosting.html#autotoc_md666", [
+        [ "Why keep it", "plan_web_demo_hosting.html#autotoc_md668", null ],
+        [ "What survived", "plan_web_demo_hosting.html#autotoc_md669", null ],
+        [ "The recipe, if resumed", "plan_web_demo_hosting.html#autotoc_md670", null ],
+        [ "The blocker", "plan_web_demo_hosting.html#autotoc_md671", null ],
+        [ "Residue from the attempt", "plan_web_demo_hosting.html#autotoc_md672", null ],
+        [ "If web stays dead", "plan_web_demo_hosting.html#autotoc_md673", null ],
+        [ "Decision log", "plan_web_demo_hosting.html#autotoc_md674", null ]
       ] ]
     ] ]
 ];
