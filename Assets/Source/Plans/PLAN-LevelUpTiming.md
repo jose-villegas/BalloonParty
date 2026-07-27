@@ -153,6 +153,21 @@ play out:
 The signal that reads as "last shot" is the *transition into* slow-mo plus the pan-in, not its
 duration; holding it through the flight adds no emphasis and subtracts the discharge's.
 
+**What exclusivity in window A actually buys** (the minimum rule means two claims never compound
+multiplicatively, so the risk is not "twice as slow"):
+
+1. Without it the world is pinned at whatever the OTHER claim wants — the beat asks for 0.5, a
+   `LastShield` curve says 0.25, you get 0.25 and the ceremony's pacing is not yours.
+2. Worse, the **release at the wall would not restore normal time**, because the other claim is still
+   active. You hit the wall expecting the snap back to full speed and the world just stays slow.
+
+The second is the one that would read as a bug rather than as bad tuning, and it is the reason the
+window needs ownership rather than merely a well-chosen value.
+
+Note the intended consequence on the far side of the wall: releasing exclusivity lets the recorded
+claims apply again, so a genuinely doomed shot resumes its own last-breath bullet-time. That is
+correct — "the flight plays normally" includes the flight's own slow-mos.
+
 ## 8. Risks and what only a playtest can answer
 
 - **This changes when the popup appears** — after the flight instead of interrupting it. That is the
