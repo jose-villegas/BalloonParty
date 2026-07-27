@@ -18,28 +18,28 @@ MonoBehaviour:
   _projectileLoadDuration: 0
   _limitsClockwise: {x: 4, y: 2.25, z: -4.5, w: -2.25}
   _cruiseWallBounceThreshold: 1
-  _cruiseSpeedPerShield: 0.1223333
+  _speedGainPerTap: 0.3926874
   _maxCruiseSpeedMultiplier: 17.5
   _cruiseTapCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
+      value: 0.0012207031
+      inSlope: 1.5563639
+      outSlope: 1.5563639
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.04912895
     - serializedVersion: 3
-      time: 0.46158066
-      value: 0.71010464
-      inSlope: 1.0768387
-      outSlope: 1.0768387
+      time: 0.39959946
+      value: 0.29625577
+      inSlope: 2.7147102
+      outSlope: 2.7147102
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0.046591327
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1

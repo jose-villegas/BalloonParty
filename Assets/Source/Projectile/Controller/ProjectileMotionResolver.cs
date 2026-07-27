@@ -10,7 +10,7 @@ namespace BalloonParty.Projectile.Controller
     internal sealed class ProjectileMotionResolver
     {
         private readonly WallLimits _walls;
-        private readonly float _cruiseSpeedPerShield;
+        private readonly float _speedGainPerTap;
         private readonly float _maxCruiseSpeedMultiplier;
         private readonly float _cruiseTapEaseDuration;
         private readonly int _cruisePiercingTapThreshold;
@@ -23,11 +23,21 @@ namespace BalloonParty.Projectile.Controller
         // The view needs the same wall geometry for its cruise lookahead trace.
         internal WallLimits Walls => _walls;
 
+        /// <summary>
+        ///     The fastest a shot can actually travel, as a multiple of base speed. Taps stop once piercing
+        ///     arms, so the ceiling is the arming tap's multiplier — the configured cap only binds with
+        ///     piercing disabled. Feedback that scales with velocity normalizes against THIS, not the cap:
+        ///     against the cap, every such effect would sit in the bottom tenth of its range forever.
+        /// </summary>
+        internal float ReachableTopSpeedMultiplier => _cruisePiercingTapThreshold > 0
+            ? TargetMultiplier(_cruisePiercingTapThreshold)
+            : Mathf.Max(_maxCruiseSpeedMultiplier, 1f);
+
         [Inject]
         internal ProjectileMotionResolver(IProjectileFlightConfig config)
         {
             _walls = new WallLimits(config.LimitsClockwise);
-            _cruiseSpeedPerShield = config.CruiseSpeedPerShield;
+            _speedGainPerTap = config.SpeedGainPerTap;
             _maxCruiseSpeedMultiplier = config.MaxCruiseSpeedMultiplier;
             _cruiseTapEaseDuration = config.CruiseTapEaseDuration;
             _cruisePiercingTapThreshold = config.CruisePiercingTapThreshold;
@@ -87,6 +97,11 @@ namespace BalloonParty.Projectile.Controller
                 return ProjectileStep.Destroyed(wallContact, model.Direction, speed);
             }
 
+            // This surviving wall hit is now the one any tap belongs to. Both grant rules resolve against
+            // it — the cruise bounce below, and the view's sweep once this Step returns — so the funnel
+            // can tell a second claim on the same hit from a claim on the next one.
+            model.Flight.WallHitSequence++;
+
             // Wall-discharge: a piercing shot that plowed through at least one tough on this segment
             // discharges at the wall — the view resolves the pending toughs, and the pierce (with its
             // speed buff) ends unless a banked Snipe charge re-arms it. If the segment had no toughs,
@@ -106,29 +121,12 @@ namespace BalloonParty.Projectile.Controller
             // VIEW's call — it confirms with a physics lookahead the plain resolver can't run.
             model.Flight.ConsecutiveWallBounces++;
 
-            // Cruise stops paying out the moment the shot is armed: an already-piercing shot sits at the
-            // top speed its taps earned, and further taps would ramp it past what the pierce was awarded
-            // for. Its freeze-then-pickup envelope stops too — with no speed change left to sell, the
-            // per-bounce dip would read as a hitch (and would keep ducking the pierce aura).
-            if (model.IsCruising.Value && !model.IsPiercing.Value)
+            // An empty-corridor cruise bounce is one of the two rules that earn a tap; the funnel owns
+            // whether it actually mints one (it declines while armed — cruise stops paying out once the
+            // shot sits at the top speed its taps earned) and what the tap does.
+            if (model.IsCruising.Value)
             {
-                model.Flight.TotalCruiseTaps++;
-
-                // A long-enough cruise ARMS the shot: from this tap on it pierces everything it
-                // touches (unbreakables included) for the rest of its life. The arming tap skips the
-                // per-tap envelope and hands the transition to the arm ramp instead (see
-                // ResolveFlightSpeed) — stalling on the beat and then holding full speed forever reads
-                // as jumping to top speed rather than accelerating into it.
-                if (_cruisePiercingTapThreshold > 0
-                    && model.Flight.TotalCruiseTaps >= _cruisePiercingTapThreshold)
-                {
-                    model.ArmPierce(speed);
-                }
-                else
-                {
-                    // A new tap lands with this bounce — restart its freeze-then-pickup envelope.
-                    model.Flight.CruiseTapElapsed = 0f;
-                }
+                model.TryGrantTap(ProjectileTapSource.CruiseBounce, _cruisePiercingTapThreshold);
             }
 
             model.Direction = Vector2.Reflect(model.Direction, reflect.normalized);
@@ -286,47 +284,62 @@ namespace BalloonParty.Projectile.Controller
             return true;
         }
 
-        // The flight speed for this step. Both cruise wall-bounces and sweep corridor-clears feed a
-        // single TotalCruiseTaps counter; speed scales with that count × CruiseSpeedPerShield.
+        // The flight speed for this step: the tap count sets the target, and whichever speed transition
+        // is in flight eases toward it from its own anchor. A tap beat anchors at a standstill and an arm
+        // ramp at the speed the shot armed with, which is the only difference between them — for a beat,
+        // Lerp(0, target, curve) is exactly the old "target × curve" envelope.
         private float ResolveFlightSpeed(IWriteableProjectileModel model, float deltaTime)
         {
-            var baseSpeed = model.ComputeBuffedValue(ProjectileBuffId.Speed, model.Speed);
-            var taps = model.Flight.TotalCruiseTaps;
+            var flight = model.Flight;
+            var target = model.ComputeBuffedValue(ProjectileBuffId.Speed, model.Speed)
+                         * TargetMultiplier(flight.TotalCruiseTaps);
 
+            // With no taps banked there is nothing above base speed to blend toward, so an unspent
+            // transition (cruise entry before its first tap) stays inert rather than dipping the shot.
+            if (flight.TotalCruiseTaps <= 0)
+            {
+                flight.CurrentSpeed = target;
+                return target;
+            }
+
+            var duration = TransitionDuration(flight.TransitionKind);
+            if (duration <= 1e-4f)
+            {
+                flight.CurrentSpeed = target;
+                return target;
+            }
+
+            var curve = flight.TransitionKind == SpeedTransitionKind.ArmRamp
+                ? _pierceArmRampCurve
+                : _cruiseTapCurve;
+            var progress = Mathf.Clamp01(flight.TransitionElapsed / duration);
+            flight.TransitionElapsed += deltaTime;
+            flight.CurrentSpeed = Mathf.Lerp(
+                flight.TransitionFromSpeed, target, Mathf.Clamp01(curve.Evaluate(progress)));
+            return flight.CurrentSpeed;
+        }
+
+        // Cumulative: every tap is worth SpeedGainPerTap of base speed, capped (the cap only binds when
+        // piercing is disabled — taps freeze at the arming one otherwise).
+        private float TargetMultiplier(int taps)
+        {
             if (taps <= 0)
             {
-                return baseSpeed;
+                return 1f;
             }
 
-            var speedBonus = _cruiseSpeedPerShield * taps;
-            var target = 1f + speedBonus;
-            if (_maxCruiseSpeedMultiplier > 0f)
+            var target = 1f + (_speedGainPerTap * taps);
+            return _maxCruiseSpeedMultiplier > 0f ? Mathf.Min(target, _maxCruiseSpeedMultiplier) : target;
+        }
+
+        private float TransitionDuration(SpeedTransitionKind kind)
+        {
+            return kind switch
             {
-                target = Mathf.Min(target, _maxCruiseSpeedMultiplier);
-            }
-
-            var topSpeed = baseSpeed * target;
-
-            // Armed: the tap count is frozen, so there are no further taps for the per-tap envelope to
-            // sell. One ramp carries the shot from the speed it armed at into that frozen top speed —
-            // blending between two real speeds, so an unauthored (or 0-start) curve holds the old speed
-            // instead of stalling the shot, and a shot armed with no anchor recorded just runs at top.
-            if (model.IsPiercing.Value && _pierceArmRampDuration > 1e-4f
-                && model.Flight.PierceArmFromSpeed > 1e-4f)
-            {
-                var armProgress = Mathf.Clamp01(model.Flight.PierceArmElapsed / _pierceArmRampDuration);
-                model.Flight.PierceArmElapsed += deltaTime;
-                return Mathf.Lerp(
-                    model.Flight.PierceArmFromSpeed, topSpeed,
-                    Mathf.Clamp01(_pierceArmRampCurve.Evaluate(armProgress)));
-            }
-
-            var progress = _cruiseTapEaseDuration > 0f
-                ? Mathf.Clamp01(model.Flight.CruiseTapElapsed / _cruiseTapEaseDuration)
-                : 1f;
-
-            model.Flight.CruiseTapElapsed += deltaTime;
-            return topSpeed * _cruiseTapCurve.Evaluate(progress);
+                SpeedTransitionKind.TapBeat => _cruiseTapEaseDuration,
+                SpeedTransitionKind.ArmRamp => _pierceArmRampDuration,
+                _ => 0f,
+            };
         }
     }
 }

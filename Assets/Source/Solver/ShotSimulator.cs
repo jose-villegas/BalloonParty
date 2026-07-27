@@ -23,7 +23,7 @@ namespace BalloonParty.Solver
         private const int CurveAverageSamples = 16;
 
         public readonly int WallBounceThreshold;
-        public readonly float SpeedPerShield;
+        public readonly float SpeedGainPerTap;
         public readonly float MaxSpeedMultiplier;
         public readonly float TapLagSeconds;
         public readonly int PiercingTapThreshold;
@@ -34,13 +34,13 @@ namespace BalloonParty.Solver
         // HandleWallBounce scales this by that gap.
         public readonly float ArmRampLagSeconds;
 
-        public ShotCruiseConfig(int wallBounceThreshold, float speedPerShield,
+        public ShotCruiseConfig(int wallBounceThreshold, float speedGainPerTap,
             float maxSpeedMultiplier = 0f, float tapEaseDuration = 0f,
             AnimationCurve tapCurve = null, int piercingTapThreshold = 0,
             float armRampDuration = 0f, AnimationCurve armRampCurve = null)
         {
             WallBounceThreshold = wallBounceThreshold;
-            SpeedPerShield = speedPerShield;
+            SpeedGainPerTap = speedGainPerTap;
             MaxSpeedMultiplier = maxSpeedMultiplier;
             PiercingTapThreshold = piercingTapThreshold;
             TapLagSeconds = EnvelopeLagSeconds(tapEaseDuration, tapCurve);
@@ -49,7 +49,7 @@ namespace BalloonParty.Solver
 
         public ShotCruiseConfig(IProjectileFlightConfig config)
             : this(
-                config.CruiseWallBounceThreshold, config.CruiseSpeedPerShield, config.MaxCruiseSpeedMultiplier,
+                config.CruiseWallBounceThreshold, config.SpeedGainPerTap, config.MaxCruiseSpeedMultiplier,
                 config.CruiseTapEaseDuration, config.CruiseTapCurve, config.CruisePiercingTapThreshold,
                 config.PierceArmRampDuration, config.PierceArmRampCurve)
         {
@@ -443,14 +443,14 @@ namespace BalloonParty.Solver
         // The steady-state cruise speed multiplier for a given tap count, capped as live caps it.
         private static float CruiseTargetMultiplier(int taps, in ShotCruiseConfig cruiseConfig)
         {
-            var target = 1f + (cruiseConfig.SpeedPerShield * Mathf.Max(taps, 0));
+            var target = 1f + (cruiseConfig.SpeedGainPerTap * Mathf.Max(taps, 0));
             return cruiseConfig.MaxSpeedMultiplier > 0f
                 ? Mathf.Min(target, cruiseConfig.MaxSpeedMultiplier)
                 : target;
         }
 
         // Mirrors ProjectileMotionResolver.Step's cruise ramp exactly: every cruise bounce adds a
-        // velocity TAP of SpeedPerShield (cumulative — a 13-shield bank accumulates 13 taps, a
+        // velocity TAP of SpeedGainPerTap (cumulative — a 13-shield bank accumulates 13 taps, a
         // 2-shield bank 2). This is the steady-state target; the per-tap animation envelope is
         // folded into ShotCruiseConfig.TapLagSeconds on the timeline instead.
         private static float CurrentSpeed(float baseSpeed, in ShotFlightState state, in ShotCruiseConfig cruiseConfig)

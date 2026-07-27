@@ -121,8 +121,11 @@ namespace BalloonParty.Projectile.View
             // Squash spring — decays toward rest (0)
             _squashSpring.Step(0f, _settings.SquashFrequency, _settings.SquashDamping, dt);
 
+            // The speed the shot is actually travelling, not model.Speed — that one is the constant base
+            // speed the thrower stamped on, so this factor never varied and the "ripples faster the
+            // quicker it moves" behaviour was inert.
             _velFactor = Mathf.Sqrt(
-                Mathf.Clamp01(_model.Speed / Mathf.Max(_settings.MaxVisualSpeed, 1f)));
+                Mathf.Clamp01(_model.Flight.CurrentSpeed / Mathf.Max(_settings.MaxVisualSpeed, 1f)));
 
             // Noise specks: off by default, ramp with cruise taps, full on piercing
             var threshold = _gameConfig != null ? _gameConfig.CruisePiercingTapThreshold : 0;

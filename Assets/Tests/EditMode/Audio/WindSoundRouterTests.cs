@@ -35,7 +35,7 @@ namespace BalloonParty.Tests.Audio
             var flightConfig = Substitute.For<IProjectileFlightConfig>();
             flightConfig.ProjectileSpeed.Returns(10f);
             flightConfig.MaxCruiseSpeedMultiplier.Returns(3f);
-            flightConfig.CruiseSpeedPerShield.Returns(2f);
+            flightConfig.SpeedGainPerTap.Returns(2f);
 
             _router = new WindSoundRouter(_player, loadedSubscriber, flightConfig);
             _router.Start();

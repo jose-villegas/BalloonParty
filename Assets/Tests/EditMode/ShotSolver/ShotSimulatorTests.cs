@@ -173,7 +173,7 @@ namespace BalloonParty.Tests.ShotSolver
             var board = new[] { ShotBoardBuilder.Green(new Vector2(0f, 500f), 0.2f, "Red", 1, 1) };
             var workingSet = new ShotBalloonState[board.Length];
             var timestamps = new List<float>();
-            var cruise = new ShotCruiseConfig(wallBounceThreshold: 1, speedPerShield: 1f);
+            var cruise = new ShotCruiseConfig(wallBounceThreshold: 1, speedGainPerTap: 1f);
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.right, startingShields: 2, projectileContactRadius: 0f,
@@ -201,7 +201,7 @@ namespace BalloonParty.Tests.ShotSolver
             var board = new[] { ShotBoardBuilder.Green(new Vector2(100f, 100f), 0.05f, "Red", 1, 1) };
             var workingSet = new ShotBalloonState[board.Length];
             var timestamps = new List<float>();
-            var cruise = new ShotCruiseConfig(wallBounceThreshold: 1, speedPerShield: 1f, piercingTapThreshold: 2);
+            var cruise = new ShotCruiseConfig(wallBounceThreshold: 1, speedGainPerTap: 1f, piercingTapThreshold: 2);
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.up, startingShields: 6, projectileContactRadius: 0f,
@@ -235,10 +235,10 @@ namespace BalloonParty.Tests.ShotSolver
             var board = new[] { ShotBoardBuilder.Green(new Vector2(100f, 100f), 0.05f, "Red", 1, 1) };
             var linear = AnimationCurve.Linear(0f, 0f, 1f, 1f);
             var withRamp = new ShotCruiseConfig(
-                wallBounceThreshold: 1, speedPerShield: 1f, piercingTapThreshold: 2, armRampDuration: 1f,
+                wallBounceThreshold: 1, speedGainPerTap: 1f, piercingTapThreshold: 2, armRampDuration: 1f,
                 armRampCurve: linear);
             var noRamp = new ShotCruiseConfig(
-                wallBounceThreshold: 1, speedPerShield: 1f, piercingTapThreshold: 2);
+                wallBounceThreshold: 1, speedGainPerTap: 1f, piercingTapThreshold: 2);
 
             var rampTimestamps = new List<float>();
             ShotSimulator.Simulate(
@@ -276,7 +276,7 @@ namespace BalloonParty.Tests.ShotSolver
             };
             var workingSet = new ShotBalloonState[board.Length];
             var timestamps = new List<float>();
-            var cruise = new ShotCruiseConfig(wallBounceThreshold: 1, speedPerShield: 1f);
+            var cruise = new ShotCruiseConfig(wallBounceThreshold: 1, speedGainPerTap: 1f);
 
             var result = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, Vector2.right, startingShields: 2, projectileContactRadius: 0f,
@@ -307,7 +307,7 @@ namespace BalloonParty.Tests.ShotSolver
             var workingSet = new ShotBalloonState[board.Length];
             var timestamps = new List<float>();
             var cruise = new ShotCruiseConfig(
-                wallBounceThreshold: 1, speedPerShield: 1f, tapEaseDuration: 1f,
+                wallBounceThreshold: 1, speedGainPerTap: 1f, tapEaseDuration: 1f,
                 tapCurve: AnimationCurve.Linear(0f, 0f, 1f, 1f));
 
             ShotSimulator.Simulate(
@@ -333,7 +333,7 @@ namespace BalloonParty.Tests.ShotSolver
                 ShotBoardBuilder.Green(new Vector2(0f, 3f), 0.1f, "Red", 1, 1),
             };
             var workingSet = new ShotBalloonState[board.Length];
-            var cruise = new ShotCruiseConfig(wallBounceThreshold: 99, speedPerShield: 5f);
+            var cruise = new ShotCruiseConfig(wallBounceThreshold: 99, speedGainPerTap: 5f);
 
             var result = ShotSimulator.Simulate(
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 1, projectileContactRadius: 0f,
@@ -560,7 +560,7 @@ namespace BalloonParty.Tests.ShotSolver
             var workingSet = new ShotBalloonState[board.Length];
 
             var armed = new ShotCruiseConfig(
-                wallBounceThreshold: 1, speedPerShield: 0f, piercingTapThreshold: 3);
+                wallBounceThreshold: 1, speedGainPerTap: 0f, piercingTapThreshold: 3);
             var armedResult = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, new Vector2(1f, 0.25f), startingShields: 6,
                 projectileContactRadius: 0f, workingSet: workingSet, cruiseConfig: armed);
@@ -569,7 +569,7 @@ namespace BalloonParty.Tests.ShotSolver
             Assert.AreEqual(1, armedResult.ToughsCleared);
             Assert.AreEqual(7, armedResult.RawScore, "colourless pop scores its flat value");
 
-            var unarmed = new ShotCruiseConfig(wallBounceThreshold: 1, speedPerShield: 0f);
+            var unarmed = new ShotCruiseConfig(wallBounceThreshold: 1, speedGainPerTap: 0f);
             var unarmedResult = ShotSimulator.Simulate(
                 board, walls, Vector2.zero, new Vector2(1f, 0.25f), startingShields: 6,
                 projectileContactRadius: 0f, workingSet: workingSet, cruiseConfig: unarmed);

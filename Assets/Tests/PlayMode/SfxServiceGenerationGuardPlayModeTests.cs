@@ -138,7 +138,7 @@ namespace BalloonParty.Tests.PlayMode
             public float ProjectileLoadDuration => 0f;
             public Vector4 LimitsClockwise { get; }
             public int CruiseWallBounceThreshold => 0;
-            public float CruiseSpeedPerShield => 0f;
+            public float SpeedGainPerTap => 0f;
             public float MaxCruiseSpeedMultiplier => 0f;
             public AnimationCurve CruiseTapCurve => null;
             public float CruiseTapEaseDuration => 0f;

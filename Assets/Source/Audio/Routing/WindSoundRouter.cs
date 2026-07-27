@@ -31,12 +31,15 @@ namespace BalloonParty.Audio.Routing
             _player = player;
             _loadedSubscriber = loadedSubscriber;
 
-            // Taps to reach full speed: the per-tap bonus (CruiseSpeedPerShield) caps the speed at
-            // base x MaxCruiseSpeedMultiplier, i.e. the bonus caps at base x (mult - 1). Mirrors the map
-            // in ProjectileMotionResolver.ResolveFlightSpeed.
-            var perShield = Mathf.Max(0.0001f, flightConfig.CruiseSpeedPerShield);
-            _maxTaps = Mathf.Max(1f,
-                flightConfig.ProjectileSpeed * (flightConfig.MaxCruiseSpeedMultiplier - 1f) / perShield);
+            // Taps at full speed. Taps stop accruing once piercing arms, so the arming threshold IS the
+            // ceiling; only with piercing disabled does the speed cap bind instead, and converting that
+            // cap to a tap count is a plain divide — SpeedGainPerTap is a FRACTION of base speed, so
+            // multiplying by ProjectileSpeed (as this used to) inflated the ceiling ~8x and left the loop
+            // stuck near silent.
+            var gainPerTap = Mathf.Max(0.0001f, flightConfig.SpeedGainPerTap);
+            _maxTaps = flightConfig.CruisePiercingTapThreshold > 0
+                ? flightConfig.CruisePiercingTapThreshold
+                : Mathf.Max(1f, (flightConfig.MaxCruiseSpeedMultiplier - 1f) / gainPerTap);
         }
 
         public void Start()

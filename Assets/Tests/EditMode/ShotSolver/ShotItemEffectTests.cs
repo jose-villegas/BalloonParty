@@ -1910,7 +1910,7 @@ namespace BalloonParty.Tests.ShotSolver
             // (base speed), never the accelerating ramp a plain (unarmed) shot on the IDENTICAL corridor
             // exhibits (mirrors Simulate_CruiseRamp_AcceleratesTimelineBounceToBounce's own mechanism).
             var walls = new Vector4(1000f, 2f, -1000f, -2f);
-            var cruise = new ShotCruiseConfig(wallBounceThreshold: 1, speedPerShield: 1f);
+            var cruise = new ShotCruiseConfig(wallBounceThreshold: 1, speedGainPerTap: 1f);
 
             // The main loop only runs `while (activeCount > 0)` — an otherwise-empty corridor would
             // never even reach a wall crossing, so every board below carries an off-ray filler (never
@@ -2072,7 +2072,7 @@ namespace BalloonParty.Tests.ShotSolver
             // pierce, and the banked charge re-arms the lance) -> leg4 carries a second Snipe host
             // (banked again — the shot is armed once more) then a final target.
             var walls = new Vector4(1000000f, 2.1f, -2f, -0.9f);
-            var cruise = new ShotCruiseConfig(wallBounceThreshold: 1, speedPerShield: 1f, piercingTapThreshold: 1);
+            var cruise = new ShotCruiseConfig(wallBounceThreshold: 1, speedGainPerTap: 1f, piercingTapThreshold: 1);
             var board = new[]
             {
                 ShotBoardBuilder.Green(new Vector2(1.5f, -0.4f), 0.05f, "Red", 1, 1, item: ItemType.Snipe),

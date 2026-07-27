@@ -14,7 +14,7 @@ namespace BalloonParty.Shared
         float ProjectileLoadDuration { get; }
         Vector4 LimitsClockwise { get; }
         int CruiseWallBounceThreshold { get; }
-        float CruiseSpeedPerShield { get; }
+        float SpeedGainPerTap { get; }
         float MaxCruiseSpeedMultiplier { get; }
         AnimationCurve CruiseTapCurve { get; }
         float CruiseTapEaseDuration { get; }

@@ -202,6 +202,10 @@ namespace BalloonParty.Thrower
             };
             _activeProjectile.ShieldsRemaining.Value = _flightConfig.ProjectileStartingShields;
 
+            // A held shot isn't stepping yet, so nothing has resolved a flight speed for it — seed the one
+            // feedback reads (the shield field's ripple) with base speed rather than leaving it at zero.
+            _activeProjectile.Flight.CurrentSpeed = _activeProjectile.Speed;
+
             _activeView.Bind(_activeProjectile);
             _positionProvider.Set(_activeView.transform);
             _loadedPublisher.Publish(new ProjectileLoadedMessage(_activeProjectile));

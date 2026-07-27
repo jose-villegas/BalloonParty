@@ -212,7 +212,7 @@ namespace BalloonParty.Tests.Projectile
         [Test]
         public void Step_CruiseEntry_StartsAtBaseSpeed()
         {
-            var resolver = CruiseResolver(perShield: 0.5f);
+            var resolver = CruiseResolver(perTap: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 4);
             model.IsCruising.Value = true;
 
@@ -226,7 +226,7 @@ namespace BalloonParty.Tests.Projectile
         public void Step_CruiseRamp_SpeedsUpAsShieldsSpend()
         {
             // Two taps at 0.5/tap -> +1.0 speed bonus -> x2 target.
-            var resolver = CruiseResolver(perShield: 0.5f);
+            var resolver = CruiseResolver(perTap: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
             model.Flight.TotalCruiseTaps = 2;
 
@@ -238,7 +238,7 @@ namespace BalloonParty.Tests.Projectile
         [Test]
         public void Step_CruiseRamp_PeaksOnLastShieldSpent()
         {
-            var resolver = CruiseResolver(perShield: 0.5f);
+            var resolver = CruiseResolver(perTap: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 0);
             model.Flight.TotalCruiseTaps = 4;
 
@@ -251,7 +251,7 @@ namespace BalloonParty.Tests.Projectile
         public void Step_CruiseTopSpeed_ScalesWithEntryShields()
         {
             // More taps should scale the multiplier directly: 8 taps at 0.5/tap -> x5.
-            var resolver = CruiseResolver(perShield: 0.5f);
+            var resolver = CruiseResolver(perTap: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 0);
             model.Flight.TotalCruiseTaps = 8;
 
@@ -266,10 +266,10 @@ namespace BalloonParty.Tests.Projectile
             // Tap animation: 1s linear 0->1 curve. Right after a tap (elapsed 0) the shot is FROZEN
             // (curve(0) = 0); halfway through the window it flies at half the x2 target; once the
             // window completes it holds the full target.
-            var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 1f);
+            var resolver = CruiseResolver(perTap: 0.5f, tapEaseDuration: 1f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
             model.Flight.TotalCruiseTaps = 2;
-            model.Flight.CruiseTapElapsed = 0f;
+            model.BeginTapBeat();
 
             var frozen = resolver.Step(model, Vector3.zero, 0.5f);
             Assert.AreEqual(0f, frozen.Position.y, 1e-4f, "curve(0) = 0 — the freeze beat");
@@ -284,27 +284,28 @@ namespace BalloonParty.Tests.Projectile
         [Test]
         public void Step_CruiseBounce_RestartsTheTapEnvelope()
         {
-            var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 1f);
+            var resolver = CruiseResolver(perTap: 0.5f, tapEaseDuration: 1f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
             model.IsCruising.Value = true;
-            model.Flight.CruiseTapElapsed = 99f;
+            model.BeginTapBeat();
+            model.Flight.TransitionElapsed = 99f;
 
             resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
 
-            Assert.AreEqual(0f, model.Flight.CruiseTapElapsed, "a cruise bounce replays the animation from t=0");
+            Assert.AreEqual(0f, model.Flight.TransitionElapsed, "a cruise bounce replays the animation from t=0");
         }
 
         [Test]
         public void Step_SweepTap_UsesSameEasePathAsCruiseTap()
         {
-            var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 1f);
+            var resolver = CruiseResolver(perTap: 0.5f, tapEaseDuration: 1f);
             var cruiseModel = NewModel(direction: Vector2.up, speed: 1f, shields: 1);
             cruiseModel.Flight.TotalCruiseTaps = 1;
-            cruiseModel.Flight.CruiseTapElapsed = 0f;
+            cruiseModel.BeginTapBeat();
 
             var sweepModel = NewModel(direction: Vector2.up, speed: 1f, shields: 1);
             sweepModel.Flight.TotalCruiseTaps = 1;
-            sweepModel.Flight.CruiseTapElapsed = 0f;
+            sweepModel.BeginTapBeat();
 
             var cruiseFrozen = resolver.Step(cruiseModel, Vector3.zero, 0.5f);
             var sweepFrozen = resolver.Step(sweepModel, Vector3.zero, 0.5f);
@@ -325,7 +326,7 @@ namespace BalloonParty.Tests.Projectile
         [Test]
         public void Step_CruiseBounce_IncrementsTotalCruiseTaps()
         {
-            var resolver = CruiseResolver(perShield: 0.5f);
+            var resolver = CruiseResolver(perTap: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
             model.IsCruising.Value = true;
 
@@ -337,7 +338,7 @@ namespace BalloonParty.Tests.Projectile
         [Test]
         public void Step_LethalBounce_DoesNotCountACruiseBounce()
         {
-            var resolver = CruiseResolver(perShield: 0.5f);
+            var resolver = CruiseResolver(perTap: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 0);
 
             var step = resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
@@ -349,7 +350,7 @@ namespace BalloonParty.Tests.Projectile
         [Test]
         public void Step_CruiseTaps_ArmPiercingAtThreshold()
         {
-            var resolver = CruiseResolver(perShield: 0f, piercingTapThreshold: 3);
+            var resolver = CruiseResolver(perTap: 0f, piercingTapThreshold: 3);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 4);
             // The model enters the test mid-cruise with one tap already banked.
             model.Flight.TotalCruiseTaps = 1;
@@ -368,7 +369,7 @@ namespace BalloonParty.Tests.Projectile
         [Test]
         public void Step_PiercingThresholdZero_NeverArms()
         {
-            var resolver = CruiseResolver(perShield: 0f);
+            var resolver = CruiseResolver(perTap: 0f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 10);
             model.IsCruising.Value = true;
 
@@ -386,7 +387,7 @@ namespace BalloonParty.Tests.Projectile
         {
             // A cruising, armed shot rides a corridor wall without losing cruise or its pierce — a wall
             // with no pending tough hits never ends the pierce.
-            var resolver = CruiseResolver(perShield: 0.5f);
+            var resolver = CruiseResolver(perTap: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
             model.IsCruising.Value = true;
             model.IsPiercing.Value = true;
@@ -403,7 +404,7 @@ namespace BalloonParty.Tests.Projectile
         {
             // A non-cruising Snipe lance: a wall costs a shield but never spends the pierce — only the
             // wall-discharge (when pending toughs exist) ends it.
-            var resolver = CruiseResolver(perShield: 0.5f);
+            var resolver = CruiseResolver(perTap: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
             model.IsPiercing.Value = true;
 
@@ -418,7 +419,7 @@ namespace BalloonParty.Tests.Projectile
         {
             // A piercing shot that plowed a tough and then hits a wall: the pierce ends at the wall,
             // and the view resolves the pending toughs (tested in the view/hit resolver tests).
-            var resolver = CruiseResolver(perShield: 0.5f);
+            var resolver = CruiseResolver(perTap: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
             model.IsPiercing.Value = true;
             model.IsCruising.Value = true;
@@ -435,7 +436,7 @@ namespace BalloonParty.Tests.Projectile
         [Test]
         public void Step_WallBounceDischarge_ResetsCruiseState()
         {
-            var resolver = CruiseResolver(perShield: 0.5f);
+            var resolver = CruiseResolver(perTap: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
             model.IsPiercing.Value = true;
             model.IsCruising.Value = true;
@@ -458,18 +459,19 @@ namespace BalloonParty.Tests.Projectile
             // Cruise stops paying out once the shot is armed: it already sits at the top speed its taps
             // earned, and a tap it can't use would only ramp it further and re-trigger the
             // freeze-then-pickup envelope (which, with no speed change left to sell, reads as a hitch).
-            var resolver = CruiseResolver(perShield: 0.5f, piercingTapThreshold: 3);
+            var resolver = CruiseResolver(perTap: 0.5f, piercingTapThreshold: 3);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
             model.IsCruising.Value = true;
             model.IsPiercing.Value = true;
             model.Flight.TotalCruiseTaps = 5;
-            model.Flight.CruiseTapElapsed = 0.2f;
+            model.BeginTapBeat();
+            model.Flight.TransitionElapsed = 0.2f;
 
             resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
 
             Assert.AreEqual(5, model.Flight.TotalCruiseTaps, "an armed shot banks no further taps");
             Assert.GreaterOrEqual(
-                model.Flight.CruiseTapElapsed, 0.2f,
+                model.Flight.TransitionElapsed, 0.2f,
                 "the envelope is never restarted at the bounce — a reset would zero this");
         }
 
@@ -481,7 +483,7 @@ namespace BalloonParty.Tests.Projectile
             // speed. One ramp carries it there from the speed it armed at (José's playtest, 2026-07-27).
             // perShield 1 + 1 tap ⇒ top speed = base x 2; a linear ramp curve (the resolver's fallback for
             // an unauthored one) over 1s makes the expected speeds exact.
-            var resolver = CruiseResolver(perShield: 1f, piercingTapThreshold: 1, armRampDuration: 1f);
+            var resolver = CruiseResolver(perTap: 1f, piercingTapThreshold: 1, armRampDuration: 1f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
             model.IsCruising.Value = true;
 
@@ -490,7 +492,7 @@ namespace BalloonParty.Tests.Projectile
             Assert.IsTrue(model.IsPiercing.Value, "one tap at threshold 1 arms the shot");
             Assert.AreEqual(1f, armStep.Speed, 1e-4f, "it arms while still travelling at base speed");
             Assert.AreEqual(
-                1f, model.Flight.PierceArmFromSpeed, 1e-4f,
+                1f, model.Flight.TransitionFromSpeed, 1e-4f,
                 "the ramp is anchored at that actual speed, so the transition is continuous");
 
             // The ramp walks from 1 to 2 over 1s. The step right after arming is the one that would betray
@@ -508,7 +510,7 @@ namespace BalloonParty.Tests.Projectile
         public void Step_PiercingArmsWithNoRampConfigured_HoldsTopSpeedImmediately()
         {
             // 0 duration disables the ramp — the pre-ramp behaviour, kept reachable for tuning.
-            var resolver = CruiseResolver(perShield: 1f, piercingTapThreshold: 1);
+            var resolver = CruiseResolver(perTap: 1f, piercingTapThreshold: 1);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
             model.IsCruising.Value = true;
 
@@ -526,7 +528,7 @@ namespace BalloonParty.Tests.Projectile
             // ceremony mid-flight). The cruise still ends: the re-armed lance starts from base speed, so
             // the old ramp can never compound with the grant the charge is about to re-apply. Spending the
             // charge itself belongs to SnipeItemHandler, which owns the grant.
-            var resolver = CruiseResolver(perShield: 0.5f);
+            var resolver = CruiseResolver(perTap: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
             model.IsPiercing.Value = true;
             model.IsCruising.Value = true;
@@ -546,7 +548,7 @@ namespace BalloonParty.Tests.Projectile
         [Test]
         public void Step_WallBounceDischarge_WithABankedRainbowSnipe_KeepsPiercing()
         {
-            var resolver = CruiseResolver(perShield: 0.5f);
+            var resolver = CruiseResolver(perTap: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
             model.IsPiercing.Value = true;
             model.Flight.BankedRainbowPierceCharges = 1;
@@ -563,7 +565,7 @@ namespace BalloonParty.Tests.Projectile
         {
             // A piercing shot that never plowed a tough has no pending hits, so the discharge never
             // fires at walls — the pierce persists indefinitely.
-            var resolver = CruiseResolver(perShield: 0.5f);
+            var resolver = CruiseResolver(perTap: 0.5f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 5);
             model.IsPiercing.Value = true;
             model.IsCruising.Value = true;
@@ -612,7 +614,7 @@ namespace BalloonParty.Tests.Projectile
         [Test]
         public void Step_TotalCruiseTaps_AppliesOutsideCruise()
         {
-            var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 0f);
+            var resolver = CruiseResolver(perTap: 0.5f, tapEaseDuration: 0f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
             model.Flight.TotalCruiseTaps = 1;
 
@@ -626,7 +628,7 @@ namespace BalloonParty.Tests.Projectile
         {
             // The refactor collapsed cruise and sweep into one tap counter. Three taps at 0.5/tap
             // give +1.5 bonus -> x2.5 target.
-            var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 0f);
+            var resolver = CruiseResolver(perTap: 0.5f, tapEaseDuration: 0f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
             model.Flight.TotalCruiseTaps = 3;
 
@@ -640,7 +642,7 @@ namespace BalloonParty.Tests.Projectile
         public void Step_MaxCruiseSpeedCap_ClampsUnifiedTapSpeed()
         {
             // Without a cap: 3 taps at 0.5/tap -> +1.5 -> x2.5. With a x2.0 cap, clamp to 2.0.
-            var resolver = CruiseResolver(perShield: 0.5f, tapEaseDuration: 0f, maxSpeedMultiplier: 2.0f);
+            var resolver = CruiseResolver(perTap: 0.5f, tapEaseDuration: 0f, maxSpeedMultiplier: 2.0f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
             model.Flight.TotalCruiseTaps = 3;
 
@@ -765,13 +767,13 @@ namespace BalloonParty.Tests.Projectile
         }
 
         private static ProjectileMotionResolver CruiseResolver(
-            float perShield, float tapEaseDuration = 0f, int piercingTapThreshold = 0,
+            float perTap, float tapEaseDuration = 0f, int piercingTapThreshold = 0,
             float maxSpeedMultiplier = 0f, float armRampDuration = 0f)
         {
             var config = Substitute.For<IProjectileFlightConfig>();
             config.PierceArmRampDuration.Returns(armRampDuration);
             config.LimitsClockwise.Returns(Walls);
-            config.CruiseSpeedPerShield.Returns(perShield);
+            config.SpeedGainPerTap.Returns(perTap);
             config.CruiseTapEaseDuration.Returns(tapEaseDuration);
             config.CruisePiercingTapThreshold.Returns(piercingTapThreshold);
             config.MaxCruiseSpeedMultiplier.Returns(maxSpeedMultiplier);

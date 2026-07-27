@@ -464,7 +464,7 @@ namespace BalloonParty.Projectile.View
                 _shieldView?.OnBounce((Vector2)travelDirection, (Vector2)step.Direction, step.Speed);
                 _shieldLostPublisher.Publish(new ShieldLostMessage(step.WallContact));
                 _wallHitPublisher.Publish(new WallHitMessage(step.WallContact, _model.ShieldsRemaining.Value));
-                TryAwardSweepTap(step.WallContact, travelDirection, step.Speed);
+                TryAwardSweepTap(step.WallContact, travelDirection);
 
 #if UNITY_EDITOR
                 RecordSweepGizmoBounce(step.WallContact);
@@ -636,11 +636,14 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            _model.Flight.CruiseTapElapsed = 0f;
+            // Entering cruise is itself a speed change, so it replays the beat — which matters on RE-entry,
+            // where taps banked before the last contact are still on the clock. At zero taps there is no
+            // target above base speed to blend toward and ResolveFlightSpeed skips it.
+            _model.BeginTapBeat();
             _model.IsCruising.Value = true;
         }
 
-        private void TryAwardSweepTap(Vector3 wallHitPosition, Vector3 travelDirection, float stepSpeed)
+        private void TryAwardSweepTap(Vector3 wallHitPosition, Vector3 travelDirection)
         {
             // Sweeps feed the same tap counter cruise bounces do, so they stop paying out while the shot
             // is armed for the same reason (ProjectileMotionResolver.Step) — otherwise a Snipe lance,
@@ -683,20 +686,9 @@ namespace BalloonParty.Projectile.View
             }
 #endif
 
-            _model.Flight.TotalCruiseTaps++;
-
-            // Same split as the resolver's cruise tap: the tap that ARMS hands its transition to the arm
-            // ramp (anchored at the speed the shot is travelling now) rather than replaying the per-tap
-            // freeze-then-pickup beat.
-            var threshold = _flightConfig.CruisePiercingTapThreshold;
-            if (threshold > 0 && _model.Flight.TotalCruiseTaps >= threshold)
-            {
-                _model.ArmPierce(stepSpeed);
-            }
-            else
-            {
-                _model.Flight.CruiseTapElapsed = 0f;
-            }
+            // A cleared corridor is the other rule that earns a tap. Through the same funnel as the
+            // resolver's cruise bounce, so this wall hit can only ever mint one of the two.
+            _model.TryGrantTap(ProjectileTapSource.SweepClear, _flightConfig.CruisePiercingTapThreshold);
         }
 
         private bool IsPathClearAhead(Vector3 position, Vector3 direction, int bounces)
@@ -725,8 +717,8 @@ namespace BalloonParty.Projectile.View
             // the aura hidden the whole time it's armed — dim toward the floor instead. Still hidden
             // entirely while doomed (drifting to its death): a flourish there reads as a power-up right
             // as it dies, and the clear path means there's nothing to pierce anyway.
-            var inTapBeat = (_model.IsCruising.Value || _model.Flight.TotalCruiseTaps > 0)
-                            && _model.Flight.CruiseTapElapsed < _flightConfig.CruiseTapEaseDuration;
+            var inTapBeat = _model.Flight.TransitionKind == SpeedTransitionKind.TapBeat
+                            && _model.Flight.TransitionElapsed < _flightConfig.CruiseTapEaseDuration;
             var pierceActive = _model.IsPiercing.Value && !_model.IsLastShieldApproach.Value;
             var target = pierceActive
                 ? (inTapBeat ? _visual.PierceTapBeatAlpha : 1f)
@@ -795,7 +787,11 @@ namespace BalloonParty.Projectile.View
         private float ComputeVelocityT(float speed)
         {
             var normalSpeed = _flightConfig.ProjectileSpeed;
-            var maxSpeed = normalSpeed * _flightConfig.MaxCruiseSpeedMultiplier;
+
+            // Against the configured cap this band is unreachable — taps freeze at the arming one, so a
+            // shot can never approach it and every velocity-scaled effect would live in the first tenth
+            // of its curve. Normalize against what the shot can actually reach.
+            var maxSpeed = normalSpeed * _motionResolver.ReachableTopSpeedMultiplier;
             return maxSpeed > normalSpeed ? Mathf.Clamp01((speed - normalSpeed) / (maxSpeed - normalSpeed)) : 0f;
         }
 

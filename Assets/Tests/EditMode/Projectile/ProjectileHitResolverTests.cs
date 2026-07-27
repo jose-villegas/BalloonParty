@@ -207,9 +207,10 @@ namespace BalloonParty.Tests.Projectile
         [Test]
         public void Resolve_AllOneHitContactsOnSegment_AwardsSweepTapUsingCruiseSpeed()
         {
-            var projectileView = CreateSweepView(cruiseSpeedPerShield: 0.25f);
+            var projectileView = CreateSweepView(cruiseSpeedGainPerTap: 0.25f);
             _projectile.Flight.LastBouncePosition = Vector3.zero;
-            _projectile.Flight.CruiseTapElapsed = 99f;
+            _projectile.BeginTapBeat();
+            _projectile.Flight.TransitionElapsed = 99f;
 
             _resolver.Resolve(_projectile, CreateBalloon(hitsToPop: 1, "Red"), Vector3.zero);
             _resolver.Resolve(_projectile, CreateBalloon(hitsToPop: 1, "Blue"), Vector3.zero);
@@ -218,16 +219,17 @@ namespace BalloonParty.Tests.Projectile
 
             Assert.AreEqual(1, _projectile.Flight.TotalCruiseTaps,
                 "a valid sweep should bank one shared cruise tap");
-            Assert.AreEqual(0f, _projectile.Flight.CruiseTapElapsed,
+            Assert.AreEqual(0f, _projectile.Flight.TransitionElapsed,
                 "a sweep tap should replay the same tap-beat ease from t=0");
         }
 
         [Test]
         public void Resolve_MultiHitContactOnSegment_DoesNotAwardSweepTap()
         {
-            var projectileView = CreateSweepView(cruiseSpeedPerShield: 0.25f);
+            var projectileView = CreateSweepView(cruiseSpeedGainPerTap: 0.25f);
             _projectile.Flight.LastBouncePosition = Vector3.zero;
-            _projectile.Flight.CruiseTapElapsed = 99f;
+            _projectile.BeginTapBeat();
+            _projectile.Flight.TransitionElapsed = 99f;
 
             // The first contact struck a 2-HP balloon, so this segment is NOT a sweep even if a later
             // 1-HP balloon pops and the corridor is otherwise clear at the wall.
@@ -238,7 +240,7 @@ namespace BalloonParty.Tests.Projectile
 
             Assert.AreEqual(0, _projectile.Flight.TotalCruiseTaps,
                 "any >1-HP contact on the segment should invalidate the sweep tap");
-            Assert.AreEqual(99f, _projectile.Flight.CruiseTapElapsed, 1e-4f,
+            Assert.AreEqual(99f, _projectile.Flight.TransitionElapsed, 1e-4f,
                 "no sweep awarded means the shared tap-beat should not restart");
         }
 
@@ -447,7 +449,7 @@ namespace BalloonParty.Tests.Projectile
             return buff;
         }
 
-        private ProjectileView CreateSweepView(float cruiseSpeedPerShield)
+        private ProjectileView CreateSweepView(float cruiseSpeedGainPerTap)
         {
             var gameObject = new GameObject(nameof(ProjectileView));
             _gameObjectsToDestroy.Add(gameObject);
@@ -455,7 +457,7 @@ namespace BalloonParty.Tests.Projectile
             var projectileView = gameObject.AddComponent<ProjectileView>();
             var config = Substitute.For<IProjectileFlightConfig>();
             config.SweepEnabled.Returns(true);
-            config.CruiseSpeedPerShield.Returns(cruiseSpeedPerShield);
+            config.SpeedGainPerTap.Returns(cruiseSpeedGainPerTap);
             config.CruisePiercingTapThreshold.Returns(0);
 
             SetField(projectileView, "_flightConfig", config);

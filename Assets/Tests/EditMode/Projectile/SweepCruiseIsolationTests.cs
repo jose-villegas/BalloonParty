@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
@@ -15,6 +16,7 @@ using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace BalloonParty.Tests.Projectile
 {
@@ -47,7 +49,7 @@ namespace BalloonParty.Tests.Projectile
 
             var flightConfig = Substitute.For<IProjectileFlightConfig>();
             flightConfig.LimitsClockwise.Returns(Walls);
-            flightConfig.CruiseSpeedPerShield.Returns(0.5f);
+            flightConfig.SpeedGainPerTap.Returns(0.5f);
             flightConfig.CruiseTapEaseDuration.Returns(0f);
             flightConfig.CruisePiercingTapThreshold.Returns(0);
             flightConfig.CruiseTapCurve.Returns(AnimationCurve.Linear(0f, 0f, 1f, 1f));
@@ -245,6 +247,48 @@ namespace BalloonParty.Tests.Projectile
                 "cruise is killed by balloon contact even if sweep didn't award speed");
         }
 
+        // The invariant itself, now that there is a seam to assert it on: a wall hit mints at most one
+        // tap, whichever rule claims it. This used to hold only because a pop cleared IsCruising in a
+        // third file — and it was violated for armed shots, which took both taps on one bounce.
+        [Test]
+        public void TryGrantTap_SameWallHitClaimedByBothSources_MintsOnlyOne()
+        {
+            var view = CreateSweepView();
+            _projectile.Direction = Vector2.up;
+            _projectile.Speed = 1f;
+            _projectile.IsCruising.Value = true;
+
+            // The bounce mints the cruise tap and stamps the wall-hit sequence it belongs to.
+            _motionResolver.Step(_projectile, new Vector3(0f, 4.5f, 0f), 1f);
+            Assert.AreEqual(1, _projectile.Flight.TotalCruiseTaps, "the cruise bounce minted one");
+
+            // Now let the sweep rule claim the SAME wall hit, with every one of its own gates satisfied.
+            _projectile.Flight.SegmentPopCount = 1;
+            _projectile.Flight.SegmentSweepValid = true;
+            _projectile.Flight.LastBouncePosition = Vector3.zero;
+            LogAssert.Expect(LogType.Assert, new Regex("already minted a tap"));
+
+            AwardSweepTap(view, new Vector3(3f, 0f, 0f), Vector3.right);
+
+            Assert.AreEqual(
+                1, _projectile.Flight.TotalCruiseTaps,
+                "one wall hit, one tap — the second claim is refused, not added");
+        }
+
+        [Test]
+        public void TryGrantTap_NextWallHit_MintsAgain()
+        {
+            _projectile.Direction = Vector2.up;
+            _projectile.Speed = 1f;
+            _projectile.IsCruising.Value = true;
+
+            _motionResolver.Step(_projectile, new Vector3(0f, 4.5f, 0f), 1f);
+            _projectile.Direction = Vector2.up;
+            _motionResolver.Step(_projectile, new Vector3(0f, 4.5f, 0f), 1f);
+
+            Assert.AreEqual(2, _projectile.Flight.TotalCruiseTaps, "the guard is per wall hit, not a latch");
+        }
+
         [Test]
         public void TryAwardSweepTap_ArmedShot_AwardsNeitherSweepNorTap()
         {
@@ -327,7 +371,7 @@ namespace BalloonParty.Tests.Projectile
             var projectileView = gameObject.AddComponent<ProjectileView>();
             var config = Substitute.For<IProjectileFlightConfig>();
             config.SweepEnabled.Returns(true);
-            config.CruiseSpeedPerShield.Returns(0.5f);
+            config.SpeedGainPerTap.Returns(0.5f);
             config.CruisePiercingTapThreshold.Returns(0);
             config.SweepTapThreshold.Returns(sweepTapThreshold);
 

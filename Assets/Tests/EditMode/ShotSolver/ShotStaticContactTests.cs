@@ -88,7 +88,7 @@ namespace BalloonParty.Tests.ShotSolver
             // Events/Absorbed/RawScore/Pops/Died are driven by GEOMETRY (wall reflections + the
             // absorber's fixed position), never by the cruise flag itself — cruise only changes
             // SPEED, not direction — so none of those alone prove cruise was actually engaged at
-            // contact. With speedPerShield=1, CruiseStartShields is pinned to the shield count right
+            // contact. With speedGainPerTap=1, CruiseStartShields is pinned to the shield count right
             // after the first bounce (9), so by the third segment (the one ending at the absorber)
             // taps = 9 − 8 = 1 → CurrentSpeed's target = 2× base — provably faster than the same
             // geometry run with cruise disabled, which is what the final assertion below checks.
@@ -98,7 +98,7 @@ namespace BalloonParty.Tests.ShotSolver
                 ShotBoardBuilder.Static(Vector2Int.zero, new Vector2(0f, 2f), 0.3f, ShotContactKind.Absorb),
             };
             var workingSet = new ShotBalloonState[board.Length];
-            var cruiseConfig = new ShotCruiseConfig(wallBounceThreshold: 1, speedPerShield: 1f);
+            var cruiseConfig = new ShotCruiseConfig(wallBounceThreshold: 1, speedGainPerTap: 1f);
             var timestampsWithCruise = new List<float>();
 
             var result = ShotSimulator.Simulate(

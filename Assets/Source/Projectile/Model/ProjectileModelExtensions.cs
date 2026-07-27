@@ -1,7 +1,62 @@
+using BalloonParty.Shared.Diagnostics;
+
 namespace BalloonParty.Projectile.Model
 {
+    /// <summary>Which rule earned a tap. Carried for diagnostics — the speed it buys is identical.</summary>
+    internal enum ProjectileTapSource
+    {
+        CruiseBounce,
+        SweepClear,
+    }
+
     internal static class ProjectileModelExtensions
     {
+        /// <summary>
+        ///     The single funnel for minting a speed tap: both grant rules (a cruising wall bounce, in the
+        ///     motion resolver, and a cleared sweep corridor, in the view where the physics lives) come
+        ///     through here, so "one tap per wall hit" is enforced rather than inferred. Returns whether a
+        ///     tap was minted. Also owns what a tap does — arm the lance at the threshold, otherwise
+        ///     restart the beat — so the two callers can't drift apart on it.
+        /// </summary>
+        public static bool TryGrantTap(
+            this IWriteableProjectileModel model, ProjectileTapSource source, int piercingTapThreshold)
+        {
+            var flight = model.Flight;
+
+            // A rule, not an error: the economy closes once the shot is armed, its ramp frozen.
+            if (model.IsPiercing.Value)
+            {
+                return false;
+            }
+
+            // An invariant. A second claim on the same wall means some rule that used to keep the two
+            // sources exclusive (a pop ending the cruise, say) changed — which is exactly how an armed
+            // cruising shot once collected both taps on one bounce and compounded from there.
+            if (flight.LastTapWallHit == flight.WallHitSequence)
+            {
+                Log.Assert(false, "Projectile",
+                    $"wall hit {flight.WallHitSequence} already minted a tap; {source} claimed it too");
+                return false;
+            }
+
+            flight.LastTapWallHit = flight.WallHitSequence;
+            flight.TotalCruiseTaps++;
+
+            // A long-enough run ARMS the shot: from this tap on it pierces everything it touches
+            // (unbreakables included) for the rest of its life, at a frozen top speed the arm ramp
+            // accelerates it into. Every other tap just replays the freeze-then-pickup beat.
+            if (piercingTapThreshold > 0 && flight.TotalCruiseTaps >= piercingTapThreshold)
+            {
+                model.ArmPierce();
+            }
+            else
+            {
+                model.BeginTapBeat();
+            }
+
+            return true;
+        }
+
         /// <summary>Ends the piercing state and the cruise that fed it — called at wall-discharge.</summary>
         public static void EndPierce(this IWriteableProjectileModel model)
         {
@@ -31,17 +86,25 @@ namespace BalloonParty.Projectile.Model
         }
 
         /// <summary>
-        ///     Arms piercing and starts the one-shot ramp into the (from here on frozen) top speed,
-        ///     anchored at <paramref name="fromSpeed" /> — the speed the shot is actually travelling at
-        ///     this instant. Both paths that earn piercing through taps (the resolver's cruise bounce and
-        ///     the view's sweep) go through here, so neither can arm without an anchor and leave the ramp
-        ///     accelerating from a standstill.
+        ///     Arms piercing and starts the acceleration into the (from here on frozen) top speed, anchored
+        ///     at the speed the shot is actually travelling right now — so arming is continuous rather than
+        ///     a snap to full speed. Both paths that earn piercing through taps (the resolver's cruise
+        ///     bounce and the view's sweep) come through <see cref="TryGrantTap" /> to get here.
         /// </summary>
-        public static void ArmPierce(this IWriteableProjectileModel model, float fromSpeed)
+        public static void ArmPierce(this IWriteableProjectileModel model)
         {
-            model.Flight.PierceArmElapsed = 0f;
-            model.Flight.PierceArmFromSpeed = fromSpeed;
+            model.BeginSpeedTransition(SpeedTransitionKind.ArmRamp, model.Flight.CurrentSpeed);
             model.IsPiercing.Value = true;
+        }
+
+        /// <summary>
+        ///     Starts a tap's freeze-then-pickup beat — the same transition as the arm ramp, anchored at a
+        ///     standstill instead. That anchor IS the beat: the shot drops and winds back up, which is how
+        ///     earning a tap reads.
+        /// </summary>
+        public static void BeginTapBeat(this IWriteableProjectileModel model)
+        {
+            model.BeginSpeedTransition(SpeedTransitionKind.TapBeat, 0f);
         }
 
         /// <summary>Drops the cruise and the taps that fed it, returning the shot to base speed.</summary>
@@ -49,7 +112,19 @@ namespace BalloonParty.Projectile.Model
         {
             model.Flight.ConsecutiveWallBounces = 0;
             model.Flight.TotalCruiseTaps = 0;
+
+            // No target left to blend toward — leaving a transition running would keep easing against the
+            // base speed the shot has already returned to, and would keep reporting a beat to feedback.
+            model.BeginSpeedTransition(SpeedTransitionKind.None, 0f);
             model.IsCruising.Value = false;
+        }
+
+        private static void BeginSpeedTransition(
+            this IWriteableProjectileModel model, SpeedTransitionKind kind, float fromSpeed)
+        {
+            model.Flight.TransitionKind = kind;
+            model.Flight.TransitionFromSpeed = fromSpeed;
+            model.Flight.TransitionElapsed = 0f;
         }
     }
 }

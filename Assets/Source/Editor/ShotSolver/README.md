@@ -98,7 +98,7 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
 - **Cruise** — entry mirrors `ProjectileView.TryEnterCruise`: past the wall-bounce threshold, a
   walls-only lookahead of `threshold` more segments must be balloon-free (tested against
   time-evaluated centres) before the ramp engages. Speed mirrors `ProjectileMotionResolver.Step`:
-  every cruise bounce adds one cumulative `CruiseSpeedPerShield` tap (13-bank → 13 taps). The
+  every cruise bounce adds one cumulative `SpeedGainPerTap` tap (13-bank → 13 taps). The
   per-tap ANIMATION (target × `CruiseTapCurve(elapsed/CruiseTapEaseDuration)`, the
   freeze-then-pickup beat) never bends the path, so the event sim folds it into a per-bounce
   timeline lag of \f$\text{duration} \times (1 - \text{mean curve value})\f$ — an approximation only when a segment is

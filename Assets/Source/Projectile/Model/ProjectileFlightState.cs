@@ -18,6 +18,19 @@ namespace BalloonParty.Projectile.Model
         }
     }
 
+    /// <summary>
+    ///     Which speed change is currently playing out. Both are the same eased blend toward the tap
+    ///     count's target speed, differing only in where they start: a tap beat starts from a standstill
+    ///     (the deliberate freeze-then-pickup punctuation of earning a tap), an arm ramp from the speed
+    ///     the shot was already travelling at (so arming accelerates instead of snapping to top speed).
+    /// </summary>
+    public enum SpeedTransitionKind
+    {
+        None,
+        TapBeat,
+        ArmRamp,
+    }
+
     // The motion resolver's per-shot scratch state — bookkeeping the algorithm needs, kept off the
     // status/intent surface of IWriteableProjectileModel.
     public class ProjectileFlightState : IProjectileFlightState
@@ -45,16 +58,29 @@ namespace BalloonParty.Projectile.Model
         // Cruise-wall taps plus Sweep taps earned so far this shot — the shared piercing threshold.
         public int TotalCruiseTaps { get; set; }
 
-        // Seconds since the last cruise speed change (entry or bounce) — drives the per-tap
-        // freeze-then-pickup animation envelope.
-        public float CruiseTapElapsed { get; set; }
+        // Monotonic id of the surviving wall bounce being resolved, and the one a tap was last minted
+        // at. A wall hit mints AT MOST ONE tap, whichever rule earned it (an empty-corridor cruise
+        // bounce or a clean sweep) — comparing these two enforces that, where it used to rest on the
+        // two grant sites happening to be mutually exclusive. Deflects don't bump the sequence: a
+        // deflect isn't a wall hit. Monotonic, so there is never a reset to order correctly.
+        public int WallHitSequence { get; set; }
 
-        // The one-shot acceleration into the frozen top speed when piercing arms: seconds since the arm,
-        // and the speed the shot was actually travelling at that instant (the ramp's starting point, so
-        // the transition is continuous instead of a snap). 0 fromSpeed = no ramp was started.
-        public float PierceArmElapsed { get; set; }
+        public int LastTapWallHit { get; set; } = -1;
 
-        public float PierceArmFromSpeed { get; set; }
+        // The speed change in flight: which kind, the speed it blends FROM, and how far into it we are.
+        // One mechanism covers both the per-tap beat and the arm ramp — they differ only by anchor
+        // (see SpeedTransitionKind), so there is exactly one "how far into the current change" field
+        // rather than one per mechanism that could disagree.
+        public SpeedTransitionKind TransitionKind { get; set; }
+
+        public float TransitionFromSpeed { get; set; }
+
+        public float TransitionElapsed { get; set; }
+
+        // The speed the shot is actually travelling this step — written by the motion resolver, so
+        // feedback that scales with velocity reads the real thing instead of re-deriving it (or reading
+        // the constant base speed).
+        public float CurrentSpeed { get; set; }
 
         // Total sweeps detected (clear-corridor passes). Compared against SweepTapThreshold to gate
         // whether speed taps actually apply.

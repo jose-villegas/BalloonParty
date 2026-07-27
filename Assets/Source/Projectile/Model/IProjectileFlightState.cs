@@ -11,7 +11,9 @@ namespace BalloonParty.Projectile.Model
         int BankedRainbowPierceCharges { get; }
         int ConsecutiveWallBounces { get; }
         int TotalCruiseTaps { get; }
-        float CruiseTapElapsed { get; }
+        SpeedTransitionKind TransitionKind { get; }
+        float TransitionElapsed { get; }
+        float CurrentSpeed { get; }
         int TotalSweeps { get; }
         int SegmentPopCount { get; }
         bool SegmentSweepValid { get; }
