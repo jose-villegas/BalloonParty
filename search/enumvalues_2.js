@@ -13,8 +13,9 @@ var searchData=
   ['concave_10',['Concave',['../namespaceBalloonParty_1_1Configuration_1_1Level.html#a6f10485b2af91bced864457369fdcd4ba1cb290ed5917afdbf2532bb2bf6f0192',1,'BalloonParty::Configuration::Level']]],
   ['convex_11',['Convex',['../namespaceBalloonParty_1_1Configuration_1_1Level.html#a6f10485b2af91bced864457369fdcd4ba766cae017fab4bcc1d1e83fbb9af87c3',1,'BalloonParty::Configuration::Level']]],
   ['created_12',['Created',['../namespaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster.html#afcdc13988dd8dbdd7b8ab7bd2bb92146a0eceeb45861f9585dd7a97a3e36f85c6',1,'BalloonParty::Slots::Actor::Cluster']]],
-  ['cruiseloopstart_13',['CruiseLoopStart',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a6717392d3979ed51e4385aed0ba986ba',1,'BalloonParty::Audio']]],
-  ['cruiseloopstop_14',['CruiseLoopStop',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a699319f2d6a8008733eae7766486288f',1,'BalloonParty::Audio']]],
-  ['cruising_15',['Cruising',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView.html#a8cbb3f09d52df56431e51199cad285caafaf4174c3eb14817864786511e649a06',1,'BalloonParty::Projectile::View::ProjectileShieldView']]],
-  ['custom_16',['Custom',['../namespaceBalloonParty_1_1Configuration_1_1Effects.html#acd622b71fc538338a703329872e54688a90589c47f06eb971d548591f23c285af',1,'BalloonParty.Configuration.Effects.Custom'],['../namespaceBalloonParty_1_1Shared_1_1Diagnostics.html#a5f963220a502f8d8158c5bc0c226698ea90589c47f06eb971d548591f23c285af',1,'BalloonParty.Shared.Diagnostics.Custom']]]
+  ['credited_13',['Credited',['../namespaceBalloonParty_1_1Projectile_1_1Controller.html#a269c35de6ac7d821e1a397646dd92704aac99ec9411052e84cbfc32ebfcf75c02',1,'BalloonParty::Projectile::Controller']]],
+  ['cruiseloopstart_14',['CruiseLoopStart',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a6717392d3979ed51e4385aed0ba986ba',1,'BalloonParty::Audio']]],
+  ['cruiseloopstop_15',['CruiseLoopStop',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a699319f2d6a8008733eae7766486288f',1,'BalloonParty::Audio']]],
+  ['cruising_16',['Cruising',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView.html#a8cbb3f09d52df56431e51199cad285caafaf4174c3eb14817864786511e649a06',1,'BalloonParty::Projectile::View::ProjectileShieldView']]],
+  ['custom_17',['Custom',['../namespaceBalloonParty_1_1Configuration_1_1Effects.html#acd622b71fc538338a703329872e54688a90589c47f06eb971d548591f23c285af',1,'BalloonParty.Configuration.Effects.Custom'],['../namespaceBalloonParty_1_1Shared_1_1Diagnostics.html#a5f963220a502f8d8158c5bc0c226698ea90589c47f06eb971d548591f23c285af',1,'BalloonParty.Shared.Diagnostics.Custom']]]
 ];

@@ -137,6 +137,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html">ProjectileStep</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result of one fixed-step advance by <a class="el" href="classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html" title="Plain, headless-testable projectile flight rules; the view only applies the returned ProjectileStep.">ProjectileMotionResolver</a>.  <a href="structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html">ProjectileTapResolver</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Owns the projectile's speed economy end to end: who may mint a tap, how many exist, and what speed they buy.  <a href="classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -151,6 +154,12 @@ Enumerations</h2></td></tr>
 , <a class="el" href="#ac2f91b5b592a9fafc9ba1d5f2a395649aaefbd0597f1bc2493bbc18898243513b">Destroyed</a>
  }</td></tr>
 <tr class="separator:ac2f91b5b592a9fafc9ba1d5f2a395649"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a269c35de6ac7d821e1a397646dd92704" id="r_a269c35de6ac7d821e1a397646dd92704"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a269c35de6ac7d821e1a397646dd92704">ProjectileSweepOutcome</a> { <a class="el" href="#a269c35de6ac7d821e1a397646dd92704a43ec9846892f6095cd124df606a773eb">RunBroken</a>
+, <a class="el" href="#a269c35de6ac7d821e1a397646dd92704aac99ec9411052e84cbfc32ebfcf75c02">Credited</a>
+, <a class="el" href="#a269c35de6ac7d821e1a397646dd92704ae0010a0a1a3259ab5c06a19bad532851">Paid</a>
+ }</td></tr>
+<tr class="memdesc:a269c35de6ac7d821e1a397646dd92704"><td class="mdescLeft">&#160;</td><td class="mdescRight">What a sweep attempt did, so the caller can tell its editor visuals the same story.  <a href="#a269c35de6ac7d821e1a397646dd92704">More...</a><br /></td></tr>
+<tr class="separator:a269c35de6ac7d821e1a397646dd92704"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="adcae15a3eb95c064df9a6b8fc67069e5" name="adcae15a3eb95c064df9a6b8fc67069e5"></a>
@@ -205,6 +214,38 @@ Enumerations</h2></td></tr>
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ac2f91b5b592a9fafc9ba1d5f2a395649a95bfdefaaf01553cbf21ccd942855c69" name="ac2f91b5b592a9fafc9ba1d5f2a395649a95bfdefaaf01553cbf21ccd942855c69"></a>Moved&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ac2f91b5b592a9fafc9ba1d5f2a395649a6592f349ddfe64e333b3c4f1d17161af" name="ac2f91b5b592a9fafc9ba1d5f2a395649a6592f349ddfe64e333b3c4f1d17161af"></a>Bounced&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ac2f91b5b592a9fafc9ba1d5f2a395649aaefbd0597f1bc2493bbc18898243513b" name="ac2f91b5b592a9fafc9ba1d5f2a395649aaefbd0597f1bc2493bbc18898243513b"></a>Destroyed&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="a269c35de6ac7d821e1a397646dd92704" name="a269c35de6ac7d821e1a397646dd92704"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a269c35de6ac7d821e1a397646dd92704">&#9670;&#160;</a></span>ProjectileSweepOutcome</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a269c35de6ac7d821e1a397646dd92704">BalloonParty.Projectile.Controller.ProjectileSweepOutcome</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>What a sweep attempt did, so the caller can tell its editor visuals the same story. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a269c35de6ac7d821e1a397646dd92704a43ec9846892f6095cd124df606a773eb" name="a269c35de6ac7d821e1a397646dd92704a43ec9846892f6095cd124df606a773eb"></a>RunBroken&#160;</td><td class="fielddoc"><p>The segment wasn't a clean clearing pass, so the run restarted. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a269c35de6ac7d821e1a397646dd92704aac99ec9411052e84cbfc32ebfcf75c02" name="a269c35de6ac7d821e1a397646dd92704aac99ec9411052e84cbfc32ebfcf75c02"></a>Credited&#160;</td><td class="fielddoc"><p>A clean pass, but the run is still short of <code>SweepTapThreshold</code>. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a269c35de6ac7d821e1a397646dd92704ae0010a0a1a3259ab5c06a19bad532851" name="a269c35de6ac7d821e1a397646dd92704ae0010a0a1a3259ab5c06a19bad532851"></a>Paid&#160;</td><td class="fielddoc"><p>A clean pass at or past the threshold — a tap was claimed for this wall. </p>
+</td></tr>
 </table>
 
 </div>

@@ -1,5 +1,11 @@
 var NAVTREEINDEX11 =
 {
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#adca0143dd5ae2112bab2784f7f5783c9":[5,0,0,1,2,5,6],
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#adca0143dd5ae2112bab2784f7f5783c9":[6,0,0,1,2,5,6],
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#ae08fb4c7c579fe9d8dd1a0e7627226d9":[5,0,0,1,2,5,15],
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#ae08fb4c7c579fe9d8dd1a0e7627226d9":[6,0,0,1,2,5,15],
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#afa9c95ec80101b4324a8692454836078":[5,0,0,1,2,5,11],
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#afa9c95ec80101b4324a8692454836078":[6,0,0,1,2,5,11],
 "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#afab2655fa5d45b0dd004b8177bd5163c":[5,0,0,1,2,5,13],
 "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#afab2655fa5d45b0dd004b8177bd5163c":[6,0,0,1,2,5,13],
 "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect_1_1OverflowBalloon.html":[5,0,0,1,2,5,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX11 =
 "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a7c54ec2e7c5968e23a4b00a6c998bbb4":[5,0,0,1,3,6,24],
 "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a7c54ec2e7c5968e23a4b00a6c998bbb4":[6,0,0,1,3,6,24],
 "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a7ed1b92eeaf95401fe302a95b00f71f5":[5,0,0,1,3,6,6],
-"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a7ed1b92eeaf95401fe302a95b00f71f5":[6,0,0,1,3,6,6],
-"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a81919f830cd1dc51bb6c268b506a9677":[5,0,0,1,3,6,23],
-"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a81919f830cd1dc51bb6c268b506a9677":[6,0,0,1,3,6,23],
-"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a89240c4aca1918f984ce25dd9bd5eebe":[5,0,0,1,3,6,7],
-"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a89240c4aca1918f984ce25dd9bd5eebe":[6,0,0,1,3,6,7],
-"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a89a9a632d7b6f42127f71e2cae59d1d3":[5,0,0,1,3,6,26],
-"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a89a9a632d7b6f42127f71e2cae59d1d3":[6,0,0,1,3,6,26]
+"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a7ed1b92eeaf95401fe302a95b00f71f5":[6,0,0,1,3,6,6]
 };

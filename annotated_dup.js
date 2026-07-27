@@ -513,7 +513,8 @@ var annotated_dup =
           [ "ProjectileDoomedTimeScaleController", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController" ],
           [ "ProjectileHitResolver", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver" ],
           [ "ProjectileMotionResolver", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver" ],
-          [ "ProjectileStep", "structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html", "structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep" ]
+          [ "ProjectileStep", "structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html", "structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep" ],
+          [ "ProjectileTapResolver", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver" ]
         ] ],
         [ "Model", "namespaceBalloonParty_1_1Projectile_1_1Model.html", [
           [ "IProjectileBuffEndCondition", "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html", "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition" ],
@@ -648,6 +649,7 @@ var annotated_dup =
           [ "SpawnBalloonLineMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBalloonLineMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBalloonLineMessage" ],
           [ "SpawnBlockedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBlockedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBlockedMessage" ],
           [ "SpeckSpawnRequestMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage" ],
+          [ "SpeedTapMintedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage" ],
           [ "StreakChangedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage" ],
           [ "TransformCapturedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage" ],
           [ "WallHitMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage" ]

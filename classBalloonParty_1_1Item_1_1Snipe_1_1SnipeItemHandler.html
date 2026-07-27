@@ -111,6 +111,7 @@ $(function(){initNavTree('classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pac-methods">Package Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Item.Snipe.SnipeItemHandler Class Reference</div></div>
@@ -146,13 +147,20 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a57f2a9f8939feb1d8c82f5ae22d49f87" id="r_a57f2a9f8939feb1d8c82f5ae22d49f87"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a57f2a9f8939feb1d8c82f5ae22d49f87">SnipeItemHandler</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration.html">IItemConfiguration</a> itemConfig, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette, <a class="el" href="classBalloonParty_1_1Item_1_1ItemEffectPlayer.html">ItemEffectPlayer</a> effectPlayer, <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Buffs_1_1IProjectileBuffs.html">IProjectileBuffs</a> buffs, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html">ProjectileLoadedMessage</a> &gt; loadedSubscriber)</td></tr>
-<tr class="separator:a57f2a9f8939feb1d8c82f5ae22d49f87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad87cb97a0c308ce088b8fdccdd9d4a93" id="r_ad87cb97a0c308ce088b8fdccdd9d4a93"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad87cb97a0c308ce088b8fdccdd9d4a93">SnipeItemHandler</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration.html">IItemConfiguration</a> itemConfig, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette, <a class="el" href="classBalloonParty_1_1Item_1_1ItemEffectPlayer.html">ItemEffectPlayer</a> effectPlayer, <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Buffs_1_1IProjectileBuffs.html">IProjectileBuffs</a> buffs, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html">ProjectileLoadedMessage</a> &gt; loadedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html">PierceDischargedMessage</a> &gt; dischargedSubscriber)</td></tr>
+<tr class="separator:ad87cb97a0c308ce088b8fdccdd9d4a93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
 <tr class="memitem:a39b3d7127a25815dcdc2a9fc6236d678" id="r_a39b3d7127a25815dcdc2a9fc6236d678"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2b">ItemType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a39b3d7127a25815dcdc2a9fc6236d678">Type</a><code> [get]</code></td></tr>
 <tr class="separator:a39b3d7127a25815dcdc2a9fc6236d678"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:ad8b8cb2507edb82b28001e73f7ed798c" id="r_ad8b8cb2507edb82b28001e73f7ed798c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad8b8cb2507edb82b28001e73f7ed798c">ArmLance</a> (float speedBuffMultiplier, bool isRainbowHost)</td></tr>
+<tr class="separator:ad8b8cb2507edb82b28001e73f7ed798c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f69bbe91aab826274f5ab616155430b" id="r_a1f69bbe91aab826274f5ab616155430b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f69bbe91aab826274f5ab616155430b">TrySpendBankedCharge</a> ()</td></tr>
+<tr class="separator:a1f69bbe91aab826274f5ab616155430b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -160,6 +168,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ac7ae012fd8cf010334bb5ee42a52b7a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a113752e236a8f7c62947f3f9d7b34868" id="r_a113752e236a8f7c62947f3f9d7b34868"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Buffs_1_1IProjectileBuffs.html">IProjectileBuffs</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a113752e236a8f7c62947f3f9d7b34868">_buffs</a></td></tr>
 <tr class="separator:a113752e236a8f7c62947f3f9d7b34868"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59c728bec994e1e38aaad2359be217c0" id="r_a59c728bec994e1e38aaad2359be217c0"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html">PierceDischargedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a59c728bec994e1e38aaad2359be217c0">_dischargedSubscriber</a></td></tr>
+<tr class="separator:a59c728bec994e1e38aaad2359be217c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad16d0f9b2b8ee5f102726fbb8ebb3872" id="r_ad16d0f9b2b8ee5f102726fbb8ebb3872"><td class="memItemLeft" align="right" valign="top">IDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad16d0f9b2b8ee5f102726fbb8ebb3872">_dischargedSubscription</a></td></tr>
+<tr class="separator:ad16d0f9b2b8ee5f102726fbb8ebb3872"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af279eff8110ab44734563c15112fcac4" id="r_af279eff8110ab44734563c15112fcac4"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Item_1_1ItemEffectPlayer.html">ItemEffectPlayer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af279eff8110ab44734563c15112fcac4">_effectPlayer</a></td></tr>
 <tr class="separator:af279eff8110ab44734563c15112fcac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aceaccc77a296ce989a6c6dfac2fc7e51" id="r_aceaccc77a296ce989a6c6dfac2fc7e51"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration.html">IItemConfiguration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aceaccc77a296ce989a6c6dfac2fc7e51">_itemConfig</a></td></tr>
@@ -173,10 +185,10 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Handles the <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a> item: arms the active projectile as a piercing lance — it plows through balloons like a cruise-earned pierce, but without entering cruise (so it skips cruise's per-shield speed tap) — and grants a single, non-stacking multiplicative ProjectileBuffId.Speed buff. </p>
-<p>A rainbow-balloon host also arms the shared ProjectileBuffId.RainbowShield buff. Both buffs ride the pierce and end together when the shared pierce-discharge fires (the plow-then-shatter mechanic itself lives in the projectile's hit/motion resolvers, not here). Non-damaging: no damage, no shield change. </p>
+<p>A rainbow-balloon host also arms the shared ProjectileBuffId.RainbowShield buff. Both buffs ride the pierce and end together when the shared pierce-discharge fires (the plow-then-shatter mechanic itself lives in the projectile's hit/motion resolvers, not here). A pickup landing on an already-piercing shot is banked whole and activates at that discharge instead — two pierces can't overlap, so the grant is saved, not wasted. Non-damaging: no damage, no shield change. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a57f2a9f8939feb1d8c82f5ae22d49f87" name="a57f2a9f8939feb1d8c82f5ae22d49f87"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a57f2a9f8939feb1d8c82f5ae22d49f87">&#9670;&#160;</a></span>SnipeItemHandler()</h2>
+<a id="ad87cb97a0c308ce088b8fdccdd9d4a93" name="ad87cb97a0c308ce088b8fdccdd9d4a93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad87cb97a0c308ce088b8fdccdd9d4a93">&#9670;&#160;</a></span>SnipeItemHandler()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -207,7 +219,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html">ProjectileLoadedMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>loadedSubscriber</em></span>&#160;)</td>
+          <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html">ProjectileLoadedMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>loadedSubscriber</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html">PierceDischargedMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>dischargedSubscriber</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -241,6 +258,35 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ad8b8cb2507edb82b28001e73f7ed798c" name="ad8b8cb2507edb82b28001e73f7ed798c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8b8cb2507edb82b28001e73f7ed798c">&#9670;&#160;</a></span>ArmLance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Snipe.SnipeItemHandler.ArmLance </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>speedBuffMultiplier</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isRainbowHost</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a6472f22a1130c04265c2691c7bb36d17" name="a6472f22a1130c04265c2691c7bb36d17"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6472f22a1130c04265c2691c7bb36d17">&#9670;&#160;</a></span>Dispose()</h2>
 
@@ -271,6 +317,31 @@ Private Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1f69bbe91aab826274f5ab616155430b" name="a1f69bbe91aab826274f5ab616155430b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f69bbe91aab826274f5ab616155430b">&#9670;&#160;</a></span>TrySpendBankedCharge()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Snipe.SnipeItemHandler.TrySpendBankedCharge </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -309,6 +380,50 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Buffs_1_1IProjectileBuffs.html">IProjectileBuffs</a> BalloonParty.Item.Snipe.SnipeItemHandler._buffs</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a59c728bec994e1e38aaad2359be217c0" name="a59c728bec994e1e38aaad2359be217c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59c728bec994e1e38aaad2359be217c0">&#9670;&#160;</a></span>_dischargedSubscriber</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly ISubscriber&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html">PierceDischargedMessage</a>&gt; BalloonParty.Item.Snipe.SnipeItemHandler._dischargedSubscriber</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad16d0f9b2b8ee5f102726fbb8ebb3872" name="ad16d0f9b2b8ee5f102726fbb8ebb3872"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad16d0f9b2b8ee5f102726fbb8ebb3872">&#9670;&#160;</a></span>_dischargedSubscription</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IDisposable BalloonParty.Item.Snipe.SnipeItemHandler._dischargedSubscription</td>
         </tr>
       </table>
   </td>

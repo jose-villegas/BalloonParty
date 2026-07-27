@@ -1,5 +1,11 @@
 var NAVTREEINDEX14 =
 {
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a65b65af58f7af1509a95c9fa9e383299":[5,0,0,3,2,5,15],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a65b65af58f7af1509a95c9fa9e383299":[6,0,0,3,2,5,15],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a8f1f88d085962940ef07345dce6c0647":[5,0,0,3,2,5,13],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a8f1f88d085962940ef07345dce6c0647":[6,0,0,3,2,5,13],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a94193e100c30af316c9f6dacbdd2e426":[5,0,0,3,2,5,3],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a94193e100c30af316c9f6dacbdd2e426":[6,0,0,3,2,5,3],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#aad3469cfd85697f34794aca104a0c764":[5,0,0,3,2,5,9],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#aad3469cfd85697f34794aca104a0c764":[6,0,0,3,2,5,9],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#ab60561269f1782afe82743faec00b6b0":[5,0,0,3,2,5,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX14 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a1a0824ad52b4a0525246be3a636bc636":[5,0,0,3,4,1,10],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a1a0824ad52b4a0525246be3a636bc636":[6,0,0,3,4,1,10],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a1a20e17eddee37c310704288af4e21b0":[5,0,0,3,4,1,40],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a1a20e17eddee37c310704288af4e21b0":[6,0,0,3,4,1,40],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a1a9efea6fe9aff1b6fe3be40a5069711":[5,0,0,3,4,1,26],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a1a9efea6fe9aff1b6fe3be40a5069711":[6,0,0,3,4,1,26],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a1dc47b8c56963175af700a4f0ac609df":[5,0,0,3,4,1,42],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a1dc47b8c56963175af700a4f0ac609df":[6,0,0,3,4,1,42],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a20d00ac33c5e66606ae373e9e16c0bb9":[5,0,0,3,4,1,41],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a20d00ac33c5e66606ae373e9e16c0bb9":[6,0,0,3,4,1,41]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a1a20e17eddee37c310704288af4e21b0":[6,0,0,3,4,1,40]
 };

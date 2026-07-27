@@ -975,6 +975,7 @@ var hierarchy =
     [ "BalloonParty.Projectile.Controller.ProjectileMotionResolver", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html", null ],
     [ "BalloonParty.Projectile.ProjectilePositionProvider", "classBalloonParty_1_1Projectile_1_1ProjectilePositionProvider.html", null ],
     [ "BalloonParty.Projectile.Controller.ProjectileStep", "structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html", null ],
+    [ "BalloonParty.Projectile.Controller.ProjectileTapResolver", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html", null ],
     [ "PropertyAttribute", null, [
       [ "BalloonParty.Configuration.Palette.PaletteColorMaskAttribute", "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorMaskAttribute.html", null ],
       [ "BalloonParty.Configuration.Palette.PaletteColorNameAttribute", "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorNameAttribute.html", null ],
@@ -1119,6 +1120,7 @@ var hierarchy =
     [ "BalloonParty.Slots.Actor.SpeckField.Speck", "structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1Speck.html", null ],
     [ "BalloonParty.Slots.Actor.SpeckProfile", "structBalloonParty_1_1Slots_1_1Actor_1_1SpeckProfile.html", null ],
     [ "BalloonParty.Shared.Messages.SpeckSpawnRequestMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html", null ],
+    [ "BalloonParty.Shared.Messages.SpeedTapMintedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html", null ],
     [ "BalloonParty.Editor.EffectPreview.PaintSplashPreviewModule.SplashInstance", "classBalloonParty_1_1Editor_1_1EffectPreview_1_1PaintSplashPreviewModule_1_1SplashInstance.html", null ],
     [ "BalloonParty.Shared.Extensions.SpriteRendererExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1SpriteRendererExtensions.html", null ],
     [ "BalloonParty.Configuration.Effects.StampProfile", "structBalloonParty_1_1Configuration_1_1Effects_1_1StampProfile.html", null ],

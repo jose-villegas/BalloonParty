@@ -1,5 +1,11 @@
 var NAVTREEINDEX15 =
 {
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a1a9efea6fe9aff1b6fe3be40a5069711":[5,0,0,3,4,1,26],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a1a9efea6fe9aff1b6fe3be40a5069711":[6,0,0,3,4,1,26],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a1dc47b8c56963175af700a4f0ac609df":[5,0,0,3,4,1,42],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a1dc47b8c56963175af700a4f0ac609df":[6,0,0,3,4,1,42],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a20d00ac33c5e66606ae373e9e16c0bb9":[5,0,0,3,4,1,41],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a20d00ac33c5e66606ae373e9e16c0bb9":[6,0,0,3,4,1,41],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a2392e85a021a190d36c64dc5aee0b3ef":[5,0,0,3,4,1,65],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a2392e85a021a190d36c64dc5aee0b3ef":[6,0,0,3,4,1,65],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a2833c5b06c5879a16824ee4cb5e5c396":[5,0,0,3,4,1,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX15 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a48be1086ce9b25aefa8b07ed7de58119":[5,0,0,3,4,21,22],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a48be1086ce9b25aefa8b07ed7de58119":[6,0,0,3,4,21,22],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a5313ab744951be6c7c68f7ee1fcf4fdd":[5,0,0,3,4,21,5],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a5313ab744951be6c7c68f7ee1fcf4fdd":[6,0,0,3,4,21,5],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a573d49cfa5a6848dc7eccb3d06e5f000":[5,0,0,3,4,21,11],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a573d49cfa5a6848dc7eccb3d06e5f000":[6,0,0,3,4,21,11],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a5786402b3125eec65b05d6ac4bd64c62":[5,0,0,3,4,21,19],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a5786402b3125eec65b05d6ac4bd64c62":[6,0,0,3,4,21,19],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a58a3307474da181c18c9605b08be4baf":[5,0,0,3,4,21,9],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a58a3307474da181c18c9605b08be4baf":[6,0,0,3,4,21,9]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a5313ab744951be6c7c68f7ee1fcf4fdd":[6,0,0,3,4,21,5]
 };

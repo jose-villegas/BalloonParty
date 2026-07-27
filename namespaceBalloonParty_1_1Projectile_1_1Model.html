@@ -151,6 +151,12 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a6a63c533c8791904d77d878aa8808865"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies a projectile buff type. Each buff is just an ID + a factor; the consumer defines what the factor means.  <a href="#a6a63c533c8791904d77d878aa8808865">More...</a><br /></td></tr>
 <tr class="separator:a6a63c533c8791904d77d878aa8808865"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a360a7607028c135b5205293095e7cabd" id="r_a360a7607028c135b5205293095e7cabd"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a360a7607028c135b5205293095e7cabd">SpeedTransitionKind</a> { <a class="el" href="#a360a7607028c135b5205293095e7cabda6adf97f83acf6453d4a6a4b1070f3754">None</a>
+, <a class="el" href="#a360a7607028c135b5205293095e7cabdab019a36c6bc8818a71557ef5ec232ac7">TapBeat</a>
+, <a class="el" href="#a360a7607028c135b5205293095e7cabda4dfe6d9de5dacfaf857e7c5e77610246">ArmRamp</a>
+ }</td></tr>
+<tr class="memdesc:a360a7607028c135b5205293095e7cabd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Which speed change is currently playing out.  <a href="#a360a7607028c135b5205293095e7cabd">More...</a><br /></td></tr>
+<tr class="separator:a360a7607028c135b5205293095e7cabd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a51a7cfe4e8f083cd12e30f878834e748" name="a51a7cfe4e8f083cd12e30f878834e748"></a>
@@ -194,6 +200,28 @@ Enumerations</h2></td></tr>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a6a63c533c8791904d77d878aa8808865a44877c6aa8e93fa5a91c9361211464fb" name="a6a63c533c8791904d77d878aa8808865a44877c6aa8e93fa5a91c9361211464fb"></a>Speed&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a6a63c533c8791904d77d878aa8808865a9218c86c6463e7f24f67a58667707f09" name="a6a63c533c8791904d77d878aa8808865a9218c86c6463e7f24f67a58667707f09"></a>RainbowShield&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="a360a7607028c135b5205293095e7cabd" name="a360a7607028c135b5205293095e7cabd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a360a7607028c135b5205293095e7cabd">&#9670;&#160;</a></span>SpeedTransitionKind</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a360a7607028c135b5205293095e7cabd">BalloonParty.Projectile.Model.SpeedTransitionKind</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Which speed change is currently playing out. </p>
+<p>Both are the same eased blend toward the tap count's target speed, differing only in where they start: a tap beat starts from a standstill (the deliberate freeze-then-pickup punctuation of earning a tap), an arm ramp from the speed the shot was already travelling at (so arming accelerates instead of snapping to top speed). </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a360a7607028c135b5205293095e7cabda6adf97f83acf6453d4a6a4b1070f3754" name="a360a7607028c135b5205293095e7cabda6adf97f83acf6453d4a6a4b1070f3754"></a>None&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a360a7607028c135b5205293095e7cabdab019a36c6bc8818a71557ef5ec232ac7" name="a360a7607028c135b5205293095e7cabdab019a36c6bc8818a71557ef5ec232ac7"></a>TapBeat&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a360a7607028c135b5205293095e7cabda4dfe6d9de5dacfaf857e7c5e77610246" name="a360a7607028c135b5205293095e7cabda4dfe6d9de5dacfaf857e7c5e77610246"></a>ArmRamp&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>

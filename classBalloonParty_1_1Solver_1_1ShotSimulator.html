@@ -145,6 +145,12 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:a36ddfaa4772d183ba405eadb063fbcfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeff3f330e00afeaadf9f8f652798ad77" id="r_aeff3f330e00afeaadf9f8f652798ad77"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeff3f330e00afeaadf9f8f652798ad77">CopyIntoWorkingSet</a> (IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a> &gt; board, <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a>[] workingSet, <a class="el" href="classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html">ShotBoardDynamics</a> dynamics, float radiusBias)</td></tr>
 <tr class="separator:aeff3f330e00afeaadf9f8f652798ad77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ee4321e2418147cf3c059c035e9f742" id="r_a9ee4321e2418147cf3c059c035e9f742"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ee4321e2418147cf3c059c035e9f742">CountCruiseTap</a> (bool enteredCruiseHere, in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html">ShotCruiseConfig</a> cruiseConfig, ref <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightState.html">ShotFlightState</a> state)</td></tr>
+<tr class="separator:a9ee4321e2418147cf3c059c035e9f742"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d4c3abca9d8d772783dfd840de7f8d9" id="r_a3d4c3abca9d8d772783dfd840de7f8d9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3d4c3abca9d8d772783dfd840de7f8d9">CountSweepTap</a> (in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html">ShotCruiseConfig</a> cruiseConfig, ref <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightState.html">ShotFlightState</a> state)</td></tr>
+<tr class="separator:a3d4c3abca9d8d772783dfd840de7f8d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac672ed5a52a35ba05d3aa4e623d4c460" id="r_ac672ed5a52a35ba05d3aa4e623d4c460"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac672ed5a52a35ba05d3aa4e623d4c460">CruiseTargetMultiplier</a> (int taps, in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html">ShotCruiseConfig</a> cruiseConfig)</td></tr>
+<tr class="separator:ac672ed5a52a35ba05d3aa4e623d4c460"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f019c8c9a9cbce1de0bb79dd0625e06" id="r_a0f019c8c9a9cbce1de0bb79dd0625e06"><td class="memItemLeft" align="right" valign="top">static Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0f019c8c9a9cbce1de0bb79dd0625e06">CurrentBalloonCenter</a> (<a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a>[] workingSet, int index, float t, <a class="el" href="classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html">ShotBoardDynamics</a> dynamics)</td></tr>
 <tr class="separator:a0f019c8c9a9cbce1de0bb79dd0625e06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bf2536e898eda069a89bd78261f2bda" id="r_a4bf2536e898eda069a89bd78261f2bda"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4bf2536e898eda069a89bd78261f2bda">CurrentSpeed</a> (float baseSpeed, in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightState.html">ShotFlightState</a> state, in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html">ShotCruiseConfig</a> cruiseConfig)</td></tr>
@@ -175,6 +181,8 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:a9e18a4ddf33e9c4365cf51afbac59044"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6987db6d4e244403d0f2566737d396c" id="r_ae6987db6d4e244403d0f2566737d396c"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae6987db6d4e244403d0f2566737d396c">SegmentHitsAnyBalloon</a> (Vector2 position, Vector2 direction, float segmentLength, float projectileContactRadius, <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a>[] workingSet, int activeCount, float tHit, <a class="el" href="classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html">ShotBoardDynamics</a> dynamics)</td></tr>
 <tr class="separator:ae6987db6d4e244403d0f2566737d396c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c79236612561ac1f5a9de8513510af1" id="r_a2c79236612561ac1f5a9de8513510af1"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c79236612561ac1f5a9de8513510af1">SpendPierceAtDischarge</a> (ref <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightState.html">ShotFlightState</a> state)</td></tr>
+<tr class="separator:a2c79236612561ac1f5a9de8513510af1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1e82c4a16fe4bee38f436b63b4eb45a" id="r_ae1e82c4a16fe4bee38f436b63b4eb45a"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae1e82c4a16fe4bee38f436b63b4eb45a">TryAxisCandidate</a> (float rate, float distance, Vector2 wallNormal, ref float bestT, ref Vector2 normal, ref bool hasCandidate)</td></tr>
 <tr class="separator:ae1e82c4a16fe4bee38f436b63b4eb45a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31253b26ca1bdf695164085953d43fdc" id="r_a31253b26ca1bdf695164085953d43fdc"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31253b26ca1bdf695164085953d43fdc">TryFindMovingBalloonEntry</a> (<a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html">ShotSimDynamicActor</a> actor, Vector2 origin, Vector2 direction, float speed, float segmentStartTime, float combinedRadius, out float distance)</td></tr>
@@ -191,6 +199,8 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:a22acd5d1239f42282980c893aacd4a3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad01282a5b3e309bfeacb551526b3e3b5" id="r_ad01282a5b3e309bfeacb551526b3e3b5"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad01282a5b3e309bfeacb551526b3e3b5">TryHandleDuePulse</a> (<a class="el" href="classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html">ShotBoardDynamics</a> dynamics, float eventDistance, float speed, List&lt; Vector2 &gt; pathOut, List&lt; float &gt; timestampsOut, ref <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightState.html">ShotFlightState</a> state)</td></tr>
 <tr class="separator:ad01282a5b3e309bfeacb551526b3e3b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f187c0d2304254be825750ef1de9df5" id="r_a6f187c0d2304254be825750ef1de9df5"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f187c0d2304254be825750ef1de9df5">TrySweepSegment</a> (Vector2 wallContact, float projectileContactRadius, <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a>[] workingSet, int activeCount, <a class="el" href="classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html">ShotBoardDynamics</a> dynamics, ref <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightState.html">ShotFlightState</a> state)</td></tr>
+<tr class="separator:a6f187c0d2304254be825750ef1de9df5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -439,6 +449,98 @@ Static Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radiusBias</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9ee4321e2418147cf3c059c035e9f742" name="a9ee4321e2418147cf3c059c035e9f742"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ee4321e2418147cf3c059c035e9f742">&#9670;&#160;</a></span>CountCruiseTap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Solver.ShotSimulator.CountCruiseTap </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>enteredCruiseHere</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html">ShotCruiseConfig</a></td>          <td class="paramname"><span class="paramname"><em>cruiseConfig</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ref <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightState.html">ShotFlightState</a></td>          <td class="paramname"><span class="paramname"><em>state</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3d4c3abca9d8d772783dfd840de7f8d9" name="a3d4c3abca9d8d772783dfd840de7f8d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d4c3abca9d8d772783dfd840de7f8d9">&#9670;&#160;</a></span>CountSweepTap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Solver.ShotSimulator.CountSweepTap </td>
+          <td>(</td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html">ShotCruiseConfig</a></td>          <td class="paramname"><span class="paramname"><em>cruiseConfig</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ref <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightState.html">ShotFlightState</a></td>          <td class="paramname"><span class="paramname"><em>state</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac672ed5a52a35ba05d3aa4e623d4c460" name="ac672ed5a52a35ba05d3aa4e623d4c460"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac672ed5a52a35ba05d3aa4e623d4c460">&#9670;&#160;</a></span>CruiseTargetMultiplier()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.Solver.ShotSimulator.CruiseTargetMultiplier </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>taps</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html">ShotCruiseConfig</a></td>          <td class="paramname"><span class="paramname"><em>cruiseConfig</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -1272,6 +1374,31 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a2c79236612561ac1f5a9de8513510af1" name="a2c79236612561ac1f5a9de8513510af1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c79236612561ac1f5a9de8513510af1">&#9670;&#160;</a></span>SpendPierceAtDischarge()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Solver.ShotSimulator.SpendPierceAtDischarge </td>
+          <td>(</td>
+          <td class="paramtype">ref <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightState.html">ShotFlightState</a></td>          <td class="paramname"><span class="paramname"><em>state</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ae1e82c4a16fe4bee38f436b63b4eb45a" name="ae1e82c4a16fe4bee38f436b63b4eb45a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae1e82c4a16fe4bee38f436b63b4eb45a">&#9670;&#160;</a></span>TryAxisCandidate()</h2>
 
@@ -1683,6 +1810,55 @@ Static Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">List&lt; float &gt;</td>          <td class="paramname"><span class="paramname"><em>timestampsOut</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ref <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightState.html">ShotFlightState</a></td>          <td class="paramname"><span class="paramname"><em>state</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6f187c0d2304254be825750ef1de9df5" name="a6f187c0d2304254be825750ef1de9df5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f187c0d2304254be825750ef1de9df5">&#9670;&#160;</a></span>TrySweepSegment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Solver.ShotSimulator.TrySweepSegment </td>
+          <td>(</td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>wallContact</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>projectileContactRadius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a>[]</td>          <td class="paramname"><span class="paramname"><em>workingSet</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>activeCount</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html">ShotBoardDynamics</a></td>          <td class="paramname"><span class="paramname"><em>dynamics</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

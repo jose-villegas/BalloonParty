@@ -1,5 +1,11 @@
 var NAVTREEINDEX18 =
 {
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings.html#addcb12469d4439581389a6fb10ec7912":[5,0,0,3,4,31,3],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings.html#addcb12469d4439581389a6fb10ec7912":[6,0,0,3,4,31,3],
+"classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html":[5,0,0,3,11],
+"classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html":[6,0,0,3,11],
+"classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html#a21aff57d70a38541694d633041f168dd":[5,0,0,3,11,2],
+"classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html#a21aff57d70a38541694d633041f168dd":[6,0,0,3,11,2],
 "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html#a40db9e658001210800e1515a104dc3ea":[5,0,0,3,11,7],
 "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html#a40db9e658001210800e1515a104dc3ea":[6,0,0,3,11,7],
 "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html#a65d695f8b7604a41f9c412dfa763aa68":[5,0,0,3,11,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX18 =
 "classBalloonParty_1_1Configuration_1_1Items_1_1PaintSettings.html#a3bb5fcd9f9d4e1491f78487e082ccdf1":[5,0,0,3,6,7,20],
 "classBalloonParty_1_1Configuration_1_1Items_1_1PaintSettings.html#a3bb5fcd9f9d4e1491f78487e082ccdf1":[6,0,0,3,6,7,20],
 "classBalloonParty_1_1Configuration_1_1Items_1_1PaintSettings.html#a435e69e5e8e92b60e62071fe40be2d19":[5,0,0,3,6,7,14],
-"classBalloonParty_1_1Configuration_1_1Items_1_1PaintSettings.html#a435e69e5e8e92b60e62071fe40be2d19":[6,0,0,3,6,7,14],
-"classBalloonParty_1_1Configuration_1_1Items_1_1PaintSettings.html#a438f5246020275787088ccdc070c0f1f":[5,0,0,3,6,7,21],
-"classBalloonParty_1_1Configuration_1_1Items_1_1PaintSettings.html#a438f5246020275787088ccdc070c0f1f":[6,0,0,3,6,7,21],
-"classBalloonParty_1_1Configuration_1_1Items_1_1PaintSettings.html#a4e4fee6bfccae9ce430a957c6d2d0134":[5,0,0,3,6,7,1],
-"classBalloonParty_1_1Configuration_1_1Items_1_1PaintSettings.html#a4e4fee6bfccae9ce430a957c6d2d0134":[6,0,0,3,6,7,1],
-"classBalloonParty_1_1Configuration_1_1Items_1_1PaintSettings.html#a59ad4159fb1e5e9c11533c57d41c5e09":[5,0,0,3,6,7,17],
-"classBalloonParty_1_1Configuration_1_1Items_1_1PaintSettings.html#a59ad4159fb1e5e9c11533c57d41c5e09":[6,0,0,3,6,7,17]
+"classBalloonParty_1_1Configuration_1_1Items_1_1PaintSettings.html#a435e69e5e8e92b60e62071fe40be2d19":[6,0,0,3,6,7,14]
 };

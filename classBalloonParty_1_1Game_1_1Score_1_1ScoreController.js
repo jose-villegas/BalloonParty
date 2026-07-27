@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Game_1_1Score_1_1ScoreController =
 [
-    [ "ScoreController", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a2ebbdd5a217b7dd05b17ada7eede6c6b", null ],
+    [ "ScoreController", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a2ba268722270f08f0f2be10eb0e0995c", null ],
     [ "ClearRunState", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a17ca817baffba507d7d9acdaeb7f2825", null ],
     [ "CollectIncompleteColors", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a682712772e6a2e4987183bf675fb10d4", null ],
     [ "Dispose", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#aa50b979a3ff223e981643100723f7c85", null ],
@@ -15,11 +15,13 @@ var classBalloonParty_1_1Game_1_1Score_1_1ScoreController =
     [ "Start", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a38c70c127b30c9c2b6b23fb9d64f9984", null ],
     [ "_colorKeys", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#ab80e378432c86810cd6d7de1bfd055f7", null ],
     [ "_levelProgress", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a0bd168269c2be12416273571bc95ed70", null ],
+    [ "_levelStartScore", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a0d377c0af8fb7219b5c140a3a44446bc", null ],
     [ "_levelUpSubscriber", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a3de1b134d7aba1c32dec01a709a5c8cf", null ],
     [ "_levelUpSubscription", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#ac241268310e8438937bf799ce2049bdc", null ],
     [ "_palette", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a15b48a850de1c26a498b783d71ab4b2d", null ],
     [ "_persistentScore", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a04b52b5b05951eeb757b9fcac1c379a4", null ],
     [ "_projectedTotal", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a399454cfc410bf326e3da59be15a26c4", null ],
+    [ "_retryState", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#adfcedc2fd9bdb33273c9850d5c8ada84", null ],
     [ "_scoredPublisher", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a9a1274a06d830e7f56041f2304099b23", null ],
     [ "_snapCredit", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#abff90c89430c564415a83ac83ecdcbf3", null ],
     [ "_streakTracker", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a29fc7e06c3688dad6d58a543beabe07b", null ],

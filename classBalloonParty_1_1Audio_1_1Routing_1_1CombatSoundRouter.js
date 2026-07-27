@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter =
 [
-    [ "CombatSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#af288caa7201ab57fa49300fd5758ec82", null ],
+    [ "CombatSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a4fee558327d670f193da2f04127246cf", null ],
     [ "DeflectSoundFor", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a20b5aa91783e49f3b5e52a89689e7cee", null ],
     [ "Dispose", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a3994946f4836829d573659a39293cb9a", null ],
     [ "IncrementPopCounter", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#abf81c768ef26f86019a9835e9215c21e", null ],
@@ -15,6 +15,7 @@ var classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter =
     [ "OnProjectileDestroyed", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a87fdcfe736d49c1c7bdf053980c286f4", null ],
     [ "OnShieldGained", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a06476eb146878d66ad4af62a911d7419", null ],
     [ "OnShieldLost", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a82c4c945aef6fc0607771dcc3e1ef93c", null ],
+    [ "OnSpeedTapMinted", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a30c934332088bd2691be593d3e0b50cd", null ],
     [ "OnWallHit", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a1467053f46fe387af71f67b066f7da4b", null ],
     [ "PopSemitoneOffset", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a11eee163200e55f1aba08e8872f680c0", null ],
     [ "PopSoundFor", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#af5dd0038b4e023887ff9885ff89ab02d", null ],
@@ -36,6 +37,7 @@ var classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter =
     [ "_rainbowPopsThisFlight", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a939b382d1d40f40d64f29f1c4c89653b", null ],
     [ "_shieldGainedSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a675d71e3913e6da5c5b370ad79d7b8d8", null ],
     [ "_shieldLostSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#ab4fb3cf05afc12a5ec80493d1363328c", null ],
+    [ "_speedTapSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a32ad6ce768ca8fd2b2b87f7c12b48bcc", null ],
     [ "_subscriptions", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a1fd9edd666bcae882f8d7f18771a05cd", null ],
     [ "_toughPopsThisFlight", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a4c6ab7f8f7e98db10e89e816c6597cc6", null ],
     [ "_unbreakableDeflectsThisFlight", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a64c3b923cb476f2602ec5c3164217102", null ],

@@ -8,5 +8,6 @@ var searchData=
   ['pressureresponse_5',['PressureResponse',['../namespaceBalloonParty_1_1Slots_1_1Capabilities.html#ac1d521bee5fff8ee83685d6d74a1068b',1,'BalloonParty::Slots::Capabilities']]],
   ['projectilebuffid_6',['ProjectileBuffId',['../namespaceBalloonParty_1_1Projectile_1_1Model.html#a6a63c533c8791904d77d878aa8808865',1,'BalloonParty::Projectile::Model']]],
   ['projectilehitvisual_7',['ProjectileHitVisual',['../namespaceBalloonParty_1_1Projectile_1_1Controller.html#adcae15a3eb95c064df9a6b8fc67069e5',1,'BalloonParty::Projectile::Controller']]],
-  ['projectilestepoutcome_8',['ProjectileStepOutcome',['../namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649',1,'BalloonParty::Projectile::Controller']]]
+  ['projectilestepoutcome_8',['ProjectileStepOutcome',['../namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649',1,'BalloonParty::Projectile::Controller']]],
+  ['projectilesweepoutcome_9',['ProjectileSweepOutcome',['../namespaceBalloonParty_1_1Projectile_1_1Controller.html#a269c35de6ac7d821e1a397646dd92704',1,'BalloonParty::Projectile::Controller']]]
 ];

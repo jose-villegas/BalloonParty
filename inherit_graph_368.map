@@ -1,25 +1,33 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,349,141,374"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Audio_1_1Editor_1_1SoundBankConfigurationEditor.html" title=" " alt="" coords="209,5,429,45"/>
-<area shape="poly" id="edge526_Node000000_Node000001" title=" " alt="" coords="74,335,82,277,101,202,116,162,135,123,158,87,188,55,207,42,210,46,191,59,163,90,139,126,121,164,106,203,87,278,79,336"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1GameDisplayConfigurationEditor.html" title=" " alt="" coords="199,70,438,125"/>
-<area shape="poly" id="edge527_Node000000_Node000002" title=" " alt="" coords="78,335,92,291,114,238,145,183,165,158,188,135,206,123,209,127,191,139,169,161,150,186,118,240,97,293,83,336"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1ProjectileFlightConfigEditor.html" title=" " alt="" coords="199,149,439,189"/>
-<area shape="poly" id="edge528_Node000000_Node000003" title=" " alt="" coords="83,335,123,267,152,230,188,199,210,187,213,192,191,204,156,234,127,270,88,337"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Editor_1_1ColorableBalloonVariantEditor.html" title=" " alt="" coords="214,213,423,253"/>
-<area shape="poly" id="edge529_Node000000_Node000004" title=" " alt="" coords="94,337,135,299,188,263,217,251,219,256,191,268,138,303,97,341"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Editor_1_1PaintDripOverlayEditor.html" title="Adds an in&#45;editor preview to PaintDripOverlay: scrub the drip with a slider or press Play to run it o..." alt="" coords="229,277,408,317"/>
-<area shape="poly" id="edge530_Node000000_Node000005" title=" " alt="" coords="131,342,189,327,235,315,236,320,190,332,133,348"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Editor_1_1RainbowBalloonVariantEditor.html" title="Replaces the inherited single&#45;colour preview (meaningless for a rainbow — it has no concrete colour) ..." alt="" coords="217,341,420,381"/>
-<area shape="poly" id="edge531_Node000000_Node000006" title=" " alt="" coords="155,359,217,359,217,364,155,364"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Editor_1_1SceneCaptureServiceEditor.html" title="Live play&#45;mode preview of the shared scene&#45;capture RT on the SceneCaptureService inspector — for judg..." alt="" coords="225,405,412,445"/>
-<area shape="poly" id="edge532_Node000000_Node000007" title=" " alt="" coords="133,375,190,391,236,403,235,408,189,396,131,380"/>
-<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Editor_1_1ScreenSpaceLightServiceEditor.html" title="Live play&#45;mode preview of the screen&#45;space light buffer: RGB is bounce color, A is shadow amount." alt="" coords="223,469,414,509"/>
-<area shape="poly" id="edge533_Node000000_Node000008" title=" " alt="" coords="97,382,138,420,191,455,224,469,222,474,188,460,135,424,94,386"/>
-<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Editor_1_1ShadowBake_1_1ImageShadowBakerEditor.html" title="Inspector for ImageShadowBaker: bakes a blurred silhouette sprite and wires it into a shadow Image ch..." alt="" coords="206,533,431,573"/>
-<area shape="poly" id="edge534_Node000000_Node000009" title=" " alt="" coords="88,385,127,453,156,489,191,519,213,531,210,536,188,524,152,493,123,456,83,388"/>
-<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor.html" title="Inspector for SpriteShadowBaker: bakes a blurred silhouette sprite and wires it into the prefab." alt="" coords="207,597,430,637"/>
-<area shape="poly" id="edge535_Node000000_Node000010" title=" " alt="" coords="83,387,96,430,117,484,149,538,168,562,191,583,209,595,207,599,188,587,164,566,144,541,113,486,91,432,78,388"/>
-<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html" title="Bake logic for SpriteLayerCombiner: flattens the assigned sprite layers into one straight&#45;alpha PNG s..." alt="" coords="189,661,448,701"/>
-<area shape="poly" id="edge536_Node000000_Node000011" title=" " alt="" coords="80,388,89,442,108,513,123,550,141,586,164,619,191,647,208,659,205,663,188,651,160,622,137,588,118,552,103,514,84,444,75,388"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,301,129,326"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html" title=" " alt="" coords="179,5,403,45"/>
+<area shape="poly" id="edge510_Node000000_Node000001" title=" " alt="" coords="70,287,80,237,99,175,130,111,151,81,176,55,193,43,196,48,179,59,155,85,135,114,104,177,85,239,75,288"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html" title=" " alt="" coords="177,69,405,109"/>
+<area shape="poly" id="edge511_Node000000_Node000002" title=" " alt="" coords="74,287,87,249,109,204,138,158,176,119,195,107,198,112,179,123,142,162,113,207,92,251,79,288"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1StampProfileDrawer.html" title=" " alt="" coords="193,133,390,173"/>
+<area shape="poly" id="edge512_Node000000_Node000003" title=" " alt="" coords="81,288,119,235,146,207,176,183,199,171,202,176,179,188,149,211,123,238,85,291"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html" title="Base class for property drawers that auto&#45;draw common fields, with a manual section for fields needin..." alt="" coords="203,197,380,237"/>
+<area shape="poly" id="edge513_Node000000_Node000004" title=" " alt="" coords="97,291,134,268,176,247,209,235,211,240,178,252,137,273,100,295"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Editor_1_1EnumIndexedDrawer.html" title="Draws each element of an EnumIndexedAttribute array using the enum value&#39;s name as its label." alt="" coords="199,261,383,301"/>
+<area shape="poly" id="edge519_Node000000_Node000010" title=" " alt="" coords="143,300,199,292,200,297,144,305"/>
+<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Editor_1_1LevelRangeEntryDrawer.html" title="Shows LevelRangeEntry array elements as &quot;Level N&quot;, &quot;Level N–M&quot;, or &quot;Fallback&quot; instead of the default ..." alt="" coords="200,325,383,365"/>
+<area shape="poly" id="edge520_Node000000_Node000011" title=" " alt="" coords="144,321,200,330,199,335,143,327"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Editor_1_1MusicalNoteDrawer.html" title="Draws a MusicalNoteAttribute int field as a note&#45;name dropdown." alt="" coords="193,389,390,429"/>
+<area shape="poly" id="edge521_Node000000_Node000012" title=" " alt="" coords="100,332,137,354,178,375,211,387,209,392,176,380,134,359,97,336"/>
+<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Editor_1_1ShowIfEnumDrawer.html" title="Hides a [ShowIfEnum] field unless its named sibling enum matches one of the attribute&#39;s values,..." alt="" coords="200,453,383,493"/>
+<area shape="poly" id="edge522_Node000000_Node000013" title=" " alt="" coords="85,336,123,388,149,416,179,439,202,451,199,456,176,444,146,420,119,392,81,339"/>
+<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Editor_1_1SortingLayerNameDrawer.html" title="Renders a SortingLayerNameAttribute string field as a popup of the project&#39;s sorting layers." alt="" coords="195,517,388,557"/>
+<area shape="poly" id="edge523_Node000000_Node000014" title=" " alt="" coords="79,338,92,375,113,420,142,465,179,503,198,515,195,519,176,507,138,468,109,423,87,378,74,340"/>
+<area shape="rect" id="Node000015" href="$classBalloonParty_1_1Editor_1_1UnitCircleDrawer.html" title="Unit&#45;circle direction picker for [UnitCircle] Vector2 fields: click or drag inside the disc to aim th..." alt="" coords="204,581,379,621"/>
+<area shape="poly" id="edge524_Node000000_Node000015" title=" " alt="" coords="75,339,85,388,104,450,135,513,155,542,179,567,205,584,203,588,176,571,151,545,130,516,99,452,80,389,70,340"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1BalloonPrefabEntryDrawer.html" title=" " alt="" coords="453,69,688,109"/>
+<area shape="poly" id="edge514_Node000004_Node000005" title=" " alt="" coords="391,191,404,183,419,168,427,152,435,135,452,119,474,107,476,112,455,123,440,139,432,154,423,171,407,187,394,195"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1HitVfxOverrideDrawer.html" title=" " alt="" coords="467,133,674,173"/>
+<area shape="poly" id="edge515_Node000004_Node000006" title=" " alt="" coords="392,192,482,171,483,176,393,197"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1ItemSettingsDrawer.html" title=" " alt="" coords="472,197,669,237"/>
+<area shape="poly" id="edge516_Node000004_Node000007" title=" " alt="" coords="394,215,472,215,472,220,394,220"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html" title=" " alt="" coords="472,261,669,301"/>
+<area shape="poly" id="edge517_Node000004_Node000008" title=" " alt="" coords="393,238,483,259,482,264,392,243"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html" title=" " alt="" coords="474,325,667,365"/>
+<area shape="poly" id="edge518_Node000004_Node000009" title=" " alt="" coords="394,239,407,247,423,263,432,280,440,296,455,311,476,323,474,328,452,315,435,299,427,283,419,267,404,251,391,244"/>
 </map>

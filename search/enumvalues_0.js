@@ -10,5 +10,6 @@ var searchData=
   ['always_7',['Always',['../namespaceBalloonParty_1_1Item.html#a3cee616f1b5780b8981284d91d31be6ba68eec46437c384d8dad18d5464ebc35c',1,'BalloonParty::Item']]],
   ['ambient_8',['Ambient',['../namespaceBalloonParty_1_1Shared_1_1SceneLight.html#aba1f92fb89a50c3bfb7903105772e9b9aed8e37bad13d76c6dbeb58152440b41e',1,'BalloonParty::Shared::SceneLight']]],
   ['appear_9',['Appear',['../classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#a8c8a6fea98ad336c6b6db99c683b7f8ca90fca44a1a2ebabd6e55ceb1537e2bc9',1,'BalloonParty::UI::Score::ProgressNotice']]],
-  ['attributionby_10',['AttributionBy',['../namespaceBalloonParty_1_1Audio_1_1Editor.html#aa262f9b9965eb614ed0767c6d5473bcca58e8bfcae326a6afb129a124f76f9639',1,'BalloonParty::Audio::Editor']]]
+  ['armramp_10',['ArmRamp',['../namespaceBalloonParty_1_1Projectile_1_1Model.html#a360a7607028c135b5205293095e7cabda4dfe6d9de5dacfaf857e7c5e77610246',1,'BalloonParty::Projectile::Model']]],
+  ['attributionby_11',['AttributionBy',['../namespaceBalloonParty_1_1Audio_1_1Editor.html#aa262f9b9965eb614ed0767c6d5473bcca58e8bfcae326a6afb129a124f76f9639',1,'BalloonParty::Audio::Editor']]]
 ];

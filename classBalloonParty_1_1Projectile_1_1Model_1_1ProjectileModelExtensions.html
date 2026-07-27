@@ -109,6 +109,7 @@ $(function(){initNavTree('classBalloonParty_1_1Projectile_1_1Model_1_1Projectile
 <div class="header">
   <div class="summary">
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileModelExtensions-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Projectile.Model.ProjectileModelExtensions Class Reference</div></div>
 </div><!--header-->
@@ -116,11 +117,145 @@ $(function(){initNavTree('classBalloonParty_1_1Projectile_1_1Model_1_1Projectile
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a67384665cdb055014e742ecd3f79b4cf" id="r_a67384665cdb055014e742ecd3f79b4cf"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67384665cdb055014e742ecd3f79b4cf">ArmPierce</a> (this <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a> model)</td></tr>
+<tr class="memdesc:a67384665cdb055014e742ecd3f79b4cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arms piercing (idempotently) and starts the acceleration into the tap count's new target, anchored at the speed the shot is actually travelling right now — so arming, and every armed tap after it, is continuous rather than a snap or a dip.  <br /></td></tr>
+<tr class="separator:a67384665cdb055014e742ecd3f79b4cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1069d5bc9aff96a227ae67f3ae4ed860" id="r_a1069d5bc9aff96a227ae67f3ae4ed860"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1069d5bc9aff96a227ae67f3ae4ed860">BeginTapBeat</a> (this <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a> model)</td></tr>
+<tr class="memdesc:a1069d5bc9aff96a227ae67f3ae4ed860"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts a tap's freeze-then-pickup beat — the same transition as the arm ramp, anchored at a standstill instead.  <br /></td></tr>
+<tr class="separator:a1069d5bc9aff96a227ae67f3ae4ed860"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2cbe61242c816d7effb226cd8c21123" id="r_ab2cbe61242c816d7effb226cd8c21123"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab2cbe61242c816d7effb226cd8c21123">EndCruise</a> (this <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a> model)</td></tr>
+<tr class="memdesc:ab2cbe61242c816d7effb226cd8c21123"><td class="mdescLeft">&#160;</td><td class="mdescRight">Drops the cruise and the taps that fed it, returning the shot to base speed.  <br /></td></tr>
+<tr class="separator:ab2cbe61242c816d7effb226cd8c21123"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d40402c889b4737f79926c606cd00e9" id="r_a1d40402c889b4737f79926c606cd00e9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1d40402c889b4737f79926c606cd00e9">EndPierce</a> (this <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a> model)</td></tr>
 <tr class="memdesc:a1d40402c889b4737f79926c606cd00e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ends the piercing state and the cruise that fed it — called at wall-discharge.  <br /></td></tr>
 <tr class="separator:a1d40402c889b4737f79926c606cd00e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4867bf0899a5eba43fe4ca98ad882113" id="r_a4867bf0899a5eba43fe4ca98ad882113"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4867bf0899a5eba43fe4ca98ad882113">SpendPierce</a> (this <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a> model)</td></tr>
+<tr class="memdesc:a4867bf0899a5eba43fe4ca98ad882113"><td class="mdescLeft">&#160;</td><td class="mdescRight">Spends the pierce at a discharge.  <br /></td></tr>
+<tr class="separator:a4867bf0899a5eba43fe4ca98ad882113"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a1b9a2a83bc9cea34efb7510532c36561" id="r_a1b9a2a83bc9cea34efb7510532c36561"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1b9a2a83bc9cea34efb7510532c36561">BeginSpeedTransition</a> (this <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a> model, <a class="el" href="namespaceBalloonParty_1_1Projectile_1_1Model.html#a360a7607028c135b5205293095e7cabd">SpeedTransitionKind</a> kind, float fromSpeed)</td></tr>
+<tr class="separator:a1b9a2a83bc9cea34efb7510532c36561"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a67384665cdb055014e742ecd3f79b4cf" name="a67384665cdb055014e742ecd3f79b4cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67384665cdb055014e742ecd3f79b4cf">&#9670;&#160;</a></span>ArmPierce()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Projectile.Model.ProjectileModelExtensions.ArmPierce </td>
+          <td>(</td>
+          <td class="paramtype">this <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a></td>          <td class="paramname"><span class="paramname"><em>model</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Arms piercing (idempotently) and starts the acceleration into the tap count's new target, anchored at the speed the shot is actually travelling right now — so arming, and every armed tap after it, is continuous rather than a snap or a dip. </p>
+<p>Both rules that earn a tap (the resolver's cruise bounce and the view's sweep) come through <code>ProjectileTapResolver.TryGrantTap</code>. </p>
+
+</div>
+</div>
+<a id="a1b9a2a83bc9cea34efb7510532c36561" name="a1b9a2a83bc9cea34efb7510532c36561"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b9a2a83bc9cea34efb7510532c36561">&#9670;&#160;</a></span>BeginSpeedTransition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Projectile.Model.ProjectileModelExtensions.BeginSpeedTransition </td>
+          <td>(</td>
+          <td class="paramtype">this <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a></td>          <td class="paramname"><span class="paramname"><em>model</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Projectile_1_1Model.html#a360a7607028c135b5205293095e7cabd">SpeedTransitionKind</a></td>          <td class="paramname"><span class="paramname"><em>kind</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>fromSpeed</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1069d5bc9aff96a227ae67f3ae4ed860" name="a1069d5bc9aff96a227ae67f3ae4ed860"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1069d5bc9aff96a227ae67f3ae4ed860">&#9670;&#160;</a></span>BeginTapBeat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Projectile.Model.ProjectileModelExtensions.BeginTapBeat </td>
+          <td>(</td>
+          <td class="paramtype">this <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a></td>          <td class="paramname"><span class="paramname"><em>model</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Starts a tap's freeze-then-pickup beat — the same transition as the arm ramp, anchored at a standstill instead. </p>
+<p>That anchor IS the beat: the shot drops and winds back up, which is how earning a tap reads. </p>
+
+</div>
+</div>
+<a id="ab2cbe61242c816d7effb226cd8c21123" name="ab2cbe61242c816d7effb226cd8c21123"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2cbe61242c816d7effb226cd8c21123">&#9670;&#160;</a></span>EndCruise()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Projectile.Model.ProjectileModelExtensions.EndCruise </td>
+          <td>(</td>
+          <td class="paramtype">this <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a></td>          <td class="paramname"><span class="paramname"><em>model</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Drops the cruise and the taps that fed it, returning the shot to base speed. </p>
+
+</div>
+</div>
 <a id="a1d40402c889b4737f79926c606cd00e9" name="a1d40402c889b4737f79926c606cd00e9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1d40402c889b4737f79926c606cd00e9">&#9670;&#160;</a></span>EndPierce()</h2>
 
@@ -145,6 +280,34 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Ends the piercing state and the cruise that fed it — called at wall-discharge. </p>
+
+</div>
+</div>
+<a id="a4867bf0899a5eba43fe4ca98ad882113" name="a4867bf0899a5eba43fe4ca98ad882113"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4867bf0899a5eba43fe4ca98ad882113">&#9670;&#160;</a></span>SpendPierce()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Projectile.Model.ProjectileModelExtensions.SpendPierce </td>
+          <td>(</td>
+          <td class="paramtype">this <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a></td>          <td class="paramname"><span class="paramname"><em>model</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Spends the pierce at a discharge. </p>
+<p>A banked Snipe charge re-arms the lance in the same breath: the cruise that fed the old pierce still ends (a re-armed lance starts from base speed, so the ramps never compound), but <code>IsPiercing</code> never dips — a dip would release the level-up hold keyed off it (<code>LevelController</code>) mid-flight. Returns true when a charge kept the shot armed; the charge itself is consumed by <code>SnipeItemHandler</code> on the discharge message, which owns the grant it re-applies. </p>
 
 </div>
 </div>

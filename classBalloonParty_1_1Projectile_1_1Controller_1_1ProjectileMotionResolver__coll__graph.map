@@ -1,5 +1,7 @@
 <map id="BalloonParty.Projectile.Controller.ProjectileMotionResolver" name="BalloonParty.Projectile.Controller.ProjectileMotionResolver">
-<area shape="rect" id="Node000001" title="Plain, headless&#45;testable projectile flight rules; the view only applies the returned ProjectileStep." alt="" coords="5,108,257,148"/>
-<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Shared_1_1WallLimits.html" title="The four play&#45;area walls unpacked from IProjectileFlightConfig.LimitsClockwise (x = top,..." alt="" coords="40,5,223,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="134,59,134,108,129,108,129,59"/>
+<area shape="rect" id="Node000001" title="Plain, headless&#45;testable projectile flight rules; the view only applies the returned ProjectileStep." alt="" coords="328,37,580,77"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Shared_1_1WallLimits.html" title="The four play&#45;area walls unpacked from IProjectileFlightConfig.LimitsClockwise (x = top,..." alt="" coords="29,5,211,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="225,33,328,43,328,48,225,38"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html" title="Owns the projectile&#39;s speed economy end to end: who may mint a tap, how many exist,..." alt="" coords="5,69,235,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="248,74,328,67,328,72,249,80"/>
 </map>

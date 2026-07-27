@@ -17,5 +17,10 @@ var namespaceBalloonParty_1_1Projectile_1_1Model =
     [ "ProjectileBuffId", "namespaceBalloonParty_1_1Projectile_1_1Model.html#a6a63c533c8791904d77d878aa8808865", [
       [ "Speed", "namespaceBalloonParty_1_1Projectile_1_1Model.html#a6a63c533c8791904d77d878aa8808865a44877c6aa8e93fa5a91c9361211464fb", null ],
       [ "RainbowShield", "namespaceBalloonParty_1_1Projectile_1_1Model.html#a6a63c533c8791904d77d878aa8808865a9218c86c6463e7f24f67a58667707f09", null ]
+    ] ],
+    [ "SpeedTransitionKind", "namespaceBalloonParty_1_1Projectile_1_1Model.html#a360a7607028c135b5205293095e7cabd", [
+      [ "None", "namespaceBalloonParty_1_1Projectile_1_1Model.html#a360a7607028c135b5205293095e7cabda6adf97f83acf6453d4a6a4b1070f3754", null ],
+      [ "TapBeat", "namespaceBalloonParty_1_1Projectile_1_1Model.html#a360a7607028c135b5205293095e7cabdab019a36c6bc8818a71557ef5ec232ac7", null ],
+      [ "ArmRamp", "namespaceBalloonParty_1_1Projectile_1_1Model.html#a360a7607028c135b5205293095e7cabda4dfe6d9de5dacfaf857e7c5e77610246", null ]
     ] ]
 ];

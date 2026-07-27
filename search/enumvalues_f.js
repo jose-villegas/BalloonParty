@@ -18,10 +18,11 @@ var searchData=
   ['snapfade_15',['SnapFade',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a58402d3cd9ac1d9358b618890bc428a7a8d4d60912514a7a5716c2b4131aaa227',1,'BalloonParty::Game::Score::Behaviours::ShapeFormationTicker']]],
   ['snipe_16',['Snipe',['../namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2ba82a0147abe0fb08bde142ccf08ae65f7',1,'BalloonParty::Configuration::Items']]],
   ['speed_17',['Speed',['../namespaceBalloonParty_1_1Projectile_1_1Model.html#a6a63c533c8791904d77d878aa8808865a44877c6aa8e93fa5a91c9361211464fb',1,'BalloonParty::Projectile::Model']]],
-  ['spin_18',['Spin',['../namespaceBalloonParty_1_1Item.html#a4a04281aacbeef82356c71d42efb15f9af5a6a925d4084ae58bd71a8a95a84ba7',1,'BalloonParty::Item']]],
-  ['spinrandom_19',['SpinRandom',['../namespaceBalloonParty_1_1Item.html#a4a04281aacbeef82356c71d42efb15f9a65dee8d89dd7066b5bd9b2f6fbf98846',1,'BalloonParty::Item']]],
-  ['static_20',['Static',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder.html#a3cadaf45926095823fd72c09e769d6f3a84a8921b25f505d0d2077aeb5db4bc16',1,'BalloonParty.Balloon.Controller.BalanceDebugRecorder.Static'],['../namespaceBalloonParty_1_1Slots_1_1Actor.html#adbab49aebf9c1f422de5a17b7033167ea84a8921b25f505d0d2077aeb5db4bc16',1,'BalloonParty.Slots.Actor.Static']]],
-  ['staticactors_21',['StaticActors',['../namespaceBalloonParty_1_1Slots_1_1Spawner.html#a59fd3232168b8edfa6b95ac465991a16a3135c713a4fafde404c140535df80cbd',1,'BalloonParty::Slots::Spawner']]],
-  ['stinger_22',['Stinger',['../namespaceBalloonParty_1_1Audio_1_1Configuration.html#ac5b2f541d895bda884bd17d9aaa85d4bae60b65c860681c0a53fcded0e33fc6de',1,'BalloonParty::Audio::Configuration']]],
-  ['streakstep_23',['StreakStep',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13ae636b7fef3bfdde05e9a90ce5a52a95f',1,'BalloonParty::Audio']]]
+  ['speedtap_18',['SpeedTap',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a94c7b886faf6f349c007fc101ccdaf00',1,'BalloonParty::Audio']]],
+  ['spin_19',['Spin',['../namespaceBalloonParty_1_1Item.html#a4a04281aacbeef82356c71d42efb15f9af5a6a925d4084ae58bd71a8a95a84ba7',1,'BalloonParty::Item']]],
+  ['spinrandom_20',['SpinRandom',['../namespaceBalloonParty_1_1Item.html#a4a04281aacbeef82356c71d42efb15f9a65dee8d89dd7066b5bd9b2f6fbf98846',1,'BalloonParty::Item']]],
+  ['static_21',['Static',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder.html#a3cadaf45926095823fd72c09e769d6f3a84a8921b25f505d0d2077aeb5db4bc16',1,'BalloonParty.Balloon.Controller.BalanceDebugRecorder.Static'],['../namespaceBalloonParty_1_1Slots_1_1Actor.html#adbab49aebf9c1f422de5a17b7033167ea84a8921b25f505d0d2077aeb5db4bc16',1,'BalloonParty.Slots.Actor.Static']]],
+  ['staticactors_22',['StaticActors',['../namespaceBalloonParty_1_1Slots_1_1Spawner.html#a59fd3232168b8edfa6b95ac465991a16a3135c713a4fafde404c140535df80cbd',1,'BalloonParty::Slots::Spawner']]],
+  ['stinger_23',['Stinger',['../namespaceBalloonParty_1_1Audio_1_1Configuration.html#ac5b2f541d895bda884bd17d9aaa85d4bae60b65c860681c0a53fcded0e33fc6de',1,'BalloonParty::Audio::Configuration']]],
+  ['streakstep_24',['StreakStep',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13ae636b7fef3bfdde05e9a90ce5a52a95f',1,'BalloonParty::Audio']]]
 ];

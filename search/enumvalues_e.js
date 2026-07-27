@@ -14,5 +14,6 @@ var searchData=
   ['removed_11',['Removed',['../namespaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster.html#afcdc13988dd8dbdd7b8ab7bd2bb92146a93f07b720ebf7d1246512569761a5804',1,'BalloonParty.Slots.Actor.Cluster.Removed'],['../namespaceBalloonParty_1_1Slots_1_1Grid.html#a6efd918aa80f2918a2b989c8b0090a39a93f07b720ebf7d1246512569761a5804',1,'BalloonParty.Slots.Grid.Removed']]],
   ['resized_12',['Resized',['../namespaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster.html#afcdc13988dd8dbdd7b8ab7bd2bb92146a22995988de764d7a8cb4165fbff371cb',1,'BalloonParty::Slots::Actor::Cluster']]],
   ['return_13',['Return',['../namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3dba988fd738de9c6d177440c5dcf69e73ce',1,'BalloonParty::UI::Score']]],
-  ['rotation_14',['Rotation',['../namespaceBalloonParty_1_1Shared_1_1Animation.html#a3b98750e703da851323fd98e58c6879baf1a42bd417390fc63b030a519624607a',1,'BalloonParty::Shared::Animation']]]
+  ['rotation_14',['Rotation',['../namespaceBalloonParty_1_1Shared_1_1Animation.html#a3b98750e703da851323fd98e58c6879baf1a42bd417390fc63b030a519624607a',1,'BalloonParty::Shared::Animation']]],
+  ['runbroken_15',['RunBroken',['../namespaceBalloonParty_1_1Projectile_1_1Controller.html#a269c35de6ac7d821e1a397646dd92704a43ec9846892f6095cd124df606a773eb',1,'BalloonParty::Projectile::Controller']]]
 ];

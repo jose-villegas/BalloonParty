@@ -110,6 +110,7 @@ $(function(){initNavTree('structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html'
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="structBalloonParty_1_1Solver_1_1ShotCruiseConfig-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Solver.ShotCruiseConfig Struct Reference</div></div>
@@ -121,23 +122,34 @@ $(function(){initNavTree('structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html'
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab8ab0ac8d02e776c5b565d06d608d2eb" id="r_ab8ab0ac8d02e776c5b565d06d608d2eb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8ab0ac8d02e776c5b565d06d608d2eb">ShotCruiseConfig</a> (int wallBounceThreshold, float speedPerShield, float maxSpeedMultiplier=0f, float tapEaseDuration=0f, AnimationCurve tapCurve=null, int piercingTapThreshold=0)</td></tr>
-<tr class="separator:ab8ab0ac8d02e776c5b565d06d608d2eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc19a8e54ffa6d4b6a60294f9e0a60f1" id="r_adc19a8e54ffa6d4b6a60294f9e0a60f1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc19a8e54ffa6d4b6a60294f9e0a60f1">ShotCruiseConfig</a> (int wallBounceThreshold, float speedGainPerTap, float maxSpeedMultiplier=0f, float tapEaseDuration=0f, AnimationCurve tapCurve=null, int piercingTapThreshold=0, float armRampDuration=0f, AnimationCurve armRampCurve=null, bool sweepEnabled=false, int sweepTapThreshold=0)</td></tr>
+<tr class="separator:adc19a8e54ffa6d4b6a60294f9e0a60f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a365a3b3a9ef13e8f357513103da901a6" id="r_a365a3b3a9ef13e8f357513103da901a6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a365a3b3a9ef13e8f357513103da901a6">ShotCruiseConfig</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a> config)</td></tr>
 <tr class="separator:a365a3b3a9ef13e8f357513103da901a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:a3b95fc46b3359fb8eeb71fcb79bcb24c" id="r_a3b95fc46b3359fb8eeb71fcb79bcb24c"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3b95fc46b3359fb8eeb71fcb79bcb24c">ArmRampLagSeconds</a></td></tr>
+<tr class="separator:a3b95fc46b3359fb8eeb71fcb79bcb24c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac61ae0f647e180a95d1a24196cef94f2" id="r_ac61ae0f647e180a95d1a24196cef94f2"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac61ae0f647e180a95d1a24196cef94f2">MaxSpeedMultiplier</a></td></tr>
 <tr class="separator:ac61ae0f647e180a95d1a24196cef94f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f48532d3c6e14b7e836cd3c1a319966" id="r_a3f48532d3c6e14b7e836cd3c1a319966"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f48532d3c6e14b7e836cd3c1a319966">PiercingTapThreshold</a></td></tr>
 <tr class="separator:a3f48532d3c6e14b7e836cd3c1a319966"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab177fbb82441bcc05602b47c99ca6d57" id="r_ab177fbb82441bcc05602b47c99ca6d57"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab177fbb82441bcc05602b47c99ca6d57">SpeedPerShield</a></td></tr>
-<tr class="separator:ab177fbb82441bcc05602b47c99ca6d57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76bd3ee39c5eb911ff8a6845ef9483a1" id="r_a76bd3ee39c5eb911ff8a6845ef9483a1"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a76bd3ee39c5eb911ff8a6845ef9483a1">SpeedGainPerTap</a></td></tr>
+<tr class="separator:a76bd3ee39c5eb911ff8a6845ef9483a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefed61ba8e3cbe96b985e906430f1b71" id="r_aefed61ba8e3cbe96b985e906430f1b71"><td class="memItemLeft" align="right" valign="top">readonly bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aefed61ba8e3cbe96b985e906430f1b71">SweepEnabled</a></td></tr>
+<tr class="separator:aefed61ba8e3cbe96b985e906430f1b71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e6a24ff33d96c776ac6b46c68b5163b" id="r_a0e6a24ff33d96c776ac6b46c68b5163b"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e6a24ff33d96c776ac6b46c68b5163b">SweepTapThreshold</a></td></tr>
+<tr class="separator:a0e6a24ff33d96c776ac6b46c68b5163b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ea7bada1ba16cb50b8d7039a3ceaeb5" id="r_a9ea7bada1ba16cb50b8d7039a3ceaeb5"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ea7bada1ba16cb50b8d7039a3ceaeb5">TapLagSeconds</a></td></tr>
 <tr class="separator:a9ea7bada1ba16cb50b8d7039a3ceaeb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac727fba2588ffecd8981f636cce2397b" id="r_ac727fba2588ffecd8981f636cce2397b"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac727fba2588ffecd8981f636cce2397b">WallBounceThreshold</a></td></tr>
 <tr class="separator:ac727fba2588ffecd8981f636cce2397b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a7a4b2bde33b3c55858c2eaab018fd705" id="r_a7a4b2bde33b3c55858c2eaab018fd705"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a4b2bde33b3c55858c2eaab018fd705">EnvelopeLagSeconds</a> (float duration, AnimationCurve curve)</td></tr>
+<tr class="separator:a7a4b2bde33b3c55858c2eaab018fd705"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -148,8 +160,8 @@ Static Private Attributes</h2></td></tr>
 <div class="textblock"><p>The cruise knobs, mirroring <code><a class="el" href="classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html" title="Plain, headless-testable projectile flight rules; the view only applies the returned ProjectileStep.">ProjectileMotionResolver</a></code>/<code>ProjectileView</code> exactly (see <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html" title="Pure, headless, deterministic billiard simulator for one aim direction (see plan_shot_geometry).">ShotSimulator</a>'s cruise handling). </p>
 <p>Default (all-zero) disables cruise entirely — <a class="el" href="#ac727fba2588ffecd8981f636cce2397b">WallBounceThreshold</a> &lt;= 0 is the same "0 disables" convention <code><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a01ede40361bdd1ac8d848ddc0ce6aaf4">IProjectileFlightConfig.CruiseWallBounceThreshold</a></code> uses. The per-bounce tap ANIMATION (target speed scaled by curve(elapsed/duration), the freeze-then-pickup beat) never bends the path, so the event sim folds it into <a class="el" href="#a9ea7bada1ba16cb50b8d7039a3ceaeb5">TapLagSeconds</a> — the time an eased startup loses versus flying the whole segment at the target speed: duration × (1 − mean curve value) — added to the timeline once per cruise bounce. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ab8ab0ac8d02e776c5b565d06d608d2eb" name="ab8ab0ac8d02e776c5b565d06d608d2eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab8ab0ac8d02e776c5b565d06d608d2eb">&#9670;&#160;</a></span>ShotCruiseConfig() <span class="overload">[1/2]</span></h2>
+<a id="adc19a8e54ffa6d4b6a60294f9e0a60f1" name="adc19a8e54ffa6d4b6a60294f9e0a60f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc19a8e54ffa6d4b6a60294f9e0a60f1">&#9670;&#160;</a></span>ShotCruiseConfig() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -162,7 +174,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>speedPerShield</em></span>, </td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>speedGainPerTap</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -182,7 +194,27 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>piercingTapThreshold</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>piercingTapThreshold</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>armRampDuration</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">AnimationCurve</td>          <td class="paramname"><span class="paramname"><em>armRampCurve</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>sweepEnabled</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>sweepTapThreshold</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -206,7 +238,51 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a7a4b2bde33b3c55858c2eaab018fd705" name="a7a4b2bde33b3c55858c2eaab018fd705"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a4b2bde33b3c55858c2eaab018fd705">&#9670;&#160;</a></span>EnvelopeLagSeconds()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.Solver.ShotCruiseConfig.EnvelopeLagSeconds </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>duration</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">AnimationCurve</td>          <td class="paramname"><span class="paramname"><em>curve</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a3b95fc46b3359fb8eeb71fcb79bcb24c" name="a3b95fc46b3359fb8eeb71fcb79bcb24c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b95fc46b3359fb8eeb71fcb79bcb24c">&#9670;&#160;</a></span>ArmRampLagSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly float BalloonParty.Solver.ShotCruiseConfig.ArmRampLagSeconds</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a89b8752b63c3ba4b51ad87ae2d8a90c3" name="a89b8752b63c3ba4b51ad87ae2d8a90c3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a89b8752b63c3ba4b51ad87ae2d8a90c3">&#9670;&#160;</a></span>CurveAverageSamples</h2>
 
@@ -257,14 +333,42 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab177fbb82441bcc05602b47c99ca6d57" name="ab177fbb82441bcc05602b47c99ca6d57"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab177fbb82441bcc05602b47c99ca6d57">&#9670;&#160;</a></span>SpeedPerShield</h2>
+<a id="a76bd3ee39c5eb911ff8a6845ef9483a1" name="a76bd3ee39c5eb911ff8a6845ef9483a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76bd3ee39c5eb911ff8a6845ef9483a1">&#9670;&#160;</a></span>SpeedGainPerTap</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">readonly float BalloonParty.Solver.ShotCruiseConfig.SpeedPerShield</td>
+          <td class="memname">readonly float BalloonParty.Solver.ShotCruiseConfig.SpeedGainPerTap</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aefed61ba8e3cbe96b985e906430f1b71" name="aefed61ba8e3cbe96b985e906430f1b71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefed61ba8e3cbe96b985e906430f1b71">&#9670;&#160;</a></span>SweepEnabled</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly bool BalloonParty.Solver.ShotCruiseConfig.SweepEnabled</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0e6a24ff33d96c776ac6b46c68b5163b" name="a0e6a24ff33d96c776ac6b46c68b5163b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e6a24ff33d96c776ac6b46c68b5163b">&#9670;&#160;</a></span>SweepTapThreshold</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Solver.ShotCruiseConfig.SweepTapThreshold</td>
         </tr>
       </table>
 </div><div class="memdoc">

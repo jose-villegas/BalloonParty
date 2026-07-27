@@ -63,6 +63,7 @@ var namespaceBalloonParty_1_1Audio =
       [ "LevelAscend", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a5336ad98defcb67c0b4465d92c35399c", null ],
       [ "LevelDescend", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a70c75a31cc6f835f2c930cf95d66106d", null ],
       [ "PierceLoop", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13aba59a10142e4a6bd01a615d5a5a9d457", null ],
-      [ "BalloonDeflectTough", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13ab3145038afada8dce494ec2e51caeef6", null ]
+      [ "BalloonDeflectTough", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13ab3145038afada8dce494ec2e51caeef6", null ],
+      [ "SpeedTap", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a94c7b886faf6f349c007fc101ccdaf00", null ]
     ] ]
 ];

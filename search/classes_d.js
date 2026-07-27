@@ -80,13 +80,14 @@ var searchData=
   ['projectilepositionprovider_77',['ProjectilePositionProvider',['../classBalloonParty_1_1Projectile_1_1ProjectilePositionProvider.html',1,'BalloonParty::Projectile']]],
   ['projectileshieldview_78',['ProjectileShieldView',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView.html',1,'BalloonParty::Projectile::View']]],
   ['projectilestep_79',['ProjectileStep',['../structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html',1,'BalloonParty::Projectile::Controller']]],
-  ['projectiletrail_80',['ProjectileTrail',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileTrail.html',1,'BalloonParty::Projectile::View']]],
-  ['projectileview_81',['ProjectileView',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html',1,'BalloonParty::Projectile::View']]],
-  ['projectilevisualconfig_82',['ProjectileVisualConfig',['../classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html',1,'BalloonParty::Configuration::Effects']]],
-  ['propertydrawerhelper_83',['PropertyDrawerHelper',['../classBalloonParty_1_1Editor_1_1PropertyDrawerHelper.html',1,'BalloonParty::Editor']]],
-  ['puffcloudsettings_84',['PuffCloudSettings',['../classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html',1,'BalloonParty::Configuration::Effects']]],
-  ['puffcloudview_85',['PuffCloudView',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView.html',1,'BalloonParty::Slots::Actor::Archetype']]],
-  ['puffcloudviewcontroller_86',['PuffCloudViewController',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudViewController.html',1,'BalloonParty::Slots::Actor::Archetype']]],
-  ['puffclusterregistry_87',['PuffClusterRegistry',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html',1,'BalloonParty::Slots::Actor::Archetype']]],
-  ['puffobstaclemodel_88',['PuffObstacleModel',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html',1,'BalloonParty::Slots::Actor::Archetype']]]
+  ['projectiletapresolver_80',['ProjectileTapResolver',['../classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html',1,'BalloonParty::Projectile::Controller']]],
+  ['projectiletrail_81',['ProjectileTrail',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileTrail.html',1,'BalloonParty::Projectile::View']]],
+  ['projectileview_82',['ProjectileView',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html',1,'BalloonParty::Projectile::View']]],
+  ['projectilevisualconfig_83',['ProjectileVisualConfig',['../classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html',1,'BalloonParty::Configuration::Effects']]],
+  ['propertydrawerhelper_84',['PropertyDrawerHelper',['../classBalloonParty_1_1Editor_1_1PropertyDrawerHelper.html',1,'BalloonParty::Editor']]],
+  ['puffcloudsettings_85',['PuffCloudSettings',['../classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html',1,'BalloonParty::Configuration::Effects']]],
+  ['puffcloudview_86',['PuffCloudView',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView.html',1,'BalloonParty::Slots::Actor::Archetype']]],
+  ['puffcloudviewcontroller_87',['PuffCloudViewController',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudViewController.html',1,'BalloonParty::Slots::Actor::Archetype']]],
+  ['puffclusterregistry_88',['PuffClusterRegistry',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html',1,'BalloonParty::Slots::Actor::Archetype']]],
+  ['puffobstaclemodel_89',['PuffObstacleModel',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html',1,'BalloonParty::Slots::Actor::Archetype']]]
 ];

@@ -83,13 +83,14 @@ var searchData=
   ['projectilepositionprovider_2ecs_80',['ProjectilePositionProvider.cs',['../ProjectilePositionProvider_8cs.html',1,'']]],
   ['projectileshieldview_2ecs_81',['ProjectileShieldView.cs',['../ProjectileShieldView_8cs.html',1,'']]],
   ['projectilestep_2ecs_82',['ProjectileStep.cs',['../ProjectileStep_8cs.html',1,'']]],
-  ['projectiletrail_2ecs_83',['ProjectileTrail.cs',['../ProjectileTrail_8cs.html',1,'']]],
-  ['projectileview_2ecs_84',['ProjectileView.cs',['../ProjectileView_8cs.html',1,'']]],
-  ['projectilevisualconfig_2ecs_85',['ProjectileVisualConfig.cs',['../ProjectileVisualConfig_8cs.html',1,'']]],
-  ['propertydrawerhelper_2ecs_86',['PropertyDrawerHelper.cs',['../PropertyDrawerHelper_8cs.html',1,'']]],
-  ['puffcloudsettings_2ecs_87',['PuffCloudSettings.cs',['../PuffCloudSettings_8cs.html',1,'']]],
-  ['puffcloudview_2ecs_88',['PuffCloudView.cs',['../PuffCloudView_8cs.html',1,'']]],
-  ['puffcloudviewcontroller_2ecs_89',['PuffCloudViewController.cs',['../PuffCloudViewController_8cs.html',1,'']]],
-  ['puffclusterregistry_2ecs_90',['PuffClusterRegistry.cs',['../PuffClusterRegistry_8cs.html',1,'']]],
-  ['puffobstaclemodel_2ecs_91',['PuffObstacleModel.cs',['../PuffObstacleModel_8cs.html',1,'']]]
+  ['projectiletapresolver_2ecs_83',['ProjectileTapResolver.cs',['../ProjectileTapResolver_8cs.html',1,'']]],
+  ['projectiletrail_2ecs_84',['ProjectileTrail.cs',['../ProjectileTrail_8cs.html',1,'']]],
+  ['projectileview_2ecs_85',['ProjectileView.cs',['../ProjectileView_8cs.html',1,'']]],
+  ['projectilevisualconfig_2ecs_86',['ProjectileVisualConfig.cs',['../ProjectileVisualConfig_8cs.html',1,'']]],
+  ['propertydrawerhelper_2ecs_87',['PropertyDrawerHelper.cs',['../PropertyDrawerHelper_8cs.html',1,'']]],
+  ['puffcloudsettings_2ecs_88',['PuffCloudSettings.cs',['../PuffCloudSettings_8cs.html',1,'']]],
+  ['puffcloudview_2ecs_89',['PuffCloudView.cs',['../PuffCloudView_8cs.html',1,'']]],
+  ['puffcloudviewcontroller_2ecs_90',['PuffCloudViewController.cs',['../PuffCloudViewController_8cs.html',1,'']]],
+  ['puffclusterregistry_2ecs_91',['PuffClusterRegistry.cs',['../PuffClusterRegistry_8cs.html',1,'']]],
+  ['puffobstaclemodel_2ecs_92',['PuffObstacleModel.cs',['../PuffObstacleModel_8cs.html',1,'']]]
 ];
