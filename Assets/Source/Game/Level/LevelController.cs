@@ -34,12 +34,14 @@ namespace BalloonParty.Game.Level
         private readonly ICinematicsSettings _cinematics;
         private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private readonly IPublisher<LevelUpAbandonedMessage> _abandonedPublisher;
+        private readonly IPublisher<ForceDestroyProjectileMessage> _forceDestroyPublisher;
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         private readonly ISubscriber<LevelUpAbortedMessage> _abortedSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         private readonly ISubscriber<LevelTransitionCompletedMessage> _transitionCompletedSubscriber;
         private readonly ISubscriber<WallHitMessage> _wallHitSubscriber;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
+        private readonly ISubscriber<BoardDepletedMessage> _boardDepletedSubscriber;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
 
         private readonly ReactiveProperty<int> _level = new(1);
@@ -55,6 +57,7 @@ namespace BalloonParty.Game.Level
         private IDisposable _transitionCompletedSubscription;
         private IDisposable _wallHitSubscription;
         private IDisposable _destroyedSubscription;
+        private IDisposable _boardDepletedSubscription;
         private IDisposable _gameOverSubscription;
         private AnimationCurve _beatCurve;
         private float _completingElapsed;
@@ -74,12 +77,14 @@ namespace BalloonParty.Game.Level
             ICinematicsSettings cinematics,
             IPublisher<ScoreLevelUpMessage> levelUpPublisher,
             IPublisher<LevelUpAbandonedMessage> abandonedPublisher,
+            IPublisher<ForceDestroyProjectileMessage> forceDestroyPublisher,
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
             ISubscriber<LevelUpAbortedMessage> abortedSubscriber,
             ISubscriber<LevelUpDismissedMessage> dismissedSubscriber,
             ISubscriber<LevelTransitionCompletedMessage> transitionCompletedSubscriber,
             ISubscriber<WallHitMessage> wallHitSubscriber,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
+            ISubscriber<BoardDepletedMessage> boardDepletedSubscriber,
             ISubscriber<GameOverMessage> gameOverSubscriber)
         {
             _levelParams = levelParams;
@@ -92,12 +97,14 @@ namespace BalloonParty.Game.Level
             _cinematics = cinematics;
             _levelUpPublisher = levelUpPublisher;
             _abandonedPublisher = abandonedPublisher;
+            _forceDestroyPublisher = forceDestroyPublisher;
             _trailArrivedSubscriber = trailArrivedSubscriber;
             _abortedSubscriber = abortedSubscriber;
             _dismissedSubscriber = dismissedSubscriber;
             _transitionCompletedSubscriber = transitionCompletedSubscriber;
             _wallHitSubscriber = wallHitSubscriber;
             _destroyedSubscriber = destroyedSubscriber;
+            _boardDepletedSubscriber = boardDepletedSubscriber;
             _gameOverSubscriber = gameOverSubscriber;
         }
 
@@ -123,6 +130,7 @@ namespace BalloonParty.Game.Level
 
             _wallHitSubscription = _wallHitSubscriber.Subscribe(_ => CloseWindowA());
             _destroyedSubscription = _destroyedSubscriber.Subscribe(_ => OnFlightEnded());
+            _boardDepletedSubscription = _boardDepletedSubscriber.Subscribe(_ => OnBoardDepleted());
             _gameOverSubscription = _gameOverSubscriber.Subscribe(_ => AbandonCeremony("game over"));
         }
 
@@ -140,6 +148,7 @@ namespace BalloonParty.Game.Level
             _transitionCompletedSubscription?.Dispose();
             _wallHitSubscription?.Dispose();
             _destroyedSubscription?.Dispose();
+            _boardDepletedSubscription?.Dispose();
             _gameOverSubscription?.Dispose();
         }
 
@@ -259,12 +268,29 @@ namespace BalloonParty.Game.Level
 
             if (_completingElapsed >= CompletingCapSeconds)
             {
-                // The boundary never arrived: the shot left play without dying (game over, board clear),
-                // or the tipping claim came from a delayed source (chain lightning, a cheat) with nothing
-                // in flight. Present anyway rather than soft-lock the run.
-                Log.Warn("Level", $"Completing timed out after {CompletingCapSeconds:0.#}s");
+                // Ultimate failsafe: force-destroy the projectile through the canonical death path, then
+                // fall through to OnFlightEnded (which is a no-op if the force-destroy already triggered
+                // it via DestroyedMessage). If no projectile exists, the force-destroy is inert and the
+                // direct OnFlightEnded presents the popup.
+                Log.Warn("Level", $"Completing timed out after {CompletingCapSeconds:0.#}s — force-destroying");
+                _forceDestroyPublisher.Publish(default);
                 OnFlightEnded();
             }
+        }
+
+        private void OnBoardDepleted()
+        {
+            if (_phase.Value != LevelUpPhase.Completing)
+            {
+                return;
+            }
+
+            // Nothing left to hit — end the flight. If a projectile exists, the synchronous destroy
+            // chain already calls OnFlightEnded via DestroyedMessage (making the direct call a no-op).
+            // If none exists, the direct call is the only presenter.
+            Log.Info("Level", "Board depleted during Completing — force-destroying projectile");
+            _forceDestroyPublisher.Publish(default);
+            OnFlightEnded();
         }
 
         private void ClearRunState()

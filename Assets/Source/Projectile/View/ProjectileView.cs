@@ -84,6 +84,7 @@ namespace BalloonParty.Projectile.View
         private ProjectileShieldView _shieldView;
         private Vector3 _baseScale;
         private bool _disappearing;
+        private bool _destroyed;
         private Color[] _paletteColors;
         private Color _glowColor;
         private Tween _glowTween;
@@ -268,6 +269,7 @@ namespace BalloonParty.Projectile.View
         {
             _shieldShown = false;
             _disappearing = false;
+            _destroyed = false;
             _hasFlown = false;
             _lastPaintPos = Vector3.zero;
             _rainbowGlowActive = false;
@@ -307,6 +309,7 @@ namespace BalloonParty.Projectile.View
             _model = null;
             _shieldShown = false;
             _disappearing = false;
+            _destroyed = false;
             _rainbowGlowActive = false;
             _rainbowGlowTimer = 0f;
             ResetPierceSpiral();
@@ -353,6 +356,13 @@ namespace BalloonParty.Projectile.View
 
         private void DestroyProjectile()
         {
+            if (_destroyed)
+            {
+                return;
+            }
+
+            _destroyed = true;
+
             // Shatter any toughs the shot plowed through but never discharged — a piercing run that
             // ends (out of shields / despawn) with pending toughs flushes them here so none are dropped,
             // with the same trail flourish the mid-flight discharge gets.
@@ -389,6 +399,18 @@ namespace BalloonParty.Projectile.View
             // pool once that finishes) and loads a fresh instance, so it never reuses one mid-disappear.
             _balancePublisher.Publish(default);
             _destroyedPublisher.Publish(default);
+        }
+
+        /// <summary>Forces the projectile through its full death sequence (pierce discharge, state
+        /// cleanup, DestroyedMessage). Called when the level-up cap fires or the board empties.</summary>
+        internal void ForceDestroy()
+        {
+            if (_disappearing)
+            {
+                return;
+            }
+
+            DestroyProjectile();
         }
 
         /// <summary>Scales the projectile to zero then invokes <paramref name="onComplete" />; runs in unscaled time so it still plays while the world is frozen.</summary>

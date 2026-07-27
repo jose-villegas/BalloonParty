@@ -10,11 +10,11 @@ namespace BalloonParty.Cheats
     internal static class CheatState
     {
         /// <summary>While true, the current level is LOCKED: score trails still fly on a pop, but nothing sticks —
-        /// <c>ClaimProgress</c> grants the visual points without advancing progress, and both <c>OnTrailArrived</c>
-        /// handlers (score + level) skip their commit, so score and bars stay put. <c>WillLevelUp</c>/
-        /// <c>CheckLevelUp</c> never complete (no cinematic or ceremony), <c>PlayerHealthController.Damage</c> is a
-        /// no-op (hearts never drain), and <c>RunController.EndRun</c> is a no-op (no loss). Toggled by
-        /// <see cref="BlockLevelUpCheat" />.</summary>
+        /// <c>ClaimProgress</c> grants the visual points without advancing progress, and both
+        /// <c>OnTrailArrived</c> handlers (score + level) skip their commit, so score and bars stay put. The
+        /// level-up detection in <c>TryBeginCompleting</c> never triggers (no ceremony), <c>PlayerHealthController
+        /// .Damage</c> is a no-op (hearts never drain), and <c>RunController.EndRun</c> is a no-op (no loss).
+        /// Toggled by <see cref="BlockLevelUpCheat" />.</summary>
         public static bool BlockLevelUp;
 
         /// <summary>While true, <c>ScoreTrailService</c> resolves each score group INSTANTLY — it publishes the

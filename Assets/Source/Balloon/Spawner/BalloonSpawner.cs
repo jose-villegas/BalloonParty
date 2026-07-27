@@ -52,6 +52,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly PoolManager _poolManager;
         private readonly RejectedBalloonEffect _rejectedBalloon;
         private readonly BalloonPlacementResolver _placement;
+        private readonly ILevelProgress _levelProgress;
         private readonly List<Vector3> _spawnPathBuffer = new();
         private readonly List<BalloonPrefabEntry> _spawnBatch = new();
         private readonly List<int> _lineColumns = new();
@@ -90,7 +91,8 @@ namespace BalloonParty.Balloon.Spawner
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             IPublisher<ItemCheckMessage> itemCheckPublisher,
             RejectedBalloonEffect rejectedBalloon,
-            BalloonPlacementResolver placement)
+            BalloonPlacementResolver placement,
+            ILevelProgress levelProgress)
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;
@@ -110,6 +112,7 @@ namespace BalloonParty.Balloon.Spawner
             _itemCheckPublisher = itemCheckPublisher;
             _rejectedBalloon = rejectedBalloon;
             _placement = placement;
+            _levelProgress = levelProgress;
 
             // Cached to avoid a per-sort delegate allocation.
             _byColumnKey = CompareColumnKeys;
@@ -185,6 +188,11 @@ namespace BalloonParty.Balloon.Spawner
 
         private void OnProjectileDestroyed()
         {
+            if (_levelProgress.Phase.Value != LevelUpPhase.Playing)
+            {
+                return;
+            }
+
             _turnCount++;
             if (_turnCount < _levelParams.Current.FirstSpawnTurn)
             {
@@ -198,6 +206,11 @@ namespace BalloonParty.Balloon.Spawner
         // balloon, spawned immediately when the chance roll passes and the board budget allows it.
         private void OnActorHit(ActorHitMessage msg)
         {
+            if (_levelProgress.Phase.Value != LevelUpPhase.Playing)
+            {
+                return;
+            }
+
             if (msg.Outcome != HitOutcome.Pop || !msg.Context.Flags.HasFlag(DamageFlags.DirectHit))
             {
                 return;

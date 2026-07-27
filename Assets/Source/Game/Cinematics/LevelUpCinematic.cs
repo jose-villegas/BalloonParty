@@ -1,18 +1,12 @@
 using System;
-using System.Threading;
-using BalloonParty.Configuration;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Score;
-using BalloonParty.Game.Score.Behaviours;
-using BalloonParty.Shared;
+using BalloonParty.Projectile;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
-using BalloonParty.Shared.Pool;
-using BalloonParty.UI.Score;
-using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UniRx;
 using UnityEngine;
@@ -22,38 +16,30 @@ using BalloonParty.Configuration.Cinematics;
 namespace BalloonParty.Game.Cinematics
 {
     /// <summary>
-    ///     Puppets the level-up's tipping score trail along the pan-in, then hands off to the popup and restore phases.
+    ///     Follows the tipping projectile during Window A (claim → first wall), then hands off to the popup and restore.
     /// </summary>
     internal sealed class LevelUpCinematic : CameraRigCinematicProducer
     {
-        // Timeout multiples of the trail's flight duration, so a lost/mismatched trail can't soft-lock the popup.
-        private const float PanInTimeoutFactor = 3f;
-        private const float TrailRegisterTimeoutFactor = 3f;
+        // Safety cap: if a wall hit somehow never arrives, end the pan-in rather than soft-locking.
+        private const float PanInSafetyCapSeconds = 5f;
 
-        private readonly IScoreTrailConfig _config;
         private readonly ISubscriber<ScorePointsGroupMessage> _scoredSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
-        private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
+        private readonly ISubscriber<WallHitMessage> _wallHitSubscriber;
         private readonly IPublisher<LevelUpAbortedMessage> _abortedPublisher;
         private readonly ILevelProgress _levelProgress;
         private readonly ILossForecast _lossForecast;
         private readonly ScoreTrailService _scoreTrailService;
-        private readonly ScoreTrailBehaviourResolver _resolver;
+        private readonly ProjectilePositionProvider _positionProvider;
         private readonly PauseService _pauseService;
-        private readonly CancellationTokenSource _cts = new();
 
-        private TrackedTrailSettings _trackedTrailSettings;
         private IDisposable _scoreSubscription;
         private IDisposable _sessionSubscription;
         private IDisposable _freezeSubscription;
-        private Vector3 _lastTrailPosition;
+        private IDisposable _wallHitSubscription;
+        private Vector3 _lastProjectilePosition;
         private bool _sessionActive;
-        private TrailId _tippingTrailId;
-        private TrailFlight _trackedFlight;
-        private float _trailElapsed;
         private float _panInElapsed;
-        private Vector3 _trailOrigin;
-        private Vector3 _trailTargetWorld;
 
         [Inject]
         internal LevelUpCinematic(
@@ -61,27 +47,25 @@ namespace BalloonParty.Game.Cinematics
             CinematicCameraRig rig,
             TimeScaleService timeScale,
             ICinematicsSettings settings,
-            IScoreTrailConfig config,
             ISubscriber<ScorePointsGroupMessage> scoredSubscriber,
             ISubscriber<LevelUpDismissedMessage> dismissedSubscriber,
-            ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
+            ISubscriber<WallHitMessage> wallHitSubscriber,
             IPublisher<LevelUpAbortedMessage> abortedPublisher,
             ILevelProgress levelProgress,
             ILossForecast lossForecast,
             ScoreTrailService scoreTrailService,
-            ScoreTrailBehaviourResolver resolver,
+            ProjectilePositionProvider positionProvider,
             PauseService pauseService)
             : base(director, rig, timeScale, settings)
         {
-            _config = config;
             _scoredSubscriber = scoredSubscriber;
             _dismissedSubscriber = dismissedSubscriber;
-            _trailArrivedSubscriber = trailArrivedSubscriber;
+            _wallHitSubscriber = wallHitSubscriber;
             _abortedPublisher = abortedPublisher;
             _levelProgress = levelProgress;
             _lossForecast = lossForecast;
             _scoreTrailService = scoreTrailService;
-            _resolver = resolver;
+            _positionProvider = positionProvider;
             _pauseService = pauseService;
         }
 
@@ -91,7 +75,7 @@ namespace BalloonParty.Game.Cinematics
             {
                 PanInState = CinematicState.LevelUpPanIn,
                 RestoreState = CinematicState.LevelUpRestore,
-                Focus = new PointFocus(() => _lastTrailPosition),
+                Focus = new PointFocus(GetCameraTarget),
                 DrivesTimeScale = false,
                 RestoreEvaluatesCurve = true,
                 OnPanInTick = PanInTick,
@@ -101,16 +85,14 @@ namespace BalloonParty.Game.Cinematics
 
         protected override void OnStart()
         {
-            _trackedTrailSettings = Settings.EntryOf(CinematicState.LevelUpPanIn).TrackedTrail;
             _scoreSubscription = _scoredSubscriber.Subscribe(OnScorePoint);
         }
 
         protected override void OnDispose()
         {
-            _cts.Cancel();
-            _cts.Dispose();
             DisposeSessionSubscription();
             LifecycleHelper.DisposeAndClear(ref _freezeSubscription);
+            LifecycleHelper.DisposeAndClear(ref _wallHitSubscription);
             _scoreSubscription?.Dispose();
 
             if (_pauseService.IsPaused(PauseSource.Cinematic))
@@ -132,56 +114,16 @@ namespace BalloonParty.Game.Cinematics
             }
 
             _sessionActive = true;
-            // The handler nominates its principal trail (via the resolver), so the tipping id can never
-            // diverge from what actually registers: DefaultScore's FIRST trail spawns immediately and is
-            // timeout-safe under the bounded registry wait; the group's LAST trail can spawn seconds later
-            // under scatter stagger and would race WaitForTippingTrailAsync's timeout.
-            _tippingTrailId = _resolver.PrincipalIdFor(msg);
-            _trackedFlight = null;
-            _lastTrailPosition = msg.WorldPosition;
+            _lastProjectilePosition = _positionProvider.IsActive
+                ? _positionProvider.Position
+                : msg.WorldPosition;
 
-            WaitForTippingTrailAsync().Forget();
+            BeginCinematic();
         }
 
-        private async UniTaskVoid WaitForTippingTrailAsync()
+        private void BeginCinematic()
         {
-            // Bounded wait: if the tipping trail never registers, give up instead of waiting forever.
-            var elapsed = 0f;
-            var timeout = _config.ScorePointTraceDuration * TrailRegisterTimeoutFactor;
-            while (!_scoreTrailService.Flights.Contains(_tippingTrailId))
-            {
-                if (elapsed >= timeout)
-                {
-                    _sessionActive = false;
-                    return;
-                }
-
-                await UniTask.Yield(PlayerLoopTiming.Update, _cts.Token);
-                elapsed += Time.unscaledDeltaTime;
-            }
-
-            if (!_sessionActive)
-            {
-                return;
-            }
-
-            _trackedFlight = _scoreTrailService.Flights.Get(_tippingTrailId);
-            if (_trackedFlight == null)
-            {
-                _sessionActive = false;
-                return;
-            }
-
-            BeginCinematicWithTrail();
-        }
-
-        private void BeginCinematicWithTrail()
-        {
-            _trailElapsed = 0f;
             _panInElapsed = 0f;
-            _trailOrigin = _trackedFlight.Transform.position;
-            _lastTrailPosition = _trailOrigin;
-            _trailTargetWorld = _scoreTrailService.GetTarget(_tippingTrailId.Color).Center;
 
             if (!Runner.TryBegin())
             {
@@ -189,43 +131,18 @@ namespace BalloonParty.Game.Cinematics
                 return;
             }
 
-            // Formation principals are bare anchor Transforms with no FlyingTrail — only tween-driven trails
-            // (DefaultScore) need their move tween killed before we puppet the transform along the pan-in.
-            _trackedFlight.Transform.GetComponent<FlyingTrail>()?.DisableMoveTween();
-            _trackedFlight.Pause();
-
-            // Only the tracked principal freezes now; the rest keep flying so their arrivals still CONFIRM the
-            // level-up (LevelController needs every colour's trails to land before it flips to Pending). The
-            // moment the ceremony IS confirmed (Phase → Pending — the popup is up), freeze whatever is still
-            // airborne so the shapes hold behind the popup instead of snapping away. The level transition then
-            // disposes them as outgoing-level content (ScoreTrailService.HoldOutgoing). Freezing at Pending
-            // rather than pan-in start is load-bearing: pausing the confirming trails before they land would
-            // strand the level-up unconfirmed and soft-lock the popup (with CompleteAll gone from EndPanIn,
-            // nothing else would force those arrivals).
+            // Freeze airborne trails when the popup appears (Phase → Pending) so shapes hold behind it
+            // instead of snapping away. The level transition resolves them as outgoing-level content.
             LifecycleHelper.DisposeAndClear(ref _freezeSubscription);
             _freezeSubscription = _levelProgress.Phase
                 .Where(phase => phase == LevelUpPhase.Pending)
                 .Subscribe(_ => _scoreTrailService.Flights.PauseAll());
 
-            SubscribeForPanIn();
-        }
+            // Window A ends at the first wall hit — the camera releases to normal framing.
+            LifecycleHelper.DisposeAndClear(ref _wallHitSubscription);
+            _wallHitSubscription = _wallHitSubscriber.Subscribe(OnWallHit);
 
-        private void OnTrailArrived(ScoreTrailArrivedMessage msg)
-        {
-            if (!Runner.IsPanInRunning)
-            {
-                return;
-            }
-
-            var matches = msg.ColorName == _tippingTrailId.Color
-                          && msg.Score == _tippingTrailId.Score;
-
-            if (!matches)
-            {
-                return;
-            }
-
-            EndPanIn();
+            SubscribeForDismissed();
         }
 
         // Camera un-zoom is driven by LevelTransitionController, not this producer.
@@ -237,65 +154,20 @@ namespace BalloonParty.Game.Cinematics
 
         private void OnCinematicEnded()
         {
-            // Pending has long since fired by any terminal, so the freeze hook has done its job; drop it.
             LifecycleHelper.DisposeAndClear(ref _freezeSubscription);
             _sessionActive = false;
         }
 
-        // Curve value modulates the tipping trail's playback speed; timeScale stays untouched during pan-in.
         private void PanInTick(float dt, float curveValue)
         {
-            // Loss can become certain mid-pan-in; it wins, so drop the show.
             if (_lossForecast.LossImminent)
             {
                 AbortSession();
                 return;
             }
 
-            // Absolute safety cap: end the pan-in so the popup's gate opens rather than soft-locking.
             _panInElapsed += dt;
-            if (_panInElapsed > _config.ScorePointTraceDuration * PanInTimeoutFactor)
-            {
-                EndPanIn();
-                return;
-            }
-
-            _trailElapsed += dt * curveValue;
-            AdvanceTrackedTrail();
-        }
-
-        private void AdvanceTrackedTrail()
-        {
-            // Trail was completed/returned out from under us (destroyed transform, or its arrival fired
-            // via its own tween / a CompleteAll and the flight went Idle) — the pooled instance may
-            // already be flying for another group, so stop steering it and end the pan-in instead.
-            if (_trackedFlight?.Transform == null || _trackedFlight.Phase == FlightPhase.Idle)
-            {
-                _trackedFlight = null;
-                if (Runner.IsPanInRunning)
-                {
-                    EndPanIn();
-                }
-
-                return;
-            }
-
-            var progress = Mathf.Clamp01(_trailElapsed / _config.ScorePointTraceDuration);
-
-            _trackedFlight.Transform.localScale = Vector3.one * _trackedTrailSettings.ScaleCurve.Evaluate(progress);
-
-            var target = _trailTargetWorld;
-            target.z = 0f;
-            _trackedFlight.Transform.position = Vector3.Lerp(_trailOrigin, target, progress);
-            _lastTrailPosition = _trackedFlight.Transform.position;
-
-            if (progress < 1f)
-            {
-                return;
-            }
-
-            _trackedFlight.Complete();
-            if (Runner.IsPanInRunning)
+            if (_panInElapsed > PanInSafetyCapSeconds)
             {
                 EndPanIn();
             }
@@ -305,9 +177,7 @@ namespace BalloonParty.Game.Cinematics
         {
             DisposeSessionSubscription();
             LifecycleHelper.DisposeAndClear(ref _freezeSubscription);
-            _trackedFlight = null;
-            // Aborts want immediate cleanup — complete every survivor now (banks points, snap-fades the shapes)
-            // rather than leaving them frozen for a transition that this path never reaches.
+            LifecycleHelper.DisposeAndClear(ref _wallHitSubscription);
             _scoreTrailService.Flights.CompleteAll();
 
             if (_pauseService.IsPaused(PauseSource.Cinematic))
@@ -322,20 +192,28 @@ namespace BalloonParty.Game.Cinematics
 
         private void EndPanIn()
         {
-            // No CompleteAll here anymore: the survivors stay frozen through the popup (frozen at Pending) and
-            // are resolved as outgoing-level content when the level transition runs. The freeze subscription is
-            // deliberately left live — in a multi-colour tip, Pending can still be one straggler-arrival away
-            // when the tracked hero lands, and that late Pending must still freeze the remaining survivors.
-            DisposeSessionSubscription();
-            _trackedFlight = null;
+            LifecycleHelper.DisposeAndClear(ref _wallHitSubscription);
             Runner.EndPanIn();
-            SubscribeForDismissed();
         }
 
-        private void SubscribeForPanIn()
+        private void OnWallHit(WallHitMessage msg)
         {
-            DisposeSessionSubscription();
-            _sessionSubscription = _trailArrivedSubscriber.Subscribe(OnTrailArrived);
+            if (!Runner.IsPanInRunning)
+            {
+                return;
+            }
+
+            EndPanIn();
+        }
+
+        private Vector3 GetCameraTarget()
+        {
+            if (_positionProvider.IsActive)
+            {
+                _lastProjectilePosition = _positionProvider.Position;
+            }
+
+            return _lastProjectilePosition;
         }
 
         private void SubscribeForDismissed()

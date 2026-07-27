@@ -9,8 +9,8 @@ scoring only tallies points and hands them to `ILevelProgress`.
 
 | File | Responsibility |
 |---|---|
-| `LevelController.cs` | The progression owner (plain C# `IStartable`/`IRunResettable`, implements `ILevelProgress`). Holds the current `Level`, per-colour confirmed + projected progress, and the `LevelUpPhase`. Detects a level-up, publishes `ScoreLevelUpMessage`, and drives the two-phase commit below. |
-| `LevelUpPhase.cs` | The ceremony as one explicit state — `Playing → Pending → Transitioning → Playing`. Replaces the old scattered guard flags: a level-up is only *detected* in `Playing`, and every out-of-phase input (a second detection, a straggler trail, a duplicate dismissal) is rejected because no transition exists for it. |
+| `LevelController.cs` | The progression owner (plain C# `IStartable`/`ITickable`/`IRunResettable`, implements `ILevelProgress`). Holds the current `Level`, per-colour confirmed + projected progress, and the `LevelUpPhase`. Detects a level-up at claim-time via projected progress (`TryBeginCompleting`), tracks the projectile's in-flight boundary (`WallHitMessage` → `CloseWindowA`, `ProjectileDestroyedMessage` → `OnFlightEnded`), publishes `ScoreLevelUpMessage`, and drives the ceremony. An `ITimeScaleClaims` exclusive claim drives the slow-mo beat during Window A. |
+| `LevelUpPhase.cs` | The ceremony as one explicit state — `Playing → Completing → Pending → Transitioning → Playing`. Replaces the old scattered guard flags: a level-up is only *detected* in `Playing`, the projectile finishes its flight during `Completing`, and every out-of-phase input is rejected. |
 | `ILevelProgress.cs` | Read surface of progression: `Level`, `Phase`, `GetRequiredPoints`/`GetProgress`, `WillLevelUp` (projected), `ClaimProgress` (the scoring write-back, capped per level, banking the excess), and `ExcessPoints`/`TotalExcessPoints` (the run-scoped banked excess). |
 | `LevelDifficultyResolver.cs` | Resolves and caches the live per-level mix (implements `IActiveLevelParameters` + `ILevelThresholds`). On level-up it re-resolves `LevelParameters` for the new level, bridging range weights onto the balloon/item catalogs and computing the allowed-colour set. Also exposes the per-level points threshold, delegating to `ILevelPacingConfiguration.ThresholdForLevel`. |
 | `IActiveLevelParameters.cs` | Single read surface for the live difficulty mix (`Current`). Never read `ILevelPacingConfiguration` directly. |
@@ -18,32 +18,33 @@ scoring only tallies points and hands them to `ILevelProgress`.
 | `LevelTransitionController.cs` | The **Ascent** — the level-transition cinematic. Phase-driven (see below); holds `PauseSource.LevelTransition` for the whole sequence. |
 | `TimeOfDayCycle.cs` | Night-mode's time-of-day *policy*: picks the ambient light angle for the current level (level 1 = the authored rest direction, each further level adds a fixed step) and pushes it to `TimeOfDayService`, which owns the actual light globals (see `Shared/SceneLight/README.md`). Snaps to the level's angle on start and on a run reset; sweeps to the new angle only on `Phase → Transitioning`, over unscaled time so it plays through the transition pause. The angle is never wrapped, so the sweep always goes forward, even across the midnight→dawn seam. Its reset order deliberately runs *after* `LevelController`'s, so a restart's snap reads the run's actual start level (which can be > 1 via the dev cheat), not an assumed level 1. A no-op entirely when night mode is off. |
 
-## The level-up ceremony (two-phase commit)
+## The level-up ceremony (flag-then-orchestrate)
 
 Progress lands via **score trails**: `ScoreController` publishes points, and each trail's arrival
 fires `ScoreTrailArrivedMessage`. `LevelController.OnTrailArrived` confirms progress (capped at the
-projected claim so a previous-level straggler can't re-inflate it) and calls `CheckLevelUp`.
+projected claim so a previous-level straggler can't re-inflate it).
 
-The level does **not** advance the moment the bars fill — the ceremony is a two-phase commit so the
-animations have a stable state to play against:
+The level does **not** advance the moment the bars fill — the ceremony is orchestrated so the shot
+keeps flying and the animations have a stable state to play against:
 
-1. **`Playing → Pending`** — `CheckLevelUp` sees every allowed colour confirmed at the threshold (and
-   the run isn't ending — gated on `NavigationState.Game` + `!ILossForecast.LossImminent`, the
-   *no level-up after a loss* rule). It snapshots the completed colours, publishes
+1. **`Playing → Completing`** — detection is at **claim-time** (`TryBeginCompleting`): when `ClaimProgress`
+   projects that all colours will reach threshold, it immediately flags `Completing` and claims an
+   exclusive time-scale (`ITimeScaleClaims.ClaimExclusive`). The projectile keeps flying — no pause.
+   This is "Window A": the slow-mo beat where the camera follows the shot. Window A ends at the first
+   wall hit (`WallHitMessage` → `CloseWindowA` releases the exclusive claim). The flight continues at
+   normal speed until the projectile dies. A safety cap (`CompletingCapSeconds = 8s`) presents the
+   ceremony if the boundary never arrives.
+2. **`Completing → Pending`** — `ProjectileDestroyedMessage` fires `OnFlightEnded`. If the run is still
+   in `NavigationState.Game`, it snapshots the completed colours, publishes
    `ScoreLevelUpMessage(newLevel, colours)`, transitions nav to `LevelUp`, and records the pending
-   level. **The `Level` integer and progress have not changed yet.** The phase is the single
-   reentrancy guard — no second detection can fire until the ceremony resolves.
-2. **`Pending → Transitioning`** — the player dismisses the popup (`LevelUpDismissedMessage`). *Now*
+   level. **The `Level` integer and progress have not changed yet.** While `Completing` the spawn wave,
+   thrower reload, and loose pop-spawns are held (they see `Phase != Playing`).
+3. **`Pending → Transitioning`** — the player dismisses the popup (`LevelUpDismissedMessage`). *Now*
    `Level` advances to the pending value and progress resets to zero.
-3. **`Transitioning → Playing`** — the Ascent reports it has settled (`LevelTransitionCompletedMessage`),
+4. **`Transitioning → Playing`** — the Ascent reports it has settled (`LevelTransitionCompletedMessage`),
    so scoring reopens. `LevelController.OnTransitionCompleted` also owns the nav return to
    `NavigationState.Game`, but only if nav is still `LevelUp`; a loss that reached `GameOver` during the
    transition is left untouched.
-
-The `Playing → Pending` commit is also held while a shot is piercing — a pierce plows through many
-balloons in one flight, so firing the ceremony on a mid-flight confirming arrival would interrupt the
-shot. `LevelController` re-checks the moment the pierce discharges, by which point any confirming
-trails that arrived during the plow have already advanced progress.
 
 `Phase` is the cue the rest of the ceremony reads instead of inferring from nav/pause: the popup shows
 on `ScoreLevelUpMessage`, and the Ascent (`LevelTransitionController`) starts on
@@ -51,11 +52,13 @@ on `ScoreLevelUpMessage`, and the Ascent (`LevelTransitionController`) starts on
 
 ### Abort recovery
 
-If the level-up cinematic bails before dismissal (for example, the loss becomes certain mid-pan-in),
-`LevelUpCinematic.AbortSession` publishes `LevelUpAbortedMessage`. `LevelController` treats that as the
-pending ceremony's recovery path: while `Phase == Pending`, it resets the phase to `Playing` and returns
-navigation from `LevelUp` to `Game`. Because this happens before dismissal, the current `Level` and
-confirmed progress stay on the pre-level-up state.
+If the run leaves gameplay before the flight ends (loss committing, game-over nav), `OnFlightEnded`
+calls `AbandonCeremony`, which resets `Phase` to `Playing` and publishes `LevelUpAbandonedMessage`.
+The thrower uses this to perform the reload that was held during `Completing`. Similarly,
+`LevelUpCinematic.AbortSession` (loss certain mid-pan-in) publishes `LevelUpAbortedMessage`;
+`LevelController` treats that the same way while `Phase == Pending` — resets phase and returns nav
+from `LevelUp` to `Game`. Because this happens before dismissal, the current `Level` and confirmed
+progress stay on the pre-level-up state.
 
 ### Banked excess
 

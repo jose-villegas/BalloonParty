@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Game.Level;
 using BalloonParty.Prediction;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
@@ -27,10 +28,12 @@ namespace BalloonParty.Thrower
         private readonly ISubscriber<RunResetMessage> _resetSubscriber;
         private readonly ISubscriber<RunRestartCompletedMessage> _restartCompletedSubscriber;
         private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
-        private readonly ISubscriber<LevelUpDismissedMessage> _levelUpDismissedSubscriber;
+        private readonly ISubscriber<ForceDestroyProjectileMessage> _forceDestroySubscriber;
         private readonly ISubscriber<LevelTransitionCompletedMessage> _levelTransitionCompletedSubscriber;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
+        private readonly ISubscriber<LevelUpAbandonedMessage> _levelUpAbandonedSubscriber;
+        private readonly ILevelProgress _levelProgress;
         private readonly PauseService _pauseService;
         private readonly IObjectResolver _resolver;
         private readonly List<Vector3> _tracePoints = new();
@@ -66,10 +69,12 @@ namespace BalloonParty.Thrower
             ISubscriber<RunResetMessage> resetSubscriber,
             ISubscriber<RunRestartCompletedMessage> restartCompletedSubscriber,
             ISubscriber<BoardClearMessage> boardClearSubscriber,
-            ISubscriber<LevelUpDismissedMessage> levelUpDismissedSubscriber,
+            ISubscriber<ForceDestroyProjectileMessage> forceDestroySubscriber,
             ISubscriber<LevelTransitionCompletedMessage> levelTransitionCompletedSubscriber,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             ISubscriber<GameOverMessage> gameOverSubscriber,
+            ISubscriber<LevelUpAbandonedMessage> levelUpAbandonedSubscriber,
+            ILevelProgress levelProgress,
             PauseService pauseService,
             ProjectilePositionProvider positionProvider,
             PredictionTraceProvider traceProvider)
@@ -85,10 +90,12 @@ namespace BalloonParty.Thrower
             _resetSubscriber = resetSubscriber;
             _restartCompletedSubscriber = restartCompletedSubscriber;
             _boardClearSubscriber = boardClearSubscriber;
-            _levelUpDismissedSubscriber = levelUpDismissedSubscriber;
+            _forceDestroySubscriber = forceDestroySubscriber;
             _levelTransitionCompletedSubscriber = levelTransitionCompletedSubscriber;
             _levelUpSubscriber = levelUpSubscriber;
             _gameOverSubscriber = gameOverSubscriber;
+            _levelUpAbandonedSubscriber = levelUpAbandonedSubscriber;
+            _levelProgress = levelProgress;
             _pauseService = pauseService;
             _positionProvider = positionProvider;
             _traceProvider = traceProvider;
@@ -105,14 +112,17 @@ namespace BalloonParty.Thrower
 
             _poolManager.Prewarm(_projectilePoolKey, 2);
 
-            // The spent shot scales away (returns to the pool only when that finishes) while a fresh instance
-            // loads at once — so the thrower never reuses a shot still mid-disappear.
-            _destroyedSubscriber.Subscribe(_ => SwapActiveProjectile()).AddTo(_subscriptions);
+            // The spent shot scales away while the fresh one loads — unless a level-up claimed the
+            // window, in which case the new shot arrives with the new level (LevelTransitionCompleted).
+            _destroyedSubscriber.Subscribe(_ => HandleProjectileDestroyed()).AddTo(_subscriptions);
 
-            // On a level-up the old shot scales away at dismiss, but the fresh one loads only once the level
-            // transition completes — so the new projectile (and its reload cue) arrives with the new level,
-            // not mid-ascent while the transition pause has the Gameplay channel ducked.
-            _levelUpDismissedSubscriber.Subscribe(_ => ScaleAwayActiveProjectile()).AddTo(_subscriptions);
+            // Completing was abandoned (run ending/restarting), so the skipped reload happens now or the
+            // thrower stays empty forever.
+            _levelUpAbandonedSubscriber.Subscribe(_ => LoadProjectile()).AddTo(_subscriptions);
+
+            // Force-destroy: the level controller commands the projectile to die through its canonical
+            // death path (board depleted, or the CompletingCap timed out).
+            _forceDestroySubscriber.Subscribe(_ => ForceDestroyActiveProjectile()).AddTo(_subscriptions);
             _levelTransitionCompletedSubscriber.Subscribe(_ => LoadProjectile()).AddTo(_subscriptions);
 
             // A shot fired in the very frame the level-up triggers never takes a physics step before the
@@ -228,10 +238,27 @@ namespace BalloonParty.Thrower
 
         // Scales the spent shot away (it returns to the pool only once its disappear finishes) and loads a
         // fresh instance now, so Get() never hands back one still mid-disappear.
-        private void SwapActiveProjectile()
+        private void HandleProjectileDestroyed()
         {
             ScaleAwayActiveProjectile();
-            LoadProjectile();
+
+            if (_levelProgress.Phase.Value == LevelUpPhase.Playing)
+            {
+                LoadProjectile();
+            }
+        }
+
+        // Force-destroys the projectile through its canonical death path (pierce discharge, state
+        // cleanup, ProjectileDestroyedMessage). The subsequent DestroyedMessage triggers
+        // HandleProjectileDestroyed which handles the visual cleanup and pool return.
+        private void ForceDestroyActiveProjectile()
+        {
+            if (_activeView == null)
+            {
+                return;
+            }
+
+            _activeView.ForceDestroy();
         }
 
         // Scales the shot away and pools it, without loading a replacement (game-over reloads only on restart).

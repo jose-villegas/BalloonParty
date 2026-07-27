@@ -1,5 +1,8 @@
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Shared.Messages;
+using MessagePipe;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace BalloonParty.Tests.Balloon
@@ -17,7 +20,7 @@ namespace BalloonParty.Tests.Balloon
         [SetUp]
         public void SetUp()
         {
-            _registry = new BalloonControllerRegistry(null);
+            _registry = new BalloonControllerRegistry(null, Substitute.For<IPublisher<BoardDepletedMessage>>());
         }
 
         [Test]

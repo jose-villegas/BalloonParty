@@ -18,6 +18,7 @@ namespace BalloonParty.Balloon.Controller
         private const int Unregistered = -1;
 
         private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
+        private readonly IPublisher<BoardDepletedMessage> _depletedPublisher;
         private readonly List<BalloonController> _clearBuffer = new();
         private readonly List<BalloonController> _outgoing = new();
 
@@ -29,9 +30,12 @@ namespace BalloonParty.Balloon.Controller
         private IDisposable _subscription;
 
         [Inject]
-        internal BalloonControllerRegistry(ISubscriber<BoardClearMessage> boardClearSubscriber)
+        internal BalloonControllerRegistry(
+            ISubscriber<BoardClearMessage> boardClearSubscriber,
+            IPublisher<BoardDepletedMessage> depletedPublisher)
         {
             _boardClearSubscriber = boardClearSubscriber;
+            _depletedPublisher = depletedPublisher;
         }
 
         public void Start()
@@ -78,6 +82,11 @@ namespace BalloonParty.Balloon.Controller
             _controllers[index] = null;
             model.RegistryHandle = Unregistered;
             _freeIndices[_freeCount++] = index;
+
+            if (_freeCount == _highWater)
+            {
+                _depletedPublisher.Publish(default);
+            }
         }
 
         internal void Route(ActorHitMessage msg)
