@@ -114,28 +114,44 @@ Each hold is a *read* of the phase, not a new flag, so there is one source of tr
 
 | System | Seam today | Hold |
 |---|---|---|
-| Spawning | `BalloonSpawner` opens its sequence on `ProjectileDestroyedMessage` | skip while `Completing`; the transition resets the board anyway, so the spawn is not deferred — it is **cancelled** for that shot |
+| Spawn **wave** | `BalloonSpawner` opens its sequence on `ProjectileDestroyedMessage` | skip while `Completing`; the transition resets the board anyway, so it is **cancelled**, not deferred |
+| **Loose (pop) spawns** | `BalloonSpawner` rolls one per direct-hit pop (`DamageFlags.DirectHit`, `BalloonSpawner.cs:197-206`) | also skipped — the rule is *all* spawns, so the flag means "the board is finished growing". Simpler to reason about than a list of exceptions, and it keeps the played-out flight clean: nothing new enters the board after the level is already decided |
 | Reload | `ThrowerController` reloads on `ProjectileDestroyedMessage` → swap | skip while `Completing`; the reload already happens on `LevelTransitionCompletedMessage` for this path (5ce98bb6) |
 | Balance pulses | `BalloonBalancer.Tick` (flight-gated) | allowed — the board is still live while the shot flies |
 | Loss / overflow | hearts launch from the spawn | cancelled with the spawn, which resolves the precedence question: **a completed level wins over the overflow it would have caused.** A loss already in progress before the tipping pop keeps priority |
 
 ## 7. Time-scale ownership
 
-`TimeScaleService.Apply` takes the **minimum** of all active claims — "slowest wins". So no other
-source can speed the world up, but one can drag it slower than the orchestrator intends (a doomed
-shot's `LastShield` bullet-time, a `PierceDischarge` dip), and that is what José ruled out: during
-level-up the orchestrator owns time and other requests are ignored.
-
-Add exclusivity to the service (small, contained, and the right home — one authority):
+`TimeScaleService.Apply` takes the **minimum** of all active claims — "slowest wins". Nobody can speed
+the world up, but a `LastShield` curve or a `PierceDischarge` dip can drag it slower than the ceremony
+intends, so exclusivity has to be real:
 
 - `ClaimExclusive(source, value)` records `_exclusiveOwner`; `Apply` then uses **only** the owner's
   value.
-- Other sources' `Claim`/`Release` still *record* while exclusivity holds — they must not be dropped,
-  so that a still-doomed shot resumes its correct scale when exclusivity ends.
+- Other sources keep claiming and releasing as normal — their values simply never reach
+  `Time.timeScale` while exclusivity holds, so an in-flight source resumes correctly when it ends.
 - `ReleaseExclusive(source)` clears the owner and re-applies the minimum of what remains.
 
-The tipping slow-mo releases on the next `WallHitMessage`; exclusivity persists until the popup, so
-the discharge dip and the last-breath ramp cannot fight the ceremony's pacing.
+**Suppress at Apply, do NOT cancel the other claims.** Cancelling was considered and rejected on
+evidence: two of the five claimants re-claim *every frame* — `LastShield`
+(`ProjectileDoomedTimeScaleController.cs:65`, curve over elapsed time) and `Cinematic`
+(`CameraRigCinematic`, per-frame curve plus a restore curve). Releasing them just invites the claim
+back on the next frame, and `LastShield` is exactly the collision case that matters (a doomed shot
+completing the level on its last pop is a likely pairing, not a rare one). Owner-only `Apply` is what
+actually suppresses them. Suppressing `LastShield` is safe: the doomed drift is eased over normalized
+GAME time in the resolver, so muting the claim changes the drift's wall-clock length, never its shape.
+
+**Two windows, not one** — whole-window ownership would contradict §2's decision to let the flight
+play out:
+
+| Window | Time scale | Why |
+|---|---|---|
+| **A — the tipping beat**: flag → next wall hit | exclusive, owner-only | the unmistakable "that was the last shot" signal, immune to a slow-mo already running |
+| between: wall → flight end | released, normal rules | the flight plays out WITH its own punctuation — a pierce discharge still lands its dip |
+| **B — the ceremony**: flight end → popup/Ascent | exclusive again | a handoff: `LevelUpPopup` (freeze at 0) and `LevelTransition` are themselves claimants, so blanket ownership until the popup would suppress the popup's own freeze |
+
+The signal that reads as "last shot" is the *transition into* slow-mo plus the pan-in, not its
+duration; holding it through the flight adds no emphasis and subtracts the discharge's.
 
 ## 8. Risks and what only a playtest can answer
 
