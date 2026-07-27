@@ -24,21 +24,14 @@ namespace BalloonParty.Projectile.Controller
         internal WallLimits Walls => _walls;
 
         /// <summary>
-        ///     The fastest a shot can actually travel, as a multiple of base speed. Taps stop once piercing
-        ///     arms, so the ceiling is the arming tap's multiplier — the configured cap only binds with
-        ///     piercing disabled. Feedback that scales with velocity normalizes against THIS, not the cap:
-        ///     against the cap, every such effect would sit in the bottom tenth of its range forever.
+        ///     The fastest a shot can actually travel, as a multiple of base speed — what feedback scaling
+        ///     with velocity normalizes against. Taps accrue for the whole flight (piercing included), so
+        ///     the speed rail is the real ceiling; with the rail disabled there is no bound at all, and the
+        ///     arming tap's multiplier is the best available reference point.
         /// </summary>
-        internal float ReachableTopSpeedMultiplier
-        {
-            get
-            {
-                var top = _cruisePiercingTapThreshold > 0
-                    ? TargetMultiplier(_cruisePiercingTapThreshold)
-                    : Mathf.Max(_maxSpeedMultiplier, 1f);
-                return _maxSpeedMultiplier > 0f ? Mathf.Min(top, _maxSpeedMultiplier) : top;
-            }
-        }
+        internal float ReachableTopSpeedMultiplier => _maxSpeedMultiplier > 0f
+            ? _maxSpeedMultiplier
+            : Mathf.Max(TargetMultiplier(_cruisePiercingTapThreshold), 1f);
 
         [Inject]
         internal ProjectileMotionResolver(IProjectileFlightConfig config)
@@ -129,8 +122,7 @@ namespace BalloonParty.Projectile.Controller
             model.Flight.ConsecutiveWallBounces++;
 
             // An empty-corridor cruise bounce is one of the two rules that earn a tap; the funnel owns
-            // whether it actually mints one (it declines while armed — cruise stops paying out once the
-            // shot sits at the top speed its taps earned) and what the tap does.
+            // whether it actually mints one (at most one per wall hit) and what the tap does.
             if (model.IsCruising.Value)
             {
                 model.TryGrantTap(ProjectileTapSource.CruiseBounce, _cruisePiercingTapThreshold);

@@ -365,7 +365,7 @@ namespace BalloonParty.Solver
                 enteredCruiseHere = true;
             }
 
-            if (state.IsCruising && !state.IsPiercing)
+            if (state.IsCruising)
             {
                 CountCruiseTap(enteredCruiseHere, in cruiseConfig, ref state);
             }
@@ -374,8 +374,9 @@ namespace BalloonParty.Solver
         }
 
         // A cruise bounce's tap, and the time its speed change costs the timeline (a pure time cost on the
-        // event timeline, never a path change). An ARMED shot never gets here — it stops earning taps, so
-        // it stops paying the envelope too (ProjectileMotionResolver.Step).
+        // event timeline, never a path change). Armed shots keep tapping — a wall hit is a wall hit — and
+        // pay the ramp's cost rather than the beat's, mirroring ProjectileModelExtensions.TryGrantTap
+        // handing every armed tap to the ramp.
         private static void CountCruiseTap(
             bool enteredCruiseHere, in ShotCruiseConfig cruiseConfig, ref ShotFlightState state)
         {

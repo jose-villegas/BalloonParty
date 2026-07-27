@@ -187,13 +187,12 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         [Test]
-        public void Simulate_CruiseRampFreezesOncePiercingArms_LegsStayEvenlyPaced()
+        public void Simulate_ArmedShotKeepsTapping_LegsKeepShortening()
         {
-            // Cruise stops paying out the moment the shot is armed (José, 2026-07-27): an armed shot sits
-            // at the top speed its taps earned, so further bounces add neither a tap nor its envelope.
-            // A vertical corridor of equal-length legs makes that visible as timing alone — every leg
-            // AFTER the arming bounce takes the same time. Without the freeze each further tap would keep
-            // shrinking them (4 units at x4, x5, x6 = 1.0, 0.8, 0.667 instead of a flat 1.333).
+            // An armed shot goes on earning taps (José, 2026-07-27), so its speed keeps climbing past the
+            // arming bounce. A vertical corridor of equal-length legs makes that visible as timing alone:
+            // every leg after the arming one is SHORTER than the last, at x4, x5, x6 and so on. The speed
+            // rail (MaxSpeedMultiplier) is what eventually bounds this, not the arming tap.
             var walls = new Vector4(2f, 0.5f, -2f, -0.5f);
 
             // Far off the corridor: never hit, but a non-empty board keeps the flight going to the end of
@@ -215,12 +214,11 @@ namespace BalloonParty.Tests.ShotSolver
             Assert.AreEqual(4f, timestamps[2] - timestamps[1], 1e-4f, "cruise entered, no tap spent yet");
             Assert.AreEqual(2f, timestamps[3] - timestamps[2], 1e-4f, "one tap -> x2");
             Assert.AreEqual(4f / 3f, timestamps[4] - timestamps[3], 1e-4f, "armed at the second tap -> x3");
-            Assert.AreEqual(
-                timestamps[4] - timestamps[3], timestamps[5] - timestamps[4], 1e-4f,
-                "frozen: the leg after the arming leg is paced identically");
-            Assert.AreEqual(
-                timestamps[4] - timestamps[3], timestamps[7] - timestamps[6], 1e-4f,
-                "still frozen four legs later — the ramp never resumes while armed");
+            Assert.AreEqual(1f, timestamps[5] - timestamps[4], 1e-4f, "a third tap while armed -> x4");
+            Assert.AreEqual(0.8f, timestamps[6] - timestamps[5], 1e-4f, "and a fourth -> x5");
+            Assert.Less(
+                timestamps[7] - timestamps[6], timestamps[6] - timestamps[5],
+                "each armed tap shortens the next leg — only the speed rail ever stops this");
         }
 
         [Test]

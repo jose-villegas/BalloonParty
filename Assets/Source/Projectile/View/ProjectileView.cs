@@ -645,11 +645,8 @@ namespace BalloonParty.Projectile.View
 
         private void TryAwardSweepTap(Vector3 wallHitPosition, Vector3 travelDirection)
         {
-            // Sweeps feed the same tap counter cruise bounces do, so they stop paying out while the shot
-            // is armed for the same reason (ProjectileMotionResolver.Step) — otherwise a Snipe lance,
-            // which deliberately skips cruise entirely, would still pick up the cruise ramp sideways.
-            if (!_flightConfig.SweepEnabled || _model.IsPiercing.Value
-                || _model.Flight.SegmentPopCount <= 0 || !_model.Flight.SegmentSweepValid)
+            if (!_flightConfig.SweepEnabled || _model.Flight.SegmentPopCount <= 0
+                || !_model.Flight.SegmentSweepValid)
             {
                 return;
             }

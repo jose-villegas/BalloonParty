@@ -23,12 +23,6 @@ namespace BalloonParty.Projectile.Model
         {
             var flight = model.Flight;
 
-            // A rule, not an error: the economy closes once the shot is armed, its ramp frozen.
-            if (model.IsPiercing.Value)
-            {
-                return false;
-            }
-
             // An invariant. A second claim on the same wall means some rule that used to keep the two
             // sources exclusive (a pop ending the cruise, say) changed — which is exactly how an armed
             // cruising shot once collected both taps on one bounce and compounded from there.
@@ -43,8 +37,11 @@ namespace BalloonParty.Projectile.Model
             flight.TotalCruiseTaps++;
 
             // A long-enough run ARMS the shot: from this tap on it pierces everything it touches
-            // (unbreakables included) for the rest of its life, at a frozen top speed the arm ramp
-            // accelerates it into. Every other tap just replays the freeze-then-pickup beat.
+            // (unbreakables included) for the rest of its life. Taps keep accruing past that point — a
+            // wall hit is a wall hit — but an armed shot rides the RAMP rather than the beat: it
+            // accelerates from the speed it is already travelling into the new target, instead of dipping
+            // to a standstill first. Re-arming is idempotent, so each further tap simply re-anchors that
+            // ramp; only the speed rail (MaxSpeedMultiplier) bounds where this ends up.
             if (piercingTapThreshold > 0 && flight.TotalCruiseTaps >= piercingTapThreshold)
             {
                 model.ArmPierce();
@@ -86,10 +83,10 @@ namespace BalloonParty.Projectile.Model
         }
 
         /// <summary>
-        ///     Arms piercing and starts the acceleration into the (from here on frozen) top speed, anchored
-        ///     at the speed the shot is actually travelling right now — so arming is continuous rather than
-        ///     a snap to full speed. Both paths that earn piercing through taps (the resolver's cruise
-        ///     bounce and the view's sweep) come through <see cref="TryGrantTap" /> to get here.
+        ///     Arms piercing (idempotently) and starts the acceleration into the tap count's new target,
+        ///     anchored at the speed the shot is actually travelling right now — so arming, and every armed
+        ///     tap after it, is continuous rather than a snap or a dip. Both rules that earn a tap (the
+        ///     resolver's cruise bounce and the view's sweep) come through <see cref="TryGrantTap" />.
         /// </summary>
         public static void ArmPierce(this IWriteableProjectileModel model)
         {

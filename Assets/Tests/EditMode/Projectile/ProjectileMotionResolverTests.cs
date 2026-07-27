@@ -454,25 +454,26 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
-        public void Step_ArmedShot_EarnsNoFurtherCruiseTapsAndKeepsItsEnvelope()
+        public void Step_ArmedShot_KeepsTappingButRidesTheRampNotTheBeat()
         {
-            // Cruise stops paying out once the shot is armed: it already sits at the top speed its taps
-            // earned, and a tap it can't use would only ramp it further and re-trigger the
-            // freeze-then-pickup envelope (which, with no speed change left to sell, reads as a hitch).
+            // An armed shot goes on earning taps — a wall hit is a wall hit (José, 2026-07-27) — so its
+            // speed keeps climbing. What changes is HOW: the tap hands its transition to the ramp, which
+            // accelerates from the speed the shot is already travelling, rather than to the beat, which
+            // would dip it to a standstill first.
             var resolver = CruiseResolver(perTap: 0.5f, piercingTapThreshold: 3);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 3);
             model.IsCruising.Value = true;
             model.IsPiercing.Value = true;
             model.Flight.TotalCruiseTaps = 5;
-            model.BeginTapBeat();
-            model.Flight.TransitionElapsed = 0.2f;
 
             resolver.Step(model, new Vector3(0f, 4.5f, 0f), 1f);
 
-            Assert.AreEqual(5, model.Flight.TotalCruiseTaps, "an armed shot banks no further taps");
-            Assert.GreaterOrEqual(
-                model.Flight.TransitionElapsed, 0.2f,
-                "the envelope is never restarted at the bounce — a reset would zero this");
+            Assert.AreEqual(6, model.Flight.TotalCruiseTaps, "the bounce still mints a tap while armed");
+            Assert.AreEqual(
+                SpeedTransitionKind.ArmRamp, model.Flight.TransitionKind,
+                "and it re-anchors the ramp rather than starting a beat");
+            Assert.AreEqual(
+                0f, model.Flight.TransitionElapsed, 1e-4f, "the ramp restarts from the new anchor");
         }
 
         [Test]

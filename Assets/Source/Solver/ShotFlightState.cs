@@ -128,8 +128,8 @@ namespace BalloonParty.Solver
         // Speed taps earned so far, COUNTED exactly as live counts them rather than derived from shields
         // spent since cruise entry. The derivation only held while "a wall hit is the only way to lose a
         // shield" stayed true, and it silently mis-counted whenever a shield moved for any other reason
-        // (a streak refund mid-cruise lowered it). Freezing while armed needs no snapshot now: no tap is
-        // counted while piercing, same as live.
+        // (a streak refund mid-cruise lowered it). Taps accrue for the whole flight, piercing included —
+        // only MaxSpeedMultiplier bounds where the speed ends up.
         public int TotalTaps;
 
         // Snipe pickups taken while the shot was already piercing (mirrors

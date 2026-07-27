@@ -290,11 +290,11 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
-        public void TryAwardSweepTap_ArmedShot_AwardsNeitherSweepNorTap()
+        public void TryAwardSweepTap_ArmedShot_StillAwardsItsTap()
         {
-            // Taps stop once the shot is piercing (José, 2026-07-27) — it already sits at the top speed its
-            // taps earned. Sweeps are the same counter, so they stop too; without this gate a Snipe lance,
-            // which deliberately never enters cruise, would still collect the cruise ramp through sweeps.
+            // An armed shot keeps earning taps from either rule (José, 2026-07-27: "it's technically still
+            // tapping"), so a clean sweep pays out exactly as it would unarmed — the pierce state changes
+            // only how the speed change is played (ramp, not beat).
             var view = CreateSweepView();
             _projectile.IsPiercing.Value = true;
             _projectile.Flight.SegmentPopCount = 1;
@@ -303,8 +303,8 @@ namespace BalloonParty.Tests.Projectile
 
             AwardSweepTap(view, new Vector3(3f, 0f, 0f), Vector3.right);
 
-            Assert.AreEqual(0, _projectile.Flight.TotalSweeps, "an armed shot earns no sweep credit");
-            Assert.AreEqual(0, _projectile.Flight.TotalCruiseTaps, "and no speed tap from one");
+            Assert.AreEqual(1, _projectile.Flight.TotalSweeps, "the sweep is credited while armed");
+            Assert.AreEqual(1, _projectile.Flight.TotalCruiseTaps, "and it mints its speed tap");
         }
 
         // ──────────────────────────────────────────────────────────────────────────────────────

@@ -215,8 +215,8 @@ with a test.
   recolor the working set instantly and BEFORE the next contact resolves; `IResistsPaint`
   respected; rainbow holder paints rainbow) → **C6 Snipe** (host arms pierce + a non-stacking
   speed buff on ANY pop — no DirectHit gate, matching live; a pop taken while ALREADY piercing
-  banks the whole grant for the discharge instead of applying it, and an armed shot's cruise ramp
-  freezes at the arming tap — both mirrored 2026-07-27; folds into E2).
+  banks the whole grant for the discharge instead of applying it — mirrored 2026-07-27; folds
+  into E2).
 
 ### Phase E — Flight residuals (G5, G6, G7 + E4) — depends on 0a; E2 folds C6
 - **E4 (found during the D-core review, pre-existing gap):** the sim's non-piercing
