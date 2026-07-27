@@ -116,7 +116,7 @@ namespace BalloonParty.Audio.Routing
                 if (message.Actor is IHasDurability durability)
                 {
                     var hitsLost = durability.MaxHitPoints - durability.HitsRemaining.Value;
-                    var offset = -(hitsLost - 1) * MusicalPitchExtensions.WholeToneSemitones;
+                    var offset = -(hitsLost - 1);
                     _player.Play(deflectId, message.WorldPosition, semitoneOffset: offset);
                 }
                 else if (deflectId == GameSoundId.BalloonDeflectUnbreakable)
@@ -155,6 +155,7 @@ namespace BalloonParty.Audio.Routing
         {
             return type switch
             {
+                BalloonType.Tough => GameSoundId.BalloonDeflectTough,
                 BalloonType.Unbreakable => GameSoundId.BalloonDeflectUnbreakable,
                 _ => GameSoundId.BalloonDeflect,
             };

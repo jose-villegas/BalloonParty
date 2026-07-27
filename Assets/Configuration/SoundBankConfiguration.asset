@@ -28,6 +28,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -51,6 +52,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 1
     _melodicMaxOctaves: 2
@@ -59,12 +61,11 @@ MonoBehaviour:
     _layers: []
     _fetchPrompt: pop ball
   - _channel: 0
-    _clips:
-    - {fileID: 8300000, guid: ef55f17fce4a54a2ebcc23082aea68f3, type: 3}
+    _clips: []
     _clipPickMode: 0
     _clipWrapMode: 0
     _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 1.5, y: 1.5}
+    _volumeRange: {x: 1, y: 1}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
     _priority: 128
@@ -74,8 +75,9 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
-    _melodicMode: 2
+    _melodicMode: 0
     _melodicMaxOctaves: 2
     _melodicSkipSteps: 1
     _tensionSemitones: 3
@@ -96,6 +98,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -119,6 +122,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -145,6 +149,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -167,6 +172,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 3
     _fadeOutSeconds: 1
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -189,6 +195,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 06000000
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -211,6 +218,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -234,6 +242,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -256,6 +265,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -278,6 +288,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 3
@@ -302,6 +313,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 1
     _melodicMaxOctaves: 2
@@ -325,6 +337,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 1
     _melodicMaxOctaves: 2
@@ -348,6 +361,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 1
     _melodicMaxOctaves: 2
@@ -371,6 +385,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 1
     _melodicMaxOctaves: 2
@@ -393,7 +408,8 @@ MonoBehaviour:
     _pan2D: 1
     _delaySeconds: 0
     _fadeInSeconds: 0
-    _fadeOutSeconds: 0
+    _fadeOutSeconds: 0.65
+    _maxPlaySeconds: 0.5
     _stopsOnPlay: 
     _melodicMode: 1
     _melodicMaxOctaves: 2
@@ -403,11 +419,11 @@ MonoBehaviour:
     _fetchPrompt: Harmonic_d4
   - _channel: 0
     _clips:
-    - {fileID: 8300000, guid: 91c47bca9c9f144f6873223335b00855, type: 3}
+    - {fileID: 8300000, guid: cd4352eca4afd45a8960e4bf06fadf56, type: 3}
     _clipPickMode: 0
     _clipWrapMode: 0
     _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 1, y: 1}
+    _volumeRange: {x: 0.6, y: 0.6}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
     _priority: 128
@@ -416,14 +432,15 @@ MonoBehaviour:
     _pan2D: 1
     _delaySeconds: 0
     _fadeInSeconds: 0
-    _fadeOutSeconds: 0
+    _fadeOutSeconds: 0.5
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 1
     _melodicMaxOctaves: 2
     _melodicSkipSteps: 1
     _tensionSemitones: 0
     _layers: []
-    _fetchPrompt: tuba
+    _fetchPrompt: kalimba
   - _channel: 0
     _clips: []
     _clipPickMode: 0
@@ -439,6 +456,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -461,6 +479,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -483,6 +502,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -505,6 +525,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -527,6 +548,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -549,6 +571,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -571,6 +594,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -595,6 +619,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -617,6 +642,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -639,6 +665,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -662,6 +689,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 1
     _melodicMaxOctaves: 2
@@ -685,6 +713,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 2
     _melodicMaxOctaves: 3
@@ -708,6 +737,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -733,6 +763,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -756,6 +787,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 3
     _fadeOutSeconds: 1
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -779,6 +811,7 @@ MonoBehaviour:
     _delaySeconds: 7
     _fadeInSeconds: 7
     _fadeOutSeconds: 7
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -802,6 +835,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 1
     _melodicMaxOctaves: 2
@@ -825,6 +859,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 1
     _melodicMaxOctaves: 2
@@ -848,6 +883,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 1
     _melodicMaxOctaves: 2
@@ -871,6 +907,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 1
     _melodicMaxOctaves: 2
@@ -894,6 +931,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 1
     _melodicMaxOctaves: 2
@@ -917,6 +955,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -940,6 +979,7 @@ MonoBehaviour:
     _delaySeconds: 0
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
@@ -953,7 +993,7 @@ MonoBehaviour:
     _clipPickMode: 0
     _clipWrapMode: 0
     _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 0.125, y: 0.125}
+    _volumeRange: {x: 0.1, y: 0.1}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
     _priority: 128
@@ -961,10 +1001,35 @@ MonoBehaviour:
     _singleInstance: 0
     _pan2D: 1
     _delaySeconds: 0.01
-    _fadeInSeconds: 30
-    _fadeOutSeconds: 1
+    _fadeInSeconds: 60
+    _fadeOutSeconds: 0.25
+    _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _layers: []
+    _fetchPrompt: 
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: ef55f17fce4a54a2ebcc23082aea68f3, type: 3}
+    _clipPickMode: 0
+    _clipWrapMode: 0
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1.2, y: 1.2}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _singleInstance: 0
+    _pan2D: 1
+    _delaySeconds: 0
+    _fadeInSeconds: 0
+    _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
+    _stopsOnPlay: 
+    _melodicMode: 2
     _melodicMaxOctaves: 2
     _melodicSkipSteps: 1
     _tensionSemitones: 0
