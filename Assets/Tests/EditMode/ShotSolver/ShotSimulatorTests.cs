@@ -255,8 +255,15 @@ namespace BalloonParty.Tests.ShotSolver
             Assert.AreEqual(plainTimestamps.Count, rampTimestamps.Count, "the ramp costs time, never a path");
             Assert.AreEqual(
                 plainTimestamps[2], rampTimestamps[2], 1e-4f, "bounces before the arming one are unaffected");
+
+            // The arming bounce's OWN timestamp is recorded before HandleWallBounce charges the lag
+            // (Simulate appends the event, then resolves the bounce), so the cost lands on everything
+            // after it rather than on the arming event itself.
             Assert.AreEqual(
-                1f / 6f, rampTimestamps[3] - plainTimestamps[3], 1e-3f, "the arming bounce pays the ramp");
+                plainTimestamps[3], rampTimestamps[3], 1e-4f, "the arming event itself is stamped pre-lag");
+            Assert.AreEqual(
+                1f / 6f, rampTimestamps[4] - plainTimestamps[4], 1e-3f,
+                "the first leg after arming carries the ramp's cost");
             Assert.AreEqual(
                 1f / 6f, rampTimestamps[7] - plainTimestamps[7], 1e-3f,
                 "and it is a one-off — later legs run at the same frozen speed, just shifted");

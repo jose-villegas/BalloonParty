@@ -4,6 +4,7 @@ using System.Reflection;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Level;
+using BalloonParty.Game.Run;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.SceneLight;
@@ -96,6 +97,7 @@ namespace BalloonParty.Tests.Game
                 _scoredPublisher,
                 _levelProgress,
                 _palette,
+                Substitute.For<IRetryState>(),
                 _streakTracker,
                 _timeOfDayNight);
         }

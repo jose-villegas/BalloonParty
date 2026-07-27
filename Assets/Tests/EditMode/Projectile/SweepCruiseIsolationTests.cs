@@ -335,6 +335,14 @@ namespace BalloonParty.Tests.Projectile
             Assert.IsFalse(_projectile.IsCruising.Value, "balloon contact ended cruise");
             Assert.AreEqual(0, _projectile.Flight.ConsecutiveWallBounces, "counter reset");
 
+            // A sweep is awarded AT a wall hit, so the segment that had the pop has to actually reach one:
+            // this third bounce is a new wall hit for the sweep to claim (and mints no cruise tap of its
+            // own, the contact having ended the cruise). Without it the sweep would be claiming the same
+            // wall hit the second cruise tap already took, which the funnel refuses by design.
+            _projectile.Direction = Vector2.up;
+            _motionResolver.Step(_projectile, new Vector3(0f, 4.5f, 0f), 1f);
+            Assert.AreEqual(2, _projectile.Flight.TotalCruiseTaps, "not cruising — that bounce mints nothing");
+
             // Award a sweep on the segment that had the pop.
             var view = CreateSweepView();
             _projectile.Flight.LastBouncePosition = Vector3.zero;
