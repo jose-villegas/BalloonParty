@@ -639,17 +639,33 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
-        public void Step_MaxCruiseSpeedCap_ClampsUnifiedTapSpeed()
+        public void Step_SpeedRail_ClampsUnifiedTapSpeed()
         {
-            // Without a cap: 3 taps at 0.5/tap -> +1.5 -> x2.5. With a x2.0 cap, clamp to 2.0.
+            // Without a rail: 3 taps at 0.5/tap -> +1.5 -> x2.5. With a x2.0 rail, clamp to 2.0.
             var resolver = CruiseResolver(perTap: 0.5f, tapEaseDuration: 0f, maxSpeedMultiplier: 2.0f);
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
             model.Flight.TotalCruiseTaps = 3;
 
             var step = resolver.Step(model, Vector3.zero, 1f);
 
-            Assert.AreEqual(2.0f, step.Position.y, 1e-4f,
-                "max-speed cap applies to the unified tap total");
+            Assert.AreEqual(2.0f, step.Position.y, 1e-4f, "the rail applies to the unified tap total");
+        }
+
+        [Test]
+        public void Step_SpeedRail_AlsoBoundsASpeedBuff()
+        {
+            // The rail guards against a step long enough to skip geometry, so a BUFF has to fall inside it
+            // too — it used to wrap only the tap multiplier, and a buff multiplied straight through. Here
+            // the buff alone (x3) would out-run a x2 rail with no taps involved at all.
+            var resolver = CruiseResolver(perTap: 0.5f, tapEaseDuration: 0f, maxSpeedMultiplier: 2.0f);
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
+            model.AddBuff(new ProjectileBuff(
+                ProjectileBuffId.Speed, 3f, BuffModifierOp.Multiplicative,
+                new WallBounceEndCondition(NeverFiringWallBounces())));
+
+            var step = resolver.Step(model, Vector3.zero, 1f);
+
+            Assert.AreEqual(2.0f, step.Position.y, 1e-4f, "x3 buff clamped to the x2 rail");
         }
 
         // --- Graze-deflect teleport bug (investigation dated 2026-07-25; José's report) ---
@@ -776,7 +792,7 @@ namespace BalloonParty.Tests.Projectile
             config.SpeedGainPerTap.Returns(perTap);
             config.CruiseTapEaseDuration.Returns(tapEaseDuration);
             config.CruisePiercingTapThreshold.Returns(piercingTapThreshold);
-            config.MaxCruiseSpeedMultiplier.Returns(maxSpeedMultiplier);
+            config.MaxSpeedMultiplier.Returns(maxSpeedMultiplier);
             config.CruiseTapCurve.Returns(AnimationCurve.Linear(0f, 0f, 1f, 1f));
             return new ProjectileMotionResolver(config);
         }

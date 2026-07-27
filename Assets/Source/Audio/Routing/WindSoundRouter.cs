@@ -39,7 +39,7 @@ namespace BalloonParty.Audio.Routing
             var gainPerTap = Mathf.Max(0.0001f, flightConfig.SpeedGainPerTap);
             _maxTaps = flightConfig.CruisePiercingTapThreshold > 0
                 ? flightConfig.CruisePiercingTapThreshold
-                : Mathf.Max(1f, (flightConfig.MaxCruiseSpeedMultiplier - 1f) / gainPerTap);
+                : Mathf.Max(1f, (flightConfig.MaxSpeedMultiplier - 1f) / gainPerTap);
         }
 
         public void Start()

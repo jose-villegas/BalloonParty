@@ -11,7 +11,7 @@ namespace BalloonParty.Projectile.Controller
     {
         private readonly WallLimits _walls;
         private readonly float _speedGainPerTap;
-        private readonly float _maxCruiseSpeedMultiplier;
+        private readonly float _maxSpeedMultiplier;
         private readonly float _cruiseTapEaseDuration;
         private readonly int _cruisePiercingTapThreshold;
         private readonly float _pierceArmRampDuration;
@@ -29,16 +29,23 @@ namespace BalloonParty.Projectile.Controller
         ///     piercing disabled. Feedback that scales with velocity normalizes against THIS, not the cap:
         ///     against the cap, every such effect would sit in the bottom tenth of its range forever.
         /// </summary>
-        internal float ReachableTopSpeedMultiplier => _cruisePiercingTapThreshold > 0
-            ? TargetMultiplier(_cruisePiercingTapThreshold)
-            : Mathf.Max(_maxCruiseSpeedMultiplier, 1f);
+        internal float ReachableTopSpeedMultiplier
+        {
+            get
+            {
+                var top = _cruisePiercingTapThreshold > 0
+                    ? TargetMultiplier(_cruisePiercingTapThreshold)
+                    : Mathf.Max(_maxSpeedMultiplier, 1f);
+                return _maxSpeedMultiplier > 0f ? Mathf.Min(top, _maxSpeedMultiplier) : top;
+            }
+        }
 
         [Inject]
         internal ProjectileMotionResolver(IProjectileFlightConfig config)
         {
             _walls = new WallLimits(config.LimitsClockwise);
             _speedGainPerTap = config.SpeedGainPerTap;
-            _maxCruiseSpeedMultiplier = config.MaxCruiseSpeedMultiplier;
+            _maxSpeedMultiplier = config.MaxSpeedMultiplier;
             _cruiseTapEaseDuration = config.CruiseTapEaseDuration;
             _cruisePiercingTapThreshold = config.CruisePiercingTapThreshold;
             _cruiseTapCurve = config.CruiseTapCurve ?? AnimationCurve.Linear(0f, 0f, 1f, 1f);
@@ -294,6 +301,15 @@ namespace BalloonParty.Projectile.Controller
             var target = model.ComputeBuffedValue(ProjectileBuffId.Speed, model.Speed)
                          * TargetMultiplier(flight.TotalCruiseTaps);
 
+            // The safety rail, applied to the FINAL speed: one fixed step has to stay short enough that
+            // the shot can't skip straight past a balloon (or the play area) between steps. It clamps
+            // against the UNBUFFED base so it's an absolute ceiling — a speed buff multiplies the target
+            // and would otherwise sail through a cap that only wrapped the tap part.
+            if (_maxSpeedMultiplier > 0f)
+            {
+                target = Mathf.Min(target, model.Speed * _maxSpeedMultiplier);
+            }
+
             // With no taps banked there is nothing above base speed to blend toward, so an unspent
             // transition (cruise entry before its first tap) stays inert rather than dipping the shot.
             if (flight.TotalCruiseTaps <= 0)
@@ -319,17 +335,11 @@ namespace BalloonParty.Projectile.Controller
             return flight.CurrentSpeed;
         }
 
-        // Cumulative: every tap is worth SpeedGainPerTap of base speed, capped (the cap only binds when
-        // piercing is disabled — taps freeze at the arming one otherwise).
+        // Cumulative: every tap is worth SpeedGainPerTap of base speed. Unclamped — the speed rail is
+        // applied to the final speed in ResolveFlightSpeed, so buffs fall inside it too.
         private float TargetMultiplier(int taps)
         {
-            if (taps <= 0)
-            {
-                return 1f;
-            }
-
-            var target = 1f + (_speedGainPerTap * taps);
-            return _maxCruiseSpeedMultiplier > 0f ? Mathf.Min(target, _maxCruiseSpeedMultiplier) : target;
+            return taps <= 0 ? 1f : 1f + (_speedGainPerTap * taps);
         }
 
         private float TransitionDuration(SpeedTransitionKind kind)

@@ -35,11 +35,14 @@ namespace BalloonParty.Configuration
         [FormerlySerializedAs("_cruiseSpeedPerShield")]
         [SerializeField] [Min(0f)] private float _speedGainPerTap = 0.25f;
 
-        [Tooltip("Hard ceiling on cruise speed as a multiple of base speed, guarding against a step long " +
-                 "enough to skip past wall geometry. NOTE: with piercing enabled the tap count freezes at " +
-                 "the arming tap, so this cap only ever binds when Cruise Piercing Tap Threshold is 0. " +
-                 "0 = unlimited.")]
-        [SerializeField] [Min(0f)] private float _maxCruiseSpeedMultiplier = 4f;
+        [Tooltip("SAFETY RAIL, not a tuning knob: the hard ceiling on flight speed as a multiple of base " +
+                 "speed, so taps and buffs together can never make one fixed step long enough to skip " +
+                 "past geometry between steps. At 8 base speed and a 0.02 timestep, a step exceeds a " +
+                 "balloon's chord (~0.875 wu, so the shot passes THROUGH it) above ~x5.5, and the play " +
+                 "area itself above ~x28 — so x5.5 is the meaningful bound. Applies to the FINAL speed, " +
+                 "buffs included. 0 = unlimited.")]
+        [FormerlySerializedAs("_maxCruiseSpeedMultiplier")]
+        [SerializeField] [Min(0f)] private float _maxSpeedMultiplier = 5.5f;
 
         [Tooltip("Per-bounce speed-change animation: replayed from t=0 on EVERY cruise bounce, scaling " +
                  "the new target speed by curve(elapsed/duration). Start the curve at 0 to freeze the " +
@@ -109,7 +112,7 @@ namespace BalloonParty.Configuration
         public Vector4 LimitsClockwise => _limitsClockwise;
         public int CruiseWallBounceThreshold => _cruiseWallBounceThreshold;
         public float SpeedGainPerTap => _speedGainPerTap;
-        public float MaxCruiseSpeedMultiplier => _maxCruiseSpeedMultiplier;
+        public float MaxSpeedMultiplier => _maxSpeedMultiplier;
         public AnimationCurve CruiseTapCurve => _cruiseTapCurve;
         public float CruiseTapEaseDuration => _cruiseTapEaseDuration;
         public bool SweepEnabled => _sweepEnabled;

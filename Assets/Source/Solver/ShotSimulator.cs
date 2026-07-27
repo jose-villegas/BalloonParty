@@ -49,7 +49,7 @@ namespace BalloonParty.Solver
 
         public ShotCruiseConfig(IProjectileFlightConfig config)
             : this(
-                config.CruiseWallBounceThreshold, config.SpeedGainPerTap, config.MaxCruiseSpeedMultiplier,
+                config.CruiseWallBounceThreshold, config.SpeedGainPerTap, config.MaxSpeedMultiplier,
                 config.CruiseTapEaseDuration, config.CruiseTapCurve, config.CruisePiercingTapThreshold,
                 config.PierceArmRampDuration, config.PierceArmRampCurve)
         {
@@ -459,10 +459,8 @@ namespace BalloonParty.Solver
         // The steady-state cruise speed multiplier for a given tap count, capped as live caps it.
         private static float CruiseTargetMultiplier(int taps, in ShotCruiseConfig cruiseConfig)
         {
-            var target = 1f + (cruiseConfig.SpeedGainPerTap * Mathf.Max(taps, 0));
-            return cruiseConfig.MaxSpeedMultiplier > 0f
-                ? Mathf.Min(target, cruiseConfig.MaxSpeedMultiplier)
-                : target;
+            // Unclamped — the speed rail is applied to the final speed in CurrentSpeed, buffs included.
+            return 1f + (cruiseConfig.SpeedGainPerTap * Mathf.Max(taps, 0));
         }
 
         // Mirrors ProjectileMotionResolver.Step's cruise ramp exactly: every qualifying wall hit adds a
@@ -478,16 +476,18 @@ namespace BalloonParty.Solver
             // Gated on the TAP COUNT, not on IsCruising: live reads TotalCruiseTaps regardless, so a shot
             // that pops something (ending its cruise but keeping its taps) holds the speed it earned. The
             // old !IsCruising gate dropped it to base and under-predicted every post-pop segment.
-            if (state.TotalTaps <= 0)
-            {
-                return buffedBase;
-            }
-
-            var target = CruiseTargetMultiplier(state.TotalTaps, cruiseConfig);
-
             // Pierce scale bleeds the ramp down through tough plows; floor at (buffed) base speed.
-            var speed = buffedBase * target * state.PierceSpeedScale;
-            return Mathf.Max(speed, buffedBase);
+            var speed = state.TotalTaps <= 0
+                ? buffedBase
+                : Mathf.Max(
+                    buffedBase * CruiseTargetMultiplier(state.TotalTaps, cruiseConfig) * state.PierceSpeedScale,
+                    buffedBase);
+
+            // The safety rail on the FINAL speed, mirroring ResolveFlightSpeed: measured against the
+            // UNBUFFED base, so a speed buff falls inside the ceiling instead of multiplying past it.
+            return cruiseConfig.MaxSpeedMultiplier > 0f
+                ? Mathf.Min(speed, baseSpeed * cruiseConfig.MaxSpeedMultiplier)
+                : speed;
         }
 
         // The event-timeline mirror of the live path-clear check (Shared.PathTrace / the predicate

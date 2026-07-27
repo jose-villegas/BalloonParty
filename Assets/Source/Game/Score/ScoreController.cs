@@ -22,6 +22,7 @@ namespace BalloonParty.Game.Score
 
         private readonly ILevelProgress _levelProgress;
         private readonly IGamePalette _palette;
+        private readonly IRetryState _retryState;
         private readonly Dictionary<string, int> _persistentScore = new();
         private readonly IPublisher<ScorePointsGroupMessage> _scoredPublisher;
         private readonly ColorStreakTracker _streakTracker;
@@ -38,6 +39,7 @@ namespace BalloonParty.Game.Score
         // are absorbed rather than double-added.
         private int _projectedTotal;
         private int _snapCredit;
+        private int _levelStartScore;
         private IDisposable _trailSubscription;
         private IDisposable _levelUpSubscription;
 
@@ -52,6 +54,7 @@ namespace BalloonParty.Game.Score
             IPublisher<ScorePointsGroupMessage> scoredPublisher,
             ILevelProgress levelProgress,
             IGamePalette palette,
+            IRetryState retryState,
             ColorStreakTracker streakTracker,
             ITimeOfDayNight timeOfDayNight)
         {
@@ -60,6 +63,7 @@ namespace BalloonParty.Game.Score
             _scoredPublisher = scoredPublisher;
             _levelProgress = levelProgress;
             _palette = palette;
+            _retryState = retryState;
             _streakTracker = streakTracker;
             _timeOfDayNight = timeOfDayNight;
         }
@@ -87,8 +91,18 @@ namespace BalloonParty.Game.Score
 
         private void ClearRunState()
         {
-            _totalScore.Value = 0;
-            _projectedTotal = 0;
+            if (_retryState.RetryLevel > 0)
+            {
+                _totalScore.Value = _levelStartScore;
+                _projectedTotal = _levelStartScore;
+            }
+            else
+            {
+                _totalScore.Value = 0;
+                _projectedTotal = 0;
+                _levelStartScore = 0;
+            }
+
             _snapCredit = 0;
 
             foreach (var key in _colorKeys)
@@ -303,6 +317,7 @@ namespace BalloonParty.Game.Score
         {
             _snapCredit += _projectedTotal - _totalScore.Value;
             _totalScore.Value = _projectedTotal;
+            _levelStartScore = _projectedTotal;
         }
     }
 }

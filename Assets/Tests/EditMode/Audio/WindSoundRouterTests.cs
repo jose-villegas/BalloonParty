@@ -34,7 +34,7 @@ namespace BalloonParty.Tests.Audio
             // ProjectileSpeed 10, x3 cap, +2 per tap => full speed at 10*(3-1)/2 = 10 taps.
             var flightConfig = Substitute.For<IProjectileFlightConfig>();
             flightConfig.ProjectileSpeed.Returns(10f);
-            flightConfig.MaxCruiseSpeedMultiplier.Returns(3f);
+            flightConfig.MaxSpeedMultiplier.Returns(3f);
             flightConfig.SpeedGainPerTap.Returns(2f);
 
             _router = new WindSoundRouter(_player, loadedSubscriber, flightConfig);
