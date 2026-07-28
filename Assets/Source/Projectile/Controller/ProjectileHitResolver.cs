@@ -150,6 +150,14 @@ namespace BalloonParty.Projectile.Controller
                     damageContext.Flags | DamageFlags.DeferredStreak,
                     damageContext.SourceColorId);
             }
+            else if (isWildcardPop && !isRainbowBuff && !string.IsNullOrEmpty(projectile.ColorName.Value))
+            {
+                // Coloured projectile popping a rainbow: the multiplier carries to the next colour.
+                damageContext = new DamageContext(
+                    damageContext.Damage,
+                    damageContext.Flags | DamageFlags.CarryStreak,
+                    damageContext.SourceColorId);
+            }
 
             var recolored = ApplyColorChange(projectile, balloon, outcome, isWildcardPop);
 

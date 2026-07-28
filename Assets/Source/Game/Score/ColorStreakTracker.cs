@@ -11,6 +11,7 @@ namespace BalloonParty.Game.Score
         private readonly IDisposable _projectileLoadedSubscription;
 
         private int _deferredPops;
+        private bool _carryOnColorChange;
 
         public string LastColor { get; private set; }
         public int CurrentStreak { get; private set; }
@@ -50,15 +51,45 @@ namespace BalloonParty.Game.Score
             {
                 CurrentStreak++;
             }
+            else if (_carryOnColorChange && CurrentStreak > 0)
+            {
+                // A rainbow pop flagged carry: the multiplier transfers to the new colour intact,
+                // folding in any deferred rainbow pops banked since the carry was armed.
+                LastColor = colorId;
+                CurrentStreak += 1 + _deferredPops;
+                _carryOnColorChange = false;
+            }
             else
             {
                 // Flush any deferred rainbow pops into the new colour's streak — they happened
                 // before the projectile had a colour, so they count toward this first real hit.
                 LastColor = colorId;
                 CurrentStreak = 1 + _deferredPops;
+                _carryOnColorChange = false;
             }
 
             _deferredPops = 0;
+            PublishChanged();
+            return CurrentStreak;
+        }
+
+        /// <summary>Records like <see cref="Record"/> but also flags the streak to carry its multiplier
+        /// across the next colour change (a coloured projectile popping a rainbow).
+        /// Assumes no <c>breaksStreak</c> attribution co-occurs — rainbow balloons never produce one.</summary>
+        public int RecordAndCarry(string colorId)
+        {
+            if (colorId == LastColor)
+            {
+                CurrentStreak++;
+            }
+            else
+            {
+                LastColor = colorId;
+                CurrentStreak = 1 + _deferredPops;
+            }
+
+            _deferredPops = 0;
+            _carryOnColorChange = true;
             PublishChanged();
             return CurrentStreak;
         }
@@ -69,6 +100,7 @@ namespace BalloonParty.Game.Score
         {
             _deferredPops = 0;
             CurrentStreak++;
+            _carryOnColorChange = true;
             PublishChanged();
             return CurrentStreak;
         }
@@ -86,6 +118,7 @@ namespace BalloonParty.Game.Score
             LastColor = null;
             CurrentStreak = 0;
             _deferredPops = 0;
+            _carryOnColorChange = false;
             PublishChanged();
         }
 

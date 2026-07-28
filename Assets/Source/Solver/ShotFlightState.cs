@@ -90,14 +90,17 @@ namespace BalloonParty.Solver
         /// <see cref="DamageFlags.DirectHit" /> always; <see cref="DamageFlags.WildcardStreak" /> plus
         /// <see cref="DamageFlags.Piercing" /> under a rainbow buff; <see cref="DamageFlags.Piercing" />
         /// alone under an armed (non-buffed) shot; <see cref="DamageFlags.DeferredStreak" /> for a
-        /// colourless projectile popping a rainbow target absent a buff.</summary>
+        /// colourless projectile popping a rainbow target absent a buff; <see cref="DamageFlags.CarryStreak" />
+        /// for a coloured projectile popping a rainbow target absent a buff.</summary>
         public static ShotPopCause ProjectileContact(
-            bool hasRainbowBuff, bool isPiercing, bool isRainbowTargetDeferred, string projectileColor)
+            bool hasRainbowBuff, bool isPiercing, bool isRainbowTargetDeferred, bool isRainbowTargetCarry,
+            string projectileColor)
         {
             var flags = DamageFlags.DirectHit
                 | (hasRainbowBuff ? DamageFlags.WildcardStreak | DamageFlags.Piercing : DamageFlags.Normal)
                 | (isPiercing ? DamageFlags.Piercing : DamageFlags.Normal)
-                | (isRainbowTargetDeferred ? DamageFlags.DeferredStreak : DamageFlags.Normal);
+                | (isRainbowTargetDeferred ? DamageFlags.DeferredStreak : DamageFlags.Normal)
+                | (isRainbowTargetCarry ? DamageFlags.CarryStreak : DamageFlags.Normal);
             return new ShotPopCause(true, projectileColor, flags);
         }
 
@@ -162,6 +165,7 @@ namespace BalloonParty.Solver
         public float SpeedBuffMultiplier;
         public string StreakColor;
         public int StreakCount;
+        public bool CarryOnColorChange;
         public string ProjectileColor;
 
         // Banks a colourless-projectile rainbow pop until the streak next anchors on a real colour
@@ -203,6 +207,7 @@ namespace BalloonParty.Solver
             SpeedBuffMultiplier = seed.HasSpeedBuff ? seed.SpeedBuffMultiplier : 1f;
             StreakColor = seed.StreakColor;
             StreakCount = seed.StreakCount;
+            CarryOnColorChange = false;
             ProjectileColor = seed.ProjectileColor;
             DeferredPops = 0;
             RawScore = 0;

@@ -191,6 +191,13 @@ namespace BalloonParty.Game.Score
                 return 1;
             }
 
+            // A coloured projectile popping a rainbow — record normally (same colour increments)
+            // and flag the streak to carry across the next colour change.
+            if (flags.HasFlag(DamageFlags.CarryStreak))
+            {
+                return RecordWithCarry(attributions);
+            }
+
             if (attributions.Count == 1)
             {
                 return _streakTracker.Record(attributions[0].ColorId, attributions[0].BreaksStreak);
@@ -222,6 +229,24 @@ namespace BalloonParty.Game.Score
 
             _streakTracker.Record(null, true);
             return 1;
+        }
+
+        private int RecordWithCarry(IReadOnlyList<ScoreAttribution> attributions)
+        {
+            if (attributions.Count == 1)
+            {
+                return _streakTracker.RecordAndCarry(attributions[0].ColorId);
+            }
+
+            for (var i = 0; i < attributions.Count; i++)
+            {
+                if (attributions[i].IsPrimary)
+                {
+                    return _streakTracker.RecordAndCarry(attributions[i].ColorId);
+                }
+            }
+
+            return _streakTracker.RecordAndCarry(attributions[0].ColorId);
         }
 
         // Keeps only what was granted (capped at the level threshold) plus its base for numbering.

@@ -144,6 +144,105 @@ namespace BalloonParty.Tests.Game
 
             Assert.AreEqual(1, _tracker.Record("Blue"));
         }
+
+        // ─── Rainbow Streak Carry ───────────────────────────────────────────
+
+        [Test]
+        public void RecordAndCarry_SameColor_IncrementsStreak()
+        {
+            _tracker.Record("Green");
+            _tracker.RecordAndCarry("Green");
+
+            Assert.AreEqual(3, _tracker.Record("Green"));
+        }
+
+        [Test]
+        public void RecordAndCarry_ThenRecordDifferentColor_CarriesStreak()
+        {
+            _tracker.Record("Green");
+            _tracker.Record("Green");
+            // Green x2 → rainbow pop arms carry at x3
+            _tracker.RecordAndCarry("Green");
+
+            // Switch to Purple: streak carries (3+1 = 4), not reset to 1
+            Assert.AreEqual(4, _tracker.Record("Purple"));
+        }
+
+        [Test]
+        public void RecordAndCarry_ThenSameColor_ThenDifferentColor_CarryStillArmed()
+        {
+            _tracker.RecordAndCarry("Green");
+            // Same color — carry not consumed yet
+            _tracker.Record("Green");
+
+            // Color change — carry is consumed, streak carries
+            Assert.AreEqual(3, _tracker.Record("Purple"));
+        }
+
+        [Test]
+        public void RecordAndCarry_ThenReset_ClearsCarry()
+        {
+            _tracker.Record("Green");
+            _tracker.Record("Green");
+            _tracker.RecordAndCarry("Green");
+
+            _projectileLoadedHandler.Handle(new ProjectileLoadedMessage(null));
+
+            // After reset, different color starts at 1 — carry was cleared
+            Assert.AreEqual(1, _tracker.Record("Purple"));
+        }
+
+        [Test]
+        public void RecordWildcard_ArmsCarry_NextDifferentColorInheritsStreak()
+        {
+            _tracker.Record("Green");
+            _tracker.Record("Green");
+            // Wildcard: streak climbs to 3, carry armed
+            _tracker.RecordWildcard();
+
+            // Different color inherits the streak (3+1 = 4)
+            Assert.AreEqual(4, _tracker.Record("Purple"));
+        }
+
+        [Test]
+        public void RecordAndCarry_MultipleCalls_CarryStaysArmed()
+        {
+            _tracker.RecordAndCarry("Green");
+            _tracker.RecordAndCarry("Green");
+            _tracker.RecordAndCarry("Green");
+
+            // Three carries stacked — carry still armed, streak = 3
+            // Color change carries: 3+1 = 4
+            Assert.AreEqual(4, _tracker.Record("Purple"));
+        }
+
+        [Test]
+        public void Carry_ConsumedOnColorChange_SubsequentChangeResetsNormally()
+        {
+            _tracker.Record("Green");
+            _tracker.RecordAndCarry("Green");
+
+            // First color change — carry consumed, streak = 3
+            _tracker.Record("Purple");
+
+            // Second color change — no carry, resets to 1
+            Assert.AreEqual(1, _tracker.Record("Red"));
+        }
+
+        [Test]
+        public void RecordAndCarry_WithDeferredPops_FoldsInCorrectly()
+        {
+            _tracker.RecordDeferred();
+            _tracker.RecordDeferred();
+            // RecordAndCarry as the first color attribution — folds 2 deferred pops
+            var streak = _tracker.RecordAndCarry("Green");
+
+            // 1 + 2 deferred = 3, carry armed
+            Assert.AreEqual(3, streak);
+            // Color change carries: 3+1 = 4
+            Assert.AreEqual(4, _tracker.Record("Purple"));
+        }
     }
 }
+
 

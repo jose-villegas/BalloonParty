@@ -18,6 +18,10 @@ namespace BalloonParty.Slots.Capabilities
 
         /// <summary>A colourless projectile popped a rainbow balloon — the streak contribution is
         /// deferred until the projectile adopts a colour on a subsequent hit.</summary>
-        DeferredStreak = 1 << 3
+        DeferredStreak = 1 << 3,
+
+        /// <summary>A coloured projectile popped a rainbow — the streak multiplier should carry
+        /// intact to the next colour the projectile adopts.</summary>
+        CarryStreak = 1 << 4
     }
 }

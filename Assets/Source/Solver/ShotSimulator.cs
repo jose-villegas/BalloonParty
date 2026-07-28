@@ -794,6 +794,8 @@ namespace BalloonParty.Solver
                 state.HasRainbowBuff, state.IsPiercing,
                 isRainbowTargetDeferred: balloon.IsRainbow && !state.HasRainbowBuff
                     && string.IsNullOrEmpty(state.ProjectileColor),
+                isRainbowTargetCarry: balloon.IsRainbow && !state.HasRainbowBuff
+                    && !string.IsNullOrEmpty(state.ProjectileColor),
                 projectileColor: state.ProjectileColor);
             ResolvePopScore(balloon, in scoreRules, in cause, ref state);
 
@@ -1068,6 +1070,7 @@ namespace BalloonParty.Solver
             state.StreakColor = null;
             state.StreakCount = 0;
             state.DeferredPops = 0;
+            state.CarryOnColorChange = false;
         }
 
         // Dispatches a pop's colour adoption + streak + payout, mirroring ScoreController.
@@ -1122,6 +1125,7 @@ namespace BalloonParty.Solver
             {
                 state.DeferredPops = 0;
                 multiplier = ++state.StreakCount;
+                state.CarryOnColorChange = true;
                 attributedColorId = balloon.PaysSourceColor ? cause.SourceColorId : balloon.ColorId;
             }
             else if (cause.Flags.HasFlag(DamageFlags.DeferredStreak))
@@ -1129,6 +1133,23 @@ namespace BalloonParty.Solver
                 state.DeferredPops++;
                 multiplier = 1;
                 attributedColorId = balloon.ColorId;
+            }
+            else if (cause.Flags.HasFlag(DamageFlags.CarryStreak))
+            {
+                if (balloon.IsRainbow)
+                {
+                    var primary = ContainsColor(allowedColors, cause.SourceColorId)
+                        ? cause.SourceColorId
+                        : allowedColors[0];
+                    multiplier = RecordColorAndCarry(primary, ref state);
+                    attributedColorId = primary;
+                }
+                else
+                {
+                    multiplier = RecordColorAndCarry(
+                        balloon.PaysSourceColor ? cause.SourceColorId : balloon.ColorId, ref state);
+                    attributedColorId = balloon.PaysSourceColor ? cause.SourceColorId : balloon.ColorId;
+                }
             }
             else if (string.IsNullOrEmpty(balloon.ColorId) && !balloon.PaysSourceColor)
             {
@@ -1178,16 +1199,48 @@ namespace BalloonParty.Solver
             }
         }
 
-        // Mirrors ColorStreakTracker.Record's non-breaking branch, including the deferred-pop fold:
-        // repeating the same colour just increments, a new colour starts at 1 plus any banked
-        // deferred rainbow pops — either way the deferred bank clears.
+        // Mirrors ColorStreakTracker.Record's non-breaking branch, including the deferred-pop fold
+        // and carry-on-color-change: repeating the same colour just increments, a colour change with
+        // carry transfers the multiplier, otherwise a new colour starts at 1 plus any banked deferred
+        // rainbow pops — either way the deferred bank clears.
         private static int RecordColor(string colorId, ref ShotFlightState state)
         {
-            state.StreakCount = string.Equals(state.StreakColor, colorId, StringComparison.Ordinal)
-                ? state.StreakCount + 1
-                : 1 + state.DeferredPops;
-            state.StreakColor = colorId;
+            if (string.Equals(state.StreakColor, colorId, StringComparison.Ordinal))
+            {
+                state.StreakCount++;
+            }
+            else if (state.CarryOnColorChange && state.StreakCount > 0)
+            {
+                state.StreakColor = colorId;
+                state.StreakCount += 1 + state.DeferredPops;
+                state.CarryOnColorChange = false;
+            }
+            else
+            {
+                state.StreakCount = 1 + state.DeferredPops;
+                state.StreakColor = colorId;
+                state.CarryOnColorChange = false;
+            }
+
             state.DeferredPops = 0;
+            return state.StreakCount;
+        }
+
+        // Mirrors ColorStreakTracker.RecordAndCarry: records the pop and flags carry for next change.
+        private static int RecordColorAndCarry(string colorId, ref ShotFlightState state)
+        {
+            if (string.Equals(state.StreakColor, colorId, StringComparison.Ordinal))
+            {
+                state.StreakCount++;
+            }
+            else
+            {
+                state.StreakCount = 1 + state.DeferredPops;
+                state.StreakColor = colorId;
+            }
+
+            state.DeferredPops = 0;
+            state.CarryOnColorChange = true;
             return state.StreakCount;
         }
 
