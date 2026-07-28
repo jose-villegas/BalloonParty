@@ -49,5 +49,12 @@ namespace BalloonParty.Configuration.Effects
         /// <summary>Speed multiplier applied to the time-of-day clock while in the Launch scene
         /// (e.g. 4 = 4× faster day/night cycle on the title screen). Reverts to 1× on entering Game.</summary>
         float LaunchSpeedMultiplier { get; }
+
+        /// <summary>Angle (degrees) the Realtime clock snaps to when transitioning from Launch to Game —
+        /// ensures the player always starts at a consistent time of day (e.g. 135 = peak noon).</summary>
+        float GameStartAngleDegrees { get; }
+
+        /// <summary>Seconds the Launch→Game sweep takes to reach <see cref="GameStartAngleDegrees"/>.</summary>
+        float GameStartSweepSeconds { get; }
     }
 }

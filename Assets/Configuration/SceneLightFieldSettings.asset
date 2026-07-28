@@ -135,6 +135,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _launchSpeedMultiplier: 20
+  _gameStartAngleDegrees: 135
+  _gameStartSweepSeconds: 3
   _texelsPerUnit: 16
   _fieldFrameInterval: 1
   _maxLights: 32

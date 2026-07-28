@@ -819,12 +819,13 @@ namespace BalloonParty.Tests.Game
             _controller.Tick();
             _timeScale.ClearReceivedCalls();
 
-            // Advance the ramp to exactly halfway.
+            // Advance the ramp to approximately halfway (dt shifts it slightly).
             SetField("_rampUpElapsed", 50f);
             _controller.Tick();
 
-            // Lerp(1, 2, 0.5) = 1.5
-            _timeScale.Received(1).Claim(TimeScaleSource.LevelUpCeremony, 1.5f);
+            // Lerp(1, 2, ~0.5) ≈ 1.5 — allow a small delta from Time.unscaledDeltaTime.
+            _timeScale.Received(1).Claim(TimeScaleSource.LevelUpCeremony,
+                Arg.Is<float>(v => Mathf.Abs(v - 1.5f) < 0.05f));
         }
 
         [Test]

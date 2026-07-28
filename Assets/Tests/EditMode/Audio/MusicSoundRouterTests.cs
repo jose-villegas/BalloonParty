@@ -1,3 +1,4 @@
+using System;
 using BalloonParty.Audio;
 using BalloonParty.Audio.Routing;
 using BalloonParty.Game.Danger;
@@ -8,6 +9,7 @@ using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
 using UniRx;
+using UnityEngine;
 
 namespace BalloonParty.Tests.Audio
 {
@@ -16,34 +18,78 @@ namespace BalloonParty.Tests.Audio
     {
         private ISoundPlayer _player;
         private ReactiveProperty<NavigationState> _state;
-        private SoundHandle _handle;
+        private ReactiveProperty<float> _dangerLevel;
+        private ITimeOfDayNight _timeOfDayNight;
+        private MusicSoundRouter _router;
+        private SoundHandle _launchHandle;
+        private SoundHandle _dayHandle;
+        private SoundHandle _nightHandle;
+
+        // MessagePipe subscriber-captured handlers (README pattern).
+        private IMessageHandler<ProjectileLoadedMessage> _loadedHandler;
+        private IMessageHandler<ProjectileDestroyedMessage> _destroyedHandler;
+        private IMessageHandler<ProjectileFiredMessage> _firedHandler;
 
         [SetUp]
         public void SetUp()
         {
             _player = Substitute.For<ISoundPlayer>();
-            _handle = new SoundHandle(1, 1u);
-            _player.Play(GameSoundId.LaunchMusic, null).Returns(_handle);
+
+            _launchHandle = new SoundHandle(0, 1u);
+            _dayHandle = new SoundHandle(1, 1u);
+            _nightHandle = new SoundHandle(2, 1u);
+
+            _player.Play(GameSoundId.LaunchMusic, null).Returns(_launchHandle);
+            _player.Play(GameSoundId.GameplayLoopDay, null).Returns(_dayHandle);
+            _player.Play(GameSoundId.GameplayLoopNight, null).Returns(_nightHandle);
 
             _state = new ReactiveProperty<NavigationState>(NavigationState.Launch);
             var navigation = Substitute.For<INavigation>();
             navigation.Current.Returns(_state);
 
-            var dangerLevel = Substitute.For<IDangerLevel>();
-            dangerLevel.Level.Returns(new ReactiveProperty<float>(0f));
+            _dangerLevel = new ReactiveProperty<float>(0f);
+            var danger = Substitute.For<IDangerLevel>();
+            danger.Level.Returns(_dangerLevel);
 
-            var timeOfDayNight = Substitute.For<ITimeOfDayNight>();
-            timeOfDayNight.IsNight.Returns(false);
+            _timeOfDayNight = Substitute.For<ITimeOfDayNight>();
+            _timeOfDayNight.IsNight.Returns(false);
 
+            // Capture MessagePipe handlers so tests can fire projectile messages.
             var loadedSub = Substitute.For<ISubscriber<ProjectileLoadedMessage>>();
-            var destroyedSub = Substitute.For<ISubscriber<ProjectileDestroyedMessage>>();
-            var firedSub = Substitute.For<ISubscriber<ProjectileFiredMessage>>();
+            loadedSub
+                .Subscribe(
+                    Arg.Do<IMessageHandler<ProjectileLoadedMessage>>(h => _loadedHandler = h),
+                    Arg.Any<MessageHandlerFilter<ProjectileLoadedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
 
-            var router = new MusicSoundRouter(
-                _player, navigation, dangerLevel, timeOfDayNight,
+            var destroyedSub = Substitute.For<ISubscriber<ProjectileDestroyedMessage>>();
+            destroyedSub
+                .Subscribe(
+                    Arg.Do<IMessageHandler<ProjectileDestroyedMessage>>(h => _destroyedHandler = h),
+                    Arg.Any<MessageHandlerFilter<ProjectileDestroyedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
+            var firedSub = Substitute.For<ISubscriber<ProjectileFiredMessage>>();
+            firedSub
+                .Subscribe(
+                    Arg.Do<IMessageHandler<ProjectileFiredMessage>>(h => _firedHandler = h),
+                    Arg.Any<MessageHandlerFilter<ProjectileFiredMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
+            _router = new MusicSoundRouter(
+                _player, navigation, danger, _timeOfDayNight,
                 loadedSub, destroyedSub, firedSub);
-            router.Start();
+            _router.Start();
         }
+
+        private void EnterGame()
+        {
+            _state.Value = NavigationState.Game;
+        }
+
+        // -------------------------------------------------------------------
+        // Launch music (existing, kept as-is)
+        // -------------------------------------------------------------------
 
         [Test]
         public void StartingAtLaunch_PlaysLaunchMusic()
@@ -52,17 +98,17 @@ namespace BalloonParty.Tests.Audio
         }
 
         [Test]
-        public void PressingPlayIntoGame_StopsTheMusic()
+        public void PressingPlayIntoGame_StopsLaunchMusic()
         {
-            _state.Value = NavigationState.Game;
+            EnterGame();
 
-            _player.Received(1).Stop(_handle);
+            _player.Received(1).Stop(_launchHandle);
         }
 
         [Test]
-        public void ReturningToLaunch_PlaysAgain()
+        public void ReturningToLaunch_PlaysLaunchMusicAgain()
         {
-            _state.Value = NavigationState.Game;
+            EnterGame();
             _state.Value = NavigationState.Launch;
 
             _player.Received(2).Play(GameSoundId.LaunchMusic, null);
@@ -73,6 +119,281 @@ namespace BalloonParty.Tests.Audio
         {
             // Only Launch is entered (once, in SetUp); no state change means no second play.
             _player.Received(1).Play(GameSoundId.LaunchMusic, null);
+        }
+
+        // -------------------------------------------------------------------
+        // Gameplay loop start/stop
+        // -------------------------------------------------------------------
+
+        [Test]
+        public void EnteringGame_PlaysBothGameplayLoops()
+        {
+            EnterGame();
+
+            _player.Received(1).Play(GameSoundId.GameplayLoopDay, null);
+            _player.Received(1).Play(GameSoundId.GameplayLoopNight, null);
+        }
+
+        [Test]
+        public void ReturningToLaunch_StopsBothGameplayLoops()
+        {
+            EnterGame();
+            _state.Value = NavigationState.Launch;
+
+            _player.Received(1).Stop(_dayHandle);
+            _player.Received(1).Stop(_nightHandle);
+        }
+
+        // -------------------------------------------------------------------
+        // Day/night crossfade — conditional branching: which loop gets factor
+        // 1 vs 0 depends on IsNight. Wrong factor = wrong loop audible.
+        // -------------------------------------------------------------------
+
+        [Test]
+        public void EnteringGame_DuringDay_DayLoopFull_NightLoopDucked()
+        {
+            _timeOfDayNight.IsNight.Returns(false);
+            EnterGame();
+
+            _player.Received().SetVolumeFactor(_dayHandle, 1f);
+            _player.Received().SetVolumeFactor(_nightHandle, 0f);
+        }
+
+        [Test]
+        public void EnteringGame_DuringNight_NightLoopFull_DayLoopDucked()
+        {
+            _timeOfDayNight.IsNight.Returns(true);
+            EnterGame();
+
+            _player.Received().SetVolumeFactor(_dayHandle, 0f);
+            _player.Received().SetVolumeFactor(_nightHandle, 1f);
+        }
+
+        [Test]
+        public void Tick_IsNightFlips_SwapsVolume()
+        {
+            _timeOfDayNight.IsNight.Returns(false);
+            EnterGame();
+            _player.ClearReceivedCalls();
+
+            // Simulate night falling.
+            _timeOfDayNight.IsNight.Returns(true);
+            _router.Tick();
+
+            _player.Received().SetVolumeFactor(_dayHandle, 0f);
+            _player.Received().SetVolumeFactor(_nightHandle, 1f);
+        }
+
+        [Test]
+        public void Tick_IsNightSame_DoesNotCallSetVolumeFactor()
+        {
+            _timeOfDayNight.IsNight.Returns(false);
+            EnterGame();
+            _player.ClearReceivedCalls();
+
+            // IsNight unchanged — Tick should be a no-op.
+            _router.Tick();
+
+            _player.DidNotReceive().SetVolumeFactor(Arg.Any<SoundHandle>(), Arg.Any<float>());
+        }
+
+        [Test]
+        public void Tick_BeforeEnteringGame_DoesNothing()
+        {
+            // Still in Launch — _isPlaying is false.
+            _player.ClearReceivedCalls();
+            _router.Tick();
+
+            _player.DidNotReceive().SetVolumeFactor(Arg.Any<SoundHandle>(), Arg.Any<float>());
+        }
+
+        // -------------------------------------------------------------------
+        // Flight ducking — fired → duck, loaded/destroyed → restore.
+        // Conditional side effects: wrong flag flip = audible gap or stuck duck.
+        // -------------------------------------------------------------------
+
+        [Test]
+        public void ProjectileFired_DucksBothLoops()
+        {
+            EnterGame();
+            _player.ClearReceivedCalls();
+
+            _firedHandler.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+
+            _player.Received().SetVolumeFactor(_dayHandle, 0f);
+            _player.Received().SetVolumeFactor(_nightHandle, 0f);
+        }
+
+        [Test]
+        public void ProjectileLoaded_AfterFire_RestoresVolume()
+        {
+            _timeOfDayNight.IsNight.Returns(false);
+            EnterGame();
+            _firedHandler.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+            _player.ClearReceivedCalls();
+
+            _loadedHandler.Handle(new ProjectileLoadedMessage(null));
+
+            _player.Received().SetVolumeFactor(_dayHandle, 1f);
+            _player.Received().SetVolumeFactor(_nightHandle, 0f);
+        }
+
+        [Test]
+        public void ProjectileDestroyed_AfterFire_RestoresVolume()
+        {
+            _timeOfDayNight.IsNight.Returns(false);
+            EnterGame();
+            _firedHandler.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+            _player.ClearReceivedCalls();
+
+            _destroyedHandler.Handle(new ProjectileDestroyedMessage());
+
+            _player.Received().SetVolumeFactor(_dayHandle, 1f);
+            _player.Received().SetVolumeFactor(_nightHandle, 0f);
+        }
+
+        [Test]
+        public void ProjectileFired_DuringNight_NightLoopAlsoDucked()
+        {
+            _timeOfDayNight.IsNight.Returns(true);
+            EnterGame();
+            _player.ClearReceivedCalls();
+
+            _firedHandler.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+
+            // Both loops duck, even though night is the active one.
+            _player.Received().SetVolumeFactor(_dayHandle, 0f);
+            _player.Received().SetVolumeFactor(_nightHandle, 0f);
+        }
+
+        [Test]
+        public void FlightEndDuringNight_RestoresNightLoop()
+        {
+            _timeOfDayNight.IsNight.Returns(true);
+            EnterGame();
+            _firedHandler.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+            _player.ClearReceivedCalls();
+
+            _loadedHandler.Handle(new ProjectileLoadedMessage(null));
+
+            _player.Received().SetVolumeFactor(_dayHandle, 0f);
+            _player.Received().SetVolumeFactor(_nightHandle, 1f);
+        }
+
+        // -------------------------------------------------------------------
+        // Popup ducking — LevelUp/GameOver nav states duck the gameplay loops.
+        // The default branch in OnNavigationChanged handles this.
+        // -------------------------------------------------------------------
+
+        [Test]
+        public void LevelUpState_DucksBothGameplayLoops()
+        {
+            EnterGame();
+            _player.ClearReceivedCalls();
+
+            _state.Value = NavigationState.LevelUp;
+
+            _player.Received().SetVolumeFactor(_dayHandle, 0f);
+            _player.Received().SetVolumeFactor(_nightHandle, 0f);
+        }
+
+        [Test]
+        public void GameOverState_DucksBothGameplayLoops()
+        {
+            EnterGame();
+            _player.ClearReceivedCalls();
+
+            _state.Value = NavigationState.GameOver;
+
+            _player.Received().SetVolumeFactor(_dayHandle, 0f);
+            _player.Received().SetVolumeFactor(_nightHandle, 0f);
+        }
+
+        [Test]
+        public void ReturningToGame_AfterLevelUp_RestoresVolume()
+        {
+            _timeOfDayNight.IsNight.Returns(false);
+            EnterGame();
+            _state.Value = NavigationState.LevelUp;
+            _player.ClearReceivedCalls();
+
+            _state.Value = NavigationState.Game;
+
+            _player.Received().SetVolumeFactor(_dayHandle, 1f);
+            _player.Received().SetVolumeFactor(_nightHandle, 0f);
+        }
+
+        // -------------------------------------------------------------------
+        // Danger pitch modulation — math formula: Pow(2, -danger * 6 / 12).
+        // Wrong sign, constant, or formula = broken pitch.
+        // -------------------------------------------------------------------
+
+        [Test]
+        public void DangerZero_PitchIsOne()
+        {
+            EnterGame();
+
+            // danger = 0 → semitones = 0 → pitch = 2^0 = 1
+            _player.Received().SetPitch(_dayHandle, 1f, 0.4f);
+            _player.Received().SetPitch(_nightHandle, 1f, 0.4f);
+        }
+
+        [Test]
+        public void DangerMax_PitchIsTritoneDown()
+        {
+            EnterGame();
+            _player.ClearReceivedCalls();
+
+            _dangerLevel.Value = 1f;
+
+            // danger = 1 → 6 semitones → pitch = 2^(-6/12) = 2^(-0.5) ≈ 0.7071
+            var expected = Mathf.Pow(2f, -0.5f);
+            _player.Received().SetPitch(_dayHandle, expected, 0.4f);
+            _player.Received().SetPitch(_nightHandle, expected, 0.4f);
+        }
+
+        [Test]
+        public void DangerHalf_PitchIsThreeSemitonesDown()
+        {
+            EnterGame();
+            _player.ClearReceivedCalls();
+
+            _dangerLevel.Value = 0.5f;
+
+            // danger = 0.5 → 3 semitones → pitch = 2^(-3/12) = 2^(-0.25)
+            var expected = Mathf.Pow(2f, -3f / 12f);
+            _player.Received().SetPitch(_dayHandle, expected, 0.4f);
+            _player.Received().SetPitch(_nightHandle, expected, 0.4f);
+        }
+
+        [Test]
+        public void DangerChange_BeforeEnteringGame_DoesNotCallSetPitch()
+        {
+            // Still in Launch — no gameplay handles are valid.
+            _player.ClearReceivedCalls();
+            _dangerLevel.Value = 0.5f;
+
+            _player.DidNotReceive().SetPitch(Arg.Any<SoundHandle>(), Arg.Any<float>(), Arg.Any<float>());
+        }
+
+        // -------------------------------------------------------------------
+        // Combined edge case — flight duck + night flip interaction.
+        // -------------------------------------------------------------------
+
+        [Test]
+        public void IsNightFlipsDuringFlight_BothLoopsStayDucked()
+        {
+            _timeOfDayNight.IsNight.Returns(false);
+            EnterGame();
+            _firedHandler.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+            _player.ClearReceivedCalls();
+
+            // Night falls while in flight — should still be ducked.
+            _timeOfDayNight.IsNight.Returns(true);
+            _router.Tick();
+
+            _player.Received().SetVolumeFactor(_dayHandle, 0f);
+            _player.Received().SetVolumeFactor(_nightHandle, 0f);
         }
     }
 }

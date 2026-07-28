@@ -24,6 +24,7 @@ namespace BalloonParty.Audio.View
 
         public void OnDespawned()
         {
+            DOTween.Kill(this);
             _source.DOKill();
             _source.Stop();
             _source.clip = null;
@@ -42,6 +43,7 @@ namespace BalloonParty.Audio.View
             // Kill any return still pending from a prior play on this voice (e.g. a stolen
             // slot replayed in place) — and any in-flight fade — before starting the new one.
             LifecycleHelper.CancelAndDispose(ref _returnCts);
+            DOTween.Kill(this);
             _source.DOKill();
             _onComplete = onComplete;
 
@@ -117,6 +119,7 @@ namespace BalloonParty.Audio.View
 
         internal void Stop()
         {
+            DOTween.Kill(this);
             _source.DOKill();
             _source.Stop();
             LifecycleHelper.CancelAndDispose(ref _returnCts);
@@ -129,6 +132,7 @@ namespace BalloonParty.Audio.View
         internal void FadeOutAndComplete(float fadeOutSeconds)
         {
             LifecycleHelper.CancelAndDispose(ref _returnCts);
+            DOTween.Kill(this);
             _source.DOKill();
 
             if (fadeOutSeconds <= 0f || _source.clip == null || !_source.isPlaying)

@@ -155,7 +155,6 @@ namespace BalloonParty.Audio
             }
         }
 
-
         public void Stop(SoundHandle handle)
         {
             if (!handle.IsValid)

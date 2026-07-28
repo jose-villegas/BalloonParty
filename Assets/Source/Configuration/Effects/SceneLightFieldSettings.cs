@@ -87,6 +87,14 @@ namespace BalloonParty.Configuration.Effects
                  "Reverts to 1× once the player enters Game. E.g. 4 = a 30-min cycle becomes ~7.5 min on the title.")]
         [SerializeField] [Min(0f)] private float _launchSpeedMultiplier = 1f;
 
+        [Tooltip("Angle (degrees) the Realtime clock snaps to on entering Game — ensures the player always " +
+                 "starts at a consistent time of day. 135 = peak noon (the canonical upper-left light direction).")]
+        [SerializeField] [Range(0f, 360f)] private float _gameStartAngleDegrees = 135f;
+
+        [Tooltip("Seconds the Launch→Game sweep takes to reach the Game Start Angle. " +
+                 "Shorter than the level-up sweep for a snappy scene-entry transition.")]
+        [SerializeField] [Min(0f)] private float _gameStartSweepSeconds = 1.5f;
+
         [Header("Field — Resolution")]
         [Tooltip("Field RT density (texels per world unit). Higher = smoother colour/light regions; the RT " +
                  "stays small and only re-renders when a light or the owner changes, so this can be far " +
@@ -221,6 +229,8 @@ namespace BalloonParty.Configuration.Effects
         public float NightEndAngle => _nightEndAngle;
         public AnimationCurve ShadowStrengthOverAngle => _shadowStrengthOverAngle;
         public float LaunchSpeedMultiplier => _launchSpeedMultiplier;
+        public float GameStartAngleDegrees => _gameStartAngleDegrees;
+        public float GameStartSweepSeconds => _gameStartSweepSeconds;
 
         public Color EvaluateColor(Vector2 direction) =>
             _lightColorFromDirection ? _lightColorOverDirection.Evaluate(direction.Angle01()) : _lightColor;

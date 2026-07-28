@@ -1,5 +1,6 @@
 using System;
 using BalloonParty.Game.Danger;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.SceneLight;
@@ -18,7 +19,6 @@ namespace BalloonParty.Audio.Routing
     internal sealed class MusicSoundRouter : IStartable, ITickable, IDisposable
     {
         private const float DangerMaxSemitones = 6f;
-        private const float SemitoneRatio = 1f / 12f;
         private const float PitchLerpSeconds = 0.4f;
 
         private readonly ISoundPlayer _player;
@@ -149,7 +149,7 @@ namespace BalloonParty.Audio.Routing
         private void ApplyPitch()
         {
             var semitones = _dangerLevel.Level.Value * DangerMaxSemitones;
-            var pitch = Mathf.Pow(2f, -semitones * SemitoneRatio);
+            var pitch = (-semitones).SemitonesToPitchMultiplier();
 
             if (_dayHandle.IsValid)
             {

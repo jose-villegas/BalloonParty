@@ -1109,7 +1109,7 @@ MonoBehaviour:
     _fetchPrompt: piano c
   - _channel: 3
     _clips:
-    - {fileID: 8300000, guid: d7f337194ee78439493cb0d7d3b79a7e, type: 3}
+    - {fileID: 8300000, guid: 0f1f53d29fb3843fb98fdaf582aa8560, type: 3}
     _clipPickMode: 0
     _clipWrapMode: 0
     _pitchRange: {x: 0.5, y: 0.5}
@@ -1121,8 +1121,8 @@ MonoBehaviour:
     _singleInstance: 0
     _pan2D: 1
     _delaySeconds: 0
-    _fadeInSeconds: 5
-    _fadeOutSeconds: 5
+    _fadeInSeconds: 3
+    _fadeOutSeconds: 3
     _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
@@ -1145,8 +1145,8 @@ MonoBehaviour:
     _singleInstance: 0
     _pan2D: 1
     _delaySeconds: 0
-    _fadeInSeconds: 5
-    _fadeOutSeconds: 5
+    _fadeInSeconds: 3
+    _fadeOutSeconds: 3
     _maxPlaySeconds: 0
     _stopsOnPlay: 
     _melodicMode: 0
