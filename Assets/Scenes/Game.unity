@@ -480,20 +480,15 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3334617146321481222, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+    - target: {fileID: 3911278788018651677, guid: b87d2a91b2e8044649b32c3a684fd6d9,
         type: 3}
-      propertyPath: m_Layer
-      value: 12
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4584803047740974688, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+    - target: {fileID: 5240266033366021506, guid: b87d2a91b2e8044649b32c3a684fd6d9,
         type: 3}
-      propertyPath: m_Layer
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 5123858081912372962, guid: b87d2a91b2e8044649b32c3a684fd6d9,
-        type: 3}
-      propertyPath: m_Layer
-      value: 12
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5767948325942363099, guid: b87d2a91b2e8044649b32c3a684fd6d9,
         type: 3}
@@ -549,31 +544,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7046068143476676169, guid: b87d2a91b2e8044649b32c3a684fd6d9,
-        type: 3}
-      propertyPath: _tintByTimeOfDay
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7046068143476676169, guid: b87d2a91b2e8044649b32c3a684fd6d9,
-        type: 3}
-      propertyPath: _timeOfDayIntensity
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7375637655178366002, guid: b87d2a91b2e8044649b32c3a684fd6d9,
-        type: 3}
-      propertyPath: m_Layer
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 8037388510251421454, guid: b87d2a91b2e8044649b32c3a684fd6d9,
-        type: 3}
-      propertyPath: m_Layer
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 9089331432706058526, guid: b87d2a91b2e8044649b32c3a684fd6d9,
-        type: 3}
-      propertyPath: m_Layer
-      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

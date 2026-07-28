@@ -82,9 +82,20 @@ namespace BalloonParty.Shared.Pause
             }
             else
             {
+                // No exclusive owner: minimum wins (freezes override speed-ups), but allow > 1 when
+                // the only active claim is a speed-up.
+                var hasAnyClaim = false;
                 foreach (var value in _claims.Values)
                 {
-                    scale = Mathf.Min(scale, value);
+                    if (!hasAnyClaim)
+                    {
+                        scale = value;
+                        hasAnyClaim = true;
+                    }
+                    else
+                    {
+                        scale = Mathf.Min(scale, value);
+                    }
                 }
             }
 

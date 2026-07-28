@@ -921,7 +921,7 @@ MonoBehaviour:
     _clipPickMode: 0
     _clipWrapMode: 0
     _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 1, y: 1}
+    _volumeRange: {x: 0.7, y: 0.7}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
     _priority: 128
@@ -1059,6 +1059,29 @@ MonoBehaviour:
     _tensionSemitones: 0
     _layers: []
     _fetchPrompt: low boom
+  - _channel: 0
+    _clips: []
+    _clipPickMode: 0
+    _clipWrapMode: 0
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 128
+    _loop: 0
+    _singleInstance: 0
+    _pan2D: 1
+    _delaySeconds: 0
+    _fadeInSeconds: 0
+    _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
+    _stopsOnPlay: 
+    _melodicMode: 1
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _layers: []
+    _fetchPrompt: 
   _melodicScale: 0000000002000000040000000700000009000000
   _melodicRootSemitone: 0
   _globalVoiceCap: 32

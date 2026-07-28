@@ -82,28 +82,46 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 1.5
-          value: 0.5
+          time: 0.018596731
+          value: 0.43267328
+          inSlope: -11.311413
+          outSlope: -11.311413
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.17314607
+          outWeight: 0.14177287
+        - serializedVersion: 3
+          time: 0.077759124
+          value: 0.16906324
           inSlope: 0
           outSlope: 0
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
-          outWeight: 0.04238786
+          outWeight: 0.15928043
         - serializedVersion: 3
-          time: 3
-          value: 1
-          inSlope: 0
-          outSlope: 0
+          time: 1.4752264
+          value: 0.4826512
+          inSlope: 0.9333925
+          outSlope: 0.9333925
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0
+          inWeight: 0.03700181
+          outWeight: 0.03565792
+        - serializedVersion: 3
+          time: 3
+          value: 1.181465
+          inSlope: -0.022447973
+          outSlope: -0.022447973
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 1
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      _zoomAmount: 1.25
-      _panWeight: 0.6
+      _zoomAmount: 1.215
+      _panWeight: 0.85
       _followSpeed: 0.7
     _trackedTrail:
       _scaleCurve:
@@ -147,14 +165,14 @@ MonoBehaviour:
         - serializedVersion: 3
           time: 0
           value: 0
-          inSlope: 0
-          outSlope: 0
+          inSlope: 0.29196644
+          outSlope: 0.29196644
           tangentMode: 0
           weightedMode: 0
           inWeight: 0
-          outWeight: 0
+          outWeight: 0.025153374
         - serializedVersion: 3
-          time: 1
+          time: 1.25
           value: 1
           inSlope: 0
           outSlope: 0
@@ -165,9 +183,9 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      _zoomAmount: 0
+      _zoomAmount: -0.75
       _panWeight: 0
-      _followSpeed: 0.7
+      _followSpeed: 3
     _trackedTrail:
       _scaleCurve:
         serializedVersion: 2

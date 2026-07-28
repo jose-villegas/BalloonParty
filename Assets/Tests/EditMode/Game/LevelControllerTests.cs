@@ -6,6 +6,7 @@ using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
+using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
@@ -34,7 +35,6 @@ namespace BalloonParty.Tests.Game
         private ICinematicsSettings _cinematics;
         private IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private IPublisher<LevelUpAbandonedMessage> _abandonedPublisher;
-        private IPublisher<ForceDestroyProjectileMessage> _forceDestroyPublisher;
         private IMessageHandler<ScoreTrailArrivedMessage> _trailArrivedHandler;
         private IMessageHandler<LevelUpAbortedMessage> _abortedHandler;
         private IMessageHandler<LevelUpDismissedMessage> _dismissedHandler;
@@ -81,7 +81,6 @@ namespace BalloonParty.Tests.Game
 
             _levelUpPublisher = Substitute.For<IPublisher<ScoreLevelUpMessage>>();
             _abandonedPublisher = Substitute.For<IPublisher<LevelUpAbandonedMessage>>();
-            _forceDestroyPublisher = Substitute.For<IPublisher<ForceDestroyProjectileMessage>>();
 
             _controller = BuildController();
             _controller.Start();
@@ -137,19 +136,12 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<GameOverMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
-            var boardDepletedSubscriber = Substitute.For<ISubscriber<BoardDepletedMessage>>();
-            boardDepletedSubscriber
-                .Subscribe(
-                    Arg.Any<IMessageHandler<BoardDepletedMessage>>(),
-                    Arg.Any<MessageHandlerFilter<BoardDepletedMessage>[]>())
-                .Returns(Substitute.For<IDisposable>());
-
             return new LevelController(
                 _levelParams, _thresholds, _palette, _navigation, _lossForecast,
-                Substitute.For<IRetryState>(), _timeScale, _cinematics,
-                _levelUpPublisher, _abandonedPublisher, _forceDestroyPublisher,
+                Substitute.For<IRetryState>(), _timeScale, _cinematics, Substitute.For<IRunConfig>(),
+                _levelUpPublisher, _abandonedPublisher,
                 trailArrivedSubscriber, abortedSubscriber, dismissedSubscriber, completedSubscriber,
-                destroyedSubscriber, boardDepletedSubscriber, gameOverSubscriber);
+                destroyedSubscriber, gameOverSubscriber);
         }
 
         [Test]
