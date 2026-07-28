@@ -22,13 +22,19 @@ publishers know nothing about subscribers; subscribers know nothing about publis
 - `ScoreController` → `ScorePointsGroupMessage` → (`ScoreTrailService`,
   `LevelUpCinematic`) — one message per resolved color; carries the group's total
   points and the last point's cumulative score
-- `BalloonSpawner` / `ProjectileView` → `BalanceBalloonsMessage` → `BalloonBalancer`
-  — pure signal; no data needed
+- `BalloonSpawner` / `ProjectileView` → `BalanceBalloonsMessage` → `BalloonBalancer` —
+  pure signal; no data needed
 - `LevelController` → `ScoreLevelUpMessage` → (`LevelUpPopUp`, `ColorProgressBar`,
   `ColorStreakTracker`, `ThrowerController`, `BalloonSpawner`, `ScoreController`,
-  `PlayerHealthController`, `LevelDifficultyResolver`, `WallNetView`) — announces the
-  *confirmed* level-up (the cinematic itself triggers earlier, off
-  `ScorePointsGroupMessage` when `WillLevelUp()` is true)
+  `PlayerHealthController`, `LevelDifficultyResolver`, `WallNetView`,
+  `ProgressionSoundRouter`) — announces the *confirmed* level-up (the cinematic itself
+  triggers off `ILevelProgress.Phase == Completing` — detection at claim time in
+  `LevelController.TryBeginCompleting`)
+- `ProjectileView` → `ProjectileDestroyedMessage` → (`ThrowerController`,
+  `BalloonSpawner`, `BalloonBalancer`, `ProjectileFacingSource`, `ShieldCounterAnimation`,
+  `LevelController`, `CombatSoundRouter`) — signals that the projectile has been
+  destroyed; `LevelController` uses it as the sole trigger for presenting the level-up
+  popup
 
 ## Guidance
 

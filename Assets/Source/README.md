@@ -274,7 +274,7 @@ Cinematic.End();
 |---|---|---|
 | `None` | No cinematic active | Default; `CinematicDirector.EndCinematic` |
 | `LevelCompleteHit` | Hit phase — camera tracks the scoring projectile during the level-completing shot | `CinematicDirector.BeginCinematic` (via `LevelUpCinematic` at trail spawn) |
-| `LevelCompleteRestore` | **Unused** — no longer played (the camera un-zoom moved to the Ascent's `RestoreTweened`); kept only so appended enum values keep their serialized indices | — |
+| `LevelCompleteRestore` | **Not played as a live cinematic state** — its segment's curve is read by `LevelUpCinematic.EndPanIn` to drive the curve-driven camera restore (`RestoreCurveDriven`); kept in the enum so appended values keep their serialized indices | — |
 | `HeartDrain` | Overflow heart-drain beat — camera follows the in-flight hearts; does **not** block loss or camera shake | `CinematicDirector.BeginCinematic` (via `HeartDrainCinematic` on the first heart request) |
 | `HeartDrainRestore` | The heart-drain's return to normal speed | `CinematicDirector.BeginCinematic` (via `HeartDrainCinematic` when the pile drains or the run ends) |
 

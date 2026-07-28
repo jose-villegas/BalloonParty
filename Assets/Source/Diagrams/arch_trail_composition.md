@@ -14,8 +14,11 @@ of those concerns leaking into `FlyingTrail` itself.
 currently in flight by their `TrailId`. `ScoreTrailService` calls
 `Register(id, transform, origin)` when it spawns a trail and `Unregister(id)` on
 arrival. A consumer that wants a trail that may not have spawned yet simply awaits
-`Contains(id)` (this is what `LevelUpCinematic` does for the tipping trail), then
-takes the `TrailFlight` handle via `Get(id)`.
+`Contains(id)`, then takes the `TrailFlight` handle via `Get(id)`. (Note:
+`LevelUpCinematic` no longer uses this registry — it triggers on
+`ILevelProgress.Phase == Completing` and follows the **projectile** position via
+`ProjectilePositionProvider` for camera pan-in. The beat end is duration-based, not
+trail-arrival-based. Score trails still use the registry for their actual flight.)
 
 `ScoreTrailService` exposes `Flights` (a `TrailFlightRegistry<TrailId>`: per-id `Register`
 / `Unregister` / `TryGet` / `Get` / `Contains`, plus the bulk `PauseAll` / `CompleteAll`);

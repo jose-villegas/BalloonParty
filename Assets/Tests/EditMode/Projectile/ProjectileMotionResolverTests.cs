@@ -67,7 +67,7 @@ namespace BalloonParty.Tests.Projectile
 
             Assert.AreEqual(ProjectileStepOutcome.Destroyed, step.Outcome);
             Assert.AreEqual(5f, step.Position.y, 1e-4f, "a dead shot stops AT the wall, not mirrored");
-            Assert.AreEqual(-1, model.ShieldsRemaining.Value, "decrement crossed below zero");
+            Assert.AreEqual(0, model.ShieldsRemaining.Value, "shields never goes negative");
         }
 
         [Test]

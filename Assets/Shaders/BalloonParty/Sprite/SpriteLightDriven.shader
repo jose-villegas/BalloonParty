@@ -37,6 +37,11 @@ Shader "BalloonParty/Sprite/LightDriven"
         // shadow child's (0.04, -0.04): zero the child's localPosition and put the magnitude
         // here, so the placement orbits with the light. 0 = rotation only.
         _OrbitDistance ("Down-Light Offset", Range(0, 0.5)) = 0
+        // Object-space pivot for the rotation (the point the sprite swings around).
+        // (0,0) = the transform's pivot (correct for SpriteRenderers and centre-pivoted UI).
+        // For non-centre-pivoted UI Images, set to the rect's centre in local coords
+        // (e.g. a 200x100 Image with pivot at bottom-centre: (0, 50)).
+        _RotationPivot ("Rotation Pivot (local)", Vector) = (0, 0, 0, 0)
         // 0 = a single point sample at the sprite's anchor (the old behaviour). >0 integrates the
         // field over a disc of this world-space radius (anchor + 4 rim taps) so a light sweeping
         // across the sprite's footprint turns the response smoothly instead of flipping the instant
@@ -167,6 +172,7 @@ Shader "BalloonParty/Sprite/LightDriven"
             float _BakedAngle;
             float _OrbitDistance;
             float _ReceiverRadius;
+            float4 _RotationPivot;
             float _TintBySceneLight;
             float _FadeWithSceneLight;
             float _LightMode;
@@ -262,7 +268,9 @@ Shader "BalloonParty/Sprite/LightDriven"
                 float s = sin(delta);
                 float c = cos(delta);
                 float4 v = IN.vertex;
-                v.xy = float2(v.x * c - v.y * s, v.x * s + v.y * c);
+                float2 centered = v.xy - _RotationPivot.xy;
+                centered = float2(centered.x * c - centered.y * s, centered.x * s + centered.y * c);
+                v.xy = centered + _RotationPivot.xy;
 
                 // Orbit: place the sprite down-light of its rest position in WORLD space, so a
                 // transform-authored offset (e.g. the baked shadow's (0.04, -0.04)) becomes a

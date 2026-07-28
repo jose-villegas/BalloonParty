@@ -63,13 +63,34 @@ _timeScaleService.Release(TimeScaleSource.LevelUpPopup);     // falls back to th
 
 The **lowest active claim wins** (the popup's 0 beats a cinematic's slow-mo ramp) and no
 claims means normal speed — so restores are automatic and the "who forgot to set it back
-to 1" bug class is gone. `IRunResettable` clears all claims on restart.
+to 1" bug class is gone. Non-exclusive claims may exceed 1.0 (e.g. a 2× speed-up ramp
+after the level-complete beat), but the min-wins rule still means any freeze or slow-mo
+from another source overrides. `IRunResettable` clears all claims on restart.
+
+### Exclusive claims
+
+`ClaimExclusive(source, value)` takes sole ownership: `Apply` uses ONLY that source's
+value until `ReleaseExclusive` — the min-wins stack is suspended. Other claimants keep
+recording normally and resume their effect on release, so no state is lost. Designed for
+the level-up beat curve where the authored ramp must not be dragged slower by an
+overlapping `LastShield` bullet-time claim.
+
+### `ITimeScaleClaims` — testable write surface
+
+Plain-C# controllers (e.g. `LevelController`) depend on the `ITimeScaleClaims` interface
+rather than on `TimeScaleService` directly. An edit-mode test fixture can substitute it
+to verify claim/release calls without warping the editor's own clock.
 
 Current claimants:
 - **`CameraRigCinematic`** (`TimeScaleSource.Cinematic`) — per-tick slow-mo ramp of a
   timeScale-driving pan-in segment, and both restore forms (tween-from-current /
   curve-sampled). Note the level-up **pan-in** does not claim at all: its tipping trail is
   slowed via a curve-modulated progress rate, other trails fly at normal speed.
+- **`LevelController`** (`TimeScaleSource.LevelUpCeremony`) — **exclusive** during the
+  beat curve (the authored ramp must not be dragged slower by an overlapping `LastShield`
+  claim), then **non-exclusive** for the post-cinematic ramp-up (1 → `LevelCompleteRampUpScale`
+  over `LevelCompleteRampUpDuration`, both from `IRunConfig`). The non-exclusive claim
+  allows > 1 so remaining flight finishes faster while still yielding to any freeze.
 - **`LevelUpPopUp`** (`TimeScaleSource.LevelUpPopup`) — freezes balloon animators and
   particles at 0 while visible; releases on dismiss *after* publishing
   `LevelUpDismissedMessage`, so the restore cinematic's claim is already in place and the

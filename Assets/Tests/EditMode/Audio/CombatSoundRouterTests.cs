@@ -6,6 +6,7 @@ using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using MessagePipe;
@@ -369,9 +370,8 @@ namespace BalloonParty.Tests.Audio
         }
 
         [Test]
-        public void OnActorHit_NonTrackedPopType_AlwaysPlaysAtOffsetZero()
+        public void OnActorHit_SilverAndGoldPops_PitchRampsAcrossConsecutivePops()
         {
-            // Silver, Gold, and generic BalloonPop are NOT pitch-ramped.
             var silver = Substitute.For<IBalloonModel>();
             silver.TypeName.Returns(BalloonType.SimpleSilver);
             var gold = Substitute.For<IBalloonModel>();
@@ -381,8 +381,11 @@ namespace BalloonParty.Tests.Audio
             _hitHandler.Handle(new ActorHitMessage(silver, Vector3.zero, Vector3.zero, HitOutcome.Pop));
             _hitHandler.Handle(new ActorHitMessage(gold, Vector3.zero, Vector3.zero, HitOutcome.Pop));
 
-            // Both silver pops at offset 0 (no ramp).
-            _player.Received(2).Play(GameSoundId.BalloonPopSilver, Vector3.zero, null, 0, 1f);
+            // Silver ramps: first at 0, second at +2 semitones (whole tone).
+            _player.Received(1).Play(GameSoundId.BalloonPopSilver, Vector3.zero, null, 0, 1f);
+            _player.Received(1).Play(GameSoundId.BalloonPopSilver, Vector3.zero, null,
+                MusicalPitchExtensions.WholeToneSemitones, 1f);
+            // Gold first pop at 0.
             _player.Received(1).Play(GameSoundId.BalloonPopGold, Vector3.zero, null, 0, 1f);
         }
 

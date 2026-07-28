@@ -651,7 +651,8 @@ MonoBehaviour:
     _layers: []
     _fetchPrompt: squeeze
   - _channel: 0
-    _clips: []
+    _clips:
+    - {fileID: 8300000, guid: b8eab586b084d41cb8277a1d498694da, type: 3}
     _clipPickMode: 0
     _clipWrapMode: 0
     _pitchRange: {x: 1, y: 1}
@@ -672,7 +673,7 @@ MonoBehaviour:
     _melodicSkipSteps: 1
     _tensionSemitones: 0
     _layers: []
-    _fetchPrompt: menu
+    _fetchPrompt: button
   - _channel: 0
     _clips:
     - {fileID: 8300000, guid: 471eac240877c45ebba2485367778f53, type: 3}
@@ -808,7 +809,7 @@ MonoBehaviour:
     _loop: 1
     _singleInstance: 1
     _pan2D: 1
-    _delaySeconds: 7
+    _delaySeconds: 3
     _fadeInSeconds: 7
     _fadeOutSeconds: 7
     _maxPlaySeconds: 0

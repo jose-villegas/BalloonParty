@@ -6,10 +6,12 @@ Replace the level-up ceremony's *gate-before-fire* model with *flag-then-orchest
 pop's score completes the level requirement, raise a flag, hold the other systems, let the shot play
 out its whole flight, and present the popup where the reload would have gone.
 
-**Status:** designed and reviewed (architect + reviewer + test strategist, 2026-07-27), **not
-implemented**. Written to be executed by an implementer who does not have the design conversation —
-every edit names its file, its insertion point and its code. Items marked **DECISION** are already
-answered: do not re-derive them, and do not invent a type, message or controller that is not listed.
+**Status:** implemented on `feature/level-up-timing` branch. Implementation diverged from spec
+in these ways: wall-hit trigger replaced by duration-based end, 8s cap replaced by 15s diagnostic
+watchdog, ramp-up added post-cinematic. Written to be executed by an implementer who does not have
+the design conversation — every edit names its file, its insertion point and its code. Items marked
+**DECISION** are already answered: do not re-derive them, and do not invent a type, message or
+controller that is not listed.
 
 ---
 

@@ -772,22 +772,155 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void Tick_PastCompletingCap_PresentsWithoutFlightEnd()
+        public void Tick_BeatCurveEnds_ReleasesExclusiveAndStartsRamp()
         {
             _thresholds.PointsRequiredForLevel(1).Returns(1);
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
             Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
+            _timeScale.ClearReceivedCalls();
 
-            // Force the internal elapsed past the cap (Time.unscaledDeltaTime is 0 in EditMode).
-            var field = typeof(LevelController).GetField("_completingElapsed",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            field.SetValue(_controller, 8.01f);
+            // Force elapsed past the beat curve duration (0.3s curve set up in SetUp).
+            SetField("_completingElapsed", 0.31f);
 
             _controller.Tick();
 
+            // Still Completing — projectile death is the sole trigger for presenting.
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
+            // Released the exclusive beat claim.
+            _timeScale.Received(1).ReleaseExclusive(TimeScaleSource.LevelUpCeremony);
+            // Started the ramp with an initial Claim(1f).
+            _timeScale.Received(1).Claim(TimeScaleSource.LevelUpCeremony, 1f);
+        }
+
+        [Test]
+        public void Tick_DuringRamp_ClaimsIncreasingScale()
+        {
+            var runConfig = Substitute.For<IRunConfig>();
+            runConfig.LevelCompleteRampUpDuration.Returns(100f);
+            runConfig.LevelCompleteRampUpScale.Returns(2f);
+            RebuildWithRunConfig(runConfig);
+
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+
+            // Transition past the beat curve into ramp.
+            SetField("_completingElapsed", 0.31f);
+            _controller.Tick();
+            _timeScale.ClearReceivedCalls();
+
+            // Advance the ramp to exactly halfway.
+            SetField("_rampUpElapsed", 50f);
+            _controller.Tick();
+
+            // Lerp(1, 2, 0.5) = 1.5
+            _timeScale.Received(1).Claim(TimeScaleSource.LevelUpCeremony, 1.5f);
+        }
+
+        [Test]
+        public void Tick_RampComplete_StopsClaimingFurtherValues()
+        {
+            var runConfig = Substitute.For<IRunConfig>();
+            runConfig.LevelCompleteRampUpDuration.Returns(100f);
+            runConfig.LevelCompleteRampUpScale.Returns(2f);
+            RebuildWithRunConfig(runConfig);
+
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+
+            // Beat curve ends → ramp starts.
+            SetField("_completingElapsed", 0.31f);
+            _controller.Tick();
+
+            // Ramp past 100%.
+            SetField("_rampUpElapsed", 101f);
+            _controller.Tick();
+            _timeScale.ClearReceivedCalls();
+
+            // Further ticks should not claim again.
+            _controller.Tick();
+            _timeScale.DidNotReceive().Claim(Arg.Any<TimeScaleSource>(), Arg.Any<float>());
+        }
+
+        [Test]
+        public void FlightEnded_DuringRamp_ReleasesClaimsAndPresents()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+
+            // Beat curve ends → ramp starts.
+            SetField("_completingElapsed", 0.31f);
+            _controller.Tick();
+            _timeScale.ClearReceivedCalls();
+
+            // Simulate ramp in progress.
+            SetField("_rampUpElapsed", 0.2f);
+            SetField("_rampingUp", true);
+
+            FireFlightEnded();
+
+            Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value);
+            _levelUpPublisher.Received(1).Publish(Arg.Is<ScoreLevelUpMessage>(m => m.NewLevel == 2));
+            // Releases both exclusive and normal claims.
+            _timeScale.Received(1).ReleaseExclusive(TimeScaleSource.LevelUpCeremony);
+            _timeScale.Received(1).Release(TimeScaleSource.LevelUpCeremony);
+        }
+
+        [Test]
+        public void FlightEnded_BeforeBeatCurveEnds_StillPresentsLevelUp()
+        {
+            // Edge case: projectile dies very quickly, before the cinematic beat finishes.
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
+
+            // Don't advance elapsed — beat is still playing.
+            FireFlightEnded();
+
             Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value);
             _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
+        }
+
+        [Test]
+        public void GameOver_DuringRamp_AbandonsCeremony()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+
+            // Enter ramp phase.
+            SetField("_completingElapsed", 0.31f);
+            _controller.Tick();
+
+            FireGameOver();
+
+            Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value);
+            _abandonedPublisher.Received(1).Publish(Arg.Any<LevelUpAbandonedMessage>());
+        }
+
+        [Test]
+        public void Tick_ZeroRampDuration_RampCompletesImmediately()
+        {
+            // IRunConfig returns 0 for LevelCompleteRampUpDuration by default (NSubstitute).
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+
+            // Beat curve ends → ramp starts with zero duration.
+            SetField("_completingElapsed", 0.31f);
+            _controller.Tick();
+            _timeScale.ClearReceivedCalls();
+
+            // Next tick: rampDuration is 0 → t = 1 immediately, ramp stops.
+            _controller.Tick();
+            // Should NOT keep claiming after this.
+            _timeScale.ClearReceivedCalls();
+            _controller.Tick();
+            _timeScale.DidNotReceive().Claim(Arg.Any<TimeScaleSource>(), Arg.Any<float>());
         }
 
         // Mirrors production: claim each point (advancing projected), then confirm it as its trail lands.
@@ -828,6 +961,68 @@ namespace BalloonParty.Tests.Game
         private void FireTransitionComplete()
         {
             _completedHandler.Handle(new LevelTransitionCompletedMessage());
+        }
+
+        private void SetField(string fieldName, object value)
+        {
+            var field = typeof(LevelController).GetField(fieldName,
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            field.SetValue(_controller, value);
+        }
+
+        private void RebuildWithRunConfig(IRunConfig runConfig)
+        {
+            _controller.Dispose();
+
+            var trailArrivedSubscriber = Substitute.For<ISubscriber<ScoreTrailArrivedMessage>>();
+            trailArrivedSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<ScoreTrailArrivedMessage>>(h => _trailArrivedHandler = h),
+                    Arg.Any<MessageHandlerFilter<ScoreTrailArrivedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
+            var abortedSubscriber = Substitute.For<ISubscriber<LevelUpAbortedMessage>>();
+            abortedSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<LevelUpAbortedMessage>>(h => _abortedHandler = h),
+                    Arg.Any<MessageHandlerFilter<LevelUpAbortedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
+            var dismissedSubscriber = Substitute.For<ISubscriber<LevelUpDismissedMessage>>();
+            dismissedSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<LevelUpDismissedMessage>>(h => _dismissedHandler = h),
+                    Arg.Any<MessageHandlerFilter<LevelUpDismissedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
+            var completedSubscriber = Substitute.For<ISubscriber<LevelTransitionCompletedMessage>>();
+            completedSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<LevelTransitionCompletedMessage>>(h => _completedHandler = h),
+                    Arg.Any<MessageHandlerFilter<LevelTransitionCompletedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
+            var destroyedSubscriber = Substitute.For<ISubscriber<ProjectileDestroyedMessage>>();
+            destroyedSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<ProjectileDestroyedMessage>>(h => _destroyedHandler = h),
+                    Arg.Any<MessageHandlerFilter<ProjectileDestroyedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
+            var gameOverSubscriber = Substitute.For<ISubscriber<GameOverMessage>>();
+            gameOverSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<GameOverMessage>>(h => _gameOverHandler = h),
+                    Arg.Any<MessageHandlerFilter<GameOverMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
+            _controller = new LevelController(
+                _levelParams, _thresholds, _palette, _navigation, _lossForecast,
+                Substitute.For<IRetryState>(), _timeScale, _cinematics, runConfig,
+                _levelUpPublisher, _abandonedPublisher,
+                trailArrivedSubscriber, abortedSubscriber, dismissedSubscriber, completedSubscriber,
+                destroyedSubscriber, gameOverSubscriber);
+            _controller.Start();
         }
     }
 }

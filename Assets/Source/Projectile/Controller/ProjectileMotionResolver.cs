@@ -66,12 +66,13 @@ namespace BalloonParty.Projectile.Controller
                 return ProjectileStep.Moved(position, model.Direction, speed);
             }
 
-            model.ShieldsRemaining.Value--;
-            if (model.ShieldsRemaining.Value < 0)
+            if (model.ShieldsRemaining.Value <= 0)
             {
                 // A dead shot stops AT the wall — the mirrored continuation is for survivors.
                 return ProjectileStep.Destroyed(wallContact, model.Direction, speed);
             }
+
+            model.ShieldsRemaining.Value--;
 
             // This surviving wall hit is now the one any tap belongs to. Both grant rules resolve against
             // it — the cruise bounce below, and the view's sweep once this Step returns — so the funnel

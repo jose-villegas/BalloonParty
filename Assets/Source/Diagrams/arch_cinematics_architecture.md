@@ -24,12 +24,16 @@ transform-descent rather than a camera move, so it reads a top-level `LevelAscen
 **Producers are thin triggers:**
 `LevelUpCinematic` and `HeartDrainCinematic` are plain C# `IStartable` entry points — a
 trigger message, a focus, an end condition, and a `CameraRigCinematicConfig` handed to the
-runner. The level-up runs a **hit-only** form (`TryBegin` … `EndPanIn` … popup gate) and
-leaves timeScale alone during the hit beat (gameplay is paused; the segment curve modulates the
-scoring projectile's playback speed instead). It does **not** run a restore segment — `EndPanIn`
-leaves the camera zoomed and the Ascent (`LevelTransitionController`) tweens it back via
-`CinematicCameraRig.RestoreTweened`, timed by the `LevelCompleteRestore` segment's own curve duration —
-independent of the concurrent board-clear effect. The heart-drain runs the
+runner. The level-up runs a **hit-only** form (`TryBegin` … `EndPanIn` … popup gate) — its
+end trigger is **duration-based** (the authored `LevelCompleteHit` curve length elapses, not
+a wall hit). `LevelController` owns the time-scale beat via `ITimeScaleClaims.ClaimExclusive`
+(the cinematic's rig segment does not claim timeScale itself for the level-up). At `EndPanIn`
+the producer starts a curve-driven camera restore (`Rig.RestoreCurveDriven` using the
+`LevelCompleteRestore` segment's curve, still following the projectile box-in-box clamped) —
+`LevelTransitionController` does **not** touch the camera. It does
+**not** run a restore cinematic *state* — `EndPanIn`
+leaves `CinematicState.None` and the Ascent (`LevelTransitionController`) only handles the
+scenario descent. The heart-drain runs the
 **continuous** form: a polled
 end condition ("pile drained ∨ game over") rolls the pan-in straight into a restore that
 tweens *from the current* timeScale, so an early game-over never snaps speed down first.

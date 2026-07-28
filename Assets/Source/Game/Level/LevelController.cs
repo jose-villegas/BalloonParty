@@ -23,6 +23,7 @@ namespace BalloonParty.Game.Level
     /// </summary>
     internal sealed class LevelController : IStartable, ITickable, IDisposable, IRunResettable, ILevelProgress
     {
+        private const float CompletingWatchdogSeconds = 15f;
 
         private readonly IActiveLevelParameters _levelParams;
         private readonly ILevelThresholds _thresholds;
@@ -281,6 +282,12 @@ namespace BalloonParty.Game.Level
                     _rampingUp = false;
                 }
             }
+
+            if (_phase.Value == LevelUpPhase.Completing && _completingElapsed > CompletingWatchdogSeconds)
+            {
+                Log.Error("Level", $"Completing watchdog fired after {CompletingWatchdogSeconds:0}s — projectile never died");
+                AbandonCeremony("watchdog");
+            }
         }
 
         private void ClearRunState()
@@ -447,11 +454,7 @@ namespace BalloonParty.Game.Level
                 return;
             }
 
-            _windowAOpen = false;
-            _rampingUp = false;
-            _timeScale.ReleaseExclusive(TimeScaleSource.LevelUpCeremony);
-            _timeScale.Release(TimeScaleSource.LevelUpCeremony);
-
+            ReleaseCeremonyTimeScale();
             PresentLevelUp();
         }
 
@@ -479,7 +482,6 @@ namespace BalloonParty.Game.Level
 
             Log.Warn("Level", $"Level-up abandoned ({reason})");
 
-            _windowAOpen = false;
             ReleaseCeremonyTimeScale();
             _phase.Value = LevelUpPhase.Playing;
             _abandonedPublisher.Publish(new LevelUpAbandonedMessage());

@@ -21,27 +21,31 @@ resolved color, carrying the group's total points. `ScoreTrailService` spawns a 
 **Projected vs confirmed progress (owned by `LevelController`, not `ScoreController`):**
 `LevelController` holds two per-color counters. Projected progress advances immediately on
 pop (`ScoreController` writes it via `ILevelProgress.ClaimProgress`, capped at the threshold);
-confirmed progress advances only on trail *arrival* (`ScoreTrailArrivedMessage`). `WillLevelUp`
-reads projected; the confirmed threshold check triggers the level-up only after the visual
-feedback has landed. The level-up itself is a two-phase commit gated by `LevelUpPhase`
-(`Playing → Pending → Transitioning`) — the level advances on popup dismissal, not on detection.
+confirmed progress advances only on trail *arrival* (`ScoreTrailArrivedMessage`). Detection
+happens at **claim time** — `LevelController.TryBeginCompleting` checks if all colors meet
+threshold inside `ClaimProgress`. Once detected, phase transitions to `Completing` immediately.
+(`WillLevelUp()` still exists on the interface but has zero callers.) The level-up itself is a
+multi-phase commit gated by `LevelUpPhase` (`Playing → Completing → Pending → Transitioning`)
+— the level advances on popup dismissal, not on detection.
 See @ref arch_cinematics_architecture and `Game/Level/README.md`.
 
 **Cinematic intercept:**
 `LevelUpCinematic` (a plain C# producer over the `CameraRigCinematic` runner — see
-@ref arch_cinematics_architecture) subscribes to `ScorePointsGroupMessage`. When
-`ILevelProgress.WillLevelUp()` is true at publish time it awaits the tipping trail's registration in
-`TrailFlightRegistry`, then intercepts it: the move tween is killed and the trail is
-puppeted manually along the pan-in segment's `TimeScaleCurve` while the camera pans in
-and gameplay pauses (`PauseSource.Cinematic`). `Time.timeScale` stays untouched during
-the pan-in — other trails fly at normal speed, confirming progress as they land. When
-the tipping trail arrives the pan-in ends, but survivors are not force-completed yet —
-they stay frozen once `LevelUpPhase` reaches `Pending` (`Flights.PauseAll()`, so their
-shapes hold behind the popup instead of snapping away). They are only resolved once the
-level transition runs: `LevelTransitionController` calls `ScoreTrailService.HoldOutgoing`,
-which calls `Flights.CompleteAll()`, banking every survivor's points as outgoing-level
-content. (Only the cinematic's own abort path calls `CompleteAll` directly, to resolve
-everything immediately if the ceremony is cut short.)
+@ref arch_cinematics_architecture) subscribes to `ILevelProgress.Phase`. When the phase
+transitions to `Completing` (detection at claim time via `LevelController.TryBeginCompleting`),
+the hit beat begins immediately. The camera follows the **projectile** (via
+`ProjectilePositionProvider`) with box-in-box clamped bounds — no trail interception is
+involved. `LevelController` drives an exclusive `ITimeScaleClaims.ClaimExclusive` during the
+beat; the authored beat curve IS the time-scale warp. The beat ends on a **duration basis**
+(authored curve length elapses), not on trail arrival. After the beat ends, a non-exclusive
+ramp-up (1→2× speed) accelerates the remaining trail flight. Survivors are not
+force-completed yet — they stay frozen once `LevelUpPhase` reaches `Pending`
+(`Flights.PauseAll()`, so their shapes hold behind the popup instead of snapping away).
+They are only resolved once the level transition runs:
+`LevelTransitionController` calls `ScoreTrailService.HoldOutgoing`, which calls
+`Flights.CompleteAll()`, banking every survivor's points as outgoing-level content. (Only
+the cinematic's own abort path calls `CompleteAll` directly, to resolve everything
+immediately if the ceremony is cut short.)
 
 ## Guidance
 

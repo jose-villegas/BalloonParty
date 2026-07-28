@@ -9,7 +9,7 @@ scoring only tallies points and hands them to `ILevelProgress`.
 
 | File | Responsibility |
 |---|---|
-| `LevelController.cs` | The progression owner (plain C# `IStartable`/`ITickable`/`IRunResettable`, implements `ILevelProgress`). Holds the current `Level`, per-colour confirmed + projected progress, and the `LevelUpPhase`. Detects a level-up at claim-time via projected progress (`TryBeginCompleting`), tracks the projectile's in-flight boundary (`WallHitMessage` → `CloseWindowA`, `ProjectileDestroyedMessage` → `OnFlightEnded`), publishes `ScoreLevelUpMessage`, and drives the ceremony. An `ITimeScaleClaims` exclusive claim drives the slow-mo beat during Window A. |
+| `LevelController.cs` | The progression owner (plain C# `IStartable`/`ITickable`/`IRunResettable`, implements `ILevelProgress`). Holds the current `Level`, per-colour confirmed + projected progress, and the `LevelUpPhase`. Detects a level-up at claim-time via projected progress (`TryBeginCompleting`), waits for `ProjectileDestroyedMessage` → `OnFlightEnded`, publishes `ScoreLevelUpMessage`, and drives the ceremony. An `ITimeScaleClaims` exclusive claim drives the slow-mo beat curve, followed by a non-exclusive ramp-up through the remainder of the flight. |
 | `LevelUpPhase.cs` | The ceremony as one explicit state — `Playing → Completing → Pending → Transitioning → Playing`. Replaces the old scattered guard flags: a level-up is only *detected* in `Playing`, the projectile finishes its flight during `Completing`, and every out-of-phase input is rejected. |
 | `ILevelProgress.cs` | Read surface of progression: `Level`, `Phase`, `GetRequiredPoints`/`GetProgress`, `WillLevelUp` (projected), `ClaimProgress` (the scoring write-back, capped per level, banking the excess), and `ExcessPoints`/`TotalExcessPoints` (the run-scoped banked excess). |
 | `LevelDifficultyResolver.cs` | Resolves and caches the live per-level mix (implements `IActiveLevelParameters` + `ILevelThresholds`). On level-up it re-resolves `LevelParameters` for the new level, bridging range weights onto the balloon/item catalogs and computing the allowed-colour set. Also exposes the per-level points threshold, delegating to `ILevelPacingConfiguration.ThresholdForLevel`. |
@@ -30,12 +30,16 @@ keeps flying and the animations have a stable state to play against:
 1. **`Playing → Completing`** — detection is at **claim-time** (`TryBeginCompleting`): when `ClaimProgress`
    projects that all colours will reach threshold, it immediately flags `Completing` and claims an
    exclusive time-scale (`ITimeScaleClaims.ClaimExclusive`). The projectile keeps flying — no pause.
-   This is "Window A": the slow-mo beat where the camera follows the shot. Window A ends at the first
-   wall hit (`WallHitMessage` → `CloseWindowA` releases the exclusive claim). The flight continues at
-   normal speed until the projectile dies. A safety cap (`CompletingCapSeconds = 8s`) presents the
-   ceremony if the boundary never arrives.
-2. **`Completing → Pending`** — `ProjectileDestroyedMessage` fires `OnFlightEnded`. If the run is still
-   in `NavigationState.Game`, it snapshots the completed colours, publishes
+   The exclusive claim drives the authored **beat curve** (evaluated in unscaled time over the curve's
+   duration). When the curve completes (`t ≥ 1`), the exclusive claim is released and a **ramp-up**
+   begins: time linearly interpolates from 1 → `LevelCompleteRampUpScale` over
+   `LevelCompleteRampUpDuration` (both from `IRunConfig`), using a **non-exclusive** `Claim` — the
+   min-wins rule means any freeze (e.g. a popup pause) still overrides. The flight continues at the
+   ramping speed until the projectile dies. A 15 s watchdog (diagnostic only — it logs and abandons,
+   never force-destroys) fires if the projectile still hasn't died.
+2. **`Completing → Pending`** — `ProjectileDestroyedMessage` is the **sole trigger** for presenting the
+   popup. `OnFlightEnded` releases any remaining time-scale claims, then — if the run is still in
+   `NavigationState.Game` — snapshots the completed colours, publishes
    `ScoreLevelUpMessage(newLevel, colours)`, transitions nav to `LevelUp`, and records the pending
    level. **The `Level` integer and progress have not changed yet.** While `Completing` the spawn wave,
    thrower reload, and loose pop-spawns are held (they see `Phase != Playing`).
@@ -81,10 +85,11 @@ cinematic + the overflow drain → float the old level's balloons away via the i
 (bound to `BoardFloatAwayEffect`: each balloon rises on a curve while swaying side-to-side, tilting
 into the sway — they *survive*, unlike the game-over's pop) → slide the **outgoing content** out the
 bottom on a shared conveyor while the **new** scenario descends into place, then reopen scoring. The
-Ascent moves the shared `ScenarioContentRoot`, not the camera; the camera un-zoom is tweened here,
-timed by the `LevelCompleteRestore` segment's own curve — independent of the concurrent board effect — *not*
-by `LevelUpCinematic`. Its tuning is `ICinematicsSettings.LevelAscend` — see
-`Game/Cinematics/README.md` and `Configuration/README.md`.
+Ascent moves the shared `ScenarioContentRoot`, not the camera; the camera un-zoom is driven earlier by
+`LevelUpCinematic.EndPanIn` (via `CinematicCameraRig.RestoreCurveDriven`, using the `LevelCompleteRestore`
+segment's curve while still following the projectile) — `LevelTransitionController` does not touch the
+camera. Its tuning is `ICinematicsSettings.LevelAscend` — see `Game/Cinematics/README.md` and
+`Configuration/README.md`.
 
 ## Difficulty resolution
 

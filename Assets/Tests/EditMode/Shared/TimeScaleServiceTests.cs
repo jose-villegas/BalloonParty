@@ -71,10 +71,38 @@ namespace BalloonParty.Tests.Shared
         }
 
         [Test]
-        public void ClaimAboveOne_CannotExceedNormalSpeed()
+        public void SingleClaimAboveOne_AllowsSpeedUp()
         {
-            // The resolution is min(claims, 1) — a >1 claim can't push the game past normal speed.
-            _service.Claim(TimeScaleSource.Cinematic, 2f);
+            // After the change: a single non-exclusive claim > 1 is allowed (enables post-cinematic ramp).
+            _service.Claim(TimeScaleSource.LevelUpCeremony, 2f);
+
+            Assert.AreEqual(2f, Time.timeScale, 0.001f);
+        }
+
+        [Test]
+        public void MultipleClaimsAboveOne_MinimumWins()
+        {
+            _service.Claim(TimeScaleSource.LevelUpCeremony, 2f);
+            _service.Claim(TimeScaleSource.Cinematic, 1.5f);
+
+            Assert.AreEqual(1.5f, Time.timeScale, 0.001f);
+        }
+
+        [Test]
+        public void ClaimAboveOne_WithSubOneClaim_SubOneWins()
+        {
+            // A slow-down claim must still beat a speed-up — minimum semantics.
+            _service.Claim(TimeScaleSource.LevelUpCeremony, 2f);
+            _service.Claim(TimeScaleSource.LastShield, 0.5f);
+
+            Assert.AreEqual(0.5f, Time.timeScale, 0.001f);
+        }
+
+        [Test]
+        public void ExclusiveClaimAboveOne_StillCappedAtOne()
+        {
+            // Exclusive path retains the cap at 1 — only non-exclusive allows > 1.
+            _service.ClaimExclusive(TimeScaleSource.LevelUpCeremony, 1.5f);
 
             Assert.AreEqual(1f, Time.timeScale, 0.001f);
         }
