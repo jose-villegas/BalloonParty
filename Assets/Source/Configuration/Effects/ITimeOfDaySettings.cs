@@ -45,5 +45,9 @@ namespace BalloonParty.Configuration.Effects
         /// dusk/night, lighten at noon. Flat 1 = the base strength unchanged; only applied while night
         /// mode is on.</summary>
         AnimationCurve ShadowStrengthOverAngle { get; }
+
+        /// <summary>Speed multiplier applied to the time-of-day clock while in the Launch scene
+        /// (e.g. 4 = 4× faster day/night cycle on the title screen). Reverts to 1× on entering Game.</summary>
+        float LaunchSpeedMultiplier { get; }
     }
 }

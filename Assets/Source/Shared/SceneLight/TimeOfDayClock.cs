@@ -1,5 +1,6 @@
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Shared.Extensions;
+using BalloonParty.Shared.GameState;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -58,10 +59,12 @@ namespace BalloonParty.Shared.SceneLight
             var period = _settings.SecondsPerCycle;
             if (period > 0f)
             {
-                var speedScale = 1f;
+                var speedScale = Navigation.Current.Value == NavigationState.Launch
+                    ? _settings.LaunchSpeedMultiplier
+                    : 1f;
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
                 // Dev cheat can speed up, slow, or freeze (0) the advance — see TimeOfDayCheat.
-                speedScale = BalloonParty.Cheats.CheatState.TimeOfDaySpeedScale;
+                speedScale *= BalloonParty.Cheats.CheatState.TimeOfDaySpeedScale;
 #endif
                 // Clockwise (decreasing angle) so the day runs the natural way; wrapped to [0,360) so a
                 // long session never drifts on float precision (the direction is identical either way).

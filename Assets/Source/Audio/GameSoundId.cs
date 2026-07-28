@@ -82,6 +82,9 @@ namespace BalloonParty.Audio
         SpeedTap,
 
         // UI cue when a color progress bar fills completely (before the level-up sequence fires).
-        UiProgressComplete
+        UiProgressComplete,
+
+        // Accent played when the tipping score trail arrives (the level is now confirmed complete).
+        LevelCompletePop
     }
 }

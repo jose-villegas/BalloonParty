@@ -1,5 +1,7 @@
 using System;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Game.Level;
+using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UniRx;
@@ -15,6 +17,7 @@ namespace BalloonParty.Audio.Routing
         private readonly ISoundPlayer _player;
         private readonly IMelodicContext _melodic;
         private readonly IGamePalette _palette;
+        private readonly ILevelProgress _levelProgress;
         private readonly ISubscriber<StreakChangedMessage> _streakSubscriber;
         private readonly ISubscriber<ScoreTrailArrivedMessage> _scoreTrailSubscriber;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
@@ -27,10 +30,14 @@ namespace BalloonParty.Audio.Routing
         private readonly ISubscriber<LevelAscendStartedMessage> _ascendStartedSubscriber;
         private readonly ISubscriber<LevelDescendStartedMessage> _descendStartedSubscriber;
         private readonly ISubscriber<ProgressBarCompletedMessage> _progressBarCompletedSubscriber;
+        private readonly ISubscriber<ProjectileLoadedMessage> _projectileLoadedSubscriber;
         private readonly CompositeDisposable _subscriptions = new();
+
+        private IProjectileModel _activeProjectile;
 
         [Inject]
         public ProgressionSoundRouter(ISoundPlayer player, IMelodicContext melodic, IGamePalette palette,
+            ILevelProgress levelProgress,
             ISubscriber<StreakChangedMessage> streakSubscriber,
             ISubscriber<ScoreTrailArrivedMessage> scoreTrailSubscriber,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
@@ -42,11 +49,13 @@ namespace BalloonParty.Audio.Routing
             ISubscriber<GameOverDismissedMessage> gameOverDismissedSubscriber,
             ISubscriber<LevelAscendStartedMessage> ascendStartedSubscriber,
             ISubscriber<LevelDescendStartedMessage> descendStartedSubscriber,
-            ISubscriber<ProgressBarCompletedMessage> progressBarCompletedSubscriber)
+            ISubscriber<ProgressBarCompletedMessage> progressBarCompletedSubscriber,
+            ISubscriber<ProjectileLoadedMessage> projectileLoadedSubscriber)
         {
             _player = player;
             _melodic = melodic;
             _palette = palette;
+            _levelProgress = levelProgress;
             _streakSubscriber = streakSubscriber;
             _scoreTrailSubscriber = scoreTrailSubscriber;
             _levelUpSubscriber = levelUpSubscriber;
@@ -59,6 +68,7 @@ namespace BalloonParty.Audio.Routing
             _ascendStartedSubscriber = ascendStartedSubscriber;
             _descendStartedSubscriber = descendStartedSubscriber;
             _progressBarCompletedSubscriber = progressBarCompletedSubscriber;
+            _projectileLoadedSubscriber = projectileLoadedSubscriber;
         }
 
         public void Start()
@@ -75,6 +85,12 @@ namespace BalloonParty.Audio.Routing
             _ascendStartedSubscriber.Subscribe(OnAscendStarted).AddTo(_subscriptions);
             _descendStartedSubscriber.Subscribe(OnDescendStarted).AddTo(_subscriptions);
             _progressBarCompletedSubscriber.Subscribe(OnProgressBarCompleted).AddTo(_subscriptions);
+            _projectileLoadedSubscriber.Subscribe(m => _activeProjectile = m.Model).AddTo(_subscriptions);
+
+            _levelProgress.Phase
+                .Where(p => p == LevelUpPhase.Completing)
+                .Subscribe(_ => PlayLevelCompletePop())
+                .AddTo(_subscriptions);
         }
 
         public void Dispose()
@@ -141,6 +157,13 @@ namespace BalloonParty.Audio.Routing
         private void OnProgressBarCompleted(ProgressBarCompletedMessage message)
         {
             _player.Play(GameSoundId.UiProgressComplete, null, semitoneOffset: ColorRootOffset(message.ColorName));
+        }
+
+        private void PlayLevelCompletePop()
+        {
+            var colorName = _activeProjectile?.ColorName.Value;
+            var offset = string.IsNullOrEmpty(colorName) ? 0 : ColorRootOffset(colorName);
+            _player.Play(GameSoundId.LevelCompletePop, null, semitoneOffset: offset);
         }
 
         private int ColorRootOffset(string color)

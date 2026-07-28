@@ -83,6 +83,10 @@ namespace BalloonParty.Configuration.Effects
                  "Flat 1 = unchanged. Only applied while Night Mode Enabled.")]
         [SerializeField] private AnimationCurve _shadowStrengthOverAngle = AnimationCurve.Constant(0f, 1f, 1f);
 
+        [Tooltip("Speed multiplier for the time-of-day clock while in the Launch scene (title screen). " +
+                 "Reverts to 1× once the player enters Game. E.g. 4 = a 30-min cycle becomes ~7.5 min on the title.")]
+        [SerializeField] [Min(0f)] private float _launchSpeedMultiplier = 1f;
+
         [Header("Field — Resolution")]
         [Tooltip("Field RT density (texels per world unit). Higher = smoother colour/light regions; the RT " +
                  "stays small and only re-renders when a light or the owner changes, so this can be far " +
@@ -216,6 +220,7 @@ namespace BalloonParty.Configuration.Effects
         public float NightStartAngle => _nightStartAngle;
         public float NightEndAngle => _nightEndAngle;
         public AnimationCurve ShadowStrengthOverAngle => _shadowStrengthOverAngle;
+        public float LaunchSpeedMultiplier => _launchSpeedMultiplier;
 
         public Color EvaluateColor(Vector2 direction) =>
             _lightColorFromDirection ? _lightColorOverDirection.Evaluate(direction.Angle01()) : _lightColor;

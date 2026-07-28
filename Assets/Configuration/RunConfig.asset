@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _startingHitPoints: 6
   _maxRetries: 3
-  _levelCompleteRampUpDuration: 8
-  _levelCompleteRampUpScale: 3
+  _levelCompleteRampUpDuration: 15
+  _levelCompleteRampUpScale: 5
