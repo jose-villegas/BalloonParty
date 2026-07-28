@@ -2,6 +2,7 @@ using System;
 using BalloonParty.Game.Danger;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.SceneLight;
 using MessagePipe;
 using UniRx;
 using UnityEngine;
@@ -9,41 +10,39 @@ using VContainer.Unity;
 
 namespace BalloonParty.Audio.Routing
 {
-    // Ambient music tied to navigation. The Launch state gets a loop (author LaunchMusic as a loop on
-    // the Music channel); entering Game starts the GameplayLoop; leaving Game (level-up or game-over)
-    // ducks it rather than stopping. Returning to Game restores full volume.
+    // Ambient music tied to navigation. Launch gets its own loop; entering Game starts both a day and
+    // a night gameplay loop. Only the active one plays at full volume — the other is ducked to its
+    // VolumeRange.x — crossfading smoothly when IsNight flips. Both duck during flight and popups.
     //
-    // Pitch drops proportionally with danger level (0→tritone at max danger) and by another tritone
-    // when the projectile enters its doomed last-breath segment. Resets on projectile load or death.
-    internal sealed class MusicSoundRouter : IStartable, IDisposable
+    // Pitch drops proportionally with danger level (0→tritone at max danger).
+    internal sealed class MusicSoundRouter : IStartable, ITickable, IDisposable
     {
         private const float DangerMaxSemitones = 6f;
-        private const float DoomedSemitones = 6f;
         private const float SemitoneRatio = 1f / 12f;
         private const float PitchLerpSeconds = 0.4f;
 
         private readonly ISoundPlayer _player;
         private readonly INavigation _navigation;
         private readonly IDangerLevel _dangerLevel;
-        private readonly ISubscriber<ProjectileDoomedStartedMessage> _doomedStartedSubscriber;
-        private readonly ISubscriber<ProjectileDoomedEndedMessage> _doomedEndedSubscriber;
+        private readonly ITimeOfDayNight _timeOfDayNight;
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly ISubscriber<ProjectileFiredMessage> _firedSubscriber;
         private readonly CompositeDisposable _subscriptions = new();
 
         private SoundHandle _launchHandle = SoundHandle.None;
-        private SoundHandle _gameplayHandle = SoundHandle.None;
-        private bool _isDoomed;
+        private SoundHandle _dayHandle = SoundHandle.None;
+        private SoundHandle _nightHandle = SoundHandle.None;
         private bool _inFlight;
         private bool _isDucked;
+        private bool _isPlaying;
+        private bool _wasNight;
 
         public MusicSoundRouter(
             ISoundPlayer player,
             INavigation navigation,
             IDangerLevel dangerLevel,
-            ISubscriber<ProjectileDoomedStartedMessage> doomedStartedSubscriber,
-            ISubscriber<ProjectileDoomedEndedMessage> doomedEndedSubscriber,
+            ITimeOfDayNight timeOfDayNight,
             ISubscriber<ProjectileLoadedMessage> loadedSubscriber,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             ISubscriber<ProjectileFiredMessage> firedSubscriber)
@@ -51,8 +50,7 @@ namespace BalloonParty.Audio.Routing
             _player = player;
             _navigation = navigation;
             _dangerLevel = dangerLevel;
-            _doomedStartedSubscriber = doomedStartedSubscriber;
-            _doomedEndedSubscriber = doomedEndedSubscriber;
+            _timeOfDayNight = timeOfDayNight;
             _loadedSubscriber = loadedSubscriber;
             _destroyedSubscriber = destroyedSubscriber;
             _firedSubscriber = firedSubscriber;
@@ -62,11 +60,24 @@ namespace BalloonParty.Audio.Routing
         {
             _navigation.Current.Subscribe(OnNavigationChanged).AddTo(_subscriptions);
             _dangerLevel.Level.Subscribe(_ => ApplyPitch()).AddTo(_subscriptions);
-            _doomedStartedSubscriber.Subscribe(_ => OnDoomedChanged(true)).AddTo(_subscriptions);
-            _doomedEndedSubscriber.Subscribe(_ => OnDoomedChanged(false)).AddTo(_subscriptions);
             _loadedSubscriber.Subscribe(_ => OnFlightEnded()).AddTo(_subscriptions);
             _destroyedSubscriber.Subscribe(_ => OnFlightEnded()).AddTo(_subscriptions);
             _firedSubscriber.Subscribe(_ => OnFired()).AddTo(_subscriptions);
+        }
+
+        public void Tick()
+        {
+            if (!_isPlaying)
+            {
+                return;
+            }
+
+            var night = _timeOfDayNight.IsNight;
+            if (night != _wasNight)
+            {
+                _wasNight = night;
+                ApplyVolume();
+            }
         }
 
         public void Dispose()
@@ -95,28 +106,16 @@ namespace BalloonParty.Audio.Routing
                     }
 
                     _isDucked = false;
-
-                    if (!_gameplayHandle.IsValid)
-                    {
-                        _gameplayHandle = _player.Play(GameSoundId.GameplayLoop, null);
-                    }
-
+                    StartGameplay();
                     ApplyVolume();
                     ApplyPitch();
                     break;
 
                 default:
-                    // LevelUp, GameOver — duck but keep playing.
                     _isDucked = true;
                     ApplyVolume();
                     break;
             }
-        }
-
-        private void OnDoomedChanged(bool doomed)
-        {
-            _isDoomed = doomed;
-            ApplyPitch();
         }
 
         private void OnFired()
@@ -127,46 +126,78 @@ namespace BalloonParty.Audio.Routing
 
         private void OnFlightEnded()
         {
-            _isDoomed = false;
             _inFlight = false;
             ApplyVolume();
-            ApplyPitch();
+        }
+
+        private void StartGameplay()
+        {
+            if (!_dayHandle.IsValid)
+            {
+                _dayHandle = _player.Play(GameSoundId.GameplayLoopDay, null);
+            }
+
+            if (!_nightHandle.IsValid)
+            {
+                _nightHandle = _player.Play(GameSoundId.GameplayLoopNight, null);
+            }
+
+            _wasNight = _timeOfDayNight.IsNight;
+            _isPlaying = true;
         }
 
         private void ApplyPitch()
         {
-            if (!_gameplayHandle.IsValid)
+            var semitones = _dangerLevel.Level.Value * DangerMaxSemitones;
+            var pitch = Mathf.Pow(2f, -semitones * SemitoneRatio);
+
+            if (_dayHandle.IsValid)
             {
-                return;
+                _player.SetPitch(_dayHandle, pitch, PitchLerpSeconds);
             }
 
-            var dangerSemitones = _dangerLevel.Level.Value * DangerMaxSemitones;
-            var doomedSemitones = _isDoomed ? DoomedSemitones : 0f;
-            var totalSemitones = dangerSemitones + doomedSemitones;
-            var pitch = Mathf.Pow(2f, -totalSemitones * SemitoneRatio);
-            _player.SetPitch(_gameplayHandle, pitch, PitchLerpSeconds);
+            if (_nightHandle.IsValid)
+            {
+                _player.SetPitch(_nightHandle, pitch, PitchLerpSeconds);
+            }
         }
 
         // Volume ducking uses SetVolumeFactor which lerps between the bank entry's VolumeRange
         // (min = ducked floor, max = full volume). Factor 0 = VolumeRange.x, factor 1 = VolumeRange.y.
+        // The active time-of-day loop gets factor 1 (or 0 if ducked/in-flight); the inactive one always 0.
         private void ApplyVolume()
         {
-            if (!_gameplayHandle.IsValid)
+            var ducked = _inFlight || _isDucked;
+            var night = _timeOfDayNight.IsNight;
+            var dayFactor = (!ducked && !night) ? 1f : 0f;
+            var nightFactor = (!ducked && night) ? 1f : 0f;
+
+            if (_dayHandle.IsValid)
             {
-                return;
+                _player.SetVolumeFactor(_dayHandle, dayFactor);
             }
 
-            var factor = (_inFlight || _isDucked) ? 0f : 1f;
-            _player.SetVolumeFactor(_gameplayHandle, factor);
+            if (_nightHandle.IsValid)
+            {
+                _player.SetVolumeFactor(_nightHandle, nightFactor);
+            }
         }
 
         private void StopGameplay()
         {
-            if (_gameplayHandle.IsValid)
+            if (_dayHandle.IsValid)
             {
-                _player.Stop(_gameplayHandle);
-                _gameplayHandle = SoundHandle.None;
+                _player.Stop(_dayHandle);
+                _dayHandle = SoundHandle.None;
             }
+
+            if (_nightHandle.IsValid)
+            {
+                _player.Stop(_nightHandle);
+                _nightHandle = SoundHandle.None;
+            }
+
+            _isPlaying = false;
         }
     }
 }

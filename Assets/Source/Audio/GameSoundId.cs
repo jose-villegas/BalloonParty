@@ -87,7 +87,10 @@ namespace BalloonParty.Audio
         // Accent played when the tipping score trail arrives (the level is now confirmed complete).
         LevelCompletePop,
 
-        // Looping ambient played during active gameplay; fades in on game start, out on level-up/game-over.
-        GameplayLoop
+        // Looping ambient played during active daytime gameplay; ducks during flight and popups.
+        GameplayLoopDay,
+
+        // Looping ambient played during active nighttime gameplay; crossfades with GameplayLoopDay.
+        GameplayLoopNight
     }
 }

@@ -3,6 +3,7 @@ using BalloonParty.Audio.Routing;
 using BalloonParty.Game.Danger;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.SceneLight;
 using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
@@ -31,14 +32,16 @@ namespace BalloonParty.Tests.Audio
             var dangerLevel = Substitute.For<IDangerLevel>();
             dangerLevel.Level.Returns(new ReactiveProperty<float>(0f));
 
-            var doomedStartSub = Substitute.For<ISubscriber<ProjectileDoomedStartedMessage>>();
-            var doomedEndSub = Substitute.For<ISubscriber<ProjectileDoomedEndedMessage>>();
+            var timeOfDayNight = Substitute.For<ITimeOfDayNight>();
+            timeOfDayNight.IsNight.Returns(false);
+
             var loadedSub = Substitute.For<ISubscriber<ProjectileLoadedMessage>>();
             var destroyedSub = Substitute.For<ISubscriber<ProjectileDestroyedMessage>>();
             var firedSub = Substitute.For<ISubscriber<ProjectileFiredMessage>>();
 
             var router = new MusicSoundRouter(
-                _player, navigation, dangerLevel, doomedStartSub, doomedEndSub, loadedSub, destroyedSub, firedSub);
+                _player, navigation, dangerLevel, timeOfDayNight,
+                loadedSub, destroyedSub, firedSub);
             router.Start();
         }
 
