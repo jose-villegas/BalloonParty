@@ -41,6 +41,7 @@ namespace BalloonParty.Game.Level
         private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         private readonly ISubscriber<LevelTransitionCompletedMessage> _transitionCompletedSubscriber;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
+        private readonly ISubscriber<ProjectileFiredMessage> _firedSubscriber;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
 
         private readonly ReactiveProperty<int> _level = new(1);
@@ -55,12 +56,14 @@ namespace BalloonParty.Game.Level
         private IDisposable _dismissedSubscription;
         private IDisposable _transitionCompletedSubscription;
         private IDisposable _destroyedSubscription;
+        private IDisposable _firedSubscription;
         private IDisposable _gameOverSubscription;
         private AnimationCurve _beatCurve;
         private float _completingElapsed;
         private float _rampUpElapsed;
         private bool _windowAOpen;
         private bool _rampingUp;
+        private bool _projectileInFlight;
 
         // The target level for the deferred increment; applied when the popup is dismissed.
         private int _pendingNewLevel;
@@ -82,6 +85,7 @@ namespace BalloonParty.Game.Level
             ISubscriber<LevelUpDismissedMessage> dismissedSubscriber,
             ISubscriber<LevelTransitionCompletedMessage> transitionCompletedSubscriber,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
+            ISubscriber<ProjectileFiredMessage> firedSubscriber,
             ISubscriber<GameOverMessage> gameOverSubscriber)
         {
             _levelParams = levelParams;
@@ -100,6 +104,7 @@ namespace BalloonParty.Game.Level
             _dismissedSubscriber = dismissedSubscriber;
             _transitionCompletedSubscriber = transitionCompletedSubscriber;
             _destroyedSubscriber = destroyedSubscriber;
+            _firedSubscriber = firedSubscriber;
             _gameOverSubscriber = gameOverSubscriber;
         }
 
@@ -124,6 +129,7 @@ namespace BalloonParty.Game.Level
             _transitionCompletedSubscription = _transitionCompletedSubscriber.Subscribe(_ => OnTransitionCompleted());
 
             _destroyedSubscription = _destroyedSubscriber.Subscribe(_ => OnFlightEnded());
+            _firedSubscription = _firedSubscriber.Subscribe(_ => _projectileInFlight = true);
             _gameOverSubscription = _gameOverSubscriber.Subscribe(_ => AbandonCeremony("game over"));
         }
 
@@ -140,6 +146,7 @@ namespace BalloonParty.Game.Level
             _dismissedSubscription?.Dispose();
             _transitionCompletedSubscription?.Dispose();
             _destroyedSubscription?.Dispose();
+            _firedSubscription?.Dispose();
             _gameOverSubscription?.Dispose();
         }
 
@@ -430,6 +437,15 @@ namespace BalloonParty.Game.Level
                 }
             }
 
+            // No active flight (e.g. cheat-triggered): skip the cinematic hold and present immediately.
+            if (!_projectileInFlight)
+            {
+                Log.Info("Level", $"Level {_level.Value} completed (no flight) — presenting immediately");
+                _phase.Value = LevelUpPhase.Completing;
+                PresentLevelUp();
+                return;
+            }
+
             _phase.Value = LevelUpPhase.Completing;
             _completingElapsed = 0f;
             _windowAOpen = true;
@@ -440,6 +456,8 @@ namespace BalloonParty.Game.Level
 
         private void OnFlightEnded()
         {
+            _projectileInFlight = false;
+
             if (_phase.Value != LevelUpPhase.Completing)
             {
                 return;

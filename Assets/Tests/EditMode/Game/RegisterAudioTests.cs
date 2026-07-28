@@ -37,7 +37,7 @@ namespace BalloonParty.Tests.Game
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterAudio(null, null, null);
+            builder.RegisterAudioCore(null, null, null);
 
             // The prefab guard must degrade to "audio disabled" (an early return), never a
             // half-registered graph that throws later when something resolves ISoundPlayer.
@@ -55,7 +55,7 @@ namespace BalloonParty.Tests.Game
 
             try
             {
-                builder.RegisterAudio(bank, prefab, mixerSettings);
+                builder.RegisterAudioCore(bank, prefab, mixerSettings);
 
                 Assert.IsTrue(builder.Exists(typeof(ISoundPlayer), includeInterfaceTypes: true));
                 Assert.IsTrue(builder.Exists(typeof(IMelodicContext), includeInterfaceTypes: true));
@@ -76,7 +76,7 @@ namespace BalloonParty.Tests.Game
 
             // No try/finally cleanup for the fallback bank: RegisterAudio owns its creation (same as
             // GameLifetimeScope's own null-asset fallbacks) and the test never captures a reference to it.
-            builder.RegisterAudio(null, prefab, null);
+            builder.RegisterAudioCore(null, prefab, null);
 
             Assert.IsTrue(builder.Exists(typeof(ISoundBankConfiguration), includeInterfaceTypes: true),
                 "A null bank must fall back to a fresh instance, not skip registration and null-ref every voice-cap reader.");
@@ -91,7 +91,7 @@ namespace BalloonParty.Tests.Game
             // Same fallback contract as the null-bank case above, but for the mixer settings asset:
             // an unauthored AudioMixerSettings must still resolve to a working (degraded) instance
             // rather than leaving IAudioMixerSettings/IAudioMixerRouter unregistered.
-            builder.RegisterAudio(null, prefab, null);
+            builder.RegisterAudioCore(null, prefab, null);
 
             Assert.IsTrue(builder.Exists(typeof(IAudioMixerSettings), includeInterfaceTypes: true),
                 "A null mixer settings asset must fall back to a fresh instance, not skip registration and null-ref AudioMixerRouter.");

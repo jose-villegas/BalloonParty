@@ -8,6 +8,8 @@ namespace BalloonParty.Audio.View
     ///     Drop-in component that plays a configurable <see cref="GameSoundId"/> when triggered.
     ///     Automatically binds to sibling <see cref="Button"/> onClick if present; can also be wired
     ///     manually to UnityEvents, Animator events, or called from code.
+    ///     Receives <see cref="ISoundPlayer"/> via VContainer's build callback injection (see
+    ///     <c>GameScopeRegistration.RegisterAudio</c>).
     /// </summary>
     [DisallowMultipleComponent]
     internal sealed class UiSfxEmitter : MonoBehaviour
@@ -38,7 +40,7 @@ namespace BalloonParty.Audio.View
 
         public void Play()
         {
-            if (_soundId == GameSoundId.None)
+            if (_soundId == GameSoundId.None || _player == null)
             {
                 return;
             }

@@ -70,7 +70,7 @@ namespace BalloonParty.Game
             builder.RegisterGameplaySystems();
             builder.RegisterItems();
             builder.RegisterPresentation();
-            builder.RegisterAudio(_soundBank, _sfxVoicePrefab, _audioMixerSettings);
+            builder.RegisterAudioRouters();
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
             builder.RegisterCheats();
@@ -80,7 +80,6 @@ namespace BalloonParty.Game
         // Kept here (not GameScopeRegistration) because it needs this component's serialized fields.
         private void RegisterConfiguration(IContainerBuilder builder)
         {
-            builder.RegisterInstance<IProjectileFlightConfig>(_projectileFlightConfig);
             builder.RegisterInstance<ISlotGridConfig>(_slotGridConfig);
             builder.RegisterInstance<IPredictionTraceConfig>(_predictionTraceConfig);
             builder.RegisterInstance<IRunConfig>(_runConfig);

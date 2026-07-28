@@ -40,6 +40,7 @@ namespace BalloonParty.Tests.Game
         private IMessageHandler<LevelUpDismissedMessage> _dismissedHandler;
         private IMessageHandler<LevelTransitionCompletedMessage> _completedHandler;
         private IMessageHandler<ProjectileDestroyedMessage> _destroyedHandler;
+        private IMessageHandler<ProjectileFiredMessage> _firedHandler;
         private IMessageHandler<GameOverMessage> _gameOverHandler;
         private LevelController _controller;
 
@@ -84,6 +85,7 @@ namespace BalloonParty.Tests.Game
 
             _controller = BuildController();
             _controller.Start();
+            FireProjectileFired();
         }
 
         [TearDown]
@@ -129,6 +131,13 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<ProjectileDestroyedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
+            var loadedSubscriber = Substitute.For<ISubscriber<ProjectileFiredMessage>>();
+            loadedSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<ProjectileFiredMessage>>(h => _firedHandler = h),
+                    Arg.Any<MessageHandlerFilter<ProjectileFiredMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
             var gameOverSubscriber = Substitute.For<ISubscriber<GameOverMessage>>();
             gameOverSubscriber
                 .Subscribe(
@@ -141,7 +150,7 @@ namespace BalloonParty.Tests.Game
                 Substitute.For<IRetryState>(), _timeScale, _cinematics, Substitute.For<IRunConfig>(),
                 _levelUpPublisher, _abandonedPublisher,
                 trailArrivedSubscriber, abortedSubscriber, dismissedSubscriber, completedSubscriber,
-                destroyedSubscriber, gameOverSubscriber);
+                destroyedSubscriber, loadedSubscriber, gameOverSubscriber);
         }
 
         [Test]
@@ -943,6 +952,11 @@ namespace BalloonParty.Tests.Game
             _destroyedHandler.Handle(new ProjectileDestroyedMessage());
         }
 
+        private void FireProjectileFired()
+        {
+            _firedHandler.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+        }
+
         private void FireGameOver()
         {
             _gameOverHandler.Handle(new GameOverMessage(1, 0));
@@ -1009,6 +1023,13 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<ProjectileDestroyedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
+            var loadedSubscriber = Substitute.For<ISubscriber<ProjectileFiredMessage>>();
+            loadedSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<ProjectileFiredMessage>>(h => _firedHandler = h),
+                    Arg.Any<MessageHandlerFilter<ProjectileFiredMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
             var gameOverSubscriber = Substitute.For<ISubscriber<GameOverMessage>>();
             gameOverSubscriber
                 .Subscribe(
@@ -1021,8 +1042,9 @@ namespace BalloonParty.Tests.Game
                 Substitute.For<IRetryState>(), _timeScale, _cinematics, runConfig,
                 _levelUpPublisher, _abandonedPublisher,
                 trailArrivedSubscriber, abortedSubscriber, dismissedSubscriber, completedSubscriber,
-                destroyedSubscriber, gameOverSubscriber);
+                destroyedSubscriber, loadedSubscriber, gameOverSubscriber);
             _controller.Start();
+            FireProjectileFired();
         }
     }
 }

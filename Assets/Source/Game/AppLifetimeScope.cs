@@ -6,6 +6,7 @@ using BalloonParty.Scenario;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Cadence;
 using BalloonParty.Shared.Disturbance;
+using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.SceneLight;
 using BalloonParty.Slots.Actor;
 using UnityEngine;
@@ -37,6 +38,10 @@ namespace BalloonParty.Game
         [SerializeField] private SceneLightFieldSettings _sceneLightFieldSettings;
         [SerializeField] private DisturbanceFieldSettings _disturbanceFieldSettings;
         [SerializeField] private BackgroundFieldSettings _backgroundFieldSettings;
+        [SerializeField] private Audio.Configuration.SoundBankConfiguration _soundBank;
+        [SerializeField] private Audio.View.AudioSourceVoice _sfxVoicePrefab;
+        [SerializeField] private Audio.Configuration.AudioMixerSettings _audioMixerSettings;
+        [SerializeField] private ProjectileFlightConfig _projectileFlightConfig;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -81,6 +86,27 @@ namespace BalloonParty.Game
             builder.Register<DisturbanceFieldService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<BackgroundFieldService>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.RegisterEntryPoint<LaunchDisturbanceStamp>();
+
+            // Object pooling — app-wide so both Launch and Game consumers resolve from the same pool root.
+            builder.Register<PoolManager>(Lifetime.Singleton);
+
+            // IProjectileFlightConfig is needed by SfxService for stereo pan boundaries. Registered here
+            // so audio can resolve it; the game scope also uses it (resolved from this parent).
+            builder.RegisterInstance<IProjectileFlightConfig>(_projectileFlightConfig);
+
+            // Core audio (SfxService, voice pool, bank config) — app-wide so any scene can play sounds.
+            builder.RegisterAudioCore(_soundBank, _sfxVoicePrefab, _audioMixerSettings);
+
+            // Inject ISoundPlayer into any UiSfxEmitter instances already in the scene.
+            builder.RegisterBuildCallback(InjectUiSfxEmitters);
+        }
+
+        private static void InjectUiSfxEmitters(IObjectResolver resolver)
+        {
+            foreach (var emitter in FindObjectsByType<Audio.View.UiSfxEmitter>(FindObjectsSortMode.None))
+            {
+                resolver.Inject(emitter);
+            }
         }
     }
 }

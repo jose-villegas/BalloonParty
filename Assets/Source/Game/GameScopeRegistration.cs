@@ -122,7 +122,6 @@ namespace BalloonParty.Game
             builder.Register<GridBalanceQuery>(Lifetime.Singleton);
             // Recording is editor-only ([Conditional]); at runtime this is an inert empty instance.
             builder.Register<BalanceDebugRecorder>(Lifetime.Singleton);
-            builder.Register<PoolManager>(Lifetime.Singleton);
             builder.Register<TrailEndpointRegistry>(Lifetime.Singleton);
             builder.Register<PauseService>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<TimeScaleService>().AsSelf().As<ITimeScaleClaims>().As<IRunResettable>();
@@ -254,21 +253,16 @@ namespace BalloonParty.Game
             }
         }
 
-        internal static void RegisterAudio(this IContainerBuilder builder, SoundBankConfiguration soundBank,
+        internal static void RegisterAudioCore(this IContainerBuilder builder, SoundBankConfiguration soundBank,
             AudioSourceVoice voicePrefab, AudioMixerSettings mixerSettings)
         {
             if (voicePrefab == null)
             {
-                Log.Warn("Audio", "SfxVoice prefab unassigned on GameLifetimeScope — audio disabled.");
+                Log.Warn("Audio", "SfxVoice prefab unassigned — audio disabled.");
                 return;
             }
 
-            // An unassigned bank degrades to an empty table (every sound a silent no-op) so a
-            // half-wired scene still loads; only the prefab is load-bearing for registration.
             var bank = soundBank != null ? soundBank : ScriptableObject.CreateInstance<SoundBankConfiguration>();
-
-            // An unassigned mixer degrades AudioMixerRouter to master output + no-op ducking (identical
-            // to the old NullAudioMixerRouter); authoring the AudioMixer asset activates ducking, no code.
             var mixer = mixerSettings != null ? mixerSettings : ScriptableObject.CreateInstance<AudioMixerSettings>();
 
             builder.RegisterInstance<ISoundBankConfiguration>(bank);
@@ -276,8 +270,6 @@ namespace BalloonParty.Game
             builder.RegisterInstance<IAudioMixerSettings>(mixer);
             builder.Register<IAudioMixerRouter, AudioMixerRouter>(Lifetime.Singleton);
 
-            // The one bank instance feeds every voice-cap reader (limiter cap, SfxService slots,
-            // pool prewarm), so they cannot drift.
             builder.RegisterInstance(new VoiceLimiter(bank.GlobalVoiceCap));
             builder.RegisterInstance(new SfxThrottleGate(() => Time.unscaledTime, CoalesceWindowSeconds, MaxBurstPerWindow));
             builder.RegisterInstance(new VariationPicker(new System.Random(), bank.MelodicScale,
@@ -286,8 +278,11 @@ namespace BalloonParty.Game
             builder.Register<SfxService>(Lifetime.Singleton)
                 .As<ISoundPlayer>().As<IMelodicContext>().As<IRunResettable>().AsSelf();
 
-            // Bootstrap first — it registers + prewarms the voice pool the routers Get() from.
             builder.RegisterEntryPoint<SfxVoicePoolBootstrap>();
+        }
+
+        internal static void RegisterAudioRouters(this IContainerBuilder builder)
+        {
             builder.RegisterEntryPoint<CombatSoundRouter>();
             builder.RegisterEntryPoint<ProgressionSoundRouter>();
             builder.RegisterEntryPoint<ItemSoundRouter>();

@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 854587282172486260}
   - component: {fileID: 3624199439205800020}
   - component: {fileID: 5272042273602997236}
+  - component: {fileID: 3809688442638898486}
   m_Layer: 6
   m_Name: GameStarter
   m_TagString: Untagged
@@ -288,6 +289,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Shared.NavigationTrigger
   _targetState: 1
+--- !u!114 &3809688442638898486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7888538842032058290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3459f9f1833408d91ea55ea727baedb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Audio.View.UiSfxEmitter
+  _soundId: 27
 --- !u!1 &7888538842323161634
 GameObject:
   m_ObjectHideFlags: 0
