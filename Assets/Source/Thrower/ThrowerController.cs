@@ -56,6 +56,10 @@ namespace BalloonParty.Thrower
         private float _loadDuration;
         private PredictionTraceCalculator _traceCalculator;
 
+        // Set by FireBestShotCheat (auto-fire toggle) to override the aimed direction on the next
+        // player-initiated fire. Consumed (cleared) once used. Null means no override.
+        internal Vector3? DirectionOverride { get; set; }
+
         [Inject]
         internal ThrowerController(
             ThrowerView view,
@@ -312,6 +316,12 @@ namespace BalloonParty.Thrower
             if (!_view.FireReleased)
             {
                 return;
+            }
+
+            if (DirectionOverride.HasValue)
+            {
+                _direction = DirectionOverride.Value;
+                DirectionOverride = null;
             }
 
             Fire();

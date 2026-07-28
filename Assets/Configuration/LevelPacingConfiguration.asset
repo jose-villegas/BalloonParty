@@ -86,6 +86,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 1
         _initialCountWeights:
@@ -154,6 +155,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       _itemWeights: []
       _gridActorGates: []
       _allowedColorsMask: 1
@@ -275,6 +277,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 1
         _initialCountWeights:
@@ -379,6 +382,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 5
       - _type: 6
         _weight: 0.3
         _initialCountWeights:
@@ -492,13 +496,16 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       _itemWeights:
       - _type: 5
         _weight: 2
         _maximumAllowedOverride: 5
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 1
         _maximumAllowedOverride: 3
+        _guaranteedInitialCount: 0
       _gridActorGates: []
       _allowedColorsMask: 3
   - _fromLevel: 3
@@ -619,6 +626,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 2
         _initialCountWeights:
@@ -732,6 +740,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 6
       - _type: 6
         _weight: 0.15
         _initialCountWeights:
@@ -827,16 +836,20 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       _itemWeights:
       - _type: 5
         _weight: 1
         _maximumAllowedOverride: 3
+        _guaranteedInitialCount: 1
       - _type: 1
         _weight: 2
         _maximumAllowedOverride: 3
+        _guaranteedInitialCount: 2
       - _type: 2
         _weight: 2
         _maximumAllowedOverride: 3
+        _guaranteedInitialCount: 1
       _gridActorGates:
       - _type: 0
         _count:
@@ -963,6 +976,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 1.5
         _initialCountWeights:
@@ -1058,6 +1072,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 0.125
         _initialCountWeights:
@@ -1153,6 +1168,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 1
         _initialCountWeights:
@@ -1248,16 +1264,20 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       _itemWeights:
       - _type: 5
         _weight: 0.6
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 1
         _maximumAllowedOverride: 3
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 1
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -1384,6 +1404,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 1.5
         _initialCountWeights:
@@ -1479,6 +1500,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 0.2
         _initialCountWeights:
@@ -1574,6 +1596,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.8
         _initialCountWeights:
@@ -1669,6 +1692,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 1
         _initialCountWeights:
@@ -1719,16 +1743,20 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       _itemWeights:
       - _type: 5
         _weight: 0.3
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 0.8
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 0.8
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -1855,6 +1883,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 1.25
         _initialCountWeights:
@@ -1950,6 +1979,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 0.2
         _initialCountWeights:
@@ -2045,6 +2075,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.7
         _initialCountWeights:
@@ -2140,19 +2171,24 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       _itemWeights:
       - _type: 5
         _weight: 0.15
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 0.8
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 0.7
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 1
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -2279,6 +2315,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 1.25
         _initialCountWeights:
@@ -2374,6 +2411,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 0.2
         _initialCountWeights:
@@ -2469,6 +2507,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.3
         _initialCountWeights:
@@ -2564,6 +2603,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 5
         _weight: 0.7
         _initialCountWeights:
@@ -2659,6 +2699,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 1
         _initialCountWeights:
@@ -2709,19 +2750,24 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       _itemWeights:
       - _type: 5
         _weight: 0.15
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 0.7
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 0.6
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.7
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -2848,6 +2894,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 2
         _initialCountWeights:
@@ -2997,6 +3044,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 0.35
         _initialCountWeights:
@@ -3092,6 +3140,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.1
         _initialCountWeights:
@@ -3187,6 +3236,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 5
         _weight: 0.025
         _initialCountWeights:
@@ -3282,22 +3332,28 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       _itemWeights:
       - _type: 5
         _weight: 0.05
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 1.25
         _maximumAllowedOverride: 12
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 0.01
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.01
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 2.25
-        _maximumAllowedOverride: 5
+        _maximumAllowedOverride: 4
+        _guaranteedInitialCount: 1
       _gridActorGates: []
       _allowedColorsMask: 7
   - _fromLevel: 9
@@ -3418,6 +3474,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 0.35
         _initialCountWeights:
@@ -3513,6 +3570,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.1
         _initialCountWeights:
@@ -3608,6 +3666,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 5
         _weight: 0.025
         _initialCountWeights:
@@ -3703,6 +3762,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 2
         _initialCountWeights:
@@ -3762,6 +3822,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 0.7
         _initialCountWeights:
@@ -3848,22 +3909,28 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       _itemWeights:
       - _type: 5
         _weight: 0.05
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 1.25
         _maximumAllowedOverride: 10
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 0.01
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.01
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 2.25
-        _maximumAllowedOverride: 5
+        _maximumAllowedOverride: 3
+        _guaranteedInitialCount: 1
       _gridActorGates:
       - _type: 0
         _count:
@@ -3990,6 +4057,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 0.35
         _initialCountWeights:
@@ -4085,6 +4153,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.1
         _initialCountWeights:
@@ -4180,6 +4249,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 5
         _weight: 0.025
         _initialCountWeights:
@@ -4275,6 +4345,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 2
         _initialCountWeights:
@@ -4352,25 +4423,32 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       _itemWeights:
       - _type: 5
         _weight: 0.05
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 1.25
         _maximumAllowedOverride: 10
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 0.01
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.01
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 2.25
-        _maximumAllowedOverride: 5
+        _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 3
         _weight: 1.25
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 1
       _gridActorGates:
       - _type: 0
         _count:
@@ -4497,6 +4575,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 0.35
         _initialCountWeights:
@@ -4592,6 +4671,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.1
         _initialCountWeights:
@@ -4687,6 +4767,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 5
         _weight: 0.025
         _initialCountWeights:
@@ -4782,6 +4863,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 2
         _initialCountWeights:
@@ -4859,6 +4941,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 1
         _initialCountWeights:
@@ -4945,25 +5028,32 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       _itemWeights:
       - _type: 5
         _weight: 0.05
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 1.25
         _maximumAllowedOverride: 7
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 0.01
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.1
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 1.55
-        _maximumAllowedOverride: 4
+        _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 3
         _weight: 1.25
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -5090,6 +5180,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 0.35
         _initialCountWeights:
@@ -5185,6 +5276,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.1
         _initialCountWeights:
@@ -5280,6 +5372,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 5
         _weight: 0.025
         _initialCountWeights:
@@ -5375,6 +5468,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 2
         _initialCountWeights:
@@ -5461,6 +5555,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 1
         _initialCountWeights:
@@ -5547,25 +5642,32 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       _itemWeights:
       - _type: 5
         _weight: 0.08
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 1.25
         _maximumAllowedOverride: 5
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 0.4
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.2
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 1.25
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 3
         _weight: 1.25
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       _gridActorGates: []
       _allowedColorsMask: 7
   - _fromLevel: 13
@@ -5686,6 +5788,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 0.35
         _initialCountWeights:
@@ -5781,6 +5884,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.1
         _initialCountWeights:
@@ -5876,6 +5980,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 5
         _weight: 0.025
         _initialCountWeights:
@@ -5971,6 +6076,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 1
         _initialCountWeights:
@@ -6021,22 +6127,28 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       _itemWeights:
       - _type: 5
         _weight: 0.08
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 0.4
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.2
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 0.75
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 3
         _weight: 1.25
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -6163,6 +6275,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 0.35
         _initialCountWeights:
@@ -6258,6 +6371,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.1
         _initialCountWeights:
@@ -6353,6 +6467,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 5
         _weight: 0.025
         _initialCountWeights:
@@ -6448,6 +6563,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 1
         _initialCountWeights:
@@ -6534,22 +6650,28 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       _itemWeights:
       - _type: 5
         _weight: 0.08
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 0.4
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.2
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 0.75
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 3
         _weight: 1.25
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       _gridActorGates: []
       _allowedColorsMask: 15
   - _fromLevel: 15
@@ -6670,6 +6792,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 0.35
         _initialCountWeights:
@@ -6765,6 +6888,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.1
         _initialCountWeights:
@@ -6860,6 +6984,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 5
         _weight: 0.025
         _initialCountWeights:
@@ -6955,6 +7080,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 1
         _initialCountWeights:
@@ -7050,6 +7176,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 1
         _initialCountWeights:
@@ -7145,19 +7272,24 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       _itemWeights:
       - _type: 5
         _weight: 0.08
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 0.4
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.2
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       - _type: 3
         _weight: 0.8
         _maximumAllowedOverride: 1
+        _guaranteedInitialCount: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -7284,6 +7416,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 0.4
         _initialCountWeights:
@@ -7379,6 +7512,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 0.25
         _initialCountWeights:
@@ -7474,6 +7608,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 3
         _weight: 0.1
         _initialCountWeights:
@@ -7569,6 +7704,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 1.5
         _initialCountWeights:
@@ -7664,6 +7800,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 5
         _weight: 1.8
         _initialCountWeights:
@@ -7759,6 +7896,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 0.9
         _initialCountWeights:
@@ -7854,25 +7992,32 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       _itemWeights:
       - _type: 1
         _weight: 1
         _maximumAllowedOverride: 5
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 0.8
         _maximumAllowedOverride: 4
+        _guaranteedInitialCount: 0
       - _type: 3
         _weight: 0.5
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.35
         _maximumAllowedOverride: 3
+        _guaranteedInitialCount: 0
       - _type: 5
         _weight: 0.2
         _maximumAllowedOverride: 3
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 0.7
         _maximumAllowedOverride: 4
+        _guaranteedInitialCount: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -8005,6 +8150,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 1
         _weight: 1
         _initialCountWeights:
@@ -8100,6 +8246,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 1
         _initialCountWeights:
@@ -8195,6 +8342,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 3
         _weight: 0.1
         _initialCountWeights:
@@ -8290,6 +8438,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 1
         _initialCountWeights:
@@ -8385,6 +8534,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 5
         _weight: 1
         _initialCountWeights:
@@ -8480,6 +8630,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 1
         _initialCountWeights:
@@ -8575,25 +8726,32 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       _itemWeights:
       - _type: 1
         _weight: 1
         _maximumAllowedOverride: 5
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 2
         _maximumAllowedOverride: 4
+        _guaranteedInitialCount: 0
       - _type: 3
         _weight: 1.15
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0.9
         _maximumAllowedOverride: 3
+        _guaranteedInitialCount: 0
       - _type: 5
         _weight: 0.5
         _maximumAllowedOverride: 5
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 1.2
         _maximumAllowedOverride: 4
+        _guaranteedInitialCount: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -8726,6 +8884,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 1
         _initialCountWeights:
@@ -8821,25 +8980,32 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       _itemWeights:
       - _type: 1
         _weight: 0
         _maximumAllowedOverride: 5
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 0
         _maximumAllowedOverride: 4
+        _guaranteedInitialCount: 0
       - _type: 3
         _weight: 0
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0
         _maximumAllowedOverride: 3
+        _guaranteedInitialCount: 0
       - _type: 5
         _weight: 0
         _maximumAllowedOverride: 5
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 0
         _maximumAllowedOverride: 4
+        _guaranteedInitialCount: 0
       _gridActorGates:
       - _type: 0
         _count:
@@ -8972,25 +9138,32 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        _guaranteedInitialCount: 0
       _itemWeights:
       - _type: 1
         _weight: 0
         _maximumAllowedOverride: 5
+        _guaranteedInitialCount: 0
       - _type: 2
         _weight: 0
         _maximumAllowedOverride: 4
+        _guaranteedInitialCount: 0
       - _type: 3
         _weight: 0
         _maximumAllowedOverride: 2
+        _guaranteedInitialCount: 0
       - _type: 4
         _weight: 0
         _maximumAllowedOverride: 3
+        _guaranteedInitialCount: 0
       - _type: 5
         _weight: 0
         _maximumAllowedOverride: 5
+        _guaranteedInitialCount: 0
       - _type: 6
         _weight: 0
         _maximumAllowedOverride: 4
+        _guaranteedInitialCount: 0
       _gridActorGates:
       - _type: 0
         _count:

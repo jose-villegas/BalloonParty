@@ -25,6 +25,8 @@ namespace BalloonParty.Item
         private readonly List<IHasWriteableItemSlot> _eligibleBuffer = new();
         private readonly Dictionary<string, int> _activeCountsBuffer = new();
 
+        private readonly List<ItemSettings> _guaranteedBuffer = new();
+
         private IDisposable _subscription;
 
         [Inject]
@@ -71,16 +73,11 @@ namespace BalloonParty.Item
             }
 
             var count = SampleCount(weights, Random.value);
-            if (count <= 0)
-            {
-                return;
-            }
-
-            AssignItems(msg.NewBalloons, count);
+            AssignItems(msg.NewBalloons, count, msg.IsInitialSpawn);
         }
 
         // Tracks running per-type counts so caps hold within the batch, not just the pre-existing board.
-        private void AssignItems(IReadOnlyList<IBalloonModel> newBalloons, int count)
+        private void AssignItems(IReadOnlyList<IBalloonModel> newBalloons, int count, bool isInitial)
         {
             var candidates = _levelParams.Current.Items;
             if (candidates.Count == 0)
@@ -98,6 +95,32 @@ namespace BalloonParty.Item
             foreach (var c in candidates)
             {
                 _activeCountsBuffer[c.Type.ToString()] = CountBalloonsWithItem(c.Type);
+            }
+
+            // Place guaranteed items first — deterministic, not weighted.
+            if (isInitial)
+            {
+                _guaranteedBuffer.Clear();
+                var guaranteedPlaced = _levelParams.Current.FillGuaranteedItems(_guaranteedBuffer, _activeCountsBuffer);
+
+                foreach (var item in _guaranteedBuffer)
+                {
+                    if (_eligibleBuffer.Count == 0)
+                    {
+                        break;
+                    }
+
+                    var indexOf = PickWeightedIndex(_eligibleBuffer, Random.value);
+                    if (indexOf < 0)
+                    {
+                        break;
+                    }
+
+                    _eligibleBuffer[indexOf].Item.Value = item.Type;
+                    _eligibleBuffer.RemoveAt(indexOf);
+                }
+
+                count = Mathf.Max(0, count - guaranteedPlaced);
             }
 
             var grants = Mathf.Min(count, _eligibleBuffer.Count);

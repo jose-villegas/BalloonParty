@@ -8,7 +8,7 @@ using VContainer;
 
 namespace BalloonParty.Cheats
 {
-    public class CheatConsoleView : MonoBehaviour
+    internal class CheatConsoleView : MonoBehaviour
     {
         private const float HandleHeight = 14f;
         private const float MinHeight = 80f;
@@ -32,6 +32,7 @@ namespace BalloonParty.Cheats
         private bool _visible;
         private bool _throwerHeld;
         private int _lastTouchCount;
+        private int _resumeCooldown;
 
         private void Update()
         {
@@ -74,6 +75,7 @@ namespace BalloonParty.Cheats
 
         private void OnDisable()
         {
+            _resumeCooldown = 0;
             if (_throwerHeld && _pauseService != null)
             {
                 _pauseService.Resume(PauseSource.Cheat);
@@ -121,10 +123,28 @@ namespace BalloonParty.Cheats
             return tapped;
         }
 
-        // Holds the thrower (via PauseService) exactly while the console is open; released on close or
-        // teardown. Reference-counted, so paired Pause/Resume is required.
+        // Holds the thrower (via PauseService) exactly while the console is open; released two frames
+        // after close so the pointer-up that dismissed the panel doesn't register as a fire.
         private void SyncThrowerHold()
         {
+            if (_resumeCooldown > 0)
+            {
+                if (_visible)
+                {
+                    _resumeCooldown = 0;
+                    return;
+                }
+
+                _resumeCooldown--;
+                if (_resumeCooldown == 0)
+                {
+                    _pauseService.Resume(PauseSource.Cheat);
+                    _throwerHeld = false;
+                }
+
+                return;
+            }
+
             if (_visible == _throwerHeld || _pauseService == null)
             {
                 return;
@@ -133,13 +153,13 @@ namespace BalloonParty.Cheats
             if (_visible)
             {
                 _pauseService.Pause(PauseSource.Cheat);
+                _throwerHeld = true;
             }
             else
             {
-                _pauseService.Resume(PauseSource.Cheat);
+                // Delay resume by 2 frames so the pointer-up that closed the console expires.
+                _resumeCooldown = 2;
             }
-
-            _throwerHeld = _visible;
         }
 
         private List<ICheat> ApplyFilters(IReadOnlyList<ICheat> cheats)

@@ -205,7 +205,8 @@ namespace BalloonParty.Game.Level
                 // Weight and per-type cap come solely from the active range now (0 cap = no limit).
                 pickList.Add(new ResolvedBalloonEntry(
                     catalogEntry, rangeWeight.Weight, rangeWeight.MaxCount,
-                    rangeWeight.InitialCountWeights, rangeWeight.WaveCountWeights));
+                    rangeWeight.InitialCountWeights, rangeWeight.WaveCountWeights,
+                    rangeWeight.GuaranteedInitialCount));
             }
 
             return pickList;
@@ -239,7 +240,7 @@ namespace BalloonParty.Game.Level
 
                 // Weight comes solely from the active range; the cap still falls back to the item catalog.
                 var maxCount = rangeWeight.MaximumAllowedOverride > 0 ? rangeWeight.MaximumAllowedOverride : catalogItem.MaximumAllowed;
-                pickList.Add(new ResolvedItemEntry(catalogItem, rangeWeight.Weight, maxCount));
+                pickList.Add(new ResolvedItemEntry(catalogItem, rangeWeight.Weight, maxCount, rangeWeight.GuaranteedInitialCount));
                 activeItems.Add(catalogItem);
             }
         }

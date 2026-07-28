@@ -29,8 +29,8 @@ namespace BalloonParty.Editor
         private const int BalloonColIndex = 5;
         private const int ItemColIndex = 9;
         private const int ActorColIndex = 10;
-        private const float BalloonExpandedWidth = 310f;
-        private const float ItemExpandedWidth = 170f;
+        private const float BalloonExpandedWidth = 340f;
+        private const float ItemExpandedWidth = 200f;
         private const float ActorExpandedWidth = 260f;
 
         // Columns that have a visual gap before them (group separators)
@@ -141,6 +141,7 @@ namespace BalloonParty.Editor
                 Fields = new[]
                 {
                     new FieldSpec("_weight", "Wt", 36f, FieldDrawMode.Float),
+                    new FieldSpec("_guaranteedInitialCount", "Min", 30f, FieldDrawMode.Int),
                     new FieldSpec("_initialCountWeights", "Initial", CurveFieldWidth, FieldDrawMode.Curve),
                     new FieldSpec("_waveCountWeights", "Wave", CurveFieldWidth, FieldDrawMode.Curve)
                 },
@@ -162,6 +163,7 @@ namespace BalloonParty.Editor
                 Fields = new[]
                 {
                     new FieldSpec("_weight", "Wt", 36f, FieldDrawMode.Float),
+                    new FieldSpec("_guaranteedInitialCount", "Min", 30f, FieldDrawMode.Int),
                     new FieldSpec("_maximumAllowedOverride", "Max", 30f, FieldDrawMode.Int)
                 },
                 InitializeNewEntry = entryProp =>

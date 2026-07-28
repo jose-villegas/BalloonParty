@@ -22,10 +22,16 @@ namespace BalloonParty.Configuration.Balloons
                  "Empty = defaults to the initial count curve.")]
         [SerializeField] private AnimationCurve _waveCountWeights;
 
+        [Tooltip("Guaranteed minimum of this type placed during the initial board fill, before weighted " +
+                 "picks run. 0 = no guarantee (purely weight-driven). Use for tutorialization: ensures " +
+                 "the player sees at least N of a new type on the first board.")]
+        [SerializeField] private int _guaranteedInitialCount;
+
         public BalloonType Type => _type;
         public float Weight => _weight;
         public AnimationCurve InitialCountWeights => _initialCountWeights;
         public AnimationCurve WaveCountWeights => _waveCountWeights;
+        public int GuaranteedInitialCount => _guaranteedInitialCount;
 
         /// <summary>Inferred from the last keyframe X of <see cref="InitialCountWeights"/>. 0 = uncapped.</summary>
         public int MaxCount =>
@@ -33,12 +39,13 @@ namespace BalloonParty.Configuration.Balloons
                 ? Mathf.RoundToInt(_initialCountWeights[_initialCountWeights.length - 1].time)
                 : 0;
 
-        public BalloonTypeWeight(BalloonType type, float weight)
+        public BalloonTypeWeight(BalloonType type, float weight, int guaranteedInitialCount = 0)
         {
             _type = type;
             _weight = weight;
             _initialCountWeights = null;
             _waveCountWeights = null;
+            _guaranteedInitialCount = guaranteedInitialCount;
         }
     }
 }

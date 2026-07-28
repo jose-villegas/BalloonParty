@@ -118,6 +118,59 @@ namespace BalloonParty.Configuration.Level
             return _simpleBalloonPickList.PickRandom(activeCounts)?.Source;
         }
 
+        /// <summary>Fills <paramref name="output"/> with guaranteed balloon entries for the initial board,
+        /// respecting MaxCount caps. Updates <paramref name="activeCounts"/> as it goes.</summary>
+        public void FillGuaranteedBalloons(
+            List<BalloonPrefabEntry> output, Dictionary<string, int> activeCounts)
+        {
+            foreach (var entry in _balloonPickList)
+            {
+                var guaranteed = entry.GuaranteedInitialCount;
+                if (guaranteed <= 0)
+                {
+                    continue;
+                }
+
+                var current = activeCounts.GetValueOrDefault(entry.PoolKey);
+                var toAdd = Mathf.Min(guaranteed, entry.MaxCount > 0 ? entry.MaxCount - current : guaranteed);
+
+                for (var i = 0; i < toAdd; i++)
+                {
+                    output.Add(entry.Source);
+                    activeCounts[entry.PoolKey] = activeCounts.GetValueOrDefault(entry.PoolKey) + 1;
+                }
+            }
+        }
+
+        /// <summary>Picks guaranteed items for the initial board, respecting MaxCount caps.
+        /// Updates <paramref name="activeCounts"/> as it goes. Returns the number placed.</summary>
+        public int FillGuaranteedItems(
+            List<ItemSettings> output, Dictionary<string, int> activeCounts)
+        {
+            var placed = 0;
+            foreach (var entry in _itemPickList)
+            {
+                var guaranteed = entry.GuaranteedInitialCount;
+                if (guaranteed <= 0)
+                {
+                    continue;
+                }
+
+                var current = activeCounts.GetValueOrDefault(entry.PoolKey);
+                var maxCount = entry.MaxCount;
+                var toAdd = maxCount > 0 ? Mathf.Min(guaranteed, maxCount - current) : guaranteed;
+
+                for (var i = 0; i < toAdd; i++)
+                {
+                    output.Add(entry.Source);
+                    activeCounts[entry.PoolKey] = activeCounts.GetValueOrDefault(entry.PoolKey) + 1;
+                    placed++;
+                }
+            }
+
+            return placed;
+        }
+
         // Rolls each curve-bearing type's allowance for the upcoming wave (absent key = unlimited).
         public void RollWaveQuotas(Dictionary<string, int> quotas, bool isInitial)
         {
@@ -169,6 +222,7 @@ namespace BalloonParty.Configuration.Level
         public int MaxCount { get; }
         public AnimationCurve InitialCountWeights { get; }
         public AnimationCurve WaveCountWeights { get; }
+        public int GuaranteedInitialCount { get; }
         public string PoolKey => Source.PoolKey;
 
         public ResolvedBalloonEntry(
@@ -176,13 +230,15 @@ namespace BalloonParty.Configuration.Level
             float weight,
             int maxCount,
             AnimationCurve initialCountWeights = null,
-            AnimationCurve waveCountWeights = null)
+            AnimationCurve waveCountWeights = null,
+            int guaranteedInitialCount = 0)
         {
             Source = source;
             Weight = weight;
             MaxCount = maxCount;
             InitialCountWeights = initialCountWeights;
             WaveCountWeights = waveCountWeights;
+            GuaranteedInitialCount = guaranteedInitialCount;
         }
     }
 
@@ -191,13 +247,15 @@ namespace BalloonParty.Configuration.Level
         public ItemSettings Source { get; }
         public float Weight { get; }
         public int MaxCount { get; }
+        public int GuaranteedInitialCount { get; }
         public string PoolKey => Source.Type.ToString();
 
-        public ResolvedItemEntry(ItemSettings source, float weight, int maxCount)
+        public ResolvedItemEntry(ItemSettings source, float weight, int maxCount, int guaranteedInitialCount = 0)
         {
             Source = source;
             Weight = weight;
             MaxCount = maxCount;
+            GuaranteedInitialCount = guaranteedInitialCount;
         }
     }
 }

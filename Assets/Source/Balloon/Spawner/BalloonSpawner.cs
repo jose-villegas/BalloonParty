@@ -398,7 +398,14 @@ namespace BalloonParty.Balloon.Spawner
             _levelParams.Current.RollWaveQuotas(_waveQuotas, isInitial);
 
             var target = lineCount * _grid.Columns;
-            for (var i = 0; i < target; i++)
+
+            // Guaranteed entries go first — they bypass the weighted pick and wave quotas.
+            if (isInitial)
+            {
+                _levelParams.Current.FillGuaranteedBalloons(_spawnBatch, _activeCounts);
+            }
+
+            for (var i = _spawnBatch.Count; i < target; i++)
             {
                 var entry = _levelParams.Current.PickBalloonEntry(_activeCounts, _waveQuotas);
                 if (entry == null)
