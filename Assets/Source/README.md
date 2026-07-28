@@ -264,7 +264,7 @@ if (Cinematic.IsPlaying) return;
 Cinematic.Current.Where(s => s == CinematicState.None).Subscribe(...);
 
 // Control (from the cinematic owner)
-Cinematic.Begin(CinematicState.LevelUpPanIn);
+Cinematic.Begin(CinematicState.LevelCompleteHit);
 Cinematic.End();
 ```
 
@@ -273,8 +273,8 @@ Cinematic.End();
 | State | Meaning | Set by |
 |---|---|---|
 | `None` | No cinematic active | Default; `CinematicDirector.EndCinematic` |
-| `LevelUpPanIn` | Pan-in phase — camera tracks tipping trail, which slows via curve-modulated progress | `CinematicDirector.BeginCinematic` (via `LevelUpCinematic` at trail spawn) |
-| `LevelUpRestore` | **Unused** — no longer played (the camera un-zoom moved to the Ascent's `RestoreTweened`); kept only so appended enum values keep their serialized indices | — |
+| `LevelCompleteHit` | Hit phase — camera tracks the scoring projectile during the level-completing shot | `CinematicDirector.BeginCinematic` (via `LevelUpCinematic` at trail spawn) |
+| `LevelCompleteRestore` | **Unused** — no longer played (the camera un-zoom moved to the Ascent's `RestoreTweened`); kept only so appended enum values keep their serialized indices | — |
 | `HeartDrain` | Overflow heart-drain beat — camera follows the in-flight hearts; does **not** block loss or camera shake | `CinematicDirector.BeginCinematic` (via `HeartDrainCinematic` on the first heart request) |
 | `HeartDrainRestore` | The heart-drain's return to normal speed | `CinematicDirector.BeginCinematic` (via `HeartDrainCinematic` when the pile drains or the run ends) |
 

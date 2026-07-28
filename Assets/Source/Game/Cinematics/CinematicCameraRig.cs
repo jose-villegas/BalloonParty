@@ -105,6 +105,88 @@ namespace BalloonParty.Game.Cinematics
         }
 
         /// <summary>
+        ///     Box-in-box follow: moves the camera (inner box = frustum) toward <paramref name="target"/> while
+        ///     keeping the frustum fully inside the outer bounds (walls + offset). Returns the clamped position.
+        ///     When the inner box grows (zoom out), freedom to move shrinks; at full base size it may be locked.
+        /// </summary>
+        public Vector3 FollowClamped(Vector3 target, Rect outerBounds)
+        {
+            if (_camera == null)
+            {
+                return target;
+            }
+
+            var halfH = _camera.orthographicSize;
+            var halfW = halfH * _camera.aspect;
+
+            // Available slide room: outer - inner on each axis.
+            var minX = outerBounds.xMin + halfW;
+            var maxX = outerBounds.xMax - halfW;
+            var minY = outerBounds.yMin + halfH;
+            var maxY = outerBounds.yMax - halfH;
+
+            var pos = target;
+            pos.x = minX < maxX ? Mathf.Clamp(pos.x, minX, maxX) : (minX + maxX) * 0.5f;
+            pos.y = minY < maxY ? Mathf.Clamp(pos.y, minY, maxY) : (minY + maxY) * 0.5f;
+            pos.z = _basePosition.z;
+            return pos;
+        }
+
+        /// <summary>
+        ///     Curve-driven restore using the box-in-box model. The curve's X = real seconds, Y = blend factor
+        ///     (0 = follows target clamped to outer bounds, 1 = original framing). The ortho size interpolates
+        ///     from current toward base, progressively shrinking the inner box's freedom until it snaps home.
+        /// </summary>
+        public void RestoreCurveDriven(
+            AnimationCurve zoomCurve,
+            Func<Vector3> followTarget,
+            float followSpeed,
+            Rect outerBounds)
+        {
+            if (_camera == null || !_hasBaseState)
+            {
+                EnableOrtho(true);
+                return;
+            }
+
+            KillTween();
+
+            var duration = zoomCurve.Duration();
+            var startSize = _camera.orthographicSize;
+            var elapsed = 0f;
+
+            _tween = DOTween.To(
+                    () => elapsed,
+                    x =>
+                    {
+                        elapsed = x;
+                        var dt = Time.unscaledDeltaTime;
+                        var t = zoomCurve.Evaluate(x);
+
+                        _camera.orthographicSize = Mathf.LerpUnclamped(startSize, _baseOrthoSize, t);
+
+                        // Desired position: follow target clamped to outer bounds, blended toward base.
+                        var target = followTarget();
+                        target.z = _basePosition.z;
+                        var clamped = FollowClamped(target, outerBounds);
+                        var desired = Vector3.LerpUnclamped(clamped, _basePosition, t);
+
+                        // Smooth toward desired — never jump, even at bounds corners.
+                        _camera.transform.position = Vector3.Lerp(
+                            _camera.transform.position, desired, followSpeed * dt);
+                    },
+                    duration,
+                    duration)
+                .SetEase(Ease.Linear)
+                .SetUpdate(true)
+                .OnComplete(() =>
+                {
+                    Restore();
+                    _tween = null;
+                });
+        }
+
+        /// <summary>
         ///     Pans toward the focus, keeping it in frustum; a single-point focus is hard-clamped after easing, a spread before.
         /// </summary>
         public void Frame(ICinematicFocus focus, CameraRigCinematicSettings segment, float dt)

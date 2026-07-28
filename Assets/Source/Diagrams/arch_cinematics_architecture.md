@@ -15,7 +15,7 @@ its behavioural `CinematicTraits`, the uniform **camera-rig segment** it plays
 (`TimeScaleCurve` — whose last key is the segment's duration — plus zoom / pan weight /
 follow speed), and capability blocks (`TrackedTrailSettings`). A *restore* is not
 special-cased — it is just another segment whose curve ramps timeScale back to 1 with
-zoom/pan at 0. States are phases: the level-up spans `LevelUpPanIn` + `LevelUpRestore`,
+zoom/pan at 0. States are phases: the level-complete beat spans `LevelCompleteHit` + `LevelCompleteRestore`,
 the heart-drain `HeartDrain` + `HeartDrainRestore`. The **Ascent** is the exception: a
 transform-descent rather than a camera move, so it reads a top-level `LevelAscendSettings`
 (descent curve / height / spawn cue / speed / pop-wave tuning) and keeps only its
@@ -24,11 +24,11 @@ transform-descent rather than a camera move, so it reads a top-level `LevelAscen
 **Producers are thin triggers:**
 `LevelUpCinematic` and `HeartDrainCinematic` are plain C# `IStartable` entry points — a
 trigger message, a focus, an end condition, and a `CameraRigCinematicConfig` handed to the
-runner. The level-up runs a **pan-in-only** form (`TryBegin` … `EndPanIn` … popup gate) and
-leaves timeScale alone during pan-in (gameplay is paused; the segment curve modulates the
-tipping trail's playback speed instead). It does **not** run a restore segment — `EndPanIn`
+runner. The level-up runs a **hit-only** form (`TryBegin` … `EndPanIn` … popup gate) and
+leaves timeScale alone during the hit beat (gameplay is paused; the segment curve modulates the
+scoring projectile's playback speed instead). It does **not** run a restore segment — `EndPanIn`
 leaves the camera zoomed and the Ascent (`LevelTransitionController`) tweens it back via
-`CinematicCameraRig.RestoreTweened`, timed by the `LevelUpRestore` segment's own curve duration —
+`CinematicCameraRig.RestoreTweened`, timed by the `LevelCompleteRestore` segment's own curve duration —
 independent of the concurrent board-clear effect. The heart-drain runs the
 **continuous** form: a polled
 end condition ("pile drained ∨ game over") rolls the pan-in straight into a restore that
@@ -48,7 +48,7 @@ blocks; the heart-drain lets the 0-HP game-over fire through — it *is* the los
 happening), `CameraShakeController` stands down on `BlocksShake` (the `CameraShakeView` it
 drives is an additive-offset shake that composes with the heart-drain pan, so it punches
 per heart launch), and
-`CinematicEndGate` holds the popup until `LevelUpPanIn` ends.
+`CinematicEndGate` holds the popup until `LevelCompleteHit` ends.
 
 **Time is claim-based:**
 `TimeScaleService` is the only legal writer of `Time.timeScale` — enforced by the
@@ -73,4 +73,4 @@ and the hand-back never flashes full speed.
 
 **Related pages:** @ref arch_score_cinematic (the level-up flow end-to-end),
 @ref arch_static_state (the `Cinematic` reactive state), @ref arch_trail_composition
-(trail interception during the pan-in).
+(trail interception during the level-complete hit).

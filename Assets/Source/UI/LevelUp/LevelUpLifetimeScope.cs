@@ -12,7 +12,7 @@ namespace BalloonParty.UI.LevelUp
             // Registered by concrete type (not .As<IReadyGate>()) so LevelUpPopUp names the exact gate it
             // waits on — and can't silently fall back to the parent scope's NavigationReadyGate(Game).
             builder.Register<CinematicEndGate>(Lifetime.Singleton)
-                .WithParameter(CinematicState.LevelUpPanIn);
+                .WithParameter(CinematicState.LevelCompleteHit);
         }
     }
 }

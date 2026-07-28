@@ -3,6 +3,7 @@ using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Score;
 using BalloonParty.Projectile;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
@@ -20,23 +21,20 @@ namespace BalloonParty.Game.Cinematics
     /// </summary>
     internal sealed class LevelUpCinematic : CameraRigCinematicProducer
     {
-        // Safety cap: if a wall hit somehow never arrives, end the pan-in rather than soft-locking.
-        private const float PanInSafetyCapSeconds = 5f;
 
         private readonly ISubscriber<ScorePointsGroupMessage> _scoredSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
-        private readonly ISubscriber<WallHitMessage> _wallHitSubscriber;
         private readonly IPublisher<LevelUpAbortedMessage> _abortedPublisher;
         private readonly ILevelProgress _levelProgress;
         private readonly ILossForecast _lossForecast;
         private readonly ScoreTrailService _scoreTrailService;
         private readonly ProjectilePositionProvider _positionProvider;
         private readonly PauseService _pauseService;
+        private readonly Rect _outerBounds;
 
         private IDisposable _scoreSubscription;
         private IDisposable _sessionSubscription;
         private IDisposable _freezeSubscription;
-        private IDisposable _wallHitSubscription;
         private Vector3 _lastProjectilePosition;
         private bool _sessionActive;
         private float _panInElapsed;
@@ -49,32 +47,39 @@ namespace BalloonParty.Game.Cinematics
             ICinematicsSettings settings,
             ISubscriber<ScorePointsGroupMessage> scoredSubscriber,
             ISubscriber<LevelUpDismissedMessage> dismissedSubscriber,
-            ISubscriber<WallHitMessage> wallHitSubscriber,
             IPublisher<LevelUpAbortedMessage> abortedPublisher,
             ILevelProgress levelProgress,
             ILossForecast lossForecast,
             ScoreTrailService scoreTrailService,
             ProjectilePositionProvider positionProvider,
-            PauseService pauseService)
+            PauseService pauseService,
+            IProjectileFlightConfig flightConfig)
             : base(director, rig, timeScale, settings)
         {
             _scoredSubscriber = scoredSubscriber;
             _dismissedSubscriber = dismissedSubscriber;
-            _wallHitSubscriber = wallHitSubscriber;
             _abortedPublisher = abortedPublisher;
             _levelProgress = levelProgress;
             _lossForecast = lossForecast;
             _scoreTrailService = scoreTrailService;
             _positionProvider = positionProvider;
             _pauseService = pauseService;
+
+            var limits = new WallLimits(flightConfig.LimitsClockwise);
+            var offset = settings.EntryOf(CinematicState.LevelCompleteRestore).Rig.ZoomAmount;
+            _outerBounds = new Rect(
+                limits.Left - offset,
+                limits.Bottom - offset,
+                limits.Right - limits.Left + offset * 2f,
+                limits.Top - limits.Bottom + offset * 2f);
         }
 
         protected override CameraRigCinematicConfig BuildConfig()
         {
             return new CameraRigCinematicConfig
             {
-                PanInState = CinematicState.LevelUpPanIn,
-                RestoreState = CinematicState.LevelUpRestore,
+                PanInState = CinematicState.LevelCompleteHit,
+                RestoreState = CinematicState.LevelCompleteRestore,
                 Focus = new PointFocus(GetCameraTarget),
                 DrivesTimeScale = false,
                 RestoreEvaluatesCurve = true,
@@ -92,7 +97,6 @@ namespace BalloonParty.Game.Cinematics
         {
             DisposeSessionSubscription();
             LifecycleHelper.DisposeAndClear(ref _freezeSubscription);
-            LifecycleHelper.DisposeAndClear(ref _wallHitSubscription);
             _scoreSubscription?.Dispose();
 
             if (_pauseService.IsPaused(PauseSource.Cinematic))
@@ -138,10 +142,6 @@ namespace BalloonParty.Game.Cinematics
                 .Where(phase => phase == LevelUpPhase.Pending)
                 .Subscribe(_ => _scoreTrailService.Flights.PauseAll());
 
-            // Window A ends at the first wall hit — the camera releases to normal framing.
-            LifecycleHelper.DisposeAndClear(ref _wallHitSubscription);
-            _wallHitSubscription = _wallHitSubscriber.Subscribe(OnWallHit);
-
             SubscribeForDismissed();
         }
 
@@ -167,7 +167,10 @@ namespace BalloonParty.Game.Cinematics
             }
 
             _panInElapsed += dt;
-            if (_panInElapsed > PanInSafetyCapSeconds)
+
+            // Pan-in runs for the full LevelCompleteHit curve duration, then rolls into restore.
+            var panInDuration = Settings.EntryOf(CinematicState.LevelCompleteHit).Rig.TimeScaleCurve.Duration();
+            if (_panInElapsed >= panInDuration)
             {
                 EndPanIn();
             }
@@ -177,7 +180,6 @@ namespace BalloonParty.Game.Cinematics
         {
             DisposeSessionSubscription();
             LifecycleHelper.DisposeAndClear(ref _freezeSubscription);
-            LifecycleHelper.DisposeAndClear(ref _wallHitSubscription);
             _scoreTrailService.Flights.CompleteAll();
 
             if (_pauseService.IsPaused(PauseSource.Cinematic))
@@ -192,18 +194,12 @@ namespace BalloonParty.Game.Cinematics
 
         private void EndPanIn()
         {
-            LifecycleHelper.DisposeAndClear(ref _wallHitSubscription);
             Runner.EndPanIn();
-        }
 
-        private void OnWallHit(WallHitMessage msg)
-        {
-            if (!Runner.IsPanInRunning)
-            {
-                return;
-            }
-
-            EndPanIn();
+            // Pan-out: slow zoom back to base size while still following the projectile,
+            // box-in-box clamped so the frustum never leaves the outer bounds.
+            var restoreSegment = Settings.EntryOf(CinematicState.LevelCompleteRestore).Rig;
+            Rig.RestoreCurveDriven(restoreSegment.TimeScaleCurve, GetCameraTarget, restoreSegment.FollowSpeed, _outerBounds);
         }
 
         private Vector3 GetCameraTarget()

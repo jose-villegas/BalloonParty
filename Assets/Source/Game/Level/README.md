@@ -82,7 +82,7 @@ cinematic + the overflow drain → float the old level's balloons away via the i
 into the sway — they *survive*, unlike the game-over's pop) → slide the **outgoing content** out the
 bottom on a shared conveyor while the **new** scenario descends into place, then reopen scoring. The
 Ascent moves the shared `ScenarioContentRoot`, not the camera; the camera un-zoom is tweened here,
-timed by the `LevelUpRestore` segment's own curve — independent of the concurrent board effect — *not*
+timed by the `LevelCompleteRestore` segment's own curve — independent of the concurrent board effect — *not*
 by `LevelUpCinematic`. Its tuning is `ICinematicsSettings.LevelAscend` — see
 `Game/Cinematics/README.md` and `Configuration/README.md`.
 

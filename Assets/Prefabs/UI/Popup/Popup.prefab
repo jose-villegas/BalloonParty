@@ -591,6 +591,7 @@ GameObject:
   - component: {fileID: 5782548314551938519}
   - component: {fileID: 5407251710165631580}
   - component: {fileID: 4097560826420640440}
+  - component: {fileID: 6696785862030033975}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -712,6 +713,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6696785862030033975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6789931612015237482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3459f9f1833408d91ea55ea727baedb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Audio.View.UiSfxEmitter
+  _soundId: 27
 --- !u!1 &6916311748001812538
 GameObject:
   m_ObjectHideFlags: 0

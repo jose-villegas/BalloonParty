@@ -28,7 +28,6 @@ namespace BalloonParty.Game.Level
     internal sealed class LevelTransitionController : IStartable, IDisposable
     {
         private readonly CinematicDirector _cinematicDirector;
-        private readonly CinematicCameraRig _cameraRig;
         private readonly ICinematicsSettings _cinematicsSettings;
         private readonly GridSpawnerCoordinator _spawnerCoordinator;
         private readonly ScenarioContentRoot _scenarioRoot;
@@ -49,7 +48,6 @@ namespace BalloonParty.Game.Level
         [Inject]
         internal LevelTransitionController(
             CinematicDirector cinematicDirector,
-            CinematicCameraRig cameraRig,
             ICinematicsSettings cinematicsSettings,
             GridSpawnerCoordinator spawnerCoordinator,
             ScenarioContentRoot scenarioRoot,
@@ -64,7 +62,6 @@ namespace BalloonParty.Game.Level
             IPublisher<LevelAscendStartedMessage> ascendStartedPublisher)
         {
             _cinematicDirector = cinematicDirector;
-            _cameraRig = cameraRig;
             _cinematicsSettings = cinematicsSettings;
             _spawnerCoordinator = spawnerCoordinator;
             _scenarioRoot = scenarioRoot;
@@ -123,11 +120,6 @@ namespace BalloonParty.Game.Level
                 // Detach the old balloons into the outgoing group — off the grid and reparented under the
                 // root, so they travel with the descent while the float animates them up.
                 _boardEffect.Collect(exitDrop);
-
-                // Un-zoom the camera (the level-up pan-in left it zoomed) over the LevelUpRestore segment's
-                // own duration — independent of the board effect, which is now a separate concurrent beat.
-                var restoreSeconds = _cinematicsSettings.EntryOf(CinematicState.LevelUpRestore).Rig.TimeScaleCurve.Duration();
-                _cameraRig.RestoreTweened(restoreSeconds);
 
                 HoldOutgoingContent(exitDrop);
 

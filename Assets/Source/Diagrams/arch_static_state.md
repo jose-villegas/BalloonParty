@@ -39,7 +39,7 @@ Navigation.Current
 **Reacting to cinematics in a service:**
 ```csharp
 Cinematic.Current
-    .Subscribe(state => { if (state == CinematicState.LevelUpPanIn) PauseWork(); })
+    .Subscribe(state => { if (state == CinematicState.LevelCompleteHit) PauseWork(); })
     .AddTo(_disposables);
 
 Cinematic.Current

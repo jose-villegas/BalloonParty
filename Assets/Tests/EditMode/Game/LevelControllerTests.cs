@@ -39,7 +39,6 @@ namespace BalloonParty.Tests.Game
         private IMessageHandler<LevelUpAbortedMessage> _abortedHandler;
         private IMessageHandler<LevelUpDismissedMessage> _dismissedHandler;
         private IMessageHandler<LevelTransitionCompletedMessage> _completedHandler;
-        private IMessageHandler<WallHitMessage> _wallHitHandler;
         private IMessageHandler<ProjectileDestroyedMessage> _destroyedHandler;
         private IMessageHandler<GameOverMessage> _gameOverHandler;
         private LevelController _controller;
@@ -78,7 +77,7 @@ namespace BalloonParty.Tests.Game
                 System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             curveField.SetValue(rig, AnimationCurve.Constant(0f, 0.3f, 0.5f));
             rigField.SetValue(entry, rig);
-            _cinematics.EntryOf(CinematicState.LevelUpPanIn).Returns(entry);
+            _cinematics.EntryOf(CinematicState.LevelCompleteHit).Returns(entry);
 
             _levelUpPublisher = Substitute.For<IPublisher<ScoreLevelUpMessage>>();
             _abandonedPublisher = Substitute.For<IPublisher<LevelUpAbandonedMessage>>();
@@ -124,13 +123,6 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<LevelTransitionCompletedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
-            var wallHitSubscriber = Substitute.For<ISubscriber<WallHitMessage>>();
-            wallHitSubscriber
-                .Subscribe(
-                    Arg.Do<IMessageHandler<WallHitMessage>>(h => _wallHitHandler = h),
-                    Arg.Any<MessageHandlerFilter<WallHitMessage>[]>())
-                .Returns(Substitute.For<IDisposable>());
-
             var destroyedSubscriber = Substitute.For<ISubscriber<ProjectileDestroyedMessage>>();
             destroyedSubscriber
                 .Subscribe(
@@ -157,7 +149,7 @@ namespace BalloonParty.Tests.Game
                 Substitute.For<IRetryState>(), _timeScale, _cinematics,
                 _levelUpPublisher, _abandonedPublisher, _forceDestroyPublisher,
                 trailArrivedSubscriber, abortedSubscriber, dismissedSubscriber, completedSubscriber,
-                wallHitSubscriber, destroyedSubscriber, boardDepletedSubscriber, gameOverSubscriber);
+                destroyedSubscriber, boardDepletedSubscriber, gameOverSubscriber);
         }
 
         [Test]
@@ -745,22 +737,6 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void WallHit_DuringCompleting_ClosesWindowA()
-        {
-            _thresholds.PointsRequiredForLevel(1).Returns(1);
-            ScoreColor(Red, 1);
-            ScoreColor(Blue, 1);
-            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
-
-            _timeScale.Received(1).ClaimExclusive(TimeScaleSource.LevelUpCeremony, Arg.Any<float>());
-
-            FireWallHit();
-
-            _timeScale.Received(1).ReleaseExclusive(TimeScaleSource.LevelUpCeremony);
-            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value, "wall hit closes Window A but phase stays Completing");
-        }
-
-        [Test]
         public void GameOver_DuringCompleting_AbandonsCeremony()
         {
             _thresholds.PointsRequiredForLevel(1).Returns(1);
@@ -835,11 +811,6 @@ namespace BalloonParty.Tests.Game
         private void FireTrailArrived(string color, int score)
         {
             _trailArrivedHandler.Handle(new ScoreTrailArrivedMessage(color, score, points: 1, Vector3.zero));
-        }
-
-        private void FireWallHit()
-        {
-            _wallHitHandler.Handle(new WallHitMessage(Vector3.zero, 0));
         }
 
         private void FireFlightEnded()

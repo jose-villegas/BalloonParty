@@ -39,7 +39,6 @@ namespace BalloonParty.Game.Level
         private readonly ISubscriber<LevelUpAbortedMessage> _abortedSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         private readonly ISubscriber<LevelTransitionCompletedMessage> _transitionCompletedSubscriber;
-        private readonly ISubscriber<WallHitMessage> _wallHitSubscriber;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly ISubscriber<BoardDepletedMessage> _boardDepletedSubscriber;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
@@ -55,7 +54,6 @@ namespace BalloonParty.Game.Level
         private IDisposable _abortedSubscription;
         private IDisposable _dismissedSubscription;
         private IDisposable _transitionCompletedSubscription;
-        private IDisposable _wallHitSubscription;
         private IDisposable _destroyedSubscription;
         private IDisposable _boardDepletedSubscription;
         private IDisposable _gameOverSubscription;
@@ -82,7 +80,6 @@ namespace BalloonParty.Game.Level
             ISubscriber<LevelUpAbortedMessage> abortedSubscriber,
             ISubscriber<LevelUpDismissedMessage> dismissedSubscriber,
             ISubscriber<LevelTransitionCompletedMessage> transitionCompletedSubscriber,
-            ISubscriber<WallHitMessage> wallHitSubscriber,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             ISubscriber<BoardDepletedMessage> boardDepletedSubscriber,
             ISubscriber<GameOverMessage> gameOverSubscriber)
@@ -102,7 +99,6 @@ namespace BalloonParty.Game.Level
             _abortedSubscriber = abortedSubscriber;
             _dismissedSubscriber = dismissedSubscriber;
             _transitionCompletedSubscriber = transitionCompletedSubscriber;
-            _wallHitSubscriber = wallHitSubscriber;
             _destroyedSubscriber = destroyedSubscriber;
             _boardDepletedSubscriber = boardDepletedSubscriber;
             _gameOverSubscriber = gameOverSubscriber;
@@ -119,7 +115,7 @@ namespace BalloonParty.Game.Level
             _colorKeys.AddRange(_palette.ProgressColorNames);
             ClearRunState();
 
-            _beatCurve = _cinematics.EntryOf(CinematicState.LevelUpPanIn).Rig.TimeScaleCurve;
+            _beatCurve = _cinematics.EntryOf(CinematicState.LevelCompleteHit).Rig.TimeScaleCurve;
             _trailSubscription = _trailArrivedSubscriber.Subscribe(OnTrailArrived);
             _abortedSubscription = _abortedSubscriber.Subscribe(_ => OnLevelUpAborted());
 
@@ -128,7 +124,6 @@ namespace BalloonParty.Game.Level
             _dismissedSubscription = _dismissedSubscriber.Subscribe(_ => OnLevelUpDismissed());
             _transitionCompletedSubscription = _transitionCompletedSubscriber.Subscribe(_ => OnTransitionCompleted());
 
-            _wallHitSubscription = _wallHitSubscriber.Subscribe(_ => CloseWindowA());
             _destroyedSubscription = _destroyedSubscriber.Subscribe(_ => OnFlightEnded());
             _boardDepletedSubscription = _boardDepletedSubscriber.Subscribe(_ => OnBoardDepleted());
             _gameOverSubscription = _gameOverSubscriber.Subscribe(_ => AbandonCeremony("game over"));
@@ -146,7 +141,6 @@ namespace BalloonParty.Game.Level
             _abortedSubscription?.Dispose();
             _dismissedSubscription?.Dispose();
             _transitionCompletedSubscription?.Dispose();
-            _wallHitSubscription?.Dispose();
             _destroyedSubscription?.Dispose();
             _boardDepletedSubscription?.Dispose();
             _gameOverSubscription?.Dispose();
@@ -263,7 +257,17 @@ namespace BalloonParty.Game.Level
             {
                 var duration = _beatCurve.Duration();
                 var t = duration > 0f ? Mathf.Clamp01(_completingElapsed / duration) : 1f;
-                _timeScale.ClaimExclusive(TimeScaleSource.LevelUpCeremony, _beatCurve.Evaluate(t));
+
+                if (t >= 1f)
+                {
+                    // Curve has run its full duration — release the clock back to normal.
+                    _windowAOpen = false;
+                    _timeScale.ReleaseExclusive(TimeScaleSource.LevelUpCeremony);
+                }
+                else
+                {
+                    _timeScale.ClaimExclusive(TimeScaleSource.LevelUpCeremony, _beatCurve.Evaluate(t));
+                }
             }
 
             if (_completingElapsed >= CompletingCapSeconds)
@@ -439,19 +443,6 @@ namespace BalloonParty.Game.Level
             _timeScale.ClaimExclusive(TimeScaleSource.LevelUpCeremony, _beatCurve.Evaluate(0f));
 
             Log.Info("Level", $"Level {_level.Value} completed at claim time — holding for end of flight");
-        }
-
-        private void CloseWindowA()
-        {
-            if (_phase.Value != LevelUpPhase.Completing || !_windowAOpen)
-            {
-                return;
-            }
-
-            // Hand the clock back completely: the rest of the flight plays at normal rules, including its
-            // own slow-mos (a pierce discharge dip, a doomed last breath).
-            _windowAOpen = false;
-            _timeScale.ReleaseExclusive(TimeScaleSource.LevelUpCeremony);
         }
 
         private void OnFlightEnded()
