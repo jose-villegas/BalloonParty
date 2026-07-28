@@ -102,6 +102,19 @@ namespace BalloonParty.Audio.View
             _source.DOFade(targetVolume, seconds).SetUpdate(true).SetLink(gameObject);
         }
 
+        internal void SetPitch(float pitch, float seconds)
+        {
+            DOTween.Kill(this);
+            if (seconds <= 0f)
+            {
+                _source.pitch = pitch;
+                return;
+            }
+
+            DOTween.To(() => _source.pitch, x => _source.pitch = x, pitch, seconds)
+                .SetId(this).SetUpdate(true).SetLink(gameObject);
+        }
+
         internal void Stop()
         {
             _source.DOKill();

@@ -85,6 +85,9 @@ namespace BalloonParty.Audio
         UiProgressComplete,
 
         // Accent played when the tipping score trail arrives (the level is now confirmed complete).
-        LevelCompletePop
+        LevelCompletePop,
+
+        // Looping ambient played during active gameplay; fades in on game start, out on level-up/game-over.
+        GameplayLoop
     }
 }

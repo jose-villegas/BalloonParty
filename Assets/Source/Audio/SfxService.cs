@@ -135,6 +135,27 @@ namespace BalloonParty.Audio
             voice.FadeVolumeTo(target, entry.FadeInSeconds);
         }
 
+        public void SetPitch(SoundHandle handle, float pitch, float seconds = 0f)
+        {
+            if (!handle.IsValid)
+            {
+                return;
+            }
+
+            var voiceId = handle.VoiceId;
+            if (voiceId < 0 || voiceId >= _slots.Length || _slots[voiceId].Generation != handle.Generation)
+            {
+                return;
+            }
+
+            var voice = _slots[voiceId].Voice;
+            if (voice != null)
+            {
+                voice.SetPitch(pitch, seconds);
+            }
+        }
+
+
         public void Stop(SoundHandle handle)
         {
             if (!handle.IsValid)

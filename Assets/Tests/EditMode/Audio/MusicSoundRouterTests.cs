@@ -1,6 +1,9 @@
 using BalloonParty.Audio;
 using BalloonParty.Audio.Routing;
+using BalloonParty.Game.Danger;
 using BalloonParty.Shared.GameState;
+using BalloonParty.Shared.Messages;
+using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
 using UniRx;
@@ -25,7 +28,17 @@ namespace BalloonParty.Tests.Audio
             var navigation = Substitute.For<INavigation>();
             navigation.Current.Returns(_state);
 
-            var router = new MusicSoundRouter(_player, navigation);
+            var dangerLevel = Substitute.For<IDangerLevel>();
+            dangerLevel.Level.Returns(new ReactiveProperty<float>(0f));
+
+            var doomedStartSub = Substitute.For<ISubscriber<ProjectileDoomedStartedMessage>>();
+            var doomedEndSub = Substitute.For<ISubscriber<ProjectileDoomedEndedMessage>>();
+            var loadedSub = Substitute.For<ISubscriber<ProjectileLoadedMessage>>();
+            var destroyedSub = Substitute.For<ISubscriber<ProjectileDestroyedMessage>>();
+            var firedSub = Substitute.For<ISubscriber<ProjectileFiredMessage>>();
+
+            var router = new MusicSoundRouter(
+                _player, navigation, dangerLevel, doomedStartSub, doomedEndSub, loadedSub, destroyedSub, firedSub);
             router.Start();
         }
 
