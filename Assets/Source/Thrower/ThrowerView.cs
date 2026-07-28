@@ -32,7 +32,7 @@ namespace BalloonParty.Thrower
 
         public bool IsAiming => Input.GetMouseButton(0);
 
-        public bool FireReleased => Input.GetMouseButtonUp(0);
+        public bool FireReleased => Input.GetMouseButtonUp(0) && Input.touchCount < 3;
 
         private void Awake()
         {
