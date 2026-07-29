@@ -43,6 +43,11 @@ namespace BalloonParty.Tests.Audio
             _player.Play(GameSoundId.GameplayLoopDay, null).Returns(_dayHandle);
             _player.Play(GameSoundId.GameplayLoopNight, null).Returns(_nightHandle);
 
+            // Self-healing in Tick checks IsAlive; return true for valid handles by default.
+            _player.IsAlive(_dayHandle).Returns(true);
+            _player.IsAlive(_nightHandle).Returns(true);
+            _player.IsAlive(_launchHandle).Returns(true);
+
             _state = new ReactiveProperty<NavigationState>(NavigationState.Launch);
             var navigation = Substitute.For<INavigation>();
             navigation.Current.Returns(_state);
@@ -394,6 +399,100 @@ namespace BalloonParty.Tests.Audio
 
             _player.Received().SetVolumeFactor(_dayHandle, 0f);
             _player.Received().SetVolumeFactor(_nightHandle, 0f);
+        }
+
+        // -------------------------------------------------------------------
+        // Self-healing — voice-limiter steal detection and recovery.
+        // Conditional branching with side effect: wrong guard or missing
+        // handle-clear leaves music permanently mute after a steal.
+        // -------------------------------------------------------------------
+
+        [Test]
+        public void Tick_DayLoopStolen_ReplaysGameplayLoopDay()
+        {
+            EnterGame();
+            _player.ClearReceivedCalls();
+
+            // Simulate the voice limiter stealing the day loop's slot.
+            _player.IsAlive(_dayHandle).Returns(false);
+
+            // After re-play, the new handle must be alive for subsequent ticks.
+            var revivedDay = new SoundHandle(3, 2u);
+            _player.Play(GameSoundId.GameplayLoopDay, null).Returns(revivedDay);
+            _player.IsAlive(revivedDay).Returns(true);
+
+            _router.Tick();
+
+            _player.Received(1).Play(GameSoundId.GameplayLoopDay, null);
+            // Night was still alive — should not re-play.
+            _player.DidNotReceive().Play(GameSoundId.GameplayLoopNight, null);
+        }
+
+        [Test]
+        public void Tick_NightLoopStolen_ReplaysGameplayLoopNight()
+        {
+            EnterGame();
+            _player.ClearReceivedCalls();
+
+            // Simulate the voice limiter stealing the night loop's slot.
+            _player.IsAlive(_nightHandle).Returns(false);
+
+            var revivedNight = new SoundHandle(4, 2u);
+            _player.Play(GameSoundId.GameplayLoopNight, null).Returns(revivedNight);
+            _player.IsAlive(revivedNight).Returns(true);
+
+            _router.Tick();
+
+            _player.DidNotReceive().Play(GameSoundId.GameplayLoopDay, null);
+            _player.Received(1).Play(GameSoundId.GameplayLoopNight, null);
+        }
+
+        [Test]
+        public void Tick_BothLoopsStolen_ReplaysBothAndReappliesVolumeAndPitch()
+        {
+            _timeOfDayNight.IsNight.Returns(false);
+            _dangerLevel.Value = 0.5f;
+            EnterGame();
+            _player.ClearReceivedCalls();
+
+            // Both loops killed (e.g. StopAllVoices from a scope reset racing the router).
+            _player.IsAlive(_dayHandle).Returns(false);
+            _player.IsAlive(_nightHandle).Returns(false);
+
+            var revivedDay = new SoundHandle(5, 2u);
+            var revivedNight = new SoundHandle(6, 2u);
+            _player.Play(GameSoundId.GameplayLoopDay, null).Returns(revivedDay);
+            _player.Play(GameSoundId.GameplayLoopNight, null).Returns(revivedNight);
+            _player.IsAlive(revivedDay).Returns(true);
+            _player.IsAlive(revivedNight).Returns(true);
+
+            _router.Tick();
+
+            // Both re-played.
+            _player.Received(1).Play(GameSoundId.GameplayLoopDay, null);
+            _player.Received(1).Play(GameSoundId.GameplayLoopNight, null);
+
+            // Volume re-applied: day is active (night is false), so day = 1, night = 0.
+            _player.Received().SetVolumeFactor(revivedDay, 1f);
+            _player.Received().SetVolumeFactor(revivedNight, 0f);
+
+            // Pitch re-applied at the current danger level.
+            var expectedPitch = Mathf.Pow(2f, -3f / 12f);
+            _player.Received().SetPitch(revivedDay, expectedPitch, 0.4f);
+            _player.Received().SetPitch(revivedNight, expectedPitch, 0.4f);
+        }
+
+        [Test]
+        public void Tick_LoopsAlive_DoesNotReplay()
+        {
+            EnterGame();
+            _player.ClearReceivedCalls();
+
+            // Both loops healthy — Tick should not touch Play.
+            _router.Tick();
+
+            _player.DidNotReceive().Play(GameSoundId.GameplayLoopDay, null);
+            _player.DidNotReceive().Play(GameSoundId.GameplayLoopNight, null);
         }
     }
 }

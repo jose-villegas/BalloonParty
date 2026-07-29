@@ -72,6 +72,28 @@ namespace BalloonParty.Audio.Routing
                 return;
             }
 
+            // Detect loops silently killed by voice-limiter stealing or StopAllVoices. Clear the
+            // stale handle so StartGameplay re-plays the loop, restoring music seamlessly.
+            var revived = false;
+            if (_dayHandle.IsValid && !_player.IsAlive(_dayHandle))
+            {
+                _dayHandle = SoundHandle.None;
+                revived = true;
+            }
+
+            if (_nightHandle.IsValid && !_player.IsAlive(_nightHandle))
+            {
+                _nightHandle = SoundHandle.None;
+                revived = true;
+            }
+
+            if (revived)
+            {
+                StartGameplay();
+                ApplyVolume();
+                ApplyPitch();
+            }
+
             var night = _timeOfDayNight.IsNight;
             if (night != _wasNight)
             {

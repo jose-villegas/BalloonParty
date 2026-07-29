@@ -177,6 +177,22 @@ namespace BalloonParty.Audio
             FadeOutSlot(voiceId);
         }
 
+        public bool IsAlive(SoundHandle handle)
+        {
+            if (!handle.IsValid)
+            {
+                return false;
+            }
+
+            var voiceId = handle.VoiceId;
+            if (voiceId < 0 || voiceId >= _slots.Length)
+            {
+                return false;
+            }
+
+            return _slots[voiceId].Generation == handle.Generation && _slots[voiceId].Voice != null;
+        }
+
         public void SetStreak(int streak)
         {
             _currentStreak = streak;

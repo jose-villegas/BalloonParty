@@ -14,5 +14,9 @@ namespace BalloonParty.Audio
         void SetPitch(SoundHandle handle, float pitch, float seconds = 0f);
 
         void Stop(SoundHandle handle);
+
+        // Returns true when the voice behind this handle is still playing (same generation, voice
+        // not null). Use to detect loops that were silently stolen by the voice limiter.
+        bool IsAlive(SoundHandle handle);
     }
 }

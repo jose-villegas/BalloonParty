@@ -1170,8 +1170,8 @@ MonoBehaviour:
     _pan2D: 1
     _delaySeconds: 0
     _fadeInSeconds: 0
-    _fadeOutSeconds: 0.5
-    _maxPlaySeconds: 1.2
+    _fadeOutSeconds: 0.7
+    _maxPlaySeconds: 1
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
