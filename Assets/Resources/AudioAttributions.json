@@ -778,5 +778,25 @@
     "LicenseName": "Attribution",
     "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
     "RequiresAttribution": true
+  },
+  {
+    "SoundId": "BalloonPopTough",
+    "ProviderId": 548269,
+    "Name": "BBeats AirBas 36.wav",
+    "Author": "Department64",
+    "SoundUrl": "https://freesound.org/people/Department64/sounds/548269/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "BalloonPopTougher",
+    "ProviderId": 239515,
+    "Name": "sine-sub-bass-e1-g0.wav",
+    "Author": "luckylittleraven",
+    "SoundUrl": "https://freesound.org/people/luckylittleraven/sounds/239515/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "http://creativecommons.org/licenses/by/3.0/",
+    "RequiresAttribution": true
   }
 ]

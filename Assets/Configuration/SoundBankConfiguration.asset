@@ -676,11 +676,11 @@ MonoBehaviour:
     _fetchPrompt: button
   - _channel: 0
     _clips:
-    - {fileID: 8300000, guid: 471eac240877c45ebba2485367778f53, type: 3}
+    - {fileID: 8300000, guid: 297a299cdc6ba4fb68f02c3bebf8e8b0, type: 3}
     _clipPickMode: 0
     _clipWrapMode: 0
-    _pitchRange: {x: 1, y: 3}
-    _volumeRange: {x: 5, y: 5}
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 1, y: 1}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
     _priority: 128
@@ -697,7 +697,7 @@ MonoBehaviour:
     _melodicSkipSteps: 1
     _tensionSemitones: 0
     _layers: []
-    _fetchPrompt: 
+    _fetchPrompt: bass air
   - _channel: 0
     _clips:
     - {fileID: 8300000, guid: c1486b83bd3e3422db22f1283185dd83, type: 3}
@@ -1157,11 +1157,11 @@ MonoBehaviour:
     _fetchPrompt: 
   - _channel: 0
     _clips:
-    - {fileID: 8300000, guid: a1ff6e91bcb2f45109bfc8139a72f332, type: 3}
+    - {fileID: 8300000, guid: 69891ea74c16c4a00bfe6742a2943c4b, type: 3}
     _clipPickMode: 0
     _clipWrapMode: 0
     _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 2, y: 2}
+    _volumeRange: {x: 1.2, y: 1.2}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
     _priority: 150
@@ -1170,15 +1170,15 @@ MonoBehaviour:
     _pan2D: 1
     _delaySeconds: 0
     _fadeInSeconds: 0
-    _fadeOutSeconds: 0
-    _maxPlaySeconds: 0
+    _fadeOutSeconds: 0.5
+    _maxPlaySeconds: 1.2
     _stopsOnPlay: 
     _melodicMode: 0
     _melodicMaxOctaves: 2
     _melodicSkipSteps: 1
     _tensionSemitones: 0
     _layers: []
-    _fetchPrompt: low bass string
+    _fetchPrompt: low e bass
   - _channel: 0
     _clips:
     - {fileID: 8300000, guid: c1ad86570c491441486dc69979a91eab, type: 3}
