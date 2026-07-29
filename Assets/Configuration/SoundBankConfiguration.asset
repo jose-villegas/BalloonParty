@@ -45,7 +45,7 @@ MonoBehaviour:
     _volumeRange: {x: 1, y: 1}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
-    _priority: 128
+    _priority: 150
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
@@ -805,7 +805,7 @@ MonoBehaviour:
     _volumeRange: {x: 0.1, y: 0.1}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 1
-    _priority: 128
+    _priority: 256
     _loop: 1
     _singleInstance: 1
     _pan2D: 1
@@ -829,7 +829,7 @@ MonoBehaviour:
     _volumeRange: {x: 1, y: 1}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
-    _priority: 128
+    _priority: 150
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
@@ -853,7 +853,7 @@ MonoBehaviour:
     _volumeRange: {x: 1, y: 1}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
-    _priority: 128
+    _priority: 150
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
@@ -877,7 +877,7 @@ MonoBehaviour:
     _volumeRange: {x: 0.2, y: 0.3}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 8
-    _priority: 128
+    _priority: 150
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
@@ -901,7 +901,7 @@ MonoBehaviour:
     _volumeRange: {x: 100, y: 100}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
-    _priority: 128
+    _priority: 150
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
@@ -925,7 +925,7 @@ MonoBehaviour:
     _volumeRange: {x: 0.7, y: 0.7}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
-    _priority: 128
+    _priority: 150
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
@@ -1116,7 +1116,7 @@ MonoBehaviour:
     _volumeRange: {x: 0.00125, y: 0.05}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
-    _priority: 128
+    _priority: 256
     _loop: 1
     _singleInstance: 0
     _pan2D: 1
@@ -1140,7 +1140,7 @@ MonoBehaviour:
     _volumeRange: {x: 0.00125, y: 0.05}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
-    _priority: 128
+    _priority: 256
     _loop: 1
     _singleInstance: 0
     _pan2D: 1
@@ -1164,7 +1164,7 @@ MonoBehaviour:
     _volumeRange: {x: 2, y: 2}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
-    _priority: 128
+    _priority: 150
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
@@ -1188,7 +1188,7 @@ MonoBehaviour:
     _volumeRange: {x: 0.5, y: 0.5}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
-    _priority: 128
+    _priority: 150
     _loop: 0
     _singleInstance: 0
     _pan2D: 1
@@ -1205,5 +1205,5 @@ MonoBehaviour:
     _fetchPrompt: bump ball
   _melodicScale: 0000000002000000040000000700000009000000
   _melodicRootSemitone: 0
-  _globalVoiceCap: 32
+  _globalVoiceCap: 64
   _dangerLevelThreshold: 0.6
