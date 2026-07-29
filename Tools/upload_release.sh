@@ -2,7 +2,7 @@
 # upload_release.sh — Creates a GitHub release and uploads APK assets.
 # Called by the Unity editor tool; not intended for direct use.
 #
-# Usage: upload_release.sh <version> <token> <repo> <checksums> <apk_path> [apk_path ...]
+# Usage: upload_release.sh <version> <token> <repo> <summary> <checksums> <apk_path> [apk_path ...]
 #
 # Steps:
 #   1. Validates inputs
@@ -14,11 +14,12 @@
 
 set -euo pipefail
 
-VERSION="${1:?Usage: upload_release.sh <version> <token> <repo> <checksums> <apk ...>}"
+VERSION="${1:?Usage: upload_release.sh <version> <token> <repo> <summary> <checksums> <apk ...>}"
 TOKEN="${2:?GitHub token required}"
 REPO="${3:?Repository (owner/name) required}"
-CHECKSUMS="${4:?Checksums string required}"
-shift 4
+SUMMARY="${4:-}"
+CHECKSUMS="${5:?Checksums string required}"
+shift 5
 
 if [ $# -eq 0 ]; then
     echo "ERROR: At least one APK path is required." >&2
@@ -53,7 +54,15 @@ else
     RANGE_LABEL="Recent changes (last 30 commits)"
 fi
 
-RELEASE_BODY="## ${RANGE_LABEL}
+# --- Build summary section ---
+SUMMARY_SECTION=""
+if [ -n "$SUMMARY" ]; then
+    SUMMARY_SECTION="${SUMMARY}
+
+"
+fi
+
+RELEASE_BODY="${SUMMARY_SECTION}## ${RANGE_LABEL}
 
 ${CHANGELOG}
 

@@ -32,6 +32,7 @@ namespace BalloonParty.Editor.Release
         private const string BuildInfoPath = "Assets/Resources/BuildInfo.json";
 
         [SerializeField] private string version = "";
+        [SerializeField] private string summary = "";
 
         private string outputLog = "";
         private Vector2 scrollPos;
@@ -61,6 +62,7 @@ namespace BalloonParty.Editor.Release
             EditorGUILayout.Space(8);
 
             DrawVersionField();
+            DrawSummaryField();
             EditorGUILayout.Space(12);
 
             DrawUploadButton();
@@ -104,6 +106,13 @@ namespace BalloonParty.Editor.Release
         {
             EditorGUILayout.LabelField("Version (e.g. 1.2.0)", EditorStyles.miniLabel);
             version = EditorGUILayout.TextField(version);
+        }
+
+        private void DrawSummaryField()
+        {
+            EditorGUILayout.Space(4);
+            EditorGUILayout.LabelField("Release Summary (shown above changelog)", EditorStyles.miniLabel);
+            summary = EditorGUILayout.TextArea(summary, GUILayout.Height(60));
         }
 
         private void DrawUploadButton()
@@ -253,6 +262,7 @@ namespace BalloonParty.Editor.Release
                     return;
                 }
 
+                var escapedSummary = summary.Replace("\"", "\\\"");
                 var checksumArg = string.Join("\\n", checksumLines);
                 var apkArgs = string.Join(" ", builtApks.Select(p => $"\"{p}\""));
                 var psi = new ProcessStartInfo
@@ -260,7 +270,7 @@ namespace BalloonParty.Editor.Release
                     FileName = "/bin/bash",
                     Arguments =
                         $"\"{scriptPath}\" \"{version}\" \"{token}\" \"{Repository}\" " +
-                        $"\"{checksumArg}\" {apkArgs}",
+                        $"\"{escapedSummary}\" \"{checksumArg}\" {apkArgs}",
                     WorkingDirectory = projectRoot,
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
