@@ -489,6 +489,7 @@ namespace BalloonParty.Game.Level
 
         private void PresentLevelUp()
         {
+            Log.Assert(!_projectileInFlight, "Level", "PresentLevelUp called with projectile still in flight");
             var completedColors = _levelParams.Current.AllowedColors;
             _phase.Value = LevelUpPhase.Pending;
             _pendingNewLevel = _level.Value + 1;

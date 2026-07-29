@@ -83,7 +83,7 @@ namespace BalloonParty.Projectile.View
         private bool _shieldShown;
         private ProjectileShieldView _shieldView;
         private Vector3 _baseScale;
-        private bool _disappearing;
+        private bool _disappearing; // Invariant: _disappearing ⟹ _destroyed
         private bool _destroyed;
         private Color[] _paletteColors;
         private Color _glowColor;
@@ -124,7 +124,7 @@ namespace BalloonParty.Projectile.View
 
         private void Update()
         {
-            if (_model == null || _pauseService.IsAnyPaused.Value)
+            if (_model == null || _pauseService.IsAnyPaused.Value || _destroyed)
             {
                 return;
             }
@@ -183,7 +183,7 @@ namespace BalloonParty.Projectile.View
 
         private void FixedUpdate()
         {
-            if (_disappearing || _model == null || !_model.IsFree || _pauseService.IsAnyPaused.Value)
+            if (_disappearing || _destroyed || _model == null || !_model.IsFree || _pauseService.IsAnyPaused.Value)
             {
                 return;
             }
@@ -216,7 +216,7 @@ namespace BalloonParty.Projectile.View
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (_disappearing || _model == null || !_model.IsFree || _pauseService.IsAnyPaused.Value)
+            if (_disappearing || _destroyed || _model == null || !_model.IsFree || _pauseService.IsAnyPaused.Value)
             {
                 return;
             }
@@ -253,7 +253,7 @@ namespace BalloonParty.Projectile.View
         // through. The guard only exists to stop an immediate re-hit on the overlap a deflect leaves behind.
         private void OnTriggerExit2D(Collider2D other)
         {
-            if (_model == null || other.gameObject.layer != BalloonsLayer)
+            if (_destroyed || _model == null || other.gameObject.layer != BalloonsLayer)
             {
                 return;
             }
@@ -362,6 +362,11 @@ namespace BalloonParty.Projectile.View
             }
 
             _destroyed = true;
+
+            // Kill the light immediately — waiting for OnDespawned would leave it visible through
+            // the disappear animation and any time-scale freeze.
+            LifecycleHelper.DisposeAndClear(ref _lightRegistration);
+            _light = null;
 
             // Shatter any toughs the shot plowed through but never discharged — a piercing run that
             // ends (out of shields / despawn) with pending toughs flushes them here so none are dropped,
@@ -617,7 +622,7 @@ namespace BalloonParty.Projectile.View
 
         private void OnBalloonDeflected(BalloonDeflectedMessage msg)
         {
-            if (_model == null || msg.Balloon != _model.LastHitBalloon)
+            if (_destroyed || _model == null || msg.Balloon != _model.LastHitBalloon)
             {
                 return;
             }
