@@ -439,7 +439,7 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 shadowAlpha *= IN.color.a * _ShadowColor.a;
                 shadowAlpha *= IN.shadowFade;
 
-                fixed3 shadowRGB = _ShadowColor.rgb * IN.color.rgb;
+                fixed3 shadowRGB = _ShadowColor.rgb;
 #endif
 
                 // Early discard when both sprite and shadow are invisible
@@ -525,10 +525,11 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 // Overlay fibers on top of crack color
                 col = lerp(col, fiberColor, fibers * (1.0 - rim));
 
-                // Diffuse term: the composed body (rubber/ash/grain/rim/cracks/fibers) is albedo,
-                // lit by the scene light — same response as Sprite/Diffuse. Without this the tough
-                // reads self-illuminated when the light dims. The shadow half below stays dark art.
-                col *= lerp(fixed3(1.0, 1.0, 1.0), IN.lightTint, _LightInfluence);
+                // Diffuse term via luminance recolor: extract brightness, re-apply
+                // in the scene light's hue so coloured lighting reads strongly on the
+                // dark rubber body instead of vanishing in a plain multiply.
+                float lightLum = dot(col, float3(0.299, 0.587, 0.114));
+                col = lerp(col, lightLum * IN.lightTint, _LightInfluence);
 
                 // ---- Composite shadow under balloon (premultiplied alpha) ----
                 // Blend mode is One / OneMinusSrcAlpha, so output is premultiplied.
