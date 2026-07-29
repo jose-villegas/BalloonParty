@@ -531,6 +531,13 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 float lightLum = dot(col, float3(0.299, 0.587, 0.114));
                 col = lerp(col, lightLum * IN.lightTint, _LightInfluence);
 
+                // Tint via luminance-normalized multiply: redistributes body
+                // brightness into the tint's hue without darkening.
+                // White → identity, saturated tint → visible hue shift at
+                // the same overall brightness, detail fully preserved.
+                float tintLum = dot(IN.color.rgb, float3(0.299, 0.587, 0.114));
+                col *= IN.color.rgb / max(tintLum, 0.001);
+
                 // ---- Composite shadow under balloon (premultiplied alpha) ----
                 // Blend mode is One / OneMinusSrcAlpha, so output is premultiplied.
                 // Porter-Duff "sprite over shadow":

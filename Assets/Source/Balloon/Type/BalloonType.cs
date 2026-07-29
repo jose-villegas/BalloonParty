@@ -12,6 +12,8 @@ namespace BalloonParty.Balloon.Type
         SimpleGold,
 
         // A colourable BalloonModel that starts in rainbow mode — see RainbowBalloonVariant.
-        Rainbow
+        Rainbow,
+
+        Tougher
     }
 }
