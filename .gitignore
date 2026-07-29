@@ -55,6 +55,9 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
+# Generated at build time by the release tool
+Assets/Resources/BuildInfo.json
+
 # Crashlytics generated file
 crashlytics-build.properties
 

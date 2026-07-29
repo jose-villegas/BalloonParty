@@ -1,32 +1,42 @@
 #!/usr/bin/env bash
-# upload_release.sh — Creates a GitHub release with an APK asset.
+# upload_release.sh — Creates a GitHub release and uploads APK assets.
 # Called by the Unity editor tool; not intended for direct use.
 #
-# Usage: upload_release.sh <version> <apk_path> <token> <repo> [commit_sha]
+# Usage: upload_release.sh <version> <token> <repo> <checksums> <apk_path> [apk_path ...]
 #
 # Steps:
 #   1. Validates inputs
 #   2. Generates changelog from commits since last tag
 #   3. Creates an annotated git tag vX.Y.Z
 #   4. Pushes the tag to origin
-#   5. Creates a GitHub release via the REST API
-#   6. Uploads the APK as a release asset
+#   5. Creates a GitHub release via the REST API (with checksums + commit info)
+#   6. Uploads each APK as a release asset
 
 set -euo pipefail
 
-VERSION="${1:?Usage: upload_release.sh <version> <apk_path> <token> <repo> [commit_sha]}"
-APK_PATH="${2:?APK path required}"
-TOKEN="${3:?GitHub token required}"
-REPO="${4:?Repository (owner/name) required}"
-COMMIT_SHA="${5:-$(git rev-parse HEAD)}"
+VERSION="${1:?Usage: upload_release.sh <version> <token> <repo> <checksums> <apk ...>}"
+TOKEN="${2:?GitHub token required}"
+REPO="${3:?Repository (owner/name) required}"
+CHECKSUMS="${4:?Checksums string required}"
+shift 4
 
-TAG="v${VERSION}"
-
-# --- Validate ---
-if [ ! -f "$APK_PATH" ]; then
-    echo "ERROR: APK not found at: $APK_PATH" >&2
+if [ $# -eq 0 ]; then
+    echo "ERROR: At least one APK path is required." >&2
     exit 1
 fi
+
+APK_PATHS=("$@")
+TAG="v${VERSION}"
+COMMIT_SHA=$(git rev-parse HEAD)
+TREE_HASH=$(git rev-parse HEAD^{tree})
+
+# --- Validate ---
+for apk in "${APK_PATHS[@]}"; do
+    if [ ! -f "$apk" ]; then
+        echo "ERROR: APK not found at: $apk" >&2
+        exit 1
+    fi
+done
 
 if git rev-parse "$TAG" >/dev/null 2>&1; then
     echo "ERROR: Tag $TAG already exists. Choose a different version." >&2
@@ -48,10 +58,27 @@ RELEASE_BODY="## ${RANGE_LABEL}
 ${CHANGELOG}
 
 ---
-**Build info**
+**Build provenance**
 - Version: \`${VERSION}\`
-- Commit: \`${COMMIT_SHA}\`
-- Built: $(date -u '+%Y-%m-%d %H:%M UTC')"
+- Commit: [\`${COMMIT_SHA:0:10}\`](https://github.com/${REPO}/commit/${COMMIT_SHA})
+- Tree hash: \`${TREE_HASH}\`
+- Built: $(date -u '+%Y-%m-%d %H:%M UTC')
+
+To verify a build came from this exact source: check out \`${TAG}\`, confirm
+\`git rev-parse HEAD^{tree}\` matches the tree hash above. Each APK also contains
+\`Resources/BuildInfo.json\` with the commit and tree hash baked in.
+
+**SHA-256 checksums**
+\`\`\`
+$(echo -e "$CHECKSUMS")
+\`\`\`
+
+**Assets**
+| File | Variant |
+|------|---------|
+| \`BalloonParty-${VERSION}-release.apk\` | Release (store-ready) |
+| \`BalloonParty-${VERSION}-release-cheats.apk\` | Release + cheat console |
+| \`BalloonParty-${VERSION}-dev.apk\` | Development (profiler, debug logs) |"
 
 echo "--- Release Notes ---"
 echo "$RELEASE_BODY"
@@ -84,33 +111,43 @@ UPLOAD_URL=$(echo "$RELEASE_RESPONSE" | jq -r '.upload_url' | sed 's/{?name,labe
 if [ -z "$UPLOAD_URL" ] || [ "$UPLOAD_URL" = "null" ]; then
     echo "ERROR: Failed to create release. Response:" >&2
     echo "$RELEASE_RESPONSE" >&2
-    # Clean up: delete the tag we just pushed
     git push origin --delete "$TAG" 2>/dev/null || true
     git tag -d "$TAG" 2>/dev/null || true
     exit 1
 fi
 
-# --- Upload APK ---
-APK_NAME="BalloonParty-${VERSION}.apk"
-echo "Uploading ${APK_NAME}..."
-UPLOAD_RESPONSE=$(curl -s -X POST \
-    -H "Authorization: token ${TOKEN}" \
-    -H "Accept: application/vnd.github+json" \
-    -H "Content-Type: application/vnd.android.package-archive" \
-    "${UPLOAD_URL}?name=${APK_NAME}" \
-    --data-binary "@${APK_PATH}")
+# --- Upload APKs ---
+FAILED=0
+for apk in "${APK_PATHS[@]}"; do
+    APK_NAME=$(basename "$apk")
+    echo "Uploading ${APK_NAME}..."
+    UPLOAD_RESPONSE=$(curl -s -X POST \
+        -H "Authorization: token ${TOKEN}" \
+        -H "Accept: application/vnd.github+json" \
+        -H "Content-Type: application/vnd.android.package-archive" \
+        "${UPLOAD_URL}?name=${APK_NAME}" \
+        --data-binary "@${apk}")
 
-DOWNLOAD_URL=$(echo "$UPLOAD_RESPONSE" | jq -r '.browser_download_url')
+    DOWNLOAD_URL=$(echo "$UPLOAD_RESPONSE" | jq -r '.browser_download_url')
 
-if [ -z "$DOWNLOAD_URL" ] || [ "$DOWNLOAD_URL" = "null" ]; then
-    echo "ERROR: Failed to upload APK. Response:" >&2
-    echo "$UPLOAD_RESPONSE" >&2
+    if [ -z "$DOWNLOAD_URL" ] || [ "$DOWNLOAD_URL" = "null" ]; then
+        echo "WARNING: Failed to upload ${APK_NAME}:" >&2
+        echo "$UPLOAD_RESPONSE" >&2
+        FAILED=1
+    else
+        echo "  -> $DOWNLOAD_URL"
+    fi
+done
+
+if [ "$FAILED" -eq 1 ]; then
+    echo ""
+    echo "WARNING: Some uploads failed. Check the release page for details." >&2
     exit 1
 fi
 
 echo ""
 echo "=== Release published successfully ==="
 echo "  Tag:      $TAG"
-echo "  Commit:   $COMMIT_SHA"
-echo "  APK:      $DOWNLOAD_URL"
+echo "  Commit:   ${COMMIT_SHA:0:10}"
+echo "  Assets:   ${#APK_PATHS[@]} APKs uploaded"
 echo "  Release:  https://github.com/${REPO}/releases/tag/${TAG}"
