@@ -42,6 +42,8 @@ namespace BalloonParty.Tests.Game
         private IMessageHandler<ProjectileDestroyedMessage> _destroyedHandler;
         private IMessageHandler<ProjectileFiredMessage> _firedHandler;
         private IMessageHandler<GameOverMessage> _gameOverHandler;
+        private IMessageHandler<BoardDepletedMessage> _boardDepletedHandler;
+        private IPublisher<ForceDestroyProjectileMessage> _forceDestroyPublisher;
         private LevelController _controller;
 
         [SetUp]
@@ -82,6 +84,7 @@ namespace BalloonParty.Tests.Game
 
             _levelUpPublisher = Substitute.For<IPublisher<ScoreLevelUpMessage>>();
             _abandonedPublisher = Substitute.For<IPublisher<LevelUpAbandonedMessage>>();
+            _forceDestroyPublisher = Substitute.For<IPublisher<ForceDestroyProjectileMessage>>();
 
             _controller = BuildController();
             _controller.Start();
@@ -145,12 +148,20 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<GameOverMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
+            var boardDepletedSubscriber = Substitute.For<ISubscriber<BoardDepletedMessage>>();
+            boardDepletedSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<BoardDepletedMessage>>(h => _boardDepletedHandler = h),
+                    Arg.Any<MessageHandlerFilter<BoardDepletedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
             return new LevelController(
                 _levelParams, _thresholds, _palette, _navigation, _lossForecast,
                 Substitute.For<IRetryState>(), _timeScale, _cinematics, Substitute.For<IRunConfig>(),
                 _levelUpPublisher, _abandonedPublisher,
                 trailArrivedSubscriber, abortedSubscriber, dismissedSubscriber, completedSubscriber,
-                destroyedSubscriber, loadedSubscriber, gameOverSubscriber);
+                destroyedSubscriber, loadedSubscriber, gameOverSubscriber,
+                boardDepletedSubscriber, _forceDestroyPublisher);
         }
 
         [Test]
@@ -978,6 +989,75 @@ namespace BalloonParty.Tests.Game
             _completedHandler.Handle(new LevelTransitionCompletedMessage());
         }
 
+        private void FireBoardDepleted()
+        {
+            _boardDepletedHandler.Handle(new BoardDepletedMessage());
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
+        // ForceDestroy / BoardDepleted wiring
+        // ─────────────────────────────────────────────────────────────────────
+
+        [Test]
+        public void BoardDepleted_DuringCompleting_WithProjectileInFlight_PublishesForceDestroy()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
+
+            FireBoardDepleted();
+
+            _forceDestroyPublisher.Received(1).Publish(Arg.Any<ForceDestroyProjectileMessage>());
+        }
+
+        [Test]
+        public void BoardDepleted_DuringPlaying_DoesNotPublishForceDestroy()
+        {
+            Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value);
+
+            FireBoardDepleted();
+
+            _forceDestroyPublisher.DidNotReceive().Publish(Arg.Any<ForceDestroyProjectileMessage>());
+        }
+
+        [Test]
+        public void BoardDepleted_DuringCompleting_NoProjectileInFlight_DoesNotPublishForceDestroy()
+        {
+            // Complete without a projectile in flight (e.g. cheat-triggered).
+            FireFlightEnded();
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
+            _controller.ClaimProgress(Red, 2);
+            _controller.ClaimProgress(Blue, 2);
+            // No flight → goes straight to Pending, skip this scenario.
+            Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value);
+
+            FireBoardDepleted();
+
+            _forceDestroyPublisher.DidNotReceive().Publish(Arg.Any<ForceDestroyProjectileMessage>());
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
+        // ClearRunState resets _projectileInFlight
+        // ─────────────────────────────────────────────────────────────────────
+
+        [Test]
+        public void ResetRun_ClearsProjectileInFlight_SoCompletionPresentsImmediately()
+        {
+            // A projectile is in flight, then we reset (simulating a retry mid-shot).
+            Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value);
+
+            _controller.ResetRun(2);
+
+            // Now if we complete without firing, it should present immediately (no flight hold).
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
+            _controller.ClaimProgress(Red, 1);
+            _controller.ClaimProgress(Blue, 1);
+
+            Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value,
+                "should present immediately, not hold for a stale flight");
+        }
+
         private void SetField(string fieldName, object value)
         {
             var field = typeof(LevelController).GetField(fieldName,
@@ -1038,12 +1118,20 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<GameOverMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
+            var boardDepletedSubscriber = Substitute.For<ISubscriber<BoardDepletedMessage>>();
+            boardDepletedSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<BoardDepletedMessage>>(h => _boardDepletedHandler = h),
+                    Arg.Any<MessageHandlerFilter<BoardDepletedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
             _controller = new LevelController(
                 _levelParams, _thresholds, _palette, _navigation, _lossForecast,
                 Substitute.For<IRetryState>(), _timeScale, _cinematics, runConfig,
                 _levelUpPublisher, _abandonedPublisher,
                 trailArrivedSubscriber, abortedSubscriber, dismissedSubscriber, completedSubscriber,
-                destroyedSubscriber, loadedSubscriber, gameOverSubscriber);
+                destroyedSubscriber, loadedSubscriber, gameOverSubscriber,
+                boardDepletedSubscriber, _forceDestroyPublisher);
             _controller.Start();
             FireProjectileFired();
         }

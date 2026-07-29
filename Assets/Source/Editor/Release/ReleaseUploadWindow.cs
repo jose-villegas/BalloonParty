@@ -37,6 +37,7 @@ namespace BalloonParty.Editor.Release
         private Vector2 scrollPos;
         private bool isRunning;
         private bool showToken;
+        private GUIStyle _outputStyle;
 
         [MenuItem("Tools/BalloonParty/Upload Release")]
         private static void Open()
@@ -124,8 +125,8 @@ namespace BalloonParty.Editor.Release
             EditorGUILayout.LabelField("Output", EditorStyles.miniLabel);
             scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.ExpandHeight(true));
 
-            var style = new GUIStyle(EditorStyles.textArea) { wordWrap = true };
-            EditorGUILayout.TextArea(outputLog, style, GUILayout.ExpandHeight(true));
+            _outputStyle ??= new GUIStyle(EditorStyles.textArea) { wordWrap = true };
+            EditorGUILayout.TextArea(outputLog, _outputStyle, GUILayout.ExpandHeight(true));
 
             EditorGUILayout.EndScrollView();
         }

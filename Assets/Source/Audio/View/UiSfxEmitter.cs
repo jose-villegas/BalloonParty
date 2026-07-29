@@ -11,6 +11,12 @@ namespace BalloonParty.Audio.View
     ///     Receives <see cref="ISoundPlayer"/> via VContainer's build callback injection (see
     ///     <c>GameScopeRegistration.RegisterAudio</c>).
     /// </summary>
+    /// <remarks>
+    ///     Emitters present in the scene at App-scope build time are auto-injected by
+    ///     <c>FindObjectsByType</c>. Dynamically spawned emitters must be manually injected via
+    ///     <c>resolver.Inject(emitter)</c>, otherwise the sound player will be null and <see cref="Play"/>
+    ///     will silently no-op.
+    /// </remarks>
     [DisallowMultipleComponent]
     internal sealed class UiSfxEmitter : MonoBehaviour
     {

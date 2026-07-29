@@ -18,7 +18,6 @@ namespace BalloonParty.Audio.Routing
     internal sealed class CombatSoundRouter : IStartable, IDisposable
     {
         private const int MaxRampSemitones = 12;
-        private static readonly int[] ColorRootSemitones = { 0, 4, 7, 11 };
 
         private readonly ISoundPlayer _player;
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
@@ -126,7 +125,7 @@ namespace BalloonParty.Audio.Routing
                 {
                     var color = colored.Color.Value;
                     _colorPopsThisFlight.TryGetValue(color, out var count);
-                    var rootOffset = ColorRootOffset(color);
+                    var rootOffset = MusicalPitchExtensions.ColorRootOffset(_palette.ProgressColorNames, color);
                     var ramp = Math.Min(count * MusicalPitchExtensions.WholeToneSemitones, MaxRampSemitones);
                     _player.Play(popId, message.WorldPosition, semitoneOffset: rootOffset + ramp);
                     _colorPopsThisFlight[color] = count + 1;
@@ -337,22 +336,6 @@ namespace BalloonParty.Audio.Routing
                     _goldPopsThisFlight++;
                     break;
             }
-        }
-
-        private int ColorRootOffset(string color)
-        {
-            var names = _palette.ProgressColorNames;
-            for (var i = 0; i < names.Count; i++)
-            {
-                if (string.Equals(names[i], color, StringComparison.Ordinal))
-                {
-                    return i < ColorRootSemitones.Length
-                        ? ColorRootSemitones[i]
-                        : ColorRootSemitones[ColorRootSemitones.Length - 1];
-                }
-            }
-
-            return 0;
         }
     }
 }

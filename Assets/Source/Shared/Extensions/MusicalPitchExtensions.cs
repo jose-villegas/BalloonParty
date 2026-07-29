@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BalloonParty.Shared.Extensions
@@ -7,6 +9,28 @@ namespace BalloonParty.Shared.Extensions
     {
         internal const int WholeToneSemitones = 2;
         internal const int TritoneSemitones = 6;
+
+        /// <summary>Major-chord root semitone offsets used for per-colour pitch colouring (I, III, V, VII).</summary>
+        internal static readonly int[] ColorRootSemitones = { 0, 4, 7, 11 };
+
+        /// <summary>
+        ///     Returns the semitone offset for a colour's root note, looked up by position in the
+        ///     palette's progress-colour list. Colours beyond the table repeat the last entry.
+        /// </summary>
+        internal static int ColorRootOffset(IReadOnlyList<string> progressColorNames, string color)
+        {
+            for (var i = 0; i < progressColorNames.Count; i++)
+            {
+                if (string.Equals(progressColorNames[i], color, StringComparison.Ordinal))
+                {
+                    return i < ColorRootSemitones.Length
+                        ? ColorRootSemitones[i]
+                        : ColorRootSemitones[ColorRootSemitones.Length - 1];
+                }
+            }
+
+            return 0;
+        }
 
         internal static float SemitonesToPitchMultiplier(this float semitones)
         {

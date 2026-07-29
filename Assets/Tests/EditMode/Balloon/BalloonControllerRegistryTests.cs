@@ -16,11 +16,13 @@ namespace BalloonParty.Tests.Balloon
     public class BalloonControllerRegistryTests
     {
         private BalloonControllerRegistry _registry;
+        private IPublisher<BoardDepletedMessage> _depletedPublisher;
 
         [SetUp]
         public void SetUp()
         {
-            _registry = new BalloonControllerRegistry(null, Substitute.For<IPublisher<BoardDepletedMessage>>());
+            _depletedPublisher = Substitute.For<IPublisher<BoardDepletedMessage>>();
+            _registry = new BalloonControllerRegistry(null, _depletedPublisher);
         }
 
         [Test]
@@ -109,6 +111,45 @@ namespace BalloonParty.Tests.Balloon
             _registry.Register(second, CreateController(second));
 
             Assert.AreEqual(index, second.RegistryHandle);
+        }
+
+        [Test]
+        public void Unregister_LastBalloon_PublishesBoardDepleted()
+        {
+            var model = new BalloonModel();
+            _registry.Register(model, CreateController(model));
+
+            _registry.Unregister(model);
+
+            _depletedPublisher.Received(1).Publish(Arg.Any<BoardDepletedMessage>());
+        }
+
+        [Test]
+        public void Unregister_NotLastBalloon_DoesNotPublishBoardDepleted()
+        {
+            var first = new BalloonModel();
+            var second = new BalloonModel();
+            _registry.Register(first, CreateController(first));
+            _registry.Register(second, CreateController(second));
+
+            _registry.Unregister(first);
+
+            _depletedPublisher.DidNotReceive().Publish(Arg.Any<BoardDepletedMessage>());
+        }
+
+        [Test]
+        public void Unregister_AllBalloonsOneByOne_PublishesOnlyOnLast()
+        {
+            var first = new BalloonModel();
+            var second = new BalloonModel();
+            _registry.Register(first, CreateController(first));
+            _registry.Register(second, CreateController(second));
+
+            _registry.Unregister(first);
+            _depletedPublisher.DidNotReceive().Publish(Arg.Any<BoardDepletedMessage>());
+
+            _registry.Unregister(second);
+            _depletedPublisher.Received(1).Publish(Arg.Any<BoardDepletedMessage>());
         }
 
         private static BalloonController CreateController(IWriteableBalloonModel model)

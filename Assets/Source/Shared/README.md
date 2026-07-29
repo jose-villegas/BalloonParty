@@ -48,6 +48,6 @@ Messages are the signals that decouple systems from one another. A publisher fir
 | `ItemRotationCapturedMessage` | `BalloonController` | `LaserItemHandler` |
 | `ShieldGainedMessage` | `ShieldItemHandler` | `ShieldTrailController` |
 | `LevelUpAbandonedMessage` | `LevelController` | `ThrowerController` |
-| `ForceDestroyProjectileMessage` | *(no active publisher)* | `ThrowerController` |
+| `ForceDestroyProjectileMessage` | `LevelController` | `ThrowerController` |
 
 > `NudgeMessage` lives in `Nudge/` (not `Messages/`) — it is specific to the nudge system and carries `NudgeType` and `NudgeOverride[]` types from that namespace.

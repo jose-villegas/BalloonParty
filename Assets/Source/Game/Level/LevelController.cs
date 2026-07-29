@@ -43,6 +43,8 @@ namespace BalloonParty.Game.Level
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly ISubscriber<ProjectileFiredMessage> _firedSubscriber;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
+        private readonly ISubscriber<BoardDepletedMessage> _boardDepletedSubscriber;
+        private readonly IPublisher<ForceDestroyProjectileMessage> _forceDestroyPublisher;
 
         private readonly ReactiveProperty<int> _level = new(1);
         private readonly ReactiveProperty<LevelUpPhase> _phase = new(LevelUpPhase.Playing);
@@ -58,7 +60,9 @@ namespace BalloonParty.Game.Level
         private IDisposable _destroyedSubscription;
         private IDisposable _firedSubscription;
         private IDisposable _gameOverSubscription;
+        private IDisposable _boardDepletedSubscription;
         private AnimationCurve _beatCurve;
+        private float _beatDuration;
         private float _completingElapsed;
         private float _rampUpElapsed;
         private bool _windowAOpen;
@@ -86,7 +90,9 @@ namespace BalloonParty.Game.Level
             ISubscriber<LevelTransitionCompletedMessage> transitionCompletedSubscriber,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             ISubscriber<ProjectileFiredMessage> firedSubscriber,
-            ISubscriber<GameOverMessage> gameOverSubscriber)
+            ISubscriber<GameOverMessage> gameOverSubscriber,
+            ISubscriber<BoardDepletedMessage> boardDepletedSubscriber,
+            IPublisher<ForceDestroyProjectileMessage> forceDestroyPublisher)
         {
             _levelParams = levelParams;
             _thresholds = thresholds;
@@ -106,6 +112,8 @@ namespace BalloonParty.Game.Level
             _destroyedSubscriber = destroyedSubscriber;
             _firedSubscriber = firedSubscriber;
             _gameOverSubscriber = gameOverSubscriber;
+            _boardDepletedSubscriber = boardDepletedSubscriber;
+            _forceDestroyPublisher = forceDestroyPublisher;
         }
 
         public IReadOnlyReactiveProperty<int> Level => _level;
@@ -120,6 +128,7 @@ namespace BalloonParty.Game.Level
             ClearRunState();
 
             _beatCurve = _cinematics.EntryOf(CinematicState.LevelCompleteHit).Rig.TimeScaleCurve;
+            _beatDuration = _beatCurve.Duration();
             _trailSubscription = _trailArrivedSubscriber.Subscribe(OnTrailArrived);
             _abortedSubscription = _abortedSubscriber.Subscribe(_ => OnLevelUpAborted());
 
@@ -131,6 +140,7 @@ namespace BalloonParty.Game.Level
             _destroyedSubscription = _destroyedSubscriber.Subscribe(_ => OnFlightEnded());
             _firedSubscription = _firedSubscriber.Subscribe(_ => _projectileInFlight = true);
             _gameOverSubscription = _gameOverSubscriber.Subscribe(_ => AbandonCeremony("game over"));
+            _boardDepletedSubscription = _boardDepletedSubscriber.Subscribe(_ => OnBoardDepleted());
         }
 
         public void ResetRun(int generation)
@@ -148,6 +158,7 @@ namespace BalloonParty.Game.Level
             _destroyedSubscription?.Dispose();
             _firedSubscription?.Dispose();
             _gameOverSubscription?.Dispose();
+            _boardDepletedSubscription?.Dispose();
         }
 
         public int GetProgress(string colorName)
@@ -256,8 +267,7 @@ namespace BalloonParty.Game.Level
 
                 if (_windowAOpen)
                 {
-                    var duration = _beatCurve.Duration();
-                    var t = duration > 0f ? Mathf.Clamp01(_completingElapsed / duration) : 1f;
+                    var t = _beatDuration > 0f ? Mathf.Clamp01(_completingElapsed / _beatDuration) : 1f;
 
                     if (t >= 1f)
                     {
@@ -311,6 +321,7 @@ namespace BalloonParty.Game.Level
             _pendingNewLevel = 0;
             _windowAOpen = false;
             _completingElapsed = 0f;
+            _projectileInFlight = false;
             ReleaseCeremonyTimeScale();
             // The excess bank is run-scoped — cleared here (fresh run), but NOT at level-up, where it keeps
             // accumulating across the run.
@@ -503,6 +514,16 @@ namespace BalloonParty.Game.Level
             ReleaseCeremonyTimeScale();
             _phase.Value = LevelUpPhase.Playing;
             _abandonedPublisher.Publish(new LevelUpAbandonedMessage());
+        }
+
+        // The board ran out of balloons organically — if the ceremony is waiting for the projectile,
+        // force it to die so the ceremony can proceed instead of stalling until the watchdog.
+        private void OnBoardDepleted()
+        {
+            if (_phase.Value == LevelUpPhase.Completing && _projectileInFlight)
+            {
+                _forceDestroyPublisher.Publish(default);
+            }
         }
 
         private void ReleaseCeremonyTimeScale()

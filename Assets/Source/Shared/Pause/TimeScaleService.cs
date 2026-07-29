@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Game.Run;
+using BalloonParty.Shared.Diagnostics;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -54,6 +55,8 @@ namespace BalloonParty.Shared.Pause
         // which the phase machine already forbids.
         public void ClaimExclusive(TimeScaleSource source, float value)
         {
+            Log.Assert(_exclusiveOwner == null || _exclusiveOwner == source,
+                "TimeScale", $"Two different sources competing for exclusivity: {_exclusiveOwner} vs {source}");
             _exclusiveOwner = source;
             _claims[source] = Mathf.Max(0f, value);
             Apply();
