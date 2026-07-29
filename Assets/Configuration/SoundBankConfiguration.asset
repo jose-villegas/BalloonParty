@@ -1161,7 +1161,7 @@ MonoBehaviour:
     _clipPickMode: 0
     _clipWrapMode: 0
     _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 1, y: 1}
+    _volumeRange: {x: 2, y: 2}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
     _priority: 128
@@ -1185,7 +1185,7 @@ MonoBehaviour:
     _clipPickMode: 0
     _clipWrapMode: 0
     _pitchRange: {x: 1, y: 1}
-    _volumeRange: {x: 0.7, y: 0.7}
+    _volumeRange: {x: 0.5, y: 0.5}
     _cooldownSeconds: 0
     _maxConcurrentVoices: 4
     _priority: 128
