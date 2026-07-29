@@ -336,9 +336,9 @@ namespace BalloonParty.Tests.ShotSolver
             // ShieldLostMessage/HasRainbowBuff=false fire on every wall decrement regardless of a same-
             // step refund (mirrors WallBounceEndCondition). Red(1*2, buffed) then the wall — if the buff
             // wrongly survived the refunded bounce, the trailing Green pop would keep climbing the same
-            // (colour-agnostic) streak to 1*3 = 3; ended correctly, a real colour change resets it to
-            // 1*1 = 1, for a total of 3 rather than 5.
-            Assert.AreEqual((1 * 2) + (1 * 1), refunding.RawScore, "the buff must end at the wall even though that same bounce was refund-covered");
+            // (colour-agnostic) streak to 1*3 = 3; ended correctly, the rainbow carry transfers the
+            // streak across the colour change: Green scores 1*3, for a total of 5.
+            Assert.AreEqual((1 * 2) + (1 * 3), refunding.RawScore, "the buff must end at the wall even though that same bounce was refund-covered");
 
             var nonRefundingBoard = new[]
             {

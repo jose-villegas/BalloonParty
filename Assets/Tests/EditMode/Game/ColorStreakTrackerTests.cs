@@ -148,27 +148,63 @@ namespace BalloonParty.Tests.Game
         // ─── Rainbow Streak Carry ───────────────────────────────────────────
 
         [Test]
-        public void RecordWildcard_ArmsCarry_NextDifferentColorInheritsStreak()
+        public void Chain_Rainbow_Color1_Rainbow_Gives3x()
         {
-            _tracker.Record("Green");
-            _tracker.Record("Green");
-            // Wildcard (rainbow pop): streak climbs to 3, carry armed
-            _tracker.RecordWildcard();
-
-            // Different color inherits the streak (3+1 = 4)
-            Assert.AreEqual(4, _tracker.Record("Purple"));
+            // rainbow → color1 → rainbow = 3× color1
+            Assert.AreEqual(1, _tracker.RecordWildcard());
+            Assert.AreEqual(2, _tracker.Record("Green"));
+            Assert.AreEqual(3, _tracker.RecordWildcard());
+            Assert.AreEqual("Green", _tracker.LastColor);
         }
 
         [Test]
-        public void SequentialWildcards_BuildStreak_ThenCarryToColor()
+        public void Chain_Rainbow_Rainbow_Color1_Gives3x()
         {
-            // Three sequential rainbow pops (wildcard) — streak climbs each time
-            _tracker.RecordWildcard();
-            _tracker.RecordWildcard();
-            _tracker.RecordWildcard();
+            // rainbow → rainbow → color1 = 3× color1
+            Assert.AreEqual(1, _tracker.RecordWildcard());
+            Assert.AreEqual(2, _tracker.RecordWildcard());
+            Assert.AreEqual(3, _tracker.Record("Green"));
+            Assert.AreEqual("Green", _tracker.LastColor);
+        }
 
-            // First real colour inherits the full streak (3+1 = 4)
-            Assert.AreEqual(4, _tracker.Record("Purple"));
+        [Test]
+        public void Chain_Color1_Rainbow_Rainbow_Gives3x()
+        {
+            // color1 → rainbow → rainbow = 3× color1
+            Assert.AreEqual(1, _tracker.Record("Green"));
+            Assert.AreEqual(2, _tracker.RecordWildcard());
+            Assert.AreEqual(3, _tracker.RecordWildcard());
+            Assert.AreEqual("Green", _tracker.LastColor);
+        }
+
+        [Test]
+        public void Chain_Color1_Rainbow_Color1_Gives3x()
+        {
+            // color1 → rainbow → color1 = 3× color1
+            Assert.AreEqual(1, _tracker.Record("Green"));
+            Assert.AreEqual(2, _tracker.RecordWildcard());
+            Assert.AreEqual(3, _tracker.Record("Green"));
+            Assert.AreEqual("Green", _tracker.LastColor);
+        }
+
+        [Test]
+        public void Chain_Color1_Rainbow_Color2_Gives3xColor2()
+        {
+            // color1 → rainbow → color2 = 3× color2
+            Assert.AreEqual(1, _tracker.Record("Green"));
+            Assert.AreEqual(2, _tracker.RecordWildcard());
+            Assert.AreEqual(3, _tracker.Record("Purple"));
+            Assert.AreEqual("Purple", _tracker.LastColor);
+        }
+
+        [Test]
+        public void Chain_Color1_Color2_Rainbow_Gives2x()
+        {
+            // color1 → color2 → rainbow = 2× (color2 streak reset, then rainbow climbs)
+            Assert.AreEqual(1, _tracker.Record("Green"));
+            Assert.AreEqual(1, _tracker.Record("Purple"));
+            Assert.AreEqual(2, _tracker.RecordWildcard());
+            Assert.AreEqual("Purple", _tracker.LastColor);
         }
 
         [Test]

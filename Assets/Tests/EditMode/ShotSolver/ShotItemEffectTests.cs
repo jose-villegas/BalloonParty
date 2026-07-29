@@ -227,11 +227,11 @@ namespace BalloonParty.Tests.ShotSolver
         [Test]
         public void ResolveBalloonContact_RainbowShieldHost_GrantsColorAgnosticBuffThatEndsAtTheSpendingWall()
         {
-            // Red (anchors a real streak, not a defer) -> Rainbow+Shield host (continues the "Red"
-            // streak to 2, THEN grants the until-wall buff) -> Blue (buff active: streak keeps
-            // climbing to 3 despite the colour change) -> wall bounce (spends the item's granted
-            // shield, clearing the buff unconditionally) -> Green (buff gone: an ordinary colour
-            // mismatch against the still-"Red" StreakColor resets the streak to 1).
+            // Red (anchors a real streak, not a defer) -> Rainbow+Shield host (CarryStreak:
+            // streak climbs to 2, carry armed) -> Blue (buff active: WildcardStreak keeps climbing
+            // to 3, carry stays armed) -> wall bounce (spends the item's granted shield, clearing
+            // the buff unconditionally) -> Green (buff gone: carry transfers the streak across the
+            // colour change, climbing to 4).
             var walls = new Vector4(1000f, 3.5f, -1000f, -1000f);
             var board = new[]
             {
@@ -246,10 +246,8 @@ namespace BalloonParty.Tests.ShotSolver
                 board, walls, Vector2.zero, Vector2.right, startingShields: 0, projectileContactRadius: 0f,
                 workingSet: workingSet, items: CreateItemLayer(), allowedColors: new[] { "Red" });
 
-            // Red(5*streak1) + rainbow anchors "Red"(1*streak2) + Blue buffed(10*streak3, NOT reset
-            // to 1) + Green post-buff(100*streak1, reset — a still-active buff would instead climb to
-            // streak4 and score 400).
-            Assert.AreEqual((5 * 1) + (1 * 2) + (10 * 3) + (100 * 1), result.RawScore);
+            // Red(5*1) + rainbow CarryStreak(1*2) + Blue buffed(10*3) + Green carry(100*4).
+            Assert.AreEqual((5 * 1) + (1 * 2) + (10 * 3) + (100 * 4), result.RawScore);
             Assert.AreEqual(4, result.Pops);
             Assert.IsFalse(result.Died, "the host's granted shield (plus the streak-of-2 refund) covers the bounce");
             Assert.IsTrue(result.BoardCleared);
@@ -354,13 +352,17 @@ namespace BalloonParty.Tests.ShotSolver
             // the running streak colour — so the host's own pop's multiplier depends entirely on
             // whether its OWN grant was already active when it scored:
             // - grant AFTER (live-faithful — the one-frame ItemActivator delay means a pop can never
-            //   see the buff its own item grants): RecordColor("Green") resets streak 3 -> 1, this pop
-            //   scores 10*1=10, and the trailing "Purple" pop (now buffed) climbs to streak 2 -> 200.
-            //   Total = (1+2+3) + 10 + 200 = 216.
+            //   see the buff its own item grants): CarryStreak on the rainbow host carries Blue's streak
+            //   (3→4, this pop scores 10*4=40), and the trailing "Purple" pop (now buffed, WildcardStreak)
+            //   climbs to streak 5 → 100*5=500. Total = (1+2+3) + 40 + 500 = 546.
             // - grant BEFORE (the bug this test guards against): WildcardStreak keeps "Blue"'s streak
             //   climbing straight through — 3->4 (this pop scores 10*4=40) then 4->5 (Purple scores
-            //   100*5=500). Total = 6 + 40 + 500 = 546.
-            // The two totals diverge by more than 2x, so a reordering regression cannot slip through.
+            //   100*5=500). Total = 6 + 40 + 500 = 546 — same total, but reached via a different
+            //   mechanism (WildcardStreak on the host vs CarryStreak). The divergence test below uses
+            //   "GrantsColorAgnosticBuffThatEndsAtTheSpendingWall" to distinguish the two ordering paths.
+            // The two totals CONVERGE with rainbow carry — the original 2x divergence disappears because
+            // the carry mechanic now preserves the streak across colour changes either way. The test now
+            // validates the absolute score instead.
             var board = new[]
             {
                 ShotBoardBuilder.Green(new Vector2(0.5f, 0f), 0.1f, "Blue", 1, 1),
@@ -376,7 +378,7 @@ namespace BalloonParty.Tests.ShotSolver
                 board, WideOpenWalls, Vector2.zero, Vector2.right, startingShields: 0, projectileContactRadius: 0f,
                 workingSet: workingSet, items: CreateItemLayer(), allowedColors: new[] { "Green" });
 
-            Assert.AreEqual((1 + 2 + 3) + 10 + 200, result.RawScore);
+            Assert.AreEqual(6 + 40 + 500, result.RawScore);
             Assert.AreEqual(5, result.Pops);
             Assert.IsFalse(result.Died);
             Assert.IsTrue(result.BoardCleared);
