@@ -1136,18 +1136,18 @@ namespace BalloonParty.Solver
             }
             else if (cause.Flags.HasFlag(DamageFlags.CarryStreak))
             {
+                // Mirrors RecordWildcard: colour-agnostic increment + arm carry.
+                state.DeferredPops = 0;
+                multiplier = ++state.StreakCount;
+                state.CarryOnColorChange = true;
                 if (balloon.IsRainbow)
                 {
-                    var primary = ContainsColor(allowedColors, cause.SourceColorId)
+                    attributedColorId = ContainsColor(allowedColors, cause.SourceColorId)
                         ? cause.SourceColorId
                         : allowedColors[0];
-                    multiplier = RecordColorAndCarry(primary, ref state);
-                    attributedColorId = primary;
                 }
                 else
                 {
-                    multiplier = RecordColorAndCarry(
-                        balloon.PaysSourceColor ? cause.SourceColorId : balloon.ColorId, ref state);
                     attributedColorId = balloon.PaysSourceColor ? cause.SourceColorId : balloon.ColorId;
                 }
             }
@@ -1223,24 +1223,6 @@ namespace BalloonParty.Solver
             }
 
             state.DeferredPops = 0;
-            return state.StreakCount;
-        }
-
-        // Mirrors ColorStreakTracker.RecordAndCarry: records the pop and flags carry for next change.
-        private static int RecordColorAndCarry(string colorId, ref ShotFlightState state)
-        {
-            if (string.Equals(state.StreakColor, colorId, StringComparison.Ordinal))
-            {
-                state.StreakCount++;
-            }
-            else
-            {
-                state.StreakCount = 1 + state.DeferredPops;
-                state.StreakColor = colorId;
-            }
-
-            state.DeferredPops = 0;
-            state.CarryOnColorChange = true;
             return state.StreakCount;
         }
 

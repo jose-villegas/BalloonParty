@@ -73,27 +73,6 @@ namespace BalloonParty.Game.Score
             return CurrentStreak;
         }
 
-        /// <summary>Records like <see cref="Record"/> but also flags the streak to carry its multiplier
-        /// across the next colour change (a coloured projectile popping a rainbow).
-        /// Assumes no <c>breaksStreak</c> attribution co-occurs — rainbow balloons never produce one.</summary>
-        public int RecordAndCarry(string colorId)
-        {
-            if (colorId == LastColor)
-            {
-                CurrentStreak++;
-            }
-            else
-            {
-                LastColor = colorId;
-                CurrentStreak = 1 + _deferredPops;
-            }
-
-            _deferredPops = 0;
-            _carryOnColorChange = true;
-            PublishChanged();
-            return CurrentStreak;
-        }
-
         /// <summary>Extends the streak regardless of colour — used while the projectile carries a
         /// colour-agnostic (rainbow) buff, so every pop keeps the multiplier climbing.</summary>
         public int RecordWildcard()

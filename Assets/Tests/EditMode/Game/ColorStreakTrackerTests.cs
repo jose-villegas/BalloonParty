@@ -148,43 +148,48 @@ namespace BalloonParty.Tests.Game
         // ─── Rainbow Streak Carry ───────────────────────────────────────────
 
         [Test]
-        public void RecordAndCarry_SameColor_IncrementsStreak()
-        {
-            _tracker.Record("Green");
-            _tracker.RecordAndCarry("Green");
-
-            Assert.AreEqual(3, _tracker.Record("Green"));
-        }
-
-        [Test]
-        public void RecordAndCarry_ThenRecordDifferentColor_CarriesStreak()
+        public void RecordWildcard_ArmsCarry_NextDifferentColorInheritsStreak()
         {
             _tracker.Record("Green");
             _tracker.Record("Green");
-            // Green x2 → rainbow pop arms carry at x3
-            _tracker.RecordAndCarry("Green");
+            // Wildcard (rainbow pop): streak climbs to 3, carry armed
+            _tracker.RecordWildcard();
 
-            // Switch to Purple: streak carries (3+1 = 4), not reset to 1
+            // Different color inherits the streak (3+1 = 4)
             Assert.AreEqual(4, _tracker.Record("Purple"));
         }
 
         [Test]
-        public void RecordAndCarry_ThenSameColor_ThenDifferentColor_CarryStillArmed()
+        public void SequentialWildcards_BuildStreak_ThenCarryToColor()
         {
-            _tracker.RecordAndCarry("Green");
+            // Three sequential rainbow pops (wildcard) — streak climbs each time
+            _tracker.RecordWildcard();
+            _tracker.RecordWildcard();
+            _tracker.RecordWildcard();
+
+            // First real colour inherits the full streak (3+1 = 4)
+            Assert.AreEqual(4, _tracker.Record("Purple"));
+        }
+
+        [Test]
+        public void Wildcard_ThenSameColor_ThenDifferentColor_CarryStillArmed()
+        {
+            _tracker.Record("Green");
+            // Rainbow pop arms carry
+            _tracker.RecordWildcard();
             // Same color — carry not consumed yet
             _tracker.Record("Green");
 
             // Color change — carry is consumed, streak carries
-            Assert.AreEqual(3, _tracker.Record("Purple"));
+            Assert.AreEqual(4, _tracker.Record("Purple"));
         }
 
         [Test]
-        public void RecordAndCarry_ThenReset_ClearsCarry()
+        public void Wildcard_ThenReset_ClearsCarry()
         {
             _tracker.Record("Green");
             _tracker.Record("Green");
-            _tracker.RecordAndCarry("Green");
+            _tracker.RecordWildcard();
 
             _projectileLoadedHandler.Handle(new ProjectileLoadedMessage(null));
 
@@ -193,34 +198,10 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void RecordWildcard_ArmsCarry_NextDifferentColorInheritsStreak()
-        {
-            _tracker.Record("Green");
-            _tracker.Record("Green");
-            // Wildcard: streak climbs to 3, carry armed
-            _tracker.RecordWildcard();
-
-            // Different color inherits the streak (3+1 = 4)
-            Assert.AreEqual(4, _tracker.Record("Purple"));
-        }
-
-        [Test]
-        public void RecordAndCarry_MultipleCalls_CarryStaysArmed()
-        {
-            _tracker.RecordAndCarry("Green");
-            _tracker.RecordAndCarry("Green");
-            _tracker.RecordAndCarry("Green");
-
-            // Three carries stacked — carry still armed, streak = 3
-            // Color change carries: 3+1 = 4
-            Assert.AreEqual(4, _tracker.Record("Purple"));
-        }
-
-        [Test]
         public void Carry_ConsumedOnColorChange_SubsequentChangeResetsNormally()
         {
             _tracker.Record("Green");
-            _tracker.RecordAndCarry("Green");
+            _tracker.RecordWildcard();
 
             // First color change — carry consumed, streak = 3
             _tracker.Record("Purple");
@@ -230,17 +211,18 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void RecordAndCarry_WithDeferredPops_FoldsInCorrectly()
+        public void Deferred_ThenWildcards_ThenColor_FoldsCorrectly()
         {
+            // Two deferred rainbow pops (colourless projectile), then projectile gets a colour,
+            // then two more rainbow pops (wildcard), then a real colour hit.
             _tracker.RecordDeferred();
             _tracker.RecordDeferred();
-            // RecordAndCarry as the first color attribution — folds 2 deferred pops
-            var streak = _tracker.RecordAndCarry("Green");
+            // Wildcard clears deferred bank and starts streak at 1
+            _tracker.RecordWildcard();
+            _tracker.RecordWildcard();
 
-            // 1 + 2 deferred = 3, carry armed
-            Assert.AreEqual(3, streak);
-            // Color change carries: 3+1 = 4
-            Assert.AreEqual(4, _tracker.Record("Purple"));
+            // First real colour inherits wildcard streak (2+1 = 3)
+            Assert.AreEqual(3, _tracker.Record("Blue"));
         }
     }
 }
