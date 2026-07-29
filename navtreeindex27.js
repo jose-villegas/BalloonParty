@@ -1,11 +1,5 @@
 var NAVTREEINDEX27 =
 {
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a2f86ec652d638dbbf414984c31d076b0":[5,0,0,5,20,50],
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a2f86ec652d638dbbf414984c31d076b0":[6,0,0,5,20,50],
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a31bdbbac23e68ce53e4526788a07d4e7":[5,0,0,5,20,47],
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a31bdbbac23e68ce53e4526788a07d4e7":[6,0,0,5,20,47],
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a31eba627aaf88dfebaca3c2f1dc48c93":[5,0,0,5,20,18],
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a31eba627aaf88dfebaca3c2f1dc48c93":[6,0,0,5,20,18],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a32e097f1ca0247e7ec19592484848e37":[5,0,0,5,20,73],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a32e097f1ca0247e7ec19592484848e37":[6,0,0,5,20,73],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a3584e6433511b438b12db4ba4aebb5f2":[5,0,0,5,20,30],
@@ -249,5 +243,11 @@ var NAVTREEINDEX27 =
 "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#ac451a4e85fa23dbad2f61725ae4897b2":[5,0,0,5,3,0,16],
 "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#ac451a4e85fa23dbad2f61725ae4897b2":[6,0,0,5,3,0,16],
 "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#acbd729c83bf2d9876f8f3d93b01dfde6":[5,0,0,5,3,0,34],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#acbd729c83bf2d9876f8f3d93b01dfde6":[6,0,0,5,3,0,34]
+"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#acbd729c83bf2d9876f8f3d93b01dfde6":[6,0,0,5,3,0,34],
+"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#adec57467b1c71264202a692d75d98507":[5,0,0,5,3,0,7],
+"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#adec57467b1c71264202a692d75d98507":[6,0,0,5,3,0,7],
+"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#afc0e93886b5f78c2e02fb2f2ac751ecc":[5,0,0,5,3,0,29],
+"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#afc0e93886b5f78c2e02fb2f2ac751ecc":[6,0,0,5,3,0,29],
+"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#aff6292ec59df6bf7d53b5d40c6658940":[5,0,0,5,3,0,10],
+"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#aff6292ec59df6bf7d53b5d40c6658940":[6,0,0,5,3,0,10]
 };

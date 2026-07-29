@@ -1,7 +1,6 @@
 var classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter =
 [
-    [ "ProgressionSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#abc330cf617060c5f6b3f80c05c45025e", null ],
-    [ "ColorRootOffset", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a0170a14e8de5839a4bcddf7e7b07c9c5", null ],
+    [ "ProgressionSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a2cfc847ac36666c1c9382a552f40b8d2", null ],
     [ "Dispose", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#ad3266168fdc405081b7b453293a284cd", null ],
     [ "OnAscendStarted", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#adae276bee5b87c9ea73c5b3942112b51", null ],
     [ "OnBoardClear", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a76bed499d0c459f98a3de71691fbb273", null ],
@@ -32,9 +31,9 @@ var classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter =
     [ "_palette", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a340538ec6100b7d577e94c930390c818", null ],
     [ "_player", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a5dac8a9ffc3ccb05bc1b5a23abd55e9d", null ],
     [ "_progressBarCompletedSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#abc71c8b2dfba7698d10cc6b1370e0a9d", null ],
+    [ "_projectileDestroyedSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a12349e616575ad2e89eff47ac9bbc799", null ],
     [ "_projectileLoadedSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a882e20ecfd71ec3468f76e17a8e4c4ac", null ],
     [ "_scoreTrailSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a7efdda6259311628099e1c5c97da801a", null ],
     [ "_streakSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a1b86e664920a322b34e264bd76e238c1", null ],
-    [ "_subscriptions", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a05979cfbd41ab9bc07550024647dda70", null ],
-    [ "ColorRootSemitones", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a7d9a407525ba1977e623d6cea80480dc", null ]
+    [ "_subscriptions", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a05979cfbd41ab9bc07550024647dda70", null ]
 ];

@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Game_1_1Level_1_1LevelController =
 [
-    [ "LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#afd394145e301b75b2f6b930e202295b0", null ],
+    [ "LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a1b59e15ef03bd32e24e9e677e8f4b088", null ],
     [ "AbandonCeremony", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ab76c910426e6f21e9dee83b267a8a9fa", null ],
     [ "AllColorsConfirmed", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a64bdbc61147c78df68cc2a2806792f71", null ],
     [ "ClaimProgress", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a2682e9e30b387143a284c0682cccca06", null ],
@@ -9,6 +9,7 @@ var classBalloonParty_1_1Game_1_1Level_1_1LevelController =
     [ "ExcessPoints", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a9f41cca7a9620cf22e0a9d34f07d99c4", null ],
     [ "GetProgress", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a63b39d84f4b051b06e0dfd4650dd537f", null ],
     [ "GetRequiredPoints", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a5fff2c5d206002d75b1672fd1f5ca881", null ],
+    [ "OnBoardDepleted", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ab2031bfba5c993b6b8f48035f23326bd", null ],
     [ "OnFlightEnded", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a4638af687e20a8e0725461b360d4fe42", null ],
     [ "OnLevelUpAborted", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a2fa9d0edcb1cbd40650309539930515d", null ],
     [ "OnLevelUpDismissed", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#adf8789206698ebf675a254345706251e", null ],
@@ -28,6 +29,9 @@ var classBalloonParty_1_1Game_1_1Level_1_1LevelController =
     [ "_abortedSubscription", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a0e7fdd6911084bc92b11eb3ba989b4dc", null ],
     [ "_bankedExcess", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ac8d7beb9f7683f54babbc0a9ac4aca1a", null ],
     [ "_beatCurve", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a5937ddec51bd2a8b6a1f20a6f007ada8", null ],
+    [ "_beatDuration", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a6ab02096eed2ae996bba447129e8f725", null ],
+    [ "_boardDepletedSubscriber", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a557026036d62421d97855b27c2c8795a", null ],
+    [ "_boardDepletedSubscription", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a59619199996be9e15e95a7616e343168", null ],
     [ "_cinematics", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#af7110f6e495f8b8a4b502e66b6474ff6", null ],
     [ "_colorKeys", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a197447ea1b7c572ff2ffe15a5b4f223f", null ],
     [ "_completingElapsed", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a36d318058e298971bf151d1ba8ee1370", null ],
@@ -37,6 +41,7 @@ var classBalloonParty_1_1Game_1_1Level_1_1LevelController =
     [ "_dismissedSubscription", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a54d627703f75834995d38965961b0eb5", null ],
     [ "_firedSubscriber", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#abc7ce7673da7cb5d9157cd054b452647", null ],
     [ "_firedSubscription", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ac607af9566b6b9a5c09ee8753c276624", null ],
+    [ "_forceDestroyPublisher", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a95b59d873d40523b89d7e6aa024fd3c8", null ],
     [ "_gameOverSubscriber", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a04df134ef4f8a039e4c9e9b144e4c897", null ],
     [ "_gameOverSubscription", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a247a2fbb709829450605f8aa2635bd79", null ],
     [ "_level", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a57d83472eb31b8af2fbc40e6dfac2fb5", null ],

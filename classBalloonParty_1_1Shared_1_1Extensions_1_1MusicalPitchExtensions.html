@@ -120,6 +120,9 @@ $(function(){initNavTree('classBalloonParty_1_1Shared_1_1Extensions_1_1MusicalPi
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
+<tr class="memitem:abcbd92f9c1f4c7ddb71f172a72faf518" id="r_abcbd92f9c1f4c7ddb71f172a72faf518"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abcbd92f9c1f4c7ddb71f172a72faf518">ColorRootOffset</a> (IReadOnlyList&lt; string &gt; progressColorNames, string color)</td></tr>
+<tr class="memdesc:abcbd92f9c1f4c7ddb71f172a72faf518"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the semitone offset for a colour's root note, looked up by position in the palette's progress-colour list.  <br /></td></tr>
+<tr class="separator:abcbd92f9c1f4c7ddb71f172a72faf518"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89867a556e125f676b07453447d3057a" id="r_a89867a556e125f676b07453447d3057a"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89867a556e125f676b07453447d3057a">SemitonesToPitchMultiplier</a> (this float semitones)</td></tr>
 <tr class="separator:a89867a556e125f676b07453447d3057a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01c6642877d482911c039e00b415d408" id="r_a01c6642877d482911c039e00b415d408"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01c6642877d482911c039e00b415d408">SemitonesToPitchMultiplier</a> (this int semitones)</td></tr>
@@ -130,6 +133,9 @@ Static Package Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-attribs" name="pac-static-attribs"></a>
 Static Package Attributes</h2></td></tr>
+<tr class="memitem:a00b1c68201c3195befc2c27ae1de034d" id="r_a00b1c68201c3195befc2c27ae1de034d"><td class="memItemLeft" align="right" valign="top">static readonly int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00b1c68201c3195befc2c27ae1de034d">ColorRootSemitones</a> = { 0, 4, 7, 11 }</td></tr>
+<tr class="memdesc:a00b1c68201c3195befc2c27ae1de034d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Major-chord root semitone offsets used for per-colour pitch colouring (I, III, V, VII).  <br /></td></tr>
+<tr class="separator:a00b1c68201c3195befc2c27ae1de034d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af15de2c435397692e84211fd09379f02" id="r_af15de2c435397692e84211fd09379f02"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af15de2c435397692e84211fd09379f02">TritoneSemitones</a> = 6</td></tr>
 <tr class="separator:af15de2c435397692e84211fd09379f02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a388520a16172b79c35462a096143e62e" id="r_a388520a16172b79c35462a096143e62e"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a388520a16172b79c35462a096143e62e">WholeToneSemitones</a> = 2</td></tr>
@@ -138,6 +144,38 @@ Static Package Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Equal-temperament pitch math: a semitone offset as an <code>AudioSource.pitch</code> multiplier. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="abcbd92f9c1f4c7ddb71f172a72faf518" name="abcbd92f9c1f4c7ddb71f172a72faf518"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abcbd92f9c1f4c7ddb71f172a72faf518">&#9670;&#160;</a></span>ColorRootOffset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int BalloonParty.Shared.Extensions.MusicalPitchExtensions.ColorRootOffset </td>
+          <td>(</td>
+          <td class="paramtype">IReadOnlyList&lt; string &gt;</td>          <td class="paramname"><span class="paramname"><em>progressColorNames</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>color</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the semitone offset for a colour's root note, looked up by position in the palette's progress-colour list. </p>
+<p>Colours beyond the table repeat the last entry. </p>
+
+</div>
+</div>
 <a id="a89867a556e125f676b07453447d3057a" name="a89867a556e125f676b07453447d3057a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a89867a556e125f676b07453447d3057a">&#9670;&#160;</a></span>SemitonesToPitchMultiplier() <span class="overload">[1/2]</span></h2>
 
@@ -217,6 +255,30 @@ Static Package Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a00b1c68201c3195befc2c27ae1de034d" name="a00b1c68201c3195befc2c27ae1de034d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00b1c68201c3195befc2c27ae1de034d">&#9670;&#160;</a></span>ColorRootSemitones</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int [] BalloonParty.Shared.Extensions.MusicalPitchExtensions.ColorRootSemitones = { 0, 4, 7, 11 }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Major-chord root semitone offsets used for per-colour pitch colouring (I, III, V, VII). </p>
+
+</div>
+</div>
 <a id="af15de2c435397692e84211fd09379f02" name="af15de2c435397692e84211fd09379f02"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af15de2c435397692e84211fd09379f02">&#9670;&#160;</a></span>TritoneSemitones</h2>
 

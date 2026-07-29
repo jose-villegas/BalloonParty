@@ -158,7 +158,8 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Drop-in component that plays a configurable <a class="el" href="namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13">GameSoundId</a> when triggered. </p>
-<p>Automatically binds to sibling Button onClick if present; can also be wired manually to UnityEvents, Animator events, or called from code. Receives <a class="el" href="interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html">ISoundPlayer</a> via VContainer's build callback injection (see <code>GameScopeRegistration.RegisterAudio</code>). </p>
+<p>Automatically binds to sibling Button onClick if present; can also be wired manually to UnityEvents, Animator events, or called from code. Receives <a class="el" href="interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html">ISoundPlayer</a> via VContainer's build callback injection (see <code>GameScopeRegistration.RegisterAudio</code>).</p>
+<p>Emitters present in the scene at App-scope build time are auto-injected by <code>FindObjectsByType</code>. Dynamically spawned emitters must be manually injected via <code>resolver.Inject(emitter)</code>, otherwise the sound player will be null and <a class="el" href="#a2b8ac6326bf5a254bbbfe086aadb2de6">Play</a> will silently no-op. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a0305b133777ec2d86286befff9d37ffa" name="a0305b133777ec2d86286befff9d37ffa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0305b133777ec2d86286befff9d37ffa">&#9670;&#160;</a></span>Awake()</h2>

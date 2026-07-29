@@ -1,9 +1,5 @@
 var NAVTREEINDEX29 =
 {
-"classBalloonParty_1_1Editor_1_1SetMobileTextureSize.html":[5,0,0,5,32],
-"classBalloonParty_1_1Editor_1_1SetMobileTextureSize.html":[6,0,0,5,32],
-"classBalloonParty_1_1Editor_1_1SetMobileTextureSize.html#a023c325e80b6e7385754fbe7e8a99218":[5,0,0,5,32,11],
-"classBalloonParty_1_1Editor_1_1SetMobileTextureSize.html#a023c325e80b6e7385754fbe7e8a99218":[6,0,0,5,32,11],
 "classBalloonParty_1_1Editor_1_1SetMobileTextureSize.html#a4b5ec6536a50475f9e040962ac4edc4d":[5,0,0,5,32,3],
 "classBalloonParty_1_1Editor_1_1SetMobileTextureSize.html#a4b5ec6536a50475f9e040962ac4edc4d":[6,0,0,5,32,3],
 "classBalloonParty_1_1Editor_1_1SetMobileTextureSize.html#a4ddef7752dc9ed3643576c51408e4868":[5,0,0,5,32,6],
@@ -249,5 +245,9 @@ var NAVTREEINDEX29 =
 "classBalloonParty_1_1Editor_1_1SortingLayerNameDrawer.html#af2ea2e29db56e069125d1c9addaf005f":[5,0,0,5,34,0],
 "classBalloonParty_1_1Editor_1_1SortingLayerNameDrawer.html#af2ea2e29db56e069125d1c9addaf005f":[6,0,0,5,34,0],
 "classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html":[5,0,0,5,7,0],
-"classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html":[6,0,0,5,7,0]
+"classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html":[6,0,0,5,7,0],
+"classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html#a07ab22f0925ada2f247df3309fcfa4d5":[5,0,0,5,7,0,5],
+"classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html#a07ab22f0925ada2f247df3309fcfa4d5":[6,0,0,5,7,0,5],
+"classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html#a3dba98063a90b53dbcd6b4bb80d54a3e":[5,0,0,5,7,0,7],
+"classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html#a3dba98063a90b53dbcd6b4bb80d54a3e":[6,0,0,5,7,0,7]
 };

@@ -1,7 +1,6 @@
 var classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter =
 [
     [ "CombatSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a543739d16454d4d1c26c30405f94a718", null ],
-    [ "ColorRootOffset", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#aecc45a6c890518cf344dd9a00bce8761", null ],
     [ "DeflectSoundFor", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a20b5aa91783e49f3b5e52a89689e7cee", null ],
     [ "Dispose", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a3994946f4836829d573659a39293cb9a", null ],
     [ "IncrementPopCounter", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#abf81c768ef26f86019a9835e9215c21e", null ],
@@ -52,6 +51,5 @@ var classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter =
     [ "_unbreakableDeflectsThisFlight", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a64c3b923cb476f2602ec5c3164217102", null ],
     [ "_unbreakablePopsThisFlight", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a7dbaf0ef315c106c418736da5bb78c3e", null ],
     [ "_wallHitSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a1f5e37323f7ce1f77e44e557e389b872", null ],
-    [ "ColorRootSemitones", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#ad28b218b2d05d1450a650f8a0f854499", null ],
     [ "MaxRampSemitones", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#af1442ee0d9d920823c2c4ec789548310", null ]
 ];

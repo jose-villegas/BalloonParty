@@ -1,5 +1,15 @@
 var NAVTREEINDEX67 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#afd14037440ed2591e65618c6ec8d63b6":[5,0,0,3,4,7,13],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#afd14037440ed2591e65618c6ec8d63b6":[6,0,0,3,4,7,13],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html":[5,0,0,3,4,8],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html":[6,0,0,3,4,8],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a2cad68087d62f131c1e062800541cbb8":[5,0,0,3,4,8,3],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a2cad68087d62f131c1e062800541cbb8":[6,0,0,3,4,8,3],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a3d965db79289946b25ec9b16dbf53055":[5,0,0,3,4,8,4],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a3d965db79289946b25ec9b16dbf53055":[6,0,0,3,4,8,4],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a7451c3bff615363846a5cfda73d76ff1":[5,0,0,3,4,8,2],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a7451c3bff615363846a5cfda73d76ff1":[6,0,0,3,4,8,2],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a7a05f37e1cfb47170d8eb56d8e5e8895":[5,0,0,3,4,8,0],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a7a05f37e1cfb47170d8eb56d8e5e8895":[6,0,0,3,4,8,0],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a987fbdaf0a21593d69c05f12c2907424":[5,0,0,3,4,8,1],
@@ -239,15 +249,5 @@ var NAVTREEINDEX67 =
 "interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a24b3485233af39086d1d8bea2d38880a":[5,0,0,3,12,0],
 "interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a24b3485233af39086d1d8bea2d38880a":[6,0,0,3,12,0],
 "interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a4d69e56c0203b8c03e54c5ef8f541dff":[5,0,0,3,12,3],
-"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a4d69e56c0203b8c03e54c5ef8f541dff":[6,0,0,3,12,3],
-"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a6d4953e7c17848bb429e56686dc6c097":[5,0,0,3,12,4],
-"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a6d4953e7c17848bb429e56686dc6c097":[6,0,0,3,12,4],
-"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a89d8715cc2f5b605726cac09c4068b14":[5,0,0,3,12,2],
-"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a89d8715cc2f5b605726cac09c4068b14":[6,0,0,3,12,2],
-"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a979087f59690aa44f9e79793b9dfa873":[5,0,0,3,12,1],
-"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a979087f59690aa44f9e79793b9dfa873":[6,0,0,3,12,1],
-"interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html":[5,0,0,3,13],
-"interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html":[6,0,0,3,13],
-"interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html#a0daaab4ae714a41a30d112f3713c1c6d":[5,0,0,3,13,5],
-"interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html#a0daaab4ae714a41a30d112f3713c1c6d":[6,0,0,3,13,5]
+"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a4d69e56c0203b8c03e54c5ef8f541dff":[6,0,0,3,12,3]
 };
