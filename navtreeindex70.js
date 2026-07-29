@@ -1,5 +1,9 @@
 var NAVTREEINDEX70 =
 {
+"interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html#a742ea5ebc2c8b84126107f3d5cfd4335":[5,0,0,12,21,2],
+"interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html#a742ea5ebc2c8b84126107f3d5cfd4335":[6,0,0,12,21,2],
+"interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html#ae42615523b0c01dede319af0bc423beb":[5,0,0,12,21,0],
+"interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html#ae42615523b0c01dede319af0bc423beb":[6,0,0,12,21,0],
 "interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html":[5,0,0,12,22],
 "interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html":[6,0,0,12,22],
 "interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html#a0bc2667b98786b4d79a280135f7ff7b9":[5,0,0,12,22,2],
@@ -245,9 +249,5 @@ var NAVTREEINDEX70 =
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IResistsPaint.html":[5,0,0,13,1,12],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IResistsPaint.html":[6,0,0,13,1,12],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IWashesProjectileColor.html":[5,0,0,13,1,13],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IWashesProjectileColor.html":[6,0,0,13,1,13],
-"interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html":[5,0,0,13,3,1],
-"interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html":[6,0,0,13,3,1],
-"interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html#a00b9c88ab65536be281af22b69cfcad6":[5,0,0,13,3,1,1],
-"interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html#a00b9c88ab65536be281af22b69cfcad6":[6,0,0,13,3,1,1]
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IWashesProjectileColor.html":[6,0,0,13,1,13]
 };

@@ -955,7 +955,7 @@ var searchData=
   ['suggested_20production_20order_952',['Suggested production order',['../plan_content_production.html#autotoc_md341',1,'']]],
   ['suggested_20tier_20thresholds_953',['9.3 Suggested Tier Thresholds',['../plan_future_ideas.html#autotoc_md411',1,'']]],
   ['suite_20stays_20green_954',['Phase 0 — Prerequisite refactors (no behavior change; the existing 22-test suite stays green)',['../plan_shot_solver_accuracy.html#autotoc_md637',1,'']]],
-  ['summary_955',['File summary',['../plan_bubble_cluster_hit_feedback.html#autotoc_md312',1,'']]],
+  ['summary_955',['summary',['../plan_bubble_cluster_hit_feedback.html#autotoc_md312',1,'File summary'],['../classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#a78a656eab26650a71ef9990f09cb77c2',1,'BalloonParty.Editor.Release.ReleaseUploadWindow.summary']]],
   ['supportsinstancing_956',['SupportsInstancing',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html#adafc653d46e1c09b962f18f636bd378d',1,'BalloonParty::Slots::Actor::Archetype::BushView']]],
   ['suppressrendering_957',['SuppressRendering',['../classBalloonParty_1_1Shared_1_1Extensions_1_1SceneExtensions.html#aa8c05ca86c6aa1e146f8004bb47866e8',1,'BalloonParty::Shared::Extensions::SceneExtensions']]],
   ['surface_958',['&lt;tt&gt;ITimeScaleClaims&lt;/tt&gt; — testable write surface',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Shared/Pause/README.md#autotoc_md826',1,'']]],

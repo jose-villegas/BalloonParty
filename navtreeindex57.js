@@ -1,5 +1,9 @@
 var NAVTREEINDEX57 =
 {
+"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a30c474513a5e860dde87fc3c44897321":[5,0,0,13,0,17,75],
+"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a30c474513a5e860dde87fc3c44897321":[6,0,0,13,0,17,75],
+"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a3653f41c11c6b0ac9a60f6e66d9b1eac":[5,0,0,13,0,17,17],
+"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a3653f41c11c6b0ac9a60f6e66d9b1eac":[6,0,0,13,0,17,17],
 "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a36e38e93ca3dd98a30ba9def5392e014":[5,0,0,13,0,17,61],
 "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a36e38e93ca3dd98a30ba9def5392e014":[6,0,0,13,0,17,61],
 "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a3e1cca91b6c455d05f3438ff40af6db9":[5,0,0,13,0,17,10],
@@ -245,9 +249,5 @@ var NAVTREEINDEX57 =
 "classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html":[5,0,0,13,1,15],
 "classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html":[6,0,0,13,1,15],
 "classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html#a18c0d2fbfcec68c3013e50608a37697f":[5,0,0,13,1,15,3],
-"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html#a18c0d2fbfcec68c3013e50608a37697f":[6,0,0,13,1,15,3],
-"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html#a5bdbd33a83e11d0cd9c7f1739860aaec":[5,0,0,13,1,15,4],
-"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html#a5bdbd33a83e11d0cd9c7f1739860aaec":[6,0,0,13,1,15,4],
-"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html#a8c1f909557afaf06d5ec3ec8ca4922aa":[5,0,0,13,1,15,0],
-"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html#a8c1f909557afaf06d5ec3ec8ca4922aa":[6,0,0,13,1,15,0]
+"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html#a18c0d2fbfcec68c3013e50608a37697f":[6,0,0,13,1,15,3]
 };

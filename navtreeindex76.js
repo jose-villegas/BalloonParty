@@ -1,5 +1,9 @@
 var NAVTREEINDEX76 =
 {
+"structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate.html#ae431c9d1912b026816dafc85c37a1406":[5,0,0,3,5,4,3],
+"structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate.html#ae431c9d1912b026816dafc85c37a1406":[6,0,0,3,5,4,3],
+"structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html":[5,0,0,3,6,4],
+"structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html":[6,0,0,3,6,4],
 "structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a2a618904ba11dae2f8f47c2487ed15d9":[5,0,0,3,6,4,8],
 "structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a2a618904ba11dae2f8f47c2487ed15d9":[6,0,0,3,6,4,8],
 "structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a2fbedf493af53685c2699f000d6143cc":[5,0,0,3,6,4,7],
@@ -245,9 +249,5 @@ var NAVTREEINDEX76 =
 "structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a60e4c1942977262ed32ec1ea09e4e899":[5,0,0,5,6,0,0,0],
 "structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a60e4c1942977262ed32ec1ea09e4e899":[6,0,0,5,6,0,0,0],
 "structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a8755605515e536ee392b113e715cda98":[5,0,0,5,6,0,0,4],
-"structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a8755605515e536ee392b113e715cda98":[6,0,0,5,6,0,0,4],
-"structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a97c5fdcd664ca9ac0602e99edd74f91e":[5,0,0,5,6,0,0,6],
-"structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a97c5fdcd664ca9ac0602e99edd74f91e":[6,0,0,5,6,0,0,6],
-"structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#acec98aa606a3b2d7aa7efa4149afe75b":[5,0,0,5,6,0,0,3],
-"structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#acec98aa606a3b2d7aa7efa4149afe75b":[6,0,0,5,6,0,0,3]
+"structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a8755605515e536ee392b113e715cda98":[6,0,0,5,6,0,0,4]
 };

@@ -1,5 +1,9 @@
 var NAVTREEINDEX53 =
 {
+"classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#ab7e472cd71b04b0013324cf15df1b503":[5,0,0,12,11,5,11],
+"classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#ab7e472cd71b04b0013324cf15df1b503":[6,0,0,12,11,5,11],
+"classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#ac87172615fc58e6b2e0cb1f53877bba1":[5,0,0,12,11,5,4],
+"classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#ac87172615fc58e6b2e0cb1f53877bba1":[6,0,0,12,11,5,4],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#ae8d1abd192fbec67d48970edc2958097":[5,0,0,12,11,5,10],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#ae8d1abd192fbec67d48970edc2958097":[6,0,0,12,11,5,10],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayService.html":[5,0,0,12,11,6],
@@ -245,9 +249,5 @@ var NAVTREEINDEX53 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html#a031cdfb3254cef956a6d9aa146593acf":[5,0,0,13,0,0,6,2],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html#a031cdfb3254cef956a6d9aa146593acf":[6,0,0,13,0,0,6,2],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html#a2d9d18d00f2d83a6c0a738273d2dd098":[5,0,0,13,0,0,6,6],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html#a2d9d18d00f2d83a6c0a738273d2dd098":[6,0,0,13,0,0,6,6],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html#a57748e75d7b082051c124d71fe17b7c6":[5,0,0,13,0,0,6,3],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html#a57748e75d7b082051c124d71fe17b7c6":[6,0,0,13,0,0,6,3],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html#a583f40d4423dc09c39bc849e754945c0":[5,0,0,13,0,0,6,5],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html#a583f40d4423dc09c39bc849e754945c0":[6,0,0,13,0,0,6,5]
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html#a2d9d18d00f2d83a6c0a738273d2dd098":[6,0,0,13,0,0,6,6]
 };

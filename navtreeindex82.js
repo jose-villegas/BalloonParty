@@ -1,5 +1,9 @@
 var NAVTREEINDEX82 =
 {
+"structBalloonParty_1_1Solver_1_1ShotPopCause.html#a6be68b6a41232e021e3fdfb32ca56e68":[5,0,0,14,16,5],
+"structBalloonParty_1_1Solver_1_1ShotPopCause.html#a6be68b6a41232e021e3fdfb32ca56e68":[6,0,0,14,16,5],
+"structBalloonParty_1_1Solver_1_1ShotPopCause.html#a773ddf77ebba32851df4670ab0bd60ea":[5,0,0,14,16,1],
+"structBalloonParty_1_1Solver_1_1ShotPopCause.html#a773ddf77ebba32851df4670ab0bd60ea":[6,0,0,14,16,1],
 "structBalloonParty_1_1Solver_1_1ShotScoreRules.html":[5,0,0,14,17],
 "structBalloonParty_1_1Solver_1_1ShotScoreRules.html":[6,0,0,14,17],
 "structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a02814ad7c50320ffdb7e0eb89cdfecb7":[5,0,0,14,17,2],

@@ -1,5 +1,9 @@
 var NAVTREEINDEX67 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#adc655400a4dcc44e2f1888dd9a700271":[5,0,0,3,4,7,12],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#adc655400a4dcc44e2f1888dd9a700271":[6,0,0,3,4,7,12],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#aeb57d5104c036ecf0e75bc82134308f7":[5,0,0,3,4,7,19],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#aeb57d5104c036ecf0e75bc82134308f7":[6,0,0,3,4,7,19],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#afd14037440ed2591e65618c6ec8d63b6":[5,0,0,3,4,7,13],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#afd14037440ed2591e65618c6ec8d63b6":[6,0,0,3,4,7,13],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html":[5,0,0,3,4,8],
@@ -245,9 +249,5 @@ var NAVTREEINDEX67 =
 "interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IGridActorConfiguration.html#afbb6e45cfa58779017d017751cc440b3":[5,0,0,3,5,3,0],
 "interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IGridActorConfiguration.html#afbb6e45cfa58779017d017751cc440b3":[6,0,0,3,5,3,0],
 "interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html":[5,0,0,3,12],
-"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html":[6,0,0,3,12],
-"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a24b3485233af39086d1d8bea2d38880a":[5,0,0,3,12,0],
-"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a24b3485233af39086d1d8bea2d38880a":[6,0,0,3,12,0],
-"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a4d69e56c0203b8c03e54c5ef8f541dff":[5,0,0,3,12,3],
-"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html#a4d69e56c0203b8c03e54c5ef8f541dff":[6,0,0,3,12,3]
+"interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html":[6,0,0,3,12]
 };

@@ -6,6 +6,7 @@ var classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow =
     [ "CleanupBuildInfo", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#af17c720592ac61839d348aaf4eddf09f", null ],
     [ "ComputeSha256", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#a9191a912b716c246421a03b527cf759b", null ],
     [ "DrawOutputLog", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#a13baaf9d32311d3fb60dbef82b91400f", null ],
+    [ "DrawSummaryField", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#a898a36bef60e4bb5b9e12bf42a9b533d", null ],
     [ "DrawTokenField", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#a4d2ca4177a97a498c51afcd88544dd1e", null ],
     [ "DrawUploadButton", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#ad7464d8281e16eaf79faeb5d66ca9347", null ],
     [ "DrawVersionField", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#a3fbad1b275c339a2ecd6107cee410b0c", null ],
@@ -25,6 +26,7 @@ var classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow =
     [ "Repository", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#af6a5e67c5828020f027073015c8f5c0b", null ],
     [ "scrollPos", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#a7f7eeb35214b953109aab2a7a5e86986", null ],
     [ "showToken", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#af9273b14fecedde4b5af6f15b566de17", null ],
+    [ "summary", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#a78a656eab26650a71ef9990f09cb77c2", null ],
     [ "TokenPrefKey", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#a847bee11bce32190146a869da28500fd", null ],
     [ "version", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#aa1b2051a0004e19079dbc7e59d5c462e", null ]
 ];
