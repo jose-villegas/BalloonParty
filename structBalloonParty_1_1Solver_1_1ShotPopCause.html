@@ -124,9 +124,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a773ddf77ebba32851df4670ab0bd60ea" id="r_a773ddf77ebba32851df4670ab0bd60ea"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotPopCause.html">ShotPopCause</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a773ddf77ebba32851df4670ab0bd60ea">ItemEffect</a> (string sourceColorId, <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762">DamageFlags</a> flags)</td></tr>
 <tr class="memdesc:a773ddf77ebba32851df4670ab0bd60ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">An item's own AOE/effect pop (<a class="el" href="plan_shot_solver_accuracy.html">Shot Solver Accuracy</a> Phase C2) — never adopts the projectile's colour, never refunds a shield (see <a class="el" href="#a666dda46a57f7aef6b3627bc20c92d2f">IsProjectileContact</a>'s doc).  <br /></td></tr>
 <tr class="separator:a773ddf77ebba32851df4670ab0bd60ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aefd9531dabde212efd0885fe98cf27b6" id="r_aefd9531dabde212efd0885fe98cf27b6"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotPopCause.html">ShotPopCause</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aefd9531dabde212efd0885fe98cf27b6">ProjectileContact</a> (bool hasRainbowBuff, bool isPiercing, bool isRainbowTargetDeferred, string projectileColor)</td></tr>
-<tr class="memdesc:aefd9531dabde212efd0885fe98cf27b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mirrors <code>ProjectileHitResolver.ResolveContactPop</code>'s own flag composition — DamageFlags.DirectHit always; DamageFlags.WildcardStreak plus DamageFlags.Piercing under a rainbow buff; DamageFlags.Piercing alone under an armed (non-buffed) shot; DamageFlags.DeferredStreak for a colourless projectile popping a rainbow target absent a buff.  <br /></td></tr>
-<tr class="separator:aefd9531dabde212efd0885fe98cf27b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67c8540847b41e215d3ffac9c607f73a" id="r_a67c8540847b41e215d3ffac9c607f73a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotPopCause.html">ShotPopCause</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67c8540847b41e215d3ffac9c607f73a">ProjectileContact</a> (bool hasRainbowBuff, bool isPiercing, bool isRainbowTargetDeferred, bool isRainbowTargetCarry, string projectileColor)</td></tr>
+<tr class="memdesc:a67c8540847b41e215d3ffac9c607f73a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mirrors <code>ProjectileHitResolver.ResolveContactPop</code>'s own flag composition — DamageFlags.DirectHit always; DamageFlags.WildcardStreak plus DamageFlags.Piercing under a rainbow buff; DamageFlags.Piercing alone under an armed (non-buffed) shot; DamageFlags.DeferredStreak for a colourless projectile popping a rainbow target absent a buff; DamageFlags.CarryStreak for a coloured projectile popping a rainbow target absent a buff.  <br /></td></tr>
+<tr class="separator:a67c8540847b41e215d3ffac9c607f73a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -212,8 +212,8 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aefd9531dabde212efd0885fe98cf27b6" name="aefd9531dabde212efd0885fe98cf27b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aefd9531dabde212efd0885fe98cf27b6">&#9670;&#160;</a></span>ProjectileContact()</h2>
+<a id="a67c8540847b41e215d3ffac9c607f73a" name="a67c8540847b41e215d3ffac9c607f73a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67c8540847b41e215d3ffac9c607f73a">&#9670;&#160;</a></span>ProjectileContact()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -239,6 +239,11 @@ Private Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isRainbowTargetCarry</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>projectileColor</em></span>&#160;)</td>
         </tr>
       </table>
@@ -249,7 +254,7 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Mirrors <code>ProjectileHitResolver.ResolveContactPop</code>'s own flag composition — DamageFlags.DirectHit always; DamageFlags.WildcardStreak plus DamageFlags.Piercing under a rainbow buff; DamageFlags.Piercing alone under an armed (non-buffed) shot; DamageFlags.DeferredStreak for a colourless projectile popping a rainbow target absent a buff. </p>
+<p>Mirrors <code>ProjectileHitResolver.ResolveContactPop</code>'s own flag composition — DamageFlags.DirectHit always; DamageFlags.WildcardStreak plus DamageFlags.Piercing under a rainbow buff; DamageFlags.Piercing alone under an armed (non-buffed) shot; DamageFlags.DeferredStreak for a colourless projectile popping a rainbow target absent a buff; DamageFlags.CarryStreak for a coloured projectile popping a rainbow target absent a buff. </p>
 
 </div>
 </div>

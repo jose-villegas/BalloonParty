@@ -4,6 +4,7 @@ var namespaceBalloonParty_1_1Editor =
     [ "EffectPreview", "namespaceBalloonParty_1_1Editor_1_1EffectPreview.html", "namespaceBalloonParty_1_1Editor_1_1EffectPreview" ],
     [ "FrameDump", "namespaceBalloonParty_1_1Editor_1_1FrameDump.html", "namespaceBalloonParty_1_1Editor_1_1FrameDump" ],
     [ "Maps", "namespaceBalloonParty_1_1Editor_1_1Maps.html", "namespaceBalloonParty_1_1Editor_1_1Maps" ],
+    [ "Release", "namespaceBalloonParty_1_1Editor_1_1Release.html", "namespaceBalloonParty_1_1Editor_1_1Release" ],
     [ "ShadowBake", "namespaceBalloonParty_1_1Editor_1_1ShadowBake.html", "namespaceBalloonParty_1_1Editor_1_1ShadowBake" ],
     [ "ShotSolver", "namespaceBalloonParty_1_1Editor_1_1ShotSolver.html", "namespaceBalloonParty_1_1Editor_1_1ShotSolver" ],
     [ "SpriteCombine", "namespaceBalloonParty_1_1Editor_1_1SpriteCombine.html", "namespaceBalloonParty_1_1Editor_1_1SpriteCombine" ],

@@ -111,6 +111,7 @@ $(function(){initNavTree('classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSo
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Audio.Routing.ProgressionSoundRouter Class Reference<span class="mlabels"><span class="mlabel sealed">sealed</span></span></div></div>
 </div><!--header-->
@@ -127,13 +128,13 @@ $(function(){initNavTree('classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSo
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter__coll__graph.svg" width="527" height="215"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter__coll__graph.svg" width="576" height="407"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab2a133064248114b88c2dfea5332153a" id="r_ab2a133064248114b88c2dfea5332153a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab2a133064248114b88c2dfea5332153a">ProgressionSoundRouter</a> (<a class="el" href="interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html">ISoundPlayer</a> player, <a class="el" href="interfaceBalloonParty_1_1Audio_1_1IMelodicContext.html">IMelodicContext</a> melodic, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html">StreakChangedMessage</a> &gt; streakSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html">ScoreTrailArrivedMessage</a> &gt; scoreTrailSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScoreLevelUpMessage.html">ScoreLevelUpMessage</a> &gt; levelUpSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpGlowTrailsMessage.html">LevelUpGlowTrailsMessage</a> &gt; levelUpGlowSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage.html">LevelUpDismissedMessage</a> &gt; levelUpDismissedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelTransitionCompletedMessage.html">LevelTransitionCompletedMessage</a> &gt; levelTransitionSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html">BoardClearMessage</a> &gt; boardClearSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1GameOverMessage.html">GameOverMessage</a> &gt; gameOverSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1GameOverDismissedMessage.html">GameOverDismissedMessage</a> &gt; gameOverDismissedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelAscendStartedMessage.html">LevelAscendStartedMessage</a> &gt; ascendStartedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelDescendStartedMessage.html">LevelDescendStartedMessage</a> &gt; descendStartedSubscriber)</td></tr>
-<tr class="separator:ab2a133064248114b88c2dfea5332153a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc330cf617060c5f6b3f80c05c45025e" id="r_abc330cf617060c5f6b3f80c05c45025e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc330cf617060c5f6b3f80c05c45025e">ProgressionSoundRouter</a> (<a class="el" href="interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html">ISoundPlayer</a> player, <a class="el" href="interfaceBalloonParty_1_1Audio_1_1IMelodicContext.html">IMelodicContext</a> melodic, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a> levelProgress, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html">StreakChangedMessage</a> &gt; streakSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html">ScoreTrailArrivedMessage</a> &gt; scoreTrailSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScoreLevelUpMessage.html">ScoreLevelUpMessage</a> &gt; levelUpSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpGlowTrailsMessage.html">LevelUpGlowTrailsMessage</a> &gt; levelUpGlowSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage.html">LevelUpDismissedMessage</a> &gt; levelUpDismissedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelTransitionCompletedMessage.html">LevelTransitionCompletedMessage</a> &gt; levelTransitionSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html">BoardClearMessage</a> &gt; boardClearSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1GameOverMessage.html">GameOverMessage</a> &gt; gameOverSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1GameOverDismissedMessage.html">GameOverDismissedMessage</a> &gt; gameOverDismissedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelAscendStartedMessage.html">LevelAscendStartedMessage</a> &gt; ascendStartedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelDescendStartedMessage.html">LevelDescendStartedMessage</a> &gt; descendStartedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProgressBarCompletedMessage.html">ProgressBarCompletedMessage</a> &gt; progressBarCompletedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html">ProjectileLoadedMessage</a> &gt; projectileLoadedSubscriber)</td></tr>
+<tr class="separator:abc330cf617060c5f6b3f80c05c45025e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3266168fdc405081b7b453293a284cd" id="r_ad3266168fdc405081b7b453293a284cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3266168fdc405081b7b453293a284cd">Dispose</a> ()</td></tr>
 <tr class="separator:ad3266168fdc405081b7b453293a284cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3119cd36bf2a134f2b947f003b7c115f" id="r_a3119cd36bf2a134f2b947f003b7c115f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3119cd36bf2a134f2b947f003b7c115f">Start</a> ()</td></tr>
@@ -141,6 +142,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a0170a14e8de5839a4bcddf7e7b07c9c5" id="r_a0170a14e8de5839a4bcddf7e7b07c9c5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0170a14e8de5839a4bcddf7e7b07c9c5">ColorRootOffset</a> (string color)</td></tr>
+<tr class="separator:a0170a14e8de5839a4bcddf7e7b07c9c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adae276bee5b87c9ea73c5b3942112b51" id="r_adae276bee5b87c9ea73c5b3942112b51"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adae276bee5b87c9ea73c5b3942112b51">OnAscendStarted</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelAscendStartedMessage.html">LevelAscendStartedMessage</a> message)</td></tr>
 <tr class="separator:adae276bee5b87c9ea73c5b3942112b51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a76bed499d0c459f98a3de71691fbb273" id="r_a76bed499d0c459f98a3de71691fbb273"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a76bed499d0c459f98a3de71691fbb273">OnBoardClear</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html">BoardClearMessage</a> message)</td></tr>
@@ -159,13 +162,19 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:aa1646275d79719aafb76aed2db9580cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af70ee119558251e30f815a30dac49fff" id="r_af70ee119558251e30f815a30dac49fff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af70ee119558251e30f815a30dac49fff">OnLevelUpGlow</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpGlowTrailsMessage.html">LevelUpGlowTrailsMessage</a> message)</td></tr>
 <tr class="separator:af70ee119558251e30f815a30dac49fff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7c024ead1c9836e7277e26566bf7e00" id="r_ad7c024ead1c9836e7277e26566bf7e00"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad7c024ead1c9836e7277e26566bf7e00">OnProgressBarCompleted</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProgressBarCompletedMessage.html">ProgressBarCompletedMessage</a> message)</td></tr>
+<tr class="separator:ad7c024ead1c9836e7277e26566bf7e00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acea1a06bc5bd34e926351e640dc1a1ea" id="r_acea1a06bc5bd34e926351e640dc1a1ea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acea1a06bc5bd34e926351e640dc1a1ea">OnScoreTrailArrived</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html">ScoreTrailArrivedMessage</a> message)</td></tr>
 <tr class="separator:acea1a06bc5bd34e926351e640dc1a1ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a399edf17d93427f892616ecb3ef2dd10" id="r_a399edf17d93427f892616ecb3ef2dd10"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a399edf17d93427f892616ecb3ef2dd10">OnStreakChanged</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html">StreakChangedMessage</a> message)</td></tr>
 <tr class="separator:a399edf17d93427f892616ecb3ef2dd10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a533e0a0fe2afd7937b6c599e9108e02c" id="r_a533e0a0fe2afd7937b6c599e9108e02c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a533e0a0fe2afd7937b6c599e9108e02c">PlayLevelCompletePop</a> ()</td></tr>
+<tr class="separator:a533e0a0fe2afd7937b6c599e9108e02c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a6f5b39a16405a627a3658a76cdf25594" id="r_a6f5b39a16405a627a3658a76cdf25594"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f5b39a16405a627a3658a76cdf25594">_activeProjectile</a></td></tr>
+<tr class="separator:a6f5b39a16405a627a3658a76cdf25594"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a875d508b11dc7b19fa89a6343a180a69" id="r_a875d508b11dc7b19fa89a6343a180a69"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelAscendStartedMessage.html">LevelAscendStartedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a875d508b11dc7b19fa89a6343a180a69">_ascendStartedSubscriber</a></td></tr>
 <tr class="separator:a875d508b11dc7b19fa89a6343a180a69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bbf89d8ef055757aa2d2802dbf4335b" id="r_a4bbf89d8ef055757aa2d2802dbf4335b"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html">BoardClearMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4bbf89d8ef055757aa2d2802dbf4335b">_boardClearSubscriber</a></td></tr>
@@ -176,6 +185,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a8301ba53cedafa789df90b7f2cb6b947"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa98e109aa7f23bf65c50bc4818e42b71" id="r_aa98e109aa7f23bf65c50bc4818e42b71"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1GameOverMessage.html">GameOverMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa98e109aa7f23bf65c50bc4818e42b71">_gameOverSubscriber</a></td></tr>
 <tr class="separator:aa98e109aa7f23bf65c50bc4818e42b71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7726b83212b74994fc7c48f5afd20561" id="r_a7726b83212b74994fc7c48f5afd20561"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7726b83212b74994fc7c48f5afd20561">_levelProgress</a></td></tr>
+<tr class="separator:a7726b83212b74994fc7c48f5afd20561"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16a6de8188b6972b7f71be390fcbdb42" id="r_a16a6de8188b6972b7f71be390fcbdb42"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelTransitionCompletedMessage.html">LevelTransitionCompletedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a16a6de8188b6972b7f71be390fcbdb42">_levelTransitionSubscriber</a></td></tr>
 <tr class="separator:a16a6de8188b6972b7f71be390fcbdb42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac943f3090db374c60c44082e9f2fecdd" id="r_ac943f3090db374c60c44082e9f2fecdd"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage.html">LevelUpDismissedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac943f3090db374c60c44082e9f2fecdd">_levelUpDismissedSubscriber</a></td></tr>
@@ -186,18 +197,29 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a09df4c5a0802ab255b83741cd60f276c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af13f25266f159d5e358ec919485fa0d4" id="r_af13f25266f159d5e358ec919485fa0d4"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Audio_1_1IMelodicContext.html">IMelodicContext</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af13f25266f159d5e358ec919485fa0d4">_melodic</a></td></tr>
 <tr class="separator:af13f25266f159d5e358ec919485fa0d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a340538ec6100b7d577e94c930390c818" id="r_a340538ec6100b7d577e94c930390c818"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a340538ec6100b7d577e94c930390c818">_palette</a></td></tr>
+<tr class="separator:a340538ec6100b7d577e94c930390c818"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5dac8a9ffc3ccb05bc1b5a23abd55e9d" id="r_a5dac8a9ffc3ccb05bc1b5a23abd55e9d"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html">ISoundPlayer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5dac8a9ffc3ccb05bc1b5a23abd55e9d">_player</a></td></tr>
 <tr class="separator:a5dac8a9ffc3ccb05bc1b5a23abd55e9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc71c8b2dfba7698d10cc6b1370e0a9d" id="r_abc71c8b2dfba7698d10cc6b1370e0a9d"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProgressBarCompletedMessage.html">ProgressBarCompletedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc71c8b2dfba7698d10cc6b1370e0a9d">_progressBarCompletedSubscriber</a></td></tr>
+<tr class="separator:abc71c8b2dfba7698d10cc6b1370e0a9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a882e20ecfd71ec3468f76e17a8e4c4ac" id="r_a882e20ecfd71ec3468f76e17a8e4c4ac"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html">ProjectileLoadedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a882e20ecfd71ec3468f76e17a8e4c4ac">_projectileLoadedSubscriber</a></td></tr>
+<tr class="separator:a882e20ecfd71ec3468f76e17a8e4c4ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7efdda6259311628099e1c5c97da801a" id="r_a7efdda6259311628099e1c5c97da801a"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html">ScoreTrailArrivedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7efdda6259311628099e1c5c97da801a">_scoreTrailSubscriber</a></td></tr>
 <tr class="separator:a7efdda6259311628099e1c5c97da801a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b86e664920a322b34e264bd76e238c1" id="r_a1b86e664920a322b34e264bd76e238c1"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html">StreakChangedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1b86e664920a322b34e264bd76e238c1">_streakSubscriber</a></td></tr>
 <tr class="separator:a1b86e664920a322b34e264bd76e238c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05979cfbd41ab9bc07550024647dda70" id="r_a05979cfbd41ab9bc07550024647dda70"><td class="memItemLeft" align="right" valign="top">readonly CompositeDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a05979cfbd41ab9bc07550024647dda70">_subscriptions</a> = new()</td></tr>
 <tr class="separator:a05979cfbd41ab9bc07550024647dda70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a7d9a407525ba1977e623d6cea80480dc" id="r_a7d9a407525ba1977e623d6cea80480dc"><td class="memItemLeft" align="right" valign="top">static readonly int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d9a407525ba1977e623d6cea80480dc">ColorRootSemitones</a> = { 0, 4, 7, 11 }</td></tr>
+<tr class="separator:a7d9a407525ba1977e623d6cea80480dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ab2a133064248114b88c2dfea5332153a" name="ab2a133064248114b88c2dfea5332153a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab2a133064248114b88c2dfea5332153a">&#9670;&#160;</a></span>ProgressionSoundRouter()</h2>
+<a id="abc330cf617060c5f6b3f80c05c45025e" name="abc330cf617060c5f6b3f80c05c45025e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc330cf617060c5f6b3f80c05c45025e">&#9670;&#160;</a></span>ProgressionSoundRouter()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -211,6 +233,16 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Audio_1_1IMelodicContext.html">IMelodicContext</a></td>          <td class="paramname"><span class="paramname"><em>melodic</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a></td>          <td class="paramname"><span class="paramname"><em>palette</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a></td>          <td class="paramname"><span class="paramname"><em>levelProgress</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -265,7 +297,17 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelDescendStartedMessage.html">LevelDescendStartedMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>descendStartedSubscriber</em></span>&#160;)</td>
+          <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelDescendStartedMessage.html">LevelDescendStartedMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>descendStartedSubscriber</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProgressBarCompletedMessage.html">ProgressBarCompletedMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>progressBarCompletedSubscriber</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html">ProjectileLoadedMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>projectileLoadedSubscriber</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -273,6 +315,31 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0170a14e8de5839a4bcddf7e7b07c9c5" name="a0170a14e8de5839a4bcddf7e7b07c9c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0170a14e8de5839a4bcddf7e7b07c9c5">&#9670;&#160;</a></span>ColorRootOffset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Audio.Routing.ProgressionSoundRouter.ColorRootOffset </td>
+          <td>(</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>color</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ad3266168fdc405081b7b453293a284cd" name="ad3266168fdc405081b7b453293a284cd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad3266168fdc405081b7b453293a284cd">&#9670;&#160;</a></span>Dispose()</h2>
 
@@ -515,6 +582,31 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ad7c024ead1c9836e7277e26566bf7e00" name="ad7c024ead1c9836e7277e26566bf7e00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7c024ead1c9836e7277e26566bf7e00">&#9670;&#160;</a></span>OnProgressBarCompleted()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Audio.Routing.ProgressionSoundRouter.OnProgressBarCompleted </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProgressBarCompletedMessage.html">ProgressBarCompletedMessage</a></td>          <td class="paramname"><span class="paramname"><em>message</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="acea1a06bc5bd34e926351e640dc1a1ea" name="acea1a06bc5bd34e926351e640dc1a1ea"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acea1a06bc5bd34e926351e640dc1a1ea">&#9670;&#160;</a></span>OnScoreTrailArrived()</h2>
 
@@ -565,6 +657,31 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a533e0a0fe2afd7937b6c599e9108e02c" name="a533e0a0fe2afd7937b6c599e9108e02c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a533e0a0fe2afd7937b6c599e9108e02c">&#9670;&#160;</a></span>PlayLevelCompletePop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Audio.Routing.ProgressionSoundRouter.PlayLevelCompletePop </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a3119cd36bf2a134f2b947f003b7c115f" name="a3119cd36bf2a134f2b947f003b7c115f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3119cd36bf2a134f2b947f003b7c115f">&#9670;&#160;</a></span>Start()</h2>
 
@@ -583,6 +700,28 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a6f5b39a16405a627a3658a76cdf25594" name="a6f5b39a16405a627a3658a76cdf25594"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f5b39a16405a627a3658a76cdf25594">&#9670;&#160;</a></span>_activeProjectile</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> BalloonParty.Audio.Routing.ProgressionSoundRouter._activeProjectile</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a875d508b11dc7b19fa89a6343a180a69" name="a875d508b11dc7b19fa89a6343a180a69"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a875d508b11dc7b19fa89a6343a180a69">&#9670;&#160;</a></span>_ascendStartedSubscriber</h2>
 
@@ -682,6 +821,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly ISubscriber&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1GameOverMessage.html">GameOverMessage</a>&gt; BalloonParty.Audio.Routing.ProgressionSoundRouter._gameOverSubscriber</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7726b83212b74994fc7c48f5afd20561" name="a7726b83212b74994fc7c48f5afd20561"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7726b83212b74994fc7c48f5afd20561">&#9670;&#160;</a></span>_levelProgress</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a> BalloonParty.Audio.Routing.ProgressionSoundRouter._levelProgress</td>
         </tr>
       </table>
   </td>
@@ -803,6 +964,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a340538ec6100b7d577e94c930390c818" name="a340538ec6100b7d577e94c930390c818"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a340538ec6100b7d577e94c930390c818">&#9670;&#160;</a></span>_palette</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> BalloonParty.Audio.Routing.ProgressionSoundRouter._palette</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a5dac8a9ffc3ccb05bc1b5a23abd55e9d" name="a5dac8a9ffc3ccb05bc1b5a23abd55e9d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5dac8a9ffc3ccb05bc1b5a23abd55e9d">&#9670;&#160;</a></span>_player</h2>
 
@@ -814,6 +997,50 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html">ISoundPlayer</a> BalloonParty.Audio.Routing.ProgressionSoundRouter._player</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abc71c8b2dfba7698d10cc6b1370e0a9d" name="abc71c8b2dfba7698d10cc6b1370e0a9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc71c8b2dfba7698d10cc6b1370e0a9d">&#9670;&#160;</a></span>_progressBarCompletedSubscriber</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly ISubscriber&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProgressBarCompletedMessage.html">ProgressBarCompletedMessage</a>&gt; BalloonParty.Audio.Routing.ProgressionSoundRouter._progressBarCompletedSubscriber</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a882e20ecfd71ec3468f76e17a8e4c4ac" name="a882e20ecfd71ec3468f76e17a8e4c4ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a882e20ecfd71ec3468f76e17a8e4c4ac">&#9670;&#160;</a></span>_projectileLoadedSubscriber</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly ISubscriber&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html">ProjectileLoadedMessage</a>&gt; BalloonParty.Audio.Routing.ProgressionSoundRouter._projectileLoadedSubscriber</td>
         </tr>
       </table>
   </td>
@@ -885,6 +1112,28 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7d9a407525ba1977e623d6cea80480dc" name="a7d9a407525ba1977e623d6cea80480dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d9a407525ba1977e623d6cea80480dc">&#9670;&#160;</a></span>ColorRootSemitones</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int [] BalloonParty.Audio.Routing.ProgressionSoundRouter.ColorRootSemitones = { 0, 4, 7, 11 }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

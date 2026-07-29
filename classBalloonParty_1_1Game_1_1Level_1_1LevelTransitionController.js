@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController =
 [
-    [ "LevelTransitionController", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#a707f84483e83bcbac877f222c46cbf89", null ],
+    [ "LevelTransitionController", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#a20655f4f6e1eb2206a06278346ea77fa", null ],
     [ "Dispose", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#a80e37957d149339b187f04fe7492b4fa", null ],
     [ "HoldOutgoingContent", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#a4a2186f8bf9350eaabf1574c8892c686", null ],
     [ "ReleaseOutgoingContent", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#ad17fc369d67cb93c4841f1523916a94a", null ],
@@ -10,7 +10,6 @@ var classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController =
     [ "_ascendStartedPublisher", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#a3c54a5495bb4bf8e6217d859413145a5", null ],
     [ "_balloonRegistry", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#a2a25bbbabed2a95bec654b651da9e7b2", null ],
     [ "_boardEffect", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#ac0f8264b424f7a7f7d18306aa31afb23", null ],
-    [ "_cameraRig", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#ab070a7da3018f4f2b7dc2e331a519b43", null ],
     [ "_cinematicDirector", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#a060b540b3d313555afa67a8060b44c8f", null ],
     [ "_cinematicsSettings", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#a6709c1338217e77ffee74f0620de98c1", null ],
     [ "_completedPublisher", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#ae2fb7084159a2aaa3aeab4dd1c7ec88e", null ],

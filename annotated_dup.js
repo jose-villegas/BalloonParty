@@ -34,7 +34,8 @@ var annotated_dup =
           [ "WindSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1WindSoundRouter.html", "classBalloonParty_1_1Audio_1_1Routing_1_1WindSoundRouter" ]
         ] ],
         [ "View", "namespaceBalloonParty_1_1Audio_1_1View.html", [
-          [ "AudioSourceVoice", "classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html", "classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice" ]
+          [ "AudioSourceVoice", "classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html", "classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice" ],
+          [ "UiSfxEmitter", "classBalloonParty_1_1Audio_1_1View_1_1UiSfxEmitter.html", "classBalloonParty_1_1Audio_1_1View_1_1UiSfxEmitter" ]
         ] ],
         [ "AudioChannelController", "classBalloonParty_1_1Audio_1_1AudioChannelController.html", "classBalloonParty_1_1Audio_1_1AudioChannelController" ],
         [ "AudioMixerRouter", "classBalloonParty_1_1Audio_1_1AudioMixerRouter.html", "classBalloonParty_1_1Audio_1_1AudioMixerRouter" ],
@@ -282,6 +283,9 @@ var annotated_dup =
         ] ],
         [ "Maps", "namespaceBalloonParty_1_1Editor_1_1Maps.html", [
           [ "GameRenderMapsWindow", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow" ]
+        ] ],
+        [ "Release", "namespaceBalloonParty_1_1Editor_1_1Release.html", [
+          [ "ReleaseUploadWindow", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow" ]
         ] ],
         [ "ShadowBake", "namespaceBalloonParty_1_1Editor_1_1ShadowBake.html", [
           [ "ImageShadowBakerEditor", "classBalloonParty_1_1Editor_1_1ShadowBake_1_1ImageShadowBakerEditor.html", "classBalloonParty_1_1Editor_1_1ShadowBake_1_1ImageShadowBakerEditor" ],
@@ -618,7 +622,9 @@ var annotated_dup =
           [ "BalanceBalloonsMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BalanceBalloonsMessage.html", null ],
           [ "BalloonDeflectedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage" ],
           [ "BoardClearMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage" ],
+          [ "BoardDepletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BoardDepletedMessage.html", null ],
           [ "EndRunRequestedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1EndRunRequestedMessage.html", null ],
+          [ "ForceDestroyProjectileMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ForceDestroyProjectileMessage.html", null ],
           [ "GameOverDismissedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1GameOverDismissedMessage.html", null ],
           [ "GameOverMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1GameOverMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1GameOverMessage" ],
           [ "IHitDispatcher", "interfaceBalloonParty_1_1Shared_1_1Messages_1_1IHitDispatcher.html", "interfaceBalloonParty_1_1Shared_1_1Messages_1_1IHitDispatcher" ],
@@ -627,11 +633,13 @@ var annotated_dup =
           [ "LevelAscendStartedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelAscendStartedMessage.html", null ],
           [ "LevelDescendStartedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelDescendStartedMessage.html", null ],
           [ "LevelTransitionCompletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelTransitionCompletedMessage.html", null ],
+          [ "LevelUpAbandonedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpAbandonedMessage.html", null ],
           [ "LevelUpAbortedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpAbortedMessage.html", null ],
           [ "LevelUpDismissedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage.html", null ],
           [ "LevelUpGlowTrailsMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpGlowTrailsMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpGlowTrailsMessage" ],
           [ "OverflowHeartRequestedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage" ],
           [ "PierceDischargedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage" ],
+          [ "ProgressBarCompletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProgressBarCompletedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProgressBarCompletedMessage" ],
           [ "ProjectileCruiseEndedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseEndedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseEndedMessage" ],
           [ "ProjectileCruiseStartedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage" ],
           [ "ProjectileDestroyedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html", null ],
@@ -655,6 +663,7 @@ var annotated_dup =
           [ "WallHitMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage" ]
         ] ],
         [ "Pause", "namespaceBalloonParty_1_1Shared_1_1Pause.html", [
+          [ "ITimeScaleClaims", "interfaceBalloonParty_1_1Shared_1_1Pause_1_1ITimeScaleClaims.html", "interfaceBalloonParty_1_1Shared_1_1Pause_1_1ITimeScaleClaims" ],
           [ "PausedMessage", "structBalloonParty_1_1Shared_1_1Pause_1_1PausedMessage.html", "structBalloonParty_1_1Shared_1_1Pause_1_1PausedMessage" ],
           [ "PauseService", "classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html", "classBalloonParty_1_1Shared_1_1Pause_1_1PauseService" ],
           [ "ResumedMessage", "structBalloonParty_1_1Shared_1_1Pause_1_1ResumedMessage.html", "structBalloonParty_1_1Shared_1_1Pause_1_1ResumedMessage" ],
@@ -890,6 +899,7 @@ var annotated_dup =
         ] ],
         [ "AnimatorGameEntryGate", "classBalloonParty_1_1UI_1_1AnimatorGameEntryGate.html", "classBalloonParty_1_1UI_1_1AnimatorGameEntryGate" ],
         [ "CanvasCameraBinder", "classBalloonParty_1_1UI_1_1CanvasCameraBinder.html", "classBalloonParty_1_1UI_1_1CanvasCameraBinder" ],
+        [ "FadeImage", "classBalloonParty_1_1UI_1_1FadeImage.html", "classBalloonParty_1_1UI_1_1FadeImage" ],
         [ "FormattedLabel", "structBalloonParty_1_1UI_1_1FormattedLabel.html", "structBalloonParty_1_1UI_1_1FormattedLabel" ],
         [ "PlainCounterDisplay", "classBalloonParty_1_1UI_1_1PlainCounterDisplay.html", "classBalloonParty_1_1UI_1_1PlainCounterDisplay" ],
         [ "ReactiveCounterLabel", "classBalloonParty_1_1UI_1_1ReactiveCounterLabel.html", "classBalloonParty_1_1UI_1_1ReactiveCounterLabel" ],

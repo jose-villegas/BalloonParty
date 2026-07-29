@@ -125,6 +125,9 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html','
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ad8f8f069093621f863d64a95755e0c5c" id="r_ad8f8f069093621f863d64a95755e0c5c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Audio_1_1SoundHandle.html">SoundHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad8f8f069093621f863d64a95755e0c5c">Play</a> (<a class="el" href="namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13">GameSoundId</a> id, Vector3? position, int? melodicStreak=null, int semitoneOffset=0, float volumeScale=1f)</td></tr>
 <tr class="separator:ad8f8f069093621f863d64a95755e0c5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf4ec365b454e43213e57d18511790df" id="r_aaf4ec365b454e43213e57d18511790df"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf4ec365b454e43213e57d18511790df">SetPitch</a> (<a class="el" href="structBalloonParty_1_1Audio_1_1SoundHandle.html">SoundHandle</a> handle, float pitch, float seconds=0f)</td></tr>
+<tr class="memdesc:aaf4ec365b454e43213e57d18511790df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lerps the pitch multiplier on a playing voice (1 = normal). No-op on stale handles.  <br /></td></tr>
+<tr class="separator:aaf4ec365b454e43213e57d18511790df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97b9523e780ca18e2bd0ccda6693e9b6" id="r_a97b9523e780ca18e2bd0ccda6693e9b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a97b9523e780ca18e2bd0ccda6693e9b6">SetVolumeFactor</a> (<a class="el" href="structBalloonParty_1_1Audio_1_1SoundHandle.html">SoundHandle</a> handle, float factor)</td></tr>
 <tr class="separator:a97b9523e780ca18e2bd0ccda6693e9b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5e9d28ded1326c6dbddf03325042bbe" id="r_aa5e9d28ded1326c6dbddf03325042bbe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5e9d28ded1326c6dbddf03325042bbe">Stop</a> (<a class="el" href="structBalloonParty_1_1Audio_1_1SoundHandle.html">SoundHandle</a> handle)</td></tr>
@@ -166,6 +169,36 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Audio_1_1SfxService.html#a4083eaae2a5f3b640ac9dd9d9766f989">BalloonParty.Audio.SfxService</a>.</p>
+
+</div>
+</div>
+<a id="aaf4ec365b454e43213e57d18511790df" name="aaf4ec365b454e43213e57d18511790df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf4ec365b454e43213e57d18511790df">&#9670;&#160;</a></span>SetPitch()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Audio.ISoundPlayer.SetPitch </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Audio_1_1SoundHandle.html">SoundHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>pitch</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>seconds</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Lerps the pitch multiplier on a playing voice (1 = normal). No-op on stale handles. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Audio_1_1SfxService.html#a827573ce42265f59aa26814f2c0cf0d3">BalloonParty.Audio.SfxService</a>.</p>
 
 </div>
 </div>

@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry =
 [
-    [ "BalloonControllerRegistry", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#a40653440b4ec8c332f70c6b9ac96a7d9", null ],
+    [ "BalloonControllerRegistry", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#ac77d5740fb36ab8b9f344717e724647f", null ],
     [ "ClearAll", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#a5e401ad83a54369853223e01e35744dc", null ],
     [ "DetachOutgoing", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#a4333deb0b7a99dfd8fa224782a21a299", null ],
     [ "Dispose", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#ae12c581eb948b18190d4e679d39f72e1", null ],
@@ -16,6 +16,7 @@ var classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry =
     [ "_boardClearSubscriber", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#aa21acdd157da8c7a0ca7508ce04c47a1", null ],
     [ "_clearBuffer", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#a93eb364e311c4242262eae35813a1f04", null ],
     [ "_controllers", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#a77be837521a5017ac0b6e5ecb1361413", null ],
+    [ "_depletedPublisher", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#acbb5facfa49888f3679aed5e67f513c2", null ],
     [ "_freeCount", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#a83e4aa36a6bbbb382fc3d3ad73d5b13b", null ],
     [ "_freeIndices", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#a862e1f414200fe119d90675c9a5ae897", null ],
     [ "_highWater", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#a21d350d427ea761631987ca763572e7c", null ],

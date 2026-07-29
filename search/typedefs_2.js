@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['navigation_0',['Navigation',['../LevelUpCinematic_8cs.html#af53eecbc68a3351b9ae14d787d8c03fd',1,'LevelUpCinematic.cs']]]
+  ['object_0',['Object',['../SpriteLayerCombinerEditor_8cs.html#aef19bab18b9814edeef255c43e4f6bbc',1,'SpriteLayerCombinerEditor.cs']]]
 ];

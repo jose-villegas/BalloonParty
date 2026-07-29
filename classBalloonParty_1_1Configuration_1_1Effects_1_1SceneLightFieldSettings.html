@@ -162,11 +162,20 @@ Properties</h2></td></tr>
 <tr class="memitem:ac4b7edd9e198e423147d1d74a2dc7f41" id="r_ac4b7edd9e198e423147d1d74a2dc7f41"><td class="memItemLeft" align="right" valign="top">Shader&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac4b7edd9e198e423147d1d74a2dc7f41">FillShader</a><code> [get]</code></td></tr>
 <tr class="memdesc:ac4b7edd9e198e423147d1d74a2dc7f41"><td class="mdescLeft">&#160;</td><td class="mdescRight">The three field-pipeline shaders.  <br /></td></tr>
 <tr class="separator:ac4b7edd9e198e423147d1d74a2dc7f41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9db52231943c63dcccbadc6ca3d26732" id="r_a9db52231943c63dcccbadc6ca3d26732"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9db52231943c63dcccbadc6ca3d26732">GameStartAngleDegrees</a><code> [get]</code></td></tr>
+<tr class="memdesc:a9db52231943c63dcccbadc6ca3d26732"><td class="mdescLeft">&#160;</td><td class="mdescRight">Angle (degrees) the Realtime clock snaps to when transitioning from Launch to <a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a> — ensures the player always starts at a consistent time of day (e.g.  <br /></td></tr>
+<tr class="separator:a9db52231943c63dcccbadc6ca3d26732"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2606a212b309260daf37da2d550b45c" id="r_af2606a212b309260daf37da2d550b45c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af2606a212b309260daf37da2d550b45c">GameStartSweepSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:af2606a212b309260daf37da2d550b45c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds the Launch→Game sweep takes to reach <a class="el" href="#a9db52231943c63dcccbadc6ca3d26732" title="Angle (degrees) the Realtime clock snaps to when transitioning from Launch to Game — ensures the play...">GameStartAngleDegrees</a>.  <br /></td></tr>
+<tr class="separator:af2606a212b309260daf37da2d550b45c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace24a194d9cdbd87ff3180a1d9d9c67a" id="r_ace24a194d9cdbd87ff3180a1d9d9c67a"><td class="memItemLeft" align="right" valign="top">Shader&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace24a194d9cdbd87ff3180a1d9d9c67a">GradientShader</a><code> [get]</code></td></tr>
 <tr class="separator:ace24a194d9cdbd87ff3180a1d9d9c67a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e7056bb5573794b0e764df97efafdc6" id="r_a6e7056bb5573794b0e764df97efafdc6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e7056bb5573794b0e764df97efafdc6">Intensity</a><code> [get]</code></td></tr>
 <tr class="memdesc:a6e7056bb5573794b0e764df97efafdc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scales the light's contribution (diffuse contrast, specular brightness).  <br /></td></tr>
 <tr class="separator:a6e7056bb5573794b0e764df97efafdc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a2a950ea0d01203e5a67731e3d83fe9" id="r_a0a2a950ea0d01203e5a67731e3d83fe9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0a2a950ea0d01203e5a67731e3d83fe9">LaunchSpeedMultiplier</a><code> [get]</code></td></tr>
+<tr class="memdesc:a0a2a950ea0d01203e5a67731e3d83fe9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Speed multiplier applied to the time-of-day clock while in the Launch scene (e.g.  <br /></td></tr>
+<tr class="separator:a0a2a950ea0d01203e5a67731e3d83fe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a767550a257d6f61b07ede766471e6ad1" id="r_a767550a257d6f61b07ede766471e6ad1"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a767550a257d6f61b07ede766471e6ad1">LightColor</a><code> [get]</code></td></tr>
 <tr class="memdesc:a767550a257d6f61b07ede766471e6ad1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The main light's colour tint — multiplies into every specular/diffuse consumer.  <br /></td></tr>
 <tr class="separator:a767550a257d6f61b07ede766471e6ad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -262,10 +271,16 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a2fb591c2b1a62fbca6028c8c46a93fd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40a29dd79c4ab023c0700fe1486fba5c" id="r_a40a29dd79c4ab023c0700fe1486fba5c"><td class="memItemLeft" align="right" valign="top">Shader&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40a29dd79c4ab023c0700fe1486fba5c">_fillShader</a></td></tr>
 <tr class="separator:a40a29dd79c4ab023c0700fe1486fba5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad05a57328df03f3bac9b15e95b89d085" id="r_ad05a57328df03f3bac9b15e95b89d085"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad05a57328df03f3bac9b15e95b89d085">_gameStartAngleDegrees</a> = 135f</td></tr>
+<tr class="separator:ad05a57328df03f3bac9b15e95b89d085"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae76337aa59929b07bd75fcc564b135ed" id="r_ae76337aa59929b07bd75fcc564b135ed"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae76337aa59929b07bd75fcc564b135ed">_gameStartSweepSeconds</a> = 1.5f</td></tr>
+<tr class="separator:ae76337aa59929b07bd75fcc564b135ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9647b784589610dabe1f23cc7ca7f99b" id="r_a9647b784589610dabe1f23cc7ca7f99b"><td class="memItemLeft" align="right" valign="top">Shader&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9647b784589610dabe1f23cc7ca7f99b">_gradientShader</a></td></tr>
 <tr class="separator:a9647b784589610dabe1f23cc7ca7f99b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fa195bb664baff299e1da4aa6c34229" id="r_a1fa195bb664baff299e1da4aa6c34229"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1fa195bb664baff299e1da4aa6c34229">_intensity</a> = 1f</td></tr>
 <tr class="separator:a1fa195bb664baff299e1da4aa6c34229"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8bc2093bb530f96b27eb6fbcafde31c" id="r_ae8bc2093bb530f96b27eb6fbcafde31c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae8bc2093bb530f96b27eb6fbcafde31c">_launchSpeedMultiplier</a> = 1f</td></tr>
+<tr class="separator:ae8bc2093bb530f96b27eb6fbcafde31c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a554257021f8765c8bb0ca7da4d2f2ac0" id="r_a554257021f8765c8bb0ca7da4d2f2ac0"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a554257021f8765c8bb0ca7da4d2f2ac0">_lightColor</a> = Color.white</td></tr>
 <tr class="separator:a554257021f8765c8bb0ca7da4d2f2ac0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ff875637e2134d760aad80e4b5408d6" id="r_a0ff875637e2134d760aad80e4b5408d6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0ff875637e2134d760aad80e4b5408d6">_lightColorFromDirection</a></td></tr>
@@ -544,6 +559,50 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ad05a57328df03f3bac9b15e95b89d085" name="ad05a57328df03f3bac9b15e95b89d085"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad05a57328df03f3bac9b15e95b89d085">&#9670;&#160;</a></span>_gameStartAngleDegrees</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.SceneLightFieldSettings._gameStartAngleDegrees = 135f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae76337aa59929b07bd75fcc564b135ed" name="ae76337aa59929b07bd75fcc564b135ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae76337aa59929b07bd75fcc564b135ed">&#9670;&#160;</a></span>_gameStartSweepSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.SceneLightFieldSettings._gameStartSweepSeconds = 1.5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a9647b784589610dabe1f23cc7ca7f99b" name="a9647b784589610dabe1f23cc7ca7f99b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9647b784589610dabe1f23cc7ca7f99b">&#9670;&#160;</a></span>_gradientShader</h2>
 
@@ -577,6 +636,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Configuration.Effects.SceneLightFieldSettings._intensity = 1f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae8bc2093bb530f96b27eb6fbcafde31c" name="ae8bc2093bb530f96b27eb6fbcafde31c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8bc2093bb530f96b27eb6fbcafde31c">&#9670;&#160;</a></span>_launchSpeedMultiplier</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.SceneLightFieldSettings._launchSpeedMultiplier = 1f</td>
         </tr>
       </table>
   </td>
@@ -1371,6 +1452,59 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a9db52231943c63dcccbadc6ca3d26732" name="a9db52231943c63dcccbadc6ca3d26732"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9db52231943c63dcccbadc6ca3d26732">&#9670;&#160;</a></span>GameStartAngleDegrees</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.SceneLightFieldSettings.GameStartAngleDegrees</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Angle (degrees) the Realtime clock snaps to when transitioning from Launch to <a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a> — ensures the player always starts at a consistent time of day (e.g. </p>
+<p>135 = peak noon). </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#ae5610dccea393b3c8b2427c808595be4">BalloonParty.Configuration.Effects.ITimeOfDaySettings</a>.</p>
+
+</div>
+</div>
+<a id="af2606a212b309260daf37da2d550b45c" name="af2606a212b309260daf37da2d550b45c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2606a212b309260daf37da2d550b45c">&#9670;&#160;</a></span>GameStartSweepSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.SceneLightFieldSettings.GameStartSweepSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds the Launch→Game sweep takes to reach <a class="el" href="#a9db52231943c63dcccbadc6ca3d26732" title="Angle (degrees) the Realtime clock snaps to when transitioning from Launch to Game — ensures the play...">GameStartAngleDegrees</a>. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#af9e289430fb3698e455f32d248dc012a">BalloonParty.Configuration.Effects.ITimeOfDaySettings</a>.</p>
+
+</div>
+</div>
 <a id="ace24a194d9cdbd87ff3180a1d9d9c67a" name="ace24a194d9cdbd87ff3180a1d9d9c67a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ace24a194d9cdbd87ff3180a1d9d9c67a">&#9670;&#160;</a></span>GradientShader</h2>
 
@@ -1419,6 +1553,33 @@ Private Attributes</h2></td></tr>
 <p>1 = neutral, authored look. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightSettings.html#aae7794a45f3fd46d68fdba330f625a2a">BalloonParty.Configuration.Effects.ISceneLightSettings</a>.</p>
+
+</div>
+</div>
+<a id="a0a2a950ea0d01203e5a67731e3d83fe9" name="a0a2a950ea0d01203e5a67731e3d83fe9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a2a950ea0d01203e5a67731e3d83fe9">&#9670;&#160;</a></span>LaunchSpeedMultiplier</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.SceneLightFieldSettings.LaunchSpeedMultiplier</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Speed multiplier applied to the time-of-day clock while in the Launch scene (e.g. </p>
+<p>4 = 4× faster day/night cycle on the title screen). Reverts to 1× on entering <a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a>. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#ab2ca215dde44e01f1451698bca7135b4">BalloonParty.Configuration.Effects.ITimeOfDaySettings</a>.</p>
 
 </div>
 </div>

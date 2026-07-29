@@ -807,13 +807,13 @@ Pool Sizes</h4>
 <h2><a class="anchor" id="autotoc_md419"></a>
 12 — Losing Conditions</h2>
 <p>The game currently has <b>no fail state</b>: each turn <code>BalloonSpawner</code> adds lines, <code>BalloonBalancer</code> consolidates them, and the player chases per-color level-ups indefinitely. Picking a losing condition effectively picks the genre feel — survival-puzzle, score-attack with a clock, or run-based. The ideas below are grounded in systems that already exist.</p>
-<p>A shared property: <b>all of these reuse the <code><a class="el" href="LevelUpCinematic_8cs.html#af53eecbc68a3351b9ae14d787d8c03fd">Navigation</a></code> state machine.</b> A <code>GameOver</code> state slots in beside <code>Launch</code> / <code>Game</code> / <code>LevelUp</code>, and the thrower already no-ops its <code>Tick</code> outside the <code>Game</code> state, so input-lockout on loss is essentially free.</p>
+<p>A shared property: <b>all of these reuse the <code>Navigation</code> state machine.</b> A <code>GameOver</code> state slots in beside <code>Launch</code> / <code>Game</code> / <code>LevelUp</code>, and the thrower already no-ops its <code>Tick</code> outside the <code>Game</code> state, so input-lockout on loss is essentially free.</p>
 <h3><a class="anchor" id="autotoc_md420"></a>
 12.1 Grid encroachment — the natural fit (Puzzle Bobble lineage)</h3>
 <p>Balloons advance toward the thrower; if any actor crosses a danger boundary on the thrower's side of the grid, the player loses.</p>
 <ul>
 <li><b>Why it fits:</b> the whole engine already exists — <code>BalloonSpawner</code> adds lines each turn, <code>BalloonBalancer</code> consolidates rows, and the <b>post-spawn balance phase</b> is a clean, already-present "end of turn" checkpoint for a fail check. <code>SlotGrid</code> knows every occupied row/slot.</li>
-<li><b>Build surface:</b> a <code>BreachDetector</code> (<code>IStartable</code>) that, after the post-spawn balance settles, checks whether any <code>ISlotActor</code> occupies the deadline row(s); if so, transition <code><a class="el" href="LevelUpCinematic_8cs.html#af53eecbc68a3351b9ae14d787d8c03fd">Navigation</a></code> to a new <code>GameOver</code> state (mirrors <code>LevelUp</code> handling). One config value (<code>DeadlineRow</code>) + lines-per-turn from <code>BalloonsConfiguration</code> is the whole difficulty curve.</li>
+<li><b>Build surface:</b> a <code>BreachDetector</code> (<code>IStartable</code>) that, after the post-spawn balance settles, checks whether any <code>ISlotActor</code> occupies the deadline row(s); if so, transition <code>Navigation</code> to a new <code>GameOver</code> state (mirrors <code>LevelUp</code> handling). One config value (<code>DeadlineRow</code>) + lines-per-turn from <code>BalloonsConfiguration</code> is the whole difficulty curve.</li>
 <li><b>Tension knobs:</b> lines/turn, deadline depth, and — elegantly — <code>UnbreakableBalloonModel</code> becomes the threat (only pops on <code>Piercing</code>, so it deflects and clogs, pushing the front toward the deadline). Tough / Gatekeeper accumulation does the same.</li>
 </ul>
 <p><b>Recommended default</b> — most mechanically native, readable to the player, and reuses the turn pipeline almost entirely.</p>
@@ -854,7 +854,7 @@ Pool Sizes</h4>
 <p>Visual representation: <b>cards</b> (the open presentation question). Level-up deals a choice of N cards; pick one, it joins the run's build.</p>
 <h3><a class="anchor" id="autotoc_md428"></a>
 13.2 When unlocks are offered</h3>
-<p>Level-up is the natural trigger — <code>ScoreLevelUpMessage</code> already fires and the level-up ceremony (<code>LevelUpCinematic</code> + popup) is an existing frozen beat. A card-select step slots into or just after the popup: freeze via <code>TimeScaleService</code> (already the pattern there), present the cards, apply the pick, release. Reuse the level-up gating so nothing else runs during selection; a new <code><a class="el" href="LevelUpCinematic_8cs.html#af53eecbc68a3351b9ae14d787d8c03fd">Navigation</a></code>/popup sub-phase, not a new scene.</p>
+<p>Level-up is the natural trigger — <code>ScoreLevelUpMessage</code> already fires and the level-up ceremony (<code>LevelUpCinematic</code> + popup) is an existing frozen beat. A card-select step slots into or just after the popup: freeze via <code>TimeScaleService</code> (already the pattern there), present the cards, apply the pick, release. Reuse the level-up gating so nothing else runs during selection; a new <code>Navigation</code>/popup sub-phase, not a new scene.</p>
 <h3><a class="anchor" id="autotoc_md429"></a>
 13.3 Model sketch</h3>
 <div class="fragment"><div class="line"><span class="keyword">internal</span> <span class="keyword">interface </span>IRunModifier { ModifierKind Kind { <span class="keyword">get</span>; } }   <span class="comment">// Passive | Active</span></div>
@@ -897,7 +897,7 @@ Pool Sizes</h4>
 <li><b>Rain</b> — spawn a burst of item-carrying balloons on the next pass (a loot beat).</li>
 <li><b>Freeze</b> — halt grid encroachment for N turns (defensive, if § 12.1 ships).</li>
 </ul>
-<p>Two sub-flavors: <b>untargeted</b> (fires on a rule-picked target — simplest UI) vs <b>targeted</b> (player selects — needs a targeting mode: tap-to-select with a highlight, gated behind a pause/<code><a class="el" href="LevelUpCinematic_8cs.html#af53eecbc68a3351b9ae14d787d8c03fd">Navigation</a></code> state so the shot input doesn't fire instead).</p>
+<p>Two sub-flavors: <b>untargeted</b> (fires on a rule-picked target — simplest UI) vs <b>targeted</b> (player selects — needs a targeting mode: tap-to-select with a highlight, gated behind a pause/<code>Navigation</code> state so the shot input doesn't fire instead).</p>
 <h3><a class="anchor" id="autotoc_md432"></a>
 13.6 Integration points (existing systems)</h3>
 <ul>
@@ -906,7 +906,7 @@ Pool Sizes</h4>
 <li><code>LevelDifficultyResolver</code> / <code>IActiveLevelParameters</code> — passive values could resolve here so per-level params and run modifiers come through one read.</li>
 <li><code>BalloonControllerRegistry</code> — board / color / targeted effects iterate live balloons.</li>
 <li><code>ScoreLevelUpMessage</code> + level-up ceremony — the card-offer trigger.</li>
-<li><code><a class="el" href="LevelUpCinematic_8cs.html#af53eecbc68a3351b9ae14d787d8c03fd">Navigation</a></code> + <code>TimeScaleService</code> — freeze for card-select / targeting.</li>
+<li><code>Navigation</code> + <code>TimeScaleService</code> — freeze for card-select / targeting.</li>
 <li><code>IRunResettable</code> — the modifier stack and any charges reset per run.</li>
 </ul>
 <h3><a class="anchor" id="autotoc_md433"></a>

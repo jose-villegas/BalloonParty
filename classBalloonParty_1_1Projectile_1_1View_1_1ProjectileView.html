@@ -144,6 +144,9 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
+<tr class="memitem:a42641c0a1bf64f4566c19b473b7a9412" id="r_a42641c0a1bf64f4566c19b473b7a9412"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a42641c0a1bf64f4566c19b473b7a9412">ForceDestroy</a> ()</td></tr>
+<tr class="memdesc:a42641c0a1bf64f4566c19b473b7a9412"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forces the projectile through its full death sequence (pierce discharge, state cleanup, DestroyedMessage).  <br /></td></tr>
+<tr class="separator:a42641c0a1bf64f4566c19b473b7a9412"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a857e94fa7fabce09a997ee0c2ef1957f" id="r_a857e94fa7fabce09a997ee0c2ef1957f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a857e94fa7fabce09a997ee0c2ef1957f">PlayDisappear</a> (Action onComplete=null)</td></tr>
 <tr class="memdesc:a857e94fa7fabce09a997ee0c2ef1957f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scales the projectile to zero then invokes <em>onComplete</em> ; runs in unscaled time so it still plays while the world is frozen.  <br /></td></tr>
 <tr class="separator:a857e94fa7fabce09a997ee0c2ef1957f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -247,6 +250,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a4ef99083a334dfbd137f7f6731b09a9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad889e55b700719ab4c715c9331c06c69" id="r_ad889e55b700719ab4c715c9331c06c69"><td class="memItemLeft" align="right" valign="top">IDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad889e55b700719ab4c715c9331c06c69">_deflectedSubscription</a></td></tr>
 <tr class="separator:ad889e55b700719ab4c715c9331c06c69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a924900045d49c2eeaa09035ef3145392" id="r_a924900045d49c2eeaa09035ef3145392"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a924900045d49c2eeaa09035ef3145392">_destroyed</a></td></tr>
+<tr class="separator:a924900045d49c2eeaa09035ef3145392"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0bee02be07340fa158494bc1f18c05b" id="r_af0bee02be07340fa158494bc1f18c05b"><td class="memItemLeft" align="right" valign="top">IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html">ProjectileDestroyedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af0bee02be07340fa158494bc1f18c05b">_destroyedPublisher</a></td></tr>
 <tr class="separator:af0bee02be07340fa158494bc1f18c05b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45f27195a6dd0491a301ec8cf2c2e0f3" id="r_a45f27195a6dd0491a301ec8cf2c2e0f3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a45f27195a6dd0491a301ec8cf2c2e0f3">_disappearing</a></td></tr>
@@ -666,6 +671,34 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a42641c0a1bf64f4566c19b473b7a9412" name="a42641c0a1bf64f4566c19b473b7a9412"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42641c0a1bf64f4566c19b473b7a9412">&#9670;&#160;</a></span>ForceDestroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Projectile.View.ProjectileView.ForceDestroy </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Forces the projectile through its full death sequence (pierce discharge, state cleanup, DestroyedMessage). </p>
+<p>Called when the level-up cap fires or the board empties. </p>
 
 </div>
 </div>
@@ -1540,6 +1573,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">IDisposable BalloonParty.Projectile.View.ProjectileView._deflectedSubscription</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a924900045d49c2eeaa09035ef3145392" name="a924900045d49c2eeaa09035ef3145392"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a924900045d49c2eeaa09035ef3145392">&#9670;&#160;</a></span>_destroyed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Projectile.View.ProjectileView._destroyed</td>
         </tr>
       </table>
   </td>

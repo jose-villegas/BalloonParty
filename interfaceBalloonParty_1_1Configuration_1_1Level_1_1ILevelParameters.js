@@ -1,5 +1,7 @@
 var interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters =
 [
+    [ "FillGuaranteedBalloons", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ad72a95268fedce8202423d5c86398962", null ],
+    [ "FillGuaranteedItems", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ad93ef4997a80ea587529b349b314576d", null ],
     [ "PickBalloonEntry", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a6a7c11ee950d23e64f3af03670669156", null ],
     [ "PickItemEntry", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a523be777f92d0ecb7f5ec2fb5039097c", null ],
     [ "PickSimpleBalloonEntry", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a3c6daa3990df43137d4afe2c01764145", null ],

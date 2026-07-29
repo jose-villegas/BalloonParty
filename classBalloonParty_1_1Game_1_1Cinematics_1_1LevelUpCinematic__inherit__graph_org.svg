@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Puppets the level&#45;up&#39;s tipping score trail along the pan&#45;in, then hands off to the popup and restore ...">
+<g id="a_Node000001"><a xlink:title="Follows the tipping projectile during Window A (claim → first wall), then hands off to the popup and ...">
 <polygon fill="#999999" stroke="#666666" points="170,-30 0,-30 0,0 170,0 170,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Cinematics.</text>
 <text text-anchor="middle" x="85" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">LevelUpCinematic</text>

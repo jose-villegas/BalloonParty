@@ -131,6 +131,12 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1RunConfig.html',
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a9790d7253d70d56dcb22239ce843acd8" id="r_a9790d7253d70d56dcb22239ce843acd8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9790d7253d70d56dcb22239ce843acd8">LevelCompleteRampUpDuration</a><code> [get]</code></td></tr>
+<tr class="memdesc:a9790d7253d70d56dcb22239ce843acd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds over which timeScale ramps from 1 to <a class="el" href="#a2514e84597164e4525c997eafbfec087" title="Peak timeScale during the post-flight ramp-up (e.g. 2 = double speed).">LevelCompleteRampUpScale</a> after the completing flight ends.  <br /></td></tr>
+<tr class="separator:a9790d7253d70d56dcb22239ce843acd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2514e84597164e4525c997eafbfec087" id="r_a2514e84597164e4525c997eafbfec087"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2514e84597164e4525c997eafbfec087">LevelCompleteRampUpScale</a><code> [get]</code></td></tr>
+<tr class="memdesc:a2514e84597164e4525c997eafbfec087"><td class="mdescLeft">&#160;</td><td class="mdescRight">Peak timeScale during the post-flight ramp-up (e.g. 2 = double speed).  <br /></td></tr>
+<tr class="separator:a2514e84597164e4525c997eafbfec087"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a978c69652a6c2acc182bcc1a91e63c5b" id="r_a978c69652a6c2acc182bcc1a91e63c5b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a978c69652a6c2acc182bcc1a91e63c5b">MaxRetries</a><code> [get]</code></td></tr>
 <tr class="memdesc:a978c69652a6c2acc182bcc1a91e63c5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many times the player may retry at the same level per run (0 = disabled).  <br /></td></tr>
 <tr class="separator:a978c69652a6c2acc182bcc1a91e63c5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -139,12 +145,60 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a74406e2dd93188032564acde7c7bac79" id="r_a74406e2dd93188032564acde7c7bac79"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74406e2dd93188032564acde7c7bac79">_levelCompleteRampUpDuration</a> = 1.5f</td></tr>
+<tr class="separator:a74406e2dd93188032564acde7c7bac79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4393bf941524d9903dfb7f689c9e94e" id="r_ae4393bf941524d9903dfb7f689c9e94e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae4393bf941524d9903dfb7f689c9e94e">_levelCompleteRampUpScale</a> = 2f</td></tr>
+<tr class="separator:ae4393bf941524d9903dfb7f689c9e94e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6775e28253dde78cdc98eb824d93df26" id="r_a6775e28253dde78cdc98eb824d93df26"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6775e28253dde78cdc98eb824d93df26">_maxRetries</a> = 1</td></tr>
 <tr class="separator:a6775e28253dde78cdc98eb824d93df26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7543729b240eb6945c720ed60d3c7f9" id="r_af7543729b240eb6945c720ed60d3c7f9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af7543729b240eb6945c720ed60d3c7f9">_startingHitPoints</a> = 5</td></tr>
 <tr class="separator:af7543729b240eb6945c720ed60d3c7f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a74406e2dd93188032564acde7c7bac79" name="a74406e2dd93188032564acde7c7bac79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74406e2dd93188032564acde7c7bac79">&#9670;&#160;</a></span>_levelCompleteRampUpDuration</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.RunConfig._levelCompleteRampUpDuration = 1.5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae4393bf941524d9903dfb7f689c9e94e" name="ae4393bf941524d9903dfb7f689c9e94e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4393bf941524d9903dfb7f689c9e94e">&#9670;&#160;</a></span>_levelCompleteRampUpScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.RunConfig._levelCompleteRampUpScale = 2f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a6775e28253dde78cdc98eb824d93df26" name="a6775e28253dde78cdc98eb824d93df26"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6775e28253dde78cdc98eb824d93df26">&#9670;&#160;</a></span>_maxRetries</h2>
 
@@ -190,6 +244,58 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="a9790d7253d70d56dcb22239ce843acd8" name="a9790d7253d70d56dcb22239ce843acd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9790d7253d70d56dcb22239ce843acd8">&#9670;&#160;</a></span>LevelCompleteRampUpDuration</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.RunConfig.LevelCompleteRampUpDuration</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds over which timeScale ramps from 1 to <a class="el" href="#a2514e84597164e4525c997eafbfec087" title="Peak timeScale during the post-flight ramp-up (e.g. 2 = double speed).">LevelCompleteRampUpScale</a> after the completing flight ends. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#a05c3849296a9e25f7d22dba16149cfc0">BalloonParty.Shared.IRunConfig</a>.</p>
+
+</div>
+</div>
+<a id="a2514e84597164e4525c997eafbfec087" name="a2514e84597164e4525c997eafbfec087"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2514e84597164e4525c997eafbfec087">&#9670;&#160;</a></span>LevelCompleteRampUpScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.RunConfig.LevelCompleteRampUpScale</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Peak timeScale during the post-flight ramp-up (e.g. 2 = double speed). </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#a55d00dfdb778943248f7d4cba6bcb57c">BalloonParty.Shared.IRunConfig</a>.</p>
+
+</div>
+</div>
 <a id="a978c69652a6c2acc182bcc1a91e63c5b" name="a978c69652a6c2acc182bcc1a91e63c5b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a978c69652a6c2acc182bcc1a91e63c5b">&#9670;&#160;</a></span>MaxRetries</h2>
 

@@ -127,7 +127,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>The loss screen shown when a run ends. It sits <em>inside</em> the loss cinematic (<code>Game/Cinematics/GameOverLossCinematic</code>), split like the level-up popup: a slow-mo push-in plays, the screen shows over the held (pushed-in) frame, and on dismiss the camera pulls back — the run only restarts once that pull-back ends.</p>
-<h1><a class="anchor" id="autotoc_md895"></a>
+<h1><a class="anchor" id="autotoc_md897"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -139,21 +139,21 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>Game/Run/GameOverPresentationGate</code>   </td><td class="markdownTableBodyNone">DI singleton the screen awaits before showing; armed and opened by <code>GameOverLossCinematic</code>. Registered in <code>GameLifetimeScope</code> (<code>RegisterPresentation</code>) so the producer and screen share one instance. Implements <code>IReadyGate</code> for consistency, but injected by concrete type — the producer needs <code>Arm</code>/<code>Open</code>, and binding it as the interface would collide with the scope's <code>NavigationReadyGate(Game)</code>   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md896"></a>
+<h1><a class="anchor" id="autotoc_md898"></a>
 Wiring requirements</h1>
 <ul>
 <li>The screen root GameObject must stay <b>active</b> in the scene — visibility is driven by the <code>CanvasGroup</code> (alpha / interactable / blocksRaycasts), not <code>SetActive</code>. If it were disabled, <code>Start</code> would never run and <code>GameOverMessage</code> would never be subscribed.</li>
 <li>Assign the four <code>TMP_Text</code> label fields and wire the Restart button's onClick to <code>GameOverScreen.OnRestartPressed</code>. Each label's authored text is a <code>FormattedLabel</code> template (e.g. <code>"Level: {0}"</code>) captured in <code>Awake</code>, so repeated losses substitute cleanly.</li>
 <li>The Restart button dismisses (hides the screen + plays the restore) rather than restarting on the spot — expect a beat between the press and the fresh board while the camera pulls back.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md897"></a>
+<h1><a class="anchor" id="autotoc_md899"></a>
 Interactions</h1>
 <ul>
 <li><b><code>GameOverMessage</code></b> — published by <code>RunController.EndRun</code> (see <code>Game/Run/</code>); carries the final level/score. Populates the labels and starts the loss cinematic; the screen reveals once the cinematic opens <code>GameOverPresentationGate</code>.</li>
 <li><b><code>GameOverDismissedMessage</code></b> — published by the screen on Restart; <code>GameOverLossCinematic</code> plays the restore in response and restarts the run when it ends.</li>
 <li><b><code>IRunMeta</code></b> — read for best level/score (the only cross-run persisted progression).</li>
 <li><b><code>RunController</code></b> — <code>RestartRun</code> (invoked by the cinematic at the restore's end, not the button) clears the board and re-spawns a fresh run.</li>
-<li><b><code><a class="el" href="LevelUpCinematic_8cs.html#af53eecbc68a3351b9ae14d787d8c03fd">Navigation</a></code></b> — the screen self-hides when state leaves <code>GameOver</code>. </li>
+<li><b><code>Navigation</code></b> — the screen self-hides when state leaves <code>GameOver</code>. </li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

@@ -143,10 +143,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8c0969ab223659bd3b63b18deef5a248" id="r_a8c0969ab223659bd3b63b18deef5a248"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c0969ab223659bd3b63b18deef5a248">Register&lt; TItem &gt;</a> (PoolChannel&lt; TItem &gt; channel)</td></tr>
 <tr class="separator:a8c0969ab223659bd3b63b18deef5a248"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c4f7b261a05703206b7dfa285882978" id="r_a6c4f7b261a05703206b7dfa285882978"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6c4f7b261a05703206b7dfa285882978">Register&lt; TItem &gt;</a> (string key, PoolChannel&lt; TItem &gt; channel)</td></tr>
-<tr class="memdesc:a6c4f7b261a05703206b7dfa285882978"><td class="mdescLeft">&#160;</td><td class="mdescRight">Throws if the key is already taken.  <br /></td></tr>
+<tr class="memdesc:a6c4f7b261a05703206b7dfa285882978"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replaces the channel if the key already exists — pooled items from a previous scene hold stale DI references, so a fresh channel with the current resolver is needed.  <br /></td></tr>
 <tr class="separator:a6c4f7b261a05703206b7dfa285882978"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8fbdf053c29cef5ceee19fa38c51caaa" id="r_a8fbdf053c29cef5ceee19fa38c51caaa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8fbdf053c29cef5ceee19fa38c51caaa">Register&lt; TItem &gt;</a> (string key, PoolChannel&lt; TItem &gt; channel, Transform container)</td></tr>
-<tr class="memdesc:a8fbdf053c29cef5ceee19fa38c51caaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Throws if the key is already taken.  <br /></td></tr>
+<tr class="memdesc:a8fbdf053c29cef5ceee19fa38c51caaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replaces the channel if the key already exists.  <br /></td></tr>
 <tr class="separator:a8fbdf053c29cef5ceee19fa38c51caaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7858f2eed9d0b5e499e527b44206fdfb" id="r_a7858f2eed9d0b5e499e527b44206fdfb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7858f2eed9d0b5e499e527b44206fdfb">Return&lt; TItem &gt;</a> (string key, TItem item)</td></tr>
 <tr class="separator:a7858f2eed9d0b5e499e527b44206fdfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -410,7 +410,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Throws if the key is already taken. </p>
+<p>Replaces the channel if the key already exists — pooled items from a previous scene hold stale DI references, so a fresh channel with the current resolver is needed. </p>
 <div class="typeconstraint">
 <dl><dt><b>Type Constraints</b></dt><dd>
 <table border="0" cellspacing="2" cellpadding="0">
@@ -447,8 +447,8 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Throws if the key is already taken. </p>
-<p>Homes the channel under <em>container</em>  instead of creating one under <code>[<a class="el" href="namespaceBalloonParty_1_1Shared_1_1Pool.html">Pool</a>]</code> — for pools whose items should live where they're consumed (e.g. <a class="el" href="namespaceBalloonParty_1_1UI.html">UI</a> notices under their bar) rather than reparenting per lifecycle. </p>
+<p>Replaces the channel if the key already exists. </p>
+<p>Homes the channel under <em>container</em>  instead of creating one under <code>[<a class="el" href="namespaceBalloonParty_1_1Shared_1_1Pool.html">Pool</a>]</code>. </p>
 <div class="typeconstraint">
 <dl><dt><b>Type Constraints</b></dt><dd>
 <table border="0" cellspacing="2" cellpadding="0">

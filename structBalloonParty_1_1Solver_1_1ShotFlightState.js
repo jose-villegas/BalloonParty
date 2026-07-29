@@ -6,6 +6,7 @@ var structBalloonParty_1_1Solver_1_1ShotFlightState =
     [ "BankedPierceMultiplier", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a351e882e45c04f0c4410395c379f9459", null ],
     [ "BankedRainbowPierceCharges", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#ad007a7db20e00984c1a45d8cf0644480", null ],
     [ "Capped", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a0f34bcec134005b178e4a7993b665905", null ],
+    [ "CarryOnColorChange", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a635c17677a8f657f8962a90136f1a25e", null ],
     [ "ConsecutiveSweeps", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a418aa832c9a052e765377c886760c51b", null ],
     [ "ConsecutiveWallBounces", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#abc773af72df854eaa99f041c51b195f4", null ],
     [ "DeferredPops", "structBalloonParty_1_1Solver_1_1ShotFlightState.html#acd7038f6ba20bd14ce94871e24613c40", null ],

@@ -55,6 +55,7 @@ var classBalloonParty_1_1UI_1_1Score_1_1ColorProgressBar =
     [ "_palette", "classBalloonParty_1_1UI_1_1Score_1_1ColorProgressBar.html#a561be83911dce1aaf7ee823a759cea81", null ],
     [ "_pointNoticePrefab", "classBalloonParty_1_1UI_1_1Score_1_1ColorProgressBar.html#a7bf1d1494c7e1a57ae1c1cc793e21b60", null ],
     [ "_poolManager", "classBalloonParty_1_1UI_1_1Score_1_1ColorProgressBar.html#a2ffd56dbb442783b47c90d93d368ea72", null ],
+    [ "_progressBarCompletedPublisher", "classBalloonParty_1_1UI_1_1Score_1_1ColorProgressBar.html#af592eeb8058a6f5cf8dc98e3c0819694", null ],
     [ "_progressSlider", "classBalloonParty_1_1UI_1_1Score_1_1ColorProgressBar.html#aceb3ce112676f5b51e084bb6ea513b6b", null ],
     [ "_resetSubscriber", "classBalloonParty_1_1UI_1_1Score_1_1ColorProgressBar.html#a2dde146dd3e0b8d8259a23f5cb63557a", null ],
     [ "_scoreTrailService", "classBalloonParty_1_1UI_1_1Score_1_1ColorProgressBar.html#a0c39f4be56a244ad114882cd6739165b", null ],

@@ -1,7 +1,9 @@
 <map id="BalloonParty.Shared.SceneLight.TimeOfDayClock" name="BalloonParty.Shared.SceneLight.TimeOfDayClock">
-<area shape="rect" id="Node000001" title="Night&#45;mode TimeOfDaySource.Realtime driver: rotates the ambient light direction continuously on a wal..." alt="" coords="5,79,200,119"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="7,5,92,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="67,40,92,77,88,80,63,43"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="116,5,196,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="143,43,118,80,113,77,138,40"/>
+<area shape="rect" id="Node000001" title="Night&#45;mode TimeOfDaySource.Realtime driver: rotates the ambient light direction continuously on a wal..." alt="" coords="57,79,252,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,91,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="76,37,131,76,127,81,73,41"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="115,5,195,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="157,44,157,79,152,79,152,44"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="219,5,317,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="241,41,184,81,180,76,238,36"/>
 </map>

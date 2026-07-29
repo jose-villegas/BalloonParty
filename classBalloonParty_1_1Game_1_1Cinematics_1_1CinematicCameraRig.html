@@ -143,6 +143,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1613b61b6df5332150a21cd84d033e07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeabc76ba7a16ea9b83900f1af50fc3eb" id="r_aeabc76ba7a16ea9b83900f1af50fc3eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeabc76ba7a16ea9b83900f1af50fc3eb">EnableOrtho</a> (bool enabled)</td></tr>
 <tr class="separator:aeabc76ba7a16ea9b83900f1af50fc3eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5faaeec7e2dd09d0c80c806614e84e0d" id="r_a5faaeec7e2dd09d0c80c806614e84e0d"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5faaeec7e2dd09d0c80c806614e84e0d">FollowClamped</a> (Vector3 target, Rect outerBounds)</td></tr>
+<tr class="memdesc:a5faaeec7e2dd09d0c80c806614e84e0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Box-in-box follow: moves the camera (inner box = frustum) toward <em>target</em>  while keeping the frustum fully inside the outer bounds (walls + offset).  <br /></td></tr>
+<tr class="separator:a5faaeec7e2dd09d0c80c806614e84e0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85c08e5c3585b14b96d9ba338d5b6c55" id="r_a85c08e5c3585b14b96d9ba338d5b6c55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a85c08e5c3585b14b96d9ba338d5b6c55">Frame</a> (<a class="el" href="interfaceBalloonParty_1_1Game_1_1Cinematics_1_1ICinematicFocus.html">ICinematicFocus</a> focus, <a class="el" href="classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html">CameraRigCinematicSettings</a> segment, float dt)</td></tr>
 <tr class="memdesc:a85c08e5c3585b14b96d9ba338d5b6c55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pans toward the focus, keeping it in frustum; a single-point focus is hard-clamped after easing, a spread before.  <br /></td></tr>
 <tr class="separator:a85c08e5c3585b14b96d9ba338d5b6c55"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -154,6 +157,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:add4d1ec14bb038cb3604609ec85b4713"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b1e1e5b83f43774f71200a16d4f23fd" id="r_a4b1e1e5b83f43774f71200a16d4f23fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4b1e1e5b83f43774f71200a16d4f23fd">Restore</a> ()</td></tr>
 <tr class="separator:a4b1e1e5b83f43774f71200a16d4f23fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a333683db467dfb907cbd8f3be221b879" id="r_a333683db467dfb907cbd8f3be221b879"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a333683db467dfb907cbd8f3be221b879">RestoreCurveDriven</a> (AnimationCurve zoomCurve, Func&lt; Vector3 &gt; followTarget, float followSpeed, Rect outerBounds)</td></tr>
+<tr class="memdesc:a333683db467dfb907cbd8f3be221b879"><td class="mdescLeft">&#160;</td><td class="mdescRight">Curve-driven restore using the box-in-box model.  <br /></td></tr>
+<tr class="separator:a333683db467dfb907cbd8f3be221b879"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a049df02a8b51f1c519fd1e6b0f2e1321" id="r_a049df02a8b51f1c519fd1e6b0f2e1321"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a049df02a8b51f1c519fd1e6b0f2e1321">RestoreTweened</a> (float duration)</td></tr>
 <tr class="memdesc:a049df02a8b51f1c519fd1e6b0f2e1321"><td class="mdescLeft">&#160;</td><td class="mdescRight">Standalone tweened return to base framing, owning its own completion unlike <a class="el" href="#add4d1ec14bb038cb3604609ec85b4713">PrepareRestore</a>.  <br /></td></tr>
 <tr class="separator:a049df02a8b51f1c519fd1e6b0f2e1321"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -272,6 +278,30 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a5faaeec7e2dd09d0c80c806614e84e0d" name="a5faaeec7e2dd09d0c80c806614e84e0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5faaeec7e2dd09d0c80c806614e84e0d">&#9670;&#160;</a></span>FollowClamped()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector3 BalloonParty.Game.Cinematics.CinematicCameraRig.FollowClamped </td>
+          <td>(</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>target</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rect</td>          <td class="paramname"><span class="paramname"><em>outerBounds</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Box-in-box follow: moves the camera (inner box = frustum) toward <em>target</em>  while keeping the frustum fully inside the outer bounds (walls + offset). </p>
+<p>Returns the clamped position. When the inner box grows (zoom out), freedom to move shrinks; at full base size it may be locked. </p>
+
+</div>
+</div>
 <a id="a85c08e5c3585b14b96d9ba338d5b6c55" name="a85c08e5c3585b14b96d9ba338d5b6c55"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a85c08e5c3585b14b96d9ba338d5b6c55">&#9670;&#160;</a></span>Frame()</h2>
 
@@ -365,6 +395,40 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a333683db467dfb907cbd8f3be221b879" name="a333683db467dfb907cbd8f3be221b879"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a333683db467dfb907cbd8f3be221b879">&#9670;&#160;</a></span>RestoreCurveDriven()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.Cinematics.CinematicCameraRig.RestoreCurveDriven </td>
+          <td>(</td>
+          <td class="paramtype">AnimationCurve</td>          <td class="paramname"><span class="paramname"><em>zoomCurve</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Func&lt; Vector3 &gt;</td>          <td class="paramname"><span class="paramname"><em>followTarget</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>followSpeed</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rect</td>          <td class="paramname"><span class="paramname"><em>outerBounds</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Curve-driven restore using the box-in-box model. </p>
+<p>The curve's X = real seconds, Y = blend factor (0 = follows target clamped to outer bounds, 1 = original framing). The ortho size interpolates from current toward base, progressively shrinking the inner box's freedom until it snaps home. </p>
 
 </div>
 </div>

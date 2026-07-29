@@ -3,6 +3,8 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters =
     [ "LevelParameters", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a5e8b79d0962e3ea8001a88acfc9588ec", null ],
     [ "LevelParameters", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a0b13594fbb9459dab4eded51643ae471", null ],
     [ "BindResolved", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a9d1ee4491163e2a385c93a96d477eaab", null ],
+    [ "FillGuaranteedBalloons", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a986faa6e911d6afd8bf6aeabeeb7218d", null ],
+    [ "FillGuaranteedItems", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#ad6681de28bb56abed0dde80dba99c1eb", null ],
     [ "PickBalloonEntry", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a21ca0f6867ea9551ea306fad9b496939", null ],
     [ "PickItemEntry", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#af5b8f1896827e828f0cdf5cba2c5f20c", null ],
     [ "PickSimpleBalloonEntry", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a5e11f6bfb48fcebf9f2025ee86e65602", null ],

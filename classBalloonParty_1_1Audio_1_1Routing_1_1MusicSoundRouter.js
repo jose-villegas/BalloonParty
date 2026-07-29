@@ -1,11 +1,31 @@
 var classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter =
 [
-    [ "MusicSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#a2259348cad8db4756bf02d7b8abac3d7", null ],
+    [ "MusicSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#ac613c9bdd908c6e6b40354a25e61479e", null ],
+    [ "ApplyPitch", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#afff8cc406468b28836b2232635a3fca0", null ],
+    [ "ApplyVolume", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#a3a40efc0870e192dfb4e4a1887c8023d", null ],
     [ "Dispose", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#a14206bff5714dbb85a4b5694e4364b27", null ],
+    [ "OnFired", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#a5e3c1cf1095dc9651fff2f34e57cd071", null ],
+    [ "OnFlightEnded", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#ab4cc3cab9d0073c48fd4251ee3c931ee", null ],
     [ "OnNavigationChanged", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#ab38da7eb78d53425190d890f6ea209f5", null ],
     [ "Start", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#a67cf1cad4fd57f61c5e98a8123d10f24", null ],
+    [ "StartGameplay", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#a4cf5b8a324f6ace90e22b33f6368100b", null ],
+    [ "StopGameplay", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#a1c980f616520a0feddcf38a349c85141", null ],
+    [ "Tick", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#a8ca614a81c315a3833813b9ca2f7f446", null ],
+    [ "_dangerLevel", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#a16957d22aff46c4602c13204bb90e9c1", null ],
+    [ "_dayHandle", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#a1d5b761d33de6263c9eb66a25569af96", null ],
+    [ "_destroyedSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#ae149480bccd671b91709b98a83b634c3", null ],
+    [ "_firedSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#a0db31e99d5a38fe59d497ae442a0954c", null ],
+    [ "_inFlight", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#a1c921f273feace5e487431dd55b4944f", null ],
+    [ "_isDucked", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#af1886cd5fa5d56f08d706935072eb159", null ],
+    [ "_isPlaying", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#acfb89a09441742bb7ced909f1aae803c", null ],
     [ "_launchHandle", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#ab351f1d8a04bf7159f282a9b32d0d6ca", null ],
+    [ "_loadedSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#a024601ee79d755dae8c1a4710095a2a7", null ],
     [ "_navigation", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#ab2f823374271e844bef2b90e255b693b", null ],
+    [ "_nightHandle", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#a6017e56feef4ea201aa762afa9b1be8f", null ],
     [ "_player", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#a926a204ba26d1d0a7e17c7850887e331", null ],
-    [ "_subscriptions", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#aaeb9c95eec9705b0be46b56cf1c395df", null ]
+    [ "_subscriptions", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#aaeb9c95eec9705b0be46b56cf1c395df", null ],
+    [ "_timeOfDayNight", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#a527176cff769e8e1491effdcd1817df0", null ],
+    [ "_wasNight", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#ae693b5a957ea0bbcfd4747531f73fc99", null ],
+    [ "DangerMaxSemitones", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#a132a03bc40cbc5a2de37fe530feb1f08", null ],
+    [ "PitchLerpSeconds", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#a714b4645ac78e9dfa6d9616f8bdd0ab7", null ]
 ];

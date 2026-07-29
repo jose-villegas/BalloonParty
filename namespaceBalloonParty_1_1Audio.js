@@ -64,6 +64,12 @@ var namespaceBalloonParty_1_1Audio =
       [ "LevelDescend", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a70c75a31cc6f835f2c930cf95d66106d", null ],
       [ "PierceLoop", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13aba59a10142e4a6bd01a615d5a5a9d457", null ],
       [ "BalloonDeflectTough", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13ab3145038afada8dce494ec2e51caeef6", null ],
-      [ "SpeedTap", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a94c7b886faf6f349c007fc101ccdaf00", null ]
+      [ "SpeedTap", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a94c7b886faf6f349c007fc101ccdaf00", null ],
+      [ "UiProgressComplete", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13af84e2ba257f4427534abe7f345cc0199", null ],
+      [ "LevelCompletePop", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a019ab7836f5099ea569c66d84c37a366", null ],
+      [ "GameplayLoopDay", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a12177cdf486aa4773a0d694c89017851", null ],
+      [ "GameplayLoopNight", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13aa22058b0091b7178ecace9e043f1286a", null ],
+      [ "BalloonPopTougher", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13ab9ff9a9da8c1a8695184b580506db156", null ],
+      [ "BalloonDeflectTougher", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a6169cd5bb097937f1d80bf8ebbe6f54c", null ]
     ] ]
 ];

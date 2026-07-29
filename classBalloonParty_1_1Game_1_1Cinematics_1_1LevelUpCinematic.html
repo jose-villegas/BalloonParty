@@ -115,13 +115,12 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCine
 <a href="#properties">Properties</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
-<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Game.Cinematics.LevelUpCinematic Class Reference<span class="mlabels"><span class="mlabel sealed">sealed</span></span></div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Puppets the level-up's tipping score trail along the pan-in, then hands off to the popup and restore phases.  
+<p>Follows the tipping projectile during Window A (claim → first wall), then hands off to the popup and restore.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Game.Cinematics.LevelUpCinematic:</div>
@@ -167,8 +166,8 @@ Protected Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a370c5247a34ef229dbff27cebdb31e93" id="r_a370c5247a34ef229dbff27cebdb31e93"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a370c5247a34ef229dbff27cebdb31e93">LevelUpCinematic</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicDirector.html">CinematicDirector</a> director, <a class="el" href="classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraRig.html">CinematicCameraRig</a> rig, <a class="el" href="classBalloonParty_1_1Shared_1_1Pause_1_1TimeScaleService.html">TimeScaleService</a> timeScale, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Cinematics_1_1ICinematicsSettings.html">ICinematicsSettings</a> settings, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html">IScoreTrailConfig</a> config, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html">ScorePointsGroupMessage</a> &gt; scoredSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage.html">LevelUpDismissedMessage</a> &gt; dismissedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html">ScoreTrailArrivedMessage</a> &gt; trailArrivedSubscriber, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpAbortedMessage.html">LevelUpAbortedMessage</a> &gt; abortedPublisher, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a> levelProgress, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1ILossForecast.html">ILossForecast</a> lossForecast, <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html">ScoreTrailService</a> scoreTrailService, <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html">ScoreTrailBehaviourResolver</a> resolver, <a class="el" href="classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html">PauseService</a> pauseService, <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html">IActiveProjectilePierce</a> pierce)</td></tr>
-<tr class="separator:a370c5247a34ef229dbff27cebdb31e93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31e71384b0206df95bf12ce52c1f31fc" id="r_a31e71384b0206df95bf12ce52c1f31fc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31e71384b0206df95bf12ce52c1f31fc">LevelUpCinematic</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicDirector.html">CinematicDirector</a> director, <a class="el" href="classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraRig.html">CinematicCameraRig</a> rig, <a class="el" href="classBalloonParty_1_1Shared_1_1Pause_1_1TimeScaleService.html">TimeScaleService</a> timeScale, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Cinematics_1_1ICinematicsSettings.html">ICinematicsSettings</a> settings, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html">ScorePointsGroupMessage</a> &gt; scoredSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage.html">LevelUpDismissedMessage</a> &gt; dismissedSubscriber, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpAbortedMessage.html">LevelUpAbortedMessage</a> &gt; abortedPublisher, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a> levelProgress, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1ILossForecast.html">ILossForecast</a> lossForecast, <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html">ScoreTrailService</a> scoreTrailService, <a class="el" href="classBalloonParty_1_1Projectile_1_1ProjectilePositionProvider.html">ProjectilePositionProvider</a> positionProvider, <a class="el" href="classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html">PauseService</a> pauseService, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a> flightConfig)</td></tr>
+<tr class="separator:a31e71384b0206df95bf12ce52c1f31fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -179,57 +178,47 @@ Properties</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a29d67fd38c43a02a7fff9d2b0d8b0d5a" id="r_a29d67fd38c43a02a7fff9d2b0d8b0d5a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29d67fd38c43a02a7fff9d2b0d8b0d5a">AbortSession</a> ()</td></tr>
 <tr class="separator:a29d67fd38c43a02a7fff9d2b0d8b0d5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed49d4f1cba3d1d0e2a3e42b0e0a2700" id="r_aed49d4f1cba3d1d0e2a3e42b0e0a2700"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed49d4f1cba3d1d0e2a3e42b0e0a2700">AdvanceTrackedTrail</a> ()</td></tr>
-<tr class="separator:aed49d4f1cba3d1d0e2a3e42b0e0a2700"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8433a9fad02a84c918e557e843374245" id="r_a8433a9fad02a84c918e557e843374245"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8433a9fad02a84c918e557e843374245">BeginCinematicWithTrail</a> ()</td></tr>
-<tr class="separator:a8433a9fad02a84c918e557e843374245"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3ab11b62290ff37eabf3d6374eeccf4" id="r_af3ab11b62290ff37eabf3d6374eeccf4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3ab11b62290ff37eabf3d6374eeccf4">BeginCinematic</a> ()</td></tr>
+<tr class="separator:af3ab11b62290ff37eabf3d6374eeccf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5471bdbde719a7067c28033cb1ccf77" id="r_ac5471bdbde719a7067c28033cb1ccf77"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac5471bdbde719a7067c28033cb1ccf77">DisposeSessionSubscription</a> ()</td></tr>
 <tr class="separator:ac5471bdbde719a7067c28033cb1ccf77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a821bc1c019724fcb07ea5ec9edfed641" id="r_a821bc1c019724fcb07ea5ec9edfed641"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a821bc1c019724fcb07ea5ec9edfed641">EndPanIn</a> ()</td></tr>
 <tr class="separator:a821bc1c019724fcb07ea5ec9edfed641"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc5016358635a923a4792022f7f8c395" id="r_adc5016358635a923a4792022f7f8c395"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc5016358635a923a4792022f7f8c395">GetCameraTarget</a> ()</td></tr>
+<tr class="separator:adc5016358635a923a4792022f7f8c395"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad62c67a503347b0817f91dd803c4169b" id="r_ad62c67a503347b0817f91dd803c4169b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad62c67a503347b0817f91dd803c4169b">OnCinematicEnded</a> ()</td></tr>
 <tr class="separator:ad62c67a503347b0817f91dd803c4169b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab72c02d966dca0f9db2365ab6b63fdb6" id="r_ab72c02d966dca0f9db2365ab6b63fdb6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab72c02d966dca0f9db2365ab6b63fdb6">OnDismissed</a> ()</td></tr>
 <tr class="separator:ab72c02d966dca0f9db2365ab6b63fdb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c2244e3d0e8a7d8e5432e1e3e132c16" id="r_a5c2244e3d0e8a7d8e5432e1e3e132c16"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5c2244e3d0e8a7d8e5432e1e3e132c16">OnScorePoint</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html">ScorePointsGroupMessage</a> msg)</td></tr>
 <tr class="separator:a5c2244e3d0e8a7d8e5432e1e3e132c16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8e0ce2951b80b875cf0a879e6e49650" id="r_aa8e0ce2951b80b875cf0a879e6e49650"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa8e0ce2951b80b875cf0a879e6e49650">OnTrailArrived</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html">ScoreTrailArrivedMessage</a> msg)</td></tr>
-<tr class="separator:aa8e0ce2951b80b875cf0a879e6e49650"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8ef539a1adcce533d5a007699a4a14b" id="r_aa8ef539a1adcce533d5a007699a4a14b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa8ef539a1adcce533d5a007699a4a14b">PanInTick</a> (float dt, float curveValue)</td></tr>
 <tr class="separator:aa8ef539a1adcce533d5a007699a4a14b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d165c69b6b8bad00d216e6f24e36e2b" id="r_a2d165c69b6b8bad00d216e6f24e36e2b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d165c69b6b8bad00d216e6f24e36e2b">SubscribeForDismissed</a> ()</td></tr>
 <tr class="separator:a2d165c69b6b8bad00d216e6f24e36e2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ba9521fc450dfbd0f64035f510d9716" id="r_a8ba9521fc450dfbd0f64035f510d9716"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ba9521fc450dfbd0f64035f510d9716">SubscribeForPanIn</a> ()</td></tr>
-<tr class="separator:a8ba9521fc450dfbd0f64035f510d9716"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4caf1419343a84b643ab7afc969a66e" id="r_ac4caf1419343a84b643ab7afc969a66e"><td class="memItemLeft" align="right" valign="top">async UniTaskVoid&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac4caf1419343a84b643ab7afc969a66e">WaitForTippingTrailAsync</a> ()</td></tr>
-<tr class="separator:ac4caf1419343a84b643ab7afc969a66e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a196d13a1f0bc7f403323b8707793efc6" id="r_a196d13a1f0bc7f403323b8707793efc6"><td class="memItemLeft" align="right" valign="top">readonly IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpAbortedMessage.html">LevelUpAbortedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a196d13a1f0bc7f403323b8707793efc6">_abortedPublisher</a></td></tr>
 <tr class="separator:a196d13a1f0bc7f403323b8707793efc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64825001af021cf4638d4f0cdef0edeb" id="r_a64825001af021cf4638d4f0cdef0edeb"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html">IScoreTrailConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a64825001af021cf4638d4f0cdef0edeb">_config</a></td></tr>
-<tr class="separator:a64825001af021cf4638d4f0cdef0edeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d03e2c8e7c96383f54fa40b092ea225" id="r_a8d03e2c8e7c96383f54fa40b092ea225"><td class="memItemLeft" align="right" valign="top">readonly CancellationTokenSource&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8d03e2c8e7c96383f54fa40b092ea225">_cts</a> = new()</td></tr>
-<tr class="separator:a8d03e2c8e7c96383f54fa40b092ea225"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae76873d0e7fd10e1f0f27426fc92cd67" id="r_ae76873d0e7fd10e1f0f27426fc92cd67"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage.html">LevelUpDismissedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae76873d0e7fd10e1f0f27426fc92cd67">_dismissedSubscriber</a></td></tr>
 <tr class="separator:ae76873d0e7fd10e1f0f27426fc92cd67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c1ac52be6c54706c4119678b39a7c56" id="r_a5c1ac52be6c54706c4119678b39a7c56"><td class="memItemLeft" align="right" valign="top">IDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5c1ac52be6c54706c4119678b39a7c56">_freezeSubscription</a></td></tr>
 <tr class="separator:a5c1ac52be6c54706c4119678b39a7c56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8efc6bb7e094b4c2e8263aca2af5e664" id="r_a8efc6bb7e094b4c2e8263aca2af5e664"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8efc6bb7e094b4c2e8263aca2af5e664">_lastTrailPosition</a></td></tr>
-<tr class="separator:a8efc6bb7e094b4c2e8263aca2af5e664"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ca6a070722181af5b6054c890782dd3" id="r_a8ca6a070722181af5b6054c890782dd3"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ca6a070722181af5b6054c890782dd3">_lastProjectilePosition</a></td></tr>
+<tr class="separator:a8ca6a070722181af5b6054c890782dd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1240e6029dfd1985058f10d008eb07b1" id="r_a1240e6029dfd1985058f10d008eb07b1"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1240e6029dfd1985058f10d008eb07b1">_levelProgress</a></td></tr>
 <tr class="separator:a1240e6029dfd1985058f10d008eb07b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5565c53da5ae23f0f3ba266b15d80e62" id="r_a5565c53da5ae23f0f3ba266b15d80e62"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1ILossForecast.html">ILossForecast</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5565c53da5ae23f0f3ba266b15d80e62">_lossForecast</a></td></tr>
 <tr class="separator:a5565c53da5ae23f0f3ba266b15d80e62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a334ec9d1808bd561d3f3e8b62c43dc6d" id="r_a334ec9d1808bd561d3f3e8b62c43dc6d"><td class="memItemLeft" align="right" valign="top">readonly Rect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a334ec9d1808bd561d3f3e8b62c43dc6d">_outerBounds</a></td></tr>
+<tr class="separator:a334ec9d1808bd561d3f3e8b62c43dc6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6614826c899880b4b6fd0fcf9b4de2dd" id="r_a6614826c899880b4b6fd0fcf9b4de2dd"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6614826c899880b4b6fd0fcf9b4de2dd">_panInElapsed</a></td></tr>
 <tr class="separator:a6614826c899880b4b6fd0fcf9b4de2dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e71a7f99b0d18a2ba3460e746da02bb" id="r_a3e71a7f99b0d18a2ba3460e746da02bb"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html">PauseService</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3e71a7f99b0d18a2ba3460e746da02bb">_pauseService</a></td></tr>
 <tr class="separator:a3e71a7f99b0d18a2ba3460e746da02bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d3b5448103a60aa4523b1d294cc1550" id="r_a5d3b5448103a60aa4523b1d294cc1550"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html">IActiveProjectilePierce</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d3b5448103a60aa4523b1d294cc1550">_pierce</a></td></tr>
-<tr class="separator:a5d3b5448103a60aa4523b1d294cc1550"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c4a44e50c04781336d970610dc85cda" id="r_a7c4a44e50c04781336d970610dc85cda"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html">ScoreTrailBehaviourResolver</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c4a44e50c04781336d970610dc85cda">_resolver</a></td></tr>
-<tr class="separator:a7c4a44e50c04781336d970610dc85cda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2e4f2c1df24df5059dde26a630fbdb2" id="r_ae2e4f2c1df24df5059dde26a630fbdb2"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Projectile_1_1ProjectilePositionProvider.html">ProjectilePositionProvider</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae2e4f2c1df24df5059dde26a630fbdb2">_positionProvider</a></td></tr>
+<tr class="separator:ae2e4f2c1df24df5059dde26a630fbdb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd4bf8f3b0997fb44a6da1b1430daf35" id="r_afd4bf8f3b0997fb44a6da1b1430daf35"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html">CameraRigCinematic</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicProducer.html#afd4bf8f3b0997fb44a6da1b1430daf35">_runner</a></td></tr>
 <tr class="separator:afd4bf8f3b0997fb44a6da1b1430daf35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfd36596b9b38b7206007c133c303e6f" id="r_abfd36596b9b38b7206007c133c303e6f"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html">ScorePointsGroupMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abfd36596b9b38b7206007c133c303e6f">_scoredSubscriber</a></td></tr>
@@ -242,33 +231,12 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a6b8b3cb5152af9f8a4044809e1aba567"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a833447d86e90f96225955bdd5d75ad0d" id="r_a833447d86e90f96225955bdd5d75ad0d"><td class="memItemLeft" align="right" valign="top">IDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a833447d86e90f96225955bdd5d75ad0d">_sessionSubscription</a></td></tr>
 <tr class="separator:a833447d86e90f96225955bdd5d75ad0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a436b31acc2bc0b822c71b4de6c20e62b" id="r_a436b31acc2bc0b822c71b4de6c20e62b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Game_1_1Score_1_1TrailId.html">TrailId</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a436b31acc2bc0b822c71b4de6c20e62b">_tippingTrailId</a></td></tr>
-<tr class="separator:a436b31acc2bc0b822c71b4de6c20e62b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a457e8cf420dd5fbf2642c86fea43503a" id="r_a457e8cf420dd5fbf2642c86fea43503a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1TrailFlight.html">TrailFlight</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a457e8cf420dd5fbf2642c86fea43503a">_trackedFlight</a></td></tr>
-<tr class="separator:a457e8cf420dd5fbf2642c86fea43503a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2ddcc937639910ae2361d0fc8a414b9" id="r_af2ddcc937639910ae2361d0fc8a414b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Cinematics_1_1TrackedTrailSettings.html">TrackedTrailSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af2ddcc937639910ae2361d0fc8a414b9">_trackedTrailSettings</a></td></tr>
-<tr class="separator:af2ddcc937639910ae2361d0fc8a414b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a199299280321149f2fb3e0f3c3564717" id="r_a199299280321149f2fb3e0f3c3564717"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html">ScoreTrailArrivedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a199299280321149f2fb3e0f3c3564717">_trailArrivedSubscriber</a></td></tr>
-<tr class="separator:a199299280321149f2fb3e0f3c3564717"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdc8fb1f0c1d8a3ec6143665b570afee" id="r_abdc8fb1f0c1d8a3ec6143665b570afee"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abdc8fb1f0c1d8a3ec6143665b570afee">_trailElapsed</a></td></tr>
-<tr class="separator:abdc8fb1f0c1d8a3ec6143665b570afee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af347daedc96ae2d06d5f744f795b078d" id="r_af347daedc96ae2d06d5f744f795b078d"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af347daedc96ae2d06d5f744f795b078d">_trailOrigin</a></td></tr>
-<tr class="separator:af347daedc96ae2d06d5f744f795b078d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6db2c84a3166a48da25a783b29a06565" id="r_a6db2c84a3166a48da25a783b29a06565"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6db2c84a3166a48da25a783b29a06565">_trailTargetWorld</a></td></tr>
-<tr class="separator:a6db2c84a3166a48da25a783b29a06565"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
-Static Private Attributes</h2></td></tr>
-<tr class="memitem:ab9a3359932a47d0b6b3b73eb9fed251e" id="r_ab9a3359932a47d0b6b3b73eb9fed251e"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab9a3359932a47d0b6b3b73eb9fed251e">PanInTimeoutFactor</a> = 3f</td></tr>
-<tr class="separator:ab9a3359932a47d0b6b3b73eb9fed251e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4da3dcf26f1046c9a86497665676cb7" id="r_ac4da3dcf26f1046c9a86497665676cb7"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac4da3dcf26f1046c9a86497665676cb7">TrailRegisterTimeoutFactor</a> = 3f</td></tr>
-<tr class="separator:ac4da3dcf26f1046c9a86497665676cb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Puppets the level-up's tipping score trail along the pan-in, then hands off to the popup and restore phases. </p>
+<div class="textblock"><p>Follows the tipping projectile during Window A (claim → first wall), then hands off to the popup and restore. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a370c5247a34ef229dbff27cebdb31e93" name="a370c5247a34ef229dbff27cebdb31e93"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a370c5247a34ef229dbff27cebdb31e93">&#9670;&#160;</a></span>LevelUpCinematic()</h2>
+<a id="a31e71384b0206df95bf12ce52c1f31fc" name="a31e71384b0206df95bf12ce52c1f31fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31e71384b0206df95bf12ce52c1f31fc">&#9670;&#160;</a></span>LevelUpCinematic()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -299,22 +267,12 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html">IScoreTrailConfig</a></td>          <td class="paramname"><span class="paramname"><em>config</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html">ScorePointsGroupMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>scoredSubscriber</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage.html">LevelUpDismissedMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>dismissedSubscriber</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html">ScoreTrailArrivedMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>trailArrivedSubscriber</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -339,7 +297,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html">ScoreTrailBehaviourResolver</a></td>          <td class="paramname"><span class="paramname"><em>resolver</em></span>, </td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Projectile_1_1ProjectilePositionProvider.html">ProjectilePositionProvider</a></td>          <td class="paramname"><span class="paramname"><em>positionProvider</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -349,7 +307,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html">IActiveProjectilePierce</a></td>          <td class="paramname"><span class="paramname"><em>pierce</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a></td>          <td class="paramname"><span class="paramname"><em>flightConfig</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -387,8 +345,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aed49d4f1cba3d1d0e2a3e42b0e0a2700" name="aed49d4f1cba3d1d0e2a3e42b0e0a2700"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aed49d4f1cba3d1d0e2a3e42b0e0a2700">&#9670;&#160;</a></span>AdvanceTrackedTrail()</h2>
+<a id="af3ab11b62290ff37eabf3d6374eeccf4" name="af3ab11b62290ff37eabf3d6374eeccf4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3ab11b62290ff37eabf3d6374eeccf4">&#9670;&#160;</a></span>BeginCinematic()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -397,32 +355,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void BalloonParty.Game.Cinematics.LevelUpCinematic.AdvanceTrackedTrail </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8433a9fad02a84c918e557e843374245" name="a8433a9fad02a84c918e557e843374245"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8433a9fad02a84c918e557e843374245">&#9670;&#160;</a></span>BeginCinematicWithTrail()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void BalloonParty.Game.Cinematics.LevelUpCinematic.BeginCinematicWithTrail </td>
+          <td class="memname">void BalloonParty.Game.Cinematics.LevelUpCinematic.BeginCinematic </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -523,6 +456,31 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">void BalloonParty.Game.Cinematics.LevelUpCinematic.EndPanIn </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adc5016358635a923a4792022f7f8c395" name="adc5016358635a923a4792022f7f8c395"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc5016358635a923a4792022f7f8c395">&#9670;&#160;</a></span>GetCameraTarget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector3 BalloonParty.Game.Cinematics.LevelUpCinematic.GetCameraTarget </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -664,31 +622,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aa8e0ce2951b80b875cf0a879e6e49650" name="aa8e0ce2951b80b875cf0a879e6e49650"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa8e0ce2951b80b875cf0a879e6e49650">&#9670;&#160;</a></span>OnTrailArrived()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void BalloonParty.Game.Cinematics.LevelUpCinematic.OnTrailArrived </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html">ScoreTrailArrivedMessage</a></td>          <td class="paramname"><span class="paramname"><em>msg</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="aa8ef539a1adcce533d5a007699a4a14b" name="aa8ef539a1adcce533d5a007699a4a14b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa8ef539a1adcce533d5a007699a4a14b">&#9670;&#160;</a></span>PanInTick()</h2>
 
@@ -768,56 +701,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a8ba9521fc450dfbd0f64035f510d9716" name="a8ba9521fc450dfbd0f64035f510d9716"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8ba9521fc450dfbd0f64035f510d9716">&#9670;&#160;</a></span>SubscribeForPanIn()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void BalloonParty.Game.Cinematics.LevelUpCinematic.SubscribeForPanIn </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac4caf1419343a84b643ab7afc969a66e" name="ac4caf1419343a84b643ab7afc969a66e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac4caf1419343a84b643ab7afc969a66e">&#9670;&#160;</a></span>WaitForTippingTrailAsync()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">async UniTaskVoid BalloonParty.Game.Cinematics.LevelUpCinematic.WaitForTippingTrailAsync </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a196d13a1f0bc7f403323b8707793efc6" name="a196d13a1f0bc7f403323b8707793efc6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a196d13a1f0bc7f403323b8707793efc6">&#9670;&#160;</a></span>_abortedPublisher</h2>
@@ -830,50 +713,6 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly IPublisher&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpAbortedMessage.html">LevelUpAbortedMessage</a>&gt; BalloonParty.Game.Cinematics.LevelUpCinematic._abortedPublisher</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a64825001af021cf4638d4f0cdef0edeb" name="a64825001af021cf4638d4f0cdef0edeb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a64825001af021cf4638d4f0cdef0edeb">&#9670;&#160;</a></span>_config</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html">IScoreTrailConfig</a> BalloonParty.Game.Cinematics.LevelUpCinematic._config</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8d03e2c8e7c96383f54fa40b092ea225" name="a8d03e2c8e7c96383f54fa40b092ea225"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d03e2c8e7c96383f54fa40b092ea225">&#9670;&#160;</a></span>_cts</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">readonly CancellationTokenSource BalloonParty.Game.Cinematics.LevelUpCinematic._cts = new()</td>
         </tr>
       </table>
   </td>
@@ -929,8 +768,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a8efc6bb7e094b4c2e8263aca2af5e664" name="a8efc6bb7e094b4c2e8263aca2af5e664"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8efc6bb7e094b4c2e8263aca2af5e664">&#9670;&#160;</a></span>_lastTrailPosition</h2>
+<a id="a8ca6a070722181af5b6054c890782dd3" name="a8ca6a070722181af5b6054c890782dd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ca6a070722181af5b6054c890782dd3">&#9670;&#160;</a></span>_lastProjectilePosition</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -939,7 +778,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Vector3 BalloonParty.Game.Cinematics.LevelUpCinematic._lastTrailPosition</td>
+          <td class="memname">Vector3 BalloonParty.Game.Cinematics.LevelUpCinematic._lastProjectilePosition</td>
         </tr>
       </table>
   </td>
@@ -995,6 +834,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a334ec9d1808bd561d3f3e8b62c43dc6d" name="a334ec9d1808bd561d3f3e8b62c43dc6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a334ec9d1808bd561d3f3e8b62c43dc6d">&#9670;&#160;</a></span>_outerBounds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly Rect BalloonParty.Game.Cinematics.LevelUpCinematic._outerBounds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a6614826c899880b4b6fd0fcf9b4de2dd" name="a6614826c899880b4b6fd0fcf9b4de2dd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6614826c899880b4b6fd0fcf9b4de2dd">&#9670;&#160;</a></span>_panInElapsed</h2>
 
@@ -1039,8 +900,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a5d3b5448103a60aa4523b1d294cc1550" name="a5d3b5448103a60aa4523b1d294cc1550"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d3b5448103a60aa4523b1d294cc1550">&#9670;&#160;</a></span>_pierce</h2>
+<a id="ae2e4f2c1df24df5059dde26a630fbdb2" name="ae2e4f2c1df24df5059dde26a630fbdb2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2e4f2c1df24df5059dde26a630fbdb2">&#9670;&#160;</a></span>_positionProvider</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1049,29 +910,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html">IActiveProjectilePierce</a> BalloonParty.Game.Cinematics.LevelUpCinematic._pierce</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7c4a44e50c04781336d970610dc85cda" name="a7c4a44e50c04781336d970610dc85cda"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7c4a44e50c04781336d970610dc85cda">&#9670;&#160;</a></span>_resolver</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">readonly <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html">ScoreTrailBehaviourResolver</a> BalloonParty.Game.Cinematics.LevelUpCinematic._resolver</td>
+          <td class="memname">readonly <a class="el" href="classBalloonParty_1_1Projectile_1_1ProjectilePositionProvider.html">ProjectilePositionProvider</a> BalloonParty.Game.Cinematics.LevelUpCinematic._positionProvider</td>
         </tr>
       </table>
   </td>
@@ -1215,160 +1054,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a436b31acc2bc0b822c71b4de6c20e62b" name="a436b31acc2bc0b822c71b4de6c20e62b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a436b31acc2bc0b822c71b4de6c20e62b">&#9670;&#160;</a></span>_tippingTrailId</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structBalloonParty_1_1Game_1_1Score_1_1TrailId.html">TrailId</a> BalloonParty.Game.Cinematics.LevelUpCinematic._tippingTrailId</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a457e8cf420dd5fbf2642c86fea43503a" name="a457e8cf420dd5fbf2642c86fea43503a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a457e8cf420dd5fbf2642c86fea43503a">&#9670;&#160;</a></span>_trackedFlight</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1TrailFlight.html">TrailFlight</a> BalloonParty.Game.Cinematics.LevelUpCinematic._trackedFlight</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="af2ddcc937639910ae2361d0fc8a414b9" name="af2ddcc937639910ae2361d0fc8a414b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af2ddcc937639910ae2361d0fc8a414b9">&#9670;&#160;</a></span>_trackedTrailSettings</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classBalloonParty_1_1Configuration_1_1Cinematics_1_1TrackedTrailSettings.html">TrackedTrailSettings</a> BalloonParty.Game.Cinematics.LevelUpCinematic._trackedTrailSettings</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a199299280321149f2fb3e0f3c3564717" name="a199299280321149f2fb3e0f3c3564717"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a199299280321149f2fb3e0f3c3564717">&#9670;&#160;</a></span>_trailArrivedSubscriber</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">readonly ISubscriber&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html">ScoreTrailArrivedMessage</a>&gt; BalloonParty.Game.Cinematics.LevelUpCinematic._trailArrivedSubscriber</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="abdc8fb1f0c1d8a3ec6143665b570afee" name="abdc8fb1f0c1d8a3ec6143665b570afee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abdc8fb1f0c1d8a3ec6143665b570afee">&#9670;&#160;</a></span>_trailElapsed</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float BalloonParty.Game.Cinematics.LevelUpCinematic._trailElapsed</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="af347daedc96ae2d06d5f744f795b078d" name="af347daedc96ae2d06d5f744f795b078d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af347daedc96ae2d06d5f744f795b078d">&#9670;&#160;</a></span>_trailOrigin</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Vector3 BalloonParty.Game.Cinematics.LevelUpCinematic._trailOrigin</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6db2c84a3166a48da25a783b29a06565" name="a6db2c84a3166a48da25a783b29a06565"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6db2c84a3166a48da25a783b29a06565">&#9670;&#160;</a></span>_trailTargetWorld</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Vector3 BalloonParty.Game.Cinematics.LevelUpCinematic._trailTargetWorld</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a7809c92f73dd4370d91accb84717f56f" name="a7809c92f73dd4370d91accb84717f56f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7809c92f73dd4370d91accb84717f56f">&#9670;&#160;</a></span>Director</h2>
 
@@ -1385,28 +1070,6 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel protected">protected</span><span class="mlabel inherited">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ab9a3359932a47d0b6b3b73eb9fed251e" name="ab9a3359932a47d0b6b3b73eb9fed251e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab9a3359932a47d0b6b3b73eb9fed251e">&#9670;&#160;</a></span>PanInTimeoutFactor</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const float BalloonParty.Game.Cinematics.LevelUpCinematic.PanInTimeoutFactor = 3f</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1473,28 +1136,6 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel protected">protected</span><span class="mlabel inherited">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac4da3dcf26f1046c9a86497665676cb7" name="ac4da3dcf26f1046c9a86497665676cb7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac4da3dcf26f1046c9a86497665676cb7">&#9670;&#160;</a></span>TrailRegisterTimeoutFactor</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const float BalloonParty.Game.Cinematics.LevelUpCinematic.TrailRegisterTimeoutFactor = 3f</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

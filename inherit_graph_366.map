@@ -1,9 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,77,143,102"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Editor_1_1ChainLightningViewEditor.html" title=" " alt="" coords="191,5,375,45"/>
-<area shape="poly" id="edge500_Node000000_Node000001" title=" " alt="" coords="129,70,216,43,217,48,130,75"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Editor_1_1LaserViewEditor.html" title=" " alt="" coords="191,69,374,109"/>
-<area shape="poly" id="edge501_Node000000_Node000002" title=" " alt="" coords="156,87,191,87,191,92,156,92"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Editor_1_1PaintSplashViewEditor.html" title=" " alt="" coords="193,133,372,173"/>
-<area shape="poly" id="edge502_Node000000_Node000003" title=" " alt="" coords="130,104,217,131,216,136,129,109"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,45,96,70"/>
+<area shape="rect" id="Node000001" href="$structBalloonParty_1_1Audio_1_1SoundHandle.html" title="Identifies one play of a voice slot — the only way to ISoundPlayer.Stop a loop." alt="" coords="145,5,332,45"/>
+<area shape="poly" id="edge492_Node000000_Node000001" title=" " alt="" coords="109,45,145,39,146,44,110,50"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Game_1_1Score_1_1TrailId.html" title="Uniquely identifies a score trail by color and score value; no level component since a trail is only ..." alt="" coords="144,69,333,109"/>
+<area shape="poly" id="edge493_Node000000_Node000002" title=" " alt="" coords="110,65,144,71,143,76,109,70"/>
 </map>

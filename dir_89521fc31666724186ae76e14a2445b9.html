@@ -131,7 +131,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Thermal-aware frame-rate governance. On the target device (Pixel 9, Tensor G4) the game runs locked and cool at 120 fps but throttles purely thermally after a couple of minutes of play — frame time tracks thermal status, with no ARR latch, memory leak, or CPU hot spot (see <code><a class="el" href="PLAN-PerformanceRecovery_8md.html">Plans/PLAN-PerformanceRecovery.md</a></code>, Step 0 findings). A deliberate, stable step down to the panel's native <b>80 Hz</b> mode under sustained heat looks smoother than a juddery, half-missed 120.</p>
-<h1><a class="anchor" id="autotoc_md857"></a>
+<h1><a class="anchor" id="autotoc_md859"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -145,7 +145,7 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ThermalFrameRateGovernor</code>   </td><td class="markdownTableBodyNone"><code>IStartable + ITickable</code> state machine over a rate ladder (default <code>{120, 80, 60}</code>).   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md858"></a>
+<h1><a class="anchor" id="autotoc_md860"></a>
 How the governor works</h1>
 <p>Ladder rungs are ordered fastest-first; index 0 is the top rate. Every <code>PollIntervalSeconds</code> (~1 s) it re-reads the source and advances hysteresis timers:</p>
 <ul>
@@ -154,7 +154,7 @@ How the governor works</h1>
 </ul>
 <p>Rate changes are applied through <code>FrameRateSettings.ApplyGovernedRate(int)</code> — the single seam that clears VSync and sets <code>Application.targetFrameRate</code>. <b>This is not the ARR echo-loop</b> the <code>MatchDisplay</code> vote path guards against: the governor decides the rung purely from thermal signals and never reads back a refresh rate, so there is nothing to re-pin.</p>
 <p>Time is fed in as accumulated deltas via <code>Advance(float dt)</code> (called from <code>Tick</code> with unscaled delta time), so the state machine has no <code>Time.*</code> dependency and EditMode tests can drive it.</p>
-<h1><a class="anchor" id="autotoc_md859"></a>
+<h1><a class="anchor" id="autotoc_md861"></a>
 Configuration &amp; wiring</h1>
 <p>Tuning lives in <code>ThermalGovernorSettings</code> (<code>Configuration/</code>, interface <code>IThermalGovernorSettings</code>): the ladder, thresholds, windows, poll cadence, and an <code>Enabled</code> flag. <code>GameLifetimeScope</code> registers it with a null-safe fallback — an unassigned asset degrades to a default instance carrying the same defaults, so the governor works without any scene wiring; author an asset only to tune. The source is platform-switched in <code>GameScopeRegistration.RegisterCoreServices</code> (<code>AndroidThermalSource</code> on device, <code>StubThermalSource</code> otherwise) and the governor is registered as an entry point in the same scope, which persists for the gameplay session (where the heat builds).</p>
 <p>Note: <code>FrameRateSettings</code> itself is a boot-only component in the Launcher scene (that scene is unloaded on the transition to Game), so the seam is a <code>static</code> method — the governor never needs a live <code>FrameRateSettings</code> instance. </p>

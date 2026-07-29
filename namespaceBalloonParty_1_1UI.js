@@ -9,6 +9,7 @@ var namespaceBalloonParty_1_1UI =
     [ "Shields", "namespaceBalloonParty_1_1UI_1_1Shields.html", "namespaceBalloonParty_1_1UI_1_1Shields" ],
     [ "AnimatorGameEntryGate", "classBalloonParty_1_1UI_1_1AnimatorGameEntryGate.html", "classBalloonParty_1_1UI_1_1AnimatorGameEntryGate" ],
     [ "CanvasCameraBinder", "classBalloonParty_1_1UI_1_1CanvasCameraBinder.html", "classBalloonParty_1_1UI_1_1CanvasCameraBinder" ],
+    [ "FadeImage", "classBalloonParty_1_1UI_1_1FadeImage.html", "classBalloonParty_1_1UI_1_1FadeImage" ],
     [ "FormattedLabel", "structBalloonParty_1_1UI_1_1FormattedLabel.html", "structBalloonParty_1_1UI_1_1FormattedLabel" ],
     [ "PlainCounterDisplay", "classBalloonParty_1_1UI_1_1PlainCounterDisplay.html", "classBalloonParty_1_1UI_1_1PlainCounterDisplay" ],
     [ "ReactiveCounterLabel", "classBalloonParty_1_1UI_1_1ReactiveCounterLabel.html", "classBalloonParty_1_1UI_1_1ReactiveCounterLabel" ],

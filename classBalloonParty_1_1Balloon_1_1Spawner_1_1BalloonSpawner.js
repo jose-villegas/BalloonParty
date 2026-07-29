@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner =
 [
-    [ "BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a8b8bc80b6659c206263ce4c0a02d2f52", null ],
+    [ "BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a61db5127c8e1799f6087f2d7dda80a2d", null ],
     [ "ArrangeInitialLayers", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a24bb087142589d3c4ed32ef4d9c8afeb", null ],
     [ "CaptureFillCapacity", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a592fcf014e6aefee9193cfcb1ece6136", null ],
     [ "CompareColumnKeys", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#abc49e8f5763cc19ff5f27d53c2493ae1", null ],
@@ -48,6 +48,7 @@ var classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner =
     [ "_layerHeavies", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a356095f0371d250e653b13313386eced", null ],
     [ "_layerLights", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a2fc0e3b7462fdf7a1b88fdc9946210b4", null ],
     [ "_levelParams", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a5c6b2204275f190510888fa767cd4f0a", null ],
+    [ "_levelProgress", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#ad6678fd82514c24b970a84bcee29a799", null ],
     [ "_levelUpSubscriber", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a6304cc9f02b53173fd0d2640ddffe275", null ],
     [ "_lineColumns", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a09a182cff89bf63e306626e0f10d0cf3", null ],
     [ "_lineSubscriber", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a925e365319979077a94a5d1a53a38f9e", null ],

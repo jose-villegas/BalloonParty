@@ -1,0 +1,5 @@
+<map id="BalloonParty.UI.FadeImage" name="BalloonParty.UI.FadeImage">
+<area shape="rect" id="Node000001" title="Fades an Image&#39;s alpha to a target over a configurable duration. Optionally plays on Awake." alt="" coords="5,79,200,104"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="41,5,165,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,44,105,79,100,79,100,44"/>
+</map>

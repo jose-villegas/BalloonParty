@@ -143,6 +143,7 @@ Enumerations</h2></td></tr>
 <tr class="memitem:a57ec4a7422d3ec908dda0a536e08a712" id="r_a57ec4a7422d3ec908dda0a536e08a712"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a57ec4a7422d3ec908dda0a536e08a712">LevelUpPhase</a> { <a class="el" href="#a57ec4a7422d3ec908dda0a536e08a712ac9dbb2b7c84159b632d71e512eba8428">Playing</a>
 , <a class="el" href="#a57ec4a7422d3ec908dda0a536e08a712a2d13df6f8b5e4c5af9f87e0dc39df69d">Pending</a>
 , <a class="el" href="#a57ec4a7422d3ec908dda0a536e08a712a69a4b7185e3fbc9bfc0878876d7416cf">Transitioning</a>
+, <a class="el" href="#a57ec4a7422d3ec908dda0a536e08a712a3e589a999568bf6d0c72b491f20f758b">Completing</a>
  }</td></tr>
 <tr class="memdesc:a57ec4a7422d3ec908dda0a536e08a712"><td class="mdescLeft">&#160;</td><td class="mdescRight">The level-up ceremony as one explicit state, owned by LevelController.  <a href="#a57ec4a7422d3ec908dda0a536e08a712">More...</a><br /></td></tr>
 <tr class="separator:a57ec4a7422d3ec908dda0a536e08a712"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -169,7 +170,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The level-up ceremony as one explicit state, owned by <a class="el" href="classBalloonParty_1_1Game_1_1Level_1_1LevelController.html" title="Owns the player&#39;s progression through levels — current level, per-colour progress,...">LevelController</a>. </p>
-<p>Replaces the scattered guard flags (pending / transitioning / nav / pause) that had to be kept in sync: a level-up is only detected in <a class="el" href="#a57ec4a7422d3ec908dda0a536e08a712ac9dbb2b7c84159b632d71e512eba8428" title="Normal play: scoring is open and a completed colour set can trigger a level-up.">Playing</a>, and every out-of-phase input (a second detection, a straggler trail, a duplicate dismissal) is rejected because no transition exists for it. Cycles <code>Playing → Pending → Transitioning → Playing</code>. </p>
+<p>Replaces the scattered guard flags (pending / transitioning / nav / pause) that had to be kept in sync: a level-up is only detected in <a class="el" href="#a57ec4a7422d3ec908dda0a536e08a712ac9dbb2b7c84159b632d71e512eba8428" title="Normal play: scoring is open and a completed colour set can trigger a level-up.">Playing</a>, and every out-of-phase input (a second detection, a straggler trail, a duplicate dismissal) is rejected because no transition exists for it. Cycles <code>Playing → Completing → Pending → Transitioning → Playing</code>. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a57ec4a7422d3ec908dda0a536e08a712ac9dbb2b7c84159b632d71e512eba8428" name="a57ec4a7422d3ec908dda0a536e08a712ac9dbb2b7c84159b632d71e512eba8428"></a>Playing&#160;</td><td class="fielddoc"><p>Normal play: scoring is open and a completed colour set can trigger a level-up. </p>
 </td></tr>
@@ -178,6 +179,9 @@ Enumerations</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="a57ec4a7422d3ec908dda0a536e08a712a69a4b7185e3fbc9bfc0878876d7416cf" name="a57ec4a7422d3ec908dda0a536e08a712a69a4b7185e3fbc9bfc0878876d7416cf"></a>Transitioning&#160;</td><td class="fielddoc"><p>Dismissed: the level has advanced and the Ascent is running. </p>
 <p>Ends when the Ascent reports completion. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a57ec4a7422d3ec908dda0a536e08a712a3e589a999568bf6d0c72b491f20f758b" name="a57ec4a7422d3ec908dda0a536e08a712a3e589a999568bf6d0c72b491f20f758b"></a>Completing&#160;</td><td class="fielddoc"><p>The tipping claim landed — holding for the shot's flight to end before presenting the ceremony. </p>
+<p>Progress keeps confirming (bars fill), spawns/reload are held. </p>
 </td></tr>
 </table>
 

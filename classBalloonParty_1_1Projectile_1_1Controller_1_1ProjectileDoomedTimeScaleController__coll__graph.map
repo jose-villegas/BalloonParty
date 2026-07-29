@@ -1,16 +1,18 @@
 <map id="BalloonParty.Projectile.Controller.ProjectileDoomedTimeScaleController" name="BalloonParty.Projectile.Controller.ProjectileDoomedTimeScaleController">
-<area shape="rect" id="Node000001" title="Claims a global slow&#45;motion time scale for the duration of a shot&#39;s doomed &#39;last breath&#39; (see Project..." alt="" coords="607,100,845,155"/>
+<area shape="rect" id="Node000001" title="Claims a global slow&#45;motion time scale for the duration of a shot&#39;s doomed &#39;last breath&#39; (see Project..." alt="" coords="607,105,845,160"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="66,5,151,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,14,309,16,396,23,482,35,534,50,584,70,656,97,654,102,582,75,532,55,481,41,395,28,309,21,165,19"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Shared_1_1Pause_1_1TimeScaleService.html" title="The only legal writer of Time.timeScale (style&#45;audit rule bans writes elsewhere); lowest active claim..." alt="" coords="273,50,470,90"/>
-<area shape="poly" id="edge6_Node000006_Node000002" title=" " alt="" coords="165,26,273,48,272,53,164,32"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="331,115,411,140"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="425,125,607,125,607,130,425,130"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="322,164,421,189"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="434,165,606,141,607,147,435,171"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="261,214,481,254"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="464,208,582,174,648,152,650,157,583,179,465,213"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="484,85,607,105,606,111,483,91"/>
-<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,59,212,99"/>
-<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="226,73,272,71,273,76,226,78"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,15,309,19,396,27,482,41,534,56,584,76,656,103,654,108,582,80,532,61,481,46,395,33,309,25,165,20"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Shared_1_1Pause_1_1TimeScaleService.html" title="The only legal writer of Time.timeScale (style&#45;audit rule bans writes elsewhere); lowest active claim..." alt="" coords="273,55,470,95"/>
+<area shape="poly" id="edge6_Node000006_Node000002" title=" " alt="" coords="165,27,280,53,279,58,164,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="331,120,411,145"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="425,130,607,130,607,135,425,135"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="322,169,421,195"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="434,171,606,147,607,152,435,176"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="261,219,481,259"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="464,213,582,179,648,158,650,163,583,185,465,218"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="484,91,607,111,606,116,483,96"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,61,212,101"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="226,76,272,75,273,80,226,81"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Shared_1_1Pause_1_1ITimeScaleClaims.html" title="Write surface of the time&#45;scale claim stack." alt="" coords="10,125,207,165"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="198,119,294,93,296,98,199,124"/>
 </map>

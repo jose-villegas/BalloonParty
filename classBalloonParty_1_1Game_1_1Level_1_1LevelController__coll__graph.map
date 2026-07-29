@@ -1,25 +1,31 @@
 <map id="BalloonParty.Game.Level.LevelController" name="BalloonParty.Game.Level.LevelController">
-<area shape="rect" id="Node000001" title="Owns the player&#39;s progression through levels — current level, per&#45;colour progress,..." alt="" coords="364,297,552,337"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="71,5,157,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,23,224,40,288,73,313,93,342,122,378,167,409,215,450,295,445,297,404,217,374,170,338,125,310,97,285,77,222,44,169,29"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="65,55,163,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="178,75,224,90,262,111,298,136,361,193,412,250,445,295,441,298,408,254,358,197,294,140,259,115,222,95,176,80"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="11,105,217,145"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="205,147,224,154,287,187,347,226,435,295,432,299,344,230,284,192,222,159,203,152"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html" title="Read surface of the player&#39;s progression through levels." alt="" coords="20,169,208,209"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="197,210,223,218,283,236,341,257,420,294,418,299,339,262,281,241,222,223,196,215"/>
-<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html" title="Single read surface for the live per&#45;level difficulty mix; never read ILevelPacingConfiguration direc..." alt="" coords="20,233,208,273"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="222,270,364,297,363,302,221,275"/>
-<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelThresholds.html" title="The per&#45;level score goal each colour must reach while playing that level — answers for any level,..." alt="" coords="20,297,208,337"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="222,314,364,314,364,319,222,319"/>
-<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="15,361,213,401"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="226,357,363,331,364,337,227,362"/>
-<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Shared_1_1GameState_1_1INavigation.html" title="Injectable seam over the static Navigation, testable without global state." alt="" coords="17,425,211,465"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="196,418,222,410,281,393,339,373,419,334,422,339,341,378,283,398,223,415,197,423"/>
-<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Game_1_1Health_1_1ILossForecast.html" title="Whether the run&#39;s loss is already a certainty, ahead of the loss actually committing." alt="" coords="16,489,212,529"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="199,482,222,474,283,453,308,442,338,424,394,379,437,335,441,339,398,383,342,428,310,447,285,458,224,479,201,487"/>
-<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html" title="Read&#45;only retry state — how many retries remain this run and the level to retry at (zero when the nex..." alt="" coords="5,553,223,593"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="222,546,283,522,312,506,338,487,375,450,405,408,445,336,450,338,409,411,379,453,342,491,315,510,285,527,224,551"/>
-<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html" title="Whether the active shot is currently piercing." alt="" coords="17,617,211,672"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="223,619,284,594,313,578,338,557,362,532,383,503,415,440,437,381,450,336,455,338,442,383,420,443,387,506,366,535,342,561,316,582,286,599,225,624"/>
+<area shape="rect" id="Node000001" title="Owns the player&#39;s progression through levels — current level, per&#45;colour progress,..." alt="" coords="376,378,564,418"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="77,5,163,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,23,236,39,301,69,327,88,354,118,378,150,399,186,432,260,454,327,467,377,462,378,449,329,427,262,394,189,374,153,350,121,323,92,299,74,234,45,175,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="80,55,160,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="174,71,205,78,236,89,301,121,326,141,354,171,394,225,425,283,465,377,460,379,421,285,389,228,350,174,322,145,298,126,234,94,204,83,173,77"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="71,104,169,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="184,123,236,140,277,163,314,192,349,224,380,259,429,325,460,376,456,379,424,328,375,262,345,228,311,196,274,167,234,144,182,128"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="17,154,223,194"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="217,196,236,204,298,235,354,277,410,329,453,376,449,379,406,333,350,281,295,240,234,208,215,201"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html" title="Read surface of the player&#39;s progression through levels." alt="" coords="26,218,214,258"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="211,260,235,267,296,288,353,314,403,345,445,376,442,380,400,350,351,319,294,293,234,273,209,265"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html" title="Single read surface for the live per&#45;level difficulty mix; never read ILevelPacingConfiguration direc..." alt="" coords="26,282,214,322"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="223,323,353,357,412,375,410,380,351,362,222,328"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelThresholds.html" title="The per&#45;level score goal each colour must reach while playing that level — answers for any level,..." alt="" coords="26,346,214,386"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="228,373,376,387,376,392,228,378"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="21,410,219,450"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="232,417,376,404,376,409,233,422"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Shared_1_1GameState_1_1INavigation.html" title="Injectable seam over the static Navigation, testable without global state." alt="" coords="23,474,217,514"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="225,468,351,435,412,416,414,421,353,441,226,473"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Game_1_1Health_1_1ILossForecast.html" title="Whether the run&#39;s loss is already a certainty, ahead of the loss actually committing." alt="" coords="22,538,218,578"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="208,532,234,523,294,505,351,480,401,448,443,416,446,420,404,452,353,484,296,510,235,529,210,537"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html" title="Read&#45;only retry state — how many retries remain this run and the level to retry at (zero when the nex..." alt="" coords="11,602,229,642"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="228,596,291,572,350,537,383,508,412,475,454,417,459,420,416,479,387,512,354,541,294,576,230,601"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Shared_1_1Pause_1_1ITimeScaleClaims.html" title="Write surface of the time&#45;scale claim stack." alt="" coords="21,666,219,706"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="232,664,294,641,324,625,350,605,391,559,423,507,446,457,460,417,465,419,451,459,428,509,395,562,354,609,326,630,296,646,233,669"/>
+<area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Configuration_1_1Cinematics_1_1ICinematicsSettings.html" title="The single setup point for cinematics: one composed entry per CinematicState." alt="" coords="5,730,235,770"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="247,730,302,710,327,695,350,677,377,647,400,613,419,577,433,540,454,470,463,418,469,419,459,471,439,541,423,579,405,616,382,651,354,681,330,700,304,715,249,735"/>
+<area shape="rect" id="Node000015" href="$interfaceBalloonParty_1_1Shared_1_1IRunConfig.html" title="Run&#45;level rules — starting hit points, retry allowance, and (future) loss thresholds." alt="" coords="28,794,212,834"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="225,804,258,796,292,785,323,769,350,748,383,710,409,666,429,619,444,571,460,482,466,418,471,418,466,482,449,572,434,621,414,668,387,713,354,752,326,774,294,790,260,801,226,809"/>
 </map>

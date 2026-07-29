@@ -14,6 +14,7 @@ var classBalloonParty_1_1Audio_1_1SfxService =
     [ "PlayUnison", "classBalloonParty_1_1Audio_1_1SfxService.html#a3244d065a3f86cee05fa1ddf8a449cf6", null ],
     [ "RandomRange", "classBalloonParty_1_1Audio_1_1SfxService.html#a4d80eabf7b7609ce478af55d3cbdc842", null ],
     [ "ResetRun", "classBalloonParty_1_1Audio_1_1SfxService.html#a4f4e72f0f52024f3c5641c58b11ec94f", null ],
+    [ "SetPitch", "classBalloonParty_1_1Audio_1_1SfxService.html#a827573ce42265f59aa26814f2c0cf0d3", null ],
     [ "SetStreak", "classBalloonParty_1_1Audio_1_1SfxService.html#a7fedde6a768f39976e4d4265d3d4e54e", null ],
     [ "SetVolumeFactor", "classBalloonParty_1_1Audio_1_1SfxService.html#a1b302673737e90a6fb7fdda33fbe54fe", null ],
     [ "Stop", "classBalloonParty_1_1Audio_1_1SfxService.html#a05ad6a0a117dbf3071a9321745e19b38", null ],

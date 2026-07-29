@@ -1,5 +1,5 @@
 <map id="BalloonParty.Game.Cinematics.LevelUpCinematic" name="BalloonParty.Game.Cinematics.LevelUpCinematic">
-<area shape="rect" id="Node000001" title="Puppets the level&#45;up&#39;s tipping score trail along the pan&#45;in, then hands off to the popup and restore ..." alt="" coords="5,167,232,207"/>
+<area shape="rect" id="Node000001" title="Follows the tipping projectile during Window A (claim → first wall), then hands off to the popup and ..." alt="" coords="5,167,232,207"/>
 <area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicProducer.html" title="Shared shape for the producers that drive a CameraRigCinematic: builds the runner from BuildConfig on..." alt="" coords="5,79,232,119"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,133,121,166,116,166,116,133"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="19,5,104,31"/>

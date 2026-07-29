@@ -131,11 +131,13 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1Level_1_1Resolve
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a99800e7096d590d19b1057dd24b4979d" id="r_a99800e7096d590d19b1057dd24b4979d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a99800e7096d590d19b1057dd24b4979d">ResolvedItemEntry</a> (<a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html">ItemSettings</a> source, float weight, int maxCount)</td></tr>
-<tr class="separator:a99800e7096d590d19b1057dd24b4979d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1933ccd5400caff30f9a2c9e6d5ace11" id="r_a1933ccd5400caff30f9a2c9e6d5ace11"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1933ccd5400caff30f9a2c9e6d5ace11">ResolvedItemEntry</a> (<a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html">ItemSettings</a> source, float weight, int maxCount, int guaranteedInitialCount=0)</td></tr>
+<tr class="separator:a1933ccd5400caff30f9a2c9e6d5ace11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:aeb4a2fd141103337f6fce6a01945c5cf" id="r_aeb4a2fd141103337f6fce6a01945c5cf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb4a2fd141103337f6fce6a01945c5cf">GuaranteedInitialCount</a><code> [get]</code></td></tr>
+<tr class="separator:aeb4a2fd141103337f6fce6a01945c5cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39788894d76c281a1334ed359eb36887" id="r_a39788894d76c281a1334ed359eb36887"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a39788894d76c281a1334ed359eb36887">MaxCount</a><code> [get]</code></td></tr>
 <tr class="separator:a39788894d76c281a1334ed359eb36887"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b6dd3f36db163d288b4c1ec620f7c75" id="r_a5b6dd3f36db163d288b4c1ec620f7c75"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5b6dd3f36db163d288b4c1ec620f7c75">PoolKey</a><code> [get]</code></td></tr>
@@ -146,8 +148,8 @@ Properties</h2></td></tr>
 <tr class="separator:a1848516d89c3cdd09c99dbb26aadd602"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a99800e7096d590d19b1057dd24b4979d" name="a99800e7096d590d19b1057dd24b4979d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a99800e7096d590d19b1057dd24b4979d">&#9670;&#160;</a></span>ResolvedItemEntry()</h2>
+<a id="a1933ccd5400caff30f9a2c9e6d5ace11" name="a1933ccd5400caff30f9a2c9e6d5ace11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1933ccd5400caff30f9a2c9e6d5ace11">&#9670;&#160;</a></span>ResolvedItemEntry()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -165,7 +167,12 @@ Properties</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>maxCount</em></span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>maxCount</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>guaranteedInitialCount</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -173,6 +180,28 @@ Properties</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="aeb4a2fd141103337f6fce6a01945c5cf" name="aeb4a2fd141103337f6fce6a01945c5cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb4a2fd141103337f6fce6a01945c5cf">&#9670;&#160;</a></span>GuaranteedInitialCount</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Level.ResolvedItemEntry.GuaranteedInitialCount</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a39788894d76c281a1334ed359eb36887" name="a39788894d76c281a1334ed359eb36887"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a39788894d76c281a1334ed359eb36887">&#9670;&#160;</a></span>MaxCount</h2>
 

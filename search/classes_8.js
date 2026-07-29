@@ -138,13 +138,14 @@ var searchData=
   ['ithermalsource_135',['IThermalSource',['../interfaceBalloonParty_1_1Shared_1_1Thermal_1_1IThermalSource.html',1,'BalloonParty::Shared::Thermal']]],
   ['itimeofdaynight_136',['ITimeOfDayNight',['../interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ITimeOfDayNight.html',1,'BalloonParty::Shared::SceneLight']]],
   ['itimeofdaysettings_137',['ITimeOfDaySettings',['../interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html',1,'BalloonParty::Configuration::Effects']]],
-  ['itrailendpoint_138',['ITrailEndpoint',['../interfaceBalloonParty_1_1Shared_1_1Pool_1_1ITrailEndpoint.html',1,'BalloonParty::Shared::Pool']]],
-  ['itransformcapture_139',['ITransformCapture',['../interfaceBalloonParty_1_1Item_1_1ITransformCapture.html',1,'BalloonParty::Item']]],
-  ['itransitionoutgoingcontent_140',['ITransitionOutgoingContent',['../interfaceBalloonParty_1_1Slots_1_1Actor_1_1ITransitionOutgoingContent.html',1,'BalloonParty::Slots::Actor']]],
-  ['iwashesprojectilecolor_141',['IWashesProjectileColor',['../interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IWashesProjectileColor.html',1,'BalloonParty::Slots::Capabilities']]],
-  ['iweightedentry_142',['IWeightedEntry',['../interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html',1,'BalloonParty::Configuration::Ranges']]],
-  ['iwriteableballoonmodel_143',['IWriteableBalloonModel',['../interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableBalloonModel.html',1,'BalloonParty::Balloon::Model']]],
-  ['iwriteabledynamicslotactor_144',['IWriteableDynamicSlotActor',['../interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html',1,'BalloonParty::Slots::Actor']]],
-  ['iwriteableprojectilemodel_145',['IWriteableProjectileModel',['../interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html',1,'BalloonParty::Projectile::Model']]],
-  ['iwriteableslotactor_146',['IWriteableSlotActor',['../interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html',1,'BalloonParty::Slots::Actor']]]
+  ['itimescaleclaims_138',['ITimeScaleClaims',['../interfaceBalloonParty_1_1Shared_1_1Pause_1_1ITimeScaleClaims.html',1,'BalloonParty::Shared::Pause']]],
+  ['itrailendpoint_139',['ITrailEndpoint',['../interfaceBalloonParty_1_1Shared_1_1Pool_1_1ITrailEndpoint.html',1,'BalloonParty::Shared::Pool']]],
+  ['itransformcapture_140',['ITransformCapture',['../interfaceBalloonParty_1_1Item_1_1ITransformCapture.html',1,'BalloonParty::Item']]],
+  ['itransitionoutgoingcontent_141',['ITransitionOutgoingContent',['../interfaceBalloonParty_1_1Slots_1_1Actor_1_1ITransitionOutgoingContent.html',1,'BalloonParty::Slots::Actor']]],
+  ['iwashesprojectilecolor_142',['IWashesProjectileColor',['../interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IWashesProjectileColor.html',1,'BalloonParty::Slots::Capabilities']]],
+  ['iweightedentry_143',['IWeightedEntry',['../interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html',1,'BalloonParty::Configuration::Ranges']]],
+  ['iwriteableballoonmodel_144',['IWriteableBalloonModel',['../interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableBalloonModel.html',1,'BalloonParty::Balloon::Model']]],
+  ['iwriteabledynamicslotactor_145',['IWriteableDynamicSlotActor',['../interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html',1,'BalloonParty::Slots::Actor']]],
+  ['iwriteableprojectilemodel_146',['IWriteableProjectileModel',['../interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html',1,'BalloonParty::Projectile::Model']]],
+  ['iwriteableslotactor_147',['IWriteableSlotActor',['../interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html',1,'BalloonParty::Slots::Actor']]]
 ];

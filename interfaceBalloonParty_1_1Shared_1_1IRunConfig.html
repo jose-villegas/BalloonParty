@@ -126,6 +126,12 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Shared_1_1IRunConfig.html',''
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a05c3849296a9e25f7d22dba16149cfc0" id="r_a05c3849296a9e25f7d22dba16149cfc0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a05c3849296a9e25f7d22dba16149cfc0">LevelCompleteRampUpDuration</a><code> [get]</code></td></tr>
+<tr class="memdesc:a05c3849296a9e25f7d22dba16149cfc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds over which timeScale ramps from 1 to <a class="el" href="#a55d00dfdb778943248f7d4cba6bcb57c" title="Peak timeScale during the post-flight ramp-up (e.g. 2 = double speed).">LevelCompleteRampUpScale</a> after the completing flight ends.  <br /></td></tr>
+<tr class="separator:a05c3849296a9e25f7d22dba16149cfc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55d00dfdb778943248f7d4cba6bcb57c" id="r_a55d00dfdb778943248f7d4cba6bcb57c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a55d00dfdb778943248f7d4cba6bcb57c">LevelCompleteRampUpScale</a><code> [get]</code></td></tr>
+<tr class="memdesc:a55d00dfdb778943248f7d4cba6bcb57c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Peak timeScale during the post-flight ramp-up (e.g. 2 = double speed).  <br /></td></tr>
+<tr class="separator:a55d00dfdb778943248f7d4cba6bcb57c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff5e95c5f910f536e2097bb24245f350" id="r_aff5e95c5f910f536e2097bb24245f350"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff5e95c5f910f536e2097bb24245f350">MaxRetries</a><code> [get]</code></td></tr>
 <tr class="memdesc:aff5e95c5f910f536e2097bb24245f350"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many times the player may retry at the same level per run (0 = disabled).  <br /></td></tr>
 <tr class="separator:aff5e95c5f910f536e2097bb24245f350"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -135,6 +141,58 @@ Properties</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Run-level rules — starting hit points, retry allowance, and (future) loss thresholds. </p>
 </div><h2 class="groupheader">Property Documentation</h2>
+<a id="a05c3849296a9e25f7d22dba16149cfc0" name="a05c3849296a9e25f7d22dba16149cfc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05c3849296a9e25f7d22dba16149cfc0">&#9670;&#160;</a></span>LevelCompleteRampUpDuration</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Shared.IRunConfig.LevelCompleteRampUpDuration</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds over which timeScale ramps from 1 to <a class="el" href="#a55d00dfdb778943248f7d4cba6bcb57c" title="Peak timeScale during the post-flight ramp-up (e.g. 2 = double speed).">LevelCompleteRampUpScale</a> after the completing flight ends. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1RunConfig.html#a9790d7253d70d56dcb22239ce843acd8">BalloonParty.Configuration.RunConfig</a>.</p>
+
+</div>
+</div>
+<a id="a55d00dfdb778943248f7d4cba6bcb57c" name="a55d00dfdb778943248f7d4cba6bcb57c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55d00dfdb778943248f7d4cba6bcb57c">&#9670;&#160;</a></span>LevelCompleteRampUpScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Shared.IRunConfig.LevelCompleteRampUpScale</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Peak timeScale during the post-flight ramp-up (e.g. 2 = double speed). </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1RunConfig.html#a2514e84597164e4525c997eafbfec087">BalloonParty.Configuration.RunConfig</a>.</p>
+
+</div>
+</div>
 <a id="aff5e95c5f910f536e2097bb24245f350" name="aff5e95c5f910f536e2097bb24245f350"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aff5e95c5f910f536e2097bb24245f350">&#9670;&#160;</a></span>MaxRetries</h2>
 

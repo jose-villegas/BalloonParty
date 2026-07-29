@@ -8,6 +8,7 @@ var classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice =
     [ "Play", "classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html#a31670d350c5a827d21037df6b1bfcede", null ],
     [ "ScheduleReturnAsync", "classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html#afbc1562f4ac326463ec775a5ea5dc1bf", null ],
     [ "SetOutputGroup", "classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html#a2f76429c8a6692c47972c91252ca6857", null ],
+    [ "SetPitch", "classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html#a52c299e78f10b8c7d4b3d64c77cd7d4a", null ],
     [ "Stop", "classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html#acfecebd7dfb13567189003f1896914a2", null ],
     [ "_onComplete", "classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html#a583df11d709597d8cec9e2ea85a5eba4", null ],
     [ "_returnCts", "classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html#a806a9bb153fba70bfce35bf2ee019a4c", null ],

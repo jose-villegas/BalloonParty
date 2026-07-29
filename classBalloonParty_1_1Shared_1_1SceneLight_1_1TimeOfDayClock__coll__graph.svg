@@ -59,9 +59,9 @@ var sectionId = 'dynsection-1';
 <g id="Node000001" class="node">
 <title>Node1</title>
 <g id="a_Node000001"><a xlink:title="Night&#45;mode TimeOfDaySource.Realtime driver: rotates the ambient light direction continuously on a wal...">
-<polygon fill="#999999" stroke="#666666" points="621,-169 475,-169 475,-139 621,-139 621,-169"/>
-<text text-anchor="start" x="483" y="-157" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.Scene</text>
-<text text-anchor="middle" x="548" y="-146" font-family="Helvetica,sans-Serif" font-size="10.00">Light.TimeOfDayClock</text>
+<polygon fill="#999999" stroke="#666666" points="621,-188 475,-188 475,-158 621,-158 621,-188"/>
+<text text-anchor="start" x="483" y="-176" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.Scene</text>
+<text text-anchor="middle" x="548" y="-165" font-family="Helvetica,sans-Serif" font-size="10.00">Light.TimeOfDayClock</text>
 </a>
 </g>
 </g>
@@ -78,26 +78,26 @@ var sectionId = 'dynsection-1';
 <g id="edge1_Node000001_Node000002" class="edge">
 <title>Node2&#45;&gt;Node1</title>
 <g id="a_edge1_Node000001_Node000002"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M117.66,-261.75C178.82,-253.44 297.03,-235.45 395,-209 435.37,-198.1 480.24,-181.26 510.69,-169.08"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="117.07,-258.29 107.63,-263.09 118,-265.23 117.07,-258.29"/>
+<path fill="none" stroke="#63b8ff" d="M117.89,-267.56C189.44,-267.22 339.86,-260.65 457,-216 478.04,-207.98 500.92,-197.02 518.34,-188.17"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="117.5,-264.06 107.51,-267.57 117.51,-271.06 117.5,-264.06"/>
 </a>
 </g>
 </g>
-<!-- Node6 -->
-<g id="Node000006" class="node">
-<title>Node6</title>
-<g id="a_Node000006"><a xlink:href="classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayService.html" target="_top" xlink:title="Owns the LIVE ambient scene light and is the single writer of its shader globals (_SceneLightDir/_Sce...">
+<!-- Node7 -->
+<g id="Node000007" class="node">
+<title>Node7</title>
+<g id="a_Node000007"><a xlink:href="classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayService.html" target="_top" xlink:title="Owns the LIVE ambient scene light and is the single writer of its shader globals (_SceneLightDir/_Sce...">
 <polygon fill="white" stroke="#666666" points="395,-126 249,-126 249,-96 395,-96 395,-126"/>
 <text text-anchor="start" x="257" y="-114" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.Scene</text>
 <text text-anchor="middle" x="322" y="-103" font-family="Helvetica,sans-Serif" font-size="10.00">Light.TimeOfDayService</text>
 </a>
 </g>
 </g>
-<!-- Node2&#45;&gt;Node6 -->
-<g id="edge6_Node000006_Node000002" class="edge">
-<title>Node2&#45;&gt;Node6</title>
-<g id="a_edge6_Node000006_Node000002"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M115.22,-254.04C126.91,-249.7 139.65,-244.55 151,-239 188.46,-220.69 197.43,-214.73 231,-190 258.62,-169.65 288.02,-142.72 305.44,-126.14"/>
+<!-- Node2&#45;&gt;Node7 -->
+<g id="edge7_Node000007_Node000002" class="edge">
+<title>Node2&#45;&gt;Node7</title>
+<g id="a_edge7_Node000007_Node000002"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M115.22,-254.04C126.91,-249.7 139.65,-244.55 151,-239 188.46,-220.69 197.51,-214.84 231,-190 239.6,-183.62 240.97,-181.08 249,-174 267.56,-157.63 288.91,-138.97 303.51,-126.24"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="113.91,-250.79 105.69,-257.48 116.29,-257.37 113.91,-250.79"/>
 </a>
 </g>
@@ -115,15 +115,15 @@ var sectionId = 'dynsection-1';
 <g id="edge2_Node000001_Node000003" class="edge">
 <title>Node3&#45;&gt;Node1</title>
 <g id="a_edge2_Node000001_Node000003"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M115.58,-154C194.47,-154 373.79,-154 474.65,-154"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="115.58,-150.5 105.58,-154 115.58,-157.5 115.58,-150.5"/>
+<path fill="none" stroke="#63b8ff" d="M115.58,-155.58C194.47,-158.76 373.79,-166.01 474.65,-170.08"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="115.71,-152.08 105.58,-155.17 115.43,-159.07 115.71,-152.08"/>
 </a>
 </g>
 </g>
-<!-- Node3&#45;&gt;Node6 -->
-<g id="edge7_Node000006_Node000003" class="edge">
-<title>Node3&#45;&gt;Node6</title>
-<g id="a_edge7_Node000006_Node000003"><a xlink:title=" ">
+<!-- Node3&#45;&gt;Node7 -->
+<g id="edge8_Node000007_Node000003" class="edge">
+<title>Node3&#45;&gt;Node7</title>
+<g id="a_edge8_Node000007_Node000003"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M115.55,-147.13C151.35,-140.84 205.27,-131.35 248.89,-123.68"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="114.75,-143.72 105.51,-148.9 115.96,-150.61 114.75,-143.72"/>
 </a>
@@ -132,10 +132,9 @@ var sectionId = 'dynsection-1';
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html" target="_top" xlink:title="Read&#45;only tuning for the night&#45;mode time&#45;of&#45;day cycle.">
-<polygon fill="white" stroke="#666666" points="151,-230 0,-230 0,-200 151,-200 151,-230"/>
-<text text-anchor="start" x="8" y="-218" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
-<text text-anchor="middle" x="75.5" y="-207" font-family="Helvetica,sans-Serif" font-size="10.00">Effects.ITimeOfDaySettings</text>
+<g id="a_Node000004"><a xlink:title=" ">
+<polygon fill="white" stroke="#666666" points="359,-201.5 285,-201.5 285,-182.5 359,-182.5 359,-201.5"/>
+<text text-anchor="middle" x="322" y="-189.5" font-family="Helvetica,sans-Serif" font-size="10.00">IDisposable</text>
 </a>
 </g>
 </g>
@@ -143,29 +142,18 @@ var sectionId = 'dynsection-1';
 <g id="edge3_Node000001_Node000004" class="edge">
 <title>Node4&#45;&gt;Node1</title>
 <g id="a_edge3_Node000001_Node000004"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M161.47,-205.28C238.65,-196.27 355.58,-182.15 457,-168 462.79,-167.19 468.79,-166.32 474.82,-165.43"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="160.84,-201.83 151.32,-206.46 161.65,-208.78 160.84,-201.83"/>
+<path fill="none" stroke="#63b8ff" d="M369.79,-188.03C400.16,-185.46 440.34,-182.05 474.76,-179.13"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="369.16,-184.57 359.49,-188.91 369.75,-191.55 369.16,-184.57"/>
 </a>
 </g>
-<text text-anchor="middle" x="322" y="-197" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _settings</text>
-</g>
-<!-- Node4&#45;&gt;Node6 -->
-<g id="edge11_Node000006_Node000004" class="edge">
-<title>Node4&#45;&gt;Node6</title>
-<g id="a_edge11_Node000006_Node000004"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M121.18,-195.99C168.52,-175.86 242.3,-144.48 285.72,-126.01"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="119.62,-192.85 111.79,-199.99 122.36,-199.3 119.62,-192.85"/>
-</a>
-</g>
-<text text-anchor="middle" x="200" y="-178" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _timeOfDay</text>
 </g>
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightSettings.html" target="_top" xlink:title="Read&#45;only ambient/main scene&#45;light configuration — direction, colour, intensity.">
-<polygon fill="white" stroke="#666666" points="150,-30 1,-30 1,0 150,0 150,-30"/>
-<text text-anchor="start" x="9" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
-<text text-anchor="middle" x="75.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Effects.ISceneLightSettings</text>
+<g id="a_Node000005"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html" target="_top" xlink:title="Read&#45;only tuning for the night&#45;mode time&#45;of&#45;day cycle.">
+<polygon fill="white" stroke="#666666" points="151,-230 0,-230 0,-200 151,-200 151,-230"/>
+<text text-anchor="start" x="8" y="-218" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
+<text text-anchor="middle" x="75.5" y="-207" font-family="Helvetica,sans-Serif" font-size="10.00">Effects.ITimeOfDaySettings</text>
 </a>
 </g>
 </g>
@@ -173,65 +161,95 @@ var sectionId = 'dynsection-1';
 <g id="edge4_Node000001_Node000005" class="edge">
 <title>Node5&#45;&gt;Node1</title>
 <g id="a_edge4_Node000001_Node000005"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M160.53,-23.97C225.84,-32.62 317.98,-48.56 395,-76 442.22,-92.82 493.34,-121.43 522.63,-138.93"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="160.65,-20.46 150.28,-22.64 159.75,-27.4 160.65,-20.46"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M161.26,-219.09C225.63,-220.95 316.23,-220.9 395,-211 423.13,-207.47 429.49,-202.84 457,-196 467.17,-193.47 477.98,-190.74 488.45,-188.08"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="161.26,-215.59 151.15,-218.78 161.04,-222.58 161.26,-215.59"/>
 </a>
 </g>
-<text text-anchor="middle" x="322" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _lightSettings</text>
+<text text-anchor="middle" x="322" y="-222" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _settings</text>
 </g>
-<!-- Node5&#45;&gt;Node6 -->
-<g id="edge10_Node000006_Node000005" class="edge">
-<title>Node5&#45;&gt;Node6</title>
-<g id="a_edge10_Node000006_Node000005"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M132.95,-33.1C139.05,-35.08 145.16,-37.07 151,-39 186.64,-50.75 196.36,-51.57 231,-66 252.29,-74.86 275.55,-86.55 293.09,-95.79"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="134.02,-29.76 123.43,-30.01 131.86,-36.42 134.02,-29.76"/>
+<!-- Node5&#45;&gt;Node7 -->
+<g id="edge12_Node000007_Node000005" class="edge">
+<title>Node5&#45;&gt;Node7</title>
+<g id="a_edge12_Node000007_Node000005"><a xlink:title=" ">
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M121.18,-195.99C168.52,-175.86 242.3,-144.48 285.72,-126.01"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="119.62,-192.85 111.79,-199.99 122.36,-199.3 119.62,-192.85"/>
 </a>
 </g>
-<text text-anchor="middle" x="200" y="-69" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _settings</text>
+<text text-anchor="middle" x="200" y="-178" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _timeOfDay</text>
+</g>
+<!-- Node6 -->
+<g id="Node000006" class="node">
+<title>Node6</title>
+<g id="a_Node000006"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightSettings.html" target="_top" xlink:title="Read&#45;only ambient/main scene&#45;light configuration — direction, colour, intensity.">
+<polygon fill="white" stroke="#666666" points="150,-30 1,-30 1,0 150,0 150,-30"/>
+<text text-anchor="start" x="9" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
+<text text-anchor="middle" x="75.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Effects.ISceneLightSettings</text>
+</a>
+</g>
 </g>
 <!-- Node6&#45;&gt;Node1 -->
 <g id="edge5_Node000001_Node000006" class="edge">
 <title>Node6&#45;&gt;Node1</title>
 <g id="a_edge5_Node000001_Node000006"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M405.29,-120.24C422.45,-122.67 440.37,-125.59 457,-129 470.19,-131.7 484.28,-135.28 497.31,-138.88"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="405.67,-116.76 395.28,-118.86 404.71,-123.69 405.67,-116.76"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M160.14,-29.12C183.13,-33.14 208.05,-37.62 231,-42 304.12,-55.96 325.95,-48.18 395,-76 425.2,-88.16 429.54,-97.52 457,-115 479.74,-129.48 505.59,-146.16 523.74,-157.91"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="160.52,-25.64 150.07,-27.37 159.32,-32.53 160.52,-25.64"/>
+</a>
+</g>
+<text text-anchor="middle" x="322" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _lightSettings</text>
+</g>
+<!-- Node6&#45;&gt;Node7 -->
+<g id="edge11_Node000007_Node000006" class="edge">
+<title>Node6&#45;&gt;Node7</title>
+<g id="a_edge11_Node000007_Node000006"><a xlink:title=" ">
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M133.67,-33.26C139.53,-35.18 145.39,-37.11 151,-39 186.71,-51 196.24,-52.48 231,-67 251.86,-75.72 274.75,-86.93 292.22,-95.85"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="134.44,-29.83 123.85,-30.06 132.28,-36.48 134.44,-29.83"/>
+</a>
+</g>
+<text text-anchor="middle" x="200" y="-70" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _settings</text>
+</g>
+<!-- Node7&#45;&gt;Node1 -->
+<g id="edge6_Node000001_Node000007" class="edge">
+<title>Node7&#45;&gt;Node1</title>
+<g id="a_edge6_Node000001_Node000007"><a xlink:title=" ">
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M405.28,-117.81C422.59,-120.42 440.57,-124.02 457,-129 479.8,-135.91 503.98,-148.02 521.52,-157.79"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="405.58,-114.32 395.19,-116.39 404.6,-121.25 405.58,-114.32"/>
 </a>
 </g>
 <text text-anchor="middle" x="435" y="-132" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _service</text>
 </g>
-<!-- Node7 -->
-<g id="Node000007" class="node">
-<title>Node7</title>
-<g id="a_Node000007"><a xlink:href="interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ISceneLightRuntime.html" target="_top" xlink:title="Read surface for the LIVE ambient scene light — the current time&#45;of&#45;day state the runtime owner (Time...">
+<!-- Node8 -->
+<g id="Node000008" class="node">
+<title>Node8</title>
+<g id="a_Node000008"><a xlink:href="interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ISceneLightRuntime.html" target="_top" xlink:title="Read surface for the LIVE ambient scene light — the current time&#45;of&#45;day state the runtime owner (Time...">
 <polygon fill="white" stroke="#666666" points="148.5,-78 2.5,-78 2.5,-48 148.5,-48 148.5,-78"/>
 <text text-anchor="start" x="10.5" y="-66" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.Scene</text>
 <text text-anchor="middle" x="75.5" y="-55" font-family="Helvetica,sans-Serif" font-size="10.00">Light.ISceneLightRuntime</text>
 </a>
 </g>
 </g>
-<!-- Node7&#45;&gt;Node6 -->
-<g id="edge8_Node000006_Node000007" class="edge">
-<title>Node7&#45;&gt;Node6</title>
-<g id="a_edge8_Node000006_Node000007"><a xlink:title=" ">
+<!-- Node8&#45;&gt;Node7 -->
+<g id="edge9_Node000007_Node000008" class="edge">
+<title>Node8&#45;&gt;Node7</title>
+<g id="a_edge9_Node000007_Node000008"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M158.69,-79.13C187.82,-84.86 220.38,-91.25 248.63,-96.79"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="159.02,-75.63 148.54,-77.14 157.67,-82.5 159.02,-75.63"/>
 </a>
 </g>
 </g>
-<!-- Node8 -->
-<g id="Node000008" class="node">
-<title>Node8</title>
-<g id="a_Node000008"><a xlink:href="interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ITimeOfDayNight.html" target="_top" xlink:title="Whether the current time of day counts as night (5 PM–4 AM), for gameplay rules that key off it.">
+<!-- Node9 -->
+<g id="Node000009" class="node">
+<title>Node9</title>
+<g id="a_Node000009"><a xlink:href="interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ITimeOfDayNight.html" target="_top" xlink:title="Whether the current time of day counts as night (5 PM–4 AM), for gameplay rules that key off it.">
 <polygon fill="white" stroke="#666666" points="148.5,-126 2.5,-126 2.5,-96 148.5,-96 148.5,-126"/>
 <text text-anchor="start" x="10.5" y="-114" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.Scene</text>
 <text text-anchor="middle" x="75.5" y="-103" font-family="Helvetica,sans-Serif" font-size="10.00">Light.ITimeOfDayNight</text>
 </a>
 </g>
 </g>
-<!-- Node8&#45;&gt;Node6 -->
-<g id="edge9_Node000006_Node000008" class="edge">
-<title>Node8&#45;&gt;Node6</title>
-<g id="a_edge9_Node000006_Node000008"><a xlink:title=" ">
+<!-- Node9&#45;&gt;Node7 -->
+<g id="edge10_Node000007_Node000009" class="edge">
+<title>Node9&#45;&gt;Node7</title>
+<g id="a_edge10_Node000007_Node000009"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M158.69,-111C187.82,-111 220.38,-111 248.63,-111"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="158.54,-107.5 148.54,-111 158.54,-114.5 158.54,-107.5"/>
 </a>

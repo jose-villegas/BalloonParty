@@ -215,6 +215,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ac5d13ab9a8bb3d64b8303a5fea791c5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af062c53bbcdc975b0f8b0c86935ddc7b" id="r_af062c53bbcdc975b0f8b0c86935ddc7b"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af062c53bbcdc975b0f8b0c86935ddc7b">_palette</a></td></tr>
 <tr class="separator:af062c53bbcdc975b0f8b0c86935ddc7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84fdc3e94f8ebfdcb22ee02af041b901" id="r_a84fdc3e94f8ebfdcb22ee02af041b901"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a84fdc3e94f8ebfdcb22ee02af041b901">_pierceDischargesThisFlight</a></td></tr>
+<tr class="separator:a84fdc3e94f8ebfdcb22ee02af041b901"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ee14a6929b366e8a7f56c2e1e8ed030" id="r_a4ee14a6929b366e8a7f56c2e1e8ed030"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Audio_1_1SoundHandle.html">SoundHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ee14a6929b366e8a7f56c2e1e8ed030">_pierceLoopHandle</a> = <a class="el" href="structBalloonParty_1_1Audio_1_1SoundHandle.html#a35b1629b72b4624f91c6e376616bc6f4">SoundHandle.None</a></td></tr>
 <tr class="separator:a4ee14a6929b366e8a7f56c2e1e8ed030"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a4fc9d74b8576f11d8e9ce581490173" id="r_a2a4fc9d74b8576f11d8e9ce581490173"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html">PierceDischargedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a4fc9d74b8576f11d8e9ce581490173">_pierceSubscriber</a></td></tr>
@@ -235,6 +237,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a4359c0493d6bce18a7184dcd01b06c3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fd9edd666bcae882f8d7f18771a05cd" id="r_a1fd9edd666bcae882f8d7f18771a05cd"><td class="memItemLeft" align="right" valign="top">readonly CompositeDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1fd9edd666bcae882f8d7f18771a05cd">_subscriptions</a> = new()</td></tr>
 <tr class="separator:a1fd9edd666bcae882f8d7f18771a05cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a83b3203ab30e9bcb66de52360f228c" id="r_a7a83b3203ab30e9bcb66de52360f228c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a83b3203ab30e9bcb66de52360f228c">_tougherPopsThisFlight</a></td></tr>
+<tr class="separator:a7a83b3203ab30e9bcb66de52360f228c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c6ab7f8f7e98db10e89e816c6597cc6" id="r_a4c6ab7f8f7e98db10e89e816c6597cc6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4c6ab7f8f7e98db10e89e816c6597cc6">_toughPopsThisFlight</a></td></tr>
 <tr class="separator:a4c6ab7f8f7e98db10e89e816c6597cc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64c3b923cb476f2602ec5c3164217102" id="r_a64c3b923cb476f2602ec5c3164217102"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a64c3b923cb476f2602ec5c3164217102">_unbreakableDeflectsThisFlight</a></td></tr>
@@ -1167,6 +1171,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a84fdc3e94f8ebfdcb22ee02af041b901" name="a84fdc3e94f8ebfdcb22ee02af041b901"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84fdc3e94f8ebfdcb22ee02af041b901">&#9670;&#160;</a></span>_pierceDischargesThisFlight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Audio.Routing.CombatSoundRouter._pierceDischargesThisFlight</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a4ee14a6929b366e8a7f56c2e1e8ed030" name="a4ee14a6929b366e8a7f56c2e1e8ed030"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4ee14a6929b366e8a7f56c2e1e8ed030">&#9670;&#160;</a></span>_pierceLoopHandle</h2>
 
@@ -1376,6 +1402,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly CompositeDisposable BalloonParty.Audio.Routing.CombatSoundRouter._subscriptions = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7a83b3203ab30e9bcb66de52360f228c" name="a7a83b3203ab30e9bcb66de52360f228c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a83b3203ab30e9bcb66de52360f228c">&#9670;&#160;</a></span>_tougherPopsThisFlight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Audio.Routing.CombatSoundRouter._tougherPopsThisFlight</td>
         </tr>
       </table>
   </td>

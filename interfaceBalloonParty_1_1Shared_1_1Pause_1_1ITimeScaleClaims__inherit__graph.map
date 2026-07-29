@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.Pause.ITimeScaleClaims" name="BalloonParty.Shared.Pause.ITimeScaleClaims">
+<area shape="rect" id="Node000001" title="Write surface of the time&#45;scale claim stack." alt="" coords="5,5,203,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Shared_1_1Pause_1_1TimeScaleService.html" title="The only legal writer of Time.timeScale (style&#45;audit rule bans writes elsewhere); lowest active claim..." alt="" coords="5,93,203,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,59,107,93,101,93,101,59"/>
+</map>

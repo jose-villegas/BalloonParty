@@ -9,6 +9,7 @@ var dir_53ff6e473d46d4e442ba5a7ce9f895e3 =
     [ "Shields", "dir_63cc5e5b50930afc607f3d2730669459.html", "dir_63cc5e5b50930afc607f3d2730669459" ],
     [ "AnimatorGameEntryGate.cs", "AnimatorGameEntryGate_8cs.html", "AnimatorGameEntryGate_8cs" ],
     [ "CanvasCameraBinder.cs", "CanvasCameraBinder_8cs.html", "CanvasCameraBinder_8cs" ],
+    [ "FadeImage.cs", "FadeImage_8cs.html", "FadeImage_8cs" ],
     [ "FormattedLabel.cs", "FormattedLabel_8cs.html", "FormattedLabel_8cs" ],
     [ "PlainCounterDisplay.cs", "PlainCounterDisplay_8cs.html", "PlainCounterDisplay_8cs" ],
     [ "ReactiveCounterLabel.cs", "ReactiveCounterLabel_8cs.html", "ReactiveCounterLabel_8cs" ],

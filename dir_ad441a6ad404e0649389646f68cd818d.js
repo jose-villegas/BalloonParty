@@ -1,5 +1,6 @@
 var dir_ad441a6ad404e0649389646f68cd818d =
 [
+    [ "ITimeScaleClaims.cs", "ITimeScaleClaims_8cs.html", "ITimeScaleClaims_8cs" ],
     [ "PausedMessage.cs", "PausedMessage_8cs.html", "PausedMessage_8cs" ],
     [ "PauseService.cs", "PauseService_8cs.html", "PauseService_8cs" ],
     [ "PauseSource.cs", "PauseSource_8cs.html", "PauseSource_8cs" ],

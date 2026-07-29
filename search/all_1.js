@@ -3,7 +3,7 @@ var searchData=
   ['1_20·_20with_20g6_0',['G3 — 4-tap bilinear blur (Pass 1) · with G6',['../plan_performance_recovery.html#autotoc_md614',1,'']]],
   ['1_20—_20completed_20✅_20spot_20checked_202026_2007_2023_3a_20all_20commits_20exist_20and_20match_1',['Phase 1 — Completed ✅ (spot-checked 2026-07-23: all commits exist and match)',['../plan_performance_recovery.html#autotoc_md587',1,'']]],
   ['1_20—_20core_20loop_20no_20message_20changes_20—_20shipped_20steps_201_206_2',['Phase 1 — Core loop, no message changes — SHIPPED (Steps 1-6)',['../plan_audio.html#autotoc_md269',1,'']]],
-  ['1_20—_20pan_20in_20tt_20cinematicstate_20leveluppanin_20tt_3',['Cinematic 1 — Pan-In (&lt;tt&gt;CinematicState.LevelUpPanIn&lt;/tt&gt;)',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Game/Cinematics/README.md#autotoc_md167',1,'']]],
+  ['1_20—_20hit_20tt_20cinematicstate_20levelcompletehit_20tt_3',['Cinematic 1 — Hit (&lt;tt&gt;CinematicState.LevelCompleteHit&lt;/tt&gt;)',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Game/Cinematics/README.md#autotoc_md167',1,'']]],
   ['1_20—_20passive_20counters_4',['Phase 1 — Passive Counters',['../plan_gameplay_telemetry.html#autotoc_md458',1,'']]],
   ['1_20—_20vfx_20improvements_5',['1 — VFX Improvements',['../plan_future_ideas.html#autotoc_md348',1,'']]],
   ['1_201_20unbreakable_20pop_20vfx_20—_20falling_20debris_6',['1.1 Unbreakable Pop VFX — Falling Debris',['../plan_future_ideas.html#autotoc_md349',1,'']]],

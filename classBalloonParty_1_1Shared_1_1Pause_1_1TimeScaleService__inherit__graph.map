@@ -1,7 +1,9 @@
 <map id="BalloonParty.Shared.Pause.TimeScaleService" name="BalloonParty.Shared.Pause.TimeScaleService">
-<area shape="rect" id="Node000001" title="The only legal writer of Time.timeScale (style&#45;audit rule bans writes elsewhere); lowest active claim..." alt="" coords="35,93,232,133"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,91,38"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="71,46,116,91,112,95,67,50"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="115,5,322,45"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="192,57,154,95,150,91,188,53"/>
+<area shape="rect" id="Node000001" title="The only legal writer of Time.timeScale (style&#45;audit rule bans writes elsewhere); lowest active claim..." alt="" coords="260,55,457,95"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="66,5,151,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,28,271,53,270,58,164,33"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,55,212,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="225,73,260,73,260,78,225,78"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1Pause_1_1ITimeScaleClaims.html" title="Write surface of the time&#45;scale claim stack." alt="" coords="10,119,207,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="200,113,279,93,281,98,201,118"/>
 </map>

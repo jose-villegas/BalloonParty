@@ -1,17 +1,18 @@
 var classBalloonParty_1_1Thrower_1_1ThrowerController =
 [
-    [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a80a986364da119a967e0432bd881019c", null ],
+    [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ab5df40686f61152bf69901e453aebee8", null ],
     [ "ClearPredictionTrace", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ac497d1607399c4a0644aa0ffd0f66c71", null ],
     [ "Dispose", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ae6a7bc74adb625d310dbf2894b1bb2c5", null ],
     [ "Fire", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#acf7c3023e29ab76fd5380d26a3896b72", null ],
     [ "FireAt", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a72af301666dcad5df369149590646f3f", null ],
+    [ "ForceDestroyActiveProjectile", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#af374d953b428c8b2ec5f3a0dd11331e0", null ],
+    [ "HandleProjectileDestroyed", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a67763dffddc3a4214707aafaaf76e4e0", null ],
     [ "LoadProjectile", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a8776a8317a14bf86ba15d902b6a5bc32", null ],
     [ "OnRunReset", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#afc22cc36dbd82218c29dc3ca91eca9e0", null ],
     [ "PlayEntrance", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a30735ba0f34d91dba7302e7526567f75", null ],
     [ "Reload", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a02930293b10d19627f15ddb4abbc0f61", null ],
     [ "ScaleAwayActiveProjectile", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a87d23c88447d99813baace4041d25c6f", null ],
     [ "Start", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a7805046511ea0b776e91af11cdd0cb21", null ],
-    [ "SwapActiveProjectile", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a56f4c609593a6d92f92288edbbe24e49", null ],
     [ "Tick", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#af2a0fe778b1f2ccc194b56cb9ac47276", null ],
     [ "TryFire", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a61697f8555b739cee4e029da6d5af2b0", null ],
     [ "UnfireIfNeverFlown", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ad75d38a66eaf45d2924f739390cfa39d", null ],
@@ -24,10 +25,12 @@ var classBalloonParty_1_1Thrower_1_1ThrowerController =
     [ "_destroyedSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a1a4ffb17683b6de23c92c56b641652d8", null ],
     [ "_direction", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a724af414befd70b081d13131b60aed3a", null ],
     [ "_flightConfig", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a45e9a2b0c6804ebf3610cc65094ed183", null ],
+    [ "_forceDestroySubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ad6da9334a5814682dd451ee60c345f40", null ],
     [ "_gameOverSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a80b7fd3528b065366b32c4b2156675c1", null ],
     [ "_isMovable", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a747e442e9df1eff3aa72c5508d422be6", null ],
+    [ "_levelProgress", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a0fb662c810bbc24368194717d48b5ab9", null ],
     [ "_levelTransitionCompletedSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a33ae1dfafe4445e58c45e48a809559bb", null ],
-    [ "_levelUpDismissedSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a13b0977fdaa093fe70d127e38f7aa9e1", null ],
+    [ "_levelUpAbandonedSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a05cdfcae7b7b514f9eb473f292b9bc94", null ],
     [ "_levelUpSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a4b64a807f334a9ed6a0682a007cdf944", null ],
     [ "_loadDuration", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#af32aa8bccaf6ea7978541ba77a1de2b3", null ],
     [ "_loadedPublisher", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a5102f4bfcfccdc139343074116db7b83", null ],
@@ -46,5 +49,6 @@ var classBalloonParty_1_1Thrower_1_1ThrowerController =
     [ "_tracePoints", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a7a2151c38d12aea78662939c35e8e982", null ],
     [ "_traceProvider", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a6608c5887d4c7e73ab7ac569d8991fe3", null ],
     [ "_tracePublished", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a59bef5df1ec4f05c862e8ec46a47940f", null ],
-    [ "_view", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a0e44adc3cdcb044fde4f2c5d6dd2b331", null ]
+    [ "_view", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a0e44adc3cdcb044fde4f2c5d6dd2b331", null ],
+    [ "DirectionOverride", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a573c22c680f9e954cfa92eefd1c18ce8", null ]
 ];

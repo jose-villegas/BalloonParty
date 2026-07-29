@@ -144,8 +144,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a40653440b4ec8c332f70c6b9ac96a7d9" id="r_a40653440b4ec8c332f70c6b9ac96a7d9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40653440b4ec8c332f70c6b9ac96a7d9">BalloonControllerRegistry</a> (ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html">BoardClearMessage</a> &gt; boardClearSubscriber)</td></tr>
-<tr class="separator:a40653440b4ec8c332f70c6b9ac96a7d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac77d5740fb36ab8b9f344717e724647f" id="r_ac77d5740fb36ab8b9f344717e724647f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac77d5740fb36ab8b9f344717e724647f">BalloonControllerRegistry</a> (ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html">BoardClearMessage</a> &gt; boardClearSubscriber, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BoardDepletedMessage.html">BoardDepletedMessage</a> &gt; depletedPublisher)</td></tr>
+<tr class="separator:ac77d5740fb36ab8b9f344717e724647f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e401ad83a54369853223e01e35744dc" id="r_a5e401ad83a54369853223e01e35744dc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e401ad83a54369853223e01e35744dc">ClearAll</a> (bool playPopVfx)</td></tr>
 <tr class="separator:a5e401ad83a54369853223e01e35744dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4333deb0b7a99dfd8fa224782a21a299" id="r_a4333deb0b7a99dfd8fa224782a21a299"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4333deb0b7a99dfd8fa224782a21a299">DetachOutgoing</a> (Transform outgoingRoot, float exitDrop, List&lt; <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html">ISlotActorView</a> &gt; views)</td></tr>
@@ -178,6 +178,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a93eb364e311c4242262eae35813a1f04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77be837521a5017ac0b6e5ecb1361413" id="r_a77be837521a5017ac0b6e5ecb1361413"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html">BalloonController</a>[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a77be837521a5017ac0b6e5ecb1361413">_controllers</a> = new <a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html">BalloonController</a>[<a class="el" href="#ad8ccd5990f3c8cd2d537aedf90655fee">InitialCapacity</a>]</td></tr>
 <tr class="separator:a77be837521a5017ac0b6e5ecb1361413"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbb5facfa49888f3679aed5e67f513c2" id="r_acbb5facfa49888f3679aed5e67f513c2"><td class="memItemLeft" align="right" valign="top">readonly IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BoardDepletedMessage.html">BoardDepletedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acbb5facfa49888f3679aed5e67f513c2">_depletedPublisher</a></td></tr>
+<tr class="separator:acbb5facfa49888f3679aed5e67f513c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a83e4aa36a6bbbb382fc3d3ad73d5b13b" id="r_a83e4aa36a6bbbb382fc3d3ad73d5b13b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83e4aa36a6bbbb382fc3d3ad73d5b13b">_freeCount</a></td></tr>
 <tr class="separator:a83e4aa36a6bbbb382fc3d3ad73d5b13b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a862e1f414200fe119d90675c9a5ae897" id="r_a862e1f414200fe119d90675c9a5ae897"><td class="memItemLeft" align="right" valign="top">int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a862e1f414200fe119d90675c9a5ae897">_freeIndices</a> = new int[<a class="el" href="#ad8ccd5990f3c8cd2d537aedf90655fee">InitialCapacity</a>]</td></tr>
@@ -201,8 +203,8 @@ Static Private Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Routes each balloon's hit reaction to its owning controller via a flat-array index, avoiding per-balloon subscriptions. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a40653440b4ec8c332f70c6b9ac96a7d9" name="a40653440b4ec8c332f70c6b9ac96a7d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40653440b4ec8c332f70c6b9ac96a7d9">&#9670;&#160;</a></span>BalloonControllerRegistry()</h2>
+<a id="ac77d5740fb36ab8b9f344717e724647f" name="ac77d5740fb36ab8b9f344717e724647f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac77d5740fb36ab8b9f344717e724647f">&#9670;&#160;</a></span>BalloonControllerRegistry()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -213,8 +215,12 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">BalloonParty.Balloon.Controller.BalloonControllerRegistry.BalloonControllerRegistry </td>
           <td>(</td>
-          <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html">BoardClearMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>boardClearSubscriber</em></span></td><td>)</td>
+          <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html">BoardClearMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>boardClearSubscriber</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BoardDepletedMessage.html">BoardDepletedMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>depletedPublisher</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -588,6 +594,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html">BalloonController</a> [] BalloonParty.Balloon.Controller.BalloonControllerRegistry._controllers = new <a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html">BalloonController</a>[<a class="el" href="#ad8ccd5990f3c8cd2d537aedf90655fee">InitialCapacity</a>]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acbb5facfa49888f3679aed5e67f513c2" name="acbb5facfa49888f3679aed5e67f513c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbb5facfa49888f3679aed5e67f513c2">&#9670;&#160;</a></span>_depletedPublisher</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly IPublisher&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BoardDepletedMessage.html">BoardDepletedMessage</a>&gt; BalloonParty.Balloon.Controller.BalloonControllerRegistry._depletedPublisher</td>
         </tr>
       </table>
   </td>

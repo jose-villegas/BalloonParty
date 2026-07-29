@@ -120,6 +120,8 @@ $(function(){initNavTree('dir_ad441a6ad404e0649389646f68cd818d.html',''); initRe
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="files" name="files"></a>
 Files</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ITimeScaleClaims_8cs.html">ITimeScaleClaims.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PausedMessage_8cs.html">PausedMessage.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PauseService_8cs.html">PauseService.cs</a></td></tr>
@@ -178,9 +180,16 @@ Reacting to a pause</h2>
 <div class="fragment"><div class="line">_timeScaleService.Claim(TimeScaleSource.LevelUpPopup, 0f);   <span class="comment">// freeze while the popup shows</span></div>
 <div class="line">_timeScaleService.Release(TimeScaleSource.LevelUpPopup);     <span class="comment">// falls back to the next claim, or 1</span></div>
 </div><!-- fragment --><p>The <b>lowest active claim wins</b> (the popup's 0 beats a cinematic's slow-mo ramp) and no claims means normal speed — so restores are automatic and the "who forgot to set it back
-to 1" bug class is gone. <code>IRunResettable</code> clears all claims on restart.</p>
+to 1" bug class is gone. Non-exclusive claims may exceed 1.0 (e.g. a 2× speed-up ramp after the level-complete beat), but the min-wins rule still means any freeze or slow-mo from another source overrides. <code>IRunResettable</code> clears all claims on restart.</p>
+<h2><a class="anchor" id="autotoc_md825"></a>
+Exclusive claims</h2>
+<p><code>ClaimExclusive(source, value)</code> takes sole ownership: <code>Apply</code> uses ONLY that source's value until <code>ReleaseExclusive</code> — the min-wins stack is suspended. Other claimants keep recording normally and resume their effect on release, so no state is lost. Designed for the level-up beat curve where the authored ramp must not be dragged slower by an overlapping <code>LastShield</code> bullet-time claim.</p>
+<h2><a class="anchor" id="autotoc_md826"></a>
+<code>ITimeScaleClaims</code> — testable write surface</h2>
+<p>Plain-C# controllers (e.g. <code>LevelController</code>) depend on the <code>ITimeScaleClaims</code> interface rather than on <code>TimeScaleService</code> directly. An edit-mode test fixture can substitute it to verify claim/release calls without warping the editor's own clock.</p>
 <p>Current claimants:</p><ul>
 <li><b><code>CameraRigCinematic</code></b> (<code>TimeScaleSource.Cinematic</code>) — per-tick slow-mo ramp of a timeScale-driving pan-in segment, and both restore forms (tween-from-current / curve-sampled). Note the level-up <b>pan-in</b> does not claim at all: its tipping trail is slowed via a curve-modulated progress rate, other trails fly at normal speed.</li>
+<li><b><code>LevelController</code></b> (<code>TimeScaleSource.LevelUpCeremony</code>) — <b>exclusive</b> during the beat curve (the authored ramp must not be dragged slower by an overlapping <code>LastShield</code> claim), then <b>non-exclusive</b> for the post-cinematic ramp-up (1 → <code>LevelCompleteRampUpScale</code> over <code>LevelCompleteRampUpDuration</code>, both from <code>IRunConfig</code>). The non-exclusive claim allows &gt; 1 so remaining flight finishes faster while still yielding to any freeze.</li>
 <li><b><code>LevelUpPopUp</code></b> (<code>TimeScaleSource.LevelUpPopup</code>) — freezes balloon animators and particles at 0 while visible; releases on dismiss <em>after</em> publishing <code>LevelUpDismissedMessage</code>, so the restore cinematic's claim is already in place and the hand-back never flashes full speed.</li>
 <li><b><code>PierceDischargeEffects</code></b> (<code>TimeScaleSource.PierceDischarge</code>, <code>Projectile/Controller/</code>) — a brief real-time dip when a piercing shot discharges the toughs it plowed through. A fresh discharge cancels and restarts the dip rather than layering; see <code><a class="el" href="Projectile_2README_8md.html">Projectile/README.md</a></code> § Pierce &amp; Discharge Feel.</li>
 <li><b><code>ProjectileDoomedTimeScaleController</code></b> (<code>TimeScaleSource.LastShield</code>, <code>Projectile/Controller/</code>) — bullet-time while a shot on its last shield drifts toward the wall it's doomed to die on, curve-sampled over the doomed approach's progress.</li>

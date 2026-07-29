@@ -153,8 +153,8 @@ Static Package Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a109d9d5544f6200443cea28b7b90df3a" id="r_a109d9d5544f6200443cea28b7b90df3a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a109d9d5544f6200443cea28b7b90df3a">AssignItems</a> (IReadOnlyList&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a> &gt; newBalloons, int count)</td></tr>
-<tr class="separator:a109d9d5544f6200443cea28b7b90df3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a467f9a5721e231e1cc089b5cd27173d8" id="r_a467f9a5721e231e1cc089b5cd27173d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a467f9a5721e231e1cc089b5cd27173d8">AssignItems</a> (IReadOnlyList&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a> &gt; newBalloons, int count, bool isInitial)</td></tr>
+<tr class="separator:a467f9a5721e231e1cc089b5cd27173d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab98b666d9d5d35c94a7e39dd8d83def0" id="r_ab98b666d9d5d35c94a7e39dd8d83def0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab98b666d9d5d35c94a7e39dd8d83def0">CollectEligibleSlots</a> (IReadOnlyList&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a> &gt; newBalloons)</td></tr>
 <tr class="separator:ab98b666d9d5d35c94a7e39dd8d83def0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e5066c1a2ab6a0e6bbaf4ccfd9bdff4" id="r_a6e5066c1a2ab6a0e6bbaf4ccfd9bdff4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e5066c1a2ab6a0e6bbaf4ccfd9bdff4">CountBalloonsWithItem</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2b">ItemType</a> type)</td></tr>
@@ -174,6 +174,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aa7637091ec3720fbbb3cb84c3300ed05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed3b750610f1a5d99922216d64e03b17" id="r_aed3b750610f1a5d99922216d64e03b17"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed3b750610f1a5d99922216d64e03b17">_grid</a></td></tr>
 <tr class="separator:aed3b750610f1a5d99922216d64e03b17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a967668fba415d1a3cbd8e356656c5ce4" id="r_a967668fba415d1a3cbd8e356656c5ce4"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html">ItemSettings</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a967668fba415d1a3cbd8e356656c5ce4">_guaranteedBuffer</a> = new()</td></tr>
+<tr class="separator:a967668fba415d1a3cbd8e356656c5ce4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a521074af522ca5ea01030d508bb48237" id="r_a521074af522ca5ea01030d508bb48237"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html">IActiveLevelParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a521074af522ca5ea01030d508bb48237">_levelParams</a></td></tr>
 <tr class="separator:a521074af522ca5ea01030d508bb48237"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7dfae65abbb49fb0ed25a3f945a86976" id="r_a7dfae65abbb49fb0ed25a3f945a86976"><td class="memItemLeft" align="right" valign="top">IDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7dfae65abbb49fb0ed25a3f945a86976">_subscription</a></td></tr>
@@ -215,8 +217,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a109d9d5544f6200443cea28b7b90df3a" name="a109d9d5544f6200443cea28b7b90df3a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a109d9d5544f6200443cea28b7b90df3a">&#9670;&#160;</a></span>AssignItems()</h2>
+<a id="a467f9a5721e231e1cc089b5cd27173d8" name="a467f9a5721e231e1cc089b5cd27173d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a467f9a5721e231e1cc089b5cd27173d8">&#9670;&#160;</a></span>AssignItems()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -232,7 +234,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>count</em></span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>count</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isInitial</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -514,6 +521,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> BalloonParty.Item.ItemAssigner._grid</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a967668fba415d1a3cbd8e356656c5ce4" name="a967668fba415d1a3cbd8e356656c5ce4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a967668fba415d1a3cbd8e356656c5ce4">&#9670;&#160;</a></span>_guaranteedBuffer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;<a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html">ItemSettings</a>&gt; BalloonParty.Item.ItemAssigner._guaranteedBuffer = new()</td>
         </tr>
       </table>
   </td>

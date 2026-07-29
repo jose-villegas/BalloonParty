@@ -129,6 +129,15 @@ Properties</h2></td></tr>
 <tr class="memitem:a98441edf7af505aee1b04753f88a9c75" id="r_a98441edf7af505aee1b04753f88a9c75"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a98441edf7af505aee1b04753f88a9c75">DegreesPerLevel</a><code> [get]</code></td></tr>
 <tr class="memdesc:a98441edf7af505aee1b04753f88a9c75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Degrees the toward-light direction advances per level, counter-clockwise (the gradient's <code>t = angle / 360</code>).  <br /></td></tr>
 <tr class="separator:a98441edf7af505aee1b04753f88a9c75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5610dccea393b3c8b2427c808595be4" id="r_ae5610dccea393b3c8b2427c808595be4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae5610dccea393b3c8b2427c808595be4">GameStartAngleDegrees</a><code> [get]</code></td></tr>
+<tr class="memdesc:ae5610dccea393b3c8b2427c808595be4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Angle (degrees) the Realtime clock snaps to when transitioning from Launch to <a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a> — ensures the player always starts at a consistent time of day (e.g.  <br /></td></tr>
+<tr class="separator:ae5610dccea393b3c8b2427c808595be4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9e289430fb3698e455f32d248dc012a" id="r_af9e289430fb3698e455f32d248dc012a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af9e289430fb3698e455f32d248dc012a">GameStartSweepSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:af9e289430fb3698e455f32d248dc012a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds the Launch→Game sweep takes to reach <a class="el" href="#ae5610dccea393b3c8b2427c808595be4" title="Angle (degrees) the Realtime clock snaps to when transitioning from Launch to Game — ensures the play...">GameStartAngleDegrees</a>.  <br /></td></tr>
+<tr class="separator:af9e289430fb3698e455f32d248dc012a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2ca215dde44e01f1451698bca7135b4" id="r_ab2ca215dde44e01f1451698bca7135b4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab2ca215dde44e01f1451698bca7135b4">LaunchSpeedMultiplier</a><code> [get]</code></td></tr>
+<tr class="memdesc:ab2ca215dde44e01f1451698bca7135b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Speed multiplier applied to the time-of-day clock while in the Launch scene (e.g.  <br /></td></tr>
+<tr class="separator:ab2ca215dde44e01f1451698bca7135b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ba00387d1565cb4ddc77eb99ccc2a02" id="r_a4ba00387d1565cb4ddc77eb99ccc2a02"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ba00387d1565cb4ddc77eb99ccc2a02">NightEndAngle</a><code> [get]</code></td></tr>
 <tr class="memdesc:a4ba00387d1565cb4ddc77eb99ccc2a02"><td class="mdescLeft">&#160;</td><td class="mdescRight">End of the night arc, in degrees (default 270).  <br /></td></tr>
 <tr class="separator:a4ba00387d1565cb4ddc77eb99ccc2a02"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -182,6 +191,86 @@ Properties</h2></td></tr>
 <p>A full day spans <code>360 / this</code> levels; it wraps continuously, so the cycle never reverses. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#a2b2d4503264e9879254ba00d4e40ccc8">BalloonParty.Configuration.Effects.SceneLightFieldSettings</a>.</p>
+
+</div>
+</div>
+<a id="ae5610dccea393b3c8b2427c808595be4" name="ae5610dccea393b3c8b2427c808595be4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5610dccea393b3c8b2427c808595be4">&#9670;&#160;</a></span>GameStartAngleDegrees</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.ITimeOfDaySettings.GameStartAngleDegrees</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Angle (degrees) the Realtime clock snaps to when transitioning from Launch to <a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a> — ensures the player always starts at a consistent time of day (e.g. </p>
+<p>135 = peak noon). </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#a9db52231943c63dcccbadc6ca3d26732">BalloonParty.Configuration.Effects.SceneLightFieldSettings</a>.</p>
+
+</div>
+</div>
+<a id="af9e289430fb3698e455f32d248dc012a" name="af9e289430fb3698e455f32d248dc012a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9e289430fb3698e455f32d248dc012a">&#9670;&#160;</a></span>GameStartSweepSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.ITimeOfDaySettings.GameStartSweepSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds the Launch→Game sweep takes to reach <a class="el" href="#ae5610dccea393b3c8b2427c808595be4" title="Angle (degrees) the Realtime clock snaps to when transitioning from Launch to Game — ensures the play...">GameStartAngleDegrees</a>. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#af2606a212b309260daf37da2d550b45c">BalloonParty.Configuration.Effects.SceneLightFieldSettings</a>.</p>
+
+</div>
+</div>
+<a id="ab2ca215dde44e01f1451698bca7135b4" name="ab2ca215dde44e01f1451698bca7135b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2ca215dde44e01f1451698bca7135b4">&#9670;&#160;</a></span>LaunchSpeedMultiplier</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.ITimeOfDaySettings.LaunchSpeedMultiplier</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Speed multiplier applied to the time-of-day clock while in the Launch scene (e.g. </p>
+<p>4 = 4× faster day/night cycle on the title screen). Reverts to 1× on entering <a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a>. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#a0a2a950ea0d01203e5a67731e3d83fe9">BalloonParty.Configuration.Effects.SceneLightFieldSettings</a>.</p>
 
 </div>
 </div>

@@ -4,7 +4,7 @@
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="364,64,453,43,454,48,366,69"/>
 <area shape="rect" id="Node000005" href="$classBalloonParty_1_1Game_1_1Cinematics_1_1HeartDrainCinematic.html" title="Begins on the first heart trail launch, follows the heart about to land in slow&#45;mo,..." alt="" coords="427,69,653,109"/>
 <area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="393,87,426,87,426,92,393,92"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html" title="Puppets the level&#45;up&#39;s tipping score trail along the pan&#45;in, then hands off to the popup and restore ..." alt="" coords="427,133,653,173"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html" title="Follows the tipping projectile during Window A (claim → first wall), then hands off to the popup and ..." alt="" coords="427,133,653,173"/>
 <area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="366,110,454,131,453,136,364,115"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="12,51,97,77"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,68,152,73,151,78,111,73"/>

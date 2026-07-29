@@ -170,13 +170,13 @@ Loss flow</h1>
 </div><!-- fragment --><p>Reset happens on <b>restart</b>, not on GameOver entry, so the GameOver screen can still show the final score. A loss arriving during a <code>BlocksLoss</code> cinematic or the <code>LevelUp</code> state is <b>deferred, never dropped</b> — <code>RunController</code> marks it pending and fires <code>EndRun()</code> the moment navigation returns to <code>Game</code>. Outside those gates, <code>EndRun()</code> only commits from <code>NavigationState.Game</code> (the GameOver state gate stops a second trigger from ending the run twice).</p>
 <h1><a class="anchor" id="autotoc_md199"></a>
 Testability seams</h1>
-<p><code>RunController</code> reaches navigation and cinematic state through <code>INavigation</code> and <code>ICinematicState</code> (<code>Shared/GameState/</code>) rather than the static <code><a class="el" href="LevelUpCinematic_8cs.html#af53eecbc68a3351b9ae14d787d8c03fd">Navigation</a></code> / <code>Cinematic</code>, so the whole lifecycle is unit-testable with substitutes.</p>
+<p><code>RunController</code> reaches navigation and cinematic state through <code>INavigation</code> and <code>ICinematicState</code> (<code>Shared/GameState/</code>) rather than the static <code>Navigation</code> / <code>Cinematic</code>, so the whole lifecycle is unit-testable with substitutes.</p>
 <h1><a class="anchor" id="autotoc_md200"></a>
 Interactions</h1>
 <ul>
 <li><b><code>GameOverMessage</code></b> — published by <code>RunController.EndRun()</code>; consumed by the GameOver screen and (later) the loss cinematic.</li>
 <li><b><code>ScoreController</code></b> (<code>Game/Score/</code>) — registered as <code>IRunScore</code> (read final score) and <code>IRunResettable</code> (reset on restart).</li>
-<li><b><code>INavigation</code> / <code>ICinematicState</code></b> (<code>Shared/GameState/</code>) — injectable seams over the static <code><a class="el" href="LevelUpCinematic_8cs.html#af53eecbc68a3351b9ae14d787d8c03fd">Navigation</a></code> and <code>Cinematic</code>. </li>
+<li><b><code>INavigation</code> / <code>ICinematicState</code></b> (<code>Shared/GameState/</code>) — injectable seams over the static <code>Navigation</code> and <code>Cinematic</code>. </li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

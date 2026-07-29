@@ -135,13 +135,14 @@ var searchData=
   ['ithermalsource_2ecs_132',['IThermalSource.cs',['../IThermalSource_8cs.html',1,'']]],
   ['itimeofdaynight_2ecs_133',['ITimeOfDayNight.cs',['../ITimeOfDayNight_8cs.html',1,'']]],
   ['itimeofdaysettings_2ecs_134',['ITimeOfDaySettings.cs',['../ITimeOfDaySettings_8cs.html',1,'']]],
-  ['itrailendpoint_2ecs_135',['ITrailEndpoint.cs',['../ITrailEndpoint_8cs.html',1,'']]],
-  ['itransformcapture_2ecs_136',['ITransformCapture.cs',['../ITransformCapture_8cs.html',1,'']]],
-  ['itransitionoutgoingcontent_2ecs_137',['ITransitionOutgoingContent.cs',['../ITransitionOutgoingContent_8cs.html',1,'']]],
-  ['iwashesprojectilecolor_2ecs_138',['IWashesProjectileColor.cs',['../IWashesProjectileColor_8cs.html',1,'']]],
-  ['iweightedentry_2ecs_139',['IWeightedEntry.cs',['../IWeightedEntry_8cs.html',1,'']]],
-  ['iwriteableballoonmodel_2ecs_140',['IWriteableBalloonModel.cs',['../IWriteableBalloonModel_8cs.html',1,'']]],
-  ['iwriteabledynamicslotactor_2ecs_141',['IWriteableDynamicSlotActor.cs',['../IWriteableDynamicSlotActor_8cs.html',1,'']]],
-  ['iwriteableprojectilemodel_2ecs_142',['IWriteableProjectileModel.cs',['../IWriteableProjectileModel_8cs.html',1,'']]],
-  ['iwriteableslotactor_2ecs_143',['IWriteableSlotActor.cs',['../IWriteableSlotActor_8cs.html',1,'']]]
+  ['itimescaleclaims_2ecs_135',['ITimeScaleClaims.cs',['../ITimeScaleClaims_8cs.html',1,'']]],
+  ['itrailendpoint_2ecs_136',['ITrailEndpoint.cs',['../ITrailEndpoint_8cs.html',1,'']]],
+  ['itransformcapture_2ecs_137',['ITransformCapture.cs',['../ITransformCapture_8cs.html',1,'']]],
+  ['itransitionoutgoingcontent_2ecs_138',['ITransitionOutgoingContent.cs',['../ITransitionOutgoingContent_8cs.html',1,'']]],
+  ['iwashesprojectilecolor_2ecs_139',['IWashesProjectileColor.cs',['../IWashesProjectileColor_8cs.html',1,'']]],
+  ['iweightedentry_2ecs_140',['IWeightedEntry.cs',['../IWeightedEntry_8cs.html',1,'']]],
+  ['iwriteableballoonmodel_2ecs_141',['IWriteableBalloonModel.cs',['../IWriteableBalloonModel_8cs.html',1,'']]],
+  ['iwriteabledynamicslotactor_2ecs_142',['IWriteableDynamicSlotActor.cs',['../IWriteableDynamicSlotActor_8cs.html',1,'']]],
+  ['iwriteableprojectilemodel_2ecs_143',['IWriteableProjectileModel.cs',['../IWriteableProjectileModel_8cs.html',1,'']]],
+  ['iwriteableslotactor_2ecs_144',['IWriteableSlotActor.cs',['../IWriteableSlotActor_8cs.html',1,'']]]
 ];

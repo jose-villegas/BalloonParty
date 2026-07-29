@@ -127,6 +127,12 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILe
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:ad72a95268fedce8202423d5c86398962" id="r_ad72a95268fedce8202423d5c86398962"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad72a95268fedce8202423d5c86398962">FillGuaranteedBalloons</a> (List&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html">BalloonPrefabEntry</a> &gt; output, Dictionary&lt; string, int &gt; activeCounts)</td></tr>
+<tr class="memdesc:ad72a95268fedce8202423d5c86398962"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills guaranteed balloon entries for the initial board fill, respecting caps.  <br /></td></tr>
+<tr class="separator:ad72a95268fedce8202423d5c86398962"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad93ef4997a80ea587529b349b314576d" id="r_ad93ef4997a80ea587529b349b314576d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad93ef4997a80ea587529b349b314576d">FillGuaranteedItems</a> (List&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html">ItemSettings</a> &gt; output, Dictionary&lt; string, int &gt; activeCounts)</td></tr>
+<tr class="memdesc:ad93ef4997a80ea587529b349b314576d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Picks guaranteed items for the initial board, respecting caps. Returns the number placed.  <br /></td></tr>
+<tr class="separator:ad93ef4997a80ea587529b349b314576d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a7c11ee950d23e64f3af03670669156" id="r_a6a7c11ee950d23e64f3af03670669156"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html">BalloonPrefabEntry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a7c11ee950d23e64f3af03670669156">PickBalloonEntry</a> (IReadOnlyDictionary&lt; string, int &gt; activeCounts, IReadOnlyDictionary&lt; string, int &gt; waveQuotas=null)</td></tr>
 <tr class="memdesc:a6a7c11ee950d23e64f3af03670669156"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -172,6 +178,56 @@ Properties</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The read surface of a fully-resolved level; cross-level queries stay on the resolver instead. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad72a95268fedce8202423d5c86398962" name="ad72a95268fedce8202423d5c86398962"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad72a95268fedce8202423d5c86398962">&#9670;&#160;</a></span>FillGuaranteedBalloons()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Configuration.Level.ILevelParameters.FillGuaranteedBalloons </td>
+          <td>(</td>
+          <td class="paramtype">List&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html">BalloonPrefabEntry</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>output</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Dictionary&lt; string, int &gt;</td>          <td class="paramname"><span class="paramname"><em>activeCounts</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Fills guaranteed balloon entries for the initial board fill, respecting caps. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a986faa6e911d6afd8bf6aeabeeb7218d">BalloonParty.Configuration.Level.LevelParameters</a>.</p>
+
+</div>
+</div>
+<a id="ad93ef4997a80ea587529b349b314576d" name="ad93ef4997a80ea587529b349b314576d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad93ef4997a80ea587529b349b314576d">&#9670;&#160;</a></span>FillGuaranteedItems()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Level.ILevelParameters.FillGuaranteedItems </td>
+          <td>(</td>
+          <td class="paramtype">List&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html">ItemSettings</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>output</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Dictionary&lt; string, int &gt;</td>          <td class="paramname"><span class="paramname"><em>activeCounts</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Picks guaranteed items for the initial board, respecting caps. Returns the number placed. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#ad6681de28bb56abed0dde80dba99c1eb">BalloonParty.Configuration.Level.LevelParameters</a>.</p>
+
+</div>
+</div>
 <a id="a6a7c11ee950d23e64f3af03670669156" name="a6a7c11ee950d23e64f3af03670669156"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6a7c11ee950d23e64f3af03670669156">&#9670;&#160;</a></span>PickBalloonEntry()</h2>
 

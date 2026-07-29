@@ -14,6 +14,7 @@ var namespaceBalloonParty_1_1Balloon_1_1Type =
       [ "BubbleCluster", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea2d92127d6af9dd8fbbe7b1fa1a72dc5e", null ],
       [ "SimpleSilver", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea5b871c76d2685e91b52371b4d281c305", null ],
       [ "SimpleGold", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60eacda9af439530c93364d7e44ab31cfb07", null ],
-      [ "Rainbow", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea4aca5ee9a087fb9218bfb662fe92605c", null ]
+      [ "Rainbow", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea4aca5ee9a087fb9218bfb662fe92605c", null ],
+      [ "Tougher", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea6a8220a3c5ab78a3431b332ea5899ea2", null ]
     ] ]
 ];
