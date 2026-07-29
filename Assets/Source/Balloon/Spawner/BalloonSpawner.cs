@@ -122,8 +122,11 @@ namespace BalloonParty.Balloon.Spawner
         {
             foreach (var entry in _balloonsConfig.Entries)
             {
-                _poolManager.Register(entry.PoolKey,
-                    new BalloonPoolChannel(_resolver, entry.Prefab));
+                if (!_poolManager.IsRegistered(entry.PoolKey))
+                {
+                    _poolManager.Register(entry.PoolKey,
+                        new BalloonPoolChannel(_resolver, entry.Prefab));
+                }
             }
 
             _lineSubscriber.Subscribe(msg => OnSpawnLinesRequested(msg.LineCount)).AddTo(_subscriptions);
