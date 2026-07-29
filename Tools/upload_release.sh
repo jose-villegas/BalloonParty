@@ -39,7 +39,7 @@ for apk in "${APK_PATHS[@]}"; do
 done
 
 if git rev-parse "$TAG" >/dev/null 2>&1; then
-    echo "ERROR: Tag $TAG already exists. Choose a different version." >&2
+    echo "ERROR: Tag $TAG already exists locally. Choose a different version." >&2
     exit 1
 fi
 
@@ -84,14 +84,7 @@ echo "--- Release Notes ---"
 echo "$RELEASE_BODY"
 echo "---------------------"
 
-# --- Git tag ---
-echo "Creating tag $TAG..."
-git tag -a "$TAG" -m "Release ${VERSION} (${COMMIT_SHA})"
-
-echo "Pushing tag to origin..."
-git push origin "$TAG"
-
-# --- Create GitHub release ---
+# --- Create GitHub release (also creates the tag via the API — no git push needed) ---
 echo "Creating GitHub release..."
 RELEASE_RESPONSE=$(curl -s -X POST \
     -H "Authorization: token ${TOKEN}" \
@@ -111,8 +104,6 @@ UPLOAD_URL=$(echo "$RELEASE_RESPONSE" | jq -r '.upload_url' | sed 's/{?name,labe
 if [ -z "$UPLOAD_URL" ] || [ "$UPLOAD_URL" = "null" ]; then
     echo "ERROR: Failed to create release. Response:" >&2
     echo "$RELEASE_RESPONSE" >&2
-    git push origin --delete "$TAG" 2>/dev/null || true
-    git tag -d "$TAG" 2>/dev/null || true
     exit 1
 fi
 
