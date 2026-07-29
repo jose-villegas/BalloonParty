@@ -201,10 +201,7 @@ namespace BalloonParty.Slots.Actor
                     continue;
                 }
 
-                if (!_poolManager.IsRegistered(entry.PoolKey))
-                {
-                    _poolManager.Register(entry.PoolKey, new GridActorPoolChannel(_resolver, entry.Prefab));
-                }
+                _poolManager.Register(entry.PoolKey, new GridActorPoolChannel(_resolver, entry.Prefab));
             }
 
             _poolsRegistered = true;

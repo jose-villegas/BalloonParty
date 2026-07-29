@@ -34,34 +34,53 @@ namespace BalloonParty.Shared.Pool
         }
 
         /// <summary>
-        ///     Throws if the key is already taken.
+        ///     Replaces the channel if the key already exists — pooled items from a previous scene
+        ///     hold stale DI references, so a fresh channel with the current resolver is needed.
         /// </summary>
         public void Register<TItem>(string key, PoolChannel<TItem> channel)
             where TItem : Component, IPoolable
         {
-            if (!_channels.TryAdd(key, channel))
+            if (_channels.ContainsKey(key))
             {
-                throw new InvalidOperationException(
-                    $"Pool channel '{key}' is already registered.");
+                _channels[key] = channel;
+            }
+            else
+            {
+                _channels.Add(key, channel);
             }
 
-            var container = new GameObject(key);
-            container.transform.SetParent(Root);
-            channel.SetParent(container.transform);
+            var container = Root.Find(key);
+            if (container == null)
+            {
+                container = new GameObject(key).transform;
+                container.SetParent(Root);
+            }
+            else
+            {
+                // Destroy stale pooled instances parented under the existing container.
+                for (var i = container.childCount - 1; i >= 0; i--)
+                {
+                    Object.Destroy(container.GetChild(i).gameObject);
+                }
+            }
+
+            channel.SetParent(container);
         }
 
         /// <summary>
-        ///     Throws if the key is already taken. Homes the channel under <paramref name="container"/>
-        ///     instead of creating one under <c>[Pool]</c> — for pools whose items should live where
-        ///     they're consumed (e.g. UI notices under their bar) rather than reparenting per lifecycle.
+        ///     Replaces the channel if the key already exists. Homes the channel under
+        ///     <paramref name="container"/> instead of creating one under <c>[Pool]</c>.
         /// </summary>
         public void Register<TItem>(string key, PoolChannel<TItem> channel, Transform container)
             where TItem : Component, IPoolable
         {
-            if (!_channels.TryAdd(key, channel))
+            if (_channels.ContainsKey(key))
             {
-                throw new InvalidOperationException(
-                    $"Pool channel '{key}' is already registered.");
+                _channels[key] = channel;
+            }
+            else
+            {
+                _channels.Add(key, channel);
             }
 
             channel.SetParent(container);

@@ -91,6 +91,9 @@ namespace BalloonParty.Audio
         GameplayLoopDay,
 
         // Looping ambient played during active nighttime gameplay; crossfades with GameplayLoopDay.
-        GameplayLoopNight
+        GameplayLoopNight,
+
+        BalloonPopTougher,
+        BalloonDeflectTougher
     }
 }

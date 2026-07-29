@@ -22,11 +22,8 @@ namespace BalloonParty.Audio
 
         public void Start()
         {
-            if (!_poolManager.IsRegistered(AudioPoolKeys.VoicePoolKey))
-            {
-                _poolManager.Register(AudioPoolKeys.VoicePoolKey, new SimplePoolChannel<AudioSourceVoice>(_prefab));
-                _poolManager.Prewarm(AudioPoolKeys.VoicePoolKey, _bank.GlobalVoiceCap);
-            }
+            _poolManager.Register(AudioPoolKeys.VoicePoolKey, new SimplePoolChannel<AudioSourceVoice>(_prefab));
+            _poolManager.Prewarm(AudioPoolKeys.VoicePoolKey, _bank.GlobalVoiceCap);
         }
     }
 }

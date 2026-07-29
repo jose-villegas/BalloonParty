@@ -748,5 +748,35 @@
     "LicenseName": "Creative Commons 0",
     "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
     "RequiresAttribution": false
+  },
+  {
+    "SoundId": "BalloonPopTougher",
+    "ProviderId": 530224,
+    "Name": "Jazz Bass Open E.wav",
+    "Author": "silver887",
+    "SoundUrl": "https://freesound.org/people/silver887/sounds/530224/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
+  },
+  {
+    "SoundId": "BalloonDeflectTougher",
+    "ProviderId": 70070,
+    "Name": "gavel-single.flac",
+    "Author": "zerolagtime",
+    "SoundUrl": "https://freesound.org/people/zerolagtime/sounds/70070/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
+  },
+  {
+    "SoundId": "BalloonDeflectTougher",
+    "ProviderId": 39706,
+    "Name": "table_tennis_ball_bump.wav",
+    "Author": "reinsamba",
+    "SoundUrl": "https://freesound.org/people/reinsamba/sounds/39706/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
   }
 ]

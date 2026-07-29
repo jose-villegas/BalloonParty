@@ -111,11 +111,8 @@ namespace BalloonParty.Thrower
             _traceCalculator = new PredictionTraceCalculator(_traceConfig, _flightConfig);
             _view.SetTraceColor(_traceConfig.PredictionTraceColor);
 
-            if (!_poolManager.IsRegistered(_projectilePoolKey))
-            {
-                _poolManager.Register(_projectilePoolKey,
-                    new ProjectilePoolChannel(_resolver, _settings.ProjectilePrefab));
-            }
+            _poolManager.Register(_projectilePoolKey,
+                new ProjectilePoolChannel(_resolver, _settings.ProjectilePrefab));
 
             _poolManager.Prewarm(_projectilePoolKey, 2);
 

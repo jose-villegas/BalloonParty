@@ -45,10 +45,12 @@ namespace BalloonParty.Audio.Routing
         private int _bounceCount;
         private int _rainbowPopsThisFlight;
         private int _toughPopsThisFlight;
+        private int _tougherPopsThisFlight;
         private int _unbreakablePopsThisFlight;
         private int _silverPopsThisFlight;
         private int _goldPopsThisFlight;
         private int _unbreakableDeflectsThisFlight;
+        private int _pierceDischargesThisFlight;
 
         [Inject]
         public CombatSoundRouter(ISoundPlayer player,
@@ -171,6 +173,7 @@ namespace BalloonParty.Audio.Routing
             return type switch
             {
                 BalloonType.Tough => GameSoundId.BalloonPopTough,
+                BalloonType.Tougher => GameSoundId.BalloonPopTougher,
                 BalloonType.Rainbow => GameSoundId.BalloonPopRainbow,
                 BalloonType.Unbreakable => GameSoundId.BalloonPopUnbreakable,
                 BalloonType.SimpleSilver => GameSoundId.BalloonPopSilver,
@@ -185,6 +188,7 @@ namespace BalloonParty.Audio.Routing
             return type switch
             {
                 BalloonType.Tough => GameSoundId.BalloonDeflectTough,
+                BalloonType.Tougher => GameSoundId.BalloonDeflectTougher,
                 BalloonType.Unbreakable => GameSoundId.BalloonDeflectUnbreakable,
                 _ => GameSoundId.BalloonDeflect,
             };
@@ -200,10 +204,12 @@ namespace BalloonParty.Audio.Routing
         {
             _rainbowPopsThisFlight = 0;
             _toughPopsThisFlight = 0;
+            _tougherPopsThisFlight = 0;
             _unbreakablePopsThisFlight = 0;
             _silverPopsThisFlight = 0;
             _goldPopsThisFlight = 0;
             _unbreakableDeflectsThisFlight = 0;
+            _pierceDischargesThisFlight = 0;
             _colorPopsThisFlight.Clear();
             _player.Play(GameSoundId.ShotReload, null);
         }
@@ -233,7 +239,9 @@ namespace BalloonParty.Audio.Routing
 
         private void OnPierceDischarged(PierceDischargedMessage message)
         {
-            _player.Play(GameSoundId.PierceDischarge, message.Center);
+            var offset = _pierceDischargesThisFlight * MusicalPitchExtensions.WholeToneSemitones;
+            _player.Play(GameSoundId.PierceDischarge, message.Center, semitoneOffset: offset);
+            _pierceDischargesThisFlight++;
         }
 
         private void OnShieldGained(ShieldGainedMessage message)
@@ -296,6 +304,7 @@ namespace BalloonParty.Audio.Routing
             {
                 GameSoundId.BalloonPopRainbow => _rainbowPopsThisFlight * MusicalPitchExtensions.WholeToneSemitones,
                 GameSoundId.BalloonPopTough => _toughPopsThisFlight * MusicalPitchExtensions.WholeToneSemitones,
+                GameSoundId.BalloonPopTougher => _tougherPopsThisFlight * MusicalPitchExtensions.WholeToneSemitones,
                 GameSoundId.BalloonPopUnbreakable => _unbreakablePopsThisFlight * MusicalPitchExtensions.WholeToneSemitones,
                 GameSoundId.BalloonPopSilver => _silverPopsThisFlight * MusicalPitchExtensions.WholeToneSemitones,
                 GameSoundId.BalloonPopGold => _goldPopsThisFlight * MusicalPitchExtensions.WholeToneSemitones,
@@ -314,6 +323,9 @@ namespace BalloonParty.Audio.Routing
                     break;
                 case GameSoundId.BalloonPopTough:
                     _toughPopsThisFlight++;
+                    break;
+                case GameSoundId.BalloonPopTougher:
+                    _tougherPopsThisFlight++;
                     break;
                 case GameSoundId.BalloonPopUnbreakable:
                     _unbreakablePopsThisFlight++;

@@ -114,7 +114,7 @@ MonoBehaviour:
     _directBalanceMotion: 0
     _omnidirectionalBalance: 0
     _deflectStampScale: 1.35
-    _spawnWeight: 3
+    _spawnWeight: 6
   - _prefab: {fileID: 4318124338822199961, guid: 49cbb92bf41a2499797a1921677efaa9,
       type: 3}
     _balloonType: 3
