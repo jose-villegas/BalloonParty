@@ -277,7 +277,7 @@ var searchData=
   ['live_20repoint_20track_20any_20time_20separable_20commits_274',['Live repoint track (any time; separable commits)',['../plan_shot_solver_accuracy.html#autotoc_md651',1,'']]],
   ['lives_20in_20tt_20game_20level_20tt_275',['Progress lives in &lt;tt&gt;Game/Level/&lt;/tt&gt;',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Game/Score/README.md#autotoc_md208',1,'']]],
   ['living_20documentation_276',['Living Documentation',['../style_guide.html#autotoc_md778',1,'']]],
-  ['load_277',['Load',['../classBalloonParty_1_1Shared_1_1GameState_1_1SceneTransition.html#a9fa2f09f742b94ed32f005d2c596ec41',1,'BalloonParty::Shared::GameState::SceneTransition']]],
+  ['load_277',['Load',['../classBalloonParty_1_1Shared_1_1Diagnostics_1_1BuildInfo.html#a333494c661e6b75dd525a77fe71df6a4',1,'BalloonParty.Shared.Diagnostics.BuildInfo.Load()'],['../classBalloonParty_1_1Shared_1_1GameState_1_1SceneTransition.html#a9fa2f09f742b94ed32f005d2c596ec41',1,'BalloonParty.Shared.GameState.SceneTransition.Load()']]],
   ['loadgradient_278',['LoadGradient',['../classBalloonParty_1_1Editor_1_1GradientTextureDrawer.html#a942e2093c43fc04d5f59fec6b4928a84',1,'BalloonParty::Editor::GradientTextureDrawer']]],
   ['loadmaterial_279',['LoadMaterial',['../classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldResources.html#ae7fc48e806045f5c28dd50e56c92bb92',1,'BalloonParty::Shared::SceneLight::SceneLightFieldResources']]],
   ['loadorcreateasset_280',['LoadOrCreateAsset',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushVariantExporter.html#aabba9617f0ef8eca401614ceee4608ce',1,'BalloonParty::Editor::Bush::BushVariantExporter']]],

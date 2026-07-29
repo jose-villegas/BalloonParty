@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"arch_cinematics_architecture.html#autotoc_md62":[2,7,0,1],
 "arch_item_activation.html":[2,11],
 "arch_item_activation.html#autotoc_md63":[2,11,0],
 "arch_item_activation.html#autotoc_md64":[2,11,0,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#ad2f837c6a8e6607b8e91534b11b58668":[5,0,0,0,0,4,11],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#ad2f837c6a8e6607b8e91534b11b58668":[6,0,0,0,0,4,11],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#ad5299bbf9ef515a4d71f42fee7449e16":[5,0,0,0,0,4,2],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#ad5299bbf9ef515a4d71f42fee7449e16":[6,0,0,0,0,4,2],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#aed662bf1c6d9d5c38c87e053cfeca4c7":[5,0,0,0,0,4,17]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#ad5299bbf9ef515a4d71f42fee7449e16":[6,0,0,0,0,4,2]
 };

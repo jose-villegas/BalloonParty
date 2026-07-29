@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"IClusterableSlotActor_8cs.html":[7,0,15,0,1,2],
 "IColorStreak_8cs.html":[7,0,7,5,2],
 "ICounterDisplay_8cs.html":[7,0,18,0,0],
 "IDangerLevel_8cs.html":[7,0,7,1,0],
@@ -164,7 +165,7 @@ var NAVTREEINDEX1 =
 "LightningChain_8cs.html":[7,0,8,3,3],
 "LightningItemHandler_8cs.html":[7,0,8,3,4],
 "ListExtensions_8cs.html":[7,0,14,4,11],
-"Log_8cs.html":[7,0,14,2,2],
+"Log_8cs.html":[7,0,14,2,3],
 "LossForecast_8cs.html":[7,0,7,2,4],
 "MeshHelper_8cs.html":[7,0,14,10,7],
 "MoveWeightEvaluator_8cs.html":[7,0,15,2,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "ProjectileDoomedTimeScaleController_8cs.html":[7,0,12,1,2],
 "ProjectileFacingRotator_8cs.html":[7,0,8,26],
 "ProjectileFacingSource_8cs.html":[7,0,12,5],
-"ProjectileFiredMessage_8cs.html":[7,0,14,7,27],
-"ProjectileFlightConfigEditor_8cs.html":[7,0,3,3,8]
+"ProjectileFiredMessage_8cs.html":[7,0,14,7,27]
 };

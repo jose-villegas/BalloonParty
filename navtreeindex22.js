@@ -1,5 +1,6 @@
 var NAVTREEINDEX22 =
 {
+"classBalloonParty_1_1Display_1_1NavigationCameraReveal.html#af2dffb6ddd4e08805f86db50b75750b1":[5,0,0,4,3,2],
 "classBalloonParty_1_1Display_1_1NavigationCameraReveal.html#af2dffb6ddd4e08805f86db50b75750b1":[6,0,0,4,3,2],
 "classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html":[5,0,0,4,4],
 "classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html":[6,0,0,4,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX22 =
 "classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerWindow.html#a5d938cb54738ddb781cc1e9aa0954045":[5,0,0,5,0,1,27],
 "classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerWindow.html#a5d938cb54738ddb781cc1e9aa0954045":[6,0,0,5,0,1,27],
 "classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerWindow.html#a68ee883c21853dd3bb05781866d2aab0":[5,0,0,5,0,1,31],
-"classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerWindow.html#a68ee883c21853dd3bb05781866d2aab0":[6,0,0,5,0,1,31],
-"classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerWindow.html#a713199828aa409ee2329b63a3c5e72b6":[5,0,0,5,0,1,51]
+"classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerWindow.html#a68ee883c21853dd3bb05781866d2aab0":[6,0,0,5,0,1,31]
 };

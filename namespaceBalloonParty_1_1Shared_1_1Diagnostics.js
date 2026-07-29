@@ -1,5 +1,6 @@
 var namespaceBalloonParty_1_1Shared_1_1Diagnostics =
 [
+    [ "BuildInfo", "classBalloonParty_1_1Shared_1_1Diagnostics_1_1BuildInfo.html", "classBalloonParty_1_1Shared_1_1Diagnostics_1_1BuildInfo" ],
     [ "FPSCounter", "classBalloonParty_1_1Shared_1_1Diagnostics_1_1FPSCounter.html", "classBalloonParty_1_1Shared_1_1Diagnostics_1_1FPSCounter" ],
     [ "FrameRateSettings", "classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html", "classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings" ],
     [ "Log", "classBalloonParty_1_1Shared_1_1Diagnostics_1_1Log.html", "classBalloonParty_1_1Shared_1_1Diagnostics_1_1Log" ],

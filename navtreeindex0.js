@@ -70,6 +70,7 @@ var NAVTREEINDEX0 =
 "BuffConfiguration_8cs.html":[7,0,3,1,0],
 "BuffEntry_8cs.html":[7,0,3,1,1],
 "BuffModifierOp_8cs.html":[7,0,12,2,0],
+"BuildInfo_8cs.html":[7,0,14,2,0],
 "BushBakerState_8cs.html":[7,0,6,0,0],
 "BushBakerWindow_8cs.html":[7,0,6,0,1],
 "BushBranchBakeSettings_8cs.html":[7,0,6,0,3],
@@ -165,7 +166,7 @@ var NAVTREEINDEX0 =
 "EndRunRequestedMessage_8cs.html":[7,0,14,7,5],
 "EnumIndexedAttribute_8cs.html":[7,0,14,14],
 "EnumIndexedDrawer_8cs.html":[7,0,6,15],
-"FPSCounter_8cs.html":[7,0,14,2,0],
+"FPSCounter_8cs.html":[7,0,14,2,1],
 "FadeImage_8cs.html":[7,0,18,9],
 "FireBestShotCheat_8cs.html":[7,0,2,10],
 "FlightMode_8cs.html":[7,0,8,10],
@@ -179,7 +180,7 @@ var NAVTREEINDEX0 =
 "FrameDebuggerEventReader_8cs.html":[7,0,6,2,1],
 "FrameDebuggerEventWalker_8cs.html":[7,0,6,2,2],
 "FrameDebuggerReflection_8cs.html":[7,0,6,2,3],
-"FrameRateSettings_8cs.html":[7,0,14,2,1],
+"FrameRateSettings_8cs.html":[7,0,14,2,2],
 "FreesoundQueryBuilder_8cs.html":[7,0,0,1,2],
 "FreesoundResponseParser_8cs.html":[7,0,0,1,3],
 "FreesoundSfxProvider_8cs.html":[7,0,0,1,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "ICinematicFocus_8cs.html":[7,0,7,0,13],
 "ICinematicState_8cs.html":[7,0,14,5,6],
 "ICinematicsSettings_8cs.html":[7,0,3,2,4],
-"IClusterViewSettings_8cs.html":[7,0,15,0,1,3],
-"IClusterableSlotActor_8cs.html":[7,0,15,0,1,2]
+"IClusterViewSettings_8cs.html":[7,0,15,0,1,3]
 };

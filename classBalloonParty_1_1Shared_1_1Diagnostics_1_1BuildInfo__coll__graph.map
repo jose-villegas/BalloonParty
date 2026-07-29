@@ -1,0 +1,6 @@
+<map id="BalloonParty.Shared.Diagnostics.BuildInfo" name="BalloonParty.Shared.Diagnostics.BuildInfo">
+<area shape="rect" id="Node000001" title="Build provenance data baked into the APK at build time by the release tool." alt="" coords="5,108,240,148"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Shared_1_1Diagnostics_1_1BuildInfo.html" title="Build provenance data baked into the APK at build time by the release tool." alt="" coords="5,5,240,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,59,125,108,120,108,120,59"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="255,17,267,25,259,33,241,36,240,31,256,28,261,26,252,21"/>
+</map>

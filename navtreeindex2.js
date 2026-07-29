@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"ProjectileFlightConfigEditor_8cs.html":[7,0,3,3,8],
 "ProjectileFlightConfig_8cs.html":[7,0,3,17],
 "ProjectileFlightState_8cs.html":[7,0,12,2,7],
 "ProjectileHitResolver_8cs.html":[7,0,12,1,3],
@@ -35,7 +36,7 @@ var NAVTREEINDEX2 =
 "RectAnchorMath_8cs.html":[7,0,18,13],
 "RejectedBalloonEffect_8cs.html":[7,0,1,2,5],
 "ReleaseUploadWindow_8cs.html":[7,0,6,4,0],
-"ReleaseUploadWindow_8cs.html#a0100be52d45f14348918ea69ec09f959":[7,0,6,4,0,1],
+"ReleaseUploadWindow_8cs.html#a0100be52d45f14348918ea69ec09f959":[7,0,6,4,0,2],
 "RendererExtensions_8cs.html":[7,0,14,4,14],
 "ResolvedGridActorGate_8cs.html":[7,0,3,5,4],
 "ResumedMessage_8cs.html":[7,0,14,8,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "arch_bush_system.html#autotoc_md59":[2,15,0,1],
 "arch_cinematics_architecture.html":[2,7],
 "arch_cinematics_architecture.html#autotoc_md60":[2,7,0],
-"arch_cinematics_architecture.html#autotoc_md61":[2,7,0,0],
-"arch_cinematics_architecture.html#autotoc_md62":[2,7,0,1]
+"arch_cinematics_architecture.html#autotoc_md61":[2,7,0,0]
 };

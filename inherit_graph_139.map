@@ -1,7 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Game_1_1Cinematics_1_1IBoardEffect.html" title="A board&#45;wide clear effect — the pop wave, the float&#45;away dissolve, and future variants." alt="" coords="5,37,232,77"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Game_1_1Cinematics_1_1BoardFloatAwayEffect.html" title="Substitutes the pop wave: detaches the old balloons into the transition&#39;s outgoing group (off the gri..." alt="" coords="280,5,507,45"/>
-<area shape="poly" id="edge75_Node000000_Node000001" title=" " alt="" coords="245,40,279,36,280,41,246,45"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Cinematics_1_1BoardPopWave.html" title="Detaches every balloon into the transition&#39;s outgoing group so they ride the fake&#45;camera travel out,..." alt="" coords="280,69,507,109"/>
-<area shape="poly" id="edge76_Node000000_Node000002" title=" " alt="" coords="246,69,280,73,279,79,245,75"/>
+<area shape="rect" id="Node000000" href="$classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicScene.html" title=" " alt="" coords="5,5,232,45"/>
 </map>

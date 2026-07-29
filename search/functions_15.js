@@ -31,9 +31,10 @@ var searchData=
   ['wrapangle_28',['WrapAngle',['../classBalloonParty_1_1Item_1_1SightSpinReaction.html#a019424e42cb25befa280983707371c63',1,'BalloonParty::Item::SightSpinReaction']]],
   ['writeallproperties_29',['WriteAllProperties',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView.html#a5fcd80781e4f00073ce592a6b709d838',1,'BalloonParty::Projectile::View::ProjectileShieldView']]],
   ['writeanchor_30',['WriteAnchor',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#ad8c655f2b9262afc78dbfb0c0629d655',1,'BalloonParty::Game::Score::Behaviours::ShapeFormationTicker']]],
-  ['writeoutput_31',['WriteOutput',['../classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerDumper.html#a7b0023f048d0f86f63909c12a10d23ba',1,'BalloonParty::Editor::FrameDump::FrameDebuggerDumper']]],
-  ['writepng_32',['WritePng',['../classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html#a6309897d505269b0c994df680ea4e932',1,'BalloonParty::Editor::SpriteCombine::SpriteLayerCombinerEditor']]],
-  ['writeshadowpng_33',['WriteShadowPng',['../classBalloonParty_1_1Editor_1_1ShadowBake_1_1ShadowBakeUtility.html#ad47b0efb17effd7443af9c31973c6973',1,'BalloonParty::Editor::ShadowBake::ShadowBakeUtility']]],
-  ['writestaticint_34',['WriteStaticInt',['../classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerReflection.html#a2c442d39fd0f0dc303362918dc72d740',1,'BalloonParty::Editor::FrameDump::FrameDebuggerReflection']]],
-  ['writeuserdata_35',['WriteUserData',['../classBalloonParty_1_1Editor_1_1GradientTextureDrawer.html#a6c0f1ca636f35b8b15dafad6626bbfbe',1,'BalloonParty::Editor::GradientTextureDrawer']]]
+  ['writebuildinfo_31',['WriteBuildInfo',['../classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#aa3d036578490ef0a2dc74b54eeb299e5',1,'BalloonParty::Editor::Release::ReleaseUploadWindow']]],
+  ['writeoutput_32',['WriteOutput',['../classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerDumper.html#a7b0023f048d0f86f63909c12a10d23ba',1,'BalloonParty::Editor::FrameDump::FrameDebuggerDumper']]],
+  ['writepng_33',['WritePng',['../classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html#a6309897d505269b0c994df680ea4e932',1,'BalloonParty::Editor::SpriteCombine::SpriteLayerCombinerEditor']]],
+  ['writeshadowpng_34',['WriteShadowPng',['../classBalloonParty_1_1Editor_1_1ShadowBake_1_1ShadowBakeUtility.html#ad47b0efb17effd7443af9c31973c6973',1,'BalloonParty::Editor::ShadowBake::ShadowBakeUtility']]],
+  ['writestaticint_35',['WriteStaticInt',['../classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerReflection.html#a2c442d39fd0f0dc303362918dc72d740',1,'BalloonParty::Editor::FrameDump::FrameDebuggerReflection']]],
+  ['writeuserdata_36',['WriteUserData',['../classBalloonParty_1_1Editor_1_1GradientTextureDrawer.html#a6c0f1ca636f35b8b15dafad6626bbfbe',1,'BalloonParty::Editor::GradientTextureDrawer']]]
 ];

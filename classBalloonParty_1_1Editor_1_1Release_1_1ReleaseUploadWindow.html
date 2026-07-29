@@ -108,6 +108,7 @@ $(function(){initNavTree('classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploa
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
@@ -117,7 +118,7 @@ $(function(){initNavTree('classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploa
 </div><!--header-->
 <div class="contents">
 
-<p><a class="el" href="namespaceBalloonParty_1_1Editor.html">Editor</a> window that automates GitHub release uploads for APK builds.  
+<p><a class="el" href="namespaceBalloonParty_1_1Editor.html">Editor</a> window that builds three APK variants (release, release+cheats, development), tags the commit, generates a changelog, and uploads everything to GitHub as a release.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Editor.Release.ReleaseUploadWindow:</div>
@@ -134,12 +135,17 @@ $(function(){initNavTree('classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploa
 <div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow__coll__graph.svg" width="214" height="124"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow_1_1BuildInfoData.html">BuildInfoData</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:ad1868195c4bf33599e64913ba3208be6" id="r_ad1868195c4bf33599e64913ba3208be6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1868195c4bf33599e64913ba3208be6">AutoDetectApk</a> ()</td></tr>
-<tr class="separator:ad1868195c4bf33599e64913ba3208be6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa547c836adf321c4bbe7f9b08cb46cff" id="r_aa547c836adf321c4bbe7f9b08cb46cff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa547c836adf321c4bbe7f9b08cb46cff">DrawApkField</a> ()</td></tr>
-<tr class="separator:aa547c836adf321c4bbe7f9b08cb46cff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a587a49a6f4becce34c19c0d935d32025" id="r_a587a49a6f4becce34c19c0d935d32025"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a587a49a6f4becce34c19c0d935d32025">AppendLog</a> (string text)</td></tr>
+<tr class="separator:a587a49a6f4becce34c19c0d935d32025"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6867dbd6f23c550a6bdf8075e84215ca" id="r_a6867dbd6f23c550a6bdf8075e84215ca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6867dbd6f23c550a6bdf8075e84215ca">BuildApk</a> (string label, string outputPath, string[] scenes, BuildOptions options, bool addCheatsDefine, string ver, string commitSha, string treeHash, string variant)</td></tr>
+<tr class="separator:a6867dbd6f23c550a6bdf8075e84215ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13baaf9d32311d3fb60dbef82b91400f" id="r_a13baaf9d32311d3fb60dbef82b91400f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a13baaf9d32311d3fb60dbef82b91400f">DrawOutputLog</a> ()</td></tr>
 <tr class="separator:a13baaf9d32311d3fb60dbef82b91400f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d2ca4177a97a498c51afcd88544dd1e" id="r_a4d2ca4177a97a498c51afcd88544dd1e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d2ca4177a97a498c51afcd88544dd1e">DrawTokenField</a> ()</td></tr>
@@ -155,13 +161,23 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
+<tr class="memitem:af17c720592ac61839d348aaf4eddf09f" id="r_af17c720592ac61839d348aaf4eddf09f"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af17c720592ac61839d348aaf4eddf09f">CleanupBuildInfo</a> (string projectRoot)</td></tr>
+<tr class="separator:af17c720592ac61839d348aaf4eddf09f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9191a912b716c246421a03b527cf759b" id="r_a9191a912b716c246421a03b527cf759b"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9191a912b716c246421a03b527cf759b">ComputeSha256</a> (string filePath)</td></tr>
+<tr class="separator:a9191a912b716c246421a03b527cf759b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbabf825cdd0a189686e27d3f8d7eeda" id="r_acbabf825cdd0a189686e27d3f8d7eeda"><td class="memItemLeft" align="right" valign="top">static string[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acbabf825cdd0a189686e27d3f8d7eeda">GetBuildScenes</a> ()</td></tr>
+<tr class="separator:acbabf825cdd0a189686e27d3f8d7eeda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81ccfdf0fc631e01fbe7e764c27a8a7c" id="r_a81ccfdf0fc631e01fbe7e764c27a8a7c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a81ccfdf0fc631e01fbe7e764c27a8a7c">Open</a> ()</td></tr>
 <tr class="separator:a81ccfdf0fc631e01fbe7e764c27a8a7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39ac38069614d2546d1139b35ef926e9" id="r_a39ac38069614d2546d1139b35ef926e9"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a39ac38069614d2546d1139b35ef926e9">RunGit</a> (string workingDir, string arguments)</td></tr>
+<tr class="separator:a39ac38069614d2546d1139b35ef926e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab98aa89ce2706531d1ac55110cc49375" id="r_ab98aa89ce2706531d1ac55110cc49375"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab98aa89ce2706531d1ac55110cc49375">SetCheatsDefine</a> (bool enable)</td></tr>
+<tr class="separator:ab98aa89ce2706531d1ac55110cc49375"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3d036578490ef0a2dc74b54eeb299e5" id="r_aa3d036578490ef0a2dc74b54eeb299e5"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3d036578490ef0a2dc74b54eeb299e5">WriteBuildInfo</a> (string ver, string commitSha, string treeHash, string variant)</td></tr>
+<tr class="separator:aa3d036578490ef0a2dc74b54eeb299e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:af175fd789c44659c6225a925557a53ec" id="r_af175fd789c44659c6225a925557a53ec"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af175fd789c44659c6225a925557a53ec">apkPath</a> = &quot;&quot;</td></tr>
-<tr class="separator:af175fd789c44659c6225a925557a53ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa383f09ebfb476cc90f4f149c5293d73" id="r_aa383f09ebfb476cc90f4f149c5293d73"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa383f09ebfb476cc90f4f149c5293d73">isRunning</a></td></tr>
 <tr class="separator:aa383f09ebfb476cc90f4f149c5293d73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a83c583a39e9cbc6522c5b484fe611959" id="r_a83c583a39e9cbc6522c5b484fe611959"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83c583a39e9cbc6522c5b484fe611959">outputLog</a> = &quot;&quot;</td></tr>
@@ -175,21 +191,30 @@ Private Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
-<tr class="memitem:a019ea0c9caa6903b344a2e6f8a3108b4" id="r_a019ea0c9caa6903b344a2e6f8a3108b4"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a019ea0c9caa6903b344a2e6f8a3108b4">ApkFolderPrefKey</a> = &quot;BalloonParty_ApkFolder&quot;</td></tr>
-<tr class="separator:a019ea0c9caa6903b344a2e6f8a3108b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7bcbd464efb7247f761886aa20c8606" id="r_aa7bcbd464efb7247f761886aa20c8606"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa7bcbd464efb7247f761886aa20c8606">DefaultApkFolder</a> = &quot;Builds&quot;</td></tr>
-<tr class="separator:aa7bcbd464efb7247f761886aa20c8606"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c31baf5f0395daf6e475f8e17c563b0" id="r_a9c31baf5f0395daf6e475f8e17c563b0"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9c31baf5f0395daf6e475f8e17c563b0">BuildFolder</a> = &quot;Builds&quot;</td></tr>
+<tr class="separator:a9c31baf5f0395daf6e475f8e17c563b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5338eb8d70ab219595e20d222c8e22ab" id="r_a5338eb8d70ab219595e20d222c8e22ab"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5338eb8d70ab219595e20d222c8e22ab">BuildInfoPath</a> = &quot;Assets/Resources/BuildInfo.json&quot;</td></tr>
+<tr class="separator:a5338eb8d70ab219595e20d222c8e22ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61b97999a371edccacf14c4690476c89" id="r_a61b97999a371edccacf14c4690476c89"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a61b97999a371edccacf14c4690476c89">CheatsDefine</a> = &quot;CHEATS_IN_RELEASE&quot;</td></tr>
+<tr class="separator:a61b97999a371edccacf14c4690476c89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6a5e67c5828020f027073015c8f5c0b" id="r_af6a5e67c5828020f027073015c8f5c0b"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af6a5e67c5828020f027073015c8f5c0b">Repository</a> = &quot;jose-villegas/BalloonParty&quot;</td></tr>
 <tr class="separator:af6a5e67c5828020f027073015c8f5c0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a847bee11bce32190146a869da28500fd" id="r_a847bee11bce32190146a869da28500fd"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a847bee11bce32190146a869da28500fd">TokenPrefKey</a> = &quot;BalloonParty_GitHubToken&quot;</td></tr>
 <tr class="separator:a847bee11bce32190146a869da28500fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="namespaceBalloonParty_1_1Editor.html">Editor</a> window that automates GitHub release uploads for APK builds. </p>
-<p>Creates a git tag, generates a changelog, and uploads the APK via the GitHub API. </p>
+<div class="textblock"><p><a class="el" href="namespaceBalloonParty_1_1Editor.html">Editor</a> window that builds three APK variants (release, release+cheats, development), tags the commit, generates a changelog, and uploads everything to GitHub as a release. </p>
+<p>Build provenance is enforced by three layers: </p><ol>
+<li>
+The working tree must be clean (no uncommitted changes). </li>
+<li>
+Commit SHA + git tree hash are baked into each APK via <code>BuildInfo.json</code>. </li>
+<li>
+SHA-256 checksums of every APK are published in the release notes. </li>
+</ol>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ad1868195c4bf33599e64913ba3208be6" name="ad1868195c4bf33599e64913ba3208be6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad1868195c4bf33599e64913ba3208be6">&#9670;&#160;</a></span>AutoDetectApk()</h2>
+<a id="a587a49a6f4becce34c19c0d935d32025" name="a587a49a6f4becce34c19c0d935d32025"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a587a49a6f4becce34c19c0d935d32025">&#9670;&#160;</a></span>AppendLog()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -198,9 +223,9 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void BalloonParty.Editor.Release.ReleaseUploadWindow.AutoDetectApk </td>
+          <td class="memname">void BalloonParty.Editor.Release.ReleaseUploadWindow.AppendLog </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>text</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -213,8 +238,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aa547c836adf321c4bbe7f9b08cb46cff" name="aa547c836adf321c4bbe7f9b08cb46cff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa547c836adf321c4bbe7f9b08cb46cff">&#9670;&#160;</a></span>DrawApkField()</h2>
+<a id="a6867dbd6f23c550a6bdf8075e84215ca" name="a6867dbd6f23c550a6bdf8075e84215ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6867dbd6f23c550a6bdf8075e84215ca">&#9670;&#160;</a></span>BuildApk()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -223,15 +248,104 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void BalloonParty.Editor.Release.ReleaseUploadWindow.DrawApkField </td>
+          <td class="memname">bool BalloonParty.Editor.Release.ReleaseUploadWindow.BuildApk </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>label</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>outputPath</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string[]</td>          <td class="paramname"><span class="paramname"><em>scenes</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">BuildOptions</td>          <td class="paramname"><span class="paramname"><em>options</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>addCheatsDefine</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>ver</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>commitSha</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>treeHash</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>variant</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af17c720592ac61839d348aaf4eddf09f" name="af17c720592ac61839d348aaf4eddf09f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af17c720592ac61839d348aaf4eddf09f">&#9670;&#160;</a></span>CleanupBuildInfo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Editor.Release.ReleaseUploadWindow.CleanupBuildInfo </td>
+          <td>(</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>projectRoot</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9191a912b716c246421a03b527cf759b" name="a9191a912b716c246421a03b527cf759b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9191a912b716c246421a03b527cf759b">&#9670;&#160;</a></span>ComputeSha256()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static string BalloonParty.Editor.Release.ReleaseUploadWindow.ComputeSha256 </td>
+          <td>(</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>filePath</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -363,6 +477,31 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="acbabf825cdd0a189686e27d3f8d7eeda" name="acbabf825cdd0a189686e27d3f8d7eeda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbabf825cdd0a189686e27d3f8d7eeda">&#9670;&#160;</a></span>GetBuildScenes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static string[] BalloonParty.Editor.Release.ReleaseUploadWindow.GetBuildScenes </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab45d73cc5632e0ecf7981ed25ff1751c" name="ab45d73cc5632e0ecf7981ed25ff1751c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab45d73cc5632e0ecf7981ed25ff1751c">&#9670;&#160;</a></span>OnGUI()</h2>
 
@@ -413,9 +552,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a019ea0c9caa6903b344a2e6f8a3108b4" name="a019ea0c9caa6903b344a2e6f8a3108b4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a019ea0c9caa6903b344a2e6f8a3108b4">&#9670;&#160;</a></span>ApkFolderPrefKey</h2>
+<a id="a39ac38069614d2546d1139b35ef926e9" name="a39ac38069614d2546d1139b35ef926e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39ac38069614d2546d1139b35ef926e9">&#9670;&#160;</a></span>RunGit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -424,7 +562,14 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const string BalloonParty.Editor.Release.ReleaseUploadWindow.ApkFolderPrefKey = &quot;BalloonParty_ApkFolder&quot;</td>
+          <td class="memname">static string BalloonParty.Editor.Release.ReleaseUploadWindow.RunGit </td>
+          <td>(</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>workingDir</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>arguments</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -436,8 +581,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="af175fd789c44659c6225a925557a53ec" name="af175fd789c44659c6225a925557a53ec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af175fd789c44659c6225a925557a53ec">&#9670;&#160;</a></span>apkPath</h2>
+<a id="ab98aa89ce2706531d1ac55110cc49375" name="ab98aa89ce2706531d1ac55110cc49375"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab98aa89ce2706531d1ac55110cc49375">&#9670;&#160;</a></span>SetCheatsDefine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -446,20 +591,23 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">string BalloonParty.Editor.Release.ReleaseUploadWindow.apkPath = &quot;&quot;</td>
+          <td class="memname">static void BalloonParty.Editor.Release.ReleaseUploadWindow.SetCheatsDefine </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>enable</em></span></td><td>)</td>
+          <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="aa7bcbd464efb7247f761886aa20c8606" name="aa7bcbd464efb7247f761886aa20c8606"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa7bcbd464efb7247f761886aa20c8606">&#9670;&#160;</a></span>DefaultApkFolder</h2>
+<a id="aa3d036578490ef0a2dc74b54eeb299e5" name="aa3d036578490ef0a2dc74b54eeb299e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3d036578490ef0a2dc74b54eeb299e5">&#9670;&#160;</a></span>WriteBuildInfo()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -468,7 +616,91 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const string BalloonParty.Editor.Release.ReleaseUploadWindow.DefaultApkFolder = &quot;Builds&quot;</td>
+          <td class="memname">static void BalloonParty.Editor.Release.ReleaseUploadWindow.WriteBuildInfo </td>
+          <td>(</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>ver</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>commitSha</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>treeHash</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>variant</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a9c31baf5f0395daf6e475f8e17c563b0" name="a9c31baf5f0395daf6e475f8e17c563b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c31baf5f0395daf6e475f8e17c563b0">&#9670;&#160;</a></span>BuildFolder</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Editor.Release.ReleaseUploadWindow.BuildFolder = &quot;Builds&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5338eb8d70ab219595e20d222c8e22ab" name="a5338eb8d70ab219595e20d222c8e22ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5338eb8d70ab219595e20d222c8e22ab">&#9670;&#160;</a></span>BuildInfoPath</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Editor.Release.ReleaseUploadWindow.BuildInfoPath = &quot;Assets/Resources/BuildInfo.json&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a61b97999a371edccacf14c4690476c89" name="a61b97999a371edccacf14c4690476c89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61b97999a371edccacf14c4690476c89">&#9670;&#160;</a></span>CheatsDefine</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Editor.Release.ReleaseUploadWindow.CheatsDefine = &quot;CHEATS_IN_RELEASE&quot;</td>
         </tr>
       </table>
   </td>

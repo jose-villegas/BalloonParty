@@ -1,5 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailReporter.html" title="Service&#45;owned sink a handler reports group arrivals through." alt="" coords="5,13,228,53"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService_1_1ScoreTrailReporter.html" title=" " alt="" coords="276,5,476,60"/>
-<area shape="poly" id="edge401_Node000000_Node000001" title=" " alt="" coords="242,30,276,30,276,35,242,35"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailBehaviour.html" title="A per&#45;group choreography handler: it owns everything between the group&#39;s spawn and its arrivals." alt="" coords="5,41,237,81"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html" title="Decomposes a big score into a catalog of 3D shapes and launches them all at once." alt="" coords="285,5,535,45"/>
+<area shape="poly" id="edge399_Node000000_Node000001" title=" " alt="" coords="250,43,285,38,285,44,251,48"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html" title="Byte&#45;for&#45;byte parity with the pre&#45;seam pipeline: one pooled trail per point, fanned out into a scatte..." alt="" coords="305,70,515,125"/>
+<area shape="poly" id="edge400_Node000000_Node000002" title=" " alt="" coords="251,75,305,82,304,87,251,80"/>
 </map>

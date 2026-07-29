@@ -6,13 +6,14 @@ var searchData=
   ['dangergradientview_3',['DangerGradientView',['../classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html',1,'BalloonParty::UI::Danger']]],
   ['dangersoundrouter_4',['DangerSoundRouter',['../classBalloonParty_1_1Audio_1_1Routing_1_1DangerSoundRouter.html',1,'BalloonParty::Audio::Routing']]],
   ['dangeruilifetimescope_5',['DangerUILifetimeScope',['../classBalloonParty_1_1UI_1_1Danger_1_1DangerUILifetimeScope.html',1,'BalloonParty::UI::Danger']]],
-  ['defaultscoretrailbehaviour_6',['DefaultScoreTrailBehaviour',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html',1,'BalloonParty::Game::Score::Behaviours']]],
-  ['deflectoractormodel_7',['DeflectorActorModel',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html',1,'BalloonParty::Slots::Actor::Archetype']]],
-  ['devlogconsole_8',['DevLogConsole',['../classBalloonParty_1_1Cheats_1_1DevLogConsole.html',1,'BalloonParty::Cheats']]],
-  ['disturbancefieldcoordinates_9',['DisturbanceFieldCoordinates',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldCoordinates.html',1,'BalloonParty::Shared::Disturbance']]],
-  ['disturbancefieldresources_10',['DisturbanceFieldResources',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldResources.html',1,'BalloonParty::Shared::Disturbance']]],
-  ['disturbancefieldservice_11',['DisturbanceFieldService',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html',1,'BalloonParty::Shared::Disturbance']]],
-  ['disturbancefieldsettings_12',['DisturbanceFieldSettings',['../classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html',1,'BalloonParty::Configuration::Effects']]],
-  ['disturbancepulseextensions_13',['DisturbancePulseExtensions',['../classBalloonParty_1_1Shared_1_1Extensions_1_1DisturbancePulseExtensions.html',1,'BalloonParty::Shared::Extensions']]],
-  ['disturbancetweenextensions_14',['DisturbanceTweenExtensions',['../classBalloonParty_1_1Shared_1_1Extensions_1_1DisturbanceTweenExtensions.html',1,'BalloonParty::Shared::Extensions']]]
+  ['data_6',['Data',['../classBalloonParty_1_1Shared_1_1Diagnostics_1_1BuildInfo_1_1Data.html',1,'BalloonParty::Shared::Diagnostics::BuildInfo']]],
+  ['defaultscoretrailbehaviour_7',['DefaultScoreTrailBehaviour',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html',1,'BalloonParty::Game::Score::Behaviours']]],
+  ['deflectoractormodel_8',['DeflectorActorModel',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html',1,'BalloonParty::Slots::Actor::Archetype']]],
+  ['devlogconsole_9',['DevLogConsole',['../classBalloonParty_1_1Cheats_1_1DevLogConsole.html',1,'BalloonParty::Cheats']]],
+  ['disturbancefieldcoordinates_10',['DisturbanceFieldCoordinates',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldCoordinates.html',1,'BalloonParty::Shared::Disturbance']]],
+  ['disturbancefieldresources_11',['DisturbanceFieldResources',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldResources.html',1,'BalloonParty::Shared::Disturbance']]],
+  ['disturbancefieldservice_12',['DisturbanceFieldService',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html',1,'BalloonParty::Shared::Disturbance']]],
+  ['disturbancefieldsettings_13',['DisturbanceFieldSettings',['../classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html',1,'BalloonParty::Configuration::Effects']]],
+  ['disturbancepulseextensions_14',['DisturbancePulseExtensions',['../classBalloonParty_1_1Shared_1_1Extensions_1_1DisturbancePulseExtensions.html',1,'BalloonParty::Shared::Extensions']]],
+  ['disturbancetweenextensions_15',['DisturbanceTweenExtensions',['../classBalloonParty_1_1Shared_1_1Extensions_1_1DisturbanceTweenExtensions.html',1,'BalloonParty::Shared::Extensions']]]
 ];
