@@ -35,6 +35,7 @@ namespace BalloonParty.Balloon.Spawner
         private int _sequenceDepth;
         private int _nextId;
         private float _launchCooldown;
+        private int _currentDoomedLineIndex = -1;
 
         public int ResetOrder => RunResetOrder.Counters;
 
@@ -83,7 +84,7 @@ namespace BalloonParty.Balloon.Spawner
                 {
                     var balloon = queue[row];
                     var ready = Advance(column.Key, row, balloon, delta);
-                    if (ready && !balloon.Launched && row < candidateRow)
+                    if (ready && !balloon.Launched && balloon.DoomedLineIndex < 0 && row < candidateRow)
                     {
                         candidate = balloon;
                         candidateRow = row;
@@ -132,7 +133,8 @@ namespace BalloonParty.Balloon.Spawner
             view.transform.position = RowPosition(col, rowOffset + 1);
             view.transform.localScale = Vector3.zero;
 
-            queue.Add(new OverflowBalloon(entry.PoolKey, view, model, col, _nextId++, staggerIndex * _settings.AppearStaggerSeconds));
+            queue.Add(new OverflowBalloon(entry.PoolKey, view, model, col, _nextId++,
+                staggerIndex * _settings.AppearStaggerSeconds, _currentDoomedLineIndex));
             BeginOverflowHold();
         }
 
@@ -187,6 +189,33 @@ namespace BalloonParty.Balloon.Spawner
             }
 
             TryReleaseOverflowHold();
+        }
+
+        /// <summary>Tags subsequent overflow balloons as part of a doomed line so they aren't auto-popped.</summary>
+        internal void BeginDoomedLine(int lineIndex)
+        {
+            _currentDoomedLineIndex = lineIndex;
+        }
+
+        internal void EndDoomedLine()
+        {
+            _currentDoomedLineIndex = -1;
+        }
+
+        /// <summary>Pops every overflow balloon tagged with the given doomed line index simultaneously.</summary>
+        internal void PopDoomedLine(int lineIndex)
+        {
+            foreach (var column in _columns)
+            {
+                var queue = column.Value;
+                for (var i = queue.Count - 1; i >= 0; i--)
+                {
+                    if (queue[i].DoomedLineIndex == lineIndex)
+                    {
+                        Pop(queue[i]);
+                    }
+                }
+            }
         }
 
         // Eases the balloon toward its current row (its live index) and runs its arrive-then-linger clock.
@@ -311,7 +340,8 @@ namespace BalloonParty.Balloon.Spawner
         private sealed class OverflowBalloon
         {
             public OverflowBalloon(
-                string poolKey, BalloonView view, IBalloonModel model, int column, int id, float appearDelay)
+                string poolKey, BalloonView view, IBalloonModel model, int column, int id,
+                float appearDelay, int doomedLineIndex = -1)
             {
                 PoolKey = poolKey;
                 View = view;
@@ -319,6 +349,7 @@ namespace BalloonParty.Balloon.Spawner
                 Column = column;
                 Id = id;
                 AppearDelay = appearDelay;
+                DoomedLineIndex = doomedLineIndex;
             }
 
             public string PoolKey { get; }
@@ -326,6 +357,7 @@ namespace BalloonParty.Balloon.Spawner
             public IBalloonModel Model { get; }
             public int Column { get; }
             public int Id { get; }
+            public int DoomedLineIndex { get; }
             public float AppearDelay { get; set; }
             public bool Arrived { get; set; }
             public float LingerRemaining { get; set; }

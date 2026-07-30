@@ -1,10 +1,12 @@
 using System;
+using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Health;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Grid;
 using BalloonParty.UI.Score;
+using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
@@ -14,7 +16,8 @@ namespace BalloonParty.UI.Health
 {
     /// <summary>
     ///     Spawns one heart trail per heart lost when a <see cref="WaveDamageMessage"/> arrives.
-    ///     Each trail flies from the health UI to the overflow row area above the grid.
+    ///     Each trail flies from the health UI to the doomed line, slides back and forth (strikethrough),
+    ///     then pops all overflow balloons in that line simultaneously.
     /// </summary>
     internal sealed class HeartTrailController : IStartable, IDisposable
     {
@@ -22,11 +25,13 @@ namespace BalloonParty.UI.Health
 
         private readonly IOverflowSettings _settings;
         private readonly ISubscriber<WaveDamageMessage> _waveDamageSubscriber;
+        private readonly IPublisher<StrikethroughArrivedMessage> _strikethroughPublisher;
         private readonly PoolManager _poolManager;
         private readonly FlyingTrail _prefab;
         private readonly TrailEndpointRegistry _endpoints;
         private readonly HeartTrailTracker _tracker;
         private readonly SlotGrid _grid;
+        private readonly RejectedBalloonEffect _overflow;
 
         private IDisposable _subscription;
         private TrailSpawner _spawner;
@@ -35,19 +40,23 @@ namespace BalloonParty.UI.Health
         internal HeartTrailController(
             IOverflowSettings settings,
             ISubscriber<WaveDamageMessage> waveDamageSubscriber,
+            IPublisher<StrikethroughArrivedMessage> strikethroughPublisher,
             PoolManager poolManager,
             FlyingTrail prefab,
             TrailEndpointRegistry endpoints,
             HeartTrailTracker tracker,
-            SlotGrid grid)
+            SlotGrid grid,
+            RejectedBalloonEffect overflow)
         {
             _settings = settings;
             _waveDamageSubscriber = waveDamageSubscriber;
+            _strikethroughPublisher = strikethroughPublisher;
             _poolManager = poolManager;
             _prefab = prefab;
             _endpoints = endpoints;
             _tracker = tracker;
             _grid = grid;
+            _overflow = overflow;
         }
 
         public void Dispose()
@@ -69,22 +78,52 @@ namespace BalloonParty.UI.Health
             }
 
             var from = source.Center;
-            var midCol = (_grid.Columns - 1) * 0.5f;
 
             for (var i = 0; i < msg.HeartsLost; i++)
             {
-                // Target: the row just above the grid, staggered per heart so trails don't overlap.
-                var targetRow = _grid.Rows + i;
-                var target = _grid.IndexToWorldPosition(new Vector2Int(Mathf.RoundToInt(midCol), targetRow));
-
-                Transform trail = null;
-                trail = _spawner.Spawn(
-                    from,
-                    target,
-                    _settings.HeartTrailDuration,
-                    onArrived: () => _tracker.Remove(trail));
-                _tracker.Add(trail);
+                SpawnStrikethrough(from, i);
             }
+        }
+
+        private void SpawnStrikethrough(Vector3 from, int lineIndex)
+        {
+            var overflowRow = _grid.Rows + lineIndex;
+            var leftPos = _grid.IndexToWorldPosition(new Vector2Int(0, overflowRow));
+            var rightPos = _grid.IndexToWorldPosition(new Vector2Int(_grid.Columns - 1, overflowRow));
+
+            var trail = _spawner.Acquire(Color.white);
+            trail.transform.position = from;
+            trail.ClearRibbon();
+            _tracker.Add(trail.transform);
+
+            var jitter = _settings.StrikethroughJitter;
+            var passDuration = _settings.StrikethroughPassDuration;
+
+            var seq = DOTween.Sequence();
+
+            // Phase 1: fly from hearts UI to left edge of the doomed line.
+            seq.Append(trail.transform.DOMove(leftPos, _settings.HeartTrailDuration).SetEase(Ease.OutCubic));
+
+            // Phase 2: back-and-forth passes across the line with jitter.
+            for (var pass = 0; pass < _settings.StrikethroughPasses; pass++)
+            {
+                var isRightward = pass % 2 == 0;
+                var target = isRightward ? rightPos : leftPos;
+                var jittered = target + new Vector3(
+                    UnityEngine.Random.Range(-jitter, jitter),
+                    UnityEngine.Random.Range(-jitter, jitter),
+                    0f);
+                seq.Append(trail.transform.DOMove(jittered, passDuration).SetEase(Ease.InOutSine));
+            }
+
+            var capturedLineIndex = lineIndex;
+            seq.OnComplete(() =>
+            {
+                _overflow.PopDoomedLine(capturedLineIndex);
+                _strikethroughPublisher.Publish(new StrikethroughArrivedMessage(capturedLineIndex));
+                _tracker.Remove(trail.transform);
+                _spawner.Release(trail);
+            });
         }
     }
 }

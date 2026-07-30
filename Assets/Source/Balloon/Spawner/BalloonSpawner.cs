@@ -377,9 +377,15 @@ namespace BalloonParty.Balloon.Spawner
 
             if (deficit.HeartsLost > 0)
             {
+                // Spawn the doomed line so the overflow pile can visualize it for the strikethrough.
+                PrepareSpawnBatch(lineCount: 1);
+                _rejectedBalloon.BeginDoomedLine(0);
+                SpawnLineInternal(PlacementReach.Pressure);
+                _rejectedBalloon.EndDoomedLine();
+                ReleaseUnspawnedBatch();
+
                 _waveDamagePublisher.Publish(
                     new WaveDamageMessage(deficit.HeartsLost, deficit.UnspawnedSlots, _grid.Columns));
-                ReleaseUnspawnedBatch();
                 return;
             }
 
@@ -613,16 +619,10 @@ namespace BalloonParty.Balloon.Spawner
                 var deficit = WaveDeficitCalculator.Calculate(
                     CountEmptySlots(), lineCount * _grid.Columns, _grid.Columns);
 
-                if (deficit.HeartsLost > 0)
-                {
-                    _waveDamagePublisher.Publish(
-                        new WaveDamageMessage(deficit.HeartsLost, deficit.UnspawnedSlots, _grid.Columns));
-                }
-
                 var effectiveLines = lineCount - deficit.HeartsLost;
-                PrepareSpawnBatch(effectiveLines);
+                PrepareSpawnBatch(lineCount);
 
-                for (var i = 0; i < effectiveLines; i++)
+                for (var i = 0; i < lineCount; i++)
                 {
                     if (generation != _generation)
                     {
@@ -641,10 +641,30 @@ namespace BalloonParty.Balloon.Spawner
                         return;
                     }
 
+                    // Tag overflow balloons from doomed lines so they wait for the strikethrough.
+                    var isDoomedLine = i >= effectiveLines;
+                    if (isDoomedLine)
+                    {
+                        _rejectedBalloon.BeginDoomedLine(i - effectiveLines);
+                    }
+
                     SpawnLineInternal(PlacementReach.Pressure);
+
+                    if (isDoomedLine)
+                    {
+                        _rejectedBalloon.EndDoomedLine();
+                    }
+
                     await UniTask.Delay(
                         (int)(_balloonsConfig.NewBalloonLinesTimeInterval * 1000),
                         cancellationToken: ct);
+                }
+
+                // Publish damage after doomed lines are spawned so the strikethrough has balloons to cross.
+                if (deficit.HeartsLost > 0)
+                {
+                    _waveDamagePublisher.Publish(
+                        new WaveDamageMessage(deficit.HeartsLost, deficit.UnspawnedSlots, _grid.Columns));
                 }
 
                 if (generation != _generation)
