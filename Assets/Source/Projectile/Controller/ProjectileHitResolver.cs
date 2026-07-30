@@ -89,9 +89,13 @@ namespace BalloonParty.Projectile.Controller
             var flags = DamageFlags.Piercing | DamageFlags.DirectHit
                         | (isRainbowBuff ? DamageFlags.WildcardStreak : DamageFlags.Normal);
 
+            // Snapshot: dispatching ActorHitMessage can re-enter and add to pending (e.g. via chain pops
+            // that trigger another pierce resolve before this loop finishes).
+            var count = pending.Count;
             var center = Vector3.zero;
-            foreach (var hit in pending)
+            for (var i = 0; i < count; i++)
             {
+                var hit = pending[i];
                 center += hit.Position;
                 var balloon = hit.Balloon;
                 var slot = balloon.SlotIndex.Value;
@@ -108,7 +112,7 @@ namespace BalloonParty.Projectile.Controller
             // Announce the discharge so its feel can play — the rainbow bloom, and (later) lights /
             // shockwave / slow-mo. Centred on the plowed line, carrying the charge (tough count) and
             // whether the shot was rainbow.
-            _dischargedPublisher.Publish(new PierceDischargedMessage(center / pending.Count, pending.Count, isRainbowBuff));
+            _dischargedPublisher.Publish(new PierceDischargedMessage(center / count, count, isRainbowBuff));
 
             pending.Clear();
         }
