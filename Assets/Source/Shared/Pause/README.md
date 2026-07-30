@@ -104,6 +104,10 @@ Current claimants:
   curve-sampled over the doomed approach's progress.
 - **`BoardPopWave`** (`TimeScaleSource.LevelTransition`, `Game/Cinematics/`) — slow-mo while the
   Ascent pop wave clears the old level's balloons band by band.
+- **`HoldSpeedUpController`** (`TimeScaleSource.HoldSpeedUp`, `Projectile/Controller/`) — while
+  the projectile is in flight, holding a finger ramps timeScale up to
+  `IProjectileFlightConfig.HoldSpeedUpMax` (default 2×); releasing or projectile death ramps
+  back to 1×. Min-wins means any freeze or slow-mo from another source overrides the speed-up.
 
 `PauseService` handles *logical* pause coordination (projectile, trail spawning);
 `TimeScaleService` handles *visual* time warping. The two are independent.

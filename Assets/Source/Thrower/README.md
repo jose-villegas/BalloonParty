@@ -26,7 +26,7 @@ Each frame (`Tick`), only when navigation state is `Game` and the entrance anima
 - Updates the prediction trace line while the mouse button is held, mirroring it into `PredictionTraceProvider` (`Prediction/`) so other readers (e.g. a balloon's `TraceHitMarker`) can react to the same-frame trace without depending on the Thrower's view chain
 - Fires on mouse-up
 
-`Tick` is a no-op outside the `Game` navigation state or while any `PauseService` source is paused — the thrower cannot aim or fire during the level-up ceremony, cinematics, or the overflow heart-drain lock.
+`Tick` is a no-op outside the `Game` navigation state, while any `PauseService` source is paused, or while `HoldSpeedUpController.ConsumedInput` is true — the thrower cannot aim or fire during the level-up ceremony, cinematics, the overflow heart-drain lock, or while the player's finger is still down from a speed-up hold. The `ConsumedInput` gate prevents the finger-lift that ended a speed-up from accidentally aiming or firing the next shot; the player must lift and tap fresh.
 
 `FireAt(Vector3 direction)` is an internal entry point bypassing mouse input entirely — it snaps the loaded shot to the spawn point, aims it at the given direction, and fires. It exists for editor tooling (the Shot Solver window and the Fire-Best-Shot cheat), which is why `ThrowerLifetimeScope` also registers the controller `.AsSelf()`.
 
@@ -40,6 +40,7 @@ When a `ProjectileDestroyedMessage` or a `LevelUpDismissedMessage` arrives, `Thr
 - **GameOverMessage** — scales the active projectile away with no replacement load
 - **BoardClearMessage / RunResetMessage** — trigger a synchronous reload so a cleared board or a fresh run starts with a fresh projectile
 - **PauseService** — any paused source blocks `Tick` (aim/fire)
+- **HoldSpeedUpController** (`Projectile/Controller/`) — `ConsumedInput` blocks `Tick` while the player's speed-up hold hasn't been released yet
 - **ProjectileLoadedMessage** — published after each load so shield UI can self-bind
 - **IProjectileFlightConfig** — provides `LimitsClockwise`, `ProjectileSpeed`, `ProjectileStartingShields`, `ProjectileLoadDuration`; **IPredictionTraceConfig** — provides `PredictionTraceColor`
 - **PredictionTraceCalculator / ThrowerView** — calculates and renders the aim trajectory line while the player holds the mouse button

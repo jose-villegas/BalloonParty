@@ -16,7 +16,7 @@ Source is organized into per-context subfolders: `Balloons/`, `Buffs/`, `Cinemat
 
 | Asset | Interface | What it holds |
 |---|---|---|
-| `ProjectileFlightConfig` | `IProjectileFlightConfig` (in `Shared/`) | Projectile flight behavior — initial velocity, gravity, deflection, and feel params, plus launch load duration. |
+| `ProjectileFlightConfig` | `IProjectileFlightConfig` (in `Shared/`) | Projectile flight behavior — initial velocity, gravity, deflection, and feel params, plus launch load duration. Hold-to-speed-up tuning: `HoldSpeedUpMax` (time-scale ceiling, default 2×), `HoldSpeedUpLerpDuration` (ramp time, default 0.3 s), `HoldSpeedUpTooltipDelay` (seconds of flight before the one-time tooltip appears, default 4 s). |
 | `SlotGridConfig` | `ISlotGridConfig` (in `Shared/`) | Slot grid layout — play-area dimensions and slot positioning. |
 | `PredictionTraceConfig` | `IPredictionTraceConfig` (in `Shared/`) | Prediction trace visualization — path rendering params and styling. |
 | `RunConfig` | `IRunConfig` (in `Shared/`) | Run rules — starting hit points (consumed by `PlayerHealthController`). |
