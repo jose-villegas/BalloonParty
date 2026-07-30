@@ -29,5 +29,14 @@ namespace BalloonParty.Shared
         float LastShieldApproachDuration { get; }
         AnimationCurve LastShieldTimeScaleCurve { get; }
         float ShieldTrailDuration { get; }
+
+        /// <summary>Maximum time-scale multiplier when holding during flight (e.g. 2 = double speed).</summary>
+        float HoldSpeedUpMax { get; }
+
+        /// <summary>Seconds to lerp from 1× to <see cref="HoldSpeedUpMax"/> while holding.</summary>
+        float HoldSpeedUpLerpDuration { get; }
+
+        /// <summary>Seconds of flight before the "hold to speed up" tooltip appears (0 = disabled).</summary>
+        float HoldSpeedUpTooltipDelay { get; }
     }
 }

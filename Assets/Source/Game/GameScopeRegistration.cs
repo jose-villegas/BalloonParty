@@ -49,6 +49,7 @@ using BalloonParty.Slots.Spawner;
 using BalloonParty.UI.GameOver;
 using BalloonParty.Slots.Grid;
 using BalloonParty.UI;
+using BalloonParty.UI.Tooltip;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
@@ -127,6 +128,7 @@ namespace BalloonParty.Game
             builder.Register<PauseService>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<TimeScaleService>().AsSelf().As<ITimeScaleClaims>().As<IRunResettable>();
             builder.RegisterEntryPoint<ProjectileDoomedTimeScaleController>();
+            builder.RegisterEntryPoint<HoldSpeedUpController>().AsSelf();
             builder.Register<ProjectilePositionProvider>(Lifetime.Singleton);
             builder.Register<PredictionTraceProvider>(Lifetime.Singleton);
             builder.RegisterEntryPoint<ProjectileFacingSource>().As<IProjectileFacingSource>();
@@ -242,6 +244,7 @@ namespace BalloonParty.Game
             builder.RegisterComponentInHierarchy<GameOverScreen>();
 
             builder.RegisterBuildCallback(InjectTints);
+            builder.RegisterBuildCallback(InjectTooltips);
             return;
 
             void InjectTints(IObjectResolver resolver)
@@ -250,6 +253,15 @@ namespace BalloonParty.Game
                              UnityEngine.FindObjectsSortMode.None))
                 {
                     resolver.Inject(tint);
+                }
+            }
+
+            void InjectTooltips(IObjectResolver resolver)
+            {
+                foreach (var tooltip in UnityEngine.Object.FindObjectsByType<HoldSpeedUpTooltip>(
+                             UnityEngine.FindObjectsSortMode.None))
+                {
+                    resolver.Inject(tooltip);
                 }
             }
         }

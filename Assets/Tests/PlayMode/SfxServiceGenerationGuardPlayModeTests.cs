@@ -153,6 +153,9 @@ namespace BalloonParty.Tests.PlayMode
             public float LastShieldApproachDuration => 0f;
             public AnimationCurve LastShieldTimeScaleCurve => null;
             public float ShieldTrailDuration => 0f;
+            public float HoldSpeedUpMax => 2f;
+            public float HoldSpeedUpLerpDuration => 0.3f;
+            public float HoldSpeedUpTooltipDelay => 4f;
 
             public StubFlightConfig(Vector4 limitsClockwise)
             {

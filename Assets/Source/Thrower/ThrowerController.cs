@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BalloonParty.Game.Level;
 using BalloonParty.Prediction;
 using BalloonParty.Projectile;
+using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
@@ -35,6 +36,7 @@ namespace BalloonParty.Thrower
         private readonly ISubscriber<LevelUpAbandonedMessage> _levelUpAbandonedSubscriber;
         private readonly ILevelProgress _levelProgress;
         private readonly PauseService _pauseService;
+        private readonly HoldSpeedUpController _holdSpeedUp;
         private readonly IObjectResolver _resolver;
         private readonly List<Vector3> _tracePoints = new();
         private readonly PoolManager _poolManager;
@@ -80,6 +82,7 @@ namespace BalloonParty.Thrower
             ISubscriber<LevelUpAbandonedMessage> levelUpAbandonedSubscriber,
             ILevelProgress levelProgress,
             PauseService pauseService,
+            HoldSpeedUpController holdSpeedUp,
             ProjectilePositionProvider positionProvider,
             PredictionTraceProvider traceProvider)
         {
@@ -101,6 +104,7 @@ namespace BalloonParty.Thrower
             _levelUpAbandonedSubscriber = levelUpAbandonedSubscriber;
             _levelProgress = levelProgress;
             _pauseService = pauseService;
+            _holdSpeedUp = holdSpeedUp;
             _positionProvider = positionProvider;
             _traceProvider = traceProvider;
             _projectilePoolKey = settings.ProjectilePrefab.name;
@@ -158,10 +162,13 @@ namespace BalloonParty.Thrower
         {
             if (!_isMovable
                 || Navigation.Current.Value != NavigationState.Game
-                || _pauseService.IsAnyPaused.Value)
+                || _pauseService.IsAnyPaused.Value
+                || _holdSpeedUp.ConsumedInput)
             {
                 // A pause or state change mid-aim must take the trace down with it, or the aim line
                 // and hit markers linger through the overflow/level-up/loss windows.
+                // ConsumedInput: the hold that sped up the previous flight hasn't been released yet —
+                // suppress aiming so the player must tap fresh to aim the next shot.
                 ClearPredictionTrace();
                 return;
             }

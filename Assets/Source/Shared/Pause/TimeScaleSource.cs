@@ -20,6 +20,9 @@ namespace BalloonParty.Shared.Pause
         /// <summary>The level-up ceremony's tipping beat and its hand-off to the popup. Claimed
         /// EXCLUSIVELY for the beat so a doomed shot's LastShield curve can't drag it slower than the
         /// ceremony asked for.</summary>
-        LevelUpCeremony
+        LevelUpCeremony,
+
+        /// <summary>Player holding during projectile flight — speeds the game up to allow fast-forwarding.</summary>
+        HoldSpeedUp
     }
 }

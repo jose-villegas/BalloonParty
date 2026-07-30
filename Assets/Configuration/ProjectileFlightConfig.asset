@@ -161,3 +161,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _holdSpeedUpMax: 2
+  _holdSpeedUpLerpDuration: 0.3
+  _holdSpeedUpTooltipDelay: 3

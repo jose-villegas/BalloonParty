@@ -108,6 +108,16 @@ namespace BalloonParty.Configuration
                  "slow-mo in and/or out for dramatic pacing.")]
         [SerializeField] private AnimationCurve _lastShieldTimeScaleCurve = AnimationCurve.Constant(0f, 1f, 0.3f);
 
+        [Header("Hold Speed-Up")]
+        [Tooltip("Maximum time-scale multiplier when holding during flight (e.g. 2 = double speed).")]
+        [SerializeField] [Min(1f)] private float _holdSpeedUpMax = 2f;
+
+        [Tooltip("Seconds to lerp from 1× to max while holding. 0 = instant.")]
+        [SerializeField] [Min(0f)] private float _holdSpeedUpLerpDuration = 0.3f;
+
+        [Tooltip("Seconds of uninterrupted flight before the hold-to-speed-up tooltip appears. 0 = disabled.")]
+        [SerializeField] [Min(0f)] private float _holdSpeedUpTooltipDelay = 4f;
+
         public int ProjectileStartingShields => _projectileStartingShields;
         public int ShieldToneThreshold => _shieldToneThreshold;
         public float ProjectileSpeed => _projectileSpeed;
@@ -129,5 +139,8 @@ namespace BalloonParty.Configuration
         public float LastShieldApproachDuration => _lastShieldApproachDuration;
         public AnimationCurve LastShieldTimeScaleCurve => _lastShieldTimeScaleCurve;
         public float ShieldTrailDuration => _shieldTrailDuration;
+        public float HoldSpeedUpMax => _holdSpeedUpMax;
+        public float HoldSpeedUpLerpDuration => _holdSpeedUpLerpDuration;
+        public float HoldSpeedUpTooltipDelay => _holdSpeedUpTooltipDelay;
     }
 }
