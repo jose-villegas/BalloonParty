@@ -360,7 +360,7 @@ brokers are already registered at `Game/GameScopeRegistration.cs:59-94`.
 | Game over | `GameOverMessage` | `Game/Run/RunController.cs:96` | `GameOver` | Progression | Loss sting; high priority; stops loops; `Stinger`. |
 | Game over dismissed | `GameOverDismissedMessage` | `UI/GameOver/GameOverScreen.cs:65` | `UiConfirm` | Progression | `UI` channel. |
 | Overflow heart (danger) | `OverflowHeartRequestedMessage` | `Balloon/Spawner/RejectedBalloonEffect.cs:254` | `HeartDrain` | Item/Prog | Danger beat. |
-| Spawn blocked | `SpawnBlockedMessage` | `RejectedBalloonEffect.cs:147,:255` | `OverflowThud` | Item | Column-keyed; throttle. |
+| Wave damage | `WaveDamageMessage` | `Balloon/Spawner/BalloonSpawner.cs` | `Strikethrough` | Item | Played per doomed-line strikethrough by `HeartTrailController`. |
 | Run reset | `RunResetMessage` | `Game/Run/RunController.cs:120` | *(control)* | — | **Flush all voices + stop loops**, no sound. |
 | Pause / resume | `PausedMessage`/`ResumedMessage` | `Shared/Pause/PauseService.cs:50,:65` | *(control)* | — | Channel duck/pause policy hook. |
 | Nudge | `NudgeMessage` | `Balloon/Controller/BalloonController.cs:208`, `Item/Bomb/BombItemHandler.cs:76` | **none** | — | Deliberately silent — per-jostle spam. |

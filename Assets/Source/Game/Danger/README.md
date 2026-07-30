@@ -7,8 +7,8 @@ gradient so the player can feel the board getting dangerous before they actually
 
 | File | What it does |
 |---|---|
-| `SpaceDanger` | Plain C# entry point (`IStartable`, `ILateTickable`, `IDisposable`). Exposes `IReadOnlyReactiveProperty<float> Level`. Grid changes (`SlotGrid.OnChanged`) and hit-point changes (`IPlayerHealth.Current`) only flag it dirty — a bomb pop or balance sweep can fire `OnChanged` a dozen+ times in one frame, so the actual recompute is debounced to once per frame in `LateTick`, after the frame's mutations have settled. `Evaluate` is a pure, unit-tested function so the curve can be reasoned about in isolation |
-| `IDangerLevel` | Read-only seam (`Level`) consumers bind against — registered alongside `SpaceDanger` in `GameLifetimeScope` |
+| `SpaceDanger` | Plain C# entry point (`IStartable`, `ILateTickable`, `IDisposable`). Exposes `IReadOnlyReactiveProperty<float> Level` (the 0→1 gradient value) and `IReadOnlyReactiveProperty<int> HeartsAtRisk` (how many hearts the *next* wave would cost, computed via `WaveDeficitCalculator.Calculate`). Grid changes (`SlotGrid.OnChanged`) and hit-point changes (`IPlayerHealth.Current`) only flag it dirty — a bomb pop or balance sweep can fire `OnChanged` a dozen+ times in one frame, so the actual recompute is debounced to once per frame in `LateTick`, after the frame's mutations have settled. `Evaluate` is a pure, unit-tested function so the curve can be reasoned about in isolation |
+| `IDangerLevel` | Read-only seam (`Level`, `HeartsAtRisk`) consumers bind against — registered alongside `SpaceDanger` in `GameLifetimeScope` |
 
 ## The danger curve
 
@@ -51,3 +51,6 @@ so tint, growth and translation glide rather than snapping. `DangerUILifetimeSco
 binds every `DangerGradientView` under its hierarchy to `IDangerLevel.Level` at `Start` via the shared
 `RegisterBoundViews` helper (`UI/Binding/`). Author the gradient, assign the target sprites, and
 (optionally) set the container + Y offset in the inspector — nothing renders until those are wired.
+
+`UI/Danger/DangerHeartLossView` — shows the number of hearts at risk (alpha lerp + UIShiny effect),
+bound to `IDangerLevel.HeartsAtRisk`.

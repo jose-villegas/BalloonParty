@@ -35,8 +35,8 @@ namespace BalloonParty.Tests.PlayMode
         {
             yield return LoadGameScene();
 
-            // Extra spawned lines on a filling board publish SpawnBlockedMessage per rejected column,
-            // draining hit points — enough rejects lose the run, and the loss→restart flow parks the
+            // Extra spawned lines on a filling board publish WaveDamageMessage per wave deficit,
+            // draining hit points — enough deficit loses the run, and the loss→restart flow parks the
             // whole incoming board below its slots (IsStable false) waiting on the restart rise. The
             // level-lock cheat makes hearts undrainable so this test only ever observes nudge/balance
             // motion, not the loss cinematic.

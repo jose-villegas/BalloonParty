@@ -53,3 +53,87 @@ Example (6 columns, 4 spawn lines = 24 needed):
 `GameLifetimeScope`: `RegisterEntryPoint<PlayerHealthController>().AsSelf().As<IRunResettable>().As<IPlayerHealth>()`.
 The deficit computation lives in `BalloonSpawner`; visual feedback (camera shake, heart trails,
 cinematic) subscribes to `WaveDamageMessage` independently.
+
+## Architecture
+
+### Spawn Wave → Damage → Strikethrough → Pop
+
+```mermaid
+sequenceDiagram
+    participant Spawner as BalloonSpawner
+    participant Calc as WaveDeficitCalculator
+    participant Bus as MessagePipe
+    participant HP as PlayerHealthController
+    participant Trail as HeartTrailController
+    participant FX as RejectedBalloonEffect
+    participant Shake as CameraShakeController
+
+    Spawner->>Calc: Calculate(available, needed, cols)
+    Calc-->>Spawner: WaveDeficit{HeartsLost, UnspawnedSlots}
+    Spawner->>FX: BeginDoomedLine(i) per doomed line
+    Spawner->>Bus: publish WaveDamageMessage
+    Bus->>HP: OnWaveDamage → subtract HeartsLost
+    Bus->>Trail: OnWaveDamage → loop heartsLost
+    Bus->>Shake: OnWaveDamage → shake(intensity)
+    Trail->>Trail: SpawnStrikethrough(delay, lineIndex)
+    Note over Trail: DOTween: stagger → fly → passes → complete
+    Trail->>FX: PopDoomedLine(lineIndex)
+    Trail->>Bus: publish StrikethroughArrivedMessage
+```
+
+### MVC Layers & Message Flow
+
+```mermaid
+graph TD
+    subgraph Model
+        WDC[WaveDeficitCalculator]
+        WD[WaveDeficit]
+        WDM[WaveDamageMessage]
+        SAM[StrikethroughArrivedMessage]
+    end
+
+    subgraph Controller
+        PHC[PlayerHealthController]
+        HTC[HeartTrailController]
+        CSC[CameraShakeController]
+        HDC[HeartDrainCinematic]
+        SD[SpaceDanger]
+        RBE[RejectedBalloonEffect]
+    end
+
+    subgraph View
+        DHLV[DangerHeartLossView]
+        CSV[CameraShakeView]
+    end
+
+    subgraph External
+        BS[BalloonSpawner]
+        SG[SlotGrid]
+    end
+
+    BS -->|calls| WDC
+    WDC -->|returns| WD
+    BS -->|publishes| WDM
+    WDM -.->|subscribes| PHC
+    WDM -.->|subscribes| HTC
+    WDM -.->|subscribes| CSC
+    WDM -.->|subscribes| HDC
+    HTC -->|pops| RBE
+    HTC -->|publishes| SAM
+    SD -->|reads| PHC
+    SD -->|reads| SG
+    DHLV -->|observes| SD
+    CSV -->|driven by| CSC
+```
+
+### Strikethrough Lifecycle
+
+```mermaid
+stateDiagram-v2
+    [*] --> Idle
+    Idle --> Staggering: WaveDamageMessage received
+    Staggering --> Flying: stagger delay elapsed
+    Flying --> Striking: trail reaches grid edge
+    Striking --> Popping: N passes complete
+    Popping --> Idle: PopDoomedLine + release trail
+```

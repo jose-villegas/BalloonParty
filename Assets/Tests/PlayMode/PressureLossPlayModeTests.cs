@@ -62,7 +62,7 @@ namespace BalloonParty.Tests.PlayMode
             var linesPublished = 0;
 
             // Flood the board with spawn lines and watch HP. Lines are paced a few frames apart so the
-            // staggered reject pops (which publish the HP-draining SpawnBlockedMessage) can resolve.
+            // line-based deficit (which publishes the HP-draining WaveDamageMessage) can resolve.
             while (health.Current.Value > 0 && elapsed < LoopTimeout)
             {
                 if (linesPublished < MaxLines && frame % FramesPerLine == 0)
