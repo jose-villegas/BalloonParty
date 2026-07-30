@@ -51,7 +51,7 @@ namespace BalloonParty.Display
             _shakeTween?.Kill();
         }
 
-        internal void Shake()
+        internal void Shake(int intensity = 1)
         {
             if (_camera == null)
             {
@@ -61,7 +61,7 @@ namespace BalloonParty.Display
             // Reset to zero so back-to-back launches each land a full punch.
             _shakeTween?.Kill();
             _offset = Vector3.zero;
-            _shakeTween = DOTween.Shake(() => _offset, v => _offset = v, _duration, _strength, _vibrato)
+            _shakeTween = DOTween.Shake(() => _offset, v => _offset = v, _duration, _strength * intensity, _vibrato)
                 .SetUpdate(true)
                 .OnComplete(() => _offset = Vector3.zero);
         }

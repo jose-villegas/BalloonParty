@@ -12,5 +12,9 @@ namespace BalloonParty.Configuration
         float MoveSharpness { get; }
         float ArrivalRadius { get; }
         float HeartTrailDuration { get; }
+        float StrikethroughPassDuration { get; }
+        float StrikethroughJitter { get; }
+        int StrikethroughPasses { get; }
+        float StrikethroughStaggerDelay { get; }
     }
 }

@@ -1,56 +1,139 @@
 # Health
 
-The player's **hit-point pool** — the only loss trigger under the spawn-saturation model. When
-the board is so choked that an incoming balloon can't spawn, that balloon is rejected and costs
-one hit point; reaching zero ends the run.
+The player's **hit-point pool** — the only loss trigger under the line-based spawn-saturation
+model. Each heart represents one full spawn line. When the board can't absorb all the lines in
+a spawn wave, the player loses one heart per full line of deficit; partial-line shortfalls are
+forgiven. Reaching zero hearts ends the run.
 
 ## Contents
 
 | File | What it does |
 |---|---|
-| `PlayerHealthController` | Plain C# entry point (`IStartable`, `IRunResettable`, `IDisposable`). Holds `ReactiveProperty<int> Current`, initialised and reset to `IRunConfig.StartingHitPoints` (clamped to a hard internal cap of 999 — never displayed). Subscribes to `SpawnBlockedMessage`; each message spends one point. Also refills to full on every `ScoreLevelUpMessage` — the level-up ceremony resets HP as a clean slate, same clamp as the run-reset refill below. When `Current` crosses to zero it publishes `EndRunRequestedMessage` exactly once (`RunController` routes it to `EndRun`) — the local zero-guard plus the `GameOver` state gate prevent a second blocked spawn from ending the run again. It publishes rather than calling `RunController` directly: as an `IRunResettable` it sits in the collection `RunController` resolves, so a direct dependency would be a DI cycle |
-| `IPlayerHealth` | Read-only seam (`Current`) — what UI binders and `SpaceDanger`/`LossForecast` inject instead of the concrete controller |
-| `IPendingHealthCharges` / `ILossForecast` + `LossForecast` | The loss forecast — see below |
-| `HeartTrailTracker` | The heart trails currently in flight (health UI → overflow pop), launch order preserved. `HeartTrailController` (`UI/Health/`) adds/removes them; the heart-drain cinematic frames the hearts in this set. Lives in the parent scope so both can reach it; cleared on run reset |
+| `PlayerHealthController` | Plain C# entry point (`IStartable`, `IRunResettable`, `IDisposable`). Holds `ReactiveProperty<int> Current`, initialised and reset to `IRunConfig.StartingHitPoints` (clamped to a hard internal cap of 999). Subscribes to `WaveDamageMessage`; each message spends `HeartsLost` points in one shot. Also refills to full on every `ScoreLevelUpMessage`. When `Current` crosses to zero it publishes `EndRunRequestedMessage` exactly once. |
+| `IPlayerHealth` | Read-only seam (`Current`) — what UI binders and `SpaceDanger` inject instead of the concrete controller |
+| `WaveDeficitCalculator` | Pure static function: `Calculate(availableSpace, neededSlots, rowLength) → WaveDeficit`. The core formula: `heartsLost = floor(max(0, needed - available) / rowLength)` |
+| `WaveDeficit` | Readonly struct result: `HeartsLost` (full lines of deficit) and `UnspawnedSlots` (total shortfall) |
+| `ILossForecast` / `LossForecast` | Loss is imminent when HP is already at zero (damage is immediate under the line model, no pending charges) |
+| `HeartTrailTracker` | The heart trails currently in flight (health UI → grid area), launch order preserved. `HeartTrailController` (`UI/Health/`) adds/removes them; the heart-drain cinematic frames the hearts in this set |
 
 ## How it works
 
 ```
-BalloonSpawner (column saturated) ──SpawnBlockedMessage──► PlayerHealthController.Damage(1)
-                                                                  │  Current == 0
-                                                                  ▼
-                                                       EndRunRequestedMessage
-                                                                  │
-                                                                  ▼
-                                                       RunController.EndRun()
+BalloonSpawner (wave start)
+  ├─ CountEmptySlots()
+  ├─ WaveDeficitCalculator.Calculate(available, spawnLines×columns, columns)
+  │       → WaveDeficit { HeartsLost, UnspawnedSlots }
+  │
+  ├─ if HeartsLost > 0:
+  │       publish WaveDamageMessage ──► PlayerHealthController.Damage(HeartsLost)
+  │                                          │  Current == 0
+  │                                          ▼
+  │                                 EndRunRequestedMessage
+  │                                          │
+  │                                          ▼
+  │                                 RunController.EndRun()
+  │
+  └─ Spawn only (spawnLines - HeartsLost) effective lines
+         └─ blocked columns → RejectedBalloonEffect.Play() [visual only]
 ```
 
-A blocked spawn is known **synchronously**: `BalloonBalancer.Balance()` updates the grid model
-before any view tween, so when `BalloonPlacementResolver` finds no reachable slot for a column,
-that column genuinely can't accept a balloon. Before costing HP the resolver looks past the column:
-it re-homes the balloon into the nearest other column that can still take it, and failing that asks
-`BalloonBalancer.TryRelievePressure` to **pressure-balance** — shove stable balloons aside to open
-the column. Only when the whole board is out of
-room does the would-be balloon join the overflow pile below the grid (`RejectedBalloonEffect`).
-`SpawnBlockedMessage` is published **when that balloon's heart launches** from the health UI
-(alongside `OverflowHeartRequestedMessage`), so the HP drain syncs with the heart leaving the bar;
-the balloon pops when the heart lands. Popping real balloons to free space is what ultimately stops
-the bleed — the core tension.
+## Damage formula
 
-`Current` exposes only the live count; the UI (`UI/Health/HealthCounterLabel`) shows it as a numeric
-label with no fixed maximum, mirroring `ShieldCounterLabel`. The label is **not** self-injected —
-`HealthUILifetimeScope` (a child scope on the health UI hierarchy) gathers the labels via the shared
-`RegisterBoundViews` helper (`UI/Binding/`) and binds them to `IPlayerHealth.Current` at `Start`. This
-avoids the injection-timing trap where the parent scope (`[DefaultExecutionOrder(-5001)]`) injects a
-MonoBehaviour before its own `Awake` has resolved the TMP component. HP resets to full on restart via
-`IRunResettable` at the `Counters` stage, before the board is repopulated.
+- `deficit = neededSlots - availableSpace` (clamped ≥ 0)
+- `heartsLost = deficit / rowLength` (integer division — only full lines count)
+- Partial remainders (< one full line) are simply not spawned, costing no heart.
+
+Example (6 columns, 4 spawn lines = 24 needed):
+- 18 available → deficit 6 → 1 heart lost
+- 21 available → deficit 3 → 0 hearts lost (partial line forgiven)
+- 12 available → deficit 12 → 2 hearts lost
 
 ## Registration
 
 `GameLifetimeScope`: `RegisterEntryPoint<PlayerHealthController>().AsSelf().As<IRunResettable>().As<IPlayerHealth>()`.
-The reject feedback (camera shake, pop VFX) lives in `Display/CameraShakeService` and the spawner;
-this controller owns only the HP state and the loss trigger.
+The deficit computation lives in `BalloonSpawner`; visual feedback (camera shake, heart trails,
+cinematic) subscribes to `WaveDamageMessage` independently.
 
-## Loss forecast
+## Architecture
 
-`IPendingHealthCharges` (implemented by `RejectedBalloonEffect`: queued, unlaunched overflow balloons — each will unconditionally cost one HP at its heart's launch) + `ILossForecast`/`LossForecast` (`PendingCharges >= Current`): the loss is knowable at reject-queue time, seconds before the Nth heart launch commits it. The level-up ceremony gates on this (no level-up after a lost run); the loss commit keeps its late timing so the heart-drain presentation plays.
+### Spawn Wave → Damage → Strikethrough → Pop
+
+```mermaid
+sequenceDiagram
+    participant Spawner as BalloonSpawner
+    participant Calc as WaveDeficitCalculator
+    participant Bus as MessagePipe
+    participant HP as PlayerHealthController
+    participant Trail as HeartTrailController
+    participant FX as RejectedBalloonEffect
+    participant Shake as CameraShakeController
+
+    Spawner->>Calc: Calculate(available, needed, cols)
+    Calc-->>Spawner: WaveDeficit{HeartsLost, UnspawnedSlots}
+    Spawner->>FX: BeginDoomedLine(i) per doomed line
+    Spawner->>Bus: publish WaveDamageMessage
+    Bus->>HP: OnWaveDamage → subtract HeartsLost
+    Bus->>Trail: OnWaveDamage → loop heartsLost
+    Bus->>Shake: OnWaveDamage → shake(intensity)
+    Trail->>Trail: SpawnStrikethrough(delay, lineIndex)
+    Note over Trail: DOTween: stagger → fly → passes → complete
+    Trail->>FX: PopDoomedLine(lineIndex)
+    Trail->>Bus: publish StrikethroughArrivedMessage
+```
+
+### MVC Layers & Message Flow
+
+```mermaid
+graph TD
+    subgraph Model
+        WDC[WaveDeficitCalculator]
+        WD[WaveDeficit]
+        WDM[WaveDamageMessage]
+        SAM[StrikethroughArrivedMessage]
+    end
+
+    subgraph Controller
+        PHC[PlayerHealthController]
+        HTC[HeartTrailController]
+        CSC[CameraShakeController]
+        HDC[HeartDrainCinematic]
+        SD[SpaceDanger]
+        RBE[RejectedBalloonEffect]
+    end
+
+    subgraph View
+        DHLV[DangerHeartLossView]
+        CSV[CameraShakeView]
+    end
+
+    subgraph External
+        BS[BalloonSpawner]
+        SG[SlotGrid]
+    end
+
+    BS -->|calls| WDC
+    WDC -->|returns| WD
+    BS -->|publishes| WDM
+    WDM -.->|subscribes| PHC
+    WDM -.->|subscribes| HTC
+    WDM -.->|subscribes| CSC
+    WDM -.->|subscribes| HDC
+    HTC -->|pops| RBE
+    HTC -->|publishes| SAM
+    SD -->|reads| PHC
+    SD -->|reads| SG
+    DHLV -->|observes| SD
+    CSV -->|driven by| CSC
+```
+
+### Strikethrough Lifecycle
+
+```mermaid
+stateDiagram-v2
+    [*] --> Idle
+    Idle --> Staggering: WaveDamageMessage received
+    Staggering --> Flying: stagger delay elapsed
+    Flying --> Striking: trail reaches grid edge
+    Striking --> Popping: N passes complete
+    Popping --> Idle: PopDoomedLine + release trail
+```

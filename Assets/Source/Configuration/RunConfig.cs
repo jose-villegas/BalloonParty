@@ -7,7 +7,7 @@ namespace BalloonParty.Configuration
     internal class RunConfig : ScriptableObject, IRunConfig
     {
         [Header("Run")]
-        [SerializeField] private int _startingHitPoints = 5;
+        [SerializeField] private int _startingHitPoints = 3;
         [SerializeField] private int _maxRetries = 1;
 
         [Header("Level Complete")]

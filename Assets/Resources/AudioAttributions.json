@@ -798,5 +798,15 @@
     "LicenseName": "Attribution",
     "LicenseUrl": "http://creativecommons.org/licenses/by/3.0/",
     "RequiresAttribution": true
+  },
+  {
+    "SoundId": "Strikethrough",
+    "ProviderId": 377844,
+    "Name": "writing-chalk-oneshot-04.wav",
+    "Author": "newagesoup",
+    "SoundUrl": "https://freesound.org/people/newagesoup/sounds/377844/",
+    "LicenseName": "Attribution",
+    "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "RequiresAttribution": true
   }
 ]

@@ -9,7 +9,6 @@ namespace BalloonParty.Tests.Game
     public class LossForecastTests
     {
         private ReactiveProperty<int> _hp;
-        private IPendingHealthCharges _pending;
         private LossForecast _forecast;
 
         [SetUp]
@@ -18,32 +17,19 @@ namespace BalloonParty.Tests.Game
             _hp = new ReactiveProperty<int>(3);
             var health = Substitute.For<IPlayerHealth>();
             health.Current.Returns(_hp);
-            _pending = Substitute.For<IPendingHealthCharges>();
-            _forecast = new LossForecast(health, _pending);
+            _forecast = new LossForecast(health);
         }
 
         [Test]
-        public void PendingBelowRemaining_NotImminent()
+        public void PositiveHp_NotImminent()
         {
-            _pending.PendingCharges.Returns(2);
-
             Assert.IsFalse(_forecast.LossImminent);
         }
 
         [Test]
-        public void PendingCoversRemaining_Imminent()
-        {
-            // The loss is certain at reject-queue time — every queued charge lands unconditionally.
-            _pending.PendingCharges.Returns(3);
-
-            Assert.IsTrue(_forecast.LossImminent);
-        }
-
-        [Test]
-        public void ZeroHp_StaysImminentWithNothingPending()
+        public void ZeroHp_Imminent()
         {
             _hp.Value = 0;
-            _pending.PendingCharges.Returns(0);
 
             Assert.IsTrue(_forecast.LossImminent);
         }

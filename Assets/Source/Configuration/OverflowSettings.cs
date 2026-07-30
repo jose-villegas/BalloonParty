@@ -27,11 +27,28 @@ namespace BalloonParty.Configuration
         [Tooltip("Flight time of the heart trail from the health UI to an overflow pop.")]
         [SerializeField] private float _heartTrailDuration = 0.5f;
 
+        [Header("Strikethrough")]
+        [Tooltip("Duration of each horizontal pass across the doomed line.")]
+        [SerializeField] private float _strikethroughPassDuration = 0.15f;
+
+        [Tooltip("Random world-space jitter applied to start/end of each strikethrough pass.")]
+        [SerializeField] private float _strikethroughJitter = 0.08f;
+
+        [Tooltip("Number of back-and-forth oscillations (one pass = one direction).")]
+        [SerializeField] private int _strikethroughPasses = 4;
+
+        [Tooltip("Delay between each successive strikethrough when multiple hearts are lost.")]
+        [SerializeField] private float _strikethroughStaggerDelay = 0.25f;
+
         public float AppearStaggerSeconds => _appearStaggerSeconds;
         public float LingerSeconds => _lingerSeconds;
         public float PopIntervalSeconds => _popIntervalSeconds;
         public float MoveSharpness => _moveSharpness;
         public float ArrivalRadius => _arrivalRadius;
         public float HeartTrailDuration => _heartTrailDuration;
+        public float StrikethroughPassDuration => _strikethroughPassDuration;
+        public float StrikethroughJitter => _strikethroughJitter;
+        public int StrikethroughPasses => _strikethroughPasses;
+        public float StrikethroughStaggerDelay => _strikethroughStaggerDelay;
     }
 }

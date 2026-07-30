@@ -18,7 +18,6 @@ namespace BalloonParty.Tests.Audio
         private ISoundPlayer _player;
         private IMessageHandler<ItemActivatedMessage> _itemActivatedHandler;
         private IMessageHandler<OverflowHeartRequestedMessage> _overflowHeartHandler;
-        private IMessageHandler<SpawnBlockedMessage> _spawnBlockedHandler;
         private IMessageHandler<ProjectileLoadedMessage> _loadedHandler;
 
         [SetUp]
@@ -28,10 +27,9 @@ namespace BalloonParty.Tests.Audio
 
             var itemActivatedSubscriber = CaptureSubscriber<ItemActivatedMessage>(h => _itemActivatedHandler = h);
             var overflowHeartSubscriber = CaptureSubscriber<OverflowHeartRequestedMessage>(h => _overflowHeartHandler = h);
-            var spawnBlockedSubscriber = CaptureSubscriber<SpawnBlockedMessage>(h => _spawnBlockedHandler = h);
             var loadedSubscriber = CaptureSubscriber<ProjectileLoadedMessage>(h => _loadedHandler = h);
 
-            var router = new ItemSoundRouter(_player, itemActivatedSubscriber, overflowHeartSubscriber, spawnBlockedSubscriber, loadedSubscriber);
+            var router = new ItemSoundRouter(_player, itemActivatedSubscriber, overflowHeartSubscriber, loadedSubscriber);
             router.Start();
         }
 
@@ -177,16 +175,6 @@ namespace BalloonParty.Tests.Audio
             _overflowHeartHandler.Handle(new OverflowHeartRequestedMessage(3, position));
 
             _player.Received(1).Play(GameSoundId.HeartDrain, position);
-        }
-
-        [Test]
-        public void OnSpawnBlocked_ForwardsOverflowThudAtPosition()
-        {
-            var position = new Vector3(2f, 0f, 0f);
-
-            _spawnBlockedHandler.Handle(new SpawnBlockedMessage(1, position));
-
-            _player.Received(1).Play(GameSoundId.OverflowThud, position);
         }
 
         private static ISubscriber<T> CaptureSubscriber<T>(Action<IMessageHandler<T>> capture)

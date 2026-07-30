@@ -3,7 +3,6 @@ using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
-using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared.Extensions;
@@ -19,15 +18,14 @@ using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Balloon.Spawner
 {
-    /// <summary>Visible pile for balloons that couldn't spawn; drains via heart trails charged at launch, not at pop.</summary>
-    internal sealed class RejectedBalloonEffect : ITickable, IRunResettable, IPendingHealthCharges
+    /// <summary>Visible pile for balloons that couldn't spawn; purely visual — HP drain is handled by <see cref="WaveDamageMessage"/>.</summary>
+    internal sealed class RejectedBalloonEffect : ITickable, IRunResettable
     {
         private readonly IActiveLevelParameters _levelParams;
         private readonly IOverflowSettings _settings;
         private readonly IGamePalette _palette;
         private readonly PoolManager _poolManager;
         private readonly BalloonPopPresenter _popPresenter;
-        private readonly IPublisher<SpawnBlockedMessage> _spawnBlockedPublisher;
         private readonly IPublisher<OverflowHeartRequestedMessage> _heartRequestPublisher;
         private readonly SlotGrid _grid;
         private readonly PauseService _pauseService;
@@ -37,33 +35,12 @@ namespace BalloonParty.Balloon.Spawner
         private int _sequenceDepth;
         private int _nextId;
         private float _launchCooldown;
+        private int _currentDoomedLineIndex = -1;
 
         public int ResetOrder => RunResetOrder.Counters;
 
-        // True while the overflow pile is resolving; the heart-drain cinematic checks this to know it's done.
+        // True while the overflow pile is resolving; the level transition waits for this to clear.
         internal bool IsOverflowActive => _overflowPaused;
-
-        // Each queued balloon costs one HP when its heart launches — read by the loss forecast.
-        public int PendingCharges
-        {
-            get
-            {
-                var pending = 0;
-                foreach (var column in _columns)
-                {
-                    var queue = column.Value;
-                    for (var i = 0; i < queue.Count; i++)
-                    {
-                        if (!queue[i].Launched)
-                        {
-                            pending++;
-                        }
-                    }
-                }
-
-                return pending;
-            }
-        }
 
         [Inject]
         internal RejectedBalloonEffect(
@@ -73,7 +50,6 @@ namespace BalloonParty.Balloon.Spawner
             IGamePalette palette,
             PoolManager poolManager,
             BalloonPopPresenter popPresenter,
-            IPublisher<SpawnBlockedMessage> spawnBlockedPublisher,
             IPublisher<OverflowHeartRequestedMessage> heartRequestPublisher,
             PauseService pauseService)
         {
@@ -83,7 +59,6 @@ namespace BalloonParty.Balloon.Spawner
             _palette = palette;
             _poolManager = poolManager;
             _popPresenter = popPresenter;
-            _spawnBlockedPublisher = spawnBlockedPublisher;
             _heartRequestPublisher = heartRequestPublisher;
             _pauseService = pauseService;
         }
@@ -109,7 +84,7 @@ namespace BalloonParty.Balloon.Spawner
                 {
                     var balloon = queue[row];
                     var ready = Advance(column.Key, row, balloon, delta);
-                    if (ready && !balloon.Launched && row < candidateRow)
+                    if (ready && !balloon.Launched && balloon.DoomedLineIndex < 0 && row < candidateRow)
                     {
                         candidate = balloon;
                         candidateRow = row;
@@ -141,8 +116,7 @@ namespace BalloonParty.Balloon.Spawner
 
             if (entry == null)
             {
-                // Nothing to visualize, but the column is still blocked — charge the hit point anyway.
-                _spawnBlockedPublisher.Publish(new SpawnBlockedMessage(col, RowPosition(col, rowOffset)));
+                // Nothing to visualize; HP drain is handled at the wave level via WaveDamageMessage.
                 return;
             }
 
@@ -159,7 +133,8 @@ namespace BalloonParty.Balloon.Spawner
             view.transform.position = RowPosition(col, rowOffset + 1);
             view.transform.localScale = Vector3.zero;
 
-            queue.Add(new OverflowBalloon(entry.PoolKey, view, model, col, _nextId++, staggerIndex * _settings.AppearStaggerSeconds));
+            queue.Add(new OverflowBalloon(entry.PoolKey, view, model, col, _nextId++,
+                staggerIndex * _settings.AppearStaggerSeconds, _currentDoomedLineIndex));
             BeginOverflowHold();
         }
 
@@ -216,6 +191,33 @@ namespace BalloonParty.Balloon.Spawner
             TryReleaseOverflowHold();
         }
 
+        /// <summary>Tags subsequent overflow balloons as part of a doomed line so they aren't auto-popped.</summary>
+        internal void BeginDoomedLine(int lineIndex)
+        {
+            _currentDoomedLineIndex = lineIndex;
+        }
+
+        internal void EndDoomedLine()
+        {
+            _currentDoomedLineIndex = -1;
+        }
+
+        /// <summary>Pops every overflow balloon tagged with the given doomed line index simultaneously.</summary>
+        internal void PopDoomedLine(int lineIndex)
+        {
+            foreach (var column in _columns)
+            {
+                var queue = column.Value;
+                for (var i = queue.Count - 1; i >= 0; i--)
+                {
+                    if (queue[i].DoomedLineIndex == lineIndex)
+                    {
+                        Pop(queue[i]);
+                    }
+                }
+            }
+        }
+
         // Eases the balloon toward its current row (its live index) and runs its arrive-then-linger clock.
         private bool Advance(int col, int rowOffset, OverflowBalloon balloon, float delta)
         {
@@ -250,11 +252,12 @@ namespace BalloonParty.Balloon.Spawner
         private void LaunchHeart(OverflowBalloon balloon)
         {
             balloon.Launched = true;
-            var position = balloon.View.transform.position;
 
-            // Hit point and camera shake charge when the heart launches, not when it lands.
-            _heartRequestPublisher.Publish(new OverflowHeartRequestedMessage(balloon.Id, position));
-            _spawnBlockedPublisher.Publish(new SpawnBlockedMessage(balloon.Column, position));
+            // Visual/audio feedback per rejected balloon; HP drain is aggregate via WaveDamageMessage.
+            _heartRequestPublisher.Publish(new OverflowHeartRequestedMessage(balloon.Id, balloon.View.transform.position));
+
+            // HP is no longer deferred to heart arrival — pop immediately after the visual cue.
+            Pop(balloon);
         }
 
         // Visual burst only — the hit point and shake were already charged in LaunchHeart. Shares the same
@@ -337,7 +340,8 @@ namespace BalloonParty.Balloon.Spawner
         private sealed class OverflowBalloon
         {
             public OverflowBalloon(
-                string poolKey, BalloonView view, IBalloonModel model, int column, int id, float appearDelay)
+                string poolKey, BalloonView view, IBalloonModel model, int column, int id,
+                float appearDelay, int doomedLineIndex = -1)
             {
                 PoolKey = poolKey;
                 View = view;
@@ -345,6 +349,7 @@ namespace BalloonParty.Balloon.Spawner
                 Column = column;
                 Id = id;
                 AppearDelay = appearDelay;
+                DoomedLineIndex = doomedLineIndex;
             }
 
             public string PoolKey { get; }
@@ -352,6 +357,7 @@ namespace BalloonParty.Balloon.Spawner
             public IBalloonModel Model { get; }
             public int Column { get; }
             public int Id { get; }
+            public int DoomedLineIndex { get; }
             public float AppearDelay { get; set; }
             public bool Arrived { get; set; }
             public float LingerRemaining { get; set; }

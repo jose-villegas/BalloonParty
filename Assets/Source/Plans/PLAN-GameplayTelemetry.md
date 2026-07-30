@@ -329,7 +329,7 @@ Boundary roles:
 | `Deflects` | `int` | `ActorHitMessage` where `Outcome == HitOutcome.Deflect` |
 | `MaxStreak` | `int` | `StreakChangedMessage.Streak` — running max |
 | `PointsBanked` | `int` | `ScoreTrailArrivedMessage.Points` — sum (`Points` is the delta; `Score` is the running total — don't sum `Score`) |
-| `OverflowCount` | `int` | `SpawnBlockedMessage` count |
+| `OverflowCount` | `int` | `WaveDamageMessage` — sum of `HeartsLost` across the run |
 | `ShieldsGained` | `int` | `ShieldGainedMessage` |
 | `ShieldsSpent` | `int` | `ShieldLostMessage` |
 | `ItemsActivated` | `IReadOnlyList<ItemActivationCount>` | `ItemActivatedMessage`; see *Item derivation* |
@@ -382,7 +382,7 @@ public readonly struct ItemActivationCount
 | `ActorHitMessage` | `Outcome == Pop` → `TotalPops++`, color bucket++, DirectHit check; `Outcome == Deflect` → `Deflects++`. Filter with `==`, not `HasFlag` — every `EvaluateHit` returns a single value and equality is the repo idiom (`ScoreController`, `BalloonSpawner`) |
 | `StreakChangedMessage` | `MaxStreak = max(MaxStreak, msg.Streak)` |
 | `ScoreTrailArrivedMessage` | `PointsBanked += msg.Points` |
-| `SpawnBlockedMessage` | `OverflowCount++` |
+| `WaveDamageMessage` | `OverflowCount += msg.HeartsLost` |
 | `ItemActivatedMessage` | Item bucket++ — see *Item derivation* |
 | `ShieldGainedMessage` | `ShieldsGained++` |
 | `ShieldLostMessage` | `ShieldsSpent++` |

@@ -1,17 +1,18 @@
 namespace BalloonParty.Game.Health
 {
+    /// <summary>
+    ///     Under the line-based damage model, HP drains immediately at wave resolution — there are no
+    ///     pending charges. Loss is imminent when HP is already at zero.
+    /// </summary>
     internal sealed class LossForecast : ILossForecast
     {
         private readonly IPlayerHealth _health;
-        private readonly IPendingHealthCharges _pending;
 
-        // Also true once HP is already 0 (0 pending >= 0 remaining) — a dead run stays doomed.
-        public bool LossImminent => _pending.PendingCharges >= _health.Current.Value;
+        public bool LossImminent => _health.Current.Value <= 0;
 
-        public LossForecast(IPlayerHealth health, IPendingHealthCharges pending)
+        public LossForecast(IPlayerHealth health)
         {
             _health = health;
-            _pending = pending;
         }
     }
 }

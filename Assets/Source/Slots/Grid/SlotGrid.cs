@@ -209,6 +209,24 @@ namespace BalloonParty.Slots.Grid
             }
         }
 
+        public int CountEmpty()
+        {
+            var count = 0;
+
+            for (var col = 0; col < Columns; col++)
+            {
+                for (var row = 0; row < Rows; row++)
+                {
+                    if (IsEmpty(col, row))
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
+        }
+
         public IEnumerable<Vector2Int> AllOccupiedSlots()
         {
             for (var col = 0; col < Columns; col++)

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba4246f28b98443558448f18beaa65c9, type: 3}
   m_Name: RunConfig
   m_EditorClassIdentifier: 
-  _startingHitPoints: 6
+  _startingHitPoints: 3
   _maxRetries: 3
   _levelCompleteRampUpDuration: 15
   _levelCompleteRampUpScale: 8

@@ -5,6 +5,7 @@ using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Level;
+using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared.Diagnostics;
@@ -46,6 +47,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private readonly SlotGrid _grid;
         private readonly IPublisher<ItemCheckMessage> _itemCheckPublisher;
+        private readonly IPublisher<WaveDamageMessage> _waveDamagePublisher;
         private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
         private readonly List<IBalloonModel> _newlySpawnedBalloons = new();
         private readonly IObjectResolver _resolver;
@@ -90,6 +92,7 @@ namespace BalloonParty.Balloon.Spawner
             ISubscriber<ActorHitMessage> hitSubscriber,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             IPublisher<ItemCheckMessage> itemCheckPublisher,
+            IPublisher<WaveDamageMessage> waveDamagePublisher,
             RejectedBalloonEffect rejectedBalloon,
             BalloonPlacementResolver placement,
             ILevelProgress levelProgress)
@@ -110,6 +113,7 @@ namespace BalloonParty.Balloon.Spawner
             _hitSubscriber = hitSubscriber;
             _levelUpSubscriber = levelUpSubscriber;
             _itemCheckPublisher = itemCheckPublisher;
+            _waveDamagePublisher = waveDamagePublisher;
             _rejectedBalloon = rejectedBalloon;
             _placement = placement;
             _levelProgress = levelProgress;
@@ -350,6 +354,26 @@ namespace BalloonParty.Balloon.Spawner
         private void SpawnLine()
         {
             _balancer.Balance(relocateRoamers: true);
+
+            var deficit = WaveDeficitCalculator.Calculate(
+                _grid.CountEmpty(), _grid.Columns, _grid.Columns);
+
+            if (deficit.HeartsLost > 0)
+            {
+                // Spawn the doomed line so the overflow pile can visualize it for the strikethrough.
+                PrepareSpawnBatch(lineCount: 1);
+                _rejectedBalloon.BeginDoomedLine(0);
+                SpawnLineInternal(PlacementReach.Pressure);
+                _rejectedBalloon.EndDoomedLine();
+                ReleaseUnspawnedBatch();
+
+                _waveDamagePublisher.Publish(
+                    new WaveDamageMessage(deficit.HeartsLost, deficit.UnspawnedSlots, _grid.Columns));
+                PublishItemCheck(isInitial: false);
+                _balancePublisher.Publish(default);
+                return;
+            }
+
             PrepareSpawnBatch(lineCount: 1);
             SpawnLineInternal(PlacementReach.Pressure);
             ReleaseUnspawnedBatch();
@@ -575,6 +599,12 @@ namespace BalloonParty.Balloon.Spawner
             try
             {
                 _balancer.Balance(relocateRoamers: true);
+
+                // Line-based deficit: compute damage before spawning so the wave only spawns lines that fit.
+                var deficit = WaveDeficitCalculator.Calculate(
+                    _grid.CountEmpty(), lineCount * _grid.Columns, _grid.Columns);
+
+                var effectiveLines = lineCount - deficit.HeartsLost;
                 PrepareSpawnBatch(lineCount);
 
                 for (var i = 0; i < lineCount; i++)
@@ -596,7 +626,20 @@ namespace BalloonParty.Balloon.Spawner
                         return;
                     }
 
+                    // Tag overflow balloons from doomed lines so they wait for the strikethrough.
+                    var isDoomedLine = i >= effectiveLines;
+                    if (isDoomedLine)
+                    {
+                        _rejectedBalloon.BeginDoomedLine(i - effectiveLines);
+                    }
+
                     SpawnLineInternal(PlacementReach.Pressure);
+
+                    if (isDoomedLine)
+                    {
+                        _rejectedBalloon.EndDoomedLine();
+                    }
+
                     await UniTask.Delay(
                         (int)(_balloonsConfig.NewBalloonLinesTimeInterval * 1000),
                         cancellationToken: ct);
@@ -605,6 +648,13 @@ namespace BalloonParty.Balloon.Spawner
                 if (generation != _generation)
                 {
                     return;
+                }
+
+                // Publish damage after doomed lines are spawned so the strikethrough has balloons to cross.
+                if (deficit.HeartsLost > 0)
+                {
+                    _waveDamagePublisher.Publish(
+                        new WaveDamageMessage(deficit.HeartsLost, deficit.UnspawnedSlots, _grid.Columns));
                 }
 
                 PublishItemCheck(isInitial: false);

@@ -94,6 +94,9 @@ namespace BalloonParty.Audio
         GameplayLoopNight,
 
         BalloonPopTougher,
-        BalloonDeflectTougher
+        BalloonDeflectTougher,
+
+        // Played when a strikethrough heart begins sliding across a doomed spawn line.
+        Strikethrough
     }
 }

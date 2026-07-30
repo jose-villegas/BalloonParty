@@ -1,6 +1,7 @@
 using BalloonParty.Shared.Pause;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace BalloonParty.Tests.Shared
 {
@@ -214,6 +215,8 @@ namespace BalloonParty.Tests.Shared
         public void ClaimExclusive_OverridesExistingExclusiveOwner()
         {
             _service.ClaimExclusive(TimeScaleSource.LevelUpCeremony, 0.6f);
+            LogAssert.Expect(LogType.Assert,
+                "[TimeScale] Two different sources competing for exclusivity: LevelUpCeremony vs Cinematic");
             _service.ClaimExclusive(TimeScaleSource.Cinematic, 0.5f);
 
             // Latest exclusive owner wins.

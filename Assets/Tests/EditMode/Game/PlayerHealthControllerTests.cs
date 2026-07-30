@@ -14,8 +14,8 @@ namespace BalloonParty.Tests.Game
         private const int StartingHitPoints = 3;
 
         private IRunConfig _config;
-        private ISubscriber<SpawnBlockedMessage> _spawnBlockedSubscriber;
-        private IMessageHandler<SpawnBlockedMessage> _spawnBlockedHandler;
+        private ISubscriber<WaveDamageMessage> _waveDamageSubscriber;
+        private IMessageHandler<WaveDamageMessage> _waveDamageHandler;
         private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private IMessageHandler<ScoreLevelUpMessage> _levelUpHandler;
         private IPublisher<EndRunRequestedMessage> _endRunPublisher;
@@ -28,11 +28,11 @@ namespace BalloonParty.Tests.Game
             _config = Substitute.For<IRunConfig>();
             _config.StartingHitPoints.Returns(StartingHitPoints);
 
-            _spawnBlockedSubscriber = Substitute.For<ISubscriber<SpawnBlockedMessage>>();
-            _spawnBlockedSubscriber
+            _waveDamageSubscriber = Substitute.For<ISubscriber<WaveDamageMessage>>();
+            _waveDamageSubscriber
                 .Subscribe(
-                    Arg.Do<IMessageHandler<SpawnBlockedMessage>>(h => _spawnBlockedHandler = h),
-                    Arg.Any<MessageHandlerFilter<SpawnBlockedMessage>[]>())
+                    Arg.Do<IMessageHandler<WaveDamageMessage>>(h => _waveDamageHandler = h),
+                    Arg.Any<MessageHandlerFilter<WaveDamageMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
             _levelUpSubscriber = Substitute.For<ISubscriber<ScoreLevelUpMessage>>();
@@ -61,32 +61,34 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void BlockedSpawn_CostsOneHitPoint()
+        public void WaveDamage_CostsHearts()
         {
-            Block();
+            DamageWave(1);
 
             Assert.AreEqual(StartingHitPoints - 1, _controller.Current.Value);
         }
 
         [Test]
+        public void WaveDamage_MultipleHearts()
+        {
+            DamageWave(2);
+
+            Assert.AreEqual(StartingHitPoints - 2, _controller.Current.Value);
+        }
+
+        [Test]
         public void ReachingZero_RequestsEndRunExactlyOnce()
         {
-            for (var i = 0; i < StartingHitPoints; i++)
-            {
-                Block();
-            }
+            DamageWave(StartingHitPoints);
 
             Assert.AreEqual(0, _controller.Current.Value);
             _endRunPublisher.Received(1).Publish(Arg.Any<EndRunRequestedMessage>());
         }
 
         [Test]
-        public void BlockedSpawn_AtZero_DoesNotRequestAgainOrUnderflow()
+        public void WaveDamage_AtZero_DoesNotRequestAgainOrUnderflow()
         {
-            for (var i = 0; i < StartingHitPoints + 5; i++)
-            {
-                Block();
-            }
+            DamageWave(StartingHitPoints + 5);
 
             Assert.AreEqual(0, _controller.Current.Value, "HP clamps at zero");
             _endRunPublisher.Received(1).Publish(Arg.Any<EndRunRequestedMessage>());
@@ -95,8 +97,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void ResetRun_RestoresStartingHitPoints()
         {
-            Block();
-            Block();
+            DamageWave(2);
 
             _controller.ResetRun(2);
 
@@ -115,25 +116,24 @@ namespace BalloonParty.Tests.Game
             Assert.AreEqual(999, _controller.Current.Value);
         }
 
-        private void Block()
-        {
-            _spawnBlockedHandler.Handle(new SpawnBlockedMessage(0, default));
-        }
-
         [Test]
         public void LevelUp_RestoresStartingHitPoints()
         {
-            Block();
-            Block();
+            DamageWave(2);
 
             _levelUpHandler.Handle(new ScoreLevelUpMessage(1));
 
             Assert.AreEqual(StartingHitPoints, _controller.Current.Value);
         }
 
+        private void DamageWave(int heartsLost)
+        {
+            _waveDamageHandler.Handle(new WaveDamageMessage(heartsLost, heartsLost * 6, 6));
+        }
+
         private PlayerHealthController BuildController()
         {
-            return new PlayerHealthController(_config, _spawnBlockedSubscriber, _levelUpSubscriber, _endRunPublisher);
+            return new PlayerHealthController(_config, _waveDamageSubscriber, _levelUpSubscriber, _endRunPublisher);
         }
     }
 }

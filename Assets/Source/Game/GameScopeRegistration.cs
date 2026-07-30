@@ -78,8 +78,9 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<StreakChangedMessage>(options);
             builder.RegisterMessageBroker<ScoreLevelUpMessage>(options);
             builder.RegisterMessageBroker<GameOverMessage>(options);
-            builder.RegisterMessageBroker<SpawnBlockedMessage>(options);
             builder.RegisterMessageBroker<OverflowHeartRequestedMessage>(options);
+            builder.RegisterMessageBroker<WaveDamageMessage>(options);
+            builder.RegisterMessageBroker<StrikethroughArrivedMessage>(options);
             builder.RegisterMessageBroker<EndRunRequestedMessage>(options);
             builder.RegisterMessageBroker<RunResetMessage>(options);
             builder.RegisterMessageBroker<RunRestartCompletedMessage>(options);
@@ -170,7 +171,7 @@ namespace BalloonParty.Game
             builder.Register<SceneLightFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<BalloonMotionTicker>().AsSelf();
-            builder.RegisterEntryPoint<RejectedBalloonEffect>().AsSelf().As<IRunResettable>().As<IPendingHealthCharges>();
+            builder.RegisterEntryPoint<RejectedBalloonEffect>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<BalloonControllerRegistry>().AsSelf();
             builder.Register<BalloonPopPresenter>(Lifetime.Singleton);
             builder.Register<BalloonControllerContext>(Lifetime.Singleton);

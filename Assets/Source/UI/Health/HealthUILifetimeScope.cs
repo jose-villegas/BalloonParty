@@ -1,6 +1,7 @@
 using BalloonParty.Game.Health;
 using BalloonParty.Shared.Pool;
 using BalloonParty.UI.Binding;
+using BalloonParty.UI.Danger;
 using BalloonParty.UI.Score;
 using UnityEngine;
 using VContainer;
@@ -23,8 +24,16 @@ namespace BalloonParty.UI.Health
 
             builder.RegisterInstance(_heartTrailPrefab);
             builder.RegisterEntryPoint<HeartTrailController>();
-            builder.RegisterBuildCallback(resolver => resolver.Resolve<TrailEndpointRegistry>()
-                .Register(TrailEndpointKeys.Heart, new TransformTrailEndpoint(_heartTrailSource)));
+            builder.RegisterBuildCallback(resolver =>
+            {
+                resolver.Resolve<TrailEndpointRegistry>()
+                    .Register(TrailEndpointKeys.Heart, new TransformTrailEndpoint(_heartTrailSource));
+
+                foreach (var view in GetComponentsInChildren<DangerHeartLossView>(true))
+                {
+                    resolver.Inject(view);
+                }
+            });
         }
     }
 }
