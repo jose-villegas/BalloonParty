@@ -8,5 +8,8 @@ namespace BalloonParty.Game.Danger
     internal interface IDangerLevel
     {
         IReadOnlyReactiveProperty<float> Level { get; }
+
+        /// <summary>How many full lines of overflow the next wave would cost (integer heart count).</summary>
+        IReadOnlyReactiveProperty<int> HeartsAtRisk { get; }
     }
 }

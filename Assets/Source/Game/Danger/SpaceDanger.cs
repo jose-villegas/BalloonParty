@@ -15,10 +15,12 @@ namespace BalloonParty.Game.Danger
         private readonly IPlayerHealth _health;
         private readonly IActiveLevelParameters _levelParams;
         private readonly ReactiveProperty<float> _level = new(0f);
+        private readonly ReactiveProperty<int> _heartsAtRisk = new(0);
         private readonly CompositeDisposable _subscriptions = new();
         private bool _dirty;
 
         public IReadOnlyReactiveProperty<float> Level => _level;
+        public IReadOnlyReactiveProperty<int> HeartsAtRisk => _heartsAtRisk;
 
         public SpaceDanger(SlotGrid grid, IPlayerHealth health, IActiveLevelParameters levelParams)
         {
@@ -49,16 +51,23 @@ namespace BalloonParty.Game.Danger
             _subscriptions.Dispose();
         }
 
-        // Pure danger curve, exposed for unit testing.
-        internal static float Evaluate(int hearts, int availableSpace, int spawnPerTurn)
+        // Pure danger curve, exposed for unit testing. Uses line-based granularity:
+        // only full lines of overflow count as hearts at risk.
+        internal static float Evaluate(int hearts, int availableSpace, int spawnPerTurn, int columns)
         {
             if (hearts <= 0)
             {
                 return 1f;
             }
 
+            if (columns <= 0)
+            {
+                return 0f;
+            }
+
             var overflow = Mathf.Max(0, spawnPerTurn - availableSpace);
-            return Mathf.Clamp01((float)overflow / hearts);
+            var heartsAtRisk = overflow / columns;
+            return Mathf.Clamp01((float)heartsAtRisk / hearts);
         }
 
         private void Recompute()
@@ -67,7 +76,13 @@ namespace BalloonParty.Game.Danger
 
             // Must read the resolved per-level value — the catalog misreports on ramped levels.
             var spawnPerTurn = _levelParams.Current.SpawnLines * _grid.Columns;
-            _level.Value = Evaluate(_health.Current.Value, CountEmptySlots(), spawnPerTurn);
+            var availableSpace = CountEmptySlots();
+            var columns = _grid.Columns;
+
+            _level.Value = Evaluate(_health.Current.Value, availableSpace, spawnPerTurn, columns);
+
+            var overflow = Mathf.Max(0, spawnPerTurn - availableSpace);
+            _heartsAtRisk.Value = columns > 0 ? overflow / columns : 0;
         }
 
         private int CountEmptySlots()
