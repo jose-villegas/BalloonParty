@@ -1,7 +1,7 @@
 namespace BalloonParty.Shared.Messages
 {
     /// <summary>Published once per spawn wave when the line-based deficit causes heart loss.</summary>
-    public readonly struct WaveDamageMessage
+    internal readonly struct WaveDamageMessage
     {
         /// <summary>Number of hearts lost this wave (full lines of deficit).</summary>
         public readonly int HeartsLost;

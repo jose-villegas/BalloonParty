@@ -246,23 +246,6 @@ namespace BalloonParty.Balloon.Spawner
             return Mathf.Max(0, Mathf.Min(capacity - occupied, waveCap));
         }
 
-        private int CountEmptySlots()
-        {
-            var count = 0;
-            for (var col = 0; col < _grid.Columns; col++)
-            {
-                for (var row = 0; row < _grid.Rows; row++)
-                {
-                    if (_grid.IsEmpty(col, row))
-                    {
-                        count++;
-                    }
-                }
-            }
-
-            return count;
-        }
-
         private void OnSpawnLinesRequested(int lineCount)
         {
             if (lineCount <= 1)
@@ -373,7 +356,7 @@ namespace BalloonParty.Balloon.Spawner
             _balancer.Balance(relocateRoamers: true);
 
             var deficit = WaveDeficitCalculator.Calculate(
-                CountEmptySlots(), _grid.Columns, _grid.Columns);
+                _grid.CountEmpty(), _grid.Columns, _grid.Columns);
 
             if (deficit.HeartsLost > 0)
             {
@@ -386,6 +369,8 @@ namespace BalloonParty.Balloon.Spawner
 
                 _waveDamagePublisher.Publish(
                     new WaveDamageMessage(deficit.HeartsLost, deficit.UnspawnedSlots, _grid.Columns));
+                PublishItemCheck(isInitial: false);
+                _balancePublisher.Publish(default);
                 return;
             }
 
@@ -617,7 +602,7 @@ namespace BalloonParty.Balloon.Spawner
 
                 // Line-based deficit: compute damage before spawning so the wave only spawns lines that fit.
                 var deficit = WaveDeficitCalculator.Calculate(
-                    CountEmptySlots(), lineCount * _grid.Columns, _grid.Columns);
+                    _grid.CountEmpty(), lineCount * _grid.Columns, _grid.Columns);
 
                 var effectiveLines = lineCount - deficit.HeartsLost;
                 PrepareSpawnBatch(lineCount);
@@ -660,16 +645,16 @@ namespace BalloonParty.Balloon.Spawner
                         cancellationToken: ct);
                 }
 
+                if (generation != _generation)
+                {
+                    return;
+                }
+
                 // Publish damage after doomed lines are spawned so the strikethrough has balloons to cross.
                 if (deficit.HeartsLost > 0)
                 {
                     _waveDamagePublisher.Publish(
                         new WaveDamageMessage(deficit.HeartsLost, deficit.UnspawnedSlots, _grid.Columns));
-                }
-
-                if (generation != _generation)
-                {
-                    return;
                 }
 
                 PublishItemCheck(isInitial: false);

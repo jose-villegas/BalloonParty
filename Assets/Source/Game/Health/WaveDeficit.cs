@@ -1,7 +1,7 @@
 namespace BalloonParty.Game.Health
 {
     /// <summary>Result of the per-wave deficit calculation: how many hearts the wave costs and how many slots go unspawned.</summary>
-    public readonly struct WaveDeficit
+    internal readonly struct WaveDeficit
     {
         /// <summary>Full lines of deficit — each costs one heart.</summary>
         public readonly int HeartsLost;

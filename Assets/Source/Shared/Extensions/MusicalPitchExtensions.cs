@@ -54,16 +54,5 @@ namespace BalloonParty.Shared.Extensions
             var semitones = sign * (TritoneSemitones + octaves);
             return semitones.SemitonesToPitchMultiplier();
         }
-
-        /// <summary>Semitone offset for descending tritone steps: 0→0, 1→-6, 2→-18, 3→-30, …</summary>
-        internal static int TritoneSemitoneOffset(int step)
-        {
-            if (step <= 0)
-            {
-                return 0;
-            }
-
-            return -(TritoneSemitones + (step - 1) * 12);
-        }
     }
 }

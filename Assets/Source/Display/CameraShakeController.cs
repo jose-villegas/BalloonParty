@@ -55,10 +55,7 @@ namespace BalloonParty.Display
                 return;
             }
 
-            for (var i = 0; i < heartsLost; i++)
-            {
-                _view.Shake();
-            }
+            _view.Shake(heartsLost);
         }
 
         private void Recoil(Vector3 fireDirection)

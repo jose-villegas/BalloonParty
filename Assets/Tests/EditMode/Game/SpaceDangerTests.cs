@@ -48,5 +48,19 @@ namespace BalloonParty.Tests.Game
         {
             Assert.AreEqual(1f, SpaceDanger.Evaluate(hearts: 0, availableSpace: 50, spawnPerTurn: 18, columns: Cols));
         }
+
+        [Test]
+        public void ZeroColumns_ReturnsSafe()
+        {
+            // Guard clause: division by zero must not blow up — returns 0 (safe).
+            Assert.AreEqual(0f, SpaceDanger.Evaluate(hearts: 3, availableSpace: 0, spawnPerTurn: 18, columns: 0));
+        }
+
+        [Test]
+        public void TwoLineOverflow_ScalesByHearts()
+        {
+            // overflow = 18 - 6 = 12, heartsAtRisk = 12/6 = 2, danger = 2/3.
+            Assert.AreEqual(2f / 3f, SpaceDanger.Evaluate(hearts: 3, availableSpace: 6, spawnPerTurn: 18, columns: Cols), 1e-4f);
+        }
     }
 }

@@ -1,9 +1,9 @@
 using System;
+using System.Collections.Generic;
 using BalloonParty.Audio;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Health;
-using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Grid;
@@ -36,6 +36,8 @@ namespace BalloonParty.UI.Health
         private readonly SlotGrid _grid;
         private readonly RejectedBalloonEffect _overflow;
 
+        private readonly List<Sequence> _activeSequences = new();
+
         private IDisposable _subscription;
         private TrailSpawner _spawner;
 
@@ -66,6 +68,12 @@ namespace BalloonParty.UI.Health
 
         public void Dispose()
         {
+            foreach (var seq in _activeSequences)
+            {
+                seq.Kill();
+            }
+
+            _activeSequences.Clear();
             _subscription?.Dispose();
         }
 
@@ -139,11 +147,14 @@ namespace BalloonParty.UI.Health
 
             seq.OnComplete(() =>
             {
+                _activeSequences.Remove(seq);
                 _overflow.PopDoomedLine(capturedLineIndex);
                 _strikethroughPublisher.Publish(new StrikethroughArrivedMessage(capturedLineIndex));
                 _tracker.Remove(trail.transform);
                 _spawner.Release(trail);
             });
+
+            _activeSequences.Add(seq);
         }
     }
 }

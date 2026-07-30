@@ -76,30 +76,11 @@ namespace BalloonParty.Game.Danger
 
             // Must read the resolved per-level value — the catalog misreports on ramped levels.
             var spawnPerTurn = _levelParams.Current.SpawnLines * _grid.Columns;
-            var availableSpace = CountEmptySlots();
+            var availableSpace = _grid.CountEmpty();
             var columns = _grid.Columns;
 
             _level.Value = Evaluate(_health.Current.Value, availableSpace, spawnPerTurn, columns);
-
-            var overflow = Mathf.Max(0, spawnPerTurn - availableSpace);
-            _heartsAtRisk.Value = columns > 0 ? overflow / columns : 0;
-        }
-
-        private int CountEmptySlots()
-        {
-            var count = 0;
-            for (var col = 0; col < _grid.Columns; col++)
-            {
-                for (var row = 0; row < _grid.Rows; row++)
-                {
-                    if (_grid.IsEmpty(col, row))
-                    {
-                        count++;
-                    }
-                }
-            }
-
-            return count;
+            _heartsAtRisk.Value = WaveDeficitCalculator.Calculate(availableSpace, spawnPerTurn, columns).HeartsLost;
         }
     }
 }
