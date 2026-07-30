@@ -140,7 +140,7 @@ Files</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>The <b>light field</b> — the disturbance-field architecture applied to light. A small screen/world-space RenderTexture that every direction/specular consumer can sample once at its anchor to get the local light <em>direction + magnitude + colour</em>, regardless of how many lights contribute. This folder is the field's <b>producer</b>; consumers read it through the shared shader include <code>Assets/Shaders/BalloonParty/Include/SceneLight.cginc</code>.</p>
 <p><code>TimeOfDayService</code> owns the <b>ambient globals</b> (<code>_SceneLightDir</code> / <code>_SceneLightColor</code> / <code>_SceneLightIntensity</code>) — the project-wide rest light, pushed once at startup (re-pushed every tick only in the editor, so they stay live-tunable in play mode) and read CPU-side via <code>ISceneLightRuntime</code>. It's a passive owner: at rest the direction it pushes is the authored value, and while night mode is on it's instead whatever <code>TimeOfDayCycle</code> (<code>Game/Level</code>, see its README for the sweep policy) sets via <code>SetDirection</code> — this folder only publishes the direction it's given, it doesn't decide it. <code>SceneLightFieldService</code> owns the light <b>field</b> RT layered on top: at rest it is exactly the ambient globals painted uniformly, and every field helper falls back to the flat globals when the field is off — so the field is a strictly additive seam, never a replacement.</p>
-<h1><a class="anchor" id="autotoc_md849"></a>
+<h1><a class="anchor" id="autotoc_md853"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -162,7 +162,7 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code><a class="el" href="UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d">Light</a></code>   </td><td class="markdownTableBodyNone">A small reactive model a caller owns: <code>Position</code> / <code>EndPosition</code> / <code>Radius</code> / <code>EndRadius</code> (perpendicular half-width at each end) / <code>Intensity</code> / <code>FalloffPower</code> / <code>PaletteIndex</code> as <code>ReactiveProperty</code>s, with <code>const</code> defaults. <code>EndPosition == Position</code> is a point/disc light; set them apart (or use <code>Light.Segment(start, end, …)</code>) for a <b>capsule/area</b> light — a beam decaying from its axis to the sides (the laser cross is two of these). Set <code>EndRadius</code> apart from <code>Radius</code> (or pass <code>endRadius</code>) to <b>taper</b> the beam — the half-width lerps along the axis, and since the gradient pass derives GB from R, the taper shapes the local direction field too. On/off is <code>RegisterLight</code>/dispose; brightness is <code>Intensity</code>; no built-in decay. <b>Not</b> a config ScriptableObject. (Name collides with <code>UnityEngine.Light</code> — alias when both are in scope.)   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md850"></a>
+<h1><a class="anchor" id="autotoc_md854"></a>
 Channel encoding (single RT)</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -177,7 +177,7 @@ Channel encoding (single RT)</h1>
 <blockquote class="doxtable">
 <p><b>Rest value, C# vs. shader.</b> The values above are what the render pipeline produces every time it runs — set by the <code>Fill</code> shader pass, whose internals this doc can't verify. Before the pipeline has ever run once, <code>SceneLightFieldResources.Initialize</code> clears both RTs directly from C# (<code>ClearToRest</code>) to <code>(1, 0.5, 0.5, 0)</code> — a different R than the Fill pass's <code>0</code>. In practice this only matters for the sliver of a frame before the first render (gated behind <code>_SceneLightFieldOn</code>, which consumers check anyway), but the discrepancy means the two "rest" values aren't the same number. </p>
 </blockquote>
-<h1><a class="anchor" id="autotoc_md851"></a>
+<h1><a class="anchor" id="autotoc_md855"></a>
 The render pipeline (three passes, ping-pong)</h1>
 <p>A render rebuilds the whole field from scratch (there's no in-texture persistence like the disturbance field's diffusion) via a three-pass ping-pong over the two RTs. It runs only when the field is dirty (a registered light or the directional owner changed) <b>and</b> the frame-interval cadence cap has elapsed — see the cadence note below:</p>
 <ol type="1">
@@ -186,7 +186,7 @@ The render pipeline (three passes, ping-pong)</h1>
 <li><b>Gradient</b> (<code>Hidden/BalloonParty/SceneLightGradient</code>) — recomputes GB from <code>grad(R)</code> via a central difference over <code>_FieldTexelSize</code>. The gradient points toward increasing brightness = toward the source = the toward-light convention. It blends from the rest GB toward the gradient direction by <code>saturate(localR * _DirectionResponse)</code> — weighted by how much <em>local</em> light is here, so a flat/rest field (localR = 0) keeps the rest GB bit-for-bit, and bright local lights capture the direction (low local R also means low weight, which suppresses gradient noise where there's no real light).</li>
 </ol>
 <p><b>Rest invariant.</b> With no lights registered: fill writes rest, accumulate is skipped (or an exact identity), and the gradient pass on the flat R field yields a zero gradient → weight 0 → <code>lerp(restGB, …, 0) == restGB</code>. R and A pass through untouched. So the published field is bit-identical to the rest state, hence bit-identical to the directional system.</p>
-<h1><a class="anchor" id="autotoc_md852"></a>
+<h1><a class="anchor" id="autotoc_md856"></a>
 The active-source model</h1>
 <p><b>Lights are state, not events</b> — a light is simply on or off, so (unlike the disturbance field, where you fire a stamp and it lingers/diffuses) callers own the lifecycle directly:</p>
 <ul>
@@ -198,7 +198,7 @@ The active-source model</h1>
 <blockquote class="doxtable">
 <p><b>Naming note:</b> <code><a class="el" href="UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d">Light</a></code> collides with <code>UnityEngine.Light</code>. Inside the <code>Shared.SceneLight</code> namespace it resolves to ours; a caller that also <code>using</code>s <code>UnityEngine</code> needs <code>using <a class="el" href="UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d">Light</a> = <a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1Light.html" title="One light a caller owns and toggles on/off in SceneLightFieldService (see Milestone 3).">BalloonParty.Shared.SceneLight.Light</a>;</code>. </p>
 </blockquote>
-<h1><a class="anchor" id="autotoc_md853"></a>
+<h1><a class="anchor" id="autotoc_md857"></a>
 Globals published</h1>
 <ul>
 <li><code>_SceneLightTex</code> — the field RT.</li>
@@ -207,15 +207,15 @@ Globals published</h1>
 <li><code>_SceneLightPalette</code> (float4[16]) — the game palette's RGB entries, pushed once at startup; <code>SceneLightTintAt</code> decodes a texel's A index against this array.</li>
 <li><code>_SceneLightFieldOn</code> (float) — the <b>fallback switch</b>: 1 while the service is alive and has filled at least once, 0 in <code>Dispose</code> and any time the service never ran (edit mode, or no owner in scene).</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md854"></a>
+<h1><a class="anchor" id="autotoc_md858"></a>
 Cadence</h1>
 <p>Renders <b>only when dirty</b> — a registered light's reactive property changed, a light was registered/cleared, or the directional owner's live-tunable direction/intensity moved. An idle scene (static lights, no owner tweaking) skips the pipeline entirely; the RT keeps its last contents, which are still correct. This is why lights are reactive: the service subscribes to each one and flips a dirty flag, rather than polling or re-rendering blindly. The on-flag is set once, after the first render, so a missing owner leaves it at 0.</p>
 <p>Dirty alone isn't the whole gate: a light that moves every frame (a tracked projectile) would otherwise dirty the field every tick, running the full pipeline at the display's refresh rate — 2× the GPU cost on a 120 Hz panel versus 60 Hz, for identical visuals. <code>FieldFrameInterval</code> (on <code>ISceneLightFieldSettings</code>) is authored as "every N frames at 60 fps" and reinterpreted as seconds, accumulated with <code>Time.unscaledDeltaTime</code> (mirroring <code>SceneCaptureService</code>'s capture-cadence knob) — so the render cadence is capped independent of display refresh. Unscaled time keeps the cadence advancing during a freeze (e.g. the level-up cinematic), same as the dirty-driven lights animating through it. The very first render (before the on-flag is set) always fires immediately, regardless of the cap, so consumers never sample an empty RT.</p>
 <p>Past the cadence gate, the service also compares the freshly built stamp batch against the one last sent to the GPU (texel-quantized epsilons for position/radius, a small absolute epsilon for magnitude/falloff, exact match for the palette index) and skips the render when nothing changed beyond what the field's own resolution can show — sub-texel drift, a converged fade tail, or an equal-within-a-texel rewrite no longer cost a re-render.</p>
-<h1><a class="anchor" id="autotoc_md855"></a>
+<h1><a class="anchor" id="autotoc_md859"></a>
 Device builds: the field shaders are serialized</h1>
 <p>All passes are <code>Hidden/</code> shaders (<code>SceneLightFieldFill</code>, <code>SceneLightAccumulate</code>, <code>SceneLightGradient</code>), which a device build would strip if they were only reached by <code>Shader.Find</code>. So the settings SO carries <b>serialized <code>Shader</code> references</b> (<code>FillShader</code>/<code>AccumulateShader</code>/<code>GradientShader</code>, mirroring <code>IDisturbanceFieldSettings</code>), which pull them into the build via the asset. <b>Assign all three on the <code>SceneLightFieldSettings</code> asset</b> — the resources prefer the serialized reference and fall back to <code>Shader.Find</code> only as an editor convenience (that fallback is stripped on device, so an unassigned slot breaks the field there).</p>
-<h1><a class="anchor" id="autotoc_md856"></a>
+<h1><a class="anchor" id="autotoc_md860"></a>
 The shared include &amp; the off-fallback</h1>
 <p><code>SceneLight.cginc</code> exposes two layers behind one API:</p>
 <ul>
@@ -230,7 +230,7 @@ receiverRadius)</code> / <code>SceneLightLocalFlowAtLOD(worldPos, receiverRadius
 </blockquote>
 <p>(The render-maps preview stays raw/point-sampled on purpose — a field-data inspector, not the consumer view.)</p>
 <p>Because nothing includes the file yet and the field publishes an off-flag until it runs, <b>Phase A has zero visual effect</b>: the field OFF is bit-identical to today.</p>
-<h1><a class="anchor" id="autotoc_md857"></a>
+<h1><a class="anchor" id="autotoc_md861"></a>
 Phase roadmap</h1>
 <ul>
 <li><b>A (shipped)</b> — the field service, rest-state fill, the globals, the shared include, the off-fallback.</li>

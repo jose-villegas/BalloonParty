@@ -40,7 +40,7 @@
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:href="classBalloonParty_1_1Game_1_1Cinematics_1_1HeartDrainCinematic.html" target="_top" xlink:title="Begins on the first heart trail launch, follows the heart about to land in slow&#45;mo,...">
+<g id="a_Node000005"><a xlink:href="classBalloonParty_1_1Game_1_1Cinematics_1_1HeartDrainCinematic.html" target="_top" xlink:title="Begins on the first wave&#45;damage event, follows the heart trail in slow&#45;mo, and ends when the pile dra...">
 <polygon fill="white" stroke="#666666" points="486,-78 316,-78 316,-48 486,-48 486,-78"/>
 <text text-anchor="start" x="324" y="-66" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Cinematics.</text>
 <text text-anchor="middle" x="401" y="-55" font-family="Helvetica,sans-Serif" font-size="10.00">HeartDrainCinematic</text>

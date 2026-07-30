@@ -120,7 +120,7 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1Cinematics_1_1HeartDrainC
 </div><!--header-->
 <div class="contents">
 
-<p>Begins on the first heart trail launch, follows the heart about to land in slow-mo, and ends when the pile drains or the run ends.  
+<p>Begins on the first wave-damage event, follows the heart trail in slow-mo, and ends when the pile drains or the run ends.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Game.Cinematics.HeartDrainCinematic:</div>
@@ -166,8 +166,8 @@ Protected Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a51b9d6f3231466ca87cad47d4c11e0db" id="r_a51b9d6f3231466ca87cad47d4c11e0db"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a51b9d6f3231466ca87cad47d4c11e0db">HeartDrainCinematic</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicDirector.html">CinematicDirector</a> director, <a class="el" href="classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraRig.html">CinematicCameraRig</a> rig, <a class="el" href="classBalloonParty_1_1Shared_1_1Pause_1_1TimeScaleService.html">TimeScaleService</a> timeScale, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Cinematics_1_1ICinematicsSettings.html">ICinematicsSettings</a> settings, <a class="el" href="classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html">HeartTrailTracker</a> tracker, <a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html">RejectedBalloonEffect</a> overflow, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html">OverflowHeartRequestedMessage</a> &gt; heartRequestedSubscriber)</td></tr>
-<tr class="separator:a51b9d6f3231466ca87cad47d4c11e0db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf72ef7b4539c5169ecc16d20af8e804" id="r_adf72ef7b4539c5169ecc16d20af8e804"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adf72ef7b4539c5169ecc16d20af8e804">HeartDrainCinematic</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicDirector.html">CinematicDirector</a> director, <a class="el" href="classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraRig.html">CinematicCameraRig</a> rig, <a class="el" href="classBalloonParty_1_1Shared_1_1Pause_1_1TimeScaleService.html">TimeScaleService</a> timeScale, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Cinematics_1_1ICinematicsSettings.html">ICinematicsSettings</a> settings, <a class="el" href="classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html">HeartTrailTracker</a> tracker, <a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html">RejectedBalloonEffect</a> overflow, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html">WaveDamageMessage</a> &gt; waveDamageSubscriber)</td></tr>
+<tr class="separator:adf72ef7b4539c5169ecc16d20af8e804"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -176,15 +176,13 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a9fd5271ffad10d1dc38c5bad3007e64f" id="r_a9fd5271ffad10d1dc38c5bad3007e64f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9fd5271ffad10d1dc38c5bad3007e64f">OnFirstHeart</a> ()</td></tr>
-<tr class="separator:a9fd5271ffad10d1dc38c5bad3007e64f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae94b047e7e172f0def09bb2d1de46d71" id="r_ae94b047e7e172f0def09bb2d1de46d71"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae94b047e7e172f0def09bb2d1de46d71">OnWaveDamage</a> ()</td></tr>
+<tr class="separator:ae94b047e7e172f0def09bb2d1de46d71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5afd098480c0bf5566faac3202a25f0" id="r_af5afd098480c0bf5566faac3202a25f0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af5afd098480c0bf5566faac3202a25f0">ShouldEnd</a> ()</td></tr>
 <tr class="separator:af5afd098480c0bf5566faac3202a25f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:ac0ca7cb8b50d7f07b388fcf9ec7cff63" id="r_ac0ca7cb8b50d7f07b388fcf9ec7cff63"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html">OverflowHeartRequestedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac0ca7cb8b50d7f07b388fcf9ec7cff63">_heartRequestedSubscriber</a></td></tr>
-<tr class="separator:ac0ca7cb8b50d7f07b388fcf9ec7cff63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a050162049382e6d81f0a35308c81382a" id="r_a050162049382e6d81f0a35308c81382a"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html">RejectedBalloonEffect</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a050162049382e6d81f0a35308c81382a">_overflow</a></td></tr>
 <tr class="separator:a050162049382e6d81f0a35308c81382a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd4bf8f3b0997fb44a6da1b1430daf35" id="r_afd4bf8f3b0997fb44a6da1b1430daf35"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html">CameraRigCinematic</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicProducer.html#afd4bf8f3b0997fb44a6da1b1430daf35">_runner</a></td></tr>
@@ -193,12 +191,14 @@ Private Attributes</h2></td></tr>
 <tr class="separator:abc4cf30e7e32dc4c274f4b26fd163a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8436831c3d945e2a924915111735959" id="r_ab8436831c3d945e2a924915111735959"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html">HeartTrailTracker</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8436831c3d945e2a924915111735959">_tracker</a></td></tr>
 <tr class="separator:ab8436831c3d945e2a924915111735959"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e5b0c72ebe92a871dbdf262752889fc" id="r_a5e5b0c72ebe92a871dbdf262752889fc"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html">WaveDamageMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e5b0c72ebe92a871dbdf262752889fc">_waveDamageSubscriber</a></td></tr>
+<tr class="separator:a5e5b0c72ebe92a871dbdf262752889fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Begins on the first heart trail launch, follows the heart about to land in slow-mo, and ends when the pile drains or the run ends. </p>
+<div class="textblock"><p>Begins on the first wave-damage event, follows the heart trail in slow-mo, and ends when the pile drains or the run ends. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a51b9d6f3231466ca87cad47d4c11e0db" name="a51b9d6f3231466ca87cad47d4c11e0db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a51b9d6f3231466ca87cad47d4c11e0db">&#9670;&#160;</a></span>HeartDrainCinematic()</h2>
+<a id="adf72ef7b4539c5169ecc16d20af8e804" name="adf72ef7b4539c5169ecc16d20af8e804"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf72ef7b4539c5169ecc16d20af8e804">&#9670;&#160;</a></span>HeartDrainCinematic()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -239,7 +239,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html">OverflowHeartRequestedMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>heartRequestedSubscriber</em></span>&#160;)</td>
+          <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html">WaveDamageMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>waveDamageSubscriber</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -329,31 +329,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a9fd5271ffad10d1dc38c5bad3007e64f" name="a9fd5271ffad10d1dc38c5bad3007e64f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9fd5271ffad10d1dc38c5bad3007e64f">&#9670;&#160;</a></span>OnFirstHeart()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void BalloonParty.Game.Cinematics.HeartDrainCinematic.OnFirstHeart </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a93d05c2ddb6b09beb957d5932b343b16" name="a93d05c2ddb6b09beb957d5932b343b16"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a93d05c2ddb6b09beb957d5932b343b16">&#9670;&#160;</a></span>OnStart()</h2>
 
@@ -373,6 +348,31 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae94b047e7e172f0def09bb2d1de46d71" name="ae94b047e7e172f0def09bb2d1de46d71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae94b047e7e172f0def09bb2d1de46d71">&#9670;&#160;</a></span>OnWaveDamage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.Cinematics.HeartDrainCinematic.OnWaveDamage </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -430,28 +430,6 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="ac0ca7cb8b50d7f07b388fcf9ec7cff63" name="ac0ca7cb8b50d7f07b388fcf9ec7cff63"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac0ca7cb8b50d7f07b388fcf9ec7cff63">&#9670;&#160;</a></span>_heartRequestedSubscriber</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">readonly ISubscriber&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html">OverflowHeartRequestedMessage</a>&gt; BalloonParty.Game.Cinematics.HeartDrainCinematic._heartRequestedSubscriber</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a050162049382e6d81f0a35308c81382a" name="a050162049382e6d81f0a35308c81382a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a050162049382e6d81f0a35308c81382a">&#9670;&#160;</a></span>_overflow</h2>
 
@@ -529,6 +507,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html">HeartTrailTracker</a> BalloonParty.Game.Cinematics.HeartDrainCinematic._tracker</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5e5b0c72ebe92a871dbdf262752889fc" name="a5e5b0c72ebe92a871dbdf262752889fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e5b0c72ebe92a871dbdf262752889fc">&#9670;&#160;</a></span>_waveDamageSubscriber</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly ISubscriber&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html">WaveDamageMessage</a>&gt; BalloonParty.Game.Cinematics.HeartDrainCinematic._waveDamageSubscriber</td>
         </tr>
       </table>
   </td>

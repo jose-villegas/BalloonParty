@@ -137,11 +137,11 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Broadcast architecture for pausing and resuming gameplay systems.</p>
-<h1><a class="anchor" id="autotoc_md819"></a>
+<h1><a class="anchor" id="autotoc_md823"></a>
 Why not <code>Time.timeScale</code>?</h1>
 <p><code>Time.timeScale</code> is a global scalar — every system must opt out individually (<code>SetUpdate(true)</code>, <code>ignoreTimeScale: true</code>, etc.). A missed annotation is a silent bug. It also conflates two distinct concerns: the <b>visual slow-motion</b> of a cinematic and the <b>logical freeze</b> of gameplay.</p>
 <p>This package separates those concerns.</p>
-<h1><a class="anchor" id="autotoc_md820"></a>
+<h1><a class="anchor" id="autotoc_md824"></a>
 Core types</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -157,15 +157,15 @@ Core types</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>TimeScaleService</code> / <code>TimeScaleSource</code>   </td><td class="markdownTableBodyNone">The only legal writer of <code>Time.timeScale</code> (audit-enforced): claim/release, lowest active claim wins, run-reset clears   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md821"></a>
+<h1><a class="anchor" id="autotoc_md825"></a>
 Usage</h1>
-<h2><a class="anchor" id="autotoc_md822"></a>
+<h2><a class="anchor" id="autotoc_md826"></a>
 Signalling a pause</h2>
 <div class="fragment"><div class="line"><span class="comment">// Inject PauseService, then:</span></div>
 <div class="line">_pauseService.Pause(PauseSource.Cinematic);   <span class="comment">// begin</span></div>
 <div class="line">_pauseService.Resume(PauseSource.Cinematic);  <span class="comment">// end</span></div>
 </div><!-- fragment --><p>Calls nest safely — a second <code>Pause</code> without a matching <code>Resume</code> won't broadcast twice.</p>
-<h2><a class="anchor" id="autotoc_md823"></a>
+<h2><a class="anchor" id="autotoc_md827"></a>
 Reacting to a pause</h2>
 <p>Live systems don't subscribe to <code>PausedMessage</code>/<code>ResumedMessage</code> — they gate on the reactive <code>IsAnyPaused</code> property instead, so a single check covers every active source:</p>
 <div class="fragment"><div class="line"><span class="comment">// Inject PauseService, then read it wherever the system already ticks:</span></div>
@@ -174,17 +174,17 @@ Reacting to a pause</h2>
 <div class="line">    <span class="keywordflow">return</span>;</div>
 <div class="line">}</div>
 </div><!-- fragment --><p><code>ThrowerController</code>, <code>BalloonBalancer</code>, and <code>ProjectileView</code> all gate this way. Use <code>IsPaused(source)</code> instead when a caller cares about one specific source (e.g. a cinematic checking only <code>PauseSource.Cinematic</code>, ignoring other pauses in flight). <code>PausedMessage</code>/<code>ResumedMessage</code> remain available for a future subscriber that needs the edge transition itself (e.g. "do X once, exactly when pausing begins") rather than a per-tick level check.</p>
-<h1><a class="anchor" id="autotoc_md824"></a>
+<h1><a class="anchor" id="autotoc_md828"></a>
 <code>TimeScaleService</code> — the only writer of <code>Time.timeScale</code></h1>
 <p>Direct <code>Time.timeScale</code> writes are <b>banned by a style-audit rule</b> (<code>timescale-writes</code>, <code>[ERROR]</code>) everywhere except <code>TimeScaleService</code>. Callers claim a value under their <code>TimeScaleSource</code> and release it when done:</p>
 <div class="fragment"><div class="line">_timeScaleService.Claim(TimeScaleSource.LevelUpPopup, 0f);   <span class="comment">// freeze while the popup shows</span></div>
 <div class="line">_timeScaleService.Release(TimeScaleSource.LevelUpPopup);     <span class="comment">// falls back to the next claim, or 1</span></div>
 </div><!-- fragment --><p>The <b>lowest active claim wins</b> (the popup's 0 beats a cinematic's slow-mo ramp) and no claims means normal speed — so restores are automatic and the "who forgot to set it back
 to 1" bug class is gone. Non-exclusive claims may exceed 1.0 (e.g. a 2× speed-up ramp after the level-complete beat), but the min-wins rule still means any freeze or slow-mo from another source overrides. <code>IRunResettable</code> clears all claims on restart.</p>
-<h2><a class="anchor" id="autotoc_md825"></a>
+<h2><a class="anchor" id="autotoc_md829"></a>
 Exclusive claims</h2>
 <p><code>ClaimExclusive(source, value)</code> takes sole ownership: <code>Apply</code> uses ONLY that source's value until <code>ReleaseExclusive</code> — the min-wins stack is suspended. Other claimants keep recording normally and resume their effect on release, so no state is lost. Designed for the level-up beat curve where the authored ramp must not be dragged slower by an overlapping <code>LastShield</code> bullet-time claim.</p>
-<h2><a class="anchor" id="autotoc_md826"></a>
+<h2><a class="anchor" id="autotoc_md830"></a>
 <code>ITimeScaleClaims</code> — testable write surface</h2>
 <p>Plain-C# controllers (e.g. <code>LevelController</code>) depend on the <code>ITimeScaleClaims</code> interface rather than on <code>TimeScaleService</code> directly. An edit-mode test fixture can substitute it to verify claim/release calls without warping the editor's own clock.</p>
 <p>Current claimants:</p><ul>
@@ -194,6 +194,7 @@ Exclusive claims</h2>
 <li><b><code>PierceDischargeEffects</code></b> (<code>TimeScaleSource.PierceDischarge</code>, <code>Projectile/Controller/</code>) — a brief real-time dip when a piercing shot discharges the toughs it plowed through. A fresh discharge cancels and restarts the dip rather than layering; see <code><a class="el" href="Projectile_2README_8md.html">Projectile/README.md</a></code> § Pierce &amp; Discharge Feel.</li>
 <li><b><code>ProjectileDoomedTimeScaleController</code></b> (<code>TimeScaleSource.LastShield</code>, <code>Projectile/Controller/</code>) — bullet-time while a shot on its last shield drifts toward the wall it's doomed to die on, curve-sampled over the doomed approach's progress.</li>
 <li><b><code>BoardPopWave</code></b> (<code>TimeScaleSource.LevelTransition</code>, <code>Game/Cinematics/</code>) — slow-mo while the Ascent pop wave clears the old level's balloons band by band.</li>
+<li><b><code>HoldSpeedUpController</code></b> (<code>TimeScaleSource.HoldSpeedUp</code>, <code>Projectile/Controller/</code>) — while the projectile is in flight, holding a finger ramps timeScale up to <code>IProjectileFlightConfig.HoldSpeedUpMax</code> (default 2×); releasing or projectile death ramps back to 1×. Min-wins means any freeze or slow-mo from another source overrides the speed-up.</li>
 </ul>
 <p><code>PauseService</code> handles <em>logical</em> pause coordination (projectile, trail spawning); <code>TimeScaleService</code> handles <em>visual</em> time warping. The two are independent. </p>
 </div><!-- contents -->

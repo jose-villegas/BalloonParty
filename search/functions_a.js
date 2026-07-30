@@ -41,7 +41,7 @@ var searchData=
   ['logifpathblocked_38',['LogIfPathBlocked',['../classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a4ca8de50cf843754e2ab8211763888e3',1,'BalloonParty::Slots::Grid::SlotGrid']]],
   ['loginitialfilldiagnostics_39',['LogInitialFillDiagnostics',['../classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a70b58af6dfd59516d0858e978b789408',1,'BalloonParty::Balloon::Spawner::BalloonSpawner']]],
   ['logresolutionfailure_40',['LogResolutionFailure',['../classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerReflection.html#a7201cbbabf283eed98a9bd4be7a1b205',1,'BalloonParty::Editor::FrameDump::FrameDebuggerReflection']]],
-  ['lossforecast_41',['LossForecast',['../classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html#a496d0f7b1e871eabaaddfd0337c25989',1,'BalloonParty::Game::Health::LossForecast']]],
+  ['lossforecast_41',['LossForecast',['../classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html#a46065db2ef8fab46d3928d8b26e1958a',1,'BalloonParty::Game::Health::LossForecast']]],
   ['lowestblockingrow_42',['LowestBlockingRow',['../classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlacementResolver.html#ae501acaab9a37eff3fa6b62fb84ed172',1,'BalloonParty::Balloon::Spawner::BalloonPlacementResolver']]],
   ['lowestpriorityslot_43',['LowestPrioritySlot',['../classBalloonParty_1_1Audio_1_1VoiceLimiter.html#ada8abe178150a29df123ac1d4fb7239d',1,'BalloonParty::Audio::VoiceLimiter']]]
 ];

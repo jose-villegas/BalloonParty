@@ -71,5 +71,6 @@ var searchData=
   ['rotationid_68',['RotationId',['../classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#abf6dd8ae382cc77b3a4590c8b6a85123',1,'BalloonParty::Balloon::Type::SoapBubbleClusterVariant']]],
   ['rotationspeedid_69',['RotationSpeedId',['../classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#af767cce7db1cefdcc12254f20fad7e27',1,'BalloonParty::Balloon::Type::SoapBubbleClusterVariant']]],
   ['rowheight_70',['RowHeight',['../classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a54a9362de10a395a49b5144e4c5c3cfa',1,'BalloonParty.Editor.LevelPacingWindow.RowHeight'],['../classBalloonParty_1_1Editor_1_1ScriptSearchPopup.html#aaf3c5863ac19afeb4d8bf525afb8f84d',1,'BalloonParty.Editor.ScriptSearchPopup.RowHeight']]],
-  ['rows_71',['Rows',['../structBalloonParty_1_1Solver_1_1ShotSlotLattice.html#ad04281c462cb1fab40274841a10a5b54',1,'BalloonParty::Solver::ShotSlotLattice']]]
+  ['rowlength_71',['RowLength',['../structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html#ab0a81f174d0151d5ddeea7d55711021a',1,'BalloonParty::Shared::Messages::WaveDamageMessage']]],
+  ['rows_72',['Rows',['../structBalloonParty_1_1Solver_1_1ShotSlotLattice.html#ad04281c462cb1fab40274841a10a5b54',1,'BalloonParty::Solver::ShotSlotLattice']]]
 ];

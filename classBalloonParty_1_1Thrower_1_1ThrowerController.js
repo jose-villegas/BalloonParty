@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Thrower_1_1ThrowerController =
 [
-    [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ab5df40686f61152bf69901e453aebee8", null ],
+    [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ae5e90f893c7d48b286bf1a44049ca25d", null ],
     [ "ClearPredictionTrace", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ac497d1607399c4a0644aa0ffd0f66c71", null ],
     [ "Dispose", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ae6a7bc74adb625d310dbf2894b1bb2c5", null ],
     [ "Fire", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#acf7c3023e29ab76fd5380d26a3896b72", null ],
@@ -27,6 +27,7 @@ var classBalloonParty_1_1Thrower_1_1ThrowerController =
     [ "_flightConfig", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a45e9a2b0c6804ebf3610cc65094ed183", null ],
     [ "_forceDestroySubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ad6da9334a5814682dd451ee60c345f40", null ],
     [ "_gameOverSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a80b7fd3528b065366b32c4b2156675c1", null ],
+    [ "_holdSpeedUp", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a33092581aa9c5ced962a161c8cc8f782", null ],
     [ "_isMovable", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a747e442e9df1eff3aa72c5508d422be6", null ],
     [ "_levelProgress", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a0fb662c810bbc24368194717d48b5ab9", null ],
     [ "_levelTransitionCompletedSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a33ae1dfafe4445e58c45e48a809559bb", null ],

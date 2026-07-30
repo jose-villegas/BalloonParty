@@ -1,5 +1,5 @@
 <map id="BalloonParty.UI.Health.HeartTrailController" name="BalloonParty.UI.Health.HeartTrailController">
-<area shape="rect" id="Node000001" title="Flies a heart trail from the health UI to a ready overflow balloon on OverflowHeartRequestedMessage,..." alt="" coords="5,79,212,119"/>
+<area shape="rect" id="Node000001" title="Spawns one heart trail per heart lost when a WaveDamageMessage arrives." alt="" coords="5,79,212,119"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="9,5,94,31"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="70,40,97,77,93,80,66,43"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="118,5,217,31"/>

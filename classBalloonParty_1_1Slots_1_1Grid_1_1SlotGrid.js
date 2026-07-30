@@ -9,6 +9,7 @@ var classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid =
     [ "BottomEmptySlotPerColumn", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a0799e8069476ccfa60f604e2d3837e8e", null ],
     [ "ComputePath", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#abd4d859d34f26dddcab1fd3e0b0d3703", null ],
     [ "ComputePath", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a71d082896386d6d222c024504ec98845", null ],
+    [ "CountEmpty", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a59c232c7fea34f928bc6af22ffd311ae", null ],
     [ "GetNeighbors", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a3c0e4ff80fe2d52fc25365dc3f8a6115", null ],
     [ "GetNeighbors", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a70f21918e2b35c41446ebfb175fa5ed8", null ],
     [ "InBounds", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#af126388d799e6b65bfb39193aad5febd", null ],

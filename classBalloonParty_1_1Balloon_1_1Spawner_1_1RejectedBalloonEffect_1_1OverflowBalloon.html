@@ -117,8 +117,8 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBal
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a76ba075666ad0ff2f4cfdfc5bdd3291f" id="r_a76ba075666ad0ff2f4cfdfc5bdd3291f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a76ba075666ad0ff2f4cfdfc5bdd3291f">OverflowBalloon</a> (string poolKey, <a class="el" href="classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html">BalloonView</a> view, <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a> model, int column, int id, float appearDelay)</td></tr>
-<tr class="separator:a76ba075666ad0ff2f4cfdfc5bdd3291f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a647b32e92476451521820abe8c9f875b" id="r_a647b32e92476451521820abe8c9f875b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a647b32e92476451521820abe8c9f875b">OverflowBalloon</a> (string poolKey, <a class="el" href="classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html">BalloonView</a> view, <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a> model, int column, int id, float appearDelay, int doomedLineIndex=-1)</td></tr>
+<tr class="separator:a647b32e92476451521820abe8c9f875b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -128,6 +128,8 @@ Properties</h2></td></tr>
 <tr class="separator:a7755870de7534a949d1b8b8bf8a093af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e3a75f1c9ee56bada2b077572bf16e4" id="r_a4e3a75f1c9ee56bada2b077572bf16e4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e3a75f1c9ee56bada2b077572bf16e4">Column</a><code> [get]</code></td></tr>
 <tr class="separator:a4e3a75f1c9ee56bada2b077572bf16e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12bda41ebed2f861bddfdc858e419330" id="r_a12bda41ebed2f861bddfdc858e419330"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a12bda41ebed2f861bddfdc858e419330">DoomedLineIndex</a><code> [get]</code></td></tr>
+<tr class="separator:a12bda41ebed2f861bddfdc858e419330"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e659587f73b44fb220f4a4998e5d54c" id="r_a0e659587f73b44fb220f4a4998e5d54c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e659587f73b44fb220f4a4998e5d54c">Id</a><code> [get]</code></td></tr>
 <tr class="separator:a0e659587f73b44fb220f4a4998e5d54c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0ac821bf5cc02af902e0feb3103ebce" id="r_ac0ac821bf5cc02af902e0feb3103ebce"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac0ac821bf5cc02af902e0feb3103ebce">Launched</a><code> [get, set]</code></td></tr>
@@ -142,8 +144,8 @@ Properties</h2></td></tr>
 <tr class="separator:a94823976f4d5667926cae9265c710d28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a76ba075666ad0ff2f4cfdfc5bdd3291f" name="a76ba075666ad0ff2f4cfdfc5bdd3291f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a76ba075666ad0ff2f4cfdfc5bdd3291f">&#9670;&#160;</a></span>OverflowBalloon()</h2>
+<a id="a647b32e92476451521820abe8c9f875b" name="a647b32e92476451521820abe8c9f875b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a647b32e92476451521820abe8c9f875b">&#9670;&#160;</a></span>OverflowBalloon()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -176,7 +178,12 @@ Properties</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>appearDelay</em></span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>appearDelay</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>doomedLineIndex</em></span><span class="paramdefsep"> = </span><span class="paramdefval">-1</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -239,6 +246,28 @@ Properties</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Balloon.Spawner.RejectedBalloonEffect.OverflowBalloon.Column</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a12bda41ebed2f861bddfdc858e419330" name="a12bda41ebed2f861bddfdc858e419330"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12bda41ebed2f861bddfdc858e419330">&#9670;&#160;</a></span>DoomedLineIndex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Spawner.RejectedBalloonEffect.OverflowBalloon.DoomedLineIndex</td>
         </tr>
       </table>
   </td>

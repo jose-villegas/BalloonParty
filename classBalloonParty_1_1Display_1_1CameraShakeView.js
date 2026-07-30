@@ -4,7 +4,7 @@ var classBalloonParty_1_1Display_1_1CameraShakeView =
     [ "LateUpdate", "classBalloonParty_1_1Display_1_1CameraShakeView.html#aa7bab0f6c869738a0faaa88eb1f334e8", null ],
     [ "OnDestroy", "classBalloonParty_1_1Display_1_1CameraShakeView.html#a7b1d83b684ba3cb356e83f65b9794203", null ],
     [ "Recoil", "classBalloonParty_1_1Display_1_1CameraShakeView.html#a0dab8a72fba51dda54b70d2e456a84de", null ],
-    [ "Shake", "classBalloonParty_1_1Display_1_1CameraShakeView.html#a47ad56269659497d4bbdeec8acf3811c", null ],
+    [ "Shake", "classBalloonParty_1_1Display_1_1CameraShakeView.html#aa374b04d0801581e3417d436e6392e41", null ],
     [ "_applied", "classBalloonParty_1_1Display_1_1CameraShakeView.html#a051e09472c4b0592c1733d6a6bbdc922", null ],
     [ "_camera", "classBalloonParty_1_1Display_1_1CameraShakeView.html#af7f85b784e7379b3070a52cbb313e360", null ],
     [ "_duration", "classBalloonParty_1_1Display_1_1CameraShakeView.html#a550ad2969dbff3a6f51f21d5a4cc0fa0", null ],

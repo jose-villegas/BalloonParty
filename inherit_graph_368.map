@@ -1,5 +1,19 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,20,96,45"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Item_1_1Lightning_1_1LightningItemHandler_1_1ByDistanceComparer.html" title=" " alt="" coords="144,5,384,60"/>
-<area shape="poly" id="edge491_Node000000_Node000001" title=" " alt="" coords="110,30,144,30,144,35,110,35"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,237,117,262"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerWindow.html" title=" " alt="" coords="175,5,358,45"/>
+<area shape="poly" id="edge485_Node000000_Node000001" title=" " alt="" coords="67,222,80,185,100,140,127,95,164,55,182,43,185,48,167,59,132,98,104,143,85,187,72,224"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Editor_1_1LevelPacingWindow.html" title="Spreadsheet&#45;style view of LevelPacingConfiguration: each range is a row, parameters are columns." alt="" coords="175,69,358,109"/>
+<area shape="poly" id="edge486_Node000000_Node000002" title=" " alt="" coords="74,223,110,171,135,143,164,119,185,107,188,112,167,124,139,147,115,174,79,226"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html" title="Unified play&#45;mode preview for the project&#39;s shared render&#45;target &quot;maps&quot; — scene capture,..." alt="" coords="169,133,364,173"/>
+<area shape="poly" id="edge487_Node000000_Node000003" title=" " alt="" coords="90,226,125,204,164,183,194,171,196,176,166,188,127,209,93,231"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html" title="Editor window that builds three APK variants (release, release+cheats, development),..." alt="" coords="165,197,368,237"/>
+<area shape="poly" id="edge488_Node000000_Node000004" title=" " alt="" coords="130,236,165,231,166,236,131,241"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Editor_1_1ScriptSearchPopup.html" title=" " alt="" coords="175,261,359,301"/>
+<area shape="poly" id="edge489_Node000000_Node000005" title=" " alt="" coords="132,258,175,264,174,270,131,263"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html" title="Sweeps aim angle against the live board (see plan_shot_geometry) and reports the windows that reach a..." alt="" coords="173,325,361,365"/>
+<area shape="poly" id="edge490_Node000000_Node000006" title=" " alt="" coords="93,268,127,290,166,311,196,323,194,328,164,316,125,295,90,272"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Editor_1_1TextureAuditWindow.html" title=" " alt="" coords="169,389,364,429"/>
+<area shape="poly" id="edge491_Node000000_Node000007" title=" " alt="" coords="79,273,115,325,139,352,167,375,188,387,185,392,164,380,135,356,110,328,74,276"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Editor_1_1UnusedAssetsWindow.html" title="Lists assets that no root can reach — candidates for deletion, not verdicts." alt="" coords="169,453,365,493"/>
+<area shape="poly" id="edge492_Node000000_Node000008" title=" " alt="" coords="72,275,85,312,104,356,132,401,167,439,185,451,182,455,164,443,127,404,100,358,80,314,67,276"/>
 </map>

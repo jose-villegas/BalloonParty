@@ -185,9 +185,9 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Items are game-wide collectible effects — Bomb, Laser, Lightning, Paint, Shield, and Snipe. They can appear in different contexts throughout the game: on balloons, in UI previews, in reward screens, or anywhere else an item needs to be displayed or activated. The item system is intentionally <b>context-independent</b> — it knows how to display and activate items, but does not know or care what is hosting them.</p>
-<h1><a class="anchor" id="autotoc_md218"></a>
+<h1><a class="anchor" id="autotoc_md222"></a>
 Contents</h1>
-<h2><a class="anchor" id="autotoc_md219"></a>
+<h2><a class="anchor" id="autotoc_md223"></a>
 Display</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -215,7 +215,7 @@ Display</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>BalloonOverlapQuery</code>   </td><td class="markdownTableBodyNone">Plain C# — shared physics setup for AoE items (bomb, laser): a balloon-layer <code>ContactFilter2D</code> plus <code>TryResolveBalloon()</code> that maps a hit collider to a live balloon model, skipping recycled views and the popped balloon itself   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md220"></a>
+<h2><a class="anchor" id="autotoc_md224"></a>
 Assignment</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -223,7 +223,7 @@ Assignment</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ItemAssigner</code>   </td><td class="markdownTableBodyNone"><code>IStartable</code> — subscribes to <code>ItemCheckMessage</code>. On the initial board fill (<code>IsInitialSpawn</code>) it rolls <code>InitialItemCountWeights</code>; on a cadence turn (<code>TurnCount % ItemCadence == 0</code>) it rolls <code>ItemCountWeights</code>. Each is an <code>AnimationCurve</code> weighted distribution (X = item count 0,1,2…, Y = weight) sampled fresh <b>per turn</b> via <code>SampleCount</code>, so the count is a random draw, not a per-level constant. It then grants that many items across distinct newly-spawned <code>IHasWriteableItemSlot</code> balloons (capped by how many are eligible), re-picking a weighted type per grant and tracking the running per-type count so <code>MaximumAllowed</code> holds within the batch. Balloons without <code>IHasWriteableItemSlot</code> (e.g. <code>ToughBalloonModel</code>) or already holding an item are excluded. Cap counting pattern-matches grid actors on the same <code>IHasItemSlot</code> capability eligibility uses — counting a concrete model type would silently break the cap   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md221"></a>
+<h2><a class="anchor" id="autotoc_md225"></a>
 Activation</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -257,7 +257,7 @@ Activation</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Paint/PaintBlobRenderer</code>   </td><td class="markdownTableBodyNone">MonoBehaviour on each blob child — assigns a random <code>_TimeOffset</code> to the PaintBlob shader via <code>MaterialPropertyBlock</code> so each blob's animation phase differs. GPU instancing is disabled on <code>PaintBlob</code> and <code>PaintFlyingBlob</code> materials because <code>_TimeOffset</code> is set per-instance via MPB (see <code>Assets/Shaders/BalloonParty/README.md</code>)   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md222"></a>
+<h2><a class="anchor" id="autotoc_md226"></a>
 Effects</h2>
 <p>A config-free, Physics2D-free selection layer (<code>Effects/</code>) shared between the live game and the shot solver (<a class="el" href="plan_shot_solver_accuracy.html">Shot Solver Accuracy</a> Phase C), so an item's kill/paint/chain geometry is written once instead of twice.</p>
 <table class="markdownTable">
@@ -275,14 +275,14 @@ Effects</h2>
 <td class="markdownTableBodyNone"><code>Bomb/BombBlast</code>, <code>Laser/LaserCross</code>, <code>Lightning/LightningChain</code>, <code>Paint/PaintSpread</code>   </td><td class="markdownTableBodyNone">The pure per-item selection cores — each mirrors its live handler's own selection exactly (kill radius, cast geometry, same-colour chain walk, triangle/blob bucketing) and runs identically over either <code>IEffectBoard</code> adapter   </td></tr>
 </table>
 <p>Two adapters implement <code>IEffectBoard</code>: <code>GridEffectBoard</code> (<code>Effects/</code>) wraps a real <code>SlotGrid</code>, reading positions from <code>IndexToWorldPosition</code>/live models rather than view transforms so it stays EditMode-testable, and <code>ShotSimEffectBoard</code> (<code>Solver/</code>) wraps the shot solver's own working set. Only the sim is repointed onto the pure cores today — the live handlers listed above still run their original <code>Physics2D</code>/<code>SlotGrid</code> queries; repointing them onto <code>GridEffectBoard</code> + the shared cores is a live behaviour change gated behind PlayMode equivalence tests (<code>BombActivationPlayModeTests</code> et al.) per the plan, so <code>GridEffectBoard</code> currently backs only the cross-board mirror-fidelity tests (<code>EffectBoardMirrorTests</code>), not gameplay.</p>
-<h1><a class="anchor" id="autotoc_md223"></a>
+<h1><a class="anchor" id="autotoc_md227"></a>
 Architecture</h1>
 <p>The item display system is a self-contained, DI-free unit: an <code>ItemDisplayService</code> MonoBehaviour on the host's item container, plus pooled <code>ItemVisualView</code> prefabs (one per <code>ItemType</code>, referenced from <code>ItemSettings.VisualPrefab</code>). The host owns the wiring — it holds a serialized reference to the service and passes every dependency (configs, palette, pool manager) through <code>Bind()</code>, so pooled hosts need no per-instance scope.</p>
-<h2><a class="anchor" id="autotoc_md224"></a>
+<h2><a class="anchor" id="autotoc_md228"></a>
 Design principle: items are not balloons</h2>
 <p>The <code>Item/</code> folder's display side has no dependency on <code>Balloon/</code>. <code>ItemDisplayService.Bind()</code> accepts individual reactive properties — it does not know whether the caller is a balloon, a UI panel, or a reward screen. Future contexts (shop previews, inventory, tutorial highlights) can host items by adding an <code>ItemDisplayService</code> to their hierarchy and calling <code>Bind()</code> with appropriate reactive properties.</p>
 <p><code>IBalloonItem</code> exists only as a thin adapter for the balloon-hosted activation flow. It is the balloon system's way of interacting with items, not the item system's knowledge of balloons.</p>
-<h2><a class="anchor" id="autotoc_md225"></a>
+<h2><a class="anchor" id="autotoc_md229"></a>
 Display flow</h2>
 <ol type="1">
 <li>A host (e.g. <code>BalloonView.Bind()</code>) calls <code>ItemDisplayService.Bind(item, colorName, slotIndex, …)</code> with the reactive properties plus the config/palette/pool dependencies and sorting inputs</li>
@@ -296,7 +296,7 @@ Display flow</h2>
 </li>
 <li>A host that has renderers which must sit <em>above</em> the item passes them nothing directly — instead it reads <code>ItemDisplayService.ActiveItemSortingCount</code> (the item's slot span, <code>0</code> when none) and re-layers its own renderers on top. Because the host can't otherwise know when the item's footprint changes, <code>Bind()</code> takes an optional <code>onSortingFootprintChanged</code> callback that fires whenever an item is added/removed; the host re-applies its above-item sorting from there (and on slot moves via its own subscription). <code>BalloonView._aboveItemRenderers</code> is the first user</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md226"></a>
+<h2><a class="anchor" id="autotoc_md230"></a>
 Activation flow</h2>
 <ol type="1">
 <li><code>ProjectileView.OnTriggerEnter2D</code> hands the hit to <code>ProjectileHitResolver</code>, which evaluates the outcome (always <code>Damage = 1</code>) and dispatches an <code>ActorHitMessage</code> through <code>IHitDispatcher</code> (<code>Game/HitPipeline</code>) — score stage first, then the owning <code>BalloonController</code>, then the broadcast</li>
@@ -305,7 +305,7 @@ Activation flow</h2>
 <li>The handler runs its effect (may be async, e.g. lightning), dispatching an <code>ActorHitMessage</code> for each secondary balloon with <code>Damage = settings.Damage</code></li>
 <li><code>ItemActivator</code> publishes <code>ItemActivatedMessage</code> — <code>BalloonController</code> receives it and returns the item balloon to pool</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md227"></a>
+<h1><a class="anchor" id="autotoc_md231"></a>
 Item types</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -323,14 +323,14 @@ Item types</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><b>Snipe</b>   </td><td class="markdownTableBodyNone">Snipe icon, tinted to host color   </td><td class="markdownTableBodyNone">Arms the active projectile as a piercing lance on any pop of its host — a direct projectile hit or an AoE/item pop (bomb, laser, lightning, paint) arms it identically; there's no direct-hit requirement. The lance plows through tough/unbreakable balloons instead of popping them, recording each; shortly after the last one, the shot slows once to base speed and shatters the whole recorded line at once. Also grants a single non-stacking speed boost while the lance holds (multiplier via <code>SnipeSettings</code>). Picking up another Snipe while the lance is already out isn't wasted — it's saved and fires as a fresh lance the moment the current one shatters its line (a rainbow holder still shatters the plowed toughs but converts nearby paintable balloons to rainbow, in a radius scaled by how many toughs it ate)   </td><td class="markdownTableBodyNone">N/A — no damage dealt   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md228"></a>
+<h1><a class="anchor" id="autotoc_md232"></a>
 Damage</h1>
 <p>Each damaging item reads <code>ItemSettings.Damage</code> (configured per item in <code>ItemConfiguration</code>) and passes it inside the <code>DamageContext</code> of the dispatched <code>ActorHitMessage</code> (along with <code>DamageFlags</code> and the source color). The outcome is pre-computed by <code>ActorHitMessage.From</code>, which calls <code>EvaluateHit(context)</code> on the hit actor — <code>BalloonController</code> reads <code>msg.Outcome</code> and routes accordingly. Setting <code>Damage = 1</code> (the default) reproduces normal one-hit behaviour. Setting it higher on Bomb, for example, allows a single blast to pop tough balloons that would otherwise survive.</p>
 <p>Non-damaging items (Paint, Shield, Snipe) do not use the <code>Damage</code> field — the <code>ItemSettingsDrawer</code> hides it for those types.</p>
 <blockquote class="doxtable">
 <p><b>Unbreakable balloons</b> — <code>UnbreakableBalloonModel</code> returns <code>Deflect</code> from <code>EvaluateHit</code> regardless of damage. Only <code>DamageFlags.Piercing</code> (e.g. the bomb's direct-neighbor blast core) forces a <code>Pop</code>. </p>
 </blockquote>
-<h1><a class="anchor" id="autotoc_md229"></a>
+<h1><a class="anchor" id="autotoc_md233"></a>
 Interactions</h1>
 <ul>
 <li><b>Any host view</b> — calls <code>ItemDisplayService.Bind()</code>/<code>Unbind()</code> to connect/disconnect item display</li>
@@ -344,7 +344,7 @@ Interactions</h1>
 <li><b>ColorableRenderer</b> — <code>PaintSplashView</code> uses <code>ColorableRenderer</code> blobs so they participate in the standard color pipeline</li>
 <li><b>SceneLightFieldService</b> — Bomb, Laser, and Lightning register temporary lights (see below)</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md230"></a>
+<h1><a class="anchor" id="autotoc_md234"></a>
 Lights Cast by Items</h1>
 <p>Damaging items cast local lights into the scene light field (<a class="el" href="arch_light_field.html">Scene Light Field (2D Multi-Light)</a>) for the duration of their activation effect. Each handler creates a reactive <code><a class="el" href="UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d">Light</a></code> model, registers it with <code>SceneLightFieldService.RegisterLight(Light) → IDisposable</code>, and disposes the registration when the effect expires (async timeout). The field re-renders only when a registered light changes — idle items add no GPU cost.</p>
 <table class="markdownTable">

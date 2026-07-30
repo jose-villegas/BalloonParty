@@ -1,5 +1,5 @@
 <map id="BalloonParty.Game.Cinematics.HeartDrainCinematic" name="BalloonParty.Game.Cinematics.HeartDrainCinematic">
-<area shape="rect" id="Node000001" title="Begins on the first heart trail launch, follows the heart about to land in slow&#45;mo,..." alt="" coords="5,167,232,207"/>
+<area shape="rect" id="Node000001" title="Begins on the first wave&#45;damage event, follows the heart trail in slow&#45;mo, and ends when the pile dra..." alt="" coords="5,167,232,207"/>
 <area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicProducer.html" title="Shared shape for the producers that drive a CameraRigCinematic: builds the runner from BuildConfig on..." alt="" coords="5,79,232,119"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,133,121,166,116,166,116,133"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="19,5,104,31"/>

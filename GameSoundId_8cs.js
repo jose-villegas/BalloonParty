@@ -50,6 +50,7 @@ var GameSoundId_8cs =
       [ "BalloonParty.Audio.GameSoundId.GameplayLoopDay", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a12177cdf486aa4773a0d694c89017851", null ],
       [ "BalloonParty.Audio.GameSoundId.GameplayLoopNight", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13aa22058b0091b7178ecace9e043f1286a", null ],
       [ "BalloonParty.Audio.GameSoundId.BalloonPopTougher", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13ab9ff9a9da8c1a8695184b580506db156", null ],
-      [ "BalloonParty.Audio.GameSoundId.BalloonDeflectTougher", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a6169cd5bb097937f1d80bf8ebbe6f54c", null ]
+      [ "BalloonParty.Audio.GameSoundId.BalloonDeflectTougher", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a6169cd5bb097937f1d80bf8ebbe6f54c", null ],
+      [ "BalloonParty.Audio.GameSoundId.Strikethrough", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a926a51baad949d12035107e5d06e2fdb", null ]
     ] ]
 ];

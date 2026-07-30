@@ -37,10 +37,11 @@ var namespaceBalloonParty_1_1Shared_1_1Messages =
     [ "ShieldGainedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage" ],
     [ "ShieldLostMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage" ],
     [ "SpawnBalloonLineMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBalloonLineMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBalloonLineMessage" ],
-    [ "SpawnBlockedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBlockedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBlockedMessage" ],
     [ "SpeckSpawnRequestMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage" ],
     [ "SpeedTapMintedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage" ],
     [ "StreakChangedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage" ],
+    [ "StrikethroughArrivedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage" ],
     [ "TransformCapturedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage" ],
-    [ "WallHitMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage" ]
+    [ "WallHitMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage" ],
+    [ "WaveDamageMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage" ]
 ];

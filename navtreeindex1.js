@@ -1,5 +1,8 @@
 var NAVTREEINDEX1 =
 {
+"ICinematicState_8cs.html":[7,0,14,5,6],
+"ICinematicsSettings_8cs.html":[7,0,3,2,4],
+"IClusterViewSettings_8cs.html":[7,0,15,0,1,3],
 "IClusterableSlotActor_8cs.html":[7,0,15,0,1,2],
 "IColorStreak_8cs.html":[7,0,7,5,2],
 "ICounterDisplay_8cs.html":[7,0,18,0,0],
@@ -40,8 +43,7 @@ var NAVTREEINDEX1 =
 "IPaintable_8cs.html":[7,0,15,1,11],
 "IPaletteColorMasked_8cs.html":[7,0,3,8,3],
 "IPassThrough_8cs.html":[7,0,15,1,12],
-"IPendingHealthCharges_8cs.html":[7,0,7,2,2],
-"IPlayerHealth_8cs.html":[7,0,7,2,3],
+"IPlayerHealth_8cs.html":[7,0,7,2,2],
 "IPoolable_8cs.html":[7,0,14,9,4],
 "IPreBalanceRelocatable_8cs.html":[7,0,15,0,9],
 "IPredictionTraceConfig_8cs.html":[7,0,14,17],
@@ -166,7 +168,7 @@ var NAVTREEINDEX1 =
 "LightningItemHandler_8cs.html":[7,0,8,3,4],
 "ListExtensions_8cs.html":[7,0,14,4,11],
 "Log_8cs.html":[7,0,14,2,3],
-"LossForecast_8cs.html":[7,0,7,2,4],
+"LossForecast_8cs.html":[7,0,7,2,3],
 "MeshHelper_8cs.html":[7,0,14,10,7],
 "MoveWeightEvaluator_8cs.html":[7,0,15,2,3],
 "MusicSoundRouter_8cs.html":[7,0,0,2,3],
@@ -217,11 +219,11 @@ var NAVTREEINDEX1 =
 "PauseSource_8cs.html":[7,0,14,8,3],
 "PausedMessage_8cs.html":[7,0,14,8,1],
 "PickContext_8cs.html":[7,0,0,12],
-"PierceDischargeEffects_8cs.html":[7,0,12,1,1],
+"PierceDischargeEffects_8cs.html":[7,0,12,1,2],
 "PierceDischargedMessage_8cs.html":[7,0,14,7,20],
 "PierceEndedEndCondition_8cs.html":[7,0,12,0,1],
-"PlainCounterDisplay_8cs.html":[7,0,18,11],
-"PlayerHealthController_8cs.html":[7,0,7,2,5],
+"PlainCounterDisplay_8cs.html":[7,0,18,12],
+"PlayerHealthController_8cs.html":[7,0,7,2,4],
 "PointFocus_8cs.html":[7,0,7,0,16],
 "PoolChannel_8cs.html":[7,0,14,9,9],
 "PoolManagerExtensions_8cs.html":[7,0,14,4,13],
@@ -246,8 +248,6 @@ var NAVTREEINDEX1 =
 "ProjectileDestroyedMessage_8cs.html":[7,0,14,7,24],
 "ProjectileDoomedEndedMessage_8cs.html":[7,0,14,7,25],
 "ProjectileDoomedStartedMessage_8cs.html":[7,0,14,7,26],
-"ProjectileDoomedTimeScaleController_8cs.html":[7,0,12,1,2],
-"ProjectileFacingRotator_8cs.html":[7,0,8,26],
-"ProjectileFacingSource_8cs.html":[7,0,12,5],
-"ProjectileFiredMessage_8cs.html":[7,0,14,7,27]
+"ProjectileDoomedTimeScaleController_8cs.html":[7,0,12,1,3],
+"ProjectileFacingRotator_8cs.html":[7,0,8,26]
 };

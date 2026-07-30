@@ -359,10 +359,11 @@ var annotated_dup =
         [ "Health", "namespaceBalloonParty_1_1Game_1_1Health.html", [
           [ "HeartTrailTracker", "classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html", "classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker" ],
           [ "ILossForecast", "interfaceBalloonParty_1_1Game_1_1Health_1_1ILossForecast.html", "interfaceBalloonParty_1_1Game_1_1Health_1_1ILossForecast" ],
-          [ "IPendingHealthCharges", "interfaceBalloonParty_1_1Game_1_1Health_1_1IPendingHealthCharges.html", "interfaceBalloonParty_1_1Game_1_1Health_1_1IPendingHealthCharges" ],
           [ "IPlayerHealth", "interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html", "interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth" ],
           [ "LossForecast", "classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html", "classBalloonParty_1_1Game_1_1Health_1_1LossForecast" ],
-          [ "PlayerHealthController", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController" ]
+          [ "PlayerHealthController", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController" ],
+          [ "WaveDeficit", "structBalloonParty_1_1Game_1_1Health_1_1WaveDeficit.html", "structBalloonParty_1_1Game_1_1Health_1_1WaveDeficit" ],
+          [ "WaveDeficitCalculator", "classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html", "classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator" ]
         ] ],
         [ "Level", "namespaceBalloonParty_1_1Game_1_1Level.html", [
           [ "IActiveLevelParameters", "interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html", "interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters" ],
@@ -512,6 +513,7 @@ var annotated_dup =
         ] ],
         [ "Controller", "namespaceBalloonParty_1_1Projectile_1_1Controller.html", [
           [ "ActiveProjectilePierce", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce" ],
+          [ "HoldSpeedUpController", "classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController" ],
           [ "IActiveProjectilePierce", "interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html", "interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce" ],
           [ "PierceDischargeEffects", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects" ],
           [ "ProjectileDoomedTimeScaleController", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController" ],
@@ -656,12 +658,13 @@ var annotated_dup =
           [ "ShieldGainedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage" ],
           [ "ShieldLostMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage" ],
           [ "SpawnBalloonLineMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBalloonLineMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBalloonLineMessage" ],
-          [ "SpawnBlockedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBlockedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBlockedMessage" ],
           [ "SpeckSpawnRequestMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage" ],
           [ "SpeedTapMintedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage" ],
           [ "StreakChangedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage" ],
+          [ "StrikethroughArrivedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage" ],
           [ "TransformCapturedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage" ],
-          [ "WallHitMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage" ]
+          [ "WallHitMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage" ],
+          [ "WaveDamageMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage" ]
         ] ],
         [ "Pause", "namespaceBalloonParty_1_1Shared_1_1Pause.html", [
           [ "ITimeScaleClaims", "interfaceBalloonParty_1_1Shared_1_1Pause_1_1ITimeScaleClaims.html", "interfaceBalloonParty_1_1Shared_1_1Pause_1_1ITimeScaleClaims" ],
@@ -867,6 +870,7 @@ var annotated_dup =
         ] ],
         [ "Danger", "namespaceBalloonParty_1_1UI_1_1Danger.html", [
           [ "DangerGradientView", "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html", "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView" ],
+          [ "DangerHeartLossView", "classBalloonParty_1_1UI_1_1Danger_1_1DangerHeartLossView.html", "classBalloonParty_1_1UI_1_1Danger_1_1DangerHeartLossView" ],
           [ "DangerUILifetimeScope", "classBalloonParty_1_1UI_1_1Danger_1_1DangerUILifetimeScope.html", "classBalloonParty_1_1UI_1_1Danger_1_1DangerUILifetimeScope" ]
         ] ],
         [ "GameOver", "namespaceBalloonParty_1_1UI_1_1GameOver.html", [
@@ -897,6 +901,9 @@ var annotated_dup =
           [ "ShieldCounterLabel", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterLabel.html", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterLabel" ],
           [ "ShieldTrailController", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldTrailController.html", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldTrailController" ],
           [ "ShieldUILifetimeScope", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldUILifetimeScope.html", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldUILifetimeScope" ]
+        ] ],
+        [ "Tooltip", "namespaceBalloonParty_1_1UI_1_1Tooltip.html", [
+          [ "HoldSpeedUpTooltip", "classBalloonParty_1_1UI_1_1Tooltip_1_1HoldSpeedUpTooltip.html", "classBalloonParty_1_1UI_1_1Tooltip_1_1HoldSpeedUpTooltip" ]
         ] ],
         [ "AnimatorGameEntryGate", "classBalloonParty_1_1UI_1_1AnimatorGameEntryGate.html", "classBalloonParty_1_1UI_1_1AnimatorGameEntryGate" ],
         [ "CanvasCameraBinder", "classBalloonParty_1_1UI_1_1CanvasCameraBinder.html", "classBalloonParty_1_1UI_1_1CanvasCameraBinder" ],

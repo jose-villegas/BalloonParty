@@ -121,16 +121,20 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1ILossForecast.html">ILossForecast</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the run's loss is already a certainty, ahead of the loss actually committing.  <a href="interfaceBalloonParty_1_1Game_1_1Health_1_1ILossForecast.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPendingHealthCharges.html">IPendingHealthCharges</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hit-point charges already committed but not yet applied — nothing cancels one except a run reset.  <a href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPendingHealthCharges.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html">IPlayerHealth</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read-only view of the player's hit-point pool.  <a href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html">LossForecast</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Under the line-based damage model, HP drains immediately at wave resolution — there are no pending charges.  <a href="classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html">PlayerHealthController</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The player's hit-point pool — the only loss trigger under the spawn-saturation model.  <a href="classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Game_1_1Health_1_1WaveDeficit.html">WaveDeficit</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result of the per-wave deficit calculation: how many hearts the wave costs and how many slots go unspawned.  <a href="structBalloonParty_1_1Game_1_1Health_1_1WaveDeficit.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html">WaveDeficitCalculator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pure, stateless calculator for the line-based damage formula.  <a href="classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->

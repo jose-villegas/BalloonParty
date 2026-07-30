@@ -1,5 +1,10 @@
 var NAVTREEINDEX3 =
 {
+"arch_bush_system.html#autotoc_md58":[2,15,0,0],
+"arch_bush_system.html#autotoc_md59":[2,15,0,1],
+"arch_cinematics_architecture.html":[2,7],
+"arch_cinematics_architecture.html#autotoc_md60":[2,7,0],
+"arch_cinematics_architecture.html#autotoc_md61":[2,7,0,0],
 "arch_cinematics_architecture.html#autotoc_md62":[2,7,0,1],
 "arch_item_activation.html":[2,11],
 "arch_item_activation.html#autotoc_md63":[2,11,0],
@@ -244,10 +249,5 @@ var NAVTREEINDEX3 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#aadc9133319cd00401ec1c1ddcf26937e":[6,0,0,0,0,4,1],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#ab52d053a188d1d8604ad3206984407ac":[5,0,0,0,0,4,0],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#ab52d053a188d1d8604ad3206984407ac":[6,0,0,0,0,4,0],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#abb075c1fe08798ba53dd91348973239d":[5,0,0,0,0,4,8],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#abb075c1fe08798ba53dd91348973239d":[6,0,0,0,0,4,8],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#ad2f837c6a8e6607b8e91534b11b58668":[5,0,0,0,0,4,11],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#ad2f837c6a8e6607b8e91534b11b58668":[6,0,0,0,0,4,11],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#ad5299bbf9ef515a4d71f42fee7449e16":[5,0,0,0,0,4,2],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#ad5299bbf9ef515a4d71f42fee7449e16":[6,0,0,0,0,4,2]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#abb075c1fe08798ba53dd91348973239d":[5,0,0,0,0,4,8]
 };

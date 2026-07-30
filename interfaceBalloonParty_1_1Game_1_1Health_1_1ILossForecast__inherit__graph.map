@@ -1,5 +1,5 @@
 <map id="BalloonParty.Game.Health.ILossForecast" name="BalloonParty.Game.Health.ILossForecast">
 <area shape="rect" id="Node000001" title="Whether the run&#39;s loss is already a certainty, ahead of the loss actually committing." alt="" coords="5,5,201,45"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html" title=" " alt="" coords="5,93,201,133"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html" title="Under the line&#45;based damage model, HP drains immediately at wave resolution — there are no pending ch..." alt="" coords="5,93,201,133"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,59,106,93,101,93,101,59"/>
 </map>

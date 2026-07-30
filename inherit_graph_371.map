@@ -1,23 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,301,120,326"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Game_1_1AppLifetimeScope.html" title="The persistent app root: the single VContainer scope that lives for the whole session (DontDestroyOnL..." alt="" coords="175,5,403,45"/>
-<area shape="poly" id="edge495_Node000000_Node000001" title=" " alt="" coords="64,287,73,237,91,175,121,111,142,81,166,55,184,43,187,48,170,59,146,84,126,113,96,177,79,239,70,287"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1GameLifetimeScope.html" title=" " alt="" coords="168,69,411,109"/>
-<area shape="poly" id="edge496_Node000000_Node000002" title=" " alt="" coords="68,286,81,249,101,204,129,158,166,119,185,107,188,112,170,123,133,161,106,206,86,251,73,288"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Game_1_1LaunchLifetimeScope.html" title=" " alt="" coords="192,133,387,173"/>
-<area shape="poly" id="edge497_Node000000_Node000003" title=" " alt="" coords="75,287,112,234,137,207,167,183,191,171,193,175,169,188,141,210,116,238,80,290"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Thrower_1_1ThrowerLifetimeScope.html" title=" " alt="" coords="182,197,397,237"/>
-<area shape="poly" id="edge498_Node000000_Node000004" title=" " alt="" coords="91,290,126,268,167,247,200,235,201,240,169,252,129,272,94,295"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1UI_1_1Danger_1_1DangerUILifetimeScope.html" title="Child scope for the danger early&#45;warning UI; binds every DangerGradientView to the parent scope&#39;s dan..." alt="" coords="179,261,400,301"/>
-<area shape="poly" id="edge499_Node000000_Node000005" title=" " alt="" coords="133,301,178,294,179,300,134,306"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1UI_1_1GameOver_1_1GameOverLifetimeScope.html" title=" " alt="" coords="191,325,388,365"/>
-<area shape="poly" id="edge500_Node000000_Node000006" title=" " alt="" coords="134,321,191,329,190,334,134,326"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1UI_1_1Health_1_1HealthUILifetimeScope.html" title="Child scope for the health UI; binds HealthCounterLabel to live HP and drives HeartTrailController." alt="" coords="182,389,397,429"/>
-<area shape="poly" id="edge501_Node000000_Node000007" title=" " alt="" coords="94,332,129,354,169,375,201,387,200,392,167,380,126,359,91,336"/>
-<area shape="rect" id="Node000008" href="$classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpLifetimeScope.html" title=" " alt="" coords="199,453,380,493"/>
-<area shape="poly" id="edge502_Node000000_Node000008" title=" " alt="" coords="80,337,116,389,141,416,169,439,199,454,197,459,167,444,137,420,112,392,75,340"/>
-<area shape="rect" id="Node000009" href="$classBalloonParty_1_1UI_1_1Score_1_1ScoreUILifetimeScope.html" title=" " alt="" coords="189,517,389,557"/>
-<area shape="poly" id="edge503_Node000000_Node000009" title=" " alt="" coords="73,338,86,376,106,420,133,465,170,503,191,516,188,521,166,507,129,469,101,423,81,378,68,340"/>
-<area shape="rect" id="Node000010" href="$classBalloonParty_1_1UI_1_1Shields_1_1ShieldUILifetimeScope.html" title=" " alt="" coords="202,581,377,621"/>
-<area shape="poly" id="edge504_Node000000_Node000010" title=" " alt="" coords="70,339,79,388,96,450,126,513,146,542,170,567,203,587,200,591,166,571,142,546,121,516,91,452,73,389,64,340"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,20,96,45"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Item_1_1Lightning_1_1LightningItemHandler_1_1ByDistanceComparer.html" title=" " alt="" coords="144,5,384,60"/>
+<area shape="poly" id="edge495_Node000000_Node000001" title=" " alt="" coords="110,30,144,30,144,35,110,35"/>
 </map>

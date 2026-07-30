@@ -118,7 +118,7 @@ $(function(){initNavTree('classBalloonParty_1_1UI_1_1Health_1_1HeartTrailControl
 </div><!--header-->
 <div class="contents">
 
-<p>Flies a heart trail from the health <a class="el" href="namespaceBalloonParty_1_1UI.html">UI</a> to a ready overflow balloon on <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html" title="RequestId identifies which balloon to pop when the trail lands (see RejectedBalloonEffect....">OverflowHeartRequestedMessage</a>, popping it on arrival via <a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a8295b17499b44614a6e5619a13a7158f" title="Pops the overflow balloon matching a landed heart trail; no-op if it&#39;s already gone.">RejectedBalloonEffect.OnHeartArrived</a>.  
+<p>Spawns one heart trail per heart lost when a <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html" title="Published once per spawn wave when the line-based deficit causes heart loss.">WaveDamageMessage</a> arrives.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.UI.Health.HeartTrailController:</div>
@@ -144,20 +144,24 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a56c8ccd4a1ff423e61655c25299dbc18" id="r_a56c8ccd4a1ff423e61655c25299dbc18"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a56c8ccd4a1ff423e61655c25299dbc18">HeartTrailController</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html">IOverflowSettings</a> settings, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html">OverflowHeartRequestedMessage</a> &gt; heartRequestedSubscriber, <a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html">PoolManager</a> poolManager, <a class="el" href="classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html">FlyingTrail</a> prefab, <a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointRegistry.html">TrailEndpointRegistry</a> endpoints, <a class="el" href="classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html">HeartTrailTracker</a> tracker, <a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html">RejectedBalloonEffect</a> overflow)</td></tr>
-<tr class="separator:a56c8ccd4a1ff423e61655c25299dbc18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a2f085e74f38da2da863f9a0d2216d9" id="r_a5a2f085e74f38da2da863f9a0d2216d9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5a2f085e74f38da2da863f9a0d2216d9">HeartTrailController</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html">IOverflowSettings</a> settings, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html">WaveDamageMessage</a> &gt; waveDamageSubscriber, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage.html">StrikethroughArrivedMessage</a> &gt; strikethroughPublisher, <a class="el" href="interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html">ISoundPlayer</a> soundPlayer, <a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html">PoolManager</a> poolManager, <a class="el" href="classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html">FlyingTrail</a> prefab, <a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointRegistry.html">TrailEndpointRegistry</a> endpoints, <a class="el" href="classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html">HeartTrailTracker</a> tracker, <a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, <a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html">RejectedBalloonEffect</a> overflow)</td></tr>
+<tr class="separator:a5a2f085e74f38da2da863f9a0d2216d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a83237d6567a05ca9af2c42754e814f45" id="r_a83237d6567a05ca9af2c42754e814f45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83237d6567a05ca9af2c42754e814f45">OnHeartRequested</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html">OverflowHeartRequestedMessage</a> msg)</td></tr>
-<tr class="separator:a83237d6567a05ca9af2c42754e814f45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadbb33121baffa45efa3ad5869efff7d" id="r_aadbb33121baffa45efa3ad5869efff7d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aadbb33121baffa45efa3ad5869efff7d">OnWaveDamage</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html">WaveDamageMessage</a> msg)</td></tr>
+<tr class="separator:aadbb33121baffa45efa3ad5869efff7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecb406a91684bc053c2972fd57f4941d" id="r_aecb406a91684bc053c2972fd57f4941d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aecb406a91684bc053c2972fd57f4941d">SpawnStrikethrough</a> (Vector3 from, int lineIndex, float delay)</td></tr>
+<tr class="separator:aecb406a91684bc053c2972fd57f4941d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a0cc59bab04561947f17b6b4304c42900" id="r_a0cc59bab04561947f17b6b4304c42900"><td class="memItemLeft" align="right" valign="top">readonly List&lt; Sequence &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0cc59bab04561947f17b6b4304c42900">_activeSequences</a> = new()</td></tr>
+<tr class="separator:a0cc59bab04561947f17b6b4304c42900"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad768b95856ed6697b41322177ea38619" id="r_ad768b95856ed6697b41322177ea38619"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointRegistry.html">TrailEndpointRegistry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad768b95856ed6697b41322177ea38619">_endpoints</a></td></tr>
 <tr class="separator:ad768b95856ed6697b41322177ea38619"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b8c2293eb062bcd3e23a13eef11b250" id="r_a7b8c2293eb062bcd3e23a13eef11b250"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html">OverflowHeartRequestedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7b8c2293eb062bcd3e23a13eef11b250">_heartRequestedSubscriber</a></td></tr>
-<tr class="separator:a7b8c2293eb062bcd3e23a13eef11b250"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5c819b0c305e0edea6c8b16e8a7d440" id="r_ab5c819b0c305e0edea6c8b16e8a7d440"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5c819b0c305e0edea6c8b16e8a7d440">_grid</a></td></tr>
+<tr class="separator:ab5c819b0c305e0edea6c8b16e8a7d440"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16ad6246fb8f0aa091daca7cb8873cbf" id="r_a16ad6246fb8f0aa091daca7cb8873cbf"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html">RejectedBalloonEffect</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a16ad6246fb8f0aa091daca7cb8873cbf">_overflow</a></td></tr>
 <tr class="separator:a16ad6246fb8f0aa091daca7cb8873cbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab76dd23c7c8bf07eff2713a5c381cc3d" id="r_ab76dd23c7c8bf07eff2713a5c381cc3d"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html">PoolManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab76dd23c7c8bf07eff2713a5c381cc3d">_poolManager</a></td></tr>
@@ -166,12 +170,18 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a611b5c487ef5645bbae40d3511a988d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f5b87c90ba6d53ef1f00e610bcbeea5" id="r_a9f5b87c90ba6d53ef1f00e610bcbeea5"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html">IOverflowSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9f5b87c90ba6d53ef1f00e610bcbeea5">_settings</a></td></tr>
 <tr class="separator:a9f5b87c90ba6d53ef1f00e610bcbeea5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e727be3fb6f054009dcbb62a9a5de92" id="r_a1e727be3fb6f054009dcbb62a9a5de92"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html">ISoundPlayer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e727be3fb6f054009dcbb62a9a5de92">_soundPlayer</a></td></tr>
+<tr class="separator:a1e727be3fb6f054009dcbb62a9a5de92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac175041932096817c3a8fa613fa72a68" id="r_ac175041932096817c3a8fa613fa72a68"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1TrailSpawner.html">TrailSpawner</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac175041932096817c3a8fa613fa72a68">_spawner</a></td></tr>
 <tr class="separator:ac175041932096817c3a8fa613fa72a68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af59be99a47420bb2cc2354f923467ba4" id="r_af59be99a47420bb2cc2354f923467ba4"><td class="memItemLeft" align="right" valign="top">readonly IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage.html">StrikethroughArrivedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af59be99a47420bb2cc2354f923467ba4">_strikethroughPublisher</a></td></tr>
+<tr class="separator:af59be99a47420bb2cc2354f923467ba4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5512f22c24d80e76c3329dd004ea65f" id="r_ad5512f22c24d80e76c3329dd004ea65f"><td class="memItemLeft" align="right" valign="top">IDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad5512f22c24d80e76c3329dd004ea65f">_subscription</a></td></tr>
 <tr class="separator:ad5512f22c24d80e76c3329dd004ea65f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4374b064d7cae03c6e95d039cb445f91" id="r_a4374b064d7cae03c6e95d039cb445f91"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html">HeartTrailTracker</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4374b064d7cae03c6e95d039cb445f91">_tracker</a></td></tr>
 <tr class="separator:a4374b064d7cae03c6e95d039cb445f91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a476d6f305a933bbe6fd3868dad0415cd" id="r_a476d6f305a933bbe6fd3868dad0415cd"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html">WaveDamageMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a476d6f305a933bbe6fd3868dad0415cd">_waveDamageSubscriber</a></td></tr>
+<tr class="separator:a476d6f305a933bbe6fd3868dad0415cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -179,10 +189,11 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a23c8819a19d2d234e78f8b605e29168b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Flies a heart trail from the health <a class="el" href="namespaceBalloonParty_1_1UI.html">UI</a> to a ready overflow balloon on <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html" title="RequestId identifies which balloon to pop when the trail lands (see RejectedBalloonEffect....">OverflowHeartRequestedMessage</a>, popping it on arrival via <a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a8295b17499b44614a6e5619a13a7158f" title="Pops the overflow balloon matching a landed heart trail; no-op if it&#39;s already gone.">RejectedBalloonEffect.OnHeartArrived</a>. </p>
+<div class="textblock"><p>Spawns one heart trail per heart lost when a <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html" title="Published once per spawn wave when the line-based deficit causes heart loss.">WaveDamageMessage</a> arrives. </p>
+<p>Each trail flies from the health <a class="el" href="namespaceBalloonParty_1_1UI.html">UI</a> to the doomed line, slides back and forth (strikethrough), then pops all overflow balloons in that line simultaneously. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a56c8ccd4a1ff423e61655c25299dbc18" name="a56c8ccd4a1ff423e61655c25299dbc18"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a56c8ccd4a1ff423e61655c25299dbc18">&#9670;&#160;</a></span>HeartTrailController()</h2>
+<a id="a5a2f085e74f38da2da863f9a0d2216d9" name="a5a2f085e74f38da2da863f9a0d2216d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a2f085e74f38da2da863f9a0d2216d9">&#9670;&#160;</a></span>HeartTrailController()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -198,7 +209,17 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html">OverflowHeartRequestedMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>heartRequestedSubscriber</em></span>, </td>
+          <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html">WaveDamageMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>waveDamageSubscriber</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage.html">StrikethroughArrivedMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>strikethroughPublisher</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html">ISoundPlayer</a></td>          <td class="paramname"><span class="paramname"><em>soundPlayer</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -219,6 +240,11 @@ Static Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html">HeartTrailTracker</a></td>          <td class="paramname"><span class="paramname"><em>tracker</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a></td>          <td class="paramname"><span class="paramname"><em>grid</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -253,8 +279,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a83237d6567a05ca9af2c42754e814f45" name="a83237d6567a05ca9af2c42754e814f45"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a83237d6567a05ca9af2c42754e814f45">&#9670;&#160;</a></span>OnHeartRequested()</h2>
+<a id="aadbb33121baffa45efa3ad5869efff7d" name="aadbb33121baffa45efa3ad5869efff7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadbb33121baffa45efa3ad5869efff7d">&#9670;&#160;</a></span>OnWaveDamage()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -263,10 +289,44 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void BalloonParty.UI.Health.HeartTrailController.OnHeartRequested </td>
+          <td class="memname">void BalloonParty.UI.Health.HeartTrailController.OnWaveDamage </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html">OverflowHeartRequestedMessage</a></td>          <td class="paramname"><span class="paramname"><em>msg</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html">WaveDamageMessage</a></td>          <td class="paramname"><span class="paramname"><em>msg</em></span></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aecb406a91684bc053c2972fd57f4941d" name="aecb406a91684bc053c2972fd57f4941d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aecb406a91684bc053c2972fd57f4941d">&#9670;&#160;</a></span>SpawnStrikethrough()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.Health.HeartTrailController.SpawnStrikethrough </td>
+          <td>(</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>from</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>lineIndex</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>delay</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -296,6 +356,28 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a0cc59bab04561947f17b6b4304c42900" name="a0cc59bab04561947f17b6b4304c42900"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0cc59bab04561947f17b6b4304c42900">&#9670;&#160;</a></span>_activeSequences</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;Sequence&gt; BalloonParty.UI.Health.HeartTrailController._activeSequences = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ad768b95856ed6697b41322177ea38619" name="ad768b95856ed6697b41322177ea38619"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad768b95856ed6697b41322177ea38619">&#9670;&#160;</a></span>_endpoints</h2>
 
@@ -318,8 +400,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a7b8c2293eb062bcd3e23a13eef11b250" name="a7b8c2293eb062bcd3e23a13eef11b250"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b8c2293eb062bcd3e23a13eef11b250">&#9670;&#160;</a></span>_heartRequestedSubscriber</h2>
+<a id="ab5c819b0c305e0edea6c8b16e8a7d440" name="ab5c819b0c305e0edea6c8b16e8a7d440"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5c819b0c305e0edea6c8b16e8a7d440">&#9670;&#160;</a></span>_grid</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -328,7 +410,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">readonly ISubscriber&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html">OverflowHeartRequestedMessage</a>&gt; BalloonParty.UI.Health.HeartTrailController._heartRequestedSubscriber</td>
+          <td class="memname">readonly <a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> BalloonParty.UI.Health.HeartTrailController._grid</td>
         </tr>
       </table>
   </td>
@@ -428,6 +510,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a1e727be3fb6f054009dcbb62a9a5de92" name="a1e727be3fb6f054009dcbb62a9a5de92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e727be3fb6f054009dcbb62a9a5de92">&#9670;&#160;</a></span>_soundPlayer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html">ISoundPlayer</a> BalloonParty.UI.Health.HeartTrailController._soundPlayer</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac175041932096817c3a8fa613fa72a68" name="ac175041932096817c3a8fa613fa72a68"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac175041932096817c3a8fa613fa72a68">&#9670;&#160;</a></span>_spawner</h2>
 
@@ -439,6 +543,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1TrailSpawner.html">TrailSpawner</a> BalloonParty.UI.Health.HeartTrailController._spawner</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af59be99a47420bb2cc2354f923467ba4" name="af59be99a47420bb2cc2354f923467ba4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af59be99a47420bb2cc2354f923467ba4">&#9670;&#160;</a></span>_strikethroughPublisher</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly IPublisher&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage.html">StrikethroughArrivedMessage</a>&gt; BalloonParty.UI.Health.HeartTrailController._strikethroughPublisher</td>
         </tr>
       </table>
   </td>
@@ -483,6 +609,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html">HeartTrailTracker</a> BalloonParty.UI.Health.HeartTrailController._tracker</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a476d6f305a933bbe6fd3868dad0415cd" name="a476d6f305a933bbe6fd3868dad0415cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a476d6f305a933bbe6fd3868dad0415cd">&#9670;&#160;</a></span>_waveDamageSubscriber</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly ISubscriber&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html">WaveDamageMessage</a>&gt; BalloonParty.UI.Health.HeartTrailController._waveDamageSubscriber</td>
         </tr>
       </table>
   </td>

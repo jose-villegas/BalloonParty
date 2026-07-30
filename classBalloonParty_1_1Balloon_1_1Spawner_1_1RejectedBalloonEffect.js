@@ -1,16 +1,19 @@
 var classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect =
 [
     [ "OverflowBalloon", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect_1_1OverflowBalloon.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect_1_1OverflowBalloon" ],
-    [ "RejectedBalloonEffect", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a102c505eda214341b1568ada680a78c1", null ],
+    [ "RejectedBalloonEffect", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a5219dac69523a700322f6214ecc8b5cf", null ],
     [ "Advance", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a620a95a8eb90e032a9b222549159bf40", null ],
+    [ "BeginDoomedLine", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a1abf0d837e403a79559b8d736269fe42", null ],
     [ "BeginOverflowHold", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a57ae401303eed84189467fa7eb57b8a3", null ],
     [ "BeginSpawnSequence", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#acb5651540773bf417fceb1e26543e68c", null ],
+    [ "EndDoomedLine", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#af36144bb937a0a96e6e7ee560a8f3c07", null ],
     [ "EndSpawnSequence", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a4eeb5aeb5d7851a76f4ca25afdf5dc84", null ],
     [ "HasActiveBalloons", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#adca0143dd5ae2112bab2784f7f5783c9", null ],
     [ "LaunchHeart", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a745295d155606c86badba6a573807333", null ],
     [ "OnHeartArrived", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a8295b17499b44614a6e5619a13a7158f", null ],
     [ "Play", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a5dd3b3d4578dcf34a36f1f701f890e0f", null ],
     [ "Pop", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a91bfd58113a66cb8095ed6a41e694aa3", null ],
+    [ "PopDoomedLine", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a2f42420d3cc5a6a19f77195665cc6857", null ],
     [ "QueueFor", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#afa9c95ec80101b4324a8692454836078", null ],
     [ "ResetRun", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a312665328263c9f1dc63cea40b814d6a", null ],
     [ "ReturnAll", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#afab2655fa5d45b0dd004b8177bd5163c", null ],
@@ -19,6 +22,7 @@ var classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect =
     [ "TryGetLivePosition", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a3aeb224b45a30715ce5f9a82581376d6", null ],
     [ "TryReleaseOverflowHold", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a60baf328f86eca194d11f7425253ac0d", null ],
     [ "_columns", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a104a20ee3feaaeedb3ba6e853d828a57", null ],
+    [ "_currentDoomedLineIndex", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a1b68d28c9c42a3c833b5a50570ab4d9e", null ],
     [ "_grid", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a2b4ac82b9641140bcd5df7a60e7854c7", null ],
     [ "_heartRequestPublisher", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#ac2e07197fd7d00d19f6f201315f8b23c", null ],
     [ "_launchCooldown", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a2e7faae98119e224db7f2be904807cf6", null ],
@@ -31,8 +35,6 @@ var classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect =
     [ "_popPresenter", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a733dea325d1da6a5ea54693df78e4348", null ],
     [ "_sequenceDepth", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#ab529d30af3250c523cdeae775eecb9b1", null ],
     [ "_settings", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a127c0f1e8812d703fe9b5531caa837d1", null ],
-    [ "_spawnBlockedPublisher", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a0510b6193a099d381331c3e56f35a1d5", null ],
     [ "IsOverflowActive", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a4a47e4c6634cbb930898713941e9a4ae", null ],
-    [ "PendingCharges", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a7a134a0e724cbde8ab2680682800f1d7", null ],
     [ "ResetOrder", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#a1d88f5aef447b4604c3963e8475e835d", null ]
 ];

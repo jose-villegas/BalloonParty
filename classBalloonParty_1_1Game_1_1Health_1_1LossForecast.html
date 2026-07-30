@@ -115,6 +115,9 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1Health_1_1LossForecast.ht
   <div class="headertitle"><div class="title">BalloonParty.Game.Health.LossForecast Class Reference<span class="mlabels"><span class="mlabel sealed">sealed</span></span></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Under the line-based damage model, HP drains immediately at wave resolution — there are no pending charges.  
+ <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Game.Health.LossForecast:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -127,13 +130,13 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1Health_1_1LossForecast.ht
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1Health_1_1LossForecast__coll__graph.svg" width="515" height="179"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1Health_1_1LossForecast__coll__graph.svg" width="427" height="154"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a496d0f7b1e871eabaaddfd0337c25989" id="r_a496d0f7b1e871eabaaddfd0337c25989"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a496d0f7b1e871eabaaddfd0337c25989">LossForecast</a> (<a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html">IPlayerHealth</a> health, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPendingHealthCharges.html">IPendingHealthCharges</a> pending)</td></tr>
-<tr class="separator:a496d0f7b1e871eabaaddfd0337c25989"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46065db2ef8fab46d3928d8b26e1958a" id="r_a46065db2ef8fab46d3928d8b26e1958a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a46065db2ef8fab46d3928d8b26e1958a">LossForecast</a> (<a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html">IPlayerHealth</a> health)</td></tr>
+<tr class="separator:a46065db2ef8fab46d3928d8b26e1958a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -144,12 +147,13 @@ Properties</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ab1b8af74127e8660b276fc8e42c3d1f7" id="r_ab1b8af74127e8660b276fc8e42c3d1f7"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html">IPlayerHealth</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab1b8af74127e8660b276fc8e42c3d1f7">_health</a></td></tr>
 <tr class="separator:ab1b8af74127e8660b276fc8e42c3d1f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0afa016068e3031e5771dde567ec2d92" id="r_a0afa016068e3031e5771dde567ec2d92"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPendingHealthCharges.html">IPendingHealthCharges</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0afa016068e3031e5771dde567ec2d92">_pending</a></td></tr>
-<tr class="separator:a0afa016068e3031e5771dde567ec2d92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a496d0f7b1e871eabaaddfd0337c25989" name="a496d0f7b1e871eabaaddfd0337c25989"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a496d0f7b1e871eabaaddfd0337c25989">&#9670;&#160;</a></span>LossForecast()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Under the line-based damage model, HP drains immediately at wave resolution — there are no pending charges. </p>
+<p>Loss is imminent when HP is already at zero. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a46065db2ef8fab46d3928d8b26e1958a" name="a46065db2ef8fab46d3928d8b26e1958a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46065db2ef8fab46d3928d8b26e1958a">&#9670;&#160;</a></span>LossForecast()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -157,12 +161,8 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">BalloonParty.Game.Health.LossForecast.LossForecast </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html">IPlayerHealth</a></td>          <td class="paramname"><span class="paramname"><em>health</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html">IPlayerHealth</a></td>          <td class="paramname"><span class="paramname"><em>health</em></span></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPendingHealthCharges.html">IPendingHealthCharges</a></td>          <td class="paramname"><span class="paramname"><em>pending</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -181,28 +181,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html">IPlayerHealth</a> BalloonParty.Game.Health.LossForecast._health</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0afa016068e3031e5771dde567ec2d92" name="a0afa016068e3031e5771dde567ec2d92"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0afa016068e3031e5771dde567ec2d92">&#9670;&#160;</a></span>_pending</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPendingHealthCharges.html">IPendingHealthCharges</a> BalloonParty.Game.Health.LossForecast._pending</td>
         </tr>
       </table>
   </td>

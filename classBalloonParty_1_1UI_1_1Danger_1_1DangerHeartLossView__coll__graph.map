@@ -1,0 +1,10 @@
+<map id="BalloonParty.UI.Danger.DangerHeartLossView" name="BalloonParty.UI.Danger.DangerHeartLossView">
+<area shape="rect" id="Node000001" title="Displays how many hearts the next wave will cost." alt="" coords="533,26,755,66"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,129,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,9,155,9,280,8,406,11,510,23,534,27,533,32,509,29,405,17,280,13,155,14,143,14"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Shared_1_1Animation_1_1RollingTextAnimator.html" title="Animates numeric changes on a TMP_Text with a rolling odometer effect." alt="" coords="179,26,405,66"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="144,25,179,29,178,34,143,30"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="419,43,533,43,533,49,419,49"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Danger_1_1IDangerLevel.html" title="Read&#45;only 0→1 &quot;how close are we to dying&quot; signal, consumed by the danger gradient HUD." alt="" coords="193,90,391,130"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="405,87,532,63,533,69,406,92"/>
+</map>

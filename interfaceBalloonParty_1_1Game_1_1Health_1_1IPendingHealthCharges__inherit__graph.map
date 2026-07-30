@@ -1,5 +1,0 @@
-<map id="BalloonParty.Game.Health.IPendingHealthCharges" name="BalloonParty.Game.Health.IPendingHealthCharges">
-<area shape="rect" id="Node000001" title="Hit&#45;point charges already committed but not yet applied — nothing cancels one except a run reset." alt="" coords="17,5,213,45"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html" title="Visible pile for balloons that couldn&#39;t spawn; drains via heart trails charged at launch,..." alt="" coords="5,93,224,133"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,59,117,93,112,93,112,59"/>
-</map>

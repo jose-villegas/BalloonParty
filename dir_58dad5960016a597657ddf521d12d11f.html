@@ -127,11 +127,11 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>The shared field services and the views that render the play-area frame — the visible boundary the projectile bounces off.</p>
-<h1><a class="anchor" id="autotoc_md784"></a>
+<h1><a class="anchor" id="autotoc_md788"></a>
 BackgroundFieldService</h1>
 <p><code><a class="el" href="BackgroundFieldService_8cs.html">BackgroundFieldService.cs</a></code> — owns the shared cloud field: an RT (<code>_BackgroundDensityTex</code>) blitted from the <code>BackgroundFieldDensity</code> material on a cadence timer rather than every frame (<code>ICadencedEffect</code>, weight 1 — see <code><a class="el" href="Shared_2Cadence_2README_8md.html">Shared/Cadence/README.md</a></code>), with the disturbance field baked in so clouds part around a wall hit or a pop. The cadence gate is bypassed while the scenario root is moving (launch ascend, level-up, game-over descent), so the density texture never visibly lags the scrolling camera during a transition. It publishes the RT plus its world bounds as global shader properties, so every consumer reads the SAME clouds with a single tap rather than each running its own noise. It is the ONE cloud generator in the project; consumers only sample, never roll their own — currently the <code>BackgroundCloud</code> backdrop, sprite drop-shadows (<code>SpriteLightDriven</code>), the GI light smear (<code>ScreenSpaceLightSmear</code>), and the wall net below.</p>
 <p>It is a <b>plain-C# DI singleton</b> — <code>IStartable/ITickable/IDisposable</code>, no <code>MonoBehaviour</code> and no scene GameObject — exactly like its siblings <code>DisturbanceFieldService</code> / <code>SceneLightFieldService</code>. Its bounds come from <code>IGameDisplayConfiguration</code> via the shared <code>DisturbanceFieldCoordinates</code> (origin-centered, so it aligns with the disturbance/light fields and needs no camera). It is registered in <code>AppLifetimeScope</code> — the persistent app root, not the per-run <code>GameLifetimeScope</code> — so it exists before either scene loads, which is what makes the launch begin-screen's clouds live from the first frame rather than depending on the Game scene's preload. Its tuning lives on <code>BackgroundFieldSettings</code> (<code>IBackgroundFieldSettings</code>: the density blit material + resolution + transition parallax). The GPU-side tap is <code>Assets/Shaders/BalloonParty/Include/BackgroundField.cginc</code>; generation is <code>BackgroundFieldGen.cginc</code> + the <code>BackgroundFieldDensity</code> blit shader. See <code><a class="el" href="Shared_2Disturbance_2README_8md.html">Shared/Disturbance/README.md</a></code>.</p>
-<h1><a class="anchor" id="autotoc_md785"></a>
+<h1><a class="anchor" id="autotoc_md789"></a>
 SmokeFieldService</h1>
 <p><code><a class="el" href="SmokeFieldService_8cs.html">SmokeFieldService.cs</a></code> — the smoke trail field: a persistent screen-space RT that accumulates palette-colored capsule stamps and decays them into animated smoke wisps. The 4th field service alongside Disturbance, SceneLight, and Background.</p>
 <p><b>Profile-based stamping:</b> every stamp originates from a <code>PaintSource</code> (<code>ProjectileTrail</code>, <code>ToughPop</code>, <code>ToughBreathing</code>, <code>ToughDeflect</code>). The service resolves the source to a <code>PaintProfile</code> (via <code>ISmokeFieldSettings.GetProfile</code>) that defines radius, opacity, and how color is chosen (<code>PaintColorMode.Dynamic</code> — caller supplies a palette index, <code>Palette</code> — profile names a fixed palette entry, <code>Custom</code> — profile carries a fixed RGB color). The public API is:</p>
@@ -142,13 +142,13 @@ SmokeFieldService</h1>
 <p><b>Pipeline:</b> each frame the projectile is moving, <code>ProjectileView</code> calls <code>Paint</code> with <code>PaintSource.ProjectileTrail</code> (capsule from previous → current position). The service batches up to 32 stamps per blit pass into <code>SmokeFieldStamp.shader</code>, then runs a decay pass (<code>SmokeFieldDecay.shader</code>) that advects, expands, erodes, and fades the accumulated paint. The result is published as the global <code>_SmokeTex</code>, sampled by the display shader.</p>
 <p><b>Decay model:</b> wind advection (swinging direction via sin oscillation), turbulent perturbation, radius expansion, noise erosion, and linear alpha decay — all driven by <code>_SmokeTime</code> (which respects <code>TimeScaleService</code> pause/slow-mo). Fresh stamps resist wind (age-based bias); fast projectile stamps get dampened wind so they don't smear.</p>
 <p><b>Lifecycle:</b> clears the RT on <code>LevelUpDismissedMessage</code> (new level = blank canvas) and on <code>GameOverMessage</code> (descend/game-over = blank canvas).</p>
-<h2><a class="anchor" id="autotoc_md786"></a>
+<h2><a class="anchor" id="autotoc_md790"></a>
 SmokeFieldResources</h2>
 <p><code><a class="el" href="SmokeFieldResources_8cs.html">SmokeFieldResources.cs</a></code> — owns the GPU resources: two <code>ARGBHalf</code> ping-pong RTs and the stamp + decay materials (instantiated from the shaders on <code>ISmokeFieldSettings</code>). Handles blit-and-swap; separated from the service so resource lifecycle is testable independently.</p>
-<h2><a class="anchor" id="autotoc_md787"></a>
+<h2><a class="anchor" id="autotoc_md791"></a>
 SmokeFieldView</h2>
 <p><code><a class="el" href="SmokeFieldView_8cs.html">View/SmokeFieldView.cs</a></code> — a <code>MonoBehaviour</code> that renders the smoke field RT as visible smoke behind the cloud backdrop. Builds a viewport-sized quad at startup, assigns the <code>SmokeTrailDisplay</code> material, and sits on the Default sorting layer at order −1 (behind the clouds at 0). Registered via <code>RegisterComponentInHierarchy&lt;SmokeFieldView&gt;()</code>.</p>
-<h2><a class="anchor" id="autotoc_md788"></a>
+<h2><a class="anchor" id="autotoc_md792"></a>
 Shaders</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -162,10 +162,10 @@ Shaders</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>SmokeField.cginc</code>   </td><td class="markdownTableBodyNone">Consumer include — exposes global <code>_SmokeTex</code>   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md789"></a>
+<h2><a class="anchor" id="autotoc_md793"></a>
 Configuration</h2>
 <p><code>ISmokeFieldSettings</code> / <code>SmokeFieldSettings</code> SO — stamps shader, decay shader, texels-per-unit, decay rate, decay tick interval, wind speed/influence/age-bias/direction/swing, and a <code>PaintProfile[]</code> array (each entry maps <code>PaintSource</code> flags → radius, opacity, <code>PaintColorMode</code>, palette name / custom color). <code>GetProfile(PaintSource)</code> resolves the active profile for a given source.</p>
-<h1><a class="anchor" id="autotoc_md790"></a>
+<h1><a class="anchor" id="autotoc_md794"></a>
 WallNetView</h1>
 <p><code><a class="el" href="WallNetView_8cs.html">View/WallNetView.cs</a></code> — a <code>MonoBehaviour</code> that builds the four <b>net-strip</b> meshes framing the play area, one per edge of the logical play rectangle. It reads that rectangle from the injected <code>IProjectileFlightConfig.LimitsClockwise</code> (unpacked via <code>WallLimits</code>), so the visible frame is sourced from the same rectangle the projectile billiard reflects off — no hand-syncing a separate visual frame.</p>
 <p>Each strip is a flat quad band laid <b>outward</b> from its wall by <code>_stripWidth</code> (away from the play area, so its reveal never covers the balloons), tessellated into a quad grid (<code>_cellsPerUnitAlong</code> × <code>_cellsAcross</code>) fine enough to deform smoothly. The meshes are built once in <code>Start</code> and never rewritten from C#: all motion lives in the shared net material's vertex stage, so there is zero per-frame CPU. Per vertex the view bakes:</p>
@@ -182,7 +182,7 @@ WallNetView</h1>
 </ul>
 <p><code>WallNetView</code> also drives a <code>_TransitionFade</code> on the material, independent of the fields above: the net starts hidden, fades in on the first shot (<code>ProjectileFiredMessage</code>), and fades back out on a Game transition (<code>ScoreLevelUpMessage</code>, <code>RunResetMessage</code>) until the next run's first shot.</p>
 <p>See <code><a class="el" href="Shared_2Disturbance_2README_8md.html">Assets/Source/Shared/Disturbance/README.md</a></code> for the disturbance field.</p>
-<h1><a class="anchor" id="autotoc_md791"></a>
+<h1><a class="anchor" id="autotoc_md795"></a>
 Shader</h1>
 <p><code>Assets/Shaders/BalloonParty/Scenario/WallNet.shader</code> — the shared world-space net material: a procedural tennis-net pattern (grid lines from UV1, feathered band edges, HDR-emissive tint so bloom carries the glow) driven by the disturbance-field unfurl/billow/colour-gradient, the cloud-field visibility/breathing, and the scene-light tint described above. Shader/visual changes are validated in-editor, not by <code>dotnet build</code>. </p>
 </div><!-- contents -->

@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner =
 [
-    [ "BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a61db5127c8e1799f6087f2d7dda80a2d", null ],
+    [ "BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a8f6e8d6c3a308014a6135d84a82eb993", null ],
     [ "ArrangeInitialLayers", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a24bb087142589d3c4ed32ef4d9c8afeb", null ],
     [ "CaptureFillCapacity", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a592fcf014e6aefee9193cfcb1ece6136", null ],
     [ "CompareColumnKeys", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#abc49e8f5763cc19ff5f27d53c2493ae1", null ],
@@ -64,6 +64,7 @@ var classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner =
     [ "_spawnPathBuffer", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#aff08ff00311e470044ed10b8d9129c6e", null ],
     [ "_subscriptions", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a587de79ef0b4f85c14024728a72cfae2", null ],
     [ "_turnCount", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#ac896f77dd06bf4f12539ba1122de21fe", null ],
+    [ "_waveDamagePublisher", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a0b662632e8d9d37208dabb1c1d085d4f", null ],
     [ "_waveQuotas", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a9593ea4e856d1a0b190bf38b88b295c5", null ],
     [ "BySpawnWeightAscending", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a247e490b50566756b301095e4329d25d", null ],
     [ "ResetOrder", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#ae9e66393060a34909c2d77582f6c9790", null ],

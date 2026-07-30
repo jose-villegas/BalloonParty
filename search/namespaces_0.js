@@ -91,5 +91,6 @@ var searchData=
   ['balloonparty_3a_3aui_3a_3ahealth_88',['Health',['../namespaceBalloonParty_1_1UI_1_1Health.html',1,'BalloonParty::UI']]],
   ['balloonparty_3a_3aui_3a_3alevelup_89',['LevelUp',['../namespaceBalloonParty_1_1UI_1_1LevelUp.html',1,'BalloonParty::UI']]],
   ['balloonparty_3a_3aui_3a_3ascore_90',['Score',['../namespaceBalloonParty_1_1UI_1_1Score.html',1,'BalloonParty::UI']]],
-  ['balloonparty_3a_3aui_3a_3ashields_91',['Shields',['../namespaceBalloonParty_1_1UI_1_1Shields.html',1,'BalloonParty::UI']]]
+  ['balloonparty_3a_3aui_3a_3ashields_91',['Shields',['../namespaceBalloonParty_1_1UI_1_1Shields.html',1,'BalloonParty::UI']]],
+  ['balloonparty_3a_3aui_3a_3atooltip_92',['Tooltip',['../namespaceBalloonParty_1_1UI_1_1Tooltip.html',1,'BalloonParty::UI']]]
 ];

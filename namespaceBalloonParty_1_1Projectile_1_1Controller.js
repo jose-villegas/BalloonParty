@@ -1,6 +1,7 @@
 var namespaceBalloonParty_1_1Projectile_1_1Controller =
 [
     [ "ActiveProjectilePierce", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce" ],
+    [ "HoldSpeedUpController", "classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController" ],
     [ "IActiveProjectilePierce", "interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html", "interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce" ],
     [ "PierceDischargeEffects", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects" ],
     [ "ProjectileDoomedTimeScaleController", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController" ],

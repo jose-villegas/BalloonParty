@@ -54,6 +54,6 @@ var searchData=
   ['itemeffectparams_51',['ItemEffectParams',['../structBalloonParty_1_1Item_1_1Effects_1_1ItemEffectParams.html#aa53aa88fb71f82cda2b270a26f13b6c2',1,'BalloonParty::Item::Effects::ItemEffectParams']]],
   ['itemeffectplayer_52',['ItemEffectPlayer',['../classBalloonParty_1_1Item_1_1ItemEffectPlayer.html#aa057868fbcd0235e06709425a5c422a3',1,'BalloonParty::Item::ItemEffectPlayer']]],
   ['itemprofile_53',['ItemProfile',['../structBalloonParty_1_1Solver_1_1ItemProfile.html#a12634ca24b86602ca5823948a3b6ab87',1,'BalloonParty::Solver::ItemProfile']]],
-  ['itemsoundrouter_54',['ItemSoundRouter',['../classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#ae894c3ca2e1e4f4c74935c99ee9c80a2',1,'BalloonParty::Audio::Routing::ItemSoundRouter']]],
+  ['itemsoundrouter_54',['ItemSoundRouter',['../classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#ad2ad021f55a7b1858354a36d219291e8',1,'BalloonParty::Audio::Routing::ItemSoundRouter']]],
   ['itemtypeweight_55',['ItemTypeWeight',['../structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a9c9f47d69b58f0006a9b147a899f3c9e',1,'BalloonParty::Configuration::Items::ItemTypeWeight']]]
 ];

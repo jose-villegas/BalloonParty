@@ -2,7 +2,7 @@
 <area shape="rect" id="Node000001" title="Shared shape for the producers that drive a CameraRigCinematic: builds the runner from BuildConfig on..." alt="" coords="152,69,379,109"/>
 <area shape="rect" id="Node000004" href="$classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html" title="The loss ceremony, split around the GameOver screen (mirrors the level&#45;up flow): a slow&#45;mo push&#45;in ov..." alt="" coords="427,5,653,45"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="364,64,453,43,454,48,366,69"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Game_1_1Cinematics_1_1HeartDrainCinematic.html" title="Begins on the first heart trail launch, follows the heart about to land in slow&#45;mo,..." alt="" coords="427,69,653,109"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Game_1_1Cinematics_1_1HeartDrainCinematic.html" title="Begins on the first wave&#45;damage event, follows the heart trail in slow&#45;mo, and ends when the pile dra..." alt="" coords="427,69,653,109"/>
 <area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="393,87,426,87,426,92,393,92"/>
 <area shape="rect" id="Node000006" href="$classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html" title="Follows the tipping projectile during Window A (claim → first wall), then hands off to the popup and ..." alt="" coords="427,133,653,173"/>
 <area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="366,110,454,131,453,136,364,115"/>

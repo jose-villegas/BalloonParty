@@ -6,7 +6,7 @@
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="111,457,122,385,148,290,167,240,191,191,222,145,258,105,275,93,278,98,262,109,226,149,196,194,172,242,153,292,128,386,116,458"/>
 <area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html" title=" " alt="" coords="264,119,483,159"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="114,457,129,395,157,318,176,277,199,238,226,201,258,169,276,157,279,162,262,173,230,205,203,241,181,280,162,320,134,397,119,458"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html" title="Visible pile for balloons that couldn&#39;t spawn; drains via heart trails charged at launch,..." alt="" coords="264,183,483,223"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html" title="Visible pile for balloons that couldn&#39;t spawn; purely visual — HP drain is handled by WaveDamageMessa..." alt="" coords="264,183,483,223"/>
 <area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="118,457,137,408,166,347,207,286,231,258,258,233,278,221,281,226,262,237,235,261,211,289,171,350,142,410,123,459"/>
 <area shape="rect" id="Node000006" href="$classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html" title="Heart trails currently in flight; launch order preserved so [0] is the next to land." alt="" coords="275,247,471,287"/>
 <area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="124,457,147,420,177,377,215,334,259,297,280,285,283,290,261,302,218,338,181,380,151,423,129,460"/>

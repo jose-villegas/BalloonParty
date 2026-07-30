@@ -119,14 +119,14 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBal
 </div><!--header-->
 <div class="contents">
 
-<p>Visible pile for balloons that couldn't spawn; drains via heart trails charged at launch, not at pop.  
+<p>Visible pile for balloons that couldn't spawn; purely visual — HP drain is handled by <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html" title="Published once per spawn wave when the line-based deficit causes heart loss.">WaveDamageMessage</a>.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Balloon.Spawner.RejectedBalloonEffect:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect__inherit__graph.svg" width="484" height="166"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect__inherit__graph.svg" width="323" height="139"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Balloon.Spawner.RejectedBalloonEffect:</div>
@@ -171,15 +171,21 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a102c505eda214341b1568ada680a78c1" id="r_a102c505eda214341b1568ada680a78c1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a102c505eda214341b1568ada680a78c1">RejectedBalloonEffect</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html">IActiveLevelParameters</a> levelParams, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html">IOverflowSettings</a> settings, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette, <a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html">PoolManager</a> poolManager, <a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonPopPresenter.html">BalloonPopPresenter</a> popPresenter, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBlockedMessage.html">SpawnBlockedMessage</a> &gt; spawnBlockedPublisher, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html">OverflowHeartRequestedMessage</a> &gt; heartRequestPublisher, <a class="el" href="classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html">PauseService</a> pauseService)</td></tr>
-<tr class="separator:a102c505eda214341b1568ada680a78c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5219dac69523a700322f6214ecc8b5cf" id="r_a5219dac69523a700322f6214ecc8b5cf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5219dac69523a700322f6214ecc8b5cf">RejectedBalloonEffect</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html">IActiveLevelParameters</a> levelParams, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html">IOverflowSettings</a> settings, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette, <a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html">PoolManager</a> poolManager, <a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonPopPresenter.html">BalloonPopPresenter</a> popPresenter, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html">OverflowHeartRequestedMessage</a> &gt; heartRequestPublisher, <a class="el" href="classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html">PauseService</a> pauseService)</td></tr>
+<tr class="separator:a5219dac69523a700322f6214ecc8b5cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1abf0d837e403a79559b8d736269fe42" id="r_a1abf0d837e403a79559b8d736269fe42"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1abf0d837e403a79559b8d736269fe42">BeginDoomedLine</a> (int lineIndex)</td></tr>
+<tr class="memdesc:a1abf0d837e403a79559b8d736269fe42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tags subsequent overflow balloons as part of a doomed line so they aren't auto-popped.  <br /></td></tr>
+<tr class="separator:a1abf0d837e403a79559b8d736269fe42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af36144bb937a0a96e6e7ee560a8f3c07" id="r_af36144bb937a0a96e6e7ee560a8f3c07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af36144bb937a0a96e6e7ee560a8f3c07">EndDoomedLine</a> ()</td></tr>
+<tr class="separator:af36144bb937a0a96e6e7ee560a8f3c07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f42420d3cc5a6a19f77195665cc6857" id="r_a2f42420d3cc5a6a19f77195665cc6857"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f42420d3cc5a6a19f77195665cc6857">PopDoomedLine</a> (int lineIndex)</td></tr>
+<tr class="memdesc:a2f42420d3cc5a6a19f77195665cc6857"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pops every overflow balloon tagged with the given doomed line index simultaneously.  <br /></td></tr>
+<tr class="separator:a2f42420d3cc5a6a19f77195665cc6857"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
 <tr class="memitem:a4a47e4c6634cbb930898713941e9a4ae" id="r_a4a47e4c6634cbb930898713941e9a4ae"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4a47e4c6634cbb930898713941e9a4ae">IsOverflowActive</a><code> [get]</code></td></tr>
 <tr class="separator:a4a47e4c6634cbb930898713941e9a4ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a134a0e724cbde8ab2680682800f1d7" id="r_a7a134a0e724cbde8ab2680682800f1d7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a134a0e724cbde8ab2680682800f1d7">PendingCharges</a><code> [get]</code></td></tr>
-<tr class="separator:a7a134a0e724cbde8ab2680682800f1d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d88f5aef447b4604c3963e8475e835d" id="r_a1d88f5aef447b4604c3963e8475e835d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1d88f5aef447b4604c3963e8475e835d">ResetOrder</a><code> [get]</code></td></tr>
 <tr class="separator:a1d88f5aef447b4604c3963e8475e835d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -208,6 +214,8 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a104a20ee3feaaeedb3ba6e853d828a57" id="r_a104a20ee3feaaeedb3ba6e853d828a57"><td class="memItemLeft" align="right" valign="top">readonly Dictionary&lt; int, List&lt; <a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect_1_1OverflowBalloon.html">OverflowBalloon</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a104a20ee3feaaeedb3ba6e853d828a57">_columns</a> = new()</td></tr>
 <tr class="separator:a104a20ee3feaaeedb3ba6e853d828a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b68d28c9c42a3c833b5a50570ab4d9e" id="r_a1b68d28c9c42a3c833b5a50570ab4d9e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1b68d28c9c42a3c833b5a50570ab4d9e">_currentDoomedLineIndex</a> = -1</td></tr>
+<tr class="separator:a1b68d28c9c42a3c833b5a50570ab4d9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b4ac82b9641140bcd5df7a60e7854c7" id="r_a2b4ac82b9641140bcd5df7a60e7854c7"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b4ac82b9641140bcd5df7a60e7854c7">_grid</a></td></tr>
 <tr class="separator:a2b4ac82b9641140bcd5df7a60e7854c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2e07197fd7d00d19f6f201315f8b23c" id="r_ac2e07197fd7d00d19f6f201315f8b23c"><td class="memItemLeft" align="right" valign="top">readonly IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html">OverflowHeartRequestedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac2e07197fd7d00d19f6f201315f8b23c">_heartRequestPublisher</a></td></tr>
@@ -232,14 +240,12 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ab529d30af3250c523cdeae775eecb9b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a127c0f1e8812d703fe9b5531caa837d1" id="r_a127c0f1e8812d703fe9b5531caa837d1"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html">IOverflowSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a127c0f1e8812d703fe9b5531caa837d1">_settings</a></td></tr>
 <tr class="separator:a127c0f1e8812d703fe9b5531caa837d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0510b6193a099d381331c3e56f35a1d5" id="r_a0510b6193a099d381331c3e56f35a1d5"><td class="memItemLeft" align="right" valign="top">readonly IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBlockedMessage.html">SpawnBlockedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0510b6193a099d381331c3e56f35a1d5">_spawnBlockedPublisher</a></td></tr>
-<tr class="separator:a0510b6193a099d381331c3e56f35a1d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Visible pile for balloons that couldn't spawn; drains via heart trails charged at launch, not at pop. </p>
+<div class="textblock"><p>Visible pile for balloons that couldn't spawn; purely visual — HP drain is handled by <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html" title="Published once per spawn wave when the line-based deficit causes heart loss.">WaveDamageMessage</a>. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a102c505eda214341b1568ada680a78c1" name="a102c505eda214341b1568ada680a78c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a102c505eda214341b1568ada680a78c1">&#9670;&#160;</a></span>RejectedBalloonEffect()</h2>
+<a id="a5219dac69523a700322f6214ecc8b5cf" name="a5219dac69523a700322f6214ecc8b5cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5219dac69523a700322f6214ecc8b5cf">&#9670;&#160;</a></span>RejectedBalloonEffect()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -276,11 +282,6 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonPopPresenter.html">BalloonPopPresenter</a></td>          <td class="paramname"><span class="paramname"><em>popPresenter</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBlockedMessage.html">SpawnBlockedMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>spawnBlockedPublisher</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -342,6 +343,33 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a1abf0d837e403a79559b8d736269fe42" name="a1abf0d837e403a79559b8d736269fe42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1abf0d837e403a79559b8d736269fe42">&#9670;&#160;</a></span>BeginDoomedLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Spawner.RejectedBalloonEffect.BeginDoomedLine </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>lineIndex</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tags subsequent overflow balloons as part of a doomed line so they aren't auto-popped. </p>
+
+</div>
+</div>
 <a id="a57ae401303eed84189467fa7eb57b8a3" name="a57ae401303eed84189467fa7eb57b8a3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a57ae401303eed84189467fa7eb57b8a3">&#9670;&#160;</a></span>BeginOverflowHold()</h2>
 
@@ -383,6 +411,31 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Brackets a turn's spawn sequence; the overflow hold won't release until it ends and the pile is empty. </p>
+
+</div>
+</div>
+<a id="af36144bb937a0a96e6e7ee560a8f3c07" name="af36144bb937a0a96e6e7ee560a8f3c07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af36144bb937a0a96e6e7ee560a8f3c07">&#9670;&#160;</a></span>EndDoomedLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Spawner.RejectedBalloonEffect.EndDoomedLine </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -522,6 +575,33 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2f42420d3cc5a6a19f77195665cc6857" name="a2f42420d3cc5a6a19f77195665cc6857"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f42420d3cc5a6a19f77195665cc6857">&#9670;&#160;</a></span>PopDoomedLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Spawner.RejectedBalloonEffect.PopDoomedLine </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>lineIndex</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pops every overflow balloon tagged with the given doomed line index simultaneously. </p>
 
 </div>
 </div>
@@ -708,6 +788,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly Dictionary&lt;int, List&lt;<a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect_1_1OverflowBalloon.html">OverflowBalloon</a>&gt; &gt; BalloonParty.Balloon.Spawner.RejectedBalloonEffect._columns = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1b68d28c9c42a3c833b5a50570ab4d9e" name="a1b68d28c9c42a3c833b5a50570ab4d9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b68d28c9c42a3c833b5a50570ab4d9e">&#9670;&#160;</a></span>_currentDoomedLineIndex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Spawner.RejectedBalloonEffect._currentDoomedLineIndex = -1</td>
         </tr>
       </table>
   </td>
@@ -983,28 +1085,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a0510b6193a099d381331c3e56f35a1d5" name="a0510b6193a099d381331c3e56f35a1d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0510b6193a099d381331c3e56f35a1d5">&#9670;&#160;</a></span>_spawnBlockedPublisher</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">readonly IPublisher&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBlockedMessage.html">SpawnBlockedMessage</a>&gt; BalloonParty.Balloon.Spawner.RejectedBalloonEffect._spawnBlockedPublisher</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <h2 class="groupheader">Property Documentation</h2>
 <a id="a4a47e4c6634cbb930898713941e9a4ae" name="a4a47e4c6634cbb930898713941e9a4ae"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4a47e4c6634cbb930898713941e9a4ae">&#9670;&#160;</a></span>IsOverflowActive</h2>
@@ -1025,30 +1105,6 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7a134a0e724cbde8ab2680682800f1d7" name="a7a134a0e724cbde8ab2680682800f1d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7a134a0e724cbde8ab2680682800f1d7">&#9670;&#160;</a></span>PendingCharges</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int BalloonParty.Balloon.Spawner.RejectedBalloonEffect.PendingCharges</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPendingHealthCharges.html#a56cbefd20ced80043b161b0c78ed147c">BalloonParty.Game.Health.IPendingHealthCharges</a>.</p>
 
 </div>
 </div>

@@ -1,0 +1,7 @@
+<map id="BalloonParty.UI.Tooltip.HoldSpeedUpTooltip" name="BalloonParty.UI.Tooltip.HoldSpeedUpTooltip">
+<area shape="rect" id="Node000001" title="Shows a one&#45;time &quot;hold to speed up&quot; hint after the projectile has been in flight for IProjectileFligh..." alt="" coords="79,108,250,148"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,129,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,46,148,106,144,110,86,50"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="153,5,373,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="237,57,185,110,181,106,233,54"/>
+</map>

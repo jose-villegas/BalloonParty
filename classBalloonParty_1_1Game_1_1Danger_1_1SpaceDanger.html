@@ -148,18 +148,19 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
-<tr class="memitem:a79eb74e41b17a1fdc7b30022161018a2" id="r_a79eb74e41b17a1fdc7b30022161018a2"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a79eb74e41b17a1fdc7b30022161018a2">Evaluate</a> (int hearts, int availableSpace, int spawnPerTurn)</td></tr>
-<tr class="separator:a79eb74e41b17a1fdc7b30022161018a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63e3b48194658c3c52d10b1dfded0bb9" id="r_a63e3b48194658c3c52d10b1dfded0bb9"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a63e3b48194658c3c52d10b1dfded0bb9">Evaluate</a> (int hearts, int availableSpace, int spawnPerTurn, int columns)</td></tr>
+<tr class="separator:a63e3b48194658c3c52d10b1dfded0bb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:adeb53fdb6518950a67009a0b4364a1b0" id="r_adeb53fdb6518950a67009a0b4364a1b0"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adeb53fdb6518950a67009a0b4364a1b0">HeartsAtRisk</a><code> [get]</code></td></tr>
+<tr class="memdesc:adeb53fdb6518950a67009a0b4364a1b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many full lines of overflow the next wave would cost (integer heart count).  <br /></td></tr>
+<tr class="separator:adeb53fdb6518950a67009a0b4364a1b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5abd0782e6c22a033e4df7b741b428a" id="r_ad5abd0782e6c22a033e4df7b741b428a"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad5abd0782e6c22a033e4df7b741b428a">Level</a><code> [get]</code></td></tr>
 <tr class="separator:ad5abd0782e6c22a033e4df7b741b428a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a14f13927b1719bd2f2392491b36bd84d" id="r_a14f13927b1719bd2f2392491b36bd84d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a14f13927b1719bd2f2392491b36bd84d">CountEmptySlots</a> ()</td></tr>
-<tr class="separator:a14f13927b1719bd2f2392491b36bd84d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7f9cc03a695e4756162827f060d9d68" id="r_ad7f9cc03a695e4756162827f060d9d68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad7f9cc03a695e4756162827f060d9d68">Recompute</a> ()</td></tr>
 <tr class="separator:ad7f9cc03a695e4756162827f060d9d68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -171,6 +172,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a3d8b698a529436cdd9b62237212c4183"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd8b8d4938c92780ea68b9c6af308268" id="r_afd8b8d4938c92780ea68b9c6af308268"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html">IPlayerHealth</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd8b8d4938c92780ea68b9c6af308268">_health</a></td></tr>
 <tr class="separator:afd8b8d4938c92780ea68b9c6af308268"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7febfa29557b47886af42f25ead6ae5" id="r_ab7febfa29557b47886af42f25ead6ae5"><td class="memItemLeft" align="right" valign="top">readonly ReactiveProperty&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab7febfa29557b47886af42f25ead6ae5">_heartsAtRisk</a> = new(0)</td></tr>
+<tr class="separator:ab7febfa29557b47886af42f25ead6ae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f9e5088bfa712eb60d55eaec2aca393" id="r_a9f9e5088bfa712eb60d55eaec2aca393"><td class="memItemLeft" align="right" valign="top">readonly ReactiveProperty&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9f9e5088bfa712eb60d55eaec2aca393">_level</a> = new(0f)</td></tr>
 <tr class="separator:a9f9e5088bfa712eb60d55eaec2aca393"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afdacdd9da5705edd614d7421e8a44d49" id="r_afdacdd9da5705edd614d7421e8a44d49"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html">IActiveLevelParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afdacdd9da5705edd614d7421e8a44d49">_levelParams</a></td></tr>
@@ -208,31 +211,6 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a14f13927b1719bd2f2392491b36bd84d" name="a14f13927b1719bd2f2392491b36bd84d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a14f13927b1719bd2f2392491b36bd84d">&#9670;&#160;</a></span>CountEmptySlots()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int BalloonParty.Game.Danger.SpaceDanger.CountEmptySlots </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="af53e461a4f92fe676bfaff8f849af699" name="af53e461a4f92fe676bfaff8f849af699"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af53e461a4f92fe676bfaff8f849af699">&#9670;&#160;</a></span>Dispose()</h2>
 
@@ -250,8 +228,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a79eb74e41b17a1fdc7b30022161018a2" name="a79eb74e41b17a1fdc7b30022161018a2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a79eb74e41b17a1fdc7b30022161018a2">&#9670;&#160;</a></span>Evaluate()</h2>
+<a id="a63e3b48194658c3c52d10b1dfded0bb9" name="a63e3b48194658c3c52d10b1dfded0bb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63e3b48194658c3c52d10b1dfded0bb9">&#9670;&#160;</a></span>Evaluate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -272,7 +250,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>spawnPerTurn</em></span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>spawnPerTurn</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>columns</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -410,6 +393,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ab7febfa29557b47886af42f25ead6ae5" name="ab7febfa29557b47886af42f25ead6ae5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7febfa29557b47886af42f25ead6ae5">&#9670;&#160;</a></span>_heartsAtRisk</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly ReactiveProperty&lt;int&gt; BalloonParty.Game.Danger.SpaceDanger._heartsAtRisk = new(0)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a9f9e5088bfa712eb60d55eaec2aca393" name="a9f9e5088bfa712eb60d55eaec2aca393"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9f9e5088bfa712eb60d55eaec2aca393">&#9670;&#160;</a></span>_level</h2>
 
@@ -477,6 +482,32 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="adeb53fdb6518950a67009a0b4364a1b0" name="adeb53fdb6518950a67009a0b4364a1b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adeb53fdb6518950a67009a0b4364a1b0">&#9670;&#160;</a></span>HeartsAtRisk</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyReactiveProperty&lt;int&gt; BalloonParty.Game.Danger.SpaceDanger.HeartsAtRisk</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How many full lines of overflow the next wave would cost (integer heart count). </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Danger_1_1IDangerLevel.html#ab90050b0aeef2043798910d9e5f1ff91">BalloonParty.Game.Danger.IDangerLevel</a>.</p>
+
+</div>
+</div>
 <a id="ad5abd0782e6c22a033e4df7b741b428a" name="ad5abd0782e6c22a033e4df7b741b428a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad5abd0782e6c22a033e4df7b741b428a">&#9670;&#160;</a></span>Level</h2>
 

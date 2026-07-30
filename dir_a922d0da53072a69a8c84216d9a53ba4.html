@@ -145,7 +145,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Owns the <b>run lifecycle</b> — the run-based progression model where a loss ends the run and resets it. A run starts at level 1 every session; only a meta record (best level / best score) survives across runs.</p>
-<h1><a class="anchor" id="autotoc_md197"></a>
+<h1><a class="anchor" id="autotoc_md201"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -163,15 +163,15 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>IRunMeta</code> / <code>RunMeta</code>   </td><td class="markdownTableBodyNone">The only state that survives a run — best level and best score, persisted to <code>PlayerPrefs</code> (<code>BestLevel</code>, <code>BestScore</code>). <code>RecordRun(level, score)</code> keeps the max of each independently and persists on change. Loaded for display, never fed back into a live run   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md198"></a>
+<h1><a class="anchor" id="autotoc_md202"></a>
 Loss flow</h1>
 <div class="fragment"><div class="line">trigger → RunController.EndRun() → (loss cinematic) → GameOver screen</div>
 <div class="line">        → [Restart] → RunController.RestartRun() → Game</div>
 </div><!-- fragment --><p>Reset happens on <b>restart</b>, not on GameOver entry, so the GameOver screen can still show the final score. A loss arriving during a <code>BlocksLoss</code> cinematic or the <code>LevelUp</code> state is <b>deferred, never dropped</b> — <code>RunController</code> marks it pending and fires <code>EndRun()</code> the moment navigation returns to <code>Game</code>. Outside those gates, <code>EndRun()</code> only commits from <code>NavigationState.Game</code> (the GameOver state gate stops a second trigger from ending the run twice).</p>
-<h1><a class="anchor" id="autotoc_md199"></a>
+<h1><a class="anchor" id="autotoc_md203"></a>
 Testability seams</h1>
 <p><code>RunController</code> reaches navigation and cinematic state through <code>INavigation</code> and <code>ICinematicState</code> (<code>Shared/GameState/</code>) rather than the static <code>Navigation</code> / <code>Cinematic</code>, so the whole lifecycle is unit-testable with substitutes.</p>
-<h1><a class="anchor" id="autotoc_md200"></a>
+<h1><a class="anchor" id="autotoc_md204"></a>
 Interactions</h1>
 <ul>
 <li><b><code>GameOverMessage</code></b> — published by <code>RunController.EndRun()</code>; consumed by the GameOver screen and (later) the loss cinematic.</li>

@@ -131,7 +131,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Runtime diagnostic tools for performance monitoring and device configuration.</p>
-<h1><a class="anchor" id="autotoc_md799"></a>
+<h1><a class="anchor" id="autotoc_md803"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -143,7 +143,7 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>FrameRateSettings</code>   </td><td class="markdownTableBodyNone">MonoBehaviour that sets <code>Application.targetFrameRate</code> on <code>Awake</code>. Disables VSync (<code>vSyncCount = 0</code>) so the target takes effect. Three modes: <b>Default60</b> (fixed 60), <b>MatchDisplay</b> (device-dependent — see below), <b>Custom</b> (exposes a frame rate field, shown conditionally via <code>[ShowIf]</code>). Default mode is <code>MatchDisplay</code>. Ships in <b>all builds</b> — it's the only code setting the target frame rate, so release needs it. Exposes <code>ApplyGovernedRate(int)</code> — a static seam any other system can call to change the target after boot (see below)   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md800"></a>
+<h1><a class="anchor" id="autotoc_md804"></a>
 Log — tagged logging</h1>
 <p>Use <code>Log</code> instead of raw <code>Debug.Log</code> / <code>Debug.LogWarning</code> / <code>Debug.LogError</code> throughout the runtime codebase. The tag string groups related messages and gets a per-tag color in the Console.</p>
 <div class="fragment"><div class="line">Log.Info(<span class="stringliteral">&quot;Spawner&quot;</span>, $<span class="stringliteral">&quot;Spawned {count} actors&quot;</span>);   <span class="comment">// stripped from release builds</span></div>
@@ -151,16 +151,16 @@ Log — tagged logging</h1>
 <div class="line">Log.Error(<span class="stringliteral">&quot;Score&quot;</span>,  <span class="stringliteral">&quot;Negative attribution&quot;</span>);       <span class="comment">// survives in all builds</span></div>
 <div class="line">Log.Assert(hp &gt; 0,  <span class="stringliteral">&quot;Health&quot;</span>, <span class="stringliteral">&quot;HP went negative&quot;</span>); <span class="comment">// stripped from release builds</span></div>
 </div><!-- fragment --><p><code>Info</code> and <code>Assert</code> auto-strip via <code>[Conditional]</code> — callers don't need <code>#if</code> guards and the string interpolation arguments are also eliminated by the compiler. <code>Warn</code> and <code>Error</code> are unconditional because warnings and errors should be visible in release diagnostics. <code>Warn</code> and <code>Error</code> accept an optional <code>UnityEngine.Object context</code> parameter to highlight the source object in the Hierarchy on click.</p>
-<h1><a class="anchor" id="autotoc_md801"></a>
+<h1><a class="anchor" id="autotoc_md805"></a>
 Usage</h1>
 <p>Add both components to a persistent GameObject in the scene. <code>FrameRateSettings</code> should run on the same object or earlier than any gameplay code — it only needs to execute once in <code>Awake()</code>.</p>
 <p>In the Editor, changing <code>FrameRateSettings</code>' Inspector fields in Play mode re-applies the target frame rate immediately via <code>OnValidate</code>. <code>FPSCounter</code> has no such hook — its colors and thresholds are read live in <code>OnGUI</code> regardless, but a font-size change needs a domain reload to show (see above). In the Editor, <code>MatchDisplay</code> leaves the target uncapped (<code>-1</code>) — the Game View reports its own refresh rate, not the physical display, so matching it would falsely cap the editor.</p>
-<h1><a class="anchor" id="autotoc_md802"></a>
+<h1><a class="anchor" id="autotoc_md806"></a>
 MatchDisplay on adaptive-refresh Android</h1>
 <p>On-device, <code>MatchDisplay</code> votes for the <b>highest refresh rate advertised across <code>Screen.resolutions</code></b> — not whatever <code>Screen.currentResolution</code> currently reports. That's deliberate, not an oversight: on adaptive-refresh-rate (ARR) panels (Pixel-class Android), there's no discrete display-mode switch to make — the panel already runs a high-Hz mode and <code>Screen.currentResolution</code> reports the <em>per-app arbitrated</em> rate, which itself echoes back whatever <code>Application.targetFrameRate</code> this app last voted for. Matching that reading is an echo loop that self-pins the target at 60 the first time it runs. Shopping <code>Screen.resolutions</code> for the best refresh rate and requesting it via <code>Screen.SetResolution</code> sidesteps the loop; it's a no-op on true ARR panels (the mode doesn't change) and a real switch on older devices that idle in a 60 Hz mode.</p>
 <p>The <code>Screen.resolutions</code> entries are <b>full-panel sizes</b>, while the app's actual rendering surface is inset by the display cutout/nav area — so width/height will (by design) never exactly match a listed mode. <code>MatchDisplay</code> only shops those entries for refresh rate and keeps the current surface size via <code>Screen.SetResolution</code>.</p>
 <p>Diagnose refresh-rate issues from the <code>[FrameRateSettings]</code> log lines it prints at startup (current resolution + refresh, the full <code>Screen.resolutions</code> list, the requested mode, and the granted mode a few frames later) — read them with <code>adb logcat</code> on a real device; this is the whole diagnosis loop. Related device-level settings: Swappy / Optimized Frame Pacing is enabled (<code>androidUseSwappy</code> in Player Settings), and the Android manifest declares <code>android:appCategory="game"</code> — both feed into how the platform paces and schedules this app's frames.</p>
-<h1><a class="anchor" id="autotoc_md803"></a>
+<h1><a class="anchor" id="autotoc_md807"></a>
 <code>ApplyGovernedRate</code> — the thermal governor seam</h1>
 <p><code>FrameRateSettings.ApplyGovernedRate(int)</code> is the single static method that clears VSync and assigns <code>Application.targetFrameRate</code>. <code>Awake</code>'s own <code>Apply()</code> calls it for the boot vote, and <code>ThermalFrameRateGovernor</code> (<code>Shared/Thermal/</code>) calls it later to step the rate down (or back up) as the device heats or cools — see <code><a class="el" href="Shared_2Thermal_2README_8md.html">Shared/Thermal/README.md</a></code>.</p>
 <p>This is a <b>deliberate</b> down-vote, not the <code>MatchDisplay</code> echo loop described above: the echo loop happens when the code <em>reads back</em> the per-app arbitrated refresh rate and votes it straight to itself, self-pinning at whatever it last asked for. The governor never reads a refresh rate — it decides purely from thermal headroom/status — so there's nothing to echo. It also only ever climbs back toward the ladder's top rung on its up-steps, mirroring <code>MatchDisplay</code>'s own rule of never down-correcting from a reading. </p>

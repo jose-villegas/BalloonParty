@@ -124,7 +124,7 @@ var sectionId = 'dynsection-0';
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:href="classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html" target="_top" xlink:title="Visible pile for balloons that couldn&#39;t spawn; drains via heart trails charged at launch,...">
+<g id="a_Node000005"><a xlink:href="classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html" target="_top" xlink:title="Visible pile for balloons that couldn&#39;t spawn; purely visual — HP drain is handled by WaveDamageMessa...">
 <polygon fill="white" stroke="#666666" points="358,-606 194,-606 194,-576 358,-576 358,-606"/>
 <text text-anchor="start" x="202" y="-594" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Spawner.</text>
 <text text-anchor="middle" x="276" y="-583" font-family="Helvetica,sans-Serif" font-size="10.00">RejectedBalloonEffect</text>

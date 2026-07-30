@@ -10,5 +10,7 @@ var searchData=
   ['hitoutcome_2ecs_7',['HitOutcome.cs',['../HitOutcome_8cs.html',1,'']]],
   ['hitpipeline_2ecs_8',['HitPipeline.cs',['../HitPipeline_8cs.html',1,'']]],
   ['hitvfxoverride_2ecs_9',['HitVfxOverride.cs',['../HitVfxOverride_8cs.html',1,'']]],
-  ['hitvfxoverridedrawer_2ecs_10',['HitVfxOverrideDrawer.cs',['../HitVfxOverrideDrawer_8cs.html',1,'']]]
+  ['hitvfxoverridedrawer_2ecs_10',['HitVfxOverrideDrawer.cs',['../HitVfxOverrideDrawer_8cs.html',1,'']]],
+  ['holdspeedupcontroller_2ecs_11',['HoldSpeedUpController.cs',['../HoldSpeedUpController_8cs.html',1,'']]],
+  ['holdspeeduptooltip_2ecs_12',['HoldSpeedUpTooltip.cs',['../HoldSpeedUpTooltip_8cs.html',1,'']]]
 ];

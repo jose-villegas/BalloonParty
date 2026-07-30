@@ -110,15 +110,15 @@ $(function(){initNavTree('plan_web_demo_hosting.html',''); initResizable(true); 
   <div class="headertitle"><div class="title">Web Demo Hosting</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md687"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md691"></a>
 Web Demo Hosting</h1>
 <p>Put a playable build behind a link, so showing the game to someone costs them a click instead of an APK sideload. Attempted end to end on 2026-07-26, reached the point of being live, then rolled back over an unresolved runtime crash. This page keeps the recipe and the blocker so the attempt does not have to be re-derived.</p>
 <p><b>Status: rolled back, resumable.</b> The tooling was deleted; the hosting change it depended on was kept (see <em>What survived</em>). Nothing here is built.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md689"></a>
+<h2><a class="anchor" id="autotoc_md693"></a>
 Why keep it</h2>
 <p>Sideloading is the only alternative without a Google Play account, and a stranger being asked to enable "install from unknown sources" for an unsigned APK is a hard sell — the scary prompts are not removable from outside a store. A URL has no such problem, which makes the web build the honest demo channel even though mobile is the shipping platform.</p>
-<h2><a class="anchor" id="autotoc_md690"></a>
+<h2><a class="anchor" id="autotoc_md694"></a>
 What survived</h2>
 <p><code>.github/workflows/doxygen.yml</code> was moved off <code>actions/deploy-pages</code> onto <code>peaceiris/actions-gh-pages@v4</code>, which <b>pushes the <code>gh-pages</code> branch</b>. This is committed and live. It was done because <b>a repo serves only one Pages site</b>, so the docs and a game could not each own an Actions-artifact deployment.</p>
 <p>Consequences to remember:</p>
@@ -127,7 +127,7 @@ What survived</h2>
 <li>The docs publish no longer passes <code>keep_files</code>, so it replaces the branch contents outright. Anything else living on that branch gets pruned. Re-adding a second occupant means re-adding <code>keep_files: true</code> to the docs job <em>and</em> giving the new content its own <code>destination_dir</code>.</li>
 <li><code>gh-pages</code> history permanently carries one 29 MB player build from the attempt. Only squashing the branch reclaims it.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md691"></a>
+<h2><a class="anchor" id="autotoc_md695"></a>
 The recipe, if resumed</h2>
 <p>Build locally, deploy by script. <b>Do not</b> reach for GameCI: it needs a <code>UNITY_LICENSE</code> secret (see the CI notes in Claude's memory for the <code>.alf</code> → <code>.ulf</code> activation path), and José's call was explicitly to build by hand instead. Actions cannot see a local build folder anyway, so once bytes are being pushed, pushing them straight to <code>gh-pages</code> <em>is</em> the deploy — a workflow adds latency and no logic.</p>
 <p>An editor entry point (<code>Tools/BalloonParty/Build WebGL Player</code>, plus a batchmode <code>-executeMethod</code> twin) must set these, because the defaults do not work on Pages:</p>
@@ -148,7 +148,7 @@ The recipe, if resumed</h2>
 <p>These are all WebGL-scoped, so they do not affect mobile builds and can simply live in ProjectSettings — set them in the editor, not by hand-editing the asset.</p>
 <p>The deploy step: fetch <code>origin/gh-pages</code> into a <code>mktemp</code> worktree <b>outside the project tree</b> (or Unity will import the site), replace the target subdirectory wholesale rather than syncing it (<code>rsync</code>'s size+mtime quick check can skip a same-size file — this bit us), <code>touch .nojekyll</code>, commit, push, remove the worktree. Guard on <code>index.html</code> existing, and no-op cleanly when nothing changed.</p>
 <p>Nothing else needs editor setup. WebGL's default quality level is <code>High</code> against mobile's <code>Medium</code>, but all six levels share one URP asset and differ only in <code>lodBias</code>, <code>particleRaycastBudget</code>, and reflection probes — irrelevant for a 2D game.</p>
-<h2><a class="anchor" id="autotoc_md692"></a>
+<h2><a class="anchor" id="autotoc_md696"></a>
 The blocker</h2>
 <p>The player reached the site and booted: <code>Unity WebGPU: Version WebGPU 1.0</code>, physics and input initialised, player data loaded. It then died on the <b>first main-loop frame</b> with <code>RuntimeError: null function</code> → <code>Halting program.</code> Never attributed. Two hypotheses:</p>
 <ol type="1">
@@ -157,12 +157,12 @@ The blocker</h2>
 </ol>
 <p><b>One build separates them:</b> exception support <code>FullWithStacktrace</code>, development build, and <code>DustSpeckField</code> disabled in <code>Game.unity</code>. Boots clean → hypothesis 1, and the fix is a WebGPU-aware guard or the texture-based fallback that <code><a class="el" href="SpeckField_8cs.html">SpeckField.cs</a></code>'s own comment suggests. Still crashes → there is now a named managed stack pointing at hypothesis 2.</p>
 <p>Benign log noise to ignore while debugging: <code>Content-Encoding: gzip</code> advice (expected with the decompression fallback), <code>AudioContext was not allowed to start</code> (autoplay policy, clears on first click), <code>Cache.put() encountered a network error</code> (payload over the browser cache quota), and the <code>JS_FileSystem_Sync</code> deprecation notice. Also note <code>Screen.resolutions</code> returns <b>empty</b> on WebGL — <code>FrameRateSettings</code> handles it, other indexing code may not.</p>
-<h2><a class="anchor" id="autotoc_md693"></a>
+<h2><a class="anchor" id="autotoc_md697"></a>
 Residue from the attempt</h2>
 <ul>
 <li>Commit <code>4d517d61</code> persisted <code>webGLCompressionFormat: 1</code>, <code>webGLDecompressionFallback: 1</code> and a <code>WebGLSupport</code> graphics-API entry into ProjectSettings. Harmless and WebGL-scoped, but dead while this plan is dormant. Clear them in the editor if it bothers you; the same commit also carries an unrelated iOS texture-format entry, so do not revert the file.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md694"></a>
+<h2><a class="anchor" id="autotoc_md698"></a>
 If web stays dead</h2>
 <p>Ranked alternatives that need no Google Play account:</p>
 <ol type="1">
@@ -170,7 +170,7 @@ If web stays dead</h2>
 <li><b>Direct APK download</b> — works, but Play Protect and the unknown-sources flow will frighten non-technical players. Publishing the APK's SHA-256 and signing with a stable key helps a technical audience and nobody else.</li>
 <li><b>Play Console internal testing</b> — the actually-friction-free mobile answer, and the one option that requires the Google account this plan exists to avoid.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md695"></a>
+<h2><a class="anchor" id="autotoc_md699"></a>
 Decision log</h2>
 <ul>
 <li><b>2026-07-26</b> — Attempted, went live at <code>/play</code>, crashed on the first frame, rolled back. Tooling deleted (<code>webgl.yml</code>, <code>Assets/Source/Editor/CI/WebGLBuilder.cs</code>, <code>Tools/deploy_webgl.sh</code>); the <code>gh-pages</code> branch hosting change kept. Shipping WebGPU was a deliberate call to preserve <code>SpeckField</code>, accepting experimental-backend risk. </li>

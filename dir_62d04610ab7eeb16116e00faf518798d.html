@@ -120,7 +120,7 @@ $(function(){initNavTree('dir_62d04610ab7eeb16116e00faf518798d.html',''); initRe
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Passive gameplay recorder. Listens to the game's internal event stream, keeps running totals for each level and each run in memory, and saves structured records to a local log file at level boundaries and game-over. Dev builds only — release builds register none of it.</p>
 <p>The service never sends events back, never modifies gameplay state, and never causes stutters during action — it only counts.</p>
-<h1><a class="anchor" id="autotoc_md214"></a>
+<h1><a class="anchor" id="autotoc_md218"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -149,10 +149,10 @@ Contents</h1>
 <td class="markdownTableBodyNone"><code>TelemetryJson</code>   </td><td class="markdownTableBodyNone">Static, reflection-free JSON writer for the two record types (reused <code>StringBuilder</code>, <code>InvariantCulture</code> throughout)   </td></tr>
 </table>
 <p>Pause handling subscribes <code>PauseService.IsAnyPaused</code> directly (reference-counted and reset-safe) rather than counting <code>PausedMessage</code>/<code>ResumedMessage</code> edges, which leak on the loss path.</p>
-<h1><a class="anchor" id="autotoc_md215"></a>
+<h1><a class="anchor" id="autotoc_md219"></a>
 Registration</h1>
 <p>Appended at the end of <code>GameScopeRegistration.RegisterGameplaySystems</code>, with the service and sink registrations wrapped in <code>#if UNITY_EDITOR || DEVELOPMENT_BUILD</code>. Release builds contain no telemetry code paths.</p>
-<h1><a class="anchor" id="autotoc_md216"></a>
+<h1><a class="anchor" id="autotoc_md220"></a>
 Design plan</h1>
 <p>Full specification: <a class="el" href="plan_gameplay_telemetry.html">Gameplay Telemetry</a> </p>
 </div><!-- contents -->

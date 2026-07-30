@@ -124,49 +124,146 @@ Files</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ILossForecast_8cs.html">ILossForecast.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IPendingHealthCharges_8cs.html">IPendingHealthCharges.cs</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IPlayerHealth_8cs.html">IPlayerHealth.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="LossForecast_8cs.html">LossForecast.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PlayerHealthController_8cs.html">PlayerHealthController.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="WaveDeficit_8cs.html">WaveDeficit.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="WaveDeficitCalculator_8cs.html">WaveDeficitCalculator.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>The player's <b>hit-point pool</b> — the only loss trigger under the spawn-saturation model. When the board is so choked that an incoming balloon can't spawn, that balloon is rejected and costs one hit point; reaching zero ends the run.</p>
+<p>The player's <b>hit-point pool</b> — the only loss trigger under the line-based spawn-saturation model. Each heart represents one full spawn line. When the board can't absorb all the lines in a spawn wave, the player loses one heart per full line of deficit; partial-line shortfalls are forgiven. Reaching zero hearts ends the run.</p>
 <h1><a class="anchor" id="autotoc_md181"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File   </th><th class="markdownTableHeadNone">What it does    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>PlayerHealthController</code>   </td><td class="markdownTableBodyNone">Plain C# entry point (<code>IStartable</code>, <code>IRunResettable</code>, <code>IDisposable</code>). Holds <code>ReactiveProperty&lt;int&gt; Current</code>, initialised and reset to <code>IRunConfig.StartingHitPoints</code> (clamped to a hard internal cap of 999 — never displayed). Subscribes to <code>SpawnBlockedMessage</code>; each message spends one point. Also refills to full on every <code>ScoreLevelUpMessage</code> — the level-up ceremony resets HP as a clean slate, same clamp as the run-reset refill below. When <code>Current</code> crosses to zero it publishes <code>EndRunRequestedMessage</code> exactly once (<code>RunController</code> routes it to <code>EndRun</code>) — the local zero-guard plus the <code>GameOver</code> state gate prevent a second blocked spawn from ending the run again. It publishes rather than calling <code>RunController</code> directly: as an <code>IRunResettable</code> it sits in the collection <code>RunController</code> resolves, so a direct dependency would be a DI cycle    </td></tr>
+<td class="markdownTableBodyNone"><code>PlayerHealthController</code>   </td><td class="markdownTableBodyNone">Plain C# entry point (<code>IStartable</code>, <code>IRunResettable</code>, <code>IDisposable</code>). Holds <code>ReactiveProperty&lt;int&gt; Current</code>, initialised and reset to <code>IRunConfig.StartingHitPoints</code> (clamped to a hard internal cap of 999). Subscribes to <code>WaveDamageMessage</code>; each message spends <code>HeartsLost</code> points in one shot. Also refills to full on every <code>ScoreLevelUpMessage</code>. When <code>Current</code> crosses to zero it publishes <code>EndRunRequestedMessage</code> exactly once.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>IPlayerHealth</code>   </td><td class="markdownTableBodyNone">Read-only seam (<code>Current</code>) — what UI binders and <code>SpaceDanger</code>/<code>LossForecast</code> inject instead of the concrete controller    </td></tr>
+<td class="markdownTableBodyNone"><code>IPlayerHealth</code>   </td><td class="markdownTableBodyNone">Read-only seam (<code>Current</code>) — what UI binders and <code>SpaceDanger</code> inject instead of the concrete controller    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>IPendingHealthCharges</code> / <code>ILossForecast</code> + <code>LossForecast</code>   </td><td class="markdownTableBodyNone">The loss forecast — see below    </td></tr>
+<td class="markdownTableBodyNone"><code>WaveDeficitCalculator</code>   </td><td class="markdownTableBodyNone">Pure static function: <code>Calculate(availableSpace, neededSlots, rowLength) → WaveDeficit</code>. The core formula: <code>heartsLost = floor(max(0, needed - available) / rowLength)</code>    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>HeartTrailTracker</code>   </td><td class="markdownTableBodyNone">The heart trails currently in flight (health UI → overflow pop), launch order preserved. <code>HeartTrailController</code> (<code>UI/Health/</code>) adds/removes them; the heart-drain cinematic frames the hearts in this set. Lives in the parent scope so both can reach it; cleared on run reset   </td></tr>
+<td class="markdownTableBodyNone"><code>WaveDeficit</code>   </td><td class="markdownTableBodyNone">Readonly struct result: <code>HeartsLost</code> (full lines of deficit) and <code>UnspawnedSlots</code> (total shortfall)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>ILossForecast</code> / <code>LossForecast</code>   </td><td class="markdownTableBodyNone">Loss is imminent when HP is already at zero (damage is immediate under the line model, no pending charges)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>HeartTrailTracker</code>   </td><td class="markdownTableBodyNone">The heart trails currently in flight (health UI → grid area), launch order preserved. <code>HeartTrailController</code> (<code>UI/Health/</code>) adds/removes them; the heart-drain cinematic frames the hearts in this set   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md182"></a>
 How it works</h1>
-<div class="fragment"><div class="line">BalloonSpawner (column saturated) ──SpawnBlockedMessage──► PlayerHealthController.Damage(1)</div>
-<div class="line">                                                                  │  Current == 0</div>
-<div class="line">                                                                  ▼</div>
-<div class="line">                                                       EndRunRequestedMessage</div>
-<div class="line">                                                                  │</div>
-<div class="line">                                                                  ▼</div>
-<div class="line">                                                       RunController.EndRun()</div>
-</div><!-- fragment --><p>A blocked spawn is known <b>synchronously</b>: <code>BalloonBalancer.Balance()</code> updates the grid model before any view tween, so when <code>BalloonPlacementResolver</code> finds no reachable slot for a column, that column genuinely can't accept a balloon. Before costing HP the resolver looks past the column: it re-homes the balloon into the nearest other column that can still take it, and failing that asks <code>BalloonBalancer.TryRelievePressure</code> to <b>pressure-balance</b> — shove stable balloons aside to open the column. Only when the whole board is out of room does the would-be balloon join the overflow pile below the grid (<code>RejectedBalloonEffect</code>). <code>SpawnBlockedMessage</code> is published <b>when that balloon's heart launches</b> from the health UI (alongside <code>OverflowHeartRequestedMessage</code>), so the HP drain syncs with the heart leaving the bar; the balloon pops when the heart lands. Popping real balloons to free space is what ultimately stops the bleed — the core tension.</p>
-<p><code>Current</code> exposes only the live count; the UI (<code>UI/Health/HealthCounterLabel</code>) shows it as a numeric label with no fixed maximum, mirroring <code>ShieldCounterLabel</code>. The label is <b>not</b> self-injected — <code>HealthUILifetimeScope</code> (a child scope on the health UI hierarchy) gathers the labels via the shared <code>RegisterBoundViews</code> helper (<code>UI/Binding/</code>) and binds them to <code>IPlayerHealth.Current</code> at <code>Start</code>. This avoids the injection-timing trap where the parent scope (<code>[DefaultExecutionOrder(-5001)]</code>) injects a MonoBehaviour before its own <code>Awake</code> has resolved the TMP component. HP resets to full on restart via <code>IRunResettable</code> at the <code>Counters</code> stage, before the board is repopulated.</p>
-<h1><a class="anchor" id="autotoc_md183"></a>
-Registration</h1>
-<p><code>GameLifetimeScope</code>: <code>RegisterEntryPoint&lt;PlayerHealthController&gt;().AsSelf().As&lt;IRunResettable&gt;().As&lt;IPlayerHealth&gt;()</code>. The reject feedback (camera shake, pop VFX) lives in <code>Display/CameraShakeService</code> and the spawner; this controller owns only the HP state and the loss trigger.</p>
+<div class="fragment"><div class="line">BalloonSpawner (wave start)</div>
+<div class="line">  ├─ CountEmptySlots()</div>
+<div class="line">  ├─ WaveDeficitCalculator.Calculate(available, spawnLines×columns, columns)</div>
+<div class="line">  │       → WaveDeficit { HeartsLost, UnspawnedSlots }</div>
+<div class="line">  │</div>
+<div class="line">  ├─ if HeartsLost &gt; 0:</div>
+<div class="line">  │       publish WaveDamageMessage ──► PlayerHealthController.Damage(HeartsLost)</div>
+<div class="line">  │                                          │  Current == 0</div>
+<div class="line">  │                                          ▼</div>
+<div class="line">  │                                 EndRunRequestedMessage</div>
+<div class="line">  │                                          │</div>
+<div class="line">  │                                          ▼</div>
+<div class="line">  │                                 RunController.EndRun()</div>
+<div class="line">  │</div>
+<div class="line">  └─ Spawn only (spawnLines - HeartsLost) effective lines</div>
+<div class="line">         └─ blocked columns → RejectedBalloonEffect.Play() [visual only]</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md183"></a>
+Damage formula</h1>
+<ul>
+<li><code>deficit = neededSlots - availableSpace</code> (clamped ≥ 0)</li>
+<li><code>heartsLost = deficit / rowLength</code> (integer division — only full lines count)</li>
+<li>Partial remainders (&lt; one full line) are simply not spawned, costing no heart.</li>
+</ul>
+<p>Example (6 columns, 4 spawn lines = 24 needed):</p><ul>
+<li>18 available → deficit 6 → 1 heart lost</li>
+<li>21 available → deficit 3 → 0 hearts lost (partial line forgiven)</li>
+<li>12 available → deficit 12 → 2 hearts lost</li>
+</ul>
 <h1><a class="anchor" id="autotoc_md184"></a>
-Loss forecast</h1>
-<p><code>IPendingHealthCharges</code> (implemented by <code>RejectedBalloonEffect</code>: queued, unlaunched overflow balloons — each will unconditionally cost one HP at its heart's launch) + <code>ILossForecast</code>/<code>LossForecast</code> (<code>PendingCharges &gt;= Current</code>): the loss is knowable at reject-queue time, seconds before the Nth heart launch commits it. The level-up ceremony gates on this (no level-up after a lost run); the loss commit keeps its late timing so the heart-drain presentation plays. </p>
-</div><!-- contents -->
+Registration</h1>
+<p><code>GameLifetimeScope</code>: <code>RegisterEntryPoint&lt;PlayerHealthController&gt;().AsSelf().As&lt;IRunResettable&gt;().As&lt;IPlayerHealth&gt;()</code>. The deficit computation lives in <code>BalloonSpawner</code>; visual feedback (camera shake, heart trails, cinematic) subscribes to <code>WaveDamageMessage</code> independently.</p>
+<h1><a class="anchor" id="autotoc_md185"></a>
+Architecture</h1>
+<h2><a class="anchor" id="autotoc_md186"></a>
+Spawn Wave → Damage → Strikethrough → Pop</h2>
+<div class="fragment"><div class="line">sequenceDiagram</div>
+<div class="line">    participant Spawner as BalloonSpawner</div>
+<div class="line">    participant Calc as WaveDeficitCalculator</div>
+<div class="line">    participant Bus as MessagePipe</div>
+<div class="line">    participant HP as PlayerHealthController</div>
+<div class="line">    participant Trail as HeartTrailController</div>
+<div class="line">    participant FX as RejectedBalloonEffect</div>
+<div class="line">    participant Shake as CameraShakeController</div>
+<div class="line"> </div>
+<div class="line">    Spawner-&gt;&gt;Calc: Calculate(available, needed, cols)</div>
+<div class="line">    Calc--&gt;&gt;Spawner: WaveDeficit{HeartsLost, UnspawnedSlots}</div>
+<div class="line">    Spawner-&gt;&gt;FX: BeginDoomedLine(i) per doomed line</div>
+<div class="line">    Spawner-&gt;&gt;Bus: publish WaveDamageMessage</div>
+<div class="line">    Bus-&gt;&gt;HP: OnWaveDamage → subtract HeartsLost</div>
+<div class="line">    Bus-&gt;&gt;Trail: OnWaveDamage → loop heartsLost</div>
+<div class="line">    Bus-&gt;&gt;Shake: OnWaveDamage → shake(intensity)</div>
+<div class="line">    Trail-&gt;&gt;Trail: SpawnStrikethrough(delay, lineIndex)</div>
+<div class="line">    Note over Trail: DOTween: stagger → fly → passes → complete</div>
+<div class="line">    Trail-&gt;&gt;FX: PopDoomedLine(lineIndex)</div>
+<div class="line">    Trail-&gt;&gt;Bus: publish StrikethroughArrivedMessage</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md187"></a>
+MVC Layers &amp; Message Flow</h2>
+<div class="fragment"><div class="line">graph TD</div>
+<div class="line">    subgraph Model</div>
+<div class="line">        WDC[WaveDeficitCalculator]</div>
+<div class="line">        WD[WaveDeficit]</div>
+<div class="line">        WDM[WaveDamageMessage]</div>
+<div class="line">        SAM[StrikethroughArrivedMessage]</div>
+<div class="line">    end</div>
+<div class="line"> </div>
+<div class="line">    subgraph Controller</div>
+<div class="line">        PHC[PlayerHealthController]</div>
+<div class="line">        HTC[HeartTrailController]</div>
+<div class="line">        CSC[CameraShakeController]</div>
+<div class="line">        HDC[HeartDrainCinematic]</div>
+<div class="line">        SD[SpaceDanger]</div>
+<div class="line">        RBE[RejectedBalloonEffect]</div>
+<div class="line">    end</div>
+<div class="line"> </div>
+<div class="line">    subgraph View</div>
+<div class="line">        DHLV[DangerHeartLossView]</div>
+<div class="line">        CSV[CameraShakeView]</div>
+<div class="line">    end</div>
+<div class="line"> </div>
+<div class="line">    subgraph External</div>
+<div class="line">        BS[BalloonSpawner]</div>
+<div class="line">        SG[SlotGrid]</div>
+<div class="line">    end</div>
+<div class="line"> </div>
+<div class="line">    BS --&gt;|calls| WDC</div>
+<div class="line">    WDC --&gt;|returns| WD</div>
+<div class="line">    BS --&gt;|publishes| WDM</div>
+<div class="line">    WDM -.-&gt;|subscribes| PHC</div>
+<div class="line">    WDM -.-&gt;|subscribes| HTC</div>
+<div class="line">    WDM -.-&gt;|subscribes| CSC</div>
+<div class="line">    WDM -.-&gt;|subscribes| HDC</div>
+<div class="line">    HTC --&gt;|pops| RBE</div>
+<div class="line">    HTC --&gt;|publishes| SAM</div>
+<div class="line">    SD --&gt;|reads| PHC</div>
+<div class="line">    SD --&gt;|reads| SG</div>
+<div class="line">    DHLV --&gt;|observes| SD</div>
+<div class="line">    CSV --&gt;|driven by| CSC</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md188"></a>
+Strikethrough Lifecycle</h2>
+<div class="fragment"><div class="line">stateDiagram-v2</div>
+<div class="line">    [*] --&gt; Idle</div>
+<div class="line">    Idle --&gt; Staggering: WaveDamageMessage received</div>
+<div class="line">    Staggering --&gt; Flying: stagger delay elapsed</div>
+<div class="line">    Flying --&gt; Striking: trail reaches grid edge</div>
+<div class="line">    Striking --&gt; Popping: N passes complete</div>
+<div class="line">    Popping --&gt; Idle: PopDoomedLine + release trail</div>
+</div><!-- fragment --> </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

@@ -139,6 +139,15 @@ Properties</h2></td></tr>
 <tr class="separator:a65cb3c052e2cab567b02dad4dfa72008"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17b21fde3ab05d424a81957f9ec264c1" id="r_a17b21fde3ab05d424a81957f9ec264c1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a17b21fde3ab05d424a81957f9ec264c1">CruiseWallBounceThreshold</a><code> [get]</code></td></tr>
 <tr class="separator:a17b21fde3ab05d424a81957f9ec264c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad83d4c6c04304e2d8e3c66aca6f39276" id="r_ad83d4c6c04304e2d8e3c66aca6f39276"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad83d4c6c04304e2d8e3c66aca6f39276">HoldSpeedUpLerpDuration</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad83d4c6c04304e2d8e3c66aca6f39276"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds to lerp from 1× to <a class="el" href="#a29a44b1bd6fa556d14dc5a710d2da33d" title="Maximum time-scale multiplier when holding during flight (e.g. 2 = double speed).">HoldSpeedUpMax</a> while holding.  <br /></td></tr>
+<tr class="separator:ad83d4c6c04304e2d8e3c66aca6f39276"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29a44b1bd6fa556d14dc5a710d2da33d" id="r_a29a44b1bd6fa556d14dc5a710d2da33d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29a44b1bd6fa556d14dc5a710d2da33d">HoldSpeedUpMax</a><code> [get]</code></td></tr>
+<tr class="memdesc:a29a44b1bd6fa556d14dc5a710d2da33d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum time-scale multiplier when holding during flight (e.g. 2 = double speed).  <br /></td></tr>
+<tr class="separator:a29a44b1bd6fa556d14dc5a710d2da33d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86df6c587b27f7d85846a785dbc32be0" id="r_a86df6c587b27f7d85846a785dbc32be0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a86df6c587b27f7d85846a785dbc32be0">HoldSpeedUpTooltipDelay</a><code> [get]</code></td></tr>
+<tr class="memdesc:a86df6c587b27f7d85846a785dbc32be0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of flight before the "hold to speed up" tooltip appears (0 = disabled).  <br /></td></tr>
+<tr class="separator:a86df6c587b27f7d85846a785dbc32be0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5da33735bb38d8092eacc66129b74f2e" id="r_a5da33735bb38d8092eacc66129b74f2e"><td class="memItemLeft" align="right" valign="top">AnimationCurve&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5da33735bb38d8092eacc66129b74f2e">LastShieldApproachCurve</a><code> [get]</code></td></tr>
 <tr class="separator:a5da33735bb38d8092eacc66129b74f2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5daf1f3032a154024e7c33ab19906cba" id="r_a5daf1f3032a154024e7c33ab19906cba"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5daf1f3032a154024e7c33ab19906cba">LastShieldApproachDuration</a><code> [get]</code></td></tr>
@@ -184,6 +193,12 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a31b78f2a98639644eb556e80a643e696"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfabde03accea8d48a2fc67e68269cd0" id="r_acfabde03accea8d48a2fc67e68269cd0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acfabde03accea8d48a2fc67e68269cd0">_cruiseWallBounceThreshold</a> = 3</td></tr>
 <tr class="separator:acfabde03accea8d48a2fc67e68269cd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2414603110313ac03398e21cf035d2fe" id="r_a2414603110313ac03398e21cf035d2fe"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2414603110313ac03398e21cf035d2fe">_holdSpeedUpLerpDuration</a> = 0.3f</td></tr>
+<tr class="separator:a2414603110313ac03398e21cf035d2fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a856282880faf4546b78eb94c0de4bad1" id="r_a856282880faf4546b78eb94c0de4bad1"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a856282880faf4546b78eb94c0de4bad1">_holdSpeedUpMax</a> = 2f</td></tr>
+<tr class="separator:a856282880faf4546b78eb94c0de4bad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefad016c638050f458272f3e385cb8fa" id="r_aefad016c638050f458272f3e385cb8fa"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aefad016c638050f458272f3e385cb8fa">_holdSpeedUpTooltipDelay</a> = 4f</td></tr>
+<tr class="separator:aefad016c638050f458272f3e385cb8fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99d8413c2e9f91ada1e4af08c667a237" id="r_a99d8413c2e9f91ada1e4af08c667a237"><td class="memItemLeft" align="right" valign="top">AnimationCurve&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a99d8413c2e9f91ada1e4af08c667a237">_lastShieldApproachCurve</a> = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f)</td></tr>
 <tr class="separator:a99d8413c2e9f91ada1e4af08c667a237"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a459ff9a94d550c6e74868b52c7e2e819" id="r_a459ff9a94d550c6e74868b52c7e2e819"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a459ff9a94d550c6e74868b52c7e2e819">_lastShieldApproachDuration</a> = 3f</td></tr>
@@ -297,6 +312,72 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Configuration.ProjectileFlightConfig._cruiseWallBounceThreshold = 3</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2414603110313ac03398e21cf035d2fe" name="a2414603110313ac03398e21cf035d2fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2414603110313ac03398e21cf035d2fe">&#9670;&#160;</a></span>_holdSpeedUpLerpDuration</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.ProjectileFlightConfig._holdSpeedUpLerpDuration = 0.3f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a856282880faf4546b78eb94c0de4bad1" name="a856282880faf4546b78eb94c0de4bad1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a856282880faf4546b78eb94c0de4bad1">&#9670;&#160;</a></span>_holdSpeedUpMax</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.ProjectileFlightConfig._holdSpeedUpMax = 2f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aefad016c638050f458272f3e385cb8fa" name="aefad016c638050f458272f3e385cb8fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefad016c638050f458272f3e385cb8fa">&#9670;&#160;</a></span>_holdSpeedUpTooltipDelay</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.ProjectileFlightConfig._holdSpeedUpTooltipDelay = 4f</td>
         </tr>
       </table>
   </td>
@@ -776,6 +857,84 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a01ede40361bdd1ac8d848ddc0ce6aaf4">BalloonParty.Shared.IProjectileFlightConfig</a>.</p>
+
+</div>
+</div>
+<a id="ad83d4c6c04304e2d8e3c66aca6f39276" name="ad83d4c6c04304e2d8e3c66aca6f39276"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad83d4c6c04304e2d8e3c66aca6f39276">&#9670;&#160;</a></span>HoldSpeedUpLerpDuration</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.ProjectileFlightConfig.HoldSpeedUpLerpDuration</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds to lerp from 1× to <a class="el" href="#a29a44b1bd6fa556d14dc5a710d2da33d" title="Maximum time-scale multiplier when holding during flight (e.g. 2 = double speed).">HoldSpeedUpMax</a> while holding. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a2a92fbf63c5d55fd0cf60f5306ee5880">BalloonParty.Shared.IProjectileFlightConfig</a>.</p>
+
+</div>
+</div>
+<a id="a29a44b1bd6fa556d14dc5a710d2da33d" name="a29a44b1bd6fa556d14dc5a710d2da33d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29a44b1bd6fa556d14dc5a710d2da33d">&#9670;&#160;</a></span>HoldSpeedUpMax</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.ProjectileFlightConfig.HoldSpeedUpMax</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Maximum time-scale multiplier when holding during flight (e.g. 2 = double speed). </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#ae3144a8638d88fe4e55dd31f6a61c869">BalloonParty.Shared.IProjectileFlightConfig</a>.</p>
+
+</div>
+</div>
+<a id="a86df6c587b27f7d85846a785dbc32be0" name="a86df6c587b27f7d85846a785dbc32be0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86df6c587b27f7d85846a785dbc32be0">&#9670;&#160;</a></span>HoldSpeedUpTooltipDelay</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.ProjectileFlightConfig.HoldSpeedUpTooltipDelay</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds of flight before the "hold to speed up" tooltip appears (0 = disabled). </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a86e6ebadd5470b71ee261fffb4d4e398">BalloonParty.Shared.IProjectileFlightConfig</a>.</p>
 
 </div>
 </div>

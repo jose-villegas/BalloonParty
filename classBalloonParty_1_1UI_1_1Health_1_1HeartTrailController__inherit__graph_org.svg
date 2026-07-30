@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Flies a heart trail from the health UI to a ready overflow balloon on OverflowHeartRequestedMessage,...">
+<g id="a_Node000001"><a xlink:title="Spawns one heart trail per heart lost when a WaveDamageMessage arrives.">
 <polygon fill="#999999" stroke="#666666" points="155,-30 0,-30 0,0 155,0 155,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.Health.Heart</text>
 <text text-anchor="middle" x="77.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">TrailController</text>

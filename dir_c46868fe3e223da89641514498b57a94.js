@@ -37,10 +37,11 @@ var dir_c46868fe3e223da89641514498b57a94 =
     [ "ShieldGainedMessage.cs", "ShieldGainedMessage_8cs.html", "ShieldGainedMessage_8cs" ],
     [ "ShieldLostMessage.cs", "ShieldLostMessage_8cs.html", "ShieldLostMessage_8cs" ],
     [ "SpawnBalloonLineMessage.cs", "SpawnBalloonLineMessage_8cs.html", "SpawnBalloonLineMessage_8cs" ],
-    [ "SpawnBlockedMessage.cs", "SpawnBlockedMessage_8cs.html", "SpawnBlockedMessage_8cs" ],
     [ "SpeckSpawnRequestMessage.cs", "SpeckSpawnRequestMessage_8cs.html", "SpeckSpawnRequestMessage_8cs" ],
     [ "SpeedTapMintedMessage.cs", "SpeedTapMintedMessage_8cs.html", "SpeedTapMintedMessage_8cs" ],
     [ "StreakChangedMessage.cs", "StreakChangedMessage_8cs.html", "StreakChangedMessage_8cs" ],
+    [ "StrikethroughArrivedMessage.cs", "StrikethroughArrivedMessage_8cs.html", "StrikethroughArrivedMessage_8cs" ],
     [ "TransformCapturedMessage.cs", "TransformCapturedMessage_8cs.html", "TransformCapturedMessage_8cs" ],
-    [ "WallHitMessage.cs", "WallHitMessage_8cs.html", "WallHitMessage_8cs" ]
+    [ "WallHitMessage.cs", "WallHitMessage_8cs.html", "WallHitMessage_8cs" ],
+    [ "WaveDamageMessage.cs", "WaveDamageMessage_8cs.html", "WaveDamageMessage_8cs" ]
 ];

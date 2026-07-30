@@ -1,9 +1,7 @@
 <map id="BalloonParty.Game.Health.LossForecast" name="BalloonParty.Game.Health.LossForecast">
-<area shape="rect" id="Node000001" title=" " alt="" coords="313,69,509,109"/>
+<area shape="rect" id="Node000001" title="Under the line&#45;based damage model, HP drains immediately at wave resolution — there are no pending ch..." alt="" coords="115,108,311,148"/>
 <area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Health_1_1ILossForecast.html" title="Whether the run&#39;s loss is already a certainty, ahead of the loss actually committing." alt="" coords="5,5,201,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="214,46,315,67,314,72,213,51"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html" title="Read&#45;only view of the player&#39;s hit&#45;point pool." alt="" coords="5,69,201,109"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="215,87,313,87,313,92,215,92"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Health_1_1IPendingHealthCharges.html" title="Hit&#45;point charges already committed but not yet applied — nothing cancels one except a run reset." alt="" coords="5,133,201,173"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="213,128,314,107,315,112,214,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,53,194,106,190,110,132,57"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html" title="Read&#45;only view of the player&#39;s hit&#45;point pool." alt="" coords="225,5,421,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="294,56,235,110,232,106,291,52"/>
 </map>
