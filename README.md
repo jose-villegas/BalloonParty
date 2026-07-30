@@ -8,6 +8,8 @@ projectiles into a hex grid of balloons, chain color streaks to fill per-color s
 bars, and trigger items — bombs, lasers, chain lightning, paint, shields — as the board
 fights back with puff clouds, bushes, and armored balloons.
 
+<video src="https://github.com/jose-villegas/BalloonParty/raw/main/video.mp4" controls width="100%"></video>
+
 Runs have **stakes**: every spawn wave packs the grid tighter, and when a wave can't fit,
 the overflow pile below the grid drains your hearts one heart-trail at a time — slow-mo
 cinematic included. Reach zero and the run ends; only your best level and score survive.
