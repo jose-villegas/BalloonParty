@@ -37,6 +37,9 @@ namespace BalloonParty.Configuration
         [Tooltip("Number of back-and-forth oscillations (one pass = one direction).")]
         [SerializeField] private int _strikethroughPasses = 4;
 
+        [Tooltip("Delay between each successive strikethrough when multiple hearts are lost.")]
+        [SerializeField] private float _strikethroughStaggerDelay = 0.25f;
+
         public float AppearStaggerSeconds => _appearStaggerSeconds;
         public float LingerSeconds => _lingerSeconds;
         public float PopIntervalSeconds => _popIntervalSeconds;
@@ -46,5 +49,6 @@ namespace BalloonParty.Configuration
         public float StrikethroughPassDuration => _strikethroughPassDuration;
         public float StrikethroughJitter => _strikethroughJitter;
         public int StrikethroughPasses => _strikethroughPasses;
+        public float StrikethroughStaggerDelay => _strikethroughStaggerDelay;
     }
 }

@@ -15,5 +15,6 @@ namespace BalloonParty.Configuration
         float StrikethroughPassDuration { get; }
         float StrikethroughJitter { get; }
         int StrikethroughPasses { get; }
+        float StrikethroughStaggerDelay { get; }
     }
 }

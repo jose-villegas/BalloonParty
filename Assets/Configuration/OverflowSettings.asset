@@ -18,3 +18,7 @@ MonoBehaviour:
   _moveSharpness: 10
   _arrivalRadius: 0.02
   _heartTrailDuration: 0.5
+  _strikethroughPassDuration: 0.1
+  _strikethroughJitter: 0.25
+  _strikethroughPasses: 3
+  _strikethroughStaggerDelay: 0.085

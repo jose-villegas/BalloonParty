@@ -1,7 +1,9 @@
 using System;
+using BalloonParty.Audio;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Health;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Grid;
@@ -26,6 +28,7 @@ namespace BalloonParty.UI.Health
         private readonly IOverflowSettings _settings;
         private readonly ISubscriber<WaveDamageMessage> _waveDamageSubscriber;
         private readonly IPublisher<StrikethroughArrivedMessage> _strikethroughPublisher;
+        private readonly ISoundPlayer _soundPlayer;
         private readonly PoolManager _poolManager;
         private readonly FlyingTrail _prefab;
         private readonly TrailEndpointRegistry _endpoints;
@@ -41,6 +44,7 @@ namespace BalloonParty.UI.Health
             IOverflowSettings settings,
             ISubscriber<WaveDamageMessage> waveDamageSubscriber,
             IPublisher<StrikethroughArrivedMessage> strikethroughPublisher,
+            ISoundPlayer soundPlayer,
             PoolManager poolManager,
             FlyingTrail prefab,
             TrailEndpointRegistry endpoints,
@@ -51,6 +55,7 @@ namespace BalloonParty.UI.Health
             _settings = settings;
             _waveDamageSubscriber = waveDamageSubscriber;
             _strikethroughPublisher = strikethroughPublisher;
+            _soundPlayer = soundPlayer;
             _poolManager = poolManager;
             _prefab = prefab;
             _endpoints = endpoints;
@@ -81,11 +86,11 @@ namespace BalloonParty.UI.Health
 
             for (var i = 0; i < msg.HeartsLost; i++)
             {
-                SpawnStrikethrough(from, i);
+                SpawnStrikethrough(from, i, i * _settings.StrikethroughStaggerDelay);
             }
         }
 
-        private void SpawnStrikethrough(Vector3 from, int lineIndex)
+        private void SpawnStrikethrough(Vector3 from, int lineIndex, float delay)
         {
             var overflowRow = _grid.Rows + lineIndex;
             var leftPos = _grid.IndexToWorldPosition(new Vector2Int(0, overflowRow));
@@ -94,12 +99,28 @@ namespace BalloonParty.UI.Health
             var trail = _spawner.Acquire(Color.white);
             trail.transform.position = from;
             trail.ClearRibbon();
+            trail.SetRibbonEmitting(false);
             _tracker.Add(trail.transform);
 
             var jitter = _settings.StrikethroughJitter;
             var passDuration = _settings.StrikethroughPassDuration;
 
             var seq = DOTween.Sequence();
+
+            // Stagger: wait for previous strikethroughs to finish.
+            if (delay > 0f)
+            {
+                seq.AppendInterval(delay);
+            }
+
+            // Enable ribbon and play sound just before the flight begins.
+            var capturedLineIndex = lineIndex;
+            seq.AppendCallback(() =>
+            {
+                trail.SetRibbonEmitting(true);
+                _soundPlayer.Play(GameSoundId.Strikethrough, leftPos,
+                    semitoneOffset: -capturedLineIndex * 3);
+            });
 
             // Phase 1: fly from hearts UI to left edge of the doomed line.
             seq.Append(trail.transform.DOMove(leftPos, _settings.HeartTrailDuration).SetEase(Ease.OutCubic));
@@ -116,7 +137,6 @@ namespace BalloonParty.UI.Health
                 seq.Append(trail.transform.DOMove(jittered, passDuration).SetEase(Ease.InOutSine));
             }
 
-            var capturedLineIndex = lineIndex;
             seq.OnComplete(() =>
             {
                 _overflow.PopDoomedLine(capturedLineIndex);
