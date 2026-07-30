@@ -3,7 +3,6 @@ using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
-using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared.Extensions;
@@ -19,15 +18,14 @@ using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Balloon.Spawner
 {
-    /// <summary>Visible pile for balloons that couldn't spawn; drains via heart trails charged at launch, not at pop.</summary>
-    internal sealed class RejectedBalloonEffect : ITickable, IRunResettable, IPendingHealthCharges
+    /// <summary>Visible pile for balloons that couldn't spawn; purely visual — HP drain is handled by <see cref="WaveDamageMessage"/>.</summary>
+    internal sealed class RejectedBalloonEffect : ITickable, IRunResettable
     {
         private readonly IActiveLevelParameters _levelParams;
         private readonly IOverflowSettings _settings;
         private readonly IGamePalette _palette;
         private readonly PoolManager _poolManager;
         private readonly BalloonPopPresenter _popPresenter;
-        private readonly IPublisher<SpawnBlockedMessage> _spawnBlockedPublisher;
         private readonly IPublisher<OverflowHeartRequestedMessage> _heartRequestPublisher;
         private readonly SlotGrid _grid;
         private readonly PauseService _pauseService;
@@ -40,30 +38,8 @@ namespace BalloonParty.Balloon.Spawner
 
         public int ResetOrder => RunResetOrder.Counters;
 
-        // True while the overflow pile is resolving; the heart-drain cinematic checks this to know it's done.
+        // True while the overflow pile is resolving; the level transition waits for this to clear.
         internal bool IsOverflowActive => _overflowPaused;
-
-        // Each queued balloon costs one HP when its heart launches — read by the loss forecast.
-        public int PendingCharges
-        {
-            get
-            {
-                var pending = 0;
-                foreach (var column in _columns)
-                {
-                    var queue = column.Value;
-                    for (var i = 0; i < queue.Count; i++)
-                    {
-                        if (!queue[i].Launched)
-                        {
-                            pending++;
-                        }
-                    }
-                }
-
-                return pending;
-            }
-        }
 
         [Inject]
         internal RejectedBalloonEffect(
@@ -73,7 +49,6 @@ namespace BalloonParty.Balloon.Spawner
             IGamePalette palette,
             PoolManager poolManager,
             BalloonPopPresenter popPresenter,
-            IPublisher<SpawnBlockedMessage> spawnBlockedPublisher,
             IPublisher<OverflowHeartRequestedMessage> heartRequestPublisher,
             PauseService pauseService)
         {
@@ -83,7 +58,6 @@ namespace BalloonParty.Balloon.Spawner
             _palette = palette;
             _poolManager = poolManager;
             _popPresenter = popPresenter;
-            _spawnBlockedPublisher = spawnBlockedPublisher;
             _heartRequestPublisher = heartRequestPublisher;
             _pauseService = pauseService;
         }
@@ -141,8 +115,7 @@ namespace BalloonParty.Balloon.Spawner
 
             if (entry == null)
             {
-                // Nothing to visualize, but the column is still blocked — charge the hit point anyway.
-                _spawnBlockedPublisher.Publish(new SpawnBlockedMessage(col, RowPosition(col, rowOffset)));
+                // Nothing to visualize; HP drain is handled at the wave level via WaveDamageMessage.
                 return;
             }
 
@@ -250,11 +223,12 @@ namespace BalloonParty.Balloon.Spawner
         private void LaunchHeart(OverflowBalloon balloon)
         {
             balloon.Launched = true;
-            var position = balloon.View.transform.position;
 
-            // Hit point and camera shake charge when the heart launches, not when it lands.
-            _heartRequestPublisher.Publish(new OverflowHeartRequestedMessage(balloon.Id, position));
-            _spawnBlockedPublisher.Publish(new SpawnBlockedMessage(balloon.Column, position));
+            // Visual/audio feedback per rejected balloon; HP drain is aggregate via WaveDamageMessage.
+            _heartRequestPublisher.Publish(new OverflowHeartRequestedMessage(balloon.Id, balloon.View.transform.position));
+
+            // HP is no longer deferred to heart arrival — pop immediately after the visual cue.
+            Pop(balloon);
         }
 
         // Visual burst only — the hit point and shake were already charged in LaunchHeart. Shares the same

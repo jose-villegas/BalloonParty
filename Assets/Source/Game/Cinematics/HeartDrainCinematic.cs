@@ -11,14 +11,14 @@ using VContainer;
 namespace BalloonParty.Game.Cinematics
 {
     /// <summary>
-    ///     Begins on the first heart trail launch, follows the heart about to land in slow-mo, and ends
+    ///     Begins on the first wave-damage event, follows the heart trail in slow-mo, and ends
     ///     when the pile drains or the run ends.
     /// </summary>
     internal sealed class HeartDrainCinematic : CameraRigCinematicProducer
     {
         private readonly HeartTrailTracker _tracker;
         private readonly RejectedBalloonEffect _overflow;
-        private readonly ISubscriber<OverflowHeartRequestedMessage> _heartRequestedSubscriber;
+        private readonly ISubscriber<WaveDamageMessage> _waveDamageSubscriber;
 
         private IDisposable _subscription;
 
@@ -30,12 +30,12 @@ namespace BalloonParty.Game.Cinematics
             ICinematicsSettings settings,
             HeartTrailTracker tracker,
             RejectedBalloonEffect overflow,
-            ISubscriber<OverflowHeartRequestedMessage> heartRequestedSubscriber)
+            ISubscriber<WaveDamageMessage> waveDamageSubscriber)
             : base(director, rig, timeScale, settings)
         {
             _tracker = tracker;
             _overflow = overflow;
-            _heartRequestedSubscriber = heartRequestedSubscriber;
+            _waveDamageSubscriber = waveDamageSubscriber;
         }
 
         protected override CameraRigCinematicConfig BuildConfig()
@@ -51,7 +51,7 @@ namespace BalloonParty.Game.Cinematics
 
         protected override void OnStart()
         {
-            _subscription = _heartRequestedSubscriber.Subscribe(_ => OnFirstHeart());
+            _subscription = _waveDamageSubscriber.Subscribe(_ => OnWaveDamage());
         }
 
         protected override void OnDispose()
@@ -59,7 +59,7 @@ namespace BalloonParty.Game.Cinematics
             _subscription?.Dispose();
         }
 
-        private void OnFirstHeart()
+        private void OnWaveDamage()
         {
             // Only in active play; the runner drops the request while any cinematic is busy.
             if (Navigation.Current.Value == NavigationState.Game)

@@ -16,7 +16,7 @@ namespace BalloonParty.Game.Health
         private const int MaxHitPoints = 999;
 
         private readonly IRunConfig _config;
-        private readonly ISubscriber<SpawnBlockedMessage> _spawnBlockedSubscriber;
+        private readonly ISubscriber<WaveDamageMessage> _waveDamageSubscriber;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private readonly IPublisher<EndRunRequestedMessage> _endRunPublisher;
         private readonly ReactiveProperty<int> _current = new();
@@ -26,12 +26,12 @@ namespace BalloonParty.Game.Health
 
         public PlayerHealthController(
             IRunConfig config,
-            ISubscriber<SpawnBlockedMessage> spawnBlockedSubscriber,
+            ISubscriber<WaveDamageMessage> waveDamageSubscriber,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             IPublisher<EndRunRequestedMessage> endRunPublisher)
         {
             _config = config;
-            _spawnBlockedSubscriber = spawnBlockedSubscriber;
+            _waveDamageSubscriber = waveDamageSubscriber;
             _levelUpSubscriber = levelUpSubscriber;
             _endRunPublisher = endRunPublisher;
         }
@@ -43,7 +43,7 @@ namespace BalloonParty.Game.Health
         public void Start()
         {
             _current.Value = ClampedStartingHitPoints();
-            _subscription = _spawnBlockedSubscriber.Subscribe(_ => Damage(1));
+            _subscription = _waveDamageSubscriber.Subscribe(msg => Damage(msg.HeartsLost));
             _levelUpSubscription = _levelUpSubscriber.Subscribe(_ => _current.Value = ClampedStartingHitPoints());
         }
 

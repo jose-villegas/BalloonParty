@@ -5,6 +5,7 @@ using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Level;
+using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared.Diagnostics;
@@ -46,6 +47,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private readonly SlotGrid _grid;
         private readonly IPublisher<ItemCheckMessage> _itemCheckPublisher;
+        private readonly IPublisher<WaveDamageMessage> _waveDamagePublisher;
         private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
         private readonly List<IBalloonModel> _newlySpawnedBalloons = new();
         private readonly IObjectResolver _resolver;
@@ -90,6 +92,7 @@ namespace BalloonParty.Balloon.Spawner
             ISubscriber<ActorHitMessage> hitSubscriber,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             IPublisher<ItemCheckMessage> itemCheckPublisher,
+            IPublisher<WaveDamageMessage> waveDamagePublisher,
             RejectedBalloonEffect rejectedBalloon,
             BalloonPlacementResolver placement,
             ILevelProgress levelProgress)
@@ -110,6 +113,7 @@ namespace BalloonParty.Balloon.Spawner
             _hitSubscriber = hitSubscriber;
             _levelUpSubscriber = levelUpSubscriber;
             _itemCheckPublisher = itemCheckPublisher;
+            _waveDamagePublisher = waveDamagePublisher;
             _rejectedBalloon = rejectedBalloon;
             _placement = placement;
             _levelProgress = levelProgress;
@@ -242,6 +246,23 @@ namespace BalloonParty.Balloon.Spawner
             return Mathf.Max(0, Mathf.Min(capacity - occupied, waveCap));
         }
 
+        private int CountEmptySlots()
+        {
+            var count = 0;
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                for (var row = 0; row < _grid.Rows; row++)
+                {
+                    if (_grid.IsEmpty(col, row))
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
+        }
+
         private void OnSpawnLinesRequested(int lineCount)
         {
             if (lineCount <= 1)
@@ -350,6 +371,18 @@ namespace BalloonParty.Balloon.Spawner
         private void SpawnLine()
         {
             _balancer.Balance(relocateRoamers: true);
+
+            var deficit = WaveDeficitCalculator.Calculate(
+                CountEmptySlots(), _grid.Columns, _grid.Columns);
+
+            if (deficit.HeartsLost > 0)
+            {
+                _waveDamagePublisher.Publish(
+                    new WaveDamageMessage(deficit.HeartsLost, deficit.UnspawnedSlots, _grid.Columns));
+                ReleaseUnspawnedBatch();
+                return;
+            }
+
             PrepareSpawnBatch(lineCount: 1);
             SpawnLineInternal(PlacementReach.Pressure);
             ReleaseUnspawnedBatch();
@@ -575,9 +608,21 @@ namespace BalloonParty.Balloon.Spawner
             try
             {
                 _balancer.Balance(relocateRoamers: true);
-                PrepareSpawnBatch(lineCount);
 
-                for (var i = 0; i < lineCount; i++)
+                // Line-based deficit: compute damage before spawning so the wave only spawns lines that fit.
+                var deficit = WaveDeficitCalculator.Calculate(
+                    CountEmptySlots(), lineCount * _grid.Columns, _grid.Columns);
+
+                if (deficit.HeartsLost > 0)
+                {
+                    _waveDamagePublisher.Publish(
+                        new WaveDamageMessage(deficit.HeartsLost, deficit.UnspawnedSlots, _grid.Columns));
+                }
+
+                var effectiveLines = lineCount - deficit.HeartsLost;
+                PrepareSpawnBatch(effectiveLines);
+
+                for (var i = 0; i < effectiveLines; i++)
                 {
                     if (generation != _generation)
                     {

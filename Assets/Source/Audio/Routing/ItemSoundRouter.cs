@@ -16,7 +16,6 @@ namespace BalloonParty.Audio.Routing
         private readonly ISoundPlayer _player;
         private readonly ISubscriber<ItemActivatedMessage> _itemActivatedSubscriber;
         private readonly ISubscriber<OverflowHeartRequestedMessage> _overflowHeartSubscriber;
-        private readonly ISubscriber<SpawnBlockedMessage> _spawnBlockedSubscriber;
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
         private readonly CompositeDisposable _subscriptions = new();
 
@@ -26,13 +25,11 @@ namespace BalloonParty.Audio.Routing
         public ItemSoundRouter(ISoundPlayer player,
             ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
             ISubscriber<OverflowHeartRequestedMessage> overflowHeartSubscriber,
-            ISubscriber<SpawnBlockedMessage> spawnBlockedSubscriber,
             ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
         {
             _player = player;
             _itemActivatedSubscriber = itemActivatedSubscriber;
             _overflowHeartSubscriber = overflowHeartSubscriber;
-            _spawnBlockedSubscriber = spawnBlockedSubscriber;
             _loadedSubscriber = loadedSubscriber;
         }
 
@@ -40,7 +37,6 @@ namespace BalloonParty.Audio.Routing
         {
             _itemActivatedSubscriber.Subscribe(OnItemActivated).AddTo(_subscriptions);
             _overflowHeartSubscriber.Subscribe(OnOverflowHeart).AddTo(_subscriptions);
-            _spawnBlockedSubscriber.Subscribe(OnSpawnBlocked).AddTo(_subscriptions);
             _loadedSubscriber.Subscribe(_ => _itemPickupsThisFlight = 0).AddTo(_subscriptions);
         }
 
@@ -79,11 +75,6 @@ namespace BalloonParty.Audio.Routing
         private void OnOverflowHeart(OverflowHeartRequestedMessage message)
         {
             _player.Play(GameSoundId.HeartDrain, message.TargetPosition);
-        }
-
-        private void OnSpawnBlocked(SpawnBlockedMessage message)
-        {
-            _player.Play(GameSoundId.OverflowThud, message.Position);
         }
     }
 }
