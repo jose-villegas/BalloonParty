@@ -216,7 +216,7 @@ namespace BalloonParty.Tests.Shared
         {
             _service.ClaimExclusive(TimeScaleSource.LevelUpCeremony, 0.6f);
             LogAssert.Expect(LogType.Assert,
-                "[TimeScale] Two different sources competing for exclusivity: LevelUpCeremony vs Cinematic");
+                "<color=#C3E88D>[TimeScale]</color> Two different sources competing for exclusivity: LevelUpCeremony vs Cinematic");
             _service.ClaimExclusive(TimeScaleSource.Cinematic, 0.5f);
 
             // Latest exclusive owner wins.
