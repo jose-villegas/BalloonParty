@@ -1,5 +1,9 @@
 var NAVTREEINDEX74 =
 {
+"plan_shot_solver_accuracy.html#autotoc_md654":[3,10,0,7,5],
+"plan_shot_solver_accuracy.html#autotoc_md655":[3,10,0,7,6],
+"plan_terrain_biomes.html":[3,6],
+"plan_terrain_biomes.html#autotoc_md656":[3,6,0],
 "plan_terrain_biomes.html#autotoc_md658":[3,6,0,0],
 "plan_terrain_biomes.html#autotoc_md659":[3,6,0,1],
 "plan_terrain_biomes.html#autotoc_md660":[3,6,0,2],
@@ -245,9 +249,5 @@ var NAVTREEINDEX74 =
 "structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a021a91a2efb7bebedb37d0a10b754c08":[5,0,0,1,1,2,9],
 "structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a021a91a2efb7bebedb37d0a10b754c08":[6,0,0,1,1,2,9],
 "structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a18be7c88abb70f3537dcafb1ea5f9a22":[5,0,0,1,1,2,1],
-"structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a18be7c88abb70f3537dcafb1ea5f9a22":[6,0,0,1,1,2,1],
-"structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a43a4c2ce3679d77bb82754ea78d4747f":[5,0,0,1,1,2,11],
-"structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a43a4c2ce3679d77bb82754ea78d4747f":[6,0,0,1,1,2,11],
-"structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a52801eccd8fd9941a056d5c0715f2b7b":[5,0,0,1,1,2,6],
-"structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a52801eccd8fd9941a056d5c0715f2b7b":[6,0,0,1,1,2,6]
+"structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a18be7c88abb70f3537dcafb1ea5f9a22":[6,0,0,1,1,2,1]
 };

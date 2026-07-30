@@ -1,5 +1,9 @@
 var NAVTREEINDEX66 =
 {
+"interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html#acc6e745cc2a4e620e744923d1e6bc0d6":[5,0,0,1,1,6,1],
+"interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html#acc6e745cc2a4e620e744923d1e6bc0d6":[6,0,0,1,1,6,1],
+"interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html#ad863b19d4ddc02e5c3ecdb711a7a7ade":[5,0,0,1,1,6,5],
+"interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html#ad863b19d4ddc02e5c3ecdb711a7a7ade":[6,0,0,1,1,6,5],
 "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot.html":[5,0,0,1,1,7],
 "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot.html":[6,0,0,1,1,7],
 "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot.html#a2ea195ee2cb350469fc02ef37c1e7917":[5,0,0,1,1,7,1],
@@ -245,9 +249,5 @@ var NAVTREEINDEX66 =
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#abe058832dbf7a9ebb635a3ce8ac4c2bb":[5,0,0,3,4,7,5],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#abe058832dbf7a9ebb635a3ce8ac4c2bb":[6,0,0,3,4,7,5],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#abec0b96ea729ffabc42ba63a604645ae":[5,0,0,3,4,7,3],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#abec0b96ea729ffabc42ba63a604645ae":[6,0,0,3,4,7,3],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ad2f23ded4f34d5ab2a7068c8a790ba8d":[5,0,0,3,4,7,10],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ad2f23ded4f34d5ab2a7068c8a790ba8d":[6,0,0,3,4,7,10],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ad4db7b151c77e8961c9dfb67413b372e":[5,0,0,3,4,7,16],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ad4db7b151c77e8961c9dfb67413b372e":[6,0,0,3,4,7,16]
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#abec0b96ea729ffabc42ba63a604645ae":[6,0,0,3,4,7,3]
 };

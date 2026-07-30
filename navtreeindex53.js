@@ -1,5 +1,7 @@
 var NAVTREEINDEX53 =
 {
+"classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#aaa7b579b8be49338267d9a192cc6984b":[5,0,0,12,11,5,2],
+"classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#aaa7b579b8be49338267d9a192cc6984b":[6,0,0,12,11,5,2],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#ab7e472cd71b04b0013324cf15df1b503":[5,0,0,12,11,5,11],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#ab7e472cd71b04b0013324cf15df1b503":[6,0,0,12,11,5,11],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#ac87172615fc58e6b2e0cb1f53877bba1":[5,0,0,12,11,5,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX53 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html":[5,0,0,13,0,0,6],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html":[6,0,0,13,0,0,6],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html#a031cdfb3254cef956a6d9aa146593acf":[5,0,0,13,0,0,6,2],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html#a031cdfb3254cef956a6d9aa146593acf":[6,0,0,13,0,0,6,2],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html#a2d9d18d00f2d83a6c0a738273d2dd098":[5,0,0,13,0,0,6,6],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html#a2d9d18d00f2d83a6c0a738273d2dd098":[6,0,0,13,0,0,6,6]
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html#a031cdfb3254cef956a6d9aa146593acf":[6,0,0,13,0,0,6,2]
 };

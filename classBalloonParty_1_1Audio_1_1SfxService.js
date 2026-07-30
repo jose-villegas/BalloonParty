@@ -7,6 +7,7 @@ var classBalloonParty_1_1Audio_1_1SfxService =
     [ "Dispose", "classBalloonParty_1_1Audio_1_1SfxService.html#ab6f5408022bd46fddf09897313dd10cc", null ],
     [ "FadeOutSlot", "classBalloonParty_1_1Audio_1_1SfxService.html#a4d65cc5c5288c8bdbf4e7d34fb077312", null ],
     [ "IndexOfSlot", "classBalloonParty_1_1Audio_1_1SfxService.html#a938f8400bc8c44e4c3c1bfb1ad39cf92", null ],
+    [ "IsAlive", "classBalloonParty_1_1Audio_1_1SfxService.html#a387c14d4272fa7ce01b729abf55937c4", null ],
     [ "NextGeneration", "classBalloonParty_1_1Audio_1_1SfxService.html#a36be3c1f4bd0da5f6524b072e8e47aa4", null ],
     [ "OnVoiceComplete", "classBalloonParty_1_1Audio_1_1SfxService.html#a53c61976e35766db6a0b0d8f22398132", null ],
     [ "Play", "classBalloonParty_1_1Audio_1_1SfxService.html#a4083eaae2a5f3b640ac9dd9d9766f989", null ],

@@ -1,5 +1,9 @@
 var NAVTREEINDEX71 =
 {
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IResistsPaint.html":[5,0,0,13,1,12],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IResistsPaint.html":[6,0,0,13,1,12],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IWashesProjectileColor.html":[5,0,0,13,1,13],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IWashesProjectileColor.html":[6,0,0,13,1,13],
 "interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html":[5,0,0,13,3,1],
 "interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html":[6,0,0,13,3,1],
 "interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html#a00b9c88ab65536be281af22b69cfcad6":[5,0,0,13,3,1,1],
@@ -245,9 +249,5 @@ var NAVTREEINDEX71 =
 "namespaceBalloonParty_1_1Projectile_1_1Controller.html":[5,0,0,10,1],
 "namespaceBalloonParty_1_1Projectile_1_1Controller.html#a269c35de6ac7d821e1a397646dd92704":[5,0,0,10,1,10],
 "namespaceBalloonParty_1_1Projectile_1_1Controller.html#a269c35de6ac7d821e1a397646dd92704a43ec9846892f6095cd124df606a773eb":[5,0,0,10,1,10,0],
-"namespaceBalloonParty_1_1Projectile_1_1Controller.html#a269c35de6ac7d821e1a397646dd92704aac99ec9411052e84cbfc32ebfcf75c02":[5,0,0,10,1,10,1],
-"namespaceBalloonParty_1_1Projectile_1_1Controller.html#a269c35de6ac7d821e1a397646dd92704ae0010a0a1a3259ab5c06a19bad532851":[5,0,0,10,1,10,2],
-"namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649":[5,0,0,10,1,9],
-"namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649a6592f349ddfe64e333b3c4f1d17161af":[5,0,0,10,1,9,1],
-"namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649a95bfdefaaf01553cbf21ccd942855c69":[5,0,0,10,1,9,0]
+"namespaceBalloonParty_1_1Projectile_1_1Controller.html#a269c35de6ac7d821e1a397646dd92704aac99ec9411052e84cbfc32ebfcf75c02":[5,0,0,10,1,10,1]
 };

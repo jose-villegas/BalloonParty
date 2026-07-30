@@ -1,5 +1,7 @@
 var NAVTREEINDEX21 =
 {
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a5e2a7cc7c81ce1065c7ae39acb3a9a2b":[5,0,0,3,18,18],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a5e2a7cc7c81ce1065c7ae39acb3a9a2b":[6,0,0,3,18,18],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a6264210cf834714517021caaad070d62":[5,0,0,3,18,28],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a6264210cf834714517021caaad070d62":[6,0,0,3,18,28],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a65cb3c052e2cab567b02dad4dfa72008":[5,0,0,3,18,23],
@@ -247,7 +249,5 @@ var NAVTREEINDEX21 =
 "classBalloonParty_1_1Display_1_1NavigationCameraReveal.html#af2dffb6ddd4e08805f86db50b75750b1":[5,0,0,4,3,2],
 "classBalloonParty_1_1Display_1_1NavigationCameraReveal.html#af2dffb6ddd4e08805f86db50b75750b1":[6,0,0,4,3,2],
 "classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html":[5,0,0,4,4],
-"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html":[6,0,0,4,4],
-"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a12861a200bf35d6f87876fc18893bc11":[5,0,0,4,4,1],
-"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a12861a200bf35d6f87876fc18893bc11":[6,0,0,4,4,1]
+"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html":[6,0,0,4,4]
 };

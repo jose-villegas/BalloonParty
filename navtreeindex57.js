@@ -1,5 +1,7 @@
 var NAVTREEINDEX57 =
 {
+"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a28830072d97f21960a9caecec5a4ec2d":[5,0,0,13,0,17,84],
+"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a28830072d97f21960a9caecec5a4ec2d":[6,0,0,13,0,17,84],
 "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a30c474513a5e860dde87fc3c44897321":[5,0,0,13,0,17,75],
 "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a30c474513a5e860dde87fc3c44897321":[6,0,0,13,0,17,75],
 "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a3653f41c11c6b0ac9a60f6e66d9b1eac":[5,0,0,13,0,17,17],
@@ -247,7 +249,5 @@ var NAVTREEINDEX57 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#ae9109f45e103bdaa9b98ca8c78c90503":[5,0,0,13,0,20,22],
 "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#ae9109f45e103bdaa9b98ca8c78c90503":[6,0,0,13,0,20,22],
 "classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html":[5,0,0,13,1,15],
-"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html":[6,0,0,13,1,15],
-"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html#a18c0d2fbfcec68c3013e50608a37697f":[5,0,0,13,1,15,3],
-"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html#a18c0d2fbfcec68c3013e50608a37697f":[6,0,0,13,1,15,3]
+"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html":[6,0,0,13,1,15]
 };

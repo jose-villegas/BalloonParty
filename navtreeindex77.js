@@ -1,5 +1,9 @@
 var NAVTREEINDEX77 =
 {
+"structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a60e4c1942977262ed32ec1ea09e4e899":[5,0,0,5,6,0,0,0],
+"structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a60e4c1942977262ed32ec1ea09e4e899":[6,0,0,5,6,0,0,0],
+"structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a8755605515e536ee392b113e715cda98":[5,0,0,5,6,0,0,4],
+"structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a8755605515e536ee392b113e715cda98":[6,0,0,5,6,0,0,4],
 "structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a97c5fdcd664ca9ac0602e99edd74f91e":[5,0,0,5,6,0,0,6],
 "structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a97c5fdcd664ca9ac0602e99edd74f91e":[6,0,0,5,6,0,0,6],
 "structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#acec98aa606a3b2d7aa7efa4149afe75b":[5,0,0,5,6,0,0,3],
@@ -245,9 +249,5 @@ var NAVTREEINDEX77 =
 "structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#adde66113d5e4dbcf436b88ebdaed1cd4":[5,0,0,7,1,9,5],
 "structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#adde66113d5e4dbcf436b88ebdaed1cd4":[6,0,0,7,1,9,5],
 "structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#ae64ac2dfcc6b840746f5ba603c98d619":[5,0,0,7,1,9,3],
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#ae64ac2dfcc6b840746f5ba603c98d619":[6,0,0,7,1,9,3],
-"structBalloonParty_1_1Item_1_1ItemActivationContext.html":[5,0,0,7,12],
-"structBalloonParty_1_1Item_1_1ItemActivationContext.html":[6,0,0,7,12],
-"structBalloonParty_1_1Item_1_1ItemActivationContext.html#a13fd0314f544b91348cd99ed1a0d8bfd":[5,0,0,7,12,4],
-"structBalloonParty_1_1Item_1_1ItemActivationContext.html#a13fd0314f544b91348cd99ed1a0d8bfd":[6,0,0,7,12,4]
+"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#ae64ac2dfcc6b840746f5ba603c98d619":[6,0,0,7,1,9,3]
 };

@@ -1,5 +1,9 @@
 var NAVTREEINDEX73 =
 {
+"plan_future_ideas.html#autotoc_md361":[3,4,0,2],
+"plan_future_ideas.html#autotoc_md362":[3,4,0,2,0],
+"plan_future_ideas.html#autotoc_md363":[3,4,0,2,1],
+"plan_future_ideas.html#autotoc_md364":[3,4,0,2,2],
 "plan_future_ideas.html#autotoc_md365":[3,4,0,2,3],
 "plan_future_ideas.html#autotoc_md367":[3,4,0,3],
 "plan_future_ideas.html#autotoc_md368":[3,4,0,3,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX73 =
 "plan_shot_solver_accuracy.html#autotoc_md650":[3,10,0,7,1],
 "plan_shot_solver_accuracy.html#autotoc_md651":[3,10,0,7,2],
 "plan_shot_solver_accuracy.html#autotoc_md652":[3,10,0,7,3],
-"plan_shot_solver_accuracy.html#autotoc_md653":[3,10,0,7,4],
-"plan_shot_solver_accuracy.html#autotoc_md654":[3,10,0,7,5],
-"plan_shot_solver_accuracy.html#autotoc_md655":[3,10,0,7,6],
-"plan_terrain_biomes.html":[3,6],
-"plan_terrain_biomes.html#autotoc_md656":[3,6,0]
+"plan_shot_solver_accuracy.html#autotoc_md653":[3,10,0,7,4]
 };
