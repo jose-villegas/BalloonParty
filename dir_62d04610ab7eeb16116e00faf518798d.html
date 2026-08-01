@@ -118,41 +118,62 @@ $(function(){initNavTree('dir_62d04610ab7eeb16116e00faf518798d.html',''); initRe
 <div class="center"><iframe scrolling="no" frameborder="0" src="dir_62d04610ab7eeb16116e00faf518798d_dep.svg" width="142" height="104"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>Passive gameplay recorder. Listens to the game's internal event stream, keeps running totals for each level and each run in memory, and saves structured records to a local log file at level boundaries and game-over. Dev builds only — release builds register none of it.</p>
-<p>The service never sends events back, never modifies gameplay state, and never causes stutters during action — it only counts.</p>
+<p>Gameplay metrics. Counts what happens during play at four nested scopes — <b>Session ⊃ Run ⊃ Level ⊃ Flight</b> — and serves those counts to three consumers: the level-up and game-over popups, an external analytics export, and balance analysis.</p>
+<p>The service never publishes, never modifies gameplay state, and never causes stutters during action — it only counts. Views read immutable snapshots; they never see a live accumulator.</p>
+<blockquote class="doxtable">
+<p><b>Nothing here is implemented yet.</b> This README describes the design the revised plan specifies (see below), so the folder reads coherently while the waves land. The file table is the target layout, not the current one. </p>
+</blockquote>
 <h1><a class="anchor" id="autotoc_md218"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File   </th><th class="markdownTableHeadNone">What it does    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>GameplayTelemetryService</code>   </td><td class="markdownTableBodyNone">Entry point (<code>IStartable</code>, <code>IDisposable</code>, <code>IRunResettable</code>). Five-state flush machine (Idle/Playing/Ceremony/Transitioning/Ended); subscribes to gameplay messages and delegates to accumulators. Flushes on <code>LevelTransitionCompletedMessage</code> and <code>GameOverMessage</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>MetricId</code> / <code>TimerId</code> / <code>MetricAxis</code>   </td><td class="markdownTableBodyNone">The vocabulary — counters, clocks, and the three dimension axes (color, balloon type, item type). Append-only once shipped    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>LevelTelemetryAccumulator</code>   </td><td class="markdownTableBodyNone">Mutable counters and stopwatches for one level. Pre-sizes collections; <code>Snapshot()</code> produces the <code>LevelRecord</code>; <code>Reset()</code> reuses the instance without reallocation    </td></tr>
+<td class="markdownTableBodyNone"><code>MetricCatalog</code>   </td><td class="markdownTableBodyNone">Static table: metric id → wire name, unit, fold rule (<code>Sum</code>/<code>Max</code>/<code>Last</code>). The single browsable list of what the game measures    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>RunTelemetryAccumulator</code>   </td><td class="markdownTableBodyNone">Run-wide totals and bests. <code>Absorb(LevelRecord)</code> folds each flushed level into the run (only <code>Completed</code> levels count toward <code>LevelsCompleted</code>); <code>Snapshot()</code> produces the <code>RunRecord</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>MetricSet</code> / <code>IReadOnlyMetricSet</code>   </td><td class="markdownTableBodyNone">Dense <code>int[]</code> counters plus per-axis breakdown tables. Allocation-free increments    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>MetricScope</code>   </td><td class="markdownTableBodyNone">One scope's metric set and timers, with <code>Seal()</code> (immutable snapshot) and <code>Reset()</code> (reuse without reallocation). Four instances    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>TelemetryStopwatch</code>   </td><td class="markdownTableBodyNone">Pure C# timer that owns its injected <code>Func&lt;float&gt;</code> clock and folds elapsed time on <code>Pause()</code>/<code>Resume()</code>/<code>Elapsed</code> reads. Deterministic in tests via a fake clock    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>LevelRecord</code>   </td><td class="markdownTableBodyNone">Sealed DTO capturing one level's statistics (pops, shots, duration, items, streaks, overflow)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>RunRecord</code>   </td><td class="markdownTableBodyNone">Sealed DTO capturing the full-run summary (levels completed, total score, end cause, timestamp)    </td></tr>
+<td class="markdownTableBodyNone"><code>LevelMetricsSnapshot</code> / <code>RunMetricsSnapshot</code>   </td><td class="markdownTableBodyNone">Sealed immutable read surfaces — what the popups render and what the sink receives    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ColorPopCount</code>   </td><td class="markdownTableBodyNone">Readonly struct — one color name + pop count pair    </td></tr>
+<td class="markdownTableBodyNone"><code>ILevelMetricsView</code>   </td><td class="markdownTableBodyNone">The UI read seam. Exposes the ceremony snapshot as an <code>IReadOnlyReactiveProperty</code>, plus the last flushed level and the run. <b>Only <code><a class="el" href="namespaceBalloonParty_1_1UI.html">BalloonParty.UI</a>.*</code> types may inject it</b>    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>ItemActivationCount</code>   </td><td class="markdownTableBodyNone">Readonly struct — one item type + activation count pair    </td></tr>
+<td class="markdownTableBodyNone"><code>IFlightScope</code> / <code>FlightScopeService</code>   </td><td class="markdownTableBodyNone">Shared per-shot boundary (<code>FlightIndex</code>, <code>IsInFlight</code>) derived from the projectile loaded/fired/destroyed messages. Consumed by metrics and by <code>MusicSoundRouter</code>    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ITelemetrySink</code>   </td><td class="markdownTableBodyNone">Interface for record output — <code>Write(LevelRecord)</code>, <code>Write(RunRecord)</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>GameplayMetricsService</code>   </td><td class="markdownTableBodyNone">Entry point (<code>IStartable</code>, <code>IDisposable</code>, <code>IRunResettable</code>). Five-state level machine (Idle/Playing/Ceremony/Transitioning/Ended); routes subscriptions into scopes, takes the two per-level snapshots, hands envelopes to the sink    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>JsonLinesTelemetrySink</code>   </td><td class="markdownTableBodyNone">Sink that writes one hand-serialized JSON object per line to a rotating log file in <code>Application.persistentDataPath/telemetry/</code>. One stream per session; never throws past its own boundary    </td></tr>
+<td class="markdownTableBodyNone"><code>SessionTelemetryContext</code>   </td><td class="markdownTableBodyNone">Session id (per launch, never persisted), schema version, launch timestamp. Registered in <code>AppLifetimeScope</code> so it survives scene reloads    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>TelemetryJson</code>   </td><td class="markdownTableBodyNone">Static, reflection-free JSON writer for the two record types (reused <code>StringBuilder</code>, <code>InvariantCulture</code> throughout)   </td></tr>
+<td class="markdownTableBodyNone"><code>TelemetryEnvelope</code>   </td><td class="markdownTableBodyNone">One uniform wire record for every scope, with a <code>RecordKind</code> discriminator    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>TelemetryEnvelopeSerializer</code>   </td><td class="markdownTableBodyNone">Static, reflection-free JSON writer driven by <code>MetricCatalog</code> (reused <code>StringBuilder</code>, <code>InvariantCulture</code> throughout)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>ITelemetrySink</code> / <code>TelemetrySinkBase</code>   </td><td class="markdownTableBodyNone">Write seam. The base owns the never-throw guard and the disabled latch, so no sink can soft-lock the game at a flush boundary    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>ConsentGateSink</code> / <code>BatchingTelemetrySink</code> / <code>CompositeTelemetrySink</code>   </td><td class="markdownTableBodyNone">Cross-cutting concerns as decorators — one concern each    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>JsonLinesTelemetrySink</code>   </td><td class="markdownTableBodyNone">Dev-only local sink: one JSON object per line, one stream per session, rotating log files in <code>Application.persistentDataPath/telemetry/</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>HttpAnalyticsSink</code>   </td><td class="markdownTableBodyNone">Batched export to an external analytics service (last wave; gated on choosing a provider)   </td></tr>
 </table>
-<p>Pause handling subscribes <code>PauseService.IsAnyPaused</code> directly (reference-counted and reset-safe) rather than counting <code>PausedMessage</code>/<code>ResumedMessage</code> edges, which leak on the loss path.</p>
 <h1><a class="anchor" id="autotoc_md219"></a>
-Registration</h1>
-<p>Appended at the end of <code>GameScopeRegistration.RegisterGameplaySystems</code>, with the service and sink registrations wrapped in <code>#if UNITY_EDITOR || DEVELOPMENT_BUILD</code>. Release builds contain no telemetry code paths.</p>
+Two snapshots per level</h1>
+<p>The level-up popup shows during the ceremony, <b>before</b> the level's flush boundary — straggler score trails are still arriving. So a <em>ceremony</em> snapshot (what the player was shown) and a <em>flush</em> snapshot (what was true) are both taken and both logged. The gap between them is data, not a bug. The popup shows <em>projected</em> points to match what <code>ScoreController</code> already displays beside it.</p>
 <h1><a class="anchor" id="autotoc_md220"></a>
+Deliberate duplication with audio</h1>
+<p><code>CombatSoundRouter</code> keeps its own per-flight counters and <b>that is intentional</b> — it reads each count before incrementing it (the count is a musical pitch step), so sourcing it from a shared bus subscriber would make the pitch depend on MessagePipe subscription order. Its counters also reset on streak break, which is musically right and analytically wrong. Only the flight <em>boundary</em> is shared, via <code>IFlightScope</code>.</p>
+<h1><a class="anchor" id="autotoc_md221"></a>
+Pause handling</h1>
+<p>Subscribes <code>PauseService.IsAnyPaused</code> directly (reference-counted and reset-safe) rather than counting <code>PausedMessage</code>/<code>ResumedMessage</code> edges, which leak on the loss path.</p>
+<h1><a class="anchor" id="autotoc_md222"></a>
+Registration</h1>
+<p><code>FlightScopeService</code> then <code>GameplayMetricsService</code> at the end of <code>GameScopeRegistration.RegisterGameplaySystems</code>; <code>SessionTelemetryContext</code> in <code>AppLifetimeScope</code>. Gating is three tiers, not one <code>#if</code>: the counting core ships (the popups need it), the export layer ships inert until consent, and the local file sink plus the cheat read are compiled out of release.</p>
+<h1><a class="anchor" id="autotoc_md223"></a>
 Design plan</h1>
 <p>Full specification: <a class="el" href="plan_gameplay_telemetry.html">Gameplay Telemetry</a> </p>
 </div><!-- contents -->

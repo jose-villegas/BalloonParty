@@ -163,7 +163,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Concrete grid actor models and the Puff cloud / Bush visual systems. Both visual systems build on the generic cluster infrastructure in <code>Slots/Actor/Cluster/</code> (<code>SlotClusterRegistry&lt;TModel&gt;</code>, <code>ClusterView</code>, <code>ClusterViewController</code>).</p>
-<h1><a class="anchor" id="autotoc_md867"></a>
+<h1><a class="anchor" id="autotoc_md890"></a>
 Actor Models</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -181,7 +181,7 @@ Actor Models</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>GridActorType</code>   </td><td class="markdownTableBodyNone">Enum identifying actor types — <code>Puff</code>, etc.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md868"></a>
+<h1><a class="anchor" id="autotoc_md891"></a>
 Grid Actor View &amp; Pool</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -191,10 +191,10 @@ Grid Actor View &amp; Pool</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>GridActorPoolChannel</code>   </td><td class="markdownTableBodyNone">Pool channel for <code>GridActorView</code> prefabs   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md869"></a>
+<h1><a class="anchor" id="autotoc_md892"></a>
 Bush System</h1>
 <p>The Bush system renders baked 2D skeletal bushes over groups of adjacent Bush slots. Branch maps and leaf attachment points are baked offline via the Bush Baker editor window. At runtime, branches are a static textured quad per slot; leaves are <code>DrawMeshInstanced</code> quads with GPU-driven wind and rattle animation. Zero GameObjects per leaf, zero CPU animation cost. Every slot's leaves are merged into one instanced draw per depth tier (inner/outer), so a whole bush submits two leaf draws plus one branch draw per slot, with materials shared (two leaf materials; one branch material per variant).</p>
-<h2><a class="anchor" id="autotoc_md870"></a>
+<h2><a class="anchor" id="autotoc_md893"></a>
 View Layer</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -216,10 +216,10 @@ View Layer</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>BushClusterRegistry</code>   </td><td class="markdownTableBodyNone"><code>SlotClusterRegistry&lt;BushObstacleModel&gt;</code>. Subscribes to grid changes (no <code>setupOnly</code>) because spawner places actors async after <code>Start()</code>.   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md871"></a>
+<h2><a class="anchor" id="autotoc_md894"></a>
 Level-transition Ascent participation</h2>
 <p><code>ClusterViewController</code> parents its single view under the shared <code>ScenarioContentRoot</code> (<code>Slots/Actor/</code>) so the level-transition Ascent (<code><a class="el" href="LevelTransitionController_8cs.html">Game/Level/LevelTransitionController.cs</a></code>) can slide the whole scenario in by moving that one root. For that to move the visuals — which otherwise render in absolute world space — the renderers follow their transform: <code>ClusterView</code> pushes <code>_SlotCentersLocal</code> (centers relative to the quad origin) and <code>PuffCloud.shader</code> masks against <code>worldPos - objectOrigin</code> (byte-identical to the old world math at rest, since origin == bounds center then); <code>BushView</code> offsets its baked world matrices by how far its transform has moved from where it was configured (a no-op at rest). See the plan's Phase 3b notes for the full rationale.</p>
-<h2><a class="anchor" id="autotoc_md872"></a>
+<h2><a class="anchor" id="autotoc_md895"></a>
 GPU Animation (BushLeaf.shader)</h2>
 <p>All leaf animation runs in the <b>vertex shader</b> — no CPU-side <code>ITickable</code> or per-frame matrix updates:</p>
 <ul>
@@ -227,10 +227,10 @@ GPU Animation (BushLeaf.shader)</h2>
 <li><b>Rattle</b> — samples the global <code>_DisturbanceTex</code> (from <code>DisturbanceFieldService</code>) at the leaf's world position. Displacement vector is crossed with the leaf direction for signed rotation, modulated by configurable damping power curve. The disturbance field's own diffusion/reform handles the settle decay.</li>
 <li><b>Per-instance data</b> — <code>_LeafWind</code> float4 (phase, depth, baseAngle, scale) packed into <code>MaterialPropertyBlock</code> at setup, never updated.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md873"></a>
+<h2><a class="anchor" id="autotoc_md896"></a>
 Disturbance Field Interaction</h2>
 <p>Bush leaves react to the same disturbance field as Puff clouds. Any event that stamps the field (projectile wake, balloon pop, bomb detonation, paint splash) causes nearby leaves to rattle. The interaction is automatic — the shader reads global <code>_DisturbanceTex</code> without any C# wiring. Toggle via <code>_RATTLE_ON</code> keyword.</p>
-<h2><a class="anchor" id="autotoc_md874"></a>
+<h2><a class="anchor" id="autotoc_md897"></a>
 Configuration</h2>
 <p><code>BushSettings</code> (ScriptableObject in <code>Configuration/</code>) — <code>IBushSettings</code>. Holds:</p><ul>
 <li><b>Prefab</b> — <code>BushView</code> prefab reference</li>
@@ -241,10 +241,10 @@ Configuration</h2>
 <li><b>Rattle</b> — enabled toggle, amplitude, frequency, damping</li>
 <li><b>Editor Preview</b> (<code>#if UNITY_EDITOR</code>) — <code>LiveTuning</code> toggle + a <code>Revision</code> counter bumped by the SO's <code>OnValidate</code>. When on, <code>BushView</code> polls <code>Revision</code> and <b>rebuilds</b> the bush (materials + render data) whenever any field changes, so <b>all</b> fields preview live — colours, AO, wind, and structural ones (atlas, gradient, world size, depth split). Editor-only (stripped from builds), but works <b>in Play mode</b>: bushes are configured only by the DI controller (an entry point), which runs in play mode, so tune with the editor playing.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md875"></a>
+<h2><a class="anchor" id="autotoc_md898"></a>
 Baking</h2>
 <p>Baked assets are generated via <b>Tools &gt; Bush Baker</b> (editor window). The bake shaders and pipeline live in <code>Assets/Source/Editor/Bush/</code> and <code>Assets/Shaders/BalloonParty/Grid/Editor/</code>. See <code><a class="el" href="Editor_2Bush_2README_8md.html">Editor/Bush/README.md</a></code>.</p>
-<h1><a class="anchor" id="autotoc_md876"></a>
+<h1><a class="anchor" id="autotoc_md899"></a>
 Puff Cloud System</h1>
 <p>The Puff cloud system renders GPU-driven clouds over groups of adjacent Puff slots. Multiple Puff slots that are hex-adjacent merge into a single continuous cloud body. The system follows MVC via the generic cluster infrastructure in <code>Slots/Actor/Cluster/</code>:</p>
 <ul>
@@ -252,7 +252,7 @@ Puff Cloud System</h1>
 <li><b>View:</b> <code>PuffCloudView</code></li>
 <li><b>Controller:</b> <code>PuffCloudViewController</code></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md877"></a>
+<h2><a class="anchor" id="autotoc_md900"></a>
 Model Layer</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -260,7 +260,7 @@ Model Layer</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>PuffClusterRegistry</code>   </td><td class="markdownTableBodyNone">Thin <code>SlotClusterRegistry&lt;PuffObstacleModel&gt;</code> subclass. The base registry subscribes to <code>SlotGrid.OnChanged</code> (Puff slots can be added/removed at runtime), flood-fills hex adjacency into <code>SlotCluster</code>s, handles merging/splitting/resizing, assigns <code>ClusterId</code> back to each model, and publishes <code>SlotClusterChangedEvent</code> via <code>OnClusterChanged</code>.   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md878"></a>
+<h2><a class="anchor" id="autotoc_md901"></a>
 View Layer</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -268,7 +268,7 @@ View Layer</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>PuffCloudView</code>   </td><td class="markdownTableBodyNone">Thin <code>ClusterView</code> subclass — a <code>MonoBehaviour</code> (<code>[ExecuteAlways]</code>) driving the <code>BalloonParty/Grid/PuffCloud</code> shader on a <code>SpriteRenderer</code> quad. <code>Configure(positions, count, bounds, settings)</code> positions/scales the quad over the combined bounds and pushes <code>_SlotCentersWorld</code>, <code>_SlotCount</code>, and <code>_AnimationSpeed</code> once via <code>MaterialPropertyBlock</code>. The runtime animation clock is shader-driven (<code>_Time.y * _AnimationSpeed</code>) — no per-frame property pushes; <code>_TimeOffset</code> is only fed in edit mode, where <code>_Time</code> is frozen. Disturbance is not managed here — the shader reads the global <code>_DisturbanceTex</code> maintained by <code>DisturbanceFieldService</code> (<code>Shared/Disturbance/</code>).   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md879"></a>
+<h2><a class="anchor" id="autotoc_md902"></a>
 Controller Layer</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -276,16 +276,16 @@ Controller Layer</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>PuffCloudViewController</code>   </td><td class="markdownTableBodyNone">Thin <code>ClusterViewController&lt;PuffObstacleModel, PuffCloudView, IPuffCloudSettings&gt;</code> subclass. The base controller instantiates <b>one</b> view instance and, on any cluster change, collects every slot position across <b>all</b> clusters (16-entry buffer cap) and reconfigures it — the single quad spans the bounding box of every cluster on the board. Applies sorting layer and order from <code>PuffCloudSettings</code>.   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md880"></a>
+<h2><a class="anchor" id="autotoc_md903"></a>
 Configuration</h2>
 <p><code>PuffCloudSettings</code> (ScriptableObject in <code>Configuration/</code>) — <code>IPuffCloudSettings</code>. Holds the <code>CloudPrefab</code> reference, animation speed, bounding-box padding, and sorting layer/order. Disturbance-field tuning lives in <code>DisturbanceFieldSettings</code>, not here.</p>
-<h2><a class="anchor" id="autotoc_md881"></a>
+<h2><a class="anchor" id="autotoc_md904"></a>
 Prefabs</h2>
 <ul>
 <li><b><code>Puff.prefab</code></b> — <code>GridActorView</code> + <code>TweenTracker</code> only. Invisible grid occupancy marker.</li>
 <li><b><code>PuffCloud.prefab</code></b> — <code>SpriteRenderer</code> (PuffCloud material, no sprite) + <code>PuffCloudView</code>. Instantiated once by <code>PuffCloudViewController</code>, referenced by <code>PuffCloudSettings.CloudPrefab</code>.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md882"></a>
+<h2><a class="anchor" id="autotoc_md905"></a>
 Shaders</h2>
 <p>All in <code>Assets/Shaders/BalloonParty/Grid/</code>:</p>
 <table class="markdownTable">

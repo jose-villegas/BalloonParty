@@ -110,536 +110,650 @@ $(function(){initNavTree('plan_gameplay_telemetry.html',''); initResizable(true)
   <div class="headertitle"><div class="title">Gameplay Telemetry</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md448"></a>
-Gameplay Telemetry</h1>
-<p>Answer balance and pacing questions from real play data — how long levels take, where runs die, which items get used, how streaks behave — by passively listening to the game's internal event stream and writing structured records to a local log file.</p>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md451"></a>
+Gameplay Metrics &amp; Telemetry</h1>
+<p>One subsystem that counts what happens during play, at four nested scopes, and serves those counts to three consumers:</p>
+<ol type="1">
+<li><b>In-game surfaces</b> — the level-up and game-over popups, redesigned to show what the player just did: score breakdown, accuracy, streaks, items used, mechanics triggered.</li>
+<li><b>External analytics</b> — a batched, consent-gated export to a third-party service.</li>
+<li><b>Balance work</b> — the original goal: how long levels take, where runs die, which items get used, how streaks behave.</li>
+</ol>
+<p>The read model comes first. A logger that nobody reads is a logger nobody maintains; a metrics system the game itself renders is one that stays correct because a wrong number is visible on screen.</p>
 <blockquote class="doxtable">
-<p><b>Handoff note.</b> This plan was audited against the codebase (architect + test + performance review, 2026-07-26). Every message shape, cast, and registration idiom below was verified against source. Where the plan says "do not", it is because the obvious alternative compiles and runs but silently records wrong or empty data. Follow the plan literally; the <em>Implementer guardrails</em> section lists the traps. </p>
+<p><b>Revision note.</b> Revised 2026-08-01 after an architecture study on generalizing the metrics vocabulary (triggered by the observation that <code>CombatSoundRouter</code> already aggregates the same events at a finer scope). The previous revision was audited against source on 2026-07-26; everything that survives from it was re-verified. <b>Section <em>Superseded decisions</em> lists what to unlearn</b> — it exists because the previous revision was written to be followed literally and parts of it are now wrong. </p>
 </blockquote>
 <hr  />
-<h2><a class="anchor" id="autotoc_md450"></a>
+<h2><a class="anchor" id="autotoc_md453"></a>
+Goals</h2>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">#   </th><th class="markdownTableHeadNone">Goal   </th><th class="markdownTableHeadNone">Consequence for the design    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">G1   </td><td class="markdownTableBodyNone">Level-up and game-over popups render per-level statistics   </td><td class="markdownTableBodyNone">The counting core <b>ships in release builds</b>. It is no longer a dev-only subsystem.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">G2   </td><td class="markdownTableBodyNone">Metrics export to an external analytics service   </td><td class="markdownTableBodyNone">The sink is a real seam: uniform record envelope, batching, consent gate, schema version, offline queue.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">G3   </td><td class="markdownTableBodyNone">Answer balance/pacing questions from real play data   </td><td class="markdownTableBodyNone">Per-level and per-run records, flushed at boundaries, filterable by cheat/retry provenance.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">G4   </td><td class="markdownTableBodyNone">Adding a metric is cheap   </td><td class="markdownTableBodyNone">A new counter costs two files and one line, not six files and a test suite.   </td></tr>
+</table>
+<hr  />
+<h2><a class="anchor" id="autotoc_md455"></a>
+Codebase delta since the 2026-07-26 audit</h2>
+<p>Everything below landed after the previous revision was verified. Each row is a requirement change, not a note.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Change   </th><th class="markdownTableHeadNone">Where   </th><th class="markdownTableHeadNone">Impact    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Retry system</b>   </td><td class="markdownTableBodyNone"><code><a class="el" href="RetryTracker_8cs.html">Game/Run/RetryTracker.cs</a></code>, <code><a class="el" href="IRetryState_8cs.html">IRetryState.cs</a></code>, <code><a class="el" href="GameOverScreen_8cs.html">UI/GameOver/GameOverScreen.cs</a>:75-79</code>   </td><td class="markdownTableBodyNone">A retry restarts at the <b>death level</b> through the ordinary <code>ResetRun</code> cascade with <code>_generation++</code> (<code><a class="el" href="RunController_8cs.html">RunController.cs</a>:105</code>), and the score carries over (<code><a class="el" href="ScoreController_8cs.html">ScoreController.cs</a>:94-98</code>) — so a retry is a <em>continuation of one run</em>, while the generation counter says otherwise. The previous revision assumed every run starts at level 1 and that non-game-over restarts were cheat-only. Treating a retry as a fresh run corrupts every levels-reached distribution — the headline analysis. See <b>R14–R14c</b> and <em>Run identity and retries</em>.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b><code>LevelUpAbandonedMessage</code></b>   </td><td class="markdownTableBodyNone"><code><a class="el" href="LevelController_8cs.html">Game/Level/LevelController.cs</a>:517</code>   </td><td class="markdownTableBodyNone">A third ceremony exit the five-state machine does not model: the ceremony leaves <code>Completing</code> without presenting because the run is ending or restarting. Without it the gameplay clock wedges exactly as it would without <code>LevelUpAbortedMessage</code>. See <b>R8</b>.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Line-based health</b>   </td><td class="markdownTableBodyNone"><code><a class="el" href="WaveDamageMessage_8cs.html">Shared/Messages/WaveDamageMessage.cs</a></code>, <code>Game/Health/</code>, <code><a class="el" href="HeartTrailController_8cs.html">UI/Health/HeartTrailController.cs</a></code>   </td><td class="markdownTableBodyNone">Partially patched already. <code>WaveDamageMessage</code> carries <code>HeartsLost</code>, <code>BlockedSlots</code>, <code>RowLength</code> — three metrics, not one, and <code>OverflowCount</code> is now a misnomer. New signals: <code>StrikethroughArrivedMessage</code>, <code>ILossForecast.LossImminent</code>, <code>IDangerLevel.HeartsAtRisk</code>. See <b>R10</b>.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>Hold-to-speed-up</b>   </td><td class="markdownTableBodyNone"><code><a class="el" href="HoldSpeedUpController_8cs.html">Projectile/Controller/HoldSpeedUpController.cs</a></code>   </td><td class="markdownTableBodyNone">New player-agency mechanic with zero coverage. Clocks sample <code>Time.unscaledTime</code>, so a level the player fast-forwarded reads identical to one they did not — the duration metric silently loses the mechanic. See <b>R11</b>.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Sweep + speed taps</b>   </td><td class="markdownTableBodyNone"><code><a class="el" href="SpeedTapMintedMessage_8cs.html">Shared/Messages/SpeedTapMintedMessage.cs</a></code>, <code><a class="el" href="IProjectileFlightState_8cs.html">Projectile/Model/IProjectileFlightState.cs</a></code>   </td><td class="markdownTableBodyNone"><code>IProjectileFlightState</code> is <em>itself</em> a per-flight metrics record (<code>TotalCruiseTaps</code>, <code>ConsecutiveSweeps</code>, <code>SegmentPopCount</code>, <code>ConsecutiveWallBounces</code>) — the second ad-hoc per-flight aggregator in the codebase.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b><code>Tougher</code> variant</b>   </td><td class="markdownTableBodyNone"><code><a class="el" href="BalloonType_8cs.html">Balloon/Type/BalloonType.cs</a></code>   </td><td class="markdownTableBodyNone"><code>BalloonType</code> now has 8 values. The previous revision breaks pops down by <b>color only</b>, while <code>CombatSoundRouter</code> already buckets by variant. Balloon type is a required second axis. See <b>R5</b>.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Rainbow streak carry</b>   </td><td class="markdownTableBodyNone"><code><a class="el" href="ColorStreakTracker_8cs.html">Game/Score/ColorStreakTracker.cs</a></code>   </td><td class="markdownTableBodyNone">Streak is no longer color-scoped in the way <code>MaxStreak</code> assumed; the carry across color changes is itself worth measuring.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b><code>BoardDepletedMessage</code></b>   </td><td class="markdownTableBodyNone"><code><a class="el" href="BalloonControllerRegistry_8cs.html">Balloon/Controller/BalloonControllerRegistry.cs</a></code>   </td><td class="markdownTableBodyNone">Organic board clear — a level-outcome signal (cleared vs timed out) the records do not capture.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b><code>ScorePointsGroupMessage.Multiplier</code></b>   </td><td class="markdownTableBodyNone"><code><a class="el" href="ScorePointsGroupMessage_8cs.html">Shared/Messages/ScorePointsGroupMessage.cs</a></code>   </td><td class="markdownTableBodyNone">Score breakdown by multiplier tier is available on the bus. The popups want exactly this.   </td></tr>
+</table>
+<p><b>Still true and re-verified:</b> <code>LevelTransitionCompletedMessage</code> is published in <code>TransitionAsync</code>'s <code>finally</code>; <code>GameOverMessage(FinalLevel, FinalScore)</code> is published by <code>RunController.EndRun</code> (<code>:96</code>); <code>PauseService.IsAnyPaused</code> is the reset-safe pause signal; <code>CheatState.AnyCheatUsed</code> <b>does not exist yet</b>; the registration site at the end of <code>RegisterGameplaySystems</code> (after <code>PierceDischargeEffects</code>, <code><a class="el" href="GameScopeRegistration_8cs.html">GameScopeRegistration.cs</a>:204</code>) is still the safe spot; <code>RegisterGameplaySystems</code> runs before <code>RegisterAudioRouters</code> (<code><a class="el" href="GameLifetimeScope_8cs.html">GameLifetimeScope.cs</a>:70,73</code>).</p>
+<hr  />
+<h2><a class="anchor" id="autotoc_md457"></a>
 Principles</h2>
 <ul>
-<li><b>Gameplay only.</b> No PII, no device fingerprinting, no session identity beyond the run generation counter.</li>
-<li><b>Subscriber-only collection.</b> The telemetry service consumes existing MessagePipe messages. It never publishes. Subscribing to <code>ActorHitMessage</code> as an order-independent observer is explicitly sanctioned (<code><a class="el" href="README_8md.html">Assets/Source/README.md</a></code>, hit-routing section); never touch <code>IHitDispatcher</code>.</li>
-<li><b>Aggregate in memory, flush at boundaries.</b> Per-level and per-run accumulators, flushed as one record when the level transition fully completes (<code>LevelTransitionCompletedMessage</code>) or at game-over. No per-pop I/O or allocation during bursts.</li>
-<li><b>Dev-only subsystem.</b> The entire subsystem (service + sink) is registered under <code>#if UNITY_EDITOR || DEVELOPMENT_BUILD</code>. Release builds pay nothing — no subscriptions, no increments. There is no <code>NoOpTelemetrySink</code>; tests use a <code>RecordingTelemetrySink</code> fake they can assert against. If release telemetry ever becomes a goal, that is the moment to revisit (a network sink behind <code>ITelemetrySink</code> is a drop-in, not a redesign).</li>
-<li><b>Decomposed internals.</b> The service delegates to focused helpers (accumulators, stopwatch, JSON writer). Each helper is a plain C# class — testable in isolation without VContainer or Unity.</li>
-<li><b>Never throw at a flush boundary.</b> Both flush points publish before releasing critical state (<code>LevelUpPopUp</code> publishes the dismissal <em>then</em> releases the time scale and pause; <code>RunController.EndRun</code> publishes <em>then</em> transitions navigation). MessagePipe runs handlers synchronously on the publisher's stack with no exception isolation, so an escaping exception freezes the game. Telemetry data is never worth a soft-lock.</li>
+<li><b>Gameplay only.</b> No PII, no device fingerprinting. The session id is a <code>Guid</code> generated per app launch and <b>never persisted</b> — persisting it would make it a device fingerprint.</li>
+<li><b>Telemetry is never client profile data.</b> Records exist to leave the device (or the dev log file); they are never written into the player's saved profile and never read back to drive gameplay, progression, or UI defaults. Profile/progression state is a different subsystem with a different owner (<code>RunMeta</code> today) — the two must not converge. A metric that someone wants to persist for the player has stopped being a metric and become progression; move it, don't extend the sink.</li>
+<li><b>Subscriber-only. The subsystem introduces zero new message types and never publishes.</b> It consumes the existing bus. Subscribing to <code>ActorHitMessage</code> as an order-independent observer is explicitly sanctioned (<code><a class="el" href="README_8md.html">Assets/Source/README.md</a></code>, hit-routing section); never touch <code>IHitDispatcher</code>. This principle is what keeps metrics from becoming a gameplay dependency.</li>
+<li><b>Aggregate in memory, snapshot at boundaries.</b> Per-flight/level/run accumulators; immutable snapshots at ceremony entry and at flush. No per-pop I/O.</li>
+<li><b>Immutable across the read boundary.</b> Views never see a mutable accumulator.</li>
+<li><b>Never throw at a flush boundary.</b> MessagePipe runs handlers synchronously on the publisher's stack with no exception isolation, and both flush points publish before releasing critical state (<code>LevelUpPopUp</code> publishes the dismissal <em>then</em> releases the time scale and pause; <code>RunController.EndRun</code> publishes <em>then</em> transitions navigation). An escaping exception freezes the game. Metrics data is never worth a soft-lock.</li>
+<li><b>Decomposed internals.</b> Counting, boundary detection, snapshotting, serialization and transport are separate plain-C# types, each testable without VContainer or Unity.</li>
+<li><b>Wire names are append-only.</b> Once a metric's wire name ships to an external warehouse it is never renamed or reordered — the same discipline <code>GameSoundId</code> carries.</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md452"></a>
+<h2><a class="anchor" id="autotoc_md459"></a>
+Requirements</h2>
+<p>Numbered so task specs can cite them. Each is testable.</p>
+<h3><a class="anchor" id="autotoc_md460"></a>
+Scopes and boundaries</h3>
+<ul>
+<li><b>R1</b> — Metrics are collected at four nested scopes: <b>Session ⊃ Run ⊃ Level ⊃ Flight</b>.</li>
+<li><b>R2</b> — A <b>Flight</b> opens on <code>ProjectileLoadedMessage</code> (<code><a class="el" href="ThrowerController_8cs.html">Thrower/ThrowerController.cs</a>:232</code>) and <b>seals</b> on <code>ProjectileDestroyedMessage</code> (<code><a class="el" href="ProjectileView_8cs.html">Projectile/View/ProjectileView.cs</a>:406</code>). The <code>[Destroyed, next Loaded)</code> window is <em>interflight</em>: increments there belong to the Level and to no flight. This deliberately differs from <code>CombatSoundRouter</code>'s boundary (which clears only on <code>Loaded</code>, so its "flight" straddles the ceremony); the metrics definition is chosen so that <b>Σ flights ⊆ level</b> holds.</li>
+<li><b>R3</b> — A <b>Level</b> flushes on <code>LevelTransitionCompletedMessage</code> (not on <code>LevelUpDismissedMessage</code> — straggler trail points land in between and would be charged to the next level). A <b>Run</b> flushes on <code>GameOverMessage</code>.</li>
+<li><b>R4</b> — Roll-up Flight → Level → Run → Session is <b>mechanical</b>, driven by a declared fold rule per metric, not by hand-written accumulate code.</li>
+</ul>
+<h3><a class="anchor" id="autotoc_md461"></a>
+Vocabulary</h3>
+<ul>
+<li><b>R5</b> — Counters are addressed by a <code>MetricId</code> enum over dense <code>int[]</code> storage, with three fixed dimension axes: <b>Color</b>, <b>BalloonType</b>, <b>ItemType</b>. A fourth axis is out of scope; if one is ever needed, that is the moment to revisit the whole shape.</li>
+<li><b>R6</b> — A static <code>MetricCatalog</code> is the single browsable table mapping each <code>MetricId</code> to its wire name, unit, and fold rule (<code>Sum</code> / <code>Max</code> / <code>Last</code>). Adding a metric = one enum value + one catalog row + one <code>Increment</code> call site.</li>
+<li><b>R7</b> — "Mechanic triggered" events use the same vocabulary as gameplay counters: pierce discharges, speed taps minted, sweeps, shields gained/lost, strikethroughs, overflow hearts lost, items activated. No parallel mechanism.</li>
+</ul>
+<h3><a class="anchor" id="autotoc_md462"></a>
+State machine</h3>
+<ul>
+<li><b>R8</b> — The Level state machine has five states (<code>Idle</code>/<code>Playing</code>/<code>Ceremony</code>/ <code>Transitioning</code>/<code>Ended</code>) and handles <b>four</b> ceremony exits: <code>LevelUpDismissedMessage</code> → <code>Transitioning</code>; <code>LevelUpAbortedMessage</code> → <code>Playing</code> (discard ceremony clock, level index <b>and ceremony snapshot</b>); <b><code>LevelUpAbandonedMessage</code> → <code>Ended</code>-or-<code>Playing</code> per the run's fate</b>; <code>GameOverMessage</code> → <code>Ended</code>.</li>
+<li><b>R9</b> — While in <code>Ended</code>, every handler early-returns. The loss cinematic completes straggler score trails <em>after</em> <code>GameOverMessage</code>; without the gate those arrivals corrupt the next run.</li>
+</ul>
+<h3><a class="anchor" id="autotoc_md463"></a>
+Fields and derivation</h3>
+<ul>
+<li><b>R10</b> — <code>WaveDamageMessage</code> contributes three metrics, not one: <code>HeartsLost</code> (rename <code>OverflowCount</code> → <code>HeartsLost</code>), <code>BlockedSlots</code>, and a derived hearts-lost-per-wave max. <code>RowLength</code> is context, not a metric.</li>
+<li><b>R11</b> — Hold-to-speed-up is measured explicitly: total held seconds per level and per flight, plus a hold-engaged flight count. Duration metrics stay on <code>Time.unscaledTime</code> (see <em>Time tracking</em>) — the hold metric is what makes a fast-forwarded level distinguishable from a slow one.</li>
+<li><b>R12</b> — Pops break down by <b>both</b> color and balloon type. Unknown color ids (rainbow, paint-converted) and actors without <code>IHasColor</code> fall into a trailing <em>other</em> bucket and must never throw or index out of range.</li>
+<li><b>R13</b> — Accuracy uses <code>DirectHitPops</code> (<code>ActorHitMessage</code> with <code>(Context.Flags &amp; DamageFlags.DirectHit) != 0</code>), never <code>ShotsFired / TotalPops</code> — total pops includes item-, cheat- and board-driven pops.</li>
+<li><b>R14</b> — Run identity is <b>three ids, not one</b> (see <em>Run identity and retries</em>): <code>RunId</code> (the run chain — stable across retries), <code>AttemptId</code> (the <code>RunController</code> generation), and <code>AttemptIndex</code> (0 for the original, 1..N for retries within the chain). The service derives all three itself from <code>IRetryState.RetryLevel</code> at reset time — no new gameplay state. Read it <b>before</b> <code>RetryTracker</code> zeroes it (see <b>R21</b>).</li>
+<li><b>R14a</b> — Every level record carries <code>LevelAttemptOrdinal</code>: how many times <em>this level index</em> has been played in this chain. <code>AttemptIndex</code> alone is wrong per level — after a retry at level 7, levels 8+ carry <code>AttemptIndex = 1</code> but are first attempts. Only the ordinal answers "how many tries did this level take".</li>
+<li><b>R14b</b> — <code>RunRecord.TotalScore</code> comes from <code>GameOverMessage.FinalScore</code> and is <b>never</b> summed from level records. Score carries across a retry (<code>ScoreController.ClearRunState</code> restores <code>_levelStartScore</code> when <code>RetryLevel &gt; 0</code>), so a chain with a replayed level has two records for that level and summing them double-counts.</li>
+<li><b>R14c</b> — Attempt history is <b>export-only</b>. The UI read model exposes the current attempt; the popups show the try that succeeded, and prior attempts are irrelevant to them. Per-level history lives in the envelope stream, not in <code>ILevelMetricsView</code>.</li>
+<li><b>R15</b> — Level outcome distinguishes <em>cleared</em> (<code>BoardDepletedMessage</code>) from <em>progressed on score</em> from <em>partial at game over</em>.</li>
+</ul>
+<h3><a class="anchor" id="autotoc_md464"></a>
+Read model (in-game consumption)</h3>
+<ul>
+<li><b>R16</b> — Views consume metrics through a narrow read-only interface, <code>ILevelMetricsView</code>, exposing an <code>IReadOnlyReactiveProperty&lt;LevelMetricsSnapshot&gt;</code>. Payloads are immutable. Views read <code>.Value</code> at render time; the subsystem publishes no message and the View never triggers a snapshot.</li>
+<li><b>R17</b> — <b>Two snapshots per level.</b> The <em>ceremony</em> snapshot is taken on <code>ScoreLevelUpMessage</code> and is what the level-up popup renders. The <em>flush</em> snapshot is taken on <code>LevelTransitionCompletedMessage</code> and is what the sink receives and what folds into the run. Both are logged; the divergence is data (a large gap means the ceremony fires too early), not a bug to hide.</li>
+<li><b>R18</b> — The popup shows <b>projected</b> points, not banked. <code>ScoreController</code> already snaps <code>TotalScore</code> to <code>_projectedTotal</code> on level-up so the popup never shows a stale low number while trails sit frozen; the stats block must adopt the same convention or it will contradict the score number beside it on the same popup.</li>
+<li><b>R19</b> — <code>GameOverScreen</code> reads the run snapshot <b>after</b> its presentation-gate <code>await</code>, never inside its <code>GameOverMessage</code> handler — otherwise it depends on MessagePipe subscriber order.</li>
+<li><b>R20</b> — Only <code><a class="el" href="namespaceBalloonParty_1_1UI.html">BalloonParty.UI</a>.*</code> types may inject <code>ILevelMetricsView</code>, and every consumer must render correctly against an empty/default snapshot. Metrics must never become load-bearing for gameplay.</li>
+</ul>
+<h3><a class="anchor" id="autotoc_md465"></a>
+Lifecycle and registration</h3>
+<ul>
+<li><b>R21</b> — The service is <code>IRunResettable</code> with <code>ResetOrder =&gt; RunResetOrder.Quiesce</code> (0), which must stay <b>below</b> <code>RetryTracker</code>'s 110 (<code>RunResetOrder.Score + 10</code>) so it reads <code>IRetryState.RetryLevel</code> before that tracker zeroes it. Pin the inequality with a unit test. <b>Do not also subscribe <code>RunResetMessage</code></b> — <code>RunController</code> invokes <code>ResetRun</code> directly, so both would double-reset.</li>
+<li><b>R22</b> — Session state (<code>SessionTelemetryContext</code>: session id, schema version, launch timestamp) registers in <b><code>AppLifetimeScope</code></b>, not <code>GameLifetimeScope</code>, so it survives scene reloads.</li>
+<li><b>R23</b> — Clocks do not start in <code>Start()</code> — entry points start during the Launcher's additive preload, long before the player taps Play. Enter <code>Playing</code> on <code>INavigation.Current == NavigationState.Game</code>.</li>
+</ul>
+<h3><a class="anchor" id="autotoc_md466"></a>
+Export</h3>
+<ul>
+<li><b>R24</b> — One uniform record: <code>ITelemetrySink.Write(in TelemetryEnvelope)</code> with a <code>RecordKind</code> discriminator, <code>SchemaVersion</code>, <code>SessionId</code>, <code>RunId</code>, <code>LevelIndex</code>, timestamp, and the metric set. <b>Not</b> an overload per record type — that makes every sink change when a record kind is added, which would have made the promised network sink a redesign rather than a drop-in.</li>
+<li><b>R25</b> — The never-throw guard (<code>try/catch</code> → <code>Log.Warn</code> → permanent <code>_disabled</code> latch for the session) lives in an abstract <code>TelemetrySinkBase</code> template method, not in any single sink. A future HTTP sink that throws at a flush boundary soft-locks the game exactly like a file sink would.</li>
+<li><b>R26</b> — Cross-cutting concerns are decorators over <code>ITelemetrySink</code>: consent gate → batcher → composite fan-out. Consent is <b>never</b> an <code>if</code> inside the service.</li>
+<li><b>R27</b> — Serialization is hand-rolled and reflection-free (see <em>Serialization</em>), a single loop over <code>MetricCatalog</code>, one reused <code>StringBuilder</code>, every numeric and date append through <code>CultureInfo.InvariantCulture</code>.</li>
+<li><b>R28</b> — Build gating is <b>three tiers</b>, not one <code>#if</code> (see <em>Gating tiers</em>). When no sink is registered, <code>CompositeTelemetrySink</code> holds an empty array and <code>Write</code> is an empty loop — do not also add a <code>NullTelemetrySink</code>.</li>
+</ul>
+<h3><a class="anchor" id="autotoc_md467"></a>
+Performance</h3>
+<ul>
+<li><b>R29</b> — Hot-path handlers allocate nothing: no string interpolation, no LINQ, no <code>Log.Info</code> in the <code>ActorHitMessage</code> / <code>StreakChangedMessage</code> / <code>ScoreTrailArrivedMessage</code> paths. Increments are <code>_counters[(int)id]++</code> and <code>_axis[i]++</code>. Measured worst case is ~10–25 <code>ActorHitMessage</code> in one frame (bomb/laser/lightning resolve synchronously) plus tens of <code>ScoreTrailArrivedMessage</code> in the transition frame; peak is low hundreds of invocations per second.</li>
+<li><b>R30</b> — <b>No pooling, no buffering, no <code>ITickable</code>.</b> Snapshot allocation at ceremony and flush (~30–120 s apart) is negligible. <code>BatchingTelemetrySink</code> reuses one list.</li>
+</ul>
+<hr  />
+<h2><a class="anchor" id="autotoc_md469"></a>
 Architecture</h2>
-<h3><a class="anchor" id="autotoc_md453"></a>
+<h3><a class="anchor" id="autotoc_md470"></a>
 Folder structure</h3>
 <div class="fragment"><div class="line">Assets/Source/Game/Telemetry/</div>
-<div class="line">├── GameplayTelemetryService.cs      ← VContainer entry point (orchestrator + state machine)</div>
-<div class="line">├── LevelTelemetryAccumulator.cs     ← mutable counters/timers for one level + Snapshot()</div>
-<div class="line">├── RunTelemetryAccumulator.cs       ← run totals, bests + Snapshot()</div>
+<div class="line">├── MetricId.cs                      ← counter vocabulary (dense, append-only)</div>
+<div class="line">├── TimerId.cs                       ← clock vocabulary (Gameplay/Ceremony/Wall/Hold)</div>
+<div class="line">├── MetricAxis.cs                    ← Color | BalloonType | ItemType</div>
+<div class="line">├── MetricCatalog.cs                 ← id → wire name, unit, fold rule (static)</div>
+<div class="line">├── FoldRule.cs                      ← Sum | Max | Last</div>
+<div class="line">├── MetricSet.cs / IReadOnlyMetricSet.cs   ← dense int[] counters + axis tables</div>
+<div class="line">├── MetricScope.cs                   ← one scope&#39;s set + timers + Seal()/Reset()</div>
 <div class="line">├── TelemetryStopwatch.cs            ← clock-owning timer (Pause/Resume/Elapsed/Reset)</div>
-<div class="line">├── LevelRecord.cs                   ← sealed DTO, per-level snapshot</div>
-<div class="line">├── RunRecord.cs                     ← sealed DTO, per-run summary</div>
-<div class="line">├── ColorPopCount.cs                 ← typed breakdown entry (color + count)</div>
-<div class="line">├── ItemActivationCount.cs           ← typed breakdown entry (item type + count)</div>
-<div class="line">├── ITelemetrySink.cs                ← write interface</div>
-<div class="line">├── JsonLinesTelemetrySink.cs        ← local-file sink (dev builds only)</div>
-<div class="line">├── TelemetryJson.cs                 ← hand-rolled JSON writer (static, StringBuilder-based)</div>
+<div class="line">├── LevelMetricsSnapshot.cs          ← sealed immutable per-level read surface</div>
+<div class="line">├── RunMetricsSnapshot.cs            ← sealed immutable per-run read surface</div>
+<div class="line">├── ColorPopCount.cs / BalloonTypeCount.cs / ItemActivationCount.cs</div>
+<div class="line">├── ILevelMetricsView.cs             ← the UI read seam</div>
+<div class="line">├── IFlightScope.cs / FlightScopeService.cs   ← shared flight boundary</div>
+<div class="line">├── GameplayMetricsService.cs        ← entry point: state machine + routing + snapshots</div>
+<div class="line">├── SessionTelemetryContext.cs       ← session id, schema version (App scope)</div>
+<div class="line">├── TelemetryEnvelope.cs             ← uniform wire record (readonly struct)</div>
+<div class="line">├── TelemetryEnvelopeSerializer.cs   ← hand-rolled JSON, catalog-driven</div>
+<div class="line">├── ITelemetrySink.cs / TelemetrySinkBase.cs</div>
+<div class="line">├── CompositeTelemetrySink.cs / BatchingTelemetrySink.cs / ConsentGateSink.cs</div>
+<div class="line">├── ITelemetryConsent.cs</div>
+<div class="line">├── JsonLinesTelemetrySink.cs        ← dev-only local file sink</div>
+<div class="line">├── HttpAnalyticsSink.cs             ← Wave F</div>
 <div class="line">└── README.md</div>
-</div><!-- fragment --><p>Deleted from the original design: <code>TelemetryPauseTracker</code> (replaced by subscribing <code>PauseService.IsAnyPaused</code> — see <em>Pause semantics</em>), <code>TelemetrySnapshotFactory</code> (replaced by <code>Snapshot()</code> methods on the accumulators — a cross-object factory would force both accumulators to expose their whole mutable interior), and <code>NoOpTelemetrySink</code> (subsystem is dev-only; see <em>Principles</em>).</p>
-<p><b>Namespace:</b> <code>BalloonParty.Game.Telemetry</code></p>
-<h3><a class="anchor" id="autotoc_md454"></a>
-Class diagram</h3>
-<div class="fragment"><div class="line">classDiagram</div>
-<div class="line">    class GameplayTelemetryService {</div>
-<div class="line">      &lt;&lt;IStartable, IDisposable, IRunResettable&gt;&gt;</div>
-<div class="line">      +int ResetOrder</div>
-<div class="line">      +Start()</div>
-<div class="line">      +Dispose()</div>
-<div class="line">      +ResetRun(int generation)</div>
+</div><!-- fragment --><p><b>Namespace:</b> <code>BalloonParty.Game.Telemetry</code> (unchanged — the folder, the README and the <code><a class="el" href="Plans_8md.html">Plans.md</a></code> <code>@subpage</code> registration all point here; renaming to <code>.Metrics</code> is churn without payoff).</p>
+<h3><a class="anchor" id="autotoc_md471"></a>
+Scope hierarchy</h3>
+<div class="fragment"><div class="line">stateDiagram-v2</div>
+<div class="line">    direction LR</div>
+<div class="line">    [*] --&gt; Session : App launch (AppLifetimeScope)</div>
+<div class="line">    state Session {</div>
+<div class="line">        [*] --&gt; Run</div>
+<div class="line">        state Run : &quot;Run (RunController generation + retry provenance)&quot;</div>
+<div class="line">        state Run {</div>
+<div class="line">            [*] --&gt; Level</div>
+<div class="line">            state Level : &quot;Level (Idle/Playing/Ceremony/Transitioning/Ended)&quot;</div>
+<div class="line">            state Level {</div>
+<div class="line">                [*] --&gt; Flight</div>
+<div class="line">                Flight --&gt; Interflight : ProjectileDestroyedMessage (flight seals)</div>
+<div class="line">                Interflight --&gt; Flight : ProjectileLoadedMessage</div>
+<div class="line">                note right of Interflight</div>
+<div class="line">                  Ceremony + Ascent live here.</div>
+<div class="line">                  Straggler ScoreTrailArrived lands here.</div>
+<div class="line">                  Belongs to the LEVEL, to no flight.</div>
+<div class="line">                end note</div>
+<div class="line">            }</div>
+<div class="line">        }</div>
 <div class="line">    }</div>
-<div class="line">    class LevelTelemetryAccumulator {</div>
-<div class="line">      -int[] _popsByColor</div>
-<div class="line">      -int[] _itemCounts</div>
-<div class="line">      +int ShotsFired</div>
-<div class="line">      +int MaxStreak</div>
-<div class="line">      +Snapshot(...) LevelRecord</div>
-<div class="line">      +Reset()</div>
-<div class="line">    }</div>
-<div class="line">    class RunTelemetryAccumulator {</div>
-<div class="line">      +int RunId</div>
-<div class="line">      +Absorb(LevelRecord)</div>
-<div class="line">      +Snapshot(...) RunRecord</div>
-<div class="line">    }</div>
-<div class="line">    class TelemetryStopwatch {</div>
-<div class="line">      +float Elapsed</div>
-<div class="line">      +Pause()</div>
-<div class="line">      +Resume()</div>
-<div class="line">      +Reset()</div>
-<div class="line">    }</div>
-<div class="line">    class ITelemetrySink {</div>
-<div class="line">      &lt;&lt;interface&gt;&gt;</div>
-<div class="line">      +Write(LevelRecord)</div>
-<div class="line">      +Write(RunRecord)</div>
-<div class="line">    }</div>
-<div class="line">    class JsonLinesTelemetrySink</div>
-<div class="line">    class TelemetryJson {</div>
-<div class="line">      &lt;&lt;static&gt;&gt;</div>
-<div class="line">      +Serialize(LevelRecord) string</div>
-<div class="line">      +Serialize(RunRecord) string</div>
-<div class="line">    }</div>
-<div class="line">    class IHasColor {</div>
-<div class="line">      &lt;&lt;interface&gt;&gt;</div>
-<div class="line">      +Color : IReadOnlyReactiveProperty~string~</div>
-<div class="line">    }</div>
-<div class="line">    class IHasItemSlot {</div>
-<div class="line">      &lt;&lt;interface&gt;&gt;</div>
-<div class="line">      +Item : IReadOnlyReactiveProperty~ItemType~</div>
-<div class="line">    }</div>
-<div class="line"> </div>
-<div class="line">    GameplayTelemetryService --&gt; LevelTelemetryAccumulator</div>
-<div class="line">    GameplayTelemetryService --&gt; RunTelemetryAccumulator</div>
-<div class="line">    GameplayTelemetryService --&gt; ITelemetrySink</div>
-<div class="line">    GameplayTelemetryService ..&gt; IHasColor : casts ActorHitMessage.Actor</div>
-<div class="line">    GameplayTelemetryService ..&gt; IHasItemSlot : casts ItemActivatedMessage.Balloon</div>
-<div class="line">    LevelTelemetryAccumulator --&gt; TelemetryStopwatch</div>
-<div class="line">    ITelemetrySink &lt;|.. JsonLinesTelemetrySink</div>
-<div class="line">    JsonLinesTelemetrySink --&gt; TelemetryJson</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md455"></a>
-Flush state machine</h3>
-<p>The service is an explicit five-state machine. This is what makes the abort edge and the post-game-over straggler leak ordinary transitions instead of playtest bugs.</p>
+</div><!-- fragment --><table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Scope   </th><th class="markdownTableHeadNone">Opens on   </th><th class="markdownTableHeadNone">Closes on   </th><th class="markdownTableHeadNone">Boundary owner    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Session   </td><td class="markdownTableBodyNone"><code>AppLifetimeScope</code> build   </td><td class="markdownTableBodyNone">process exit   </td><td class="markdownTableBodyNone"><code>SessionTelemetryContext</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Run   </td><td class="markdownTableBodyNone">first <code>NavigationState.Game</code>, then <code>ResetRun(generation)</code>   </td><td class="markdownTableBodyNone"><code>GameOverMessage</code>   </td><td class="markdownTableBodyNone"><code>RunController</code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Level   </td><td class="markdownTableBodyNone">run start / <code>LevelTransitionCompletedMessage</code>   </td><td class="markdownTableBodyNone"><code>LevelTransitionCompletedMessage</code>, or <code>GameOverMessage</code> (partial)   </td><td class="markdownTableBodyNone"><code>LevelController</code> phase machine    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Flight   </td><td class="markdownTableBodyNone"><code>ProjectileLoadedMessage</code>   </td><td class="markdownTableBodyNone"><code>ProjectileDestroyedMessage</code>   </td><td class="markdownTableBodyNone"><code>ThrowerController</code> + <code>ProjectileView</code>   </td></tr>
+</table>
+<h3><a class="anchor" id="autotoc_md472"></a>
+Level flush state machine</h3>
 <div class="fragment"><div class="line">stateDiagram-v2</div>
 <div class="line">    [*] --&gt; Idle : Start()</div>
 <div class="line">    Idle --&gt; Playing : INavigation.Current == Game</div>
-<div class="line">    Playing --&gt; Ceremony : ScoreLevelUpMessage</div>
+<div class="line">    Playing --&gt; Ceremony : ScoreLevelUpMessage / take CEREMONY snapshot</div>
 <div class="line">    Ceremony --&gt; Transitioning : LevelUpDismissedMessage</div>
-<div class="line">    Ceremony --&gt; Playing : LevelUpAbortedMessage (discard ceremony clock, roll back level index)</div>
-<div class="line">    Transitioning --&gt; Playing : LevelTransitionCompletedMessage / flush LevelRecord + reset</div>
-<div class="line">    Playing --&gt; Ended : GameOverMessage / flush partial LevelRecord + RunRecord</div>
-<div class="line">    Ceremony --&gt; Ended : GameOverMessage (deferred loss)</div>
+<div class="line">    Ceremony --&gt; Playing : LevelUpAbortedMessage (discard ceremony clock, level index, snapshot)</div>
+<div class="line">    Ceremony --&gt; Ended : LevelUpAbandonedMessage (run ending/restarting) or GameOverMessage</div>
+<div class="line">    Transitioning --&gt; Playing : LevelTransitionCompletedMessage / FLUSH snapshot + reset</div>
+<div class="line">    Playing --&gt; Ended : GameOverMessage / flush partial level + run record</div>
 <div class="line">    Transitioning --&gt; Ended : GameOverMessage</div>
-<div class="line">    Ended --&gt; Playing : ResetRun(generation) / RunId = generation</div>
+<div class="line">    Ended --&gt; Playing : ResetRun(generation) / RunId = generation, retry provenance captured</div>
 <div class="line">    note right of Ended : accumulation OFF — post-game-over straggler\ntrails must NOT leak into the next run</div>
-</div><!-- fragment --><p>While in <code>Ended</code>, all message handlers early-return. The loss cinematic completes straggler score trails <em>after</em> <code>GameOverMessage</code> (<code>GameOverLossCinematic.HoldOutgoingContent</code> → <code>ScoreTrailService</code> → <code>CompleteAll</code>); without the <code>Ended</code> gate those arrivals corrupt the next run's accumulator.</p>
-<h3><a class="anchor" id="autotoc_md456"></a>
-Sequence diagram — level flush</h3>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md473"></a>
+Level flush sequence</h3>
 <div class="fragment"><div class="line">sequenceDiagram</div>
 <div class="line">    participant Bus as MessagePipe</div>
-<div class="line">    participant Svc as TelemetryService</div>
-<div class="line">    participant Lvl as LevelAccumulator</div>
+<div class="line">    participant Svc as GameplayMetricsService</div>
+<div class="line">    participant Lvl as MetricScope (Level)</div>
+<div class="line">    participant Popup as LevelUpPopUp (View)</div>
 <div class="line">    participant Trails as ScoreTrailService</div>
 <div class="line">    participant Sink as ITelemetrySink</div>
 <div class="line"> </div>
-<div class="line">    Bus-&gt;&gt;Svc: gameplay msgs (fired / hit / item / shield / blocked)</div>
+<div class="line">    Bus-&gt;&gt;Svc: gameplay msgs (fired / hit / item / shield / wave damage)</div>
 <div class="line">    Svc-&gt;&gt;Lvl: increment counters</div>
 <div class="line">    Bus-&gt;&gt;Svc: ScoreLevelUpMessage (NewLevel)</div>
-<div class="line">    Svc-&gt;&gt;Lvl: gameplay clock -&gt; Pause, ceremony clock -&gt; Resume</div>
+<div class="line">    Svc-&gt;&gt;Lvl: gameplay clock Pause, ceremony clock Resume</div>
+<div class="line">    Svc-&gt;&gt;Svc: CeremonyLevel.Value = Seal() (immutable snapshot)</div>
+<div class="line">    Popup-&gt;&gt;Svc: read CeremonyLevel.Value after its gate await</div>
 <div class="line">    Bus-&gt;&gt;Svc: LevelUpDismissedMessage</div>
-<div class="line">    Svc-&gt;&gt;Lvl: ceremony clock -&gt; Pause</div>
 <div class="line">    Note over Trails: LevelTransitionController.HoldOutgoingContent -&gt; CompleteAll</div>
 <div class="line">    Trails-&gt;&gt;Bus: ScoreTrailArrivedMessage (stragglers)</div>
 <div class="line">    Bus-&gt;&gt;Svc: ScoreTrailArrivedMessage</div>
 <div class="line">    Svc-&gt;&gt;Lvl: PointsBanked += Points (STILL the completed level)</div>
 <div class="line">    Bus-&gt;&gt;Svc: LevelTransitionCompletedMessage</div>
-<div class="line">    Svc-&gt;&gt;Sink: Write(LevelRecord)</div>
-<div class="line">    Svc-&gt;&gt;Lvl: Reset(); gameplay clock -&gt; Resume</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md457"></a>
-Service</h3>
-<p><code>GameplayTelemetryService</code> — plain C# class registered as an entry point. Orchestrates the helpers and owns the state machine; owns no counting state itself.</p>
+<div class="line">    Svc-&gt;&gt;Sink: Write(envelope from FLUSH snapshot)</div>
+<div class="line">    Svc-&gt;&gt;Lvl: Absorb into Run; Reset(); gameplay clock Resume</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md474"></a>
+Dependency graph</h3>
+<div class="fragment"><div class="line">graph TD</div>
+<div class="line">    Bus[MessagePipe bus] --&gt;|ActorHit / Projectile* / Score* / Level* / Shield* / Item* / WaveDamage / Strikethrough| Svc[GameplayMetricsService]</div>
+<div class="line">    Bus --&gt; FS[FlightScopeService]</div>
+<div class="line">    FS --&gt;|IFlightScope| Svc</div>
+<div class="line">    FS --&gt;|IsInFlight| Music[MusicSoundRouter]</div>
+<div class="line">    Pause[PauseService.IsAnyPaused] --&gt; Svc</div>
+<div class="line">    Retry[IRetryState] --&gt;|read in ResetRun, before RetryTracker zeroes it| Svc</div>
+<div class="line">    Palette[IGamePalette.ProgressColorNames] --&gt; Svc</div>
+<div class="line">    Svc --&gt; Scopes[MetricScope x4]</div>
+<div class="line">    Scopes --&gt; Cat[MetricCatalog fold rules]</div>
+<div class="line">    Svc --&gt;|Write envelope| Consent[ConsentGateSink] --&gt; Batch[BatchingTelemetrySink] --&gt; Comp[CompositeTelemetrySink]</div>
+<div class="line">    Comp --&gt; Json[JsonLinesTelemetrySink DEV ONLY]</div>
+<div class="line">    Comp --&gt; Http[HttpAnalyticsSink Wave F]</div>
+<div class="line">    Svc --&gt;|ILevelMetricsView| Popup[LevelUpPopUp View]</div>
+<div class="line">    Svc --&gt;|ILevelMetricsView| GO[GameOverScreen View]</div>
+<div class="line">    Combat[CombatSoundRouter] -.-&gt;|keeps its OWN counters — intentional, see below| Bus</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md475"></a>
+Metric vocabulary — why a registry, not named fields</h3>
+<p>The decisive argument is the <b>fold rule</b>, not the hot path — both layouts are allocation-free.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Interface   </th><th class="markdownTableHeadNone">Purpose    </th></tr>
+<th class="markdownTableHeadNone">Criterion   </th><th class="markdownTableHeadNone">Named fields per record   </th><th class="markdownTableHeadNone">Enum registry (chosen)    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>IStartable</code>   </td><td class="markdownTableBodyNone">Subscribe to messages via <code>CompositeDisposable</code>    </td></tr>
+<td class="markdownTableBodyNone">Adding one metric   </td><td class="markdownTableBodyNone">6 files: DTO + level accumulator + snapshot + serializer + run fold + tests   </td><td class="markdownTableBodyNone">2 files + 1 line    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>IDisposable</code>   </td><td class="markdownTableBodyNone">Dispose <code>CompositeDisposable</code>; close the sink    </td></tr>
+<td class="markdownTableBodyNone">Level→Run roll-up   </td><td class="markdownTableBodyNone">hand-written <code>Absorb</code> that silently drifts from the DTO   </td><td class="markdownTableBodyNone">one loop over declared fold rules    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>IRunResettable</code>   </td><td class="markdownTableBodyNone"><code>ResetOrder =&gt; RunResetOrder.Quiesce</code> — see below   </td></tr>
+<td class="markdownTableBodyNone">Serialization   </td><td class="markdownTableBodyNone">one change per field   </td><td class="markdownTableBodyNone">one loop, zeros skipped    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Hot path   </td><td class="markdownTableBodyNone"><code>_pops++</code>   </td><td class="markdownTableBodyNone"><code>_counters[(int)id]++</code> — one bounds check, zero alloc    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Discoverability   </td><td class="markdownTableBodyNone">best   </td><td class="markdownTableBodyNone"><b>the one real cost</b> — mitigated by <code>MetricCatalog</code> being a single browsable table   </td></tr>
 </table>
-<p><b><code>IRunResettable</code>, precisely:</b> <code>RunController</code> invokes <code>ResetRun(generation)</code> <em>directly</em> on registered <code>IRunResettable</code>s in ascending <code>ResetOrder</code> (<code><a class="el" href="RunController_8cs.html">Game/Run/RunController.cs</a></code>). <code>RunResetMessage</code> is a separate broadcast for views outside that graph — <b>do not also subscribe to it</b> (that would double-reset). Use <code>RunResetOrder.Quiesce</code> (0), same as <code>ScoreTrailService</code> and <code>SfxService</code>. On reset: silently clear both accumulators (no flush — the game-over path already flushed; cheat-restart paths are dev-only), set <code>RunId = generation</code>. <code>RunId</code> initialises to 1, matching <code>RunController</code>'s generation counter — do not keep a second counter.</p>
-<p>Constructor receives all dependencies via <b>constructor injection</b> (a bare <code>public</code>/ <code>internal</code> ctor resolves fine in VContainer; <code>[Inject]</code> on the ctor is also idiomatic here — either passes review). Subscribe with <b>method groups</b>, not lambdas (<code>.Subscribe(OnActorHit)</code>; for payload-less messages <code>Subscribe(_ =&gt; OnFoo())</code> matches <code>ColorStreakTracker</code>). Collect subscriptions in a <code>CompositeDisposable</code> via <code>.AddTo(_subscriptions)</code> (<code>ItemSoundRouter</code> is the copyable shape).</p>
-<p><b>Clock start:</b> entry points <code>Start()</code> during the Launcher's additive preload, long before the player taps Play. Do not start clocks in <code>Start()</code> — subscribe <code>INavigation.Current</code> and enter <code>Playing</code> on <code>NavigationState.Game</code> (<code>RunController</code> shows the idiom).</p>
-<p><b>Registration:</b> append at the <b>end</b> of <code>GameScopeRegistration.RegisterGameplaySystems</code> (after <code>PierceDischargeEffects</code>) — the method is annotated "Do not reorder or split", and telemetry has no start-order dependency, so the end is the safe spot. Wrap the service <em>and</em> sink registrations in <code>#if UNITY_EDITOR || DEVELOPMENT_BUILD</code> (precedent: the <code>RegisterCheats</code> guard and the <code>IThermalSource</code> swap in the same file).</p>
-<h3><a class="anchor" id="autotoc_md458"></a>
-Internal helpers</h3>
+<p>Rejected: <code>Dictionary&lt;MetricId,int&gt;</code> (hash per hit and resize allocations during 10–25-hit frames — not for boxing, which would not occur), and a generic N-dimensional metric cube (YAGNI, and it destroys the catalog's discoverability, which is the registry's only real cost and its only real defence).</p>
+<h3><a class="anchor" id="autotoc_md476"></a>
+Audio: extract the flight <em>boundary</em>, not the counters</h3>
+<p><code>CombatSoundRouter</code> keeps nine per-flight counters (<code>:40-52</code>) and uses them as musical pitch ramps. <b>They stay where they are.</b> The duplication is eight ints and a dictionary, incremented a handful of times per frame; the merge would cost far more:</p>
+<ul>
+<li><b>Read-before-write.</b> The router reads the count, plays the note, <em>then</em> increments (<code>:127-131</code>, and the <code>PopSemitoneOffset</code>/<code>IncrementPopCounter</code> pair at <code>:300-339</code>). If audio read a shared bus-subscribing aggregate instead, the pitch would depend on MessagePipe subscription order — and since <code>RegisterGameplaySystems</code> runs before <code>RegisterAudioRouters</code>, every ramp would come out a whole tone sharp, with the first pop of a colour off the root. Silent, ear-only, in a subsystem whose entries currently ship dormant. This is exactly the coupling <code>HitPipeline</code> exists to eliminate (<em>"MessagePipe's subscription order is enforced nowhere"</em>), and re-introducing it for a cosmetic subsystem is a straight regression.</li>
+<li><b>Divergent reset semantics.</b> The router clears <code>_colorPopsThisFlight</code> on <code>StreakChangedMessage(0)</code> (<code>:267-270</code>). That is musically correct and analytically wrong: applying it to the shared aggregate would make <code>PopsByColor</code> under-report by every pop before the last streak break — wrong data that looks entirely plausible.</li>
+</ul>
+<p><b>What is shared instead:</b> <code>IFlightScope</code> (<code>FlightIndex</code>, <code>IsInFlight</code>), a tiny plain-C# service. Flight state is currently tracked five independent times (<code>CombatSoundRouter</code>, <code>MusicSoundRouter._inFlight</code>, <code>HoldSpeedUpController</code>, <code>HoldSpeedUpTooltip</code>, <code>WindSoundRouter</code> via live cruise state). Consumers react to a <b>state flip</b> rather than reading a counter mid-hit, so there is no ordering hazard. <code>MusicSoundRouter</code>'s three subscriptions collapse to one.</p>
+<p>Document the duplication as intentional in <b>both</b> <code><a class="el" href="Audio_2README_8md.html">Audio/README.md</a></code> and <code><a class="el" href="Game_2Telemetry_2README_8md.html">Game/Telemetry/README.md</a></code>, or someone will "fix" it.</p>
+<h3><a class="anchor" id="autotoc_md477"></a>
+Run identity and retries</h3>
+<p><code>RunController._generation</code> increments on <b>every</b> reset, retry included (<code><a class="el" href="RunController_8cs.html">RunController.cs</a>:105</code>) — so it is an <em>attempt</em> counter, and using it as run identity corrupts every levels-reached distribution. The rest of the game already disagrees with that reading: on a retry <code>ScoreController.ClearRunState</code> restores the score to <code>_levelStartScore</code> rather than zero (<code>:94-98</code>), and <code>RunMeta.RecordRun</code> runs on the retried attempt too — the domain treats a retry as a <b>continuation of one run</b>.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Responsibility    </th></tr>
+<th class="markdownTableHeadNone">Id   </th><th class="markdownTableHeadNone">Increments when   </th><th class="markdownTableHeadNone">Meaning    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>LevelTelemetryAccumulator</code>   </td><td class="markdownTableBodyNone">Mutable counters and <code>TelemetryStopwatch</code> instances for the current level. <code>Snapshot(...)</code> produces a <code>LevelRecord</code>; <code>Reset()</code> reuses the instance across levels without reallocation. Pre-sizes all collections in the constructor.    </td></tr>
+<td class="markdownTableBodyNone"><code>RunId</code> (chain)   </td><td class="markdownTableBodyNone">a reset arrives with <code>RetryLevel == 0</code>   </td><td class="markdownTableBodyNone">one player run, score-continuous, matches the player's mental model    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>RunTelemetryAccumulator</code>   </td><td class="markdownTableBodyNone">Run-wide totals and bests. <code>Absorb(LevelRecord)</code> folds each flushed level into the run; increments <code>LevelsCompleted</code> <b>only when <code>record.Completed</code> is true</b>. <code>Snapshot(...)</code> produces the <code>RunRecord</code>.    </td></tr>
+<td class="markdownTableBodyNone"><code>AttemptId</code>   </td><td class="markdownTableBodyNone">every reset   </td><td class="markdownTableBodyNone"><code>RunController</code> generation, as-is    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>TelemetryStopwatch</code>   </td><td class="markdownTableBodyNone">Pure C# timer that <b>owns its clock</b>: constructed with a <code>Func&lt;float&gt; clock</code>, keeps <code>_lastSample</code> internally, and folds <code>clock() - _lastSample</code> into <code>Elapsed</code> on <code>Pause()</code> / <code>Resume()</code> / <code>Elapsed</code> reads. No <code>Advance()</code> in the public API and no "call at every boundary" contract — miss-a-boundary bugs are structurally impossible. Tests inject a mutable fake clock.    </td></tr>
+<td class="markdownTableBodyNone"><code>AttemptIndex</code>   </td><td class="markdownTableBodyNone">every retry within the chain   </td><td class="markdownTableBodyNone">0 = original, 1..N = retries    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>TelemetryJson</code>   </td><td class="markdownTableBodyNone">Static serializer: <code>Serialize(LevelRecord)</code> / <code>Serialize(RunRecord)</code> → one JSON line. See <em>Serialization</em>.   </td></tr>
+<td class="markdownTableBodyNone"><code>LevelAttemptOrdinal</code>   </td><td class="markdownTableBodyNone">per level index, within the chain   </td><td class="markdownTableBodyNone"><b>the per-level number</b> — see below   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md459"></a>
-Sink</h3>
-<p><code>ITelemetrySink</code> — one method per record type (<code>Write(LevelRecord)</code>, <code>Write(RunRecord)</code>), plus <code>Dispose()</code>.</p>
-<p><code>JsonLinesTelemetrySink</code> (the only production implementation, dev builds only):</p>
+<p>The service derives all four from <code>IRetryState.RetryLevel</code> alone, read at <code>RunResetOrder.Quiesce</code> before <code>RetryTracker</code> zeroes it (<b>R21</b>). No gameplay-side change.</p>
+<p><b>Why <code>AttemptIndex</code> is not a per-level answer.</b> Retries restart at the death level (<code><a class="el" href="GameOverScreen_8cs.html">GameOverScreen.cs</a>:76</code> → <code><a class="el" href="LevelController_8cs.html">LevelController.cs</a>:312</code>), so a chain that dies at level 7 and retries produces records for 1…7, then 7, 8, 9…. All of the second attempt's records carry <code>AttemptIndex = 1</code>, but only level 7 was actually replayed — levels 8+ are first attempts that merely happened during the second attempt. Segmenting level difficulty by <code>AttemptIndex</code> would wrongly mark level 9 as retried. <code>LevelAttemptOrdinal</code> (a small <code>Dictionary&lt;int,int&gt;</code> at chain scope, cleared only on a fresh chain) stamps level 7 with 2 and levels 8+ with 1, which is what "how many tries did this level take" actually means.</p>
+<p><b>Persistence: none, by design.</b> Level records live in memory for the duration of their scope, are snapshotted, handed to the sink, and reset. Nothing is written to the player's profile — telemetry leaves the device (or lands in the dev log) and is done. This is a constraint, not a missing feature: the moment a metric is persisted client-side it stops being telemetry and becomes progression, which is <code>RunMeta</code>'s job, not this subsystem's.</p>
+<p>The only cross-session state in the game today is <code>RunMeta</code>'s two PlayerPrefs ints (<code>BestLevel</code>, <code>BestScore</code>) — which, note for analytics, are <b>retry-inclusive</b>, since <code>EndRun</code> records them on retried attempts too.</p>
+<h3><a class="anchor" id="autotoc_md478"></a>
+Read model</h3>
+<div class="fragment"><div class="line"><span class="keyword">internal</span> <span class="keyword">interface </span>ILevelMetricsView</div>
+<div class="line">{</div>
+<div class="line">    IReadOnlyReactiveProperty&lt;LevelMetricsSnapshot&gt; CeremonyLevel { <span class="keyword">get</span>; }</div>
+<div class="line">    LevelMetricsSnapshot LastFlushedLevel { <span class="keyword">get</span>; }</div>
+<div class="line">    RunMetricsSnapshot Run { <span class="keyword">get</span>; }</div>
+<div class="line">}</div>
+</div><!-- fragment --><p><code>LevelMetricsSnapshot</code> is a <code>sealed</code> immutable class: <code>int this[MetricId]</code>, <code>float this[TimerId]</code>, <code>IReadOnlyList&lt;ColorPopCount&gt; PopsByColor</code>, <code>IReadOnlyList&lt;BalloonTypeCount&gt; PopsByBalloonType</code>, <code>IReadOnlyList&lt;ItemActivationCount&gt; ItemsActivated</code>, <code>int LevelIndex</code>, <code>bool Completed</code>.</p>
+<p><b>Scope: the current attempt only.</b> The popups show the try that succeeded; earlier attempts at the same level are irrelevant to them (<b>R14c</b>). The read model therefore holds no history and the retry ids are carried for the export stream's benefit, not the UI's. If a future surface wants "you cleared this on try 3", that is one extra field on the snapshot, not a retained record set.</p>
+<p>Rejected alternatives: <b>publishing a <code>LevelStatsReadyMessage</code></b> (two subscribers of <code>ScoreLevelUpMessage</code> with unenforced order race the popup's async show, and it breaks the subscriber-only principle); <b>an injected <code>Snapshot()</code> the View calls</b> (hands the View the ability to snapshot mid-burst). The chosen shape is also the established repo idiom — <code>GameOverScreen</code> already injects <code>IRunMeta</code> and reads <code>BestLevel.Value</code> at render time; <code>IPlayerHealth.Current</code>, <code>IDangerLevel.Level</code> and <code>IColorStreak</code> are the same shape.</p>
+<h3><a class="anchor" id="autotoc_md479"></a>
+Export layer</h3>
+<div class="fragment"><div class="line">classDiagram</div>
+<div class="line">    class ITelemetrySink {</div>
+<div class="line">        &lt;&lt;interface&gt;&gt;</div>
+<div class="line">        +Write(in TelemetryEnvelope)</div>
+<div class="line">        +FlushAsync(CancellationToken) UniTask</div>
+<div class="line">        +Dispose()</div>
+<div class="line">    }</div>
+<div class="line">    class TelemetrySinkBase {</div>
+<div class="line">        &lt;&lt;abstract&gt;&gt;</div>
+<div class="line">        -bool _disabled</div>
+<div class="line">        +Write(in TelemetryEnvelope)</div>
+<div class="line">        #WriteCore(in TelemetryEnvelope)*</div>
+<div class="line">    }</div>
+<div class="line">    class TelemetryEnvelope {</div>
+<div class="line">        &lt;&lt;readonly struct&gt;&gt;</div>
+<div class="line">        +RecordKind Kind</div>
+<div class="line">        +int SchemaVersion</div>
+<div class="line">        +string SessionId</div>
+<div class="line">        +int RunId</div>
+<div class="line">        +int LevelIndex</div>
+<div class="line">        +long TimestampUtcTicks</div>
+<div class="line">        +IReadOnlyMetricSet Metrics</div>
+<div class="line">    }</div>
+<div class="line">    ITelemetrySink &lt;|.. TelemetrySinkBase</div>
+<div class="line">    TelemetrySinkBase &lt;|-- JsonLinesTelemetrySink</div>
+<div class="line">    TelemetrySinkBase &lt;|-- HttpAnalyticsSink</div>
+<div class="line">    ITelemetrySink &lt;|.. BatchingTelemetrySink</div>
+<div class="line">    ITelemetrySink &lt;|.. ConsentGateSink</div>
+<div class="line">    ITelemetrySink &lt;|.. CompositeTelemetrySink</div>
+<div class="line">    BatchingTelemetrySink --&gt; ITelemetrySink : inner</div>
+<div class="line">    ConsentGateSink --&gt; ITelemetrySink : inner</div>
+<div class="line">    CompositeTelemetrySink --&gt; ITelemetrySink : fan-out</div>
+<div class="line">    JsonLinesTelemetrySink --&gt; TelemetryEnvelopeSerializer</div>
+<div class="line">    TelemetryEnvelopeSerializer --&gt; MetricCatalog</div>
+</div><!-- fragment --><table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">In the interface   </th><th class="markdownTableHeadNone">In the base   </th><th class="markdownTableHeadNone">In a decorator    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>Write(in TelemetryEnvelope)</code>, <code>FlushAsync</code>, <code>Dispose</code>   </td><td class="markdownTableBodyNone">never-throw guard, <code>_disabled</code> latch, re-entrancy guard, <code>WriteCore</code> hook   </td><td class="markdownTableBodyNone">batching, consent, fan-out, offline queue/retry   </td></tr>
+</table>
+<p><code>JsonLinesTelemetrySink</code> (dev only) keeps the previously-verified policy: path <code>Application.persistentDataPath + "/telemetry/"</code>; file <code>telemetry_yyyyMMdd_HHmmss.jsonl</code> formatted with <code>CultureInfo.InvariantCulture</code> (a non-Gregorian device calendar otherwise writes year 2569); <b>one <code>StreamWriter</code> opened in <code>Start()</code> and kept for the session</b> (the file-open on Android <code>persistentDataPath</code> dominates the write cost and neither flush boundary is an idle frame); rotation keeps the 20 most recent files sorted <b>by file name</b>, not <code>File.GetLastWriteTime</code> (which is N extra <code>stat</code> calls on the scope-start frame). Game-over records are snapshotted synchronously and the write deferred one frame (<code>UniTask.Yield</code> + guarded <code>.Forget()</code>) — <code>GameOverMessage</code> lands on the first frame of the loss push-in. The deferred write owns the immutable snapshots, never the live scopes.</p>
+<h3><a class="anchor" id="autotoc_md480"></a>
+Gating tiers</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Aspect   </th><th class="markdownTableHeadNone">Detail    </th></tr>
+<th class="markdownTableHeadNone">Tier   </th><th class="markdownTableHeadNone">Contents   </th><th class="markdownTableHeadNone">Gate   </th><th class="markdownTableHeadNone">Ships?    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Path   </td><td class="markdownTableBodyNone"><code>Application.persistentDataPath + "/telemetry/"</code>    </td></tr>
+<td class="markdownTableBodyNone"><b>Core</b>   </td><td class="markdownTableBodyNone">vocabulary, catalog, <code>MetricSet</code>, <code>MetricScope</code>, <code>TelemetryStopwatch</code>, <code>FlightScopeService</code>, <code>GameplayMetricsService</code>, snapshots, <code>ILevelMetricsView</code>   </td><td class="markdownTableBodyNone">none   </td><td class="markdownTableBodyNone"><b>yes</b> — the popups need it    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">File naming   </td><td class="markdownTableBodyNone"><code>telemetry_yyyyMMdd_HHmmss.jsonl</code> — one file per app session; format the name with <code>CultureInfo.InvariantCulture</code> (a non-Gregorian device calendar otherwise writes year 2569)    </td></tr>
+<td class="markdownTableBodyNone"><b>Export</b>   </td><td class="markdownTableBodyNone">envelope, serializer, sink base, batching/consent/composite, HTTP sink   </td><td class="markdownTableBodyNone">runtime consent + config, not <code>#if</code>   </td><td class="markdownTableBodyNone"><b>yes</b>, inert until consent    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Stream   </td><td class="markdownTableBodyNone"><b>Open one <code>StreamWriter</code> in <code>Start()</code> (after rotation) and keep it for the session</b>; append + <code>Flush()</code> per record; close in <code>Dispose()</code>. Do not open/append/close per flush — the file-open on Android <code>persistentDataPath</code> dominates the write cost, and neither flush boundary is an idle frame.    </td></tr>
+<td class="markdownTableBodyNone"><b>Dev-only</b>   </td><td class="markdownTableBodyNone"><code>JsonLinesTelemetrySink</code>, telemetry viewer window   </td><td class="markdownTableBodyNone"><code>#if UNITY_EDITOR \|\| DEVELOPMENT_BUILD</code>   </td><td class="markdownTableBodyNone">no    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Rotation   </td><td class="markdownTableBodyNone">On start, keep the 20 most recent files, delete the rest. Sort by <b>file name</b> (lexicographically ordered by construction) — not <code>File.GetLastWriteTime</code>, which is N extra <code>stat</code> calls on the scope-start frame.    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Robustness   </td><td class="markdownTableBodyNone">Every public method body wrapped in <code>try/catch (Exception e) { Log.Warn(...); _disabled = true; }</code>. A sink that has thrown once stops attempting writes for the session. This is the project's <b>first runtime file I/O</b> — there is no precedent to copy, and an unhandled <code>IOException</code> at a flush boundary soft-locks the game (see <em>Principles</em>).    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Game-over write   </td><td class="markdownTableBodyNone">Snapshot the records <b>synchronously</b> on <code>GameOverMessage</code>, then defer the actual write one frame (<code>UniTask.Yield</code> + <code>.Forget()</code>, guarded) — <code>GameOverMessage</code> lands on the first frame of the loss push-in, not an idle frame. The deferred write must own the immutable snapshots, never the live accumulators (<code>RestartRun</code> may run before it completes).   </td></tr>
+<td class="markdownTableBodyNone"><b>Cheat read</b>   </td><td class="markdownTableBodyNone"><code>CheatState.*</code> read at flush   </td><td class="markdownTableBodyNone"><code>#if UNITY_EDITOR \|\| DEVELOPMENT_BUILD \|\| CHEATS_IN_RELEASE</code> <b>with an <code>#else</code> defaulting false</b>   </td><td class="markdownTableBodyNone">no   </td></tr>
 </table>
-<p>The service also wraps its own flush calls in the same guard — defense in depth on both sides of the interface.</p>
-<h3><a class="anchor" id="autotoc_md460"></a>
+<p>The double guard and the triple guard are different on purpose — <b>do not harmonise them.</b> <code>dotnet build</code> defines <code>UNITY_EDITOR</code>, so a missing <code>#else</code> compiles locally and breaks only the real release build.</p>
+<p>The release cost of shipping Core is ~6 int increments per <code>ActorHitMessage</code>, peak low hundreds per second. That is the honest price of stats in the popup.</p>
+<h3><a class="anchor" id="autotoc_md481"></a>
 Serialization</h3>
-<p><b>Hand-rolled, no reflection. This is not a style preference; neither library option works:</b></p>
+<p>Hand-rolled, no reflection. Neither library option works, and this is not a style preference:</p>
 <ul>
-<li><b>Newtonsoft is unreachable.</b> <code>BalloonParty.Runtime.asmdef</code> sets <code>"overrideReferences": true</code> with <code>"precompiledReferences": ["DOTween.dll"]</code> only. The Newtonsoft DLL is referenced solely by the editor-only audio asmdef.</li>
-<li><b><code>JsonUtility</code> fails silently.</b> It serializes only Unity-serializable public <em>fields</em> — never properties, never <code>readonly</code> fields, never <code>IReadOnlyList&lt;T&gt;</code>. Fed these DTOs it returns <code>{}</code> with no error, and it cannot emit the <code>"type"</code> discriminator.</li>
+<li><b>Newtonsoft is unreachable.</b> <code>BalloonParty.Runtime.asmdef</code> sets <code>"overrideReferences": true</code> with <code>"precompiledReferences": ["DOTween.dll"]</code> only; the Newtonsoft DLL is referenced solely by the editor-only audio asmdef.</li>
+<li><b><code>JsonUtility</code> fails silently.</b> It serializes only Unity-serializable public <em>fields</em> — never properties, never <code>readonly</code> fields, never <code>IReadOnlyList&lt;T&gt;</code>. Fed these types it returns <code>{}</code> with no error, and cannot emit the <code>"type"</code> discriminator.</li>
 </ul>
-<p><code>TelemetryJson</code> builds each line into a <b>single reused <code>StringBuilder</code></b> field (cleared per record, never reallocated): <code>{"type":"level","levelIndex":3,...}</code> / <code>{"type":"run",...}</code>. <b>Every numeric and date append passes <code>CultureInfo.InvariantCulture</code></b> — on a comma-decimal locale <code>float.ToString()</code> emits <code>12,5</code> and the whole log becomes unparseable. Timestamp: <code>DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture)</code>. (Only two <code>InvariantCulture</code> call sites exist in the repo today — this will not be caught by imitation.)</p>
-<p>Because serialization is hand-rolled, the DTOs keep their intended shape: <code>sealed</code> classes / <code>readonly struct</code>s with get-only properties, <code>IReadOnlyList&lt;T&gt;</code> breakdowns. Member ordering per CLAUDE.md: <b>properties in the top block, before the constructor</b> — <code>style_audit.py</code> blocks the commit otherwise.</p>
-<hr  />
-<h2><a class="anchor" id="autotoc_md462"></a>
-Phase 1 — Passive Counters</h2>
-<p>Everything in this phase uses signals already on the bus. Gameplay-code edits are limited to: the registration lines, and the one-line <code>CheatState.AnyCheatUsed</code> addition (see <em>Cheat tagging</em>).</p>
-<h3><a class="anchor" id="autotoc_md463"></a>
-Flush boundaries</h3>
-<p>The level record flushes on <b><code>LevelTransitionCompletedMessage</code></b>, not on <code>LevelUpDismissedMessage</code>. The dismissal is published <em>before</em> the surviving score trails resolve: <code>LevelUpPopUp</code> publishes it, and the survivors are only completed later inside the Ascent (<code>LevelTransitionController.HoldOutgoingContent</code> → <code>ScoreTrailService</code>'s <code>CompleteAll</code>). Flushing on dismissal would charge those arrivals to the <em>next</em> level's <code>PointsBanked</code>. <code>LevelTransitionCompletedMessage</code> already exists, is already registered, and is published in <code>TransitionAsync</code>'s <code>finally</code> — it fires on every path including cancellation.</p>
-<p>Boundary roles:</p>
-<ul>
-<li><code>ScoreLevelUpMessage</code> → enter <code>Ceremony</code>: pause gameplay clock, resume ceremony clock, capture <code>LevelIndex = msg.NewLevel - 1</code> (the level just completed — do <b>not</b> keep an internal counter; <code>CheatState.StartLevel</code> lets dev runs start at arbitrary levels and a counter drifts).</li>
-<li><code>LevelUpDismissedMessage</code> → enter <code>Transitioning</code>: pause ceremony clock. No flush yet.</li>
-<li><b><code>LevelUpAbortedMessage</code></b> → back to <code>Playing</code>: zero the ceremony clock, resume the gameplay clock, discard the captured level index, do <b>not</b> flush. The ceremony can bail without ever reaching a dismissal (<code>LevelUpCinematic.AbortSession</code> → <code>LevelController</code> returns <code>Pending → Playing</code> directly). Without this subscription the gameplay clock stays paused forever and every subsequent level records <code>DurationSeconds ≈ 0</code>.</li>
-<li><code>LevelTransitionCompletedMessage</code> → back to <code>Playing</code>: snapshot (with <code>Completed = true</code>), write, absorb into the run accumulator, reset the level accumulator, resume the gameplay clock.</li>
-<li><code>GameOverMessage</code> → enter <code>Ended</code>: snapshot the partial level (with <code>Completed = false</code>, <code>LevelIndex</code> from <code>msg.FinalLevel</code>) plus the run record (<code>TotalScore</code> from <code>msg.FinalScore</code>), hand both to the sink (deferred write, see <em>Sink</em>). All handlers early-return until <code>ResetRun</code>.</li>
-</ul>
-<h3><a class="anchor" id="autotoc_md464"></a>
-LevelRecord fields</h3>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Field   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Source    </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>LevelIndex</code>   </td><td class="markdownTableBodyNone"><code>int</code>   </td><td class="markdownTableBodyNone"><code>ScoreLevelUpMessage.NewLevel - 1</code>; on game-over partial: <code>GameOverMessage.FinalLevel</code>    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>Completed</code>   </td><td class="markdownTableBodyNone"><code>bool</code>   </td><td class="markdownTableBodyNone"><code>true</code> on transition-completed flush, <code>false</code> on game-over partial flush    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>DurationSeconds</code>   </td><td class="markdownTableBodyNone"><code>float</code>   </td><td class="markdownTableBodyNone">Gameplay clock (excludes pause + ceremony + transition)    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>WallDurationSeconds</code>   </td><td class="markdownTableBodyNone"><code>float</code>   </td><td class="markdownTableBodyNone">Wall clock — see <em>Time tracking</em>    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ShotsFired</code>   </td><td class="markdownTableBodyNone"><code>int</code>   </td><td class="markdownTableBodyNone"><code>ProjectileFiredMessage</code>    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>TotalPops</code>   </td><td class="markdownTableBodyNone"><code>int</code>   </td><td class="markdownTableBodyNone"><code>ActorHitMessage</code> where <code>Outcome == HitOutcome.Pop</code>    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>DirectHitPops</code>   </td><td class="markdownTableBodyNone"><code>int</code>   </td><td class="markdownTableBodyNone">Same, and <code>(msg.Context.Flags &amp; DamageFlags.DirectHit) != 0</code> — the true accuracy numerator    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>PopsByColor</code>   </td><td class="markdownTableBodyNone"><code>IReadOnlyList&lt;ColorPopCount&gt;</code>   </td><td class="markdownTableBodyNone">Pop outcomes broken down by color; see <em>Color derivation</em>    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>Deflects</code>   </td><td class="markdownTableBodyNone"><code>int</code>   </td><td class="markdownTableBodyNone"><code>ActorHitMessage</code> where <code>Outcome == HitOutcome.Deflect</code>    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>MaxStreak</code>   </td><td class="markdownTableBodyNone"><code>int</code>   </td><td class="markdownTableBodyNone"><code>StreakChangedMessage.Streak</code> — running max    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>PointsBanked</code>   </td><td class="markdownTableBodyNone"><code>int</code>   </td><td class="markdownTableBodyNone"><code>ScoreTrailArrivedMessage.Points</code> — sum (<code>Points</code> is the delta; <code>Score</code> is the running total — don't sum <code>Score</code>)    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>OverflowCount</code>   </td><td class="markdownTableBodyNone"><code>int</code>   </td><td class="markdownTableBodyNone"><code>WaveDamageMessage</code> — sum of <code>HeartsLost</code> across the run    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ShieldsGained</code>   </td><td class="markdownTableBodyNone"><code>int</code>   </td><td class="markdownTableBodyNone"><code>ShieldGainedMessage</code>    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>ShieldsSpent</code>   </td><td class="markdownTableBodyNone"><code>int</code>   </td><td class="markdownTableBodyNone"><code>ShieldLostMessage</code>    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ItemsActivated</code>   </td><td class="markdownTableBodyNone"><code>IReadOnlyList&lt;ItemActivationCount&gt;</code>   </td><td class="markdownTableBodyNone"><code>ItemActivatedMessage</code>; see <em>Item derivation</em>    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>CeremonyDurationSeconds</code>   </td><td class="markdownTableBodyNone"><code>float</code>   </td><td class="markdownTableBodyNone">Ceremony clock (trigger → dismissal)    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>CheatActive</code>   </td><td class="markdownTableBodyNone"><code>bool</code>   </td><td class="markdownTableBodyNone">See <em>Cheat tagging</em>   </td></tr>
-</table>
-<p><code>TotalPops</code> includes item-driven and cheat-driven pops (<code>BombItemHandler</code>, <code>LightningChain</code>, <code>AwardScorePopCheat</code> all dispatch hits) — that is why <code>ShotsFired / TotalPops</code> is <b>not</b> an accuracy proxy and <code>DirectHitPops</code> exists.</p>
-<h4><a class="anchor" id="autotoc_md465"></a>
-Typed breakdown entries</h4>
-<div class="fragment"><div class="line"><span class="keyword">public</span> readonly <span class="keyword">struct </span>ColorPopCount</div>
-<div class="line">{</div>
-<div class="line">    <span class="keyword">public</span> <span class="keywordtype">string</span> ColorName { <span class="keyword">get</span>; }</div>
-<div class="line">    <span class="keyword">public</span> <span class="keywordtype">int</span> Count { <span class="keyword">get</span>; }</div>
-<div class="line">}</div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">public</span> readonly <span class="keyword">struct </span>ItemActivationCount</div>
-<div class="line">{</div>
-<div class="line">    <span class="keyword">public</span> ItemType ItemType { <span class="keyword">get</span>; }</div>
-<div class="line">    <span class="keyword">public</span> <span class="keywordtype">int</span> Count { <span class="keyword">get</span>; }</div>
-<div class="line">}</div>
-</div><!-- fragment --><p>(<code>string</code> color identity matches the repo — <code>IHasColor.Color</code> and <code>IGamePalette.ProgressColorNames</code> are both string-keyed; do not invent a <code>ColorId</code>.)</p>
-<h3><a class="anchor" id="autotoc_md466"></a>
-RunRecord fields</h3>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Field   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Source    </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>RunId</code>   </td><td class="markdownTableBodyNone"><code>int</code>   </td><td class="markdownTableBodyNone"><code>RunController</code> generation — init 1, updated in <code>ResetRun(generation)</code>    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>LevelsCompleted</code>   </td><td class="markdownTableBodyNone"><code>int</code>   </td><td class="markdownTableBodyNone">Count of absorbed records with <code>Completed == true</code>    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>TotalDurationSeconds</code>   </td><td class="markdownTableBodyNone"><code>float</code>   </td><td class="markdownTableBodyNone">Sum of LevelRecord wall durations    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>TotalScore</code>   </td><td class="markdownTableBodyNone"><code>int</code>   </td><td class="markdownTableBodyNone"><code>GameOverMessage.FinalScore</code>    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>EndCause</code>   </td><td class="markdownTableBodyNone"><code>string</code>   </td><td class="markdownTableBodyNone">Constant <code>"HealthDepleted"</code> — only loss path today; revisit when a second cause exists    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>TotalShotsFired</code>   </td><td class="markdownTableBodyNone"><code>int</code>   </td><td class="markdownTableBodyNone">Accumulated across levels    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>TotalPops</code>   </td><td class="markdownTableBodyNone"><code>int</code>   </td><td class="markdownTableBodyNone">Accumulated across levels    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>MaxStreakOverall</code>   </td><td class="markdownTableBodyNone"><code>int</code>   </td><td class="markdownTableBodyNone">Best streak in the entire run (max across absorbed levels, not last)    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>CheatActive</code>   </td><td class="markdownTableBodyNone"><code>bool</code>   </td><td class="markdownTableBodyNone">True if any absorbed level was tagged (never overwritten back to false)    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>Timestamp</code>   </td><td class="markdownTableBodyNone"><code>string</code>   </td><td class="markdownTableBodyNone">ISO 8601 UTC (<code>"o"</code> format, InvariantCulture) at flush time   </td></tr>
-</table>
-<h3><a class="anchor" id="autotoc_md467"></a>
-Message subscriptions</h3>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Message   </th><th class="markdownTableHeadNone">Effect (all handlers early-return in <code>Ended</code>)    </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ProjectileFiredMessage</code>   </td><td class="markdownTableBodyNone"><code>ShotsFired++</code>    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>ActorHitMessage</code>   </td><td class="markdownTableBodyNone"><code>Outcome == Pop</code> → <code>TotalPops++</code>, color bucket++, DirectHit check; <code>Outcome == Deflect</code> → <code>Deflects++</code>. Filter with <code>==</code>, not <code>HasFlag</code> — every <code>EvaluateHit</code> returns a single value and equality is the repo idiom (<code>ScoreController</code>, <code>BalloonSpawner</code>)    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>StreakChangedMessage</code>   </td><td class="markdownTableBodyNone"><code>MaxStreak = max(MaxStreak, msg.Streak)</code>    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>ScoreTrailArrivedMessage</code>   </td><td class="markdownTableBodyNone"><code>PointsBanked += msg.Points</code>    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>WaveDamageMessage</code>   </td><td class="markdownTableBodyNone"><code>OverflowCount += msg.HeartsLost</code>    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>ItemActivatedMessage</code>   </td><td class="markdownTableBodyNone">Item bucket++ — see <em>Item derivation</em>    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ShieldGainedMessage</code>   </td><td class="markdownTableBodyNone"><code>ShieldsGained++</code>    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>ShieldLostMessage</code>   </td><td class="markdownTableBodyNone"><code>ShieldsSpent++</code>    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ScoreLevelUpMessage</code>   </td><td class="markdownTableBodyNone">State → <code>Ceremony</code> (see <em>Flush boundaries</em>)    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>LevelUpDismissedMessage</code>   </td><td class="markdownTableBodyNone">State → <code>Transitioning</code>    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>LevelUpAbortedMessage</code>   </td><td class="markdownTableBodyNone">State → <code>Playing</code>, ceremony discarded    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>LevelTransitionCompletedMessage</code>   </td><td class="markdownTableBodyNone">Flush + reset, state → <code>Playing</code>    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>GameOverMessage</code>   </td><td class="markdownTableBodyNone">Flush partial + run record, state → <code>Ended</code>    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>PauseService.IsAnyPaused</code> (ReactiveProperty, <b>not</b> a message)   </td><td class="markdownTableBodyNone">Gate the gameplay clock — see <em>Pause semantics</em>   </td></tr>
-</table>
-<p>Notes for the implementer:</p><ul>
-<li><code>PausedMessage</code> / <code>ResumedMessage</code> live in namespace <code><a class="el" href="namespaceBalloonParty_1_1Shared_1_1Pause.html">BalloonParty.Shared.Pause</a></code> (not <code>Shared.Messages</code>) and are <b>not subscribed</b> in this design.</li>
-<li><code>ProjectileFiredMessage</code> and <code>LevelUpAbortedMessage</code> are <code>internal</code> — fine, same assembly.</li>
-</ul>
-<h3><a class="anchor" id="autotoc_md468"></a>
-Color derivation</h3>
-<p><code>ActorHitMessage</code> carries <b>no color</b> — it carries <code>ISlotActor Actor</code>. Derive it:</p>
-<div class="fragment"><div class="line"><span class="keywordflow">if</span> (msg.Actor is IHasColor colored) { <span class="comment">/* colored.Color.Value is the palette string */</span> }</div>
-</div><!-- fragment --><p>(Precedents: <code>ProjectileHitResolver</code>, <code>ScoreController</code>.) Accumulate in an <code>int[] _popsByColor</code> sized from <code>IGamePalette.ProgressColorNames.Count</code> <b>plus one trailing "other" bucket</b>, with a <code>Dictionary&lt;string,int&gt;</code> name→index map built once in the constructor from the same list. Use <code>ProgressColorNames</code>, <b>not</b> <code>ColorNames</code> — the latter includes presentation-only tints that never appear on a balloon (<code>ScoreController</code> does the same). Unknown ids (rainbow — <code>GamePalette.RainbowColorId</code> — or paint-converted) and actors without <code>IHasColor</code> (statics, gatekeepers) fall into the "other" bucket and must never throw or index out of range. <code>ColorPopCount[]</code> is materialised only at flush.</p>
-<h3><a class="anchor" id="autotoc_md469"></a>
-Item derivation</h3>
-<p><code>ItemActivatedMessage</code> carries <b>no item type</b> — it carries <code>IBalloonModel Balloon</code>. Derive it with the same guarded cast <code>ItemSoundRouter</code> uses:</p>
-<div class="fragment"><div class="line"><span class="keywordflow">if</span> (message.Balloon is IHasItemSlot slot) { _itemCounts[(int)slot.Item.Value]++; }</div>
-</div><!-- fragment --><p>Non-item-eligible balloons (e.g. <code>ToughBalloonModel</code>) must no-op, not throw. Size the array with <code>Enum.GetValues(typeof(ItemType)).Length</code> (currently 7, <code>None</code>=0, contiguous), not a hardcoded literal. The message is published <em>after</em> <code>handler.Activate</code> completes, so bucket <code>ItemType.None</code> like any other value rather than assuming it can't happen. (Known fragility, do not "fix": reading the slot off a popped balloon works because models are constructed per spawn and the slot is never cleared — the same assumption <code>ItemSoundRouter</code> makes. If balloon <em>models</em> are ever pooled, this silently becomes all-<code>None</code>; the fix then is an <code>ItemType</code> field on the message.)</p>
-<h3><a class="anchor" id="autotoc_md470"></a>
+<p><code>TelemetryEnvelopeSerializer</code> builds each line into a <b>single reused <code>StringBuilder</code></b> field by looping <code>MetricCatalog</code>. <b>Every numeric and date append passes <code>CultureInfo.InvariantCulture</code></b> — on a comma-decimal locale <code>float.ToString()</code> emits <code>12,5</code> and the whole log becomes unparseable. Timestamp: <code>DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture)</code>. (Only two <code>InvariantCulture</code> call sites exist in the repo today — this will not be caught by imitation.)</p>
+<p>Member ordering per CLAUDE.md: <b>properties in the top block, before the constructor</b> — <code>style_audit.py</code> blocks the commit otherwise.</p>
+<h3><a class="anchor" id="autotoc_md482"></a>
 Time tracking</h3>
-<p>Clocks sample <b><code>Time.unscaledTime</code></b> — not <code>Time.realtimeSinceStartup</code>. Nothing in the project observes app backgrounding (no <code>OnApplicationPause</code>/<code>OnApplicationFocus</code> anywhere in <code>Assets/Source</code>), so a pocket-suspend would silently inflate <code>realtimeSinceStartup</code>-based durations by the full background time. <code>unscaledTime</code> advances only on ticked frames, clamped by <code>Time.maximumDeltaTime</code> (0.333 s default, unmodified in this project), so a suspend of any length costs at most one clamped frame. It is also <code>timeScale</code>-independent, which the slow-mo cinematics require. The clock is injected as <code>Func&lt;float&gt;</code> — precedent: <code>SfxThrottleGate</code>'s registration (<code>GameScopeRegistration</code>, <code>() =&gt; Time.unscaledTime</code>).</p>
-<p><code>TelemetryStopwatch</code> owns the clock (see <em>Internal helpers</em>) — there is no <code>Advance()</code> call the service can forget to make.</p>
+<p>Clocks sample <b><code>Time.unscaledTime</code></b> — not <code>Time.realtimeSinceStartup</code>. Nothing in the project observes app backgrounding (no <code>OnApplicationPause</code>/<code>OnApplicationFocus</code> anywhere in <code>Assets/Source</code>), so a pocket-suspend would silently inflate <code>realtimeSinceStartup</code>-based durations by the full background time. <code>unscaledTime</code> advances only on ticked frames, clamped by <code>Time.maximumDeltaTime</code> (0.333 s default, unmodified here), so a suspend of any length costs at most one clamped frame. It is also <code>timeScale</code>-independent, which the slow-mo cinematics <b>and hold-to-speed-up</b> require. The clock is injected as <code>Func&lt;float&gt;</code> (precedent: <code>SfxThrottleGate</code>'s registration, <code>() =&gt; Time.unscaledTime</code>).</p>
+<p><code>TelemetryStopwatch</code> <b>owns its clock</b> — constructed with a <code>Func&lt;float&gt;</code>, keeps <code>_lastSample</code> internally, folds <code>clock() - _lastSample</code> into <code>Elapsed</code> on <code>Pause()</code>/<code>Resume()</code>/<code>Elapsed</code> reads. No <code>Advance()</code> in the public API and no "call at every boundary" contract; miss-a-boundary bugs are structurally impossible.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Clock   </th><th class="markdownTableHeadNone">Runs while   </th><th class="markdownTableHeadNone">Pause-gated by <code>IsAnyPaused</code>?    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>Gameplay</b>   </td><td class="markdownTableBodyNone">State == <code>Playing</code>   </td><td class="markdownTableBodyNone"><b>Yes</b>    </td></tr>
+<td class="markdownTableBodyNone"><b>Gameplay</b>   </td><td class="markdownTableBodyNone">state == <code>Playing</code>   </td><td class="markdownTableBodyNone"><b>Yes</b>    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>Ceremony</b>   </td><td class="markdownTableBodyNone">State == <code>Ceremony</code>   </td><td class="markdownTableBodyNone"><b>No — deliberately.</b> The ceremony <em>is</em> a pause: <code>LevelUpCinematic</code> holds <code>PauseSource.Cinematic</code> and <code>LevelUpPopUp</code> holds <code>PauseSource.LevelUp</code> for its whole duration. A pause-gated ceremony clock would read ≈ 0.    </td></tr>
+<td class="markdownTableBodyNone"><b>Ceremony</b>   </td><td class="markdownTableBodyNone">state == <code>Ceremony</code>   </td><td class="markdownTableBodyNone"><b>No — deliberately.</b> The ceremony <em>is</em> a pause: <code>LevelUpCinematic</code> holds <code>PauseSource.Cinematic</code> and <code>LevelUpPopUp</code> holds <code>PauseSource.LevelUp</code> for its whole duration. A pause-gated ceremony clock would read ≈ 0.    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>Wall</b>   </td><td class="markdownTableBodyNone">State != <code>Idle</code>/<code>Ended</code> (level start → flush)   </td><td class="markdownTableBodyNone"><b>No</b> — see below   </td></tr>
+<td class="markdownTableBodyNone"><b>Wall</b>   </td><td class="markdownTableBodyNone">state != <code>Idle</code>/<code>Ended</code>   </td><td class="markdownTableBodyNone"><b>No</b> — total elapsed including ceremony and transition    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>Hold</b> (new, <b>R11</b>)   </td><td class="markdownTableBodyNone">hold-to-speed-up engaged   </td><td class="markdownTableBodyNone"><b>No</b> — it only runs in flight   </td></tr>
 </table>
-<p><b><code>WallDurationSeconds</code> definition:</b> total elapsed time for the level including ceremony and transition, ungated. Every <code>PauseSource</code> that exists today (<code>Cinematic</code>, <code>LevelUp</code>, <code>Overflow</code>, <code>LevelTransition</code>, <code>Cheat</code>) is gameplay-/ceremony-owned, not a user interruption — gating the wall clock on <code>IsAnyPaused</code> would collapse it toward <code>DurationSeconds</code> on every level. If a genuine user-interruption source (settings menu, ad overlay) is ever added, that is the moment to introduce a source filter. A <code>PauseSource.Cheat</code> pause (dev console open) does inflate wall time; those records are <code>CheatActive</code>-tagged anyway.</p>
-<h3><a class="anchor" id="autotoc_md471"></a>
+<p>Every <code>PauseSource</code> that exists today (<code>Cinematic</code>, <code>LevelUp</code>, <code>Overflow</code>, <code>LevelTransition</code>, <code>Cheat</code>) is gameplay- or ceremony-owned, not a user interruption — gating the wall clock on <code>IsAnyPaused</code> would collapse it toward the gameplay duration on every level. If a genuine user-interruption source (settings menu, ad overlay) is ever added, that is the moment to introduce a source filter.</p>
+<h3><a class="anchor" id="autotoc_md483"></a>
 Pause semantics</h3>
-<p><b>Subscribe, don't recount.</b> <code>PauseService</code> is already reference-counted per source and exposes <code>IReadOnlyReactiveProperty&lt;bool&gt; IsAnyPaused</code>. Inject <code>PauseService</code> and subscribe to <code>IsAnyPaused</code>; do <b>not</b> count <code>PausedMessage</code>/<code>ResumedMessage</code> edges.</p>
-<p>This is load-bearing, not stylistic: <code>PauseService.ResetRun</code> clears its source stack <b>without publishing <code>ResumedMessage</code></b> ("Drop all sources outright; live systems only
-gate on IsAnyPaused"). Any message-edge counter therefore leaks depth permanently on the loss path — <code>GameOverLossCinematic</code> pauses, <code>RestartRun</code> clears the stack silently, the cinematic pauses/resumes again — netting +1 per loss and freezing every subsequent level's timers at zero. <code>IsAnyPaused</code> is reset to <code>false</code> by the same method, so it cannot leak.</p>
-<h3><a class="anchor" id="autotoc_md472"></a>
+<p><b>Subscribe, don't recount.</b> <code>PauseService</code> is already reference-counted per source and exposes <code>IReadOnlyReactiveProperty&lt;bool&gt; IsAnyPaused</code>. Inject it and subscribe; do <b>not</b> count <code>PausedMessage</code>/<code>ResumedMessage</code> edges.</p>
+<p>Load-bearing, not stylistic: <code>PauseService.ResetRun</code> clears its source stack <b>without publishing <code>ResumedMessage</code></b>. Any message-edge counter therefore leaks depth permanently on the loss path — <code>GameOverLossCinematic</code> pauses, <code>RestartRun</code> clears the stack silently, the cinematic pauses/resumes again — netting +1 per loss and freezing every subsequent level's timers at zero. <code>IsAnyPaused</code> is reset to <code>false</code> by the same method, so it cannot leak. (<code>PausedMessage</code>/<code>ResumedMessage</code> live in <code><a class="el" href="namespaceBalloonParty_1_1Shared_1_1Pause.html">BalloonParty.Shared.Pause</a></code>, not <code>Shared.Messages</code>, and are not subscribed in this design.)</p>
+<h3><a class="anchor" id="autotoc_md484"></a>
+Color and item derivation</h3>
+<p><code>ActorHitMessage</code> carries <b>no color</b> — it carries <code>ISlotActor Actor</code>:</p>
+<div class="fragment"><div class="line"><span class="keywordflow">if</span> (msg.Actor is IHasColor colored) { <span class="comment">/* colored.Color.Value is the palette string */</span> }</div>
+</div><!-- fragment --><p>Index from <code>IGamePalette.ProgressColorNames</code> plus a trailing <em>other</em> bucket, with a <code>Dictionary&lt;string,int&gt;</code> name→index map built once in the constructor. Use <code>ProgressColorNames</code>, <b>not</b> <code>ColorNames</code> — the latter includes presentation-only tints that never appear on a balloon. <code>string</code> color identity matches the repo; do not invent a <code>ColorId</code>.</p>
+<p><code>ItemActivatedMessage</code> carries <b>no item type</b> — it carries <code>IBalloonModel Balloon</code>. Derive it with the same guarded cast <code>ItemSoundRouter</code> uses:</p>
+<div class="fragment"><div class="line"><span class="keywordflow">if</span> (message.Balloon is IHasItemSlot slot) { <span class="comment">/* slot.Item.Value */</span> }</div>
+</div><!-- fragment --><p>Non-item-eligible balloons (e.g. <code>ToughBalloonModel</code>) must no-op, not throw. Size the axis with <code>Enum.GetValues(typeof(ItemType)).Length</code>, not a literal. The message is published <em>after</em> <code>handler.Activate</code> completes, so bucket <code>ItemType.None</code> like any other value. (Known fragility, do not "fix": reading the slot off a popped balloon works because models are constructed per spawn and the slot is never cleared. If balloon <em>models</em> are ever pooled this silently becomes all-<code>None</code>; the fix then is an <code>ItemType</code> field on the message.)</p>
+<p>Balloon type comes from <code>IBalloonModel.TypeName</code> (<code>BalloonType</code>), the same cast <code>CombatSoundRouter</code> uses.</p>
+<h3><a class="anchor" id="autotoc_md485"></a>
 Cheat tagging</h3>
-<p><code>CheatState</code> is compiled out of release builds — the whole file sits under <code>#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE</code>. The read site in the service needs the <b>identical triple guard</b> with an <code>#else</code> branch defaulting <code>cheatActive = false</code> (same shape as <code>RunController.EndRun</code>). Note the sink's guard is the <em>double</em> guard and the cheat guard is the <em>triple</em> one — they are different on purpose; do not harmonise them. <code>dotnet build</code> defines <code>UNITY_EDITOR</code>, so a missing guard here compiles locally and <b>breaks only the real release build</b>.</p>
-<p>"Any flag active" is insufficient as-is: <code>StartLevel</code> and <code>TimeOfDaySpeedScale</code> default to 1 (not 0), and one-shot cheats (<code>AwardScorePopCheat</code>, <code>TriggerLevelUpCheat</code>, <code>AddShieldCheat</code>, …) leave no trace. Phase 1 therefore includes one line of gameplay code: add <code>public static bool AnyCheatUsed;</code> to <code>CheatState</code> (reset in <code>ResetOnPlay</code>), set <code>true</code> when the cheat console opens (<code>CheatConsoleView</code>) — every cheat except the pacing window goes through the console, and the pacing window already writes <code>StartLevel</code>. Then:</p>
+<p><code>CheatState</code> is compiled out of release builds. The read site needs the <b>triple</b> guard with an <code>#else</code> branch defaulting <code>cheatActive = false</code> (same shape as <code>RunController.EndRun</code>).</p>
+<p>"Any flag active" is insufficient as-is: <code>StartLevel</code> and <code>TimeOfDaySpeedScale</code> default to 1 (not 0), and one-shot cheats (<code>AwardScorePopCheat</code>, <code>TriggerLevelUpCheat</code>, <code>AddShieldCheat</code>, …) leave no trace. One line of gameplay code is therefore in scope: add <code>public static bool AnyCheatUsed;</code> to <code>CheatState</code> (reset in <code>ResetOnPlay</code>), set <code>true</code> when the cheat console opens (<code>CheatConsoleView</code>) — every cheat except the pacing window goes through the console, and the pacing window already writes <code>StartLevel</code>. Then:</p>
 <div class="fragment"><div class="line">cheatActive = CheatState.AnyCheatUsed</div>
 <div class="line">    || CheatState.BlockLevelUp</div>
 <div class="line">    || CheatState.InstantScoreTrails</div>
 <div class="line">    || CheatState.StartLevel != 1</div>
 <div class="line">    || !Mathf.Approximately(CheatState.TimeOfDaySpeedScale, 1f);</div>
-</div><!-- fragment --><p>Evaluated at flush time ("read at flush time" contract — a cheat toggled off before flush does not tag the record). The run record's flag is sticky: once any level is tagged, the run stays tagged. Records are never dropped — tagged for filtering.</p>
-<h3><a class="anchor" id="autotoc_md473"></a>
-Performance notes</h3>
-<p>Measured worst case: ~10–25 <code>ActorHitMessage</code> in a single frame (bomb/laser/lightning resolve synchronously), plus tens of <code>ScoreTrailArrivedMessage</code> in the transition frame (<code>CompleteAll</code> fires every in-flight arrival at once — one per <em>point</em>, not per pop). Every handler is an <code>int</code> add or an array increment; peak ≈ low hundreds of invocations/second. <b>This design needs no pooling, no buffering, no <code>ITickable</code> — do not add any.</b> (<code>BoardPopWave</code> is scoreless by design — it publishes no <code>ActorHitMessage</code> and contributes zero handler invocations.)</p>
-<ul>
-<li>Hot-path handlers must allocate nothing: no string interpolation, no LINQ, no <code>Log.Info</code> in the <code>ActorHitMessage</code> / <code>StreakChangedMessage</code> / <code>ScoreTrailArrivedMessage</code> paths. Color ids are palette-authored strings passed by reference — the dictionary lookup + <code>int[]</code> increment allocates zero.</li>
-<li><code>int[]</code> for items and colors; DTO lists materialise only at flush. (For the record: <code>Dictionary&lt;ItemType,int&gt;</code> would <em>not</em> box — <code>EqualityComparer&lt;TEnum&gt;.Default</code> is specialised — the <code>int[]</code> is preferred for simplicity, not to avoid boxing.)</li>
-<li><code>CompositeDisposable</code> for one-call teardown.</li>
-<li>No record pooling — flush frequency (~30–120 s) makes allocation negligible.</li>
-<li>Flush-time costs (record allocation, ISO timestamp, list materialisation) are fine; the file-stream policy is what matters — see <em>Sink</em>.</li>
-</ul>
+</div><!-- fragment --><p>Evaluated at flush time. The run flag is sticky: once any level is tagged, the run stays tagged. Records are never dropped — tagged for filtering.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md475"></a>
-Phase 2 — Small Extensions</h2>
-<p>Trimmed from the original plan after review:</p>
-<ul>
-<li><strike><code>HealthChangedMessage</code></strike> — <b>cut.</b> <code>IPlayerHealth.Current</code> is already an <code>IReadOnlyReactiveProperty&lt;int&gt;</code>; min-HP-per-level is one <code>Subscribe</code>. Adding a bus message no other system wants violates this plan's own principles.</li>
-<li><strike><code>LossCause</code> enum + <code>GameOverMessage</code> change</strike> — <b>cut</b> until a second loss cause exists. <code>RunRecord.EndCause</code> ships in Phase 1 as a constant string.</li>
-<li>Track HP minimum per level (inject <code>IPlayerHealth</code>, subscribe <code>Current</code>).</li>
-<li>Track max danger level per level (inject <code>IDangerLevel</code>, sample <code>Level.Value</code> on overflow).</li>
-</ul>
+<h2><a class="anchor" id="autotoc_md487"></a>
+Superseded decisions</h2>
+<p>Things the previous revision states that are now <b>wrong</b>. Listed explicitly because that revision was written to be followed literally.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Previously   </th><th class="markdownTableHeadNone">Now    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">"Dev-only subsystem… release builds pay nothing… there is no `NoOpTelemetrySink`"   </td><td class="markdownTableBodyNone">Core ships in release (G1). Three gating tiers. Still no null sink — an empty composite covers it.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>ITelemetrySink.Write(LevelRecord)</code> + <code>Write(RunRecord)</code> overloads   </td><td class="markdownTableBodyNone">One <code>Write(in TelemetryEnvelope)</code> with a <code>RecordKind</code> discriminator (<b>R24</b>).    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Never-throw guard inside <code>JsonLinesTelemetrySink</code>   </td><td class="markdownTableBodyNone">In <code>TelemetrySinkBase</code> (<b>R25</b>).    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>LevelRecord</code>/<code>RunRecord</code> with hand-written named fields; <code>RunTelemetryAccumulator.Absorb</code>   </td><td class="markdownTableBodyNone"><code>MetricSet</code> + <code>MetricCatalog</code> fold rules (<b>R4–R6</b>).    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>LevelTelemetryAccumulator</code> / <code>RunTelemetryAccumulator</code> as distinct types   </td><td class="markdownTableBodyNone">One <code>MetricScope</code> type, four instances.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>OverflowCount</code>   </td><td class="markdownTableBodyNone"><code>HeartsLost</code> + <code>BlockedSlots</code> (<b>R10</b>).    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Pops broken down by color only   </td><td class="markdownTableBodyNone">Color <b>and</b> balloon type (<b>R12</b>).    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Three ceremony exits   </td><td class="markdownTableBodyNone">Four — <code>LevelUpAbandonedMessage</code> added (<b>R8</b>).    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>RunId</code> = <code>RunController</code> generation, full stop   </td><td class="markdownTableBodyNone">Three ids — chain / attempt / attempt index — plus a per-level attempt ordinal (<b>R14–R14a</b>). The generation is an <em>attempt</em> counter.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Write-only; no UI consumer   </td><td class="markdownTableBodyNone"><code>ILevelMetricsView</code> read model, two snapshots per level (<b>R16–R19</b>).    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Phase 2 "track HP minimum / max danger level"   </td><td class="markdownTableBodyNone">Absorbed into the registry as ordinary <code>MetricId</code>s with <code>Fold.Max</code>.   </td></tr>
+</table>
 <hr  />
-<h2><a class="anchor" id="autotoc_md477"></a>
-Phase 3 — Deferred</h2>
-<ul>
-<li>Streak-break reason decomposition (what ended the streak)</li>
-<li>Burst-rate summaries (pops-per-second peaks)</li>
-<li>Time-to-first-pop per level</li>
-<li>Editor window (<code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Telemetry Viewer</code>)</li>
-<li>Remote/network sink implementation</li>
-<li>Run-counter persistence across app restarts</li>
-<li>Flush-on-background (<code>OnApplicationPause</code>) — would need a MonoBehaviour seam; not worth the MVC exception today</li>
-<li>Record a run on cheat-restart (<code>ForceRestartCheat</code>/<code>StartFromLevelCheat</code> bypass <code>GameOverMessage</code>, so those dev runs currently vanish; an <code>EndCause = "Abandoned"</code> flush from <code>ResetRun</code> would capture them)</li>
+<h2><a class="anchor" id="autotoc_md489"></a>
+Task plan</h2>
+<p>Sizes: S ≤ half a day · M ≈ 1–2 days · L ≈ 3+ days. Agent assignments follow the established split: <b>opus</b> for quality-critical/judgment work, <b>sonnet</b> for well-specified implementation, <b>haiku</b> for mechanical tasks; Fable investigates handoffs, reviews, commits. Each task below is scoped so its spec can be written once and handed over; the requirement numbers are the acceptance criteria.</p>
+<h3><a class="anchor" id="autotoc_md490"></a>
+Dependency graph</h3>
+<div class="fragment"><div class="line">W0 doc freshness (haiku/scribe) ──┐</div>
+<div class="line">                                  │</div>
+<div class="line">W1 vocabulary + scopes (sonnet) ──┴──▶ W2 envelope + serializer + JSONL sink (sonnet)</div>
+<div class="line">            │                                          │</div>
+<div class="line">            ├──────────────────────────────────────────┤</div>
+<div class="line">            ▼                                          ▼</div>
+<div class="line">   W3 service + state machine + IFlightScope (opus) ──▶ W4 UI read model + popups (opus)</div>
+<div class="line">            │                                          │</div>
+<div class="line">            └──▶ W5 export decorators (sonnet) ────────┴──▶ W6 HTTP analytics sink (opus)</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md491"></a>
+W0 — Doc freshness · <b>P0 · S · haiku (scribe)</b></h3>
+<p>Blocker for W3/W4: two READMEs describe code that no longer matches.</p><ul>
+<li><code><a class="el" href="Audio_2README_8md.html">Audio/README.md</a></code> — (a) <code>MusicSoundRouter</code> is described as launch-music only; it now also runs the day/night gameplay crossfade, ducks on <code>_inFlight</code>, and pitches down with danger. (b) The <em>Melodic pops</em> section documents only the <code>IMelodicContext.SetStreak</code> path and <b>never mentions</b> <code>CombatSoundRouter</code>'s independent per-flight semitone ramp — the mechanism this plan's audio decision hinges on.</li>
+<li><code><a class="el" href="Game_2Run_2README_8md.html">Game/Run/README.md</a></code> — contents table omits <code>RetryTracker</code>, <code>IRetryState</code>, <code>GameOverPresentationGate</code>, and gives <code>IBoardResettable</code> no row.</li>
 </ul>
+<h3><a class="anchor" id="autotoc_md492"></a>
+W1 — Vocabulary, scopes, timers · <b>P0 · M · sonnet</b></h3>
+<p><code>MetricId</code>, <code>TimerId</code>, <code>MetricAxis</code>, <code>FoldRule</code>, <code>MetricCatalog</code>, <code>MetricSet</code> / <code>IReadOnlyMetricSet</code>, <code>MetricScope</code>, <code>TelemetryStopwatch</code>, <code>LevelMetricsSnapshot</code>, <code>RunMetricsSnapshot</code>, the three breakdown structs, plus EditMode tests. Pure C# — no Unity, no VContainer, no DI. Table-driven tests. <b>Mechanical given a literal spec; this is the highest-value task to specify precisely.</b> Acceptance: <b>R1, R4–R7, R12, R29–R30</b>.</p>
+<h3><a class="anchor" id="autotoc_md493"></a>
+W2 — Envelope, serializer, dev sink · <b>P0 · M · sonnet</b></h3>
+<p><code>TelemetryEnvelope</code>, <code>TelemetryEnvelopeSerializer</code> (catalog-driven loop, reused <code>StringBuilder</code>, <code>InvariantCulture</code> throughout), <code>ITelemetrySink</code>, <code>TelemetrySinkBase</code>, <code>JsonLinesTelemetrySink</code>, <code>RecordingTelemetrySink</code> (test fake), plus tests asserting on the emitted string. Mechanical — the constraints are fully written out above. Acceptance: <b>R24, R25, R27</b>, plus the dev-only tier of <b>R28</b>.</p>
+<h3><a class="anchor" id="autotoc_md494"></a>
+W3 — Service, state machine, flight scope · <b>P0 · L · opus</b></h3>
+<p><code>IFlightScope</code>/<code>FlightScopeService</code>, <code>GameplayMetricsService</code> (state machine, ~14 subscriptions, boundaries, snapshots, <code>IRunResettable</code>, cheat tagging), <code>SessionTelemetryContext</code> in <code>AppLifetimeScope</code>, registration at the end of <code>RegisterGameplaySystems</code>, <code>CheatState.AnyCheatUsed</code>, and the <code>MusicSoundRouter</code> migration to <code>IFlightScope</code>.</p>
+<p><b>Judgment task — every trap in <em>Implementer guardrails</em> lives here.</b> Requires an in-editor playtest; <code>dotnet build</code> cannot verify the state machine. Acceptance: <b>R2, R3, R8–R15, R21–R23, R28</b>.</p>
+<h3><a class="anchor" id="autotoc_md495"></a>
+W4 — UI read model and popups · <b>P1 · M–L · opus</b></h3>
+<p><code>ILevelMetricsView</code>, <code>LevelUpPopUp</code> and <code>GameOverScreen</code> consumption, the ceremony-vs-flush divergence, the projected-vs-banked convention, the read-after-gate contract in <code><a class="el" href="UI_2GameOver_2README_8md.html">UI/GameOver/README.md</a></code>.</p>
+<p>Judgment plus design input — <em>what</em> the popups show is a design decision (see <em>Open decisions</em>); <em>when</em> they read it is a correctness one. Playtest required. Acceptance: <b>R16–R20</b>.</p>
+<h3><a class="anchor" id="autotoc_md496"></a>
+W5 — Export decorators · <b>P1 · M · sonnet</b></h3>
+<p><code>CompositeTelemetrySink</code>, <code>BatchingTelemetrySink</code>, <code>ConsentGateSink</code>, <code>ITelemetryConsent</code>, <code>TelemetrySettings</code> SO behind <code>ITelemetrySettings</code> (endpoint, batch size, flush interval, enabled flag) — injected as the read-only interface per CLAUDE.md. Each decorator is one concern with an obvious test matrix. Mostly mechanical once the consent <em>policy</em> is decided. Acceptance: <b>R26</b>, plus the export tier of <b>R28</b>.</p>
+<h3><a class="anchor" id="autotoc_md497"></a>
+W6 — HTTP analytics sink · <b>P2 · M–L · opus</b></h3>
+<p><code>HttpAnalyticsSink</code>, persistent envelope queue, retry/backoff, schema governance doc. Judgment: offline semantics, backpressure, cancellation, and the project's first outbound network I/O. <b>Do not start before an analytics provider is chosen.</b></p>
+<h3><a class="anchor" id="autotoc_md498"></a>
+Cross-cutting</h3>
+<p>Every wave: <code>.meta</code> files for new <code>.cs</code>/<code>.md</code> (mirror a sibling's format); <code>dotnet build BalloonParty.Runtime.csproj</code> + <code>python3 Tools/style_audit.py</code>; feature README updated. W3/W4 additionally need a build with <code>UNITY_EDITOR</code> stripped (for the <code>#else</code> cheat branch) and an in-editor playtest — say so, do not claim verified.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md479"></a>
-Test Strategy</h2>
-<h3><a class="anchor" id="autotoc_md480"></a>
-File structure</h3>
-<p>Flat in <code>Assets/Tests/EditMode/Game/</code> (the existing <code>Game</code> test folder has no subfolders — do not introduce one), namespace <code>BalloonParty.Tests.Game</code>. No asmdef changes needed: <code>AssemblyInfo.cs</code> already grants <code>InternalsVisibleTo</code> for the EditMode assembly, which already references <code>BalloonParty.Runtime</code>, MessagePipe, and VContainer.</p>
-<div class="fragment"><div class="line">Assets/Tests/EditMode/Game/</div>
-<div class="line">├── TelemetryStopwatchTests.cs         (TDD-first)</div>
-<div class="line">├── LevelTelemetryAccumulatorTests.cs  (TDD-first)</div>
-<div class="line">├── RunTelemetryAccumulatorTests.cs</div>
-<div class="line">├── GameplayTelemetryServiceTests.cs   (orchestration / flush boundaries)</div>
-<div class="line">└── TelemetryJsonTests.cs              (string-shape assertions)</div>
-</div><!-- fragment --><p><b>Template:</b> <code>ScoreControllerTests.cs</code> — specifically its subscriber-capture pattern (NSubstitute <code>ISubscriber&lt;T&gt;</code> whose <code>Subscribe</code> call captures the <code>IMessageHandler&lt;T&gt;</code> via <code>Arg.Do</code>, so the test fires messages by invoking the captured handler directly). <code>GameplayTelemetryServiceTests</code> needs one capture per subscribed message, wired in a <code>BuildService()</code> helper, <code>Start()</code>ed in <code>SetUp</code>, <code>Dispose()</code>d in <code>TearDown</code>. The sink is a hand-written <code>RecordingTelemetrySink</code> (captures written records into lists) — a no-op sink cannot be asserted against.</p>
+<h2><a class="anchor" id="autotoc_md500"></a>
+Implementer guardrails</h2>
+<p>The traps here all <em>compile and run</em>; they fail only in the data, on device, or by ear. In rough order of cost-to-discover.</p>
+<ol type="1">
+<li><b>Do not merge <code>CombatSoundRouter</code>'s counters into the shared aggregate</b> — it reads before it increments, so the pitch would become subscription-order dependent, and its streak-break reset is analytically wrong. Extract <code>IFlightScope</code> only.</li>
+<li><b>Do not use <code>JsonUtility</code> or Newtonsoft</b> — <code>JsonUtility</code> emits <code>{}</code> for these types with no error; Newtonsoft is unreachable from the runtime asmdef.</li>
+<li><b>Do not count <code>PausedMessage</code>/<code>ResumedMessage</code></b> — the counter leaks on every loss; subscribe <code>PauseService.IsAnyPaused</code>.</li>
+<li><b>Do not flush on <code>LevelUpDismissedMessage</code></b> — straggler trail points land after it.</li>
+<li><b>Do not forget <code>LevelUpAbortedMessage</code> or <code>LevelUpAbandonedMessage</code></b> — either omission wedges the gameplay clock and every subsequent level records ≈ 0 duration. Abort must also clear the ceremony snapshot, or the next popup can show stale numbers.</li>
+<li><b>Do not read <code>CheatState</code> without the triple <code>#if</code> guard + <code>#else</code></b> — <code>dotnet build</code> defines <code>UNITY_EDITOR</code>, so this compiles locally and breaks only the real release build.</li>
+<li><b>Do not use <code>Time.realtimeSinceStartup</code></b> — pocket-suspends inflate it and nothing publishes a pause for backgrounding.</li>
+<li><b>Do not let a sink exception escape</b> — MessagePipe handlers run on the publisher's stack; a throw at either flush boundary soft-locks the game. Guard in the base <em>and</em> in the service (defense in depth on both sides of the interface).</li>
+<li><b>Do not subscribe <code>RunResetMessage</code></b> — <code>IRunResettable.ResetRun</code> is invoked directly; subscribing both double-resets.</li>
+<li><b>Do not read <code>IRetryState</code> after <code>RetryTracker</code> resets</b> — it zeroes <code>RetryLevel</code> at <code>ResetOrder</code> 110; metrics reads at 0. Pin the inequality with a test.</li>
+<li><b>Do not let <code>GameOverScreen</code> read metrics in its message handler</b> — read after the presentation-gate <code>await</code>, or it depends on subscriber order.</li>
+<li><b>Do not open the log file per flush</b> — one <code>StreamWriter</code> per session.</li>
+<li><b>Every numeric/date <code>ToString</code> takes <code>InvariantCulture</code>.</b></li>
+<li><b>Do not rename or reorder a shipped <code>MetricCatalog</code> wire name</b> — append only.</li>
+<li>New <code>.cs</code>/<code>.md</code> files need Unity <code>.meta</code> files.</li>
+</ol>
+<p><b>Pre-existing bug, out of scope — do not migrate it.</b> <code>CombatSoundRouter._bounceCount</code> is dead: it is zeroed on every <code>OnFired</code> (<code>:198</code>) and incremented only inside <code>if (_bounceCount &gt; 0)</code> (<code>:278-282</code>), a branch that can never be entered, so the intended descending bounce ramp never plays. <code>MetricId.WallBounces</code> should be derived from <code>WallHitMessage</code> directly. File the audio bug separately.</p>
+<hr  />
+<h2><a class="anchor" id="autotoc_md502"></a>
+Risk register</h2>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">ID   </th><th class="markdownTableHeadNone">Risk   </th><th class="markdownTableHeadNone">Trigger   </th><th class="markdownTableHeadNone">Mitigation    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">RK-1   </td><td class="markdownTableBodyNone">Audio pitch ramp shifts a whole tone, silently   </td><td class="markdownTableBodyNone">Merging audio's counters into a bus-subscribing aggregate   </td><td class="markdownTableBodyNone">Keep them local; extract <code>IFlightScope</code> only    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">RK-2   </td><td class="markdownTableBodyNone"><code>PopsByColor</code> under-reports every pop before the last streak break   </td><td class="markdownTableBodyNone">Applying audio's <code>StreakChangedMessage(0)</code> clear to the shared aggregate   </td><td class="markdownTableBodyNone">Same. Worst failure mode here — the data looks plausible    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">RK-3   </td><td class="markdownTableBodyNone">Levels-reached distribution corrupted by retries   </td><td class="markdownTableBodyNone">Treating the run generation as run identity   </td><td class="markdownTableBodyNone"><b>R14</b> — chain / attempt / attempt-index split    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">RK-3a   </td><td class="markdownTableBodyNone">Level difficulty analysis blames levels that were never retried   </td><td class="markdownTableBodyNone">Segmenting by <code>AttemptIndex</code> instead of <code>LevelAttemptOrdinal</code>   </td><td class="markdownTableBodyNone"><b>R14a</b>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">RK-3b   </td><td class="markdownTableBodyNone">Run totals double-count a replayed level   </td><td class="markdownTableBodyNone">Summing <code>PointsBanked</code> across level records in a chain   </td><td class="markdownTableBodyNone"><b>R14b</b> — take <code>TotalScore</code> from <code>GameOverMessage</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">RK-4   </td><td class="markdownTableBodyNone">Metrics reset reads a zeroed <code>RetryLevel</code>   </td><td class="markdownTableBodyNone">Anyone changes <code>ResetOrder</code> on either side of 0 vs 110   </td><td class="markdownTableBodyNone"><b>R21</b> + unit test on the inequality    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">RK-5   </td><td class="markdownTableBodyNone">Soft-lock at a flush boundary   </td><td class="markdownTableBodyNone">Sink throws; MessagePipe has no exception isolation   </td><td class="markdownTableBodyNone"><b>R25</b> + service-side guard    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">RK-6   </td><td class="markdownTableBodyNone">Popup stats contradict the score beside them   </td><td class="markdownTableBodyNone">Showing banked instead of projected points   </td><td class="markdownTableBodyNone"><b>R18</b>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">RK-7   </td><td class="markdownTableBodyNone">Heisenbug on the game-over screen   </td><td class="markdownTableBodyNone">Reading in the handler instead of after the gate   </td><td class="markdownTableBodyNone"><b>R19</b>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">RK-8   </td><td class="markdownTableBodyNone">Post-game-over stragglers corrupt the next run   </td><td class="markdownTableBodyNone">Loss cinematic completes trails after <code>GameOverMessage</code>   </td><td class="markdownTableBodyNone">The <code>Ended</code> gate, <b>R9</b>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">RK-9   </td><td class="markdownTableBodyNone">Stale ceremony snapshot after an aborted ceremony   </td><td class="markdownTableBodyNone">Abort not clearing <code>CeremonyLevel</code>   </td><td class="markdownTableBodyNone"><b>R8</b> + test    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">RK-10   </td><td class="markdownTableBodyNone">Release build breaks while <code>dotnet build</code> stays green   </td><td class="markdownTableBodyNone">Missing <code>#else</code> on the triple cheat guard   </td><td class="markdownTableBodyNone">Rebuild with <code>UNITY_EDITOR</code> stripped in W3    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">RK-11   </td><td class="markdownTableBodyNone">Wire-name drift breaks the external warehouse   </td><td class="markdownTableBodyNone">Renaming a catalog entry   </td><td class="markdownTableBodyNone">Append-only; consider a test pinning the id→name map    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">RK-12   </td><td class="markdownTableBodyNone">Metrics becomes load-bearing gameplay   </td><td class="markdownTableBodyNone">A gameplay system injects <code>ILevelMetricsView</code>   </td><td class="markdownTableBodyNone"><b>R20</b>, enforced by README contract    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">RK-13   </td><td class="markdownTableBodyNone">Consent checks scattered through the service   </td><td class="markdownTableBodyNone">Implementing consent as an <code>if</code>   </td><td class="markdownTableBodyNone"><code>ConsentGateSink</code>, <b>R26</b>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">RK-14   </td><td class="markdownTableBodyNone">Session id becomes a device fingerprint   </td><td class="markdownTableBodyNone">Persisting the GUID to <code>PlayerPrefs</code>   </td><td class="markdownTableBodyNone">Explicit non-goal — regenerate per launch   </td></tr>
+</table>
+<hr  />
+<h2><a class="anchor" id="autotoc_md504"></a>
+Test strategy</h2>
+<p>Flat in <code>Assets/Tests/EditMode/Game/</code> (that folder has no subfolders — do not introduce one), namespace <code>BalloonParty.Tests.Game</code>. No asmdef changes: <code>AssemblyInfo.cs</code> already grants <code>InternalsVisibleTo</code> for the EditMode assembly, which already references <code>BalloonParty.Runtime</code>, MessagePipe and VContainer.</p>
+<div class="fragment"><div class="line">MetricSetTests.cs                 (W1, TDD-first)</div>
+<div class="line">MetricCatalogFoldTests.cs         (W1, TDD-first — every MetricId has a fold rule)</div>
+<div class="line">MetricScopeTests.cs               (W1)</div>
+<div class="line">TelemetryStopwatchTests.cs        (W1, TDD-first)</div>
+<div class="line">TelemetryEnvelopeSerializerTests.cs (W2 — string-shape assertions)</div>
+<div class="line">FlightScopeServiceTests.cs        (W3)</div>
+<div class="line">GameplayMetricsServiceTests.cs    (W3 — orchestration / boundaries)</div>
+</div><!-- fragment --><p><b>Template:</b> <code>ScoreControllerTests.cs</code> — specifically its subscriber-capture pattern (NSubstitute <code>ISubscriber&lt;T&gt;</code> whose <code>Subscribe</code> captures the <code>IMessageHandler&lt;T&gt;</code> via <code>Arg.Do</code>, so tests fire messages by invoking the captured handler). The service test needs one capture per subscribed message wired in a <code>BuildService()</code> helper, <code>Start()</code>ed in <code>SetUp</code>, <code>Dispose()</code>d in <code>TearDown</code>. The sink is a hand-written <code>RecordingTelemetrySink</code>.</p>
 <p><b>Repo gotchas, non-negotiable:</b></p><ul>
 <li>Every <code>[Test]</code> method must be <b><code>public</code></b> — NUnit here silently skips non-public test methods (this has produced false green in this repo before).</li>
 <li>Any test touching <code>CheatState</code> statics must restore them in <code>TearDown</code> (same rule as <code>PlayerPrefs</code>).</li>
-<li>Time control: service tests drive the injected <code>Func&lt;float&gt;</code> (a mutable <code>_now</code> field bumped between handler invocations) and assert on the durations in the records the fake sink captured. Stopwatch tests drive the stopwatch's own injected fake clock. <b>Do not add a test-only <code>AdvanceForTest</code> seam to the service</b> — the clock func is the single seam.</li>
+<li>Time control: service tests drive the injected <code>Func&lt;float&gt;</code> (a mutable <code>_now</code> field bumped between handler invocations). <b>Do not add a test-only <code>AdvanceForTest</code> seam</b> — the clock func is the single seam.</li>
+<li>Culture: the serializer test sets a comma-decimal <code>CultureInfo.CurrentCulture</code> and restores it in <code>TearDown</code>.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md481"></a>
-Named test cases</h3>
-<p><code>TelemetryStopwatchTests</code> (TDD-first):</p><ul>
-<li><code>Elapsed_WhileRunning_AccumulatesClockDelta</code></li>
-<li><code>Elapsed_WhilePaused_DoesNotAccumulate</code></li>
-<li><code>Pause_CalledTwice_IsIdempotent</code></li>
-<li><code>Resume_WithoutPause_IsIdempotent</code></li>
-<li><code>Resume_AfterPause_ResumesAccumulating</code></li>
-<li><code>Reset_ZeroesElapsed_AndDefinesRunningState</code> (spec the post-reset state explicitly: reset returns the stopwatch to <b>paused</b>; callers resume it deliberately)</li>
-<li><code>Elapsed_ClockGoesBackward_ClampsAtZeroDelta</code> (negative delta from a clock glitch must not corrupt <code>Elapsed</code>)</li>
-<li><code>Elapsed_ReadTwiceWithoutClockAdvance_IsStable</code></li>
-</ul>
-<p><code>LevelTelemetryAccumulatorTests</code> (TDD-first):</p><ul>
-<li><code>MaxStreak_TracksRunningMaximum_NotLastValue</code></li>
-<li><code>PointsBanked_SumsAcrossArrivals</code></li>
-<li><code>PopsByColor_KnownColor_IncrementsThatBucket</code></li>
-<li><code>PopsByColor_UnknownColor_FallsIntoOtherBucket_NoThrow</code> (rainbow / paint-converted)</li>
-<li><code>PopsByColor_ActorWithoutColor_FallsIntoOtherBucket_NoThrow</code></li>
-<li><code>PopsByColor_BuiltFromProgressColorNames_NotAllColorNames</code></li>
-<li><code>ItemCounts_AllItemTypeValues_IndexWithoutThrowing</code> (walk <code>Enum.GetValues</code>)</li>
-<li><code>Reset_ZeroesAllCounters</code></li>
-<li><code>Snapshot_ProducesRecordMatchingCounters</code></li>
-</ul>
-<p><code>RunTelemetryAccumulatorTests</code>:</p><ul>
-<li><code>Absorb_CompletedLevel_IncrementsLevelsCompleted</code></li>
-<li><code>Absorb_PartialLevel_DoesNotIncrementLevelsCompleted</code></li>
-<li><code>Absorb_SumsShotsAndPopsAcrossLevels</code></li>
-<li><code>MaxStreakOverall_MaxAcrossLevels_NotLastLevel</code></li>
-<li><code>CheatActive_StickyOnceTagged_NotOverwrittenByCleanLevel</code></li>
-<li><code>TotalDurationSeconds_SumsWallDurations</code></li>
-</ul>
-<p><code>GameplayTelemetryServiceTests</code>:</p><ul>
-<li>One increment test per simple subscription (shots, pops+color, deflects, streak, points, overflow, shields ×2)</li>
-<li><code>OnItemActivated_NonItemEligibleBalloon_NoOp_NoThrow</code></li>
-<li><code>OnActorHit_DirectHitFlag_IncrementsDirectHitPops</code></li>
-<li><code>OnScoreLevelUp_StopsGameplayClock_StartsCeremonyClock</code></li>
-<li><code>OnLevelTransitionCompleted_FlushesCompletedRecord_ResetsAccumulator</code></li>
-<li><code>OnLevelTransitionCompleted_StragglerTrailPointsArriveBeforeFlush_CountedInCompletedLevel</code></li>
-<li><code>OnLevelUpAborted_DiscardsCeremony_ResumesGameplayClock_NoFlush</code></li>
-<li><code>OnLevelUpAborted_NextFlushRecordsCorrectLevelIndex</code></li>
-<li><code>OnGameOver_FlushesPartialLevelWithCompletedFalse_PlusRunRecord</code></li>
-<li><code>OnGameOver_ThenStragglerMessages_DoNotMutateAnything</code> (the <code>Ended</code> gate)</li>
-<li><code>OnGameOver_ImmediatelyAfterTransitionCompleted_NoPhantomEmptyRecord</code></li>
-<li><code>OnTransitionCompleted_WithoutPriorScoreLevelUp_NoDoubleFlush</code></li>
-<li><code>IsAnyPausedTrue_GameplayClockPauses_CeremonyClockDoesNot</code></li>
-<li><code>LevelIndex_FromScoreLevelUpNewLevel_NotInternalCounter</code> (fire <code>NewLevel: 5</code> cold; expect flushed index 4)</li>
-<li><code>CheatActiveAtFlush_TagsRecord</code> / <code>CheatDisabledBeforeFlush_DoesNotTag</code> (restore <code>CheatState</code> in <code>TearDown</code>)</li>
-<li><code>ResetRun_MidLevel_ClearsSilently_NoFlush_NoThrow</code> and sets <code>RunId = generation</code></li>
-<li><code>Dispose_UnsubscribesAll_NoMutationAfterDispose</code></li>
-</ul>
-<p><code>TelemetryJsonTests</code> (assert on the emitted string — the EditMode assembly has no JSON parser, so no parse-based round-trip):</p><ul>
-<li><code>Serialize_LevelRecord_EmitsTypeDiscriminatorAndAllFields</code></li>
-<li><code>Serialize_RunRecord_EmitsTypeDiscriminatorAndAllFields</code></li>
-<li><code>Serialize_FloatFields_UseInvariantCulture</code> (set a comma-decimal <code>CultureInfo.CurrentCulture</code> in the test, restore in <code>TearDown</code>)</li>
-<li><code>Serialize_ColorAndItemBreakdowns_EmitEachEntry</code></li>
-<li><code>Serialize_ReusedBuilder_SecondRecordNotContaminatedByFirst</code></li>
+<p><b>Cases that must exist</b> (beyond one-per-counter increments):</p><ul>
+<li>Fold: <code>MaxStreak</code> takes the running maximum, not the last value; a completed level increments <code>LevelsCompleted</code>, a partial one does not; cheat flag is sticky.</li>
+<li>Boundaries: straggler points arriving between dismissal and transition-completed are charged to the <b>completed</b> level; transition-completed without a prior <code>ScoreLevelUpMessage</code> does not double-flush; game-over immediately after transition-completed emits no phantom empty record; post-game-over messages mutate nothing.</li>
+<li>Abort/abandon: gameplay clock resumes, no flush, ceremony snapshot cleared, and the <em>next</em> flush records the correct level index.</li>
+<li>Level index comes from <code>ScoreLevelUpMessage.NewLevel - 1</code>, fired cold with <code>NewLevel: 5</code> → flushed index 4 (never an internal counter — <code>CheatState.StartLevel</code> lets dev runs start anywhere and a counter drifts).</li>
+<li>Pause: <code>IsAnyPaused == true</code> pauses the gameplay clock and <b>not</b> the ceremony clock.</li>
+<li>Derivation: unknown color and actor-without-<code>IHasColor</code> land in <em>other</em> without throwing; every <code>ItemType</code> value indexes without throwing; a non-item-eligible balloon no-ops.</li>
+<li>Ordering: <code>GameplayMetricsService.ResetOrder &lt; RetryTracker.ResetOrder</code>.</li>
+<li>Reset: <code>ResetRun</code> mid-level clears silently (no flush, no throw) and sets the run id; <code>Dispose</code> unsubscribes and nothing mutates afterward.</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md483"></a>
-Implementer guardrails</h2>
-<p>The traps in this feature all <em>compile and run</em>; they fail only in the data or on device. In rough order of cost-to-discover:</p>
+<h2><a class="anchor" id="autotoc_md506"></a>
+Open decisions</h2>
+<p>Not blockers for W0–W3; needed before W4 and W5 respectively.</p>
 <ol type="1">
-<li><b>Do not use <code>JsonUtility</code> or Newtonsoft</b> — see <em>Serialization</em>. <code>JsonUtility</code> emits <code>{}</code> for these DTOs with no error.</li>
-<li><b>Do not count <code>PausedMessage</code>/<code>ResumedMessage</code></b> — the counter leaks on every loss; subscribe <code>PauseService.IsAnyPaused</code>.</li>
-<li><b>Do not flush on <code>LevelUpDismissedMessage</code></b> — straggler trail points land after it.</li>
-<li><b>Do not forget <code>LevelUpAbortedMessage</code></b> — or the gameplay clock wedges forever on the first aborted ceremony.</li>
-<li><b>Do not read <code>CheatState</code> without the triple <code>#if</code> guard + <code>#else</code></b> — <code>dotnet build</code> will not catch it; only a real release build breaks.</li>
-<li><b>Do not use <code>Time.realtimeSinceStartup</code></b> — pocket-suspends inflate it and nothing publishes a pause for backgrounding.</li>
-<li><b>Do not let a sink exception escape</b> — MessagePipe handlers run on the publisher's stack; a throw at either flush boundary soft-locks the game.</li>
-<li><b>Do not subscribe <code>RunResetMessage</code></b> — <code>IRunResettable.ResetRun</code> is invoked directly; subscribing both double-resets.</li>
-<li><b>Do not open the log file per flush</b> — one <code>StreamWriter</code> per session.</li>
-<li><b>Every numeric/date <code>ToString</code> in the sink takes <code>InvariantCulture</code>.</b></li>
-<li>New <code>.cs</code>/<code>.md</code> files need Unity <code>.meta</code> files (mirror a sibling's format).</li>
-<li>After implementation: <code>dotnet build BalloonParty.Runtime.csproj</code> + <code>python3 Tools/style_audit.py</code>; behavior needs an in-editor playtest — say so, don't claim verified.</li>
+<li><b>What the popups actually show.</b> Which metrics, in what order, with what visual treatment. A design call, not an engineering one. The read model serves whatever is chosen; W4 cannot be specified without it.</li>
+<li><b>Consent policy.</b> Opt-in, opt-out, or region-dependent; where the toggle lives; what happens to records buffered before a decision. One line, but it gates W5's default.</li>
+<li><b>Analytics provider.</b> Gates W6 entirely. Until chosen, the JSONL sink is the only implementation and the decorator chain has one leaf.</li>
 </ol>
 <hr  />
-<h2><a class="anchor" id="autotoc_md485"></a>
-Analytics Notes</h2>
-<h3><a class="anchor" id="autotoc_md486"></a>
+<h2><a class="anchor" id="autotoc_md508"></a>
+Analytics notes</h2>
+<h3><a class="anchor" id="autotoc_md509"></a>
 Minimum viable fields</h3>
-<p>Five fields answer ~80% of balance questions: <b>level index</b>, <b>active gameplay duration</b>, <b>shots fired</b>, <b>total pops</b>, <b>overflow count</b>. Phase 1 captures all five plus many more — but these are the priority for early analysis.</p>
-<h3><a class="anchor" id="autotoc_md487"></a>
+<p>Five answer ~80% of balance questions: <b>level index</b>, <b>active gameplay duration</b>, <b>shots fired</b>, <b>total pops</b>, <b>hearts lost</b>. W1–W3 capture all five plus many more — but these are the priority for early analysis.</p>
+<h3><a class="anchor" id="autotoc_md510"></a>
 Key analyses enabled</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Question   </th><th class="markdownTableHeadNone">Fields used    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Which levels are too hard / too easy?   </td><td class="markdownTableBodyNone">OverflowCount by LevelIndex    </td></tr>
+<td class="markdownTableBodyNone">Which levels are too hard / too easy?   </td><td class="markdownTableBodyNone"><code>HeartsLost</code> by level index    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Are levels too long or too short?   </td><td class="markdownTableBodyNone">DurationSeconds percentiles by LevelIndex    </td></tr>
+<td class="markdownTableBodyNone">Are levels too long or too short?   </td><td class="markdownTableBodyNone">Gameplay-duration percentiles by level index    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Is the player shooting enough?   </td><td class="markdownTableBodyNone">ShotsFired vs <b>DirectHitPops</b> (true accuracy; TotalPops includes item/cheat pops)    </td></tr>
+<td class="markdownTableBodyNone">Is the player shooting well?   </td><td class="markdownTableBodyNone"><code>ShotsFired</code> vs <b><code>DirectHitPops</code></b> (true accuracy)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Where do runs end?   </td><td class="markdownTableBodyNone">LevelsCompleted distribution on RunRecords (partial levels excluded via <code>Completed</code>)    </td></tr>
+<td class="markdownTableBodyNone">Where do runs end?   </td><td class="markdownTableBodyNone"><code>LevelsCompleted</code> distribution, <b>segmented by retry provenance</b>    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Are items impactful?   </td><td class="markdownTableBodyNone">ItemsActivated frequency vs level outcomes   </td></tr>
+<td class="markdownTableBodyNone">Are items impactful?   </td><td class="markdownTableBodyNone"><code>ItemsActivated</code> frequency vs level outcome    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Does the ceremony fire too early?   </td><td class="markdownTableBodyNone">Ceremony-snapshot vs flush-snapshot point gap (<b>R17</b>)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Do players use hold-to-speed-up?   </td><td class="markdownTableBodyNone">Hold seconds / hold-engaged flight count per level (<b>R11</b>)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Which mechanics actually trigger?   </td><td class="markdownTableBodyNone">Pierce discharges, speed taps, sweeps, strikethroughs per level   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md488"></a>
+<h3><a class="anchor" id="autotoc_md511"></a>
 Sample-size guidance</h3>
 <ul>
 <li>~400 runs per level to detect large problems (&gt;10% failure-rate shift)</li>
 <li>~1,000 runs per level for tuning-level confidence (5% shifts)</li>
-<li>Segment by skill proxy (best level reached in session, or total runs) rather than global averages — a new player's level-3 data and a veteran's are different populations.</li>
+<li>Segment by skill proxy (best level reached in session, or total runs) rather than global averages — a new player's level-3 data and a veteran's are different populations. Filter out cheat-tagged records; segment retry continuations separately.</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md490"></a>
-Resolved questions (from the original draft)</h2>
-<ol type="1">
-<li><b>Run-counter persistence</b> — dissolved: <code>RunId</code> is the <code>RunController</code> generation, per-session-monotonic by construction. Cross-session persistence stays Phase 3.</li>
-<li><b>Accuracy tracking</b> — resolved by <code>DirectHitPops</code> (gated on <code>DamageFlags.DirectHit</code>), which excludes item/cheat pops and absorbed projectiles in one stroke.</li>
-<li><b><code>LevelTransitionCompletedMessage</code></b> — it already existed; the flush lives there. </li>
-</ol>
+<h2><a class="anchor" id="autotoc_md513"></a>
+Deferred</h2>
+<ul>
+<li>Streak-break reason decomposition (what ended the streak)</li>
+<li>Burst-rate summaries (pops-per-second peaks); time-to-first-pop per level</li>
+<li>Editor window (<code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Telemetry Viewer</code>)</li>
+<li>Run-counter persistence across app restarts (session id stays non-persistent — <b>RK-14</b>)</li>
+<li><strike>Cross-session level performance</strike> — <b>not deferred, out of scope.</b> "Your best time on
+  level 7" is a progression feature: it belongs beside <code>RunMeta</code>, owned by whatever persists player state, and must not be built by teaching a sink to write locally. The analytics warehouse answers the same question from the export stream without touching the device.</li>
+<li>Flush-on-background (<code>OnApplicationPause</code>) — needs a MonoBehaviour seam; not worth the MVC exception today</li>
+<li>Record a run on cheat-restart (<code>ForceRestartCheat</code>/<code>StartFromLevelCheat</code> bypass <code>GameOverMessage</code>, so those dev runs currently vanish; an <code>EndCause = "Abandoned"</code> flush from <code>ResetRun</code> would capture them)</li>
+<li>Audio metrics piggybacking this subsystem (peak concurrent voices, voice-steal count, coalesced-burst count, dropped-sound count per id) — see <code>PLAN-Audio</code> Phase 2. Dev-build only; they are ordinary <code>MetricId</code>s once W1 lands.</li>
+<li>A fourth dimension axis. If one is genuinely needed, revisit the whole vocabulary shape rather than bolting it on. </li>
+</ul>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->
