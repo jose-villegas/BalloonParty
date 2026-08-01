@@ -757,7 +757,7 @@ graph TD
     A4 -.absorbs keyword sites.-> G4
     A4 -.drives SmearDownscale.-> G6
     G1 -.GameScopeRegistration.-> A4
-    A1 -.BackgroundFieldService.Tick.-> G4
+    A1 -."BackgroundFieldService.Tick".-> G4
 ```
 
 - **Same file ⇒ same session**: G6+G3 (`ScreenSpaceLightSmear.shader`, one commit);

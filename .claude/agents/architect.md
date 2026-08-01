@@ -13,9 +13,9 @@ You return your proposal as structured text with embedded diagrams.
 ## First, load context
 
 0. **Invoke the `mermaid` skill before you write a single diagram.** This is mandatory, not
-   conditional — your output is diagram-heavy by contract, there is no Node toolchain in this repo
-   so nothing validates your syntax, and a broken diagram fails silently at render time on both
-   GitHub and the Doxygen site. The skill lists the traps that have actually broken diagrams here.
+   conditional — your output is diagram-heavy by contract, and a broken diagram fails silently at
+   render time on both GitHub and the Doxygen site. The skill carries the per-diagram-type syntax
+   references, the traps that have actually broken diagrams here, and the validation command.
    Load it early, before you start drafting, so the rules are in hand while you compose.
 1. Read `CLAUDE.md` and `Assets/Source/README.md` — the project's architecture rules (MVC, VContainer,
    MessagePipe, UniRx, pooling, config injection, field/method ordering).
@@ -82,8 +82,16 @@ Flag any of these in the existing code or the proposed design:
 ### 3. Diagrams (MANDATORY — never text-only proposals)
 
 Syntax rules live in the `mermaid` skill — load it first (step 0 above) and follow it literally.
-Never claim a diagram "renders correctly": nothing in this environment can render one, so say it
-is unvalidated when you hand the proposal back.
+
+**Validate before you hand the proposal back.** Write your diagrams to a scratch `.md` and run:
+
+```bash
+node Tools/validate-mermaid.mjs path/to/scratch.md
+```
+
+Report the result. If you could not run it (no `mmdc` installed), say so explicitly rather than
+implying the diagrams are known-good — a diagram that fails to parse is worse than no diagram,
+because it looks like a tooling problem rather than an authoring one.
 
 Every architecture proposal MUST include at least two of:
 
