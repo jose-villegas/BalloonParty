@@ -165,8 +165,9 @@ Contents</h1>
 Two snapshots per level</h1>
 <p>The level-up popup shows during the ceremony, <b>before</b> the level's flush boundary — straggler score trails are still arriving. So a <em>ceremony</em> snapshot (what the player was shown) and a <em>flush</em> snapshot (what was true) are both taken and both logged. The gap between them is data, not a bug. The popup shows <em>projected</em> points to match what <code>ScoreController</code> already displays beside it.</p>
 <h1><a class="anchor" id="autotoc_md220"></a>
-Deliberate duplication with audio</h1>
-<p><code>CombatSoundRouter</code> keeps its own per-flight counters and <b>that is intentional</b> — it reads each count before incrementing it (the count is a musical pitch step), so sourcing it from a shared bus subscriber would make the pitch depend on MessagePipe subscription order. Its counters also reset on streak break, which is musically right and analytically wrong. Only the flight <em>boundary</em> is shared, via <code>IFlightScope</code>.</p>
+Where the per-flight numbers come from</h1>
+<p>Per-flight counts live in <code>FlightStatsService</code> (<code>Game/Flight/</code>, a <b>gameplay</b> service, not part of this folder). <code>HitPipeline</code> is its only writer, recording each hit <em>before</em> publishing <code>ActorHitMessage</code> — so the count is fixed before any subscriber runs, and <code>CombatSoundRouter</code> reads it post-increment for its pitch ramps. Metrics folds it at flight seal. One owner, two readers, no ordering hazard.</p>
+<p>The one exception: <code>CombatSoundRouter._colorPopsThisFlight</code> <b>stays private to audio</b>. It resets on streak break as well as on load, and counts only pops that use the generic <code>BalloonPop</code> sound — a pitch cursor, not a statistic. Do not "unify" it.</p>
 <h1><a class="anchor" id="autotoc_md221"></a>
 Pause handling</h1>
 <p>Subscribes <code>PauseService.IsAnyPaused</code> directly (reference-counted and reset-safe) rather than counting <code>PausedMessage</code>/<code>ResumedMessage</code> edges, which leak on the loss path.</p>

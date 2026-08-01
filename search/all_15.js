@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['keep_20drawing_20during_20completing_0',['6.6 ColorProgressBar must keep drawing during Completing',['../plan_level_up_timing.html#autotoc_md603',1,'']]],
-  ['keep_20it_1',['Why keep it',['../plan_web_demo_hosting.html#autotoc_md716',1,'']]],
-  ['keep_20the_20watchdog_20regardless_2',['11. Keep the watchdog regardless',['../plan_level_up_timing.html#autotoc_md609',1,'']]],
-  ['keep_20tipping_20identity_20as_20presentation_3',['4. Detect on projected progress; keep tipping identity as presentation',['../plan_level_up_timing.html#autotoc_md595',1,'']]],
-  ['kept_20strong_4',['Tier 1: UI arrival storm — &lt;strong&gt;RESOLVED 2026-07-23: U1 reverted, U2 kept&lt;/strong&gt;',['../plan_performance_recovery.html#autotoc_md635',1,'']]],
-  ['key_20analyses_20enabled_5',['Key analyses enabled',['../plan_gameplay_telemetry.html#autotoc_md510',1,'']]],
+  ['keep_20drawing_20during_20completing_0',['6.6 ColorProgressBar must keep drawing during Completing',['../plan_level_up_timing.html#autotoc_md612',1,'']]],
+  ['keep_20it_1',['Why keep it',['../plan_web_demo_hosting.html#autotoc_md725',1,'']]],
+  ['keep_20the_20watchdog_20regardless_2',['11. Keep the watchdog regardless',['../plan_level_up_timing.html#autotoc_md618',1,'']]],
+  ['keep_20tipping_20identity_20as_20presentation_3',['4. Detect on projected progress; keep tipping identity as presentation',['../plan_level_up_timing.html#autotoc_md604',1,'']]],
+  ['kept_20strong_4',['Tier 1: UI arrival storm — &lt;strong&gt;RESOLVED 2026-07-23: U1 reverted, U2 kept&lt;/strong&gt;',['../plan_performance_recovery.html#autotoc_md644',1,'']]],
+  ['key_20analyses_20enabled_5',['Key analyses enabled',['../plan_gameplay_telemetry.html#autotoc_md519',1,'']]],
   ['key_20contracts_20this_20enforces_6',['Key contracts this enforces',['../arch_shape_formations.html#autotoc_md93',1,'']]],
   ['key_20design_20decisions_7',['Key design decisions',['../arch_bush_system.html#autotoc_md59',1,'Key design decisions'],['../arch_light_field.html#autotoc_md68',1,'Key design decisions']]],
   ['key_20design_20decisions_20contracts_8',['Key design decisions &amp; contracts',['../arch_screen_space_light.html#autotoc_md87',1,'']]],
@@ -19,6 +19,6 @@ var searchData=
   ['killtimescaletween_16',['KillTimeScaleTween',['../classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#aa51f7d3b49f24cc1e5368a7455ebe4b5',1,'BalloonParty::Game::Cinematics::CameraRigCinematic']]],
   ['killtween_17',['KillTween',['../classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraRig.html#acbe52b3e18489ef5089ad6ddbf587b7f',1,'BalloonParty::Game::Cinematics::CinematicCameraRig']]],
   ['kind_18',['Kind',['../classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a62c9013b13683f11b5fdbcf41755e20d',1,'BalloonParty.Balloon.Model.BalloonModelBase.Kind'],['../structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html#ad0a9cbf78775e8bbe95a29bdf6835201',1,'BalloonParty.Item.Effects.EffectHit.Kind'],['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1AbsorberActorModel.html#a4be6f5c4f032894851fb850d2fa0bfab',1,'BalloonParty.Slots.Actor.Archetype.AbsorberActorModel.Kind'],['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushObstacleModel.html#aa0b8dd15fc557eb52e7f002652b1c5e0',1,'BalloonParty.Slots.Actor.Archetype.BushObstacleModel.Kind'],['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html#af3958d57e31b4c266403a7987c3d02db',1,'BalloonParty.Slots.Actor.Archetype.DeflectorActorModel.Kind'],['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GatekeeperActorModel.html#ab2a20ab25e7cbc610948b6191a7c4e5e',1,'BalloonParty.Slots.Actor.Archetype.GatekeeperActorModel.Kind'],['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a4e83b79d2c573dceded7187fead65fc8',1,'BalloonParty.Slots.Actor.Archetype.PuffObstacleModel.Kind'],['../interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html#a76294bf735ba1535932a393b29e045c4',1,'BalloonParty.Slots.Actor.ISlotActor.Kind'],['../classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorModel.html#a5712d074a9e8f35e3db494236f0e9d41',1,'BalloonParty.Slots.Actor.StaticActorModel.Kind'],['../classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html#ad852e12f9bc2f9917d939e3642ffde2b',1,'BalloonParty.Solver.ShotSimDynamicActor.Kind'],['../classBalloonParty_1_1Solver_1_1ShotSimStaticActor.html#a4f6144bf7910b960e3df235b98f78715',1,'BalloonParty.Solver.ShotSimStaticActor.Kind']]],
-  ['known_20gap_19',['Known gap',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Shared/Cadence/README.md#autotoc_md824',1,'']]],
-  ['known_20residual_20scoped_20cosmetic_20',['10. Known residual (scoped, cosmetic)',['../plan_level_up_timing.html#autotoc_md608',1,'']]]
+  ['known_20gap_19',['Known gap',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Shared/Cadence/README.md#autotoc_md833',1,'']]],
+  ['known_20residual_20scoped_20cosmetic_20',['10. Known residual (scoped, cosmetic)',['../plan_level_up_timing.html#autotoc_md617',1,'']]]
 ];

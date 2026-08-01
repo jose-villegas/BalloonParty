@@ -264,7 +264,6 @@ Folder structure</h3>
 <div class="line">├── RunMetricsSnapshot.cs            ← sealed immutable per-run read surface</div>
 <div class="line">├── ColorPopCount.cs / BalloonTypeCount.cs / ItemActivationCount.cs</div>
 <div class="line">├── ILevelMetricsView.cs             ← the UI read seam</div>
-<div class="line">├── IFlightScope.cs / FlightScopeService.cs   ← shared flight boundary</div>
 <div class="line">├── GameplayMetricsService.cs        ← entry point: state machine + routing + snapshots</div>
 <div class="line">├── SessionTelemetryContext.cs       ← session id, schema version (App scope)</div>
 <div class="line">├── TelemetryEnvelope.cs             ← uniform wire record (readonly struct)</div>
@@ -387,15 +386,161 @@ Metric vocabulary — why a registry, not named fields</h3>
 </table>
 <p>Rejected: <code>Dictionary&lt;MetricId,int&gt;</code> (hash per hit and resize allocations during 10–25-hit frames — not for boxing, which would not occur), and a generic N-dimensional metric cube (YAGNI, and it destroys the catalog's discoverability, which is the registry's only real cost and its only real defence).</p>
 <h3><a class="anchor" id="autotoc_md476"></a>
-Audio: extract the flight <em>boundary</em>, not the counters</h3>
-<p><code>CombatSoundRouter</code> keeps nine per-flight counters (<code>:40-52</code>) and uses them as musical pitch ramps. <b>They stay where they are.</b> The duplication is eight ints and a dictionary, incremented a handful of times per frame; the merge would cost far more:</p>
-<ul>
-<li><b>Read-before-write.</b> The router reads the count, plays the note, <em>then</em> increments (<code>:127-131</code>, and the <code>PopSemitoneOffset</code>/<code>IncrementPopCounter</code> pair at <code>:300-339</code>). If audio read a shared bus-subscribing aggregate instead, the pitch would depend on MessagePipe subscription order — and since <code>RegisterGameplaySystems</code> runs before <code>RegisterAudioRouters</code>, every ramp would come out a whole tone sharp, with the first pop of a colour off the root. Silent, ear-only, in a subsystem whose entries currently ship dormant. This is exactly the coupling <code>HitPipeline</code> exists to eliminate (<em>"MessagePipe's subscription order is enforced nowhere"</em>), and re-introducing it for a cosmetic subsystem is a straight regression.</li>
-<li><b>Divergent reset semantics.</b> The router clears <code>_colorPopsThisFlight</code> on <code>StreakChangedMessage(0)</code> (<code>:267-270</code>). That is musically correct and analytically wrong: applying it to the shared aggregate would make <code>PopsByColor</code> under-report by every pop before the last streak break — wrong data that looks entirely plausible.</li>
-</ul>
-<p><b>What is shared instead:</b> <code>IFlightScope</code> (<code>FlightIndex</code>, <code>IsInFlight</code>), a tiny plain-C# service. Flight state is currently tracked five independent times (<code>CombatSoundRouter</code>, <code>MusicSoundRouter._inFlight</code>, <code>HoldSpeedUpController</code>, <code>HoldSpeedUpTooltip</code>, <code>WindSoundRouter</code> via live cruise state). Consumers react to a <b>state flip</b> rather than reading a counter mid-hit, so there is no ordering hazard. <code>MusicSoundRouter</code>'s three subscriptions collapse to one.</p>
-<p>Document the duplication as intentional in <b>both</b> <code><a class="el" href="Audio_2README_8md.html">Audio/README.md</a></code> and <code><a class="el" href="Game_2Telemetry_2README_8md.html">Game/Telemetry/README.md</a></code>, or someone will "fix" it.</p>
-<h3><a class="anchor" id="autotoc_md477"></a>
+The catalog</h3>
+<p><b>This table is W1's specification.</b> Implement exactly these ids, in this order, with these wire names. Do not invent, rename, reorder, or "improve" them — wire names are the external contract (<b>R6</b>, guardrail 14) and are append-only once shipped. If a metric you expect is missing, it was left out deliberately; add it in a later wave rather than guessing here.</p>
+<p><b>Naming convention:</b> enum members are <code>PascalCase</code>, wire names are <code>snake_case</code>. The split is deliberate — the C# identifier stays free to be renamed for readability while the wire name stays frozen for the warehouse.</p>
+<p><b>Scope</b> is where the metric is <em>counted</em>. Everything folds upward to Level, Run and Session by its fold rule (<b>R4</b>); Flight-scope metrics are additionally sealed per shot.</p>
+<div class="fragment"><div class="line"><span class="keyword">internal</span> <span class="keyword">enum</span> FoldRule { Sum, Max, Min, Last }</div>
+</div><!-- fragment --><h4><a class="anchor" id="autotoc_md477"></a>
+Counters — <code>MetricId</code></h4>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Enum member   </th><th class="markdownTableHeadNone">Wire name   </th><th class="markdownTableHeadNone">Unit   </th><th class="markdownTableHeadNone">Fold   </th><th class="markdownTableHeadNone">Source   </th><th class="markdownTableHeadNone">Axis   </th><th class="markdownTableHeadNone">Scope    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>ShotsFired</code>   </td><td class="markdownTableBodyNone"><code>shots_fired</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone"><code>ProjectileFiredMessage</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>FlightsStarted</code>   </td><td class="markdownTableBodyNone"><code>flights_started</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone"><code>ProjectileLoadedMessage</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>Pops</code>   </td><td class="markdownTableBodyNone"><code>pops</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone"><code>ActorHitMessage</code>, <code>Outcome == Pop</code>   </td><td class="markdownTableBodyNone">Color, BalloonType   </td><td class="markdownTableBodyNone">Flight    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>DirectHitPops</code>   </td><td class="markdownTableBodyNone"><code>direct_hit_pops</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone">as above <b>and</b> <code>(Context.Flags &amp; DamageFlags.DirectHit) != 0</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Flight    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>Deflects</code>   </td><td class="markdownTableBodyNone"><code>deflects</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone"><code>ActorHitMessage</code>, <code>Outcome == Deflect</code>   </td><td class="markdownTableBodyNone">BalloonType   </td><td class="markdownTableBodyNone">Flight    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>Absorbs</code>   </td><td class="markdownTableBodyNone"><code>absorbs</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone"><code>ActorHitMessage</code>, <code>Outcome == Absorb \| PassThrough</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Flight    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>WallBounces</code>   </td><td class="markdownTableBodyNone"><code>wall_bounces</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone"><code>WallHitMessage</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Flight    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>PierceDischarges</code>   </td><td class="markdownTableBodyNone"><code>pierce_discharges</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone"><code>PierceDischargedMessage</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Flight    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>PierceToughsCleared</code>   </td><td class="markdownTableBodyNone"><code>pierce_toughs_cleared</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone"><code>PierceDischargedMessage.ToughCount</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Flight    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>RainbowPierceDischarges</code>   </td><td class="markdownTableBodyNone"><code>rainbow_pierce_discharges</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone"><code>PierceDischargedMessage.IsRainbow</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Flight    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>SpeedTapsMinted</code>   </td><td class="markdownTableBodyNone"><code>speed_taps_minted</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone"><code>SpeedTapMintedMessage</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Flight    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>MaxWallBouncesInFlight</code>   </td><td class="markdownTableBodyNone"><code>max_wall_bounces_in_flight</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Max   </td><td class="markdownTableBodyNone"><code>WallBounces</code> at flight seal   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>MaxSpeedTapsInFlight</code>   </td><td class="markdownTableBodyNone"><code>max_speed_taps_in_flight</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Max   </td><td class="markdownTableBodyNone"><code>SpeedTapMintedMessage.TotalTaps</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>HoldSpeedUpFlights</code>   </td><td class="markdownTableBodyNone"><code>hold_speed_up_flights</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone"><code>IHoldSpeedUpState</code> — flights where hold engaged (<b>R11</b>)   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>PointsBanked</code>   </td><td class="markdownTableBodyNone"><code>points_banked</code>   </td><td class="markdownTableBodyNone">points   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone"><code>ScoreTrailArrivedMessage.Points</code>   </td><td class="markdownTableBodyNone">Color   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>PointsProjected</code>   </td><td class="markdownTableBodyNone"><code>points_projected</code>   </td><td class="markdownTableBodyNone">points   </td><td class="markdownTableBodyNone">Last   </td><td class="markdownTableBodyNone"><code>IRunScore.TotalScore</code> read at ceremony snapshot (<b>R18</b>)   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>MaxMultiplier</code>   </td><td class="markdownTableBodyNone"><code>max_multiplier</code>   </td><td class="markdownTableBodyNone">multiplier   </td><td class="markdownTableBodyNone">Max   </td><td class="markdownTableBodyNone"><code>ScorePointsGroupMessage.Multiplier</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>MaxStreak</code>   </td><td class="markdownTableBodyNone"><code>max_streak</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Max   </td><td class="markdownTableBodyNone"><code>StreakChangedMessage.Streak</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>StreakBreaks</code>   </td><td class="markdownTableBodyNone"><code>streak_breaks</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone"><code>StreakChangedMessage</code> where <code>Streak == 0</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>HeartsLost</code>   </td><td class="markdownTableBodyNone"><code>hearts_lost</code>   </td><td class="markdownTableBodyNone">hearts   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone"><code>WaveDamageMessage.HeartsLost</code> (<b>R10</b>)   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>MaxHeartsLostInWave</code>   </td><td class="markdownTableBodyNone"><code>max_hearts_lost_in_wave</code>   </td><td class="markdownTableBodyNone">hearts   </td><td class="markdownTableBodyNone">Max   </td><td class="markdownTableBodyNone"><code>WaveDamageMessage.HeartsLost</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>BlockedSlots</code>   </td><td class="markdownTableBodyNone"><code>blocked_slots</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone"><code>WaveDamageMessage.BlockedSlots</code> (<b>R10</b>)   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>Strikethroughs</code>   </td><td class="markdownTableBodyNone"><code>strikethroughs</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone"><code>StrikethroughArrivedMessage</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>ShieldsGained</code>   </td><td class="markdownTableBodyNone"><code>shields_gained</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone"><code>ShieldGainedMessage</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>ShieldsSpent</code>   </td><td class="markdownTableBodyNone"><code>shields_spent</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone"><code>ShieldLostMessage</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>ItemsActivated</code>   </td><td class="markdownTableBodyNone"><code>items_activated</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone"><code>ItemActivatedMessage</code>   </td><td class="markdownTableBodyNone">ItemType   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>MinHealth</code>   </td><td class="markdownTableBodyNone"><code>min_health</code>   </td><td class="markdownTableBodyNone">hearts   </td><td class="markdownTableBodyNone"><b>Min</b>   </td><td class="markdownTableBodyNone"><code>IPlayerHealth.Current</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>MaxDangerLevel</code>   </td><td class="markdownTableBodyNone"><code>max_danger_level</code>   </td><td class="markdownTableBodyNone">level   </td><td class="markdownTableBodyNone">Max   </td><td class="markdownTableBodyNone"><code>IDangerLevel.Level</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>BoardCleared</code>   </td><td class="markdownTableBodyNone"><code>board_cleared</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Max   </td><td class="markdownTableBodyNone"><code>BoardDepletedMessage</code> — 1 if the board emptied organically (<b>R15</b>)   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Level    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>LevelsCompleted</code>   </td><td class="markdownTableBodyNone"><code>levels_completed</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Sum   </td><td class="markdownTableBodyNone">derived: absorbed level with <code>Completed == true</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Run    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>RetriesUsed</code>   </td><td class="markdownTableBodyNone"><code>retries_used</code>   </td><td class="markdownTableBodyNone">count   </td><td class="markdownTableBodyNone">Last   </td><td class="markdownTableBodyNone"><code>IRetryState</code> at reset (<b>R14</b>)   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Run   </td></tr>
+</table>
+<p><code>Absorbs</code> uses <code>!=</code> against a combined mask because it is the one outcome family where two values share a metric; every other filter is <code>==</code> per the repo idiom.</p>
+<h4><a class="anchor" id="autotoc_md478"></a>
+Timers — <code>TimerId</code></h4>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Enum member   </th><th class="markdownTableHeadNone">Wire name   </th><th class="markdownTableHeadNone">Runs while   </th><th class="markdownTableHeadNone">Pause-gated    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>Gameplay</code>   </td><td class="markdownTableBodyNone"><code>gameplay_seconds</code>   </td><td class="markdownTableBodyNone">state == <code>Playing</code>   </td><td class="markdownTableBodyNone"><b>yes</b>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>Ceremony</code>   </td><td class="markdownTableBodyNone"><code>ceremony_seconds</code>   </td><td class="markdownTableBodyNone">state == <code>Ceremony</code>   </td><td class="markdownTableBodyNone">no — the ceremony <em>is</em> a pause    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>Wall</code>   </td><td class="markdownTableBodyNone"><code>wall_seconds</code>   </td><td class="markdownTableBodyNone">state ∉ {<code>Idle</code>, <code>Ended</code>}   </td><td class="markdownTableBodyNone">no    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>Hold</code>   </td><td class="markdownTableBodyNone"><code>hold_seconds</code>   </td><td class="markdownTableBodyNone">hold-to-speed-up engaged (<b>R11</b>)   </td><td class="markdownTableBodyNone">no — only runs in flight   </td></tr>
+</table>
+<h4><a class="anchor" id="autotoc_md479"></a>
+Not metrics</h4>
+<p>These live on the envelope as identity/context, never in <code>MetricSet</code>: <code>SchemaVersion</code>, <code>SessionId</code>, <code>RunId</code>, <code>AttemptId</code>, <code>AttemptIndex</code>, <code>LevelIndex</code>, <code>LevelAttemptOrdinal</code>, <code>Completed</code>, <code>CheatActive</code>, <code>EndCause</code>, <code>RecordKind</code>, <code>TimestampUtcTicks</code>.</p>
+<div class="fragment"><div class="line"><span class="keyword">internal</span> <span class="keyword">enum</span> RecordKind { Flight, Level, Run, Session }</div>
+</div><!-- fragment --><p><code>Session</code> is reserved: the scope accumulates (<b>R1</b>) but nothing flushes it in the waves below, so no <code>Session</code> envelope is emitted yet and there is no <code>SessionMetricsSnapshot</code>. Do not build one speculatively.</p>
+<h3><a class="anchor" id="autotoc_md480"></a>
+Flight stats: extract the boundary <em>and</em> the type counters; the colour ramp stays</h3>
+<p><code>CombatSoundRouter</code> keeps nine per-flight counters (<code>:40-52</code>) and uses them as musical pitch ramps. <b>Eight of the nine are gameplay facts wearing an audio costume</b> — "how many
+Toughs died this flight" is not a sound concern — and they move to a gameplay-owned <code>FlightStatsService</code>. One stays.</p>
+<h4><a class="anchor" id="autotoc_md481"></a>
+The single-writer rule</h4>
+<p>The reason a naive merge fails is real and unchanged: the router reads the count, plays the note, <em>then</em> increments (<code>:127-131</code>, and the <code>PopSemitoneOffset</code>/<code>IncrementPopCounter</code> pair at <code>:300-339</code>). Two independent bus subscribers would make the pitch depend on MessagePipe subscription order, and every ramp would come out a whole tone sharp.</p>
+<p>That argument constrains <b>where the write goes</b>, not whether the counters move. <code><a class="el" href="HitPipeline_8cs.html">HitPipeline.cs</a>:14</code> holds the <b>only</b> <code>IPublisher&lt;ActorHitMessage&gt;</code> in the repo — all nine <code>IHitDispatcher.Dispatch</code> call sites (projectile, bomb, laser, lightning, three cheats) funnel through it. Recording there, <em>before</em> the publish, fixes the count before any subscriber runs:</p>
+<div class="fragment"><div class="line">_score.OnActorHit(msg);</div>
+<div class="line">_balloonRegistry.Route(msg);</div>
+<div class="line">_flightStats.Record(msg);</div>
+<div class="line">_hitPublisher.Publish(msg);</div>
+</div><!-- fragment --><p>The hazard is dissolved by construction rather than mitigated — there is no longer an order to depend on. Audio reads the post-increment value and subtracts one, so every played <code>semitoneOffset</code> is byte-identical to today. This is in character for <code>HitPipeline</code>, whose stated job is <em>"the order-dependent part of hit resolution,
+explicitly"</em>; the dangerous design is the one that avoids it.</p>
+<p><b>Audio must not be the writer.</b> Inverting it — <code>CombatSoundRouter</code> calling <code>Record</code> — makes a cosmetic subsystem the source of truth for analytical data, and the melodic machinery currently ships dormant. One future early-return for a muted state silently zeroes the metrics.</p>
+<h4><a class="anchor" id="autotoc_md482"></a>
+What moves, and what does not</h4>
+<p>The deciding fact, which neither the original study nor an earlier revision of this plan noticed: <b>audio's two axes are mutually exclusive.</b> <code>OnActorHit</code> branches at <code>:124</code> — a pop takes the colour path <b>or</b> the type path, never both. A red Tough increments the Tough counter and <em>not</em> the red one. R12 requires both axes on every pop, so the two quantities are genuinely different, and the divergence is confined to one field.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Field   </th><th class="markdownTableHeadNone">Verdict   </th><th class="markdownTableHeadNone">Why    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">six per-type pop counters (<code>:46-50</code>)   </td><td class="markdownTableBodyNone"><b>move</b>   </td><td class="markdownTableBodyNone"><code>PopSoundFor</code> (<code>:170-182</code>) is a 1:1 map from <code>BalloonType</code>; each counter <em>is</em> <code>PopsByBalloonType[T]</code> for the flight    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>_unbreakableDeflectsThisFlight</code> (<code>:51</code>)   </td><td class="markdownTableBodyNone"><b>move</b>   </td><td class="markdownTableBodyNone"><code>UnbreakableBalloonModel</code> has no <code>IHasDurability</code>, so the branch is unconditional — becomes <code>DeflectsByBalloonType[Unbreakable]</code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>_pierceDischargesThisFlight</code> (<code>:52</code>)   </td><td class="markdownTableBodyNone"><b>move</b>   </td><td class="markdownTableBodyNone">unconditional increment on <code>PierceDischargedMessage</code>; zero musical conditioning    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>_bounceCount</code> (<code>:44</code>)   </td><td class="markdownTableBodyNone"><b>move, with a test</b>   </td><td class="markdownTableBodyNone">now a clean gameplay fact, but it resets on <code>ProjectileFiredMessage</code> (<code>:198</code>) while the rest reset on <code>ProjectileLoadedMessage</code> (<code>:204-212</code>). Moving it to the <code>[Loaded, Destroyed)</code> boundary is behaviourally identical <em>only because</em> no <code>WallHitMessage</code> can occur before launch — assert that, do not assume it    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>_colorPopsThisFlight</code> (<code>:40</code>)   </td><td class="markdownTableBodyNone"><b>stays private</b>   </td><td class="markdownTableBodyNone">cleared on both <code>Loaded</code> (<code>:212</code>) <b>and</b> <code>StreakChangedMessage(0)</code> (<code>:269</code>), so its scope is <code>[max(flight start, last streak break), now)</code> — not a flight counter at all, and it counts only generic-<code>BalloonPop</code> pops. It is a pitch cursor, not a statistic   </td></tr>
+</table>
+<p>Moving the colour dictionary would reintroduce the whole-tone-sharp regression through a different door: under a shared <code>PopsByColor</code>, a red Tough followed by a red Simple plays the Simple at step 1 instead of step 0.</p>
+<h4><a class="anchor" id="autotoc_md483"></a>
+Ownership — beside telemetry, not inside it</h4>
+<p><code>FlightStatsService</code> is a <b>gameplay</b> service with two readers, one of which is metrics. Putting it inside <code>Game/Telemetry</code> would break <b>R20</b> and the subscriber-only principle outright, because audio is a shipping feature and metrics would become load-bearing for it. Folder <code>Assets/Source/Game/Flight/</code>, namespace <code>BalloonParty.Game.Flight</code>, Controller layer (plain C#, <code>IStartable</code>/<code>IDisposable</code>), registered in <code>RegisterGameplaySystems</code> before <code>LevelController</code>.</p>
+<div class="fragment"><div class="line"><span class="keyword">internal</span> <span class="keyword">interface </span>IFlightScope</div>
+<div class="line">{</div>
+<div class="line">    <span class="keywordtype">int</span> FlightIndex { <span class="keyword">get</span>; }</div>
+<div class="line">    IReadOnlyReactiveProperty&lt;bool&gt; IsLoaded { <span class="keyword">get</span>; }    <span class="comment">// [Loaded, Destroyed)</span></div>
+<div class="line">    IReadOnlyReactiveProperty&lt;bool&gt; IsAirborne { <span class="keyword">get</span>; }  <span class="comment">// [Fired, Destroyed)</span></div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">internal</span> <span class="keyword">interface </span>IFlightStats</div>
+<div class="line">{</div>
+<div class="line">    <span class="keywordtype">int</span> PopsOf(BalloonType type);</div>
+<div class="line">    <span class="keywordtype">int</span> DeflectsOf(BalloonType type);</div>
+<div class="line">    <span class="keywordtype">int</span> PierceDischarges { <span class="keyword">get</span>; }</div>
+<div class="line">    <span class="keywordtype">int</span> WallBounces { <span class="keyword">get</span>; }</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Write seam — HitPipeline only. Segregated so no reader can mutate.</span></div>
+<div class="line"><span class="keyword">internal</span> <span class="keyword">interface </span>IFlightStatsWriter</div>
+<div class="line">{</div>
+<div class="line">    <span class="keywordtype">void</span> Record(in ActorHitMessage msg);</div>
+<div class="line">}</div>
+</div><!-- fragment --><p>Two flags, not one: the five existing flight trackers use three different boundaries. <code>MusicSoundRouter</code> sets <code>_inFlight</code> on <b>Fired</b> (<code><a class="el" href="MusicSoundRouter_8cs.html">MusicSoundRouter.cs</a>:145</code>) and uses it to duck (<code>:192</code>), so migrating it to a <code>[Loaded, Destroyed)</code> flag would duck the music while the player is <em>aiming</em> — permanently, between shots. <code>IsAirborne</code> is the flag it and <code>HoldSpeedUpController</code> take; <code>IsLoaded</code> is what R2's Σ-flights ⊆ level needs.</p>
+<h4><a class="anchor" id="autotoc_md484"></a>
+The acceptance gate is free</h4>
+<p>Every played <code>semitoneOffset</code> is unchanged by this refactor, so <code>Assets/Tests/EditMode/Audio/CombatSoundRouterTests.cs</code> <b>must pass entirely unmodified</b>. That converts an ear-only regression risk into a red/green gate — which is what makes this wave safe to hand to a cheaper model.</p>
+<p>Note for the implementer: cheat-driven dispatches (<code>AwardScorePopCheat</code>, <code>BalloonRemoverCheat</code>, <code>ScoreCheatHelper</code>) now feed the shared stats too. Harmless — those runs are cheat-tagged for filtering — but say so in the README or someone will "fix" it.</p>
+<h3><a class="anchor" id="autotoc_md485"></a>
 Run identity and retries</h3>
 <p><code>RunController._generation</code> increments on <b>every</b> reset, retry included (<code><a class="el" href="RunController_8cs.html">RunController.cs</a>:105</code>) — so it is an <em>attempt</em> counter, and using it as run identity corrupts every levels-reached distribution. The rest of the game already disagrees with that reading: on a retry <code>ScoreController.ClearRunState</code> restores the score to <code>_levelStartScore</code> rather than zero (<code>:94-98</code>), and <code>RunMeta.RecordRun</code> runs on the retried attempt too — the domain treats a retry as a <b>continuation of one run</b>.</p>
 <table class="markdownTable">
@@ -414,7 +559,7 @@ Run identity and retries</h3>
 <p><b>Why <code>AttemptIndex</code> is not a per-level answer.</b> Retries restart at the death level (<code><a class="el" href="GameOverScreen_8cs.html">GameOverScreen.cs</a>:76</code> → <code><a class="el" href="LevelController_8cs.html">LevelController.cs</a>:312</code>), so a chain that dies at level 7 and retries produces records for 1…7, then 7, 8, 9…. All of the second attempt's records carry <code>AttemptIndex = 1</code>, but only level 7 was actually replayed — levels 8+ are first attempts that merely happened during the second attempt. Segmenting level difficulty by <code>AttemptIndex</code> would wrongly mark level 9 as retried. <code>LevelAttemptOrdinal</code> (a small <code>Dictionary&lt;int,int&gt;</code> at chain scope, cleared only on a fresh chain) stamps level 7 with 2 and levels 8+ with 1, which is what "how many tries did this level take" actually means.</p>
 <p><b>Persistence: none, by design.</b> Level records live in memory for the duration of their scope, are snapshotted, handed to the sink, and reset. Nothing is written to the player's profile — telemetry leaves the device (or lands in the dev log) and is done. This is a constraint, not a missing feature: the moment a metric is persisted client-side it stops being telemetry and becomes progression, which is <code>RunMeta</code>'s job, not this subsystem's.</p>
 <p>The only cross-session state in the game today is <code>RunMeta</code>'s two PlayerPrefs ints (<code>BestLevel</code>, <code>BestScore</code>) — which, note for analytics, are <b>retry-inclusive</b>, since <code>EndRun</code> records them on retried attempts too.</p>
-<h3><a class="anchor" id="autotoc_md478"></a>
+<h3><a class="anchor" id="autotoc_md486"></a>
 Read model</h3>
 <div class="fragment"><div class="line"><span class="keyword">internal</span> <span class="keyword">interface </span>ILevelMetricsView</div>
 <div class="line">{</div>
@@ -425,7 +570,7 @@ Read model</h3>
 </div><!-- fragment --><p><code>LevelMetricsSnapshot</code> is a <code>sealed</code> immutable class: <code>int this[MetricId]</code>, <code>float this[TimerId]</code>, <code>IReadOnlyList&lt;ColorPopCount&gt; PopsByColor</code>, <code>IReadOnlyList&lt;BalloonTypeCount&gt; PopsByBalloonType</code>, <code>IReadOnlyList&lt;ItemActivationCount&gt; ItemsActivated</code>, <code>int LevelIndex</code>, <code>bool Completed</code>.</p>
 <p><b>Scope: the current attempt only.</b> The popups show the try that succeeded; earlier attempts at the same level are irrelevant to them (<b>R14c</b>). The read model therefore holds no history and the retry ids are carried for the export stream's benefit, not the UI's. If a future surface wants "you cleared this on try 3", that is one extra field on the snapshot, not a retained record set.</p>
 <p>Rejected alternatives: <b>publishing a <code>LevelStatsReadyMessage</code></b> (two subscribers of <code>ScoreLevelUpMessage</code> with unenforced order race the popup's async show, and it breaks the subscriber-only principle); <b>an injected <code>Snapshot()</code> the View calls</b> (hands the View the ability to snapshot mid-burst). The chosen shape is also the established repo idiom — <code>GameOverScreen</code> already injects <code>IRunMeta</code> and reads <code>BestLevel.Value</code> at render time; <code>IPlayerHealth.Current</code>, <code>IDangerLevel.Level</code> and <code>IColorStreak</code> are the same shape.</p>
-<h3><a class="anchor" id="autotoc_md479"></a>
+<h3><a class="anchor" id="autotoc_md487"></a>
 Export layer</h3>
 <div class="fragment"><div class="line">classDiagram</div>
 <div class="line">    class ITelemetrySink {</div>
@@ -468,7 +613,7 @@ Export layer</h3>
 <td class="markdownTableBodyNone"><code>Write(in TelemetryEnvelope)</code>, <code>FlushAsync</code>, <code>Dispose</code>   </td><td class="markdownTableBodyNone">never-throw guard, <code>_disabled</code> latch, re-entrancy guard, <code>WriteCore</code> hook   </td><td class="markdownTableBodyNone">batching, consent, fan-out, offline queue/retry   </td></tr>
 </table>
 <p><code>JsonLinesTelemetrySink</code> (dev only) keeps the previously-verified policy: path <code>Application.persistentDataPath + "/telemetry/"</code>; file <code>telemetry_yyyyMMdd_HHmmss.jsonl</code> formatted with <code>CultureInfo.InvariantCulture</code> (a non-Gregorian device calendar otherwise writes year 2569); <b>one <code>StreamWriter</code> opened in <code>Start()</code> and kept for the session</b> (the file-open on Android <code>persistentDataPath</code> dominates the write cost and neither flush boundary is an idle frame); rotation keeps the 20 most recent files sorted <b>by file name</b>, not <code>File.GetLastWriteTime</code> (which is N extra <code>stat</code> calls on the scope-start frame). Game-over records are snapshotted synchronously and the write deferred one frame (<code>UniTask.Yield</code> + guarded <code>.Forget()</code>) — <code>GameOverMessage</code> lands on the first frame of the loss push-in. The deferred write owns the immutable snapshots, never the live scopes.</p>
-<h3><a class="anchor" id="autotoc_md480"></a>
+<h3><a class="anchor" id="autotoc_md488"></a>
 Gating tiers</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -484,7 +629,7 @@ Gating tiers</h3>
 </table>
 <p>The double guard and the triple guard are different on purpose — <b>do not harmonise them.</b> <code>dotnet build</code> defines <code>UNITY_EDITOR</code>, so a missing <code>#else</code> compiles locally and breaks only the real release build.</p>
 <p>The release cost of shipping Core is ~6 int increments per <code>ActorHitMessage</code>, peak low hundreds per second. That is the honest price of stats in the popup.</p>
-<h3><a class="anchor" id="autotoc_md481"></a>
+<h3><a class="anchor" id="autotoc_md489"></a>
 Serialization</h3>
 <p>Hand-rolled, no reflection. Neither library option works, and this is not a style preference:</p>
 <ul>
@@ -493,7 +638,7 @@ Serialization</h3>
 </ul>
 <p><code>TelemetryEnvelopeSerializer</code> builds each line into a <b>single reused <code>StringBuilder</code></b> field by looping <code>MetricCatalog</code>. <b>Every numeric and date append passes <code>CultureInfo.InvariantCulture</code></b> — on a comma-decimal locale <code>float.ToString()</code> emits <code>12,5</code> and the whole log becomes unparseable. Timestamp: <code>DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture)</code>. (Only two <code>InvariantCulture</code> call sites exist in the repo today — this will not be caught by imitation.)</p>
 <p>Member ordering per CLAUDE.md: <b>properties in the top block, before the constructor</b> — <code>style_audit.py</code> blocks the commit otherwise.</p>
-<h3><a class="anchor" id="autotoc_md482"></a>
+<h3><a class="anchor" id="autotoc_md490"></a>
 Time tracking</h3>
 <p>Clocks sample <b><code>Time.unscaledTime</code></b> — not <code>Time.realtimeSinceStartup</code>. Nothing in the project observes app backgrounding (no <code>OnApplicationPause</code>/<code>OnApplicationFocus</code> anywhere in <code>Assets/Source</code>), so a pocket-suspend would silently inflate <code>realtimeSinceStartup</code>-based durations by the full background time. <code>unscaledTime</code> advances only on ticked frames, clamped by <code>Time.maximumDeltaTime</code> (0.333 s default, unmodified here), so a suspend of any length costs at most one clamped frame. It is also <code>timeScale</code>-independent, which the slow-mo cinematics <b>and hold-to-speed-up</b> require. The clock is injected as <code>Func&lt;float&gt;</code> (precedent: <code>SfxThrottleGate</code>'s registration, <code>() =&gt; Time.unscaledTime</code>).</p>
 <p><code>TelemetryStopwatch</code> <b>owns its clock</b> — constructed with a <code>Func&lt;float&gt;</code>, keeps <code>_lastSample</code> internally, folds <code>clock() - _lastSample</code> into <code>Elapsed</code> on <code>Pause()</code>/<code>Resume()</code>/<code>Elapsed</code> reads. No <code>Advance()</code> in the public API and no "call at every boundary" contract; miss-a-boundary bugs are structurally impossible.</p>
@@ -510,11 +655,11 @@ Time tracking</h3>
 <td class="markdownTableBodyNone"><b>Hold</b> (new, <b>R11</b>)   </td><td class="markdownTableBodyNone">hold-to-speed-up engaged   </td><td class="markdownTableBodyNone"><b>No</b> — it only runs in flight   </td></tr>
 </table>
 <p>Every <code>PauseSource</code> that exists today (<code>Cinematic</code>, <code>LevelUp</code>, <code>Overflow</code>, <code>LevelTransition</code>, <code>Cheat</code>) is gameplay- or ceremony-owned, not a user interruption — gating the wall clock on <code>IsAnyPaused</code> would collapse it toward the gameplay duration on every level. If a genuine user-interruption source (settings menu, ad overlay) is ever added, that is the moment to introduce a source filter.</p>
-<h3><a class="anchor" id="autotoc_md483"></a>
+<h3><a class="anchor" id="autotoc_md491"></a>
 Pause semantics</h3>
 <p><b>Subscribe, don't recount.</b> <code>PauseService</code> is already reference-counted per source and exposes <code>IReadOnlyReactiveProperty&lt;bool&gt; IsAnyPaused</code>. Inject it and subscribe; do <b>not</b> count <code>PausedMessage</code>/<code>ResumedMessage</code> edges.</p>
 <p>Load-bearing, not stylistic: <code>PauseService.ResetRun</code> clears its source stack <b>without publishing <code>ResumedMessage</code></b>. Any message-edge counter therefore leaks depth permanently on the loss path — <code>GameOverLossCinematic</code> pauses, <code>RestartRun</code> clears the stack silently, the cinematic pauses/resumes again — netting +1 per loss and freezing every subsequent level's timers at zero. <code>IsAnyPaused</code> is reset to <code>false</code> by the same method, so it cannot leak. (<code>PausedMessage</code>/<code>ResumedMessage</code> live in <code><a class="el" href="namespaceBalloonParty_1_1Shared_1_1Pause.html">BalloonParty.Shared.Pause</a></code>, not <code>Shared.Messages</code>, and are not subscribed in this design.)</p>
-<h3><a class="anchor" id="autotoc_md484"></a>
+<h3><a class="anchor" id="autotoc_md492"></a>
 Color and item derivation</h3>
 <p><code>ActorHitMessage</code> carries <b>no color</b> — it carries <code>ISlotActor Actor</code>:</p>
 <div class="fragment"><div class="line"><span class="keywordflow">if</span> (msg.Actor is IHasColor colored) { <span class="comment">/* colored.Color.Value is the palette string */</span> }</div>
@@ -523,7 +668,7 @@ Color and item derivation</h3>
 <div class="fragment"><div class="line"><span class="keywordflow">if</span> (message.Balloon is IHasItemSlot slot) { <span class="comment">/* slot.Item.Value */</span> }</div>
 </div><!-- fragment --><p>Non-item-eligible balloons (e.g. <code>ToughBalloonModel</code>) must no-op, not throw. Size the axis with <code>Enum.GetValues(typeof(ItemType)).Length</code>, not a literal. The message is published <em>after</em> <code>handler.Activate</code> completes, so bucket <code>ItemType.None</code> like any other value. (Known fragility, do not "fix": reading the slot off a popped balloon works because models are constructed per spawn and the slot is never cleared. If balloon <em>models</em> are ever pooled this silently becomes all-<code>None</code>; the fix then is an <code>ItemType</code> field on the message.)</p>
 <p>Balloon type comes from <code>IBalloonModel.TypeName</code> (<code>BalloonType</code>), the same cast <code>CombatSoundRouter</code> uses.</p>
-<h3><a class="anchor" id="autotoc_md485"></a>
+<h3><a class="anchor" id="autotoc_md493"></a>
 Cheat tagging</h3>
 <p><code>CheatState</code> is compiled out of release builds. The read site needs the <b>triple</b> guard with an <code>#else</code> branch defaulting <code>cheatActive = false</code> (same shape as <code>RunController.EndRun</code>).</p>
 <p>"Any flag active" is insufficient as-is: <code>StartLevel</code> and <code>TimeOfDaySpeedScale</code> default to 1 (not 0), and one-shot cheats (<code>AwardScorePopCheat</code>, <code>TriggerLevelUpCheat</code>, <code>AddShieldCheat</code>, …) leave no trace. One line of gameplay code is therefore in scope: add <code>public static bool AnyCheatUsed;</code> to <code>CheatState</code> (reset in <code>ResetOnPlay</code>), set <code>true</code> when the cheat console opens (<code>CheatConsoleView</code>) — every cheat except the pacing window goes through the console, and the pacing window already writes <code>StartLevel</code>. Then:</p>
@@ -534,7 +679,7 @@ Cheat tagging</h3>
 <div class="line">    || !Mathf.Approximately(CheatState.TimeOfDaySpeedScale, 1f);</div>
 </div><!-- fragment --><p>Evaluated at flush time. The run flag is sticky: once any level is tagged, the run stays tagged. Records are never dropped — tagged for filtering.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md487"></a>
+<h2><a class="anchor" id="autotoc_md495"></a>
 Superseded decisions</h2>
 <p>Things the previous revision states that are now <b>wrong</b>. Listed explicitly because that revision was written to be followed literally.</p>
 <table class="markdownTable">
@@ -564,55 +709,70 @@ Superseded decisions</h2>
 <td class="markdownTableBodyNone">Phase 2 "track HP minimum / max danger level"   </td><td class="markdownTableBodyNone">Absorbed into the registry as ordinary <code>MetricId</code>s with <code>Fold.Max</code>.   </td></tr>
 </table>
 <hr  />
-<h2><a class="anchor" id="autotoc_md489"></a>
+<h2><a class="anchor" id="autotoc_md497"></a>
 Task plan</h2>
 <p>Sizes: S ≤ half a day · M ≈ 1–2 days · L ≈ 3+ days. Agent assignments follow the established split: <b>opus</b> for quality-critical/judgment work, <b>sonnet</b> for well-specified implementation, <b>haiku</b> for mechanical tasks; Fable investigates handoffs, reviews, commits. Each task below is scoped so its spec can be written once and handed over; the requirement numbers are the acceptance criteria.</p>
-<h3><a class="anchor" id="autotoc_md490"></a>
+<h3><a class="anchor" id="autotoc_md498"></a>
 Dependency graph</h3>
-<div class="fragment"><div class="line">W0 doc freshness (haiku/scribe) ──┐</div>
-<div class="line">                                  │</div>
-<div class="line">W1 vocabulary + scopes (sonnet) ──┴──▶ W2 envelope + serializer + JSONL sink (sonnet)</div>
-<div class="line">            │                                          │</div>
-<div class="line">            ├──────────────────────────────────────────┤</div>
-<div class="line">            ▼                                          ▼</div>
-<div class="line">   W3 service + state machine + IFlightScope (opus) ──▶ W4 UI read model + popups (opus)</div>
-<div class="line">            │                                          │</div>
-<div class="line">            └──▶ W5 export decorators (sonnet) ────────┴──▶ W6 HTTP analytics sink (opus)</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md491"></a>
-W0 — Doc freshness · <b>P0 · S · haiku (scribe)</b></h3>
-<p>Blocker for W3/W4: two READMEs describe code that no longer matches.</p><ul>
-<li><code><a class="el" href="Audio_2README_8md.html">Audio/README.md</a></code> — (a) <code>MusicSoundRouter</code> is described as launch-music only; it now also runs the day/night gameplay crossfade, ducks on <code>_inFlight</code>, and pitches down with danger. (b) The <em>Melodic pops</em> section documents only the <code>IMelodicContext.SetStreak</code> path and <b>never mentions</b> <code>CombatSoundRouter</code>'s independent per-flight semitone ramp — the mechanism this plan's audio decision hinges on.</li>
-<li><code><a class="el" href="Game_2Run_2README_8md.html">Game/Run/README.md</a></code> — contents table omits <code>RetryTracker</code>, <code>IRetryState</code>, <code>GameOverPresentationGate</code>, and gives <code>IBoardResettable</code> no row.</li>
+<div class="fragment"><div class="line">graph TD</div>
+<div class="line">    W0[&quot;W0 doc freshness (haiku + sonnet)&quot;] --&gt; W2b</div>
+<div class="line">    W0 --&gt; W3</div>
+<div class="line">    W0 --&gt; W4</div>
+<div class="line">    W1[&quot;W1 vocabulary + scopes (sonnet)&quot;] --&gt; W1R{{&quot;opus review — wire names are append-only&quot;}}</div>
+<div class="line">    W1R --&gt; W2[&quot;W2 envelope + serializer + sinks (sonnet)&quot;]</div>
+<div class="line">    W1R --&gt; W3</div>
+<div class="line">    W2 --&gt; W3</div>
+<div class="line">    W2 --&gt; W5[&quot;W5 export decorators (sonnet)&quot;]</div>
+<div class="line">    W2b[&quot;W2b flight scope + flight stats (sonnet)&quot;] --&gt; W3[&quot;W3 metrics service (opus)&quot;]</div>
+<div class="line">    W3 --&gt; W4[&quot;W4 UI read model + popups (opus)&quot;]</div>
+<div class="line">    W5 --&gt; W6[&quot;W6 HTTP analytics sink (opus)&quot;]</div>
+</div><!-- fragment --><p><b>Parallelism, precisely:</b> only <b>W0 ∥ W1 ∥ W2b</b> is real. W1 → W2 is a hard edge (the serializer loops <code>MetricCatalog</code>, and <code>TelemetryEnvelope</code> carries <code>IReadOnlyMetricSet</code>); W2 → W5 is a hard edge (the decorators implement <code>ITelemetrySink</code> and extend <code>TelemetrySinkBase</code>, both W2 artifacts). W5 does <b>not</b> depend on W3.</p>
+<h3><a class="anchor" id="autotoc_md499"></a>
+W0 — Doc freshness · <b>P0 · S</b></h3>
+<p>Blocker for W2b/W3/W4: two READMEs describe code that no longer matches.</p><ul>
+<li><code><a class="el" href="Audio_2README_8md.html">Audio/README.md</a></code> — <b>sonnet, not haiku.</b> (a) <code>MusicSoundRouter</code> is described as launch-music only; it now also runs the day/night gameplay crossfade, ducks on <code>_inFlight</code>, and pitches down with danger. (b) The <em>Melodic pops</em> section documents only the <code>IMelodicContext.SetStreak</code> path and <b>never mentions</b> <code>CombatSoundRouter</code>'s per-flight semitone ramp — including the read-before-write shape and the colour/type XOR at <code>:124</code>. That mechanism is what the whole flight-stats decision rests on; document it wrong and the README <em>justifies</em> moving the colour dictionary.</li>
+<li><code><a class="el" href="Game_2Run_2README_8md.html">Game/Run/README.md</a></code> — <b>haiku.</b> Contents table omits <code>RetryTracker</code>, <code>IRetryState</code>, <code>GameOverPresentationGate</code>, and gives <code>IBoardResettable</code> no row. Pure transcription.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md492"></a>
+<h3><a class="anchor" id="autotoc_md500"></a>
 W1 — Vocabulary, scopes, timers · <b>P0 · M · sonnet</b></h3>
 <p><code>MetricId</code>, <code>TimerId</code>, <code>MetricAxis</code>, <code>FoldRule</code>, <code>MetricCatalog</code>, <code>MetricSet</code> / <code>IReadOnlyMetricSet</code>, <code>MetricScope</code>, <code>TelemetryStopwatch</code>, <code>LevelMetricsSnapshot</code>, <code>RunMetricsSnapshot</code>, the three breakdown structs, plus EditMode tests. Pure C# — no Unity, no VContainer, no DI. Table-driven tests. <b>Mechanical given a literal spec; this is the highest-value task to specify precisely.</b> Acceptance: <b>R1, R4–R7, R12, R29–R30</b>.</p>
-<h3><a class="anchor" id="autotoc_md493"></a>
+<h3><a class="anchor" id="autotoc_md501"></a>
 W2 — Envelope, serializer, dev sink · <b>P0 · M · sonnet</b></h3>
 <p><code>TelemetryEnvelope</code>, <code>TelemetryEnvelopeSerializer</code> (catalog-driven loop, reused <code>StringBuilder</code>, <code>InvariantCulture</code> throughout), <code>ITelemetrySink</code>, <code>TelemetrySinkBase</code>, <code>JsonLinesTelemetrySink</code>, <code>RecordingTelemetrySink</code> (test fake), plus tests asserting on the emitted string. Mechanical — the constraints are fully written out above. Acceptance: <b>R24, R25, R27</b>, plus the dev-only tier of <b>R28</b>.</p>
-<h3><a class="anchor" id="autotoc_md494"></a>
-W3 — Service, state machine, flight scope · <b>P0 · L · opus</b></h3>
-<p><code>IFlightScope</code>/<code>FlightScopeService</code>, <code>GameplayMetricsService</code> (state machine, ~14 subscriptions, boundaries, snapshots, <code>IRunResettable</code>, cheat tagging), <code>SessionTelemetryContext</code> in <code>AppLifetimeScope</code>, registration at the end of <code>RegisterGameplaySystems</code>, <code>CheatState.AnyCheatUsed</code>, and the <code>MusicSoundRouter</code> migration to <code>IFlightScope</code>.</p>
-<p><b>Judgment task — every trap in <em>Implementer guardrails</em> lives here.</b> Requires an in-editor playtest; <code>dotnet build</code> cannot verify the state machine. Acceptance: <b>R2, R3, R8–R15, R21–R23, R28</b>.</p>
-<h3><a class="anchor" id="autotoc_md495"></a>
+<h3><a class="anchor" id="autotoc_md502"></a>
+W2b — Flight scope + flight stats · <b>P0 · M · sonnet, opus review</b></h3>
+<p>Independent of W1 and W2; can run alongside them. New folder <code>Assets/Source/Game/Flight/</code> (namespace <code>BalloonParty.Game.Flight</code>): <code>IFlightScope</code>, <code>IFlightStats</code>, <code>IFlightStatsWriter</code>, <code>FlightStatsService</code>, <code>README.md</code>.</p>
+<ul>
+<li>One <code>Record(msg)</code> line in <code>HitPipeline.Dispatch</code>, <b>before</b> the publish. <code>HitPipeline</code> is the only writer, forever.</li>
+<li><code>CombatSoundRouter</code>: delete the eight moved counters, <code>PopSemitoneOffset</code> and <code>IncrementPopCounter</code>; read post-increment counts and subtract one. <b>Keep <code>_colorPopsThisFlight</code> exactly as it is.</b></li>
+<li><code>MusicSoundRouter</code> and <code>HoldSpeedUpController</code> migrate to <code>IFlightScope.IsAirborne</code> (<b>not</b> <code>IsLoaded</code> — see <em>Flight stats</em>).</li>
+<li>Registration in <code>RegisterGameplaySystems</code> before <code>LevelController</code>.</li>
+</ul>
+<p><b>Hard gate:</b> <code>Assets/Tests/EditMode/Audio/CombatSoundRouterTests.cs</code> must pass <b>entirely unmodified</b> — every played <code>semitoneOffset</code> is unchanged by this refactor. Add one new test asserting no <code>WallHitMessage</code> can arrive before <code>ProjectileFiredMessage</code> (the <code>_bounceCount</code> boundary move depends on it). Sonnet is safe here <em>because</em> of that gate; without it this would be opus. Acceptance: <b>R2</b> (Flight scope), plus no audio behaviour change.</p>
+<h3><a class="anchor" id="autotoc_md503"></a>
+W3 — Metrics service and state machine · <b>P0 · L · opus</b></h3>
+<p><code>GameplayMetricsService</code> (state machine, ~14 subscriptions, boundaries, both snapshots, <code>IRunResettable</code> + the three-id retry derivation, cheat tagging), <code>SessionTelemetryContext</code> in <code>AppLifetimeScope</code>, registration at the end of <code>RegisterGameplaySystems</code>, <code>CheatState.AnyCheatUsed</code>, and <code>IHoldSpeedUpState</code> on <code>HoldSpeedUpController</code> (<b>R11</b>).</p>
+<p>Reads <code>IFlightStats</code> at flight seal rather than maintaining a parallel flight scope — so R2's Σ-flights ⊆ level is a property of one owner, not an invariant two owners must independently respect.</p>
+<p><b>Judgment task — every trap in <em>Implementer guardrails</em> lives here.</b> Requires an in-editor playtest <b>and</b> a rebuild with <code>UNITY_EDITOR</code> stripped (for the <code>#else</code> cheat branch); <code>dotnet build</code> cannot verify the state machine. Acceptance: <b>R2, R3, R8–R11, R13–R17, R21–R23</b>, plus the cheat-read tier of <b>R28</b>.</p>
+<h3><a class="anchor" id="autotoc_md504"></a>
 W4 — UI read model and popups · <b>P1 · M–L · opus</b></h3>
 <p><code>ILevelMetricsView</code>, <code>LevelUpPopUp</code> and <code>GameOverScreen</code> consumption, the ceremony-vs-flush divergence, the projected-vs-banked convention, the read-after-gate contract in <code><a class="el" href="UI_2GameOver_2README_8md.html">UI/GameOver/README.md</a></code>.</p>
 <p>Judgment plus design input — <em>what</em> the popups show is a design decision (see <em>Open decisions</em>); <em>when</em> they read it is a correctness one. Playtest required. Acceptance: <b>R16–R20</b>.</p>
-<h3><a class="anchor" id="autotoc_md496"></a>
+<h3><a class="anchor" id="autotoc_md505"></a>
 W5 — Export decorators · <b>P1 · M · sonnet</b></h3>
 <p><code>CompositeTelemetrySink</code>, <code>BatchingTelemetrySink</code>, <code>ConsentGateSink</code>, <code>ITelemetryConsent</code>, <code>TelemetrySettings</code> SO behind <code>ITelemetrySettings</code> (endpoint, batch size, flush interval, enabled flag) — injected as the read-only interface per CLAUDE.md. Each decorator is one concern with an obvious test matrix. Mostly mechanical once the consent <em>policy</em> is decided. Acceptance: <b>R26</b>, plus the export tier of <b>R28</b>.</p>
-<h3><a class="anchor" id="autotoc_md497"></a>
+<h3><a class="anchor" id="autotoc_md506"></a>
 W6 — HTTP analytics sink · <b>P2 · M–L · opus</b></h3>
 <p><code>HttpAnalyticsSink</code>, persistent envelope queue, retry/backoff, schema governance doc. Judgment: offline semantics, backpressure, cancellation, and the project's first outbound network I/O. <b>Do not start before an analytics provider is chosen.</b></p>
-<h3><a class="anchor" id="autotoc_md498"></a>
+<h3><a class="anchor" id="autotoc_md507"></a>
 Cross-cutting</h3>
 <p>Every wave: <code>.meta</code> files for new <code>.cs</code>/<code>.md</code> (mirror a sibling's format); <code>dotnet build BalloonParty.Runtime.csproj</code> + <code>python3 Tools/style_audit.py</code>; feature README updated. W3/W4 additionally need a build with <code>UNITY_EDITOR</code> stripped (for the <code>#else</code> cheat branch) and an in-editor playtest — say so, do not claim verified.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md500"></a>
+<h2><a class="anchor" id="autotoc_md509"></a>
 Implementer guardrails</h2>
 <p>The traps here all <em>compile and run</em>; they fail only in the data, on device, or by ear. In rough order of cost-to-discover.</p>
 <ol type="1">
-<li><b>Do not merge <code>CombatSoundRouter</code>'s counters into the shared aggregate</b> — it reads before it increments, so the pitch would become subscription-order dependent, and its streak-break reset is analytically wrong. Extract <code>IFlightScope</code> only.</li>
+<li><b><code>HitPipeline</code> is the only writer of <code>FlightStatsService</code>, and <code>_colorPopsThisFlight</code> never moves.</b> Audio reads the post-increment count and subtracts one. If audio (or a second bus subscriber) writes instead, the pitch becomes subscription-order dependent and every ramp comes out a whole tone sharp. The colour dictionary is streak-scoped, not flight-scoped — moving it breaks the ramp a different way.</li>
 <li><b>Do not use <code>JsonUtility</code> or Newtonsoft</b> — <code>JsonUtility</code> emits <code>{}</code> for these types with no error; Newtonsoft is unreachable from the runtime asmdef.</li>
 <li><b>Do not count <code>PausedMessage</code>/<code>ResumedMessage</code></b> — the counter leaks on every loss; subscribe <code>PauseService.IsAnyPaused</code>.</li>
 <li><b>Do not flush on <code>LevelUpDismissedMessage</code></b> — straggler trail points land after it.</li>
@@ -630,46 +790,48 @@ Implementer guardrails</h2>
 </ol>
 <p><b>Pre-existing bug, out of scope — do not migrate it.</b> <code>CombatSoundRouter._bounceCount</code> is dead: it is zeroed on every <code>OnFired</code> (<code>:198</code>) and incremented only inside <code>if (_bounceCount &gt; 0)</code> (<code>:278-282</code>), a branch that can never be entered, so the intended descending bounce ramp never plays. <code>MetricId.WallBounces</code> should be derived from <code>WallHitMessage</code> directly. File the audio bug separately.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md502"></a>
+<h2><a class="anchor" id="autotoc_md511"></a>
 Risk register</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">ID   </th><th class="markdownTableHeadNone">Risk   </th><th class="markdownTableHeadNone">Trigger   </th><th class="markdownTableHeadNone">Mitigation    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">RK-1   </td><td class="markdownTableBodyNone">Audio pitch ramp shifts a whole tone, silently   </td><td class="markdownTableBodyNone">Merging audio's counters into a bus-subscribing aggregate   </td><td class="markdownTableBodyNone">Keep them local; extract <code>IFlightScope</code> only    </td></tr>
+<td class="markdownTableBodyNone">RK-1   </td><td class="markdownTableBodyNone">Audio pitch ramp shifts a whole tone, silently   </td><td class="markdownTableBodyNone">Anything but <code>HitPipeline</code> writing <code>FlightStatsService</code>, or audio forgetting the <code>- 1</code> on the post-increment read   </td><td class="markdownTableBodyNone">Single-writer rule; <code>CombatSoundRouterTests</code> must pass unmodified    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">RK-2   </td><td class="markdownTableBodyNone"><code>PopsByColor</code> under-reports every pop before the last streak break   </td><td class="markdownTableBodyNone">Applying audio's <code>StreakChangedMessage(0)</code> clear to the shared aggregate   </td><td class="markdownTableBodyNone">Same. Worst failure mode here — the data looks plausible    </td></tr>
+<td class="markdownTableBodyNone">RK-2   </td><td class="markdownTableBodyNone">The colour ramp breaks after a streak break, or a red Tough offsets the next red Simple   </td><td class="markdownTableBodyNone">Moving <code>_colorPopsThisFlight</code> into the shared stats — it is streak-scoped and counts only generic-<code>BalloonPop</code> pops   </td><td class="markdownTableBodyNone">It stays private to <code>CombatSoundRouter</code>. Worst failure mode here — silent and ear-only    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">RK-2a   </td><td class="markdownTableBodyNone">Two answers to "how many Toughs popped" drift apart   </td><td class="markdownTableBodyNone">Leaving the type counters private and recounting them in metrics — adding a <code>BalloonType</code> then requires lockstep edits in <code>PopSoundFor</code>, <code>PopSemitoneOffset</code>, <code>IncrementPopCounter</code> <em>and</em> metrics   </td><td class="markdownTableBodyNone">Single owner: <code>FlightStatsService</code>    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">RK-3   </td><td class="markdownTableBodyNone">Levels-reached distribution corrupted by retries   </td><td class="markdownTableBodyNone">Treating the run generation as run identity   </td><td class="markdownTableBodyNone"><b>R14</b> — chain / attempt / attempt-index split    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">RK-3a   </td><td class="markdownTableBodyNone">Level difficulty analysis blames levels that were never retried   </td><td class="markdownTableBodyNone">Segmenting by <code>AttemptIndex</code> instead of <code>LevelAttemptOrdinal</code>   </td><td class="markdownTableBodyNone"><b>R14a</b>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">RK-3b   </td><td class="markdownTableBodyNone">Run totals double-count a replayed level   </td><td class="markdownTableBodyNone">Summing <code>PointsBanked</code> across level records in a chain   </td><td class="markdownTableBodyNone"><b>R14b</b> — take <code>TotalScore</code> from <code>GameOverMessage</code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">RK-4   </td><td class="markdownTableBodyNone">Metrics reset reads a zeroed <code>RetryLevel</code>   </td><td class="markdownTableBodyNone">Anyone changes <code>ResetOrder</code> on either side of 0 vs 110   </td><td class="markdownTableBodyNone"><b>R21</b> + unit test on the inequality    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">RK-5   </td><td class="markdownTableBodyNone">Soft-lock at a flush boundary   </td><td class="markdownTableBodyNone">Sink throws; MessagePipe has no exception isolation   </td><td class="markdownTableBodyNone"><b>R25</b> + service-side guard    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">RK-6   </td><td class="markdownTableBodyNone">Popup stats contradict the score beside them   </td><td class="markdownTableBodyNone">Showing banked instead of projected points   </td><td class="markdownTableBodyNone"><b>R18</b>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">RK-7   </td><td class="markdownTableBodyNone">Heisenbug on the game-over screen   </td><td class="markdownTableBodyNone">Reading in the handler instead of after the gate   </td><td class="markdownTableBodyNone"><b>R19</b>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">RK-8   </td><td class="markdownTableBodyNone">Post-game-over stragglers corrupt the next run   </td><td class="markdownTableBodyNone">Loss cinematic completes trails after <code>GameOverMessage</code>   </td><td class="markdownTableBodyNone">The <code>Ended</code> gate, <b>R9</b>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">RK-9   </td><td class="markdownTableBodyNone">Stale ceremony snapshot after an aborted ceremony   </td><td class="markdownTableBodyNone">Abort not clearing <code>CeremonyLevel</code>   </td><td class="markdownTableBodyNone"><b>R8</b> + test    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">RK-10   </td><td class="markdownTableBodyNone">Release build breaks while <code>dotnet build</code> stays green   </td><td class="markdownTableBodyNone">Missing <code>#else</code> on the triple cheat guard   </td><td class="markdownTableBodyNone">Rebuild with <code>UNITY_EDITOR</code> stripped in W3    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">RK-11   </td><td class="markdownTableBodyNone">Wire-name drift breaks the external warehouse   </td><td class="markdownTableBodyNone">Renaming a catalog entry   </td><td class="markdownTableBodyNone">Append-only; consider a test pinning the id→name map    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">RK-12   </td><td class="markdownTableBodyNone">Metrics becomes load-bearing gameplay   </td><td class="markdownTableBodyNone">A gameplay system injects <code>ILevelMetricsView</code>   </td><td class="markdownTableBodyNone"><b>R20</b>, enforced by README contract    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">RK-13   </td><td class="markdownTableBodyNone">Consent checks scattered through the service   </td><td class="markdownTableBodyNone">Implementing consent as an <code>if</code>   </td><td class="markdownTableBodyNone"><code>ConsentGateSink</code>, <b>R26</b>    </td></tr>
+<td class="markdownTableBodyNone">RK-12   </td><td class="markdownTableBodyNone">Metrics becomes load-bearing gameplay   </td><td class="markdownTableBodyNone">A gameplay system injects <code>ILevelMetricsView</code>   </td><td class="markdownTableBodyNone"><b>R20</b>, enforced by README contract    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">RK-13   </td><td class="markdownTableBodyNone">Consent checks scattered through the service   </td><td class="markdownTableBodyNone">Implementing consent as an <code>if</code>   </td><td class="markdownTableBodyNone"><code>ConsentGateSink</code>, <b>R26</b>    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">RK-14   </td><td class="markdownTableBodyNone">Session id becomes a device fingerprint   </td><td class="markdownTableBodyNone">Persisting the GUID to <code>PlayerPrefs</code>   </td><td class="markdownTableBodyNone">Explicit non-goal — regenerate per launch   </td></tr>
 </table>
 <hr  />
-<h2><a class="anchor" id="autotoc_md504"></a>
+<h2><a class="anchor" id="autotoc_md513"></a>
 Test strategy</h2>
 <p>Flat in <code>Assets/Tests/EditMode/Game/</code> (that folder has no subfolders — do not introduce one), namespace <code>BalloonParty.Tests.Game</code>. No asmdef changes: <code>AssemblyInfo.cs</code> already grants <code>InternalsVisibleTo</code> for the EditMode assembly, which already references <code>BalloonParty.Runtime</code>, MessagePipe and VContainer.</p>
 <div class="fragment"><div class="line">MetricSetTests.cs                 (W1, TDD-first)</div>
@@ -697,7 +859,7 @@ Test strategy</h2>
 <li>Reset: <code>ResetRun</code> mid-level clears silently (no flush, no throw) and sets the run id; <code>Dispose</code> unsubscribes and nothing mutates afterward.</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md506"></a>
+<h2><a class="anchor" id="autotoc_md515"></a>
 Open decisions</h2>
 <p>Not blockers for W0–W3; needed before W4 and W5 respectively.</p>
 <ol type="1">
@@ -706,12 +868,12 @@ Open decisions</h2>
 <li><b>Analytics provider.</b> Gates W6 entirely. Until chosen, the JSONL sink is the only implementation and the decorator chain has one leaf.</li>
 </ol>
 <hr  />
-<h2><a class="anchor" id="autotoc_md508"></a>
+<h2><a class="anchor" id="autotoc_md517"></a>
 Analytics notes</h2>
-<h3><a class="anchor" id="autotoc_md509"></a>
+<h3><a class="anchor" id="autotoc_md518"></a>
 Minimum viable fields</h3>
 <p>Five answer ~80% of balance questions: <b>level index</b>, <b>active gameplay duration</b>, <b>shots fired</b>, <b>total pops</b>, <b>hearts lost</b>. W1–W3 capture all five plus many more — but these are the priority for early analysis.</p>
-<h3><a class="anchor" id="autotoc_md510"></a>
+<h3><a class="anchor" id="autotoc_md519"></a>
 Key analyses enabled</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -733,7 +895,7 @@ Key analyses enabled</h3>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Which mechanics actually trigger?   </td><td class="markdownTableBodyNone">Pierce discharges, speed taps, sweeps, strikethroughs per level   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md511"></a>
+<h3><a class="anchor" id="autotoc_md520"></a>
 Sample-size guidance</h3>
 <ul>
 <li>~400 runs per level to detect large problems (&gt;10% failure-rate shift)</li>
@@ -741,7 +903,7 @@ Sample-size guidance</h3>
 <li>Segment by skill proxy (best level reached in session, or total runs) rather than global averages — a new player's level-3 data and a veteran's are different populations. Filter out cheat-tagged records; segment retry continuations separately.</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md513"></a>
+<h2><a class="anchor" id="autotoc_md522"></a>
 Deferred</h2>
 <ul>
 <li>Streak-break reason decomposition (what ended the streak)</li>

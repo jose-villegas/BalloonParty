@@ -1,6 +1,6 @@
 var plans =
 [
-    [ "Plans", "plans.html#autotoc_md723", null ],
+    [ "Plans", "plans.html#autotoc_md732", null ],
     [ "Bubble Cluster Hit Feedback", "plan_bubble_cluster_hit_feedback.html", [
       [ "Bubble Cluster Hit Feedback", "plan_bubble_cluster_hit_feedback.html#autotoc_md291", [
         [ "Goals", "plan_bubble_cluster_hit_feedback.html#autotoc_md293", null ],
@@ -29,57 +29,57 @@ var plans =
       ] ]
     ] ],
     [ "Grid Actor Expansion — Phase 8+", "plan_grid_actor_expansion.html", [
-      [ "Grid Actor Expansion — Phase 8+", "plan_grid_actor_expansion.html#autotoc_md514", [
-        [ "Orientation", "plan_grid_actor_expansion.html#autotoc_md516", null ],
-        [ "Actor Vocabulary — Design Reference", "plan_grid_actor_expansion.html#autotoc_md518", [
-          [ "Balloon archetypes", "plan_grid_actor_expansion.html#autotoc_md519", null ],
-          [ "Grid actor archetypes", "plan_grid_actor_expansion.html#autotoc_md520", null ],
-          [ "Hit controller pattern for non-balloon actors", "plan_grid_actor_expansion.html#autotoc_md521", null ]
+      [ "Grid Actor Expansion — Phase 8+", "plan_grid_actor_expansion.html#autotoc_md523", [
+        [ "Orientation", "plan_grid_actor_expansion.html#autotoc_md525", null ],
+        [ "Actor Vocabulary — Design Reference", "plan_grid_actor_expansion.html#autotoc_md527", [
+          [ "Balloon archetypes", "plan_grid_actor_expansion.html#autotoc_md528", null ],
+          [ "Grid actor archetypes", "plan_grid_actor_expansion.html#autotoc_md529", null ],
+          [ "Hit controller pattern for non-balloon actors", "plan_grid_actor_expansion.html#autotoc_md530", null ]
         ] ],
-        [ "Phases", "plan_grid_actor_expansion.html#autotoc_md523", [
-          [ "✅ Phase 8.0 — Spawner Coordination", "plan_grid_actor_expansion.html#autotoc_md525", [
-            [ "What was built", "plan_grid_actor_expansion.html#autotoc_md526", null ]
+        [ "Phases", "plan_grid_actor_expansion.html#autotoc_md532", [
+          [ "✅ Phase 8.0 — Spawner Coordination", "plan_grid_actor_expansion.html#autotoc_md534", [
+            [ "What was built", "plan_grid_actor_expansion.html#autotoc_md535", null ]
           ] ],
-          [ "✅ Phase 8.1a — Absorb Routing", "plan_grid_actor_expansion.html#autotoc_md528", [
-            [ "What was built", "plan_grid_actor_expansion.html#autotoc_md529", null ]
+          [ "✅ Phase 8.1a — Absorb Routing", "plan_grid_actor_expansion.html#autotoc_md537", [
+            [ "What was built", "plan_grid_actor_expansion.html#autotoc_md538", null ]
           ] ],
-          [ "✅ Phase 8.1b — DamageContext API Migration", "plan_grid_actor_expansion.html#autotoc_md531", [
-            [ "What was built", "plan_grid_actor_expansion.html#autotoc_md532", null ]
+          [ "✅ Phase 8.1b — DamageContext API Migration", "plan_grid_actor_expansion.html#autotoc_md540", [
+            [ "What was built", "plan_grid_actor_expansion.html#autotoc_md541", null ]
           ] ],
-          [ "Phase 8.1c — UnbreakableBalloonModel + BalloonModelBase Cleanup", "plan_grid_actor_expansion.html#autotoc_md534", [
-            [ "UnbreakableBalloonModel", "plan_grid_actor_expansion.html#autotoc_md535", null ],
-            [ "ScoreValue on BalloonModelBase", "plan_grid_actor_expansion.html#autotoc_md536", null ],
-            [ "Failing tests", "plan_grid_actor_expansion.html#autotoc_md537", null ]
-          ] ],
-          [ "Phase 8.2a — Structural Actors (Puff + Bush)", "plan_grid_actor_expansion.html#autotoc_md539", [
-            [ "Folder structure", "plan_grid_actor_expansion.html#autotoc_md540", null ],
-            [ "Files", "plan_grid_actor_expansion.html#autotoc_md541", null ],
-            [ "Failing tests", "plan_grid_actor_expansion.html#autotoc_md542", null ]
-          ] ],
-          [ "Phase 8.2b — Indestructible Hitable Actors (Deflector + Absorber)", "plan_grid_actor_expansion.html#autotoc_md544", [
-            [ "Files", "plan_grid_actor_expansion.html#autotoc_md545", null ],
+          [ "Phase 8.1c — UnbreakableBalloonModel + BalloonModelBase Cleanup", "plan_grid_actor_expansion.html#autotoc_md543", [
+            [ "UnbreakableBalloonModel", "plan_grid_actor_expansion.html#autotoc_md544", null ],
+            [ "ScoreValue on BalloonModelBase", "plan_grid_actor_expansion.html#autotoc_md545", null ],
             [ "Failing tests", "plan_grid_actor_expansion.html#autotoc_md546", null ]
           ] ],
-          [ "Phase 8.2c — Gatekeeper + GridActorHitController", "plan_grid_actor_expansion.html#autotoc_md548", [
-            [ "Files", "plan_grid_actor_expansion.html#autotoc_md549", null ],
-            [ "GatekeeperActorModel", "plan_grid_actor_expansion.html#autotoc_md550", null ],
-            [ "GridActorHitController", "plan_grid_actor_expansion.html#autotoc_md551", null ],
-            [ "NudgeOverrides cleanup on BalloonModelBase", "plan_grid_actor_expansion.html#autotoc_md552", null ],
-            [ "NudgeService decoupling (done alongside 8.2c)", "plan_grid_actor_expansion.html#autotoc_md553", null ],
-            [ "Failing tests", "plan_grid_actor_expansion.html#autotoc_md554", null ]
+          [ "Phase 8.2a — Structural Actors (Puff + Bush)", "plan_grid_actor_expansion.html#autotoc_md548", [
+            [ "Folder structure", "plan_grid_actor_expansion.html#autotoc_md549", null ],
+            [ "Files", "plan_grid_actor_expansion.html#autotoc_md550", null ],
+            [ "Failing tests", "plan_grid_actor_expansion.html#autotoc_md551", null ]
           ] ],
-          [ "Phase 8.3 — Procedural Placement Engine", "plan_grid_actor_expansion.html#autotoc_md556", [
-            [ "Design", "plan_grid_actor_expansion.html#autotoc_md557", null ],
-            [ "Migration path", "plan_grid_actor_expansion.html#autotoc_md558", null ],
-            [ "Failing tests", "plan_grid_actor_expansion.html#autotoc_md559", null ]
+          [ "Phase 8.2b — Indestructible Hitable Actors (Deflector + Absorber)", "plan_grid_actor_expansion.html#autotoc_md553", [
+            [ "Files", "plan_grid_actor_expansion.html#autotoc_md554", null ],
+            [ "Failing tests", "plan_grid_actor_expansion.html#autotoc_md555", null ]
           ] ],
-          [ "Phase 8.4 — Difficulty + Level Coupling", "plan_grid_actor_expansion.html#autotoc_md561", [
-            [ "Design", "plan_grid_actor_expansion.html#autotoc_md562", null ],
+          [ "Phase 8.2c — Gatekeeper + GridActorHitController", "plan_grid_actor_expansion.html#autotoc_md557", [
+            [ "Files", "plan_grid_actor_expansion.html#autotoc_md558", null ],
+            [ "GatekeeperActorModel", "plan_grid_actor_expansion.html#autotoc_md559", null ],
+            [ "GridActorHitController", "plan_grid_actor_expansion.html#autotoc_md560", null ],
+            [ "NudgeOverrides cleanup on BalloonModelBase", "plan_grid_actor_expansion.html#autotoc_md561", null ],
+            [ "NudgeService decoupling (done alongside 8.2c)", "plan_grid_actor_expansion.html#autotoc_md562", null ],
             [ "Failing tests", "plan_grid_actor_expansion.html#autotoc_md563", null ]
+          ] ],
+          [ "Phase 8.3 — Procedural Placement Engine", "plan_grid_actor_expansion.html#autotoc_md565", [
+            [ "Design", "plan_grid_actor_expansion.html#autotoc_md566", null ],
+            [ "Migration path", "plan_grid_actor_expansion.html#autotoc_md567", null ],
+            [ "Failing tests", "plan_grid_actor_expansion.html#autotoc_md568", null ]
+          ] ],
+          [ "Phase 8.4 — Difficulty + Level Coupling", "plan_grid_actor_expansion.html#autotoc_md570", [
+            [ "Design", "plan_grid_actor_expansion.html#autotoc_md571", null ],
+            [ "Failing tests", "plan_grid_actor_expansion.html#autotoc_md572", null ]
           ] ]
         ] ],
-        [ "Open Questions", "plan_grid_actor_expansion.html#autotoc_md565", null ],
-        [ "Current State", "plan_grid_actor_expansion.html#autotoc_md567", null ]
+        [ "Open Questions", "plan_grid_actor_expansion.html#autotoc_md574", null ],
+        [ "Current State", "plan_grid_actor_expansion.html#autotoc_md576", null ]
       ] ]
     ] ],
     [ "Content Production Plan — Pre-8.3 Assets", "plan_content_production.html", [
@@ -202,68 +202,68 @@ var plans =
       ] ]
     ] ],
     [ "HDR Color Pipeline", "plan_hdr_color_pipeline.html", [
-      [ "HDR Color Pipeline — migration plan", "plan_hdr_color_pipeline.html#autotoc_md568", [
-        [ "Decision & scope", "plan_hdr_color_pipeline.html#autotoc_md570", null ],
-        [ "Verified inventory (2026-07-11)", "plan_hdr_color_pipeline.html#autotoc_md571", null ],
-        [ "Task plan", "plan_hdr_color_pipeline.html#autotoc_md572", [
-          [ "Dependency graph", "plan_hdr_color_pipeline.html#autotoc_md573", null ],
-          [ "Wave A — Linear color space (the foundation, and the cost gate)", "plan_hdr_color_pipeline.html#autotoc_md574", [
-            [ "A0 — Baseline captures · P0 · S", "plan_hdr_color_pipeline.html#autotoc_md575", null ],
-            [ "A1 — Flip to Linear · P0 · S (mechanical) — do NOT merge without A2", "plan_hdr_color_pipeline.html#autotoc_md576", null ],
-            [ "A2 — Look re-tune · P0 · L — art-driven, art-led", "plan_hdr_color_pipeline.html#autotoc_md577", null ],
-            [ "A-gate — parity/quality sign-off + perf sanity", "plan_hdr_color_pipeline.html#autotoc_md578", null ]
+      [ "HDR Color Pipeline — migration plan", "plan_hdr_color_pipeline.html#autotoc_md577", [
+        [ "Decision & scope", "plan_hdr_color_pipeline.html#autotoc_md579", null ],
+        [ "Verified inventory (2026-07-11)", "plan_hdr_color_pipeline.html#autotoc_md580", null ],
+        [ "Task plan", "plan_hdr_color_pipeline.html#autotoc_md581", [
+          [ "Dependency graph", "plan_hdr_color_pipeline.html#autotoc_md582", null ],
+          [ "Wave A — Linear color space (the foundation, and the cost gate)", "plan_hdr_color_pipeline.html#autotoc_md583", [
+            [ "A0 — Baseline captures · P0 · S", "plan_hdr_color_pipeline.html#autotoc_md584", null ],
+            [ "A1 — Flip to Linear · P0 · S (mechanical) — do NOT merge without A2", "plan_hdr_color_pipeline.html#autotoc_md585", null ],
+            [ "A2 — Look re-tune · P0 · L — art-driven, art-led", "plan_hdr_color_pipeline.html#autotoc_md586", null ],
+            [ "A-gate — parity/quality sign-off + perf sanity", "plan_hdr_color_pipeline.html#autotoc_md587", null ]
           ] ],
-          [ "Wave B — HDR rendering + post + bloom", "plan_hdr_color_pipeline.html#autotoc_md579", [
-            [ "B1 — HDR target + post scaffold · P0 · S", "plan_hdr_color_pipeline.html#autotoc_md580", null ],
-            [ "B2 — Tonemapping · P0 · S", "plan_hdr_color_pipeline.html#autotoc_md581", null ],
-            [ "B3 — Emissive authoring path · P1 · M", "plan_hdr_color_pipeline.html#autotoc_md582", null ],
-            [ "B4 — Bloom · P1 · S–M", "plan_hdr_color_pipeline.html#autotoc_md583", null ],
-            [ "B5 — Tooling: Render Maps HDR view · P2 · S (parallel after B1)", "plan_hdr_color_pipeline.html#autotoc_md584", null ],
-            [ "B6 — GI/capture chain under HDR · P1 · M", "plan_hdr_color_pipeline.html#autotoc_md585", null ],
-            [ "B-gate — device sign-off", "plan_hdr_color_pipeline.html#autotoc_md586", null ]
+          [ "Wave B — HDR rendering + post + bloom", "plan_hdr_color_pipeline.html#autotoc_md588", [
+            [ "B1 — HDR target + post scaffold · P0 · S", "plan_hdr_color_pipeline.html#autotoc_md589", null ],
+            [ "B2 — Tonemapping · P0 · S", "plan_hdr_color_pipeline.html#autotoc_md590", null ],
+            [ "B3 — Emissive authoring path · P1 · M", "plan_hdr_color_pipeline.html#autotoc_md591", null ],
+            [ "B4 — Bloom · P1 · S–M", "plan_hdr_color_pipeline.html#autotoc_md592", null ],
+            [ "B5 — Tooling: Render Maps HDR view · P2 · S (parallel after B1)", "plan_hdr_color_pipeline.html#autotoc_md593", null ],
+            [ "B6 — GI/capture chain under HDR · P1 · M", "plan_hdr_color_pipeline.html#autotoc_md594", null ],
+            [ "B-gate — device sign-off", "plan_hdr_color_pipeline.html#autotoc_md595", null ]
           ] ],
-          [ "Wave C — HDR display output · deferred, own trigger", "plan_hdr_color_pipeline.html#autotoc_md587", null ]
+          [ "Wave C — HDR display output · deferred, own trigger", "plan_hdr_color_pipeline.html#autotoc_md596", null ]
         ] ],
-        [ "Open questions (answer at execution time)", "plan_hdr_color_pipeline.html#autotoc_md588", null ]
+        [ "Open questions (answer at execution time)", "plan_hdr_color_pipeline.html#autotoc_md597", null ]
       ] ]
     ] ],
     [ "Terrain & Biomes", "plan_terrain_biomes.html", [
-      [ "Terrain & Biomes — scenario ground generator", "plan_terrain_biomes.html#autotoc_md683", [
-        [ "Vision & constraints", "plan_terrain_biomes.html#autotoc_md685", null ],
-        [ "Verified inventory (2026-07-12)", "plan_terrain_biomes.html#autotoc_md686", null ],
-        [ "Architecture", "plan_terrain_biomes.html#autotoc_md687", [
-          [ "Data — TerrainMapService (plain C#, VContainer)", "plan_terrain_biomes.html#autotoc_md688", null ],
-          [ "Bake — one blit per level (GPU, amortizable)", "plan_terrain_biomes.html#autotoc_md689", null ],
-          [ "View — TerrainView (MonoBehaviour) + runtime shader", "plan_terrain_biomes.html#autotoc_md690", null ]
+      [ "Terrain & Biomes — scenario ground generator", "plan_terrain_biomes.html#autotoc_md692", [
+        [ "Vision & constraints", "plan_terrain_biomes.html#autotoc_md694", null ],
+        [ "Verified inventory (2026-07-12)", "plan_terrain_biomes.html#autotoc_md695", null ],
+        [ "Architecture", "plan_terrain_biomes.html#autotoc_md696", [
+          [ "Data — TerrainMapService (plain C#, VContainer)", "plan_terrain_biomes.html#autotoc_md697", null ],
+          [ "Bake — one blit per level (GPU, amortizable)", "plan_terrain_biomes.html#autotoc_md698", null ],
+          [ "View — TerrainView (MonoBehaviour) + runtime shader", "plan_terrain_biomes.html#autotoc_md699", null ]
         ] ],
-        [ "Shader design — options per stage", "plan_terrain_biomes.html#autotoc_md691", [
-          [ "S1 — Zone blending (bake-time)", "plan_terrain_biomes.html#autotoc_md692", null ],
-          [ "S2 — Grass (the flagship reaction)", "plan_terrain_biomes.html#autotoc_md693", null ],
-          [ "S3 — Water", "plan_terrain_biomes.html#autotoc_md694", null ],
-          [ "S4 — Sand / dirt / stone / lava", "plan_terrain_biomes.html#autotoc_md695", null ],
-          [ "S5 — Data layout (bake outputs)", "plan_terrain_biomes.html#autotoc_md696", null ],
-          [ "S6 — Cheap density & anti-repetition (mobile)", "plan_terrain_biomes.html#autotoc_md697", null ],
-          [ "S7 — Runtime composition rules", "plan_terrain_biomes.html#autotoc_md698", null ]
+        [ "Shader design — options per stage", "plan_terrain_biomes.html#autotoc_md700", [
+          [ "S1 — Zone blending (bake-time)", "plan_terrain_biomes.html#autotoc_md701", null ],
+          [ "S2 — Grass (the flagship reaction)", "plan_terrain_biomes.html#autotoc_md702", null ],
+          [ "S3 — Water", "plan_terrain_biomes.html#autotoc_md703", null ],
+          [ "S4 — Sand / dirt / stone / lava", "plan_terrain_biomes.html#autotoc_md704", null ],
+          [ "S5 — Data layout (bake outputs)", "plan_terrain_biomes.html#autotoc_md705", null ],
+          [ "S6 — Cheap density & anti-repetition (mobile)", "plan_terrain_biomes.html#autotoc_md706", null ],
+          [ "S7 — Runtime composition rules", "plan_terrain_biomes.html#autotoc_md707", null ]
         ] ],
-        [ "Task plan", "plan_terrain_biomes.html#autotoc_md699", [
-          [ "Dependency graph", "plan_terrain_biomes.html#autotoc_md700", null ],
-          [ "Wave A — data + bake", "plan_terrain_biomes.html#autotoc_md701", [
-            [ "A1 — TerrainMapService + BiomeProfile config + ITerrainQuery · P0 · M · opus", "plan_terrain_biomes.html#autotoc_md702", null ],
-            [ "A2 — Index-map build/upload · P0 · S · sonnet", "plan_terrain_biomes.html#autotoc_md703", null ],
-            [ "A3 — Bake blit shader + TerrainBaker · P0 · M · opus", "plan_terrain_biomes.html#autotoc_md704", null ]
+        [ "Task plan", "plan_terrain_biomes.html#autotoc_md708", [
+          [ "Dependency graph", "plan_terrain_biomes.html#autotoc_md709", null ],
+          [ "Wave A — data + bake", "plan_terrain_biomes.html#autotoc_md710", [
+            [ "A1 — TerrainMapService + BiomeProfile config + ITerrainQuery · P0 · M · opus", "plan_terrain_biomes.html#autotoc_md711", null ],
+            [ "A2 — Index-map build/upload · P0 · S · sonnet", "plan_terrain_biomes.html#autotoc_md712", null ],
+            [ "A3 — Bake blit shader + TerrainBaker · P0 · M · opus", "plan_terrain_biomes.html#autotoc_md713", null ]
           ] ],
-          [ "Wave B — view + reactions + GI", "plan_terrain_biomes.html#autotoc_md705", [
-            [ "B1 — TerrainView + runtime shader v1 · P0 · M · sonnet", "plan_terrain_biomes.html#autotoc_md706", null ],
-            [ "B2 — Disturbance reactions · P1 · M–L · opus", "plan_terrain_biomes.html#autotoc_md707", null ],
-            [ "B3 — GI integration · P1 · S · sonnet", "plan_terrain_biomes.html#autotoc_md708", null ]
+          [ "Wave B — view + reactions + GI", "plan_terrain_biomes.html#autotoc_md714", [
+            [ "B1 — TerrainView + runtime shader v1 · P0 · M · sonnet", "plan_terrain_biomes.html#autotoc_md715", null ],
+            [ "B2 — Disturbance reactions · P1 · M–L · opus", "plan_terrain_biomes.html#autotoc_md716", null ],
+            [ "B3 — GI integration · P1 · S · sonnet", "plan_terrain_biomes.html#autotoc_md717", null ]
           ] ],
-          [ "Wave C — gameplay + tooling (parallel after A1)", "plan_terrain_biomes.html#autotoc_md709", [
-            [ "C1 — Placement gating seam · P1 · S–M · sonnet", "plan_terrain_biomes.html#autotoc_md710", null ],
-            [ "C2 — Seed plumbing + reproduction affordance · P2 · S · haiku", "plan_terrain_biomes.html#autotoc_md711", null ],
-            [ "C3 — Game Render Maps entries · P2 · S · sonnet", "plan_terrain_biomes.html#autotoc_md712", null ]
+          [ "Wave C — gameplay + tooling (parallel after A1)", "plan_terrain_biomes.html#autotoc_md718", [
+            [ "C1 — Placement gating seam · P1 · S–M · sonnet", "plan_terrain_biomes.html#autotoc_md719", null ],
+            [ "C2 — Seed plumbing + reproduction affordance · P2 · S · haiku", "plan_terrain_biomes.html#autotoc_md720", null ],
+            [ "C3 — Game Render Maps entries · P2 · S · sonnet", "plan_terrain_biomes.html#autotoc_md721", null ]
           ] ]
         ] ],
-        [ "Open questions (answer at execution time)", "plan_terrain_biomes.html#autotoc_md713", null ]
+        [ "Open questions (answer at execution time)", "plan_terrain_biomes.html#autotoc_md722", null ]
       ] ]
     ] ],
     [ "Gameplay Telemetry", "plan_gameplay_telemetry.html", [
@@ -288,85 +288,96 @@ var plans =
           [ "Level flush sequence", "plan_gameplay_telemetry.html#autotoc_md473", null ],
           [ "Dependency graph", "plan_gameplay_telemetry.html#autotoc_md474", null ],
           [ "Metric vocabulary — why a registry, not named fields", "plan_gameplay_telemetry.html#autotoc_md475", null ],
-          [ "Audio: extract the flight boundary, not the counters", "plan_gameplay_telemetry.html#autotoc_md476", null ],
-          [ "Run identity and retries", "plan_gameplay_telemetry.html#autotoc_md477", null ],
-          [ "Read model", "plan_gameplay_telemetry.html#autotoc_md478", null ],
-          [ "Export layer", "plan_gameplay_telemetry.html#autotoc_md479", null ],
-          [ "Gating tiers", "plan_gameplay_telemetry.html#autotoc_md480", null ],
-          [ "Serialization", "plan_gameplay_telemetry.html#autotoc_md481", null ],
-          [ "Time tracking", "plan_gameplay_telemetry.html#autotoc_md482", null ],
-          [ "Pause semantics", "plan_gameplay_telemetry.html#autotoc_md483", null ],
-          [ "Color and item derivation", "plan_gameplay_telemetry.html#autotoc_md484", null ],
-          [ "Cheat tagging", "plan_gameplay_telemetry.html#autotoc_md485", null ]
+          [ "The catalog", "plan_gameplay_telemetry.html#autotoc_md476", [
+            [ "Counters — MetricId", "plan_gameplay_telemetry.html#autotoc_md477", null ],
+            [ "Timers — TimerId", "plan_gameplay_telemetry.html#autotoc_md478", null ],
+            [ "Not metrics", "plan_gameplay_telemetry.html#autotoc_md479", null ]
+          ] ],
+          [ "Flight stats: extract the boundary and the type counters; the colour ramp stays", "plan_gameplay_telemetry.html#autotoc_md480", [
+            [ "The single-writer rule", "plan_gameplay_telemetry.html#autotoc_md481", null ],
+            [ "What moves, and what does not", "plan_gameplay_telemetry.html#autotoc_md482", null ],
+            [ "Ownership — beside telemetry, not inside it", "plan_gameplay_telemetry.html#autotoc_md483", null ],
+            [ "The acceptance gate is free", "plan_gameplay_telemetry.html#autotoc_md484", null ]
+          ] ],
+          [ "Run identity and retries", "plan_gameplay_telemetry.html#autotoc_md485", null ],
+          [ "Read model", "plan_gameplay_telemetry.html#autotoc_md486", null ],
+          [ "Export layer", "plan_gameplay_telemetry.html#autotoc_md487", null ],
+          [ "Gating tiers", "plan_gameplay_telemetry.html#autotoc_md488", null ],
+          [ "Serialization", "plan_gameplay_telemetry.html#autotoc_md489", null ],
+          [ "Time tracking", "plan_gameplay_telemetry.html#autotoc_md490", null ],
+          [ "Pause semantics", "plan_gameplay_telemetry.html#autotoc_md491", null ],
+          [ "Color and item derivation", "plan_gameplay_telemetry.html#autotoc_md492", null ],
+          [ "Cheat tagging", "plan_gameplay_telemetry.html#autotoc_md493", null ]
         ] ],
-        [ "Superseded decisions", "plan_gameplay_telemetry.html#autotoc_md487", null ],
-        [ "Task plan", "plan_gameplay_telemetry.html#autotoc_md489", [
-          [ "Dependency graph", "plan_gameplay_telemetry.html#autotoc_md490", null ],
-          [ "W0 — Doc freshness · P0 · S · haiku (scribe)", "plan_gameplay_telemetry.html#autotoc_md491", null ],
-          [ "W1 — Vocabulary, scopes, timers · P0 · M · sonnet", "plan_gameplay_telemetry.html#autotoc_md492", null ],
-          [ "W2 — Envelope, serializer, dev sink · P0 · M · sonnet", "plan_gameplay_telemetry.html#autotoc_md493", null ],
-          [ "W3 — Service, state machine, flight scope · P0 · L · opus", "plan_gameplay_telemetry.html#autotoc_md494", null ],
-          [ "W4 — UI read model and popups · P1 · M–L · opus", "plan_gameplay_telemetry.html#autotoc_md495", null ],
-          [ "W5 — Export decorators · P1 · M · sonnet", "plan_gameplay_telemetry.html#autotoc_md496", null ],
-          [ "W6 — HTTP analytics sink · P2 · M–L · opus", "plan_gameplay_telemetry.html#autotoc_md497", null ],
-          [ "Cross-cutting", "plan_gameplay_telemetry.html#autotoc_md498", null ]
+        [ "Superseded decisions", "plan_gameplay_telemetry.html#autotoc_md495", null ],
+        [ "Task plan", "plan_gameplay_telemetry.html#autotoc_md497", [
+          [ "Dependency graph", "plan_gameplay_telemetry.html#autotoc_md498", null ],
+          [ "W0 — Doc freshness · P0 · S", "plan_gameplay_telemetry.html#autotoc_md499", null ],
+          [ "W1 — Vocabulary, scopes, timers · P0 · M · sonnet", "plan_gameplay_telemetry.html#autotoc_md500", null ],
+          [ "W2 — Envelope, serializer, dev sink · P0 · M · sonnet", "plan_gameplay_telemetry.html#autotoc_md501", null ],
+          [ "W2b — Flight scope + flight stats · P0 · M · sonnet, opus review", "plan_gameplay_telemetry.html#autotoc_md502", null ],
+          [ "W3 — Metrics service and state machine · P0 · L · opus", "plan_gameplay_telemetry.html#autotoc_md503", null ],
+          [ "W4 — UI read model and popups · P1 · M–L · opus", "plan_gameplay_telemetry.html#autotoc_md504", null ],
+          [ "W5 — Export decorators · P1 · M · sonnet", "plan_gameplay_telemetry.html#autotoc_md505", null ],
+          [ "W6 — HTTP analytics sink · P2 · M–L · opus", "plan_gameplay_telemetry.html#autotoc_md506", null ],
+          [ "Cross-cutting", "plan_gameplay_telemetry.html#autotoc_md507", null ]
         ] ],
-        [ "Implementer guardrails", "plan_gameplay_telemetry.html#autotoc_md500", null ],
-        [ "Risk register", "plan_gameplay_telemetry.html#autotoc_md502", null ],
-        [ "Test strategy", "plan_gameplay_telemetry.html#autotoc_md504", null ],
-        [ "Open decisions", "plan_gameplay_telemetry.html#autotoc_md506", null ],
-        [ "Analytics notes", "plan_gameplay_telemetry.html#autotoc_md508", [
-          [ "Minimum viable fields", "plan_gameplay_telemetry.html#autotoc_md509", null ],
-          [ "Key analyses enabled", "plan_gameplay_telemetry.html#autotoc_md510", null ],
-          [ "Sample-size guidance", "plan_gameplay_telemetry.html#autotoc_md511", null ]
+        [ "Implementer guardrails", "plan_gameplay_telemetry.html#autotoc_md509", null ],
+        [ "Risk register", "plan_gameplay_telemetry.html#autotoc_md511", null ],
+        [ "Test strategy", "plan_gameplay_telemetry.html#autotoc_md513", null ],
+        [ "Open decisions", "plan_gameplay_telemetry.html#autotoc_md515", null ],
+        [ "Analytics notes", "plan_gameplay_telemetry.html#autotoc_md517", [
+          [ "Minimum viable fields", "plan_gameplay_telemetry.html#autotoc_md518", null ],
+          [ "Key analyses enabled", "plan_gameplay_telemetry.html#autotoc_md519", null ],
+          [ "Sample-size guidance", "plan_gameplay_telemetry.html#autotoc_md520", null ]
         ] ],
-        [ "Deferred", "plan_gameplay_telemetry.html#autotoc_md513", null ]
+        [ "Deferred", "plan_gameplay_telemetry.html#autotoc_md522", null ]
       ] ]
     ] ],
     [ "Performance Recovery", "plan_performance_recovery.html", [
-      [ "Performance Recovery Plan — BalloonParty (Phase 2, revised 2026-07-23)", "plan_performance_recovery.html#autotoc_md610", [
-        [ "Execution model & delegation matrix", "plan_performance_recovery.html#autotoc_md612", null ],
-        [ "Phase 1 — Completed ✅ (spot-checked 2026-07-23: all commits exist and match)", "plan_performance_recovery.html#autotoc_md614", null ],
-        [ "Step 0: Diagnose before optimizing (mandatory, do first)", "plan_performance_recovery.html#autotoc_md616", [
-          [ "Preconditions — record backend and build type", "plan_performance_recovery.html#autotoc_md617", null ],
-          [ "Pacing / ARR check", "plan_performance_recovery.html#autotoc_md618", null ],
-          [ "CPU vs GPU classification", "plan_performance_recovery.html#autotoc_md619", null ],
-          [ "Overdraw look (editor)", "plan_performance_recovery.html#autotoc_md620", null ],
-          [ "AGI — Mali fragment vs bandwidth", "plan_performance_recovery.html#autotoc_md621", null ],
-          [ "Thermal baseline", "plan_performance_recovery.html#autotoc_md622", null ],
-          [ "Findings — first pass, 2026-07-23 (cool device, release build, live gameplay)", "plan_performance_recovery.html#autotoc_md623", null ],
-          [ "Findings — second pass, 2026-07-23 evening (90s perfetto capture during live play)", "plan_performance_recovery.html#autotoc_md624", null ],
-          [ "Findings — third pass, 2026-07-23 night (20-min longitudinal monitor, 15s cadence)", "plan_performance_recovery.html#autotoc_md625", null ],
-          [ "Findings — fourth pass, 2026-07-23 night (simpleperf callstacks, dev build)", "plan_performance_recovery.html#autotoc_md626", null ],
-          [ "Decision tree", "plan_performance_recovery.html#autotoc_md627", null ]
+      [ "Performance Recovery Plan — BalloonParty (Phase 2, revised 2026-07-23)", "plan_performance_recovery.html#autotoc_md619", [
+        [ "Execution model & delegation matrix", "plan_performance_recovery.html#autotoc_md621", null ],
+        [ "Phase 1 — Completed ✅ (spot-checked 2026-07-23: all commits exist and match)", "plan_performance_recovery.html#autotoc_md623", null ],
+        [ "Step 0: Diagnose before optimizing (mandatory, do first)", "plan_performance_recovery.html#autotoc_md625", [
+          [ "Preconditions — record backend and build type", "plan_performance_recovery.html#autotoc_md626", null ],
+          [ "Pacing / ARR check", "plan_performance_recovery.html#autotoc_md627", null ],
+          [ "CPU vs GPU classification", "plan_performance_recovery.html#autotoc_md628", null ],
+          [ "Overdraw look (editor)", "plan_performance_recovery.html#autotoc_md629", null ],
+          [ "AGI — Mali fragment vs bandwidth", "plan_performance_recovery.html#autotoc_md630", null ],
+          [ "Thermal baseline", "plan_performance_recovery.html#autotoc_md631", null ],
+          [ "Findings — first pass, 2026-07-23 (cool device, release build, live gameplay)", "plan_performance_recovery.html#autotoc_md632", null ],
+          [ "Findings — second pass, 2026-07-23 evening (90s perfetto capture during live play)", "plan_performance_recovery.html#autotoc_md633", null ],
+          [ "Findings — third pass, 2026-07-23 night (20-min longitudinal monitor, 15s cadence)", "plan_performance_recovery.html#autotoc_md634", null ],
+          [ "Findings — fourth pass, 2026-07-23 night (simpleperf callstacks, dev build)", "plan_performance_recovery.html#autotoc_md635", null ],
+          [ "Decision tree", "plan_performance_recovery.html#autotoc_md636", null ]
         ] ],
-        [ "Tier 0: Free / Near-Free Wins", "plan_performance_recovery.html#autotoc_md629", [
-          [ "F2 — Remove the shrink Array.Resize in TransformRibbon · sonnet", "plan_performance_recovery.html#autotoc_md630", null ],
-          [ "F3 — SetCharArray in RollingTextAnimator · haiku", "plan_performance_recovery.html#autotoc_md631", null ],
-          [ "F4 — Shader variant warmup · sonnet (capture = José)", "plan_performance_recovery.html#autotoc_md632", null ],
-          [ "C1 + C3 — Projectile cleanups · sonnet, one session (same file)", "plan_performance_recovery.html#autotoc_md633", null ]
+        [ "Tier 0: Free / Near-Free Wins", "plan_performance_recovery.html#autotoc_md638", [
+          [ "F2 — Remove the shrink Array.Resize in TransformRibbon · sonnet", "plan_performance_recovery.html#autotoc_md639", null ],
+          [ "F3 — SetCharArray in RollingTextAnimator · haiku", "plan_performance_recovery.html#autotoc_md640", null ],
+          [ "F4 — Shader variant warmup · sonnet (capture = José)", "plan_performance_recovery.html#autotoc_md641", null ],
+          [ "C1 + C3 — Projectile cleanups · sonnet, one session (same file)", "plan_performance_recovery.html#autotoc_md642", null ]
         ] ],
-        [ "Tier 1: UI arrival storm — RESOLVED 2026-07-23: U1 reverted, U2 kept", "plan_performance_recovery.html#autotoc_md635", [
-          [ "U1 — De-Animator the progress-bar hit pulse · opus", "plan_performance_recovery.html#autotoc_md636", null ],
-          [ "U2 — Eliminate ProgressNotice reparenting · sonnet (+ mandatory fable review of pool consumers)", "plan_performance_recovery.html#autotoc_md637", null ]
+        [ "Tier 1: UI arrival storm — RESOLVED 2026-07-23: U1 reverted, U2 kept", "plan_performance_recovery.html#autotoc_md644", [
+          [ "U1 — De-Animator the progress-bar hit pulse · opus", "plan_performance_recovery.html#autotoc_md645", null ],
+          [ "U2 — Eliminate ProgressNotice reparenting · sonnet (+ mandatory fable review of pool consumers)", "plan_performance_recovery.html#autotoc_md646", null ]
         ] ],
-        [ "Tier 2: GPU / Shader (re-prioritized for Mali-G715)", "plan_performance_recovery.html#autotoc_md639", [
-          [ "G6 — fp16 in ScreenSpaceLightSmear.shader · opus, same session as G3", "plan_performance_recovery.html#autotoc_md640", null ],
-          [ "G3 — 4-tap bilinear blur (Pass 1) · with G6", "plan_performance_recovery.html#autotoc_md641", null ],
-          [ "G4 — BackgroundField bake fine-octave skip · SHIPPED THEN REVERTED 2026-07-23", "plan_performance_recovery.html#autotoc_md642", null ],
-          [ "G1 — Blit budget controller · opus, after Step 0 confirms spikes matter", "plan_performance_recovery.html#autotoc_md643", null ],
-          [ "G5 — Gradient-skip · DEFERRED — riskier than it looks (opus if ever done)", "plan_performance_recovery.html#autotoc_md644", null ]
+        [ "Tier 2: GPU / Shader (re-prioritized for Mali-G715)", "plan_performance_recovery.html#autotoc_md648", [
+          [ "G6 — fp16 in ScreenSpaceLightSmear.shader · opus, same session as G3", "plan_performance_recovery.html#autotoc_md649", null ],
+          [ "G3 — 4-tap bilinear blur (Pass 1) · with G6", "plan_performance_recovery.html#autotoc_md650", null ],
+          [ "G4 — BackgroundField bake fine-octave skip · SHIPPED THEN REVERTED 2026-07-23", "plan_performance_recovery.html#autotoc_md651", null ],
+          [ "G1 — Blit budget controller · opus, after Step 0 confirms spikes matter", "plan_performance_recovery.html#autotoc_md652", null ],
+          [ "G5 — Gradient-skip · DEFERRED — riskier than it looks (opus if ever done)", "plan_performance_recovery.html#autotoc_md653", null ]
         ] ],
-        [ "Tier 3: Architectural (gated on Step 0 evidence)", "plan_performance_recovery.html#autotoc_md646", [
-          [ "A4 — Quality tiers + ADPF · opus — required for ship, promoted earlier", "plan_performance_recovery.html#autotoc_md647", null ],
-          [ "A1 — Render Graph prototype · opus — go/no-go, only on Step-0 GPU evidence", "plan_performance_recovery.html#autotoc_md648", null ],
-          [ "A2 — SceneCapture → Renderer Feature · parked behind A1", "plan_performance_recovery.html#autotoc_md649", null ]
+        [ "Tier 3: Architectural (gated on Step 0 evidence)", "plan_performance_recovery.html#autotoc_md655", [
+          [ "A4 — Quality tiers + ADPF · opus — required for ship, promoted earlier", "plan_performance_recovery.html#autotoc_md656", null ],
+          [ "A1 — Render Graph prototype · opus — go/no-go, only on Step-0 GPU evidence", "plan_performance_recovery.html#autotoc_md657", null ],
+          [ "A2 — SceneCapture → Renderer Feature · parked behind A1", "plan_performance_recovery.html#autotoc_md658", null ]
         ] ],
-        [ "Quality vetoes — 2026-07-23 device pass (José)", "plan_performance_recovery.html#autotoc_md651", null ],
-        [ "Dropped in the 2026-07-23 revision", "plan_performance_recovery.html#autotoc_md652", null ],
-        [ "Investigated and Skipped (carried over)", "plan_performance_recovery.html#autotoc_md653", null ],
-        [ "Dependency map & execution waves", "plan_performance_recovery.html#autotoc_md655", null ],
-        [ "Verification Protocol", "plan_performance_recovery.html#autotoc_md657", null ]
+        [ "Quality vetoes — 2026-07-23 device pass (José)", "plan_performance_recovery.html#autotoc_md660", null ],
+        [ "Dropped in the 2026-07-23 revision", "plan_performance_recovery.html#autotoc_md661", null ],
+        [ "Investigated and Skipped (carried over)", "plan_performance_recovery.html#autotoc_md662", null ],
+        [ "Dependency map & execution waves", "plan_performance_recovery.html#autotoc_md664", null ],
+        [ "Verification Protocol", "plan_performance_recovery.html#autotoc_md666", null ]
       ] ]
     ] ],
     [ "Audio / SFX", "plan_audio.html", [
@@ -399,67 +410,67 @@ var plans =
       ] ]
     ] ],
     [ "Shot Solver Accuracy", "plan_shot_solver_accuracy.html", [
-      [ "Shot Solver Accuracy", "plan_shot_solver_accuracy.html#autotoc_md658", [
-        [ "Diagnostic", "plan_shot_solver_accuracy.html#autotoc_md660", null ],
-        [ "Goals & non-goals", "plan_shot_solver_accuracy.html#autotoc_md661", null ],
-        [ "Architecture decisions (settled)", "plan_shot_solver_accuracy.html#autotoc_md662", null ],
-        [ "Phases", "plan_shot_solver_accuracy.html#autotoc_md663", [
-          [ "Phase 0 — Prerequisite refactors (no behavior change; the existing 22-test suite stays green)", "plan_shot_solver_accuracy.html#autotoc_md664", null ],
-          [ "Phase A — Interactive static geometry (G1) — depends on 0b", "plan_shot_solver_accuracy.html#autotoc_md665", null ],
-          [ "Phase B — Weight-system fidelity (G2) — depends on 0b; parallel to A", "plan_shot_solver_accuracy.html#autotoc_md666", null ],
-          [ "Phase D-core — Rainbow scoring + in-sim buff state (G4-scoring, G8) — depends on 0a", "plan_shot_solver_accuracy.html#autotoc_md667", null ],
-          [ "✅ Phase C — Item carriers (G3) — depends on B + D-core", "plan_shot_solver_accuracy.html#autotoc_md668", null ],
-          [ "Phase E — Flight residuals (G5, G6, G7 + E4) — depends on 0a; E2 folds C6", "plan_shot_solver_accuracy.html#autotoc_md669", null ],
-          [ "Phase F — Nondeterminism policy + instrumentation (G9) — last", "plan_shot_solver_accuracy.html#autotoc_md670", null ],
-          [ "Phase G — Headless level diagnostics (follow-up tier; scoped 2026-07-25)", "plan_shot_solver_accuracy.html#autotoc_md671", null ]
+      [ "Shot Solver Accuracy", "plan_shot_solver_accuracy.html#autotoc_md667", [
+        [ "Diagnostic", "plan_shot_solver_accuracy.html#autotoc_md669", null ],
+        [ "Goals & non-goals", "plan_shot_solver_accuracy.html#autotoc_md670", null ],
+        [ "Architecture decisions (settled)", "plan_shot_solver_accuracy.html#autotoc_md671", null ],
+        [ "Phases", "plan_shot_solver_accuracy.html#autotoc_md672", [
+          [ "Phase 0 — Prerequisite refactors (no behavior change; the existing 22-test suite stays green)", "plan_shot_solver_accuracy.html#autotoc_md673", null ],
+          [ "Phase A — Interactive static geometry (G1) — depends on 0b", "plan_shot_solver_accuracy.html#autotoc_md674", null ],
+          [ "Phase B — Weight-system fidelity (G2) — depends on 0b; parallel to A", "plan_shot_solver_accuracy.html#autotoc_md675", null ],
+          [ "Phase D-core — Rainbow scoring + in-sim buff state (G4-scoring, G8) — depends on 0a", "plan_shot_solver_accuracy.html#autotoc_md676", null ],
+          [ "✅ Phase C — Item carriers (G3) — depends on B + D-core", "plan_shot_solver_accuracy.html#autotoc_md677", null ],
+          [ "Phase E — Flight residuals (G5, G6, G7 + E4) — depends on 0a; E2 folds C6", "plan_shot_solver_accuracy.html#autotoc_md678", null ],
+          [ "Phase F — Nondeterminism policy + instrumentation (G9) — last", "plan_shot_solver_accuracy.html#autotoc_md679", null ],
+          [ "Phase G — Headless level diagnostics (follow-up tier; scoped 2026-07-25)", "plan_shot_solver_accuracy.html#autotoc_md680", null ]
         ] ],
-        [ "Test plan (per test-everything; full detail in the review transcript)", "plan_shot_solver_accuracy.html#autotoc_md672", null ],
-        [ "Verification workflow", "plan_shot_solver_accuracy.html#autotoc_md673", null ],
-        [ "Open decisions", "plan_shot_solver_accuracy.html#autotoc_md674", null ],
-        [ "Remaining work — detailed status (2026-07-26)", "plan_shot_solver_accuracy.html#autotoc_md675", [
-          [ "E — flight residuals (next; ONE architect memo for all four, they interact)", "plan_shot_solver_accuracy.html#autotoc_md676", null ],
-          [ "F — instrumentation + acceptance (after E)", "plan_shot_solver_accuracy.html#autotoc_md677", null ],
-          [ "Live repoint track (any time; separable commits)", "plan_shot_solver_accuracy.html#autotoc_md678", null ],
-          [ "José's gates (accumulated)", "plan_shot_solver_accuracy.html#autotoc_md679", null ],
-          [ "Deferred code follow-ups (small, none blocking)", "plan_shot_solver_accuracy.html#autotoc_md680", null ],
-          [ "G — headless level diagnostics (follow-up tier; unchanged spec in §4 Phase G)", "plan_shot_solver_accuracy.html#autotoc_md681", null ],
-          [ "Design questions parked for José", "plan_shot_solver_accuracy.html#autotoc_md682", null ]
+        [ "Test plan (per test-everything; full detail in the review transcript)", "plan_shot_solver_accuracy.html#autotoc_md681", null ],
+        [ "Verification workflow", "plan_shot_solver_accuracy.html#autotoc_md682", null ],
+        [ "Open decisions", "plan_shot_solver_accuracy.html#autotoc_md683", null ],
+        [ "Remaining work — detailed status (2026-07-26)", "plan_shot_solver_accuracy.html#autotoc_md684", [
+          [ "E — flight residuals (next; ONE architect memo for all four, they interact)", "plan_shot_solver_accuracy.html#autotoc_md685", null ],
+          [ "F — instrumentation + acceptance (after E)", "plan_shot_solver_accuracy.html#autotoc_md686", null ],
+          [ "Live repoint track (any time; separable commits)", "plan_shot_solver_accuracy.html#autotoc_md687", null ],
+          [ "José's gates (accumulated)", "plan_shot_solver_accuracy.html#autotoc_md688", null ],
+          [ "Deferred code follow-ups (small, none blocking)", "plan_shot_solver_accuracy.html#autotoc_md689", null ],
+          [ "G — headless level diagnostics (follow-up tier; unchanged spec in §4 Phase G)", "plan_shot_solver_accuracy.html#autotoc_md690", null ],
+          [ "Design questions parked for José", "plan_shot_solver_accuracy.html#autotoc_md691", null ]
         ] ]
       ] ]
     ] ],
     [ "Web Demo Hosting", "plan_web_demo_hosting.html", [
-      [ "Web Demo Hosting", "plan_web_demo_hosting.html#autotoc_md714", [
-        [ "Why keep it", "plan_web_demo_hosting.html#autotoc_md716", null ],
-        [ "What survived", "plan_web_demo_hosting.html#autotoc_md717", null ],
-        [ "The recipe, if resumed", "plan_web_demo_hosting.html#autotoc_md718", null ],
-        [ "The blocker", "plan_web_demo_hosting.html#autotoc_md719", null ],
-        [ "Residue from the attempt", "plan_web_demo_hosting.html#autotoc_md720", null ],
-        [ "If web stays dead", "plan_web_demo_hosting.html#autotoc_md721", null ],
-        [ "Decision log", "plan_web_demo_hosting.html#autotoc_md722", null ]
+      [ "Web Demo Hosting", "plan_web_demo_hosting.html#autotoc_md723", [
+        [ "Why keep it", "plan_web_demo_hosting.html#autotoc_md725", null ],
+        [ "What survived", "plan_web_demo_hosting.html#autotoc_md726", null ],
+        [ "The recipe, if resumed", "plan_web_demo_hosting.html#autotoc_md727", null ],
+        [ "The blocker", "plan_web_demo_hosting.html#autotoc_md728", null ],
+        [ "Residue from the attempt", "plan_web_demo_hosting.html#autotoc_md729", null ],
+        [ "If web stays dead", "plan_web_demo_hosting.html#autotoc_md730", null ],
+        [ "Decision log", "plan_web_demo_hosting.html#autotoc_md731", null ]
       ] ]
     ] ],
     [ "Level-Up Timing", "plan_level_up_timing.html", [
-      [ "Level-Up Timing", "plan_level_up_timing.html#autotoc_md589", [
-        [ "The bug this fixes", "plan_level_up_timing.html#autotoc_md591", null ],
-        [ "The model", "plan_level_up_timing.html#autotoc_md592", null ],
-        [ "2.1 The signals, by name", "plan_level_up_timing.html#autotoc_md593", null ],
-        [ "What this deletes", "plan_level_up_timing.html#autotoc_md594", null ],
-        [ "Detect on projected progress; keep tipping identity as presentation", "plan_level_up_timing.html#autotoc_md595", null ],
-        [ "The orchestrator IS the existing phase machine", "plan_level_up_timing.html#autotoc_md596", null ],
-        [ "The edits", "plan_level_up_timing.html#autotoc_md597", [
-          [ "6.1 TimeScaleService — exclusivity", "plan_level_up_timing.html#autotoc_md598", null ],
-          [ "6.2 The two windows", "plan_level_up_timing.html#autotoc_md599", null ],
-          [ "6.3 LevelController — the exact edits", "plan_level_up_timing.html#autotoc_md600", null ],
-          [ "6.4 New message: LevelUpAbandonedMessage", "plan_level_up_timing.html#autotoc_md601", null ],
-          [ "6.5 The holds — predicate is Phase != Playing, NEVER == Completing", "plan_level_up_timing.html#autotoc_md602", null ],
-          [ "6.6 ColorProgressBar must keep drawing during Completing", "plan_level_up_timing.html#autotoc_md603", null ],
-          [ "6.7 The pan-in stops pausing; the camera follows the shot", "plan_level_up_timing.html#autotoc_md604", null ]
+      [ "Level-Up Timing", "plan_level_up_timing.html#autotoc_md598", [
+        [ "The bug this fixes", "plan_level_up_timing.html#autotoc_md600", null ],
+        [ "The model", "plan_level_up_timing.html#autotoc_md601", null ],
+        [ "2.1 The signals, by name", "plan_level_up_timing.html#autotoc_md602", null ],
+        [ "What this deletes", "plan_level_up_timing.html#autotoc_md603", null ],
+        [ "Detect on projected progress; keep tipping identity as presentation", "plan_level_up_timing.html#autotoc_md604", null ],
+        [ "The orchestrator IS the existing phase machine", "plan_level_up_timing.html#autotoc_md605", null ],
+        [ "The edits", "plan_level_up_timing.html#autotoc_md606", [
+          [ "6.1 TimeScaleService — exclusivity", "plan_level_up_timing.html#autotoc_md607", null ],
+          [ "6.2 The two windows", "plan_level_up_timing.html#autotoc_md608", null ],
+          [ "6.3 LevelController — the exact edits", "plan_level_up_timing.html#autotoc_md609", null ],
+          [ "6.4 New message: LevelUpAbandonedMessage", "plan_level_up_timing.html#autotoc_md610", null ],
+          [ "6.5 The holds — predicate is Phase != Playing, NEVER == Completing", "plan_level_up_timing.html#autotoc_md611", null ],
+          [ "6.6 ColorProgressBar must keep drawing during Completing", "plan_level_up_timing.html#autotoc_md612", null ],
+          [ "6.7 The pan-in stops pausing; the camera follows the shot", "plan_level_up_timing.html#autotoc_md613", null ]
         ] ],
-        [ "Tests", "plan_level_up_timing.html#autotoc_md605", null ],
-        [ "Sequencing", "plan_level_up_timing.html#autotoc_md606", null ],
-        [ "Risks — playtest, not compile", "plan_level_up_timing.html#autotoc_md607", null ],
-        [ "Known residual (scoped, cosmetic)", "plan_level_up_timing.html#autotoc_md608", null ],
-        [ "Keep the watchdog regardless", "plan_level_up_timing.html#autotoc_md609", null ]
+        [ "Tests", "plan_level_up_timing.html#autotoc_md614", null ],
+        [ "Sequencing", "plan_level_up_timing.html#autotoc_md615", null ],
+        [ "Risks — playtest, not compile", "plan_level_up_timing.html#autotoc_md616", null ],
+        [ "Known residual (scoped, cosmetic)", "plan_level_up_timing.html#autotoc_md617", null ],
+        [ "Keep the watchdog regardless", "plan_level_up_timing.html#autotoc_md618", null ]
       ] ]
     ] ]
 ];

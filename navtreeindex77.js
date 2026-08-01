@@ -1,5 +1,14 @@
 var NAVTREEINDEX77 =
 {
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html#ac4fadb87f3d5e62edbccde51de38da46":[5,0,0,3,7,4,6],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html#ac4fadb87f3d5e62edbccde51de38da46":[6,0,0,3,7,4,6],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html#acbbe0d01d73e80b24d11e5c374305e56":[5,0,0,3,7,4,2],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html#acbbe0d01d73e80b24d11e5c374305e56":[6,0,0,3,7,4,2],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html#ae0c5b687913afb73b9b9ca6d99ed4273":[5,0,0,3,7,4,10],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html#ae0c5b687913afb73b9b9ca6d99ed4273":[6,0,0,3,7,4,10],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html#af77e1d10c9d1595d833aba9c5735f95f":[5,0,0,3,7,4,9],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html#af77e1d10c9d1595d833aba9c5735f95f":[6,0,0,3,7,4,9],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html#af83cbe255f411b5f4671a292f01c819f":[5,0,0,3,7,4,4],
 "structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html#af83cbe255f411b5f4671a292f01c819f":[6,0,0,3,7,4,4],
 "structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html":[5,0,0,3,7,5],
 "structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html":[6,0,0,3,7,5],
@@ -240,14 +249,5 @@ var NAVTREEINDEX77 =
 "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreFormationRequest.html#af2c1317c74d4156afc85551025f8711c":[5,0,0,6,5,0,0,6],
 "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreFormationRequest.html#af2c1317c74d4156afc85551025f8711c":[6,0,0,6,5,0,0,6],
 "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreGroupRequest.html":[5,0,0,6,5,0,1],
-"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreGroupRequest.html":[6,0,0,6,5,0,1],
-"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreGroupRequest.html#a3fe07c3648ea2897ebb2e94b9ddfa2c0":[5,0,0,6,5,0,1,8],
-"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreGroupRequest.html#a3fe07c3648ea2897ebb2e94b9ddfa2c0":[6,0,0,6,5,0,1,8],
-"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreGroupRequest.html#a4d23c72af8941347bc0255929c7de137":[5,0,0,6,5,0,1,0],
-"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreGroupRequest.html#a4d23c72af8941347bc0255929c7de137":[6,0,0,6,5,0,1,0],
-"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreGroupRequest.html#a5e38fd1032dcabdba08c4025974705fb":[5,0,0,6,5,0,1,7],
-"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreGroupRequest.html#a5e38fd1032dcabdba08c4025974705fb":[6,0,0,6,5,0,1,7],
-"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreGroupRequest.html#a625106d67734fff9f9254d667e5b2f86":[5,0,0,6,5,0,1,2],
-"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreGroupRequest.html#a625106d67734fff9f9254d667e5b2f86":[6,0,0,6,5,0,1,2],
-"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreGroupRequest.html#a8ac3e824ccf4baa32ae052559a6c9c8e":[5,0,0,6,5,0,1,11]
+"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreGroupRequest.html":[6,0,0,6,5,0,1]
 };
