@@ -207,12 +207,12 @@ sequenceDiagram
     alt throttled / capped
         Gate-->>Svc: drop (or coalesce into pitch-spread chord)
     else allowed
-        Gate-->>Svc: ok; picker → clip + pitch + volume + pan
+        Gate-->>Svc: ok, picker yields clip + pitch + volume + pan
         Svc->>Pool: Get<AudioSourceVoice>("SfxVoice")
         Pool-->>Svc: voice
         Svc->>V: Play(clip, vol, pitch, pan, loop=false, onComplete)
         V->>V: AudioSource.Play (channel = SfxEntry.channel mixer group)
-        V-->>Svc: onComplete after clip.length / |pitch| (real-time, ignoreTimeScale)
+        V-->>Svc: onComplete after clip.length over abs pitch, real-time, ignoreTimeScale
         Svc->>Pool: Return("SfxVoice", voice)
     end
 ```

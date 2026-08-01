@@ -278,7 +278,7 @@ debuggable build; symbolize host-side with Unity's NDK simpleperf + the build-id
 
 ```mermaid
 graph TD
-    S[record backend + build] --> P{arbitrated <120 +<br/>missed vsync, frame <8.3ms?}
+    S[record backend + build] --> P{"arbitrated <120 +<br/>missed vsync, frame <8.3ms?"}
     P -->|yes| PAC[Pacing/ARR: vote path / A4 ladder]
     P -->|no| C{Profiler dominant marker}
     C -->|Canvas rebuilds| UI[U1 + U2]

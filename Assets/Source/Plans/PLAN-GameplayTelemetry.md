@@ -280,21 +280,19 @@ without payoff).
 ```mermaid
 stateDiagram-v2
     direction LR
-    [*] --> Session : App launch (AppLifetimeScope)
+    [*] --> Session
     state Session {
         [*] --> Run
-        state Run : "Run (RunController generation + retry provenance)"
         state Run {
             [*] --> Level
-            state Level : "Level (Idle/Playing/Ceremony/Transitioning/Ended)"
             state Level {
                 [*] --> Flight
-                Flight --> Interflight : ProjectileDestroyedMessage (flight seals)
+                Flight --> Interflight : ProjectileDestroyedMessage, flight seals
                 Interflight --> Flight : ProjectileLoadedMessage
                 note right of Interflight
-                  Ceremony + Ascent live here.
-                  Straggler ScoreTrailArrived lands here.
-                  Belongs to the LEVEL, to no flight.
+                    Ceremony and Ascent live here.
+                    Straggler ScoreTrailArrived lands here.
+                    Belongs to the LEVEL, to no flight.
                 end note
             }
         }
@@ -321,8 +319,11 @@ stateDiagram-v2
     Transitioning --> Playing : LevelTransitionCompletedMessage / FLUSH snapshot + reset
     Playing --> Ended : GameOverMessage / flush partial level + run record
     Transitioning --> Ended : GameOverMessage
-    Ended --> Playing : ResetRun(generation) / RunId = generation, retry provenance captured
-    note right of Ended : accumulation OFF — post-game-over straggler\ntrails must NOT leak into the next run
+    Ended --> Playing : ResetRun, RunId = generation, retry provenance captured
+    note right of Ended
+        Accumulation OFF. Post-game-over straggler trails
+        must NOT leak into the next run.
+    end note
 ```
 
 ### Level flush sequence
@@ -331,25 +332,25 @@ stateDiagram-v2
 sequenceDiagram
     participant Bus as MessagePipe
     participant Svc as GameplayMetricsService
-    participant Lvl as MetricScope (Level)
-    participant Popup as LevelUpPopUp (View)
+    participant Lvl as Level MetricScope
+    participant Popup as LevelUpPopUp view
     participant Trails as ScoreTrailService
     participant Sink as ITelemetrySink
 
-    Bus->>Svc: gameplay msgs (fired / hit / item / shield / wave damage)
+    Bus->>Svc: gameplay msgs - fired, hit, item, shield, wave damage
     Svc->>Lvl: increment counters
-    Bus->>Svc: ScoreLevelUpMessage (NewLevel)
-    Svc->>Lvl: gameplay clock Pause, ceremony clock Resume
-    Svc->>Svc: CeremonyLevel.Value = Seal() (immutable snapshot)
-    Popup->>Svc: read CeremonyLevel.Value after its gate await
+    Bus->>Svc: ScoreLevelUpMessage
+    Svc->>Lvl: pause gameplay clock, resume ceremony clock
+    Svc->>Svc: CeremonyLevel.Value = Seal, an immutable snapshot
+    Popup->>Svc: reads CeremonyLevel.Value after its gate await
     Bus->>Svc: LevelUpDismissedMessage
-    Note over Trails: LevelTransitionController.HoldOutgoingContent -> CompleteAll
-    Trails->>Bus: ScoreTrailArrivedMessage (stragglers)
+    Note over Trails: HoldOutgoingContent triggers CompleteAll
+    Trails->>Bus: ScoreTrailArrivedMessage stragglers
     Bus->>Svc: ScoreTrailArrivedMessage
-    Svc->>Lvl: PointsBanked += Points (STILL the completed level)
+    Svc->>Lvl: PointsBanked += Points, still the completed level
     Bus->>Svc: LevelTransitionCompletedMessage
-    Svc->>Sink: Write(envelope from FLUSH snapshot)
-    Svc->>Lvl: Absorb into Run; Reset(); gameplay clock Resume
+    Svc->>Sink: Write envelope from FLUSH snapshot
+    Svc->>Lvl: absorb into Run, reset, resume gameplay clock
 ```
 
 ### Dependency graph
