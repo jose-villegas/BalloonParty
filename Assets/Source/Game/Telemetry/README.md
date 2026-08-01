@@ -1,38 +1,66 @@
 # Telemetry
 
-Passive gameplay recorder. Listens to the game's internal event stream, keeps running
-totals for each level and each run in memory, and saves structured records to a local
-log file at level boundaries and game-over. Dev builds only — release builds register
-none of it.
+Gameplay metrics. Counts what happens during play at four nested scopes —
+**Session ⊃ Run ⊃ Level ⊃ Flight** — and serves those counts to three consumers: the
+level-up and game-over popups, an external analytics export, and balance analysis.
 
-The service never sends events back, never modifies gameplay state, and never causes
-stutters during action — it only counts.
+The service never publishes, never modifies gameplay state, and never causes stutters
+during action — it only counts. Views read immutable snapshots; they never see a live
+accumulator.
+
+> **Nothing here is implemented yet.** This README describes the design the revised plan
+> specifies (see below), so the folder reads coherently while the waves land. The file
+> table is the target layout, not the current one.
 
 ## Contents
 
 | File | What it does |
 |---|---|
-| `GameplayTelemetryService` | Entry point (`IStartable`, `IDisposable`, `IRunResettable`). Five-state flush machine (Idle/Playing/Ceremony/Transitioning/Ended); subscribes to gameplay messages and delegates to accumulators. Flushes on `LevelTransitionCompletedMessage` and `GameOverMessage` |
-| `LevelTelemetryAccumulator` | Mutable counters and stopwatches for one level. Pre-sizes collections; `Snapshot()` produces the `LevelRecord`; `Reset()` reuses the instance without reallocation |
-| `RunTelemetryAccumulator` | Run-wide totals and bests. `Absorb(LevelRecord)` folds each flushed level into the run (only `Completed` levels count toward `LevelsCompleted`); `Snapshot()` produces the `RunRecord` |
+| `MetricId` / `TimerId` / `MetricAxis` | The vocabulary — counters, clocks, and the three dimension axes (color, balloon type, item type). Append-only once shipped |
+| `MetricCatalog` | Static table: metric id → wire name, unit, fold rule (`Sum`/`Max`/`Last`). The single browsable list of what the game measures |
+| `MetricSet` / `IReadOnlyMetricSet` | Dense `int[]` counters plus per-axis breakdown tables. Allocation-free increments |
+| `MetricScope` | One scope's metric set and timers, with `Seal()` (immutable snapshot) and `Reset()` (reuse without reallocation). Four instances |
 | `TelemetryStopwatch` | Pure C# timer that owns its injected `Func<float>` clock and folds elapsed time on `Pause()`/`Resume()`/`Elapsed` reads. Deterministic in tests via a fake clock |
-| `LevelRecord` | Sealed DTO capturing one level's statistics (pops, shots, duration, items, streaks, overflow) |
-| `RunRecord` | Sealed DTO capturing the full-run summary (levels completed, total score, end cause, timestamp) |
-| `ColorPopCount` | Readonly struct — one color name + pop count pair |
-| `ItemActivationCount` | Readonly struct — one item type + activation count pair |
-| `ITelemetrySink` | Interface for record output — `Write(LevelRecord)`, `Write(RunRecord)` |
-| `JsonLinesTelemetrySink` | Sink that writes one hand-serialized JSON object per line to a rotating log file in `Application.persistentDataPath/telemetry/`. One stream per session; never throws past its own boundary |
-| `TelemetryJson` | Static, reflection-free JSON writer for the two record types (reused `StringBuilder`, `InvariantCulture` throughout) |
+| `LevelMetricsSnapshot` / `RunMetricsSnapshot` | Sealed immutable read surfaces — what the popups render and what the sink receives |
+| `ILevelMetricsView` | The UI read seam. Exposes the ceremony snapshot as an `IReadOnlyReactiveProperty`, plus the last flushed level and the run. **Only `BalloonParty.UI.*` types may inject it** |
+| `IFlightScope` / `FlightScopeService` | Shared per-shot boundary (`FlightIndex`, `IsInFlight`) derived from the projectile loaded/fired/destroyed messages. Consumed by metrics and by `MusicSoundRouter` |
+| `GameplayMetricsService` | Entry point (`IStartable`, `IDisposable`, `IRunResettable`). Five-state level machine (Idle/Playing/Ceremony/Transitioning/Ended); routes subscriptions into scopes, takes the two per-level snapshots, hands envelopes to the sink |
+| `SessionTelemetryContext` | Session id (per launch, never persisted), schema version, launch timestamp. Registered in `AppLifetimeScope` so it survives scene reloads |
+| `TelemetryEnvelope` | One uniform wire record for every scope, with a `RecordKind` discriminator |
+| `TelemetryEnvelopeSerializer` | Static, reflection-free JSON writer driven by `MetricCatalog` (reused `StringBuilder`, `InvariantCulture` throughout) |
+| `ITelemetrySink` / `TelemetrySinkBase` | Write seam. The base owns the never-throw guard and the disabled latch, so no sink can soft-lock the game at a flush boundary |
+| `ConsentGateSink` / `BatchingTelemetrySink` / `CompositeTelemetrySink` | Cross-cutting concerns as decorators — one concern each |
+| `JsonLinesTelemetrySink` | Dev-only local sink: one JSON object per line, one stream per session, rotating log files in `Application.persistentDataPath/telemetry/` |
+| `HttpAnalyticsSink` | Batched export to an external analytics service (last wave; gated on choosing a provider) |
 
-Pause handling subscribes `PauseService.IsAnyPaused` directly (reference-counted and
-reset-safe) rather than counting `PausedMessage`/`ResumedMessage` edges, which leak on
-the loss path.
+## Two snapshots per level
+
+The level-up popup shows during the ceremony, **before** the level's flush boundary —
+straggler score trails are still arriving. So a *ceremony* snapshot (what the player was
+shown) and a *flush* snapshot (what was true) are both taken and both logged. The gap
+between them is data, not a bug. The popup shows *projected* points to match what
+`ScoreController` already displays beside it.
+
+## Deliberate duplication with audio
+
+`CombatSoundRouter` keeps its own per-flight counters and **that is intentional** — it
+reads each count before incrementing it (the count is a musical pitch step), so sourcing
+it from a shared bus subscriber would make the pitch depend on MessagePipe subscription
+order. Its counters also reset on streak break, which is musically right and analytically
+wrong. Only the flight *boundary* is shared, via `IFlightScope`.
+
+## Pause handling
+
+Subscribes `PauseService.IsAnyPaused` directly (reference-counted and reset-safe) rather
+than counting `PausedMessage`/`ResumedMessage` edges, which leak on the loss path.
 
 ## Registration
 
-Appended at the end of `GameScopeRegistration.RegisterGameplaySystems`, with the
-service and sink registrations wrapped in `#if UNITY_EDITOR || DEVELOPMENT_BUILD`.
-Release builds contain no telemetry code paths.
+`FlightScopeService` then `GameplayMetricsService` at the end of
+`GameScopeRegistration.RegisterGameplaySystems`; `SessionTelemetryContext` in
+`AppLifetimeScope`. Gating is three tiers, not one `#if`: the counting core ships (the
+popups need it), the export layer ships inert until consent, and the local file sink plus
+the cheat read are compiled out of release.
 
 ## Design plan
 

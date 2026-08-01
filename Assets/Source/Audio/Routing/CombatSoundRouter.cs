@@ -270,16 +270,13 @@ namespace BalloonParty.Audio.Routing
             }
         }
 
+        // Each bounce of a shot sounds a semitone below the last, so a long ricochet reads as losing
+        // energy. Clamped like the pop ramps — an unbounded descent runs a cruising shot into the floor.
         private void OnWallHit(WallHitMessage message)
         {
             var depth = Math.Max(0, _flightConfig.ShieldToneThreshold - message.ShieldsRemaining);
-            var offset = 0;
-
-            if (_bounceCount > 0)
-            {
-                offset = -_bounceCount;
-                _bounceCount++;
-            }
+            var offset = -Math.Min(_bounceCount, MaxRampSemitones);
+            _bounceCount++;
 
             _player.Play(GameSoundId.WallHit, message.Position, depth, semitoneOffset: offset);
         }

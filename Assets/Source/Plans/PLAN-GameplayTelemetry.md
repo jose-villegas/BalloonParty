@@ -1,45 +1,242 @@
 @page plan_gameplay_telemetry Gameplay Telemetry
 
-# Gameplay Telemetry
+# Gameplay Metrics & Telemetry
 
-Answer balance and pacing questions from real play data — how long levels take, where
-runs die, which items get used, how streaks behave — by passively listening to the
-game's internal event stream and writing structured records to a local log file.
+One subsystem that counts what happens during play, at four nested scopes, and serves
+those counts to three consumers:
 
-> **Handoff note.** This plan was audited against the codebase (architect + test +
-> performance review, 2026-07-26). Every message shape, cast, and registration idiom
-> below was verified against source. Where the plan says "do not", it is because the
-> obvious alternative compiles and runs but silently records wrong or empty data.
-> Follow the plan literally; the *Implementer guardrails* section lists the traps.
+1. **In-game surfaces** — the level-up and game-over popups, redesigned to show what the
+   player just did: score breakdown, accuracy, streaks, items used, mechanics triggered.
+2. **External analytics** — a batched, consent-gated export to a third-party service.
+3. **Balance work** — the original goal: how long levels take, where runs die, which
+   items get used, how streaks behave.
+
+The read model comes first. A logger that nobody reads is a logger nobody maintains;
+a metrics system the game itself renders is one that stays correct because a wrong
+number is visible on screen.
+
+> **Revision note.** Revised 2026-08-01 after an architecture study on generalizing the
+> metrics vocabulary (triggered by the observation that `CombatSoundRouter` already
+> aggregates the same events at a finer scope). The previous revision was audited against
+> source on 2026-07-26; everything that survives from it was re-verified. **Section
+> *Superseded decisions* lists what to unlearn** — it exists because the previous
+> revision was written to be followed literally and parts of it are now wrong.
+
+---
+
+## Goals
+
+| # | Goal | Consequence for the design |
+|---|---|---|
+| G1 | Level-up and game-over popups render per-level statistics | The counting core **ships in release builds**. It is no longer a dev-only subsystem. |
+| G2 | Metrics export to an external analytics service | The sink is a real seam: uniform record envelope, batching, consent gate, schema version, offline queue. |
+| G3 | Answer balance/pacing questions from real play data | Per-level and per-run records, flushed at boundaries, filterable by cheat/retry provenance. |
+| G4 | Adding a metric is cheap | A new counter costs two files and one line, not six files and a test suite. |
+
+---
+
+## Codebase delta since the 2026-07-26 audit
+
+Everything below landed after the previous revision was verified. Each row is a
+requirement change, not a note.
+
+| Change | Where | Impact |
+|---|---|---|
+| **Retry system** | `Game/Run/RetryTracker.cs`, `IRetryState.cs`, `UI/GameOver/GameOverScreen.cs:75-79` | A retry restarts at the **death level** through the ordinary `ResetRun` cascade with `_generation++` (`RunController.cs:105`), and the score carries over (`ScoreController.cs:94-98`) — so a retry is a *continuation of one run*, while the generation counter says otherwise. The previous revision assumed every run starts at level 1 and that non-game-over restarts were cheat-only. Treating a retry as a fresh run corrupts every levels-reached distribution — the headline analysis. See **R14–R14c** and *Run identity and retries*. |
+| **`LevelUpAbandonedMessage`** | `Game/Level/LevelController.cs:517` | A third ceremony exit the five-state machine does not model: the ceremony leaves `Completing` without presenting because the run is ending or restarting. Without it the gameplay clock wedges exactly as it would without `LevelUpAbortedMessage`. See **R8**. |
+| **Line-based health** | `Shared/Messages/WaveDamageMessage.cs`, `Game/Health/`, `UI/Health/HeartTrailController.cs` | Partially patched already. `WaveDamageMessage` carries `HeartsLost`, `BlockedSlots`, `RowLength` — three metrics, not one, and `OverflowCount` is now a misnomer. New signals: `StrikethroughArrivedMessage`, `ILossForecast.LossImminent`, `IDangerLevel.HeartsAtRisk`. See **R10**. |
+| **Hold-to-speed-up** | `Projectile/Controller/HoldSpeedUpController.cs` | New player-agency mechanic with zero coverage. Clocks sample `Time.unscaledTime`, so a level the player fast-forwarded reads identical to one they did not — the duration metric silently loses the mechanic. See **R11**. |
+| **Sweep + speed taps** | `Shared/Messages/SpeedTapMintedMessage.cs`, `Projectile/Model/IProjectileFlightState.cs` | `IProjectileFlightState` is *itself* a per-flight metrics record (`TotalCruiseTaps`, `ConsecutiveSweeps`, `SegmentPopCount`, `ConsecutiveWallBounces`) — the second ad-hoc per-flight aggregator in the codebase. |
+| **`Tougher` variant** | `Balloon/Type/BalloonType.cs` | `BalloonType` now has 8 values. The previous revision breaks pops down by **color only**, while `CombatSoundRouter` already buckets by variant. Balloon type is a required second axis. See **R5**. |
+| **Rainbow streak carry** | `Game/Score/ColorStreakTracker.cs` | Streak is no longer color-scoped in the way `MaxStreak` assumed; the carry across color changes is itself worth measuring. |
+| **`BoardDepletedMessage`** | `Balloon/Controller/BalloonControllerRegistry.cs` | Organic board clear — a level-outcome signal (cleared vs timed out) the records do not capture. |
+| **`ScorePointsGroupMessage.Multiplier`** | `Shared/Messages/ScorePointsGroupMessage.cs` | Score breakdown by multiplier tier is available on the bus. The popups want exactly this. |
+
+**Still true and re-verified:** `LevelTransitionCompletedMessage` is published in
+`TransitionAsync`'s `finally`; `GameOverMessage(FinalLevel, FinalScore)` is published by
+`RunController.EndRun` (`:96`); `PauseService.IsAnyPaused` is the reset-safe pause signal;
+`CheatState.AnyCheatUsed` **does not exist yet**; the registration site at the end of
+`RegisterGameplaySystems` (after `PierceDischargeEffects`, `GameScopeRegistration.cs:204`)
+is still the safe spot; `RegisterGameplaySystems` runs before `RegisterAudioRouters`
+(`GameLifetimeScope.cs:70,73`).
 
 ---
 
 ## Principles
 
-- **Gameplay only.** No PII, no device fingerprinting, no session identity beyond the
-  run generation counter.
-- **Subscriber-only collection.** The telemetry service consumes existing MessagePipe
-  messages. It never publishes. Subscribing to `ActorHitMessage` as an order-independent
-  observer is explicitly sanctioned (`Assets/Source/README.md`, hit-routing section);
-  never touch `IHitDispatcher`.
-- **Aggregate in memory, flush at boundaries.** Per-level and per-run accumulators,
-  flushed as one record when the level transition fully completes
-  (`LevelTransitionCompletedMessage`) or at game-over. No per-pop I/O or allocation
-  during bursts.
-- **Dev-only subsystem.** The entire subsystem (service + sink) is registered under
-  `#if UNITY_EDITOR || DEVELOPMENT_BUILD`. Release builds pay nothing — no
-  subscriptions, no increments. There is no `NoOpTelemetrySink`; tests use a
-  `RecordingTelemetrySink` fake they can assert against. If release telemetry ever
-  becomes a goal, that is the moment to revisit (a network sink behind `ITelemetrySink`
-  is a drop-in, not a redesign).
-- **Decomposed internals.** The service delegates to focused helpers (accumulators,
-  stopwatch, JSON writer). Each helper is a plain C# class — testable in isolation
-  without VContainer or Unity.
-- **Never throw at a flush boundary.** Both flush points publish before releasing
-  critical state (`LevelUpPopUp` publishes the dismissal *then* releases the time scale
-  and pause; `RunController.EndRun` publishes *then* transitions navigation). MessagePipe
-  runs handlers synchronously on the publisher's stack with no exception isolation, so
-  an escaping exception freezes the game. Telemetry data is never worth a soft-lock.
+- **Gameplay only.** No PII, no device fingerprinting. The session id is a `Guid`
+  generated per app launch and **never persisted** — persisting it would make it a
+  device fingerprint.
+- **Telemetry is never client profile data.** Records exist to leave the device (or the
+  dev log file); they are never written into the player's saved profile and never read
+  back to drive gameplay, progression, or UI defaults. Profile/progression state is a
+  different subsystem with a different owner (`RunMeta` today) — the two must not
+  converge. A metric that someone wants to persist for the player has stopped being a
+  metric and become progression; move it, don't extend the sink.
+- **Subscriber-only. The subsystem introduces zero new message types and never
+  publishes.** It consumes the existing bus. Subscribing to `ActorHitMessage` as an
+  order-independent observer is explicitly sanctioned (`Assets/Source/README.md`,
+  hit-routing section); never touch `IHitDispatcher`. This principle is what keeps
+  metrics from becoming a gameplay dependency.
+- **Aggregate in memory, snapshot at boundaries.** Per-flight/level/run accumulators;
+  immutable snapshots at ceremony entry and at flush. No per-pop I/O.
+- **Immutable across the read boundary.** Views never see a mutable accumulator.
+- **Never throw at a flush boundary.** MessagePipe runs handlers synchronously on the
+  publisher's stack with no exception isolation, and both flush points publish before
+  releasing critical state (`LevelUpPopUp` publishes the dismissal *then* releases the
+  time scale and pause; `RunController.EndRun` publishes *then* transitions navigation).
+  An escaping exception freezes the game. Metrics data is never worth a soft-lock.
+- **Decomposed internals.** Counting, boundary detection, snapshotting, serialization and
+  transport are separate plain-C# types, each testable without VContainer or Unity.
+- **Wire names are append-only.** Once a metric's wire name ships to an external
+  warehouse it is never renamed or reordered — the same discipline `GameSoundId` carries.
+
+---
+
+## Requirements
+
+Numbered so task specs can cite them. Each is testable.
+
+### Scopes and boundaries
+
+- **R1** — Metrics are collected at four nested scopes: **Session ⊃ Run ⊃ Level ⊃ Flight**.
+- **R2** — A **Flight** opens on `ProjectileLoadedMessage` (`Thrower/ThrowerController.cs:232`)
+  and **seals** on `ProjectileDestroyedMessage` (`Projectile/View/ProjectileView.cs:406`).
+  The `[Destroyed, next Loaded)` window is *interflight*: increments there belong to the
+  Level and to no flight. This deliberately differs from `CombatSoundRouter`'s boundary
+  (which clears only on `Loaded`, so its "flight" straddles the ceremony); the metrics
+  definition is chosen so that **Σ flights ⊆ level** holds.
+- **R3** — A **Level** flushes on `LevelTransitionCompletedMessage` (not on
+  `LevelUpDismissedMessage` — straggler trail points land in between and would be charged
+  to the next level). A **Run** flushes on `GameOverMessage`.
+- **R4** — Roll-up Flight → Level → Run → Session is **mechanical**, driven by a declared
+  fold rule per metric, not by hand-written accumulate code.
+
+### Vocabulary
+
+- **R5** — Counters are addressed by a `MetricId` enum over dense `int[]` storage, with
+  three fixed dimension axes: **Color**, **BalloonType**, **ItemType**. A fourth axis is
+  out of scope; if one is ever needed, that is the moment to revisit the whole shape.
+- **R6** — A static `MetricCatalog` is the single browsable table mapping each `MetricId`
+  to its wire name, unit, and fold rule (`Sum` / `Max` / `Last`). Adding a metric =
+  one enum value + one catalog row + one `Increment` call site.
+- **R7** — "Mechanic triggered" events use the same vocabulary as gameplay counters:
+  pierce discharges, speed taps minted, sweeps, shields gained/lost, strikethroughs,
+  overflow hearts lost, items activated. No parallel mechanism.
+
+### State machine
+
+- **R8** — The Level state machine has five states (`Idle`/`Playing`/`Ceremony`/
+  `Transitioning`/`Ended`) and handles **four** ceremony exits:
+  `LevelUpDismissedMessage` → `Transitioning`; `LevelUpAbortedMessage` → `Playing`
+  (discard ceremony clock, level index **and ceremony snapshot**);
+  **`LevelUpAbandonedMessage` → `Ended`-or-`Playing` per the run's fate**;
+  `GameOverMessage` → `Ended`.
+- **R9** — While in `Ended`, every handler early-returns. The loss cinematic completes
+  straggler score trails *after* `GameOverMessage`; without the gate those arrivals
+  corrupt the next run.
+
+### Fields and derivation
+
+- **R10** — `WaveDamageMessage` contributes three metrics, not one: `HeartsLost`
+  (rename `OverflowCount` → `HeartsLost`), `BlockedSlots`, and a derived
+  hearts-lost-per-wave max. `RowLength` is context, not a metric.
+- **R11** — Hold-to-speed-up is measured explicitly: total held seconds per level and
+  per flight, plus a hold-engaged flight count. Duration metrics stay on
+  `Time.unscaledTime` (see *Time tracking*) — the hold metric is what makes a
+  fast-forwarded level distinguishable from a slow one.
+- **R12** — Pops break down by **both** color and balloon type. Unknown color ids
+  (rainbow, paint-converted) and actors without `IHasColor` fall into a trailing
+  *other* bucket and must never throw or index out of range.
+- **R13** — Accuracy uses `DirectHitPops` (`ActorHitMessage` with
+  `(Context.Flags & DamageFlags.DirectHit) != 0`), never `ShotsFired / TotalPops` —
+  total pops includes item-, cheat- and board-driven pops.
+- **R14** — Run identity is **three ids, not one** (see *Run identity and retries*):
+  `RunId` (the run chain — stable across retries), `AttemptId` (the `RunController`
+  generation), and `AttemptIndex` (0 for the original, 1..N for retries within the
+  chain). The service derives all three itself from `IRetryState.RetryLevel` at reset
+  time — no new gameplay state. Read it **before** `RetryTracker` zeroes it (see **R21**).
+- **R14a** — Every level record carries `LevelAttemptOrdinal`: how many times *this level
+  index* has been played in this chain. `AttemptIndex` alone is wrong per level — after a
+  retry at level 7, levels 8+ carry `AttemptIndex = 1` but are first attempts. Only the
+  ordinal answers "how many tries did this level take".
+- **R14b** — `RunRecord.TotalScore` comes from `GameOverMessage.FinalScore` and is
+  **never** summed from level records. Score carries across a retry
+  (`ScoreController.ClearRunState` restores `_levelStartScore` when `RetryLevel > 0`), so
+  a chain with a replayed level has two records for that level and summing them
+  double-counts.
+- **R14c** — Attempt history is **export-only**. The UI read model exposes the current
+  attempt; the popups show the try that succeeded, and prior attempts are irrelevant to
+  them. Per-level history lives in the envelope stream, not in `ILevelMetricsView`.
+- **R15** — Level outcome distinguishes *cleared* (`BoardDepletedMessage`) from
+  *progressed on score* from *partial at game over*.
+
+### Read model (in-game consumption)
+
+- **R16** — Views consume metrics through a narrow read-only interface,
+  `ILevelMetricsView`, exposing an `IReadOnlyReactiveProperty<LevelMetricsSnapshot>`.
+  Payloads are immutable. Views read `.Value` at render time; the subsystem publishes
+  no message and the View never triggers a snapshot.
+- **R17** — **Two snapshots per level.** The *ceremony* snapshot is taken on
+  `ScoreLevelUpMessage` and is what the level-up popup renders. The *flush* snapshot is
+  taken on `LevelTransitionCompletedMessage` and is what the sink receives and what folds
+  into the run. Both are logged; the divergence is data (a large gap means the ceremony
+  fires too early), not a bug to hide.
+- **R18** — The popup shows **projected** points, not banked. `ScoreController` already
+  snaps `TotalScore` to `_projectedTotal` on level-up so the popup never shows a stale
+  low number while trails sit frozen; the stats block must adopt the same convention or
+  it will contradict the score number beside it on the same popup.
+- **R19** — `GameOverScreen` reads the run snapshot **after** its presentation-gate
+  `await`, never inside its `GameOverMessage` handler — otherwise it depends on
+  MessagePipe subscriber order.
+- **R20** — Only `BalloonParty.UI.*` types may inject `ILevelMetricsView`, and every
+  consumer must render correctly against an empty/default snapshot. Metrics must never
+  become load-bearing for gameplay.
+
+### Lifecycle and registration
+
+- **R21** — The service is `IRunResettable` with `ResetOrder => RunResetOrder.Quiesce`
+  (0), which must stay **below** `RetryTracker`'s 110 (`RunResetOrder.Score + 10`) so it
+  reads `IRetryState.RetryLevel` before that tracker zeroes it. Pin the inequality with a
+  unit test. **Do not also subscribe `RunResetMessage`** — `RunController` invokes
+  `ResetRun` directly, so both would double-reset.
+- **R22** — Session state (`SessionTelemetryContext`: session id, schema version, launch
+  timestamp) registers in **`AppLifetimeScope`**, not `GameLifetimeScope`, so it survives
+  scene reloads.
+- **R23** — Clocks do not start in `Start()` — entry points start during the Launcher's
+  additive preload, long before the player taps Play. Enter `Playing` on
+  `INavigation.Current == NavigationState.Game`.
+
+### Export
+
+- **R24** — One uniform record: `ITelemetrySink.Write(in TelemetryEnvelope)` with a
+  `RecordKind` discriminator, `SchemaVersion`, `SessionId`, `RunId`, `LevelIndex`,
+  timestamp, and the metric set. **Not** an overload per record type — that makes every
+  sink change when a record kind is added, which would have made the promised network
+  sink a redesign rather than a drop-in.
+- **R25** — The never-throw guard (`try/catch` → `Log.Warn` → permanent `_disabled`
+  latch for the session) lives in an abstract `TelemetrySinkBase` template method, not in
+  any single sink. A future HTTP sink that throws at a flush boundary soft-locks the game
+  exactly like a file sink would.
+- **R26** — Cross-cutting concerns are decorators over `ITelemetrySink`: consent gate →
+  batcher → composite fan-out. Consent is **never** an `if` inside the service.
+- **R27** — Serialization is hand-rolled and reflection-free (see *Serialization*), a
+  single loop over `MetricCatalog`, one reused `StringBuilder`, every numeric and date
+  append through `CultureInfo.InvariantCulture`.
+- **R28** — Build gating is **three tiers**, not one `#if` (see *Gating tiers*). When no
+  sink is registered, `CompositeTelemetrySink` holds an empty array and `Write` is an
+  empty loop — do not also add a `NullTelemetrySink`.
+
+### Performance
+
+- **R29** — Hot-path handlers allocate nothing: no string interpolation, no LINQ, no
+  `Log.Info` in the `ActorHitMessage` / `StreakChangedMessage` / `ScoreTrailArrivedMessage`
+  paths. Increments are `_counters[(int)id]++` and `_axis[i]++`. Measured worst case is
+  ~10–25 `ActorHitMessage` in one frame (bomb/laser/lightning resolve synchronously) plus
+  tens of `ScoreTrailArrivedMessage` in the transition frame; peak is low hundreds of
+  invocations per second.
+- **R30** — **No pooling, no buffering, no `ITickable`.** Snapshot allocation at ceremony
+  and flush (~30–120 s apart) is negligible. `BatchingTelemetrySink` reuses one list.
 
 ---
 
@@ -49,454 +246,430 @@ game's internal event stream and writing structured records to a local log file.
 
 ```
 Assets/Source/Game/Telemetry/
-├── GameplayTelemetryService.cs      ← VContainer entry point (orchestrator + state machine)
-├── LevelTelemetryAccumulator.cs     ← mutable counters/timers for one level + Snapshot()
-├── RunTelemetryAccumulator.cs       ← run totals, bests + Snapshot()
+├── MetricId.cs                      ← counter vocabulary (dense, append-only)
+├── TimerId.cs                       ← clock vocabulary (Gameplay/Ceremony/Wall/Hold)
+├── MetricAxis.cs                    ← Color | BalloonType | ItemType
+├── MetricCatalog.cs                 ← id → wire name, unit, fold rule (static)
+├── FoldRule.cs                      ← Sum | Max | Last
+├── MetricSet.cs / IReadOnlyMetricSet.cs   ← dense int[] counters + axis tables
+├── MetricScope.cs                   ← one scope's set + timers + Seal()/Reset()
 ├── TelemetryStopwatch.cs            ← clock-owning timer (Pause/Resume/Elapsed/Reset)
-├── LevelRecord.cs                   ← sealed DTO, per-level snapshot
-├── RunRecord.cs                     ← sealed DTO, per-run summary
-├── ColorPopCount.cs                 ← typed breakdown entry (color + count)
-├── ItemActivationCount.cs           ← typed breakdown entry (item type + count)
-├── ITelemetrySink.cs                ← write interface
-├── JsonLinesTelemetrySink.cs        ← local-file sink (dev builds only)
-├── TelemetryJson.cs                 ← hand-rolled JSON writer (static, StringBuilder-based)
+├── LevelMetricsSnapshot.cs          ← sealed immutable per-level read surface
+├── RunMetricsSnapshot.cs            ← sealed immutable per-run read surface
+├── ColorPopCount.cs / BalloonTypeCount.cs / ItemActivationCount.cs
+├── ILevelMetricsView.cs             ← the UI read seam
+├── IFlightScope.cs / FlightScopeService.cs   ← shared flight boundary
+├── GameplayMetricsService.cs        ← entry point: state machine + routing + snapshots
+├── SessionTelemetryContext.cs       ← session id, schema version (App scope)
+├── TelemetryEnvelope.cs             ← uniform wire record (readonly struct)
+├── TelemetryEnvelopeSerializer.cs   ← hand-rolled JSON, catalog-driven
+├── ITelemetrySink.cs / TelemetrySinkBase.cs
+├── CompositeTelemetrySink.cs / BatchingTelemetrySink.cs / ConsentGateSink.cs
+├── ITelemetryConsent.cs
+├── JsonLinesTelemetrySink.cs        ← dev-only local file sink
+├── HttpAnalyticsSink.cs             ← Wave F
 └── README.md
 ```
 
-Deleted from the original design: `TelemetryPauseTracker` (replaced by subscribing
-`PauseService.IsAnyPaused` — see *Pause semantics*), `TelemetrySnapshotFactory`
-(replaced by `Snapshot()` methods on the accumulators — a cross-object factory would
-force both accumulators to expose their whole mutable interior), and
-`NoOpTelemetrySink` (subsystem is dev-only; see *Principles*).
+**Namespace:** `BalloonParty.Game.Telemetry` (unchanged — the folder, the README and the
+`Plans.md` `@subpage` registration all point here; renaming to `.Metrics` is churn
+without payoff).
 
-**Namespace:** `BalloonParty.Game.Telemetry`
-
-### Class diagram
+### Scope hierarchy
 
 ```mermaid
-classDiagram
-    class GameplayTelemetryService {
-      <<IStartable, IDisposable, IRunResettable>>
-      +int ResetOrder
-      +Start()
-      +Dispose()
-      +ResetRun(int generation)
+stateDiagram-v2
+    direction LR
+    [*] --> Session : App launch (AppLifetimeScope)
+    state Session {
+        [*] --> Run
+        state Run : "Run (RunController generation + retry provenance)"
+        state Run {
+            [*] --> Level
+            state Level : "Level (Idle/Playing/Ceremony/Transitioning/Ended)"
+            state Level {
+                [*] --> Flight
+                Flight --> Interflight : ProjectileDestroyedMessage (flight seals)
+                Interflight --> Flight : ProjectileLoadedMessage
+                note right of Interflight
+                  Ceremony + Ascent live here.
+                  Straggler ScoreTrailArrived lands here.
+                  Belongs to the LEVEL, to no flight.
+                end note
+            }
+        }
     }
-    class LevelTelemetryAccumulator {
-      -int[] _popsByColor
-      -int[] _itemCounts
-      +int ShotsFired
-      +int MaxStreak
-      +Snapshot(...) LevelRecord
-      +Reset()
-    }
-    class RunTelemetryAccumulator {
-      +int RunId
-      +Absorb(LevelRecord)
-      +Snapshot(...) RunRecord
-    }
-    class TelemetryStopwatch {
-      +float Elapsed
-      +Pause()
-      +Resume()
-      +Reset()
-    }
-    class ITelemetrySink {
-      <<interface>>
-      +Write(LevelRecord)
-      +Write(RunRecord)
-    }
-    class JsonLinesTelemetrySink
-    class TelemetryJson {
-      <<static>>
-      +Serialize(LevelRecord) string
-      +Serialize(RunRecord) string
-    }
-    class IHasColor {
-      <<interface>>
-      +Color : IReadOnlyReactiveProperty~string~
-    }
-    class IHasItemSlot {
-      <<interface>>
-      +Item : IReadOnlyReactiveProperty~ItemType~
-    }
-
-    GameplayTelemetryService --> LevelTelemetryAccumulator
-    GameplayTelemetryService --> RunTelemetryAccumulator
-    GameplayTelemetryService --> ITelemetrySink
-    GameplayTelemetryService ..> IHasColor : casts ActorHitMessage.Actor
-    GameplayTelemetryService ..> IHasItemSlot : casts ItemActivatedMessage.Balloon
-    LevelTelemetryAccumulator --> TelemetryStopwatch
-    ITelemetrySink <|.. JsonLinesTelemetrySink
-    JsonLinesTelemetrySink --> TelemetryJson
 ```
 
-### Flush state machine
+| Scope | Opens on | Closes on | Boundary owner |
+|---|---|---|---|
+| Session | `AppLifetimeScope` build | process exit | `SessionTelemetryContext` |
+| Run | first `NavigationState.Game`, then `ResetRun(generation)` | `GameOverMessage` | `RunController` |
+| Level | run start / `LevelTransitionCompletedMessage` | `LevelTransitionCompletedMessage`, or `GameOverMessage` (partial) | `LevelController` phase machine |
+| Flight | `ProjectileLoadedMessage` | `ProjectileDestroyedMessage` | `ThrowerController` + `ProjectileView` |
 
-The service is an explicit five-state machine. This is what makes the abort edge and
-the post-game-over straggler leak ordinary transitions instead of playtest bugs.
+### Level flush state machine
 
 ```mermaid
 stateDiagram-v2
     [*] --> Idle : Start()
     Idle --> Playing : INavigation.Current == Game
-    Playing --> Ceremony : ScoreLevelUpMessage
+    Playing --> Ceremony : ScoreLevelUpMessage / take CEREMONY snapshot
     Ceremony --> Transitioning : LevelUpDismissedMessage
-    Ceremony --> Playing : LevelUpAbortedMessage (discard ceremony clock, roll back level index)
-    Transitioning --> Playing : LevelTransitionCompletedMessage / flush LevelRecord + reset
-    Playing --> Ended : GameOverMessage / flush partial LevelRecord + RunRecord
-    Ceremony --> Ended : GameOverMessage (deferred loss)
+    Ceremony --> Playing : LevelUpAbortedMessage (discard ceremony clock, level index, snapshot)
+    Ceremony --> Ended : LevelUpAbandonedMessage (run ending/restarting) or GameOverMessage
+    Transitioning --> Playing : LevelTransitionCompletedMessage / FLUSH snapshot + reset
+    Playing --> Ended : GameOverMessage / flush partial level + run record
     Transitioning --> Ended : GameOverMessage
-    Ended --> Playing : ResetRun(generation) / RunId = generation
+    Ended --> Playing : ResetRun(generation) / RunId = generation, retry provenance captured
     note right of Ended : accumulation OFF — post-game-over straggler\ntrails must NOT leak into the next run
 ```
 
-While in `Ended`, all message handlers early-return. The loss cinematic completes
-straggler score trails *after* `GameOverMessage`
-(`GameOverLossCinematic.HoldOutgoingContent` → `ScoreTrailService` → `CompleteAll`);
-without the `Ended` gate those arrivals corrupt the next run's accumulator.
-
-### Sequence diagram — level flush
+### Level flush sequence
 
 ```mermaid
 sequenceDiagram
     participant Bus as MessagePipe
-    participant Svc as TelemetryService
-    participant Lvl as LevelAccumulator
+    participant Svc as GameplayMetricsService
+    participant Lvl as MetricScope (Level)
+    participant Popup as LevelUpPopUp (View)
     participant Trails as ScoreTrailService
     participant Sink as ITelemetrySink
 
-    Bus->>Svc: gameplay msgs (fired / hit / item / shield / blocked)
+    Bus->>Svc: gameplay msgs (fired / hit / item / shield / wave damage)
     Svc->>Lvl: increment counters
     Bus->>Svc: ScoreLevelUpMessage (NewLevel)
-    Svc->>Lvl: gameplay clock -> Pause, ceremony clock -> Resume
+    Svc->>Lvl: gameplay clock Pause, ceremony clock Resume
+    Svc->>Svc: CeremonyLevel.Value = Seal() (immutable snapshot)
+    Popup->>Svc: read CeremonyLevel.Value after its gate await
     Bus->>Svc: LevelUpDismissedMessage
-    Svc->>Lvl: ceremony clock -> Pause
     Note over Trails: LevelTransitionController.HoldOutgoingContent -> CompleteAll
     Trails->>Bus: ScoreTrailArrivedMessage (stragglers)
     Bus->>Svc: ScoreTrailArrivedMessage
     Svc->>Lvl: PointsBanked += Points (STILL the completed level)
     Bus->>Svc: LevelTransitionCompletedMessage
-    Svc->>Sink: Write(LevelRecord)
-    Svc->>Lvl: Reset(); gameplay clock -> Resume
+    Svc->>Sink: Write(envelope from FLUSH snapshot)
+    Svc->>Lvl: Absorb into Run; Reset(); gameplay clock Resume
 ```
 
-### Service
+### Dependency graph
 
-`GameplayTelemetryService` — plain C# class registered as an entry point. Orchestrates
-the helpers and owns the state machine; owns no counting state itself.
+```mermaid
+graph TD
+    Bus[MessagePipe bus] -->|ActorHit / Projectile* / Score* / Level* / Shield* / Item* / WaveDamage / Strikethrough| Svc[GameplayMetricsService]
+    Bus --> FS[FlightScopeService]
+    FS -->|IFlightScope| Svc
+    FS -->|IsInFlight| Music[MusicSoundRouter]
+    Pause[PauseService.IsAnyPaused] --> Svc
+    Retry[IRetryState] -->|read in ResetRun, before RetryTracker zeroes it| Svc
+    Palette[IGamePalette.ProgressColorNames] --> Svc
+    Svc --> Scopes[MetricScope x4]
+    Scopes --> Cat[MetricCatalog fold rules]
+    Svc -->|Write envelope| Consent[ConsentGateSink] --> Batch[BatchingTelemetrySink] --> Comp[CompositeTelemetrySink]
+    Comp --> Json[JsonLinesTelemetrySink DEV ONLY]
+    Comp --> Http[HttpAnalyticsSink Wave F]
+    Svc -->|ILevelMetricsView| Popup[LevelUpPopUp View]
+    Svc -->|ILevelMetricsView| GO[GameOverScreen View]
+    Combat[CombatSoundRouter] -.->|keeps its OWN counters — intentional, see below| Bus
+```
 
-| Interface | Purpose |
-|---|---|
-| `IStartable` | Subscribe to messages via `CompositeDisposable` |
-| `IDisposable` | Dispose `CompositeDisposable`; close the sink |
-| `IRunResettable` | `ResetOrder => RunResetOrder.Quiesce` — see below |
+### Metric vocabulary — why a registry, not named fields
 
-**`IRunResettable`, precisely:** `RunController` invokes `ResetRun(generation)`
-*directly* on registered `IRunResettable`s in ascending `ResetOrder`
-(`Game/Run/RunController.cs`). `RunResetMessage` is a separate broadcast for views
-outside that graph — **do not also subscribe to it** (that would double-reset). Use
-`RunResetOrder.Quiesce` (0), same as `ScoreTrailService` and `SfxService`. On reset:
-silently clear both accumulators (no flush — the game-over path already flushed;
-cheat-restart paths are dev-only), set `RunId = generation`. `RunId` initialises to 1,
-matching `RunController`'s generation counter — do not keep a second counter.
+The decisive argument is the **fold rule**, not the hot path — both layouts are
+allocation-free.
 
-Constructor receives all dependencies via **constructor injection** (a bare `public`/
-`internal` ctor resolves fine in VContainer; `[Inject]` on the ctor is also idiomatic
-here — either passes review). Subscribe with **method groups**, not lambdas
-(`.Subscribe(OnActorHit)`; for payload-less messages `Subscribe(_ => OnFoo())` matches
-`ColorStreakTracker`). Collect subscriptions in a `CompositeDisposable` via
-`.AddTo(_subscriptions)` (`ItemSoundRouter` is the copyable shape).
+| Criterion | Named fields per record | Enum registry (chosen) |
+|---|---|---|
+| Adding one metric | 6 files: DTO + level accumulator + snapshot + serializer + run fold + tests | 2 files + 1 line |
+| Level→Run roll-up | hand-written `Absorb` that silently drifts from the DTO | one loop over declared fold rules |
+| Serialization | one change per field | one loop, zeros skipped |
+| Hot path | `_pops++` | `_counters[(int)id]++` — one bounds check, zero alloc |
+| Discoverability | best | **the one real cost** — mitigated by `MetricCatalog` being a single browsable table |
 
-**Clock start:** entry points `Start()` during the Launcher's additive preload, long
-before the player taps Play. Do not start clocks in `Start()` — subscribe
-`INavigation.Current` and enter `Playing` on `NavigationState.Game`
-(`RunController` shows the idiom).
+Rejected: `Dictionary<MetricId,int>` (hash per hit and resize allocations during
+10–25-hit frames — not for boxing, which would not occur), and a generic
+N-dimensional metric cube (YAGNI, and it destroys the catalog's discoverability,
+which is the registry's only real cost and its only real defence).
 
-**Registration:** append at the **end** of `GameScopeRegistration.RegisterGameplaySystems`
-(after `PierceDischargeEffects`) — the method is annotated "Do not reorder or split",
-and telemetry has no start-order dependency, so the end is the safe spot. Wrap the
-service *and* sink registrations in `#if UNITY_EDITOR || DEVELOPMENT_BUILD` (precedent:
-the `RegisterCheats` guard and the `IThermalSource` swap in the same file).
+### Audio: extract the flight *boundary*, not the counters
 
-### Internal helpers
+`CombatSoundRouter` keeps nine per-flight counters (`:40-52`) and uses them as musical
+pitch ramps. **They stay where they are.** The duplication is eight ints and a
+dictionary, incremented a handful of times per frame; the merge would cost far more:
 
-| Type | Responsibility |
-|---|---|
-| `LevelTelemetryAccumulator` | Mutable counters and `TelemetryStopwatch` instances for the current level. `Snapshot(...)` produces a `LevelRecord`; `Reset()` reuses the instance across levels without reallocation. Pre-sizes all collections in the constructor. |
-| `RunTelemetryAccumulator` | Run-wide totals and bests. `Absorb(LevelRecord)` folds each flushed level into the run; increments `LevelsCompleted` **only when `record.Completed` is true**. `Snapshot(...)` produces the `RunRecord`. |
-| `TelemetryStopwatch` | Pure C# timer that **owns its clock**: constructed with a `Func<float> clock`, keeps `_lastSample` internally, and folds `clock() - _lastSample` into `Elapsed` on `Pause()` / `Resume()` / `Elapsed` reads. No `Advance()` in the public API and no "call at every boundary" contract — miss-a-boundary bugs are structurally impossible. Tests inject a mutable fake clock. |
-| `TelemetryJson` | Static serializer: `Serialize(LevelRecord)` / `Serialize(RunRecord)` → one JSON line. See *Serialization*. |
+- **Read-before-write.** The router reads the count, plays the note, *then* increments
+  (`:127-131`, and the `PopSemitoneOffset`/`IncrementPopCounter` pair at `:300-339`). If
+  audio read a shared bus-subscribing aggregate instead, the pitch would depend on
+  MessagePipe subscription order — and since `RegisterGameplaySystems` runs before
+  `RegisterAudioRouters`, every ramp would come out a whole tone sharp, with the first
+  pop of a colour off the root. Silent, ear-only, in a subsystem whose entries currently
+  ship dormant. This is exactly the coupling `HitPipeline` exists to eliminate
+  (*"MessagePipe's subscription order is enforced nowhere"*), and re-introducing it for a
+  cosmetic subsystem is a straight regression.
+- **Divergent reset semantics.** The router clears `_colorPopsThisFlight` on
+  `StreakChangedMessage(0)` (`:267-270`). That is musically correct and analytically
+  wrong: applying it to the shared aggregate would make `PopsByColor` under-report by
+  every pop before the last streak break — wrong data that looks entirely plausible.
 
-### Sink
+**What is shared instead:** `IFlightScope` (`FlightIndex`, `IsInFlight`), a tiny plain-C#
+service. Flight state is currently tracked five independent times (`CombatSoundRouter`,
+`MusicSoundRouter._inFlight`, `HoldSpeedUpController`, `HoldSpeedUpTooltip`,
+`WindSoundRouter` via live cruise state). Consumers react to a **state flip** rather than
+reading a counter mid-hit, so there is no ordering hazard. `MusicSoundRouter`'s three
+subscriptions collapse to one.
 
-`ITelemetrySink` — one method per record type (`Write(LevelRecord)`,
-`Write(RunRecord)`), plus `Dispose()`.
+Document the duplication as intentional in **both** `Audio/README.md` and
+`Game/Telemetry/README.md`, or someone will "fix" it.
 
-`JsonLinesTelemetrySink` (the only production implementation, dev builds only):
+### Run identity and retries
 
-| Aspect | Detail |
-|---|---|
-| Path | `Application.persistentDataPath + "/telemetry/"` |
-| File naming | `telemetry_yyyyMMdd_HHmmss.jsonl` — one file per app session; format the name with `CultureInfo.InvariantCulture` (a non-Gregorian device calendar otherwise writes year 2569) |
-| Stream | **Open one `StreamWriter` in `Start()` (after rotation) and keep it for the session**; append + `Flush()` per record; close in `Dispose()`. Do not open/append/close per flush — the file-open on Android `persistentDataPath` dominates the write cost, and neither flush boundary is an idle frame. |
-| Rotation | On start, keep the 20 most recent files, delete the rest. Sort by **file name** (lexicographically ordered by construction) — not `File.GetLastWriteTime`, which is N extra `stat` calls on the scope-start frame. |
-| Robustness | Every public method body wrapped in `try/catch (Exception e) { Log.Warn(...); _disabled = true; }`. A sink that has thrown once stops attempting writes for the session. This is the project's **first runtime file I/O** — there is no precedent to copy, and an unhandled `IOException` at a flush boundary soft-locks the game (see *Principles*). |
-| Game-over write | Snapshot the records **synchronously** on `GameOverMessage`, then defer the actual write one frame (`UniTask.Yield` + `.Forget()`, guarded) — `GameOverMessage` lands on the first frame of the loss push-in, not an idle frame. The deferred write must own the immutable snapshots, never the live accumulators (`RestartRun` may run before it completes). |
+`RunController._generation` increments on **every** reset, retry included
+(`RunController.cs:105`) — so it is an *attempt* counter, and using it as run identity
+corrupts every levels-reached distribution. The rest of the game already disagrees with
+that reading: on a retry `ScoreController.ClearRunState` restores the score to
+`_levelStartScore` rather than zero (`:94-98`), and `RunMeta.RecordRun` runs on the
+retried attempt too — the domain treats a retry as a **continuation of one run**.
 
-The service also wraps its own flush calls in the same guard — defense in depth on
-both sides of the interface.
+| Id | Increments when | Meaning |
+|---|---|---|
+| `RunId` (chain) | a reset arrives with `RetryLevel == 0` | one player run, score-continuous, matches the player's mental model |
+| `AttemptId` | every reset | `RunController` generation, as-is |
+| `AttemptIndex` | every retry within the chain | 0 = original, 1..N = retries |
+| `LevelAttemptOrdinal` | per level index, within the chain | **the per-level number** — see below |
+
+The service derives all four from `IRetryState.RetryLevel` alone, read at
+`RunResetOrder.Quiesce` before `RetryTracker` zeroes it (**R21**). No gameplay-side change.
+
+**Why `AttemptIndex` is not a per-level answer.** Retries restart at the death level
+(`GameOverScreen.cs:76` → `LevelController.cs:312`), so a chain that dies at level 7 and
+retries produces records for 1…7, then 7, 8, 9…. All of the second attempt's records
+carry `AttemptIndex = 1`, but only level 7 was actually replayed — levels 8+ are first
+attempts that merely happened during the second attempt. Segmenting level difficulty by
+`AttemptIndex` would wrongly mark level 9 as retried. `LevelAttemptOrdinal` (a small
+`Dictionary<int,int>` at chain scope, cleared only on a fresh chain) stamps level 7 with
+2 and levels 8+ with 1, which is what "how many tries did this level take" actually means.
+
+**Persistence: none, by design.** Level records live in memory for the duration of their
+scope, are snapshotted, handed to the sink, and reset. Nothing is written to the player's
+profile — telemetry leaves the device (or lands in the dev log) and is done. This is a
+constraint, not a missing feature: the moment a metric is persisted client-side it stops
+being telemetry and becomes progression, which is `RunMeta`'s job, not this subsystem's.
+
+The only cross-session state in the game today is `RunMeta`'s two PlayerPrefs ints
+(`BestLevel`, `BestScore`) — which, note for analytics, are **retry-inclusive**, since
+`EndRun` records them on retried attempts too.
+
+### Read model
+
+```csharp
+internal interface ILevelMetricsView
+{
+    IReadOnlyReactiveProperty<LevelMetricsSnapshot> CeremonyLevel { get; }
+    LevelMetricsSnapshot LastFlushedLevel { get; }
+    RunMetricsSnapshot Run { get; }
+}
+```
+
+`LevelMetricsSnapshot` is a `sealed` immutable class: `int this[MetricId]`,
+`float this[TimerId]`, `IReadOnlyList<ColorPopCount> PopsByColor`,
+`IReadOnlyList<BalloonTypeCount> PopsByBalloonType`,
+`IReadOnlyList<ItemActivationCount> ItemsActivated`, `int LevelIndex`, `bool Completed`.
+
+**Scope: the current attempt only.** The popups show the try that succeeded; earlier
+attempts at the same level are irrelevant to them (**R14c**). The read model therefore
+holds no history and the retry ids are carried for the export stream's benefit, not the
+UI's. If a future surface wants "you cleared this on try 3", that is one extra field on
+the snapshot, not a retained record set.
+
+Rejected alternatives: **publishing a `LevelStatsReadyMessage`** (two subscribers of
+`ScoreLevelUpMessage` with unenforced order race the popup's async show, and it breaks
+the subscriber-only principle); **an injected `Snapshot()` the View calls** (hands the
+View the ability to snapshot mid-burst). The chosen shape is also the established repo
+idiom — `GameOverScreen` already injects `IRunMeta` and reads `BestLevel.Value` at render
+time; `IPlayerHealth.Current`, `IDangerLevel.Level` and `IColorStreak` are the same shape.
+
+### Export layer
+
+```mermaid
+classDiagram
+    class ITelemetrySink {
+        <<interface>>
+        +Write(in TelemetryEnvelope)
+        +FlushAsync(CancellationToken) UniTask
+        +Dispose()
+    }
+    class TelemetrySinkBase {
+        <<abstract>>
+        -bool _disabled
+        +Write(in TelemetryEnvelope)
+        #WriteCore(in TelemetryEnvelope)*
+    }
+    class TelemetryEnvelope {
+        <<readonly struct>>
+        +RecordKind Kind
+        +int SchemaVersion
+        +string SessionId
+        +int RunId
+        +int LevelIndex
+        +long TimestampUtcTicks
+        +IReadOnlyMetricSet Metrics
+    }
+    ITelemetrySink <|.. TelemetrySinkBase
+    TelemetrySinkBase <|-- JsonLinesTelemetrySink
+    TelemetrySinkBase <|-- HttpAnalyticsSink
+    ITelemetrySink <|.. BatchingTelemetrySink
+    ITelemetrySink <|.. ConsentGateSink
+    ITelemetrySink <|.. CompositeTelemetrySink
+    BatchingTelemetrySink --> ITelemetrySink : inner
+    ConsentGateSink --> ITelemetrySink : inner
+    CompositeTelemetrySink --> ITelemetrySink : fan-out
+    JsonLinesTelemetrySink --> TelemetryEnvelopeSerializer
+    TelemetryEnvelopeSerializer --> MetricCatalog
+```
+
+| In the interface | In the base | In a decorator |
+|---|---|---|
+| `Write(in TelemetryEnvelope)`, `FlushAsync`, `Dispose` | never-throw guard, `_disabled` latch, re-entrancy guard, `WriteCore` hook | batching, consent, fan-out, offline queue/retry |
+
+`JsonLinesTelemetrySink` (dev only) keeps the previously-verified policy: path
+`Application.persistentDataPath + "/telemetry/"`; file
+`telemetry_yyyyMMdd_HHmmss.jsonl` formatted with `CultureInfo.InvariantCulture` (a
+non-Gregorian device calendar otherwise writes year 2569); **one `StreamWriter` opened in
+`Start()` and kept for the session** (the file-open on Android `persistentDataPath`
+dominates the write cost and neither flush boundary is an idle frame); rotation keeps the
+20 most recent files sorted **by file name**, not `File.GetLastWriteTime` (which is N
+extra `stat` calls on the scope-start frame). Game-over records are snapshotted
+synchronously and the write deferred one frame (`UniTask.Yield` + guarded `.Forget()`) —
+`GameOverMessage` lands on the first frame of the loss push-in. The deferred write owns
+the immutable snapshots, never the live scopes.
+
+### Gating tiers
+
+| Tier | Contents | Gate | Ships? |
+|---|---|---|---|
+| **Core** | vocabulary, catalog, `MetricSet`, `MetricScope`, `TelemetryStopwatch`, `FlightScopeService`, `GameplayMetricsService`, snapshots, `ILevelMetricsView` | none | **yes** — the popups need it |
+| **Export** | envelope, serializer, sink base, batching/consent/composite, HTTP sink | runtime consent + config, not `#if` | **yes**, inert until consent |
+| **Dev-only** | `JsonLinesTelemetrySink`, telemetry viewer window | `#if UNITY_EDITOR \|\| DEVELOPMENT_BUILD` | no |
+| **Cheat read** | `CheatState.*` read at flush | `#if UNITY_EDITOR \|\| DEVELOPMENT_BUILD \|\| CHEATS_IN_RELEASE` **with an `#else` defaulting false** | no |
+
+The double guard and the triple guard are different on purpose — **do not harmonise
+them.** `dotnet build` defines `UNITY_EDITOR`, so a missing `#else` compiles locally and
+breaks only the real release build.
+
+The release cost of shipping Core is ~6 int increments per `ActorHitMessage`, peak low
+hundreds per second. That is the honest price of stats in the popup.
 
 ### Serialization
 
-**Hand-rolled, no reflection. This is not a style preference; neither library option
-works:**
+Hand-rolled, no reflection. Neither library option works, and this is not a style
+preference:
 
 - **Newtonsoft is unreachable.** `BalloonParty.Runtime.asmdef` sets
-  `"overrideReferences": true` with `"precompiledReferences": ["DOTween.dll"]` only.
-  The Newtonsoft DLL is referenced solely by the editor-only audio asmdef.
-- **`JsonUtility` fails silently.** It serializes only Unity-serializable public
-  *fields* — never properties, never `readonly` fields, never `IReadOnlyList<T>`. Fed
-  these DTOs it returns `{}` with no error, and it cannot emit the `"type"`
-  discriminator.
+  `"overrideReferences": true` with `"precompiledReferences": ["DOTween.dll"]` only; the
+  Newtonsoft DLL is referenced solely by the editor-only audio asmdef.
+- **`JsonUtility` fails silently.** It serializes only Unity-serializable public *fields* —
+  never properties, never `readonly` fields, never `IReadOnlyList<T>`. Fed these types it
+  returns `{}` with no error, and cannot emit the `"type"` discriminator.
 
-`TelemetryJson` builds each line into a **single reused `StringBuilder`** field
-(cleared per record, never reallocated):
-`{"type":"level","levelIndex":3,...}` / `{"type":"run",...}`.
-**Every numeric and date append passes `CultureInfo.InvariantCulture`** — on a
-comma-decimal locale `float.ToString()` emits `12,5` and the whole log becomes
-unparseable. Timestamp: `DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture)`.
-(Only two `InvariantCulture` call sites exist in the repo today — this will not be
-caught by imitation.)
+`TelemetryEnvelopeSerializer` builds each line into a **single reused `StringBuilder`**
+field by looping `MetricCatalog`. **Every numeric and date append passes
+`CultureInfo.InvariantCulture`** — on a comma-decimal locale `float.ToString()` emits
+`12,5` and the whole log becomes unparseable. Timestamp:
+`DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture)`. (Only two
+`InvariantCulture` call sites exist in the repo today — this will not be caught by
+imitation.)
 
-Because serialization is hand-rolled, the DTOs keep their intended shape: `sealed`
-classes / `readonly struct`s with get-only properties, `IReadOnlyList<T>` breakdowns.
 Member ordering per CLAUDE.md: **properties in the top block, before the constructor** —
 `style_audit.py` blocks the commit otherwise.
 
----
+### Time tracking
 
-## Phase 1 — Passive Counters
+Clocks sample **`Time.unscaledTime`** — not `Time.realtimeSinceStartup`. Nothing in the
+project observes app backgrounding (no `OnApplicationPause`/`OnApplicationFocus` anywhere
+in `Assets/Source`), so a pocket-suspend would silently inflate
+`realtimeSinceStartup`-based durations by the full background time. `unscaledTime`
+advances only on ticked frames, clamped by `Time.maximumDeltaTime` (0.333 s default,
+unmodified here), so a suspend of any length costs at most one clamped frame. It is also
+`timeScale`-independent, which the slow-mo cinematics **and hold-to-speed-up** require.
+The clock is injected as `Func<float>` (precedent: `SfxThrottleGate`'s registration,
+`() => Time.unscaledTime`).
 
-Everything in this phase uses signals already on the bus. Gameplay-code edits are
-limited to: the registration lines, and the one-line `CheatState.AnyCheatUsed` addition
-(see *Cheat tagging*).
+`TelemetryStopwatch` **owns its clock** — constructed with a `Func<float>`, keeps
+`_lastSample` internally, folds `clock() - _lastSample` into `Elapsed` on
+`Pause()`/`Resume()`/`Elapsed` reads. No `Advance()` in the public API and no
+"call at every boundary" contract; miss-a-boundary bugs are structurally impossible.
 
-### Flush boundaries
-
-The level record flushes on **`LevelTransitionCompletedMessage`**, not on
-`LevelUpDismissedMessage`. The dismissal is published *before* the surviving score
-trails resolve: `LevelUpPopUp` publishes it, and the survivors are only completed later
-inside the Ascent (`LevelTransitionController.HoldOutgoingContent` →
-`ScoreTrailService`'s `CompleteAll`). Flushing on dismissal would charge those arrivals
-to the *next* level's `PointsBanked`. `LevelTransitionCompletedMessage` already exists,
-is already registered, and is published in `TransitionAsync`'s `finally` — it fires on
-every path including cancellation.
-
-Boundary roles:
-
-- `ScoreLevelUpMessage` → enter `Ceremony`: pause gameplay clock, resume ceremony
-  clock, capture `LevelIndex = msg.NewLevel - 1` (the level just completed — do **not**
-  keep an internal counter; `CheatState.StartLevel` lets dev runs start at arbitrary
-  levels and a counter drifts).
-- `LevelUpDismissedMessage` → enter `Transitioning`: pause ceremony clock. No flush yet.
-- **`LevelUpAbortedMessage`** → back to `Playing`: zero the ceremony clock, resume the
-  gameplay clock, discard the captured level index, do **not** flush. The ceremony can
-  bail without ever reaching a dismissal (`LevelUpCinematic.AbortSession` →
-  `LevelController` returns `Pending → Playing` directly). Without this subscription the
-  gameplay clock stays paused forever and every subsequent level records
-  `DurationSeconds ≈ 0`.
-- `LevelTransitionCompletedMessage` → back to `Playing`: snapshot (with
-  `Completed = true`), write, absorb into the run accumulator, reset the level
-  accumulator, resume the gameplay clock.
-- `GameOverMessage` → enter `Ended`: snapshot the partial level (with
-  `Completed = false`, `LevelIndex` from `msg.FinalLevel`) plus the run record
-  (`TotalScore` from `msg.FinalScore`), hand both to the sink (deferred write, see
-  *Sink*). All handlers early-return until `ResetRun`.
-
-### LevelRecord fields
-
-| Field | Type | Source |
+| Clock | Runs while | Pause-gated by `IsAnyPaused`? |
 |---|---|---|
-| `LevelIndex` | `int` | `ScoreLevelUpMessage.NewLevel - 1`; on game-over partial: `GameOverMessage.FinalLevel` |
-| `Completed` | `bool` | `true` on transition-completed flush, `false` on game-over partial flush |
-| `DurationSeconds` | `float` | Gameplay clock (excludes pause + ceremony + transition) |
-| `WallDurationSeconds` | `float` | Wall clock — see *Time tracking* |
-| `ShotsFired` | `int` | `ProjectileFiredMessage` |
-| `TotalPops` | `int` | `ActorHitMessage` where `Outcome == HitOutcome.Pop` |
-| `DirectHitPops` | `int` | Same, and `(msg.Context.Flags & DamageFlags.DirectHit) != 0` — the true accuracy numerator |
-| `PopsByColor` | `IReadOnlyList<ColorPopCount>` | Pop outcomes broken down by color; see *Color derivation* |
-| `Deflects` | `int` | `ActorHitMessage` where `Outcome == HitOutcome.Deflect` |
-| `MaxStreak` | `int` | `StreakChangedMessage.Streak` — running max |
-| `PointsBanked` | `int` | `ScoreTrailArrivedMessage.Points` — sum (`Points` is the delta; `Score` is the running total — don't sum `Score`) |
-| `OverflowCount` | `int` | `WaveDamageMessage` — sum of `HeartsLost` across the run |
-| `ShieldsGained` | `int` | `ShieldGainedMessage` |
-| `ShieldsSpent` | `int` | `ShieldLostMessage` |
-| `ItemsActivated` | `IReadOnlyList<ItemActivationCount>` | `ItemActivatedMessage`; see *Item derivation* |
-| `CeremonyDurationSeconds` | `float` | Ceremony clock (trigger → dismissal) |
-| `CheatActive` | `bool` | See *Cheat tagging* |
+| **Gameplay** | state == `Playing` | **Yes** |
+| **Ceremony** | state == `Ceremony` | **No — deliberately.** The ceremony *is* a pause: `LevelUpCinematic` holds `PauseSource.Cinematic` and `LevelUpPopUp` holds `PauseSource.LevelUp` for its whole duration. A pause-gated ceremony clock would read ≈ 0. |
+| **Wall** | state != `Idle`/`Ended` | **No** — total elapsed including ceremony and transition |
+| **Hold** (new, **R11**) | hold-to-speed-up engaged | **No** — it only runs in flight |
 
-`TotalPops` includes item-driven and cheat-driven pops (`BombItemHandler`,
-`LightningChain`, `AwardScorePopCheat` all dispatch hits) — that is why
-`ShotsFired / TotalPops` is **not** an accuracy proxy and `DirectHitPops` exists.
+Every `PauseSource` that exists today (`Cinematic`, `LevelUp`, `Overflow`,
+`LevelTransition`, `Cheat`) is gameplay- or ceremony-owned, not a user interruption —
+gating the wall clock on `IsAnyPaused` would collapse it toward the gameplay duration on
+every level. If a genuine user-interruption source (settings menu, ad overlay) is ever
+added, that is the moment to introduce a source filter.
 
-#### Typed breakdown entries
+### Pause semantics
 
-```csharp
-public readonly struct ColorPopCount
-{
-    public string ColorName { get; }
-    public int Count { get; }
-}
+**Subscribe, don't recount.** `PauseService` is already reference-counted per source and
+exposes `IReadOnlyReactiveProperty<bool> IsAnyPaused`. Inject it and subscribe; do **not**
+count `PausedMessage`/`ResumedMessage` edges.
 
-public readonly struct ItemActivationCount
-{
-    public ItemType ItemType { get; }
-    public int Count { get; }
-}
-```
+Load-bearing, not stylistic: `PauseService.ResetRun` clears its source stack **without
+publishing `ResumedMessage`**. Any message-edge counter therefore leaks depth permanently
+on the loss path — `GameOverLossCinematic` pauses, `RestartRun` clears the stack silently,
+the cinematic pauses/resumes again — netting +1 per loss and freezing every subsequent
+level's timers at zero. `IsAnyPaused` is reset to `false` by the same method, so it cannot
+leak. (`PausedMessage`/`ResumedMessage` live in `BalloonParty.Shared.Pause`, not
+`Shared.Messages`, and are not subscribed in this design.)
 
-(`string` color identity matches the repo — `IHasColor.Color` and
-`IGamePalette.ProgressColorNames` are both string-keyed; do not invent a `ColorId`.)
+### Color and item derivation
 
-### RunRecord fields
-
-| Field | Type | Source |
-|---|---|---|
-| `RunId` | `int` | `RunController` generation — init 1, updated in `ResetRun(generation)` |
-| `LevelsCompleted` | `int` | Count of absorbed records with `Completed == true` |
-| `TotalDurationSeconds` | `float` | Sum of LevelRecord wall durations |
-| `TotalScore` | `int` | `GameOverMessage.FinalScore` |
-| `EndCause` | `string` | Constant `"HealthDepleted"` — only loss path today; revisit when a second cause exists |
-| `TotalShotsFired` | `int` | Accumulated across levels |
-| `TotalPops` | `int` | Accumulated across levels |
-| `MaxStreakOverall` | `int` | Best streak in the entire run (max across absorbed levels, not last) |
-| `CheatActive` | `bool` | True if any absorbed level was tagged (never overwritten back to false) |
-| `Timestamp` | `string` | ISO 8601 UTC (`"o"` format, InvariantCulture) at flush time |
-
-### Message subscriptions
-
-| Message | Effect (all handlers early-return in `Ended`) |
-|---|---|
-| `ProjectileFiredMessage` | `ShotsFired++` |
-| `ActorHitMessage` | `Outcome == Pop` → `TotalPops++`, color bucket++, DirectHit check; `Outcome == Deflect` → `Deflects++`. Filter with `==`, not `HasFlag` — every `EvaluateHit` returns a single value and equality is the repo idiom (`ScoreController`, `BalloonSpawner`) |
-| `StreakChangedMessage` | `MaxStreak = max(MaxStreak, msg.Streak)` |
-| `ScoreTrailArrivedMessage` | `PointsBanked += msg.Points` |
-| `WaveDamageMessage` | `OverflowCount += msg.HeartsLost` |
-| `ItemActivatedMessage` | Item bucket++ — see *Item derivation* |
-| `ShieldGainedMessage` | `ShieldsGained++` |
-| `ShieldLostMessage` | `ShieldsSpent++` |
-| `ScoreLevelUpMessage` | State → `Ceremony` (see *Flush boundaries*) |
-| `LevelUpDismissedMessage` | State → `Transitioning` |
-| `LevelUpAbortedMessage` | State → `Playing`, ceremony discarded |
-| `LevelTransitionCompletedMessage` | Flush + reset, state → `Playing` |
-| `GameOverMessage` | Flush partial + run record, state → `Ended` |
-| `PauseService.IsAnyPaused` (ReactiveProperty, **not** a message) | Gate the gameplay clock — see *Pause semantics* |
-
-Notes for the implementer:
-- `PausedMessage` / `ResumedMessage` live in namespace `BalloonParty.Shared.Pause`
-  (not `Shared.Messages`) and are **not subscribed** in this design.
-- `ProjectileFiredMessage` and `LevelUpAbortedMessage` are `internal` — fine, same
-  assembly.
-
-### Color derivation
-
-`ActorHitMessage` carries **no color** — it carries `ISlotActor Actor`. Derive it:
+`ActorHitMessage` carries **no color** — it carries `ISlotActor Actor`:
 
 ```csharp
 if (msg.Actor is IHasColor colored) { /* colored.Color.Value is the palette string */ }
 ```
 
-(Precedents: `ProjectileHitResolver`, `ScoreController`.) Accumulate in an
-`int[] _popsByColor` sized from `IGamePalette.ProgressColorNames.Count` **plus one
-trailing "other" bucket**, with a `Dictionary<string,int>` name→index map built once in
-the constructor from the same list. Use `ProgressColorNames`, **not** `ColorNames` —
-the latter includes presentation-only tints that never appear on a balloon
-(`ScoreController` does the same). Unknown ids (rainbow — `GamePalette.RainbowColorId` —
-or paint-converted) and actors without `IHasColor` (statics, gatekeepers) fall into the
-"other" bucket and must never throw or index out of range. `ColorPopCount[]` is
-materialised only at flush.
-
-### Item derivation
+Index from `IGamePalette.ProgressColorNames` plus a trailing *other* bucket, with a
+`Dictionary<string,int>` name→index map built once in the constructor. Use
+`ProgressColorNames`, **not** `ColorNames` — the latter includes presentation-only tints
+that never appear on a balloon. `string` color identity matches the repo; do not invent a
+`ColorId`.
 
 `ItemActivatedMessage` carries **no item type** — it carries `IBalloonModel Balloon`.
 Derive it with the same guarded cast `ItemSoundRouter` uses:
 
 ```csharp
-if (message.Balloon is IHasItemSlot slot) { _itemCounts[(int)slot.Item.Value]++; }
+if (message.Balloon is IHasItemSlot slot) { /* slot.Item.Value */ }
 ```
 
-Non-item-eligible balloons (e.g. `ToughBalloonModel`) must no-op, not throw. Size the
-array with `Enum.GetValues(typeof(ItemType)).Length` (currently 7, `None`=0,
-contiguous), not a hardcoded literal. The message is published *after*
-`handler.Activate` completes, so bucket `ItemType.None` like any other value rather
-than assuming it can't happen. (Known fragility, do not "fix": reading the slot off a
-popped balloon works because models are constructed per spawn and the slot is never
-cleared — the same assumption `ItemSoundRouter` makes. If balloon *models* are ever
-pooled, this silently becomes all-`None`; the fix then is an `ItemType` field on the
+Non-item-eligible balloons (e.g. `ToughBalloonModel`) must no-op, not throw. Size the axis
+with `Enum.GetValues(typeof(ItemType)).Length`, not a literal. The message is published
+*after* `handler.Activate` completes, so bucket `ItemType.None` like any other value.
+(Known fragility, do not "fix": reading the slot off a popped balloon works because models
+are constructed per spawn and the slot is never cleared. If balloon *models* are ever
+pooled this silently becomes all-`None`; the fix then is an `ItemType` field on the
 message.)
 
-### Time tracking
-
-Clocks sample **`Time.unscaledTime`** — not `Time.realtimeSinceStartup`. Nothing in
-the project observes app backgrounding (no `OnApplicationPause`/`OnApplicationFocus`
-anywhere in `Assets/Source`), so a pocket-suspend would silently inflate
-`realtimeSinceStartup`-based durations by the full background time. `unscaledTime`
-advances only on ticked frames, clamped by `Time.maximumDeltaTime` (0.333 s default,
-unmodified in this project), so a suspend of any length costs at most one clamped
-frame. It is also `timeScale`-independent, which the slow-mo cinematics require. The
-clock is injected as `Func<float>` — precedent: `SfxThrottleGate`'s registration
-(`GameScopeRegistration`, `() => Time.unscaledTime`).
-
-`TelemetryStopwatch` owns the clock (see *Internal helpers*) — there is no `Advance()`
-call the service can forget to make.
-
-| Clock | Runs while | Pause-gated by `IsAnyPaused`? |
-|---|---|---|
-| **Gameplay** | State == `Playing` | **Yes** |
-| **Ceremony** | State == `Ceremony` | **No — deliberately.** The ceremony *is* a pause: `LevelUpCinematic` holds `PauseSource.Cinematic` and `LevelUpPopUp` holds `PauseSource.LevelUp` for its whole duration. A pause-gated ceremony clock would read ≈ 0. |
-| **Wall** | State != `Idle`/`Ended` (level start → flush) | **No** — see below |
-
-**`WallDurationSeconds` definition:** total elapsed time for the level including
-ceremony and transition, ungated. Every `PauseSource` that exists today (`Cinematic`,
-`LevelUp`, `Overflow`, `LevelTransition`, `Cheat`) is gameplay-/ceremony-owned, not a
-user interruption — gating the wall clock on `IsAnyPaused` would collapse it toward
-`DurationSeconds` on every level. If a genuine user-interruption source (settings menu,
-ad overlay) is ever added, that is the moment to introduce a source filter. A
-`PauseSource.Cheat` pause (dev console open) does inflate wall time; those records are
-`CheatActive`-tagged anyway.
-
-### Pause semantics
-
-**Subscribe, don't recount.** `PauseService` is already reference-counted per source
-and exposes `IReadOnlyReactiveProperty<bool> IsAnyPaused`. Inject `PauseService` and
-subscribe to `IsAnyPaused`; do **not** count `PausedMessage`/`ResumedMessage` edges.
-
-This is load-bearing, not stylistic: `PauseService.ResetRun` clears its source stack
-**without publishing `ResumedMessage`** ("Drop all sources outright; live systems only
-gate on IsAnyPaused"). Any message-edge counter therefore leaks depth permanently on
-the loss path — `GameOverLossCinematic` pauses, `RestartRun` clears the stack
-silently, the cinematic pauses/resumes again — netting +1 per loss and freezing every
-subsequent level's timers at zero. `IsAnyPaused` is reset to `false` by the same
-method, so it cannot leak.
+Balloon type comes from `IBalloonModel.TypeName` (`BalloonType`), the same cast
+`CombatSoundRouter` uses.
 
 ### Cheat tagging
 
-`CheatState` is compiled out of release builds — the whole file sits under
-`#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE`. The read site in the
-service needs the **identical triple guard** with an `#else` branch defaulting
-`cheatActive = false` (same shape as `RunController.EndRun`). Note the sink's guard is
-the *double* guard and the cheat guard is the *triple* one — they are different on
-purpose; do not harmonise them. `dotnet build` defines `UNITY_EDITOR`, so a missing
-guard here compiles locally and **breaks only the real release build**.
+`CheatState` is compiled out of release builds. The read site needs the **triple** guard
+with an `#else` branch defaulting `cheatActive = false` (same shape as
+`RunController.EndRun`).
 
-"Any flag active" is insufficient as-is: `StartLevel` and `TimeOfDaySpeedScale` default
-to 1 (not 0), and one-shot cheats (`AwardScorePopCheat`, `TriggerLevelUpCheat`,
-`AddShieldCheat`, …) leave no trace. Phase 1 therefore includes one line of gameplay
-code: add `public static bool AnyCheatUsed;` to `CheatState` (reset in `ResetOnPlay`),
-set `true` when the cheat console opens (`CheatConsoleView`) — every cheat except the
-pacing window goes through the console, and the pacing window already writes
-`StartLevel`. Then:
+"Any flag active" is insufficient as-is: `StartLevel` and `TimeOfDaySpeedScale` default to
+1 (not 0), and one-shot cheats (`AwardScorePopCheat`, `TriggerLevelUpCheat`,
+`AddShieldCheat`, …) leave no trace. One line of gameplay code is therefore in scope: add
+`public static bool AnyCheatUsed;` to `CheatState` (reset in `ResetOnPlay`), set `true`
+when the cheat console opens (`CheatConsoleView`) — every cheat except the pacing window
+goes through the console, and the pacing window already writes `StartLevel`. Then:
 
 ```csharp
 cheatActive = CheatState.AnyCheatUsed
@@ -506,230 +679,303 @@ cheatActive = CheatState.AnyCheatUsed
     || !Mathf.Approximately(CheatState.TimeOfDaySpeedScale, 1f);
 ```
 
-Evaluated at flush time ("read at flush time" contract — a cheat toggled off before
-flush does not tag the record). The run record's flag is sticky: once any level is
-tagged, the run stays tagged. Records are never dropped — tagged for filtering.
-
-### Performance notes
-
-Measured worst case: ~10–25 `ActorHitMessage` in a single frame (bomb/laser/lightning
-resolve synchronously), plus tens of `ScoreTrailArrivedMessage` in the transition
-frame (`CompleteAll` fires every in-flight arrival at once — one per *point*, not per
-pop). Every handler is an `int` add or an array increment; peak ≈ low hundreds of
-invocations/second. **This design needs no pooling, no buffering, no `ITickable` — do
-not add any.** (`BoardPopWave` is scoreless by design — it publishes no
-`ActorHitMessage` and contributes zero handler invocations.)
-
-- Hot-path handlers must allocate nothing: no string interpolation, no LINQ, no
-  `Log.Info` in the `ActorHitMessage` / `StreakChangedMessage` /
-  `ScoreTrailArrivedMessage` paths. Color ids are palette-authored strings passed by
-  reference — the dictionary lookup + `int[]` increment allocates zero.
-- `int[]` for items and colors; DTO lists materialise only at flush. (For the record:
-  `Dictionary<ItemType,int>` would *not* box — `EqualityComparer<TEnum>.Default` is
-  specialised — the `int[]` is preferred for simplicity, not to avoid boxing.)
-- `CompositeDisposable` for one-call teardown.
-- No record pooling — flush frequency (~30–120 s) makes allocation negligible.
-- Flush-time costs (record allocation, ISO timestamp, list materialisation) are fine;
-  the file-stream policy is what matters — see *Sink*.
+Evaluated at flush time. The run flag is sticky: once any level is tagged, the run stays
+tagged. Records are never dropped — tagged for filtering.
 
 ---
 
-## Phase 2 — Small Extensions
+## Superseded decisions
 
-Trimmed from the original plan after review:
+Things the previous revision states that are now **wrong**. Listed explicitly because
+that revision was written to be followed literally.
 
-- ~~`HealthChangedMessage`~~ — **cut.** `IPlayerHealth.Current` is already an
-  `IReadOnlyReactiveProperty<int>`; min-HP-per-level is one `Subscribe`. Adding a bus
-  message no other system wants violates this plan's own principles.
-- ~~`LossCause` enum + `GameOverMessage` change~~ — **cut** until a second loss cause
-  exists. `RunRecord.EndCause` ships in Phase 1 as a constant string.
-- Track HP minimum per level (inject `IPlayerHealth`, subscribe `Current`).
-- Track max danger level per level (inject `IDangerLevel`, sample `Level.Value` on
-  overflow).
-
----
-
-## Phase 3 — Deferred
-
-- Streak-break reason decomposition (what ended the streak)
-- Burst-rate summaries (pops-per-second peaks)
-- Time-to-first-pop per level
-- Editor window (`Tools > BalloonParty > Telemetry Viewer`)
-- Remote/network sink implementation
-- Run-counter persistence across app restarts
-- Flush-on-background (`OnApplicationPause`) — would need a MonoBehaviour seam; not
-  worth the MVC exception today
-- Record a run on cheat-restart (`ForceRestartCheat`/`StartFromLevelCheat` bypass
-  `GameOverMessage`, so those dev runs currently vanish; an `EndCause = "Abandoned"`
-  flush from `ResetRun` would capture them)
+| Previously | Now |
+|---|---|
+| "Dev-only subsystem… release builds pay nothing… there is no `NoOpTelemetrySink`" | Core ships in release (G1). Three gating tiers. Still no null sink — an empty composite covers it. |
+| `ITelemetrySink.Write(LevelRecord)` + `Write(RunRecord)` overloads | One `Write(in TelemetryEnvelope)` with a `RecordKind` discriminator (**R24**). |
+| Never-throw guard inside `JsonLinesTelemetrySink` | In `TelemetrySinkBase` (**R25**). |
+| `LevelRecord`/`RunRecord` with hand-written named fields; `RunTelemetryAccumulator.Absorb` | `MetricSet` + `MetricCatalog` fold rules (**R4–R6**). |
+| `LevelTelemetryAccumulator` / `RunTelemetryAccumulator` as distinct types | One `MetricScope` type, four instances. |
+| `OverflowCount` | `HeartsLost` + `BlockedSlots` (**R10**). |
+| Pops broken down by color only | Color **and** balloon type (**R12**). |
+| Three ceremony exits | Four — `LevelUpAbandonedMessage` added (**R8**). |
+| `RunId` = `RunController` generation, full stop | Three ids — chain / attempt / attempt index — plus a per-level attempt ordinal (**R14–R14a**). The generation is an *attempt* counter. |
+| Write-only; no UI consumer | `ILevelMetricsView` read model, two snapshots per level (**R16–R19**). |
+| Phase 2 "track HP minimum / max danger level" | Absorbed into the registry as ordinary `MetricId`s with `Fold.Max`. |
 
 ---
 
-## Test Strategy
+## Task plan
 
-### File structure
+Sizes: S ≤ half a day · M ≈ 1–2 days · L ≈ 3+ days. Agent assignments follow the
+established split: **opus** for quality-critical/judgment work, **sonnet** for
+well-specified implementation, **haiku** for mechanical tasks; Fable investigates
+handoffs, reviews, commits. Each task below is scoped so its spec can be written once and
+handed over; the requirement numbers are the acceptance criteria.
 
-Flat in `Assets/Tests/EditMode/Game/` (the existing `Game` test folder has no
-subfolders — do not introduce one), namespace `BalloonParty.Tests.Game`. No asmdef
-changes needed: `AssemblyInfo.cs` already grants `InternalsVisibleTo` for the EditMode
-assembly, which already references `BalloonParty.Runtime`, MessagePipe, and VContainer.
+### Dependency graph
 
 ```
-Assets/Tests/EditMode/Game/
-├── TelemetryStopwatchTests.cs         (TDD-first)
-├── LevelTelemetryAccumulatorTests.cs  (TDD-first)
-├── RunTelemetryAccumulatorTests.cs
-├── GameplayTelemetryServiceTests.cs   (orchestration / flush boundaries)
-└── TelemetryJsonTests.cs              (string-shape assertions)
+W0 doc freshness (haiku/scribe) ──┐
+                                  │
+W1 vocabulary + scopes (sonnet) ──┴──▶ W2 envelope + serializer + JSONL sink (sonnet)
+            │                                          │
+            ├──────────────────────────────────────────┤
+            ▼                                          ▼
+   W3 service + state machine + IFlightScope (opus) ──▶ W4 UI read model + popups (opus)
+            │                                          │
+            └──▶ W5 export decorators (sonnet) ────────┴──▶ W6 HTTP analytics sink (opus)
 ```
 
-**Template:** `ScoreControllerTests.cs` — specifically its subscriber-capture pattern
-(NSubstitute `ISubscriber<T>` whose `Subscribe` call captures the `IMessageHandler<T>`
-via `Arg.Do`, so the test fires messages by invoking the captured handler directly).
-`GameplayTelemetryServiceTests` needs one capture per subscribed message, wired in a
-`BuildService()` helper, `Start()`ed in `SetUp`, `Dispose()`d in `TearDown`. The sink
-is a hand-written `RecordingTelemetrySink` (captures written records into lists) — a
-no-op sink cannot be asserted against.
+### W0 — Doc freshness · **P0 · S · haiku (scribe)**
+Blocker for W3/W4: two READMEs describe code that no longer matches.
+- `Audio/README.md` — (a) `MusicSoundRouter` is described as launch-music only; it now
+  also runs the day/night gameplay crossfade, ducks on `_inFlight`, and pitches down with
+  danger. (b) The *Melodic pops* section documents only the `IMelodicContext.SetStreak`
+  path and **never mentions** `CombatSoundRouter`'s independent per-flight semitone ramp —
+  the mechanism this plan's audio decision hinges on.
+- `Game/Run/README.md` — contents table omits `RetryTracker`, `IRetryState`,
+  `GameOverPresentationGate`, and gives `IBoardResettable` no row.
 
-**Repo gotchas, non-negotiable:**
-- Every `[Test]` method must be **`public`** — NUnit here silently skips non-public
-  test methods (this has produced false green in this repo before).
-- Any test touching `CheatState` statics must restore them in `TearDown` (same rule as
-  `PlayerPrefs`).
-- Time control: service tests drive the injected `Func<float>` (a mutable `_now` field
-  bumped between handler invocations) and assert on the durations in the records the
-  fake sink captured. Stopwatch tests drive the stopwatch's own injected fake clock.
-  **Do not add a test-only `AdvanceForTest` seam to the service** — the clock func is
-  the single seam.
+### W1 — Vocabulary, scopes, timers · **P0 · M · sonnet**
+`MetricId`, `TimerId`, `MetricAxis`, `FoldRule`, `MetricCatalog`, `MetricSet` /
+`IReadOnlyMetricSet`, `MetricScope`, `TelemetryStopwatch`, `LevelMetricsSnapshot`,
+`RunMetricsSnapshot`, the three breakdown structs, plus EditMode tests. Pure C# — no
+Unity, no VContainer, no DI. Table-driven tests. **Mechanical given a literal spec; this
+is the highest-value task to specify precisely.** Acceptance: **R1, R4–R7, R12, R29–R30**.
 
-### Named test cases
+### W2 — Envelope, serializer, dev sink · **P0 · M · sonnet**
+`TelemetryEnvelope`, `TelemetryEnvelopeSerializer` (catalog-driven loop, reused
+`StringBuilder`, `InvariantCulture` throughout), `ITelemetrySink`, `TelemetrySinkBase`,
+`JsonLinesTelemetrySink`, `RecordingTelemetrySink` (test fake), plus tests asserting on
+the emitted string. Mechanical — the constraints are fully written out above. Acceptance:
+**R24, R25, R27**, plus the dev-only tier of **R28**.
 
-`TelemetryStopwatchTests` (TDD-first):
-- `Elapsed_WhileRunning_AccumulatesClockDelta`
-- `Elapsed_WhilePaused_DoesNotAccumulate`
-- `Pause_CalledTwice_IsIdempotent`
-- `Resume_WithoutPause_IsIdempotent`
-- `Resume_AfterPause_ResumesAccumulating`
-- `Reset_ZeroesElapsed_AndDefinesRunningState` (spec the post-reset state explicitly:
-  reset returns the stopwatch to **paused**; callers resume it deliberately)
-- `Elapsed_ClockGoesBackward_ClampsAtZeroDelta` (negative delta from a clock glitch
-  must not corrupt `Elapsed`)
-- `Elapsed_ReadTwiceWithoutClockAdvance_IsStable`
+### W3 — Service, state machine, flight scope · **P0 · L · opus**
+`IFlightScope`/`FlightScopeService`, `GameplayMetricsService` (state machine, ~14
+subscriptions, boundaries, snapshots, `IRunResettable`, cheat tagging),
+`SessionTelemetryContext` in `AppLifetimeScope`, registration at the end of
+`RegisterGameplaySystems`, `CheatState.AnyCheatUsed`, and the `MusicSoundRouter`
+migration to `IFlightScope`.
 
-`LevelTelemetryAccumulatorTests` (TDD-first):
-- `MaxStreak_TracksRunningMaximum_NotLastValue`
-- `PointsBanked_SumsAcrossArrivals`
-- `PopsByColor_KnownColor_IncrementsThatBucket`
-- `PopsByColor_UnknownColor_FallsIntoOtherBucket_NoThrow` (rainbow / paint-converted)
-- `PopsByColor_ActorWithoutColor_FallsIntoOtherBucket_NoThrow`
-- `PopsByColor_BuiltFromProgressColorNames_NotAllColorNames`
-- `ItemCounts_AllItemTypeValues_IndexWithoutThrowing` (walk `Enum.GetValues`)
-- `Reset_ZeroesAllCounters`
-- `Snapshot_ProducesRecordMatchingCounters`
+**Judgment task — every trap in *Implementer guardrails* lives here.** Requires an
+in-editor playtest; `dotnet build` cannot verify the state machine. Acceptance:
+**R2, R3, R8–R15, R21–R23, R28**.
 
-`RunTelemetryAccumulatorTests`:
-- `Absorb_CompletedLevel_IncrementsLevelsCompleted`
-- `Absorb_PartialLevel_DoesNotIncrementLevelsCompleted`
-- `Absorb_SumsShotsAndPopsAcrossLevels`
-- `MaxStreakOverall_MaxAcrossLevels_NotLastLevel`
-- `CheatActive_StickyOnceTagged_NotOverwrittenByCleanLevel`
-- `TotalDurationSeconds_SumsWallDurations`
+### W4 — UI read model and popups · **P1 · M–L · opus**
+`ILevelMetricsView`, `LevelUpPopUp` and `GameOverScreen` consumption, the
+ceremony-vs-flush divergence, the projected-vs-banked convention, the read-after-gate
+contract in `UI/GameOver/README.md`.
 
-`GameplayTelemetryServiceTests`:
-- One increment test per simple subscription (shots, pops+color, deflects, streak,
-  points, overflow, shields ×2)
-- `OnItemActivated_NonItemEligibleBalloon_NoOp_NoThrow`
-- `OnActorHit_DirectHitFlag_IncrementsDirectHitPops`
-- `OnScoreLevelUp_StopsGameplayClock_StartsCeremonyClock`
-- `OnLevelTransitionCompleted_FlushesCompletedRecord_ResetsAccumulator`
-- `OnLevelTransitionCompleted_StragglerTrailPointsArriveBeforeFlush_CountedInCompletedLevel`
-- `OnLevelUpAborted_DiscardsCeremony_ResumesGameplayClock_NoFlush`
-- `OnLevelUpAborted_NextFlushRecordsCorrectLevelIndex`
-- `OnGameOver_FlushesPartialLevelWithCompletedFalse_PlusRunRecord`
-- `OnGameOver_ThenStragglerMessages_DoNotMutateAnything` (the `Ended` gate)
-- `OnGameOver_ImmediatelyAfterTransitionCompleted_NoPhantomEmptyRecord`
-- `OnTransitionCompleted_WithoutPriorScoreLevelUp_NoDoubleFlush`
-- `IsAnyPausedTrue_GameplayClockPauses_CeremonyClockDoesNot`
-- `LevelIndex_FromScoreLevelUpNewLevel_NotInternalCounter` (fire `NewLevel: 5` cold;
-  expect flushed index 4)
-- `CheatActiveAtFlush_TagsRecord` / `CheatDisabledBeforeFlush_DoesNotTag` (restore
-  `CheatState` in `TearDown`)
-- `ResetRun_MidLevel_ClearsSilently_NoFlush_NoThrow` and sets `RunId = generation`
-- `Dispose_UnsubscribesAll_NoMutationAfterDispose`
+Judgment plus design input — *what* the popups show is a design decision (see *Open
+decisions*); *when* they read it is a correctness one. Playtest required. Acceptance:
+**R16–R20**.
 
-`TelemetryJsonTests` (assert on the emitted string — the EditMode assembly has no JSON
-parser, so no parse-based round-trip):
-- `Serialize_LevelRecord_EmitsTypeDiscriminatorAndAllFields`
-- `Serialize_RunRecord_EmitsTypeDiscriminatorAndAllFields`
-- `Serialize_FloatFields_UseInvariantCulture` (set a comma-decimal
-  `CultureInfo.CurrentCulture` in the test, restore in `TearDown`)
-- `Serialize_ColorAndItemBreakdowns_EmitEachEntry`
-- `Serialize_ReusedBuilder_SecondRecordNotContaminatedByFirst`
+### W5 — Export decorators · **P1 · M · sonnet**
+`CompositeTelemetrySink`, `BatchingTelemetrySink`, `ConsentGateSink`, `ITelemetryConsent`,
+`TelemetrySettings` SO behind `ITelemetrySettings` (endpoint, batch size, flush interval,
+enabled flag) — injected as the read-only interface per CLAUDE.md. Each decorator is one
+concern with an obvious test matrix. Mostly mechanical once the consent *policy* is
+decided. Acceptance: **R26**, plus the export tier of **R28**.
+
+### W6 — HTTP analytics sink · **P2 · M–L · opus**
+`HttpAnalyticsSink`, persistent envelope queue, retry/backoff, schema governance doc.
+Judgment: offline semantics, backpressure, cancellation, and the project's first outbound
+network I/O. **Do not start before an analytics provider is chosen.**
+
+### Cross-cutting
+Every wave: `.meta` files for new `.cs`/`.md` (mirror a sibling's format);
+`dotnet build BalloonParty.Runtime.csproj` + `python3 Tools/style_audit.py`; feature
+README updated. W3/W4 additionally need a build with `UNITY_EDITOR` stripped (for the
+`#else` cheat branch) and an in-editor playtest — say so, do not claim verified.
 
 ---
 
 ## Implementer guardrails
 
-The traps in this feature all *compile and run*; they fail only in the data or on
-device. In rough order of cost-to-discover:
+The traps here all *compile and run*; they fail only in the data, on device, or by ear.
+In rough order of cost-to-discover.
 
-1. **Do not use `JsonUtility` or Newtonsoft** — see *Serialization*. `JsonUtility`
-   emits `{}` for these DTOs with no error.
-2. **Do not count `PausedMessage`/`ResumedMessage`** — the counter leaks on every loss;
+1. **Do not merge `CombatSoundRouter`'s counters into the shared aggregate** — it reads
+   before it increments, so the pitch would become subscription-order dependent, and its
+   streak-break reset is analytically wrong. Extract `IFlightScope` only.
+2. **Do not use `JsonUtility` or Newtonsoft** — `JsonUtility` emits `{}` for these types
+   with no error; Newtonsoft is unreachable from the runtime asmdef.
+3. **Do not count `PausedMessage`/`ResumedMessage`** — the counter leaks on every loss;
    subscribe `PauseService.IsAnyPaused`.
-3. **Do not flush on `LevelUpDismissedMessage`** — straggler trail points land after it.
-4. **Do not forget `LevelUpAbortedMessage`** — or the gameplay clock wedges forever on
-   the first aborted ceremony.
-5. **Do not read `CheatState` without the triple `#if` guard + `#else`** —
-   `dotnet build` will not catch it; only a real release build breaks.
-6. **Do not use `Time.realtimeSinceStartup`** — pocket-suspends inflate it and nothing
+4. **Do not flush on `LevelUpDismissedMessage`** — straggler trail points land after it.
+5. **Do not forget `LevelUpAbortedMessage` or `LevelUpAbandonedMessage`** — either
+   omission wedges the gameplay clock and every subsequent level records ≈ 0 duration.
+   Abort must also clear the ceremony snapshot, or the next popup can show stale numbers.
+6. **Do not read `CheatState` without the triple `#if` guard + `#else`** — `dotnet build`
+   defines `UNITY_EDITOR`, so this compiles locally and breaks only the real release build.
+7. **Do not use `Time.realtimeSinceStartup`** — pocket-suspends inflate it and nothing
    publishes a pause for backgrounding.
-7. **Do not let a sink exception escape** — MessagePipe handlers run on the publisher's
-   stack; a throw at either flush boundary soft-locks the game.
-8. **Do not subscribe `RunResetMessage`** — `IRunResettable.ResetRun` is invoked
-   directly; subscribing both double-resets.
-9. **Do not open the log file per flush** — one `StreamWriter` per session.
-10. **Every numeric/date `ToString` in the sink takes `InvariantCulture`.**
-11. New `.cs`/`.md` files need Unity `.meta` files (mirror a sibling's format).
-12. After implementation: `dotnet build BalloonParty.Runtime.csproj` +
-    `python3 Tools/style_audit.py`; behavior needs an in-editor playtest — say so,
-    don't claim verified.
+8. **Do not let a sink exception escape** — MessagePipe handlers run on the publisher's
+   stack; a throw at either flush boundary soft-locks the game. Guard in the base *and*
+   in the service (defense in depth on both sides of the interface).
+9. **Do not subscribe `RunResetMessage`** — `IRunResettable.ResetRun` is invoked directly;
+   subscribing both double-resets.
+10. **Do not read `IRetryState` after `RetryTracker` resets** — it zeroes `RetryLevel` at
+    `ResetOrder` 110; metrics reads at 0. Pin the inequality with a test.
+11. **Do not let `GameOverScreen` read metrics in its message handler** — read after the
+    presentation-gate `await`, or it depends on subscriber order.
+12. **Do not open the log file per flush** — one `StreamWriter` per session.
+13. **Every numeric/date `ToString` takes `InvariantCulture`.**
+14. **Do not rename or reorder a shipped `MetricCatalog` wire name** — append only.
+15. New `.cs`/`.md` files need Unity `.meta` files.
+
+**Pre-existing bug, out of scope — do not migrate it.** `CombatSoundRouter._bounceCount`
+is dead: it is zeroed on every `OnFired` (`:198`) and incremented only inside
+`if (_bounceCount > 0)` (`:278-282`), a branch that can never be entered, so the intended
+descending bounce ramp never plays. `MetricId.WallBounces` should be derived from
+`WallHitMessage` directly. File the audio bug separately.
 
 ---
 
-## Analytics Notes
+## Risk register
+
+| ID | Risk | Trigger | Mitigation |
+|---|---|---|---|
+| RK-1 | Audio pitch ramp shifts a whole tone, silently | Merging audio's counters into a bus-subscribing aggregate | Keep them local; extract `IFlightScope` only |
+| RK-2 | `PopsByColor` under-reports every pop before the last streak break | Applying audio's `StreakChangedMessage(0)` clear to the shared aggregate | Same. Worst failure mode here — the data looks plausible |
+| RK-3 | Levels-reached distribution corrupted by retries | Treating the run generation as run identity | **R14** — chain / attempt / attempt-index split |
+| RK-3a | Level difficulty analysis blames levels that were never retried | Segmenting by `AttemptIndex` instead of `LevelAttemptOrdinal` | **R14a** |
+| RK-3b | Run totals double-count a replayed level | Summing `PointsBanked` across level records in a chain | **R14b** — take `TotalScore` from `GameOverMessage` |
+| RK-4 | Metrics reset reads a zeroed `RetryLevel` | Anyone changes `ResetOrder` on either side of 0 vs 110 | **R21** + unit test on the inequality |
+| RK-5 | Soft-lock at a flush boundary | Sink throws; MessagePipe has no exception isolation | **R25** + service-side guard |
+| RK-6 | Popup stats contradict the score beside them | Showing banked instead of projected points | **R18** |
+| RK-7 | Heisenbug on the game-over screen | Reading in the handler instead of after the gate | **R19** |
+| RK-8 | Post-game-over stragglers corrupt the next run | Loss cinematic completes trails after `GameOverMessage` | The `Ended` gate, **R9** |
+| RK-9 | Stale ceremony snapshot after an aborted ceremony | Abort not clearing `CeremonyLevel` | **R8** + test |
+| RK-10 | Release build breaks while `dotnet build` stays green | Missing `#else` on the triple cheat guard | Rebuild with `UNITY_EDITOR` stripped in W3 |
+| RK-11 | Wire-name drift breaks the external warehouse | Renaming a catalog entry | Append-only; consider a test pinning the id→name map |
+| RK-12 | Metrics becomes load-bearing gameplay | A gameplay system injects `ILevelMetricsView` | **R20**, enforced by README contract |
+| RK-13 | Consent checks scattered through the service | Implementing consent as an `if` | `ConsentGateSink`, **R26** |
+| RK-14 | Session id becomes a device fingerprint | Persisting the GUID to `PlayerPrefs` | Explicit non-goal — regenerate per launch |
+
+---
+
+## Test strategy
+
+Flat in `Assets/Tests/EditMode/Game/` (that folder has no subfolders — do not introduce
+one), namespace `BalloonParty.Tests.Game`. No asmdef changes: `AssemblyInfo.cs` already
+grants `InternalsVisibleTo` for the EditMode assembly, which already references
+`BalloonParty.Runtime`, MessagePipe and VContainer.
+
+```
+MetricSetTests.cs                 (W1, TDD-first)
+MetricCatalogFoldTests.cs         (W1, TDD-first — every MetricId has a fold rule)
+MetricScopeTests.cs               (W1)
+TelemetryStopwatchTests.cs        (W1, TDD-first)
+TelemetryEnvelopeSerializerTests.cs (W2 — string-shape assertions)
+FlightScopeServiceTests.cs        (W3)
+GameplayMetricsServiceTests.cs    (W3 — orchestration / boundaries)
+```
+
+**Template:** `ScoreControllerTests.cs` — specifically its subscriber-capture pattern
+(NSubstitute `ISubscriber<T>` whose `Subscribe` captures the `IMessageHandler<T>` via
+`Arg.Do`, so tests fire messages by invoking the captured handler). The service test needs
+one capture per subscribed message wired in a `BuildService()` helper, `Start()`ed in
+`SetUp`, `Dispose()`d in `TearDown`. The sink is a hand-written `RecordingTelemetrySink`.
+
+**Repo gotchas, non-negotiable:**
+- Every `[Test]` method must be **`public`** — NUnit here silently skips non-public test
+  methods (this has produced false green in this repo before).
+- Any test touching `CheatState` statics must restore them in `TearDown` (same rule as
+  `PlayerPrefs`).
+- Time control: service tests drive the injected `Func<float>` (a mutable `_now` field
+  bumped between handler invocations). **Do not add a test-only `AdvanceForTest` seam** —
+  the clock func is the single seam.
+- Culture: the serializer test sets a comma-decimal `CultureInfo.CurrentCulture` and
+  restores it in `TearDown`.
+
+**Cases that must exist** (beyond one-per-counter increments):
+- Fold: `MaxStreak` takes the running maximum, not the last value; a completed level
+  increments `LevelsCompleted`, a partial one does not; cheat flag is sticky.
+- Boundaries: straggler points arriving between dismissal and transition-completed are
+  charged to the **completed** level; transition-completed without a prior
+  `ScoreLevelUpMessage` does not double-flush; game-over immediately after
+  transition-completed emits no phantom empty record; post-game-over messages mutate
+  nothing.
+- Abort/abandon: gameplay clock resumes, no flush, ceremony snapshot cleared, and the
+  *next* flush records the correct level index.
+- Level index comes from `ScoreLevelUpMessage.NewLevel - 1`, fired cold with `NewLevel: 5`
+  → flushed index 4 (never an internal counter — `CheatState.StartLevel` lets dev runs
+  start anywhere and a counter drifts).
+- Pause: `IsAnyPaused == true` pauses the gameplay clock and **not** the ceremony clock.
+- Derivation: unknown color and actor-without-`IHasColor` land in *other* without
+  throwing; every `ItemType` value indexes without throwing; a non-item-eligible balloon
+  no-ops.
+- Ordering: `GameplayMetricsService.ResetOrder < RetryTracker.ResetOrder`.
+- Reset: `ResetRun` mid-level clears silently (no flush, no throw) and sets the run id;
+  `Dispose` unsubscribes and nothing mutates afterward.
+
+---
+
+## Open decisions
+
+Not blockers for W0–W3; needed before W4 and W5 respectively.
+
+1. **What the popups actually show.** Which metrics, in what order, with what visual
+   treatment. A design call, not an engineering one. The read model serves whatever is
+   chosen; W4 cannot be specified without it.
+2. **Consent policy.** Opt-in, opt-out, or region-dependent; where the toggle lives; what
+   happens to records buffered before a decision. One line, but it gates W5's default.
+3. **Analytics provider.** Gates W6 entirely. Until chosen, the JSONL sink is the only
+   implementation and the decorator chain has one leaf.
+
+---
+
+## Analytics notes
 
 ### Minimum viable fields
 
-Five fields answer ~80% of balance questions: **level index**, **active gameplay
-duration**, **shots fired**, **total pops**, **overflow count**. Phase 1 captures all
-five plus many more — but these are the priority for early analysis.
+Five answer ~80% of balance questions: **level index**, **active gameplay duration**,
+**shots fired**, **total pops**, **hearts lost**. W1–W3 capture all five plus many more —
+but these are the priority for early analysis.
 
 ### Key analyses enabled
 
 | Question | Fields used |
 |---|---|
-| Which levels are too hard / too easy? | OverflowCount by LevelIndex |
-| Are levels too long or too short? | DurationSeconds percentiles by LevelIndex |
-| Is the player shooting enough? | ShotsFired vs **DirectHitPops** (true accuracy; TotalPops includes item/cheat pops) |
-| Where do runs end? | LevelsCompleted distribution on RunRecords (partial levels excluded via `Completed`) |
-| Are items impactful? | ItemsActivated frequency vs level outcomes |
+| Which levels are too hard / too easy? | `HeartsLost` by level index |
+| Are levels too long or too short? | Gameplay-duration percentiles by level index |
+| Is the player shooting well? | `ShotsFired` vs **`DirectHitPops`** (true accuracy) |
+| Where do runs end? | `LevelsCompleted` distribution, **segmented by retry provenance** |
+| Are items impactful? | `ItemsActivated` frequency vs level outcome |
+| Does the ceremony fire too early? | Ceremony-snapshot vs flush-snapshot point gap (**R17**) |
+| Do players use hold-to-speed-up? | Hold seconds / hold-engaged flight count per level (**R11**) |
+| Which mechanics actually trigger? | Pierce discharges, speed taps, sweeps, strikethroughs per level |
 
 ### Sample-size guidance
 
 - ~400 runs per level to detect large problems (>10% failure-rate shift)
 - ~1,000 runs per level for tuning-level confidence (5% shifts)
-- Segment by skill proxy (best level reached in session, or total runs) rather than
-  global averages — a new player's level-3 data and a veteran's are different
-  populations.
+- Segment by skill proxy (best level reached in session, or total runs) rather than global
+  averages — a new player's level-3 data and a veteran's are different populations. Filter
+  out cheat-tagged records; segment retry continuations separately.
 
 ---
 
-## Resolved questions (from the original draft)
+## Deferred
 
-1. **Run-counter persistence** — dissolved: `RunId` is the `RunController` generation,
-   per-session-monotonic by construction. Cross-session persistence stays Phase 3.
-2. **Accuracy tracking** — resolved by `DirectHitPops` (gated on
-   `DamageFlags.DirectHit`), which excludes item/cheat pops and absorbed projectiles
-   in one stroke.
-3. **`LevelTransitionCompletedMessage`** — it already existed; the flush lives there.
+- Streak-break reason decomposition (what ended the streak)
+- Burst-rate summaries (pops-per-second peaks); time-to-first-pop per level
+- Editor window (`Tools > BalloonParty > Telemetry Viewer`)
+- Run-counter persistence across app restarts (session id stays non-persistent — **RK-14**)
+- ~~Cross-session level performance~~ — **not deferred, out of scope.** "Your best time on
+  level 7" is a progression feature: it belongs beside `RunMeta`, owned by whatever
+  persists player state, and must not be built by teaching a sink to write locally. The
+  analytics warehouse answers the same question from the export stream without touching
+  the device.
+- Flush-on-background (`OnApplicationPause`) — needs a MonoBehaviour seam; not worth the
+  MVC exception today
+- Record a run on cheat-restart (`ForceRestartCheat`/`StartFromLevelCheat` bypass
+  `GameOverMessage`, so those dev runs currently vanish; an `EndCause = "Abandoned"` flush
+  from `ResetRun` would capture them)
+- Audio metrics piggybacking this subsystem (peak concurrent voices, voice-steal count,
+  coalesced-burst count, dropped-sound count per id) — see `PLAN-Audio` Phase 2. Dev-build
+  only; they are ordinary `MetricId`s once W1 lands.
+- A fourth dimension axis. If one is genuinely needed, revisit the whole vocabulary shape
+  rather than bolting it on.

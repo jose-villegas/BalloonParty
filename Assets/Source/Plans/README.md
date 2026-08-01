@@ -14,5 +14,5 @@ or a pending evaluation.
 | `PLAN-GridActorExpansion.md` | Grid actor Phase 8+ — archetypes done; 8.3 procedural placement (blocked on content) and 8.4 difficulty coupling open | active |
 | `PLAN-HDRColorPipeline.md` | Gamma→Linear color space + HDR rendering/bloom — planned from verified inventory; execution gated on the Wave A look re-tune decision | conditional |
 | `PLAN-TerrainBiomes.md` | Seeded biome terrain under the board — hex-bound types, noise-blended, disturbance-reactive, GI-fed; baked-composite architecture with per-task agent assignments | active |
-| `PLAN-GameplayTelemetry.md` | Lightweight telemetry for gameplay sessions — draft/parked for a future session | conditional |
+| `PLAN-GameplayTelemetry.md` | Gameplay metrics subsystem — four nested scopes, enum-keyed metric registry, in-game read model for the level-up/game-over popups, decorator-composed export to external analytics; waved with per-task agent assignments | active |
 | `Plans.md` | Doxygen index page linking all plans | — |
