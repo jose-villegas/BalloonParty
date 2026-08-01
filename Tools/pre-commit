@@ -1,33 +1,95 @@
-#!/bin/zsh
-# BalloonParty pre-commit hook — runs style audit on staged .cs files.
-# Install: cp Tools/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
-# (or once: git config core.hooksPath Tools, to track the hook in-repo)
+#!/usr/bin/env bash
+# BalloonParty pre-commit hook — style audit on staged .cs, Mermaid validation on staged .md.
+# Install once: git config core.hooksPath Tools   (keeps the hook tracked in-repo)
+# Or:           cp Tools/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+#
+# Checks run against the WORKING TREE, not the staged blob — a partially staged file is
+# judged by what's on disk. That matches how the audit has always behaved; if it ever
+# matters, stage everything or commit from a clean tree.
+#
+# A missing interpreter SKIPS its check loudly rather than blocking the commit. Tools are
+# probed by running them, not with `command -v`: on Windows, python3/node can resolve to a
+# Microsoft Store alias stub that exists on PATH but fails on execution.
 
-STAGED=$(git diff --cached --name-only --diff-filter=ACM | grep '\.cs$' | grep '^Assets/Source/' || true)
+set -uo pipefail
 
-if [ -z "$STAGED" ]; then
-    exit 0
-fi
-
-echo "🎈 Running style audit on staged files..."
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT" || exit 1
 
 FAILED=0
-for FILE in $STAGED; do
-    # The auditor exits non-zero only on errors (warnings are advisory); show its
-    # report just for the files that fail so a clean commit stays quiet.
-    OUTPUT=$(python3 Tools/style_audit.py --file "$FILE" 2>&1)
-    if [ $? -ne 0 ]; then
-        echo "\n❌ $FILE"
-        echo "$OUTPUT"
-        FAILED=1
+SKIPPED=""
+
+# ---------------------------------------------------------------- C# style audit
+
+STAGED_CS=$(git diff --cached --name-only --diff-filter=ACM | grep '\.cs$' | grep '^Assets/Source/' || true)
+
+if [ -n "$STAGED_CS" ]; then
+    PY=""
+    for candidate in python3 python py; do
+        if command -v "$candidate" >/dev/null 2>&1 && "$candidate" -c "pass" >/dev/null 2>&1; then
+            PY="$candidate"
+            break
+        fi
+    done
+
+    if [ -z "$PY" ]; then
+        SKIPPED="${SKIPPED}  • style audit — no working Python (install it, or the audit never runs)\n"
+    else
+        printf '🎈 Running style audit on staged files...\n'
+        while IFS= read -r FILE; do
+            [ -z "$FILE" ] && continue
+            # The auditor exits non-zero only on errors (warnings are advisory); show its
+            # report just for the files that fail so a clean commit stays quiet.
+            if ! OUTPUT=$("$PY" Tools/style_audit.py --file "$FILE" 2>&1); then
+                printf '\n❌ %s\n%s\n' "$FILE" "$OUTPUT"
+                FAILED=1
+            fi
+        done <<< "$STAGED_CS"
+
+        [ $FAILED -eq 0 ] && printf '✅ Style audit passed.\n'
     fi
-done
+fi
+
+# ---------------------------------------------------------------- Mermaid diagrams
+
+# The skill's references/ are vendored upstream docs — not ours to fix.
+STAGED_MD=$(git diff --cached --name-only --diff-filter=ACM \
+    | grep '\.md$' \
+    | grep -v '^\.claude/skills/mermaid/references/' || true)
+
+if [ -n "$STAGED_MD" ]; then
+    DIAGRAM_FILES=""
+    while IFS= read -r FILE; do
+        [ -z "$FILE" ] && continue
+        [ -f "$FILE" ] || continue
+        if grep -q '^[[:space:]]*```[[:space:]]*mermaid[[:space:]]*$' "$FILE"; then
+            DIAGRAM_FILES="$DIAGRAM_FILES $FILE"
+        fi
+    done <<< "$STAGED_MD"
+
+    if [ -n "$DIAGRAM_FILES" ]; then
+        if ! command -v node >/dev/null 2>&1 || ! node --version >/dev/null 2>&1; then
+            SKIPPED="${SKIPPED}  • Mermaid validation — Node not found (broken diagrams will not be caught)\n"
+        else
+            printf '🎈 Validating Mermaid diagrams...\n'
+            # shellcheck disable=SC2086
+            if ! node Tools/validate-mermaid.mjs $DIAGRAM_FILES; then
+                FAILED=1
+            fi
+        fi
+    fi
+fi
+
+# ---------------------------------------------------------------- Result
+
+if [ -n "$SKIPPED" ]; then
+    printf '\n⚠️  Checks skipped:\n'
+    printf "$SKIPPED"
+fi
 
 if [ $FAILED -eq 1 ]; then
-    echo "\n⛔ Style errors found. Fix them or commit with --no-verify to skip."
+    printf '\n⛔ Commit blocked. Fix the findings above, or commit with --no-verify to skip.\n'
     exit 1
 fi
 
-echo "✅ Style audit passed."
 exit 0
-

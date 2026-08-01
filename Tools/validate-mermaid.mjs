@@ -142,6 +142,17 @@ async function main() {
     return;
   }
 
+  // Probe once, so a missing CLI reads as one actionable line instead of N identical
+  // per-block failures.
+  try {
+    await execFileAsync('mmdc', ['--version'], { shell: process.platform === 'win32' });
+  } catch {
+    console.error('mermaid-cli (mmdc) not found — cannot validate diagrams.');
+    console.error('Install it with:  npm install -g @mermaid-js/mermaid-cli');
+    process.exitCode = 1;
+    return;
+  }
+
   console.log(`Validating ${tasks.length} mermaid block(s)...\n`);
 
   const results = new Array(tasks.length);

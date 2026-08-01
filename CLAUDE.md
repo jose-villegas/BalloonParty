@@ -88,9 +88,17 @@ python3 Tools/style_audit.py            # full scan
 python3 Tools/style_audit.py --file X   # one file
 python3 Tools/style_audit.py --fix      # auto-fix: braces, blank lines, comments, namespace
 ```
-Markdown plan edits don't trigger the audit.
+Markdown edits don't trigger the C# audit — but they do trigger Mermaid validation.
+
+Mermaid diagrams (plans, feature READMEs, `ARCHITECTURE.md`) are validated by rendering:
+```bash
+node Tools/validate-mermaid.mjs          # all of Assets/ + README.md + .claude/agents
+node Tools/validate-mermaid.mjs path.md  # one file or directory
+```
+Needs `npm install -g @mermaid-js/mermaid-cli`. Load the `mermaid` skill before authoring
+a diagram — a broken one fails silently on both GitHub and the Doxygen site.
 
 ## Workflow notes
-- The pre-commit hook (`Tools/pre-commit`) runs `style_audit.py` on staged `.cs` and blocks on `[ERROR]` findings (advisory `[WARN]` ones don't block; `--strict` promotes them). CI runs the same audit + `Tools/test_style_audit.py`. Fix the check, not the code, if it misfires.
+- The pre-commit hook (`Tools/pre-commit`) runs `style_audit.py` on staged `.cs` (blocks on `[ERROR]`; advisory `[WARN]` doesn't block, `--strict` promotes it) and `validate-mermaid.mjs` on staged `.md` that contain diagrams. Enable it with `git config core.hooksPath Tools`. A missing interpreter skips its check with a warning rather than blocking. CI runs the same audit + `Tools/test_style_audit.py`. Fix the check, not the code, if it misfires.
 - This repo commits directly to `main` (single-developer history). Commit only when asked.
 - Project status, optimization findings, and known-fragile areas (e.g. the level-up cinematic trail path) live in Claude's memory index, not here — check it for current state.

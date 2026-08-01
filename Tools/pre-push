@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env bash
 # BalloonParty pre-push hook — run the EditMode suite before pushing.
 # Install: cp Tools/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push
 # (or once: git config core.hooksPath Tools, to track the hook in-repo)
