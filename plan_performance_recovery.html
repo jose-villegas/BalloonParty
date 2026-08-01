@@ -298,7 +298,7 @@ Findings — fourth pass, 2026-07-23 night (simpleperf callstacks, dev build)</h
 <h3><a class="anchor" id="autotoc_md627"></a>
 Decision tree</h3>
 <div class="fragment"><div class="line">graph TD</div>
-<div class="line">    S[record backend + build] --&gt; P{arbitrated &lt;120 +&lt;br/&gt;missed vsync, frame &lt;8.3ms?}</div>
+<div class="line">    S[record backend + build] --&gt; P{&quot;arbitrated &lt;120 +&lt;br/&gt;missed vsync, frame &lt;8.3ms?&quot;}</div>
 <div class="line">    P --&gt;|yes| PAC[Pacing/ARR: vote path / A4 ladder]</div>
 <div class="line">    P --&gt;|no| C{Profiler dominant marker}</div>
 <div class="line">    C --&gt;|Canvas rebuilds| UI[U1 + U2]</div>
@@ -499,7 +499,7 @@ Dependency map &amp; execution waves</h2>
 <div class="line">    A4 -.absorbs keyword sites.-&gt; G4</div>
 <div class="line">    A4 -.drives SmearDownscale.-&gt; G6</div>
 <div class="line">    G1 -.GameScopeRegistration.-&gt; A4</div>
-<div class="line">    A1 -.BackgroundFieldService.Tick.-&gt; G4</div>
+<div class="line">    A1 -.&quot;BackgroundFieldService.Tick&quot;.-&gt; G4</div>
 </div><!-- fragment --><ul>
 <li><b>Same file ⇒ same session</b>: G6+G3 (<code>ScreenSpaceLightSmear.shader</code>, one commit); C1+C3 (<code><a class="el" href="ProjectileView_8cs.html">ProjectileView.cs</a></code>).</li>
 <li><b>Serialize</b>: G4 → A1 → A4 all touch <code>BackgroundFieldService</code> (G4 <code>Start</code> keyword; A1 <code>Tick</code> blit→feature; A4 relocates keyword sites — G4 before A4 or the site lands where A4 moves it). G1 → A4 both edit <code>GameScopeRegistration</code> + multiple services.</li>

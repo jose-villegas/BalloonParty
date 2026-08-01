@@ -283,12 +283,12 @@ Sequence diagram — event to sound</h3>
 <div class="line">    alt throttled / capped</div>
 <div class="line">        Gate--&gt;&gt;Svc: drop (or coalesce into pitch-spread chord)</div>
 <div class="line">    else allowed</div>
-<div class="line">        Gate--&gt;&gt;Svc: ok; picker → clip + pitch + volume + pan</div>
+<div class="line">        Gate--&gt;&gt;Svc: ok, picker yields clip + pitch + volume + pan</div>
 <div class="line">        Svc-&gt;&gt;Pool: Get&lt;AudioSourceVoice&gt;(&quot;SfxVoice&quot;)</div>
 <div class="line">        Pool--&gt;&gt;Svc: voice</div>
 <div class="line">        Svc-&gt;&gt;V: Play(clip, vol, pitch, pan, loop=false, onComplete)</div>
 <div class="line">        V-&gt;&gt;V: AudioSource.Play (channel = SfxEntry.channel mixer group)</div>
-<div class="line">        V--&gt;&gt;Svc: onComplete after clip.length / |pitch| (real-time, ignoreTimeScale)</div>
+<div class="line">        V--&gt;&gt;Svc: onComplete after clip.length over abs pitch, real-time, ignoreTimeScale</div>
 <div class="line">        Svc-&gt;&gt;Pool: Return(&quot;SfxVoice&quot;, voice)</div>
 <div class="line">    end</div>
 </div><!-- fragment --><h3><a class="anchor" id="autotoc_md264"></a>

@@ -280,21 +280,19 @@ Folder structure</h3>
 Scope hierarchy</h3>
 <div class="fragment"><div class="line">stateDiagram-v2</div>
 <div class="line">    direction LR</div>
-<div class="line">    [*] --&gt; Session : App launch (AppLifetimeScope)</div>
+<div class="line">    [*] --&gt; Session</div>
 <div class="line">    state Session {</div>
 <div class="line">        [*] --&gt; Run</div>
-<div class="line">        state Run : &quot;Run (RunController generation + retry provenance)&quot;</div>
 <div class="line">        state Run {</div>
 <div class="line">            [*] --&gt; Level</div>
-<div class="line">            state Level : &quot;Level (Idle/Playing/Ceremony/Transitioning/Ended)&quot;</div>
 <div class="line">            state Level {</div>
 <div class="line">                [*] --&gt; Flight</div>
-<div class="line">                Flight --&gt; Interflight : ProjectileDestroyedMessage (flight seals)</div>
+<div class="line">                Flight --&gt; Interflight : ProjectileDestroyedMessage, flight seals</div>
 <div class="line">                Interflight --&gt; Flight : ProjectileLoadedMessage</div>
 <div class="line">                note right of Interflight</div>
-<div class="line">                  Ceremony + Ascent live here.</div>
-<div class="line">                  Straggler ScoreTrailArrived lands here.</div>
-<div class="line">                  Belongs to the LEVEL, to no flight.</div>
+<div class="line">                    Ceremony and Ascent live here.</div>
+<div class="line">                    Straggler ScoreTrailArrived lands here.</div>
+<div class="line">                    Belongs to the LEVEL, to no flight.</div>
 <div class="line">                end note</div>
 <div class="line">            }</div>
 <div class="line">        }</div>
@@ -323,32 +321,35 @@ Level flush state machine</h3>
 <div class="line">    Transitioning --&gt; Playing : LevelTransitionCompletedMessage / FLUSH snapshot + reset</div>
 <div class="line">    Playing --&gt; Ended : GameOverMessage / flush partial level + run record</div>
 <div class="line">    Transitioning --&gt; Ended : GameOverMessage</div>
-<div class="line">    Ended --&gt; Playing : ResetRun(generation) / RunId = generation, retry provenance captured</div>
-<div class="line">    note right of Ended : accumulation OFF — post-game-over straggler\ntrails must NOT leak into the next run</div>
+<div class="line">    Ended --&gt; Playing : ResetRun, RunId = generation, retry provenance captured</div>
+<div class="line">    note right of Ended</div>
+<div class="line">        Accumulation OFF. Post-game-over straggler trails</div>
+<div class="line">        must NOT leak into the next run.</div>
+<div class="line">    end note</div>
 </div><!-- fragment --><h3><a class="anchor" id="autotoc_md473"></a>
 Level flush sequence</h3>
 <div class="fragment"><div class="line">sequenceDiagram</div>
 <div class="line">    participant Bus as MessagePipe</div>
 <div class="line">    participant Svc as GameplayMetricsService</div>
-<div class="line">    participant Lvl as MetricScope (Level)</div>
-<div class="line">    participant Popup as LevelUpPopUp (View)</div>
+<div class="line">    participant Lvl as Level MetricScope</div>
+<div class="line">    participant Popup as LevelUpPopUp view</div>
 <div class="line">    participant Trails as ScoreTrailService</div>
 <div class="line">    participant Sink as ITelemetrySink</div>
 <div class="line"> </div>
-<div class="line">    Bus-&gt;&gt;Svc: gameplay msgs (fired / hit / item / shield / wave damage)</div>
+<div class="line">    Bus-&gt;&gt;Svc: gameplay msgs - fired, hit, item, shield, wave damage</div>
 <div class="line">    Svc-&gt;&gt;Lvl: increment counters</div>
-<div class="line">    Bus-&gt;&gt;Svc: ScoreLevelUpMessage (NewLevel)</div>
-<div class="line">    Svc-&gt;&gt;Lvl: gameplay clock Pause, ceremony clock Resume</div>
-<div class="line">    Svc-&gt;&gt;Svc: CeremonyLevel.Value = Seal() (immutable snapshot)</div>
-<div class="line">    Popup-&gt;&gt;Svc: read CeremonyLevel.Value after its gate await</div>
+<div class="line">    Bus-&gt;&gt;Svc: ScoreLevelUpMessage</div>
+<div class="line">    Svc-&gt;&gt;Lvl: pause gameplay clock, resume ceremony clock</div>
+<div class="line">    Svc-&gt;&gt;Svc: CeremonyLevel.Value = Seal, an immutable snapshot</div>
+<div class="line">    Popup-&gt;&gt;Svc: reads CeremonyLevel.Value after its gate await</div>
 <div class="line">    Bus-&gt;&gt;Svc: LevelUpDismissedMessage</div>
-<div class="line">    Note over Trails: LevelTransitionController.HoldOutgoingContent -&gt; CompleteAll</div>
-<div class="line">    Trails-&gt;&gt;Bus: ScoreTrailArrivedMessage (stragglers)</div>
+<div class="line">    Note over Trails: HoldOutgoingContent triggers CompleteAll</div>
+<div class="line">    Trails-&gt;&gt;Bus: ScoreTrailArrivedMessage stragglers</div>
 <div class="line">    Bus-&gt;&gt;Svc: ScoreTrailArrivedMessage</div>
-<div class="line">    Svc-&gt;&gt;Lvl: PointsBanked += Points (STILL the completed level)</div>
+<div class="line">    Svc-&gt;&gt;Lvl: PointsBanked += Points, still the completed level</div>
 <div class="line">    Bus-&gt;&gt;Svc: LevelTransitionCompletedMessage</div>
-<div class="line">    Svc-&gt;&gt;Sink: Write(envelope from FLUSH snapshot)</div>
-<div class="line">    Svc-&gt;&gt;Lvl: Absorb into Run; Reset(); gameplay clock Resume</div>
+<div class="line">    Svc-&gt;&gt;Sink: Write envelope from FLUSH snapshot</div>
+<div class="line">    Svc-&gt;&gt;Lvl: absorb into Run, reset, resume gameplay clock</div>
 </div><!-- fragment --><h3><a class="anchor" id="autotoc_md474"></a>
 Dependency graph</h3>
 <div class="fragment"><div class="line">graph TD</div>
