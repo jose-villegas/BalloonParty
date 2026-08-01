@@ -16,6 +16,11 @@ cinematic included. Reach zero and the run ends; only your best level and score 
 Leveling up earns its own cinematic: the tipping trail is intercepted mid-flight, the
 camera dives after it, and the world hands back control through a curve-driven restore.
 
+## Releases
+
+🎮 **[Latest Release](https://github.com/jose-villegas/BalloonParty/releases/latest)** —
+Play the most recent stable build. Also available on [itch.io](https://jose-villegas.itch.io/balloonparty).
+
 ## Documentation
 
 📚 **[Full documentation & API reference](https://jose-villegas.github.io/BalloonParty/)** —
