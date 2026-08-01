@@ -13,7 +13,8 @@
         "UniTask.DOTween",
         "DOTween.Modules",
         "Unity.RenderPipelines.Universal.Runtime",
-        "UIEffect"
+        "UIEffect",
+        "Coffee.UIEffect"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -94,9 +94,7 @@ Packages/com.balloonparty.editorui/
 │   ├── Layout/          (3 files)
 │   ├── Palette/         (2 files)
 │   └── Utilities/       (5 files)
-├── Tests/Editor/        (15 test files)
-└── Samples~/
-    └── TableWindowExample/
+└── Tests/Editor/        (15 test files)
 ```
 
 ## Requirements

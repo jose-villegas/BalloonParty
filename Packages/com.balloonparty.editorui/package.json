@@ -5,12 +5,5 @@
   "description": "Reusable IMGUI building blocks for Unity editor windows.",
   "unity": "2022.3",
   "keywords": ["editor", "imgui", "tools", "charts", "tables"],
-  "type": "tool",
-  "samples": [
-    {
-      "displayName": "Table Window Example",
-      "description": "Demonstrates SortableHeader + SelectionTracker in an EditorWindow.",
-      "path": "Samples~/TableWindowExample"
-    }
-  ]
+  "type": "tool"
 }

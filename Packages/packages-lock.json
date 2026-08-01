@@ -7,39 +7,40 @@
       "dependencies": {}
     },
     "com.coffee.ui-effect": {
-      "version": "https://github.com/mob-sakai/UIEffect.git",
+      "version": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src#5.11.5",
       "depth": 0,
       "source": "git",
-      "dependencies": {},
-      "hash": "b43e40508b167d143330d8b9eff0d5c9965cdf3c"
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      },
+      "hash": "1f4427c3d5d249534dba69d8c53acafb5d5fbd7f"
     },
     "com.cysharp.messagepipe": {
-      "version": "1.8.1",
+      "version": "1.8.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
     "com.cysharp.messagepipe.vcontainer": {
-      "version": "1.8.1",
+      "version": "1.8.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
     "com.cysharp.unitask": {
-      "version": "2.5.10",
+      "version": "2.5.11",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
     "com.dbrizov.naughtyattributes-x": {
-      "version": "2.2.1",
+      "version": "file:com.dbrizov.naughtyattributes-x",
       "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
+      "source": "embedded",
+      "dependencies": {}
     },
     "com.github-glitchenzo.nugetforunity": {
       "version": "4.5.0",
@@ -323,7 +324,7 @@
       "hash": "d6cd6cef038c980a47eef5508642a7bb43eae98d"
     },
     "jp.hadashikick.vcontainer": {
-      "version": "1.16.8",
+      "version": "1.19.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
