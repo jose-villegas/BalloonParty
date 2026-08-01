@@ -3,18 +3,20 @@
 [![Style Audit](https://github.com/jose-villegas/BalloonParty/actions/workflows/style-audit.yml/badge.svg)](https://github.com/jose-villegas/BalloonParty/actions/workflows/style-audit.yml)
 [![Docs](https://github.com/jose-villegas/BalloonParty/actions/workflows/doxygen.yml/badge.svg)](https://jose-villegas.github.io/BalloonParty/)
 
-A colorful, fast-paced arcade balloon-popper built with **Unity 6**. Fire bouncing
-projectiles into a hex grid of balloons, chain color streaks to fill per-color score
-bars, and trigger items — bombs, lasers, chain lightning, paint, shields — as the board
-fights back with puff clouds, bushes, and armored balloons.
+A colorful, rhythmic arcade balloon-popper built with **Unity 6**. Fire bouncing
+projectiles into a hex grid, build color streaks for score multipliers, and chain
+mechanics — wall bounces earn speed taps, cascading clears trigger sweep bonuses — while
+the board fights back with puff clouds, bushes, and increasingly resilient balloons.
 
 <video src="https://github.com/jose-villegas/BalloonParty/raw/main/video.mp4" controls width="100%"></video>
 
-Runs have **stakes**: every spawn wave packs the grid tighter, and when a wave can't fit,
-the overflow pile below the grid drains your hearts one heart-trail at a time — slow-mo
-cinematic included. Reach zero and the run ends; only your best level and score survive.
-Leveling up earns its own cinematic: the tipping trail is intercepted mid-flight, the
-camera dives after it, and the world hands back control through a curve-driven restore.
+Every run has **pressure**: spawn waves pack the grid tighter each turn, and overflow —
+balloons too high to fit — drains your hearts one heart-trail at a time (with slow-mo
+cinematics). Reach zero and the run ends; only your best level and score persist. Each
+new level brings tighter grids, new balloon variants, and harder trade-offs between
+defense (shields) and offense (bombs, lightning). Level-ups earn their own cinematic: the
+tipping trail is intercepted mid-flight and the camera dives after it, handing control
+back through a curve-driven restore.
 
 ## Releases
 
