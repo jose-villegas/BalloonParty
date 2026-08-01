@@ -31,6 +31,15 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
 
+# Windows consoles default to cp1252, which cannot encode the report's box-drawing and
+# emoji characters — the run would die with UnicodeEncodeError while printing its own
+# success line, making a clean audit exit 1 and block every commit touching C#.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):  # already-wrapped or non-reconfigurable stream
+        pass
+
 # ─── Configuration ───────────────────────────────────────────────────────────
 
 SOURCE_ROOT = Path(__file__).resolve().parent.parent / "Assets" / "Source"
@@ -1789,9 +1798,14 @@ def run_fix(result: AuditResult):
 def run_audit(rule_filter: Optional[str] = None, file_filter: Optional[str] = None) -> AuditResult:
     result = AuditResult()
 
+    # Separator-agnostic so a caller can pass either slash style. The pre-commit hook feeds
+    # git's forward-slash paths, which never matched a Windows backslash path — the filter
+    # silently selected zero files and the audit reported success on an unchecked commit.
+    needle = file_filter.replace("\\", "/") if file_filter else None
+
     # Per-file rules
     for path in cs_files(SOURCE_ROOT):
-        if file_filter and file_filter not in str(path):
+        if needle and needle not in str(path).replace("\\", "/"):
             continue
 
         lines = read_lines(path)
