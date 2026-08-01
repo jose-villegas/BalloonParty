@@ -56,7 +56,7 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "BalloonParty.sln",
+    "dotnet.defaultSolution": "BalloonParty.slnx",
     "FSharp.suggestGitignore": false,
     "dotnet.preferCSharpExtension": true
 }
