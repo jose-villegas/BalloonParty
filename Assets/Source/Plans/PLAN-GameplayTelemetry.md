@@ -258,7 +258,6 @@ Assets/Source/Game/Telemetry/
 ├── RunMetricsSnapshot.cs            ← sealed immutable per-run read surface
 ├── ColorPopCount.cs / BalloonTypeCount.cs / ItemActivationCount.cs
 ├── ILevelMetricsView.cs             ← the UI read seam
-├── IFlightScope.cs / FlightScopeService.cs   ← shared flight boundary
 ├── GameplayMetricsService.cs        ← entry point: state machine + routing + snapshots
 ├── SessionTelemetryContext.cs       ← session id, schema version (App scope)
 ├── TelemetryEnvelope.cs             ← uniform wire record (readonly struct)
@@ -392,35 +391,194 @@ Rejected: `Dictionary<MetricId,int>` (hash per hit and resize allocations during
 N-dimensional metric cube (YAGNI, and it destroys the catalog's discoverability,
 which is the registry's only real cost and its only real defence).
 
-### Audio: extract the flight *boundary*, not the counters
+### The catalog
+
+**This table is W1's specification.** Implement exactly these ids, in this order, with
+these wire names. Do not invent, rename, reorder, or "improve" them — wire names are the
+external contract (**R6**, guardrail 14) and are append-only once shipped. If a metric you
+expect is missing, it was left out deliberately; add it in a later wave rather than
+guessing here.
+
+**Naming convention:** enum members are `PascalCase`, wire names are `snake_case`. The
+split is deliberate — the C# identifier stays free to be renamed for readability while the
+wire name stays frozen for the warehouse.
+
+**Scope** is where the metric is *counted*. Everything folds upward to Level, Run and
+Session by its fold rule (**R4**); Flight-scope metrics are additionally sealed per shot.
+
+```csharp
+internal enum FoldRule { Sum, Max, Min, Last }
+```
+
+#### Counters — `MetricId`
+
+| Enum member | Wire name | Unit | Fold | Source | Axis | Scope |
+|---|---|---|---|---|---|---|
+| `ShotsFired` | `shots_fired` | count | Sum | `ProjectileFiredMessage` | — | Level |
+| `FlightsStarted` | `flights_started` | count | Sum | `ProjectileLoadedMessage` | — | Level |
+| `Pops` | `pops` | count | Sum | `ActorHitMessage`, `Outcome == Pop` | Color, BalloonType | Flight |
+| `DirectHitPops` | `direct_hit_pops` | count | Sum | as above **and** `(Context.Flags & DamageFlags.DirectHit) != 0` | — | Flight |
+| `Deflects` | `deflects` | count | Sum | `ActorHitMessage`, `Outcome == Deflect` | BalloonType | Flight |
+| `Absorbs` | `absorbs` | count | Sum | `ActorHitMessage`, `Outcome == Absorb \| PassThrough` | — | Flight |
+| `WallBounces` | `wall_bounces` | count | Sum | `WallHitMessage` | — | Flight |
+| `PierceDischarges` | `pierce_discharges` | count | Sum | `PierceDischargedMessage` | — | Flight |
+| `PierceToughsCleared` | `pierce_toughs_cleared` | count | Sum | `PierceDischargedMessage.ToughCount` | — | Flight |
+| `RainbowPierceDischarges` | `rainbow_pierce_discharges` | count | Sum | `PierceDischargedMessage.IsRainbow` | — | Flight |
+| `SpeedTapsMinted` | `speed_taps_minted` | count | Sum | `SpeedTapMintedMessage` | — | Flight |
+| `MaxWallBouncesInFlight` | `max_wall_bounces_in_flight` | count | Max | `WallBounces` at flight seal | — | Level |
+| `MaxSpeedTapsInFlight` | `max_speed_taps_in_flight` | count | Max | `SpeedTapMintedMessage.TotalTaps` | — | Level |
+| `HoldSpeedUpFlights` | `hold_speed_up_flights` | count | Sum | `IHoldSpeedUpState` — flights where hold engaged (**R11**) | — | Level |
+| `PointsBanked` | `points_banked` | points | Sum | `ScoreTrailArrivedMessage.Points` | Color | Level |
+| `PointsProjected` | `points_projected` | points | Last | `IRunScore.TotalScore` read at ceremony snapshot (**R18**) | — | Level |
+| `MaxMultiplier` | `max_multiplier` | multiplier | Max | `ScorePointsGroupMessage.Multiplier` | — | Level |
+| `MaxStreak` | `max_streak` | count | Max | `StreakChangedMessage.Streak` | — | Level |
+| `StreakBreaks` | `streak_breaks` | count | Sum | `StreakChangedMessage` where `Streak == 0` | — | Level |
+| `HeartsLost` | `hearts_lost` | hearts | Sum | `WaveDamageMessage.HeartsLost` (**R10**) | — | Level |
+| `MaxHeartsLostInWave` | `max_hearts_lost_in_wave` | hearts | Max | `WaveDamageMessage.HeartsLost` | — | Level |
+| `BlockedSlots` | `blocked_slots` | count | Sum | `WaveDamageMessage.BlockedSlots` (**R10**) | — | Level |
+| `Strikethroughs` | `strikethroughs` | count | Sum | `StrikethroughArrivedMessage` | — | Level |
+| `ShieldsGained` | `shields_gained` | count | Sum | `ShieldGainedMessage` | — | Level |
+| `ShieldsSpent` | `shields_spent` | count | Sum | `ShieldLostMessage` | — | Level |
+| `ItemsActivated` | `items_activated` | count | Sum | `ItemActivatedMessage` | ItemType | Level |
+| `MinHealth` | `min_health` | hearts | **Min** | `IPlayerHealth.Current` | — | Level |
+| `MaxDangerLevel` | `max_danger_level` | level | Max | `IDangerLevel.Level` | — | Level |
+| `BoardCleared` | `board_cleared` | count | Max | `BoardDepletedMessage` — 1 if the board emptied organically (**R15**) | — | Level |
+| `LevelsCompleted` | `levels_completed` | count | Sum | derived: absorbed level with `Completed == true` | — | Run |
+| `RetriesUsed` | `retries_used` | count | Last | `IRetryState` at reset (**R14**) | — | Run |
+
+`Absorbs` uses `!=` against a combined mask because it is the one outcome family where two
+values share a metric; every other filter is `==` per the repo idiom.
+
+#### Timers — `TimerId`
+
+| Enum member | Wire name | Runs while | Pause-gated |
+|---|---|---|---|
+| `Gameplay` | `gameplay_seconds` | state == `Playing` | **yes** |
+| `Ceremony` | `ceremony_seconds` | state == `Ceremony` | no — the ceremony *is* a pause |
+| `Wall` | `wall_seconds` | state ∉ {`Idle`, `Ended`} | no |
+| `Hold` | `hold_seconds` | hold-to-speed-up engaged (**R11**) | no — only runs in flight |
+
+#### Not metrics
+
+These live on the envelope as identity/context, never in `MetricSet`: `SchemaVersion`,
+`SessionId`, `RunId`, `AttemptId`, `AttemptIndex`, `LevelIndex`, `LevelAttemptOrdinal`,
+`Completed`, `CheatActive`, `EndCause`, `RecordKind`, `TimestampUtcTicks`.
+
+```csharp
+internal enum RecordKind { Flight, Level, Run, Session }
+```
+
+`Session` is reserved: the scope accumulates (**R1**) but nothing flushes it in the waves
+below, so no `Session` envelope is emitted yet and there is no `SessionMetricsSnapshot`.
+Do not build one speculatively.
+
+### Flight stats: extract the boundary *and* the type counters; the colour ramp stays
 
 `CombatSoundRouter` keeps nine per-flight counters (`:40-52`) and uses them as musical
-pitch ramps. **They stay where they are.** The duplication is eight ints and a
-dictionary, incremented a handful of times per frame; the merge would cost far more:
+pitch ramps. **Eight of the nine are gameplay facts wearing an audio costume** — "how many
+Toughs died this flight" is not a sound concern — and they move to a gameplay-owned
+`FlightStatsService`. One stays.
 
-- **Read-before-write.** The router reads the count, plays the note, *then* increments
-  (`:127-131`, and the `PopSemitoneOffset`/`IncrementPopCounter` pair at `:300-339`). If
-  audio read a shared bus-subscribing aggregate instead, the pitch would depend on
-  MessagePipe subscription order — and since `RegisterGameplaySystems` runs before
-  `RegisterAudioRouters`, every ramp would come out a whole tone sharp, with the first
-  pop of a colour off the root. Silent, ear-only, in a subsystem whose entries currently
-  ship dormant. This is exactly the coupling `HitPipeline` exists to eliminate
-  (*"MessagePipe's subscription order is enforced nowhere"*), and re-introducing it for a
-  cosmetic subsystem is a straight regression.
-- **Divergent reset semantics.** The router clears `_colorPopsThisFlight` on
-  `StreakChangedMessage(0)` (`:267-270`). That is musically correct and analytically
-  wrong: applying it to the shared aggregate would make `PopsByColor` under-report by
-  every pop before the last streak break — wrong data that looks entirely plausible.
+#### The single-writer rule
 
-**What is shared instead:** `IFlightScope` (`FlightIndex`, `IsInFlight`), a tiny plain-C#
-service. Flight state is currently tracked five independent times (`CombatSoundRouter`,
-`MusicSoundRouter._inFlight`, `HoldSpeedUpController`, `HoldSpeedUpTooltip`,
-`WindSoundRouter` via live cruise state). Consumers react to a **state flip** rather than
-reading a counter mid-hit, so there is no ordering hazard. `MusicSoundRouter`'s three
-subscriptions collapse to one.
+The reason a naive merge fails is real and unchanged: the router reads the count, plays
+the note, *then* increments (`:127-131`, and the `PopSemitoneOffset`/`IncrementPopCounter`
+pair at `:300-339`). Two independent bus subscribers would make the pitch depend on
+MessagePipe subscription order, and every ramp would come out a whole tone sharp.
 
-Document the duplication as intentional in **both** `Audio/README.md` and
-`Game/Telemetry/README.md`, or someone will "fix" it.
+That argument constrains **where the write goes**, not whether the counters move.
+`HitPipeline.cs:14` holds the **only** `IPublisher<ActorHitMessage>` in the repo — all
+nine `IHitDispatcher.Dispatch` call sites (projectile, bomb, laser, lightning, three
+cheats) funnel through it. Recording there, *before* the publish, fixes the count before
+any subscriber runs:
+
+```csharp
+_score.OnActorHit(msg);
+_balloonRegistry.Route(msg);
+_flightStats.Record(msg);
+_hitPublisher.Publish(msg);
+```
+
+The hazard is dissolved by construction rather than mitigated — there is no longer an
+order to depend on. Audio reads the post-increment value and subtracts one, so every
+played `semitoneOffset` is byte-identical to today. This is in character for
+`HitPipeline`, whose stated job is *"the order-dependent part of hit resolution,
+explicitly"*; the dangerous design is the one that avoids it.
+
+**Audio must not be the writer.** Inverting it — `CombatSoundRouter` calling `Record` —
+makes a cosmetic subsystem the source of truth for analytical data, and the melodic
+machinery currently ships dormant. One future early-return for a muted state silently
+zeroes the metrics.
+
+#### What moves, and what does not
+
+The deciding fact, which neither the original study nor an earlier revision of this plan
+noticed: **audio's two axes are mutually exclusive.** `OnActorHit` branches at `:124` — a
+pop takes the colour path **or** the type path, never both. A red Tough increments the
+Tough counter and *not* the red one. R12 requires both axes on every pop, so the two
+quantities are genuinely different, and the divergence is confined to one field.
+
+| Field | Verdict | Why |
+|---|---|---|
+| six per-type pop counters (`:46-50`) | **move** | `PopSoundFor` (`:170-182`) is a 1:1 map from `BalloonType`; each counter *is* `PopsByBalloonType[T]` for the flight |
+| `_unbreakableDeflectsThisFlight` (`:51`) | **move** | `UnbreakableBalloonModel` has no `IHasDurability`, so the branch is unconditional — becomes `DeflectsByBalloonType[Unbreakable]` |
+| `_pierceDischargesThisFlight` (`:52`) | **move** | unconditional increment on `PierceDischargedMessage`; zero musical conditioning |
+| `_bounceCount` (`:44`) | **move, with a test** | now a clean gameplay fact, but it resets on `ProjectileFiredMessage` (`:198`) while the rest reset on `ProjectileLoadedMessage` (`:204-212`). Moving it to the `[Loaded, Destroyed)` boundary is behaviourally identical *only because* no `WallHitMessage` can occur before launch — assert that, do not assume it |
+| `_colorPopsThisFlight` (`:40`) | **stays private** | cleared on both `Loaded` (`:212`) **and** `StreakChangedMessage(0)` (`:269`), so its scope is `[max(flight start, last streak break), now)` — not a flight counter at all, and it counts only generic-`BalloonPop` pops. It is a pitch cursor, not a statistic |
+
+Moving the colour dictionary would reintroduce the whole-tone-sharp regression through a
+different door: under a shared `PopsByColor`, a red Tough followed by a red Simple plays
+the Simple at step 1 instead of step 0.
+
+#### Ownership — beside telemetry, not inside it
+
+`FlightStatsService` is a **gameplay** service with two readers, one of which is metrics.
+Putting it inside `Game/Telemetry` would break **R20** and the subscriber-only principle
+outright, because audio is a shipping feature and metrics would become load-bearing for
+it. Folder `Assets/Source/Game/Flight/`, namespace `BalloonParty.Game.Flight`, Controller
+layer (plain C#, `IStartable`/`IDisposable`), registered in `RegisterGameplaySystems`
+before `LevelController`.
+
+```csharp
+internal interface IFlightScope
+{
+    int FlightIndex { get; }
+    IReadOnlyReactiveProperty<bool> IsLoaded { get; }    // [Loaded, Destroyed)
+    IReadOnlyReactiveProperty<bool> IsAirborne { get; }  // [Fired, Destroyed)
+}
+
+internal interface IFlightStats
+{
+    int PopsOf(BalloonType type);
+    int DeflectsOf(BalloonType type);
+    int PierceDischarges { get; }
+    int WallBounces { get; }
+}
+
+// Write seam — HitPipeline only. Segregated so no reader can mutate.
+internal interface IFlightStatsWriter
+{
+    void Record(in ActorHitMessage msg);
+}
+```
+
+Two flags, not one: the five existing flight trackers use three different boundaries.
+`MusicSoundRouter` sets `_inFlight` on **Fired** (`MusicSoundRouter.cs:145`) and uses it
+to duck (`:192`), so migrating it to a `[Loaded, Destroyed)` flag would duck the music
+while the player is *aiming* — permanently, between shots. `IsAirborne` is the flag it
+and `HoldSpeedUpController` take; `IsLoaded` is what R2's Σ-flights ⊆ level needs.
+
+#### The acceptance gate is free
+
+Every played `semitoneOffset` is unchanged by this refactor, so
+`Assets/Tests/EditMode/Audio/CombatSoundRouterTests.cs` **must pass entirely unmodified**.
+That converts an ear-only regression risk into a red/green gate — which is what makes this
+wave safe to hand to a cheaper model.
+
+Note for the implementer: cheat-driven dispatches (`AwardScorePopCheat`,
+`BalloonRemoverCheat`, `ScoreCheatHelper`) now feed the shared stats too. Harmless —
+those runs are cheat-tagged for filtering — but say so in the README or someone will
+"fix" it.
 
 ### Run identity and retries
 
@@ -716,27 +874,37 @@ handed over; the requirement numbers are the acceptance criteria.
 
 ### Dependency graph
 
-```
-W0 doc freshness (haiku/scribe) ──┐
-                                  │
-W1 vocabulary + scopes (sonnet) ──┴──▶ W2 envelope + serializer + JSONL sink (sonnet)
-            │                                          │
-            ├──────────────────────────────────────────┤
-            ▼                                          ▼
-   W3 service + state machine + IFlightScope (opus) ──▶ W4 UI read model + popups (opus)
-            │                                          │
-            └──▶ W5 export decorators (sonnet) ────────┴──▶ W6 HTTP analytics sink (opus)
+```mermaid
+graph TD
+    W0["W0 doc freshness (haiku + sonnet)"] --> W2b
+    W0 --> W3
+    W0 --> W4
+    W1["W1 vocabulary + scopes (sonnet)"] --> W1R{{"opus review — wire names are append-only"}}
+    W1R --> W2["W2 envelope + serializer + sinks (sonnet)"]
+    W1R --> W3
+    W2 --> W3
+    W2 --> W5["W5 export decorators (sonnet)"]
+    W2b["W2b flight scope + flight stats (sonnet)"] --> W3["W3 metrics service (opus)"]
+    W3 --> W4["W4 UI read model + popups (opus)"]
+    W5 --> W6["W6 HTTP analytics sink (opus)"]
 ```
 
-### W0 — Doc freshness · **P0 · S · haiku (scribe)**
-Blocker for W3/W4: two READMEs describe code that no longer matches.
-- `Audio/README.md` — (a) `MusicSoundRouter` is described as launch-music only; it now
-  also runs the day/night gameplay crossfade, ducks on `_inFlight`, and pitches down with
-  danger. (b) The *Melodic pops* section documents only the `IMelodicContext.SetStreak`
-  path and **never mentions** `CombatSoundRouter`'s independent per-flight semitone ramp —
-  the mechanism this plan's audio decision hinges on.
-- `Game/Run/README.md` — contents table omits `RetryTracker`, `IRetryState`,
-  `GameOverPresentationGate`, and gives `IBoardResettable` no row.
+**Parallelism, precisely:** only **W0 ∥ W1 ∥ W2b** is real. W1 → W2 is a hard edge (the
+serializer loops `MetricCatalog`, and `TelemetryEnvelope` carries `IReadOnlyMetricSet`);
+W2 → W5 is a hard edge (the decorators implement `ITelemetrySink` and extend
+`TelemetrySinkBase`, both W2 artifacts). W5 does **not** depend on W3.
+
+### W0 — Doc freshness · **P0 · S**
+Blocker for W2b/W3/W4: two READMEs describe code that no longer matches.
+- `Audio/README.md` — **sonnet, not haiku.** (a) `MusicSoundRouter` is described as
+  launch-music only; it now also runs the day/night gameplay crossfade, ducks on
+  `_inFlight`, and pitches down with danger. (b) The *Melodic pops* section documents only
+  the `IMelodicContext.SetStreak` path and **never mentions** `CombatSoundRouter`'s
+  per-flight semitone ramp — including the read-before-write shape and the colour/type
+  XOR at `:124`. That mechanism is what the whole flight-stats decision rests on; document
+  it wrong and the README *justifies* moving the colour dictionary.
+- `Game/Run/README.md` — **haiku.** Contents table omits `RetryTracker`, `IRetryState`,
+  `GameOverPresentationGate`, and gives `IBoardResettable` no row. Pure transcription.
 
 ### W1 — Vocabulary, scopes, timers · **P0 · M · sonnet**
 `MetricId`, `TimerId`, `MetricAxis`, `FoldRule`, `MetricCatalog`, `MetricSet` /
@@ -752,16 +920,41 @@ is the highest-value task to specify precisely.** Acceptance: **R1, R4–R7, R12
 the emitted string. Mechanical — the constraints are fully written out above. Acceptance:
 **R24, R25, R27**, plus the dev-only tier of **R28**.
 
-### W3 — Service, state machine, flight scope · **P0 · L · opus**
-`IFlightScope`/`FlightScopeService`, `GameplayMetricsService` (state machine, ~14
-subscriptions, boundaries, snapshots, `IRunResettable`, cheat tagging),
-`SessionTelemetryContext` in `AppLifetimeScope`, registration at the end of
-`RegisterGameplaySystems`, `CheatState.AnyCheatUsed`, and the `MusicSoundRouter`
-migration to `IFlightScope`.
+### W2b — Flight scope + flight stats · **P0 · M · sonnet, opus review**
+Independent of W1 and W2; can run alongside them. New folder
+`Assets/Source/Game/Flight/` (namespace `BalloonParty.Game.Flight`):
+`IFlightScope`, `IFlightStats`, `IFlightStatsWriter`, `FlightStatsService`, `README.md`.
+
+- One `Record(msg)` line in `HitPipeline.Dispatch`, **before** the publish. `HitPipeline`
+  is the only writer, forever.
+- `CombatSoundRouter`: delete the eight moved counters, `PopSemitoneOffset` and
+  `IncrementPopCounter`; read post-increment counts and subtract one. **Keep
+  `_colorPopsThisFlight` exactly as it is.**
+- `MusicSoundRouter` and `HoldSpeedUpController` migrate to `IFlightScope.IsAirborne`
+  (**not** `IsLoaded` — see *Flight stats*).
+- Registration in `RegisterGameplaySystems` before `LevelController`.
+
+**Hard gate:** `Assets/Tests/EditMode/Audio/CombatSoundRouterTests.cs` must pass
+**entirely unmodified** — every played `semitoneOffset` is unchanged by this refactor. Add
+one new test asserting no `WallHitMessage` can arrive before `ProjectileFiredMessage`
+(the `_bounceCount` boundary move depends on it). Sonnet is safe here *because* of that
+gate; without it this would be opus. Acceptance: **R2** (Flight scope), plus no audio
+behaviour change.
+
+### W3 — Metrics service and state machine · **P0 · L · opus**
+`GameplayMetricsService` (state machine, ~14 subscriptions, boundaries, both snapshots,
+`IRunResettable` + the three-id retry derivation, cheat tagging), `SessionTelemetryContext`
+in `AppLifetimeScope`, registration at the end of `RegisterGameplaySystems`,
+`CheatState.AnyCheatUsed`, and `IHoldSpeedUpState` on `HoldSpeedUpController` (**R11**).
+
+Reads `IFlightStats` at flight seal rather than maintaining a parallel flight scope — so
+R2's Σ-flights ⊆ level is a property of one owner, not an invariant two owners must
+independently respect.
 
 **Judgment task — every trap in *Implementer guardrails* lives here.** Requires an
-in-editor playtest; `dotnet build` cannot verify the state machine. Acceptance:
-**R2, R3, R8–R15, R21–R23, R28**.
+in-editor playtest **and** a rebuild with `UNITY_EDITOR` stripped (for the `#else` cheat
+branch); `dotnet build` cannot verify the state machine. Acceptance:
+**R2, R3, R8–R11, R13–R17, R21–R23**, plus the cheat-read tier of **R28**.
 
 ### W4 — UI read model and popups · **P1 · M–L · opus**
 `ILevelMetricsView`, `LevelUpPopUp` and `GameOverScreen` consumption, the
@@ -797,9 +990,11 @@ README updated. W3/W4 additionally need a build with `UNITY_EDITOR` stripped (fo
 The traps here all *compile and run*; they fail only in the data, on device, or by ear.
 In rough order of cost-to-discover.
 
-1. **Do not merge `CombatSoundRouter`'s counters into the shared aggregate** — it reads
-   before it increments, so the pitch would become subscription-order dependent, and its
-   streak-break reset is analytically wrong. Extract `IFlightScope` only.
+1. **`HitPipeline` is the only writer of `FlightStatsService`, and `_colorPopsThisFlight`
+   never moves.** Audio reads the post-increment count and subtracts one. If audio (or a
+   second bus subscriber) writes instead, the pitch becomes subscription-order dependent
+   and every ramp comes out a whole tone sharp. The colour dictionary is streak-scoped,
+   not flight-scoped — moving it breaks the ramp a different way.
 2. **Do not use `JsonUtility` or Newtonsoft** — `JsonUtility` emits `{}` for these types
    with no error; Newtonsoft is unreachable from the runtime asmdef.
 3. **Do not count `PausedMessage`/`ResumedMessage`** — the counter leaks on every loss;
@@ -838,8 +1033,9 @@ descending bounce ramp never plays. `MetricId.WallBounces` should be derived fro
 
 | ID | Risk | Trigger | Mitigation |
 |---|---|---|---|
-| RK-1 | Audio pitch ramp shifts a whole tone, silently | Merging audio's counters into a bus-subscribing aggregate | Keep them local; extract `IFlightScope` only |
-| RK-2 | `PopsByColor` under-reports every pop before the last streak break | Applying audio's `StreakChangedMessage(0)` clear to the shared aggregate | Same. Worst failure mode here — the data looks plausible |
+| RK-1 | Audio pitch ramp shifts a whole tone, silently | Anything but `HitPipeline` writing `FlightStatsService`, or audio forgetting the `- 1` on the post-increment read | Single-writer rule; `CombatSoundRouterTests` must pass unmodified |
+| RK-2 | The colour ramp breaks after a streak break, or a red Tough offsets the next red Simple | Moving `_colorPopsThisFlight` into the shared stats — it is streak-scoped and counts only generic-`BalloonPop` pops | It stays private to `CombatSoundRouter`. Worst failure mode here — silent and ear-only |
+| RK-2a | Two answers to "how many Toughs popped" drift apart | Leaving the type counters private and recounting them in metrics — adding a `BalloonType` then requires lockstep edits in `PopSoundFor`, `PopSemitoneOffset`, `IncrementPopCounter` *and* metrics | Single owner: `FlightStatsService` |
 | RK-3 | Levels-reached distribution corrupted by retries | Treating the run generation as run identity | **R14** — chain / attempt / attempt-index split |
 | RK-3a | Level difficulty analysis blames levels that were never retried | Segmenting by `AttemptIndex` instead of `LevelAttemptOrdinal` | **R14a** |
 | RK-3b | Run totals double-count a replayed level | Summing `PointsBanked` across level records in a chain | **R14b** — take `TotalScore` from `GameOverMessage` |

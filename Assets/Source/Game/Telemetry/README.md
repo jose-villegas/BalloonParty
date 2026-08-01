@@ -41,13 +41,17 @@ shown) and a *flush* snapshot (what was true) are both taken and both logged. Th
 between them is data, not a bug. The popup shows *projected* points to match what
 `ScoreController` already displays beside it.
 
-## Deliberate duplication with audio
+## Where the per-flight numbers come from
 
-`CombatSoundRouter` keeps its own per-flight counters and **that is intentional** — it
-reads each count before incrementing it (the count is a musical pitch step), so sourcing
-it from a shared bus subscriber would make the pitch depend on MessagePipe subscription
-order. Its counters also reset on streak break, which is musically right and analytically
-wrong. Only the flight *boundary* is shared, via `IFlightScope`.
+Per-flight counts live in `FlightStatsService` (`Game/Flight/`, a **gameplay** service,
+not part of this folder). `HitPipeline` is its only writer, recording each hit *before*
+publishing `ActorHitMessage` — so the count is fixed before any subscriber runs, and
+`CombatSoundRouter` reads it post-increment for its pitch ramps. Metrics folds it at
+flight seal. One owner, two readers, no ordering hazard.
+
+The one exception: `CombatSoundRouter._colorPopsThisFlight` **stays private to audio**. It
+resets on streak break as well as on load, and counts only pops that use the generic
+`BalloonPop` sound — a pitch cursor, not a statistic. Do not "unify" it.
 
 ## Pause handling
 
