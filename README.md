@@ -21,7 +21,7 @@ back through a curve-driven restore.
 ## Releases
 
 🎮 **[Latest Release](https://github.com/jose-villegas/BalloonParty/releases/latest)** —
-Play the most recent stable build. Also available on [itch.io](https://jose-villegas.itch.io/balloonparty).
+Play the most recent stable build.
 
 ## Documentation
 
