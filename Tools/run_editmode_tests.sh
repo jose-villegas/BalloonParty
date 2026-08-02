@@ -28,9 +28,23 @@ FORCE=0
 [ "${1:-}" = "--force" ] && FORCE=1
 
 VERSION="$(awk '/^m_EditorVersion:/ {print $2}' "$ROOT/ProjectSettings/ProjectVersion.txt")"
-UNITY="/Applications/Unity/Hub/Editor/$VERSION/Unity.app/Contents/MacOS/Unity"
-if [ ! -x "$UNITY" ]; then
-    echo "Unity $VERSION not found at $UNITY" >&2
+
+# Hub layout differs per platform. The macOS path was the only one here for a long time,
+# so this script silently failed on Windows — and the pre-push hook that calls it skipped
+# the suite without saying why.
+UNITY=""
+for CANDIDATE in \
+    "/Applications/Unity/Hub/Editor/$VERSION/Unity.app/Contents/MacOS/Unity" \
+    "/c/Program Files/Unity/Hub/Editor/$VERSION/Editor/Unity.exe" \
+    "$HOME/Unity/Hub/Editor/$VERSION/Editor/Unity" ; do
+    if [ -x "$CANDIDATE" ]; then
+        UNITY="$CANDIDATE"
+        break
+    fi
+done
+
+if [ -z "$UNITY" ]; then
+    echo "Unity $VERSION not found. Looked in the macOS, Windows and Linux Hub locations." >&2
     exit 1
 fi
 

@@ -84,6 +84,7 @@ class Violation:
 @dataclass
 class AuditResult:
     violations: list[Violation] = field(default_factory=list)
+    scanned: int = 0
 
     def add(self, v: Violation):
         v.severity = "warning" if v.rule in WARNING_RULES else "error"
@@ -1808,6 +1809,7 @@ def run_audit(rule_filter: Optional[str] = None, file_filter: Optional[str] = No
         if needle and needle not in str(path).replace("\\", "/"):
             continue
 
+        result.scanned += 1
         lines = read_lines(path)
 
         for name, check_fn in RULES.items():
@@ -1854,6 +1856,17 @@ def main():
     print(f"Scanning {SOURCE_ROOT} ...")
     result = run_audit(rule_filter=args.rule, file_filter=args.file)
 
+    # A --file that matches nothing used to print "No violations found!" and exit 0 — the audit
+    # reporting success on a file it never opened. That is how the pre-commit hook silently passed
+    # for months, and it is exactly what --file is most often pointed at: a path under Assets/Tests,
+    # which SOURCE_ROOT does not cover at all.
+    if args.file and result.scanned == 0:
+        print(f"\n  ⚠️   '{args.file}' matched no .cs file under {SOURCE_ROOT} — nothing was audited.",
+              file=sys.stderr)
+        print("      Only Assets/Source is scanned; paths outside it (e.g. Assets/Tests) never match.",
+              file=sys.stderr)
+        sys.exit(2)
+
     if args.fix and any(v.fixable for v in result.violations):
         print("\nApplying auto-fixes...")
         run_fix(result)
@@ -1861,7 +1874,7 @@ def main():
         result = run_audit(rule_filter=args.rule, file_filter=args.file)
 
     if not result.violations:
-        print("\n  ✅  No violations found!")
+        print(f"\n  ✅  No violations found! ({result.scanned} file(s) audited)")
         return
 
     _print_report(result)
