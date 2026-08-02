@@ -755,12 +755,15 @@ sink's deferred one-frame game-over write, where the scope is reset before seria
 runs. `CopyState` already clones the axis arrays to build the breakdown lists; keeping them
 costs no extra allocation and makes the envelope's contract satisfiable by an immutable value.
 
-**Only Flight and Level scopes run clocks.** `Absorb` sums the child's elapsed time into the
-parent, so Run and Session durations accumulate purely by absorption. The alternative — a
-stopwatch per timer per scope, all driven in lockstep — is the multiplied form of guardrail
-#5: one missed `Resume` on the Run scope zeroes a whole run's `gameplay_seconds` while every
-level record still looks right. Run and Session stopwatches are **never started**; document
-that, or the double-count is the next trap.
+**Every scope runs its own clocks, and `Absorb` never folds timers.** A `TimerId` names a
+clock; each scope holds its own instance of each one, measuring its own window. The service
+drives them together — pausing the gameplay clock is one loop over the scopes, not one call
+per scope per timer — so there is no lockstep contract to miss and no roll-up to perform.
+
+**Folding timers would double-count**: a Run scope's `Gameplay` stopwatch has already measured
+the whole run, so adding each Level's elapsed on top doubles it. `Absorb` handles counters and
+axes only. (An earlier revision specified the fold; it was wrong, and the reasoning behind it
+assumed the service would drive each scope's clocks from separate call sites.)
 
 **Scope: the current attempt only.** The popups show the try that succeeded; earlier
 attempts at the same level are irrelevant to them (**R14c**). The read model therefore
@@ -1162,9 +1165,14 @@ network I/O. **Do not start before an analytics provider is chosen.**
 No wave is done when its code compiles. Each one runs this loop before the next starts:
 
 1. **Implement** — at the model the wave specifies.
-2. **Review by all three agents** — `architect`, `test-everything` and `reviewer`,
-   scheduled on the finished wave, each given a distinct lens so they do not re-derive the
-   same ground.
+2. **Review.** `reviewer` runs on **every** wave. `architect` and `test-everything` join
+   only at **milestones** — a wave that establishes a foundation others build on,
+   introduces new architecture, crosses a subsystem boundary, or reworks something an
+   earlier review flagged. On this plan that means **W1b, W2b, W3 and W4**; W0, W2, W5 and
+   W6 get the reviewer alone. Docs-only waves swap in `caveman` for comprehension —
+   `test-everything` and `architect` have nothing to grip on prose.
+   Give each agent a distinct lens, and tell it what has already been verified so it does
+   not spend its budget re-deriving that.
 3. **Curate** — reconcile the three reports into one: deduplicate, resolve conflicts
    (and say which agent was wrong), order by what blocks progress, and verify any claim
    that would change the design before acting on it.

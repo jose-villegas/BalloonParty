@@ -48,16 +48,6 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void RecordMin_KeepsTheRunningMinimum()
-        {
-            _metrics.RecordMin(MetricId.MinHealth, 5);
-            _metrics.RecordMin(MetricId.MinHealth, 1);
-            _metrics.RecordMin(MetricId.MinHealth, 3);
-
-            Assert.AreEqual(1, _metrics[MetricId.MinHealth]);
-        }
-
-        [Test]
         public void SetLast_OverwritesThePriorValue()
         {
             _metrics.SetLast(MetricId.RetriesUsed, 1);
@@ -67,55 +57,81 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void IncrementColorAxis_EveryValidIndex_DoesNotThrow()
+        public void IncrementAxis_EveryColorBucket_DoesNotThrow()
         {
             for (var i = 0; i < ColorAxisSize; i++)
             {
-                var index = i;
-                Assert.DoesNotThrow(() => _metrics.IncrementColorAxis(index));
+                var bucket = i;
+                Assert.DoesNotThrow(() => _metrics.IncrementAxis(MetricId.Pops, MetricAxis.Color, bucket));
             }
 
-            Assert.AreEqual(1, _metrics.ColorAxis[ColorAxisSize - 1]);
+            Assert.AreEqual(1, _metrics.AxisBucketsOf(MetricId.Pops, MetricAxis.Color)[ColorAxisSize - 1]);
         }
 
         [Test]
-        public void IncrementBalloonTypeAxis_EveryEnumValue_DoesNotThrow()
+        public void IncrementAxis_EveryBalloonTypeBucket_DoesNotThrow()
         {
             foreach (BalloonType type in Enum.GetValues(typeof(BalloonType)))
             {
                 var captured = type;
-                Assert.DoesNotThrow(() => _metrics.IncrementBalloonTypeAxis(captured));
+                Assert.DoesNotThrow(() => _metrics.IncrementAxis(MetricId.Deflects, MetricAxis.BalloonType, (int)captured));
             }
 
-            Assert.AreEqual(1, _metrics.BalloonTypeAxis[(int)BalloonType.Tougher]);
+            Assert.AreEqual(1, _metrics.AxisBucketsOf(MetricId.Deflects, MetricAxis.BalloonType)[(int)BalloonType.Tougher]);
         }
 
         [Test]
-        public void IncrementItemTypeAxis_EveryEnumValue_DoesNotThrow()
+        public void IncrementAxis_EveryItemTypeBucket_DoesNotThrow()
         {
             foreach (ItemType type in Enum.GetValues(typeof(ItemType)))
             {
                 var captured = type;
-                Assert.DoesNotThrow(() => _metrics.IncrementItemTypeAxis(captured));
+                Assert.DoesNotThrow(() => _metrics.IncrementAxis(MetricId.ItemsActivated, MetricAxis.ItemType, (int)captured));
             }
 
-            Assert.AreEqual(1, _metrics.ItemTypeAxis[(int)ItemType.Snipe]);
+            Assert.AreEqual(1, _metrics.AxisBucketsOf(MetricId.ItemsActivated, MetricAxis.ItemType)[(int)ItemType.Snipe]);
+        }
+
+        // The largest change in this rework (see PLAN-GameplayTelemetry.md, "Axis storage"): storage is
+        // keyed by the (MetricId, axis) pair, not by the axis kind alone. Pops and Deflects both declare
+        // a BalloonType axis; without per-pair slots they would silently share one table.
+        [Test]
+        public void IncrementAxis_SameAxisKindDifferentMetric_DoesNotBleedBetweenMetrics()
+        {
+            _metrics.IncrementAxis(MetricId.Pops, MetricAxis.BalloonType, (int)BalloonType.Tough);
+            _metrics.IncrementAxis(MetricId.Deflects, MetricAxis.BalloonType, (int)BalloonType.Tough);
+            _metrics.IncrementAxis(MetricId.Pops, MetricAxis.BalloonType, (int)BalloonType.Tough);
+
+            Assert.AreEqual(2, _metrics.AxisBucketsOf(MetricId.Pops, MetricAxis.BalloonType)[(int)BalloonType.Tough]);
+            Assert.AreEqual(1, _metrics.AxisBucketsOf(MetricId.Deflects, MetricAxis.BalloonType)[(int)BalloonType.Tough]);
+        }
+
+        // Pops (a count) and PointsBanked (points) both declare a Color axis. Summing them into one
+        // table would add two different units together.
+        [Test]
+        public void AddAxis_SameAxisKindDifferentMetric_DoesNotBleedBetweenMetrics()
+        {
+            _metrics.IncrementAxis(MetricId.Pops, MetricAxis.Color, 0);
+            _metrics.AddAxis(MetricId.PointsBanked, MetricAxis.Color, 0, 50);
+
+            Assert.AreEqual(1, _metrics.AxisBucketsOf(MetricId.Pops, MetricAxis.Color)[0]);
+            Assert.AreEqual(50, _metrics.AxisBucketsOf(MetricId.PointsBanked, MetricAxis.Color)[0]);
         }
 
         [Test]
-        public void Reset_ZeroesCountersAndEveryAxis()
+        public void Reset_ZeroesCountersAndEveryAxisSlot()
         {
             _metrics.Increment(MetricId.ShotsFired);
-            _metrics.IncrementColorAxis(0);
-            _metrics.IncrementBalloonTypeAxis(BalloonType.Tough);
-            _metrics.IncrementItemTypeAxis(ItemType.Bomb);
+            _metrics.IncrementAxis(MetricId.Pops, MetricAxis.Color, 0);
+            _metrics.IncrementAxis(MetricId.Deflects, MetricAxis.BalloonType, (int)BalloonType.Tough);
+            _metrics.IncrementAxis(MetricId.ItemsActivated, MetricAxis.ItemType, (int)ItemType.Bomb);
 
             _metrics.Reset();
 
             Assert.AreEqual(0, _metrics[MetricId.ShotsFired]);
-            Assert.AreEqual(0, _metrics.ColorAxis[0]);
-            Assert.AreEqual(0, _metrics.BalloonTypeAxis[(int)BalloonType.Tough]);
-            Assert.AreEqual(0, _metrics.ItemTypeAxis[(int)ItemType.Bomb]);
+            Assert.AreEqual(0, _metrics.AxisBucketsOf(MetricId.Pops, MetricAxis.Color)[0]);
+            Assert.AreEqual(0, _metrics.AxisBucketsOf(MetricId.Deflects, MetricAxis.BalloonType)[(int)BalloonType.Tough]);
+            Assert.AreEqual(0, _metrics.AxisBucketsOf(MetricId.ItemsActivated, MetricAxis.ItemType)[(int)ItemType.Bomb]);
         }
 
         [Test]
@@ -131,15 +147,15 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void CopyColorAxis_ReturnsAnIndependentArray()
+        public void CopyAxis_ReturnsAnIndependentArray()
         {
-            _metrics.IncrementColorAxis(0);
+            _metrics.IncrementAxis(MetricId.Pops, MetricAxis.Color, 0);
 
-            var copy = _metrics.CopyColorAxis();
-            _metrics.IncrementColorAxis(0);
+            var copy = _metrics.CopyAxis(MetricId.Pops, MetricAxis.Color);
+            _metrics.IncrementAxis(MetricId.Pops, MetricAxis.Color, 0);
 
             Assert.AreEqual(1, copy[0]);
-            Assert.AreEqual(2, _metrics.ColorAxis[0]);
+            Assert.AreEqual(2, _metrics.AxisBucketsOf(MetricId.Pops, MetricAxis.Color)[0]);
         }
     }
 }

@@ -52,10 +52,18 @@ namespace BalloonParty.Game.Telemetry
             _running = false;
         }
 
+        // Preserves whatever running state the clock already had — a level's Wall clock spans the
+        // whole level lifetime and is never explicitly paused/resumed at the flush boundary (only
+        // Gameplay is), so a Reset() that force-stopped every timer silently lost Wall from the second
+        // level onward. Re-sampling _lastSample when still running avoids folding in the instant
+        // between the last read and this Reset() as if it had already elapsed.
         public void Reset()
         {
             _elapsed = 0f;
-            _running = false;
+            if (_running)
+            {
+                _lastSample = _clock();
+            }
         }
 
         // A backwards-going clock (device clock skew, a suspect Func in a test) clamps its own delta to

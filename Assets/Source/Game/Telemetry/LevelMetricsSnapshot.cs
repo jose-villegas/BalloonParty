@@ -1,45 +1,16 @@
-using System.Collections.Generic;
-
 namespace BalloonParty.Game.Telemetry
 {
-    // Sealed and immutable (R16): built once by MetricScope.Seal(), read many times, never mutated —
-    // the ceremony snapshot must not drift when later stragglers land or the level resets (R17).
-    internal sealed class LevelMetricsSnapshot
+    // The level-only two fields on top of MetricsSnapshotBase's shared payload — what the level-up
+    // popup renders (ceremony snapshot) and what the sink receives and folds into the run (flush
+    // snapshot). See MetricsSnapshotBase for the immutability/aliasing contract.
+    internal sealed class LevelMetricsSnapshot : MetricsSnapshotBase
     {
-        private readonly int[] _counters;
-        private readonly float[] _timers;
-        private readonly IReadOnlyList<ColorPopCount> _popsByColor;
-        private readonly IReadOnlyList<BalloonTypeCount> _popsByBalloonType;
-        private readonly IReadOnlyList<ItemActivationCount> _itemsActivated;
-
         public int LevelIndex { get; }
 
         public bool Completed { get; }
 
-        public int this[MetricId id] => _counters[(int)id];
-
-        public float this[TimerId id] => _timers[(int)id];
-
-        public IReadOnlyList<ColorPopCount> PopsByColor => _popsByColor;
-
-        public IReadOnlyList<BalloonTypeCount> PopsByBalloonType => _popsByBalloonType;
-
-        public IReadOnlyList<ItemActivationCount> ItemsActivated => _itemsActivated;
-
-        public LevelMetricsSnapshot(
-            int[] counters,
-            float[] timers,
-            IReadOnlyList<ColorPopCount> popsByColor,
-            IReadOnlyList<BalloonTypeCount> popsByBalloonType,
-            IReadOnlyList<ItemActivationCount> itemsActivated,
-            int levelIndex,
-            bool completed)
+        public LevelMetricsSnapshot(MetricScopeState state, int levelIndex, bool completed) : base(state)
         {
-            _counters = counters;
-            _timers = timers;
-            _popsByColor = popsByColor;
-            _popsByBalloonType = popsByBalloonType;
-            _itemsActivated = itemsActivated;
             LevelIndex = levelIndex;
             Completed = completed;
         }

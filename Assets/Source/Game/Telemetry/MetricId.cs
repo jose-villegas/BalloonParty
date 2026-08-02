@@ -31,7 +31,6 @@ namespace BalloonParty.Game.Telemetry
         ShieldsGained,
         ShieldsSpent,
         ItemsActivated,
-        MinHealth,
         MaxDangerLevel,
         BoardCleared,
         LevelsCompleted,

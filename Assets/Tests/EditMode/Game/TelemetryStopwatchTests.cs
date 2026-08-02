@@ -67,19 +67,40 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void Reset_DefinesAPausedState()
+        public void Reset_WhileStopped_StaysStoppedAndZeroesElapsed()
         {
             _stopwatch.Resume();
             _now = 4f;
+            _stopwatch.Pause();
 
             _stopwatch.Reset();
 
             Assert.IsFalse(_stopwatch.IsRunning);
             Assert.AreEqual(0f, _stopwatch.Elapsed);
 
-            // The clock keeps moving; a paused stopwatch must not pick it back up on its own.
+            // The clock keeps moving; a stopped stopwatch must not pick it back up on its own.
             _now = 9f;
             Assert.AreEqual(0f, _stopwatch.Elapsed);
+        }
+
+        // Reset() used to force every timer to a stopped state. The Wall clock spans a whole level and
+        // is never explicitly paused/resumed at the flush boundary (only Gameplay is), so that old
+        // behaviour silently lost Wall from the second level onward — see
+        // PLAN-GameplayTelemetry.md's flush sequence and "Cheap hardening" in the W1 rework.
+        [Test]
+        public void Reset_WhileRunning_StaysRunningAndZeroesElapsed()
+        {
+            _stopwatch.Resume();
+            _now = 4f;
+
+            _stopwatch.Reset();
+
+            Assert.IsTrue(_stopwatch.IsRunning);
+            Assert.AreEqual(0f, _stopwatch.Elapsed);
+
+            // Still running across the reset, so the clock keeps accumulating from zero.
+            _now = 7f;
+            Assert.AreEqual(3f, _stopwatch.Elapsed);
         }
 
         [Test]
