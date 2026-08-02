@@ -12,7 +12,11 @@ survives across runs.
 | `IRunResettable` | Implemented by services holding per-run state that must be cleared on restart. `RestartRun` runs them in ascending `ResetOrder` so teardown that must precede other resets (quiesce async work, return pooled actors, clear the grid) can order itself ahead of the rest |
 | `RunResetOrder` | Named stages for `ResetOrder` — `Quiesce(0)` → `Board(20)` → `Derived(40)` → `Counters(60)` → `Score(100)` → `Respawn(120)` — so a new resettable picks a stage instead of guessing a magic number |
 | `BoardClearController` | `IRunResettable` at the `Board` stage — broadcasts `BoardClearMessage` so every actor returns its pooled view and vacates its grid slot; MessagePipe publishes synchronously, so the board is empty when its `ResetRun` returns |
+| `IBoardResettable` | Marker interface for `IRunResettable` implementations whose reset work is board teardown/population (clearing/spawning actors). `RunController.RestartRun(resetBoard: false)` skips these so a transition cinematic can swap the board itself while run state still resets |
 | `IRunScore` | Read-only view of the run's `TotalScore`, implemented by `ScoreController`. When a run ends `RunController` snapshots the score from here and the level from `ILevelProgress` (`Game/Level/`) |
+| `IRetryState` | Read-only interface exposing retry state — `RetriesRemaining` and `RetryLevel` (the level the next restart should begin at; zero means a fresh run) |
+| `RetryTracker` | An `IRunResettable` at the `Score + 10` stage that tracks per-run retry allowance. `PrepareRetry(level)` stages a level to retry at before dismissing; on reset, consumes a retry if one was staged, otherwise clears the counter for a fresh run. Exposed as `IRetryState` |
+| `GameOverPresentationGate` | An `IReadyGate` holding the GameOver screen closed until the loss cinematic finishes. Starts closed and is opened by the cinematic producer's `Open()` call; ensures the screen never displays before the beat completes, even on paths with no cinematic beat |
 | `IRunMeta` / `RunMeta` | The only state that survives a run — best level and best score, persisted to `PlayerPrefs` (`BestLevel`, `BestScore`). `RecordRun(level, score)` keeps the max of each independently and persists on change. Loaded for display, never fed back into a live run |
 
 ## Loss flow

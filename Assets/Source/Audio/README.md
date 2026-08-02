@@ -29,7 +29,7 @@ Unity audio only (`AudioSource` + `AudioMixer`), no middleware.
 | `Routing/ItemSoundRouter` | Per-item activation, overflow heart |
 | `Routing/DangerSoundRouter` | Starts/stops the `DangerWarn` loop as `IDangerLevel` crosses `DangerLevelThreshold` |
 | `Routing/WindSoundRouter` | Drives the `WindLoop` volume from cruise speed (TotalCruiseTaps) via `SetVolumeFactor` |
-| `Routing/MusicSoundRouter` | Navigation-driven music: plays `LaunchMusic` in the Launch state, stops it (fading) on the move to Game |
+| `Routing/MusicSoundRouter` | Navigation-driven music: plays `LaunchMusic` in the Launch state, stops it (fading) on the move to Game. In `Game`, crossfades a day/night gameplay-loop pair (the current time-of-day loop at full volume, the other ducked, swapping smoothly as `IsNight` flips); both loops duck while a shot is in flight — the window opens on `ProjectileFiredMessage`, not on `ProjectileLoadedMessage` — and pitch down together as danger level rises, toward a tritone at max danger |
 | `Configuration/GameSoundId`, `SfxChannel`, `SfxEntry`, `ISoundBankConfiguration`, `SoundBankConfiguration` | The data side — see *Configuration* below |
 
 **Namespace:** `BalloonParty.Audio` (`.Routing`, `.View`, `.Configuration` for their folders).
@@ -131,6 +131,88 @@ shields lifts the tone back toward the root on the next hit — no counter, noth
 reload. `ShieldLost` and `ShieldGained` play plain. A play with an explicit `melodicStreak`
 never updates the ambient pop key, so it can't disturb the `Tension` cues. **The melodic pop
 entries ship dormant** — see *Deferred*.
+
+### A second, independent ramp: `CombatSoundRouter`'s own pitch counters
+
+The player-facing effect is simple: keep popping without a break and each pop sounds a little
+higher than the one before — a rising run of notes that rewards staying on one thing. What
+counts as "one thing" is either a colour or a balloon type, and crucially **never both at
+once**; which of the two applies to a given pop is decided per pop, as described below.
+
+This is a different mechanism from the *Melodic pops* scale above. That one is
+`SfxEntry.MelodicMode`/`SetStreak`, a shared facility gated behind authored entries and
+**currently dormant**. `CombatSoundRouter` runs its own pitch system from plain counters, and
+it is **live today**: it passes an explicit `semitoneOffset` into `Play`, added on top of
+whatever pitch the entry would otherwise use, dormant `MelodicMode` or not.
+
+One word of warning before the detail: **"streak" means two different things here.** The
+rising run of notes is informal — just consecutive pops of the same thing. The game's *combo
+streak* (`StreakChangedMessage`) is a separate scoring concept, and it is not decorative here:
+breaking it resets one of the two counter families, as the reset rules below spell out.
+
+The counters come in two families that never mix. One is `_colorPopsThisFlight`, a dictionary
+counting pops per palette colour name. The other is six separate per-`BalloonType` counters
+(one each for Rainbow, Tough, Tougher, Unbreakable, SimpleSilver, SimpleGold), plus three more
+single-purpose counters for unbreakable deflects, pierce discharges, and wall bounces. **A pop
+takes the colour counter or a type counter, never both.** `OnActorHit` first resolves the
+popped balloon to a `GameSoundId` — a special type maps to its own id (e.g. `BalloonPopTough`);
+anything else stays on the generic `BalloonPop`. Only a pop that stays on `BalloonPop` *and*
+has a colour reads and bumps the colour dictionary; every pop that resolved to a dedicated type
+id instead bumps its own type counter and never touches the colour dictionary at all. Colour and
+type aren't two axes tracked side by side, they're a fork, and only one branch fires per pop.
+
+For most special types the fork discards nothing: Tough, Tougher and Unbreakable are
+colourless — `BalloonModelFactory` builds them from `ToughBalloonModel` and
+`UnbreakableBalloonModel`, neither of which implements `IHasColor` — and Rainbow is a
+wildcard whose `Color` holds the `__rainbow__` sentinel rather than a palette colour, so
+there is no real colour to lose in either case.
+
+**Silver and gold are the exception, and it is worth knowing about.** They are ordinary
+coloured balloons: `IsSimpleFamily()` groups them with `Simple`, they take part in colour
+streaks like any other balloon, and the only thing that sets them apart is the score they
+award. But `PopSoundFor` still gives each its own pop id — silver and gold want their own pop
+sound — and a distinct id is what routes a pop down the type path. Their falling off the
+colour ramp is a consequence of that sound choice, not a decision about pitch progression: a
+gold balloon advances the Gold counter and its colour never advances the colour ramp. Pop
+red, red, gold-that-happens-to-be-red, red, and the fourth pop sounds at the *third* step,
+not the fourth, even though the colour streak itself never broke. So the colour dictionary
+is not a record of "pops per colour this flight" — it counts plain `Simple` pops only, and
+must not be read as anything broader.
+
+Every counter here — colour, type, deflect, pierce, bounce — shares exactly one property, and
+it is the important one: the current count is read and used to compute *this* pop's pitch step
+**before** it is incremented. The order is load-bearing, not incidental. The first pop of a
+colour or type has to land on the root (the colour's or type's base note, with no step added),
+which only works if the value read for pitch is the pre-increment count. In every other
+respect — direction, cap, reset boundary — they differ, as below. The colour ramp
+steps by a whole tone per pop (`MusicalPitchExtensions.WholeToneSemitones` = 2), capped at
+`MaxRampSemitones` = 12 semitones (one octave), and rides on top of a colour-specific root note
+from `MusicalPitchExtensions.ColorRootOffset` — so each colour climbs its own key rather than a
+shared one. The six type counters step and cap the same way. The wall-bounce counter
+(`_bounceCount`) instead steps *chromatically*, one semitone down per bounce, capped at the same
+12 — this is a second offset layered on top of the shields-depth descent already described
+above, not a replacement for it. The unbreakable-deflect and pierce-discharge counters follow
+the same read-then-increment order but are uncapped: deflect steps chromatically, pierce steps
+by a whole tone, and either can in principle drift arbitrarily far from the root over a very
+long unbroken run.
+
+The two main families also don't share a reset schedule — each has its own boundary, and
+knowing which is what keeps this mechanism debuggable:
+
+- `_colorPopsThisFlight` clears on `ProjectileLoadedMessage` **and** whenever the combo streak
+  breaks (`StreakChangedMessage` with `Streak == 0`). Its real scope is "since the later of the
+  shot loading or the last broken streak" — a streak break resets it mid-flight, before the next
+  reload.
+- The six type counters, plus the deflect and pierce counters, clear only on
+  `ProjectileLoadedMessage`. A broken streak does not touch them.
+- `_bounceCount` clears on `ProjectileFiredMessage` instead — a third, different boundary — since
+  it counts bounces of the shot currently in the air, not the shot currently loaded.
+
+This distinction matters beyond bookkeeping: the colour dictionary and the type counters are not
+interchangeable state. Merging them would break the fork above — a gold pop would start bumping
+whatever colour's entry instead of the Gold counter it's supposed to advance — and giving the
+type counters the colour dictionary's streak-break reset would make a broken streak silently undo
+type-ramp progress that today survives streak breaks.
 
 ## Channels and duck-on-pause
 
