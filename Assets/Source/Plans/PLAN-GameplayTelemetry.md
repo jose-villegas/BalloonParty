@@ -294,7 +294,7 @@ Assets/Source/Game/Telemetry/
 ├── TelemetryStopwatch.cs            ← clock-owning timer (Pause/Resume/Elapsed/Reset)
 ├── LevelMetricsSnapshot.cs          ← sealed immutable per-level read surface
 ├── RunMetricsSnapshot.cs            ← sealed immutable per-run read surface
-├── ColorPopCount.cs / BalloonTypeCount.cs / ItemActivationCount.cs
+├── ColorCount.cs / BalloonTypeCount.cs / ItemActivationCount.cs
 ├── ILevelMetricsView.cs             ← the UI read seam
 ├── GameplayMetricsService.cs        ← entry point: state machine + routing + snapshots
 ├── SessionTelemetryContext.cs       ← session id, schema version (App scope)
@@ -470,8 +470,14 @@ wire name stays frozen for the warehouse.
 Session by its fold rule (**R4**); Flight-scope metrics are additionally sealed per shot.
 
 ```csharp
-internal enum FoldRule { Sum, Max, Min, Last }
+internal enum FoldRule { Sum, Max, Last }
 ```
+
+**`Scope` is part of the catalog row, not decoration.** `Absorb` must skip any metric whose
+declared scope sits above the child being folded. `Sum` and `Max` tolerate folding a zero
+(it is their identity), but `Last` does not: `RetriesUsed` is `Last` at Run scope, so
+folding a Level child's zero into it would report **zero retries on every run record**.
+Transcribe the column into the catalog entry.
 
 #### Counters — `MetricId`
 
@@ -503,7 +509,6 @@ internal enum FoldRule { Sum, Max, Min, Last }
 | `ShieldsGained` | `shields_gained` | count | Sum | `ShieldGainedMessage` | — | Level |
 | `ShieldsSpent` | `shields_spent` | count | Sum | `ShieldLostMessage` | — | Level |
 | `ItemsActivated` | `items_activated` | count | Sum | `ItemActivatedMessage` | ItemType | Level |
-| `MinHealth` | `min_health` | hearts | **Min** | `IPlayerHealth.Current` | — | Level |
 | `MaxDangerLevel` | `max_danger_level` | level | Max | `IDangerLevel.Level` | — | Level |
 | `BoardCleared` | `board_cleared` | count | Max | `BoardDepletedMessage` — 1 if the board emptied organically (**R15**) | — | Level |
 | `LevelsCompleted` | `levels_completed` | count | Sum | derived: absorbed level with `Completed == true` | — | Run |
@@ -520,6 +525,30 @@ values share a metric; every other filter is `==` per the repo idiom.
 | `Ceremony` | `ceremony_seconds` | state == `Ceremony` | no — the ceremony *is* a pause |
 | `Wall` | `wall_seconds` | state ∉ {`Idle`, `Ended`} | no |
 | `Hold` | `hold_seconds` | hold-to-speed-up engaged (**R11**) | no — only runs in flight |
+
+**Dropped deliberately — do not re-add.** `min_health` (lowest HP reached in a level) is not
+a metric: health only ever decreases within a level, since the only recovery is level-up, so
+the minimum is just the level's end value and is already implied by `hearts_lost`. It was the
+sole user of a `Min` fold, which is why `FoldRule` has three members and not four. If a
+genuine minimum is ever needed, restoring `Min` is two lines — but it needs a real unset
+sentinel, because a zero-initialised counter makes every `RecordMin` of a non-negative value
+a silent no-op.
+
+#### Axis storage
+
+The catalog tags five `(MetricId, axis)` pairs. **Storage is keyed by the pair, not by the
+axis alone** — one array per axis kind would make `Deflects` and `Pops` share a
+`BalloonType` table, and `PointsBanked` (points) share a Color table with `Pops` (counts),
+summing two different units into one meaningless number.
+
+`MetricCatalog` assigns each pair a dense `AxisSlot` at static init and exposes
+`SlotOf(MetricId, MetricAxis)` plus `AllSlots`. `MetricSet` holds one `int[]` per slot; the
+write API is `IncrementAxis(MetricId id, MetricAxis axis, int bucket)`. `Absorb` and
+`CopyState` then loop `AllSlots` instead of hand-unrolling one block per axis, so an
+axis-bearing metric costs the same two files as any other.
+
+Five arrays of ≤ 8 entries per scope, four scopes. The cost is nothing; the alternative is a
+wire name that ships permanently attached to the wrong numbers.
 
 #### Not metrics
 
@@ -577,9 +606,20 @@ zeroes the metrics.
 
 The deciding fact, which neither the original study nor an earlier revision of this plan
 noticed: **audio's two axes are mutually exclusive.** `OnActorHit` branches at `:124` — a
-pop takes the colour path **or** the type path, never both. A red Tough increments the
-Tough counter and *not* the red one. R12 requires both axes on every pop, so the two
-quantities are genuinely different, and the divergence is confined to one field.
+pop takes the colour path **or** the type path, never both.
+
+Where that costs something is **silver and gold**. `Tough`/`Tougher` (`ToughBalloonModel`)
+and `Unbreakable` are colourless — they do not implement `IHasColor` — and `Rainbow` is a
+wildcard carrying the `__rainbow__` sentinel rather than a palette colour, so for those the
+fork discards nothing. But `SimpleSilver` and `SimpleGold` are ordinary coloured balloons:
+`BalloonTypeExtensions.IsSimpleFamily()` groups them with `Simple`, they participate in
+colour streaks, and **the only thing that distinguishes them is the score they award**. They
+still resolve to a dedicated pop id, so **a gold balloon increments the Gold counter and its
+colour is never counted**.
+
+Audio's colour dictionary therefore counts plain `Simple` pops only — it is not "pops per
+colour this flight", which is exactly what **R12** requires on every pop. The two quantities
+are genuinely different, and the divergence is confined to one field.
 
 | Field | Verdict | Why |
 |---|---|---|
@@ -590,8 +630,9 @@ quantities are genuinely different, and the divergence is confined to one field.
 | `_colorPopsThisFlight` (`:40`) | **stays private** | cleared on both `Loaded` (`:212`) **and** `StreakChangedMessage(0)` (`:269`), so its scope is `[max(flight start, last streak break), now)` — not a flight counter at all, and it counts only generic-`BalloonPop` pops. It is a pitch cursor, not a statistic |
 
 Moving the colour dictionary would reintroduce the whole-tone-sharp regression through a
-different door: under a shared `PopsByColor`, a red Tough followed by a red Simple plays
-the Simple at step 1 instead of step 0.
+different door: under a shared `PopsByColor` — which counts every pop of that colour,
+including the silver and gold ones audio routes elsewhere — a red gold balloon followed by
+a red Simple plays the Simple at step 1 instead of step 0.
 
 #### Ownership — beside telemetry, not inside it
 
@@ -701,9 +742,25 @@ internal interface ILevelMetricsView
 ```
 
 `LevelMetricsSnapshot` is a `sealed` immutable class: `int this[MetricId]`,
-`float this[TimerId]`, `IReadOnlyList<ColorPopCount> PopsByColor`,
+`float this[TimerId]`, `IReadOnlyList<ColorCount> PopsByColor`,
+`IReadOnlyList<ColorCount> PointsByColor`,
+`IReadOnlyList<BalloonTypeCount> DeflectsByBalloonType`,
 `IReadOnlyList<BalloonTypeCount> PopsByBalloonType`,
 `IReadOnlyList<ItemActivationCount> ItemsActivated`, `int LevelIndex`, `bool Completed`.
+
+**Snapshots implement `IReadOnlyMetricSet`.** `TelemetryEnvelope` carries one (**R24**), and
+the only other implementer is the live, reset-in-place `MetricSet` — aliasing that into an
+envelope would break "immutable across the read boundary" outright, and is unsafe given the
+sink's deferred one-frame game-over write, where the scope is reset before serialization
+runs. `CopyState` already clones the axis arrays to build the breakdown lists; keeping them
+costs no extra allocation and makes the envelope's contract satisfiable by an immutable value.
+
+**Only Flight and Level scopes run clocks.** `Absorb` sums the child's elapsed time into the
+parent, so Run and Session durations accumulate purely by absorption. The alternative — a
+stopwatch per timer per scope, all driven in lockstep — is the multiplied form of guardrail
+#5: one missed `Resume` on the Run scope zeroes a whole run's `gameplay_seconds` while every
+level record still looks right. Run and Session stopwatches are **never started**; document
+that, or the double-count is the next trap.
 
 **Scope: the current attempt only.** The popups show the try that succeeded; earlier
 attempts at the same level are irrelevant to them (**R14c**). The read model therefore
@@ -1100,11 +1157,31 @@ is one concern with an obvious test matrix. Acceptance: **R26, R28b, R30a**.
 Judgment: offline semantics, backpressure, cancellation, and the project's first outbound
 network I/O. **Do not start before an analytics provider is chosen.**
 
+### The review loop — every wave, without exception
+
+No wave is done when its code compiles. Each one runs this loop before the next starts:
+
+1. **Implement** — at the model the wave specifies.
+2. **Review by all three agents** — `architect`, `test-everything` and `reviewer`,
+   scheduled on the finished wave, each given a distinct lens so they do not re-derive the
+   same ground.
+3. **Curate** — reconcile the three reports into one: deduplicate, resolve conflicts
+   (and say which agent was wrong), order by what blocks progress, and verify any claim
+   that would change the design before acting on it.
+4. **Quick fixes** — apply the small and uncontroversial findings.
+5. **Author sign-off** — the last review is the human's, on curated work that has already
+   survived a pass. Raw agent output never goes upward.
+
+Nothing is committed before step 5.
+
 ### Cross-cutting
 Every wave: `.meta` files for new `.cs`/`.md` (mirror a sibling's format);
-`dotnet build BalloonParty.Runtime.csproj` + `python3 Tools/style_audit.py`; feature
-README updated. W3/W4 additionally need a build with `UNITY_EDITOR` stripped (for the
-`#else` cheat branch) and an in-editor playtest — say so, do not claim verified.
+`dotnet build BalloonParty.Runtime.csproj` + `dotnet build BalloonParty.Tests.EditMode.csproj`
++ `python3 Tools/style_audit.py`; `node Tools/validate-mermaid.mjs` if any `.md` gained a
+diagram; feature README updated. W3/W4 additionally need a build with `UNITY_EDITOR`
+stripped (for the `#else` cheat branch) and an in-editor playtest — say so, do not claim
+verified. Tests compile here but **cannot be run** (no Unity runtime): never report them
+as passing.
 
 ---
 
@@ -1160,7 +1237,7 @@ than assuming.
 | ID | Risk | Trigger | Mitigation |
 |---|---|---|---|
 | RK-1 | Audio pitch ramp shifts a whole tone, silently | Anything but `HitPipeline` writing `FlightStatsService`, or audio forgetting the `- 1` on the post-increment read | Single-writer rule; `CombatSoundRouterTests` must pass unmodified |
-| RK-2 | The colour ramp breaks after a streak break, or a red Tough offsets the next red Simple | Moving `_colorPopsThisFlight` into the shared stats — it is streak-scoped and counts only generic-`BalloonPop` pops | It stays private to `CombatSoundRouter`. Worst failure mode here — silent and ear-only |
+| RK-2 | The colour ramp breaks after a streak break, or a coloured special type (silver/gold/rainbow) offsets the next Simple of the same colour | Moving `_colorPopsThisFlight` into the shared stats — it is streak-scoped and counts only generic-`BalloonPop` pops | It stays private to `CombatSoundRouter`. Worst failure mode here — silent and ear-only |
 | RK-2a | Two answers to "how many Toughs popped" drift apart | Leaving the type counters private and recounting them in metrics — adding a `BalloonType` then requires lockstep edits in `PopSoundFor`, `PopSemitoneOffset`, `IncrementPopCounter` *and* metrics | Single owner: `FlightStatsService` |
 | RK-3 | Levels-reached distribution corrupted by retries | Treating the run generation as run identity | **R14** — chain / attempt / attempt-index split |
 | RK-3a | Level difficulty analysis blames levels that were never retried | Segmenting by `AttemptIndex` instead of `LevelAttemptOrdinal` | **R14a** |
