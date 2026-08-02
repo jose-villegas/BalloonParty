@@ -268,25 +268,30 @@ namespace BalloonParty.Tests.Audio
         public void OnWallHit_BelowThreshold_StepsDownByShieldsBelowThreshold()
         {
             // Threshold is 5: depth = threshold - shieldsRemaining. 4 left = one step down, 2 left = three.
+            // The bounce ramp is a second, independent descent layered on top — one semitone per wall
+            // hit of the flight — so the second hit also carries offset -1.
             var position = new Vector3(3f, -1f, 0f);
 
             _wallHitHandler.Handle(new WallHitMessage(position, 4));
             _wallHitHandler.Handle(new WallHitMessage(position, 2));
 
             _player.Received(1).Play(GameSoundId.WallHit, position, 1);
-            _player.Received(1).Play(GameSoundId.WallHit, position, 3);
+            _player.Received(1).Play(GameSoundId.WallHit, position, 3, -1);
         }
 
         [Test]
         public void OnWallHit_AtOrAboveThreshold_StaysAtRoot()
         {
-            // At or above 5 shields the tone stays on the root (depth 0) — the descent hasn't started.
+            // At or above 5 shields the shields depth stays on the root — that descent hasn't started.
+            // The bounce ramp is independent of shields and does descend, so only the first hit of the
+            // flight sounds at the root.
             var position = new Vector3(3f, -1f, 0f);
 
             _wallHitHandler.Handle(new WallHitMessage(position, 5));
             _wallHitHandler.Handle(new WallHitMessage(position, 9));
 
-            _player.Received(2).Play(GameSoundId.WallHit, position, 0);
+            _player.Received(1).Play(GameSoundId.WallHit, position, 0);
+            _player.Received(1).Play(GameSoundId.WallHit, position, 0, -1);
         }
 
         // --- Pitch-ramp per-flight counters ---
