@@ -140,13 +140,15 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a64e9a30086d0e49c2d37a3848c55ea4a" id="r_a64e9a30086d0e49c2d37a3848c55ea4a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a64e9a30086d0e49c2d37a3848c55ea4a">HitPipeline</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html">ScoreController</a> score, <a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html">BalloonControllerRegistry</a> balloonRegistry, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html">ActorHitMessage</a> &gt; hitPublisher)</td></tr>
-<tr class="separator:a64e9a30086d0e49c2d37a3848c55ea4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a11afad5be3cacd406025c97b9ae64e" id="r_a4a11afad5be3cacd406025c97b9ae64e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4a11afad5be3cacd406025c97b9ae64e">HitPipeline</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html">ScoreController</a> score, <a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html">BalloonControllerRegistry</a> balloonRegistry, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsWriter.html">IFlightStatsWriter</a> flightStats, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html">ActorHitMessage</a> &gt; hitPublisher)</td></tr>
+<tr class="separator:a4a11afad5be3cacd406025c97b9ae64e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a93994ee1bb46302892100c4b6d37c65e" id="r_a93994ee1bb46302892100c4b6d37c65e"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html">BalloonControllerRegistry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a93994ee1bb46302892100c4b6d37c65e">_balloonRegistry</a></td></tr>
 <tr class="separator:a93994ee1bb46302892100c4b6d37c65e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19b27fbe89c6988af050e81baf798dc5" id="r_a19b27fbe89c6988af050e81baf798dc5"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsWriter.html">IFlightStatsWriter</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a19b27fbe89c6988af050e81baf798dc5">_flightStats</a></td></tr>
+<tr class="separator:a19b27fbe89c6988af050e81baf798dc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae53c87aba1d81f912fef8d2acfd1fd17" id="r_ae53c87aba1d81f912fef8d2acfd1fd17"><td class="memItemLeft" align="right" valign="top">readonly IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html">ActorHitMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae53c87aba1d81f912fef8d2acfd1fd17">_hitPublisher</a></td></tr>
 <tr class="separator:ae53c87aba1d81f912fef8d2acfd1fd17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43937e8daff38f9c6e10a49bfa114160" id="r_a43937e8daff38f9c6e10a49bfa114160"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html">ScoreController</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a43937e8daff38f9c6e10a49bfa114160">_score</a></td></tr>
@@ -155,8 +157,8 @@ Private Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Owns the order-dependent part of hit resolution explicitly, since MessagePipe's subscription order is enforced nowhere. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a64e9a30086d0e49c2d37a3848c55ea4a" name="a64e9a30086d0e49c2d37a3848c55ea4a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a64e9a30086d0e49c2d37a3848c55ea4a">&#9670;&#160;</a></span>HitPipeline()</h2>
+<a id="a4a11afad5be3cacd406025c97b9ae64e" name="a4a11afad5be3cacd406025c97b9ae64e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a11afad5be3cacd406025c97b9ae64e">&#9670;&#160;</a></span>HitPipeline()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -173,6 +175,11 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html">BalloonControllerRegistry</a></td>          <td class="paramname"><span class="paramname"><em>balloonRegistry</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsWriter.html">IFlightStatsWriter</a></td>          <td class="paramname"><span class="paramname"><em>flightStats</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -221,6 +228,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html">BalloonControllerRegistry</a> BalloonParty.Game.HitPipeline._balloonRegistry</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a19b27fbe89c6988af050e81baf798dc5" name="a19b27fbe89c6988af050e81baf798dc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19b27fbe89c6988af050e81baf798dc5">&#9670;&#160;</a></span>_flightStats</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsWriter.html">IFlightStatsWriter</a> BalloonParty.Game.HitPipeline._flightStats</td>
         </tr>
       </table>
   </td>

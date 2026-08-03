@@ -125,7 +125,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Editor-only <b>Game Render Maps</b> window (<code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Game Render Maps</code>) — a unified play-mode preview for the project's shared render-target "maps," with per-channel RGBA isolation. Supersedes <code>DisturbanceFieldPreviewWindow</code>; the per-inspector previews on <code>SceneCaptureService</code> / <code>ScreenSpaceLightService</code> stay as-is (useful with that component selected in the Hierarchy) but this is the one-stop window for comparing any of them.</p>
-<h1><a class="anchor" id="autotoc_md133"></a>
+<h1><a class="anchor" id="autotoc_md134"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -133,7 +133,7 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>GameRenderMapsWindow</code>   </td><td class="markdownTableBodyNone">The <code>EditorWindow</code>. A toolbar dropdown picks the map; four toggle buttons (R/G/B/A) mask the preview; a <code>Custom…</code> entry lets you drop in any <code>Texture</code> by reference. Repaints continuously via <code>EditorApplication.update</code> so a live-updating buffer (the GI light buffer, the disturbance field) is never stale.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md134"></a>
+<h1><a class="anchor" id="autotoc_md135"></a>
 What it shows</h1>
 <p>Five built-in maps, plus a <code>Custom…</code> slot for ad hoc inspection:</p>
 <ul>
@@ -145,21 +145,21 @@ What it shows</h1>
 <li><b>Custom…</b> — any <code>Texture</code> you assign via an <code>ObjectField</code>, for one-off inspection outside the registered maps.</li>
 </ul>
 <p>Each map that only binds during Play Mode shows an explanatory <code>HelpBox</code> instead of a blank preview when unavailable (not in Play Mode, or the owning service/component isn't in the scene yet).</p>
-<h1><a class="anchor" id="autotoc_md135"></a>
+<h1><a class="anchor" id="autotoc_md136"></a>
 Channel toggles &amp; tooltips</h1>
 <p>The four R/G/B/A toggle buttons mask the preview to the channels you care about. Each button's tooltip is per-map and per-channel — e.g. the Disturbance Field's <code>G</code> toggle reads "Displacement X — 0.5-biased…" rather than a generic "green channel" label — so the meaning of each channel is discoverable without leaving the window. The <code>Custom…</code> map has no defined channel semantics, so its tooltips fall back to a generic "Raw {0}
 channel" format.</p>
-<h1><a class="anchor" id="autotoc_md136"></a>
+<h1><a class="anchor" id="autotoc_md137"></a>
 Registry pattern</h1>
 <p>Each built-in map is a <code>MapDescriptor</code>: a name, a <code>Func&lt;Texture&gt; Fetch</code>, an unavailable-hint string, and four channel-tooltip strings. Descriptors are built once into a static <code>Descriptors</code> array (<code>BuildDescriptors</code>) — this is a plain lookup registry, not a service dependency: the window doesn't inject or reference <code>SceneCaptureService</code>/<code>ScreenSpaceLightService</code> directly, it only knows the global shader-texture IDs (<code>_SceneCaptureTex</code>, <code>_DisturbanceTex</code>) and, for the GI buffer, looks the service up by type at fetch time. This keeps the window decoupled from those systems' lifetimes.</p>
 <p>The GI light buffer is the one exception to "just a global texture fetch": it's ping-ponged (see <code>ScreenSpaceLightService.LightTexture</code>), so <code>FetchLightBuffer</code> calls <code>FindFirstObjectByType</code> and re-resolves <code>LightTexture</code> fresh on every repaint rather than caching the service or the texture reference — caching either would risk showing a buffer that's already been swapped out from under it.</p>
-<h1><a class="anchor" id="autotoc_md137"></a>
+<h1><a class="anchor" id="autotoc_md138"></a>
 ChannelPreview shader</h1>
 <p><code>Assets/Shaders/BalloonParty/Editor/ChannelPreview.shader</code> (<code>Hidden/BalloonParty/Editor/ChannelPreview</code>) is the editor-only blit that masks <code>_MainTex</code> down to the toggled channels via <code>_ChannelMask</code>. <code>GameRenderMapsWindow</code> resolves it with <code>Shader.Find</code> rather than a serialized reference — safe here because this window is editor-only tooling that's never shipped, so the build-stripping concern that makes <code>ScreenSpaceLightService</code> serialize its shaders doesn't apply. If the shader fails to load (<code>Shader.Find</code> returns null — <code>dotnet build</code> can't validate shader compilation, so a typo here only surfaces in the editor), the window falls back to <code>EditorGUI.DrawPreviewTexture</code> with no material instead of breaking the preview.</p>
-<h2><a class="anchor" id="autotoc_md138"></a>
+<h2><a class="anchor" id="autotoc_md139"></a>
 Alpha-only-when-isolated display rule</h2>
 <p>Exactly one channel toggled on replicates that channel as grayscale, so a lone R/G/B/A toggle reads clearly on its own. Multiple channels toggled on keep each in its own RGB slot and zero the rest — alpha has no RGB slot of its own, so <b>alpha only visibly contributes to the preview when it's the sole channel selected</b>; with other channels also on, alpha is masked but not shown. The shader always forces output alpha to 1 so <code>EditorGUI.DrawPreviewTexture</code> never blends the preview against the window background.</p>
-<h1><a class="anchor" id="autotoc_md139"></a>
+<h1><a class="anchor" id="autotoc_md140"></a>
 Dependencies</h1>
 <ul>
 <li><code><a class="el" href="namespaceBalloonParty_1_1Editor.html">BalloonParty.Editor</a></code> assembly (editor-only platform).</li>

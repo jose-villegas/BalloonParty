@@ -159,14 +159,14 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>A generic object pooling system for Unity components. Pools are managed centrally through <code>PoolManager</code> and accessed by string key.</p>
-<h1><a class="anchor" id="autotoc_md864"></a>
+<h1><a class="anchor" id="autotoc_md879"></a>
 Architecture</h1>
 <ul>
 <li><b><code>IPoolable</code></b> — pure lifecycle interface: <code>OnSpawned()</code> (called after activation) and <code>OnDespawned()</code> (called before deactivation). Items never reference the pool — they don't know they're pooled.</li>
 <li><b><code>PoolChannel&lt;TItem&gt;</code></b> — abstract base owning a <code>Stack&lt;TItem&gt;</code>. <code>Get()</code> pops or calls <code>Create()</code>; skips destroyed items in the stack. <code>Return()</code> despawns, deactivates, and pushes back. On return, <code>SetParent(..., worldPositionStays: false)</code> prevents scale drift from reparenting — skipped if the item is already parented under <code>Container</code>, so channels whose items never leave their home transform (see <code>Register(key, channel, container)</code> below) pay no per-return <code>SetParent</code> cost. Subclasses implement <code>Create()</code>.</li>
 <li><b><code>PoolManager</code></b> — injectable singleton registry keyed by <code>string</code>. Channels are registered via <code>Register()</code> (creates a container <code>GameObject</code> under the shared <code>[Pool]</code> root) or <code>Register(key, channel, container)</code> (homes the channel under a caller-supplied <code>container</code> instead — for pools whose items should live where they're consumed, e.g. a HUD notice pool parented under its own bar), or lazily via <code>GetOrRegister()</code>. Consumers call <code>Get&lt;TItem&gt;(key)</code> / <code>Return(key, item)</code>. <code>KeyFor(prefab)</code> returns a cached pool key for a prefab — <code>Object.name</code> allocates a fresh managed string on every access, so hot paths (per-pop VFX) resolve keys through the cache instead.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md865"></a>
+<h1><a class="anchor" id="autotoc_md880"></a>
 Effect Abstraction</h1>
 <p>Effects (VFX that need to <code>Play</code> and <code>Stop</code>) have their own hierarchy, separate from raw particle pooling:</p>
 <ul>
@@ -176,14 +176,14 @@ Effect Abstraction</h1>
 <li><b><code>AnimatorEffectView</code></b> — <code>EffectView</code> subclass for animator-driven effects. Timer-based completion against the first clip's length.</li>
 <li>Effect views are pooled via the generic <b><code>SimplePoolChannel&lt;EffectView&gt;</code></b> (see below) — the prefab must already have the correct <code>EffectView</code> subclass attached.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md866"></a>
+<h1><a class="anchor" id="autotoc_md881"></a>
 Particle Pooling (simple effects)</h1>
 <p>For simple particle effects that don't need the full <code>EffectView</code> contract:</p>
 <ul>
 <li><b><code>PoolableParticle</code></b> — <code>MonoBehaviour</code> implementing <code>IPoolable</code> and <code>IEffect</code>. <code>OnSpawned()</code> stops the particle to prevent stale color from Play-on-Awake. The consumer calls <code>Play(pos, color, onComplete)</code> and handles the return in the <code>onComplete</code> callback. Completion is detected the same way as <code>ParticleEffectView</code>: <code>stopAction = Callback</code> → <code>OnParticleSystemStopped()</code>, with an <code>IsAlive(true)</code> fallback in <code>Update()</code> for prefabs whose child sub-emitters outlive the root's own stop (e.g. the tough-balloon-pop smoke child).</li>
 <li><b><code>ParticlePoolChannel</code></b> — <code>PoolChannel&lt;PoolableParticle&gt;</code> that takes a <code>GameObject</code> prefab. <code>Create()</code> reuses the prefab's own <code>PoolableParticle</code> if it already has one, adding it via <code>AddComponent</code> only as a fallback. Used for balloon pop VFX and shield VFX.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md867"></a>
+<h1><a class="anchor" id="autotoc_md882"></a>
 Return Responsibility</h1>
 <p><b>The consumer that calls <code>Get()</code> is responsible for calling <code>Return()</code>.</b> Items signal completion via callbacks passed to their <code>Play()</code> or <code>Setup()</code> calls. The consumer bundles the <code>Return()</code> into that callback.</p>
 <table class="markdownTable">
@@ -202,23 +202,23 @@ Return Responsibility</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ProjectileView</code>   </td><td class="markdownTableBodyNone">No completion callback — returned directly on death   </td><td class="markdownTableBodyNone"><code>ThrowerController</code>   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md868"></a>
+<h2><a class="anchor" id="autotoc_md883"></a>
 Fire-and-forget helpers</h2>
 <p><code>PoolManagerExtensions</code> (<code>Shared/Extensions/</code>) wraps the common effect flow into one call: <code>pool.PlayParticle(prefab, position, tint)</code> and <code>pool.PlayEffect(prefab, position, tint)</code> (plus rotation overloads). Each resolves the key via <code>KeyFor</code>, lazily registers a <code>ParticlePoolChannel</code> / <code>SimplePoolChannel&lt;EffectView&gt;</code>, gets the item, binds it to the pool via <code>BindPool(pool, key)</code>, and plays it with the item's own <code>ReturnToPool</code> action as the completion callback — the effect returns itself, so the caller wires nothing.</p>
-<h1><a class="anchor" id="autotoc_md869"></a>
+<h1><a class="anchor" id="autotoc_md884"></a>
 Injecting Pool Channel</h1>
 <p>For prefabs that have <code>[Inject]</code> fields but don't need their own VContainer child scope (all injected dependencies are singletons from an ancestor scope):</p>
 <ul>
 <li><b><code>InjectingPoolChannel&lt;TItem&gt;</code></b> — generic <code>PoolChannel&lt;TItem&gt;</code> that takes an <code>IObjectResolver</code> and a prefab. <code>Create()</code> calls <code>resolver.Instantiate(prefab, container)</code> — VContainer's built-in extension that deactivates the prefab, clones, injects all <code>[Inject]</code> fields from the parent container, and reactivates. Much faster than <code>CreateChildFromPrefab</code> because it skips container creation, <code>Configure()</code>, and <code>RegisterComponentInHierarchy</code> traversals. Any <code>LifetimeScope</code> components on the prefab should have <code>autoRun</code> disabled in the Inspector.</li>
 <li><b><code>BalloonPoolChannel</code></b> and <b><code>ProjectilePoolChannel</code></b> extend <code>InjectingPoolChannel&lt;T&gt;</code> as thin type aliases.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md870"></a>
+<h1><a class="anchor" id="autotoc_md885"></a>
 Simple Pool Channel (no injection)</h1>
 <p>For prefabs that need <b>no</b> VContainer injection — the common case for effects, trails, and HUD notices:</p>
 <ul>
 <li><b><code>SimplePoolChannel&lt;TItem&gt;</code></b> — generic <code>PoolChannel&lt;TItem&gt;</code> whose <code>Create()</code> instantiates the prefab under the container, deactivates it, and returns the <code>TItem</code> component. Two constructors: one takes the <code>TItem</code> component prefab directly, the other takes a <code>GameObject</code> prefab and resolves the component via <code>GetComponent&lt;TItem&gt;()</code>. This single channel replaces the former per-type <code>EffectPoolChannel</code>, <code>ItemVisualPoolChannel</code>, <code>ScoreTrailPoolChannel</code>, <code>ShieldTrailPoolChannel</code>, and <code>ProgressNoticePoolChannel</code> shells.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md871"></a>
+<h1><a class="anchor" id="autotoc_md886"></a>
 Channels</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -234,7 +234,7 @@ Channels</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>SimplePoolChannel&lt;T&gt;</code>   </td><td class="markdownTableBodyNone">(varies — prefab name, <code>ScoreTrail_{color}</code>, <code>StreakNotice_{color}</code>, …)   </td><td class="markdownTableBodyNone">any non-injected <code>IPoolable</code> (<code>EffectView</code>, <code>ItemVisualView</code>, <code>FlyingTrail</code>, <code>ProgressNotice</code>)   </td><td class="markdownTableBodyNone"><code>Object.Instantiate</code> (+ <code>GetComponent&lt;T&gt;</code> for the <code>GameObject</code> overload)   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md872"></a>
+<h1><a class="anchor" id="autotoc_md887"></a>
 Usage</h1>
 <div class="fragment"><div class="line"><span class="comment">// === Registration — injecting channel (prefabs with [Inject] fields) ===</span></div>
 <div class="line">_poolManager.Register(prefab.name, <span class="keyword">new</span> BalloonPoolChannel(resolver, prefab));</div>
@@ -253,7 +253,7 @@ Usage</h1>
 <div class="line"><span class="comment">// === Lazy registration + get — EffectView ===</span></div>
 <div class="line">var effect = _poolManager.GetOrRegister(prefab.name, () =&gt; <span class="keyword">new</span> SimplePoolChannel&lt;EffectView&gt;(effectPrefab));</div>
 <div class="line">effect.Play(pos, tint, () =&gt; _poolManager.Return(prefab.name, effect));</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md873"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md888"></a>
 Pre-warming</h1>
 <p>Pre-warming creates pool items ahead of time so the first <code>Get()</code> call hits a warm cache instead of calling <code>Create()</code>.</p>
 <ul>
@@ -277,7 +277,7 @@ Pre-warming</h1>
 <div class="line">    { <span class="stringliteral">&quot;ToughBalloon&quot;</span>, 3 },</div>
 <div class="line">};</div>
 <div class="line">await _poolManager.PrewarmAllAsync(counts, ct);</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md874"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md889"></a>
 Adding a new pool</h1>
 <ol type="1">
 <li>Create a class extending <code>PoolChannel&lt;TItem&gt;</code> — or use <code>InjectingPoolChannel&lt;TItem&gt;</code> if the prefab has <code>[Inject]</code> fields</li>
@@ -287,10 +287,10 @@ Adding a new pool</h1>
 <li>Register via <code>_poolManager.Register(key, new YourChannel(...))</code></li>
 <li>The consumer passes a return callback through the item's public API; the callback calls <code>Return(key, item)</code> on completion</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md875"></a>
+<h1><a class="anchor" id="autotoc_md890"></a>
 Trail Utilities</h1>
 <p>Composable plain-C# helpers for trail orb services. Pick the level that matches your feature's complexity:</p>
-<h2><a class="anchor" id="autotoc_md876"></a>
+<h2><a class="anchor" id="autotoc_md891"></a>
 <code>TrailSpawner</code></h2>
 <p>Spawn-and-forget: handles pool get → position → setup → return on arrival. Accepts an optional <code>sortingOrder</code> to override the trail's sorting layer (used by glow trails at <code>3200</code>).</p>
 <div class="fragment"><div class="line">var spawner = <span class="keyword">new</span> TrailSpawner(poolManager, <span class="stringliteral">&quot;MyTrail&quot;</span>, prefab);                       <span class="comment">// common case: pools via SimplePoolChannel</span></div>
@@ -301,16 +301,16 @@ Trail Utilities</h1>
 <div class="line">spawner.SpawnFollow(from, () =&gt; balloon.position, duration, onArrived);  <span class="comment">// curve-eased, homes on a moving target</span></div>
 </div><!-- fragment --><p><code>SpawnFollow</code> (backed by <code>FlyingTrail.SetupFollow</code>) eases from its launch point to a <b>live-updating</b> target over <code>duration</code> along the move curve, instead of tweening to a fixed point — used by <code>HeartTrailController</code> so an overflow heart lands on its balloon even while the pile compacts up under it. It honours <code>TrailMotion</code> like the fixed-point flights.</p>
 <p>Used by <code>ScoreTrailService</code> for score trail spawning, <code>ShieldTrailController</code> for shield trails, <code>HeartTrailController</code> for overflow heart trails, and <code>LevelUpPopUp</code> for glow trails.</p>
-<h2><a class="anchor" id="autotoc_md877"></a>
+<h2><a class="anchor" id="autotoc_md892"></a>
 <code>TrailEndpointRegistry</code> + <code>ITrailEndpoint</code></h2>
 <p>The fixed anchor a trail flies <b>to</b> or <b>from</b>, resolved by key instead of each feature wiring its own position provider. A view registers under a key; a controller resolves it when spawning:</p>
 <div class="fragment"><div class="line">registry.Register(TrailEndpointKeys.Heart, <span class="keyword">new</span> TransformTrailEndpoint(anchor));  <span class="comment">// scope build / view Start</span></div>
 <div class="line"><span class="keywordflow">if</span> (registry.TryGet(TrailEndpointKeys.Heart, out var e)) { spawner.Spawn(e.Center, popPos, dur); }</div>
 </div><!-- fragment --><p><code>ITrailEndpoint</code> exposes <code>Center</code> and <code>RandomPosition()</code> — point anchors return <code>Center</code> for both; an area (a progress bar) spreads arrivals. Implementations: <code>TransformTrailEndpoint</code> (wraps a fixed anchor <code>Transform</code>; used for shield target / heart source) and <code>ColorProgressBar</code> (registers per palette-colour name via <code>ScoreTrailService.RegisterTarget</code>). The registry is a <code>GameLifetimeScope</code> singleton so child UI scopes resolve the same instance; registrations are long-lived (not reset per run). Well-known single-anchor keys live in <code>TrailEndpointKeys</code>; score endpoints key on colour name.</p>
-<h2><a class="anchor" id="autotoc_md878"></a>
+<h2><a class="anchor" id="autotoc_md893"></a>
 <code>TrailFlightRegistry&lt;TId&gt;</code></h2>
 <p>Identity-based flight registry with per-trail control and bulk operations. Each trail is wrapped in a <code>TrailFlight</code> value object exposing transport-style commands: pause, resume, stop, complete, and speed control. The registry does <b>not</b> own spawning — the service spawns and calls <code>Register</code>/<code>Unregister</code>.</p>
-<h3><a class="anchor" id="autotoc_md879"></a>
+<h3><a class="anchor" id="autotoc_md894"></a>
 <code>TrailFlight</code></h3>
 <p>Per-trail controller wrapping DOTween operations on a <code>Transform</code>. Tracks <code>FlightPhase</code> (<code>Idle</code>, <code>InFlight</code>, <code>Paused</code>), exposes <code>Origin</code>, <code>Speed</code>, and <code>Transform</code>.</p>
 <div class="fragment"><div class="line">flight.Pause();          <span class="comment">// DOPause, phase → Paused</span></div>
@@ -319,7 +319,7 @@ Trail Utilities</h1>
 <div class="line">flight.Complete();       <span class="comment">// DOComplete, fires onComplete callbacks</span></div>
 <div class="line">flight.SetSpeed(0.5f);   <span class="comment">// timeScale on all tweens</span></div>
 <div class="line">flight.SetUnscaledTime(<span class="keyword">true</span>); <span class="comment">// ignore Time.timeScale</span></div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md880"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md895"></a>
 Registry API</h3>
 <div class="fragment"><div class="line">var registry = <span class="keyword">new</span> TrailFlightRegistry&lt;TrailId&gt;();</div>
 <div class="line"> </div>

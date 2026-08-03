@@ -1,22 +1,24 @@
 <map id="BalloonParty.Audio.Routing.MusicSoundRouter" name="BalloonParty.Audio.Routing.MusicSoundRouter">
-<area shape="rect" id="Node000001" title=" " alt="" coords="625,186,827,226"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="625,218,827,258"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="318,5,403,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="417,27,461,39,534,62,565,75,603,96,662,140,708,184,704,188,659,144,600,100,563,80,532,67,459,45,416,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="417,25,508,52,557,73,603,100,637,128,668,160,713,216,709,220,664,163,633,132,600,104,555,78,506,57,416,31"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="321,55,401,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="415,77,461,89,533,107,602,132,653,157,696,184,693,188,650,162,600,136,531,112,459,94,413,82"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="415,76,461,89,534,109,565,121,603,140,659,178,705,216,701,220,656,182,600,144,563,126,532,114,459,94,413,82"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="311,104,410,129"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="424,125,509,141,602,163,668,183,667,189,601,169,507,147,423,130"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="424,126,509,146,602,174,649,194,691,216,688,220,647,199,600,179,508,151,423,131"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html" title=" " alt="" coords="265,154,456,194"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="470,181,625,195,625,200,470,186"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="470,190,626,218,625,223,470,196"/>
 <area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Shared_1_1GameState_1_1INavigation.html" title="Injectable seam over the static Navigation, testable without global state." alt="" coords="263,218,458,258"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="472,226,625,212,625,217,472,231"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="472,235,625,235,625,241,472,241"/>
 <area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Danger_1_1IDangerLevel.html" title="Read&#45;only 0→1 &quot;how close are we to dying&quot; signal, consumed by the danger gradient HUD." alt="" coords="261,282,460,322"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="473,276,601,245,668,224,669,229,602,250,474,282"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="473,280,625,253,626,258,474,285"/>
 <area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ITimeOfDayNight.html" title="Whether the current time of day counts as night (5 PM–4 AM), for gameplay rules that key off it." alt="" coords="263,346,458,386"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="471,340,536,321,600,294,656,260,701,224,704,228,659,264,603,299,538,326,472,345"/>
-<area shape="rect" id="Node000009" href="$structBalloonParty_1_1Audio_1_1SoundHandle.html" title="Identifies one play of a voice slot — the only way to ISoundPlayer.Stop a loop." alt="" coords="267,449,454,489"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="467,447,536,423,569,407,600,387,640,348,672,303,697,260,714,225,719,227,702,262,677,306,644,352,603,391,572,411,538,428,468,452"/>
-<area shape="poly" id="edge10_Node000009_Node000009" title=" " alt="" coords="337,433,346,425,361,422,374,424,383,430,386,439,385,449,380,448,381,440,378,434,372,429,361,427,348,430,341,436"/>
-<area shape="rect" id="Node000010" title=" " alt="" coords="5,456,212,481"/>
-<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="226,466,267,466,267,471,226,471"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="465,340,532,321,600,298,689,256,691,260,602,303,534,326,466,345"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightScope.html" title="The per&#45;shot boundary, owned in one place instead of re&#45;derived by every consumer." alt="" coords="265,410,456,450"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="468,407,535,386,600,356,633,333,662,306,707,256,711,260,666,310,636,337,603,360,537,391,470,412"/>
+<area shape="rect" id="Node000010" href="$structBalloonParty_1_1Audio_1_1SoundHandle.html" title="Identifies one play of a voice slot — the only way to ISoundPlayer.Stop a loop." alt="" coords="267,513,454,553"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="467,513,536,490,569,473,600,452,623,430,643,405,677,351,701,299,716,258,721,259,706,301,682,353,648,408,627,434,603,456,572,477,538,495,468,518"/>
+<area shape="poly" id="edge11_Node000010_Node000010" title=" " alt="" coords="337,497,346,489,361,486,374,488,383,494,386,503,385,513,380,512,381,504,378,498,372,493,361,491,348,494,341,500"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="5,520,212,545"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="226,530,267,530,267,535,226,535"/>
 </map>

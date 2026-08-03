@@ -126,7 +126,7 @@ Directories</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Represents balloons in the game — their state, appearance, spawning, and destruction.</p>
-<h1><a class="anchor" id="autotoc_md18"></a>
+<h1><a class="anchor" id="autotoc_md19"></a>
 Folder structure</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -145,10 +145,10 @@ Folder structure</h1>
 <td class="markdownTableBodyNone"><code>BalloonLifetimeScope</code>   </td><td class="markdownTableBodyNone">Legacy scope on balloon prefabs — <code>autoRun</code> disabled in Inspector; injection handled by <code>InjectingPoolChannel</code>   </td></tr>
 </table>
 <p><code>View/</code> also contains <code>SpriteColorableRenderer</code> (<code>ColorableRenderer&lt;SpriteRenderer&gt;</code> — sets <code>renderer.color</code>), <code>ParticleColorableRenderer</code> (<code>ColorableRenderer&lt;ParticleSystem&gt;</code> — sets <code>startColor</code> and immediately recolors live particles via <code>Clear</code>+<code>Play</code>), and <code>IBalloonMotionView</code> — a single read/write <code>Position</code> passthrough to <code>transform.position</code>, which <code>BalloonMotionTicker</code> reads (to detect another writer taking over) and writes (reconciled base position plus any active nudge impulses); the ticker owns nudge motion state, the view only exposes the transform.</p>
-<h2><a class="anchor" id="autotoc_md19"></a>
+<h2><a class="anchor" id="autotoc_md20"></a>
 Rendering and GPU instancing</h2>
 <p>Balloon materials (<code>BalloonMaterial</code>, <code>SpecularBalloonBlur</code>, etc.) have GPU instancing enabled. Per-balloon color is applied via <code>SpriteRenderer.color</code>, which Unity streams to the shader as <code>unity_SpriteRendererColorArray</code> in the instancing buffer. All 6 custom shaders follow the <code>UnitySprites.cginc</code> pattern with a <code>_RendererColor</code> fallback for non-SpriteRenderer components. Balloon sprites are packed into <code>Balloons.spriteatlas</code> for draw call reduction. Drop shadows are pre-baked where used (e.g. the <code>Balloon</code> and <code>Unbreakable</code> prefabs): <code>SpriteShadowBaker</code> (<code>Shared/Rendering/</code>) bakes the blurred child-sprite silhouette offline into a <code>BakedShadow</code> child sprite, replacing runtime blur-shadow materials. See <code>Assets/Shaders/BalloonParty/README.md</code> for the instancing policy and <code>Assets/Sprites/README.md</code> for atlas groupings.</p>
-<h1><a class="anchor" id="autotoc_md20"></a>
+<h1><a class="anchor" id="autotoc_md21"></a>
 Behaviour</h1>
 <p>A balloon knows its type, how many hits it can absorb, where it sits in the grid, whether it has settled into position, and whether it carries an item. <code>BalloonModel</code> additionally knows its color (<code>IPaintable</code>). When any reactive property changes, the view updates automatically via UniRx subscriptions.</p>
 <p><code>BalloonController</code> receives its own hits directly: each controller registers with <code>BalloonControllerRegistry</code> on spawn, and <code>HitPipeline</code> (<code>Game/</code>) resolves the owning controller by model and calls <code>HandleHit</code> — no per-balloon subscriptions or broadcast filtering. It routes on the pre-computed <code>msg.Outcome</code>:</p>
@@ -160,10 +160,10 @@ Behaviour</h1>
 </ul>
 <p><code>EvaluateHit</code> on <code>BalloonModelBase</code> is <b>state-mutating</b> — it decrements <code>HitsRemaining</code> (or zeroes it for <code>Piercing</code>) and returns the outcome in a single call. <code>ProjectileHitResolver</code> calls it once, wraps it in a <code>DamageContext(1, flags, projectile's source color)</code> (<code>flags</code> always includes <code>DamageFlags.DirectHit</code> for a contact hit), and dispatches the outcome via <code>IHitDispatcher.Dispatch</code>; <code>BalloonController</code> reads <code>msg.Outcome</code> without calling <code>EvaluateHit</code> again.</p>
 <p>Neighbor nudges for every hit are handled independently by <code>NudgeService</code> in <code>Nudge/</code>, which subscribes to <code>ActorHitMessage</code> (filtering by <code>IHasNudge</code>) and dispatches push-out → return animations to all 6 grid neighbors that also implement <code>IHasNudge</code>.</p>
-<h2><a class="anchor" id="autotoc_md21"></a>
+<h2><a class="anchor" id="autotoc_md22"></a>
 Pooling</h2>
 <p>Balloon views are pooled via <code>PoolManager</code> / <code>BalloonPoolChannel</code>. A <code>CompositeDisposable</code> replaces <code>AddTo(this)</code> for reactive subscriptions — cleared on each <code>Bind()</code> and <code>OnDespawned()</code>. External subscribers (e.g. <code>BalloonController</code>'s transient item-activation subscription) register via <code>RegisterDisposeOnDespawn()</code> so they're cleaned up on pool return. <code>IBalloonViewBinding</code> components (e.g. <code>ToughBalloonVariant</code>) receive the same <code>CompositeDisposable</code> so their subscriptions are cleared automatically in the same lifecycle.</p>
-<h2><a class="anchor" id="autotoc_md22"></a>
+<h2><a class="anchor" id="autotoc_md23"></a>
 Animation phases (turn-based)</h2>
 <p>Balloon animations are organized into sequential, non-overlapping phases per turn:</p>
 <ol type="1">
@@ -173,7 +173,7 @@ Animation phases (turn-based)</h2>
 <li><b>Post-spawn balance</b> — a <code>BalanceBalloonsMessage</code> triggers a deferred balance pass (next frame) to settle any newly created gaps.</li>
 </ol>
 <p>Additionally, a <b>direct projectile pop</b> (<code>DamageFlags.DirectHit</code> — never AOE items) can earn one extra balloon, spawned immediately: each pop rolls <code>IBalloonsConfiguration.PopSpawnChance</code> (global, not per level; 0 = off). The loose spawn takes its column's own entry only — no rehoming, no pressure, no overflow charge, columns without room skipped — and is excluded from item checks. Each spawn is budget-gated: the automated spawns stop at grid capacity minus <code>IBalloonsConfiguration.PopSpawnFreeRows</code> × columns (headroom further clamped to one turn-wave's worth, the range's <code>SpawnLines</code> × columns), so they can never pack the play space solid.</p>
-<h2><a class="anchor" id="autotoc_md23"></a>
+<h2><a class="anchor" id="autotoc_md24"></a>
 Motion arbitration</h2>
 <p>Position motion has two independent drivers: DOTween (spawn and balance paths, sequenced by the <code>TweenTracker</code> component on each view) and <code>BalloonMotionTicker</code> (nudge impulses). Rather than one driver cancelling the other, the ticker runs last in the frame as an <code>ILateTickable</code> and reconciles instead of fighting: each tick it compares a view's current position against what it wrote last tick, and if something else (DOTween, a pool teleport) moved the transform in between, it silently adopts that as the new base.</p>
 <ul>
@@ -181,10 +181,10 @@ Motion arbitration</h2>
 <li><b>Balance</b> (<code>BalloonBalancer.AnimatePaths</code>) calls <code>TweenTracker.Kill()</code> + <code>transform.DOKill()</code>, then appends its <code>DOPath</code> via <code>tracker.Append(tween)</code>. It never touches the ticker — any nudge impulses already running on that view keep applying on top of the balance motion; the ticker just adopts the balance tween's positions as its new base each tick.</li>
 <li><b>Despawn</b> calls <code>TweenTracker.Kill()</code> + <code>transform.DOKill()</code> + <code>BalloonMotionTicker.CancelAll(this)</code> — drops the view's impulses without a final write, since the pool is about to reposition it anyway.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md24"></a>
+<h2><a class="anchor" id="autotoc_md25"></a>
 Scale recovery</h2>
 <p>When balance interrupts a spawning balloon, <code>transform.DOKill()</code> kills the standalone scale tween mid-animation. <code>BalloonBalancer.StartBalanceTween</code> captures the current scale beforehand and creates a parallel <code>DOScale(Vector3.one, duration)</code> if the balloon hasn't reached full size — so it smoothly finishes scaling alongside the balance move. Nudge no longer touches scale at all (it only adds a ticker impulse), so a mid-scale-up balloon that gets nudged keeps scaling on its own original tween.</p>
-<h1><a class="anchor" id="autotoc_md25"></a>
+<h1><a class="anchor" id="autotoc_md26"></a>
 Interactions</h1>
 <ul>
 <li><b>SlotGrid</b> — balloons occupy positions in it; stores models and views in parallel arrays. Spawner places, controller removes, balancer relocates. <code>_grid.ViewAt(slotIndex)</code> reaches views from models.</li>

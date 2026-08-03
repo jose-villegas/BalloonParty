@@ -110,11 +110,11 @@ $(function(){initNavTree('arch_bush_system.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">Bush System</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md57"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md58"></a>
 Bush System</h1>
 <div class="dotgraph">
 <iframe scrolling="no" frameborder="0" src="dot_inline_dotgraph_1.svg" width="1520" height="1122"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-<h2><a class="anchor" id="autotoc_md58"></a>
+<h2><a class="anchor" id="autotoc_md59"></a>
 What this diagram shows</h2>
 <p>The bush system's full data flow from editor bake time through runtime rendering and GPU animation.</p>
 <p><b>Editor (bake time):</b></p><ul>
@@ -141,7 +141,7 @@ What this diagram shows</h2>
 <li>The field's diffusion and reform mechanics provide the rattle settle curve</li>
 <li>A parallel CPU path exists too: repelling stamps also <code>Report()</code> to <code>ImpactEventBus</code>, and <code>BushRustleController</code> (<code>Tick()</code>ed from <code>BushView.LateUpdate</code>) reads the pending impacts plus the live projectile position to spawn rustle VFX — so stampers drive a visible CPU-side response as well as the shader rattle</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md59"></a>
+<h2><a class="anchor" id="autotoc_md60"></a>
 Key design decisions</h2>
 <ol type="1">
 <li><b>Static base matrices</b> — leaf matrices are baked once at <code>RebuildRenderResources</code> and never mutated. No <code>ITickable</code>. <code>BushView.LateUpdate</code> does compose a per-frame translation offset on top of them while the Ascent slide displaces the bush root, but the animated leaf transform itself is still entirely GPU-side.</li>

@@ -135,7 +135,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Responsible for introducing balloons into the grid — both at game start and during play.</p>
-<h1><a class="anchor" id="autotoc_md27"></a>
+<h1><a class="anchor" id="autotoc_md28"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -151,7 +151,7 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>BalloonPoolChannel</code>   </td><td class="markdownTableBodyNone"><code>InjectingPoolChannel&lt;BalloonView&gt;</code> — creates balloon instances via <code>IObjectResolver.Instantiate()</code>, injecting all <code>[Inject]</code> fields from the parent container without creating child scopes   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md28"></a>
+<h1><a class="anchor" id="autotoc_md29"></a>
 Behaviour</h1>
 <p><code>BalloonSpawner</code> implements <code>IGridSpawner</code> with <code>SpawnPriority = SpawnStage.BalloonActors</code>. <code>GridSpawnerCoordinator</code> calls <code>SpawnAsync()</code> after the Navigation gate opens and all lower-priority spawners (e.g. <code>StaticActorSpawner</code>) have completed. <code>SpawnAsync</code> awaits the pre-warm task started in <code>Start()</code> — so pool pre-warming and the navigation/static-actor wait overlap rather than serialize.</p>
 <p>At game start <code>BalloonSpawner</code> spawns the initial grid rows — the row count is the active level's resolved <code>IActiveLevelParameters.Current.BoardLines</code>. For each empty slot it picks a balloon type via the level's resolved weighted pick (<code>IActiveLevelParameters.Current.PickBalloonEntry</code>, which gates types by the active range and respects each type's resolved max-count cap), then hands the entry to <code>BalloonFactory.Create</code>. Model configuration such as <code>TypeName</code>, <code>ScoreValue</code>, <code>HitsToPop</code>, <code>NudgeOverrides</code>, and <code>ItemActivationWeight</code> is bundled into a <code>BalloonModelConfig</code> struct and passed to the model constructor. <code>BalloonModelFactory.Create</code> (in <code>Balloon/Model/</code>) picks the model class from <code>entry.BalloonType</code> — shared with <code>RejectedBalloonEffect</code> so the switch lives in one place:</p>
@@ -170,7 +170,7 @@ Behaviour</h1>
 <p>The variant's <code>Initialize(model, levelAllowedColorsMask)</code> handles color (for colorable types) — the mask is the active level's color gate, intersected with the variant's own allowed-color mask so a level can withhold specific colors. Spawn animation follows the path returned by <code>SlotGrid.ComputePath</code>, driving a <code>DOPath(CatmullRom)</code> from the entry-row offset down to the target slot (run by <code>BalloonFactory.AnimateSpawn</code>).</p>
 <p>After each projectile death the spawner fires <code>IActiveLevelParameters.Current.SpawnLines</code> new lines with <code>BalloonsConfiguration.NewBalloonLinesTimeInterval</code> delay between lines, but only once the turn count reaches the level's <code>FirstSpawnTurn</code> — a per-level grace period (reset to zero on every level-up) that lets a fresh range play a few turns before its own lines start landing. Multi-line spawning uses <code>async UniTaskVoid</code> with a <code>CancellationTokenSource</code>, avoiding any coroutine runner dependency. Game-start lines are seeded separately — <code>SceneTransition</code> publishes <code>SpawnBalloonLineMessage</code> on scene load.</p>
 <p>After the final line in each spawn batch, the spawner publishes <code>ItemCheckMessage</code> (so <code>ItemAssigner</code> can assign items to newly spawned balloons) and <code>BalanceBalloonsMessage</code> (so <code>BalloonBalancer</code> settles the grid).</p>
-<h2><a class="anchor" id="autotoc_md29"></a>
+<h2><a class="anchor" id="autotoc_md30"></a>
 Placement under pressure (turn spawns)</h2>
 <p>A blocked column isn't lost immediately. <code>BalloonPlacementResolver.Resolve</code> picks a slot in order, scanning columns nearest-first (<code>TryNearestColumn</code>):</p>
 <ol type="1">
@@ -185,11 +185,11 @@ Placement under pressure (turn spawns)</h2>
 <li><b>Initial grid fill</b> passes <code>PlacementReach.Rehome</code> — steps 1–2 only. On tight boards (static actors occupying cells) a column can be blocked at level start, so rehoming redistributes its allotment into columns that still have reachable room, keeping the total at <code>BoardLines × columns</code> whenever the board's reachable capacity allows. It never shoves (no step 3) or overflows below the grid (no step 4). <code>LogInitialFillDiagnostics</code> logs expected/achievable/spawned per column in editor and development builds.</li>
 <li><b>Pop-spawn extras</b> (<code>SpawnLooseBalloons</code>) pass <code>PlacementReach.OwnColumn</code> — step 1 only; a blocked column is skipped.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md30"></a>
+<h2><a class="anchor" id="autotoc_md31"></a>
 Spawn depth &amp; tough layering</h2>
 <p><code>BalloonPrefabEntry.SpawnWeight</code> controls <em>depth</em>, never <em>which</em> types spawn or <em>how many</em> (those come from the range pick weights and the <code>InitialCountWeights</code>/<code>WaveCountWeights</code> quota curves). Each wave's picked batch is dealt into the topmost open rows first, so the deal order is the vertical order. <code>PrepareSpawnBatch</code> sorts the batch <b>lightest-first</b> (<code>BySpawnWeightAscending</code>), so heavier types (Tough, weight <code>+3</code>) settle below lighter ones — one bottom-heavy gradient.</p>
 <p>The <b>initial fill</b> overrides that with vertical layering (<code>ArrangeInitialLayers</code> + the pure <code>InitialLayerPlan.HeavyPerLine</code>). The board is split into segments <code>BalloonsConfiguration.ToughLayerSpacing</code> lines tall; the bottom line of each segment collects the heavy (positive-weight) types, and lighter types fill the rest. With spacing <code>3</code> that reads as <em>two light lines, one part-tough line, repeating</em>. Heavies are round-robined onto the layer lines deepest-first (an uneven count settles lower), capped at one board line each; any surplus beyond the layers' capacity sinks to the bottom as the plain gradient would place it. This is <b>arrangement-only</b> — the tough <em>count</em> is unchanged, just its depth. Spacing <code>0</code>/<code>1</code>, no heavies, or a board too short for a full segment all fall back to the plain gradient. The mapping is exact on an empty board (one pass ≈ one row) and approximate on tight boards where static actors offset a column's entry row.</p>
-<h1><a class="anchor" id="autotoc_md31"></a>
+<h1><a class="anchor" id="autotoc_md32"></a>
 Interactions</h1>
 <ul>
 <li><b>SlotGrid</b> — queried for empty slots (<code>CountEmpty()</code>); all placed balloons registered here</li>

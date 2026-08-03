@@ -199,7 +199,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Shared editor tooling — drawer infrastructure, custom inspectors, bake pipelines, and menu tools. Nothing in this folder is referenced at runtime — it compiles only in Editor builds.</p>
-<h1><a class="anchor" id="autotoc_md141"></a>
+<h1><a class="anchor" id="autotoc_md142"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -263,7 +263,7 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>TestRunner/</code>   </td><td class="markdownTableBodyNone"><code>EditModeTestRunner</code> — runs the EditMode suite inside the open editor (no batchmode project-lock) via <b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Run EditMode Tests</b>, writing the same <code>Tools/last-test-run.md</code> the headless runner produces. No README   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md142"></a>
+<h1><a class="anchor" id="autotoc_md143"></a>
 AutoFieldPropertyDrawer</h1>
 <p>Subclasses declare one required property and up to three optional overrides:</p>
 <table class="markdownTable">
@@ -278,19 +278,19 @@ AutoFieldPropertyDrawer</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>BuildFoldoutLabel</code>   </td><td class="markdownTableBodyNone">No   </td><td class="markdownTableBodyNone">Override to append contextual text to the foldout header (e.g. <code>Element 0 [Deflect]</code>, <code>Element 2 [Bomb]</code>)   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md143"></a>
+<h2><a class="anchor" id="autotoc_md144"></a>
 Draw order when expanded</h2>
 <div class="fragment"><div class="line">1. Foldout header        ← BuildFoldoutLabel</div>
 <div class="line">2. Pinned fields         ← DrawPinnedFields   (default: nothing)</div>
 <div class="line">3. Auto common fields    ← DrawCommonFields via PropertyDrawerHelper</div>
 <div class="line">4. Special fields        ← DrawSpecialFields</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md144"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md145"></a>
 Adding new fields to a type</h2>
 <ul>
 <li><b>New common field</b> — add it to the data class. It appears in the Inspector automatically with a nicified name derived from the field name. No drawer changes needed.</li>
 <li><b>New field needing custom layout</b> — add its serialized name to <code>ExcludedFields</code> and handle it in <code>DrawPinnedFields</code> or <code>DrawSpecialFields</code> (with the matching height method).</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md145"></a>
+<h1><a class="anchor" id="autotoc_md146"></a>
 Current drawers using this base</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -304,7 +304,7 @@ Current drawers using this base</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>NudgeOverrideDrawer</code>   </td><td class="markdownTableBodyNone"><code>Nudge/Editor/</code>   </td><td class="markdownTableBodyNone"><code>BuildFoldoutLabel</code> appends <code>[NudgeType]</code>; <code>_appliesTo</code> pinned to top via <code>DrawPinnedFields</code> using <code>EnumFlagsField</code>; <code>_falloff</code> conditional on Shockwave flag   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md146"></a>
+<h1><a class="anchor" id="autotoc_md147"></a>
 Standalone drawers</h1>
 <p>These drawers extend <code>PropertyDrawer</code> directly and handle their own rendering without the auto-field pattern:</p>
 <table class="markdownTable">
@@ -325,7 +325,7 @@ Standalone drawers</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>LevelThresholdOverrideDrawer</code>   </td><td class="markdownTableBodyNone"><code>Editor/</code>   </td><td class="markdownTableBodyNone">Relabels <code>LevelThresholdOverride</code> array elements as "Level N" / "Level N–M"   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md147"></a>
+<h1><a class="anchor" id="autotoc_md148"></a>
 Custom editors</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -353,7 +353,7 @@ Custom editors</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>SpriteLayerCombinerEditor</code>   </td><td class="markdownTableBodyNone"><code>SpriteLayerCombiner</code>   </td><td class="markdownTableBodyNone">Bake button + sprite-layer flattening pipeline — see <code><a class="el" href="Editor_2SpriteCombine_2README_8md.html">SpriteCombine/README.md</a></code>   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md148"></a>
+<h1><a class="anchor" id="autotoc_md149"></a>
 Scene overlays</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -361,7 +361,7 @@ Scene overlays</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>MapLimitsSceneOverlay</code>   </td><td class="markdownTableBodyNone"><code>[InitializeOnLoad]</code> static class — draws the <code>ProjectileFlightConfig.LimitsClockwise</code> map boundary as an orange rectangle with edge-value labels in the Scene view. Active in both edit and play mode regardless of inspector selection. Uses an <code>EditorAssetCache&lt;ProjectileFlightConfig&gt;</code> to locate the asset. Toggle persisted via <code>EditorPrefs</code> and controllable from the <code>ProjectileFlightConfigEditor</code> inspector   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md149"></a>
+<h1><a class="anchor" id="autotoc_md150"></a>
 Menu tools</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">

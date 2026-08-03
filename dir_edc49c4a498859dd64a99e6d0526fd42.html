@@ -157,7 +157,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Orchestrates cinematic sequences during gameplay — trail slow-motion, camera zoom/pan, and restore transitions.</p>
-<h1><a class="anchor" id="autotoc_md165"></a>
+<h1><a class="anchor" id="autotoc_md166"></a>
 Architecture</h1>
 <p>The system follows a <b>producer → director → scene</b> pattern:</p>
 <table class="markdownTable">
@@ -175,10 +175,10 @@ Architecture</h1>
 <td class="markdownTableBodyNone"><b>Producer</b> (<code>LevelUpCinematic</code>, <code>HeartDrainCinematic</code>, <code>GameOverLossCinematic</code>)   </td><td class="markdownTableBodyNone">Plain C# over the base   </td><td class="markdownTableBodyNone">Detects its trigger, hands the runner a config (states, focus, end condition, hooks)   </td></tr>
 </table>
 <p>The director does not know about level-ups, trails, or cameras. Producers define all domain-specific behaviour via scene callbacks. <code>LevelAscendCinematic</code> is a producer too but stands outside this base — it drives a transform descent, not the camera runner (see below).</p>
-<h1><a class="anchor" id="autotoc_md166"></a>
+<h1><a class="anchor" id="autotoc_md167"></a>
 Level-Complete Projectile Follow</h1>
 <p><code>LevelUpCinematic</code> produces <b>one</b> cinematic per level-up (the runner's form: <code>TryBegin</code> … <code>EndPanIn</code>). When <code>Phase</code> enters <code>Completing</code>, the camera zooms in and follows the <b>projectile</b> (via <code>ProjectilePositionProvider</code>, box-in-box clamped so the frustum never leaves the play area) for the authored <code>LevelCompleteHit</code> curve duration. The end trigger is <b>duration-based</b> — when the curve's elapsed time reaches its length, <code>EndPanIn</code> clears the cinematic state, starts a <b>curve-driven camera restore</b> (<code>Rig.RestoreCurveDriven</code> using the <code>LevelCompleteRestore</code> segment's curve, still following the projectile box-in-box clamped), and leaves the camera un-zooming back to base while the projectile finishes its flight. On dismiss, <code>LevelUpCinematic</code> only cleans up its session state — <code>LevelController</code> owns the navigation return to <code>Game</code> once the ceremony resolves. The Ascent moves the incoming <em>scenario</em>, not the camera (see <code><a class="el" href="LevelAscendCinematic_8cs.html">LevelAscendCinematic.cs</a></code> below).</p>
-<h2><a class="anchor" id="autotoc_md167"></a>
+<h2><a class="anchor" id="autotoc_md168"></a>
 Cinematic 1 — Hit (<code>CinematicState.LevelCompleteHit</code>)</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -194,11 +194,11 @@ Cinematic 1 — Hit (<code>CinematicState.LevelCompleteHit</code>)</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>End</b>   </td><td class="markdownTableBodyNone"><code>EndPanIn()</code> → ends the hit cinematic state and starts the curve-driven camera restore (un-zoom while following). Popup gate can now open because <code>Cinematic.Current != LevelCompleteHit</code>   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md168"></a>
+<h2><a class="anchor" id="autotoc_md169"></a>
 Gate — Popup Wait + Glow Trails</h2>
 <p><code>LevelUpLifetimeScope</code> registers <code>CinematicEndGate(CinematicState.LevelCompleteHit)</code> by concrete type; <code>LevelUpPopUp</code> injects it directly and waits until <code>Cinematic.Current != LevelCompleteHit</code>. When the gate opens, the popup claims <code>TimeScaleSource.LevelUpPopup = 0</code> via <code>TimeScaleService</code> to freeze balloons/particles.</p>
 <p>After the appear animation finishes, <code>LevelUpPopUp</code> publishes <code>LevelUpGlowTrailsMessage</code> — each <code>ColorProgressBar</code> drains its slider in sync — then spawns decorative <code>FlyingTrail</code> orbs from each bar to the glow fill in unscaled time. When all glow trails arrive, the level label updates. No cinematic state is active during this phase.</p>
-<h2><a class="anchor" id="autotoc_md169"></a>
+<h2><a class="anchor" id="autotoc_md170"></a>
 Dismiss — hand-off to the Ascent</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -210,7 +210,7 @@ Dismiss — hand-off to the Ascent</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b><code>LevelTransitionController</code></b>   </td><td class="markdownTableBodyNone">Driven by <code>ILevelProgress.Phase → Transitioning</code> (the dismissal advances the phase; the Ascent watches the phase, not the message). Waits for <code>!Cinematic.IsPlaying</code> (safety net) then for overflow drain, and runs the Ascent. The camera is already restoring (driven by <code>LevelUpCinematic.EndPanIn</code> via <code>RestoreCurveDriven</code>); <code>LevelTransitionController</code> does <b>not</b> touch the camera. Runs an injected <code>IBoardEffect</code> to clear the old balloons — bound to <code>BoardFloatAwayEffect</code>, so level-up balloons float away rather than pop. Both halves of the old level travel with the descent: statics ride via <code>ITransitionOutgoingContent</code>, and the old balloons are detached off the grid + reparented under the <code>ScenarioContentRoot</code> (<code>BalloonControllerRegistry.DetachOutgoing</code>) by the float effect's <code>Collect()</code> — hence the root-reset happens <em>before</em> <code>Collect()</code> so their reparent lands at the right offset. The level-up's <b>frozen score trails</b> are outgoing content too: <code>ScoreTrailService.HoldOutgoing</code> resolves them here (<code>CompleteAll</code>) so they disappear under the Ascent (see <em>Pausing survivors through the ceremony</em>)   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md170"></a>
+<h2><a class="anchor" id="autotoc_md171"></a>
 Pause Integration</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -226,7 +226,7 @@ Pause Integration</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Score trails   </td><td class="markdownTableBodyNone">Fly at normal speed during the flight — their arrivals must land to confirm the level-up. Frozen only once the ceremony is confirmed (<code>Phase → Pending</code>)   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md171"></a>
+<h2><a class="anchor" id="autotoc_md172"></a>
 Pausing survivors through the ceremony</h2>
 <p>The level-up used to <b>clear</b> every still-airborne trail with <code>CompleteAll()</code> at the end of the hit beat. Now that big scores fly as drawn constellations, snapping them away read as harsh — so the survivors are <b>paused through the popup and resolved as outgoing-level content</b>, exactly like the old board's balloons.</p>
 <ol type="1">
@@ -234,10 +234,10 @@ Pausing survivors through the ceremony</h2>
 <li><b>Resolve at the transition seam.</b> <code>ScoreTrailService</code> implements <code>ITransitionOutgoingContent</code>; its <code>HoldOutgoing</code> (called by <code>LevelTransitionController</code> mid-Ascent, while the phase is still <code>Transitioning</code>) calls <code>Flights.CompleteAll()</code>. Each survivor's arrival fires — <code>ScoreController</code> banks its points (they were never banked while frozen, so total score stays correct) and the formations snap-fade out. The Ascent's board effect visually covers their exit, so they "safely disappear" there. Because this runs <em>before</em> <code>LevelTransitionCompletedMessage</code> returns the phase to <code>Playing</code>, the arrivals (carrying the finished level's numbering) land in a non-<code>Playing</code> phase and are ignored by <code>LevelController</code>/<code>ColorProgressBar</code> — they can't step the <b>new</b> level's progress, bar, or watermark.</li>
 <li><b>Abort/loss recover the controller too.</b> A loss committing mid-hit (<code>AbortSession</code>) still <code>CompleteAll()</code>s at once — that path never reaches a transition, so it must not leave anything frozen. It also publishes <code>LevelUpAbortedMessage</code>, letting <code>LevelController</code> reset <code>Phase</code> back to <code>Playing</code> and return navigation to <code>Game</code> while the level is still pending. Every session exit disposes the freeze subscription; abort/dismiss/dispose are all leak-audited.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md172"></a>
+<h2><a class="anchor" id="autotoc_md173"></a>
 Trail Identity</h2>
 <p><code>TrailId(Color, Score, Level)</code> — color needed because <code>_projectedProgress</code> is per-color; level prevents post-reset collisions when progress restarts.</p>
-<h1><a class="anchor" id="autotoc_md173"></a>
+<h1><a class="anchor" id="autotoc_md174"></a>
 Loss Ceremony Flow</h1>
 <p><code>GameOverLossCinematic</code> produces the loss beat, <b>split around the GameOver screen exactly like the level-up</b> (pan-in → screen → dismiss → restore): a slow-mo push-in holds the camera <em>in</em> while the screen is up, and the camera only pulls back once the player dismisses. The run itself restarts <b>mid-transition</b> the moment dismiss triggers the scenery swap — not on the button press directly, and not when the pull-back ends — while the pull-back and the board pop play out over the swap. It listens for <code>GameOverMessage</code> (published by <code>RunController.EndRun</code>), then:</p>
 <table class="markdownTable">
@@ -258,10 +258,10 @@ Loss Ceremony Flow</h1>
 </table>
 <p>On any path where the beat can't run — director never frees, or no rig authored — the producer opens the gate anyway (screen reveals bare) and, on dismiss, restarts immediately with no restore, so the screen never soft-locks.</p>
 <p>Unlike the level-up gate (a passive <code>CinematicEndGate</code> observing <code>Cinematic.Current</code>), the loss gate is <b>producer-driven</b> (<code>GameOverPresentationGate</code>): the loss beat starts a few frames <em>after</em> the message (it waits out the heart-drain), so a state-observing gate would read "not yet started" as "already done" and reveal early. The explicit arm/open handshake closes that race.</p>
-<h1><a class="anchor" id="autotoc_md174"></a>
+<h1><a class="anchor" id="autotoc_md175"></a>
 Camera Reference</h1>
 <p><code>CinematicCameraView</code> (on the persistent Main Camera, registered by <code>AppLifetimeScope</code>) is the single holder of the camera the shared rig drives — serialized reference with a lazy <code>Camera.main</code> fallback (avoids <code>Camera.main</code> fragility on Android when wired).</p>
-<h1><a class="anchor" id="autotoc_md175"></a>
+<h1><a class="anchor" id="autotoc_md176"></a>
 Files</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">

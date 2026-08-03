@@ -68,7 +68,7 @@ var searchData=
   ['listeners_65',['Listeners',['../classBalloonParty_1_1Shared_1_1Extensions_1_1SceneRenderingHandle.html#a95d8afa4d3e352b93cb3e73d49265d88',1,'BalloonParty::Shared::Extensions::SceneRenderingHandle']]],
   ['localpenspeed_66',['LocalPenSpeed',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a4b96381e40d6030a2e20133285af1e0c',1,'BalloonParty::Game::Score::Behaviours::ShapeFormationTicker::FormationState']]],
   ['localscale_67',['LocalScale',['../structBalloonParty_1_1Item_1_1TransformSnapshot.html#a6097e3088454dd1fec15a62b8f23ed9b',1,'BalloonParty::Item::TransformSnapshot']]],
-  ['logtag_68',['LogTag',['../classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a6fd7464ac440c7b7a8a7d57d4179e146',1,'BalloonParty::Shared::Thermal::ThermalFrameRateGovernor']]],
+  ['logtag_68',['LogTag',['../classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetrySinkBase.html#a0d7c489a2c51307f42a5cc22db24ac48',1,'BalloonParty.Game.Telemetry.TelemetrySinkBase.LogTag'],['../classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a6fd7464ac440c7b7a8a7d57d4179e146',1,'BalloonParty.Shared.Thermal.ThermalFrameRateGovernor.LogTag']]],
   ['losttrigger_69',['LostTrigger',['../classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterAnimation.html#a1b941a2675d9b0f459fc260fd25a942e',1,'BalloonParty::UI::Shields::ShieldCounterAnimation']]],
   ['lowqualitymp3_70',['LowQualityMp3',['../classBalloonParty_1_1Audio_1_1Editor_1_1FreesoundResponseParser_1_1Previews.html#a7c29f096834b0d966f39e7a5d77d4474',1,'BalloonParty::Audio::Editor::FreesoundResponseParser::Previews']]]
 ];

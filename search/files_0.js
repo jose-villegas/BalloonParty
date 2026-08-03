@@ -37,5 +37,7 @@ var searchData=
   ['audiopoolkeys_2ecs_34',['AudioPoolKeys.cs',['../AudioPoolKeys_8cs.html',1,'']]],
   ['audiosourcevoice_2ecs_35',['AudioSourceVoice.cs',['../AudioSourceVoice_8cs.html',1,'']]],
   ['autofieldpropertydrawer_2ecs_36',['AutoFieldPropertyDrawer.cs',['../AutoFieldPropertyDrawer_8cs.html',1,'']]],
-  ['awardscorepopcheat_2ecs_37',['AwardScorePopCheat.cs',['../AwardScorePopCheat_8cs.html',1,'']]]
+  ['awardscorepopcheat_2ecs_37',['AwardScorePopCheat.cs',['../AwardScorePopCheat_8cs.html',1,'']]],
+  ['axisslot_2ecs_38',['AxisSlot.cs',['../AxisSlot_8cs.html',1,'']]],
+  ['axisslotinfo_2ecs_39',['AxisSlotInfo.cs',['../AxisSlotInfo_8cs.html',1,'']]]
 ];

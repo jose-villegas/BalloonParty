@@ -110,10 +110,10 @@ $(function(){initNavTree('editor_bush.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">Bush Baking Tools</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md114"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md115"></a>
 Bush Baking Tools</h1>
 <p>Editor-only tooling for baking procedural bush branch maps and leaf sprite atlases. Branch maps are generated from fractal segment math and rendered via an offscreen camera. Leaf attachment points are extracted from terminal branch segments. Output is serialized as <code>BushVariantData</code> ScriptableObjects consumed at runtime by <code>BushView</code>.</p>
-<h2><a class="anchor" id="autotoc_md115"></a>
+<h2><a class="anchor" id="autotoc_md116"></a>
 Contents</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -141,7 +141,7 @@ Contents</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>LeafVenationSimulator</code>   </td><td class="markdownTableBodyNone">Runions auxin-based vein simulation (legacy — superseded by shader-inline veins in <code>BushBakeLeaf.shader</code>).   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md116"></a>
+<h2><a class="anchor" id="autotoc_md117"></a>
 Shaders (in <code>Assets/Shaders/BalloonParty/Grid/Editor/</code>)</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -157,9 +157,9 @@ Shaders (in <code>Assets/Shaders/BalloonParty/Grid/Editor/</code>)</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>Bush.shader</code>, <code>BushBake.shader</code>   </td><td class="markdownTableBodyNone">Earlier fully-procedural bush prototypes (phyllotaxis leaf placement, painter's-algorithm layering). Not referenced by any baker — kept for reference.   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md117"></a>
+<h2><a class="anchor" id="autotoc_md118"></a>
 Pipeline</h2>
-<h3><a class="anchor" id="autotoc_md118"></a>
+<h3><a class="anchor" id="autotoc_md119"></a>
 Branch Map + Variant Export</h3>
 <ol type="1">
 <li><code>BushBranchGenerator.Generate(seed, settings)</code> produces fractal segments in UV space.</li>
@@ -167,13 +167,13 @@ Branch Map + Variant Export</h3>
 <li><code>BushLeafExtractor.Extract()</code> re-generates segments from the same seed, finds terminal tips, and produces <code>LeafSlot[]</code> with UV attachment positions.</li>
 <li><code>BushVariantExporter.Export()</code> saves the branch map PNG, creates <code>BushVariantData</code> SO with leaf slot data and debug segments.</li>
 </ol>
-<h3><a class="anchor" id="autotoc_md119"></a>
+<h3><a class="anchor" id="autotoc_md120"></a>
 Leaf Atlas</h3>
 <ol type="1">
 <li><code>BushLeafBaker.BakeLeaf()</code> renders each variant via offscreen camera + Gielis SDF material.</li>
 <li><code>LeafAtlasPacker.Pack()</code> composites variants into a grid atlas PNG and configures sprite slicing.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md120"></a>
+<h2><a class="anchor" id="autotoc_md121"></a>
 Dependencies</h2>
 <ul>
 <li><code><a class="el" href="namespaceBalloonParty_1_1Editor.html">BalloonParty.Editor</a></code> assembly (editor-only platform).</li>

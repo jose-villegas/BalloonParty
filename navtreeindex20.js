@@ -1,5 +1,14 @@
 var NAVTREEINDEX20 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a81f230fd98caf43e49b51d367756a6ea":[5,0,0,3,7,3,12],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a81f230fd98caf43e49b51d367756a6ea":[6,0,0,3,7,3,12],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a8d62cc6ac1a035bc378c9307143fbfe3":[5,0,0,3,7,3,29],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a8d62cc6ac1a035bc378c9307143fbfe3":[6,0,0,3,7,3,29],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a9588c2ad958d52e9fd3846faeee38e20":[5,0,0,3,7,3,23],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a9588c2ad958d52e9fd3846faeee38e20":[6,0,0,3,7,3,23],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a986faa6e911d6afd8bf6aeabeeb7218d":[5,0,0,3,7,3,3],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a986faa6e911d6afd8bf6aeabeeb7218d":[6,0,0,3,7,3,3],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a9d1ee4491163e2a385c93a96d477eaab":[5,0,0,3,7,3,2],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a9d1ee4491163e2a385c93a96d477eaab":[6,0,0,3,7,3,2],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a9d2532fc3f6bbef0ab46480bbaf26c63":[5,0,0,3,7,3,31],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a9d2532fc3f6bbef0ab46480bbaf26c63":[6,0,0,3,7,3,31],
@@ -240,14 +249,5 @@ var NAVTREEINDEX20 =
 "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#ae097c2d21c60ac90a596e43d0c077d35":[5,0,0,3,17,1],
 "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#ae097c2d21c60ac90a596e43d0c077d35":[6,0,0,3,17,1],
 "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#af8b3413ea9c0e24edf44e4d6d2f77545":[5,0,0,3,17,2],
-"classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#af8b3413ea9c0e24edf44e4d6d2f77545":[6,0,0,3,17,2],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html":[5,0,0,3,18],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html":[6,0,0,3,18],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a060023b23298d3e8cda0ec73e5f0d9d1":[5,0,0,3,18,20],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a060023b23298d3e8cda0ec73e5f0d9d1":[6,0,0,3,18,20],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a0b4b8e0a2b681b38319035c55f47ad4b":[5,0,0,3,18,15],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a0b4b8e0a2b681b38319035c55f47ad4b":[6,0,0,3,18,15],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a0e5c7b7b0c8d8f3fa63601e600198781":[5,0,0,3,18,43],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a0e5c7b7b0c8d8f3fa63601e600198781":[6,0,0,3,18,43],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a16ff31d8c1027a8c3e6a7a678028ed74":[5,0,0,3,18,1]
+"classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#af8b3413ea9c0e24edf44e4d6d2f77545":[6,0,0,3,17,2]
 };

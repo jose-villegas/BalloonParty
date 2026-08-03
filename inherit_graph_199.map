@@ -1,7 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html" title=" " alt="" coords="5,5,176,45"/>
-<area shape="rect" id="Node000001" href="$interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html" title=" " alt="" coords="224,5,459,45"/>
-<area shape="poly" id="edge409_Node000000_Node000001" title=" " alt="" coords="190,23,224,23,224,28,190,28"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileModel.html" title=" " alt="" coords="507,5,677,45"/>
-<area shape="poly" id="edge410_Node000001_Node000002" title=" " alt="" coords="472,23,507,23,507,28,472,28"/>
+<area shape="rect" id="Node000000" href="$classBalloonParty_1_1Item_1_1Paint_1_1PaintSplashView_1_1BlobFlight.html" title=" " alt="" coords="5,5,204,45"/>
 </map>

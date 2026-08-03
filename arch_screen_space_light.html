@@ -110,11 +110,11 @@ $(function(){initNavTree('arch_screen_space_light.html',''); initResizable(true)
   <div class="headertitle"><div class="title">Screen-Space Light (2D GI)</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md85"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md86"></a>
 Screen-Space Light (2D GI)</h1>
 <div class="dotgraph">
 <iframe scrolling="no" frameborder="0" src="dot_inline_dotgraph_3.svg" width="1940" height="928"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-<h2><a class="anchor" id="autotoc_md86"></a>
+<h2><a class="anchor" id="autotoc_md87"></a>
 What this diagram shows</h2>
 <p>A whole-screen fake of a global 2D directional light, now <b>field-aware</b> and <b>multi-directional</b>: each fragment reads its local light direction from the scene light field (see <a class="el" href="arch_light_field.html">Scene Light Field (2D Multi-Light)</a>) and gathers bounce color from 4 directions at 90° spacing around it — an RSM-style Virtual Point <a class="el" href="UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d">Light</a> gather in 2D. Shadow stays single-direction (toward the light) for correct directionality. When the field is off, the shader falls back to the flat global direction — bit-identical to the original single-direction march.</p>
 <p><b>Configuration</b> lives on the <code>SceneLightFieldSettings</code> ScriptableObject, injected via VContainer as <code>IScreenSpaceLightSettings</code> (GI tuning) and <code>ISceneLightSettings</code> (ambient direction/colour/ intensity — the former <code>SceneLightService</code> MonoBehaviour, now decommissioned). All knobs are live-tunable in play mode.</p>
@@ -128,7 +128,7 @@ What this diagram shows</h2>
 <li><b>Pass 1</b> is a 3×3 box blur that removes the smear's directional streaks. (A former Pass 2 — temporal EMA against a ping-pong history — was never enabled in the shipped tuning and was removed 2026-07-18.)</li>
 </ul>
 <p><b>Composite</b> (<code>ScreenSpaceLightOverlay</code>): a camera-fitted quad on <code>TransparentFX</code>, sorting <code>Sky</code>/32000 (above gameplay, below UI), drawn with <code>Blend DstColor SrcColor</code> (= <code>2·src·dst</code>, neutral at 0.5, so it can darken <em>and</em> brighten). The bounce term scales by the <b>absolute local magnitude</b> (field-off == global intensity). The shadow term scales by the <b>relative magnitude</b> (<code>localR / _MagnitudeRef</code>) — field-off resolves to 1.0, preserving authored shadow strength.</p>
-<h2><a class="anchor" id="autotoc_md87"></a>
+<h2><a class="anchor" id="autotoc_md88"></a>
 Key design decisions &amp; contracts</h2>
 <ol type="1">
 <li><b>Composite quad, not <code>OnRenderImage</code>.</b> A post effect would resolve the full frame — the same tile-GPU stall that <code>GrabPass</code> caused. The multiplicative quad needs no frame readback.</li>
@@ -141,17 +141,17 @@ Key design decisions &amp; contracts</h2>
 <li><b>Shadow mip penumbra.</b> <code>_ShadowMipSpread</code> (steeper than bounce spread) gives distance-dependent penumbra: sharp contact shadows, soft far from the caster.</li>
 <li><b>All config on SO (DI).</b> The service holds no tuning fields — everything comes from <code>IScreenSpaceLightSettings</code> / <code>ISceneLightSettings</code>, injected by VContainer.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md88"></a>
+<h2><a class="anchor" id="autotoc_md89"></a>
 Deliberately not built</h2>
 <p>Balloons <em>receiving</em> GI shadows. Coverage alone can't separate a caster's own body from another caster stacked in front of it, so the mask that stops self-shadowing also stops casters from being shadowed by others. Per-balloon drop-shadows are covered by the baked shadows (<code>SpriteShadowBaker</code>); the GI handles large-scale occlusion from bushes and clusters.</p>
-<h2><a class="anchor" id="autotoc_md89"></a>
+<h2><a class="anchor" id="autotoc_md90"></a>
 In-editor setup</h2>
 <ol type="1">
 <li><code>ScreenSpaceLightService</code> sits on the <b>Main Camera</b>, beside <code>SceneCaptureService</code>; the smear/overlay shader refs are on the <code>SceneLightFieldSettings</code> SO.</li>
 <li>The capture mask excludes <code>TransparentFX</code> and the background, and includes what should cast/bounce (Grid, Balloons, …).</li>
 <li>All knobs on the SO (<code>SceneLightFieldSettings</code>) tune live in play mode; disable the service component to A/B. Its inspector previews the bounce (RGB) and shadow (A) buffers.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md90"></a>
+<h2><a class="anchor" id="autotoc_md91"></a>
 Cost</h2>
 <p>Two blits at <code>SmearDownscale</code> below capture resolution per <em>unique</em> capture (the chain skips entirely between <code>ContentVersion</code> advances) + one fullscreen alpha-blended quad with a single low-res fetch every frame. Pass 0's tap count is quality-gated (<code>_LOW_QUALITY_SMEAR</code>, mobile-only): desktop runs the full 4×8 + 8 + 1 = 41 fetches per pixel (minus the skipped shadow march on sprite-covered fragments); mobile drops to 2 bounce directions and 5 taps per direction (2×5 + 5 + 1 = 16 fetches, a 61% cut). At the default downscale of 2 the fragment count is also a quarter of the capture's — trivial on mobile at the time-paced cadence. </p>
 </div></div><!-- contents -->

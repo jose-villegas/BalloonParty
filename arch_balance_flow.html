@@ -110,13 +110,13 @@ $(function(){initNavTree('arch_balance_flow.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">Balance Flow</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md54"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md55"></a>
 Balance Flow</h1>
 <div class="image">
 <object type="image/svg+xml" data="balance_flow.svg" style="pointer-events: none;"></object>
 <div class="caption">
 Balance Algorithm — Per-Actor Transit Tracking</div></div>
-<h2><a class="anchor" id="autotoc_md55"></a>
+<h2><a class="anchor" id="autotoc_md56"></a>
 What this diagram shows</h2>
 <p>How <code>BalloonBalancer</code> moves balloons up to fill grid gaps, and how it keeps concurrent spawn animations aware of in-progress movement. Balance keeps the stack packed against the board's top edge after every pop, spawn, and shot — closing gaps immediately so downstream systems (spawn placement, pressure propagation) can assume a compact board rather than scattered holes.</p>
 <p><b>Core algorithm — a priority race, not a single scan:</b> <code>Balance()</code> delegates the actual decision-making to <code>BalancePlanner.Plan</code>. Each pass snapshots every currently unbalanced actor (a slot whose support above is missing — see "Motion direction" below) and sorts them by <code>IBalanceInfluence.BalancePriority</code>: higher priority acts first within the pass and wins any slot two actors would otherwise both want. The planner mutates the grid (<code>Remove</code>/<code>Place</code>) for every move as it happens, so later candidates in the same pass — and every candidate in the next pass — see the already-updated occupancy. Passes repeat until one produces no move at all, with a <code>maxPasses</code> backstop and a per-actor revisit guard that breaks any cycle (an actor with <code>OmnidirectionalBalance</code> true and <code>MaxBalanceSteps</code> unlimited — today, BubbleCluster — can have a side move tie its up move and ping-pong between the same two slots forever without the guard). Because settling can take several passes, one actor's final path can be a chain of hops across multiple slots, not a single jump.</p>
@@ -132,7 +132,7 @@ What this diagram shows</h2>
 <li>In-flight rebalance pulses: while a shot is airborne, <code>BalloonBalancer.Tick</code> fires a deferred balance every <code>FlightRebalanceInterval</code> seconds, but only when <code>HasPossibleMove()</code> finds something to do — most flights, the board is already settled and no pulse is scheduled.</li>
 </ul>
 <p><b>Transit tracking — <code>BalancePathHolder</code>:</b> <code>ApplyBalanceMoves</code> reserves every slot along an actor's full move chain — its original slot, every intermediate hop from earlier passes, and its final slot — all under that actor's identity in <code>BalancePathHolder</code>. While reserved, <code>ComputePath</code> treats those slots as occupied-in-transit and emits a warning if a spawn path crosses them. The whole chain is released together, in the tween's <code>OnComplete</code>, via <code>BalancePathHolder.Release(actor)</code>.</p>
-<h2><a class="anchor" id="autotoc_md56"></a>
+<h2><a class="anchor" id="autotoc_md57"></a>
 Guidance</h2>
 <p><b>Why a race instead of a single ordered scan:</b> Different actor types need to visibly behave differently under the same gap — a normal balloon rises immediately, a heavy one should lag, and some types want first claim on a contested slot. Sorting each pass by <code>BalancePriority</code> and letting higher-priority actors move (and thus occupy contested slots) before lower-priority ones gives every actor type a lever over its own timing without hardcoding per-type logic into the planner.</p>
 <p><b>Why the step budget is per-turn, not per-run:</b> A <code>BalloonBalancer.Balance()</code> call can run several times between one projectile's death and the next shot (pre-spawn, post-spawn, flight pulses). If <code>MaxBalanceSteps</code> reset on every one of those runs, a "slow" heavy actor would actually take one step per run and read as just as fast as anything else, only choppier. Keeping the budget in <code>_turnSteps</code> across the whole turn is what makes a step cap actually read as "moves slower."</p>

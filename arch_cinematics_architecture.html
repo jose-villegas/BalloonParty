@@ -110,13 +110,13 @@ $(function(){initNavTree('arch_cinematics_architecture.html',''); initResizable(
   <div class="headertitle"><div class="title">Cinematics Architecture</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md60"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md61"></a>
 Cinematics Architecture</h1>
 <div class="image">
 <object type="image/svg+xml" data="cinematics_architecture.svg" style="pointer-events: none;"></object>
 <div class="caption">
 Cinematics pipeline and its interplay with other systems</div></div>
-<h2><a class="anchor" id="autotoc_md61"></a>
+<h2><a class="anchor" id="autotoc_md62"></a>
 What this diagram shows</h2>
 <p>The full cinematics pipeline after the 2026-07 restructure: configuration, producers, the shared runner, the services it drives, and every other system a cinematic touches.</p>
 <p><b>One setup point — <code>CinematicsSettings</code> (SO):</b> Every <code>CinematicState</code> declares one <code>CinematicStateEntry</code> in an enum-indexed collection: its behavioural <code>CinematicTraits</code>, the uniform <b>camera-rig segment</b> it plays (<code>TimeScaleCurve</code> — whose last key is the segment's duration — plus zoom / pan weight / follow speed), and capability blocks (<code>TrackedTrailSettings</code>). A <em>restore</em> is not special-cased — it is just another segment whose curve ramps timeScale back to 1 with zoom/pan at 0. States are phases: the level-complete beat spans <code>LevelCompleteHit</code> + <code>LevelCompleteRestore</code>, the heart-drain <code>HeartDrain</code> + <code>HeartDrainRestore</code>. The <b>Ascent</b> is the exception: a transform-descent rather than a camera move, so it reads a top-level <code>LevelAscendSettings</code> (descent curve / height / spawn cue / speed / pop-wave tuning) and keeps only its <code>LevelAscend</code> entry's <code>CinematicTraits</code>, not its rig.</p>
@@ -124,7 +124,7 @@ What this diagram shows</h2>
 <p><b>The runner owns the mechanics:</b> <code>CameraRigCinematic</code> is the reusable shape — begin/end pairing through <code>CinematicDirector.TryBeginCinematic</code> (the drop-while-busy concurrency policy lives in the director, not in producers), per-tick framing through the single DI <code>CinematicCameraRig</code> (fed its <code>Camera</code> by the thin <code>CinematicCameraView</code>), timeScale through <code>TimeScaleService</code>, and <code>Abort()</code> teardown so producers carry no repair code.</p>
 <p><b>Traits, not flags:</b> Consumers never enumerate states. <code>ICinematicState.Has(trait)</code> reads the current state's declared traits from the SO: <code>RunController</code> gates <code>EndRun</code> on <code>BlocksLoss</code> (level-up blocks; the heart-drain lets the 0-HP game-over fire through — it <em>is</em> the loss happening), <code>CameraShakeController</code> stands down on <code>BlocksShake</code> (the <code>CameraShakeView</code> it drives is an additive-offset shake that composes with the heart-drain pan, so it punches per heart launch), and <code>CinematicEndGate</code> holds the popup until <code>LevelCompleteHit</code> ends.</p>
 <p><b>Time is claim-based:</b> <code>TimeScaleService</code> is the only legal writer of <code>Time.timeScale</code> — enforced by the <code>timescale-writes</code> style-audit rule. The lowest active claim wins: the popup's <code>LevelUpPopup = 0</code> freeze beats the cinematic's ramp, and the popup releases its claim <em>after</em> publishing <code>LevelUpDismissedMessage</code>, so the restore's claim is already active and the hand-back never flashes full speed.</p>
-<h2><a class="anchor" id="autotoc_md62"></a>
+<h2><a class="anchor" id="autotoc_md63"></a>
 Guidance</h2>
 <p><b>Adding a cinematic</b> (e.g. the planned game-over loss beat):</p><ol type="1">
 <li>Add its state(s) to <code>CinematicState</code> — append, to preserve serialized indices.</li>

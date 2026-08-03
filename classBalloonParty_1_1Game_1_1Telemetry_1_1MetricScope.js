@@ -1,0 +1,26 @@
+var classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope =
+[
+    [ "MetricScope", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#af9e4268e864ad0f8fc0a79a48591a76e", null ],
+    [ "Absorb", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#aa0dce135f552735e13940f5b701fca8b", null ],
+    [ "AbsorbAxes", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#af68286fce2f9096b405cd399e994d4b4", null ],
+    [ "Add", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a2543fbab8d11c3c62233f20b67f0e5b9", null ],
+    [ "AddAxis", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a5a4287232a98ce3f13c67232ef4bbdac", null ],
+    [ "BuildBalloonTypeCounts", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a878989eace7ab0ec681061af55ce28a1", null ],
+    [ "BuildColorCounts", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a7271f1cc7341f204f824231bdb39380d", null ],
+    [ "BuildItemActivationCounts", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a2a2292ff840d7e2f6710d6d22756c813", null ],
+    [ "CopyState", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#ac58ab0ded01dd9d40d77cf7f3d0dc267", null ],
+    [ "Create", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#aceb4e9c873babad5a9ff3ff466209085", null ],
+    [ "Increment", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#ab02b9d2ce81fb961e240ae4ebb2dd571", null ],
+    [ "IncrementAxis", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#aa54c9caf999b04d4f1f60aa2d7918f90", null ],
+    [ "RecordMax", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#aa7a13eab417a09c10bb544a046ce6e7d", null ],
+    [ "Reset", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a88d12bed36e21cfafe68f57f6b28616a", null ],
+    [ "Seal", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a9188a8314916409bc6b910c96bfa9f89", null ],
+    [ "Seal", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a62aa85bf02585fa7db1d243aeb53c7ef", null ],
+    [ "SetLast", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a8bb8b15a24e183720647336a8b0057a4", null ],
+    [ "Timer", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a04c497010a8c0e8c88cf05b45fe6a444", null ],
+    [ "_metrics", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#adbf5d15dbadaf42ad7ad790f0b139d60", null ],
+    [ "_scope", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a9adf8e5ac5473edc3ed83346470f45c9", null ],
+    [ "_timers", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a275ae671e926ab2f4b0c87e8cf6107d4", null ],
+    [ "Metrics", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a6faf52e617dcfd2b2e4361aae52f2f46", null ],
+    [ "Scope", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a869c6fc28592900560228294de799118", null ]
+];

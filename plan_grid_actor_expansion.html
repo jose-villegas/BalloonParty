@@ -110,13 +110,13 @@ $(function(){initNavTree('plan_grid_actor_expansion.html',''); initResizable(tru
   <div class="headertitle"><div class="title">Grid Actor Expansion — Phase 8+</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md523"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md538"></a>
 Grid Actor Expansion — Phase 8+</h1>
 <blockquote class="doxtable">
 <p>Working plan for procedural generation, actor archetypes, and difficulty coupling. Foundation (Phases 1–7.5) is complete; its reference document was retired (<code>PLAN-GridActorSystem-Foundation.md</code>, recoverable from git history). </p>
 </blockquote>
 <hr  />
-<h2><a class="anchor" id="autotoc_md525"></a>
+<h2><a class="anchor" id="autotoc_md540"></a>
 Orientation</h2>
 <p>Phases 1–7.5 built the capability-interface foundation: every actor declares what it does through interfaces, not through class hierarchies or field conventions. Phase 8 builds the content and systems on top of that foundation.</p>
 <p>The four threads — in order:</p>
@@ -131,10 +131,10 @@ Orientation</h2>
 <div class="line">8.4  Difficulty + Levels      — tuning knobs driven by score-based level progression</div>
 </div><!-- fragment --><p><b>Why this order:</b> You can't write a placement algorithm worth tuning until you have a diverse actor vocabulary (8.2a–c before 8.3). You can't tune difficulty until the algorithm runs (8.3 before 8.4). The coordinator is pure infrastructure with no gameplay impact — it goes first so all future spawners have a clean integration point.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md527"></a>
+<h2><a class="anchor" id="autotoc_md542"></a>
 Actor Vocabulary — Design Reference</h2>
 <p>Before detailing the phases, this section specifies the archetypes that Phases 8.2a–c will implement. They are the building blocks the procedural algorithm needs.</p>
-<h3><a class="anchor" id="autotoc_md528"></a>
+<h3><a class="anchor" id="autotoc_md543"></a>
 Balloon archetypes</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -148,7 +148,7 @@ Balloon archetypes</h3>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Unbreakable   </td><td class="markdownTableBodyNone"><code>UnbreakableBalloonModel</code>   </td><td class="markdownTableBodyNone">Deflect always   </td><td class="markdownTableBodyNone">∞   </td><td class="markdownTableBodyNone">❌   </td><td class="markdownTableBodyNone">Permanent obstacle; no <code>IHasDurability</code>   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md529"></a>
+<h3><a class="anchor" id="autotoc_md544"></a>
 Grid actor archetypes</h3>
 <p>These all live in <code>Slots/Actor/</code> as separate model/view pairs, not subclasses of anything balloon-specific.</p>
 <table class="markdownTable">
@@ -174,7 +174,7 @@ Grid actor archetypes</h3>
 <li>An <b>Absorber</b> creates genuine danger zones — a column with one requires a different shot path, and the difficulty knobs control how many appear and where.</li>
 <li>A <b>Gatekeeper</b> introduces a spatial sub-objective — destroy the blocker to reach the balloons behind it. Pairing a Gatekeeper with Tough or Unbreakable balloons gives the procedural algorithm a way to gate difficulty without just increasing density.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md530"></a>
+<h3><a class="anchor" id="autotoc_md545"></a>
 Hit controller pattern for non-balloon actors</h3>
 <p><code>BalloonController</code> is balloon-specific (it knows about <code>BalloonView.PlayPopEffect</code>, <code>IHasItemSlot</code>, etc.). Grid actors need a general hit-response controller.</p>
 <p><b><code>GridActorHitController</code></b> (Phase 8.2c) — a single <code>IStartable</code> that subscribes to <code>ActorHitMessage</code> and handles removal for any grid actor that is not an <code>IBalloonModel</code>:</p>
@@ -190,7 +190,7 @@ Hit controller pattern for non-balloon actors</h3>
 <div class="line">}</div>
 </div><!-- fragment --><p>Indestructible actors (<code>IHitable</code> but not <code>IHasDurability</code>) never trigger removal — the hit outcome alone is sufficient.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md532"></a>
+<h2><a class="anchor" id="autotoc_md547"></a>
 Phases</h2>
 <blockquote class="doxtable">
 <p><b>TDD rule:</b> write failing tests before implementation. Real objects over mocks for plain C# types; NSubstitute only for interfaces and ScriptableObjects. </p>
@@ -199,10 +199,10 @@ Phases</h2>
 <p><b>Style rule:</b> follow <code><a class="el" href="README_8md.html">Assets/Source/README.md</a></code>. Comments only on the <em>why</em>. No block headers. No XML docs on obvious internal API. </p>
 </blockquote>
 <hr  />
-<h3><a class="anchor" id="autotoc_md534"></a>
+<h3><a class="anchor" id="autotoc_md549"></a>
 ✅ Phase 8.0 — Spawner Coordination</h3>
 <p><b>Status: Complete.</b> Zero gameplay change — purely infrastructure.</p>
-<h4><a class="anchor" id="autotoc_md535"></a>
+<h4><a class="anchor" id="autotoc_md550"></a>
 What was built</h4>
 <p><b><code>IGridSpawner</code></b> (<code>Slots/Spawner/</code>): </p><div class="fragment"><div class="line"><span class="keyword">internal</span> <span class="keyword">interface </span>IGridSpawner</div>
 <div class="line">{</div>
@@ -243,10 +243,10 @@ What was built</h4>
 </ul>
 <p>Test double: <code>ImmediateGate : IReadyGate</code> — <code>WaitAsync</code> returns immediately.</p>
 <hr  />
-<h3><a class="anchor" id="autotoc_md537"></a>
+<h3><a class="anchor" id="autotoc_md552"></a>
 ✅ Phase 8.1a — Absorb Routing</h3>
 <p><b>Status: Complete.</b></p>
-<h4><a class="anchor" id="autotoc_md538"></a>
+<h4><a class="anchor" id="autotoc_md553"></a>
 What was built</h4>
 <p><code>ProjectileView.OnAbsorb(ISlotActor actor, Vector3 worldPos)</code> — <code>internal</code> terminal method called when <code>EvaluateHit</code> returns <code>HitOutcome.Absorb</code>:</p><ol type="1">
 <li>Publishes <code>ActorHitMessage</code> with <code>HitOutcome.Absorb</code> (so Phase 8.2c <code>GridActorHitController</code> can react).</li>
@@ -261,10 +261,10 @@ What was built</h4>
 <li><code>ProjectileView_OnAbsorb_PublishesActorHitMessageWithAbsorbOutcome</code> ✅</li>
 </ul>
 <hr  />
-<h3><a class="anchor" id="autotoc_md540"></a>
+<h3><a class="anchor" id="autotoc_md555"></a>
 ✅ Phase 8.1b — DamageContext API Migration</h3>
 <p><b>Status: Complete.</b> No gameplay change — pure API migration.</p>
-<h4><a class="anchor" id="autotoc_md541"></a>
+<h4><a class="anchor" id="autotoc_md556"></a>
 What was built</h4>
 <p><b><code>DamageFlags</code></b> (<code><a class="el" href="DamageFlags_8cs.html">Slots/Capabilities/DamageFlags.cs</a></code>): </p><div class="fragment"><div class="line">[Flags]</div>
 <div class="line"><span class="keyword">public</span> <span class="keyword">enum</span> DamageFlags</div>
@@ -318,11 +318,11 @@ What was built</h4>
 <li><code>BalloonModel_EvaluateHit_PiercingFlag_PopsRegardlessOfHitsRemaining</code></li>
 </ul>
 <hr  />
-<h3><a class="anchor" id="autotoc_md543"></a>
+<h3><a class="anchor" id="autotoc_md558"></a>
 Phase 8.1c — UnbreakableBalloonModel + BalloonModelBase Cleanup</h3>
 <p><b>Goal:</b> Introduce <code>UnbreakableBalloonModel</code> using <code>DamageContext.Piercing</code>, and remove <code>ScoreValue</code> from <code>BalloonModelBase</code> — a cleanup <code>UnbreakableBalloonModel</code> forces because it is a permanent obstacle that awards no score.</p>
 <p><b>Depends on:</b> 8.1b (<code>DamageContext</code> must exist).</p>
-<h4><a class="anchor" id="autotoc_md544"></a>
+<h4><a class="anchor" id="autotoc_md559"></a>
 <code>UnbreakableBalloonModel</code></h4>
 <p><code>UnbreakableBalloonModel</code> extends <code>BalloonModelBase</code> but has no <code>IHasDurability</code> — it is a permanent obstacle. Because <code>BalloonModelBase.EvaluateHit</code> already handles Piercing unconditionally, <code>UnbreakableBalloonModel</code> only overrides <code>EvaluateNormalHit</code>:</p>
 <div class="fragment"><div class="line"><span class="keyword">internal</span> <span class="keyword">class </span>UnbreakableBalloonModel : BalloonModelBase</div>
@@ -333,10 +333,10 @@ Phase 8.1c — UnbreakableBalloonModel + BalloonModelBase Cleanup</h3>
 <div class="line">    <span class="keyword">protected</span> <span class="keyword">override</span> HitOutcome EvaluateNormalHit(DamageContext context) =&gt; HitOutcome.Deflect;</div>
 <div class="line">}</div>
 </div><!-- fragment --><p><code>BalloonSpawner</code> switch gains: </p><div class="fragment"><div class="line">BalloonType.Unbreakable =&gt; <span class="keyword">new</span> UnbreakableBalloonModel(config),</div>
-</div><!-- fragment --><h4><a class="anchor" id="autotoc_md545"></a>
+</div><!-- fragment --><h4><a class="anchor" id="autotoc_md560"></a>
 <code>ScoreValue</code> on <code>BalloonModelBase</code></h4>
 <p><code>UnbreakableBalloonModel</code> does not score — making <code>ScoreValue</code> on the base a lie. Remove it: <code>BalloonModel</code> and <code>ToughBalloonModel</code> each hold their own <code>ScoreValue</code> from config. <code>IHasScore</code> is the read interface for <code>ScoreController</code> — nothing else changes.</p>
-<h4><a class="anchor" id="autotoc_md546"></a>
+<h4><a class="anchor" id="autotoc_md561"></a>
 Failing tests</h4>
 <p>New fixture <b><code>UnbreakableBalloonModelTests</code></b>: </p><div class="fragment"><div class="line">UnbreakableBalloonModel_IsIHitable</div>
 <div class="line">UnbreakableBalloonModel_IsNotIHasDurability</div>
@@ -354,10 +354,10 @@ Failing tests</h4>
 <div class="line">BalloonModel_EvaluateHit_PiercingFlag_PopsRegardlessOfHitsRemaining</div>
 <div class="line">  — model with HitsToPop=5; EvaluateHit(new DamageContext(1, DamageFlags.Piercing)) == Pop; HitsRemaining == 0</div>
 </div><!-- fragment --><hr  />
-<h3><a class="anchor" id="autotoc_md548"></a>
+<h3><a class="anchor" id="autotoc_md563"></a>
 Phase 8.2a — Structural Actors (Puff + Bush)</h3>
 <p><b>Goal:</b> Rename <code>StaticActorModel</code> to <code>PuffObstacleModel</code> and add <code>BushObstacleModel</code>. No hit pipeline involvement — purely structural/visual. Lowest-risk 8.2 step; unblocks the config groundwork that 8.2b and 8.2c depend on.</p>
-<h4><a class="anchor" id="autotoc_md549"></a>
+<h4><a class="anchor" id="autotoc_md564"></a>
 Folder structure</h4>
 <p>New archetype models live in <code>Slots/Actor/Archetype/</code> (namespace <code><a class="el" href="namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html">BalloonParty.Slots.Actor.Archetype</a></code>). Existing interfaces, infrastructure (<code>StaticActorView</code>, <code>StaticActorSpawner</code>, pool channel, settings) remain flat in <code>Slots/Actor/</code> until the spawner is retired in Phase 8.3.</p>
 <div class="fragment"><div class="line">Slots/Actor/</div>
@@ -369,7 +369,7 @@ Folder structure</h4>
 <div class="line">    ├── GridActorType.cs                      ← enum: Puff, Bush (extended in 8.2b–c)</div>
 <div class="line">    ├── PuffObstacleModel.cs                 ← IWriteableSlotActor + IPassThrough</div>
 <div class="line">    └── BushObstacleModel.cs                 ← IWriteableSlotActor only</div>
-</div><!-- fragment --><h4><a class="anchor" id="autotoc_md550"></a>
+</div><!-- fragment --><h4><a class="anchor" id="autotoc_md565"></a>
 Files</h4>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -382,7 +382,7 @@ Files</h4>
 <td class="markdownTableBodyNone"><code><a class="el" href="BushObstacleModel_8cs.html">Archetype/BushObstacleModel.cs</a></code>   </td><td class="markdownTableBodyNone"><code>IWriteableSlotActor</code> only; blocks spawn-path traversal   </td></tr>
 </table>
 <p><code>StaticActorModel</code> is <b>not deleted</b> yet — the spawner still references it until Phase 8.3 retires the legacy path. <code>StaticActorSpawner.SpawnStaticActors</code> switches to <code>new PuffObstacleModel(slot)</code> so the grid starts using the canonical type.</p>
-<h4><a class="anchor" id="autotoc_md551"></a>
+<h4><a class="anchor" id="autotoc_md566"></a>
 Failing tests</h4>
 <p>New fixture <b><code>StructuralActorTests</code></b> (<code>Tests/EditMode/Slots/</code>): </p><div class="fragment"><div class="line">PuffObstacleModel_KindIsStatic</div>
 <div class="line">PuffObstacleModel_IsIPassThrough</div>
@@ -392,10 +392,10 @@ Failing tests</h4>
 <div class="line">BushObstacleModel_IsNotIPassThrough</div>
 <div class="line">BushObstacleModel_IsNotIHitable</div>
 </div><!-- fragment --><hr  />
-<h3><a class="anchor" id="autotoc_md553"></a>
+<h3><a class="anchor" id="autotoc_md568"></a>
 Phase 8.2b — Indestructible Hitable Actors (Deflector + Absorber)</h3>
 <p><b>Goal:</b> Add <code>DeflectorActorModel</code> and <code>AbsorberActorModel</code> — grid actors that participate in the hit pipeline but have no durability. Also introduces <code>GridActorPrefabEntry</code> so both types can be wired to prefabs and spawned via config.</p>
-<h4><a class="anchor" id="autotoc_md554"></a>
+<h4><a class="anchor" id="autotoc_md569"></a>
 Files</h4>
 <div class="fragment"><div class="line">Slots/Actor/Archetype/</div>
 <div class="line">├── DeflectorActorModel.cs     ← IWriteableSlotActor + IHitable → Deflect; no IHasDurability</div>
@@ -406,7 +406,7 @@ Files</h4>
 <div class="line">└── GridActorPrefabEntry.cs    ← [Serializable]; prefab, weight, maxCount, GridActorType, PoolKey</div>
 </div><!-- fragment --><p><code>GridActorPrefabEntry.PoolKey</code> follows the existing convention: derived from the prefab GameObject name, no manual key assignment needed.</p>
 <p>Views and pool channels for Deflector and Absorber follow the exact same pattern as <code>StaticActorView</code> / <code>StaticActorPoolChannel</code>. They live in <code>Slots/Actor/Archetype/</code> next to their models.</p>
-<h4><a class="anchor" id="autotoc_md555"></a>
+<h4><a class="anchor" id="autotoc_md570"></a>
 Failing tests</h4>
 <p>New fixture <b><code>HitableActorTests</code></b> (<code>Tests/EditMode/Slots/</code>): </p><div class="fragment"><div class="line">DeflectorActor_EvaluateHit_ReturnsDeflect</div>
 <div class="line">DeflectorActor_IsNotIHasDurability</div>
@@ -415,11 +415,11 @@ Failing tests</h4>
 <div class="line">AbsorberActor_EvaluateHit_ReturnsAbsorb</div>
 <div class="line">AbsorberActor_IsNotIHasDurability</div>
 </div><!-- fragment --><hr  />
-<h3><a class="anchor" id="autotoc_md557"></a>
+<h3><a class="anchor" id="autotoc_md572"></a>
 Phase 8.2c — Gatekeeper + GridActorHitController</h3>
 <p><b>Goal:</b> Add <code>GatekeeperActorModel</code> (the first grid actor with <code>IHasDurability</code>) and the <code>GridActorHitController</code> that handles removal when any non-balloon <code>IHasDurability</code> actor reaches zero hits.</p>
 <p>This is the most complex 8.2 step because it introduces durability tracking on a grid actor and the reactive controller that responds to it. It also forces the <code>NudgeOverrides</code> cleanup on <code>BalloonModelBase</code> — Gatekeeper is not nudgeable, so keeping <code>NudgeOverrides</code> on the base would be the same lie that <code>ScoreValue</code> was before 8.1c cleaned it up.</p>
-<h4><a class="anchor" id="autotoc_md558"></a>
+<h4><a class="anchor" id="autotoc_md573"></a>
 Files</h4>
 <div class="fragment"><div class="line">Slots/Actor/Archetype/</div>
 <div class="line">├── GatekeeperActorModel.cs    ← IWriteableSlotActor + IHasDurability; Deflect→Pop on zero hits</div>
@@ -428,7 +428,7 @@ Files</h4>
 <div class="line">Slots/Actor/</div>
 <div class="line">└── GridActorHitController.cs  ← IStartable; subscribes ActorHitMessage; removes durable non-balloon actors at zero hits</div>
 </div><!-- fragment --><p><b><code>GridActorHitController</code></b> lives flat in <code>Slots/Actor/</code> (not in <code>Archetype/</code>) because it is infrastructure that reacts to <em>any</em> grid actor, not an archetype itself.</p>
-<h4><a class="anchor" id="autotoc_md559"></a>
+<h4><a class="anchor" id="autotoc_md574"></a>
 <code>GatekeeperActorModel</code></h4>
 <div class="fragment"><div class="line"><span class="comment">// Deflects projectiles until HitsRemaining reaches zero, then reports Pop.</span></div>
 <div class="line"><span class="comment">// IHasDurability exposed so GridActorHitController can watch HitsRemaining.</span></div>
@@ -444,7 +444,7 @@ Files</h4>
 <div class="line">    }</div>
 <div class="line">    <span class="comment">// …</span></div>
 <div class="line">}</div>
-</div><!-- fragment --><h4><a class="anchor" id="autotoc_md560"></a>
+</div><!-- fragment --><h4><a class="anchor" id="autotoc_md575"></a>
 <code>GridActorHitController</code></h4>
 <div class="fragment"><div class="line"><span class="comment">// Filters out IBalloonModel — BalloonController handles those.</span></div>
 <div class="line"><span class="comment">// For any other IHasDurability actor: remove from grid when HitsRemaining &lt;= 0.</span></div>
@@ -456,10 +456,10 @@ Files</h4>
 <div class="line">    <span class="keywordflow">if</span> (durable.HitsRemaining.Value &gt; 0) <span class="keywordflow">return</span>;</div>
 <div class="line">    _grid.Remove(msg.Actor.SlotIndex.Value);</div>
 <div class="line">}</div>
-</div><!-- fragment --><h4><a class="anchor" id="autotoc_md561"></a>
+</div><!-- fragment --><h4><a class="anchor" id="autotoc_md576"></a>
 <code>NudgeOverrides</code> cleanup on <code>BalloonModelBase</code></h4>
 <p><code>GatekeeperActorModel</code> is not nudgeable. Keeping <code>NudgeOverrides</code> on <code>BalloonModelBase</code> would make it a base-class concern for types that have nothing to do with nudge. Move it: <code>BalloonModel</code> and <code>ToughBalloonModel</code> each declare their own <code>NudgeOverrides</code> from config. <code>UnbreakableBalloonModel</code> gets <code>NudgeOverrides =&gt; null</code> (permanent obstacles don't nudge). <code>IBalloonModel : IHasNudge</code> stays — only concrete balloon types implement it directly.</p>
-<h4><a class="anchor" id="autotoc_md562"></a>
+<h4><a class="anchor" id="autotoc_md577"></a>
 NudgeService decoupling (done alongside 8.2c)</h4>
 <p><code>GatekeeperActorModel</code> introduced the first non-balloon <code>IHitable</code> actor, which exposed a coupling problem: <code>BalloonNudgeMessage</code> carried an <code>IBalloonModel</code> target, and <code>NudgeService</code> drove <code>BalloonView</code> directly. Neither was valid for non-balloon actors. Both were fixed:</p>
 <ul>
@@ -469,7 +469,7 @@ NudgeService decoupling (done alongside 8.2c)</h4>
 <li><code>BalloonView</code> implements <code>INudgeable</code>. Stability tracking (<code>_isNudging</code>, <code>IsStable</code>) moved from <code>NudgeService</code> into <code>BalloonView.Nudge()</code> — the view owns the animation state.</li>
 <li><code>ISpawnGate</code> pruned from <code>Slots/</code> — its body was empty. Canonical type is <code>IReadyGate</code> in <code>Shared/</code>.</li>
 </ul>
-<h4><a class="anchor" id="autotoc_md563"></a>
+<h4><a class="anchor" id="autotoc_md578"></a>
 Failing tests</h4>
 <p>New fixture <b><code>GatekeeperActorTests</code></b> (<code>Tests/EditMode/Slots/</code>): </p><div class="fragment"><div class="line">GatekeeperActor_EvaluateHit_Survives_ReturnsDeflect_AndDecrementsHits</div>
 <div class="line">GatekeeperActor_EvaluateHit_KillingBlow_ReturnsPop_AndHitsRemainingIsZero</div>
@@ -477,7 +477,7 @@ Failing tests</h4>
 <div class="line">GridActorHitController_OnActorHit_Gatekeeper_WhenHitsReachZero_RemovesFromGrid</div>
 <div class="line">GridActorHitController_OnActorHit_Deflector_IsNotRemoved</div>
 </div><!-- fragment --><hr  />
-<h3><a class="anchor" id="autotoc_md565"></a>
+<h3><a class="anchor" id="autotoc_md580"></a>
 Phase 8.3 — Procedural Placement Engine</h3>
 <blockquote class="doxtable">
 <p><b>Pre-requisite:</b> All actor prefabs and the <code>GridActorConfiguration</code> SO must exist before this phase runs meaningfully in-game. See <code><a class="el" href="PLAN-ContentProduction_8md.html">PLAN-ContentProduction.md</a></code> for the full art and asset checklist. </p>
@@ -485,7 +485,7 @@ Phase 8.3 — Procedural Placement Engine</h3>
 <p><b>Goal:</b> Replace <code>BalloonSpawner</code> + <code>StaticActorSpawner</code> with a single <code>GridSpawner</code> that drives weighted, rule-based placement for all actor types.</p>
 <p><code>BalloonSpawner</code> and <code>StaticActorSpawner</code> retire from <code>IGridSpawner</code> registration once <code>GridSpawner</code> covers all responsibilities. No flag day — they co-exist until <code>GridSpawner</code> is validated in-game.</p>
 <p><b>Depends on:</b> 8.2c (all archetypes must exist before the procedural engine can place them).</p>
-<h4><a class="anchor" id="autotoc_md566"></a>
+<h4><a class="anchor" id="autotoc_md581"></a>
 Design</h4>
 <p><code>GridSpawner</code> implements <code>IGridSpawner</code> with <code>SpawnPriority = SpawnStage.DynamicActors</code> (value 50). It slots between the retired static and balloon spawners in the coordinator's stage ordering — when both legacy spawners are removed, only this stage remains.</p>
 <div class="fragment"><div class="line">GridSpawner</div>
@@ -507,7 +507,7 @@ Design</h4>
 <td class="markdownTableBodyNone">Column avoidance for Absorbers   </td><td class="markdownTableBodyNone">Don't place Absorbers adjacent to each other   </td><td class="markdownTableBodyNone">8.4   </td></tr>
 </table>
 <p>| Neighbor constraints (for future behavior actors) | Phase 9 |</p>
-<h4><a class="anchor" id="autotoc_md567"></a>
+<h4><a class="anchor" id="autotoc_md582"></a>
 Migration path</h4>
 <ol type="1">
 <li><code>GridSpawner.SpawnAsync</code> duplicates <code>BalloonSpawner</code>'s population logic — test parity.</li>
@@ -515,7 +515,7 @@ Migration path</h4>
 <li>Disable legacy spawner registrations when <code>GridSpawner</code> passes in-game validation.</li>
 <li>Remove the retired spawners; <code>DynamicActors=50</code> becomes the only active stage.</li>
 </ol>
-<h4><a class="anchor" id="autotoc_md568"></a>
+<h4><a class="anchor" id="autotoc_md583"></a>
 Failing tests</h4>
 <p>New fixture <b><code>GridSpawnerTests</code></b>: </p><div class="fragment"><div class="line">PickEntry_SingleEntry_AlwaysReturnsIt</div>
 <div class="line">PickEntry_AllEntriesAtMax_ReturnsNull</div>
@@ -526,13 +526,13 @@ Failing tests</h4>
 <div class="line">SlotSelector_MinDistance_ExcludesNearbySlots</div>
 <div class="line">SlotSelector_RowBias_PrefersTargetRows</div>
 </div><!-- fragment --><hr  />
-<h3><a class="anchor" id="autotoc_md570"></a>
+<h3><a class="anchor" id="autotoc_md585"></a>
 Phase 8.4 — Difficulty + Level Coupling</h3>
 <p><b>Goal:</b> Connect tunable difficulty knobs to score-driven level progression.</p>
 <p>This phase is deliberately last — you can't tune what you haven't built. Design the <code>DifficultyProfile</code> only after watching the procedural algorithm run.</p>
 <p><b>Cross-reference (added 2026-07-05):</b> a simpler, pre-8.3 version of "grid-actor difficulty
 per level" already ships for whatever <code>StaticActorSpawner</code> can build today (Puff, Bush) — the <code>LevelPacingConfiguration</code>/<code>LevelDifficultyResolver</code> pacing system (see <code><a class="el" href="Game_2Level_2README_8md.html">Game/Level/README.md</a></code>). That's a type-gate + per-type resolved count, not the richer <code>DifficultyProfile</code> shape below (no <code>GridDensity</code>/<code>StaticActorRatio</code>/weight overrides — today's spawner has no competitive weighted draw to apply a ratio or override to). When this phase lands, decide whether <code>DifficultyProfile</code> <b>replaces</b> that gate/count model wholesale, or whether <code>GridSpawner</code> keeps reading through <code>IActiveLevelParameters</code> (extended with the richer shape) so <code>LevelPacingConfiguration</code> stays the single per-level authoring surface rather than splitting into two competing level-driven configs.</p>
-<h4><a class="anchor" id="autotoc_md571"></a>
+<h4><a class="anchor" id="autotoc_md586"></a>
 Design</h4>
 <div class="fragment"><div class="line">DifficultyProfile  (ScriptableObject)</div>
 <div class="line">├── GridDensity: float              (0–1; % of slots filled per spawn pass)</div>
@@ -546,14 +546,14 @@ Design</h4>
 <div class="line">Level 7–10:  Gatekeepers introduced; Soap Cluster balloons appear</div>
 <div class="line">Level 11+:   Absorbers introduced; Unbreakable balloons; density climbs</div>
 </div><!-- fragment --><p>This is a starting point — real values come from playtesting, not design documents.</p>
-<h4><a class="anchor" id="autotoc_md572"></a>
+<h4><a class="anchor" id="autotoc_md587"></a>
 Failing tests</h4>
 <div class="fragment"><div class="line">DifficultyService_OnLevelUp_UpdatesActiveProfile</div>
 <div class="line">DifficultyProfile_Default_HasNoWeightOverrides</div>
 <div class="line">GridSpawner_AppliesWeightOverride_FromActiveProfile</div>
 <div class="line">GridSpawner_AbsorberGated_NotSpawnedWhenFlagFalse</div>
 </div><!-- fragment --><hr  />
-<h2><a class="anchor" id="autotoc_md574"></a>
+<h2><a class="anchor" id="autotoc_md589"></a>
 Open Questions</h2>
 <p>These are known design gaps to resolve during implementation:</p>
 <ol type="1">
@@ -564,7 +564,7 @@ Open Questions</h2>
 <li><b>Pool key for grid actors</b> — current <code>PoolKey</code> convention derives from prefab name. <code>GridActorPrefabEntry.PoolKey</code> follows the same convention. Confirm before 8.2b.</li>
 </ol>
 <hr  />
-<h2><a class="anchor" id="autotoc_md576"></a>
+<h2><a class="anchor" id="autotoc_md591"></a>
 Current State</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">

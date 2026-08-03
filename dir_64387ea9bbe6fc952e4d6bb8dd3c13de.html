@@ -164,9 +164,9 @@ Files</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>All game data is split across focused ScriptableObjects. Most are registered as singletons in <code>GameLifetimeScope</code> and injected wherever needed. A handful that the single persistent camera and its always-on backdrop fields need — <code>GameDisplayConfiguration</code>, <code>DisturbanceFieldSettings</code>, <code>BackgroundFieldSettings</code>, and the direction/GI-facing interfaces of <code>SceneLightFieldSettings</code> (<code>ISceneLightSettings</code>/<code>ITimeOfDaySettings</code>/<code>IScreenSpaceLightSettings</code>) — are instead owned by <code>AppLifetimeScope</code>, the persistent app root that parents both the Launcher and Game scopes; see <code><a class="el" href="README_8md.html">Assets/Source/README.md</a></code>.</p>
 <p>Source is organized into per-context subfolders: <code>Balloons/</code>, <code>Buffs/</code>, <code>Cinematics/</code>, <code>Effects/</code>, <code>GridActors/</code>, <code>Items/</code>, <code>Level/</code>, <code>Palette/</code>, <code>Ranges/</code>, and <code>Editor/</code> (drawers). The tables below note the subfolder where it isn't obvious.</p>
-<h1><a class="anchor" id="autotoc_md49"></a>
+<h1><a class="anchor" id="autotoc_md50"></a>
 Contents</h1>
-<h2><a class="anchor" id="autotoc_md50"></a>
+<h2><a class="anchor" id="autotoc_md51"></a>
 ScriptableObjects</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -220,7 +220,7 @@ ScriptableObjects</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>BushVariantData</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Pre-baked bush variant asset (branch map texture + leaf attachment slots), created by the Bush Baker editor window, loaded at runtime by <code>BushView</code>   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md51"></a>
+<h2><a class="anchor" id="autotoc_md52"></a>
 Data types</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -268,7 +268,7 @@ Data types</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>PaintColorMode</code>   </td><td class="markdownTableBodyNone">Enum (<code>Effects/</code>) — <code>Dynamic</code> (caller supplies palette index), <code>Palette</code> (profile names a fixed entry), <code>Custom</code> (profile carries an authored RGB)   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md52"></a>
+<h2><a class="anchor" id="autotoc_md53"></a>
 Editor</h2>
 <p>All custom <code>PropertyDrawer</code> implementations in this folder extend <code>AutoFieldPropertyDrawer</code> (in <code>Source/Editor/</code>) unless they need fully custom rendering. Common fields are discovered automatically via serialized-property iteration and rendered using nicified names — drawers only need to declare which fields require special layout in <code>ExcludedFields</code> and handle those manually.</p>
 <table class="markdownTable">
@@ -293,7 +293,7 @@ Editor</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>PaintProfileDrawer</code>   </td><td class="markdownTableBodyNone">Custom <code>PropertyDrawer</code> for <code>PaintProfile</code> — foldout header shows <code>PaintSource</code> flags label; expanded view shows Sources, Radius, Opacity, Color Mode, and conditionally Palette Color (dropdown with swatch) or Custom Color based on <code>PaintColorMode</code>   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md53"></a>
+<h1><a class="anchor" id="autotoc_md54"></a>
 Design rules</h1>
 <ul>
 <li><b>Never hardcode</b> values that exist in a configuration asset.</li>

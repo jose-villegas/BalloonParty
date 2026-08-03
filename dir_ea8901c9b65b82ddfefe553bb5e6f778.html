@@ -127,7 +127,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>The <b>early-warning signal</b> for running out of space — a single 0→1 value the UI maps onto a colour gradient so the player can feel the board getting dangerous before they actually lose a heart.</p>
-<h1><a class="anchor" id="autotoc_md177"></a>
+<h1><a class="anchor" id="autotoc_md178"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -137,7 +137,7 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>IDangerLevel</code>   </td><td class="markdownTableBodyNone">Read-only seam (<code>Level</code>, <code>HeartsAtRisk</code>) consumers bind against — registered alongside <code>SpaceDanger</code> in <code>GameLifetimeScope</code>   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md178"></a>
+<h1><a class="anchor" id="autotoc_md179"></a>
 The danger curve</h1>
 <p class="formulaDsp">
 \[\text{overflow} = \max(0, \text{spawnPerTurn} - \text{availableSpace})
@@ -162,7 +162,7 @@ The danger curve</h1>
 <li><b><code>availableSpace</code></b> = the empty-slot count. Re-home + pressure balance fill nearly every empty, so this approximates "how many balloons the board can still take" without re-deriving reachability.</li>
 <li><b><code>spawnPerTurn</code></b> = <code>IActiveLevelParameters.Current.SpawnLines × Columns</code>, the worst case a turn can throw at the board.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md179"></a>
+<h1><a class="anchor" id="autotoc_md180"></a>
 Consumers</h1>
 <p><code>UI/Danger/DangerGradientView</code> samples a <code>Gradient</code> at <code>Level</code> to tint sprites and grows the <b>top/bottom gradient sprites</b> toward the centre — simulating the gradient creeping over the scenario. Each side has its own height increase (<code>SpriteRenderer.size.y += increase × Level</code>, so those sprites need a Sliced/Tiled draw mode) and is recentred by <b>half</b> the growth (centred pivot assumed) so its outer edge stays put: the bottom expands up, the top expands down. On top of that it slides a top and a bottom container by a <b>custom per-side Y offset</b> ( \(\text{restY} + \text{offsetY} \times \text{Level}\), sign per the inspector value). It treats the bound <code>Level</code> as a <em>target</em> and eases a current value toward it each frame (frame-rate-independent, <code>_lerpSpeed</code>), so tint, growth and translation glide rather than snapping. <code>DangerUILifetimeScope</code> (a child scope) binds every <code>DangerGradientView</code> under its hierarchy to <code>IDangerLevel.Level</code> at <code>Start</code> via the shared <code>RegisterBoundViews</code> helper (<code>UI/Binding/</code>). Author the gradient, assign the target sprites, and (optionally) set the container + Y offset in the inspector — nothing renders until those are wired.</p>
 <p><code>UI/Danger/DangerHeartLossView</code> — shows the number of hearts at risk (alpha lerp + UIShiny effect), bound to <code>IDangerLevel.HeartsAtRisk</code>. </p>

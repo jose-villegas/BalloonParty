@@ -110,13 +110,13 @@ $(function(){initNavTree('arch_spawner_coordination.html',''); initResizable(tru
   <div class="headertitle"><div class="title">Spawner Coordination</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md97"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md98"></a>
 Spawner Coordination</h1>
 <div class="image">
 <object type="image/svg+xml" data="spawner_coordination.svg" style="pointer-events: none;"></object>
 <div class="caption">
 Spawner Coordination — Staged GridSpawner Pipeline</div></div>
-<h2><a class="anchor" id="autotoc_md98"></a>
+<h2><a class="anchor" id="autotoc_md99"></a>
 What this diagram shows</h2>
 <p>How <code>GridSpawnerCoordinator</code> sequences all grid population work at scene start, ensuring static actors exist before balloons try to find empty slots.</p>
 <p><b>Gate:</b> The coordinator first awaits <code>NavigationReadyGate(Game)</code> — an <code>IReadyGate</code> that resolves when <code>Navigation.Current == NavigationState.Game</code>. Nothing spawns until the scene is fully active and the player has tapped Play.</p>
@@ -125,7 +125,7 @@ What this diagram shows</h2>
 <div class="line">SpawnStage.DynamicActors (50) →  (GridSpawner — procedural placement, Phase 8.3)</div>
 <div class="line">SpawnStage.BalloonActors (100)→  BalloonSpawner.SpawnAsync</div>
 </div><!-- fragment --><p><b>Pre-warming overlap:</b> <code>BalloonSpawner.Start()</code> begins pool pre-warming asynchronously and stores the task. <code>SpawnAsync</code> awaits it before populating the grid — so pre-warm and navigation waiting overlap rather than serialise.</p>
-<h2><a class="anchor" id="autotoc_md99"></a>
+<h2><a class="anchor" id="autotoc_md100"></a>
 Guidance</h2>
 <p><b>Adding a new grid spawner:</b></p><ol type="1">
 <li>Implement <code>IGridSpawner</code> — provide <code>SpawnStage</code> and <code>SpawnAsync(CancellationToken)</code></li>

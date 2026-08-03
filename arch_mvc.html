@@ -110,13 +110,13 @@ $(function(){initNavTree('arch_mvc.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">MVC Pattern</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md76"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md77"></a>
 MVC Pattern</h1>
 <div class="image">
 <object type="image/svg+xml" data="mvc_architecture.svg" style="pointer-events: none;"></object>
 <div class="caption">
 Model–View–Controller with MessagePipe</div></div>
-<h2><a class="anchor" id="autotoc_md77"></a>
+<h2><a class="anchor" id="autotoc_md78"></a>
 What this diagram shows</h2>
 <p>The three-layer split that governs every feature in <a class="el" href="namespaceBalloonParty.html">BalloonParty</a>. Each layer has a strict contract about what it is allowed to touch:</p>
 <ul>
@@ -125,7 +125,7 @@ What this diagram shows</h2>
 <li><b>Controller</b> — pure C# class; registered with VContainer as <code>IStartable</code> / <code>ITickable</code>; orchestrates systems; mutates models; no <code>MonoBehaviour</code>, no <code>transform</code></li>
 </ul>
 <p>MessagePipe arrows cross layer boundaries: a <b>View</b> reports input or contact (e.g. <code>ProjectileView</code> hands each balloon contact to the plain-C# <code>ProjectileHitResolver</code>, which dispatches the resulting <code>ActorHitMessage</code> through the hit pipeline); <b>Controllers</b> subscribe to the broadcast and decide what to do. This keeps Views ignorant of game logic and Controllers ignorant of Unity rendering.</p>
-<h2><a class="anchor" id="autotoc_md78"></a>
+<h2><a class="anchor" id="autotoc_md79"></a>
 Guidance</h2>
 <p><b>Adding a new feature:</b></p><ol type="1">
 <li>Start with the model — what reactive state does this feature need?</li>

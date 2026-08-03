@@ -1,0 +1,9 @@
+<map id="BalloonParty.Game.Telemetry.MetricScope" name="BalloonParty.Game.Telemetry.MetricScope">
+<area shape="rect" id="Node000001" title=" " alt="" coords="596,47,812,87"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Telemetry_1_1MetricSet.html" title=" " alt="" coords="271,5,487,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="501,38,596,50,596,56,500,43"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Telemetry_1_1IReadOnlyMetricSet.html" title=" " alt="" coords="5,5,221,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="235,23,271,23,271,28,235,28"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryStopwatch.html" title=" " alt="" coords="271,69,487,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="500,81,572,76,596,74,596,79,572,81,501,86"/>
+</map>

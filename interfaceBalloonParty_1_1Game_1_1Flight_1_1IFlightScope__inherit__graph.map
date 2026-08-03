@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Flight.IFlightScope" name="BalloonParty.Game.Flight.IFlightScope">
+<area shape="rect" id="Node000001" title="The per&#45;shot boundary, owned in one place instead of re&#45;derived by every consumer." alt="" coords="5,5,196,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html" title="Owns the per&#45;shot boundary and the counts scoped to it." alt="" coords="5,93,196,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,59,103,93,98,93,98,59"/>
+</map>

@@ -124,7 +124,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>The thrower is the player-controlled launcher at the bottom of the screen. It aims at the balloon grid and fires projectiles.</p>
-<h1><a class="anchor" id="autotoc_md928"></a>
+<h1><a class="anchor" id="autotoc_md943"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -138,10 +138,10 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ThrowerSettings</code>   </td><td class="markdownTableBodyNone">Holds the <code>ProjectileView</code> prefab reference for pool creation (registered in <code>GameLifetimeScope</code>)   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md929"></a>
+<h1><a class="anchor" id="autotoc_md944"></a>
 Gameplay</h1>
 <p>The player holds the mouse button to aim — the thrower rotates to face the cursor. Releasing the mouse fires the loaded projectile. Once the projectile is destroyed (shields depleted), the thrower automatically reloads and is ready for the next shot.</p>
-<h1><a class="anchor" id="autotoc_md930"></a>
+<h1><a class="anchor" id="autotoc_md945"></a>
 How it works</h1>
 <p><code>ThrowerController</code> is a plain C# class registered as an entry point in <code>ThrowerLifetimeScope</code>. It delegates all visual operations <em>and pointer input</em> to <code>ThrowerView</code>, keeping the controller free of Unity engine APIs. On start it registers the projectile pool and pre-warms two instances. It subscribes reactively to <code>Navigation.State</code> — when the state becomes <code>Game</code> (via <code>NavigationTrigger</code> on the Launch button), it plays the entrance animation. After the entrance animation completes, input is enabled.</p>
 <p>Each frame (<code>Tick</code>), only when navigation state is <code>Game</code> and the entrance animation is complete, the controller:</p><ul>
@@ -154,7 +154,7 @@ How it works</h1>
 <p><code>Tick</code> is a no-op outside the <code>Game</code> navigation state, while any <code>PauseService</code> source is paused, or while <code>HoldSpeedUpController.ConsumedInput</code> is true — the thrower cannot aim or fire during the level-up ceremony, cinematics, the overflow heart-drain lock, or while the player's finger is still down from a speed-up hold. The <code>ConsumedInput</code> gate prevents the finger-lift that ended a speed-up from accidentally aiming or firing the next shot; the player must lift and tap fresh.</p>
 <p><code>FireAt(Vector3 direction)</code> is an internal entry point bypassing mouse input entirely — it snaps the loaded shot to the spawn point, aims it at the given direction, and fires. It exists for editor tooling (the Shot Solver window and the Fire-Best-Shot cheat), which is why <code>ThrowerLifetimeScope</code> also registers the controller <code>.AsSelf()</code>.</p>
 <p>When a <code>ProjectileDestroyedMessage</code> or a <code>LevelUpDismissedMessage</code> arrives, <code>ThrowerController</code> swaps the active projectile: the spent one plays its scale-away disappear animation and only returns to the pool once that finishes, while a fresh instance loads immediately — so the thrower never hands out a shot still mid-disappear. A <code>ScoreLevelUpMessage</code> (the level-up freeze) un-fires a shot that was fired the very same frame, before it ever took a physics step, so the dismissal swap doesn't scale-drift a phantom shot away from the muzzle. A <code>GameOverMessage</code> scales the active projectile away without loading a replacement (the thrower only reloads on restart). A <code>BoardClearMessage</code> or <code>RunResetMessage</code> triggers a synchronous reload — the old projectile returns to the pool immediately and a fresh one loads — so a fresh run or a cleared board starts with a fresh projectile (default shields and position). Projectiles are created through <code>ProjectilePoolChannel</code> (an <code>InjectingPoolChannel</code> — <code>[Inject]</code> fields resolved from the parent container, no child scope on the prefab). The pool key is derived from the prefab's name.</p>
-<h1><a class="anchor" id="autotoc_md931"></a>
+<h1><a class="anchor" id="autotoc_md946"></a>
 Interactions</h1>
 <ul>
 <li><b>PoolManager / ProjectilePoolChannel</b> — registers and serves the projectile pool (pre-warmed with two instances)</li>

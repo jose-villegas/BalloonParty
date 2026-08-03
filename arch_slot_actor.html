@@ -110,13 +110,13 @@ $(function(){initNavTree('arch_slot_actor.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">Slot Actor Abstraction</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md94"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md95"></a>
 Slot Actor Abstraction</h1>
 <div class="image">
 <object type="image/svg+xml" data="actor_hierarchy.svg" style="pointer-events: none;"></object>
 <div class="caption">
 Slot Actor Interface Hierarchy</div></div>
-<h2><a class="anchor" id="autotoc_md95"></a>
+<h2><a class="anchor" id="autotoc_md96"></a>
 What this diagram shows</h2>
 <p>How <code>SlotGrid</code> stays decoupled from concrete balloon types by operating exclusively through interface contracts. Every grid occupant is an <code>ISlotActor</code>; everything else is an optional capability discovered at the call site via a cast.</p>
 <p><b>Core interfaces:</b></p><ul>
@@ -150,7 +150,7 @@ What this diagram shows</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>IPassThrough</code>   </td><td class="markdownTableBodyNone">Slot traversable by animation paths   </td><td class="markdownTableBodyNone"><code>PuffObstacleModel</code>, <code>StaticActorModel</code>   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md96"></a>
+<h2><a class="anchor" id="autotoc_md97"></a>
 Guidance</h2>
 <p><b>Adding a new actor type:</b></p><ol type="1">
 <li>Create a plain C# model implementing <code>IWriteableSlotActor</code> at minimum</li>

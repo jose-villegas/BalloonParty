@@ -139,7 +139,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Owns everything about the player's climb through levels: the current level and per-colour progress, the <b>level-up ceremony</b> (detection → popup → Ascent), and the <b>per-level difficulty mix</b> each level resolves to. Level logic lives here, not in <code>ScoreController</code> — scoring only tallies points and hands them to <code>ILevelProgress</code>.</p>
-<h1><a class="anchor" id="autotoc_md190"></a>
+<h1><a class="anchor" id="autotoc_md197"></a>
 Components</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -161,7 +161,7 @@ Components</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code><a class="el" href="TimeOfDayCycle_8cs.html">TimeOfDayCycle.cs</a></code>   </td><td class="markdownTableBodyNone">Night-mode's time-of-day <em>policy</em>: picks the ambient light angle for the current level (level 1 = the authored rest direction, each further level adds a fixed step) and pushes it to <code>TimeOfDayService</code>, which owns the actual light globals (see <code><a class="el" href="Shared_2SceneLight_2README_8md.html">Shared/SceneLight/README.md</a></code>). Snaps to the level's angle on start and on a run reset; sweeps to the new angle only on <code>Phase → Transitioning</code>, over unscaled time so it plays through the transition pause. The angle is never wrapped, so the sweep always goes forward, even across the midnight→dawn seam. Its reset order deliberately runs <em>after</em> <code>LevelController</code>'s, so a restart's snap reads the run's actual start level (which can be &gt; 1 via the dev cheat), not an assumed level 1. A no-op entirely when night mode is off.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md191"></a>
+<h1><a class="anchor" id="autotoc_md198"></a>
 The level-up ceremony (flag-then-orchestrate)</h1>
 <p>Progress lands via <b>score trails</b>: <code>ScoreController</code> publishes points, and each trail's arrival fires <code>ScoreTrailArrivedMessage</code>. <code>LevelController.OnTrailArrived</code> confirms progress (capped at the projected claim so a previous-level straggler can't re-inflate it).</p>
 <p>The level does <b>not</b> advance the moment the bars fill — the ceremony is orchestrated so the shot keeps flying and the animations have a stable state to play against:</p>
@@ -172,16 +172,16 @@ The level-up ceremony (flag-then-orchestrate)</h1>
 <li><b><code>Transitioning → Playing</code></b> — the Ascent reports it has settled (<code>LevelTransitionCompletedMessage</code>), so scoring reopens. <code>LevelController.OnTransitionCompleted</code> also owns the nav return to <code>NavigationState.Game</code>, but only if nav is still <code>LevelUp</code>; a loss that reached <code>GameOver</code> during the transition is left untouched.</li>
 </ol>
 <p><code>Phase</code> is the cue the rest of the ceremony reads instead of inferring from nav/pause: the popup shows on <code>ScoreLevelUpMessage</code>, and the Ascent (<code>LevelTransitionController</code>) starts on <code>Phase → Transitioning</code> — deterministic, fires exactly once, no extra re-entrancy flag.</p>
-<h2><a class="anchor" id="autotoc_md192"></a>
+<h2><a class="anchor" id="autotoc_md199"></a>
 Abort recovery</h2>
 <p>If the run leaves gameplay before the flight ends (loss committing, game-over nav), <code>OnFlightEnded</code> calls <code>AbandonCeremony</code>, which resets <code>Phase</code> to <code>Playing</code> and publishes <code>LevelUpAbandonedMessage</code>. The thrower uses this to perform the reload that was held during <code>Completing</code>. Similarly, <code>LevelUpCinematic.AbortSession</code> (loss certain mid-pan-in) publishes <code>LevelUpAbortedMessage</code>; <code>LevelController</code> treats that the same way while <code>Phase == Pending</code> — resets phase and returns nav from <code>LevelUp</code> to <code>Game</code>. Because this happens before dismissal, the current <code>Level</code> and confirmed progress stay on the pre-level-up state.</p>
-<h2><a class="anchor" id="autotoc_md193"></a>
+<h2><a class="anchor" id="autotoc_md200"></a>
 Banked excess</h2>
 <p><code>ClaimProgress</code> caps <code>granted</code> at one level's worth per colour — a pop landing a colour past its threshold still only grants the remaining room, and progress still resets to zero at level-up. The excess past the cap doesn't feed back into progress, but it isn't discarded either: it's banked per colour (<code>_bankedExcess</code>, exposed as <code>ExcessPoints</code>/<code>TotalExcessPoints</code>) as a run-scoped running total that accumulates across levels and is logged (editor/dev builds) as it accrues. The bank is cleared only on a run reset (<code>ClearRunState</code>), never at level-up, and the dev cheat (<code>CheatState.BlockLevelUp</code>) never banks because it doesn't advance real progress. Nothing in gameplay or UI reads the bank today — it's reserved for a future per-level currency system (Balatro-style) feeding the level-up popup.</p>
-<h1><a class="anchor" id="autotoc_md194"></a>
+<h1><a class="anchor" id="autotoc_md201"></a>
 The Ascent (level transition)</h1>
 <p><code>LevelTransitionController</code> subscribes to <code>Phase → Transitioning</code> and holds <code>PauseSource.LevelTransition</code> for the whole run so the thrower and spawn-loss checks stay inert until the reveal is ready. Its sequence (see the file for the full choreography): wait for any in-flight cinematic + the overflow drain → float the old level's balloons away via the injected <code>IBoardEffect</code> (bound to <code>BoardFloatAwayEffect</code>: each balloon rises on a curve while swaying side-to-side, tilting into the sway — they <em>survive</em>, unlike the game-over's pop) → slide the <b>outgoing content</b> out the bottom on a shared conveyor while the <b>new</b> scenario descends into place, then reopen scoring. The Ascent moves the shared <code>ScenarioContentRoot</code>, not the camera; the camera un-zoom is driven earlier by <code>LevelUpCinematic.EndPanIn</code> (via <code>CinematicCameraRig.RestoreCurveDriven</code>, using the <code>LevelCompleteRestore</code> segment's curve while still following the projectile) — <code>LevelTransitionController</code> does not touch the camera. Its tuning is <code>ICinematicsSettings.LevelAscend</code> — see <code><a class="el" href="Game_2Cinematics_2README_8md.html">Game/Cinematics/README.md</a></code> and <code><a class="el" href="Configuration_2README_8md.html">Configuration/README.md</a></code>.</p>
-<h1><a class="anchor" id="autotoc_md195"></a>
+<h1><a class="anchor" id="autotoc_md202"></a>
 Difficulty resolution</h1>
 <p><code>LevelDifficultyResolver</code> resolves <code>LevelParameters</code> for the current level on start, on level-up, and on run reset (before the grid respawns, <code>RunResetOrder.Derived</code>). It looks up the authored <code>LevelRangeEntry</code> whose bounds contain the level, falling back to the entry flagged <code>IsFallback</code> (a <code>-1</code> level bound) when none matches, resolves its <code>RangedValue</code> bands with the run's seeded RNG, then bridges the result onto the catalogs: balloon/item <b>type gates</b> (a type absent or zero-weight in the range's set is excluded) with effective weight <code>catalogEntry.Weight × rangeWeight.Weight</code>, and the allowed-colour set from the range's colour mask. Consumers read only <code>IActiveLevelParameters.Current</code> — see <code>Configuration/Level/</code> for the authored config and <code>LevelParameters</code>. </p>
 </div><!-- contents -->

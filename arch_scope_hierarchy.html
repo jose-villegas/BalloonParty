@@ -110,13 +110,13 @@ $(function(){initNavTree('arch_scope_hierarchy.html',''); initResizable(true); }
   <div class="headertitle"><div class="title">VContainer Scope Hierarchy</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md79"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md80"></a>
 VContainer Scope Hierarchy</h1>
 <div class="image">
 <object type="image/svg+xml" data="scope_hierarchy.svg" style="pointer-events: none;"></object>
 <div class="caption">
 VContainer Scope Hierarchy</div></div>
-<h2><a class="anchor" id="autotoc_md80"></a>
+<h2><a class="anchor" id="autotoc_md81"></a>
 What this diagram shows</h2>
 <p>How VContainer scopes nest in <a class="el" href="namespaceBalloonParty.html">BalloonParty</a>. Child scopes automatically inherit all parent registrations. <code>AppLifetimeScope</code> is the actual VContainer <b>project root</b> — a persistent, <code>DontDestroyOnLoad</code> scope built once for the whole session — and parents both <code>LaunchLifetimeScope</code> and <code>GameLifetimeScope</code>, which resolve its registrations as children.</p>
 <p><b>Current scope tree:</b></p><ul>
@@ -136,7 +136,7 @@ What this diagram shows</h2>
 </li>
 </ul>
 <p><b>Pooled prefabs (balloons, projectiles)</b> do not use child scopes. Their <code>[Inject]</code> fields are populated via <code>InjectingPoolChannel</code>, which instantiates each instance through <code>IObjectResolver.Instantiate()</code> directly — no scope creation overhead per instance.</p>
-<h2><a class="anchor" id="autotoc_md81"></a>
+<h2><a class="anchor" id="autotoc_md82"></a>
 Guidance</h2>
 <p><b>Registering a new service:</b></p><ul>
 <li>Game-wide singleton → register in <code>GameLifetimeScope</code></li>

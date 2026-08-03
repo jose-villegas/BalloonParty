@@ -125,7 +125,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Editor tooling for the shot geometry system — sweeps aim angle against the live board and reports which windows reach a target score. The shot is modelled as a deterministic billiard; the simulation mirrors the runtime projectile rules.</p>
-<h1><a class="anchor" id="autotoc_md156"></a>
+<h1><a class="anchor" id="autotoc_md157"></a>
 Contents</h1>
 <p>Only <code>ShotSolverWindow</code> lives in this folder. The simulation classes it drives live in <code>Assets/Source/Solver/</code> (runtime <code>BalloonParty.Runtime</code> assembly, not <code>Editor/</code>) so they stay unit-testable outside the editor.</p>
 <table class="markdownTable">
@@ -152,7 +152,7 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ShotSimEffectBoard</code>   </td><td class="markdownTableBodyNone"><code>Solver/</code>   </td><td class="markdownTableBodyNone">The sim's <code>IEffectBoard</code> adapter (<code>Item/Effects/</code>) — rebuilds <code>EffectOccupant</code>s from the active working set (statics and the popped host excluded) over a <code>ShotSlotLattice</code> (<code>HexCoordinates</code> math only, no live grid/dynamics reference), so an item core selects identically whether or not a dynamic board is present   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md157"></a>
+<h1><a class="anchor" id="autotoc_md158"></a>
 Rule mirroring</h1>
 <p>The simulator reproduces these runtime rules without touching a live <code>IBalloonModel</code>:</p>
 <ul>
@@ -167,7 +167,7 @@ Rule mirroring</h1>
 <li><b>Balance &amp; nudge (dynamic board)</b> — when the window supplies <code>ShotBoardDynamics</code>, rebalance pulses fire at \(k \times \text{FlightRebalanceInterval}\) running the REAL <code>BalancePlanner</code> over a real <code>SlotGrid</code> (no mirrored rules — rule drift is impossible); moved balloons follow their hop waypoints as an arc-length polyline with OutQuad-eased progress over a per-move duration of path length ÷ the balloon's resolved <code>MoveSpeed</code> (per-type <code>BalloonPrefabEntry.MoveSpeed</code>, or <code>DefaultBalloonMoveSpeed</code>) — mirroring the live <code>BalloonBalancer</code>'s speed-based duration and <code>DOPath</code>'s constant-speed percentage under the project's DOTween default ease (<code>DOTweenSettings.asset</code>); contacts against them solve the moving-circle quadratic linearized at the instantaneous eased velocity. Every contact nudges the target's occupied hex neighbours and deflects additionally shove the hit balloon, with the exact <code>Reach</code> impulse envelope; centres become \(\text{balancePosition}(t) + \sum \text{impulses}(t)\), and a pulse landing mid-wobble seeds its path from the WOBBLED centre (waypoint 0 = view position in the live <code>StartBalanceTween</code>, with the ticker re-adding impulses on top of tween writes — the brief start-offset double-carry is faithful). Pops <code>Remove</code> from the dynamics grid so later pulses see the gaps. With no dynamics supplied the loop takes the original static fast path unchanged.</li>
 <li><b>Items</b> (Phase C) — an item carrier is opt-in: <code>ShotItemLayer</code> is a nullable peer of <code>dynamics</code> on <code>Simulate</code> (<code>items: null</code> ⇒ the original loop runs byte-for-byte unchanged). Assignment is spawn-time (<code>ItemAssigner</code>), so which balloon carries what is a deterministic fact of the gather, never something the flight itself rolls. On a host pop the layer resolves the item's effect by running the same pure per-item core a future live repoint would share (<code>BombBlast</code>/<code>LaserCross</code>/<code>LightningChain</code>/<code>PaintSpread</code>, behind <code>IEffectBoard</code>'s two adapters — <code>GridEffectBoard</code>, live-side, and <code>ShotSimEffectBoard</code> here), draining a FIFO queue breadth-first — a popped item's own effect chaining into another item resolves on a LATER iteration, mirroring <code>ItemActivator</code>'s per-frame cadence — bounded by <code>MaxActivationsPerFlight</code> (32). Item pops score through the SAME pop-scoring dispatch a projectile contact uses, with colour adoption and the shield refund gated OFF (verified: both live only in <code>ProjectileHitResolver.ResolveContactPop</code>, which an item handler never reaches); they nudge their hit neighbours and chain their own carried item exactly like a direct pop would. Shield grants +1 projectile shield (a rainbow host additionally grants the until-wall rainbow buff); Snipe arms the lance (piercing, without entering cruise) plus the non-stacking speed buff (a rainbow host additionally grants the until-pierce-end rainbow buff) — there is deliberately <b>no <code>DamageFlags.DirectHit</code> gate</b> (José's ruling, 2026-07-25: the lance is recoverable off an AoE pop too, matching the live code, which has none). An armed lance is barred from later entering cruise (<code>ProjectileView.TryEnterCruise</code>'s own bar, mirrored by <code>HandleWallBounce</code>'s <code>!state.IsPiercing</code> guard), so it can never layer cruise's per-shield speed tap on top.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md158"></a>
+<h1><a class="anchor" id="autotoc_md159"></a>
 Accepted approximations (plan §7)</h1>
 <ul>
 <li><code>ShotItemLayer.MaxActivationsPerFlight</code> (32) is a sim-only safety valve — live's <code>ItemActivator</code> has no cap, so a flight that would chain past it in-game keeps granting effects the sim silently drops from that point. Related edge: chained activations enqueue in the chain's hit order, and two EXACTLY equidistant lightning targets can receive swapped jump indices between sim and live (unstable sort) — observable only when a tie sits right at the budget wall.</li>
@@ -185,10 +185,10 @@ Accepted approximations (plan §7)</h1>
 <li>Pre-existing gap (E4, found during the D-core review): the sim's non-piercing <code>HitsRemaining &gt; 1</code> branch always deflects a surviving multi-hit target, but live only <code>ToughBalloonModel</code>/<code>UnbreakableBalloonModel</code> actually return <code>HitOutcome.Deflect</code> — a surviving multi-HP soap cluster (<code>BubbleClusterModel</code>) returns <code>PassThrough</code> and flies through unbent instead. Planned fix is Phase E4 (a survive-outcome discriminator on the snapshot).</li>
 <li>Balance fidelity honours <code>WeightBias</code>/<code>OmnidirectionalBalance</code> only — <code>ShoveVector</code> pop-pressure shoves are never exercised by a flight-rebalance pulse, so a board effect that leans on pressure propagation diverges from the sim.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md159"></a>
+<h1><a class="anchor" id="autotoc_md160"></a>
 Sweep and refine</h1>
 <p><code>ShotSolverWindow</code> samples N angles (default 2048) across a configurable arc (default 10°–170°, measured from +X), then finds contiguous runs where <code>RawScore &gt;= target</code>. Each run's edges are refined by bisection to ~0.01° (the plan's §2 fair-window resolution threshold), not by enumerating exact tangency angles — the plan calls that exact enumeration v2. The "best" window is the widest qualifying one; "Draw Best" re-simulates its centre angle with the simulator's optional path-capture list and draws it via <code>SceneDrawingHelper.DrawWorldPolyline</code>.</p>
-<h1><a class="anchor" id="autotoc_md160"></a>
+<h1><a class="anchor" id="autotoc_md161"></a>
 Usage</h1>
 <ol type="1">
 <li>Enter Play Mode with the Game scene loaded.</li>

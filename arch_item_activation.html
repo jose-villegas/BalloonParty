@@ -110,13 +110,13 @@ $(function(){initNavTree('arch_item_activation.html',''); initResizable(true); }
   <div class="headertitle"><div class="title">Item Activation Pipeline</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md63"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md64"></a>
 Item Activation Pipeline</h1>
 <div class="image">
 <object type="image/svg+xml" data="item_activation.svg" style="pointer-events: none;"></object>
 <div class="caption">
 Item Activation Pipeline</div></div>
-<h2><a class="anchor" id="autotoc_md64"></a>
+<h2><a class="anchor" id="autotoc_md65"></a>
 What this diagram shows</h2>
 <p>The handoff chain from projectile contact to item effect, and how <code>BalloonController</code> coordinates the timing so the item balloon is not returned to the pool mid-activation.</p>
 <p><b>Sequence:</b></p><ol type="1">
@@ -127,7 +127,7 @@ What this diagram shows</h2>
 <li><code>ItemActivator</code> publishes <code>ItemActivatedMessage</code> — <code>BalloonController</code> unblocks and returns the item balloon to pool.</li>
 </ol>
 <p><b>Context-independence:</b> <code>Item/</code> has no dependency on <code>Balloon/</code>. <code>IBalloonItem</code> is the balloon system's adapter into the item system — not the item system's knowledge of balloons. Items can be hosted on any object that provides the <code>IBalloonItem</code> interface.</p>
-<h2><a class="anchor" id="autotoc_md65"></a>
+<h2><a class="anchor" id="autotoc_md66"></a>
 Guidance</h2>
 <p><b>Adding a new item type:</b></p><ol type="1">
 <li>Add the enum value to <code>ItemType</code></li>

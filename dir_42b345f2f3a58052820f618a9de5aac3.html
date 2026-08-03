@@ -137,7 +137,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>The player's <b>hit-point pool</b> — the only loss trigger under the line-based spawn-saturation model. Each heart represents one full spawn line. When the board can't absorb all the lines in a spawn wave, the player loses one heart per full line of deficit; partial-line shortfalls are forgiven. Reaching zero hearts ends the run.</p>
-<h1><a class="anchor" id="autotoc_md181"></a>
+<h1><a class="anchor" id="autotoc_md188"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -155,7 +155,7 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>HeartTrailTracker</code>   </td><td class="markdownTableBodyNone">The heart trails currently in flight (health UI → grid area), launch order preserved. <code>HeartTrailController</code> (<code>UI/Health/</code>) adds/removes them; the heart-drain cinematic frames the hearts in this set   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md182"></a>
+<h1><a class="anchor" id="autotoc_md189"></a>
 How it works</h1>
 <div class="fragment"><div class="line">BalloonSpawner (wave start)</div>
 <div class="line">  ├─ CountEmptySlots()</div>
@@ -173,7 +173,7 @@ How it works</h1>
 <div class="line">  │</div>
 <div class="line">  └─ Spawn only (spawnLines - HeartsLost) effective lines</div>
 <div class="line">         └─ blocked columns → RejectedBalloonEffect.Play() [visual only]</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md183"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md190"></a>
 Damage formula</h1>
 <ul>
 <li><code>deficit = neededSlots - availableSpace</code> (clamped ≥ 0)</li>
@@ -185,12 +185,12 @@ Damage formula</h1>
 <li>21 available → deficit 3 → 0 hearts lost (partial line forgiven)</li>
 <li>12 available → deficit 12 → 2 hearts lost</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md184"></a>
+<h1><a class="anchor" id="autotoc_md191"></a>
 Registration</h1>
 <p><code>GameLifetimeScope</code>: <code>RegisterEntryPoint&lt;PlayerHealthController&gt;().AsSelf().As&lt;IRunResettable&gt;().As&lt;IPlayerHealth&gt;()</code>. The deficit computation lives in <code>BalloonSpawner</code>; visual feedback (camera shake, heart trails, cinematic) subscribes to <code>WaveDamageMessage</code> independently.</p>
-<h1><a class="anchor" id="autotoc_md185"></a>
+<h1><a class="anchor" id="autotoc_md192"></a>
 Architecture</h1>
-<h2><a class="anchor" id="autotoc_md186"></a>
+<h2><a class="anchor" id="autotoc_md193"></a>
 Spawn Wave → Damage → Strikethrough → Pop</h2>
 <div class="fragment"><div class="line">sequenceDiagram</div>
 <div class="line">    participant Spawner as BalloonSpawner</div>
@@ -212,7 +212,7 @@ Spawn Wave → Damage → Strikethrough → Pop</h2>
 <div class="line">    Note over Trail: DOTween: stagger → fly → passes → complete</div>
 <div class="line">    Trail-&gt;&gt;FX: PopDoomedLine(lineIndex)</div>
 <div class="line">    Trail-&gt;&gt;Bus: publish StrikethroughArrivedMessage</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md187"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md194"></a>
 MVC Layers &amp; Message Flow</h2>
 <div class="fragment"><div class="line">graph TD</div>
 <div class="line">    subgraph Model</div>
@@ -254,7 +254,7 @@ MVC Layers &amp; Message Flow</h2>
 <div class="line">    SD --&gt;|reads| SG</div>
 <div class="line">    DHLV --&gt;|observes| SD</div>
 <div class="line">    CSV --&gt;|driven by| CSC</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md188"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md195"></a>
 Strikethrough Lifecycle</h2>
 <div class="fragment"><div class="line">stateDiagram-v2</div>
 <div class="line">    [*] --&gt; Idle</div>

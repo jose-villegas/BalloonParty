@@ -110,11 +110,11 @@ $(function(){initNavTree('arch_light_field.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">Scene Light Field (2D Multi-Light)</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md66"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md67"></a>
 Scene Light Field (2D Multi-Light)</h1>
 <div class="dotgraph">
 <iframe scrolling="no" frameborder="0" src="dot_inline_dotgraph_2.svg" width="1363" height="1742"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-<h2><a class="anchor" id="autotoc_md67"></a>
+<h2><a class="anchor" id="autotoc_md68"></a>
 What this diagram shows</h2>
 <p>The <b>scene light field</b> — a screen/world-space RT that collapses N point/area lights into a single per-position composite (direction + magnitude + colour) that every consumer samples once. The architecture mirrors the disturbance field: a batched stamp pipeline producing a global RT, shared coordinates, and a cginc include for consumers.</p>
 <p><b>Producers</b> are game sources that own a reactive <code><a class="el" href="UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d">Light</a></code> model and register it with the service. Each light is a small C# object (<code>Position</code>/<code>EndPosition</code>/<code>Radius</code>/<code>Intensity</code>/<code>FalloffPower</code>/ <code>PaletteIndex</code> as <code>ReactiveProperty</code>s). Point lights have <code>EndPosition == Position</code> (disc falloff); area lights set them apart (capsule — the laser cross is two of these). Registration is <code>RegisterLight(Light) → IDisposable</code>; disposing turns it off. No built-in decay — a fade is the caller animating <code>Intensity</code>.</p>
@@ -126,7 +126,7 @@ What this diagram shows</h2>
 <li><b>Gradient</b> — derives direction from <code>grad(R)</code> via central difference. Blends from rest GB toward the gradient direction by \( \mathrm{saturate}(\mathit{localR}\cdot \mathit{DirectionResponse}) \) — presence-weighted, so flat regions keep the global direction and bright regions capture the local one.</li>
 </ol>
 <p><b>Consumers</b> read the field through <code>SceneLight.cginc</code> (<code>SceneLightDirectionAt</code>, <code>…MagnitudeAt</code>, <code>…TintAt</code>, <code>ShadowLightFadeAt</code>). When <code>_SceneLightFieldOn &lt; 0.5</code> (field off, edit mode, or no service alive) all helpers return the flat globals — bit-identical to the pre-field state. This makes the field a strictly additive seam.</p>
-<h2><a class="anchor" id="autotoc_md68"></a>
+<h2><a class="anchor" id="autotoc_md69"></a>
 Key design decisions</h2>
 <ol type="1">
 <li><b>Lights are state, not events.</b> Unlike the disturbance field (fire a stamp, it lingers/diffuses), a light is simply on or off. The caller owns the lifecycle — there is no decay in the service. A flash is just the caller DOTweening <code>Intensity</code> to zero and disposing.</li>
@@ -137,7 +137,7 @@ Key design decisions</h2>
 <li><b>Dirty-gated cost.</b> The pipeline is skipped entirely when nothing changed. An idle scene with static lights pays zero GPU cost per frame. The field runs at <code>TexelsPerUnit = 32</code> (finer than the disturbance field's 8) — affordable because it's not ticked every frame.</li>
 <li><b>Cadence-capped, not just dirty-gated.</b> A light that dirties every tick (a tracked projectile) would otherwise re-render at the display's full refresh rate for identical visuals — 2× the GPU cost on a 120 Hz panel versus 60 Hz. <code>FieldFrameInterval</code> is authored as "every N frames at 60 fps" and reinterpreted as seconds, accumulated with unscaled time (mirroring <code>SceneCaptureService</code>'s capture cadence), decoupling render cost from display refresh. The very first render is exempt from the cap so consumers never sample an empty RT.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md69"></a>
+<h2><a class="anchor" id="autotoc_md70"></a>
 Channel encoding (single RT)</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -149,7 +149,7 @@ Channel encoding (single RT)</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>A</b>   </td><td class="markdownTableBodyNone">Palette colour index \( (\mathit{index}+1)/16 \); 0 = use <code>_SceneLightColor</code>   </td><td class="markdownTableBodyNone"><code>0</code> exactly   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md70"></a>
+<h2><a class="anchor" id="autotoc_md71"></a>
 Current game sources</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -165,10 +165,10 @@ Current game sources</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>Specks</b>   </td><td class="markdownTableBodyNone">— (consumer only)   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Per-appearance <code>LightMode</code> + <code>LightInfluence</code>   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md71"></a>
+<h2><a class="anchor" id="autotoc_md72"></a>
 Relationship to the GI</h2>
 <p><code>ScreenSpaceLightService</code> (the screen-space GI, see <a class="el" href="arch_screen_space_light.html">Screen-Space Light (2D GI)</a>) is now a <b>field consumer</b>: its smear shader reads the local direction and magnitude per-fragment via <code>SceneLight.cginc</code>. A local light bends the bleed and shadows around it; field-off reproduces the old single-direction march. The composite couples intensity: bounce scales by absolute R, shadow scales by R relative to the owner's <code>Intensity</code> reference. See the updated GI diagram.</p>
-<h2><a class="anchor" id="autotoc_md72"></a>
+<h2><a class="anchor" id="autotoc_md73"></a>
 See also</h2>
 <ul>
 <li><a class="el" href="arch_screen_space_light.html">Screen-Space Light (2D GI)</a> — the GI composite that consumes this field</li>

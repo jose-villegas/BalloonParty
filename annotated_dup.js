@@ -356,6 +356,12 @@ var annotated_dup =
           [ "IDangerLevel", "interfaceBalloonParty_1_1Game_1_1Danger_1_1IDangerLevel.html", "interfaceBalloonParty_1_1Game_1_1Danger_1_1IDangerLevel" ],
           [ "SpaceDanger", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger" ]
         ] ],
+        [ "Flight", "namespaceBalloonParty_1_1Game_1_1Flight.html", [
+          [ "FlightStatsService", "classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html", "classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService" ],
+          [ "IFlightScope", "interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightScope.html", "interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightScope" ],
+          [ "IFlightStats", "interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStats.html", "interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStats" ],
+          [ "IFlightStatsWriter", "interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsWriter.html", "interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsWriter" ]
+        ] ],
         [ "Health", "namespaceBalloonParty_1_1Game_1_1Health.html", [
           [ "HeartTrailTracker", "classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html", "classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker" ],
           [ "ILossForecast", "interfaceBalloonParty_1_1Game_1_1Health_1_1ILossForecast.html", "interfaceBalloonParty_1_1Game_1_1Health_1_1ILossForecast" ],
@@ -407,6 +413,30 @@ var annotated_dup =
           [ "ScoreController", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController" ],
           [ "ScoreTrailService", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService" ],
           [ "TrailId", "structBalloonParty_1_1Game_1_1Score_1_1TrailId.html", "structBalloonParty_1_1Game_1_1Score_1_1TrailId" ]
+        ] ],
+        [ "Telemetry", "namespaceBalloonParty_1_1Game_1_1Telemetry.html", [
+          [ "AxisSlot", "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlot.html", "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlot" ],
+          [ "AxisSlotInfo", "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html", "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo" ],
+          [ "BalloonTypeCount", "structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html", "structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount" ],
+          [ "ColorCount", "structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html", "structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount" ],
+          [ "CompositeTelemetrySink", "classBalloonParty_1_1Game_1_1Telemetry_1_1CompositeTelemetrySink.html", "classBalloonParty_1_1Game_1_1Telemetry_1_1CompositeTelemetrySink" ],
+          [ "ILevelMetricsView", "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html", "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView" ],
+          [ "IReadOnlyMetricSet", "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1IReadOnlyMetricSet.html", "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1IReadOnlyMetricSet" ],
+          [ "ISealedMetrics", "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ISealedMetrics.html", "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ISealedMetrics" ],
+          [ "ITelemetrySink", "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ITelemetrySink.html", "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ITelemetrySink" ],
+          [ "ItemActivationCount", "structBalloonParty_1_1Game_1_1Telemetry_1_1ItemActivationCount.html", "structBalloonParty_1_1Game_1_1Telemetry_1_1ItemActivationCount" ],
+          [ "LevelMetricsSnapshot", "classBalloonParty_1_1Game_1_1Telemetry_1_1LevelMetricsSnapshot.html", "classBalloonParty_1_1Game_1_1Telemetry_1_1LevelMetricsSnapshot" ],
+          [ "MetricCatalog", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog.html", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog" ],
+          [ "MetricScope", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope" ],
+          [ "MetricScopeState", "structBalloonParty_1_1Game_1_1Telemetry_1_1MetricScopeState.html", "structBalloonParty_1_1Game_1_1Telemetry_1_1MetricScopeState" ],
+          [ "MetricSet", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricSet.html", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricSet" ],
+          [ "MetricsSnapshotBase", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricsSnapshotBase.html", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricsSnapshotBase" ],
+          [ "RunMetricsSnapshot", "classBalloonParty_1_1Game_1_1Telemetry_1_1RunMetricsSnapshot.html", "classBalloonParty_1_1Game_1_1Telemetry_1_1RunMetricsSnapshot" ],
+          [ "TelemetryEnvelope", "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html", "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope" ],
+          [ "TelemetryEnvelopeSerializer", "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html", "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer" ],
+          [ "TelemetrySinkBase", "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetrySinkBase.html", "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetrySinkBase" ],
+          [ "TelemetryStopwatch", "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryStopwatch.html", "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryStopwatch" ],
+          [ "TimerCatalog", "classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html", "classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog" ]
         ] ],
         [ "AppLifetimeScope", "classBalloonParty_1_1Game_1_1AppLifetimeScope.html", "classBalloonParty_1_1Game_1_1AppLifetimeScope" ],
         [ "GameLifetimeScope", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html", "classBalloonParty_1_1Game_1_1GameLifetimeScope" ],

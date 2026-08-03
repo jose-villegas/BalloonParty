@@ -137,7 +137,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Reusable editor-time preview system for <code>EffectView</code> subclasses. Lets designers play effect animations inside the Inspector (prefab edit mode or scene) without entering Play mode.</p>
-<h1><a class="anchor" id="autotoc_md122"></a>
+<h1><a class="anchor" id="autotoc_md123"></a>
 Architecture</h1>
 <p>The system follows a <b>player + module</b> composition pattern:</p>
 <div class="fragment"><div class="line">EffectViewPreviewPlayer          ← owns animation loop, color picker, config caches</div>
@@ -155,7 +155,7 @@ Architecture</h1>
 <li>Per-frame tick logic (moving blobs, updating line renderers)</li>
 <li>Cleanup (hiding objects, destroying temporaries)</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md123"></a>
+<h1><a class="anchor" id="autotoc_md124"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -175,7 +175,7 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>LaserPreviewModule</code>   </td><td class="markdownTableBodyNone">Module for <code>LaserView</code> — recolours the view's wired renderers with the picked tint and samples the effect's <code>AnimationClip</code> frame-by-frame via <code>SampleAnimation</code> (<code>Animator.Update</code> is unreliable outside Play mode), re-applying the tint after each sample   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md124"></a>
+<h1><a class="anchor" id="autotoc_md125"></a>
 Adding a new effect preview</h1>
 <ol type="1">
 <li>Create a class implementing <code>IEffectPreviewModule</code></li>
@@ -208,7 +208,7 @@ Adding a new effect preview</h1>
 <div class="line">        base.OnDisable();</div>
 <div class="line">    }</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md125"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md126"></a>
 Design notes</h1>
 <ul>
 <li><b>Single source of truth</b> — preview modules reuse runtime math wherever possible. <code>PaintSplashPreviewModule</code> calls <code>PaintSplashView.ComputeBlobFlight</code> and <code>ApplyBlobMaterial</code> for position/scale/MPB computation. <code>ChainLightningPreviewModule</code> calls <code>ChainLightningGeometry.BuildBoltBuffers</code>, <code>BuildGlowPath</code>, and uses <code>PathHelper.SampleAt</code> for per-tick glow interpolation along the smooth centroid path. <code>EditorGridHelper</code> delegates to <code>SlotGrid.IndexToWorldPosition(index, separation, offset)</code>. Only editor-specific behavior (particle simulation, prefab-stage instantiation, delta-time state machine vs async) lives in the modules</li>

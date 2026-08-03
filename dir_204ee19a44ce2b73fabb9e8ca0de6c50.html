@@ -138,7 +138,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Score-keeping only: per-color point tallies, streak multipliers, and the visual trail orbs that fly from popped balloons to the progress bars. <b>Level progression — per-color progress, the threshold, and the level-up trigger — lives in <code>Game/Level/</code> (<code>LevelController</code>/<code>ILevelProgress</code>), not here.</b> <code>ScoreController</code> writes progress into <code>ILevelProgress</code> but never decides a level-up.</p>
-<h1><a class="anchor" id="autotoc_md208"></a>
+<h1><a class="anchor" id="autotoc_md215"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -154,7 +154,7 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>Behaviours/</code>   </td><td class="markdownTableBodyNone">The choreography seam — see Trail Behaviour Seam   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md209"></a>
+<h1><a class="anchor" id="autotoc_md216"></a>
 Streak Multiplier</h1>
 <p><code>ColorStreakTracker</code> tracks the current color streak — consecutive pops of the same color:</p>
 <ul>
@@ -167,10 +167,10 @@ Streak Multiplier</h1>
 </ul>
 <p>The balloon's <code>ScoreValue</code> is multiplied by the current streak before publishing the group's <code>Points</code>. More trails spawn, filling the progress bar faster.</p>
 <p><code>GetStreak(string colorName)</code> on <code>ColorStreakTracker</code> exposes the current streak for a color so views can display a streak notice.</p>
-<h1><a class="anchor" id="autotoc_md210"></a>
+<h1><a class="anchor" id="autotoc_md217"></a>
 Night Multiplier</h1>
 <p>While it's night (<code>ITimeOfDayNight.IsNight</code>, see <code><a class="el" href="Shared_2SceneLight_2README_8md.html">Shared/SceneLight/README.md</a></code>), every pop is worth double — a flat ×2 stacked on top of the streak multiplier in <code>PublishAttributionGroup</code>, before <code>ClaimProgress</code> caps the total at the level threshold. A ×3 streak during the night window awards ×6. Night is a global time-of-day state, not tied to any one color or balloon, so it applies uniformly to whatever a pop attributes. <code>ColorProgressBar</code> shows a "2x" badge while it's active (see <code><a class="el" href="UI_2Score_2README_8md.html">UI/Score/README.md</a></code>).</p>
-<h1><a class="anchor" id="autotoc_md211"></a>
+<h1><a class="anchor" id="autotoc_md218"></a>
 Trail Identity</h1>
 <p>Each trail is identified by a <code>TrailId(Color, Score)</code>:</p>
 <ul>
@@ -178,13 +178,13 @@ Trail Identity</h1>
 <li><b>Score</b> — the level progress value this trail represents (1-based within the level). Every pop advances the color's <em>projected</em> progress via <code>ILevelProgress.ClaimProgress</code>, so each trail from a multi-point balloon gets a unique sequential score.</li>
 </ul>
 <p>No level component is needed: the level-up is gated by the transition, so a trail is only ever in flight during the single level it belongs to — <code>(Color, Score)</code> never collides across levels.</p>
-<h1><a class="anchor" id="autotoc_md212"></a>
+<h1><a class="anchor" id="autotoc_md219"></a>
 Progress lives in <code>Game/Level/</code></h1>
 <p><code>ScoreController</code> does not track level progress. It computes granted points ( \(\text{attribution} \times \text{streak}\), capped) and calls <code>ILevelProgress.ClaimProgress</code>; <code>LevelController</code> owns the projected-vs-confirmed progress, the threshold cap, the post-level-up straggler suppression (via <code>LevelUpPhase</code>, not a latch), <code>WillLevelUp</code>/<code>GetProgress</code>/<code>GetRequiredPoints</code>, and the <code>ScoreLevelUpMessage</code> trigger. See <code><a class="el" href="Game_2Level_2README_8md.html">Game/Level/README.md</a></code> for the two-phase commit and how a trail arrival confirms progress.</p>
-<h1><a class="anchor" id="autotoc_md213"></a>
+<h1><a class="anchor" id="autotoc_md220"></a>
 Trail Behaviour Seam</h1>
 <p><code>Behaviours/</code> decouples <em>what a score group is worth</em> from <em>how it flies</em>. <code>ScoreTrailService</code> no longer spawns trails itself: it resolves each <code>ScorePointsGroupMessage</code> to an <code>IScoreTrailBehaviour</code> through <code>ScoreTrailBehaviourResolver</code> (highest-<code>MinPoints</code> entry the group's total clears wins, table authored in <code>IScoreTrailBehaviourConfiguration</code>), packs the shared infrastructure into a <code>ScoreTrailContext</code> (palette colour, endpoint, spawner, <code>Flights</code> registry, a fresh (not pooled) <code>IScoreTrailReporter</code>, config, a group-scoped cancellation token), and calls <code>Begin</code>. The handler owns everything from spawn to arrival: it registers and unregisters its own flights, and reports arrivals through the reporter with true cumulative scores that sum to the group total. Each handler also nominates its <b>principal trail</b> via <code>GetPrincipalId</code> — the one the level-up cinematic tracks — so the cinematic derives the tipping id from the same code (<code>resolver.PrincipalIdFor(msg)</code>) that decides what registers, and the two can never disagree. <code>DefaultScore</code> reproduces the pre-seam pipeline byte-for-byte (one trail per point, scatter fan, <code>0.02 s</code> stagger, one point reported per landing, first trail = principal). <code>BigScore</code> is the confluence handler for any group past that floor (see below).</p>
-<h2><a class="anchor" id="autotoc_md214"></a>
+<h2><a class="anchor" id="autotoc_md221"></a>
 <code>BigScore</code> + <code>ShapeFormationTicker</code> + <code>ShapeCatalog</code></h2>
 <p>When a pop scores 2+ points, the system visualises it as spinning 3D wireframe shapes that fly toward the score bar — rather than spawning hundreds of individual "+1" trails. Each shape is drawn by <b>pens</b>: small glowing dots that orbit along the shape's edges, leaving fading ribbon trails behind them (like sparklers traced in the dark). The path a pen follows is a <b>walk</b> — a closed loop of edges it repeats forever. When a shape reaches the bar, it <b>arrives</b> and banks its points.</p>
 <p>The score <b>decomposes</b> into shapes like making change with coins: 47 points might become a 30-shape + a 12-shape + a 5-shape, all launched simultaneously from the pop position. The <code>DefaultScore</code> handler (simple single-trail fly-in) only fires for 1-point groups.</p>
@@ -199,7 +199,7 @@ Trail Behaviour Seam</h1>
 </ul>
 <p>The whole figure is <b>rigid in formation space</b>: each tick every live pen ribbon is re-framed through <code>FlyingTrail.TransformRibbon(oldCenter, newCenter, delta, scaleRatio)</code> ( \(p&#39; = \text{newCenter} + \text{delta} \cdot (p - \text{oldCenter}) \cdot \text{scaleRatio}\); pure translation at scale 1 is the identity-delta fast path). The ribbon <b>is</b> scale-corrected — old ink shrinks with the shape as it tapers toward the bar, which matters most on the long-ribbon shapes (few pens sharing a long walk) where unscaled old ink would outlive the taper and hold the big silhouette.</p>
 <p><b>Transport bridge</b> — the group's anchor <code>TrailFlight</code> handle is the pause/snap/slow-mo interface, shared by every formation in the group (so a cinematic pause/completion fans out to the whole constellation), polled per tick: <code>Paused</code> freezes the formation and inflates its ribbon time so the drawn figure survives the freeze; <code>Idle</code> (the pan-in or a <code>CompleteAll</code> drove the principal home) <b>snaps</b> — report the value now at the anchor's position, fade the live pens out (unscaled, freeze-safe), release; <code>Speed</code> scales the formation clock (slow-mo). The flight stays registered (InFlight) through the group's whole life and is unregistered only once the last formation finishes, so a principal that lands first never falsely snaps the others. A group-CTS cancellation (run reset) releases everything <b>without</b> reporting. A <code>Reported</code> guard (plus the reporter's own backstop) keeps a snap and a normal arrival from double-firing.</p>
-<h1><a class="anchor" id="autotoc_md215"></a>
+<h1><a class="anchor" id="autotoc_md222"></a>
 Spawn &amp; Cinematic Interception</h1>
 <p>The <code>DefaultScore</code> handler spawns one trail per point in each <code>ScorePointsGroupMessage</code>, unconditionally — nothing gates spawning during cinematics. A single per-group task walks the points in order for stagger delay: the first point spawns immediately, each subsequent point after one more <code>ScorePointsScatterDelay</code>. Each flight registers in the <code>TrailFlightRegistry&lt;TrailId&gt;</code> (exposed as <code>Flights</code>) on spawn and unregisters on arrival.</p>
 <p><code>RegisterTarget</code> (called by each <code>ColorProgressBar</code> in <code>Start()</code>) also prewarms that color's <code>ScoreTrail_{colorName}</code> pool via <code>TrailSpawner.PrewarmAsync</code>, to <code>IScoreTrailConfig.ScoreTrailPrewarmPerColor</code> (default 64) — one <code>Instantiate</code> per frame so registering a color at level setup never spikes into a hitch. A level restart re-registering the same color is a no-op past the first call, so the pool tops up once instead of growing unboundedly.</p>
@@ -209,7 +209,7 @@ Spawn &amp; Cinematic Interception</h1>
 <li>It then pauses that single flight (<code>FlyingTrail.DisableMoveTween()</code> + <code>TrailFlight.Pause()</code>) and puppets its position/scale along the pan-in curve while the camera follows. All other in-flight trails keep flying at normal speed so their progress-bar arrivals confirm naturally.</li>
 <li>When the tipping trail reaches its bar (or its matching <code>ScoreTrailArrivedMessage</code> lands first) the pan-in ends — but the survivors are <b>not</b> completed there. They stay airborne (confirming progress normally) until <code>LevelUpPhase</code> reaches <code>Pending</code> (the popup is up), at which point <code>Flights.PauseAll()</code> freezes whatever is still in flight behind the popup. Those frozen trails are only resolved later, as outgoing-level content: <code>LevelTransitionController</code> calls <code>ScoreTrailService.HoldOutgoing</code>, which calls <code>Flights.CompleteAll()</code> — every survivor reports its arrival (banking its points) and, for shape formations, snap-fades out. Only the cinematic's own abort path calls <code>CompleteAll</code> directly, to resolve everything immediately when the ceremony is cut short.</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md216"></a>
+<h1><a class="anchor" id="autotoc_md223"></a>
 Interactions</h1>
 <ul>
 <li><b><code>ScorePointsGroupMessage</code></b> — published by <code>ScoreController</code> on pop (one per resolved color, carries the group's total <code>Points</code>, <code>LastScore</code>, streak <code>Multiplier</code>, and the shot's <code>HitDirection</code> — BigScore rolls its shapes about it), consumed by <code>ScoreTrailService</code> and <code>LevelUpCinematic</code></li>

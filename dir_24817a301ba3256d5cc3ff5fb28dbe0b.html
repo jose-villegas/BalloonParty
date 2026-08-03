@@ -130,7 +130,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Camera and screen-adaptation logic.</p>
-<h1><a class="anchor" id="autotoc_md111"></a>
+<h1><a class="anchor" id="autotoc_md112"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -150,11 +150,11 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ScreenSpaceLightService</code>   </td><td class="markdownTableBodyNone">MonoBehaviour on the persistent camera, next to <code>SceneCaptureService</code> (architecture: <a class="el" href="arch_screen_space_light.html">Screen-Space Light (2D GI)</a>). Fakes a 2D global + multi-directional indirect light via two low-res blits: Pass 0 is an RSM-style 4-direction VPL gather (shadow = single toward-light march with mip penumbra; bounce = 4 cone marches at 90° spacing around the field's local direction, <code>_SecondaryWeight</code>-modulated). Pass 1 = 3×3 box soften. The smear/work targets run at <code>SmearDownscale</code> below capture resolution (default half — the light buffer is low-frequency, so pass 1's soften doubles as the upsample filter). Composites over the frame as a camera-fitted multiplicative quad. The blit chain only re-runs when <code>SceneCaptureService.ContentVersion</code> has advanced since the last rebuild (or the targets were just resized) — capture-cadence-bound rather than display-refresh-bound, since between refreshes the chain is a pure function of the same capture. All GI tuning lives on <code>SceneLightFieldSettings</code> SO (injected as <code>IScreenSpaceLightSettings</code>); the ambient magnitude reference reads <code>ISceneLightRuntime</code>. DI-registered via <code>RegisterComponentInHierarchy</code>   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md112"></a>
+<h1><a class="anchor" id="autotoc_md113"></a>
 How it works</h1>
 <p><code>GameDisplayConfiguration</code> (in <code>Configuration/</code>) holds a reference world width and height. <code>GetOrthogonalSize()</code> computes the orthographic size that fits both against the current screen aspect (<code>max</code> of fit-width and fit-height), so the play field is fully visible on every device without letterboxing or clipping. Its custom editor previews the resulting size for common device ratios, in the inspector and as a Scene-view overlay.</p>
 <p>There is a single persistent camera for the whole session (the <code>Main Camera</code> nested in the app-root prefab, <code>DontDestroyOnLoad</code>) — Launch and Game never had, and now never get, their own camera. The whole camera pipeline above (<code>OrthogonalSizeCameraController</code>, <code>SceneCaptureService</code>, <code>ScreenSpaceLightService</code>, <code>CameraBackgroundTint</code>, <code>CinematicCameraView</code>, <code>CameraShakeView</code>, <code>NavigationCameraReveal</code>) is registered via <code>RegisterComponentInHierarchy&lt;T&gt;()</code> in <code>AppLifetimeScope</code> (<code>Game/</code>) against that one prefab; <code>GameLifetimeScope</code> and <code>LaunchLifetimeScope</code> resolve them from the parent rather than owning their own copies.</p>
-<h1><a class="anchor" id="autotoc_md113"></a>
+<h1><a class="anchor" id="autotoc_md114"></a>
 URP RenderGraph constraints</h1>
 <p>The project runs URP's 2D Renderer. Two constraints apply to anyone touching <code>SceneCaptureService</code> or <code>ScreenSpaceLightService</code>:</p>
 <ul>

@@ -28,7 +28,8 @@ var searchData=
   ['runconfig_25',['RunConfig',['../classBalloonParty_1_1Configuration_1_1RunConfig.html',1,'BalloonParty::Configuration']]],
   ['runcontroller_26',['RunController',['../classBalloonParty_1_1Game_1_1Run_1_1RunController.html',1,'BalloonParty::Game::Run']]],
   ['runmeta_27',['RunMeta',['../classBalloonParty_1_1Game_1_1Run_1_1RunMeta.html',1,'BalloonParty::Game::Run']]],
-  ['runresetmessage_28',['RunResetMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html',1,'BalloonParty::Shared::Messages']]],
-  ['runresetorder_29',['RunResetOrder',['../classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html',1,'BalloonParty::Game::Run']]],
-  ['runrestartcompletedmessage_30',['RunRestartCompletedMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1RunRestartCompletedMessage.html',1,'BalloonParty::Shared::Messages']]]
+  ['runmetricssnapshot_28',['RunMetricsSnapshot',['../classBalloonParty_1_1Game_1_1Telemetry_1_1RunMetricsSnapshot.html',1,'BalloonParty::Game::Telemetry']]],
+  ['runresetmessage_29',['RunResetMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html',1,'BalloonParty::Shared::Messages']]],
+  ['runresetorder_30',['RunResetOrder',['../classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html',1,'BalloonParty::Game::Run']]],
+  ['runrestartcompletedmessage_31',['RunRestartCompletedMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1RunRestartCompletedMessage.html',1,'BalloonParty::Shared::Messages']]]
 ];

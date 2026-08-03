@@ -11,7 +11,7 @@ var searchData=
   ['effectview_8',['EffectView',['../classBalloonParty_1_1Shared_1_1Pool_1_1EffectView.html',1,'BalloonParty::Shared::Pool']]],
   ['effectviewpreviewplayer_9',['EffectViewPreviewPlayer',['../classBalloonParty_1_1Editor_1_1EffectPreview_1_1EffectViewPreviewPlayer.html',1,'BalloonParty::Editor::EffectPreview']]],
   ['endrunrequestedmessage_10',['EndRunRequestedMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1EndRunRequestedMessage.html',1,'BalloonParty::Shared::Messages']]],
-  ['entry_11',['Entry',['../classBalloonParty_1_1Editor_1_1TextureAuditWindow_1_1Entry.html',1,'BalloonParty.Editor.TextureAuditWindow.Entry'],['../structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver_1_1Entry.html',1,'BalloonParty.Game.Score.Behaviours.ScoreTrailBehaviourResolver.Entry']]],
+  ['entry_11',['Entry',['../classBalloonParty_1_1Editor_1_1TextureAuditWindow_1_1Entry.html',1,'BalloonParty.Editor.TextureAuditWindow.Entry'],['../structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver_1_1Entry.html',1,'BalloonParty.Game.Score.Behaviours.ScoreTrailBehaviourResolver.Entry'],['../structBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog_1_1Entry.html',1,'BalloonParty.Game.Telemetry.MetricCatalog.Entry'],['../structBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog_1_1Entry.html',1,'BalloonParty.Game.Telemetry.TimerCatalog.Entry']]],
   ['enumindexedattribute_12',['EnumIndexedAttribute',['../classBalloonParty_1_1Shared_1_1EnumIndexedAttribute.html',1,'BalloonParty::Shared']]],
   ['enumindexeddrawer_13',['EnumIndexedDrawer',['../classBalloonParty_1_1Editor_1_1EnumIndexedDrawer.html',1,'BalloonParty::Editor']]]
 ];

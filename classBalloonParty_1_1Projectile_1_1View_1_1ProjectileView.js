@@ -58,6 +58,7 @@ var classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView =
     [ "_doomedSubscription", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a2aabd3e607a8f31abee03e25f0a2916d", null ],
     [ "_firedPublisher", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#af477efaae2425ea2e1f752d19cad794b", null ],
     [ "_flightConfig", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a77df826253f8810e46a163ad4b568b49", null ],
+    [ "_flightStats", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a210d116edaa0df3adfc3b5371c870bd3", null ],
     [ "_glowColor", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#ae1ea1ccb0a0175085fae455a9aae177f", null ],
     [ "_glowRenderers", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a8363e1e5ab4fe2b34db43fac0f66c0f8", null ],
     [ "_glowTween", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#ab5b4721fff0376e8afe7925dee636ba9", null ],

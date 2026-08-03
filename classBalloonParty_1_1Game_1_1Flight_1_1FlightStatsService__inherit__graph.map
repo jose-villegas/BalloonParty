@@ -1,0 +1,13 @@
+<map id="BalloonParty.Game.Flight.FlightStatsService" name="BalloonParty.Game.Flight.FlightStatsService">
+<area shape="rect" id="Node000001" title="Owns the per&#45;shot boundary and the counts scoped to it." alt="" coords="244,105,435,145"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="58,5,143,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,27,197,40,259,70,310,102,307,107,256,75,195,44,156,32"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="51,55,150,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="164,80,256,102,255,107,163,85"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightScope.html" title="The per&#45;shot boundary, owned in one place instead of re&#45;derived by every consumer." alt="" coords="5,105,196,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="210,122,244,122,244,127,210,127"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStats.html" title="What happened during the flight in progress." alt="" coords="5,169,196,209"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="188,162,264,142,265,147,190,168"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsWriter.html" title="The write half of IFlightStats, segregated so no reader can mutate what it reads." alt="" coords="5,233,196,273"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="179,225,195,218,259,180,311,143,314,147,262,185,197,223,182,230"/>
+</map>

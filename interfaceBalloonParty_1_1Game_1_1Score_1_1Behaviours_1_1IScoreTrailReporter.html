@@ -138,7 +138,7 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Service-owned sink a handler reports group arrivals through. </p>
-<p>The implementation publishes one <code>ScoreTrailArrivedMessage(color, score, points, at)</code> per call. Flight registration is NOT the reporter's concern — the handler registers and unregisters its own flights so the ownership of the <a class="el" href="structBalloonParty_1_1Game_1_1Score_1_1TrailId.html" title="Uniquely identifies a score trail by color and score value; no level component since a trail is only ...">TrailId</a> bookkeeping stays in one place (parity with the pre-seam inline code). </p>
+<p>The implementation publishes one <code>ScoreTrailArrivedMessage(color, score, points, at)</code> per call. <a class="el" href="namespaceBalloonParty_1_1Game_1_1Flight.html">Flight</a> registration is NOT the reporter's concern — the handler registers and unregisters its own flights so the ownership of the <a class="el" href="structBalloonParty_1_1Game_1_1Score_1_1TrailId.html" title="Uniquely identifies a score trail by color and score value; no level component since a trail is only ...">TrailId</a> bookkeeping stays in one place (parity with the pre-seam inline code). </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ad95bf02acb91bcd2e1a0b19bcd7ebc3b" name="ad95bf02acb91bcd2e1a0b19bcd7ebc3b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad95bf02acb91bcd2e1a0b19bcd7ebc3b">&#9670;&#160;</a></span>ReportArrival()</h2>

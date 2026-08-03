@@ -110,19 +110,19 @@ $(function(){initNavTree('arch_static_state.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">Static State — Navigation &amp; Cinematic</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md100"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md101"></a>
 Static State — Navigation &amp; Cinematic</h1>
 <div class="image">
 <object type="image/svg+xml" data="static_state.svg" style="pointer-events: none;"></object>
 <div class="caption">
 Static State — Navigation &amp; Cinematic</div></div>
-<h2><a class="anchor" id="autotoc_md101"></a>
+<h2><a class="anchor" id="autotoc_md102"></a>
 What this diagram shows</h2>
 <p>Two static singleton classes that carry app-wide state without requiring DI wiring across scene boundaries: <code>Navigation</code> and <code>Cinematic</code>.</p>
 <p><b><code>Navigation</code></b> holds a <code>ReactiveProperty&lt;NavigationState&gt;</code> and exposes <code>TransitionTo(state)</code>. Any system can observe or transition the current state. States: <code>Launch</code> → <code>Game</code> → <code>LevelUp</code> (→ <code>Game</code> on dismiss), and <code>Game</code> → <code>GameOver</code> (<code>RunController.EndRun</code>) → <code>Game</code> on restart (<code>RunController.RestartRun</code>).</p>
 <p><b><code>Cinematic</code></b> holds a <code>ReactiveProperty&lt;CinematicState&gt;</code>. <code>Begin(state)</code> / <code>End()</code> set the state; services that need to pause/resume during a cinematic query <code>Cinematic.IsPlaying</code> or subscribe to <code>Cinematic.Current</code>.</p>
 <p><b>Why static and not injected?</b> Both classes carry state that must survive scene transitions and be accessible from both the Launcher scene and the Game scene simultaneously. A DI-registered singleton lives inside a <code>LifetimeScope</code> which is tied to a scene — it cannot be shared across additive scene boundaries without complex parent-scope wiring. Static state sidesteps this cleanly; the trade-off (harder to mock in tests) is acceptable for these two narrow, well-defined responsibilities.</p>
-<h2><a class="anchor" id="autotoc_md102"></a>
+<h2><a class="anchor" id="autotoc_md103"></a>
 Guidance</h2>
 <p><b>Observing navigation state:</b> </p><div class="fragment"><div class="line">Navigation.Current</div>
 <div class="line">    .Where(s =&gt; s == NavigationState.Game)</div>

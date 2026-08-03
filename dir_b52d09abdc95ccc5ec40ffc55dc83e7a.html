@@ -129,7 +129,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Bake-time drop shadows for sprite and UI Image prefabs. The runtime <code>SpriteShadow</code>/<code>SpriteBlur</code> shaders re-blur a static image every frame (up to 10 texture taps per pixel per layer); baking the shadow once replaces that with a single plain sprite — and since it's offline, the blur can be as soft as it wants.</p>
-<h1><a class="anchor" id="autotoc_md151"></a>
+<h1><a class="anchor" id="autotoc_md152"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -139,7 +139,7 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ImageShadowBakerEditor</code>   </td><td class="markdownTableBodyNone">Custom inspector for <code>ImageShadowBaker</code> (<code>Shared/Rendering/</code>) — same workflow adapted for UI <code>Image</code> hierarchies   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md152"></a>
+<h1><a class="anchor" id="autotoc_md153"></a>
 Workflow</h1>
 <ol type="1">
 <li>Drop a <code>SpriteShadowBaker</code> component anywhere on a prefab — its transform is the silhouette root; every enabled child <code>SpriteRenderer</code> contributes.</li>
@@ -154,7 +154,7 @@ Workflow</h1>
 </li>
 </ol>
 <p>All edits go through <code>LoadPrefabContents</code>/<code>SaveAsPrefabAsset</code> — the prefab asset is modified directly (no undo; re-bake is cheap, and materials can be reassigned by hand to revert). Re-baking reuses the same shadow child and overwrites the same PNG.</p>
-<h1><a class="anchor" id="autotoc_md153"></a>
+<h1><a class="anchor" id="autotoc_md154"></a>
 Notes</h1>
 <ul>
 <li>The shadow color is baked into the texture (matching how the runtime shader tinted the shadow); tint the <code>BakedShadow</code> renderer's color for per-instance variation — e.g. give it a <code>ColorableRenderer</code> if it should follow the balloon color like the shader shadows did.</li>
@@ -164,7 +164,7 @@ Notes</h1>
 <li>Still excluded outright: anything <code>PaintSplashView</code> drives (<code>_SpriteScale</code> at runtime).</li>
 <li><b>Rotating prefabs (e.g. Unbreakable's <code>Shell</code>):</b> parent the <code>BakedShadow</code> under a non-rotating ancestor (<code>Body</code>), never under the rotating node — a child shadow would spin its offset and break light directionality. The frozen-silhouette artifact this leaves is erased by blur: raise the radius until the shape reads rotationally symmetric. The offset is never baked into the texture (it's the child's transform position), so direction and shape are independent by construction. Note the Unbreakable had no runtime shadow at all — its shaders never implemented one — so the bake is an addition there, not a swap.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md154"></a>
+<h1><a class="anchor" id="autotoc_md155"></a>
 ImageShadowBaker</h1>
 <p>Same concept for UI <code>Image</code> hierarchies. Drop <code>ImageShadowBaker</code> on a prefab's RectTransform and press <b>Bake</b>.</p>
 <ul>

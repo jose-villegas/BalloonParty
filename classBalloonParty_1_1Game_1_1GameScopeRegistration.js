@@ -8,6 +8,7 @@ var classBalloonParty_1_1Game_1_1GameScopeRegistration =
     [ "RegisterItems", "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a7dc104d36e38add62120e58c52849b08", null ],
     [ "RegisterMessages", "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a685d92880a6a1c1699651eca2a33c697", null ],
     [ "RegisterPresentation", "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a143e0fa66785e50bbb6ddf5071af25a3", null ],
+    [ "RegisterTelemetrySinks", "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a96ea7d3372e36728938f4ad85c6376e5", null ],
     [ "CoalesceWindowSeconds", "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#ad6d1de178ce3bbc0052c8d6f51613e4e", null ],
     [ "MaxBurstPerWindow", "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#ae90de8d6a000ad6b85bb21b5c9c0d492", null ]
 ];

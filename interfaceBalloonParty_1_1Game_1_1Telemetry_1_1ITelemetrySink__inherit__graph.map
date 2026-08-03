@@ -1,0 +1,9 @@
+<map id="BalloonParty.Game.Telemetry.ITelemetrySink" name="BalloonParty.Game.Telemetry.ITelemetrySink">
+<area shape="rect" id="Node000001" title=" " alt="" coords="152,37,368,77"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Game_1_1Telemetry_1_1CompositeTelemetrySink.html" title=" " alt="" coords="416,5,632,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="381,40,416,36,416,41,382,45"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetrySinkBase.html" title=" " alt="" coords="416,69,632,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="382,69,416,74,416,79,381,75"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,45,104,70"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,55,152,55,152,60,117,60"/>
+</map>

@@ -1,0 +1,35 @@
+var MetricId_8cs =
+[
+    [ "BalloonParty.Game.Telemetry.MetricId", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eb", [
+      [ "BalloonParty.Game.Telemetry.MetricId.ShotsFired", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba839308aa1482ca4ed4328809fed2ae8e", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.FlightsStarted", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebabc1993067f0854edbb08f9bb57b81883", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.Pops", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebab5190af1bcc87e359657b13ad793b0e4", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.DirectHitPops", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba15f1092f737cd2786534d58ba057ae36", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.Deflects", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaafc0eeb50b92e2e989a1d14e43c21eae", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.Absorbs", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba0a839f40bcb0b0ca3436622a1daf7038", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.WallBounces", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba5edc749570c0b44cf6e6b8d01b241c7f", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.PierceDischarges", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba5033d151d5e3a328bfdcf707d07ee9fd", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.PierceToughsCleared", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba2ace9ff96187780aa8b3e2a850080088", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.RainbowPierceDischarges", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba57ff5c7718e39229990f97327b4ec5da", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.SpeedTapsMinted", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba747efc07e00c79414f876f3509a3d5d1", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.MaxWallBouncesInFlight", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebac3a2b3ba13734eedd5feae650037bc2e", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.MaxSpeedTapsInFlight", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba93cf8f3684028469c46fd52d3fab8219", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.HoldSpeedUpFlights", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba25e2f12438c333021f484e52470477a8", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.PointsBanked", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebadb939a84eed3787caeceafca957811e6", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.PointsProjected", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba59ac3dea6774f993fb65accfd60ef965", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.MaxMultiplier", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebae08bd89404a997e8f92985b815755035", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.MaxStreak", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba41c7a6874f5cc24e023529f222a47f2b", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.StreakBreaks", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba177cc6188079c2e974bf43abfe6e9121", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.HeartsLost", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaadeaf9c0747cdb74f0454ab8b04f7d4e", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.MaxHeartsLostInWave", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaf8fed9f975697e26feccf5fbda9125f2", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.BlockedSlots", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba4908d9502a1fcbb3ead6108b5f53bdb0", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.Strikethroughs", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebab39244a268bb6b4d8939fef525dd2cd5", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.ShieldsGained", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba0aa3310bae3357148fd0c26ee097c947", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.ShieldsSpent", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba7e750ef9b33a4918fe9cac04d2e496ed", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.ItemsActivated", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba194da3d12f0bb49a0d58c0121d5330c5", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.MaxDangerLevel", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaa5d6d8249f4c72bed97328b7a2b904d8", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.BoardCleared", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebab65bda0bf7248cc77c87f2bb0119074e", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.LevelsCompleted", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebad0a549eeaa08ef5c939c6bbbd75ed111", null ],
+      [ "BalloonParty.Game.Telemetry.MetricId.RetriesUsed", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba9ef01b10a4b468f5aff8fceddf9a25dc", null ]
+    ] ]
+];

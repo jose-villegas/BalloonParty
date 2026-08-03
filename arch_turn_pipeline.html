@@ -110,20 +110,20 @@ $(function(){initNavTree('arch_turn_pipeline.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">Turn Pipeline</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md106"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md107"></a>
 Turn Pipeline</h1>
 <div class="image">
 <object type="image/svg+xml" data="turn_pipeline.svg" style="pointer-events: none;"></object>
 <div class="caption">
 Turn Pipeline — Hit → Balance → Spawn → Post-Balance</div></div>
-<h2><a class="anchor" id="autotoc_md107"></a>
+<h2><a class="anchor" id="autotoc_md108"></a>
 What this diagram shows</h2>
 <p>The four sequential phases that make up one game turn — from the moment the projectile contacts a balloon to the moment the grid is settled and ready for the next shot.</p>
 <p><b>Phase 1 — Hit</b> The projectile flies freely, bouncing off walls. On each balloon contact <code>ProjectileView</code> hands the collision to the plain-C# <code>ProjectileHitResolver</code>, which calls <code>EvaluateHit</code> (state-mutating), embeds the outcome in <code>ActorHitMessage</code>, and routes it through <code>IHitDispatcher</code> (<code>Game/HitPipeline</code>). The pipeline runs the order-dependent stages synchronously and explicitly — <code>ScoreController</code> records streak/score first, then the owning <code>BalloonController</code> (resolved via <code>BalloonControllerRegistry</code>) pops/deflects — and only then broadcasts the message for order-independent observers (<code>NudgeService</code>, <code>ItemActivator</code>, <code>GridActorHitController</code>, <code>BalloonSpawner</code>, <code>SpeckField</code>, VFX). A direct (<code>DamageFlags.DirectHit</code>) pop also gives <code>BalloonSpawner</code> a chance to roll an extra "pop-spawn" balloon into the board, independent of the turn's own spawn wave. The board itself keeps settling during flight too — see "In-flight rebalancing" below.</p>
 <p><b>Phase 2 — Balance (pre-spawn)</b> When the projectile dies it publishes <code>ProjectileDestroyedMessage</code>. <code>BalloonSpawner</code> receives it and, once past the level's <code>FirstSpawnTurn</code> grace period (a few turns with no spawns at the start of each level), kicks off its spawn sequence — which opens with a <code>Balance(relocateRoamers: true)</code> pass consolidating existing balloons upward before any new lines arrive. Transit slots for in-progress balance animations are reserved in <code>BalancePathHolder</code>.</p>
 <p><b>Phase 3 — Spawn</b> New balloon lines are placed with a stagger delay between each. Spawn animations use <code>ComputePath</code> waypoints; the <code>BalancePathHolder</code> is consulted to detect conflicts with still-animating balance moves from Phase 2.</p>
 <p><b>Phase 4 — Post-spawn Balance</b> After all lines are spawned, <code>BalloonSpawner</code> publishes <code>BalanceBalloonsMessage</code>. <code>BalloonBalancer</code> runs again on the next frame to settle any gaps created by the fresh spawn (e.g. a balloon placed in a column that needed support from below).</p>
-<h2><a class="anchor" id="autotoc_md108"></a>
+<h2><a class="anchor" id="autotoc_md109"></a>
 Guidance</h2>
 <p><b>Where to add behavior triggered by a balloon pop:</b> Subscribe to <code>ActorHitMessage</code> filtered by <code>Outcome == Pop</code>. Your subscriber runs in Phase 1 — synchronously, before the projectile dies, and <em>after</em> the pipeline's ordered stages (score recording and the owning balloon's reaction) have completed. If your behavior must run <em>before</em> the pop or interleave with scoring, it belongs in <code>HitPipeline</code> as an explicit stage, not on the bus. Never publish <code>ActorHitMessage</code> directly — route hits through <code>IHitDispatcher</code>.</p>
 <p><b>Where to add behavior triggered by turn end (projectile death):</b> Subscribe to <code>ProjectileDestroyedMessage</code>. This runs between Phase 1 and Phase 2.</p>

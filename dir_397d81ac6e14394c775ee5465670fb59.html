@@ -125,7 +125,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Editor half of <code>SpriteLayerCombiner</code> (<code>Shared/Rendering/</code>): flattens a prefab's rigid sprite layers into one baked sprite to cut per-balloon draws and overdraw. Scoped to the colored normal balloons.</p>
-<h1><a class="anchor" id="autotoc_md162"></a>
+<h1><a class="anchor" id="autotoc_md163"></a>
 Workflow</h1>
 <ol type="1">
 <li>Open the prefab, add <code>SpriteLayerCombiner</code> on the node that will host the combined renderer (the baked sprite's pivot lands on that transform).</li>
@@ -136,7 +136,7 @@ Workflow</h1>
 </li>
 <li>Bake → <code>Assets/Sprites/Baked/Combined/&lt;prefab path&gt;/&lt;Prefab&gt;_&lt;suffix&gt;.png</code>, pivot pre-positioned. Wiring is manual: assign the sprite, disable/remove the source layers, update <code>BalloonView._spriteLayerRenderers</code> / <code>_colorableRenderers</code>.</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md163"></a>
+<h1><a class="anchor" id="autotoc_md164"></a>
 Constraints</h1>
 <ul>
 <li>Layers must be rigid relative to each other — anything independently animated (Tough's <code>ShinePivot</code>, item icons, shield overlays) stays live. The base balloon's <code>StableIdle</code> only animates the shared "Ballon" child, so its five layers qualify.</li>
