@@ -32,6 +32,7 @@ number is visible on screen.
 | G2 | Metrics export to an external analytics service | The sink is a real seam: uniform record envelope, batching, consent gate, schema version, offline queue. |
 | G3 | Answer balance/pacing questions from real play data | Per-level and per-run records, flushed at boundaries, filterable by cheat/retry provenance. |
 | G4 | Adding a metric is cheap | A new counter costs two files and one line, not six files and a test suite. |
+| G5 | The counting engine leaves this repo eventually | It stays agnostic of BalloonParty types and logistics — the game feeds it a catalog and axis descriptors and gets structured output back. See *Separability*. |
 
 ---
 
@@ -989,6 +990,75 @@ Evaluated at flush time. The run flag is sticky: once any level is tagged, the r
 tagged. Records are never dropped — tagged for filtering.
 
 ---
+
+## Separability — this becomes an external library
+
+**Target: the counting engine ships as a game-agnostic package.** BalloonParty feeds it a
+description of what to measure and how to name the output; the package knows nothing about
+balloons, projectiles, levels or runs. Nothing below is scheduled work — it is the seam the
+remaining waves must not thicken.
+
+Where the coupling stands today, measured rather than assumed: **19 of 29 files in
+`Game/Telemetry/` are pure BCL**, including the whole storage and fold engine (`MetricSet`,
+`MetricScope`, `TelemetryStopwatch`, both snapshots, `TelemetryEnvelope`, every enum). No
+file references a balloon, a projectile, a level or a gameplay message — the vocabulary is a
+flat `MetricId`, so `pops` is a name, not a type.
+
+### What the library owns
+
+Storage, scopes, folding, the catalog *mechanism*, snapshots, the envelope, the serializer,
+and the sink seam with its never-throw guard.
+
+### What the game supplies
+
+| Injected | Currently | For a package |
+|---|---|---|
+| The catalog rows | `MetricCatalog` / `TimerCatalog`, hardcoded | Consumer-owned; the library takes them at construction |
+| Axis definitions | `MetricAxis` with three hardcoded members, sized from `BalloonType`/`ItemType` | An axis descriptor: wire name, bucket count, `bucketIndex → name` |
+| Colour names | `IGamePalette.ProgressColorNames` | Narrows to `IReadOnlyList<string>` at the constructor |
+| Logging | `Log.Warn` | An `ILogSink`, no-op by default |
+| The file sink | `JsonLinesTelemetrySink` (the only Unity-touching file) | Stays with the game; the library ships the interface |
+
+### The one real design change
+
+**Axes are the only structural coupling**, and it is roughly fifteen lines. `MetricAxis`
+today is a fixed three-member enum whose bucket counts come from two game enums. Generalise
+it to a descriptor supplied with the catalog and every consumer downstream is already
+agnostic — slots, storage, `Absorb` and the serializer all go through `AllSlots` and would
+not change at all. W1b's slot indirection set this up accidentally: the storage engine
+already has no idea what an axis *means*.
+
+**Open question, decide before extraction:** how a metric is identified across the boundary.
+`MetricId` is inherently the consumer's — thirty rows naming *this* game's events. Either the
+library is generic over the consumer's enum (`MetricSet<TMetric> where TMetric : struct, Enum`,
+keeping type safety, some IL2CPP/AOT care needed) or it addresses metrics as dense `int`s with
+the catalog supplying names (simpler, loses compile-time safety at the seam). Not urgent —
+nothing before W6 forces it.
+
+### Why the JSON stays hand-rolled
+
+Originally justified by a constraint: `BalloonParty.Runtime.asmdef` sets
+`"overrideReferences": true` with only `DOTween.dll`, so Newtonsoft is unreachable, and
+`JsonUtility` returns `{}` for these types because it serializes only Unity-serializable
+public *fields*.
+
+That framing understates it — NuGetForUnity is in the project, so a dependency *could* be
+added. Restating it as a decision rather than a wall:
+
+- **Escaping and formatting are already correct** — quotes, backslash, `\n`/`\r`/`\t` and all
+  control characters below `0x20` as `\uXXXX`, every numeric and date append through
+  `InvariantCulture`, all covered by tests. The usual reason to reach for a library is
+  already paid for.
+- **Zero dependencies is a feature of a library you intend to lift out**, not a limitation.
+- **Reflection-based serializers are the classic IL2CPP/AOT landmine**, and System.Text.Json's
+  source generators do not run in Unity's build pipeline.
+- The allocation argument is weak in both directions: flushes are 30–120 s apart, so this is
+  not a hot path either way. `Utf8JsonWriter` would avoid the string-then-encode double pass,
+  which matters slightly more for W6's batched HTTP sink than for a file — revisit there if
+  batch sizes get large, not before.
+
+Nothing reads these files back yet. The day something does — a viewer, a round-trip test — a
+*parser* dependency appears, and that is a better place to take one than the writer.
 
 ## Superseded decisions
 
