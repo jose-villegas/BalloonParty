@@ -8,13 +8,17 @@ The service never publishes, never modifies gameplay state, and never causes stu
 during action — it only counts. Views read immutable snapshots; they never see a live
 accumulator.
 
-> **W1 (vocabulary, scopes, timers) has landed**, including the post-review rework:
-> `MetricId`/`TimerId`/`MetricAxis`, `MetricCatalog`/`TimerCatalog`,
+> **W1 (vocabulary, scopes, timers) and W2 (envelope, serializer, sinks) have landed.**
+> W1: `MetricId`/`TimerId`/`MetricAxis`, `MetricCatalog`/`TimerCatalog`,
 > `MetricSet`/`IReadOnlyMetricSet`/`ISealedMetrics`, `MetricScope`, `TelemetryStopwatch`,
-> both snapshots (now sharing `MetricsSnapshotBase`) and `ILevelMetricsView` are
-> implemented and covered by the EditMode tests in `Assets/Tests/EditMode/Game/`.
-> Everything from `GameplayMetricsService` down is still design — the rest of the file
-> table below is the target layout for those rows, not current code.
+> both snapshots (sharing `MetricsSnapshotBase`) and `ILevelMetricsView`. W2:
+> `TelemetryEnvelope`, `TelemetryEnvelopeSerializer`, `ITelemetrySink`/`TelemetrySinkBase`,
+> `CompositeTelemetrySink` (registered in `GameScopeRegistration.RegisterTelemetrySinks`,
+> called from `GameLifetimeScope.Configure`) and the dev-only `JsonLinesTelemetrySink`. All
+> covered by the EditMode tests in `Assets/Tests/EditMode/Game/`, including the test fake
+> `RecordingTelemetrySink`. `GameplayMetricsService`, `SessionTelemetryContext` and the
+> consent/batching decorators are still design — the rest of the file table below is the
+> target layout for those rows, not current code.
 
 ## Contents
 
@@ -33,11 +37,12 @@ accumulator.
 | `ILevelMetricsView` | The UI read seam. Exposes the ceremony snapshot as an `IReadOnlyReactiveProperty`, plus the last flushed level and the run. **Only `BalloonParty.UI.*` types may inject it** |
 | `GameplayMetricsService` | Entry point (`IStartable`, `IDisposable`, `IRunResettable`). Five-state level machine (Idle/Playing/Ceremony/Transitioning/Ended); routes subscriptions into scopes, takes the two per-level snapshots, hands envelopes to the sink |
 | `SessionTelemetryContext` | Session id (per launch, never persisted), schema version, launch timestamp. Registered in `AppLifetimeScope` so it survives scene reloads |
-| `TelemetryEnvelope` | One uniform wire record for every scope, with a `RecordKind` discriminator |
-| `TelemetryEnvelopeSerializer` | Static, reflection-free JSON writer driven by `MetricCatalog` (reused `StringBuilder`, `InvariantCulture` throughout) |
-| `ITelemetrySink` / `TelemetrySinkBase` | Write seam. The base owns the never-throw guard and the disabled latch, so no sink can soft-lock the game at a flush boundary |
-| `ConsentGateSink` / `BatchingTelemetrySink` / `CompositeTelemetrySink` | Cross-cutting concerns as decorators — one concern each |
-| `JsonLinesTelemetrySink` | Dev-only local sink: one JSON object per line, one stream per session, rotating log files in `Application.persistentDataPath/telemetry/` |
+| `TelemetryEnvelope` | One uniform wire record for every scope (`readonly struct`), with a `RecordKind` discriminator and an `ISealedMetrics` payload |
+| `TelemetryEnvelopeSerializer` | Reflection-free JSON writer over one reused `StringBuilder`, driven by loops over `MetricCatalog`/`TimerCatalog` (zero-valued counters skipped, timers always emitted, `InvariantCulture` on every numeric/date append) |
+| `ITelemetrySink` / `TelemetrySinkBase` | Write seam. The base owns the never-throw guard: `Write`/`FlushAsync` share one latch that permanently no-ops both once either hook throws; `Dispose` is guarded and idempotent independently, so a prior write failure never leaks the sink's resource |
+| `CompositeTelemetrySink` | Fans out to an array of leaf sinks; an empty array is the inert "no export configured" state — no `NullTelemetrySink`. Registered unconditionally in `GameScopeRegistration.RegisterTelemetrySinks`, wrapping `{ JsonLinesTelemetrySink }` under the dev guard or an empty array otherwise |
+| `ConsentGateSink` / `BatchingTelemetrySink` | Cross-cutting decorators — one concern each (W5) |
+| `JsonLinesTelemetrySink` | Dev-only local sink (`#if UNITY_EDITOR \|\| DEVELOPMENT_BUILD`): one JSON object per line, one `StreamWriter` opened in `Start()` and kept for the session, rotating log files in `Application.persistentDataPath/telemetry/` (20 most recent, sorted by file name) |
 | `HttpAnalyticsSink` | Batched export to an external analytics service (last wave; gated on choosing a provider) |
 
 ## Every scope runs its own clocks
@@ -62,10 +67,11 @@ between them is data, not a bug. The popup shows *projected* points to match wha
 ## Where the per-flight numbers come from
 
 Per-flight counts live in `FlightStatsService` (`Game/Flight/`, a **gameplay** service,
-not part of this folder). `HitPipeline` is its only writer, recording each hit *before*
-publishing `ActorHitMessage` — so the count is fixed before any subscriber runs, and
-`CombatSoundRouter` reads it post-increment for its pitch ramps. Metrics folds it at
-flight seal. One owner, two readers, no ordering hazard.
+not part of this folder). Each count is written by whoever publishes the message it belongs
+to, immediately before that publish — `HitPipeline` for pops and deflects, `ProjectileView`
+for wall bounces, `ProjectileHitResolver` for pierce discharges. The count is therefore
+fixed before any subscriber runs: `CombatSoundRouter` reads it post-increment for its pitch
+ramps, metrics folds it at flight seal, and neither depends on subscription order.
 
 The one exception: `CombatSoundRouter._colorPopsThisFlight` **stays private to audio**. It
 resets on streak break as well as on load, and counts only pops that use the generic
@@ -78,10 +84,14 @@ than counting `PausedMessage`/`ResumedMessage` edges, which leak on the loss pat
 
 ## Registration
 
-`GameplayMetricsService` at the end of `GameScopeRegistration.RegisterGameplaySystems`;
-`SessionTelemetryContext` in `AppLifetimeScope` so it survives scene reloads.
-`FlightStatsService` is registered earlier in the same method and lives in `Game/Flight/` —
-it is a gameplay service, not part of this subsystem.
+`ITelemetrySink` → `CompositeTelemetrySink` registers unconditionally in
+`GameScopeRegistration.RegisterTelemetrySinks`, called from `GameLifetimeScope.Configure`
+before `RegisterGameplaySystems` — a later consumer (`GameplayMetricsService`, W3) can
+depend on it without caring whether any leaf sink exists. `GameplayMetricsService` will
+register at the end of `RegisterGameplaySystems`; `SessionTelemetryContext` in
+`AppLifetimeScope` so it survives scene reloads. `FlightStatsService` is registered
+earlier in `RegisterGameplaySystems` and lives in `Game/Flight/` — it is a gameplay
+service, not part of this subsystem.
 
 Gating is three tiers, not one `#if`: the counting core ships (the popups need it), the
 export layer ships inert until consent, and the local file sink plus the cheat read are

@@ -2,6 +2,7 @@
 using BalloonParty.Cheats;
 #endif
 
+using System;
 using System.Collections.Generic;
 using BalloonParty.Audio;
 using BalloonParty.Audio.Configuration;
@@ -20,6 +21,7 @@ using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Game.Score;
 using BalloonParty.Game.Score.Behaviours;
+using BalloonParty.Game.Telemetry;
 using BalloonParty.Item;
 using BalloonParty.Item.Bomb;
 using BalloonParty.Item.Laser;
@@ -155,6 +157,23 @@ namespace BalloonParty.Game
             // Scene-view debug overlay only; hierarchy registration throws if the component is absent,
             // so the guard keeps device builds independent of the debug object.
             builder.RegisterComponentInHierarchy<BalanceGizmos>();
+#endif
+        }
+
+        // The composite is always registered (R28b) so a later consumer (GameplayMetricsService, W3)
+        // can depend on ITelemetrySink unconditionally — only which leaf sinks it wraps is gated. An
+        // empty array is the inert "no export configured" state; there is deliberately no
+        // NullTelemetrySink. Same #if shape as RegisterCheats below, but the method itself is never
+        // compiled out, only the JsonLinesTelemetrySink branch inside it.
+        internal static void RegisterTelemetrySinks(this IContainerBuilder builder)
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            builder.RegisterEntryPoint<JsonLinesTelemetrySink>().AsSelf();
+            builder.Register<ITelemetrySink>(resolver =>
+                new CompositeTelemetrySink(new ITelemetrySink[] { resolver.Resolve<JsonLinesTelemetrySink>() }),
+                Lifetime.Singleton);
+#else
+            builder.Register<ITelemetrySink>(_ => new CompositeTelemetrySink(Array.Empty<ITelemetrySink>()), Lifetime.Singleton);
 #endif
         }
 

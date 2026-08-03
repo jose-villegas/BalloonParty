@@ -22,6 +22,8 @@ namespace BalloonParty.Game.Telemetry
 
         private static readonly Dictionary<TimerId, Entry> ById;
 
+        internal static readonly TimerId[] AllIds;
+
         static TimerCatalog()
         {
             var allTimerIds = (TimerId[])Enum.GetValues(typeof(TimerId));
@@ -33,6 +35,7 @@ namespace BalloonParty.Game.Telemetry
             }
 
             ById = BuildIndex();
+            AllIds = BuildIds();
         }
 
         internal static string WireNameOf(TimerId id)
@@ -54,6 +57,19 @@ namespace BalloonParty.Game.Telemetry
             }
 
             return map;
+        }
+
+        // W2's serializer loops this rather than hardcoding four TimerId literals — the same
+        // mechanical-loop discipline MetricCatalog.AllIds gives the counter side (R27).
+        private static TimerId[] BuildIds()
+        {
+            var ids = new TimerId[Entries.Length];
+            for (var i = 0; i < Entries.Length; i++)
+            {
+                ids[i] = Entries[i].Id;
+            }
+
+            return ids;
         }
 
         private readonly struct Entry

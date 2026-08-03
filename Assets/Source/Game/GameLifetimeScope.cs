@@ -67,6 +67,7 @@ namespace BalloonParty.Game
 
             // Call order is load-bearing — entry points start in registration order.
             builder.RegisterCoreServices();
+            builder.RegisterTelemetrySinks();
             builder.RegisterGameplaySystems();
             builder.RegisterItems();
             builder.RegisterPresentation();
