@@ -2,6 +2,7 @@ using System;
 using BalloonParty.Audio;
 using BalloonParty.Audio.Routing;
 using BalloonParty.Game.Danger;
+using BalloonParty.Game.Flight;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.SceneLight;
@@ -59,31 +60,17 @@ namespace BalloonParty.Tests.Audio
             _timeOfDayNight = Substitute.For<ITimeOfDayNight>();
             _timeOfDayNight.IsNight.Returns(false);
 
-            // Capture MessagePipe handlers so tests can fire projectile messages.
-            var loadedSub = Substitute.For<ISubscriber<ProjectileLoadedMessage>>();
-            loadedSub
-                .Subscribe(
-                    Arg.Do<IMessageHandler<ProjectileLoadedMessage>>(h => _loadedHandler = h),
-                    Arg.Any<MessageHandlerFilter<ProjectileLoadedMessage>[]>())
-                .Returns(Substitute.For<IDisposable>());
-
-            var destroyedSub = Substitute.For<ISubscriber<ProjectileDestroyedMessage>>();
-            destroyedSub
-                .Subscribe(
-                    Arg.Do<IMessageHandler<ProjectileDestroyedMessage>>(h => _destroyedHandler = h),
-                    Arg.Any<MessageHandlerFilter<ProjectileDestroyedMessage>[]>())
-                .Returns(Substitute.For<IDisposable>());
-
-            var firedSub = Substitute.For<ISubscriber<ProjectileFiredMessage>>();
-            firedSub
-                .Subscribe(
-                    Arg.Do<IMessageHandler<ProjectileFiredMessage>>(h => _firedHandler = h),
-                    Arg.Any<MessageHandlerFilter<ProjectileFiredMessage>[]>())
-                .Returns(Substitute.For<IDisposable>());
+            // The router now reads IFlightScope.IsAirborne rather than subscribing to the three
+            // projectile messages itself. These relays keep the tests firing the same messages: fired
+            // opens the airborne window, loaded and destroyed close it — exactly what
+            // FlightStatsService does.
+            var flightScope = new FakeFlightScope();
+            _loadedHandler = new Relay<ProjectileLoadedMessage>(() => flightScope.Airborne.Value = false);
+            _destroyedHandler = new Relay<ProjectileDestroyedMessage>(() => flightScope.Airborne.Value = false);
+            _firedHandler = new Relay<ProjectileFiredMessage>(() => flightScope.Airborne.Value = true);
 
             _router = new MusicSoundRouter(
-                _player, navigation, danger, _timeOfDayNight,
-                loadedSub, destroyedSub, firedSub);
+                _player, navigation, danger, _timeOfDayNight, flightScope);
             _router.Start();
         }
 
@@ -493,6 +480,32 @@ namespace BalloonParty.Tests.Audio
 
             _player.DidNotReceive().Play(GameSoundId.GameplayLoopDay, null);
             _player.DidNotReceive().Play(GameSoundId.GameplayLoopNight, null);
+        }
+
+        private sealed class FakeFlightScope : IFlightScope
+        {
+            public ReactiveProperty<bool> Airborne { get; } = new();
+
+            public int FlightIndex => 0;
+
+            IReadOnlyReactiveProperty<bool> IFlightScope.IsLoaded => Airborne;
+
+            IReadOnlyReactiveProperty<bool> IFlightScope.IsAirborne => Airborne;
+        }
+
+        private sealed class Relay<T> : IMessageHandler<T>
+        {
+            private readonly Action _onHandle;
+
+            public Relay(Action onHandle)
+            {
+                _onHandle = onHandle;
+            }
+
+            public void Handle(T message)
+            {
+                _onHandle();
+            }
         }
     }
 }

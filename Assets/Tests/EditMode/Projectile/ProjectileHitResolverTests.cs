@@ -6,6 +6,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Score;
 using BalloonParty.Projectile.Buffs;
+using BalloonParty.Game.Flight;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Projectile.View;
@@ -64,7 +65,8 @@ namespace BalloonParty.Tests.Projectile
                 Substitute.For<IPublisher<StreakChangedMessage>>(), levelUpSubscriber, projectileLoadedSubscriber);
 
             _resolver = new ProjectileHitResolver(
-                _hitDispatcher, _shieldGainedPublisher, _dischargedPublisher, _streakTracker, _grid);
+                _hitDispatcher, _shieldGainedPublisher, _dischargedPublisher,
+                Substitute.For<IFlightStatsWriter>(), _streakTracker, _grid);
             _projectile = new ProjectileModel { IsFree = true };
         }
 

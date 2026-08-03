@@ -14,6 +14,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Display;
 using BalloonParty.Game.Cinematics;
 using BalloonParty.Game.Danger;
+using BalloonParty.Game.Flight;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
@@ -179,6 +180,11 @@ namespace BalloonParty.Game
             builder.Register<BalloonControllerContext>(Lifetime.Singleton);
             builder.Register<BalloonPlacementResolver>(Lifetime.Singleton);
             builder.Register<BalloonFactory>(Lifetime.Singleton);
+            // Ahead of everything that reads it: HitPipeline writes it, audio and the hold controller
+            // read it. Its own counters reset on ProjectileLoadedMessage, so start order only has to
+            // beat the first shot, but keeping it early makes the dependency direction obvious.
+            builder.RegisterEntryPoint<FlightStatsService>()
+                .As<IFlightScope>().As<IFlightStats>().As<IFlightStatsWriter>();
             // Registered before BalloonSpawner, which reads IActiveLevelParameters during prewarm sizing.
             builder.RegisterEntryPoint<LevelDifficultyResolver>().AsSelf().As<IActiveLevelParameters>().As<ILevelThresholds>().As<IRunResettable>();
             builder.RegisterEntryPoint<BalloonSpawner>().As<IGridSpawner>().AsSelf().As<IRunResettable>();

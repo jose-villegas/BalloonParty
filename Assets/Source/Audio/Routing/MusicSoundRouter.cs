@@ -1,5 +1,6 @@
 using System;
 using BalloonParty.Game.Danger;
+using BalloonParty.Game.Flight;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
@@ -25,9 +26,7 @@ namespace BalloonParty.Audio.Routing
         private readonly INavigation _navigation;
         private readonly IDangerLevel _dangerLevel;
         private readonly ITimeOfDayNight _timeOfDayNight;
-        private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
-        private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
-        private readonly ISubscriber<ProjectileFiredMessage> _firedSubscriber;
+        private readonly IFlightScope _flightScope;
         private readonly CompositeDisposable _subscriptions = new();
 
         private SoundHandle _launchHandle = SoundHandle.None;
@@ -43,26 +42,23 @@ namespace BalloonParty.Audio.Routing
             INavigation navigation,
             IDangerLevel dangerLevel,
             ITimeOfDayNight timeOfDayNight,
-            ISubscriber<ProjectileLoadedMessage> loadedSubscriber,
-            ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
-            ISubscriber<ProjectileFiredMessage> firedSubscriber)
+            IFlightScope flightScope)
         {
             _player = player;
             _navigation = navigation;
             _dangerLevel = dangerLevel;
             _timeOfDayNight = timeOfDayNight;
-            _loadedSubscriber = loadedSubscriber;
-            _destroyedSubscriber = destroyedSubscriber;
-            _firedSubscriber = firedSubscriber;
+            _flightScope = flightScope;
         }
 
         public void Start()
         {
             _navigation.Current.Subscribe(OnNavigationChanged).AddTo(_subscriptions);
             _dangerLevel.Level.Subscribe(_ => ApplyPitch()).AddTo(_subscriptions);
-            _loadedSubscriber.Subscribe(_ => OnFlightEnded()).AddTo(_subscriptions);
-            _destroyedSubscriber.Subscribe(_ => OnFlightEnded()).AddTo(_subscriptions);
-            _firedSubscriber.Subscribe(_ => OnFired()).AddTo(_subscriptions);
+            // IsAirborne, not IsLoaded: ducking must lift the moment the shot dies, and a loaded-but-
+            // unfired projectile is the aiming state — ducking on that would hold the music down
+            // permanently between shots.
+            _flightScope.IsAirborne.Subscribe(OnFlightChanged).AddTo(_subscriptions);
         }
 
         public void Tick()
@@ -140,15 +136,9 @@ namespace BalloonParty.Audio.Routing
             }
         }
 
-        private void OnFired()
+        private void OnFlightChanged(bool airborne)
         {
-            _inFlight = true;
-            ApplyVolume();
-        }
-
-        private void OnFlightEnded()
-        {
-            _inFlight = false;
+            _inFlight = airborne;
             ApplyVolume();
         }
 

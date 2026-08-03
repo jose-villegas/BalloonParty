@@ -150,11 +150,18 @@ rising run of notes is informal — just consecutive pops of the same thing. The
 streak* (`StreakChangedMessage`) is a separate scoring concept, and it is not decorative here:
 breaking it resets one of the two counter families, as the reset rules below spell out.
 
-The counters come in two families that never mix. One is `_colorPopsThisFlight`, a dictionary
-counting pops per palette colour name. The other is six separate per-`BalloonType` counters
-(one each for Rainbow, Tough, Tougher, Unbreakable, SimpleSilver, SimpleGold), plus three more
-single-purpose counters for unbreakable deflects, pierce discharges, and wall bounces. **A pop
-takes the colour counter or a type counter, never both.** `OnActorHit` first resolves the
+The counters come in two families that never mix, and they now live in different places. One
+is `_colorPopsThisFlight`, a dictionary counting pops per palette colour name, still private
+to this router. The other — per-`BalloonType` pops and deflects, pierce discharges and wall
+bounces — moved to `FlightStatsService` (`Game/Flight/`), because "how many Toughs died this
+flight" is a gameplay fact that metrics wants too, and two systems counting it separately
+would eventually disagree. The router reads those through `IFlightStats`.
+
+The read is **post-increment**: `HitPipeline` records the hit before publishing it, so by the
+time the router's handler runs the count already includes this pop. The step is therefore the
+count minus one, which is what keeps the flight's first pop of a type on the root.
+
+**A pop takes the colour counter or a type counter, never both.** `OnActorHit` first resolves the
 popped balloon to a `GameSoundId` — a special type maps to its own id (e.g. `BalloonPopTough`);
 anything else stays on the generic `BalloonPop`. Only a pop that stays on `BalloonPop` *and*
 has a colour reads and bumps the colour dictionary; every pop that resolved to a dedicated type
@@ -203,10 +210,11 @@ knowing which is what keeps this mechanism debuggable:
   breaks (`StreakChangedMessage` with `Streak == 0`). Its real scope is "since the later of the
   shot loading or the last broken streak" — a streak break resets it mid-flight, before the next
   reload.
-- The six type counters, plus the deflect and pierce counters, clear only on
-  `ProjectileLoadedMessage`. A broken streak does not touch them.
-- `_bounceCount` clears on `ProjectileFiredMessage` instead — a third, different boundary — since
-  it counts bounces of the shot currently in the air, not the shot currently loaded.
+- Everything in `FlightStatsService` — type pops and deflects, pierce discharges, wall bounces —
+  clears on `ProjectileLoadedMessage`. A broken streak does not touch them. The bounce counter
+  used to reset a beat later, on `ProjectileFiredMessage`; moving it onto the same boundary is
+  safe only because a wall hit cannot arrive before launch, which
+  `FlightStatsServiceTests.WallBounces_AreZeroBetweenLoadingAndFiring` pins.
 
 This distinction matters beyond bookkeeping: the colour dictionary and the type counters are not
 interchangeable state. Merging them would break the fork above — a gold pop would start bumping

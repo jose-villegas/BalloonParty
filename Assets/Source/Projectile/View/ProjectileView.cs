@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
+using BalloonParty.Game.Flight;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
@@ -47,6 +48,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
         [Inject] private IPublisher<ShieldLostMessage> _shieldLostPublisher;
         [Inject] private IPublisher<WallHitMessage> _wallHitPublisher;
+        [Inject] private IFlightStatsWriter _flightStats;
         [Inject] private IPublisher<SpeedTapMintedMessage> _speedTapPublisher;
         [Inject] private IPublisher<ProjectileFiredMessage> _firedPublisher;
         [Inject] private IPublisher<ProjectileCruiseStartedMessage> _cruiseStartedPublisher;
@@ -494,6 +496,8 @@ namespace BalloonParty.Projectile.View
             {
                 _shieldView?.OnBounce((Vector2)travelDirection, (Vector2)step.Direction, step.Speed);
                 _shieldLostPublisher.Publish(new ShieldLostMessage(step.WallContact));
+                // Count before publishing, so every subscriber sees a total including this bounce.
+                _flightStats.RecordWallHit();
                 _wallHitPublisher.Publish(new WallHitMessage(step.WallContact, _model.ShieldsRemaining.Value));
                 TryAwardSweepTap(step.WallContact, travelDirection);
 

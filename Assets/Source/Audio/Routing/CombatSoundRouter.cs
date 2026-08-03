@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Game.Flight;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using MessagePipe;
 using UniRx;
@@ -35,21 +37,13 @@ namespace BalloonParty.Audio.Routing
         private readonly ISubscriber<StreakChangedMessage> _streakChangedSubscriber;
         private readonly IProjectileFlightConfig _flightConfig;
         private readonly IActiveProjectilePierce _activePierce;
+        private readonly IFlightStats _flightStats;
         private readonly IGamePalette _palette;
         private readonly CompositeDisposable _subscriptions = new();
         private readonly Dictionary<string, int> _colorPopsThisFlight = new();
 
         private SoundHandle _cruiseHandle = SoundHandle.None;
         private SoundHandle _pierceLoopHandle = SoundHandle.None;
-        private int _bounceCount;
-        private int _rainbowPopsThisFlight;
-        private int _toughPopsThisFlight;
-        private int _tougherPopsThisFlight;
-        private int _unbreakablePopsThisFlight;
-        private int _silverPopsThisFlight;
-        private int _goldPopsThisFlight;
-        private int _unbreakableDeflectsThisFlight;
-        private int _pierceDischargesThisFlight;
 
         [Inject]
         public CombatSoundRouter(ISoundPlayer player,
@@ -68,6 +62,7 @@ namespace BalloonParty.Audio.Routing
             ISubscriber<StreakChangedMessage> streakChangedSubscriber,
             IProjectileFlightConfig flightConfig,
             IActiveProjectilePierce activePierce,
+            IFlightStats flightStats,
             IGamePalette palette)
         {
             _player = player;
@@ -86,6 +81,7 @@ namespace BalloonParty.Audio.Routing
             _streakChangedSubscriber = streakChangedSubscriber;
             _flightConfig = flightConfig;
             _activePierce = activePierce;
+            _flightStats = flightStats;
             _palette = palette;
         }
 
@@ -132,9 +128,8 @@ namespace BalloonParty.Audio.Routing
                 }
                 else
                 {
-                    var offset = PopSemitoneOffset(popId);
+                    var offset = PopSemitoneOffset(popId, message.Actor);
                     _player.Play(popId, message.WorldPosition, semitoneOffset: offset);
-                    IncrementPopCounter(popId);
                 }
             }
             else if ((outcome & HitOutcome.Deflect) != 0)
@@ -151,8 +146,8 @@ namespace BalloonParty.Audio.Routing
                 }
                 else if (deflectId == GameSoundId.BalloonDeflectUnbreakable)
                 {
-                    _player.Play(deflectId, message.WorldPosition, semitoneOffset: _unbreakableDeflectsThisFlight);
-                    _unbreakableDeflectsThisFlight++;
+                    var step = _flightStats.DeflectsOf(BalloonType.Unbreakable) - 1;
+                    _player.Play(deflectId, message.WorldPosition, semitoneOffset: step);
                 }
                 else
                 {
@@ -195,20 +190,14 @@ namespace BalloonParty.Audio.Routing
 
         private void OnFired(ProjectileFiredMessage message)
         {
-            _bounceCount = 0;
             _player.Play(GameSoundId.ShotFired, message.WorldPosition);
         }
 
+        // The type/deflect/pierce/bounce counters live in FlightStatsService and reset with the flight
+        // there. The colour dictionary stays local: it also clears on a streak break, so its scope is
+        // "since the later of flight start and the last broken streak" — a pitch cursor, not a statistic.
         private void OnLoaded(ProjectileLoadedMessage message)
         {
-            _rainbowPopsThisFlight = 0;
-            _toughPopsThisFlight = 0;
-            _tougherPopsThisFlight = 0;
-            _unbreakablePopsThisFlight = 0;
-            _silverPopsThisFlight = 0;
-            _goldPopsThisFlight = 0;
-            _unbreakableDeflectsThisFlight = 0;
-            _pierceDischargesThisFlight = 0;
             _colorPopsThisFlight.Clear();
             _player.Play(GameSoundId.ShotReload, null);
         }
@@ -238,9 +227,9 @@ namespace BalloonParty.Audio.Routing
 
         private void OnPierceDischarged(PierceDischargedMessage message)
         {
-            var offset = _pierceDischargesThisFlight * MusicalPitchExtensions.WholeToneSemitones;
+            var step = _flightStats.PierceDischarges - 1;
+            var offset = step * MusicalPitchExtensions.WholeToneSemitones;
             _player.Play(GameSoundId.PierceDischarge, message.Center, semitoneOffset: offset);
-            _pierceDischargesThisFlight++;
         }
 
         private void OnShieldGained(ShieldGainedMessage message)
@@ -275,8 +264,7 @@ namespace BalloonParty.Audio.Routing
         private void OnWallHit(WallHitMessage message)
         {
             var depth = Math.Max(0, _flightConfig.ShieldToneThreshold - message.ShieldsRemaining);
-            var offset = -Math.Min(_bounceCount, MaxRampSemitones);
-            _bounceCount++;
+            var offset = -Math.Min(_flightStats.WallBounces - 1, MaxRampSemitones);
 
             _player.Play(GameSoundId.WallHit, message.Position, depth, semitoneOffset: offset);
         }
@@ -294,45 +282,22 @@ namespace BalloonParty.Audio.Routing
             }
         }
 
-        private int PopSemitoneOffset(GameSoundId popId)
+        // FlightStatsService has already counted this pop by the time the message reaches us — HitPipeline
+        // records before publishing — so the step is the count minus one, and the flight's first pop of a
+        // type lands on the root.
+        //
+        // Only types with a dedicated pop id ramp. Flight stats count every balloon type, but a type that
+        // falls through to the generic BalloonPop without a colour (BubbleCluster today) has no voice of
+        // its own to climb, and never ramped before this counter was shared.
+        private int PopSemitoneOffset(GameSoundId popId, ISlotActor actor)
         {
-            var raw = popId switch
+            if (popId == GameSoundId.BalloonPop || actor is not IBalloonModel balloon)
             {
-                GameSoundId.BalloonPopRainbow => _rainbowPopsThisFlight * MusicalPitchExtensions.WholeToneSemitones,
-                GameSoundId.BalloonPopTough => _toughPopsThisFlight * MusicalPitchExtensions.WholeToneSemitones,
-                GameSoundId.BalloonPopTougher => _tougherPopsThisFlight * MusicalPitchExtensions.WholeToneSemitones,
-                GameSoundId.BalloonPopUnbreakable => _unbreakablePopsThisFlight * MusicalPitchExtensions.WholeToneSemitones,
-                GameSoundId.BalloonPopSilver => _silverPopsThisFlight * MusicalPitchExtensions.WholeToneSemitones,
-                GameSoundId.BalloonPopGold => _goldPopsThisFlight * MusicalPitchExtensions.WholeToneSemitones,
-                _ => 0
-            };
-
-            return Math.Min(raw, MaxRampSemitones);
-        }
-
-        private void IncrementPopCounter(GameSoundId popId)
-        {
-            switch (popId)
-            {
-                case GameSoundId.BalloonPopRainbow:
-                    _rainbowPopsThisFlight++;
-                    break;
-                case GameSoundId.BalloonPopTough:
-                    _toughPopsThisFlight++;
-                    break;
-                case GameSoundId.BalloonPopTougher:
-                    _tougherPopsThisFlight++;
-                    break;
-                case GameSoundId.BalloonPopUnbreakable:
-                    _unbreakablePopsThisFlight++;
-                    break;
-                case GameSoundId.BalloonPopSilver:
-                    _silverPopsThisFlight++;
-                    break;
-                case GameSoundId.BalloonPopGold:
-                    _goldPopsThisFlight++;
-                    break;
+                return 0;
             }
+
+            var step = _flightStats.PopsOf(balloon.TypeName) - 1;
+            return Math.Min(step * MusicalPitchExtensions.WholeToneSemitones, MaxRampSemitones);
         }
     }
 }

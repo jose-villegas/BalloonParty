@@ -1,4 +1,5 @@
 using System;
+using BalloonParty.Game.Flight;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
@@ -21,8 +22,7 @@ namespace BalloonParty.Projectile.Controller
     {
         private readonly IProjectileFlightConfig _config;
         private readonly TimeScaleService _timeScale;
-        private readonly ISubscriber<ProjectileFiredMessage> _firedSubscriber;
-        private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
+        private readonly IFlightScope _flightScope;
         private readonly CompositeDisposable _subscriptions = new();
 
         private bool _inFlight;
@@ -39,22 +39,17 @@ namespace BalloonParty.Projectile.Controller
         internal HoldSpeedUpController(
             IProjectileFlightConfig config,
             TimeScaleService timeScale,
-            ISubscriber<ProjectileFiredMessage> firedSubscriber,
-            ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber)
+            IFlightScope flightScope)
         {
             _config = config;
             _timeScale = timeScale;
-            _firedSubscriber = firedSubscriber;
-            _destroyedSubscriber = destroyedSubscriber;
+            _flightScope = flightScope;
         }
 
         public void Start()
         {
-            _firedSubscriber
-                .Subscribe(_ => OnFired())
-                .AddTo(_subscriptions);
-            _destroyedSubscriber
-                .Subscribe(_ => OnDestroyed())
+            _flightScope.IsAirborne
+                .Subscribe(OnAirborneChanged)
                 .AddTo(_subscriptions);
         }
 
@@ -99,17 +94,15 @@ namespace BalloonParty.Projectile.Controller
             _subscriptions.Dispose();
         }
 
-        private void OnFired()
+        private void OnAirborneChanged(bool airborne)
         {
-            _inFlight = true;
+            _inFlight = airborne;
             _t = 0f;
-        }
 
-        private void OnDestroyed()
-        {
-            _inFlight = false;
-            _t = 0f;
-            _timeScale.Release(TimeScaleSource.HoldSpeedUp);
+            if (!airborne)
+            {
+                _timeScale.Release(TimeScaleSource.HoldSpeedUp);
+            }
         }
     }
 }

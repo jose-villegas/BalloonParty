@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using BalloonParty.Audio;
 using BalloonParty.Audio.Routing;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Game.Flight;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
@@ -39,17 +41,24 @@ namespace BalloonParty.Tests.Audio
         {
             _player = Substitute.For<ISoundPlayer>();
 
-            var hitSubscriber = CaptureSubscriber<ActorHitMessage>(h => _hitHandler = h);
-            var firedSubscriber = CaptureSubscriber<ProjectileFiredMessage>(h => _firedHandler = h);
-            var loadedSubscriber = CaptureSubscriber<ProjectileLoadedMessage>(h => _loadedHandler = h);
+            var hitFanout = new Fanout<ActorHitMessage>();
+            var firedFanout = new Fanout<ProjectileFiredMessage>();
+            var loadedFanout = new Fanout<ProjectileLoadedMessage>();
+            var destroyedFanout = new Fanout<ProjectileDestroyedMessage>();
+            var wallHitFanout = new Fanout<WallHitMessage>();
+            var pierceFanout = new Fanout<PierceDischargedMessage>();
+
+            var hitSubscriber = CaptureSubscriber<ActorHitMessage>(hitFanout.Add);
+            var firedSubscriber = CaptureSubscriber<ProjectileFiredMessage>(firedFanout.Add);
+            var loadedSubscriber = CaptureSubscriber<ProjectileLoadedMessage>(loadedFanout.Add);
             var cruiseStartedSubscriber = CaptureSubscriber<ProjectileCruiseStartedMessage>(h => _cruiseStartedHandler = h);
             var cruiseEndedSubscriber = CaptureSubscriber<ProjectileCruiseEndedMessage>(h => _cruiseEndedHandler = h);
             var doomedSubscriber = CaptureSubscriber<ProjectileDoomedStartedMessage>(_ => { });
-            var destroyedSubscriber = CaptureSubscriber<ProjectileDestroyedMessage>(h => _destroyedHandler = h);
-            var pierceSubscriber = CaptureSubscriber<PierceDischargedMessage>(h => _pierceHandler = h);
+            var destroyedSubscriber = CaptureSubscriber<ProjectileDestroyedMessage>(destroyedFanout.Add);
+            var pierceSubscriber = CaptureSubscriber<PierceDischargedMessage>(pierceFanout.Add);
             var shieldGainedSubscriber = CaptureSubscriber<ShieldGainedMessage>(h => _shieldGainedHandler = h);
             var shieldLostSubscriber = CaptureSubscriber<ShieldLostMessage>(h => _shieldLostHandler = h);
-            var wallHitSubscriber = CaptureSubscriber<WallHitMessage>(h => _wallHitHandler = h);
+            var wallHitSubscriber = CaptureSubscriber<WallHitMessage>(wallHitFanout.Add);
             var speedTapSubscriber = CaptureSubscriber<SpeedTapMintedMessage>(h => _speedTapHandler = h);
             var streakChangedSubscriber = CaptureSubscriber<StreakChangedMessage>(_ => { });
 
@@ -62,12 +71,31 @@ namespace BalloonParty.Tests.Audio
             var palette = Substitute.For<IGamePalette>();
             palette.ProgressColorNames.Returns(new[] { "Red", "Blue", "Green", "Yellow", "Purple" });
 
+            // Real, not a stub: the pitch ramps are now a function of what the flight actually
+            // recorded, so a canned IFlightStats would assert against the fake instead of the ramp.
+            // Started first so it counts a wall hit or discharge before the router reads the total —
+            // the same order registration guarantees in the game.
+            var flightStats = new FlightStatsService(
+                loadedSubscriber, firedSubscriber, destroyedSubscriber);
+            flightStats.Start();
+
             var router = new CombatSoundRouter(
                 _player, hitSubscriber, firedSubscriber, loadedSubscriber,
                 cruiseStartedSubscriber, cruiseEndedSubscriber, doomedSubscriber, destroyedSubscriber,
                 pierceSubscriber, shieldGainedSubscriber, shieldLostSubscriber, wallHitSubscriber,
-                speedTapSubscriber, streakChangedSubscriber, flightConfig, activePierce, palette);
+                speedTapSubscriber, streakChangedSubscriber, flightConfig, activePierce, flightStats, palette);
             router.Start();
+
+            // Each of these mirrors its real publisher, which records into flight stats immediately
+            // before publishing — so the router always reads a total that includes the event it is
+            // reacting to, with no dependence on subscription order.
+            _hitHandler = new HitPipelineStub(flightStats, hitFanout);
+            _wallHitHandler = new RecordingPublisher<WallHitMessage>(flightStats.RecordWallHit, wallHitFanout);
+            _pierceHandler = new RecordingPublisher<PierceDischargedMessage>(
+                flightStats.RecordPierceDischarge, pierceFanout);
+            _firedHandler = firedFanout;
+            _loadedHandler = loadedFanout;
+            _destroyedHandler = destroyedFanout;
         }
 
         [Test]
@@ -168,6 +196,21 @@ namespace BalloonParty.Tests.Audio
             _hitHandler.Handle(new ActorHitMessage(cluster, Vector3.zero, Vector3.zero, HitOutcome.Pop));
 
             _player.Received(1).Play(GameSoundId.BalloonPop, Vector3.zero);
+        }
+
+        // A type with no dedicated pop id has no voice of its own to climb, so it never ramps —
+        // even though flight stats count it like every other type. One pop cannot tell the
+        // difference; two can.
+        [Test]
+        public void OnActorHit_UnmappedBalloonTypePoppedTwice_StaysAtTheRootBothTimes()
+        {
+            var cluster = Substitute.For<IBalloonModel>();
+            cluster.TypeName.Returns(BalloonType.BubbleCluster);
+
+            _hitHandler.Handle(new ActorHitMessage(cluster, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+            _hitHandler.Handle(new ActorHitMessage(cluster, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+
+            _player.Received(2).Play(GameSoundId.BalloonPop, Vector3.zero, null, 0, 1f);
         }
 
         [Test]
@@ -272,6 +315,7 @@ namespace BalloonParty.Tests.Audio
             // hit of the flight — so the second hit also carries offset -1.
             var position = new Vector3(3f, -1f, 0f);
 
+            _firedHandler.Handle(new ProjectileFiredMessage(position, Vector3.up));
             _wallHitHandler.Handle(new WallHitMessage(position, 4));
             _wallHitHandler.Handle(new WallHitMessage(position, 2));
 
@@ -287,6 +331,7 @@ namespace BalloonParty.Tests.Audio
             // flight sounds at the root.
             var position = new Vector3(3f, -1f, 0f);
 
+            _firedHandler.Handle(new ProjectileFiredMessage(position, Vector3.up));
             _wallHitHandler.Handle(new WallHitMessage(position, 5));
             _wallHitHandler.Handle(new WallHitMessage(position, 9));
 
@@ -435,6 +480,67 @@ namespace BalloonParty.Tests.Audio
                     Arg.Any<MessageHandlerFilter<T>[]>())
                 .Returns(Substitute.For<IDisposable>());
             return subscriber;
+        }
+
+        // Two systems now subscribe to the same messages — FlightStatsService owns the per-flight
+        // counts, CombatSoundRouter reads them for pitch — so a capture that kept only the last
+        // handler would silently drop one. Delivers to both in subscription order, as the bus does.
+        private sealed class Fanout<T> : IMessageHandler<T>
+        {
+            private readonly List<IMessageHandler<T>> _handlers = new();
+
+            public void Add(IMessageHandler<T> handler)
+            {
+                _handlers.Add(handler);
+            }
+
+            public void Handle(T message)
+            {
+                foreach (var handler in _handlers)
+                {
+                    handler.Handle(message);
+                }
+            }
+        }
+
+        // Stands in for a publisher that records before it publishes.
+        private sealed class RecordingPublisher<T> : IMessageHandler<T>
+        {
+            private readonly Action _record;
+            private readonly IMessageHandler<T> _subscribers;
+
+            public RecordingPublisher(Action record, IMessageHandler<T> subscribers)
+            {
+                _record = record;
+                _subscribers = subscribers;
+            }
+
+            public void Handle(T message)
+            {
+                _record();
+                _subscribers.Handle(message);
+            }
+        }
+
+        // Stands in for HitPipeline, which is what wires these together in the game: it records the
+        // hit into flight stats and only then publishes, so every subscriber reads a count that
+        // already includes the hit it is reacting to. Without this the router would see zero pops.
+        private sealed class HitPipelineStub : IMessageHandler<ActorHitMessage>
+        {
+            private readonly IFlightStatsWriter _flightStats;
+            private readonly IMessageHandler<ActorHitMessage> _subscribers;
+
+            public HitPipelineStub(IFlightStatsWriter flightStats, IMessageHandler<ActorHitMessage> subscribers)
+            {
+                _flightStats = flightStats;
+                _subscribers = subscribers;
+            }
+
+            public void Handle(ActorHitMessage message)
+            {
+                _flightStats.Record(message);
+                _subscribers.Handle(message);
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Game.Flight;
 using BalloonParty.Game.Score;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Extensions;
@@ -17,6 +18,7 @@ namespace BalloonParty.Projectile.Controller
         private readonly IHitDispatcher _hitDispatcher;
         private readonly IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
         private readonly IPublisher<PierceDischargedMessage> _dischargedPublisher;
+        private readonly IFlightStatsWriter _flightStats;
         private readonly ColorStreakTracker _streakTracker;
         private readonly SlotGrid _grid;
         private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
@@ -25,12 +27,14 @@ namespace BalloonParty.Projectile.Controller
             IHitDispatcher hitDispatcher,
             IPublisher<ShieldGainedMessage> shieldGainedPublisher,
             IPublisher<PierceDischargedMessage> dischargedPublisher,
+            IFlightStatsWriter flightStats,
             ColorStreakTracker streakTracker,
             SlotGrid grid)
         {
             _hitDispatcher = hitDispatcher;
             _shieldGainedPublisher = shieldGainedPublisher;
             _dischargedPublisher = dischargedPublisher;
+            _flightStats = flightStats;
             _streakTracker = streakTracker;
             _grid = grid;
         }
@@ -112,6 +116,8 @@ namespace BalloonParty.Projectile.Controller
             // Announce the discharge so its feel can play — the rainbow bloom, and (later) lights /
             // shockwave / slow-mo. Centred on the plowed line, carrying the charge (tough count) and
             // whether the shot was rainbow.
+            // Count before publishing, so every subscriber sees a total including this discharge.
+            _flightStats.RecordPierceDischarge();
             _dischargedPublisher.Publish(new PierceDischargedMessage(center / count, count, isRainbowBuff));
 
             pending.Clear();

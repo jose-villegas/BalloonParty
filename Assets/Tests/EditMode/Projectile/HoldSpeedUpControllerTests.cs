@@ -1,11 +1,13 @@
 using System;
 using BalloonParty.Projectile.Controller;
+using BalloonParty.Game.Flight;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
 using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
+using UniRx;
 using UnityEngine;
 
 namespace BalloonParty.Tests.Projectile
@@ -40,12 +42,13 @@ namespace BalloonParty.Tests.Projectile
             _config.HoldSpeedUpMax.Returns(2f);
             _config.HoldSpeedUpLerpDuration.Returns(0.5f);
 
-            var firedSubscriber = CaptureSubscriber<ProjectileFiredMessage>(h => _firedHandler = h);
-            var destroyedSubscriber =
-                CaptureSubscriber<ProjectileDestroyedMessage>(h => _destroyedHandler = h);
+            // The controller now gates on IFlightScope.IsAirborne instead of the two messages. The
+            // relays keep the tests firing the same messages against the same window.
+            var flightScope = new FakeFlightScope();
+            _firedHandler = new Relay<ProjectileFiredMessage>(() => flightScope.Airborne.Value = true);
+            _destroyedHandler = new Relay<ProjectileDestroyedMessage>(() => flightScope.Airborne.Value = false);
 
-            _controller = new HoldSpeedUpController(_config, _timeScale, firedSubscriber,
-                destroyedSubscriber);
+            _controller = new HoldSpeedUpController(_config, _timeScale, flightScope);
             _controller.Start();
         }
 
@@ -149,6 +152,32 @@ namespace BalloonParty.Tests.Projectile
                     Arg.Any<MessageHandlerFilter<T>[]>())
                 .Returns(Substitute.For<IDisposable>());
             return subscriber;
+        }
+
+        private sealed class FakeFlightScope : IFlightScope
+        {
+            public ReactiveProperty<bool> Airborne { get; } = new();
+
+            public int FlightIndex => 0;
+
+            IReadOnlyReactiveProperty<bool> IFlightScope.IsLoaded => Airborne;
+
+            IReadOnlyReactiveProperty<bool> IFlightScope.IsAirborne => Airborne;
+        }
+
+        private sealed class Relay<T> : IMessageHandler<T>
+        {
+            private readonly Action _onHandle;
+
+            public Relay(Action onHandle)
+            {
+                _onHandle = onHandle;
+            }
+
+            public void Handle(T message)
+            {
+                _onHandle();
+            }
         }
     }
 }

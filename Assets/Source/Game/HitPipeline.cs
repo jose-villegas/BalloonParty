@@ -1,4 +1,5 @@
 using BalloonParty.Balloon.Controller;
+using BalloonParty.Game.Flight;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
@@ -11,16 +12,19 @@ namespace BalloonParty.Game
     {
         private readonly ScoreController _score;
         private readonly BalloonControllerRegistry _balloonRegistry;
+        private readonly IFlightStatsWriter _flightStats;
         private readonly IPublisher<ActorHitMessage> _hitPublisher;
 
         [Inject]
         internal HitPipeline(
             ScoreController score,
             BalloonControllerRegistry balloonRegistry,
+            IFlightStatsWriter flightStats,
             IPublisher<ActorHitMessage> hitPublisher)
         {
             _score = score;
             _balloonRegistry = balloonRegistry;
+            _flightStats = flightStats;
             _hitPublisher = hitPublisher;
         }
 
@@ -30,6 +34,11 @@ namespace BalloonParty.Game
             _score.OnActorHit(msg);
 
             _balloonRegistry.Route(msg);
+
+            // Before the publish, deliberately: subscribers read a count that already includes the hit
+            // they are reacting to, so no reader depends on subscription order. This is the only write
+            // site for flight stats — see IFlightStatsWriter.
+            _flightStats.Record(msg);
 
             _hitPublisher.Publish(msg);
         }
