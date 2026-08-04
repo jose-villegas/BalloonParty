@@ -6,7 +6,7 @@ The full-screen level-up ceremony that plays when all color bars complete.
 
 | File | What it does |
 |---|---|
-| `LevelUpLifetimeScope` | VContainer child scope on the LevelUp popup root; registers `LevelUpPopUp` and a `CinematicEndGate(LevelCompleteHit)` by concrete type (not `.As<IReadyGate>()`) so the popup names the exact gate it waits on |
+| `LevelUpLifetimeScope` | VContainer child scope on the LevelUp popup root; registers `LevelUpPopUp` and a `CinematicEndGate(LevelCompleteHit)` by concrete type (not `.As<IReadyGate>()`) so the popup names the exact gate it waits on, plus `RegisterMetricLabels(this)` (see `UI/Telemetry/`), which binds any `MetricLabel` under the popup to `ILevelMetricsView` and no-ops when there are none |
 | `LevelUpPopUp` | Holds a `PauseService` pause while it waits for the level-complete hit cinematic to end (via an injected `CinematicEndGate`), then freezes time via `TimeScaleService`, shows the popup, spawns glow trails from each `ColorProgressBar` to the glow fill, and publishes `LevelUpDismissedMessage` on Continue |
 
 ## How it works

@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
-using BalloonParty.Balloon.Type;
-using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Game.Telemetry
@@ -26,9 +24,6 @@ namespace BalloonParty.Game.Telemetry
     // the dense index, so an enum insert cannot silently re-label historical data.
     internal sealed class TelemetryEnvelopeSerializer
     {
-        private const string OtherColorBucketName = "other";
-        private const string UnknownBucketName = "unknown";
-
         private readonly IGamePalette _palette;
         private readonly StringBuilder _builder = new(512);
 
@@ -85,32 +80,13 @@ namespace BalloonParty.Game.Telemetry
             };
         }
 
-        // Colour buckets index IGamePalette.ProgressColorNames, with one trailing bucket for ids that
-        // are not progress colours — rainbow's sentinel, paint-converted, or an actor with no colour
-        // at all. (A palette colour literally named "other" would merge into that bucket; no guard,
-        // just don't.) BalloonType and ItemType index their enums directly.
-        //
-        // Every branch falls back to a NAME on an out-of-range bucket. Enum.ToString() on an undefined
-        // value returns the integer as a string, which would silently reintroduce the dense index this
-        // whole scheme exists to keep off the wire.
+        // Delegates to AxisBucketNaming (shared with MetricValueResolver in BalloonParty.UI.Telemetry,
+        // which needs this same forward mapping plus its inverse) rather than keeping its own copy — see
+        // that type for the "other"/"unknown" fallback rationale. (A palette colour literally named
+        // "other" would merge into that bucket; no guard, just don't.)
         private string BucketName(MetricAxis axis, int bucket)
         {
-            switch (axis)
-            {
-                case MetricAxis.Color:
-                    var names = _palette.ProgressColorNames;
-                    return bucket < names.Count ? names[bucket] : OtherColorBucketName;
-                case MetricAxis.BalloonType:
-                    return Enum.IsDefined(typeof(BalloonType), bucket)
-                        ? ((BalloonType)bucket).ToString()
-                        : UnknownBucketName;
-                case MetricAxis.ItemType:
-                    return Enum.IsDefined(typeof(ItemType), bucket)
-                        ? ((ItemType)bucket).ToString()
-                        : UnknownBucketName;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(axis), axis, "Unhandled MetricAxis.");
-            }
+            return AxisBucketNaming.BucketName(_palette.ProgressColorNames, axis, bucket);
         }
 
         private static bool AnyNonZero(IReadOnlyList<int> buckets)

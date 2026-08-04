@@ -1071,6 +1071,16 @@ Four changes, in dependency order. Only the first is small.
    `Completed`, `RunId`, `AttemptId`, `AttemptIndex`, `LevelAttemptOrdinal` and `EndCause`
    are this game's run model. The library's own envelope needs a scope kind, a payload, a
    timestamp and a schema version; everything else is dimensions the consumer attaches.
+   **Note the one UI dependency on this:** `MetricValueResolver.ResolveField` downcasts
+   `ISealedMetrics` to `LevelMetricsSnapshot` to read `LevelIndex`/`Completed`, so
+   `RecordField` moves with change #4. One `is` pattern in one method — a cost to plan
+   for, not a redirection.
+
+W4 pre-built part of change #1: `AxisBucketNaming` is the `bucketIndex → name` half of the
+axis descriptor, already isolated behind an `IReadOnlyList<string>` rather than
+`IGamePalette`. W4 also verified change #2's premise holds — no file outside
+`Game/Telemetry/` references the five named breakdown properties, so deleting them stays a
+pure engine edit that touches no UI and no prefab.
 
 **Open question, decide before extraction:** how a metric is identified across the boundary.
 `MetricId` is inherently the consumer's — thirty rows naming *this* game's events. Either the
@@ -1242,14 +1252,75 @@ in-editor playtest **and** a rebuild with `UNITY_EDITOR` stripped (for the `#els
 branch); `dotnet build` cannot verify the state machine. Acceptance:
 **R2, R3, R8, R8a, R9–R11, R13–R17, R21–R23, R28c**.
 
-### W4 — UI read model and popups · **P1 · M–L · opus**
-`LevelUpPopUp` and `GameOverScreen` consumption of `ILevelMetricsView` (the interface
-itself ships in W1, the implementation in W3), the ceremony-vs-flush divergence, the
-projected-vs-banked convention, the read-after-gate contract in `UI/GameOver/README.md`.
+### W4 — Catalog-driven metric labels · **P1 · M · sonnet**
 
-**Do not start before the popup content is decided** (*Open decisions* #1) — *what* the
-popups show is a design call this wave cannot invent. *When* they read it is a correctness
-one. Playtest required. Acceptance: **R18–R20**.
+Ships the *mechanism*, not the popup content. The content is authored in the editor
+afterwards, which is what unblocks this wave — "what the popups show" was never a coding
+question.
+
+**Most of this already exists and must be reused, not reinvented:**
+
+| Existing | Role in W4 |
+|---|---|
+| `UI/FormattedLabel.cs` | Already treats a `TMP_Text`'s authored text as a `string.Format` template, defaulting to `{0}`. This *is* the "the label provides the format" mechanism |
+| `UI/Binding/IReactiveBindable<T>` | The bind seam every UI view here already implements |
+| `UI/Binding/ReactiveBinderRegistration.RegisterBoundViews<TView, TSource, TValue>` | Gathers every matching view under a `LifetimeScope` and binds them to one reactive source. `ILevelMetricsView`'s three members became `IReadOnlyReactiveProperty` in W3 precisely so this helper applies |
+| `UI/ReactiveCounterLabel` + `ICounterDisplay` | The established shape: a MonoBehaviour subscribes, a sibling component decides how the number renders. Follow it |
+
+**New:**
+
+- **`MetricBinding`** — a `[Serializable]` struct naming one value: source
+  (`CeremonyLevel` / `LastFlushedLevel` / `Run`), value kind (`Metric` / `Timer` /
+  `AxisBucket` / `RecordField`), and the id it needs. Nothing else in the wave may hold
+  these fields loose; the struct is the unit.
+- **`MetricBindingDrawer`** — `[CustomPropertyDrawer(typeof(MetricBinding))]`, one popup
+  built from `MetricCatalog.AllIds`, `AllSlots` and `TimerCatalog`, rendered as a flat
+  path list (`Pops`, `Pops › by color › Red`, `Gameplay time`, `Level index`).
+- **`MetricLabel`** — the MonoBehaviour: one `MetricBinding`, binds via
+  `IReactiveBindable`, formats through `FormattedLabel`.
+- **`MetricValueResolver`** — pure C#, `(snapshot, MetricBinding) → object`. The only
+  place that knows how a binding becomes a number, so it is the only place W4 needs tests.
+
+**Formatting comes from the catalog's unit column**, never from the label: `seconds`
+renders as time, `level_hundredths` as a percentage, `count` and `points` as
+thousands-separated integers. A label author writes `"Reds popped: {0}"` and gets the
+right shape without knowing which is which.
+
+**Two structural constraints, both deliberate:**
+
+1. **One value per label now; a collection later without a redesign.** Achieved by
+   writing a `PropertyDrawer` for `MetricBinding` rather than a custom `Editor` for
+   `MetricLabel` — Unity reuses a property drawer for every element of an array for free.
+   Do not fold the binding's fields directly into the MonoBehaviour, and do not hand-roll
+   the popup in a component editor: either choice forfeits this.
+
+   **What that buys, precisely:** the serialized authoring data and the entire editor UI
+   survive untouched — the expensive half, and the half a custom editor would have thrown
+   away. It is *not* free end to end. `MetricLabel.Bind` produces one subscription; N
+   bindings across different sources means N subscriptions, a cached latest value per
+   source, and a re-render of the whole tuple whenever any one ticks, because
+   `string.Format(format, values)` needs all N at once and the three sources tick at
+   different moments (ceremony entry, level flush, game over). Plus a hide-when-zero
+   any/all policy. Budget that as a rewrite of `Bind`/`Render`, not a field change.
+2. **Bind through `(MetricId, axis, bucket)`, never through the snapshot's typed
+   breakdown properties** (`PopsByColor`, `PointsByColor`, `ItemsActivated`, …). Those are
+   extraction change #2 in *Separability* — going through the catalog instead means they
+   can be removed later without touching a prefab. This is the whole reason to prefer a
+   generated dropdown over per-metric components.
+
+**Colour buckets store the bucket *name*, not its index.** The colour axis is sized from
+`IGamePalette.ProgressColorNames` at runtime, so a stored index silently repoints every
+label the day the palette is reordered. Balloon-type and item-type buckets are enum
+ordinals and store as-is. A name that no longer resolves warns once and renders the
+placeholder — never throws inside a popup.
+
+**R20 in this design:** every label must render against the empty snapshot, which is a real
+runtime state, not a defensive hypothetical — `CeremonyLevel` is cleared to it on an
+aborted level-up while the popup may still be awaiting its gate. `ReactiveCounterLabel`'s
+existing `ShowPlaceholder()` is the precedent.
+
+Playtest required (label rendering is not verifiable from `dotnet build`).
+Acceptance: **R18–R20**.
 
 ### W5 — Export decorators · **P1 · M · sonnet**
 `BatchingTelemetrySink`, `ConsentGateSink`, `ITelemetryConsent`, and
@@ -1265,6 +1336,12 @@ Asset path `Assets/Configuration/TelemetrySettings.asset`, matching its siblings
 in `GameplayMetricsService`. It is a build/ops kill-switch, a different concern from player
 consent, but it belongs at the same seam so there is exactly one place a record can be
 dropped (**R26**).
+
+**Non-goal, now load-bearing: never gate the accumulator or the read model — only the
+sink.** Consent and the `Enabled` kill-switch sit downstream of `GameplayMetricsService`,
+which is also what serves `ILevelMetricsView`. Since W4, that placement is the difference
+between "export is off" and "the level-up popup renders `--`". Nothing in code enforces it,
+and W5 is exactly where someone would be tempted to short-circuit the counting instead.
 
 **Do not start before the consent policy is decided** (*Open decisions* #2). Each decorator
 is one concern with an obvious test matrix. Acceptance: **R26, R28b, R30a**.
@@ -1488,11 +1565,11 @@ one capture per subscribed message wired in a `BuildService()` helper, `Start()`
 
 ## Open decisions
 
-Not blockers for W0–W3; needed before W4 and W5 respectively.
-
-1. **What the popups actually show.** Which metrics, in what order, with what visual
-   treatment. A design call, not an engineering one. The read model serves whatever is
-   chosen; W4 cannot be specified without it.
+1. ~~**What the popups actually show.**~~ **Resolved — dissolved rather than decided.**
+   W4 ships a catalog-driven binding component instead of hand-built popup labels, so the
+   content becomes editor authoring rather than a code prerequisite. Which metrics appear,
+   in what order, with what treatment, is chosen in the inspector after the wave lands and
+   can change without a code edit.
 2. **Consent policy.** Opt-in, opt-out, or region-dependent; where the toggle lives; what
    happens to records buffered before a decision. One line, but it gates W5's default.
 3. **Analytics provider.** Gates W6 entirely. Until chosen, the JSONL sink is the only
