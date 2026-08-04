@@ -1,3 +1,13 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html" title=" " alt="" coords="5,5,221,45"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Game_1_1Telemetry_1_1IReadOnlyMetricSet.html" title=" " alt="" coords="5,69,221,109"/>
+<area shape="rect" id="Node000001" href="$interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ISealedMetrics.html" title=" " alt="" coords="269,37,485,77"/>
+<area shape="poly" id="edge419_Node000000_Node000001" title=" " alt="" coords="234,72,269,68,270,73,235,77"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Game_1_1Telemetry_1_1MetricSet.html" title=" " alt="" coords="269,101,485,141"/>
+<area shape="poly" id="edge423_Node000000_Node000005" title=" " alt="" coords="235,101,270,106,269,111,234,107"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Telemetry_1_1MetricsSnapshotBase.html" title=" " alt="" coords="533,37,749,77"/>
+<area shape="poly" id="edge420_Node000001_Node000002" title=" " alt="" coords="499,55,533,55,533,60,499,60"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Game_1_1Telemetry_1_1LevelMetricsSnapshot.html" title=" " alt="" coords="797,5,1013,45"/>
+<area shape="poly" id="edge421_Node000002_Node000003" title=" " alt="" coords="762,40,797,36,798,41,763,45"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Game_1_1Telemetry_1_1RunMetricsSnapshot.html" title=" " alt="" coords="797,69,1013,109"/>
+<area shape="poly" id="edge422_Node000002_Node000004" title=" " alt="" coords="763,69,798,74,797,79,762,75"/>
 </map>

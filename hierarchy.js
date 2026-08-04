@@ -287,6 +287,7 @@ var hierarchy =
       [ "BalloonParty.Game.Score.ColorStreakTracker", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html", null ],
       [ "BalloonParty.Game.Score.ScoreController", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html", null ],
       [ "BalloonParty.Game.Score.ScoreTrailService", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html", null ],
+      [ "BalloonParty.Game.Telemetry.GameplayMetricsService", "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html", null ],
       [ "BalloonParty.Game.Telemetry.ITelemetrySink", "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ITelemetrySink.html", [
         [ "BalloonParty.Game.Telemetry.CompositeTelemetrySink", "classBalloonParty_1_1Game_1_1Telemetry_1_1CompositeTelemetrySink.html", null ],
         [ "BalloonParty.Game.Telemetry.TelemetrySinkBase", "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetrySinkBase.html", null ]
@@ -425,6 +426,9 @@ var hierarchy =
     [ "BalloonParty.Shared.Messages.IHitDispatcher", "interfaceBalloonParty_1_1Shared_1_1Messages_1_1IHitDispatcher.html", [
       [ "BalloonParty.Game.HitPipeline", "classBalloonParty_1_1Game_1_1HitPipeline.html", null ]
     ] ],
+    [ "BalloonParty.Projectile.Controller.IHoldSpeedUpState", "interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IHoldSpeedUpState.html", [
+      [ "BalloonParty.Projectile.Controller.HoldSpeedUpController", "classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html", null ]
+    ] ],
     [ "BalloonParty.Item.IItem", "interfaceBalloonParty_1_1Item_1_1IItem.html", [
       [ "BalloonParty.Item.IBalloonItem", "interfaceBalloonParty_1_1Item_1_1IBalloonItem.html", [
         [ "BalloonParty.Item.Bomb.BombItemHandler", "classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler.html", null ],
@@ -448,7 +452,9 @@ var hierarchy =
       [ "BalloonParty.Game.Score.Behaviours.ShapeFormationTicker", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html", null ],
       [ "BalloonParty.Shared.ImpactEventBus", "classBalloonParty_1_1Shared_1_1ImpactEventBus.html", null ]
     ] ],
-    [ "BalloonParty.Game.Telemetry.ILevelMetricsView", "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html", null ],
+    [ "BalloonParty.Game.Telemetry.ILevelMetricsView", "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html", [
+      [ "BalloonParty.Game.Telemetry.GameplayMetricsService", "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html", null ]
+    ] ],
     [ "BalloonParty.Configuration.Level.ILevelPacingConfiguration", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html", [
       [ "BalloonParty.Configuration.Level.LevelPacingConfiguration", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html", null ]
     ] ],
@@ -598,6 +604,7 @@ var hierarchy =
       [ "BalloonParty.Game.Run.RetryTracker", "classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html", null ],
       [ "BalloonParty.Game.Score.ScoreController", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html", null ],
       [ "BalloonParty.Game.Score.ScoreTrailService", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html", null ],
+      [ "BalloonParty.Game.Telemetry.GameplayMetricsService", "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html", null ],
       [ "BalloonParty.Shared.Pause.PauseService", "classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html", null ],
       [ "BalloonParty.Shared.Pause.TimeScaleService", "classBalloonParty_1_1Shared_1_1Pause_1_1TimeScaleService.html", null ],
       [ "BalloonParty.Slots.Grid.BalancePathHolder", "classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html", null ]
@@ -732,6 +739,7 @@ var hierarchy =
       [ "BalloonParty.Game.Run.RunController", "classBalloonParty_1_1Game_1_1Run_1_1RunController.html", null ],
       [ "BalloonParty.Game.Score.ScoreController", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html", null ],
       [ "BalloonParty.Game.Score.ScoreTrailService", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html", null ],
+      [ "BalloonParty.Game.Telemetry.GameplayMetricsService", "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html", null ],
       [ "BalloonParty.Item.ItemActivator", "classBalloonParty_1_1Item_1_1ItemActivator.html", null ],
       [ "BalloonParty.Item.ItemAssigner", "classBalloonParty_1_1Item_1_1ItemAssigner.html", null ],
       [ "BalloonParty.Item.Laser.LaserItemHandler", "classBalloonParty_1_1Item_1_1Laser_1_1LaserItemHandler.html", null ],
@@ -1120,6 +1128,7 @@ var hierarchy =
     [ "BalloonParty.Editor.ScriptReferenceRemap", "classBalloonParty_1_1Editor_1_1ScriptReferenceRemap.html", null ],
     [ "BalloonParty.Audio.Editor.FreesoundResponseParser.SearchResponse", "classBalloonParty_1_1Audio_1_1Editor_1_1FreesoundResponseParser_1_1SearchResponse.html", null ],
     [ "BalloonParty.Editor.Bush.BushBranchGenerator.Segment", "structBalloonParty_1_1Editor_1_1Bush_1_1BushBranchGenerator_1_1Segment.html", null ],
+    [ "BalloonParty.Game.Telemetry.SessionTelemetryContext", "classBalloonParty_1_1Game_1_1Telemetry_1_1SessionTelemetryContext.html", null ],
     [ "BalloonParty.Editor.SetMobileTextureSize", "classBalloonParty_1_1Editor_1_1SetMobileTextureSize.html", null ],
     [ "BalloonParty.Audio.Editor.SfxCandidate", "structBalloonParty_1_1Audio_1_1Editor_1_1SfxCandidate.html", null ],
     [ "BalloonParty.Audio.Editor.SfxClipImporter", "classBalloonParty_1_1Audio_1_1Editor_1_1SfxClipImporter.html", null ],

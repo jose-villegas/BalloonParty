@@ -141,7 +141,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Tracks and displays player progress toward the next level — one bar per balloon color, plus score and level counters.</p>
-<h1><a class="anchor" id="autotoc_md965"></a>
+<h1><a class="anchor" id="autotoc_md966"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -169,11 +169,11 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>LevelLabel</code>   </td><td class="markdownTableBodyNone">Binds level <code>TMP_Text</code> to <code>LevelController.Level</code>; <code>_showNextLevel</code> toggle   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md966"></a>
+<h1><a class="anchor" id="autotoc_md967"></a>
 How it works</h1>
 <p>Four <code>ColorProgressBar</code> instances are placed in the scene under the Score UI Canvas — one per balloon color. <code>ScoreUILifetimeScope</code> injects them via <code>RegisterBuildCallback</code> so each bar resolves its <code>[Inject]</code> dependencies (palette, score controller, subscribers, pool manager, trail service) without singleton conflicts.</p>
 <p>Each bar identifies its color through a <code>[PaletteColorName]</code> string field, which renders in the Inspector as a popup dropdown with color swatch. On <code>Start()</code> the bar resolves its <code>PaletteEntry</code>, tints its graphics (preserving existing alpha), sets up the slider, and registers a target provider with <code>ScoreTrailService</code> — which also prewarms that color's <code>ScoreTrail_{color}</code> pool (see <code><a class="el" href="Game_2Score_2README_8md.html">Game/Score/README.md</a></code>). The bar then kicks off its own notice prewarm via <code>ProgressNoticePresenter.PrewarmAsync</code>, tied to <code>destroyCancellationToken</code>. Both prewarms proceed one <code>Instantiate</code> per frame so registering a color at level setup never spikes into a hitch, and both no-op past the first registration so a level restart tops up rather than growing the pools unboundedly.</p>
-<h2><a class="anchor" id="autotoc_md967"></a>
+<h2><a class="anchor" id="autotoc_md968"></a>
 Scoring flow</h2>
 <p>Scoring is deferred to trail arrival — points, persistent score, and level progress all update when a <code>ScoreTrailArrivedMessage</code> is received, not immediately on balloon pop. This synchronises the visual trail animation with the actual score state.</p>
 <ol type="1">
@@ -184,7 +184,7 @@ Scoring flow</h2>
 <li><b><code>ScoreController.OnTrailArrived</code></b> → adds <code>msg.Points</code> to <code>_persistentScore</code> and <code>_totalScore</code>; <code>LevelController</code> confirms progress and checks for level-up</li>
 <li><b><code>ColorProgressBar.OnTrailArrived</code></b> → advances the slider by <code>msg.Points</code>, spawns a <b>point notice</b> (showing <code>msg.Points</code>) at the trail's arrival world position (converted to local anchored space via <code>WorldToAnchoredPosition</code>) using the <code>_pointNoticePrefab</code>, triggers "TrailHit" animator feedback</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md968"></a>
+<h2><a class="anchor" id="autotoc_md969"></a>
 Level-up reset flow</h2>
 <p>Bar reset is a two-phase process synchronised with the glow trail ceremony:</p>
 <ol type="1">
@@ -192,7 +192,7 @@ Level-up reset flow</h2>
 <li><b><code>LevelUpGlowTrailsMessage</code></b> → <code>DrainSliderAsync</code> gradually drains the slider to zero in sync with glow trail waves spawned by <code>LevelUpPopUp</code>.</li>
 <li><b><code>LevelUpDismissedMessage</code></b> → <code>OnDismissed</code> applies <code>_stashedMaxValue</code> as the new <code>maxValue</code> and resets the slider value to zero.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md969"></a>
+<h2><a class="anchor" id="autotoc_md970"></a>
 Notices</h2>
 <p><code>ProgressNotice</code> is a pooled TMP popup with <code>ColorableRenderer</code>-based tinting. Two separate prefabs and pools are used:</p>
 <ul>
@@ -203,10 +203,10 @@ Notices</h2>
 <p><code>OnValidate()</code> provides editor-time color preview — it loads <code>GamePalette</code> via <code>AssetDatabase</code>, finds the matching entry, and tints <code>_graphicsToSetColor</code> while preserving each graphic's existing alpha.</p>
 <p>When the slider reaches its maximum, a completion particle plays and the bar enters its "Completed" animator state.</p>
 <p><code>ScoreCounterLabel</code> and <code>LevelLabel</code> are bound imperatively from <code>ScoreUILifetimeScope.Start()</code> — they receive <code>ScoreController.TotalScore</code> and <code>LevelController.Level</code> respectively and subscribe with UniRx.</p>
-<h2><a class="anchor" id="autotoc_md970"></a>
+<h2><a class="anchor" id="autotoc_md971"></a>
 Night badge</h2>
 <p>While it's night (<code>ITimeOfDayNight.IsNight</code>), every bar shows a "2x" badge reminding the player that <code>ScoreController</code> is doubling every pop's points (see <code><a class="el" href="Game_2Score_2README_8md.html">Game/Score/README.md</a>#night-multiplier</code>). Rather than every badge lighting independently, a single highlight travels back and forth across the whole row (<code>Mathf.PingPong</code>, its speed normalized by bar count so a full sweep takes the same time whether two colors or five are showing). Each bar's badge brightens and grows as the highlight passes over it, with a wide smoothstepped falloff so neighbours blend into one soft traveling wave instead of bars blinking on one at a time. The whole badge eases in when night begins and out when it ends (<code>_nightBadgeFadeDuration</code>) rather than popping, and stays deactivated while fully faded. Optional <code>_nightFadeExtras</code> (e.g. a night backdrop that must sit on a different sorting layer, outside the badge's own hierarchy) fade in/out on the same schedule but take no part in the sweep.</p>
-<h1><a class="anchor" id="autotoc_md971"></a>
+<h1><a class="anchor" id="autotoc_md972"></a>
 Interactions</h1>
 <ul>
 <li><b>ScoreController</b> — source of <code>ScorePointsGroupMessage</code> and <code>TotalScore</code>; score mutation deferred to <code>ScoreTrailArrivedMessage</code>. <code>Level</code> and <code>ScoreLevelUpMessage</code> belong to <code>LevelController</code> instead (<code>Game/Level/</code>)</li>

@@ -12,5 +12,6 @@ var classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController =
     [ "_t", "classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#a521b7d04cb29e14441d82b0cce0a4952", null ],
     [ "_timeScale", "classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#a263ff6e8229e197a848b5d6833bdcfdb", null ],
     [ "_wasActive", "classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#a843f1d2e213bfe5207c61b66ff51fc23", null ],
-    [ "ConsumedInput", "classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#ac0eca39911ac8a5b53bddbf00cf425c5", null ]
+    [ "ConsumedInput", "classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#ac0eca39911ac8a5b53bddbf00cf425c5", null ],
+    [ "IsHolding", "classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#a9ec6cf14743e4d258a9fc714031d5943", null ]
 ];

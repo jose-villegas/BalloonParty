@@ -208,6 +208,7 @@ var NAVTREEINDEX0 =
 "GameRenderMapsWindow_8cs.html":[7,0,6,3,0],
 "GameScopeRegistration_8cs.html":[7,0,7,10],
 "GameSoundId_8cs.html":[7,0,0,7],
+"GameplayMetricsService_8cs.html":[7,0,7,7,6],
 "GatekeeperActorModel_8cs.html":[7,0,15,0,0,11],
 "GizmoDrawingHelper_8cs.html":[7,0,14,10,4],
 "GradientTextureDrawer_8cs.html":[7,0,6,17],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "IBalloonVariant_8cs.html":[7,0,1,3,2],
 "IBalloonViewBinding_8cs.html":[7,0,1,4,3],
 "IBalloonsConfiguration_8cs.html":[7,0,3,0,5],
-"IBoardEffect_8cs.html":[7,0,7,0,12],
-"IBoardResettable_8cs.html":[7,0,7,5,2]
+"IBoardEffect_8cs.html":[7,0,7,0,12]
 };

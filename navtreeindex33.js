@@ -1,5 +1,8 @@
 var NAVTREEINDEX33 =
 {
+"classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#a63e3b48194658c3c52d10b1dfded0bb9":[6,0,0,6,1,1,2],
+"classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#a665abee8186d012be96fef76d5054e2f":[5,0,0,6,1,1,12],
+"classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#a665abee8186d012be96fef76d5054e2f":[6,0,0,6,1,1,12],
 "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#a7313f89a8f420f9e0af8ec56352a60e3":[5,0,0,6,1,1,3],
 "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#a7313f89a8f420f9e0af8ec56352a60e3":[6,0,0,6,1,1,3],
 "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#a85566ed197fd070dc043c3958a16a697":[5,0,0,6,1,1,5],
@@ -138,6 +141,8 @@ var NAVTREEINDEX33 =
 "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#affbe79c5b3014ce24d5f67324a277803":[6,0,0,6,9,0],
 "classBalloonParty_1_1Game_1_1GameScopeRegistration.html":[5,0,0,6,10],
 "classBalloonParty_1_1Game_1_1GameScopeRegistration.html":[6,0,0,6,10],
+"classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a09b26181830b8a5cd04ab7c6a15a5750":[5,0,0,6,10,11],
+"classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a09b26181830b8a5cd04ab7c6a15a5750":[6,0,0,6,10,11],
 "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a143e0fa66785e50bbb6ddf5071af25a3":[5,0,0,6,10,7],
 "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a143e0fa66785e50bbb6ddf5071af25a3":[6,0,0,6,10,7],
 "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a1cd7bf4a47cc2d87f0555d9ba8e70880":[5,0,0,6,10,2],
@@ -244,10 +249,5 @@ var NAVTREEINDEX33 =
 "classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#a42c9bd0ad89d422b07f2fd8b1da35acb":[6,0,0,6,12,0],
 "classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#a9f9d6fee67531dfab3d57edb28429e3d":[5,0,0,6,12,5],
 "classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#a9f9d6fee67531dfab3d57edb28429e3d":[6,0,0,6,12,5],
-"classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#aa465c5771cbd4a78a5d5b9dfd1697f08":[5,0,0,6,12,1],
-"classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#aa465c5771cbd4a78a5d5b9dfd1697f08":[6,0,0,6,12,1],
-"classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#ab8a6880585ecdb083cd88daf5070d807":[5,0,0,6,12,7],
-"classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#ab8a6880585ecdb083cd88daf5070d807":[6,0,0,6,12,7],
-"classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#ac2dc570a6b47f7591750d2546b8331fa":[5,0,0,6,12,3],
-"classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#ac2dc570a6b47f7591750d2546b8331fa":[6,0,0,6,12,3]
+"classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#aa465c5771cbd4a78a5d5b9dfd1697f08":[5,0,0,6,12,1]
 };

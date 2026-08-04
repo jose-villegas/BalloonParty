@@ -110,11 +110,11 @@ $(function(){initNavTree('plan_audio.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">Audio / SFX</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md264"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md265"></a>
 Audio / SFX</h1>
 <p>Give gameplay a voice — trigger sound effects at every key moment (pops, shots, shields, items, streaks, level-up, game-over) by passively consuming the game's existing MessagePipe event stream. The design goal is an <em>easy</em> handler: adding a new sound is one enum value, one subscription line, and an authored clip — no plumbing.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md266"></a>
+<h2><a class="anchor" id="autotoc_md267"></a>
 Principles</h2>
 <ul>
 <li><b>Native Unity audio, no middleware.</b> <code>AudioSource</code> + <code>AudioMixer</code> + pooled voices. No FMOD/Wwise: the variation, pooling, and voice-limiting we'd adopt middleware <em>for</em> are the ~200 lines we write anyway, and middleware adds licensing, a native plugin, and URP-upgrade friction a solo mobile project doesn't need. Revisit only if audio scope explodes into adaptive/interactive music.</li>
@@ -126,9 +126,9 @@ Principles</h2>
 <li><b>Decomposed internals.</b> The service delegates to focused plain-C# helpers (voice-limiter, throttle gate, variation picker) — each testable without VContainer or Unity.</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md268"></a>
+<h2><a class="anchor" id="autotoc_md269"></a>
 Architecture</h2>
-<h3><a class="anchor" id="autotoc_md269"></a>
+<h3><a class="anchor" id="autotoc_md270"></a>
 Folder structure</h3>
 <div class="fragment"><div class="line">Assets/Source/Audio/</div>
 <div class="line">├── GameSoundId.cs                 ← semantic sound identity (enum), decoupled from messages</div>
@@ -165,7 +165,7 @@ Folder structure</h3>
 </div><!-- fragment --><p><code>MusicalPitchExtensions</code> (semitone ↔ pitch-multiplier math) lives in <code>Shared/Extensions/</code> — it is generic equal-temperament math, not audio-specific, so it follows the "extension
 methods in `Shared/Extensions/`" convention rather than living in this folder.</p>
 <p><b>Namespace:</b> <code><a class="el" href="namespaceBalloonParty_1_1Audio.html">BalloonParty.Audio</a></code> (routing <code><a class="el" href="namespaceBalloonParty_1_1Audio_1_1Routing.html">BalloonParty.Audio.Routing</a></code>, view <code><a class="el" href="namespaceBalloonParty_1_1Audio_1_1View.html">BalloonParty.Audio.View</a></code>, config <code><a class="el" href="namespaceBalloonParty_1_1Audio_1_1Configuration.html">BalloonParty.Audio.Configuration</a></code>).</p>
-<h3><a class="anchor" id="autotoc_md270"></a>
+<h3><a class="anchor" id="autotoc_md271"></a>
 Class diagram</h3>
 <div class="fragment"><div class="line">classDiagram</div>
 <div class="line">    class GameSoundId {</div>
@@ -267,7 +267,7 @@ Class diagram</h3>
 <div class="line">    CombatSoundRouter ..&gt; GameSoundId : maps message to</div>
 <div class="line">    AudioChannelController --&gt; IAudioMixerRouter : SetChannelDucked</div>
 <div class="line">    AudioChannelController --&gt; SfxService : StopChannel(Gameplay) on GameOver</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md271"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md272"></a>
 Sequence diagram — event to sound</h3>
 <div class="fragment"><div class="line">sequenceDiagram</div>
 <div class="line">    participant Bus as MessagePipe</div>
@@ -291,7 +291,7 @@ Sequence diagram — event to sound</h3>
 <div class="line">        V--&gt;&gt;Svc: onComplete after clip.length over abs pitch, real-time, ignoreTimeScale</div>
 <div class="line">        Svc-&gt;&gt;Pool: Return(&quot;SfxVoice&quot;, voice)</div>
 <div class="line">    end</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md272"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md273"></a>
 Dependency graph — VContainer wiring</h3>
 <div class="fragment"><div class="line">graph TD</div>
 <div class="line">    Scope[GameScopeRegistration.RegisterAudio] --&gt;|RegisterInstance| Bank[ISoundBankConfiguration]</div>
@@ -321,7 +321,7 @@ Dependency graph — VContainer wiring</h3>
 <div class="line">    IR -.subscribes.-&gt; MP</div>
 <div class="line">    ACC -.subscribes.-&gt; MP2[(PausedMessage / ResumedMessage / GameOverMessage)]</div>
 </div><!-- fragment --><p><code>SfxService</code> is deliberately <b>bus-free</b> — it never injects <code>ISubscriber&lt;T&gt;</code> or <code>PauseService</code> itself. Pause/duck/game-over reactions live entirely in <code>AudioChannelController</code>, which calls <code>SfxService.StopChannel</code> and <code>IAudioMixerRouter.SetChannelDucked</code> from the outside. This keeps the orchestrator a pure <code>Play</code>/<code>Stop</code> surface and the pause policy independently swappable.</p>
-<h3><a class="anchor" id="autotoc_md273"></a>
+<h3><a class="anchor" id="autotoc_md274"></a>
 Voice lifecycle</h3>
 <div class="fragment"><div class="line">stateDiagram-v2</div>
 <div class="line">    [*] --&gt; Idle: in pool</div>
@@ -330,7 +330,7 @@ Voice lifecycle</h3>
 <div class="line">    Playing --&gt; Returning: onComplete (real-time) OR Stop()</div>
 <div class="line">    Returning --&gt; Idle: OnDespawned stops source + cancels delay + clears disposables</div>
 <div class="line">    Playing --&gt; Returning: RunReset / GameOver / scope teardown</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md274"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md275"></a>
 Responsibility map</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -368,7 +368,7 @@ Responsibility map</h3>
 </table>
 <p><code>AudioSourceVoice</code> has <b>no <code>[Inject]</code> fields</b>, so it uses <code>SimplePoolChannel&lt;AudioSourceVoice&gt;</code> (the no-DI case), not <code>InjectingPoolChannel</code>. It is modeled on <code>EffectView</code> (<code><a class="el" href="EffectView_8cs.html">Shared/Pool/EffectView.cs</a></code>) — reuse its cached <code>_selfReturn</code> delegate + <code>OnComplete</code> + <code>OnDespawned()</code> cleanup shape to stay zero-alloc on the hot path.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md276"></a>
+<h2><a class="anchor" id="autotoc_md277"></a>
 Channels (the pause / context answer)</h2>
 <p>Every <code>SfxEntry</code> names an <code>SfxChannel</code>, which maps to an <code>AudioMixerGroup</code> on one shared <code>AudioMixer</code>. Freeze/pause behavior is then <b>per-channel</b>, not a blunt <code>AudioListener.pause</code>:</p>
 <table class="markdownTable">
@@ -383,11 +383,11 @@ Channels (the pause / context answer)</h2>
 </table>
 <p>Because audio ignores <code>Time.timeScale</code>, this is explicit: <code>AudioChannelController</code> — a small, dedicated <code>IStartable</code>, not <code>SfxService</code> itself — subscribes to <code>PausedMessage</code>/ <code>ResumedMessage</code> and calls <code>IAudioMixerRouter.SetChannelDucked(Gameplay, …)</code>, and subscribes to <code>GameOverMessage</code> to call <code>SfxService.StopChannel(Gameplay)</code>. Keeping this policy off <code>SfxService</code> means the orchestrator stays a pure <code>Play</code>/<code>Stop</code> surface with no bus dependency, and the duck/stop policy is swappable independently. <code>IAudioMixerRouter</code>'s registered implementation is <code>AudioMixerRouter</code>, so the duck call is live end-to-end once an <code>AudioMixerSettings</code> asset with a real <code>AudioMixer</code> and exposed volume params is authored and assigned to <code>GameLifetimeScope</code> — until then it degrades to the same no-op the design originally shipped with, so <code>Gameplay</code> audio simply keeps playing through a pause and only the <code>GameOver</code> stop is live. The mixer also gives us a master-volume control and a music-under-stinger duck seam for free later, without a refactor.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md278"></a>
+<h2><a class="anchor" id="autotoc_md279"></a>
 Spatialization</h2>
 <p>Default <b>2D with a subtle stereo pan derived from world-X</b> (<code>AudioSource.panStereo</code> mapped from the sound's horizontal position relative to the camera). <code>spatialBlend = 0</code> (no distance rolloff). Routers pass a <code>Vector3?</code> position; the voice converts X → pan. This gives directional feel for a 2D arcade board without the moving-listener fiddliness that full 3D would introduce during the camera-down loss transition and level-up pan. Full spatial 3D is out of scope (see Deferred).</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md280"></a>
+<h2><a class="anchor" id="autotoc_md281"></a>
 SFX moment inventory</h2>
 <p>Every row is an <b>existing</b> publish — the router subscribes, no producer edits. All brokers are already registered at <code><a class="el" href="GameScopeRegistration_8cs.html">Game/GameScopeRegistration.cs</a>:59-94</code>.</p>
 <table class="markdownTable">
@@ -445,7 +445,7 @@ SFX moment inventory</h2>
 <td class="markdownTableBodyNone">Nudge   </td><td class="markdownTableBodyNone"><code>NudgeMessage</code>   </td><td class="markdownTableBodyNone"><code><a class="el" href="BalloonController_8cs.html">Balloon/Controller/BalloonController.cs</a>:208</code>, <code><a class="el" href="BombItemHandler_8cs.html">Item/Bomb/BombItemHandler.cs</a>:76</code>   </td><td class="markdownTableBodyNone"><b>none</b>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Deliberately silent — per-jostle spam.   </td></tr>
 </table>
 <hr  />
-<h2><a class="anchor" id="autotoc_md282"></a>
+<h2><a class="anchor" id="autotoc_md283"></a>
 Melodic pops (streak-driven scale)</h2>
 <p>The simple-balloon pop is not a fixed sound — it <b>walks up a musical scale as the streak climbs</b>. Rather than randomized pitch, the <code>BalloonPop</code> variation for simple balloons maps the current streak multiplier to a scale degree: in C major, successive pops play C → D → E → F → G → … . A hot streak becomes a rising phrase; a streak break resets to the root. This is the melodic-combo game-feel trick (a la many puzzle games) and it turns the most-repeated sound in the game into a reward.</p>
 <p>The organizing principle: <b>consonance is reward, dissonance is tension.</b> The positive walk deliberately avoids semitones so it can never sound "wrong"; the semitone is reserved as an expressive tool for the <em>negative</em> events (deflect, wall hit) so a bad outcome is heard before it's parsed.</p>
@@ -460,7 +460,7 @@ Melodic pops (streak-driven scale)</h2>
 </ul>
 <p><b>Open feel questions (device audition):</b> the <code>MelodicMaxOctaves</code> value (the pitch soft cap — resolved as a bounded loop-a-semitone-up walk, just tune the octave count by ear); the exact intervals for deflect vs wall hit (they're distinct — just which two land best); whether per-color streaks each get their own voice/register. Slot: Phase 2 (the pop itself ships in Phase 1 with plain variation; the melodic walk + tension notes layer on once the core loop feels right).</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md284"></a>
+<h2><a class="anchor" id="autotoc_md285"></a>
 Phase 1 — Core loop, no message changes — SHIPPED (Steps 1-6)</h2>
 <p>Ships the spine plus the first-pass core sounds. Everything uses signals already on the bus; the only gameplay-code change is the <code>RegisterAudio</code> line. All six steps below are code-complete, reviewed, and committed:</p>
 <ol type="1">
@@ -473,30 +473,30 @@ Phase 1 — Core loop, no message changes — SHIPPED (Steps 1-6)</h2>
 </ol>
 <p><b>Also shipped (Phase 2 pulled forward):</b> the real mixer router. <code>AudioMixerRouter</code> + <code>AudioMixerSettings</code>/<code>IAudioMixerSettings</code> are code-complete, reviewed, and registered in place of <code>NullAudioMixerRouter</code> (which now survives only as a test double for <code>SfxServiceGenerationGuardPlayModeTests</code>). <code>AudioMixerRouter</code> reads the settings asset to resolve <code>GroupFor(channel)</code> and to <code>SetFloat</code> the channel's exposed volume param on duck; <code>Log.Assert</code> catches a mistyped param name in dev builds. With no <code>AudioMixerSettings</code> asset assigned it degrades to master output and a no-op duck — identical to the old null router — so ducking activates the moment the asset is authored, with zero further code.</p>
 <p><b>Still open (not part of the code deliverable):</b> building the actual <code>AudioMixer</code> asset itself — <code>Gameplay</code>/<code>UI</code>/<code>Stinger</code> groups with matching exposed volume params — and an <code>AudioMixerSettings</code> asset pointing at it, then assigning both to <code>GameLifetimeScope._audioMixerSettings</code>. Until that asset exists, the shipped router runs in its degraded (no-op) mode. Also still open: authoring the actual <code>SfxEntry</code> clips on the <code>SoundBankConfiguration</code> asset (an editor/content task; every id plays silently until its entry has clips). See <em>Deferred</em> in the README and below.</p>
-<h3><a class="anchor" id="autotoc_md285"></a>
+<h3><a class="anchor" id="autotoc_md286"></a>
 First-pass sounds to author</h3>
 <p><code>BalloonPop</code> (hot path), <code>ShotFired</code>, <code>ShotReload</code>, <code>ShieldGained</code>, <code>ShieldLost</code>, per-item (×6), <code>StreakStep</code>, <code>LevelUp</code>, <code>GameOver</code>. The rest are enum entries authored later. (The enum, routing, and playback machinery for all of these already ship in code — this list is purely the content/authoring backlog against the <code>SoundBankConfiguration</code> asset.)</p>
-<h3><a class="anchor" id="autotoc_md286"></a>
+<h3><a class="anchor" id="autotoc_md287"></a>
 Voice management</h3>
 <ul>
 <li><b>Per-id cap</b> (e.g. 3–4 concurrent pops) <b>and</b> a <b>global cap</b> (~16, well under Android's ~32 real voices; set Project Settings → Audio <em>Max Real Voices</em> deliberately).</li>
 <li><b>Priority</b> so <code>LevelUp</code>/<code>GameOver</code> (<code>Stinger</code>) can't be starved by pop spam.</li>
 <li><b>Burst coalescing</b> collapses a same-id burst within a wall-clock window into a few voices with a pitch spread ("chord", not 30 clicks), with diminishing-returns volume.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md287"></a>
+<h3><a class="anchor" id="autotoc_md288"></a>
 Return scheduling</h3>
 <p><code>AudioSourceVoice</code> schedules its own return via <code>UniTask.Delay(clip.length / |pitch|, ignoreTimeScale: true)</code> — O(1) per voice, no per-frame poll, identical at 60/120 Hz. <code>ignoreTimeScale</code> is mandatory or voices leak during a <code>timeScale = 0</code> level-up freeze. If profiling shows pressure, migrate to a single central due-time ticker (still not per-voice polling) — mirrors the <code>BalloonMotionTicker</code> central-ticker precedent.</p>
-<h3><a class="anchor" id="autotoc_md288"></a>
+<h3><a class="anchor" id="autotoc_md289"></a>
 Teardown</h3>
 <p><code>OnDespawned()</code> must <code>_source.Stop()</code>, null the clip (a held <code>AudioClip</code> pins memory), null the completion callback, and cancel the pending-return <code>CancellationTokenSource</code>. The voice holds no UniRx subscriptions, so there is no <code>CompositeDisposable</code> to clear (the pooled-view <code>AddTo(this)</code>-never-fires rule only applies when a pooled view subscribes). <code>SfxService</code> implements <code>IRunResettable</code> (<code>ResetOrder = RunResetOrder.Quiesce</code>, the earliest stage) so <code>RunController.RestartRun</code> flushes every active voice and loop before any other system resets — a dropped <code>Stop</code> from the previous run can't strand a loop into the next one. <code>GameOverMessage</code> is handled separately, by <code>AudioChannelController</code>, which only stops the <code>Gameplay</code> channel (see <em>Channels</em>) — it does not touch <code>UI</code>/<code>Stinger</code> voices or reset the picker/throttle state the way a full run reset does.</p>
-<h3><a class="anchor" id="autotoc_md289"></a>
+<h3><a class="anchor" id="autotoc_md290"></a>
 Clip import settings (device)</h3>
 <p>Short SFX → <b>ADPCM + Decompress On Load</b> (near-zero decode CPU, no per-play hitch — the right choice for pops/impacts). Very short stingers → PCM. Long music/ambience (later) → Vorbis + Streaming. Downsample SFX to ~22 kHz where transparent. Keep clips out of <code>Resources/</code>. Pre-warm the voice pool in the existing async preload window to avoid a first-play hitch.</p>
-<h3><a class="anchor" id="autotoc_md290"></a>
+<h3><a class="anchor" id="autotoc_md291"></a>
 GC / hot-path</h3>
 <p>Zero steady-state allocation on <code>BalloonPop</code>: pooled voices, <code>readonly struct SoundHandle</code>, enum keying that avoids boxing (<code>int</code>-keyed table or a custom comparer — a raw <code>Dictionary&lt;GameSoundId,…&gt;</code> boxes the enum key), no LINQ in <code>Play</code>, cached return delegate (no per-call closure), pass settings by <code>in</code>.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md292"></a>
+<h2><a class="anchor" id="autotoc_md293"></a>
 Phase 2 — Fill-out + optional signals</h2>
 <ul>
 <li><strike>The real mixer router (<code>AudioMixerRouter</code>/<code>AudioMixerSettings</code>)</strike> — <b>shipped</b>, see Phase 1's "Also shipped" note above. Only the <code>AudioMixer</code> asset itself and its <code>AudioMixerSettings</code> need in-editor authoring before ducking is audible.</li>
@@ -506,7 +506,7 @@ Phase 2 — Fill-out + optional signals</h2>
 <li><b>Audio metrics via telemetry</b> (piggyback <code>PLAN-GameplayTelemetry</code>, subscriber-only): peak concurrent voices, voice-steal count, coalesced-burst count, dropped-sound count per id (a high drop rate on a <em>meaningful</em> sound means the throttle is eating feedback the player needs). Dev-build only, flush at level boundary.</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md294"></a>
+<h2><a class="anchor" id="autotoc_md295"></a>
 Phase 3 — Deferred</h2>
 <ul>
 <li><b>Automated SFX asset fetching — SHIPPED (editor-only).</b> The <code>ISfxProvider</code> seam + <code>FreesoundSfxProvider</code> + <code>SfxFetcherWindow</code> (<code>Tools ▸ <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> ▸ SFX Fetcher</code>, in <code>Audio/Editor/</code>) fill empty clip slots at author time from each <code>SfxEntry</code>'s fetch prompt. Source is Freesound, filtered to CC0 + CC-BY (allowlist); CC-BY attribution recorded to <code>Resources/AudioAttributions.json</code>. Runtime stays fully independent (editor-only assembly); token via <code>FREESOUND_API_TOKEN</code> env / EditorPrefs, never committed. <b>Remaining gating concern:</b> clear Freesound's API TOS + confirm the credits screen displays the recorded attribution before shipping fetched CC-BY audio. <code>ISfxProvider</code> is the seam for a future text-to-SFX provider (e.g. ElevenLabs).</li>
@@ -515,7 +515,7 @@ Phase 3 — Deferred</h2>
 <li><b>Music / ambience bus</b> beyond the <code>Stinger</code> channel already reserved.</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md296"></a>
+<h2><a class="anchor" id="autotoc_md297"></a>
 Test strategy</h2>
 <p>Shipped, per <code>Assets/Tests/README.md</code>:</p>
 <div class="fragment"><div class="line">Assets/Tests/EditMode/Audio/</div>
@@ -542,7 +542,7 @@ Test strategy</h2>
 <li>Actual audio behavior — Android latency (AAudio/OpenSL), voice-cap feel, coalescing tuning, pan — <b>requires an on-device (Pixel 9) playtest</b>; <code>dotnet build</code> and the editor cannot validate it. Bias DSP buffer toward <em>Good/Best Latency</em> and measure.</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md298"></a>
+<h2><a class="anchor" id="autotoc_md299"></a>
 Open questions</h2>
 <ol type="1">
 <li><b>Item type discovery.</b> <code>ItemActivatedMessage</code> (<code><a class="el" href="ItemActivator_8cs.html">Item/ItemActivator.cs</a>:90</code>) carries only <code>msg.Balloon</code>. The item router can downcast it to <code>IHasItemSlot</code> and read <code>.Item.Value</code> (keeps audio a pure consumer, no producer edit) <b>or</b> we add an <code>ItemType</code> field to the message (cleaner read, wider blast radius). Default: downcast; decide at implementation.</li>

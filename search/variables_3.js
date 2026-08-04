@@ -85,8 +85,9 @@ var searchData=
   ['cumulative_82',['Cumulative',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html#a216f9c12c6dd6b2f3956d953b5034027',1,'BalloonParty::Game::Score::Behaviours::FormationShape']]],
   ['cumulativecolor_83',['CumulativeColor',['../classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#af06d8991e4e53b0aa16b1a57dd4e0800',1,'BalloonParty::Editor::LevelPacingCurvePanel']]],
   ['currentclusterslots_84',['CurrentClusterSlots',['../classBalloonParty_1_1Slots_1_1Actor_1_1ClusterSlotSelectionStrategy_1_1ClusterFill.html#a2ab358c37b28e828d9b5b5ee53c0537c',1,'BalloonParty::Slots::Actor::ClusterSlotSelectionStrategy::ClusterFill']]],
-  ['currentsemitone_85',['CurrentSemitone',['../structBalloonParty_1_1Audio_1_1PickContext.html#a9cf5637a04c14a86b32cb449ac245ea1',1,'BalloonParty::Audio::PickContext']]],
-  ['curveaveragesamples_86',['CurveAverageSamples',['../structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a89b8752b63c3ba4b51ad87ae2d8a90c3',1,'BalloonParty::Solver::ShotCruiseConfig']]],
-  ['curvefieldwidth_87',['CurveFieldWidth',['../classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a4002c2612ae4f6869d641ee103c89658',1,'BalloonParty::Editor::LevelPacingWindow']]],
-  ['customcolor_88',['CustomColor',['../structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a2aec7a97904642d398130d1b7b1610cd',1,'BalloonParty::Configuration::Effects::PaintProfile']]]
+  ['currentschemaversion_85',['CurrentSchemaVersion',['../classBalloonParty_1_1Game_1_1Telemetry_1_1SessionTelemetryContext.html#a8063ef034d233421860196abae2ccf24',1,'BalloonParty::Game::Telemetry::SessionTelemetryContext']]],
+  ['currentsemitone_86',['CurrentSemitone',['../structBalloonParty_1_1Audio_1_1PickContext.html#a9cf5637a04c14a86b32cb449ac245ea1',1,'BalloonParty::Audio::PickContext']]],
+  ['curveaveragesamples_87',['CurveAverageSamples',['../structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a89b8752b63c3ba4b51ad87ae2d8a90c3',1,'BalloonParty::Solver::ShotCruiseConfig']]],
+  ['curvefieldwidth_88',['CurveFieldWidth',['../classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a4002c2612ae4f6869d641ee103c89658',1,'BalloonParty::Editor::LevelPacingWindow']]],
+  ['customcolor_89',['CustomColor',['../structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a2aec7a97904642d398130d1b7b1610cd',1,'BalloonParty::Configuration::Effects::PaintProfile']]]
 ];

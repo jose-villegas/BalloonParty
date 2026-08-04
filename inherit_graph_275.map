@@ -1,5 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
 <area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Shared_1_1Messages_1_1IHitDispatcher.html" title="Publish ActorHitMessage only through this — publishing to the broker directly skips scoring and the o..." alt="" coords="5,5,229,45"/>
 <area shape="rect" id="Node000001" href="$classBalloonParty_1_1Game_1_1HitPipeline.html" title="Owns the order&#45;dependent part of hit resolution explicitly, since MessagePipe&#39;s subscription order is..." alt="" coords="277,13,497,38"/>
-<area shape="poly" id="edge429_Node000000_Node000001" title=" " alt="" coords="243,23,277,23,277,28,243,28"/>
+<area shape="poly" id="edge434_Node000000_Node000001" title=" " alt="" coords="243,23,277,23,277,28,243,28"/>
 </map>

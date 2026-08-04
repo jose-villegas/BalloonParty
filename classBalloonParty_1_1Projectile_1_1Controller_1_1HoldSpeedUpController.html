@@ -125,14 +125,14 @@ $(function(){initNavTree('classBalloonParty_1_1Projectile_1_1Controller_1_1HoldS
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController__inherit__graph.svg" width="323" height="124"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController__inherit__graph.svg" width="515" height="200"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Projectile.Controller.HoldSpeedUpController:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController__coll__graph.svg" width="100%" height="547"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController__coll__graph.svg" width="100%" height="595"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -154,6 +154,9 @@ Properties</h2></td></tr>
 <tr class="memitem:ac0eca39911ac8a5b53bddbf00cf425c5" id="r_ac0eca39911ac8a5b53bddbf00cf425c5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac0eca39911ac8a5b53bddbf00cf425c5">ConsumedInput</a><code> [get]</code></td></tr>
 <tr class="memdesc:ac0eca39911ac8a5b53bddbf00cf425c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">True from the moment speed-up engages until one frame after the projectile dies.  <br /></td></tr>
 <tr class="separator:ac0eca39911ac8a5b53bddbf00cf425c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ec6cf14743e4d258a9fc714031d5943" id="r_a9ec6cf14743e4d258a9fc714031d5943"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ec6cf14743e4d258a9fc714031d5943">IsHolding</a><code> [get]</code></td></tr>
+<tr class="memdesc:a9ec6cf14743e4d258a9fc714031d5943"><td class="mdescLeft">&#160;</td><td class="mdescRight">True while the speed-up is actually claiming a time scale — i.e.  <br /></td></tr>
+<tr class="separator:a9ec6cf14743e4d258a9fc714031d5943"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -470,6 +473,33 @@ Private Attributes</h2></td></tr>
 
 <p>True from the moment speed-up engages until one frame after the projectile dies. </p>
 <p>The thrower checks this to suppress the fire that would otherwise occur on finger lift. </p>
+
+</div>
+</div>
+<a id="a9ec6cf14743e4d258a9fc714031d5943" name="a9ec6cf14743e4d258a9fc714031d5943"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ec6cf14743e4d258a9fc714031d5943">&#9670;&#160;</a></span>IsHolding</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Projectile.Controller.HoldSpeedUpController.IsHolding</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>True while the speed-up is actually claiming a time scale — i.e. </p>
+<p>the lerp has left zero. Narrower than <a class="el" href="#ac0eca39911ac8a5b53bddbf00cf425c5" title="True from the moment speed-up engages until one frame after the projectile dies.">ConsumedInput</a>, which deliberately survives the frame after the flight ends so the thrower can swallow the fire on finger lift. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IHoldSpeedUpState.html#a3257d7bd75e3f88bb4d1ac83fb215fe5">BalloonParty.Projectile.Controller.IHoldSpeedUpState</a>.</p>
 
 </div>
 </div>
