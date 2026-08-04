@@ -70,6 +70,11 @@ namespace BalloonParty.Game
         private const float CoalesceWindowSeconds = 0.06f;
         private const int MaxBurstPerWindow = 4;
 
+        // Hoisted to a field so the registration below binds one delegate instance rather than an
+        // implicitly cached lambda whose overload resolution depends on WithParameter's Func<TParam>
+        // overload picking float instead of Func<float>.
+        private static readonly Func<float> UnscaledClock = () => Time.unscaledTime;
+
         internal static void RegisterMessages(this IContainerBuilder builder, MessagePipeOptions options)
         {
             builder.RegisterMessageBroker<BalanceBalloonsMessage>(options);
@@ -131,7 +136,7 @@ namespace BalloonParty.Game
             builder.Register<PauseService>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<TimeScaleService>().AsSelf().As<ITimeScaleClaims>().As<IRunResettable>();
             builder.RegisterEntryPoint<ProjectileDoomedTimeScaleController>();
-            builder.RegisterEntryPoint<HoldSpeedUpController>().AsSelf();
+            builder.RegisterEntryPoint<HoldSpeedUpController>().AsSelf().As<IHoldSpeedUpState>();
             builder.Register<ProjectilePositionProvider>(Lifetime.Singleton);
             builder.Register<PredictionTraceProvider>(Lifetime.Singleton);
             builder.RegisterEntryPoint<ProjectileFacingSource>().As<IProjectileFacingSource>();
@@ -227,6 +232,16 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ProjectileBuffService>().As<IProjectileBuffs>();
             builder.RegisterEntryPoint<ActiveProjectilePierce>().As<IActiveProjectilePierce>();
             builder.RegisterEntryPoint<PierceDischargeEffects>();
+
+            // Last on purpose: it subscribes to everything above it and must never sit in front of a
+            // gameplay system in the entry-point start order. Clocks sample Time.unscaledTime (not
+            // realtimeSinceStartup — nothing here observes app backgrounding, so a pocket-suspend would
+            // inflate that by the full background time), injected the same way SfxThrottleGate takes its.
+            builder.RegisterEntryPoint<GameplayMetricsService>()
+                .AsSelf()
+                .As<IRunResettable>()
+                .As<ILevelMetricsView>()
+                .WithParameter(typeof(Func<float>), UnscaledClock);
         }
 
         internal static void RegisterItems(this IContainerBuilder builder)

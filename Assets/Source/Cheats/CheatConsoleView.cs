@@ -39,6 +39,13 @@ namespace BalloonParty.Cheats
             if (Input.GetKeyDown(KeyCode.BackQuote) || ThreeFingerTapped())
             {
                 _visible = !_visible;
+
+                // Opening the console is the one observable moment that covers every cheat, including the
+                // one-shots that leave no flag behind. Telemetry reads this to tag the run's records.
+                if (_visible)
+                {
+                    CheatState.AnyCheatUsed = true;
+                }
             }
 
             SyncThrowerHold();

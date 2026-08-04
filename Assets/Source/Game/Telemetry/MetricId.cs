@@ -34,6 +34,7 @@ namespace BalloonParty.Game.Telemetry
         MaxDangerLevel,
         BoardCleared,
         LevelsCompleted,
-        RetriesUsed
+        RetriesUsed,
+        TotalScore
     }
 }

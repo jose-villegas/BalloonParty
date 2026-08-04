@@ -35,6 +35,15 @@ namespace BalloonParty.Cheats
         /// <see cref="TimeOfDayCheat" />; read (under this guard) by the clock each tick.</summary>
         public static float TimeOfDaySpeedScale = 1f;
 
+        /// <summary>Sticky "this session touched the cheat console" flag, read by
+        /// <c>GameplayMetricsService</c> at every flush so the records it writes are filterable. The other
+        /// flags cannot answer that question on their own: <see cref="StartLevel" /> and
+        /// <see cref="TimeOfDaySpeedScale" /> default to 1 rather than 0, and the one-shot cheats
+        /// (<c>AwardScorePopCheat</c>, <c>TriggerLevelUpCheat</c>, <c>AddShieldCheat</c>, …) leave no trace
+        /// at all. Set when <c>CheatConsoleView</c> opens — every cheat except the Level Pacing window goes
+        /// through the console, and that window already writes <see cref="StartLevel" />.</summary>
+        public static bool AnyCheatUsed;
+
         internal const string StartLevelPrefKey = "BalloonParty.Cheats.StartLevel";
 
         // With Enter Play Mode Options disabling domain reload, statics survive between play sessions — reset
@@ -45,6 +54,7 @@ namespace BalloonParty.Cheats
             BlockLevelUp = false;
             InstantScoreTrails = false;
             TimeOfDaySpeedScale = 1f;
+            AnyCheatUsed = false;
 #if UNITY_EDITOR
             // Pick up (and consume) the "play from here" level the pacing window stashed before entering play.
             StartLevel = UnityEditor.EditorPrefs.GetInt(StartLevelPrefKey, 1);

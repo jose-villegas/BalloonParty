@@ -8,17 +8,14 @@ The service never publishes, never modifies gameplay state, and never causes stu
 during action — it only counts. Views read immutable snapshots; they never see a live
 accumulator.
 
-> **W1 (vocabulary, scopes, timers) and W2 (envelope, serializer, sinks) have landed.**
-> W1: `MetricId`/`TimerId`/`MetricAxis`, `MetricCatalog`/`TimerCatalog`,
-> `MetricSet`/`IReadOnlyMetricSet`/`ISealedMetrics`, `MetricScope`, `TelemetryStopwatch`,
-> both snapshots (sharing `MetricsSnapshotBase`) and `ILevelMetricsView`. W2:
-> `TelemetryEnvelope`, `TelemetryEnvelopeSerializer`, `ITelemetrySink`/`TelemetrySinkBase`,
-> `CompositeTelemetrySink` (registered in `GameScopeRegistration.RegisterTelemetrySinks`,
-> called from `GameLifetimeScope.Configure`) and the dev-only `JsonLinesTelemetrySink`. All
+> **W1 (vocabulary, scopes, timers), W2 (envelope, serializer, sinks) and W3 (the service)
+> have landed.** W3 added `GameplayMetricsService` and `SessionTelemetryContext`, plus two
+> sanctioned non-message touches outside this folder: `CheatState.AnyCheatUsed` and
+> `IHoldSpeedUpState` on `HoldSpeedUpController`. The consent and batching decorators
+> (`ConsentGateSink`, `BatchingTelemetrySink`) and `HttpAnalyticsSink` are still design —
+> those rows in the table below are the target layout, not current code. Everything else is
 > covered by the EditMode tests in `Assets/Tests/EditMode/Game/`, including the test fake
-> `RecordingTelemetrySink`. `GameplayMetricsService`, `SessionTelemetryContext` and the
-> consent/batching decorators are still design — the rest of the file table below is the
-> target layout for those rows, not current code.
+> `RecordingTelemetrySink` and the shared `GameplayMetricsHarness`.
 
 ## Contents
 
@@ -34,7 +31,7 @@ accumulator.
 | `TelemetryStopwatch` | Pure C# timer that owns its injected `Func<float>` clock and folds elapsed time on `Pause()`/`Resume()`/`Elapsed` reads. Deterministic in tests via a fake clock |
 | `MetricsSnapshotBase` / `LevelMetricsSnapshot` / `RunMetricsSnapshot` | Sealed immutable read surfaces implementing `ISealedMetrics` — what the popups render and what the sink receives. The shared payload (counters, timers, axis slots, named breakdowns) lives once in the base; `LevelMetricsSnapshot` adds only `LevelIndex`/`Completed` |
 | `ColorCount` / `BalloonTypeCount` / `ItemActivationCount` | The breakdown shapes the snapshots expose (`PopsByColor`, `PointsByColor`, `PopsByBalloonType`, `DeflectsByBalloonType`, `ItemsActivated`) |
-| `ILevelMetricsView` | The UI read seam. Exposes the ceremony snapshot as an `IReadOnlyReactiveProperty`, plus the last flushed level and the run. **Only `BalloonParty.UI.*` types may inject it** |
+| `ILevelMetricsView` | The UI read seam. All three members (ceremony snapshot, last flushed level, run) are `IReadOnlyReactiveProperty` — each is assigned from inside a message handler, so a plain property read from a view's own handler for the same message would return the previous value whenever that view subscribed first. **Only `BalloonParty.UI.*` types may inject it** |
 | `GameplayMetricsService` | Entry point (`IStartable`, `IDisposable`, `IRunResettable`). Five-state level machine (Idle/Playing/Ceremony/Transitioning/Ended); routes subscriptions into scopes, takes the two per-level snapshots, hands envelopes to the sink |
 | `SessionTelemetryContext` | Session id (per launch, never persisted), schema version, launch timestamp. Registered in `AppLifetimeScope` so it survives scene reloads |
 | `TelemetryEnvelope` | One uniform wire record for every scope (`readonly struct`), with a `RecordKind` discriminator and an `ISealedMetrics` payload |
@@ -56,13 +53,31 @@ on top would double it. An earlier revision specified the fold (`TelemetryStopwa
 plus a `MetricScope.AbsorbTimers` step inside `Absorb`); it was wrong and has been
 removed, not just left unused.
 
-## Two snapshots per level
+## Two snapshots per level, one record
 
 The level-up popup shows during the ceremony, **before** the level's flush boundary —
-straggler score trails are still arriving. So a *ceremony* snapshot (what the player was
-shown) and a *flush* snapshot (what was true) are both taken and both logged. The gap
-between them is data, not a bug. The popup shows *projected* points to match what
-`ScoreController` already displays beside it.
+straggler score trails are still arriving. So two snapshots are taken: the *ceremony* one
+(what the player was shown) and the *flush* one (what was true).
+
+Only the flush snapshot is exported. The ceremony snapshot exists for the popup, is exposed
+on `ILevelMetricsView.CeremonyLevel`, and never reaches a sink — the gap between the two is
+still recoverable from the single exported record, which carries `points_projected` beside
+`points_banked`. A second record per level would double the export for a number already in
+the first one.
+
+The popup shows *projected* points to match what `ScoreController` already displays beside
+it.
+
+Two rules for whoever binds a view to `CeremonyLevel`:
+
+- **Read it after the popup's gate `await`, never inside a `ScoreLevelUpMessage` handler.**
+  `LevelController` publishes that message before it transitions navigation, so the snapshot
+  is always in place by the time the gate resolves — but a handler racing the service's own
+  is not.
+- **`LevelIndex` is the only trustworthy discriminator of stale vs. current.** The cleared
+  state is one shared empty snapshot, and `ReactiveProperty<T>` compares by reference, so
+  clearing twice in a row (abort, then a run reset) raises only one `OnNext`. A view that
+  resets itself on *receiving* the empty snapshot will miss the second clear.
 
 ## Where the per-flight numbers come from
 
@@ -86,12 +101,47 @@ than counting `PausedMessage`/`ResumedMessage` edges, which leak on the loss pat
 
 `ITelemetrySink` → `CompositeTelemetrySink` registers unconditionally in
 `GameScopeRegistration.RegisterTelemetrySinks`, called from `GameLifetimeScope.Configure`
-before `RegisterGameplaySystems` — a later consumer (`GameplayMetricsService`, W3) can
-depend on it without caring whether any leaf sink exists. `GameplayMetricsService` will
-register at the end of `RegisterGameplaySystems`; `SessionTelemetryContext` in
-`AppLifetimeScope` so it survives scene reloads. `FlightStatsService` is registered
-earlier in `RegisterGameplaySystems` and lives in `Game/Flight/` — it is a gameplay
-service, not part of this subsystem.
+before `RegisterGameplaySystems` — `GameplayMetricsService` depends on it without caring
+whether any leaf sink exists. `GameplayMetricsService` registers **last** in
+`RegisterGameplaySystems` so it never sits in front of a gameplay system in the start order.
+That is a preference, not a correctness argument, and the service must not depend on it: it
+registers last but is written to be order-independent, because gameplay systems re-publish
+from inside their own handlers. `LevelController.OnTransitionCompleted` reopens navigation,
+which fires a deferred loss, which publishes `GameOverMessage` — nested, before this service
+has seen the transition that message follows. `OnGameOver` therefore settles a pending level
+boundary itself rather than trusting that it already happened. Its clock is an explicit
+`Func<float>` parameter —
+`Time.unscaledTime`, the same way `SfxThrottleGate` takes its. `SessionTelemetryContext`
+registers in `AppLifetimeScope` so one play session keeps one id across scene reloads.
+`FlightStatsService` is registered earlier in `RegisterGameplaySystems` and lives in
+`Game/Flight/` — it is a gameplay service, not part of this subsystem.
+
+## What the service does and does not own
+
+`GameplayMetricsService` is a subscriber and nothing else: ~21 message subscriptions plus
+`PauseService.IsAnyPaused`, `INavigation.Current` and `IDangerLevel.Level`, all in one
+`CompositeDisposable`.
+
+- **Boundaries.** A level flushes on `LevelTransitionCompletedMessage`, never on
+  `LevelUpDismissedMessage` — straggler score trails land between the two and belong to the
+  level that just ended. A run flushes on `GameOverMessage`, which alone enters the terminal
+  `Ended` state. `LevelUpAbortedMessage` and `LevelUpAbandonedMessage` both return
+  `Ceremony → Playing` and are idempotent; `LevelUpAbandonedMessage` is a *nested re-publish*
+  from inside both the abort and the game-over handler, so treating it as terminal would
+  wedge the gameplay clock on abort and drop every lost run's record.
+- **Per-flight counts come from `FlightStatsService`**, folded in at
+  `ProjectileDestroyedMessage` — and at `GameOverMessage` if a projectile is still airborne,
+  which is the ordinary death: hearts reach zero from a wave mid-flight, and that flight's
+  `ProjectileDestroyedMessage` arrives during the loss cinematic, after the terminal state
+  drops it. Only the interflight window — `[Destroyed, next Loaded)`, which that service
+  zeroes without ever sealing — is counted from the message directly, and it lands on the
+  Level scope, which is what R2 asks for.
+- **Three ids plus an ordinal.** `RunId` (the chain, held across a retry), `AttemptId` (the
+  generation), `AttemptIndex` (0 for the original) and `LevelAttemptOrdinal` (per level
+  number, incremented when the level opens). The run's total points are taken from
+  `GameOverMessage.FinalScore`, never summed across level records — a retry replays a level.
+- **Nothing is persisted.** Scopes live in memory, are snapshotted, handed to the sink and
+  reset. A metric someone wants to keep for the player has stopped being telemetry.
 
 Gating is three tiers, not one `#if`: the counting core ships (the popups need it), the
 export layer ships inert until consent, and the local file sink plus the cheat read are

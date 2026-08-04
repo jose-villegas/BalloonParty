@@ -49,10 +49,11 @@ namespace BalloonParty.Game.Telemetry
             new(MetricId.ShieldsGained, "shields_gained", "count", FoldRule.Sum, MetricScopeKind.Level, NoAxes),
             new(MetricId.ShieldsSpent, "shields_spent", "count", FoldRule.Sum, MetricScopeKind.Level, NoAxes),
             new(MetricId.ItemsActivated, "items_activated", "count", FoldRule.Sum, MetricScopeKind.Level, ItemTypeAxisOnly),
-            new(MetricId.MaxDangerLevel, "max_danger_level", "level", FoldRule.Max, MetricScopeKind.Level, NoAxes),
+            new(MetricId.MaxDangerLevel, "max_danger_level", "level_hundredths", FoldRule.Max, MetricScopeKind.Level, NoAxes),
             new(MetricId.BoardCleared, "board_cleared", "count", FoldRule.Max, MetricScopeKind.Level, NoAxes),
             new(MetricId.LevelsCompleted, "levels_completed", "count", FoldRule.Sum, MetricScopeKind.Run, NoAxes),
             new(MetricId.RetriesUsed, "retries_used", "count", FoldRule.Last, MetricScopeKind.Run, NoAxes),
+            new(MetricId.TotalScore, "total_score", "points", FoldRule.Last, MetricScopeKind.Run, NoAxes),
         };
 
         private static readonly Dictionary<MetricId, Entry> ById;

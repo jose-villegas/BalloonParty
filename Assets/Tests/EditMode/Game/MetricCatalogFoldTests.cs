@@ -150,10 +150,11 @@ namespace BalloonParty.Tests.Game
             yield return new GoldenRow(nameof(MetricId.ShieldsGained), "shields_gained", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level));
             yield return new GoldenRow(nameof(MetricId.ShieldsSpent), "shields_spent", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level));
             yield return new GoldenRow(nameof(MetricId.ItemsActivated), "items_activated", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level), nameof(MetricAxis.ItemType));
-            yield return new GoldenRow(nameof(MetricId.MaxDangerLevel), "max_danger_level", "level", nameof(FoldRule.Max), nameof(MetricScopeKind.Level));
+            yield return new GoldenRow(nameof(MetricId.MaxDangerLevel), "max_danger_level", "level_hundredths", nameof(FoldRule.Max), nameof(MetricScopeKind.Level));
             yield return new GoldenRow(nameof(MetricId.BoardCleared), "board_cleared", "count", nameof(FoldRule.Max), nameof(MetricScopeKind.Level));
             yield return new GoldenRow(nameof(MetricId.LevelsCompleted), "levels_completed", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Run));
             yield return new GoldenRow(nameof(MetricId.RetriesUsed), "retries_used", "count", nameof(FoldRule.Last), nameof(MetricScopeKind.Run));
+            yield return new GoldenRow(nameof(MetricId.TotalScore), "total_score", "points", nameof(FoldRule.Last), nameof(MetricScopeKind.Run));
         }
 
         public readonly struct GoldenRow

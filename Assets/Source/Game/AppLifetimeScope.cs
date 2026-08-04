@@ -90,6 +90,11 @@ namespace BalloonParty.Game
             // Object pooling — app-wide so both Launch and Game consumers resolve from the same pool root.
             builder.Register<PoolManager>(Lifetime.Singleton);
 
+            // Session identity for telemetry (R22 of @ref plan_gameplay_telemetry). Here, not in the Game
+            // scope: a restart rebuilds that scope, and a per-scene session id would shatter one play
+            // session into several in the warehouse. The id is a per-launch Guid, never persisted.
+            builder.Register<Telemetry.SessionTelemetryContext>(Lifetime.Singleton);
+
             // IProjectileFlightConfig is needed by SfxService for stereo pan boundaries. Registered here
             // so audio can resolve it; the game scope also uses it (resolved from this parent).
             builder.RegisterInstance<IProjectileFlightConfig>(_projectileFlightConfig);

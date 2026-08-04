@@ -18,7 +18,7 @@ namespace BalloonParty.Projectile.Controller
     ///     lerps back to 1×. Only active between <see cref="ProjectileFiredMessage"/> and
     ///     <see cref="ProjectileDestroyedMessage"/>.
     /// </summary>
-    internal sealed class HoldSpeedUpController : IStartable, ITickable, IDisposable
+    internal sealed class HoldSpeedUpController : IStartable, ITickable, IDisposable, IHoldSpeedUpState
     {
         private readonly IProjectileFlightConfig _config;
         private readonly TimeScaleService _timeScale;
@@ -34,6 +34,13 @@ namespace BalloonParty.Projectile.Controller
         ///     The thrower checks this to suppress the fire that would otherwise occur on finger lift.
         /// </summary>
         internal bool ConsumedInput => _wasActive;
+
+        /// <summary>
+        ///     True while the speed-up is actually claiming a time scale — i.e. the lerp has left zero.
+        ///     Narrower than <see cref="ConsumedInput" />, which deliberately survives the frame after the
+        ///     flight ends so the thrower can swallow the fire on finger lift.
+        /// </summary>
+        public bool IsHolding => _t > 0f;
 
         [Inject]
         internal HoldSpeedUpController(

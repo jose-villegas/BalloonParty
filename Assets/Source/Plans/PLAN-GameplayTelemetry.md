@@ -206,11 +206,16 @@ Numbered so task specs can cite them. Each is testable.
   `ILevelMetricsView`, exposing an `IReadOnlyReactiveProperty<LevelMetricsSnapshot>`.
   Payloads are immutable. Views read `.Value` at render time; the subsystem publishes
   no message and the View never triggers a snapshot.
-- **R17** — **Two snapshots per level.** The *ceremony* snapshot is taken on
-  `ScoreLevelUpMessage` and is what the level-up popup renders. The *flush* snapshot is
-  taken on `LevelTransitionCompletedMessage` and is what the sink receives and what folds
-  into the run. Both are logged; the divergence is data (a large gap means the ceremony
-  fires too early), not a bug to hide.
+- **R17** — **Two snapshots per level, one record.** The *ceremony* snapshot is taken on
+  `ScoreLevelUpMessage` and is what the level-up popup renders; it is exposed on
+  `ILevelMetricsView.CeremonyLevel` and **never written to a sink**. The *flush* snapshot is
+  taken on `LevelTransitionCompletedMessage` and is the only one exported or folded into the
+  run.
+
+  The divergence is still data — a large gap means the ceremony fires too early — but it is
+  recoverable from the single flush record, which carries `points_projected` (read at
+  ceremony) alongside `points_banked` (final). A second record per level would double the
+  export for one number that is already there.
 - **R18** — The popup shows **projected** points, not banked. `ScoreController` already
   snaps `TotalScore` to `_projectedTotal` on level-up so the popup never shows a stale
   low number while trails sit frozen; the stats block must adopt the same convention or
@@ -510,10 +515,11 @@ Transcribe the column into the catalog entry.
 | `ShieldsGained` | `shields_gained` | count | Sum | `ShieldGainedMessage` | — | Level |
 | `ShieldsSpent` | `shields_spent` | count | Sum | `ShieldLostMessage` | — | Level |
 | `ItemsActivated` | `items_activated` | count | Sum | `ItemActivatedMessage` | ItemType | Level |
-| `MaxDangerLevel` | `max_danger_level` | level | Max | `IDangerLevel.Level` | — | Level |
+| `MaxDangerLevel` | `max_danger_level` | level_hundredths | Max | `IDangerLevel.Level` | — | Level |
 | `BoardCleared` | `board_cleared` | count | Max | `BoardDepletedMessage` — 1 if the board emptied organically (**R15**) | — | Level |
 | `LevelsCompleted` | `levels_completed` | count | Sum | derived: absorbed level with `Completed == true` | — | Run |
 | `RetriesUsed` | `retries_used` | count | Last | `IRetryState` at reset (**R14**) | — | Run |
+| `TotalScore` | `total_score` | points | Last | `GameOverMessage.FinalScore` (**R14b**) | — | Run |
 
 `Absorbs` uses `!=` against a combined mask because it is the one outcome family where two
 values share a metric; every other filter is `==` per the repo idiom.
@@ -998,11 +1004,34 @@ description of what to measure and how to name the output; the package knows not
 balloons, projectiles, levels or runs. Nothing below is scheduled work — it is the seam the
 remaining waves must not thicken.
 
-Where the coupling stands today, measured rather than assumed: **19 of 29 files in
-`Game/Telemetry/` are pure BCL**, including the whole storage and fold engine (`MetricSet`,
-`MetricScope`, `TelemetryStopwatch`, both snapshots, `TelemetryEnvelope`, every enum). No
-file references a balloon, a projectile, a level or a gameplay message — the vocabulary is a
-flat `MetricId`, so `pops` is a name, not a type.
+Where the coupling stands today, measured rather than assumed. `GameplayMetricsService` is
+the game's **translator** — every gameplay message, `IRetryState`, `IDangerLevel`,
+`IRunScore`, `PauseService`, `INavigation`, `IGamePalette`, `IFlightStats` and
+`IHoldSpeedUpState` terminate there, and it is the file that stays behind at extraction.
+That part of the line holds: the dependency arrow runs from telemetry to the game and never
+back.
+
+Beneath it the line is **thinner than an earlier revision of this section claimed**. That
+revision said the whole storage and fold engine was pure BCL and that no file referenced a
+balloon, a projectile, a level or a run. It was wrong, and the correction is the point of
+this section — an extraction cost that is under-stated is an extraction that stalls:
+
+- `MetricScope` imports `BalloonType` and `ItemType`, casts bucket ordinals to them when
+  building its named breakdowns, and hardcodes five specific metrics by name in
+  `CopyState` — the generic fold engine knows which metrics matter.
+- `MetricScope.Seal(int levelIndex, bool completed)` puts *level* in the engine's signature.
+- `MetricScopeState` and `MetricsSnapshotBase` name five game concepts as properties
+  (`PopsByColor`, `PopsByBalloonType`, `DeflectsByBalloonType`, `PointsByColor`,
+  `ItemsActivated`), with `ColorCount`/`BalloonTypeCount`/`ItemActivationCount` behind them.
+- `MetricScopeKind.Flight` is a game concept in the enum `Absorb`'s adjacency gate compares
+  ordinals on.
+- `TelemetryEnvelope` carries `LevelIndex`, `LevelAttemptOrdinal`, `Completed`, `RunId`,
+  `AttemptId`, `AttemptIndex` and `EndCause` — run and level vocabulary on the wire record.
+- `MetricCatalog` sizes its axis bucket counts from two game enums.
+
+None of this arrived with the service; the engine was built this way in W1. The remaining
+waves must not thicken it further, and the "one real design change" below is now the *first*
+of several — see *What extraction actually costs*.
 
 ### What the library owns
 
@@ -1019,14 +1048,29 @@ and the sink seam with its never-throw guard.
 | Logging | `Log.Warn` | An `ILogSink`, no-op by default |
 | The file sink | `JsonLinesTelemetrySink` (the only Unity-touching file) | Stays with the game; the library ships the interface |
 
-### The one real design change
+### What extraction actually costs
 
-**Axes are the only structural coupling**, and it is roughly fifteen lines. `MetricAxis`
-today is a fixed three-member enum whose bucket counts come from two game enums. Generalise
-it to a descriptor supplied with the catalog and every consumer downstream is already
-agnostic — slots, storage, `Absorb` and the serializer all go through `AllSlots` and would
-not change at all. W1b's slot indirection set this up accidentally: the storage engine
-already has no idea what an axis *means*.
+Four changes, in dependency order. Only the first is small.
+
+1. **Axes become a descriptor.** `MetricAxis` today is a fixed three-member enum whose
+   bucket counts come from two game enums. Generalise it to a descriptor supplied with the
+   catalog — wire name, bucket count, `bucketIndex → name` — and slots, storage, `Absorb`
+   and the serializer need no change at all: they already go through `AllSlots`. W1b's slot
+   indirection set this up accidentally; the storage engine has never known what an axis
+   *means*. Roughly fifteen lines.
+2. **The named breakdowns leave the snapshot.** `PopsByColor` and its four siblings, the
+   three `*Count` record types, and the hardcoded metric names in `MetricScope.CopyState`
+   all exist to give the popups typed, pre-joined lists. Once axes are descriptors the
+   library can expose `AxisBucketsOf(metric, axis)` plus bucket names and let the *game*
+   build the typed views it wants. This is the largest of the four and the one that touches
+   UI code, so it wants to happen before W4 hardens a binding against those properties — or
+   knowingly after, accepting the rework.
+3. **`Flight` leaves `MetricScopeKind`.** The engine needs *ordered nesting depth*, not four
+   named tiers; the consumer names them.
+4. **The envelope's identity fields become a consumer-supplied bag.** `LevelIndex`,
+   `Completed`, `RunId`, `AttemptId`, `AttemptIndex`, `LevelAttemptOrdinal` and `EndCause`
+   are this game's run model. The library's own envelope needs a scope kind, a payload, a
+   timestamp and a schema version; everything else is dimensions the consumer attaches.
 
 **Open question, decide before extraction:** how a metric is identified across the boundary.
 `MetricId` is inherently the consumer's — thirty rows naming *this* game's events. Either the
@@ -1331,6 +1375,7 @@ than assuming.
 | RK-12 | Metrics becomes load-bearing gameplay | A gameplay system injects `ILevelMetricsView` | **R20**, enforced by README contract |
 | RK-13 | Consent checks scattered through the service | Implementing consent as an `if` | `ConsentGateSink`, **R26** |
 | RK-14 | Session id becomes a device fingerprint | Persisting the GUID to `PlayerPrefs` | Explicit non-goal — regenerate per launch |
+| RK-15 | `session.total_score` reports the *last* run's score | `Absorb` stops a metric folding **below** its declared scope but not **above** it, so `TotalScore`, `RetriesUsed` and `PointsProjected` fold as `Last` into the Session scope | Harmless while `RecordKind.Session` is never written. **Decide before W6**, not during: either a `MaxScope` column, or skip `Last` metrics in `Absorb` once the child scope is the one that owns them. Note also that `ResetRun` never folds the run into the session, so a run abandoned to the menu contributes nothing |
 
 ---
 
@@ -1416,9 +1461,13 @@ one capture per subscribed message wired in a `BuildService()` helper, `Start()`
     the run record, despite the nested `Abandoned` arriving first.
 - Level index comes from `ScoreLevelUpMessage.NewLevel - 1`, fired cold with `NewLevel: 5`
   → flushed index 4 (never an internal counter — `CheatState.StartLevel` lets dev runs
-  start anywhere and a counter drifts). **The partial record at game over has no
-  `ScoreLevelUpMessage` to read**, so it takes `GameOverMessage.FinalLevel - 1`; assert
-  both paths agree on a clean flush.
+  start anywhere and a counter drifts). **The partial record at game over takes
+  `GameOverMessage.FinalLevel` unchanged** — the two sources are offset from each other:
+  `NewLevel` is the level being *entered*, so `NewLevel - 1` names the one just completed,
+  while `FinalLevel` is the level being *played*, which is already the one the partial
+  record is about. Subtracting there would file a death on level 2 under completed-level-1's
+  index. Assert a death on level *N* records *N*, and that it does not collide with the
+  record for a completed level *N-1*.
 - Retry provenance (**R14–R14c**): `RunId` constant across a retry, `AttemptIndex` 0→1→0,
   `LevelAttemptOrdinal` = 2 for the replayed level and 1 for the levels after it,
   `TotalScore` taken from `GameOverMessage` and **not** summed across level records.
@@ -1483,6 +1532,14 @@ but these are the priority for early analysis.
 ---
 
 ## Deferred
+
+- **The Session scope is Game-scoped, not App-scoped.** `SessionTelemetryContext` (the session
+  *id*) lives in `AppLifetimeScope` and survives a scene reload, as **R22** requires — but the
+  Session `MetricScope` is a field on `GameplayMetricsService`, which lives in
+  `GameLifetimeScope`. A return to the menu and back rebuilds that scope and mints a fresh,
+  empty accumulator. Harmless today because nothing ever seals or writes a `Session` record;
+  whoever flushes one must either move that scope to the App container or accept that
+  "session" means "one Game-scope lifetime". Do not discover this by reading a wrong number.
 
 - Streak-break reason decomposition (what ended the streak)
 - Burst-rate summaries (pops-per-second peaks); time-to-first-pop per level
