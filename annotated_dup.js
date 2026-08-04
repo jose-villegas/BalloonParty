@@ -314,6 +314,7 @@ var annotated_dup =
         [ "LevelPacingMigrationTool", "classBalloonParty_1_1Editor_1_1LevelPacingMigrationTool.html", "classBalloonParty_1_1Editor_1_1LevelPacingMigrationTool" ],
         [ "LevelPacingWindow", "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html", "classBalloonParty_1_1Editor_1_1LevelPacingWindow" ],
         [ "LevelRangeEntryDrawer", "classBalloonParty_1_1Editor_1_1LevelRangeEntryDrawer.html", "classBalloonParty_1_1Editor_1_1LevelRangeEntryDrawer" ],
+        [ "MetricBindingDrawer", "classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html", "classBalloonParty_1_1Editor_1_1MetricBindingDrawer" ],
         [ "MusicalNoteDrawer", "classBalloonParty_1_1Editor_1_1MusicalNoteDrawer.html", "classBalloonParty_1_1Editor_1_1MusicalNoteDrawer" ],
         [ "PaintDripOverlayEditor", "classBalloonParty_1_1Editor_1_1PaintDripOverlayEditor.html", "classBalloonParty_1_1Editor_1_1PaintDripOverlayEditor" ],
         [ "PaintSplashViewEditor", "classBalloonParty_1_1Editor_1_1PaintSplashViewEditor.html", "classBalloonParty_1_1Editor_1_1PaintSplashViewEditor" ],
@@ -415,6 +416,7 @@ var annotated_dup =
           [ "TrailId", "structBalloonParty_1_1Game_1_1Score_1_1TrailId.html", "structBalloonParty_1_1Game_1_1Score_1_1TrailId" ]
         ] ],
         [ "Telemetry", "namespaceBalloonParty_1_1Game_1_1Telemetry.html", [
+          [ "AxisBucketNaming", "classBalloonParty_1_1Game_1_1Telemetry_1_1AxisBucketNaming.html", "classBalloonParty_1_1Game_1_1Telemetry_1_1AxisBucketNaming" ],
           [ "AxisSlot", "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlot.html", "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlot" ],
           [ "AxisSlotInfo", "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html", "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo" ],
           [ "BalloonTypeCount", "structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html", "structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount" ],
@@ -672,7 +674,7 @@ var annotated_dup =
           [ "LevelUpAbandonedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpAbandonedMessage.html", null ],
           [ "LevelUpAbortedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpAbortedMessage.html", null ],
           [ "LevelUpDismissedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage.html", null ],
-          [ "LevelUpGlowTrailsMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpGlowTrailsMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpGlowTrailsMessage" ],
+          [ "LevelUpFillTrailsMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpFillTrailsMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpFillTrailsMessage" ],
           [ "OverflowHeartRequestedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage" ],
           [ "PierceDischargedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage" ],
           [ "ProgressBarCompletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProgressBarCompletedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProgressBarCompletedMessage" ],
@@ -736,6 +738,7 @@ var annotated_dup =
           [ "IColorableRenderer", "interfaceBalloonParty_1_1Shared_1_1Rendering_1_1IColorableRenderer.html", "interfaceBalloonParty_1_1Shared_1_1Rendering_1_1IColorableRenderer" ],
           [ "ImageShadowBaker", "classBalloonParty_1_1Shared_1_1Rendering_1_1ImageShadowBaker.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1ImageShadowBaker" ],
           [ "MeshHelper", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshHelper.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshHelper" ],
+          [ "ShaderTimeService", "classBalloonParty_1_1Shared_1_1Rendering_1_1ShaderTimeService.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1ShaderTimeService" ],
           [ "SortingHelper", "classBalloonParty_1_1Shared_1_1Rendering_1_1SortingHelper.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1SortingHelper" ],
           [ "SpriteLayerCombiner", "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner" ],
           [ "SpriteShadowBaker", "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker" ]
@@ -934,6 +937,13 @@ var annotated_dup =
           [ "ShieldCounterLabel", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterLabel.html", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterLabel" ],
           [ "ShieldTrailController", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldTrailController.html", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldTrailController" ],
           [ "ShieldUILifetimeScope", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldUILifetimeScope.html", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldUILifetimeScope" ]
+        ] ],
+        [ "Telemetry", "namespaceBalloonParty_1_1UI_1_1Telemetry.html", [
+          [ "MetricBinding", "structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html", "structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding" ],
+          [ "MetricLabel", "classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabel.html", "classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabel" ],
+          [ "MetricLabelBinder", "classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabelBinder.html", "classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabelBinder" ],
+          [ "MetricLabelRegistration", "classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabelRegistration.html", "classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabelRegistration" ],
+          [ "MetricValueResolver", "classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html", "classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver" ]
         ] ],
         [ "Tooltip", "namespaceBalloonParty_1_1UI_1_1Tooltip.html", [
           [ "HoldSpeedUpTooltip", "classBalloonParty_1_1UI_1_1Tooltip_1_1HoldSpeedUpTooltip.html", "classBalloonParty_1_1UI_1_1Tooltip_1_1HoldSpeedUpTooltip" ]

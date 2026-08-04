@@ -12,5 +12,6 @@ var searchData=
   ['ambient_9',['Ambient',['../namespaceBalloonParty_1_1Shared_1_1SceneLight.html#aba1f92fb89a50c3bfb7903105772e9b9aed8e37bad13d76c6dbeb58152440b41e',1,'BalloonParty::Shared::SceneLight']]],
   ['appear_10',['Appear',['../classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#a8c8a6fea98ad336c6b6db99c683b7f8ca90fca44a1a2ebabd6e55ceb1537e2bc9',1,'BalloonParty::UI::Score::ProgressNotice']]],
   ['armramp_11',['ArmRamp',['../namespaceBalloonParty_1_1Projectile_1_1Model.html#a360a7607028c135b5205293095e7cabda4dfe6d9de5dacfaf857e7c5e77610246',1,'BalloonParty::Projectile::Model']]],
-  ['attributionby_12',['AttributionBy',['../namespaceBalloonParty_1_1Audio_1_1Editor.html#aa262f9b9965eb614ed0767c6d5473bcca58e8bfcae326a6afb129a124f76f9639',1,'BalloonParty::Audio::Editor']]]
+  ['attributionby_12',['AttributionBy',['../namespaceBalloonParty_1_1Audio_1_1Editor.html#aa262f9b9965eb614ed0767c6d5473bcca58e8bfcae326a6afb129a124f76f9639',1,'BalloonParty::Audio::Editor']]],
+  ['axisbucket_13',['AxisBucket',['../namespaceBalloonParty_1_1UI_1_1Telemetry.html#a20e80a757cebf98f741774a57e8c5311a77164eaa52cdc11297689e1e352e1a68',1,'BalloonParty::UI::Telemetry']]]
 ];

@@ -18,7 +18,7 @@ var dir_c46868fe3e223da89641514498b57a94 =
     [ "LevelUpAbandonedMessage.cs", "LevelUpAbandonedMessage_8cs.html", "LevelUpAbandonedMessage_8cs" ],
     [ "LevelUpAbortedMessage.cs", "LevelUpAbortedMessage_8cs.html", "LevelUpAbortedMessage_8cs" ],
     [ "LevelUpDismissedMessage.cs", "LevelUpDismissedMessage_8cs.html", "LevelUpDismissedMessage_8cs" ],
-    [ "LevelUpGlowTrailsMessage.cs", "LevelUpGlowTrailsMessage_8cs.html", "LevelUpGlowTrailsMessage_8cs" ],
+    [ "LevelUpFillTrailsMessage.cs", "LevelUpFillTrailsMessage_8cs.html", "LevelUpFillTrailsMessage_8cs" ],
     [ "OverflowHeartRequestedMessage.cs", "OverflowHeartRequestedMessage_8cs.html", "OverflowHeartRequestedMessage_8cs" ],
     [ "PierceDischargedMessage.cs", "PierceDischargedMessage_8cs.html", "PierceDischargedMessage_8cs" ],
     [ "ProgressBarCompletedMessage.cs", "ProgressBarCompletedMessage_8cs.html", "ProgressBarCompletedMessage_8cs" ],

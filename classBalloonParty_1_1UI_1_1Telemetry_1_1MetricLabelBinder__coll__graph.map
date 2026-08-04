@@ -1,0 +1,19 @@
+<map id="BalloonParty.UI.Telemetry.MetricLabelBinder" name="BalloonParty.UI.Telemetry.MetricLabelBinder">
+<area shape="rect" id="Node000001" title="Binds every MetricLabel under a scope to the read model at Start, mirroring Binding...." alt="" coords="640,87,831,127"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="376,5,461,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="475,28,527,41,674,85,672,90,526,46,474,33"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabel.html" title="Renders one telemetry value into this object&#39;s TMP_Text, whose authored text is the format template (..." alt="" coords="323,55,514,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="528,84,640,95,640,100,528,89"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="42,5,166,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="180,29,323,55,322,61,179,34"/>
+<area shape="rect" id="Node000005" href="$structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html" title=" " alt="" coords="9,55,199,95"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="213,73,323,73,323,78,213,78"/>
+<area shape="rect" id="Node000006" href="$structBalloonParty_1_1UI_1_1FormattedLabel.html" title="Wraps a TMP_Text whose authored text is a string.Format template; construct it before the label&#39;s tex..." alt="" coords="9,119,199,159"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="212,115,322,92,323,97,213,120"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html" title=" " alt="" coords="311,119,527,159"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="540,124,639,114,640,120,540,130"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html" title="Turns one MetricBinding plus a snapshot into the object a label formats." alt="" coords="323,183,514,223"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="503,177,615,143,673,125,675,130,617,149,504,182"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="5,183,203,223"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="216,201,323,201,323,206,216,206"/>
+</map>

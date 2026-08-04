@@ -43,7 +43,7 @@ var searchData=
   ['levelupabortedmessage_40',['LevelUpAbortedMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpAbortedMessage.html',1,'BalloonParty::Shared::Messages']]],
   ['levelupcinematic_41',['LevelUpCinematic',['../classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html',1,'BalloonParty::Game::Cinematics']]],
   ['levelupdismissedmessage_42',['LevelUpDismissedMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage.html',1,'BalloonParty::Shared::Messages']]],
-  ['levelupglowtrailsmessage_43',['LevelUpGlowTrailsMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpGlowTrailsMessage.html',1,'BalloonParty::Shared::Messages']]],
+  ['levelupfilltrailsmessage_43',['LevelUpFillTrailsMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpFillTrailsMessage.html',1,'BalloonParty::Shared::Messages']]],
   ['leveluplifetimescope_44',['LevelUpLifetimeScope',['../classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpLifetimeScope.html',1,'BalloonParty::UI::LevelUp']]],
   ['leveluppopup_45',['LevelUpPopUp',['../classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html',1,'BalloonParty::UI::LevelUp']]],
   ['lifecyclehelper_46',['LifecycleHelper',['../classBalloonParty_1_1Shared_1_1Extensions_1_1LifecycleHelper.html',1,'BalloonParty::Shared::Extensions']]],

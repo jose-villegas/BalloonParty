@@ -28,5 +28,6 @@ var searchData=
   ['arrived_25',['Arrived',['../classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect_1_1OverflowBalloon.html#a7755870de7534a949d1b8b8bf8a093af',1,'BalloonParty::Balloon::Spawner::RejectedBalloonEffect::OverflowBalloon']]],
   ['attemptid_26',['AttemptId',['../structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a9ba0b33aecb407b433ef431ac07b18fe',1,'BalloonParty::Game::Telemetry::TelemetryEnvelope']]],
   ['attemptindex_27',['AttemptIndex',['../structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#ade741fbbb50f02178096126d76c5c6e6',1,'BalloonParty::Game::Telemetry::TelemetryEnvelope']]],
-  ['availablecount_28',['AvailableCount',['../interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolChannel.html#ac789ca5ae1e796d1040d68791a2bd5be',1,'BalloonParty.Shared.Pool.IPoolChannel.AvailableCount'],['../classBalloonParty_1_1Shared_1_1Pool_1_1PoolChannel-1-g.html#ac39c3d0ab6c6658fce73ebbec2255756',1,'BalloonParty.Shared.Pool.PoolChannel-1-g.AvailableCount']]]
+  ['availablecount_28',['AvailableCount',['../interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolChannel.html#ac789ca5ae1e796d1040d68791a2bd5be',1,'BalloonParty.Shared.Pool.IPoolChannel.AvailableCount'],['../classBalloonParty_1_1Shared_1_1Pool_1_1PoolChannel-1-g.html#ac39c3d0ab6c6658fce73ebbec2255756',1,'BalloonParty.Shared.Pool.PoolChannel-1-g.AvailableCount']]],
+  ['axis_29',['Axis',['../structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html#a6ff96a859fbf52beb128382eb0b9ebd0',1,'BalloonParty::UI::Telemetry::MetricBinding']]]
 ];

@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter =
 [
-    [ "ProgressionSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a2cfc847ac36666c1c9382a552f40b8d2", null ],
+    [ "ProgressionSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a8332ffcaaa649a4ab82b8811dc959f22", null ],
     [ "Dispose", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#ad3266168fdc405081b7b453293a284cd", null ],
     [ "OnAscendStarted", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#adae276bee5b87c9ea73c5b3942112b51", null ],
     [ "OnBoardClear", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a76bed499d0c459f98a3de71691fbb273", null ],
@@ -10,7 +10,7 @@ var classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter =
     [ "OnLevelTransition", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a9d2dcb8e720f9b875f099034716fef65", null ],
     [ "OnLevelUp", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#ae8c8fb97897bf8b69f3d7a449bc2b614", null ],
     [ "OnLevelUpDismissed", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#aa1646275d79719aafb76aed2db9580cb", null ],
-    [ "OnLevelUpGlow", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#af70ee119558251e30f815a30dac49fff", null ],
+    [ "OnLevelUpFill", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a84a5721ba75dd6bd249771d5810e93ff", null ],
     [ "OnProgressBarCompleted", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#ad7c024ead1c9836e7277e26566bf7e00", null ],
     [ "OnScoreTrailArrived", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#acea1a06bc5bd34e926351e640dc1a1ea", null ],
     [ "OnStreakChanged", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a399edf17d93427f892616ecb3ef2dd10", null ],
@@ -25,7 +25,7 @@ var classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter =
     [ "_levelProgress", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a7726b83212b74994fc7c48f5afd20561", null ],
     [ "_levelTransitionSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a16a6de8188b6972b7f71be390fcbdb42", null ],
     [ "_levelUpDismissedSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#ac943f3090db374c60c44082e9f2fecdd", null ],
-    [ "_levelUpGlowSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#abcc9ca11049ffa20a4b226879191695d", null ],
+    [ "_levelUpFillSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#aa7e224b384d82843025c707a4c111933", null ],
     [ "_levelUpSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a09df4c5a0802ab255b83741cd60f276c", null ],
     [ "_melodic", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#af13f25266f159d5e358ec919485fa0d4", null ],
     [ "_palette", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a340538ec6100b7d577e94c930390c818", null ],

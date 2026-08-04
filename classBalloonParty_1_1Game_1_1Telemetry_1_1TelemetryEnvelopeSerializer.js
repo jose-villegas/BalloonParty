@@ -18,7 +18,5 @@ var classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer =
     [ "RecordKindWireName", "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html#a35d3c17d627665aa930374042c99c49f", null ],
     [ "Serialize", "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html#ae0390ebcd01256fe5f9cef6f6ff81e86", null ],
     [ "_builder", "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html#a83b54a86420db91f4d13234f0e49f2c5", null ],
-    [ "_palette", "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html#ac706e5e14991fa27f586e3a2dace7d2f", null ],
-    [ "OtherColorBucketName", "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html#abbddb722c5c3a5e3b29117db7578f919", null ],
-    [ "UnknownBucketName", "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html#a850680f8ef4772f0ba73a7fc146116cc", null ]
+    [ "_palette", "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html#ac706e5e14991fa27f586e3a2dace7d2f", null ]
 ];

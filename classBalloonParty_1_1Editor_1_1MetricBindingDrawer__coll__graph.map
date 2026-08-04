@@ -1,0 +1,9 @@
+<map id="BalloonParty.Editor.MetricBindingDrawer" name="BalloonParty.Editor.MetricBindingDrawer">
+<area shape="rect" id="Node000001" title="Two popups for a MetricBinding: which snapshot, then which value out of it." alt="" coords="32,211,220,251"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,115,129,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,151,117,209,113,212,79,154"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1SourceCatalog.html" title=" " alt="" coords="153,108,368,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="226,158,153,213,150,208,223,154"/>
+<area shape="rect" id="Node000004" href="$structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1Entry.html" title=" " alt="" coords="167,5,355,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="263,59,263,108,258,108,258,59"/>
+</map>

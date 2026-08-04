@@ -22,6 +22,7 @@ var namespaceBalloonParty_1_1Editor =
     [ "LevelPacingMigrationTool", "classBalloonParty_1_1Editor_1_1LevelPacingMigrationTool.html", "classBalloonParty_1_1Editor_1_1LevelPacingMigrationTool" ],
     [ "LevelPacingWindow", "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html", "classBalloonParty_1_1Editor_1_1LevelPacingWindow" ],
     [ "LevelRangeEntryDrawer", "classBalloonParty_1_1Editor_1_1LevelRangeEntryDrawer.html", "classBalloonParty_1_1Editor_1_1LevelRangeEntryDrawer" ],
+    [ "MetricBindingDrawer", "classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html", "classBalloonParty_1_1Editor_1_1MetricBindingDrawer" ],
     [ "MusicalNoteDrawer", "classBalloonParty_1_1Editor_1_1MusicalNoteDrawer.html", "classBalloonParty_1_1Editor_1_1MusicalNoteDrawer" ],
     [ "PaintDripOverlayEditor", "classBalloonParty_1_1Editor_1_1PaintDripOverlayEditor.html", "classBalloonParty_1_1Editor_1_1PaintDripOverlayEditor" ],
     [ "PaintSplashViewEditor", "classBalloonParty_1_1Editor_1_1PaintSplashViewEditor.html", "classBalloonParty_1_1Editor_1_1PaintSplashViewEditor" ],

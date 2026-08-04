@@ -1,0 +1,9 @@
+<map id="BalloonParty.UI.Telemetry.MetricLabel" name="BalloonParty.UI.Telemetry.MetricLabel">
+<area shape="rect" id="Node000001" title="Renders one telemetry value into this object&#39;s TMP_Text, whose authored text is the format template (..." alt="" coords="304,55,495,95"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="39,5,163,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,30,304,54,303,60,176,35"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html" title=" " alt="" coords="5,55,196,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="210,73,304,73,304,78,210,78"/>
+<area shape="rect" id="Node000004" href="$structBalloonParty_1_1UI_1_1FormattedLabel.html" title="Wraps a TMP_Text whose authored text is a string.Format template; construct it before the label&#39;s tex..." alt="" coords="5,119,196,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="208,114,305,93,306,98,209,119"/>
+</map>

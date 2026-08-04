@@ -16,6 +16,7 @@ var searchData=
   ['audiopoolkeys_13',['AudioPoolKeys',['../classBalloonParty_1_1Audio_1_1AudioPoolKeys.html',1,'BalloonParty::Audio']]],
   ['audiosourcevoice_14',['AudioSourceVoice',['../classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html',1,'BalloonParty::Audio::View']]],
   ['autofieldpropertydrawer_15',['AutoFieldPropertyDrawer',['../classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html',1,'BalloonParty::Editor']]],
-  ['axisslot_16',['AxisSlot',['../structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlot.html',1,'BalloonParty::Game::Telemetry']]],
-  ['axisslotinfo_17',['AxisSlotInfo',['../structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html',1,'BalloonParty::Game::Telemetry']]]
+  ['axisbucketnaming_16',['AxisBucketNaming',['../classBalloonParty_1_1Game_1_1Telemetry_1_1AxisBucketNaming.html',1,'BalloonParty::Game::Telemetry']]],
+  ['axisslot_17',['AxisSlot',['../structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlot.html',1,'BalloonParty::Game::Telemetry']]],
+  ['axisslotinfo_18',['AxisSlotInfo',['../structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html',1,'BalloonParty::Game::Telemetry']]]
 ];

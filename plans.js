@@ -324,7 +324,7 @@ var plans =
           [ "W2 — Envelope, serializer, sinks · P0 · M · sonnet", "plan_gameplay_telemetry.html#autotoc_md516", null ],
           [ "W2b — Flight scope + flight stats · P0 · M · sonnet, opus review", "plan_gameplay_telemetry.html#autotoc_md517", null ],
           [ "W3 — Metrics service and state machine · P0 · L · opus", "plan_gameplay_telemetry.html#autotoc_md518", null ],
-          [ "W4 — UI read model and popups · P1 · M–L · opus", "plan_gameplay_telemetry.html#autotoc_md519", null ],
+          [ "W4 — Catalog-driven metric labels · P1 · M · sonnet", "plan_gameplay_telemetry.html#autotoc_md519", null ],
           [ "W5 — Export decorators · P1 · M · sonnet", "plan_gameplay_telemetry.html#autotoc_md520", null ],
           [ "W6 — HTTP analytics sink · P2 · M–L · opus", "plan_gameplay_telemetry.html#autotoc_md521", null ],
           [ "The review loop — every wave, without exception", "plan_gameplay_telemetry.html#autotoc_md522", null ],

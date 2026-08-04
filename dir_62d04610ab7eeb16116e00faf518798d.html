@@ -120,6 +120,8 @@ $(function(){initNavTree('dir_62d04610ab7eeb16116e00faf518798d.html',''); initRe
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="files" name="files"></a>
 Files</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AxisBucketNaming_8cs.html">AxisBucketNaming.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AxisSlot_8cs.html">AxisSlot.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AxisSlotInfo_8cs.html">AxisSlotInfo.cs</a></td></tr>
@@ -201,38 +203,40 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>TimerCatalog</code>   </td><td class="markdownTableBodyNone">Static table: timer id → wire name, unit. Kept separate from <code>MetricCatalog</code> because a timer has no <code>FoldRule</code>, <code>Scope</code> or <code>MetricAxis</code> — <code>Absorb</code> never folds timers (see <em>Every scope runs its own clocks</em> below)    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>AxisBucketNaming</code>   </td><td class="markdownTableBodyNone">Bucket ↔ name for the three axes, in one place: palette colour names plus a trailing <code>other</code>, and the two enums by ordinal. <code>TelemetryEnvelopeSerializer</code> needs the forward direction for the wire, <code>MetricValueResolver</code> (<code>UI/Telemetry/</code>) needs the inverse because a label's binding stores a colour by <b>name</b>. Two copies would drift, and the symptom would be a label disagreeing with the exported column    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>AxisSlot</code> / <code>AxisSlotInfo</code>   </td><td class="markdownTableBodyNone">A dense index into <code>MetricSet</code>'s per-slot axis storage, and the catalog row describing it. One slot per <code>(MetricId, MetricAxis)</code> pair — not one array per axis kind — so metrics that share an axis kind (e.g. <code>Pops</code> and <code>Deflects</code>, both <code>BalloonType</code>) never alias the same table    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>MetricSet</code> / <code>IReadOnlyMetricSet</code>   </td><td class="markdownTableBodyNone">Dense <code>int[]</code> counters plus one <code>int[]</code> per declared <code>AxisSlot</code>. Allocation-free increments. <code>IReadOnlyMetricSet</code> is a read-only <em>view</em>, not an immutability guarantee — <code>MetricScope.Metrics</code> is the one legitimate place a live view belongs    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ISealedMetrics</code>   </td><td class="markdownTableBodyNone">The envelope's actual contract: <code>IReadOnlyMetricSet</code> plus <code>this[TimerId]</code>, implemented only by the two snapshots — never by <code>MetricSet</code> — so a reference typed as <code>ISealedMetrics</code> really is immutable    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>MetricScope</code> / <code>MetricScopeState</code>   </td><td class="markdownTableBodyNone">One scope's metric set and timers, with <code>Seal()</code> (immutable snapshot) and <code>Reset()</code> (reuse without reallocation). Four instances, built only through <code>MetricScope.Create</code>. <code>Absorb</code> requires its argument to be exactly one scope below (rejects itself, a sibling, or a non-adjacent scope); <code>Seal(int, bool)</code>/<code>Seal()</code> each validate the scope they run on    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>TelemetryStopwatch</code>   </td><td class="markdownTableBodyNone">Pure C# timer that owns its injected <code>Func&lt;float&gt;</code> clock and folds elapsed time on <code>Pause()</code>/<code>Resume()</code>/<code>Elapsed</code> reads. Deterministic in tests via a fake clock    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>MetricsSnapshotBase</code> / <code>LevelMetricsSnapshot</code> / <code>RunMetricsSnapshot</code>   </td><td class="markdownTableBodyNone">Sealed immutable read surfaces implementing <code>ISealedMetrics</code> — what the popups render and what the sink receives. The shared payload (counters, timers, axis slots, named breakdowns) lives once in the base; <code>LevelMetricsSnapshot</code> adds only <code>LevelIndex</code>/<code>Completed</code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ColorCount</code> / <code>BalloonTypeCount</code> / <code>ItemActivationCount</code>   </td><td class="markdownTableBodyNone">The breakdown shapes the snapshots expose (<code>PopsByColor</code>, <code>PointsByColor</code>, <code>PopsByBalloonType</code>, <code>DeflectsByBalloonType</code>, <code>ItemsActivated</code>)    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ILevelMetricsView</code>   </td><td class="markdownTableBodyNone">The UI read seam. All three members (ceremony snapshot, last flushed level, run) are <code>IReadOnlyReactiveProperty</code> — each is assigned from inside a message handler, so a plain property read from a view's own handler for the same message would return the previous value whenever that view subscribed first. <b>Only <code><a class="el" href="namespaceBalloonParty_1_1UI.html">BalloonParty.UI</a>.*</code> types may inject it</b>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>GameplayMetricsService</code>   </td><td class="markdownTableBodyNone">Entry point (<code>IStartable</code>, <code>IDisposable</code>, <code>IRunResettable</code>). Five-state level machine (Idle/Playing/Ceremony/Transitioning/Ended); routes subscriptions into scopes, takes the two per-level snapshots, hands envelopes to the sink    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>SessionTelemetryContext</code>   </td><td class="markdownTableBodyNone">Session id (per launch, never persisted), schema version, launch timestamp. Registered in <code>AppLifetimeScope</code> so it survives scene reloads    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>TelemetryEnvelope</code>   </td><td class="markdownTableBodyNone">One uniform wire record for every scope (<code>readonly struct</code>), with a <code>RecordKind</code> discriminator and an <code>ISealedMetrics</code> payload    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>TelemetryEnvelopeSerializer</code>   </td><td class="markdownTableBodyNone">Reflection-free JSON writer over one reused <code>StringBuilder</code>, driven by loops over <code>MetricCatalog</code>/<code>TimerCatalog</code> (zero-valued counters skipped, timers always emitted, <code>InvariantCulture</code> on every numeric/date append)    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ITelemetrySink</code> / <code>TelemetrySinkBase</code>   </td><td class="markdownTableBodyNone">Write seam. The base owns the never-throw guard: <code>Write</code>/<code>FlushAsync</code> share one latch that permanently no-ops both once either hook throws; <code>Dispose</code> is guarded and idempotent independently, so a prior write failure never leaks the sink's resource    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>CompositeTelemetrySink</code>   </td><td class="markdownTableBodyNone">Fans out to an array of leaf sinks; an empty array is the inert "no export configured" state — no <code>NullTelemetrySink</code>. Registered unconditionally in <code>GameScopeRegistration.RegisterTelemetrySinks</code>, wrapping <code>{ JsonLinesTelemetrySink }</code> under the dev guard or an empty array otherwise    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>ConsentGateSink</code> / <code>BatchingTelemetrySink</code>   </td><td class="markdownTableBodyNone">Cross-cutting decorators — one concern each (W5)    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>JsonLinesTelemetrySink</code>   </td><td class="markdownTableBodyNone">Dev-only local sink (<code>#if UNITY_EDITOR \|\| DEVELOPMENT_BUILD</code>): one JSON object per line, one <code>StreamWriter</code> opened in <code>Start()</code> and kept for the session, rotating log files in <code>Application.persistentDataPath/telemetry/</code> (20 most recent, sorted by file name)    </td></tr>
+<td class="markdownTableBodyNone"><code>ConsentGateSink</code> / <code>BatchingTelemetrySink</code>   </td><td class="markdownTableBodyNone">Cross-cutting decorators — one concern each (W5)    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>JsonLinesTelemetrySink</code>   </td><td class="markdownTableBodyNone">Dev-only local sink (<code>#if UNITY_EDITOR \|\| DEVELOPMENT_BUILD</code>): one JSON object per line, one <code>StreamWriter</code> opened in <code>Start()</code> and kept for the session, rotating log files in <code>Application.persistentDataPath/telemetry/</code> (20 most recent, sorted by file name)    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>HttpAnalyticsSink</code>   </td><td class="markdownTableBodyNone">Batched export to an external analytics service (last wave; gated on choosing a provider)   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md226"></a>

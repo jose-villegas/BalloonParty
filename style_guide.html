@@ -419,7 +419,7 @@ Pause Integration</h3>
 <li><b>Trail spawning</b> is not explicitly gated — the projectile freeze prevents new pops, so no new trails are queued during the cinematic.</li>
 <li><b>Balloon animators/particles</b> are frozen when the popup shows — the popup claims <code>TimeScaleSource.LevelUpPopup = 0</code> via <code>TimeScaleService</code> (visual freeze, separate from logical pause).</li>
 <li><b>Score trails</b> (non-tipping) are never paused — they fly at normal speed during the cinematic.</li>
-<li><b>Glow trails</b> — after the popup's appear animation finishes, <code>LevelUpPopUp</code> publishes <code>LevelUpGlowTrailsMessage</code> to drain each <code>ColorProgressBar</code> slider in sync, then spawns decorative <code>FlyingTrail</code> orbs in unscaled time from bars to the glow fill. These fly independently of <code>Time.timeScale</code> and <code>PauseService</code>.</li>
+<li><b>Fill trails</b> — after the popup's appear animation finishes, <code>LevelUpPopUp</code> publishes <code>LevelUpFillTrailsMessage</code> to drain each <code>ColorProgressBar</code> slider in sync, then spawns decorative <code>FlyingTrail</code> orbs in unscaled time from bars to the level fill. These fly independently of <code>Time.timeScale</code> and <code>PauseService</code>.</li>
 </ul>
 <p>See <code><a class="el" href="Shared_2Pause_2README_8md.html">Shared/Pause/README.md</a></code> for full documentation.</p>
 <hr  />

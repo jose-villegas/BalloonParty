@@ -22,7 +22,7 @@ var searchData=
   ['levelscoringcurve_19',['LevelScoringCurve',['../structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a3056668ddb975767b08b012693ae1522',1,'BalloonParty::Configuration::Level::LevelScoringCurve']]],
   ['leveltransitioncontroller_20',['LevelTransitionController',['../classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#a20655f4f6e1eb2206a06278346ea77fa',1,'BalloonParty::Game::Level::LevelTransitionController']]],
   ['levelupcinematic_21',['LevelUpCinematic',['../classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#a31e71384b0206df95bf12ce52c1f31fc',1,'BalloonParty::Game::Cinematics::LevelUpCinematic']]],
-  ['levelupglowtrailsmessage_22',['LevelUpGlowTrailsMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpGlowTrailsMessage.html#aecb5b4c2a14c3c72fc8950d247e036e0',1,'BalloonParty::Shared::Messages::LevelUpGlowTrailsMessage']]],
+  ['levelupfilltrailsmessage_22',['LevelUpFillTrailsMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpFillTrailsMessage.html#a7d69e1eeb1326103a57a7971034c146a',1,'BalloonParty::Shared::Messages::LevelUpFillTrailsMessage']]],
   ['licensefilter_23',['LicenseFilter',['../classBalloonParty_1_1Audio_1_1Editor_1_1FreesoundQueryBuilder.html#ae792b3d72554fe3e9d75a4617aec22c6',1,'BalloonParty::Audio::Editor::FreesoundQueryBuilder']]],
   ['licensename_24',['LicenseName',['../classBalloonParty_1_1Audio_1_1Editor_1_1FreesoundResponseParser.html#a735ea587908f4162c1636d37c6f4c78e',1,'BalloonParty::Audio::Editor::FreesoundResponseParser']]],
   ['light_25',['Light',['../classBalloonParty_1_1Shared_1_1SceneLight_1_1Light.html#a7f4315c5d32edbf33fc32924b9ae823b',1,'BalloonParty::Shared::SceneLight::Light']]],

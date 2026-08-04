@@ -1,0 +1,5 @@
+<map id="BalloonParty.UI.Telemetry.MetricLabel" name="BalloonParty.UI.Telemetry.MetricLabel">
+<area shape="rect" id="Node000001" title="Renders one telemetry value into this object&#39;s TMP_Text, whose authored text is the format template (..." alt="" coords="5,79,196,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="39,5,163,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,44,103,79,98,79,98,44"/>
+</map>

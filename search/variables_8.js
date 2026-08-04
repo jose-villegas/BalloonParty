@@ -24,5 +24,6 @@ var searchData=
   ['hitsremaining_21',['HitsRemaining',['../structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a5512ca360b8804e3e7ec60738d6009cf',1,'BalloonParty.Solver.ShotBalloonSnapshot.HitsRemaining'],['../structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a25ce084feb61fbe6ec5280ffa290cd7e',1,'BalloonParty.Solver.ShotBalloonState.HitsRemaining']]],
   ['hitstopop_22',['HitsToPop',['../structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a52801eccd8fd9941a056d5c0715f2b7b',1,'BalloonParty::Balloon::Model::BalloonModelConfig']]],
   ['huejitter_23',['HueJitter',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBakeSettings.html#a75b9751553a9a8c455527ed600d4be74',1,'BalloonParty::Editor::Bush::BushLeafBakeSettings']]],
-  ['hueshiftid_24',['HueShiftId',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBaker.html#abca2837543a88b0ab7cf03591ef3cb72',1,'BalloonParty::Editor::Bush::BushLeafBaker']]]
+  ['hueshiftid_24',['HueShiftId',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBaker.html#abca2837543a88b0ab7cf03591ef3cb72',1,'BalloonParty::Editor::Bush::BushLeafBaker']]],
+  ['hundredthsunit_25',['HundredthsUnit',['../classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html#a85f74470f5edcd35116d0b4204fe9807',1,'BalloonParty::UI::Telemetry::MetricValueResolver']]]
 ];

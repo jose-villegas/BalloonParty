@@ -195,9 +195,9 @@ Cinematic 1 — Hit (<code>CinematicState.LevelCompleteHit</code>)</h2>
 <td class="markdownTableBodyNone"><b>End</b>   </td><td class="markdownTableBodyNone"><code>EndPanIn()</code> → ends the hit cinematic state and starts the curve-driven camera restore (un-zoom while following). Popup gate can now open because <code>Cinematic.Current != LevelCompleteHit</code>   </td></tr>
 </table>
 <h2><a class="anchor" id="autotoc_md169"></a>
-Gate — Popup Wait + Glow Trails</h2>
+Gate — Popup Wait + Fill Trails</h2>
 <p><code>LevelUpLifetimeScope</code> registers <code>CinematicEndGate(CinematicState.LevelCompleteHit)</code> by concrete type; <code>LevelUpPopUp</code> injects it directly and waits until <code>Cinematic.Current != LevelCompleteHit</code>. When the gate opens, the popup claims <code>TimeScaleSource.LevelUpPopup = 0</code> via <code>TimeScaleService</code> to freeze balloons/particles.</p>
-<p>After the appear animation finishes, <code>LevelUpPopUp</code> publishes <code>LevelUpGlowTrailsMessage</code> — each <code>ColorProgressBar</code> drains its slider in sync — then spawns decorative <code>FlyingTrail</code> orbs from each bar to the glow fill in unscaled time. When all glow trails arrive, the level label updates. No cinematic state is active during this phase.</p>
+<p>After the appear animation finishes, <code>LevelUpPopUp</code> publishes <code>LevelUpFillTrailsMessage</code> — each <code>ColorProgressBar</code> drains its slider in sync — then spawns decorative <code>FlyingTrail</code> orbs from each bar to the level fill in unscaled time. Each arrival scales <code>_levelFill</code> a step closer to full. No cinematic state is active during this phase.</p>
 <h2><a class="anchor" id="autotoc_md170"></a>
 Dismiss — hand-off to the Ascent</h2>
 <table class="markdownTable">
@@ -317,11 +317,11 @@ Files</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code><a class="el" href="ScoreController_8cs.html">Game/Score/ScoreController.cs</a></code>   </td><td class="markdownTableBodyNone">Score tracking, <code>CheckLevelUp</code>, <code>WillLevelUp</code>    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code><a class="el" href="LevelUpPopUp_8cs.html">UI/LevelUp/LevelUpPopUp.cs</a></code>   </td><td class="markdownTableBodyNone">Popup display, dismiss, <code>Time.timeScale = 0</code>, glow trail spawning via <code>LevelUpGlowTrailsMessage</code>    </td></tr>
+<td class="markdownTableBodyNone"><code><a class="el" href="LevelUpPopUp_8cs.html">UI/LevelUp/LevelUpPopUp.cs</a></code>   </td><td class="markdownTableBodyNone">Popup display, dismiss, <code>Time.timeScale = 0</code>, fill trail spawning via <code>LevelUpFillTrailsMessage</code>    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code><a class="el" href="LevelUpLifetimeScope_8cs.html">UI/LevelUp/LevelUpLifetimeScope.cs</a></code>   </td><td class="markdownTableBodyNone">DI: registers <code>CinematicEndGate(LevelCompleteHit)</code> by concrete type (the popup injects it directly, not via <code>IReadyGate</code>)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code><a class="el" href="LevelUpGlowTrailsMessage_8cs.html">Shared/Messages/LevelUpGlowTrailsMessage.cs</a></code>   </td><td class="markdownTableBodyNone">Signal carrying trail-per-bar count and stagger delay for bar draining    </td></tr>
+<td class="markdownTableBodyNone"><code><a class="el" href="LevelUpFillTrailsMessage_8cs.html">Shared/Messages/LevelUpFillTrailsMessage.cs</a></code>   </td><td class="markdownTableBodyNone">Signal carrying trail-per-bar count and stagger delay for bar draining    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code><a class="el" href="ProjectileView_8cs.html">Projectile/View/ProjectileView.cs</a></code>   </td><td class="markdownTableBodyNone">Checks <code>IsAnyPaused</code> to freeze movement   </td></tr>
 </table>

@@ -7,6 +7,7 @@ var namespaceBalloonParty_1_1UI =
     [ "LevelUp", "namespaceBalloonParty_1_1UI_1_1LevelUp.html", "namespaceBalloonParty_1_1UI_1_1LevelUp" ],
     [ "Score", "namespaceBalloonParty_1_1UI_1_1Score.html", "namespaceBalloonParty_1_1UI_1_1Score" ],
     [ "Shields", "namespaceBalloonParty_1_1UI_1_1Shields.html", "namespaceBalloonParty_1_1UI_1_1Shields" ],
+    [ "Telemetry", "namespaceBalloonParty_1_1UI_1_1Telemetry.html", "namespaceBalloonParty_1_1UI_1_1Telemetry" ],
     [ "Tooltip", "namespaceBalloonParty_1_1UI_1_1Tooltip.html", "namespaceBalloonParty_1_1UI_1_1Tooltip" ],
     [ "AnimatorGameEntryGate", "classBalloonParty_1_1UI_1_1AnimatorGameEntryGate.html", "classBalloonParty_1_1UI_1_1AnimatorGameEntryGate" ],
     [ "CanvasCameraBinder", "classBalloonParty_1_1UI_1_1CanvasCameraBinder.html", "classBalloonParty_1_1UI_1_1CanvasCameraBinder" ],

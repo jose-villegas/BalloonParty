@@ -1,5 +1,6 @@
 var namespaceBalloonParty_1_1Game_1_1Telemetry =
 [
+    [ "AxisBucketNaming", "classBalloonParty_1_1Game_1_1Telemetry_1_1AxisBucketNaming.html", "classBalloonParty_1_1Game_1_1Telemetry_1_1AxisBucketNaming" ],
     [ "AxisSlot", "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlot.html", "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlot" ],
     [ "AxisSlotInfo", "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html", "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo" ],
     [ "BalloonTypeCount", "structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html", "structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount" ],

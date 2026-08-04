@@ -1,0 +1,7 @@
+<map id="BalloonParty.Shared.Rendering.ShaderTimeService" name="BalloonParty.Shared.Rendering.ShaderTimeService">
+<area shape="rect" id="Node000001" title="Publishes _BP_UnscaledTime as a global shader property so an effect can opt out of the engine&#39;s scale..." alt="" coords="5,79,231,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="22,5,107,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,40,107,77,103,80,78,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="131,5,211,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="158,43,133,80,129,77,154,40"/>
+</map>

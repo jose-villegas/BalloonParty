@@ -292,7 +292,7 @@ Trail Utilities</h1>
 <p>Composable plain-C# helpers for trail orb services. Pick the level that matches your feature's complexity:</p>
 <h2><a class="anchor" id="autotoc_md892"></a>
 <code>TrailSpawner</code></h2>
-<p>Spawn-and-forget: handles pool get → position → setup → return on arrival. Accepts an optional <code>sortingOrder</code> to override the trail's sorting layer (used by glow trails at <code>3200</code>).</p>
+<p>Spawn-and-forget: handles pool get → position → setup → return on arrival. Accepts an optional <code>sortingOrder</code> to override the trail's sorting layer (used by fill trails at <code>3200</code>).</p>
 <div class="fragment"><div class="line">var spawner = <span class="keyword">new</span> TrailSpawner(poolManager, <span class="stringliteral">&quot;MyTrail&quot;</span>, prefab);                       <span class="comment">// common case: pools via SimplePoolChannel</span></div>
 <div class="line">var spawner = <span class="keyword">new</span> TrailSpawner(poolManager, <span class="stringliteral">&quot;MyTrail&quot;</span>, () =&gt; <span class="keyword">new</span> MyPoolChannel(prefab)); <span class="comment">// custom channel (e.g. injected prefabs)</span></div>
 <div class="line">spawner.Spawn(from, to, duration, color, onArrived);</div>
@@ -300,7 +300,7 @@ Trail Utilities</h1>
 <div class="line">spawner.SpawnBurst(center, burstTo, target, burstDur, traceDur, color, onArrived);  <span class="comment">// two-phase: scatter then trace</span></div>
 <div class="line">spawner.SpawnFollow(from, () =&gt; balloon.position, duration, onArrived);  <span class="comment">// curve-eased, homes on a moving target</span></div>
 </div><!-- fragment --><p><code>SpawnFollow</code> (backed by <code>FlyingTrail.SetupFollow</code>) eases from its launch point to a <b>live-updating</b> target over <code>duration</code> along the move curve, instead of tweening to a fixed point — used by <code>HeartTrailController</code> so an overflow heart lands on its balloon even while the pile compacts up under it. It honours <code>TrailMotion</code> like the fixed-point flights.</p>
-<p>Used by <code>ScoreTrailService</code> for score trail spawning, <code>ShieldTrailController</code> for shield trails, <code>HeartTrailController</code> for overflow heart trails, and <code>LevelUpPopUp</code> for glow trails.</p>
+<p>Used by <code>ScoreTrailService</code> for score trail spawning, <code>ShieldTrailController</code> for shield trails, <code>HeartTrailController</code> for overflow heart trails, and <code>LevelUpPopUp</code> for fill trails.</p>
 <h2><a class="anchor" id="autotoc_md893"></a>
 <code>TrailEndpointRegistry</code> + <code>ITrailEndpoint</code></h2>
 <p>The fixed anchor a trail flies <b>to</b> or <b>from</b>, resolved by key instead of each feature wiring its own position provider. A view registers under a key; a controller resolves it when spawning:</p>
