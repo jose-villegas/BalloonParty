@@ -29,7 +29,7 @@ namespace BalloonParty.Audio
         StreakStep,
         ScoreChime,
         LevelUp,
-        LevelUpGlow,
+        LevelUpFill,
         LevelTransition,
         BoardClear,
         GameOver,

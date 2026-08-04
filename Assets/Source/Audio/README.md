@@ -25,7 +25,7 @@ Unity audio only (`AudioSource` + `AudioMixer`), no middleware.
 | `SfxVoicePoolBootstrap` | `IStartable` — registers and pre-warms the `AudioSourceVoice` pool before any router can play a sound |
 | `View/AudioSourceVoice` | **View** — the only `MonoBehaviour` in this feature, and the only type that touches `AudioSource` directly. Wraps one `AudioSource`; pooled; schedules its own real-time return |
 | `Routing/CombatSoundRouter` | Hits, shots, reload, cruise loop, doomed warning, pierce, shield gained/lost |
-| `Routing/ProgressionSoundRouter` | Streak, score chime, level-up (+ glow, dismiss), level transition, board clear, game-over (+ dismiss) |
+| `Routing/ProgressionSoundRouter` | Streak, score chime, level-up (+ fill, dismiss), level transition, board clear, game-over (+ dismiss) |
 | `Routing/ItemSoundRouter` | Per-item activation, overflow heart |
 | `Routing/DangerSoundRouter` | Starts/stops the `DangerWarn` loop as `IDangerLevel` crosses `DangerLevelThreshold` |
 | `Routing/WindSoundRouter` | Drives the `WindLoop` volume from cruise speed (TotalCruiseTaps) via `SetVolumeFactor` |

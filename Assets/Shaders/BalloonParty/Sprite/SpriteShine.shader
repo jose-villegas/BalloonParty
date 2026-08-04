@@ -14,6 +14,9 @@
          // OPT-IN scene lighting: on, the sweep axis derives from _SceneLightDir (scenario
          // objects); off (default), the classic hardcoded 45-degree diagonal (UI stays art).
          [ToggleUI] _ShineFromSceneLight("Shine Follows Scene Light", Float) = 0
+         // OPT-IN unscaled clock: on, the sweep keeps moving while Time.timeScale is 0 (level-up
+         // popup, pause); off (default), it runs on scaled time exactly as before.
+         [ToggleUI] _ShineUnscaledTime("Shine Uses Unscaled Time", Float) = 0
          [PerRendererData] _TimeOffset("TimeOffset", Float) = 0
          [MaterialToggle] PixelSnap("Pixel snap", Float) = 0
      }
@@ -105,6 +108,7 @@
      float _ShineWidth;
      float _ShineSpeed;
      float _ShineFromSceneLight;
+     float _ShineUnscaledTime;
      float _TimeOffset;
 
      fixed4 SampleSpriteTexture(float2 uv, float2 lightDir, float3 lightTint)
@@ -119,7 +123,7 @@
          float location = _ShineLocation;
          if (_ShineSpeed > 0)
          {
-             location = frac((_Time.y + _TimeOffset) * _ShineSpeed);
+             location = frac((ShineTime(_ShineUnscaledTime) + _TimeOffset) * _ShineSpeed);
          }
 
          float projection = CalcShineProjection(uv, lightDir, _ShineFromSceneLight);

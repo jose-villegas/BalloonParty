@@ -97,7 +97,7 @@ namespace BalloonParty.UI.Score
         [Inject] private ISubscriber<StreakChangedMessage> _streakChangedSubscriber;
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         [Inject] private ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
-        [Inject] private ISubscriber<LevelUpGlowTrailsMessage> _glowTrailsSubscriber;
+        [Inject] private ISubscriber<LevelUpFillTrailsMessage> _fillTrailsSubscriber;
         [Inject] private ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         [Inject] private ISubscriber<LevelTransitionCompletedMessage> _transitionCompletedSubscriber;
         [Inject] private ISubscriber<RunResetMessage> _resetSubscriber;
@@ -222,7 +222,7 @@ namespace BalloonParty.UI.Score
             _streakChangedSubscriber.Subscribe(_ => OnStreakChanged()).AddTo(this);
             _levelUpSubscriber.Subscribe(OnLevelUp).AddTo(this);
             _trailArrivedSubscriber.Subscribe(OnTrailArrived).AddTo(this);
-            _glowTrailsSubscriber.Subscribe(OnGlowTrails).AddTo(this);
+            _fillTrailsSubscriber.Subscribe(OnFillTrails).AddTo(this);
             _dismissedSubscriber.Subscribe(_ => OnDismissed()).AddTo(this);
             _transitionCompletedSubscriber.Subscribe(_ => OnTransitionCompleted()).AddTo(this);
             _resetSubscriber.Subscribe(_ => OnRunReset()).AddTo(this);
@@ -405,7 +405,7 @@ namespace BalloonParty.UI.Score
             // The watermark only fires this once every colour has confirmed its requirement, but the slider
             // sums points as trails LAND — the ones still in flight are frozen behind the popup, so the bar
             // can read low. Snap it full (maxValue is still this level's requirement) so the popup shows the
-            // score that was actually reached, and the glow drain starts from a completed bar.
+            // score that was actually reached, and the drain starts from a completed bar.
             _progressSlider.value = _progressSlider.maxValue;
             _targetFill = _progressSlider.maxValue;
             _fillTween?.Kill();
@@ -495,7 +495,7 @@ namespace BalloonParty.UI.Score
             _animator.SetBool(CompletedParam, false);
         }
 
-        private void OnGlowTrails(LevelUpGlowTrailsMessage msg)
+        private void OnFillTrails(LevelUpFillTrailsMessage msg)
         {
             DrainSliderAsync(msg.TrailsPerBar, msg.StaggerDelay).Forget();
         }

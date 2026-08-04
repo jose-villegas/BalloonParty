@@ -353,7 +353,7 @@ brokers are already registered at `Game/GameScopeRegistration.cs:59-94`.
 | Streak changed | `StreakChangedMessage` | `Game/Score/ColorStreakTracker.cs:94` | `StreakStep` | Progression | Rising pitch keyed to `Streak`; throttle. |
 | Score trail arrived | `ScoreTrailArrivedMessage` | `Game/Score/ScoreTrailService.cs:198` | `ScoreChime` | Progression | Per-color pitch; frequent → throttle. |
 | Level up | `ScoreLevelUpMessage` | `Game/Level/LevelController.cs:324` | `LevelUp` | Progression | Fanfare; **high priority**, `Stinger` channel. |
-| Level-up glow trails | `LevelUpGlowTrailsMessage` | `UI/LevelUp/LevelUpPopUp.cs:106` | `LevelUpGlow` | Progression | Sparkle bed. |
+| Level-up fill trails | `LevelUpFillTrailsMessage` | `UI/LevelUp/LevelUpPopUp.cs:106` | `LevelUpFill` | Progression | Sparkle bed. |
 | Level-up dismissed | `LevelUpDismissedMessage` | `UI/LevelUp/LevelUpPopUp.cs:180` | `UiConfirm` | Progression | `UI` channel. |
 | Level transition done | `LevelTransitionCompletedMessage` | `Game/Level/LevelTransitionController.cs:155` | `LevelTransition` | Progression | |
 | Board clear | `BoardClearMessage` | `Game/Run/BoardClearController.cs:20` | `BoardClear` | Progression | |

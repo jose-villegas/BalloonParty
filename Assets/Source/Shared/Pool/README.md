@@ -131,7 +131,7 @@ Composable plain-C# helpers for trail orb services. Pick the level that matches 
 
 ### `TrailSpawner`
 
-Spawn-and-forget: handles pool get → position → setup → return on arrival. Accepts an optional `sortingOrder` to override the trail's sorting layer (used by glow trails at `3200`).
+Spawn-and-forget: handles pool get → position → setup → return on arrival. Accepts an optional `sortingOrder` to override the trail's sorting layer (used by fill trails at `3200`).
 
 ```csharp
 var spawner = new TrailSpawner(poolManager, "MyTrail", prefab);                       // common case: pools via SimplePoolChannel
@@ -144,7 +144,7 @@ spawner.SpawnFollow(from, () => balloon.position, duration, onArrived);  // curv
 
 `SpawnFollow` (backed by `FlyingTrail.SetupFollow`) eases from its launch point to a **live-updating** target over `duration` along the move curve, instead of tweening to a fixed point — used by `HeartTrailController` so an overflow heart lands on its balloon even while the pile compacts up under it. It honours `TrailMotion` like the fixed-point flights.
 
-Used by `ScoreTrailService` for score trail spawning, `ShieldTrailController` for shield trails, `HeartTrailController` for overflow heart trails, and `LevelUpPopUp` for glow trails.
+Used by `ScoreTrailService` for score trail spawning, `ShieldTrailController` for shield trails, `HeartTrailController` for overflow heart trails, and `LevelUpPopUp` for fill trails.
 
 ### `TrailEndpointRegistry` + `ITrailEndpoint`
 

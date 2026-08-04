@@ -28,7 +28,7 @@ namespace BalloonParty.Tests.Audio
             var streakSubscriber = CaptureSubscriber<StreakChangedMessage>(h => _streakHandler = h);
             var scoreTrailSubscriber = CaptureSubscriber<ScoreTrailArrivedMessage>(_ => { });
             var levelUpSubscriber = CaptureSubscriber<ScoreLevelUpMessage>(_ => { });
-            var levelUpGlowSubscriber = CaptureSubscriber<LevelUpGlowTrailsMessage>(_ => { });
+            var levelUpFillSubscriber = CaptureSubscriber<LevelUpFillTrailsMessage>(_ => { });
             var levelUpDismissedSubscriber = CaptureSubscriber<LevelUpDismissedMessage>(_ => { });
             var levelTransitionSubscriber = CaptureSubscriber<LevelTransitionCompletedMessage>(_ => { });
             var boardClearSubscriber = CaptureSubscriber<BoardClearMessage>(_ => { });
@@ -48,7 +48,7 @@ namespace BalloonParty.Tests.Audio
 
             var router = new ProgressionSoundRouter(
                 _player, _melodic, palette, levelProgress, streakSubscriber, scoreTrailSubscriber, levelUpSubscriber,
-                levelUpGlowSubscriber, levelUpDismissedSubscriber, levelTransitionSubscriber,
+                levelUpFillSubscriber, levelUpDismissedSubscriber, levelTransitionSubscriber,
                 boardClearSubscriber, gameOverSubscriber, gameOverDismissedSubscriber,
                 ascendStartedSubscriber, descendStartedSubscriber, progressBarCompletedSubscriber,
                 projectileLoadedSubscriber, projectileDestroyedSubscriber);

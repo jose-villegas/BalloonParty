@@ -30,11 +30,11 @@ The director does not know about level-ups, trails, or cameras. Producers define
 | **End trigger** | Duration-based: the `LevelCompleteHit` curve's authored length elapses (pan-in timer reaches the curve duration). Loss-imminent check aborts earlier if applicable |
 | **End** | `EndPanIn()` → ends the hit cinematic state and starts the curve-driven camera restore (un-zoom while following). Popup gate can now open because `Cinematic.Current != LevelCompleteHit` |
 
-### Gate — Popup Wait + Glow Trails
+### Gate — Popup Wait + Fill Trails
 
 `LevelUpLifetimeScope` registers `CinematicEndGate(CinematicState.LevelCompleteHit)` by concrete type; `LevelUpPopUp` injects it directly and waits until `Cinematic.Current != LevelCompleteHit`. When the gate opens, the popup claims `TimeScaleSource.LevelUpPopup = 0` via `TimeScaleService` to freeze balloons/particles.
 
-After the appear animation finishes, `LevelUpPopUp` publishes `LevelUpGlowTrailsMessage` — each `ColorProgressBar` drains its slider in sync — then spawns decorative `FlyingTrail` orbs from each bar to the glow fill in unscaled time. When all glow trails arrive, the level label updates. No cinematic state is active during this phase.
+After the appear animation finishes, `LevelUpPopUp` publishes `LevelUpFillTrailsMessage` — each `ColorProgressBar` drains its slider in sync — then spawns decorative `FlyingTrail` orbs from each bar to the level fill in unscaled time. Each arrival scales `_levelFill` a step closer to full. No cinematic state is active during this phase.
 
 ### Dismiss — hand-off to the Ascent
 
@@ -148,7 +148,7 @@ and reveal early. The explicit arm/open handshake closes that race.
 | `Shared/Pool/FlightPhase.cs` | Enum: `Idle`, `InFlight`, `Paused` |
 | `Game/Score/ScoreTrailService.cs` | Trail spawning, flight registration |
 | `Game/Score/ScoreController.cs` | Score tracking, `CheckLevelUp`, `WillLevelUp` |
-| `UI/LevelUp/LevelUpPopUp.cs` | Popup display, dismiss, `Time.timeScale = 0`, glow trail spawning via `LevelUpGlowTrailsMessage` |
+| `UI/LevelUp/LevelUpPopUp.cs` | Popup display, dismiss, `Time.timeScale = 0`, fill trail spawning via `LevelUpFillTrailsMessage` |
 | `UI/LevelUp/LevelUpLifetimeScope.cs` | DI: registers `CinematicEndGate(LevelCompleteHit)` by concrete type (the popup injects it directly, not via `IReadyGate`) |
-| `Shared/Messages/LevelUpGlowTrailsMessage.cs` | Signal carrying trail-per-bar count and stagger delay for bar draining |
+| `Shared/Messages/LevelUpFillTrailsMessage.cs` | Signal carrying trail-per-bar count and stagger delay for bar draining |
 | `Projectile/View/ProjectileView.cs` | Checks `IsAnyPaused` to freeze movement |

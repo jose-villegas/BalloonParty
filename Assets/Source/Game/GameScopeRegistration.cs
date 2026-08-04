@@ -119,7 +119,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<LevelTransitionCompletedMessage>(options);
             builder.RegisterMessageBroker<LevelAscendStartedMessage>(options);
             builder.RegisterMessageBroker<LevelDescendStartedMessage>(options);
-            builder.RegisterMessageBroker<LevelUpGlowTrailsMessage>(options);
+            builder.RegisterMessageBroker<LevelUpFillTrailsMessage>(options);
             builder.RegisterMessageBroker<ProgressBarCompletedMessage>(options);
             builder.RegisterMessageBroker<PausedMessage>(options);
             builder.RegisterMessageBroker<ResumedMessage>(options);

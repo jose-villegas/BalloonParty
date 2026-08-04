@@ -20,7 +20,7 @@ namespace BalloonParty.Audio.Routing
         private readonly ISubscriber<StreakChangedMessage> _streakSubscriber;
         private readonly ISubscriber<ScoreTrailArrivedMessage> _scoreTrailSubscriber;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
-        private readonly ISubscriber<LevelUpGlowTrailsMessage> _levelUpGlowSubscriber;
+        private readonly ISubscriber<LevelUpFillTrailsMessage> _levelUpFillSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _levelUpDismissedSubscriber;
         private readonly ISubscriber<LevelTransitionCompletedMessage> _levelTransitionSubscriber;
         private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
@@ -41,7 +41,7 @@ namespace BalloonParty.Audio.Routing
             ISubscriber<StreakChangedMessage> streakSubscriber,
             ISubscriber<ScoreTrailArrivedMessage> scoreTrailSubscriber,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
-            ISubscriber<LevelUpGlowTrailsMessage> levelUpGlowSubscriber,
+            ISubscriber<LevelUpFillTrailsMessage> levelUpFillSubscriber,
             ISubscriber<LevelUpDismissedMessage> levelUpDismissedSubscriber,
             ISubscriber<LevelTransitionCompletedMessage> levelTransitionSubscriber,
             ISubscriber<BoardClearMessage> boardClearSubscriber,
@@ -60,7 +60,7 @@ namespace BalloonParty.Audio.Routing
             _streakSubscriber = streakSubscriber;
             _scoreTrailSubscriber = scoreTrailSubscriber;
             _levelUpSubscriber = levelUpSubscriber;
-            _levelUpGlowSubscriber = levelUpGlowSubscriber;
+            _levelUpFillSubscriber = levelUpFillSubscriber;
             _levelUpDismissedSubscriber = levelUpDismissedSubscriber;
             _levelTransitionSubscriber = levelTransitionSubscriber;
             _boardClearSubscriber = boardClearSubscriber;
@@ -78,7 +78,7 @@ namespace BalloonParty.Audio.Routing
             _streakSubscriber.Subscribe(OnStreakChanged).AddTo(_subscriptions);
             _scoreTrailSubscriber.Subscribe(OnScoreTrailArrived).AddTo(_subscriptions);
             _levelUpSubscriber.Subscribe(OnLevelUp).AddTo(_subscriptions);
-            _levelUpGlowSubscriber.Subscribe(OnLevelUpGlow).AddTo(_subscriptions);
+            _levelUpFillSubscriber.Subscribe(OnLevelUpFill).AddTo(_subscriptions);
             _levelUpDismissedSubscriber.Subscribe(OnLevelUpDismissed).AddTo(_subscriptions);
             _levelTransitionSubscriber.Subscribe(OnLevelTransition).AddTo(_subscriptions);
             _boardClearSubscriber.Subscribe(OnBoardClear).AddTo(_subscriptions);
@@ -117,9 +117,9 @@ namespace BalloonParty.Audio.Routing
             _player.Play(GameSoundId.LevelUp, null);
         }
 
-        private void OnLevelUpGlow(LevelUpGlowTrailsMessage message)
+        private void OnLevelUpFill(LevelUpFillTrailsMessage message)
         {
-            _player.Play(GameSoundId.LevelUpGlow, null);
+            _player.Play(GameSoundId.LevelUpFill, null);
         }
 
         private void OnLevelUpDismissed(LevelUpDismissedMessage message)

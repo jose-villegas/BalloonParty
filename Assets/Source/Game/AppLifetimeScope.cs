@@ -7,6 +7,7 @@ using BalloonParty.Shared;
 using BalloonParty.Shared.Cadence;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Shared.Rendering;
 using BalloonParty.Shared.SceneLight;
 using BalloonParty.Slots.Actor;
 using UnityEngine;
@@ -85,6 +86,9 @@ namespace BalloonParty.Game
             builder.Register<ScenarioContentRoot>(Lifetime.Singleton);
             builder.Register<DisturbanceFieldService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<BackgroundFieldService>(Lifetime.Singleton).AsImplementedInterfaces();
+            // App scope, not Game: a global shader uniform has no scene lifetime, and a material
+            // opted into the unscaled clock would freeze at 0 anywhere this did not tick.
+            builder.Register<ShaderTimeService>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.RegisterEntryPoint<LaunchDisturbanceStamp>();
 
             // Object pooling — app-wide so both Launch and Game consumers resolve from the same pool root.

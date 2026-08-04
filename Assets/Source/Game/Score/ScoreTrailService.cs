@@ -19,7 +19,7 @@ namespace BalloonParty.Game.Score
 {
     internal class ScoreTrailService : IStartable, IDisposable, IRunResettable, ITransitionOutgoingContent
     {
-        // Above the level-up popup canvases (root 3000 / content 3100) and its glow trails (3200) so score
+        // Above the level-up popup canvases (root 3000 / content 3100) and its fill trails (3200) so score
         // trails stay on top of the popup while flying to the score bars during the level-up transition.
         private const int ScoreTrailSortingOrder = 3300;
 
