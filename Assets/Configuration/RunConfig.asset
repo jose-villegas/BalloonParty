@@ -15,4 +15,4 @@ MonoBehaviour:
   _startingHitPoints: 3
   _maxRetries: 3
   _levelCompleteRampUpDuration: 15
-  _levelCompleteRampUpScale: 8
+  _levelCompleteRampUpScale: 12

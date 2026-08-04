@@ -1048,7 +1048,7 @@ MonoBehaviour:
       _spreadBaseWidth: 4.25
       _spreadBlobRadius: 0.35
     _snipe:
-      _snipeSpeedBuffMultiplier: 1.9817185
+      _snipeSpeedBuffMultiplier: 3.926874
       _snipeChargePerToughHit: 1
       _bloomBaseRadius: 1
       _bloomRadiusPerCharge: 0.5

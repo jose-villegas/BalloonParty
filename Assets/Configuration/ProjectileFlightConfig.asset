@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _projectileStartingShields: 1
   _shieldToneThreshold: 10
-  _projectileSpeed: 8
+  _projectileSpeed: 9.869022
   _projectileLoadDuration: 0
   _limitsClockwise: {x: 4, y: 2.25, z: -4.5, w: -2.25}
   _cruiseWallBounceThreshold: 1
-  _speedGainPerTap: 0.19634375
-  _maxSpeedMultiplier: 4.71225
+  _speedGainPerTap: 0.3926874
+  _maxSpeedMultiplier: 9.4245
   _cruiseTapCurve:
     serializedVersion: 2
     m_Curve:
