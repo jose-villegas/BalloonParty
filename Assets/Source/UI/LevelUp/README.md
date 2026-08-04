@@ -17,10 +17,11 @@ The full-screen level-up ceremony that plays when all color bars complete.
 2. **Gate opens** — `CinematicEndGate(LevelCompleteHit)` unblocks: `Cinematic.Current != LevelCompleteHit` is now true.
 3. **Popup shows** — `LevelUpPopUp.ShowAfterGateAsync` claims a `PauseService` pause (`PauseSource.LevelUp`) the moment `ScoreLevelUpMessage` arrives, before it even awaits the gate. Once the gate opens it claims `TimeScaleSource.LevelUpPopup = 0` via `TimeScaleService` (effective `Time.timeScale` drops to 0), triggers the `"Appear"` animator, and waits for the appear animation to finish. `_levelLabel` shows the level being entered (`NewLevel`) and the optional `_previousLevelLabel` shows the one just completed (`NewLevel - 1`); both are set once here and neither changes while the popup is up.
 4. **Fill trails** — After the appear animation completes, `LevelUpPopUp` publishes `LevelUpFillTrailsMessage` (triggers `ColorProgressBar.DrainSliderAsync` to drain each bar in sync), then spawns decorative `FlyingTrail` orbs from each bar's random position to random offsets around the level fill centre. Trails fly in unscaled time (`Spawn(..., useUnscaledTime: true)`), staggered across waves (`_fillTrailsPerBar` waves × the message's completed-colors count). As each trail arrives, `_levelFill.localScale` tweens toward the new fraction over `_fillStepDuration` (`Ease.OutCubic`, unscaled). The tween is *restarted* from wherever it currently is rather than queued, so a burst of arrivals blends into one continuous ramp instead of a staircase.
-5. **Player taps Continue** — `OnContinue()` triggers `"Hide"` and calls `Resume()` synchronously (no delay), which publishes `LevelUpDismissedMessage`, releases the popup's `TimeScaleService` claim, and resumes the `PauseService` pause (`PauseSource.LevelUp`).
-6. **Level advances (two-phase commit)** — `LevelController` receives `LevelUpDismissedMessage` and *now* advances the `Level` integer to the pending value, resets progress, and flips `LevelUpPhase` from `Pending` to `Transitioning`. The popup has shown the new number since it opened (step 3), but the authoritative `Level` only changes here — see `Game/Level/README.md`.
-7. **Bar reset** — Each `ColorProgressBar` receives `LevelUpDismissedMessage` and applies the stashed new max value, resetting progress to zero.
-8. **Ascent + navigate** — the phase flip to `Transitioning` triggers `LevelTransitionController` (the Ascent), which slides the new level in. The camera un-zoom was already started at `EndPanIn` by `LevelUpCinematic` (via `CinematicCameraRig.RestoreCurveDriven`) — the Ascent does not touch the camera. `LevelController` owns the nav return to `Game` once `LevelTransitionCompletedMessage` arrives. There is **no** `LevelCompleteRestore` cinematic state played — it's kept in the enum only for serialized-index stability; its curve is read for the `RestoreCurveDriven` call.
+5. **Fill completes → stats reveal** — when the fill tween reaches full, `_continueButton` becomes interactable, `_statsRevealCover` scales down to zero, and each entry in `_statContainers` pops in from zero on a `_statPopStagger` cadence. All unscaled. Completion fires off the *tween*, not the arrival count, so the reveal follows what the player watches fill rather than the frame the last trail landed.
+6. **Player taps Continue** — `OnContinue()` triggers `"Hide"` and calls `Resume()` synchronously (no delay), which publishes `LevelUpDismissedMessage`, releases the popup's `TimeScaleService` claim, and resumes the `PauseService` pause (`PauseSource.LevelUp`).
+7. **Level advances (two-phase commit)** — `LevelController` receives `LevelUpDismissedMessage` and *now* advances the `Level` integer to the pending value, resets progress, and flips `LevelUpPhase` from `Pending` to `Transitioning`. The popup has shown the new number since it opened (step 3), but the authoritative `Level` only changes here — see `Game/Level/README.md`.
+8. **Bar reset** — Each `ColorProgressBar` receives `LevelUpDismissedMessage` and applies the stashed new max value, resetting progress to zero.
+9. **Ascent + navigate** — the phase flip to `Transitioning` triggers `LevelTransitionController` (the Ascent), which slides the new level in. The camera un-zoom was already started at `EndPanIn` by `LevelUpCinematic` (via `CinematicCameraRig.RestoreCurveDriven`) — the Ascent does not touch the camera. `LevelController` owns the nav return to `Game` once `LevelTransitionCompletedMessage` arrives. There is **no** `LevelCompleteRestore` cinematic state played — it's kept in the enum only for serialized-index stability; its curve is read for the `RestoreCurveDriven` call.
 
 The Animator's `updateMode` is set to `UnscaledTime` in `Start()`, so animations play even while the game is paused.
 
@@ -39,10 +40,23 @@ CinematicEndGate(LevelCompleteHit) → opens when Cinematic.Current != LevelComp
 NavigationReadyGate(Game)      → opens when Navigation.Current == Game
 ```
 
+### Continue is gated on the fill
+
+`OnContinue` returns early unless `_fillComplete`, and `_continueButton.interactable` is false until
+then — two halves of one rule, because the popup's full-screen button keeps receiving raycasts either
+way. **Anything that can prevent the fill from completing therefore makes the popup unmissable**, so
+both known cases complete it immediately instead: a level-up with no completed colours (reachable via
+the cheat that grants a level directly) and an unassigned `_levelFill`. The second is not paranoia —
+that field changed type from `Image` to `RectTransform`, so every prefab authored before that starts
+out unassigned.
+
 ## Wiring requirements
 
 - The popup GameObject must be **active** in the scene at all times — visibility is controlled by CanvasGroup alpha (animated by the `LevelUp` animator), not by `SetActive`. If the object is disabled, `Start()` never runs and `ScoreLevelUpMessage` is never subscribed.
 - Registered in `LevelUpLifetimeScope` via `RegisterComponentInHierarchy<LevelUpPopUp>()`.
+- `_levelFill` and `_fillTargetArea` must be **different** objects (see below). `_continueButton`,
+  `_previousLevelLabel`, `_statsRevealCover` and `_statContainers` are all optional — unassigned, each
+  simply drops its part of the ceremony rather than breaking it.
 
 ## Interactions
 

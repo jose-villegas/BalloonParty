@@ -15,6 +15,7 @@ using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 using VContainer;
 using BalloonParty.Configuration.Palette;
 
@@ -45,6 +46,23 @@ namespace BalloonParty.UI.LevelUp
         [Tooltip("Fixed-size container the trail arrival disc is measured from. Separate from " +
             "_levelFill on purpose: that one scales to zero, which would collapse the disc to a point.")]
         [SerializeField] private RectTransform _fillTargetArea;
+
+        [Tooltip("Locked off until the fill finishes, so the ceremony cannot be skipped past its own " +
+            "reveal. Optional — unassigned leaves the button always interactable.")]
+        [SerializeField] private Button _continueButton;
+
+        [Header("Stats Reveal")]
+        [Tooltip("Scaled down to zero once the fill completes, uncovering the stats behind it. " +
+            "Optional.")]
+        [SerializeField] private RectTransform _statsRevealCover;
+
+        [Tooltip("Popped in one after another after the cover clears. Order here is the order they " +
+            "appear on screen.")]
+        [SerializeField] private RectTransform[] _statContainers;
+
+        [SerializeField] private float _statsRevealDuration = 0.3f;
+        [SerializeField] private float _statPopDuration = 0.25f;
+        [SerializeField] private float _statPopStagger = 0.08f;
 
         [Header("Fill Trails")]
         [FormerlySerializedAs("_glowTrailsPerBar")]
@@ -88,6 +106,7 @@ namespace BalloonParty.UI.LevelUp
         private readonly Dictionary<string, TrailSpawner> _trailSpawners = new();
 
         private Tween _fillTween;
+        private bool _fillComplete;
 
         private int _fillTrailArrivedCount;
         private int _fillTrailTotalCount;
@@ -105,6 +124,7 @@ namespace BalloonParty.UI.LevelUp
         private void OnDestroy()
         {
             _fillTween?.Kill();
+            KillRevealTweens();
             _disposable.Dispose();
         }
 
@@ -112,7 +132,9 @@ namespace BalloonParty.UI.LevelUp
         {
             // The hidden popup's full-screen button still receives raycasts, so every gameplay tap
             // lands here — without this gate each one published a dismissal and vanished the live shot.
-            if (!_isShowing)
+            // _fillComplete is the second half of the same idea: the button is also non-interactable
+            // until then, but the raycast reaches this method either way.
+            if (!_isShowing || !_fillComplete)
             {
                 return;
             }
@@ -140,6 +162,7 @@ namespace BalloonParty.UI.LevelUp
             }
 
             SnapFillFraction(0f);
+            ResetReveal();
             _animator.ResetTrigger(HideTrigger);
             _animator.SetTrigger(AppearTrigger);
             _isShowing = true;
@@ -148,6 +171,17 @@ namespace BalloonParty.UI.LevelUp
 
             _fillTrailArrivedCount = 0;
             _fillTrailTotalCount = msg.CompletedColors.Count * _fillTrailsPerBar;
+
+            // Nothing will ever complete the fill in either case, and Continue is gated on that — so
+            // the popup would be unmissable. No completed colours is reachable through a cheat that
+            // grants a level directly; an unassigned _levelFill is one inspector slip, and the type
+            // changed from Image, so every existing prefab starts out that way.
+            if (_fillTrailTotalCount <= 0 || _levelFill == null)
+            {
+                SnapFillFraction(1f);
+                CompleteFill();
+                return;
+            }
 
             _fillTrailsPublisher.Publish(
                 new LevelUpFillTrailsMessage(_fillTrailsPerBar, _fillTrailStaggerDelay));
@@ -216,12 +250,127 @@ namespace BalloonParty.UI.LevelUp
                 return;
             }
 
+            var clamped = Mathf.Clamp01(fraction);
             _fillTween?.Kill();
             _fillTween = _levelFill
-                .DOScale(Vector3.one * Mathf.Clamp01(fraction), _fillStepDuration)
+                .DOScale(Vector3.one * clamped, _fillStepDuration)
                 .SetEase(Ease.OutCubic)
                 .SetUpdate(true)
                 .SetLink(gameObject);
+
+            // Off the tween rather than off the arrival count: the reveal should follow what the
+            // player sees fill up, not the frame the last trail happened to land.
+            if (clamped >= 1f)
+            {
+                _fillTween.OnComplete(CompleteFill);
+            }
+        }
+
+        private void CompleteFill()
+        {
+            if (_fillComplete)
+            {
+                return;
+            }
+
+            _fillComplete = true;
+            if (_continueButton != null)
+            {
+                _continueButton.interactable = true;
+            }
+
+            RevealStatsAsync().Forget();
+        }
+
+        // Cover shrinks away, then each stat container pops in turn. Every tween is unscaled — the
+        // popup holds Time.timeScale at 0 for its whole life.
+        private async UniTaskVoid RevealStatsAsync()
+        {
+            if (_statsRevealCover != null)
+            {
+                _statsRevealCover
+                    .DOScale(Vector3.zero, _statsRevealDuration)
+                    .SetEase(Ease.InBack)
+                    .SetUpdate(true)
+                    .SetLink(gameObject);
+
+                await UniTask.Delay(Mathf.RoundToInt(_statsRevealDuration * 1000f), true,
+                    cancellationToken: destroyCancellationToken);
+            }
+
+            if (_statContainers == null)
+            {
+                return;
+            }
+
+            var staggerMs = Mathf.RoundToInt(_statPopStagger * 1000f);
+            foreach (var container in _statContainers)
+            {
+                if (container == null)
+                {
+                    continue;
+                }
+
+                container
+                    .DOScale(Vector3.one, _statPopDuration)
+                    .SetEase(Ease.OutBack)
+                    .SetUpdate(true)
+                    .SetLink(gameObject);
+
+                await UniTask.Delay(staggerMs, true, cancellationToken: destroyCancellationToken);
+            }
+        }
+
+        private void KillRevealTweens()
+        {
+            if (_statsRevealCover != null)
+            {
+                DOTween.Kill(_statsRevealCover);
+            }
+
+            if (_statContainers == null)
+            {
+                return;
+            }
+
+            foreach (var container in _statContainers)
+            {
+                if (container != null)
+                {
+                    DOTween.Kill(container);
+                }
+            }
+        }
+
+        // Every show starts from covered stats and a locked Continue, including a second ceremony in
+        // the same run — the popup object is never destroyed between them.
+        private void ResetReveal()
+        {
+            _fillComplete = false;
+            if (_continueButton != null)
+            {
+                _continueButton.interactable = false;
+            }
+
+            if (_statsRevealCover != null)
+            {
+                DOTween.Kill(_statsRevealCover);
+                _statsRevealCover.localScale = Vector3.one;
+            }
+
+            if (_statContainers == null)
+            {
+                return;
+            }
+
+            foreach (var container in _statContainers)
+            {
+                if (container != null)
+                {
+                    DOTween.Kill(container);
+                    container.localScale = Vector3.zero;
+                }
+            }
         }
 
         private void SnapFillFraction(float fraction)
