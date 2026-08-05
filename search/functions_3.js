@@ -138,7 +138,8 @@ var searchData=
   ['drawworldrect_135',['DrawWorldRect',['../classBalloonParty_1_1Editor_1_1SceneDrawingHelper.html#a36183ec74b58a1c8d1af194db51a59b2',1,'BalloonParty::Editor::SceneDrawingHelper']]],
   ['drawworldrectfromlimits_136',['DrawWorldRectFromLimits',['../classBalloonParty_1_1Editor_1_1SceneDrawingHelper.html#a851404487fcda4d4af3a3f3436412131',1,'BalloonParty::Editor::SceneDrawingHelper']]],
   ['drawworldtriangle_137',['DrawWorldTriangle',['../classBalloonParty_1_1Editor_1_1SceneDrawingHelper.html#a3bf7c932c87632e142740a0bd1110bb8',1,'BalloonParty::Editor::SceneDrawingHelper']]],
-  ['dump_138',['Dump',['../classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerDumper.html#ace30bed3d529ddb0b3be882ce14c174f',1,'BalloonParty::Editor::FrameDump::FrameDebuggerDumper']]],
-  ['dumpwithstepscreenshots_139',['DumpWithStepScreenshots',['../classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerDumper.html#a868158f52d6a7b8dc2bc50c0212a4a8e',1,'BalloonParty::Editor::FrameDump::FrameDebuggerDumper']]],
-  ['duration_140',['Duration',['../classBalloonParty_1_1Shared_1_1Extensions_1_1AnimationCurveExtensions.html#a4fb0c20f499639659da2e5e47e4a1b5e',1,'BalloonParty::Shared::Extensions::AnimationCurveExtensions']]]
+  ['dropchainhostsafterremoval_138',['DropChainHostsAfterRemoval',['../classBalloonParty_1_1Item_1_1ItemAssigner.html#acb6a55ee635c933f8d3b6638346be74f',1,'BalloonParty::Item::ItemAssigner']]],
+  ['dump_139',['Dump',['../classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerDumper.html#ace30bed3d529ddb0b3be882ce14c174f',1,'BalloonParty::Editor::FrameDump::FrameDebuggerDumper']]],
+  ['dumpwithstepscreenshots_140',['DumpWithStepScreenshots',['../classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerDumper.html#a868158f52d6a7b8dc2bc50c0212a4a8e',1,'BalloonParty::Editor::FrameDump::FrameDebuggerDumper']]],
+  ['duration_141',['Duration',['../classBalloonParty_1_1Shared_1_1Extensions_1_1AnimationCurveExtensions.html#a4fb0c20f499639659da2e5e47e4a1b5e',1,'BalloonParty::Shared::Extensions::AnimationCurveExtensions']]]
 ];

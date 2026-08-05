@@ -157,10 +157,11 @@ var searchData=
   ['subveincurvature_154',['SubVeinCurvature',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBakeSettings.html#a440821109f25a2e7826785f4b119e1b9',1,'BalloonParty::Editor::Bush::BushLeafBakeSettings']]],
   ['subveincurvatureid_155',['SubVeinCurvatureId',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBaker.html#adeebbd20c36fcbc13fe64e12432fd48f',1,'BalloonParty::Editor::Bush::BushLeafBaker']]],
   ['summary_156',['summary',['../classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#a78a656eab26650a71ef9990f09cb77c2',1,'BalloonParty::Editor::Release::ReleaseUploadWindow']]],
-  ['surfaceradius_157',['SurfaceRadius',['../structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a21868f8a92fb8bb98caf6d90ccb7a346',1,'BalloonParty::Shared::Messages::BalloonDeflectedMessage']]],
-  ['swatchsize_158',['SwatchSize',['../classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#a360aa6aa3f420f503efd6f1b6235c4eb',1,'BalloonParty.Configuration.Editor.PaletteColorNameDrawer.SwatchSize'],['../classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#ac2eae93833ee0f808d78a20fb691b952',1,'BalloonParty.Editor.LevelPacingWindow.SwatchSize']]],
-  ['swatchspacing_159',['SwatchSpacing',['../classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#afd54a7044313b7550aecc38ff9024475',1,'BalloonParty::Configuration::Editor::PaletteColorNameDrawer']]],
-  ['sweepenabled_160',['SweepEnabled',['../structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#aefed61ba8e3cbe96b985e906430f1b71',1,'BalloonParty::Solver::ShotCruiseConfig']]],
-  ['sweeptapthreshold_161',['SweepTapThreshold',['../structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a0e6a24ff33d96c776ac6b46c68b5163b',1,'BalloonParty::Solver::ShotCruiseConfig']]],
-  ['swirlangleid_162',['SwirlAngleId',['../classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#aa5369a50f8f93f4580777cdd55430dec',1,'BalloonParty::Slots::Actor::SpeckField']]]
+  ['surfaceepsilon_157',['SurfaceEpsilon',['../classBalloonParty_1_1Item_1_1Shield_1_1ShieldChainPlanner.html#ae1c9f37857a70bc9ca9aa6356b5e02d3',1,'BalloonParty::Item::Shield::ShieldChainPlanner']]],
+  ['surfaceradius_158',['SurfaceRadius',['../structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a21868f8a92fb8bb98caf6d90ccb7a346',1,'BalloonParty::Shared::Messages::BalloonDeflectedMessage']]],
+  ['swatchsize_159',['SwatchSize',['../classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#a360aa6aa3f420f503efd6f1b6235c4eb',1,'BalloonParty.Configuration.Editor.PaletteColorNameDrawer.SwatchSize'],['../classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#ac2eae93833ee0f808d78a20fb691b952',1,'BalloonParty.Editor.LevelPacingWindow.SwatchSize']]],
+  ['swatchspacing_160',['SwatchSpacing',['../classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#afd54a7044313b7550aecc38ff9024475',1,'BalloonParty::Configuration::Editor::PaletteColorNameDrawer']]],
+  ['sweepenabled_161',['SweepEnabled',['../structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#aefed61ba8e3cbe96b985e906430f1b71',1,'BalloonParty::Solver::ShotCruiseConfig']]],
+  ['sweeptapthreshold_162',['SweepTapThreshold',['../structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a0e6a24ff33d96c776ac6b46c68b5163b',1,'BalloonParty::Solver::ShotCruiseConfig']]],
+  ['swirlangleid_163',['SwirlAngleId',['../classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#aa5369a50f8f93f4580777cdd55430dec',1,'BalloonParty::Slots::Actor::SpeckField']]]
 ];

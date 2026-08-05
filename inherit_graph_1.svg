@@ -445,7 +445,7 @@
 <!-- Node47 -->
 <g id="Node000047" class="node">
 <title>Node47</title>
-<g id="a_Node000047"><a xlink:href="interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html" target="_top" xlink:title="Prediction trace settings: step size, bounce/step limits, and line colour.">
+<g id="a_Node000047"><a xlink:href="interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html" target="_top" xlink:title="Prediction trace settings: how the line is segmented, how far it reaches, how many reflections it giv...">
 <polygon fill="white" stroke="#666666" points="367.5,-750 199.5,-750 199.5,-720 367.5,-720 367.5,-750"/>
 <text text-anchor="start" x="207.5" y="-738" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.IPrediction</text>
 <text text-anchor="middle" x="283.5" y="-727" font-family="Helvetica,sans-Serif" font-size="10.00">TraceConfig</text>

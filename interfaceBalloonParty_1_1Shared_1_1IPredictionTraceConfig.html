@@ -114,7 +114,7 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Shared_1_1IPredictionTraceCon
 </div><!--header-->
 <div class="contents">
 
-<p><a class="el" href="namespaceBalloonParty_1_1Prediction.html">Prediction</a> trace settings: step size, bounce/step limits, and line colour.  
+<p><a class="el" href="namespaceBalloonParty_1_1Prediction.html">Prediction</a> trace settings: how the line is segmented, how far it reaches, how many reflections it gives away, and its colour.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Shared.IPredictionTraceConfig:</div>
@@ -126,21 +126,23 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Shared_1_1IPredictionTraceCon
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
-<tr class="memitem:a9c4707c2bebcc0d601fba085b6898882" id="r_a9c4707c2bebcc0d601fba085b6898882"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9c4707c2bebcc0d601fba085b6898882">PredictionTraceColor</a><code> [get]</code></td></tr>
-<tr class="separator:a9c4707c2bebcc0d601fba085b6898882"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abed96880f9f164383efe2b1431644fcd" id="r_abed96880f9f164383efe2b1431644fcd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abed96880f9f164383efe2b1431644fcd">PredictionTraceMaxReflections</a><code> [get]</code></td></tr>
-<tr class="memdesc:abed96880f9f164383efe2b1431644fcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reflections the trace will draw before it stops — walls and balloon deflections together, because to the player they are the same event: the line turned.  <br /></td></tr>
-<tr class="separator:abed96880f9f164383efe2b1431644fcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f19bcb5c4dd64aca0eddee63bc27382" id="r_a3f19bcb5c4dd64aca0eddee63bc27382"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f19bcb5c4dd64aca0eddee63bc27382">PredictionTraceMaxSteps</a><code> [get]</code></td></tr>
-<tr class="separator:a3f19bcb5c4dd64aca0eddee63bc27382"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a053fc747d7ef3e6883670830836f2442" id="r_a053fc747d7ef3e6883670830836f2442"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a053fc747d7ef3e6883670830836f2442">PredictionTraceStep</a><code> [get]</code></td></tr>
-<tr class="separator:a053fc747d7ef3e6883670830836f2442"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0af2fd00818aa8e1a1db7b880e4db6e7" id="r_a0af2fd00818aa8e1a1db7b880e4db6e7"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0af2fd00818aa8e1a1db7b880e4db6e7">LineColor</a><code> [get]</code></td></tr>
+<tr class="separator:a0af2fd00818aa8e1a1db7b880e4db6e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada1029a5fd17019982ba21fbf7604c77" id="r_ada1029a5fd17019982ba21fbf7604c77"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada1029a5fd17019982ba21fbf7604c77">MaxReflections</a><code> [get]</code></td></tr>
+<tr class="memdesc:ada1029a5fd17019982ba21fbf7604c77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reflections the trace will draw before it stops — walls and balloon deflections together, because to the player they are the same event: the line turned.  <br /></td></tr>
+<tr class="separator:ada1029a5fd17019982ba21fbf7604c77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e87fe731f1d9a08f49ecadd37630c98" id="r_a9e87fe731f1d9a08f49ecadd37630c98"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9e87fe731f1d9a08f49ecadd37630c98">MaxSegments</a><code> [get]</code></td></tr>
+<tr class="memdesc:a9e87fe731f1d9a08f49ecadd37630c98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Segments before the trace gives up; times SegmentLength, its reach.  <br /></td></tr>
+<tr class="separator:a9e87fe731f1d9a08f49ecadd37630c98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2578a2c861e5516e28c58c9f0305787c" id="r_a2578a2c861e5516e28c58c9f0305787c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2578a2c861e5516e28c58c9f0305787c">SegmentLength</a><code> [get]</code></td></tr>
+<tr class="memdesc:a2578a2c861e5516e28c58c9f0305787c"><td class="mdescLeft">&#160;</td><td class="mdescRight">World length of one polyline segment — smoothness, not accuracy.  <br /></td></tr>
+<tr class="separator:a2578a2c861e5516e28c58c9f0305787c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="namespaceBalloonParty_1_1Prediction.html">Prediction</a> trace settings: step size, bounce/step limits, and line colour. </p>
+<div class="textblock"><p><a class="el" href="namespaceBalloonParty_1_1Prediction.html">Prediction</a> trace settings: how the line is segmented, how far it reaches, how many reflections it gives away, and its colour. </p>
 </div><h2 class="groupheader">Property Documentation</h2>
-<a id="a9c4707c2bebcc0d601fba085b6898882" name="a9c4707c2bebcc0d601fba085b6898882"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c4707c2bebcc0d601fba085b6898882">&#9670;&#160;</a></span>PredictionTraceColor</h2>
+<a id="a0af2fd00818aa8e1a1db7b880e4db6e7" name="a0af2fd00818aa8e1a1db7b880e4db6e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0af2fd00818aa8e1a1db7b880e4db6e7">&#9670;&#160;</a></span>LineColor</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -149,7 +151,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Color BalloonParty.Shared.IPredictionTraceConfig.PredictionTraceColor</td>
+          <td class="memname">Color BalloonParty.Shared.IPredictionTraceConfig.LineColor</td>
         </tr>
       </table>
   </td>
@@ -159,12 +161,12 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a9ba83243f8006ca9983dbf7a67824312">BalloonParty.Configuration.PredictionTraceConfig</a>.</p>
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#abaa95f19a425b4b44d6c42f8e6247acb">BalloonParty.Configuration.PredictionTraceConfig</a>.</p>
 
 </div>
 </div>
-<a id="abed96880f9f164383efe2b1431644fcd" name="abed96880f9f164383efe2b1431644fcd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abed96880f9f164383efe2b1431644fcd">&#9670;&#160;</a></span>PredictionTraceMaxReflections</h2>
+<a id="ada1029a5fd17019982ba21fbf7604c77" name="ada1029a5fd17019982ba21fbf7604c77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada1029a5fd17019982ba21fbf7604c77">&#9670;&#160;</a></span>MaxReflections</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -173,7 +175,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int BalloonParty.Shared.IPredictionTraceConfig.PredictionTraceMaxReflections</td>
+          <td class="memname">int BalloonParty.Shared.IPredictionTraceConfig.MaxReflections</td>
         </tr>
       </table>
   </td>
@@ -187,12 +189,12 @@ Properties</h2></td></tr>
 <p>The leg leaving the last allowed reflection is still drawn; the one after it is not.</p>
 <p>Deliberately one budget rather than one per kind. The telegraph is an aid, not a solution — showing the whole ricochet answers the shot for the player. Expected to rise with progression. </p>
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a3cdc1f21a3dd9da182589f42cdbdccf6">BalloonParty.Configuration.PredictionTraceConfig</a>.</p>
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#ac67e8fa2e1706bfed36a1be016b8c659">BalloonParty.Configuration.PredictionTraceConfig</a>.</p>
 
 </div>
 </div>
-<a id="a3f19bcb5c4dd64aca0eddee63bc27382" name="a3f19bcb5c4dd64aca0eddee63bc27382"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f19bcb5c4dd64aca0eddee63bc27382">&#9670;&#160;</a></span>PredictionTraceMaxSteps</h2>
+<a id="a9e87fe731f1d9a08f49ecadd37630c98" name="a9e87fe731f1d9a08f49ecadd37630c98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e87fe731f1d9a08f49ecadd37630c98">&#9670;&#160;</a></span>MaxSegments</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -201,7 +203,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int BalloonParty.Shared.IPredictionTraceConfig.PredictionTraceMaxSteps</td>
+          <td class="memname">int BalloonParty.Shared.IPredictionTraceConfig.MaxSegments</td>
         </tr>
       </table>
   </td>
@@ -211,12 +213,14 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#ac4fd299ce6fd0bf26841a9a69a53e239">BalloonParty.Configuration.PredictionTraceConfig</a>.</p>
+<p>Segments before the trace gives up; times SegmentLength, its reach. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a28bc9f0a00b7f4070953193649f0657d">BalloonParty.Configuration.PredictionTraceConfig</a>.</p>
 
 </div>
 </div>
-<a id="a053fc747d7ef3e6883670830836f2442" name="a053fc747d7ef3e6883670830836f2442"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a053fc747d7ef3e6883670830836f2442">&#9670;&#160;</a></span>PredictionTraceStep</h2>
+<a id="a2578a2c861e5516e28c58c9f0305787c" name="a2578a2c861e5516e28c58c9f0305787c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2578a2c861e5516e28c58c9f0305787c">&#9670;&#160;</a></span>SegmentLength</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -225,7 +229,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Shared.IPredictionTraceConfig.PredictionTraceStep</td>
+          <td class="memname">float BalloonParty.Shared.IPredictionTraceConfig.SegmentLength</td>
         </tr>
       </table>
   </td>
@@ -235,7 +239,9 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a03ae7c51ddea28fd0ee183d7b263320b">BalloonParty.Configuration.PredictionTraceConfig</a>.</p>
+<p>World length of one polyline segment — smoothness, not accuracy. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a4e82df384725c54d4c9bcf889761c91f">BalloonParty.Configuration.PredictionTraceConfig</a>.</p>
 
 </div>
 </div>

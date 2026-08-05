@@ -140,6 +140,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a978c69652a6c2acc182bcc1a91e63c5b" id="r_a978c69652a6c2acc182bcc1a91e63c5b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a978c69652a6c2acc182bcc1a91e63c5b">MaxRetries</a><code> [get]</code></td></tr>
 <tr class="memdesc:a978c69652a6c2acc182bcc1a91e63c5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many times the player may retry at the same level per run (0 = disabled).  <br /></td></tr>
 <tr class="separator:a978c69652a6c2acc182bcc1a91e63c5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75b18b28468f1525e7992c521a12a095" id="r_a75b18b28468f1525e7992c521a12a095"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75b18b28468f1525e7992c521a12a095">PlanShieldChains</a><code> [get]</code></td></tr>
+<tr class="memdesc:a75b18b28468f1525e7992c521a12a095"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether shields are placed along a flight the thrower can fly, rather than by the plain weighted draw.  <br /></td></tr>
+<tr class="separator:a75b18b28468f1525e7992c521a12a095"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addac5244db6c7a4bf4b1db1a0f74b9d3" id="r_addac5244db6c7a4bf4b1db1a0f74b9d3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#addac5244db6c7a4bf4b1db1a0f74b9d3">StartingHitPoints</a><code> [get]</code></td></tr>
 <tr class="separator:addac5244db6c7a4bf4b1db1a0f74b9d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20619052d65e82bbe6393341d202a7f4" id="r_a20619052d65e82bbe6393341d202a7f4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a20619052d65e82bbe6393341d202a7f4">StreakGrantsShields</a><code> [get]</code></td></tr>
@@ -154,6 +157,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ae4393bf941524d9903dfb7f689c9e94e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6775e28253dde78cdc98eb824d93df26" id="r_a6775e28253dde78cdc98eb824d93df26"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6775e28253dde78cdc98eb824d93df26">_maxRetries</a> = 1</td></tr>
 <tr class="separator:a6775e28253dde78cdc98eb824d93df26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21f5cd21d0f79df92aac2335fa3c6c4b" id="r_a21f5cd21d0f79df92aac2335fa3c6c4b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a21f5cd21d0f79df92aac2335fa3c6c4b">_planShieldChains</a> = true</td></tr>
+<tr class="separator:a21f5cd21d0f79df92aac2335fa3c6c4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7543729b240eb6945c720ed60d3c7f9" id="r_af7543729b240eb6945c720ed60d3c7f9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af7543729b240eb6945c720ed60d3c7f9">_startingHitPoints</a> = 3</td></tr>
 <tr class="separator:af7543729b240eb6945c720ed60d3c7f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e3fc3f305c7909e51035a8305a48b37" id="r_a4e3fc3f305c7909e51035a8305a48b37"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e3fc3f305c7909e51035a8305a48b37">_streakGrantsShields</a> = true</td></tr>
@@ -215,6 +220,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Configuration.RunConfig._maxRetries = 1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a21f5cd21d0f79df92aac2335fa3c6c4b" name="a21f5cd21d0f79df92aac2335fa3c6c4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21f5cd21d0f79df92aac2335fa3c6c4b">&#9670;&#160;</a></span>_planShieldChains</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Configuration.RunConfig._planShieldChains = true</td>
         </tr>
       </table>
   </td>
@@ -346,6 +373,33 @@ Private Attributes</h2></td></tr>
 <p>How many times the player may retry at the same level per run (0 = disabled). </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#aff5e95c5f910f536e2097bb24245f350">BalloonParty.Shared.IRunConfig</a>.</p>
+
+</div>
+</div>
+<a id="a75b18b28468f1525e7992c521a12a095" name="a75b18b28468f1525e7992c521a12a095"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75b18b28468f1525e7992c521a12a095">&#9670;&#160;</a></span>PlanShieldChains</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Configuration.RunConfig.PlanShieldChains</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Whether shields are placed along a flight the thrower can fly, rather than by the plain weighted draw. </p>
+<p>Off restores the previous random placement. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#a6f7b40d3bec0cb6a540c782bd7c3f421">BalloonParty.Shared.IRunConfig</a>.</p>
 
 </div>
 </div>

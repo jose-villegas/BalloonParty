@@ -1,5 +1,5 @@
 <map id="BalloonParty.Shared.IPredictionTraceConfig" name="BalloonParty.Shared.IPredictionTraceConfig">
-<area shape="rect" id="Node000001" title="Prediction trace settings: step size, bounce/step limits, and line colour." alt="" coords="5,5,229,45"/>
+<area shape="rect" id="Node000001" title="Prediction trace settings: how the line is segmented, how far it reaches, how many reflections it giv..." alt="" coords="5,5,229,45"/>
 <area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html" title=" " alt="" coords="19,93,216,133"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,59,120,93,115,93,115,59"/>
 </map>

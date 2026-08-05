@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Shared_1_1Disturbance_1_1LerpStampScheduler_1_1LerpStamp.html" target="_top" xlink:title=" ">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldResources.html" target="_top" xlink:title="Holds the disturbance field&#39;s GPU resources and blit&#45;and&#45;swap, separate from DisturbanceFieldService&#39;...">
 <polygon fill="white" stroke="#666666" points="178,-30 0,-30 0,0 178,0 178,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.Disturbance.</text>
-<text text-anchor="middle" x="89" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">LerpStampScheduler.LerpStamp</text>
+<text text-anchor="middle" x="89" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">DisturbanceFieldResources</text>
 </a>
 </g>
 </g>

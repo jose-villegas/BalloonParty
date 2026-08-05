@@ -494,7 +494,10 @@ var annotated_dup =
           [ "PaintTriangle", "structBalloonParty_1_1Item_1_1Paint_1_1PaintTriangle.html", "structBalloonParty_1_1Item_1_1Paint_1_1PaintTriangle" ]
         ] ],
         [ "Shield", "namespaceBalloonParty_1_1Item_1_1Shield.html", [
-          [ "ShieldItemHandler", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldItemHandler.html", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldItemHandler" ]
+          [ "ShieldChainPlanner", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldChainPlanner.html", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldChainPlanner" ],
+          [ "ShieldHostCandidate", "structBalloonParty_1_1Item_1_1Shield_1_1ShieldHostCandidate.html", "structBalloonParty_1_1Item_1_1Shield_1_1ShieldHostCandidate" ],
+          [ "ShieldItemHandler", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldItemHandler.html", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldItemHandler" ],
+          [ "ShieldPlacement", "structBalloonParty_1_1Item_1_1Shield_1_1ShieldPlacement.html", "structBalloonParty_1_1Item_1_1Shield_1_1ShieldPlacement" ]
         ] ],
         [ "Snipe", "namespaceBalloonParty_1_1Item_1_1Snipe.html", [
           [ "SnipeDischargeBloom", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom" ],
@@ -899,6 +902,7 @@ var annotated_dup =
       [ "Thrower", "namespaceBalloonParty_1_1Thrower.html", [
         [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html", "classBalloonParty_1_1Thrower_1_1ThrowerController" ],
         [ "ThrowerLifetimeScope", "classBalloonParty_1_1Thrower_1_1ThrowerLifetimeScope.html", "classBalloonParty_1_1Thrower_1_1ThrowerLifetimeScope" ],
+        [ "ThrowerOriginProvider", "classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html", "classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider" ],
         [ "ThrowerSettings", "classBalloonParty_1_1Thrower_1_1ThrowerSettings.html", "classBalloonParty_1_1Thrower_1_1ThrowerSettings" ],
         [ "ThrowerView", "classBalloonParty_1_1Thrower_1_1ThrowerView.html", "classBalloonParty_1_1Thrower_1_1ThrowerView" ]
       ] ],

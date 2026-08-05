@@ -117,6 +117,8 @@ Files</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ThrowerLifetimeScope_8cs.html">ThrowerLifetimeScope.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ThrowerOriginProvider_8cs.html">ThrowerOriginProvider.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ThrowerSettings_8cs.html">ThrowerSettings.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ThrowerView_8cs.html">ThrowerView.cs</a></td></tr>
@@ -165,7 +167,7 @@ Interactions</h1>
 <li><b>PauseService</b> — any paused source blocks <code>Tick</code> (aim/fire)</li>
 <li><b>HoldSpeedUpController</b> (<code>Projectile/Controller/</code>) — <code>ConsumedInput</code> blocks <code>Tick</code> while the player's speed-up hold hasn't been released yet</li>
 <li><b>ProjectileLoadedMessage</b> — published after each load so shield UI can self-bind</li>
-<li><b>IProjectileFlightConfig</b> — provides <code>LimitsClockwise</code>, <code>ProjectileSpeed</code>, <code>ProjectileStartingShields</code>, <code>ProjectileLoadDuration</code>; <b>IPredictionTraceConfig</b> — provides <code>PredictionTraceColor</code></li>
+<li><b>IProjectileFlightConfig</b> — provides <code>LimitsClockwise</code>, <code>ProjectileSpeed</code>, <code>ProjectileStartingShields</code>, <code>ProjectileLoadDuration</code>; <b>IPredictionTraceConfig</b> — provides <code>LineColor</code></li>
 <li><b>PredictionTraceCalculator / ThrowerView</b> — calculates and renders the aim trajectory line while the player holds the mouse button</li>
 <li><b>PredictionTraceProvider</b> — written each <code>Tick</code> alongside the view (set on aim, cleared on fire/release/reload) so non-Thrower readers can find where the trace currently sits </li>
 </ul>

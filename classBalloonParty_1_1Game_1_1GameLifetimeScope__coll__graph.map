@@ -64,7 +64,7 @@
 <area shape="rect" id="Node000020" href="$classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html" title=" " alt="" coords="1208,370,1403,410"/>
 <area shape="poly" id="edge32_Node000020_Node000007" title=" " alt="" coords="938,501,1033,470,1135,432,1159,420,1207,406,1209,411,1161,425,1137,437,1035,475,939,506"/>
 <area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="1868,1194,1999,1202,2075,1211,2156,1224,2238,1243,2321,1269,2400,1301,2475,1342,2545,1394,2599,1444,2596,1448,2542,1399,2472,1346,2398,1306,2319,1274,2237,1249,2155,1230,2074,1216,1998,1207,1867,1199"/>
-<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html" title="Prediction trace settings: step size, bounce/step limits, and line colour." alt="" coords="1193,1034,1417,1074"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html" title="Prediction trace settings: how the line is segmented, how far it reaches, how many reflections it giv..." alt="" coords="1193,1034,1417,1074"/>
 <area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="1373,1077,1491,1119,1626,1163,1669,1175,1668,1180,1625,1168,1489,1124,1372,1082"/>
 <area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="1867,1330,1992,1341,2145,1359,2310,1384,2474,1419,2560,1444,2559,1449,2473,1424,2309,1390,2144,1364,1992,1347,1867,1335"/>
 <area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Shared_1_1IRunConfig.html" title="Run&#45;level rules — starting hit points, retry allowance, and (future) loss thresholds." alt="" coords="357,2000,541,2040"/>

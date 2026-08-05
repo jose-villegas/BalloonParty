@@ -44,7 +44,7 @@
 <area shape="rect" id="Node000043" href="$interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html" title="Tuning for the overflow pile below the grid (rejected balloons) — see Balloon/Spawner/RejectedBalloon..." alt="" coords="285,901,482,941"/>
 <area shape="rect" id="Node000042" href="$classBalloonParty_1_1Configuration_1_1OverflowSettings.html" title=" " alt="" coords="577,901,775,941"/>
 <area shape="poly" id="edge16_Node000043_Node000042" title=" " alt="" coords="495,919,577,919,577,924,495,924"/>
-<area shape="rect" id="Node000047" href="$interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html" title="Prediction trace settings: step size, bounce/step limits, and line colour." alt="" coords="271,965,495,1005"/>
+<area shape="rect" id="Node000047" href="$interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html" title="Prediction trace settings: how the line is segmented, how far it reaches, how many reflections it giv..." alt="" coords="271,965,495,1005"/>
 <area shape="rect" id="Node000046" href="$classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html" title=" " alt="" coords="577,965,775,1005"/>
 <area shape="poly" id="edge17_Node000047_Node000046" title=" " alt="" coords="509,983,577,983,577,988,509,988"/>
 <area shape="rect" id="Node000049" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="273,1029,493,1069"/>

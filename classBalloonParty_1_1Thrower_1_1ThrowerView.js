@@ -21,5 +21,6 @@ var classBalloonParty_1_1Thrower_1_1ThrowerView =
     [ "IsAiming", "classBalloonParty_1_1Thrower_1_1ThrowerView.html#a5064c4510d1ba49499eac42299bf0ef6", null ],
     [ "Position", "classBalloonParty_1_1Thrower_1_1ThrowerView.html#a785848dbacf4e55d775ba58a1095ac9e", null ],
     [ "Rotation", "classBalloonParty_1_1Thrower_1_1ThrowerView.html#a655b71fa5aece9e4917d8efc150c2cd6", null ],
+    [ "SpawnPoint", "classBalloonParty_1_1Thrower_1_1ThrowerView.html#ac24f82560acbfd495dbfd259ca02956b", null ],
     [ "SpawnPointPosition", "classBalloonParty_1_1Thrower_1_1ThrowerView.html#a41a8fb15854959710d39be40e07a3958", null ]
 ];

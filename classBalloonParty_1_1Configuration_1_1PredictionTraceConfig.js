@@ -1,11 +1,11 @@
 var classBalloonParty_1_1Configuration_1_1PredictionTraceConfig =
 [
-    [ "_initialPredictionLength", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a043d97671b7d1d7d96d886cd0a466496", null ],
-    [ "_predictionTraceColor", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#ae097c2d21c60ac90a596e43d0c077d35", null ],
-    [ "_predictionTraceMaxReflections", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a1dbaac7a81d1be6ef58fcb2d3ca0c001", null ],
-    [ "_predictionTraceMaxSteps", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#abdb7bf956f2225fb90f5e2f6aa62d4a9", null ],
-    [ "PredictionTraceColor", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a9ba83243f8006ca9983dbf7a67824312", null ],
-    [ "PredictionTraceMaxReflections", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a3cdc1f21a3dd9da182589f42cdbdccf6", null ],
-    [ "PredictionTraceMaxSteps", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#ac4fd299ce6fd0bf26841a9a69a53e239", null ],
-    [ "PredictionTraceStep", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a03ae7c51ddea28fd0ee183d7b263320b", null ]
+    [ "_lineColor", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a5a0bb410b36748e760bb4938270e0a8e", null ],
+    [ "_maxReflections", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#ac2c5e5a08e83b0fa389a6d98f195b771", null ],
+    [ "_maxSegments", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a79232efc212efd5a6a057ba8a6f0082e", null ],
+    [ "_segmentLength", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#ad7b1add70bd869ffd05fc1ddb4848b77", null ],
+    [ "LineColor", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#abaa95f19a425b4b44d6c42f8e6247acb", null ],
+    [ "MaxReflections", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#ac67e8fa2e1706bfed36a1be016b8c659", null ],
+    [ "MaxSegments", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a28bc9f0a00b7f4070953193649f0657d", null ],
+    [ "SegmentLength", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a4e82df384725c54d4c9bcf889761c91f", null ]
 ];

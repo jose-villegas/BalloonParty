@@ -1,5 +1,7 @@
 var NAVTREEINDEX20 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a201448b90c9dc69d05238b0a26cab278":[5,0,0,3,7,3,17],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a201448b90c9dc69d05238b0a26cab278":[6,0,0,3,7,3,17],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a213033f3fad95bf1642c18f65ee7e76b":[5,0,0,3,7,3,8],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a213033f3fad95bf1642c18f65ee7e76b":[6,0,0,3,7,3,8],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a21ca0f6867ea9551ea306fad9b496939":[5,0,0,3,7,3,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX20 =
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorMaskAttribute.html":[5,0,0,3,8,5],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorMaskAttribute.html":[6,0,0,3,8,5],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorMaskedExtensions.html":[5,0,0,3,8,6],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorMaskedExtensions.html":[6,0,0,3,8,6],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorMaskedExtensions.html#a21dbcca6aef94d168bcdcfd091efec66":[5,0,0,3,8,6,0],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorMaskedExtensions.html#a21dbcca6aef94d168bcdcfd091efec66":[6,0,0,3,8,6,0]
+"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorMaskedExtensions.html":[6,0,0,3,8,6]
 };

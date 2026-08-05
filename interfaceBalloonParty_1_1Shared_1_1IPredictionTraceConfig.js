@@ -1,7 +1,7 @@
 var interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig =
 [
-    [ "PredictionTraceColor", "interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html#a9c4707c2bebcc0d601fba085b6898882", null ],
-    [ "PredictionTraceMaxReflections", "interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html#abed96880f9f164383efe2b1431644fcd", null ],
-    [ "PredictionTraceMaxSteps", "interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html#a3f19bcb5c4dd64aca0eddee63bc27382", null ],
-    [ "PredictionTraceStep", "interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html#a053fc747d7ef3e6883670830836f2442", null ]
+    [ "LineColor", "interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html#a0af2fd00818aa8e1a1db7b880e4db6e7", null ],
+    [ "MaxReflections", "interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html#ada1029a5fd17019982ba21fbf7604c77", null ],
+    [ "MaxSegments", "interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html#a9e87fe731f1d9a08f49ecadd37630c98", null ],
+    [ "SegmentLength", "interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html#a2578a2c861e5516e28c58c9f0305787c", null ]
 ];

@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Thrower_1_1ThrowerController =
 [
-    [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a5dbdf905a65983e2c7663dce54da6cc4", null ],
+    [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a0c09ba2cc8ca11e3a9e2a0f3515d3776", null ],
     [ "ClearPredictionTrace", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ac497d1607399c4a0644aa0ffd0f66c71", null ],
     [ "Dispose", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ae6a7bc74adb625d310dbf2894b1bb2c5", null ],
     [ "Fire", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#acf7c3023e29ab76fd5380d26a3896b72", null ],
@@ -37,6 +37,7 @@ var classBalloonParty_1_1Thrower_1_1ThrowerController =
     [ "_loadDuration", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#af32aa8bccaf6ea7978541ba77a1de2b3", null ],
     [ "_loadedPublisher", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a5102f4bfcfccdc139343074116db7b83", null ],
     [ "_loadElapsed", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a77898a44d1cf96de728258dd25feb330", null ],
+    [ "_originProvider", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#adba443e866a8fc17ffcbcadd59e8dfbd", null ],
     [ "_pauseService", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ad178d569e4f52cbbe30576952cc2f64c", null ],
     [ "_poolManager", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a212ef8bc11064806c7a2f894ef28f6ef", null ],
     [ "_positionProvider", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a53930af2d186c89add5b508107ea776e", null ],

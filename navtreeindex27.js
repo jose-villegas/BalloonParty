@@ -1,5 +1,11 @@
 var NAVTREEINDEX27 =
 {
+"classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a65730c6ef156f6eeb8caaf687d8a144d":[5,0,0,5,18,3],
+"classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a65730c6ef156f6eeb8caaf687d8a144d":[6,0,0,5,18,3],
+"classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a67dfd9afaebda39b93393fc920d09db1":[5,0,0,5,18,23],
+"classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a67dfd9afaebda39b93393fc920d09db1":[6,0,0,5,18,23],
+"classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a75b3eb06f8f1355dc13b49bd98f6d38c":[5,0,0,5,18,6],
+"classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a75b3eb06f8f1355dc13b49bd98f6d38c":[6,0,0,5,18,6],
 "classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a763ceb4e8b47163de076ad043a3a9aab":[5,0,0,5,18,0],
 "classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a763ceb4e8b47163de076ad043a3a9aab":[6,0,0,5,18,0],
 "classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a850637f7da60b935a9103156461be043":[5,0,0,5,18,18],
@@ -243,11 +249,5 @@ var NAVTREEINDEX27 =
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#afe760c34c7c1c0983692620db42b1bd7":[5,0,0,5,20,15],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#afe760c34c7c1c0983692620db42b1bd7":[6,0,0,5,20,15],
 "classBalloonParty_1_1Editor_1_1LevelRangeEntryDrawer.html":[5,0,0,5,21],
-"classBalloonParty_1_1Editor_1_1LevelRangeEntryDrawer.html":[6,0,0,5,21],
-"classBalloonParty_1_1Editor_1_1LevelRangeEntryDrawer.html#a5a9f18eb3a0151498be99c803b3eba6c":[5,0,0,5,21,0],
-"classBalloonParty_1_1Editor_1_1LevelRangeEntryDrawer.html#a5a9f18eb3a0151498be99c803b3eba6c":[6,0,0,5,21,0],
-"classBalloonParty_1_1Editor_1_1LevelRangeEntryDrawer.html#aca69f3aef5dcbd711258ec53df56736f":[5,0,0,5,21,1],
-"classBalloonParty_1_1Editor_1_1LevelRangeEntryDrawer.html#aca69f3aef5dcbd711258ec53df56736f":[6,0,0,5,21,1],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html":[5,0,0,5,3,0],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html":[6,0,0,5,3,0]
+"classBalloonParty_1_1Editor_1_1LevelRangeEntryDrawer.html":[6,0,0,5,21]
 };
