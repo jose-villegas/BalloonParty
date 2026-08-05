@@ -620,6 +620,7 @@ namespace BalloonParty.Editor.ShotSolver
                 scope.Container.Resolve<ThrowerSettings>(),
                 scope.Container.Resolve<IGamePalette>(),
                 scope.Container.Resolve<IActiveLevelParameters>(),
+                scope.Container.Resolve<IRunConfig>(),
                 pulseDelay);
             return true;
         }

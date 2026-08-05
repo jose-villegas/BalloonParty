@@ -27,6 +27,9 @@ namespace BalloonParty.Solver
         public readonly Vector2 ThrowerPivot;
         public readonly Vector3 SpawnLocalOffset;
         public readonly int StartingShields;
+
+        /// <summary>Mirrors <c>IRunConfig.StreakGrantsShields</c> — see ShotScoreRules.</summary>
+        public readonly bool StreakGrantsShields;
         public readonly float ProjectileContactRadius;
         public readonly float ProjectileSpeed;
         public readonly ShotCruiseConfig CruiseConfig;
@@ -49,7 +52,8 @@ namespace BalloonParty.Solver
 
         public ShotSolveContext(
             IReadOnlyList<ShotBalloonSnapshot> board, Vector4 wallLimitsClockwise, Vector2 throwerPivot,
-            Vector3 spawnLocalOffset, int startingShields, float projectileContactRadius,
+            Vector3 spawnLocalOffset, int startingShields, bool streakGrantsShields,
+            float projectileContactRadius,
             float projectileSpeed, ShotCruiseConfig cruiseConfig, ShotBoardDynamics dynamics,
             float nudgeAmplitude, IReadOnlyList<string> allowedColors, string rainbowColorId, ShotItemLayer items)
         {
@@ -58,6 +62,7 @@ namespace BalloonParty.Solver
             ThrowerPivot = throwerPivot;
             SpawnLocalOffset = spawnLocalOffset;
             StartingShields = startingShields;
+            StreakGrantsShields = streakGrantsShields;
             ProjectileContactRadius = projectileContactRadius;
             ProjectileSpeed = projectileSpeed;
             CruiseConfig = cruiseConfig;
@@ -79,7 +84,7 @@ namespace BalloonParty.Solver
             SlotGrid grid, IProjectileFlightConfig config, ISlotGridConfig gridConfig,
             IBalloonsConfiguration balloonsConfig, IItemConfiguration itemConfig, ThrowerView thrower,
             ThrowerSettings throwerSettings, IGamePalette palette, IActiveLevelParameters levelParams,
-            float pulseExecutionDelay)
+            IRunConfig runConfig, float pulseExecutionDelay)
         {
             var targets = new List<ShotBalloonSnapshot>();
             var otherDynamicActors = new List<ShotDynamicActorSnapshot>();
@@ -111,6 +116,7 @@ namespace BalloonParty.Solver
                 thrower.Position,
                 spawnLocalOffset,
                 config.ProjectileStartingShields,
+                runConfig?.StreakGrantsShields ?? true,
                 ResolveProjectileContactRadius(throwerSettings),
                 config.ProjectileSpeed,
                 cruiseConfig,
@@ -132,7 +138,8 @@ namespace BalloonParty.Solver
                 workingSet, pathOut: pathOut, projectileSpeed: context.ProjectileSpeed,
                 cruiseConfig: context.CruiseConfig, dynamics: context.Dynamics, timestampsOut: timesOut,
                 targetColorId: targetColorId, radiusBias: radiusBias, allowedColors: context.AllowedColors,
-                rainbowColorId: context.RainbowColorId, seed: seed, items: context.Items);
+                rainbowColorId: context.RainbowColorId, seed: seed, items: context.Items,
+                streakGrantsShields: context.StreakGrantsShields);
         }
 
         // The thrower rotates around its pivot to aim (ThrowerView.RotateTo: fire-direction angle − 90°),

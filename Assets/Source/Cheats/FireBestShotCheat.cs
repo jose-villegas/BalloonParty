@@ -39,6 +39,7 @@ namespace BalloonParty.Cheats
         private readonly ThrowerSettings _throwerSettings;
         private readonly IGamePalette _palette;
         private readonly IActiveLevelParameters _levelParams;
+        private readonly IRunConfig _runConfig;
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
 
         private IDisposable _subscription;
@@ -60,6 +61,7 @@ namespace BalloonParty.Cheats
             ThrowerSettings throwerSettings,
             IGamePalette palette,
             IActiveLevelParameters levelParams,
+            IRunConfig runConfig,
             ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
         {
             _grid = grid;
@@ -70,6 +72,7 @@ namespace BalloonParty.Cheats
             _throwerSettings = throwerSettings;
             _palette = palette;
             _levelParams = levelParams;
+            _runConfig = runConfig;
             _loadedSubscriber = loadedSubscriber;
         }
 
@@ -138,7 +141,7 @@ namespace BalloonParty.Cheats
             var pulseDelay = Mathf.Clamp(1.5f * Time.smoothDeltaTime, 0f, 0.1f);
             var context = ShotBoardGather.Gather(
                 _grid, _config, _gridConfig, _balloonsConfig, _itemConfig, _cachedView, _throwerSettings, _palette,
-                _levelParams, pulseDelay);
+                _levelParams, _runConfig, pulseDelay);
             if (context.Board.Count == 0)
             {
                 return;
@@ -176,7 +179,7 @@ namespace BalloonParty.Cheats
             var pulseDelay = Mathf.Clamp(1.5f * Time.smoothDeltaTime, 0f, 0.1f);
             var context = ShotBoardGather.Gather(
                 _grid, _config, _gridConfig, _balloonsConfig, _itemConfig, _cachedView, _throwerSettings, _palette,
-                _levelParams, pulseDelay);
+                _levelParams, _runConfig, pulseDelay);
             if (context.Board.Count == 0)
             {
                 Log.Warn("FireBestShotCheat", "no targets on the board.");

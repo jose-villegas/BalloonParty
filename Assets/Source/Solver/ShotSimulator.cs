@@ -91,11 +91,21 @@ namespace BalloonParty.Solver
         public readonly IReadOnlyList<string> AllowedColors;
         public readonly string RainbowColorId;
 
-        public ShotScoreRules(string targetColorId, IReadOnlyList<string> allowedColors, string rainbowColorId)
+        /// <summary>
+        ///     Mirrors <c>IRunConfig.StreakGrantsShields</c>. Off, a continued colour streak stops
+        ///     paying a shield — and a simulated shot that still collected them would credit itself
+        ///     wall bounces the real one cannot afford, so its "best" shots die early in play.
+        /// </summary>
+        public readonly bool StreakGrantsShields;
+
+        public ShotScoreRules(
+            string targetColorId, IReadOnlyList<string> allowedColors, string rainbowColorId,
+            bool streakGrantsShields = true)
         {
             TargetColorId = targetColorId;
             AllowedColors = allowedColors;
             RainbowColorId = rainbowColorId;
+            StreakGrantsShields = streakGrantsShields;
         }
     }
 
@@ -196,7 +206,8 @@ namespace BalloonParty.Solver
             IReadOnlyList<string> allowedColors = null,
             string rainbowColorId = null,
             in ShotFlightSeed seed = default,
-            ShotItemLayer items = null)
+            ShotItemLayer items = null,
+            bool streakGrantsShields = true)
         {
             var walls = new WallLimits(wallLimitsClockwise);
             dynamics?.ResetForNewFlight();
@@ -210,7 +221,8 @@ namespace BalloonParty.Solver
             // already-established streak once a buff takes over) be exercised by tests, and later a
             // headless scenario, without a full item layer in place.
             var state = new ShotFlightState(origin, direction, startingShields, in seed);
-            var scoreRules = new ShotScoreRules(targetColorId, allowedColors, rainbowColorId);
+            var scoreRules = new ShotScoreRules(
+                targetColorId, allowedColors, rainbowColorId, streakGrantsShields);
 
             if (pathOut != null)
             {
@@ -1192,7 +1204,10 @@ namespace BalloonParty.Solver
                 || string.Equals(attributedColorId, targetColorId, StringComparison.Ordinal);
             state.RawScore += (counts ? balloon.ScoreValue * payColors : 0) * multiplier;
 
-            if (cause.IsProjectileContact && !string.IsNullOrEmpty(balloon.ColorId) && state.StreakCount >= 2
+            // Gated exactly as ProjectileHitResolver gates it — the two rules have to move together
+            // or the solver optimises for a shot the game will not fly.
+            if (scoreRules.StreakGrantsShields
+                && cause.IsProjectileContact && !string.IsNullOrEmpty(balloon.ColorId) && state.StreakCount >= 2
                 && string.Equals(state.StreakColor, state.ProjectileColor, StringComparison.Ordinal))
             {
                 state.Shields++;
