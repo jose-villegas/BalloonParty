@@ -87,6 +87,32 @@ float. A record showing `"max_danger_level": 33` means **0.33 — a third of the
 death**, not 33 of anything. `MetricValueResolver` already renders it as `33%` for labels;
 a human reading the `.jsonl` has to know.
 
+## Reading the log
+
+`JsonLinesTelemetrySink` writes one JSON object per line to
+`<Application.persistentDataPath>/telemetry/telemetry_<yyyyMMdd_HHmmss>.jsonl` — one file
+per session, flushed after every record, 20 files retained.
+
+**In the editor:** `Tools ▸ BalloonParty ▸ Telemetry ▸ Open Latest Log` (or *Open Log
+Folder*, or *Log Path To Console*). On Windows the folder resolves to
+`%USERPROFILE%/AppData/LocalLow/<Company>/<Product>/telemetry/`, on macOS to
+`~/Library/Application Support/<Company>/<Product>/telemetry/`.
+
+**On Android** `persistentDataPath` is `/storage/emulated/0/Android/data/<package>/files`,
+which Android 11+ hides from file managers — use `adb` instead:
+
+```
+adb shell ls /sdcard/Android/data/<package>/files/telemetry/
+adb pull /sdcard/Android/data/<package>/files/telemetry/ .
+```
+
+**On iOS** it is the app's `Library/Application Support`. Xcode ▸ *Window ▸ Devices and
+Simulators* ▸ select the app ▸ gear ▸ *Download Container* gives a `.xcappdata` bundle;
+the logs are inside under `AppData/Library/Application Support/telemetry/`.
+
+The sink is dev-only (`#if UNITY_EDITOR || DEVELOPMENT_BUILD`), so a device build must be a
+**development build** for any of this to exist.
+
 ## A record per flight
 
 Every projectile writes a `RecordKind.Flight` envelope when it is destroyed, before its
