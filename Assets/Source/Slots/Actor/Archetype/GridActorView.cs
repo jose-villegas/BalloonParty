@@ -17,6 +17,11 @@ namespace BalloonParty.Slots.Actor.Archetype
         // Absorber) — zero (collision-inert) until a collider is authored on the prefab.
         public float ContactRadius => BalloonParty.Shared.ContactRadius.FromCollider(_collider, transform.lossyScale.x);
 
+        public Vector3 ContactCenter =>
+            _collider != null ? transform.TransformPoint(_collider.offset) : transform.position;
+
+        public bool HasActiveCollider => _collider != null && _collider.enabled;
+
         public void OnSpawned()
         {
             transform.localScale = Vector3.one;

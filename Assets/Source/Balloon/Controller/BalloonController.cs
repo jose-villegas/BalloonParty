@@ -79,23 +79,6 @@ namespace BalloonParty.Balloon.Controller
         }
 
         // Invoked by BalloonControllerRegistry.Route; no self-filtering needed here.
-        // The aim telegraph's view of this balloon. View position and ContactRadius deliberately —
-        // the same two values Deflect() hands the projectile, so the drawn line bounces off exactly
-        // what the shot will. A balloon mid-despawn has its collider off before the view returns to
-        // the pool and must not deflect anything.
-        internal bool TryGetDeflector(out DeflectorCircle deflector)
-        {
-            if (_view == null || !_view.HasActiveCollider
-                || _model is not IDeflectsShots deflects || !deflects.DeflectsOrdinaryHit)
-            {
-                deflector = default;
-                return false;
-            }
-
-            deflector = new DeflectorCircle(_view.ContactCenter, _view.ContactRadius);
-            return true;
-        }
-
         internal void HandleHit(ActorHitMessage msg)
         {
             if (_popped)

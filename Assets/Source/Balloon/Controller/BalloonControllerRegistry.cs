@@ -12,7 +12,7 @@ using VContainer.Unity;
 namespace BalloonParty.Balloon.Controller
 {
     /// <summary>Routes each balloon's hit reaction to its owning controller via a flat-array index, avoiding per-balloon subscriptions.</summary>
-    internal class BalloonControllerRegistry : IStartable, IDisposable, IDeflectorField
+    internal class BalloonControllerRegistry : IStartable, IDisposable
     {
         // Comfortably above the 66-slot board plus spawn/transit overlap.
         private const int InitialCapacity = 128;
@@ -87,18 +87,6 @@ namespace BalloonParty.Balloon.Controller
             if (_freeCount == _highWater)
             {
                 _depletedPublisher.Publish(default);
-            }
-        }
-
-        public void CollectDeflectors(List<DeflectorCircle> results)
-        {
-            results.Clear();
-            for (var i = 0; i < _highWater; i++)
-            {
-                if (_controllers[i] != null && _controllers[i].TryGetDeflector(out var deflector))
-                {
-                    results.Add(deflector);
-                }
             }
         }
 

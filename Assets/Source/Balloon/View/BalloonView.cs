@@ -80,18 +80,18 @@ namespace BalloonParty.Balloon.View
 
         // World-space contact radius for exact-contact deflection (uniform scale assumed, matching
         // the light-driven accessories' convention). Falls back to bounds for non-circle colliders.
-        internal float ContactRadius => _collider is CircleCollider2D circle
+        public float ContactRadius => _collider is CircleCollider2D circle
             ? circle.radius * transform.lossyScale.x
             : _collider != null ? _collider.bounds.extents.x : 0f;
 
         // Item effect boards (@ref plan_shot_solver_accuracy Phase C §2.3) must skip a balloon mid-
         // despawn — its collider is disabled before the view actually returns to the pool.
-        internal bool HasActiveCollider => _collider != null && _collider.enabled;
+        public bool HasActiveCollider => _collider != null && _collider.enabled;
 
         // The deflection reflects off the collider, not the pivot. The balloon prefabs happen to
         // centre theirs today, which is exactly why this should be read rather than assumed — an
         // offset added later would otherwise bend every shot around a circle that is not there.
-        internal Vector3 ContactCenter =>
+        public Vector3 ContactCenter =>
             _collider != null ? transform.TransformPoint(_collider.offset) : transform.position;
 
         Vector3 IBalloonMotionView.Position

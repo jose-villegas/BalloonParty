@@ -132,6 +132,9 @@ namespace BalloonParty.Game
         {
             builder.Register<BalancePathHolder>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.Register<SlotGrid>(Lifetime.Singleton);
+            // Deflectors come from the grid, not from the balloon registry: statics deflect too, and
+            // the grid is the one place that holds every actor regardless of family.
+            builder.Register<SlotGridDeflectorField>(Lifetime.Singleton).As<IDeflectorField>();
             // The shield preference is attached rather than injected: ten call sites build a
             // MoveWeightEvaluator, including the shot simulator's board mirror, and only the live
             // board has a thrower to measure reachability from.
@@ -224,9 +227,7 @@ namespace BalloonParty.Game
                 .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<BalloonMotionTicker>().AsSelf();
             builder.RegisterEntryPoint<RejectedBalloonEffect>().AsSelf().As<IRunResettable>();
-            // Also as IDeflectorField: it already holds the live controllers, so the aim
-            // telegraph reads its deflectors from the same array the hit routing uses.
-            builder.RegisterEntryPoint<BalloonControllerRegistry>().AsSelf().As<IDeflectorField>();
+            builder.RegisterEntryPoint<BalloonControllerRegistry>().AsSelf();
             builder.Register<BalloonPopPresenter>(Lifetime.Singleton);
             builder.Register<BalloonControllerContext>(Lifetime.Singleton);
             builder.Register<BalloonPlacementResolver>(Lifetime.Singleton);
