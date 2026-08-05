@@ -1,9 +1,5 @@
 var NAVTREEINDEX74 =
 {
-"interfaceBalloonParty_1_1Editor_1_1EffectPreview_1_1IEffectPreviewModule.html":[5,0,0,5,1,4],
-"interfaceBalloonParty_1_1Editor_1_1EffectPreview_1_1IEffectPreviewModule.html":[6,0,0,5,1,4],
-"interfaceBalloonParty_1_1Editor_1_1EffectPreview_1_1IEffectPreviewModule.html#a580229ba8ef127da1d103bb48fd8659d":[5,0,0,5,1,4,5],
-"interfaceBalloonParty_1_1Editor_1_1EffectPreview_1_1IEffectPreviewModule.html#a580229ba8ef127da1d103bb48fd8659d":[6,0,0,5,1,4,5],
 "interfaceBalloonParty_1_1Editor_1_1EffectPreview_1_1IEffectPreviewModule.html#a5805ba891ebbe706929ba2e894b86747":[5,0,0,5,1,4,3],
 "interfaceBalloonParty_1_1Editor_1_1EffectPreview_1_1IEffectPreviewModule.html#a5805ba891ebbe706929ba2e894b86747":[6,0,0,5,1,4,3],
 "interfaceBalloonParty_1_1Editor_1_1EffectPreview_1_1IEffectPreviewModule.html#ad6fe96608300595e0f10236abd4d0cc0":[5,0,0,5,1,4,2],
@@ -249,5 +245,9 @@ var NAVTREEINDEX74 =
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html":[5,0,0,10,2,0],
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html":[6,0,0,10,2,0],
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html#acf40990555fc50d89fad56f625d3101d":[5,0,0,10,2,0,0],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html#acf40990555fc50d89fad56f625d3101d":[6,0,0,10,2,0,0]
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html#acf40990555fc50d89fad56f625d3101d":[6,0,0,10,2,0,0],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html":[5,0,0,10,2,1],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html":[6,0,0,10,2,1],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a08eed9c1dbc704ddb9db54bc4619bc52":[5,0,0,10,2,1,5],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a08eed9c1dbc704ddb9db54bc4619bc52":[6,0,0,10,2,1,5]
 };

@@ -1,9 +1,5 @@
 var NAVTREEINDEX59 =
 {
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html#aa083f7e53db75331d74e5580c112f814":[5,0,0,13,0,0,8,41],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html#aa083f7e53db75331d74e5580c112f814":[6,0,0,13,0,0,8,41],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html#aa110504024f08c4034b3663b3a0ac268":[5,0,0,13,0,0,8,51],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html#aa110504024f08c4034b3663b3a0ac268":[6,0,0,13,0,0,8,51],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html#aa2c9ff4137511995e46b150df8cb79f0":[5,0,0,13,0,0,8,19],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html#aa2c9ff4137511995e46b150df8cb79f0":[6,0,0,13,0,0,8,19],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html#aa31effb255e5e294e3541fe019963c00":[5,0,0,13,0,0,8,37],
@@ -249,5 +245,9 @@ var NAVTREEINDEX59 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudViewController.html#a05fd2b9c13ec2501bbb7c5a11a1ae187":[5,0,0,13,0,0,18,5],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudViewController.html#a05fd2b9c13ec2501bbb7c5a11a1ae187":[6,0,0,13,0,0,18,5],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudViewController.html#a15fe3624f2fa1f14e246defe563fed9a":[5,0,0,13,0,0,18,16],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudViewController.html#a15fe3624f2fa1f14e246defe563fed9a":[6,0,0,13,0,0,18,16]
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudViewController.html#a15fe3624f2fa1f14e246defe563fed9a":[6,0,0,13,0,0,18,16],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudViewController.html#a1c659f6b0f40907e6bbc932ee203b53d":[5,0,0,13,0,0,18,13],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudViewController.html#a1c659f6b0f40907e6bbc932ee203b53d":[6,0,0,13,0,0,18,13],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudViewController.html#a2b48250c97317989fefb3a3350dcb061":[5,0,0,13,0,0,18,3],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudViewController.html#a2b48250c97317989fefb3a3350dcb061":[6,0,0,13,0,0,18,3]
 };

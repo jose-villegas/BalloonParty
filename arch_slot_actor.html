@@ -123,7 +123,7 @@ What this diagram shows</h2>
 <li><code>ISlotActor</code> — read-only: <code>SlotIndex</code>, <code>Kind</code> (<code>Dynamic</code> or <code>Static</code>)</li>
 <li><code>IWriteableSlotActor</code> — adds writable <code>SlotIndex</code>; used by grid mutators</li>
 <li><code>IDynamicSlotActor</code> — redefines <code>SlotIndex</code> as reactive, adds <code>IsStable</code> reactive property; balloons implement this</li>
-<li><code>ISlotActorView</code> — view contract: <code>transform</code>, <code>TweenTracker</code>, <code>ActorKind</code>, <code>RotationPivot</code></li>
+<li><code>ISlotActorView</code> — view contract: <code>transform</code>, <code>TweenTracker</code>, <code>ActorKind</code>, <code>RotationPivot</code>, plus the contact geometry every actor family exposes uniformly — <code>ContactRadius</code>, <code>ContactCenter</code> (the collider's centre, not the pivot) and <code>HasActiveCollider</code> (false while a pooled view is mid-despawn). The aim telegraph and the shot solver both read these</li>
 </ul>
 <p><b>Capability interfaces</b> — optional traits discovered by casting at the subscriber's call site:</p>
 <table class="markdownTable">
@@ -148,6 +148,8 @@ What this diagram shows</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>IHasDurability</code>   </td><td class="markdownTableBodyNone">Tracks <code>HitsRemaining</code>   </td><td class="markdownTableBodyNone">Most balloons + Gatekeeper    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>IDeflectsShots</code>   </td><td class="markdownTableBodyNone">Would the next ordinary hit bounce? Asked without spending durability, unlike <code>EvaluateHit</code>   </td><td class="markdownTableBodyNone"><code>ToughBalloonModel</code>, <code>UnbreakableBalloonModel</code>, <code>DeflectorActorModel</code>, <code>GatekeeperActorModel</code>    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>IPassThrough</code>   </td><td class="markdownTableBodyNone">Slot traversable by animation paths   </td><td class="markdownTableBodyNone"><code>PuffObstacleModel</code>, <code>StaticActorModel</code>   </td></tr>
 </table>
 <h2><a class="anchor" id="autotoc_md97"></a>
@@ -159,6 +161,7 @@ Guidance</h2>
 <li><code>GridActorHitController</code> and <code>ScoreController</code> discover capabilities via casting — no changes needed in those systems unless you add a new capability interface</li>
 </ol>
 <p><b>Capability casting is intentional:</b> Subscribers that previously cast broadly to <code>IBalloonModel</code> now cast to the narrowest interface they need (<code>IHasColor</code>, <code>IHasScore</code>, <code>IHasNudge</code>). This is not defensive programming — it is the extension point. A new actor type can implement <code>IHasNudge</code> and automatically receive nudge animations without touching <code>NudgeService</code>.</p>
+<p><code>IDeflectsShots</code> is the sharpest example, because it spans families rather than a hierarchy: two balloon types and two static archetypes answer it, and <code>SlotGridDeflectorField</code> walks the grid asking every occupant without knowing what kind of actor replied. A base-class rule could not have covered both, which is precisely why it is a capability — and why a new deflecting archetype needs no change to the aim trace.</p>
 <p><b><code>IHasDurability</code> vs <code>IHitable</code>:</b></p><ul>
 <li><code>IHitable</code> only — actor responds to hits but has no health pool (Deflector, Absorber)</li>
 <li><code>IHasDurability</code> — extends <code>IHitable</code>; actor tracks <code>HitsRemaining</code> and pops at zero</li>

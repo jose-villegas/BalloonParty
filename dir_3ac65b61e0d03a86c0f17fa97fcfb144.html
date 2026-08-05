@@ -141,6 +141,25 @@ PredictionTraceCalculator</h2>
 <blockquote class="doxtable">
 <p><b>Accuracy caveat.</b> A circle deflection is very sensitive to where it is struck, so near a balloon's edge a pixel of aim movement swings the outgoing leg hard — the dispersion <code>ProjectileMotionResolver</code> already warns about, where error amplifies ×10-20 per deflection. The line is truthful; whether it reads as <em>precise</em> or as <em>jittery</em> is a playtest question. If it reads badly, draw the post-deflection leg differently (shorter, dimmer, dashed) rather than making it lie. </p>
 </blockquote>
+<div class="fragment"><div class="line">sequenceDiagram</div>
+<div class="line">    participant Ctl as ThrowerController Tick</div>
+<div class="line">    participant Calc as PredictionTraceCalculator</div>
+<div class="line">    participant Field as SlotGridDeflectorField</div>
+<div class="line">    participant Grid as SlotGrid</div>
+<div class="line">    participant View as ISlotActorView</div>
+<div class="line">    Ctl-&gt;&gt;Calc: Calculate origin, direction, shot radius</div>
+<div class="line">    Calc-&gt;&gt;Field: CollectDeflectors into a reused buffer</div>
+<div class="line">    loop every slot, columns times rows</div>
+<div class="line">        Field-&gt;&gt;Grid: At slot, cast to IDeflectsShots</div>
+<div class="line">        Field-&gt;&gt;View: ContactCenter, ContactRadius, HasActiveCollider</div>
+<div class="line">    end</div>
+<div class="line">    Field--&gt;&gt;Calc: list of DeflectorCircle</div>
+<div class="line">    loop each segment, one shared reflection budget</div>
+<div class="line">        Calc-&gt;&gt;Calc: clip the step by the walls first</div>
+<div class="line">        Calc-&gt;&gt;Calc: nearest circle within the clipped step wins</div>
+<div class="line">    end</div>
+<div class="line">    Calc--&gt;&gt;Ctl: polyline whose corner sits on the deflector skin</div>
+</div><!-- fragment --><p>The per-frame grid walk is deliberate and must not be cached, because the geometry is read from views that drift as the board settles. <code>SlotGridDeflectorField</code>'s own XML doc explains why — point at it rather than repeating it here.</p>
 <h2><a class="anchor" id="autotoc_md714"></a>
 PredictionTraceView</h2>
 <p>MonoBehaviour with a <code>LineRenderer</code>. Call <code>SetTrace(points)</code> to update, <code>SetColor(color)</code> to set <code>startColor</code>/<code>endColor</code>, or <code>Clear()</code> to hide. Attach to the Thrower prefab alongside a <code>LineRenderer</code>. For the smoke + glitter look, use the <code>BalloonParty/Display/TraceGlitterLine</code> material shader (SightSmoke's drifting-noise alpha eat plus GlitterSwirl's orbiting specks in one pass) and set the LineRenderer's texture mode to <b>Tile</b> so the pattern density stays constant over any aim length — the config-driven trace colour reaches the shader through the renderer's start/end vertex colours.</p>

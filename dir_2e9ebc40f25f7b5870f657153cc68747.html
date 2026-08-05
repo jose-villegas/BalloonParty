@@ -169,7 +169,8 @@ Interactions</h1>
 <li><b>ProjectileLoadedMessage</b> — published after each load so shield UI can self-bind</li>
 <li><b>IProjectileFlightConfig</b> — provides <code>LimitsClockwise</code>, <code>ProjectileSpeed</code>, <code>ProjectileStartingShields</code>, <code>ProjectileLoadDuration</code>; <b>IPredictionTraceConfig</b> — provides <code>LineColor</code></li>
 <li><b>PredictionTraceCalculator / ThrowerView</b> — calculates and renders the aim trajectory line while the player holds the mouse button</li>
-<li><b>PredictionTraceProvider</b> — written each <code>Tick</code> alongside the view (set on aim, cleared on fire/release/reload) so non-Thrower readers can find where the trace currently sits </li>
+<li><b>PredictionTraceProvider</b> — written each <code>Tick</code> alongside the view (set on aim, cleared on fire/release/reload) so non-Thrower readers can find where the trace currently sits</li>
+<li><b>ThrowerOriginProvider</b> — set once in <code>Start()</code> from the spawn point transform and the prefab's own collider-derived contact radius (<code>ContactRadius.FromCollider</code>, read off the prefab since nothing has been fired yet). Same shape as <code>ProjectilePositionProvider</code> and <code>PredictionTraceProvider</code>: a plain game-scope singleton a view in the thrower's own child scope fills in, so a system registered above <code>ThrowerLifetimeScope</code> — <code>ItemAssigner</code>, planning a shield chain — can read a launch point it could never inject directly. <code>IsAvailable</code> is false until <code>Start()</code> runs, and <code>ItemAssigner</code> treats that as "no thrower yet" rather than an error: any shield grant requested before the thrower has started falls back to the plain weighted draw instead of a planned chain </li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

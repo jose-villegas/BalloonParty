@@ -364,8 +364,35 @@ Lights Cast by Items</h1>
 <h1><a class="anchor" id="autotoc_md251"></a>
 Shield chains</h1>
 <p>Shields placed by the plain weighted draw scatter, and a scattered shield extends nothing — the player picks it up on a flight that was already going to end safely. <code>ShieldChainPlanner</code> instead places them along a flight the thrower can actually fly: each shield is what buys the wall bounce that reaches the next, so shield <em>n</em> makes shield <em>n+1</em> reachable. <code>ItemAssigner</code> plans the chain once per fill and then hands shields out in flight order.</p>
+<div class="fragment"><div class="line">graph TD</div>
+<div class="line">    Spawn[&quot;BalloonSpawner publishes ItemCheckMessage&quot;] --&gt; IA[&quot;ItemAssigner.OnItemCheck&quot;]</div>
+<div class="line">    IA --&gt; Elig[&quot;CollectEligibleSlots — newly spawned hosts with a free item slot&quot;]</div>
+<div class="line">    Elig --&gt; Gate{&quot;PlanShieldChains on and a thrower origin exists?&quot;}</div>
+<div class="line">    Gate --&gt;|no| Draw[&quot;Weighted random draw for every grant&quot;]</div>
+<div class="line">    Gate --&gt;|yes| Cand[&quot;ShieldHostCandidate per host — slot world position, per-type radius plus the shot radius&quot;]</div>
+<div class="line">    Cand --&gt; Defl[&quot;IDeflectorField.CollectDeflectors&quot;]</div>
+<div class="line">    Defl --&gt; Fan[&quot;BuildFan — FanSamples openings from FanMinDegrees to FanMaxDegrees&quot;]</div>
+<div class="line">    Fan --&gt; Sweep[&quot;SweepFan — fly every opening, record which candidates each one reaches&quot;]</div>
+<div class="line">    Sweep --&gt; Band{&quot;SelectInBand — at least MinEntryAngles, at most CheapZoneFraction of the fan&quot;}</div>
+<div class="line">    Band --&gt;|&quot;nothing qualifies&quot;| Relax[&quot;Drop the cheap-zone ceiling, then the tolerance floor&quot;]</div>
+<div class="line">    Relax --&gt; Band</div>
+<div class="line">    Band --&gt;|&quot;a candidate wins&quot;| Narrow[&quot;Intersect the chain angles with that candidate&#39;s entry angles&quot;]</div>
+<div class="line">    Narrow --&gt;|&quot;fewer than wanted placed&quot;| Sweep</div>
+<div class="line">    Narrow --&gt; Chain[&quot;ShieldPlacement list, in flight order&quot;]</div>
+<div class="line">    Chain --&gt; Hand[&quot;TryTakeChainHost — shields drain the chain, other items take the draw&quot;]</div>
+<div class="line">    Draw --&gt; Hand</div>
+</div><!-- fragment --><p>The narrowing loop (<code>Narrow</code> feeding back into <code>Sweep</code>) is the "a chain is one flight" guarantee — the least obvious thing in <code>ShieldChainPlanner</code>. Each round keeps only the fan angles that still reach <em>every</em> shield placed so far, not just the one just added, so two shields reachable from unrelated angles can never masquerade as a chain.</p>
 <p>It plans against a <b>fan</b> of opening angles rather than one, so a chain has several ways in, and keeps only slots reached by enough of the fan — but not by so much of it that the player sweeps them for free. Both bounds, and the fan itself, are authored on <code>RunConfig</code> under <code>ShieldChain</code> (<code>IShieldChainSettings</code>): <code>FanSamples</code>, <code>FanMinDegrees</code>/<code>FanMaxDegrees</code>, <code>MinEntryAngles</code>, <code>CheapZoneFraction</code>. They are balance knobs retuned against playtests, which is why they live on the asset; the planner keeps only the guards that stop it looping (surface epsilon, leg cap).</p>
 <p>A chain planned at spawn decays as the board settles, so <code>ShieldReachabilityField</code> re-sweeps a coarser fan on every grid mutation and records the fewest reflections any sampled shot needs to cross each slot. <code>ShieldSlotPreference</code> turns that into a small balance bias — full bonus for a straight-shot slot, less per reflection — which the balancer adds to the actor's own bias rather than obeying, so a shield drifts toward reachable slots without hovering in defiance of the board. <code>ReachabilityFanSamples</code>, <code>ReachabilityMaxReflections</code>, <code>ReachableSlotBonus</code> and <code>PerReflectionPenalty</code> tune it, on the same <code>ShieldChain</code> block.</p>
+<div class="fragment"><div class="line">graph LR</div>
+<div class="line">    Mut[&quot;SlotGrid.MutationVersion bumps on Place or Remove&quot;] --&gt; Build[&quot;ShieldReachabilityField.EnsureBuilt&quot;]</div>
+<div class="line">    Origin[&quot;ThrowerOriginProvider — game scope, filled by ThrowerView&quot;] --&gt; Build</div>
+<div class="line">    Build --&gt; Sweep[&quot;ReachabilityFanSamples openings, wall bounces only, capped at ReachabilityMaxReflections&quot;]</div>
+<div class="line">    Sweep --&gt; Table[&quot;reflections-to-reach, one entry per slot&quot;]</div>
+<div class="line">    Table --&gt; Pref[&quot;ShieldSlotPreference.WeightFor — ReachableSlotBonus minus PerReflectionPenalty per reflection&quot;]</div>
+<div class="line">    Pref --&gt; Eval[&quot;MoveWeightEvaluator.ScoreMove — added to the actor&#39;s own bias&quot;]</div>
+<div class="line">    Eval --&gt; Bal[&quot;BalloonBalancer chooses the move&quot;]</div>
+</div><!-- fragment --><p>"Wall bounces only" is the current truth, and is deliberately in tension with the deflector step in the shield-chain planning diagram above — the reachability sweep injects <code>IDeflectorField</code> but never consults what it collects, an unresolved gap rather than a design choice.</p>
 <p><code>IRunConfig.PlanShieldChains</code> turns the whole thing off, restoring the weighted draw. <code>Tools ▸ <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> ▸ Shield Chains</code> (editor) counts how many openings collect the board's shields and draws one path at a time — the only practical way to see whether a level holds a chain, since the shields still look like items on a hex lattice either way. </p>
 </div><!-- contents -->
 </div><!-- doc-content -->

@@ -146,7 +146,7 @@ Core interfaces</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>IWriteableDynamicSlotActor</code>   </td><td class="markdownTableBodyNone">Extends both <code>IDynamicSlotActor</code> and <code>IWriteableSlotActor</code> — adds writable <code>new ReactiveProperty&lt;Vector2Int&gt; SlotIndex</code> and <code>new ReactiveProperty&lt;bool&gt; IsStable</code>    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ISlotActorView</code>   </td><td class="markdownTableBodyNone">View contract — <code>transform</code>, <code>TweenTracker</code>, <code>ActorKind</code>, <code>RotationPivot</code> (the transform an effect should rotate when tilting the actor, so lighting-baked children keep a consistent light direction)    </td></tr>
+<td class="markdownTableBodyNone"><code>ISlotActorView</code>   </td><td class="markdownTableBodyNone">View contract — <code>transform</code>, <code>TweenTracker</code>, <code>ActorKind</code>, <code>RotationPivot</code> (the transform an effect should rotate when tilting the actor, so lighting-baked children keep a consistent light direction), and the contact geometry the aim telegraph and shot solver read uniformly across every actor family: <code>ContactRadius</code>/<code>ContactCenter</code> (the collider's own radius and centre, not the pivot) and <code>HasActiveCollider</code> (false while a pooled view is mid-despawn)    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>SlotActorKind</code>   </td><td class="markdownTableBodyNone">Enum — <code>Dynamic</code> (balancer can relocate, contributes weight) or <code>Static</code> (fixed, contributes weight, balancer skips)   </td></tr>
 </table>
@@ -171,13 +171,54 @@ Capability interfaces</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>IHasDurability</code>   </td><td class="markdownTableBodyNone">Extends <code>IHitable</code> — actor also tracks <code>HitsRemaining</code>. Removal is determined by <code>HitsRemaining.Value &lt;= 0</code> after <code>EvaluateHit</code> returns    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>IHasItemSlot</code>   </td><td class="markdownTableBodyNone">Actor can host an item — extends <code>IHasColor</code> (item visuals always tint to the host color). Exposes <code>IReadOnlyReactiveProperty&lt;ItemType&gt; Item</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>IDeflectsShots</code>   </td><td class="markdownTableBodyNone"><code>bool DeflectsOrdinaryHit { get; }</code> — whether the next ordinary (non-piercing, 1-damage) hit would bounce rather than pass through or pop. Asked by the aim telegraph and the shield planner, both of which need the answer without spending durability the way <code>EvaluateHit</code> does. A capability rather than a base-class rule because deflecting spans families — two balloon types and two static archetypes — so <code>SlotGridDeflectorField</code> can ask the grid for it without knowing what kind of actor answered    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>IPassThrough</code>   </td><td class="markdownTableBodyNone">Actor's slot can be crossed by animation paths (spawn entry, balance moves). Actors that do NOT implement this block traversal; rerouting is deferred to a future phase.    </td></tr>
+<td class="markdownTableBodyNone"><code>IHasItemSlot</code>   </td><td class="markdownTableBodyNone">Actor can host an item — extends <code>IHasColor</code> (item visuals always tint to the host color). Exposes <code>IReadOnlyReactiveProperty&lt;ItemType&gt; Item</code>    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>IPassThrough</code>   </td><td class="markdownTableBodyNone">Actor's slot can be crossed by animation paths (spawn entry, balance moves). Actors that do NOT implement this block traversal; rerouting is deferred to a future phase.    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>IWashesProjectileColor</code>   </td><td class="markdownTableBodyNone">Marker — a projectile that contacts this actor has its stolen colour reset to none, like a fresh launch (the soap-bubble cluster). Checked in <code>ProjectileHitResolver</code>   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md895"></a>
+<div class="fragment"><div class="line">classDiagram</div>
+<div class="line">    class IDeflectsShots {</div>
+<div class="line">        &lt;&lt;interface&gt;&gt;</div>
+<div class="line">        +bool DeflectsOrdinaryHit</div>
+<div class="line">    }</div>
+<div class="line">    class ISlotActorView {</div>
+<div class="line">        &lt;&lt;interface&gt;&gt;</div>
+<div class="line">        +float ContactRadius</div>
+<div class="line">        +Vector3 ContactCenter</div>
+<div class="line">        +bool HasActiveCollider</div>
+<div class="line">    }</div>
+<div class="line">    class IDeflectorField {</div>
+<div class="line">        &lt;&lt;interface&gt;&gt;</div>
+<div class="line">        +CollectDeflectors(results)</div>
+<div class="line">    }</div>
+<div class="line">    class SlotGridDeflectorField {</div>
+<div class="line">        -SlotGrid _grid</div>
+<div class="line">        +CollectDeflectors(results)</div>
+<div class="line">    }</div>
+<div class="line">    class DeflectorCircle {</div>
+<div class="line">        &lt;&lt;readonly struct&gt;&gt;</div>
+<div class="line">        +Vector2 Center</div>
+<div class="line">        +float Radius</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    ToughBalloonModel ..|&gt; IDeflectsShots</div>
+<div class="line">    UnbreakableBalloonModel ..|&gt; IDeflectsShots</div>
+<div class="line">    DeflectorActorModel ..|&gt; IDeflectsShots</div>
+<div class="line">    GatekeeperActorModel ..|&gt; IDeflectsShots</div>
+<div class="line"> </div>
+<div class="line">    SlotGridDeflectorField ..|&gt; IDeflectorField</div>
+<div class="line">    SlotGridDeflectorField --&gt; SlotGrid : walks every slot</div>
+<div class="line">    SlotGrid --&gt; IDeflectsShots : cast per occupant</div>
+<div class="line">    SlotGrid --&gt; ISlotActorView : geometry per occupant</div>
+<div class="line">    SlotGridDeflectorField ..&gt; DeflectorCircle : emits</div>
+<div class="line"> </div>
+<div class="line">    PredictionTraceCalculator --&gt; IDeflectorField : aim telegraph</div>
+<div class="line">    ItemAssigner --&gt; IDeflectorField : chain planning</div>
+<div class="line">    ShieldChainWindow --&gt; IDeflectorField : editor scan</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md895"></a>
 Hit types</h2>
 <p><code>DamageContext</code> wraps damage with optional flags:</p>
 <table class="markdownTable">
@@ -197,17 +238,17 @@ Hit types</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>BalloonModel</code> (soft)   </td><td class="markdownTableBodyNone"><code>IHasDurability</code>, <code>IHasScoreColor</code>   </td><td class="markdownTableBodyNone"><code>PassThrough</code> on survival, <code>Pop</code> on death; decrements <code>HitsRemaining</code>. <code>Piercing</code> flag → <code>Pop</code> immediately. No score attribution when <code>HitsRemaining &gt; 0</code> after hit    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>ToughBalloonModel</code>   </td><td class="markdownTableBodyNone"><code>IHasDurability</code>, <code>IHasScoreColor</code>   </td><td class="markdownTableBodyNone"><code>Deflect</code> on survival, <code>Pop</code> on death; decrements <code>HitsRemaining</code>. <code>Piercing</code> flag → <code>Pop</code> immediately. Score scattered across the still-incomplete color bars on pop    </td></tr>
+<td class="markdownTableBodyNone"><code>ToughBalloonModel</code>   </td><td class="markdownTableBodyNone"><code>IHasDurability</code>, <code>IHasScoreColor</code>, <code>IDeflectsShots</code>   </td><td class="markdownTableBodyNone"><code>Deflect</code> on survival, <code>Pop</code> on death; decrements <code>HitsRemaining</code>. <code>Piercing</code> flag → <code>Pop</code> immediately. Score scattered across the still-incomplete color bars on pop. <code>DeflectsOrdinaryHit</code> is <code>HitsRemaining.Value &gt; 1</code> — the last hit pops rather than bouncing    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>UnbreakableBalloonModel</code> <em>(Phase 7.5)</em>   </td><td class="markdownTableBodyNone"><code>IHitable</code>, <code>IHasScoreColor</code>   </td><td class="markdownTableBodyNone">Always <code>Deflect</code>; no <code>HitsRemaining</code>. <code>Piercing</code> forces <code>Pop</code>. Score attributed to source (projectile) color on pop    </td></tr>
+<td class="markdownTableBodyNone"><code>UnbreakableBalloonModel</code> <em>(Phase 7.5)</em>   </td><td class="markdownTableBodyNone"><code>IHitable</code>, <code>IHasScoreColor</code>, <code>IDeflectsShots</code>   </td><td class="markdownTableBodyNone">Always <code>Deflect</code>; no <code>HitsRemaining</code>. <code>Piercing</code> forces <code>Pop</code>. Score attributed to source (projectile) color on pop. <code>DeflectsOrdinaryHit</code> is always <code>true</code>    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>BubbleClusterModel</code>   </td><td class="markdownTableBodyNone"><code>IHasDurability</code>, <code>IHasScoreColor</code>   </td><td class="markdownTableBodyNone"><code>PassThrough</code> on survival, <code>Pop</code> on death; decrements <code>HitsRemaining</code> (bubble count). Score scattered across the still-incomplete color bars, aggregated one entry per color (never one per point of damage); <code>BreaksStreak = true</code> on all attributions    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>DeflectorActorModel</code> <em>(Phase 8.2b)</em>   </td><td class="markdownTableBodyNone"><code>IHitable</code> only   </td><td class="markdownTableBodyNone">Always <code>Deflect</code>; no <code>HitsRemaining</code>; not a balloon    </td></tr>
+<td class="markdownTableBodyNone"><code>DeflectorActorModel</code> <em>(Phase 8.2b)</em>   </td><td class="markdownTableBodyNone"><code>IHitable</code>, <code>IDeflectsShots</code>   </td><td class="markdownTableBodyNone">Always <code>Deflect</code>; no <code>HitsRemaining</code>; not a balloon. <code>DeflectsOrdinaryHit</code> is always <code>true</code>    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>AbsorberActorModel</code> <em>(Phase 8.2b)</em>   </td><td class="markdownTableBodyNone"><code>IHitable</code> only   </td><td class="markdownTableBodyNone">Always <code>Absorb</code>; kills the projectile    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>GatekeeperActorModel</code> <em>(Phase 8.2c)</em>   </td><td class="markdownTableBodyNone"><code>IHasDurability</code>   </td><td class="markdownTableBodyNone"><code>Deflect</code> on survival, <code>Pop</code> on death; decrements <code>HitsRemaining</code>. Blocks a column until destroyed.    </td></tr>
+<td class="markdownTableBodyNone"><code>GatekeeperActorModel</code> <em>(Phase 8.2c)</em>   </td><td class="markdownTableBodyNone"><code>IHasDurability</code>, <code>IDeflectsShots</code>   </td><td class="markdownTableBodyNone"><code>Deflect</code> on survival, <code>Pop</code> on death; decrements <code>HitsRemaining</code>. Blocks a column until destroyed. <code>DeflectsOrdinaryHit</code> is <code>HitsRemaining.Value &gt; 1</code>    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>StaticActorModel</code>   </td><td class="markdownTableBodyNone">neither   </td><td class="markdownTableBodyNone">No collider — not part of the hit pipeline    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -219,7 +260,7 @@ Contents</h1>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File / Folder   </th><th class="markdownTableHeadNone">What it does    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>Grid/</code>   </td><td class="markdownTableBodyNone"><code>SlotGrid</code>, <code>SlotGridChangedEvent</code>, <code>SlotGridView</code>, <code>BalancePathHolder</code>, <code>GridBalanceQuery</code>, <code>MoveWeightEvaluator</code>, <code>HexCoordinates</code>, <code>ShoveVector</code> — core grid data structure, balance heuristics/transit tracking, and hex-coordinate math (namespace <code><a class="el" href="namespaceBalloonParty_1_1Slots_1_1Grid.html">BalloonParty.Slots.Grid</a></code>)    </td></tr>
+<td class="markdownTableBodyNone"><code>Grid/</code>   </td><td class="markdownTableBodyNone"><code>SlotGrid</code>, <code>SlotGridChangedEvent</code>, <code>SlotGridView</code>, <code>BalancePathHolder</code>, <code>GridBalanceQuery</code>, <code>MoveWeightEvaluator</code>, <code>HexCoordinates</code>, <code>ShoveVector</code>, <code>SlotGridDeflectorField</code> (walks the grid for every <code>IDeflectsShots</code> occupant, so the aim telegraph and the shield planner see statics and balloons alike), <code>IShieldSlotPreference</code> (the balance-weight seam <code>Item/Shield/ShieldSlotPreference</code> implements) — core grid data structure, balance heuristics/transit tracking, and hex-coordinate math (namespace <code><a class="el" href="namespaceBalloonParty_1_1Slots_1_1Grid.html">BalloonParty.Slots.Grid</a></code>)    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Actor/</code>   </td><td class="markdownTableBodyNone">Core actor interfaces, spawner, hit controller, slot selection strategies, and scenario/ambient support — <code>ISlotActor</code>, <code>IWriteableSlotActor</code>, <code>IDynamicSlotActor</code>, <code>IWriteableDynamicSlotActor</code>, <code>ISlotActorView</code>, <code>SlotActorKind</code>, <code>StaticActorModel</code>, <code>StaticActorSpawner</code>, <code>GridActorHitController</code>, <code>ISlotSelectionStrategy</code>, <code>RandomSlotSelectionStrategy</code>, <code>ClusterSlotSelectionStrategy</code>, <code>SlotPlacementMode</code>, <code>IBalanceInfluence</code>, <code>IBalanceBiasSource</code> (the neighbour read-set — color id + an opaque type tag — the shared bias formulas in <code>Shared/Extensions/BalanceBiasExtensions</code> need; implemented by <code>BalloonModelBase</code>), <code>BalanceBiasKind</code>, <code>IPreBalanceRelocatable</code>, <code>ITransitionOutgoingContent</code>, <code>ScenarioContentRoot</code> — plus <code>SpeckField</code>/<code>SpeckProfile</code>, a GPU-simulated ambient dust/pollen field that listens to <code>ActorHitMessage</code> (balloon pops) and explicit spawn-request messages to burst specks at the hit point (namespace <code><a class="el" href="namespaceBalloonParty_1_1Slots_1_1Actor.html">BalloonParty.Slots.Actor</a></code>)    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -227,10 +268,11 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Actor/Archetype/</code>   </td><td class="markdownTableBodyNone">Concrete grid actor models and the Puff/Bush cluster visual systems — see <a class="el" href="Slots_2Actor_2Archetype_2README_8md.html">Archetype README</a> (namespace <code><a class="el" href="namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html">BalloonParty.Slots.Actor.Archetype</a></code>)    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>Capabilities/</code>   </td><td class="markdownTableBodyNone">Optional capability interfaces — <code>IHasColor</code>, <code>IPaintable</code>, <code>IHasScore</code>, <code>IHasScoreColor</code>, <code>IHasNudge</code>, <code>IHasItemSlot</code>, <code>IHitable</code>, <code>IHasDurability</code>, <code>IPassThrough</code>, <code>IHasDeflectStamp</code>, <code>IWashesProjectileColor</code>, <code>HitOutcome</code>, <code>DamageContext</code>, <code>DamageFlags</code>, <code>ScoreAttribution</code>, <code>ScoreAttributions</code> — plus the pressure-cascade pair <code>IPressureMovable</code>/<code>PressureResponse</code>, which lets a balance push shove, or relocate, a blocking actor instead of stopping at it (namespace <code><a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html">BalloonParty.Slots.Capabilities</a></code>)    </td></tr>
+<td class="markdownTableBodyNone"><code>Capabilities/</code>   </td><td class="markdownTableBodyNone">Optional capability interfaces — <code>IHasColor</code>, <code>IPaintable</code>, <code>IResistsPaint</code>, <code>IHasScore</code>, <code>IHasScoreColor</code>, <code>IHasNudge</code>, <code>IHasItemSlot</code>, <code>IHitable</code>, <code>IHasDurability</code>, <code>IDeflectsShots</code>, <code>IPassThrough</code>, <code>IHasDeflectStamp</code>, <code>IWashesProjectileColor</code>, <code>HitOutcome</code>, <code>DamageContext</code>, <code>DamageFlags</code>, <code>ScoreAttribution</code>, <code>ScoreAttributions</code> — plus the pressure-cascade pair <code>IPressureMovable</code>/<code>PressureResponse</code>, which lets a balance push shove, or relocate, a blocking actor instead of stopping at it (namespace <code><a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html">BalloonParty.Slots.Capabilities</a></code>)    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Spawner/</code>   </td><td class="markdownTableBodyNone">Spawner coordination — <code>IGridSpawner</code>, <code>SpawnStage</code>, <code>GridSpawnerCoordinator</code> (namespace <code><a class="el" href="namespaceBalloonParty_1_1Slots_1_1Spawner.html">BalloonParty.Slots.Spawner</a></code>)   </td></tr>
 </table>
+<p><code>IShieldSlotPreference</code> living here while <code>Item/Shield/</code> implements it is this codebase's cleanest example of dependency inversion: <code>MoveWeightEvaluator</code> depends on an interface beside it in <code>Slots</code>, never on the item layer, so the shot solver's board mirror can leave the preference null instead of being taught about a bias it has no thrower to measure from.</p>
 <h1><a class="anchor" id="autotoc_md897"></a>
 How it works</h1>
 <p>The grid is a two-dimensional space of slots arranged in a staggered pattern (odd rows offset by half a column). Each slot is either empty or occupied by an actor model and its view. <code>SlotGrid</code> itself only converts a slot coordinate into a world position (<code>IndexToWorldPosition</code>); balance queries — which slots are unbalanced (missing support from below) and what the best empty slot is for an actor to move into — live on <code>GridBalanceQuery</code>.</p>

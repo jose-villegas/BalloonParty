@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Item_1_1Shield_1_1ShieldReachabilityField =
 [
-    [ "ShieldReachabilityField", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldReachabilityField.html#ab0189fcdd3b67365bc6b93b3308169cb", null ],
+    [ "ShieldReachabilityField", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldReachabilityField.html#a63f8788dec51dae69583acdb30191615", null ],
     [ "BuildFan", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldReachabilityField.html#ad38e56c1af5391c82622ad2283c63964", null ],
     [ "EnsureBuffers", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldReachabilityField.html#adb70fd68dac76f1d5e2b5e59364300b6", null ],
     [ "EnsureBuilt", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldReachabilityField.html#aa534d85db407031055dfaaae75a9f315", null ],
@@ -8,8 +8,6 @@ var classBalloonParty_1_1Item_1_1Shield_1_1ShieldReachabilityField =
     [ "MarkSlotsOnLeg", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldReachabilityField.html#acb9d1535c1d0a2770a243253e0c9a918", null ],
     [ "ReflectionsToReach", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldReachabilityField.html#a729dc3209743548d156ffe54f0d35fed", null ],
     [ "_builtAtVersion", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldReachabilityField.html#ae2d30cc3d99106be5321be93ac1b7ad2", null ],
-    [ "_deflectorField", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldReachabilityField.html#a7e377c4afe02785e29ab9dace07aee88", null ],
-    [ "_deflectors", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldReachabilityField.html#ac48b5504f2dcddb73d0e0973418193c2", null ],
     [ "_fan", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldReachabilityField.html#a7fb3a66b87d30511b7cccac64a8dbafb", null ],
     [ "_flightConfig", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldReachabilityField.html#a8dc8ee73b9cbc166e9f2f442fa7d7fc6", null ],
     [ "_grid", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldReachabilityField.html#a9602795873b4efaed442631eedd6723d", null ],

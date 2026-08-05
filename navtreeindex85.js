@@ -1,9 +1,5 @@
 var NAVTREEINDEX85 =
 {
-"structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html#a07053e545ffa37745ac0aaa60df30623":[6,0,0,7,2,1,0],
-"structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html#a25afe9dbf3eabc7c63460bbcf1ec9f0e":[5,0,0,7,2,1,2],
-"structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html#a25afe9dbf3eabc7c63460bbcf1ec9f0e":[6,0,0,7,2,1,2],
-"structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html#a88ffc9de9e6a8d240e593cafdef3b2c9":[5,0,0,7,2,1,1],
 "structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html#a88ffc9de9e6a8d240e593cafdef3b2c9":[6,0,0,7,2,1,1],
 "structBalloonParty_1_1Item_1_1Lightning_1_1ChainLightningView_1_1BoltPlayback.html":[5,0,0,7,3,1,0],
 "structBalloonParty_1_1Item_1_1Lightning_1_1ChainLightningView_1_1BoltPlayback.html":[6,0,0,7,3,1,0],
@@ -249,5 +245,9 @@ var NAVTREEINDEX85 =
 "structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html#a44831a44e0397c4e36e06fab1f8c9632":[6,0,0,12,7,0,5],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html#a70282ddb8f511323fb54c6d716f72b31":[5,0,0,12,7,0,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html#a70282ddb8f511323fb54c6d716f72b31":[6,0,0,12,7,0,3],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html#a9fa849f2071ad466902eb53d19f80df4":[5,0,0,12,7,0,2]
+"structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html#a9fa849f2071ad466902eb53d19f80df4":[5,0,0,12,7,0,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html#a9fa849f2071ad466902eb53d19f80df4":[6,0,0,12,7,0,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html#ac1b9c4056203409ecf1957edb5bed8e4":[5,0,0,12,7,0,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html#ac1b9c4056203409ecf1957edb5bed8e4":[6,0,0,12,7,0,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html#ae73a917cc94568e571fdd64d106d0407":[5,0,0,12,7,0,4]
 };

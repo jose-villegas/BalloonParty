@@ -267,6 +267,12 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ShotSolver/</code>   </td><td class="markdownTableBodyNone"><code>ShotSolverWindow</code> — play-mode-only tool that sweeps aim angle against the live board and reports which windows reach a target score, behind <b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Shot Solver</b>. See <code><a class="el" href="Editor_2ShotSolver_2README_8md.html">ShotSolver/README.md</a></code>    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>ShieldChains/</code>   </td><td class="markdownTableBodyNone"><code>ShieldChainWindow</code> — play-mode-only tool behind <b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Shield Chains</b>: counts how many opening angles collect every shield placed on the live board and steps through them one at a time, drawn in the Scene view — a chain still looks like ordinary items on a hex lattice, so this is the only practical way to see whether a level actually holds one. See <code><a class="el" href="Item_2README_8md.html">Item/README.md</a></code>'s <em>Shield chains</em> section. No README    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>TelemetryLogMenu</code>   </td><td class="markdownTableBodyNone">Three menu items under <b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Telemetry</b> — Open Log Folder, Open Latest Log (warns if the file is empty), Log Path To Console — shortcuts to the JSON Lines log <code>JsonLinesTelemetrySink</code> writes under <code>Application.persistentDataPath</code>, which differs per platform and per company/product name. See <code><a class="el" href="Game_2Telemetry_2README_8md.html">Game/Telemetry/README.md</a></code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>MetricBindingDrawer</code>   </td><td class="markdownTableBodyNone"><code>[CustomPropertyDrawer(typeof(MetricBinding))]</code> — two popups (which snapshot, then which value) that let a <code>MetricLabel</code> be authored without code; the value list is generated from <code>MetricCatalog</code>/<code>TimerCatalog</code>, so a new metric is selectable here with no edit to this file. See <code><a class="el" href="UI_2Telemetry_2README_8md.html">UI/Telemetry/README.md</a></code>    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>TestRunner/</code>   </td><td class="markdownTableBodyNone"><code>EditModeTestRunner</code> — runs the EditMode suite inside the open editor (no batchmode project-lock) via <b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Run EditMode Tests</b>, writing the same <code>Tools/last-test-run.md</code> the headless runner produces. No README   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md143"></a>
@@ -329,7 +335,9 @@ Standalone drawers</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>LevelRangeEntryDrawer</code>   </td><td class="markdownTableBodyNone"><code>Editor/</code>   </td><td class="markdownTableBodyNone">Relabels <code>LevelRangeEntry</code> array elements as "Level N" / "Level N–M" / "Fallback"    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>LevelThresholdOverrideDrawer</code>   </td><td class="markdownTableBodyNone"><code>Editor/</code>   </td><td class="markdownTableBodyNone">Relabels <code>LevelThresholdOverride</code> array elements as "Level N" / "Level N–M"   </td></tr>
+<td class="markdownTableBodyNone"><code>LevelThresholdOverrideDrawer</code>   </td><td class="markdownTableBodyNone"><code>Editor/</code>   </td><td class="markdownTableBodyNone">Relabels <code>LevelThresholdOverride</code> array elements as "Level N" / "Level N–M"    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>MetricBindingDrawer</code>   </td><td class="markdownTableBodyNone"><code>Editor/</code>   </td><td class="markdownTableBodyNone">Two popups for a <code>MetricBinding</code> — which snapshot, then which value out of it — generated from <code>MetricCatalog</code>/<code>TimerCatalog</code>   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md148"></a>
 Custom editors</h1>
@@ -391,7 +399,11 @@ Menu tools</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>FrameDebuggerDumper</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Dump Frame Debugger</code>, <code>Dump Frame Debugger With Step Screenshots</code>   </td><td class="markdownTableBodyNone">Dumps the Frame Debugger's captured event list to a diff-friendly text file — see <code><a class="el" href="Editor_2FrameDump_2README_8md.html">FrameDump/README.md</a></code>    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>ShotSolverWindow</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Shot Solver</code>   </td><td class="markdownTableBodyNone">Play-mode-only tool that sweeps aim angle against the live board and reports which windows reach a target score — see <code><a class="el" href="Editor_2ShotSolver_2README_8md.html">ShotSolver/README.md</a></code>   </td></tr>
+<td class="markdownTableBodyNone"><code>ShotSolverWindow</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Shot Solver</code>   </td><td class="markdownTableBodyNone">Play-mode-only tool that sweeps aim angle against the live board and reports which windows reach a target score — see <code><a class="el" href="Editor_2ShotSolver_2README_8md.html">ShotSolver/README.md</a></code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>ShieldChainWindow</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Shield Chains</code>   </td><td class="markdownTableBodyNone">Play-mode-only tool that counts how many opening angles collect every shield on the live board and steps through them one at a time in the Scene view — see <code><a class="el" href="Item_2README_8md.html">Item/README.md</a></code>'s <em>Shield chains</em> section    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>TelemetryLogMenu</code>   </td><td class="markdownTableBodyNone"><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Telemetry &gt; Open Log Folder</code>, <code>Open Latest Log</code>, <code>Log Path To Console</code>   </td><td class="markdownTableBodyNone">Shortcuts to the JSON Lines telemetry log under <code>Application.persistentDataPath</code> — see <code><a class="el" href="Game_2Telemetry_2README_8md.html">Game/Telemetry/README.md</a></code>   </td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->

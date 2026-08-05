@@ -175,7 +175,11 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Danger/</code>   </td><td class="markdownTableBodyNone">Space-pressure early-warning signal — see <code><a class="el" href="Game_2Danger_2README_8md.html">Danger/README.md</a></code>    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>Cinematics/</code>   </td><td class="markdownTableBodyNone">Cinematic director, camera rig, and the level-up / heart-drain producers — see <code><a class="el" href="Game_2Cinematics_2README_8md.html">Cinematics/README.md</a></code>   </td></tr>
+<td class="markdownTableBodyNone"><code>Cinematics/</code>   </td><td class="markdownTableBodyNone">Cinematic director, camera rig, and the level-up / heart-drain producers — see <code><a class="el" href="Game_2Cinematics_2README_8md.html">Cinematics/README.md</a></code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>Flight/</code>   </td><td class="markdownTableBodyNone"><code>FlightStatsService</code> — the single owner of per-flight counts (pops, deflects, wall bounces, pierce discharges), exposed read-only via <code>IFlightStats</code> and read by both audio and telemetry so neither keeps its own copy    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>Telemetry/</code>   </td><td class="markdownTableBodyNone">Gameplay metrics — counts what happens during play at four nested scopes (Session ⊃ Run ⊃ Level ⊃ Flight) and serves the level-up/game-over popups, a local JSON Lines log, and (unbuilt) an external analytics export — see <code>Telemetry/README.md</code>   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md205"></a>
 Architecture</h1>

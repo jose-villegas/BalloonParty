@@ -1,9 +1,5 @@
 var NAVTREEINDEX78 =
 {
-"namespaceBalloonParty_1_1Game_1_1Telemetry.html#afe92d9f4b6c560e2af24ec284ae652c1ab243e7fccc7a9e8b7cbce046875c08ac":[5,0,0,6,7,31,1],
-"namespaceBalloonParty_1_1Game_1_1Telemetry.html#afe92d9f4b6c560e2af24ec284ae652c1abcd8db575b47c838e5d551e3973db4ac":[5,0,0,6,7,31,3],
-"namespaceBalloonParty_1_1Item.html":[5,0,0,7],
-"namespaceBalloonParty_1_1Item.html#a3cee616f1b5780b8981284d91d31be6b":[5,0,0,7,30],
 "namespaceBalloonParty_1_1Item.html#a3cee616f1b5780b8981284d91d31be6ba589ab34e870b80c8c7d035805452df19":[5,0,0,7,30,0],
 "namespaceBalloonParty_1_1Item.html#a3cee616f1b5780b8981284d91d31be6ba68eec46437c384d8dad18d5464ebc35c":[5,0,0,7,30,1],
 "namespaceBalloonParty_1_1Item.html#a3cee616f1b5780b8981284d91d31be6baf8dfb524e6ddea9129cc2f955d55db19":[5,0,0,7,30,2],
@@ -249,5 +245,9 @@ var NAVTREEINDEX78 =
 "plan_audio.html#autotoc_md286":[3,9,0,4],
 "plan_audio.html#autotoc_md288":[3,9,0,5],
 "plan_audio.html#autotoc_md290":[3,9,0,6],
-"plan_audio.html#autotoc_md291":[3,9,0,6,0]
+"plan_audio.html#autotoc_md291":[3,9,0,6,0],
+"plan_audio.html#autotoc_md292":[3,9,0,6,1],
+"plan_audio.html#autotoc_md293":[3,9,0,6,2],
+"plan_audio.html#autotoc_md294":[3,9,0,6,3],
+"plan_audio.html#autotoc_md295":[3,9,0,6,4]
 };

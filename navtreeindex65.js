@@ -1,9 +1,5 @@
 var NAVTREEINDEX65 =
 {
-"classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html#a805dfc6d4d264fad2fb6f70ad461c1ac":[5,0,0,15,2,6],
-"classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html#a805dfc6d4d264fad2fb6f70ad461c1ac":[6,0,0,15,2,6],
-"classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html#abeba85fd72065041a3c58550d6c75341":[5,0,0,15,2,5],
-"classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html#abeba85fd72065041a3c58550d6c75341":[6,0,0,15,2,5],
 "classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html#ac054ee4f17fe7c7b822437197787edfd":[5,0,0,15,2,1],
 "classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html#ac054ee4f17fe7c7b822437197787edfd":[6,0,0,15,2,1],
 "classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html#ae3004d8eaf61cc95dda0ecc5edd08f52":[5,0,0,15,2,4],
@@ -249,5 +245,9 @@ var NAVTREEINDEX65 =
 "classBalloonParty_1_1UI_1_1GameOver_1_1GameOverLifetimeScope.html#ada495558378f534257391002ab8df245":[5,0,0,16,2,0,0],
 "classBalloonParty_1_1UI_1_1GameOver_1_1GameOverLifetimeScope.html#ada495558378f534257391002ab8df245":[6,0,0,16,2,0,0],
 "classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html":[5,0,0,16,2,1],
-"classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html":[6,0,0,16,2,1]
+"classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html":[6,0,0,16,2,1],
+"classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a06962719f729264af8c05020135e197f":[5,0,0,16,2,1,13],
+"classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a06962719f729264af8c05020135e197f":[6,0,0,16,2,1,13],
+"classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a0acfd6888139e176d1d9339845a177b5":[5,0,0,16,2,1,23],
+"classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a0acfd6888139e176d1d9339845a177b5":[6,0,0,16,2,1,23]
 };

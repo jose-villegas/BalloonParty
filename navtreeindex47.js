@@ -1,9 +1,5 @@
 var NAVTREEINDEX47 =
 {
-"classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#ac4ee1cb07a86c43f1a6e395b85464e08":[5,0,0,10,1,1,3],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#ac4ee1cb07a86c43f1a6e395b85464e08":[6,0,0,10,1,1,3],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#ac98367035a8989b84f6bcdd492ba873d":[5,0,0,10,1,1,1],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#ac98367035a8989b84f6bcdd492ba873d":[6,0,0,10,1,1,1],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#ae9c88cd5ee3dfca2fd203216de76aecd":[5,0,0,10,1,1,2],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#ae9c88cd5ee3dfca2fd203216de76aecd":[6,0,0,10,1,1,2],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html":[5,0,0,10,1,4],
@@ -249,5 +245,9 @@ var NAVTREEINDEX47 =
 "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileModelExtensions.html#a1b9a2a83bc9cea34efb7510532c36561":[5,0,0,10,2,8,1],
 "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileModelExtensions.html#a1b9a2a83bc9cea34efb7510532c36561":[6,0,0,10,2,8,1],
 "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileModelExtensions.html#a1d40402c889b4737f79926c606cd00e9":[5,0,0,10,2,8,4],
-"classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileModelExtensions.html#a1d40402c889b4737f79926c606cd00e9":[6,0,0,10,2,8,4]
+"classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileModelExtensions.html#a1d40402c889b4737f79926c606cd00e9":[6,0,0,10,2,8,4],
+"classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileModelExtensions.html#a4867bf0899a5eba43fe4ca98ad882113":[5,0,0,10,2,8,5],
+"classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileModelExtensions.html#a4867bf0899a5eba43fe4ca98ad882113":[6,0,0,10,2,8,5],
+"classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileModelExtensions.html#a67384665cdb055014e742ecd3f79b4cf":[5,0,0,10,2,8,0],
+"classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileModelExtensions.html#a67384665cdb055014e742ecd3f79b4cf":[6,0,0,10,2,8,0]
 };

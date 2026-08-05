@@ -213,7 +213,7 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>Diagnostics/</code>   </td><td class="markdownTableBodyNone"><a class="el" href="ReleaseUploadWindow_8cs.html#a0100be52d45f14348918ea69ec09f959">Debug</a> utilities — <code>FPSCounter</code>, <code>FrameRateSettings</code>    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>IProjectileFlightConfig</code> / <code>ISlotGridConfig</code> / <code>IPredictionTraceConfig</code> / <code>IRunConfig</code> / <code>IScoreTrailConfig</code>   </td><td class="markdownTableBodyNone">The focused read-only config contracts consumed across assemblies — projectile flight tuning, slot-grid layout, prediction-trace params, run rules, and score-trail timing respectively. Backed by the <code>ProjectileFlightConfig</code> / <code>SlotGridConfig</code> / <code>PredictionTraceConfig</code> / <code>RunConfig</code> / <code>ScoreTrailBehaviourConfiguration</code> SOs (they replaced the former single <code>IGameConfiguration</code> umbrella)    </td></tr>
+<td class="markdownTableBodyNone"><code>IProjectileFlightConfig</code> / <code>ISlotGridConfig</code> / <code>IPredictionTraceConfig</code> / <code>IRunConfig</code> / <code>IScoreTrailConfig</code>   </td><td class="markdownTableBodyNone">The focused read-only config contracts consumed across assemblies — projectile flight tuning, slot-grid layout, prediction-trace params, run rules, and score-trail timing respectively. Backed by the <code>ProjectileFlightConfig</code> / <code>SlotGridConfig</code> / <code>PredictionTraceConfig</code> / <code>RunConfig</code> / <code>ScoreTrailBehaviourConfiguration</code> SOs (they replaced the former single <code>IGameConfiguration</code> umbrella). <code>IRunConfig.ShieldChain</code> is itself an <code>IShieldChainSettings</code> — shield-chain planning tuning (fan bounds, selection band, reachability sweep), unread while <code>IRunConfig.PlanShieldChains</code> is off    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>IEffect</code>   </td><td class="markdownTableBodyNone">Interface for poolable visual effects — <code>Play(position, tint)</code>, <code>Play(position, rotation, tint)</code>, <code>Stop()</code>    </td></tr>
 <tr class="markdownTableRowEven">
@@ -225,12 +225,21 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>WallLimits</code>   </td><td class="markdownTableBodyNone">The four play-area walls unpacked from <code>IProjectileFlightConfig.LimitsClockwise</code> — wall-crossing (<code>TryFindCrossing</code>), billiard mirror-reflect (<code>Reflect</code>), in-bounds clamp (<code>ClampInside</code>)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>EnumIndexedAttribute</code>   </td><td class="markdownTableBodyNone"><code>PropertyAttribute</code> that labels a serialized array indexed by enum ordinal with the enum value's name instead of "Element N"   </td></tr>
+<td class="markdownTableBodyNone"><code>EnumIndexedAttribute</code>   </td><td class="markdownTableBodyNone"><code>PropertyAttribute</code> that labels a serialized array indexed by enum ordinal with the enum value's name instead of "Element N"    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>CircleContact</code>   </td><td class="markdownTableBodyNone">The one analytic ray-circle entry solver (<code>TryFindEntry</code>/<code>TryFindEntryNormal</code>), shared by the projectile's real deflection (<code>ProjectileMotionResolver</code>) and the aim telegraph (<code>Prediction/PredictionTraceCalculator</code>) so the drawn line can't drift from the flight it predicts    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>ContactRadius</code>   </td><td class="markdownTableBodyNone"><code>FromCollider(Collider2D, lossyScaleX)</code> — the one place a circle/capsule collider becomes a world-space contact radius, shared by live gather and the shot solver's static archetypes    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>IDeflectorField</code> / <code>DeflectorCircle</code>   </td><td class="markdownTableBodyNone">The deflectors the aim telegraph (and the shield planner) must bounce off, as circles in the geometry the projectile will actually meet. Implemented by <code>SlotGridDeflectorField</code> (<code>Slots/Grid/</code>)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>StreakShieldRule</code>   </td><td class="markdownTableBodyNone">The one place a continued colour streak's shield refund is decided, called by both the live <code>ProjectileHitResolver</code> and the shot solver's <code>ShotSimulator</code> so the two can't drift apart   </td></tr>
 </table>
 <p>This table covers the folders and the types other features reach for most; a few small editor-only attributes living alongside these files aren't broken out separately.</p>
 <h1><a class="anchor" id="autotoc_md859"></a>
 Messages</h1>
 <p>Messages are the signals that decouple systems from one another. A publisher fires a message; any number of subscribers react independently.</p>
+<p><b>This table is a curated subset, not an index.</b> It lists the gameplay-visible consumers of each message — the ones whose absence would break a mechanic — not every subscriber. <code>Game/Telemetry</code>'s <code>GameplayMetricsService</code> and <code>Game/Flight</code>'s <code>FlightStatsService</code> between them subscribe to roughly 21 of these messages without being named in a single row below; they read the game, they don't drive it, so listing them on every row would bury the consumers that do. Check the publisher's own file for the exhaustive subscriber list when it matters.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Message   </th><th class="markdownTableHeadNone">Published by   </th><th class="markdownTableHeadNone">Consumed by    </th></tr>

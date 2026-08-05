@@ -1,9 +1,5 @@
 var NAVTREEINDEX46 =
 {
-"classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html#ac74de2b368fa4228c21c2c9bf128e466":[5,0,0,8,0,0,2],
-"classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html#ac74de2b368fa4228c21c2c9bf128e466":[6,0,0,8,0,0,2],
-"classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html#acba9ea0e307fb3efaa73525cda4a096f":[5,0,0,8,0,0,0],
-"classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html#acba9ea0e307fb3efaa73525cda4a096f":[6,0,0,8,0,0,0],
 "classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html#ae901318777caa172b8c9ef5047ff598e":[5,0,0,8,0,0,3],
 "classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html#ae901318777caa172b8c9ef5047ff598e":[6,0,0,8,0,0,3],
 "classBalloonParty_1_1Nudge_1_1NudgeOverride.html":[5,0,0,8,3],
@@ -249,5 +245,9 @@ var NAVTREEINDEX46 =
 "classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#ac0eca39911ac8a5b53bddbf00cf425c5":[5,0,0,10,1,1,12],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#ac0eca39911ac8a5b53bddbf00cf425c5":[6,0,0,10,1,1,12],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#ac33b69cdb2bf67a89b0c2e1d2667aca6":[5,0,0,10,1,1,5],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#ac33b69cdb2bf67a89b0c2e1d2667aca6":[6,0,0,10,1,1,5]
+"classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#ac33b69cdb2bf67a89b0c2e1d2667aca6":[6,0,0,10,1,1,5],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#ac4ee1cb07a86c43f1a6e395b85464e08":[5,0,0,10,1,1,3],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#ac4ee1cb07a86c43f1a6e395b85464e08":[6,0,0,10,1,1,3],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#ac98367035a8989b84f6bcdd492ba873d":[5,0,0,10,1,1,1],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html#ac98367035a8989b84f6bcdd492ba873d":[6,0,0,10,1,1,1]
 };

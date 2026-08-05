@@ -1,9 +1,5 @@
 var NAVTREEINDEX81 =
 {
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#ac91efd65201a510ee5eb4d1168155d87":[6,0,0,1,0,1,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html":[5,0,0,1,0,2,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html":[6,0,0,1,0,2,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html#a957f695296400c59df19664b5a2cce0a":[5,0,0,1,0,2,0,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html#a957f695296400c59df19664b5a2cce0a":[6,0,0,1,0,2,0,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html#aa6772cbcd7c5cd19352f7ee206d7e42a":[5,0,0,1,0,2,0,0],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html#aa6772cbcd7c5cd19352f7ee206d7e42a":[6,0,0,1,0,2,0,0],
@@ -249,5 +245,9 @@ var NAVTREEINDEX81 =
 "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html#a906ff46c09ddb44fff1dbeb7c0fbc4ff":[6,0,0,3,4,29,11],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html#a99e09c0496294857d3dd7abbb237ef8d":[5,0,0,3,4,29,6],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html#a99e09c0496294857d3dd7abbb237ef8d":[6,0,0,3,4,29,6],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html#ab1e8201299d4a9055070e4733653fc5a":[5,0,0,3,4,29,5]
+"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html#ab1e8201299d4a9055070e4733653fc5a":[5,0,0,3,4,29,5],
+"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html#ab1e8201299d4a9055070e4733653fc5a":[6,0,0,3,4,29,5],
+"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html#abc7c43043cba9ab64848c9a5b3bfb514":[5,0,0,3,4,29,7],
+"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html#abc7c43043cba9ab64848c9a5b3bfb514":[6,0,0,3,4,29,7],
+"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html#aeeb27bcd72b043dc082252a2cb364f92":[5,0,0,3,4,29,1]
 };

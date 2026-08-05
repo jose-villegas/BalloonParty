@@ -195,6 +195,37 @@ Files</h2></td></tr>
 <p><b>Not built:</b> <code>ConsentGateSink</code>, <code>BatchingTelemetrySink</code> and <code>HttpAnalyticsSink</code> — those rows below are the target layout, not current code, and are out of scope until a consent policy and an analytics provider are chosen. Nothing shipping needs them; the local JSON Lines log covers balance work today.</p>
 <p>EditMode coverage lives in <code>Assets/Tests/EditMode/Game/</code> and <code>.../UI/</code>, including the test fake <code>RecordingTelemetrySink</code> and the shared <code>GameplayMetricsHarness</code>. </p>
 </blockquote>
+<div class="fragment"><div class="line">graph TD</div>
+<div class="line">    Bus[&quot;MessagePipe — 21 message subscriptions&quot;] --&gt; Svc[&quot;GameplayMetricsService&quot;]</div>
+<div class="line">    Stats[&quot;FlightStatsService via IFlightStats&quot;] --&gt; Svc</div>
+<div class="line">    Hold[&quot;IHoldSpeedUpState&quot;] --&gt; Svc</div>
+<div class="line">    Danger[&quot;IDangerLevel.Level&quot;] --&gt; Svc</div>
+<div class="line">    Pause[&quot;PauseService.IsAnyPaused&quot;] --&gt; Svc</div>
+<div class="line">    Nav[&quot;INavigation.Current&quot;] --&gt; Svc</div>
+<div class="line"> </div>
+<div class="line">    Svc --&gt;|&quot;increment while a projectile is loaded&quot;| F[&quot;Flight MetricScope&quot;]</div>
+<div class="line">    Svc --&gt;|&quot;increment interflight and level-owned metrics&quot;| L[&quot;Level MetricScope&quot;]</div>
+<div class="line"> </div>
+<div class="line">    F --&gt;|&quot;Absorb on ProjectileDestroyedMessage&quot;| L</div>
+<div class="line">    L --&gt;|&quot;Absorb on LevelTransitionCompletedMessage&quot;| R[&quot;Run MetricScope&quot;]</div>
+<div class="line">    R --&gt;|&quot;Absorb on GameOverMessage&quot;| S[&quot;Session MetricScope — accumulates, never written&quot;]</div>
+<div class="line"> </div>
+<div class="line">    F --&gt;|SealFlight| SF[&quot;FlightMetricsSnapshot&quot;]</div>
+<div class="line">    L --&gt;|&quot;Seal at ScoreLevelUpMessage&quot;| SC[&quot;LevelMetricsSnapshot — ceremony&quot;]</div>
+<div class="line">    L --&gt;|&quot;Seal at flush&quot;| SL[&quot;LevelMetricsSnapshot — flush&quot;]</div>
+<div class="line">    R --&gt;|Seal| SR[&quot;RunMetricsSnapshot&quot;]</div>
+<div class="line"> </div>
+<div class="line">    SF --&gt; Env[&quot;TelemetryEnvelope — RecordKind discriminator&quot;]</div>
+<div class="line">    SL --&gt; Env</div>
+<div class="line">    SR --&gt; Env</div>
+<div class="line">    Env --&gt; Sink[&quot;ITelemetrySink — CompositeTelemetrySink&quot;]</div>
+<div class="line">    Sink --&gt; Json[&quot;JsonLinesTelemetrySink — dev builds only&quot;]</div>
+<div class="line"> </div>
+<div class="line">    SC --&gt; View[&quot;ILevelMetricsView — BalloonParty.UI only&quot;]</div>
+<div class="line">    SL --&gt; View</div>
+<div class="line">    SR --&gt; View</div>
+<div class="line">    View --&gt; Label[&quot;MetricLabel resolved through MetricCatalog&quot;]</div>
+</div><!-- fragment --><p>The picture says in one look what the prose above takes three paragraphs to say: <code>SC</code> (the ceremony snapshot) has no arrow into <code>Env</code> — it feeds the popup and nothing else, and is never exported.</p>
 <h1><a class="anchor" id="autotoc_md225"></a>
 Contents</h1>
 <table class="markdownTable">
@@ -302,6 +333,24 @@ Registration</h1>
 <p><code>ITelemetrySink</code> → <code>CompositeTelemetrySink</code> registers unconditionally in <code>GameScopeRegistration.RegisterTelemetrySinks</code>, called from <code>GameLifetimeScope.Configure</code> before <code>RegisterGameplaySystems</code> — <code>GameplayMetricsService</code> depends on it without caring whether any leaf sink exists. <code>GameplayMetricsService</code> registers <b>last</b> in <code>RegisterGameplaySystems</code> so it never sits in front of a gameplay system in the start order. That is a preference, not a correctness argument, and the service must not depend on it: it registers last but is written to be order-independent, because gameplay systems re-publish from inside their own handlers. <code>LevelController.OnTransitionCompleted</code> reopens navigation, which fires a deferred loss, which publishes <code>GameOverMessage</code> — nested, before this service has seen the transition that message follows. <code>OnGameOver</code> therefore settles a pending level boundary itself rather than trusting that it already happened. Its clock is an explicit <code>Func&lt;float&gt;</code> parameter — <code>Time.unscaledTime</code>, the same way <code>SfxThrottleGate</code> takes its. <code>SessionTelemetryContext</code> registers in <code>AppLifetimeScope</code> so one play session keeps one id across scene reloads. <code>FlightStatsService</code> is registered earlier in <code>RegisterGameplaySystems</code> and lives in <code>Game/Flight/</code> — it is a gameplay service, not part of this subsystem.</p>
 <h1><a class="anchor" id="autotoc_md235"></a>
 What the service does and does not own</h1>
+<div class="fragment"><div class="line">stateDiagram-v2</div>
+<div class="line">    [*] --&gt; Idle</div>
+<div class="line">    Idle --&gt; Playing: INavigation reports Game</div>
+<div class="line">    Playing --&gt; Ceremony: ScoreLevelUpMessage</div>
+<div class="line">    Ceremony --&gt; Transitioning: LevelUpDismissedMessage</div>
+<div class="line">    Ceremony --&gt; Playing: LevelUpAbortedMessage or LevelUpAbandonedMessage</div>
+<div class="line">    Transitioning --&gt; Playing: LevelTransitionCompletedMessage flushes the level</div>
+<div class="line">    Playing --&gt; Ended: GameOverMessage</div>
+<div class="line">    Ceremony --&gt; Ended: GameOverMessage</div>
+<div class="line">    Transitioning --&gt; Ended: GameOverMessage settles the boundary first</div>
+<div class="line">    Ended --&gt; Playing: ResetRun</div>
+<div class="line"> </div>
+<div class="line">    note right of Ended</div>
+<div class="line">        Every handler early-returns while Ended. The loss cinematic</div>
+<div class="line">        completes straggler score trails after GameOverMessage and</div>
+<div class="line">        must not reach the next run.</div>
+<div class="line">    end note</div>
+</div><!-- fragment --><p>The three arrows into <code>Ended</code> are the point of the picture — one message, <code>GameOverMessage</code>, owns the terminal transition no matter which state it lands from.</p>
 <p><code>GameplayMetricsService</code> is a subscriber and nothing else: ~21 message subscriptions plus <code>PauseService.IsAnyPaused</code>, <code>INavigation.Current</code> and <code>IDangerLevel.Level</code>, all in one <code>CompositeDisposable</code>.</p>
 <ul>
 <li><b>Boundaries.</b> A level flushes on <code>LevelTransitionCompletedMessage</code>, never on <code>LevelUpDismissedMessage</code> — straggler score trails land between the two and belong to the level that just ended. A run flushes on <code>GameOverMessage</code>, which alone enters the terminal <code>Ended</code> state. <code>LevelUpAbortedMessage</code> and <code>LevelUpAbandonedMessage</code> both return <code>Ceremony → Playing</code> and are idempotent; <code>LevelUpAbandonedMessage</code> is a <em>nested re-publish</em> from inside both the abort and the game-over handler, so treating it as terminal would wedge the gameplay clock on abort and drop every lost run's record.</li>
