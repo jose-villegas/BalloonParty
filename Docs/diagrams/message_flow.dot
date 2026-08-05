@@ -45,6 +45,8 @@ digraph MessageFlow {
         TrailEffect [label="LevelUpCinematic", fillcolor="#1a3a1a", fontcolor="#3fb950"];
         ColorBar [label="ColorProgressBar", fillcolor="#1a3a1a", fontcolor="#3fb950"];
         TrailService [label="ScoreTrailService", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+        Metrics [label="GameplayMetricsService\n(21 subscriptions)", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+        FlightStats [label="FlightStatsService", fillcolor="#1a3a1a", fontcolor="#3fb950"];
     }
 
     // Edges
@@ -73,5 +75,18 @@ digraph MessageFlow {
     ItemCheck -> ItemAssigner;
     ItemActivated -> BalloonCtrl2;
     Dismissed -> TrailEffect;
+
+    // Telemetry subscribes far more broadly than this page draws. Only its edges from
+    // messages already shown are here; the rest would bury the gameplay flows this page
+    // exists to make legible. Game/Telemetry/README.md has the full list.
+    ActorHit -> Metrics [color="#8b949e", style=dotted];
+    ProjDestroyed -> Metrics [color="#8b949e", style=dotted];
+    ProjLoaded -> Metrics [color="#8b949e", style=dotted];
+    LevelUp -> Metrics [color="#8b949e", style=dotted];
+    ItemActivated -> Metrics [color="#8b949e", style=dotted];
+    TrailArrived -> Metrics [color="#8b949e", style=dotted];
+    Dismissed -> Metrics [color="#8b949e", style=dotted];
+    ProjDestroyed -> FlightStats [color="#8b949e", style=dotted];
+    ProjLoaded -> FlightStats [color="#8b949e", style=dotted];
 }
 

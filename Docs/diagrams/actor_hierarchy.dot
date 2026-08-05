@@ -9,7 +9,10 @@ digraph ActorHierarchy {
     IWriteableSlotActor [label="IWriteableSlotActor\n─────────\nSlotIndex {set}", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
     IDynamicSlotActor [label="IDynamicSlotActor\n─────────\nIsStable (readonly)", fillcolor="#2d1f3d", fontcolor="#d2a8ff"];
     IWriteableDynamic [label="IWriteableDynamic\nSlotActor\n─────────\nIsStable {set}", fillcolor="#2d1f3d", fontcolor="#d2a8ff"];
-    ISlotActorView [label="ISlotActorView\n─────────\ntransform\nTweenTracker\nActorKind", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+    ISlotActorView [label="ISlotActorView\n─────────\ntransform\nTweenTracker\nActorKind\nRotationPivot\nContactRadius\nContactCenter\nHasActiveCollider", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+
+    // Capability that spans families: balloons AND static archetypes
+    IDeflectsShots [label="«capability»\nIDeflectsShots\n─────────\nDeflectsOrdinaryHit", fillcolor="#3d2a1a", fontcolor="#f78166"];
 
     // Balloon model hierarchy
     IBalloonModel [label="IBalloonModel\n─────────\nTypeName", fillcolor="#3d2a1a", fontcolor="#f78166"];
@@ -18,8 +21,12 @@ digraph ActorHierarchy {
 
     // Concrete models
     BalloonModel [label="BalloonModel\n─────────\nIPaintable\nIHasDurability\nIHasItemSlot", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
-    ToughBalloonModel [label="ToughBalloonModel\n─────────\nIHasDurability\nDeflect on survival", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
-    UnbreakableBalloonModel [label="UnbreakableBalloonModel\n─────────\nIHitable only\nAlways Deflect", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
+    ToughBalloonModel [label="ToughBalloonModel\n─────────\nIHasDurability\nDeflects while hits remain", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
+    UnbreakableBalloonModel [label="UnbreakableBalloonModel\n─────────\nIHitable\nAlways deflects", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
+
+    // Static archetypes: not balloons, same deflection capability
+    DeflectorActorModel [label="DeflectorActorModel\n─────────\nIHitable\nAlways deflects", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
+    GatekeeperActorModel [label="GatekeeperActorModel\n─────────\nIHasDurability\nDeflects while hits remain", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
     BubbleClusterModel [label="BubbleClusterModel\n─────────\nIHasDurability\nPassThrough", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
 
     // Inheritance edges
@@ -37,5 +44,13 @@ digraph ActorHierarchy {
     ToughBalloonModel -> BalloonModelBase;
     UnbreakableBalloonModel -> BalloonModelBase;
     BubbleClusterModel -> BalloonModelBase;
+
+    // Why deflection is a capability rather than a base-class rule: two balloon types and
+    // two static archetypes answer it, and SlotGridDeflectorField asks the grid for it
+    // without knowing which kind of actor replied.
+    ToughBalloonModel -> IDeflectsShots [style=dashed, color="#f78166"];
+    UnbreakableBalloonModel -> IDeflectsShots [style=dashed, color="#f78166"];
+    DeflectorActorModel -> IDeflectsShots [style=dashed, color="#f78166"];
+    GatekeeperActorModel -> IDeflectsShots [style=dashed, color="#f78166"];
 }
 

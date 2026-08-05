@@ -6,9 +6,14 @@
 
 ## What this diagram shows
 
-All MessagePipe pub/sub connections in the game — which systems publish which messages
+The principal MessagePipe pub/sub connections — which systems publish which messages
 and which systems subscribe to them. This is the primary decoupling mechanism:
 publishers know nothing about subscribers; subscribers know nothing about publishers.
+
+Not exhaustive, and deliberately so. `GameplayMetricsService` alone subscribes to 21
+messages; drawing every edge would bury the gameplay flows this page exists to make
+legible. Telemetry is shown with dotted edges from the messages already on the diagram,
+and `Assets/Source/Game/Telemetry/README.md` carries its full subscription list.
 
 **Key flows:**
 - `ProjectileHitResolver` → `IHitDispatcher.Dispatch` → `HitPipeline` runs the

@@ -14,7 +14,10 @@ is an optional capability discovered at the call site via a cast.
 - `ISlotActor` — read-only: `SlotIndex`, `Kind` (`Dynamic` or `Static`)
 - `IWriteableSlotActor` — adds writable `SlotIndex`; used by grid mutators
 - `IDynamicSlotActor` — redefines `SlotIndex` as reactive, adds `IsStable` reactive property; balloons implement this
-- `ISlotActorView` — view contract: `transform`, `TweenTracker`, `ActorKind`, `RotationPivot`
+- `ISlotActorView` — view contract: `transform`, `TweenTracker`, `ActorKind`, `RotationPivot`,
+  plus the contact geometry every actor family exposes uniformly — `ContactRadius`,
+  `ContactCenter` (the collider's centre, not the pivot) and `HasActiveCollider` (false while a
+  pooled view is mid-despawn). The aim telegraph and the shot solver both read these
 
 **Capability interfaces** — optional traits discovered by casting at the subscriber's
 call site:
@@ -30,6 +33,7 @@ call site:
 | `IPressureMovable` | Yields its slot when shoved by a pressure cascade (`PushResponse`) | All balloon models (via `BalloonModelBase`) |
 | `IHitable` | Responds to `EvaluateHit` | Balloons + Deflector + Absorber + Gatekeeper |
 | `IHasDurability` | Tracks `HitsRemaining` | Most balloons + Gatekeeper |
+| `IDeflectsShots` | Would the next ordinary hit bounce? Asked without spending durability, unlike `EvaluateHit` | `ToughBalloonModel`, `UnbreakableBalloonModel`, `DeflectorActorModel`, `GatekeeperActorModel` |
 | `IPassThrough` | Slot traversable by animation paths | `PuffObstacleModel`, `StaticActorModel` |
 
 ## Guidance
@@ -49,6 +53,12 @@ Subscribers that previously cast broadly to `IBalloonModel` now cast to the narr
 interface they need (`IHasColor`, `IHasScore`, `IHasNudge`). This is not defensive
 programming — it is the extension point. A new actor type can implement `IHasNudge`
 and automatically receive nudge animations without touching `NudgeService`.
+
+`IDeflectsShots` is the sharpest example, because it spans families rather than a
+hierarchy: two balloon types and two static archetypes answer it, and
+`SlotGridDeflectorField` walks the grid asking every occupant without knowing what kind
+of actor replied. A base-class rule could not have covered both, which is precisely why
+it is a capability — and why a new deflecting archetype needs no change to the aim trace.
 
 **`IHasDurability` vs `IHitable`:**
 - `IHitable` only — actor responds to hits but has no health pool (Deflector, Absorber)
