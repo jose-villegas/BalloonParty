@@ -81,12 +81,19 @@ namespace BalloonParty.Prediction
                 // Tested against the step already clipped by any wall above, so a deflector sitting
                 // beyond that wall cannot steal a bounce the wall reaches first.
                 if (TryFindNearestDeflector(
-                        origin, direction, shift, projectileContactRadius, out var contact, out var normal))
+                        origin, direction, shift, projectileContactRadius, out var contact, out var normal,
+                        out var surface))
                 {
                     // Clamped like the real deflection: a balloon in an edge column can sit within its
                     // own radius of a wall, and an unclamped contact starts the next step out of bounds.
                     origin = walls.ClampInside(contact);
-                    results.Add(origin);
+
+                    // Drawn on the deflector's skin, not where the shot's CENTRE turns — those differ by
+                    // the shot's radius, and a thin line whose corner floats a quarter-balloon short of
+                    // the balloon reads as a bend that happened too early. The flight continues from the
+                    // true contact above, so only the painted corner moves; the leg after it is offset
+                    // by that same radius, which is invisible over its length.
+                    results.Add(walls.ClampInside(surface));
                     if (reflectsLeft <= 0)
                     {
                         return;
@@ -129,10 +136,11 @@ namespace BalloonParty.Prediction
         // Nearest, not first found: two balloons can both lie along one step and only the closer is hit.
         private bool TryFindNearestDeflector(
             Vector3 origin, Vector3 direction, float maxDistance, float projectileContactRadius,
-            out Vector3 contact, out Vector2 normal)
+            out Vector3 contact, out Vector2 normal, out Vector3 surface)
         {
             contact = default;
             normal = default;
+            surface = default;
             var nearest = float.MaxValue;
 
             for (var i = 0; i < _deflectors.Count; i++)
@@ -155,6 +163,8 @@ namespace BalloonParty.Prediction
                 normal = entryNormal;
                 contact = deflector.Center + (entryNormal * contactRadius);
                 contact.z = origin.z;
+                surface = deflector.Center + (entryNormal * deflector.Radius);
+                surface.z = origin.z;
             }
 
             return nearest < float.MaxValue;

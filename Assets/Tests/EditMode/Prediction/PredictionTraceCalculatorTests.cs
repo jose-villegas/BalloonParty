@@ -224,15 +224,19 @@ namespace BalloonParty.Tests.Prediction
             Assert.Less(_results[1].x, origin.x + 0.5f, "contact sits on the near side, not through it");
         }
 
+        // The shot's CENTRE turns where the two circles touch, but the drawn corner goes on the
+        // balloon's skin: a line one shot-radius short of the balloon reads as a bend that happened
+        // too early. Detection still uses the combined radius — Calculate_GrazingShot covers that,
+        // and would fail if this drew the skin contact instead of merely painting it there.
         [Test]
-        public void Calculate_HeadOnContact_SitsOnTheCombinedRadius()
+        public void Calculate_HeadOnContact_IsDrawnOnTheBalloonSkin()
         {
             _deflectors.Add(new DeflectorCircle(new Vector2(0f, 2f), 0.5f));
 
             _calculator.Calculate(Vector3.zero, Vector3.up, 0.25f, _results);
 
-            // 2 - (0.5 + 0.25): the shot stops where the two circles touch, not at the balloon's skin.
-            Assert.AreEqual(1.25f, _results[1].y, 0.05f);
+            // 2 - 0.5, not 2 - (0.5 + 0.25).
+            Assert.AreEqual(1.5f, _results[1].y, 0.05f);
         }
 
         private sealed class FakeDeflectorField : IDeflectorField
