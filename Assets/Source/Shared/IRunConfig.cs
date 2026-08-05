@@ -14,6 +14,12 @@ namespace BalloonParty.Shared
         /// </summary>
         bool StreakGrantsShields { get; }
 
+        /// <summary>
+        ///     Whether shields are placed along a flight the thrower can fly, rather than by the
+        ///     plain weighted draw. Off restores the previous random placement.
+        /// </summary>
+        bool PlanShieldChains { get; }
+
         /// <summary>Seconds over which timeScale ramps from 1 to <see cref="LevelCompleteRampUpScale"/> after the completing flight ends.</summary>
         float LevelCompleteRampUpDuration { get; }
 

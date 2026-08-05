@@ -10,6 +10,7 @@ using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
+using BalloonParty.Thrower;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
@@ -50,7 +51,15 @@ namespace BalloonParty.Tests.Item
                     Arg.Any<MessageHandlerFilter<ItemCheckMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
-            var assigner = new ItemAssigner(_levelParams, _grid, subscriber);
+            // Chain planning off: these tests are about the weighted draw, and a planner with no
+            // thrower would quietly do nothing anyway.
+            var runConfig = Substitute.For<IRunConfig>();
+            runConfig.PlanShieldChains.Returns(false);
+
+            var assigner = new ItemAssigner(
+                _levelParams, _grid, Substitute.For<ISlotGridConfig>(),
+                Substitute.For<IProjectileFlightConfig>(), runConfig,
+                new ThrowerOriginProvider(), null, subscriber);
             assigner.Start();
         }
 

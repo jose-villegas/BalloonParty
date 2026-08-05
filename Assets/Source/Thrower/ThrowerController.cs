@@ -44,6 +44,7 @@ namespace BalloonParty.Thrower
         private readonly ThrowerSettings _settings;
         private readonly ThrowerView _view;
         private readonly ProjectilePositionProvider _positionProvider;
+        private readonly ThrowerOriginProvider _originProvider;
         private readonly PredictionTraceProvider _traceProvider;
         private readonly CompositeDisposable _subscriptions = new();
 
@@ -86,6 +87,7 @@ namespace BalloonParty.Thrower
             PauseService pauseService,
             HoldSpeedUpController holdSpeedUp,
             ProjectilePositionProvider positionProvider,
+            ThrowerOriginProvider originProvider,
             PredictionTraceProvider traceProvider)
         {
             _view = view;
@@ -109,6 +111,7 @@ namespace BalloonParty.Thrower
             _pauseService = pauseService;
             _holdSpeedUp = holdSpeedUp;
             _positionProvider = positionProvider;
+            _originProvider = originProvider;
             _traceProvider = traceProvider;
             _projectilePoolKey = settings.ProjectilePrefab.name;
         }
@@ -117,6 +120,7 @@ namespace BalloonParty.Thrower
         {
             _traceCalculator = new PredictionTraceCalculator(_traceConfig, _flightConfig, _deflectorField);
             _view.SetTraceColor(_traceConfig.LineColor);
+            _originProvider.Set(_view.SpawnPoint);
 
             _poolManager.Register(_projectilePoolKey,
                 new ProjectilePoolChannel(_resolver, _settings.ProjectilePrefab));

@@ -51,6 +51,7 @@ using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Spawner;
 using BalloonParty.UI.GameOver;
 using BalloonParty.Slots.Grid;
+using BalloonParty.Thrower;
 using BalloonParty.UI;
 using BalloonParty.UI.Tooltip;
 using MessagePipe;
@@ -138,6 +139,9 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ProjectileDoomedTimeScaleController>();
             builder.RegisterEntryPoint<HoldSpeedUpController>().AsSelf().As<IHoldSpeedUpState>();
             builder.Register<ProjectilePositionProvider>(Lifetime.Singleton);
+            // Game scope, not the thrower's: ItemAssigner plans shield chains from it and cannot
+            // reach into a child scope for ThrowerView.
+            builder.Register<ThrowerOriginProvider>(Lifetime.Singleton);
             builder.Register<PredictionTraceProvider>(Lifetime.Singleton);
             builder.RegisterEntryPoint<ProjectileFacingSource>().As<IProjectileFacingSource>();
             builder.Register<NudgeOverrideResolver>(Lifetime.Singleton);

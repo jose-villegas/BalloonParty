@@ -6,6 +6,10 @@ using BalloonParty.Game.Level;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
+using BalloonParty.Shared;
+using BalloonParty.Thrower;
+using BalloonParty.Item.Shield;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
 using UnityEngine;
@@ -18,14 +22,31 @@ namespace BalloonParty.Item
 {
     internal class ItemAssigner : IStartable, IDisposable
     {
+        // The upper semicircle, trimmed of the near-horizontal shots that never climb.
+        private const int FanSamples = 25;
+        private const float FanMinDegrees = 25f;
+        private const float FanMaxDegrees = 155f;
+
         private readonly ISubscriber<ItemCheckMessage> _checkSubscriber;
         private readonly IActiveLevelParameters _levelParams;
         private readonly SlotGrid _grid;
+        private readonly ISlotGridConfig _gridConfig;
+        private readonly IProjectileFlightConfig _flightConfig;
+        private readonly IRunConfig _runConfig;
+        private readonly ThrowerOriginProvider _origin;
+        private readonly IDeflectorField _deflectorField;
 
         private readonly List<IHasWriteableItemSlot> _eligibleBuffer = new();
         private readonly Dictionary<string, int> _activeCountsBuffer = new();
 
         private readonly List<ItemSettings> _guaranteedBuffer = new();
+
+        // Hosts the shield chain picked, in flight order; drained as shields are handed out.
+        private readonly List<ShieldPlacement> _chainBuffer = new();
+        private readonly List<ShieldHostCandidate> _candidateBuffer = new();
+        private readonly List<DeflectorCircle> _deflectorBuffer = new();
+        private readonly List<Vector2> _fanBuffer = new();
+        private int _chainCursor;
 
         private IDisposable _subscription;
 
@@ -33,10 +54,20 @@ namespace BalloonParty.Item
         internal ItemAssigner(
             IActiveLevelParameters levelParams,
             SlotGrid grid,
+            ISlotGridConfig gridConfig,
+            IProjectileFlightConfig flightConfig,
+            IRunConfig runConfig,
+            ThrowerOriginProvider origin,
+            IDeflectorField deflectorField,
             ISubscriber<ItemCheckMessage> checkSubscriber)
         {
             _levelParams = levelParams;
             _grid = grid;
+            _gridConfig = gridConfig;
+            _flightConfig = flightConfig;
+            _runConfig = runConfig;
+            _origin = origin;
+            _deflectorField = deflectorField;
             _checkSubscriber = checkSubscriber;
         }
 
@@ -91,39 +122,44 @@ namespace BalloonParty.Item
                 return;
             }
 
+            PlanShieldChain();
+
             _activeCountsBuffer.Clear();
             foreach (var c in candidates)
             {
                 _activeCountsBuffer[c.Type.ToString()] = CountBalloonsWithItem(c.Type);
             }
 
-            // Place guaranteed items first — deterministic, not weighted.
             if (isInitial)
             {
-                _guaranteedBuffer.Clear();
-                var guaranteedPlaced = _levelParams.Current.FillGuaranteedItems(_guaranteedBuffer, _activeCountsBuffer);
-
-                foreach (var item in _guaranteedBuffer)
-                {
-                    if (_eligibleBuffer.Count == 0)
-                    {
-                        break;
-                    }
-
-                    var indexOf = PickWeightedIndex(_eligibleBuffer, Random.value);
-                    if (indexOf < 0)
-                    {
-                        break;
-                    }
-
-                    _eligibleBuffer[indexOf].Item.Value = item.Type;
-                    _eligibleBuffer.RemoveAt(indexOf);
-                }
-
-                count = Mathf.Max(0, count - guaranteedPlaced);
+                count = Mathf.Max(0, count - PlaceGuaranteedItems());
             }
 
-            var grants = Mathf.Min(count, _eligibleBuffer.Count);
+            PlaceWeightedItems(Mathf.Min(count, _eligibleBuffer.Count));
+        }
+
+        // Deterministic, not weighted — but they still take hosts from the same pool, so they go
+        // through ConsumeHost and keep the chain's indices honest.
+        private int PlaceGuaranteedItems()
+        {
+            _guaranteedBuffer.Clear();
+            var placed = _levelParams.Current.FillGuaranteedItems(_guaranteedBuffer, _activeCountsBuffer);
+
+            foreach (var item in _guaranteedBuffer)
+            {
+                if (_eligibleBuffer.Count == 0 || !TryTakeHost(item.Type, out var indexOf))
+                {
+                    break;
+                }
+
+                ConsumeHost(indexOf, item.Type);
+            }
+
+            return placed;
+        }
+
+        private void PlaceWeightedItems(int grants)
+        {
             for (var n = 0; n < grants; n++)
             {
                 var picked = _levelParams.Current.PickItemEntry(_activeCountsBuffer);
@@ -133,18 +169,120 @@ namespace BalloonParty.Item
                     break;
                 }
 
-                var indexOf = PickWeightedIndex(_eligibleBuffer, Random.value);
-                if (indexOf < 0)
+                if (!TryTakeHost(picked.Type, out var indexOf))
                 {
-                    // Defensive only — CollectEligibleSlots already excludes zero-weight hosts.
                     break;
                 }
 
-                _eligibleBuffer[indexOf].Item.Value = picked.Type;
-                _eligibleBuffer.RemoveAt(indexOf);
+                ConsumeHost(indexOf, picked.Type);
 
                 var key = picked.Type.ToString();
                 _activeCountsBuffer[key] = _activeCountsBuffer[key] + 1;
+            }
+        }
+
+        // Shields follow the planned chain when there is one; everything else takes the weighted draw.
+        private bool TryTakeHost(ItemType type, out int indexOf)
+        {
+            if (type == ItemType.Shield && TryTakeChainHost(out indexOf))
+            {
+                return true;
+            }
+
+            indexOf = PickWeightedIndex(_eligibleBuffer, Random.value);
+
+            // Defensive only — CollectEligibleSlots already excludes zero-weight hosts.
+            return indexOf >= 0;
+        }
+
+        private void ConsumeHost(int indexOf, ItemType type)
+        {
+            _eligibleBuffer[indexOf].Item.Value = type;
+            _eligibleBuffer.RemoveAt(indexOf);
+            DropChainHostsAfterRemoval(indexOf);
+        }
+
+        // Builds a chain over this batch's eligible hosts before any item is handed out, so shields
+        // land on balloons a shot can actually collect in sequence rather than wherever the weighted
+        // draw happened to point. Off, or with no thrower yet, the draw is untouched.
+        private void PlanShieldChain()
+        {
+            _chainBuffer.Clear();
+            _chainCursor = 0;
+            if (!_runConfig.PlanShieldChains || !_origin.IsAvailable || _eligibleBuffer.Count == 0)
+            {
+                return;
+            }
+
+            // Slot positions, not view positions: the board is mid-spawn here, and the lattice is
+            // where these balloons are heading. Half the column pitch approximates the balloon's
+            // contact circle plus the projectile's, which is all a fan-sampled plan needs.
+            var contactRadius = _gridConfig.SlotSeparation.x;
+            _candidateBuffer.Clear();
+            for (var i = 0; i < _eligibleBuffer.Count; i++)
+            {
+                var host = _eligibleBuffer[i] as ISlotActor;
+                var world = host != null ? _grid.IndexToWorldPosition(host.SlotIndex) : Vector3.zero;
+                _candidateBuffer.Add(new ShieldHostCandidate(world, contactRadius));
+            }
+
+            _deflectorBuffer.Clear();
+            _deflectorField?.CollectDeflectors(_deflectorBuffer);
+            BuildFan();
+
+            var planner = new ShieldChainPlanner(new WallLimits(_flightConfig.LimitsClockwise), _deflectorBuffer);
+            planner.PlanChain(
+                _origin.Origin, _fanBuffer, _flightConfig.ProjectileStartingShields,
+                _eligibleBuffer.Count, _candidateBuffer, _chainBuffer);
+        }
+
+        // The upper semicircle, which is what the thrower's position at the bottom limits aiming to
+        // in practice — nothing in code clamps it. Near-horizontal is skipped: with no gravity a flat
+        // shot bounces between the side walls forever without ever reaching the board.
+        private void BuildFan()
+        {
+            _fanBuffer.Clear();
+            for (var i = 0; i < FanSamples; i++)
+            {
+                var t = (float)i / (FanSamples - 1);
+                var degrees = Mathf.Lerp(FanMinDegrees, FanMaxDegrees, t);
+                _fanBuffer.Add(new Vector2(
+                    Mathf.Cos(degrees * Mathf.Deg2Rad), Mathf.Sin(degrees * Mathf.Deg2Rad)));
+            }
+        }
+
+        private bool TryTakeChainHost(out int index)
+        {
+            index = -1;
+            while (_chainCursor < _chainBuffer.Count)
+            {
+                var candidate = _chainBuffer[_chainCursor++].CandidateIndex;
+                if (candidate >= 0 && candidate < _eligibleBuffer.Count)
+                {
+                    index = candidate;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        // _eligibleBuffer is compacted as hosts are consumed, so every planned index above the removed
+        // one shifts down. Left unadjusted the chain would walk onto the wrong balloons — silently,
+        // since every index stays in range.
+        private void DropChainHostsAfterRemoval(int removedIndex)
+        {
+            for (var i = 0; i < _chainBuffer.Count; i++)
+            {
+                var placement = _chainBuffer[i];
+                if (placement.CandidateIndex > removedIndex)
+                {
+                    _chainBuffer[i] = new ShieldPlacement(placement.CandidateIndex - 1, placement.EntryAngles);
+                }
+                else if (placement.CandidateIndex == removedIndex)
+                {
+                    _chainBuffer[i] = new ShieldPlacement(-1, placement.EntryAngles);
+                }
             }
         }
 

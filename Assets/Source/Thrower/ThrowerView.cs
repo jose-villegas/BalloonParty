@@ -28,6 +28,8 @@ namespace BalloonParty.Thrower
 
         public Vector3 SpawnPointPosition => _projectileSpawnPoint.position;
 
+        internal Transform SpawnPoint => _projectileSpawnPoint;
+
         public Quaternion Rotation => transform.rotation;
 
         public bool IsAiming => Input.GetMouseButton(0);
