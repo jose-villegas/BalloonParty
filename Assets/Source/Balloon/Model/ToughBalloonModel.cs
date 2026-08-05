@@ -10,7 +10,7 @@ using BalloonParty.Configuration.Palette;
 namespace BalloonParty.Balloon.Model
 {
     internal class ToughBalloonModel : BalloonModelBase, IHasDeflectStamp, IHasDurability, IHasScore,
-        IHasScoreColor, IResistsPaint
+        IHasScoreColor, IResistsPaint, IDeflectsShots
     {
         private readonly ColorSource _colorSource;
         private readonly float _balanceBias;
@@ -28,6 +28,9 @@ namespace BalloonParty.Balloon.Model
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
 
         protected override HitOutcome SurviveOutcome => HitOutcome.Deflect;
+
+        // Mirrors EvaluateNormalHit: the LAST hit pops rather than bouncing.
+        public bool DeflectsOrdinaryHit => HitsRemaining.Value > 1;
 
         internal ToughBalloonModel(
             BalloonModelConfig config, IGamePalette palette = null, IReadOnlyList<string> allowedColors = null)

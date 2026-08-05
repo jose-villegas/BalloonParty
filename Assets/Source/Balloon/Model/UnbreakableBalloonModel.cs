@@ -9,7 +9,7 @@ using UnityEngine;
 namespace BalloonParty.Balloon.Model
 {
     internal class UnbreakableBalloonModel : BalloonModelBase, IHasDeflectStamp, IHasScore, IHasScoreColor,
-        IPreBalanceRelocatable, IResistsPaint
+        IPreBalanceRelocatable, IResistsPaint, IDeflectsShots
     {
         private readonly ColorSource _colorSource;
 
@@ -35,6 +35,10 @@ namespace BalloonParty.Balloon.Model
             ScoreAttributions.AddRandomPerColor(
                 results, _colorSource.Resolve(), incompleteColors, ScoreValue, breaksStreak: true);
         }
+
+        // Always: EvaluateHit below returns Deflect for every non-piercing hit, and there is no
+        // durability to spend down.
+        public bool DeflectsOrdinaryHit => true;
 
         public override HitOutcome EvaluateHit(DamageContext context)
         {

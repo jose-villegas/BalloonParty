@@ -6,6 +6,8 @@ using BalloonParty.Game.Level;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
+using BalloonParty.Balloon;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Shared;
 using BalloonParty.Thrower;
 using BalloonParty.Item.Shield;
@@ -31,6 +33,7 @@ namespace BalloonParty.Item
         private readonly IActiveLevelParameters _levelParams;
         private readonly SlotGrid _grid;
         private readonly ISlotGridConfig _gridConfig;
+        private readonly BalloonContactRadii _radii;
         private readonly IProjectileFlightConfig _flightConfig;
         private readonly IRunConfig _runConfig;
         private readonly ThrowerOriginProvider _origin;
@@ -55,6 +58,7 @@ namespace BalloonParty.Item
             IActiveLevelParameters levelParams,
             SlotGrid grid,
             ISlotGridConfig gridConfig,
+            BalloonContactRadii radii,
             IProjectileFlightConfig flightConfig,
             IRunConfig runConfig,
             ThrowerOriginProvider origin,
@@ -64,6 +68,7 @@ namespace BalloonParty.Item
             _levelParams = levelParams;
             _grid = grid;
             _gridConfig = gridConfig;
+            _radii = radii;
             _flightConfig = flightConfig;
             _runConfig = runConfig;
             _origin = origin;
@@ -215,15 +220,21 @@ namespace BalloonParty.Item
             }
 
             // Slot positions, not view positions: the board is mid-spawn here, and the lattice is
-            // where these balloons are heading. Half the column pitch approximates the balloon's
-            // contact circle plus the projectile's, which is all a fan-sampled plan needs.
-            var contactRadius = _gridConfig.SlotSeparation.x;
+            // where these balloons are heading.
+            //
+            // Radii are per type plus the shot's own, because that is what contact actually is — the
+            // types differ (an ordinary balloon, a tough and a soap cluster are three circles), and a
+            // single averaged radius plans shields the shot grazes past on one type and clips early
+            // on another.
+            var projectileRadius = _origin.ProjectileContactRadius;
             _candidateBuffer.Clear();
             for (var i = 0; i < _eligibleBuffer.Count; i++)
             {
                 var host = _eligibleBuffer[i] as ISlotActor;
                 var world = host != null ? _grid.IndexToWorldPosition(host.SlotIndex) : Vector3.zero;
-                _candidateBuffer.Add(new ShieldHostCandidate(world, contactRadius));
+                var type = _eligibleBuffer[i] is IBalloonModel balloon ? balloon.TypeName : BalloonType.Simple;
+                _candidateBuffer.Add(
+                    new ShieldHostCandidate(world, _radii.For(type) + projectileRadius));
             }
 
             _deflectorBuffer.Clear();

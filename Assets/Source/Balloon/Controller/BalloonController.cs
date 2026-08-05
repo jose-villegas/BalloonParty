@@ -86,7 +86,7 @@ namespace BalloonParty.Balloon.Controller
         internal bool TryGetDeflector(out DeflectorCircle deflector)
         {
             if (_view == null || !_view.HasActiveCollider
-                || _model is not BalloonModelBase model || !model.DeflectsOrdinaryHit)
+                || _model is not IDeflectsShots deflects || !deflects.DeflectsOrdinaryHit)
             {
                 deflector = default;
                 return false;

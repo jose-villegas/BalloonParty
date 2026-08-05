@@ -27,6 +27,8 @@ using BalloonParty.Item.Bomb;
 using BalloonParty.Item.Laser;
 using BalloonParty.Item.Lightning;
 using BalloonParty.Item.Paint;
+using BalloonParty.Balloon;
+using BalloonParty.Configuration.Balloons;
 using BalloonParty.Item.Shield;
 using BalloonParty.Item.Snipe;
 using BalloonParty.Nudge;
@@ -146,6 +148,10 @@ namespace BalloonParty.Game
             }, Lifetime.Singleton);
 
             builder.Register<ShieldReachabilityField>(Lifetime.Singleton);
+            builder.Register(resolver => new BalloonContactRadii(
+                    resolver.Resolve<IBalloonsConfiguration>(),
+                    resolver.Resolve<ISlotGridConfig>().SlotSeparation.x),
+                Lifetime.Singleton);
             // Recording is editor-only ([Conditional]); at runtime this is an inert empty instance.
             builder.Register<BalanceDebugRecorder>(Lifetime.Singleton);
             builder.Register<TrailEndpointRegistry>(Lifetime.Singleton);

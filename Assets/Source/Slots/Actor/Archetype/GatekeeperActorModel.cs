@@ -5,13 +5,16 @@ using UnityEngine;
 namespace BalloonParty.Slots.Actor.Archetype
 {
     // Deflects until HitsRemaining reaches zero, then pops.
-    internal class GatekeeperActorModel : IWriteableSlotActor, IHasDurability
+    internal class GatekeeperActorModel : IWriteableSlotActor, IHasDurability, IDeflectsShots
     {
         public int MaxHitPoints { get; }
         public ReactiveProperty<int> HitsRemaining { get; }
 
         int IHasDurability.MaxHitPoints => MaxHitPoints;
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
+
+        // Mirrors EvaluateHit: it bounces until the hit that takes it to zero, which pops.
+        public bool DeflectsOrdinaryHit => HitsRemaining.Value > 1;
 
         public Vector2Int SlotIndex { get; private set; }
 

@@ -120,7 +120,14 @@ namespace BalloonParty.Thrower
         {
             _traceCalculator = new PredictionTraceCalculator(_traceConfig, _flightConfig, _deflectorField);
             _view.SetTraceColor(_traceConfig.LineColor);
-            _originProvider.Set(_view.SpawnPoint);
+            // Off the prefab, not a spawned view: nothing has been fired yet, and ProjectileView
+            // resolves its own radius in Awake, which a prefab asset never runs.
+            var projectilePrefab = _settings.ProjectilePrefab;
+            _originProvider.Set(
+                _view.SpawnPoint,
+                ContactRadius.FromCollider(
+                    projectilePrefab != null ? projectilePrefab.GetComponent<Collider2D>() : null,
+                    projectilePrefab != null ? projectilePrefab.transform.lossyScale.x : 1f));
 
             _poolManager.Register(_projectilePoolKey,
                 new ProjectilePoolChannel(_resolver, _settings.ProjectilePrefab));

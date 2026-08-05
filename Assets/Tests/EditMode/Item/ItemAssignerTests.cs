@@ -5,6 +5,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Level;
 using BalloonParty.Item;
+using BalloonParty.Balloon;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
@@ -58,6 +59,7 @@ namespace BalloonParty.Tests.Item
 
             var assigner = new ItemAssigner(
                 _levelParams, _grid, Substitute.For<ISlotGridConfig>(),
+                new BalloonContactRadii(null, 0.375f),
                 Substitute.For<IProjectileFlightConfig>(), runConfig,
                 new ThrowerOriginProvider(), null, subscriber);
             assigner.Start();

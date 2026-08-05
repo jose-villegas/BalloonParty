@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using BalloonParty.Balloon;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Shared;
 using BalloonParty.Slots.Grid;
 using BalloonParty.Thrower;
@@ -41,7 +43,7 @@ namespace BalloonParty.Item.Shield
 
         private readonly SlotGrid _grid;
         private readonly IProjectileFlightConfig _flightConfig;
-        private readonly ISlotGridConfig _gridConfig;
+        private readonly BalloonContactRadii _radii;
         private readonly ThrowerOriginProvider _origin;
         private readonly IDeflectorField _deflectorField;
 
@@ -52,12 +54,12 @@ namespace BalloonParty.Item.Shield
         private int _builtAtVersion = -1;
 
         internal ShieldReachabilityField(
-            SlotGrid grid, IProjectileFlightConfig flightConfig, ISlotGridConfig gridConfig,
+            SlotGrid grid, IProjectileFlightConfig flightConfig, BalloonContactRadii radii,
             ThrowerOriginProvider origin, IDeflectorField deflectorField)
         {
             _grid = grid;
             _flightConfig = flightConfig;
-            _gridConfig = gridConfig;
+            _radii = radii;
             _origin = origin;
             _deflectorField = deflectorField;
         }
@@ -102,8 +104,11 @@ namespace BalloonParty.Item.Shield
             _deflectorField?.CollectDeflectors(_deflectors);
             BuildFan();
 
+            // A shield sits on an ordinary balloon far more often than not, and this field asks
+            // where a shot CAN go rather than what it hits — one representative circle is enough, and
+            // it is the authored one rather than the slot pitch.
             var walls = new WallLimits(_flightConfig.LimitsClockwise);
-            var radius = _gridConfig.SlotSeparation.x;
+            var radius = _radii.For(BalloonType.Simple) + _origin.ProjectileContactRadius;
             for (var i = 0; i < _fan.Count; i++)
             {
                 MarkFlight(walls, _origin.Origin, _fan[i], radius);

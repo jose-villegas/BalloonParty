@@ -4,7 +4,7 @@ using UnityEngine;
 namespace BalloonParty.Slots.Actor.Archetype
 {
     // Indestructible; permanently redirects projectiles.
-    internal class DeflectorActorModel : IWriteableSlotActor, IHitable
+    internal class DeflectorActorModel : IWriteableSlotActor, IHitable, IDeflectsShots
     {
         public Vector2Int SlotIndex { get; private set; }
 
@@ -15,6 +15,9 @@ namespace BalloonParty.Slots.Actor.Archetype
         }
 
         public SlotActorKind Kind => SlotActorKind.Static;
+
+        // Indestructible, so there is no state that could ever make it stop bouncing.
+        public bool DeflectsOrdinaryHit => true;
 
         public HitOutcome EvaluateHit(DamageContext context)
         {
