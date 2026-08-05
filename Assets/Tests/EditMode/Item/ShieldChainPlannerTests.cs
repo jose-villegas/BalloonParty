@@ -203,6 +203,72 @@ namespace BalloonParty.Tests.Item
             Assert.AreEqual(1, placements[0].CandidateIndex, "the one no tough has to be alive for");
         }
 
+
+        // The guarantee the fan version originally lost: every shield in a chain must be collectable
+        // by ONE opening. Two individually reachable shields on unrelated shots are two pickups, not
+        // a chain — which is exactly what "sometimes it chains" looked like from the outside.
+        [Test]
+        public void PlanChain_EveryShield_IsCollectableByAtLeastOneSharedOpening()
+        {
+            var planner = new ShieldChainPlanner(Walls, null);
+            var candidates = new List<ShieldHostCandidate>
+            {
+                new(new Vector2(-1.8f, 1.2f), 0.45f),
+                new(new Vector2(1.8f, 1.2f), 0.45f),
+                new(new Vector2(0f, 3.2f), 0.45f),
+                new(new Vector2(2.2f, 3.6f), 0.45f),
+            };
+            var placements = new List<ShieldPlacement>();
+            var fan = Fan(30f, 150f, 25);
+
+            var placed = planner.PlanChain(Vector2.zero, fan, 2, 3, candidates, placements);
+            Assert.Greater(placed, 1, "need at least two links to have a chain at all");
+
+            // Re-fly the fan and keep only openings that collect the whole chain.
+            var collected = new List<int>();
+            var survivors = 0;
+            for (var i = 0; i < fan.Count; i++)
+            {
+                planner.PlanChain(Vector2.zero, fan[i], 2, candidates.Count, candidates, collected);
+
+                var takesAll = true;
+                foreach (var placement in placements)
+                {
+                    takesAll &= collected.Contains(placement.CandidateIndex);
+                }
+
+                if (takesAll)
+                {
+                    survivors++;
+                }
+            }
+
+            Assert.Greater(survivors, 0, "no single opening collects the chain — these are not links");
+        }
+
+        // The reported tolerance is now the chain's, not the shield's, so it can only narrow as links
+        // are added — a later shield cannot be easier to reach than the chain that funds it.
+        [Test]
+        public void PlanChain_ReportedEntryAngles_NarrowAlongTheChain()
+        {
+            var planner = new ShieldChainPlanner(Walls, null);
+            var candidates = new List<ShieldHostCandidate>
+            {
+                new(new Vector2(-1.8f, 1.2f), 0.45f),
+                new(new Vector2(1.8f, 1.2f), 0.45f),
+                new(new Vector2(0f, 3.2f), 0.45f),
+                new(new Vector2(2.2f, 3.6f), 0.45f),
+            };
+            var placements = new List<ShieldPlacement>();
+
+            planner.PlanChain(Vector2.zero, Fan(30f, 150f, 25), 2, 3, candidates, placements);
+
+            for (var i = 1; i < placements.Count; i++)
+            {
+                Assert.LessOrEqual(placements[i].EntryAngles, placements[i - 1].EntryAngles);
+            }
+        }
+
         // Evenly spaced headings across the upper semicircle — the arc the thrower's position, not any
         // code clamp, actually limits aiming to.
         private static List<Vector2> Fan(float fromDegrees, float toDegrees, int count)

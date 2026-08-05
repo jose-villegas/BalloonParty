@@ -123,35 +123,66 @@ namespace BalloonParty.Item.Shield
             var reached = new List<int>();
             var deflections = new List<int>();
 
+            // Which fan angles reach each candidate this round, and which of them still collect
+            // everything placed so far. The chain is one flight only while that second set is
+            // non-empty — see SelectInBand.
+            var reachedBy = new bool[candidates.Count, fan.Count];
+            var chainAngles = new bool[fan.Count];
+            for (var i = 0; i < fan.Count; i++)
+            {
+                chainAngles[i] = true;
+            }
+
             while (results.Count < wanted)
             {
-                Array.Clear(reachCount, 0, reachCount.Length);
-                for (var i = 0; i < viaDeflections.Length; i++)
-                {
-                    viaDeflections[i] = int.MaxValue;
-                }
+                SweepFan(origin, fan, shields, candidates, placed, reached, deflections,
+                    reachCount, viaDeflections, reachedBy);
 
-                for (var i = 0; i < fan.Count; i++)
-                {
-                    Fly(origin, fan[i], shields, candidates, placed, reached, deflections);
-                    for (var r = 0; r < reached.Count; r++)
-                    {
-                        reachCount[reached[r]]++;
-                        viaDeflections[reached[r]] = Mathf.Min(viaDeflections[reached[r]], deflections[r]);
-                    }
-                }
-
-                var pick = SelectInBand(reachCount, viaDeflections, placed, fan.Count);
+                var pick = SelectInBand(
+                    reachCount, viaDeflections, placed, reachedBy, chainAngles, fan.Count);
                 if (pick < 0)
                 {
                     break;
                 }
 
+                // The chain narrows to the openings that collect this shield too, so the next round
+                // can only extend a flight that already takes every shield before it.
+                for (var i = 0; i < fan.Count; i++)
+                {
+                    chainAngles[i] &= reachedBy[pick, i];
+                }
+
                 placed[pick] = true;
-                results.Add(new ShieldPlacement(pick, reachCount[pick]));
+                results.Add(new ShieldPlacement(pick, CountTrue(chainAngles)));
             }
 
             return results.Count;
+        }
+
+        // One pass of every opening angle, recording per candidate: how many reach it, which ones,
+        // and the fewest deflections any of them needed.
+        private void SweepFan(
+            Vector2 origin, IReadOnlyList<Vector2> fan, int shields,
+            IReadOnlyList<ShieldHostCandidate> candidates, IReadOnlyList<bool> placed, List<int> reached,
+            List<int> deflections, int[] reachCount, int[] viaDeflections, bool[,] reachedBy)
+        {
+            Array.Clear(reachCount, 0, reachCount.Length);
+            Array.Clear(reachedBy, 0, reachedBy.Length);
+            for (var i = 0; i < viaDeflections.Length; i++)
+            {
+                viaDeflections[i] = int.MaxValue;
+            }
+
+            for (var i = 0; i < fan.Count; i++)
+            {
+                Fly(origin, fan[i], shields, candidates, placed, reached, deflections);
+                for (var r = 0; r < reached.Count; r++)
+                {
+                    reachCount[reached[r]]++;
+                    reachedBy[reached[r], i] = true;
+                    viaDeflections[reached[r]] = Mathf.Min(viaDeflections[reached[r]], deflections[r]);
+                }
+            }
         }
 
         // The band, and the two relaxations. Rejecting everything would leave shields unplaced, which
@@ -159,18 +190,37 @@ namespace BalloonParty.Item.Shield
         // floor only after that.
         private int SelectInBand(
             IReadOnlyList<int> reachCount, IReadOnlyList<int> viaDeflections, IReadOnlyList<bool> placed,
-            int fanSize)
+            bool[,] reachedBy, IReadOnlyList<bool> chainAngles, int fanSize)
         {
             var cheapCutoff = Mathf.Max(MinEntryAngles, Mathf.RoundToInt(fanSize * CheapZoneFraction));
 
-            var best = Pick(reachCount, viaDeflections, placed, MinEntryAngles, cheapCutoff);
+            var best = Pick(
+                reachCount, viaDeflections, placed, reachedBy, chainAngles, MinEntryAngles, cheapCutoff);
             if (best >= 0)
             {
                 return best;
             }
 
-            best = Pick(reachCount, viaDeflections, placed, MinEntryAngles, int.MaxValue);
-            return best >= 0 ? best : Pick(reachCount, viaDeflections, placed, 1, int.MaxValue);
+            best = Pick(
+                reachCount, viaDeflections, placed, reachedBy, chainAngles, MinEntryAngles, int.MaxValue);
+            return best >= 0
+                ? best
+                : Pick(reachCount, viaDeflections, placed, reachedBy, chainAngles, 1, int.MaxValue);
+        }
+
+        // How many openings still collect every shield placed so far.
+        private static int CountTrue(IReadOnlyList<bool> flags)
+        {
+            var count = 0;
+            for (var i = 0; i < flags.Count; i++)
+            {
+                if (flags[i])
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
 
         /// <summary>Fewest deflections first, then most entry angles.</summary>
@@ -183,10 +233,10 @@ namespace BalloonParty.Item.Shield
         /// </remarks>
         private static int Pick(
             IReadOnlyList<int> reachCount, IReadOnlyList<int> viaDeflections, IReadOnlyList<bool> placed,
-            int min, int max)
+            bool[,] reachedBy, IReadOnlyList<bool> chainAngles, int min, int max)
         {
             var best = -1;
-            var bestCount = 0;
+            var bestShared = 0;
             var bestDeflections = int.MaxValue;
 
             for (var i = 0; i < reachCount.Count; i++)
@@ -197,18 +247,42 @@ namespace BalloonParty.Item.Shield
                     continue;
                 }
 
+                // The openings that reach this candidate AND still collect everything already placed.
+                // Zero means it is individually reachable but by some unrelated shot — a second
+                // pickup, not a link in this chain, and the reason "sometimes it chains" was the
+                // honest description of the previous behaviour.
+                var shared = SharedAngles(reachedBy, chainAngles, i);
+                if (shared == 0)
+                {
+                    continue;
+                }
+
                 var deflections = viaDeflections[i];
-                if (deflections > bestDeflections || (deflections == bestDeflections && count <= bestCount))
+                if (deflections > bestDeflections || (deflections == bestDeflections && shared <= bestShared))
                 {
                     continue;
                 }
 
                 bestDeflections = deflections;
-                bestCount = count;
+                bestShared = shared;
                 best = i;
             }
 
             return best;
+        }
+
+        private static int SharedAngles(bool[,] reachedBy, IReadOnlyList<bool> chainAngles, int candidate)
+        {
+            var shared = 0;
+            for (var i = 0; i < chainAngles.Count; i++)
+            {
+                if (chainAngles[i] && reachedBy[candidate, i])
+                {
+                    shared++;
+                }
+            }
+
+            return shared;
         }
 
         /// <summary>
@@ -221,9 +295,14 @@ namespace BalloonParty.Item.Shield
         /// </param>
         /// <param name="wanted">How many to place. Fewer is a partial chain, not a failure.</param>
         /// <returns>How many were placed.</returns>
+        /// <param name="pathOut">
+        ///     Optional polyline of the flight, origin first then every turn — for drawing one
+        ///     candidate opening in the editor rather than guessing at it.
+        /// </param>
         internal int PlanChain(
             Vector2 origin, Vector2 direction, int shields, int wanted,
-            IReadOnlyList<ShieldHostCandidate> candidates, List<int> results)
+            IReadOnlyList<ShieldHostCandidate> candidates, List<int> results,
+            List<Vector2> pathOut = null)
         {
             results.Clear();
             if (candidates == null || wanted <= 0)
@@ -231,7 +310,7 @@ namespace BalloonParty.Item.Shield
                 return 0;
             }
 
-            Fly(origin, direction, shields, candidates, null, results);
+            Fly(origin, direction, shields, candidates, null, results, pathOut: pathOut);
             if (results.Count > wanted)
             {
                 results.RemoveRange(wanted, results.Count - wanted);
@@ -249,10 +328,12 @@ namespace BalloonParty.Item.Shield
         private void Fly(
             Vector2 origin, Vector2 direction, int shields,
             IReadOnlyList<ShieldHostCandidate> candidates, IReadOnlyList<bool> placed, List<int> reached,
-            List<int> deflectionsAt = null)
+            List<int> deflectionsAt = null, List<Vector2> pathOut = null)
         {
             reached.Clear();
             deflectionsAt?.Clear();
+            pathOut?.Clear();
+            pathOut?.Add(origin);
             if (direction.sqrMagnitude < SurfaceEpsilon)
             {
                 return;
@@ -267,6 +348,7 @@ namespace BalloonParty.Item.Shield
             {
                 if (!_walls.TryFindCrossing(position, heading, out var crossing, out var wallNormal))
                 {
+                    pathOut?.Add(position);
                     return;
                 }
 
@@ -281,6 +363,7 @@ namespace BalloonParty.Item.Shield
                 if (deflected)
                 {
                     position = contact + (deflectNormal * SurfaceEpsilon);
+                    pathOut?.Add(position);
                     heading = Vector2.Reflect(heading, deflectNormal);
                     deflectionsUsed++;
                     continue;
@@ -289,10 +372,13 @@ namespace BalloonParty.Item.Shield
                 // The wall is what the shot pays for, and a shot that cannot pay ends here.
                 if (--shields < 0)
                 {
+                    // Drawn to where it dies, not to where it would have gone.
+                    pathOut?.Add(crossing);
                     return;
                 }
 
                 position = _walls.ClampInside(crossing) + (wallNormal.normalized * SurfaceEpsilon);
+                pathOut?.Add(position);
                 heading = Vector2.Reflect(heading, wallNormal.normalized);
             }
         }
