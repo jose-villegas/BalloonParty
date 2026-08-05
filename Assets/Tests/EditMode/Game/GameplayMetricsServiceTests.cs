@@ -749,6 +749,73 @@ namespace BalloonParty.Tests.Game
                 "a level-up that never happened must not project points onto the level it aborted from");
         }
 
+        // One record per shot, so a level's flights can be read individually rather than only as
+        // level totals. The flight scope is Reset() at ProjectileLoadedMessage and Reset() zeroes its
+        // stopwatches, so the record's own gameplay timer IS the time of flight.
+        [Test]
+        public void EveryFlight_WritesItsOwnRecord_OrdinalCountingFromOneWithinTheLevel()
+        {
+            _harness.EnterGame();
+
+            for (var i = 0; i < 3; i++)
+            {
+                _harness.ProjectileLoaded.Handle(new ProjectileLoadedMessage(null));
+                _harness.ProjectileFired.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+                _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage());
+            }
+
+            var flights = _harness.AllOf(RecordKind.Flight);
+            Assert.AreEqual(3, flights.Count);
+            Assert.AreEqual(1, flights[0].FlightIndex);
+            Assert.AreEqual(2, flights[1].FlightIndex);
+            Assert.AreEqual(3, flights[2].FlightIndex);
+        }
+
+        [Test]
+        public void AFlightRecord_CarriesItsOwnDurationAndCounts_NotTheLevelsRunningTotals()
+        {
+            _harness.EnterGame();
+
+            _harness.ProjectileLoaded.Handle(new ProjectileLoadedMessage(null));
+            _harness.FlightLoaded.Value = true;
+            _harness.Now = 4f;
+            _harness.ActorHit.Handle(GameplayMetricsHarness.Hit(
+                GameplayMetricsHarness.Balloon(BalloonType.Simple, GameplayMetricsHarness.Red),
+                HitOutcome.Pop));
+            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage());
+
+            var first = _harness.LastOf(RecordKind.Flight);
+            Assert.AreEqual(4f, first.Metrics[TimerId.Gameplay], 0.01f, "time of flight, not level time");
+            Assert.AreEqual(1, first.Metrics[MetricId.Pops]);
+
+            // A second flight must start from zero on both, or every record after the first would be
+            // a running total wearing a flight's name.
+            _harness.ProjectileLoaded.Handle(new ProjectileLoadedMessage(null));
+            _harness.Now = 6f;
+            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage());
+
+            var second = _harness.LastOf(RecordKind.Flight);
+            Assert.AreEqual(2f, second.Metrics[TimerId.Gameplay], 0.01f);
+            Assert.AreEqual(0, second.Metrics[MetricId.Pops]);
+        }
+
+        [Test]
+        public void FlightOrdinal_RestartsWithEachLevel()
+        {
+            _harness.EnterGame();
+            _harness.ProjectileLoaded.Handle(new ProjectileLoadedMessage(null));
+            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage());
+            Play();
+            _harness.CompleteLevel(2);
+
+            _harness.ProjectileLoaded.Handle(new ProjectileLoadedMessage(null));
+            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage());
+
+            var flights = _harness.AllOf(RecordKind.Flight);
+            Assert.AreEqual(1, flights[flights.Count - 1].FlightIndex, "first flight of the new level");
+            Assert.AreEqual(2, flights[flights.Count - 1].LevelIndex);
+        }
+
         private void Play()
         {
             _harness.ProjectileFired.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));

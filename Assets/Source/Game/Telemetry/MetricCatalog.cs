@@ -6,7 +6,7 @@ using BalloonParty.Configuration.Items;
 namespace BalloonParty.Game.Telemetry
 {
     // The single browsable table (R6): id -> wire name, unit, fold rule, scope, dimension axes.
-    // Transcribed verbatim from "The catalog" in PLAN-GameplayTelemetry.md — wire names are
+    // This table IS the catalog — the plan no longer carries a copy to drift from. Wire names are
     // append-only once shipped (guardrail 14), so this table is never reordered or edited in place,
     // only extended. Keyed by MetricId rather than indexed by ordinal so a row can never silently
     // apply to the wrong id if the enum and the table ever drift out of declaration order.

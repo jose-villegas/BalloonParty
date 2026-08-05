@@ -1,6 +1,7 @@
 namespace BalloonParty.Game.Telemetry
 {
-    // See "Time tracking" in PLAN-GameplayTelemetry.md for the pause-gating rule per clock.
+    // What each clock measures and why Ceremony and Wall are NOT pause-gated: see "What each timer
+    // means" in this folder's README.
     internal enum TimerId
     {
         Gameplay,

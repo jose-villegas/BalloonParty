@@ -1,8 +1,8 @@
 namespace BalloonParty.Game.Telemetry
 {
     // Append-only once shipped (R6, guardrail 14) — a wire name is an external contract the moment it
-    // reaches the warehouse. See MetricCatalog for wire names, units and fold rules; see
-    // PLAN-GameplayTelemetry.md's "The catalog" for the source table.
+    // reaches the warehouse. See MetricCatalog for wire names, units and fold rules —
+    // it is the authoritative table.
     internal enum MetricId
     {
         ShotsFired,

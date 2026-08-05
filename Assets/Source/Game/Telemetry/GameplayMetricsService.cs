@@ -108,6 +108,8 @@ namespace BalloonParty.Game.Telemetry
         private int _levelAttemptOrdinal;
         private int _ceremonyLevelIndex;
         private int _pendingNewLevel;
+        private int _flightIndexInLevel;
+        private int _currentLevelIndex;
 
         public IReadOnlyReactiveProperty<LevelMetricsSnapshot> CeremonyLevel => _ceremonyLevel;
 
@@ -374,6 +376,7 @@ namespace BalloonParty.Game.Telemetry
             // interflight window cannot alias the previous flight (R2).
             _flightScopeMetrics.Reset();
             _holdEngagedThisFlight = false;
+            _flightIndexInLevel++;
             _levelMetrics.Increment(MetricId.FlightsStarted);
         }
 
@@ -807,6 +810,8 @@ namespace BalloonParty.Game.Telemetry
         private void OpenLevel(int levelNumber)
         {
             _levelDirty = false;
+            _flightIndexInLevel = 0;
+            _currentLevelIndex = levelNumber;
             _levelAttemptsByLevel.TryGetValue(levelNumber, out var played);
             played++;
             _levelAttemptsByLevel[levelNumber] = played;
@@ -870,6 +875,13 @@ namespace BalloonParty.Game.Telemetry
                 _levelMetrics.Increment(MetricId.HoldSpeedUpFlights);
             }
 
+            // Before the fold, while the scope still holds this flight alone. Its own clocks are the
+            // time of flight: OnProjectileLoaded resets the scope, and Reset() zeroes the stopwatches
+            // too, so gameplay_seconds here is [Loaded, Destroyed) minus any pause.
+            WriteEnvelope(RecordKind.Flight, _flightScopeMetrics.SealFlight(_flightIndexInLevel),
+                _currentLevelIndex, _levelAttemptOrdinal, false, _runCheatActive, null,
+                _flightIndexInLevel);
+
             _levelMetrics.Absorb(_flightScopeMetrics);
             _flightScopeMetrics.Reset();
             _holdEngagedThisFlight = false;
@@ -929,7 +941,7 @@ namespace BalloonParty.Game.Telemetry
         }
 
         private void WriteEnvelope(RecordKind kind, ISealedMetrics metrics, int levelIndex, int levelAttemptOrdinal,
-            bool completed, bool cheatActive, string endCause)
+            bool completed, bool cheatActive, string endCause, int flightIndex = 0)
         {
             // Defence in depth (guardrail 8, RK-5): TelemetrySinkBase guards its own side, and this
             // guards ours. MessagePipe runs handlers synchronously on the publisher's stack with no
@@ -946,6 +958,7 @@ namespace BalloonParty.Game.Telemetry
                     _attemptIndex,
                     levelIndex,
                     levelAttemptOrdinal,
+                    flightIndex,
                     completed,
                     cheatActive,
                     endCause,

@@ -30,7 +30,7 @@ namespace BalloonParty.Tests.Game
         {
             var scope = MetricScope.Create(MetricScopeKind.Level, 1, () => 0f);
             var envelope = new TelemetryEnvelope(
-                RecordKind.Level, 3, "abc-session", 5, 2, 1, 7, 2, true, true, "GameOver", 0L, scope.Seal(7, true));
+                RecordKind.Level, 3, "abc-session", 5, 2, 1, 7, 2, 0, true, true, "GameOver", 0L, scope.Seal(7, true));
 
             var json = _serializer.Serialize(envelope);
 
@@ -173,13 +173,13 @@ namespace BalloonParty.Tests.Game
         private static TelemetryEnvelope BuildLevel(MetricScope scope)
         {
             return new TelemetryEnvelope(
-                RecordKind.Level, 1, "session", 1, 1, 0, 1, 1, true, false, "LevelUp", 0L, scope.Seal(1, true));
+                RecordKind.Level, 1, "session", 1, 1, 0, 1, 1, 0, true, false, "LevelUp", 0L, scope.Seal(1, true));
         }
 
         private static TelemetryEnvelope BuildEnvelope(RecordKind kind, MetricScope scope)
         {
             return new TelemetryEnvelope(
-                kind, 1, "session", 1, 1, 0, 1, 1, true, false, "LevelUp", 0L, scope.Seal());
+                kind, 1, "session", 1, 1, 0, 1, 1, 0, true, false, "LevelUp", 0L, scope.Seal());
         }
     }
 }

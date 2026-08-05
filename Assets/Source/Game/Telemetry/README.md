@@ -8,14 +8,18 @@ The service never publishes, never modifies gameplay state, and never causes stu
 during action — it only counts. Views read immutable snapshots; they never see a live
 accumulator.
 
-> **W1 (vocabulary, scopes, timers), W2 (envelope, serializer, sinks) and W3 (the service)
-> have landed.** W3 added `GameplayMetricsService` and `SessionTelemetryContext`, plus two
-> sanctioned non-message touches outside this folder: `CheatState.AnyCheatUsed` and
-> `IHoldSpeedUpState` on `HoldSpeedUpController`. The consent and batching decorators
-> (`ConsentGateSink`, `BatchingTelemetrySink`) and `HttpAnalyticsSink` are still design —
-> those rows in the table below are the target layout, not current code. Everything else is
-> covered by the EditMode tests in `Assets/Tests/EditMode/Game/`, including the test fake
-> `RecordingTelemetrySink` and the shared `GameplayMetricsHarness`.
+> **Everything here is built and in use** — the vocabulary and scopes, the
+> envelope/serializer/sink layer, `GameplayMetricsService`, and the catalog-driven metric
+> labels in `UI/Telemetry/` that render it. Two sanctioned non-message touches live outside
+> this folder: `CheatState.AnyCheatUsed` and `IHoldSpeedUpState` on `HoldSpeedUpController`.
+>
+> **Not built:** `ConsentGateSink`, `BatchingTelemetrySink` and `HttpAnalyticsSink` — those
+> rows below are the target layout, not current code, and are out of scope until a consent
+> policy and an analytics provider are chosen. Nothing shipping needs them; the local
+> JSON Lines log covers balance work today.
+>
+> EditMode coverage lives in `Assets/Tests/EditMode/Game/` and `.../UI/`, including the test
+> fake `RecordingTelemetrySink` and the shared `GameplayMetricsHarness`.
 
 ## Contents
 
@@ -30,7 +34,7 @@ accumulator.
 | `ISealedMetrics` | The envelope's actual contract: `IReadOnlyMetricSet` plus `this[TimerId]`, implemented only by the two snapshots — never by `MetricSet` — so a reference typed as `ISealedMetrics` really is immutable |
 | `MetricScope` / `MetricScopeState` | One scope's metric set and timers, with `Seal()` (immutable snapshot) and `Reset()` (reuse without reallocation). Four instances, built only through `MetricScope.Create`. `Absorb` requires its argument to be exactly one scope below (rejects itself, a sibling, or a non-adjacent scope); `Seal(int, bool)`/`Seal()` each validate the scope they run on |
 | `TelemetryStopwatch` | Pure C# timer that owns its injected `Func<float>` clock and folds elapsed time on `Pause()`/`Resume()`/`Elapsed` reads. Deterministic in tests via a fake clock |
-| `MetricsSnapshotBase` / `LevelMetricsSnapshot` / `RunMetricsSnapshot` | Sealed immutable read surfaces implementing `ISealedMetrics` — what the popups render and what the sink receives. The shared payload (counters, timers, axis slots, named breakdowns) lives once in the base; `LevelMetricsSnapshot` adds only `LevelIndex`/`Completed` |
+| `MetricsSnapshotBase` / `FlightMetricsSnapshot` / `LevelMetricsSnapshot` / `RunMetricsSnapshot` | Sealed immutable read surfaces implementing `ISealedMetrics` — what the popups render and what the sink receives. The shared payload (counters, timers, axis slots, named breakdowns) lives once in the base; `LevelMetricsSnapshot` adds only `LevelIndex`/`Completed`, and `FlightMetricsSnapshot` only `FlightIndex` |
 | `ColorCount` / `BalloonTypeCount` / `ItemActivationCount` | The breakdown shapes the snapshots expose (`PopsByColor`, `PointsByColor`, `PopsByBalloonType`, `DeflectsByBalloonType`, `ItemsActivated`) |
 | `ILevelMetricsView` | The UI read seam. All three members (ceremony snapshot, last flushed level, run) are `IReadOnlyReactiveProperty` — each is assigned from inside a message handler, so a plain property read from a view's own handler for the same message would return the previous value whenever that view subscribed first. **Only `BalloonParty.UI.*` types may inject it** |
 | `GameplayMetricsService` | Entry point (`IStartable`, `IDisposable`, `IRunResettable`). Five-state level machine (Idle/Playing/Ceremony/Transitioning/Ended); routes subscriptions into scopes, takes the two per-level snapshots, hands envelopes to the sink |
@@ -39,9 +43,9 @@ accumulator.
 | `TelemetryEnvelopeSerializer` | Reflection-free JSON writer over one reused `StringBuilder`, driven by loops over `MetricCatalog`/`TimerCatalog` (zero-valued counters skipped, timers always emitted, `InvariantCulture` on every numeric/date append) |
 | `ITelemetrySink` / `TelemetrySinkBase` | Write seam. The base owns the never-throw guard: `Write`/`FlushAsync` share one latch that permanently no-ops both once either hook throws; `Dispose` is guarded and idempotent independently, so a prior write failure never leaks the sink's resource |
 | `CompositeTelemetrySink` | Fans out to an array of leaf sinks; an empty array is the inert "no export configured" state — no `NullTelemetrySink`. Registered unconditionally in `GameScopeRegistration.RegisterTelemetrySinks`, wrapping `{ JsonLinesTelemetrySink }` under the dev guard or an empty array otherwise |
-| `ConsentGateSink` / `BatchingTelemetrySink` | Cross-cutting decorators — one concern each (W5) |
+| `ConsentGateSink` / `BatchingTelemetrySink` | *(Not built)* Cross-cutting decorators — one concern each |
 | `JsonLinesTelemetrySink` | Dev-only local sink (`#if UNITY_EDITOR \|\| DEVELOPMENT_BUILD`): one JSON object per line, one `StreamWriter` opened in `Start()` and kept for the session, rotating log files in `Application.persistentDataPath/telemetry/` (20 most recent, sorted by file name) |
-| `HttpAnalyticsSink` | Batched export to an external analytics service (last wave; gated on choosing a provider) |
+| `HttpAnalyticsSink` | *(Not built)* Batched export to an external analytics service; gated on choosing a provider |
 
 ## Every scope runs its own clocks
 
@@ -53,6 +57,56 @@ never folds timers, only counters and axes. Folding would double-count: a Run sc
 on top would double it. An earlier revision specified the fold (`TelemetryStopwatch.Add`
 plus a `MetricScope.AbsorbTimers` step inside `Absorb`); it was wrong and has been
 removed, not just left unused.
+
+### What each timer means
+
+| Timer | Runs while | Reads as |
+|---|---|---|
+| `gameplay_seconds` | `Playing` **and** not paused | Thumb-on-screen play. The one to compare levels by |
+| `ceremony_seconds` | `Ceremony` | How long the level-up popup was up |
+| `wall_seconds` | Any state except `Idle`/`Ended` | The level end to end — gameplay + ceremony + transition |
+| `hold_seconds` | Counting **and** hold-to-speed-up engaged | How much of the level was fast-forwarded |
+
+**`ceremony_seconds` is deliberately not pause-gated.** The ceremony *is* a pause —
+`LevelUpCinematic` holds `PauseSource.Cinematic` and `LevelUpPopUp` holds
+`PauseSource.LevelUp` for its whole duration — so gating it would make it read ~0.
+`wall_seconds` is ungated for the same reason: every `PauseSource` today is gameplay- or
+ceremony-owned rather than a user interruption, so gating it would collapse it toward
+`gameplay_seconds` and the two would stop being different measurements.
+
+So `wall − gameplay − ceremony` is transition time, and `hold / gameplay` is the fraction
+of a level that was fast-forwarded — which is what makes a rushed level distinguishable
+from a slow one rather than just "shorter".
+
+## Units on the wire
+
+The envelope carries raw numbers; **the unit lives in `MetricCatalog`, not in the JSON**.
+One case surprises everybody who reads a record cold: `max_danger_level` is declared
+`level_hundredths` because `MetricSet` stores `int`, while `IDangerLevel.Level` is a 0→1
+float. A record showing `"max_danger_level": 33` means **0.33 — a third of the way to
+death**, not 33 of anything. `MetricValueResolver` already renders it as `33%` for labels;
+a human reading the `.jsonl` has to know.
+
+## A record per flight
+
+Every projectile writes a `RecordKind.Flight` envelope when it is destroyed, before its
+counters fold into the level — so a level's shots can be read individually rather than only
+as level totals.
+
+**The duration comes free.** `OnProjectileLoaded` calls `_flightScopeMetrics.Reset()`, and
+`MetricScope.Reset()` zeroes its stopwatches as well as its counters, so by the seal the
+Flight scope's own `gameplay_seconds` is exactly `[Loaded, Destroyed)` minus any pause —
+the time of flight — and `hold_seconds` is how much of that shot was fast-forwarded. No
+metric had to be added for it; the clocks were already running and were being thrown away.
+
+`FlightIndex` counts from 1 within the level and resets when a level opens, so records
+order without a timestamp sort and a gap reads as a dropped record rather than a slow
+frame.
+
+**This is the highest-volume record kind by an order of magnitude** — one per shot against
+one per level. That is fine for the local JSON Lines log it feeds today; it is the first
+thing to reconsider if an HTTP sink is ever added, since a batched upload would carry
+mostly flight records.
 
 ## Two snapshots per level, one record
 
@@ -150,4 +204,6 @@ compiled out of release.
 
 ## Design plan
 
-Full specification: @ref plan_gameplay_telemetry
+@ref plan_gameplay_telemetry — pruned to the numbered requirements and risks this folder's
+comments cite (R1–R30, RK-1…RK-15), the extraction path, and the two pieces never built.
+This README is the first place to look; the plan is the second.

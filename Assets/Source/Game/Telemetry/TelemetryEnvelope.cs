@@ -24,6 +24,9 @@ namespace BalloonParty.Game.Telemetry
 
         public int LevelAttemptOrdinal { get; }
 
+        // 1-based within the level on a flight record; 0 on every other kind.
+        public int FlightIndex { get; }
+
         public bool Completed { get; }
 
         public bool CheatActive { get; }
@@ -43,6 +46,7 @@ namespace BalloonParty.Game.Telemetry
             int attemptIndex,
             int levelIndex,
             int levelAttemptOrdinal,
+            int flightIndex,
             bool completed,
             bool cheatActive,
             string endCause,
@@ -57,6 +61,7 @@ namespace BalloonParty.Game.Telemetry
             AttemptIndex = attemptIndex;
             LevelIndex = levelIndex;
             LevelAttemptOrdinal = levelAttemptOrdinal;
+            FlightIndex = flightIndex;
             Completed = completed;
             CheatActive = cheatActive;
             EndCause = endCause;

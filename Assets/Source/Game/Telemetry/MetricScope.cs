@@ -5,8 +5,7 @@ using BalloonParty.Configuration.Items;
 namespace BalloonParty.Game.Telemetry
 {
     // One scope's working state: its MetricSet plus its TimerId-indexed clocks. Flight, Level, Run and
-    // Session are four instances of this one type, never four hand-written accumulator classes (see
-    // "Superseded decisions" in PLAN-GameplayTelemetry.md).
+    // Session are four instances of this one type, never four hand-written accumulator classes.
     internal sealed class MetricScope
     {
         private readonly MetricScopeKind _scope;
@@ -85,8 +84,8 @@ namespace BalloonParty.Game.Telemetry
         // Counters and axes only — never timers. Every scope runs its own clocks, driven together by
         // the service (pausing the gameplay clock is one loop over the scopes, not one call per scope
         // per timer). A Run scope's Gameplay stopwatch has already measured the whole run; adding each
-        // Level's elapsed on top would double it (see "Every scope runs its own clocks" in
-        // PLAN-GameplayTelemetry.md's Read model section).
+        // Level's elapsed on top would double it (see "Every scope runs its own clocks" in this
+        // folder's README).
         //
         // The child must be exactly one scope below this one — Absorb has no way to tell "fold Level
         // into Session" apart from a caller that meant to fold through Run first, and folding a
@@ -145,6 +144,18 @@ namespace BalloonParty.Game.Telemetry
             }
 
             return new LevelMetricsSnapshot(CopyState(), levelIndex, completed);
+        }
+
+        public FlightMetricsSnapshot SealFlight(int flightIndex)
+        {
+            if (_scope != MetricScopeKind.Flight)
+            {
+                throw new InvalidOperationException(
+                    $"SealFlight produces a FlightMetricsSnapshot and is only valid on a Flight scope " +
+                    $"(this scope is {_scope}).");
+            }
+
+            return new FlightMetricsSnapshot(CopyState(), flightIndex);
         }
 
         public RunMetricsSnapshot Seal()

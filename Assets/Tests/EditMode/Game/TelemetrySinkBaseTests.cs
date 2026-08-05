@@ -93,7 +93,7 @@ namespace BalloonParty.Tests.Game
         {
             var scope = MetricScope.Create(MetricScopeKind.Level, 1, () => 0f);
             var metrics = scope.Seal(1, true);
-            return new TelemetryEnvelope(RecordKind.Level, 1, "session", 1, 1, 0, 1, 1, true, false, "LevelUp", 0L, metrics);
+            return new TelemetryEnvelope(RecordKind.Level, 1, "session", 1, 1, 0, 1, 1, 0, true, false, "LevelUp", 0L, metrics);
         }
 
         // The Dispose/_disposed split exists so a prior write failure cannot leak the resource

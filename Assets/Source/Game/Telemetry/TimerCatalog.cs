@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace BalloonParty.Game.Telemetry
 {
-    // Timer-side counterpart to MetricCatalog. TimerId's four wire names existed only in
-    // PLAN-GameplayTelemetry.md's "Timers" table before this type, which would have left W2's
+    // Timer-side counterpart to MetricCatalog, and the only home for TimerId's four wire names.
+    // Without it the
     // serializer to hardcode four string literals into what are permanent, append-only wire names —
     // exactly what the counter catalog exists to prevent (R6, guardrail 14). Kept as its own static
     // table rather than folded into MetricCatalog: TimerId carries no FoldRule, Scope or MetricAxis —

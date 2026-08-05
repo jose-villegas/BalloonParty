@@ -4,8 +4,8 @@ using System.Collections.Generic;
 namespace BalloonParty.Game.Telemetry
 {
     // Dense storage only (R5, R29): a counters array over MetricId plus one array per declared
-    // AxisSlot — one per (MetricId, MetricAxis) pair, not one per axis kind (see "Axis storage" in
-    // PLAN-GameplayTelemetry.md). BalloonType/ItemType slots are sized from their own enum length; a
+    // AxisSlot — one per (MetricId, MetricAxis) pair, not one per axis kind (see AxisSlot).
+    // BalloonType/ItemType slots are sized from their own enum length; a
     // Color slot's size is caller-supplied because it depends on the configured palette
     // (ProgressColorNames plus a trailing "other" bucket), which this pure-C# type has no access to.
     // Every write below is a bounds-checked array index — no Dictionary, no LINQ, no allocation past
