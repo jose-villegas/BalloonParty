@@ -189,11 +189,9 @@ namespace BalloonParty.Projectile.Controller
             }
 
             // Dispatch runs the streak stage synchronously, so the tracker is already current here.
-            // StreakGrantsShields off leaves items as the only shield source (IRunConfig).
-            if (_runConfig.StreakGrantsShields &&
-                outcome == HitOutcome.Pop && balloon is IHasColor &&
-                _streakTracker.CurrentStreak >= 2 &&
-                _streakTracker.LastColor == projectile.ColorName.Value)
+            if (StreakShieldRule.GrantsShield(
+                    _runConfig.StreakGrantsShields, outcome == HitOutcome.Pop, balloon is IHasColor,
+                    _streakTracker.CurrentStreak, _streakTracker.LastColor, projectile.ColorName.Value))
             {
                 projectile.ShieldsRemaining.Value++;
                 _shieldGainedPublisher.Publish(new ShieldGainedMessage(projectile.LastHitBalloon.SlotIndex.Value));

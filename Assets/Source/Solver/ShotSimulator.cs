@@ -1204,11 +1204,10 @@ namespace BalloonParty.Solver
                 || string.Equals(attributedColorId, targetColorId, StringComparison.Ordinal);
             state.RawScore += (counts ? balloon.ScoreValue * payColors : 0) * multiplier;
 
-            // Gated exactly as ProjectileHitResolver gates it — the two rules have to move together
-            // or the solver optimises for a shot the game will not fly.
-            if (scoreRules.StreakGrantsShields
-                && cause.IsProjectileContact && !string.IsNullOrEmpty(balloon.ColorId) && state.StreakCount >= 2
-                && string.Equals(state.StreakColor, state.ProjectileColor, StringComparison.Ordinal))
+            if (StreakShieldRule.GrantsShield(
+                    scoreRules.StreakGrantsShields, cause.IsProjectileContact,
+                    !string.IsNullOrEmpty(balloon.ColorId), state.StreakCount, state.StreakColor,
+                    state.ProjectileColor))
             {
                 state.Shields++;
             }
