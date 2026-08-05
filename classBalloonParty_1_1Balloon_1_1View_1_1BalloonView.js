@@ -50,6 +50,7 @@ var classBalloonParty_1_1Balloon_1_1View_1_1BalloonView =
     [ "IsStableParam", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#aeed4022bcc869d545fb4dee686e559a9", null ],
     [ "TimeOffsetId", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a56d81a3e3b90b6c436db05a10e44b3f3", null ],
     [ "ActorKind", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a68894a5a2e259ed145734524f7d9efb6", null ],
+    [ "ContactCenter", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a2cf569a951ae07966f5f0b6b6f670cd4", null ],
     [ "ContactRadius", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#ac556f34547ae1afcc60408be0b77e4a2", null ],
     [ "HasActiveCollider", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a6816100f6c8cc89dc1e6c72355c9f6f6", null ],
     [ "Model", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a0761ff60f9163e14f05883d0f4ae7d26", null ],

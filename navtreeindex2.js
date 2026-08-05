@@ -1,7 +1,9 @@
 var NAVTREEINDEX2 =
 {
+"ParticleEffectView_8cs.html":[7,0,14,9,6],
+"ParticlePoolChannel_8cs.html":[7,0,14,9,7],
 "PathHelper_8cs.html":[7,0,14,0,0],
-"PathTrace_8cs.html":[7,0,14,24],
+"PathTrace_8cs.html":[7,0,14,26],
 "PauseService_8cs.html":[7,0,14,8,2],
 "PauseSource_8cs.html":[7,0,14,8,3],
 "PausedMessage_8cs.html":[7,0,14,8,1],
@@ -158,7 +160,7 @@ var NAVTREEINDEX2 =
 "ShotSimulator_8cs.html":[7,0,16,8],
 "ShotSolverWindow_8cs.html":[7,0,6,6,0],
 "ShoveVector_8cs.html":[7,0,15,2,4],
-"ShowIfEnumAttribute_8cs.html":[7,0,14,25],
+"ShowIfEnumAttribute_8cs.html":[7,0,14,27],
 "ShowIfEnumDrawer_8cs.html":[7,0,6,35],
 "SightRampReaction_8cs.html":[7,0,8,27],
 "SightReaction_8cs.html":[7,0,8,28],
@@ -185,7 +187,7 @@ var NAVTREEINDEX2 =
 "SnipeItemHandler_8cs.html":[7,0,8,6,1],
 "SoapBubbleClusterVariant_8cs.html":[7,0,1,3,5],
 "SortingHelper_8cs.html":[7,0,14,10,9],
-"SortingLayerNameAttribute_8cs.html":[7,0,14,26],
+"SortingLayerNameAttribute_8cs.html":[7,0,14,28],
 "SortingLayerNameDrawer_8cs.html":[7,0,6,36],
 "SoundBankClipAssigner_8cs.html":[7,0,0,1,12],
 "SoundBankConfigurationEditor_8cs.html":[7,0,0,1,13],
@@ -247,7 +249,5 @@ var NAVTREEINDEX2 =
 "TimeOfDayTint_8cs.html":[7,0,18,20],
 "TimeOfDayVisibility_8cs.html":[7,0,18,21],
 "TimeScaleService_8cs.html":[7,0,14,8,5],
-"TimeScaleSource_8cs.html":[7,0,14,8,6],
-"TimerCatalog_8cs.html":[7,0,7,7,31],
-"TimerId_8cs.html":[7,0,7,7,32]
+"TimeScaleSource_8cs.html":[7,0,14,8,6]
 };

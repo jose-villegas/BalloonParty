@@ -759,8 +759,11 @@ var annotated_dup =
           [ "StubThermalSource", "classBalloonParty_1_1Shared_1_1Thermal_1_1StubThermalSource.html", "classBalloonParty_1_1Shared_1_1Thermal_1_1StubThermalSource" ],
           [ "ThermalFrameRateGovernor", "classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html", "classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor" ]
         ] ],
+        [ "CircleContact", "classBalloonParty_1_1Shared_1_1CircleContact.html", "classBalloonParty_1_1Shared_1_1CircleContact" ],
         [ "ContactRadius", "classBalloonParty_1_1Shared_1_1ContactRadius.html", "classBalloonParty_1_1Shared_1_1ContactRadius" ],
+        [ "DeflectorCircle", "structBalloonParty_1_1Shared_1_1DeflectorCircle.html", "structBalloonParty_1_1Shared_1_1DeflectorCircle" ],
         [ "EnumIndexedAttribute", "classBalloonParty_1_1Shared_1_1EnumIndexedAttribute.html", "classBalloonParty_1_1Shared_1_1EnumIndexedAttribute" ],
+        [ "IDeflectorField", "interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html", "interfaceBalloonParty_1_1Shared_1_1IDeflectorField" ],
         [ "IEffect", "interfaceBalloonParty_1_1Shared_1_1IEffect.html", "interfaceBalloonParty_1_1Shared_1_1IEffect" ],
         [ "ImpactEventBus", "classBalloonParty_1_1Shared_1_1ImpactEventBus.html", "classBalloonParty_1_1Shared_1_1ImpactEventBus" ],
         [ "IPredictionTraceConfig", "interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html", "interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig" ],

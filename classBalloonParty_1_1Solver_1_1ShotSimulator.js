@@ -24,7 +24,7 @@ var classBalloonParty_1_1Solver_1_1ShotSimulator =
     [ "ResolveToughPop", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#af2f4f4d006c01c211fe559141e1888df", null ],
     [ "RunItemEffects", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a9e18a4ddf33e9c4365cf51afbac59044", null ],
     [ "SegmentHitsAnyBalloon", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ae6987db6d4e244403d0f2566737d396c", null ],
-    [ "Simulate", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a4d34e5e613cd7e1840477fbb76b959d0", null ],
+    [ "Simulate", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#adbcab1422f5654df4fca61e07fbae07b", null ],
     [ "SpendPierceAtDischarge", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a2c79236612561ac1f5a9de8513510af1", null ],
     [ "TryAxisCandidate", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ae1e82c4a16fe4bee38f436b63b4eb45a", null ],
     [ "TryFindMovingBalloonEntry", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a31253b26ca1bdf695164085953d43fdc", null ],

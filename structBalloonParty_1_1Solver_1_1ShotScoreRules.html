@@ -115,13 +115,13 @@ $(function(){initNavTree('structBalloonParty_1_1Solver_1_1ShotScoreRules.html','
 </div><!--header-->
 <div class="contents">
 
-<p>The board-global scoring inputs <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a13f1ff5fdbeb5a27b6dd1af11a28f05d">ShotSimulator.ResolveBalloonContact</a>/ <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a1838fa96f7dc61d7719e89dcef0f365d">ShotSimulator.ResolvePopScore</a> need — built once inside <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a4d34e5e613cd7e1840477fbb76b959d0" title="Simulates one aim direction to completion.">ShotSimulator.Simulate</a> from its own parameters and threaded <code>in</code> from there down, replacing the three loose strings/list that used to thread the same distance (<a class="el" href="plan_shot_solver_accuracy.html">Shot Solver Accuracy</a> Phase C §5).  
+<p>The board-global scoring inputs <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a13f1ff5fdbeb5a27b6dd1af11a28f05d">ShotSimulator.ResolveBalloonContact</a>/ <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a1838fa96f7dc61d7719e89dcef0f365d">ShotSimulator.ResolvePopScore</a> need — built once inside <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#adbcab1422f5654df4fca61e07fbae07b" title="Simulates one aim direction to completion.">ShotSimulator.Simulate</a> from its own parameters and threaded <code>in</code> from there down, replacing the three loose strings/list that used to thread the same distance (<a class="el" href="plan_shot_solver_accuracy.html">Shot Solver Accuracy</a> Phase C §5).  
  <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad9b636040facc12cdb66d18dab58f31d" id="r_ad9b636040facc12cdb66d18dab58f31d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad9b636040facc12cdb66d18dab58f31d">ShotScoreRules</a> (string targetColorId, IReadOnlyList&lt; string &gt; allowedColors, string rainbowColorId)</td></tr>
-<tr class="separator:ad9b636040facc12cdb66d18dab58f31d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c486cb11415589d529c9289e8fdaec3" id="r_a3c486cb11415589d529c9289e8fdaec3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3c486cb11415589d529c9289e8fdaec3">ShotScoreRules</a> (string targetColorId, IReadOnlyList&lt; string &gt; allowedColors, string rainbowColorId, bool streakGrantsShields=true)</td></tr>
+<tr class="separator:a3c486cb11415589d529c9289e8fdaec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -129,14 +129,17 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ab6f7f606563809f8c89d75839741ceaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02814ad7c50320ffdb7e0eb89cdfecb7" id="r_a02814ad7c50320ffdb7e0eb89cdfecb7"><td class="memItemLeft" align="right" valign="top">readonly string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02814ad7c50320ffdb7e0eb89cdfecb7">RainbowColorId</a></td></tr>
 <tr class="separator:a02814ad7c50320ffdb7e0eb89cdfecb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3d05ed9907bb6acb89b4f290e227ed8" id="r_ac3d05ed9907bb6acb89b4f290e227ed8"><td class="memItemLeft" align="right" valign="top">readonly bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac3d05ed9907bb6acb89b4f290e227ed8">StreakGrantsShields</a></td></tr>
+<tr class="memdesc:ac3d05ed9907bb6acb89b4f290e227ed8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mirrors <code><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#aacdc46db15c884ea8a3528f6d94ffb3c" title="Whether continuing a colour streak grants a projectile shield.">IRunConfig.StreakGrantsShields</a></code>.  <br /></td></tr>
+<tr class="separator:ac3d05ed9907bb6acb89b4f290e227ed8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1104452934b6ac299c219844d8120d39" id="r_a1104452934b6ac299c219844d8120d39"><td class="memItemLeft" align="right" valign="top">readonly string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1104452934b6ac299c219844d8120d39">TargetColorId</a></td></tr>
 <tr class="separator:a1104452934b6ac299c219844d8120d39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The board-global scoring inputs <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a13f1ff5fdbeb5a27b6dd1af11a28f05d">ShotSimulator.ResolveBalloonContact</a>/ <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a1838fa96f7dc61d7719e89dcef0f365d">ShotSimulator.ResolvePopScore</a> need — built once inside <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a4d34e5e613cd7e1840477fbb76b959d0" title="Simulates one aim direction to completion.">ShotSimulator.Simulate</a> from its own parameters and threaded <code>in</code> from there down, replacing the three loose strings/list that used to thread the same distance (<a class="el" href="plan_shot_solver_accuracy.html">Shot Solver Accuracy</a> Phase C §5). </p>
+<div class="textblock"><p>The board-global scoring inputs <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a13f1ff5fdbeb5a27b6dd1af11a28f05d">ShotSimulator.ResolveBalloonContact</a>/ <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#a1838fa96f7dc61d7719e89dcef0f365d">ShotSimulator.ResolvePopScore</a> need — built once inside <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#adbcab1422f5654df4fca61e07fbae07b" title="Simulates one aim direction to completion.">ShotSimulator.Simulate</a> from its own parameters and threaded <code>in</code> from there down, replacing the three loose strings/list that used to thread the same distance (<a class="el" href="plan_shot_solver_accuracy.html">Shot Solver Accuracy</a> Phase C §5). </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ad9b636040facc12cdb66d18dab58f31d" name="ad9b636040facc12cdb66d18dab58f31d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad9b636040facc12cdb66d18dab58f31d">&#9670;&#160;</a></span>ShotScoreRules()</h2>
+<a id="a3c486cb11415589d529c9289e8fdaec3" name="a3c486cb11415589d529c9289e8fdaec3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c486cb11415589d529c9289e8fdaec3">&#9670;&#160;</a></span>ShotScoreRules()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -154,7 +157,12 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>rainbowColorId</em></span>&#160;)</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>rainbowColorId</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>streakGrantsShields</em></span><span class="paramdefsep"> = </span><span class="paramdefval">true</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -187,6 +195,23 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac3d05ed9907bb6acb89b4f290e227ed8" name="ac3d05ed9907bb6acb89b4f290e227ed8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3d05ed9907bb6acb89b4f290e227ed8">&#9670;&#160;</a></span>StreakGrantsShields</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly bool BalloonParty.Solver.ShotScoreRules.StreakGrantsShields</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Mirrors <code><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#aacdc46db15c884ea8a3528f6d94ffb3c" title="Whether continuing a colour streak grants a projectile shield.">IRunConfig.StreakGrantsShields</a></code>. </p>
+<p>Off, a continued colour streak stops paying a shield — and a simulated shot that still collected them would credit itself wall bounces the real one cannot afford, so its "best" shots die early in play. </p>
 
 </div>
 </div>

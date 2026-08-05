@@ -109,6 +109,7 @@ $(function(){initNavTree('classBalloonParty_1_1Prediction_1_1PredictionTraceCalc
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Prediction.PredictionTraceCalculator Class Reference</div></div>
@@ -119,27 +120,36 @@ $(function(){initNavTree('classBalloonParty_1_1Prediction_1_1PredictionTraceCalc
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator__coll__graph.svg" width="555" height="115"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator__coll__graph.svg" width="570" height="179"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac05b84cfd06400ace4bff126becf01b6" id="r_ac05b84cfd06400ace4bff126becf01b6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac05b84cfd06400ace4bff126becf01b6">PredictionTraceCalculator</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html">IPredictionTraceConfig</a> config, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a> flightConfig)</td></tr>
-<tr class="separator:ac05b84cfd06400ace4bff126becf01b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7208a698e28648043b9c70c28a97f6d4" id="r_a7208a698e28648043b9c70c28a97f6d4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7208a698e28648043b9c70c28a97f6d4">Calculate</a> (Vector3 origin, Vector3 direction, List&lt; Vector3 &gt; results)</td></tr>
-<tr class="memdesc:a7208a698e28648043b9c70c28a97f6d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the prediction trace, bouncing off the left/right/top walls.  <br /></td></tr>
-<tr class="separator:a7208a698e28648043b9c70c28a97f6d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5cd8b1ecb105d63bdaf01346e8adbafc" id="r_a5cd8b1ecb105d63bdaf01346e8adbafc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5cd8b1ecb105d63bdaf01346e8adbafc">PredictionTraceCalculator</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html">IPredictionTraceConfig</a> config, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a> flightConfig, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html">IDeflectorField</a> deflectorField)</td></tr>
+<tr class="separator:a5cd8b1ecb105d63bdaf01346e8adbafc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f7093d896dd53ee739fc4c6ab4d512c" id="r_a0f7093d896dd53ee739fc4c6ab4d512c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0f7093d896dd53ee739fc4c6ab4d512c">Calculate</a> (Vector3 origin, Vector3 direction, float projectileContactRadius, List&lt; Vector3 &gt; results)</td></tr>
+<tr class="memdesc:a0f7093d896dd53ee739fc4c6ab4d512c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the prediction trace, bouncing off the left/right/top walls and off any balloon that would deflect the shot rather than let it through.  <br /></td></tr>
+<tr class="separator:a0f7093d896dd53ee739fc4c6ab4d512c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:af006826e680c59bf10013f5bc159c4fd" id="r_af006826e680c59bf10013f5bc159c4fd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af006826e680c59bf10013f5bc159c4fd">TryFindNearestDeflector</a> (Vector3 origin, Vector3 direction, float maxDistance, float projectileContactRadius, out Vector3 contact, out Vector2 normal)</td></tr>
+<tr class="separator:af006826e680c59bf10013f5bc159c4fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:aeadbdbccff150502b91078c83d250dd2" id="r_aeadbdbccff150502b91078c83d250dd2"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html">IPredictionTraceConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeadbdbccff150502b91078c83d250dd2">_config</a></td></tr>
 <tr class="separator:aeadbdbccff150502b91078c83d250dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a610d4977191c85d2d5d2befbae373d2b" id="r_a610d4977191c85d2d5d2befbae373d2b"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html">IDeflectorField</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a610d4977191c85d2d5d2befbae373d2b">_deflectorField</a></td></tr>
+<tr class="separator:a610d4977191c85d2d5d2befbae373d2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbc9434859c808bfcd298619f0293d50" id="r_abbc9434859c808bfcd298619f0293d50"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1DeflectorCircle.html">DeflectorCircle</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abbc9434859c808bfcd298619f0293d50">_deflectors</a> = new()</td></tr>
+<tr class="separator:abbc9434859c808bfcd298619f0293d50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e17c975cb9ea34b25bf27347a10c31c" id="r_a6e17c975cb9ea34b25bf27347a10c31c"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e17c975cb9ea34b25bf27347a10c31c">_flightConfig</a></td></tr>
 <tr class="separator:a6e17c975cb9ea34b25bf27347a10c31c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ac05b84cfd06400ace4bff126becf01b6" name="ac05b84cfd06400ace4bff126becf01b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac05b84cfd06400ace4bff126becf01b6">&#9670;&#160;</a></span>PredictionTraceCalculator()</h2>
+<a id="a5cd8b1ecb105d63bdaf01346e8adbafc" name="a5cd8b1ecb105d63bdaf01346e8adbafc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5cd8b1ecb105d63bdaf01346e8adbafc">&#9670;&#160;</a></span>PredictionTraceCalculator()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -152,7 +162,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a></td>          <td class="paramname"><span class="paramname"><em>flightConfig</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a></td>          <td class="paramname"><span class="paramname"><em>flightConfig</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html">IDeflectorField</a></td>          <td class="paramname"><span class="paramname"><em>deflectorField</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -160,8 +175,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a7208a698e28648043b9c70c28a97f6d4" name="a7208a698e28648043b9c70c28a97f6d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7208a698e28648043b9c70c28a97f6d4">&#9670;&#160;</a></span>Calculate()</h2>
+<a id="a0f7093d896dd53ee739fc4c6ab4d512c" name="a0f7093d896dd53ee739fc4c6ab4d512c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f7093d896dd53ee739fc4c6ab4d512c">&#9670;&#160;</a></span>Calculate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -179,12 +194,73 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>projectileContactRadius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">List&lt; Vector3 &gt;</td>          <td class="paramname"><span class="paramname"><em>results</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Calculates the prediction trace, bouncing off the left/right/top walls. </p>
+<p>Calculates the prediction trace, bouncing off the left/right/top walls and off any balloon that would deflect the shot rather than let it through. </p>
+<p>Walls and deflections share one reflection budget. They cost the shot differently — a wall spends a shield and a deflection does not — but the budget here is about how much the telegraph gives away, not about what the shot can afford, and to the player both are the same event: the line turned. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">projectileContactRadius</td><td>The shot's own contact radius. Every deflector is inflated by it, because contact happens when the two circles touch — <code>ProjectileView</code> passes <code>SurfaceRadius + _contactRadius</code> to the real deflection for the same reason. Treating the shot as a point shrinks every target and draws grazing hits as misses. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af006826e680c59bf10013f5bc159c4fd" name="af006826e680c59bf10013f5bc159c4fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af006826e680c59bf10013f5bc159c4fd">&#9670;&#160;</a></span>TryFindNearestDeflector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Prediction.PredictionTraceCalculator.TryFindNearestDeflector </td>
+          <td>(</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>origin</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>direction</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>maxDistance</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>projectileContactRadius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out Vector3</td>          <td class="paramname"><span class="paramname"><em>contact</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out Vector2</td>          <td class="paramname"><span class="paramname"><em>normal</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -200,6 +276,50 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html">IPredictionTraceConfig</a> BalloonParty.Prediction.PredictionTraceCalculator._config</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a610d4977191c85d2d5d2befbae373d2b" name="a610d4977191c85d2d5d2befbae373d2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a610d4977191c85d2d5d2befbae373d2b">&#9670;&#160;</a></span>_deflectorField</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html">IDeflectorField</a> BalloonParty.Prediction.PredictionTraceCalculator._deflectorField</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abbc9434859c808bfcd298619f0293d50" name="abbc9434859c808bfcd298619f0293d50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbc9434859c808bfcd298619f0293d50">&#9670;&#160;</a></span>_deflectors</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1DeflectorCircle.html">DeflectorCircle</a>&gt; BalloonParty.Prediction.PredictionTraceCalculator._deflectors = new()</td>
         </tr>
       </table>
   </td>

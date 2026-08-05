@@ -1,7 +1,10 @@
 var classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator =
 [
-    [ "PredictionTraceCalculator", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#ac05b84cfd06400ace4bff126becf01b6", null ],
-    [ "Calculate", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#a7208a698e28648043b9c70c28a97f6d4", null ],
+    [ "PredictionTraceCalculator", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#a5cd8b1ecb105d63bdaf01346e8adbafc", null ],
+    [ "Calculate", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#a0f7093d896dd53ee739fc4c6ab4d512c", null ],
+    [ "TryFindNearestDeflector", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#af006826e680c59bf10013f5bc159c4fd", null ],
     [ "_config", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#aeadbdbccff150502b91078c83d250dd2", null ],
+    [ "_deflectorField", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#a610d4977191c85d2d5d2befbae373d2b", null ],
+    [ "_deflectors", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#abbc9434859c808bfcd298619f0293d50", null ],
     [ "_flightConfig", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#a6e17c975cb9ea34b25bf27347a10c31c", null ]
 ];

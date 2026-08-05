@@ -1,6 +1,6 @@
 var structBalloonParty_1_1Solver_1_1ShotSolveContext =
 [
-    [ "ShotSolveContext", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a0cb470fdfb216ac049905dd15feb89b4", null ],
+    [ "ShotSolveContext", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#aca25262b8b191fbe88baa60a87fe83f5", null ],
     [ "AllowedColors", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a2b1eaaee78d366ddc37b0bcf63ac85bf", null ],
     [ "Board", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a6c2497ec7b3aa65f161da19e89aae850", null ],
     [ "CruiseConfig", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#acdb2a043e58dee4b3060d3bf532225a0", null ],
@@ -12,6 +12,7 @@ var structBalloonParty_1_1Solver_1_1ShotSolveContext =
     [ "RainbowColorId", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a185a932ade4e74322a3799d71b08247d", null ],
     [ "SpawnLocalOffset", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a565e2ba7709d72a2b52268776853cca7", null ],
     [ "StartingShields", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a8ed51d952d7a30ab47a05ec5eb514394", null ],
+    [ "StreakGrantsShields", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#ae36919be00223c5bf8072b1de121defa", null ],
     [ "ThrowerPivot", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a07c48c105d7b9abf7a7dcb41cee44164", null ],
     [ "WallLimitsClockwise", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a259839e9234f9434391350accd4849a7", null ]
 ];

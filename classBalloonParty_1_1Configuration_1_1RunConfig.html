@@ -142,6 +142,9 @@ Properties</h2></td></tr>
 <tr class="separator:a978c69652a6c2acc182bcc1a91e63c5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addac5244db6c7a4bf4b1db1a0f74b9d3" id="r_addac5244db6c7a4bf4b1db1a0f74b9d3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#addac5244db6c7a4bf4b1db1a0f74b9d3">StartingHitPoints</a><code> [get]</code></td></tr>
 <tr class="separator:addac5244db6c7a4bf4b1db1a0f74b9d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20619052d65e82bbe6393341d202a7f4" id="r_a20619052d65e82bbe6393341d202a7f4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a20619052d65e82bbe6393341d202a7f4">StreakGrantsShields</a><code> [get]</code></td></tr>
+<tr class="memdesc:a20619052d65e82bbe6393341d202a7f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether continuing a colour streak grants a projectile shield.  <br /></td></tr>
+<tr class="separator:a20619052d65e82bbe6393341d202a7f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -153,6 +156,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a6775e28253dde78cdc98eb824d93df26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7543729b240eb6945c720ed60d3c7f9" id="r_af7543729b240eb6945c720ed60d3c7f9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af7543729b240eb6945c720ed60d3c7f9">_startingHitPoints</a> = 3</td></tr>
 <tr class="separator:af7543729b240eb6945c720ed60d3c7f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e3fc3f305c7909e51035a8305a48b37" id="r_a4e3fc3f305c7909e51035a8305a48b37"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e3fc3f305c7909e51035a8305a48b37">_streakGrantsShields</a> = true</td></tr>
+<tr class="separator:a4e3fc3f305c7909e51035a8305a48b37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a74406e2dd93188032564acde7c7bac79" name="a74406e2dd93188032564acde7c7bac79"></a>
@@ -232,6 +237,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Configuration.RunConfig._startingHitPoints = 3</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4e3fc3f305c7909e51035a8305a48b37" name="a4e3fc3f305c7909e51035a8305a48b37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e3fc3f305c7909e51035a8305a48b37">&#9670;&#160;</a></span>_streakGrantsShields</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Configuration.RunConfig._streakGrantsShields = true</td>
         </tr>
       </table>
   </td>
@@ -343,6 +370,33 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#a05e7a059dd6f744faf423f2be72cbfca">BalloonParty.Shared.IRunConfig</a>.</p>
+
+</div>
+</div>
+<a id="a20619052d65e82bbe6393341d202a7f4" name="a20619052d65e82bbe6393341d202a7f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20619052d65e82bbe6393341d202a7f4">&#9670;&#160;</a></span>StreakGrantsShields</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Configuration.RunConfig.StreakGrantsShields</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Whether continuing a colour streak grants a projectile shield. </p>
+<p>Off makes items the only source of shields — a balance experiment; see <code><a class="el" href="Projectile_2README_8md.html">Projectile/README.md</a></code>. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#aacdc46db15c884ea8a3528f6d94ffb3c">BalloonParty.Shared.IRunConfig</a>.</p>
 
 </div>
 </div>

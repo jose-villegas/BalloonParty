@@ -1,5 +1,7 @@
 var NAVTREEINDEX3 =
 {
+"TimerCatalog_8cs.html":[7,0,7,7,31],
+"TimerId_8cs.html":[7,0,7,7,32],
 "TmpTextExtensions_8cs.html":[7,0,14,4,18],
 "ToughBalloonModel_8cs.html":[7,0,1,1,9],
 "ToughBalloonVariant_8cs.html":[7,0,1,3,6],
@@ -24,7 +26,7 @@ var NAVTREEINDEX3 =
 "UnbreakableBalloonVariant_8cs.html":[7,0,1,3,7],
 "UnbreakableBalloonVariant_8cs.html#a832e8f52fca5a678819ec96269dcb532":[7,0,1,3,7,2],
 "UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d":[7,0,1,3,7,1],
-"UnitCircleAttribute_8cs.html":[7,0,14,27],
+"UnitCircleAttribute_8cs.html":[7,0,14,29],
 "UnitCircleDrawer_8cs.html":[7,0,6,40],
 "UnusedAssetsWindow_8cs.html":[7,0,6,41],
 "VariationPicker_8cs.html":[7,0,0,18],
@@ -34,7 +36,7 @@ var NAVTREEINDEX3 =
 "VoicePlayback_8cs.html":[7,0,0,20],
 "WallBounceEndCondition_8cs.html":[7,0,12,0,3],
 "WallHitMessage_8cs.html":[7,0,14,7,42],
-"WallLimits_8cs.html":[7,0,14,28],
+"WallLimits_8cs.html":[7,0,14,30],
 "WallNetView_8cs.html":[7,0,13,0,1],
 "WaveDamageMessage_8cs.html":[7,0,14,7,43],
 "WaveDeficitCalculator_8cs.html":[7,0,7,3,6],
@@ -247,7 +249,5 @@ var NAVTREEINDEX3 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#ab3284995fb7c7a5af38d4941df909411":[5,0,0,0,0,3,22],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#ab3284995fb7c7a5af38d4941df909411":[6,0,0,0,0,3,22],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#ac77d8deb7688abcf83063bcec1ecd1b0":[5,0,0,0,0,3,43],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#ac77d8deb7688abcf83063bcec1ecd1b0":[6,0,0,0,0,3,43],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#ac88fb227084e31ce37d9e82cb33e4ebb":[5,0,0,0,0,3,12],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#ac88fb227084e31ce37d9e82cb33e4ebb":[6,0,0,0,0,3,12]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#ac77d8deb7688abcf83063bcec1ecd1b0":[6,0,0,0,0,3,43]
 };

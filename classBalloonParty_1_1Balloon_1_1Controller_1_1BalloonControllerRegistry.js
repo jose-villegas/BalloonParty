@@ -2,6 +2,7 @@ var classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry =
 [
     [ "BalloonControllerRegistry", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#ac77d5740fb36ab8b9f344717e724647f", null ],
     [ "ClearAll", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#a5e401ad83a54369853223e01e35744dc", null ],
+    [ "CollectDeflectors", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#ad5acba9382c2286f42e2f60ef3137dbb", null ],
     [ "DetachOutgoing", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#a4333deb0b7a99dfd8fa224782a21a299", null ],
     [ "Dispose", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#ae12c581eb948b18190d4e679d39f72e1", null ],
     [ "Grow", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#a8b5939cbb5a2c92393f4a652b17eb61e", null ],

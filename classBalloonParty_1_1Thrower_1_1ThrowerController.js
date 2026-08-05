@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Thrower_1_1ThrowerController =
 [
-    [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ae5e90f893c7d48b286bf1a44049ca25d", null ],
+    [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a5dbdf905a65983e2c7663dce54da6cc4", null ],
     [ "ClearPredictionTrace", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ac497d1607399c4a0644aa0ffd0f66c71", null ],
     [ "Dispose", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ae6a7bc74adb625d310dbf2894b1bb2c5", null ],
     [ "Fire", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#acf7c3023e29ab76fd5380d26a3896b72", null ],
@@ -22,6 +22,7 @@ var classBalloonParty_1_1Thrower_1_1ThrowerController =
     [ "_activeProjectile", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a5a73d5c70e042bce036c1fe2bb5bb4a7", null ],
     [ "_activeView", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#af3d5c57651fd8b2608996d45358a55aa", null ],
     [ "_boardClearSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ab4556eddb1977a5a50bc4c56621ded51", null ],
+    [ "_deflectorField", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a12c652fed197903c0c5679ec5bade6f4", null ],
     [ "_destroyedSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a1a4ffb17683b6de23c92c56b641652d8", null ],
     [ "_direction", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a724af414befd70b081d13131b60aed3a", null ],
     [ "_flightConfig", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a45e9a2b0c6804ebf3610cc65094ed183", null ],

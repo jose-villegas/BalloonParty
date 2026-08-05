@@ -128,8 +128,9 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Shared_1_1IPredictionTraceCon
 Properties</h2></td></tr>
 <tr class="memitem:a9c4707c2bebcc0d601fba085b6898882" id="r_a9c4707c2bebcc0d601fba085b6898882"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9c4707c2bebcc0d601fba085b6898882">PredictionTraceColor</a><code> [get]</code></td></tr>
 <tr class="separator:a9c4707c2bebcc0d601fba085b6898882"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8eb5d5dd5cc0ffc8a65515f3f5414e2e" id="r_a8eb5d5dd5cc0ffc8a65515f3f5414e2e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8eb5d5dd5cc0ffc8a65515f3f5414e2e">PredictionTraceMaxBounces</a><code> [get]</code></td></tr>
-<tr class="separator:a8eb5d5dd5cc0ffc8a65515f3f5414e2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abed96880f9f164383efe2b1431644fcd" id="r_abed96880f9f164383efe2b1431644fcd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abed96880f9f164383efe2b1431644fcd">PredictionTraceMaxReflections</a><code> [get]</code></td></tr>
+<tr class="memdesc:abed96880f9f164383efe2b1431644fcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reflections the trace will draw before it stops — walls and balloon deflections together, because to the player they are the same event: the line turned.  <br /></td></tr>
+<tr class="separator:abed96880f9f164383efe2b1431644fcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f19bcb5c4dd64aca0eddee63bc27382" id="r_a3f19bcb5c4dd64aca0eddee63bc27382"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f19bcb5c4dd64aca0eddee63bc27382">PredictionTraceMaxSteps</a><code> [get]</code></td></tr>
 <tr class="separator:a3f19bcb5c4dd64aca0eddee63bc27382"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a053fc747d7ef3e6883670830836f2442" id="r_a053fc747d7ef3e6883670830836f2442"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a053fc747d7ef3e6883670830836f2442">PredictionTraceStep</a><code> [get]</code></td></tr>
@@ -162,8 +163,8 @@ Properties</h2></td></tr>
 
 </div>
 </div>
-<a id="a8eb5d5dd5cc0ffc8a65515f3f5414e2e" name="a8eb5d5dd5cc0ffc8a65515f3f5414e2e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8eb5d5dd5cc0ffc8a65515f3f5414e2e">&#9670;&#160;</a></span>PredictionTraceMaxBounces</h2>
+<a id="abed96880f9f164383efe2b1431644fcd" name="abed96880f9f164383efe2b1431644fcd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abed96880f9f164383efe2b1431644fcd">&#9670;&#160;</a></span>PredictionTraceMaxReflections</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -172,7 +173,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int BalloonParty.Shared.IPredictionTraceConfig.PredictionTraceMaxBounces</td>
+          <td class="memname">int BalloonParty.Shared.IPredictionTraceConfig.PredictionTraceMaxReflections</td>
         </tr>
       </table>
   </td>
@@ -182,7 +183,11 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a42b1e1f16f3dac367bdbd32c63efc76e">BalloonParty.Configuration.PredictionTraceConfig</a>.</p>
+<p>Reflections the trace will draw before it stops — walls and balloon deflections together, because to the player they are the same event: the line turned. </p>
+<p>The leg leaving the last allowed reflection is still drawn; the one after it is not.</p>
+<p>Deliberately one budget rather than one per kind. The telegraph is an aid, not a solution — showing the whole ricochet answers the shot for the player. Expected to rise with progression. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a3cdc1f21a3dd9da182589f42cdbdccf6">BalloonParty.Configuration.PredictionTraceConfig</a>.</p>
 
 </div>
 </div>

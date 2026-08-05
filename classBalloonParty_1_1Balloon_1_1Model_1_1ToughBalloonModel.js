@@ -12,6 +12,7 @@ var classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel =
     [ "BiasTypeId", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a8c3761c788318a9a6e9a675fe237cd2d", null ],
     [ "BiasValue", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#ae21fedad77f13811ac4d16191823a2a2", null ],
     [ "ColorId", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a0d8adaf1a03ab6f41b8532b51f31e78a", null ],
+    [ "DeflectsOrdinaryHit", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a937b7930a0f992b4096c3b0d75af5701", null ],
     [ "DeflectStampScale", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a6f08947fcf6700473c56b15f6cbde2c0", null ],
     [ "DirectBalanceMotion", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a23aad630e6dd316a26c31b21063ae9e0", null ],
     [ "HitsRemaining", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#ae86922261682f7187590d5d69fd4a632", null ],

@@ -42,6 +42,7 @@ var classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView =
     [ "UpdateGlowColor", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#ab184bcd257084e19d465b0affc72e8a9", null ],
     [ "_balancePublisher", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#ab752cd6a65490e64c8201fa38d1c3560", null ],
     [ "_baseScale", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#af440b2862f9441516bafe7f35a7e3bf3", null ],
+    [ "_colliderOffset", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a95bea5dcb9b3ab5240d5ff36e075d869", null ],
     [ "_contactRadius", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a387e55ed5c77ca235caa01cad43399e9", null ],
     [ "_corridorBlocked", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a815fdaa0915a652f6768bc9322497036", null ],
     [ "_cruiseEndedPublisher", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#ae2a2588f411be69c1b1a61cbe66ca486", null ],
@@ -99,5 +100,7 @@ var classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView =
     [ "_visual", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a128366a3792b094b8750b0cbe9c8e05a", null ],
     [ "_wallHitPublisher", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a64c00c517ebbede3729b8feb747ad7cf", null ],
     [ "BalloonsLayer", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a380f930191e7eade1b6441d6b1d9fa48", null ],
+    [ "ContactCenter", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a079853dd445a375c421440130f8e1aac", null ],
+    [ "ContactRadius", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#ac2e949b34e60026be49e3f57fb8ded44", null ],
     [ "HasFlown", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#aa2a67112f40c7a9ec77f82628b436e9c", null ]
 ];

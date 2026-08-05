@@ -66,6 +66,7 @@ var hierarchy =
     [ "BalloonParty.Shared.GameState.Cinematic", "classBalloonParty_1_1Shared_1_1GameState_1_1Cinematic.html", null ],
     [ "BalloonParty.Game.Cinematics.CinematicScene", "classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicScene.html", null ],
     [ "BalloonParty.Configuration.Cinematics.CinematicStateEntry", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicStateEntry.html", null ],
+    [ "BalloonParty.Shared.CircleContact", "classBalloonParty_1_1Shared_1_1CircleContact.html", null ],
     [ "BalloonParty.Editor.CloudNoiseTextureGenerator", "classBalloonParty_1_1Editor_1_1CloudNoiseTextureGenerator.html", null ],
     [ "BalloonParty.Slots.Actor.ClusterSlotSelectionStrategy.ClusterFill", "classBalloonParty_1_1Slots_1_1Actor_1_1ClusterSlotSelectionStrategy_1_1ClusterFill.html", null ],
     [ "BalloonParty.Shared.Extensions.ColorableRendererExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1ColorableRendererExtensions.html", null ],
@@ -81,6 +82,7 @@ var hierarchy =
     [ "BalloonParty.Shared.Math.DampedSpring1D", "structBalloonParty_1_1Shared_1_1Math_1_1DampedSpring1D.html", null ],
     [ "BalloonParty.Shared.Math.DampedSpring2D", "structBalloonParty_1_1Shared_1_1Math_1_1DampedSpring2D.html", null ],
     [ "BalloonParty.Shared.Diagnostics.BuildInfo.Data", "classBalloonParty_1_1Shared_1_1Diagnostics_1_1BuildInfo_1_1Data.html", null ],
+    [ "BalloonParty.Shared.DeflectorCircle", "structBalloonParty_1_1Shared_1_1DeflectorCircle.html", null ],
     [ "BalloonParty.Shared.Disturbance.DisturbanceFieldCoordinates", "classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldCoordinates.html", null ],
     [ "BalloonParty.Shared.Disturbance.DisturbanceFieldResources", "classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldResources.html", null ],
     [ "BalloonParty.Shared.Extensions.DisturbancePulseExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1DisturbancePulseExtensions.html", null ],
@@ -258,6 +260,9 @@ var hierarchy =
     ] ],
     [ "BalloonParty.Game.Danger.IDangerLevel", "interfaceBalloonParty_1_1Game_1_1Danger_1_1IDangerLevel.html", [
       [ "BalloonParty.Game.Danger.SpaceDanger", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html", null ]
+    ] ],
+    [ "BalloonParty.Shared.IDeflectorField", "interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html", [
+      [ "BalloonParty.Balloon.Controller.BalloonControllerRegistry", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html", null ]
     ] ],
     [ "IDisposable", null, [
       [ "BalloonParty.Audio.AudioChannelController", "classBalloonParty_1_1Audio_1_1AudioChannelController.html", null ],

@@ -153,6 +153,10 @@ Package Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a079853dd445a375c421440130f8e1aac" id="r_a079853dd445a375c421440130f8e1aac"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a079853dd445a375c421440130f8e1aac">ContactCenter</a><code> [get]</code></td></tr>
+<tr class="separator:a079853dd445a375c421440130f8e1aac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2e949b34e60026be49e3f57fb8ded44" id="r_ac2e949b34e60026be49e3f57fb8ded44"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac2e949b34e60026be49e3f57fb8ded44">ContactRadius</a><code> [get]</code></td></tr>
+<tr class="separator:ac2e949b34e60026be49e3f57fb8ded44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2a67112f40c7a9ec77f82628b436e9c" id="r_aa2a67112f40c7a9ec77f82628b436e9c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2a67112f40c7a9ec77f82628b436e9c">HasFlown</a><code> [get]</code></td></tr>
 <tr class="memdesc:aa2a67112f40c7a9ec77f82628b436e9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">True once the fired shot has taken at least one physics step.  <br /></td></tr>
 <tr class="separator:aa2a67112f40c7a9ec77f82628b436e9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -236,6 +240,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ab752cd6a65490e64c8201fa38d1c3560"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af440b2862f9441516bafe7f35a7e3bf3" id="r_af440b2862f9441516bafe7f35a7e3bf3"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af440b2862f9441516bafe7f35a7e3bf3">_baseScale</a></td></tr>
 <tr class="separator:af440b2862f9441516bafe7f35a7e3bf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95bea5dcb9b3ab5240d5ff36e075d869" id="r_a95bea5dcb9b3ab5240d5ff36e075d869"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a95bea5dcb9b3ab5240d5ff36e075d869">_colliderOffset</a></td></tr>
+<tr class="separator:a95bea5dcb9b3ab5240d5ff36e075d869"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a387e55ed5c77ca235caa01cad43399e9" id="r_a387e55ed5c77ca235caa01cad43399e9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a387e55ed5c77ca235caa01cad43399e9">_contactRadius</a></td></tr>
 <tr class="separator:a387e55ed5c77ca235caa01cad43399e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a815fdaa0915a652f6768bc9322497036" id="r_a815fdaa0915a652f6768bc9322497036"><td class="memItemLeft" align="right" valign="top">PathTrace.SegmentBlocked&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a815fdaa0915a652f6768bc9322497036">_corridorBlocked</a></td></tr>
@@ -1421,6 +1427,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">Vector3 BalloonParty.Projectile.View.ProjectileView._baseScale</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a95bea5dcb9b3ab5240d5ff36e075d869" name="a95bea5dcb9b3ab5240d5ff36e075d869"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95bea5dcb9b3ab5240d5ff36e075d869">&#9670;&#160;</a></span>_colliderOffset</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2 BalloonParty.Projectile.View.ProjectileView._colliderOffset</td>
         </tr>
       </table>
   </td>
@@ -2687,6 +2715,50 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="a079853dd445a375c421440130f8e1aac" name="a079853dd445a375c421440130f8e1aac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a079853dd445a375c421440130f8e1aac">&#9670;&#160;</a></span>ContactCenter</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector3 BalloonParty.Projectile.View.ProjectileView.ContactCenter</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac2e949b34e60026be49e3f57fb8ded44" name="ac2e949b34e60026be49e3f57fb8ded44"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2e949b34e60026be49e3f57fb8ded44">&#9670;&#160;</a></span>ContactRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Projectile.View.ProjectileView.ContactRadius</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aa2a67112f40c7a9ec77f82628b436e9c" name="aa2a67112f40c7a9ec77f82628b436e9c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa2a67112f40c7a9ec77f82628b436e9c">&#9670;&#160;</a></span>HasFlown</h2>
 

@@ -10,11 +10,12 @@ var searchData=
   ['data_7',['Data',['../classBalloonParty_1_1Shared_1_1Diagnostics_1_1BuildInfo_1_1Data.html',1,'BalloonParty::Shared::Diagnostics::BuildInfo']]],
   ['defaultscoretrailbehaviour_8',['DefaultScoreTrailBehaviour',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html',1,'BalloonParty::Game::Score::Behaviours']]],
   ['deflectoractormodel_9',['DeflectorActorModel',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html',1,'BalloonParty::Slots::Actor::Archetype']]],
-  ['devlogconsole_10',['DevLogConsole',['../classBalloonParty_1_1Cheats_1_1DevLogConsole.html',1,'BalloonParty::Cheats']]],
-  ['disturbancefieldcoordinates_11',['DisturbanceFieldCoordinates',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldCoordinates.html',1,'BalloonParty::Shared::Disturbance']]],
-  ['disturbancefieldresources_12',['DisturbanceFieldResources',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldResources.html',1,'BalloonParty::Shared::Disturbance']]],
-  ['disturbancefieldservice_13',['DisturbanceFieldService',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html',1,'BalloonParty::Shared::Disturbance']]],
-  ['disturbancefieldsettings_14',['DisturbanceFieldSettings',['../classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html',1,'BalloonParty::Configuration::Effects']]],
-  ['disturbancepulseextensions_15',['DisturbancePulseExtensions',['../classBalloonParty_1_1Shared_1_1Extensions_1_1DisturbancePulseExtensions.html',1,'BalloonParty::Shared::Extensions']]],
-  ['disturbancetweenextensions_16',['DisturbanceTweenExtensions',['../classBalloonParty_1_1Shared_1_1Extensions_1_1DisturbanceTweenExtensions.html',1,'BalloonParty::Shared::Extensions']]]
+  ['deflectorcircle_10',['DeflectorCircle',['../structBalloonParty_1_1Shared_1_1DeflectorCircle.html',1,'BalloonParty::Shared']]],
+  ['devlogconsole_11',['DevLogConsole',['../classBalloonParty_1_1Cheats_1_1DevLogConsole.html',1,'BalloonParty::Cheats']]],
+  ['disturbancefieldcoordinates_12',['DisturbanceFieldCoordinates',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldCoordinates.html',1,'BalloonParty::Shared::Disturbance']]],
+  ['disturbancefieldresources_13',['DisturbanceFieldResources',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldResources.html',1,'BalloonParty::Shared::Disturbance']]],
+  ['disturbancefieldservice_14',['DisturbanceFieldService',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html',1,'BalloonParty::Shared::Disturbance']]],
+  ['disturbancefieldsettings_15',['DisturbanceFieldSettings',['../classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html',1,'BalloonParty::Configuration::Effects']]],
+  ['disturbancepulseextensions_16',['DisturbancePulseExtensions',['../classBalloonParty_1_1Shared_1_1Extensions_1_1DisturbancePulseExtensions.html',1,'BalloonParty::Shared::Extensions']]],
+  ['disturbancetweenextensions_17',['DisturbanceTweenExtensions',['../classBalloonParty_1_1Shared_1_1Extensions_1_1DisturbanceTweenExtensions.html',1,'BalloonParty::Shared::Extensions']]]
 ];
