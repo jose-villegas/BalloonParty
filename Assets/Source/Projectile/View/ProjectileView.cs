@@ -107,9 +107,9 @@ namespace BalloonParty.Projectile.View
         internal float ContactRadius => _contactRadius;
 
         // Where the contact circle actually is. Radius and offset both come from the collider, so
-        // retuning the prefab retunes the maths — but the offset is currently larger than the radius,
-        // and the projectile rotates to face travel, so the circle LEADS the transform origin along
-        // the direction of flight. Every contact calculation wants this, never transform.position.
+        // retuning the prefab retunes the maths — and the projectile rotates to face travel, so an
+        // offset circle leads the transform origin along the direction of flight. Every contact
+        // calculation wants this, never transform.position.
         internal Vector3 ContactCenter => transform.TransformPoint(_colliderOffset);
 
         /// <summary>True once the fired shot has taken at least one physics step.</summary>

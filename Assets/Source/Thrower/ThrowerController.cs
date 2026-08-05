@@ -402,7 +402,7 @@ namespace BalloonParty.Thrower
             }
 
             // From the contact circle, not the transform: the collider leads the origin, so a trace
-            // started at the transform begins a couple of radii behind where the shot really is.
+            // started at the transform begins behind where the shot really is.
             _traceCalculator.Calculate(
                 _activeView.ContactCenter, _direction, _activeView.ContactRadius, _tracePoints);
             _view.SetTrace(_tracePoints);
