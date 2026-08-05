@@ -20,9 +20,19 @@ namespace BalloonParty.Item.Shield
     ///         shield-carrying balloon prefer slots a shot still passes through.
     ///     </para>
     ///     <para>
-    ///         Costs one fan sweep per grid mutation, marking the slots each flight crosses. That is a
-    ///         sweep over paths, not a search per slot, so it is bounded by the fan size rather than by
-    ///         the board area.
+    ///         Costs one fan sweep per grid mutation, and each leg of each flight tests every slot on
+    ///         the board — so roughly <c>fan x legs x columns x rows</c> ray-circle tests per mutation,
+    ///         bounded by board area, not by the fan alone. Cheap at a 6x11 grid; the thing to watch if
+    ///         either the board or the fan grows.
+    ///     </para>
+    ///     <para>
+    ///         Bounces off walls only, unlike <c>ShieldChainPlanner</c>, which also deflects off toughs.
+    ///         Deliberate: the table is cached on <see cref="SlotGrid.MutationVersion" />, and walls are
+    ///         the only reflectors that hold still between mutations — a deflector's geometry comes from
+    ///         its view, which drifts as the board settles with nothing to invalidate on. So the nudge
+    ///         under-values slots reachable only via a deflection, and that is the accepted cost of it
+    ///         being a cached bias rather than a per-frame solve. Add deflectors here and you are
+    ///         caching positions that are already wrong.
     ///     </para>
     /// </remarks>
     internal sealed class ShieldReachabilityField
@@ -37,10 +47,8 @@ namespace BalloonParty.Item.Shield
         private readonly IProjectileFlightConfig _flightConfig;
         private readonly BalloonContactRadii _radii;
         private readonly ThrowerOriginProvider _origin;
-        private readonly IDeflectorField _deflectorField;
         private readonly IShieldChainSettings _settings;
 
-        private readonly List<DeflectorCircle> _deflectors = new();
         private readonly List<Vector2> _fan = new();
 
         private int[,] _reflectionsToReach;
@@ -48,13 +56,12 @@ namespace BalloonParty.Item.Shield
 
         internal ShieldReachabilityField(
             SlotGrid grid, IProjectileFlightConfig flightConfig, BalloonContactRadii radii,
-            ThrowerOriginProvider origin, IDeflectorField deflectorField, IRunConfig runConfig)
+            ThrowerOriginProvider origin, IRunConfig runConfig)
         {
             _grid = grid;
             _flightConfig = flightConfig;
             _radii = radii;
             _origin = origin;
-            _deflectorField = deflectorField;
             _settings = runConfig.ShieldChain;
         }
 
@@ -94,8 +101,6 @@ namespace BalloonParty.Item.Shield
                 }
             }
 
-            _deflectors.Clear();
-            _deflectorField?.CollectDeflectors(_deflectors);
             BuildFan();
 
             // A shield sits on an ordinary balloon far more often than not, and this field asks

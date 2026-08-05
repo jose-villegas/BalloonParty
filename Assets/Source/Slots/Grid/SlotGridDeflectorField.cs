@@ -18,6 +18,13 @@ namespace BalloonParty.Slots.Grid
     ///         Geometry comes from the spawned view, not from the slot's world position: an actor
     ///         animating into place, or one with an offset collider, deflects where its collider is.
     ///     </para>
+    ///     <para>
+    ///         Which is why this must NOT be memoised on <see cref="SlotGrid.MutationVersion" /> the way
+    ///         MoveWeightEvaluator and ShieldReachabilityField are, however much it looks like the same
+    ///         shape. Those cache occupancy, which only changes on Place/Remove. This reads positions
+    ///         that drift continuously as the board settles, with no mutation to invalidate on — and a
+    ///         settling board is exactly when a player is lining a shot up.
+    ///     </para>
     /// </remarks>
     internal sealed class SlotGridDeflectorField : IDeflectorField
     {
