@@ -10,7 +10,6 @@
   <Project Path="BalloonParty.Audio.Editor.csproj" />
   <Project Path="BalloonParty.Tests.PlayMode.csproj" />
   <Project Path="DOTween.Modules.csproj" />
-  <Project Path="UIEffect.csproj" />
   <Project Path="BalloonParty.Configuration.Editor.csproj" />
   <Project Path="BalloonParty.TestRunner.Editor.csproj" />
   <Project Path="BalloonParty.Nudge.Editor.csproj" />

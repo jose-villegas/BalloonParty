@@ -12,9 +12,7 @@
         "UniTask.TextMeshPro",
         "UniTask.DOTween",
         "DOTween.Modules",
-        "Unity.RenderPipelines.Universal.Runtime",
-        "UIEffect",
-        "Coffee.UIEffect"
+        "Unity.RenderPipelines.Universal.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

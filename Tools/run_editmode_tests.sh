@@ -65,20 +65,43 @@ if [ "$FORCE" -eq 0 ] && [ -f "$STAMP" ]; then
 fi
 
 # --- Editor lock check ------------------------------------------------------
+# Presence alone is not proof: a closed or crashed editor leaves the lockfile behind, and
+# refusing to run then sends you hunting for an editor that is not open. Check for a live
+# process instead, and clear the file when there is none.
 if [ -f "$ROOT/Temp/UnityLockfile" ]; then
-    echo "The Unity editor appears to hold the project lock (Temp/UnityLockfile)." >&2
-    echo "Close the editor and retry, or run tests from its Test Runner window." >&2
-    exit 2
+    UNITY_RUNNING=0
+    if command -v tasklist >/dev/null 2>&1; then
+        tasklist 2>/dev/null | grep -qiE "^Unity\.exe" && UNITY_RUNNING=1
+    elif pgrep -x Unity >/dev/null 2>&1; then
+        UNITY_RUNNING=1
+    fi
+
+    if [ "$UNITY_RUNNING" -eq 1 ]; then
+        echo "The Unity editor is running and holds the project lock." >&2
+        echo "Close the editor and retry, or run tests from its Test Runner window." >&2
+        exit 2
+    fi
+
+    echo "Stale Temp/UnityLockfile (no editor running) - removing it and continuing." >&2
+    rm -f "$ROOT/Temp/UnityLockfile"
 fi
 
 # --- Run --------------------------------------------------------------------
+# Deleted first: a run that aborts (compile error, licence failure) leaves the PREVIOUS
+# results in place, and parsing those reports a confident green for code that never ran.
+rm -f "$RESULTS"
+
 echo "Running EditMode tests via Unity $VERSION (can take a minute)…"
 "$UNITY" -runTests -batchmode -projectPath "$ROOT" \
     -testPlatform EditMode -testResults "$RESULTS" -logFile "$LOG"
 CODE=$?
 
 if [ ! -f "$RESULTS" ]; then
-    echo "No results file produced — the run did not start. See $LOG" >&2
+    echo "No results file produced — the run did not start." >&2
+    # Surface the cause here rather than making the reader open the log: a compile error is
+    # the usual one, and it is exactly what Unity's abort message omits.
+    grep -iE "error CS[0-9]+|JSON parse error|Compilation failed" "$LOG" 2>/dev/null | head -10 >&2
+    echo "Full log: $LOG" >&2
     echo "# EditMode tests — run did not start (exit $CODE); see Tools/.editmode-run.log" > "$OUT"
     exit "$CODE"
 fi

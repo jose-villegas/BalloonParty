@@ -6,15 +6,6 @@
       "source": "embedded",
       "dependencies": {}
     },
-    "com.coffee.ui-effect": {
-      "version": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src#5.11.5",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.ugui": "1.0.0"
-      },
-      "hash": "1f4427c3d5d249534dba69d8c53acafb5d5fbd7f"
-    },
     "com.cysharp.messagepipe": {
       "version": "1.8.2",
       "depth": 0,
