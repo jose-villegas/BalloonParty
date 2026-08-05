@@ -89,3 +89,8 @@ ProfilerCaptures/
 
 # Android Gradle/CMake build intermediates
 .utmp/
+
+# Graphviz renders — build output. Tools/generate-docs.sh makes them locally and CI
+# re-renders from the .dot sources before publishing, so tracking them only produced
+# diffs that went stale whenever a source changed without graphviz to hand.
+Docs/diagrams/*.svg
