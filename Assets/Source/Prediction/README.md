@@ -12,7 +12,7 @@ Pure C# class (no MonoBehaviour) that takes an origin, direction, and reusable `
 
 The geometry is the **view's** position and `ContactRadius`, not the slot's, because that is what `BalloonController.Deflect` hands the real projectile: balloons drift between slots while the board settles, and that is exactly when a player is lining a shot up. Both the trace and the real deflection call `Shared/CircleContact.TryFindEntry` — one analytic ray-circle solver, so the drawn line cannot drift from the flight it predicts.
 
-Walls and deflections share **one budget** (`IPredictionTraceConfig.PredictionTraceMaxReflections`, currently 1). They cost the shot differently — a wall spends a shield and a deflection does not, since `ProjectileMotionResolver` decrements only on a wall — but this budget is about how much the telegraph gives away, not about what the shot can afford, and to the player both are the same event: the line turned.
+Walls and deflections share **one budget** (`IPredictionTraceConfig.MaxReflections`, currently 1). They cost the shot differently — a wall spends a shield and a deflection does not, since `ProjectileMotionResolver` decrements only on a wall — but this budget is about how much the telegraph gives away, not about what the shot can afford, and to the player both are the same event: the line turned.
 
 The leg *leaving* the last allowed reflection is still drawn; the one after it is not. So at 1 the player sees where the shot turns once and where that takes it, and works the rest out. Expected to rise with progression.
 
@@ -34,12 +34,12 @@ MonoBehaviour view for a circular actor (e.g. a balloon) that shows a marker whe
 
 ### Integration
 
-`ThrowerController` owns a `PredictionTraceCalculator`; `ThrowerView` finds the `PredictionTraceView` via `GetComponentInChildren` in `Awake` and exposes `SetTrace`/`SetTraceColor`/`ClearTrace`. Each `Tick`, while the player is aiming and the projectile hasn't been fired, the controller calculates the trace, pushes it through the view, and mirrors it into `PredictionTraceProvider` for any `TraceHitMarker` readers. On fire, release, or reload, both the view and the provider are cleared. The line's color comes from `IPredictionTraceConfig.PredictionTraceColor`, pushed once in `ThrowerController.Start`. The line deliberately casts NO scene-light — an aim telegraph relighting the actors it crosses read as noise (a light-field version was tried and removed; see branch backup/gi-normals-spherize for the era).
+`ThrowerController` owns a `PredictionTraceCalculator`; `ThrowerView` finds the `PredictionTraceView` via `GetComponentInChildren` in `Awake` and exposes `SetTrace`/`SetTraceColor`/`ClearTrace`. Each `Tick`, while the player is aiming and the projectile hasn't been fired, the controller calculates the trace, pushes it through the view, and mirrors it into `PredictionTraceProvider` for any `TraceHitMarker` readers. On fire, release, or reload, both the view and the provider are cleared. The line's color comes from `IPredictionTraceConfig.LineColor`, pushed once in `ThrowerController.Start`. The line deliberately casts NO scene-light — an aim telegraph relighting the actors it crosses read as noise (a light-field version was tried and removed; see branch backup/gi-normals-spherize for the era).
 
 ## Unity Setup
 
 1. Add a child GameObject to the Thrower prefab
 2. Add `LineRenderer` + `PredictionTraceView` components
-3. Configure the `LineRenderer` material and width; color is driven at runtime from `IPredictionTraceConfig.PredictionTraceColor`
+3. Configure the `LineRenderer` material and width; color is driven at runtime from `IPredictionTraceConfig.LineColor`
 4. For a hit marker on a circular actor prefab (e.g. a balloon): add a small child sprite (e.g. "HitMarker"), add `TraceHitMarker` to the actor, and assign `_marker` (the child sprite's `Transform`), `_circleRadius` (the actor's world-unit circle radius), and `_markerOffset` (distance from the actor origin the marker sits at)
 

@@ -107,7 +107,7 @@ namespace BalloonParty.Prediction
             {
                 // RGB mirrors the trace line's configured colour (read per hit so the SO stays
                 // live-tunable); only the alpha is ours — authored ceiling × centrality fade.
-                var color = _config.PredictionTraceColor;
+                var color = _config.LineColor;
                 color.a = _baseAlpha * Mathf.Lerp(_minIntensity, 1f, centrality);
                 _markerRenderer.color = color;
             }

@@ -22,9 +22,9 @@ namespace BalloonParty.Tests.Prediction
         public void SetUp()
         {
             _config = Substitute.For<IPredictionTraceConfig>();
-            _config.PredictionTraceStep.Returns(0.5f);
-            _config.PredictionTraceMaxReflections.Returns(3);
-            _config.PredictionTraceMaxSteps.Returns(100);
+            _config.SegmentLength.Returns(0.5f);
+            _config.MaxReflections.Returns(3);
+            _config.MaxSegments.Returns(100);
 
             _flightConfig = Substitute.For<IProjectileFlightConfig>();
             _flightConfig.LimitsClockwise.Returns(DefaultLimits);
@@ -46,25 +46,31 @@ namespace BalloonParty.Tests.Prediction
             Assert.AreEqual(DefaultLimits.w, _results[1].x, 0.01f);
         }
 
+        // The budget stops the NEXT turn, not the leg leaving this one — a reflection drawn with
+        // nothing coming out of it tells the player where the shot stops being predicted, not where
+        // it goes. So one reflection is three points: the start, the bounce, and where the outgoing
+        // leg runs out.
         [Test]
-        public void Calculate_MaxReflections_StopsAfterLimit()
+        public void Calculate_OneWallReflection_DrawsTheOutgoingLegToTheNextLimit()
         {
-            _config.PredictionTraceMaxReflections.Returns(1);
-            _config.PredictionTraceMaxSteps.Returns(200);
+            _config.MaxReflections.Returns(1);
+            _config.MaxSegments.Returns(200);
 
             var origin = new Vector3(2.5f, 0f, 0f);
             var direction = new Vector3(1f, 1f, 0f).normalized;
 
             _calculator.Calculate(origin, direction, 0f, _results);
 
-            Assert.AreEqual(2, _results.Count);
+            Assert.AreEqual(3, _results.Count);
+            Assert.AreEqual(DefaultLimits.y, _results[1].x, 0.01f, "y is the right wall");
+            Assert.AreEqual(DefaultLimits.x, _results[2].y, 0.01f, "the leg ends on the top wall");
         }
 
         [Test]
         public void Calculate_MaxSteps_StopsBeforeReachingWall()
         {
-            _config.PredictionTraceMaxSteps.Returns(3);
-            _config.PredictionTraceMaxReflections.Returns(10);
+            _config.MaxSegments.Returns(3);
+            _config.MaxReflections.Returns(10);
 
             _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results);
 
@@ -99,8 +105,8 @@ namespace BalloonParty.Tests.Prediction
         [Test]
         public void Calculate_TopWallHit_TerminatesBouncing()
         {
-            _config.PredictionTraceMaxReflections.Returns(10);
-            _config.PredictionTraceMaxSteps.Returns(200);
+            _config.MaxReflections.Returns(10);
+            _config.MaxSegments.Returns(200);
 
             _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results);
 
@@ -110,9 +116,9 @@ namespace BalloonParty.Tests.Prediction
         [Test]
         public void Calculate_ZigZag_ProducesMultipleBouncePoints()
         {
-            _config.PredictionTraceMaxReflections.Returns(5);
-            _config.PredictionTraceMaxSteps.Returns(200);
-            _config.PredictionTraceStep.Returns(1f);
+            _config.MaxReflections.Returns(5);
+            _config.MaxSegments.Returns(200);
+            _config.SegmentLength.Returns(1f);
 
             var direction = new Vector3(1f, 0.3f, 0f).normalized;
 
@@ -170,7 +176,7 @@ namespace BalloonParty.Tests.Prediction
         [Test]
         public void Calculate_NoReflectionBudget_EndsAtTheContact()
         {
-            _config.PredictionTraceMaxReflections.Returns(0);
+            _config.MaxReflections.Returns(0);
             _deflectors.Add(new DeflectorCircle(new Vector2(0f, 2f), 0.5f));
 
             _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results);
@@ -186,7 +192,7 @@ namespace BalloonParty.Tests.Prediction
         [Test]
         public void Calculate_OneReflection_DrawsTheOutgoingLegThenStops()
         {
-            _config.PredictionTraceMaxReflections.Returns(1);
+            _config.MaxReflections.Returns(1);
             _deflectors.Add(new DeflectorCircle(new Vector2(0f, 2f), 0.5f));
 
             // Off-centre, so the deflection sends it sideways into a wall rather than straight back.

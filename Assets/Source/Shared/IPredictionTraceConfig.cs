@@ -2,10 +2,13 @@ using UnityEngine;
 
 namespace BalloonParty.Shared
 {
-    /// <summary>Prediction trace settings: step size, bounce/step limits, and line colour.</summary>
+    /// <summary>Prediction trace settings: how the line is segmented, how far it reaches,
+    /// how many reflections it gives away, and its colour.</summary>
     public interface IPredictionTraceConfig
     {
-        float PredictionTraceStep { get; }
+        /// <summary>World length of one polyline segment — smoothness, not accuracy.</summary>
+        float SegmentLength { get; }
+
         /// <summary>
         ///     Reflections the trace will draw before it stops — walls and balloon deflections
         ///     together, because to the player they are the same event: the line turned. The leg
@@ -16,8 +19,11 @@ namespace BalloonParty.Shared
         ///     solution — showing the whole ricochet answers the shot for the player. Expected to
         ///     rise with progression.
         /// </remarks>
-        int PredictionTraceMaxReflections { get; }
-        int PredictionTraceMaxSteps { get; }
-        Color PredictionTraceColor { get; }
+        int MaxReflections { get; }
+
+        /// <summary>Segments before the trace gives up; times SegmentLength, its reach.</summary>
+        int MaxSegments { get; }
+
+        Color LineColor { get; }
     }
 }

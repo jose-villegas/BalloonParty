@@ -42,6 +42,6 @@ When a `ProjectileDestroyedMessage` or a `LevelUpDismissedMessage` arrives, `Thr
 - **PauseService** — any paused source blocks `Tick` (aim/fire)
 - **HoldSpeedUpController** (`Projectile/Controller/`) — `ConsumedInput` blocks `Tick` while the player's speed-up hold hasn't been released yet
 - **ProjectileLoadedMessage** — published after each load so shield UI can self-bind
-- **IProjectileFlightConfig** — provides `LimitsClockwise`, `ProjectileSpeed`, `ProjectileStartingShields`, `ProjectileLoadDuration`; **IPredictionTraceConfig** — provides `PredictionTraceColor`
+- **IProjectileFlightConfig** — provides `LimitsClockwise`, `ProjectileSpeed`, `ProjectileStartingShields`, `ProjectileLoadDuration`; **IPredictionTraceConfig** — provides `LineColor`
 - **PredictionTraceCalculator / ThrowerView** — calculates and renders the aim trajectory line while the player holds the mouse button
 - **PredictionTraceProvider** — written each `Tick` alongside the view (set on aim, cleared on fire/release/reload) so non-Thrower readers can find where the trace currently sits

@@ -46,12 +46,12 @@ namespace BalloonParty.Prediction
             _deflectorField?.CollectDeflectors(_deflectors);
 
             var walls = new WallLimits(_flightConfig.LimitsClockwise);
-            var stepsLeft = _config.PredictionTraceMaxSteps;
-            var reflectsLeft = _config.PredictionTraceMaxReflections;
+            var stepsLeft = _config.MaxSegments;
+            var reflectsLeft = _config.MaxReflections;
 
             while (stepsLeft > 0)
             {
-                var shift = _config.PredictionTraceStep;
+                var shift = _config.SegmentLength;
                 var extended = origin + (direction * shift);
                 var reflect = Vector3.zero;
 
