@@ -25,10 +25,10 @@ namespace BalloonParty.Prediction
         ///     balloon that would deflect the shot rather than let it through.
         /// </summary>
         /// <remarks>
-        ///     Deflections carry their own budget, separate from the wall one. A wall bounce spends a
-        ///     shield and a deflection does not (<c>ProjectileMotionResolver</c> decrements only on a
-        ///     wall), so counting them together would misreport what the shot can afford — and an
-        ///     uncapped chain of deflections is an unreadable line as well as an expensive one.
+        ///     Walls and deflections share one reflection budget. They cost the shot differently — a
+        ///     wall spends a shield and a deflection does not — but the budget here is about how much
+        ///     the telegraph gives away, not about what the shot can afford, and to the player both
+        ///     are the same event: the line turned.
         /// </remarks>
         /// <param name="projectileContactRadius">
         ///     The shot's own contact radius. Every deflector is inflated by it, because contact
@@ -47,10 +47,9 @@ namespace BalloonParty.Prediction
 
             var walls = new WallLimits(_flightConfig.LimitsClockwise);
             var stepsLeft = _config.PredictionTraceMaxSteps;
-            var maxBounces = _config.PredictionTraceMaxBounces;
-            var deflectsLeft = _config.PredictionTraceMaxDeflections;
+            var reflectsLeft = _config.PredictionTraceMaxReflections;
 
-            while (stepsLeft > 0 && maxBounces > 0)
+            while (stepsLeft > 0)
             {
                 var shift = _config.PredictionTraceStep;
                 var extended = origin + (direction * shift);
@@ -70,26 +69,31 @@ namespace BalloonParty.Prediction
                     extended = origin + (direction * shift);
                 }
 
+                var topHit = false;
                 if (extended.y > walls.Top)
                 {
                     reflect += Vector3.down;
                     shift = (walls.Top - origin.y) / direction.y;
                     extended = origin + (direction * shift);
-                    maxBounces = 0;
+                    topHit = true;
                 }
 
                 // Tested against the step already clipped by any wall above, so a deflector sitting
                 // beyond that wall cannot steal a bounce the wall reaches first.
-                if (deflectsLeft > 0
-                    && TryFindNearestDeflector(
+                if (TryFindNearestDeflector(
                         origin, direction, shift, projectileContactRadius, out var contact, out var normal))
                 {
                     // Clamped like the real deflection: a balloon in an edge column can sit within its
                     // own radius of a wall, and an unclamped contact starts the next step out of bounds.
                     origin = walls.ClampInside(contact);
                     results.Add(origin);
+                    if (reflectsLeft <= 0)
+                    {
+                        return;
+                    }
+
                     direction = Vector2.Reflect(direction, normal);
-                    deflectsLeft--;
+                    reflectsLeft--;
                     stepsLeft--;
                     continue;
                 }
@@ -100,8 +104,15 @@ namespace BalloonParty.Prediction
                 if (reflect != Vector3.zero)
                 {
                     results.Add(extended);
+
+                    // The top wall ends the shot in flight, so the line ends with it.
+                    if (topHit || reflectsLeft <= 0)
+                    {
+                        return;
+                    }
+
                     direction = Vector2.Reflect(direction, reflect.normalized);
-                    maxBounces--;
+                    reflectsLeft--;
                 }
             }
 

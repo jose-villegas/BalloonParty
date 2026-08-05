@@ -23,9 +23,8 @@ namespace BalloonParty.Tests.Prediction
         {
             _config = Substitute.For<IPredictionTraceConfig>();
             _config.PredictionTraceStep.Returns(0.5f);
-            _config.PredictionTraceMaxBounces.Returns(3);
+            _config.PredictionTraceMaxReflections.Returns(3);
             _config.PredictionTraceMaxSteps.Returns(100);
-            _config.PredictionTraceMaxDeflections.Returns(2);
 
             _flightConfig = Substitute.For<IProjectileFlightConfig>();
             _flightConfig.LimitsClockwise.Returns(DefaultLimits);
@@ -48,9 +47,9 @@ namespace BalloonParty.Tests.Prediction
         }
 
         [Test]
-        public void Calculate_MaxBounces_StopsAfterLimit()
+        public void Calculate_MaxReflections_StopsAfterLimit()
         {
-            _config.PredictionTraceMaxBounces.Returns(1);
+            _config.PredictionTraceMaxReflections.Returns(1);
             _config.PredictionTraceMaxSteps.Returns(200);
 
             var origin = new Vector3(2.5f, 0f, 0f);
@@ -65,7 +64,7 @@ namespace BalloonParty.Tests.Prediction
         public void Calculate_MaxSteps_StopsBeforeReachingWall()
         {
             _config.PredictionTraceMaxSteps.Returns(3);
-            _config.PredictionTraceMaxBounces.Returns(10);
+            _config.PredictionTraceMaxReflections.Returns(10);
 
             _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results);
 
@@ -100,7 +99,7 @@ namespace BalloonParty.Tests.Prediction
         [Test]
         public void Calculate_TopWallHit_TerminatesBouncing()
         {
-            _config.PredictionTraceMaxBounces.Returns(10);
+            _config.PredictionTraceMaxReflections.Returns(10);
             _config.PredictionTraceMaxSteps.Returns(200);
 
             _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results);
@@ -111,7 +110,7 @@ namespace BalloonParty.Tests.Prediction
         [Test]
         public void Calculate_ZigZag_ProducesMultipleBouncePoints()
         {
-            _config.PredictionTraceMaxBounces.Returns(5);
+            _config.PredictionTraceMaxReflections.Returns(5);
             _config.PredictionTraceMaxSteps.Returns(200);
             _config.PredictionTraceStep.Returns(1f);
 
@@ -166,16 +165,36 @@ namespace BalloonParty.Tests.Prediction
             CollectionAssert.AreEqual(withoutDeflectors, _results);
         }
 
+        // A budget of zero draws the line up to the first thing it would hit and stops — it does not
+        // pretend the balloon is not there and carry on through it.
         [Test]
-        public void Calculate_DeflectionBudgetExhausted_StopsDeflecting()
+        public void Calculate_NoReflectionBudget_EndsAtTheContact()
         {
-            _config.PredictionTraceMaxDeflections.Returns(0);
+            _config.PredictionTraceMaxReflections.Returns(0);
             _deflectors.Add(new DeflectorCircle(new Vector2(0f, 2f), 0.5f));
 
             _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results);
 
-            // Straight through to the top wall instead of turning around.
-            Assert.AreEqual(DefaultLimits.x, _results[_results.Count - 1].y, 0.05f, "x is the top wall");
+            Assert.AreEqual(2, _results.Count);
+            Assert.AreEqual(1.5f, _results[1].y, 0.05f, "stops on the balloon's surface");
+        }
+
+        // What a budget of 1 is FOR: the player sees the turn and the leg leaving it, then the line
+        // ends where it would have turned again. Walls and deflections share the budget, so a shot
+        // that deflects off a balloon has spent its one reflection and will not also show a wall
+        // bounce after it.
+        [Test]
+        public void Calculate_OneReflection_DrawsTheOutgoingLegThenStops()
+        {
+            _config.PredictionTraceMaxReflections.Returns(1);
+            _deflectors.Add(new DeflectorCircle(new Vector2(0f, 2f), 0.5f));
+
+            // Off-centre, so the deflection sends it sideways into a wall rather than straight back.
+            _calculator.Calculate(new Vector3(-0.3f, 0f, 0f), Vector3.up, 0f, _results);
+
+            Assert.AreEqual(3, _results.Count,
+                "origin, the deflection, and where the outgoing leg ends");
+            Assert.AreEqual(DefaultLimits.w, _results[2].x, 0.05f, "the leg runs to the left wall");
         }
 
 

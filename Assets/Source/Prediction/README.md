@@ -12,7 +12,9 @@ Pure C# class (no MonoBehaviour) that takes an origin, direction, and reusable `
 
 The geometry is the **view's** position and `ContactRadius`, not the slot's, because that is what `BalloonController.Deflect` hands the real projectile: balloons drift between slots while the board settles, and that is exactly when a player is lining a shot up. Both the trace and the real deflection call `Shared/CircleContact.TryFindEntry` — one analytic ray-circle solver, so the drawn line cannot drift from the flight it predicts.
 
-Deflections carry **their own budget** (`IPredictionTraceConfig.PredictionTraceMaxDeflections`), separate from the wall one. A wall bounce spends a shield and a deflection does not — `ProjectileMotionResolver` decrements only on a wall — so pooling the two would misreport what the shot can afford.
+Walls and deflections share **one budget** (`IPredictionTraceConfig.PredictionTraceMaxReflections`, currently 1). They cost the shot differently — a wall spends a shield and a deflection does not, since `ProjectileMotionResolver` decrements only on a wall — but this budget is about how much the telegraph gives away, not about what the shot can afford, and to the player both are the same event: the line turned.
+
+The leg *leaving* the last allowed reflection is still drawn; the one after it is not. So at 1 the player sees where the shot turns once and where that takes it, and works the rest out. Expected to rise with progression.
 
 Within a step the nearest deflector wins, and the test runs against the step *already clipped by any wall*, so a balloon beyond a wall cannot steal a bounce the wall reaches first. The contact is clamped inside the walls for the same reason the real deflection clamps it: an edge-column balloon can sit within its own radius of a wall.
 

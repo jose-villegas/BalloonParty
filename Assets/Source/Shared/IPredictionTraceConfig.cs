@@ -6,13 +6,17 @@ namespace BalloonParty.Shared
     public interface IPredictionTraceConfig
     {
         float PredictionTraceStep { get; }
-        int PredictionTraceMaxBounces { get; }
-
         /// <summary>
-        ///     Balloon deflections the trace will draw, budgeted separately from wall bounces — a
-        ///     deflection costs no shield, and an uncapped chain of them is unreadable.
+        ///     Reflections the trace will draw before it stops — walls and balloon deflections
+        ///     together, because to the player they are the same event: the line turned. The leg
+        ///     leaving the last allowed reflection is still drawn; the one after it is not.
         /// </summary>
-        int PredictionTraceMaxDeflections { get; }
+        /// <remarks>
+        ///     Deliberately one budget rather than one per kind. The telegraph is an aid, not a
+        ///     solution — showing the whole ricochet answers the shot for the player. Expected to
+        ///     rise with progression.
+        /// </remarks>
+        int PredictionTraceMaxReflections { get; }
         int PredictionTraceMaxSteps { get; }
         Color PredictionTraceColor { get; }
     }
