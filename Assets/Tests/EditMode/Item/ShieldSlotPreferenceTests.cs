@@ -1,3 +1,4 @@
+using BalloonParty.Configuration;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Item.Shield;
 using BalloonParty.Slots.Actor;
@@ -17,7 +18,7 @@ namespace BalloonParty.Tests.Item
         [Test]
         public void WeightFor_ActorWithoutAnItemSlot_IsZero()
         {
-            var preference = new ShieldSlotPreference(null);
+            var preference = new ShieldSlotPreference(null, new ShieldChainSettings());
 
             Assert.AreEqual(0, preference.WeightFor(Substitute.For<ISlotActor>(), Vector2Int.zero));
         }
@@ -25,7 +26,7 @@ namespace BalloonParty.Tests.Item
         [Test]
         public void WeightFor_ActorCarryingAnotherItem_IsZero()
         {
-            var preference = new ShieldSlotPreference(null);
+            var preference = new ShieldSlotPreference(null, new ShieldChainSettings());
 
             Assert.AreEqual(0, preference.WeightFor(Host(ItemType.Bomb), Vector2Int.zero));
         }

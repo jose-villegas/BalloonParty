@@ -24,7 +24,7 @@ Items are game-wide collectible effects — Bomb, Laser, Lightning, Paint, Shiel
 
 | File | What it does |
 |---|---|
-| `ItemAssigner` | `IStartable` — subscribes to `ItemCheckMessage`. On the initial board fill (`IsInitialSpawn`) it rolls `InitialItemCountWeights`; on a cadence turn (`TurnCount % ItemCadence == 0`) it rolls `ItemCountWeights`. Each is an `AnimationCurve` weighted distribution (X = item count 0,1,2…, Y = weight) sampled fresh **per turn** via `SampleCount`, so the count is a random draw, not a per-level constant. It then grants that many items across distinct newly-spawned `IHasWriteableItemSlot` balloons (capped by how many are eligible), re-picking a weighted type per grant and tracking the running per-type count so `MaximumAllowed` holds within the batch. Balloons without `IHasWriteableItemSlot` (e.g. `ToughBalloonModel`) or already holding an item are excluded. Cap counting pattern-matches grid actors on the same `IHasItemSlot` capability eligibility uses — counting a concrete model type would silently break the cap |
+| `ItemAssigner` | `IStartable` — subscribes to `ItemCheckMessage`. On the initial board fill (`IsInitialSpawn`) it rolls `InitialItemCountWeights`; on a cadence turn (`TurnCount % ItemCadence == 0`) it rolls `ItemCountWeights`. Each is an `AnimationCurve` weighted distribution (X = item count 0,1,2…, Y = weight) sampled fresh **per turn** via `SampleCount`, so the count is a random draw, not a per-level constant. It then grants that many items across distinct newly-spawned `IHasWriteableItemSlot` balloons (capped by how many are eligible), re-picking a weighted type per grant and tracking the running per-type count so `MaximumAllowed` holds within the batch. Balloons without `IHasWriteableItemSlot` (e.g. `ToughBalloonModel`) or already holding an item are excluded. Cap counting pattern-matches grid actors on the same `IHasItemSlot` capability eligibility uses — counting a concrete model type would silently break the cap. **Shields skip the weighted draw** while `IRunConfig.PlanShieldChains` is on: see *Shield chains* below |
 
 ### Activation
 
@@ -160,3 +160,31 @@ beam; Lightning casts one along each arc the bolt travels as it jumps. Point lig
 cross telegraph light while the item is held (not yet activated). Controlled by per-item-settings
 toggle (`TelegraphLightEnabled`) and tuned via `TelegraphLightHalfLength`, `TelegraphLightHalfWidth`,
 `TelegraphLightIntensity` in `ItemSettings.Laser`. Off by default.
+
+## Shield chains
+
+Shields placed by the plain weighted draw scatter, and a scattered shield extends nothing — the
+player picks it up on a flight that was already going to end safely. `ShieldChainPlanner` instead
+places them along a flight the thrower can actually fly: each shield is what buys the wall bounce
+that reaches the next, so shield *n* makes shield *n+1* reachable. `ItemAssigner` plans the chain
+once per fill and then hands shields out in flight order.
+
+It plans against a **fan** of opening angles rather than one, so a chain has several ways in, and
+keeps only slots reached by enough of the fan — but not by so much of it that the player sweeps
+them for free. Both bounds, and the fan itself, are authored on `RunConfig` under `ShieldChain`
+(`IShieldChainSettings`): `FanSamples`, `FanMinDegrees`/`FanMaxDegrees`, `MinEntryAngles`,
+`CheapZoneFraction`. They are balance knobs retuned against playtests, which is why they live on
+the asset; the planner keeps only the guards that stop it looping (surface epsilon, leg cap).
+
+A chain planned at spawn decays as the board settles, so `ShieldReachabilityField` re-sweeps a
+coarser fan on every grid mutation and records the fewest reflections any sampled shot needs to
+cross each slot. `ShieldSlotPreference` turns that into a small balance bias — full bonus for a
+straight-shot slot, less per reflection — which the balancer adds to the actor's own bias rather
+than obeying, so a shield drifts toward reachable slots without hovering in defiance of the board.
+`ReachabilityFanSamples`, `ReachabilityMaxReflections`, `ReachableSlotBonus` and
+`PerReflectionPenalty` tune it, on the same `ShieldChain` block.
+
+`IRunConfig.PlanShieldChains` turns the whole thing off, restoring the weighted draw.
+`Tools ▸ BalloonParty ▸ Shield Chains` (editor) counts how many openings collect the board's
+shields and draws one path at a time — the only practical way to see whether a level holds a chain,
+since the shields still look like items on a hex lattice either way.

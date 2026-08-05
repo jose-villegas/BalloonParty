@@ -18,6 +18,8 @@ namespace BalloonParty.Configuration
             "collectable in sequence. Off falls back to the weighted random draw.")]
         [SerializeField] private bool _planShieldChains = true;
 
+        [SerializeField] private ShieldChainSettings _shieldChain = new();
+
         [Header("Level Complete")]
         [Tooltip("Seconds over which timeScale ramps from 1 to peak after the completing flight ends.")]
         [SerializeField] [Min(0f)] private float _levelCompleteRampUpDuration = 1.5f;
@@ -29,6 +31,7 @@ namespace BalloonParty.Configuration
         public int MaxRetries => _maxRetries;
         public bool StreakGrantsShields => _streakGrantsShields;
         public bool PlanShieldChains => _planShieldChains;
+        public IShieldChainSettings ShieldChain => _shieldChain;
         public float LevelCompleteRampUpDuration => _levelCompleteRampUpDuration;
         public float LevelCompleteRampUpScale => _levelCompleteRampUpScale;
     }

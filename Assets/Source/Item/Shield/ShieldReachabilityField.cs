@@ -33,19 +33,12 @@ namespace BalloonParty.Item.Shield
         private const float SurfaceEpsilon = 1e-3f;
         private const int MaxLegs = 12;
 
-        // Deeper than a player will plan. The field is a nudge for the balancer, not a solver.
-        private const int MaxReflections = 2;
-
-        // Coarser than the planner's fan: this runs per grid mutation, not once per spawn batch.
-        private const int FanSamples = 13;
-        private const float FanMinDegrees = 25f;
-        private const float FanMaxDegrees = 155f;
-
         private readonly SlotGrid _grid;
         private readonly IProjectileFlightConfig _flightConfig;
         private readonly BalloonContactRadii _radii;
         private readonly ThrowerOriginProvider _origin;
         private readonly IDeflectorField _deflectorField;
+        private readonly IShieldChainSettings _settings;
 
         private readonly List<DeflectorCircle> _deflectors = new();
         private readonly List<Vector2> _fan = new();
@@ -55,13 +48,14 @@ namespace BalloonParty.Item.Shield
 
         internal ShieldReachabilityField(
             SlotGrid grid, IProjectileFlightConfig flightConfig, BalloonContactRadii radii,
-            ThrowerOriginProvider origin, IDeflectorField deflectorField)
+            ThrowerOriginProvider origin, IDeflectorField deflectorField, IRunConfig runConfig)
         {
             _grid = grid;
             _flightConfig = flightConfig;
             _radii = radii;
             _origin = origin;
             _deflectorField = deflectorField;
+            _settings = runConfig.ShieldChain;
         }
 
         /// <summary>
@@ -134,7 +128,7 @@ namespace BalloonParty.Item.Shield
             var direction = heading.normalized;
             var reflections = 0;
 
-            for (var leg = 0; leg < MaxLegs && reflections <= MaxReflections; leg++)
+            for (var leg = 0; leg < MaxLegs && reflections <= _settings.ReachabilityMaxReflections; leg++)
             {
                 if (!walls.TryFindCrossing(position, direction, out var crossing, out var wallNormal))
                 {
@@ -175,10 +169,11 @@ namespace BalloonParty.Item.Shield
         private void BuildFan()
         {
             _fan.Clear();
-            for (var i = 0; i < FanSamples; i++)
+            var samples = _settings.ReachabilityFanSamples;
+            for (var i = 0; i < samples; i++)
             {
-                var t = (float)i / (FanSamples - 1);
-                var degrees = Mathf.Lerp(FanMinDegrees, FanMaxDegrees, t);
+                var t = (float)i / (samples - 1);
+                var degrees = Mathf.Lerp(_settings.FanMinDegrees, _settings.FanMaxDegrees, t);
                 _fan.Add(new Vector2(Mathf.Cos(degrees * Mathf.Deg2Rad), Mathf.Sin(degrees * Mathf.Deg2Rad)));
             }
         }

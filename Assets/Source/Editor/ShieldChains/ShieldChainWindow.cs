@@ -24,8 +24,6 @@ namespace BalloonParty.Editor.ShieldChains
     {
         // Finer than the planner's own fan: this is measuring, not choosing, so resolution is free.
         private const int FanSamples = 61;
-        private const float FanMinDegrees = 25f;
-        private const float FanMaxDegrees = 155f;
 
         private readonly List<ShieldHostCandidate> _shields = new();
         private readonly List<Vector2> _path = new();
@@ -40,6 +38,8 @@ namespace BalloonParty.Editor.ShieldChains
 
         private int _current;
         private int _bestCollected;
+        private float _fanMinDegrees = 25f;
+        private float _fanMaxDegrees = 155f;
         private int _threshold = 1;
         private string _status = "Enter play mode and press Scan.";
 
@@ -124,7 +124,7 @@ namespace BalloonParty.Editor.ShieldChains
                 return;
             }
 
-            var planner = new ShieldChainPlanner(context.Walls, _deflectors);
+            var planner = new ShieldChainPlanner(context.Walls, _deflectors, context.ChainSettings);
             for (var i = 0; i < FanSamples; i++)
             {
                 planner.PlanChain(
@@ -179,7 +179,7 @@ namespace BalloonParty.Editor.ShieldChains
             }
 
             var radians = _openingAngles[_matching[_current]] * Mathf.Deg2Rad;
-            var planner = new ShieldChainPlanner(context.Walls, _deflectors);
+            var planner = new ShieldChainPlanner(context.Walls, _deflectors, context.ChainSettings);
             planner.PlanChain(
                 context.Origin, new Vector2(Mathf.Cos(radians), Mathf.Sin(radians)), context.Shields,
                 _shields.Count, _shields, _collected, _path);
@@ -235,12 +235,13 @@ namespace BalloonParty.Editor.ShieldChains
             }
         }
 
-        private static float AngleAt(int index)
+        // Spans the authored fan, so the window measures the openings the planner considered.
+        private float AngleAt(int index)
         {
-            return Mathf.Lerp(FanMinDegrees, FanMaxDegrees, (float)index / (FanSamples - 1));
+            return Mathf.Lerp(_fanMinDegrees, _fanMaxDegrees, (float)index / (FanSamples - 1));
         }
 
-        private static Vector2 DirectionAt(int index)
+        private Vector2 DirectionAt(int index)
         {
             var radians = AngleAt(index) * Mathf.Deg2Rad;
             return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
@@ -270,12 +271,17 @@ namespace BalloonParty.Editor.ShieldChains
             _deflectors.Clear();
             scope.Container.Resolve<IDeflectorField>().CollectDeflectors(_deflectors);
 
+            var chainSettings = scope.Container.Resolve<IRunConfig>().ShieldChain;
+            _fanMinDegrees = chainSettings.FanMinDegrees;
+            _fanMaxDegrees = chainSettings.FanMaxDegrees;
+
             context = new ChainContext(
                 scope.Container.Resolve<SlotGrid>(),
                 scope.Container.Resolve<ISlotGridConfig>(),
                 new WallLimits(flightConfig.LimitsClockwise),
                 origin.Origin,
-                flightConfig.ProjectileStartingShields);
+                flightConfig.ProjectileStartingShields,
+                chainSettings);
             return true;
         }
 
@@ -286,15 +292,18 @@ namespace BalloonParty.Editor.ShieldChains
             public readonly WallLimits Walls;
             public readonly Vector2 Origin;
             public readonly int Shields;
+            public readonly IShieldChainSettings ChainSettings;
 
             public ChainContext(
-                SlotGrid grid, ISlotGridConfig gridConfig, WallLimits walls, Vector2 origin, int shields)
+                SlotGrid grid, ISlotGridConfig gridConfig, WallLimits walls, Vector2 origin, int shields,
+                IShieldChainSettings chainSettings)
             {
                 Grid = grid;
                 GridConfig = gridConfig;
                 Walls = walls;
                 Origin = origin;
                 Shields = shields;
+                ChainSettings = chainSettings;
             }
         }
     }

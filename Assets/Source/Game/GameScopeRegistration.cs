@@ -141,10 +141,11 @@ namespace BalloonParty.Game
             builder.Register(resolver =>
             {
                 var query = new GridBalanceQuery(resolver.Resolve<SlotGrid>());
-                if (resolver.Resolve<IRunConfig>().PlanShieldChains)
+                var runConfig = resolver.Resolve<IRunConfig>();
+                if (runConfig.PlanShieldChains)
                 {
-                    query.Evaluator.ShieldPreference =
-                        new ShieldSlotPreference(resolver.Resolve<ShieldReachabilityField>());
+                    query.Evaluator.ShieldPreference = new ShieldSlotPreference(
+                        resolver.Resolve<ShieldReachabilityField>(), runConfig.ShieldChain);
                 }
 
                 return query;

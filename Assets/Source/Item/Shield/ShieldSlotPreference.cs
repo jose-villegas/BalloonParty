@@ -1,4 +1,5 @@
 using BalloonParty.Configuration.Items;
+using BalloonParty.Shared;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
@@ -17,16 +18,13 @@ namespace BalloonParty.Item.Shield
     /// </remarks>
     internal sealed class ShieldSlotPreference : IShieldSlotPreference
     {
-        // Comfortably inside the range the existing biases occupy (small ints), and orders below
-        // MoveWeightEvaluator.PressureGain, so a shove still wins every contested slot.
-        private const int ReachableBonus = 6;
-        private const int PerReflectionPenalty = 2;
-
         private readonly ShieldReachabilityField _field;
+        private readonly IShieldChainSettings _settings;
 
-        internal ShieldSlotPreference(ShieldReachabilityField field)
+        internal ShieldSlotPreference(ShieldReachabilityField field, IShieldChainSettings settings)
         {
             _field = field;
+            _settings = settings;
         }
 
         public int WeightFor(ISlotActor actor, Vector2Int candidate)
@@ -44,7 +42,8 @@ namespace BalloonParty.Item.Shield
 
             // Straight-shot slots score highest and each reflection costs, so a shield drifts toward
             // the shots a player can actually see — the same reason the planner prefers walls.
-            return Mathf.Max(0, ReachableBonus - (reflections * PerReflectionPenalty));
+            return Mathf.Max(
+                0, _settings.ReachableSlotBonus - (reflections * _settings.PerReflectionPenalty));
         }
     }
 }

@@ -71,22 +71,18 @@ namespace BalloonParty.Item.Shield
         // deflectors keep redirecting it and no wall is ever reached.
         private const int MaxLegs = 64;
 
-        // A shield only a couple of angles reach is the brittle chain this design exists to avoid.
-        private const int MinEntryAngles = 3;
-
-        // Reachable by more than this share of the fan means the player already sweeps it for free,
-        // so a shield there extends nothing — the scattered-placement failure, restated as a number.
-        private const float CheapZoneFraction = 0.6f;
-
         private readonly WallLimits _walls;
         private readonly IReadOnlyList<DeflectorCircle> _deflectors;
+        private readonly IShieldChainSettings _settings;
 
         private readonly List<int> _claimed = new();
 
-        internal ShieldChainPlanner(WallLimits walls, IReadOnlyList<DeflectorCircle> deflectors)
+        internal ShieldChainPlanner(
+            WallLimits walls, IReadOnlyList<DeflectorCircle> deflectors, IShieldChainSettings settings)
         {
             _walls = walls;
             _deflectors = deflectors;
+            _settings = settings;
         }
 
         /// <summary>
@@ -192,17 +188,19 @@ namespace BalloonParty.Item.Shield
             IReadOnlyList<int> reachCount, IReadOnlyList<int> viaDeflections, IReadOnlyList<bool> placed,
             bool[,] reachedBy, IReadOnlyList<bool> chainAngles, int fanSize)
         {
-            var cheapCutoff = Mathf.Max(MinEntryAngles, Mathf.RoundToInt(fanSize * CheapZoneFraction));
+            var minEntryAngles = _settings.MinEntryAngles;
+            var cheapCutoff = Mathf.Max(
+                minEntryAngles, Mathf.RoundToInt(fanSize * _settings.CheapZoneFraction));
 
             var best = Pick(
-                reachCount, viaDeflections, placed, reachedBy, chainAngles, MinEntryAngles, cheapCutoff);
+                reachCount, viaDeflections, placed, reachedBy, chainAngles, minEntryAngles, cheapCutoff);
             if (best >= 0)
             {
                 return best;
             }
 
             best = Pick(
-                reachCount, viaDeflections, placed, reachedBy, chainAngles, MinEntryAngles, int.MaxValue);
+                reachCount, viaDeflections, placed, reachedBy, chainAngles, minEntryAngles, int.MaxValue);
             return best >= 0
                 ? best
                 : Pick(reachCount, viaDeflections, placed, reachedBy, chainAngles, 1, int.MaxValue);

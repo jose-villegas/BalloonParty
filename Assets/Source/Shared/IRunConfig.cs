@@ -20,6 +20,9 @@ namespace BalloonParty.Shared
         /// </summary>
         bool PlanShieldChains { get; }
 
+        /// <summary>Tuning for that placement; unread while <see cref="PlanShieldChains" /> is off.</summary>
+        IShieldChainSettings ShieldChain { get; }
+
         /// <summary>Seconds over which timeScale ramps from 1 to <see cref="LevelCompleteRampUpScale"/> after the completing flight ends.</summary>
         float LevelCompleteRampUpDuration { get; }
 

@@ -24,11 +24,6 @@ namespace BalloonParty.Item
 {
     internal class ItemAssigner : IStartable, IDisposable
     {
-        // The upper semicircle, trimmed of the near-horizontal shots that never climb.
-        private const int FanSamples = 25;
-        private const float FanMinDegrees = 25f;
-        private const float FanMaxDegrees = 155f;
-
         private readonly ISubscriber<ItemCheckMessage> _checkSubscriber;
         private readonly IActiveLevelParameters _levelParams;
         private readonly SlotGrid _grid;
@@ -241,7 +236,8 @@ namespace BalloonParty.Item
             _deflectorField?.CollectDeflectors(_deflectorBuffer);
             BuildFan();
 
-            var planner = new ShieldChainPlanner(new WallLimits(_flightConfig.LimitsClockwise), _deflectorBuffer);
+            var planner = new ShieldChainPlanner(
+                new WallLimits(_flightConfig.LimitsClockwise), _deflectorBuffer, _runConfig.ShieldChain);
             planner.PlanChain(
                 _origin.Origin, _fanBuffer, _flightConfig.ProjectileStartingShields,
                 _eligibleBuffer.Count, _candidateBuffer, _chainBuffer);
@@ -253,10 +249,11 @@ namespace BalloonParty.Item
         private void BuildFan()
         {
             _fanBuffer.Clear();
-            for (var i = 0; i < FanSamples; i++)
+            var settings = _runConfig.ShieldChain;
+            for (var i = 0; i < settings.FanSamples; i++)
             {
-                var t = (float)i / (FanSamples - 1);
-                var degrees = Mathf.Lerp(FanMinDegrees, FanMaxDegrees, t);
+                var t = (float)i / (settings.FanSamples - 1);
+                var degrees = Mathf.Lerp(settings.FanMinDegrees, settings.FanMaxDegrees, t);
                 _fanBuffer.Add(new Vector2(
                     Mathf.Cos(degrees * Mathf.Deg2Rad), Mathf.Sin(degrees * Mathf.Deg2Rad)));
             }

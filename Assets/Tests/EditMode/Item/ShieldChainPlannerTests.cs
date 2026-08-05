@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BalloonParty.Configuration;
 using BalloonParty.Item.Shield;
 using BalloonParty.Shared;
 using NUnit.Framework;
@@ -14,6 +15,9 @@ namespace BalloonParty.Tests.Item
         // x = top, y = right, z = bottom, w = left (WallLimits).
         private static readonly WallLimits Walls = new(new Vector4(5f, 3f, -5f, -3f));
 
+        // The authored defaults — the tuning these tests' expectations were written against.
+        private static readonly IShieldChainSettings Settings = new ShieldChainSettings();
+
         private List<int> _results;
 
         [SetUp]
@@ -28,7 +32,7 @@ namespace BalloonParty.Tests.Item
         [Test]
         public void PlanChain_TwoCandidatesOnOneLeg_ClaimsOnlyTheNearer()
         {
-            var planner = new ShieldChainPlanner(Walls, null);
+            var planner = new ShieldChainPlanner(Walls, null, Settings);
             var candidates = new List<ShieldHostCandidate>
             {
                 new(new Vector2(2f, 2f), 0.4f),
@@ -47,7 +51,7 @@ namespace BalloonParty.Tests.Item
         [Test]
         public void PlanChain_ShieldCollectedEnRoute_PaysForTheBounceToTheNext()
         {
-            var planner = new ShieldChainPlanner(Walls, null);
+            var planner = new ShieldChainPlanner(Walls, null, Settings);
             // Up-right hits the right wall at (3,3) and leaves toward (1,5); (2,4) sits on that leg.
             var enRoute = new ShieldHostCandidate(new Vector2(1f, 1f), 0.4f);
             var afterTheBounce = new ShieldHostCandidate(new Vector2(2f, 4f), 0.4f);
@@ -71,7 +75,7 @@ namespace BalloonParty.Tests.Item
         [Test]
         public void PlanChain_NoShields_DiesAtTheFirstWall()
         {
-            var planner = new ShieldChainPlanner(Walls, null);
+            var planner = new ShieldChainPlanner(Walls, null, Settings);
             var candidates = new List<ShieldHostCandidate>
             {
                 new(new Vector2(0f, 4f), 0.4f), // reachable only after a bounce
@@ -89,7 +93,7 @@ namespace BalloonParty.Tests.Item
         public void PlanChain_DeflectorBendsTheChain_WithoutSpendingAShield()
         {
             var deflectors = new List<DeflectorCircle> { new(new Vector2(0f, 2f), 0.5f) };
-            var planner = new ShieldChainPlanner(Walls, deflectors);
+            var planner = new ShieldChainPlanner(Walls, deflectors, Settings);
             var candidates = new List<ShieldHostCandidate>
             {
                 new(new Vector2(0f, 3.5f), 0.4f), // straight on, BEHIND the deflector
@@ -103,7 +107,7 @@ namespace BalloonParty.Tests.Item
         [Test]
         public void PlanChain_NothingReachable_ReturnsEmptyRatherThanGuessing()
         {
-            var planner = new ShieldChainPlanner(Walls, null);
+            var planner = new ShieldChainPlanner(Walls, null, Settings);
             var candidates = new List<ShieldHostCandidate> { new(new Vector2(-2.5f, -4f), 0.4f) };
 
             var placed = planner.PlanChain(Vector2.zero, Vector2.up, 1, 1, candidates, _results);
@@ -115,7 +119,7 @@ namespace BalloonParty.Tests.Item
         [Test]
         public void PlanChain_NeverClaimsTheSameCandidateTwice()
         {
-            var planner = new ShieldChainPlanner(Walls, null);
+            var planner = new ShieldChainPlanner(Walls, null, Settings);
             var candidates = new List<ShieldHostCandidate> { new(new Vector2(0f, 1f), 0.4f) };
 
             var placed = planner.PlanChain(Vector2.zero, Vector2.up, 5, 3, candidates, _results);
@@ -128,7 +132,7 @@ namespace BalloonParty.Tests.Item
         [Test]
         public void PlanChain_FromAFan_ReportsHowManyAnglesReachEachShield()
         {
-            var planner = new ShieldChainPlanner(Walls, null);
+            var planner = new ShieldChainPlanner(Walls, null, Settings);
             var candidates = new List<ShieldHostCandidate>
             {
                 new(new Vector2(0f, 2f), 0.5f),
@@ -149,7 +153,7 @@ namespace BalloonParty.Tests.Item
         [Test]
         public void PlanChain_FromAFan_NeverPlacesTwiceOnOneCandidate()
         {
-            var planner = new ShieldChainPlanner(Walls, null);
+            var planner = new ShieldChainPlanner(Walls, null, Settings);
             var candidates = new List<ShieldHostCandidate> { new(new Vector2(0f, 2f), 0.5f) };
             var placements = new List<ShieldPlacement>();
 
@@ -165,7 +169,7 @@ namespace BalloonParty.Tests.Item
         [Test]
         public void PlanChain_FromAFan_NothingAffordable_PlacesNothing()
         {
-            var planner = new ShieldChainPlanner(Walls, null);
+            var planner = new ShieldChainPlanner(Walls, null, Settings);
             var candidates = new List<ShieldHostCandidate> { new(new Vector2(0f, -4.5f), 0.3f) };
             var placements = new List<ShieldPlacement>();
 
@@ -186,7 +190,7 @@ namespace BalloonParty.Tests.Item
         public void PlanChain_PrefersAShieldReachedOffAWall_OverOneBehindATough()
         {
             var deflectors = new List<DeflectorCircle> { new(new Vector2(-1.5f, 2f), 0.5f) };
-            var planner = new ShieldChainPlanner(Walls, deflectors);
+            var planner = new ShieldChainPlanner(Walls, deflectors, Settings);
 
             // Left of centre, only reachable once the tough has bent the shot into it.
             var behindTheTough = new ShieldHostCandidate(new Vector2(-2.4f, 2.6f), 0.45f);
@@ -210,7 +214,7 @@ namespace BalloonParty.Tests.Item
         [Test]
         public void PlanChain_EveryShield_IsCollectableByAtLeastOneSharedOpening()
         {
-            var planner = new ShieldChainPlanner(Walls, null);
+            var planner = new ShieldChainPlanner(Walls, null, Settings);
             var candidates = new List<ShieldHostCandidate>
             {
                 new(new Vector2(-1.8f, 1.2f), 0.45f),
@@ -251,7 +255,7 @@ namespace BalloonParty.Tests.Item
         [Test]
         public void PlanChain_ReportedEntryAngles_NarrowAlongTheChain()
         {
-            var planner = new ShieldChainPlanner(Walls, null);
+            var planner = new ShieldChainPlanner(Walls, null, Settings);
             var candidates = new List<ShieldHostCandidate>
             {
                 new(new Vector2(-1.8f, 1.2f), 0.45f),
