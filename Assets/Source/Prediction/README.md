@@ -6,7 +6,17 @@ Prediction trace system — draws a dotted line showing the projectile's predict
 
 ### PredictionTraceCalculator
 
-Pure C# class (no MonoBehaviour) that takes an origin, direction, and reusable `List<Vector3>`, then fills it with world-space trace points by stepping forward and reflecting off walls. Bounces off left, right, and top limits (from `LimitsClockwise`). A top-wall hit terminates further bounces.
+Pure C# class (no MonoBehaviour) that takes an origin, direction, and reusable `List<Vector3>`, then fills it with world-space trace points by stepping forward and reflecting off walls **and off balloons that would deflect the shot**. Bounces off left, right, and top limits (from `LimitsClockwise`). A top-wall hit terminates further bounces.
+
+**Deflections come from `IDeflectorField`** (implemented by `BalloonControllerRegistry`, which already holds the live controllers). A balloon qualifies when `BalloonModelBase.DeflectsOrdinaryHit` — Tough with more than one hit left, or Unbreakable — and its view still has an active collider, so a balloon mid-despawn never deflects the line.
+
+The geometry is the **view's** position and `ContactRadius`, not the slot's, because that is what `BalloonController.Deflect` hands the real projectile: balloons drift between slots while the board settles, and that is exactly when a player is lining a shot up. Both the trace and the real deflection call `Shared/CircleContact.TryFindEntry` — one analytic ray-circle solver, so the drawn line cannot drift from the flight it predicts.
+
+Deflections carry **their own budget** (`IPredictionTraceConfig.PredictionTraceMaxDeflections`), separate from the wall one. A wall bounce spends a shield and a deflection does not — `ProjectileMotionResolver` decrements only on a wall — so pooling the two would misreport what the shot can afford.
+
+Within a step the nearest deflector wins, and the test runs against the step *already clipped by any wall*, so a balloon beyond a wall cannot steal a bounce the wall reaches first. The contact is clamped inside the walls for the same reason the real deflection clamps it: an edge-column balloon can sit within its own radius of a wall.
+
+> **Accuracy caveat.** A circle deflection is very sensitive to where it is struck, so near a balloon's edge a pixel of aim movement swings the outgoing leg hard — the dispersion `ProjectileMotionResolver` already warns about, where error amplifies ×10-20 per deflection. The line is truthful; whether it reads as *precise* or as *jittery* is a playtest question. If it reads badly, draw the post-deflection leg differently (shorter, dimmer, dashed) rather than making it lie.
 
 ### PredictionTraceView
 

@@ -23,6 +23,7 @@ namespace BalloonParty.Thrower
     internal class ThrowerController : IStartable, ITickable, IDisposable
     {
         private readonly IPredictionTraceConfig _traceConfig;
+        private readonly IDeflectorField _deflectorField;
         private readonly IProjectileFlightConfig _flightConfig;
         private readonly IPublisher<ProjectileLoadedMessage> _loadedPublisher;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
@@ -67,6 +68,7 @@ namespace BalloonParty.Thrower
             ThrowerView view,
             IPredictionTraceConfig traceConfig,
             IProjectileFlightConfig flightConfig,
+            IDeflectorField deflectorField,
             PoolManager poolManager,
             IObjectResolver resolver,
             ThrowerSettings settings,
@@ -89,6 +91,7 @@ namespace BalloonParty.Thrower
             _view = view;
             _traceConfig = traceConfig;
             _flightConfig = flightConfig;
+            _deflectorField = deflectorField;
             _poolManager = poolManager;
             _resolver = resolver;
             _settings = settings;
@@ -112,7 +115,7 @@ namespace BalloonParty.Thrower
 
         public void Start()
         {
-            _traceCalculator = new PredictionTraceCalculator(_traceConfig, _flightConfig);
+            _traceCalculator = new PredictionTraceCalculator(_traceConfig, _flightConfig, _deflectorField);
             _view.SetTraceColor(_traceConfig.PredictionTraceColor);
 
             _poolManager.Register(_projectilePoolKey,
@@ -387,7 +390,10 @@ namespace BalloonParty.Thrower
                 return;
             }
 
-            _traceCalculator.Calculate(_activeView.transform.position, _direction, _tracePoints);
+            // From the contact circle, not the transform: the collider leads the origin, so a trace
+            // started at the transform begins a couple of radii behind where the shot really is.
+            _traceCalculator.Calculate(
+                _activeView.ContactCenter, _direction, _activeView.ContactRadius, _tracePoints);
             _view.SetTrace(_tracePoints);
             _traceProvider.SetTrace(_tracePoints);
             _tracePublished = true;

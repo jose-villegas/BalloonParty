@@ -95,8 +95,15 @@ namespace BalloonParty.Solver
 
             // Un-rotate the spawn point back into the thrower's aim-neutral frame so per-angle
             // simulation can re-rotate it — the launch origin orbits the pivot with the aim.
+            //
+            // The collider offset rides along in that same frame: the simulator models the shot as a
+            // circle, and that circle sits at the collider, not at the transform the spawn point
+            // describes. Both rotate with the aim, so folding them here leaves OriginForAngle
+            // untouched — and skipping it launches every simulated path with a fixed forward bias of
+            // the offset, which on the current prefab is larger than the projectile's own radius.
             var spawnLocalOffset =
-                Quaternion.Inverse(thrower.Rotation) * (thrower.SpawnPointPosition - thrower.Position);
+                (Quaternion.Inverse(thrower.Rotation) * (thrower.SpawnPointPosition - thrower.Position))
+                + ResolveProjectileColliderOffset(throwerSettings);
 
             return new ShotSolveContext(
                 targets,
@@ -326,6 +333,15 @@ namespace BalloonParty.Solver
             return actor.EvaluateHit(new DamageContext(0)) == HitOutcome.Absorb
                 ? ShotContactKind.Absorb
                 : ShotContactKind.Poppable;
+        }
+
+        // Local-space collider offset, in the same aim-neutral frame as the spawn offset it is added
+        // to. Read from the prefab rather than assumed, so retuning the collider retunes the solver.
+        private static Vector3 ResolveProjectileColliderOffset(ThrowerSettings settings)
+        {
+            var prefabView = settings?.ProjectilePrefab;
+            var collider = prefabView != null ? prefabView.GetComponent<Collider2D>() : null;
+            return collider != null ? (Vector3)collider.offset : Vector3.zero;
         }
 
         // Mirrors ProjectileView.Awake's own (private) contact-radius derivation — a capsule's

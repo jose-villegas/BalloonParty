@@ -35,6 +35,13 @@ namespace BalloonParty.Balloon.Model
         // Default non-fatal hit outcome; the fatal (Pop) branch stays in EvaluateNormalHit.
         protected virtual HitOutcome SurviveOutcome => HitOutcome.PassThrough;
 
+        /// <summary>
+        ///     Whether an ordinary 1-damage hit would bounce off this balloon rather than pop it — the
+        ///     aim telegraph's question, asked without mutating anything. Mirrors
+        ///     <see cref="EvaluateNormalHit" />'s rule so the two cannot disagree.
+        /// </summary>
+        internal bool DeflectsOrdinaryHit => SurviveOutcome == HitOutcome.Deflect && HitsRemaining.Value > 1;
+
         IReadOnlyReactiveProperty<bool> IDynamicSlotActor.IsStable => IsStable;
         IReadOnlyReactiveProperty<Vector2Int> IDynamicSlotActor.SlotIndex => SlotIndex;
 

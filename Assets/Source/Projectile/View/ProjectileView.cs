@@ -82,11 +82,14 @@ namespace BalloonParty.Projectile.View
         private IDisposable _doomedSubscription;
         private ProjectileTrail _projectileTrail;
         private float _contactRadius;
+        private Vector2 _colliderOffset;
+
         private bool _shieldShown;
         private ProjectileShieldView _shieldView;
         private Vector3 _baseScale;
         private bool _disappearing; // Invariant: _disappearing ⟹ _destroyed
         private bool _destroyed;
+
         private Color[] _paletteColors;
         private Color _glowColor;
         private Tween _glowTween;
@@ -98,6 +101,16 @@ namespace BalloonParty.Projectile.View
         private PathTrace.SegmentBlocked _corridorBlocked;
         private Vector3 _lastPaintPos;
         private float _stampScale = 1f;
+
+        // The aim telegraph inflates every deflector by this, the same way Deflect() adds it to the
+        // balloon's SurfaceRadius — contact is the sum of both circles, not the balloon's alone.
+        internal float ContactRadius => _contactRadius;
+
+        // Where the contact circle actually is. Radius and offset both come from the collider, so
+        // retuning the prefab retunes the maths — but the offset is currently larger than the radius,
+        // and the projectile rotates to face travel, so the circle LEADS the transform origin along
+        // the direction of flight. Every contact calculation wants this, never transform.position.
+        internal Vector3 ContactCenter => transform.TransformPoint(_colliderOffset);
 
         /// <summary>True once the fired shot has taken at least one physics step.</summary>
         internal bool HasFlown => _hasFlown;
@@ -115,6 +128,7 @@ namespace BalloonParty.Projectile.View
             // World contact radius for exact-contact deflection: the tightest half-extent of our own
             // collider (a capsule's cross-section radius) — cached once, colliders don't change.
             var collider = GetComponent<Collider2D>();
+            _colliderOffset = collider != null ? collider.offset : Vector2.zero;
             _contactRadius = collider is CircleCollider2D circle
                 ? circle.radius * transform.lossyScale.x
                 : collider is CapsuleCollider2D capsule
@@ -633,9 +647,14 @@ namespace BalloonParty.Projectile.View
 
             var preDir = (Vector2)_model.Direction;
             var speed = _model.Speed;
+            // Deflect reasons in contact-circle space, so it takes the circle centre and returns
+            // where that centre belongs. The transform carries the offset, so it is subtracted back
+            // out — assigning the circle's position to the transform would jump the shot forward by
+            // the offset on every deflection.
+            var centreToOrigin = transform.position - ContactCenter;
             var contact = _motionResolver.Deflect(
-                _model, transform.position, msg.BalloonWorldPosition, msg.SurfaceRadius + _contactRadius);
-            transform.position = contact;
+                _model, ContactCenter, msg.BalloonWorldPosition, msg.SurfaceRadius + _contactRadius);
+            transform.position = contact + centreToOrigin;
             _shieldView?.OnBounce(preDir, (Vector2)_model.Direction, speed);
 
             // Deflection interrupts free roaming — reset all progress toward piercing

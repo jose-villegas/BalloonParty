@@ -7,6 +7,12 @@ namespace BalloonParty.Shared
     {
         float PredictionTraceStep { get; }
         int PredictionTraceMaxBounces { get; }
+
+        /// <summary>
+        ///     Balloon deflections the trace will draw, budgeted separately from wall bounces — a
+        ///     deflection costs no shield, and an uncapped chain of them is unreadable.
+        /// </summary>
+        int PredictionTraceMaxDeflections { get; }
         int PredictionTraceMaxSteps { get; }
         Color PredictionTraceColor { get; }
     }

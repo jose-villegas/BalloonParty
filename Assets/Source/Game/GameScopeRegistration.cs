@@ -199,7 +199,9 @@ namespace BalloonParty.Game
                 .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<BalloonMotionTicker>().AsSelf();
             builder.RegisterEntryPoint<RejectedBalloonEffect>().AsSelf().As<IRunResettable>();
-            builder.RegisterEntryPoint<BalloonControllerRegistry>().AsSelf();
+            // Also as IDeflectorField: it already holds the live controllers, so the aim
+            // telegraph reads its deflectors from the same array the hit routing uses.
+            builder.RegisterEntryPoint<BalloonControllerRegistry>().AsSelf().As<IDeflectorField>();
             builder.Register<BalloonPopPresenter>(Lifetime.Singleton);
             builder.Register<BalloonControllerContext>(Lifetime.Singleton);
             builder.Register<BalloonPlacementResolver>(Lifetime.Singleton);

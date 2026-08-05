@@ -19,8 +19,8 @@ MonoBehaviour:
       _spawnLines: 4
       _boardLines: 7
       _itemCadence:
-        _min: 0
-        _max: 0
+        _min: 1
+        _max: 1
         _mode: 0
       _firstSpawnTurn: 0
       _initialItemCountWeights:
@@ -28,21 +28,30 @@ MonoBehaviour:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 34
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
+          value: 0
+          inSlope: -0.072295494
+          outSlope: -0.072295494
+          tangentMode: 0
+          weightedMode: 3
+          inWeight: 0.33333334
+          outWeight: 0.33333334
         - serializedVersion: 3
-          time: 1
+          time: 3
           value: 1
+          inSlope: Infinity
+          outSlope: 0
+          tangentMode: 7
+          weightedMode: 3
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 6
+          value: 0.15
           inSlope: 0
           outSlope: 0
-          tangentMode: 34
-          weightedMode: 0
-          inWeight: 0
+          tangentMode: 0
+          weightedMode: 1
+          inWeight: 0.33333337
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -52,21 +61,57 @@ MonoBehaviour:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 1
-          inSlope: 0
-          outSlope: 0
+          value: 0
+          inSlope: 0.45
+          outSlope: 0.45
           tangentMode: 34
           weightedMode: 0
           inWeight: 0
-          outWeight: 0
+          outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
-          value: 1
+          value: 0.45
           inSlope: 0
           outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 2
+          value: 0.4
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 3
+          value: 0.3
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 4
+          value: 0.2
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 6
+          value: 0.15
+          inSlope: -0.024999999
+          outSlope: -0.024999999
           tangentMode: 34
           weightedMode: 0
-          inWeight: 0
+          inWeight: 0.33333334
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -156,7 +201,11 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         _guaranteedInitialCount: 0
-      _itemWeights: []
+      _itemWeights:
+      - _type: 1
+        _weight: 1
+        _maximumAllowedOverride: 8
+        _guaranteedInitialCount: 3
       _gridActorGates: []
       _allowedColorsMask: 1
   - _fromLevel: 2

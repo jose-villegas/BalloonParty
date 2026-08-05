@@ -1296,7 +1296,7 @@ PrefabInstance:
     - target: {fileID: 4241542687160100890, guid: 334c68e3882847140b40720208a2f1b2,
         type: 3}
       propertyPath: _binding._timer
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4241542687160100890, guid: 334c68e3882847140b40720208a2f1b2,
         type: 3}

@@ -128,7 +128,7 @@ namespace BalloonParty.Projectile.Controller
                 projectilePosition, model.Direction, balloonPosition, contactRadius, out var surfaceNormal);
 
             if (penetrated
-                || TryComputeForwardContactNormal(
+                || CircleContact.TryFindEntryNormal(
                     projectilePosition, model.Direction, balloonPosition, contactRadius, out surfaceNormal))
             {
                 model.Direction = Vector2.Reflect(model.Direction, surfaceNormal);
@@ -227,38 +227,6 @@ namespace BalloonParty.Projectile.Controller
         // further along direction. This solves the SAME quadratic's other root — the entry ahead of
         // position instead of behind it — recovering the true tangent normal there instead of the
         // penetrated-radial one the degenerate fallback used to supply.
-        private static bool TryComputeForwardContactNormal(
-            Vector2 position, Vector2 direction, Vector2 center, float radius, out Vector2 normal)
-        {
-            normal = default;
-            if (radius <= 0f || direction.sqrMagnitude < 1e-8f)
-            {
-                return false;
-            }
-
-            var travel = direction.normalized;
-            var toPosition = position - center;
-            var along = Vector2.Dot(toPosition, travel);
-            var discriminant = along * along - toPosition.sqrMagnitude + radius * radius;
-            if (discriminant < 0f)
-            {
-                if (discriminant < -1e-6f)
-                {
-                    return false;
-                }
-
-                discriminant = 0f;
-            }
-
-            var entryDistance = -along - Mathf.Sqrt(discriminant);
-            if (entryDistance <= 0f)
-            {
-                return false;
-            }
-
-            normal = (toPosition + travel * entryDistance) / radius;
-            return true;
-        }
 
     }
 }

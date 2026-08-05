@@ -6,6 +6,7 @@ using BalloonParty.Nudge;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Scenario;
 using BalloonParty.Slots.Actor;
@@ -78,6 +79,23 @@ namespace BalloonParty.Balloon.Controller
         }
 
         // Invoked by BalloonControllerRegistry.Route; no self-filtering needed here.
+        // The aim telegraph's view of this balloon. View position and ContactRadius deliberately —
+        // the same two values Deflect() hands the projectile, so the drawn line bounces off exactly
+        // what the shot will. A balloon mid-despawn has its collider off before the view returns to
+        // the pool and must not deflect anything.
+        internal bool TryGetDeflector(out DeflectorCircle deflector)
+        {
+            if (_view == null || !_view.HasActiveCollider
+                || _model is not BalloonModelBase model || !model.DeflectsOrdinaryHit)
+            {
+                deflector = default;
+                return false;
+            }
+
+            deflector = new DeflectorCircle(_view.ContactCenter, _view.ContactRadius);
+            return true;
+        }
+
         internal void HandleHit(ActorHitMessage msg)
         {
             if (_popped)
@@ -171,11 +189,12 @@ namespace BalloonParty.Balloon.Controller
 
         private void Deflect(ActorHitMessage msg)
         {
-            var viewPos = _view.transform.position;
+            var viewPos = _view.ContactCenter;
             var slotWorldPos = _grid.IndexToWorldPosition(_model.SlotIndex.Value);
 
             // Projectile reflection needs the visual position — the ball bounced off the view, not
-            // the (potentially different) model-slot position during a mid-balance move.
+            // the (potentially different) model-slot position during a mid-balance move. The
+            // collider's centre specifically, so an offset one would still reflect where it is drawn.
             _deflectedPublisher.Publish(
                 new BalloonDeflectedMessage(_model, viewPos, msg.ProjectileDirection, _view.ContactRadius));
 

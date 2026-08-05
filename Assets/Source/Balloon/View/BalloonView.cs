@@ -88,6 +88,12 @@ namespace BalloonParty.Balloon.View
         // despawn — its collider is disabled before the view actually returns to the pool.
         internal bool HasActiveCollider => _collider != null && _collider.enabled;
 
+        // The deflection reflects off the collider, not the pivot. The balloon prefabs happen to
+        // centre theirs today, which is exactly why this should be read rather than assumed — an
+        // offset added later would otherwise bend every shot around a circle that is not there.
+        internal Vector3 ContactCenter =>
+            _collider != null ? transform.TransformPoint(_collider.offset) : transform.position;
+
         Vector3 IBalloonMotionView.Position
         {
             get => transform.position;
