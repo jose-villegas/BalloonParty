@@ -10,6 +10,10 @@ namespace BalloonParty.Configuration
         [SerializeField] private int _startingHitPoints = 3;
         [SerializeField] private int _maxRetries = 1;
 
+        [Tooltip("Off makes items the only source of shields — the streak stops granting them. " +
+            "A balance experiment: leave it on for current behaviour.")]
+        [SerializeField] private bool _streakGrantsShields = true;
+
         [Header("Level Complete")]
         [Tooltip("Seconds over which timeScale ramps from 1 to peak after the completing flight ends.")]
         [SerializeField] [Min(0f)] private float _levelCompleteRampUpDuration = 1.5f;
@@ -19,6 +23,7 @@ namespace BalloonParty.Configuration
 
         public int StartingHitPoints => _startingHitPoints;
         public int MaxRetries => _maxRetries;
+        public bool StreakGrantsShields => _streakGrantsShields;
         public float LevelCompleteRampUpDuration => _levelCompleteRampUpDuration;
         public float LevelCompleteRampUpScale => _levelCompleteRampUpScale;
     }

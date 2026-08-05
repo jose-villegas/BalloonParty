@@ -3,6 +3,7 @@ using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Flight;
 using BalloonParty.Game.Score;
 using BalloonParty.Projectile.Model;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
@@ -20,6 +21,7 @@ namespace BalloonParty.Projectile.Controller
         private readonly IPublisher<PierceDischargedMessage> _dischargedPublisher;
         private readonly IFlightStatsWriter _flightStats;
         private readonly ColorStreakTracker _streakTracker;
+        private readonly IRunConfig _runConfig;
         private readonly SlotGrid _grid;
         private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
 
@@ -29,6 +31,7 @@ namespace BalloonParty.Projectile.Controller
             IPublisher<PierceDischargedMessage> dischargedPublisher,
             IFlightStatsWriter flightStats,
             ColorStreakTracker streakTracker,
+            IRunConfig runConfig,
             SlotGrid grid)
         {
             _hitDispatcher = hitDispatcher;
@@ -36,6 +39,7 @@ namespace BalloonParty.Projectile.Controller
             _dischargedPublisher = dischargedPublisher;
             _flightStats = flightStats;
             _streakTracker = streakTracker;
+            _runConfig = runConfig;
             _grid = grid;
         }
 
@@ -185,7 +189,9 @@ namespace BalloonParty.Projectile.Controller
             }
 
             // Dispatch runs the streak stage synchronously, so the tracker is already current here.
-            if (outcome == HitOutcome.Pop && balloon is IHasColor &&
+            // StreakGrantsShields off leaves items as the only shield source (IRunConfig).
+            if (_runConfig.StreakGrantsShields &&
+                outcome == HitOutcome.Pop && balloon is IHasColor &&
                 _streakTracker.CurrentStreak >= 2 &&
                 _streakTracker.LastColor == projectile.ColorName.Value)
             {

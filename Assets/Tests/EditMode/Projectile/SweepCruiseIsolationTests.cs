@@ -72,9 +72,12 @@ namespace BalloonParty.Tests.Projectile
             var streakTracker = new ColorStreakTracker(
                 Substitute.For<IPublisher<StreakChangedMessage>>(), levelUpSubscriber, projectileLoadedSubscriber);
 
+            var runConfig = Substitute.For<IRunConfig>();
+            runConfig.StreakGrantsShields.Returns(true);
+
             _hitResolver = new ProjectileHitResolver(
                 _hitDispatcher, shieldGainedPublisher, dischargedPublisher,
-                Substitute.For<IFlightStatsWriter>(), streakTracker, grid);
+                Substitute.For<IFlightStatsWriter>(), streakTracker, runConfig, grid);
             _motionResolver = new ProjectileMotionResolver(flightConfig, new ProjectileTapResolver(flightConfig));
             _projectile = new ProjectileModel { IsFree = true };
             _projectile.ShieldsRemaining.Value = 10;

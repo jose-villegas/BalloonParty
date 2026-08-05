@@ -29,6 +29,7 @@ namespace BalloonParty.Tests.Projectile
         private IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
         private IPublisher<PierceDischargedMessage> _dischargedPublisher;
         private ColorStreakTracker _streakTracker;
+        private IRunConfig _runConfig;
         private SlotGrid _grid;
         private ProjectileHitResolver _resolver;
         private ProjectileModel _projectile;
@@ -37,6 +38,9 @@ namespace BalloonParty.Tests.Projectile
         [SetUp]
         public void SetUp()
         {
+            _runConfig = Substitute.For<IRunConfig>();
+            _runConfig.StreakGrantsShields.Returns(true);
+
             _hitDispatcher = Substitute.For<IHitDispatcher>();
             _shieldGainedPublisher = Substitute.For<IPublisher<ShieldGainedMessage>>();
             _dischargedPublisher = Substitute.For<IPublisher<PierceDischargedMessage>>();
@@ -66,7 +70,7 @@ namespace BalloonParty.Tests.Projectile
 
             _resolver = new ProjectileHitResolver(
                 _hitDispatcher, _shieldGainedPublisher, _dischargedPublisher,
-                Substitute.For<IFlightStatsWriter>(), _streakTracker, _grid);
+                Substitute.For<IFlightStatsWriter>(), _streakTracker, _runConfig, _grid);
             _projectile = new ProjectileModel { IsFree = true };
         }
 
@@ -385,6 +389,25 @@ namespace BalloonParty.Tests.Projectile
 
             Assert.AreEqual(1, _projectile.ShieldsRemaining.Value);
             Assert.AreEqual("Blue", _projectile.ColorName.Value); // unchanged — no steal
+        }
+
+        // The balance experiment: with IRunConfig.StreakGrantsShields off, items become the only
+        // source of shields. Same setup as the test above, so the two differ by the flag alone.
+        [Test]
+        public void Resolve_StreakAtTwo_GrantsNoShield_WhenTheConfigTurnsStreakShieldsOff()
+        {
+            _runConfig.StreakGrantsShields.Returns(false);
+            _streakTracker.Record("Blue", false);
+            _streakTracker.Record("Blue", false);
+
+            var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            balloon.Color.Value = GamePalette.RainbowColorId;
+            _projectile.ColorName.Value = "Blue";
+
+            _resolver.Resolve(_projectile, balloon, Vector3.zero);
+
+            Assert.AreEqual(0, _projectile.ShieldsRemaining.Value);
+            _shieldGainedPublisher.DidNotReceive().Publish(Arg.Any<ShieldGainedMessage>());
         }
 
         [Test]
