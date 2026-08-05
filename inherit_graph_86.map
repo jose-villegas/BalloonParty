@@ -1,3 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html" title="How a palette index is packed into a single texture channel for the stamp/field systems: (index + 1) ..." alt="" coords="5,5,233,45"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html" title="Base contract for a config entry keyed to a set of palette colours by a PaletteColorMaskAttribute bit..." alt="" coords="5,69,209,109"/>
+<area shape="rect" id="Node000001" href="$structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html" title="A render&#45;look override for a set of palette colours." alt="" coords="268,5,465,45"/>
+<area shape="poly" id="edge67_Node000000_Node000001" title=" " alt="" coords="202,63,284,43,286,48,203,69"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html" title="A motion override for a set of palette colours." alt="" coords="268,69,465,109"/>
+<area shape="poly" id="edge68_Node000000_Node000002" title=" " alt="" coords="223,87,268,87,268,92,223,92"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html" title="The range&#45;authored form of a level&#39;s difficulty mix; Resolve is a pure function, so it&#39;s EditMode&#45;tes..." alt="" coords="257,133,476,173"/>
+<area shape="poly" id="edge69_Node000000_Node000003" title=" " alt="" coords="203,110,286,131,284,136,202,115"/>
 </map>

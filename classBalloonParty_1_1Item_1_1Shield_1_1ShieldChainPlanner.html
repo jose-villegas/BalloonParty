@@ -125,29 +125,31 @@ $(function(){initNavTree('classBalloonParty_1_1Item_1_1Shield_1_1ShieldChainPlan
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Item_1_1Shield_1_1ShieldChainPlanner__coll__graph.svg" width="195" height="154"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Item_1_1Shield_1_1ShieldChainPlanner__coll__graph.svg" width="416" height="154"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a915aad7de9ae6e2e9e2e1912b7d63320" id="r_a915aad7de9ae6e2e9e2e1912b7d63320"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a915aad7de9ae6e2e9e2e1912b7d63320">ShieldChainPlanner</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1WallLimits.html">WallLimits</a> walls, IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1DeflectorCircle.html">DeflectorCircle</a> &gt; deflectors)</td></tr>
-<tr class="separator:a915aad7de9ae6e2e9e2e1912b7d63320"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ff4ad0d4921f9427b0f88aeca36eb6b" id="r_a1ff4ad0d4921f9427b0f88aeca36eb6b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ff4ad0d4921f9427b0f88aeca36eb6b">ShieldChainPlanner</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1WallLimits.html">WallLimits</a> walls, IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1DeflectorCircle.html">DeflectorCircle</a> &gt; deflectors, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html">IShieldChainSettings</a> settings)</td></tr>
+<tr class="separator:a1ff4ad0d4921f9427b0f88aeca36eb6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a833fc2b3fcac3c36d638347df06aa20b" id="r_a833fc2b3fcac3c36d638347df06aa20b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a833fc2b3fcac3c36d638347df06aa20b">PlanChain</a> (Vector2 origin, IReadOnlyList&lt; Vector2 &gt; fan, int shields, int wanted, IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Shield_1_1ShieldHostCandidate.html">ShieldHostCandidate</a> &gt; candidates, List&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Shield_1_1ShieldPlacement.html">ShieldPlacement</a> &gt; results)</td></tr>
 <tr class="memdesc:a833fc2b3fcac3c36d638347df06aa20b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Plans a chain against a fan of opening angles, so every shield has several ways in.  <br /></td></tr>
 <tr class="separator:a833fc2b3fcac3c36d638347df06aa20b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5e9ba6d2076d7810170f8a632c0a14d" id="r_ae5e9ba6d2076d7810170f8a632c0a14d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae5e9ba6d2076d7810170f8a632c0a14d">PlanChain</a> (Vector2 origin, Vector2 direction, int shields, int wanted, IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Shield_1_1ShieldHostCandidate.html">ShieldHostCandidate</a> &gt; candidates, List&lt; int &gt; results)</td></tr>
-<tr class="memdesc:ae5e9ba6d2076d7810170f8a632c0a14d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flies one shot from <em>origin</em>  along <em>direction</em>  and records which candidates it can collect, in the order it meets them.  <br /></td></tr>
-<tr class="separator:ae5e9ba6d2076d7810170f8a632c0a14d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74f53606e5214966882650222b11651b" id="r_a74f53606e5214966882650222b11651b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74f53606e5214966882650222b11651b">PlanChain</a> (Vector2 origin, Vector2 direction, int shields, int wanted, IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Shield_1_1ShieldHostCandidate.html">ShieldHostCandidate</a> &gt; candidates, List&lt; int &gt; results, List&lt; Vector2 &gt; pathOut=null)</td></tr>
+<tr class="memdesc:a74f53606e5214966882650222b11651b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flies one shot from <em>origin</em>  along <em>direction</em>  and records which candidates it can collect, in the order it meets them.  <br /></td></tr>
+<tr class="separator:a74f53606e5214966882650222b11651b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:ac691ba94acdb93f6d32074e500c4422e" id="r_ac691ba94acdb93f6d32074e500c4422e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac691ba94acdb93f6d32074e500c4422e">ClaimOnLeg</a> (Vector2 position, Vector2 heading, float legLength, IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Shield_1_1ShieldHostCandidate.html">ShieldHostCandidate</a> &gt; candidates, IReadOnlyList&lt; bool &gt; placed, ref int shields, List&lt; int &gt; reached, List&lt; int &gt; deflectionsAt, int deflectionsUsed)</td></tr>
 <tr class="separator:ac691ba94acdb93f6d32074e500c4422e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b0787ce7c3525bcd239680ce8a02605" id="r_a7b0787ce7c3525bcd239680ce8a02605"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7b0787ce7c3525bcd239680ce8a02605">Fly</a> (Vector2 origin, Vector2 direction, int shields, IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Shield_1_1ShieldHostCandidate.html">ShieldHostCandidate</a> &gt; candidates, IReadOnlyList&lt; bool &gt; placed, List&lt; int &gt; reached, List&lt; int &gt; deflectionsAt=null)</td></tr>
-<tr class="memdesc:a7b0787ce7c3525bcd239680ce8a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flies one shot and records the candidates it meets, in order.  <br /></td></tr>
-<tr class="separator:a7b0787ce7c3525bcd239680ce8a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab4922b8d1c735063f33325351ed9873" id="r_aab4922b8d1c735063f33325351ed9873"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab4922b8d1c735063f33325351ed9873">SelectInBand</a> (IReadOnlyList&lt; int &gt; reachCount, IReadOnlyList&lt; int &gt; viaDeflections, IReadOnlyList&lt; bool &gt; placed, int fanSize)</td></tr>
-<tr class="separator:aab4922b8d1c735063f33325351ed9873"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23f81e58b982eabc3c8e38e14b0e3502" id="r_a23f81e58b982eabc3c8e38e14b0e3502"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a23f81e58b982eabc3c8e38e14b0e3502">Fly</a> (Vector2 origin, Vector2 direction, int shields, IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Shield_1_1ShieldHostCandidate.html">ShieldHostCandidate</a> &gt; candidates, IReadOnlyList&lt; bool &gt; placed, List&lt; int &gt; reached, List&lt; int &gt; deflectionsAt=null, List&lt; Vector2 &gt; pathOut=null)</td></tr>
+<tr class="memdesc:a23f81e58b982eabc3c8e38e14b0e3502"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flies one shot and records the candidates it meets, in order.  <br /></td></tr>
+<tr class="separator:a23f81e58b982eabc3c8e38e14b0e3502"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a413047f96df630bae136648e858c65e4" id="r_a413047f96df630bae136648e858c65e4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a413047f96df630bae136648e858c65e4">SelectInBand</a> (IReadOnlyList&lt; int &gt; reachCount, IReadOnlyList&lt; int &gt; viaDeflections, IReadOnlyList&lt; bool &gt; placed, bool[,] reachedBy, IReadOnlyList&lt; bool &gt; chainAngles, int fanSize)</td></tr>
+<tr class="separator:a413047f96df630bae136648e858c65e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ba2e1b4c85a928ea90bf61c8ffbb255" id="r_a2ba2e1b4c85a928ea90bf61c8ffbb255"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ba2e1b4c85a928ea90bf61c8ffbb255">SweepFan</a> (Vector2 origin, IReadOnlyList&lt; Vector2 &gt; fan, int shields, IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Shield_1_1ShieldHostCandidate.html">ShieldHostCandidate</a> &gt; candidates, IReadOnlyList&lt; bool &gt; placed, List&lt; int &gt; reached, List&lt; int &gt; deflections, int[] reachCount, int[] viaDeflections, bool[,] reachedBy)</td></tr>
+<tr class="separator:a2ba2e1b4c85a928ea90bf61c8ffbb255"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0696d6c37a7435702f82a10bcf399d92" id="r_a0696d6c37a7435702f82a10bcf399d92"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0696d6c37a7435702f82a10bcf399d92">TryClaimOnLeg</a> (Vector2 position, Vector2 heading, float legLength, IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Shield_1_1ShieldHostCandidate.html">ShieldHostCandidate</a> &gt; candidates, out int claimed)</td></tr>
 <tr class="separator:a0696d6c37a7435702f82a10bcf399d92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53db692c0f682951b8c5b45fef915e8d" id="r_a53db692c0f682951b8c5b45fef915e8d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53db692c0f682951b8c5b45fef915e8d">TryFindNearestDeflector</a> (Vector2 position, Vector2 heading, float maxDistance, out Vector2 contact, out Vector2 normal)</td></tr>
@@ -155,9 +157,13 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
-<tr class="memitem:a4827d9cbbe11374f515eefff9619a88b" id="r_a4827d9cbbe11374f515eefff9619a88b"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4827d9cbbe11374f515eefff9619a88b">Pick</a> (IReadOnlyList&lt; int &gt; reachCount, IReadOnlyList&lt; int &gt; viaDeflections, IReadOnlyList&lt; bool &gt; placed, int min, int max)</td></tr>
-<tr class="memdesc:a4827d9cbbe11374f515eefff9619a88b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fewest deflections first, then most entry angles.  <br /></td></tr>
-<tr class="separator:a4827d9cbbe11374f515eefff9619a88b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f980d07df2700a0e60dc949f5791784" id="r_a7f980d07df2700a0e60dc949f5791784"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f980d07df2700a0e60dc949f5791784">CountTrue</a> (IReadOnlyList&lt; bool &gt; flags)</td></tr>
+<tr class="separator:a7f980d07df2700a0e60dc949f5791784"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1dd3ca89c1339fe44317885db4739207" id="r_a1dd3ca89c1339fe44317885db4739207"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1dd3ca89c1339fe44317885db4739207">Pick</a> (IReadOnlyList&lt; int &gt; reachCount, IReadOnlyList&lt; int &gt; viaDeflections, IReadOnlyList&lt; bool &gt; placed, bool[,] reachedBy, IReadOnlyList&lt; bool &gt; chainAngles, int min, int max)</td></tr>
+<tr class="memdesc:a1dd3ca89c1339fe44317885db4739207"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fewest deflections first, then most entry angles.  <br /></td></tr>
+<tr class="separator:a1dd3ca89c1339fe44317885db4739207"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6571c2e67426b196d5638dd95860da26" id="r_a6571c2e67426b196d5638dd95860da26"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6571c2e67426b196d5638dd95860da26">SharedAngles</a> (bool[,] reachedBy, IReadOnlyList&lt; bool &gt; chainAngles, int candidate)</td></tr>
+<tr class="separator:a6571c2e67426b196d5638dd95860da26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -165,17 +171,15 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ae3aaa7654b4cea440d4ca111cecf7744"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1d2dad224526e69c9c23ddaa0334688" id="r_ac1d2dad224526e69c9c23ddaa0334688"><td class="memItemLeft" align="right" valign="top">readonly IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1DeflectorCircle.html">DeflectorCircle</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac1d2dad224526e69c9c23ddaa0334688">_deflectors</a></td></tr>
 <tr class="separator:ac1d2dad224526e69c9c23ddaa0334688"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4af1eae9a484ed3b55c1356e46d70822" id="r_a4af1eae9a484ed3b55c1356e46d70822"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html">IShieldChainSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4af1eae9a484ed3b55c1356e46d70822">_settings</a></td></tr>
+<tr class="separator:a4af1eae9a484ed3b55c1356e46d70822"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa541eae56b65283edbe2a178ee56a749" id="r_aa541eae56b65283edbe2a178ee56a749"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="structBalloonParty_1_1Shared_1_1WallLimits.html">WallLimits</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa541eae56b65283edbe2a178ee56a749">_walls</a></td></tr>
 <tr class="separator:aa541eae56b65283edbe2a178ee56a749"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
-<tr class="memitem:ad5efa1c613edc690aa7124d558e68a67" id="r_ad5efa1c613edc690aa7124d558e68a67"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad5efa1c613edc690aa7124d558e68a67">CheapZoneFraction</a> = 0.6f</td></tr>
-<tr class="separator:ad5efa1c613edc690aa7124d558e68a67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a550afee288e6ad3bb594a6642516a5b8" id="r_a550afee288e6ad3bb594a6642516a5b8"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a550afee288e6ad3bb594a6642516a5b8">MaxLegs</a> = 64</td></tr>
 <tr class="separator:a550afee288e6ad3bb594a6642516a5b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57f08fdea7650a73b3927c977cda3a37" id="r_a57f08fdea7650a73b3927c977cda3a37"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a57f08fdea7650a73b3927c977cda3a37">MinEntryAngles</a> = 3</td></tr>
-<tr class="separator:a57f08fdea7650a73b3927c977cda3a37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1c9f37857a70bc9ca9aa6356b5e02d3" id="r_ae1c9f37857a70bc9ca9aa6356b5e02d3"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae1c9f37857a70bc9ca9aa6356b5e02d3">SurfaceEpsilon</a> = 1e-3f</td></tr>
 <tr class="separator:ae1c9f37857a70bc9ca9aa6356b5e02d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -186,8 +190,8 @@ Static Private Attributes</h2></td></tr>
         with one more shield in the bank", and each placement extends how far the flight may continue. That extension is the whole mechanic: shield <em>n</em> is what makes shield <em>n+1</em> reachable. </p>
 <p>Pure C#: no scene, no grid, no Unity object. The caller supplies circles and gets back indices into its own candidate list. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a915aad7de9ae6e2e9e2e1912b7d63320" name="a915aad7de9ae6e2e9e2e1912b7d63320"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a915aad7de9ae6e2e9e2e1912b7d63320">&#9670;&#160;</a></span>ShieldChainPlanner()</h2>
+<a id="a1ff4ad0d4921f9427b0f88aeca36eb6b" name="a1ff4ad0d4921f9427b0f88aeca36eb6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ff4ad0d4921f9427b0f88aeca36eb6b">&#9670;&#160;</a></span>ShieldChainPlanner()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -203,7 +207,12 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1DeflectorCircle.html">DeflectorCircle</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>deflectors</em></span>&#160;)</td>
+          <td class="paramtype">IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1DeflectorCircle.html">DeflectorCircle</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>deflectors</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html">IShieldChainSettings</a></td>          <td class="paramname"><span class="paramname"><em>settings</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -280,8 +289,33 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a7b0787ce7c3525bcd239680ce8a02605" name="a7b0787ce7c3525bcd239680ce8a02605"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b0787ce7c3525bcd239680ce8a02605">&#9670;&#160;</a></span>Fly()</h2>
+<a id="a7f980d07df2700a0e60dc949f5791784" name="a7f980d07df2700a0e60dc949f5791784"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f980d07df2700a0e60dc949f5791784">&#9670;&#160;</a></span>CountTrue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int BalloonParty.Item.Shield.ShieldChainPlanner.CountTrue </td>
+          <td>(</td>
+          <td class="paramtype">IReadOnlyList&lt; bool &gt;</td>          <td class="paramname"><span class="paramname"><em>flags</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a23f81e58b982eabc3c8e38e14b0e3502" name="a23f81e58b982eabc3c8e38e14b0e3502"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23f81e58b982eabc3c8e38e14b0e3502">&#9670;&#160;</a></span>Fly()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -322,7 +356,12 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">List&lt; int &gt;</td>          <td class="paramname"><span class="paramname"><em>deflectionsAt</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>&#160;)</td>
+          <td class="paramtype">List&lt; int &gt;</td>          <td class="paramname"><span class="paramname"><em>deflectionsAt</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">List&lt; Vector2 &gt;</td>          <td class="paramname"><span class="paramname"><em>pathOut</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -337,8 +376,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a4827d9cbbe11374f515eefff9619a88b" name="a4827d9cbbe11374f515eefff9619a88b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4827d9cbbe11374f515eefff9619a88b">&#9670;&#160;</a></span>Pick()</h2>
+<a id="a1dd3ca89c1339fe44317885db4739207" name="a1dd3ca89c1339fe44317885db4739207"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1dd3ca89c1339fe44317885db4739207">&#9670;&#160;</a></span>Pick()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -360,6 +399,16 @@ Static Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">IReadOnlyList&lt; bool &gt;</td>          <td class="paramname"><span class="paramname"><em>placed</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>reachedBy</em></span>[,], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; bool &gt;</td>          <td class="paramname"><span class="paramname"><em>chainAngles</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -437,8 +486,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ae5e9ba6d2076d7810170f8a632c0a14d" name="ae5e9ba6d2076d7810170f8a632c0a14d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae5e9ba6d2076d7810170f8a632c0a14d">&#9670;&#160;</a></span>PlanChain() <span class="overload">[2/2]</span></h2>
+<a id="a74f53606e5214966882650222b11651b" name="a74f53606e5214966882650222b11651b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74f53606e5214966882650222b11651b">&#9670;&#160;</a></span>PlanChain() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -474,7 +523,12 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">List&lt; int &gt;</td>          <td class="paramname"><span class="paramname"><em>results</em></span>&#160;)</td>
+          <td class="paramtype">List&lt; int &gt;</td>          <td class="paramname"><span class="paramname"><em>results</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">List&lt; Vector2 &gt;</td>          <td class="paramname"><span class="paramname"><em>pathOut</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -493,11 +547,17 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>How many were placed.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pathOut</td><td>Optional polyline of the flight, origin first then every turn — for drawing one candidate opening in the editor rather than guessing at it. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="aab4922b8d1c735063f33325351ed9873" name="aab4922b8d1c735063f33325351ed9873"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab4922b8d1c735063f33325351ed9873">&#9670;&#160;</a></span>SelectInBand()</h2>
+<a id="a413047f96df630bae136648e858c65e4" name="a413047f96df630bae136648e858c65e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a413047f96df630bae136648e858c65e4">&#9670;&#160;</a></span>SelectInBand()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -523,7 +583,120 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>reachedBy</em></span>[,], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; bool &gt;</td>          <td class="paramname"><span class="paramname"><em>chainAngles</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>fanSize</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6571c2e67426b196d5638dd95860da26" name="a6571c2e67426b196d5638dd95860da26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6571c2e67426b196d5638dd95860da26">&#9670;&#160;</a></span>SharedAngles()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int BalloonParty.Item.Shield.ShieldChainPlanner.SharedAngles </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>reachedBy</em></span>[,], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; bool &gt;</td>          <td class="paramname"><span class="paramname"><em>chainAngles</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>candidate</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2ba2e1b4c85a928ea90bf61c8ffbb255" name="a2ba2e1b4c85a928ea90bf61c8ffbb255"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ba2e1b4c85a928ea90bf61c8ffbb255">&#9670;&#160;</a></span>SweepFan()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Shield.ShieldChainPlanner.SweepFan </td>
+          <td>(</td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>origin</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; Vector2 &gt;</td>          <td class="paramname"><span class="paramname"><em>fan</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>shields</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Shield_1_1ShieldHostCandidate.html">ShieldHostCandidate</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>candidates</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; bool &gt;</td>          <td class="paramname"><span class="paramname"><em>placed</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">List&lt; int &gt;</td>          <td class="paramname"><span class="paramname"><em>reached</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">List&lt; int &gt;</td>          <td class="paramname"><span class="paramname"><em>deflections</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int[]</td>          <td class="paramname"><span class="paramname"><em>reachCount</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int[]</td>          <td class="paramname"><span class="paramname"><em>viaDeflections</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>reachedBy</em></span>[,]&#160;)</td>
         </tr>
       </table>
   </td>
@@ -668,6 +841,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4af1eae9a484ed3b55c1356e46d70822" name="a4af1eae9a484ed3b55c1356e46d70822"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4af1eae9a484ed3b55c1356e46d70822">&#9670;&#160;</a></span>_settings</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html">IShieldChainSettings</a> BalloonParty.Item.Shield.ShieldChainPlanner._settings</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aa541eae56b65283edbe2a178ee56a749" name="aa541eae56b65283edbe2a178ee56a749"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa541eae56b65283edbe2a178ee56a749">&#9670;&#160;</a></span>_walls</h2>
 
@@ -690,28 +885,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ad5efa1c613edc690aa7124d558e68a67" name="ad5efa1c613edc690aa7124d558e68a67"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad5efa1c613edc690aa7124d558e68a67">&#9670;&#160;</a></span>CheapZoneFraction</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const float BalloonParty.Item.Shield.ShieldChainPlanner.CheapZoneFraction = 0.6f</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a550afee288e6ad3bb594a6642516a5b8" name="a550afee288e6ad3bb594a6642516a5b8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a550afee288e6ad3bb594a6642516a5b8">&#9670;&#160;</a></span>MaxLegs</h2>
 
@@ -723,28 +896,6 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">const int BalloonParty.Item.Shield.ShieldChainPlanner.MaxLegs = 64</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a57f08fdea7650a73b3927c977cda3a37" name="a57f08fdea7650a73b3927c977cda3a37"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a57f08fdea7650a73b3927c977cda3a37">&#9670;&#160;</a></span>MinEntryAngles</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const int BalloonParty.Item.Shield.ShieldChainPlanner.MinEntryAngles = 3</td>
         </tr>
       </table>
   </td>

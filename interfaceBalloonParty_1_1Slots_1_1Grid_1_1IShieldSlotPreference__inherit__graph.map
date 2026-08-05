@@ -1,0 +1,5 @@
+<map id="BalloonParty.Slots.Grid.IShieldSlotPreference" name="BalloonParty.Slots.Grid.IShieldSlotPreference">
+<area shape="rect" id="Node000001" title="A balance&#45;weight nudge that keeps shields somewhere a shot can still collect them." alt="" coords="11,5,184,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Item_1_1Shield_1_1ShieldSlotPreference.html" title="Steers shield&#45;carrying balloons toward slots a shot can still reach, so a planned chain degrades grac..." alt="" coords="5,93,189,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,59,100,93,95,93,95,59"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.IShieldChainSettings" name="BalloonParty.Shared.IShieldChainSettings">
+<area shape="rect" id="Node000001" title="Tuning for how shield chains are planned: the fan of openings tried, and how selective the planner is..." alt="" coords="5,5,204,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html" title="Inspector&#45;authored IShieldChainSettings, serialized inside RunConfig beside the toggle that turns cha..." alt="" coords="6,93,203,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,59,107,93,102,93,102,59"/>
+</map>

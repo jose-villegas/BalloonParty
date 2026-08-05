@@ -105,7 +105,8 @@ var annotated_dup =
           [ "PaintDripOverlay", "classBalloonParty_1_1Balloon_1_1View_1_1PaintDripOverlay.html", "classBalloonParty_1_1Balloon_1_1View_1_1PaintDripOverlay" ],
           [ "ParticleColorableRenderer", "classBalloonParty_1_1Balloon_1_1View_1_1ParticleColorableRenderer.html", "classBalloonParty_1_1Balloon_1_1View_1_1ParticleColorableRenderer" ],
           [ "SpriteColorableRenderer", "classBalloonParty_1_1Balloon_1_1View_1_1SpriteColorableRenderer.html", "classBalloonParty_1_1Balloon_1_1View_1_1SpriteColorableRenderer" ]
-        ] ]
+        ] ],
+        [ "BalloonContactRadii", "classBalloonParty_1_1Balloon_1_1BalloonContactRadii.html", "classBalloonParty_1_1Balloon_1_1BalloonContactRadii" ]
       ] ],
       [ "Cheats", "namespaceBalloonParty_1_1Cheats.html", [
         [ "DevLogConsole", "classBalloonParty_1_1Cheats_1_1DevLogConsole.html", "classBalloonParty_1_1Cheats_1_1DevLogConsole" ]
@@ -240,6 +241,7 @@ var annotated_dup =
         [ "RunConfig", "classBalloonParty_1_1Configuration_1_1RunConfig.html", "classBalloonParty_1_1Configuration_1_1RunConfig" ],
         [ "ScoreTrailBehaviourConfiguration", "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html", "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration" ],
         [ "ScoreTrailBehaviourEntry", "structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html", "structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry" ],
+        [ "ShieldChainSettings", "classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html", "classBalloonParty_1_1Configuration_1_1ShieldChainSettings" ],
         [ "SlotGridConfig", "classBalloonParty_1_1Configuration_1_1SlotGridConfig.html", "classBalloonParty_1_1Configuration_1_1SlotGridConfig" ],
         [ "ThermalGovernorSettings", "classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html", "classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings" ]
       ] ],
@@ -291,6 +293,9 @@ var annotated_dup =
           [ "ImageShadowBakerEditor", "classBalloonParty_1_1Editor_1_1ShadowBake_1_1ImageShadowBakerEditor.html", "classBalloonParty_1_1Editor_1_1ShadowBake_1_1ImageShadowBakerEditor" ],
           [ "ShadowBakeUtility", "classBalloonParty_1_1Editor_1_1ShadowBake_1_1ShadowBakeUtility.html", "classBalloonParty_1_1Editor_1_1ShadowBake_1_1ShadowBakeUtility" ],
           [ "SpriteShadowBakerEditor", "classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor.html", "classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor" ]
+        ] ],
+        [ "ShieldChains", "namespaceBalloonParty_1_1Editor_1_1ShieldChains.html", [
+          [ "ShieldChainWindow", "classBalloonParty_1_1Editor_1_1ShieldChains_1_1ShieldChainWindow.html", "classBalloonParty_1_1Editor_1_1ShieldChains_1_1ShieldChainWindow" ]
         ] ],
         [ "ShotSolver", "namespaceBalloonParty_1_1Editor_1_1ShotSolver.html", [
           [ "ShotSolverWindow", "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html", "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow" ]
@@ -497,7 +502,9 @@ var annotated_dup =
           [ "ShieldChainPlanner", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldChainPlanner.html", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldChainPlanner" ],
           [ "ShieldHostCandidate", "structBalloonParty_1_1Item_1_1Shield_1_1ShieldHostCandidate.html", "structBalloonParty_1_1Item_1_1Shield_1_1ShieldHostCandidate" ],
           [ "ShieldItemHandler", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldItemHandler.html", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldItemHandler" ],
-          [ "ShieldPlacement", "structBalloonParty_1_1Item_1_1Shield_1_1ShieldPlacement.html", "structBalloonParty_1_1Item_1_1Shield_1_1ShieldPlacement" ]
+          [ "ShieldPlacement", "structBalloonParty_1_1Item_1_1Shield_1_1ShieldPlacement.html", "structBalloonParty_1_1Item_1_1Shield_1_1ShieldPlacement" ],
+          [ "ShieldReachabilityField", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldReachabilityField.html", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldReachabilityField" ],
+          [ "ShieldSlotPreference", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldSlotPreference.html", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldSlotPreference" ]
         ] ],
         [ "Snipe", "namespaceBalloonParty_1_1Item_1_1Snipe.html", [
           [ "SnipeDischargeBloom", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom" ],
@@ -774,11 +781,13 @@ var annotated_dup =
         [ "IReadyGate", "interfaceBalloonParty_1_1Shared_1_1IReadyGate.html", "interfaceBalloonParty_1_1Shared_1_1IReadyGate" ],
         [ "IRunConfig", "interfaceBalloonParty_1_1Shared_1_1IRunConfig.html", "interfaceBalloonParty_1_1Shared_1_1IRunConfig" ],
         [ "IScoreTrailConfig", "interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html", "interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig" ],
+        [ "IShieldChainSettings", "interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html", "interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings" ],
         [ "ISlotGridConfig", "interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html", "interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig" ],
         [ "MusicalNoteAttribute", "classBalloonParty_1_1Shared_1_1MusicalNoteAttribute.html", "classBalloonParty_1_1Shared_1_1MusicalNoteAttribute" ],
         [ "PathTrace", "classBalloonParty_1_1Shared_1_1PathTrace.html", "classBalloonParty_1_1Shared_1_1PathTrace" ],
         [ "ShowIfEnumAttribute", "classBalloonParty_1_1Shared_1_1ShowIfEnumAttribute.html", "classBalloonParty_1_1Shared_1_1ShowIfEnumAttribute" ],
         [ "SortingLayerNameAttribute", "classBalloonParty_1_1Shared_1_1SortingLayerNameAttribute.html", null ],
+        [ "StreakShieldRule", "classBalloonParty_1_1Shared_1_1StreakShieldRule.html", "classBalloonParty_1_1Shared_1_1StreakShieldRule" ],
         [ "UnitCircleAttribute", "classBalloonParty_1_1Shared_1_1UnitCircleAttribute.html", null ],
         [ "WallLimits", "structBalloonParty_1_1Shared_1_1WallLimits.html", "structBalloonParty_1_1Shared_1_1WallLimits" ]
       ] ],
@@ -840,6 +849,7 @@ var annotated_dup =
         ] ],
         [ "Capabilities", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html", [
           [ "DamageContext", "structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html", "structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext" ],
+          [ "IDeflectsShots", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IDeflectsShots.html", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IDeflectsShots" ],
           [ "IHasColor", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasColor.html", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasColor" ],
           [ "IHasDeflectStamp", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasDeflectStamp.html", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasDeflectStamp" ],
           [ "IHasDurability", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasDurability.html", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasDurability" ],
@@ -860,10 +870,12 @@ var annotated_dup =
           [ "BalancePathHolder", "classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html", "classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder" ],
           [ "GridBalanceQuery", "classBalloonParty_1_1Slots_1_1Grid_1_1GridBalanceQuery.html", "classBalloonParty_1_1Slots_1_1Grid_1_1GridBalanceQuery" ],
           [ "HexCoordinates", "classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates.html", "classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates" ],
+          [ "IShieldSlotPreference", "interfaceBalloonParty_1_1Slots_1_1Grid_1_1IShieldSlotPreference.html", "interfaceBalloonParty_1_1Slots_1_1Grid_1_1IShieldSlotPreference" ],
           [ "MoveWeightEvaluator", "classBalloonParty_1_1Slots_1_1Grid_1_1MoveWeightEvaluator.html", "classBalloonParty_1_1Slots_1_1Grid_1_1MoveWeightEvaluator" ],
           [ "ShoveVector", "structBalloonParty_1_1Slots_1_1Grid_1_1ShoveVector.html", "structBalloonParty_1_1Slots_1_1Grid_1_1ShoveVector" ],
           [ "SlotGrid", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid" ],
           [ "SlotGridChangedEvent", "structBalloonParty_1_1Slots_1_1Grid_1_1SlotGridChangedEvent.html", "structBalloonParty_1_1Slots_1_1Grid_1_1SlotGridChangedEvent" ],
+          [ "SlotGridDeflectorField", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridDeflectorField.html", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridDeflectorField" ],
           [ "SlotGridView", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridView.html", null ]
         ] ],
         [ "Spawner", "namespaceBalloonParty_1_1Slots_1_1Spawner.html", [

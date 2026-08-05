@@ -25,11 +25,13 @@ var namespaceBalloonParty_1_1Shared =
     [ "IReadyGate", "interfaceBalloonParty_1_1Shared_1_1IReadyGate.html", "interfaceBalloonParty_1_1Shared_1_1IReadyGate" ],
     [ "IRunConfig", "interfaceBalloonParty_1_1Shared_1_1IRunConfig.html", "interfaceBalloonParty_1_1Shared_1_1IRunConfig" ],
     [ "IScoreTrailConfig", "interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html", "interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig" ],
+    [ "IShieldChainSettings", "interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html", "interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings" ],
     [ "ISlotGridConfig", "interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html", "interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig" ],
     [ "MusicalNoteAttribute", "classBalloonParty_1_1Shared_1_1MusicalNoteAttribute.html", "classBalloonParty_1_1Shared_1_1MusicalNoteAttribute" ],
     [ "PathTrace", "classBalloonParty_1_1Shared_1_1PathTrace.html", "classBalloonParty_1_1Shared_1_1PathTrace" ],
     [ "ShowIfEnumAttribute", "classBalloonParty_1_1Shared_1_1ShowIfEnumAttribute.html", "classBalloonParty_1_1Shared_1_1ShowIfEnumAttribute" ],
     [ "SortingLayerNameAttribute", "classBalloonParty_1_1Shared_1_1SortingLayerNameAttribute.html", null ],
+    [ "StreakShieldRule", "classBalloonParty_1_1Shared_1_1StreakShieldRule.html", "classBalloonParty_1_1Shared_1_1StreakShieldRule" ],
     [ "UnitCircleAttribute", "classBalloonParty_1_1Shared_1_1UnitCircleAttribute.html", null ],
     [ "WallLimits", "structBalloonParty_1_1Shared_1_1WallLimits.html", "structBalloonParty_1_1Shared_1_1WallLimits" ]
 ];

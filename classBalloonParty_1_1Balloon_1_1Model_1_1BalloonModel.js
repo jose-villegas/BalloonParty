@@ -16,7 +16,6 @@ var classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel =
     [ "Color", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html#a6b1ebc902b839522954c4d3221cdb6a6", null ],
     [ "Color", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html#a9bf1d934a7e1bf7faedb346c1ac872fd", null ],
     [ "ColorId", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html#a0d8adaf1a03ab6f41b8532b51f31e78a", null ],
-    [ "DeflectsOrdinaryHit", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html#a937b7930a0f992b4096c3b0d75af5701", null ],
     [ "DirectBalanceMotion", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html#a23aad630e6dd316a26c31b21063ae9e0", null ],
     [ "HitsRemaining", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html#ad2831fab52a175232353f7b83b1242d5", null ],
     [ "IsStable", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html#a128f930790cc3c403f5a9e41dabb8e02", null ],

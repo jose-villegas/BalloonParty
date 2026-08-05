@@ -9,7 +9,6 @@ var classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController =
     [ "Pop", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#aef3fb2eb239441222e693b39530b7cdb", null ],
     [ "ReturnToPool", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#ad20e4a36d9296ef3d2562ed44ecc12de", null ],
     [ "Start", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#a9f0db7e96c9148b020420adc2fa19e33", null ],
-    [ "TryGetDeflector", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#aa13b238e0d3017023a15908bb9c55606", null ],
     [ "_deflectedPublisher", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#a216a76e4b39c0b5c256145d609a339b2", null ],
     [ "_disturbanceField", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#a53ff49b50c58cd91eaf99b5c051afca6", null ],
     [ "_grid", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#aaf0dd0e72a695255245cd267edbbb4a5", null ],

@@ -110,6 +110,7 @@ $(function(){initNavTree('classBalloonParty_1_1Slots_1_1Grid_1_1MoveWeightEvalua
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pac-static-attribs">Static Package Attributes</a> &#124;
+<a href="#properties">Properties</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Slots_1_1Grid_1_1MoveWeightEvaluator-members.html">List of all members</a>  </div>
@@ -145,6 +146,12 @@ Public Member Functions</h2></td></tr>
 Static Package Attributes</h2></td></tr>
 <tr class="memitem:acf707e2e637e3af3db9678af4afacc8c" id="r_acf707e2e637e3af3db9678af4afacc8c"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf707e2e637e3af3db9678af4afacc8c">PressureGain</a> = 100000</td></tr>
 <tr class="separator:acf707e2e637e3af3db9678af4afacc8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
+Properties</h2></td></tr>
+<tr class="memitem:a829d960c7b665ec8127e0bc068cda7af" id="r_a829d960c7b665ec8127e0bc068cda7af"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Slots_1_1Grid_1_1IShieldSlotPreference.html">IShieldSlotPreference</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a829d960c7b665ec8127e0bc068cda7af">ShieldPreference</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a829d960c7b665ec8127e0bc068cda7af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional: when set, an actor carrying a shield prefers slots a shot can still reach.  <br /></td></tr>
+<tr class="separator:a829d960c7b665ec8127e0bc068cda7af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -504,6 +511,32 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Property Documentation</h2>
+<a id="a829d960c7b665ec8127e0bc068cda7af" name="a829d960c7b665ec8127e0bc068cda7af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a829d960c7b665ec8127e0bc068cda7af">&#9670;&#160;</a></span>ShieldPreference</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Slots_1_1Grid_1_1IShieldSlotPreference.html">IShieldSlotPreference</a> BalloonParty.Slots.Grid.MoveWeightEvaluator.ShieldPreference</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel set">set</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Optional: when set, an actor carrying a shield prefers slots a shot can still reach. </p>
+<p>Settable rather than a constructor argument on purpose. Ten call sites build this, including the shot simulator's own board mirror, and every one of them wants today's behaviour — null keeps it, so the sim stays a faithful mirror without being taught about a bias it has no thrower for. </p>
 
 </div>
 </div>

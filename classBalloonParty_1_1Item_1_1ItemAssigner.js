@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Item_1_1ItemAssigner =
 [
-    [ "ItemAssigner", "classBalloonParty_1_1Item_1_1ItemAssigner.html#abbd139a07760bcad0e1f3a47f87a9bac", null ],
+    [ "ItemAssigner", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a04d8c1943c88155afd88d416bb9923da", null ],
     [ "AssignItems", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a467f9a5721e231e1cc089b5cd27173d8", null ],
     [ "BuildFan", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a8be026ce9d4a1d7bb776e18fe8dd3d11", null ],
     [ "CollectEligibleSlots", "classBalloonParty_1_1Item_1_1ItemAssigner.html#ab98b666d9d5d35c94a7e39dd8d83def0", null ],
@@ -33,9 +33,7 @@ var classBalloonParty_1_1Item_1_1ItemAssigner =
     [ "_guaranteedBuffer", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a967668fba415d1a3cbd8e356656c5ce4", null ],
     [ "_levelParams", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a521074af522ca5ea01030d508bb48237", null ],
     [ "_origin", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a382a07363d360f2c2f3cb879dab87964", null ],
+    [ "_radii", "classBalloonParty_1_1Item_1_1ItemAssigner.html#ac9251be363dcf016b9e2a907a6d9e3fa", null ],
     [ "_runConfig", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a403a3a02a50546534428a031d5288e86", null ],
-    [ "_subscription", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a7dfae65abbb49fb0ed25a3f945a86976", null ],
-    [ "FanMaxDegrees", "classBalloonParty_1_1Item_1_1ItemAssigner.html#aab7e11fe8030551ff68beaa175250f51", null ],
-    [ "FanMinDegrees", "classBalloonParty_1_1Item_1_1ItemAssigner.html#aed6d7a708555280ada1b3bfd19f2cc01", null ],
-    [ "FanSamples", "classBalloonParty_1_1Item_1_1ItemAssigner.html#ad1ba91e22783e590e0b7752891b86847", null ]
+    [ "_subscription", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a7dfae65abbb49fb0ed25a3f945a86976", null ]
 ];

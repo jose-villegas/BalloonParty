@@ -1,5 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html" title="How the field fills and drains — the testing spawn&#45;all toggle, initial count, per&#45;source spawn profil..." alt="" coords="5,5,215,45"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings.html" title=" " alt="" coords="263,5,468,45"/>
-<area shape="poly" id="edge65_Node000000_Node000001" title=" " alt="" coords="229,23,262,23,262,28,229,28"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html" title="How specks move — Brownian drift, drag, and their response to scenario motion and the disturbance fie..." alt="" coords="5,5,216,45"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionSettings.html" title=" " alt="" coords="264,5,471,45"/>
+<area shape="poly" id="edge64_Node000000_Node000001" title=" " alt="" coords="229,23,264,23,264,28,229,28"/>
 </map>

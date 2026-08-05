@@ -168,10 +168,13 @@ Properties</h2></td></tr>
 <tr class="memitem:a68894a5a2e259ed145734524f7d9efb6" id="r_a68894a5a2e259ed145734524f7d9efb6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Slots_1_1Actor.html#adbab49aebf9c1f422de5a17b7033167e">SlotActorKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68894a5a2e259ed145734524f7d9efb6">ActorKind</a><code> [get]</code></td></tr>
 <tr class="separator:a68894a5a2e259ed145734524f7d9efb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cf569a951ae07966f5f0b6b6f670cd4" id="r_a2cf569a951ae07966f5f0b6b6f670cd4"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2cf569a951ae07966f5f0b6b6f670cd4">ContactCenter</a><code> [get]</code></td></tr>
+<tr class="memdesc:a2cf569a951ae07966f5f0b6b6f670cd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">World centre of that circle — the collider, not the pivot.  <br /></td></tr>
 <tr class="separator:a2cf569a951ae07966f5f0b6b6f670cd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac556f34547ae1afcc60408be0b77e4a2" id="r_ac556f34547ae1afcc60408be0b77e4a2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac556f34547ae1afcc60408be0b77e4a2">ContactRadius</a><code> [get]</code></td></tr>
+<tr class="memdesc:ac556f34547ae1afcc60408be0b77e4a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">World radius of the circle a shot collides with; 0 when the actor is collision-inert.  <br /></td></tr>
 <tr class="separator:ac556f34547ae1afcc60408be0b77e4a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6816100f6c8cc89dc1e6c72355c9f6f6" id="r_a6816100f6c8cc89dc1e6c72355c9f6f6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6816100f6c8cc89dc1e6c72355c9f6f6">HasActiveCollider</a><code> [get]</code></td></tr>
+<tr class="memdesc:a6816100f6c8cc89dc1e6c72355c9f6f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">False while a pooled view is mid-despawn: its collider is off before it returns.  <br /></td></tr>
 <tr class="separator:a6816100f6c8cc89dc1e6c72355c9f6f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0761ff60f9163e14f05883d0f4ae7d26" id="r_a0761ff60f9163e14f05883d0f4ae7d26"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0761ff60f9163e14f05883d0f4ae7d26">Model</a><code> [get, private set]</code></td></tr>
 <tr class="separator:a0761ff60f9163e14f05883d0f4ae7d26"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1419,10 +1422,15 @@ Static Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel package">package</span></span>  </td>
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>World centre of that circle — the collider, not the pivot. </p>
+<p>A shot reflects off where the collider is, and the two differ whenever one is authored with an offset. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html#ae9f7a0d348a554d513dbae931bee1584">BalloonParty.Slots.Actor.ISlotActorView</a>.</p>
 
 </div>
 </div>
@@ -1441,10 +1449,14 @@ Static Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel package">package</span></span>  </td>
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>World radius of the circle a shot collides with; 0 when the actor is collision-inert. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html#aca1f4563ee99f1860a695c3c91932e79">BalloonParty.Slots.Actor.ISlotActorView</a>.</p>
 
 </div>
 </div>
@@ -1463,10 +1475,14 @@ Static Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel package">package</span></span>  </td>
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>False while a pooled view is mid-despawn: its collider is off before it returns. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html#ab2914ff92064b785eb095ecd38bbc8ec">BalloonParty.Slots.Actor.ISlotActorView</a>.</p>
 
 </div>
 </div>

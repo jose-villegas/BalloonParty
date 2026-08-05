@@ -24,11 +24,13 @@ var dir_da555cc5272c9bb1aca8990be5c6787a =
     [ "IReadyGate.cs", "IReadyGate_8cs.html", "IReadyGate_8cs" ],
     [ "IRunConfig.cs", "IRunConfig_8cs.html", "IRunConfig_8cs" ],
     [ "IScoreTrailConfig.cs", "IScoreTrailConfig_8cs.html", "IScoreTrailConfig_8cs" ],
+    [ "IShieldChainSettings.cs", "IShieldChainSettings_8cs.html", "IShieldChainSettings_8cs" ],
     [ "ISlotGridConfig.cs", "ISlotGridConfig_8cs.html", "ISlotGridConfig_8cs" ],
     [ "MusicalNoteAttribute.cs", "MusicalNoteAttribute_8cs.html", "MusicalNoteAttribute_8cs" ],
     [ "PathTrace.cs", "PathTrace_8cs.html", "PathTrace_8cs" ],
     [ "ShowIfEnumAttribute.cs", "ShowIfEnumAttribute_8cs.html", "ShowIfEnumAttribute_8cs" ],
     [ "SortingLayerNameAttribute.cs", "SortingLayerNameAttribute_8cs.html", "SortingLayerNameAttribute_8cs" ],
+    [ "StreakShieldRule.cs", "StreakShieldRule_8cs.html", "StreakShieldRule_8cs" ],
     [ "UnitCircleAttribute.cs", "UnitCircleAttribute_8cs.html", "UnitCircleAttribute_8cs" ],
     [ "WallLimits.cs", "WallLimits_8cs.html", "WallLimits_8cs" ]
 ];

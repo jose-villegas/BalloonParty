@@ -1,9 +1,11 @@
 <map id="BalloonParty.Slots.Actor.Archetype.DeflectorActorModel" name="BalloonParty.Slots.Actor.Archetype.DeflectorActorModel">
-<area shape="rect" id="Node000001" title=" " alt="" coords="503,37,728,77"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="503,69,728,109"/>
 <area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="254,5,433,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="447,35,503,41,502,47,446,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="443,46,530,67,529,72,442,51"/>
 <area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="5,5,184,45"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="198,23,254,23,254,28,198,28"/>
 <area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHitable.html" title=" " alt="" coords="232,69,455,109"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="468,72,502,68,503,73,469,77"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="469,87,503,87,503,92,469,92"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IDeflectsShots.html" title="A slot actor that bounces an ordinary shot rather than letting it through or popping." alt="" coords="232,133,455,173"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="442,128,529,107,530,112,443,133"/>
 </map>

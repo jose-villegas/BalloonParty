@@ -12,7 +12,6 @@ var classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel =
     [ "BiasTypeId", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html#a8c3761c788318a9a6e9a675fe237cd2d", null ],
     [ "BiasValue", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html#a14671c0988326180b1646270d91d9749", null ],
     [ "ColorId", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html#a0d8adaf1a03ab6f41b8532b51f31e78a", null ],
-    [ "DeflectsOrdinaryHit", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html#a937b7930a0f992b4096c3b0d75af5701", null ],
     [ "DirectBalanceMotion", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html#a23aad630e6dd316a26c31b21063ae9e0", null ],
     [ "HitsRemaining", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html#aff023b93aadd6742236df8699b21e27d", null ],
     [ "IsStable", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html#a128f930790cc3c403f5a9e41dabb8e02", null ],

@@ -15,6 +15,7 @@ var hierarchy =
     [ "BalloonParty.Balloon.Controller.BalanceMove", "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html", null ],
     [ "BalloonParty.Balloon.Controller.BalancePlanner", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner.html", null ],
     [ "BalloonParty.Solver.BalanceProfile", "structBalloonParty_1_1Solver_1_1BalanceProfile.html", null ],
+    [ "BalloonParty.Balloon.BalloonContactRadii", "classBalloonParty_1_1Balloon_1_1BalloonContactRadii.html", null ],
     [ "BalloonParty.Balloon.Controller.BalloonController", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html", null ],
     [ "BalloonParty.Balloon.Controller.BalloonControllerContext", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerContext.html", null ],
     [ "BalloonParty.Shared.Messages.BalloonDeflectedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html", null ],
@@ -61,6 +62,7 @@ var hierarchy =
     [ "BalloonParty.Game.Cinematics.CameraRigCinematic", "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html", null ],
     [ "BalloonParty.Game.Cinematics.CameraRigCinematicConfig", "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicConfig.html", null ],
     [ "BalloonParty.Configuration.Cinematics.CameraRigCinematicSettings", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html", null ],
+    [ "BalloonParty.Editor.ShieldChains.ShieldChainWindow.ChainContext", "structBalloonParty_1_1Editor_1_1ShieldChains_1_1ShieldChainWindow_1_1ChainContext.html", null ],
     [ "BalloonParty.Item.Lightning.ChainLightningGeometry", "classBalloonParty_1_1Item_1_1Lightning_1_1ChainLightningGeometry.html", null ],
     [ "BalloonParty.Editor.CheatsInReleaseToggle", "classBalloonParty_1_1Editor_1_1CheatsInReleaseToggle.html", null ],
     [ "BalloonParty.Shared.GameState.Cinematic", "classBalloonParty_1_1Shared_1_1GameState_1_1Cinematic.html", null ],
@@ -109,6 +111,7 @@ var hierarchy =
       [ "BalloonParty.Editor.Maps.GameRenderMapsWindow", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html", null ],
       [ "BalloonParty.Editor.Release.ReleaseUploadWindow", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html", null ],
       [ "BalloonParty.Editor.ScriptSearchPopup", "classBalloonParty_1_1Editor_1_1ScriptSearchPopup.html", null ],
+      [ "BalloonParty.Editor.ShieldChains.ShieldChainWindow", "classBalloonParty_1_1Editor_1_1ShieldChains_1_1ShieldChainWindow.html", null ],
       [ "BalloonParty.Editor.ShotSolver.ShotSolverWindow", "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html", null ],
       [ "BalloonParty.Editor.TextureAuditWindow", "classBalloonParty_1_1Editor_1_1TextureAuditWindow.html", null ],
       [ "BalloonParty.Editor.UnusedAssetsWindow", "classBalloonParty_1_1Editor_1_1UnusedAssetsWindow.html", null ]
@@ -262,7 +265,13 @@ var hierarchy =
       [ "BalloonParty.Game.Danger.SpaceDanger", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html", null ]
     ] ],
     [ "BalloonParty.Shared.IDeflectorField", "interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html", [
-      [ "BalloonParty.Balloon.Controller.BalloonControllerRegistry", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html", null ]
+      [ "BalloonParty.Slots.Grid.SlotGridDeflectorField", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridDeflectorField.html", null ]
+    ] ],
+    [ "BalloonParty.Slots.Capabilities.IDeflectsShots", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IDeflectsShots.html", [
+      [ "BalloonParty.Balloon.Model.ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", null ],
+      [ "BalloonParty.Balloon.Model.UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", null ],
+      [ "BalloonParty.Slots.Actor.Archetype.DeflectorActorModel", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html", null ],
+      [ "BalloonParty.Slots.Actor.Archetype.GatekeeperActorModel", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GatekeeperActorModel.html", null ]
     ] ],
     [ "IDisposable", null, [
       [ "BalloonParty.Audio.AudioChannelController", "classBalloonParty_1_1Audio_1_1AudioChannelController.html", null ],
@@ -651,8 +660,14 @@ var hierarchy =
     [ "BalloonParty.Audio.Editor.ISfxProvider", "interfaceBalloonParty_1_1Audio_1_1Editor_1_1ISfxProvider.html", [
       [ "BalloonParty.Audio.Editor.FreesoundSfxProvider", "classBalloonParty_1_1Audio_1_1Editor_1_1FreesoundSfxProvider.html", null ]
     ] ],
+    [ "BalloonParty.Shared.IShieldChainSettings", "interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html", [
+      [ "BalloonParty.Configuration.ShieldChainSettings", "classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html", null ]
+    ] ],
     [ "BalloonParty.Configuration.Effects.IShieldFieldSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IShieldFieldSettings.html", [
       [ "BalloonParty.Configuration.Effects.ShieldFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html", null ]
+    ] ],
+    [ "BalloonParty.Slots.Grid.IShieldSlotPreference", "interfaceBalloonParty_1_1Slots_1_1Grid_1_1IShieldSlotPreference.html", [
+      [ "BalloonParty.Item.Shield.ShieldSlotPreference", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldSlotPreference.html", null ]
     ] ],
     [ "BalloonParty.Slots.Actor.ISlotActor", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html", [
       [ "BalloonParty.Slots.Actor.IDynamicSlotActor", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IDynamicSlotActor.html", [
@@ -1160,6 +1175,7 @@ var hierarchy =
     [ "BalloonParty.Item.Shield.ShieldHostCandidate", "structBalloonParty_1_1Item_1_1Shield_1_1ShieldHostCandidate.html", null ],
     [ "BalloonParty.Shared.Messages.ShieldLostMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html", null ],
     [ "BalloonParty.Item.Shield.ShieldPlacement", "structBalloonParty_1_1Item_1_1Shield_1_1ShieldPlacement.html", null ],
+    [ "BalloonParty.Item.Shield.ShieldReachabilityField", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldReachabilityField.html", null ],
     [ "BalloonParty.Solver.ShotBalloonSnapshot", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html", null ],
     [ "BalloonParty.Solver.ShotBalloonState", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html", null ],
     [ "BalloonParty.Solver.ShotBoardDynamics", "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html", null ],
@@ -1206,6 +1222,7 @@ var hierarchy =
     [ "BalloonParty.Shared.Extensions.SpriteRendererExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1SpriteRendererExtensions.html", null ],
     [ "BalloonParty.Configuration.Effects.StampProfile", "structBalloonParty_1_1Configuration_1_1Effects_1_1StampProfile.html", null ],
     [ "BalloonParty.Shared.Messages.StreakChangedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html", null ],
+    [ "BalloonParty.Shared.StreakShieldRule", "classBalloonParty_1_1Shared_1_1StreakShieldRule.html", null ],
     [ "BalloonParty.Shared.Messages.StrikethroughArrivedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage.html", null ],
     [ "BalloonParty.Shared.Diagnostics.Log.TagPalette", "classBalloonParty_1_1Shared_1_1Diagnostics_1_1Log_1_1TagPalette.html", null ],
     [ "BalloonParty.Configuration.Level.TailGrowthConfig", "structBalloonParty_1_1Configuration_1_1Level_1_1TailGrowthConfig.html", null ],

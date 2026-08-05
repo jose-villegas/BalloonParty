@@ -1,0 +1,27 @@
+<map id="BalloonParty.Item.Shield.ShieldReachabilityField" name="BalloonParty.Item.Shield.ShieldReachabilityField">
+<area shape="rect" id="Node000001" title="Which slots an affordable shot can still reach, so the balancer can prefer keeping a shield somewhere..." alt="" coords="995,256,1179,296"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="650,96,823,136"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="822,138,847,145,911,164,972,190,1022,222,1064,254,1060,258,1019,226,969,194,909,169,846,151,821,143"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="267,5,440,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="454,43,603,76,668,93,667,99,602,81,453,48"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,5,212,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="226,23,267,23,267,28,226,28"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="261,69,445,109"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="459,94,650,107,650,113,459,99"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="264,133,443,173"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="456,141,649,122,650,127,457,146"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,133,198,173"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="212,151,264,151,264,156,212,156"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="264,197,443,237"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="456,199,528,182,602,159,626,146,658,134,660,139,628,150,604,164,530,187,457,204"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="627,160,847,200"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="845,201,971,233,1032,253,1031,258,970,239,843,206"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Balloon_1_1BalloonContactRadii.html" title="Per&#45;type contact radius, read once off the authored prefabs." alt="" coords="633,224,841,264"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="854,252,995,265,994,270,854,257"/>
+<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html" title="Where a shot leaves from, readable outside the thrower&#39;s own scope." alt="" coords="629,288,844,328"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="858,294,994,282,995,287,858,300"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html" title="The deflectors the aim telegraph must bounce off, in the geometry the projectile will actually meet." alt="" coords="627,352,846,392"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="839,346,970,312,1028,293,1030,299,971,317,841,351"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html" title="Tuning for how shield chains are planned: the fan of openings tried, and how selective the planner is..." alt="" coords="637,416,836,456"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="821,409,846,401,909,383,969,358,1019,326,1060,294,1064,298,1022,330,972,362,911,388,847,407,822,414"/>
+</map>

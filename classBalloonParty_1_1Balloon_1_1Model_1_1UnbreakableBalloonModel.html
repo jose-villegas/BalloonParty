@@ -174,9 +174,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a0d8adaf1a03ab6f41b8532b51f31e78a" id="r_a0d8adaf1a03ab6f41b8532b51f31e78a"><td class="memItemLeft" align="right" valign="top">string IBalanceBiasSource.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a0d8adaf1a03ab6f41b8532b51f31e78a">ColorId</a><code> [get]</code></td></tr>
 <tr class="memdesc:a0d8adaf1a03ab6f41b8532b51f31e78a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Palette color ID, or empty when colorless.  <br /></td></tr>
 <tr class="separator:a0d8adaf1a03ab6f41b8532b51f31e78a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a937b7930a0f992b4096c3b0d75af5701" id="r_a937b7930a0f992b4096c3b0d75af5701"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a937b7930a0f992b4096c3b0d75af5701">DeflectsOrdinaryHit</a><code> [get]</code></td></tr>
-<tr class="memdesc:a937b7930a0f992b4096c3b0d75af5701"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether an ordinary 1-damage hit would bounce off this balloon rather than pop it — the aim telegraph's question, asked without mutating anything.  <br /></td></tr>
-<tr class="separator:a937b7930a0f992b4096c3b0d75af5701"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af81f0962bdc9589b8ed4bf75f0c44c0c" id="r_af81f0962bdc9589b8ed4bf75f0c44c0c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af81f0962bdc9589b8ed4bf75f0c44c0c">DeflectsOrdinaryHit</a><code> [get]</code></td></tr>
+<tr class="memdesc:af81f0962bdc9589b8ed4bf75f0c44c0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the next ordinary (non-piercing, 1 damage) hit would bounce.  <br /></td></tr>
+<tr class="separator:af81f0962bdc9589b8ed4bf75f0c44c0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8165bda3eaf2d9f89819ea87472f5066" id="r_a8165bda3eaf2d9f89819ea87472f5066"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8165bda3eaf2d9f89819ea87472f5066">DeflectStampScale</a><code> [get]</code></td></tr>
 <tr class="memdesc:a8165bda3eaf2d9f89819ea87472f5066"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplier on the BalloonDeflect stamp profile's radius; 0 = no stamp.  <br /></td></tr>
 <tr class="separator:a8165bda3eaf2d9f89819ea87472f5066"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -605,8 +605,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a937b7930a0f992b4096c3b0d75af5701" name="a937b7930a0f992b4096c3b0d75af5701"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a937b7930a0f992b4096c3b0d75af5701">&#9670;&#160;</a></span>DeflectsOrdinaryHit</h2>
+<a id="af81f0962bdc9589b8ed4bf75f0c44c0c" name="af81f0962bdc9589b8ed4bf75f0c44c0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af81f0962bdc9589b8ed4bf75f0c44c0c">&#9670;&#160;</a></span>DeflectsOrdinaryHit</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -615,18 +615,19 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool BalloonParty.Balloon.Model.BalloonModelBase.DeflectsOrdinaryHit</td>
+          <td class="memname">bool BalloonParty.Balloon.Model.UnbreakableBalloonModel.DeflectsOrdinaryHit</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel package">package</span><span class="mlabel inherited">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Whether an ordinary 1-damage hit would bounce off this balloon rather than pop it — the aim telegraph's question, asked without mutating anything. </p>
-<p>Mirrors <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a38f649d61b0710f4730ca8060ec7d969">EvaluateNormalHit</a>'s rule so the two cannot disagree. </p>
+<p>Whether the next ordinary (non-piercing, 1 damage) hit would bounce. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IDeflectsShots.html#a26ae8779b24cb7ba2f2f4f3d063c47b6">BalloonParty.Slots.Capabilities.IDeflectsShots</a>.</p>
 
 </div>
 </div>

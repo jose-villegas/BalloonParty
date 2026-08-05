@@ -6,6 +6,7 @@ var namespaceBalloonParty_1_1Editor =
     [ "Maps", "namespaceBalloonParty_1_1Editor_1_1Maps.html", "namespaceBalloonParty_1_1Editor_1_1Maps" ],
     [ "Release", "namespaceBalloonParty_1_1Editor_1_1Release.html", "namespaceBalloonParty_1_1Editor_1_1Release" ],
     [ "ShadowBake", "namespaceBalloonParty_1_1Editor_1_1ShadowBake.html", "namespaceBalloonParty_1_1Editor_1_1ShadowBake" ],
+    [ "ShieldChains", "namespaceBalloonParty_1_1Editor_1_1ShieldChains.html", "namespaceBalloonParty_1_1Editor_1_1ShieldChains" ],
     [ "ShotSolver", "namespaceBalloonParty_1_1Editor_1_1ShotSolver.html", "namespaceBalloonParty_1_1Editor_1_1ShotSolver" ],
     [ "SpriteCombine", "namespaceBalloonParty_1_1Editor_1_1SpriteCombine.html", "namespaceBalloonParty_1_1Editor_1_1SpriteCombine" ],
     [ "TestRunner", "namespaceBalloonParty_1_1Editor_1_1TestRunner.html", "namespaceBalloonParty_1_1Editor_1_1TestRunner" ],

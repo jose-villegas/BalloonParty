@@ -141,8 +141,15 @@ Public Member Functions</h2></td></tr>
 Properties</h2></td></tr>
 <tr class="memitem:a9c86baedbd389d408374b16053126000" id="r_a9c86baedbd389d408374b16053126000"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Slots_1_1Actor.html#adbab49aebf9c1f422de5a17b7033167e">SlotActorKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9c86baedbd389d408374b16053126000">ActorKind</a><code> [get]</code></td></tr>
 <tr class="separator:a9c86baedbd389d408374b16053126000"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd8ebe30f0d0a8c8e77e717e154396e7" id="r_abd8ebe30f0d0a8c8e77e717e154396e7"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abd8ebe30f0d0a8c8e77e717e154396e7">ContactCenter</a><code> [get]</code></td></tr>
+<tr class="memdesc:abd8ebe30f0d0a8c8e77e717e154396e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">World centre of that circle — the collider, not the pivot.  <br /></td></tr>
+<tr class="separator:abd8ebe30f0d0a8c8e77e717e154396e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a83d70b2629325a468256bb061b1d65cb" id="r_a83d70b2629325a468256bb061b1d65cb"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83d70b2629325a468256bb061b1d65cb">ContactRadius</a><code> [get]</code></td></tr>
+<tr class="memdesc:a83d70b2629325a468256bb061b1d65cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">World radius of the circle a shot collides with; 0 when the actor is collision-inert.  <br /></td></tr>
 <tr class="separator:a83d70b2629325a468256bb061b1d65cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2639f1ed8e1d766ae8cfe370331b944b" id="r_a2639f1ed8e1d766ae8cfe370331b944b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2639f1ed8e1d766ae8cfe370331b944b">HasActiveCollider</a><code> [get]</code></td></tr>
+<tr class="memdesc:a2639f1ed8e1d766ae8cfe370331b944b"><td class="mdescLeft">&#160;</td><td class="mdescRight">False while a pooled view is mid-despawn: its collider is off before it returns.  <br /></td></tr>
+<tr class="separator:a2639f1ed8e1d766ae8cfe370331b944b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ebca5ae0a0f04bdb08af4ca10aa131f" id="r_a3ebca5ae0a0f04bdb08af4ca10aa131f"><td class="memItemLeft" align="right" valign="top">Transform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3ebca5ae0a0f04bdb08af4ca10aa131f">RotationPivot</a><code> [get]</code></td></tr>
 <tr class="memdesc:a3ebca5ae0a0f04bdb08af4ca10aa131f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transform an effect should rotate when tilting the actor, so lighting-baked children (e.g.  <br /></td></tr>
 <tr class="separator:a3ebca5ae0a0f04bdb08af4ca10aa131f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -267,6 +274,33 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="abd8ebe30f0d0a8c8e77e717e154396e7" name="abd8ebe30f0d0a8c8e77e717e154396e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd8ebe30f0d0a8c8e77e717e154396e7">&#9670;&#160;</a></span>ContactCenter</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector3 BalloonParty.Slots.Actor.Archetype.GridActorView.ContactCenter</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>World centre of that circle — the collider, not the pivot. </p>
+<p>A shot reflects off where the collider is, and the two differ whenever one is authored with an offset. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html#ae9f7a0d348a554d513dbae931bee1584">BalloonParty.Slots.Actor.ISlotActorView</a>.</p>
+
+</div>
+</div>
 <a id="a83d70b2629325a468256bb061b1d65cb" name="a83d70b2629325a468256bb061b1d65cb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a83d70b2629325a468256bb061b1d65cb">&#9670;&#160;</a></span>ContactRadius</h2>
 
@@ -286,6 +320,36 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>World radius of the circle a shot collides with; 0 when the actor is collision-inert. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html#aca1f4563ee99f1860a695c3c91932e79">BalloonParty.Slots.Actor.ISlotActorView</a>.</p>
+
+</div>
+</div>
+<a id="a2639f1ed8e1d766ae8cfe370331b944b" name="a2639f1ed8e1d766ae8cfe370331b944b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2639f1ed8e1d766ae8cfe370331b944b">&#9670;&#160;</a></span>HasActiveCollider</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Slots.Actor.Archetype.GridActorView.HasActiveCollider</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>False while a pooled view is mid-despawn: its collider is off before it returns. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html#ab2914ff92064b785eb095ecd38bbc8ec">BalloonParty.Slots.Actor.ISlotActorView</a>.</p>
 
 </div>
 </div>

@@ -1,0 +1,22 @@
+<map id="BalloonParty.Editor.ShieldChains.ShieldChainWindow.ChainContext" name="BalloonParty.Editor.ShieldChains.ShieldChainWindow.ChainContext">
+<area shape="rect" id="Node000001" title=" " alt="" coords="968,110,1207,165"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="639,85,813,125"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="826,111,968,124,968,129,826,117"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="267,69,440,109"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="454,100,469,101,639,105,639,110,469,107,454,105"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,69,212,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="226,87,267,87,267,92,226,92"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="261,5,445,45"/>
+<area shape="poly" id="edge8_Node000001_Node000005" title=" " alt="" coords="459,28,684,49,815,68,945,95,993,107,992,113,943,100,814,74,683,55,459,33"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="433,47,470,56,640,89,639,95,469,61,432,52"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="264,197,443,237"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="456,207,530,191,567,178,601,162,613,149,625,135,648,123,650,128,628,139,617,153,604,166,569,183,532,196,457,212"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,197,198,237"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="212,215,264,215,264,220,212,220"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="264,133,443,173"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="456,142,602,125,638,120,639,125,603,131,457,147"/>
+<area shape="rect" id="Node000009" href="$structBalloonParty_1_1Shared_1_1WallLimits.html" title="The four play&#45;area walls unpacked from IProjectileFlightConfig.LimitsClockwise (x = top,..." alt="" coords="635,149,817,189"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="831,157,968,145,968,151,831,163"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html" title="Tuning for how shield chains are planned: the fan of openings tried, and how selective the planner is..." alt="" coords="627,213,825,253"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="822,207,943,176,993,162,994,167,945,181,824,213"/>
+</map>

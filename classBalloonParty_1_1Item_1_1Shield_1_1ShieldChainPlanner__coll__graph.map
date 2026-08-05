@@ -1,5 +1,7 @@
 <map id="BalloonParty.Item.Shield.ShieldChainPlanner" name="BalloonParty.Item.Shield.ShieldChainPlanner">
-<area shape="rect" id="Node000001" title="Places shields along flights the thrower can actually fly, so a chain is collectable by construction ..." alt="" coords="5,108,189,148"/>
-<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Shared_1_1WallLimits.html" title="The four play&#45;area walls unpacked from IProjectileFlightConfig.LimitsClockwise (x = top,..." alt="" coords="6,5,189,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,59,100,108,95,108,95,59"/>
+<area shape="rect" id="Node000001" title="Places shields along flights the thrower can actually fly, so a chain is collectable by construction ..." alt="" coords="111,108,295,148"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Shared_1_1WallLimits.html" title="The four play&#45;area walls unpacked from IProjectileFlightConfig.LimitsClockwise (x = top,..." alt="" coords="5,5,188,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,53,185,106,182,110,125,57"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html" title="Tuning for how shield chains are planned: the fan of openings tried, and how selective the planner is..." alt="" coords="212,5,411,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="283,57,225,110,222,106,279,53"/>
 </map>

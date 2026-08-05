@@ -1,9 +1,7 @@
 <map id="BalloonParty.Balloon.Controller.BalloonControllerRegistry" name="BalloonParty.Balloon.Controller.BalloonControllerRegistry">
-<area shape="rect" id="Node000001" title="Routes each balloon&#39;s hit reaction to its owning controller via a flat&#45;array index,..." alt="" coords="51,93,277,133"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,91,38"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="76,44,140,91,137,95,73,48"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="115,13,213,38"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="167,52,167,93,161,93,161,52"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html" title="The deflectors the aim telegraph must bounce off, in the geometry the projectile will actually meet." alt="" coords="237,5,456,45"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="295,54,205,96,203,91,293,49"/>
+<area shape="rect" id="Node000001" title="Routes each balloon&#39;s hit reaction to its owning controller via a flat&#45;array index,..." alt="" coords="5,79,232,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="19,5,104,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="80,40,107,77,103,80,76,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="128,5,227,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="163,43,135,80,131,77,158,40"/>
 </map>

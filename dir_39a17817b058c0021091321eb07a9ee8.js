@@ -3,6 +3,7 @@ var dir_39a17817b058c0021091321eb07a9ee8 =
     [ "DamageContext.cs", "DamageContext_8cs.html", "DamageContext_8cs" ],
     [ "DamageFlags.cs", "DamageFlags_8cs.html", "DamageFlags_8cs" ],
     [ "HitOutcome.cs", "HitOutcome_8cs.html", "HitOutcome_8cs" ],
+    [ "IDeflectsShots.cs", "IDeflectsShots_8cs.html", "IDeflectsShots_8cs" ],
     [ "IHasColor.cs", "IHasColor_8cs.html", "IHasColor_8cs" ],
     [ "IHasDeflectStamp.cs", "IHasDeflectStamp_8cs.html", "IHasDeflectStamp_8cs" ],
     [ "IHasDurability.cs", "IHasDurability_8cs.html", "IHasDurability_8cs" ],

@@ -140,7 +140,7 @@ Files</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Puts a gameplay metric into a label without writing code for it. Drop <code>MetricLabel</code> on a <code>TMP_Text</code>, type the format into the label's own text field (<code>"Reds popped: {0}"</code>), and pick the value from a dropdown generated out of <code>MetricCatalog</code>.</p>
 <p>Adding a metric to the catalog makes it selectable here. Nothing in this folder changes.</p>
-<h1><a class="anchor" id="autotoc_md938"></a>
+<h1><a class="anchor" id="autotoc_md939"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -162,22 +162,22 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>MetricLabelRegistration</code>   </td><td class="markdownTableBodyNone"><code>RegisterMetricLabels(scope)</code> — call it from a UI <code>LifetimeScope</code>. Already wired into <code>LevelUpLifetimeScope</code> and <code>GameOverLifetimeScope</code>   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md939"></a>
+<h1><a class="anchor" id="autotoc_md940"></a>
 Formatting comes from the catalog, not the label</h1>
 <p>The author writes the sentence; the unit column decides the number's shape. <code>seconds</code> renders as <code>1:23</code> (and <code>1:02:05</code> past an hour), <code>level_hundredths</code> as <code>87%</code>, everything else as a thousands-separated integer. So a label never has to know that the danger level is stored in hundredths because <code>MetricSet</code> holds ints.</p>
-<h1><a class="anchor" id="autotoc_md940"></a>
+<h1><a class="anchor" id="autotoc_md941"></a>
 Why a dropdown and not a component per metric</h1>
 <p>A component per metric means a new component every time the catalog grows. More importantly, binding through <code>(MetricId, axis, bucket)</code> means <b>no label ever touches the snapshot's typed breakdown properties</b> (<code>PopsByColor</code>, <code>PointsByColor</code>, <code>ItemsActivated</code>). Those are scheduled to leave the snapshot when the counting engine is extracted as a standalone library — see <em>Separability</em> in <a class="el" href="plan_gameplay_telemetry.html">Gameplay Telemetry</a>. Going through the catalog means that removal does not touch a single prefab.</p>
-<h1><a class="anchor" id="autotoc_md941"></a>
+<h1><a class="anchor" id="autotoc_md942"></a>
 Colour buckets are stored by name</h1>
 <p>The colour axis is sized from <code>IGamePalette.ProgressColorNames</code> at runtime, so a stored index would silently repoint every label the day the palette is reordered — a label that reads "Reds
 popped" quietly showing the blue count. Balloon-type and item-type buckets are enum ordinals and store as-is.</p>
 <p>A colour name that no longer resolves warns <b>once</b> and shows the placeholder. It never throws: a popup is the worst possible place for an exception, and the binding is serialized in a prefab, so it would fail identically on every frame the popup is open.</p>
-<h1><a class="anchor" id="autotoc_md942"></a>
+<h1><a class="anchor" id="autotoc_md943"></a>
 Reading the ceremony snapshot</h1>
 <p>Two rules, both from <code><a class="el" href="Game_2Telemetry_2README_8md.html">Game/Telemetry/README.md</a></code>: read it after the popup's gate <code>await</code> (never inside a <code>ScoreLevelUpMessage</code> handler), and treat <code>LevelIndex</code> as the only trustworthy discriminator of stale vs. current. <code>MetricLabel</code> binds reactively, so it satisfies the first by construction.</p>
 <p>Every label must survive the empty snapshot — it is a real runtime state, not a defensive hypothetical, since an aborted level-up clears <code>CeremonyLevel</code> to it while the popup may still be awaiting its gate.</p>
-<h1><a class="anchor" id="autotoc_md943"></a>
+<h1><a class="anchor" id="autotoc_md944"></a>
 Editor</h1>
 <p><code>MetricBindingDrawer</code> (<code>Assets/Source/Editor/</code>) is a <code>[CustomPropertyDrawer]</code> on <code>MetricBinding</code> rather than a custom editor for <code>MetricLabel</code> — Unity reuses a property drawer for each element of an array, so the day a label needs several values, the drawer does not change. Do not fold the binding's fields into the <code>MonoBehaviour</code>; that forfeits it. </p>
 </div><!-- contents -->

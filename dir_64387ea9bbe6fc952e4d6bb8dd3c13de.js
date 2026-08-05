@@ -20,6 +20,7 @@ var dir_64387ea9bbe6fc952e4d6bb8dd3c13de =
     [ "ProjectileFlightConfig.cs", "ProjectileFlightConfig_8cs.html", "ProjectileFlightConfig_8cs" ],
     [ "RunConfig.cs", "RunConfig_8cs.html", "RunConfig_8cs" ],
     [ "ScoreTrailBehaviourConfiguration.cs", "ScoreTrailBehaviourConfiguration_8cs.html", "ScoreTrailBehaviourConfiguration_8cs" ],
+    [ "ShieldChainSettings.cs", "ShieldChainSettings_8cs.html", "ShieldChainSettings_8cs" ],
     [ "SlotGridConfig.cs", "SlotGridConfig_8cs.html", "SlotGridConfig_8cs" ],
     [ "ThermalGovernorSettings.cs", "ThermalGovernorSettings_8cs.html", "ThermalGovernorSettings_8cs" ]
 ];

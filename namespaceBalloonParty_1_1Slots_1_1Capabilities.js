@@ -1,6 +1,7 @@
 var namespaceBalloonParty_1_1Slots_1_1Capabilities =
 [
     [ "DamageContext", "structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html", "structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext" ],
+    [ "IDeflectsShots", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IDeflectsShots.html", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IDeflectsShots" ],
     [ "IHasColor", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasColor.html", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasColor" ],
     [ "IHasDeflectStamp", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasDeflectStamp.html", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasDeflectStamp" ],
     [ "IHasDurability", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasDurability.html", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasDurability" ],

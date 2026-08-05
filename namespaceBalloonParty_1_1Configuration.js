@@ -22,6 +22,7 @@ var namespaceBalloonParty_1_1Configuration =
     [ "RunConfig", "classBalloonParty_1_1Configuration_1_1RunConfig.html", "classBalloonParty_1_1Configuration_1_1RunConfig" ],
     [ "ScoreTrailBehaviourConfiguration", "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html", "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration" ],
     [ "ScoreTrailBehaviourEntry", "structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html", "structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry" ],
+    [ "ShieldChainSettings", "classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html", "classBalloonParty_1_1Configuration_1_1ShieldChainSettings" ],
     [ "SlotGridConfig", "classBalloonParty_1_1Configuration_1_1SlotGridConfig.html", "classBalloonParty_1_1Configuration_1_1SlotGridConfig" ],
     [ "ThermalGovernorSettings", "classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html", "classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings" ]
 ];

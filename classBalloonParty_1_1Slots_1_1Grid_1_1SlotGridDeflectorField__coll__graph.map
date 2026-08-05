@@ -1,0 +1,19 @@
+<map id="BalloonParty.Slots.Grid.SlotGridDeflectorField" name="BalloonParty.Slots.Grid.SlotGridDeflectorField">
+<area shape="rect" id="Node000001" title="Every occupied slot whose actor would turn an ordinary shot away, as circles." alt="" coords="931,69,1104,109"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html" title="The deflectors the aim telegraph must bounce off, in the geometry the projectile will actually meet." alt="" coords="627,37,845,77"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="859,69,931,77,930,82,858,74"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="649,101,823,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="836,107,930,96,931,102,837,113"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="267,5,440,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="454,41,528,57,603,77,628,87,664,99,663,104,626,92,602,83,527,62,453,46"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,5,212,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="226,23,267,23,267,28,226,28"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="261,69,445,109"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="459,95,649,111,649,117,459,101"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="264,133,443,173"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="456,142,649,126,649,131,456,147"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,133,198,173"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="212,151,264,151,264,156,212,156"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="264,197,443,237"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="455,195,602,161,676,139,677,144,603,167,457,201"/>
+</map>
