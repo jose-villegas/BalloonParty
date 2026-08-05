@@ -57,7 +57,7 @@ MessagePipe (`IPublisher<T>`/`ISubscriber<T>`), UniTask (`async UniTask`), DOTwe
 - `OnDespawned()` kills in-flight tweens (`DOTween.Kill(transform)` / `tweenTracker.Kill()`).
 
 ### Configuration
-- Never hardcode values that live in a config asset; never duplicate config via `[SerializeField]` — inject the **read-only interface** (`IGameConfiguration`, `IBalloonsConfiguration`, `IGamePalette`, `IGameDisplayConfiguration`, `IItemConfiguration`, `IGridActorConfiguration`, `IDisturbanceFieldSettings`, `IPuffCloudSettings`, `IBushSettings`, `IShieldFieldSettings`, `IBackgroundFieldSettings`, `ISmokeFieldSettings`), not the concrete SO.
+- Never hardcode values that live in a config asset; never duplicate config via `[SerializeField]` — inject the **read-only interface** (`IGameConfiguration`, `IBalloonsConfiguration`, `IGamePalette`, `IGameDisplayConfiguration`, `IItemConfiguration`, `IGridActorConfiguration`, `IDisturbanceFieldSettings`, `IPuffCloudSettings`, `IBushSettings`, `IShieldFieldSettings`, `IBackgroundFieldSettings`, `ISmokeFieldSettings`, `IShieldChainSettings`), not the concrete SO.
 - Editor config lookups: use `EditorAssetCache<T>` (editor-only, in the `com.balloonparty.editorui` package; formerly `ConfigAssetCache<T>` in `Shared/`) — never inline `FindAssets` + `LoadAssetAtPath`. It lives in an editor assembly, so a runtime `#if UNITY_EDITOR` block **can't** reference it (a runtime assembly can't depend on an editor one) — those still fall back to inline lookups.
 
 ### Gizmos / editor drawing

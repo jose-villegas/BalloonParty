@@ -17,6 +17,8 @@ The entry point that starts and runs the game.
 | `Health/` | Player hit-point pool and loss forecast — see `Health/README.md` |
 | `Danger/` | Space-pressure early-warning signal — see `Danger/README.md` |
 | `Cinematics/` | Cinematic director, camera rig, and the level-up / heart-drain producers — see `Cinematics/README.md` |
+| `Flight/` | `FlightStatsService` — the single owner of per-flight counts (pops, deflects, wall bounces, pierce discharges), exposed read-only via `IFlightStats` and read by both audio and telemetry so neither keeps its own copy |
+| `Telemetry/` | Gameplay metrics — counts what happens during play at four nested scopes (Session ⊃ Run ⊃ Level ⊃ Flight) and serves the level-up/game-over popups, a local JSON Lines log, and (unbuilt) an external analytics export — see `Telemetry/README.md` |
 
 ## Architecture
 

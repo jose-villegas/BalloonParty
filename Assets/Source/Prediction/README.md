@@ -24,6 +24,31 @@ Within a step the nearest deflector wins, and the test runs against the step *al
 
 > **Accuracy caveat.** A circle deflection is very sensitive to where it is struck, so near a balloon's edge a pixel of aim movement swings the outgoing leg hard — the dispersion `ProjectileMotionResolver` already warns about, where error amplifies ×10-20 per deflection. The line is truthful; whether it reads as *precise* or as *jittery* is a playtest question. If it reads badly, draw the post-deflection leg differently (shorter, dimmer, dashed) rather than making it lie.
 
+```mermaid
+sequenceDiagram
+    participant Ctl as ThrowerController Tick
+    participant Calc as PredictionTraceCalculator
+    participant Field as SlotGridDeflectorField
+    participant Grid as SlotGrid
+    participant View as ISlotActorView
+    Ctl->>Calc: Calculate origin, direction, shot radius
+    Calc->>Field: CollectDeflectors into a reused buffer
+    loop every slot, columns times rows
+        Field->>Grid: At slot, cast to IDeflectsShots
+        Field->>View: ContactCenter, ContactRadius, HasActiveCollider
+    end
+    Field-->>Calc: list of DeflectorCircle
+    loop each segment, one shared reflection budget
+        Calc->>Calc: clip the step by the walls first
+        Calc->>Calc: nearest circle within the clipped step wins
+    end
+    Calc-->>Ctl: polyline whose corner sits on the deflector skin
+```
+
+The per-frame grid walk is deliberate and must not be cached, because the geometry is read from views
+that drift as the board settles. `SlotGridDeflectorField`'s own XML doc explains why — point at it
+rather than repeating it here.
+
 ### PredictionTraceView
 
 MonoBehaviour with a `LineRenderer`. Call `SetTrace(points)` to update, `SetColor(color)` to set `startColor`/`endColor`, or `Clear()` to hide. Attach to the Thrower prefab alongside a `LineRenderer`. For the smoke + glitter look, use the `BalloonParty/Display/TraceGlitterLine` material shader (SightSmoke's drifting-noise alpha eat plus GlitterSwirl's orbiting specks in one pass) and set the LineRenderer's texture mode to **Tile** so the pattern density stays constant over any aim length — the config-driven trace colour reaches the shader through the renderer's start/end vertex colours.

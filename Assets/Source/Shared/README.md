@@ -17,19 +17,30 @@ Types and utilities used across multiple features.
 | `Extensions/` | Extension methods — `ColorableRendererExtensions` (`BindColor` overloads for reactive color subscriptions), `WeightedPickExtensions` (`PickRandom<T>()` for `IWeightedEntry` collections — shared weighted random selection used for balloon and item spawning, over the resolver's resolved pick lists), `SlotActorExtensions` (actor query helpers), `SceneExtensions` (`SuppressRendering()` / `SceneRenderingHandle.Restore()`), `AnimationCurveExtensions` |
 | `Messages/` | MessagePipe signal structs that decouple systems from one another |
 | `Diagnostics/` | Debug utilities — `FPSCounter`, `FrameRateSettings` |
-| `IProjectileFlightConfig` / `ISlotGridConfig` / `IPredictionTraceConfig` / `IRunConfig` / `IScoreTrailConfig` | The focused read-only config contracts consumed across assemblies — projectile flight tuning, slot-grid layout, prediction-trace params, run rules, and score-trail timing respectively. Backed by the `ProjectileFlightConfig` / `SlotGridConfig` / `PredictionTraceConfig` / `RunConfig` / `ScoreTrailBehaviourConfiguration` SOs (they replaced the former single `IGameConfiguration` umbrella) |
+| `IProjectileFlightConfig` / `ISlotGridConfig` / `IPredictionTraceConfig` / `IRunConfig` / `IScoreTrailConfig` | The focused read-only config contracts consumed across assemblies — projectile flight tuning, slot-grid layout, prediction-trace params, run rules, and score-trail timing respectively. Backed by the `ProjectileFlightConfig` / `SlotGridConfig` / `PredictionTraceConfig` / `RunConfig` / `ScoreTrailBehaviourConfiguration` SOs (they replaced the former single `IGameConfiguration` umbrella). `IRunConfig.ShieldChain` is itself an `IShieldChainSettings` — shield-chain planning tuning (fan bounds, selection band, reachability sweep), unread while `IRunConfig.PlanShieldChains` is off |
 | `IEffect` | Interface for poolable visual effects — `Play(position, tint)`, `Play(position, rotation, tint)`, `Stop()` |
 | `EditorAssetCache<T>` | Editor-only lazy cache for a config `ScriptableObject` asset by type — lives in the `com.balloonparty.editorui` package (`EditorUI.Utilities`). Editor config lookups go through this instead of inlining `FindAssets` + `LoadAssetAtPath` |
 | `ImpactEventBus` | Frame-scoped list of impact events (position + radius); written via `Report`, cleared every `LateTick` |
 | `PathTrace` | Shared skeleton for tracing a projectile's wall-reflected path ahead (`IsClearAhead`) — reflects off each wall via `WallLimits`, leaving the per-segment occupancy test to the caller |
 | `WallLimits` | The four play-area walls unpacked from `IProjectileFlightConfig.LimitsClockwise` — wall-crossing (`TryFindCrossing`), billiard mirror-reflect (`Reflect`), in-bounds clamp (`ClampInside`) |
 | `EnumIndexedAttribute` | `PropertyAttribute` that labels a serialized array indexed by enum ordinal with the enum value's name instead of "Element N" |
+| `CircleContact` | The one analytic ray-circle entry solver (`TryFindEntry`/`TryFindEntryNormal`), shared by the projectile's real deflection (`ProjectileMotionResolver`) and the aim telegraph (`Prediction/PredictionTraceCalculator`) so the drawn line can't drift from the flight it predicts |
+| `ContactRadius` | `FromCollider(Collider2D, lossyScaleX)` — the one place a circle/capsule collider becomes a world-space contact radius, shared by live gather and the shot solver's static archetypes |
+| `IDeflectorField` / `DeflectorCircle` | The deflectors the aim telegraph (and the shield planner) must bounce off, as circles in the geometry the projectile will actually meet. Implemented by `SlotGridDeflectorField` (`Slots/Grid/`) |
+| `StreakShieldRule` | The one place a continued colour streak's shield refund is decided, called by both the live `ProjectileHitResolver` and the shot solver's `ShotSimulator` so the two can't drift apart |
 
 This table covers the folders and the types other features reach for most; a few small editor-only attributes living alongside these files aren't broken out separately.
 
 ## Messages
 
 Messages are the signals that decouple systems from one another. A publisher fires a message; any number of subscribers react independently.
+
+**This table is a curated subset, not an index.** It lists the gameplay-visible consumers of each
+message — the ones whose absence would break a mechanic — not every subscriber. `Game/Telemetry`'s
+`GameplayMetricsService` and `Game/Flight`'s `FlightStatsService` between them subscribe to roughly
+21 of these messages without being named in a single row below; they read the game, they don't drive
+it, so listing them on every row would bury the consumers that do. Check the publisher's own file for
+the exhaustive subscriber list when it matters.
 
 | Message | Published by | Consumed by |
 |---|---|---|

@@ -21,6 +21,42 @@ accumulator.
 > EditMode coverage lives in `Assets/Tests/EditMode/Game/` and `.../UI/`, including the test
 > fake `RecordingTelemetrySink` and the shared `GameplayMetricsHarness`.
 
+```mermaid
+graph TD
+    Bus["MessagePipe — 21 message subscriptions"] --> Svc["GameplayMetricsService"]
+    Stats["FlightStatsService via IFlightStats"] --> Svc
+    Hold["IHoldSpeedUpState"] --> Svc
+    Danger["IDangerLevel.Level"] --> Svc
+    Pause["PauseService.IsAnyPaused"] --> Svc
+    Nav["INavigation.Current"] --> Svc
+
+    Svc -->|"increment while a projectile is loaded"| F["Flight MetricScope"]
+    Svc -->|"increment interflight and level-owned metrics"| L["Level MetricScope"]
+
+    F -->|"Absorb on ProjectileDestroyedMessage"| L
+    L -->|"Absorb on LevelTransitionCompletedMessage"| R["Run MetricScope"]
+    R -->|"Absorb on GameOverMessage"| S["Session MetricScope — accumulates, never written"]
+
+    F -->|SealFlight| SF["FlightMetricsSnapshot"]
+    L -->|"Seal at ScoreLevelUpMessage"| SC["LevelMetricsSnapshot — ceremony"]
+    L -->|"Seal at flush"| SL["LevelMetricsSnapshot — flush"]
+    R -->|Seal| SR["RunMetricsSnapshot"]
+
+    SF --> Env["TelemetryEnvelope — RecordKind discriminator"]
+    SL --> Env
+    SR --> Env
+    Env --> Sink["ITelemetrySink — CompositeTelemetrySink"]
+    Sink --> Json["JsonLinesTelemetrySink — dev builds only"]
+
+    SC --> View["ILevelMetricsView — BalloonParty.UI only"]
+    SL --> View
+    SR --> View
+    View --> Label["MetricLabel resolved through MetricCatalog"]
+```
+
+The picture says in one look what the prose above takes three paragraphs to say: `SC` (the ceremony
+snapshot) has no arrow into `Env` — it feeds the popup and nothing else, and is never exported.
+
 ## Contents
 
 | File | What it does |
@@ -198,6 +234,29 @@ registers in `AppLifetimeScope` so one play session keeps one id across scene re
 `Game/Flight/` — it is a gameplay service, not part of this subsystem.
 
 ## What the service does and does not own
+
+```mermaid
+stateDiagram-v2
+    [*] --> Idle
+    Idle --> Playing: INavigation reports Game
+    Playing --> Ceremony: ScoreLevelUpMessage
+    Ceremony --> Transitioning: LevelUpDismissedMessage
+    Ceremony --> Playing: LevelUpAbortedMessage or LevelUpAbandonedMessage
+    Transitioning --> Playing: LevelTransitionCompletedMessage flushes the level
+    Playing --> Ended: GameOverMessage
+    Ceremony --> Ended: GameOverMessage
+    Transitioning --> Ended: GameOverMessage settles the boundary first
+    Ended --> Playing: ResetRun
+
+    note right of Ended
+        Every handler early-returns while Ended. The loss cinematic
+        completes straggler score trails after GameOverMessage and
+        must not reach the next run.
+    end note
+```
+
+The three arrows into `Ended` are the point of the picture — one message, `GameOverMessage`, owns the
+terminal transition no matter which state it lands from.
 
 `GameplayMetricsService` is a subscriber and nothing else: ~21 message subscriptions plus
 `PauseService.IsAnyPaused`, `INavigation.Current` and `IDangerLevel.Level`, all in one

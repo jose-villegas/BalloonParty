@@ -169,6 +169,31 @@ places them along a flight the thrower can actually fly: each shield is what buy
 that reaches the next, so shield *n* makes shield *n+1* reachable. `ItemAssigner` plans the chain
 once per fill and then hands shields out in flight order.
 
+```mermaid
+graph TD
+    Spawn["BalloonSpawner publishes ItemCheckMessage"] --> IA["ItemAssigner.OnItemCheck"]
+    IA --> Elig["CollectEligibleSlots — newly spawned hosts with a free item slot"]
+    Elig --> Gate{"PlanShieldChains on and a thrower origin exists?"}
+    Gate -->|no| Draw["Weighted random draw for every grant"]
+    Gate -->|yes| Cand["ShieldHostCandidate per host — slot world position, per-type radius plus the shot radius"]
+    Cand --> Defl["IDeflectorField.CollectDeflectors"]
+    Defl --> Fan["BuildFan — FanSamples openings from FanMinDegrees to FanMaxDegrees"]
+    Fan --> Sweep["SweepFan — fly every opening, record which candidates each one reaches"]
+    Sweep --> Band{"SelectInBand — at least MinEntryAngles, at most CheapZoneFraction of the fan"}
+    Band -->|"nothing qualifies"| Relax["Drop the cheap-zone ceiling, then the tolerance floor"]
+    Relax --> Band
+    Band -->|"a candidate wins"| Narrow["Intersect the chain angles with that candidate's entry angles"]
+    Narrow -->|"fewer than wanted placed"| Sweep
+    Narrow --> Chain["ShieldPlacement list, in flight order"]
+    Chain --> Hand["TryTakeChainHost — shields drain the chain, other items take the draw"]
+    Draw --> Hand
+```
+
+The narrowing loop (`Narrow` feeding back into `Sweep`) is the "a chain is one flight" guarantee — the
+least obvious thing in `ShieldChainPlanner`. Each round keeps only the fan angles that still reach
+*every* shield placed so far, not just the one just added, so two shields reachable from unrelated
+angles can never masquerade as a chain.
+
 It plans against a **fan** of opening angles rather than one, so a chain has several ways in, and
 keeps only slots reached by enough of the fan — but not by so much of it that the player sweeps
 them for free. Both bounds, and the fan itself, are authored on `RunConfig` under `ShieldChain`
@@ -183,6 +208,21 @@ straight-shot slot, less per reflection — which the balancer adds to the actor
 than obeying, so a shield drifts toward reachable slots without hovering in defiance of the board.
 `ReachabilityFanSamples`, `ReachabilityMaxReflections`, `ReachableSlotBonus` and
 `PerReflectionPenalty` tune it, on the same `ShieldChain` block.
+
+```mermaid
+graph LR
+    Mut["SlotGrid.MutationVersion bumps on Place or Remove"] --> Build["ShieldReachabilityField.EnsureBuilt"]
+    Origin["ThrowerOriginProvider — game scope, filled by ThrowerView"] --> Build
+    Build --> Sweep["ReachabilityFanSamples openings, wall bounces only, capped at ReachabilityMaxReflections"]
+    Sweep --> Table["reflections-to-reach, one entry per slot"]
+    Table --> Pref["ShieldSlotPreference.WeightFor — ReachableSlotBonus minus PerReflectionPenalty per reflection"]
+    Pref --> Eval["MoveWeightEvaluator.ScoreMove — added to the actor's own bias"]
+    Eval --> Bal["BalloonBalancer chooses the move"]
+```
+
+"Wall bounces only" is the current truth, and is deliberately in tension with the deflector step in
+the shield-chain planning diagram above — the reachability sweep injects `IDeflectorField` but never
+consults what it collects, an unresolved gap rather than a design choice.
 
 `IRunConfig.PlanShieldChains` turns the whole thing off, restoring the weighted draw.
 `Tools ▸ BalloonParty ▸ Shield Chains` (editor) counts how many openings collect the board's

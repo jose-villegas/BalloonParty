@@ -14,7 +14,7 @@ Every grid occupant is an `ISlotActor`. The grid never speaks directly in balloo
 | `IWriteableSlotActor` | Writable counterpart — adds `new Vector2Int SlotIndex { get; set; }` |
 | `IDynamicSlotActor` | Extends `ISlotActor` — redefines `SlotIndex` as a reactive `new IReadOnlyReactiveProperty<Vector2Int>` and adds `IReadOnlyReactiveProperty<bool> IsStable`. Actors that can move or be in a transitioning state implement this. Static actors do NOT. |
 | `IWriteableDynamicSlotActor` | Extends both `IDynamicSlotActor` and `IWriteableSlotActor` — adds writable `new ReactiveProperty<Vector2Int> SlotIndex` and `new ReactiveProperty<bool> IsStable` |
-| `ISlotActorView` | View contract — `transform`, `TweenTracker`, `ActorKind`, `RotationPivot` (the transform an effect should rotate when tilting the actor, so lighting-baked children keep a consistent light direction) |
+| `ISlotActorView` | View contract — `transform`, `TweenTracker`, `ActorKind`, `RotationPivot` (the transform an effect should rotate when tilting the actor, so lighting-baked children keep a consistent light direction), and the contact geometry the aim telegraph and shot solver read uniformly across every actor family: `ContactRadius`/`ContactCenter` (the collider's own radius and centre, not the pivot) and `HasActiveCollider` (false while a pooled view is mid-despawn) |
 | `SlotActorKind` | Enum — `Dynamic` (balancer can relocate, contributes weight) or `Static` (fixed, contributes weight, balancer skips) |
 
 ### Capability interfaces
@@ -30,9 +30,52 @@ Optional traits actors can advertise to consumers:
 | `IHasNudge` | Actor participates in the nudge force system |
 | `IHitable` | Actor participates in the hit system — `EvaluateHit(DamageContext)` returns a `HitOutcome` and is responsible for mutating any internal state (e.g. decrementing health). Takes a `DamageContext` containing `Damage` (int), `DamageFlags`, and `SourceColorId` (the color of the hitting projectile — read by `ResolveScoreAttribution` implementations that attribute score to the source rather than the actor's own color, e.g. `UnbreakableBalloonModel`). `Piercing` forces an immediate `Pop` regardless of `HitsRemaining` |
 | `IHasDurability` | Extends `IHitable` — actor also tracks `HitsRemaining`. Removal is determined by `HitsRemaining.Value <= 0` after `EvaluateHit` returns |
+| `IDeflectsShots` | `bool DeflectsOrdinaryHit { get; }` — whether the next ordinary (non-piercing, 1-damage) hit would bounce rather than pass through or pop. Asked by the aim telegraph and the shield planner, both of which need the answer without spending durability the way `EvaluateHit` does. A capability rather than a base-class rule because deflecting spans families — two balloon types and two static archetypes — so `SlotGridDeflectorField` can ask the grid for it without knowing what kind of actor answered |
 | `IHasItemSlot` | Actor can host an item — extends `IHasColor` (item visuals always tint to the host color). Exposes `IReadOnlyReactiveProperty<ItemType> Item` |
 | `IPassThrough` | Actor's slot can be crossed by animation paths (spawn entry, balance moves). Actors that do NOT implement this block traversal; rerouting is deferred to a future phase. |
 | `IWashesProjectileColor` | Marker — a projectile that contacts this actor has its stolen colour reset to none, like a fresh launch (the soap-bubble cluster). Checked in `ProjectileHitResolver` |
+
+```mermaid
+classDiagram
+    class IDeflectsShots {
+        <<interface>>
+        +bool DeflectsOrdinaryHit
+    }
+    class ISlotActorView {
+        <<interface>>
+        +float ContactRadius
+        +Vector3 ContactCenter
+        +bool HasActiveCollider
+    }
+    class IDeflectorField {
+        <<interface>>
+        +CollectDeflectors(results)
+    }
+    class SlotGridDeflectorField {
+        -SlotGrid _grid
+        +CollectDeflectors(results)
+    }
+    class DeflectorCircle {
+        <<readonly struct>>
+        +Vector2 Center
+        +float Radius
+    }
+
+    ToughBalloonModel ..|> IDeflectsShots
+    UnbreakableBalloonModel ..|> IDeflectsShots
+    DeflectorActorModel ..|> IDeflectsShots
+    GatekeeperActorModel ..|> IDeflectsShots
+
+    SlotGridDeflectorField ..|> IDeflectorField
+    SlotGridDeflectorField --> SlotGrid : walks every slot
+    SlotGrid --> IDeflectsShots : cast per occupant
+    SlotGrid --> ISlotActorView : geometry per occupant
+    SlotGridDeflectorField ..> DeflectorCircle : emits
+
+    PredictionTraceCalculator --> IDeflectorField : aim telegraph
+    ItemAssigner --> IDeflectorField : chain planning
+    ShieldChainWindow --> IDeflectorField : editor scan
+```
 
 ### Hit types
 
@@ -52,12 +95,12 @@ Paintability is expressed purely through types: a `BalloonModel` implements `IPa
 | Actor | Implements | `EvaluateHit` behaviour |
 |---|---|---|
 | `BalloonModel` (soft) | `IHasDurability`, `IHasScoreColor` | `PassThrough` on survival, `Pop` on death; decrements `HitsRemaining`. `Piercing` flag → `Pop` immediately. No score attribution when `HitsRemaining > 0` after hit |
-| `ToughBalloonModel` | `IHasDurability`, `IHasScoreColor` | `Deflect` on survival, `Pop` on death; decrements `HitsRemaining`. `Piercing` flag → `Pop` immediately. Score scattered across the still-incomplete color bars on pop |
-| `UnbreakableBalloonModel` *(Phase 7.5)* | `IHitable`, `IHasScoreColor` | Always `Deflect`; no `HitsRemaining`. `Piercing` forces `Pop`. Score attributed to source (projectile) color on pop |
+| `ToughBalloonModel` | `IHasDurability`, `IHasScoreColor`, `IDeflectsShots` | `Deflect` on survival, `Pop` on death; decrements `HitsRemaining`. `Piercing` flag → `Pop` immediately. Score scattered across the still-incomplete color bars on pop. `DeflectsOrdinaryHit` is `HitsRemaining.Value > 1` — the last hit pops rather than bouncing |
+| `UnbreakableBalloonModel` *(Phase 7.5)* | `IHitable`, `IHasScoreColor`, `IDeflectsShots` | Always `Deflect`; no `HitsRemaining`. `Piercing` forces `Pop`. Score attributed to source (projectile) color on pop. `DeflectsOrdinaryHit` is always `true` |
 | `BubbleClusterModel` | `IHasDurability`, `IHasScoreColor` | `PassThrough` on survival, `Pop` on death; decrements `HitsRemaining` (bubble count). Score scattered across the still-incomplete color bars, aggregated one entry per color (never one per point of damage); `BreaksStreak = true` on all attributions |
-| `DeflectorActorModel` *(Phase 8.2b)* | `IHitable` only | Always `Deflect`; no `HitsRemaining`; not a balloon |
+| `DeflectorActorModel` *(Phase 8.2b)* | `IHitable`, `IDeflectsShots` | Always `Deflect`; no `HitsRemaining`; not a balloon. `DeflectsOrdinaryHit` is always `true` |
 | `AbsorberActorModel` *(Phase 8.2b)* | `IHitable` only | Always `Absorb`; kills the projectile |
-| `GatekeeperActorModel` *(Phase 8.2c)* | `IHasDurability` | `Deflect` on survival, `Pop` on death; decrements `HitsRemaining`. Blocks a column until destroyed. |
+| `GatekeeperActorModel` *(Phase 8.2c)* | `IHasDurability`, `IDeflectsShots` | `Deflect` on survival, `Pop` on death; decrements `HitsRemaining`. Blocks a column until destroyed. `DeflectsOrdinaryHit` is `HitsRemaining.Value > 1` |
 | `StaticActorModel` | neither | No collider — not part of the hit pipeline |
 | `PuffObstacleModel` | neither | Structural obstacle; `IPassThrough` — animation paths can cross it. `IClusterableSlotActor` — gains `ClusterId` linking to a visual `SlotCluster`. |
 
@@ -65,12 +108,14 @@ Paintability is expressed purely through types: a `BalloonModel` implements `IPa
 
 | File / Folder | What it does |
 |---|---|
-| `Grid/` | `SlotGrid`, `SlotGridChangedEvent`, `SlotGridView`, `BalancePathHolder`, `GridBalanceQuery`, `MoveWeightEvaluator`, `HexCoordinates`, `ShoveVector` — core grid data structure, balance heuristics/transit tracking, and hex-coordinate math (namespace `BalloonParty.Slots.Grid`) |
+| `Grid/` | `SlotGrid`, `SlotGridChangedEvent`, `SlotGridView`, `BalancePathHolder`, `GridBalanceQuery`, `MoveWeightEvaluator`, `HexCoordinates`, `ShoveVector`, `SlotGridDeflectorField` (walks the grid for every `IDeflectsShots` occupant, so the aim telegraph and the shield planner see statics and balloons alike), `IShieldSlotPreference` (the balance-weight seam `Item/Shield/ShieldSlotPreference` implements) — core grid data structure, balance heuristics/transit tracking, and hex-coordinate math (namespace `BalloonParty.Slots.Grid`) |
 | `Actor/` | Core actor interfaces, spawner, hit controller, slot selection strategies, and scenario/ambient support — `ISlotActor`, `IWriteableSlotActor`, `IDynamicSlotActor`, `IWriteableDynamicSlotActor`, `ISlotActorView`, `SlotActorKind`, `StaticActorModel`, `StaticActorSpawner`, `GridActorHitController`, `ISlotSelectionStrategy`, `RandomSlotSelectionStrategy`, `ClusterSlotSelectionStrategy`, `SlotPlacementMode`, `IBalanceInfluence`, `IBalanceBiasSource` (the neighbour read-set — color id + an opaque type tag — the shared bias formulas in `Shared/Extensions/BalanceBiasExtensions` need; implemented by `BalloonModelBase`), `BalanceBiasKind`, `IPreBalanceRelocatable`, `ITransitionOutgoingContent`, `ScenarioContentRoot` — plus `SpeckField`/`SpeckProfile`, a GPU-simulated ambient dust/pollen field that listens to `ActorHitMessage` (balloon pops) and explicit spawn-request messages to burst specks at the hit point (namespace `BalloonParty.Slots.Actor`) |
 | `Actor/Cluster/` | Generic slot-cluster infrastructure — `SlotClusterRegistry<TModel>` (hex-adjacency flood-fill, merge/split, publishes `SlotClusterChangedEvent`), `SlotCluster`, `IClusterableSlotActor`, `ISlotClusterSource`, `ClusterView`, `ClusterViewController<TModel, TView, TSettings>`, `IClusterViewSettings` (namespace `BalloonParty.Slots.Actor.Cluster`) |
 | `Actor/Archetype/` | Concrete grid actor models and the Puff/Bush cluster visual systems — see [Archetype README](Actor/Archetype/README.md) (namespace `BalloonParty.Slots.Actor.Archetype`) |
-| `Capabilities/` | Optional capability interfaces — `IHasColor`, `IPaintable`, `IHasScore`, `IHasScoreColor`, `IHasNudge`, `IHasItemSlot`, `IHitable`, `IHasDurability`, `IPassThrough`, `IHasDeflectStamp`, `IWashesProjectileColor`, `HitOutcome`, `DamageContext`, `DamageFlags`, `ScoreAttribution`, `ScoreAttributions` — plus the pressure-cascade pair `IPressureMovable`/`PressureResponse`, which lets a balance push shove, or relocate, a blocking actor instead of stopping at it (namespace `BalloonParty.Slots.Capabilities`) |
+| `Capabilities/` | Optional capability interfaces — `IHasColor`, `IPaintable`, `IResistsPaint`, `IHasScore`, `IHasScoreColor`, `IHasNudge`, `IHasItemSlot`, `IHitable`, `IHasDurability`, `IDeflectsShots`, `IPassThrough`, `IHasDeflectStamp`, `IWashesProjectileColor`, `HitOutcome`, `DamageContext`, `DamageFlags`, `ScoreAttribution`, `ScoreAttributions` — plus the pressure-cascade pair `IPressureMovable`/`PressureResponse`, which lets a balance push shove, or relocate, a blocking actor instead of stopping at it (namespace `BalloonParty.Slots.Capabilities`) |
 | `Spawner/` | Spawner coordination — `IGridSpawner`, `SpawnStage`, `GridSpawnerCoordinator` (namespace `BalloonParty.Slots.Spawner`) |
+
+`IShieldSlotPreference` living here while `Item/Shield/` implements it is this codebase's cleanest example of dependency inversion: `MoveWeightEvaluator` depends on an interface beside it in `Slots`, never on the item layer, so the shot solver's board mirror can leave the preference null instead of being taught about a bias it has no thrower to measure from.
 
 ## How it works
 

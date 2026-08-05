@@ -331,7 +331,7 @@ Game data is split across focused ScriptableObjects, each registered as a single
 | `ProjectileFlightConfig` | `IProjectileFlightConfig` | Projectile flight behavior — initial velocity, gravity, deflection, feel params |
 | `SlotGridConfig` | `ISlotGridConfig` | Slot grid layout — play-area dimensions and slot positioning |
 | `PredictionTraceConfig` | `IPredictionTraceConfig` | Prediction trace visualization — path rendering params and styling |
-| `RunConfig` | `IRunConfig` | Run rules — starting hit points |
+| `RunConfig` | `IRunConfig` | Run rules — starting hit points, max retries, the level-complete ramp-up curve, and two balance-experiment gates: `StreakGrantsShields` (off routes shields through items only) and `PlanShieldChains` (off restores the plain weighted item draw) plus its tuning block, `IShieldChainSettings` |
 | `ProjectileVisualConfig` | `IProjectileVisualConfig` | Projectile visual tuning — glow, pierce spiral, scene light, shield-loss/pierce flash FX, death presentation |
 | `BalloonsConfiguration` | `IBalloonsConfiguration` | Balloon prefab entries (weight, cap, nudge overrides, pop VFX), spawn line counts, animation range, balance delay, global nudge defaults |
 | `GridActorConfiguration` | `IGridActorConfiguration` | Grid actor prefab entries (weight, max-count cap, `HitsToPop` for Gatekeeper) — read by procedural grid spawner (Phase 8.3) |

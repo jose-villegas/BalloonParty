@@ -34,6 +34,9 @@ Shared editor tooling — drawer infrastructure, custom inspectors, bake pipelin
 | `Maps/` | `GameRenderMapsWindow` — unified play-mode preview of the project's shared render-target "maps" (disturbance field, GI light buffer, …) with per-channel RGBA isolation, behind **Tools > BalloonParty > Game Render Maps**. See `Maps/README.md` |
 | `FrameDump/` | Dumps the Frame Debugger's captured event list to a diff-friendly text file, for comparing batch composition before/after a rendering change. Two menu items under **Tools > BalloonParty**. See `FrameDump/README.md` |
 | `ShotSolver/` | `ShotSolverWindow` — play-mode-only tool that sweeps aim angle against the live board and reports which windows reach a target score, behind **Tools > BalloonParty > Shot Solver**. See `ShotSolver/README.md` |
+| `ShieldChains/` | `ShieldChainWindow` — play-mode-only tool behind **Tools > BalloonParty > Shield Chains**: counts how many opening angles collect every shield placed on the live board and steps through them one at a time, drawn in the Scene view — a chain still looks like ordinary items on a hex lattice, so this is the only practical way to see whether a level actually holds one. See `Item/README.md`'s *Shield chains* section. No README |
+| `TelemetryLogMenu` | Three menu items under **Tools > BalloonParty > Telemetry** — Open Log Folder, Open Latest Log (warns if the file is empty), Log Path To Console — shortcuts to the JSON Lines log `JsonLinesTelemetrySink` writes under `Application.persistentDataPath`, which differs per platform and per company/product name. See `Game/Telemetry/README.md` |
+| `MetricBindingDrawer` | `[CustomPropertyDrawer(typeof(MetricBinding))]` — two popups (which snapshot, then which value) that let a `MetricLabel` be authored without code; the value list is generated from `MetricCatalog`/`TimerCatalog`, so a new metric is selectable here with no edit to this file. See `UI/Telemetry/README.md` |
 | `TestRunner/` | `EditModeTestRunner` — runs the EditMode suite inside the open editor (no batchmode project-lock) via **Tools > BalloonParty > Run EditMode Tests**, writing the same `Tools/last-test-run.md` the headless runner produces. No README |
 
 ## AutoFieldPropertyDrawer
@@ -83,6 +86,7 @@ These drawers extend `PropertyDrawer` directly and handle their own rendering wi
 | `UnitCircleDrawer` | `Editor/` | Renders a `[UnitCircle]` `Vector2` field as a click-or-drag disc for aiming a normalized direction |
 | `LevelRangeEntryDrawer` | `Editor/` | Relabels `LevelRangeEntry` array elements as "Level N" / "Level N–M" / "Fallback" |
 | `LevelThresholdOverrideDrawer` | `Editor/` | Relabels `LevelThresholdOverride` array elements as "Level N" / "Level N–M" |
+| `MetricBindingDrawer` | `Editor/` | Two popups for a `MetricBinding` — which snapshot, then which value out of it — generated from `MetricCatalog`/`TimerCatalog` |
 
 ## Custom editors
 
@@ -120,4 +124,6 @@ These drawers extend `PropertyDrawer` directly and handle their own rendering wi
 | `GameRenderMapsWindow` | `Tools > BalloonParty > Game Render Maps` | Unified play-mode preview of the project's shared render-target "maps" with per-channel RGBA isolation — see `Maps/README.md` |
 | `FrameDebuggerDumper` | `Tools > BalloonParty > Dump Frame Debugger`, `Dump Frame Debugger With Step Screenshots` | Dumps the Frame Debugger's captured event list to a diff-friendly text file — see `FrameDump/README.md` |
 | `ShotSolverWindow` | `Tools > BalloonParty > Shot Solver` | Play-mode-only tool that sweeps aim angle against the live board and reports which windows reach a target score — see `ShotSolver/README.md` |
+| `ShieldChainWindow` | `Tools > BalloonParty > Shield Chains` | Play-mode-only tool that counts how many opening angles collect every shield on the live board and steps through them one at a time in the Scene view — see `Item/README.md`'s *Shield chains* section |
+| `TelemetryLogMenu` | `Tools > BalloonParty > Telemetry > Open Log Folder`, `Open Latest Log`, `Log Path To Console` | Shortcuts to the JSON Lines telemetry log under `Application.persistentDataPath` — see `Game/Telemetry/README.md` |
 
