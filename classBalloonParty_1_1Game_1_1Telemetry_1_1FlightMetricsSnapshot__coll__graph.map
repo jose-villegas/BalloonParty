@@ -1,0 +1,17 @@
+<map id="BalloonParty.Game.Telemetry.FlightMetricsSnapshot" name="BalloonParty.Game.Telemetry.FlightMetricsSnapshot">
+<area shape="rect" id="Node000001" title=" " alt="" coords="997,69,1213,109"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Telemetry_1_1MetricsSnapshotBase.html" title=" " alt="" coords="732,69,948,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="962,87,997,87,997,92,962,92"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ISealedMetrics.html" title=" " alt="" coords="423,21,639,61"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="652,57,732,70,731,75,652,63"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Telemetry_1_1IReadOnlyMetricSet.html" title=" " alt="" coords="5,5,221,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="235,27,423,35,422,40,235,33"/>
+<area shape="rect" id="Node000005" href="$structBalloonParty_1_1Game_1_1Telemetry_1_1MetricScopeState.html" title=" " alt="" coords="423,101,639,141"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="652,106,731,98,732,103,653,111"/>
+<area shape="rect" id="Node000006" href="$structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html" title=" " alt="" coords="5,69,221,109"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="235,96,423,110,422,116,235,101"/>
+<area shape="rect" id="Node000007" href="$structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html" title=" " alt="" coords="5,133,221,173"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="235,152,316,150,398,144,436,139,436,144,399,149,316,155,235,158"/>
+<area shape="rect" id="Node000008" href="$structBalloonParty_1_1Game_1_1Telemetry_1_1ItemActivationCount.html" title=" " alt="" coords="5,197,221,237"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="235,204,316,192,398,173,445,157,487,139,490,144,447,162,399,179,317,197,235,209"/>
+</map>

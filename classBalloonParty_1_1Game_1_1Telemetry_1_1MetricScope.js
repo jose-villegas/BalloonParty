@@ -16,6 +16,7 @@ var classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope =
     [ "Reset", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a88d12bed36e21cfafe68f57f6b28616a", null ],
     [ "Seal", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a9188a8314916409bc6b910c96bfa9f89", null ],
     [ "Seal", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a62aa85bf02585fa7db1d243aeb53c7ef", null ],
+    [ "SealFlight", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a2753cc611b76c553ca32a20d2e4c7ab4", null ],
     [ "SetLast", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a8bb8b15a24e183720647336a8b0057a4", null ],
     [ "Timer", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a04c497010a8c0e8c88cf05b45fe6a444", null ],
     [ "_metrics", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#adbf5d15dbadaf42ad7ad790f0b139d60", null ],

@@ -6,6 +6,7 @@ var namespaceBalloonParty_1_1Game_1_1Telemetry =
     [ "BalloonTypeCount", "structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html", "structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount" ],
     [ "ColorCount", "structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html", "structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount" ],
     [ "CompositeTelemetrySink", "classBalloonParty_1_1Game_1_1Telemetry_1_1CompositeTelemetrySink.html", "classBalloonParty_1_1Game_1_1Telemetry_1_1CompositeTelemetrySink" ],
+    [ "FlightMetricsSnapshot", "classBalloonParty_1_1Game_1_1Telemetry_1_1FlightMetricsSnapshot.html", "classBalloonParty_1_1Game_1_1Telemetry_1_1FlightMetricsSnapshot" ],
     [ "GameplayMetricsService", "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html", "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService" ],
     [ "ILevelMetricsView", "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html", "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView" ],
     [ "IReadOnlyMetricSet", "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1IReadOnlyMetricSet.html", "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1IReadOnlyMetricSet" ],

@@ -11,27 +11,27 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="interfaceBalloonParty_1_1Game_1_1Cinematics_1_1ICinematicFocus.html" target="_top" xlink:title="Return false when there is currently nothing to frame — the rig holds its position.">
+<g id="a_Node000000"><a xlink:href="interfaceBalloonParty_1_1Game_1_1Cinematics_1_1IBoardEffect.html" target="_top" xlink:title="A board&#45;wide clear effect — the pop wave, the float&#45;away dissolve, and future variants.">
 <polygon fill="white" stroke="#666666" points="170,-54 0,-54 0,-24 170,-24 170,-54"/>
 <text text-anchor="start" x="8" y="-42" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Cinematics.</text>
-<text text-anchor="middle" x="85" y="-31" font-family="Helvetica,sans-Serif" font-size="10.00">ICinematicFocus</text>
+<text text-anchor="middle" x="85" y="-31" font-family="Helvetica,sans-Serif" font-size="10.00">IBoardEffect</text>
 </a>
 </g>
 </g>
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:href="classBalloonParty_1_1Game_1_1Cinematics_1_1HeartTrailFocus.html" target="_top" xlink:title="Focus centre is the oldest (soonest&#45;landing) heart trail; the bounding box still spans all of them.">
+<g id="a_Node000001"><a xlink:href="classBalloonParty_1_1Game_1_1Cinematics_1_1BoardFloatAwayEffect.html" target="_top" xlink:title="Substitutes the pop wave: detaches the old balloons into the transition&#39;s outgoing group (off the gri...">
 <polygon fill="white" stroke="#666666" points="376,-78 206,-78 206,-48 376,-48 376,-78"/>
 <text text-anchor="start" x="214" y="-66" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Cinematics.</text>
-<text text-anchor="middle" x="291" y="-55" font-family="Helvetica,sans-Serif" font-size="10.00">HeartTrailFocus</text>
+<text text-anchor="middle" x="291" y="-55" font-family="Helvetica,sans-Serif" font-size="10.00">BoardFloatAwayEffect</text>
 </a>
 </g>
 </g>
 <!-- Node0&#45;&gt;Node1 -->
-<g id="edge77_Node000000_Node000001" class="edge">
+<g id="edge75_Node000000_Node000001" class="edge">
 <title>Node0&#45;&gt;Node1</title>
-<g id="a_edge77_Node000000_Node000001"><a xlink:title=" ">
+<g id="a_edge75_Node000000_Node000001"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M180.12,-50.07C188.66,-51.08 197.27,-52.09 205.71,-53.08"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="180.49,-46.59 170.15,-48.9 179.67,-53.54 180.49,-46.59"/>
 </a>
@@ -40,17 +40,17 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="classBalloonParty_1_1Game_1_1Cinematics_1_1PointFocus.html" target="_top" xlink:title="min == max == center, which the rig treats as &quot;hard&#45;clamp after easing.&quot;">
+<g id="a_Node000002"><a xlink:href="classBalloonParty_1_1Game_1_1Cinematics_1_1BoardPopWave.html" target="_top" xlink:title="Detaches every balloon into the transition&#39;s outgoing group so they ride the fake&#45;camera travel out,...">
 <polygon fill="white" stroke="#666666" points="376,-30 206,-30 206,0 376,0 376,-30"/>
 <text text-anchor="start" x="214" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Cinematics.</text>
-<text text-anchor="middle" x="291" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">PointFocus</text>
+<text text-anchor="middle" x="291" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">BoardPopWave</text>
 </a>
 </g>
 </g>
 <!-- Node0&#45;&gt;Node2 -->
-<g id="edge78_Node000000_Node000002" class="edge">
+<g id="edge76_Node000000_Node000002" class="edge">
 <title>Node0&#45;&gt;Node2</title>
-<g id="a_edge78_Node000000_Node000002"><a xlink:title=" ">
+<g id="a_edge76_Node000000_Node000002"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M180.12,-27.93C188.66,-26.92 197.27,-25.91 205.71,-24.92"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="179.67,-24.46 170.15,-29.1 180.49,-31.41 179.67,-24.46"/>
 </a>

@@ -176,11 +176,12 @@ var NAVTREEINDEX0 =
 "FPSCounter_8cs.html":[7,0,14,2,1],
 "FadeImage_8cs.html":[7,0,18,11],
 "FireBestShotCheat_8cs.html":[7,0,2,10],
+"FlightMetricsSnapshot_8cs.html":[7,0,7,7,6],
 "FlightMode_8cs.html":[7,0,8,10],
 "FlightPhase_8cs.html":[7,0,14,9,2],
 "FlightStatsService_8cs.html":[7,0,7,2,0],
 "FlyingTrail_8cs.html":[7,0,18,5,1],
-"FoldRule_8cs.html":[7,0,7,7,6],
+"FoldRule_8cs.html":[7,0,7,7,7],
 "ForceDestroyProjectileMessage_8cs.html":[7,0,14,7,6],
 "ForceGameOverCheat_8cs.html":[7,0,2,11],
 "ForceRestartCheat_8cs.html":[7,0,2,12],
@@ -209,7 +210,7 @@ var NAVTREEINDEX0 =
 "GameRenderMapsWindow_8cs.html":[7,0,6,3,0],
 "GameScopeRegistration_8cs.html":[7,0,7,10],
 "GameSoundId_8cs.html":[7,0,0,7],
-"GameplayMetricsService_8cs.html":[7,0,7,7,7],
+"GameplayMetricsService_8cs.html":[7,0,7,7,8],
 "GatekeeperActorModel_8cs.html":[7,0,15,0,0,11],
 "GizmoDrawingHelper_8cs.html":[7,0,14,10,4],
 "GradientTextureDrawer_8cs.html":[7,0,6,17],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "IBalloonModel_8cs.html":[7,0,1,1,6],
 "IBalloonMotionView_8cs.html":[7,0,1,4,2],
 "IBalloonVariant_8cs.html":[7,0,1,3,2],
-"IBalloonViewBinding_8cs.html":[7,0,1,4,3],
-"IBalloonsConfiguration_8cs.html":[7,0,3,0,5]
+"IBalloonViewBinding_8cs.html":[7,0,1,4,3]
 };

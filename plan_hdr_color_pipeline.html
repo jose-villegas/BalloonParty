@@ -110,13 +110,13 @@ $(function(){initNavTree('plan_hdr_color_pipeline.html',''); initResizable(true)
   <div class="headertitle"><div class="title">HDR Color Pipeline</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md593"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md552"></a>
 HDR Color Pipeline — migration plan</h1>
 <blockquote class="doxtable">
 <p>Migrate the color pipeline from Gamma/LDR to Linear color space with HDR rendering — unclipped additive stacking, real bloom on emissive effects, and a correct foundation for the screen-space GI math. Planned 2026-07-11 from a verified inventory (same method as the retired URP migration plan: facts first, tasks gated on in-editor/device verification). <b>Execution not started</b> — Wave A's look re-tune is the cost gate; read the decision section before pulling the trigger. </p>
 </blockquote>
 <hr  />
-<h2><a class="anchor" id="autotoc_md595"></a>
+<h2><a class="anchor" id="autotoc_md554"></a>
 Decision &amp; scope</h2>
 <p><b>What HDR buys this game, concretely</b> (all currently clip at 1.0):</p><ul>
 <li>Additive particle stacks (pop VFX, lightning, beam shine, level-up glow) — brightness saturates exactly where the game is most spectacular.</li>
@@ -127,7 +127,7 @@ Decision &amp; scope</h2>
 <p><b>The cost structure is front-loaded in Wave A (Linear migration):</b> switching color space shifts the rendered look of every authored color — palette entries, sprite tints, particle gradients, shader constants, the GI tints. That's an art re-tune pass across the whole game, not a code task. Waves B/C are mechanical by comparison. There is no "HDR without Linear" shortcut worth taking: URP disables HDR color grading in Gamma space and the blending benefits vanish.</p>
 <p><b>Performance reality (8.33 ms budget at 120 Hz):</b> HDR render target at 32-bit (<code>B10G11R11</code>) costs no extra bandwidth vs LDR; FP16 doubles it. Enabling post-processing adds the uber-post pass (tonemap + bloom chain) — the single biggest new GPU cost, on a fill-rate-sensitive game. Every wave ends with the established measurement loop (Baselines~ framedumps, device Profiler, SurfaceFlinger pacing via adb).</p>
 <p><b>Triggers to execute:</b> an art push that needs glow/bloom (level-up, lightning, lasers are the candidates), or dissatisfaction with clipped VFX brightness. No external forcing function — this is an elective quality migration.</p>
-<h2><a class="anchor" id="autotoc_md596"></a>
+<h2><a class="anchor" id="autotoc_md555"></a>
 Verified inventory (2026-07-11)</h2>
 <ul>
 <li><b>Color space: Gamma</b> (<code>ProjectSettings.asset</code> <code>m_ActiveColorSpace: 0</code>). Linear on Android requires ES3/Vulkan — project is Vulkan-first ✓.</li>
@@ -141,10 +141,10 @@ Verified inventory (2026-07-11)</h2>
 <li><b>Stock materials:</b> ~30 on <code>Mobile/Particles/Additive</code>/<code>Alpha Blended</code> — these render under URP compatibility and work in Linear/HDR, but additive brightness <em>appearance</em> changes in Linear (part of the Wave A re-tune, not a code break).</li>
 <li><b>Tooling in place from the URP migration</b> (reuse, don't rebuild): Baselines~ framedump + step screenshots for A/B, Game Render Maps window for buffer inspection (gains an "HDR values \f$&gt;1\f$" blind spot — see task B5), adb pacing loop, reference video workflow, <code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a></code> menu conventions.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md597"></a>
+<h2><a class="anchor" id="autotoc_md556"></a>
 Task plan</h2>
 <p>Sizes: S ≤ half a day · M ≈ 1–2 days · L ≈ 3+ days. <b>Every wave ends with a visual QA in-editor/device verification gate — same rhythm as the URP migration.</b></p>
-<h3><a class="anchor" id="autotoc_md598"></a>
+<h3><a class="anchor" id="autotoc_md557"></a>
 Dependency graph</h3>
 <div class="fragment"><div class="line">A0 baseline capture ─▶ A1 Linear switch ─▶ A2 look re-tune (art, L) ─▶ A-gate</div>
 <div class="line">                                                                        │</div>
@@ -154,47 +154,47 @@ Dependency graph</h3>
 <div class="line">        B6 GI/capture RT format + composite audit (after B1, before B-gate)</div>
 <div class="line">                                                                        │</div>
 <div class="line">        C1 HDR display output (deferred, separate trigger) ◀────────────┘</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md599"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md558"></a>
 Wave A — Linear color space (the foundation, and the cost gate)</h3>
-<h4><a class="anchor" id="autotoc_md600"></a>
+<h4><a class="anchor" id="autotoc_md559"></a>
 A0 — Baseline captures · <b>P0 · S</b></h4>
 <p>Same drill as the URP migration B0: reference video of every visual system, framedumps of busy frames, device Profiler capture — all under Gamma, stored in <code>Baselines~/</code> (<code>framedump_gamma_baseline</code> naming). The A2 re-tune is judged against these.</p>
-<h4><a class="anchor" id="autotoc_md601"></a>
+<h4><a class="anchor" id="autotoc_md560"></a>
 A1 — Flip to Linear · <b>P0 · S (mechanical) — do NOT merge without A2</b></h4>
 <p>Editor: Project Settings → Player → Color Space → Linear. Everything re-renders "washed/different" immediately — that is expected, not broken. Branch like the URP migration (<code>hdr-color-pipeline</code>), because main stays shippable while A2 runs. Compile-level risk: none (color space is a project setting). Runtime risk: shaders that do their own gamma-ish math (check \(x^{2.2}\)-style hacks — grep before flipping; none known, verify).</p>
-<h4><a class="anchor" id="autotoc_md602"></a>
+<h4><a class="anchor" id="autotoc_md561"></a>
 A2 — Look re-tune · <b>P0 · L — art-driven, art-led</b></h4>
 <p>Re-tune authored colors until the game reads like the A0 references (or deliberately better): palette entries, particle gradients/materials, shader color constants (danger gradient, GI shadow tint/bounce strength, cloud shading, bush tints), UI. Agents can batch-adjust values you specify, but the eye is yours. Practical technique: run A0's reference video side-by-side; work system-by-system with the checklist. Timebox expectation: this is the longest single item in the whole plan.</p>
-<h4><a class="anchor" id="autotoc_md603"></a>
+<h4><a class="anchor" id="autotoc_md562"></a>
 A-gate — parity/quality sign-off + perf sanity</h4>
 <p>Linear costs nothing measurable by itself, but verify: device build, pacing sample, GI/chrome/disturbance intact (their shaders are color-space-agnostic math, but their <em>tints</em> were re-tuned). Merge to main here if desired — Linear stands alone as a correctness win even if HDR waits.</p>
-<h3><a class="anchor" id="autotoc_md604"></a>
+<h3><a class="anchor" id="autotoc_md563"></a>
 Wave B — HDR rendering + post + bloom</h3>
-<h4><a class="anchor" id="autotoc_md605"></a>
+<h4><a class="anchor" id="autotoc_md564"></a>
 B1 — HDR target + post scaffold · <b>P0 · S</b></h4>
 <p>URP asset: <code>Supports HDR</code> on, precision <b>32-bit</b> (<code>B10G11R11</code>; FP16 only if banding shows in gradients — it doubles target bandwidth). Main camera: post-processing ON. Scene: one global Volume with an (initially empty) profile — do not reuse <code>DefaultVolumeProfile.asset</code>; author <code>Assets/Settings/URP/GameVolumeProfile.asset</code>. Capture camera + bake cameras stay post-OFF (they must render raw values). Measure immediately: the empty-post pass cost on device is the go/no-go number for the whole wave.</p>
-<h4><a class="anchor" id="autotoc_md606"></a>
+<h4><a class="anchor" id="autotoc_md565"></a>
 B2 — Tonemapping · <b>P0 · S</b></h4>
 <p>Volume override: Tonemapping = <b>Neutral</b> (ACES costs more and crushes saturated hues — this game is saturated hues; audition both in-editor, decide by eye). Color Grading Mode: HDR, LUT 32. Without tonemapping HDR values just clip at white — this is what makes \(&gt;1\) values <em>render</em> as brightness rolloff.</p>
-<h4><a class="anchor" id="autotoc_md607"></a>
+<h4><a class="anchor" id="autotoc_md566"></a>
 B3 — Emissive authoring path · <b>P1 · M</b></h4>
 <p>The palette gains HDR intensity: add <code>[ColorUsage(true, true)]</code> where entries should author \(&gt;1\) (or an explicit per-entry intensity float if full HDR pickers are overkill — decide in-editor by authoring one real effect). Sweep the effect systems that deserve emitters: lightning, laser/beam, chrome specular sweep, rainbow glitter, level-up glow, pop-VFX cores. Per-shader <code>fixed4 → half4</code> on the paths that now carry \(&gt;1\) values (the 25-file audit; only flagged shaders change — blanket conversion is churn).</p>
-<h4><a class="anchor" id="autotoc_md608"></a>
+<h4><a class="anchor" id="autotoc_md567"></a>
 B4 — Bloom · <b>P1 · S–M</b></h4>
 <p>Volume override: Bloom, threshold \(\ge 1\) (only true HDR emitters bloom — the scene's LDR content stays clean), low scatter to start. Tune per effect by eye. Device cost check: bloom's downsample chain is the second-biggest new GPU cost after the post pass itself.</p>
-<h4><a class="anchor" id="autotoc_md609"></a>
+<h4><a class="anchor" id="autotoc_md568"></a>
 B5 — Tooling: Render Maps HDR view · <b>P2 · S (parallel after B1)</b></h4>
 <p>The Game Render Maps window draws raw values — HDR buffers will display clamped. Add a small exposure slider (multiply in the ChannelPreview shader) + a "values \f$&gt;1\f$" highlight toggle (tint pixels exceeding 1 red). Small, and it makes B3/B4 authoring debuggable.</p>
-<h4><a class="anchor" id="autotoc_md610"></a>
+<h4><a class="anchor" id="autotoc_md569"></a>
 B6 — GI/capture chain under HDR · <b>P1 · M</b></h4>
 <p>Decide per RT: capture stays LDR (reflections/GI read tonemapped-ish scene — cheapest, probably fine at downscale-12) vs upgrade to <code>ARGBHalf</code> (alpha channel REQUIRED — the coverage mask and shadow-amount semantics live in A; <code>B10G11R11</code> is ineligible). Re-audit the GI overlay's multiplicative composite against the HDR scene behind it, and the smear shaders' <code>fixed</code> precision. Verify with the Render Maps window (B5).</p>
-<h4><a class="anchor" id="autotoc_md611"></a>
+<h4><a class="anchor" id="autotoc_md570"></a>
 B-gate — device sign-off</h4>
 <p>Full reference sweep vs A-gate captures + Profiler/pacing on the Pixel at 120 Hz. Gate: post + bloom fit the 8.33 ms budget with the game's busiest moments. If they don't, the fallback ladder is: cheaper bloom (fewer mips) → Neutral-only post (no bloom) → park Wave B until content demands it.</p>
-<h3><a class="anchor" id="autotoc_md612"></a>
+<h3><a class="anchor" id="autotoc_md571"></a>
 Wave C — HDR display output · <b>deferred, own trigger</b></h3>
 <p>True HDR10 output on capable panels (<code>allowHDRDisplaySupport</code>, paper-white/UI calibration, tonemap-to-display). Meaningful only after B ships and only on HDR screens; parked exactly like 2D lights were in the URP plan. Do not scope until B has lived on devices for a while.</p>
-<h2><a class="anchor" id="autotoc_md613"></a>
+<h2><a class="anchor" id="autotoc_md572"></a>
 Open questions (answer at execution time)</h2>
 <ol type="1">
 <li><b>Which effects get HDR emitters first?</b> an art call — the plan assumes lightning, beams, chrome sweep, glitter, level-up glow; the authoring pass (B3) should start with ONE showcase effect to validate the whole pipeline before sweeping.</li>

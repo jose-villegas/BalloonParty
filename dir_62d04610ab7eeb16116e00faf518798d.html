@@ -132,6 +132,8 @@ Files</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CompositeTelemetrySink_8cs.html">CompositeTelemetrySink.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FlightMetricsSnapshot_8cs.html">FlightMetricsSnapshot.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FoldRule_8cs.html">FoldRule.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="GameplayMetricsService_8cs.html">GameplayMetricsService.cs</a></td></tr>
@@ -189,7 +191,9 @@ Files</h2></td></tr>
 <p>Gameplay metrics. Counts what happens during play at four nested scopes — <b>Session ⊃ Run ⊃ Level ⊃ Flight</b> — and serves those counts to three consumers: the level-up and game-over popups, an external analytics export, and balance analysis.</p>
 <p>The service never publishes, never modifies gameplay state, and never causes stutters during action — it only counts. Views read immutable snapshots; they never see a live accumulator.</p>
 <blockquote class="doxtable">
-<p><b>W1 (vocabulary, scopes, timers), W2 (envelope, serializer, sinks) and W3 (the service) have landed.</b> W3 added <code>GameplayMetricsService</code> and <code>SessionTelemetryContext</code>, plus two sanctioned non-message touches outside this folder: <code>CheatState.AnyCheatUsed</code> and <code>IHoldSpeedUpState</code> on <code>HoldSpeedUpController</code>. The consent and batching decorators (<code>ConsentGateSink</code>, <code>BatchingTelemetrySink</code>) and <code>HttpAnalyticsSink</code> are still design — those rows in the table below are the target layout, not current code. Everything else is covered by the EditMode tests in <code>Assets/Tests/EditMode/Game/</code>, including the test fake <code>RecordingTelemetrySink</code> and the shared <code>GameplayMetricsHarness</code>. </p>
+<p><b>Everything here is built and in use</b> — the vocabulary and scopes, the envelope/serializer/sink layer, <code>GameplayMetricsService</code>, and the catalog-driven metric labels in <code>UI/Telemetry/</code> that render it. Two sanctioned non-message touches live outside this folder: <code>CheatState.AnyCheatUsed</code> and <code>IHoldSpeedUpState</code> on <code>HoldSpeedUpController</code>.</p>
+<p><b>Not built:</b> <code>ConsentGateSink</code>, <code>BatchingTelemetrySink</code> and <code>HttpAnalyticsSink</code> — those rows below are the target layout, not current code, and are out of scope until a consent policy and an analytics provider are chosen. Nothing shipping needs them; the local JSON Lines log covers balance work today.</p>
+<p>EditMode coverage lives in <code>Assets/Tests/EditMode/Game/</code> and <code>.../UI/</code>, including the test fake <code>RecordingTelemetrySink</code> and the shared <code>GameplayMetricsHarness</code>. </p>
 </blockquote>
 <h1><a class="anchor" id="autotoc_md225"></a>
 Contents</h1>
@@ -215,7 +219,7 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>TelemetryStopwatch</code>   </td><td class="markdownTableBodyNone">Pure C# timer that owns its injected <code>Func&lt;float&gt;</code> clock and folds elapsed time on <code>Pause()</code>/<code>Resume()</code>/<code>Elapsed</code> reads. Deterministic in tests via a fake clock    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>MetricsSnapshotBase</code> / <code>LevelMetricsSnapshot</code> / <code>RunMetricsSnapshot</code>   </td><td class="markdownTableBodyNone">Sealed immutable read surfaces implementing <code>ISealedMetrics</code> — what the popups render and what the sink receives. The shared payload (counters, timers, axis slots, named breakdowns) lives once in the base; <code>LevelMetricsSnapshot</code> adds only <code>LevelIndex</code>/<code>Completed</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>MetricsSnapshotBase</code> / <code>FlightMetricsSnapshot</code> / <code>LevelMetricsSnapshot</code> / <code>RunMetricsSnapshot</code>   </td><td class="markdownTableBodyNone">Sealed immutable read surfaces implementing <code>ISealedMetrics</code> — what the popups render and what the sink receives. The shared payload (counters, timers, axis slots, named breakdowns) lives once in the base; <code>LevelMetricsSnapshot</code> adds only <code>LevelIndex</code>/<code>Completed</code>, and <code>FlightMetricsSnapshot</code> only <code>FlightIndex</code>    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ColorCount</code> / <code>BalloonTypeCount</code> / <code>ItemActivationCount</code>   </td><td class="markdownTableBodyNone">The breakdown shapes the snapshots expose (<code>PopsByColor</code>, <code>PointsByColor</code>, <code>PopsByBalloonType</code>, <code>DeflectsByBalloonType</code>, <code>ItemsActivated</code>)    </td></tr>
 <tr class="markdownTableRowEven">
@@ -233,16 +237,50 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>CompositeTelemetrySink</code>   </td><td class="markdownTableBodyNone">Fans out to an array of leaf sinks; an empty array is the inert "no export configured" state — no <code>NullTelemetrySink</code>. Registered unconditionally in <code>GameScopeRegistration.RegisterTelemetrySinks</code>, wrapping <code>{ JsonLinesTelemetrySink }</code> under the dev guard or an empty array otherwise    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ConsentGateSink</code> / <code>BatchingTelemetrySink</code>   </td><td class="markdownTableBodyNone">Cross-cutting decorators — one concern each (W5)    </td></tr>
+<td class="markdownTableBodyNone"><code>ConsentGateSink</code> / <code>BatchingTelemetrySink</code>   </td><td class="markdownTableBodyNone"><em>(Not built)</em> Cross-cutting decorators — one concern each    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>JsonLinesTelemetrySink</code>   </td><td class="markdownTableBodyNone">Dev-only local sink (<code>#if UNITY_EDITOR \|\| DEVELOPMENT_BUILD</code>): one JSON object per line, one <code>StreamWriter</code> opened in <code>Start()</code> and kept for the session, rotating log files in <code>Application.persistentDataPath/telemetry/</code> (20 most recent, sorted by file name)    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>HttpAnalyticsSink</code>   </td><td class="markdownTableBodyNone">Batched export to an external analytics service (last wave; gated on choosing a provider)   </td></tr>
+<td class="markdownTableBodyNone"><code>HttpAnalyticsSink</code>   </td><td class="markdownTableBodyNone"><em>(Not built)</em> Batched export to an external analytics service; gated on choosing a provider   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md226"></a>
 Every scope runs its own clocks</h1>
 <p>A <code>TimerId</code> names a clock; each of the four scopes holds its own instance of each one, measuring its own window. The service drives them together — pausing the gameplay clock is one loop over the scopes, not one call per scope per timer — so <code>MetricScope.Absorb</code> never folds timers, only counters and axes. Folding would double-count: a Run scope's <code>Gameplay</code> stopwatch has already measured the whole run, so adding each Level's elapsed on top would double it. An earlier revision specified the fold (<code>TelemetryStopwatch.Add</code> plus a <code>MetricScope.AbsorbTimers</code> step inside <code>Absorb</code>); it was wrong and has been removed, not just left unused.</p>
-<h1><a class="anchor" id="autotoc_md227"></a>
+<h2><a class="anchor" id="autotoc_md227"></a>
+What each timer means</h2>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Timer   </th><th class="markdownTableHeadNone">Runs while   </th><th class="markdownTableHeadNone">Reads as    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>gameplay_seconds</code>   </td><td class="markdownTableBodyNone"><code>Playing</code> <b>and</b> not paused   </td><td class="markdownTableBodyNone">Thumb-on-screen play. The one to compare levels by    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>ceremony_seconds</code>   </td><td class="markdownTableBodyNone"><code>Ceremony</code>   </td><td class="markdownTableBodyNone">How long the level-up popup was up    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>wall_seconds</code>   </td><td class="markdownTableBodyNone">Any state except <code>Idle</code>/<code>Ended</code>   </td><td class="markdownTableBodyNone">The level end to end — gameplay + ceremony + transition    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>hold_seconds</code>   </td><td class="markdownTableBodyNone">Counting <b>and</b> hold-to-speed-up engaged   </td><td class="markdownTableBodyNone">How much of the level was fast-forwarded   </td></tr>
+</table>
+<p><b><code>ceremony_seconds</code> is deliberately not pause-gated.</b> The ceremony <em>is</em> a pause — <code>LevelUpCinematic</code> holds <code>PauseSource.Cinematic</code> and <code>LevelUpPopUp</code> holds <code>PauseSource.LevelUp</code> for its whole duration — so gating it would make it read ~0. <code>wall_seconds</code> is ungated for the same reason: every <code>PauseSource</code> today is gameplay- or ceremony-owned rather than a user interruption, so gating it would collapse it toward <code>gameplay_seconds</code> and the two would stop being different measurements.</p>
+<p>So <code>wall − gameplay − ceremony</code> is transition time, and <code>hold / gameplay</code> is the fraction of a level that was fast-forwarded — which is what makes a rushed level distinguishable from a slow one rather than just "shorter".</p>
+<h1><a class="anchor" id="autotoc_md228"></a>
+Units on the wire</h1>
+<p>The envelope carries raw numbers; <b>the unit lives in <code>MetricCatalog</code>, not in the JSON</b>. One case surprises everybody who reads a record cold: <code>max_danger_level</code> is declared <code>level_hundredths</code> because <code>MetricSet</code> stores <code>int</code>, while <code>IDangerLevel.Level</code> is a 0→1 float. A record showing <code>"max_danger_level": 33</code> means <b>0.33 — a third of the way to death</b>, not 33 of anything. <code>MetricValueResolver</code> already renders it as <code>33%</code> for labels; a human reading the <code>.jsonl</code> has to know.</p>
+<h1><a class="anchor" id="autotoc_md229"></a>
+Reading the log</h1>
+<p><code>JsonLinesTelemetrySink</code> writes one JSON object per line to <code>&lt;Application.persistentDataPath&gt;/telemetry/telemetry_&lt;yyyyMMdd_HHmmss&gt;.jsonl</code> — one file per session, flushed after every record, 20 files retained.</p>
+<p><b>In the editor:</b> <code>Tools ▸ <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> ▸ Telemetry ▸ Open Latest Log</code> (or <em>Open Log Folder</em>, or <em>Log Path To Console</em>). On Windows the folder resolves to <code>USERPROFILE%/AppData/LocalLow/&lt;Company&gt;/&lt;Product&gt;/telemetry/</code>, on macOS to <code>~/Library/Application Support/&lt;Company&gt;/&lt;Product&gt;/telemetry/</code>.</p>
+<p><b>On Android</b> <code>persistentDataPath</code> is <code>/storage/emulated/0/Android/data/&lt;package&gt;/files</code>, which Android 11+ hides from file managers — use <code>adb</code> instead:</p>
+<div class="fragment"><div class="line">adb shell ls /sdcard/Android/data/&lt;package&gt;/files/telemetry/</div>
+<div class="line">adb pull /sdcard/Android/data/&lt;package&gt;/files/telemetry/ .</div>
+</div><!-- fragment --><p><b>On iOS</b> it is the app's <code>Library/Application Support</code>. Xcode ▸ <em>Window ▸ Devices and Simulators</em> ▸ select the app ▸ gear ▸ <em>Download Container</em> gives a <code>.xcappdata</code> bundle; the logs are inside under <code>AppData/Library/Application Support/telemetry/</code>.</p>
+<p>The sink is dev-only (<code>#if UNITY_EDITOR || DEVELOPMENT_BUILD</code>), so a device build must be a <b>development build</b> for any of this to exist.</p>
+<h1><a class="anchor" id="autotoc_md230"></a>
+A record per flight</h1>
+<p>Every projectile writes a <code>RecordKind.Flight</code> envelope when it is destroyed, before its counters fold into the level — so a level's shots can be read individually rather than only as level totals.</p>
+<p><b>The duration comes free.</b> <code>OnProjectileLoaded</code> calls <code>_flightScopeMetrics.Reset()</code>, and <code>MetricScope.Reset()</code> zeroes its stopwatches as well as its counters, so by the seal the Flight scope's own <code>gameplay_seconds</code> is exactly <code>[Loaded, Destroyed)</code> minus any pause — the time of flight — and <code>hold_seconds</code> is how much of that shot was fast-forwarded. No metric had to be added for it; the clocks were already running and were being thrown away.</p>
+<p><code>FlightIndex</code> counts from 1 within the level and resets when a level opens, so records order without a timestamp sort and a gap reads as a dropped record rather than a slow frame.</p>
+<p><b>This is the highest-volume record kind by an order of magnitude</b> — one per shot against one per level. That is fine for the local JSON Lines log it feeds today; it is the first thing to reconsider if an HTTP sink is ever added, since a batched upload would carry mostly flight records.</p>
+<h1><a class="anchor" id="autotoc_md231"></a>
 Two snapshots per level, one record</h1>
 <p>The level-up popup shows during the ceremony, <b>before</b> the level's flush boundary — straggler score trails are still arriving. So two snapshots are taken: the <em>ceremony</em> one (what the player was shown) and the <em>flush</em> one (what was true).</p>
 <p>Only the flush snapshot is exported. The ceremony snapshot exists for the popup, is exposed on <code>ILevelMetricsView.CeremonyLevel</code>, and never reaches a sink — the gap between the two is still recoverable from the single exported record, which carries <code>points_projected</code> beside <code>points_banked</code>. A second record per level would double the export for a number already in the first one.</p>
@@ -252,17 +290,17 @@ Two snapshots per level, one record</h1>
 <li><b>Read it after the popup's gate <code>await</code>, never inside a <code>ScoreLevelUpMessage</code> handler.</b> <code>LevelController</code> publishes that message before it transitions navigation, so the snapshot is always in place by the time the gate resolves — but a handler racing the service's own is not.</li>
 <li><b><code>LevelIndex</code> is the only trustworthy discriminator of stale vs. current.</b> The cleared state is one shared empty snapshot, and <code>ReactiveProperty&lt;T&gt;</code> compares by reference, so clearing twice in a row (abort, then a run reset) raises only one <code>OnNext</code>. A view that resets itself on <em>receiving</em> the empty snapshot will miss the second clear.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md228"></a>
+<h1><a class="anchor" id="autotoc_md232"></a>
 Where the per-flight numbers come from</h1>
 <p>Per-flight counts live in <code>FlightStatsService</code> (<code>Game/Flight/</code>, a <b>gameplay</b> service, not part of this folder). Each count is written by whoever publishes the message it belongs to, immediately before that publish — <code>HitPipeline</code> for pops and deflects, <code>ProjectileView</code> for wall bounces, <code>ProjectileHitResolver</code> for pierce discharges. The count is therefore fixed before any subscriber runs: <code>CombatSoundRouter</code> reads it post-increment for its pitch ramps, metrics folds it at flight seal, and neither depends on subscription order.</p>
 <p>The one exception: <code>CombatSoundRouter._colorPopsThisFlight</code> <b>stays private to audio</b>. It resets on streak break as well as on load, and counts only pops that use the generic <code>BalloonPop</code> sound — a pitch cursor, not a statistic. Do not "unify" it.</p>
-<h1><a class="anchor" id="autotoc_md229"></a>
+<h1><a class="anchor" id="autotoc_md233"></a>
 Pause handling</h1>
 <p>Subscribes <code>PauseService.IsAnyPaused</code> directly (reference-counted and reset-safe) rather than counting <code>PausedMessage</code>/<code>ResumedMessage</code> edges, which leak on the loss path.</p>
-<h1><a class="anchor" id="autotoc_md230"></a>
+<h1><a class="anchor" id="autotoc_md234"></a>
 Registration</h1>
 <p><code>ITelemetrySink</code> → <code>CompositeTelemetrySink</code> registers unconditionally in <code>GameScopeRegistration.RegisterTelemetrySinks</code>, called from <code>GameLifetimeScope.Configure</code> before <code>RegisterGameplaySystems</code> — <code>GameplayMetricsService</code> depends on it without caring whether any leaf sink exists. <code>GameplayMetricsService</code> registers <b>last</b> in <code>RegisterGameplaySystems</code> so it never sits in front of a gameplay system in the start order. That is a preference, not a correctness argument, and the service must not depend on it: it registers last but is written to be order-independent, because gameplay systems re-publish from inside their own handlers. <code>LevelController.OnTransitionCompleted</code> reopens navigation, which fires a deferred loss, which publishes <code>GameOverMessage</code> — nested, before this service has seen the transition that message follows. <code>OnGameOver</code> therefore settles a pending level boundary itself rather than trusting that it already happened. Its clock is an explicit <code>Func&lt;float&gt;</code> parameter — <code>Time.unscaledTime</code>, the same way <code>SfxThrottleGate</code> takes its. <code>SessionTelemetryContext</code> registers in <code>AppLifetimeScope</code> so one play session keeps one id across scene reloads. <code>FlightStatsService</code> is registered earlier in <code>RegisterGameplaySystems</code> and lives in <code>Game/Flight/</code> — it is a gameplay service, not part of this subsystem.</p>
-<h1><a class="anchor" id="autotoc_md231"></a>
+<h1><a class="anchor" id="autotoc_md235"></a>
 What the service does and does not own</h1>
 <p><code>GameplayMetricsService</code> is a subscriber and nothing else: ~21 message subscriptions plus <code>PauseService.IsAnyPaused</code>, <code>INavigation.Current</code> and <code>IDangerLevel.Level</code>, all in one <code>CompositeDisposable</code>.</p>
 <ul>
@@ -272,9 +310,9 @@ What the service does and does not own</h1>
 <li><b>Nothing is persisted.</b> Scopes live in memory, are snapshotted, handed to the sink and reset. A metric someone wants to keep for the player has stopped being telemetry.</li>
 </ul>
 <p>Gating is three tiers, not one <code>#if</code>: the counting core ships (the popups need it), the export layer ships inert until consent, and the local file sink plus the cheat read are compiled out of release.</p>
-<h1><a class="anchor" id="autotoc_md232"></a>
+<h1><a class="anchor" id="autotoc_md236"></a>
 Design plan</h1>
-<p>Full specification: <a class="el" href="plan_gameplay_telemetry.html">Gameplay Telemetry</a> </p>
+<p><a class="el" href="plan_gameplay_telemetry.html">Gameplay Telemetry</a> — pruned to the numbered requirements and risks this folder's comments cite (R1–R30, RK-1…RK-15), the extraction path, and the two pieces never built. This README is the first place to look; the plan is the second. </p>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

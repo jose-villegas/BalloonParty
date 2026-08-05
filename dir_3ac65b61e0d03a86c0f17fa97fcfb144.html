@@ -126,24 +126,24 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Prediction trace system — draws a dotted line showing the projectile's predicted trajectory while the player is aiming.</p>
-<h1><a class="anchor" id="autotoc_md752"></a>
+<h1><a class="anchor" id="autotoc_md711"></a>
 Architecture</h1>
-<h2><a class="anchor" id="autotoc_md753"></a>
+<h2><a class="anchor" id="autotoc_md712"></a>
 PredictionTraceCalculator</h2>
 <p>Pure C# class (no MonoBehaviour) that takes an origin, direction, and reusable <code>List&lt;Vector3&gt;</code>, then fills it with world-space trace points by stepping forward and reflecting off walls. Bounces off left, right, and top limits (from <code>LimitsClockwise</code>). A top-wall hit terminates further bounces.</p>
-<h2><a class="anchor" id="autotoc_md754"></a>
+<h2><a class="anchor" id="autotoc_md713"></a>
 PredictionTraceView</h2>
 <p>MonoBehaviour with a <code>LineRenderer</code>. Call <code>SetTrace(points)</code> to update, <code>SetColor(color)</code> to set <code>startColor</code>/<code>endColor</code>, or <code>Clear()</code> to hide. Attach to the Thrower prefab alongside a <code>LineRenderer</code>. For the smoke + glitter look, use the <code>BalloonParty/Display/TraceGlitterLine</code> material shader (SightSmoke's drifting-noise alpha eat plus GlitterSwirl's orbiting specks in one pass) and set the LineRenderer's texture mode to <b>Tile</b> so the pattern density stays constant over any aim length — the config-driven trace colour reaches the shader through the renderer's start/end vertex colours.</p>
-<h2><a class="anchor" id="autotoc_md755"></a>
+<h2><a class="anchor" id="autotoc_md714"></a>
 PredictionTraceProvider</h2>
 <p>Plain C# game-scope singleton (registered in <code>GameScopeRegistration.RegisterCoreServices</code>) that mirrors the same-frame trace for readers outside the Thrower's own view chain — the house pattern is <code>ProjectilePositionProvider</code> (<code>Projectile/</code>). <code>SetTrace(points)</code> copies into an internal preallocated <code>List&lt;Vector3&gt;</code> (never aliases the caller's mutable buffer), bumps an <code>int Version</code>, and sets <code>IsActive</code>; <code>Clear()</code> sets <code>IsActive</code> false and bumps <code>Version</code>. Readers poll <code>IsActive</code>/<code>Version</code>/<code>Points</code> instead of subscribing, so many pooled readers can cheaply skip work on frames where nothing changed.</p>
-<h2><a class="anchor" id="autotoc_md756"></a>
+<h2><a class="anchor" id="autotoc_md715"></a>
 TraceHitMarker</h2>
 <p>MonoBehaviour view for a circular actor (e.g. a balloon) that shows a marker where the aim trace crosses its circle. Each <code>LateUpdate</code>, it reads <code>PredictionTraceProvider</code> and finds which segment of the trace polyline most directly strikes the actor's circle via <code>TraceHitGeometry.TryFindSurfaceHit</code> (line-circle intersection scored by centrality — the segment whose perpendicular foot is closest to the centre wins, not necessarily the first in travel order; this matters near wall bounces where a pre-bounce segment can graze the circle while the post-bounce segment strikes dead-centre; pure, allocation-free, edit-mode tested in <code>Assets/Tests/EditMode/Prediction/TraceHitGeometryTests.cs</code>). The marker shows only when an intersection exists; it's positioned at <code>origin + hitDirection * _markerOffset</code> with hitDirection pointing at that surface entry, translated only — never rotated or scaled. Optionally (assign <code>_markerRenderer</code>), the sprite's alpha scales with the crossing's <b>centrality</b> (1 = line through the centre, 0 = tangential one-touch graze): direct aims read strong, grazes fade toward <code>_minIntensity</code>, under the sprite's authored alpha as the ceiling; its RGB mirrors the trace line's configured colour. Work is skipped whenever the provider's <code>Version</code> is unchanged and the actor hasn't moved past a small epsilon since the last evaluation. Visibility toggles the marker GameObject only on change, not every frame. <code>OnEnable</code> force-hides and invalidates the cache, since pooled instances are reused by toggling the whole prefab's GameObject (<code>PoolChannel&lt;T&gt;.Get</code>/<code>Return</code>) rather than by any dedicated reset callback.</p>
-<h2><a class="anchor" id="autotoc_md757"></a>
+<h2><a class="anchor" id="autotoc_md716"></a>
 Integration</h2>
 <p><code>ThrowerController</code> owns a <code>PredictionTraceCalculator</code>; <code>ThrowerView</code> finds the <code>PredictionTraceView</code> via <code>GetComponentInChildren</code> in <code>Awake</code> and exposes <code>SetTrace</code>/<code>SetTraceColor</code>/<code>ClearTrace</code>. Each <code>Tick</code>, while the player is aiming and the projectile hasn't been fired, the controller calculates the trace, pushes it through the view, and mirrors it into <code>PredictionTraceProvider</code> for any <code>TraceHitMarker</code> readers. On fire, release, or reload, both the view and the provider are cleared. The line's color comes from <code>IPredictionTraceConfig.PredictionTraceColor</code>, pushed once in <code>ThrowerController.Start</code>. The line deliberately casts NO scene-light — an aim telegraph relighting the actors it crosses read as noise (a light-field version was tried and removed; see branch backup/gi-normals-spherize for the era).</p>
-<h1><a class="anchor" id="autotoc_md758"></a>
+<h1><a class="anchor" id="autotoc_md717"></a>
 Unity Setup</h1>
 <ol type="1">
 <li>Add a child GameObject to the Thrower prefab</li>

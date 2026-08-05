@@ -36,6 +36,7 @@ var namespaceBalloonParty_1_1Editor =
     [ "SetMobileTextureSize", "classBalloonParty_1_1Editor_1_1SetMobileTextureSize.html", "classBalloonParty_1_1Editor_1_1SetMobileTextureSize" ],
     [ "ShowIfEnumDrawer", "classBalloonParty_1_1Editor_1_1ShowIfEnumDrawer.html", "classBalloonParty_1_1Editor_1_1ShowIfEnumDrawer" ],
     [ "SortingLayerNameDrawer", "classBalloonParty_1_1Editor_1_1SortingLayerNameDrawer.html", "classBalloonParty_1_1Editor_1_1SortingLayerNameDrawer" ],
+    [ "TelemetryLogMenu", "classBalloonParty_1_1Editor_1_1TelemetryLogMenu.html", "classBalloonParty_1_1Editor_1_1TelemetryLogMenu" ],
     [ "TextureAuditWindow", "classBalloonParty_1_1Editor_1_1TextureAuditWindow.html", "classBalloonParty_1_1Editor_1_1TextureAuditWindow" ],
     [ "TexturePreviewBox", "classBalloonParty_1_1Editor_1_1TexturePreviewBox.html", "classBalloonParty_1_1Editor_1_1TexturePreviewBox" ],
     [ "UnitCircleDrawer", "classBalloonParty_1_1Editor_1_1UnitCircleDrawer.html", "classBalloonParty_1_1Editor_1_1UnitCircleDrawer" ],

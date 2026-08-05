@@ -117,8 +117,8 @@ $(function(){initNavTree('structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEn
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5521611c7ab7d57c8ccc4a535f158ae6" id="r_a5521611c7ab7d57c8ccc4a535f158ae6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5521611c7ab7d57c8ccc4a535f158ae6">TelemetryEnvelope</a> (<a class="el" href="namespaceBalloonParty_1_1Game_1_1Telemetry.html#a634f9537c09ea241a0544abc34bd93bc">RecordKind</a> kind, int schemaVersion, string sessionId, int runId, int attemptId, int attemptIndex, int levelIndex, int levelAttemptOrdinal, bool completed, bool cheatActive, string endCause, long timestampUtcTicks, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ISealedMetrics.html">ISealedMetrics</a> metrics)</td></tr>
-<tr class="separator:a5521611c7ab7d57c8ccc4a535f158ae6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21b6050ec01fa5fe62ece61dbff859c1" id="r_a21b6050ec01fa5fe62ece61dbff859c1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a21b6050ec01fa5fe62ece61dbff859c1">TelemetryEnvelope</a> (<a class="el" href="namespaceBalloonParty_1_1Game_1_1Telemetry.html#a634f9537c09ea241a0544abc34bd93bc">RecordKind</a> kind, int schemaVersion, string sessionId, int runId, int attemptId, int attemptIndex, int levelIndex, int levelAttemptOrdinal, int flightIndex, bool completed, bool cheatActive, string endCause, long timestampUtcTicks, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ISealedMetrics.html">ISealedMetrics</a> metrics)</td></tr>
+<tr class="separator:a21b6050ec01fa5fe62ece61dbff859c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -132,6 +132,8 @@ Properties</h2></td></tr>
 <tr class="separator:a2e1a66dbab361b32b98587150ecf80bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13d64ab1e107d7954e203df65ca52a02" id="r_a13d64ab1e107d7954e203df65ca52a02"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a13d64ab1e107d7954e203df65ca52a02">EndCause</a><code> [get]</code></td></tr>
 <tr class="separator:a13d64ab1e107d7954e203df65ca52a02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad13f9f1fdcf0719b78894e68666c684e" id="r_ad13f9f1fdcf0719b78894e68666c684e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad13f9f1fdcf0719b78894e68666c684e">FlightIndex</a><code> [get]</code></td></tr>
+<tr class="separator:ad13f9f1fdcf0719b78894e68666c684e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfccc2e17b86238cb601d1d271f75662" id="r_abfccc2e17b86238cb601d1d271f75662"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Game_1_1Telemetry.html#a634f9537c09ea241a0544abc34bd93bc">RecordKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abfccc2e17b86238cb601d1d271f75662">Kind</a><code> [get]</code></td></tr>
 <tr class="separator:abfccc2e17b86238cb601d1d271f75662"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a252bb5cd31fd60b76221255663f844b5" id="r_a252bb5cd31fd60b76221255663f844b5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a252bb5cd31fd60b76221255663f844b5">LevelAttemptOrdinal</a><code> [get]</code></td></tr>
@@ -150,8 +152,8 @@ Properties</h2></td></tr>
 <tr class="separator:a94ed8e052936db5429e37145321d3fb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a5521611c7ab7d57c8ccc4a535f158ae6" name="a5521611c7ab7d57c8ccc4a535f158ae6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5521611c7ab7d57c8ccc4a535f158ae6">&#9670;&#160;</a></span>TelemetryEnvelope()</h2>
+<a id="a21b6050ec01fa5fe62ece61dbff859c1" name="a21b6050ec01fa5fe62ece61dbff859c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21b6050ec01fa5fe62ece61dbff859c1">&#9670;&#160;</a></span>TelemetryEnvelope()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -195,6 +197,11 @@ Properties</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>levelAttemptOrdinal</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>flightIndex</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -326,6 +333,28 @@ Properties</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">string BalloonParty.Game.Telemetry.TelemetryEnvelope.EndCause</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad13f9f1fdcf0719b78894e68666c684e" name="ad13f9f1fdcf0719b78894e68666c684e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad13f9f1fdcf0719b78894e68666c684e">&#9670;&#160;</a></span>FlightIndex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Game.Telemetry.TelemetryEnvelope.FlightIndex</td>
         </tr>
       </table>
   </td>

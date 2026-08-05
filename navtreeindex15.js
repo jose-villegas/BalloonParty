@@ -1,5 +1,7 @@
 var NAVTREEINDEX15 =
 {
+"classBalloonParty_1_1Configuration_1_1Editor_1_1MapLimitsSceneOverlay.html#a0b568b1d7c14339c21d0bfc6dcbf16eb":[5,0,0,3,3,4,6],
+"classBalloonParty_1_1Configuration_1_1Editor_1_1MapLimitsSceneOverlay.html#a0b568b1d7c14339c21d0bfc6dcbf16eb":[6,0,0,3,3,4,6],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1MapLimitsSceneOverlay.html#a12188a29460c03c7d8ff7f108e7e775a":[5,0,0,3,3,4,3],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1MapLimitsSceneOverlay.html#a12188a29460c03c7d8ff7f108e7e775a":[6,0,0,3,3,4,3],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1MapLimitsSceneOverlay.html#a2da4d2403ea47685188c4b7026675786":[5,0,0,3,3,4,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX15 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#ae9cd3b29a793988f183fd1e83f7788ce":[5,0,0,3,4,1,37],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#ae9cd3b29a793988f183fd1e83f7788ce":[6,0,0,3,4,1,37],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#ae9d567ea7025176fff1b960dc885f6a8":[5,0,0,3,4,1,45],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#ae9d567ea7025176fff1b960dc885f6a8":[6,0,0,3,4,1,45],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#aeb45c63adf8e86c664855ea96ba8dbf0":[5,0,0,3,4,1,73],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#aeb45c63adf8e86c664855ea96ba8dbf0":[6,0,0,3,4,1,73]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#ae9d567ea7025176fff1b960dc885f6a8":[6,0,0,3,4,1,45]
 };

@@ -37,7 +37,7 @@ var searchData=
   ['writeanchor_34',['WriteAnchor',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#ad8c655f2b9262afc78dbfb0c0629d655',1,'BalloonParty::Game::Score::Behaviours::ShapeFormationTicker']]],
   ['writebuildinfo_35',['WriteBuildInfo',['../classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#aa3d036578490ef0a2dc74b54eeb299e5',1,'BalloonParty::Editor::Release::ReleaseUploadWindow']]],
   ['writecore_36',['WriteCore',['../classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetrySinkBase.html#a6e4e1079eb58a5a4abed72694b17da28',1,'BalloonParty::Game::Telemetry::TelemetrySinkBase']]],
-  ['writeenvelope_37',['WriteEnvelope',['../classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a828bc9f30cec16670e72a5d78109c284',1,'BalloonParty::Game::Telemetry::GameplayMetricsService']]],
+  ['writeenvelope_37',['WriteEnvelope',['../classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a9aa9a0bea63d5556e149f97847d19468',1,'BalloonParty::Game::Telemetry::GameplayMetricsService']]],
   ['writeoutput_38',['WriteOutput',['../classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerDumper.html#a7b0023f048d0f86f63909c12a10d23ba',1,'BalloonParty::Editor::FrameDump::FrameDebuggerDumper']]],
   ['writepng_39',['WritePng',['../classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html#a6309897d505269b0c994df680ea4e932',1,'BalloonParty::Editor::SpriteCombine::SpriteLayerCombinerEditor']]],
   ['writeshadowpng_40',['WriteShadowPng',['../classBalloonParty_1_1Editor_1_1ShadowBake_1_1ShadowBakeUtility.html#ad47b0efb17effd7443af9c31973c6973',1,'BalloonParty::Editor::ShadowBake::ShadowBakeUtility']]],

@@ -1,5 +1,7 @@
 var NAVTREEINDEX20 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a4e97b2969509440bc4f20570d6a5d1ba":[5,0,0,3,7,3,26],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a4e97b2969509440bc4f20570d6a5d1ba":[6,0,0,3,7,3,26],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a5c20579427e7cbb656783d28894b38b2":[5,0,0,3,7,3,14],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a5c20579427e7cbb656783d28894b38b2":[6,0,0,3,7,3,14],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a5e11f6bfb48fcebf9f2025ee86e65602":[5,0,0,3,7,3,7],
@@ -247,7 +249,5 @@ var NAVTREEINDEX20 =
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#ab835c8c796aa55c5527ff44d20057b6f":[5,0,0,3,8,8,3],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#ab835c8c796aa55c5527ff44d20057b6f":[6,0,0,3,8,8,3],
 "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html":[5,0,0,3,17],
-"classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html":[6,0,0,3,17],
-"classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a03ae7c51ddea28fd0ee183d7b263320b":[5,0,0,3,17,7],
-"classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a03ae7c51ddea28fd0ee183d7b263320b":[6,0,0,3,17,7]
+"classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html":[6,0,0,3,17]
 };

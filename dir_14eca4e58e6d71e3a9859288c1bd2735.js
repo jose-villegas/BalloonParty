@@ -37,6 +37,7 @@ var dir_14eca4e58e6d71e3a9859288c1bd2735 =
     [ "SetMobileTextureSize.cs", "SetMobileTextureSize_8cs.html", "SetMobileTextureSize_8cs" ],
     [ "ShowIfEnumDrawer.cs", "ShowIfEnumDrawer_8cs.html", "ShowIfEnumDrawer_8cs" ],
     [ "SortingLayerNameDrawer.cs", "SortingLayerNameDrawer_8cs.html", "SortingLayerNameDrawer_8cs" ],
+    [ "TelemetryLogMenu.cs", "TelemetryLogMenu_8cs.html", "TelemetryLogMenu_8cs" ],
     [ "TextureAuditWindow.cs", "TextureAuditWindow_8cs.html", "TextureAuditWindow_8cs" ],
     [ "TexturePreviewBox.cs", "TexturePreviewBox_8cs.html", "TexturePreviewBox_8cs" ],
     [ "UnitCircleDrawer.cs", "UnitCircleDrawer_8cs.html", "UnitCircleDrawer_8cs" ],

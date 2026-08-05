@@ -6,6 +6,7 @@ var dir_62d04610ab7eeb16116e00faf518798d =
     [ "BalloonTypeCount.cs", "BalloonTypeCount_8cs.html", "BalloonTypeCount_8cs" ],
     [ "ColorCount.cs", "ColorCount_8cs.html", "ColorCount_8cs" ],
     [ "CompositeTelemetrySink.cs", "CompositeTelemetrySink_8cs.html", "CompositeTelemetrySink_8cs" ],
+    [ "FlightMetricsSnapshot.cs", "FlightMetricsSnapshot_8cs.html", "FlightMetricsSnapshot_8cs" ],
     [ "FoldRule.cs", "FoldRule_8cs.html", "FoldRule_8cs" ],
     [ "GameplayMetricsService.cs", "GameplayMetricsService_8cs.html", "GameplayMetricsService_8cs" ],
     [ "ILevelMetricsView.cs", "ILevelMetricsView_8cs.html", "ILevelMetricsView_8cs" ],

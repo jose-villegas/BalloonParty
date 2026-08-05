@@ -133,7 +133,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Elastic push-out/return animations for actors — triggered by projectile hits, tough-balloon deflections, and item shockwaves.</p>
-<h1><a class="anchor" id="autotoc_md255"></a>
+<h1><a class="anchor" id="autotoc_md259"></a>
 Folder structure</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -157,7 +157,7 @@ Folder structure</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>Editor/NudgeOverrideDrawer</code>   </td><td class="markdownTableBodyNone">Extends <code>AutoFieldPropertyDrawer</code> (in <code>Source/Editor/</code>) — auto-draws <code>_distance</code> and <code>_duration</code>; pins <code>_appliesTo</code> above the auto section via <code>DrawPinnedFields</code> using <code>EnumFlagsField</code>; conditionally draws <code>_falloff</code> only when the Shockwave flag is set. Overrides <code>BuildFoldoutLabel</code> to append the current <code>NudgeType</code> value to each array element header (e.g. <code>Element 0 [Deflect]</code>)   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md256"></a>
+<h1><a class="anchor" id="autotoc_md260"></a>
 Nudge types</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -169,7 +169,7 @@ Nudge types</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>Shockwave</code>   </td><td class="markdownTableBodyNone">Item handler (e.g. Bomb) publishes <code>NudgeMessage(Source=Shockwave, Actor=null)</code>   </td><td class="markdownTableBodyNone">All occupied grid slots, attenuated by distance   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md257"></a>
+<h1><a class="anchor" id="autotoc_md261"></a>
 Override resolution</h1>
 <p>Distance, duration, and falloff are resolved in priority order for each affected actor:</p>
 <ol type="1">
@@ -178,7 +178,7 @@ Override resolution</h1>
 <li><b>Global default</b> — <code>BalloonsConfiguration.NudgeDistance</code>, <code>NudgeDuration</code>, <code>NudgeFalloff</code></li>
 </ol>
 <p>Shockwave uses exponential distance falloff: \(\text{distance} = \text{baseDistance} \times \exp(-\text{falloff} \times d)\). A per-actor shockwave override skips the falloff entirely and uses its fixed <code>Distance</code>.</p>
-<h1><a class="anchor" id="autotoc_md258"></a>
+<h1><a class="anchor" id="autotoc_md262"></a>
 The impulse model</h1>
 <p>A nudge is a <b>pure impulse</b> — an additive, transient offset applied on top of the balloon's base position. Each impulse has three parameters: a unit direction, a distance (peak amplitude), and a duration (how long it plays).</p>
 <p>The per-frame offset is computed as:</p>
@@ -202,7 +202,7 @@ The impulse model</h1>
 \]
 </p>
 <p>A balloon hit twice in quick succession shows a bouncing effect: it nudges away for the first impact, gets hit again mid-return, bounces out again from wherever it is, and completes both impulses on independent timelines. Each impulse removal is automatic — when \(\text{elapsed} \ge \text{duration}\), the impulse is discarded.</p>
-<h1><a class="anchor" id="autotoc_md259"></a>
+<h1><a class="anchor" id="autotoc_md263"></a>
 Base reconciliation</h1>
 <p>The nudge ticker applies \(\text{BasePosition} + \sum \text{impulses}\) every late tick. It cannot assume it knows when other systems move the balloon, so it detects external writes by remembering the final position it wrote last frame (<code>LastWritten</code>). At the start of each late tick:</p>
 <div class="fragment"><div class="line">if (view.Position ≉ LastWritten)   // another system wrote the transform this frame</div>
@@ -216,7 +216,7 @@ Base reconciliation</h1>
 <li>A balloon is teleported to a new position (e.g., board effect reparent). The ticker detects the teleport, adopts the new position, and any active impulses continue from that point without snapping or jumping.</li>
 </ul>
 <p>When the last impulse completes, the ticker writes pure <code>BasePosition</code> once (releasing the view's pooled state back to the pool) and detaches from the view. Steady-state cost is zero — the ticker only manages active impulses.</p>
-<h1><a class="anchor" id="autotoc_md260"></a>
+<h1><a class="anchor" id="autotoc_md264"></a>
 Ownership map</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -231,17 +231,17 @@ Ownership map</h1>
 <td class="markdownTableBodyNone">Everything else   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">never   </td><td class="markdownTableBodyNone">—   </td></tr>
 </table>
 <p><b>Critical invariant</b>: Only one system writes at a time (by registration order). The factory/pool teleports the balloon and spawns with a tween; the balancer overrides with a balance DOPath; the ticker detects these writes and reads them as base updates. Nothing re-coordinated or paused — each system runs its own flow independently.</p>
-<h1><a class="anchor" id="autotoc_md261"></a>
+<h1><a class="anchor" id="autotoc_md265"></a>
 Stability and motion state</h1>
 <p><code>IsStable</code> now has a single, clear meaning: <b>the base position has no active motion</b> (no spawn tween, no balance DOPath). It is owned and managed exclusively by the spawn and balance systems.</p>
 <p>Nudges do not touch <code>IsStable</code>. A nudge's offset rises and falls around the base, but the base is not in motion (from the nudge system's perspective), so the flag stays put. Behavioral implication: a balloon's idle animation (the slow bob) continues playing while a nudge impulse bounces it, since the animator's <code>IsStable</code> bool doesn't flip.</p>
-<h1><a class="anchor" id="autotoc_md262"></a>
+<h1><a class="anchor" id="autotoc_md266"></a>
 Lifecycle</h1>
 <p>When a view despawns (returns to the pool), <code>BalloonView.OnDespawned()</code> calls:</p>
 <div class="fragment"><div class="line">_motionTicker?.CancelAll(<span class="keyword">this</span>);</div>
 </div><!-- fragment --><p>This clears all pending impulses for the view and drops its pooled state <b>without a final write</b>. The caller (the pool/despawner) is about to teleport or recycle the view, so the ticker should not touch <code>transform.position</code> again.</p>
 <p>For fine-grained impulse management, <code>AddImpulse()</code> also has a spillover cap: when a view already has 8 active impulses (max), a 9th impulse silently replaces the one closest to completion. This caps memory under shockwave spam without visible artifact — the fading impulse contributes almost nothing anyway.</p>
-<h1><a class="anchor" id="autotoc_md263"></a>
+<h1><a class="anchor" id="autotoc_md267"></a>
 Interactions</h1>
 <ul>
 <li><b>ActorHitMessage</b> — triggers automatic neighbor nudges for every hit on an <code>IHasNudge</code> actor</li>

@@ -1,17 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,205,140,230"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorMaskAttribute.html" title=" " alt="" coords="190,5,433,45"/>
-<area shape="poly" id="edge536_Node000000_Node000001" title=" " alt="" coords="83,191,122,123,151,86,186,55,208,43,211,48,190,60,155,90,126,126,87,193"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorNameAttribute.html" title=" " alt="" coords="188,69,435,109"/>
-<area shape="poly" id="edge537_Node000000_Node000002" title=" " alt="" coords="94,192,134,155,187,119,215,107,217,112,189,124,138,159,97,196"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Shared_1_1EnumIndexedAttribute.html" title="Labels a serialized array indexed by enum ordinal with the enum value&#39;s name instead of &quot;Element N&quot;." alt="" coords="215,133,407,173"/>
-<area shape="poly" id="edge538_Node000000_Node000003" title=" " alt="" coords="131,198,187,183,232,171,233,176,189,188,133,203"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Shared_1_1MusicalNoteAttribute.html" title="Renders an int semitone field as a musical&#45;note dropdown (C, C#, D, …) instead of a raw number." alt="" coords="209,197,414,237"/>
-<area shape="poly" id="edge539_Node000000_Node000004" title=" " alt="" coords="154,215,208,215,208,220,154,220"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Shared_1_1ShowIfEnumAttribute.html" title="Hides the decorated field in the inspector unless a sibling enum field (on the same serialized object..." alt="" coords="216,261,407,301"/>
-<area shape="poly" id="edge540_Node000000_Node000005" title=" " alt="" coords="133,231,189,247,233,259,232,264,187,252,131,236"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Shared_1_1SortingLayerNameAttribute.html" title="Draws a string field as a dropdown of the project&#39;s sorting layers." alt="" coords="211,325,412,365"/>
-<area shape="poly" id="edge541_Node000000_Node000006" title=" " alt="" coords="97,238,138,276,189,311,217,323,215,328,187,316,134,280,94,242"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Shared_1_1UnitCircleAttribute.html" title="Draws a Vector2 field as a unit&#45;circle direction picker: click or drag inside the disc to aim the vec..." alt="" coords="220,389,403,429"/>
-<area shape="poly" id="edge542_Node000000_Node000007" title=" " alt="" coords="87,241,126,309,155,345,189,375,221,391,218,396,187,380,151,348,122,312,83,244"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,77,143,102"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Editor_1_1ChainLightningViewEditor.html" title=" " alt="" coords="191,5,375,45"/>
+<area shape="poly" id="edge534_Node000000_Node000001" title=" " alt="" coords="129,70,216,43,217,48,130,75"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Editor_1_1LaserViewEditor.html" title=" " alt="" coords="191,69,374,109"/>
+<area shape="poly" id="edge535_Node000000_Node000002" title=" " alt="" coords="156,87,191,87,191,92,156,92"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Editor_1_1PaintSplashViewEditor.html" title=" " alt="" coords="193,133,372,173"/>
+<area shape="poly" id="edge536_Node000000_Node000003" title=" " alt="" coords="130,104,217,131,216,136,129,109"/>
 </map>

@@ -110,13 +110,13 @@ $(function(){initNavTree('plan_terrain_biomes.html',''); initResizable(true); })
   <div class="headertitle"><div class="title">Terrain &amp; Biomes</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md708"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md667"></a>
 Terrain &amp; Biomes — scenario ground generator</h1>
 <blockquote class="doxtable">
 <p>Replace the flat blue canvas with a seeded, biome-blended terrain seen from above — grass, water, sand, dirt, stone, lava — bound to the hex grid (each slot has a biome type that gameplay can query), reacting to the disturbance field (grass parts, water ripples), feeding the GI bounce, and gating what static actors may grow where. Planned 2026-07-12 from a verified inventory. <b>Execution not started.</b> </p>
 </blockquote>
 <hr  />
-<h2><a class="anchor" id="autotoc_md710"></a>
+<h2><a class="anchor" id="autotoc_md669"></a>
 Vision &amp; constraints</h2>
 <ul>
 <li><b>Top-down ground plane</b>: the game is airborne; the terrain is the distant ground seen from high above. It scrolls with the scenario travel (ascend/descent) with a parallax factor \(&lt; 1\) — depth for free, and <b>biome transitions happen across levels</b>: the noise field is continuous along the ascent axis, so climbing reveals new biome bands naturally.</li>
@@ -124,7 +124,7 @@ Vision &amp; constraints</h2>
 <li><b>Style match</b>: soft, painterly, blurry-edged (see the bushes/clouds) — biome boundaries are noise-warped and blended, never hard hex edges. Hexes are the <em>logic</em> granularity, not the <em>visual</em> one.</li>
 <li><b>Performance doctrine (the clever optimization)</b>: all noise is baked, never evaluated per-pixel at runtime (the PuffCloud 5c lesson — tileable baked noise, <code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Generate Cloud Noise Texture</code> pipeline exists). The biome composite is <b>baked once per level into an RT</b>; the per-frame cost is one quad sampling that RT + a detail texture + <code>_DisturbanceTex</code> for reactions. Budget frame: 8.33 ms at 120 Hz on a fill-rate-sensitive game — the terrain replaces background pixels we already pay for, so the net new cost must stay near shader-sampling only.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md711"></a>
+<h2><a class="anchor" id="autotoc_md670"></a>
 Verified inventory (2026-07-12)</h2>
 <ul>
 <li><b>Grid</b>: hex coordinates in <code><a class="el" href="HexCoordinates_8cs.html">Slots/Grid/HexCoordinates.cs</a></code>; slot→world via the grid service's <code>IndexToWorldPosition(Vector2Int)</code> (used by balloons, trails, pressure). Slots are the biome granularity; board footprint + margin defines the bake area.</li>
@@ -138,10 +138,10 @@ Verified inventory (2026-07-12)</h2>
 <li><b>In-flight synergy (not scope)</b>: SpeckField is gaining palette/heat tinting — biome-tinted ambient specks (pollen over grass, embers over lava) become a natural follow-up once terrain exposes "biome under this world position".</li>
 <li><b>HDR coupling</b>: lava/emissive biomes are first-class HDR emitter candidates when <code><a class="el" href="PLAN-HDRColorPipeline_8md.html">PLAN-HDRColorPipeline.md</a></code> Wave B lands — author biome emissive params HDR-ready (float intensity, not baked-into-LDR-color).</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md712"></a>
+<h2><a class="anchor" id="autotoc_md671"></a>
 Architecture</h2>
 <p>Three layers, MVC-conformant (model/service plain C#, view MonoBehaviour):</p>
-<h3><a class="anchor" id="autotoc_md713"></a>
+<h3><a class="anchor" id="autotoc_md672"></a>
 1. Data — <code>TerrainMapService</code> (plain C#, VContainer)</h3>
 <ul>
 <li>Input: seed + level index + <code>BiomeProfile</code> (new config SO + read-only interface, registered like the other <code>I*Settings</code>).</li>
@@ -149,7 +149,7 @@ Architecture</h2>
 <li>Output A: <code>ITerrainQuery</code> — <code>BiomeType GetBiome(Vector2Int slot)</code> + <code>BiomeType GetBiomeAtWorld(Vector2 world)</code> (for non-slot consumers like specks).</li>
 <li>Output B: a hex-resolution <b>index map</b> <code>Texture2D</code> (point-filtered, R8: biome index; board + 1-hex margin) uploaded for the bake.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md714"></a>
+<h3><a class="anchor" id="autotoc_md673"></a>
 2. Bake — one blit per level (GPU, amortizable)</h3>
 <p>A bake shader expands the index map into the <b>terrain composite RT</b> (moderate res, ~512–1024 wide, screen-aspect):</p><ul>
 <li>Per pixel: find containing hex + neighbors from the index map, compute noise-warped hex distances (warp sampled from the baked tileable noise — no procedural noise), blend the 2–3 nearest biomes' albedo/params.</li>
@@ -157,7 +157,7 @@ Architecture</h2>
 <li>RT needs a depth-stencil if ever rendered by a camera — it is a <b>blit target</b>, so depthless is fine (the RenderGraph rule applies to camera outputs only; documented in <a class="el" href="Display_2README_8md.html">Display/README.md</a>).</li>
 <li>Re-bake on level start / seed change only. If the one-time bake ever spikes a frame, amortize into strips (the prewarm idiom) — measure first.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md715"></a>
+<h3><a class="anchor" id="autotoc_md674"></a>
 3. View — <code>TerrainView</code> (MonoBehaviour) + runtime shader</h3>
 <ul>
 <li>One quad, sorting layer <b>Default</b>, sized to camera frustum + travel margin, parented/bound to <code>ScenarioContentRoot</code> with a <code>_parallaxFactor</code> (serialized).</li>
@@ -165,10 +165,10 @@ Architecture</h2>
 <li>Reaction params come from the bake's packed data channels — one shader, no per-biome materials, no branching beyond a biome-id selector on cheap math.</li>
 <li><b>Opaque queue</b>: the terrain fully covers its pixels — render opaque (no blending) to save bandwidth under the fully-transparent 2D stack above it. Verify batching/ sorting interaction in Frame Debugger (2D Renderer + opaque geometry — the URP migration taught us to verify, not assume).</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md716"></a>
+<h2><a class="anchor" id="autotoc_md675"></a>
 Shader design — options per stage</h2>
 <p>The visual calls below can't be settled on paper — each stage lists its candidate techniques with tradeoffs, a recommendation, and what the in-editor <b>spike</b> must prove. Spike protocol: shader variants behind <code>#pragma multi_compile</code>-style keywords (or just material swaps), toggled live in play mode with visual QA as judge; losers deleted, never shipped dormant.</p>
-<h3><a class="anchor" id="autotoc_md717"></a>
+<h3><a class="anchor" id="autotoc_md676"></a>
 S1 — Zone blending (bake-time)</h3>
 <p>How two biomes meet is the single biggest style lever.</p>
 <table class="markdownTable">
@@ -184,7 +184,7 @@ S1 — Zone blending (bake-time)</h3>
 <td class="markdownTableBodyNone"><b>(d) Boundary SDF</b>   </td><td class="markdownTableBodyNone">bake <b>signed distance to the biome boundary</b> into a data channel   </td><td class="markdownTableBodyNone">Not a blend by itself — an <em>enabler</em>: shoreline foam bands, wet-sand darkening, lava crust edges, edge AO all become one-tap lookups at runtime. Strongly recommended <b>in addition to</b> (a) or (b)   </td></tr>
 </table>
 <p><b>Recommendation</b>: (b) + (d). Domain-warp the hex distance with the baked tileable noise <em>before</em> blending (warp amplitude per biome pair — water wants smooth coasts, grass→dirt wants ragged). <b>Spike SP-1 (at A3)</b>: (a) vs (b) on a grass/sand/water test seed, judged at game zoom.</p>
-<h3><a class="anchor" id="autotoc_md718"></a>
+<h3><a class="anchor" id="autotoc_md677"></a>
 S2 — Grass (the flagship reaction)</h3>
 <p>Top-down 2D "grass" is a material illusion — no geometry, no shells.</p>
 <table class="markdownTable">
@@ -207,7 +207,7 @@ S2 — Grass (the flagship reaction)</h3>
 <li><b>Persistent trample RT</b> (opt-in, shares the sand footprint decision): a tiny ping-pong RT accumulating bend with slow decay — paths stay flattened for seconds. Same infrastructure as the field/footprints; only if the game reads better with memory of where things flew.</li>
 </ol>
 <p><b>Mobile rule (from the field's consensus, encode as a hard constraint): no alpha-tested grass anywhere</b> — alpha clip is a tile-GPU killer (reported ~2× frame cost vs non-clipped); everything above is opaque/blended sampling, which is why this design stays cheap.</p>
-<h3><a class="anchor" id="autotoc_md719"></a>
+<h3><a class="anchor" id="autotoc_md678"></a>
 S3 — Water</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -224,7 +224,7 @@ S3 — Water</h3>
 <td class="markdownTableBodyNone">Shoreline   </td><td class="markdownTableBodyNone">boundary-SDF band (S1-d): foam stripe + wet-sand darkening on the sand side   </td><td class="markdownTableBodyNone">One tap; sells water more than ripples do — prioritize it   </td></tr>
 </table>
 <p><b>Recommendation</b>: (a) + (c) + shoreline first; (d) as a flagged stretch task. <b>Spike SP-3 (at B2)</b>: (c) vs (d-prototype) on a water-heavy seed — decide if the wave sim earns its RT.</p>
-<h3><a class="anchor" id="autotoc_md720"></a>
+<h3><a class="anchor" id="autotoc_md679"></a>
 S4 — Sand / dirt / stone / lava</h3>
 <ul>
 <li><b>Sand</b>: granular high-frequency detail; reaction options: <em>(a)</em> instantaneous darkening by density deficit (cheap, recovers with the field) vs <em>(b)</em> a persistent <b>footprint RT</b> (tiny ping-pong accumulating disturbance with very slow decay — projectile tracks that linger in sand). (b) is charming and cheap (same pattern as the field itself) but is a new resource — build behind the same decision gate as the wave sim: only if (a) feels dead. Dirt = (a) with lower strength.</li>
@@ -232,7 +232,7 @@ S4 — Sand / dirt / stone / lava</h3>
 <li><b>Moss (derived overlay, NOT a biome)</b>: moss is where the design gets procedural depth for free — compute a bake-time moss mask from data we already have: <code>moisture high</code> AND (<code>boundary SDF small</code> — growth creeps along transitions — OR near static actors, approximated by stamping bush/cluster slot positions into the mask). Render as a tinted stroke-clump layer (same texture family as grass) over whatever biome it lands on: mossy stone, mossy dirt, moss-edged water — one mask, many looks. Costs one bake channel + one runtime tap <em>only where the mask is hot</em>. Optional flourish: moss darkens/saturates with moisture (macro-noise modulated), so no two patches read identical.</li>
 <li><b>Lava</b>: crust = thresholded detail noise (dark crust plates over bright gaps); slow domain-scroll for flow; boundary SDF → cooled-crust rim. Reaction: agitation boosts emissive intensity (authored as a float, HDR-ready for <code><a class="el" href="PLAN-HDRColorPipeline_8md.html">PLAN-HDRColorPipeline.md</a></code> B3 — under LDR it clamps, under HDR it blooms). Idle pulse via the self-derived shader clock idiom (no MPB churn).</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md721"></a>
+<h3><a class="anchor" id="autotoc_md680"></a>
 S5 — Data layout (bake outputs)</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -243,7 +243,7 @@ S5 — Data layout (bake outputs)</h3>
 <td class="markdownTableBodyNone"><b>(b) Two RTs</b>   </td><td class="markdownTableBodyNone">RGBA8 composite (RGB albedo, A = blend/AO) + RG8 data map (R = dominant biome id, G = boundary SDF)   </td><td class="markdownTableBodyNone">Two taps (identical bandwidth class at these resolutions); every technique above that wants the SDF or clean ids gets them without bit tricks   </td></tr>
 </table>
 <p><b>Recommendation</b>: (b). Resolution spike at A-gate: 512 vs 1024 wide — the soft style may make 512 free money.</p>
-<h3><a class="anchor" id="autotoc_md722"></a>
+<h3><a class="anchor" id="autotoc_md681"></a>
 S6 — Cheap density &amp; anti-repetition (mobile)</h3>
 <p>Fixed ortho zoom means tiling repetition is <em>the</em> density-killer — the eye finds the pattern in seconds. The ladder, cheapest first (stack until the repetition dies, stop there):</p>
 <table class="markdownTable">
@@ -266,7 +266,7 @@ S6 — Cheap density &amp; anti-repetition (mobile)</h3>
 </table>
 <p>Precision hygiene throughout: <code>half</code> for all color/detail math (the URP shaders here are unlit and LDR), world-space UVs so nothing swims during travel.</p>
 <p>References: Heitz/Deliot procedural stochastic texturing (<a href="https://unity.com/blog/engine-platform/procedural-stochastic-texturing-in-unity">Unity blog</a>, <a href="https://github.com/UnityLabs/procedural-stochastic-texturing">Unity Labs implementation</a>), Mikkelsen hex-tiling (<a href="https://github.com/mmikk/hextile-demo">demo/paper</a>), texture bombing (GPU Gems ch. 20).</p>
-<h3><a class="anchor" id="autotoc_md723"></a>
+<h3><a class="anchor" id="autotoc_md682"></a>
 S7 — Runtime composition rules</h3>
 <ul>
 <li><b>One sun</b>: light direction is the existing <code>_lightDirection</code> convention (GI + PuffCloud) — terrain glints/shading must read from the same serialized value or a shared global, never a second authored direction.</li>
@@ -275,10 +275,10 @@ S7 — Runtime composition rules</h3>
 <li>Opaque queue for the terrain quad (it fully covers its pixels; saves blend bandwidth under a fully-transparent stack) — verify 2D Renderer opaque-pass ordering in the Frame Debugger before relying on it (URP migration rule: verify, don't assume).</li>
 <li>Reaction budget: \(\le 4\) extra taps in the common path (disturbance + gradient pair + detail); wave-sim/footprint RTs are opt-in extras with their own device measurement.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md724"></a>
+<h2><a class="anchor" id="autotoc_md683"></a>
 Task plan</h2>
 <p>Sizes: S ≤ half a day · M ≈ 1–2 days · L ≈ 3+ days. Every wave ends with a visual QA in-editor gate. Agent assignments follow the established split: opus for quality-critical/subtle work, sonnet for well-specified implementation, haiku for mechanical tasks; Fable investigates handoffs, reviews, commits.</p>
-<h3><a class="anchor" id="autotoc_md725"></a>
+<h3><a class="anchor" id="autotoc_md684"></a>
 Dependency graph</h3>
 <div class="fragment"><div class="line">A1 data service (opus) ─▶ A2 index-map upload (sonnet) ─▶ A3 bake blit (opus, shader) ─▶ A-gate (visual QA: bake looks right in Render Maps)</div>
 <div class="line">                                                                 │</div>
@@ -287,44 +287,44 @@ Dependency graph</h3>
 <div class="line">        C1 placement gating seam (sonnet) ◀──────────────────────┤   (needs only A1)</div>
 <div class="line">        C2 seed plumbing + debug (haiku) ◀───────────────────────┤   (needs only A1)</div>
 <div class="line">        C3 Render Maps registry entry (sonnet) ◀─────────────────┘   (any time after A3)</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md726"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md685"></a>
 Wave A — data + bake</h3>
-<h4><a class="anchor" id="autotoc_md727"></a>
+<h4><a class="anchor" id="autotoc_md686"></a>
 A1 — <code>TerrainMapService</code> + <code>BiomeProfile</code> config + <code>ITerrainQuery</code> · <b>P0 · M · opus</b></h4>
 <p>Pure C#: seeded two-noise classification over slots, profile SO (+ read-only interface, registered in scope), both query methods, and <b>EditMode tests</b> (determinism: same seed → same map; adjacency sanity: no lava-touching-water unless profile allows; threshold coverage). Opus — the classification quality and the profile's expressiveness shape everything downstream. Noise source: sample the existing baked tileable noise texture data on CPU (import readable copy or bake a float array via the generator tool) — do NOT hand-roll simplex; determinism and visual continuity with the bake depend on both stages reading the same fields. Fable pre-investigates the noise-data access path before dispatch.</p>
-<h4><a class="anchor" id="autotoc_md728"></a>
+<h4><a class="anchor" id="autotoc_md687"></a>
 A2 — Index-map build/upload · <b>P0 · S · sonnet</b></h4>
 <p><code>Texture2D</code> R8 point-filtered from the service's slot array (+ margin ring extrapolated from nearest slot), rebuilt on level start; lifecycle owned by the service's disposal.</p>
-<h4><a class="anchor" id="autotoc_md729"></a>
+<h4><a class="anchor" id="autotoc_md688"></a>
 A3 — Bake blit shader + <code>TerrainBaker</code> · <b>P0 · M · opus</b></h4>
 <p>The composite bake per shader-design S1 + S5: noise-warped hex-distance blending into the two-RT layout (composite RGBA8 + id/SDF data map). Ships <b>spike SP-1</b> (cross-fade vs height-blend, keyword-switched) for the A-gate decision. Shader work is in-editor-verified only — A-gate visual QA: inspect both RTs in the Game Render Maps window (add via C3 or the custom slot), pick the blend style, delete the loser. Blend width, warp amplitude per biome pair, and per-biome albedo exposed on <code>BiomeProfile</code> for live tuning; include the 512-vs-1024 resolution check here.</p>
 <p><b>A-gate (visual QA)</b>: composite for a handful of seeds reads as natural, blended, style-matched ground. Iterate A3 knobs before any view work.</p>
-<h3><a class="anchor" id="autotoc_md730"></a>
+<h3><a class="anchor" id="autotoc_md689"></a>
 Wave B — view + reactions + GI</h3>
-<h4><a class="anchor" id="autotoc_md731"></a>
+<h4><a class="anchor" id="autotoc_md690"></a>
 B1 — <code>TerrainView</code> + runtime shader v1 · <b>P0 · M · sonnet</b></h4>
 <p>Quad on Default layer, frustum+margin sizing, parallax binding to <code>ScenarioContentRoot</code> (mirror SpeckField's motion sampling incl. teleport rejection), opaque queue, composite</p><ul>
 <li>world-space detail sampling. No reactions yet. Visual QA gate: in-game look vs the screenshots' soft style; travel/parallax feel during ascend + restart descent.</li>
 </ul>
-<h4><a class="anchor" id="autotoc_md732"></a>
+<h4><a class="anchor" id="autotoc_md691"></a>
 B2 — Disturbance reactions · <b>P1 · M–L · opus</b></h4>
 <p>The per-biome reaction block per shader-design S2–S4 recommendations: grass stroke+offset shear, water dual-noise + gradient rings + SDF shoreline, sand darkening, lava emissive pulse, stone inert. Ships <b>spikes SP-2</b> (grass technique A/B + bush wind sync) and <b>SP-3</b> (gradient rings vs wave-sim prototype — the wave sim reuses the disturbance ping-pong pattern; build the prototype minimal and be ready to delete it). This is the showpiece and the most tuning-heavy task — every constant a material property so the author live-tunes in play mode. Device measurement closes it: \(\le 4\) extra taps in the common path; wave-sim/footprint RTs only survive with their own pacing numbers.</p>
-<h4><a class="anchor" id="autotoc_md733"></a>
+<h4><a class="anchor" id="autotoc_md692"></a>
 B3 — GI integration · <b>P1 · S · sonnet</b></h4>
 <p>Put the terrain on a captured layer (config change + docs), re-tune <code>_BounceStrength</code>/ shadow tint so biome bounce reads without overpowering (lava orange on balloon undersides = the money shot). Verify in Game Render Maps (capture alpha semantics unchanged — terrain is opaque, so coverage = 1 under the board; check the GI ground shadow still behaves).</p>
 <p><b>B-gate (visual QA)</b>: full style pass + device build — pacing sample via the adb loop, overdraw check in Frame Debugger dump vs a pre-terrain baseline capture (take one at A-gate time).</p>
-<h3><a class="anchor" id="autotoc_md734"></a>
+<h3><a class="anchor" id="autotoc_md693"></a>
 Wave C — gameplay + tooling (parallel after A1)</h3>
-<h4><a class="anchor" id="autotoc_md735"></a>
+<h4><a class="anchor" id="autotoc_md694"></a>
 C1 — Placement gating seam · <b>P1 · S–M · sonnet</b></h4>
 <p><code>BiomeProfile</code> gains per-biome allowed-content flags (bush, cluster, future actor archetypes); expose a query helper on <code>ITerrainQuery</code>. Wire into today's placement path only where it exists (bush/cluster spawn points); leave 8.3's procedural placement to <code><a class="el" href="PLAN-GridActorExpansion_8md.html">PLAN-GridActorExpansion.md</a></code> — this task builds the seam it will consume. Coordinate with the in-flight balance work before touching shared files.</p>
-<h4><a class="anchor" id="autotoc_md736"></a>
+<h4><a class="anchor" id="autotoc_md695"></a>
 C2 — Seed plumbing + reproduction affordance · <b>P2 · S · haiku</b></h4>
 <p>Seed source (level config or run-random), logged at level start (<code>[TerrainMap] seed=… level=…</code>), settable via a cheat/debug entry for reproduction. Mechanical once A1 defines the seam.</p>
-<h4><a class="anchor" id="autotoc_md737"></a>
+<h4><a class="anchor" id="autotoc_md696"></a>
 C3 — Game Render Maps entries · <b>P2 · S · sonnet</b></h4>
 <p>Register the index map + composite RT in the Render Maps window with channel tooltips (R = biome index / packed params). Tooling continuity — this is how A-gate and B-gate inspect the pipeline.</p>
-<h2><a class="anchor" id="autotoc_md738"></a>
+<h2><a class="anchor" id="autotoc_md697"></a>
 Open questions (answer at execution time)</h2>
 <ol type="1">
 <li><b>Biome set + matrix</b>: final list and the elevation/moisture matrix — the author defines in <code>BiomeProfile</code> during A-gate iteration; the plan assumes grass/water/sand/dirt/stone/lava.</li>

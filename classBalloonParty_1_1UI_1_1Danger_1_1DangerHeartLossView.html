@@ -110,6 +110,7 @@ $(function(){initNavTree('classBalloonParty_1_1UI_1_1Danger_1_1DangerHeartLossVi
   <div class="summary">
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1UI_1_1Danger_1_1DangerHeartLossView-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.UI.Danger.DangerHeartLossView Class Reference<span class="mlabels"><span class="mlabel sealed">sealed</span></span></div></div>
 </div><!--header-->
@@ -134,6 +135,10 @@ $(function(){initNavTree('classBalloonParty_1_1UI_1_1Danger_1_1DangerHeartLossVi
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:afdd2b7d672a586ebf218f09ea87b24cb" id="r_afdd2b7d672a586ebf218f09ea87b24cb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afdd2b7d672a586ebf218f09ea87b24cb">ApplyShineSpeed</a> ()</td></tr>
+<tr class="separator:afdd2b7d672a586ebf218f09ea87b24cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f717fbc6fb2a21c50499f2b7b132d8d" id="r_a2f717fbc6fb2a21c50499f2b7b132d8d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f717fbc6fb2a21c50499f2b7b132d8d">Awake</a> ()</td></tr>
+<tr class="separator:a2f717fbc6fb2a21c50499f2b7b132d8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab38154d3a7618b3106f6a106a3edbd57" id="r_ab38154d3a7618b3106f6a106a3edbd57"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab38154d3a7618b3106f6a106a3edbd57">Construct</a> (<a class="el" href="interfaceBalloonParty_1_1Game_1_1Danger_1_1IDangerLevel.html">IDangerLevel</a> danger)</td></tr>
 <tr class="separator:ab38154d3a7618b3106f6a106a3edbd57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e96051c19dd8c8c5319dabab278b275" id="r_a9e96051c19dd8c8c5319dabab278b275"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9e96051c19dd8c8c5319dabab278b275">OnDangerLevelChanged</a> (float level)</td></tr>
@@ -155,21 +160,81 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ad328de1cd2724d52e572f564456c37f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea46d6604481459a1e6f14c3d3bd8fe9" id="r_aea46d6604481459a1e6f14c3d3bd8fe9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Shared_1_1Animation_1_1RollingTextAnimator.html">RollingTextAnimator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aea46d6604481459a1e6f14c3d3bd8fe9">_rollingText</a></td></tr>
 <tr class="separator:aea46d6604481459a1e6f14c3d3bd8fe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae75731d6bc35daf1c1b21cf941930407" id="r_ae75731d6bc35daf1c1b21cf941930407"><td class="memItemLeft" align="right" valign="top">UIShiny&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae75731d6bc35daf1c1b21cf941930407">_shiny</a></td></tr>
-<tr class="separator:ae75731d6bc35daf1c1b21cf941930407"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5123a0fa406d06433c33f49d36eaa852" id="r_a5123a0fa406d06433c33f49d36eaa852"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5123a0fa406d06433c33f49d36eaa852">_shinyDurationAtMaxDanger</a> = 0.3f</td></tr>
-<tr class="separator:a5123a0fa406d06433c33f49d36eaa852"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f766d805824deb10fd9debba5f26ec5" id="r_a1f766d805824deb10fd9debba5f26ec5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f766d805824deb10fd9debba5f26ec5">_shinyDurationAtNoDanger</a> = 2f</td></tr>
-<tr class="separator:a1f766d805824deb10fd9debba5f26ec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8de88492cee16cff5597879a027c383" id="r_af8de88492cee16cff5597879a027c383"><td class="memItemLeft" align="right" valign="top">Image&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af8de88492cee16cff5597879a027c383">_shineImage</a></td></tr>
+<tr class="separator:af8de88492cee16cff5597879a027c383"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67efadcc1205e1c5a2758af05923aacc" id="r_a67efadcc1205e1c5a2758af05923aacc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67efadcc1205e1c5a2758af05923aacc">_shineLevel</a></td></tr>
+<tr class="separator:a67efadcc1205e1c5a2758af05923aacc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18746c7b6cfa8e4a161eb22d863cea51" id="r_a18746c7b6cfa8e4a161eb22d863cea51"><td class="memItemLeft" align="right" valign="top">Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18746c7b6cfa8e4a161eb22d863cea51">_shineMaterial</a></td></tr>
+<tr class="separator:a18746c7b6cfa8e4a161eb22d863cea51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1dee919f96e520c333b4f5dced940661" id="r_a1dee919f96e520c333b4f5dced940661"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1dee919f96e520c333b4f5dced940661">_shineSpeedAtMaxDanger</a> = 3.5f</td></tr>
+<tr class="separator:a1dee919f96e520c333b4f5dced940661"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a540156b3f223615b326ad20eb549414d" id="r_a540156b3f223615b326ad20eb549414d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a540156b3f223615b326ad20eb549414d">_shineSpeedAtNoDanger</a> = 0.5f</td></tr>
+<tr class="separator:a540156b3f223615b326ad20eb549414d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c5cd2bb1bb01b3a62b22b80b6740eba" id="r_a9c5cd2bb1bb01b3a62b22b80b6740eba"><td class="memItemLeft" align="right" valign="top">CompositeDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9c5cd2bb1bb01b3a62b22b80b6740eba">_subscriptions</a></td></tr>
 <tr class="separator:a9c5cd2bb1bb01b3a62b22b80b6740eba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca9a2dff5f93ec259b983aeeddff78f8" id="r_aca9a2dff5f93ec259b983aeeddff78f8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aca9a2dff5f93ec259b983aeeddff78f8">_targetAlpha</a></td></tr>
 <tr class="separator:aca9a2dff5f93ec259b983aeeddff78f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a7e080aac300c28aec663c6e07bc535fc" id="r_a7e080aac300c28aec663c6e07bc535fc"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7e080aac300c28aec663c6e07bc535fc">ShineSpeedId</a> = Shader.PropertyToID(&quot;_ShineSpeed&quot;)</td></tr>
+<tr class="separator:a7e080aac300c28aec663c6e07bc535fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Displays how many hearts the next wave will cost. </p>
-<p>Fades in when danger is non-zero, speeds up the shine effect proportionally, and shows "-{N}" via rolling text. </p>
+<p>Fades in when danger is non-zero, speeds up the shine sweep proportionally, and shows "-{N}" via rolling text.</p>
+<p>The shine is the <code>BalloonParty/Sprite/ShinyDefault</code> material on <a class="el" href="#af8de88492cee16cff5597879a027c383">_shineImage</a>, driven through its <code>_ShineSpeed</code> property. Tick that material's <b>Shine Uses Unscaled Time</b> if the sweep should keep moving while a popup holds <code>Time.timeScale</code> at 0. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="afdd2b7d672a586ebf218f09ea87b24cb" name="afdd2b7d672a586ebf218f09ea87b24cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdd2b7d672a586ebf218f09ea87b24cb">&#9670;&#160;</a></span>ApplyShineSpeed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.Danger.DangerHeartLossView.ApplyShineSpeed </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2f717fbc6fb2a21c50499f2b7b132d8d" name="a2f717fbc6fb2a21c50499f2b7b132d8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f717fbc6fb2a21c50499f2b7b132d8d">&#9670;&#160;</a></span>Awake()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.Danger.DangerHeartLossView.Awake </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab38154d3a7618b3106f6a106a3edbd57" name="ab38154d3a7618b3106f6a106a3edbd57"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab38154d3a7618b3106f6a106a3edbd57">&#9670;&#160;</a></span>Construct()</h2>
 
@@ -384,8 +449,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ae75731d6bc35daf1c1b21cf941930407" name="ae75731d6bc35daf1c1b21cf941930407"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae75731d6bc35daf1c1b21cf941930407">&#9670;&#160;</a></span>_shiny</h2>
+<a id="af8de88492cee16cff5597879a027c383" name="af8de88492cee16cff5597879a027c383"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8de88492cee16cff5597879a027c383">&#9670;&#160;</a></span>_shineImage</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -394,7 +459,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">UIShiny BalloonParty.UI.Danger.DangerHeartLossView._shiny</td>
+          <td class="memname">Image BalloonParty.UI.Danger.DangerHeartLossView._shineImage</td>
         </tr>
       </table>
   </td>
@@ -406,8 +471,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a5123a0fa406d06433c33f49d36eaa852" name="a5123a0fa406d06433c33f49d36eaa852"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5123a0fa406d06433c33f49d36eaa852">&#9670;&#160;</a></span>_shinyDurationAtMaxDanger</h2>
+<a id="a67efadcc1205e1c5a2758af05923aacc" name="a67efadcc1205e1c5a2758af05923aacc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67efadcc1205e1c5a2758af05923aacc">&#9670;&#160;</a></span>_shineLevel</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -416,7 +481,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.UI.Danger.DangerHeartLossView._shinyDurationAtMaxDanger = 0.3f</td>
+          <td class="memname">float BalloonParty.UI.Danger.DangerHeartLossView._shineLevel</td>
         </tr>
       </table>
   </td>
@@ -428,8 +493,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a1f766d805824deb10fd9debba5f26ec5" name="a1f766d805824deb10fd9debba5f26ec5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f766d805824deb10fd9debba5f26ec5">&#9670;&#160;</a></span>_shinyDurationAtNoDanger</h2>
+<a id="a18746c7b6cfa8e4a161eb22d863cea51" name="a18746c7b6cfa8e4a161eb22d863cea51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18746c7b6cfa8e4a161eb22d863cea51">&#9670;&#160;</a></span>_shineMaterial</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -438,7 +503,51 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.UI.Danger.DangerHeartLossView._shinyDurationAtNoDanger = 2f</td>
+          <td class="memname">Material BalloonParty.UI.Danger.DangerHeartLossView._shineMaterial</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1dee919f96e520c333b4f5dced940661" name="a1dee919f96e520c333b4f5dced940661"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1dee919f96e520c333b4f5dced940661">&#9670;&#160;</a></span>_shineSpeedAtMaxDanger</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.UI.Danger.DangerHeartLossView._shineSpeedAtMaxDanger = 3.5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a540156b3f223615b326ad20eb549414d" name="a540156b3f223615b326ad20eb549414d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a540156b3f223615b326ad20eb549414d">&#9670;&#160;</a></span>_shineSpeedAtNoDanger</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.UI.Danger.DangerHeartLossView._shineSpeedAtNoDanger = 0.5f</td>
         </tr>
       </table>
   </td>
@@ -488,6 +597,28 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7e080aac300c28aec663c6e07bc535fc" name="a7e080aac300c28aec663c6e07bc535fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e080aac300c28aec663c6e07bc535fc">&#9670;&#160;</a></span>ShineSpeedId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.UI.Danger.DangerHeartLossView.ShineSpeedId = Shader.PropertyToID(&quot;_ShineSpeed&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

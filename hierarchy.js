@@ -565,6 +565,7 @@ var hierarchy =
     [ "BalloonParty.Game.Telemetry.IReadOnlyMetricSet", "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1IReadOnlyMetricSet.html", [
       [ "BalloonParty.Game.Telemetry.ISealedMetrics", "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ISealedMetrics.html", [
         [ "BalloonParty.Game.Telemetry.MetricsSnapshotBase", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricsSnapshotBase.html", [
+          [ "BalloonParty.Game.Telemetry.FlightMetricsSnapshot", "classBalloonParty_1_1Game_1_1Telemetry_1_1FlightMetricsSnapshot.html", null ],
           [ "BalloonParty.Game.Telemetry.LevelMetricsSnapshot", "classBalloonParty_1_1Game_1_1Telemetry_1_1LevelMetricsSnapshot.html", null ],
           [ "BalloonParty.Game.Telemetry.RunMetricsSnapshot", "classBalloonParty_1_1Game_1_1Telemetry_1_1RunMetricsSnapshot.html", null ]
         ] ]
@@ -1202,6 +1203,7 @@ var hierarchy =
     [ "BalloonParty.Configuration.Level.TailGrowthConfig", "structBalloonParty_1_1Configuration_1_1Level_1_1TailGrowthConfig.html", null ],
     [ "BalloonParty.Game.Telemetry.TelemetryEnvelope", "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html", null ],
     [ "BalloonParty.Game.Telemetry.TelemetryEnvelopeSerializer", "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html", null ],
+    [ "BalloonParty.Editor.TelemetryLogMenu", "classBalloonParty_1_1Editor_1_1TelemetryLogMenu.html", null ],
     [ "BalloonParty.Game.Telemetry.TelemetryStopwatch", "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryStopwatch.html", null ],
     [ "BalloonParty.Editor.TexturePreviewBox", "classBalloonParty_1_1Editor_1_1TexturePreviewBox.html", null ],
     [ "BalloonParty.Thrower.ThrowerSettings", "classBalloonParty_1_1Thrower_1_1ThrowerSettings.html", null ],
