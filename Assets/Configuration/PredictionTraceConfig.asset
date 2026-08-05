@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64d6116f7f00548748522328887cd9fe, type: 3}
   m_Name: PredictionTraceConfig
   m_EditorClassIdentifier: 
-  _initialPredictionLength: 1
-  _predictionTraceMaxReflections: 1
-  _predictionTraceMaxSteps: 15
-  _predictionTraceColor: {r: 1, g: 0.3882353, b: 0.2784314, a: 0.2509804}
+  _segmentLength: 1
+  _maxSegments: 64
+  _maxReflections: 1
+  _lineColor: {r: 1, g: 0.3882353, b: 0.2784314, a: 0.5019608}
