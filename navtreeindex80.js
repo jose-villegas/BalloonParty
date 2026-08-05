@@ -1,5 +1,7 @@
 var NAVTREEINDEX80 =
 {
+"plan_performance_recovery.html#autotoc_md608":[3,8,0,2,6],
+"plan_performance_recovery.html#autotoc_md609":[3,8,0,2,7],
 "plan_performance_recovery.html#autotoc_md610":[3,8,0,2,8],
 "plan_performance_recovery.html#autotoc_md611":[3,8,0,2,9],
 "plan_performance_recovery.html#autotoc_md612":[3,8,0,2,10],
@@ -247,7 +249,5 @@ var NAVTREEINDEX80 =
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a5f2c277f41fb18ff29406b17b5366b75":[6,0,0,1,0,1,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#ac91efd65201a510ee5eb4d1168155d87":[5,0,0,1,0,1,2],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#ac91efd65201a510ee5eb4d1168155d87":[6,0,0,1,0,1,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html":[5,0,0,1,0,2,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html":[6,0,0,1,0,2,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html#a957f695296400c59df19664b5a2cce0a":[5,0,0,1,0,2,0,1]
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html":[5,0,0,1,0,2,0]
 };

@@ -1,5 +1,7 @@
 var NAVTREEINDEX53 =
 {
+"classBalloonParty_1_1Shared_1_1Extensions_1_1ImageExtensions.html#ad09a08387f44605fa7f99b04e3b86246":[5,0,0,12,4,8,1],
+"classBalloonParty_1_1Shared_1_1Extensions_1_1ImageExtensions.html#ad09a08387f44605fa7f99b04e3b86246":[6,0,0,12,4,8,1],
 "classBalloonParty_1_1Shared_1_1Extensions_1_1ImageExtensions.html#ae97dffeadd8617100fb4a2d298e72cc6":[5,0,0,12,4,8,2],
 "classBalloonParty_1_1Shared_1_1Extensions_1_1ImageExtensions.html#ae97dffeadd8617100fb4a2d298e72cc6":[6,0,0,12,4,8,2],
 "classBalloonParty_1_1Shared_1_1Extensions_1_1ImageExtensions.html#af751ea2edebd00259c4883bd38db2637":[5,0,0,12,4,8,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX53 =
 "classBalloonParty_1_1Shared_1_1GameState_1_1SceneTransition.html#ad880c923fa595043608ab0add6a60fc0":[5,0,0,12,5,11,4],
 "classBalloonParty_1_1Shared_1_1GameState_1_1SceneTransition.html#ad880c923fa595043608ab0add6a60fc0":[6,0,0,12,5,11,4],
 "classBalloonParty_1_1Shared_1_1ImpactEventBus.html":[5,0,0,12,19],
-"classBalloonParty_1_1Shared_1_1ImpactEventBus.html":[6,0,0,12,19],
-"classBalloonParty_1_1Shared_1_1ImpactEventBus.html#a169a0a9dc84c35fcc7fc8e6fb68deaed":[5,0,0,12,19,1],
-"classBalloonParty_1_1Shared_1_1ImpactEventBus.html#a169a0a9dc84c35fcc7fc8e6fb68deaed":[6,0,0,12,19,1]
+"classBalloonParty_1_1Shared_1_1ImpactEventBus.html":[6,0,0,12,19]
 };

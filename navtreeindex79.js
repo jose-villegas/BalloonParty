@@ -1,5 +1,7 @@
 var NAVTREEINDEX79 =
 {
+"plan_audio.html#autotoc_md294":[3,9,0,6,3],
+"plan_audio.html#autotoc_md295":[3,9,0,6,4],
 "plan_audio.html#autotoc_md296":[3,9,0,6,5],
 "plan_audio.html#autotoc_md298":[3,9,0,7],
 "plan_audio.html#autotoc_md300":[3,9,0,8],
@@ -247,7 +249,5 @@ var NAVTREEINDEX79 =
 "plan_performance_recovery.html#autotoc_md604":[3,8,0,2,2],
 "plan_performance_recovery.html#autotoc_md605":[3,8,0,2,3],
 "plan_performance_recovery.html#autotoc_md606":[3,8,0,2,4],
-"plan_performance_recovery.html#autotoc_md607":[3,8,0,2,5],
-"plan_performance_recovery.html#autotoc_md608":[3,8,0,2,6],
-"plan_performance_recovery.html#autotoc_md609":[3,8,0,2,7]
+"plan_performance_recovery.html#autotoc_md607":[3,8,0,2,5]
 };

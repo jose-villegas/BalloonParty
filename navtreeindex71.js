@@ -1,5 +1,7 @@
 var NAVTREEINDEX71 =
 {
+"functions_prop_m.html":[6,3,4,12],
+"functions_prop_n.html":[6,3,4,13],
 "functions_prop_o.html":[6,3,4,14],
 "functions_prop_p.html":[6,3,4,15],
 "functions_prop_r.html":[6,3,4,16],
@@ -247,7 +249,5 @@ var NAVTREEINDEX71 =
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#a651eeeb2667b1cb990c7fc5094487adf":[5,0,0,3,4,5,9],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#a651eeeb2667b1cb990c7fc5094487adf":[6,0,0,3,4,5,9],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#a6a6b8975c26d5ef395d08bf2895b4e8a":[5,0,0,3,4,5,22],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#a6a6b8975c26d5ef395d08bf2895b4e8a":[6,0,0,3,4,5,22],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#a6b1a8c7da9b1f9521c4cdfb3a457c024":[5,0,0,3,4,5,12],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#a6b1a8c7da9b1f9521c4cdfb3a457c024":[6,0,0,3,4,5,12]
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#a6a6b8975c26d5ef395d08bf2895b4e8a":[6,0,0,3,4,5,22]
 };

@@ -1,5 +1,7 @@
 var NAVTREEINDEX83 =
 {
+"structBalloonParty_1_1Editor_1_1Bush_1_1LeafVenationSimulator_1_1SimulationSettings.html#a0f75a93dd6b3eb0e3476863dff382557":[6,0,0,5,0,10,0,5],
+"structBalloonParty_1_1Editor_1_1Bush_1_1LeafVenationSimulator_1_1SimulationSettings.html#a20ed90df2d3378e5c11d789fb7644d3d":[5,0,0,5,0,10,0,2],
 "structBalloonParty_1_1Editor_1_1Bush_1_1LeafVenationSimulator_1_1SimulationSettings.html#a20ed90df2d3378e5c11d789fb7644d3d":[6,0,0,5,0,10,0,2],
 "structBalloonParty_1_1Editor_1_1Bush_1_1LeafVenationSimulator_1_1SimulationSettings.html#a653b5c71baec34ef006a7765a0ae2923":[5,0,0,5,0,10,0,4],
 "structBalloonParty_1_1Editor_1_1Bush_1_1LeafVenationSimulator_1_1SimulationSettings.html#a653b5c71baec34ef006a7765a0ae2923":[6,0,0,5,0,10,0,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX83 =
 "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html":[6,0,0,6,7,2],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#a6675fc65b45cf7bc9b70f2184aabafe3":[5,0,0,6,7,2,0],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#a6675fc65b45cf7bc9b70f2184aabafe3":[6,0,0,6,7,2,0],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#a85313ac767f357c2ba2dd71aed242b6f":[5,0,0,6,7,2,2],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#a85313ac767f357c2ba2dd71aed242b6f":[6,0,0,6,7,2,2],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#aca8edaa8a74dbd2c2207c5ac7a9ab0ad":[5,0,0,6,7,2,3]
+"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#a85313ac767f357c2ba2dd71aed242b6f":[5,0,0,6,7,2,2]
 };

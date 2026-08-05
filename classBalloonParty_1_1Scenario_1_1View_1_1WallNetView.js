@@ -15,6 +15,7 @@ var classBalloonParty_1_1Scenario_1_1View_1_1WallNetView =
     [ "_netCellsAcross", "classBalloonParty_1_1Scenario_1_1View_1_1WallNetView.html#ab549525c3650161d99deb7bc8ddc25ea", null ],
     [ "_netMaterial", "classBalloonParty_1_1Scenario_1_1View_1_1WallNetView.html#acc36ddd6632500cf6feebae03022fdeb", null ],
     [ "_runResetSubscriber", "classBalloonParty_1_1Scenario_1_1View_1_1WallNetView.html#a83823c1c8b0c25ccf758297fad4fdd87", null ],
+    [ "_runtimeMaterial", "classBalloonParty_1_1Scenario_1_1View_1_1WallNetView.html#ab3482c3d76f31caea3fa0c7373fa9b9a", null ],
     [ "_sortingLayerName", "classBalloonParty_1_1Scenario_1_1View_1_1WallNetView.html#a5151a665d2d458e9a2754e6b73b63102", null ],
     [ "_sortingOrder", "classBalloonParty_1_1Scenario_1_1View_1_1WallNetView.html#a7686e60acf51b6a56a3fcabdeeba5e89", null ],
     [ "_stripWidth", "classBalloonParty_1_1Scenario_1_1View_1_1WallNetView.html#a4972a14bed68cc21e0ab1d8d70ae59d6", null ],

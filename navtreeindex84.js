@@ -1,5 +1,7 @@
 var NAVTREEINDEX84 =
 {
+"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#a85313ac767f357c2ba2dd71aed242b6f":[6,0,0,6,7,2,2],
+"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#aca8edaa8a74dbd2c2207c5ac7a9ab0ad":[5,0,0,6,7,2,3],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#aca8edaa8a74dbd2c2207c5ac7a9ab0ad":[6,0,0,6,7,2,3],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#acc23d999013b3e393d2bd4fba4d5def9":[5,0,0,6,7,2,4],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#acc23d999013b3e393d2bd4fba4d5def9":[6,0,0,6,7,2,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX84 =
 "structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html":[6,0,0,7,2,1],
 "structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html#a07053e545ffa37745ac0aaa60df30623":[5,0,0,7,2,1,0],
 "structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html#a07053e545ffa37745ac0aaa60df30623":[6,0,0,7,2,1,0],
-"structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html#a25afe9dbf3eabc7c63460bbcf1ec9f0e":[5,0,0,7,2,1,2],
-"structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html#a25afe9dbf3eabc7c63460bbcf1ec9f0e":[6,0,0,7,2,1,2],
-"structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html#a88ffc9de9e6a8d240e593cafdef3b2c9":[5,0,0,7,2,1,1]
+"structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html#a25afe9dbf3eabc7c63460bbcf1ec9f0e":[5,0,0,7,2,1,2]
 };
