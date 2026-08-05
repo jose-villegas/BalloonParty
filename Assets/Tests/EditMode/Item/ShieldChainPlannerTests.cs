@@ -158,17 +158,25 @@ namespace BalloonParty.Tests.Item
             Assert.AreEqual(1, placed);
         }
 
+        // Below the thrower, so no opening leg reaches it — and with nothing to spend, no shot
+        // survives the wall that would turn it back down. Give this same board two shields and it IS
+        // reachable: straight up, off the top, back down through it. Unreachable means unaffordable,
+        // not "behind me".
         [Test]
-        public void PlanChain_FromAFan_UnreachableBoard_PlacesNothing()
+        public void PlanChain_FromAFan_NothingAffordable_PlacesNothing()
         {
             var planner = new ShieldChainPlanner(Walls, null);
-            // Below the thrower, behind every angle in the fan.
             var candidates = new List<ShieldHostCandidate> { new(new Vector2(0f, -4.5f), 0.3f) };
             var placements = new List<ShieldPlacement>();
 
-            var placed = planner.PlanChain(Vector2.zero, Fan(30f, 150f, 25), 2, 1, candidates, placements);
+            var placed = planner.PlanChain(Vector2.zero, Fan(30f, 150f, 25), 0, 1, candidates, placements);
 
             Assert.AreEqual(0, placed, "better no shield than one no shot can take");
+
+            // The control: the same board, affordable. Reachability is a budget question.
+            Assert.AreEqual(
+                1, planner.PlanChain(Vector2.zero, Fan(30f, 150f, 25), 2, 1, candidates, placements),
+                "two shields buy the top-wall bounce that turns the shot back down onto it");
         }
 
 

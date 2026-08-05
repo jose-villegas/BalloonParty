@@ -23,6 +23,17 @@ namespace BalloonParty.Slots.Grid
         // Grid version the memo was built at; -1 forces a rebuild on first use.
         private int _memoVersion = -1;
 
+        /// <summary>
+        ///     Optional: when set, an actor carrying a shield prefers slots a shot can still reach.
+        /// </summary>
+        /// <remarks>
+        ///     Settable rather than a constructor argument on purpose. Ten call sites build this,
+        ///     including the shot simulator's own board mirror, and every one of them wants today's
+        ///     behaviour — null keeps it, so the sim stays a faithful mirror without being taught
+        ///     about a bias it has no thrower for.
+        /// </remarks>
+        internal IShieldSlotPreference ShieldPreference { get; set; }
+
         public MoveWeightEvaluator(SlotGrid grid)
         {
             _grid = grid;
@@ -122,6 +133,12 @@ namespace BalloonParty.Slots.Grid
             {
                 weight += influence.WeightBias(_grid, to);
             }
+
+            // A planned chain is built once, at spawn; the board then settles and moves the shields
+            // out from under it. This is the counter-pressure — a shield-carrying balloon prefers a
+            // slot a shot still crosses. Added after the actor's own bias, never replacing it: a
+            // tough carrying a shield should still want its line.
+            weight += ShieldPreference?.WeightFor(_grid.At(from), to) ?? 0;
 
             return true;
         }

@@ -130,7 +130,22 @@ namespace BalloonParty.Game
         {
             builder.Register<BalancePathHolder>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.Register<SlotGrid>(Lifetime.Singleton);
-            builder.Register<GridBalanceQuery>(Lifetime.Singleton);
+            // The shield preference is attached rather than injected: ten call sites build a
+            // MoveWeightEvaluator, including the shot simulator's board mirror, and only the live
+            // board has a thrower to measure reachability from.
+            builder.Register(resolver =>
+            {
+                var query = new GridBalanceQuery(resolver.Resolve<SlotGrid>());
+                if (resolver.Resolve<IRunConfig>().PlanShieldChains)
+                {
+                    query.Evaluator.ShieldPreference =
+                        new ShieldSlotPreference(resolver.Resolve<ShieldReachabilityField>());
+                }
+
+                return query;
+            }, Lifetime.Singleton);
+
+            builder.Register<ShieldReachabilityField>(Lifetime.Singleton);
             // Recording is editor-only ([Conditional]); at runtime this is an inert empty instance.
             builder.Register<BalanceDebugRecorder>(Lifetime.Singleton);
             builder.Register<TrailEndpointRegistry>(Lifetime.Singleton);
