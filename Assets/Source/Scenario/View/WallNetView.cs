@@ -54,6 +54,7 @@ namespace BalloonParty.Scenario.View
         private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private ISubscriber<RunResetMessage> _runResetSubscriber;
         private ISubscriber<ProjectileFiredMessage> _firedSubscriber;
+        private Material _runtimeMaterial;
         private float _transitionFade;
         private float _transitionFadeTarget;
 
@@ -66,14 +67,21 @@ namespace BalloonParty.Scenario.View
                 return;
             }
 
+            // Every write below goes to an instance, never to the serialized asset. SetFloat on a
+            // [SerializeField] Material writes THROUGH to the .mat on disk, and Update writes the fade
+            // every frame it lerps — so in the editor each play session left whatever value the fade
+            // stopped at committed into WallNet.mat. One instance for all four strips, so they still
+            // batch together.
+            _runtimeMaterial = new Material(_netMaterial);
+
             // The shader un-extrudes each row back to the wall's edge line at rest by this much, so it
             // must match the geometry width the meshes were built with (single source of truth in C#).
-            _netMaterial.SetFloat(StripWidthId, _stripWidth);
+            _runtimeMaterial.SetFloat(StripWidthId, _stripWidth);
             BuildStrips(new WallLimits(_config.LimitsClockwise));
 
             // Start hidden and lerp in on the first shot; a Game transition (level-up ascend, restart
             // descent) fades it back out until the next first shot.
-            _netMaterial.SetFloat(TransitionFadeId, _transitionFade);
+            _runtimeMaterial.SetFloat(TransitionFadeId, _transitionFade);
             _levelUpSubscriber?.Subscribe(_ => _transitionFadeTarget = 0f).AddTo(_subscriptions);
             _runResetSubscriber?.Subscribe(_ => _transitionFadeTarget = 0f).AddTo(_subscriptions);
             _firedSubscriber?.Subscribe(_ => _transitionFadeTarget = 1f).AddTo(_subscriptions);
@@ -94,12 +102,17 @@ namespace BalloonParty.Scenario.View
                 _transitionFade = _transitionFadeTarget;
             }
 
-            _netMaterial.SetFloat(TransitionFadeId, _transitionFade);
+            _runtimeMaterial.SetFloat(TransitionFadeId, _transitionFade);
         }
 
         private void OnDestroy()
         {
             _subscriptions.Dispose();
+
+            if (_runtimeMaterial != null)
+            {
+                Destroy(_runtimeMaterial);
+            }
 
             foreach (var mesh in _meshes)
             {
@@ -218,7 +231,7 @@ namespace BalloonParty.Scenario.View
             child.AddComponent<MeshFilter>().sharedMesh = mesh;
 
             var renderer = child.AddComponent<MeshRenderer>();
-            renderer.sharedMaterial = _netMaterial;
+            renderer.sharedMaterial = _runtimeMaterial;
             renderer.sortingLayerName = _sortingLayerName;
             renderer.sortingOrder = _sortingOrder;
             renderer.shadowCastingMode = ShadowCastingMode.Off;
