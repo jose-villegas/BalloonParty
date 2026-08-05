@@ -16,8 +16,8 @@ MonoBehaviour:
   - _fromLevel: 1
     _toLevel: 1
     _parameters:
-      _spawnLines: 4
-      _boardLines: 7
+      _spawnLines: 3
+      _boardLines: 8
       _itemCadence:
         _min: 1
         _max: 1
@@ -45,8 +45,8 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 8
-          value: 0.15
+          time: 12
+          value: 0.001
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -105,10 +105,10 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 8
-          value: 0.085
-          inSlope: -0.02875
-          outSlope: -0.02875
+          time: 12
+          value: 0.015
+          inSlope: -0.023125
+          outSlope: -0.023125
           tangentMode: 34
           weightedMode: 0
           inWeight: 0.33333334
@@ -204,14 +204,14 @@ MonoBehaviour:
       _itemWeights:
       - _type: 1
         _weight: 1
-        _maximumAllowedOverride: 8
-        _guaranteedInitialCount: 3
+        _maximumAllowedOverride: 12
+        _guaranteedInitialCount: 12
       _gridActorGates: []
       _allowedColorsMask: 1
   - _fromLevel: 2
     _toLevel: 2
     _parameters:
-      _spawnLines: 4
+      _spawnLines: 3
       _boardLines: 5
       _itemCadence:
         _min: 1
@@ -240,8 +240,8 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 8
-          value: 0.15
+          time: 12
+          value: 0.001
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -257,15 +257,15 @@ MonoBehaviour:
         - serializedVersion: 3
           time: 0
           value: 0
-          inSlope: 0.65
-          outSlope: 0.65
+          inSlope: 0.45
+          outSlope: 0.45
           tangentMode: 34
           weightedMode: 0
           inWeight: 0
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
-          value: 0.65
+          value: 0.45
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -274,24 +274,6 @@ MonoBehaviour:
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 2
-          value: 0.6
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 3
-          value: 0.5
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 4
           value: 0.4
           inSlope: 0
           outSlope: 0
@@ -300,8 +282,8 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 5
-          value: 0.25
+          time: 3
+          value: 0.3
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -309,7 +291,7 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 6
+          time: 4
           value: 0.2
           inSlope: 0
           outSlope: 0
@@ -318,19 +300,10 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 7
-          value: 0.15
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 8
-          value: 0.085
-          inSlope: -0.065000005
-          outSlope: -0.065000005
+          time: 12
+          value: 0.015
+          inSlope: -0.023125
+          outSlope: -0.023125
           tangentMode: 34
           weightedMode: 0
           inWeight: 0.33333334
@@ -580,14 +553,14 @@ MonoBehaviour:
         _guaranteedInitialCount: 0
       - _type: 1
         _weight: 3
-        _maximumAllowedOverride: 8
+        _maximumAllowedOverride: 9
         _guaranteedInitialCount: 3
       _gridActorGates: []
       _allowedColorsMask: 3
   - _fromLevel: 3
     _toLevel: 3
     _parameters:
-      _spawnLines: 4
+      _spawnLines: 3
       _boardLines: 5
       _itemCadence:
         _min: 1
@@ -616,8 +589,8 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 8
-          value: 0.15
+          time: 12
+          value: 0.001
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -633,15 +606,15 @@ MonoBehaviour:
         - serializedVersion: 3
           time: 0
           value: 0
-          inSlope: 0.65
-          outSlope: 0.65
+          inSlope: 0.45
+          outSlope: 0.45
           tangentMode: 34
           weightedMode: 0
           inWeight: 0
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
-          value: 0.65
+          value: 0.45
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -650,24 +623,6 @@ MonoBehaviour:
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 2
-          value: 0.6
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 3
-          value: 0.5
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 4
           value: 0.4
           inSlope: 0
           outSlope: 0
@@ -676,8 +631,8 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 5
-          value: 0.25
+          time: 3
+          value: 0.3
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -685,7 +640,7 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 6
+          time: 4
           value: 0.2
           inSlope: 0
           outSlope: 0
@@ -694,19 +649,10 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 7
-          value: 0.15
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 8
-          value: 0.085
-          inSlope: -0.065000005
-          outSlope: -0.065000005
+          time: 12
+          value: 0.015
+          inSlope: -0.023125
+          outSlope: -0.023125
           tangentMode: 34
           weightedMode: 0
           inWeight: 0.33333334
@@ -947,7 +893,7 @@ MonoBehaviour:
         _guaranteedInitialCount: 1
       - _type: 1
         _weight: 2.75
-        _maximumAllowedOverride: 8
+        _maximumAllowedOverride: 9
         _guaranteedInitialCount: 2
       - _type: 2
         _weight: 2
