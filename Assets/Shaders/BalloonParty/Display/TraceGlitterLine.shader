@@ -37,6 +37,11 @@ Shader "BalloonParty/Display/TraceGlitterLine"
         _SwirlSpeed("Swirl Speed", Range(0, 20)) = 3.0
         _SwirlRadius("Swirl Radius", Range(0, 0.5)) = 0.15
 
+        // Orbit-phase turn per along-line cell — the spiral's tightness. 0 = every speck orbits
+        // independently (the old look); higher values correlate neighbouring specks into a visible
+        // corkscrew. SwirlSpeed then reads as the helix travelling along the line, not spinning in place.
+        _SpiralTwist("Spiral Twist (rad/cell)", Range(0, 6.2832)) = 0.9
+
         // Alpha-blend (the default) composites over the background, so the line's visibility
         // depends on what's behind it — it can wash out against a bright or similarly-hued sky.
         // Additive (One One) brightens the background instead, which stays legible everywhere at
@@ -104,6 +109,7 @@ Shader "BalloonParty/Display/TraceGlitterLine"
             float4 _Drift;
             float _SwirlSpeed;
             float _SwirlRadius;
+            float _SpiralTwist;
 
             v2f vert(appdata_t IN)
             {
@@ -139,7 +145,14 @@ Shader "BalloonParty/Display/TraceGlitterLine"
 
                 float2 jitter = float2(Hash21(cellId + 17.0), Hash21(cellId + 91.0)) - 0.5;
 
-                float  ang   = _Time.y * _SwirlSpeed + Hash21(cellId + 33.0) * BP_TAU;
+                // Phase advances with each along-line cell (a spiral gradient) rather than a purely
+                // random per-cell offset, so neighbouring specks sit at neighbouring points of the SAME
+                // orbit instead of independent ones — reads as one continuous corkscrew winding along
+                // the line. The residual hash term keeps it from looking perfectly mechanical. Because
+                // the phase gradient runs along the line, SwirlSpeed rotating every speck's phase
+                // together makes the whole helix appear to travel from origin to tip, not spin in place.
+                float  ang   = cellId.x * _SpiralTwist - _Time.y * _SwirlSpeed
+                    + Hash21(cellId + 33.0) * (BP_TAU * 0.15);
                 float2 orbit = float2(cos(ang), sin(ang)) * _SwirlRadius;
 
                 float dist  = length(cellPos - (jitter * 0.6 + orbit));
