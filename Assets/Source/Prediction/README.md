@@ -51,7 +51,9 @@ rather than repeating it here.
 
 ### PredictionTraceView
 
-MonoBehaviour with a `LineRenderer`. Call `SetTrace(points)` to update, `SetColor(color)` to set `startColor`/`endColor`, or `Clear()` to hide. Attach to the Thrower prefab alongside a `LineRenderer`. For the smoke + glitter look, use the `BalloonParty/Display/TraceGlitterLine` material shader (SightSmoke's drifting-noise alpha eat plus GlitterSwirl's orbiting specks in one pass) and set the LineRenderer's texture mode to **Tile** so the pattern density stays constant over any aim length — the config-driven trace colour reaches the shader through the renderer's start/end vertex colours.
+MonoBehaviour with a `LineRenderer`. Call `SetTrace(points)` to update, `SetColor(color)` to tint it, or `Clear()` to hide. Attach to the Thrower prefab alongside a `LineRenderer`. For the smoke + glitter look, use the `BalloonParty/Display/TraceGlitterLine` material shader (SightSmoke's drifting-noise alpha eat plus GlitterSwirl's orbiting specks in one pass) and set the LineRenderer's texture mode to **Tile** so the pattern density stays constant over any aim length — the config-driven trace colour reaches the shader through the renderer's vertex colours.
+
+`SetColor` deliberately does **not** set `startColor`/`endColor` — those replace the whole `colorGradient` with a flat, alpha-less 2-key gradient. RGB comes from `color` (flat across the line, same as `startColor`/`endColor` used to give); alpha is recovered from the prefab-authored gradient's own keys, cached once in `Awake` before anything can overwrite them — so the line still fades however the prefab was authored (e.g. toward transparent near the tip) instead of losing that shape to a flat override.
 
 ### PredictionTraceProvider
 
