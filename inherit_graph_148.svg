@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Game_1_1GameScopeRegistration.html" target="_top" xlink:title="Per&#45;section registration for GameLifetimeScope — call in the sequence declared here; VContainer start...">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicConfig.html" target="_top" xlink:title="How one CameraRigCinematic composes the shared shape.">
 <polygon fill="white" stroke="#666666" points="170,-30 0,-30 0,0 170,0 170,-30"/>
-<text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.GameScope</text>
-<text text-anchor="middle" x="85" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Registration</text>
+<text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Cinematics.</text>
+<text text-anchor="middle" x="85" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">CameraRigCinematicConfig</text>
 </a>
 </g>
 </g>

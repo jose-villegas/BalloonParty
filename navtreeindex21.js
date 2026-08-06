@@ -1,5 +1,6 @@
 var NAVTREEINDEX21 =
 {
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePaletteExtensions.html#a6260b0875f9692883e96516722d118bf":[6,0,0,3,8,1,0],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html":[5,0,0,3,8,4],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html":[6,0,0,3,8,4],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html#a11a88d675b45dda25f39f93600bfada0":[5,0,0,3,8,4,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX21 =
 "classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html#aecb1333da0eb63b2976bcc4567e33e18":[6,0,0,3,22,0],
 "classBalloonParty_1_1Configuration_1_1SlotGridConfig.html":[5,0,0,3,23],
 "classBalloonParty_1_1Configuration_1_1SlotGridConfig.html":[6,0,0,3,23],
-"classBalloonParty_1_1Configuration_1_1SlotGridConfig.html#a7a87ab4237e126df5403ef8d54350ada":[5,0,0,3,23,2],
-"classBalloonParty_1_1Configuration_1_1SlotGridConfig.html#a7a87ab4237e126df5403ef8d54350ada":[6,0,0,3,23,2]
+"classBalloonParty_1_1Configuration_1_1SlotGridConfig.html#a7a87ab4237e126df5403ef8d54350ada":[5,0,0,3,23,2]
 };

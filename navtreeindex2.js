@@ -82,8 +82,9 @@ var NAVTREEINDEX2 =
 "RecordKind_8cs.html":[7,0,7,7,24],
 "RectAnchorMath_8cs.html":[7,0,18,15],
 "RejectedBalloonEffect_8cs.html":[7,0,1,2,5],
-"ReleaseUploadWindow_8cs.html":[7,0,6,4,0],
-"ReleaseUploadWindow_8cs.html#a0100be52d45f14348918ea69ec09f959":[7,0,6,4,0,2],
+"ReleasePublisher_8cs.html":[7,0,6,4,0],
+"ReleaseUploadWindow_8cs.html":[7,0,6,4,1],
+"ReleaseUploadWindow_8cs.html#a0100be52d45f14348918ea69ec09f959":[7,0,6,4,1,2],
 "RendererExtensions_8cs.html":[7,0,14,4,14],
 "ResolvedGridActorGate_8cs.html":[7,0,3,5,4],
 "ResumedMessage_8cs.html":[7,0,14,8,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "ThermalGovernorSettings_8cs.html":[7,0,3,22],
 "ThrowerController_8cs.html":[7,0,17,0],
 "ThrowerLifetimeScope_8cs.html":[7,0,17,1],
-"ThrowerOriginProvider_8cs.html":[7,0,17,2],
-"ThrowerSettings_8cs.html":[7,0,17,3]
+"ThrowerOriginProvider_8cs.html":[7,0,17,2]
 };

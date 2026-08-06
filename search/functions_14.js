@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['validate_0',['Validate',['../classBalloonParty_1_1Editor_1_1SetMobileTextureSize.html#aaecad311ebcdd963f56448437a74957a',1,'BalloonParty::Editor::SetMobileTextureSize']]],
+  ['validate_0',['Validate',['../classBalloonParty_1_1Editor_1_1Release_1_1ReleasePublisher.html#a0957e00fa978a281fd06a05d1d7a010b',1,'BalloonParty.Editor.Release.ReleasePublisher.Validate()'],['../classBalloonParty_1_1Editor_1_1SetMobileTextureSize.html#aaecad311ebcdd963f56448437a74957a',1,'BalloonParty.Editor.SetMobileTextureSize.Validate()']]],
   ['validateopenfromcontextmenu_1',['ValidateOpenFromContextMenu',['../classBalloonParty_1_1Editor_1_1TextureAuditWindow.html#a8c4b4468fe029ec826ff05c5ef30d5bd',1,'BalloonParty::Editor::TextureAuditWindow']]],
   ['variationpicker_2',['VariationPicker',['../classBalloonParty_1_1Audio_1_1VariationPicker.html#a936861279e0b55428c950497a9f61ff8',1,'BalloonParty::Audio::VariationPicker']]],
   ['vertexdisplacer_3',['VertexDisplacer',['../namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours.html#a33bff20e5951e5e2eee9701fe3db921a',1,'BalloonParty::Game::Score::Behaviours']]],
