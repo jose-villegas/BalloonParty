@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
@@ -35,6 +36,11 @@ namespace BalloonParty.Editor.Release
         [SerializeField] private string summary = "";
 
         private string outputLog = "";
+
+        // Scrubbed from everything the log shows. Nothing puts the token on a command line any more,
+        // but an API error body can hand it back, and this window's output is what gets pasted into
+        // a bug report — cheap insurance on a credential that is a nuisance to rotate.
+        private string redactToken = "";
         private Vector2 scrollPos;
         private bool isRunning;
         private bool showToken;
@@ -145,6 +151,7 @@ namespace BalloonParty.Editor.Release
             outputLog = "";
 
             var token = EditorPrefs.GetString(TokenPrefKey, "").Trim();
+            redactToken = token;
             if (string.IsNullOrWhiteSpace(token))
             {
                 outputLog = "ERROR: GitHub token is not set.";
@@ -255,54 +262,18 @@ namespace BalloonParty.Editor.Release
                 AppendLog("\nAll builds succeeded. Starting upload...\n");
                 Repaint();
 
-                var scriptPath = Path.Combine(projectRoot, "Tools", "upload_release.sh");
-                if (!File.Exists(scriptPath))
-                {
-                    AppendLog("ERROR: Tools/upload_release.sh not found.");
-                    return;
-                }
+                var request = new ReleaseRequest(
+                    version, token, Repository, summary, commitSha, treeHash, projectRoot,
+                    checksumLines, builtApks);
 
-                var escapedSummary = summary.Replace("\"", "\\\"");
-                var checksumArg = string.Join("\\n", checksumLines);
-                var apkArgs = string.Join(" ", builtApks.Select(p => $"\"{p}\""));
-                var psi = new ProcessStartInfo
-                {
-                    FileName = "/bin/bash",
-                    Arguments =
-                        $"\"{scriptPath}\" \"{version}\" \"{token}\" \"{Repository}\" " +
-                        $"\"{escapedSummary}\" \"{checksumArg}\" {apkArgs}",
-                    WorkingDirectory = projectRoot,
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    CreateNoWindow = true
-                };
-
-                using var process = Process.Start(psi);
-                if (process == null)
-                {
-                    AppendLog("ERROR: Failed to start upload process.");
-                    return;
-                }
-
-                var stdout = process.StandardOutput.ReadToEnd();
-                var stderr = process.StandardError.ReadToEnd();
-                process.WaitForExit();
-
-                AppendLog(stdout);
-                if (!string.IsNullOrWhiteSpace(stderr))
-                {
-                    AppendLog($"\n--- stderr ---\n{stderr}");
-                }
-
-                if (process.ExitCode == 0)
+                if (ReleasePublisher.Publish(request, AppendLog))
                 {
                     AppendLog("\n\u2713 Release uploaded successfully!");
                     Debug.Log($"[Release] v{version} published to GitHub with 3 APKs.");
                 }
                 else
                 {
-                    AppendLog($"\n\u2717 Upload failed (exit code {process.ExitCode}).");
+                    AppendLog("\n\u2717 Upload failed. See the messages above.");
                     Debug.LogError($"[Release] Upload failed for v{version}.");
                 }
             }
@@ -313,6 +284,7 @@ namespace BalloonParty.Editor.Release
             }
             finally
             {
+                redactToken = "";
                 SetCheatsDefine(false);
                 CleanupBuildInfo(projectRoot);
                 isRunning = false;
@@ -461,7 +433,24 @@ namespace BalloonParty.Editor.Release
 
         private void AppendLog(string text)
         {
-            outputLog += text + "\n";
+            outputLog += Redact(text) + "\n";
+        }
+
+        private string Redact(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return text;
+            }
+
+            if (!string.IsNullOrEmpty(redactToken))
+            {
+                text = text.Replace(redactToken, "***");
+            }
+
+            // Also catches a token this run never held — one pasted into the summary, or handed
+            // back inside an API error body — across GitHub's prefixed formats.
+            return Regex.Replace(text, "gh[pousr]_[A-Za-z0-9_]{16,}|github_pat_[A-Za-z0-9_]{20,}", "***");
         }
 
         [Serializable]
