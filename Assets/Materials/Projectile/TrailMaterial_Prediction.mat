@@ -70,7 +70,7 @@ Material:
     - _ColorMask: 15
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DstBlend: 0
+    - _DstBlend: 10
     - _GlitterAcross: 6
     - _GlitterBrightness: 1
     - _GlitterChance: 0.5
@@ -95,7 +95,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SpriteScale: 0.75
-    - _SrcBlend: 1
+    - _SrcBlend: 3
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0

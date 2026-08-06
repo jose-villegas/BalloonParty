@@ -36,6 +36,15 @@ Shader "BalloonParty/Display/TraceGlitterLine"
         _Drift("Drift (xy dir x speed)", Vector) = (0, 0.15, 0, 0)
         _SwirlSpeed("Swirl Speed", Range(0, 20)) = 3.0
         _SwirlRadius("Swirl Radius", Range(0, 0.5)) = 0.15
+
+        // Alpha-blend (the default) composites over the background, so the line's visibility
+        // depends on what's behind it — it can wash out against a bright or similarly-hued sky.
+        // Additive (One One) brightens the background instead, which stays legible everywhere at
+        // the cost of losing occlusion (it won't darken over light backgrounds). Per-material, not
+        // a shader-wide switch, since only the prediction trace uses this shader today.
+        [Header(Blending)]
+        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("Src Blend", Float) = 1
+        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend("Dst Blend", Float) = 6
     }
 
     SubShader
@@ -51,7 +60,7 @@ Shader "BalloonParty/Display/TraceGlitterLine"
         Cull     Off
         Lighting Off
         ZWrite   Off
-        Blend    One OneMinusSrcAlpha
+        Blend    [_SrcBlend] [_DstBlend]
 
         Pass
         {
