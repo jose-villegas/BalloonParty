@@ -67,14 +67,13 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   `breaksStreak: true` attributions to a locked ×1 multiplier. Green pops score
   \f$\text{ScoreValue} \times \text{streak}\f$, where streak follows `ColorStreakTracker.Record`'s same-colour-extends /
   different-colour-resets rule.
-- **Colour adoption & shield refund** — mirrors `ProjectileHitResolver`: the projectile's tracked
+- **Colour adoption** — mirrors `ProjectileHitResolver`: the projectile's tracked
   colour adopts the popped balloon's colour (off the OLD colour, same order as
-  `ApplyColorChange` running before the streak record), then a shield is refunded when the streak
-  reaches \f$\ge 2\f$ of the projectile's now-current colour — gated by `IRunConfig.StreakGrantsShields`
-  (`ShotScoreRules.StreakGrantsShields`, read by `ShotBoardGather.Gather` so the window and the Fire
-  Best Shot cheat can't disagree with each other or with the live game). The condition itself is
-  `Shared/StreakShieldRule.GrantsShield`, the one place both the live resolver and this simulator
-  read it from.
+  `ApplyColorChange` running before the streak record). Shield grants come from items only
+  (see `ShieldItemHandler`), controlled by `IRunConfig.StreakGrantsShields` (`ShotScoreRules.StreakGrantsShields`, read by
+  `ShotBoardGather.Gather` so the window and the Fire Best Shot cheat agree with the live game):
+  when true, a same-color streak of 2+ yields one shield per pop; when false (current), no streak-based shields.
+  The condition itself is `Shared/StreakShieldRule.GrantsShield`, called by both the live resolver and this simulator.
 - **Walls** — analytic per-axis crossing time, then `Vector2.Reflect` off the (possibly summed, for
   an exact corner hit) wall normal — same rectangle and reflect convention as `WallLimits`. Each
   bounce costs a shield; shields dropping below zero ends the flight (`Died`).

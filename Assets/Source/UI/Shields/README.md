@@ -8,18 +8,18 @@ Displays the projectile's remaining shields, animates state changes, and spawns 
 |---|---|
 | `ShieldUILifetimeScope` | VContainer child scope on the shield HUD root; registers `ShieldCounterLabel[]`, `ShieldCounterAnimation`, trail prefab, the HUD anchor as the `Shield` trail endpoint, and `ShieldTrailController` entry point |
 | `ShieldCounterLabel` | Marker subclass of `ReactiveCounterLabel` — rendering delegated to a `RollingCounterDisplay` sibling component. Shows "--" until bound and between turns; bound to the live projectile's `ShieldsRemaining` by `ShieldCounterAnimation` on each load |
-| `ShieldCounterAnimation` | Drives Animator triggers (`Ready`, `Lost`, `Gain`, `Waiting`) based on `ShieldsRemaining` changes; binds/unbinds the labels on projectile load/destroy |
+| `ShieldCounterAnimation` | Drives Animator triggers (`Ready`, `Lost`, `Gain`, `Waiting`) based on `ShieldsRemaining` changes (gain from shield item activation); binds/unbinds the labels on projectile load/destroy |
 | `ShieldTrailController` | Plain C# `IStartable` — subscribes to `ShieldGainedMessage` (balloon → HUD) and `ShieldLostMessage` (HUD → wall bounce); composes a `TrailSpawner` (pool key `ShieldTrail`, which builds its own `SimplePoolChannel<FlyingTrail>` internally) to fly `FlyingTrail` orbs between the balloon/bounce point and the shield HUD endpoint |
 
 ## How it works
 
 `ShieldCounterAnimation` subscribes to `ProjectileLoadedMessage` / `ProjectileDestroyedMessage` and owns the labels' binding: on load it binds every `ShieldCounterLabel` to the new projectile's `ShieldsRemaining` (the labels show "--" until then); on destroy it unbinds them, returning the display to "--" for the between-turns wait.
 
-It also drives an Animator: `"Ready"` on load, `"Lost"` when `ShieldsRemaining` decrements, `"Gain"` when it increments (streak shield awards), and `"Waiting"` from projectile death until the next load. It binds directly to the live projectile's `ShieldsRemaining` reactive property carried in `ProjectileLoadedMessage`.
+It also drives an Animator: `"Ready"` on load, `"Lost"` when `ShieldsRemaining` decrements, `"Gain"` when it increments (from shield item activation), and `"Waiting"` from projectile death until the next load. It binds directly to the live projectile's `ShieldsRemaining` reactive property carried in `ProjectileLoadedMessage`.
 
 `ShieldTrailController` is a plain C# `IStartable` + `IDisposable` registered as an entry point in `ShieldUILifetimeScope`. It flies shield orbs in both directions between a world point and the `Shield` trail endpoint (the HUD anchor, resolved from the shared `TrailEndpointRegistry` — see `Shared/Pool`), reusing one composed `TrailSpawner`:
 
-- **`ShieldGainedMessage`** (published by `ShieldItemHandler` when a shield item is activated, and by `ProjectileHitResolver` when a same-color pop streak of 2+ awards a bonus shield): resolves the granting balloon's world position from its slot index via `SlotGrid.IndexToWorldPosition` and flies an orb *up to* the HUD.
+- **`ShieldGainedMessage`** (published by `ShieldItemHandler` when a shield item is activated; see `IRunConfig.StreakGrantsShields` to gate whether streaks grant shields as an optional rule): resolves the granting balloon's world position from its slot index via `SlotGrid.IndexToWorldPosition` and flies an orb *up to* the HUD.
 - **`ShieldLostMessage`** (published by `ProjectileView` when a wall bounce spends a shield — i.e. `ShieldsRemaining` stays `>= 0` after the decrement; below that the projectile is destroyed instead): flies an orb *from* the HUD down to the bounce point carried in the message.
 
 Both use `IProjectileFlightConfig.ShieldTrailDuration`; the spawner handles pool return on completion.
@@ -29,7 +29,7 @@ Both use `IProjectileFlightConfig.ShieldTrailDuration`; the spawner handles pool
 - **ProjectileModel.ShieldsRemaining** — `ReactiveProperty<int>` subscribed by `ShieldCounterAnimation` and the labels
 - **ProjectileLoadedMessage** — triggers "Ready" state and binds the labels to the new projectile
 - **ProjectileDestroyedMessage** — triggers "Waiting" state and unbinds the labels
-- **ShieldGainedMessage** — published by `ShieldItemHandler` (item activation) and `ProjectileHitResolver` (streak shield award); triggers trail spawn from balloon slot to shield HUD
+- **ShieldGainedMessage** — published by `ShieldItemHandler` (item activation); when `IRunConfig.StreakGrantsShields` is true, also by `ProjectileHitResolver` (same-color streak grant); triggers trail spawn from balloon slot to shield HUD
 - **IProjectileFlightConfig** — `ShieldTrailDuration` used by trail controller
 - **SlotGrid** — resolves slot index to world position for trail origin
 - **PoolManager** — `ShieldTrail` pool for `FlyingTrail`; consumer handles return
