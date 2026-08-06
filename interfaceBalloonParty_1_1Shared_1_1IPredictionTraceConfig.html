@@ -126,6 +126,24 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Shared_1_1IPredictionTraceCon
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a32baa99d3a629f110282f35e92cae33f" id="r_a32baa99d3a629f110282f35e92cae33f"><td class="memItemLeft" align="right" valign="top">AnimationCurve&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a32baa99d3a629f110282f35e92cae33f">LightFadeCurve</a><code> [get]</code></td></tr>
+<tr class="memdesc:a32baa99d3a629f110282f35e92cae33f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intensity multiplier along the line from launch (t=0) to tip (t=1), sampled at each trace leg's arc-length midpoint.  <br /></td></tr>
+<tr class="separator:a32baa99d3a629f110282f35e92cae33f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b0f646f1adf1e564bb22d98d40b48c9" id="r_a1b0f646f1adf1e564bb22d98d40b48c9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1b0f646f1adf1e564bb22d98d40b48c9">LightFalloffPower</a><code> [get]</code></td></tr>
+<tr class="memdesc:a1b0f646f1adf1e564bb22d98d40b48c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Radial falloff exponent for the capsule lights: (1 - dist/radius)^power.  <br /></td></tr>
+<tr class="separator:a1b0f646f1adf1e564bb22d98d40b48c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00307e7f8d5ad902684b0177cdc28d69" id="r_a00307e7f8d5ad902684b0177cdc28d69"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00307e7f8d5ad902684b0177cdc28d69">LightHalfWidth</a><code> [get]</code></td></tr>
+<tr class="memdesc:a00307e7f8d5ad902684b0177cdc28d69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Peak half-width of the capsule lights (one per trace leg), before <a class="el" href="#ac156b32146892c09fa137d3b83777538" title="Half-width multiplier along the line from launch (t=0) to tip (t=1) — sampled by the trace&#39;s total ar...">LightWidthCurve</a> tapers it.  <br /></td></tr>
+<tr class="separator:a00307e7f8d5ad902684b0177cdc28d69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01944421259cbb4d59441d7170c60211" id="r_a01944421259cbb4d59441d7170c60211"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01944421259cbb4d59441d7170c60211">LightingEnabled</a><code> [get]</code></td></tr>
+<tr class="memdesc:a01944421259cbb4d59441d7170c60211"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the trace also casts capsule scene-lights (one per leg, mirroring the drawn line) while aiming.  <br /></td></tr>
+<tr class="separator:a01944421259cbb4d59441d7170c60211"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7811a463d1bc33b647fa7c6e973774f7" id="r_a7811a463d1bc33b647fa7c6e973774f7"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7811a463d1bc33b647fa7c6e973774f7">LightIntensity</a><code> [get]</code></td></tr>
+<tr class="memdesc:a7811a463d1bc33b647fa7c6e973774f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Peak intensity of the capsule lights, before <a class="el" href="#a32baa99d3a629f110282f35e92cae33f" title="Intensity multiplier along the line from launch (t=0) to tip (t=1), sampled at each trace leg&#39;s arc-l...">LightFadeCurve</a> tapers it.  <br /></td></tr>
+<tr class="separator:a7811a463d1bc33b647fa7c6e973774f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac156b32146892c09fa137d3b83777538" id="r_ac156b32146892c09fa137d3b83777538"><td class="memItemLeft" align="right" valign="top">AnimationCurve&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac156b32146892c09fa137d3b83777538">LightWidthCurve</a><code> [get]</code></td></tr>
+<tr class="memdesc:ac156b32146892c09fa137d3b83777538"><td class="mdescLeft">&#160;</td><td class="mdescRight">Half-width multiplier along the line from launch (t=0) to tip (t=1) — sampled by the trace's total arc-length fraction, the same way as <a class="el" href="#a32baa99d3a629f110282f35e92cae33f" title="Intensity multiplier along the line from launch (t=0) to tip (t=1), sampled at each trace leg&#39;s arc-l...">LightFadeCurve</a>, not per-leg.  <br /></td></tr>
+<tr class="separator:ac156b32146892c09fa137d3b83777538"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0af2fd00818aa8e1a1db7b880e4db6e7" id="r_a0af2fd00818aa8e1a1db7b880e4db6e7"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0af2fd00818aa8e1a1db7b880e4db6e7">LineColor</a><code> [get]</code></td></tr>
 <tr class="separator:a0af2fd00818aa8e1a1db7b880e4db6e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada1029a5fd17019982ba21fbf7604c77" id="r_ada1029a5fd17019982ba21fbf7604c77"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada1029a5fd17019982ba21fbf7604c77">MaxReflections</a><code> [get]</code></td></tr>
@@ -141,6 +159,165 @@ Properties</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="namespaceBalloonParty_1_1Prediction.html">Prediction</a> trace settings: how the line is segmented, how far it reaches, how many reflections it gives away, and its colour. </p>
 </div><h2 class="groupheader">Property Documentation</h2>
+<a id="a32baa99d3a629f110282f35e92cae33f" name="a32baa99d3a629f110282f35e92cae33f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32baa99d3a629f110282f35e92cae33f">&#9670;&#160;</a></span>LightFadeCurve</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">AnimationCurve BalloonParty.Shared.IPredictionTraceConfig.LightFadeCurve</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Intensity multiplier along the line from launch (t=0) to tip (t=1), sampled at each trace leg's arc-length midpoint. </p>
+<p>Linear by default — see <a class="el" href="#ac156b32146892c09fa137d3b83777538" title="Half-width multiplier along the line from launch (t=0) to tip (t=1) — sampled by the trace&#39;s total ar...">LightWidthCurve</a> for why an eased curve reads badly here. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a7d05152cb04a53a4d51a2b9f58a4ead8">BalloonParty.Configuration.PredictionTraceConfig</a>.</p>
+
+</div>
+</div>
+<a id="a1b0f646f1adf1e564bb22d98d40b48c9" name="a1b0f646f1adf1e564bb22d98d40b48c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b0f646f1adf1e564bb22d98d40b48c9">&#9670;&#160;</a></span>LightFalloffPower</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Shared.IPredictionTraceConfig.LightFalloffPower</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Radial falloff exponent for the capsule lights: (1 - dist/radius)^power. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a8616a35c96051f5e0b21cd801c9e932d">BalloonParty.Configuration.PredictionTraceConfig</a>.</p>
+
+</div>
+</div>
+<a id="a00307e7f8d5ad902684b0177cdc28d69" name="a00307e7f8d5ad902684b0177cdc28d69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00307e7f8d5ad902684b0177cdc28d69">&#9670;&#160;</a></span>LightHalfWidth</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Shared.IPredictionTraceConfig.LightHalfWidth</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Peak half-width of the capsule lights (one per trace leg), before <a class="el" href="#ac156b32146892c09fa137d3b83777538" title="Half-width multiplier along the line from launch (t=0) to tip (t=1) — sampled by the trace&#39;s total ar...">LightWidthCurve</a> tapers it. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a8971ab52a6fac59420cdbf1a22075ee9">BalloonParty.Configuration.PredictionTraceConfig</a>.</p>
+
+</div>
+</div>
+<a id="a01944421259cbb4d59441d7170c60211" name="a01944421259cbb4d59441d7170c60211"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01944421259cbb4d59441d7170c60211">&#9670;&#160;</a></span>LightingEnabled</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Shared.IPredictionTraceConfig.LightingEnabled</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Whether the trace also casts capsule scene-lights (one per leg, mirroring the drawn line) while aiming. </p>
+<p>Off by default: an earlier attempt at this relit the actors the line crosses and read as noise rather than a telegraph. Kept as a per-config toggle for experimentation rather than deleted, since the underlying capsule-light machinery (BalloonParty.Shared.SceneLight.Light.Segment) is otherwise unused by this system. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a5e743a5fcf944e5eef30263d0e6d5339">BalloonParty.Configuration.PredictionTraceConfig</a>.</p>
+
+</div>
+</div>
+<a id="a7811a463d1bc33b647fa7c6e973774f7" name="a7811a463d1bc33b647fa7c6e973774f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7811a463d1bc33b647fa7c6e973774f7">&#9670;&#160;</a></span>LightIntensity</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Shared.IPredictionTraceConfig.LightIntensity</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Peak intensity of the capsule lights, before <a class="el" href="#a32baa99d3a629f110282f35e92cae33f" title="Intensity multiplier along the line from launch (t=0) to tip (t=1), sampled at each trace leg&#39;s arc-l...">LightFadeCurve</a> tapers it. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#aa30221dbc57938d05b665e768539e833">BalloonParty.Configuration.PredictionTraceConfig</a>.</p>
+
+</div>
+</div>
+<a id="ac156b32146892c09fa137d3b83777538" name="ac156b32146892c09fa137d3b83777538"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac156b32146892c09fa137d3b83777538">&#9670;&#160;</a></span>LightWidthCurve</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">AnimationCurve BalloonParty.Shared.IPredictionTraceConfig.LightWidthCurve</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Half-width multiplier along the line from launch (t=0) to tip (t=1) — sampled by the trace's total arc-length fraction, the same way as <a class="el" href="#a32baa99d3a629f110282f35e92cae33f" title="Intensity multiplier along the line from launch (t=0) to tip (t=1), sampled at each trace leg&#39;s arc-l...">LightFadeCurve</a>, not per-leg. </p>
+<p>A flat curve gives uniform width; the default is a straight linear decrease, not an eased S-curve — with legs of very unequal length (a short post-bounce leg next to a long straight one), an eased curve's flat plateaus at each end squeeze the whole visible transition into whichever leg happens to straddle the curve's steep middle, reading as a hard step between two near-uniform widths (or, for <a class="el" href="#a32baa99d3a629f110282f35e92cae33f" title="Intensity multiplier along the line from launch (t=0) to tip (t=1), sampled at each trace leg&#39;s arc-l...">LightFadeCurve</a>, a strong leg next to a uniformly weak one) rather than a smooth change. Linear spreads it evenly across distance travelled regardless of how the legs are split. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#a081d410230aa5464ab975042b72b5ce4">BalloonParty.Configuration.PredictionTraceConfig</a>.</p>
+
+</div>
+</div>
 <a id="a0af2fd00818aa8e1a1db7b880e4db6e7" name="a0af2fd00818aa8e1a1db7b880e4db6e7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0af2fd00818aa8e1a1db7b880e4db6e7">&#9670;&#160;</a></span>LineColor</h2>
 

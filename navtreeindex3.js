@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"ThrowerOriginProvider_8cs.html":[7,0,17,2],
 "ThrowerSettings_8cs.html":[7,0,17,3],
 "ThrowerView_8cs.html":[7,0,17,4],
 "TimeOfDayCheat_8cs.html":[7,0,2,21],
@@ -18,8 +19,8 @@ var NAVTREEINDEX3 =
 "TmpTextExtensions_8cs.html":[7,0,14,4,18],
 "ToughBalloonModel_8cs.html":[7,0,1,1,9],
 "ToughBalloonVariant_8cs.html":[7,0,1,3,6],
-"TraceHitGeometry_8cs.html":[7,0,11,3],
-"TraceHitMarker_8cs.html":[7,0,11,4],
+"TraceHitGeometry_8cs.html":[7,0,11,4],
+"TraceHitMarker_8cs.html":[7,0,11,5],
 "TrackedTrailSettings_8cs.html":[7,0,3,2,6],
 "TrailEndpointKeys_8cs.html":[7,0,14,9,12],
 "TrailEndpointRegistry_8cs.html":[7,0,14,9,13],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a91f682f6cd4f81e494a6319cdb93ab83":[5,0,0,0,0,3,18],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a91f682f6cd4f81e494a6319cdb93ab83":[6,0,0,0,0,3,18],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a9a9892cda9d3150ad0e5c1a2f9076d44":[5,0,0,0,0,3,23],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a9a9892cda9d3150ad0e5c1a2f9076d44":[6,0,0,0,0,3,23],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a9d08b90f083b1af47d6add3e90496cb6":[5,0,0,0,0,3,5]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a9a9892cda9d3150ad0e5c1a2f9076d44":[6,0,0,0,0,3,23]
 };

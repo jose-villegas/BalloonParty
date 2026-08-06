@@ -1,35 +1,35 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
 <area shape="rect" id="Node000000" title=" " alt="" coords="5,333,129,358"/>
 <area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html" title=" " alt="" coords="179,5,403,45"/>
-<area shape="poly" id="edge552_Node000000_Node000001" title=" " alt="" coords="68,318,77,263,95,193,109,155,126,119,149,85,176,55,192,43,195,48,179,59,153,88,131,122,114,158,100,194,82,264,74,319"/>
+<area shape="poly" id="edge553_Node000000_Node000001" title=" " alt="" coords="68,318,77,263,95,193,109,155,126,119,149,85,176,55,192,43,195,48,179,59,153,88,131,122,114,158,100,194,82,264,74,319"/>
 <area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html" title=" " alt="" coords="177,69,405,109"/>
-<area shape="poly" id="edge553_Node000000_Node000002" title=" " alt="" coords="71,318,83,275,104,221,134,167,153,141,176,119,194,107,197,112,179,123,157,145,138,169,109,224,88,277,77,320"/>
+<area shape="poly" id="edge554_Node000000_Node000002" title=" " alt="" coords="71,318,83,275,104,221,134,167,153,141,176,119,194,107,197,112,179,123,157,145,138,169,109,224,88,277,77,320"/>
 <area shape="rect" id="Node000003" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1StampProfileDrawer.html" title=" " alt="" coords="193,133,390,173"/>
-<area shape="poly" id="edge554_Node000000_Node000003" title=" " alt="" coords="77,318,114,251,142,214,176,183,196,171,199,176,179,187,146,218,118,254,82,321"/>
+<area shape="poly" id="edge555_Node000000_Node000003" title=" " alt="" coords="77,318,114,251,142,214,176,183,196,171,199,176,179,187,146,218,118,254,82,321"/>
 <area shape="rect" id="Node000004" href="$classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html" title="Base class for property drawers that auto&#45;draw common fields, with a manual section for fields needin..." alt="" coords="203,197,380,237"/>
-<area shape="poly" id="edge555_Node000000_Node000004" title=" " alt="" coords="88,320,126,282,176,247,202,235,205,240,179,252,130,287,91,324"/>
+<area shape="poly" id="edge556_Node000000_Node000004" title=" " alt="" coords="88,320,126,282,176,247,202,235,205,240,179,252,130,287,91,324"/>
 <area shape="rect" id="Node000010" href="$classBalloonParty_1_1Editor_1_1EnumIndexedDrawer.html" title="Draws each element of an EnumIndexedAttribute array using the enum value&#39;s name as its label." alt="" coords="199,261,383,301"/>
-<area shape="poly" id="edge561_Node000000_Node000010" title=" " alt="" coords="124,326,177,311,218,299,220,304,178,316,125,331"/>
+<area shape="poly" id="edge562_Node000000_Node000010" title=" " alt="" coords="124,326,177,311,218,299,220,304,178,316,125,331"/>
 <area shape="rect" id="Node000011" href="$classBalloonParty_1_1Editor_1_1LevelRangeEntryDrawer.html" title="Shows LevelRangeEntry array elements as &quot;Level N&quot;, &quot;Level N–M&quot;, or &quot;Fallback&quot; instead of the default ..." alt="" coords="200,325,383,365"/>
-<area shape="poly" id="edge562_Node000000_Node000011" title=" " alt="" coords="143,343,200,343,200,348,143,348"/>
+<area shape="poly" id="edge563_Node000000_Node000011" title=" " alt="" coords="143,343,200,343,200,348,143,348"/>
 <area shape="rect" id="Node000012" href="$classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html" title="Two popups for a MetricBinding: which snapshot, then which value out of it." alt="" coords="197,389,385,429"/>
-<area shape="poly" id="edge563_Node000000_Node000012" title=" " alt="" coords="125,359,178,375,220,387,218,392,177,380,124,364"/>
+<area shape="poly" id="edge564_Node000000_Node000012" title=" " alt="" coords="125,359,178,375,220,387,218,392,177,380,124,364"/>
 <area shape="rect" id="Node000013" href="$classBalloonParty_1_1Editor_1_1MusicalNoteDrawer.html" title="Draws a MusicalNoteAttribute int field as a note&#45;name dropdown." alt="" coords="193,453,390,493"/>
-<area shape="poly" id="edge564_Node000000_Node000013" title=" " alt="" coords="91,367,130,404,179,439,205,451,202,456,176,444,126,408,88,371"/>
+<area shape="poly" id="edge565_Node000000_Node000013" title=" " alt="" coords="91,367,130,404,179,439,205,451,202,456,176,444,126,408,88,371"/>
 <area shape="rect" id="Node000014" href="$classBalloonParty_1_1Editor_1_1ShowIfEnumDrawer.html" title="Hides a [ShowIfEnum] field unless its named sibling enum matches one of the attribute&#39;s values,..." alt="" coords="200,517,383,557"/>
-<area shape="poly" id="edge565_Node000000_Node000014" title=" " alt="" coords="82,370,118,437,146,473,179,503,201,516,199,520,176,507,142,476,114,440,77,372"/>
+<area shape="poly" id="edge566_Node000000_Node000014" title=" " alt="" coords="82,370,118,437,146,473,179,503,201,516,199,520,176,507,142,476,114,440,77,372"/>
 <area shape="rect" id="Node000015" href="$classBalloonParty_1_1Editor_1_1SortingLayerNameDrawer.html" title="Renders a SortingLayerNameAttribute string field as a popup of the project&#39;s sorting layers." alt="" coords="195,581,388,621"/>
-<area shape="poly" id="edge566_Node000000_Node000015" title=" " alt="" coords="77,371,88,414,109,467,138,521,157,546,179,567,197,579,194,583,176,571,153,549,134,524,104,469,83,416,71,372"/>
+<area shape="poly" id="edge567_Node000000_Node000015" title=" " alt="" coords="77,371,88,414,109,467,138,521,157,546,179,567,197,579,194,583,176,571,153,549,134,524,104,469,83,416,71,372"/>
 <area shape="rect" id="Node000016" href="$classBalloonParty_1_1Editor_1_1UnitCircleDrawer.html" title="Unit&#45;circle direction picker for [UnitCircle] Vector2 fields: click or drag inside the disc to aim th..." alt="" coords="204,645,379,685"/>
-<area shape="poly" id="edge567_Node000000_Node000016" title=" " alt="" coords="74,372,82,426,100,496,114,533,131,569,153,602,179,631,205,648,202,652,176,635,149,606,126,572,109,535,95,498,77,427,68,372"/>
+<area shape="poly" id="edge568_Node000000_Node000016" title=" " alt="" coords="74,372,82,426,100,496,114,533,131,569,153,602,179,631,205,648,202,652,176,635,149,606,126,572,109,535,95,498,77,427,68,372"/>
 <area shape="rect" id="Node000005" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1BalloonPrefabEntryDrawer.html" title=" " alt="" coords="453,69,688,109"/>
-<area shape="poly" id="edge556_Node000004_Node000005" title=" " alt="" coords="391,191,404,183,419,168,427,152,435,135,452,119,474,107,476,112,455,123,440,139,432,154,423,171,407,187,394,195"/>
+<area shape="poly" id="edge557_Node000004_Node000005" title=" " alt="" coords="391,191,404,183,419,168,427,152,435,135,452,119,474,107,476,112,455,123,440,139,432,154,423,171,407,187,394,195"/>
 <area shape="rect" id="Node000006" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1HitVfxOverrideDrawer.html" title=" " alt="" coords="467,133,674,173"/>
-<area shape="poly" id="edge557_Node000004_Node000006" title=" " alt="" coords="392,192,482,171,483,176,393,197"/>
+<area shape="poly" id="edge558_Node000004_Node000006" title=" " alt="" coords="392,192,482,171,483,176,393,197"/>
 <area shape="rect" id="Node000007" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1ItemSettingsDrawer.html" title=" " alt="" coords="472,197,669,237"/>
-<area shape="poly" id="edge558_Node000004_Node000007" title=" " alt="" coords="394,215,472,215,472,220,394,220"/>
+<area shape="poly" id="edge559_Node000004_Node000007" title=" " alt="" coords="394,215,472,215,472,220,394,220"/>
 <area shape="rect" id="Node000008" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html" title=" " alt="" coords="472,261,669,301"/>
-<area shape="poly" id="edge559_Node000004_Node000008" title=" " alt="" coords="393,238,483,259,482,264,392,243"/>
+<area shape="poly" id="edge560_Node000004_Node000008" title=" " alt="" coords="393,238,483,259,482,264,392,243"/>
 <area shape="rect" id="Node000009" href="$classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html" title=" " alt="" coords="474,325,667,365"/>
-<area shape="poly" id="edge560_Node000004_Node000009" title=" " alt="" coords="394,239,407,247,423,263,432,280,440,296,455,311,476,323,474,328,452,315,435,299,427,283,419,267,404,251,391,244"/>
+<area shape="poly" id="edge561_Node000004_Node000009" title=" " alt="" coords="394,239,407,247,423,263,432,280,440,296,455,311,476,323,474,328,452,315,435,299,427,283,419,267,404,251,391,244"/>
 </map>

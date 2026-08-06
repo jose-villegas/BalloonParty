@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Thrower_1_1ThrowerController =
 [
-    [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a0c09ba2cc8ca11e3a9e2a0f3515d3776", null ],
+    [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a67091d262102a2712ffadf5988049999", null ],
     [ "ClearPredictionTrace", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ac497d1607399c4a0644aa0ffd0f66c71", null ],
     [ "Dispose", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ae6a7bc74adb625d310dbf2894b1bb2c5", null ],
     [ "Fire", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#acf7c3023e29ab76fd5380d26a3896b72", null ],
@@ -34,10 +34,12 @@ var classBalloonParty_1_1Thrower_1_1ThrowerController =
     [ "_levelTransitionCompletedSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a33ae1dfafe4445e58c45e48a809559bb", null ],
     [ "_levelUpAbandonedSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a05cdfcae7b7b514f9eb473f292b9bc94", null ],
     [ "_levelUpSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a4b64a807f334a9ed6a0682a007cdf944", null ],
+    [ "_lightField", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a8c3750a461fb7b77d7c57f704d5364c7", null ],
     [ "_loadDuration", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#af32aa8bccaf6ea7978541ba77a1de2b3", null ],
     [ "_loadedPublisher", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a5102f4bfcfccdc139343074116db7b83", null ],
     [ "_loadElapsed", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a77898a44d1cf96de728258dd25feb330", null ],
     [ "_originProvider", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#adba443e866a8fc17ffcbcadd59e8dfbd", null ],
+    [ "_palette", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a433abf591321788c4cd692b3a66b9c76", null ],
     [ "_pauseService", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ad178d569e4f52cbbe30576952cc2f64c", null ],
     [ "_poolManager", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a212ef8bc11064806c7a2f894ef28f6ef", null ],
     [ "_positionProvider", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a53930af2d186c89add5b508107ea776e", null ],
@@ -49,6 +51,7 @@ var classBalloonParty_1_1Thrower_1_1ThrowerController =
     [ "_subscriptions", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#acd8343d4fc283429803580edaef6cdfe", null ],
     [ "_traceCalculator", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#adc2ae7ce87a75686c2175c1918e067d4", null ],
     [ "_traceConfig", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a81f9d4f82a1bfd9af96205adb425e2c2", null ],
+    [ "_traceLights", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a47fce44dfc7f3bb535286a71ac7f3e8c", null ],
     [ "_tracePoints", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a7a2151c38d12aea78662939c35e8e982", null ],
     [ "_traceProvider", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a6608c5887d4c7e73ab7ac569d8991fe3", null ],
     [ "_tracePublished", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a59bef5df1ec4f05c862e8ec46a47940f", null ],

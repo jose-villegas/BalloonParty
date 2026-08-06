@@ -131,7 +131,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Displays the projectile's remaining shields, animates state changes, and spawns visual trails when shields are gained.</p>
-<h1><a class="anchor" id="autotoc_md935"></a>
+<h1><a class="anchor" id="autotoc_md936"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -141,27 +141,27 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ShieldCounterLabel</code>   </td><td class="markdownTableBodyNone">Marker subclass of <code>ReactiveCounterLabel</code> — rendering delegated to a <code>RollingCounterDisplay</code> sibling component. Shows "--" until bound and between turns; bound to the live projectile's <code>ShieldsRemaining</code> by <code>ShieldCounterAnimation</code> on each load    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ShieldCounterAnimation</code>   </td><td class="markdownTableBodyNone">Drives Animator triggers (<code>Ready</code>, <code>Lost</code>, <code>Gain</code>, <code>Waiting</code>) based on <code>ShieldsRemaining</code> changes; binds/unbinds the labels on projectile load/destroy    </td></tr>
+<td class="markdownTableBodyNone"><code>ShieldCounterAnimation</code>   </td><td class="markdownTableBodyNone">Drives Animator triggers (<code>Ready</code>, <code>Lost</code>, <code>Gain</code>, <code>Waiting</code>) based on <code>ShieldsRemaining</code> changes (gain from shield item activation); binds/unbinds the labels on projectile load/destroy    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ShieldTrailController</code>   </td><td class="markdownTableBodyNone">Plain C# <code>IStartable</code> — subscribes to <code>ShieldGainedMessage</code> (balloon → HUD) and <code>ShieldLostMessage</code> (HUD → wall bounce); composes a <code>TrailSpawner</code> (pool key <code>ShieldTrail</code>, which builds its own <code>SimplePoolChannel&lt;FlyingTrail&gt;</code> internally) to fly <code>FlyingTrail</code> orbs between the balloon/bounce point and the shield HUD endpoint   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md936"></a>
+<h1><a class="anchor" id="autotoc_md937"></a>
 How it works</h1>
 <p><code>ShieldCounterAnimation</code> subscribes to <code>ProjectileLoadedMessage</code> / <code>ProjectileDestroyedMessage</code> and owns the labels' binding: on load it binds every <code>ShieldCounterLabel</code> to the new projectile's <code>ShieldsRemaining</code> (the labels show "--" until then); on destroy it unbinds them, returning the display to "--" for the between-turns wait.</p>
-<p>It also drives an Animator: <code>"Ready"</code> on load, <code>"Lost"</code> when <code>ShieldsRemaining</code> decrements, <code>"Gain"</code> when it increments (streak shield awards), and <code>"Waiting"</code> from projectile death until the next load. It binds directly to the live projectile's <code>ShieldsRemaining</code> reactive property carried in <code>ProjectileLoadedMessage</code>.</p>
+<p>It also drives an Animator: <code>"Ready"</code> on load, <code>"Lost"</code> when <code>ShieldsRemaining</code> decrements, <code>"Gain"</code> when it increments (from shield item activation), and <code>"Waiting"</code> from projectile death until the next load. It binds directly to the live projectile's <code>ShieldsRemaining</code> reactive property carried in <code>ProjectileLoadedMessage</code>.</p>
 <p><code>ShieldTrailController</code> is a plain C# <code>IStartable</code> + <code>IDisposable</code> registered as an entry point in <code>ShieldUILifetimeScope</code>. It flies shield orbs in both directions between a world point and the <code>Shield</code> trail endpoint (the HUD anchor, resolved from the shared <code>TrailEndpointRegistry</code> — see <code>Shared/Pool</code>), reusing one composed <code>TrailSpawner</code>:</p>
 <ul>
-<li><b><code>ShieldGainedMessage</code></b> (published by <code>ShieldItemHandler</code> when a shield item is activated, and by <code>ProjectileHitResolver</code> when a same-color pop streak of 2+ awards a bonus shield): resolves the granting balloon's world position from its slot index via <code>SlotGrid.IndexToWorldPosition</code> and flies an orb <em>up to</em> the HUD.</li>
+<li><b><code>ShieldGainedMessage</code></b> (published by <code>ShieldItemHandler</code> when a shield item is activated; see <code>IRunConfig.StreakGrantsShields</code> to gate whether streaks grant shields as an optional rule): resolves the granting balloon's world position from its slot index via <code>SlotGrid.IndexToWorldPosition</code> and flies an orb <em>up to</em> the HUD.</li>
 <li><b><code>ShieldLostMessage</code></b> (published by <code>ProjectileView</code> when a wall bounce spends a shield — i.e. <code>ShieldsRemaining</code> stays <code>&gt;= 0</code> after the decrement; below that the projectile is destroyed instead): flies an orb <em>from</em> the HUD down to the bounce point carried in the message.</li>
 </ul>
 <p>Both use <code>IProjectileFlightConfig.ShieldTrailDuration</code>; the spawner handles pool return on completion.</p>
-<h1><a class="anchor" id="autotoc_md937"></a>
+<h1><a class="anchor" id="autotoc_md938"></a>
 Interactions</h1>
 <ul>
 <li><b>ProjectileModel.ShieldsRemaining</b> — <code>ReactiveProperty&lt;int&gt;</code> subscribed by <code>ShieldCounterAnimation</code> and the labels</li>
 <li><b>ProjectileLoadedMessage</b> — triggers "Ready" state and binds the labels to the new projectile</li>
 <li><b>ProjectileDestroyedMessage</b> — triggers "Waiting" state and unbinds the labels</li>
-<li><b>ShieldGainedMessage</b> — published by <code>ShieldItemHandler</code> (item activation) and <code>ProjectileHitResolver</code> (streak shield award); triggers trail spawn from balloon slot to shield HUD</li>
+<li><b>ShieldGainedMessage</b> — published by <code>ShieldItemHandler</code> (item activation); when <code>IRunConfig.StreakGrantsShields</code> is true, also by <code>ProjectileHitResolver</code> (same-color streak grant); triggers trail spawn from balloon slot to shield HUD</li>
 <li><b>IProjectileFlightConfig</b> — <code>ShieldTrailDuration</code> used by trail controller</li>
 <li><b>SlotGrid</b> — resolves slot index to world position for trail origin</li>
 <li><b>PoolManager</b> — <code>ShieldTrail</code> pool for <code>FlyingTrail</code>; consumer handles return </li>

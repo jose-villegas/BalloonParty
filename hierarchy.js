@@ -316,6 +316,7 @@ var hierarchy =
       [ "BalloonParty.Item.Shield.ShieldItemHandler", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldItemHandler.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeDischargeBloom", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeItemHandler", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html", null ],
+      [ "BalloonParty.Prediction.PredictionTraceLights", "classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html", null ],
       [ "BalloonParty.Projectile.Buffs.ProjectileBuffService", "classBalloonParty_1_1Projectile_1_1Buffs_1_1ProjectileBuffService.html", null ],
       [ "BalloonParty.Projectile.Controller.ActiveProjectilePierce", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html", null ],
       [ "BalloonParty.Projectile.Controller.HoldSpeedUpController", "classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html", null ],

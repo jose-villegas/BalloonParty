@@ -13,6 +13,7 @@ var classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette =
     [ "_names", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#aa9dcbd6dc5c7e443948774f9dfafd622", null ],
     [ "_namesByMask", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a40850ecccdc6706f0e37b73a50ce4576", null ],
     [ "_progressNames", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a136de7759a508251fc2873ccdc4e7605", null ],
+    [ "PredictionColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a9d25ed70cd0747f4809a7887cd7f2f12", null ],
     [ "ProjectileColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a855a2e34e0fe446574122d182d3909f0", null ],
     [ "RainbowColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ab1c22d1c348537d6dc9985e1c5728746", null ],
     [ "SparksColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ac2aeb10121b120e25a3001f97dc0e1d3", null ],

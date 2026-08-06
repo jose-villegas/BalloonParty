@@ -26,8 +26,9 @@ var NAVTREEINDEX2 =
 "PredictionSightSpiral_8cs.html":[7,0,8,25],
 "PredictionTraceCalculator_8cs.html":[7,0,11,0],
 "PredictionTraceConfig_8cs.html":[7,0,3,16],
-"PredictionTraceProvider_8cs.html":[7,0,11,1],
-"PredictionTraceView_8cs.html":[7,0,11,2],
+"PredictionTraceLights_8cs.html":[7,0,11,1],
+"PredictionTraceProvider_8cs.html":[7,0,11,2],
+"PredictionTraceView_8cs.html":[7,0,11,3],
 "PressurePropagation_8cs.html":[7,0,1,0,8],
 "PressureResponse_8cs.html":[7,0,15,1,17],
 "ProgressBarCompletedMessage_8cs.html":[7,0,14,7,21],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "ThermalFrameRateGovernor_8cs.html":[7,0,14,12,3],
 "ThermalGovernorSettings_8cs.html":[7,0,3,22],
 "ThrowerController_8cs.html":[7,0,17,0],
-"ThrowerLifetimeScope_8cs.html":[7,0,17,1],
-"ThrowerOriginProvider_8cs.html":[7,0,17,2]
+"ThrowerLifetimeScope_8cs.html":[7,0,17,1]
 };
