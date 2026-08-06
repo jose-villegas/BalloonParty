@@ -224,4 +224,8 @@ has zero visual effect**: the field OFF is bit-identical to today.
   palette-tagged to the matched target colour, lasting `PopLightSeconds`.
 - **First consumer (shipped)** — the projectile registers a small `Light` that follows it and takes its
   colour (Sparks while colourless); see `Projectile/README.md`.
+- **Prediction line (shipped, off by default — experimental)** — `PredictionTraceLights` mirrors the aim
+  trace with one `Light.Segment` per leg, gated by `IPredictionTraceConfig.LightingEnabled`. A prior
+  attempt at this shipped and was pulled (relighting the actors it crosses read as noise); kept as a
+  per-config toggle rather than deleted. See `Prediction/README.md`.
 - **Next** — more game-source wiring (balloon pops flashing their colour), further field tuning.

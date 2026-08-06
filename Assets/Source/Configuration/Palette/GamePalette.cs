@@ -40,6 +40,13 @@ namespace BalloonParty.Configuration.Palette
         /// </summary>
         public const string ProjectileColorId = "Projectile";
 
+        /// <summary>
+        ///     Presentation-only palette entry tinting the aim-prediction line's optional capsule lights
+        ///     (see <see cref="BalloonParty.Shared.IPredictionTraceConfig.LightingEnabled" />) — authored
+        ///     in the palette asset but never a spawnable balloon color.
+        /// </summary>
+        public const string PredictionColorId = "Prediction";
+
         [SerializeField] private PaletteEntry[] _colors;
 
         private Dictionary<string, PaletteEntry> _byName;

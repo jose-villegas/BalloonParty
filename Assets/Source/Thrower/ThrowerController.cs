@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
 using BalloonParty.Prediction;
 using BalloonParty.Projectile;
@@ -7,10 +8,12 @@ using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.SceneLight;
 using DG.Tweening;
 using MessagePipe;
 using UniRx;
@@ -46,6 +49,8 @@ namespace BalloonParty.Thrower
         private readonly ProjectilePositionProvider _positionProvider;
         private readonly ThrowerOriginProvider _originProvider;
         private readonly PredictionTraceProvider _traceProvider;
+        private readonly SceneLightFieldService _lightField;
+        private readonly IGamePalette _palette;
         private readonly CompositeDisposable _subscriptions = new();
 
         // Cached since Object.name allocates; Reload() hits this twice per shot.
@@ -59,6 +64,7 @@ namespace BalloonParty.Thrower
         private float _loadElapsed;
         private float _loadDuration;
         private PredictionTraceCalculator _traceCalculator;
+        private PredictionTraceLights _traceLights;
 
         // Set by FireBestShotCheat (auto-fire toggle) to override the aimed direction on the next
         // player-initiated fire. Consumed (cleared) once used. Null means no override.
@@ -88,7 +94,9 @@ namespace BalloonParty.Thrower
             HoldSpeedUpController holdSpeedUp,
             ProjectilePositionProvider positionProvider,
             ThrowerOriginProvider originProvider,
-            PredictionTraceProvider traceProvider)
+            PredictionTraceProvider traceProvider,
+            SceneLightFieldService lightField,
+            IGamePalette palette)
         {
             _view = view;
             _traceConfig = traceConfig;
@@ -113,12 +121,19 @@ namespace BalloonParty.Thrower
             _positionProvider = positionProvider;
             _originProvider = originProvider;
             _traceProvider = traceProvider;
+            _lightField = lightField;
+            _palette = palette;
             _projectilePoolKey = settings.ProjectilePrefab.name;
         }
 
         public void Start()
         {
             _traceCalculator = new PredictionTraceCalculator(_traceConfig, _flightConfig, _deflectorField);
+            // Off by default (IPredictionTraceConfig.LightingEnabled) — a prior attempt at this made the
+            // actors the line crosses read as noise, kept togglable rather than deleted. Constructed
+            // unconditionally since every call is a no-op while the toggle is off.
+            _traceLights = new PredictionTraceLights(
+                _lightField, _traceConfig, _palette.PaletteIndexOf(GamePalette.PredictionColorId));
             _view.SetTraceColor(_traceConfig.LineColor);
             // Off the prefab, not a spawned view: nothing has been fired yet, and ProjectileView
             // resolves its own radius in Awake, which a prefab asset never runs.
@@ -169,6 +184,7 @@ namespace BalloonParty.Thrower
 
         public void Dispose()
         {
+            _traceLights?.Dispose();
             _subscriptions.Dispose();
         }
 
@@ -407,6 +423,7 @@ namespace BalloonParty.Thrower
                 _activeView.ContactCenter, _direction, _activeView.ContactRadius, _tracePoints);
             _view.SetTrace(_tracePoints);
             _traceProvider.SetTrace(_tracePoints);
+            _traceLights.SetTrace(_tracePoints);
             _tracePublished = true;
         }
 
@@ -421,6 +438,7 @@ namespace BalloonParty.Thrower
 
             _view.ClearTrace();
             _traceProvider.Clear();
+            _traceLights.Clear();
             _tracePublished = false;
         }
     }

@@ -30,9 +30,38 @@ namespace BalloonParty.Configuration
         [FormerlySerializedAs("_predictionTraceColor")]
         [SerializeField] private Color _lineColor = Color.white;
 
+        [Header("Light (experimental)")]
+        [Tooltip("Also cast capsule scene-lights (one per trace leg) matching the drawn line. Off by " +
+            "default — see IPredictionTraceConfig.LightingEnabled for why.")]
+        [SerializeField] private bool _lightingEnabled;
+
+        [Tooltip("Half-width of the capsule lights mirroring the line (one per trace leg).")]
+        [SerializeField] [Min(0f)] private float _lightHalfWidth = 0.35f;
+
+        [SerializeField] [Min(0f)] private float _lightIntensity = 1f;
+
+        [Tooltip("Radial falloff exponent for the capsule lights: (1 - dist/radius)^power.")]
+        [SerializeField] [Min(0.01f)] private float _lightFalloffPower = 2f;
+
+        [Tooltip("Intensity multiplier along the line from launch (t=0) to tip (t=1), sampled at each " +
+            "trace leg's arc-length midpoint. Linear by default — same reasoning as _lightWidthCurve.")]
+        [SerializeField] private AnimationCurve _lightFadeCurve = AnimationCurve.Linear(0f, 1f, 1f, 0.15f);
+
+        [Tooltip("Half-width multiplier along the line from launch (t=0) to tip (t=1), sampled by total " +
+            "arc-length fraction. Linear by default, deliberately not eased — with unequal leg lengths " +
+            "an S-curve squeezes the whole taper into whichever leg straddles its steep middle, reading " +
+            "as a hard step instead of a smooth narrowing through every bend.")]
+        [SerializeField] private AnimationCurve _lightWidthCurve = AnimationCurve.Linear(0f, 1f, 1f, 0.15f);
+
         public float SegmentLength => _segmentLength;
         public int MaxSegments => _maxSegments;
         public int MaxReflections => _maxReflections;
         public Color LineColor => _lineColor;
+        public bool LightingEnabled => _lightingEnabled;
+        public float LightHalfWidth => _lightHalfWidth;
+        public float LightIntensity => _lightIntensity;
+        public float LightFalloffPower => _lightFalloffPower;
+        public AnimationCurve LightFadeCurve => _lightFadeCurve;
+        public AnimationCurve LightWidthCurve => _lightWidthCurve;
     }
 }
