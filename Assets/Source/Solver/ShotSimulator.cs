@@ -4,6 +4,7 @@ using BalloonParty.Configuration.Items;
 using BalloonParty.Item.Effects;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using UnityEngine;
@@ -812,11 +813,11 @@ namespace BalloonParty.Solver
             ResolvePopScore(balloon, in scoreRules, in cause, ref state);
 
             // A rainbow-buffed shot converts nearby paintable balloons on every pop it lands, not
-            // just a rainbow-target one — mirrors ProjectileHitResolver.ConvertNeighborsToRainbow,
+            // just a rainbow-target one — mirrors ProjectileHitResolver.ConvertSideNeighboursToRainbow,
             // run over the ACTIVE WORKING SET (SlotIndex-addressed) so it works with dynamics: null.
             if (state.HasRainbowBuff)
             {
-                ConvertNeighborsToRainbow(workingSet, activeCount, balloon.SlotIndex, scoreRules.RainbowColorId);
+                ConvertNeighborsToRainbow(workingSet, activeCount, balloon.SlotIndex, state.Direction, scoreRules.RainbowColorId);
             }
 
             state.Pops++;
@@ -1258,14 +1259,32 @@ namespace BalloonParty.Solver
             return false;
         }
 
-        // Mirrors ProjectileHitResolver.ConvertNeighborsToRainbow — a rainbow-buffed pop spreads onto
-        // its hex neighbours, but over the ACTIVE WORKING SET (SlotIndex-addressed linear scan, not
-        // the dynamics grid), so it works with dynamics: null too. Only a poppable, still-coloured,
-        // non-rainbow, non-static target converts — IPaintable is "poppable, coloured" today.
+        // Mirrors ProjectileHitResolver.ConvertNeighborsToRainbow — a rainbow-buffed pop converts
+        // only the two side neighbours orthogonal to the projectile direction, not every nearby neighbour.
+        // This runs over the ACTIVE WORKING SET (SlotIndex-addressed linear scan, not the dynamics grid),
+        // so it works with dynamics: null too. Only a poppable, still-coloured, non-rainbow, non-static
+        // target converts — IPaintable is "poppable, coloured" today.
         private static void ConvertNeighborsToRainbow(
-            ShotBalloonState[] workingSet, int activeCount, Vector2Int slot, string rainbowColorId)
+            ShotBalloonState[] workingSet, int activeCount, Vector2Int slot, Vector2 direction, string rainbowColorId)
         {
+            if (direction.sqrMagnitude < 1e-8f)
+            {
+                return;
+            }
+
+            direction.Normalize();
+            var centerIndex = FindActiveIndex(workingSet, activeCount, slot);
+            if (centerIndex < 0)
+            {
+                return;
+            }
+
+            var center = workingSet[centerIndex].Position;
             HexCoordinates.HexNeighborIndices(slot.x, slot.y, NeighborBuffer);
+
+            var neighborOffsets = new Vector2[6];
+            var neighborIndices = new int[6];
+            var count = 0;
 
             for (var n = 0; n < 6; n++)
             {
@@ -1277,13 +1296,26 @@ namespace BalloonParty.Solver
                         continue;
                     }
 
-                    if (!workingSet[i].IsStatic && !workingSet[i].IsRainbow
-                        && !string.IsNullOrEmpty(workingSet[i].ColorId))
-                    {
-                        ApplyRecolor(ref workingSet[i], rainbowColorId, rainbowColorId);
-                    }
-
+                    neighborOffsets[count] = workingSet[i].Position - center;
+                    neighborIndices[count] = i;
+                    count++;
                     break;
+                }
+            }
+
+            if (count == 0)
+            {
+                return;
+            }
+
+            var sideIndices = VectorMathExtensions.GetMostPerpendicularIndices(direction, neighborOffsets, count, Math.Min(2, count));
+            for (var j = 0; j < sideIndices.Length; j++)
+            {
+                var i = neighborIndices[sideIndices[j]];
+                if (!workingSet[i].IsStatic && !workingSet[i].IsRainbow
+                    && !string.IsNullOrEmpty(workingSet[i].ColorId))
+                {
+                    ApplyRecolor(ref workingSet[i], rainbowColorId, rainbowColorId);
                 }
             }
         }

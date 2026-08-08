@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,8 +34,8 @@ namespace BalloonParty.Shared.Extensions
         public static Vector2 RandomPointInAnnulusSector(
             float innerRadius, float outerRadius, float minAngleRadians, float maxAngleRadians)
         {
-            var angle = Random.Range(minAngleRadians, maxAngleRadians);
-            var radius = Mathf.Sqrt(Random.Range(innerRadius * innerRadius, outerRadius * outerRadius));
+            var angle = UnityEngine.Random.Range(minAngleRadians, maxAngleRadians);
+            var radius = Mathf.Sqrt(UnityEngine.Random.Range(innerRadius * innerRadius, outerRadius * outerRadius));
             return DirectionFromAngle(angle) * radius;
         }
 
@@ -52,8 +53,61 @@ namespace BalloonParty.Shared.Extensions
             return t < 0f ? t + 1f : t;
         }
 
-        /// <summary>True length of the open polyline through every point — the sum of consecutive segment
-        /// lengths (unlike a sum of <em>squared</em> segments, this is the real distance travelled).</summary>
+        /// <summary>Returns the indices of the vectors that are most perpendicular to <paramref name="direction" />.
+        /// The result is the vectors with the smallest absolute dot product against the normalized direction,
+        /// useful for selecting the side neighbours of a projectile pop based on its travel direction.</summary>
+        internal static int[] GetMostPerpendicularIndices(Vector2 direction, Vector2[] vectors, int vectorCount, int count)
+        {
+            if (vectors == null || vectorCount <= 0 || count <= 0)
+            {
+                return Array.Empty<int>();
+            }
+
+            var absDots = new float[vectorCount];
+            var indices = new int[vectorCount];
+            for (var i = 0; i < vectorCount; i++)
+            {
+                var vector = vectors[i];
+                if (vector.sqrMagnitude < 1e-8f)
+                {
+                    absDots[i] = 1f;
+                }
+                else
+                {
+                    absDots[i] = Mathf.Abs(Vector2.Dot(direction, vector.normalized));
+                }
+
+                indices[i] = i;
+            }
+
+            for (var i = 0; i < vectorCount - 1; i++)
+            {
+                for (var j = i + 1; j < vectorCount; j++)
+                {
+                    if (absDots[j] < absDots[i])
+                    {
+                        var tempDot = absDots[i];
+                        absDots[i] = absDots[j];
+                        absDots[j] = tempDot;
+
+                        var tempIndex = indices[i];
+                        indices[i] = indices[j];
+                        indices[j] = tempIndex;
+                    }
+                }
+            }
+
+            count = Mathf.Min(count, vectorCount);
+            var result = new int[count];
+            for (var i = 0; i < count; i++)
+            {
+                result[i] = indices[i];
+            }
+
+            return result;
+        }
+
+        /// <summary>True length of the open polyline through every point — the sum of consecutive segment lengths.</summary>
         public static float PolylineLength(this IReadOnlyList<Vector3> points)
         {
             if (points == null || points.Count < 2)

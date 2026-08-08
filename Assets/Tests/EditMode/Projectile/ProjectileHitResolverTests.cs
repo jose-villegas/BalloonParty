@@ -411,7 +411,7 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
-        public void Resolve_RainbowBuffPop_DispatchesWildcardStreakAndPiercingFlags()
+        public void Resolve_RainbowBuffPop_DispatchesWildcardStreakOnly()
         {
             ApplyRainbowBuff();
             var balloon = PlaceBalloon(new Vector2Int(2, 2), "Red");
@@ -421,11 +421,11 @@ namespace BalloonParty.Tests.Projectile
             _hitDispatcher.Received().Dispatch(Arg.Is<ActorHitMessage>(m =>
                 m.Outcome == HitOutcome.Pop
                 && m.Context.Flags.HasFlag(DamageFlags.WildcardStreak)
-                && m.Context.Flags.HasFlag(DamageFlags.Piercing)));
+                && !m.Context.Flags.HasFlag(DamageFlags.Piercing)));
         }
 
         [Test]
-        public void Resolve_RainbowBuff_PiercesMultiHitBalloon()
+        public void Resolve_RainbowBuff_DoesNotAutoPierceMultiHitBalloon()
         {
             ApplyRainbowBuff();
             var tough = new BalloonModel(new BalloonModelConfig(hitsToPop: 3));
@@ -434,21 +434,28 @@ namespace BalloonParty.Tests.Projectile
 
             _resolver.Resolve(_projectile, tough, Vector3.zero);
 
-            // Without the buff a 3-hit balloon would survive one hit; piercing one-shots it.
-            _hitDispatcher.Received().Dispatch(Arg.Is<ActorHitMessage>(m =>
+            Assert.AreEqual(2, tough.HitsRemaining.Value);
+            _hitDispatcher.DidNotReceive().Dispatch(Arg.Is<ActorHitMessage>(m =>
                 m.Actor == tough && m.Outcome == HitOutcome.Pop));
         }
 
         [Test]
-        public void Resolve_RainbowBuffPop_ConvertsNeighboursToRainbow()
+        public void Resolve_RainbowBuffPop_ConvertsOnlySideNeighboursToRainbow()
         {
             ApplyRainbowBuff();
             var hit = PlaceBalloon(new Vector2Int(2, 2), "Red");
-            var neighbour = PlaceBalloon(new Vector2Int(1, 2), "Blue"); // a hex neighbour of (2,2)
+            var left = PlaceBalloon(new Vector2Int(1, 2), "Blue");
+            var right = PlaceBalloon(new Vector2Int(3, 2), "Blue");
+            var front = PlaceBalloon(new Vector2Int(2, 1), "Green");
+            var back = PlaceBalloon(new Vector2Int(2, 3), "Green");
 
+            _projectile.Direction = Vector3.up;
             _resolver.Resolve(_projectile, hit, Vector3.zero);
 
-            Assert.AreEqual(GamePalette.RainbowColorId, neighbour.Color.Value);
+            Assert.AreEqual(GamePalette.RainbowColorId, left.Color.Value);
+            Assert.AreEqual(GamePalette.RainbowColorId, right.Color.Value);
+            Assert.AreEqual("Green", front.Color.Value);
+            Assert.AreEqual("Green", back.Color.Value);
         }
 
         [Test]

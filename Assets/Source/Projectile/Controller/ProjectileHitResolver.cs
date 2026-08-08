@@ -5,6 +5,7 @@ using BalloonParty.Game.Score;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
+using System;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
@@ -99,12 +100,12 @@ namespace BalloonParty.Projectile.Controller
 
             // Snapshot: dispatching ActorHitMessage can re-enter and add to pending (e.g. via chain pops
             // that trigger another pierce resolve before this loop finishes).
-            var count = pending.Count;
+            var pendingCount = pending.Count;
+            var resolvedCount = 0;
             var center = Vector3.zero;
-            for (var i = 0; i < count; i++)
+            for (var i = 0; i < pendingCount; i++)
             {
                 var hit = pending[i];
-                center += hit.Position;
                 var balloon = hit.Balloon;
                 var slot = balloon.SlotIndex.Value;
                 if (_grid.IsEmpty(slot.x, slot.y) || !ReferenceEquals(_grid.At(slot), balloon))
@@ -112,17 +113,24 @@ namespace BalloonParty.Projectile.Controller
                     continue;
                 }
 
+                resolvedCount++;
+                center += hit.Position;
                 var context = new DamageContext(1, flags, projectile.ColorName.Value);
                 var outcome = balloon.EvaluateHit(context);
                 _hitDispatcher.Dispatch(new ActorHitMessage(balloon, hit.Position, projectile.Direction, outcome, context));
             }
 
+            if (resolvedCount == 0)
+            {
+                pending.Clear();
+                return;
+            }
+
             // Announce the discharge so its feel can play — the rainbow bloom, and (later) lights /
             // shockwave / slow-mo. Centred on the plowed line, carrying the charge (tough count) and
             // whether the shot was rainbow.
-            // Count before publishing, so every subscriber sees a total including this discharge.
             _flightStats.RecordPierceDischarge();
-            _dischargedPublisher.Publish(new PierceDischargedMessage(center / count, count, isRainbowBuff));
+            _dischargedPublisher.Publish(new PierceDischargedMessage(center / resolvedCount, resolvedCount, isRainbowBuff));
 
             pending.Clear();
         }
@@ -132,11 +140,10 @@ namespace BalloonParty.Projectile.Controller
         private ProjectileHitVisual ResolveContactPop(
             IWriteableProjectileModel projectile, IBalloonModel balloon, Vector3 balloonWorldPosition, bool isPiercing)
         {
-            // A rainbow-buffed projectile pierces (plows through tough/unbreakable balloons instead of
-            // one-shotting or deflecting off them), scores colour-agnostically, and rainbow-converts what
-            // it pops near — until it loses a shield to a wall (which ends the buff).
+            // A rainbow-buffed projectile scores colour-agnostically and rainbow-converts what
+            // it pops near — it no longer gains automatic piercing from the shield itself.
             var isRainbowBuff = projectile.HasBuff(ProjectileBuffId.RainbowShield);
-            var flags = (isRainbowBuff ? DamageFlags.WildcardStreak | DamageFlags.Piercing : DamageFlags.Normal)
+            var flags = (isRainbowBuff ? DamageFlags.WildcardStreak : DamageFlags.Normal)
                         | (isPiercing ? DamageFlags.Piercing : DamageFlags.Normal)
                         | DamageFlags.DirectHit;
             var damageContext = new DamageContext(1, flags, projectile.ColorName.Value);
@@ -201,7 +208,7 @@ namespace BalloonParty.Projectile.Controller
             // is retained on the model, so its surviving neighbours are still resolvable.
             if (isRainbowBuff && outcome == HitOutcome.Pop)
             {
-                ConvertNeighborsToRainbow(balloon.SlotIndex.Value);
+                ConvertSideNeighboursToRainbow(balloon.SlotIndex.Value, projectile.Direction);
             }
 
             return recolored ? ProjectileHitVisual.Recolored : ProjectileHitVisual.None;
@@ -234,8 +241,21 @@ namespace BalloonParty.Projectile.Controller
             return false;
         }
 
-        private void ConvertNeighborsToRainbow(Vector2Int slot)
+        private void ConvertSideNeighboursToRainbow(Vector2Int slot, Vector3 projectileDirection)
         {
+            // Convert up to two neighbours on the shot's sides, not every active neighbour.
+            // The selection is based on the projectile's travel direction: the neighbours
+            // whose offsets are most perpendicular to the shot are the left/right side slots.
+            var direction2D = new Vector2(projectileDirection.x, projectileDirection.y);
+            if (direction2D.sqrMagnitude < 1e-8f)
+            {
+                return;
+            }
+
+            var center = (Vector2)_grid.IndexToWorldPosition(slot);
+            var neighborOffsets = new Vector2[6];
+            var validNeighborSlots = new Vector2Int[6];
+            var validCount = 0;
             HexCoordinates.HexNeighborIndices(slot.x, slot.y, _neighborBuffer);
 
             for (var n = 0; n < 6; n++)
@@ -246,6 +266,20 @@ namespace BalloonParty.Projectile.Controller
                     continue;
                 }
 
+                validNeighborSlots[validCount] = neighbor;
+                neighborOffsets[validCount] = (Vector2)_grid.IndexToWorldPosition(neighbor) - center;
+                validCount++;
+            }
+
+            if (validCount == 0)
+            {
+                return;
+            }
+
+            var sideIndices = VectorMathExtensions.GetMostPerpendicularIndices(direction2D.normalized, neighborOffsets, validCount, Math.Min(2, validCount));
+            foreach (var index in sideIndices)
+            {
+                var neighbor = validNeighborSlots[index];
                 if (_grid.At(neighbor) is IPaintable paintable)
                 {
                     paintable.Color.Value = GamePalette.RainbowColorId;

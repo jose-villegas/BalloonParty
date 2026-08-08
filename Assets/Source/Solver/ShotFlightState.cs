@@ -97,7 +97,7 @@ namespace BalloonParty.Solver
             string projectileColor)
         {
             var flags = DamageFlags.DirectHit
-                | (hasRainbowBuff ? DamageFlags.WildcardStreak | DamageFlags.Piercing : DamageFlags.Normal)
+                | (hasRainbowBuff ? DamageFlags.WildcardStreak : DamageFlags.Normal)
                 | (isPiercing ? DamageFlags.Piercing : DamageFlags.Normal)
                 | (isRainbowTargetDeferred ? DamageFlags.DeferredStreak : DamageFlags.Normal)
                 | (isRainbowTargetCarry ? DamageFlags.CarryStreak : DamageFlags.Normal);
