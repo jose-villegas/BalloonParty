@@ -96,7 +96,7 @@ Material:
     - _GlowIntensity: 0.5
     - _GlowWidth: 0.045
     - _JunctionSmooth: 0.0512
-    - _LayerSpacing: 0.0115
+    - _LayerSpacing: 0.015
     - _LeanBendPower: 4
     - _LeanStrength: 2.5
     - _LeanStrengthY: 0.3
@@ -116,7 +116,7 @@ Material:
     - _NoiseVelocityIntensity: 0.2
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _PreviewLayers: 0.69
+    - _PreviewLayers: 0
     - _PulseSpeed: 10
     - _RevealEdge: 0.1
     - _RippleAmplitude: 0.05

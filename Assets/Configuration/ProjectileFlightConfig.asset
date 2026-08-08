@@ -55,7 +55,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   _cruiseTapEaseDuration: 0.25
   _sweepEnabled: 1
-  _sweepTapThreshold: 4
+  _sweepTapThreshold: 1
   _cruisePiercingTapThreshold: 5
   _pierceArmRampDuration: 0.5
   _pierceArmRampCurve:
