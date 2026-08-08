@@ -163,4 +163,4 @@ MonoBehaviour:
     m_RotationOrder: 4
   _holdSpeedUpMax: 3
   _holdSpeedUpLerpDuration: 2
-  _holdSpeedUpTooltipDelay: 3
+  _holdSpeedUpTooltipDelay: 7
