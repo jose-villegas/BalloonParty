@@ -1,5 +1,7 @@
 var NAVTREEINDEX84 =
 {
+"structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a23c2bc64d5d027dc397933c6359b4f5e":[6,0,0,5,7,0,0,7],
+"structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a2fcea0f276dec01e1f297ce0a6822704":[5,0,0,5,7,0,0,1],
 "structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a2fcea0f276dec01e1f297ce0a6822704":[6,0,0,5,7,0,0,1],
 "structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a5a3210add1dcecf34d0600bef1fcf2b4":[5,0,0,5,7,0,0,5],
 "structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a5a3210add1dcecf34d0600bef1fcf2b4":[6,0,0,5,7,0,0,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX84 =
 "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#abfccc2e17b86238cb601d1d271f75662":[6,0,0,6,7,21,7],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#ac448d8c158f936af3fae38e3b2aafe02":[5,0,0,6,7,21,9],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#ac448d8c158f936af3fae38e3b2aafe02":[6,0,0,6,7,21,9],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#ad13f9f1fdcf0719b78894e68666c684e":[5,0,0,6,7,21,6],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#ad13f9f1fdcf0719b78894e68666c684e":[6,0,0,6,7,21,6],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#ade741fbbb50f02178096126d76c5c6e6":[5,0,0,6,7,21,2]
+"structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#ad13f9f1fdcf0719b78894e68666c684e":[5,0,0,6,7,21,6]
 };
