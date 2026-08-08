@@ -109,6 +109,7 @@ $(function(){initNavTree('classBalloonParty_1_1Shared_1_1Extensions_1_1VectorMat
 <div class="header">
   <div class="summary">
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pac-static-methods">Static Package Functions</a> &#124;
 <a href="classBalloonParty_1_1Shared_1_1Extensions_1_1VectorMathExtensions-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Shared.Extensions.VectorMathExtensions Class Reference</div></div>
 </div><!--header-->
@@ -138,7 +139,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memdesc:a834bfa0109b711c57fa93019f0124701"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unit direction in the XY plane for <em>radians</em> ; assign to a <code>Vector3</code> local before adding (direct <code>Vector3 + Vector2</code> is ambiguous).  <br /></td></tr>
 <tr class="separator:a834bfa0109b711c57fa93019f0124701"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2483de863f503d85f1c6bafc032ec0c4" id="r_a2483de863f503d85f1c6bafc032ec0c4"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2483de863f503d85f1c6bafc032ec0c4">PolylineLength</a> (this IReadOnlyList&lt; Vector3 &gt; points)</td></tr>
-<tr class="memdesc:a2483de863f503d85f1c6bafc032ec0c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">True length of the open polyline through every point — the sum of consecutive segment lengths (unlike a sum of <em>squared</em> segments, this is the real distance travelled).  <br /></td></tr>
+<tr class="memdesc:a2483de863f503d85f1c6bafc032ec0c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">True length of the open polyline through every point — the sum of consecutive segment lengths.  <br /></td></tr>
 <tr class="separator:a2483de863f503d85f1c6bafc032ec0c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aecac2755ad6f60a1f20bc19d533227af" id="r_aecac2755ad6f60a1f20bc19d533227af"><td class="memItemLeft" align="right" valign="top">static Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aecac2755ad6f60a1f20bc19d533227af">RandomPointInAnnulusSector</a> (float innerRadius, float outerRadius, float minAngleRadians, float maxAngleRadians)</td></tr>
 <tr class="memdesc:aecac2755ad6f60a1f20bc19d533227af"><td class="mdescLeft">&#160;</td><td class="mdescRight">A uniformly random point in the annulus sector bounded by radii [<em>innerRadius</em> , <em>outerRadius</em> ] and the angular span [<em>minAngleRadians</em> , <em>maxAngleRadians</em> ] (CCW from +x).  <br /></td></tr>
@@ -151,6 +152,12 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:ace136725e3966a10d67fd510644019ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3402894d84898066d7edc5025490dc73" id="r_a3402894d84898066d7edc5025490dc73"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3402894d84898066d7edc5025490dc73">WithinRadius</a> (this Vector3 a, Vector3 b, float radius)</td></tr>
 <tr class="separator:a3402894d84898066d7edc5025490dc73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
+Static Package Functions</h2></td></tr>
+<tr class="memitem:ad34eaf869a33d3359d3defecc86eec67" id="r_ad34eaf869a33d3359d3defecc86eec67"><td class="memItemLeft" align="right" valign="top">static int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad34eaf869a33d3359d3defecc86eec67">GetMostPerpendicularIndices</a> (Vector2 direction, Vector2[] vectors, int vectorCount, int count)</td></tr>
+<tr class="memdesc:ad34eaf869a33d3359d3defecc86eec67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the indices of the vectors that are most perpendicular to <em>direction</em> .  <br /></td></tr>
+<tr class="separator:ad34eaf869a33d3359d3defecc86eec67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Stateless geometry helpers: 2D distance/radius tests, point-set ops, a framing clamp. </p>
@@ -359,6 +366,48 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ad34eaf869a33d3359d3defecc86eec67" name="ad34eaf869a33d3359d3defecc86eec67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad34eaf869a33d3359d3defecc86eec67">&#9670;&#160;</a></span>GetMostPerpendicularIndices()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int[] BalloonParty.Shared.Extensions.VectorMathExtensions.GetMostPerpendicularIndices </td>
+          <td>(</td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>direction</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2[]</td>          <td class="paramname"><span class="paramname"><em>vectors</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>vectorCount</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>count</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the indices of the vectors that are most perpendicular to <em>direction</em> . </p>
+<p>The result is the vectors with the smallest absolute dot product against the normalized direction, useful for selecting the side neighbours of a projectile pop based on its travel direction. </p>
+
+</div>
+</div>
 <a id="a2483de863f503d85f1c6bafc032ec0c4" name="a2483de863f503d85f1c6bafc032ec0c4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2483de863f503d85f1c6bafc032ec0c4">&#9670;&#160;</a></span>PolylineLength()</h2>
 
@@ -382,7 +431,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>True length of the open polyline through every point — the sum of consecutive segment lengths (unlike a sum of <em>squared</em> segments, this is the real distance travelled). </p>
+<p>True length of the open polyline through every point — the sum of consecutive segment lengths. </p>
 
 </div>
 </div>

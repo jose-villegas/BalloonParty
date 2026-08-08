@@ -1,5 +1,7 @@
 var NAVTREEINDEX80 =
 {
+"plan_future_ideas.html#autotoc_md451":[3,4,0,13,3],
+"plan_future_ideas.html#autotoc_md452":[3,4,0,13,4],
 "plan_future_ideas.html#autotoc_md453":[3,4,0,13,5],
 "plan_future_ideas.html#autotoc_md454":[3,4,0,13,6],
 "plan_future_ideas.html#autotoc_md455":[3,4,0,13,7],
@@ -247,7 +249,5 @@ var NAVTREEINDEX80 =
 "structBalloonParty_1_1Audio_1_1Editor_1_1SfxCandidate.html#afac96fce0d5f659389966eb9aacc5606":[6,0,0,0,1,7,8],
 "structBalloonParty_1_1Audio_1_1Editor_1_1SfxCandidate.html#afb6061994b28b2e5be2435fc3521ce26":[5,0,0,0,1,7,0],
 "structBalloonParty_1_1Audio_1_1Editor_1_1SfxCandidate.html#afb6061994b28b2e5be2435fc3521ce26":[6,0,0,0,1,7,0],
-"structBalloonParty_1_1Audio_1_1Editor_1_1SfxFetchRequest.html":[5,0,0,0,1,9],
-"structBalloonParty_1_1Audio_1_1Editor_1_1SfxFetchRequest.html":[6,0,0,0,1,9],
-"structBalloonParty_1_1Audio_1_1Editor_1_1SfxFetchRequest.html#a03ab0ad1f5668321784a21bbabe89650":[5,0,0,0,1,9,3]
+"structBalloonParty_1_1Audio_1_1Editor_1_1SfxFetchRequest.html":[5,0,0,0,1,9]
 };
