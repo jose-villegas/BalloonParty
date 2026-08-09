@@ -817,7 +817,7 @@ namespace BalloonParty.Solver
             // run over the ACTIVE WORKING SET (SlotIndex-addressed) so it works with dynamics: null.
             if (state.HasRainbowBuff)
             {
-                ConvertNeighborsToRainbow(workingSet, activeCount, balloon.SlotIndex, state.Direction, scoreRules.RainbowColorId);
+                ConvertSideNeighboursToRainbow(workingSet, activeCount, balloon.SlotIndex, state.Direction, scoreRules.RainbowColorId);
             }
 
             state.Pops++;
@@ -1009,7 +1009,7 @@ namespace BalloonParty.Solver
         // pop, chaining the popped carrier's own item (if any) onto the SAME FIFO queue — a bomb-popped
         // balloon carrying another Bomb resolves on a LATER iteration of RunItemEffects' drain, not
         // nested recursion (mirrors the live frame cadence). Item pops never touch
-        // ConvertNeighborsToRainbow/IsCruising/ConsecutiveWallBounces — those are projectile-contact-only.
+        // ConvertSideNeighboursToRainbow/IsCruising/ConsecutiveWallBounces — those are projectile-contact-only.
         private static void PopItemHit(
             ShotItemLayer items, ShotBalloonState[] workingSet, ref int activeCount, int index, float tHit,
             ShotBoardDynamics dynamics, in ShotScoreRules scoreRules, string sourceColorId, DamageFlags flags,
@@ -1044,7 +1044,7 @@ namespace BalloonParty.Solver
             }
         }
 
-        // Shared by ApplyEffectHits' Recolor case and ConvertNeighborsToRainbow's rainbow-buff
+        // Shared by ApplyEffectHits' Recolor case and ConvertSideNeighboursToRainbow's rainbow-buff
         // conversion — a plain assignment mirrors ApplyColorChange writing IHasColor.Color.Value
         // directly: setting a balloon's colour to the reserved rainbow marker makes it rainbow; painting
         // a rainbow balloon back to an ordinary colour (Paint's green-on-rainbow case, Phase C5) clears
@@ -1259,12 +1259,12 @@ namespace BalloonParty.Solver
             return false;
         }
 
-        // Mirrors ProjectileHitResolver.ConvertNeighborsToRainbow — a rainbow-buffed pop converts
+        // Mirrors ProjectileHitResolver.ConvertSideNeighboursToRainbow — a rainbow-buffed pop converts
         // only the two side neighbours orthogonal to the projectile direction, not every nearby neighbour.
         // This runs over the ACTIVE WORKING SET (SlotIndex-addressed linear scan, not the dynamics grid),
         // so it works with dynamics: null too. Only a poppable, still-coloured, non-rainbow, non-static
         // target converts — IPaintable is "poppable, coloured" today.
-        private static void ConvertNeighborsToRainbow(
+        private static void ConvertSideNeighboursToRainbow(
             ShotBalloonState[] workingSet, int activeCount, Vector2Int slot, Vector2 direction, string rainbowColorId)
         {
             if (direction.sqrMagnitude < 1e-8f)
