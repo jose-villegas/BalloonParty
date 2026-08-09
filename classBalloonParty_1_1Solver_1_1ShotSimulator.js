@@ -4,7 +4,7 @@ var classBalloonParty_1_1Solver_1_1ShotSimulator =
     [ "ApplyItemOutcome", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ab622d64137e080f1d9e19c9940dc0899", null ],
     [ "ApplyRecolor", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ac5df1a415170ebd9bbce1b898777d8c6", null ],
     [ "ContainsColor", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ac3f9c8484153e97ecddd8834144d8df8", null ],
-    [ "ConvertNeighborsToRainbow", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a1925f0a995bfa94f000d7b28b13619bc", null ],
+    [ "ConvertSideNeighboursToRainbow", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ad0fcb585d4da51a43e3f0fb55d479b78", null ],
     [ "CopyIntoWorkingSet", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#aeff3f330e00afeaadf9f8f652798ad77", null ],
     [ "CountCruiseTap", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a9ee4321e2418147cf3c059c035e9f742", null ],
     [ "CountSweepTap", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a3d4c3abca9d8d772783dfd840de7f8d9", null ],
