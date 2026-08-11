@@ -944,16 +944,18 @@ var hierarchy =
       [ "BalloonParty.Item.ItemVisualView", "classBalloonParty_1_1Item_1_1ItemVisualView.html", null ],
       [ "BalloonParty.Item.LaserItemRotation", "classBalloonParty_1_1Item_1_1LaserItemRotation.html", null ],
       [ "BalloonParty.Item.Paint.PaintBlobRenderer", "classBalloonParty_1_1Item_1_1Paint_1_1PaintBlobRenderer.html", null ],
-      [ "BalloonParty.Item.PredictionSightProbe", "classBalloonParty_1_1Item_1_1PredictionSightProbe.html", null ],
       [ "BalloonParty.Item.ProjectileFacingRotator", "classBalloonParty_1_1Item_1_1ProjectileFacingRotator.html", null ],
       [ "BalloonParty.Item.SightReaction", "classBalloonParty_1_1Item_1_1SightReaction.html", [
         [ "BalloonParty.Item.SightRampReaction", "classBalloonParty_1_1Item_1_1SightRampReaction.html", [
           [ "BalloonParty.Item.PredictionSightSpiral", "classBalloonParty_1_1Item_1_1PredictionSightSpiral.html", null ],
+          [ "BalloonParty.Item.SightFadeReaction", "classBalloonParty_1_1Item_1_1SightFadeReaction.html", null ],
+          [ "BalloonParty.Item.SightGlitterDriftReaction", "classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html", null ],
           [ "BalloonParty.Item.SightScalePulseReaction", "classBalloonParty_1_1Item_1_1SightScalePulseReaction.html", null ],
           [ "BalloonParty.Item.SightShakeReaction", "classBalloonParty_1_1Item_1_1SightShakeReaction.html", null ],
           [ "BalloonParty.Item.SightSpinReaction", "classBalloonParty_1_1Item_1_1SightSpinReaction.html", null ]
         ] ]
       ] ],
+      [ "BalloonParty.Prediction.PredictionSightProbe", "classBalloonParty_1_1Prediction_1_1PredictionSightProbe.html", null ],
       [ "BalloonParty.Prediction.PredictionTraceView", "classBalloonParty_1_1Prediction_1_1PredictionTraceView.html", null ],
       [ "BalloonParty.Prediction.TraceHitMarker", "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html", null ],
       [ "BalloonParty.Projectile.View.ProjectileShieldView", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView.html", null ],

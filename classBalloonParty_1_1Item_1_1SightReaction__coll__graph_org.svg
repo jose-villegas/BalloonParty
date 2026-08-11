@@ -38,10 +38,10 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="classBalloonParty_1_1Item_1_1PredictionSightProbe.html" target="_top" xlink:title="Single per&#45;item producer of the &quot;is the loaded shot&#39;s aim&#45;prediction line sighted on this item,...">
-<polygon fill="white" stroke="#666666" points="252.5,-96 98.5,-96 98.5,-66 252.5,-66 252.5,-96"/>
-<text text-anchor="start" x="106.5" y="-84" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Prediction</text>
-<text text-anchor="middle" x="175.5" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">SightProbe</text>
+<g id="a_Node000003"><a xlink:href="classBalloonParty_1_1Prediction_1_1PredictionSightProbe.html" target="_top" xlink:title="Single per&#45;actor producer of the &quot;is the loaded shot&#39;s aim&#45;prediction line sighted on this &#160;&#160;&#160;actor,...">
+<polygon fill="white" stroke="#666666" points="230,-96 99,-96 99,-66 230,-66 230,-96"/>
+<text text-anchor="start" x="107" y="-84" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Prediction.</text>
+<text text-anchor="middle" x="164.5" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">PredictionSightProbe</text>
 </a>
 </g>
 </g>
@@ -49,8 +49,8 @@
 <g id="edge3_Node000003_Node000002" class="edge">
 <title>Node2&#45;&gt;Node3</title>
 <g id="a_edge3_Node000003_Node000002"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M90.7,-142.57C109.44,-129.19 137.15,-109.39 155.74,-96.11"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="88.65,-139.74 82.54,-148.4 92.72,-145.43 88.65,-139.74"/>
+<path fill="none" stroke="#63b8ff" d="M89.27,-142.02C106.03,-128.65 130.39,-109.21 146.81,-96.11"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="86.92,-139.42 81.28,-148.4 91.28,-144.9 86.92,-139.42"/>
 </a>
 </g>
 </g>
@@ -58,11 +58,11 @@
 <g id="edge2_Node000001_Node000003" class="edge">
 <title>Node3&#45;&gt;Node1</title>
 <g id="a_edge2_Node000001_Node000003"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M149.47,-59.68C132.29,-46.26 110.65,-29.36 97.73,-19.27"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="147.45,-62.54 157.49,-65.94 151.76,-57.02 147.45,-62.54"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M140.86,-58.94C125.95,-45.65 107.46,-29.17 96.34,-19.27"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="138.92,-61.9 148.72,-65.94 143.58,-56.67 138.92,-61.9"/>
 </a>
 </g>
-<text text-anchor="middle" x="153" y="-40" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _probe</text>
+<text text-anchor="middle" x="147" y="-40" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _probe</text>
 </g>
 <!-- Node4 -->
 <g id="Node000004" class="node">
@@ -78,11 +78,11 @@
 <g id="edge4_Node000003_Node000004" class="edge">
 <title>Node4&#45;&gt;Node3</title>
 <g id="a_edge4_Node000003_Node000004"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M191.91,-133.28C187.99,-121.03 183.34,-106.5 179.99,-96.04"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="188.6,-134.44 194.99,-142.89 195.27,-132.3 188.6,-134.44"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M188.6,-133.65C182.85,-121.32 175.98,-106.61 171.05,-96.04"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="185.52,-135.31 192.92,-142.89 191.86,-132.35 185.52,-135.31"/>
 </a>
 </g>
-<text text-anchor="middle" x="209" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _source</text>
+<text text-anchor="middle" x="205" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _source</text>
 </g>
 </g>
 </svg>

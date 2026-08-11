@@ -1,5 +1,9 @@
 var NAVTREEINDEX20 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a8e5a36830884f82b21a7a176ffd7ab71":[5,0,0,3,7,2,0],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a8e5a36830884f82b21a7a176ffd7ab71":[6,0,0,3,7,2,0],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a910ae2e8368e2801282b58afd27ef15a":[5,0,0,3,7,2,5],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a910ae2e8368e2801282b58afd27ef15a":[6,0,0,3,7,2,5],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#abd2e1448346df5889b839d8cbbedcf46":[5,0,0,3,7,2,4],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#abd2e1448346df5889b839d8cbbedcf46":[6,0,0,3,7,2,4],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#ac4477083100c07602672f5cae85b3d04":[5,0,0,3,7,2,10],
@@ -245,9 +249,5 @@ var NAVTREEINDEX20 =
 "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ae107af9a44f594acec3593aff7b19a1b":[5,0,0,3,8,0,20],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ae107af9a44f594acec3593aff7b19a1b":[6,0,0,3,8,0,20],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ae39b60a027595d542c58860144bdb217":[5,0,0,3,8,0,1],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ae39b60a027595d542c58860144bdb217":[6,0,0,3,8,0,1],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#aef3dc229dd3ded67f2e414e9c4d28470":[5,0,0,3,8,0,3],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#aef3dc229dd3ded67f2e414e9c4d28470":[6,0,0,3,8,0,3],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#afe98ac3340ddeb1bd314559924b96984":[5,0,0,3,8,0,0],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#afe98ac3340ddeb1bd314559924b96984":[6,0,0,3,8,0,0]
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ae39b60a027595d542c58860144bdb217":[6,0,0,3,8,0,1]
 };

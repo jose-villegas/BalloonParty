@@ -525,9 +525,10 @@ var annotated_dup =
         [ "ItemVisualView", "classBalloonParty_1_1Item_1_1ItemVisualView.html", "classBalloonParty_1_1Item_1_1ItemVisualView" ],
         [ "ITransformCapture", "interfaceBalloonParty_1_1Item_1_1ITransformCapture.html", "interfaceBalloonParty_1_1Item_1_1ITransformCapture" ],
         [ "LaserItemRotation", "classBalloonParty_1_1Item_1_1LaserItemRotation.html", "classBalloonParty_1_1Item_1_1LaserItemRotation" ],
-        [ "PredictionSightProbe", "classBalloonParty_1_1Item_1_1PredictionSightProbe.html", "classBalloonParty_1_1Item_1_1PredictionSightProbe" ],
         [ "PredictionSightSpiral", "classBalloonParty_1_1Item_1_1PredictionSightSpiral.html", "classBalloonParty_1_1Item_1_1PredictionSightSpiral" ],
         [ "ProjectileFacingRotator", "classBalloonParty_1_1Item_1_1ProjectileFacingRotator.html", "classBalloonParty_1_1Item_1_1ProjectileFacingRotator" ],
+        [ "SightFadeReaction", "classBalloonParty_1_1Item_1_1SightFadeReaction.html", "classBalloonParty_1_1Item_1_1SightFadeReaction" ],
+        [ "SightGlitterDriftReaction", "classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html", "classBalloonParty_1_1Item_1_1SightGlitterDriftReaction" ],
         [ "SightRampReaction", "classBalloonParty_1_1Item_1_1SightRampReaction.html", "classBalloonParty_1_1Item_1_1SightRampReaction" ],
         [ "SightReaction", "classBalloonParty_1_1Item_1_1SightReaction.html", "classBalloonParty_1_1Item_1_1SightReaction" ],
         [ "SightScalePulseReaction", "classBalloonParty_1_1Item_1_1SightScalePulseReaction.html", "classBalloonParty_1_1Item_1_1SightScalePulseReaction" ],
@@ -546,6 +547,7 @@ var annotated_dup =
         [ "NudgeService", "classBalloonParty_1_1Nudge_1_1NudgeService.html", "classBalloonParty_1_1Nudge_1_1NudgeService" ]
       ] ],
       [ "Prediction", "namespaceBalloonParty_1_1Prediction.html", [
+        [ "PredictionSightProbe", "classBalloonParty_1_1Prediction_1_1PredictionSightProbe.html", "classBalloonParty_1_1Prediction_1_1PredictionSightProbe" ],
         [ "PredictionTraceCalculator", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator" ],
         [ "PredictionTraceLights", "classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html", "classBalloonParty_1_1Prediction_1_1PredictionTraceLights" ],
         [ "PredictionTraceProvider", "classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html", "classBalloonParty_1_1Prediction_1_1PredictionTraceProvider" ],

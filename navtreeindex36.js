@@ -1,5 +1,9 @@
 var NAVTREEINDEX36 =
 {
+"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#afd1723a7bf9e100985cb683781a73231":[5,0,0,6,4,4,26],
+"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#afd1723a7bf9e100985cb683781a73231":[6,0,0,6,4,4,26],
+"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#afe881b18f90cd3831e49e626a97c2123":[5,0,0,6,4,4,27],
+"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#afe881b18f90cd3831e49e626a97c2123":[6,0,0,6,4,4,27],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html":[5,0,0,6,4,5],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html":[6,0,0,6,4,5],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html#a03617a92b186445d2b01aa1df0448a6e":[5,0,0,6,4,5,5],
@@ -245,9 +249,5 @@ var NAVTREEINDEX36 =
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#aba384954d8c15c25cd96fbf966e142ed":[5,0,0,6,6,0,2,8],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#aba384954d8c15c25cd96fbf966e142ed":[6,0,0,6,6,0,2,8],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#abd507b54cad22ff5dc8bf0801c1bf145":[5,0,0,6,6,0,2,17],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#abd507b54cad22ff5dc8bf0801c1bf145":[6,0,0,6,6,0,2,17],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#ad11e963f406e9022c04a7551efaa9bf0":[5,0,0,6,6,0,2,23],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#ad11e963f406e9022c04a7551efaa9bf0":[6,0,0,6,6,0,2,23],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#ae80d4a108934247fc28ca907a89f4f86":[5,0,0,6,6,0,2,19],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#ae80d4a108934247fc28ca907a89f4f86":[6,0,0,6,6,0,2,19]
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#abd507b54cad22ff5dc8bf0801c1bf145":[6,0,0,6,6,0,2,17]
 };

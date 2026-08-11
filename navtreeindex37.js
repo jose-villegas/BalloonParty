@@ -1,5 +1,9 @@
 var NAVTREEINDEX37 =
 {
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#ad11e963f406e9022c04a7551efaa9bf0":[5,0,0,6,6,0,2,23],
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#ad11e963f406e9022c04a7551efaa9bf0":[6,0,0,6,6,0,2,23],
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#ae80d4a108934247fc28ca907a89f4f86":[5,0,0,6,6,0,2,19],
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#ae80d4a108934247fc28ca907a89f4f86":[6,0,0,6,6,0,2,19],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#af2ce2463a643f0b82f8e0ce0aadfe1ed":[5,0,0,6,6,0,2,0],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#af2ce2463a643f0b82f8e0ce0aadfe1ed":[6,0,0,6,6,0,2,0],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#aff7ab0dcff98194e0b05585c4500b78e":[5,0,0,6,6,0,2,10],
@@ -245,9 +249,5 @@ var NAVTREEINDEX37 =
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html#a76aa595a7874e7cf43fecb485e063215":[5,0,0,6,6,0,11,0,8],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html#a76aa595a7874e7cf43fecb485e063215":[6,0,0,6,6,0,11,0,8],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html#a7cca5059c051944605782cd4d93fb87a":[5,0,0,6,6,0,11,0,10],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html#a7cca5059c051944605782cd4d93fb87a":[6,0,0,6,6,0,11,0,10],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html#a8647ba9984ba1e5a64682d457003dc85":[5,0,0,6,6,0,11,0,9],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html#a8647ba9984ba1e5a64682d457003dc85":[6,0,0,6,6,0,11,0,9],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html#a9e94f1db82f7a5e58260a45333f48e63":[5,0,0,6,6,0,11,0,7],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html#a9e94f1db82f7a5e58260a45333f48e63":[6,0,0,6,6,0,11,0,7]
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html#a7cca5059c051944605782cd4d93fb87a":[6,0,0,6,6,0,11,0,10]
 };

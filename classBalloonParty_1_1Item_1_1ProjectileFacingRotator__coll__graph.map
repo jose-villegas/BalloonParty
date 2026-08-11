@@ -1,11 +1,11 @@
 <map id="BalloonParty.Item.ProjectileFacingRotator" name="BalloonParty.Item.ProjectileFacingRotator">
-<area shape="rect" id="Node000001" title="Rotates an item icon to face the loaded/flying shot — aim direction while it&#39;s being lined up,..." alt="" coords="615,37,816,77"/>
+<area shape="rect" id="Node000001" title="Rotates an item icon to face the loaded/flying shot — aim direction while it&#39;s being lined up,..." alt="" coords="584,37,785,77"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="29,5,153,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,15,256,15,424,18,497,23,591,34,615,37,614,43,590,39,497,28,424,23,256,21,167,20"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Item_1_1PredictionSightProbe.html" title="Single per&#45;item producer of the &quot;is the loaded shot&#39;s aim&#45;prediction line sighted on this item,..." alt="" coords="280,37,485,77"/>
-<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="167,25,280,40,279,46,166,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="499,54,614,54,614,59,499,59"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,16,256,17,355,18,455,22,560,34,584,37,583,43,560,39,454,27,355,23,256,22,167,21"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Prediction_1_1PredictionSightProbe.html" title="Single per&#45;actor producer of the &quot;is the loaded shot&#39;s aim&#45;prediction line sighted on this &#160;&#160;&#160;actor,..." alt="" coords="280,37,455,77"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="168,26,280,42,279,47,167,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="469,54,584,54,584,59,469,59"/>
 <area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileFacingSource.html" title="Read&#45;only facing surface for the loaded/flying shot, exposed to a pooled (non&#45;injected) item visual —..." alt="" coords="5,66,177,106"/>
-<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="191,94,280,101,383,106,485,101,563,89,635,74,636,79,564,95,486,106,383,111,280,106,191,99"/>
-<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="191,73,279,64,280,70,191,79"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="191,94,280,101,367,105,454,101,532,89,605,74,606,79,533,95,455,106,367,110,280,106,191,99"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="191,73,279,63,280,69,191,78"/>
 </map>

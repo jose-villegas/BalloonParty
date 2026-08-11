@@ -1,9 +1,12 @@
 <map id="BalloonParty.Prediction.TraceHitMarker" name="BalloonParty.Prediction.TraceHitMarker">
-<area shape="rect" id="Node000001" title="View&#45;only marker showing where the aim&#45;prediction trace crosses this actor&#39;s circle." alt="" coords="376,55,551,95"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="55,5,179,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,27,352,53,376,57,375,62,352,58,193,32"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html" title="Shared reference to the current aim&#45;prediction trace, decoupled from direct access — mirrors BalloonP..." alt="" coords="30,55,205,95"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="219,73,376,73,376,78,219,78"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html" title="Prediction trace settings: how the line is segmented, how far it reaches, how many reflections it giv..." alt="" coords="5,119,229,159"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="239,114,375,89,376,94,240,119"/>
+<area shape="rect" id="Node000001" title="View&#45;only marker showing where the aim&#45;prediction trace crosses this actor&#39;s circle." alt="" coords="603,50,777,90"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="29,5,153,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,16,323,22,504,35,579,47,603,51,602,57,578,53,504,41,322,27,167,22"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Prediction_1_1PredictionSightProbe.html" title="Single per&#45;actor producer of the &quot;is the loaded shot&#39;s aim&#45;prediction line sighted on this &#160;&#160;&#160;actor,..." alt="" coords="305,50,479,90"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="167,28,305,52,304,58,166,34"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="493,67,602,67,602,73,493,73"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileFacingSource.html" title="Read&#45;only facing surface for the loaded/flying shot, exposed to a pooled (non&#45;injected) item visual —..." alt="" coords="5,61,177,101"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="191,78,256,77,304,74,305,79,256,82,191,83"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html" title="Prediction trace settings: how the line is segmented, how far it reaches, how many reflections it giv..." alt="" coords="280,114,504,154"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="499,108,602,86,603,91,500,114"/>
 </map>

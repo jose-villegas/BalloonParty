@@ -1,5 +1,9 @@
 var NAVTREEINDEX40 =
 {
+"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#aec3352291cc449162d95bdb0b162ffe1":[5,0,0,6,7,7,22],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#aec3352291cc449162d95bdb0b162ffe1":[6,0,0,6,7,7,22],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#af1edda20490efa20fe43d0dd3a0db30b":[5,0,0,6,7,7,25],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#af1edda20490efa20fe43d0dd3a0db30b":[6,0,0,6,7,7,25],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#af52da7455d7a792dd2ca01495202d76c":[5,0,0,6,7,7,17],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#af52da7455d7a792dd2ca01495202d76c":[6,0,0,6,7,7,17],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#af74ab9326bd38931610f3001f8636218":[5,0,0,6,7,7,93],
@@ -245,9 +249,5 @@ var NAVTREEINDEX40 =
 "classBalloonParty_1_1Game_1_1Telemetry_1_1SessionTelemetryContext.html#a342608c5e6ac5170d2cc743ea46101ba":[5,0,0,6,7,20,1],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1SessionTelemetryContext.html#a342608c5e6ac5170d2cc743ea46101ba":[6,0,0,6,7,20,1],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1SessionTelemetryContext.html#a8063ef034d233421860196abae2ccf24":[5,0,0,6,7,20,3],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1SessionTelemetryContext.html#a8063ef034d233421860196abae2ccf24":[6,0,0,6,7,20,3],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1SessionTelemetryContext.html#a99590c443b9d560304cd44ed1ace3e3c":[5,0,0,6,7,20,6],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1SessionTelemetryContext.html#a99590c443b9d560304cd44ed1ace3e3c":[6,0,0,6,7,20,6],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1SessionTelemetryContext.html#aae6858af68bc41b36cb75f66324698c4":[5,0,0,6,7,20,0],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1SessionTelemetryContext.html#aae6858af68bc41b36cb75f66324698c4":[6,0,0,6,7,20,0]
+"classBalloonParty_1_1Game_1_1Telemetry_1_1SessionTelemetryContext.html#a8063ef034d233421860196abae2ccf24":[6,0,0,6,7,20,3]
 };

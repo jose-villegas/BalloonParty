@@ -1,5 +1,5 @@
-<map id="BalloonParty.Item.PredictionSightProbe" name="BalloonParty.Item.PredictionSightProbe">
-<area shape="rect" id="Node000001" title="Single per&#45;item producer of the &quot;is the loaded shot&#39;s aim&#45;prediction line sighted on this item,..." alt="" coords="50,108,255,148"/>
+<map id="BalloonParty.Prediction.PredictionSightProbe" name="BalloonParty.Prediction.PredictionSightProbe">
+<area shape="rect" id="Node000001" title="Single per&#45;actor producer of the &quot;is the loaded shot&#39;s aim&#45;prediction line sighted on this &#160;&#160;&#160;actor,..." alt="" coords="65,108,240,148"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,13,129,38"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,47,139,106,135,110,84,50"/>
 <area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileFacingSource.html" title="Read&#45;only facing surface for the loaded/flying shot, exposed to a pooled (non&#45;injected) item visual —..." alt="" coords="153,5,325,45"/>

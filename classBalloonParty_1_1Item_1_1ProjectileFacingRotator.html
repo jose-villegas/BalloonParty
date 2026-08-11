@@ -130,7 +130,7 @@ $(function(){initNavTree('classBalloonParty_1_1Item_1_1ProjectileFacingRotator.h
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Item_1_1ProjectileFacingRotator__coll__graph.svg" width="100%" height="386"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Item_1_1ProjectileFacingRotator__coll__graph.svg" width="100%" height="385"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
@@ -187,7 +187,7 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a6608badcc4d931fa637f57a96f38009a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae59218db69c5b557d4f62f7b7458e360" id="r_ae59218db69c5b557d4f62f7b7458e360"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae59218db69c5b557d4f62f7b7458e360">_proximityRadius</a></td></tr>
 <tr class="separator:ae59218db69c5b557d4f62f7b7458e360"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c6be367785238512af225eb4a720bbb" id="r_a2c6be367785238512af225eb4a720bbb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Item_1_1PredictionSightProbe.html">PredictionSightProbe</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c6be367785238512af225eb4a720bbb">_sightProbe</a></td></tr>
+<tr class="memitem:a2c6be367785238512af225eb4a720bbb" id="r_a2c6be367785238512af225eb4a720bbb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Prediction_1_1PredictionSightProbe.html">PredictionSightProbe</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c6be367785238512af225eb4a720bbb">_sightProbe</a></td></tr>
 <tr class="separator:a2c6be367785238512af225eb4a720bbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90bfc3462594121b6baf659245b2bc69" id="r_a90bfc3462594121b6baf659245b2bc69"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1IProjectileFacingSource.html">IProjectileFacingSource</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a90bfc3462594121b6baf659245b2bc69">_source</a></td></tr>
 <tr class="separator:a90bfc3462594121b6baf659245b2bc69"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -202,7 +202,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Rotates an item icon to face the loaded/flying shot — aim direction while it's being lined up, the strike point while it's in flight, an idle spin otherwise. </p>
-<p>Sits on a pooled item visual (like <a class="el" href="classBalloonParty_1_1Item_1_1LaserItemRotation.html">LaserItemRotation</a>), so it isn't DI-injected: the host (<a class="el" href="classBalloonParty_1_1Item_1_1ItemDisplayService.html">ItemDisplayService</a>) hands it an <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1IProjectileFacingSource.html" title="Read-only facing surface for the loaded/flying shot, exposed to a pooled (non-injected) item visual —...">IProjectileFacingSource</a> via <a class="el" href="#a5d045e39a5b5c4af037aab97e82478bf">Configure</a> after activation. For AlignPredictionHit it prefers a composed <a class="el" href="classBalloonParty_1_1Item_1_1PredictionSightProbe.html" title="Single per-item producer of the &quot;is the loaded shot&#39;s aim-prediction line sighted on this item,...">PredictionSightProbe</a> (the shared per-item trace) when one is present, falling back to its own trace otherwise — so a rotator without a probe still aligns exactly as before. </p>
+<p>Sits on a pooled item visual (like <a class="el" href="classBalloonParty_1_1Item_1_1LaserItemRotation.html">LaserItemRotation</a>), so it isn't DI-injected: the host (<a class="el" href="classBalloonParty_1_1Item_1_1ItemDisplayService.html">ItemDisplayService</a>) hands it an <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1IProjectileFacingSource.html" title="Read-only facing surface for the loaded/flying shot, exposed to a pooled (non-injected) item visual —...">IProjectileFacingSource</a> via <a class="el" href="#a5d045e39a5b5c4af037aab97e82478bf">Configure</a> after activation. For AlignPredictionHit it prefers a composed <a class="el" href="classBalloonParty_1_1Prediction_1_1PredictionSightProbe.html" title="Single per-actor producer of the &quot;is the loaded shot&#39;s aim-prediction line sighted on this    actor,...">PredictionSightProbe</a> (the shared per-item trace) when one is present, falling back to its own trace otherwise — so a rotator without a probe still aligns exactly as before. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a2f807a1259bb538ae6bc92471b6c07a1" name="a2f807a1259bb538ae6bc92471b6c07a1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2f807a1259bb538ae6bc92471b6c07a1">&#9670;&#160;</a></span>Align()</h2>
@@ -754,7 +754,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classBalloonParty_1_1Item_1_1PredictionSightProbe.html">PredictionSightProbe</a> BalloonParty.Item.ProjectileFacingRotator._sightProbe</td>
+          <td class="memname"><a class="el" href="classBalloonParty_1_1Prediction_1_1PredictionSightProbe.html">PredictionSightProbe</a> BalloonParty.Item.ProjectileFacingRotator._sightProbe</td>
         </tr>
       </table>
   </td>

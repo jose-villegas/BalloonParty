@@ -46,7 +46,7 @@ var searchData=
   ['poolchannel_2d1_2dg_43',['PoolChannel-1-g',['../classBalloonParty_1_1Shared_1_1Pool_1_1PoolChannel-1-g.html',1,'BalloonParty::Shared::Pool']]],
   ['poolmanager_44',['PoolManager',['../classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html',1,'BalloonParty::Shared::Pool']]],
   ['poolmanagerextensions_45',['PoolManagerExtensions',['../classBalloonParty_1_1Shared_1_1Extensions_1_1PoolManagerExtensions.html',1,'BalloonParty::Shared::Extensions']]],
-  ['predictionsightprobe_46',['PredictionSightProbe',['../classBalloonParty_1_1Item_1_1PredictionSightProbe.html',1,'BalloonParty::Item']]],
+  ['predictionsightprobe_46',['PredictionSightProbe',['../classBalloonParty_1_1Prediction_1_1PredictionSightProbe.html',1,'BalloonParty::Prediction']]],
   ['predictionsightspiral_47',['PredictionSightSpiral',['../classBalloonParty_1_1Item_1_1PredictionSightSpiral.html',1,'BalloonParty::Item']]],
   ['predictiontracecalculator_48',['PredictionTraceCalculator',['../classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html',1,'BalloonParty::Prediction']]],
   ['predictiontraceconfig_49',['PredictionTraceConfig',['../classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html',1,'BalloonParty::Configuration']]],

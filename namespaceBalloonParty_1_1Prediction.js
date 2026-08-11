@@ -1,5 +1,6 @@
 var namespaceBalloonParty_1_1Prediction =
 [
+    [ "PredictionSightProbe", "classBalloonParty_1_1Prediction_1_1PredictionSightProbe.html", "classBalloonParty_1_1Prediction_1_1PredictionSightProbe" ],
     [ "PredictionTraceCalculator", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator" ],
     [ "PredictionTraceLights", "classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html", "classBalloonParty_1_1Prediction_1_1PredictionTraceLights" ],
     [ "PredictionTraceProvider", "classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html", "classBalloonParty_1_1Prediction_1_1PredictionTraceProvider" ],

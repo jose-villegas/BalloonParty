@@ -1,5 +1,9 @@
 var NAVTREEINDEX16 =
 {
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#aaa5830b8dfccaa73597faee0e993ee5d":[5,0,0,3,4,1,61],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#aaa5830b8dfccaa73597faee0e993ee5d":[6,0,0,3,4,1,61],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#aacc060d5a4cc7938521e61555196f350":[5,0,0,3,4,1,18],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#aacc060d5a4cc7938521e61555196f350":[6,0,0,3,4,1,18],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#ab2d9830f182240b390dbae6332029aa9":[5,0,0,3,4,1,31],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#ab2d9830f182240b390dbae6332029aa9":[6,0,0,3,4,1,31],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#abc8127c4009493b546f835e01b8d3cc2":[5,0,0,3,4,1,7],
@@ -245,9 +249,5 @@ var NAVTREEINDEX16 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html#adfc4a1e972e19fbe392d98e6c3bc8d72":[5,0,0,3,4,22,7],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html#adfc4a1e972e19fbe392d98e6c3bc8d72":[6,0,0,3,4,22,7],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html#ae7a2c0fcd2d9f6d1a74e7eebdd800d04":[5,0,0,3,4,22,6],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html#ae7a2c0fcd2d9f6d1a74e7eebdd800d04":[6,0,0,3,4,22,6],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html#aee9507e8d0427c56b8e3fa317c19b847":[5,0,0,3,4,22,9],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html#aee9507e8d0427c56b8e3fa317c19b847":[6,0,0,3,4,22,9],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html#af575b57a39b80e673596127566f5454c":[5,0,0,3,4,22,0],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html#af575b57a39b80e673596127566f5454c":[6,0,0,3,4,22,0]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html#ae7a2c0fcd2d9f6d1a74e7eebdd800d04":[6,0,0,3,4,22,6]
 };

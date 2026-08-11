@@ -1,4 +1,4 @@
 var PredictionSightProbe_8cs =
 [
-    [ "BalloonParty.Item.PredictionSightProbe", "classBalloonParty_1_1Item_1_1PredictionSightProbe.html", "classBalloonParty_1_1Item_1_1PredictionSightProbe" ]
+    [ "BalloonParty.Prediction.PredictionSightProbe", "classBalloonParty_1_1Prediction_1_1PredictionSightProbe.html", "classBalloonParty_1_1Prediction_1_1PredictionSightProbe" ]
 ];

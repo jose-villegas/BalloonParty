@@ -1,5 +1,9 @@
 var NAVTREEINDEX19 =
 {
+"classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a7862dda581cb1d3acfdc46568b61b819":[5,0,0,3,6,0,8],
+"classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a7862dda581cb1d3acfdc46568b61b819":[6,0,0,3,6,0,8],
+"classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a7eb877e63600a435d39fe0ce48827170":[5,0,0,3,6,0,4],
+"classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a7eb877e63600a435d39fe0ce48827170":[6,0,0,3,6,0,4],
 "classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a81b79e95027e7f2e248b530147846e14":[5,0,0,3,6,0,10],
 "classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a81b79e95027e7f2e248b530147846e14":[6,0,0,3,6,0,10],
 "classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a93b6f47bbe9ccf1d03ac0575a9f05a43":[5,0,0,3,6,0,15],
@@ -245,9 +249,5 @@ var NAVTREEINDEX19 =
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a4257aa1223da4bf9462f2a386b17df60":[5,0,0,3,7,2,1],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a4257aa1223da4bf9462f2a386b17df60":[6,0,0,3,7,2,1],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a576eaa8d45acc610a5314a770f105251":[5,0,0,3,7,2,9],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a576eaa8d45acc610a5314a770f105251":[6,0,0,3,7,2,9],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a8e5a36830884f82b21a7a176ffd7ab71":[5,0,0,3,7,2,0],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a8e5a36830884f82b21a7a176ffd7ab71":[6,0,0,3,7,2,0],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a910ae2e8368e2801282b58afd27ef15a":[5,0,0,3,7,2,5],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a910ae2e8368e2801282b58afd27ef15a":[6,0,0,3,7,2,5]
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a576eaa8d45acc610a5314a770f105251":[6,0,0,3,7,2,9]
 };

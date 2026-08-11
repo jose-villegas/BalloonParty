@@ -135,7 +135,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>The projectile is the ball fired by the thrower. It travels in a straight line, bounces off walls, and pops balloons on contact.</p>
-<h1><a class="anchor" id="autotoc_md721"></a>
+<h1><a class="anchor" id="autotoc_md722"></a>
 Gameplay</h1>
 <p>Each shot starts loaded on the thrower. When fired it moves freely across the screen, reflecting off the top, left, and right boundaries. Each bounce costs one shield. When shields are exhausted the projectile is destroyed, the grid rebalances, and the thrower reloads.</p>
 <p>Cruise and Sweep both feed the projectile's tap system, and both are <b>runs</b> — each pays out only once the shot has strung enough of its own kind of segment together, and any segment of the other kind breaks the streak:</p>
@@ -164,7 +164,7 @@ Gameplay</h1>
 <p><b><code>MaxSpeedMultiplier</code> is a safety rail, not a tuning knob</b> — and since taps accrue for the whole flight, it is what actually stops the shot. It clamps the <b>final</b> speed (buffs included, measured against unbuffed base) in both <code>ProjectileMotionResolver.ResolveFlightSpeed</code> and the solver's <code>CurrentSpeed</code>. Its job is purely that one fixed step must stay short enough to hit what it passes: at 8 base speed and a 0.02 timestep a step exceeds a balloon's chord (~0.875 wu) above ~×5.5 and the play area above ~×28, so ×5.5 is the meaningful bound. Velocity-scaled feedback normalizes against <code>ReachableTopSpeedMultiplier</code>, which is that rail.</p>
 <p>On contact with a balloon the projectile absorbs that balloon's color. The shared <code>ColorStreakTracker</code> (<code>Game/Score/</code>) tracks consecutive same-color pops, but <b>shields are granted by items only</b> — see <code>ShieldItemHandler</code> and <code>ItemAssigner</code>. <b><code>IRunConfig.StreakGrantsShields</code> gates this behavior</b>: when true (the old mode), a same-color streak of 2+ yields an additional shield per pop; when false (current), color streaks award no shields at all. The condition lives in <code>StreakShieldRule.GrantsShield</code>, called by both <code>ProjectileHitResolver</code> and the solver's <code>ShotSimulator</code>. Neighboring balloons nudge outward from the impact point using slot-based positions (logical grid positions, not visual transform positions) to ensure consistent nudge direction regardless of in-progress animations.</p>
 <p>When a hit returns <code>HitOutcome.Absorb</code>, <code>ProjectileHitResolver</code> dispatches <code>ActorHitMessage(Absorb)</code>, sets <code>model.IsFree = false</code>, and returns <code>ProjectileHitVisual.Destroyed</code> — the view then calls <code>DestroyProjectile()</code>. <code>Absorb</code> is produced by <code>AbsorberActorModel</code> (always absorbs, killing the projectile) — no balloon model returns it; balloon hits resolve to <code>Pop</code>, <code>Deflect</code>, or <code>PassThrough</code>.</p>
-<h1><a class="anchor" id="autotoc_md722"></a>
+<h1><a class="anchor" id="autotoc_md723"></a>
 Turn-based flow</h1>
 <p>The game follows a turn-based animation pipeline:</p>
 <ol type="1">
@@ -173,7 +173,7 @@ Turn-based flow</h1>
 <li><b>Spawn + balance</b> — <code>BalloonSpawner</code> opens its spawn sequence with a pre-spawn <code>Balance(relocateRoamers: true)</code> pass, spawns new lines, then publishes <code>BalanceBalloonsMessage</code> after all lines are placed.</li>
 </ol>
 <p>See <a class="el" href="arch_balance_flow.html">Balance Flow</a> for the full balance algorithm and its entry points.</p>
-<h1><a class="anchor" id="autotoc_md723"></a>
+<h1><a class="anchor" id="autotoc_md724"></a>
 Pooling</h1>
 <p>The projectile is <b>pooled, not destroyed</b>. A single instance is created via <code>ProjectilePoolChannel</code> on first load and reused across turns. On death the projectile publishes messages but does not self-destruct — <code>ThrowerController</code> returns it to the pool and immediately re-gets it.</p>
 <ul>
@@ -187,16 +187,16 @@ Pooling</h1>
 </ul>
 <p><code>ProjectileView</code> calls <code>Enable()</code> on the first <code>FixedUpdate</code> frame where <code>IsFree</code> is true (fired) and <code>Disable()</code> on death and despawn.</p>
 <p>The shield field is hidden until the projectile is fired. <code>ProjectileShieldView</code> starts inactive on <code>Awake()</code> and is shown via <code>Show()</code> on the first <code>FixedUpdate</code> frame where <code>IsFree</code> is true.</p>
-<h1><a class="anchor" id="autotoc_md724"></a>
+<h1><a class="anchor" id="autotoc_md725"></a>
 Shield Visuals</h1>
 <p>The projectile's shield appears as a glowing force field resembling magnetic field lines wrapping around the ball. Each remaining shield adds a visible concentric layer (up to a configured maximum). When a shield is gained, it appears with a wipe sweeping from the leading tip to the tail. When lost, the outermost layer crumbles away (starting from the front).</p>
 <p>While the ball is flying, the glow stretches into a comet shape with a tail trailing behind it. As the ball nears a wall, the glow smoothly tucks into a circle, holds that round shape through the bounce, then stretches back into the comet as it flies away. On impact, the circle visually squashes against the surface — compressing along the wall normal and expanding sideways — then springs back. This works for both flat wall bounces and angled deflector bounces. The field also ripples faster the quicker the ball moves.</p>
 <p>A four-state cycle (Cruising → Closing → Bracing → Opening) drives the shape transition. The game predicts how far the next wall is; when it falls below a threshold, closing begins. On bounce, the shield force-snaps to circle regardless of the current state.</p>
-<h2><a class="anchor" id="autotoc_md725"></a>
+<h2><a class="anchor" id="autotoc_md726"></a>
 Implementation</h2>
 <p><code>ProjectileShieldView</code> feeds 10 uniforms to the <code>EMShieldField.shader</code> (a single-quad procedural shader — one draw call). All uniforms — per-layer dissolve/reveal arrays, active layers, color, velocity factor, noise scroll direction, shape lerp, noise intensity, squash amount, and squash axis — are written to a single <code>MaterialPropertyBlock</code> and pushed through <code>WriteAllProperties()</code>. Both tween callbacks and the per-frame <code>Update()</code> call this method, which writes <b>every</b> property before calling <code>SetPropertyBlock</code>. This single-push pattern prevents split-brain overwrites where one code path's push would erase properties written by another. Configuration lives in <code>IShieldFieldSettings</code> (injected, not serialized on the view).</p>
 <p>All VFX (gain/lose/bounce particles) are spawned via <code>ParticlePoolChannel</code> as world-space particles — they are not children of the projectile and survive recycling independently.</p>
-<h2><a class="anchor" id="autotoc_md726"></a>
+<h2><a class="anchor" id="autotoc_md727"></a>
 Event Flow</h2>
 <div class="fragment"><div class="line">sequenceDiagram</div>
 <div class="line">    participant M as IProjectileModel</div>
@@ -217,7 +217,7 @@ Event Flow</h2>
 <div class="line">    V-&gt;&gt;MPB: WriteAllProperties()</div>
 <div class="line">    MPB-&gt;&gt;S: SetPropertyBlock (all 10 uniforms)</div>
 </div><!-- fragment --><p>See plan_em_shield_field for the full shader design and phase status.</p>
-<h1><a class="anchor" id="autotoc_md727"></a>
+<h1><a class="anchor" id="autotoc_md728"></a>
 Pierce &amp; Discharge Feel</h1>
 <p>A piercing shot doesn't pop the tough (<code>hits &gt; 1</code>) balloons it plows through on contact — it carries them until it <b>discharges</b> at the next wall. (The plow-then-shatter mechanic itself — driven by cruise piercing and the Snipe item — is documented in <code><a class="el" href="Item_2README_8md.html">Item/README.md</a></code>; this section covers only how the projectile <em>sells</em> it.) Two lights carry the beat:</p>
 <ul>
@@ -227,7 +227,7 @@ Pierce &amp; Discharge Feel</h1>
 <p>The discharge itself plays a shared shockwave-and-slow-mo beat, owned by <code>Controller/PierceDischargeEffects</code> off the <code>PierceDischargedMessage</code> the discharge publishes: a <code>DisturbanceField</code> shockwave stamp (<code>StampSource.PierceDischarge</code>) at the shattered line, and a brief real-time slow-mo dip (<code>TimeScaleSource.PierceDischarge</code>; duration/scale from <code>IProjectileFlightConfig.PierceDischargeTimeScale</code>/<code>PierceDischargeTimeScaleDuration</code>) via a serial <code>CancellationTokenSource</code> — a discharge landing mid-dip restarts the dip cleanly instead of layering, and only the dip that runs to completion releases the claim. The rainbow colour-bloom that plays on the same message is a separate effect owned by the Snipe item (<code>SnipeDischargeBloom</code>), not by the projectile.</p>
 <p>The discharge fires at the <b>next wall bounce</b> after the shot plows at least one tough — every tough plowed on a single wall-to-wall segment is collected and shattered together when the shot hits the wall (<code>ProjectileMotionResolver.Step</code>, wall-discharge branch). If the shot dies at the wall (no shields), <code>DestroyProjectile</code> flushes pending hits as a safety net. Piercing persists indefinitely across empty-corridor walls (no toughs plowed = no discharge), so the buff only ends when the shot actually encounters a tough line.</p>
 <p><b>Tunneling safety net</b> — at high cruise/pierce speeds the projectile can tunnel through balloons (Unity's <code>OnTriggerEnter2D</code> fires per-fixed-step and can skip thin colliders). On every wall bounce while piercing, <code>SweepPierceMisses</code> runs a <code>CircleCastAll</code> from the segment's start to the wall hit. Any tough balloon in the swept path that wasn't already registered via trigger is added to <code>PendingPierceHits</code> before the discharge resolves — guaranteeing every tough in the flight line is shattered.</p>
-<h1><a class="anchor" id="autotoc_md728"></a>
+<h1><a class="anchor" id="autotoc_md729"></a>
 Buffs (<code>Buffs/</code>)</h1>
 <p>A <b>projectile buff</b> is a temporary stat modifier on the active projectile following the industry-standard <em>Flat / Additive / Multiplicative</em> stacking pattern:</p>
 <p class="formulaDsp">
@@ -254,7 +254,7 @@ Buffs (<code>Buffs/</code>)</h1>
 <li><b><code>ProjectileBuffService</code></b> — <code>IStartable</code> owning storage + lifecycle: tracks the active projectile (<code>ProjectileLoadedMessage</code>), applies buffs onto it, and drops a buff the first time its <code>EndCondition.Expired</code> fires. Knows nothing about any buff's effect or end-condition — it only observes the exposed signal.</li>
 </ul>
 <p>The model stores buffs in a plain list exposed via <code>HasBuff(ProjectileBuffId)</code> (read), <code>ComputeBuffedValue(id, baseValue)</code> (aggregated stat query), and <code>AddBuff</code>/<code>RemoveBuff</code> (write); a fresh <code>ProjectileModel</code> per throw resets them for free.</p>
-<h1><a class="anchor" id="autotoc_md729"></a>
+<h1><a class="anchor" id="autotoc_md730"></a>
 How it works</h1>
 <ul>
 <li><b><code>ProjectilePoolChannel</code></b> — <code>InjectingPoolChannel&lt;ProjectileView&gt;</code> that creates projectiles via <code>IObjectResolver</code> injection from the parent container (no child scope on the prefab). Accessed through <code>PoolManager</code>.</li>
@@ -273,7 +273,7 @@ How it works</h1>
 <li><b><code>ProjectileTrail</code></b> — child MonoBehaviour on the trail GameObject. <code>Enable()</code>/<code>Disable()</code> manage <code>TrailRenderer</code> emitting state using <code>async UniTaskVoid</code> with <code>destroyCancellationToken</code>. Not <code>IPoolable</code> — lifecycle follows the pooled projectile parent.</li>
 <li><b><code>ProjectileShieldView</code></b> — MonoBehaviour on the projectile prefab. Drives the <code>EMShieldField</code> shader via <code>MaterialPropertyBlock</code>: subscribes to <code>ShieldsRemaining</code> (reveal wipe on gain, noise dissolve on loss) and <code>ColorName</code> (tint) via UniRx. Per-frame <code>Update</code> steps the noise-scroll spring (<code>DampedSpring2D</code>) and squash spring (<code>DampedSpring1D</code>), runs the morph FSM, computes velocity-driven uniforms, and pushes all properties through the unified <code>WriteAllProperties()</code> method; tween callbacks use the same method, ensuring every <code>SetPropertyBlock</code> call writes the full property set. <code>OnBounce(oldDir, newDir, speed)</code> force-snaps to Bracing (circle), computes the impact normal as <code>normalize(newDir - oldDir)</code>, transforms it to local UV space, and injects a speed-scaled impulse into the squash spring. Spawns gain/lose/bounce VFX via <code>ParticlePoolChannel</code>.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md730"></a>
+<h1><a class="anchor" id="autotoc_md731"></a>
 Interactions</h1>
 <ul>
 <li><b>ThrowerController</b> — gets/returns projectile via <code>PoolManager</code> + <code>ProjectilePoolChannel</code>; binds to a fresh <code>ProjectileModel</code>; reloads on <code>ProjectileDestroyedMessage</code></li>
@@ -287,7 +287,7 @@ Interactions</h1>
 <li><b>TimeScaleService</b> (<code>Shared/Pause/</code>) — <code>Controller/PierceDischargeEffects</code> claims a brief real-time slow-mo dip under <code>TimeScaleSource.PierceDischarge</code> on each pierce discharge; <code>Controller/HoldSpeedUpController</code> claims a speed-up ramp under <code>TimeScaleSource.HoldSpeedUp</code> while the player holds during flight</li>
 <li><b>SceneLightFieldService</b> — <code>ProjectileView</code> registers a small <code><a class="el" href="UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d">Light</a></code> (radius/intensity from the <code>Scene <a class="el" href="UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d">Light</a></code> serialized fields) on the <b>first free frame</b> (when the shot fires, alongside the muzzle burst — it's dark while still held at the thrower), updates its <code>Position</code> to the transform each <code>Update</code>, and disposes the registration in <code>OnDespawned</code>. Its <code>PaletteIndex</code> follows the shot's colour (<code>UpdateGlowColor</code> sets it via <code>IGamePalette.IndexOfColor</code>), falling back to the <code>Sparks</code> palette entry while colourless — so the bullet casts a coloured point light into the scene-light field. This same light is the one that stretches into the pierce telegraph capsule (see Pierce &amp; Discharge Feel); the shield-loss and pierce-spark flashes register short-lived lights of their own.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md731"></a>
+<h1><a class="anchor" id="autotoc_md732"></a>
 Editor Gizmos</h1>
 <ul>
 <li><b>Sweep counting gizmo</b> (<code>ProjectileView</code>, <code>#if UNITY_EDITOR</code>) — visualizes the current sweep RUN toward <code>SweepTapThreshold</code>. Tracking starts on the first clean clearing pass, drawing a wire sphere at each subsequent wall hit and linking them into a polyline, with a faint tail from the last marker to the shot's live position. Markers are <b>red</b> while the run is still short of the threshold and <b>blue</b> once it is reached. Because the line is the run, it clears the moment the run breaks (a wall reached without a clean pass, or a deflect) as well as on despawn/spawn — otherwise it would draw a continuous clearing streak the rule never required. </li>

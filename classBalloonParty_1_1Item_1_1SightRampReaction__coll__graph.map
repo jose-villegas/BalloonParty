@@ -4,9 +4,9 @@
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,250,123,285,118,285,118,250"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="37,13,161,38"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,52,122,210,117,210,99,52"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Item_1_1PredictionSightProbe.html" title="Single per&#45;item producer of the &quot;is the loaded shot&#39;s aim&#45;prediction line sighted on this item,..." alt="" coords="137,108,342,148"/>
-<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="128,44,215,106,211,110,125,48"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="206,159,137,212,134,208,203,154"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Prediction_1_1PredictionSightProbe.html" title="Single per&#45;actor producer of the &quot;is the loaded shot&#39;s aim&#45;prediction line sighted on this &#160;&#160;&#160;actor,..." alt="" coords="137,108,312,148"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="126,45,203,106,199,110,123,49"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="195,159,136,212,132,208,191,155"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileFacingSource.html" title="Read&#45;only facing surface for the loaded/flying shot, exposed to a pooled (non&#45;injected) item visual —..." alt="" coords="185,5,357,45"/>
-<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="264,59,248,109,243,107,259,57"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="259,59,236,109,231,107,254,57"/>
 </map>

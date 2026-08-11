@@ -42,6 +42,7 @@ var classBalloonParty_1_1Balloon_1_1View_1_1BalloonView =
     [ "_poolManager", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a2c799a282e7b7899803a2daade6d8c37", null ],
     [ "_projectileFacing", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a204d8014336ebca54aba8e417e16a751", null ],
     [ "_rainbowBlock", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a43318b510ad5384da9e15903d73624eb", null ],
+    [ "_sightProbe", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a031442eb9ebd931c7ec8c3bd6efb7f19", null ],
     [ "_spriteLayerRenderers", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a00a36a4bc68d8c5696497f74f89d5486", null ],
     [ "_swayPivot", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a5514683b2357c14192830d51ad2405ea", null ],
     [ "_tweenTracker", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a9e1d7e31e6f64c36ab4b0cee564185fa", null ],
