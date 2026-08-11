@@ -25,16 +25,16 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 315407971490248995}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.86613554, y: 0.86613554, z: 0.86613554}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6555064605166848896}
+  m_Father: {fileID: 2616140572188777767}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5890643277408351852
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -91,6 +91,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!1 &586506590779476678
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,7 +126,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6020316169838688404
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -182,6 +183,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!1 &1886248629334981160
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,7 +220,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5110843805831965112
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -275,6 +277,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!114 &4191716864938239222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,6 +326,73 @@ Transform:
   - {fileID: 3872814629867547184}
   m_Father: {fileID: 1788660481030380393}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2506283986119165078
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2616140572188777767}
+  - component: {fileID: 6372032985936684347}
+  - component: {fileID: 45418706536015621}
+  m_Layer: 10
+  m_Name: HitMarkers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2616140572188777767
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2506283986119165078}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3221824090879841419}
+  m_Father: {fileID: 1788660481030380393}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6372032985936684347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2506283986119165078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6134d1d0840af43ac9238ebc21e36558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Item.PredictionSightProbe
+  _target: {fileID: 1788660481030380393}
+  _hitRadius: 0.35
+  _sightEnter: 0
+  _sightExit: 0.25
+--- !u!114 &45418706536015621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2506283986119165078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 412e6d4b49e5e432c8ada6ca4ff9bd6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Prediction.TraceHitMarker
+  _probe: {fileID: 6372032985936684347}
+  _marker: {fileID: 3221824090879841419}
+  _markerOffset: 0.275
+  _markerRenderer: {fileID: 5890643277408351852}
+  _minIntensity: 0.2
 --- !u!1 &5394957553681577040
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,7 +452,6 @@ GameObject:
   - component: {fileID: 7744549277022113413}
   - component: {fileID: -4720687053981353126}
   - component: {fileID: 6173351546761552298}
-  - component: {fileID: 7480911328229068980}
   m_Layer: 10
   m_Name: Balloon
   m_TagString: Balloons
@@ -405,6 +474,7 @@ Transform:
   m_Children:
   - {fileID: 8217776062739370819}
   - {fileID: 6555064605166848896}
+  - {fileID: 2616140572188777767}
   - {fileID: 486833216842763078}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -523,6 +593,7 @@ MonoBehaviour:
   _aboveItemRenderers:
   - {fileID: 6020316169838688404}
   _swayPivot: {fileID: 8217776062739370819}
+  _sightProbe: {fileID: 6372032985936684347}
   _baseSortingLayer: 50
 --- !u!114 &-4720687053981353126
 MonoBehaviour:
@@ -549,23 +620,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.Type.SimpleBalloonType
   _allowedColorsMask: -1
---- !u!114 &7480911328229068980
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5923847143892959990}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 412e6d4b49e5e432c8ada6ca4ff9bd6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Prediction.TraceHitMarker
-  _marker: {fileID: 3221824090879841419}
-  _circleRadius: 0.3525
-  _markerOffset: 0.275
-  _markerRenderer: {fileID: 5890643277408351852}
-  _minIntensity: 0.2
 --- !u!1 &6117035275633951413
 GameObject:
   m_ObjectHideFlags: 0
@@ -600,7 +654,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8377671993713916893
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -657,6 +711,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!1 &7505818221697802126
 GameObject:
   m_ObjectHideFlags: 0
@@ -693,7 +748,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4471461091841029516
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -750,6 +805,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!114 &6583017124811997955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -869,7 +925,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1529748305594679390
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -926,6 +982,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!114 &8474570483664470936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -975,7 +1032,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5015188092537337491
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1032,6 +1089,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!114 &2989577501380538669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1077,6 +1135,5 @@ Transform:
   m_Children:
   - {fileID: 3544175884441922046}
   - {fileID: 8052970369701275148}
-  - {fileID: 3221824090879841419}
   m_Father: {fileID: 1788660481030380393}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

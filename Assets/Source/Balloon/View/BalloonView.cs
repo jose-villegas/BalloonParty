@@ -5,6 +5,7 @@ using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Item;
 using BalloonParty.Nudge;
+using BalloonParty.Prediction;
 using BalloonParty.Projectile;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Animation;
@@ -52,6 +53,11 @@ namespace BalloonParty.Balloon.View
         [Tooltip("Child the float-away tilts. Keep baked specular-fake sprites parented outside it so their " +
                  "light direction stays fixed when the body swings. Falls back to the root if unset.")]
         [SerializeField] private Transform _swayPivot;
+
+        [Tooltip("Shared aim-sighting probe (e.g. on a child \"HitMarkers\" object) — Configure()'d with " +
+                 "this balloon's IProjectileFacingSource so TraceHitMarker and any item SightReaction can " +
+                 "read it instead of each re-tracing.")]
+        [SerializeField] private PredictionSightProbe _sightProbe;
 
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
@@ -110,6 +116,15 @@ namespace BalloonParty.Balloon.View
             if (_bodyRenderer != null)
             {
                 _originalBodyMaterial = _bodyRenderer.sharedMaterial;
+            }
+
+            // Not DI-injected (mirrors how ItemDisplayService hands the pooled item's own probe its
+            // source) — wired here, once, since this balloon's IProjectileFacingSource never changes
+            // across its pooled lifetime. TraceHitMarker and any item SightReaction on this balloon read
+            // the probe's answer instead of each re-tracing.
+            if (_sightProbe != null)
+            {
+                _sightProbe.Configure(_projectileFacing);
             }
         }
 

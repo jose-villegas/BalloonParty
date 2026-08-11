@@ -1,19 +1,23 @@
-using BalloonParty.Prediction;
 using BalloonParty.Projectile;
 using UniRx;
 using UnityEngine;
 
-namespace BalloonParty.Item
+namespace BalloonParty.Prediction
 {
     /// <summary>
-    ///     Single per-item producer of the "is the loaded shot's aim-prediction line sighted on this item,
-    ///     and how centrally" signal. Owns the polyline-vs-circle trace test (run once per frame) and
-    ///     publishes it for any number of composed consumers — reactions (see <see cref="SightReaction"/>)
-    ///     and the facing rotator — so none of them re-trace. Pooled/non-DI: the host hands it an
-    ///     <see cref="IProjectileFacingSource"/> via <see cref="Configure"/>.
+    ///     Single per-actor producer of the "is the loaded shot's aim-prediction line sighted on this
+    ///     actor, and how centrally" signal. Owns the polyline-vs-circle trace test — run once per frame,
+    ///     skipped whenever neither the trace nor the target moved since the last evaluation — and
+    ///     publishes it for any number of composed consumers: <see cref="TraceHitMarker"/> and item
+    ///     reactions (see <see cref="BalloonParty.Item.SightReaction"/>), so none of them re-trace.
+    ///     Pooled/non-DI: the host hands it an <see cref="IProjectileFacingSource"/> via
+    ///     <see cref="Configure"/>.
     /// </summary>
     internal class PredictionSightProbe : MonoBehaviour
     {
+        // 1cm — below this, the target is considered stationary since the last evaluation.
+        private const float PositionEpsilonSqr = 0.0001f;
+
         [Tooltip("Point tested against the aim prediction trace. Defaults to this object if left unset.")]
         [SerializeField] private Transform _target;
 
@@ -32,12 +36,17 @@ namespace BalloonParty.Item
         private readonly ReactiveProperty<bool> _isSighted = new ReactiveProperty<bool>(false);
 
         private IProjectileFacingSource _source;
+        private int _lastVersion = int.MinValue;
+        private Vector3 _lastPosition;
 
         /// <summary>Raw centrality of the aim on the target this frame: 0 = not sighted, up to 1 = dead centre.</summary>
         internal IReadOnlyReactiveProperty<float> Sight => _sight;
 
         /// <summary>Hysteretic latch (enter/exit thresholds) — the enter/exit EDGE for one-shot reactions.</summary>
         internal IReadOnlyReactiveProperty<bool> IsSighted => _isSighted;
+
+        /// <summary>Whether the trace crosses the target's circle this frame — the raw crossing test, distinct from <see cref="IsSighted"/>'s hysteretic latch.</summary>
+        internal bool HasHit { get; private set; }
 
         /// <summary>Raw strike travel direction where the trace crossed this frame; zero when there's no crossing.</summary>
         internal Vector2 SightDirection { get; private set; }
@@ -61,8 +70,23 @@ namespace BalloonParty.Item
                 return;
             }
 
+            // Skip the trace test entirely when nothing that could change its answer has: the aim
+            // polyline is unchanged (version) and this target hasn't moved past the epsilon — lets N
+            // pooled probes (item reactions, balloon markers) share one evaluation cost per real change.
+            var position = _target.position;
+            if (_source.PredictionVersion == _lastVersion
+                && (position - _lastPosition).sqrMagnitude < PositionEpsilonSqr)
+            {
+                return;
+            }
+
+            _lastVersion = _source.PredictionVersion;
+            _lastPosition = position;
+
             var hit = TraceHitGeometry.TryFindSurfaceHit(
-                _source.PredictionPoints, _target.position, _hitRadius, out var point, out var centrality, out var direction);
+                _source.PredictionPoints, position, _hitRadius, out var point, out var centrality, out var direction);
+
+            HasHit = hit;
             if (!hit)
             {
                 ClearSight();
@@ -85,9 +109,11 @@ namespace BalloonParty.Item
             }
         }
 
-        // Zero every signal so a pooled reuse never inherits the previous host's sighted look for a frame.
+        // Pooled reuse (the whole prefab GameObject toggled by PoolChannel<T>.Get/Return) must not carry a
+        // stale cache into the next life — force a fresh evaluation next LateUpdate.
         private void OnDisable()
         {
+            _lastVersion = int.MinValue;
             ClearSight();
         }
 
@@ -106,6 +132,7 @@ namespace BalloonParty.Item
 
         private void ClearSight()
         {
+            HasHit = false;
             _sight.Value = 0f;
             _isSighted.Value = false;
             SightDirection = Vector2.zero;

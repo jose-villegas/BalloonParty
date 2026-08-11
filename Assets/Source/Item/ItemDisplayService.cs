@@ -1,5 +1,6 @@
 using System;
 using BalloonParty.Configuration;
+using BalloonParty.Prediction;
 using BalloonParty.Projectile;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Rendering;
