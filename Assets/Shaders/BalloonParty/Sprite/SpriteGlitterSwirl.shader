@@ -170,12 +170,15 @@ Shader "BalloonParty/Sprite/GlitterSwirl"
             {
                 UNITY_SETUP_INSTANCE_ID(IN);
 
-                // The sprite is never drawn — only its alpha (× renderer alpha) confines the sparkle.
+                // The sprite is never drawn — only its alpha (× renderer alpha) confines the sparkle; its
+                // RGB (IN.color already folds in the SpriteRenderer's own color, _Color, and _RendererColor)
+                // tints the specks, so a recolored icon carries its hue into the glitter instead of always
+                // sparkling _GlitterColor's fixed one. White (the default) leaves _GlitterColor unchanged.
                 fixed mask = SampleSpriteTexture(IN.texcoord).a * IN.color.a;
                 fixed amt = mask * GlitterAmount(IN.texcoord, IN.localPos);
 
                 fixed4 c;
-                c.rgb = _GlitterColor.rgb * (amt * _GlitterBrightness);
+                c.rgb = _GlitterColor.rgb * IN.color.rgb * (amt * _GlitterBrightness);
                 c.a = _GlitterColor.a * amt;
                 return c;
             }

@@ -390,7 +390,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: a21041c776e5e384fbf321d6076182f6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 0.3882353, b: 0.2784314, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -507,6 +507,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4621365535610352935}
   - component: {fileID: 8686884174181931711}
+  - component: {fileID: 731305038772954807}
   m_Layer: 10
   m_Name: Markers
   m_TagString: Untagged
@@ -547,6 +548,22 @@ MonoBehaviour:
   _maxAlpha: 1
   _smoothTime: 0.15
   _hideThreshold: 0.01
+--- !u!114 &731305038772954807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8895438751164188183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c235120f6a44f3db21aec24d4f2241e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Item.SightGlitterDriftReaction
+  _probe: {fileID: 4462627402240698646}
+  _glitterRenderer: {fileID: 3428659591730039973}
+  _driftSpeed: -0.65
+  _smoothTime: 0
 --- !u!1 &9076839815742733324
 GameObject:
   m_ObjectHideFlags: 0
