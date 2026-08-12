@@ -35,9 +35,6 @@ namespace BalloonParty.Configuration
         /// </remarks>
         ItemPreviewBloomDraw BloomDraw { get; }
 
-        /// <summary>Pens for this item, or 0 to use <see cref="IItemPreviewConfig.PenCount" />.</summary>
-        int PenCount { get; }
-
         /// <summary>
         ///     Ribbon lifetime in seconds for this item's pens, or 0 to keep the prefab's authored value.
         /// </summary>
@@ -48,24 +45,6 @@ namespace BalloonParty.Configuration
         ///     around) to read as a complete shape rather than a travelling dash.
         /// </remarks>
         float RibbonSeconds { get; }
-
-        /// <summary>
-        ///     Dash slots to divide each stroke into, or 0 for one continuous ribbon (the default).
-        /// </summary>
-        /// <remarks>
-        ///     A <see cref="TrailRenderer" /> only ever draws one unbroken ribbon per pen, so a dashed
-        ///     figure is made by MOVING: each pen paints <see cref="DashLength" /> of its slot, blanks,
-        ///     and restarts. With more slots than pens the dashes march along the stroke; with equal
-        ///     counts each pen re-draws its own slot in place.
-        /// </remarks>
-        int DashCount { get; }
-
-        /// <summary>
-        ///     World length a pen paints within its dash slot before blanking. Ignored while
-        ///     <see cref="DashCount" /> is 0. Clamped to the slot, so a value past the slot's own length
-        ///     just yields a solid line.
-        /// </summary>
-        float DashLength { get; }
     }
 
     /// <summary>
@@ -82,11 +61,64 @@ namespace BalloonParty.Configuration
         float StubLength { get; }
     }
 
+    /// <summary>
+    ///     Bomb's own figure params. A per-item block rather than a field on
+    ///     <see cref="IItemPreviewStyle" />, mirroring how <c>ItemSettings</c> nests <c>Bomb</c>/<c>Laser</c>/
+    ///     <c>Paint</c> — a number only one figure reads has no business on the shared style.
+    /// </summary>
+    public interface IBombPreviewSettings
+    {
+        /// <summary>
+        ///     World units added to <c>BombSettings.Radius</c> purely for display, so the drawn circle can
+        ///     be nudged without touching the blast itself. Can be negative to draw tighter than the true
+        ///     radius; a positive value actually reads CLOSER to the real catchment, since <c>BombBlast</c>
+        ///     catches an occupant whose centre lies within the radius plus that occupant's own radius, so
+        ///     the drawn circle at the bare radius already understates the true reach.
+        /// </summary>
+        float RadiusOffset { get; }
+    }
+
+    /// <summary>
+    ///     Paint's own figure params. A per-item block rather than a field on
+    ///     <see cref="IItemPreviewStyle" />, mirroring how <c>ItemSettings</c> nests <c>Bomb</c>/<c>Laser</c>/
+    ///     <c>Paint</c> — numbers only one figure reads have no business on the shared style.
+    /// </summary>
+    public interface IPaintPreviewSettings
+    {
+        /// <summary>
+        ///     Display-only multiplier applied to both <c>PaintSettings.SpreadLength</c> and
+        ///     <c>SpreadBaseWidth</c> when drawing the triangle, so the whole figure can be nudged without
+        ///     touching the spread itself. <c>1</c> draws the true spread; below <c>1</c> draws it
+        ///     tighter. Scales about the figure's own centre, so the triangle shrinks in place rather than
+        ///     sliding toward the host as it gets smaller.
+        /// </summary>
+        float Scale { get; }
+    }
+
     /// <summary>Tuning for the aim-time item range telegraph (@ref plan_item_range_preview).</summary>
     public interface IItemPreviewConfig
     {
-        /// <summary>Pens spawned per figure, spread round-robin over its strokes.</summary>
-        int PenCount { get; }
+        /// <summary>
+        ///     World length a pen paints within its dash slot before blanking. Universal across every
+        ///     figure — dashing is the one drawing style, not a per-item opt-in — so a Bomb circle and
+        ///     Shield's stub dash at the same size.
+        /// </summary>
+        float DashLength { get; }
+
+        /// <summary>
+        ///     World length of blank arc between dashes. 0 reproduces a solid line: the stride collapses
+        ///     to <see cref="DashLength" />, so each pen's slot equals its painted length and adjacent
+        ///     dashes touch with no gap — the zero-spacing case, not a separate continuous mode.
+        /// </summary>
+        float DashSpacing { get; }
+
+        /// <summary>
+        ///     Hard ceiling on pens summed across a figure's strokes. A stroke's own dash count is derived
+        ///     from its length, so a large figure (Laser's two ~40-unit corridors, ~160 units of combined
+        ///     perimeter) would otherwise ask for hundreds of pooled <see cref="TrailRenderer" />s. Past
+        ///     this cap every stroke's dashes are spaced out together instead of any part going undrawn.
+        /// </summary>
+        int MaxPens { get; }
 
         /// <summary>Seconds a pen takes to sweep out from the host to its stroke entry point.</summary>
         float BloomDuration { get; }
@@ -118,5 +150,11 @@ namespace BalloonParty.Configuration
 
         /// <summary>Shield's own figure params.</summary>
         IShieldPreviewSettings Shield { get; }
+
+        /// <summary>Bomb's own figure params.</summary>
+        IBombPreviewSettings Bomb { get; }
+
+        /// <summary>Paint's own figure params.</summary>
+        IPaintPreviewSettings Paint { get; }
     }
 }

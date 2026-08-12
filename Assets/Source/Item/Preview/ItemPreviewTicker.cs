@@ -31,17 +31,16 @@ namespace BalloonParty.Item.Preview
         private readonly List<float> _arcTable = new();
         private readonly List<float> _strokeLengths = new();
 
-        // How many pens have been dealt to each stroke so far this AcquirePens pass — a reused counter
-        // rather than a per-call dictionary, so re-aiming at a new host allocates nothing.
-        private readonly List<int> _pensPerStroke = new();
+        // Dashes derived per stroke this Show pass — sized to stroke count and reused rather than
+        // reallocated, so re-aiming at a new host allocates nothing. Doubles as the pens-per-stroke count,
+        // since dashing is universal now: one pen per dash, by definition.
+        private readonly List<int> _dashesPerStroke = new();
 
         private Vector2 _origin;
         private Vector2Int _currentSlot;
         private bool _visible;
 
-        // The active item's resolved style, captured on Show so LateTick doesn't re-resolve it every
-        // frame. DashCount 0 means continuous tracing.
-        private int _dashCount;
+        // Captured on Show so LateTick doesn't re-resolve the config every frame.
         private float _dashLength;
         private bool _emitDuringBloom;
 
@@ -94,8 +93,7 @@ namespace BalloonParty.Item.Preview
 
             var isSameHost = _visible && context.Slot == _currentSlot;
             var style = _config.StyleFor(preview.Type);
-            _dashCount = style.DashCount;
-            _dashLength = style.DashLength;
+            _dashLength = _config.DashLength;
             _emitDuringBloom = style.BloomDraw switch
             {
                 ItemPreviewBloomDraw.Draw => true,
@@ -190,20 +188,42 @@ namespace BalloonParty.Item.Preview
             }
         }
 
-        // Pens are dealt round-robin across strokes, so a two-armed figure splits them evenly without any
-        // item needing to state how many it wants; within a stroke they start evenly spaced along its length.
+        // Each stroke derives its own dash count from its own length, so a long stroke gets more dashes
+        // than a short one instead of every figure sharing one authored count — that count IS the
+        // pens-on-that-stroke, one pen per dash, by definition.
+        //
+        // Laser is why the cap below is mandatory rather than a nice-to-have: its two ~40-unit corridors
+        // sum to roughly 160 units of stroke length, which at the authored stride would derive around
+        // 320 pens — 320 pooled TrailRenderers for one figure. Past MaxPens the stride is inflated once
+        // and every stroke recomputed with it, so a big figure's dashes get sparser and longer-spaced
+        // rather than any part of it going undrawn or the pool blowing out.
         private void AcquirePens(IItemPreviewStyle style)
         {
             var strokeCount = _shape.Strokes.Count;
+            var stride = _config.DashLength + _config.DashSpacing;
 
-            // In dash mode the dash count IS the pens-per-stroke — one pen per dash, by definition. Only
-            // continuous mode divides a free-floating pen budget across the strokes.
-            // 0 on the style means "no override" — fall back to the shared count.
-            var pensOnStroke = _dashCount > 0
-                ? _dashCount
-                : Mathf.Max(1, Mathf.CeilToInt(
-                    Mathf.Max(1, style.PenCount > 0 ? style.PenCount : _config.PenCount) / (float)strokeCount));
-            var wanted = pensOnStroke * strokeCount;
+            _dashesPerStroke.Clear();
+            var desiredTotal = 0;
+            for (var s = 0; s < strokeCount; s++)
+            {
+                var count = stride <= 1e-5f ? 1 : Mathf.Max(1, Mathf.RoundToInt(_strokeLengths[s] / stride));
+                _dashesPerStroke.Add(count);
+                desiredTotal += count;
+            }
+
+            if (desiredTotal > _config.MaxPens && stride > 1e-5f)
+            {
+                var inflatedStride = stride * (desiredTotal / (float)_config.MaxPens);
+                desiredTotal = 0;
+                for (var s = 0; s < strokeCount; s++)
+                {
+                    var count = Mathf.Max(1, Mathf.RoundToInt(_strokeLengths[s] / inflatedStride));
+                    _dashesPerStroke[s] = count;
+                    desiredTotal += count;
+                }
+            }
+
+            var wanted = desiredTotal;
 
             while (_pens.Count > wanted)
             {
@@ -222,45 +242,37 @@ namespace BalloonParty.Item.Preview
                 _pens.Add(new Pen());
             }
 
-            _pensPerStroke.Clear();
+            var penIndex = 0;
             for (var s = 0; s < strokeCount; s++)
             {
-                _pensPerStroke.Add(0);
-            }
+                var dashesOnStroke = _dashesPerStroke[s];
+                for (var dashIndex = 0; dashIndex < dashesOnStroke; dashIndex++)
+                {
+                    var pen = _pens[penIndex];
+                    pen.Trail ??= _poolManager.GetOrRegister(
+                        _poolKey, () => new SimplePoolChannel<HighlightTrail>(_penPrefab));
+                    pen.StrokeIndex = s;
+                    pen.DashIndex = dashIndex;
 
-            for (var i = 0; i < _pens.Count; i++)
-            {
-                var pen = _pens[i];
-                pen.Trail ??= _poolManager.GetOrRegister(
-                    _poolKey, () => new SimplePoolChannel<HighlightTrail>(_penPrefab));
-                pen.StrokeIndex = i % strokeCount;
+                    // Distance is measured inside the pen's own slot, so it always starts at 0 — the
+                    // slot's offset along the stroke is applied when sampling, in AdvanceDash.
+                    pen.Distance = 0f;
+                    pen.BloomElapsed = 0f;
+                    pen.Bloomed = false;
 
-                // This pen's index among the ones sharing its stroke — its dash slot in dash mode, and
-                // its spacing along the stroke in continuous mode.
-                var ordinal = _pensPerStroke[pen.StrokeIndex];
-                _pensPerStroke[pen.StrokeIndex] = ordinal + 1;
+                    // Spread over the whole pen set (global penIndex), not per-stroke (dashIndex) — pens
+                    // are dealt stroke by stroke, so a per-stroke phase would clump the fan instead of
+                    // spreading it evenly around the full circle.
+                    pen.BloomPhaseDegrees = 360f * penIndex / _pens.Count;
 
-                var length = _strokeLengths[pen.StrokeIndex];
-                pen.DashIndex = ordinal;
+                    pen.Trail.SetRibbonTime(style.RibbonSeconds);
+                    pen.Trail.ClearRibbon();
+                    pen.Trail.SetPosition(new Vector3(_origin.x, _origin.y, 0f));
+                    pen.Trail.SetEmitting(_emitDuringBloom);
 
-                // Dash mode measures Distance inside the pen's own slot, so it starts at 0 and the slot
-                // offset is applied when sampling; continuous mode walks the stroke's absolute length.
-                pen.EntryDistance = length * (ordinal / (float)pensOnStroke);
-                pen.Distance = _dashCount > 0 ? 0f : pen.EntryDistance;
-                pen.BloomElapsed = 0f;
-                pen.Bloomed = false;
-
-                // Spread over the whole pen set (global i), not per-stroke (ordinal) — pens are dealt
-                // round-robin across strokes, so a per-stroke phase would clump the fan instead of
-                // spreading it evenly around the full circle.
-                pen.BloomPhaseDegrees = 360f * i / _pens.Count;
-
-                pen.Trail.SetRibbonTime(style.RibbonSeconds);
-                pen.Trail.ClearRibbon();
-                pen.Trail.SetPosition(new Vector3(_origin.x, _origin.y, 0f));
-                pen.Trail.SetEmitting(_emitDuringBloom);
-
-                _pens[i] = pen;
+                    _pens[penIndex] = pen;
+                    penIndex++;
+                }
             }
         }
 
@@ -295,9 +307,7 @@ namespace BalloonParty.Item.Preview
                 return;
             }
 
-            var shapePos = _dashCount > 0
-                ? AdvanceDash(ref pen, deltaTime)
-                : AdvanceTrace(ref pen, deltaTime);
+            var shapePos = AdvanceDash(ref pen, deltaTime);
 
             var duration = Mathf.Max(_config.BloomDuration, 1e-4f);
             pen.BloomElapsed += deltaTime;
@@ -341,7 +351,10 @@ namespace BalloonParty.Item.Preview
         }
 
         // One pen draws ONE dash, and the dashed line is the pens sitting next to each other — ask for
-        // three dashes and you get three pens, each owning a third of the stroke.
+        // three dashes and you get three pens, each owning a third of the stroke. Dashing is the only
+        // drawing style now: zero spacing (DashSpacing == 0) collapses a slot to exactly DashLength, so
+        // painted == slotLength below and adjacent dashes touch with no gap — a solid line falls out of
+        // this same code rather than needing a separate continuous-mode branch.
         //
         // Within its own slot a pen loops: it paints for DashLength (the dash), lifts for the remainder
         // (the spacing), and wraps back to its slot start to redraw. Pen up/down via emitting, never
@@ -352,7 +365,7 @@ namespace BalloonParty.Item.Preview
         // revealed by a pen touring it.
         private Vector3 AdvanceDash(ref Pen pen, float deltaTime)
         {
-            var slotLength = _strokeLengths[pen.StrokeIndex] / _dashCount;
+            var slotLength = _strokeLengths[pen.StrokeIndex] / _dashesPerStroke[pen.StrokeIndex];
             if (slotLength <= 1e-5f)
             {
                 return SampleStroke(pen.StrokeIndex, 0f);
@@ -369,14 +382,6 @@ namespace BalloonParty.Item.Preview
 
             var withinDash = Mathf.PingPong(pen.Distance, painted);
             return SampleStroke(pen.StrokeIndex, (pen.DashIndex * slotLength) + withinDash);
-        }
-
-        // Continuous mode's own shape motion: constant arc-length rate along the whole stroke, wrapping per
-        // SampleStroke. Runs from t = 0 same as dash mode, so it is already under way through the bloom.
-        private Vector3 AdvanceTrace(ref Pen pen, float deltaTime)
-        {
-            pen.Distance += _config.TraceSpeed * deltaTime;
-            return SampleStroke(pen.StrokeIndex, pen.Distance);
         }
 
         // Distance wraps: a closed stroke loops forever, an open one ping-pongs so a pen never stalls at
@@ -436,14 +441,12 @@ namespace BalloonParty.Item.Preview
             public int StrokeIndex;
             public float BloomElapsed;
 
-            // Continuous mode: arc length along the whole stroke. Dash mode: arc length travelled inside
-            // this pen's OWN slot, wrapped by the slot length.
+            // Arc length travelled inside this pen's OWN slot, wrapped by the slot length.
             public float Distance;
-            public float EntryDistance;
             public bool Bloomed;
 
-            // Dash mode: the slot this pen owns for its whole life. One pen draws one dash — the dashed
-            // line is the pens sitting side by side, not one pen visiting every slot.
+            // The slot this pen owns for its whole life. One pen draws one dash — the dashed line is the
+            // pens sitting side by side, not one pen visiting every slot.
             public int DashIndex;
 
             // Evenly spaced launch bearings so the set fans out radially on bloom instead of turning as

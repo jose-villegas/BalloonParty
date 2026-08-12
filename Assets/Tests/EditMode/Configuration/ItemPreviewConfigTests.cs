@@ -27,7 +27,9 @@ namespace BalloonParty.Tests.Configuration
         [Test]
         public void Defaults_AreUsable()
         {
-            Assert.Greater(_config.PenCount, 0);
+            Assert.Greater(_config.DashLength, 0f);
+            Assert.GreaterOrEqual(_config.DashSpacing, 0f);
+            Assert.Greater(_config.MaxPens, 0);
             Assert.Greater(_config.TraceSpeed, 0f);
             Assert.Greater(_config.BloomDuration, 0f);
         }
@@ -50,9 +52,7 @@ namespace BalloonParty.Tests.Configuration
         {
             var style = _config.StyleFor(ItemType.Bomb);
 
-            Assert.AreEqual(0, style.PenCount, "0 means fall back to the shared pen count");
             Assert.AreEqual(0f, style.RibbonSeconds, "0 means keep the prefab's authored ribbon time");
-            Assert.AreEqual(0, style.DashCount, "0 means a continuous ribbon, not dashes");
             Assert.AreEqual(ItemPreviewBloomDraw.Inherit, style.BloomDraw, "defers to the shared flag");
         }
 

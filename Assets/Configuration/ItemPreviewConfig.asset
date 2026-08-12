@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abb69724193741cd9cbd38fb8276c01c, type: 3}
   m_Name: ItemPreviewConfig
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.ItemPreviewConfig
-  _penCount: 6
+  _dashLength: 0.2
+  _dashSpacing: 0.15
+  _maxPens: 64
   _traceSpeed: 1.5
   _bloomDuration: 0.35
   _bloomSweepDegrees: 120
@@ -42,40 +44,23 @@ MonoBehaviour:
     m_RotationOrder: 4
   _emitDuringBloom: 1
   _styles:
-  - _penCount: 0
-    _ribbonSeconds: 0
+  - _ribbonSeconds: 0
     _bloomDraw: 0
-    _dashCount: 0
-    _dashLength: 0.5
-  - _penCount: 3
-    _ribbonSeconds: 0.3
+  - _ribbonSeconds: 0.3
     _bloomDraw: 2
-    _dashCount: 3
-    _dashLength: 0.3
-  - _penCount: 0
-    _ribbonSeconds: 0
+  - _ribbonSeconds: 0
+    _bloomDraw: 2
+  - _ribbonSeconds: 0
     _bloomDraw: 0
-    _dashCount: 0
-    _dashLength: 0.5
-  - _penCount: 0
-    _ribbonSeconds: 0
+  - _ribbonSeconds: 0
     _bloomDraw: 0
-    _dashCount: 0
-    _dashLength: 0.5
-  - _penCount: 0
-    _ribbonSeconds: 0
+  - _ribbonSeconds: 0
+    _bloomDraw: 2
+  - _ribbonSeconds: 0
     _bloomDraw: 0
-    _dashCount: 0
-    _dashLength: 0.5
-  - _penCount: 0
-    _ribbonSeconds: 0
-    _bloomDraw: 0
-    _dashCount: 0
-    _dashLength: 0.5
-  - _penCount: 0
-    _ribbonSeconds: 0
-    _bloomDraw: 0
-    _dashCount: 0
-    _dashLength: 0.5
   _shield:
-    _stubLength: 1.2
+    _stubLength: 1
+  _bomb:
+    _radiusOffset: 0.25
+  _paint:
+    _scale: 0.65

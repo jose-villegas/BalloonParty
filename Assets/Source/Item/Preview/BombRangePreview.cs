@@ -1,4 +1,6 @@
+using BalloonParty.Configuration;
 using BalloonParty.Configuration.Items;
+using UnityEngine;
 
 namespace BalloonParty.Item.Preview
 {
@@ -11,10 +13,11 @@ namespace BalloonParty.Item.Preview
     ///     kill radius (see <c>BombItemHandler.Activate</c>). A telegraph drawn at the visual scale would
     ///     promise reach the blast doesn't have.
     ///     <para>
-    ///         The drawn circle is the radius alone. <c>BombBlast</c> actually catches an occupant whose
-    ///         centre lies within the radius plus its OWN radius, so a balloon straddling the line still
-    ///         pops — the outline reads as "what is inside dies", which is the useful lie. Revisit if
-    ///         players read the edge as exact.
+    ///         The drawn circle is the radius alone, plus <see cref="IBombPreviewSettings.RadiusOffset" />
+    ///         — a display-only nudge on top of the source of truth. <c>BombBlast</c> actually catches an
+    ///         occupant whose centre lies within the radius plus its OWN radius, so the true catchment is
+    ///         meaningfully larger than the bare-radius circle; a small positive offset reads CLOSER to
+    ///         that real reach, not further from it. Revisit if players read the edge as exact.
     ///     </para>
     /// </remarks>
     internal sealed class BombRangePreview : IItemRangePreview
@@ -23,12 +26,14 @@ namespace BalloonParty.Item.Preview
         private const int CircleSegments = 48;
 
         private readonly IItemConfiguration _itemConfig;
+        private readonly IItemPreviewConfig _previewConfig;
 
         public ItemType Type => ItemType.Bomb;
 
-        internal BombRangePreview(IItemConfiguration itemConfig)
+        internal BombRangePreview(IItemConfiguration itemConfig, IItemPreviewConfig previewConfig)
         {
             _itemConfig = itemConfig;
+            _previewConfig = previewConfig;
         }
 
         public void BuildShape(in ItemPreviewContext context, ItemPreviewShape shape)
@@ -39,7 +44,10 @@ namespace BalloonParty.Item.Preview
                 return;
             }
 
-            shape.AddCircle(context.Origin, settings.Bomb.Radius, CircleSegments);
+            // Clamped at the source, even though AddCircle already no-ops on radius <= 0 — a large
+            // negative offset should read as "as tight as it gets", not silently draw nothing.
+            var radius = Mathf.Max(0f, settings.Bomb.Radius + _previewConfig.Bomb.RadiusOffset);
+            shape.AddCircle(context.Origin, radius, CircleSegments);
         }
     }
 }

@@ -87,7 +87,7 @@ namespace BalloonParty.Tests.Item
         [Test]
         public void Paint_DrawsTheClosedSpreadTriangle()
         {
-            var preview = new PaintRangePreview(BuildItemConfig());
+            var preview = new PaintRangePreview(BuildItemConfig(), BuildPreviewConfig(stubLength: 0f));
 
             var context = BuildContext(Vector2.zero, Vector2.up, 0f);
             preview.BuildShape(in context, _shape);
@@ -101,7 +101,7 @@ namespace BalloonParty.Tests.Item
         [Test]
         public void Paint_OrientsTheTriangleAlongTheAim()
         {
-            var preview = new PaintRangePreview(BuildItemConfig());
+            var preview = new PaintRangePreview(BuildItemConfig(), BuildPreviewConfig(stubLength: 0f));
 
             var context = BuildContext(Vector2.zero, Vector2.up, 0f);
             preview.BuildShape(in context, _shape);
@@ -112,6 +112,29 @@ namespace BalloonParty.Tests.Item
 
             Assert.Greater(left.y, apex.y, "the base sits ahead of the apex along the aim");
             Assert.AreEqual(left.y, right.y, 0.001f, "an isosceles base is square to the axis");
+        }
+
+        // A display-only multiplier on top of the true spread — proves the scale actually reaches the
+        // drawn triangle rather than only existing on the config, AND that it scales about the figure's
+        // own axis midpoint rather than its apex. With the default SpreadLength of 3 and SpreadOffset of
+        // 0, aiming up: a 0.5 scale must halve the length (apex to base) while leaving the midpoint where
+        // it was unscaled — the property that was broken when Scale shrank the triangle toward the host.
+        [Test]
+        public void Paint_ScaleShrinksTheTriangleAboutItsMidpoint()
+        {
+            var preview = new PaintRangePreview(
+                BuildItemConfig(), BuildPreviewConfig(stubLength: 0f, paintScale: 0.5f));
+
+            var context = BuildContext(Vector2.zero, Vector2.up, 0f);
+            preview.BuildShape(in context, _shape);
+
+            var apex = _shape.Points[0];
+            var left = _shape.Points[1];
+            var midpoint = (apex.y + left.y) * 0.5f;
+
+            Assert.AreEqual(0.75f, apex.y, 0.001f, "the apex moved in by half the spread length lost");
+            Assert.AreEqual(2.25f, left.y, 0.001f, "the base moved in by half the spread length lost");
+            Assert.AreEqual(1.5f, midpoint, 0.001f, "the axis midpoint stayed put, scaled or not");
         }
 
         // Shield shows the bounce it buys, so the stub must start at the aim line's end and leave along
@@ -208,7 +231,7 @@ namespace BalloonParty.Tests.Item
         [Test]
         public void Bomb_DrawsOneClosedCircleAtTheBlastRadius()
         {
-            var preview = new BombRangePreview(BuildItemConfig(bombRadius: 1.5f));
+            var preview = new BombRangePreview(BuildItemConfig(bombRadius: 1.5f), BuildPreviewConfig(stubLength: 0f));
 
             var context = BuildContext(new Vector2(2f, 1f), Vector2.up, 0f);
             preview.BuildShape(in context, _shape);
@@ -223,13 +246,40 @@ namespace BalloonParty.Tests.Item
             }
         }
 
-        private static IItemPreviewConfig BuildPreviewConfig(float stubLength)
+        // A display-only nudge on top of the true radius — proves the offset actually reaches the drawn
+        // circle rather than only existing on the config.
+        [Test]
+        public void Bomb_RadiusOffsetMovesTheDrawnRadius()
+        {
+            var preview = new BombRangePreview(
+                BuildItemConfig(bombRadius: 1.5f), BuildPreviewConfig(stubLength: 0f, radiusOffset: 0.5f));
+
+            var context = BuildContext(new Vector2(2f, 1f), Vector2.up, 0f);
+            preview.BuildShape(in context, _shape);
+
+            foreach (var point in _shape.Points)
+            {
+                var offset = new Vector2(point.x - 2f, point.y - 1f);
+                Assert.AreEqual(2.0f, offset.magnitude, 0.001f, "the offset shifts every point outward");
+            }
+        }
+
+        private static IItemPreviewConfig BuildPreviewConfig(
+            float stubLength, float radiusOffset = 0f, float paintScale = 1f)
         {
             var shield = Substitute.For<IShieldPreviewSettings>();
             shield.StubLength.Returns(stubLength);
 
+            var bomb = Substitute.For<IBombPreviewSettings>();
+            bomb.RadiusOffset.Returns(radiusOffset);
+
+            var paint = Substitute.For<IPaintPreviewSettings>();
+            paint.Scale.Returns(paintScale);
+
             var config = Substitute.For<IItemPreviewConfig>();
             config.Shield.Returns(shield);
+            config.Bomb.Returns(bomb);
+            config.Paint.Returns(paint);
             return config;
         }
 
