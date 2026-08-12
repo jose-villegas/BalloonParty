@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ItemPreviewConfig
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.ItemPreviewConfig
   _penCount: 6
-  _traceSpeed: 6
+  _traceSpeed: 1.5
   _bloomDuration: 0.35
   _bloomSweepDegrees: 120
   _bloomCurve:
@@ -47,11 +47,11 @@ MonoBehaviour:
     _bloomDraw: 0
     _dashCount: 0
     _dashLength: 0.5
-  - _penCount: 0
-    _ribbonSeconds: 0.6
+  - _penCount: 3
+    _ribbonSeconds: 0.3
     _bloomDraw: 2
     _dashCount: 3
-    _dashLength: 0.35
+    _dashLength: 0.3
   - _penCount: 0
     _ribbonSeconds: 0
     _bloomDraw: 0

@@ -250,12 +250,11 @@ namespace BalloonParty.Item.Preview
                 pen.Entry = SampleStroke(pen.StrokeIndex, pen.EntryDistance);
                 pen.BloomElapsed = 0f;
                 pen.Tracing = false;
-                pen.Emitting = _emitDuringBloom;
 
                 pen.Trail.SetRibbonTime(style.RibbonSeconds);
                 pen.Trail.ClearRibbon();
                 pen.Trail.SetPosition(new Vector3(_origin.x, _origin.y, 0f));
-                pen.Trail.SetEmitting(pen.Emitting);
+                pen.Trail.SetEmitting(_emitDuringBloom);
 
                 _pens[i] = pen;
             }
@@ -293,14 +292,13 @@ namespace BalloonParty.Item.Preview
                 return;
             }
 
-            pen.Distance += _config.TraceSpeed * deltaTime;
-
             if (_dashCount > 0)
             {
-                AdvanceDash(ref pen);
+                AdvanceDash(ref pen, deltaTime);
                 return;
             }
 
+            pen.Distance += _config.TraceSpeed * deltaTime;
             pen.Trail.SetPosition(SampleStroke(pen.StrokeIndex, pen.Distance));
         }
 
@@ -314,7 +312,7 @@ namespace BalloonParty.Item.Preview
         //
         // A pen never leaves its slot, so the whole figure is always described at once rather than being
         // revealed by a pen touring it.
-        private void AdvanceDash(ref Pen pen)
+        private void AdvanceDash(ref Pen pen, float deltaTime)
         {
             var slotLength = _strokeLengths[pen.StrokeIndex] / _dashCount;
             if (slotLength <= 1e-5f)
@@ -322,18 +320,18 @@ namespace BalloonParty.Item.Preview
                 return;
             }
 
-            var withinSlot = Mathf.Repeat(pen.Distance, slotLength);
+            // The pen SWEEPS its dash — a → b, then b → a, forever. It never jumps, so there is no
+            // restart to flicker, no discontinuity to hide, and no pen-up at all: the spacing between
+            // dashes is simply arc no pen ever visits (DashLength < the slot it owns).
+            //
+            // The earlier a → b, snap-back-to-a, repeat is what strobed: every snap ended one ribbon and
+            // began another, so the ribbon lifetime decided how many stale copies piled up behind it.
+            var painted = Mathf.Min(_dashLength, slotLength);
+            pen.Distance += _config.TraceSpeed * deltaTime;
+
+            var withinDash = Mathf.PingPong(pen.Distance, painted);
             pen.Trail.SetPosition(
-                SampleStroke(pen.StrokeIndex, (pen.DashIndex * slotLength) + withinSlot));
-
-            var shouldEmit = withinSlot < Mathf.Min(_dashLength, slotLength);
-            if (shouldEmit == pen.Emitting)
-            {
-                return;
-            }
-
-            pen.Emitting = shouldEmit;
-            pen.Trail.SetEmitting(shouldEmit);
+                SampleStroke(pen.StrokeIndex, (pen.DashIndex * slotLength) + withinDash));
         }
 
         // The outward launch: the pen spirals from the host to its stroke entry — bearing eases from an
@@ -366,10 +364,7 @@ namespace BalloonParty.Item.Preview
 
             // Pen down for the figure itself. When the bloom drew too, the spiral in and the stroke are one
             // continuous ribbon; when it didn't, clearing here drops the invisible approach so the first
-            // traced segment doesn't join back to the host. Either way _Emitting_ is left true so dash
-            // mode's edge detection starts from a known state on the next tick.
-            pen.Emitting = true;
-
+            // traced segment doesn't join back to the host.
             if (!_emitDuringBloom)
             {
                 pen.Trail.ClearRibbon();
@@ -444,9 +439,6 @@ namespace BalloonParty.Item.Preview
             // Dash mode: the slot this pen owns for its whole life. One pen draws one dash — the dashed
             // line is the pens sitting side by side, not one pen visiting every slot.
             public int DashIndex;
-
-            // Mirrors the trail's own emitting flag so dash mode only calls into it on a real edge.
-            public bool Emitting;
         }
     }
 }

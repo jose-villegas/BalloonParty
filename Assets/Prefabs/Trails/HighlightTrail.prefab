@@ -84,11 +84,11 @@ SpriteRenderer:
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: a21041c776e5e384fbf321d6076182f6, type: 3}
-  m_Color: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  m_Color: {r: 0.2, g: 0.2, b: 0.2, a: 0.5019608}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 0.235, y: 0.235}
+  m_Size: {x: 0.15, y: 0.15}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -147,13 +147,13 @@ TrailRenderer:
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 0.15
     widthCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.15
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -163,20 +163,20 @@ TrailRenderer:
       - serializedVersion: 3
         time: 1
         value: 0
-        inSlope: -1.2682407
-        outSlope: -1.2682407
+        inSlope: -0.03805442
+        outSlope: -0.03805442
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0.43913043
+        inWeight: 0.34838158
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.8627452, g: 0.1921569, b: 0.1960784, a: 1}
-      key1: {r: 0.95, g: 0.95, b: 0.9098039, a: 1}
-      key2: {r: 0.06158147, g: 0.6692205, b: 0.9356472, a: 0}
+      key0: {r: 0.2, g: 0.2, b: 0.2, a: 0.2509804}
+      key1: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+      key2: {r: 0.06158147, g: 0.6692205, b: 0.9356472, a: 0.2509804}
       key3: {r: 1, g: 0.7912, b: 0.536, a: 0}
       key4: {r: 1, g: 0.7912, b: 0.536, a: 0}
       key5: {r: 1, g: 0.7912, b: 0.536, a: 0}
@@ -191,9 +191,9 @@ TrailRenderer:
       ctime6: 65535
       ctime7: 65535
       atime0: 0
-      atime1: 44333
+      atime1: 32768
       atime2: 65535
-      atime3: 0
+      atime3: 65535
       atime4: 0
       atime5: 0
       atime6: 0
@@ -205,11 +205,11 @@ TrailRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 3
-    textureScale: {x: 1.5, y: 1.5}
+    textureMode: 0
+    textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 0.1
+  m_MinVertexDistance: 0
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 0

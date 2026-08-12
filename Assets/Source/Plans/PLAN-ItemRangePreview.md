@@ -208,6 +208,12 @@ fidelity and looks come after that reads right.
   nothing useful. It now draws a short stub of the bounce off the wall the aim line ends
   on — the *consequence* of the life the shield buys, rather than a fake area. Pairs with
   a low pen count and the dash settings.
+  **Walls only, and that is the whole rule**: a shield is spent on a wall and nothing else
+  (`ProjectileMotionResolver.Step` decrements `ShieldsRemaining` on a wall reflection, its
+  `Deflect` never does), so a balloon deflection costs the shot nothing and there is no
+  consequence to advertise. An aim line ending on a deflector — or petering out in open air,
+  which a downward deflection routinely does since there is no bottom wall — draws nothing,
+  by design rather than by omission.
 - **Laser spin.** The beam's rotation at contact time is extrapolated live
   (`ItemSpinDegrees + rate * tHit`). The preview cannot know `tHit` while aiming.
   **Resolved for now** by drawing at the icon's *current* rotation (read through

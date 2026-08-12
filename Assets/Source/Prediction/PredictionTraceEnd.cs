@@ -39,9 +39,6 @@ namespace BalloonParty.Prediction
         /// </summary>
         public readonly Vector2 Normal;
 
-        /// <summary>True when the shot actually struck something a bounce could leave from.</summary>
-        public bool HasContact => Kind != PredictionTraceEndKind.OpenAir;
-
         public PredictionTraceEnd(int pierceStartIndex, PredictionTraceEndKind kind, Vector2 normal)
         {
             PierceStartIndex = pierceStartIndex;

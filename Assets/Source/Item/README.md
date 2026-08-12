@@ -94,7 +94,7 @@ The figures, and what each reuses:
 
 | Item | Figure | Geometry source |
 |---|---|---|
-| Shield | a stub of the bounce off whatever the aim line ends on — wall **or** deflecting balloon | `PredictionTraceEnd`, the contact the trace calculator already solved to stop there. It has no board range, so it shows the *consequence*: where the shot carries on after surviving that hit. Draws nothing when the line ended in open air, since there's no contact to bounce from |
+| Shield | a stub of the **wall** bounce the aim line ends on | `PredictionTraceEnd`, the contact the trace calculator already solved to stop there. It has no board range, so it shows the *consequence*: where the shot carries on after surviving that hit. Walls only — a shield is spent on a wall and nothing else (`ProjectileMotionResolver.Step` decrements `ShieldsRemaining` on a wall reflection, its `Deflect` never does), so a balloon deflection costs the shot nothing and there is no consequence to advertise |
 | Bomb | circle at the blast radius | `BombSettings.Radius`, the same field `BombBlast` selects with — deliberately not `RainbowEffectScale`, which scales only the VFX |
 | Snipe | line from the host to the wall | `WallLimits.TryFindCrossing` along the aim. Traced fresh rather than copied from the aim polyline past its pierce marker, since that stops at the telegraph's segment budget, not the wall |
 | Laser | two crossing rectangles | the four `LaserCross` arms share two corridors; `CircleCastRadius` × `RaycastDistance`, rotated by the icon's live spin |
@@ -117,16 +117,23 @@ pen prefab's own authored value is only the fallback.
 
 **One pen draws one dash; the dashed line is the pens side by side.** `DashCount` divides a stroke
 into that many slots and spawns one pen per slot — ask for three dashes on Shield's stub and you get
-three pens, each owning a third of it. A pen never leaves its own slot: it loops inside it, painting
-`DashLength` (the dash) and lifting for the remainder (the spacing) via `emitting`, then wrapping
-back to redraw. Because they sit next to each other, the figure is described all at once rather than
-being revealed by a pen touring it. `DashCount = 0` is the continuous ribbon, and stays the default;
-`PenCount` only applies there, since in dash mode the dash count *is* the pen count per stroke.
+three pens, each owning a third of it. Because they sit next to each other, the figure is described
+all at once rather than being revealed by a pen touring it. `DashCount = 0` is the continuous ribbon,
+and stays the default; `PenCount` only applies there, since in dash mode the dash count *is* the pen
+count per stroke.
 
-> Two wrong turns worth not repeating. **`ClearRibbon` cannot make the gaps** — clearing wipes every
-> dash already painted, collapsing the figure into one short stroke sliding along it. And **a pen must
-> not tour the whole stroke** leaving dashes behind it: that reads as trails travelling from one end
-> to the other, not as a dashed shape.
+**A pen sweeps its dash — a → b, then b → a, forever.** It never jumps, which is the whole trick:
+there is no restart to flicker, no discontinuity to hide, and **no pen-up at all**. The spacing
+between dashes is simply arc that no pen ever visits, because `DashLength` is shorter than the slot
+its pen owns.
+
+> Three wrong turns worth not repeating, all of them attempts to make the gaps by interrupting the
+> pen rather than by bounding where it travels. **`ClearRibbon` cannot make the gaps** — clearing
+> wipes every dash already painted, collapsing the figure into one short stroke sliding along it.
+> **A pen must not tour the whole stroke** leaving dashes behind it: that reads as trails travelling
+> from one end to the other, not as a dashed shape. And **a pen must not snap back to its dash start**
+> to repeat — each snap ends one ribbon and begins another, so the ribbon lifetime decides how many
+> stale copies pile up, which is what a hard strobe with far too much alpha actually is.
 
 **A figure far from its host needs its approach hidden.** The outward bloom is drawn by default,
 which suits a figure centred on the host (Bomb's circle has almost no approach). Shield's stub sits

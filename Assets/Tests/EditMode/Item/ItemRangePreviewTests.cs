@@ -133,23 +133,20 @@ namespace BalloonParty.Tests.Item
             Assert.AreEqual(3f, _shape.Points[1].y, 0.001f, "heads back down for the configured length of 2");
         }
 
-        // The case that was broken: the aim line very often ends on a DEFLECTING BALLOON, not a wall.
-        // Shield used to test the endpoint against the walls only, so it drew nothing at all there.
+        // Walls only, on purpose: a shield is spent on a wall and nothing else (ProjectileMotionResolver
+        // decrements ShieldsRemaining on a wall reflection, its Deflect never does), so a bounce off a
+        // balloon costs the shot nothing and Shield has no consequence to advertise there.
         [Test]
-        public void Shield_DrawsTheStubWhenTheAimEndsOnADeflector()
+        public void Shield_WhenTheAimEndsOnADeflector_DrawsNothing()
         {
             var preview = new ShieldRangePreview(BuildPreviewConfig(stubLength: 2f));
             var trace = new[] { new Vector3(0f, 0f, 0f), new Vector3(0f, 1.5f, 0f) };
-
-            // Head-on into a balloon sitting above: its surface normal points back down at the shot.
             var end = new PredictionTraceEnd(-1, PredictionTraceEndKind.Deflector, Vector2.down);
 
             var context = BuildShieldContext(trace, end);
             preview.BuildShape(in context, _shape);
 
-            Assert.AreEqual(1, _shape.Strokes.Count, "a deflected ending still has a bounce to show");
-            Assert.AreEqual(1.5f, _shape.Points[0].y, 0.001f, "starts at the contact");
-            Assert.AreEqual(-0.5f, _shape.Points[1].y, 0.001f, "and reverses back down");
+            Assert.AreEqual(0, _shape.Strokes.Count, "no shield is spent deflecting off a balloon");
         }
 
         // The stub's reach is config, not a constant — a tuning change has to move it.
