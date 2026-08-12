@@ -247,9 +247,13 @@ namespace BalloonParty.Item.Preview
                 // offset is applied when sampling; continuous mode walks the stroke's absolute length.
                 pen.EntryDistance = length * (ordinal / (float)pensOnStroke);
                 pen.Distance = _dashCount > 0 ? 0f : pen.EntryDistance;
-                pen.Entry = SampleStroke(pen.StrokeIndex, pen.EntryDistance);
                 pen.BloomElapsed = 0f;
-                pen.Tracing = false;
+                pen.Bloomed = false;
+
+                // Spread over the whole pen set (global i), not per-stroke (ordinal) — pens are dealt
+                // round-robin across strokes, so a per-stroke phase would clump the fan instead of
+                // spreading it evenly around the full circle.
+                pen.BloomPhaseDegrees = 360f * i / _pens.Count;
 
                 pen.Trail.SetRibbonTime(style.RibbonSeconds);
                 pen.Trail.ClearRibbon();
@@ -261,7 +265,8 @@ namespace BalloonParty.Item.Preview
         }
 
         // Same host, re-fitted geometry: keep every pen's phase and progress, only clamp what the new stroke
-        // set can no longer support. A pen still blooming re-aims at the moved entry point mid-flight.
+        // set can no longer support. A pen still blooming needs no re-aim here — the warp re-derives from
+        // the live shape position every frame in AdvancePen, so it just follows the refitted geometry.
         private void RefitPens()
         {
             var strokeCount = _shape.Strokes.Count;
@@ -274,11 +279,15 @@ namespace BalloonParty.Item.Preview
                     pen.StrokeIndex = i % strokeCount;
                 }
 
-                pen.Entry = SampleStroke(pen.StrokeIndex, pen.EntryDistance);
                 _pens[i] = pen;
             }
         }
 
+        // The pen's on-screen position every frame: the shape position it would have with no bloom at all
+        // (already advancing from t = 0), warped around the host origin by a clock that decays to identity.
+        // At t = 0 the warp collapses the pen onto the origin; at t = 1 rotation is zero and scale is one,
+        // so the warp IS the shape position — one continuous formula rather than a spiral phase handing off
+        // to a separate tracing phase, so there is no velocity discontinuity at the seam.
         private void AdvancePen(ref Pen pen, float deltaTime)
         {
             if (pen.Trail == null)
@@ -286,20 +295,49 @@ namespace BalloonParty.Item.Preview
                 return;
             }
 
-            if (!pen.Tracing)
+            var shapePos = _dashCount > 0
+                ? AdvanceDash(ref pen, deltaTime)
+                : AdvanceTrace(ref pen, deltaTime);
+
+            var duration = Mathf.Max(_config.BloomDuration, 1e-4f);
+            pen.BloomElapsed += deltaTime;
+            var t = Mathf.Clamp01(pen.BloomElapsed / duration);
+
+            if (t >= 1f)
             {
-                AdvanceBloom(ref pen, deltaTime);
+                pen.Trail.SetPosition(shapePos);
+
+                // Pen down for the figure itself, fired once on the frame the warp first settles. When the
+                // bloom drew too, the spiral in and the stroke are one continuous ribbon; when it didn't,
+                // clearing here drops the invisible approach so the first traced segment doesn't join back
+                // to the host.
+                if (!pen.Bloomed)
+                {
+                    pen.Bloomed = true;
+
+                    if (!_emitDuringBloom)
+                    {
+                        pen.Trail.ClearRibbon();
+                        pen.Trail.SetEmitting(true);
+                    }
+                }
+
                 return;
             }
 
-            if (_dashCount > 0)
-            {
-                AdvanceDash(ref pen, deltaTime);
-                return;
-            }
+            var eased = _config.BloomCurve.Evaluate(t);
+            var offsetX = shapePos.x - _origin.x;
+            var offsetY = shapePos.y - _origin.y;
+            var radians = (_config.BloomSweepDegrees + pen.BloomPhaseDegrees) * (1f - eased) * Mathf.Deg2Rad;
+            var cos = Mathf.Cos(radians);
+            var sin = Mathf.Sin(radians);
+            var rotatedX = (offsetX * cos) - (offsetY * sin);
+            var rotatedY = (offsetX * sin) + (offsetY * cos);
 
-            pen.Distance += _config.TraceSpeed * deltaTime;
-            pen.Trail.SetPosition(SampleStroke(pen.StrokeIndex, pen.Distance));
+            pen.Trail.SetPosition(new Vector3(
+                _origin.x + (rotatedX * eased),
+                _origin.y + (rotatedY * eased),
+                0f));
         }
 
         // One pen draws ONE dash, and the dashed line is the pens sitting next to each other — ask for
@@ -312,12 +350,12 @@ namespace BalloonParty.Item.Preview
         //
         // A pen never leaves its slot, so the whole figure is always described at once rather than being
         // revealed by a pen touring it.
-        private void AdvanceDash(ref Pen pen, float deltaTime)
+        private Vector3 AdvanceDash(ref Pen pen, float deltaTime)
         {
             var slotLength = _strokeLengths[pen.StrokeIndex] / _dashCount;
             if (slotLength <= 1e-5f)
             {
-                return;
+                return SampleStroke(pen.StrokeIndex, 0f);
             }
 
             // The pen SWEEPS its dash — a → b, then b → a, forever. It never jumps, so there is no
@@ -330,46 +368,15 @@ namespace BalloonParty.Item.Preview
             pen.Distance += _config.TraceSpeed * deltaTime;
 
             var withinDash = Mathf.PingPong(pen.Distance, painted);
-            pen.Trail.SetPosition(
-                SampleStroke(pen.StrokeIndex, (pen.DashIndex * slotLength) + withinDash));
+            return SampleStroke(pen.StrokeIndex, (pen.DashIndex * slotLength) + withinDash);
         }
 
-        // The outward launch: the pen spirals from the host to its stroke entry — bearing eases from an
-        // offset launch angle onto the true one while the radius grows, so it arcs out rather than shooting
-        // straight, and still lands exactly on the entry point at t = 1.
-        private void AdvanceBloom(ref Pen pen, float deltaTime)
+        // Continuous mode's own shape motion: constant arc-length rate along the whole stroke, wrapping per
+        // SampleStroke. Runs from t = 0 same as dash mode, so it is already under way through the bloom.
+        private Vector3 AdvanceTrace(ref Pen pen, float deltaTime)
         {
-            var duration = Mathf.Max(_config.BloomDuration, 1e-4f);
-            pen.BloomElapsed += deltaTime;
-            var t = Mathf.Clamp01(pen.BloomElapsed / duration);
-            var eased = _config.BloomCurve.Evaluate(t);
-
-            var toEntry = new Vector2(pen.Entry.x - _origin.x, pen.Entry.y - _origin.y);
-            var targetAngle = Mathf.Atan2(toEntry.y, toEntry.x) * Mathf.Rad2Deg;
-            var angle = Mathf.LerpAngle(targetAngle - _config.BloomSweepDegrees, targetAngle, eased);
-            var radius = Mathf.Lerp(0f, toEntry.magnitude, eased);
-            var radians = angle * Mathf.Deg2Rad;
-
-            pen.Trail.SetPosition(new Vector3(
-                _origin.x + (Mathf.Cos(radians) * radius),
-                _origin.y + (Mathf.Sin(radians) * radius),
-                0f));
-
-            if (t < 1f)
-            {
-                return;
-            }
-
-            pen.Tracing = true;
-
-            // Pen down for the figure itself. When the bloom drew too, the spiral in and the stroke are one
-            // continuous ribbon; when it didn't, clearing here drops the invisible approach so the first
-            // traced segment doesn't join back to the host.
-            if (!_emitDuringBloom)
-            {
-                pen.Trail.ClearRibbon();
-                pen.Trail.SetEmitting(true);
-            }
+            pen.Distance += _config.TraceSpeed * deltaTime;
+            return SampleStroke(pen.StrokeIndex, pen.Distance);
         }
 
         // Distance wraps: a closed stroke loops forever, an open one ping-pongs so a pen never stalls at
@@ -433,12 +440,15 @@ namespace BalloonParty.Item.Preview
             // this pen's OWN slot, wrapped by the slot length.
             public float Distance;
             public float EntryDistance;
-            public Vector3 Entry;
-            public bool Tracing;
+            public bool Bloomed;
 
             // Dash mode: the slot this pen owns for its whole life. One pen draws one dash — the dashed
             // line is the pens sitting side by side, not one pen visiting every slot.
             public int DashIndex;
+
+            // Evenly spaced launch bearings so the set fans out radially on bloom instead of turning as
+            // one rigid stick; decays away with the shared sweep, so it never moves the landing position.
+            public float BloomPhaseDegrees;
         }
     }
 }
