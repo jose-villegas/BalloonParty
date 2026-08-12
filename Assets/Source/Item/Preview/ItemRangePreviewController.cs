@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration.Items;
-using BalloonParty.Configuration.Palette;
 using BalloonParty.Prediction;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
@@ -31,7 +30,6 @@ namespace BalloonParty.Item.Preview
         private readonly SlotGrid _grid;
         private readonly PredictionTraceProvider _traceProvider;
         private readonly ItemPreviewTicker _ticker;
-        private readonly IGamePalette _palette;
         private readonly IEnumerable<IItemRangePreview> _previews;
 
         private Dictionary<ItemType, IItemRangePreview> _previewMap;
@@ -41,13 +39,11 @@ namespace BalloonParty.Item.Preview
             SlotGrid grid,
             PredictionTraceProvider traceProvider,
             ItemPreviewTicker ticker,
-            IGamePalette palette,
             IEnumerable<IItemRangePreview> previews)
         {
             _grid = grid;
             _traceProvider = traceProvider;
             _ticker = ticker;
-            _palette = palette;
             _previews = previews;
         }
 
@@ -103,9 +99,9 @@ namespace BalloonParty.Item.Preview
                 ? spinHost.SpinningItem?.AngleDegrees ?? 0f
                 : 0f;
             var context = new ItemPreviewContext(
-                origin, slot, direction, _traceProvider.Points, colorId, spinDegrees);
+                origin, slot, direction, _traceProvider.Points, colorId, spinDegrees, _traceProvider.End);
 
-            _ticker.Show(preview, in context, _palette.GetColor(colorId));
+            _ticker.Show(preview, in context);
         }
 
         // The most centrally-struck item host wins, mirroring TraceHitGeometry's own scoring: an aim

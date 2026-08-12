@@ -57,6 +57,8 @@ namespace BalloonParty.Game
                  "sprite, carrying the highlight material. Unassigned simply shows no telegraph.")]
         [SerializeField] private HighlightTrail _itemPreviewPenPrefab;
 
+        [SerializeField] private ItemPreviewConfig _itemPreviewConfig;
+
         [SerializeField] private AudioSourceVoice _sfxVoicePrefab;
 
         protected override void Awake()
@@ -126,6 +128,13 @@ namespace BalloonParty.Game
             // ticker already no-ops on a null prefab) so the telegraph is opt-in by wiring the prefab,
             // not a hard startup failure before it's authored.
             builder.RegisterInstance(_itemPreviewPenPrefab);
+
+            // Degrades to a default instance carrying the sensible defaults, like the thermal governor
+            // below — the telegraph works out of the box, and an authored asset only tunes it.
+            builder.RegisterInstance<IItemPreviewConfig>(
+                _itemPreviewConfig != null
+                    ? _itemPreviewConfig
+                    : ScriptableObject.CreateInstance<ItemPreviewConfig>());
 
             // An unassigned asset degrades to a default instance carrying the sensible defaults, so the
             // governor works out of the box; wire an authored asset in the scene only to tune it.

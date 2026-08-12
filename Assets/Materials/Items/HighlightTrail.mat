@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TrailMaterial_Prediction
+  m_Name: HighlightTrail
   m_Shader: {fileID: 4800000, guid: c54f79cfbe564ea89c698a14dc7c78a3, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -65,6 +65,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - PixelSnap: 0
     - _BlurAmount: 8
     - _BumpScale: 1
     - _ColorMask: 15
@@ -81,15 +82,17 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _InvFade: 1
     - _Metallic: 0
     - _MinVisibility: 0.435
+    - _MirrorX: 0
     - _Mode: 0
     - _NoiseScale: 5
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _ShadowSoftness: 0.01
-    - _Shininess: 0.7
+    - _ShineLocation: 0.552
+    - _ShineSpeed: 0
+    - _ShineWidth: 0.238
     - _SmokeContrast: 1.35
     - _SmokeStrength: 0.55
     - _SmoothnessTextureChannel: 0
@@ -104,6 +107,7 @@ Material:
     - _StencilWriteMask: 255
     - _SwirlRadius: 0.25
     - _SwirlSpeed: 8
+    - _TimeOffset: 0
     - _UVSec: 0
     - _UseUIAlphaClip: 0
     - _ZTest: 4
@@ -111,14 +115,12 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Drift: {r: -0.125, g: 0.35, b: 0, a: 0}
-    - _EmisColor: {r: 0.2, g: 0.2, b: 0.2, a: 0}
-    - _Emission: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _GlitterColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    - _MirrorAxis: {r: 1, g: 0, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _ScrollSpeed: {r: -0.1, g: 0.45, b: 0, a: 0}
     - _ShadowColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.75}
     - _ShadowOffset: {r: 0.1, g: -0.1, b: 0, a: 0}
-    - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

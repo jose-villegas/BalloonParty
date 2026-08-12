@@ -1,37 +1,72 @@
+using BalloonParty.Configuration;
 using BalloonParty.Configuration.Items;
 using UnityEngine;
 
 namespace BalloonParty.Item.Preview
 {
     /// <summary>
-    ///     Shield's telegraph: a plus sign at the end of the prediction line.
+    ///     Shield's telegraph: a stub of the bounce the shot would survive — a short segment leaving the
+    ///     aim line's end along the direction it would carry on in.
     /// </summary>
     /// <remarks>
-    ///     Shield is the one item with no board range at all — it grants the SHOT a life, so there is no
-    ///     area to outline. Marking the aim line's end says "this shot gets to keep going" in the place the
-    ///     player is already looking. Placeholder by intent (@ref plan_item_range_preview): if it reads as
-    ///     a range rather than a bonus it is worse than drawing nothing.
+    ///     Shield is the one item with no board range at all: it buys the shot a hit it would otherwise
+    ///     die on. So the useful thing to show is not an area but the CONSEQUENCE — where the shot carries
+    ///     on to. The aim line already stops at that contact (its reflection budget is spent), and this
+    ///     picks up exactly there.
+    ///     <para>
+    ///         Works off whatever the line ran into — a wall OR a deflecting balloon. The normal comes
+    ///         from <see cref="ItemPreviewContext.TraceEnd" />, which the trace calculator already solved
+    ///         to stop there; deriving it here instead (testing the endpoint against the walls, hunting a
+    ///         deflector circle near it) would be a second answer to a settled question, and got the
+    ///         deflection case wrong outright by only ever checking walls.
+    ///     </para>
+    ///     <para>
+    ///         Draws nothing when the line simply ran out of segments in open air — there is no contact,
+    ///         so there is no bounce to promise.
+    ///     </para>
     /// </remarks>
     internal sealed class ShieldRangePreview : IItemRangePreview
     {
-        // World units — the arm half-length of the drawn plus. Tuning-pass material.
-        private const float ArmLength = 0.45f;
+        private readonly IItemPreviewConfig _previewConfig;
 
         public ItemType Type => ItemType.Shield;
 
+        internal ShieldRangePreview(IItemPreviewConfig previewConfig)
+        {
+            _previewConfig = previewConfig;
+        }
+
         public void BuildShape(in ItemPreviewContext context, ItemPreviewShape shape)
         {
-            var points = context.TracePoints;
-            if (points == null || points.Count == 0)
+            if (!context.TraceEnd.HasContact)
             {
                 return;
             }
 
-            var tip = points[points.Count - 1];
-            var center = new Vector2(tip.x, tip.y);
+            var points = context.TracePoints;
+            if (points == null || points.Count < 2)
+            {
+                return;
+            }
 
-            shape.AddSegment(center + (Vector2.left * ArmLength), center + (Vector2.right * ArmLength));
-            shape.AddSegment(center + (Vector2.down * ArmLength), center + (Vector2.up * ArmLength));
+            var end = points[points.Count - 1];
+            var incoming = end - points[points.Count - 2];
+            if (incoming.sqrMagnitude < 1e-8f)
+            {
+                return;
+            }
+
+            var normal = context.TraceEnd.Normal;
+            if (normal.sqrMagnitude < 1e-8f)
+            {
+                return;
+            }
+
+            // Normalized because a corner crossing sums two wall normals — reflecting about a non-unit
+            // normal scales the outgoing heading instead of mirroring it (the same reason
+            // PredictionTraceCalculator normalizes its own).
+            var reflected = Vector2.Reflect(((Vector2)incoming).normalized, normal.normalized).normalized;
+            shape.AddSegment(end, (Vector2)end + (reflected * _previewConfig.Shield.StubLength));
         }
     }
 }

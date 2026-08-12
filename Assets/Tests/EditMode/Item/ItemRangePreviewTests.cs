@@ -1,5 +1,8 @@
+using BalloonParty.Configuration;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Item.Preview;
+using BalloonParty.Prediction;
+using BalloonParty.Shared;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
@@ -111,30 +114,95 @@ namespace BalloonParty.Tests.Item
             Assert.AreEqual(left.y, right.y, 0.001f, "an isosceles base is square to the axis");
         }
 
+        // Shield shows the bounce it buys, so the stub must start at the aim line's end and leave along
+        // the REFLECTED heading — straight up into the top wall comes back straight down.
         [Test]
-        public void Shield_MarksTheAimTipWithTwoCrossedArms()
+        public void Shield_DrawsTheReflectedStubOffTheWallTheAimEndsOn()
         {
-            var preview = new ShieldRangePreview();
-            var trace = new[] { Vector3.zero, new Vector3(1f, 2f, 0f) };
+            var preview = new ShieldRangePreview(BuildPreviewConfig(stubLength: 2f));
+            var trace = new[] { new Vector3(0f, 1f, 0f), new Vector3(0f, 5f, 0f) };
+            var end = new PredictionTraceEnd(-1, PredictionTraceEndKind.Wall, Vector2.down);
 
-            var context = new ItemPreviewContext(Vector2.zero, Vector2Int.zero, Vector2.up, trace, null, 0f);
+            var context = BuildShieldContext(trace, end);
             preview.BuildShape(in context, _shape);
 
-            Assert.AreEqual(2, _shape.Strokes.Count, "a plus is two arms");
+            Assert.AreEqual(1, _shape.Strokes.Count);
+            Assert.AreEqual(2, _shape.Strokes[0].Count, "a stub is one segment");
+            Assert.AreEqual(0f, _shape.Points[0].x, 0.001f, "starts at the aim line's end");
+            Assert.AreEqual(5f, _shape.Points[0].y, 0.001f);
+            Assert.AreEqual(3f, _shape.Points[1].y, 0.001f, "heads back down for the configured length of 2");
+        }
 
-            // Both arms are centred on the trace's LAST point, not the host.
-            var centerX = (_shape.Points[0].x + _shape.Points[1].x) * 0.5f;
-            var centerY = (_shape.Points[2].y + _shape.Points[3].y) * 0.5f;
-            Assert.AreEqual(1f, centerX, 0.001f);
-            Assert.AreEqual(2f, centerY, 0.001f);
+        // The case that was broken: the aim line very often ends on a DEFLECTING BALLOON, not a wall.
+        // Shield used to test the endpoint against the walls only, so it drew nothing at all there.
+        [Test]
+        public void Shield_DrawsTheStubWhenTheAimEndsOnADeflector()
+        {
+            var preview = new ShieldRangePreview(BuildPreviewConfig(stubLength: 2f));
+            var trace = new[] { new Vector3(0f, 0f, 0f), new Vector3(0f, 1.5f, 0f) };
+
+            // Head-on into a balloon sitting above: its surface normal points back down at the shot.
+            var end = new PredictionTraceEnd(-1, PredictionTraceEndKind.Deflector, Vector2.down);
+
+            var context = BuildShieldContext(trace, end);
+            preview.BuildShape(in context, _shape);
+
+            Assert.AreEqual(1, _shape.Strokes.Count, "a deflected ending still has a bounce to show");
+            Assert.AreEqual(1.5f, _shape.Points[0].y, 0.001f, "starts at the contact");
+            Assert.AreEqual(-0.5f, _shape.Points[1].y, 0.001f, "and reverses back down");
+        }
+
+        // The stub's reach is config, not a constant — a tuning change has to move it.
+        [Test]
+        public void Shield_StubLengthComesFromConfig()
+        {
+            var preview = new ShieldRangePreview(BuildPreviewConfig(stubLength: 0.5f));
+            var trace = new[] { new Vector3(0f, 1f, 0f), new Vector3(0f, 5f, 0f) };
+            var end = new PredictionTraceEnd(-1, PredictionTraceEndKind.Wall, Vector2.down);
+
+            var context = BuildShieldContext(trace, end);
+            preview.BuildShape(in context, _shape);
+
+            Assert.AreEqual(4.5f, _shape.Points[1].y, 0.001f);
+        }
+
+        // A side wall reflects the horizontal component only — the stub keeps climbing while it turns back.
+        [Test]
+        public void Shield_ReflectsOffASideWallAcrossTheHorizontal()
+        {
+            var preview = new ShieldRangePreview(BuildPreviewConfig(stubLength: 2f));
+            var trace = new[] { new Vector3(1f, 0f, 0f), new Vector3(3f, 2f, 0f) };
+            var end = new PredictionTraceEnd(-1, PredictionTraceEndKind.Wall, Vector2.left);
+
+            var context = BuildShieldContext(trace, end);
+            preview.BuildShape(in context, _shape);
+
+            Assert.AreEqual(1, _shape.Strokes.Count);
+            Assert.Less(_shape.Points[1].x, _shape.Points[0].x, "turned back off the right wall");
+            Assert.Greater(_shape.Points[1].y, _shape.Points[0].y, "but keeps its upward travel");
+        }
+
+        // The aim line can run out of segments in open air; there is no contact, so there is no bounce to
+        // promise, and inventing one would be a lie.
+        [Test]
+        public void Shield_WhenTheAimEndsInOpenAir_DrawsNothing()
+        {
+            var preview = new ShieldRangePreview(BuildPreviewConfig(stubLength: 2f));
+            var trace = new[] { new Vector3(0f, 0f, 0f), new Vector3(0f, 1f, 0f) };
+
+            var context = BuildShieldContext(trace, PredictionTraceEnd.OpenAir(-1));
+            preview.BuildShape(in context, _shape);
+
+            Assert.AreEqual(0, _shape.Strokes.Count);
         }
 
         [Test]
         public void Shield_WithNoTrace_DrawsNothing()
         {
-            var preview = new ShieldRangePreview();
+            var preview = new ShieldRangePreview(BuildPreviewConfig(stubLength: 2f));
+            var end = new PredictionTraceEnd(-1, PredictionTraceEndKind.Wall, Vector2.down);
 
-            var context = new ItemPreviewContext(Vector2.zero, Vector2Int.zero, Vector2.up, null, null, 0f);
+            var context = BuildShieldContext(null, end);
             preview.BuildShape(in context, _shape);
 
             Assert.AreEqual(0, _shape.Strokes.Count);
@@ -156,6 +224,22 @@ namespace BalloonParty.Tests.Item
                 var offset = new Vector2(point.x - 2f, point.y - 1f);
                 Assert.AreEqual(1.5f, offset.magnitude, 0.001f, "every point sits on the blast radius");
             }
+        }
+
+        private static IItemPreviewConfig BuildPreviewConfig(float stubLength)
+        {
+            var shield = Substitute.For<IShieldPreviewSettings>();
+            shield.StubLength.Returns(stubLength);
+
+            var config = Substitute.For<IItemPreviewConfig>();
+            config.Shield.Returns(shield);
+            return config;
+        }
+
+        private static ItemPreviewContext BuildShieldContext(Vector3[] trace, PredictionTraceEnd end)
+        {
+            return new ItemPreviewContext(
+                Vector2.zero, Vector2Int.zero, Vector2.up, trace, null, 0f, end);
         }
 
         private static ItemPreviewContext BuildContext(Vector2 origin, Vector2 aim, float spinDegrees)

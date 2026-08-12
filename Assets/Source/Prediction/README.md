@@ -71,7 +71,15 @@ MonoBehaviour with a `LineRenderer`. Call `SetTrace(points)` to update, `SetColo
 
 ### PredictionTraceProvider
 
-Plain C# game-scope singleton (registered in `GameScopeRegistration.RegisterCoreServices`) that mirrors the same-frame trace for readers outside the Thrower's own view chain — the house pattern is `ProjectilePositionProvider` (`Projectile/`). `SetTrace(points, pierceStartIndex = -1)` copies into an internal preallocated `List<Vector3>` (never aliases the caller's mutable buffer), stores `PierceStartIndex` (mirroring `PredictionTraceCalculator.Calculate`'s own out parameter), bumps an `int Version`, and sets `IsActive`; `Clear()` resets `PierceStartIndex` to -1, sets `IsActive` false, and bumps `Version`. Readers poll `IsActive`/`Version`/`Points`/`PierceStartIndex` instead of subscribing, so many pooled readers can cheaply skip work on frames where nothing changed.
+Plain C# game-scope singleton (registered in `GameScopeRegistration.RegisterCoreServices`) that mirrors the same-frame trace for readers outside the Thrower's own view chain — the house pattern is `ProjectilePositionProvider` (`Projectile/`). `SetTrace(points, end)` copies into an internal preallocated `List<Vector3>` (never aliases the caller's mutable buffer), stores the `PredictionTraceEnd`, bumps an `int Version`, and sets `IsActive`; `Clear()` resets the end to `OpenAir`, sets `IsActive` false, and bumps `Version`. Readers poll `IsActive`/`Version`/`Points`/`End` instead of subscribing, so many pooled readers can cheaply skip work on frames where nothing changed.
+
+### PredictionTraceEnd
+
+Everything about a finished trace beyond its polyline: `PierceStartIndex` (where piercing began, or -1), a `PredictionTraceEndKind` (`OpenAir`/`Wall`/`Deflector`) and the unit `Normal` at that end contact. Returned by `Calculate` as one `out` value rather than a growing parameter list.
+
+**The normal is reported because the calculator is the only thing that knows it** — it solved the wall crossing or the ray-circle entry in order to stop there. A consumer that re-derived it (testing the last point against the walls, or hunting a deflector circle near it) is computing a second answer to a settled question, and the two drift: `ShieldRangePreview` first did exactly that, checked walls only, and so drew nothing whenever the aim line ended on a deflecting balloon — which is most of the time. Same reasoning as `Shared/CircleContact` being the one ray-circle solver.
+
+`OpenAir` means the line simply ran out of segments, so there is no contact and nothing to draw a bounce from.
 
 ### PredictionSightProbe
 

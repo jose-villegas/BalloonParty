@@ -248,11 +248,11 @@ namespace BalloonParty.Tests.Prediction
         {
             _pierceItems.Add(new PierceItemCircle(new Vector2(0f, 2f), 0.5f));
 
-            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out var pierceStartIndex);
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out var end);
 
             Assert.AreEqual(3, _results.Count, "origin, the pierce mark, and the top wall — unchanged otherwise");
-            Assert.AreEqual(1, pierceStartIndex);
-            Assert.AreEqual(1.5f, _results[pierceStartIndex].y, 0.05f,
+            Assert.AreEqual(1, end.PierceStartIndex);
+            Assert.AreEqual(1.5f, _results[end.PierceStartIndex].y, 0.05f,
                 "the item's own contact, same math as a deflector's");
             Assert.AreEqual(DefaultLimits.x, _results[2].y, 0.05f, "still runs straight up to the top wall");
         }
@@ -262,9 +262,9 @@ namespace BalloonParty.Tests.Prediction
         [Test]
         public void Calculate_NoPierceItemsInTheWay_PierceStartIndexStaysNegativeOne()
         {
-            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out var pierceStartIndex);
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out var end);
 
-            Assert.AreEqual(-1, pierceStartIndex);
+            Assert.AreEqual(-1, end.PierceStartIndex);
         }
 
         // The whole point of pierce-awareness: a tough beyond the pierce-item host must not still
@@ -275,9 +275,9 @@ namespace BalloonParty.Tests.Prediction
             _pierceItems.Add(new PierceItemCircle(new Vector2(0f, 2f), 0.5f));
             _deflectors.Add(new DeflectorCircle(new Vector2(0f, 3.5f), 0.5f));
 
-            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out var pierceStartIndex);
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out var end);
 
-            Assert.AreEqual(1, pierceStartIndex);
+            Assert.AreEqual(1, end.PierceStartIndex);
             Assert.AreEqual(3, _results.Count, "no extra bend vertex for the tough beyond the pierce host");
             Assert.AreEqual(DefaultLimits.x, _results[2].y, 0.05f,
                 "reached the top wall instead of stopping/reversing at the tough");
@@ -294,9 +294,9 @@ namespace BalloonParty.Tests.Prediction
             _pierceItems.Add(new PierceItemCircle(new Vector2(0f, 2f), 0.5f));
             _deflectors.Add(new DeflectorCircle(new Vector2(0f, -2f), 0.5f));
 
-            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out var pierceStartIndex);
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out var end);
 
-            Assert.AreEqual(1, pierceStartIndex, "arms at the same contact that still deflects");
+            Assert.AreEqual(1, end.PierceStartIndex, "arms at the same contact that still deflects");
             Assert.AreEqual(1.5f, _results[1].y, 0.05f, "the pierce mark sits at the shared contact");
             Assert.AreEqual(1.5f, _results[2].y, 0.05f, "the deflection at that same contact still happens");
             var lastPoint = _results[_results.Count - 1];
@@ -314,10 +314,10 @@ namespace BalloonParty.Tests.Prediction
             _pierceItems.Add(new PierceItemCircle(new Vector2(0f, 0.2f), 0.05f));
             _deflectors.Add(new DeflectorCircle(new Vector2(0f, 0.4f), 0.05f));
 
-            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out var pierceStartIndex);
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out var end);
 
-            Assert.AreEqual(1, pierceStartIndex);
-            Assert.AreEqual(0.15f, _results[pierceStartIndex].y, 0.01f,
+            Assert.AreEqual(1, end.PierceStartIndex);
+            Assert.AreEqual(0.15f, _results[end.PierceStartIndex].y, 0.01f,
                 "arms at the nearer pierce item's own contact, not the farther deflector's");
             Assert.AreEqual(DefaultLimits.x, _results[_results.Count - 1].y, 0.05f,
                 "kept travelling straight to the top wall — the farther deflector never bounced it");
@@ -331,9 +331,9 @@ namespace BalloonParty.Tests.Prediction
             _pierceItems.Add(new PierceItemCircle(new Vector2(3.2f, 0f), 0.05f));
             var origin = new Vector3(2.9f, 0f, 0f);
 
-            _calculator.Calculate(origin, Vector3.right, 0f, _results, out var pierceStartIndex);
+            _calculator.Calculate(origin, Vector3.right, 0f, _results, out var end);
 
-            Assert.AreEqual(-1, pierceStartIndex, "the wall-clipped step ends before reaching the item");
+            Assert.AreEqual(-1, end.PierceStartIndex, "the wall-clipped step ends before reaching the item");
             Assert.AreEqual(DefaultLimits.y, _results[1].x, 0.05f, "still bounces normally off the right wall");
         }
 

@@ -185,8 +185,9 @@ per-actor) against each item host's view circle, and gates the whole grid walk o
 2  Remaining figures    ✅ DONE — Laser rectangles (spin-aware, via IHostsSpinningItem), Paint
                           triangle (PaintTriangle.Build), Lightning arcs (LightningChain over a
                           live GridEffectBoard)
-3  Visual pass          — material, ribbon width/lifetime, bloom curve, per-item colour,
-                          pen counts; the "tuned later" work
+3  Visual pass          🔨 KNOBS IN — IItemPreviewConfig/ItemPreviewConfig SO exposes bloom curve,
+                          per-item colour, pen counts and ribbon lifetime; the tuning itself
+                          (authoring the asset, the pen material, ribbon width) is in-editor work
 4  Polish               — pause/level-up gating, run-reset teardown, pooling prewarm,
                           telemetry if it earns it
 ```
@@ -203,9 +204,10 @@ fidelity and looks come after that reads right.
   the shape rebuilds each frame (correct, costs a rebuild) or it anchors to the host
   transform and rides along (cheap, but a Lightning chain's targets would lie). Start with
   a rebuild gated on the trace version and revisit if it shows up in a profile.
-- **Shield has no board range.** The plus sign at the prediction line's end is a
-  placeholder for "this helps the shot, not the board". If it reads as a range it may be
-  worse than nothing.
+- ~~**Shield has no board range.**~~ **Resolved.** The plus sign read as chaotic and said
+  nothing useful. It now draws a short stub of the bounce off the wall the aim line ends
+  on — the *consequence* of the life the shield buys, rather than a fake area. Pairs with
+  a low pen count and the dash settings.
 - **Laser spin.** The beam's rotation at contact time is extrapolated live
   (`ItemSpinDegrees + rate * tHit`). The preview cannot know `tHit` while aiming.
   **Resolved for now** by drawing at the icon's *current* rotation (read through

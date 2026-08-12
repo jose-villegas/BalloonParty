@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BalloonParty.Prediction;
 using UnityEngine;
 
 namespace BalloonParty.Item.Preview
@@ -39,9 +40,15 @@ namespace BalloonParty.Item.Preview
         /// </remarks>
         public readonly float ItemSpinDegrees;
 
+        /// <summary>
+        ///     What the aim line ran into at its end, and that contact's surface normal — solved by the
+        ///     trace calculator, so a figure drawing the bounce leaving it doesn't derive a second answer.
+        /// </summary>
+        public readonly PredictionTraceEnd TraceEnd;
+
         public ItemPreviewContext(
             Vector2 origin, Vector2Int slot, Vector2 aimDirection, IReadOnlyList<Vector3> tracePoints,
-            string hostColorId, float itemSpinDegrees)
+            string hostColorId, float itemSpinDegrees, PredictionTraceEnd traceEnd = default)
         {
             Origin = origin;
             Slot = slot;
@@ -49,6 +56,7 @@ namespace BalloonParty.Item.Preview
             TracePoints = tracePoints;
             HostColorId = hostColorId;
             ItemSpinDegrees = itemSpinDegrees;
+            TraceEnd = traceEnd;
         }
     }
 }

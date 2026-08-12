@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Configuration;
 using BalloonParty.Shared.Pool;
 using UnityEngine;
 using VContainer.Unity;
@@ -19,7 +20,7 @@ namespace BalloonParty.Item.Preview
     {
         private readonly PoolManager _poolManager;
         private readonly HighlightTrail _penPrefab;
-        private readonly ItemPreviewSettings _settings;
+        private readonly IItemPreviewConfig _config;
         private readonly string _poolKey;
 
         private readonly ItemPreviewShape _shape = new();
@@ -38,12 +39,18 @@ namespace BalloonParty.Item.Preview
         private Vector2Int _currentSlot;
         private bool _visible;
 
+        // The active item's resolved style, captured on Show so LateTick doesn't re-resolve it every
+        // frame. DashCount 0 means continuous tracing.
+        private int _dashCount;
+        private float _dashLength;
+        private bool _emitDuringBloom;
+
         internal ItemPreviewTicker(
-            PoolManager poolManager, HighlightTrail penPrefab, ItemPreviewSettings settings)
+            PoolManager poolManager, HighlightTrail penPrefab, IItemPreviewConfig config)
         {
             _poolManager = poolManager;
             _penPrefab = penPrefab;
-            _settings = settings;
+            _config = config;
             _poolKey = penPrefab != null ? penPrefab.name : nameof(HighlightTrail);
         }
 
@@ -59,10 +66,14 @@ namespace BalloonParty.Item.Preview
         ///     Called on every aim change while a host stays sighted, so it distinguishes the two cases by
         ///     <see cref="ItemPreviewContext.Slot" />: a DIFFERENT host restarts the pens (they re-bloom out
         ///     of the new origin), while the SAME host only re-fits the geometry — the figure follows a
-        ///     drifting balloon, or a Shield plus follows the aim tip, without every pen snapping back to the
-        ///     start of its bloom each time the player nudges the aim.
+        ///     drifting balloon, or a Shield stub follows the aim tip, without every pen snapping back to
+        ///     the start of its bloom each time the player nudges the aim.
+        ///     <para>
+        ///         Carries no colour: every figure draws with the pen prefab's own material, so the
+        ///         telegraph reads as one system and there is no runtime tint path to keep in step with it.
+        ///     </para>
         /// </remarks>
-        internal void Show(IItemRangePreview preview, in ItemPreviewContext context, Color color)
+        internal void Show(IItemRangePreview preview, in ItemPreviewContext context)
         {
             if (preview == null || _penPrefab == null)
             {
@@ -82,6 +93,15 @@ namespace BalloonParty.Item.Preview
             }
 
             var isSameHost = _visible && context.Slot == _currentSlot;
+            var style = _config.StyleFor(preview.Type);
+            _dashCount = style.DashCount;
+            _dashLength = style.DashLength;
+            _emitDuringBloom = style.BloomDraw switch
+            {
+                ItemPreviewBloomDraw.Draw => true,
+                ItemPreviewBloomDraw.Hide => false,
+                _ => _config.EmitDuringBloom
+            };
             _origin = context.Origin;
             _currentSlot = context.Slot;
             BuildArcTable();
@@ -92,7 +112,7 @@ namespace BalloonParty.Item.Preview
             }
             else
             {
-                AcquirePens(color);
+                AcquirePens(style);
             }
 
             _visible = true;
@@ -172,9 +192,18 @@ namespace BalloonParty.Item.Preview
 
         // Pens are dealt round-robin across strokes, so a two-armed figure splits them evenly without any
         // item needing to state how many it wants; within a stroke they start evenly spaced along its length.
-        private void AcquirePens(Color color)
+        private void AcquirePens(IItemPreviewStyle style)
         {
-            var wanted = Mathf.Max(1, _settings.PenCount);
+            var strokeCount = _shape.Strokes.Count;
+
+            // In dash mode the dash count IS the pens-per-stroke — one pen per dash, by definition. Only
+            // continuous mode divides a free-floating pen budget across the strokes.
+            // 0 on the style means "no override" — fall back to the shared count.
+            var pensOnStroke = _dashCount > 0
+                ? _dashCount
+                : Mathf.Max(1, Mathf.CeilToInt(
+                    Mathf.Max(1, style.PenCount > 0 ? style.PenCount : _config.PenCount) / (float)strokeCount));
+            var wanted = pensOnStroke * strokeCount;
 
             while (_pens.Count > wanted)
             {
@@ -193,9 +222,6 @@ namespace BalloonParty.Item.Preview
                 _pens.Add(new Pen());
             }
 
-            var strokeCount = _shape.Strokes.Count;
-            var pensOnStroke = Mathf.Max(1, Mathf.CeilToInt(_pens.Count / (float)strokeCount));
-
             _pensPerStroke.Clear();
             for (var s = 0; s < strokeCount; s++)
             {
@@ -209,21 +235,27 @@ namespace BalloonParty.Item.Preview
                     _poolKey, () => new SimplePoolChannel<HighlightTrail>(_penPrefab));
                 pen.StrokeIndex = i % strokeCount;
 
-                // Spread this stroke's pens evenly over its length, by how many have already landed on it.
+                // This pen's index among the ones sharing its stroke — its dash slot in dash mode, and
+                // its spacing along the stroke in continuous mode.
                 var ordinal = _pensPerStroke[pen.StrokeIndex];
                 _pensPerStroke[pen.StrokeIndex] = ordinal + 1;
 
                 var length = _strokeLengths[pen.StrokeIndex];
+                pen.DashIndex = ordinal;
+
+                // Dash mode measures Distance inside the pen's own slot, so it starts at 0 and the slot
+                // offset is applied when sampling; continuous mode walks the stroke's absolute length.
                 pen.EntryDistance = length * (ordinal / (float)pensOnStroke);
-                pen.Distance = pen.EntryDistance;
+                pen.Distance = _dashCount > 0 ? 0f : pen.EntryDistance;
                 pen.Entry = SampleStroke(pen.StrokeIndex, pen.EntryDistance);
                 pen.BloomElapsed = 0f;
                 pen.Tracing = false;
+                pen.Emitting = _emitDuringBloom;
 
-                pen.Trail.SetColor(color);
+                pen.Trail.SetRibbonTime(style.RibbonSeconds);
                 pen.Trail.ClearRibbon();
                 pen.Trail.SetPosition(new Vector3(_origin.x, _origin.y, 0f));
-                pen.Trail.SetEmitting(_settings.EmitDuringBloom);
+                pen.Trail.SetEmitting(pen.Emitting);
 
                 _pens[i] = pen;
             }
@@ -261,8 +293,47 @@ namespace BalloonParty.Item.Preview
                 return;
             }
 
-            pen.Distance += _settings.TraceSpeed * deltaTime;
+            pen.Distance += _config.TraceSpeed * deltaTime;
+
+            if (_dashCount > 0)
+            {
+                AdvanceDash(ref pen);
+                return;
+            }
+
             pen.Trail.SetPosition(SampleStroke(pen.StrokeIndex, pen.Distance));
+        }
+
+        // One pen draws ONE dash, and the dashed line is the pens sitting next to each other — ask for
+        // three dashes and you get three pens, each owning a third of the stroke.
+        //
+        // Within its own slot a pen loops: it paints for DashLength (the dash), lifts for the remainder
+        // (the spacing), and wraps back to its slot start to redraw. Pen up/down via emitting, never
+        // ClearRibbon — clearing wipes what was already painted, which is what made an earlier attempt
+        // read as one short stroke sliding along the figure instead of a dashed line.
+        //
+        // A pen never leaves its slot, so the whole figure is always described at once rather than being
+        // revealed by a pen touring it.
+        private void AdvanceDash(ref Pen pen)
+        {
+            var slotLength = _strokeLengths[pen.StrokeIndex] / _dashCount;
+            if (slotLength <= 1e-5f)
+            {
+                return;
+            }
+
+            var withinSlot = Mathf.Repeat(pen.Distance, slotLength);
+            pen.Trail.SetPosition(
+                SampleStroke(pen.StrokeIndex, (pen.DashIndex * slotLength) + withinSlot));
+
+            var shouldEmit = withinSlot < Mathf.Min(_dashLength, slotLength);
+            if (shouldEmit == pen.Emitting)
+            {
+                return;
+            }
+
+            pen.Emitting = shouldEmit;
+            pen.Trail.SetEmitting(shouldEmit);
         }
 
         // The outward launch: the pen spirals from the host to its stroke entry — bearing eases from an
@@ -270,14 +341,14 @@ namespace BalloonParty.Item.Preview
         // straight, and still lands exactly on the entry point at t = 1.
         private void AdvanceBloom(ref Pen pen, float deltaTime)
         {
-            var duration = Mathf.Max(_settings.BloomDuration, 1e-4f);
+            var duration = Mathf.Max(_config.BloomDuration, 1e-4f);
             pen.BloomElapsed += deltaTime;
             var t = Mathf.Clamp01(pen.BloomElapsed / duration);
-            var eased = Mathf.SmoothStep(0f, 1f, t);
+            var eased = _config.BloomCurve.Evaluate(t);
 
             var toEntry = new Vector2(pen.Entry.x - _origin.x, pen.Entry.y - _origin.y);
             var targetAngle = Mathf.Atan2(toEntry.y, toEntry.x) * Mathf.Rad2Deg;
-            var angle = Mathf.LerpAngle(targetAngle - _settings.BloomSweepDegrees, targetAngle, eased);
+            var angle = Mathf.LerpAngle(targetAngle - _config.BloomSweepDegrees, targetAngle, eased);
             var radius = Mathf.Lerp(0f, toEntry.magnitude, eased);
             var radians = angle * Mathf.Deg2Rad;
 
@@ -295,8 +366,11 @@ namespace BalloonParty.Item.Preview
 
             // Pen down for the figure itself. When the bloom drew too, the spiral in and the stroke are one
             // continuous ribbon; when it didn't, clearing here drops the invisible approach so the first
-            // traced segment doesn't join back to the host.
-            if (!_settings.EmitDuringBloom)
+            // traced segment doesn't join back to the host. Either way _Emitting_ is left true so dash
+            // mode's edge detection starts from a known state on the next tick.
+            pen.Emitting = true;
+
+            if (!_emitDuringBloom)
             {
                 pen.Trail.ClearRibbon();
                 pen.Trail.SetEmitting(true);
@@ -359,10 +433,20 @@ namespace BalloonParty.Item.Preview
             public HighlightTrail Trail;
             public int StrokeIndex;
             public float BloomElapsed;
+
+            // Continuous mode: arc length along the whole stroke. Dash mode: arc length travelled inside
+            // this pen's OWN slot, wrapped by the slot length.
             public float Distance;
             public float EntryDistance;
             public Vector3 Entry;
             public bool Tracing;
+
+            // Dash mode: the slot this pen owns for its whole life. One pen draws one dash — the dashed
+            // line is the pens sitting side by side, not one pen visiting every slot.
+            public int DashIndex;
+
+            // Mirrors the trail's own emitting flag so dash mode only calls into it on a real edge.
+            public bool Emitting;
         }
     }
 }

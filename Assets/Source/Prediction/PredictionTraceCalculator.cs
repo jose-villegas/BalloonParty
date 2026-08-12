@@ -53,20 +53,19 @@ namespace BalloonParty.Prediction
         ///     <c>SurfaceRadius + _contactRadius</c> to the real deflection for the same reason.
         ///     Treating the shot as a point shrinks every target and draws grazing hits as misses.
         /// </param>
-        /// <param name="pierceStartIndex">
-        ///     Index into <paramref name="results" /> where the shot starts piercing (the first
-        ///     pierce-item host the path crosses), or -1 if it never does. Everything from that point on
-        ///     already reflects piercing — no deflector bends the line past it — so a view can use the
-        ///     index to style just that trailing run differently (e.g. a second overlay LineRenderer)
-        ///     without recomputing anything.
+        /// <param name="end">
+        ///     Where piercing began (or -1), plus what the line ran into at the end and that contact's
+        ///     surface normal. Piercing's index lets a view style just the trailing pierced run; the end
+        ///     contact lets one draw the bounce leaving it without re-deriving a normal this already
+        ///     solved.
         /// </param>
         public void Calculate(
             Vector3 origin, Vector3 direction, float projectileContactRadius, List<Vector3> results,
-            out int pierceStartIndex)
+            out PredictionTraceEnd end)
         {
             results.Clear();
             results.Add(origin);
-            pierceStartIndex = -1;
+            var pierceStartIndex = -1;
 
             _deflectors.Clear();
             _deflectorField?.CollectDeflectors(_deflectors);
@@ -139,6 +138,8 @@ namespace BalloonParty.Prediction
                         results.Add(walls.ClampInside(surface));
                         if (reflectsLeft <= 0)
                         {
+                            end = new PredictionTraceEnd(
+                                pierceStartIndex, PredictionTraceEndKind.Deflector, normal);
                             return;
                         }
 
@@ -159,6 +160,8 @@ namespace BalloonParty.Prediction
                     // The top wall ends the shot in flight, so the line ends with it.
                     if (topHit || reflectsLeft <= 0)
                     {
+                        end = new PredictionTraceEnd(
+                            pierceStartIndex, PredictionTraceEndKind.Wall, reflect.normalized);
                         return;
                     }
 
@@ -175,6 +178,10 @@ namespace BalloonParty.Prediction
             {
                 results.Add(origin);
             }
+
+            // Fell out of the step budget rather than hitting anything — the line simply stops, and there
+            // is no contact for a consumer to draw a bounce from.
+            end = PredictionTraceEnd.OpenAir(pierceStartIndex);
         }
 
         // Decides what this iteration means for a not-yet-piercing shot, by comparing the nearest

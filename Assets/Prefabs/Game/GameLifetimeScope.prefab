@@ -92,6 +92,7 @@ MonoBehaviour:
     type: 3}
   _itemPreviewPenPrefab: {fileID: 4099821410776616829, guid: f312a737d945cef43a1aa51eb73ead14,
     type: 3}
+  _itemPreviewConfig: {fileID: 11400000, guid: 60c565fb49629c54d9bbaaa036ede15a, type: 2}
   _sfxVoicePrefab: {fileID: 3556449806259486447, guid: 63acbe5bdda2f4582826f289b4c2f5bd,
     type: 3}
 --- !u!114 &5521832732712766469

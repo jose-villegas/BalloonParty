@@ -425,9 +425,9 @@ namespace BalloonParty.Thrower
             // started at the transform begins behind where the shot really is.
             _traceCalculator.Calculate(
                 _activeView.ContactCenter, _direction, _activeView.ContactRadius, _tracePoints,
-                out var pierceStartIndex);
+                out var traceEnd);
             _view.SetTrace(_tracePoints);
-            _traceProvider.SetTrace(_tracePoints, pierceStartIndex);
+            _traceProvider.SetTrace(_tracePoints, traceEnd);
             _traceLights.SetTrace(_tracePoints);
             _tracePublished = true;
         }

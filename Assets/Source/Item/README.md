@@ -84,7 +84,9 @@ to a balloon rather than 3D polyhedra flying at a UI bar.
 | `ItemRangePreviewController` | `IStartable`/`ILateTickable`, plain C# — decides which host the aim is sighted on (most central crossing wins, via `TraceHitGeometry`) and drives the one visible figure. Plain C# rather than a component on the balloon, because it needs DI singletons a pooled item visual would have to be hand-threaded, and because only one preview shows at a time — a global arbitration a per-balloon component cannot make. Gated on `PredictionTraceProvider.Version`, so a held aim re-walks nothing |
 | `ItemPreviewTicker` | `ILateTickable` — drives the pens closed-form off one clock, no tweens or coroutines, mirroring `ShapeFormationTicker`'s zero-allocation constraints. A pen **blooms** (spirals out of the host to its stroke entry, the circular launch motion) then **traces** (walks the stroke at constant arc-length rate, wrapping on closed strokes and ping-ponging on open ones). `Show` distinguishes a new host (re-bloom) from the same host re-fitted (keep pen phase), so nudging the aim doesn't restart every pen |
 | `HighlightTrail` | The pooled pen view — a head sprite dragging a `TrailRenderer`, positioned entirely from the ticker. Deliberately not `UI/Score/FlyingTrail`: that one owns its own DOTween flight, motion-curve table and flight gradients and lives on the UI sorting layer, none of which applies here |
-| `ItemPreviewSettings` | Plain settings with working defaults (pen count, bloom duration/sweep, trace speed) rather than a `ScriptableObject` — the visual pass is still open, and an authored asset would just be a second place for moving numbers to go stale. Promote it behind a read-only interface once they settle |
+| `IItemPreviewConfig` / `ItemPreviewConfig` | The tuning surface (interface in `Shared/`, SO in `Configuration/`, per the config convention). Shared knobs — pen count, trace speed, bloom duration/sweep/curve, whether the ribbon draws during the bloom — plus an `[EnumIndexed(typeof(ItemType))]` array of per-item overrides. Unassigned on `GameLifetimeScope` it degrades to a default instance, so the telegraph works before anyone authors an asset |
+| `IItemPreviewStyle` | One item's overrides, all opt-in: a pen count, a ribbon lifetime, whether the outward bloom draws (`ItemPreviewBloomDraw.Inherit`/`Draw`/`Hide` — a tri-state because a plain bool has no "unset"), and the dash pair below. **0 means "use the shared value"** on the numeric fields, so an unauthored entry can't silently win. Deliberately carries **no colour**: every figure draws with the pen prefab's own material, so the telegraph reads as one system and there is no runtime tint path to keep in step with it |
+| `IShieldPreviewSettings` | Shield's own figure params (its stub length) as a nested block on the config, mirroring how `ItemSettings` nests `Bomb`/`Laser`/`Paint` — a number only one figure reads has no business on the shared per-item style. The pattern to copy when another figure needs its own tuning |
 
 | `IHostsSpinningItem` (in `Item/`) | Lets the controller read a Laser's live angle off an `ISlotActorView` without naming `BalloonView`, keeping the dependency pointing Balloon → Item. Hands back `ISpinningItemVisual`, never `ITransformCapture`, whose `CaptureSnapshot` is destructive — a telegraph must not perturb what it telegraphs |
 
@@ -92,7 +94,7 @@ The figures, and what each reuses:
 
 | Item | Figure | Geometry source |
 |---|---|---|
-| Shield | plus at the prediction line's end | none — it has no board range, so it marks the shot instead. Placeholder by intent |
+| Shield | a stub of the bounce off whatever the aim line ends on — wall **or** deflecting balloon | `PredictionTraceEnd`, the contact the trace calculator already solved to stop there. It has no board range, so it shows the *consequence*: where the shot carries on after surviving that hit. Draws nothing when the line ended in open air, since there's no contact to bounce from |
 | Bomb | circle at the blast radius | `BombSettings.Radius`, the same field `BombBlast` selects with — deliberately not `RainbowEffectScale`, which scales only the VFX |
 | Snipe | line from the host to the wall | `WallLimits.TryFindCrossing` along the aim. Traced fresh rather than copied from the aim polyline past its pierce marker, since that stops at the telegraph's segment budget, not the wall |
 | Laser | two crossing rectangles | the four `LaserCross` arms share two corridors; `CircleCastRadius` × `RaycastDistance`, rotated by the icon's live spin |
@@ -103,9 +105,33 @@ Bomb's circle, Laser's rectangles and Paint's triangle are all the effect's own 
 exact catchment — each core also catches an occupant by its own radius, so a balloon straddling an
 edge is still caught. The outline reads as intent; that is the deliberate simplification.
 
-Registered in `GameScopeRegistration.RegisterItemRangePreviews`; the pen prefab is a serialized field
-on `GameLifetimeScope`. Leaving that prefab unassigned disables the telegraph rather than failing
-startup.
+Registered in `GameScopeRegistration.RegisterItemRangePreviews`; the pen prefab and the config asset
+are serialized fields on `GameLifetimeScope`. Leaving the prefab unassigned disables the telegraph
+rather than failing startup; leaving the config unassigned falls back to working defaults.
+
+**Ribbon lifetime is the knob that decides how much of a figure you can see at once.** A pen paints
+`TraceSpeed × ribbon seconds` of world length before its tail fades, so the figures need very
+different values to read as complete shapes: the Laser's corridors are tens of units long, a Bomb
+circle only a few units around. That is why `IItemPreviewStyle.RibbonSeconds` is per-item and why the
+pen prefab's own authored value is only the fallback.
+
+**One pen draws one dash; the dashed line is the pens side by side.** `DashCount` divides a stroke
+into that many slots and spawns one pen per slot — ask for three dashes on Shield's stub and you get
+three pens, each owning a third of it. A pen never leaves its own slot: it loops inside it, painting
+`DashLength` (the dash) and lifting for the remainder (the spacing) via `emitting`, then wrapping
+back to redraw. Because they sit next to each other, the figure is described all at once rather than
+being revealed by a pen touring it. `DashCount = 0` is the continuous ribbon, and stays the default;
+`PenCount` only applies there, since in dash mode the dash count *is* the pen count per stroke.
+
+> Two wrong turns worth not repeating. **`ClearRibbon` cannot make the gaps** — clearing wipes every
+> dash already painted, collapsing the figure into one short stroke sliding along it. And **a pen must
+> not tour the whole stroke** leaving dashes behind it: that reads as trails travelling from one end
+> to the other, not as a dashed shape.
+
+**A figure far from its host needs its approach hidden.** The outward bloom is drawn by default,
+which suits a figure centred on the host (Bomb's circle has almost no approach). Shield's stub sits
+over at a wall, so a drawn approach is a long spoke across the board that buries the stub it was
+meant to introduce — set that item's `BloomDraw` to `Hide`.
 
 ## Architecture
 

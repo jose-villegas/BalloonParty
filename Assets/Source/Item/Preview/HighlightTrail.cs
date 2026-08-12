@@ -17,12 +17,9 @@ namespace BalloonParty.Item.Preview
     [RequireComponent(typeof(TrailRenderer))]
     internal sealed class HighlightTrail : MonoBehaviour, IPoolable
     {
-        [Tooltip("Optional head sprite at the pen's position. Leave empty for a ribbon with no visible head.")]
-        [SerializeField] private SpriteRenderer _head;
-
         [SerializeField] private TrailRenderer _trailRenderer;
 
-        private Color _defaultColor = Color.white;
+        private float _defaultRibbonTime;
 
         private void Awake()
         {
@@ -31,7 +28,7 @@ namespace BalloonParty.Item.Preview
                 _trailRenderer = GetComponent<TrailRenderer>();
             }
 
-            _defaultColor = _trailRenderer.startColor;
+            _defaultRibbonTime = _trailRenderer.time;
         }
 
         public void OnSpawned()
@@ -41,18 +38,24 @@ namespace BalloonParty.Item.Preview
             // figure is visible at the new position.
             _trailRenderer.Clear();
             _trailRenderer.emitting = false;
-            ApplyColor(_defaultColor);
         }
 
         public void OnDespawned()
         {
             _trailRenderer.Clear();
             _trailRenderer.emitting = false;
+
+            // Restore the authored lifetime, so a per-item override can't leak into the next item's pens.
+            _trailRenderer.time = _defaultRibbonTime;
         }
 
-        internal void SetColor(Color color)
+        /// <summary>
+        ///     Ribbon lifetime in seconds — how much of a figure one pen shows at once. Non-positive
+        ///     restores the prefab's authored value.
+        /// </summary>
+        internal void SetRibbonTime(float seconds)
         {
-            ApplyColor(color);
+            _trailRenderer.time = seconds > 0f ? seconds : _defaultRibbonTime;
         }
 
         /// <summary>Pen up/down — a pen travelling to its stroke shouldn't necessarily draw on the way.</summary>
@@ -70,16 +73,6 @@ namespace BalloonParty.Item.Preview
         internal void SetPosition(Vector3 position)
         {
             transform.position = position;
-        }
-
-        private void ApplyColor(Color color)
-        {
-            _trailRenderer.startColor = color;
-
-            if (_head != null)
-            {
-                _head.color = color;
-            }
         }
     }
 }

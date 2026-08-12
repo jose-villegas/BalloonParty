@@ -17,13 +17,13 @@ namespace BalloonParty.Prediction
         internal int Version { get; private set; }
         internal IReadOnlyList<Vector3> Points => _points;
 
-        /// <summary>Index into <see cref="Points" /> where the trace starts piercing (mirrors
-        /// <c>PredictionTraceCalculator.Calculate</c>'s own out parameter), or -1 if it never does.</summary>
-        internal int PierceStartIndex { get; private set; } = -1;
+        /// <summary>Where piercing began and what the line ran into, mirroring
+        /// <c>PredictionTraceCalculator.Calculate</c>'s own out parameter.</summary>
+        internal PredictionTraceEnd End { get; private set; } = PredictionTraceEnd.OpenAir(-1);
 
         // Copies rather than aliasing — the writer's buffer (ThrowerController._tracePoints) is mutated
         // in place every Tick, so holding a reference to it would let readers see a half-written trace.
-        internal void SetTrace(IReadOnlyList<Vector3> points, int pierceStartIndex = -1)
+        internal void SetTrace(IReadOnlyList<Vector3> points, PredictionTraceEnd end = default)
         {
             _points.Clear();
             if (points != null)
@@ -34,14 +34,14 @@ namespace BalloonParty.Prediction
                 }
             }
 
-            PierceStartIndex = pierceStartIndex;
+            End = end;
             IsActive = true;
             Version++;
         }
 
         internal void Clear()
         {
-            PierceStartIndex = -1;
+            End = PredictionTraceEnd.OpenAir(-1);
             IsActive = false;
             Version++;
         }
