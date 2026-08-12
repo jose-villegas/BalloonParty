@@ -27,6 +27,7 @@ using BalloonParty.Item.Bomb;
 using BalloonParty.Item.Laser;
 using BalloonParty.Item.Lightning;
 using BalloonParty.Item.Paint;
+using BalloonParty.Item.Preview;
 using BalloonParty.Balloon;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Item.Shield;
@@ -288,6 +289,25 @@ namespace BalloonParty.Game
             builder.Register<PaintItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<SnipeItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.RegisterEntryPoint<SnipeDischargeBloom>();
+
+            RegisterItemRangePreviews(builder);
+        }
+
+        // The aim-time range telegraph (@ref plan_item_range_preview). One IItemRangePreview per item type,
+        // resolved by Type exactly as ItemActivator resolves IBalloonItem — a new item's preview joins by
+        // registering here, with no dispatch table to edit. Item types with no preview registered yet simply
+        // show nothing.
+        private static void RegisterItemRangePreviews(IContainerBuilder builder)
+        {
+            builder.Register<ShieldRangePreview>(Lifetime.Singleton).As<IItemRangePreview>();
+            builder.Register<BombRangePreview>(Lifetime.Singleton).As<IItemRangePreview>();
+            builder.Register<SnipeRangePreview>(Lifetime.Singleton).As<IItemRangePreview>();
+
+            // Plain settings with working defaults until the visual pass settles the numbers
+            // (@ref plan_item_range_preview Phase 3).
+            builder.RegisterInstance(new ItemPreviewSettings());
+            builder.RegisterEntryPoint<ItemPreviewTicker>().AsSelf();
+            builder.RegisterEntryPoint<ItemRangePreviewController>();
         }
 
         internal static void RegisterPresentation(this IContainerBuilder builder)

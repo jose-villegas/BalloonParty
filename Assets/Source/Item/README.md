@@ -68,6 +68,29 @@ a live behaviour change gated behind PlayMode equivalence tests (`BombActivation
 per the plan, so `GridEffectBoard` currently backs only the cross-board mirror-fidelity tests
 (`EffectBoardMirrorTests`), not gameplay.
 
+### Range preview (`Preview/`)
+
+The aim-time telegraph (@ref plan_item_range_preview): while the prediction line of sight crosses a
+balloon hosting an item, that item's affected area is drawn on the board by ribbon "pens" streaming
+out of the host. Borrows the technique from the score-trail formations (`Game/Score/Behaviours/`) —
+heads dragging `TrailRenderer` ribbons trace a figure — but these are flat, board-space, and anchored
+to a balloon rather than 3D polyhedra flying at a UI bar.
+
+| File | What it does |
+|---|---|
+| `IItemRangePreview` | The seam — `ItemType Type` plus `BuildShape(in context, shape)`. One implementation per item type, resolved by `Type` exactly as `ItemActivator` resolves `IBalloonItem`, so a new item ships its preview beside its handler with no dispatch table to edit. `BuildShape` is **pure geometry**: it appends points and never touches a renderer, the pool, or `Time` — which is what keeps every figure edit-mode testable and lets one driver animate all of them. An implementation with an existing config-free core for its shape (`PaintTriangle`, `LightningChain`, `BombBlast`, `LaserCross`) must build on it rather than re-derive, or the telegraph drifts from the effect it advertises |
+| `ItemPreviewShape` / `ItemPreviewStroke` | The shared vocabulary: a figure is a set of **strokes** (polylines), each a range into one flat point list. A circle is one closed stroke, a plus two open ones, lightning one per arc. Reused across rebuilds (cleared, never reallocated). `AddCircle`/`AddSegment` cover the common cases; a stroke of fewer than two points is discarded rather than recorded, since it has no arc length for a pen to travel |
+| `ItemPreviewContext` | Readonly struct — the per-crossing inputs (`Origin`, `Slot`, `AimDirection`, `TracePoints`, `HostColorId`). The services a preview needs are constructor-injected into the preview itself, since they never change between crossings |
+| `ItemRangePreviewController` | `IStartable`/`ILateTickable`, plain C# — decides which host the aim is sighted on (most central crossing wins, via `TraceHitGeometry`) and drives the one visible figure. Plain C# rather than a component on the balloon, because it needs DI singletons a pooled item visual would have to be hand-threaded, and because only one preview shows at a time — a global arbitration a per-balloon component cannot make. Gated on `PredictionTraceProvider.Version`, so a held aim re-walks nothing |
+| `ItemPreviewTicker` | `ILateTickable` — drives the pens closed-form off one clock, no tweens or coroutines, mirroring `ShapeFormationTicker`'s zero-allocation constraints. A pen **blooms** (spirals out of the host to its stroke entry, the circular launch motion) then **traces** (walks the stroke at constant arc-length rate, wrapping on closed strokes and ping-ponging on open ones). `Show` distinguishes a new host (re-bloom) from the same host re-fitted (keep pen phase), so nudging the aim doesn't restart every pen |
+| `HighlightTrail` | The pooled pen view — a head sprite dragging a `TrailRenderer`, positioned entirely from the ticker. Deliberately not `UI/Score/FlyingTrail`: that one owns its own DOTween flight, motion-curve table and flight gradients and lives on the UI sorting layer, none of which applies here |
+| `ItemPreviewSettings` | Plain settings with working defaults (pen count, bloom duration/sweep, trace speed) rather than a `ScriptableObject` — the visual pass is still open, and an authored asset would just be a second place for moving numbers to go stale. Promote it behind a read-only interface once they settle |
+
+Registered in `GameScopeRegistration.RegisterItemRangePreviews`; the pen prefab is a serialized field
+on `GameLifetimeScope`. Leaving that prefab unassigned disables the telegraph rather than failing
+startup. Shipped so far: Shield (a plus at the aim tip — it has no board range of its own), Bomb (the
+blast circle) and Snipe (the pierce corridor to the wall); Laser, Paint and Lightning are Phase 2.
+
 ## Architecture
 
 The item display system is a self-contained, DI-free unit: an `ItemDisplayService` MonoBehaviour on the host's item container, plus pooled `ItemVisualView` prefabs (one per `ItemType`, referenced from `ItemSettings.VisualPrefab`). The host owns the wiring — it holds a serialized reference to the service and passes every dependency (configs, palette, pool manager) through `Bind()`, so pooled hosts need no per-instance scope.

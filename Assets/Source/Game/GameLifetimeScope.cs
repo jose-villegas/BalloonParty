@@ -1,4 +1,5 @@
 using BalloonParty.Configuration;
+using BalloonParty.Item.Preview;
 using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
 using BalloonParty.Thrower;
@@ -51,6 +52,11 @@ namespace BalloonParty.Game
         [SerializeField] private AudioMixerSettings _audioMixerSettings;
         [SerializeField] private ProjectileView _projectilePrefab;
         [SerializeField] private FlyingTrail _scoreTrailPrefab;
+
+        [Tooltip("Pen prefab for the aim-time item range telegraph — a TrailRenderer plus optional head " +
+                 "sprite, carrying the highlight material. Unassigned simply shows no telegraph.")]
+        [SerializeField] private HighlightTrail _itemPreviewPenPrefab;
+
         [SerializeField] private AudioSourceVoice _sfxVoicePrefab;
 
         protected override void Awake()
@@ -115,6 +121,11 @@ namespace BalloonParty.Game
             builder.RegisterInstance<IScoreTrailConfig>(scoreTrailConfig);
             builder.RegisterInstance(new ThrowerSettings(_projectilePrefab));
             builder.RegisterInstance(_scoreTrailPrefab);
+
+            // Registered even when unassigned (VContainer can't resolve a missing dependency, and the
+            // ticker already no-ops on a null prefab) so the telegraph is opt-in by wiring the prefab,
+            // not a hard startup failure before it's authored.
+            builder.RegisterInstance(_itemPreviewPenPrefab);
 
             // An unassigned asset degrades to a default instance carrying the sensible defaults, so the
             // governor works out of the box; wire an authored asset in the scene only to tune it.

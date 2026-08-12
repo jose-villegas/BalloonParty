@@ -84,9 +84,13 @@ MonoBehaviour:
   _thermalGovernorSettings: {fileID: 11400000, guid: f19fc68a72ffb4b00af1a0690911bab8,
     type: 2}
   _soundBank: {fileID: 11400000, guid: 9c284084ced24491880c598ac7e35607, type: 2}
+  _audioMixerSettings: {fileID: 11400000, guid: 3cc092ef79ee34b5bba33c6dfd00bd45,
+    type: 2}
   _projectilePrefab: {fileID: 7317932863533360661, guid: 514e1ddc348a5498aa3edae2404ff130,
     type: 3}
   _scoreTrailPrefab: {fileID: 1429749022553535108, guid: 17e678e81b22a4d3481d8307861019b8,
+    type: 3}
+  _itemPreviewPenPrefab: {fileID: 4099821410776616829, guid: f312a737d945cef43a1aa51eb73ead14,
     type: 3}
   _sfxVoicePrefab: {fileID: 3556449806259486447, guid: 63acbe5bdda2f4582826f289b4c2f5bd,
     type: 3}
