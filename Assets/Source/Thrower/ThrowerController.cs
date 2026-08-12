@@ -27,6 +27,7 @@ namespace BalloonParty.Thrower
     {
         private readonly IPredictionTraceConfig _traceConfig;
         private readonly IDeflectorField _deflectorField;
+        private readonly IPierceItemField _pierceItemField;
         private readonly IProjectileFlightConfig _flightConfig;
         private readonly IPublisher<ProjectileLoadedMessage> _loadedPublisher;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
@@ -76,6 +77,7 @@ namespace BalloonParty.Thrower
             IPredictionTraceConfig traceConfig,
             IProjectileFlightConfig flightConfig,
             IDeflectorField deflectorField,
+            IPierceItemField pierceItemField,
             PoolManager poolManager,
             IObjectResolver resolver,
             ThrowerSettings settings,
@@ -102,6 +104,7 @@ namespace BalloonParty.Thrower
             _traceConfig = traceConfig;
             _flightConfig = flightConfig;
             _deflectorField = deflectorField;
+            _pierceItemField = pierceItemField;
             _poolManager = poolManager;
             _resolver = resolver;
             _settings = settings;
@@ -128,7 +131,8 @@ namespace BalloonParty.Thrower
 
         public void Start()
         {
-            _traceCalculator = new PredictionTraceCalculator(_traceConfig, _flightConfig, _deflectorField);
+            _traceCalculator = new PredictionTraceCalculator(
+                _traceConfig, _flightConfig, _deflectorField, _pierceItemField);
             // Off by default (IPredictionTraceConfig.LightingEnabled) — a prior attempt at this made the
             // actors the line crosses read as noise, kept togglable rather than deleted. Constructed
             // unconditionally since every call is a no-op while the toggle is off.
@@ -420,9 +424,10 @@ namespace BalloonParty.Thrower
             // From the contact circle, not the transform: the collider leads the origin, so a trace
             // started at the transform begins behind where the shot really is.
             _traceCalculator.Calculate(
-                _activeView.ContactCenter, _direction, _activeView.ContactRadius, _tracePoints);
+                _activeView.ContactCenter, _direction, _activeView.ContactRadius, _tracePoints,
+                out var pierceStartIndex);
             _view.SetTrace(_tracePoints);
-            _traceProvider.SetTrace(_tracePoints);
+            _traceProvider.SetTrace(_tracePoints, pierceStartIndex);
             _traceLights.SetTrace(_tracePoints);
             _tracePublished = true;
         }

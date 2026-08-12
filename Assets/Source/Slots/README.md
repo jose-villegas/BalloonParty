@@ -60,6 +60,19 @@ classDiagram
         +Vector2 Center
         +float Radius
     }
+    class IPierceItemField {
+        <<interface>>
+        +CollectPierceItems(results)
+    }
+    class SlotGridPierceItemField {
+        -SlotGrid _grid
+        +CollectPierceItems(results)
+    }
+    class PierceItemCircle {
+        <<readonly struct>>
+        +Vector2 Center
+        +float Radius
+    }
 
     ToughBalloonModel ..|> IDeflectsShots
     UnbreakableBalloonModel ..|> IDeflectsShots
@@ -72,7 +85,13 @@ classDiagram
     SlotGrid --> ISlotActorView : geometry per occupant
     SlotGridDeflectorField ..> DeflectorCircle : emits
 
+    SlotGridPierceItemField ..|> IPierceItemField
+    SlotGridPierceItemField --> SlotGrid : walks every slot
+    SlotGrid --> IHasItemSlot : cast per occupant, Item == Snipe
+    SlotGridPierceItemField ..> PierceItemCircle : emits
+
     PredictionTraceCalculator --> IDeflectorField : aim telegraph
+    PredictionTraceCalculator --> IPierceItemField : aim telegraph, pierce-through
     ItemAssigner --> IDeflectorField : chain planning
     ShieldChainWindow --> IDeflectorField : editor scan
 ```
@@ -108,7 +127,7 @@ Paintability is expressed purely through types: a `BalloonModel` implements `IPa
 
 | File / Folder | What it does |
 |---|---|
-| `Grid/` | `SlotGrid`, `SlotGridChangedEvent`, `SlotGridView`, `BalancePathHolder`, `GridBalanceQuery`, `MoveWeightEvaluator`, `HexCoordinates`, `ShoveVector`, `SlotGridDeflectorField` (walks the grid for every `IDeflectsShots` occupant, so the aim telegraph and the shield planner see statics and balloons alike), `IShieldSlotPreference` (the balance-weight seam `Item/Shield/ShieldSlotPreference` implements) — core grid data structure, balance heuristics/transit tracking, and hex-coordinate math (namespace `BalloonParty.Slots.Grid`) |
+| `Grid/` | `SlotGrid`, `SlotGridChangedEvent`, `SlotGridView`, `BalancePathHolder`, `GridBalanceQuery`, `MoveWeightEvaluator`, `HexCoordinates`, `ShoveVector`, `SlotGridDeflectorField` (walks the grid for every `IDeflectsShots` occupant, so the aim telegraph and the shield planner see statics and balloons alike), `SlotGridPierceItemField` (same walk, for every `IHasItemSlot` hosting a pierce-arming item — the aim telegraph's own use, so it knows where to stop drawing deflections), `IShieldSlotPreference` (the balance-weight seam `Item/Shield/ShieldSlotPreference` implements) — core grid data structure, balance heuristics/transit tracking, and hex-coordinate math (namespace `BalloonParty.Slots.Grid`) |
 | `Actor/` | Core actor interfaces, spawner, hit controller, slot selection strategies, and scenario/ambient support — `ISlotActor`, `IWriteableSlotActor`, `IDynamicSlotActor`, `IWriteableDynamicSlotActor`, `ISlotActorView`, `SlotActorKind`, `StaticActorModel`, `StaticActorSpawner`, `GridActorHitController`, `ISlotSelectionStrategy`, `RandomSlotSelectionStrategy`, `ClusterSlotSelectionStrategy`, `SlotPlacementMode`, `IBalanceInfluence`, `IBalanceBiasSource` (the neighbour read-set — color id + an opaque type tag — the shared bias formulas in `Shared/Extensions/BalanceBiasExtensions` need; implemented by `BalloonModelBase`), `BalanceBiasKind`, `IPreBalanceRelocatable`, `ITransitionOutgoingContent`, `ScenarioContentRoot` — plus `SpeckField`/`SpeckProfile`, a GPU-simulated ambient dust/pollen field that listens to `ActorHitMessage` (balloon pops) and explicit spawn-request messages to burst specks at the hit point (namespace `BalloonParty.Slots.Actor`) |
 | `Actor/Cluster/` | Generic slot-cluster infrastructure — `SlotClusterRegistry<TModel>` (hex-adjacency flood-fill, merge/split, publishes `SlotClusterChangedEvent`), `SlotCluster`, `IClusterableSlotActor`, `ISlotClusterSource`, `ClusterView`, `ClusterViewController<TModel, TView, TSettings>`, `IClusterViewSettings` (namespace `BalloonParty.Slots.Actor.Cluster`) |
 | `Actor/Archetype/` | Concrete grid actor models and the Puff/Bush cluster visual systems — see [Archetype README](Actor/Archetype/README.md) (namespace `BalloonParty.Slots.Actor.Archetype`) |

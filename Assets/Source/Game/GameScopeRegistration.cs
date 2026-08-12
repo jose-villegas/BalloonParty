@@ -135,6 +135,9 @@ namespace BalloonParty.Game
             // Deflectors come from the grid, not from the balloon registry: statics deflect too, and
             // the grid is the one place that holds every actor regardless of family.
             builder.Register<SlotGridDeflectorField>(Lifetime.Singleton).As<IDeflectorField>();
+            // Same reasoning, for pierce-arming item hosts (the aim telegraph's own use — see
+            // PredictionTraceCalculator).
+            builder.Register<SlotGridPierceItemField>(Lifetime.Singleton).As<IPierceItemField>();
             // The shield preference is attached rather than injected: ten call sites build a
             // MoveWeightEvaluator, including the shot simulator's board mirror, and only the live
             // board has a thrower to measure reachability from.

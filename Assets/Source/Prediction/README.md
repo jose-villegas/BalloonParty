@@ -24,25 +24,39 @@ Within a step the nearest deflector wins, and the test runs against the step *al
 
 > **Accuracy caveat.** A circle deflection is very sensitive to where it is struck, so near a balloon's edge a pixel of aim movement swings the outgoing leg hard — the dispersion `ProjectileMotionResolver` already warns about, where error amplifies ×10-20 per deflection. The line is truthful; whether it reads as *precise* or as *jittery* is a playtest question. If it reads badly, draw the post-deflection leg differently (shorter, dimmer, dashed) rather than making it lie.
 
+**Pierce-item hosts stop deflections applying.** Once the path crosses a balloon hosting a pierce-arming item (Snipe — the only one today), every deflector *after* that point is ignored: the line just continues straight through subsequent toughs, matching what a piercing shot actually does, rather than showing a bounce that wouldn't happen. **Pierce-item hosts come from `IPierceItemField`** (implemented by `SlotGridPierceItemField`, which walks the grid the same way `SlotGridDeflectorField` does) — an actor qualifies when it's `IHasItemSlot` with `Item.Value == ItemType.Snipe`, under the same active-collider/non-zero-`ContactRadius` guards. If a second pierce-arming item ever ships, that grid walk's own check is the one place to widen.
+
+Within one step, the nearer of the two — the deflector or the pierce-item host — governs: a *different*, farther deflector is skipped outright once the nearer pierce point arms (`ResolveStepEvent`'s `PiercedThrough`), while the *same* host (a Tough that itself carries Snipe) still deflects at that exact contact (`PiercedAndDeflected`) — live, the item's activation lands a frame after the bounce it was hit on, so only what the shot meets *after* this contact is piercing, not this contact itself. `Calculate`'s `out int pierceStartIndex` reports which point in the polyline this happened at (-1 if it never does), inserted into the line even when nothing bends there (a normal 1-hit balloon hosting Snipe just gets a vertex on an otherwise-straight run) — so a view can style the trailing "piercing" run differently without recomputing anything.
+
 ```mermaid
 sequenceDiagram
     participant Ctl as ThrowerController Tick
     participant Calc as PredictionTraceCalculator
-    participant Field as SlotGridDeflectorField
+    participant DField as SlotGridDeflectorField
+    participant PField as SlotGridPierceItemField
     participant Grid as SlotGrid
     participant View as ISlotActorView
     Ctl->>Calc: Calculate origin, direction, shot radius
-    Calc->>Field: CollectDeflectors into a reused buffer
+    Calc->>DField: CollectDeflectors into a reused buffer
     loop every slot, columns times rows
-        Field->>Grid: At slot, cast to IDeflectsShots
-        Field->>View: ContactCenter, ContactRadius, HasActiveCollider
+        DField->>Grid: At slot, cast to IDeflectsShots
+        DField->>View: ContactCenter, ContactRadius, HasActiveCollider
     end
-    Field-->>Calc: list of DeflectorCircle
-    loop each segment, one shared reflection budget
+    DField-->>Calc: list of DeflectorCircle
+    Calc->>PField: CollectPierceItems into a reused buffer
+    loop every slot, columns times rows
+        PField->>Grid: At slot, cast to IHasItemSlot, Item == Snipe
+        PField->>View: ContactCenter, ContactRadius, HasActiveCollider
+    end
+    PField-->>Calc: list of PierceItemCircle
+    loop each segment, one shared reflection budget, until piercing
         Calc->>Calc: clip the step by the walls first
-        Calc->>Calc: nearest circle within the clipped step wins
+        Calc->>Calc: nearest deflector vs nearest pierce-item host wins
     end
-    Calc-->>Ctl: polyline whose corner sits on the deflector skin
+    loop each remaining segment, once piercing
+        Calc->>Calc: walls only — no deflector bends the line
+    end
+    Calc-->>Ctl: polyline whose corner sits on the deflector skin, plus pierceStartIndex
 ```
 
 The per-frame grid walk is deliberate and must not be cached, because the geometry is read from views
@@ -57,7 +71,7 @@ MonoBehaviour with a `LineRenderer`. Call `SetTrace(points)` to update, `SetColo
 
 ### PredictionTraceProvider
 
-Plain C# game-scope singleton (registered in `GameScopeRegistration.RegisterCoreServices`) that mirrors the same-frame trace for readers outside the Thrower's own view chain — the house pattern is `ProjectilePositionProvider` (`Projectile/`). `SetTrace(points)` copies into an internal preallocated `List<Vector3>` (never aliases the caller's mutable buffer), bumps an `int Version`, and sets `IsActive`; `Clear()` sets `IsActive` false and bumps `Version`. Readers poll `IsActive`/`Version`/`Points` instead of subscribing, so many pooled readers can cheaply skip work on frames where nothing changed.
+Plain C# game-scope singleton (registered in `GameScopeRegistration.RegisterCoreServices`) that mirrors the same-frame trace for readers outside the Thrower's own view chain — the house pattern is `ProjectilePositionProvider` (`Projectile/`). `SetTrace(points, pierceStartIndex = -1)` copies into an internal preallocated `List<Vector3>` (never aliases the caller's mutable buffer), stores `PierceStartIndex` (mirroring `PredictionTraceCalculator.Calculate`'s own out parameter), bumps an `int Version`, and sets `IsActive`; `Clear()` resets `PierceStartIndex` to -1, sets `IsActive` false, and bumps `Version`. Readers poll `IsActive`/`Version`/`Points`/`PierceStartIndex` instead of subscribing, so many pooled readers can cheaply skip work on frames where nothing changed.
 
 ### PredictionSightProbe
 

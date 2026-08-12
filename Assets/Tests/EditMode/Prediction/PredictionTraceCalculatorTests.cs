@@ -16,6 +16,7 @@ namespace BalloonParty.Tests.Prediction
         private IPredictionTraceConfig _config;
         private IProjectileFlightConfig _flightConfig;
         private FakeDeflectorField _deflectors;
+        private FakePierceItemField _pierceItems;
         private List<Vector3> _results;
 
         [SetUp]
@@ -30,7 +31,8 @@ namespace BalloonParty.Tests.Prediction
             _flightConfig.LimitsClockwise.Returns(DefaultLimits);
 
             _deflectors = new FakeDeflectorField();
-            _calculator = new PredictionTraceCalculator(_config, _flightConfig, _deflectors);
+            _pierceItems = new FakePierceItemField();
+            _calculator = new PredictionTraceCalculator(_config, _flightConfig, _deflectors, _pierceItems);
             _results = new List<Vector3>();
         }
 
@@ -40,7 +42,7 @@ namespace BalloonParty.Tests.Prediction
             var origin = new Vector3(-2.5f, 0f, 0f);
             var direction = new Vector3(-1f, 1f, 0f).normalized;
 
-            _calculator.Calculate(origin, direction, 0f, _results);
+            _calculator.Calculate(origin, direction, 0f, _results, out _);
 
             Assert.GreaterOrEqual(_results.Count, 2);
             Assert.AreEqual(DefaultLimits.w, _results[1].x, 0.01f);
@@ -59,7 +61,7 @@ namespace BalloonParty.Tests.Prediction
             var origin = new Vector3(2.5f, 0f, 0f);
             var direction = new Vector3(1f, 1f, 0f).normalized;
 
-            _calculator.Calculate(origin, direction, 0f, _results);
+            _calculator.Calculate(origin, direction, 0f, _results, out _);
 
             Assert.AreEqual(3, _results.Count);
             Assert.AreEqual(DefaultLimits.y, _results[1].x, 0.01f, "y is the right wall");
@@ -72,7 +74,7 @@ namespace BalloonParty.Tests.Prediction
             _config.MaxSegments.Returns(3);
             _config.MaxReflections.Returns(10);
 
-            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results);
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out _);
 
             // Origin plus where it got to. It used to be the origin alone, which drew no line at all —
             // invisible before deflections existed, because every upward shot ends on a wall, but a
@@ -87,7 +89,7 @@ namespace BalloonParty.Tests.Prediction
             var origin = new Vector3(2.5f, 0f, 0f);
             var direction = new Vector3(1f, 1f, 0f).normalized;
 
-            _calculator.Calculate(origin, direction, 0f, _results);
+            _calculator.Calculate(origin, direction, 0f, _results, out _);
 
             Assert.GreaterOrEqual(_results.Count, 2);
             Assert.AreEqual(DefaultLimits.y, _results[1].x, 0.01f);
@@ -96,7 +98,7 @@ namespace BalloonParty.Tests.Prediction
         [Test]
         public void Calculate_StraightUp_HitsTopWall()
         {
-            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results);
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out _);
 
             var lastPoint = _results[_results.Count - 1];
             Assert.AreEqual(DefaultLimits.x, lastPoint.y, 0.01f);
@@ -108,7 +110,7 @@ namespace BalloonParty.Tests.Prediction
             _config.MaxReflections.Returns(10);
             _config.MaxSegments.Returns(200);
 
-            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results);
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out _);
 
             Assert.AreEqual(2, _results.Count);
         }
@@ -122,7 +124,7 @@ namespace BalloonParty.Tests.Prediction
 
             var direction = new Vector3(1f, 0.3f, 0f).normalized;
 
-            _calculator.Calculate(Vector3.zero, direction, 0f, _results);
+            _calculator.Calculate(Vector3.zero, direction, 0f, _results, out _);
 
             Assert.GreaterOrEqual(_results.Count, 3);
         }
@@ -134,7 +136,7 @@ namespace BalloonParty.Tests.Prediction
         {
             _deflectors.Add(new DeflectorCircle(new Vector2(0f, 2f), 0.5f));
 
-            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results);
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out _);
 
             Assert.GreaterOrEqual(_results.Count, 2);
             // Contact is the near surface, one radius below the centre.
@@ -151,7 +153,7 @@ namespace BalloonParty.Tests.Prediction
             _deflectors.Add(new DeflectorCircle(new Vector2(0f, 4f), 0.5f));
             _deflectors.Add(new DeflectorCircle(new Vector2(0f, 2f), 0.5f));
 
-            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results);
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out _);
 
             Assert.AreEqual(1.5f, _results[1].y, 0.05f, "the nearer surface, not the far one");
         }
@@ -161,12 +163,12 @@ namespace BalloonParty.Tests.Prediction
         {
             var origin = new Vector3(-2.5f, 0f, 0f);
             var direction = new Vector3(-1f, 1f, 0f).normalized;
-            _calculator.Calculate(origin, direction, 0f, _results);
+            _calculator.Calculate(origin, direction, 0f, _results, out _);
             var withoutDeflectors = new List<Vector3>(_results);
 
             _deflectors.Add(new DeflectorCircle(new Vector2(4f, -2f), 0.5f)); // far behind the shot
 
-            _calculator.Calculate(origin, direction, 0f, _results);
+            _calculator.Calculate(origin, direction, 0f, _results, out _);
 
             CollectionAssert.AreEqual(withoutDeflectors, _results);
         }
@@ -179,7 +181,7 @@ namespace BalloonParty.Tests.Prediction
             _config.MaxReflections.Returns(0);
             _deflectors.Add(new DeflectorCircle(new Vector2(0f, 2f), 0.5f));
 
-            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results);
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out _);
 
             Assert.AreEqual(2, _results.Count);
             Assert.AreEqual(1.5f, _results[1].y, 0.05f, "stops on the balloon's surface");
@@ -196,7 +198,7 @@ namespace BalloonParty.Tests.Prediction
             _deflectors.Add(new DeflectorCircle(new Vector2(0f, 2f), 0.5f));
 
             // Off-centre, so the deflection sends it sideways into a wall rather than straight back.
-            _calculator.Calculate(new Vector3(-0.3f, 0f, 0f), Vector3.up, 0f, _results);
+            _calculator.Calculate(new Vector3(-0.3f, 0f, 0f), Vector3.up, 0f, _results, out _);
 
             Assert.AreEqual(3, _results.Count,
                 "origin, the deflection, and where the outgoing leg ends");
@@ -214,10 +216,10 @@ namespace BalloonParty.Tests.Prediction
             _deflectors.Add(new DeflectorCircle(new Vector2(0f, 2f), 0.5f));
             var origin = new Vector3(0.6f, 0f, 0f);
 
-            _calculator.Calculate(origin, Vector3.up, 0f, _results);
+            _calculator.Calculate(origin, Vector3.up, 0f, _results, out _);
             var asAPoint = _results.Count;
 
-            _calculator.Calculate(origin, Vector3.up, 0.2f, _results);
+            _calculator.Calculate(origin, Vector3.up, 0.2f, _results, out _);
 
             Assert.AreEqual(2, asAPoint, "as a point it misses entirely — straight to the top wall");
             Assert.Greater(_results.Count, asAPoint, "with its real radius it clips and turns");
@@ -233,10 +235,106 @@ namespace BalloonParty.Tests.Prediction
         {
             _deflectors.Add(new DeflectorCircle(new Vector2(0f, 2f), 0.5f));
 
-            _calculator.Calculate(Vector3.zero, Vector3.up, 0.25f, _results);
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0.25f, _results, out _);
 
             // 2 - 0.5, not 2 - (0.5 + 0.25).
             Assert.AreEqual(1.5f, _results[1].y, 0.05f);
+        }
+
+        // No deflector on the path at all — the only thing a pierce-item host should do here is drop
+        // a vertex on an otherwise-straight run and report where, not bend or shorten the line.
+        [Test]
+        public void Calculate_PierceItemWithNoDeflectorInTheWay_InsertsVertexAndReportsPierceStartIndex()
+        {
+            _pierceItems.Add(new PierceItemCircle(new Vector2(0f, 2f), 0.5f));
+
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out var pierceStartIndex);
+
+            Assert.AreEqual(3, _results.Count, "origin, the pierce mark, and the top wall — unchanged otherwise");
+            Assert.AreEqual(1, pierceStartIndex);
+            Assert.AreEqual(1.5f, _results[pierceStartIndex].y, 0.05f,
+                "the item's own contact, same math as a deflector's");
+            Assert.AreEqual(DefaultLimits.x, _results[2].y, 0.05f, "still runs straight up to the top wall");
+        }
+
+        // Pierce-start index must stay -1 for a trace that never crosses a pierce-item host — the
+        // signal a view relies on to know whether to style a trailing run at all.
+        [Test]
+        public void Calculate_NoPierceItemsInTheWay_PierceStartIndexStaysNegativeOne()
+        {
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out var pierceStartIndex);
+
+            Assert.AreEqual(-1, pierceStartIndex);
+        }
+
+        // The whole point of pierce-awareness: a tough beyond the pierce-item host must not still
+        // draw a bounce — the real shot would already be piercing by the time it gets there.
+        [Test]
+        public void Calculate_ToughBeyondPierceHost_IsPassedThroughInsteadOfDeflecting()
+        {
+            _pierceItems.Add(new PierceItemCircle(new Vector2(0f, 2f), 0.5f));
+            _deflectors.Add(new DeflectorCircle(new Vector2(0f, 3.5f), 0.5f));
+
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out var pierceStartIndex);
+
+            Assert.AreEqual(1, pierceStartIndex);
+            Assert.AreEqual(3, _results.Count, "no extra bend vertex for the tough beyond the pierce host");
+            Assert.AreEqual(DefaultLimits.x, _results[2].y, 0.05f,
+                "reached the top wall instead of stopping/reversing at the tough");
+        }
+
+        // A tough that itself hosts the pierce item still deflects at that exact contact — the item's
+        // activation lands a frame after the bounce it was hit on — but a SECOND tough further along
+        // the reflected path no longer deflects once piercing has armed.
+        [Test]
+        public void Calculate_ToughHostingPierceItem_StillDeflectsButLaterToughDoesNot()
+        {
+            _config.MaxSegments.Returns(20);
+            _deflectors.Add(new DeflectorCircle(new Vector2(0f, 2f), 0.5f));
+            _pierceItems.Add(new PierceItemCircle(new Vector2(0f, 2f), 0.5f));
+            _deflectors.Add(new DeflectorCircle(new Vector2(0f, -2f), 0.5f));
+
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out var pierceStartIndex);
+
+            Assert.AreEqual(1, pierceStartIndex, "arms at the same contact that still deflects");
+            Assert.AreEqual(1.5f, _results[1].y, 0.05f, "the pierce mark sits at the shared contact");
+            Assert.AreEqual(1.5f, _results[2].y, 0.05f, "the deflection at that same contact still happens");
+            var lastPoint = _results[_results.Count - 1];
+            Assert.Less(lastPoint.y, -1.5f,
+                "kept travelling straight down past the second tough instead of bouncing off it");
+        }
+
+        // The scenario a same-step comparison must get right: a DIFFERENT, nearer pierce-item host must
+        // pre-empt a farther deflector found within the SAME step — the deflector must not still bounce
+        // the line just because both were discovered while resolving the same iteration. Both circles
+        // sit well inside one 0.5-unit segment on purpose.
+        [Test]
+        public void Calculate_PierceItemNearerThanDeflectorOnTheSameStep_ArmsInsteadOfDeflecting()
+        {
+            _pierceItems.Add(new PierceItemCircle(new Vector2(0f, 0.2f), 0.05f));
+            _deflectors.Add(new DeflectorCircle(new Vector2(0f, 0.4f), 0.05f));
+
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out var pierceStartIndex);
+
+            Assert.AreEqual(1, pierceStartIndex);
+            Assert.AreEqual(0.15f, _results[pierceStartIndex].y, 0.01f,
+                "arms at the nearer pierce item's own contact, not the farther deflector's");
+            Assert.AreEqual(DefaultLimits.x, _results[_results.Count - 1].y, 0.05f,
+                "kept travelling straight to the top wall — the farther deflector never bounced it");
+        }
+
+        // Mirrors the "deflector beyond a wall can't steal a bounce" rule: the pierce test is bounded
+        // by the same wall-clipped step, so a host sitting past the wall cannot arm piercing on it.
+        [Test]
+        public void Calculate_PierceItemBeyondAWall_DoesNotArmOnThatStep()
+        {
+            _pierceItems.Add(new PierceItemCircle(new Vector2(3.2f, 0f), 0.05f));
+            var origin = new Vector3(2.9f, 0f, 0f);
+
+            _calculator.Calculate(origin, Vector3.right, 0f, _results, out var pierceStartIndex);
+
+            Assert.AreEqual(-1, pierceStartIndex, "the wall-clipped step ends before reaching the item");
+            Assert.AreEqual(DefaultLimits.y, _results[1].x, 0.05f, "still bounces normally off the right wall");
         }
 
         private sealed class FakeDeflectorField : IDeflectorField
@@ -254,5 +352,21 @@ namespace BalloonParty.Tests.Prediction
                 results.AddRange(_circles);
             }
         }
-}
+
+        private sealed class FakePierceItemField : IPierceItemField
+        {
+            private readonly List<PierceItemCircle> _circles = new();
+
+            internal void Add(PierceItemCircle circle)
+            {
+                _circles.Add(circle);
+            }
+
+            public void CollectPierceItems(List<PierceItemCircle> results)
+            {
+                results.Clear();
+                results.AddRange(_circles);
+            }
+        }
+    }
 }

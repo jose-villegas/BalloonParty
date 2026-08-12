@@ -6,23 +6,40 @@ namespace BalloonParty.Prediction
 {
     internal class PredictionTraceCalculator
     {
+        // What governs a single step while the shot isn't piercing yet — resolved once per iteration by
+        // ResolveStepEvent, then applied by Calculate. Splitting "decide" from "apply" keeps the
+        // deflector/pierce-item distance comparison out of the main loop's own branching.
+        private enum StepEvent
+        {
+            None,
+            Deflected,
+            PiercedThrough,
+            PiercedAndDeflected
+        }
+
         private readonly IPredictionTraceConfig _config;
         private readonly IProjectileFlightConfig _flightConfig;
         private readonly IDeflectorField _deflectorField;
+        private readonly IPierceItemField _pierceItemField;
 
         private readonly List<DeflectorCircle> _deflectors = new();
+        private readonly List<PierceItemCircle> _pierceItems = new();
 
         public PredictionTraceCalculator(
-            IPredictionTraceConfig config, IProjectileFlightConfig flightConfig, IDeflectorField deflectorField)
+            IPredictionTraceConfig config, IProjectileFlightConfig flightConfig, IDeflectorField deflectorField,
+            IPierceItemField pierceItemField)
         {
             _config = config;
             _flightConfig = flightConfig;
             _deflectorField = deflectorField;
+            _pierceItemField = pierceItemField;
         }
 
         /// <summary>
         ///     Calculates the prediction trace, bouncing off the left/right/top walls and off any
-        ///     balloon that would deflect the shot rather than let it through.
+        ///     balloon that would deflect the shot rather than let it through — until the path crosses a
+        ///     pierce-item host, from which point on it just continues straight through every tough
+        ///     instead, matching a piercing shot's real flight.
         /// </summary>
         /// <remarks>
         ///     Walls and deflections share one reflection budget. They cost the shot differently — a
@@ -31,26 +48,40 @@ namespace BalloonParty.Prediction
         ///     are the same event: the line turned.
         /// </remarks>
         /// <param name="projectileContactRadius">
-        ///     The shot's own contact radius. Every deflector is inflated by it, because contact
-        ///     happens when the two circles touch — <c>ProjectileView</c> passes
+        ///     The shot's own contact radius. Every deflector (and pierce-item host) is inflated by it,
+        ///     because contact happens when the two circles touch — <c>ProjectileView</c> passes
         ///     <c>SurfaceRadius + _contactRadius</c> to the real deflection for the same reason.
         ///     Treating the shot as a point shrinks every target and draws grazing hits as misses.
         /// </param>
+        /// <param name="pierceStartIndex">
+        ///     Index into <paramref name="results" /> where the shot starts piercing (the first
+        ///     pierce-item host the path crosses), or -1 if it never does. Everything from that point on
+        ///     already reflects piercing — no deflector bends the line past it — so a view can use the
+        ///     index to style just that trailing run differently (e.g. a second overlay LineRenderer)
+        ///     without recomputing anything.
+        /// </param>
         public void Calculate(
-            Vector3 origin, Vector3 direction, float projectileContactRadius, List<Vector3> results)
+            Vector3 origin, Vector3 direction, float projectileContactRadius, List<Vector3> results,
+            out int pierceStartIndex)
         {
             results.Clear();
             results.Add(origin);
+            pierceStartIndex = -1;
 
             _deflectors.Clear();
             _deflectorField?.CollectDeflectors(_deflectors);
 
+            _pierceItems.Clear();
+            _pierceItemField?.CollectPierceItems(_pierceItems);
+
             var walls = new WallLimits(_flightConfig.LimitsClockwise);
             var stepsLeft = _config.MaxSegments;
             var reflectsLeft = _config.MaxReflections;
+            var isPiercing = false;
 
             while (stepsLeft > 0)
             {
+                var stepStart = origin;
                 var shift = _config.SegmentLength;
                 var extended = origin + (direction * shift);
                 var reflect = Vector3.zero;
@@ -78,31 +109,44 @@ namespace BalloonParty.Prediction
                     topHit = true;
                 }
 
-                // Tested against the step already clipped by any wall above, so a deflector sitting
-                // beyond that wall cannot steal a bounce the wall reaches first.
-                if (TryFindNearestDeflector(
-                        origin, direction, shift, projectileContactRadius, out var contact, out var normal,
-                        out var surface))
+                if (!isPiercing)
                 {
-                    // Clamped like the real deflection: a balloon in an edge column can sit within its
-                    // own radius of a wall, and an unclamped contact starts the next step out of bounds.
-                    origin = walls.ClampInside(contact);
+                    // Tested against the step already clipped by any wall above, so an event sitting
+                    // beyond that wall cannot steal this iteration from the wall that reaches it first.
+                    var stepEvent = ResolveStepEvent(
+                        stepStart, direction, shift, projectileContactRadius, out var contact, out var normal,
+                        out var surface, out var pierceContact);
 
-                    // Drawn on the deflector's skin, not where the shot's CENTRE turns — those differ by
-                    // the shot's radius, and a thin line whose corner floats a quarter-balloon short of
-                    // the balloon reads as a bend that happened too early. The flight continues from the
-                    // true contact above, so only the painted corner moves; the leg after it is offset
-                    // by that same radius, which is invisible over its length.
-                    results.Add(walls.ClampInside(surface));
-                    if (reflectsLeft <= 0)
+                    if (stepEvent is StepEvent.PiercedThrough or StepEvent.PiercedAndDeflected)
                     {
-                        return;
+                        isPiercing = true;
+                        pierceStartIndex = results.Count;
+                        results.Add(walls.ClampInside(pierceContact));
                     }
 
-                    direction = Vector2.Reflect(direction, normal);
-                    reflectsLeft--;
-                    stepsLeft--;
-                    continue;
+                    if (stepEvent is StepEvent.Deflected or StepEvent.PiercedAndDeflected)
+                    {
+                        // Clamped like the real deflection: a balloon in an edge column can sit within
+                        // its own radius of a wall, and an unclamped contact starts the next step out of
+                        // bounds.
+                        origin = walls.ClampInside(contact);
+
+                        // Drawn on the deflector's skin, not where the shot's CENTRE turns — those differ
+                        // by the shot's radius, and a thin line whose corner floats a quarter-balloon
+                        // short of the balloon reads as a bend that happened too early. The flight
+                        // continues from the true contact above, so only the painted corner moves; the
+                        // leg after it is offset by that same radius, which is invisible over its length.
+                        results.Add(walls.ClampInside(surface));
+                        if (reflectsLeft <= 0)
+                        {
+                            return;
+                        }
+
+                        direction = Vector2.Reflect(direction, normal);
+                        reflectsLeft--;
+                        stepsLeft--;
+                        continue;
+                    }
                 }
 
                 origin = extended;
@@ -133,14 +177,42 @@ namespace BalloonParty.Prediction
             }
         }
 
+        // Decides what this iteration means for a not-yet-piercing shot, by comparing the nearest
+        // deflector against the nearest pierce-item host within the same clipped step. The pierce point
+        // governs whenever it's reached no later than the deflector: a DIFFERENT, farther deflector
+        // (PiercedThrough) is skipped outright, matching "just continue" — while the SAME host
+        // (PiercedAndDeflected, both reads of one circle) still bounces this one time, since live, the
+        // item's activation lands a frame after the bounce it was hit on, and only what the shot meets
+        // AFTER this contact is piercing, not this contact itself.
+        private StepEvent ResolveStepEvent(
+            Vector3 stepStart, Vector3 direction, float shift, float projectileContactRadius,
+            out Vector3 contact, out Vector2 normal, out Vector3 surface, out Vector3 pierceContact)
+        {
+            var hasDeflector = TryFindNearestDeflector(
+                stepStart, direction, shift, projectileContactRadius, out contact, out normal, out surface,
+                out var deflectorDistance);
+            var hasPierceItem = TryFindNearestPierceItem(
+                stepStart, direction, shift, projectileContactRadius, out pierceContact, out var pierceDistance);
+
+            if (hasPierceItem && (!hasDeflector || pierceDistance <= deflectorDistance))
+            {
+                return hasDeflector && pierceDistance >= deflectorDistance
+                    ? StepEvent.PiercedAndDeflected
+                    : StepEvent.PiercedThrough;
+            }
+
+            return hasDeflector ? StepEvent.Deflected : StepEvent.None;
+        }
+
         // Nearest, not first found: two balloons can both lie along one step and only the closer is hit.
         private bool TryFindNearestDeflector(
             Vector3 origin, Vector3 direction, float maxDistance, float projectileContactRadius,
-            out Vector3 contact, out Vector2 normal, out Vector3 surface)
+            out Vector3 contact, out Vector2 normal, out Vector3 surface, out float entryDistance)
         {
             contact = default;
             normal = default;
             surface = default;
+            entryDistance = float.MaxValue;
             var nearest = float.MaxValue;
 
             for (var i = 0; i < _deflectors.Count; i++)
@@ -149,17 +221,17 @@ namespace BalloonParty.Prediction
                 var contactRadius = deflector.Radius + projectileContactRadius;
                 if (!CircleContact.TryFindEntry(
                         origin, direction, deflector.Center, contactRadius, out var entryNormal,
-                        out var entryDistance))
+                        out var candidateDistance))
                 {
                     continue;
                 }
 
-                if (entryDistance > maxDistance || entryDistance >= nearest)
+                if (candidateDistance > maxDistance || candidateDistance >= nearest)
                 {
                     continue;
                 }
 
-                nearest = entryDistance;
+                nearest = candidateDistance;
                 normal = entryNormal;
                 contact = deflector.Center + (entryNormal * contactRadius);
                 contact.z = origin.z;
@@ -167,6 +239,43 @@ namespace BalloonParty.Prediction
                 surface.z = origin.z;
             }
 
+            entryDistance = nearest;
+            return nearest < float.MaxValue;
+        }
+
+        // Mirrors TryFindNearestDeflector: nearest wins, so a graze past a closer host doesn't skip ahead
+        // to arm on a farther one first. Reports its own entry distance so the caller can compare it
+        // directly against a same-step deflector's, rather than reconstructing either from a contact point.
+        private bool TryFindNearestPierceItem(
+            Vector3 origin, Vector3 direction, float maxDistance, float projectileContactRadius,
+            out Vector3 contact, out float entryDistance)
+        {
+            contact = default;
+            entryDistance = float.MaxValue;
+            var nearest = float.MaxValue;
+
+            for (var i = 0; i < _pierceItems.Count; i++)
+            {
+                var item = _pierceItems[i];
+                var contactRadius = item.Radius + projectileContactRadius;
+                if (!CircleContact.TryFindEntry(
+                        origin, direction, item.Center, contactRadius, out var entryNormal,
+                        out var candidateDistance))
+                {
+                    continue;
+                }
+
+                if (candidateDistance > maxDistance || candidateDistance >= nearest)
+                {
+                    continue;
+                }
+
+                nearest = candidateDistance;
+                contact = item.Center + (entryNormal * contactRadius);
+                contact.z = origin.z;
+            }
+
+            entryDistance = nearest;
             return nearest < float.MaxValue;
         }
     }

@@ -27,6 +27,7 @@ Types and utilities used across multiple features.
 | `CircleContact` | The one analytic ray-circle entry solver (`TryFindEntry`/`TryFindEntryNormal`), shared by the projectile's real deflection (`ProjectileMotionResolver`) and the aim telegraph (`Prediction/PredictionTraceCalculator`) so the drawn line can't drift from the flight it predicts |
 | `ContactRadius` | `FromCollider(Collider2D, lossyScaleX)` — the one place a circle/capsule collider becomes a world-space contact radius, shared by live gather and the shot solver's static archetypes |
 | `IDeflectorField` / `DeflectorCircle` | The deflectors the aim telegraph (and the shield planner) must bounce off, as circles in the geometry the projectile will actually meet. Implemented by `SlotGridDeflectorField` (`Slots/Grid/`) |
+| `IPierceItemField` / `PierceItemCircle` | The pierce-arming item hosts the aim telegraph must know about, so it can stop drawing a deflection off every tough beyond the first one crossed. Implemented by `SlotGridPierceItemField` (`Slots/Grid/`) |
 | `StreakShieldRule` | The one place a continued colour streak's shield refund is decided, called by both the live `ProjectileHitResolver` and the shot solver's `ShotSimulator` so the two can't drift apart |
 
 This table covers the folders and the types other features reach for most; a few small editor-only attributes living alongside these files aren't broken out separately.
