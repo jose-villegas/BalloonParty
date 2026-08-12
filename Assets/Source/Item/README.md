@@ -86,10 +86,26 @@ to a balloon rather than 3D polyhedra flying at a UI bar.
 | `HighlightTrail` | The pooled pen view — a head sprite dragging a `TrailRenderer`, positioned entirely from the ticker. Deliberately not `UI/Score/FlyingTrail`: that one owns its own DOTween flight, motion-curve table and flight gradients and lives on the UI sorting layer, none of which applies here |
 | `ItemPreviewSettings` | Plain settings with working defaults (pen count, bloom duration/sweep, trace speed) rather than a `ScriptableObject` — the visual pass is still open, and an authored asset would just be a second place for moving numbers to go stale. Promote it behind a read-only interface once they settle |
 
+| `IHostsSpinningItem` (in `Item/`) | Lets the controller read a Laser's live angle off an `ISlotActorView` without naming `BalloonView`, keeping the dependency pointing Balloon → Item. Hands back `ISpinningItemVisual`, never `ITransformCapture`, whose `CaptureSnapshot` is destructive — a telegraph must not perturb what it telegraphs |
+
+The figures, and what each reuses:
+
+| Item | Figure | Geometry source |
+|---|---|---|
+| Shield | plus at the prediction line's end | none — it has no board range, so it marks the shot instead. Placeholder by intent |
+| Bomb | circle at the blast radius | `BombSettings.Radius`, the same field `BombBlast` selects with — deliberately not `RainbowEffectScale`, which scales only the VFX |
+| Snipe | line from the host to the wall | `WallLimits.TryFindCrossing` along the aim. Traced fresh rather than copied from the aim polyline past its pierce marker, since that stops at the telegraph's segment budget, not the wall |
+| Laser | two crossing rectangles | the four `LaserCross` arms share two corridors; `CircleCastRadius` × `RaycastDistance`, rotated by the icon's live spin |
+| Paint | the spread triangle | `PaintTriangle.Build` itself — the same call the handler and the solver make |
+| Lightning | an arc per chain jump | `LightningChain` over a live `GridEffectBoard`, so the chain visits exactly the balloons the effect would, in the same order |
+
+Bomb's circle, Laser's rectangles and Paint's triangle are all the effect's own *footprint*, not its
+exact catchment — each core also catches an occupant by its own radius, so a balloon straddling an
+edge is still caught. The outline reads as intent; that is the deliberate simplification.
+
 Registered in `GameScopeRegistration.RegisterItemRangePreviews`; the pen prefab is a serialized field
 on `GameLifetimeScope`. Leaving that prefab unassigned disables the telegraph rather than failing
-startup. Shipped so far: Shield (a plus at the aim tip — it has no board range of its own), Bomb (the
-blast circle) and Snipe (the pierce corridor to the wall); Laser, Paint and Lightning are Phase 2.
+startup.
 
 ## Architecture
 

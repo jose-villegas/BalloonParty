@@ -99,8 +99,11 @@ namespace BalloonParty.Item.Preview
             }
 
             var colorId = _grid.At(slot) is IHasColor colored ? colored.Color.Value : null;
+            var spinDegrees = _grid.ViewAt(slot) is IHostsSpinningItem spinHost
+                ? spinHost.SpinningItem?.AngleDegrees ?? 0f
+                : 0f;
             var context = new ItemPreviewContext(
-                origin, slot, direction, _traceProvider.Points, colorId);
+                origin, slot, direction, _traceProvider.Points, colorId, spinDegrees);
 
             _ticker.Show(preview, in context, _palette.GetColor(colorId));
         }

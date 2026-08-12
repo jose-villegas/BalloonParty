@@ -179,11 +179,12 @@ per-actor) against each item host's view circle, and gates the whole grid walk o
 ## Phases
 
 ```
-1  Infrastructure       — ItemPreviewShape/Stroke, IItemRangePreview, ItemPreviewContext,
+1  Infrastructure       ✅ DONE — ItemPreviewShape/Stroke, IItemRangePreview, ItemPreviewContext,
                           HighlightTrail + prefab, ItemPreviewTicker, ItemRangePreviewController,
                           settings; Snipe + Bomb + Shield previews (line, circle, plus)
-2  Remaining figures    — Laser rectangles, Paint triangle, Lightning arcs — each reusing its
-                          existing core for target selection
+2  Remaining figures    ✅ DONE — Laser rectangles (spin-aware, via IHostsSpinningItem), Paint
+                          triangle (PaintTriangle.Build), Lightning arcs (LightningChain over a
+                          live GridEffectBoard)
 3  Visual pass          — material, ribbon width/lifetime, bloom curve, per-item colour,
                           pen counts; the "tuned later" work
 4  Polish               — pause/level-up gating, run-reset teardown, pooling prewarm,
@@ -206,6 +207,16 @@ fidelity and looks come after that reads right.
   placeholder for "this helps the shot, not the board". If it reads as a range it may be
   worse than nothing.
 - **Laser spin.** The beam's rotation at contact time is extrapolated live
-  (`ItemSpinDegrees + rate * tHit`). The preview cannot know `tHit` while aiming — draw it
-  at the item's current visual rotation and accept the drift, or draw the swept annulus
-  instead.
+  (`ItemSpinDegrees + rate * tHit`). The preview cannot know `tHit` while aiming.
+  **Resolved for now** by drawing at the icon's *current* rotation (read through
+  `IHostsSpinningItem`, whose non-destructive face exists so the telegraph can't stop the
+  spin it is reading). The drawn cross therefore turns with the icon but is not the cross
+  the shot will meet. If that reads as a lie rather than as "it spins", the swept annulus
+  is the fallback.
+- **Rainbow Lightning matches the wrong colour.** Live, a rainbow host chains on the
+  *projectile's* colour when it has a concrete one, falling back to the nearest concrete
+  colour on the board. `LightningRangePreview` only does the fallback, so a rainbow host
+  under a coloured shot draws a chain to the wrong balloons. Fixing it means getting the
+  loaded projectile's colour into `ItemPreviewContext` — cheap, but it needs a provider that
+  does not exist yet (`IProjectileFacingSource` carries direction, not colour). Rainbow item
+  hosts are rare enough to defer; it is a correctness gap, not a cosmetic one.

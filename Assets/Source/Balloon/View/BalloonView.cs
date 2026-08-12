@@ -26,7 +26,8 @@ using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Balloon.View
 {
-    public class BalloonView : MonoBehaviour, IPoolable, ISlotActorView, IPaintReactive, INudgeable, IBalloonMotionView
+    public class BalloonView : MonoBehaviour, IPoolable, ISlotActorView, IPaintReactive, INudgeable,
+        IBalloonMotionView, IHostsSpinningItem
     {
         private static readonly int IsStableParam = Animator.StringToHash("IsStable");
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
@@ -107,6 +108,10 @@ namespace BalloonParty.Balloon.View
         }
 
         internal ITransformCapture TransformCapture => _itemService?.TransformCapture;
+
+        // The same component TransformCapture exposes, narrowed to its non-destructive read-only face —
+        // the aim telegraph must be able to read a Laser's angle without CaptureSnapshot stopping its spin.
+        ISpinningItemVisual IHostsSpinningItem.SpinningItem => _itemService?.TransformCapture as ISpinningItemVisual;
 
         private void Awake()
         {

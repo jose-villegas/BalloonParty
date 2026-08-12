@@ -302,6 +302,9 @@ namespace BalloonParty.Game
             builder.Register<ShieldRangePreview>(Lifetime.Singleton).As<IItemRangePreview>();
             builder.Register<BombRangePreview>(Lifetime.Singleton).As<IItemRangePreview>();
             builder.Register<SnipeRangePreview>(Lifetime.Singleton).As<IItemRangePreview>();
+            builder.Register<LaserRangePreview>(Lifetime.Singleton).As<IItemRangePreview>();
+            builder.Register<PaintRangePreview>(Lifetime.Singleton).As<IItemRangePreview>();
+            builder.Register<LightningRangePreview>(Lifetime.Singleton).As<IItemRangePreview>();
 
             // Plain settings with working defaults until the visual pass settles the numbers
             // (@ref plan_item_range_preview Phase 3).

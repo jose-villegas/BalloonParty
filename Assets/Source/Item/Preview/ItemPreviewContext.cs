@@ -26,15 +26,29 @@ namespace BalloonParty.Item.Preview
 
         public readonly string HostColorId;
 
+        /// <summary>
+        ///     The hosted item visual's current Z rotation, or 0 when it doesn't spin. Only the Laser's
+        ///     icon spins, and its cross is cast along that rotation — drawn axis-aligned while the icon
+        ///     visibly turns, the telegraph would point at balloons the beam misses.
+        /// </summary>
+        /// <remarks>
+        ///     This is the angle NOW, not at contact. Live, the cross is cast at
+        ///     <c>ItemSpinDegrees + rate * tHit</c>, and while aiming there is no <c>tHit</c> to
+        ///     extrapolate to — so the drawn cross is honest about the item's current pose and drifts from
+        ///     the one the shot will actually meet (@ref plan_item_range_preview open questions).
+        /// </remarks>
+        public readonly float ItemSpinDegrees;
+
         public ItemPreviewContext(
             Vector2 origin, Vector2Int slot, Vector2 aimDirection, IReadOnlyList<Vector3> tracePoints,
-            string hostColorId)
+            string hostColorId, float itemSpinDegrees)
         {
             Origin = origin;
             Slot = slot;
             AimDirection = aimDirection;
             TracePoints = tracePoints;
             HostColorId = hostColorId;
+            ItemSpinDegrees = itemSpinDegrees;
         }
     }
 }
