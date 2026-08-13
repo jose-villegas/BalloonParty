@@ -21,6 +21,14 @@ namespace BalloonParty.Item.Preview
 
         private float _defaultRibbonTime;
 
+        /// <summary>
+        ///     The ribbon lifetime currently applied — whatever <see cref="SetRibbonTime" /> last set, or
+        ///     the prefab's authored value if it was never called this life. A graceful hide reads this to
+        ///     know how long a paused ribbon takes to fade on its own, rather than a duration re-authored
+        ///     on the ticker that could drift from what the trail is actually doing.
+        /// </summary>
+        internal float EffectiveRibbonSeconds => _trailRenderer.time;
+
         private void Awake()
         {
             if (_trailRenderer == null)

@@ -18,6 +18,15 @@ namespace BalloonParty.Item.Preview
     /// </remarks>
     internal sealed class ItemPreviewTicker : ILateTickable, IDisposable
     {
+        // How many multiples of one frame's worth of sweep travel (TraceSpeed * deltaTime) count as a
+        // teleport rather than normal motion. Exists to absorb frame-time spikes, not to tune a look —
+        // raise it if a slow device's hitches start reading as false teleports, not for visual taste.
+        private const float TeleportSpeedMultiplier = 2f;
+
+        // Floor on the teleport distance threshold itself, so a near-zero deltaTime frame (e.g. the
+        // first tick after a stall) can't collapse the threshold to ~0 and flag ordinary motion.
+        private const float MinTeleportDistance = 0.01f;
+
         private readonly PoolManager _poolManager;
         private readonly HighlightTrail _penPrefab;
         private readonly IItemPreviewConfig _config;
@@ -40,6 +49,14 @@ namespace BalloonParty.Item.Preview
         private Vector2 _origin;
         private Vector2Int _currentSlot;
         private bool _visible;
+
+        // A graceful hide stops emitting but keeps the pens where they are, so what was already drawn
+        // fades out over the ribbon's own lifetime instead of vanishing. _fadeDuration is that lifetime,
+        // read off a pen's trail at BeginHide rather than authored again here (see
+        // HighlightTrail.EffectiveRibbonSeconds); _fadeElapsed tracks how far into it LateTick is.
+        private bool _fading;
+        private float _fadeElapsed;
+        private float _fadeDuration;
 
         // Captured on Show so LateTick doesn't re-resolve the config every frame.
         private float _dashSpacing;
@@ -66,18 +83,31 @@ namespace BalloonParty.Item.Preview
         /// <summary>
         ///     Builds <paramref name="preview" />'s figure for this crossing and aims the pens at it.
         /// </summary>
+        /// <param name="introduce">
+        ///     True for a figure's first appearance on this host — pens are acquired at the host origin and
+        ///     the outward bloom plays, exactly as before this parameter existed. False for a re-settle on
+        ///     a host already being telegraphed (the aim nudged but landed on the same host): pens acquired
+        ///     here start already in their settled, post-bloom state, so the figure reappears in place
+        ///     instead of spiralling back in. <see cref="ItemRangePreviewController" /> decides which this
+        ///     is by tracking the slot it last actually showed.
+        /// </param>
         /// <remarks>
         ///     Called on every aim change while a host stays sighted, so it distinguishes the two cases by
         ///     <see cref="ItemPreviewContext.Slot" />: a DIFFERENT host restarts the pens (they re-bloom out
         ///     of the new origin), while the SAME host only re-fits the geometry — the figure follows a
         ///     drifting balloon, or a Shield stub follows the aim tip, without every pen snapping back to
-        ///     the start of its bloom each time the player nudges the aim.
+        ///     the start of its bloom each time the player nudges the aim. In current play the controller
+        ///     never calls this on the same-host-still-visible path (it only re-`Show`s after a
+        ///     <see cref="BeginHide" />, which always drops <c>_visible</c> first), so that branch is a
+        ///     dormant fallback; <paramref name="introduce" /> is the mechanism that actually distinguishes
+        ///     the two cases in practice, independently of whether the geometry itself is acquired or
+        ///     re-fitted.
         ///     <para>
         ///         Carries no colour: every figure draws with the pen prefab's own material, so the
         ///         telegraph reads as one system and there is no runtime tint path to keep in step with it.
         ///     </para>
         /// </remarks>
-        internal void Show(IItemRangePreview preview, in ItemPreviewContext context)
+        internal void Show(IItemRangePreview preview, in ItemPreviewContext context, bool introduce)
         {
             if (preview == null || _penPrefab == null)
             {
@@ -95,6 +125,14 @@ namespace BalloonParty.Item.Preview
                 Hide();
                 return;
             }
+
+            // A Show arriving mid-fade supersedes it outright — cancelling here (rather than letting
+            // LateTick's fade timer run) stops it from releasing these pens later while they're already
+            // reused for the figure being built below. _visible is already false from BeginHide, so
+            // isSameHost comes out false regardless of slot, which is what routes this into AcquirePens
+            // instead of RefitPens: the acquire path is what re-blooms from the host, which is the
+            // intended fade-in.
+            _fading = false;
 
             var isSameHost = _visible && context.Slot == _currentSlot;
             var style = _config.StyleFor(preview.Type);
@@ -115,7 +153,7 @@ namespace BalloonParty.Item.Preview
             }
             else
             {
-                AcquirePens(style);
+                AcquirePens(style, introduce);
             }
 
             _visible = true;
@@ -123,8 +161,38 @@ namespace BalloonParty.Item.Preview
 
         internal void Hide()
         {
+            // Teardown-immediate: whatever a fade might have been doing is moot once every pen is about
+            // to be returned to the pool outright.
+            _fading = false;
+
             if (!_visible && _pens.Count == 0)
             {
+                return;
+            }
+
+            ReleasePens();
+            _visible = false;
+        }
+
+        /// <summary>
+        ///     Releases nothing yet — stops every pen laying new ribbon and lets what's already drawn fade
+        ///     on the <see cref="TrailRenderer" />'s own lifetime, then releases to the pool once that has
+        ///     played out. Pens keep their positions while fading, so the figure holds its last shape
+        ///     instead of collapsing to a point.
+        /// </summary>
+        internal void BeginHide()
+        {
+            // Idempotent: called every frame the controller has nothing to show, but only the first such
+            // frame (still _visible) has anything to start — a call mid-fade, or after one has already
+            // released, is a no-op rather than restarting the clock or double-releasing.
+            if (_fading || !_visible)
+            {
+                return;
+            }
+
+            if (_pens.Count == 0)
+            {
+                _visible = false;
                 return;
             }
 
@@ -133,16 +201,26 @@ namespace BalloonParty.Item.Preview
                 var trail = _pens[i].Trail;
                 if (trail != null)
                 {
-                    _poolManager.Return(_poolKey, trail);
+                    trail.SetEmitting(false);
                 }
             }
 
-            _pens.Clear();
+            // Read off a live pen rather than re-authoring the duration here, so this can never drift
+            // from what SetRibbonTime actually applied for this figure's style.
+            _fadeDuration = _pens[0].Trail != null ? _pens[0].Trail.EffectiveRibbonSeconds : 0f;
+            _fadeElapsed = 0f;
+            _fading = true;
             _visible = false;
         }
 
         public void LateTick()
         {
+            if (_fading)
+            {
+                AdvanceFade(Time.deltaTime);
+                return;
+            }
+
             if (!_visible)
             {
                 return;
@@ -159,6 +237,20 @@ namespace BalloonParty.Item.Preview
                 AdvancePen(ref pen, deltaTime);
                 _pens[i] = pen;
             }
+        }
+
+        // Pens hold their last position while fading (no AdvancePen calls here) — a fading ribbon should
+        // hang where it stopped, not keep sweeping its dash while it dims.
+        private void AdvanceFade(float deltaTime)
+        {
+            _fadeElapsed += deltaTime;
+            if (_fadeElapsed < _fadeDuration)
+            {
+                return;
+            }
+
+            ReleasePens();
+            _fading = false;
         }
 
         // Cumulative arc length per point, so a pen's travel can be expressed as one distance that maps to a
@@ -239,6 +331,22 @@ namespace BalloonParty.Item.Preview
             return desiredTotal;
         }
 
+        // Shared by Hide() and a fade's natural completion — the two moments every pen actually goes back
+        // to the pool, as opposed to BeginHide, which only stops them emitting.
+        private void ReleasePens()
+        {
+            for (var i = 0; i < _pens.Count; i++)
+            {
+                var trail = _pens[i].Trail;
+                if (trail != null)
+                {
+                    _poolManager.Return(_poolKey, trail);
+                }
+            }
+
+            _pens.Clear();
+        }
+
         // Grows or shrinks the pen list to the wanted count, returning shed pens to the pool — shared by
         // the acquire and refit paths so both resize the same way; which pens end up "new" (Trail == null)
         // is left for the caller's dealing pass to notice and populate.
@@ -262,7 +370,7 @@ namespace BalloonParty.Item.Preview
             }
         }
 
-        private void AcquirePens(IItemPreviewStyle style)
+        private void AcquirePens(IItemPreviewStyle style, bool introduce)
         {
             var strokeCount = _shape.Strokes.Count;
             var wanted = DeriveDashCounts();
@@ -284,8 +392,22 @@ namespace BalloonParty.Item.Preview
                     // Distance is measured inside the pen's own slot, so it always starts at 0 — the
                     // slot's offset along the stroke is applied when sampling, in AdvanceDash.
                     pen.Distance = 0f;
-                    pen.BloomElapsed = 0f;
-                    pen.Bloomed = false;
+
+                    if (introduce)
+                    {
+                        pen.BloomElapsed = 0f;
+                        pen.Bloomed = false;
+                    }
+                    else
+                    {
+                        // A re-settle on a host already being telegraphed is not the figure's first
+                        // appearance — hand the pen the same fully-settled state RefitPens gives a pen the
+                        // figure only just grew into, so AdvancePen takes the settled branch on its very
+                        // first tick and the pen simply appears at its place in the figure instead of
+                        // spiralling back in from the origin.
+                        pen.BloomElapsed = _config.BloomDuration + 1f;
+                        pen.Bloomed = true;
+                    }
 
                     // Spread over the whole pen set (global penIndex), not per-stroke (dashIndex) — pens
                     // are dealt stroke by stroke, so a per-stroke phase would clump the fan instead of
@@ -395,6 +517,30 @@ namespace BalloonParty.Item.Preview
                     _origin.y + (rotatedY * eased),
                     0f);
             }
+
+            // A refit (same host, reshaped figure) can reassign this pen to a different stroke slot,
+            // which jumps its position outright — the ribbon would otherwise draw a straight chord
+            // across that jump instead of restarting at the new spot. Now a backstop rather than a case
+            // that fires in normal play: ItemRangePreviewController only shows a figure once its inputs
+            // have held still past the sight delay and never re-Shows while it stays visible, so a
+            // visible figure's pens shouldn't reposition at all — RefitPens only ever runs on a Show the
+            // controller itself no longer issues while shown. Left in for whatever reaches AdvancePen
+            // outside that contract. Gated on Bloomed because during the bloom the warp is deliberately
+            // carrying the pen far and fast from the host to its place in the figure, easily outrunning
+            // this threshold every frame; checking there would clear the ribbon continuously and suppress
+            // the launch entirely.
+            if (pen.Bloomed && pen.HasLastPosition)
+            {
+                var teleportThreshold = Mathf.Max(
+                    _config.TraceSpeed * deltaTime * TeleportSpeedMultiplier, MinTeleportDistance);
+                if ((position - pen.LastPosition).sqrMagnitude > teleportThreshold * teleportThreshold)
+                {
+                    pen.Trail.ClearRibbon();
+                }
+            }
+
+            pen.LastPosition = position;
+            pen.HasLastPosition = true;
 
             pen.Trail.SetPosition(position);
 
@@ -529,6 +675,12 @@ namespace BalloonParty.Item.Preview
             // Evenly spaced launch bearings so the set fans out radially on bloom instead of turning as
             // one rigid stick; decays away with the shared sweep, so it never moves the landing position.
             public float BloomPhaseDegrees;
+
+            // Last frame's position, for teleport detection in AdvancePen. HasLastPosition guards a
+            // freshly acquired pen (default Vector3.zero) from reading as having teleported from the
+            // origin on its very first tick.
+            public Vector3 LastPosition;
+            public bool HasLastPosition;
         }
     }
 }

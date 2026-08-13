@@ -16,34 +16,34 @@ MonoBehaviour:
   _dashSpacing: 0.15
   _maxPens: 64
   _traceSpeed: 1.5
-  _bloomDuration: 0.35
-  _bloomSweepDegrees: 120
+  _bloomDuration: 1
+  _bloomSweepDegrees: 360
   _bloomCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
+      value: 0.0012817383
+      inSlope: 3.1892436
+      outSlope: 3.1892436
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.032292787
     - serializedVersion: 3
       time: 1
-      value: 1
+      value: 1.001255
       inSlope: 0
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.14424115
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   _emitDuringBloom: 1
-  _sightDelaySeconds: 0.15
+  _sightDelaySeconds: 0.35
   _styles:
   - _ribbonSeconds: 0
     _bloomDraw: 0
