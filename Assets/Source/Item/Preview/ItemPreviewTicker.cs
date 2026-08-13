@@ -134,9 +134,10 @@ namespace BalloonParty.Item.Preview
         /// </summary>
         /// <param name="introduce">
         ///     True for a figure's first appearance on this host — pens cascade in one dash at a time: each
-        ///     stroke's leading pen approaches, pen-up, from the host origin to the stroke's entry point,
-        ///     then draws its own dash; every other pen on the stroke waits, pen-up, at its own dash's
-        ///     start until its turn, then draws that dash and hands off to the next. False for a re-settle
+        ///     stroke's leading pen approaches, emitting the whole way, from the host origin to the
+        ///     stroke's entry point, then draws its own dash; every other pen on the stroke waits, parked
+        ///     pen-up, at its own dash's start until its turn, then draws that dash and hands off to the
+        ///     next. False for a re-settle
         ///     on a host already being telegraphed (the aim nudged but landed on the same host): pens
         ///     acquired here start already in their settled, post-bloom state, so the figure reappears in
         ///     place instead of cascading in again. <see cref="ItemRangePreviewController" /> decides which
@@ -601,7 +602,7 @@ namespace BalloonParty.Item.Preview
                     {
                         pen.BloomElapsed = 0f;
                         pen.Bloomed = false;
-                        pen.Waiting = true;
+                        pen.Parked = true;
                     }
                     else
                     {
@@ -609,12 +610,12 @@ namespace BalloonParty.Item.Preview
                         // appearance — hand the pen the same fully-settled state RefitPens gives a pen the
                         // figure only just grew into, so AdvancePen takes the settled branch on its very
                         // first tick and the pen simply appears at its place in the figure instead of
-                        // cascading in again. Bloomed = true skips AdvanceCascade forever after, so Waiting
+                        // cascading in again. Bloomed = true skips AdvanceCascade forever after, so Parked
                         // must be cleared explicitly here — a reused pen's could otherwise still read true
                         // from whatever figure it last belonged to and leave it dark.
                         pen.BloomElapsed = _config.BloomDuration + 1f;
                         pen.Bloomed = true;
-                        pen.Waiting = false;
+                        pen.Parked = false;
                     }
 
                     // Parked pen-up at the origin rather than seeded emitting: AdvancePen's rising edge
@@ -685,7 +686,7 @@ namespace BalloonParty.Item.Preview
                         pen.Distance = 0f;
                         pen.Bloomed = true;
                         pen.BloomElapsed = _config.BloomDuration + 1f;
-                        pen.Waiting = false;
+                        pen.Parked = false;
                     }
 
                     _pens[penIndex] = pen;
@@ -775,10 +776,13 @@ namespace BalloonParty.Item.Preview
         // this identical elapsed/eased value, just against its own _approachDurations/_dashDurations, so a
         // two-stroke figure (Laser's two lines, Lightning's arcs) draws both at once rather than in series.
         //
-        // Only CascadeRank 0 — the leading pen — ever gets an approach: a straight, pen-up line from the
-        // host origin to the stroke's entry point, exactly as before. Every other pen simply waits, pen-up,
-        // at its own dash's start position until its window opens; nothing else ever leaves the host, so
-        // nothing else can stack a ribbon onto the shared approach path.
+        // Only CascadeRank 0 — the leading pen — ever gets an approach: an emitting sweep along the trace
+        // from the host origin to the stroke's entry point. It draws because the leg is a continuous walk
+        // along the trace polyline — there is no discontinuity on it to hide, unlike a parked pen's jump
+        // into its own dash — so ink flows out of the balloon and along the aim before the dash itself
+        // starts forming at the entry point. Every other pen simply waits, Parked and pen-up, at its own
+        // dash's start position until its window opens; nothing else ever leaves the host, so nothing else
+        // can stack a ribbon onto the shared approach path.
         private Vector3 AdvanceCascade(ref Pen pen, float deltaTime)
         {
             pen.BloomElapsed += deltaTime;
@@ -792,14 +796,17 @@ namespace BalloonParty.Item.Preview
 
             if (pen.CascadeRank == 0 && elapsed < approachDuration)
             {
-                pen.Waiting = true;
+                // Not Parked: the approach must draw, so ApplyPenPosition's !pen.Parked visibility term
+                // has to read true for the whole leg, not just once the dash itself starts.
+                pen.Parked = false;
                 var approachT = approachDuration > 1e-4f ? elapsed / approachDuration : 1f;
                 return SampleApproach(strokeIndex, approachT);
             }
 
             // The leading pen falls through here the instant its approach window closes (windowStart for
             // rank 0 is exactly approachDuration), so it never has a separate waiting frame between
-            // approaching and drawing — the two legs hand off on the very same tick.
+            // approaching and drawing — the two legs hand off on the very same tick, and the ribbon is
+            // never cleared at the seam since the position is continuous across it.
             var dashDuration = _dashDurations[strokeIndex];
             var windowStart = approachDuration + (pen.CascadeRank * dashDuration);
 
@@ -808,11 +815,11 @@ namespace BalloonParty.Item.Preview
 
             if (elapsed < windowStart)
             {
-                pen.Waiting = true;
+                pen.Parked = true;
                 return SampleStroke(strokeIndex, dashStart);
             }
 
-            pen.Waiting = false;
+            pen.Parked = false;
             var painted = ComputePaintedLength(slotLength);
             var localT = dashDuration > 1e-4f ? Mathf.Clamp01((elapsed - windowStart) / dashDuration) : 1f;
 
@@ -879,11 +886,11 @@ namespace BalloonParty.Item.Preview
             pen.Trail.SetPosition(position);
 
             // A pen draws once its own cascade window opens — the sweep within that window IS what draws
-            // its dash in — but stays dark while Waiting, whether that means the leading pen's shared
-            // host-to-entry approach (drawing it would stack every pen on the stroke into one bright stem)
-            // or a later pen simply parked at its own dash start until its turn. Visibility decides the
-            // edge the rest of the time.
-            var visible = !pen.Waiting && (!_viewport.IsActive || _viewport.Contains(position));
+            // its dash in — and the leading pen also draws through its approach, since that leg is a
+            // continuous walk with nothing to hide. A pen stays dark only while Parked: a later pen sitting
+            // at its own dash start until its turn, reached by a discontinuous jump it must not reveal.
+            // Visibility decides the edge the rest of the time.
+            var visible = !pen.Parked && (!_viewport.IsActive || _viewport.Contains(position));
             if (visible != pen.Emitting)
             {
                 // Re-entry clears first: the ribbon still holds the points from before the pen left, and
@@ -1053,12 +1060,13 @@ namespace BalloonParty.Item.Preview
             public float Distance;
             public bool Bloomed;
 
-            // True while this pen hasn't reached its turn yet — either the stroke's leading pen still on
-            // its approach (host origin to the stroke's entry point), or a later pen parked at its own
-            // dash start awaiting its cascade window. Set each tick by AdvanceCascade and read by
-            // ApplyPenPosition to keep the pen dark until its own dash actually starts drawing —
+            // True only while this pen is parked, pen-up, at its own dash start awaiting its cascade
+            // window — it reaches that spot by a discontinuous jump, so it must stay dark until its turn.
+            // NOT true during the leading pen's approach (host origin to the stroke's entry point): that
+            // leg is a continuous walk along the trace with no discontinuity to hide, so it draws instead.
+            // Set each tick by AdvanceCascade and read by ApplyPenPosition to decide the dark/lit edge —
             // recorded on the pen rather than recomputed in both places.
-            public bool Waiting;
+            public bool Parked;
 
             // Mirrors the trail's own emitting flag, so AdvancePen only calls into the renderer on a real
             // edge (bloom settling, or crossing the visible-rect boundary) instead of every frame.
