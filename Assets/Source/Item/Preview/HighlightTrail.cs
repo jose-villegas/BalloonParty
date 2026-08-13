@@ -19,13 +19,9 @@ namespace BalloonParty.Item.Preview
     {
         [SerializeField] private TrailRenderer _trailRenderer;
 
-        private float _defaultRibbonTime;
-
         /// <summary>
-        ///     The ribbon lifetime currently applied — whatever <see cref="SetRibbonTime" /> last set, or
-        ///     the prefab's authored value if it was never called this life. A graceful hide reads this to
-        ///     know how long a paused ribbon takes to fade on its own, rather than a duration re-authored
-        ///     on the ticker that could drift from what the trail is actually doing.
+        ///     The pen prefab's own authored ribbon lifetime — every item shares it now. A graceful hide
+        ///     reads this to know how long a paused ribbon takes to fade on its own.
         /// </summary>
         internal float EffectiveRibbonSeconds => _trailRenderer.time;
 
@@ -35,8 +31,6 @@ namespace BalloonParty.Item.Preview
             {
                 _trailRenderer = GetComponent<TrailRenderer>();
             }
-
-            _defaultRibbonTime = _trailRenderer.time;
         }
 
         public void OnSpawned()
@@ -52,18 +46,6 @@ namespace BalloonParty.Item.Preview
         {
             _trailRenderer.Clear();
             _trailRenderer.emitting = false;
-
-            // Restore the authored lifetime, so a per-item override can't leak into the next item's pens.
-            _trailRenderer.time = _defaultRibbonTime;
-        }
-
-        /// <summary>
-        ///     Ribbon lifetime in seconds — how much of a figure one pen shows at once. Non-positive
-        ///     restores the prefab's authored value.
-        /// </summary>
-        internal void SetRibbonTime(float seconds)
-        {
-            _trailRenderer.time = seconds > 0f ? seconds : _defaultRibbonTime;
         }
 
         /// <summary>Pen up/down — a pen travelling to its stroke shouldn't necessarily draw on the way.</summary>

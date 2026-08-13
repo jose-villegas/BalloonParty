@@ -117,18 +117,12 @@ namespace BalloonParty.Configuration
         [Serializable]
         private sealed class ItemPreviewStyle : IItemPreviewStyle
         {
-            [Tooltip("Ribbon lifetime for this item's pens. 0 keeps the prefab's authored value. This is " +
-                "how much of the figure is visible at once — Trace Speed times this is the world length " +
-                "a pen paints before its tail fades, so a long figure needs more than a small one.")]
-            [SerializeField] [Min(0f)] private float _ribbonSeconds;
+            [Tooltip("Makes this item's figure appear in place instead of blooming out from the host. " +
+                "Set it for a figure that sits far from its host (Shield's stub is at a wall) — a drawn " +
+                "approach is a long spoke across the board that buries what it was meant to introduce.")]
+            [SerializeField] private bool _skipBloom;
 
-            [Tooltip("Whether this item's pens paint on the way out to the figure. Hide it for a figure " +
-                "that sits far from its host (Shield's stub is at a wall) — the approach is a long spoke " +
-                "across the board that buries what it was meant to introduce.")]
-            [SerializeField] private ItemPreviewBloomDraw _bloomDraw = ItemPreviewBloomDraw.Inherit;
-
-            public float RibbonSeconds => _ribbonSeconds;
-            public ItemPreviewBloomDraw BloomDraw => _bloomDraw;
+            public bool SkipBloom => _skipBloom;
         }
 
         [Serializable]

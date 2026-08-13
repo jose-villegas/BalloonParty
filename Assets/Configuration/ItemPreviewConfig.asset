@@ -23,21 +23,21 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.0012817383
-      inSlope: 3.1892436
-      outSlope: 3.1892436
+      value: 0
+      inSlope: 2
+      outSlope: 2
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.032292787
+      outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 1.001255
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.14424115
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -45,20 +45,13 @@ MonoBehaviour:
   _emitDuringBloom: 1
   _sightDelaySeconds: 0.35
   _styles:
-  - _ribbonSeconds: 0
-    _bloomDraw: 0
-  - _ribbonSeconds: 0.3
-    _bloomDraw: 2
-  - _ribbonSeconds: 0
-    _bloomDraw: 2
-  - _ribbonSeconds: 0
-    _bloomDraw: 2
-  - _ribbonSeconds: 0
-    _bloomDraw: 0
-  - _ribbonSeconds: 0
-    _bloomDraw: 2
-  - _ribbonSeconds: 0
-    _bloomDraw: 0
+  - _skipBloom: 0
+  - _skipBloom: 0
+  - _skipBloom: 0
+  - _skipBloom: 1
+  - _skipBloom: 1
+  - _skipBloom: 1
+  - _skipBloom: 0
   _shield:
     _stubLength: 1
   _bomb:

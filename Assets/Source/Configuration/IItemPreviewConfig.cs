@@ -3,16 +3,6 @@ using UnityEngine;
 
 namespace BalloonParty.Configuration
 {
-    /// <summary>Per-item answer to "does the outward launch draw?", with a defer-to-shared default.</summary>
-    public enum ItemPreviewBloomDraw
-    {
-        /// <summary>Use <see cref="IItemPreviewConfig.EmitDuringBloom" />.</summary>
-        Inherit,
-
-        Draw,
-        Hide
-    }
-
     /// <summary>
     ///     Per-item-type overrides for the range telegraph's motion. Every field is opt-in: left at its
     ///     neutral value the item draws with the shared defaults.
@@ -25,26 +15,18 @@ namespace BalloonParty.Configuration
     public interface IItemPreviewStyle
     {
         /// <summary>
-        ///     Whether this item's pens paint on their way out to the figure.
+        ///     This item never plays the outward bloom — its figure just appears at its settled
+        ///     positions, rather than sweeping out from the host.
         /// </summary>
         /// <remarks>
         ///     Matters most for a figure that sits far from its host — Shield's bounce stub is over at a
         ///     wall, so a drawn approach is a long spoke across the board that buries the stub it was
         ///     meant to introduce. A figure centred on the host (Bomb's circle) has almost no approach to
-        ///     draw and doesn't care.
+        ///     draw and doesn't care. No tri-state is needed here — unlike <see cref="IItemPreviewConfig.EmitDuringBloom" />,
+        ///     which decides whether an item that DOES bloom draws its approach, this decides whether the
+        ///     bloom happens at all, and there is no shared counterpart to defer to.
         /// </remarks>
-        ItemPreviewBloomDraw BloomDraw { get; }
-
-        /// <summary>
-        ///     Ribbon lifetime in seconds for this item's pens, or 0 to keep the prefab's authored value.
-        /// </summary>
-        /// <remarks>
-        ///     The knob that decides how much of a figure is visible at once: a pen paints
-        ///     <c>TraceSpeed × seconds</c> of world length before its tail fades, so a long figure (the
-        ///     Laser's 40-unit corridors) needs far more than a short one (a Bomb circle a few units
-        ///     around) to read as a complete shape rather than a travelling dash.
-        /// </remarks>
-        float RibbonSeconds { get; }
+        bool SkipBloom { get; }
     }
 
     /// <summary>

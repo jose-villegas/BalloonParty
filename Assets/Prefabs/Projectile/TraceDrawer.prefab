@@ -144,7 +144,7 @@ LineRenderer:
     numCapVertices: 0
     alignment: 0
     textureMode: 0
-    textureScale: {x: 1, y: 1}
+    textureScale: {x: 1.5, y: 1.5}
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 1

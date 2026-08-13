@@ -53,8 +53,7 @@ namespace BalloonParty.Tests.Configuration
         {
             var style = _config.StyleFor(ItemType.Bomb);
 
-            Assert.AreEqual(0f, style.RibbonSeconds, "0 means keep the prefab's authored ribbon time");
-            Assert.AreEqual(ItemPreviewBloomDraw.Inherit, style.BloomDraw, "defers to the shared flag");
+            Assert.IsFalse(style.SkipBloom, "an unauthored item still plays the outward bloom");
         }
 
         // An empty AnimationCurve evaluates to 0 everywhere, which would collapse every bloom to a pen

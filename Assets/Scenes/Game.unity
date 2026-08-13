@@ -623,16 +623,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2682153834734624164, guid: 0ea0a8b48930245ba944bd64372eead0,
         type: 3}
-      propertyPath: m_Parameters.textureScale.x
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2682153834734624164, guid: 0ea0a8b48930245ba944bd64372eead0,
-        type: 3}
-      propertyPath: m_Parameters.textureScale.y
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2682153834734624164, guid: 0ea0a8b48930245ba944bd64372eead0,
-        type: 3}
       propertyPath: m_Parameters.widthMultiplier
       value: 0.3
       objectReference: {fileID: 0}

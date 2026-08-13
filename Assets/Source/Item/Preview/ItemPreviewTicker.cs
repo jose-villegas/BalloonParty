@@ -137,23 +137,18 @@ namespace BalloonParty.Item.Preview
             var isSameHost = _visible && context.Slot == _currentSlot;
             var style = _config.StyleFor(preview.Type);
             _dashSpacing = _config.DashSpacing;
-            _emitDuringBloom = style.BloomDraw switch
-            {
-                ItemPreviewBloomDraw.Draw => true,
-                ItemPreviewBloomDraw.Hide => false,
-                _ => _config.EmitDuringBloom
-            };
+            _emitDuringBloom = _config.EmitDuringBloom;
             _origin = context.Origin;
             _currentSlot = context.Slot;
             BuildArcTable();
 
             if (isSameHost)
             {
-                RefitPens(style);
+                RefitPens();
             }
             else
             {
-                AcquirePens(style, introduce);
+                AcquirePens(introduce && !style.SkipBloom);
             }
 
             _visible = true;
@@ -206,7 +201,7 @@ namespace BalloonParty.Item.Preview
             }
 
             // Read off a live pen rather than re-authoring the duration here, so this can never drift
-            // from what SetRibbonTime actually applied for this figure's style.
+            // from the pen prefab's own authored ribbon lifetime.
             _fadeDuration = _pens[0].Trail != null ? _pens[0].Trail.EffectiveRibbonSeconds : 0f;
             _fadeElapsed = 0f;
             _fading = true;
@@ -370,7 +365,7 @@ namespace BalloonParty.Item.Preview
             }
         }
 
-        private void AcquirePens(IItemPreviewStyle style, bool introduce)
+        private void AcquirePens(bool introduce)
         {
             var strokeCount = _shape.Strokes.Count;
             var wanted = DeriveDashCounts();
@@ -414,11 +409,20 @@ namespace BalloonParty.Item.Preview
                     // spreading it evenly around the full circle.
                     pen.BloomPhaseDegrees = 360f * penIndex / _pens.Count;
 
-                    pen.Trail.SetRibbonTime(style.RibbonSeconds);
+                    // Parked pen-up at the origin rather than seeded emitting: AdvancePen's rising edge
+                    // (wantEmit flips true) is what starts the ribbon, and that edge clears first and runs
+                    // after SetPosition, so the ribbon opens clean at the pen's real first position instead
+                    // of a chord from here to there.
                     pen.Trail.ClearRibbon();
                     pen.Trail.SetPosition(new Vector3(_origin.x, _origin.y, 0f));
-                    pen.Trail.SetEmitting(_emitDuringBloom);
-                    pen.Emitting = _emitDuringBloom;
+                    pen.Trail.SetEmitting(false);
+                    pen.Emitting = false;
+
+                    // A reused pen's teleport baseline is stale from its previous figure, and a freshly
+                    // grown one already reads false — either way it must not be trusted, so clear it
+                    // explicitly rather than rely on carryover.
+                    pen.HasLastPosition = false;
+                    pen.LastPosition = default;
 
                     _pens[penIndex] = pen;
                     penIndex++;
@@ -434,7 +438,7 @@ namespace BalloonParty.Item.Preview
         // The dash counts themselves are NOT stable across a refit: BuildArcTable already ran against the
         // new shape, so DeriveDashCounts must run again here too, or AdvanceDash would divide the new
         // stroke lengths by a stale dash count left over from whatever geometry the host last had.
-        private void RefitPens(IItemPreviewStyle style)
+        private void RefitPens()
         {
             var strokeCount = _shape.Strokes.Count;
             var wanted = DeriveDashCounts();
@@ -465,7 +469,6 @@ namespace BalloonParty.Item.Preview
                         pen.Distance = 0f;
                         pen.Bloomed = true;
                         pen.BloomElapsed = _config.BloomDuration + 1f;
-                        pen.Trail.SetRibbonTime(style.RibbonSeconds);
                     }
 
                     _pens[penIndex] = pen;
