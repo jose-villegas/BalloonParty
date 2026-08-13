@@ -43,6 +43,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _emitDuringBloom: 1
+  _sightDelaySeconds: 0.15
   _styles:
   - _ribbonSeconds: 0
     _bloomDraw: 0

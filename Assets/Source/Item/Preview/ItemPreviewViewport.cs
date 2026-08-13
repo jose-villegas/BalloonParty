@@ -5,7 +5,8 @@ namespace BalloonParty.Item.Preview
 {
     /// <summary>
     ///     Single shared owner of "what is visible" for the range-preview figures — the camera-derived
-    ///     world rect, expanded by a margin derived from <see cref="IItemPreviewConfig.DashLength" />.
+    ///     world rect, expanded by a margin derived from <see cref="IItemPreviewConfig.DashLength" /> and
+    ///     <see cref="IItemPreviewConfig.DashSpacing" />.
     ///     Both <see cref="ItemPreviewTicker" /> (culling pens) and <see cref="LaserRangePreview" />
     ///     (clipping beam lines) read this one instance, so the two agree on one notion of "visible"
     ///     instead of drifting apart.
@@ -67,10 +68,13 @@ namespace BalloonParty.Item.Preview
                 return;
             }
 
-            // The margin is DashLength: AdvanceDash never lets a pen travel further than DashLength from
-            // its dash's start, so expanding the visible rect by exactly that much is the smallest
-            // expansion that can never clip a dash mid-stroke — no authored knob needed.
-            var margin = _config.DashLength;
+            // The margin is the stride (DashLength + DashSpacing), not DashLength alone: AdvanceDash now
+            // pins the gap and lets the dash absorb each stroke's rounding error, so a capped figure's
+            // slot — and with it a pen's travel within its dash — can exceed DashLength. The stride is
+            // the widest a slot is ever intended to be, so it bounds a pen's travel in every case,
+            // including a capped figure, and expanding the visible rect by exactly that much is still the
+            // smallest expansion that can never clip a dash mid-stroke — no authored knob needed.
+            var margin = _config.DashLength + _config.DashSpacing;
             var halfHeight = _camera.orthographicSize + margin;
             var halfWidth = (_camera.orthographicSize * _camera.aspect) + margin;
             var centre = _camera.transform.position;

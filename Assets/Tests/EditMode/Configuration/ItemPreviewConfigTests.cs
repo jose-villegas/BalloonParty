@@ -32,6 +32,7 @@ namespace BalloonParty.Tests.Configuration
             Assert.Greater(_config.MaxPens, 0);
             Assert.Greater(_config.TraceSpeed, 0f);
             Assert.Greater(_config.BloomDuration, 0f);
+            Assert.GreaterOrEqual(_config.SightDelaySeconds, 0f, "0 is legitimate — it means show immediately");
         }
 
         // Every item type must get a style, including ones with no authored entry — the ticker reads it

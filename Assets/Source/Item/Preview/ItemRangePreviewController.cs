@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Configuration;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Prediction;
 using BalloonParty.Slots.Capabilities;
@@ -31,22 +32,36 @@ namespace BalloonParty.Item.Preview
         private readonly PredictionTraceProvider _traceProvider;
         private readonly ItemPreviewTicker _ticker;
         private readonly ItemPreviewViewport _viewport;
+        private readonly IItemPreviewConfig _config;
         private readonly IEnumerable<IItemRangePreview> _previews;
 
         private Dictionary<ItemType, IItemRangePreview> _previewMap;
         private int _lastVersion = int.MinValue;
+
+        // Dwell state for the currently sighted host, kept separate from _lastVersion's expensive-work
+        // gate: the timer below must advance every frame a host stays sighted, including the frames the
+        // aim is held perfectly still and the version gate above skips the grid walk entirely.
+        private bool _hasSightedHost;
+        private bool _shownForSightedHost;
+        private Vector2Int _sightedSlot;
+        private Vector2 _sightedOrigin;
+        private Vector2 _sightedDirection;
+        private IItemRangePreview _sightedPreview;
+        private float _dwellElapsed;
 
         internal ItemRangePreviewController(
             SlotGrid grid,
             PredictionTraceProvider traceProvider,
             ItemPreviewTicker ticker,
             ItemPreviewViewport viewport,
+            IItemPreviewConfig config,
             IEnumerable<IItemRangePreview> previews)
         {
             _grid = grid;
             _traceProvider = traceProvider;
             _ticker = ticker;
             _viewport = viewport;
+            _config = config;
             _previews = previews;
         }
 
@@ -75,41 +90,94 @@ namespace BalloonParty.Item.Preview
             if (!_traceProvider.IsActive || _traceProvider.Points.Count < 2)
             {
                 _lastVersion = int.MinValue;
+                ResetDwell();
                 _ticker.Hide();
                 return;
             }
 
-            // Gated on the trace version: a held aim re-walks nothing. The figure therefore refreshes when
+            // Gated on the trace version: a held aim re-walks nothing. The grid walk therefore runs when
             // the AIM moves, not when the board settles — a host drifting under a motionless aim lags by
-            // design (@ref plan_item_range_preview open questions).
-            if (_traceProvider.Version == _lastVersion)
+            // design (@ref plan_item_range_preview open questions). The dwell timer below is NOT gated the
+            // same way: it must keep accumulating on the held-still frames this skips, or a perfectly
+            // still aim would never satisfy the delay.
+            if (_traceProvider.Version != _lastVersion)
+            {
+                _lastVersion = _traceProvider.Version;
+                RefreshSightedHost();
+            }
+
+            if (!_hasSightedHost)
             {
                 return;
             }
 
-            _lastVersion = _traceProvider.Version;
+            _dwellElapsed += Time.deltaTime;
 
-            if (!TryFindSightedHost(out var slot, out var itemType, out var origin, out var direction))
+            // Once shown, later version changes are handled inside RefreshSightedHost itself (it re-Shows
+            // on every refresh once past dwell) — this only gates the FIRST appearance for this host.
+            if (_shownForSightedHost || _dwellElapsed < _config.SightDelaySeconds)
             {
+                return;
+            }
+
+            _shownForSightedHost = true;
+            ShowSightedHost();
+        }
+
+        // Runs only on a version change (the expensive grid walk), and only decides WHAT is sighted —
+        // the dwell timer that gates WHEN it draws lives in LateTick, which keeps running every frame
+        // regardless of whether this method does.
+        private void RefreshSightedHost()
+        {
+            if (!TryFindSightedHost(out var slot, out var itemType, out var origin, out var direction) ||
+                !_previewMap.TryGetValue(itemType, out var preview))
+            {
+                ResetDwell();
                 _ticker.Hide();
                 return;
             }
 
-            if (!_previewMap.TryGetValue(itemType, out var preview))
+            // A different host restarts the delay from zero — sweeping past several items shows nothing
+            // until the aim settles on one, which is the whole point of the dwell.
+            if (!_hasSightedHost || slot != _sightedSlot)
             {
+                _hasSightedHost = true;
+                _sightedSlot = slot;
+                _dwellElapsed = 0f;
+                _shownForSightedHost = false;
                 _ticker.Hide();
-                return;
             }
 
-            var colorId = _grid.At(slot) is IHasColor colored ? colored.Color.Value : null;
-            var spinDegrees = _grid.ViewAt(slot) is IHostsSpinningItem spinHost
+            _sightedOrigin = origin;
+            _sightedDirection = direction;
+            _sightedPreview = preview;
+
+            // The same host, already past its dwell: keep tracking the aim exactly as before the delay
+            // existed — only the first appearance for a host is gated, never a later refresh.
+            if (_shownForSightedHost)
+            {
+                ShowSightedHost();
+            }
+        }
+
+        private void ShowSightedHost()
+        {
+            var colorId = _grid.At(_sightedSlot) is IHasColor colored ? colored.Color.Value : null;
+            var spinDegrees = _grid.ViewAt(_sightedSlot) is IHostsSpinningItem spinHost
                 ? spinHost.SpinningItem?.AngleDegrees ?? 0f
                 : 0f;
             var context = new ItemPreviewContext(
-                origin, slot, direction, _traceProvider.Points, colorId, spinDegrees, _traceProvider.End,
-                _viewport);
+                _sightedOrigin, _sightedSlot, _sightedDirection, _traceProvider.Points, colorId, spinDegrees,
+                _traceProvider.End, _viewport);
 
-            _ticker.Show(preview, in context);
+            _ticker.Show(_sightedPreview, in context);
+        }
+
+        private void ResetDwell()
+        {
+            _hasSightedHost = false;
+            _shownForSightedHost = false;
+            _dwellElapsed = 0f;
         }
 
         // The most centrally-struck item host wins, mirroring TraceHitGeometry's own scoring: an aim

@@ -82,10 +82,10 @@ to a balloon rather than 3D polyhedra flying at a UI bar.
 | `ItemPreviewShape` / `ItemPreviewStroke` | The shared vocabulary: a figure is a set of **strokes** (polylines), each a range into one flat point list. A circle is one closed stroke, a plus two open ones, lightning one per arc. Reused across rebuilds (cleared, never reallocated). `AddCircle`/`AddSegment` cover the common cases; a stroke of fewer than two points is discarded rather than recorded, since it has no arc length for a pen to travel |
 | `ItemPreviewContext` | Readonly struct — the per-crossing inputs (`Origin`, `Slot`, `AimDirection`, `TracePoints`, `HostColorId`, `Viewport`). The services a preview needs are constructor-injected into the preview itself, since they never change between crossings |
 | `ItemPreviewViewport` | Plain C#, DI singleton — the one shared owner of "what is visible": the camera-derived world rect, expanded by a margin derived from `IItemPreviewConfig.DashLength`. Both `ItemPreviewTicker` (culling pens) and `LaserRangePreview` (clipping its beam lines) read this single instance, so the two agree on one notion of "visible" instead of drifting apart. `Refresh()` is idempotent per frame (guarded on `Time.frameCount`), so `ItemRangePreviewController` and `ItemPreviewTicker` can both call it before reading without depending on tickable ordering. `IsActive` is false with no main camera yet or a non-orthographic one — cull nothing / clip nothing rather than guessing at maths that don't apply. Also exposes `TryFindExit`, a `WallLimits`-style slab test for clipping a ray to the rect, so any figure can reuse the geometry that defines the bounds |
-| `ItemRangePreviewController` | `IStartable`/`ILateTickable`, plain C# — decides which host the aim is sighted on (most central crossing wins, via `TraceHitGeometry`) and drives the one visible figure. Plain C# rather than a component on the balloon, because it needs DI singletons a pooled item visual would have to be hand-threaded, and because only one preview shows at a time — a global arbitration a per-balloon component cannot make. Gated on `PredictionTraceProvider.Version`, so a held aim re-walks nothing. Refreshes `ItemPreviewViewport` at the top of `LateTick`, before building the context that carries it |
-| `ItemPreviewTicker` | `ILateTickable` — drives the pens closed-form off one clock, no tweens or coroutines, mirroring `ShapeFormationTicker`'s zero-allocation constraints. A pen's position is one formula, not a phase handoff: every frame it computes its **shape position** — the dash-sweep position it would have with no bloom at all, already running from the moment the pen appears — then **warps** that position around the host origin by a bloom clock that decays to identity (full rotation and zero scale at t = 0, no rotation and full scale at t = 1). So a pen starts sitting at the host centre and drifts smoothly into its place in the figure, with the shape's own motion already under way the whole time — no velocity discontinuity where a separate outward launch would have handed off to tracing. `Show` distinguishes a new host (bloom clock restarts) from the same host re-fitted (keep pen phase), so nudging the aim doesn't restart every pen. Each pen also carries its own evenly-spaced angular phase, added to the shared sweep so it decays away with it — the set fans out radially on launch instead of rotating as one rigid stick, with every pen still landing exactly on its shape position at t = 1 |
+| `ItemRangePreviewController` | `IStartable`/`ILateTickable`, plain C# — decides which host the aim is sighted on (most central crossing wins, via `TraceHitGeometry`) and drives the one visible figure. Plain C# rather than a component on the balloon, because it needs DI singletons a pooled item visual would have to be hand-threaded, and because only one preview shows at a time — a global arbitration a per-balloon component cannot make. The grid walk that finds the sighted host is gated on `PredictionTraceProvider.Version`, so a held aim re-walks nothing — but the dwell timer below is **not** gated the same way, and keeps accumulating every frame the version check skips; pairing the two is exactly the kind of thing a future edit could break by moving the accumulation inside the version-gated branch. A host must stay continuously sighted for `IItemPreviewConfig.SightDelaySeconds` before its figure first appears — this stops the telegraph flickering on every host the aim sweeps past. The delay restarts whenever the sighted host changes (sweeping a row of items shows nothing until the aim settles on one, and `0` shows on the same frame a host is first sighted). It gates only the FIRST appearance for a given host: once shown, later refreshes while that same host stays sighted are immediate, exactly as before the delay existed. Refreshes `ItemPreviewViewport` at the top of `LateTick`, before building the context that carries it |
+| `ItemPreviewTicker` | `ILateTickable` — drives the pens closed-form off one clock, no tweens or coroutines, mirroring `ShapeFormationTicker`'s zero-allocation constraints. A pen's position is one formula, not a phase handoff: every frame it computes its **shape position** — the dash-sweep position it would have with no bloom at all, already running from the moment the pen appears — then **warps** that position around the host origin by a bloom clock that decays to identity (full rotation and zero scale at t = 0, no rotation and full scale at t = 1). So a pen starts sitting at the host centre and drifts smoothly into its place in the figure, with the shape's own motion already under way the whole time — no velocity discontinuity where a separate outward launch would have handed off to tracing. `Show` distinguishes a new host (bloom clock restarts) from the same host re-fitted (keep pen phase), so nudging the aim doesn't restart every pen. A re-fit also re-derives the per-stroke dash counts, not just the arc table, because a figure can reshape while its host stays put — Laser's hex-stepped rotation is the case that forces this, since its beams' clipped length swings every step even though the host doesn't move. Pens surviving a re-fit keep their bloom phase and progress; a pen added because the figure grew a slot appears already bloomed in place rather than flying in from the host, since that isn't the same event as the figure first appearing. Each pen also carries its own evenly-spaced angular phase, added to the shared sweep so it decays away with it — the set fans out radially on launch instead of rotating as one rigid stick, with every pen still landing exactly on its shape position at t = 1 |
 | `HighlightTrail` | The pooled pen view — a head sprite dragging a `TrailRenderer`, positioned entirely from the ticker. Deliberately not `UI/Score/FlyingTrail`: that one owns its own DOTween flight, motion-curve table and flight gradients and lives on the UI sorting layer, none of which applies here |
-| `IItemPreviewConfig` / `ItemPreviewConfig` | The tuning surface (interface in `Shared/`, SO in `Configuration/`, per the config convention). Shared knobs — dash length/spacing, the pen cap, trace speed, bloom duration/sweep/curve, whether the ribbon draws during the bloom — plus an `[EnumIndexed(typeof(ItemType))]` array of per-item overrides. Unassigned on `GameLifetimeScope` it degrades to a default instance, so the telegraph works before anyone authors an asset. No longer carries a cull margin — `ItemPreviewViewport` derives it from `DashLength` instead of it being authored |
+| `IItemPreviewConfig` / `ItemPreviewConfig` | The tuning surface (interface in `Shared/`, SO in `Configuration/`, per the config convention). Shared knobs — dash length/spacing, the pen cap, trace speed, bloom duration/sweep/curve, whether the ribbon draws during the bloom, the sight dwell delay — plus an `[EnumIndexed(typeof(ItemType))]` array of per-item overrides. Unassigned on `GameLifetimeScope` it degrades to a default instance, so the telegraph works before anyone authors an asset. No longer carries a cull margin — `ItemPreviewViewport` derives it from `DashLength + DashSpacing` (the stride) instead of it being authored |
 | `IItemPreviewStyle` | One item's overrides, all opt-in: a ribbon lifetime and whether the outward bloom draws (`ItemPreviewBloomDraw.Inherit`/`Draw`/`Hide` — a tri-state because a plain bool has no "unset"). **0 means "use the shared value"** on `RibbonSeconds`, so an unauthored entry can't silently win. Deliberately carries **no colour**: every figure draws with the pen prefab's own material, so the telegraph reads as one system and there is no runtime tint path to keep in step with it |
 | `IShieldPreviewSettings` | Shield's own figure params (its stub length) as a nested block on the config, mirroring how `ItemSettings` nests `Bomb`/`Laser`/`Paint` — a number only one figure reads has no business on the shared per-item style. The pattern to copy when another figure needs its own tuning |
 | `IBombPreviewSettings` | Bomb's own figure params (`RadiusOffset`, world units added to `BombSettings.Radius` purely for display, default 0). No `[Min]` on purpose — a negative offset legitimately draws tighter than the true radius. The drawn circle is the blast's *footprint* alone, while `BombBlast` actually catches an occupant whose centre lies within the radius plus that occupant's own radius, so the real catchment is meaningfully larger than the circle at the bare radius — a small positive offset therefore reads *closer* to what the blast actually takes, not further from it |
@@ -139,16 +139,36 @@ the authored stride, well past the cap. Clipping each half-arm to the play area 
 above) keeps both lines under the board's ~9.3-unit diagonal each, so Laser's own dashes no longer
 reach the cap — the mechanism above still exists for whatever figure does.
 
+**The gap is pinned; the dash absorbs the rounding, not the other way round.** Each stroke's dash
+count is `round(strokeLength / stride)`, so a stroke's own `slotLength = strokeLength / dashCount` is
+almost never exactly `stride` — rounding a per-stroke length to a whole dash count leaves a remainder,
+and whichever of {dash, gap} is *not* pinned has to absorb it. The gap is what the eye reads as
+rhythm, so it is the one held constant: a pen paints `slot − DashSpacing` (floored at a small fraction
+of the slot so a very short stroke, or a spacing authored larger than the stride, still draws
+something instead of vanishing) and lifts for exactly `DashSpacing`, on every stroke of every figure
+regardless of length. That is what lets Laser's two very differently-sized corridors read as the same
+dash pattern — pin the dash length instead and the gap is what would visibly stretch and shrink
+between them, since it would be the one left to carry the per-stroke remainder.
+
 **Zero spacing reproduces a solid line — there is no separate continuous mode.** With
-`DashSpacing = 0`, `stride` collapses to `DashLength`, so a pen's slot equals exactly the length it
-paints; adjacent dashes touch with no gap and the stroke reads as one unbroken ribbon. This is why
-the old `DashCount = 0` continuous branch was deleted rather than kept alongside dash mode — the
-zero-spacing case already produces its output with no separate code path to keep in sync.
+`DashSpacing = 0`, a pen's painted length equals its slot length exactly (`slot − 0`); adjacent dashes
+touch with no gap and the stroke reads as one unbroken ribbon. This is why the old `DashCount = 0`
+continuous branch was deleted rather than kept alongside dash mode — the zero-spacing case already
+produces its output with no separate code path to keep in sync.
 
 **A pen sweeps its dash — a → b, then b → a, forever.** It never jumps, which is the whole trick:
 there is no restart to flicker, no discontinuity to hide, and **no pen-up at all**. The spacing
-between dashes is simply arc that no pen ever visits, because `DashLength` is shorter than the slot
-its pen owns.
+between dashes is simply arc that no pen ever visits, because the painted dash is shorter than the
+slot its pen owns.
+
+**A heavily capped figure trends toward looking solid.** Because the gap is pinned rather than the
+dash, a figure whose dash count the `MaxPens` cap has reduced gets *longer dashes with the same gaps*
+instead of everything scaling up together — the fewer, longer slots each still lose only a fixed
+`DashSpacing` to gap, so a heavily capped figure's dashes start to merge visually. This is acceptable
+today: after Laser's clipping landed (see above), no shipped figure reaches the cap — Laser draws
+around 37 dashes, Bomb's circle around 22, Paint's triangle around 23, all well under the cap of 64.
+If a future figure's stroke lengths push it up against `MaxPens`, this is where to look rather than
+rediscovering the trade-off from scratch.
 
 **A pen goes dark while it is outside the camera's view.** `ItemPreviewTicker` checks every pen's
 final position each frame against `ItemPreviewViewport`, the one shared owner of "what is visible" —
@@ -173,11 +193,13 @@ clears the ribbon before re-enabling it: the trail still holds the points from w
 re-enabling without clearing would draw a straight chord from the exit point to the re-entry point,
 which is exactly the jumping trail this cull exists to avoid.
 
-The cull bounds aren't the bare visible rect — `ItemPreviewViewport` pushes them outward by
-`IItemPreviewConfig.DashLength`, recomputed alongside the rect each frame. That margin is *derived*,
-not authored: `AdvanceDash` never lets a pen travel further than `DashLength` from its dash's start,
-so expanding the visible rect by exactly that much is the smallest expansion that can never clip a
-dash mid-stroke — a pen even partly on-screen is always drawn in full. It also happens to solve
+The cull bounds aren't the bare visible rect — `ItemPreviewViewport` pushes them outward by the
+stride, `IItemPreviewConfig.DashLength + DashSpacing`, recomputed alongside the rect each frame. That
+margin is *derived*, not authored: the stride is the widest a slot is ever intended to be, and with
+the gap pinned (see above) a pen's painted dash can run up to a whole slot — so it can exceed
+`DashLength` alone once `MaxPens` inflates the stride on a capped figure. Bounding by the stride is
+still the smallest expansion that can never clip a dash mid-stroke in every case, including a capped
+one — a pen even partly on-screen is always drawn in full. It also happens to solve
 **boundary chatter**: a pen sweeping its dash near the screen edge crosses a hairline boundary every
 cycle, and since every re-entry clears the ribbon (the jump above), culling right at the edge would
 read as a visible stutter instead of the pen simply appearing and disappearing. Shared rather than

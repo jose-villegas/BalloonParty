@@ -44,6 +44,11 @@ namespace BalloonParty.Configuration
             "spokes can bury the shape they are supposed to reveal.")]
         [SerializeField] private bool _emitDuringBloom = true;
 
+        [Tooltip("Seconds a host must stay continuously sighted before its figure first appears. " +
+            "Restarts whenever the sighted host changes, so sweeping across a row of items shows " +
+            "nothing until the aim settles on one. 0 shows the figure immediately.")]
+        [SerializeField] [Min(0f)] private float _sightDelaySeconds = 0.15f;
+
         [Header("Per item")]
         [Tooltip("Optional per-item overrides. Leave an entry at its defaults to use the shared values " +
             "above and tint to the host balloon's own colour.")]
@@ -68,6 +73,7 @@ namespace BalloonParty.Configuration
 
         public float TraceSpeed => _traceSpeed;
         public bool EmitDuringBloom => _emitDuringBloom;
+        public float SightDelaySeconds => _sightDelaySeconds;
         public IShieldPreviewSettings Shield => _shield;
         public IBombPreviewSettings Bomb => _bomb;
         public IPaintPreviewSettings Paint => _paint;

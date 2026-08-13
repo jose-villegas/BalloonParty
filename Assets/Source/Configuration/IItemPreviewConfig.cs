@@ -99,16 +99,23 @@ namespace BalloonParty.Configuration
     public interface IItemPreviewConfig
     {
         /// <summary>
-        ///     World length a pen paints within its dash slot before blanking. Universal across every
-        ///     figure — dashing is the one drawing style, not a per-item opt-in — so a Bomb circle and
-        ///     Shield's stub dash at the same size.
+        ///     Target world length of a dash, feeding <c>stride = DashLength + DashSpacing</c>, which in
+        ///     turn derives each stroke's dash count. Not the literal painted length — the gap is the
+        ///     pinned quantity (see <see cref="DashSpacing" />), so the dash a pen actually paints is
+        ///     <c>slot − DashSpacing</c> and absorbs the per-stroke rounding error instead. Universal
+        ///     across every figure — dashing is the one drawing style, not a per-item opt-in — so a Bomb
+        ///     circle and Shield's stub target the same dash size.
         /// </summary>
         float DashLength { get; }
 
         /// <summary>
-        ///     World length of blank arc between dashes. 0 reproduces a solid line: the stride collapses
-        ///     to <see cref="DashLength" />, so each pen's slot equals its painted length and adjacent
-        ///     dashes touch with no gap — the zero-spacing case, not a separate continuous mode.
+        ///     World length of blank arc between dashes — the pinned quantity a pen's gap always equals
+        ///     exactly, regardless of stroke length, because rounding the dash count per stroke means the
+        ///     slot is never exactly the stride; pinning the gap rather than the dash is what makes two
+        ///     strokes of different length (e.g. Laser's two corridors) read as the same dash pattern. 0
+        ///     reproduces a solid line: the stride collapses to <see cref="DashLength" />, so each pen's
+        ///     slot equals its painted length and adjacent dashes touch with no gap — the zero-spacing
+        ///     case, not a separate continuous mode.
         /// </summary>
         float DashSpacing { get; }
 
@@ -144,6 +151,14 @@ namespace BalloonParty.Configuration
         ///     <c>FlyingTrail</c>'s own pen-up/pen-down helpers).
         /// </summary>
         bool EmitDuringBloom { get; }
+
+        /// <summary>
+        ///     Seconds a host must stay continuously sighted before its figure first appears. Restarts
+        ///     whenever the sighted host changes, so sweeping the aim across a row of items shows nothing
+        ///     until it settles on one. 0 shows the figure the instant a host is sighted, reproducing the
+        ///     old no-delay behaviour.
+        /// </summary>
+        float SightDelaySeconds { get; }
 
         /// <summary>This item type's overrides, never null — an unauthored entry returns neutral values.</summary>
         IItemPreviewStyle StyleFor(ItemType type);

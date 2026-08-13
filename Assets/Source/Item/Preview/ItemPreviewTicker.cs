@@ -42,7 +42,7 @@ namespace BalloonParty.Item.Preview
         private bool _visible;
 
         // Captured on Show so LateTick doesn't re-resolve the config every frame.
-        private float _dashLength;
+        private float _dashSpacing;
         private bool _emitDuringBloom;
 
         internal ItemPreviewTicker(
@@ -98,7 +98,7 @@ namespace BalloonParty.Item.Preview
 
             var isSameHost = _visible && context.Slot == _currentSlot;
             var style = _config.StyleFor(preview.Type);
-            _dashLength = _config.DashLength;
+            _dashSpacing = _config.DashSpacing;
             _emitDuringBloom = style.BloomDraw switch
             {
                 ItemPreviewBloomDraw.Draw => true,
@@ -111,7 +111,7 @@ namespace BalloonParty.Item.Preview
 
             if (isSameHost)
             {
-                RefitPens();
+                RefitPens(style);
             }
             else
             {
@@ -206,7 +206,11 @@ namespace BalloonParty.Item.Preview
         // 320 pens — 320 pooled TrailRenderers for one figure. Past MaxPens the stride is inflated once
         // and every stroke recomputed with it, so a big figure's dashes get sparser and longer-spaced
         // rather than any part of it going undrawn or the pool blowing out.
-        private void AcquirePens(IItemPreviewStyle style)
+        //
+        // Reads _strokeLengths, so callers must run this after BuildArcTable — on both the acquire and
+        // the refit path, since a figure can reshape (Laser's hex-stepped rotation) while its host stays
+        // the same, and _dashesPerStroke would otherwise go stale against the new geometry.
+        private int DeriveDashCounts()
         {
             var strokeCount = _shape.Strokes.Count;
             var stride = _config.DashLength + _config.DashSpacing;
@@ -232,8 +236,14 @@ namespace BalloonParty.Item.Preview
                 }
             }
 
-            var wanted = desiredTotal;
+            return desiredTotal;
+        }
 
+        // Grows or shrinks the pen list to the wanted count, returning shed pens to the pool — shared by
+        // the acquire and refit paths so both resize the same way; which pens end up "new" (Trail == null)
+        // is left for the caller's dealing pass to notice and populate.
+        private void ResizePens(int wanted)
+        {
             while (_pens.Count > wanted)
             {
                 var last = _pens.Count - 1;
@@ -250,6 +260,14 @@ namespace BalloonParty.Item.Preview
             {
                 _pens.Add(new Pen());
             }
+        }
+
+        private void AcquirePens(IItemPreviewStyle style)
+        {
+            var strokeCount = _shape.Strokes.Count;
+            var wanted = DeriveDashCounts();
+
+            ResizePens(wanted);
 
             var penIndex = 0;
             for (var s = 0; s < strokeCount; s++)
@@ -286,22 +304,51 @@ namespace BalloonParty.Item.Preview
             }
         }
 
-        // Same host, re-fitted geometry: keep every pen's phase and progress, only clamp what the new stroke
-        // set can no longer support. A pen still blooming needs no re-aim here — the warp re-derives from
-        // the live shape position every frame in AdvancePen, so it just follows the refitted geometry.
-        private void RefitPens()
+        // Same host, re-fitted geometry: keep every surviving pen's bloom phase and progress, only
+        // reassign the slot (StrokeIndex/DashIndex) it owns to match the new dash counts. A pen still
+        // blooming needs no re-aim here — the warp re-derives from the live shape position every frame in
+        // AdvancePen, so it just follows the refitted geometry.
+        //
+        // The dash counts themselves are NOT stable across a refit: BuildArcTable already ran against the
+        // new shape, so DeriveDashCounts must run again here too, or AdvanceDash would divide the new
+        // stroke lengths by a stale dash count left over from whatever geometry the host last had.
+        private void RefitPens(IItemPreviewStyle style)
         {
             var strokeCount = _shape.Strokes.Count;
+            var wanted = DeriveDashCounts();
 
-            for (var i = 0; i < _pens.Count; i++)
+            ResizePens(wanted);
+
+            var penIndex = 0;
+            for (var s = 0; s < strokeCount; s++)
             {
-                var pen = _pens[i];
-                if (pen.StrokeIndex >= strokeCount)
+                var dashesOnStroke = _dashesPerStroke[s];
+                for (var dashIndex = 0; dashIndex < dashesOnStroke; dashIndex++)
                 {
-                    pen.StrokeIndex = i % strokeCount;
-                }
+                    var pen = _pens[penIndex];
 
-                _pens[i] = pen;
+                    // A pen carried over from before the resize (Trail already set) keeps its bloom and
+                    // distance; only a slot the figure just grew into starts life with a null Trail.
+                    var isNewPen = pen.Trail == null;
+                    pen.Trail ??= _poolManager.GetOrRegister(
+                        _poolKey, () => new SimplePoolChannel<HighlightTrail>(_penPrefab));
+                    pen.StrokeIndex = s;
+                    pen.DashIndex = dashIndex;
+
+                    if (isNewPen)
+                    {
+                        // A pen the figure only just grew into is a different event from the figure first
+                        // appearing — it should read as already part of the figure, not bloom in from the
+                        // host, so it is handed the fully-settled state directly.
+                        pen.Distance = 0f;
+                        pen.Bloomed = true;
+                        pen.BloomElapsed = _config.BloomDuration + 1f;
+                        pen.Trail.SetRibbonTime(style.RibbonSeconds);
+                    }
+
+                    _pens[penIndex] = pen;
+                    penIndex++;
+                }
             }
         }
 
@@ -370,14 +417,14 @@ namespace BalloonParty.Item.Preview
 
         // One pen draws ONE dash, and the dashed line is the pens sitting next to each other — ask for
         // three dashes and you get three pens, each owning a third of the stroke. Dashing is the only
-        // drawing style now: zero spacing (DashSpacing == 0) collapses a slot to exactly DashLength, so
-        // painted == slotLength below and adjacent dashes touch with no gap — a solid line falls out of
-        // this same code rather than needing a separate continuous-mode branch.
+        // drawing style now: zero spacing (DashSpacing == 0) means painted == slotLength below and
+        // adjacent dashes touch with no gap — a solid line falls out of this same code rather than
+        // needing a separate continuous-mode branch.
         //
-        // Within its own slot a pen loops: it paints for DashLength (the dash), lifts for the remainder
-        // (the spacing), and wraps back to its slot start to redraw. Pen up/down via emitting, never
-        // ClearRibbon — clearing wipes what was already painted, which is what made an earlier attempt
-        // read as one short stroke sliding along the figure instead of a dashed line.
+        // Within its own slot a pen loops: it paints for the derived dash length, lifts for the pinned
+        // gap, and wraps back to its slot start to redraw. Pen up/down via emitting, never ClearRibbon —
+        // clearing wipes what was already painted, which is what made an earlier attempt read as one
+        // short stroke sliding along the figure instead of a dashed line.
         //
         // A pen never leaves its slot, so the whole figure is always described at once rather than being
         // revealed by a pen touring it.
@@ -391,11 +438,19 @@ namespace BalloonParty.Item.Preview
 
             // The pen SWEEPS its dash — a → b, then b → a, forever. It never jumps, so there is no
             // restart to flicker, no discontinuity to hide, and no pen-up at all: the spacing between
-            // dashes is simply arc no pen ever visits (DashLength < the slot it owns).
+            // dashes is simply arc no pen ever visits (the gap below).
             //
             // The earlier a → b, snap-back-to-a, repeat is what strobed: every snap ended one ribbon and
             // began another, so the ribbon lifetime decided how many stale copies piled up behind it.
-            var painted = Mathf.Min(_dashLength, slotLength);
+            //
+            // Rounding the dash count per stroke (AcquirePens) means slotLength is never exactly the
+            // authored stride, so one of {dash, gap} must absorb that per-stroke error. The gap is what
+            // the eye reads as rhythm, so it is pinned at exactly _dashSpacing and the dash absorbs the
+            // error instead — that is what makes two strokes of very different length (Laser's two
+            // corridors) read as the same dash pattern. Floored at a fraction of the slot rather than
+            // let the subtraction go non-positive, so a very short stroke (or a spacing authored larger
+            // than the stride) still draws something instead of a vanished dash.
+            var painted = Mathf.Max(slotLength * 0.1f, slotLength - _dashSpacing);
             pen.Distance += _config.TraceSpeed * deltaTime;
 
             var withinDash = Mathf.PingPong(pen.Distance, painted);
