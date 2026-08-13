@@ -41,14 +41,64 @@ namespace BalloonParty.Item.Preview
         private readonly List<float> _arcTable = new();
         private readonly List<float> _strokeLengths = new();
 
+        // A retained copy of context.TracePoints, plus its own cumulative-arc table (mirroring _arcTable,
+        // but for the trace polyline rather than a shape stroke — always open, since a trace never
+        // closes). Copied rather than aliased: the provider's buffer is rewritten in place every Tick, and
+        // sampling it mid-rewrite would show a torn frame. Rebuilt per Show/refit, read every frame by
+        // AdvanceCascade so the leading pen's approach can follow a bent trace instead of cutting across it.
+        // _traceLength and _hostTraceOffset (below, with the other mutable fields) are derived alongside it.
+        private readonly List<Vector3> _tracePoints = new();
+        private readonly List<float> _traceArcTable = new();
+
+        // Where each stroke's own entry point sits, as an arc-length offset from the stroke's own start —
+        // one entry per stroke, parallel to _strokeLengths. No longer a travel destination for every pen;
+        // it only ranks the cascade order (ComputeTravelDistance) and anchors the leading pen's approach.
+        private readonly List<float> _entryOffsets = new();
+
+        // The entry point itself, in world space, alongside the arc-length distance the leading pen's
+        // approach actually covers — along the trace when _entryTraceValid says the trace can answer,
+        // otherwise the straight-line fallback distance to _entryPoints. Only the stroke's LEADING pen
+        // (CascadeRank 0) ever travels this leg now — every other pen on the stroke never leaves its own
+        // dash slot, which is the whole point of the cascade (see AdvanceCascade).
+        private readonly List<Vector3> _entryPoints = new();
+        private readonly List<float> _approachLengths = new();
+
+        // The entry point's own arc-length offset along the trace, parallel to _entryOffsets, and whether
+        // that offset is trustworthy — false when the trace itself is unusable (fewer than two points) or
+        // this stroke's entry helper never found a crossing (Lightning's later arcs, reached only through
+        // the chain), in which case the approach falls back to a straight line to _entryPoints instead.
+        private readonly List<float> _entryTraceOffsets = new();
+        private readonly List<bool> _entryTraceValid = new();
+
         // Dashes derived per stroke this Show pass — sized to stroke count and reused rather than
         // reallocated, so re-aiming at a new host allocates nothing. Doubles as the pens-per-stroke count,
         // since dashing is universal now: one pen per dash, by definition.
         private readonly List<int> _dashesPerStroke = new();
 
+        // Per-stroke cascade timing, derived once per Show from BloomDuration (see BuildCascadeTimings):
+        // the leading pen's approach gets a share proportional to its length against the stroke's total
+        // path, and the remainder splits evenly across that stroke's dash count, so pen k's window starts
+        // exactly when pen k − 1's ends. Every stroke reads the very same BloomElapsed clock — only these
+        // per-stroke window bounds differ — which is what makes several strokes (Laser's two lines,
+        // Lightning's arcs) cascade in parallel rather than one after another.
+        private readonly List<float> _approachDurations = new();
+        private readonly List<float> _dashDurations = new();
+
+        // Scratch space for AssignCascadeRanks — one ComputeTravelDistance result per dash on the stroke
+        // currently being ranked. Cleared and refilled per stroke rather than allocated, since ranking
+        // runs once per Show, not per frame.
+        private readonly List<float> _cascadeScratch = new();
+
         private Vector2 _origin;
         private Vector2Int _currentSlot;
         private bool _visible;
+
+        // Total arc length of _tracePoints, and the host's own position along it as an arc-length offset
+        // from the trace's first point — both derived by BuildTraceBuffers alongside _traceArcTable above.
+        // The trace runs from the projectile through the board and crosses the host somewhere along the
+        // way, so the host offset is generally non-zero; together these anchor the leading pen's approach.
+        private float _traceLength;
+        private float _hostTraceOffset;
 
         // A graceful hide stops emitting but keeps the pens where they are, so what was already drawn
         // fades out over the ribbon's own lifetime instead of vanishing. _fadeDuration is that lifetime,
@@ -60,7 +110,6 @@ namespace BalloonParty.Item.Preview
 
         // Captured on Show so LateTick doesn't re-resolve the config every frame.
         private float _dashSpacing;
-        private bool _emitDuringBloom;
 
         internal ItemPreviewTicker(
             PoolManager poolManager,
@@ -84,19 +133,21 @@ namespace BalloonParty.Item.Preview
         ///     Builds <paramref name="preview" />'s figure for this crossing and aims the pens at it.
         /// </summary>
         /// <param name="introduce">
-        ///     True for a figure's first appearance on this host — pens are acquired at the host origin and
-        ///     the outward bloom plays, exactly as before this parameter existed. False for a re-settle on
-        ///     a host already being telegraphed (the aim nudged but landed on the same host): pens acquired
-        ///     here start already in their settled, post-bloom state, so the figure reappears in place
-        ///     instead of spiralling back in. <see cref="ItemRangePreviewController" /> decides which this
-        ///     is by tracking the slot it last actually showed.
+        ///     True for a figure's first appearance on this host — pens cascade in one dash at a time: each
+        ///     stroke's leading pen approaches, pen-up, from the host origin to the stroke's entry point,
+        ///     then draws its own dash; every other pen on the stroke waits, pen-up, at its own dash's
+        ///     start until its turn, then draws that dash and hands off to the next. False for a re-settle
+        ///     on a host already being telegraphed (the aim nudged but landed on the same host): pens
+        ///     acquired here start already in their settled, post-bloom state, so the figure reappears in
+        ///     place instead of cascading in again. <see cref="ItemRangePreviewController" /> decides which
+        ///     this is by tracking the slot it last actually showed.
         /// </param>
         /// <remarks>
         ///     Called on every aim change while a host stays sighted, so it distinguishes the two cases by
-        ///     <see cref="ItemPreviewContext.Slot" />: a DIFFERENT host restarts the pens (they re-bloom out
-        ///     of the new origin), while the SAME host only re-fits the geometry — the figure follows a
-        ///     drifting balloon, or a Shield stub follows the aim tip, without every pen snapping back to
-        ///     the start of its bloom each time the player nudges the aim. In current play the controller
+        ///     <see cref="ItemPreviewContext.Slot" />: a DIFFERENT host restarts the pens (they bloom in
+        ///     again from their strokes' entry points), while the SAME host only re-fits the geometry — the
+        ///     figure follows a drifting balloon, or a Shield stub follows the aim tip, without every pen
+        ///     restarting its bloom each time the player nudges the aim. In current play the controller
         ///     never calls this on the same-host-still-visible path (it only re-`Show`s after a
         ///     <see cref="BeginHide" />, which always drops <c>_visible</c> first), so that branch is a
         ///     dormant fallback; <paramref name="introduce" /> is the mechanism that actually distinguishes
@@ -135,12 +186,16 @@ namespace BalloonParty.Item.Preview
             _fading = false;
 
             var isSameHost = _visible && context.Slot == _currentSlot;
-            var style = _config.StyleFor(preview.Type);
             _dashSpacing = _config.DashSpacing;
-            _emitDuringBloom = _config.EmitDuringBloom;
             _origin = context.Origin;
             _currentSlot = context.Slot;
             BuildArcTable();
+            BuildTraceBuffers(context.TracePoints);
+
+            // Reads _arcTable and the trace buffers built just above, so must run after both — the offset
+            // an entry point resolves to is an arc length along the stroke, and the trace offset alongside
+            // it is an arc length along the (possibly bent) trace, not a raw geometry comparison.
+            BuildEntryOffsets();
 
             if (isSameHost)
             {
@@ -148,7 +203,7 @@ namespace BalloonParty.Item.Preview
             }
             else
             {
-                AcquirePens(introduce && !style.SkipBloom);
+                AcquirePens(introduce);
             }
 
             _visible = true;
@@ -284,6 +339,114 @@ namespace BalloonParty.Item.Preview
             }
         }
 
+        // Copies the live trace into a reusable buffer and builds its own cumulative-arc table, mirroring
+        // BuildArcTable but for the trace polyline rather than one of the shape's strokes — done once per
+        // Show/refit so AdvanceCascade can sample along it every frame without re-copying or re-walking
+        // it. Also resolves the host's own position on the trace (_hostTraceOffset), since it depends on
+        // nothing but the buffer just built and _origin, already set by the time this runs.
+        private void BuildTraceBuffers(IReadOnlyList<Vector3> tracePoints)
+        {
+            _tracePoints.Clear();
+            _traceArcTable.Clear();
+            _traceLength = 0f;
+            _hostTraceOffset = 0f;
+
+            if (tracePoints == null || tracePoints.Count == 0)
+            {
+                return;
+            }
+
+            for (var i = 0; i < tracePoints.Count; i++)
+            {
+                _tracePoints.Add(tracePoints[i]);
+            }
+
+            _traceArcTable.Add(0f);
+            var total = 0f;
+            for (var i = 1; i < _tracePoints.Count; i++)
+            {
+                total += Vector3.Distance(_tracePoints[i - 1], _tracePoints[i]);
+                _traceArcTable.Add(total);
+            }
+
+            _traceLength = total;
+            _hostTraceOffset = NearestOffsetOnPolyline(
+                _tracePoints, _traceArcTable, new Vector3(_origin.x, _origin.y, 0f));
+        }
+
+        // Where the closest point of an arbitrary polyline to a target sits, as an arc-length offset from
+        // the polyline's own first point — an O(n) walk over every segment, fine here since it runs once
+        // per Show/refit (for the host's own position on the trace), never per frame or per pen.
+        private static float NearestOffsetOnPolyline(
+            IReadOnlyList<Vector3> points, IReadOnlyList<float> arcTable, Vector3 target)
+        {
+            var bestOffset = 0f;
+            var bestDistanceSqr = float.MaxValue;
+
+            for (var i = 0; i < points.Count - 1; i++)
+            {
+                var a = points[i];
+                var segment = points[i + 1] - a;
+                var segmentLengthSqr = segment.sqrMagnitude;
+
+                var t = segmentLengthSqr <= 1e-10f
+                    ? 0f
+                    : Mathf.Clamp01(Vector3.Dot(target - a, segment) / segmentLengthSqr);
+
+                var candidate = a + (segment * t);
+                var distanceSqr = (target - candidate).sqrMagnitude;
+                if (distanceSqr >= bestDistanceSqr)
+                {
+                    continue;
+                }
+
+                bestDistanceSqr = distanceSqr;
+                bestOffset = arcTable[i] + (t * Mathf.Sqrt(segmentLengthSqr));
+            }
+
+            return bestOffset;
+        }
+
+        // Where each stroke's own figure-drawing starts: the arc-length offset of the point where the
+        // aim's line of sight first crosses it, via the pure geometry helper. Falls back to the stroke's
+        // own start (0) when the trace never crosses it at all — true of Lightning's later arcs, which the
+        // trace only reaches through the chain, not directly; starting those at 0 makes each arc draw in
+        // sequence after the one before it, which is the wanted look anyway rather than a special case.
+        //
+        // Also resolves that offset to a world point, and the arc-length distance the leading pen's
+        // approach actually covers: along the trace, between _hostTraceOffset and this stroke's own entry
+        // trace offset, when the helper found a crossing; otherwise the straight-line distance to the
+        // entry point, same as before the trace-following approach existed. Reads _tracePoints and
+        // _traceArcTable, so must run after BuildTraceBuffers.
+        private void BuildEntryOffsets()
+        {
+            _entryOffsets.Clear();
+            _entryPoints.Clear();
+            _approachLengths.Clear();
+            _entryTraceOffsets.Clear();
+            _entryTraceValid.Clear();
+
+            var origin = new Vector3(_origin.x, _origin.y, 0f);
+            for (var s = 0; s < _shape.Strokes.Count; s++)
+            {
+                var found = ItemPreviewEntry.TryFindEntryOffset(
+                    _shape, s, _arcTable, _tracePoints, out var offset, out var traceOffset);
+                offset = found ? offset : 0f;
+                _entryOffsets.Add(offset);
+
+                var entryPoint = SampleStroke(s, offset);
+                _entryPoints.Add(entryPoint);
+
+                _entryTraceValid.Add(found);
+                _entryTraceOffsets.Add(found ? traceOffset : 0f);
+
+                var approachLength = found
+                    ? Mathf.Abs(traceOffset - _hostTraceOffset)
+                    : Vector3.Distance(origin, entryPoint);
+                _approachLengths.Add(approachLength);
+            }
+        }
+
         // Each stroke derives its own dash count from its own length, so a long stroke gets more dashes
         // than a short one instead of every figure sharing one authored count — that count IS the
         // pens-on-that-stroke, one pen per dash, by definition.
@@ -324,6 +487,47 @@ namespace BalloonParty.Item.Preview
             }
 
             return desiredTotal;
+        }
+
+        // The arc length a pen actually paints within its slot, factored out so BuildCascadeTimings' split
+        // and AdvanceDash's own ping-pong always agree on the identical value — see AdvanceDash for why the
+        // gap, not the dash, is the pinned quantity.
+        private float ComputePaintedLength(float slotLength)
+        {
+            return Mathf.Max(slotLength * 0.1f, slotLength - _dashSpacing);
+        }
+
+        // Splits BloomDuration into this stroke's own cascade windows: the leading pen's approach gets a
+        // share proportional to its length against the stroke's total path (approach length + every dash's
+        // own painted length), and the remainder divides evenly across the stroke's dash count, so pen k's
+        // window starts exactly when pen k − 1's ends (AdvanceCascade). Reads _dashesPerStroke and
+        // _approachLengths, so callers must run this after DeriveDashCounts and BuildEntryOffsets, on both
+        // the acquire and the refit path — a re-fit can change either a stroke's dash count or its entry
+        // offset, and the windows would otherwise go stale against the new geometry.
+        private void BuildCascadeTimings()
+        {
+            _approachDurations.Clear();
+            _dashDurations.Clear();
+
+            var bloomDuration = _config.BloomDuration;
+            for (var s = 0; s < _shape.Strokes.Count; s++)
+            {
+                var dashesOnStroke = _dashesPerStroke[s];
+                var slotLength = _strokeLengths[s] / dashesOnStroke;
+                var painted = ComputePaintedLength(slotLength);
+                var approachLength = _approachLengths[s];
+                var total = approachLength + (painted * dashesOnStroke);
+
+                // A near-zero approach (the entry sits on the host itself, e.g. Paint's apex or
+                // Lightning's first arc) is treated as already arrived rather than divided by — the
+                // leading pen gets no approach window at all, and starts drawing its own dash at t = 0.
+                var approachDuration = approachLength > 1e-4f && total > 1e-4f
+                    ? bloomDuration * (approachLength / total)
+                    : 0f;
+
+                _approachDurations.Add(approachDuration);
+                _dashDurations.Add((bloomDuration - approachDuration) / dashesOnStroke);
+            }
         }
 
         // Shared by Hide() and a fade's natural completion — the two moments every pen actually goes back
@@ -369,6 +573,7 @@ namespace BalloonParty.Item.Preview
         {
             var strokeCount = _shape.Strokes.Count;
             var wanted = DeriveDashCounts();
+            BuildCascadeTimings();
 
             ResizePens(wanted);
 
@@ -376,6 +581,9 @@ namespace BalloonParty.Item.Preview
             for (var s = 0; s < strokeCount; s++)
             {
                 var dashesOnStroke = _dashesPerStroke[s];
+                var slotLength = _strokeLengths[s] / dashesOnStroke;
+                var strokeStartIndex = penIndex;
+
                 for (var dashIndex = 0; dashIndex < dashesOnStroke; dashIndex++)
                 {
                     var pen = _pens[penIndex];
@@ -384,14 +592,16 @@ namespace BalloonParty.Item.Preview
                     pen.StrokeIndex = s;
                     pen.DashIndex = dashIndex;
 
-                    // Distance is measured inside the pen's own slot, so it always starts at 0 — the
-                    // slot's offset along the stroke is applied when sampling, in AdvanceDash.
+                    // Distance only matters once Bloomed (AdvanceDash's own ping-pong) — the cascade
+                    // itself is driven by the shared clock in AdvanceCascade, not by accumulated distance,
+                    // so this just primes the value AdvanceDash will inherit at handoff.
                     pen.Distance = 0f;
 
                     if (introduce)
                     {
                         pen.BloomElapsed = 0f;
                         pen.Bloomed = false;
+                        pen.Waiting = true;
                     }
                     else
                     {
@@ -399,20 +609,19 @@ namespace BalloonParty.Item.Preview
                         // appearance — hand the pen the same fully-settled state RefitPens gives a pen the
                         // figure only just grew into, so AdvancePen takes the settled branch on its very
                         // first tick and the pen simply appears at its place in the figure instead of
-                        // spiralling back in from the origin.
+                        // cascading in again. Bloomed = true skips AdvanceCascade forever after, so Waiting
+                        // must be cleared explicitly here — a reused pen's could otherwise still read true
+                        // from whatever figure it last belonged to and leave it dark.
                         pen.BloomElapsed = _config.BloomDuration + 1f;
                         pen.Bloomed = true;
+                        pen.Waiting = false;
                     }
 
-                    // Spread over the whole pen set (global penIndex), not per-stroke (dashIndex) — pens
-                    // are dealt stroke by stroke, so a per-stroke phase would clump the fan instead of
-                    // spreading it evenly around the full circle.
-                    pen.BloomPhaseDegrees = 360f * penIndex / _pens.Count;
-
                     // Parked pen-up at the origin rather than seeded emitting: AdvancePen's rising edge
-                    // (wantEmit flips true) is what starts the ribbon, and that edge clears first and runs
-                    // after SetPosition, so the ribbon opens clean at the pen's real first position instead
-                    // of a chord from here to there.
+                    // (visible flips true) is what starts the ribbon, and that edge clears first and runs
+                    // after SetPosition, so the ribbon opens clean at the pen's real first position —
+                    // wherever the leading pen's approach or a waiting pen's own dash start puts it — never
+                    // a chord from this parked origin to there.
                     pen.Trail.ClearRibbon();
                     pen.Trail.SetPosition(new Vector3(_origin.x, _origin.y, 0f));
                     pen.Trail.SetEmitting(false);
@@ -427,13 +636,16 @@ namespace BalloonParty.Item.Preview
                     _pens[penIndex] = pen;
                     penIndex++;
                 }
+
+                AssignCascadeRanks(s, strokeStartIndex, dashesOnStroke, slotLength);
             }
         }
 
-        // Same host, re-fitted geometry: keep every surviving pen's bloom phase and progress, only
-        // reassign the slot (StrokeIndex/DashIndex) it owns to match the new dash counts. A pen still
-        // blooming needs no re-aim here — the warp re-derives from the live shape position every frame in
-        // AdvancePen, so it just follows the refitted geometry.
+        // Same host, re-fitted geometry: keep every surviving pen's bloom progress, only reassign the slot
+        // (StrokeIndex/DashIndex) it owns and, with it, its cascade rank and window, to match the new dash
+        // counts. A pen still cascading needs no other re-aim here — its position re-derives from the live
+        // entry offset, rank and window every frame in AdvanceCascade, so it just follows the refitted
+        // geometry.
         //
         // The dash counts themselves are NOT stable across a refit: BuildArcTable already ran against the
         // new shape, so DeriveDashCounts must run again here too, or AdvanceDash would divide the new
@@ -442,6 +654,7 @@ namespace BalloonParty.Item.Preview
         {
             var strokeCount = _shape.Strokes.Count;
             var wanted = DeriveDashCounts();
+            BuildCascadeTimings();
 
             ResizePens(wanted);
 
@@ -449,6 +662,9 @@ namespace BalloonParty.Item.Preview
             for (var s = 0; s < strokeCount; s++)
             {
                 var dashesOnStroke = _dashesPerStroke[s];
+                var slotLength = _strokeLengths[s] / dashesOnStroke;
+                var strokeStartIndex = penIndex;
+
                 for (var dashIndex = 0; dashIndex < dashesOnStroke; dashIndex++)
                 {
                     var pen = _pens[penIndex];
@@ -464,24 +680,81 @@ namespace BalloonParty.Item.Preview
                     if (isNewPen)
                     {
                         // A pen the figure only just grew into is a different event from the figure first
-                        // appearing — it should read as already part of the figure, not bloom in from the
-                        // host, so it is handed the fully-settled state directly.
+                        // appearing — it should read as already part of the figure, not cascade in from its
+                        // own dash start, so it is handed the fully-settled state directly.
                         pen.Distance = 0f;
                         pen.Bloomed = true;
                         pen.BloomElapsed = _config.BloomDuration + 1f;
+                        pen.Waiting = false;
                     }
 
                     _pens[penIndex] = pen;
                     penIndex++;
                 }
+
+                AssignCascadeRanks(s, strokeStartIndex, dashesOnStroke, slotLength);
             }
         }
 
-        // The pen's on-screen position every frame: the shape position it would have with no bloom at all
-        // (already advancing from t = 0), warped around the host origin by a clock that decays to identity.
-        // At t = 0 the warp collapses the pen onto the origin; at t = 1 rotation is zero and scale is one,
-        // so the warp IS the shape position — one continuous formula rather than a spiral phase handing off
-        // to a separate tracing phase, so there is no velocity discontinuity at the seam.
+        // Forward arc distance from this stroke's entry to this dash's own slot start — used only to RANK
+        // the stroke's pens into cascade order now (AssignCascadeRanks); the pen no longer travels this
+        // distance. A closed stroke always measures forward (Repeat wraps a slot-before-entry distance the
+        // long way round instead of going negative), so ranking by it puts every pen in the order the
+        // cascade sweeps around the shape. An open stroke has no wrap to enforce that with, so the plain
+        // signed difference is used instead — it still ranks correctly, since a slot's raw position along
+        // the stroke and its distance from the (fixed) entry differ only by a constant offset.
+        private float ComputeTravelDistance(int strokeIndex, int dashIndex, float slotLength)
+        {
+            var slotOffset = dashIndex * slotLength;
+            var entryOffset = _entryOffsets[strokeIndex];
+
+            return _shape.Strokes[strokeIndex].Closed
+                ? Mathf.Repeat(slotOffset - entryOffset, _strokeLengths[strokeIndex])
+                : slotOffset - entryOffset;
+        }
+
+        // Ranks this stroke's just-assigned pens by forward distance from the entry (smallest first) into
+        // CascadeRank, so AdvanceCascade knows each pen's turn in the relay — rank 0 is the leading pen,
+        // the only one that ever approaches from the host. A plain O(n²) compare is fine here: it runs
+        // once per Show/refit, never per frame, and n is bounded by MaxPens.
+        private void AssignCascadeRanks(int strokeIndex, int startPenIndex, int dashesOnStroke, float slotLength)
+        {
+            _cascadeScratch.Clear();
+            for (var dashIndex = 0; dashIndex < dashesOnStroke; dashIndex++)
+            {
+                _cascadeScratch.Add(ComputeTravelDistance(strokeIndex, dashIndex, slotLength));
+            }
+
+            for (var i = 0; i < dashesOnStroke; i++)
+            {
+                var travel = _cascadeScratch[i];
+                var rank = 0;
+                for (var j = 0; j < dashesOnStroke; j++)
+                {
+                    // Ties (only possible at slotLength == 0, a degenerate stroke) fall back to dash
+                    // index order, so rank is always a total order with no two pens sharing a slot.
+                    if (j == i)
+                    {
+                        continue;
+                    }
+
+                    var otherTravel = _cascadeScratch[j];
+                    if (otherTravel < travel || (otherTravel == travel && j < i))
+                    {
+                        rank++;
+                    }
+                }
+
+                var pen = _pens[startPenIndex + i];
+                pen.CascadeRank = rank;
+                _pens[startPenIndex + i] = pen;
+            }
+        }
+
+        // Dispatches to whichever phase this pen is in — cascading in (waiting its turn, the leading pen's
+        // approach, or sweeping its own dash for the first time), or (once Bloomed) settled into its dash
+        // slot's own ping-pong — then applies the result uniformly (teleport guard, positioning,
+        // visibility-driven emit) regardless of which phase produced it.
         private void AdvancePen(ref Pen pen, float deltaTime)
         {
             if (pen.Trail == null)
@@ -489,49 +762,107 @@ namespace BalloonParty.Item.Preview
                 return;
             }
 
-            var shapePos = AdvanceDash(ref pen, deltaTime);
+            var position = pen.Bloomed ? AdvanceDash(ref pen, deltaTime) : AdvanceCascade(ref pen, deltaTime);
+            ApplyPenPosition(ref pen, position, deltaTime);
+        }
+
+        // One shared progress clock (t, off BloomDuration, eased by BloomCurve) drives every pen on every
+        // stroke — NOT a per-pen ease over that pen's own window. Under one shared clock, pen k's window
+        // opens exactly when pen k − 1's closes (see BuildCascadeTimings), so dashes light up one after
+        // another in cascade-rank order: this is what reads as the shape drawing itself in one dash at a
+        // time, instead of every pen tracing the same shared path at once — the stacking this cascade
+        // exists to replace. Multiple strokes cascade in parallel for the same reason: every stroke reads
+        // this identical elapsed/eased value, just against its own _approachDurations/_dashDurations, so a
+        // two-stroke figure (Laser's two lines, Lightning's arcs) draws both at once rather than in series.
+        //
+        // Only CascadeRank 0 — the leading pen — ever gets an approach: a straight, pen-up line from the
+        // host origin to the stroke's entry point, exactly as before. Every other pen simply waits, pen-up,
+        // at its own dash's start position until its window opens; nothing else ever leaves the host, so
+        // nothing else can stack a ribbon onto the shared approach path.
+        private Vector3 AdvanceCascade(ref Pen pen, float deltaTime)
+        {
+            pen.BloomElapsed += deltaTime;
 
             var duration = Mathf.Max(_config.BloomDuration, 1e-4f);
-            pen.BloomElapsed += deltaTime;
             var t = Mathf.Clamp01(pen.BloomElapsed / duration);
+            var elapsed = _config.BloomCurve.Evaluate(t) * _config.BloomDuration;
 
-            Vector3 position;
-            if (t >= 1f)
+            var strokeIndex = pen.StrokeIndex;
+            var approachDuration = _approachDurations[strokeIndex];
+
+            if (pen.CascadeRank == 0 && elapsed < approachDuration)
             {
-                position = shapePos;
+                pen.Waiting = true;
+                var approachT = approachDuration > 1e-4f ? elapsed / approachDuration : 1f;
+                return SampleApproach(strokeIndex, approachT);
+            }
 
-                // Fired once on the frame the warp first settles — Bloomed feeds the emit rule below,
-                // which is what used to clear/re-enable here directly.
+            // The leading pen falls through here the instant its approach window closes (windowStart for
+            // rank 0 is exactly approachDuration), so it never has a separate waiting frame between
+            // approaching and drawing — the two legs hand off on the very same tick.
+            var dashDuration = _dashDurations[strokeIndex];
+            var windowStart = approachDuration + (pen.CascadeRank * dashDuration);
+
+            var slotLength = _strokeLengths[strokeIndex] / _dashesPerStroke[strokeIndex];
+            var dashStart = pen.DashIndex * slotLength;
+
+            if (elapsed < windowStart)
+            {
+                pen.Waiting = true;
+                return SampleStroke(strokeIndex, dashStart);
+            }
+
+            pen.Waiting = false;
+            var painted = ComputePaintedLength(slotLength);
+            var localT = dashDuration > 1e-4f ? Mathf.Clamp01((elapsed - windowStart) / dashDuration) : 1f;
+
+            // localT == 1 is the normal handoff signal, but it depends on `elapsed` (the EASED clock)
+            // landing exactly on this window's own end. For every pen but the last, that end is strictly
+            // interior to the stroke's total window and elapsed sails past it well before t reaches 1, so
+            // drift is invisible. The LAST pen's window end is arithmetically equal to BloomDuration
+            // itself (BuildCascadeTimings), so its promotion depends on the eased value landing exactly on
+            // the raw clock's own ceiling — and BuildCascadeTimings' division doesn't reliably round-trip
+            // to that ceiling in float, so elapsed lands a hair short and localT stalls just below 1
+            // forever, stranding the pen mid-dash with a frozen, still-emitting ribbon that ages out. The
+            // raw, clamped `t` reaches exactly 1 by construction regardless of that arithmetic, so it is
+            // used as a second, unconditional promotion signal — one that also covers an authored
+            // BloomCurve that never reaches 1 at t == 1, which would otherwise strand every pen whose
+            // window closes late, not just the last one.
+            if (localT >= 1f || t >= 1f)
+            {
+                // Force localT to the ping-pong's own peak so the position below lands exactly where
+                // AdvanceDash's next tick continues the sweep from — no separate jump between the frozen
+                // spot and the handoff point.
+                localT = 1f;
+
+                // Fired once on the frame this pen promotes — Bloomed both stops AdvanceCascade running
+                // next frame (AdvancePen dispatches to AdvanceDash instead) and feeds the emit/teleport
+                // rules in ApplyPenPosition. Distance is pinned to painted — the ping-pong's own peak — so
+                // AdvanceDash's next tick continues the same sweep outward instead of restarting it; the
+                // two formulas agree exactly at this handoff.
                 pen.Bloomed = true;
-            }
-            else
-            {
-                var eased = _config.BloomCurve.Evaluate(t);
-                var offsetX = shapePos.x - _origin.x;
-                var offsetY = shapePos.y - _origin.y;
-                var radians = (_config.BloomSweepDegrees + pen.BloomPhaseDegrees) * (1f - eased) * Mathf.Deg2Rad;
-                var cos = Mathf.Cos(radians);
-                var sin = Mathf.Sin(radians);
-                var rotatedX = (offsetX * cos) - (offsetY * sin);
-                var rotatedY = (offsetX * sin) + (offsetY * cos);
-
-                position = new Vector3(
-                    _origin.x + (rotatedX * eased),
-                    _origin.y + (rotatedY * eased),
-                    0f);
+                pen.Distance = painted;
             }
 
-            // A refit (same host, reshaped figure) can reassign this pen to a different stroke slot,
-            // which jumps its position outright — the ribbon would otherwise draw a straight chord
-            // across that jump instead of restarting at the new spot. Now a backstop rather than a case
-            // that fires in normal play: ItemRangePreviewController only shows a figure once its inputs
-            // have held still past the sight delay and never re-Shows while it stays visible, so a
-            // visible figure's pens shouldn't reposition at all — RefitPens only ever runs on a Show the
-            // controller itself no longer issues while shown. Left in for whatever reaches AdvancePen
-            // outside that contract. Gated on Bloomed because during the bloom the warp is deliberately
-            // carrying the pen far and fast from the host to its place in the figure, easily outrunning
-            // this threshold every frame; checking there would clear the ribbon continuously and suppress
-            // the launch entirely.
+            return SampleStroke(strokeIndex, dashStart + (localT * painted));
+        }
+
+        // Teleport guard, positioning, and the visibility-driven emit edge — split out of AdvancePen so the
+        // per-frame per-pen phase dispatch stays a single branch rather than growing past the audit's
+        // complexity ceiling.
+        private void ApplyPenPosition(ref Pen pen, Vector3 position, float deltaTime)
+        {
+            // A refit (same host, reshaped figure) can reassign this pen to a different stroke slot, which
+            // jumps its position outright — the ribbon would otherwise draw a straight chord across that
+            // jump instead of restarting at the new spot. Now a backstop rather than a case that fires in
+            // normal play: ItemRangePreviewController only shows a figure once its inputs have held still
+            // past the sight delay and never re-Shows while it stays visible, so a visible figure's pens
+            // shouldn't reposition at all — RefitPens only ever runs on a Show the controller itself no
+            // longer issues while shown. Left in for whatever reaches AdvancePen outside that contract.
+            // Gated on Bloomed because mid-cascade the pen can deliberately move far and fast — the
+            // leading pen's approach, or a waiting pen's jump from its parked spot into its dash the
+            // instant its window opens — easily outrunning this threshold every frame; checking there
+            // would clear the ribbon continuously and suppress the draw-in entirely.
             if (pen.Bloomed && pen.HasLastPosition)
             {
                 var teleportThreshold = Mathf.Max(
@@ -547,21 +878,46 @@ namespace BalloonParty.Item.Preview
 
             pen.Trail.SetPosition(position);
 
-            var visible = !_viewport.IsActive || _viewport.Contains(position);
-            var wantEmit = visible && (pen.Bloomed || _emitDuringBloom);
-            if (wantEmit != pen.Emitting)
+            // A pen draws once its own cascade window opens — the sweep within that window IS what draws
+            // its dash in — but stays dark while Waiting, whether that means the leading pen's shared
+            // host-to-entry approach (drawing it would stack every pen on the stroke into one bright stem)
+            // or a later pen simply parked at its own dash start until its turn. Visibility decides the
+            // edge the rest of the time.
+            var visible = !pen.Waiting && (!_viewport.IsActive || _viewport.Contains(position));
+            if (visible != pen.Emitting)
             {
                 // Re-entry clears first: the ribbon still holds the points from before the pen left, and
                 // re-enabling without clearing draws a straight chord from where it exited to where it came
                 // back in -- the jump this cull exists to avoid.
-                if (wantEmit)
+                if (visible)
                 {
                     pen.Trail.ClearRibbon();
                 }
 
-                pen.Trail.SetEmitting(wantEmit);
-                pen.Emitting = wantEmit;
+                pen.Trail.SetEmitting(visible);
+                pen.Emitting = visible;
             }
+        }
+
+        // The leading pen's approach: sweeps along the trace polyline between the host's own position on
+        // it (_hostTraceOffset) and this stroke's entry point (_entryTraceOffsets), so a bent aim line —
+        // a wall bounce, a deflection — is followed rather than cut across in a straight line. Shield is
+        // the figure this matters most for, since its entry sits at the far end of the aim line, but it
+        // is a general fix: any figure whose entry isn't adjacent to the host bends with the trace now.
+        // The two offsets can fall in either order (the entry can sit behind the host along the trace) —
+        // Lerp moves continuously from one to the other regardless of which is larger, so both directions
+        // just work. Falls back to the straight host-to-entry lerp used before this existed when the
+        // trace can't answer for this stroke (BuildEntryOffsets already decided that per stroke).
+        private Vector3 SampleApproach(int strokeIndex, float t)
+        {
+            if (_entryTraceValid[strokeIndex])
+            {
+                var distance = Mathf.Lerp(_hostTraceOffset, _entryTraceOffsets[strokeIndex], t);
+                return SampleTrace(distance);
+            }
+
+            var origin = new Vector3(_origin.x, _origin.y, 0f);
+            return Vector3.Lerp(origin, _entryPoints[strokeIndex], t);
         }
 
         // One pen draws ONE dash, and the dashed line is the pens sitting next to each other — ask for
@@ -599,7 +955,7 @@ namespace BalloonParty.Item.Preview
             // corridors) read as the same dash pattern. Floored at a fraction of the slot rather than
             // let the subtraction go non-positive, so a very short stroke (or a spacing authored larger
             // than the stride) still draws something instead of a vanished dash.
-            var painted = Mathf.Max(slotLength * 0.1f, slotLength - _dashSpacing);
+            var painted = ComputePaintedLength(slotLength);
             pen.Distance += _config.TraceSpeed * deltaTime;
 
             var withinDash = Mathf.PingPong(pen.Distance, painted);
@@ -657,15 +1013,52 @@ namespace BalloonParty.Item.Preview
             return points[lastIndex];
         }
 
+        // Mirrors SampleStroke for the trace polyline instead of a stroke — but a trace never wraps or
+        // ping-pongs (it isn't a figure being drawn, just a path the approach samples a single leg of), so
+        // out-of-range distances simply clamp to its ends rather than repeating or bouncing.
+        private Vector3 SampleTrace(float distance)
+        {
+            if (_traceLength <= 1e-5f)
+            {
+                return _tracePoints.Count > 0 ? _tracePoints[0] : Vector3.zero;
+            }
+
+            distance = Mathf.Clamp(distance, 0f, _traceLength);
+
+            var lastIndex = _tracePoints.Count - 1;
+            for (var i = 1; i <= lastIndex; i++)
+            {
+                if (distance > _traceArcTable[i])
+                {
+                    continue;
+                }
+
+                var segmentLength = _traceArcTable[i] - _traceArcTable[i - 1];
+                var segmentT = segmentLength <= 1e-5f ? 0f : (distance - _traceArcTable[i - 1]) / segmentLength;
+                return Vector3.Lerp(_tracePoints[i - 1], _tracePoints[i], segmentT);
+            }
+
+            return _tracePoints[lastIndex];
+        }
+
         private struct Pen
         {
             public HighlightTrail Trail;
             public int StrokeIndex;
             public float BloomElapsed;
 
-            // Arc length travelled inside this pen's OWN slot, wrapped by the slot length.
+            // Arc length travelled inside this pen's OWN slot, wrapped by the slot length. Untouched by
+            // AdvanceCascade until the frame it hands off to AdvanceDash (pinned to the painted length
+            // then), so the ping-pong sweep continues outward rather than restarting.
             public float Distance;
             public bool Bloomed;
+
+            // True while this pen hasn't reached its turn yet — either the stroke's leading pen still on
+            // its approach (host origin to the stroke's entry point), or a later pen parked at its own
+            // dash start awaiting its cascade window. Set each tick by AdvanceCascade and read by
+            // ApplyPenPosition to keep the pen dark until its own dash actually starts drawing —
+            // recorded on the pen rather than recomputed in both places.
+            public bool Waiting;
 
             // Mirrors the trail's own emitting flag, so AdvancePen only calls into the renderer on a real
             // edge (bloom settling, or crossing the visible-rect boundary) instead of every frame.
@@ -675,9 +1068,12 @@ namespace BalloonParty.Item.Preview
             // pens sitting side by side, not one pen visiting every slot.
             public int DashIndex;
 
-            // Evenly spaced launch bearings so the set fans out radially on bloom instead of turning as
-            // one rigid stick; decays away with the shared sweep, so it never moves the landing position.
-            public float BloomPhaseDegrees;
+            // This pen's position in its stroke's relay order — 0 is the leading pen (the only one that
+            // approaches from the host), 1 draws next once rank 0's window closes, and so on. Computed
+            // once per Show/refit by AssignCascadeRanks from ComputeTravelDistance's forward-arc ordering,
+            // not per frame; AdvanceCascade turns it into a time window via _approachDurations/
+            // _dashDurations.
+            public int CascadeRank;
 
             // Last frame's position, for teleport detection in AdvancePen. HasLastPosition guards a
             // freshly acquired pen (default Vector3.zero) from reading as having teleported from the

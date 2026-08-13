@@ -1,5 +1,4 @@
 using BalloonParty.Configuration;
-using BalloonParty.Configuration.Items;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -35,37 +34,17 @@ namespace BalloonParty.Tests.Configuration
             Assert.GreaterOrEqual(_config.SightDelaySeconds, 0f, "0 is legitimate — it means show immediately");
         }
 
-        // Every item type must get a style, including ones with no authored entry — the ticker reads it
-        // unconditionally and has no null branch.
-        [Test]
-        public void StyleFor_EveryItemType_IsNeverNull()
-        {
-            foreach (ItemType type in System.Enum.GetValues(typeof(ItemType)))
-            {
-                Assert.IsNotNull(_config.StyleFor(type), $"no style for {type}");
-            }
-        }
-
-        // Neutral means "use the shared value": the ticker treats 0 as no-override, so an unauthored
-        // entry must report 0 rather than some plausible-looking default that would silently win.
-        [Test]
-        public void StyleFor_UnauthoredEntry_ReportsNeutralOverrides()
-        {
-            var style = _config.StyleFor(ItemType.Bomb);
-
-            Assert.IsFalse(style.SkipBloom, "an unauthored item still plays the outward bloom");
-        }
-
-        // An empty AnimationCurve evaluates to 0 everywhere, which would collapse every bloom to a pen
-        // sitting motionless on the host — the fallback exists so a newly-added curve field can't do that.
+        // An empty AnimationCurve evaluates to 0 everywhere, which would collapse every pen's travel to
+        // zero and strand the whole figure at its entry point — the fallback exists so a newly-added
+        // curve field can't do that.
         [Test]
         public void BloomCurve_IsNeverEmpty()
         {
             var curve = _config.BloomCurve;
 
             Assert.Greater(curve.length, 0);
-            Assert.AreEqual(0f, curve.Evaluate(0f), 0.001f, "starts at the host");
-            Assert.AreEqual(1f, curve.Evaluate(1f), 0.001f, "and lands on the stroke entry");
+            Assert.AreEqual(0f, curve.Evaluate(0f), 0.001f, "no arc drawn yet");
+            Assert.AreEqual(1f, curve.Evaluate(1f), 0.001f, "every pen has reached its dash slot");
         }
 
         // Shield's stub length is a per-item block (mirroring ItemSettings' Bomb/Laser/Paint nesting), so
@@ -75,13 +54,6 @@ namespace BalloonParty.Tests.Configuration
         {
             Assert.IsNotNull(_config.Shield);
             Assert.Greater(_config.Shield.StubLength, 0f);
-        }
-
-        [Test]
-        public void StyleFor_OutOfRangeType_FallsBackInsteadOfThrowing()
-        {
-            Assert.DoesNotThrow(() => _config.StyleFor((ItemType)999));
-            Assert.IsNotNull(_config.StyleFor((ItemType)999));
         }
     }
 }

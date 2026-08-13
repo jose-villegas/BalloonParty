@@ -162,7 +162,7 @@ TrailRenderer:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: 0.65
         inSlope: -0.03805442
         outSlope: -0.03805442
         tangentMode: 0
@@ -206,7 +206,7 @@ TrailRenderer:
     numCapVertices: 0
     alignment: 0
     textureMode: 0
-    textureScale: {x: 1, y: 1}
+    textureScale: {x: 1.5, y: 1.5}
     shadowBias: 0.5
     generateLightingData: 0
   m_MinVertexDistance: 0

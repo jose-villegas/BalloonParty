@@ -18,6 +18,7 @@ namespace BalloonParty.Item.Preview
     internal sealed class HighlightTrail : MonoBehaviour, IPoolable
     {
         [SerializeField] private TrailRenderer _trailRenderer;
+        [SerializeField] private SpriteRenderer _head;
 
         /// <summary>
         ///     The pen prefab's own authored ribbon lifetime — every item shares it now. A graceful hide
@@ -31,6 +32,14 @@ namespace BalloonParty.Item.Preview
             {
                 _trailRenderer = GetComponent<TrailRenderer>();
             }
+
+            // _head was re-added after being dropped along with the runtime-tint path it used to serve —
+            // the existing prefab's serialized reference is gone, so this fallback is what makes it resolve
+            // again without re-wiring the prefab by hand.
+            if (_head == null)
+            {
+                _head = GetComponentInChildren<SpriteRenderer>(true);
+            }
         }
 
         public void OnSpawned()
@@ -40,18 +49,35 @@ namespace BalloonParty.Item.Preview
             // figure is visible at the new position.
             _trailRenderer.Clear();
             _trailRenderer.emitting = false;
+
+            if (_head != null)
+            {
+                _head.enabled = false;
+            }
         }
 
         public void OnDespawned()
         {
             _trailRenderer.Clear();
             _trailRenderer.emitting = false;
+
+            if (_head != null)
+            {
+                _head.enabled = false;
+            }
         }
 
         /// <summary>Pen up/down — a pen travelling to its stroke shouldn't necessarily draw on the way.</summary>
         internal void SetEmitting(bool emitting)
         {
             _trailRenderer.emitting = emitting;
+
+            // The head dot is part of "is this pen drawing", not decoration independent of it — a parked
+            // or pen-up pen must be fully invisible, not just missing its ribbon.
+            if (_head != null)
+            {
+                _head.enabled = emitting;
+            }
         }
 
         /// <summary>Drops the recorded ribbon, so a jump to a new stroke doesn't draw a chord across the gap.</summary>

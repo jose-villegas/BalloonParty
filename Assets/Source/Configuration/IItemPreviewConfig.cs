@@ -1,38 +1,11 @@
-using BalloonParty.Configuration.Items;
 using UnityEngine;
 
 namespace BalloonParty.Configuration
 {
     /// <summary>
-    ///     Per-item-type overrides for the range telegraph's motion. Every field is opt-in: left at its
-    ///     neutral value the item draws with the shared defaults.
-    /// </summary>
-    /// <remarks>
-    ///     Deliberately carries no colour. Every figure draws with the pen prefab's own material, so the
-    ///     telegraph reads as one system rather than as N differently-tinted effects — and there is no
-    ///     runtime tint path to keep in step with it.
-    /// </remarks>
-    public interface IItemPreviewStyle
-    {
-        /// <summary>
-        ///     This item never plays the outward bloom — its figure just appears at its settled
-        ///     positions, rather than sweeping out from the host.
-        /// </summary>
-        /// <remarks>
-        ///     Matters most for a figure that sits far from its host — Shield's bounce stub is over at a
-        ///     wall, so a drawn approach is a long spoke across the board that buries the stub it was
-        ///     meant to introduce. A figure centred on the host (Bomb's circle) has almost no approach to
-        ///     draw and doesn't care. No tri-state is needed here — unlike <see cref="IItemPreviewConfig.EmitDuringBloom" />,
-        ///     which decides whether an item that DOES bloom draws its approach, this decides whether the
-        ///     bloom happens at all, and there is no shared counterpart to defer to.
-        /// </remarks>
-        bool SkipBloom { get; }
-    }
-
-    /// <summary>
-    ///     Shield's own figure params. A per-item block rather than a field on
-    ///     <see cref="IItemPreviewStyle" />, mirroring how <c>ItemSettings</c> nests <c>Bomb</c>/<c>Laser</c>/
-    ///     <c>Paint</c> — a length only one figure reads has no business on the shared style.
+    ///     Shield's own figure params. A per-item block, mirroring how <c>ItemSettings</c> nests
+    ///     <c>Bomb</c>/<c>Laser</c>/<c>Paint</c> — a length only one figure reads has no business on the
+    ///     shared config.
     /// </summary>
     public interface IShieldPreviewSettings
     {
@@ -44,9 +17,9 @@ namespace BalloonParty.Configuration
     }
 
     /// <summary>
-    ///     Bomb's own figure params. A per-item block rather than a field on
-    ///     <see cref="IItemPreviewStyle" />, mirroring how <c>ItemSettings</c> nests <c>Bomb</c>/<c>Laser</c>/
-    ///     <c>Paint</c> — a number only one figure reads has no business on the shared style.
+    ///     Bomb's own figure params. A per-item block, mirroring how <c>ItemSettings</c> nests
+    ///     <c>Bomb</c>/<c>Laser</c>/<c>Paint</c> — a number only one figure reads has no business on the
+    ///     shared config.
     /// </summary>
     public interface IBombPreviewSettings
     {
@@ -61,9 +34,9 @@ namespace BalloonParty.Configuration
     }
 
     /// <summary>
-    ///     Paint's own figure params. A per-item block rather than a field on
-    ///     <see cref="IItemPreviewStyle" />, mirroring how <c>ItemSettings</c> nests <c>Bomb</c>/<c>Laser</c>/
-    ///     <c>Paint</c> — numbers only one figure reads have no business on the shared style.
+    ///     Paint's own figure params. A per-item block, mirroring how <c>ItemSettings</c> nests
+    ///     <c>Bomb</c>/<c>Laser</c>/<c>Paint</c> — numbers only one figure reads have no business on the
+    ///     shared config.
     /// </summary>
     public interface IPaintPreviewSettings
     {
@@ -109,30 +82,22 @@ namespace BalloonParty.Configuration
         /// </summary>
         int MaxPens { get; }
 
-        /// <summary>Seconds a pen takes to sweep out from the host to its stroke entry point.</summary>
+        /// <summary>
+        ///     Seconds the figure's FURTHEST-travelling pen takes to reach its dash slot, so every figure
+        ///     — however large — completes its draw-in in the same time. Nearer pens cover less arc under
+        ///     the same shared clock and so arrive sooner, which is what makes the figure read as drawing
+        ///     itself in one stroke at a time rather than fading in all at once.
+        /// </summary>
         float BloomDuration { get; }
 
         /// <summary>
-        ///     Extra degrees of arc a pen sweeps on the way out, on top of the straight-line bearing.
-        ///     0 shoots radially outward; larger values curl the launch into a circular motion.
-        /// </summary>
-        float BloomSweepDegrees { get; }
-
-        /// <summary>
-        ///     Eases the outward bloom over its normalized duration — drives angle and radius together,
-        ///     so the pen's whole spiral accelerates or settles as one.
+        ///     Eases the shared bloom clock over its normalized duration — shapes how the drawing tip
+        ///     accelerates and settles, applied once to the whole figure rather than per pen.
         /// </summary>
         AnimationCurve BloomCurve { get; }
 
         /// <summary>World units per second a pen travels along its stroke once it starts tracing.</summary>
         float TraceSpeed { get; }
-
-        /// <summary>
-        ///     Whether the ribbon draws during the outward bloom. On, the launch spokes are visible; off,
-        ///     only the figure is drawn — deploy spokes can bury a shape (the lesson recorded on
-        ///     <c>FlyingTrail</c>'s own pen-up/pen-down helpers).
-        /// </summary>
-        bool EmitDuringBloom { get; }
 
         /// <summary>
         ///     Seconds a host must stay continuously sighted before its figure first appears. Restarts
@@ -141,9 +106,6 @@ namespace BalloonParty.Configuration
         ///     old no-delay behaviour.
         /// </summary>
         float SightDelaySeconds { get; }
-
-        /// <summary>This item type's overrides, never null — an unauthored entry returns neutral values.</summary>
-        IItemPreviewStyle StyleFor(ItemType type);
 
         /// <summary>Shield's own figure params.</summary>
         IShieldPreviewSettings Shield { get; }
