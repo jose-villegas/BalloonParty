@@ -306,6 +306,7 @@ namespace BalloonParty.Game
             builder.Register<PaintRangePreview>(Lifetime.Singleton).As<IItemRangePreview>();
             builder.Register<LightningRangePreview>(Lifetime.Singleton).As<IItemRangePreview>();
 
+            builder.Register<ItemPreviewViewport>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<ItemPreviewTicker>().AsSelf();
             builder.RegisterEntryPoint<ItemRangePreviewController>();
         }

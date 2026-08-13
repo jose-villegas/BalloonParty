@@ -21,6 +21,7 @@ namespace BalloonParty.Item.Preview
         private readonly PoolManager _poolManager;
         private readonly HighlightTrail _penPrefab;
         private readonly IItemPreviewConfig _config;
+        private readonly ItemPreviewViewport _viewport;
         private readonly string _poolKey;
 
         private readonly ItemPreviewShape _shape = new();
@@ -45,11 +46,15 @@ namespace BalloonParty.Item.Preview
         private bool _emitDuringBloom;
 
         internal ItemPreviewTicker(
-            PoolManager poolManager, HighlightTrail penPrefab, IItemPreviewConfig config)
+            PoolManager poolManager,
+            HighlightTrail penPrefab,
+            IItemPreviewConfig config,
+            ItemPreviewViewport viewport)
         {
             _poolManager = poolManager;
             _penPrefab = penPrefab;
             _config = config;
+            _viewport = viewport;
             _poolKey = penPrefab != null ? penPrefab.name : nameof(HighlightTrail);
         }
 
@@ -142,6 +147,10 @@ namespace BalloonParty.Item.Preview
             {
                 return;
             }
+
+            // Idempotent per frame, so it costs nothing extra when ItemRangePreviewController already
+            // refreshed the same viewport earlier this frame.
+            _viewport.Refresh();
 
             var deltaTime = Time.deltaTime;
             for (var i = 0; i < _pens.Count; i++)
@@ -269,6 +278,7 @@ namespace BalloonParty.Item.Preview
                     pen.Trail.ClearRibbon();
                     pen.Trail.SetPosition(new Vector3(_origin.x, _origin.y, 0f));
                     pen.Trail.SetEmitting(_emitDuringBloom);
+                    pen.Emitting = _emitDuringBloom;
 
                     _pens[penIndex] = pen;
                     penIndex++;
@@ -313,41 +323,49 @@ namespace BalloonParty.Item.Preview
             pen.BloomElapsed += deltaTime;
             var t = Mathf.Clamp01(pen.BloomElapsed / duration);
 
+            Vector3 position;
             if (t >= 1f)
             {
-                pen.Trail.SetPosition(shapePos);
+                position = shapePos;
 
-                // Pen down for the figure itself, fired once on the frame the warp first settles. When the
-                // bloom drew too, the spiral in and the stroke are one continuous ribbon; when it didn't,
-                // clearing here drops the invisible approach so the first traced segment doesn't join back
-                // to the host.
-                if (!pen.Bloomed)
-                {
-                    pen.Bloomed = true;
+                // Fired once on the frame the warp first settles — Bloomed feeds the emit rule below,
+                // which is what used to clear/re-enable here directly.
+                pen.Bloomed = true;
+            }
+            else
+            {
+                var eased = _config.BloomCurve.Evaluate(t);
+                var offsetX = shapePos.x - _origin.x;
+                var offsetY = shapePos.y - _origin.y;
+                var radians = (_config.BloomSweepDegrees + pen.BloomPhaseDegrees) * (1f - eased) * Mathf.Deg2Rad;
+                var cos = Mathf.Cos(radians);
+                var sin = Mathf.Sin(radians);
+                var rotatedX = (offsetX * cos) - (offsetY * sin);
+                var rotatedY = (offsetX * sin) + (offsetY * cos);
 
-                    if (!_emitDuringBloom)
-                    {
-                        pen.Trail.ClearRibbon();
-                        pen.Trail.SetEmitting(true);
-                    }
-                }
-
-                return;
+                position = new Vector3(
+                    _origin.x + (rotatedX * eased),
+                    _origin.y + (rotatedY * eased),
+                    0f);
             }
 
-            var eased = _config.BloomCurve.Evaluate(t);
-            var offsetX = shapePos.x - _origin.x;
-            var offsetY = shapePos.y - _origin.y;
-            var radians = (_config.BloomSweepDegrees + pen.BloomPhaseDegrees) * (1f - eased) * Mathf.Deg2Rad;
-            var cos = Mathf.Cos(radians);
-            var sin = Mathf.Sin(radians);
-            var rotatedX = (offsetX * cos) - (offsetY * sin);
-            var rotatedY = (offsetX * sin) + (offsetY * cos);
+            pen.Trail.SetPosition(position);
 
-            pen.Trail.SetPosition(new Vector3(
-                _origin.x + (rotatedX * eased),
-                _origin.y + (rotatedY * eased),
-                0f));
+            var visible = !_viewport.IsActive || _viewport.Contains(position);
+            var wantEmit = visible && (pen.Bloomed || _emitDuringBloom);
+            if (wantEmit != pen.Emitting)
+            {
+                // Re-entry clears first: the ribbon still holds the points from before the pen left, and
+                // re-enabling without clearing draws a straight chord from where it exited to where it came
+                // back in -- the jump this cull exists to avoid.
+                if (wantEmit)
+                {
+                    pen.Trail.ClearRibbon();
+                }
+
+                pen.Trail.SetEmitting(wantEmit);
+                pen.Emitting = wantEmit;
+            }
         }
 
         // One pen draws ONE dash, and the dashed line is the pens sitting next to each other — ask for
@@ -444,6 +462,10 @@ namespace BalloonParty.Item.Preview
             // Arc length travelled inside this pen's OWN slot, wrapped by the slot length.
             public float Distance;
             public bool Bloomed;
+
+            // Mirrors the trail's own emitting flag, so AdvancePen only calls into the renderer on a real
+            // edge (bloom settling, or crossing the visible-rect boundary) instead of every frame.
+            public bool Emitting;
 
             // The slot this pen owns for its whole life. One pen draws one dash — the dashed line is the
             // pens sitting side by side, not one pen visiting every slot.

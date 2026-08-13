@@ -46,9 +46,17 @@ namespace BalloonParty.Item.Preview
         /// </summary>
         public readonly PredictionTraceEnd TraceEnd;
 
+        /// <summary>
+        ///     The shared visible bounds a figure can clip itself to (see <see cref="LaserRangePreview" />),
+        ///     null when no viewport is available — test call sites that don't care about clipping default
+        ///     to null rather than having to construct one.
+        /// </summary>
+        public readonly ItemPreviewViewport Viewport;
+
         public ItemPreviewContext(
             Vector2 origin, Vector2Int slot, Vector2 aimDirection, IReadOnlyList<Vector3> tracePoints,
-            string hostColorId, float itemSpinDegrees, PredictionTraceEnd traceEnd = default)
+            string hostColorId, float itemSpinDegrees, PredictionTraceEnd traceEnd = default,
+            ItemPreviewViewport viewport = null)
         {
             Origin = origin;
             Slot = slot;
@@ -57,6 +65,7 @@ namespace BalloonParty.Item.Preview
             HostColorId = hostColorId;
             ItemSpinDegrees = itemSpinDegrees;
             TraceEnd = traceEnd;
+            Viewport = viewport;
         }
     }
 }

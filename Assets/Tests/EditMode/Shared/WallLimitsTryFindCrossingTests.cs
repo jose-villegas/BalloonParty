@@ -146,4 +146,51 @@ namespace BalloonParty.Tests.Shared
             Assert.AreEqual(0f, distance, 0.001f, "Already on the wall — distance is zero");
         }
     }
+
+    /// <summary>
+    /// Tests <see cref="WallLimits.Contains"/> — the general play-area membership check. Inside, outside
+    /// on each of the four sides, and boundary inclusivity.
+    /// </summary>
+    [TestFixture]
+    public class WallLimitsContainsTests
+    {
+        // A simple box: top=5, right=3, bottom=-5, left=-3
+        private readonly WallLimits _walls = new(new Vector4(5f, 3f, -5f, -3f));
+
+        [Test]
+        public void Contains_CenterPosition_ReturnsTrue()
+        {
+            Assert.IsTrue(_walls.Contains(Vector3.zero));
+        }
+
+        [Test]
+        public void Contains_PastRightWall_ReturnsFalse()
+        {
+            Assert.IsFalse(_walls.Contains(new Vector3(3.001f, 0f, 0f)));
+        }
+
+        [Test]
+        public void Contains_PastLeftWall_ReturnsFalse()
+        {
+            Assert.IsFalse(_walls.Contains(new Vector3(-3.001f, 0f, 0f)));
+        }
+
+        [Test]
+        public void Contains_PastTopWall_ReturnsFalse()
+        {
+            Assert.IsFalse(_walls.Contains(new Vector3(0f, 5.001f, 0f)));
+        }
+
+        [Test]
+        public void Contains_PastBottomWall_ReturnsFalse()
+        {
+            Assert.IsFalse(_walls.Contains(new Vector3(0f, -5.001f, 0f)));
+        }
+
+        [Test]
+        public void Contains_ExactlyOnBoundary_ReturnsTrue()
+        {
+            Assert.IsTrue(_walls.Contains(new Vector3(3f, 5f, 0f)), "On-boundary corner counts as inside");
+        }
+    }
 }

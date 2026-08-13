@@ -51,7 +51,7 @@ MonoBehaviour:
   - _ribbonSeconds: 0
     _bloomDraw: 2
   - _ribbonSeconds: 0
-    _bloomDraw: 0
+    _bloomDraw: 2
   - _ribbonSeconds: 0
     _bloomDraw: 0
   - _ribbonSeconds: 0

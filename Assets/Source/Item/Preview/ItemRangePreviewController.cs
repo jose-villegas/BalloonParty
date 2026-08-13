@@ -30,6 +30,7 @@ namespace BalloonParty.Item.Preview
         private readonly SlotGrid _grid;
         private readonly PredictionTraceProvider _traceProvider;
         private readonly ItemPreviewTicker _ticker;
+        private readonly ItemPreviewViewport _viewport;
         private readonly IEnumerable<IItemRangePreview> _previews;
 
         private Dictionary<ItemType, IItemRangePreview> _previewMap;
@@ -39,11 +40,13 @@ namespace BalloonParty.Item.Preview
             SlotGrid grid,
             PredictionTraceProvider traceProvider,
             ItemPreviewTicker ticker,
+            ItemPreviewViewport viewport,
             IEnumerable<IItemRangePreview> previews)
         {
             _grid = grid;
             _traceProvider = traceProvider;
             _ticker = ticker;
+            _viewport = viewport;
             _previews = previews;
         }
 
@@ -65,6 +68,10 @@ namespace BalloonParty.Item.Preview
 
         public void LateTick()
         {
+            // Idempotent, so calling it here before the ticker's own LateTick call costs nothing extra —
+            // this just guarantees the viewport is fresh before the context below is built from it.
+            _viewport.Refresh();
+
             if (!_traceProvider.IsActive || _traceProvider.Points.Count < 2)
             {
                 _lastVersion = int.MinValue;
@@ -99,7 +106,8 @@ namespace BalloonParty.Item.Preview
                 ? spinHost.SpinningItem?.AngleDegrees ?? 0f
                 : 0f;
             var context = new ItemPreviewContext(
-                origin, slot, direction, _traceProvider.Points, colorId, spinDegrees, _traceProvider.End);
+                origin, slot, direction, _traceProvider.Points, colorId, spinDegrees, _traceProvider.End,
+                _viewport);
 
             _ticker.Show(preview, in context);
         }

@@ -15,7 +15,7 @@ Items are game-wide collectible effects — Bomb, Laser, Lightning, Paint, Shiel
 | `ItemDisplayService` | Plain MonoBehaviour on the host's item container (a serialized reference on `BalloonView` — no DI). `Bind()` bridges the host's reactive properties (`Item`, color name, slot index) to a pooled visual's lifecycle: gets the `ItemVisualView` for `ItemSettings.VisualPrefab` from `PoolManager.GetOrRegister()`, reparents it under itself, recolors immediately when the host's color changes (a **rainbow** host flips PaintBlob-shaded sprites to their radial palette rings via `ItemVisualView.SetRainbow`, matching the flung blobs), re-sorts on slot changes, and exposes the active visual's `ITransformCapture` (the laser's rotating body) to the host |
 | `ItemVisualView` | MonoBehaviour on each item visual prefab (PU_Bomb, PU_Laser, etc.) — implements `IItemView` and `IPoolable`; `Activate(color)` shows and colors, `SetColor(color)` recolors without toggling visibility, `Deactivate()` hides. Sorting managed via `ApplySortingOrder(int)` |
 | `SimplePoolChannel<ItemVisualView>` | `PoolChannel<ItemVisualView>` — one channel per visual prefab, keyed by prefab name. Managed by `ItemDisplayService` via `PoolManager.GetOrRegister()` |
-| `LaserItemRotation` | MonoBehaviour on the laser body child — continuous Z-axis rotation at `_rotationSpeed`; resets angle and stops on `OnEnable` or `Stop()`. Implements `ITransformCapture` so the host can snapshot the rotation at hit time |
+| `LaserItemRotation` | MonoBehaviour on the laser body child — **stepped** rotation: dwells on a hex-grid-aligned angle for `_stepSeconds`, then eases to the next one over the trailing `TransitionFraction` of the step (`Mathf.SmoothStep` + `Mathf.LerpAngle`), stepping through all 6 hex bearings (`0`, `A`, `180-A`, `180`, `180+A`, `360-A`, derived from `ISlotGridConfig.SlotSeparation`) in order so every transition — including the wrap — moves forward under `Mathf.LerpAngle`'s shortest-path rule (see "Idle laser telegraph" below). Picks a random start step (not a random angle) on `OnEnable` so multiple lasers don't march in lockstep; `CaptureSnapshot()` stops it. Implements `ITransformCapture` so the host can snapshot the rotation at hit time |
 | `ITransformCapture` / `TransformSnapshot` | Capture contract for item visuals whose transform matters at hit time — `CaptureSnapshot()` returns position/rotation/scale. `BalloonController` snapshots the hit balloon's capture component and publishes `TransformCapturedMessage` (in `Shared/Messages/`) |
 | `ItemEffectPlayer` | Plain C# — plays an item's one-shot activation effect: pulls the `EffectView` for `ItemSettings.ActivationEffectPrefab` from the pool, tints it by the popped balloon's color, returns it on completion. Shared by bomb/laser/shield; chain/splash effects drive their own two-phase setup |
 | `BalloonOverlapQuery` | Plain C# — shared physics setup for AoE items (bomb, laser): a balloon-layer `ContactFilter2D` plus `TryResolveBalloon()` that maps a hit collider to a live balloon model, skipping recycled views and the popped balloon itself |
@@ -80,11 +80,12 @@ to a balloon rather than 3D polyhedra flying at a UI bar.
 |---|---|
 | `IItemRangePreview` | The seam — `ItemType Type` plus `BuildShape(in context, shape)`. One implementation per item type, resolved by `Type` exactly as `ItemActivator` resolves `IBalloonItem`, so a new item ships its preview beside its handler with no dispatch table to edit. `BuildShape` is **pure geometry**: it appends points and never touches a renderer, the pool, or `Time` — which is what keeps every figure edit-mode testable and lets one driver animate all of them. An implementation with an existing config-free core for its shape (`PaintTriangle`, `LightningChain`, `BombBlast`, `LaserCross`) must build on it rather than re-derive, or the telegraph drifts from the effect it advertises |
 | `ItemPreviewShape` / `ItemPreviewStroke` | The shared vocabulary: a figure is a set of **strokes** (polylines), each a range into one flat point list. A circle is one closed stroke, a plus two open ones, lightning one per arc. Reused across rebuilds (cleared, never reallocated). `AddCircle`/`AddSegment` cover the common cases; a stroke of fewer than two points is discarded rather than recorded, since it has no arc length for a pen to travel |
-| `ItemPreviewContext` | Readonly struct — the per-crossing inputs (`Origin`, `Slot`, `AimDirection`, `TracePoints`, `HostColorId`). The services a preview needs are constructor-injected into the preview itself, since they never change between crossings |
-| `ItemRangePreviewController` | `IStartable`/`ILateTickable`, plain C# — decides which host the aim is sighted on (most central crossing wins, via `TraceHitGeometry`) and drives the one visible figure. Plain C# rather than a component on the balloon, because it needs DI singletons a pooled item visual would have to be hand-threaded, and because only one preview shows at a time — a global arbitration a per-balloon component cannot make. Gated on `PredictionTraceProvider.Version`, so a held aim re-walks nothing |
+| `ItemPreviewContext` | Readonly struct — the per-crossing inputs (`Origin`, `Slot`, `AimDirection`, `TracePoints`, `HostColorId`, `Viewport`). The services a preview needs are constructor-injected into the preview itself, since they never change between crossings |
+| `ItemPreviewViewport` | Plain C#, DI singleton — the one shared owner of "what is visible": the camera-derived world rect, expanded by a margin derived from `IItemPreviewConfig.DashLength`. Both `ItemPreviewTicker` (culling pens) and `LaserRangePreview` (clipping its beam lines) read this single instance, so the two agree on one notion of "visible" instead of drifting apart. `Refresh()` is idempotent per frame (guarded on `Time.frameCount`), so `ItemRangePreviewController` and `ItemPreviewTicker` can both call it before reading without depending on tickable ordering. `IsActive` is false with no main camera yet or a non-orthographic one — cull nothing / clip nothing rather than guessing at maths that don't apply. Also exposes `TryFindExit`, a `WallLimits`-style slab test for clipping a ray to the rect, so any figure can reuse the geometry that defines the bounds |
+| `ItemRangePreviewController` | `IStartable`/`ILateTickable`, plain C# — decides which host the aim is sighted on (most central crossing wins, via `TraceHitGeometry`) and drives the one visible figure. Plain C# rather than a component on the balloon, because it needs DI singletons a pooled item visual would have to be hand-threaded, and because only one preview shows at a time — a global arbitration a per-balloon component cannot make. Gated on `PredictionTraceProvider.Version`, so a held aim re-walks nothing. Refreshes `ItemPreviewViewport` at the top of `LateTick`, before building the context that carries it |
 | `ItemPreviewTicker` | `ILateTickable` — drives the pens closed-form off one clock, no tweens or coroutines, mirroring `ShapeFormationTicker`'s zero-allocation constraints. A pen's position is one formula, not a phase handoff: every frame it computes its **shape position** — the dash-sweep position it would have with no bloom at all, already running from the moment the pen appears — then **warps** that position around the host origin by a bloom clock that decays to identity (full rotation and zero scale at t = 0, no rotation and full scale at t = 1). So a pen starts sitting at the host centre and drifts smoothly into its place in the figure, with the shape's own motion already under way the whole time — no velocity discontinuity where a separate outward launch would have handed off to tracing. `Show` distinguishes a new host (bloom clock restarts) from the same host re-fitted (keep pen phase), so nudging the aim doesn't restart every pen. Each pen also carries its own evenly-spaced angular phase, added to the shared sweep so it decays away with it — the set fans out radially on launch instead of rotating as one rigid stick, with every pen still landing exactly on its shape position at t = 1 |
 | `HighlightTrail` | The pooled pen view — a head sprite dragging a `TrailRenderer`, positioned entirely from the ticker. Deliberately not `UI/Score/FlyingTrail`: that one owns its own DOTween flight, motion-curve table and flight gradients and lives on the UI sorting layer, none of which applies here |
-| `IItemPreviewConfig` / `ItemPreviewConfig` | The tuning surface (interface in `Shared/`, SO in `Configuration/`, per the config convention). Shared knobs — dash length/spacing, the pen cap, trace speed, bloom duration/sweep/curve, whether the ribbon draws during the bloom — plus an `[EnumIndexed(typeof(ItemType))]` array of per-item overrides. Unassigned on `GameLifetimeScope` it degrades to a default instance, so the telegraph works before anyone authors an asset |
+| `IItemPreviewConfig` / `ItemPreviewConfig` | The tuning surface (interface in `Shared/`, SO in `Configuration/`, per the config convention). Shared knobs — dash length/spacing, the pen cap, trace speed, bloom duration/sweep/curve, whether the ribbon draws during the bloom — plus an `[EnumIndexed(typeof(ItemType))]` array of per-item overrides. Unassigned on `GameLifetimeScope` it degrades to a default instance, so the telegraph works before anyone authors an asset. No longer carries a cull margin — `ItemPreviewViewport` derives it from `DashLength` instead of it being authored |
 | `IItemPreviewStyle` | One item's overrides, all opt-in: a ribbon lifetime and whether the outward bloom draws (`ItemPreviewBloomDraw.Inherit`/`Draw`/`Hide` — a tri-state because a plain bool has no "unset"). **0 means "use the shared value"** on `RibbonSeconds`, so an unauthored entry can't silently win. Deliberately carries **no colour**: every figure draws with the pen prefab's own material, so the telegraph reads as one system and there is no runtime tint path to keep in step with it |
 | `IShieldPreviewSettings` | Shield's own figure params (its stub length) as a nested block on the config, mirroring how `ItemSettings` nests `Bomb`/`Laser`/`Paint` — a number only one figure reads has no business on the shared per-item style. The pattern to copy when another figure needs its own tuning |
 | `IBombPreviewSettings` | Bomb's own figure params (`RadiusOffset`, world units added to `BombSettings.Radius` purely for display, default 0). No `[Min]` on purpose — a negative offset legitimately draws tighter than the true radius. The drawn circle is the blast's *footprint* alone, while `BombBlast` actually catches an occupant whose centre lies within the radius plus that occupant's own radius, so the real catchment is meaningfully larger than the circle at the bare radius — a small positive offset therefore reads *closer* to what the blast actually takes, not further from it |
@@ -99,13 +100,16 @@ The figures, and what each reuses:
 | Shield | a stub of the **wall** bounce the aim line ends on | `PredictionTraceEnd`, the contact the trace calculator already solved to stop there. It has no board range, so it shows the *consequence*: where the shot carries on after surviving that hit. Walls only — a shield is spent on a wall and nothing else (`ProjectileMotionResolver.Step` decrements `ShieldsRemaining` on a wall reflection, its `Deflect` never does), so a balloon deflection costs the shot nothing and there is no consequence to advertise |
 | Bomb | circle at the blast radius | `BombSettings.Radius`, the same field `BombBlast` selects with — deliberately not `RainbowEffectScale`, which scales only the VFX — plus `IBombPreviewSettings.RadiusOffset`, a display-only nudge on top of it |
 | Snipe | line from the host to the wall | `WallLimits.TryFindCrossing` along the aim. Traced fresh rather than copied from the aim polyline past its pierce marker, since that stops at the telegraph's segment budget, not the wall |
-| Laser | two crossing rectangles | the four `LaserCross` arms share two corridors; `CircleCastRadius` × `RaycastDistance`, rotated by the icon's live spin |
+| Laser | two crossing lines, each clipped to what's visible | the four `LaserCross` arms share two corridors, so two lines along the rotated right/up axes; each half-arm clipped independently via `ItemPreviewViewport.TryFindExit` rather than drawn the full `RaycastDistance`. Falls back to `WallLimits.TryFindCrossing` when no viewport is available (no camera yet, or a non-orthographic one). The rectangle it replaced drew each beam twice at a negligible (0.13-unit) width and, unclipped, was a 40-unit corridor on a board whose diagonal is under 10 — that overrun was what starved the pen budget |
 | Paint | the spread triangle | `PaintTriangle.Build` itself — the same call the handler and the solver make — with `SpreadLength`/`SpreadBaseWidth` scaled by `IPaintPreviewSettings.Scale`, a display-only nudge on top of it, applied about the triangle's own centre so it shrinks in place |
 | Lightning | an arc per chain jump | `LightningChain` over a live `GridEffectBoard`, so the chain visits exactly the balloons the effect would, in the same order |
 
-Bomb's circle, Laser's rectangles and Paint's triangle are all the effect's own *footprint*, not its
+Bomb's circle, Laser's axis lines and Paint's triangle are all the effect's own *footprint*, not its
 exact catchment — each core also catches an occupant by its own radius, so a balloon straddling an
-edge is still caught. The outline reads as intent; that is the deliberate simplification.
+edge is still caught. Laser's own footprint is a line rather than a box because `CircleCastRadius` is
+negligible (0.065) next to a balloon's radius — drawing it as a 0.13-wide rectangle implied a precision
+the number doesn't carry, and the line represents the beam at least as truthfully. The outline reads as
+intent; that is the deliberate simplification.
 
 Registered in `GameScopeRegistration.RegisterItemRangePreviews`; the pen prefab and the config asset
 are serialized fields on `GameLifetimeScope`. Leaving the prefab unassigned disables the telegraph
@@ -113,9 +117,9 @@ rather than failing startup; leaving the config unassigned falls back to working
 
 **Ribbon lifetime is the knob that decides how much of a figure you can see at once.** A pen paints
 `TraceSpeed × ribbon seconds` of world length before its tail fades, so the figures need very
-different values to read as complete shapes: the Laser's corridors are tens of units long, a Bomb
-circle only a few units around. That is why `IItemPreviewStyle.RibbonSeconds` is per-item and why the
-pen prefab's own authored value is only the fallback.
+different values to read as complete shapes: the Laser's corridors can span most of the board's
+diagonal, a Bomb circle only a few units around. That is why `IItemPreviewStyle.RibbonSeconds` is
+per-item and why the pen prefab's own authored value is only the fallback.
 
 **Dashing is the one drawing style, not a per-item opt-in.** `DashLength` and `DashSpacing` are shared
 across every figure — a Bomb circle dashes at the same size as Shield's stub. Each stroke *derives*
@@ -126,12 +130,14 @@ one dash, and the dashed line is the pens sitting side by side. Ask for a stroke
 and you get three pens, each owning a third of it; a two-armed figure with unequal arm lengths
 legitimately gets a different dash count on each arm, which is the point.
 
-**A pen cap bounds the total.** Laser's two ~40-unit corridors sum to roughly 160 units of combined
-perimeter, which at the authored stride would derive around 320 pens — 320 pooled `TrailRenderer`s
-for one figure. `MaxPens` caps the total summed across a figure's strokes: past it, the stride is
-inflated once by `desiredTotal / MaxPens` and every stroke's count is recomputed with the inflated
-stride. A big figure's dashes come out sparser and longer-spaced rather than any part of it going
-undrawn.
+**A pen cap bounds the total.** `MaxPens` caps the total summed across a figure's strokes: past it,
+the stride is inflated once by `desiredTotal / MaxPens` and every stroke's count is recomputed with
+the inflated stride. A big figure's dashes come out sparser and longer-spaced rather than any part of
+it going undrawn. Laser used to be the figure that engaged it: unclipped, its two corridors ran the
+full `RaycastDistance` of 20 each way — roughly 160 units of combined perimeter, around 320 pens at
+the authored stride, well past the cap. Clipping each half-arm to the play area (see the figures table
+above) keeps both lines under the board's ~9.3-unit diagonal each, so Laser's own dashes no longer
+reach the cap — the mechanism above still exists for whatever figure does.
 
 **Zero spacing reproduces a solid line — there is no separate continuous mode.** With
 `DashSpacing = 0`, `stride` collapses to `DashLength`, so a pen's slot equals exactly the length it
@@ -143,6 +149,41 @@ zero-spacing case already produces its output with no separate code path to keep
 there is no restart to flicker, no discontinuity to hide, and **no pen-up at all**. The spacing
 between dashes is simply arc that no pen ever visits, because `DashLength` is shorter than the slot
 its pen owns.
+
+**A pen goes dark while it is outside the camera's view.** `ItemPreviewTicker` checks every pen's
+final position each frame against `ItemPreviewViewport`, the one shared owner of "what is visible" —
+the camera-derived world rect, refreshed once per frame (not per pen) from `Camera.main`'s
+orthographic size, aspect, and transform position. This is the general answer to a figure extending
+past what's on screen when its host sits near an edge: Bomb's circle and Paint's triangle can both do
+it, and distorting their geometry to fit would misrepresent the effect, so the pen is simply culled
+for the part nobody can see rather than the shape being bent to stay inside. Culling is a drawing
+concern, so it measures against what is actually **visible** — not against the gameplay play-area
+walls, which the camera frames more than and which don't move, while the camera does (shake,
+cinematic rigs, the level-transition move); a wall-based box would be both too small and stale. The
+rect is refreshed every frame rather than cached, precisely because a stale one would cull pens that
+are still on screen — but the refresh itself is idempotent per frame (`ItemPreviewViewport.Refresh`
+guards on `Time.frameCount`), so both `ItemRangePreviewController` and `ItemPreviewTicker` can call it
+without caring which one runs first. If there is no main camera yet, or it isn't orthographic (the
+maths above assume orthographic projection), `IsActive` goes false and culling is skipped entirely —
+every pen is treated as visible, since drawing something off-screen is a far cheaper failure than a
+figure silently vanishing. Laser clips its own geometry to this same viewport (see the figures table
+above), for the pen-budget reason there — an unclipped 40-unit corridor would starve the shared pen
+budget — falling back to `WallLimits` only while the viewport itself is unavailable. Crossing back in
+clears the ribbon before re-enabling it: the trail still holds the points from where the pen left, and
+re-enabling without clearing would draw a straight chord from the exit point to the re-entry point,
+which is exactly the jumping trail this cull exists to avoid.
+
+The cull bounds aren't the bare visible rect — `ItemPreviewViewport` pushes them outward by
+`IItemPreviewConfig.DashLength`, recomputed alongside the rect each frame. That margin is *derived*,
+not authored: `AdvanceDash` never lets a pen travel further than `DashLength` from its dash's start,
+so expanding the visible rect by exactly that much is the smallest expansion that can never clip a
+dash mid-stroke — a pen even partly on-screen is always drawn in full. It also happens to solve
+**boundary chatter**: a pen sweeping its dash near the screen edge crosses a hairline boundary every
+cycle, and since every re-entry clears the ribbon (the jump above), culling right at the edge would
+read as a visible stutter instead of the pen simply appearing and disappearing. Shared rather than
+per-item, since it is about the viewport, which no item owns — and since Laser's own clip reads the
+same `ItemPreviewViewport`, cull and clip agree on exactly one notion of "visible" rather than two
+that could drift apart.
 
 > Three wrong turns worth not repeating, all of them attempts to make the gaps by interrupting the
 > pen rather than by bounding where it travels. **`ClearRibbon` cannot make the gaps** — clearing
@@ -176,7 +217,7 @@ The `Item/` folder's display side has no dependency on `Balloon/`. `ItemDisplayS
 4. When `colorName` changes while a visual is active, `ItemDisplayService` calls `SetColor()` on the active visual — the item display always matches the host's current color
 5. When `Unbind()` is called or the item changes back to None, the active visual is returned to its pool via `PoolManager.Return()`
 6. Sorting order updates flow through `ItemDisplayService` → `ItemVisualView.ApplySortingOrder()` on the active instance
-   - The item icon pool (`SimplePoolChannel`) does **not** DI-inject its views, so any visual needing a scoped service is handed it here. `Bind()` takes an optional `SceneLightFieldService`; when the spawned visual is a `LaserItemRotation`, `ItemDisplayService` calls `ConfigureLightField()` on it so the idle laser can register its telegraph light (it can't `[Inject]`)
+   - The item icon pool (`SimplePoolChannel`) does **not** DI-inject its views, so any visual needing a scoped service is handed it here. `Bind()` takes an optional `SceneLightFieldService`; when the spawned visual is a `LaserItemRotation`, `ItemDisplayService` calls `Configure()` on it, passing the light field (so the idle laser can register its telegraph light) and the slot grid's `SlotSeparation` (so its stepped rotation dwells on hex-aligned angles) — neither can be `[Inject]`ed
 7. A host that has renderers which must sit *above* the item passes them nothing directly — instead it reads `ItemDisplayService.ActiveItemSortingCount` (the item's slot span, `0` when none) and re-layers its own renderers on top. Because the host can't otherwise know when the item's footprint changes, `Bind()` takes an optional `onSortingFootprintChanged` callback that fires whenever an item is added/removed; the host re-applies its above-item sorting from there (and on slot moves via its own subscription). `BalloonView._aboveItemRenderers` is the first user
 
 ### Activation flow
@@ -192,7 +233,7 @@ The `Item/` folder's display side has no dependency on `Balloon/`. `ItemDisplayS
 | Type | Visual | Activation effect | Damage |
 |---|---|---|---|
 | **Bomb** | Bomb icon, tinted to host color | Area-of-effect explosion — destroys nearby balloons in a radius with exponential nudge falloff (a rainbow host kills all colours in-radius, scales the blast visual, and converts an outer ring to rainbow mid-effect) | Configurable — set to 2 to instantly pop tough balloons |
-| **Laser** | Rotating cross, tinted to host color | Cross-shaped beam — destroys balloons along four rotated axes; rotation is captured from `LaserItemRotation` at hit time (a rainbow holder converts the survivors bordering the beam to rainbow) | Configurable |
+| **Laser** | Stepped-rotation cross, tinted to host color | Cross-shaped beam — destroys balloons along four rotated axes; rotation is captured from `LaserItemRotation` at hit time. Because the icon now steps through hex-grid-aligned angles rather than spinning freely, the beam always fires along an actual row or diagonal of the hex grid instead of an arbitrary angle between them (a rainbow holder converts the survivors bordering the beam to rainbow) | Configurable |
 | **Lightning** | Lightning icon, tinted to host color | Chain lightning — hits all same-color balloons sequentially with a growing/retracting `LineRenderer` effect (a rainbow holder instead converts the last-projectile colour group to rainbow) | Configurable |
 | **Paint** | Paint blob, tinted to host color | Splatoon-style color spread — flings packed blobs into a triangular region aimed along the projectile's travel direction; paintable different-color balloons inside the triangle adopt the popped balloon's color as blobs land | N/A — no damage dealt |
 | **Shield** | Shield icon, tinted to host color | Grants the active projectile +1 bounce shield; a rainbow holder also buffs it iridescent, granting wildcard scoring and side-neighbour rainbow conversion until the next wall bounce, but not automatic piercing | N/A — no damage dealt |
@@ -250,6 +291,26 @@ beam; Lightning casts one along each arc the bolt travels as it jumps. Point lig
 cross telegraph light while the item is held (not yet activated). Controlled by per-item-settings
 toggle (`TelegraphLightEnabled`) and tuned via `TelegraphLightHalfLength`, `TelegraphLightHalfWidth`,
 `TelegraphLightIntensity` in `ItemSettings.Laser`. Off by default.
+
+**Hex-aligned stepped rotation:** the laser icon no longer spins freely — it dwells on a hex-grid-
+aligned angle, then eases to the next one, repeating. `HexCoordinates.IndexToWorldPosition` places
+neighbour slots at bearings of roughly `0`, `A`, `2A`, `180`, `180+A`, `180+2A` degrees, where
+`A = atan2(SlotSeparation.y, SlotSeparation.x)` (≈60° with the shipped separation, so very nearly —
+but not exactly, since the grid isn't perfectly regular — a hexagon). Because `LaserCross` fires a
+four-arm cross, its look repeats every 90°, so only three of those six angles are visually distinct
+(`0`, `A`, `180-A` read the same as `180`, `180+A`, `360-A`). `LaserItemRotation` still cycles through
+all six in order rather than just those three, spending `_stepSeconds` on each (the trailing quarter
+of which eases into the next) — `Mathf.LerpAngle` always takes the shortest path, and with only three
+entries the wrap from the last step back to the first would run backwards (~-120°), snapping the cross
+instead of continuing its turn. Stepping through all six keeps every transition, including the wrap, a
+forward ~+60°, so the rotation reads as continuous even though its look only has three distinct
+positions. This is a gameplay change, not just a
+presentation one: `LaserItemHandler` captures the icon's rotation at hit time and casts along it, so
+the beam now always fires along an actual row or diagonal of balloons on the hex grid rather than an
+arbitrary angle that could slice between them. `ISpinningItemVisual.SpinDegreesPerSecond` reports `0`
+for this icon — a stepped rotation has no meaningful constant rate, so the shot solver's gather reads
+the angle as-is (correct for the dwell, the overwhelming majority of the time) instead of
+extrapolating along a rate that no longer exists.
 
 ## Shield chains
 

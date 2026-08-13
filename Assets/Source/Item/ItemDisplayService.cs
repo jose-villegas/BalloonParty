@@ -124,11 +124,12 @@ namespace BalloonParty.Item
             _activeView.Activate(color);
             _activeView.SetRainbow(!string.IsNullOrEmpty(colorName) && _palette.IsRainbow(colorName));
 
-            // The pooled icon isn't DI-injected; hand a laser its light-field access so the idle
-            // telegraph can register (it's the capture we already resolved above).
-            if (_lightField != null && _activeCapture is LaserItemRotation laser)
+            // The pooled icon isn't DI-injected; hand a laser its light-field access and the slot
+            // separation so it can dwell on hex-aligned angles (it's the capture we already resolved
+            // above).
+            if (_activeCapture is LaserItemRotation laser)
             {
-                laser.ConfigureLightField(_lightField, _palette, settings.Laser);
+                laser.Configure(_lightField, _palette, settings.Laser, _config.SlotSeparation);
             }
 
             // Same non-injection problem for a projectile-facing icon (e.g. the thrower, Snipe) — a

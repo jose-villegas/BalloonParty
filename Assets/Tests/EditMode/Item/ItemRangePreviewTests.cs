@@ -24,11 +24,12 @@ namespace BalloonParty.Tests.Item
             _shape = new ItemPreviewShape();
         }
 
-        // The four cast arms share two corridors, so the figure is two rectangles, not four.
+        // The four cast arms share two corridors, so the figure is two open axis lines, not four —
+        // and not closed, since a beam has no interior to fill.
         [Test]
-        public void Laser_DrawsTwoClosedRectangles()
+        public void Laser_DrawsTwoOpenLines()
         {
-            var preview = new LaserRangePreview(BuildItemConfig());
+            var preview = new LaserRangePreview(BuildItemConfig(), BuildFlightConfig());
 
             var context = BuildContext(Vector2.zero, Vector2.up, 0f);
             preview.BuildShape(in context, _shape);
@@ -36,52 +37,74 @@ namespace BalloonParty.Tests.Item
             Assert.AreEqual(2, _shape.Strokes.Count);
             foreach (var stroke in _shape.Strokes)
             {
-                Assert.AreEqual(4, stroke.Count, "a rectangle is four corners");
-                Assert.IsTrue(stroke.Closed);
+                Assert.AreEqual(2, stroke.Count, "a line is two endpoints");
+                Assert.IsFalse(stroke.Closed);
             }
         }
 
-        // Half-length is RaycastDistance and half-width CircleCastRadius, so the unrotated corridor spans
-        // ±distance along one axis and ±radius across it.
+        // With the walls far enough away not to clip, each axis spans the full ±RaycastDistance either
+        // side of the host — CircleCastRadius no longer contributes a width, since the rectangle it used
+        // to draw was 0.13 units wide on a board 4.5 units across. Unrotated, the first stroke is the
+        // right axis (x) and the second is the up axis (y).
         [Test]
-        public void Laser_UnrotatedRectangleSpansCastDistanceAndRadius()
+        public void Laser_UnclippedLinesSpanCastDistance()
         {
-            var preview = new LaserRangePreview(BuildItemConfig(castDistance: 4f, castRadius: 0.5f));
+            var preview = new LaserRangePreview(
+                BuildItemConfig(castDistance: 4f), BuildFlightConfig(top: 100f, right: 100f, bottom: -100f, left: -100f));
 
             var context = BuildContext(Vector2.zero, Vector2.up, 0f);
             preview.BuildShape(in context, _shape);
 
-            var maxX = float.MinValue;
-            var maxY = float.MinValue;
-            var first = _shape.Strokes[0];
-            for (var i = first.Start; i < first.Start + first.Count; i++)
-            {
-                maxX = Mathf.Max(maxX, Mathf.Abs(_shape.Points[i].x));
-                maxY = Mathf.Max(maxY, Mathf.Abs(_shape.Points[i].y));
-            }
+            var rightAxis = _shape.Strokes[0];
+            Assert.AreEqual(-4f, _shape.Points[rightAxis.Start].x, 0.001f, "the minus arm reaches the cast distance");
+            Assert.AreEqual(4f, _shape.Points[rightAxis.Start + 1].x, 0.001f, "the plus arm reaches the cast distance");
+            Assert.AreEqual(0f, _shape.Points[rightAxis.Start].y, 0.001f, "the right axis carries no y component");
 
-            Assert.AreEqual(4f, maxX, 0.001f, "extends the cast distance along its axis");
-            Assert.AreEqual(0.5f, maxY, 0.001f, "and the cast radius across it");
+            var upAxis = _shape.Strokes[1];
+            Assert.AreEqual(-4f, _shape.Points[upAxis.Start].y, 0.001f, "the minus arm reaches the cast distance");
+            Assert.AreEqual(4f, _shape.Points[upAxis.Start + 1].y, 0.001f, "the plus arm reaches the cast distance");
         }
 
         // The cross is cast along the icon's rotation — drawn axis-aligned while it spins, the telegraph
-        // would point at balloons the beam misses.
+        // would point at balloons the beam misses. At 90 degrees, the axis that ran along x at spin 0
+        // now runs along y.
         [Test]
-        public void Laser_RotatesTheCrossWithTheItemSpin()
+        public void Laser_RotatesTheAxesWithTheItemSpin()
         {
-            var preview = new LaserRangePreview(BuildItemConfig(castDistance: 4f, castRadius: 0.5f));
+            var preview = new LaserRangePreview(
+                BuildItemConfig(castDistance: 4f), BuildFlightConfig(top: 100f, right: 100f, bottom: -100f, left: -100f));
 
             var context = BuildContext(Vector2.zero, Vector2.up, 90f);
             preview.BuildShape(in context, _shape);
 
-            var maxX = float.MinValue;
             var first = _shape.Strokes[0];
-            for (var i = first.Start; i < first.Start + first.Count; i++)
-            {
-                maxX = Mathf.Max(maxX, Mathf.Abs(_shape.Points[i].x));
-            }
+            var maxX = Mathf.Max(
+                Mathf.Abs(_shape.Points[first.Start].x), Mathf.Abs(_shape.Points[first.Start + 1].x));
+            var maxY = Mathf.Max(
+                Mathf.Abs(_shape.Points[first.Start].y), Mathf.Abs(_shape.Points[first.Start + 1].y));
 
-            Assert.AreEqual(0.5f, maxX, 0.001f, "at 90 degrees the long axis is now vertical");
+            Assert.AreEqual(0f, maxX, 0.001f, "the axis that ran along x at spin 0 now carries no x component");
+            Assert.AreEqual(4f, maxY, 0.001f, "and reaches the same cast distance, now along y");
+        }
+
+        // A wall closer than RaycastDistance clips that half-arm to the wall crossing rather than the
+        // full cast distance — the arm near the wall is short, the opposite arm is unaffected. The top
+        // wall only bounds the vertical (up) axis, the second stroke when unrotated.
+        [Test]
+        public void Laser_ClipsAnArmAtTheNearerWall()
+        {
+            var preview = new LaserRangePreview(
+                BuildItemConfig(castDistance: 20f), BuildFlightConfig(top: 3f, right: 100f, bottom: -100f, left: -100f));
+
+            var context = BuildContext(Vector2.zero, Vector2.up, 0f);
+            preview.BuildShape(in context, _shape);
+
+            var upAxis = _shape.Strokes[1];
+            var a = _shape.Points[upAxis.Start];
+            var b = _shape.Points[upAxis.Start + 1];
+
+            Assert.AreEqual(3f, b.y, 0.001f, "the plus arm stops at the top wall rather than the cast distance");
+            Assert.AreEqual(-20f, a.y, 0.001f, "the minus arm is unaffected and keeps the full cast distance");
         }
 
         [Test]
@@ -298,14 +321,12 @@ namespace BalloonParty.Tests.Item
         // ItemSettings' tuning fields are all [SerializeField]-private with no setters, so the values come
         // in the way Unity itself would deserialize them. FromJsonOverwrite merges, leaving every field
         // the json omits (Paint's spread, the curves) at its authored default.
-        private static IItemConfiguration BuildItemConfig(
-            float bombRadius = 1.25f, float castDistance = 20f, float castRadius = 0.065f)
+        private static IItemConfiguration BuildItemConfig(float bombRadius = 1.25f, float castDistance = 20f)
         {
             var settings = new ItemSettings();
             JsonUtility.FromJsonOverwrite(
                 "{\"_bomb\":{\"_bombRadius\":" + bombRadius + "}," +
-                "\"_laser\":{\"_laserRaycastDistance\":" + castDistance +
-                ",\"_laserCircleCastRadius\":" + castRadius + "}}",
+                "\"_laser\":{\"_laserRaycastDistance\":" + castDistance + "}}",
                 settings);
 
             var config = Substitute.For<IItemConfiguration>();
@@ -315,6 +336,17 @@ namespace BalloonParty.Tests.Item
             }
 
             return config;
+        }
+
+        // Defaults mirror the real board (IProjectileFlightConfig.LimitsClockwise): Top 3.625 / Right
+        // 2.25 / Bottom -4.5 / Left -2.25. Individual tests override whichever wall needs to be near or
+        // far to make the clipping behaviour under test unambiguous.
+        private static IProjectileFlightConfig BuildFlightConfig(
+            float top = 3.625f, float right = 2.25f, float bottom = -4.5f, float left = -2.25f)
+        {
+            var flightConfig = Substitute.For<IProjectileFlightConfig>();
+            flightConfig.LimitsClockwise.Returns(new Vector4(top, right, bottom, left));
+            return flightConfig;
         }
     }
 }

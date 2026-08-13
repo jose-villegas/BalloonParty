@@ -75,6 +75,13 @@ namespace BalloonParty.Shared
             return true;
         }
 
+        /// <summary>Whether <paramref name="position" /> is within all four walls, inclusive of the
+        /// boundary itself.</summary>
+        public bool Contains(Vector3 position)
+        {
+            return position.x >= Left && position.x <= Right && position.y >= Bottom && position.y <= Top;
+        }
+
         /// <summary>Clamps a position inside the walls WITHOUT reflecting or reporting a crossing —
         /// used to keep a snapped point (e.g. a deflect contact off a near-wall balloon, whose collider
         /// radius can extend past the wall) in-bounds so the next step doesn't read it as a spurious
