@@ -25,6 +25,10 @@ namespace BalloonParty.Thrower
 {
     internal class ThrowerController : IStartable, ITickable, IDisposable
     {
+        // Sub-hundredth-of-a-degree noise floor: a direction whose length has decayed this far below unit
+        // (mouse resting exactly on the thrower) is not a real heading to snap, only Atan2 noise.
+        private const float DegenerateDirectionSqrMagnitude = 1e-8f;
+
         private readonly IPredictionTraceConfig _traceConfig;
         private readonly IDeflectorField _deflectorField;
         private readonly IPierceItemField _pierceItemField;
@@ -234,6 +238,26 @@ namespace BalloonParty.Thrower
             Fire();
         }
 
+        // Snaps a raw aim direction to the nearest multiple of stepDegrees, so the pointer keeps moving
+        // continuously while the heading it produces jumps between fixed headings — a game rule, so it
+        // lives here rather than in ThrowerView, which only reports raw pointer state. Snapping to the
+        // NEAREST multiple (not flooring) is deliberate: a floor would bias every aim toward one side of
+        // its true heading. stepDegrees <= 0, or a degenerate (near-zero) direction, both mean continuous
+        // aim — the direction passes through unchanged. internal static so the pure snap is edit-mode
+        // testable without spinning up the controller.
+        internal static Vector3 QuantizeAimDirection(Vector3 direction, float stepDegrees)
+        {
+            if (stepDegrees <= 0f || direction.sqrMagnitude < DegenerateDirectionSqrMagnitude)
+            {
+                return direction;
+            }
+
+            var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            var snapped = Mathf.Round(angle / stepDegrees) * stepDegrees;
+            var radians = snapped * Mathf.Deg2Rad;
+            return new Vector3(Mathf.Cos(radians), Mathf.Sin(radians), 0f);
+        }
+
         private void PlayEntrance()
         {
             _view.AnimateEntrance().OnComplete(() =>
@@ -386,7 +410,7 @@ namespace BalloonParty.Thrower
 
             if (_view.TryGetAimDirection(out var direction))
             {
-                _direction = direction;
+                _direction = QuantizeAimDirection(direction, _flightConfig.AimAngleStepDegrees);
             }
         }
 

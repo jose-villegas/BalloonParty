@@ -156,6 +156,7 @@ namespace BalloonParty.Tests.PlayMode
             public float HoldSpeedUpMax => 2f;
             public float HoldSpeedUpLerpDuration => 0.3f;
             public float HoldSpeedUpTooltipDelay => 4f;
+            public float AimAngleStepDegrees => 0f;
 
             public StubFlightConfig(Vector4 limitsClockwise)
             {

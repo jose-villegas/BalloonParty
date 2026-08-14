@@ -27,7 +27,9 @@ namespace BalloonParty.Cheats
     /// </summary>
     internal class FireBestShotCheat : ICheat, ICheatControls, IStartable, IDisposable
     {
-        private const int SampleCount = 1024;
+        // Only used for continuous aim (AimAngleStepDegrees <= 0) — a quantized aim instead samples
+        // exactly the reachable angles (see ShotBoardGather.ResolveSweepSampleCount).
+        private const int ContinuousSampleCount = 1024;
         private const float ArcMinDegrees = 10f;
         private const float ArcMaxDegrees = 170f;
 
@@ -148,18 +150,7 @@ namespace BalloonParty.Cheats
             }
 
             var workingSet = new ShotBalloonState[context.Board.Count];
-            var bestAngle = ArcMinDegrees;
-            var bestScore = int.MinValue;
-            for (var i = 0; i < SampleCount; i++)
-            {
-                var angle = Mathf.Lerp(ArcMinDegrees, ArcMaxDegrees, i / (float)(SampleCount - 1));
-                var score = ShotBoardGather.SimulateAt(angle, context, workingSet).RawScore;
-                if (score > bestScore)
-                {
-                    bestScore = score;
-                    bestAngle = angle;
-                }
-            }
+            FindBestAngle(context, workingSet, out var bestAngle, out var bestScore);
 
             _cachedScope.Container.Resolve<ThrowerController>().DirectionOverride =
                 ShotBoardGather.DirectionFromDegrees(bestAngle);
@@ -187,11 +178,27 @@ namespace BalloonParty.Cheats
             }
 
             var workingSet = new ShotBalloonState[context.Board.Count];
-            var bestAngle = ArcMinDegrees;
-            var bestScore = int.MinValue;
-            for (var i = 0; i < SampleCount; i++)
+            FindBestAngle(context, workingSet, out var bestAngle, out var bestScore);
+
+            _cachedScope.Container.Resolve<ThrowerController>()
+                .FireAt(ShotBoardGather.DirectionFromDegrees(bestAngle));
+            Log.Info("FireBestShotCheat", $"fired {bestAngle:F2}° (predicted score {bestScore}).");
+        }
+
+        // Shared by the auto-fire override and the one-shot fire — both must pick the exact same
+        // angle the same way, or the auto-set override could silently disagree with what "Fire Once"
+        // would have chosen for the identical board.
+        private void FindBestAngle(
+            in ShotSolveContext context, ShotBalloonState[] workingSet, out float bestAngle, out int bestScore)
+        {
+            var sampleCount = ShotBoardGather.ResolveSweepSampleCount(
+                ArcMinDegrees, ArcMaxDegrees, _config.AimAngleStepDegrees, ContinuousSampleCount);
+            bestAngle = ArcMinDegrees;
+            bestScore = int.MinValue;
+            for (var i = 0; i < sampleCount; i++)
             {
-                var angle = Mathf.Lerp(ArcMinDegrees, ArcMaxDegrees, i / (float)(SampleCount - 1));
+                var angle = ShotBoardGather.ResolveSweepAngle(
+                    i, ArcMinDegrees, ArcMaxDegrees, _config.AimAngleStepDegrees, ContinuousSampleCount);
                 var score = ShotBoardGather.SimulateAt(angle, context, workingSet).RawScore;
                 if (score > bestScore)
                 {
@@ -199,10 +206,6 @@ namespace BalloonParty.Cheats
                     bestAngle = angle;
                 }
             }
-
-            _cachedScope.Container.Resolve<ThrowerController>()
-                .FireAt(ShotBoardGather.DirectionFromDegrees(bestAngle));
-            Log.Info("FireBestShotCheat", $"fired {bestAngle:F2}° (predicted score {bestScore}).");
         }
 
         private void RefreshCachedRefs()

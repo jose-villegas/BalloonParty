@@ -156,6 +156,61 @@ namespace BalloonParty.Solver
             return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
         }
 
+        /// <summary>How many angles a sweep over [<paramref name="arcMinDegrees" />,
+        /// <paramref name="arcMaxDegrees" />] needs. Continuous aim (<paramref name="stepDegrees" />
+        /// &lt;= 0) keeps the caller's fixed <paramref name="continuousSampleCount" /> unchanged —
+        /// today's behaviour. A quantized aim instead counts the step multiples that land inside the
+        /// arc, so the sweep only ever visits angles <see cref="ThrowerController.QuantizeAimDirection" />
+        /// can actually reach — a ~31° arc at a 5° step is ~7 samples, not thousands. Always at least
+        /// 1, even when the step is wider than the whole arc.</summary>
+        internal static int ResolveSweepSampleCount(
+            float arcMinDegrees, float arcMaxDegrees, float stepDegrees, int continuousSampleCount)
+        {
+            if (stepDegrees <= 0f)
+            {
+                return Mathf.Max(1, continuousSampleCount);
+            }
+
+            var firstIndex = GridFirstIndex(arcMinDegrees, stepDegrees);
+            var lastIndex = GridLastIndex(arcMaxDegrees, stepDegrees);
+            return firstIndex <= lastIndex ? lastIndex - firstIndex + 1 : 1;
+        }
+
+        /// <summary>The i'th sweep angle over [<paramref name="arcMinDegrees" />,
+        /// <paramref name="arcMaxDegrees" />], paired with <see cref="ResolveSweepSampleCount" />.
+        /// Continuous aim (<paramref name="stepDegrees" /> &lt;= 0) lerps evenly across
+        /// <paramref name="continuousSampleCount" /> samples, exactly as before quantization existed.
+        /// A quantized aim instead walks the absolute step grid — the same grid
+        /// <see cref="ThrowerController.QuantizeAimDirection" /> snaps player input to — rather than
+        /// lerping and hoping the result coincides with a reachable angle. That grid is anchored at
+        /// multiples of <paramref name="stepDegrees" /> in absolute terms, not at
+        /// <paramref name="arcMinDegrees" />, so the first sample is the smallest step multiple at or
+        /// above <paramref name="arcMinDegrees" /> — not necessarily <paramref name="arcMinDegrees" />
+        /// itself. When the step is wider than the whole arc (no multiple falls inside it), this
+        /// returns whichever neighbouring grid line sits closest to the arc, so the single guaranteed
+        /// sample from <see cref="ResolveSweepSampleCount" /> is still a reachable angle.</summary>
+        internal static float ResolveSweepAngle(
+            int index, float arcMinDegrees, float arcMaxDegrees, float stepDegrees, int continuousSampleCount)
+        {
+            if (stepDegrees <= 0f)
+            {
+                var count = Mathf.Max(1, continuousSampleCount);
+                var t = count <= 1 ? 0f : index / (float)(count - 1);
+                return Mathf.Lerp(arcMinDegrees, arcMaxDegrees, t);
+            }
+
+            var firstIndex = GridFirstIndex(arcMinDegrees, stepDegrees);
+            var lastIndex = GridLastIndex(arcMaxDegrees, stepDegrees);
+            if (firstIndex <= lastIndex)
+            {
+                return (firstIndex + index) * stepDegrees;
+            }
+
+            var below = lastIndex * stepDegrees;
+            var above = firstIndex * stepDegrees;
+            return arcMinDegrees - below <= above - arcMaxDegrees ? below : above;
+        }
+
         // Every occupied slot feeds the dynamic-board sim's SlotGrid: poppable/deflectable shot
         // targets — including never-popping Unbreakables — carry geometry + balance/nudge properties;
         // any other Dynamic occupant carries balance properties only; Static occupants their slot only.
@@ -363,6 +418,19 @@ namespace BalloonParty.Solver
 
             var collider = prefabView.GetComponent<Collider2D>();
             return ContactRadius.FromCollider(collider, prefabView.transform.lossyScale.x);
+        }
+
+        // Smallest step multiple at or above arcMinDegrees — the grid is anchored at absolute
+        // multiples of the step, not at the arc bounds.
+        private static int GridFirstIndex(float arcMinDegrees, float stepDegrees)
+        {
+            return Mathf.CeilToInt(arcMinDegrees / stepDegrees);
+        }
+
+        // Largest step multiple at or below arcMaxDegrees.
+        private static int GridLastIndex(float arcMaxDegrees, float stepDegrees)
+        {
+            return Mathf.FloorToInt(arcMaxDegrees / stepDegrees);
         }
     }
 }

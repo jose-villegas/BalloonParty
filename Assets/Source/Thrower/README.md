@@ -15,6 +15,8 @@ The thrower is the player-controlled launcher at the bottom of the screen. It ai
 
 The player holds the mouse button to aim — the thrower rotates to face the cursor. Releasing the mouse fires the loaded projectile. Once the projectile is destroyed (shields depleted), the thrower automatically reloads and is ready for the next shot.
 
+The pointer itself always moves freely — `ThrowerView.TryGetAimDirection` just reports where it is. `ThrowerController` optionally snaps the *angle* that produces to the nearest multiple of `IProjectileFlightConfig.AimAngleStepDegrees` before storing it, so the aim (and everything derived from it — the thrower's own rotation, the prediction trace) jumps between fixed headings instead of following the cursor continuously. `AimAngleStepDegrees` defaults to 0, meaning continuous aim — today's exact behaviour; any positive value (degrees) turns quantization on.
+
 ## How it works
 
 `ThrowerController` is a plain C# class registered as an entry point in `ThrowerLifetimeScope`. It delegates all visual operations *and pointer input* to `ThrowerView`, keeping the controller free of Unity engine APIs. On start it registers the projectile pool and pre-warms two instances. It subscribes reactively to `Navigation.State` — when the state becomes `Game` (via `NavigationTrigger` on the Launch button), it plays the entrance animation. After the entrance animation completes, input is enabled.
@@ -42,7 +44,7 @@ When a `ProjectileDestroyedMessage` or a `LevelUpDismissedMessage` arrives, `Thr
 - **PauseService** — any paused source blocks `Tick` (aim/fire)
 - **HoldSpeedUpController** (`Projectile/Controller/`) — `ConsumedInput` blocks `Tick` while the player's speed-up hold hasn't been released yet
 - **ProjectileLoadedMessage** — published after each load so shield UI can self-bind
-- **IProjectileFlightConfig** — provides `LimitsClockwise`, `ProjectileSpeed`, `ProjectileStartingShields`, `ProjectileLoadDuration`; **IPredictionTraceConfig** — provides `LineColor` plus the optional capsule-light tuning (`LightingEnabled` and friends — see `Prediction/README.md`)
+- **IProjectileFlightConfig** — provides `LimitsClockwise`, `ProjectileSpeed`, `ProjectileStartingShields`, `ProjectileLoadDuration`, `AimAngleStepDegrees` (0 = continuous aim, the default); **IPredictionTraceConfig** — provides `LineColor` plus the optional capsule-light tuning (`LightingEnabled` and friends — see `Prediction/README.md`)
 - **PredictionTraceCalculator / ThrowerView** — calculates and renders the aim trajectory line while the player holds the mouse button
 - **PredictionTraceProvider** — written each `Tick` alongside the view (set on aim, cleared on fire/release/reload) so non-Thrower readers can find where the trace currently sits
 - **PredictionTraceLights** (`Prediction/`) — mirrors the same trace into optional per-leg capsule scene-lights, off by default; see `Prediction/README.md`

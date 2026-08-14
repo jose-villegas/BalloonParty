@@ -38,5 +38,8 @@ namespace BalloonParty.Shared
 
         /// <summary>Seconds of flight before the "hold to speed up" tooltip appears (0 = disabled).</summary>
         float HoldSpeedUpTooltipDelay { get; }
+
+        /// <summary>Minimum angular subdivision (degrees) the aim direction snaps to. 0 = continuous aim.</summary>
+        float AimAngleStepDegrees { get; }
     }
 }

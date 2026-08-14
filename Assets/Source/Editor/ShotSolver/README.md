@@ -16,7 +16,7 @@ unit-testable outside the editor.
 | `ShotSimulator` | `Solver/` | Pure, headless, static class — simulates one aim direction to completion, event-to-event (next analytic wall crossing, next analytic balloon-corridor entry, or next due balance pulse), never fixed-step. Reuses `ProjectileMotionResolver.TryComputeContactNormal` for deflect contacts. Mirrors the runtime's pop/deflect/shield/streak/rainbow rules, including Phase A's interactive statics (see below), on a `ShotBalloonSnapshot` board — no `MonoBehaviour`, no live model, no allocation beyond the caller-owned working-set buffer. Events carry timestamps (`t += distance / speed(segment)`), and speed mirrors the cruise ramp exactly |
 | `ShotBoardSnapshot` | `Solver/` | The board's data types: `ShotBalloonSnapshot` (one target's geometry, `ColorProfile` colour identity, optional `BalanceProfile`, `ShotContactKind`, item), built only via its named factories (`ForColorTarget`/`ForToughTarget`/`ForRainbowTarget`/`ForStaticContact`) so every caller's field mapping stays honest as the struct grows; `ShotBalloonState`, its mutable per-simulation copy |
 | `ShotFlightState` | `Solver/` | Mutable per-flight state passed by `ref` through `Simulate` — position/direction/shields/elapsed, cruise/pierce state, and the Phase D-core buff/streak/colour fields (`HasRainbowBuff`, `SpeedBuffMultiplier`, `StreakColor`/`StreakCount`, `DeferredPops`, `ProjectileColor`) |
-| `ShotBoardGather` | `Solver/` | Snapshots the live board/thrower/projectile into the sim's input structs (`ShotBoardGather.Gather`), and converts sweep angles to world directions (`DirectionFromDegrees`). Called by `ShotSolverWindow` |
+| `ShotBoardGather` | `Solver/` | Snapshots the live board/thrower/projectile into the sim's input structs (`ShotBoardGather.Gather`), converts sweep angles to world directions (`DirectionFromDegrees`), and derives the sweep's sample grid (`ResolveSweepSampleCount`/`ResolveSweepAngle`, see below). Called by `ShotSolverWindow` |
 | `ShotBoardDynamics` | `Solver/` | The dynamic-board half (plan §7): owns a real headless `SlotGrid` + `GridBalanceQuery` + `BalancePlanner` over stub actors, schedules flight-rebalance pulses on the sim timeline, and keeps per-balloon nudge-impulse state. Built once per gather, reset per simulated flight |
 | `ShotSimBoardActor` | `Solver/` | The stub actors (`ShotSimDynamicActor`/`ShotSimStaticActor`) the dynamics grid is populated with, plus the per-flight snapshot structs for non-target actors |
 | `ShotMotionMath` | `Solver/` | Pure math: the nudge `Reach` envelope (mirrors `BalloonMotionTicker` exactly) and the moving-circle entry solve (relative-velocity quadratic, reduces to the exact static solve at zero velocity) |
@@ -201,18 +201,35 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
 
 ## Sweep and refine
 
-`ShotSolverWindow` samples N angles (default 2048) across a configurable arc (default 10°–170°,
-measured from +X), then finds contiguous runs where `RawScore >= target`. Each run's edges are
-refined by bisection to ~0.01° (the plan's §2 fair-window resolution threshold), not by enumerating
-exact tangency angles — the plan calls that exact enumeration v2. The "best" window is the widest
-qualifying one; "Draw Best" re-simulates its centre angle with the simulator's optional path-capture
-list and draws it via `SceneDrawingHelper.DrawWorldPolyline`.
+`ShotSolverWindow` samples N angles across a configurable arc (default 10°–170°, measured from +X),
+then finds contiguous runs where `RawScore >= target`. Each run's edges are refined by bisection to
+~0.01° (the plan's §2 fair-window resolution threshold), not by enumerating exact tangency angles —
+the plan calls that exact enumeration v2. The "best" window is the widest qualifying one; "Draw Best"
+re-simulates its centre angle with the simulator's optional path-capture list and draws it via
+`SceneDrawingHelper.DrawWorldPolyline`.
+
+**Sample count.** With `IProjectileFlightConfig.AimAngleStepDegrees` at 0 (continuous aim, the
+default), N is the editable **Samples** field (default 2048), lerped evenly across the arc — unchanged
+from before quantization existed. Once a non-zero step is configured, the aim only ever lands on
+multiples of that step (`ThrowerController.QuantizeAimDirection`), so the window instead derives N
+from the arc and the step (`ShotBoardGather.ResolveSweepSampleCount`) and samples exactly those
+reachable angles (`ResolveSweepAngle`) — the **Samples** field becomes a read-only display of that
+derived count rather than an editable one, so it can't drift back to sampling off-grid angles. This is
+both cheaper (a ~31° usable arc at a 5° step is ~7 samples instead of thousands) and more correct: a
+sweep over off-grid angles could recommend, and via **Fire Best**, actually fire, a shot the player
+could never aim at. Note this only covers the SWEEP itself — a qualifying window's centre (what
+**Fire Best** actually fires when a window is found) is still bisection-refined between two on-grid
+samples to ~0.01°, so it is not itself guaranteed to land back on the step grid; only the no-window
+fallback path (drawn straight from a sample) is guaranteed on-grid. Snapping the fired centre to the
+grid too is a follow-up, not done here.
 
 ## Usage
 
 1. Enter Play Mode with the Game scene loaded.
 2. `Tools > BalloonParty > Shot Solver`.
-3. Set target score, min window width, arc, and sample count (or keep the defaults).
+3. Set target score, min window width, and arc (or keep the defaults). **Samples** is editable with
+   continuous aim (step 0) and shows the derived, read-only count once a non-zero
+   `AimAngleStepDegrees` is configured.
 4. **Run Sweep** — reads the live board/thrower/projectile once, sweeps, refines, and lists windows.
 5. Toggle **Draw Best** to see the widest qualifying window's flight path in the Scene view.
 6. **Target Colour** (empty = all): when set, only pops of that colour id count toward the target

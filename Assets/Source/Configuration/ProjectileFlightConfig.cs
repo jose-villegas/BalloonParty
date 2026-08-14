@@ -118,6 +118,12 @@ namespace BalloonParty.Configuration
         [Tooltip("Seconds of uninterrupted flight before the hold-to-speed-up tooltip appears. 0 = disabled.")]
         [SerializeField] [Min(0f)] private float _holdSpeedUpTooltipDelay = 4f;
 
+        [Header("Aiming")]
+        [Tooltip("Minimum angular subdivision (degrees) the aim direction snaps to. The pointer still " +
+                 "moves freely; only the direction it produces jumps between multiples of this step, " +
+                 "snapped to the nearest one. 0 = continuous aim (today's exact behaviour).")]
+        [SerializeField] [Min(0f)] private float _aimAngleStepDegrees;
+
         public int ProjectileStartingShields => _projectileStartingShields;
         public int ShieldToneThreshold => _shieldToneThreshold;
         public float ProjectileSpeed => _projectileSpeed;
@@ -142,5 +148,6 @@ namespace BalloonParty.Configuration
         public float HoldSpeedUpMax => _holdSpeedUpMax;
         public float HoldSpeedUpLerpDuration => _holdSpeedUpLerpDuration;
         public float HoldSpeedUpTooltipDelay => _holdSpeedUpTooltipDelay;
+        public float AimAngleStepDegrees => _aimAngleStepDegrees;
     }
 }

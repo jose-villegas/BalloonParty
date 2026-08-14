@@ -2,10 +2,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
+using BalloonParty.Configuration;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.EditorUI.Charts;
+using BalloonParty.EditorUI.Utilities;
 using BalloonParty.Game;
 using BalloonParty.Game.Level;
 using BalloonParty.Nudge;
@@ -50,6 +52,8 @@ namespace BalloonParty.Editor.ShotSolver
 
         private static readonly Color ActualPathColor = new(1f, 0.8f, 0.1f);
 
+        private static readonly EditorAssetCache<ProjectileFlightConfig> ConfigCache = new();
+
         private readonly List<ShotSolverWindowEntry> _windows = new();
         private readonly List<Vector2> _bestWindowPath = new();
         private readonly List<float> _bestWindowTimes = new();
@@ -78,6 +82,12 @@ namespace BalloonParty.Editor.ShotSolver
         private ProjectilePositionProvider _positionProvider;
         private Vector2 _windowListScroll;
         private WorldPolylineGizmo _pathGizmo;
+
+        /// <summary>0 = continuous aim. Read from the project's <see cref="ProjectileFlightConfig" />
+        /// asset rather than the live DI container — cheap enough for every <see cref="OnGUI" /> call,
+        /// and matches <see cref="ThrowerController.QuantizeAimDirection" />'s notion of "reachable"
+        /// regardless of whether a sweep has gathered the live board yet.</summary>
+        private float AimAngleStepDegrees => ConfigCache.Value != null ? ConfigCache.Value.AimAngleStepDegrees : 0f;
 
         [MenuItem("Tools/BalloonParty/Shot Solver")]
         private static void Open()
@@ -126,7 +136,30 @@ namespace BalloonParty.Editor.ShotSolver
             EditorGUILayout.BeginHorizontal();
             _arcMinDegrees = EditorGUILayout.FloatField("Arc Min °", _arcMinDegrees);
             _arcMaxDegrees = EditorGUILayout.FloatField("Arc Max °", _arcMaxDegrees);
-            _sampleCount = Mathf.Max(2, EditorGUILayout.IntField("Samples", _sampleCount));
+
+            var stepDegrees = AimAngleStepDegrees;
+            if (stepDegrees > 0f)
+            {
+                // Quantized aim: sampling anything off the reachable grid could recommend (and, via
+                // Fire Best, actually fire) a shot the player could never aim at — so once a step is
+                // configured, the count is derived from the arc/step and shown, not user-editable.
+                _sampleCount = ShotBoardGather.ResolveSweepSampleCount(
+                    _arcMinDegrees, _arcMaxDegrees, stepDegrees, _sampleCount);
+                using (new EditorGUI.DisabledScope(true))
+                {
+                    EditorGUILayout.IntField(
+                        new GUIContent(
+                            "Samples",
+                            $"Derived from the arc and the configured aim step ({stepDegrees:F2}°) — every " +
+                            "sample lands on a reachable angle."),
+                        _sampleCount);
+                }
+            }
+            else
+            {
+                _sampleCount = Mathf.Max(2, EditorGUILayout.IntField("Samples", _sampleCount));
+            }
+
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
@@ -587,8 +620,8 @@ namespace BalloonParty.Editor.ShotSolver
 
         private float SampleAngle(int index)
         {
-            var t = _sampleCount <= 1 ? 0f : (float)index / (_sampleCount - 1);
-            return Mathf.Lerp(_arcMinDegrees, _arcMaxDegrees, t);
+            return ShotBoardGather.ResolveSweepAngle(
+                index, _arcMinDegrees, _arcMaxDegrees, AimAngleStepDegrees, _sampleCount);
         }
 
         private static bool TryGatherLiveContext(out ShotSolveContext context)
