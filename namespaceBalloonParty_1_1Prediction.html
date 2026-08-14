@@ -108,7 +108,8 @@ $(function(){initNavTree('namespaceBalloonParty_1_1Prediction.html',''); initRes
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Prediction Namespace Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -120,6 +121,9 @@ Classes</h2></td></tr>
     actor, and how centrally" signal.  <a href="classBalloonParty_1_1Prediction_1_1PredictionSightProbe.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html">PredictionTraceCalculator</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Everything about a finished trace beyond its polyline: where piercing began, and what the line ran into at the end.  <a href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html">PredictionTraceLights</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional capsule (segment) lights mirroring the prediction line while the player aims — one per trace leg (the calculator emits corner points only: launch, each wall bounce, the top-wall tip), so the lights bend exactly where the line does.  <a href="classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html#details">More...</a><br /></td></tr>
@@ -135,7 +139,47 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Prediction_1_1TraceHitMarker.html">TraceHitMarker</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">View-only marker showing where the aim-prediction trace crosses this actor's circle.  <a href="classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a254a3b76e2281f08bf6f5a0b1024809b" id="r_a254a3b76e2281f08bf6f5a0b1024809b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a254a3b76e2281f08bf6f5a0b1024809b">PredictionTraceEndKind</a> { <a class="el" href="#a254a3b76e2281f08bf6f5a0b1024809ba694d154d83bf9e21a5dccd5cbf861add">OpenAir</a>
+, <a class="el" href="#a254a3b76e2281f08bf6f5a0b1024809ba94e8a499539d1a472f3b5dbbb85508c0">Wall</a>
+, <a class="el" href="#a254a3b76e2281f08bf6f5a0b1024809ba68e6202e50e4806f18d28cab574e0d82">Deflector</a>
+ }</td></tr>
+<tr class="memdesc:a254a3b76e2281f08bf6f5a0b1024809b"><td class="mdescLeft">&#160;</td><td class="mdescRight">What stopped the aim trace where it did.  <a href="#a254a3b76e2281f08bf6f5a0b1024809b">More...</a><br /></td></tr>
+<tr class="separator:a254a3b76e2281f08bf6f5a0b1024809b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a254a3b76e2281f08bf6f5a0b1024809b" name="a254a3b76e2281f08bf6f5a0b1024809b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a254a3b76e2281f08bf6f5a0b1024809b">&#9670;&#160;</a></span>PredictionTraceEndKind</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a254a3b76e2281f08bf6f5a0b1024809b">BalloonParty.Prediction.PredictionTraceEndKind</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>What stopped the aim trace where it did. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a254a3b76e2281f08bf6f5a0b1024809ba694d154d83bf9e21a5dccd5cbf861add" name="a254a3b76e2281f08bf6f5a0b1024809ba694d154d83bf9e21a5dccd5cbf861add"></a>OpenAir&#160;</td><td class="fielddoc"><p>Ran out of segments in open air — nothing was struck, so nothing bounces. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a254a3b76e2281f08bf6f5a0b1024809ba94e8a499539d1a472f3b5dbbb85508c0" name="a254a3b76e2281f08bf6f5a0b1024809ba94e8a499539d1a472f3b5dbbb85508c0"></a>Wall&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a254a3b76e2281f08bf6f5a0b1024809ba68e6202e50e4806f18d28cab574e0d82" name="a254a3b76e2281f08bf6f5a0b1024809ba68e6202e50e4806f18d28cab574e0d82"></a>Deflector&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

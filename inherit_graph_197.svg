@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Item_1_1Effects_1_1LaserEffectParams.html" target="_top" xlink:title="Laser&#45;core scalars — mirrors LaserSettings&#39;s geometry fields only.">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Item_1_1Effects_1_1EffectOccupant.html" target="_top" xlink:title="One board actor as an item effect core sees it — deliberately NOT HitsRemaining/damage&#45;capable (ISP: ...">
 <polygon fill="white" stroke="#666666" points="141,-30 0,-30 0,0 141,0 141,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Effects.</text>
-<text text-anchor="middle" x="70.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">LaserEffectParams</text>
+<text text-anchor="middle" x="70.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">EffectOccupant</text>
 </a>
 </g>
 </g>

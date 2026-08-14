@@ -1,0 +1,5 @@
+<map id="BalloonParty.Slots.Grid.SlotGridPierceItemField" name="BalloonParty.Slots.Grid.SlotGridPierceItemField">
+<area shape="rect" id="Node000001" title="Every occupied slot hosting a pierce&#45;arming item, as circles." alt="" coords="17,93,192,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Shared_1_1IPierceItemField.html" title="The pierce&#45;arming item hosts the aim telegraph must know about, in the geometry the projectile will a..." alt="" coords="5,5,204,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,59,107,93,102,93,102,59"/>
+</map>

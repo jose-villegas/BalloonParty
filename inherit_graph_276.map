@@ -1,5 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Shared_1_1GameState_1_1INavigation.html" title="Injectable seam over the static Navigation, testable without global state." alt="" coords="5,5,200,45"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Shared_1_1GameState_1_1NavigationService.html" title=" " alt="" coords="248,5,443,45"/>
-<area shape="poly" id="edge438_Node000000_Node000001" title=" " alt="" coords="214,23,248,23,248,28,214,28"/>
+<area shape="rect" id="Node000000" href="$classBalloonParty_1_1Shared_1_1Extensions_1_1PoolManagerExtensions.html" title=" " alt="" coords="5,5,236,45"/>
 </map>

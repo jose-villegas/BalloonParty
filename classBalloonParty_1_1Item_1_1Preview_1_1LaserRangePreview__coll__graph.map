@@ -1,0 +1,9 @@
+<map id="BalloonParty.Item.Preview.LaserRangePreview" name="BalloonParty.Item.Preview.LaserRangePreview">
+<area shape="rect" id="Node000001" title="Laser&#39;s telegraph: two crossing lines — the beam&#39;s axes, clipped to what&#39;s actually visible." alt="" coords="359,69,553,109"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Item_1_1Preview_1_1IItemRangePreview.html" title="Draws one item type&#39;s affected area as strokes, for the aim&#45;time telegraph that shows what an item al..." alt="" coords="18,5,213,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="227,44,359,68,358,74,226,49"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration.html" title=" " alt="" coords="17,69,214,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="228,87,358,87,358,92,228,92"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="5,133,225,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="236,128,358,105,359,110,237,133"/>
+</map>

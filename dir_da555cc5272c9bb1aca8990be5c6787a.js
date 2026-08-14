@@ -19,6 +19,7 @@ var dir_da555cc5272c9bb1aca8990be5c6787a =
     [ "IDeflectorField.cs", "IDeflectorField_8cs.html", "IDeflectorField_8cs" ],
     [ "IEffect.cs", "IEffect_8cs.html", "IEffect_8cs" ],
     [ "ImpactEventBus.cs", "ImpactEventBus_8cs.html", "ImpactEventBus_8cs" ],
+    [ "IPierceItemField.cs", "IPierceItemField_8cs.html", "IPierceItemField_8cs" ],
     [ "IPredictionTraceConfig.cs", "IPredictionTraceConfig_8cs.html", "IPredictionTraceConfig_8cs" ],
     [ "IProjectileFlightConfig.cs", "IProjectileFlightConfig_8cs.html", "IProjectileFlightConfig_8cs" ],
     [ "IReadyGate.cs", "IReadyGate_8cs.html", "IReadyGate_8cs" ],

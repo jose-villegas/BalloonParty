@@ -110,7 +110,9 @@ $(function(){initNavTree('classBalloonParty_1_1Prediction_1_1PredictionTraceProv
   <div class="summary">
 <a href="#pac-methods">Package Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Prediction_1_1PredictionTraceProvider-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Prediction.PredictionTraceProvider Class Reference</div></div>
 </div><!--header-->
@@ -123,11 +125,14 @@ $(function(){initNavTree('classBalloonParty_1_1Prediction_1_1PredictionTraceProv
 Package Functions</h2></td></tr>
 <tr class="memitem:a58937408150498ddc889b32122bb274d" id="r_a58937408150498ddc889b32122bb274d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a58937408150498ddc889b32122bb274d">Clear</a> ()</td></tr>
 <tr class="separator:a58937408150498ddc889b32122bb274d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36e5b8c8b7238712a56dfcce8c86a454" id="r_a36e5b8c8b7238712a56dfcce8c86a454"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36e5b8c8b7238712a56dfcce8c86a454">SetTrace</a> (IReadOnlyList&lt; Vector3 &gt; points)</td></tr>
-<tr class="separator:a36e5b8c8b7238712a56dfcce8c86a454"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a560d84f1492858257ec8fb713f066c84" id="r_a560d84f1492858257ec8fb713f066c84"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a560d84f1492858257ec8fb713f066c84">SetTrace</a> (IReadOnlyList&lt; Vector3 &gt; points, <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a> end=default)</td></tr>
+<tr class="separator:a560d84f1492858257ec8fb713f066c84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a0ed9d57275a5a104c0550a2ced31f99b" id="r_a0ed9d57275a5a104c0550a2ced31f99b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0ed9d57275a5a104c0550a2ced31f99b">End</a> = <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html#a9a0c5d7e992bf3df6e5b876d9b46c1ac">PredictionTraceEnd.OpenAir</a>(-1)<code> [get, private set]</code></td></tr>
+<tr class="memdesc:a0ed9d57275a5a104c0550a2ced31f99b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where piercing began and what the line ran into, mirroring <code><a class="el" href="classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#a7d5d0a81896e184ad2cf1f9adde1ba85" title="Calculates the prediction trace, bouncing off the left/right/top walls and off any balloon that would...">PredictionTraceCalculator.Calculate</a></code>'s own out parameter.  <br /></td></tr>
+<tr class="separator:a0ed9d57275a5a104c0550a2ced31f99b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d33fe54be929a98260423a2a553f4f4" id="r_a8d33fe54be929a98260423a2a553f4f4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8d33fe54be929a98260423a2a553f4f4">IsActive</a><code> [get, private set]</code></td></tr>
 <tr class="separator:a8d33fe54be929a98260423a2a553f4f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30672c970f6f425e1d29c92118de98c4" id="r_a30672c970f6f425e1d29c92118de98c4"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; Vector3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a30672c970f6f425e1d29c92118de98c4">Points</a><code> [get]</code></td></tr>
@@ -135,10 +140,22 @@ Properties</h2></td></tr>
 <tr class="memitem:aaab5caefa4d93be6b867e73921dcabfb" id="r_aaab5caefa4d93be6b867e73921dcabfb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaab5caefa4d93be6b867e73921dcabfb">Version</a><code> [get, private set]</code></td></tr>
 <tr class="separator:aaab5caefa4d93be6b867e73921dcabfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a325bad2a871d69e43fd49617cfde231d" id="r_a325bad2a871d69e43fd49617cfde231d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a325bad2a871d69e43fd49617cfde231d">HasChanged</a> (IReadOnlyList&lt; Vector3 &gt; points, <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a> end)</td></tr>
+<tr class="separator:a325bad2a871d69e43fd49617cfde231d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a40e0c91d94f1405f5f0ec8ed70c0adfb" id="r_a40e0c91d94f1405f5f0ec8ed70c0adfb"><td class="memItemLeft" align="right" valign="top">readonly List&lt; Vector3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40e0c91d94f1405f5f0ec8ed70c0adfb">_points</a> = new()</td></tr>
 <tr class="separator:a40e0c91d94f1405f5f0ec8ed70c0adfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:afbefc6af1256d2a21abc17b20f5af5a2" id="r_afbefc6af1256d2a21abc17b20f5af5a2"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afbefc6af1256d2a21abc17b20f5af5a2">PointEpsilon</a> = 0.0005f</td></tr>
+<tr class="separator:afbefc6af1256d2a21abc17b20f5af5a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71313c7567d0b90bd1b30e94ec1f791e" id="r_a71313c7567d0b90bd1b30e94ec1f791e"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a71313c7567d0b90bd1b30e94ec1f791e">PointEpsilonSqr</a> = <a class="el" href="#afbefc6af1256d2a21abc17b20f5af5a2">PointEpsilon</a> * <a class="el" href="#afbefc6af1256d2a21abc17b20f5af5a2">PointEpsilon</a></td></tr>
+<tr class="separator:a71313c7567d0b90bd1b30e94ec1f791e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="namespaceBalloonParty_1_1Shared.html">Shared</a> reference to the current aim-prediction trace, decoupled from direct access — mirrors <a class="el" href="classBalloonParty_1_1Projectile_1_1ProjectilePositionProvider.html" title="Shared reference to the active projectile&#39;s world position, decoupled from direct access.">BalloonParty.Projectile.ProjectilePositionProvider</a>. </p>
@@ -169,8 +186,37 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a36e5b8c8b7238712a56dfcce8c86a454" name="a36e5b8c8b7238712a56dfcce8c86a454"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a36e5b8c8b7238712a56dfcce8c86a454">&#9670;&#160;</a></span>SetTrace()</h2>
+<a id="a325bad2a871d69e43fd49617cfde231d" name="a325bad2a871d69e43fd49617cfde231d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a325bad2a871d69e43fd49617cfde231d">&#9670;&#160;</a></span>HasChanged()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Prediction.PredictionTraceProvider.HasChanged </td>
+          <td>(</td>
+          <td class="paramtype">IReadOnlyList&lt; Vector3 &gt;</td>          <td class="paramname"><span class="paramname"><em>points</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a></td>          <td class="paramname"><span class="paramname"><em>end</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a560d84f1492858257ec8fb713f066c84" name="a560d84f1492858257ec8fb713f066c84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a560d84f1492858257ec8fb713f066c84">&#9670;&#160;</a></span>SetTrace()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -181,8 +227,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void BalloonParty.Prediction.PredictionTraceProvider.SetTrace </td>
           <td>(</td>
-          <td class="paramtype">IReadOnlyList&lt; Vector3 &gt;</td>          <td class="paramname"><span class="paramname"><em>points</em></span></td><td>)</td>
+          <td class="paramtype">IReadOnlyList&lt; Vector3 &gt;</td>          <td class="paramname"><span class="paramname"><em>points</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a></td>          <td class="paramname"><span class="paramname"><em>end</em></span><span class="paramdefsep"> = </span><span class="paramdefval">default</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -217,7 +267,75 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="afbefc6af1256d2a21abc17b20f5af5a2" name="afbefc6af1256d2a21abc17b20f5af5a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbefc6af1256d2a21abc17b20f5af5a2">&#9670;&#160;</a></span>PointEpsilon</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.Prediction.PredictionTraceProvider.PointEpsilon = 0.0005f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a71313c7567d0b90bd1b30e94ec1f791e" name="a71313c7567d0b90bd1b30e94ec1f791e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71313c7567d0b90bd1b30e94ec1f791e">&#9670;&#160;</a></span>PointEpsilonSqr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.Prediction.PredictionTraceProvider.PointEpsilonSqr = <a class="el" href="#afbefc6af1256d2a21abc17b20f5af5a2">PointEpsilon</a> * <a class="el" href="#afbefc6af1256d2a21abc17b20f5af5a2">PointEpsilon</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="a0ed9d57275a5a104c0550a2ced31f99b" name="a0ed9d57275a5a104c0550a2ced31f99b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ed9d57275a5a104c0550a2ced31f99b">&#9670;&#160;</a></span>End</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a> BalloonParty.Prediction.PredictionTraceProvider.End = <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html#a9a0c5d7e992bf3df6e5b876d9b46c1ac">PredictionTraceEnd.OpenAir</a>(-1)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private-set">private set</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where piercing began and what the line ran into, mirroring <code><a class="el" href="classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#a7d5d0a81896e184ad2cf1f9adde1ba85" title="Calculates the prediction trace, bouncing off the left/right/top walls and off any balloon that would...">PredictionTraceCalculator.Calculate</a></code>'s own out parameter. </p>
+
+</div>
+</div>
 <a id="a8d33fe54be929a98260423a2a553f4f4" name="a8d33fe54be929a98260423a2a553f4f4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8d33fe54be929a98260423a2a553f4f4">&#9670;&#160;</a></span>IsActive</h2>
 

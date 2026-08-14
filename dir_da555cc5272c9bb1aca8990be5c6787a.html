@@ -154,6 +154,8 @@ Files</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ImpactEventBus_8cs.html">ImpactEventBus.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IPierceItemField_8cs.html">IPierceItemField.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IPredictionTraceConfig_8cs.html">IPredictionTraceConfig.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IProjectileFlightConfig_8cs.html">IProjectileFlightConfig.cs</a></td></tr>
@@ -185,7 +187,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Types and utilities used across multiple features.</p>
-<h1><a class="anchor" id="autotoc_md860"></a>
+<h1><a class="anchor" id="autotoc_md875"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -233,10 +235,12 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>IDeflectorField</code> / <code>DeflectorCircle</code>   </td><td class="markdownTableBodyNone">The deflectors the aim telegraph (and the shield planner) must bounce off, as circles in the geometry the projectile will actually meet. Implemented by <code>SlotGridDeflectorField</code> (<code>Slots/Grid/</code>)    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>IPierceItemField</code> / <code>PierceItemCircle</code>   </td><td class="markdownTableBodyNone">The pierce-arming item hosts the aim telegraph must know about, so it can stop drawing a deflection off every tough beyond the first one crossed. Implemented by <code>SlotGridPierceItemField</code> (<code>Slots/Grid/</code>)    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>StreakShieldRule</code>   </td><td class="markdownTableBodyNone">The one place a continued colour streak's shield refund is decided, called by both the live <code>ProjectileHitResolver</code> and the shot solver's <code>ShotSimulator</code> so the two can't drift apart   </td></tr>
 </table>
 <p>This table covers the folders and the types other features reach for most; a few small editor-only attributes living alongside these files aren't broken out separately.</p>
-<h1><a class="anchor" id="autotoc_md861"></a>
+<h1><a class="anchor" id="autotoc_md876"></a>
 Messages</h1>
 <p>Messages are the signals that decouple systems from one another. A publisher fires a message; any number of subscribers react independently.</p>
 <p><b>This table is a curated subset, not an index.</b> It lists the gameplay-visible consumers of each message — the ones whose absence would break a mechanic — not every subscriber. <code>Game/Telemetry</code>'s <code>GameplayMetricsService</code> and <code>Game/Flight</code>'s <code>FlightStatsService</code> between them subscribe to roughly 21 of these messages without being named in a single row below; they read the game, they don't drive it, so listing them on every row would bury the consumers that do. Check the publisher's own file for the exhaustive subscriber list when it matters.</p>

@@ -113,6 +113,7 @@ $(function(){initNavTree('classBalloonParty_1_1Item_1_1LaserItemRotation.html','
 <a href="#properties">Properties</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Item_1_1LaserItemRotation-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Item.LaserItemRotation Class Reference</div></div>
 </div><!--header-->
@@ -139,8 +140,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a5f3dbf8ddbde71b9acefbe9a08917849" id="r_a5f3dbf8ddbde71b9acefbe9a08917849"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5f3dbf8ddbde71b9acefbe9a08917849">ConfigureLightField</a> (<a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a> lightField, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette, <a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html">LaserSettings</a> settings)</td></tr>
-<tr class="separator:a5f3dbf8ddbde71b9acefbe9a08917849"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa261a406353ab9493b7bdc15d26449b7" id="r_aa261a406353ab9493b7bdc15d26449b7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa261a406353ab9493b7bdc15d26449b7">Configure</a> (<a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a> lightField, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette, <a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html">LaserSettings</a> settings, Vector2 slotSeparation)</td></tr>
+<tr class="separator:aa261a406353ab9493b7bdc15d26449b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -152,8 +153,12 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a6bae99c9ce34fce38509218d0d6bd150" id="r_a6bae99c9ce34fce38509218d0d6bd150"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6bae99c9ce34fce38509218d0d6bd150">AdvanceStep</a> ()</td></tr>
+<tr class="separator:a6bae99c9ce34fce38509218d0d6bd150"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb6617bc8a241e4d5208afdba45646f7" id="r_afb6617bc8a241e4d5208afdba45646f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afb6617bc8a241e4d5208afdba45646f7">DisposeTelegraph</a> ()</td></tr>
 <tr class="separator:afb6617bc8a241e4d5208afdba45646f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba0e4596ca9d7178accf8ba96d6a6c35" id="r_aba0e4596ca9d7178accf8ba96d6a6c35"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba0e4596ca9d7178accf8ba96d6a6c35">DrawnAngle</a> ()</td></tr>
+<tr class="separator:aba0e4596ca9d7178accf8ba96d6a6c35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65cbc62a91a434bd37d61a13e8a52da6" id="r_a65cbc62a91a434bd37d61a13e8a52da6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65cbc62a91a434bd37d61a13e8a52da6">OnDisable</a> ()</td></tr>
 <tr class="separator:a65cbc62a91a434bd37d61a13e8a52da6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49912cb28a389c228e981fe6aa3aa13b" id="r_a49912cb28a389c228e981fe6aa3aa13b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a49912cb28a389c228e981fe6aa3aa13b">OnEnable</a> ()</td></tr>
@@ -169,8 +174,12 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a0361cfdaeb86205f2b48c76b35171763" id="r_a0361cfdaeb86205f2b48c76b35171763"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0361cfdaeb86205f2b48c76b35171763">_angle</a></td></tr>
-<tr class="separator:a0361cfdaeb86205f2b48c76b35171763"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a374fdbbbdf4ce6d6060050867c58f7d5" id="r_a374fdbbbdf4ce6d6060050867c58f7d5"><td class="memItemLeft" align="right" valign="top">float[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a374fdbbbdf4ce6d6060050867c58f7d5">_angles</a> = { 0f, 60f, 120f, 180f, 240f, 300f }</td></tr>
+<tr class="separator:a374fdbbbdf4ce6d6060050867c58f7d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d29969caeca3ea956b6194d3fb0d655" id="r_a1d29969caeca3ea956b6194d3fb0d655"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1d29969caeca3ea956b6194d3fb0d655">_currentIndex</a></td></tr>
+<tr class="separator:a1d29969caeca3ea956b6194d3fb0d655"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1422894d81be61a855fad5b8b70b9fb" id="r_ab1422894d81be61a855fad5b8b70b9fb"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab1422894d81be61a855fad5b8b70b9fb">_elapsed</a></td></tr>
+<tr class="separator:ab1422894d81be61a855fad5b8b70b9fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a173599f21bf80a59698edd65b861113d" id="r_a173599f21bf80a59698edd65b861113d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1Light.html">Light</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a173599f21bf80a59698edd65b861113d">_horizontal</a></td></tr>
 <tr class="separator:a173599f21bf80a59698edd65b861113d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab76aa89506308d95c4c5fe21e55f859c" id="r_ab76aa89506308d95c4c5fe21e55f859c"><td class="memItemLeft" align="right" valign="top">IDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab76aa89506308d95c4c5fe21e55f859c">_horizontalRegistration</a></td></tr>
@@ -181,16 +190,48 @@ Private Attributes</h2></td></tr>
 <tr class="separator:af8145558e0483e14d6a8b653c8554a0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c8a73971e2261cfcaf4cbaac2cd3d38" id="r_a1c8a73971e2261cfcaf4cbaac2cd3d38"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c8a73971e2261cfcaf4cbaac2cd3d38">_palette</a></td></tr>
 <tr class="separator:a1c8a73971e2261cfcaf4cbaac2cd3d38"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7b0ea9a99ab21d98ac645f6d076cdf2" id="r_ac7b0ea9a99ab21d98ac645f6d076cdf2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac7b0ea9a99ab21d98ac645f6d076cdf2">_rotationSpeed</a></td></tr>
-<tr class="separator:ac7b0ea9a99ab21d98ac645f6d076cdf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f53f58f57b776e5c08b2f8e0133faef" id="r_a0f53f58f57b776e5c08b2f8e0133faef"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0f53f58f57b776e5c08b2f8e0133faef">_previousIndex</a></td></tr>
+<tr class="separator:a0f53f58f57b776e5c08b2f8e0133faef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90268d14af03437f17e49f32a248640a" id="r_a90268d14af03437f17e49f32a248640a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a90268d14af03437f17e49f32a248640a">_stepSeconds</a> = 1.5f</td></tr>
+<tr class="separator:a90268d14af03437f17e49f32a248640a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf506aa6a9bba468c280f5de154234d1" id="r_aaf506aa6a9bba468c280f5de154234d1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf506aa6a9bba468c280f5de154234d1">_stopped</a></td></tr>
 <tr class="separator:aaf506aa6a9bba468c280f5de154234d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3e5d2808ad33f49c317b384306927b6" id="r_ae3e5d2808ad33f49c317b384306927b6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1Light.html">Light</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae3e5d2808ad33f49c317b384306927b6">_vertical</a></td></tr>
 <tr class="separator:ae3e5d2808ad33f49c317b384306927b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a777c5968796128e5cab774cf7cc2641f" id="r_a777c5968796128e5cab774cf7cc2641f"><td class="memItemLeft" align="right" valign="top">IDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a777c5968796128e5cab774cf7cc2641f">_verticalRegistration</a></td></tr>
 <tr class="separator:a777c5968796128e5cab774cf7cc2641f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:adf90d23c890d8466f71dd9564e146cbd" id="r_adf90d23c890d8466f71dd9564e146cbd"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adf90d23c890d8466f71dd9564e146cbd">TransitionFraction</a> = 0.25f</td></tr>
+<tr class="separator:adf90d23c890d8466f71dd9564e146cbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6bae99c9ce34fce38509218d0d6bd150" name="a6bae99c9ce34fce38509218d0d6bd150"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6bae99c9ce34fce38509218d0d6bd150">&#9670;&#160;</a></span>AdvanceStep()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.LaserItemRotation.AdvanceStep </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a4c4aee83e1c3c18a759e8a34702c9d27" name="a4c4aee83e1c3c18a759e8a34702c9d27"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4c4aee83e1c3c18a759e8a34702c9d27">&#9670;&#160;</a></span>CaptureSnapshot()</h2>
 
@@ -210,8 +251,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a5f3dbf8ddbde71b9acefbe9a08917849" name="a5f3dbf8ddbde71b9acefbe9a08917849"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5f3dbf8ddbde71b9acefbe9a08917849">&#9670;&#160;</a></span>ConfigureLightField()</h2>
+<a id="aa261a406353ab9493b7bdc15d26449b7" name="aa261a406353ab9493b7bdc15d26449b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa261a406353ab9493b7bdc15d26449b7">&#9670;&#160;</a></span>Configure()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -220,7 +261,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void BalloonParty.Item.LaserItemRotation.ConfigureLightField </td>
+          <td class="memname">void BalloonParty.Item.LaserItemRotation.Configure </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a></td>          <td class="paramname"><span class="paramname"><em>lightField</em></span>, </td>
         </tr>
@@ -232,7 +273,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html">LaserSettings</a></td>          <td class="paramname"><span class="paramname"><em>settings</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html">LaserSettings</a></td>          <td class="paramname"><span class="paramname"><em>settings</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>slotSeparation</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -255,6 +301,31 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">void BalloonParty.Item.LaserItemRotation.DisposeTelegraph </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aba0e4596ca9d7178accf8ba96d6a6c35" name="aba0e4596ca9d7178accf8ba96d6a6c35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba0e4596ca9d7178accf8ba96d6a6c35">&#9670;&#160;</a></span>DrawnAngle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Item.LaserItemRotation.DrawnAngle </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -420,8 +491,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a0361cfdaeb86205f2b48c76b35171763" name="a0361cfdaeb86205f2b48c76b35171763"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0361cfdaeb86205f2b48c76b35171763">&#9670;&#160;</a></span>_angle</h2>
+<a id="a374fdbbbdf4ce6d6060050867c58f7d5" name="a374fdbbbdf4ce6d6060050867c58f7d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a374fdbbbdf4ce6d6060050867c58f7d5">&#9670;&#160;</a></span>_angles</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -430,7 +501,51 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Item.LaserItemRotation._angle</td>
+          <td class="memname">float [] BalloonParty.Item.LaserItemRotation._angles = { 0f, 60f, 120f, 180f, 240f, 300f }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1d29969caeca3ea956b6194d3fb0d655" name="a1d29969caeca3ea956b6194d3fb0d655"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d29969caeca3ea956b6194d3fb0d655">&#9670;&#160;</a></span>_currentIndex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Item.LaserItemRotation._currentIndex</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab1422894d81be61a855fad5b8b70b9fb" name="ab1422894d81be61a855fad5b8b70b9fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1422894d81be61a855fad5b8b70b9fb">&#9670;&#160;</a></span>_elapsed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Item.LaserItemRotation._elapsed</td>
         </tr>
       </table>
   </td>
@@ -552,8 +667,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac7b0ea9a99ab21d98ac645f6d076cdf2" name="ac7b0ea9a99ab21d98ac645f6d076cdf2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7b0ea9a99ab21d98ac645f6d076cdf2">&#9670;&#160;</a></span>_rotationSpeed</h2>
+<a id="a0f53f58f57b776e5c08b2f8e0133faef" name="a0f53f58f57b776e5c08b2f8e0133faef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f53f58f57b776e5c08b2f8e0133faef">&#9670;&#160;</a></span>_previousIndex</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -562,7 +677,29 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Item.LaserItemRotation._rotationSpeed</td>
+          <td class="memname">int BalloonParty.Item.LaserItemRotation._previousIndex</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a90268d14af03437f17e49f32a248640a" name="a90268d14af03437f17e49f32a248640a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90268d14af03437f17e49f32a248640a">&#9670;&#160;</a></span>_stepSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Item.LaserItemRotation._stepSeconds = 1.5f</td>
         </tr>
       </table>
   </td>
@@ -634,6 +771,28 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adf90d23c890d8466f71dd9564e146cbd" name="adf90d23c890d8466f71dd9564e146cbd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf90d23c890d8466f71dd9564e146cbd">&#9670;&#160;</a></span>TransitionFraction</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.Item.LaserItemRotation.TransitionFraction = 0.25f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

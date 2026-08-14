@@ -9,5 +9,6 @@ var dir_25123b577f127efb9ecd32bac211639a =
     [ "SlotGrid.cs", "SlotGrid_8cs.html", "SlotGrid_8cs" ],
     [ "SlotGridChangedEvent.cs", "SlotGridChangedEvent_8cs.html", "SlotGridChangedEvent_8cs" ],
     [ "SlotGridDeflectorField.cs", "SlotGridDeflectorField_8cs.html", "SlotGridDeflectorField_8cs" ],
+    [ "SlotGridPierceItemField.cs", "SlotGridPierceItemField_8cs.html", "SlotGridPierceItemField_8cs" ],
     [ "SlotGridView.cs", "SlotGridView_8cs.html", "SlotGridView_8cs" ]
 ];

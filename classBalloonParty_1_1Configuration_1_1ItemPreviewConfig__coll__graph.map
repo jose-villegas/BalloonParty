@@ -1,0 +1,19 @@
+<map id="BalloonParty.Configuration.ItemPreviewConfig" name="BalloonParty.Configuration.ItemPreviewConfig">
+<area shape="rect" id="Node000001" title=" " alt="" coords="643,127,840,167"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="333,5,463,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="477,24,545,41,592,60,637,82,711,125,708,130,635,87,590,65,543,46,476,29"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html" title="Tuning for the aim&#45;time item range telegraph (Item Range Preview)." alt="" coords="299,55,497,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="508,96,646,125,644,130,507,101"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1ShieldPreviewSettings.html" title=" " alt="" coords="277,120,519,175"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="532,145,643,145,643,150,532,150"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Configuration_1_1IShieldPreviewSettings.html" title="Shield&#39;s own figure params." alt="" coords="5,127,203,167"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="216,145,277,145,277,150,216,150"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1BombPreviewSettings.html" title=" " alt="" coords="252,199,544,239"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="507,194,644,165,646,170,508,199"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1IBombPreviewSettings.html" title="Bomb&#39;s own figure params." alt="" coords="5,199,203,239"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="216,217,252,217,252,222,216,222"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1PaintPreviewSettings.html" title=" " alt="" coords="255,263,541,303"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="518,257,543,249,634,207,707,165,710,170,636,212,545,254,520,262"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Configuration_1_1IPaintPreviewSettings.html" title="Paint&#39;s own figure params." alt="" coords="5,263,203,303"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="216,281,254,281,254,286,216,286"/>
+</map>

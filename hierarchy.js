@@ -3,6 +3,7 @@ var hierarchy =
     [ "BalloonParty.Shared.Messages.ActorHitMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html", null ],
     [ "BalloonParty.Editor.GradientTextureDrawer.GradientStorage.AlphaKeyEntry", "classBalloonParty_1_1Editor_1_1GradientTextureDrawer_1_1GradientStorage_1_1AlphaKeyEntry.html", null ],
     [ "BalloonParty.Shared.Extensions.AnimationCurveExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1AnimationCurveExtensions.html", null ],
+    [ "BalloonParty.Item.Preview.ItemPreviewTicker.ApproachPen", "structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker_1_1ApproachPen.html", null ],
     [ "BalloonParty.Editor.Release.ReleasePublisher.AssetResponse", "classBalloonParty_1_1Editor_1_1Release_1_1ReleasePublisher_1_1AssetResponse.html", null ],
     [ "BalloonParty.Audio.Editor.AttributionLedger", "classBalloonParty_1_1Audio_1_1Editor_1_1AttributionLedger.html", null ],
     [ "BalloonParty.Audio.Editor.AttributionRecord", "classBalloonParty_1_1Audio_1_1Editor_1_1AttributionRecord.html", null ],
@@ -151,6 +152,7 @@ var hierarchy =
     [ "BalloonParty.Slots.Grid.GridBalanceQuery", "classBalloonParty_1_1Slots_1_1Grid_1_1GridBalanceQuery.html", null ],
     [ "BalloonParty.Slots.Grid.HexCoordinates", "classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates.html", null ],
     [ "BalloonParty.Configuration.Balloons.HitVfxOverride", "classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html", null ],
+    [ "BalloonParty.Item.Preview.ItemRangePreviewController.HostHit", "structBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController_1_1HostHit.html", null ],
     [ "BalloonParty.Game.Level.IActiveLevelParameters", "interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html", [
       [ "BalloonParty.Game.Level.LevelDifficultyResolver", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html", null ]
     ] ],
@@ -204,6 +206,9 @@ var hierarchy =
     [ "BalloonParty.Game.Cinematics.IBoardEffect", "interfaceBalloonParty_1_1Game_1_1Cinematics_1_1IBoardEffect.html", [
       [ "BalloonParty.Game.Cinematics.BoardFloatAwayEffect", "classBalloonParty_1_1Game_1_1Cinematics_1_1BoardFloatAwayEffect.html", null ],
       [ "BalloonParty.Game.Cinematics.BoardPopWave", "classBalloonParty_1_1Game_1_1Cinematics_1_1BoardPopWave.html", null ]
+    ] ],
+    [ "BalloonParty.Configuration.IBombPreviewSettings", "interfaceBalloonParty_1_1Configuration_1_1IBombPreviewSettings.html", [
+      [ "BalloonParty.Configuration.ItemPreviewConfig.BombPreviewSettings", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1BombPreviewSettings.html", null ]
     ] ],
     [ "BalloonParty.Configuration.Buffs.IBuffConfiguration", "interfaceBalloonParty_1_1Configuration_1_1Buffs_1_1IBuffConfiguration.html", [
       [ "BalloonParty.Configuration.Buffs.BuffConfiguration", "classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffConfiguration.html", null ]
@@ -313,6 +318,8 @@ var hierarchy =
       [ "BalloonParty.Item.ItemAssigner", "classBalloonParty_1_1Item_1_1ItemAssigner.html", null ],
       [ "BalloonParty.Item.Laser.LaserItemHandler", "classBalloonParty_1_1Item_1_1Laser_1_1LaserItemHandler.html", null ],
       [ "BalloonParty.Item.Lightning.LightningItemHandler", "classBalloonParty_1_1Item_1_1Lightning_1_1LightningItemHandler.html", null ],
+      [ "BalloonParty.Item.Preview.ItemPreviewTicker", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html", null ],
+      [ "BalloonParty.Item.Preview.ItemRangePreviewController", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html", null ],
       [ "BalloonParty.Item.Shield.ShieldItemHandler", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldItemHandler.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeDischargeBloom", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeItemHandler", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html", null ],
@@ -447,6 +454,9 @@ var hierarchy =
     [ "BalloonParty.Projectile.Controller.IHoldSpeedUpState", "interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IHoldSpeedUpState.html", [
       [ "BalloonParty.Projectile.Controller.HoldSpeedUpController", "classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html", null ]
     ] ],
+    [ "BalloonParty.Item.IHostsSpinningItem", "interfaceBalloonParty_1_1Item_1_1IHostsSpinningItem.html", [
+      [ "BalloonParty.Balloon.View.BalloonView", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html", null ]
+    ] ],
     [ "BalloonParty.Item.IItem", "interfaceBalloonParty_1_1Item_1_1IItem.html", [
       [ "BalloonParty.Item.IBalloonItem", "interfaceBalloonParty_1_1Item_1_1IBalloonItem.html", [
         [ "BalloonParty.Item.Bomb.BombItemHandler", "classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler.html", null ],
@@ -460,6 +470,17 @@ var hierarchy =
     [ "BalloonParty.Configuration.Items.IItemConfiguration", "interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration.html", [
       [ "BalloonParty.Configuration.Items.ItemConfiguration", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemConfiguration.html", null ]
     ] ],
+    [ "BalloonParty.Configuration.IItemPreviewConfig", "interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html", [
+      [ "BalloonParty.Configuration.ItemPreviewConfig", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html", null ]
+    ] ],
+    [ "BalloonParty.Item.Preview.IItemRangePreview", "interfaceBalloonParty_1_1Item_1_1Preview_1_1IItemRangePreview.html", [
+      [ "BalloonParty.Item.Preview.BombRangePreview", "classBalloonParty_1_1Item_1_1Preview_1_1BombRangePreview.html", null ],
+      [ "BalloonParty.Item.Preview.LaserRangePreview", "classBalloonParty_1_1Item_1_1Preview_1_1LaserRangePreview.html", null ],
+      [ "BalloonParty.Item.Preview.LightningRangePreview", "classBalloonParty_1_1Item_1_1Preview_1_1LightningRangePreview.html", null ],
+      [ "BalloonParty.Item.Preview.PaintRangePreview", "classBalloonParty_1_1Item_1_1Preview_1_1PaintRangePreview.html", null ],
+      [ "BalloonParty.Item.Preview.ShieldRangePreview", "classBalloonParty_1_1Item_1_1Preview_1_1ShieldRangePreview.html", null ],
+      [ "BalloonParty.Item.Preview.SnipeRangePreview", "classBalloonParty_1_1Item_1_1Preview_1_1SnipeRangePreview.html", null ]
+    ] ],
     [ "BalloonParty.Item.IItemView", "interfaceBalloonParty_1_1Item_1_1IItemView.html", [
       [ "BalloonParty.Item.ItemVisualView", "classBalloonParty_1_1Item_1_1ItemVisualView.html", null ]
     ] ],
@@ -468,6 +489,8 @@ var hierarchy =
       [ "BalloonParty.Game.Cinematics.CinematicDirector", "classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicDirector.html", null ],
       [ "BalloonParty.Game.Danger.SpaceDanger", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html", null ],
       [ "BalloonParty.Game.Score.Behaviours.ShapeFormationTicker", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html", null ],
+      [ "BalloonParty.Item.Preview.ItemPreviewTicker", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html", null ],
+      [ "BalloonParty.Item.Preview.ItemRangePreviewController", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html", null ],
       [ "BalloonParty.Shared.ImpactEventBus", "classBalloonParty_1_1Shared_1_1ImpactEventBus.html", null ]
     ] ],
     [ "BalloonParty.Game.Telemetry.ILevelMetricsView", "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html", [
@@ -504,6 +527,9 @@ var hierarchy =
     [ "BalloonParty.Configuration.IOverflowSettings", "interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html", [
       [ "BalloonParty.Configuration.OverflowSettings", "classBalloonParty_1_1Configuration_1_1OverflowSettings.html", null ]
     ] ],
+    [ "BalloonParty.Configuration.IPaintPreviewSettings", "interfaceBalloonParty_1_1Configuration_1_1IPaintPreviewSettings.html", [
+      [ "BalloonParty.Configuration.ItemPreviewConfig.PaintPreviewSettings", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1PaintPreviewSettings.html", null ]
+    ] ],
     [ "BalloonParty.Configuration.Palette.IPaletteColorMasked", "interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html", [
       [ "BalloonParty.Configuration.Effects.SpeckLookProfile", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html", null ],
       [ "BalloonParty.Configuration.Effects.SpeckMotionProfile", "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html", null ],
@@ -512,6 +538,9 @@ var hierarchy =
     [ "BalloonParty.Slots.Capabilities.IPassThrough", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IPassThrough.html", [
       [ "BalloonParty.Slots.Actor.Archetype.PuffObstacleModel", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html", null ],
       [ "BalloonParty.Slots.Actor.StaticActorModel", "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorModel.html", null ]
+    ] ],
+    [ "BalloonParty.Shared.IPierceItemField", "interfaceBalloonParty_1_1Shared_1_1IPierceItemField.html", [
+      [ "BalloonParty.Slots.Grid.SlotGridPierceItemField", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridPierceItemField.html", null ]
     ] ],
     [ "BalloonParty.Game.Health.IPlayerHealth", "interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html", [
       [ "BalloonParty.Game.Health.PlayerHealthController", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html", null ]
@@ -523,6 +552,7 @@ var hierarchy =
       [ "BalloonParty.Audio.View.AudioSourceVoice", "classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html", null ],
       [ "BalloonParty.Balloon.View.BalloonView", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html", null ],
       [ "BalloonParty.Item.ItemVisualView", "classBalloonParty_1_1Item_1_1ItemVisualView.html", null ],
+      [ "BalloonParty.Item.Preview.HighlightTrail", "classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html", null ],
       [ "BalloonParty.Projectile.View.ProjectileView", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html", null ],
       [ "BalloonParty.Shared.Pool.EffectView", "classBalloonParty_1_1Shared_1_1Pool_1_1EffectView.html", null ],
       [ "BalloonParty.Shared.Pool.PoolableParticle", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolableParticle.html", null ],
@@ -668,6 +698,9 @@ var hierarchy =
     [ "BalloonParty.Configuration.Effects.IShieldFieldSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IShieldFieldSettings.html", [
       [ "BalloonParty.Configuration.Effects.ShieldFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html", null ]
     ] ],
+    [ "BalloonParty.Configuration.IShieldPreviewSettings", "interfaceBalloonParty_1_1Configuration_1_1IShieldPreviewSettings.html", [
+      [ "BalloonParty.Configuration.ItemPreviewConfig.ShieldPreviewSettings", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1ShieldPreviewSettings.html", null ]
+    ] ],
     [ "BalloonParty.Slots.Grid.IShieldSlotPreference", "interfaceBalloonParty_1_1Slots_1_1Grid_1_1IShieldSlotPreference.html", [
       [ "BalloonParty.Item.Shield.ShieldSlotPreference", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldSlotPreference.html", null ]
     ] ],
@@ -769,6 +802,8 @@ var hierarchy =
       [ "BalloonParty.Item.ItemAssigner", "classBalloonParty_1_1Item_1_1ItemAssigner.html", null ],
       [ "BalloonParty.Item.Laser.LaserItemHandler", "classBalloonParty_1_1Item_1_1Laser_1_1LaserItemHandler.html", null ],
       [ "BalloonParty.Item.Lightning.LightningItemHandler", "classBalloonParty_1_1Item_1_1Lightning_1_1LightningItemHandler.html", null ],
+      [ "BalloonParty.Item.Preview.ItemPreviewPoolBootstrap", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewPoolBootstrap.html", null ],
+      [ "BalloonParty.Item.Preview.ItemRangePreviewController", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html", null ],
       [ "BalloonParty.Item.Shield.ShieldItemHandler", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldItemHandler.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeDischargeBloom", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeItemHandler", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html", null ],
@@ -806,6 +841,11 @@ var hierarchy =
     [ "BalloonParty.Shared.Messages.ItemCheckMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ItemCheckMessage.html", null ],
     [ "BalloonParty.Item.Effects.ItemEffectParams", "structBalloonParty_1_1Item_1_1Effects_1_1ItemEffectParams.html", null ],
     [ "BalloonParty.Item.ItemEffectPlayer", "classBalloonParty_1_1Item_1_1ItemEffectPlayer.html", null ],
+    [ "BalloonParty.Item.Preview.ItemPreviewContext", "structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewContext.html", null ],
+    [ "BalloonParty.Item.Preview.ItemPreviewEntry", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewEntry.html", null ],
+    [ "BalloonParty.Item.Preview.ItemPreviewShape", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewShape.html", null ],
+    [ "BalloonParty.Item.Preview.ItemPreviewStroke", "structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewStroke.html", null ],
+    [ "BalloonParty.Item.Preview.ItemPreviewViewport", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewViewport.html", null ],
     [ "BalloonParty.Solver.ItemProfile", "structBalloonParty_1_1Solver_1_1ItemProfile.html", null ],
     [ "BalloonParty.Configuration.Items.ItemSettings", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html", null ],
     [ "BalloonParty.Configuration.Items.ItemTypeWeight", "structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html", null ],
@@ -944,6 +984,7 @@ var hierarchy =
       [ "BalloonParty.Item.ItemVisualView", "classBalloonParty_1_1Item_1_1ItemVisualView.html", null ],
       [ "BalloonParty.Item.LaserItemRotation", "classBalloonParty_1_1Item_1_1LaserItemRotation.html", null ],
       [ "BalloonParty.Item.Paint.PaintBlobRenderer", "classBalloonParty_1_1Item_1_1Paint_1_1PaintBlobRenderer.html", null ],
+      [ "BalloonParty.Item.Preview.HighlightTrail", "classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html", null ],
       [ "BalloonParty.Item.ProjectileFacingRotator", "classBalloonParty_1_1Item_1_1ProjectileFacingRotator.html", null ],
       [ "BalloonParty.Item.SightReaction", "classBalloonParty_1_1Item_1_1SightReaction.html", [
         [ "BalloonParty.Item.SightRampReaction", "classBalloonParty_1_1Item_1_1SightRampReaction.html", [
@@ -1044,15 +1085,18 @@ var hierarchy =
     [ "BalloonParty.Shared.Animation.PathHelper", "classBalloonParty_1_1Shared_1_1Animation_1_1PathHelper.html", null ],
     [ "BalloonParty.Shared.PathTrace", "classBalloonParty_1_1Shared_1_1PathTrace.html", null ],
     [ "BalloonParty.Shared.Pause.PausedMessage", "structBalloonParty_1_1Shared_1_1Pause_1_1PausedMessage.html", null ],
+    [ "BalloonParty.Item.Preview.ItemPreviewTicker.Pen", "structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker_1_1Pen.html", null ],
     [ "BalloonParty.Projectile.Model.PendingPierceHit", "structBalloonParty_1_1Projectile_1_1Model_1_1PendingPierceHit.html", null ],
     [ "BalloonParty.Slots.Actor.SpeckField.PendingSpeck", "structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1PendingSpeck.html", null ],
     [ "BalloonParty.Scenario.SmokeFieldService.PendingStamp", "structBalloonParty_1_1Scenario_1_1SmokeFieldService_1_1PendingStamp.html", null ],
     [ "BalloonParty.Shared.Disturbance.DisturbanceFieldService.PendingStamp", "structBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService_1_1PendingStamp.html", null ],
     [ "BalloonParty.Audio.PickContext", "structBalloonParty_1_1Audio_1_1PickContext.html", null ],
     [ "BalloonParty.Shared.Messages.PierceDischargedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html", null ],
+    [ "BalloonParty.Shared.PierceItemCircle", "structBalloonParty_1_1Shared_1_1PierceItemCircle.html", null ],
     [ "BalloonParty.Shared.Pool.PoolManager", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html", null ],
     [ "BalloonParty.Shared.Extensions.PoolManagerExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1PoolManagerExtensions.html", null ],
     [ "BalloonParty.Prediction.PredictionTraceCalculator", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html", null ],
+    [ "BalloonParty.Prediction.PredictionTraceEnd", "structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html", null ],
     [ "BalloonParty.Prediction.PredictionTraceProvider", "classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html", null ],
     [ "BalloonParty.Balloon.Controller.PressurePropagation", "classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation.html", null ],
     [ "BalloonParty.Audio.Editor.FreesoundResponseParser.Previews", "classBalloonParty_1_1Audio_1_1Editor_1_1FreesoundResponseParser_1_1Previews.html", null ],
@@ -1150,6 +1194,7 @@ var hierarchy =
       [ "BalloonParty.Configuration.Effects.SpeckFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckFieldSettings.html", null ],
       [ "BalloonParty.Configuration.GameDisplayConfiguration", "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html", null ],
       [ "BalloonParty.Configuration.GridActors.GridActorConfiguration", "classBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorConfiguration.html", null ],
+      [ "BalloonParty.Configuration.ItemPreviewConfig", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html", null ],
       [ "BalloonParty.Configuration.Items.ItemConfiguration", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemConfiguration.html", null ],
       [ "BalloonParty.Configuration.Level.LevelPacingConfiguration", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html", null ],
       [ "BalloonParty.Configuration.OverflowSettings", "classBalloonParty_1_1Configuration_1_1OverflowSettings.html", null ],

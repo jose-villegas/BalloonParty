@@ -1,0 +1,9 @@
+<map id="BalloonParty.Item.Preview.ItemPreviewContext" name="BalloonParty.Item.Preview.ItemPreviewContext">
+<area shape="rect" id="Node000001" title="Everything about one aim&#45;crossing that a range figure depends on." alt="" coords="607,37,801,77"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html" title="Everything about a finished trace beyond its polyline: where piercing began, and what the line ran in..." alt="" coords="311,5,486,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="500,33,607,45,606,50,500,39"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewViewport.html" title="Single shared owner of &quot;what is visible&quot; for the range&#45;preview figures — the camera&#45;derived world rec..." alt="" coords="301,69,496,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="509,75,606,65,606,70,510,80"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html" title="Tuning for the aim&#45;time item range telegraph (Item Range Preview)." alt="" coords="5,69,203,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="217,87,301,87,301,92,217,92"/>
+</map>

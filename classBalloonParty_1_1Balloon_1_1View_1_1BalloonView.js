@@ -57,6 +57,7 @@ var classBalloonParty_1_1Balloon_1_1View_1_1BalloonView =
     [ "Model", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a0761ff60f9163e14f05883d0f4ae7d26", null ],
     [ "Position", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#ab6d6f8f5e05ef4ae911434e85f7d406b", null ],
     [ "RotationPivot", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a2668e7f13542ead657664ff29ca23e56", null ],
+    [ "SpinningItem", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#ab02688a8445fea71e91226f8bee14a44", null ],
     [ "transform", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#aef539d7581e7b4662c9e5701cfb941b2", null ],
     [ "TransformCapture", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a4f21b09c9826ff3efc4827f26a584c96", null ],
     [ "TweenTracker", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a4be123dd31847033f8ec7fb73215d9b9", null ],

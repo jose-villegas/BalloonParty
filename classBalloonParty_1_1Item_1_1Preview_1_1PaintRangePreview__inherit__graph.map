@@ -1,0 +1,5 @@
+<map id="BalloonParty.Item.Preview.PaintRangePreview" name="BalloonParty.Item.Preview.PaintRangePreview">
+<area shape="rect" id="Node000001" title="Paint&#39;s telegraph: the spread triangle, over the balloons it would repaint." alt="" coords="5,93,200,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Item_1_1Preview_1_1IItemRangePreview.html" title="Draws one item type&#39;s affected area as strokes, for the aim&#45;time telegraph that shows what an item al..." alt="" coords="5,5,200,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,59,105,93,100,93,100,59"/>
+</map>

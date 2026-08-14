@@ -9,6 +9,7 @@ var namespaceBalloonParty_1_1Slots_1_1Grid =
     [ "SlotGrid", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid" ],
     [ "SlotGridChangedEvent", "structBalloonParty_1_1Slots_1_1Grid_1_1SlotGridChangedEvent.html", "structBalloonParty_1_1Slots_1_1Grid_1_1SlotGridChangedEvent" ],
     [ "SlotGridDeflectorField", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridDeflectorField.html", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridDeflectorField" ],
+    [ "SlotGridPierceItemField", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridPierceItemField.html", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridPierceItemField" ],
     [ "SlotGridView", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridView.html", null ],
     [ "SlotGridChangeType", "namespaceBalloonParty_1_1Slots_1_1Grid.html#a6efd918aa80f2918a2b989c8b0090a39", [
       [ "Placed", "namespaceBalloonParty_1_1Slots_1_1Grid.html#a6efd918aa80f2918a2b989c8b0090a39af429e45eaf722cbbb524b40a0313aa67", null ],

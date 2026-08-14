@@ -15,5 +15,6 @@ var searchData=
   ['specksource_12',['SpeckSource',['../namespaceBalloonParty_1_1Slots_1_1Actor.html#a62e521bc8cad6be75a1029d9b639d2cc',1,'BalloonParty::Slots::Actor']]],
   ['speedtransitionkind_13',['SpeedTransitionKind',['../namespaceBalloonParty_1_1Projectile_1_1Model.html#a360a7607028c135b5205293095e7cabd',1,'BalloonParty::Projectile::Model']]],
   ['spinspace_14',['SpinSpace',['../namespaceBalloonParty_1_1Item.html#a56a73c61cef9453ed9c4853f226e0676',1,'BalloonParty::Item']]],
-  ['stampsource_15',['StampSource',['../namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0e',1,'BalloonParty::Configuration::Effects']]]
+  ['stampsource_15',['StampSource',['../namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0e',1,'BalloonParty::Configuration::Effects']]],
+  ['stepevent_16',['StepEvent',['../classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#a3da9399151e38b6b17f5f76319cab383',1,'BalloonParty::Prediction::PredictionTraceCalculator']]]
 ];

@@ -2,6 +2,7 @@ var dir_3ac65b61e0d03a86c0f17fa97fcfb144 =
 [
     [ "PredictionSightProbe.cs", "PredictionSightProbe_8cs.html", "PredictionSightProbe_8cs" ],
     [ "PredictionTraceCalculator.cs", "PredictionTraceCalculator_8cs.html", "PredictionTraceCalculator_8cs" ],
+    [ "PredictionTraceEnd.cs", "PredictionTraceEnd_8cs.html", "PredictionTraceEnd_8cs" ],
     [ "PredictionTraceLights.cs", "PredictionTraceLights_8cs.html", "PredictionTraceLights_8cs" ],
     [ "PredictionTraceProvider.cs", "PredictionTraceProvider_8cs.html", "PredictionTraceProvider_8cs" ],
     [ "PredictionTraceView.cs", "PredictionTraceView_8cs.html", "PredictionTraceView_8cs" ],

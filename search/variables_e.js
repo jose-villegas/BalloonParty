@@ -14,9 +14,10 @@ var searchData=
   ['noisescrolldirid_11',['NoiseScrollDirId',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView.html#a6a6df828f84920e2f15c1af41b29ce49',1,'BalloonParty::Projectile::View::ProjectileShieldView']]],
   ['none_12',['None',['../structBalloonParty_1_1Audio_1_1SoundHandle.html#a35b1629b72b4624f91c6e376616bc6f4',1,'BalloonParty.Audio.SoundHandle.None'],['../structBalloonParty_1_1Slots_1_1Grid_1_1ShoveVector.html#a9d60c7ce50e269541afcb7be3b8c8cc3',1,'BalloonParty.Slots.Grid.ShoveVector.None']]],
   ['nonqualifyingcolor_13',['NonQualifyingColor',['../classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a040b4c489763b0005a4bb8c62ab2d5dc',1,'BalloonParty::Editor::ShotSolver::ShotSolverWindow']]],
-  ['normalizedpan_14',['NormalizedPan',['../structBalloonParty_1_1Audio_1_1PickContext.html#a9ccd2724479761ff2f999733696f759c',1,'BalloonParty::Audio::PickContext']]],
-  ['notenames_15',['NoteNames',['../classBalloonParty_1_1Editor_1_1MusicalNoteDrawer.html#ac4d5554b24c73b16d3e3a78ab584099a',1,'BalloonParty::Editor::MusicalNoteDrawer']]],
-  ['nudgeamplitude_16',['NudgeAmplitude',['../structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a0e0d8c0e0849643a072ff5ee9fb12851',1,'BalloonParty::Solver::ShotSolveContext']]],
-  ['nudgeimpulses_17',['NudgeImpulses',['../classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html#abf557c2c307cb31cdef3c489e36ef5a6',1,'BalloonParty::Solver::ShotSimDynamicActor']]],
-  ['nudgeoverrides_18',['NudgeOverrides',['../structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a78cae6453ecf42fa44deb945a494e160',1,'BalloonParty.Balloon.Model.BalloonModelConfig.NudgeOverrides'],['../structBalloonParty_1_1Solver_1_1BalanceProfile.html#a5bc782bc30b57819f858e8228a461666',1,'BalloonParty.Solver.BalanceProfile.NudgeOverrides']]]
+  ['normal_14',['Normal',['../structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html#a8738dd5b705c12f08b9bcf9d68695d48',1,'BalloonParty::Prediction::PredictionTraceEnd']]],
+  ['normalizedpan_15',['NormalizedPan',['../structBalloonParty_1_1Audio_1_1PickContext.html#a9ccd2724479761ff2f999733696f759c',1,'BalloonParty::Audio::PickContext']]],
+  ['notenames_16',['NoteNames',['../classBalloonParty_1_1Editor_1_1MusicalNoteDrawer.html#ac4d5554b24c73b16d3e3a78ab584099a',1,'BalloonParty::Editor::MusicalNoteDrawer']]],
+  ['nudgeamplitude_17',['NudgeAmplitude',['../structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a0e0d8c0e0849643a072ff5ee9fb12851',1,'BalloonParty::Solver::ShotSolveContext']]],
+  ['nudgeimpulses_18',['NudgeImpulses',['../classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html#abf557c2c307cb31cdef3c489e36ef5a6',1,'BalloonParty::Solver::ShotSimDynamicActor']]],
+  ['nudgeoverrides_19',['NudgeOverrides',['../structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a78cae6453ecf42fa44deb945a494e160',1,'BalloonParty.Balloon.Model.BalloonModelConfig.NudgeOverrides'],['../structBalloonParty_1_1Solver_1_1BalanceProfile.html#a5bc782bc30b57819f858e8228a461666',1,'BalloonParty.Solver.BalanceProfile.NudgeOverrides']]]
 ];

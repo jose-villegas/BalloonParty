@@ -7,5 +7,6 @@ var searchData=
   ['plan_20—_20pre_208_203_20assets_4',['Content Production Plan — Pre-8.3 Assets',['../plan_content_production.html',1,'plans']]],
   ['plans_5',['Plans',['../plans.html',1,'index']]],
   ['pre_208_203_20assets_6',['Content Production Plan — Pre-8.3 Assets',['../plan_content_production.html',1,'plans']]],
-  ['production_20plan_20—_20pre_208_203_20assets_7',['Content Production Plan — Pre-8.3 Assets',['../plan_content_production.html',1,'plans']]]
+  ['preview_7',['Item Range Preview',['../plan_item_range_preview.html',1,'plans']]],
+  ['production_20plan_20—_20pre_208_203_20assets_8',['Content Production Plan — Pre-8.3 Assets',['../plan_content_production.html',1,'plans']]]
 ];

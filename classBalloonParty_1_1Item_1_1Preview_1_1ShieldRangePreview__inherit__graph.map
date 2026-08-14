@@ -1,0 +1,5 @@
+<map id="BalloonParty.Item.Preview.ShieldRangePreview" name="BalloonParty.Item.Preview.ShieldRangePreview">
+<area shape="rect" id="Node000001" title="Shield&#39;s telegraph: a stub of the WALL bounce the shot would survive — a short segment leaving the ai..." alt="" coords="5,93,200,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Item_1_1Preview_1_1IItemRangePreview.html" title="Draws one item type&#39;s affected area as strokes, for the aim&#45;time telegraph that shows what an item al..." alt="" coords="5,5,200,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,59,105,93,100,93,100,59"/>
+</map>

@@ -1,5 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Slots_1_1Grid_1_1IShieldSlotPreference.html" title="A balance&#45;weight nudge that keeps shields somewhere a shot can still collect them." alt="" coords="5,5,179,45"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Item_1_1Shield_1_1ShieldSlotPreference.html" title="Steers shield&#45;carrying balloons toward slots a shot can still reach, so a planned chain degrades grac..." alt="" coords="227,5,411,45"/>
-<area shape="poly" id="edge517_Node000000_Node000001" title=" " alt="" coords="193,23,226,23,226,28,193,28"/>
+<area shape="rect" id="Node000000" href="$structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafTier.html" title="One depth tier of leaf instances for a single slot." alt="" coords="5,5,184,45"/>
 </map>

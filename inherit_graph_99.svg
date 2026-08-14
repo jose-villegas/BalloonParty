@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBakeSettings.html" target="_top" xlink:title=" ">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Editor_1_1Bush_1_1BushBranchGenerator.html" target="_top" xlink:title="Generates fractal branch segments in UV space (0&#45;1) for baking into a branch map texture.">
 <polygon fill="white" stroke="#666666" points="137,-30 0,-30 0,0 137,0 137,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Editor.Bush.</text>
-<text text-anchor="middle" x="68.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">BushLeafBakeSettings</text>
+<text text-anchor="middle" x="68.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">BushBranchGenerator</text>
 </a>
 </g>
 </g>

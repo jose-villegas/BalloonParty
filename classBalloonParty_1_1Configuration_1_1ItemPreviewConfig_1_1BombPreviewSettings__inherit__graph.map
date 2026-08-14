@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.ItemPreviewConfig.BombPreviewSettings" name="BalloonParty.Configuration.ItemPreviewConfig.BombPreviewSettings">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,93,297,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1IBombPreviewSettings.html" title="Bomb&#39;s own figure params." alt="" coords="53,5,250,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,59,154,93,149,93,149,59"/>
+</map>

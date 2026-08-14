@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Thrower_1_1ThrowerController =
 [
-    [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a67091d262102a2712ffadf5988049999", null ],
+    [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#aabbcf90785287f2907e814454c0f191e", null ],
     [ "ClearPredictionTrace", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ac497d1607399c4a0644aa0ffd0f66c71", null ],
     [ "Dispose", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ae6a7bc74adb625d310dbf2894b1bb2c5", null ],
     [ "Fire", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#acf7c3023e29ab76fd5380d26a3896b72", null ],
@@ -41,6 +41,7 @@ var classBalloonParty_1_1Thrower_1_1ThrowerController =
     [ "_originProvider", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#adba443e866a8fc17ffcbcadd59e8dfbd", null ],
     [ "_palette", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a433abf591321788c4cd692b3a66b9c76", null ],
     [ "_pauseService", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ad178d569e4f52cbbe30576952cc2f64c", null ],
+    [ "_pierceItemField", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a25ccc0063d67848a63390339579857b3", null ],
     [ "_poolManager", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a212ef8bc11064806c7a2f894ef28f6ef", null ],
     [ "_positionProvider", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a53930af2d186c89add5b508107ea776e", null ],
     [ "_projectilePoolKey", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a4ce058ba3269e007706cc0bcda2582e8", null ],

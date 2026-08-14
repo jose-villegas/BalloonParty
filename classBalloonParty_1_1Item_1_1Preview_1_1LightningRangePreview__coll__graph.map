@@ -1,0 +1,25 @@
+<map id="BalloonParty.Item.Preview.LightningRangePreview" name="BalloonParty.Item.Preview.LightningRangePreview">
+<area shape="rect" id="Node000001" title="Lightning&#39;s telegraph: the chain — an arc from the host to its nearest same&#45;colour target,..." alt="" coords="1203,69,1397,109"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Item_1_1Preview_1_1IItemRangePreview.html" title="Draws one item type&#39;s affected area as strokes, for the aim&#45;time telegraph that shows what an item al..." alt="" coords="901,5,1096,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1107,46,1206,67,1205,72,1106,51"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="900,69,1097,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1111,87,1202,87,1202,92,1111,92"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Item_1_1Effects_1_1GridEffectBoard.html" title="Live IEffectBoard over a real SlotGrid — occupants are every IBalloonModel on the grid (statics are n..." alt="" coords="905,133,1093,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1105,128,1204,107,1205,112,1107,133"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Item_1_1Effects_1_1IEffectBoard.html" title="The occupant read&#45;set an item&#45;effect core selects against — implemented by GridEffectBoard (live) and..." alt="" coords="627,101,815,141"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="829,131,905,140,904,145,828,136"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="634,165,807,205"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="821,171,904,161,905,167,821,176"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="267,69,440,109"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="454,105,528,121,603,141,628,151,661,163,659,168,626,156,602,147,527,126,453,110"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,69,212,109"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="226,87,267,87,267,92,226,92"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="261,133,445,173"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="459,160,634,175,634,180,459,165"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="264,197,443,237"/>
+<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="456,206,602,193,634,191,634,196,603,199,457,211"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,197,198,237"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="212,215,264,215,264,220,212,220"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="264,261,443,301"/>
+<area shape="poly" id="edge11_Node000006_Node000012" title=" " alt="" coords="456,260,602,225,668,203,670,208,603,231,457,265"/>
+</map>

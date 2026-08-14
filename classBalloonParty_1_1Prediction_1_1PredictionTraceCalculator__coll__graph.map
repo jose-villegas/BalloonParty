@@ -1,9 +1,11 @@
 <map id="BalloonParty.Prediction.PredictionTraceCalculator" name="BalloonParty.Prediction.PredictionTraceCalculator">
-<area shape="rect" id="Node000001" title=" " alt="" coords="377,69,564,109"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="391,101,577,141"/>
 <area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html" title="Prediction trace settings: how the line is segmented, how far it reaches, how many reflections it giv..." alt="" coords="5,5,229,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="243,45,377,70,376,75,242,51"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="229,46,367,80,427,99,425,104,366,85,228,51"/>
 <area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="7,69,227,109"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="241,87,377,87,377,92,241,92"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="241,97,391,111,390,116,241,103"/>
 <area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html" title="The deflectors the aim telegraph must bounce off, in the geometry the projectile will actually meet." alt="" coords="8,133,227,173"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="239,129,377,104,377,109,240,134"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="240,140,366,129,390,127,390,133,367,135,240,146"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1IPierceItemField.html" title="The pierce&#45;arming item hosts the aim telegraph must know about, in the geometry the projectile will a..." alt="" coords="18,197,217,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="230,193,366,160,430,139,431,144,367,165,231,198"/>
 </map>

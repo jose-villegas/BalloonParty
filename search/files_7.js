@@ -7,10 +7,11 @@ var searchData=
   ['hearttrailfocus_2ecs_4',['HeartTrailFocus.cs',['../HeartTrailFocus_8cs.html',1,'']]],
   ['hearttrailtracker_2ecs_5',['HeartTrailTracker.cs',['../HeartTrailTracker_8cs.html',1,'']]],
   ['hexcoordinates_2ecs_6',['HexCoordinates.cs',['../HexCoordinates_8cs.html',1,'']]],
-  ['hitoutcome_2ecs_7',['HitOutcome.cs',['../HitOutcome_8cs.html',1,'']]],
-  ['hitpipeline_2ecs_8',['HitPipeline.cs',['../HitPipeline_8cs.html',1,'']]],
-  ['hitvfxoverride_2ecs_9',['HitVfxOverride.cs',['../HitVfxOverride_8cs.html',1,'']]],
-  ['hitvfxoverridedrawer_2ecs_10',['HitVfxOverrideDrawer.cs',['../HitVfxOverrideDrawer_8cs.html',1,'']]],
-  ['holdspeedupcontroller_2ecs_11',['HoldSpeedUpController.cs',['../HoldSpeedUpController_8cs.html',1,'']]],
-  ['holdspeeduptooltip_2ecs_12',['HoldSpeedUpTooltip.cs',['../HoldSpeedUpTooltip_8cs.html',1,'']]]
+  ['highlighttrail_2ecs_7',['HighlightTrail.cs',['../HighlightTrail_8cs.html',1,'']]],
+  ['hitoutcome_2ecs_8',['HitOutcome.cs',['../HitOutcome_8cs.html',1,'']]],
+  ['hitpipeline_2ecs_9',['HitPipeline.cs',['../HitPipeline_8cs.html',1,'']]],
+  ['hitvfxoverride_2ecs_10',['HitVfxOverride.cs',['../HitVfxOverride_8cs.html',1,'']]],
+  ['hitvfxoverridedrawer_2ecs_11',['HitVfxOverrideDrawer.cs',['../HitVfxOverrideDrawer_8cs.html',1,'']]],
+  ['holdspeedupcontroller_2ecs_12',['HoldSpeedUpController.cs',['../HoldSpeedUpController_8cs.html',1,'']]],
+  ['holdspeeduptooltip_2ecs_13',['HoldSpeedUpTooltip.cs',['../HoldSpeedUpTooltip_8cs.html',1,'']]]
 ];
