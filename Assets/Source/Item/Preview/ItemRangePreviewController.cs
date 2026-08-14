@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Prediction;
@@ -879,10 +880,16 @@ namespace BalloonParty.Item.Preview
 
         private ItemPreviewContext BuildContext(in ItemPreviewSightedHost active, float spinDegrees, in PredictionTraceEnd traceEnd)
         {
-            var colorId = _grid.At(active.Slot) is IHasColor colored ? colored.Color.Value : null;
+            var actor = _grid.At(active.Slot);
+            var colorId = actor is IHasColor colored ? colored.Color.Value : null;
+
+            // An item is only ever hosted by a balloon, so this should always resolve — the fallback is
+            // just the enum's first member (see ItemPreviewContext.HostBalloonType), never thrown on.
+            var balloonType = actor is IBalloonModel balloon ? balloon.TypeName : default;
+
             return new ItemPreviewContext(
                 active.Origin, active.Slot, active.Direction, _traceProvider.Points, colorId, spinDegrees,
-                traceEnd, _viewport);
+                traceEnd, _viewport, balloonType);
         }
 
         // Collects every item host the trace crosses, then orders them first-to-last along the line via

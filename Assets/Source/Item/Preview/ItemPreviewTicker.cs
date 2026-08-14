@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Balloon;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Pool;
 using UnityEngine;
@@ -28,10 +30,18 @@ namespace BalloonParty.Item.Preview
         // first tick after a stall) can't collapse the threshold to ~0 and flag ordinary motion.
         private const float MinTeleportDistance = 0.01f;
 
+        // Segment count for the approach loop's own circle (see BuildApproachPaths) — enough that it
+        // reads as a curve rather than a polygon at a balloon's size. BombRangePreview uses 48 for its
+        // blast radius, but that circle ships at up to ~1.25 world units; a balloon's contact radius is a
+        // fraction of that, so holding roughly the same per-segment chord length (not the same segment
+        // count) calls for a smaller number here.
+        private const int ApproachLoopSegments = 20;
+
         private readonly PoolManager _poolManager;
         private readonly HighlightTrail _penPrefab;
         private readonly IItemPreviewConfig _config;
         private readonly ItemPreviewViewport _viewport;
+        private readonly BalloonContactRadii _balloonRadii;
         private readonly string _poolKey;
 
         private readonly ItemPreviewShape _shape = new();
@@ -60,6 +70,20 @@ namespace BalloonParty.Item.Preview
         // _traceLength and _hostTraceOffset (below, with the other mutable fields) are derived alongside it.
         private readonly List<Vector3> _tracePoints = new();
         private readonly List<float> _traceArcTable = new();
+
+        // The approach's own combined path, one stroke's worth at a time: the balloon-radius loop
+        // (ItemPreviewEntry.AppendApproachLoop) immediately followed by that stroke's original
+        // host-to-entry leg — materialized once per Show/refit into a flat buffer with a per-point
+        // cumulative-arc table, mirroring _tracePoints/_traceArcTable above but per stroke rather than
+        // one shared trace. _approachPathStart/_approachPathCount are the per-stroke range into both,
+        // parallel to _entryOffsets — built by BuildApproachPaths, read by SampleApproachArc. Building
+        // an explicit polyline rather than keeping the old closed-form Lerp is what lets the loop simply
+        // prefix the leg with no special-casing anywhere the leg is sampled, timed or dashed: every one
+        // of those already works in arc length over a polyline.
+        private readonly List<Vector3> _approachPathPoints = new();
+        private readonly List<float> _approachPathArc = new();
+        private readonly List<int> _approachPathStart = new();
+        private readonly List<int> _approachPathCount = new();
 
         // Where each stroke's own entry point sits, as an arc-length offset from the stroke's own start —
         // one entry per stroke, parallel to _strokeLengths. No longer a travel destination for every figure
@@ -111,6 +135,13 @@ namespace BalloonParty.Item.Preview
         private Vector2 _origin;
         private Vector2Int _currentSlot;
         private bool _visible;
+
+        // The aim's own travel direction and the host's balloon type, captured on Show alongside _origin
+        // — read only by BuildApproachPaths, as the loop's fallback sweep-start direction and the key
+        // into _balloonRadii respectively (see its own remarks for why a fallback direction is needed at
+        // all).
+        private Vector2 _aimDirection;
+        private BalloonType _hostBalloonType;
 
         // True once a loop cycle's fade has fully aged out and the ticker has parked instead of
         // replaying itself — see Park. Pens are held exactly where the fade left them (dark, ribbons
@@ -212,12 +243,14 @@ namespace BalloonParty.Item.Preview
             PoolManager poolManager,
             HighlightTrail penPrefab,
             IItemPreviewConfig config,
-            ItemPreviewViewport viewport)
+            ItemPreviewViewport viewport,
+            BalloonContactRadii balloonRadii)
         {
             _poolManager = poolManager;
             _penPrefab = penPrefab;
             _config = config;
             _viewport = viewport;
+            _balloonRadii = balloonRadii;
             _poolKey = penPrefab != null ? penPrefab.name : nameof(HighlightTrail);
         }
 
@@ -314,6 +347,8 @@ namespace BalloonParty.Item.Preview
             _dashSpacing = _config.DashSpacing;
             _origin = context.Origin;
             _currentSlot = context.Slot;
+            _aimDirection = context.AimDirection;
+            _hostBalloonType = context.HostBalloonType;
             BuildArcTable();
             BuildTraceBuffers(context.TracePoints);
 
@@ -321,6 +356,12 @@ namespace BalloonParty.Item.Preview
             // an entry point resolves to is an arc length along the stroke, and the trace offset alongside
             // it is an arc length along the (possibly bent) trace, not a raw geometry comparison.
             BuildEntryOffsets();
+
+            // Reads _entryTraceValid/_entryTraceOffsets/_entryPoints and the trace buffers above, so must
+            // run after both BuildTraceBuffers and BuildEntryOffsets — and before DeriveApproachDashCounts
+            // (inside AcquirePens/RefitPens below), since it overwrites _approachLengths with the loop's
+            // own contribution added in.
+            BuildApproachPaths();
 
             if (isSameHost)
             {
@@ -757,6 +798,156 @@ namespace BalloonParty.Item.Preview
                     ? Mathf.Abs(traceOffset - _hostTraceOffset)
                     : Vector3.Distance(origin, entryPoint);
                 _approachLengths.Add(approachLength);
+            }
+        }
+
+        // Materializes each stroke's own approach path — the balloon-radius loop, then that stroke's
+        // original host-to-entry leg — into the flat _approachPathPoints/_approachPathArc buffers, and
+        // overwrites _approachLengths[s] (set above by BuildEntryOffsets, off the leg alone) with the
+        // combined total. Everything downstream that reads _approachLengths (DeriveApproachDashCounts,
+        // BuildCascadeTimings, ComputeApproachDashArc) already works in arc length over one polyline, so
+        // this is the one place the loop is actually spliced in — nowhere else needs to know it exists.
+        //
+        // A stroke's own leg now starts where the trace itself crosses the loop's own circle (see
+        // ResolveLoopAnchor) rather than at the host centre's interior projection — that projection sits
+        // INSIDE the circle by construction (it is simply the trace's closest approach to the centre), so
+        // starting the leg there used to jump the trail in from the loop's boundary to that interior point
+        // the instant the loop closed. Anchoring on the real crossing instead means the loop is still a
+        // genuine PREFIX, not a replacement of anything the leg already did — only where that prefix now
+        // ends (and the leg begins) has moved, onto the circle itself.
+        private void BuildApproachPaths()
+        {
+            _approachPathPoints.Clear();
+            _approachPathArc.Clear();
+            _approachPathStart.Clear();
+            _approachPathCount.Clear();
+
+            var origin = new Vector3(_origin.x, _origin.y, 0f);
+
+            // Zero balloon radius or a missing config degrades to no loop at all (AppendApproachLoop's
+            // own no-op guard), not a thrown exception — the combined path is then just the leg, exactly
+            // today's behaviour.
+            var radius = _balloonRadii != null ? Mathf.Max(0f, _balloonRadii.For(_hostBalloonType)) : 0f;
+
+            for (var s = 0; s < _shape.Strokes.Count; s++)
+            {
+                var startIndex = _approachPathPoints.Count;
+                ResolveLoopAnchor(s, origin, radius, out var legStart, out var legStartOffset);
+
+                var loopLength = ItemPreviewEntry.AppendApproachLoop(
+                    _approachPathPoints, origin, legStart, _aimDirection, radius, ApproachLoopSegments);
+
+                // Once a loop was actually drawn, its own closing vertex — just appended, at buffer[startIndex]
+                // — is the point the leg must continue from, not legStart itself: AppendApproachLoop reaches
+                // it via normalize() + trig even when legStart already sat exactly on the circle (the crossing
+                // case below), and that recomputation can round a hair differently than the value that went
+                // in. Reusing the identical float triple, rather than the nominally-equal legStart, is what
+                // makes the loop-to-leg join continuous BY CONSTRUCTION — the standing no-discontinuous-emit
+                // rule this whole feature exists to uphold — instead of merely close.
+                var actualLegStart = loopLength > 0f ? _approachPathPoints[startIndex] : legStart;
+                var legLength = AppendApproachLeg(s, actualLegStart, legStartOffset);
+
+                _approachPathStart.Add(startIndex);
+                _approachPathCount.Add(_approachPathPoints.Count - startIndex);
+                AppendApproachPointArc(startIndex, _approachPathPoints.Count - startIndex);
+
+                _approachLengths[s] = loopLength + legLength;
+            }
+        }
+
+        // Where the loop starts/ends, and (when the trace can answer for it) that point's own arc-length
+        // offset: the trace's crossing of the loop's own circle — the sight's real mark on the balloon —
+        // rather than the host centre's interior projection a straight "one radius along the trace" guess
+        // would land on. Chooses the crossing on whichever side this stroke's approach is actually heading
+        // toward its own entry (Shield, out at the wall, leaves by the forward crossing; Bomb, whose own
+        // circle the sight reaches before the host centre, leaves by the backward one) — falling back to
+        // forward when there is no real entry-on-trace to compare against at all (Laser, Paint and
+        // Lightning's first arc, whose entry sits on the host itself; Lightning's later arcs, reached only
+        // through the chain), matching the shot's own direction of travel rather than an arbitrary pick.
+        // Degrades to the pre-crossing anchor — the trace's own nearest point to the host, or the host
+        // origin itself — when no real crossing exists to find (zero radius, a trace too short to project
+        // onto, or one that never comes within the circle at all), exactly what BuildApproachPaths already
+        // tolerated before this crossing existed.
+        private void ResolveLoopAnchor(int strokeIndex, Vector3 origin, float radius, out Vector3 legStart, out float legStartOffset)
+        {
+            var forward = !_entryTraceValid[strokeIndex] || _entryTraceOffsets[strokeIndex] >= _hostTraceOffset;
+
+            if (ItemPreviewEntry.TryFindCircleCrossing(
+                    _tracePoints, _traceArcTable, origin, radius, _hostTraceOffset, forward,
+                    out var crossingPoint, out var crossingOffset))
+            {
+                legStart = crossingPoint;
+                legStartOffset = crossingOffset;
+                return;
+            }
+
+            legStart = _entryTraceValid[strokeIndex] ? SampleTrace(_hostTraceOffset) : origin;
+            legStartOffset = _hostTraceOffset;
+        }
+
+        // Appends this stroke's own original host-to-entry leg to _approachPathPoints, right after
+        // whatever AppendApproachLoop just added (nothing, if the loop was skipped) — legStart is always
+        // (re-)added here regardless, so the loop's own end and the leg's own start are simply adjacent
+        // points in the same polyline, with no gap and no special handling needed at that join. Mirrors
+        // what the old closed-form SampleApproach computed on the fly: the trace's own knot points
+        // between legStartOffset (the loop's own anchor — the trace/circle crossing when one was found,
+        // ResolveLoopAnchor's own fallback otherwise) and this stroke's entry trace offset when the trace
+        // can answer for it (materializing the bent path exactly, not resampling it), or the straight
+        // two-point fallback otherwise.
+        private float AppendApproachLeg(int strokeIndex, Vector3 legStart, float legStartOffset)
+        {
+            _approachPathPoints.Add(legStart);
+
+            if (!_entryTraceValid[strokeIndex])
+            {
+                var entryPoint = _entryPoints[strokeIndex];
+                _approachPathPoints.Add(entryPoint);
+                return Vector3.Distance(legStart, entryPoint);
+            }
+
+            var hostOffset = legStartOffset;
+            var entryOffset = _entryTraceOffsets[strokeIndex];
+            var ascending = entryOffset >= hostOffset;
+            var lo = ascending ? hostOffset : entryOffset;
+            var hi = ascending ? entryOffset : hostOffset;
+
+            var previous = legStart;
+            var length = 0f;
+            var count = _tracePoints.Count;
+            var start = ascending ? 0 : count - 1;
+            var end = ascending ? count : -1;
+            var step = ascending ? 1 : -1;
+
+            for (var i = start; i != end; i += step)
+            {
+                var arc = _traceArcTable[i];
+                if (arc <= lo || arc >= hi)
+                {
+                    continue;
+                }
+
+                length += Vector3.Distance(previous, _tracePoints[i]);
+                _approachPathPoints.Add(_tracePoints[i]);
+                previous = _tracePoints[i];
+            }
+
+            var legEnd = SampleTrace(entryOffset);
+            length += Vector3.Distance(previous, legEnd);
+            _approachPathPoints.Add(legEnd);
+            return length;
+        }
+
+        // Per-point cumulative arc length for this stroke's slice of _approachPathPoints, mirroring
+        // BuildArcTable's own convention — what SampleApproachArc walks to turn an arc-length offset into
+        // a position.
+        private void AppendApproachPointArc(int startIndex, int count)
+        {
+            _approachPathArc.Add(0f);
+            var total = 0f;
+            for (var i = startIndex + 1; i < startIndex + count; i++)
+            {
+                total += Vector3.Distance(_approachPathPoints[i - 1], _approachPathPoints[i]);
+                _approachPathArc.Add(total);
             }
         }
 
@@ -1435,37 +1626,41 @@ namespace BalloonParty.Item.Preview
             }
         }
 
-        // The approach leg itself: sweeps along the trace polyline between the host's own position on it
-        // (_hostTraceOffset) and this stroke's entry point (_entryTraceOffsets), so a bent aim line — a
-        // wall bounce, a deflection — is followed rather than cut across in a straight line. Shield is the
-        // figure this matters most for, since its entry sits at the far end of the aim line, but it is a
-        // general fix: any figure whose entry isn't adjacent to the host bends with the trace now. The two
-        // offsets can fall in either order (the entry can sit behind the host along the trace) — Lerp
-        // moves continuously from one to the other regardless of which is larger, so both directions just
-        // work. Falls back to the straight host-to-entry lerp used before this existed when the trace
-        // can't answer for this stroke (BuildEntryOffsets already decided that per stroke). t spans the
-        // whole leg; SampleApproachArc below is what an individual approach pen actually calls, converting
-        // its own dash's arc-length range into this function's t.
-        private Vector3 SampleApproach(int strokeIndex, float t)
-        {
-            if (_entryTraceValid[strokeIndex])
-            {
-                var distance = Mathf.Lerp(_hostTraceOffset, _entryTraceOffsets[strokeIndex], t);
-                return SampleTrace(distance);
-            }
-
-            var origin = new Vector3(_origin.x, _origin.y, 0f);
-            return Vector3.Lerp(origin, _entryPoints[strokeIndex], t);
-        }
-
-        // Converts an arc-length offset along the approach leg (0 at the host, approachLength at the
-        // entry) into SampleApproach's own t — a fraction of the leg — so an approach pen can be positioned
-        // by arc length like every other pen in the file, rather than the ticker growing a second position
-        // convention just for this cascade.
+        // The approach leg itself, sampled by arc length off the combined path BuildApproachPaths
+        // materializes once per Show/refit — the balloon-radius loop, then the stroke's own host-to-entry
+        // leg (the trace's own knots when a bent aim line needs following, or the straight fallback)
+        // — exactly mirroring SampleTrace's clamp-at-ends convention, since an approach pen sweeps its own
+        // dash once and retires rather than wrapping or ping-ponging (see AdvanceApproachPen).
+        // approachLength is _approachLengths[strokeIndex], passed in rather than re-read so every call
+        // site shares the identical value DeriveApproachDashCounts and BuildCascadeTimings already used
+        // to size and time this stroke's dashes.
         private Vector3 SampleApproachArc(int strokeIndex, float approachLength, float arcOffset)
         {
-            var t = approachLength > 1e-4f ? Mathf.Clamp01(arcOffset / approachLength) : 0f;
-            return SampleApproach(strokeIndex, t);
+            var start = _approachPathStart[strokeIndex];
+            var count = _approachPathCount[strokeIndex];
+
+            if (count <= 1)
+            {
+                return count == 1 ? _approachPathPoints[start] : _entryPoints[strokeIndex];
+            }
+
+            var distance = Mathf.Clamp(arcOffset, 0f, approachLength);
+            var lastIndex = start + count - 1;
+
+            for (var i = start + 1; i <= lastIndex; i++)
+            {
+                var arc = _approachPathArc[i];
+                if (distance > arc)
+                {
+                    continue;
+                }
+
+                var segmentLength = arc - _approachPathArc[i - 1];
+                var t = segmentLength <= 1e-5f ? 0f : (distance - _approachPathArc[i - 1]) / segmentLength;
+                return Vector3.Lerp(_approachPathPoints[i - 1], _approachPathPoints[i], t);
+            }
+
+            return _approachPathPoints[lastIndex];
         }
 
         // The arc-length range this approach dash paints — on the same DashLength/DashSpacing stride and

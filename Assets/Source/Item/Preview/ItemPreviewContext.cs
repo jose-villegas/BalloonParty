@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Prediction;
 using UnityEngine;
 
@@ -53,10 +54,18 @@ namespace BalloonParty.Item.Preview
         /// </summary>
         public readonly ItemPreviewViewport Viewport;
 
+        /// <summary>
+        ///     The host's own balloon type — lets a figure that needs the host's true size (the approach
+        ///     loop's circle, see <see cref="ItemPreviewTicker" />) read it off <c>BalloonContactRadii</c>
+        ///     rather than guessing. Defaults to the enum's first member for call sites (mostly tests) that
+        ///     don't care, same as every other optional trailing param here.
+        /// </summary>
+        public readonly BalloonType HostBalloonType;
+
         public ItemPreviewContext(
             Vector2 origin, Vector2Int slot, Vector2 aimDirection, IReadOnlyList<Vector3> tracePoints,
             string hostColorId, float itemSpinDegrees, PredictionTraceEnd traceEnd = default,
-            ItemPreviewViewport viewport = null)
+            ItemPreviewViewport viewport = null, BalloonType hostBalloonType = default)
         {
             Origin = origin;
             Slot = slot;
@@ -66,6 +75,7 @@ namespace BalloonParty.Item.Preview
             ItemSpinDegrees = itemSpinDegrees;
             TraceEnd = traceEnd;
             Viewport = viewport;
+            HostBalloonType = hostBalloonType;
         }
     }
 }

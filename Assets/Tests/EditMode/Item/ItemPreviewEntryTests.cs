@@ -213,6 +213,234 @@ namespace BalloonParty.Tests.Item
             Assert.AreEqual(0f, traceOffset);
         }
 
+        // The loop's own defining property: whatever vertices land in between, the first and last must be
+        // the identical point — not merely close within tolerance, since the last one re-uses the first
+        // outright rather than recomputing it from angle + 2π (see AppendApproachLoop's own remarks on
+        // why: trig round-off must not leave a gap for the standing no-discontinuity rule to catch).
+        [Test]
+        public void AppendApproachLoop_ClosesExactlyOnItsStartPoint()
+        {
+            var buffer = new List<Vector3>();
+
+            ItemPreviewEntry.AppendApproachLoop(
+                buffer, Vector3.zero, new Vector3(1f, 0f, 0f), Vector2.up, 2f, 12);
+
+            Assert.AreEqual(buffer[0], buffer[^1]);
+        }
+
+        // The returned length must be the discrete polygon's own perimeter — the same consecutive-point
+        // summation ItemPreviewTicker's own arc tables use everywhere else — not the ideal 2*pi*r a
+        // caller could otherwise assume. A regular n-gon inscribed in radius r has a closed-form
+        // perimeter (2*n*r*sin(pi/n)); comparing against that formula, rather than re-summing the
+        // buffer's own points, is what keeps this an independent check.
+        [Test]
+        public void AppendApproachLoop_ReturnsRegularPolygonPerimeter()
+        {
+            var buffer = new List<Vector3>();
+            const float radius = 3f;
+            const int segments = 16;
+
+            var length = ItemPreviewEntry.AppendApproachLoop(
+                buffer, Vector3.zero, new Vector3(radius, 0f, 0f), Vector2.up, radius, segments);
+
+            var expected = 2f * segments * radius * Mathf.Sin(Mathf.PI / segments);
+            Assert.AreEqual(expected, length, 0.001f);
+            Assert.AreEqual(segments + 1, buffer.Count, "n segments plus the closing duplicate of the first point");
+        }
+
+        // Every appended vertex, including the closing duplicate, must sit on the authored radius — a
+        // regression here (an off-by-one angle step, say) would otherwise still "close" trivially without
+        // actually being a circle.
+        [Test]
+        public void AppendApproachLoop_EveryPointSitsOnTheRadius()
+        {
+            var buffer = new List<Vector3>();
+            var center = new Vector3(5f, -2f, 0f);
+            const float radius = 1.5f;
+
+            ItemPreviewEntry.AppendApproachLoop(
+                buffer, center, center + new Vector3(0f, radius, 0f), Vector2.right, radius, 20);
+
+            foreach (var point in buffer)
+            {
+                Assert.AreEqual(radius, Vector3.Distance(center, point), 0.001f);
+            }
+        }
+
+        // Winding is counter-clockwise (increasing angle), matching ItemPreviewShape.AddCircle: starting
+        // due +X of the centre, the very next vertex must have a positive Y — a clockwise loop would swing
+        // negative instead.
+        [Test]
+        public void AppendApproachLoop_WindsCounterClockwise()
+        {
+            var buffer = new List<Vector3>();
+
+            ItemPreviewEntry.AppendApproachLoop(
+                buffer, Vector3.zero, new Vector3(1f, 0f, 0f), Vector2.up, 1f, 12);
+
+            Assert.Greater(buffer[1].y, 0f);
+        }
+
+        // towardPoint coinciding with the centre (Laser, Paint, Lightning's first arc — the entry sits
+        // right on the host) leaves no leg direction to sight the loop's start off; it must fall back to
+        // the caller-supplied direction rather than produce a NaN from normalizing a zero vector.
+        [Test]
+        public void AppendApproachLoop_TowardPointOnCentre_FallsBackToSuppliedDirection()
+        {
+            var buffer = new List<Vector3>();
+
+            ItemPreviewEntry.AppendApproachLoop(
+                buffer, Vector3.zero, Vector3.zero, new Vector3(0f, 1f, 0f), 2f, 12);
+
+            Assert.AreEqual(new Vector3(0f, 2f, 0f), buffer[0], "starts on the +Y ray, the supplied fallback direction");
+            Assert.IsFalse(float.IsNaN(buffer[0].x) || float.IsNaN(buffer[0].y), "must never NaN from a zero-length direction");
+        }
+
+        // A non-positive radius (missing config, or a genuinely zero balloon radius) must degrade to no
+        // loop at all — nothing appended, zero length — rather than throwing or drawing a degenerate point.
+        [TestCase(0f)]
+        [TestCase(-1f)]
+        public void AppendApproachLoop_NonPositiveRadius_AppendsNothing(float radius)
+        {
+            var buffer = new List<Vector3>();
+
+            var length = ItemPreviewEntry.AppendApproachLoop(
+                buffer, Vector3.zero, new Vector3(1f, 0f, 0f), Vector2.up, radius, 12);
+
+            Assert.AreEqual(0f, length);
+            Assert.AreEqual(0, buffer.Count);
+        }
+
+        // Straight trace through the centre (perpendicular offset d = 0), so the two crossings sit exactly
+        // one radius either side of the host's own projection — the simplest case, and the one a naive
+        // "always one radius along the trace" implementation would also get right, so it mainly pins the
+        // forward/backward split itself.
+        [Test]
+        public void TryFindCircleCrossing_StraightTraceThroughCentre_ForwardAndBackwardSplitAroundHost()
+        {
+            var trace = new List<Vector3> { new(-10f, 0f, 0f), new(10f, 0f, 0f) };
+            var arcTable = BuildTraceArcTable(trace);
+
+            // The host's own projection sits at (0,0,0), 10 units into the trace.
+            var foundForward = ItemPreviewEntry.TryFindCircleCrossing(
+                trace, arcTable, Vector3.zero, 5f, 10f, true, out var forwardPoint, out var forwardOffset);
+            var foundBackward = ItemPreviewEntry.TryFindCircleCrossing(
+                trace, arcTable, Vector3.zero, 5f, 10f, false, out var backwardPoint, out var backwardOffset);
+
+            Assert.IsTrue(foundForward);
+            Assert.AreEqual(new Vector3(5f, 0f, 0f), forwardPoint, "forward exit sits one radius ahead");
+            Assert.AreEqual(15f, forwardOffset, 0.0001f);
+
+            Assert.IsTrue(foundBackward);
+            Assert.AreEqual(new Vector3(-5f, 0f, 0f), backwardPoint, "backward exit sits one radius behind");
+            Assert.AreEqual(5f, backwardOffset, 0.0001f);
+        }
+
+        // The case a "one radius along the trace" shortcut gets wrong: the host projects off-centre (d = 3
+        // on a radius-5 circle), so the true half-chord is sqrt(5^2 - 3^2) = 4, not 5.
+        [Test]
+        public void TryFindCircleCrossing_OffCentreProjection_UsesHalfChordNotRadius()
+        {
+            var trace = new List<Vector3> { new(-20f, 0f, 0f), new(20f, 0f, 0f) };
+            var arcTable = BuildTraceArcTable(trace);
+            var center = new Vector3(0f, 3f, 0f);
+
+            // The host's own projection sits at (0,0,0), 20 units into the trace.
+            var found = ItemPreviewEntry.TryFindCircleCrossing(
+                trace, arcTable, center, 5f, 20f, true, out var point, out var offset);
+
+            Assert.IsTrue(found);
+            Assert.AreEqual(0f, Vector3.Distance(new Vector3(4f, 0f, 0f), point), 0.0001f);
+            Assert.AreEqual(24f, offset, 0.0001f, "20 (to the projection) + 4 (the true half-chord)");
+        }
+
+        // The case the whole helper exists for: the projection sits exactly on the segment nearest it, but
+        // the actual exit crossing (walking further in the requested direction) only happens on a LATER
+        // segment once the trace has already turned a corner — so the walk must cross a segment boundary,
+        // not just solve the one segment the projection landed on.
+        [Test]
+        public void TryFindCircleCrossing_BentTrace_CrossesOnALaterSegment()
+        {
+            // Leg 1: (-10,10) -> (4,10), length 14.
+            // Leg 2: (4,10) -> (4,-10), length 20 — the host projects onto this leg, at (4,-9).
+            // Leg 3: (4,-10) -> (14,-10), length 10 — the forward exit actually lands here.
+            var trace = new List<Vector3>
+            {
+                new(-10f, 10f, 0f),
+                new(4f, 10f, 0f),
+                new(4f, -10f, 0f),
+                new(14f, -10f, 0f),
+            };
+            var arcTable = BuildTraceArcTable(trace);
+            var center = new Vector3(4f, -9f, 0f);
+
+            // Host projection (4,-9) sits 14 + 19 = 33 units in.
+            var foundForward = ItemPreviewEntry.TryFindCircleCrossing(
+                trace, arcTable, center, 3f, 33f, true, out var forwardPoint, out var forwardOffset);
+
+            Assert.IsTrue(foundForward);
+            Assert.AreEqual(-10f, forwardPoint.y, 0.001f, "the forward exit has already turned onto leg 3");
+            Assert.Greater(forwardPoint.x, 4f, "past the corner, heading toward (14,-10)");
+            Assert.AreEqual(3f, Vector3.Distance(center, forwardPoint), 0.001f, "still exactly on the circle");
+            Assert.Greater(forwardOffset, 34f, "past the corner's own arc offset (14 + 20 = 34)");
+
+            // The backward exit, by contrast, never leaves leg 2 — a plain sanity check that the two
+            // directions aren't accidentally sharing one answer.
+            var foundBackward = ItemPreviewEntry.TryFindCircleCrossing(
+                trace, arcTable, center, 3f, 33f, false, out var backwardPoint, out var backwardOffset);
+
+            Assert.IsTrue(foundBackward);
+            Assert.AreEqual(0f, Vector3.Distance(new Vector3(4f, -6f, 0f), backwardPoint), 0.001f);
+            Assert.AreEqual(30f, backwardOffset, 0.001f);
+        }
+
+        // The host centre sits nowhere near the trace at all (perpendicular distance far exceeds the
+        // radius) — there is no crossing to find in either direction, and the walk must say so rather than
+        // return whatever segment happened to look closest.
+        [Test]
+        public void TryFindCircleCrossing_HostFarOffTrace_ReturnsFalse()
+        {
+            var trace = new List<Vector3> { new(0f, 0f, 0f), new(10f, 0f, 0f) };
+            var arcTable = BuildTraceArcTable(trace);
+            var center = new Vector3(5f, 10f, 0f);
+
+            var found = ItemPreviewEntry.TryFindCircleCrossing(
+                trace, arcTable, center, 2f, 5f, true, out var point, out var offset);
+
+            Assert.IsFalse(found);
+            Assert.AreEqual(default(Vector3), point);
+            Assert.AreEqual(0f, offset);
+        }
+
+        [TestCase(0f)]
+        [TestCase(-1f)]
+        public void TryFindCircleCrossing_NonPositiveRadius_ReturnsFalse(float radius)
+        {
+            var trace = new List<Vector3> { new(-10f, 0f, 0f), new(10f, 0f, 0f) };
+            var arcTable = BuildTraceArcTable(trace);
+
+            var found = ItemPreviewEntry.TryFindCircleCrossing(
+                trace, arcTable, Vector3.zero, radius, 10f, true, out var point, out var offset);
+
+            Assert.IsFalse(found);
+            Assert.AreEqual(default(Vector3), point);
+            Assert.AreEqual(0f, offset);
+        }
+
+        [Test]
+        public void TryFindCircleCrossing_FewerThanTwoTracePoints_ReturnsFalse()
+        {
+            var trace = new List<Vector3> { new(4f, -5f, 0f) };
+            var arcTable = BuildTraceArcTable(trace);
+
+            var found = ItemPreviewEntry.TryFindCircleCrossing(
+                trace, arcTable, Vector3.zero, 5f, 0f, true, out var point, out var offset);
+
+            Assert.IsFalse(found);
+            Assert.AreEqual(default(Vector3), point);
+            Assert.AreEqual(0f, offset);
+        }
+
         [Test]
         public void TryFindEntryOffset_StrokeIndexOutOfRange_ReturnsFalse()
         {
@@ -266,6 +494,23 @@ namespace BalloonParty.Tests.Item
             }
 
             strokeLengths = lengths;
+            return arcTable;
+        }
+
+        // Mirrors ItemPreviewTicker.BuildTraceBuffers' own cumulative-arc table for a flat trace polyline
+        // (as opposed to BuildArcTable above, which tables a shape's own strokes) — what feeds
+        // TryFindCircleCrossing's arcTable parameter in these tests, matching what production code hands it.
+        private static List<float> BuildTraceArcTable(IReadOnlyList<Vector3> trace)
+        {
+            var arcTable = new List<float> { 0f };
+            var total = 0f;
+
+            for (var i = 1; i < trace.Count; i++)
+            {
+                total += Vector3.Distance(trace[i - 1], trace[i]);
+                arcTable.Add(total);
+            }
+
             return arcTable;
         }
 
