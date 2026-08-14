@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.ItemPreviewConfig
   _dashLength: 0.2
   _dashSpacing: 0.15
-  _maxPens: 128
-  _traceSpeed: 1.5
+  _maxPens: 256
+  _traceSpeed: 2
   _bloomDuration: 1
   _bloomCurve:
     serializedVersion: 2
@@ -41,8 +41,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _sightDelaySeconds: 0.35
-  _rebloomHoldSeconds: 1.5
+  _sightDelaySeconds: 0.3
+  _rebloomHoldSeconds: 0.65
   _shield:
     _stubLength: 1
   _bomb:
