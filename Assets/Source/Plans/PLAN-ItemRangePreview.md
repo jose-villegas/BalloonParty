@@ -161,17 +161,26 @@ prefab. Two reasons:
 1. It needs `SlotGrid`, `IItemConfiguration` and the pool — all DI singletons. Pooled item
    visuals are not resolver-spawned (`ItemDisplayService` hand-threads what they need), so
    a view-side trigger would mean hand-threading four more services through that seam.
-2. Only **one** preview shows at a time. That is a global arbitration — which host the aim
-   is most centrally on — and a per-balloon component cannot make it without every instance
-   knowing about every other.
+2. Only **one** figure shows at a time. That is a global arbitration — which hosts the aim
+   crosses, and in what order — and a per-balloon component cannot make it without every
+   instance knowing about every other.
 
 It reuses `TraceHitGeometry.TryFindSurfaceHit` (the same test `PredictionSightProbe` runs
 per-actor) against each item host's view circle, and gates the whole grid walk on
 `PredictionTraceProvider.Version` so an unchanged aim costs nothing.
 
+A single prediction line can cross several item-carrying balloons at once — the controller
+collects every one `TraceHitGeometry` scores a hit on, orders them first-to-last along the
+line, and steps the one visible figure through them in that order, wrapping back to the
+first once the last finishes its loop. **Not** by `Centrality` (how squarely the line
+crosses a balloon) — that was the old winner-takes-all criterion for picking a single host,
+and it answers a different question from "how far along the line does this balloon sit,"
+which is the only thing a sequence needs to order by. A line crossing only one host is a
+one-element sequence, so it behaves exactly as the original single-host telegraph always did.
+
 > **Note on the existing probe.** `PredictionSightProbe` stays exactly as it is — it drives
 > the per-item *reactions* (glitter, fade, drift) on the visual itself. This controller
-> answers a different question (which single host owns the board-level telegraph) and the
+> answers a different question (which host currently owns the board-level telegraph) and the
 > two are deliberately independent.
 
 ---

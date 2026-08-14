@@ -11,7 +11,8 @@ using VContainer.Unity;
 namespace BalloonParty.Item.Preview
 {
     /// <summary>
-    ///     Decides which item host the aim is sighted on, and drives the one visible range telegraph for it.
+    ///     Decides which item hosts the aim is sighted on, and drives the visible range telegraph through
+    ///     them in sequence, first-to-last along the line.
     /// </summary>
     /// <remarks>
     ///     Plain C# rather than a component on the balloon prefab, for two reasons. It needs
@@ -22,7 +23,7 @@ namespace BalloonParty.Item.Preview
     ///     <para>
     ///         <c>PredictionSightProbe</c> is untouched and independent: it drives the per-item visual
     ///         REACTIONS on the icon itself (glitter, fade, drift). This answers a different question — which
-    ///         single host owns the board-level figure — and shares only the underlying
+    ///         host currently owns the board-level figure — and shares only the underlying
     ///         <see cref="TraceHitGeometry" /> test.
     ///     </para>
     /// </remarks>
@@ -43,21 +44,39 @@ namespace BalloonParty.Item.Preview
         private readonly IItemPreviewConfig _config;
         private readonly IEnumerable<IItemRangePreview> _previews;
 
+        // Every item host the trace currently crosses, ordered first-to-last along the line via
+        // ItemPreviewSightOrder — the sequence the telegraph steps through. Rebuilt from scratch by
+        // RefreshSightedHosts on every grid-walk refresh, never appended across frames.
+        private readonly List<ItemPreviewSightedHost> _sightedHosts = new();
+
+        // Ordered slots of the set the current signature describes, and of the set last actually shown —
+        // parallel snapshots of _sightedHosts' own Slot column (via CopySlots). Two separate lists, not
+        // one, because they answer two different questions on two different cadences: _signatureSlots is
+        // compared every frame to decide whether the aim moved to a genuinely different set of balloons
+        // (HasSetChanged); _shownSetSlots is compared only when a dwell elapses, to decide whether that
+        // set is the very one already on screen (ShowActiveHost's introduce rule).
+        private readonly List<Vector2Int> _signatureSlots = new();
+        private readonly List<Vector2Int> _shownSetSlots = new();
+
         private Dictionary<ItemType, IItemRangePreview> _previewMap;
         private int _lastVersion = int.MinValue;
 
-        private bool _hasSightedHost;
-        private Vector2Int _sightedSlot;
-        private Vector2 _sightedOrigin;
-        private Vector2 _sightedDirection;
-        private IItemRangePreview _sightedPreview;
+        private bool _hasSightedHosts;
 
-        // The figure's inputs as of the last frame the signature was checked, compared against this
+        // Which entry in _sightedHosts is currently being drawn (or about to be, once dwell elapses).
+        // Reset to 0 only when the SET itself changes (see LateTick) — advancing through an unchanged set
+        // via AdvanceSequence is not a signature change and must not restart the sequence.
+        private int _sequenceIndex;
+
+        // The active host's inputs as of the last frame the signature was checked, compared against this
         // frame's to decide whether the aim actually moved. NOT PredictionTraceProvider.Version — that
         // increments every Tick while aiming (ThrowerController.UpdatePredictionTrace calls SetTrace
         // unconditionally) regardless of whether the aim moved, so it can't stand in for this.
+        // _signatureSlots (above) is the SET half of the signature; these five are the active host's own
+        // continuous geometry, updated both when the set changes (StoreSignature) and when the sequence
+        // advances to a new active host (AdvanceSequence) — never when neither happens, which is what lets
+        // a drifting balloon still invalidate a held signature without every advance doing the same.
         private bool _hasSignature;
-        private Vector2Int _signatureSlot;
         private Vector2 _signatureOrigin;
         private Vector2 _signatureDirection;
         private float _signatureSpinDegrees;
@@ -70,13 +89,10 @@ namespace BalloonParty.Item.Preview
         private bool _shown;
         private float _dwellElapsed;
 
-        // The slot of the host the figure was last actually shown for, so ShowSightedHost can tell a
-        // re-settle on the SAME host (an aim nudge that lands back on what was already being telegraphed)
-        // apart from a genuinely new one — see ItemPreviewTicker.Show's introduce parameter. Cleared
-        // whenever the telegraph goes away entirely (trace inactive, or no host sighted), so looking away
-        // and back at the same item introduces again rather than reappearing in place.
-        private bool _hasShownHost;
-        private Vector2Int _shownSlot;
+        // Whether the SET last actually shown (_shownSetSlots) is still current — see ShowActiveHost for
+        // why re-settling on the identical set skips the re-bloom, and RefreshSightedHosts for why a
+        // detour through a different set must not be invisible to that check.
+        private bool _hasShownSet;
 
         internal ItemRangePreviewController(
             SlotGrid grid,
@@ -132,75 +148,89 @@ namespace BalloonParty.Item.Preview
             if (_traceProvider.Version != _lastVersion)
             {
                 _lastVersion = _traceProvider.Version;
-                RefreshSightedHost();
+                RefreshSightedHosts();
             }
 
-            if (!_hasSightedHost)
+            if (!_hasSightedHosts)
             {
                 HideAndClearSignature();
                 return;
             }
 
-            var spinDegrees = ResolveSpinDegrees(_sightedSlot);
+            // A changed SET restarts the sequence at its first host; an unchanged one keeps whatever
+            // AdvanceSequence last left it at. Computed before reading _sightedHosts[_sequenceIndex] below
+            // so a set that shrank since the last frame can never index past its new end.
+            var setChanged = !_hasSignature || HasSetChanged();
+            _sequenceIndex = setChanged ? 0 : _sequenceIndex;
+
+            var active = _sightedHosts[_sequenceIndex];
+            var spinDegrees = ResolveSpinDegrees(active.Slot);
             var traceEnd = _traceProvider.End;
 
-            // A changed signature (including a different host) hides gracefully and restarts the dwell —
-            // but falls through to the accumulate-and-check below instead of returning, so a
-            // SightDelaySeconds of 0 still shows on this same frame rather than costing one.
-            if (!_hasSignature ||
-                HasSignatureChanged(_sightedSlot, _sightedOrigin, _sightedDirection, spinDegrees, in traceEnd))
+            // A changed signature (a different set, or the active host's own geometry drifting) hides
+            // gracefully and restarts the dwell — but falls through to the accumulate-and-check below
+            // instead of returning, so a SightDelaySeconds of 0 still shows on this same frame rather than
+            // costing one.
+            if (setChanged || HasActiveSignatureChanged(active, spinDegrees, in traceEnd))
             {
                 _ticker.BeginHide();
                 _shown = false;
                 _dwellElapsed = 0f;
-                StoreSignature(_sightedSlot, _sightedOrigin, _sightedDirection, spinDegrees, in traceEnd);
+                StoreSignature(active, spinDegrees, in traceEnd);
             }
 
             _dwellElapsed += Time.deltaTime;
 
-            // Once shown for a stable signature, do nothing on later stable frames: re-calling Show is
-            // exactly what would reposition the pens while the figure is visible, which is the invariant
-            // this whole scheme exists to hold.
-            if (_shown || _dwellElapsed < _config.SightDelaySeconds)
+            // Once shown for a stable signature, do nothing further on later stable frames EXCEPT react
+            // to the ticker's own loop completing — re-calling Show for any other reason is exactly what
+            // would reposition the pens while the figure is visible, which is the invariant this whole
+            // scheme exists to hold. CycleComplete only ever turns true once the ticker has already faded
+            // out and parked (see ItemPreviewTicker.Park), so advancing here never violates it: the figure
+            // isn't visible any more at the instant this fires, it's about to become visible again — for
+            // whichever host comes next in the sequence.
+            if (_shown)
+            {
+                if (_ticker.CycleComplete)
+                {
+                    AdvanceSequence(in traceEnd);
+                }
+
+                return;
+            }
+
+            if (_dwellElapsed < _config.SightDelaySeconds)
             {
                 return;
             }
 
             _shown = true;
-            ShowSightedHost(spinDegrees, in traceEnd);
+            ShowActiveHost(active, spinDegrees, in traceEnd);
         }
 
-        // Runs only on a version change (the expensive grid walk), and only decides WHAT is sighted —
-        // the signature comparison and dwell timer that decide WHEN (and whether) to draw it live in
-        // LateTick, which keeps running every frame regardless of whether this method does.
-        private void RefreshSightedHost()
+        // Runs only on a version change (the expensive grid walk), and only decides WHICH hosts are
+        // sighted — the signature comparison, sequencing and dwell timer that decide WHEN (and WHAT) to
+        // draw live in LateTick, which keeps running every frame regardless of whether this method does.
+        private void RefreshSightedHosts()
         {
-            if (!TryFindSightedHost(out var slot, out var itemType, out var origin, out var direction) ||
-                !_previewMap.TryGetValue(itemType, out var preview))
+            CollectSightedHosts();
+
+            // _shownSetSlots/_hasShownSet is a "last actually shown" cache, only ever written by
+            // ShowActiveHost once a signature has dwelt long enough to draw — NOT a live mirror of what
+            // is currently sighted. A sweep that lands on a DIFFERENT set and back onto this one, too
+            // quickly for that other set to ever dwell its own way to a Show, would otherwise leave
+            // _shownSetSlots pinned on the original set the whole time: by the time the aim resettles
+            // there, the sighted set equals _shownSetSlots again and the detour is invisible to
+            // ShowActiveHost's introduce check, so the figure would reappear already formed instead of
+            // re-blooming. Sighting a SET the figure isn't actually shown for is itself proof the aim
+            // left it, dwell or no dwell — compared as a whole set now, not a single slot, so stepping
+            // through an unchanged set via AdvanceSequence (which alters no slot this compares) never
+            // trips it, only a genuinely different aim does.
+            if (_hasShownSet && !SlotsEqual(_shownSetSlots, _sightedHosts))
             {
-                _hasSightedHost = false;
-                return;
+                _hasShownSet = false;
             }
 
-            // _shownSlot/_hasShownHost is a "last actually shown" cache, only ever written by
-            // ShowSightedHost once a signature has dwelt long enough to draw — NOT a live mirror of what
-            // is currently sighted. A sweep that lands on a DIFFERENT host and back onto this one, too
-            // quickly for that other host to ever dwell its own way to a Show, would otherwise leave
-            // _shownSlot pinned on the original host the whole time: by the time the aim resettles there,
-            // _sightedSlot equals _shownSlot again and the visit elsewhere is invisible to ShowSightedHost's
-            // introduce check, so the figure reappears already formed instead of re-blooming. Sighting a
-            // slot the figure isn't actually shown for is itself proof the aim left it, dwell or no dwell,
-            // so the memory that suppresses re-introduction must not survive that visit.
-            if (_hasShownHost && slot != _shownSlot)
-            {
-                _hasShownHost = false;
-            }
-
-            _hasSightedHost = true;
-            _sightedSlot = slot;
-            _sightedOrigin = origin;
-            _sightedDirection = direction;
-            _sightedPreview = preview;
+            _hasSightedHosts = _sightedHosts.Count > 0;
         }
 
         private float ResolveSpinDegrees(Vector2Int slot)
@@ -213,86 +243,154 @@ namespace BalloonParty.Item.Preview
         private void HideAndClearSignature()
         {
             _ticker.BeginHide();
-            _hasSightedHost = false;
+            _hasSightedHosts = false;
+            _sequenceIndex = 0;
             _hasSignature = false;
             _shown = false;
             _dwellElapsed = 0f;
-            _hasShownHost = false;
+            _hasShownSet = false;
         }
 
-        // Slot and TraceEnd.Kind are exact (a different slot or contact type IS a different aim, however
-        // close the geometry); everything else is a Vector2/float that can carry float jitter from a
-        // physically-held-still aim, so those compare against SignatureEpsilon(Sq) instead of equality.
-        private bool HasSignatureChanged(
-            Vector2Int slot, Vector2 origin, Vector2 direction, float spinDegrees, in PredictionTraceEnd traceEnd)
+        // TraceEnd.Kind is exact (a different contact type IS a different aim, however close the geometry);
+        // everything else is a Vector2/float that can carry float jitter from a physically-held-still aim,
+        // so those compare against SignatureEpsilon(Sq) instead of equality. The active host's own slot is
+        // deliberately not compared here — with the set unchanged (the caller only reaches this when
+        // setChanged is false), the active index still points at the same slot it did last frame, so
+        // comparing it again would say nothing HasSetChanged hasn't already said.
+        private bool HasActiveSignatureChanged(
+            in ItemPreviewSightedHost active, float spinDegrees, in PredictionTraceEnd traceEnd)
         {
-            return slot != _signatureSlot ||
-                (origin - _signatureOrigin).sqrMagnitude > SignatureEpsilonSq ||
-                (direction - _signatureDirection).sqrMagnitude > SignatureEpsilonSq ||
+            return (active.Origin - _signatureOrigin).sqrMagnitude > SignatureEpsilonSq ||
+                (active.Direction - _signatureDirection).sqrMagnitude > SignatureEpsilonSq ||
                 Mathf.Abs(spinDegrees - _signatureSpinDegrees) > SignatureEpsilon ||
                 traceEnd.Kind != _signatureTraceKind ||
                 (traceEnd.Normal - _signatureTraceNormal).sqrMagnitude > SignatureEpsilonSq;
         }
 
-        private void StoreSignature(
-            Vector2Int slot, Vector2 origin, Vector2 direction, float spinDegrees, in PredictionTraceEnd traceEnd)
+        // Whole-set equality against the signature's own slot snapshot — count first (cheap, and the only
+        // check most changes need), then an exact per-slot compare in trace order. Order matters as much as
+        // membership: two hosts swapping which sequences first is as genuine a change as one appearing or
+        // disappearing.
+        private bool HasSetChanged()
+        {
+            return !SlotsEqual(_signatureSlots, _sightedHosts);
+        }
+
+        private static bool SlotsEqual(IReadOnlyList<Vector2Int> storedSlots, IReadOnlyList<ItemPreviewSightedHost> hosts)
+        {
+            if (storedSlots.Count != hosts.Count)
+            {
+                return false;
+            }
+
+            for (var i = 0; i < storedSlots.Count; i++)
+            {
+                if (storedSlots[i] != hosts[i].Slot)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static void CopySlots(List<Vector2Int> destination, IReadOnlyList<ItemPreviewSightedHost> hosts)
+        {
+            destination.Clear();
+            for (var i = 0; i < hosts.Count; i++)
+            {
+                destination.Add(hosts[i].Slot);
+            }
+        }
+
+        private void StoreSignature(in ItemPreviewSightedHost active, float spinDegrees, in PredictionTraceEnd traceEnd)
         {
             _hasSignature = true;
-            _signatureSlot = slot;
-            _signatureOrigin = origin;
-            _signatureDirection = direction;
+            CopySlots(_signatureSlots, _sightedHosts);
+            _signatureOrigin = active.Origin;
+            _signatureDirection = active.Direction;
             _signatureSpinDegrees = spinDegrees;
             _signatureTraceKind = traceEnd.Kind;
             _signatureTraceNormal = traceEnd.Normal;
         }
 
-        private void ShowSightedHost(float spinDegrees, in PredictionTraceEnd traceEnd)
+        private void ShowActiveHost(in ItemPreviewSightedHost active, float spinDegrees, in PredictionTraceEnd traceEnd)
         {
-            var colorId = _grid.At(_sightedSlot) is IHasColor colored ? colored.Color.Value : null;
-            var context = new ItemPreviewContext(
-                _sightedOrigin, _sightedSlot, _sightedDirection, _traceProvider.Points, colorId, spinDegrees,
-                traceEnd, _viewport);
+            var context = BuildContext(in active, spinDegrees, in traceEnd);
 
-            // A different slot than the one last actually shown is a genuinely new figure (or the first
-            // one); the same slot means the aim only nudged and settled back on a host already being
-            // telegraphed, so the re-appearance should not re-bloom.
-            var introduce = !_hasShownHost || _sightedSlot != _shownSlot;
-            _ticker.Show(_sightedPreview, in context, introduce);
-            _hasShownHost = true;
-            _shownSlot = _sightedSlot;
+            // A different SET than the one last actually shown is a genuinely new sequence (or the first
+            // one); the same SET means the aim only nudged and settled back on a group of hosts already
+            // being telegraphed, so the re-appearance should not re-bloom. Compared as a whole set, not
+            // just the active slot — this only ever runs for a freshly (re)started sequence, so the active
+            // slot is index 0 by construction, but that alone says nothing about whether the OTHER hosts
+            // in the sequence are the same ones as last time.
+            var introduce = !_hasShownSet || !SlotsEqual(_shownSetSlots, _sightedHosts);
+            _ticker.Show(active.Preview, in context, introduce);
+            _hasShownSet = true;
+            CopySlots(_shownSetSlots, _sightedHosts);
         }
 
-        // The most centrally-struck item host wins, mirroring TraceHitGeometry's own scoring: an aim
-        // threading two item balloons telegraphs the one it actually points at, not whichever the grid walk
-        // reached first.
-        private bool TryFindSightedHost(
-            out Vector2Int slot, out ItemType itemType, out Vector2 origin, out Vector2 direction)
+        // Replays the sequence in response to ItemPreviewTicker.CycleComplete: the ticker's own loop just
+        // parked, so this advances to the NEXT host in the sighted set — wrapping past the last back to
+        // the first — and draws it in. Always introduce: true, exactly like the single-host replay this
+        // generalizes: Park already dropped _visible, so the pens ARE dark and ARE due a fresh draw-in
+        // regardless of which host comes next. A one-element set advances to itself (0 -> 0 mod 1), which
+        // is exactly today's single-host replay — the sequence collapses to that case rather than needing
+        // a special one.
+        //
+        // Updates only the signature's ACTIVE-host geometry (origin/direction/spin/trace end), never
+        // _signatureSlots — the set itself hasn't changed, only the sequence's position within it, and
+        // routing this through StoreSignature's full reset would make LateTick read this very advance as a
+        // changed aim on the very next frame (see HasActiveSignatureChanged).
+        private void AdvanceSequence(in PredictionTraceEnd traceEnd)
         {
-            slot = default;
-            itemType = ItemType.None;
-            origin = default;
-            direction = default;
-            var bestCentrality = -1f;
+            _sequenceIndex = (_sequenceIndex + 1) % _sightedHosts.Count;
+            var active = _sightedHosts[_sequenceIndex];
+            var spinDegrees = ResolveSpinDegrees(active.Slot);
+
+            _signatureOrigin = active.Origin;
+            _signatureDirection = active.Direction;
+            _signatureSpinDegrees = spinDegrees;
+            _signatureTraceKind = traceEnd.Kind;
+            _signatureTraceNormal = traceEnd.Normal;
+
+            var context = BuildContext(in active, spinDegrees, in traceEnd);
+            _ticker.Show(active.Preview, in context, introduce: true);
+        }
+
+        private ItemPreviewContext BuildContext(in ItemPreviewSightedHost active, float spinDegrees, in PredictionTraceEnd traceEnd)
+        {
+            var colorId = _grid.At(active.Slot) is IHasColor colored ? colored.Color.Value : null;
+            return new ItemPreviewContext(
+                active.Origin, active.Slot, active.Direction, _traceProvider.Points, colorId, spinDegrees,
+                traceEnd, _viewport);
+        }
+
+        // Collects every item host the trace crosses, then orders them first-to-last along the line via
+        // ItemPreviewSightOrder — the sequence the telegraph steps through, rather than picking a single
+        // winner by Centrality the way this used to. Centrality still comes back out of TryScoreHost
+        // (TraceHitGeometry always reports it), it just no longer decides anything here: how squarely the
+        // line crosses a balloon is a different question from how far along the line that balloon sits,
+        // and only the latter orders a sequence.
+        private void CollectSightedHosts()
+        {
+            _sightedHosts.Clear();
 
             for (var col = 0; col < _grid.Columns; col++)
             {
                 for (var row = 0; row < _grid.Rows; row++)
                 {
                     var candidate = new Vector2Int(col, row);
-                    if (!TryScoreHost(candidate, out var hit) || hit.Centrality <= bestCentrality)
+                    if (!TryScoreHost(candidate, out var hit) || !_previewMap.TryGetValue(hit.Item, out var preview))
                     {
                         continue;
                     }
 
-                    bestCentrality = hit.Centrality;
-                    slot = candidate;
-                    itemType = hit.Item;
-                    origin = hit.Origin;
-                    direction = hit.Direction;
+                    _sightedHosts.Add(new ItemPreviewSightedHost(candidate, preview, hit.Origin, hit.Direction));
                 }
             }
 
-            return bestCentrality >= 0f;
+            ItemPreviewSightOrder.OrderAlongTrace(_sightedHosts, _traceProvider.Points);
         }
 
         // One slot's candidacy: it must host an item, have live geometry to aim at (an actor mid-despawn or

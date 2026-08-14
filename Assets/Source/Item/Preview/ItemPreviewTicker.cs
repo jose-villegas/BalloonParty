@@ -13,8 +13,9 @@ namespace BalloonParty.Item.Preview
     /// </summary>
     /// <remarks>
     ///     Exactly one figure is ever shown, so this owns a single pen set that <see cref="Show" /> re-aims
-    ///     rather than a registry of concurrent previews. Arbitration of WHICH host is sighted belongs to
-    ///     <see cref="ItemRangePreviewController" />.
+    ///     rather than a registry of concurrent previews. Arbitration of WHICH host is sighted, and WHAT
+    ///     draws next once a loop cycle completes, both belong to <see cref="ItemRangePreviewController" />
+    ///     — this ticker only owns HOW a figure draws and times its own cycle (see <see cref="CycleComplete" />).
     /// </remarks>
     internal sealed class ItemPreviewTicker : ILateTickable, IDisposable
     {
@@ -111,6 +112,16 @@ namespace BalloonParty.Item.Preview
         private Vector2Int _currentSlot;
         private bool _visible;
 
+        // True once a loop cycle's fade has fully aged out and the ticker has parked instead of
+        // replaying itself — see Park. Pens are held exactly where the fade left them (dark, ribbons
+        // already faded to nothing), not returned to the pool, so a Show that follows can reuse them
+        // with no pool Get/Return churn. Deciding WHAT draws next is not this ticker's job any more —
+        // see the class remarks — so parking only ever reports the cycle is done via CycleComplete and
+        // waits for ItemRangePreviewController to either replay it (Show) or let it go (BeginHide/Hide).
+        // A ticker-level state, unrelated to Pen.Parked below (one pen waiting pen-up for its own
+        // cascade window) beyond sharing the word for the same idea one level up: nothing is moving.
+        private bool _parked;
+
         // Total arc length of _tracePoints, and the host's own position along it as an arc-length offset
         // from the trace's first point — both derived by BuildTraceBuffers alongside _traceArcTable above.
         // The trace runs from the projectile through the board and crosses the host somewhere along the
@@ -133,10 +144,10 @@ namespace BalloonParty.Item.Preview
 
         // The re-bloom loop's own state machine: Drawing while the cascade is still bristling in, Holding
         // through the settled pause, Fading once BeginLoopFade has stopped every pen and is waiting for
-        // their ribbons to age out before RestartCascade replays the whole draw-in. Explicit rather than
-        // derived from one accumulated total against BloomDuration + RebloomHoldSeconds + a fade duration —
-        // the fade's own length isn't even known until BeginLoopFade reads it off a pen, so a single
-        // running total was never going to stay a readable comparison. Also doubles as the signal
+        // their ribbons to age out before Park reports the cycle complete (see CycleComplete). Explicit
+        // rather than derived from one accumulated total against BloomDuration + RebloomHoldSeconds + a
+        // fade duration — the fade's own length isn't even known until BeginLoopFade reads it off a pen,
+        // so a single running total was never going to stay a readable comparison. Also doubles as the signal
         // AdvanceFade uses to tell the loop's own fade apart from a genuine BeginHide: only BeginLoopFade
         // ever leaves this at Fading. Reset to Drawing by Show, alongside _cycleElapsed, so a fresh figure
         // never starts mid-hold or mid-fade.
@@ -149,6 +160,13 @@ namespace BalloonParty.Item.Preview
         // and by a restart itself; only ever advances while visible and not fading, which LateTick already
         // gates before AdvanceRebloomCycle runs.
         private float _cycleElapsed;
+
+        // The signal ItemRangePreviewController polls once per LateTick: true once a loop cycle has
+        // parked (see Park/_parked). It stays true until the next Show clears it, which is what makes it
+        // safe to read every frame rather than edge-triggering it — the controller calling Show in
+        // response IS what consumes it; if nothing ever does, it just stays parked until a
+        // BeginHide/Hide releases the pens instead, never observed twice for the one cycle that set it.
+        internal bool CycleComplete => _parked;
 
         internal ItemPreviewTicker(
             PoolManager poolManager,
@@ -189,11 +207,11 @@ namespace BalloonParty.Item.Preview
         ///     again from their strokes' entry points), while the SAME host only re-fits the geometry — the
         ///     figure follows a drifting balloon, or a Shield stub follows the aim tip, without every pen
         ///     restarting its bloom each time the player nudges the aim. In current play the controller
-        ///     never calls this on the same-host-still-visible path (it only re-`Show`s after a
-        ///     <see cref="BeginHide" />, which always drops <c>_visible</c> first), so that branch is a
-        ///     dormant fallback; <paramref name="introduce" /> is the mechanism that actually distinguishes
-        ///     the two cases in practice, independently of whether the geometry itself is acquired or
-        ///     re-fitted.
+        ///     never calls this on a host still actively visible — it only re-`Show`s once <c>_visible</c>
+        ///     has already dropped first, either via <see cref="BeginHide" /> (a real hide) or a completed
+        ///     loop cycle parking (see <see cref="CycleComplete" />) — so that branch is a dormant
+        ///     fallback; <paramref name="introduce" /> is the mechanism that actually distinguishes the two
+        ///     cases in practice, independently of whether the geometry itself is acquired or re-fitted.
         ///     <para>
         ///         Carries no colour: every figure draws with the pen prefab's own material, so the
         ///         telegraph reads as one system and there is no runtime tint path to keep in step with it.
@@ -224,11 +242,20 @@ namespace BalloonParty.Item.Preview
             // BeginHide, _visible is already false, so isSameHost comes out false regardless of slot,
             // which is what routes this into AcquirePens instead of RefitPens: the acquire path is what
             // re-blooms from the host, which is the intended fade-in. When it was instead the loop's own
-            // fade (BeginLoopFade never touches _visible), isSameHost can legitimately come out true for
-            // a Show on the very same host — RefitPens' surviving-pen path stays correct for that case
-            // because StopPensEmitting already keeps every pen's Emitting mirror in step with its trail's
-            // real state, so ApplyPenPosition still sees a clean rising edge instead of a stale no-op.
+            // fade still in flight (BeginLoopFade never touches _visible while the fade is running — see
+            // Park), isSameHost can legitimately come out true for a Show on the very same host —
+            // RefitPens' surviving-pen path stays correct for that case because StopPensEmitting already
+            // keeps every pen's Emitting mirror in step with its trail's real state, so ApplyPenPosition
+            // still sees a clean rising edge instead of a stale no-op.
             _fading = false;
+
+            // A cycle that already finished parking (see Park) is likewise superseded here: clearing
+            // this before isSameHost is computed below is what a controller-driven replay relies on —
+            // Park already dropped _visible, so isSameHost reads false regardless of slot and this Show
+            // takes the AcquirePens(introduce) path, never the dormant RefitPens one. Also the only place
+            // CycleComplete is ever cleared, so a controller that observes it and calls back in here
+            // cannot observe the same completed cycle twice.
+            _parked = false;
 
             var isSameHost = _visible && context.Slot == _currentSlot;
             _dashSpacing = _config.DashSpacing;
@@ -265,13 +292,17 @@ namespace BalloonParty.Item.Preview
             // to be returned to the pool outright.
             _fading = false;
 
-            if (!_visible && _pens.Count == 0)
+            // A parked ticker already reads !_visible with pens still held (see Park), so it would
+            // otherwise slip past this guard unreleased — checked explicitly rather than folded into the
+            // pen count below, since the defensive zero-pens park (BeginLoopFade) has none to count.
+            if (!_visible && !_parked && _pens.Count == 0)
             {
                 return;
             }
 
             ReleasePens();
             _visible = false;
+            _parked = false;
         }
 
         /// <summary>
@@ -286,14 +317,26 @@ namespace BalloonParty.Item.Preview
             // whichever frame actually starts something. A call arriving mid-fade is the one case that
             // still has to DO something: if that fade is the loop's own (see BeginLoopFade), a real hide
             // must win over it — the pens are already stopped and already ageing (StopPensEmitting), so
-            // nothing about the fade itself restarts, only where it lands, redirected here from a replay
-            // to a release (see AdvanceFade). A call arriving mid- a genuine hide-fade, or after one has
+            // nothing about the fade itself restarts, only where it lands, redirected here from a park to
+            // a release (see AdvanceFade). A call arriving mid- a genuine hide-fade, or after one has
             // already released, hits this same branch and is a true no-op, since _cyclePhase is already
             // Drawing and _visible already false.
             if (_fading)
             {
                 _cyclePhase = CyclePhase.Drawing;
                 _visible = false;
+                return;
+            }
+
+            // A cycle that already finished parking has nothing left to fade — its ribbons are already
+            // fully aged out (Park is only ever reached once the loop's own fade elapsed, or with nothing
+            // to fade at all) — so there is no graceful stage to run here, only the release itself. Left
+            // unhandled, a parked ticker would otherwise leak forever: it reads !_visible, so it would
+            // fall straight through the guard below and never reach ReleasePens.
+            if (_parked)
+            {
+                ReleasePens();
+                _parked = false;
                 return;
             }
 
@@ -393,11 +436,13 @@ namespace BalloonParty.Item.Preview
         // LateTick already applies before reaching here — and walks _cyclePhase through Drawing (the
         // draw-in, BloomDuration long) then Holding (the settled pause, RebloomHoldSeconds long), at which
         // point BeginLoopFade takes over: it stops every pen and moves the ticker into LateTick's other
-        // branch (AdvanceFade), which is what actually calls RestartCascade and hands the phase back to
-        // Drawing once the fade elapses. A single ticker-level clock rather than polling every pen for "am
-        // I settled" — every pen already shares one BloomElapsed-derived clock by construction, so this
+        // branch (AdvanceFade), which is what actually calls Park and reports the cycle complete once the
+        // fade elapses — replaying it, if anything does, is ItemRangePreviewController's call from there
+        // (see CycleComplete). A single ticker-level clock rather than polling every pen for "am I
+        // settled" — every pen already shares one BloomElapsed-derived clock by construction, so this
         // just reads the same shape of signal one level up. RebloomHoldSeconds <= 0 is the off switch:
-        // never advance the phase at all, draw once and hold, exactly the behaviour before this existed.
+        // never advance the phase at all, draw once and hold, exactly the behaviour before this existed —
+        // and CycleComplete never turns true, since Park is only ever reached through this switch.
         private void AdvanceRebloomCycle(float deltaTime)
         {
             if (_config.RebloomHoldSeconds <= 0f)
@@ -428,20 +473,21 @@ namespace BalloonParty.Item.Preview
             }
         }
 
-        // Starts the loop's own fade before a replay — the settled figure stops emitting and its ribbons
-        // age out on their own lifetime, exactly like a real hide (see StopPensEmitting), before
-        // RestartCascade draws it in again once AdvanceFade sees that lifetime elapse. Never touches
-        // _visible: the preview is still showing, just between cycles — only a genuine BeginHide turns it
-        // off, and does so explicitly even if it lands mid-fade (see BeginHide).
+        // Starts the loop's own fade before a park — the settled figure stops emitting and its ribbons
+        // age out on their own lifetime, exactly like a real hide (see StopPensEmitting), before Park
+        // reports the cycle complete once AdvanceFade sees that lifetime elapse. Deliberately does NOT
+        // touch _visible itself while the fade is running: the preview is still showing, just between
+        // cycles, so the controller's own signature/dwell bookkeeping should keep reading it as shown
+        // throughout the fade rather than spuriously treating a mid-loop fade as the aim having left. Only
+        // once the fade actually completes does _visible drop — in Park, the same moment CycleComplete
+        // turns true — mirroring how a genuine BeginHide always drops _visible before a re-Show.
         private void BeginLoopFade()
         {
             if (_pens.Count == 0)
             {
-                // Nothing to fade out — replay straight away rather than stalling the cycle on a fade
-                // with nothing to age out.
-                RestartCascade();
-                _cyclePhase = CyclePhase.Drawing;
-                _cycleElapsed = 0f;
+                // Nothing to fade out — the cycle is complete the instant it would have started fading,
+                // so park immediately rather than stalling on a fade with nothing to age out.
+                Park();
                 return;
             }
 
@@ -455,45 +501,26 @@ namespace BalloonParty.Item.Preview
             _cyclePhase = CyclePhase.Fading;
         }
 
-        // Replays the whole draw-in — approach leg included — without re-acquiring geometry or touching
-        // the pool: the shape, strokes, arc tables, entry offsets, dash counts and cascade timings are all
-        // unchanged between cycles, so only the pens' own cascade state resets, via the identical per-pen
-        // reset AcquirePens/AcquireApproachPens use to introduce a pen the first time (ResetPenForDrawIn /
-        // ResetApproachPenForDrawIn). Approach pens have retired by the time a hold elapses, so they are
-        // revived here rather than left dead — a replay that skipped them would draw only the figure and
-        // never the comet leading into it.
-        private void RestartCascade()
+        // Reached once a loop cycle's own fade has fully aged out (or BeginLoopFade found nothing to fade
+        // at all): the ticker stops driving itself and reports the cycle complete instead of replaying —
+        // deciding whether, and for what, to replay next is ItemRangePreviewController's job now, via
+        // CycleComplete. Drops _visible here, not in BeginLoopFade, so the controller's own
+        // signature/dwell bookkeeping keeps reading the figure as shown for the whole draw/hold/fade
+        // arc and only sees it "gone" at the exact moment the pens actually go dark for good — the same
+        // instant a Show responding to CycleComplete needs isSameHost to read false, so it takes the
+        // AcquirePens(introduce) path (see Show) rather than the dormant RefitPens one, mirroring how a
+        // genuine BeginHide already drops _visible before its own re-Show.
+        private void Park()
         {
-            for (var i = 0; i < _pens.Count; i++)
-            {
-                var pen = _pens[i];
-                if (pen.Trail == null)
-                {
-                    continue;
-                }
-
-                ResetPenForDrawIn(ref pen);
-                _pens[i] = pen;
-            }
-
-            for (var i = 0; i < _approachPens.Count; i++)
-            {
-                var pen = _approachPens[i];
-                if (pen.Trail == null)
-                {
-                    continue;
-                }
-
-                ResetApproachPenForDrawIn(ref pen);
-                _approachPens[i] = pen;
-            }
+            _visible = false;
+            _parked = true;
         }
 
         // Pens hold their last position while fading (no AdvancePen calls here) — a fading ribbon should
         // hang where it stopped, not keep sweeping its dash while it dims. Once the ribbon lifetime
         // elapses, _cyclePhase is what tells the loop's own fade (BeginLoopFade) apart from a genuine
         // hide (BeginHide) — only BeginLoopFade ever leaves it at Fading, so that's the one case that
-        // replays instead of releasing.
+        // parks instead of releasing outright.
         private void AdvanceFade(float deltaTime)
         {
             _fadeElapsed += deltaTime;
@@ -506,9 +533,7 @@ namespace BalloonParty.Item.Preview
 
             if (_cyclePhase == CyclePhase.Fading)
             {
-                _cyclePhase = CyclePhase.Drawing;
-                _cycleElapsed = 0f;
-                RestartCascade();
+                Park();
                 return;
             }
 
@@ -859,10 +884,12 @@ namespace BalloonParty.Item.Preview
         }
 
         // The figure-pen reset for the start of a draw-in — parked pen-up at the host origin, cascade
-        // state zeroed. Shared by AcquirePens' introduce branch and RestartCascade's re-bloom, so "what
-        // does it mean for this pen to begin cascading in" has exactly one definition rather than a second
-        // copy that can drift from the original. Never seeds the pen emitting: AdvancePen's rising edge is
-        // what starts the ribbon, once this pen's own cascade window opens, never this reset directly —
+        // state zeroed. Used by AcquirePens' introduce branch alone now — both a figure's first
+        // appearance and a loop's replay (ItemRangePreviewController re-Showing once CycleComplete fires)
+        // go through it, so "what does it mean for this pen to begin cascading in" has exactly one
+        // definition rather than a second copy that could drift from the original. Never seeds the pen
+        // emitting: AdvancePen's rising edge is what starts the ribbon, once this pen's own cascade
+        // window opens, never this reset directly —
         // the standing rule that a pen must never be emitting at a position it is about to leave
         // discontinuously is exactly why the trail goes dark here rather than mid-sweep.
         private void ResetPenForDrawIn(ref Pen pen)
@@ -881,10 +908,10 @@ namespace BalloonParty.Item.Preview
             pen.LastPosition = default;
         }
 
-        // Mirrors ResetPenForDrawIn one level down, for an approach dash's own pen — shared by
-        // AcquireApproachPens' introduce branch and RestartCascade. A retired approach pen (the common
-        // case once a settled hold elapses) is revived here, not just reset: Retired must go back to
-        // false or AdvanceApproachPen would skip it forever.
+        // Mirrors ResetPenForDrawIn one level down, for an approach dash's own pen — used by
+        // AcquireApproachPens' introduce branch alone now, on both a figure's first appearance and a
+        // loop's replay. A retired approach pen (the common case once a settled hold elapses) is revived
+        // here, not just reset: Retired must go back to false or AdvanceApproachPen would skip it forever.
         private void ResetApproachPenForDrawIn(ref ApproachPen pen)
         {
             pen.Retired = false;
