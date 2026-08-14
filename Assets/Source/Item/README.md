@@ -76,6 +76,39 @@ out of the host. Borrows the technique from the score-trail formations (`Game/Sc
 heads dragging `TrailRenderer` ribbons trace a figure — but these are flat, board-space, and anchored
 to a balloon rather than 3D polyhedra flying at a UI bar.
 
+**A draw-in, once started, completes before anything is allowed to change what is drawn.** This is a
+standing invariant, not a guard on any one trigger. Several rounds of fixes each closed off one thing
+that could change the active host or its signature mid-cascade — the sighted set changing under the
+aim, ordinary aim jitter tripping the active-host signature check, a spinning host's rotation leaving
+its settled step — by patching that trigger's own call site. That is why the same visible symptom (a
+figure starts drawing, then jumps to another item's figure before finishing) kept resurfacing under a
+new trigger each time: guarding triggers one at a time never establishes the complementary rule on the
+*target*, which is that nothing may repoint the pens while a draw-in is in flight, regardless of which
+trigger is asking. `ItemPreviewTicker` already knows whether it is mid-draw — that is exactly what
+`CyclePhase.Drawing` means — so it exposes that fact once, as `ItemPreviewTicker.IsDrawing`, and every
+trigger that could otherwise interrupt a draw-in now consults it before acting, instead of each one
+needing its own bespoke check (or, as happened repeatedly, needing one added after the fact).
+`IsDrawing` is deliberately not a bare read of `CyclePhase.Drawing`, though: with `RebloomHoldSeconds`
+authored off, `AdvanceRebloomCycle` never advances the phase at all, so `CyclePhase` would stay pinned
+at `Drawing` forever, long after the figure has actually finished cascading in, and a check against it
+alone would defer every future change permanently rather than just for the cascade's own window.
+`IsDrawing` instead reads a dedicated clock, `_drawInElapsed`, that always advances through the same
+visible/non-fading window a draw-in actually occupies, independent of whether the hold loop is switched
+on. A genuine hide is the one thing this deliberately does not cover: the aim leaving the board
+entirely, or the trace going inactive (`HideAndClearSignature`), still calls `ItemPreviewTicker.BeginHide`
+immediately regardless of `IsDrawing` — disappearing promptly when the aim truly leaves is correct, and
+`BeginHide` already fades gracefully from wherever the pens currently sit rather than cutting them, so
+there is no discontinuity to guard against there. Everything else that could change what is drawn — a
+changed sighted set, drifting aim geometry, a spin departing its settled step — waits instead of firing:
+`ItemRangePreviewController.LateTick` computes `deferChange` (`_shown && ItemPreviewTicker.IsDrawing`)
+and, while it holds, simply does not act on `setChanged`/`HasActiveSignatureChanged` that frame, and
+`AdvanceOrRebloomActiveHost` holds a detected spin-departure edge in `_earlyCycleEndPending` rather than
+calling `RequestEarlyCycleEnd` immediately. Neither stores *what* the deferred change actually is —
+both are simply re-evaluated, live, against whatever is currently sighted the moment `IsDrawing` next
+reads false — which is what keeps a deferral from becoming a queue of stale intentions: a change that
+reverts itself before the draw-in finishes is correctly never acted on at all, and nothing here can
+strand a figure mid-cascade or replay a decision made against inputs that no longer hold.
+
 | File | What it does |
 |---|---|
 | `IItemRangePreview` | The seam — `ItemType Type` plus `BuildShape(in context, shape)`. One implementation per item type, resolved by `Type` exactly as `ItemActivator` resolves `IBalloonItem`, so a new item ships its preview beside its handler with no dispatch table to edit. `BuildShape` is **pure geometry**: it appends points and never touches a renderer, the pool, or `Time` — which is what keeps every figure edit-mode testable and lets one driver animate all of them. An implementation with an existing config-free core for its shape (`PaintTriangle`, `LightningChain`, `BombBlast`, `LaserCross`) must build on it rather than re-derive, or the telegraph drifts from the effect it advertises |
@@ -240,11 +273,50 @@ cross, so a mid-transition draw shows a cross the beam has not yet turned to —
 once the *next* rotation happens to trigger a redraw, a glitch that silently self-corrects and is easy to
 miss in testing. `ItemRangePreviewController.ShowHost` is the one place every draw call in this file
 funnels through, so the settle guard lives there once rather than as three separate checks that could
-drift apart; it returns whether it actually drew, and each caller holds its own bookkeeping back when it
-didn't — `ShowActiveHost` leaves `_shown` false so `LateTick` keeps retrying every frame at no extra cost,
-and `AdvanceSequence` leaves `_activeHostElapsed` unreset and sets `_activeHostDrawPending` so
-`AdvanceOrRebloomActiveHost` finishes the deferred draw directly on a later frame instead of re-running
-its turn-timer decision against a budget that never got to start.
+drift apart; it reports a three-way `ShowOutcome` (`Drew` / `WaitingOnSpin` / `Empty`, see below) rather
+than a bare bool, and each caller holds its own bookkeeping back when it isn't `Drew` — `ShowActiveHost`
+leaves `_shown` false so `LateTick` keeps retrying every frame at no extra cost, and `AdvanceSequence`
+leaves `_activeHostElapsed` unreset and sets `_activeHostDrawPending` so `AdvanceOrRebloomActiveHost`
+finishes the deferred draw directly on a later frame instead of re-running its turn-timer decision
+against a budget that never got to start.
+<br><br>
+**A host whose figure builds to nothing is skipped, not treated as a drawn figure that ends the cycle.**
+`IItemRangePreview.BuildShape` returning an empty shape is a *correct* answer for some inputs — Shield's
+`BuildShape` returns early whenever `context.TraceEnd.Kind != PredictionTraceEndKind.Wall`, since a shot
+that survives via a balloon deflection has no wall-bounce consequence to advertise — but
+`ItemPreviewTicker.Show` used to react to that empty shape by calling `Hide()`, which drops `_parked`
+along with everything else. Since `ItemPreviewTicker.CycleComplete` is just `_parked`, clearing it is
+indistinguishable from "nothing to advance from" — the sequence could never observe another cycle
+complete, so it stopped advancing permanently, silently, for the rest of that aim: not just the empty
+host, but every host after it in the sequence, including ones with a perfectly good figure. A sighted
+Bomb ahead of a Shield whose trace ends on a deflector would draw once and then never redraw, even on its
+own turn. `ItemPreviewTicker.Show` now returns whether it actually produced a figure, and `ShowHost`
+turns a `false` into `ShowOutcome.Empty` rather than silently swallowing it, so `ItemRangePreviewController`
+can tell "nothing drawn because the rotation isn't settled yet" (`WaitingOnSpin` — retry the *same* host
+next frame) apart from "nothing drawn because this host has nothing to show" (`Empty` — move on to the
+*next* sighted host instead; waiting won't change a `BuildShape` result that doesn't depend on time).
+`TryDrawActiveHost` is the shared mechanism this now funnels through: starting at `_sequenceIndex`, it
+tries `ShowHost` and, on `Empty`, advances to the next sighted host and tries again, refreshing the
+signature's active-host geometry to match each host it lands on (the same bookkeeping `AdvanceSequence`
+already did for its own single-step move) so the very next frame's `HasActiveSignatureChanged` compares
+against the host actually being drawn rather than the one the call started on. `ShowActiveHost` (the
+first draw for a fresh dwell), `AdvanceSequence` (a turn-timer advance or a re-bloom in place) and the
+deferred-draw retry in `AdvanceOrRebloomActiveHost` all call `TryDrawActiveHost` rather than `ShowHost`
+directly, so this is the one place "what happens when a host's figure is empty" is answered, not three
+separate copies that could drift. The skip is bounded to **one full lap** of `_sightedHosts` — there is no
+guarantee any sighted host has a figure for the current trace, so a set that is empty end to end must
+leave the preview hidden and let a later frame retry, never spin further within the one frame it's
+already on or thrash frame to frame trying. Emptiness is never cached: it depends on live trace state
+(`TraceEnd.Kind`, in Shield's case) that can change from one frame to the next as the aim moves, so a host
+that is empty now may have a figure a moment later, and the skip always re-asks `BuildShape` fresh rather
+than remembering a past answer. This is also why the skip happens at *draw* time, in `ShowHost`, rather
+than at *collection* time in `CollectSightedHosts`: dropping empty hosts there would need to build every
+sighted host's shape on every grid-walk refresh (in practice near enough to every frame while aiming, see
+`ItemRangePreviewController`'s own remarks on `PredictionTraceProvider.Version`) just to find out which
+ones currently qualify, since the live-state dependency means that answer cannot be cached across the
+refresh either — paying to build every sighted host's figure eagerly, when at most one is ever actually
+shown per frame, for a check that would have to be repeated at draw time anyway to stay correct. The
+skip's own bound already caps that cost at one lap, and only when a draw is actually being attempted.
 <br><br>
 The edge tracker itself (`_previousSpinSettled`/`_hasPreviousSpinSettled`) is updated **every frame**
 `AdvanceOrRebloomActiveHost` runs, unconditionally, before any branching on `CycleComplete` — deliberately,

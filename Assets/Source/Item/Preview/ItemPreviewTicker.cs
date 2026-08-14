@@ -161,6 +161,28 @@ namespace BalloonParty.Item.Preview
         // gates before AdvanceRebloomCycle runs.
         private float _cycleElapsed;
 
+        // A second, independent clock for "has the draw-in's own cascade window elapsed" — IsDrawing below
+        // needs this rather than _cycleElapsed above, because AdvanceRebloomCycle bails out before ever
+        // touching _cycleElapsed while RebloomHoldSeconds is authored off (its own off switch), leaving it
+        // pinned at 0 forever even once every pen has long since finished cascading in. This one advances
+        // every visible, non-fading LateTick regardless of that switch, in exact lockstep with every pen's
+        // own BloomElapsed, so it reaches BloomDuration at the identical moment AdvanceCascade's own
+        // t >= 1f promotion guard guarantees the last pen is Bloomed. Show pins it straight past
+        // BloomDuration for a re-settle that never cascades at all (introduce == false) — nothing is
+        // filling in on that path, so there is nothing for IsDrawing to protect.
+        private float _drawInElapsed;
+
+        // The signal ItemRangePreviewController checks before letting any external trigger change what is
+        // drawn — see the Item README's draw-in-completes invariant. Deliberately not _cyclePhase ==
+        // Drawing: that field stays pinned at Drawing forever once RebloomHoldSeconds is authored off (see
+        // _drawInElapsed's own remarks), long after the figure has actually finished bristling in, so a
+        // check against it alone would defer every future change forever instead of just the cascade's own
+        // window. !_fading excludes a hide already in flight — BeginHide always drops _visible in the same
+        // call, so that alone would already read false, but a genuine hide is deliberately never deferred
+        // (see ItemRangePreviewController.HideAndClearSignature) and this makes that reachable from the
+        // property alone rather than relying on caller ordering.
+        internal bool IsDrawing => _visible && !_fading && _drawInElapsed < _config.BloomDuration;
+
         // The signal ItemRangePreviewController polls once per LateTick: true once a loop cycle has
         // parked (see Park/_parked). It stays true until the next Show clears it, which is what makes it
         // safe to read every frame rather than edge-triggering it — the controller calling Show in
@@ -201,6 +223,13 @@ namespace BalloonParty.Item.Preview
         ///     place instead of cascading in again. <see cref="ItemRangePreviewController" /> decides which
         ///     this is by tracking the slot it last actually showed.
         /// </param>
+        /// <returns>
+        ///     False when <paramref name="preview" />'s <c>BuildShape</c> added no stroke for this crossing
+        ///     (a Shield with no wall to brace against, say) — nothing is drawn and the pens already held,
+        ///     if any, are released via <see cref="Hide" /> rather than left aimed at a host with nothing to
+        ///     show. <see cref="ItemRangePreviewController" /> reads this to move on to the next sighted
+        ///     host instead of treating an empty figure as a drawn one that ends its cycle.
+        /// </returns>
         /// <remarks>
         ///     Called on every aim change while a host stays sighted, so it distinguishes the two cases by
         ///     <see cref="ItemPreviewContext.Slot" />: a DIFFERENT host restarts the pens (they bloom in
@@ -219,23 +248,27 @@ namespace BalloonParty.Item.Preview
         ///         telegraph reads as one system and there is no runtime tint path to keep in step with it.
         ///     </para>
         /// </remarks>
-        internal void Show(IItemRangePreview preview, in ItemPreviewContext context, bool introduce)
+        internal bool Show(IItemRangePreview preview, in ItemPreviewContext context, bool introduce)
         {
             if (preview == null || _penPrefab == null)
             {
                 Hide();
-                return;
+                return false;
             }
 
             _shape.Clear();
             preview.BuildShape(in context, _shape);
 
             // An item with no board figure (or one whose geometry degenerated this frame) shows nothing
-            // rather than stranding pens at the host.
+            // rather than stranding pens at the host. Hide() here is what the original empty-host bug
+            // rode in on: it drops _parked along with everything else, so a caller that mistook "empty"
+            // for "drawn, cycle ended" would see CycleComplete go permanently false right under it. That
+            // is exactly why this is now a reported outcome (see the <returns> remarks) rather than a
+            // silent no-op the caller can't distinguish from a genuine parked cycle.
             if (_shape.Strokes.Count == 0)
             {
                 Hide();
-                return;
+                return false;
             }
 
             // A Show arriving mid-fade supersedes it outright — cancelling here (rather than letting
@@ -285,7 +318,14 @@ namespace BalloonParty.Item.Preview
             // racing an already-due re-bloom on the very same frame.
             _cyclePhase = CyclePhase.Drawing;
             _cycleElapsed = 0f;
+
+            // introduce == false means every pen above was just handed its fully-settled state directly
+            // (AcquirePens/RefitPens) rather than cascading in — pin the clock straight past BloomDuration
+            // so IsDrawing reads false immediately instead of protecting a draw-in that was never going to
+            // animate.
+            _drawInElapsed = introduce ? 0f : _config.BloomDuration;
             _visible = true;
+            return true;
         }
 
         internal void Hide()
@@ -448,6 +488,11 @@ namespace BalloonParty.Item.Preview
             _viewport.Refresh();
 
             var deltaTime = Time.deltaTime;
+
+            // See _drawInElapsed's own remarks for why this runs unconditionally here rather than inside
+            // AdvanceRebloomCycle below.
+            _drawInElapsed += deltaTime;
+
             for (var i = 0; i < _pens.Count; i++)
             {
                 var pen = _pens[i];

@@ -135,6 +135,19 @@ namespace BalloonParty.Item.Preview
         // a previous cycle can never be read as covering this one.
         private bool _earlyCycleEndRequested;
 
+        // True from the frame HasSpinLeftSettledAngle fires until the request actually reaches the
+        // ticker — separate from _earlyCycleEndRequested above, which only ever means "the ticker has
+        // been told." The edge itself is a single frame wide (HasSpinLeftSettledAngle compares only last
+        // frame's reading to this one's), so if it lands while ItemPreviewTicker.IsDrawing is still true
+        // — the rotation stepping on before this host's own fresh draw-in has even finished bristling in
+        // — the request has to be held rather than fired immediately, or it would cut that draw-in short
+        // (see the Item README's draw-in-completes invariant). Consumed the first frame IsDrawing reads
+        // false, in AdvanceOrRebloomActiveHost, same as an un-deferred edge always fired on its own frame.
+        // Reset on every draw by ShowHost, same as _earlyCycleEndRequested, and by a genuine hide — a
+        // stale pending request from a host that's no longer even being drawn must never fire against
+        // whatever the next one turns out to be.
+        private bool _earlyCycleEndPending;
+
         // Whether the SET last actually shown (_shownSetSlots) is still current — see ShowActiveHost for
         // why re-settling on the identical set skips the re-bloom, and RefreshSightedHosts for why a
         // detour through a different set must not be invisible to that check.
@@ -209,9 +222,29 @@ namespace BalloonParty.Item.Preview
             // _activeHostElapsed is deliberately NOT reset here — see that field's remarks for why it
             // waits for the host to actually be shown instead.
             var setChanged = !_hasSignature || HasSetChanged();
-            if (setChanged)
+
+            // A draw-in in flight must finish before anything is allowed to change what's drawn — see the
+            // Item README's draw-in-completes invariant. Only a genuine hide (the aim leaving entirely,
+            // handled above via HideAndClearSignature before this point is ever reached) skips this;
+            // everything below is "the aim moved to something else while still aiming at SOMETHING," which
+            // waits. No specific change is remembered here — setChanged/HasActiveSignatureChanged below
+            // are recomputed fresh every frame from live input, so simply not acting on them this frame is
+            // enough to "re-ask" once the draw-in ends; a change that reverts itself before then is
+            // correctly never acted on at all, and nothing here can strand or replay a stale one.
+            var deferChange = _shown && _ticker.IsDrawing;
+
+            if (setChanged && !deferChange)
             {
                 _sequenceIndex = 0;
+            }
+            else if (setChanged)
+            {
+                // Deferred: the host currently mid-draw must keep its own sequence slot so the spin
+                // tracking below still reads its rotation, not whatever the new set's first entry happens
+                // to be. Clamped only so a set that shrank under the aim can't index past its new end —
+                // the (possibly now-unrelated) host this briefly points at feeds nothing but a transient
+                // spin reading for the few remaining draw-in frames, never a draw.
+                _sequenceIndex = Mathf.Min(_sequenceIndex, _sightedHosts.Count - 1);
             }
 
             var active = _sightedHosts[_sequenceIndex];
@@ -221,8 +254,9 @@ namespace BalloonParty.Item.Preview
             // A changed signature (a different set, or the active host's own geometry drifting — NOT its
             // spin, see HasActiveSignatureChanged) hides gracefully and restarts the dwell — but falls
             // through to the accumulate-and-check below instead of returning, so a SightDelaySeconds of 0
-            // still shows on this same frame rather than costing one.
-            if (setChanged || HasActiveSignatureChanged(active, in traceEnd))
+            // still shows on this same frame rather than costing one. Gated on !deferChange so a change
+            // landing mid-draw-in is withheld instead — see deferChange's own remarks.
+            if ((setChanged || HasActiveSignatureChanged(active, in traceEnd)) && !deferChange)
             {
                 _ticker.BeginHide();
                 _shown = false;
@@ -240,7 +274,7 @@ namespace BalloonParty.Item.Preview
             // exists to hold.
             if (_shown)
             {
-                AdvanceOrRebloomActiveHost(active, spinDegrees, spinSettled, spinning, in traceEnd);
+                AdvanceOrRebloomActiveHost(spinSettled, spinning, in traceEnd);
                 return;
             }
 
@@ -255,7 +289,7 @@ namespace BalloonParty.Item.Preview
             // true, so _shown only latches once the figure is genuinely on screen; while it stays false
             // this keeps retrying every frame at no extra cost, since the rotation dwells for most of
             // every step.
-            _shown = ShowActiveHost(active, spinDegrees, spinSettled, in traceEnd);
+            _shown = ShowActiveHost(in traceEnd);
         }
 
         // Runs only on a version change (the expensive grid walk), and only decides WHICH hosts are
@@ -309,6 +343,7 @@ namespace BalloonParty.Item.Preview
             _hasShownSet = false;
             _hasPreviousSpinSettled = false;
             _earlyCycleEndRequested = false;
+            _earlyCycleEndPending = false;
         }
 
         // The one place a shown figure's turn can move on, now that both ways of getting here go through
@@ -357,9 +392,7 @@ namespace BalloonParty.Item.Preview
         // (_earlyCycleEndRequested, set where RequestEarlyCycleEnd is called below). A qualifying spinning
         // host, and every non-spinning one, keeps redrawing on the hold loop exactly as before this
         // existed.
-        private void AdvanceOrRebloomActiveHost(
-            in ItemPreviewSightedHost active, float spinDegrees, bool spinSettled, ISpinningItemVisual spinning,
-            in PredictionTraceEnd traceEnd)
+        private void AdvanceOrRebloomActiveHost(bool spinSettled, ISpinningItemVisual spinning, in PredictionTraceEnd traceEnd)
         {
             // Tracked first, unconditionally — every frame this method runs, regardless of CycleComplete
             // or any return below. The rotation's own departure is the only thing that can ever authorise
@@ -367,15 +400,27 @@ namespace BalloonParty.Item.Preview
             // be caught even while the ticker sits parked: a parked host has no other clock running, so an
             // edge missed here is an edge that can never be recovered, stranding the figure dark for good.
             // RequestEarlyCycleEnd is already a no-op while parked or fading (see its own remarks), so
-            // calling it on the edge in any state is safe — only the flag set alongside it matters.
+            // calling it on the edge in any state is safe — only the flag set alongside it matters. The
+            // edge is recorded into _earlyCycleEndPending rather than acted on directly, though — see
+            // that field's remarks for why the call itself still has to wait out a draw-in in flight.
             if (HasSpinLeftSettledAngle(spinSettled))
             {
-                _ticker.RequestEarlyCycleEnd();
-                _earlyCycleEndRequested = true;
+                _earlyCycleEndPending = true;
             }
 
             _previousSpinSettled = spinSettled;
             _hasPreviousSpinSettled = true;
+
+            // Fires the moment it's safe to — same frame as an un-deferred edge always did — but never
+            // while this host's own fresh draw-in is still bristling in (see IsDrawing's own remarks and
+            // the Item README's draw-in-completes invariant). A pending request outlives however many
+            // frames that takes; RequestEarlyCycleEnd's own idempotence covers the rest.
+            if (_earlyCycleEndPending && !_ticker.IsDrawing)
+            {
+                _ticker.RequestEarlyCycleEnd();
+                _earlyCycleEndRequested = true;
+                _earlyCycleEndPending = false;
+            }
 
             if (!_ticker.CycleComplete)
             {
@@ -396,10 +441,22 @@ namespace BalloonParty.Item.Preview
                 // PREVIOUS host's turn running out, not this one's. Finish the deferred draw directly
                 // instead of falling into the turn-timer decision below, which would misread that stale
                 // value as another turn already expired and advance straight past this host unseen.
-                if (ShowHost(in active, spinDegrees, spinSettled, in traceEnd, introduce: true))
+                // Routed through TryDrawActiveHost, not a bare ShowHost call, because the rotation settling
+                // is no guarantee the now-buildable figure is non-empty — it can just as easily turn out
+                // empty as a host reached any other way, and the deferred draw deserves the same skip.
+                var outcome = TryDrawActiveHost(in traceEnd, introduce: true);
+                if (outcome == ShowOutcome.Drew)
                 {
                     _activeHostDrawPending = false;
                     _activeHostElapsed = 0f;
+                }
+                else if (outcome == ShowOutcome.Empty)
+                {
+                    // A full lap found nothing to draw — see AdvanceSequence's own Empty branch for why
+                    // dropping _shown (and the pending flag with it) is the right fallback rather than
+                    // leaving this host queued forever for a draw that will never come.
+                    _activeHostDrawPending = false;
+                    _shown = false;
                 }
 
                 return;
@@ -420,7 +477,17 @@ namespace BalloonParty.Item.Preview
             }
             else if (HoldLoopMayRebloom(spinning, oneCycleSeconds) || _earlyCycleEndRequested)
             {
-                ShowHost(in active, spinDegrees, spinSettled, in traceEnd, introduce: true);
+                // In practice the active host's own inputs can't have gone empty here without also
+                // tripping HasActiveSignatureChanged first (which would have hidden and restarted the
+                // sequence long before this branch ever ran) — but this still goes through the shared skip
+                // rather than a bare ShowHost call, so THAT invariant is never something this file has to
+                // keep proving by hand at every call site; if it ever doesn't hold, the sequence recovers
+                // instead of sticking exactly the way the original bug did.
+                var outcome = TryDrawActiveHost(in traceEnd, introduce: true);
+                if (outcome == ShowOutcome.Empty)
+                {
+                    _shown = false;
+                }
             }
 
             // Disqualified, and this park wasn't the rotation's own doing: leave the figure dark and
@@ -536,10 +603,13 @@ namespace BalloonParty.Item.Preview
             _signatureTraceNormal = traceEnd.Normal;
         }
 
-        // Returns whether it actually drew — see ShowHost. LateTick only latches _shown once this returns
-        // true, so a spinning host that is mid-transition when the dwell elapses simply keeps this
-        // returning false (and _shown staying false) until a later frame finds the rotation settled.
-        private bool ShowActiveHost(in ItemPreviewSightedHost active, float spinDegrees, bool spinSettled, in PredictionTraceEnd traceEnd)
+        // Returns whether it actually drew — see ShowHost/TryDrawActiveHost. LateTick only latches _shown
+        // once this returns true, so a spinning host that is mid-transition when the dwell elapses simply
+        // keeps this returning false (and _shown staying false) until a later frame finds the rotation
+        // settled. An active host whose figure builds empty is handled the same way now: TryDrawActiveHost
+        // skips past it (bounded to one lap of _sightedHosts) rather than this method latching _shown on a
+        // host with nothing drawn, or stalling forever on one that will never draw anything at all.
+        private bool ShowActiveHost(in PredictionTraceEnd traceEnd)
         {
             // A different SET than the one last actually shown is a genuinely new sequence (or the first
             // one); the same SET means the aim only nudged and settled back on a group of hosts already
@@ -548,7 +618,7 @@ namespace BalloonParty.Item.Preview
             // slot is index 0 by construction, but that alone says nothing about whether the OTHER hosts
             // in the sequence are the same ones as last time.
             var introduce = !_hasShownSet || !SlotsEqual(_shownSetSlots, _sightedHosts);
-            if (!ShowHost(in active, spinDegrees, spinSettled, in traceEnd, introduce))
+            if (TryDrawActiveHost(in traceEnd, introduce) != ShowOutcome.Drew)
             {
                 return false;
             }
@@ -561,6 +631,57 @@ namespace BalloonParty.Item.Preview
             // actual draw, rather than back when the signature that triggered this dwell was stored.
             _activeHostElapsed = 0f;
             return true;
+        }
+
+        // The shared empty-host skip: tries to draw the host currently at _sequenceIndex, and if its
+        // figure builds to nothing (ShowOutcome.Empty — see ShowHost), advances to the next sighted host
+        // and tries that one instead, bounded to one full lap of _sightedHosts so a set where every host
+        // is empty can never spin within a frame or thrash frame to frame — there is no guarantee any
+        // host has a figure (a Shield with no wall to brace against, say), and emptiness is a live
+        // property of the current trace, not something a stale flag could ever safely cache across an aim
+        // change. Stops at the first WaitingOnSpin instead of skipping past it: a spin-blocked host may
+        // well draw given another frame, so it deserves the same per-frame retry any other spin-blocked
+        // draw already gets, not a skip that would only be undone the moment its own retry runs.
+        //
+        // Every skip past an Empty host also refreshes the signature's own active-host geometry
+        // (origin/direction/trace-end) to whichever host it lands on next — the same bookkeeping
+        // AdvanceSequence already does for its own single-step move — so the very next frame's
+        // HasActiveSignatureChanged compares against the host actually being drawn (or waited on) rather
+        // than the one _sequenceIndex started this call pointing at, which would otherwise read as a
+        // spurious aim change and re-trigger BeginHide on a frame nothing about the aim moved at all.
+        //
+        // The single funnel every draw attempt in this file now goes through — ShowActiveHost (the first
+        // draw for a fresh dwell), AdvanceSequence (the turn timer or a re-bloom) and the deferred-draw
+        // retry in AdvanceOrRebloomActiveHost all call this rather than ShowHost directly, so "what
+        // happens when a host's figure is empty" has exactly one answer instead of three that could drift.
+        private ShowOutcome TryDrawActiveHost(in PredictionTraceEnd traceEnd, bool introduce)
+        {
+            var attempts = _sightedHosts.Count;
+            for (var i = 0; i < attempts; i++)
+            {
+                var candidate = _sightedHosts[_sequenceIndex];
+                var spinDegrees = ResolveSpinDegrees(candidate.Slot, out var spinSettled, out _);
+                var outcome = ShowHost(in candidate, spinDegrees, spinSettled, in traceEnd, introduce);
+
+                if (outcome != ShowOutcome.Empty)
+                {
+                    return outcome;
+                }
+
+                _sequenceIndex = (_sequenceIndex + 1) % _sightedHosts.Count;
+                var next = _sightedHosts[_sequenceIndex];
+                _signatureOrigin = next.Origin;
+                _signatureDirection = next.Direction;
+                _signatureTraceKind = traceEnd.Kind;
+                _signatureTraceNormal = traceEnd.Normal;
+            }
+
+            // A full lap found nothing to draw at all — every sighted host is empty for the current
+            // trace. Leave the preview hidden (ShowHost's own Empty path already released any pens via
+            // Show -> Hide) rather than looping further within this frame; callers treat this exactly
+            // like "nothing to show yet" and simply retry on a later frame, when the live trace state
+            // that decided emptiness may have moved on.
+            return ShowOutcome.Empty;
         }
 
         // Replays the sequence: the NEXT host in the sighted set — wrapping past the last back to the
@@ -585,65 +706,89 @@ namespace BalloonParty.Item.Preview
         // same rule ShowActiveHost follows, not at the moment it merely became active. A host that can't
         // draw yet (mid-transition) leaves _activeHostDrawPending set so AdvanceOrRebloomActiveHost can
         // finish this draw on a later frame once the rotation settles, instead of re-running the turn-timer
-        // decision against a budget that never got to start.
+        // decision against a budget that never got to start. A host whose figure builds empty instead falls
+        // through to TryDrawActiveHost's own skip (see its remarks) — this method only sets up the FIRST
+        // candidate's signature and lets that shared mechanism carry on from there if it turns out empty,
+        // so a dead host costs the sequence one step rather than stranding CycleComplete the way an empty
+        // Show used to (see the Item README).
         private void AdvanceSequence(in PredictionTraceEnd traceEnd)
         {
             _sequenceIndex = (_sequenceIndex + 1) % _sightedHosts.Count;
             var active = _sightedHosts[_sequenceIndex];
-            var spinDegrees = ResolveSpinDegrees(active.Slot, out var spinSettled, out _);
 
             _signatureOrigin = active.Origin;
             _signatureDirection = active.Direction;
             _signatureTraceKind = traceEnd.Kind;
             _signatureTraceNormal = traceEnd.Normal;
 
-            if (ShowHost(in active, spinDegrees, spinSettled, in traceEnd, introduce: true))
+            var outcome = TryDrawActiveHost(in traceEnd, introduce: true);
+
+            if (outcome == ShowOutcome.Drew)
             {
                 _activeHostElapsed = 0f;
             }
-            else
+            else if (outcome == ShowOutcome.WaitingOnSpin)
             {
                 _activeHostDrawPending = true;
+            }
+            else
+            {
+                // Empty for a full lap — nothing sighted has a figure right now. _shown drops so LateTick's
+                // own "not yet shown" branch (ShowActiveHost) picks the sequence back up on a later frame —
+                // the dwell is already long past SightDelaySeconds by the time a sequence gets this far, so
+                // that retry costs no extra wait, same as the spin-not-settled retry already gets.
+                _shown = false;
             }
         }
 
         // The one place BuildContext, ItemPreviewTicker.Show and resetting the spin edge tracker
-        // (_hasPreviousSpinSettled) happen together — every draw call in this file (a fresh dwell via
-        // ShowActiveHost, a sequence advance via AdvanceSequence, and a spin-triggered re-bloom via
-        // AdvanceOrRebloomActiveHost's CycleComplete branch) funnels through it, so the three operations
-        // can't drift out of lockstep the way three separate copies of the same triple once did. Resetting
-        // the tracker on every draw is what stops a host's edge state from ever surviving onto a DIFFERENT
-        // active host (see AdvanceSequence and _previousSpinSettled's own remarks): the very next frame's
-        // reading, whatever it is, becomes the new baseline rather than being compared against whatever the
-        // previous host last reported. _earlyCycleEndRequested is cleared here for the same reason: once
+        // (_hasPreviousSpinSettled) happen together — every draw attempt in this file funnels through it,
+        // directly or via TryDrawActiveHost, so those operations can't drift out of lockstep the way three
+        // separate copies of the same triple once did. Resetting the tracker on every actual draw is what
+        // stops a host's edge state from ever surviving onto a DIFFERENT active host (see AdvanceSequence
+        // and _previousSpinSettled's own remarks): the very next frame's reading, whatever it is, becomes
+        // the new baseline rather than being compared against whatever the previous host last reported.
+        // _earlyCycleEndRequested and _earlyCycleEndPending are cleared here for the same reason: once
         // this draw starts a fresh cycle, whether THAT cycle's eventual park was rotation-requested has to
-        // be decided fresh too, never inherited from whatever the previous cycle (or host) last asked for.
+        // be decided fresh too, never inherited — and never fired late against this new draw-in — from
+        // whatever the previous cycle (or host) last asked for. None of these three are touched on a
+        // WaitingOnSpin or Empty result — only an actual draw starts a fresh cycle worth rebasing them to.
         // Callers are responsible for everything else a particular draw implies (introduce,
         // signature/sequence bookkeeping, _activeHostElapsed) — this only ever does the draw itself.
         //
-        // Also the one place the settle guard lives, and returns whether it actually drew. A spinning
-        // host's figure is built from its rotation's CURRENT angle (BuildContext -> spinDegrees), so
-        // drawing while spinSettled is false would bake in a mid-transition angle the beam isn't actually
-        // aligned to — it would then look correct only once the NEXT rotation happens to trigger a
-        // redraw, reading as a glitch that silently self-corrects. Every caller funnels through here so
-        // this only has to be checked once rather than three times risking drift; each caller holds its
-        // own bookkeeping (introduce, signature/sequence state, _activeHostElapsed) back when this
-        // returns false, exactly as it already does when this returns true.
-        private bool ShowHost(
+        // Also the one place the settle guard lives, and the one place ItemPreviewTicker.Show's own empty
+        // report is read. A spinning host's figure is built from its rotation's CURRENT angle
+        // (BuildContext -> spinDegrees), so drawing while spinSettled is false would bake in a
+        // mid-transition angle the beam isn't actually aligned to — it would then look correct only once
+        // the NEXT rotation happens to trigger a redraw, reading as a glitch that silently self-corrects.
+        // An item whose BuildShape adds no stroke for this crossing (Shield with no wall to brace against,
+        // say — see the Item README) is a different, unrelated reason nothing gets drawn, so it is reported
+        // as its own outcome rather than folded into the same "not drawn" the spin guard already returns:
+        // ItemRangePreviewController must retry the very same host on a later frame for the spin case, but
+        // move on to a different one for the empty case (see TryDrawActiveHost) — collapsing the two would
+        // make one of those two reactions wrong for the other's cause.
+        private ShowOutcome ShowHost(
             in ItemPreviewSightedHost host, float spinDegrees, bool spinSettled, in PredictionTraceEnd traceEnd,
             bool introduce)
         {
             if (!spinSettled)
             {
                 // No work queued, no allocation — just wait for a later frame's spinSettled to read true.
-                return false;
+                return ShowOutcome.WaitingOnSpin;
             }
 
             var context = BuildContext(in host, spinDegrees, in traceEnd);
-            _ticker.Show(host.Preview, in context, introduce);
+            if (!_ticker.Show(host.Preview, in context, introduce))
+            {
+                // Show already routed this to Hide() internally (see its own remarks), so the ticker is
+                // idle, not parked — nothing here to release or fade a second time.
+                return ShowOutcome.Empty;
+            }
+
             _hasPreviousSpinSettled = false;
             _earlyCycleEndRequested = false;
-            return true;
+            _earlyCycleEndPending = false;
+            return ShowOutcome.Drew;
         }
 
         private ItemPreviewContext BuildContext(in ItemPreviewSightedHost active, float spinDegrees, in PredictionTraceEnd traceEnd)
@@ -723,6 +868,18 @@ namespace BalloonParty.Item.Preview
                 Direction = direction;
                 Centrality = centrality;
             }
+        }
+
+        // ShowHost's own result — three genuinely different reasons a draw attempt didn't put anything new
+        // on screen, each demanding a different reaction from TryDrawActiveHost/its callers: WaitingOnSpin
+        // retries the SAME host next frame (its rotation, not its figure, is what's blocking it), Empty
+        // skips to the NEXT sighted host instead (this one has nothing to draw, and waiting won't change
+        // that), and Drew needs no further action beyond whatever bookkeeping the caller already does.
+        private enum ShowOutcome
+        {
+            Drew,
+            WaitingOnSpin,
+            Empty,
         }
     }
 }
