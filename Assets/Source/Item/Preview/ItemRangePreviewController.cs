@@ -103,6 +103,16 @@ namespace BalloonParty.Item.Preview
         // still ends its turn once it has run that long anyway.
         private float _activeHostElapsed;
 
+        // Set by AdvanceSequence when the host it just advanced onto is mid-transition and its draw had
+        // to be deferred (see ShowHost) — the sequence index has already moved, but nothing was drawn, so
+        // _activeHostElapsed is left stale (still at or past oneCycleSeconds, which is what triggered the
+        // advance in the first place). AdvanceOrRebloomActiveHost checks this before running its normal
+        // turn-timer decision: without it, that stale elapsed value would immediately look like ANOTHER
+        // turn already expired and advance straight past this host, unseen. Cleared on the retry's
+        // successful draw, and on any full reset or signature change, so a stale flag can never make an
+        // unrelated host's turn-timer check take the wrong branch.
+        private bool _activeHostDrawPending;
+
         // The active host's ISpinningItemVisual.IsSettled as of last frame, read straight off
         // LaserItemRotation.IsDwelling (via IHostsSpinningItem) — an exact boolean, not a threshold on a
         // lerped angle, so this is a genuine edge detector rather than the frame-delta heuristics this
@@ -217,6 +227,7 @@ namespace BalloonParty.Item.Preview
                 _ticker.BeginHide();
                 _shown = false;
                 _dwellElapsed = 0f;
+                _activeHostDrawPending = false;
                 StoreSignature(active, in traceEnd);
             }
 
@@ -238,8 +249,13 @@ namespace BalloonParty.Item.Preview
                 return;
             }
 
-            _shown = true;
-            ShowActiveHost(active, spinDegrees, in traceEnd);
+            // A Laser's figure is its rotated cross — building it from a mid-transition angle draws a
+            // cross the beam isn't actually aligned to, which then silently "corrects" on the next
+            // rotation and reads as a glitch. ShowActiveHost only actually draws once spinSettled is
+            // true, so _shown only latches once the figure is genuinely on screen; while it stays false
+            // this keeps retrying every frame at no extra cost, since the rotation dwells for most of
+            // every step.
+            _shown = ShowActiveHost(active, spinDegrees, spinSettled, in traceEnd);
         }
 
         // Runs only on a version change (the expensive grid walk), and only decides WHICH hosts are
@@ -289,6 +305,7 @@ namespace BalloonParty.Item.Preview
             _shown = false;
             _dwellElapsed = 0f;
             _activeHostElapsed = 0f;
+            _activeHostDrawPending = false;
             _hasShownSet = false;
             _hasPreviousSpinSettled = false;
             _earlyCycleEndRequested = false;
@@ -372,6 +389,22 @@ namespace BalloonParty.Item.Preview
                 return;
             }
 
+            if (_activeHostDrawPending)
+            {
+                // AdvanceSequence already moved onto this host while its rotation was mid-transition and
+                // deferred the draw (see ShowHost) — _activeHostElapsed is stale evidence of the
+                // PREVIOUS host's turn running out, not this one's. Finish the deferred draw directly
+                // instead of falling into the turn-timer decision below, which would misread that stale
+                // value as another turn already expired and advance straight past this host unseen.
+                if (ShowHost(in active, spinDegrees, spinSettled, in traceEnd, introduce: true))
+                {
+                    _activeHostDrawPending = false;
+                    _activeHostElapsed = 0f;
+                }
+
+                return;
+            }
+
             var oneCycleSeconds = _config.BloomDuration + _config.RebloomHoldSeconds;
 
             // A one-host sequence's "advance" wraps straight back to itself (AdvanceSequence's own mod
@@ -387,7 +420,7 @@ namespace BalloonParty.Item.Preview
             }
             else if (HoldLoopMayRebloom(spinning, oneCycleSeconds) || _earlyCycleEndRequested)
             {
-                ShowHost(in active, spinDegrees, in traceEnd, introduce: true);
+                ShowHost(in active, spinDegrees, spinSettled, in traceEnd, introduce: true);
             }
 
             // Disqualified, and this park wasn't the rotation's own doing: leave the figure dark and
@@ -503,7 +536,10 @@ namespace BalloonParty.Item.Preview
             _signatureTraceNormal = traceEnd.Normal;
         }
 
-        private void ShowActiveHost(in ItemPreviewSightedHost active, float spinDegrees, in PredictionTraceEnd traceEnd)
+        // Returns whether it actually drew — see ShowHost. LateTick only latches _shown once this returns
+        // true, so a spinning host that is mid-transition when the dwell elapses simply keeps this
+        // returning false (and _shown staying false) until a later frame finds the rotation settled.
+        private bool ShowActiveHost(in ItemPreviewSightedHost active, float spinDegrees, bool spinSettled, in PredictionTraceEnd traceEnd)
         {
             // A different SET than the one last actually shown is a genuinely new sequence (or the first
             // one); the same SET means the aim only nudged and settled back on a group of hosts already
@@ -512,7 +548,11 @@ namespace BalloonParty.Item.Preview
             // slot is index 0 by construction, but that alone says nothing about whether the OTHER hosts
             // in the sequence are the same ones as last time.
             var introduce = !_hasShownSet || !SlotsEqual(_shownSetSlots, _sightedHosts);
-            ShowHost(in active, spinDegrees, in traceEnd, introduce);
+            if (!ShowHost(in active, spinDegrees, spinSettled, in traceEnd, introduce))
+            {
+                return false;
+            }
+
             _hasShownSet = true;
             CopySlots(_shownSetSlots, _sightedHosts);
 
@@ -520,6 +560,7 @@ namespace BalloonParty.Item.Preview
             // _activeHostElapsed's own remarks for why its turn budget starts counting only now, at the
             // actual draw, rather than back when the signature that triggered this dwell was stored.
             _activeHostElapsed = 0f;
+            return true;
         }
 
         // Replays the sequence: the NEXT host in the sighted set — wrapping past the last back to the
@@ -535,24 +576,35 @@ namespace BalloonParty.Item.Preview
         // Updates only the signature's ACTIVE-host geometry (origin/direction/trace end), never
         // _signatureSlots — the set itself hasn't changed, only the sequence's position within it, and
         // routing this through StoreSignature's full reset would make LateTick read this very advance as a
-        // changed aim on the very next frame (see HasActiveSignatureChanged). Also resets
-        // _activeHostElapsed: the newly active host's turn starts fresh regardless of how long the
-        // previous one ran. The spin edge tracker (_hasPreviousSpinSettled) is reset by the shared
-        // ShowHost helper below, not here directly, so the newly active host's first reading is never
-        // mistaken for a falling edge.
+        // changed aim on the very next frame (see HasActiveSignatureChanged). The spin edge tracker
+        // (_hasPreviousSpinSettled) is reset by the shared ShowHost helper below on an actual draw, not
+        // here directly, so the newly active host's first reading is never mistaken for a falling edge.
+        // The index moves unconditionally — the new host becomes active regardless of whether its own
+        // rotation happens to be mid-transition right now — but _activeHostElapsed only resets once ShowHost
+        // reports it actually drew: the newly active host's turn budget must start at the actual draw, the
+        // same rule ShowActiveHost follows, not at the moment it merely became active. A host that can't
+        // draw yet (mid-transition) leaves _activeHostDrawPending set so AdvanceOrRebloomActiveHost can
+        // finish this draw on a later frame once the rotation settles, instead of re-running the turn-timer
+        // decision against a budget that never got to start.
         private void AdvanceSequence(in PredictionTraceEnd traceEnd)
         {
             _sequenceIndex = (_sequenceIndex + 1) % _sightedHosts.Count;
             var active = _sightedHosts[_sequenceIndex];
-            var spinDegrees = ResolveSpinDegrees(active.Slot, out _, out _);
+            var spinDegrees = ResolveSpinDegrees(active.Slot, out var spinSettled, out _);
 
             _signatureOrigin = active.Origin;
             _signatureDirection = active.Direction;
             _signatureTraceKind = traceEnd.Kind;
             _signatureTraceNormal = traceEnd.Normal;
-            _activeHostElapsed = 0f;
 
-            ShowHost(in active, spinDegrees, in traceEnd, introduce: true);
+            if (ShowHost(in active, spinDegrees, spinSettled, in traceEnd, introduce: true))
+            {
+                _activeHostElapsed = 0f;
+            }
+            else
+            {
+                _activeHostDrawPending = true;
+            }
         }
 
         // The one place BuildContext, ItemPreviewTicker.Show and resetting the spin edge tracker
@@ -568,12 +620,30 @@ namespace BalloonParty.Item.Preview
         // be decided fresh too, never inherited from whatever the previous cycle (or host) last asked for.
         // Callers are responsible for everything else a particular draw implies (introduce,
         // signature/sequence bookkeeping, _activeHostElapsed) — this only ever does the draw itself.
-        private void ShowHost(in ItemPreviewSightedHost host, float spinDegrees, in PredictionTraceEnd traceEnd, bool introduce)
+        //
+        // Also the one place the settle guard lives, and returns whether it actually drew. A spinning
+        // host's figure is built from its rotation's CURRENT angle (BuildContext -> spinDegrees), so
+        // drawing while spinSettled is false would bake in a mid-transition angle the beam isn't actually
+        // aligned to — it would then look correct only once the NEXT rotation happens to trigger a
+        // redraw, reading as a glitch that silently self-corrects. Every caller funnels through here so
+        // this only has to be checked once rather than three times risking drift; each caller holds its
+        // own bookkeeping (introduce, signature/sequence state, _activeHostElapsed) back when this
+        // returns false, exactly as it already does when this returns true.
+        private bool ShowHost(
+            in ItemPreviewSightedHost host, float spinDegrees, bool spinSettled, in PredictionTraceEnd traceEnd,
+            bool introduce)
         {
+            if (!spinSettled)
+            {
+                // No work queued, no allocation — just wait for a later frame's spinSettled to read true.
+                return false;
+            }
+
             var context = BuildContext(in host, spinDegrees, in traceEnd);
             _ticker.Show(host.Preview, in context, introduce);
             _hasPreviousSpinSettled = false;
             _earlyCycleEndRequested = false;
+            return true;
         }
 
         private ItemPreviewContext BuildContext(in ItemPreviewSightedHost active, float spinDegrees, in PredictionTraceEnd traceEnd)

@@ -231,6 +231,21 @@ spin — so the re-bloom always lands on the rotation's own arrival, never ahead
 timer and the sequence position are all left untouched throughout — the loop stays running, the sequence
 doesn't move.
 <br><br>
+**Every draw of a spinning host waits for the rotation to settle, not just this re-bloom.** The first
+time a host is ever shown (`ShowActiveHost`, once `SightDelaySeconds` elapses) and a sequence advancing
+onto a *different* host (`AdvanceSequence`) build the figure from the exact same `spinDegrees` reading as
+the re-bloom above, so they carry the exact same risk: drawing while `ISpinningItemVisual.IsSettled` is
+false bakes in a mid-transition angle the beam isn't actually aligned to. A Laser's figure is its rotated
+cross, so a mid-transition draw shows a cross the beam has not yet turned to — it then looks correct only
+once the *next* rotation happens to trigger a redraw, a glitch that silently self-corrects and is easy to
+miss in testing. `ItemRangePreviewController.ShowHost` is the one place every draw call in this file
+funnels through, so the settle guard lives there once rather than as three separate checks that could
+drift apart; it returns whether it actually drew, and each caller holds its own bookkeeping back when it
+didn't — `ShowActiveHost` leaves `_shown` false so `LateTick` keeps retrying every frame at no extra cost,
+and `AdvanceSequence` leaves `_activeHostElapsed` unreset and sets `_activeHostDrawPending` so
+`AdvanceOrRebloomActiveHost` finishes the deferred draw directly on a later frame instead of re-running
+its turn-timer decision against a budget that never got to start.
+<br><br>
 The edge tracker itself (`_previousSpinSettled`/`_hasPreviousSpinSettled`) is updated **every frame**
 `AdvanceOrRebloomActiveHost` runs, unconditionally, before any branching on `CycleComplete` — deliberately,
 because a disqualified host can sit parked for an arbitrary stretch (see `HoldLoopMayRebloom` below) with
