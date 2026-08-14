@@ -11,5 +11,13 @@ namespace BalloonParty.Item
         float AngleDegrees { get; }
 
         float SpinDegreesPerSecond { get; }
+
+        /// <summary>True while <see cref="AngleDegrees" /> is holding still (dwelling on a step, or a
+        /// frozen snapshot with nothing left to move), false while a transition toward a new angle is
+        /// still in flight. Lets a consumer that only ever sees the raw angle — the aim-time range
+        /// telegraph (<c>ItemRangePreviewController</c>) — tell "arrived" from "still easing in" without
+        /// inferring it from a frame-to-frame delta, which a <c>Mathf.SmoothStep</c> ease drives toward
+        /// zero on its own tail and would misread as arrived early.</summary>
+        bool IsSettled { get; }
     }
 }

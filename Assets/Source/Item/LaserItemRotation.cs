@@ -45,6 +45,10 @@ namespace BalloonParty.Item
         // overwhelming majority of the time (the dwell).
         float ISpinningItemVisual.SpinDegreesPerSecond => 0f;
 
+        // Reports the exact same condition DrawnAngle branches on, via IsDwelling — the two cannot
+        // disagree because there is only one comparison, not a second one written to match it.
+        bool ISpinningItemVisual.IsSettled => IsDwelling(_elapsed, _stepSeconds);
+
         private void OnEnable()
         {
             // Random start step (not a random angle) so multiple lasers on the board don't march in
@@ -196,16 +200,31 @@ namespace BalloonParty.Item
         // target across the last TransitionFraction of it.
         private float DrawnAngle()
         {
-            var dwellDuration = _stepSeconds * (1f - TransitionFraction);
-            if (_elapsed <= dwellDuration)
+            if (IsDwelling(_elapsed, _stepSeconds))
             {
                 return _angles[_previousIndex];
             }
 
+            var dwellDuration = DwellDuration(_stepSeconds);
             var transitionDuration = _stepSeconds * TransitionFraction;
             var t = (_elapsed - dwellDuration) / transitionDuration;
             var smoothT = Mathf.SmoothStep(0f, 1f, t);
             return Mathf.LerpAngle(_angles[_previousIndex], _angles[_currentIndex], smoothT);
+        }
+
+        // Where the dwell ends and the transition tail begins — the one definition DrawnAngle and
+        // IsDwelling both key off, so neither can drift out of step with the other.
+        private static float DwellDuration(float stepSeconds)
+        {
+            return stepSeconds * (1f - TransitionFraction);
+        }
+
+        // Pure and static — no MonoBehaviour/Time dependency — so ISpinningItemVisual.IsSettled and
+        // DrawnAngle's own branch share this single comparison instead of each carrying a copy that could
+        // disagree; internal rather than private so it is edit-mode testable directly.
+        internal static bool IsDwelling(float elapsedSeconds, float stepSeconds)
+        {
+            return elapsedSeconds <= DwellDuration(stepSeconds);
         }
     }
 }

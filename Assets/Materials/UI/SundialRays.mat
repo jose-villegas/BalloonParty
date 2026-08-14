@@ -64,7 +64,7 @@ Material:
     - _VerticalScale: 0.8
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _InsideColor: {r: 0.5294118, g: 0.80784315, b: 0.92156863, a: 1}
     - _OutsideColor: {r: 0.9607844, g: 0.9607844, b: 0.9607844, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}

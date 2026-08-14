@@ -76,8 +76,8 @@ namespace BalloonParty.Item.Preview
         // continuous geometry, updated both when the set changes (StoreSignature) and when the sequence
         // advances to a new active host (AdvanceSequence) — never when neither happens, which is what lets
         // a drifting balloon still invalidate a held signature without every advance doing the same. Spin
-        // is deliberately NOT one of these — see _drawnSpinDegrees below for why it is tracked apart from
-        // this signature instead of inside it.
+        // is deliberately NOT one of these — see _previousSpinSettled below for why it is tracked apart
+        // from this signature instead of inside it.
         private bool _hasSignature;
         private Vector2 _signatureOrigin;
         private Vector2 _signatureDirection;
@@ -91,25 +91,30 @@ namespace BalloonParty.Item.Preview
         private float _dwellElapsed;
 
         // How long the current sequence entry (_sequenceIndex) has been the active host — ticks every
-        // frame it stays active, reset only when the sequence actually advances (AdvanceSequence) or the
-        // sighted set changes (LateTick's setChanged), NEVER by a spin-driven re-bloom (see
-        // ReactToSpinSettle). Exists because Show always restarts ItemPreviewTicker's own draw/hold/fade
+        // frame regardless of what's on screen, but only actually RESET once that host is actually shown:
+        // ShowActiveHost (a dwell just elapsed) or AdvanceSequence (a fresh host takes over) — NEVER by a
+        // spin-driven re-bloom in place (see AdvanceOrRebloomActiveHost), and deliberately not at the
+        // signature change that starts a dwell either. Resetting at the actual draw rather than the
+        // signature change is what keeps SightDelaySeconds from silently eating into the turn budget: the
+        // dwell is time the host isn't on screen yet, so it must not count against how long it gets to
+        // stay once it is. Exists because Show always restarts ItemPreviewTicker's own draw/hold/fade
         // clock (see Show's remarks), so a host whose spin re-blooms it faster than a full cycle would
         // otherwise never let ItemPreviewTicker.CycleComplete fire on its own — this is the fallback that
         // still ends its turn once it has run that long anyway.
         private float _activeHostElapsed;
 
-        // The active host's spin as of its figure's own last (re)draw, and as of last frame's read — two
-        // fields because they answer different questions on different cadences. _drawnSpinDegrees is the
-        // baseline a newly-read angle is measured against to decide whether a re-bloom is due; it is
-        // rebased only where the figure is actually (re)drawn — ShowActiveHost, AdvanceSequence and
-        // ReactToSpinSettle — never by StoreSignature, since a signature can be stored well before the
-        // dwell lets the figure actually appear. _lastFrameSpinDegrees is purely this-frame-vs-last-frame,
-        // which is what lets HasSpinSettledOnNewAngle tell a LaserItemRotation lerp still in flight (the
-        // angle differs from last frame too) apart from one that just arrived and is now dwelling
-        // (identical to last frame, but not yet to the drawn baseline) — see that method.
-        private float _drawnSpinDegrees;
-        private float _lastFrameSpinDegrees;
+        // The active host's ISpinningItemVisual.IsSettled as of last frame, read straight off
+        // LaserItemRotation.IsDwelling (via IHostsSpinningItem) — an exact boolean, not a threshold on a
+        // lerped angle, so this is a genuine edge detector rather than the frame-delta heuristics this
+        // area used to lean on. HasSpinLeftSettledAngle compares it against this frame's reading to catch
+        // the FALLING edge: the rotation leaving its settled step and beginning a transition. That is now
+        // the re-bloom trigger, not arrival — see HasSpinLeftSettledAngle for why firing on arrival left
+        // the figure showing an orientation the laser had already turned away from. _hasPreviousSpinSettled
+        // guards the first frame after any (re)draw — reset inside ShowHost, called from ShowActiveHost,
+        // AdvanceSequence and the CycleComplete re-bloom-in-place branch of AdvanceOrRebloomActiveHost —
+        // so a newly active host's first reading is never mistaken for an edge.
+        private bool _previousSpinSettled;
+        private bool _hasPreviousSpinSettled;
 
         // Whether the SET last actually shown (_shownSetSlots) is still current — see ShowActiveHost for
         // why re-settling on the identical set skips the re-bloom, and RefreshSightedHosts for why a
@@ -181,17 +186,17 @@ namespace BalloonParty.Item.Preview
 
             // A changed SET restarts the sequence at its first host; an unchanged one keeps whatever
             // AdvanceSequence last left it at. Computed before reading _sightedHosts[_sequenceIndex] below
-            // so a set that shrank since the last frame can never index past its new end. A new sequence
-            // entry also gets a fresh _activeHostElapsed — see that field's remarks.
+            // so a set that shrank since the last frame can never index past its new end.
+            // _activeHostElapsed is deliberately NOT reset here — see that field's remarks for why it
+            // waits for the host to actually be shown instead.
             var setChanged = !_hasSignature || HasSetChanged();
             if (setChanged)
             {
                 _sequenceIndex = 0;
-                _activeHostElapsed = 0f;
             }
 
             var active = _sightedHosts[_sequenceIndex];
-            var spinDegrees = ResolveSpinDegrees(active.Slot);
+            var spinDegrees = ResolveSpinDegrees(active.Slot, out var spinSettled);
             var traceEnd = _traceProvider.End;
 
             // A changed signature (a different set, or the active host's own geometry drifting — NOT its
@@ -215,7 +220,7 @@ namespace BalloonParty.Item.Preview
             // exists to hold.
             if (_shown)
             {
-                AdvanceOrRebloomActiveHost(active, spinDegrees, in traceEnd);
+                AdvanceOrRebloomActiveHost(active, spinDegrees, spinSettled, in traceEnd);
                 return;
             }
 
@@ -254,11 +259,14 @@ namespace BalloonParty.Item.Preview
             _hasSightedHosts = _sightedHosts.Count > 0;
         }
 
-        private float ResolveSpinDegrees(Vector2Int slot)
+        // isSettled defaults true for a non-spinning (or unhosted) slot — nothing is ever in flight for it,
+        // so it can never register a settled-to-unsettled edge (HasSpinLeftSettledAngle), which correctly
+        // keeps it a no-op, exactly as before this existed.
+        private float ResolveSpinDegrees(Vector2Int slot, out bool isSettled)
         {
-            return _grid.ViewAt(slot) is IHostsSpinningItem spinHost
-                ? spinHost.SpinningItem?.AngleDegrees ?? 0f
-                : 0f;
+            var spinning = _grid.ViewAt(slot) is IHostsSpinningItem spinHost ? spinHost.SpinningItem : null;
+            isSettled = spinning?.IsSettled ?? true;
+            return spinning?.AngleDegrees ?? 0f;
         }
 
         private void HideAndClearSignature()
@@ -271,44 +279,88 @@ namespace BalloonParty.Item.Preview
             _dwellElapsed = 0f;
             _activeHostElapsed = 0f;
             _hasShownSet = false;
+            _hasPreviousSpinSettled = false;
         }
 
-        // The two ways a shown figure's turn can legitimately move on. CycleComplete only ever turns true
-        // once the ticker has already faded out and parked (see ItemPreviewTicker.Park), so advancing
-        // here never repositions a visible figure — it's already dark. HasSpinSettledOnNewAngle catches
-        // the other case this exists for: the active host's spin arriving at (and dwelling on) a new
-        // angle is a re-bloom request, not an aim change, so it redraws in place rather than tearing down
-        // _shown/_dwellElapsed/the sequence position — see ReactToSpinSettle for why that redraw can
-        // itself turn into an advance once the host has held its turn too long.
+        // The one place a shown figure's turn can move on, now that both ways of getting here go through
+        // the very same fade-and-park cycle. CycleComplete only ever turns true once the ticker has
+        // already faded out and parked (see ItemPreviewTicker.Park) — whether that park was the ticker's
+        // own scheduled loop end (AdvanceRebloomCycle, once RebloomHoldSeconds elapses) or one requested
+        // early below (ItemPreviewTicker.RequestEarlyCycleEnd) — so every branch here only ever acts once
+        // the figure is already dark, never repositioning a visible one.
+        //
+        // Once parked, _activeHostElapsed decides what happens next — the same budget that used to live
+        // only in the now-removed ReactToSpinSettle. A natural CycleComplete always arrives well past
+        // oneCycleSeconds (a full Draw+Hold+Fade already takes at least that long), so a non-spinning host
+        // keeps behaving exactly as before: advance to the next host (or wrap to the only one, on a
+        // single-host sequence). A spin-forced park can arrive early, and that is the one case this now
+        // also has to decide: still within its turn, re-show the SAME host — the re-bloom, and it
+        // genuinely blooms now, because the ticker parked and dropped _visible in between, unlike calling
+        // Show directly on a still-visible figure — or, if its turn already ran long, advance instead of
+        // re-blooming again. Gated on RebloomHoldSeconds > 0 to match AdvanceRebloomCycle's own off
+        // switch: with looping authored off, a park can only ever be spin-forced (the natural loop never
+        // parks at all), and it must keep re-blooming the same host in place forever, exactly as before
+        // this existed.
+        //
+        // HasSpinLeftSettledAngle catches the other half: the active host's spin LEAVING its settled step
+        // — beginning a transition toward the next one — is the re-bloom trigger, not arriving at the new
+        // one. Triggering on arrival left the figure showing an orientation the laser had already turned
+        // away from for the whole transition (LaserItemRotation spends its last TransitionFraction easing
+        // to the next step) plus the fade, roughly half a second of a visibly stale figure hanging in the
+        // air. Firing on the departure instead starts the fade while the rotation is still turning, so the
+        // old figure is on its way out as the orientation changes rather than lingering past it. Rather
+        // than redrawing in place directly — which used to mean calling Show on a still-visible figure,
+        // silently taking the RefitPens branch instead of actually re-blooming — it only ever asks the
+        // ticker to end the current cycle early and waits for CycleComplete above to do the actual redraw
+        // once the pens are dark. RequestEarlyCycleEnd is idempotent while its own fade (or the loop's) is
+        // already running, so calling it again on a later frame before that fade completes costs nothing
+        // extra. Because the fade is shorter than the rotation's own transition, the ticker will typically
+        // park mid-transition — CycleComplete above waits out the remainder (!spinSettled) before it will
+        // draw, so the redraw always lands on the rotation's own arrival, never ahead of it.
         private void AdvanceOrRebloomActiveHost(
-            in ItemPreviewSightedHost active, float spinDegrees, in PredictionTraceEnd traceEnd)
+            in ItemPreviewSightedHost active, float spinDegrees, bool spinSettled, in PredictionTraceEnd traceEnd)
         {
             if (_ticker.CycleComplete)
             {
-                AdvanceSequence(in traceEnd);
+                if (!spinSettled)
+                {
+                    // Parked mid-transition: nothing to draw until the rotation itself lands. No work
+                    // queued, no allocation — just wait for a later frame's spinSettled to read true.
+                    return;
+                }
+
+                var oneCycleSeconds = _config.BloomDuration + _config.RebloomHoldSeconds;
+                if (_config.RebloomHoldSeconds > 0f && _activeHostElapsed >= oneCycleSeconds)
+                {
+                    AdvanceSequence(in traceEnd);
+                }
+                else
+                {
+                    ShowHost(in active, spinDegrees, in traceEnd, introduce: true);
+                }
+
                 return;
             }
 
-            if (HasSpinSettledOnNewAngle(spinDegrees))
+            if (HasSpinLeftSettledAngle(spinSettled))
             {
-                ReactToSpinSettle(active, spinDegrees, in traceEnd);
+                _ticker.RequestEarlyCycleEnd();
             }
+
+            _previousSpinSettled = spinSettled;
+            _hasPreviousSpinSettled = true;
         }
 
-        // True the one frame the active host's spin value stops changing after having differed from the
-        // figure's own last-drawn angle — i.e. the item just settled onto a new hex step, not a sample
-        // mid-lerp. LaserItemRotation (the only spin source today) holds the angle exactly fixed for the
-        // dwelling majority of every step and only changes it, every single frame, during the brief
-        // transition at the tail (see LaserItemRotation.DrawnAngle) — so "identical to the previous frame"
-        // is what tells the two apart, using only the raw angle the controller already reads through
-        // IHostsSpinningItem/ISpinningItemVisual. No transition-phase signal from LaserItemRotation itself
-        // is needed.
-        private bool HasSpinSettledOnNewAngle(float spinDegrees)
+        // True on the FALLING edge of ISpinningItemVisual.IsSettled — settled last frame, not settled this
+        // frame — i.e. the rotation just left its dwell and started easing toward the next step. Reads the
+        // flag itself rather than inferring "still moving" from a frame-to-frame angle delta: LaserItemRotation
+        // eases its transition with Mathf.SmoothStep, whose per-frame delta approaches zero as the
+        // transition ends, so a delta-based guess would misread the tail end of an OUTGOING transition as
+        // already-settled. IsSettled has no such tail — it is the exact same boolean DrawnAngle branches on
+        // (LaserItemRotation.IsDwelling) — so this edge is genuine, not a threshold guess.
+        private bool HasSpinLeftSettledAngle(bool spinSettled)
         {
-            var stableThisFrame = Mathf.Abs(spinDegrees - _lastFrameSpinDegrees) <= SignatureEpsilon;
-            _lastFrameSpinDegrees = spinDegrees;
-
-            return stableThisFrame && Mathf.Abs(spinDegrees - _drawnSpinDegrees) > SignatureEpsilon;
+            return _hasPreviousSpinSettled && _previousSpinSettled && !spinSettled;
         }
 
         // TraceEnd.Kind is exact (a different contact type IS a different aim, however close the geometry);
@@ -321,7 +373,8 @@ namespace BalloonParty.Item.Preview
         // rotation changes it every single frame for a quarter of every step (LaserItemRotation.DrawnAngle's
         // lerp), and tearing the dwell/settled state down on every one of those frames — the old
         // behaviour — is what stuck the sequence on it forever. A settled spin change is its own,
-        // non-invalidating re-bloom instead — see HasSpinSettledOnNewAngle/ReactToSpinSettle.
+        // non-invalidating re-bloom instead — see HasSpinLeftSettledAngle and
+        // AdvanceOrRebloomActiveHost.
         private bool HasActiveSignatureChanged(in ItemPreviewSightedHost active, in PredictionTraceEnd traceEnd)
         {
             return (active.Origin - _signatureOrigin).sqrMagnitude > SignatureEpsilonSq ||
@@ -378,8 +431,6 @@ namespace BalloonParty.Item.Preview
 
         private void ShowActiveHost(in ItemPreviewSightedHost active, float spinDegrees, in PredictionTraceEnd traceEnd)
         {
-            var context = BuildContext(in active, spinDegrees, in traceEnd);
-
             // A different SET than the one last actually shown is a genuinely new sequence (or the first
             // one); the same SET means the aim only nudged and settled back on a group of hosts already
             // being telegraphed, so the re-appearance should not re-bloom. Compared as a whole set, not
@@ -387,78 +438,65 @@ namespace BalloonParty.Item.Preview
             // slot is index 0 by construction, but that alone says nothing about whether the OTHER hosts
             // in the sequence are the same ones as last time.
             var introduce = !_hasShownSet || !SlotsEqual(_shownSetSlots, _sightedHosts);
-            _ticker.Show(active.Preview, in context, introduce);
+            ShowHost(in active, spinDegrees, in traceEnd, introduce);
             _hasShownSet = true;
             CopySlots(_shownSetSlots, _sightedHosts);
 
-            // Rebased here, not only wherever a signature happens to get stored — SightDelaySeconds can
-            // let several frames (and, for a spinning host, several angle changes) pass between the two,
-            // and this is the value the figure is actually drawn at.
-            _drawnSpinDegrees = spinDegrees;
-            _lastFrameSpinDegrees = spinDegrees;
+            // The dwell that led here is exactly the time this host was NOT on screen — see
+            // _activeHostElapsed's own remarks for why its turn budget starts counting only now, at the
+            // actual draw, rather than back when the signature that triggered this dwell was stored.
+            _activeHostElapsed = 0f;
         }
 
         // Replays the sequence: the NEXT host in the sighted set — wrapping past the last back to the
         // first — draws in with introduce: true, exactly like the single-host replay this generalizes. A
         // one-element set advances to itself (0 -> 0 mod 1), which is exactly today's single-host replay —
-        // the sequence collapses to that case rather than needing a special one. Called from two places:
-        // AdvanceOrRebloomActiveHost once ItemPreviewTicker.CycleComplete reports the ticker's own loop
-        // has parked (Park already dropped _visible, so the pens ARE dark and ARE due a fresh draw-in
-        // regardless of which host comes next), and ReactToSpinSettle once _activeHostElapsed shows a
-        // re-blooming host has held its turn for a full cycle already — the only two ways a host's turn
-        // legitimately ends.
+        // the sequence collapses to that case rather than needing a special one. Called from exactly one
+        // place now — AdvanceOrRebloomActiveHost's CycleComplete branch — once the ticker has parked,
+        // whether that park was its own scheduled loop end or one requested early by a spin settling with
+        // its turn already spent (see ItemPreviewTicker.RequestEarlyCycleEnd); either way Park already
+        // dropped _visible, so the pens ARE dark and ARE due a fresh draw-in regardless of which host
+        // comes next.
         //
-        // Updates only the signature's ACTIVE-host geometry (origin/direction/trace end) and the spin
-        // re-bloom baseline (_drawnSpinDegrees/_lastFrameSpinDegrees), never _signatureSlots — the set
-        // itself hasn't changed, only the sequence's position within it, and routing this through
-        // StoreSignature's full reset would make LateTick read this very advance as a changed aim on the
-        // very next frame (see HasActiveSignatureChanged). Also resets _activeHostElapsed: the newly
-        // active host's turn starts fresh regardless of how long the previous one ran.
+        // Updates only the signature's ACTIVE-host geometry (origin/direction/trace end), never
+        // _signatureSlots — the set itself hasn't changed, only the sequence's position within it, and
+        // routing this through StoreSignature's full reset would make LateTick read this very advance as a
+        // changed aim on the very next frame (see HasActiveSignatureChanged). Also resets
+        // _activeHostElapsed: the newly active host's turn starts fresh regardless of how long the
+        // previous one ran. The spin edge tracker (_hasPreviousSpinSettled) is reset by the shared
+        // ShowHost helper below, not here directly, so the newly active host's first reading is never
+        // mistaken for a falling edge.
         private void AdvanceSequence(in PredictionTraceEnd traceEnd)
         {
             _sequenceIndex = (_sequenceIndex + 1) % _sightedHosts.Count;
             var active = _sightedHosts[_sequenceIndex];
-            var spinDegrees = ResolveSpinDegrees(active.Slot);
+            var spinDegrees = ResolveSpinDegrees(active.Slot, out _);
 
             _signatureOrigin = active.Origin;
             _signatureDirection = active.Direction;
             _signatureTraceKind = traceEnd.Kind;
             _signatureTraceNormal = traceEnd.Normal;
-            _drawnSpinDegrees = spinDegrees;
-            _lastFrameSpinDegrees = spinDegrees;
             _activeHostElapsed = 0f;
 
-            var context = BuildContext(in active, spinDegrees, in traceEnd);
-            _ticker.Show(active.Preview, in context, introduce: true);
+            ShowHost(in active, spinDegrees, in traceEnd, introduce: true);
         }
 
-        // Reached once HasSpinSettledOnNewAngle confirms the active host just arrived at a new angle while
-        // its figure is already shown. A settled spin change is a re-bloom request, not an aim change —
-        // see HasActiveSignatureChanged — so the ordinary path here simply redraws the SAME host in place,
-        // touching neither _shown/_dwellElapsed nor the sequence position. But Show always resets
-        // ItemPreviewTicker's own draw/hold/fade clock (see Show's remarks), so a host that keeps
-        // re-blooming faster than one full cycle would otherwise never let CycleComplete fire and the
-        // sequence would stick on it forever — the original bug. _activeHostElapsed, which a re-bloom
-        // never resets (only AdvanceSequence and a changed set do), is what still bounds its turn: once it
-        // reaches one cycle's worth of time — BloomDuration + RebloomHoldSeconds, the same terms
-        // ItemPreviewTicker.AdvanceRebloomCycle already uses for its own draw + hold, rather than a new
-        // authored knob — the next settle advances instead of re-blooming again. Gated on
-        // RebloomHoldSeconds > 0 to match AdvanceRebloomCycle's own off switch: with looping authored off,
-        // nothing ever advances, spinning host or not, so this must not either — it just keeps re-blooming
-        // the same host in place forever, same as before this existed.
-        private void ReactToSpinSettle(in ItemPreviewSightedHost active, float spinDegrees, in PredictionTraceEnd traceEnd)
+        // The one place BuildContext, ItemPreviewTicker.Show and resetting the spin edge tracker
+        // (_hasPreviousSpinSettled) happen together — every draw call in this file (a fresh dwell via
+        // ShowActiveHost, a sequence advance via AdvanceSequence, and a spin-triggered re-bloom via
+        // AdvanceOrRebloomActiveHost's CycleComplete branch) funnels through it, so the three operations
+        // can't drift out of lockstep the way three separate copies of the same triple once did. Resetting
+        // the tracker on every draw is what stops a host's edge state from ever surviving onto a DIFFERENT
+        // active host (see AdvanceSequence and _previousSpinSettled's own remarks): the very next frame's
+        // reading, whatever it is, becomes the new baseline rather than being compared against whatever the
+        // previous host last reported. Callers are responsible for everything else a particular draw
+        // implies (introduce, signature/sequence bookkeeping, _activeHostElapsed) — this only ever does the
+        // draw itself.
+        private void ShowHost(in ItemPreviewSightedHost host, float spinDegrees, in PredictionTraceEnd traceEnd, bool introduce)
         {
-            var oneCycleSeconds = _config.BloomDuration + _config.RebloomHoldSeconds;
-            if (_config.RebloomHoldSeconds > 0f && _activeHostElapsed >= oneCycleSeconds)
-            {
-                AdvanceSequence(in traceEnd);
-                return;
-            }
-
-            var context = BuildContext(in active, spinDegrees, in traceEnd);
-            _ticker.Show(active.Preview, in context, introduce: true);
-            _drawnSpinDegrees = spinDegrees;
-            _lastFrameSpinDegrees = spinDegrees;
+            var context = BuildContext(in host, spinDegrees, in traceEnd);
+            _ticker.Show(host.Preview, in context, introduce);
+            _hasPreviousSpinSettled = false;
         }
 
         private ItemPreviewContext BuildContext(in ItemPreviewSightedHost active, float spinDegrees, in PredictionTraceEnd traceEnd)

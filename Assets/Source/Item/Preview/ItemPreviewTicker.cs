@@ -207,11 +207,13 @@ namespace BalloonParty.Item.Preview
         ///     again from their strokes' entry points), while the SAME host only re-fits the geometry — the
         ///     figure follows a drifting balloon, or a Shield stub follows the aim tip, without every pen
         ///     restarting its bloom each time the player nudges the aim. In current play the controller
-        ///     never calls this on a host still actively visible — it only re-`Show`s once <c>_visible</c>
-        ///     has already dropped first, either via <see cref="BeginHide" /> (a real hide) or a completed
-        ///     loop cycle parking (see <see cref="CycleComplete" />) — so that branch is a dormant
-        ///     fallback; <paramref name="introduce" /> is the mechanism that actually distinguishes the two
-        ///     cases in practice, independently of whether the geometry itself is acquired or re-fitted.
+        ///     never calls this on a host still actively visible — every call site (a fresh dwell, a
+        ///     sequence advance, and a spin-driven re-bloom via <see cref="RequestEarlyCycleEnd" />) only
+        ///     re-`Show`s once <c>_visible</c> has already dropped first, either via <see cref="BeginHide" />
+        ///     (a real hide) or a completed loop cycle parking (see <see cref="CycleComplete" />) — so the
+        ///     <see cref="RefitPens" /> branch below is genuinely a dormant fallback, not exercised by any
+        ///     path today; <paramref name="introduce" /> is the mechanism that actually distinguishes the
+        ///     two cases in practice, independently of whether the geometry itself is acquired or re-fitted.
         ///     <para>
         ///         Carries no colour: every figure draws with the pen prefab's own material, so the
         ///         telegraph reads as one system and there is no runtime tint path to keep in step with it.
@@ -361,6 +363,37 @@ namespace BalloonParty.Item.Preview
             _visible = false;
         }
 
+        /// <summary>
+        ///     Ends the current figure's own re-bloom cycle early — the same fade-then-park a full
+        ///     Draw+Hold cycle reaches on its own (see <see cref="AdvanceRebloomCycle" /> /
+        ///     <see cref="BeginLoopFade" />), just triggered before <c>RebloomHoldSeconds</c> would have.
+        /// </summary>
+        /// <remarks>
+        ///     Exists for <see cref="ItemRangePreviewController" />'s spin-driven re-bloom: a settled
+        ///     rotation must never call <see cref="Show" /> on a figure that is still visible — that would
+        ///     reposition its pens in place instead of re-blooming them (<see cref="RefitPens" />, not
+        ///     <see cref="AcquirePens" />) — so it asks the cycle to end here instead and waits for
+        ///     <see cref="CycleComplete" /> before drawing again, exactly like every other transition. Goes
+        ///     through <see cref="BeginLoopFade" /> rather than <see cref="BeginHide" /> deliberately: this
+        ///     figure is expected back very soon, which is what parking (not releasing) means, and is
+        ///     exactly the contract the loop's own scheduled fade already carries — reusing it here means
+        ///     there is still only one route to <see cref="Park" />.
+        ///     <para>
+        ///         Idempotent while a fade — this call's own or the loop's natural one — is already
+        ///         running, and once parked, so the controller can call this every frame a settle remains
+        ///         unconsumed without racing or restarting its own timer.
+        ///     </para>
+        /// </remarks>
+        internal void RequestEarlyCycleEnd()
+        {
+            if (!_visible || _fading || _parked)
+            {
+                return;
+            }
+
+            BeginLoopFade();
+        }
+
         // Stops every pen — figure and approach alike — laying new ribbon without releasing them, so
         // whatever's already drawn can age out on the ribbon's own lifetime instead of vanishing outright.
         // Shared by BeginHide (a real hide) and BeginLoopFade (the loop's own fade before a replay); the
@@ -480,7 +513,10 @@ namespace BalloonParty.Item.Preview
         // cycles, so the controller's own signature/dwell bookkeeping should keep reading it as shown
         // throughout the fade rather than spuriously treating a mid-loop fade as the aim having left. Only
         // once the fade actually completes does _visible drop — in Park, the same moment CycleComplete
-        // turns true — mirroring how a genuine BeginHide always drops _visible before a re-Show.
+        // turns true — mirroring how a genuine BeginHide always drops _visible before a re-Show. Two
+        // callers now share this exact contract: AdvanceRebloomCycle, once the hold's own timer elapses,
+        // and RequestEarlyCycleEnd, when a spin settling on a new angle asks for the same ending before
+        // that timer would have — neither needs its own version of "stop, fade, park."
         private void BeginLoopFade()
         {
             if (_pens.Count == 0)
