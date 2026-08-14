@@ -1,5 +1,10 @@
 var NAVTREEINDEX40 =
 {
+"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a7d3dcb903d068c7c3af45c1c9cc46633":[5,0,0,6,7,7,75],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a7d3dcb903d068c7c3af45c1c9cc46633":[6,0,0,6,7,7,75],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a814e71259fd7aec95e5e80f5f90925a0":[5,0,0,6,7,7,69],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a814e71259fd7aec95e5e80f5f90925a0":[6,0,0,6,7,7,69],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a8843a6a168e32199976160259a357a09":[5,0,0,6,7,7,92],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a8843a6a168e32199976160259a357a09":[6,0,0,6,7,7,92],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a8a093a59f3f2a9948fe0a986509f2ff9":[5,0,0,6,7,7,98],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a8a093a59f3f2a9948fe0a986509f2ff9":[6,0,0,6,7,7,98],
@@ -244,10 +249,5 @@ var NAVTREEINDEX40 =
 "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#af68286fce2f9096b405cd399e994d4b4":[5,0,0,6,7,15,2],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#af68286fce2f9096b405cd399e994d4b4":[6,0,0,6,7,15,2],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#af9e4268e864ad0f8fc0a79a48591a76e":[5,0,0,6,7,15,0],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#af9e4268e864ad0f8fc0a79a48591a76e":[6,0,0,6,7,15,0],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricSet.html":[5,0,0,6,7,17],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricSet.html":[6,0,0,6,7,17],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricSet.html#a17ce25fc5d9ad7467f1677ce8f43b365":[5,0,0,6,7,17,7],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricSet.html#a17ce25fc5d9ad7467f1677ce8f43b365":[6,0,0,6,7,17,7],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricSet.html#a1839f72e67b44cbc190dff73c90321e9":[5,0,0,6,7,17,8]
+"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#af9e4268e864ad0f8fc0a79a48591a76e":[6,0,0,6,7,15,0]
 };

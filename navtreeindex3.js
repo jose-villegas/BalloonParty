@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"SpriteRendererExtensions_8cs.html":[7,0,14,4,17],
 "SpriteShadowBakerEditor_8cs.html":[7,0,6,5,2],
 "SpriteShadowBaker_8cs.html":[7,0,14,10,11],
 "StampProfileDrawer_8cs.html":[7,0,3,3,9],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a44f9b214c8bb534badae2c7fa15d7174":[5,0,0,0,0,3,37],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a44f9b214c8bb534badae2c7fa15d7174":[6,0,0,0,0,3,37],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a48c3170743a4904ade4e383e90a923be":[5,0,0,0,0,3,7],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a48c3170743a4904ade4e383e90a923be":[6,0,0,0,0,3,7],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a4983529e73b7273fb3055d0c5a67665b":[5,0,0,0,0,3,40]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a48c3170743a4904ade4e383e90a923be":[6,0,0,0,0,3,7]
 };

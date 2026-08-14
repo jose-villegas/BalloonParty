@@ -117,7 +117,7 @@ $(function(){initNavTree('classBalloonParty_1_1Item_1_1Preview_1_1SnipeRangePrev
 </div><!--header-->
 <div class="contents">
 
-<p><a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a>'s telegraph: the pierce corridor — one line from the host to the wall the shot would run to.  
+<p><a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a>'s telegraph: the pierce corridor — one line from the point on the prediction trace nearest the host to the wall the shot would run to.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Item.Preview.SnipeRangePreview:</div>
@@ -156,9 +156,9 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a70c34204415f02c8e18723d87f5d3748"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a>'s telegraph: the pierce corridor — one line from the host to the wall the shot would run to. </p>
+<div class="textblock"><p><a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a>'s telegraph: the pierce corridor — one line from the point on the prediction trace nearest the host to the wall the shot would run to. </p>
 <p><a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a> arms piercing, so what it grants is reach, and reach is what this draws.</p>
-<p>Deliberately traced from the host along the aim heading rather than copied out of the aim polyline past its pierce marker: the two agree (<code>PredictionTraceCalculator</code> stops deflecting at exactly this host), but the polyline stops at <code>MaxSegments</code>/<code>MaxReflections</code> — telegraph budget, not flight — so reading it would cut the corridor short of the wall the shot really reaches. </p>
+<p>Anchored on the trace rather than the host's own centre because the corridor is what the shot does from here on, and the shot is already travelling along the trace, not launching fresh from the balloon's middle — starting there reads as the aim line handing off into the corridor rather than the corridor sprouting from an unrelated point beside it. The corridor's <em>direction</em> is still traced from the host along the aim heading rather than copied out of the aim polyline past its pierce marker: the two agree (<code>PredictionTraceCalculator</code> stops deflecting at exactly this host), but the polyline stops at <code>MaxSegments</code>/<code>MaxReflections</code> — telegraph budget, not flight — so reading it would cut the corridor short of the wall the shot really reaches. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a504dd945c4ddcbd3d334c0be2185d0ea" name="a504dd945c4ddcbd3d334c0be2185d0ea"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a504dd945c4ddcbd3d334c0be2185d0ea">&#9670;&#160;</a></span>SnipeRangePreview()</h2>

@@ -226,11 +226,12 @@ Where the trigger lives</h2>
 <p>The controller is <b>plain C#</b> (<code>ILateTickable</code>), not a <code>SightReaction</code> on the balloon prefab. Two reasons:</p>
 <ol type="1">
 <li>It needs <code>SlotGrid</code>, <code>IItemConfiguration</code> and the pool — all DI singletons. Pooled item visuals are not resolver-spawned (<code>ItemDisplayService</code> hand-threads what they need), so a view-side trigger would mean hand-threading four more services through that seam.</li>
-<li>Only <b>one</b> preview shows at a time. That is a global arbitration — which host the aim is most centrally on — and a per-balloon component cannot make it without every instance knowing about every other.</li>
+<li>Only <b>one</b> figure shows at a time. That is a global arbitration — which hosts the aim crosses, and in what order — and a per-balloon component cannot make it without every instance knowing about every other.</li>
 </ol>
 <p>It reuses <code>TraceHitGeometry.TryFindSurfaceHit</code> (the same test <code>PredictionSightProbe</code> runs per-actor) against each item host's view circle, and gates the whole grid walk on <code>PredictionTraceProvider.Version</code> so an unchanged aim costs nothing.</p>
+<p>A single prediction line can cross several item-carrying balloons at once — the controller collects every one <code>TraceHitGeometry</code> scores a hit on, orders them first-to-last along the line, and steps the one visible figure through them in that order, wrapping back to the first once the last finishes its loop. <b>Not</b> by <code>Centrality</code> (how squarely the line crosses a balloon) — that was the old winner-takes-all criterion for picking a single host, and it answers a different question from "how far along the line does this balloon sit," which is the only thing a sequence needs to order by. A line crossing only one host is a one-element sequence, so it behaves exactly as the original single-host telegraph always did.</p>
 <blockquote class="doxtable">
-<p><b>Note on the existing probe.</b> <code>PredictionSightProbe</code> stays exactly as it is — it drives the per-item <em>reactions</em> (glitter, fade, drift) on the visual itself. This controller answers a different question (which single host owns the board-level telegraph) and the two are deliberately independent. </p>
+<p><b>Note on the existing probe.</b> <code>PredictionSightProbe</code> stays exactly as it is — it drives the per-item <em>reactions</em> (glitter, fade, drift) on the visual itself. This controller answers a different question (which host currently owns the board-level telegraph) and the two are deliberately independent. </p>
 </blockquote>
 <hr  />
 <h2><a class="anchor" id="autotoc_md585"></a>

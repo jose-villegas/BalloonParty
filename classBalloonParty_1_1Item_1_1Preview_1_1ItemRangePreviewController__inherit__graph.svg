@@ -22,7 +22,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Decides which item host the aim is sighted on, and drives the one visible range telegraph for it.">
+<g id="a_Node000001"><a xlink:title="Decides which item hosts the aim is sighted on, and drives the visible range telegraph through them i...">
 <polygon fill="#999999" stroke="#666666" points="201.5,-30 44.5,-30 44.5,0 201.5,0 201.5,-30"/>
 <text text-anchor="start" x="52.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Preview.</text>
 <text text-anchor="middle" x="123" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">ItemRangePreviewController</text>

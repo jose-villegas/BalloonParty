@@ -1,5 +1,5 @@
 <map id="BalloonParty.Item.Preview.ItemRangePreviewController" name="BalloonParty.Item.Preview.ItemRangePreviewController">
-<area shape="rect" id="Node000001" title="Decides which item host the aim is sighted on, and drives the one visible range telegraph for it." alt="" coords="65,79,274,119"/>
+<area shape="rect" id="Node000001" title="Decides which item hosts the aim is sighted on, and drives the visible range telegraph through them i..." alt="" coords="65,79,274,119"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,5,91,31"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="79,36,142,76,139,81,76,41"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="115,5,223,31"/>

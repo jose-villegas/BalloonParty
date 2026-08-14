@@ -112,6 +112,7 @@ $(function(){initNavTree('classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePrevi
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pac-methods">Package Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController-members.html">List of all members</a>  </div>
@@ -119,7 +120,7 @@ $(function(){initNavTree('classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePrevi
 </div><!--header-->
 <div class="contents">
 
-<p>Decides which item host the aim is sighted on, and drives the one visible range telegraph for it.  
+<p>Decides which item hosts the aim is sighted on, and drives the visible range telegraph through them in sequence, first-to-last along the line.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Item.Preview.ItemRangePreviewController:</div>
@@ -157,63 +158,82 @@ Package Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a6c34eca225f7eccc661f48f86b990909" id="r_a6c34eca225f7eccc661f48f86b990909"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6c34eca225f7eccc661f48f86b990909">HasSignatureChanged</a> (Vector2Int slot, Vector2 origin, Vector2 direction, float spinDegrees, in <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a> traceEnd)</td></tr>
-<tr class="separator:a6c34eca225f7eccc661f48f86b990909"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a305f8f845f157f9455b8c5d25fb2dadb" id="r_a305f8f845f157f9455b8c5d25fb2dadb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a305f8f845f157f9455b8c5d25fb2dadb">AdvanceOrRebloomActiveHost</a> (in <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html">ItemPreviewSightedHost</a> active, float spinDegrees, in <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a> traceEnd)</td></tr>
+<tr class="separator:a305f8f845f157f9455b8c5d25fb2dadb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ab335c6069a71ce3d7a494e80c3ffa3" id="r_a5ab335c6069a71ce3d7a494e80c3ffa3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ab335c6069a71ce3d7a494e80c3ffa3">AdvanceSequence</a> (in <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a> traceEnd)</td></tr>
+<tr class="separator:a5ab335c6069a71ce3d7a494e80c3ffa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6158aea3695eed8482d2e9ec23be409" id="r_ad6158aea3695eed8482d2e9ec23be409"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewContext.html">ItemPreviewContext</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad6158aea3695eed8482d2e9ec23be409">BuildContext</a> (in <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html">ItemPreviewSightedHost</a> active, float spinDegrees, in <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a> traceEnd)</td></tr>
+<tr class="separator:ad6158aea3695eed8482d2e9ec23be409"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a991fce4f33819e7e59b464490b143e40" id="r_a991fce4f33819e7e59b464490b143e40"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a991fce4f33819e7e59b464490b143e40">CollectSightedHosts</a> ()</td></tr>
+<tr class="separator:a991fce4f33819e7e59b464490b143e40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0714518462d3ff20bf8cab92b3bada22" id="r_a0714518462d3ff20bf8cab92b3bada22"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0714518462d3ff20bf8cab92b3bada22">HasActiveSignatureChanged</a> (in <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html">ItemPreviewSightedHost</a> active, in <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a> traceEnd)</td></tr>
+<tr class="separator:a0714518462d3ff20bf8cab92b3bada22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a888e5f9b7b5361c7b67d037fd45027b1" id="r_a888e5f9b7b5361c7b67d037fd45027b1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a888e5f9b7b5361c7b67d037fd45027b1">HasSetChanged</a> ()</td></tr>
+<tr class="separator:a888e5f9b7b5361c7b67d037fd45027b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6353febe99a2b3756aa55c8e95fb655" id="r_aa6353febe99a2b3756aa55c8e95fb655"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa6353febe99a2b3756aa55c8e95fb655">HasSpinSettledOnNewAngle</a> (float spinDegrees)</td></tr>
+<tr class="separator:aa6353febe99a2b3756aa55c8e95fb655"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a962dcba70e8f294aa4d58994efe7ec72" id="r_a962dcba70e8f294aa4d58994efe7ec72"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a962dcba70e8f294aa4d58994efe7ec72">HideAndClearSignature</a> ()</td></tr>
 <tr class="separator:a962dcba70e8f294aa4d58994efe7ec72"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab66532a3643e6990c8c10512b8a692cf" id="r_ab66532a3643e6990c8c10512b8a692cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab66532a3643e6990c8c10512b8a692cf">RefreshSightedHost</a> ()</td></tr>
-<tr class="separator:ab66532a3643e6990c8c10512b8a692cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1fe83f62d08022ba830510c0cd7a215" id="r_ad1fe83f62d08022ba830510c0cd7a215"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1fe83f62d08022ba830510c0cd7a215">ReactToSpinSettle</a> (in <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html">ItemPreviewSightedHost</a> active, float spinDegrees, in <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a> traceEnd)</td></tr>
+<tr class="separator:ad1fe83f62d08022ba830510c0cd7a215"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a558a8622276167a8e52bcf1bed6d48e3" id="r_a558a8622276167a8e52bcf1bed6d48e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a558a8622276167a8e52bcf1bed6d48e3">RefreshSightedHosts</a> ()</td></tr>
+<tr class="separator:a558a8622276167a8e52bcf1bed6d48e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af573c7c8dfd14b11e0a879779d04fc2a" id="r_af573c7c8dfd14b11e0a879779d04fc2a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af573c7c8dfd14b11e0a879779d04fc2a">ResolveSpinDegrees</a> (Vector2Int slot)</td></tr>
 <tr class="separator:af573c7c8dfd14b11e0a879779d04fc2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5ef87375780bbaf1d095e10b8aec3da" id="r_ac5ef87375780bbaf1d095e10b8aec3da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac5ef87375780bbaf1d095e10b8aec3da">ShowSightedHost</a> (float spinDegrees, in <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a> traceEnd)</td></tr>
-<tr class="separator:ac5ef87375780bbaf1d095e10b8aec3da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a924b90a40cc01e12c6a7052c81e8364e" id="r_a924b90a40cc01e12c6a7052c81e8364e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a924b90a40cc01e12c6a7052c81e8364e">StoreSignature</a> (Vector2Int slot, Vector2 origin, Vector2 direction, float spinDegrees, in <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a> traceEnd)</td></tr>
-<tr class="separator:a924b90a40cc01e12c6a7052c81e8364e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2fa20384fcaf3d1733f3a177491d0029" id="r_a2fa20384fcaf3d1733f3a177491d0029"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2fa20384fcaf3d1733f3a177491d0029">TryFindSightedHost</a> (out Vector2Int slot, out <a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2b">ItemType</a> itemType, out Vector2 origin, out Vector2 direction)</td></tr>
-<tr class="separator:a2fa20384fcaf3d1733f3a177491d0029"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d175f175e1172f2abebb4c911e6dffd" id="r_a0d175f175e1172f2abebb4c911e6dffd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0d175f175e1172f2abebb4c911e6dffd">ShowActiveHost</a> (in <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html">ItemPreviewSightedHost</a> active, float spinDegrees, in <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a> traceEnd)</td></tr>
+<tr class="separator:a0d175f175e1172f2abebb4c911e6dffd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4dd72bb0e214c24f09b325c29b6c46ed" id="r_a4dd72bb0e214c24f09b325c29b6c46ed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4dd72bb0e214c24f09b325c29b6c46ed">StoreSignature</a> (in <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html">ItemPreviewSightedHost</a> active, in <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a> traceEnd)</td></tr>
+<tr class="separator:a4dd72bb0e214c24f09b325c29b6c46ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69e993bde2e8157700e8e75a4ab6fdcc" id="r_a69e993bde2e8157700e8e75a4ab6fdcc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a69e993bde2e8157700e8e75a4ab6fdcc">TryScoreHost</a> (Vector2Int slot, out <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController_1_1HostHit.html">HostHit</a> hit)</td></tr>
 <tr class="separator:a69e993bde2e8157700e8e75a4ab6fdcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a343ed57090b3118f32bde30b15e4c301" id="r_a343ed57090b3118f32bde30b15e4c301"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a343ed57090b3118f32bde30b15e4c301">CopySlots</a> (List&lt; Vector2Int &gt; destination, IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html">ItemPreviewSightedHost</a> &gt; hosts)</td></tr>
+<tr class="separator:a343ed57090b3118f32bde30b15e4c301"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85d837b20381a056f7004d7fdd3f5886" id="r_a85d837b20381a056f7004d7fdd3f5886"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a85d837b20381a056f7004d7fdd3f5886">SlotsEqual</a> (IReadOnlyList&lt; Vector2Int &gt; storedSlots, IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html">ItemPreviewSightedHost</a> &gt; hosts)</td></tr>
+<tr class="separator:a85d837b20381a056f7004d7fdd3f5886"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a575aa5bbb18efd7827ce32f86ada5d44" id="r_a575aa5bbb18efd7827ce32f86ada5d44"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a575aa5bbb18efd7827ce32f86ada5d44">_activeHostElapsed</a></td></tr>
+<tr class="separator:a575aa5bbb18efd7827ce32f86ada5d44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59c5bbbe4a9fc439327dcfcfd22c02ff" id="r_a59c5bbbe4a9fc439327dcfcfd22c02ff"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html">IItemPreviewConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a59c5bbbe4a9fc439327dcfcfd22c02ff">_config</a></td></tr>
 <tr class="separator:a59c5bbbe4a9fc439327dcfcfd22c02ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8982271d8aa4a06cf3c87da89049ab3e" id="r_a8982271d8aa4a06cf3c87da89049ab3e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8982271d8aa4a06cf3c87da89049ab3e">_drawnSpinDegrees</a></td></tr>
+<tr class="separator:a8982271d8aa4a06cf3c87da89049ab3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bec8d85c878de339ad1f962b4579747" id="r_a4bec8d85c878de339ad1f962b4579747"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4bec8d85c878de339ad1f962b4579747">_dwellElapsed</a></td></tr>
 <tr class="separator:a4bec8d85c878de339ad1f962b4579747"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2a0c5ffa56480ccc57aad7c11ac4aca" id="r_ab2a0c5ffa56480ccc57aad7c11ac4aca"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab2a0c5ffa56480ccc57aad7c11ac4aca">_grid</a></td></tr>
 <tr class="separator:ab2a0c5ffa56480ccc57aad7c11ac4aca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a377bf8d8219a983560e7ff7f845078d1" id="r_a377bf8d8219a983560e7ff7f845078d1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a377bf8d8219a983560e7ff7f845078d1">_hasShownHost</a></td></tr>
-<tr class="separator:a377bf8d8219a983560e7ff7f845078d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a822052116026f7e0b43c3d4a1e1518d6" id="r_a822052116026f7e0b43c3d4a1e1518d6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a822052116026f7e0b43c3d4a1e1518d6">_hasSightedHost</a></td></tr>
-<tr class="separator:a822052116026f7e0b43c3d4a1e1518d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d33c909289ffe215be17d0dbf42c383" id="r_a3d33c909289ffe215be17d0dbf42c383"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3d33c909289ffe215be17d0dbf42c383">_hasShownSet</a></td></tr>
+<tr class="separator:a3d33c909289ffe215be17d0dbf42c383"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab99a0dfb8b06505efe9f82f18f06c33f" id="r_ab99a0dfb8b06505efe9f82f18f06c33f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab99a0dfb8b06505efe9f82f18f06c33f">_hasSightedHosts</a></td></tr>
+<tr class="separator:ab99a0dfb8b06505efe9f82f18f06c33f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe35388e72fcb75e1a85bb022cd01112" id="r_abe35388e72fcb75e1a85bb022cd01112"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abe35388e72fcb75e1a85bb022cd01112">_hasSignature</a></td></tr>
 <tr class="separator:abe35388e72fcb75e1a85bb022cd01112"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f591d0db45c0643f7356e43f676989a" id="r_a4f591d0db45c0643f7356e43f676989a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4f591d0db45c0643f7356e43f676989a">_lastFrameSpinDegrees</a></td></tr>
+<tr class="separator:a4f591d0db45c0643f7356e43f676989a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac35f4eb88994e5f70dad9c6f7f50ba81" id="r_ac35f4eb88994e5f70dad9c6f7f50ba81"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac35f4eb88994e5f70dad9c6f7f50ba81">_lastVersion</a> = int.MinValue</td></tr>
 <tr class="separator:ac35f4eb88994e5f70dad9c6f7f50ba81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad712392eaf75125b8e23e0e6243ea428" id="r_ad712392eaf75125b8e23e0e6243ea428"><td class="memItemLeft" align="right" valign="top">Dictionary&lt; <a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2b">ItemType</a>, <a class="el" href="interfaceBalloonParty_1_1Item_1_1Preview_1_1IItemRangePreview.html">IItemRangePreview</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad712392eaf75125b8e23e0e6243ea428">_previewMap</a></td></tr>
 <tr class="separator:ad712392eaf75125b8e23e0e6243ea428"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13dff335cdf9e05867331c3be2197b28" id="r_a13dff335cdf9e05867331c3be2197b28"><td class="memItemLeft" align="right" valign="top">readonly IEnumerable&lt; <a class="el" href="interfaceBalloonParty_1_1Item_1_1Preview_1_1IItemRangePreview.html">IItemRangePreview</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a13dff335cdf9e05867331c3be2197b28">_previews</a></td></tr>
 <tr class="separator:a13dff335cdf9e05867331c3be2197b28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10e81057512e63dae4ba5b3ae05e05da" id="r_a10e81057512e63dae4ba5b3ae05e05da"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a10e81057512e63dae4ba5b3ae05e05da">_sequenceIndex</a></td></tr>
+<tr class="separator:a10e81057512e63dae4ba5b3ae05e05da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1f68b4bb81ac127e71a5edd77ec21a1" id="r_ae1f68b4bb81ac127e71a5edd77ec21a1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae1f68b4bb81ac127e71a5edd77ec21a1">_shown</a></td></tr>
 <tr class="separator:ae1f68b4bb81ac127e71a5edd77ec21a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a94f8562d82f2aabc5c5ad08958c4dbd4" id="r_a94f8562d82f2aabc5c5ad08958c4dbd4"><td class="memItemLeft" align="right" valign="top">Vector2Int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a94f8562d82f2aabc5c5ad08958c4dbd4">_shownSlot</a></td></tr>
-<tr class="separator:a94f8562d82f2aabc5c5ad08958c4dbd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaab9fc727e6ea31429775b7b35693f3b" id="r_aaab9fc727e6ea31429775b7b35693f3b"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaab9fc727e6ea31429775b7b35693f3b">_sightedDirection</a></td></tr>
-<tr class="separator:aaab9fc727e6ea31429775b7b35693f3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb46ec8c65c4430764a5e1abaf8d1f86" id="r_aeb46ec8c65c4430764a5e1abaf8d1f86"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb46ec8c65c4430764a5e1abaf8d1f86">_sightedOrigin</a></td></tr>
-<tr class="separator:aeb46ec8c65c4430764a5e1abaf8d1f86"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afdaa4b34008aac05c64a351e1348be18" id="r_afdaa4b34008aac05c64a351e1348be18"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Item_1_1Preview_1_1IItemRangePreview.html">IItemRangePreview</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afdaa4b34008aac05c64a351e1348be18">_sightedPreview</a></td></tr>
-<tr class="separator:afdaa4b34008aac05c64a351e1348be18"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0aff44bdfaec265011f6b99340072832" id="r_a0aff44bdfaec265011f6b99340072832"><td class="memItemLeft" align="right" valign="top">Vector2Int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0aff44bdfaec265011f6b99340072832">_sightedSlot</a></td></tr>
-<tr class="separator:a0aff44bdfaec265011f6b99340072832"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a774c2ba25e7a55212da3636f3ce6ca0f" id="r_a774c2ba25e7a55212da3636f3ce6ca0f"><td class="memItemLeft" align="right" valign="top">readonly List&lt; Vector2Int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a774c2ba25e7a55212da3636f3ce6ca0f">_shownSetSlots</a> = new()</td></tr>
+<tr class="separator:a774c2ba25e7a55212da3636f3ce6ca0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2886c7126e7bf37420215b8863fdca2c" id="r_a2886c7126e7bf37420215b8863fdca2c"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html">ItemPreviewSightedHost</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2886c7126e7bf37420215b8863fdca2c">_sightedHosts</a> = new()</td></tr>
+<tr class="separator:a2886c7126e7bf37420215b8863fdca2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71545eec07b2f2311651d2e9eed144fd" id="r_a71545eec07b2f2311651d2e9eed144fd"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a71545eec07b2f2311651d2e9eed144fd">_signatureDirection</a></td></tr>
 <tr class="separator:a71545eec07b2f2311651d2e9eed144fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1b1eee1b6c9d3c8102a009ead547722" id="r_ad1b1eee1b6c9d3c8102a009ead547722"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1b1eee1b6c9d3c8102a009ead547722">_signatureOrigin</a></td></tr>
 <tr class="separator:ad1b1eee1b6c9d3c8102a009ead547722"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7ff2dd9f131bb3cfeea98dd06b0bc59" id="r_af7ff2dd9f131bb3cfeea98dd06b0bc59"><td class="memItemLeft" align="right" valign="top">Vector2Int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af7ff2dd9f131bb3cfeea98dd06b0bc59">_signatureSlot</a></td></tr>
-<tr class="separator:af7ff2dd9f131bb3cfeea98dd06b0bc59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a535be7f89d68eb41d63a62c49129537f" id="r_a535be7f89d68eb41d63a62c49129537f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a535be7f89d68eb41d63a62c49129537f">_signatureSpinDegrees</a></td></tr>
-<tr class="separator:a535be7f89d68eb41d63a62c49129537f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ca2ea4ed6f2aa9a170ee39366d9cc22" id="r_a1ca2ea4ed6f2aa9a170ee39366d9cc22"><td class="memItemLeft" align="right" valign="top">readonly List&lt; Vector2Int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ca2ea4ed6f2aa9a170ee39366d9cc22">_signatureSlots</a> = new()</td></tr>
+<tr class="separator:a1ca2ea4ed6f2aa9a170ee39366d9cc22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a059a74b5469002d4e3f89fa8e8e6728d" id="r_a059a74b5469002d4e3f89fa8e8e6728d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809b">PredictionTraceEndKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a059a74b5469002d4e3f89fa8e8e6728d">_signatureTraceKind</a></td></tr>
 <tr class="separator:a059a74b5469002d4e3f89fa8e8e6728d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a140da8daa840fe389e9781d1a7e015" id="r_a3a140da8daa840fe389e9781d1a7e015"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3a140da8daa840fe389e9781d1a7e015">_signatureTraceNormal</a></td></tr>
@@ -233,9 +253,9 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a141d166e3cc0b77930b001bd4c6d4756"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Decides which item host the aim is sighted on, and drives the one visible range telegraph for it. </p>
+<div class="textblock"><p>Decides which item hosts the aim is sighted on, and drives the visible range telegraph through them in sequence, first-to-last along the line. </p>
 <p>Plain C# rather than a component on the balloon prefab, for two reasons. It needs <a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a>, the item config and the pool — DI singletons that a pooled item visual (hand-threaded by <code><a class="el" href="classBalloonParty_1_1Item_1_1ItemDisplayService.html">ItemDisplayService</a></code>, never resolver-spawned) would have to receive one by one. And only ONE preview shows at a time, which is a global arbitration a per-balloon component cannot make without every instance knowing about every other. </p>
-<p><code><a class="el" href="classBalloonParty_1_1Prediction_1_1PredictionSightProbe.html" title="Single per-actor producer of the &quot;is the loaded shot&#39;s aim-prediction line sighted on this    actor,...">PredictionSightProbe</a></code> is untouched and independent: it drives the per-item visual REACTIONS on the icon itself (glitter, fade, drift). This answers a different question — which single host owns the board-level figure — and shares only the underlying <a class="el" href="classBalloonParty_1_1Prediction_1_1TraceHitGeometry.html" title="Pure polyline-vs-circle math, factored out of TraceHitMarker so the segment projection/intersection i...">TraceHitGeometry</a> test. </p>
+<p><code><a class="el" href="classBalloonParty_1_1Prediction_1_1PredictionSightProbe.html" title="Single per-actor producer of the &quot;is the loaded shot&#39;s aim-prediction line sighted on this    actor,...">PredictionSightProbe</a></code> is untouched and independent: it drives the per-item visual REACTIONS on the icon itself (glitter, fade, drift). This answers a different question — which host currently owns the board-level figure — and shares only the underlying <a class="el" href="classBalloonParty_1_1Prediction_1_1TraceHitGeometry.html" title="Pure polyline-vs-circle math, factored out of TraceHitMarker so the segment projection/intersection i...">TraceHitGeometry</a> test. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad1034ff46894b5149b22061afe5cf97d" name="ad1034ff46894b5149b22061afe5cf97d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad1034ff46894b5149b22061afe5cf97d">&#9670;&#160;</a></span>ItemRangePreviewController()</h2>
@@ -287,6 +307,153 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a305f8f845f157f9455b8c5d25fb2dadb" name="a305f8f845f157f9455b8c5d25fb2dadb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a305f8f845f157f9455b8c5d25fb2dadb">&#9670;&#160;</a></span>AdvanceOrRebloomActiveHost()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Preview.ItemRangePreviewController.AdvanceOrRebloomActiveHost </td>
+          <td>(</td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html">ItemPreviewSightedHost</a></td>          <td class="paramname"><span class="paramname"><em>active</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>spinDegrees</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a></td>          <td class="paramname"><span class="paramname"><em>traceEnd</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5ab335c6069a71ce3d7a494e80c3ffa3" name="a5ab335c6069a71ce3d7a494e80c3ffa3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ab335c6069a71ce3d7a494e80c3ffa3">&#9670;&#160;</a></span>AdvanceSequence()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Preview.ItemRangePreviewController.AdvanceSequence </td>
+          <td>(</td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a></td>          <td class="paramname"><span class="paramname"><em>traceEnd</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad6158aea3695eed8482d2e9ec23be409" name="ad6158aea3695eed8482d2e9ec23be409"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6158aea3695eed8482d2e9ec23be409">&#9670;&#160;</a></span>BuildContext()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewContext.html">ItemPreviewContext</a> BalloonParty.Item.Preview.ItemRangePreviewController.BuildContext </td>
+          <td>(</td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html">ItemPreviewSightedHost</a></td>          <td class="paramname"><span class="paramname"><em>active</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>spinDegrees</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a></td>          <td class="paramname"><span class="paramname"><em>traceEnd</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a991fce4f33819e7e59b464490b143e40" name="a991fce4f33819e7e59b464490b143e40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a991fce4f33819e7e59b464490b143e40">&#9670;&#160;</a></span>CollectSightedHosts()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Preview.ItemRangePreviewController.CollectSightedHosts </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a343ed57090b3118f32bde30b15e4c301" name="a343ed57090b3118f32bde30b15e4c301"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a343ed57090b3118f32bde30b15e4c301">&#9670;&#160;</a></span>CopySlots()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Item.Preview.ItemRangePreviewController.CopySlots </td>
+          <td>(</td>
+          <td class="paramtype">List&lt; Vector2Int &gt;</td>          <td class="paramname"><span class="paramname"><em>destination</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html">ItemPreviewSightedHost</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>hosts</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a95f777d104c5bc8746273d55d2ae5fb7" name="a95f777d104c5bc8746273d55d2ae5fb7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a95f777d104c5bc8746273d55d2ae5fb7">&#9670;&#160;</a></span>Dispose()</h2>
 
@@ -304,8 +471,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a6c34eca225f7eccc661f48f86b990909" name="a6c34eca225f7eccc661f48f86b990909"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6c34eca225f7eccc661f48f86b990909">&#9670;&#160;</a></span>HasSignatureChanged()</h2>
+<a id="a0714518462d3ff20bf8cab92b3bada22" name="a0714518462d3ff20bf8cab92b3bada22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0714518462d3ff20bf8cab92b3bada22">&#9670;&#160;</a></span>HasActiveSignatureChanged()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -314,29 +481,64 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool BalloonParty.Item.Preview.ItemRangePreviewController.HasSignatureChanged </td>
+          <td class="memname">bool BalloonParty.Item.Preview.ItemRangePreviewController.HasActiveSignatureChanged </td>
           <td>(</td>
-          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>slot</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>origin</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>direction</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>spinDegrees</em></span>, </td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html">ItemPreviewSightedHost</a></td>          <td class="paramname"><span class="paramname"><em>active</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a></td>          <td class="paramname"><span class="paramname"><em>traceEnd</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a888e5f9b7b5361c7b67d037fd45027b1" name="a888e5f9b7b5361c7b67d037fd45027b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a888e5f9b7b5361c7b67d037fd45027b1">&#9670;&#160;</a></span>HasSetChanged()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Item.Preview.ItemRangePreviewController.HasSetChanged </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa6353febe99a2b3756aa55c8e95fb655" name="aa6353febe99a2b3756aa55c8e95fb655"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6353febe99a2b3756aa55c8e95fb655">&#9670;&#160;</a></span>HasSpinSettledOnNewAngle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Item.Preview.ItemRangePreviewController.HasSpinSettledOnNewAngle </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>spinDegrees</em></span></td><td>)</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -390,8 +592,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab66532a3643e6990c8c10512b8a692cf" name="ab66532a3643e6990c8c10512b8a692cf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab66532a3643e6990c8c10512b8a692cf">&#9670;&#160;</a></span>RefreshSightedHost()</h2>
+<a id="ad1fe83f62d08022ba830510c0cd7a215" name="ad1fe83f62d08022ba830510c0cd7a215"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1fe83f62d08022ba830510c0cd7a215">&#9670;&#160;</a></span>ReactToSpinSettle()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -400,7 +602,41 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void BalloonParty.Item.Preview.ItemRangePreviewController.RefreshSightedHost </td>
+          <td class="memname">void BalloonParty.Item.Preview.ItemRangePreviewController.ReactToSpinSettle </td>
+          <td>(</td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html">ItemPreviewSightedHost</a></td>          <td class="paramname"><span class="paramname"><em>active</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>spinDegrees</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a></td>          <td class="paramname"><span class="paramname"><em>traceEnd</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a558a8622276167a8e52bcf1bed6d48e3" name="a558a8622276167a8e52bcf1bed6d48e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a558a8622276167a8e52bcf1bed6d48e3">&#9670;&#160;</a></span>RefreshSightedHosts()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Preview.ItemRangePreviewController.RefreshSightedHosts </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -440,8 +676,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac5ef87375780bbaf1d095e10b8aec3da" name="ac5ef87375780bbaf1d095e10b8aec3da"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac5ef87375780bbaf1d095e10b8aec3da">&#9670;&#160;</a></span>ShowSightedHost()</h2>
+<a id="a0d175f175e1172f2abebb4c911e6dffd" name="a0d175f175e1172f2abebb4c911e6dffd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d175f175e1172f2abebb4c911e6dffd">&#9670;&#160;</a></span>ShowActiveHost()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -450,8 +686,13 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void BalloonParty.Item.Preview.ItemRangePreviewController.ShowSightedHost </td>
+          <td class="memname">void BalloonParty.Item.Preview.ItemRangePreviewController.ShowActiveHost </td>
           <td>(</td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html">ItemPreviewSightedHost</a></td>          <td class="paramname"><span class="paramname"><em>active</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>spinDegrees</em></span>, </td>
         </tr>
         <tr>
@@ -463,6 +704,35 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a85d837b20381a056f7004d7fdd3f5886" name="a85d837b20381a056f7004d7fdd3f5886"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85d837b20381a056f7004d7fdd3f5886">&#9670;&#160;</a></span>SlotsEqual()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Item.Preview.ItemRangePreviewController.SlotsEqual </td>
+          <td>(</td>
+          <td class="paramtype">IReadOnlyList&lt; Vector2Int &gt;</td>          <td class="paramname"><span class="paramname"><em>storedSlots</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html">ItemPreviewSightedHost</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>hosts</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -486,8 +756,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a924b90a40cc01e12c6a7052c81e8364e" name="a924b90a40cc01e12c6a7052c81e8364e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a924b90a40cc01e12c6a7052c81e8364e">&#9670;&#160;</a></span>StoreSignature()</h2>
+<a id="a4dd72bb0e214c24f09b325c29b6c46ed" name="a4dd72bb0e214c24f09b325c29b6c46ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4dd72bb0e214c24f09b325c29b6c46ed">&#9670;&#160;</a></span>StoreSignature()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -498,66 +768,12 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void BalloonParty.Item.Preview.ItemRangePreviewController.StoreSignature </td>
           <td>(</td>
-          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>slot</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>origin</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>direction</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>spinDegrees</em></span>, </td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html">ItemPreviewSightedHost</a></td>          <td class="paramname"><span class="paramname"><em>active</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a></td>          <td class="paramname"><span class="paramname"><em>traceEnd</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a2fa20384fcaf3d1733f3a177491d0029" name="a2fa20384fcaf3d1733f3a177491d0029"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2fa20384fcaf3d1733f3a177491d0029">&#9670;&#160;</a></span>TryFindSightedHost()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool BalloonParty.Item.Preview.ItemRangePreviewController.TryFindSightedHost </td>
-          <td>(</td>
-          <td class="paramtype">out Vector2Int</td>          <td class="paramname"><span class="paramname"><em>slot</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">out <a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2b">ItemType</a></td>          <td class="paramname"><span class="paramname"><em>itemType</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">out Vector2</td>          <td class="paramname"><span class="paramname"><em>origin</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">out Vector2</td>          <td class="paramname"><span class="paramname"><em>direction</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -599,6 +815,28 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a575aa5bbb18efd7827ce32f86ada5d44" name="a575aa5bbb18efd7827ce32f86ada5d44"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a575aa5bbb18efd7827ce32f86ada5d44">&#9670;&#160;</a></span>_activeHostElapsed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Item.Preview.ItemRangePreviewController._activeHostElapsed</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a59c5bbbe4a9fc439327dcfcfd22c02ff" name="a59c5bbbe4a9fc439327dcfcfd22c02ff"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a59c5bbbe4a9fc439327dcfcfd22c02ff">&#9670;&#160;</a></span>_config</h2>
 
@@ -610,6 +848,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html">IItemPreviewConfig</a> BalloonParty.Item.Preview.ItemRangePreviewController._config</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8982271d8aa4a06cf3c87da89049ab3e" name="a8982271d8aa4a06cf3c87da89049ab3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8982271d8aa4a06cf3c87da89049ab3e">&#9670;&#160;</a></span>_drawnSpinDegrees</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Item.Preview.ItemRangePreviewController._drawnSpinDegrees</td>
         </tr>
       </table>
   </td>
@@ -665,8 +925,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a377bf8d8219a983560e7ff7f845078d1" name="a377bf8d8219a983560e7ff7f845078d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a377bf8d8219a983560e7ff7f845078d1">&#9670;&#160;</a></span>_hasShownHost</h2>
+<a id="a3d33c909289ffe215be17d0dbf42c383" name="a3d33c909289ffe215be17d0dbf42c383"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d33c909289ffe215be17d0dbf42c383">&#9670;&#160;</a></span>_hasShownSet</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -675,7 +935,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool BalloonParty.Item.Preview.ItemRangePreviewController._hasShownHost</td>
+          <td class="memname">bool BalloonParty.Item.Preview.ItemRangePreviewController._hasShownSet</td>
         </tr>
       </table>
   </td>
@@ -687,8 +947,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a822052116026f7e0b43c3d4a1e1518d6" name="a822052116026f7e0b43c3d4a1e1518d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a822052116026f7e0b43c3d4a1e1518d6">&#9670;&#160;</a></span>_hasSightedHost</h2>
+<a id="ab99a0dfb8b06505efe9f82f18f06c33f" name="ab99a0dfb8b06505efe9f82f18f06c33f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab99a0dfb8b06505efe9f82f18f06c33f">&#9670;&#160;</a></span>_hasSightedHosts</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -697,7 +957,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool BalloonParty.Item.Preview.ItemRangePreviewController._hasSightedHost</td>
+          <td class="memname">bool BalloonParty.Item.Preview.ItemRangePreviewController._hasSightedHosts</td>
         </tr>
       </table>
   </td>
@@ -720,6 +980,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool BalloonParty.Item.Preview.ItemRangePreviewController._hasSignature</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4f591d0db45c0643f7356e43f676989a" name="a4f591d0db45c0643f7356e43f676989a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f591d0db45c0643f7356e43f676989a">&#9670;&#160;</a></span>_lastFrameSpinDegrees</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Item.Preview.ItemRangePreviewController._lastFrameSpinDegrees</td>
         </tr>
       </table>
   </td>
@@ -797,6 +1079,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a10e81057512e63dae4ba5b3ae05e05da" name="a10e81057512e63dae4ba5b3ae05e05da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10e81057512e63dae4ba5b3ae05e05da">&#9670;&#160;</a></span>_sequenceIndex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Item.Preview.ItemRangePreviewController._sequenceIndex</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ae1f68b4bb81ac127e71a5edd77ec21a1" name="ae1f68b4bb81ac127e71a5edd77ec21a1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae1f68b4bb81ac127e71a5edd77ec21a1">&#9670;&#160;</a></span>_shown</h2>
 
@@ -819,8 +1123,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a94f8562d82f2aabc5c5ad08958c4dbd4" name="a94f8562d82f2aabc5c5ad08958c4dbd4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a94f8562d82f2aabc5c5ad08958c4dbd4">&#9670;&#160;</a></span>_shownSlot</h2>
+<a id="a774c2ba25e7a55212da3636f3ce6ca0f" name="a774c2ba25e7a55212da3636f3ce6ca0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a774c2ba25e7a55212da3636f3ce6ca0f">&#9670;&#160;</a></span>_shownSetSlots</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -829,7 +1133,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Vector2Int BalloonParty.Item.Preview.ItemRangePreviewController._shownSlot</td>
+          <td class="memname">readonly List&lt;Vector2Int&gt; BalloonParty.Item.Preview.ItemRangePreviewController._shownSetSlots = new()</td>
         </tr>
       </table>
   </td>
@@ -841,8 +1145,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aaab9fc727e6ea31429775b7b35693f3b" name="aaab9fc727e6ea31429775b7b35693f3b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaab9fc727e6ea31429775b7b35693f3b">&#9670;&#160;</a></span>_sightedDirection</h2>
+<a id="a2886c7126e7bf37420215b8863fdca2c" name="a2886c7126e7bf37420215b8863fdca2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2886c7126e7bf37420215b8863fdca2c">&#9670;&#160;</a></span>_sightedHosts</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -851,73 +1155,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Vector2 BalloonParty.Item.Preview.ItemRangePreviewController._sightedDirection</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aeb46ec8c65c4430764a5e1abaf8d1f86" name="aeb46ec8c65c4430764a5e1abaf8d1f86"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb46ec8c65c4430764a5e1abaf8d1f86">&#9670;&#160;</a></span>_sightedOrigin</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Vector2 BalloonParty.Item.Preview.ItemRangePreviewController._sightedOrigin</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="afdaa4b34008aac05c64a351e1348be18" name="afdaa4b34008aac05c64a351e1348be18"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afdaa4b34008aac05c64a351e1348be18">&#9670;&#160;</a></span>_sightedPreview</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Item_1_1Preview_1_1IItemRangePreview.html">IItemRangePreview</a> BalloonParty.Item.Preview.ItemRangePreviewController._sightedPreview</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0aff44bdfaec265011f6b99340072832" name="a0aff44bdfaec265011f6b99340072832"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0aff44bdfaec265011f6b99340072832">&#9670;&#160;</a></span>_sightedSlot</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Vector2Int BalloonParty.Item.Preview.ItemRangePreviewController._sightedSlot</td>
+          <td class="memname">readonly List&lt;<a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html">ItemPreviewSightedHost</a>&gt; BalloonParty.Item.Preview.ItemRangePreviewController._sightedHosts = new()</td>
         </tr>
       </table>
   </td>
@@ -973,8 +1211,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="af7ff2dd9f131bb3cfeea98dd06b0bc59" name="af7ff2dd9f131bb3cfeea98dd06b0bc59"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af7ff2dd9f131bb3cfeea98dd06b0bc59">&#9670;&#160;</a></span>_signatureSlot</h2>
+<a id="a1ca2ea4ed6f2aa9a170ee39366d9cc22" name="a1ca2ea4ed6f2aa9a170ee39366d9cc22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ca2ea4ed6f2aa9a170ee39366d9cc22">&#9670;&#160;</a></span>_signatureSlots</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -983,29 +1221,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Vector2Int BalloonParty.Item.Preview.ItemRangePreviewController._signatureSlot</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a535be7f89d68eb41d63a62c49129537f" name="a535be7f89d68eb41d63a62c49129537f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a535be7f89d68eb41d63a62c49129537f">&#9670;&#160;</a></span>_signatureSpinDegrees</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float BalloonParty.Item.Preview.ItemRangePreviewController._signatureSpinDegrees</td>
+          <td class="memname">readonly List&lt;Vector2Int&gt; BalloonParty.Item.Preview.ItemRangePreviewController._signatureSlots = new()</td>
         </tr>
       </table>
   </td>

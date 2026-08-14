@@ -261,6 +261,9 @@ var hierarchy =
       [ "BalloonParty.Game.Score.ColorStreakTracker", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html", null ]
     ] ],
     [ "IComparer", null, [
+      [ "BalloonParty.Item.Preview.ItemPreviewSightOrder.TraceOffsetComparer", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightOrder_1_1TraceOffsetComparer.html", null ]
+    ] ],
+    [ "IComparer", null, [
       [ "BalloonParty.Item.Lightning.LightningItemHandler.ByDistanceComparer", "classBalloonParty_1_1Item_1_1Lightning_1_1LightningItemHandler_1_1ByDistanceComparer.html", null ]
     ] ],
     [ "BalloonParty.UI.Binding.ICounterDisplay", "interfaceBalloonParty_1_1UI_1_1Binding_1_1ICounterDisplay.html", [
@@ -844,6 +847,8 @@ var hierarchy =
     [ "BalloonParty.Item.Preview.ItemPreviewContext", "structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewContext.html", null ],
     [ "BalloonParty.Item.Preview.ItemPreviewEntry", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewEntry.html", null ],
     [ "BalloonParty.Item.Preview.ItemPreviewShape", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewShape.html", null ],
+    [ "BalloonParty.Item.Preview.ItemPreviewSightedHost", "structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html", null ],
+    [ "BalloonParty.Item.Preview.ItemPreviewSightOrder", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightOrder.html", null ],
     [ "BalloonParty.Item.Preview.ItemPreviewStroke", "structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewStroke.html", null ],
     [ "BalloonParty.Item.Preview.ItemPreviewViewport", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewViewport.html", null ],
     [ "BalloonParty.Solver.ItemProfile", "structBalloonParty_1_1Solver_1_1ItemProfile.html", null ],

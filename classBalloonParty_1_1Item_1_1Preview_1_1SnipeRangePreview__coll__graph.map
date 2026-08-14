@@ -1,5 +1,5 @@
 <map id="BalloonParty.Item.Preview.SnipeRangePreview" name="BalloonParty.Item.Preview.SnipeRangePreview">
-<area shape="rect" id="Node000001" title="Snipe&#39;s telegraph: the pierce corridor — one line from the host to the wall the shot would run to." alt="" coords="359,37,553,77"/>
+<area shape="rect" id="Node000001" title="Snipe&#39;s telegraph: the pierce corridor — one line from the point on the prediction trace nearest the ..." alt="" coords="359,37,553,77"/>
 <area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Item_1_1Preview_1_1IItemRangePreview.html" title="Draws one item type&#39;s affected area as strokes, for the aim&#45;time telegraph that shows what an item al..." alt="" coords="18,5,213,45"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="227,33,358,46,358,51,226,38"/>
 <area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="5,69,225,109"/>

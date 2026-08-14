@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"OrthogonalSizeCameraController_8cs.html":[7,0,5,4],
 "OverflowHeartRequestedMessage_8cs.html":[7,0,14,7,19],
 "OverflowSettings_8cs.html":[7,0,3,17],
 "PaintBlobRenderer_8cs.html":[7,0,8,4,1],
@@ -7,7 +8,7 @@ var NAVTREEINDEX2 =
 "PaintDripOverlay_8cs.html":[7,0,1,4,4],
 "PaintItemHandler_8cs.html":[7,0,8,4,2],
 "PaintProfileDrawer_8cs.html":[7,0,3,3,4],
-"PaintRangePreview_8cs.html":[7,0,8,5,12],
+"PaintRangePreview_8cs.html":[7,0,8,5,13],
 "PaintSplashPreviewModule_8cs.html":[7,0,6,1,6],
 "PaintSplashViewEditor_8cs.html":[7,0,6,27],
 "PaintSplashView_8cs.html":[7,0,8,4,3],
@@ -174,7 +175,7 @@ var NAVTREEINDEX2 =
 "ShieldGainedMessage_8cs.html":[7,0,14,7,34],
 "ShieldItemHandler_8cs.html":[7,0,8,6,1],
 "ShieldLostMessage_8cs.html":[7,0,14,7,35],
-"ShieldRangePreview_8cs.html":[7,0,8,5,13],
+"ShieldRangePreview_8cs.html":[7,0,8,5,14],
 "ShieldReachabilityField_8cs.html":[7,0,8,6,2],
 "ShieldSlotPreference_8cs.html":[7,0,8,6,3],
 "ShieldTrailController_8cs.html":[7,0,18,6,2],
@@ -219,7 +220,7 @@ var NAVTREEINDEX2 =
 "SmokeFieldView_8cs.html":[7,0,13,0,0],
 "SnipeDischargeBloom_8cs.html":[7,0,8,7,0],
 "SnipeItemHandler_8cs.html":[7,0,8,7,1],
-"SnipeRangePreview_8cs.html":[7,0,8,5,14],
+"SnipeRangePreview_8cs.html":[7,0,8,5,15],
 "SoapBubbleClusterVariant_8cs.html":[7,0,1,3,5],
 "SortingHelper_8cs.html":[7,0,14,10,9],
 "SortingLayerNameAttribute_8cs.html":[7,0,14,30],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "SpriteColorableRenderer_8cs.html":[7,0,1,4,6],
 "SpriteLayerCombinerEditor_8cs.html":[7,0,6,8,0],
 "SpriteLayerCombinerEditor_8cs.html#aef19bab18b9814edeef255c43e4f6bbc":[7,0,6,8,0,1],
-"SpriteLayerCombiner_8cs.html":[7,0,14,10,10],
-"SpriteRendererExtensions_8cs.html":[7,0,14,4,17]
+"SpriteLayerCombiner_8cs.html":[7,0,14,10,10]
 };

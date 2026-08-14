@@ -1,5 +1,6 @@
 var NAVTREEINDEX15 =
 {
+"classBalloonParty_1_1Configuration_1_1Editor_1_1GameDisplayConfigurationEditor.html#a144569a92c07c8326036d66226beeb71":[5,0,0,3,3,1,1],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1GameDisplayConfigurationEditor.html#a144569a92c07c8326036d66226beeb71":[6,0,0,3,3,1,1],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1GameDisplayConfigurationEditor.html#a1623d0581b90b50fc2412b8b1ed2c862":[5,0,0,3,3,1,6],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1GameDisplayConfigurationEditor.html#a1623d0581b90b50fc2412b8b1ed2c862":[6,0,0,3,3,1,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX15 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a6f77313793fcbe622886302479c3faa4":[5,0,0,3,4,1,22],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a6f77313793fcbe622886302479c3faa4":[6,0,0,3,4,1,22],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a75596e9a2e153125f589ab8ed9ddefad":[5,0,0,3,4,1,15],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a75596e9a2e153125f589ab8ed9ddefad":[6,0,0,3,4,1,15],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a76975ea929a7c58f953eca911459312b":[5,0,0,3,4,1,8]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a75596e9a2e153125f589ab8ed9ddefad":[6,0,0,3,4,1,15]
 };

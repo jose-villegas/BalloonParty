@@ -1262,7 +1262,7 @@
 <!-- Node51 -->
 <g id="Node000051" class="node">
 <title>Node51</title>
-<g id="a_Node000051"><a xlink:href="classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html" target="_top" xlink:title="Decides which item host the aim is sighted on, and drives the one visible range telegraph for it.">
+<g id="a_Node000051"><a xlink:href="classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html" target="_top" xlink:title="Decides which item hosts the aim is sighted on, and drives the visible range telegraph through them i...">
 <polygon fill="white" stroke="#666666" points="547,-606 390,-606 390,-576 547,-576 547,-606"/>
 <text text-anchor="start" x="398" y="-594" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Preview.</text>
 <text text-anchor="middle" x="468.5" y="-583" font-family="Helvetica,sans-Serif" font-size="10.00">ItemRangePreviewController</text>

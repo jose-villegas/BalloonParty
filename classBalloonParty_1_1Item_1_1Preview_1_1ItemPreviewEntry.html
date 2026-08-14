@@ -124,6 +124,9 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:a29935b25cc09e53d3c765b516c0980e0" id="r_a29935b25cc09e53d3c765b516c0980e0"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29935b25cc09e53d3c765b516c0980e0">TryFindEntryOffset</a> (<a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewShape.html">ItemPreviewShape</a> shape, int strokeIndex, IReadOnlyList&lt; float &gt; arcTable, IReadOnlyList&lt; Vector3 &gt; tracePoints, out float offset, out float traceOffset)</td></tr>
 <tr class="memdesc:a29935b25cc09e53d3c765b516c0980e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds where <em>tracePoints</em>  first crosses <em>shape</em> 's stroke at <em>strokeIndex</em> , walking the trace segment by segment so "first" means earliest along the shot's own direction of travel rather than merely the first stroke segment tested.  <br /></td></tr>
 <tr class="separator:a29935b25cc09e53d3c765b516c0980e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bb295f5bb2afba7f418045b9f43fae2" id="r_a1bb295f5bb2afba7f418045b9f43fae2"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1bb295f5bb2afba7f418045b9f43fae2">TryFindNearestPointOnPolyline</a> (IReadOnlyList&lt; Vector3 &gt; points, Vector3 target, out Vector3 point, out float offset)</td></tr>
+<tr class="memdesc:a1bb295f5bb2afba7f418045b9f43fae2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where the closest point of an arbitrary polyline to <em>target</em>  sits: the point itself and its arc-length offset from the polyline's own first point.  <br /></td></tr>
+<tr class="separator:a1bb295f5bb2afba7f418045b9f43fae2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -347,6 +350,49 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1bb295f5bb2afba7f418045b9f43fae2" name="a1bb295f5bb2afba7f418045b9f43fae2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bb295f5bb2afba7f418045b9f43fae2">&#9670;&#160;</a></span>TryFindNearestPointOnPolyline()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Item.Preview.ItemPreviewEntry.TryFindNearestPointOnPolyline </td>
+          <td>(</td>
+          <td class="paramtype">IReadOnlyList&lt; Vector3 &gt;</td>          <td class="paramname"><span class="paramname"><em>points</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>target</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out Vector3</td>          <td class="paramname"><span class="paramname"><em>point</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out float</td>          <td class="paramname"><span class="paramname"><em>offset</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where the closest point of an arbitrary polyline to <em>target</em>  sits: the point itself and its arc-length offset from the polyline's own first point. </p>
+<p><a class="el" href="namespaceBalloonParty_1_1Shared.html">Shared</a> by <a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html" title="Drives the pens of the one visible item-range figure, closed-form off a single clock — no tweens,...">ItemPreviewTicker</a> (locating the host on the aim trace, to anchor the approach cascade's own start) and <a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1SnipeRangePreview.html" title="Snipe&#39;s telegraph: the pierce corridor — one line from the point on the prediction trace nearest the ...">SnipeRangePreview</a> (anchoring the pierce corridor on that same trace instead of the host centre) so this projection exists in one place rather than twice. An O(n) walk over every segment, fine for either caller: the ticker runs it once per <code>Show</code>/refit, never per frame, and <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a> once per <code>BuildShape</code>.</p>
+<dl class="section return"><dt>Returns</dt><dd>False when <em>points</em>  has fewer than two points to project onto — nothing to be nearest to — leaving <em>point</em>  and <em>offset</em>  at their defaults for the caller's own fallback. </dd></dl>
 
 </div>
 </div>

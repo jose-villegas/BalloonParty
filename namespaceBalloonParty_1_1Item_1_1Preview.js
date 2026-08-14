@@ -7,6 +7,8 @@ var namespaceBalloonParty_1_1Item_1_1Preview =
     [ "ItemPreviewEntry", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewEntry.html", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewEntry" ],
     [ "ItemPreviewPoolBootstrap", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewPoolBootstrap.html", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewPoolBootstrap" ],
     [ "ItemPreviewShape", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewShape.html", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewShape" ],
+    [ "ItemPreviewSightedHost", "structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost.html", "structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightedHost" ],
+    [ "ItemPreviewSightOrder", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightOrder.html", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightOrder" ],
     [ "ItemPreviewStroke", "structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewStroke.html", "structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewStroke" ],
     [ "ItemPreviewTicker", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker" ],
     [ "ItemPreviewViewport", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewViewport.html", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewViewport" ],

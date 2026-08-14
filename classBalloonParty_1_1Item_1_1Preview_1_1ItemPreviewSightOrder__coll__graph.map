@@ -1,0 +1,7 @@
+<map id="BalloonParty.Item.Preview.ItemPreviewSightOrder" name="BalloonParty.Item.Preview.ItemPreviewSightOrder">
+<area shape="rect" id="Node000001" title="Orders a set of sighted item hosts first&#45;to&#45;last along the trace they were found on — the sequence It..." alt="" coords="33,212,227,252"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightOrder_1_1TraceOffsetComparer.html" title=" " alt="" coords="5,95,255,149"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,164,133,212,127,212,127,164"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="12,5,248,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="133,59,133,95,127,95,127,59"/>
+</map>

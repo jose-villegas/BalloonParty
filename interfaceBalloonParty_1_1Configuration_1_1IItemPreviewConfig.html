@@ -147,6 +147,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a80e72758417b093351ba6e66f874d077" id="r_a80e72758417b093351ba6e66f874d077"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1IPaintPreviewSettings.html">IPaintPreviewSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80e72758417b093351ba6e66f874d077">Paint</a><code> [get]</code></td></tr>
 <tr class="memdesc:a80e72758417b093351ba6e66f874d077"><td class="mdescLeft">&#160;</td><td class="mdescRight">Paint's own figure params.  <br /></td></tr>
 <tr class="separator:a80e72758417b093351ba6e66f874d077"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74e6c832f60a3c3028bcecea338b87b8" id="r_a74e6c832f60a3c3028bcecea338b87b8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74e6c832f60a3c3028bcecea338b87b8">RebloomHoldSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a74e6c832f60a3c3028bcecea338b87b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds the settled figure holds once its draw-in finishes before the whole cascade — approach leg included — replays from scratch.  <br /></td></tr>
+<tr class="separator:a74e6c832f60a3c3028bcecea338b87b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a944b55114cae4aeed5a9905bef332782" id="r_a944b55114cae4aeed5a9905bef332782"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1IShieldPreviewSettings.html">IShieldPreviewSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a944b55114cae4aeed5a9905bef332782">Shield</a><code> [get]</code></td></tr>
 <tr class="memdesc:a944b55114cae4aeed5a9905bef332782"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shield's own figure params.  <br /></td></tr>
 <tr class="separator:a944b55114cae4aeed5a9905bef332782"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -343,6 +346,33 @@ Properties</h2></td></tr>
 <p>Paint's own figure params. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#a77dcc8f2e4b648e5d4c3f17e4fceab75">BalloonParty.Configuration.ItemPreviewConfig</a>.</p>
+
+</div>
+</div>
+<a id="a74e6c832f60a3c3028bcecea338b87b8" name="a74e6c832f60a3c3028bcecea338b87b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74e6c832f60a3c3028bcecea338b87b8">&#9670;&#160;</a></span>RebloomHoldSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.IItemPreviewConfig.RebloomHoldSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds the settled figure holds once its draw-in finishes before the whole cascade — approach leg included — replays from scratch. </p>
+<p><code>0</code> means never re-bloom: draw once and hold, exactly the behaviour before this existed, so the loop is off unless authored on. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#a37dd398928496c5a27c7fbc2e6b08566">BalloonParty.Configuration.ItemPreviewConfig</a>.</p>
 
 </div>
 </div>

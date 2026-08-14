@@ -15,6 +15,7 @@ var searchData=
   ['directhit_12',['DirectHit',['../namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762aa5dcddfe1229c26686d7abc62e4223ec',1,'BalloonParty::Slots::Capabilities']]],
   ['directhitpops_13',['DirectHitPops',['../namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba15f1092f737cd2786534d58ba057ae36',1,'BalloonParty::Game::Telemetry']]],
   ['doomedwarn_14',['DoomedWarn',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13ac3f3dffe51a2c1f6dffa06da606f4964',1,'BalloonParty::Audio']]],
-  ['dynamic_15',['Dynamic',['../namespaceBalloonParty_1_1Configuration_1_1Effects.html#acd622b71fc538338a703329872e54688a971fd8cc345d8bd9f92e9f7d88fdf20c',1,'BalloonParty.Configuration.Effects.Dynamic'],['../namespaceBalloonParty_1_1Slots_1_1Actor.html#adbab49aebf9c1f422de5a17b7033167ea971fd8cc345d8bd9f92e9f7d88fdf20c',1,'BalloonParty.Slots.Actor.Dynamic']]],
-  ['dynamicactors_16',['DynamicActors',['../namespaceBalloonParty_1_1Slots_1_1Spawner.html#a59fd3232168b8edfa6b95ac465991a16a5d8b8ad417e7aa9bdee173cc254de9a2',1,'BalloonParty::Slots::Spawner']]]
+  ['drawing_15',['Drawing',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html#ad57a256d74f5a9e46a26b14cc5fd8f7ea681d72abce5de4f856e71bfb1856796b',1,'BalloonParty::Item::Preview::ItemPreviewTicker']]],
+  ['dynamic_16',['Dynamic',['../namespaceBalloonParty_1_1Configuration_1_1Effects.html#acd622b71fc538338a703329872e54688a971fd8cc345d8bd9f92e9f7d88fdf20c',1,'BalloonParty.Configuration.Effects.Dynamic'],['../namespaceBalloonParty_1_1Slots_1_1Actor.html#adbab49aebf9c1f422de5a17b7033167ea971fd8cc345d8bd9f92e9f7d88fdf20c',1,'BalloonParty.Slots.Actor.Dynamic']]],
+  ['dynamicactors_17',['DynamicActors',['../namespaceBalloonParty_1_1Slots_1_1Spawner.html#a59fd3232168b8edfa6b95ac465991a16a5d8b8ad417e7aa9bdee173cc254de9a2',1,'BalloonParty::Slots::Spawner']]]
 ];

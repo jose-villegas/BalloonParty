@@ -56,5 +56,6 @@ var searchData=
   ['currentrate_53',['CurrentRate',['../classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a6c42ca80a6e8eac97ff35d1c786f5bf3',1,'BalloonParty::Shared::Thermal::ThermalFrameRateGovernor']]],
   ['currentrungindex_54',['CurrentRungIndex',['../classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a3745746c0862b7418557cf0abc14537a',1,'BalloonParty::Shared::Thermal::ThermalFrameRateGovernor']]],
   ['currentspeed_55',['CurrentSpeed',['../interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#a7241c77b83287709308490b40c693745',1,'BalloonParty.Projectile.Model.IProjectileFlightState.CurrentSpeed'],['../classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#a4cc37bdeb2997a270777b81c2519a5f0',1,'BalloonParty.Projectile.Model.ProjectileFlightState.CurrentSpeed']]],
-  ['currentstreak_56',['CurrentStreak',['../classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html#a9b301d53cd3c379014ebb2fb83a97275',1,'BalloonParty::Game::Score::ColorStreakTracker']]]
+  ['currentstreak_56',['CurrentStreak',['../classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html#a9b301d53cd3c379014ebb2fb83a97275',1,'BalloonParty::Game::Score::ColorStreakTracker']]],
+  ['cyclecomplete_57',['CycleComplete',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html#a98c5af7bfbcfaadb91a0e28f785c3d4e',1,'BalloonParty::Item::Preview::ItemPreviewTicker']]]
 ];

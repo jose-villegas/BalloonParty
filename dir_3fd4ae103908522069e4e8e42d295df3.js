@@ -7,6 +7,7 @@ var dir_3fd4ae103908522069e4e8e42d295df3 =
     [ "ItemPreviewEntry.cs", "ItemPreviewEntry_8cs.html", "ItemPreviewEntry_8cs" ],
     [ "ItemPreviewPoolBootstrap.cs", "ItemPreviewPoolBootstrap_8cs.html", "ItemPreviewPoolBootstrap_8cs" ],
     [ "ItemPreviewShape.cs", "ItemPreviewShape_8cs.html", "ItemPreviewShape_8cs" ],
+    [ "ItemPreviewSightOrder.cs", "ItemPreviewSightOrder_8cs.html", "ItemPreviewSightOrder_8cs" ],
     [ "ItemPreviewTicker.cs", "ItemPreviewTicker_8cs.html", "ItemPreviewTicker_8cs" ],
     [ "ItemPreviewViewport.cs", "ItemPreviewViewport_8cs.html", "ItemPreviewViewport_8cs" ],
     [ "ItemRangePreviewController.cs", "ItemRangePreviewController_8cs.html", "ItemRangePreviewController_8cs" ],

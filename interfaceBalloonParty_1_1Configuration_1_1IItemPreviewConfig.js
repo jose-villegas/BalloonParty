@@ -7,6 +7,7 @@ var interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig =
     [ "DashSpacing", "interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#a182be20099b8bda88dc6dba49ce1db3e", null ],
     [ "MaxPens", "interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#abd9d65e4fa8032b80bb1a105428fbf79", null ],
     [ "Paint", "interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#a80e72758417b093351ba6e66f874d077", null ],
+    [ "RebloomHoldSeconds", "interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#a74e6c832f60a3c3028bcecea338b87b8", null ],
     [ "Shield", "interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#a944b55114cae4aeed5a9905bef332782", null ],
     [ "SightDelaySeconds", "interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#a2651d3bab7bf39744182aa88555e729e", null ],
     [ "TraceSpeed", "interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#a98ef3d0ea0d9b34dd0b45af8822ac92a", null ]
