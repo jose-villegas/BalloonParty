@@ -15,8 +15,9 @@ namespace BalloonParty.Configuration
             "equals its painted length, so adjacent dashes touch with no gap.")]
         [SerializeField] [Min(0f)] private float _dashSpacing = 0.15f;
 
-        [Tooltip("Hard ceiling on pens summed across a figure's strokes. Past this, every stroke's " +
-            "dashes are spaced out together rather than any part of a large figure going undrawn.")]
+        [Tooltip("Hard ceiling on pens summed across a figure's strokes AND their approach cascades. " +
+            "Past this, every stroke's dashes are spaced out together rather than any part of a large " +
+            "figure going undrawn; the figure's own dashes claim their share first.")]
         [SerializeField] [Min(1)] private int _maxPens = 64;
 
         [Tooltip("World units per second a pen travels along its stroke once it starts tracing.")]

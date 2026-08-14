@@ -309,6 +309,7 @@ namespace BalloonParty.Game
             builder.Register<ItemPreviewViewport>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<ItemPreviewTicker>().AsSelf();
             builder.RegisterEntryPoint<ItemRangePreviewController>();
+            builder.RegisterEntryPoint<ItemPreviewPoolBootstrap>();
         }
 
         internal static void RegisterPresentation(this IContainerBuilder builder)

@@ -75,10 +75,13 @@ namespace BalloonParty.Configuration
         float DashSpacing { get; }
 
         /// <summary>
-        ///     Hard ceiling on pens summed across a figure's strokes. A stroke's own dash count is derived
-        ///     from its length, so a large figure (Laser's two ~40-unit corridors, ~160 units of combined
+        ///     Hard ceiling on pens summed across a figure's strokes AND their approach cascades (the
+        ///     dashed comet tail each leading leg draws in with). A stroke's own dash count is derived from
+        ///     its length, so a large figure (Laser's two ~40-unit corridors, ~160 units of combined
         ///     perimeter) would otherwise ask for hundreds of pooled <see cref="TrailRenderer" />s. Past
-        ///     this cap every stroke's dashes are spaced out together instead of any part going undrawn.
+        ///     this cap every stroke's dashes are spaced out together instead of any part going undrawn —
+        ///     the figure's own dashes claim their share first, so a long approach can only ever spend what
+        ///     the figure didn't need.
         /// </summary>
         int MaxPens { get; }
 

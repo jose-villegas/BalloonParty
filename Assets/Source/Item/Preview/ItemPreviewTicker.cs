@@ -36,6 +36,16 @@ namespace BalloonParty.Item.Preview
         private readonly ItemPreviewShape _shape = new();
         private readonly List<Pen> _pens = new();
 
+        // One pen per approach dash — the comet's tail. A single pen can't produce this: toggling
+        // TrailRenderer.emitting off and on again bridges every gap with a straight chord (it keeps its
+        // recorded points across the gap), and clearing on re-enable avoids the chord but erases the dash
+        // just drawn. So each dash of the approach gets its own pen, cascading host-to-entry on the same
+        // clock the figure's own dashes wait through, and each RETIRES — goes pen-up for good — the
+        // instant its own dash is drawn, rather than settling into AdvanceDash's ping-pong (see
+        // AdvanceApproachPen). Sized per Show/refit by DeriveApproachDashCounts, parallel to _pens but a
+        // separate list since these pens never join the figure's own per-stroke dash cascade.
+        private readonly List<ApproachPen> _approachPens = new();
+
         // Cumulative arc length per stroke, flattened: _arcTable[stroke.Start + i] is the distance from the
         // stroke's first point to its i-th. Rebuilt per Show, sized to the shape's own point count.
         private readonly List<float> _arcTable = new();
@@ -45,21 +55,23 @@ namespace BalloonParty.Item.Preview
         // but for the trace polyline rather than a shape stroke — always open, since a trace never
         // closes). Copied rather than aliased: the provider's buffer is rewritten in place every Tick, and
         // sampling it mid-rewrite would show a torn frame. Rebuilt per Show/refit, read every frame by
-        // AdvanceCascade so the leading pen's approach can follow a bent trace instead of cutting across it.
+        // AdvanceApproachPen so the approach cascade can follow a bent trace instead of cutting across it.
         // _traceLength and _hostTraceOffset (below, with the other mutable fields) are derived alongside it.
         private readonly List<Vector3> _tracePoints = new();
         private readonly List<float> _traceArcTable = new();
 
         // Where each stroke's own entry point sits, as an arc-length offset from the stroke's own start —
-        // one entry per stroke, parallel to _strokeLengths. No longer a travel destination for every pen;
-        // it only ranks the cascade order (ComputeTravelDistance) and anchors the leading pen's approach.
+        // one entry per stroke, parallel to _strokeLengths. No longer a travel destination for every figure
+        // pen; it only ranks the cascade order (ComputeTravelDistance) and anchors the stroke's own
+        // approach cascade.
         private readonly List<float> _entryOffsets = new();
 
-        // The entry point itself, in world space, alongside the arc-length distance the leading pen's
-        // approach actually covers — along the trace when _entryTraceValid says the trace can answer,
-        // otherwise the straight-line fallback distance to _entryPoints. Only the stroke's LEADING pen
-        // (CascadeRank 0) ever travels this leg now — every other pen on the stroke never leaves its own
-        // dash slot, which is the whole point of the cascade (see AdvanceCascade).
+        // The entry point itself, in world space, alongside the arc-length distance the approach cascade
+        // actually covers — along the trace when _entryTraceValid says the trace can answer, otherwise the
+        // straight-line fallback distance to _entryPoints. This is now the shared path the stroke's
+        // dedicated approach pens divide into their own dashes (DeriveApproachDashCounts); no figure pen
+        // ever leaves its own dash slot — that is still the whole point of the cascade (see
+        // AdvanceCascade).
         private readonly List<Vector3> _entryPoints = new();
         private readonly List<float> _approachLengths = new();
 
@@ -75,12 +87,18 @@ namespace BalloonParty.Item.Preview
         // since dashing is universal now: one pen per dash, by definition.
         private readonly List<int> _dashesPerStroke = new();
 
+        // Approach dashes derived per stroke, parallel to _dashesPerStroke but for the leading leg rather
+        // than the figure itself — see DeriveApproachDashCounts for how the two share MaxPens with the
+        // figure's own dashes always winning. Zero for a stroke whose entry sits on the host already
+        // (Laser, Paint, Lightning's first arc): no approach, no approach pens.
+        private readonly List<int> _approachDashesPerStroke = new();
+
         // Per-stroke cascade timing, derived once per Show from BloomDuration (see BuildCascadeTimings):
-        // the leading pen's approach gets a share proportional to its length against the stroke's total
-        // path, and the remainder splits evenly across that stroke's dash count, so pen k's window starts
-        // exactly when pen k − 1's ends. Every stroke reads the very same BloomElapsed clock — only these
-        // per-stroke window bounds differ — which is what makes several strokes (Laser's two lines,
-        // Lightning's arcs) cascade in parallel rather than one after another.
+        // the stroke's own approach cascade gets a share proportional to its length against the stroke's
+        // total path, and the remainder splits evenly across that stroke's figure dash count, so figure
+        // pen k's window starts exactly when pen k − 1's ends. Every stroke reads the very same BloomElapsed
+        // clock — only these per-stroke window bounds differ — which is what makes several strokes (Laser's
+        // two lines, Lightning's arcs) cascade in parallel rather than one after another.
         private readonly List<float> _approachDurations = new();
         private readonly List<float> _dashDurations = new();
 
@@ -96,7 +114,7 @@ namespace BalloonParty.Item.Preview
         // Total arc length of _tracePoints, and the host's own position along it as an arc-length offset
         // from the trace's first point — both derived by BuildTraceBuffers alongside _traceArcTable above.
         // The trace runs from the projectile through the board and crosses the host somewhere along the
-        // way, so the host offset is generally non-zero; together these anchor the leading pen's approach.
+        // way, so the host offset is generally non-zero; together these anchor the approach cascade.
         private float _traceLength;
         private float _hostTraceOffset;
 
@@ -133,11 +151,12 @@ namespace BalloonParty.Item.Preview
         ///     Builds <paramref name="preview" />'s figure for this crossing and aims the pens at it.
         /// </summary>
         /// <param name="introduce">
-        ///     True for a figure's first appearance on this host — pens cascade in one dash at a time: each
-        ///     stroke's leading pen approaches, emitting the whole way, from the host origin to the
-        ///     stroke's entry point, then draws its own dash; every other pen on the stroke waits, parked
-        ///     pen-up, at its own dash's start until its turn, then draws that dash and hands off to the
-        ///     next. False for a re-settle
+        ///     True for a figure's first appearance on this host — pens cascade in one dash at a time: the
+        ///     stroke's own dedicated approach pens draw the leg from the host origin to the stroke's entry
+        ///     point one dash at a time, each retiring the instant its own dash is drawn, then the figure's
+        ///     own dashes cascade from the entry point exactly as before; every dash-slot pen on the stroke
+        ///     waits, parked pen-up, at its own dash's start until its turn, then draws that dash and hands
+        ///     off to the next. False for a re-settle
         ///     on a host already being telegraphed (the aim nudged but landed on the same host): pens
         ///     acquired here start already in their settled, post-bloom state, so the figure reappears in
         ///     place instead of cascading in again. <see cref="ItemRangePreviewController" /> decides which
@@ -256,6 +275,17 @@ namespace BalloonParty.Item.Preview
                 }
             }
 
+            // A retired approach pen is already not emitting, so this is a no-op for most of them — only
+            // one still mid-dash (or not yet started) actually needs stopping here.
+            for (var i = 0; i < _approachPens.Count; i++)
+            {
+                var trail = _approachPens[i].Trail;
+                if (trail != null)
+                {
+                    trail.SetEmitting(false);
+                }
+            }
+
             // Read off a live pen rather than re-authoring the duration here, so this can never drift
             // from the pen prefab's own authored ribbon lifetime.
             _fadeDuration = _pens[0].Trail != null ? _pens[0].Trail.EffectiveRibbonSeconds : 0f;
@@ -287,6 +317,13 @@ namespace BalloonParty.Item.Preview
                 var pen = _pens[i];
                 AdvancePen(ref pen, deltaTime);
                 _pens[i] = pen;
+            }
+
+            for (var i = 0; i < _approachPens.Count; i++)
+            {
+                var pen = _approachPens[i];
+                AdvanceApproachPen(ref pen, deltaTime);
+                _approachPens[i] = pen;
             }
         }
 
@@ -414,8 +451,8 @@ namespace BalloonParty.Item.Preview
         // trace only reaches through the chain, not directly; starting those at 0 makes each arc draw in
         // sequence after the one before it, which is the wanted look anyway rather than a special case.
         //
-        // Also resolves that offset to a world point, and the arc-length distance the leading pen's
-        // approach actually covers: along the trace, between _hostTraceOffset and this stroke's own entry
+        // Also resolves that offset to a world point, and the arc-length distance the stroke's own approach
+        // cascade actually covers: along the trace, between _hostTraceOffset and this stroke's own entry
         // trace offset, when the helper found a crossing; otherwise the straight-line distance to the
         // entry point, same as before the trace-following approach existed. Reads _tracePoints and
         // _traceArcTable, so must run after BuildTraceBuffers.
@@ -490,6 +527,72 @@ namespace BalloonParty.Item.Preview
             return desiredTotal;
         }
 
+        // Approach dashes on the same DashLength/DashSpacing stride as DeriveDashCounts, but sharing the
+        // remaining budget after the figure's own dashes rather than the whole of MaxPens — the figure's
+        // dashes are the payload and must win if the two compete, so figureTotal is subtracted first and
+        // only what's left goes to the comet tail. A remaining budget of zero (or less) starves the
+        // approach outright, not just to one dash each: a long approach must never crowd out the figure it
+        // leads into. Reads _approachLengths, so callers must run this after BuildEntryOffsets, on both the
+        // acquire and refit path — same reshaping reasons as DeriveDashCounts.
+        private int DeriveApproachDashCounts(int remainingBudget)
+        {
+            var strokeCount = _shape.Strokes.Count;
+            var stride = _config.DashLength + _config.DashSpacing;
+
+            _approachDashesPerStroke.Clear();
+            var desiredTotal = 0;
+            for (var s = 0; s < strokeCount; s++)
+            {
+                var count = ApproachDashCountForLength(_approachLengths[s], stride);
+                _approachDashesPerStroke.Add(count);
+                desiredTotal += count;
+            }
+
+            if (remainingBudget <= 0)
+            {
+                for (var s = 0; s < strokeCount; s++)
+                {
+                    _approachDashesPerStroke[s] = 0;
+                }
+
+                return 0;
+            }
+
+            if (desiredTotal > remainingBudget && stride > 1e-5f)
+            {
+                var inflatedStride = stride * (desiredTotal / (float)remainingBudget);
+                desiredTotal = 0;
+                for (var s = 0; s < strokeCount; s++)
+                {
+                    var count = ApproachDashCountForLength(_approachLengths[s], inflatedStride);
+                    _approachDashesPerStroke[s] = count;
+                    desiredTotal += count;
+                }
+            }
+
+            return desiredTotal;
+        }
+
+        // Zero comet dashes is a fully supported outcome, not a degenerate one rounded up to one — true
+        // both for a near-zero approach (the entry sits on the host itself — Paint's apex, Lightning's
+        // first arc, Laser and Snipe's whole line) and for one merely too short to carry a full dash. The
+        // honest floor is one whole stride: an approach that can't fit DashLength + DashSpacing has no
+        // room for a dash whose ComputePaintedLength wouldn't immediately floor to slot * 0.1f — a sliver
+        // that reads as a point, not a dash. Measured against whatever stride the caller passes in
+        // (authored or budget-inflated by DeriveApproachDashCounts), so a tighter budget raises this floor
+        // exactly as it should: fewer pens to spend means a shorter approach is worth spending one on.
+        // internal rather than private so the pure sweep of thresholds/counts is edit-mode testable
+        // without the ticker's pen/pool machinery.
+        internal static int ApproachDashCountForLength(float approachLength, float stride)
+        {
+            if (stride <= 1e-5f)
+            {
+                return approachLength > 1e-4f ? 1 : 0;
+            }
+
+            return approachLength <= stride ? 0 : Mathf.Max(1, Mathf.RoundToInt(approachLength / stride));
+        }
+
         // The arc length a pen actually paints within its slot, factored out so BuildCascadeTimings' split
         // and AdvanceDash's own ping-pong always agree on the identical value — see AdvanceDash for why the
         // gap, not the dash, is the pinned quantity.
@@ -498,13 +601,14 @@ namespace BalloonParty.Item.Preview
             return Mathf.Max(slotLength * 0.1f, slotLength - _dashSpacing);
         }
 
-        // Splits BloomDuration into this stroke's own cascade windows: the leading pen's approach gets a
-        // share proportional to its length against the stroke's total path (approach length + every dash's
-        // own painted length), and the remainder divides evenly across the stroke's dash count, so pen k's
-        // window starts exactly when pen k − 1's ends (AdvanceCascade). Reads _dashesPerStroke and
-        // _approachLengths, so callers must run this after DeriveDashCounts and BuildEntryOffsets, on both
-        // the acquire and the refit path — a re-fit can change either a stroke's dash count or its entry
-        // offset, and the windows would otherwise go stale against the new geometry.
+        // Splits BloomDuration into this stroke's own cascade windows: the approach cascade gets a share
+        // proportional to its length against the stroke's total path (approach length + every dash's own
+        // painted length), and the remainder divides evenly across the stroke's figure dash count, so pen
+        // k's window starts exactly when pen k − 1's ends (AdvanceCascade). Reads _dashesPerStroke,
+        // _approachLengths and _approachDashesPerStroke, so callers must run this after DeriveDashCounts,
+        // BuildEntryOffsets and DeriveApproachDashCounts, on both the acquire and the refit path — a
+        // re-fit can change a stroke's dash count, entry offset or approach dash count, and the windows
+        // would otherwise go stale against the new geometry.
         private void BuildCascadeTimings()
         {
             _approachDurations.Clear();
@@ -519,10 +623,15 @@ namespace BalloonParty.Item.Preview
                 var approachLength = _approachLengths[s];
                 var total = approachLength + (painted * dashesOnStroke);
 
-                // A near-zero approach (the entry sits on the host itself, e.g. Paint's apex or
-                // Lightning's first arc) is treated as already arrived rather than divided by — the
-                // leading pen gets no approach window at all, and starts drawing its own dash at t = 0.
-                var approachDuration = approachLength > 1e-4f && total > 1e-4f
+                // No approach pens on this stroke — the entry sits on the host itself (Paint's apex,
+                // Lightning's first arc), the leg is shorter than one dash stride
+                // (ApproachDashCountForLength), or the shared MaxPens budget starved it — means nothing
+                // would be drawn during an approach window, so the stroke gets none: its figure dashes
+                // cascade across the whole BloomDuration and start at t = 0, instead of waiting out a
+                // window with no comet leading into it. Gated on the actual pen count rather than just
+                // approachLength, since a stroke can carry a real approachLength yet own zero approach
+                // pens under either case above.
+                var approachDuration = _approachDashesPerStroke[s] > 0 && total > 1e-4f
                     ? bloomDuration * (approachLength / total)
                     : 0f;
 
@@ -532,7 +641,9 @@ namespace BalloonParty.Item.Preview
         }
 
         // Shared by Hide() and a fade's natural completion — the two moments every pen actually goes back
-        // to the pool, as opposed to BeginHide, which only stops them emitting.
+        // to the pool, as opposed to BeginHide, which only stops them emitting. Releases both pools: a
+        // retired approach pen is still allocated (see the class remarks on _approachPens) right up until
+        // this runs.
         private void ReleasePens()
         {
             for (var i = 0; i < _pens.Count; i++)
@@ -545,6 +656,17 @@ namespace BalloonParty.Item.Preview
             }
 
             _pens.Clear();
+
+            for (var i = 0; i < _approachPens.Count; i++)
+            {
+                var trail = _approachPens[i].Trail;
+                if (trail != null)
+                {
+                    _poolManager.Return(_poolKey, trail);
+                }
+            }
+
+            _approachPens.Clear();
         }
 
         // Grows or shrinks the pen list to the wanted count, returning shed pens to the pool — shared by
@@ -570,10 +692,38 @@ namespace BalloonParty.Item.Preview
             }
         }
 
+        // Mirrors ResizePens for the approach-dash pool — a separate list (see _approachPens) so it needs
+        // its own resize rather than sharing the figure's.
+        private void ResizeApproachPens(int wanted)
+        {
+            while (_approachPens.Count > wanted)
+            {
+                var last = _approachPens.Count - 1;
+                var trail = _approachPens[last].Trail;
+                if (trail != null)
+                {
+                    _poolManager.Return(_poolKey, trail);
+                }
+
+                _approachPens.RemoveAt(last);
+            }
+
+            while (_approachPens.Count < wanted)
+            {
+                _approachPens.Add(new ApproachPen());
+            }
+        }
+
         private void AcquirePens(bool introduce)
         {
             var strokeCount = _shape.Strokes.Count;
             var wanted = DeriveDashCounts();
+
+            // Figure dashes claim their share of MaxPens first — see DeriveApproachDashCounts for why the
+            // approach only ever gets what's left over. Must run before BuildCascadeTimings, which now
+            // reads the resulting _approachDashesPerStroke to decide whether a stroke gets an approach
+            // window at all.
+            var approachWanted = DeriveApproachDashCounts(_config.MaxPens - wanted);
             BuildCascadeTimings();
 
             ResizePens(wanted);
@@ -621,8 +771,8 @@ namespace BalloonParty.Item.Preview
                     // Parked pen-up at the origin rather than seeded emitting: AdvancePen's rising edge
                     // (visible flips true) is what starts the ribbon, and that edge clears first and runs
                     // after SetPosition, so the ribbon opens clean at the pen's real first position —
-                    // wherever the leading pen's approach or a waiting pen's own dash start puts it — never
-                    // a chord from this parked origin to there.
+                    // wherever this pen's own dash start puts it once its window opens — never a chord
+                    // from this parked origin to there.
                     pen.Trail.ClearRibbon();
                     pen.Trail.SetPosition(new Vector3(_origin.x, _origin.y, 0f));
                     pen.Trail.SetEmitting(false);
@@ -640,6 +790,53 @@ namespace BalloonParty.Item.Preview
 
                 AssignCascadeRanks(s, strokeStartIndex, dashesOnStroke, slotLength);
             }
+
+            AcquireApproachPens(approachWanted, introduce);
+        }
+
+        // The approach cascade's own acquire pass, mirroring AcquirePens but for the comet's tail: one pen
+        // per approach dash, in host-to-entry order (DashIndex already IS that order — the approach path
+        // is a single arc from the host, unlike a stroke, so there's no separate ranking step to run).
+        // introduce = false (a re-settle on an already-telegraphed host) reappears in place exactly like a
+        // figure dash does, just adapted for a pen that retires instead of settling into a loop — see
+        // SettleApproachPen.
+        private void AcquireApproachPens(int wanted, bool introduce)
+        {
+            ResizeApproachPens(wanted);
+
+            var penIndex = 0;
+            for (var s = 0; s < _shape.Strokes.Count; s++)
+            {
+                var dashesOnStroke = _approachDashesPerStroke[s];
+                for (var dashIndex = 0; dashIndex < dashesOnStroke; dashIndex++)
+                {
+                    var pen = _approachPens[penIndex];
+                    pen.Trail ??= _poolManager.GetOrRegister(
+                        _poolKey, () => new SimplePoolChannel<HighlightTrail>(_penPrefab));
+                    pen.StrokeIndex = s;
+                    pen.DashIndex = dashIndex;
+
+                    if (introduce)
+                    {
+                        // Parked pen-up at the origin — a placeholder AdvanceApproachPen overwrites with
+                        // the pen's real dash-start position before it is ever emitting, the same rule
+                        // AcquirePens follows for the figure's own pens.
+                        pen.Retired = false;
+                        pen.Emitting = false;
+                        pen.BloomElapsed = 0f;
+                        pen.Trail.ClearRibbon();
+                        pen.Trail.SetPosition(new Vector3(_origin.x, _origin.y, 0f));
+                        pen.Trail.SetEmitting(false);
+                    }
+                    else
+                    {
+                        SettleApproachPen(ref pen, s, dashIndex);
+                    }
+
+                    _approachPens[penIndex] = pen;
+                    penIndex++;
+                }
+            }
         }
 
         // Same host, re-fitted geometry: keep every surviving pen's bloom progress, only reassign the slot
@@ -655,6 +852,9 @@ namespace BalloonParty.Item.Preview
         {
             var strokeCount = _shape.Strokes.Count;
             var wanted = DeriveDashCounts();
+
+            // Same ordering constraint as AcquirePens: BuildCascadeTimings reads _approachDashesPerStroke.
+            var approachWanted = DeriveApproachDashCounts(_config.MaxPens - wanted);
             BuildCascadeTimings();
 
             ResizePens(wanted);
@@ -695,6 +895,42 @@ namespace BalloonParty.Item.Preview
 
                 AssignCascadeRanks(s, strokeStartIndex, dashesOnStroke, slotLength);
             }
+
+            RefitApproachPens(approachWanted);
+        }
+
+        // The approach cascade's own refit pass, mirroring RefitPens: a surviving pen (Trail already set)
+        // just gets reassigned to its (possibly different) dash slot and keeps whatever progress or
+        // retirement it already had — a re-fit re-deriving the approach's own length or dash count under
+        // it is the same tolerated staleness RefitPens already accepts for the figure's dashes. A pen the
+        // approach only just grew into is handed the fully-drawn, retired state directly, exactly as
+        // RefitPens does for a new figure-dash pen.
+        private void RefitApproachPens(int wanted)
+        {
+            ResizeApproachPens(wanted);
+
+            var penIndex = 0;
+            for (var s = 0; s < _shape.Strokes.Count; s++)
+            {
+                var dashesOnStroke = _approachDashesPerStroke[s];
+                for (var dashIndex = 0; dashIndex < dashesOnStroke; dashIndex++)
+                {
+                    var pen = _approachPens[penIndex];
+                    var isNewPen = pen.Trail == null;
+                    pen.Trail ??= _poolManager.GetOrRegister(
+                        _poolKey, () => new SimplePoolChannel<HighlightTrail>(_penPrefab));
+                    pen.StrokeIndex = s;
+                    pen.DashIndex = dashIndex;
+
+                    if (isNewPen)
+                    {
+                        SettleApproachPen(ref pen, s, dashIndex);
+                    }
+
+                    _approachPens[penIndex] = pen;
+                    penIndex++;
+                }
+            }
         }
 
         // Forward arc distance from this stroke's entry to this dash's own slot start — used only to RANK
@@ -715,9 +951,10 @@ namespace BalloonParty.Item.Preview
         }
 
         // Ranks this stroke's just-assigned pens by forward distance from the entry (smallest first) into
-        // CascadeRank, so AdvanceCascade knows each pen's turn in the relay — rank 0 is the leading pen,
-        // the only one that ever approaches from the host. A plain O(n²) compare is fine here: it runs
-        // once per Show/refit, never per frame, and n is bounded by MaxPens.
+        // CascadeRank, so AdvanceCascade knows each pen's turn in the relay — rank 0 is simply the first
+        // figure dash to draw, once the stroke's own approach cascade (a separate set of pens; see
+        // AdvanceApproachPen) has finished. A plain O(n²) compare is fine here: it runs once per
+        // Show/refit, never per frame, and n is bounded by MaxPens.
         private void AssignCascadeRanks(int strokeIndex, int startPenIndex, int dashesOnStroke, float slotLength)
         {
             _cascadeScratch.Clear();
@@ -752,10 +989,10 @@ namespace BalloonParty.Item.Preview
             }
         }
 
-        // Dispatches to whichever phase this pen is in — cascading in (waiting its turn, the leading pen's
-        // approach, or sweeping its own dash for the first time), or (once Bloomed) settled into its dash
-        // slot's own ping-pong — then applies the result uniformly (teleport guard, positioning,
-        // visibility-driven emit) regardless of which phase produced it.
+        // Dispatches to whichever phase this pen is in — cascading in (waiting its turn, or sweeping its
+        // own dash for the first time), or (once Bloomed) settled into its dash slot's own ping-pong — then
+        // applies the result uniformly (teleport guard, positioning, visibility-driven emit) regardless of
+        // which phase produced it.
         private void AdvancePen(ref Pen pen, float deltaTime)
         {
             if (pen.Trail == null)
@@ -776,13 +1013,12 @@ namespace BalloonParty.Item.Preview
         // this identical elapsed/eased value, just against its own _approachDurations/_dashDurations, so a
         // two-stroke figure (Laser's two lines, Lightning's arcs) draws both at once rather than in series.
         //
-        // Only CascadeRank 0 — the leading pen — ever gets an approach: an emitting sweep along the trace
-        // from the host origin to the stroke's entry point. It draws because the leg is a continuous walk
-        // along the trace polyline — there is no discontinuity on it to hide, unlike a parked pen's jump
-        // into its own dash — so ink flows out of the balloon and along the aim before the dash itself
-        // starts forming at the entry point. Every other pen simply waits, Parked and pen-up, at its own
-        // dash's start position until its window opens; nothing else ever leaves the host, so nothing else
-        // can stack a ribbon onto the shared approach path.
+        // No figure pen ever leaves its own dash slot any more — the approach leg belongs entirely to a
+        // separate set of pens now (AdvanceApproachPen), one per approach dash, that draw it and retire.
+        // Every figure pen, rank 0 included, simply waits Parked and pen-up at its own dash's start until
+        // its window opens — rank 0's window starts exactly at approachDuration, i.e. the moment the
+        // approach cascade's own last window closes, so the figure's first dash begins the instant the
+        // comet's tail reaches the entry point.
         private Vector3 AdvanceCascade(ref Pen pen, float deltaTime)
         {
             pen.BloomElapsed += deltaTime;
@@ -793,20 +1029,6 @@ namespace BalloonParty.Item.Preview
 
             var strokeIndex = pen.StrokeIndex;
             var approachDuration = _approachDurations[strokeIndex];
-
-            if (pen.CascadeRank == 0 && elapsed < approachDuration)
-            {
-                // Not Parked: the approach must draw, so ApplyPenPosition's !pen.Parked visibility term
-                // has to read true for the whole leg, not just once the dash itself starts.
-                pen.Parked = false;
-                var approachT = approachDuration > 1e-4f ? elapsed / approachDuration : 1f;
-                return SampleApproach(strokeIndex, approachT);
-            }
-
-            // The leading pen falls through here the instant its approach window closes (windowStart for
-            // rank 0 is exactly approachDuration), so it never has a separate waiting frame between
-            // approaching and drawing — the two legs hand off on the very same tick, and the ribbon is
-            // never cleared at the seam since the position is continuous across it.
             var dashDuration = _dashDurations[strokeIndex];
             var windowStart = approachDuration + (pen.CascadeRank * dashDuration);
 
@@ -866,10 +1088,10 @@ namespace BalloonParty.Item.Preview
             // past the sight delay and never re-Shows while it stays visible, so a visible figure's pens
             // shouldn't reposition at all — RefitPens only ever runs on a Show the controller itself no
             // longer issues while shown. Left in for whatever reaches AdvancePen outside that contract.
-            // Gated on Bloomed because mid-cascade the pen can deliberately move far and fast — the
-            // leading pen's approach, or a waiting pen's jump from its parked spot into its dash the
-            // instant its window opens — easily outrunning this threshold every frame; checking there
-            // would clear the ribbon continuously and suppress the draw-in entirely.
+            // Gated on Bloomed because mid-cascade the pen can deliberately move far and fast — a waiting
+            // pen's jump from its parked spot into its own dash the instant its window opens — easily
+            // outrunning this threshold every frame; checking there would clear the ribbon continuously
+            // and suppress the draw-in entirely.
             if (pen.Bloomed && pen.HasLastPosition)
             {
                 var teleportThreshold = Mathf.Max(
@@ -886,10 +1108,9 @@ namespace BalloonParty.Item.Preview
             pen.Trail.SetPosition(position);
 
             // A pen draws once its own cascade window opens — the sweep within that window IS what draws
-            // its dash in — and the leading pen also draws through its approach, since that leg is a
-            // continuous walk with nothing to hide. A pen stays dark only while Parked: a later pen sitting
-            // at its own dash start until its turn, reached by a discontinuous jump it must not reveal.
-            // Visibility decides the edge the rest of the time.
+            // its dash in. A pen stays dark only while Parked: waiting at its own dash start until its
+            // turn, reached by a discontinuous jump it must not reveal. Visibility decides the edge the
+            // rest of the time.
             var visible = !pen.Parked && (!_viewport.IsActive || _viewport.Contains(position));
             if (visible != pen.Emitting)
             {
@@ -906,15 +1127,17 @@ namespace BalloonParty.Item.Preview
             }
         }
 
-        // The leading pen's approach: sweeps along the trace polyline between the host's own position on
-        // it (_hostTraceOffset) and this stroke's entry point (_entryTraceOffsets), so a bent aim line —
-        // a wall bounce, a deflection — is followed rather than cut across in a straight line. Shield is
-        // the figure this matters most for, since its entry sits at the far end of the aim line, but it
-        // is a general fix: any figure whose entry isn't adjacent to the host bends with the trace now.
-        // The two offsets can fall in either order (the entry can sit behind the host along the trace) —
-        // Lerp moves continuously from one to the other regardless of which is larger, so both directions
-        // just work. Falls back to the straight host-to-entry lerp used before this existed when the
-        // trace can't answer for this stroke (BuildEntryOffsets already decided that per stroke).
+        // The approach leg itself: sweeps along the trace polyline between the host's own position on it
+        // (_hostTraceOffset) and this stroke's entry point (_entryTraceOffsets), so a bent aim line — a
+        // wall bounce, a deflection — is followed rather than cut across in a straight line. Shield is the
+        // figure this matters most for, since its entry sits at the far end of the aim line, but it is a
+        // general fix: any figure whose entry isn't adjacent to the host bends with the trace now. The two
+        // offsets can fall in either order (the entry can sit behind the host along the trace) — Lerp
+        // moves continuously from one to the other regardless of which is larger, so both directions just
+        // work. Falls back to the straight host-to-entry lerp used before this existed when the trace
+        // can't answer for this stroke (BuildEntryOffsets already decided that per stroke). t spans the
+        // whole leg; SampleApproachArc below is what an individual approach pen actually calls, converting
+        // its own dash's arc-length range into this function's t.
         private Vector3 SampleApproach(int strokeIndex, float t)
         {
             if (_entryTraceValid[strokeIndex])
@@ -925,6 +1148,148 @@ namespace BalloonParty.Item.Preview
 
             var origin = new Vector3(_origin.x, _origin.y, 0f);
             return Vector3.Lerp(origin, _entryPoints[strokeIndex], t);
+        }
+
+        // Converts an arc-length offset along the approach leg (0 at the host, approachLength at the
+        // entry) into SampleApproach's own t — a fraction of the leg — so an approach pen can be positioned
+        // by arc length like every other pen in the file, rather than the ticker growing a second position
+        // convention just for this cascade.
+        private Vector3 SampleApproachArc(int strokeIndex, float approachLength, float arcOffset)
+        {
+            var t = approachLength > 1e-4f ? Mathf.Clamp01(arcOffset / approachLength) : 0f;
+            return SampleApproach(strokeIndex, t);
+        }
+
+        // The arc-length range this approach dash paints — on the same DashLength/DashSpacing stride and
+        // ComputePaintedLength gap-pinning as a figure dash — factored out since both the live sweep
+        // (AdvanceApproachPen) and the instant re-settle (SettleApproachPen) need the identical geometry.
+        // dashesOnStroke is always at least 1 at every call site (both loop within dashIndex <
+        // dashesOnStroke), so the division below can't land on a zero approach dash count.
+        private void ComputeApproachDashArc(
+            int strokeIndex, int dashIndex, out float approachLength, out float dashStartArc, out float painted)
+        {
+            var dashesOnStroke = _approachDashesPerStroke[strokeIndex];
+            approachLength = _approachLengths[strokeIndex];
+            var slotLength = approachLength / dashesOnStroke;
+            painted = ComputePaintedLength(slotLength);
+            dashStartArc = dashIndex * slotLength;
+        }
+
+        // A re-settled approach pen (introduce == false in AcquireApproachPens, or a pen the approach only
+        // just grew into under RefitApproachPens) has no cascade to relay through — it should simply
+        // already be drawn, exactly as a re-settled figure dash already sits mid-ping-pong instead of
+        // cascading in. Unlike a figure dash there's no steady-state loop to drop it into, so this paints
+        // the dash directly: start position, emitting on, end position, emitting off — one clean segment,
+        // then retired, aging on the ribbon's own TrailRenderer time like any other retired approach pen.
+        private void SettleApproachPen(ref ApproachPen pen, int strokeIndex, int dashIndex)
+        {
+            ComputeApproachDashArc(strokeIndex, dashIndex, out var approachLength, out var dashStartArc, out var painted);
+
+            var start = SampleApproachArc(strokeIndex, approachLength, dashStartArc);
+            var end = SampleApproachArc(strokeIndex, approachLength, dashStartArc + painted);
+
+            pen.Trail.ClearRibbon();
+            pen.Trail.SetPosition(start);
+            pen.Trail.SetEmitting(true);
+            pen.Trail.SetPosition(end);
+            pen.Trail.SetEmitting(false);
+
+            pen.Emitting = false;
+            pen.Retired = true;
+            pen.BloomElapsed = _config.BloomDuration + 1f;
+        }
+
+        // Positions and emits one approach pen — the visibility half of ApplyPenPosition's job, minus the
+        // teleport guard: an approach pen never gets reassigned mid-flight the way a figure dash can under
+        // RefitPens (see RefitApproachPens), so there is no discontinuous jump here to guard against beyond
+        // the rising-edge clear every pen in the file already does.
+        private void ApplyApproachPenPosition(ref ApproachPen pen, Vector3 position, bool wantsToEmit)
+        {
+            pen.Trail.SetPosition(position);
+
+            var visible = wantsToEmit && (!_viewport.IsActive || _viewport.Contains(position));
+            if (visible == pen.Emitting)
+            {
+                return;
+            }
+
+            if (visible)
+            {
+                pen.Trail.ClearRibbon();
+            }
+
+            pen.Trail.SetEmitting(visible);
+            pen.Emitting = visible;
+        }
+
+        // The comet's tail: mirrors AdvanceCascade's parked/drawing split for a single approach dash, but
+        // a completed one RETIRES instead of settling into any further phase — see the class remarks on
+        // _approachPens for why a single pen can't produce this tail by toggling emitting on its own.
+        // Retiring is what produces the fade: a stationary ribbon ages out purely on its own TrailRenderer
+        // time (no per-pen colour or alpha involved, deliberately), so the dash drawn earliest — nearest
+        // the item — is also the one that has been aging the longest once pens further out are still
+        // advancing or haven't started. Skips entirely once Retired, so a finished approach pen costs
+        // nothing more per frame until the next Show.
+        private void AdvanceApproachPen(ref ApproachPen pen, float deltaTime)
+        {
+            if (pen.Trail == null || pen.Retired)
+            {
+                return;
+            }
+
+            // This pen's own local clock is the only stand-in this file has for "how far along the
+            // approach cascade is" — every pen on a stroke starts it at 0 and ticks it by the same
+            // deltaTime every frame, so any one of them is as good a proxy for the shared window timing
+            // as any other.
+            pen.BloomElapsed += deltaTime;
+
+            var duration = Mathf.Max(_config.BloomDuration, 1e-4f);
+            var t = Mathf.Clamp01(pen.BloomElapsed / duration);
+            var elapsed = _config.BloomCurve.Evaluate(t) * _config.BloomDuration;
+
+            var strokeIndex = pen.StrokeIndex;
+            ComputeApproachDashArc(strokeIndex, pen.DashIndex, out var approachLength, out var dashStartArc, out var painted);
+
+            var dashesOnStroke = _approachDashesPerStroke[strokeIndex];
+            var approachDuration = _approachDurations[strokeIndex];
+            var dashDuration = dashesOnStroke > 0 ? approachDuration / dashesOnStroke : 0f;
+            var windowStart = pen.DashIndex * dashDuration;
+
+            if (elapsed < windowStart)
+            {
+                // Not yet its turn — sits pen-up at its own dash's start point. Never emitting here, so
+                // the rising edge below is what lets it start drawing without chording from wherever it
+                // was, the same rule every pen in this file follows.
+                ApplyApproachPenPosition(ref pen, SampleApproachArc(strokeIndex, approachLength, dashStartArc), false);
+                return;
+            }
+
+            // t < 1f alongside the window-end comparison is cheap insurance against the same
+            // saturating-clock class of bug AdvanceCascade's own promotion guard exists for: elapsed is
+            // Clamp01'd t run through BloomCurve, so if it ever failed to round-trip past windowStart +
+            // dashDuration, the pen would stall here mid-sweep instead of retiring. Once t itself saturates
+            // at 1 there is no further elapsed to wait on, so this forces the fall-through unconditionally.
+            if (dashDuration > 1e-4f && t < 1f && elapsed < windowStart + dashDuration)
+            {
+                var localT = (elapsed - windowStart) / dashDuration;
+                var position = SampleApproachArc(strokeIndex, approachLength, dashStartArc + (localT * painted));
+                ApplyApproachPenPosition(ref pen, position, true);
+                return;
+            }
+
+            // The sweep just finished (or dashDuration was degenerate, or t saturated) — retire pen-up
+            // for good.
+            RetireApproachPen(ref pen, strokeIndex, approachLength, dashStartArc, painted);
+        }
+
+        // Window closed: retire exactly at the dash's own end, pen-up for good. No promotion to any
+        // further phase — this pen is done drawing until the next Show re-acquires it.
+        private void RetireApproachPen(
+            ref ApproachPen pen, int strokeIndex, float approachLength, float dashStartArc, float painted)
+        {
+            var dashFrontArc = dashStartArc + painted;
+            ApplyApproachPenPosition(ref pen, SampleApproachArc(strokeIndex, approachLength, dashFrontArc), false);
+            pen.Retired = true;
         }
 
         // One pen draws ONE dash, and the dashed line is the pens sitting next to each other — ask for
@@ -943,9 +1308,11 @@ namespace BalloonParty.Item.Preview
         private Vector3 AdvanceDash(ref Pen pen, float deltaTime)
         {
             var slotLength = _strokeLengths[pen.StrokeIndex] / _dashesPerStroke[pen.StrokeIndex];
+            var dashStart = pen.DashIndex * slotLength;
+
             if (slotLength <= 1e-5f)
             {
-                return SampleStroke(pen.StrokeIndex, 0f);
+                return SampleStroke(pen.StrokeIndex, dashStart);
             }
 
             // The pen SWEEPS its dash — a → b, then b → a, forever. It never jumps, so there is no
@@ -966,7 +1333,7 @@ namespace BalloonParty.Item.Preview
             pen.Distance += _config.TraceSpeed * deltaTime;
 
             var withinDash = Mathf.PingPong(pen.Distance, painted);
-            return SampleStroke(pen.StrokeIndex, (pen.DashIndex * slotLength) + withinDash);
+            return SampleStroke(pen.StrokeIndex, dashStart + withinDash);
         }
 
         // Distance wraps: a closed stroke loops forever, an open one ping-pongs so a pen never stalls at
@@ -1062,10 +1429,10 @@ namespace BalloonParty.Item.Preview
 
             // True only while this pen is parked, pen-up, at its own dash start awaiting its cascade
             // window — it reaches that spot by a discontinuous jump, so it must stay dark until its turn.
-            // NOT true during the leading pen's approach (host origin to the stroke's entry point): that
-            // leg is a continuous walk along the trace with no discontinuity to hide, so it draws instead.
-            // Set each tick by AdvanceCascade and read by ApplyPenPosition to decide the dark/lit edge —
-            // recorded on the pen rather than recomputed in both places.
+            // Every figure pen is Parked through the whole approach now, rank 0 included — the leg itself
+            // belongs to a separate set of pens that draw and retire (see ApproachPen below). Set each tick
+            // by AdvanceCascade and read by ApplyPenPosition to decide the dark/lit edge — recorded on the
+            // pen rather than recomputed in both places.
             public bool Parked;
 
             // Mirrors the trail's own emitting flag, so AdvancePen only calls into the renderer on a real
@@ -1076,8 +1443,8 @@ namespace BalloonParty.Item.Preview
             // pens sitting side by side, not one pen visiting every slot.
             public int DashIndex;
 
-            // This pen's position in its stroke's relay order — 0 is the leading pen (the only one that
-            // approaches from the host), 1 draws next once rank 0's window closes, and so on. Computed
+            // This pen's position in its stroke's relay order — 0 draws first, once the stroke's own
+            // approach cascade has finished, 1 draws next once rank 0's window closes, and so on. Computed
             // once per Show/refit by AssignCascadeRanks from ComputeTravelDistance's forward-arc ordering,
             // not per frame; AdvanceCascade turns it into a time window via _approachDurations/
             // _dashDurations.
@@ -1088,6 +1455,35 @@ namespace BalloonParty.Item.Preview
             // origin on its very first tick.
             public Vector3 LastPosition;
             public bool HasLastPosition;
+        }
+
+        // One approach dash's own pen — the comet's tail. Simpler than Pen: no CascadeRank, teleport-guard,
+        // or Distance/ping-pong fields, since an approach pen sweeps its own dash exactly once and then
+        // retires for good — it never settles into a loop the way a Bloomed figure dash does, and it is
+        // never reassigned to a different dash mid-flight the way a figure pen can be under a refit.
+        private struct ApproachPen
+        {
+            public HighlightTrail Trail;
+            public int StrokeIndex;
+            public float BloomElapsed;
+
+            // The slot this pen owns for its whole life — also its place in the host-to-entry relay order,
+            // since the approach is a single arc from the host rather than a stroke with its own entry
+            // point to rank against, so no separate AssignCascadeRanks-style step is needed here.
+            public int DashIndex;
+
+            // Mirrors the trail's own emitting flag, so AdvanceApproachPen only calls into the renderer on
+            // a real edge, exactly as Pen.Emitting does for a figure dash.
+            public bool Emitting;
+
+            // True once this pen has drawn its own dash and gone pen-up for good — never re-emits, never
+            // moves again, and AdvanceApproachPen skips it outright from then on. This is the field Pen
+            // has no equivalent of: a figure dash settles into AdvanceDash's ping-pong forever instead,
+            // but a single pen toggling emitting on and off would chord across every gap it tried to leave
+            // (see the class remarks on _approachPens), so an approach pen must stop for good rather than
+            // loop indefinitely. The pen stays allocated — not returned to the pool — until the next Show,
+            // so its ribbon can keep fading on the TrailRenderer's own time instead of despawning mid-fade.
+            public bool Retired;
         }
     }
 }
