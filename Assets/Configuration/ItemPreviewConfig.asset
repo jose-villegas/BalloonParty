@@ -42,6 +42,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _sightDelaySeconds: 0.35
+  _rebloomHoldSeconds: 1.5
   _shield:
     _stubLength: 1
   _bomb:

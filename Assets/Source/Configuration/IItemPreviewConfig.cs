@@ -110,6 +110,13 @@ namespace BalloonParty.Configuration
         /// </summary>
         float SightDelaySeconds { get; }
 
+        /// <summary>
+        ///     Seconds the settled figure holds once its draw-in finishes before the whole cascade —
+        ///     approach leg included — replays from scratch. <c>0</c> means never re-bloom: draw once and
+        ///     hold, exactly the behaviour before this existed, so the loop is off unless authored on.
+        /// </summary>
+        float RebloomHoldSeconds { get; }
+
         /// <summary>Shield's own figure params.</summary>
         IShieldPreviewSettings Shield { get; }
 

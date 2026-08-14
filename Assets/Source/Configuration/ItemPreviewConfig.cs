@@ -37,6 +37,10 @@ namespace BalloonParty.Configuration
             "nothing until the aim settles on one. 0 shows the figure immediately.")]
         [SerializeField] [Min(0f)] private float _sightDelaySeconds = 0.15f;
 
+        [Tooltip("Seconds the settled figure holds before the whole draw-in — approach leg included — " +
+            "replays from scratch. 0 disables the loop: draw once and hold.")]
+        [SerializeField] [Min(0f)] private float _rebloomHoldSeconds = 1.5f;
+
         [SerializeField] private ShieldPreviewSettings _shield = new();
         [SerializeField] private BombPreviewSettings _bomb = new();
         [SerializeField] private PaintPreviewSettings _paint = new();
@@ -54,6 +58,7 @@ namespace BalloonParty.Configuration
 
         public float TraceSpeed => _traceSpeed;
         public float SightDelaySeconds => _sightDelaySeconds;
+        public float RebloomHoldSeconds => _rebloomHoldSeconds;
         public IShieldPreviewSettings Shield => _shield;
         public IBombPreviewSettings Bomb => _bomb;
         public IPaintPreviewSettings Paint => _paint;

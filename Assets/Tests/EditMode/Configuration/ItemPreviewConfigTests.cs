@@ -32,6 +32,7 @@ namespace BalloonParty.Tests.Configuration
             Assert.Greater(_config.TraceSpeed, 0f);
             Assert.Greater(_config.BloomDuration, 0f);
             Assert.GreaterOrEqual(_config.SightDelaySeconds, 0f, "0 is legitimate — it means show immediately");
+            Assert.GreaterOrEqual(_config.RebloomHoldSeconds, 0f, "0 is legitimate — it means never re-bloom");
         }
 
         // An empty AnimationCurve evaluates to 0 everywhere, which would collapse every pen's travel to

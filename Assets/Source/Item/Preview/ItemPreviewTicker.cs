@@ -120,14 +120,35 @@ namespace BalloonParty.Item.Preview
 
         // A graceful hide stops emitting but keeps the pens where they are, so what was already drawn
         // fades out over the ribbon's own lifetime instead of vanishing. _fadeDuration is that lifetime,
-        // read off a pen's trail at BeginHide rather than authored again here (see
-        // HighlightTrail.EffectiveRibbonSeconds); _fadeElapsed tracks how far into it LateTick is.
+        // read off a pen's trail (see HighlightTrail.EffectiveRibbonSeconds) rather than authored again
+        // here; _fadeElapsed tracks how far into it LateTick is. The very same machinery also drives the
+        // re-bloom loop's own fade before each replay (BeginLoopFade) — the two only differ in what
+        // AdvanceFade does once _fadeElapsed reaches _fadeDuration, decided by _cyclePhase below.
         private bool _fading;
         private float _fadeElapsed;
         private float _fadeDuration;
 
         // Captured on Show so LateTick doesn't re-resolve the config every frame.
         private float _dashSpacing;
+
+        // The re-bloom loop's own state machine: Drawing while the cascade is still bristling in, Holding
+        // through the settled pause, Fading once BeginLoopFade has stopped every pen and is waiting for
+        // their ribbons to age out before RestartCascade replays the whole draw-in. Explicit rather than
+        // derived from one accumulated total against BloomDuration + RebloomHoldSeconds + a fade duration —
+        // the fade's own length isn't even known until BeginLoopFade reads it off a pen, so a single
+        // running total was never going to stay a readable comparison. Also doubles as the signal
+        // AdvanceFade uses to tell the loop's own fade apart from a genuine BeginHide: only BeginLoopFade
+        // ever leaves this at Fading. Reset to Drawing by Show, alongside _cycleElapsed, so a fresh figure
+        // never starts mid-hold or mid-fade.
+        private CyclePhase _cyclePhase;
+
+        // Elapsed time within the current phase above — the single shared clock the re-bloom loop reads
+        // (AdvanceRebloomCycle) rather than polling every pen for "am I settled yet," since every pen
+        // already ticks against one shared BloomElapsed-derived clock by construction (BuildCascadeTimings
+        // cuts every pen's window from the same BloomDuration). Reset on every phase transition, by Show,
+        // and by a restart itself; only ever advances while visible and not fading, which LateTick already
+        // gates before AdvanceRebloomCycle runs.
+        private float _cycleElapsed;
 
         internal ItemPreviewTicker(
             PoolManager poolManager,
@@ -199,10 +220,14 @@ namespace BalloonParty.Item.Preview
 
             // A Show arriving mid-fade supersedes it outright — cancelling here (rather than letting
             // LateTick's fade timer run) stops it from releasing these pens later while they're already
-            // reused for the figure being built below. _visible is already false from BeginHide, so
-            // isSameHost comes out false regardless of slot, which is what routes this into AcquirePens
-            // instead of RefitPens: the acquire path is what re-blooms from the host, which is the
-            // intended fade-in.
+            // reused for the figure being built below. When the fade being cancelled was a genuine
+            // BeginHide, _visible is already false, so isSameHost comes out false regardless of slot,
+            // which is what routes this into AcquirePens instead of RefitPens: the acquire path is what
+            // re-blooms from the host, which is the intended fade-in. When it was instead the loop's own
+            // fade (BeginLoopFade never touches _visible), isSameHost can legitimately come out true for
+            // a Show on the very same host — RefitPens' surviving-pen path stays correct for that case
+            // because StopPensEmitting already keeps every pen's Emitting mirror in step with its trail's
+            // real state, so ApplyPenPosition still sees a clean rising edge instead of a stale no-op.
             _fading = false;
 
             var isSameHost = _visible && context.Slot == _currentSlot;
@@ -226,6 +251,11 @@ namespace BalloonParty.Item.Preview
                 AcquirePens(introduce);
             }
 
+            // A Show starts its own draw-in — resetting the phase and clock here, rather than leaving
+            // either running, is what stops a fresh figure starting mid-hold or mid-fade, or a Show
+            // racing an already-due re-bloom on the very same frame.
+            _cyclePhase = CyclePhase.Drawing;
+            _cycleElapsed = 0f;
             _visible = true;
         }
 
@@ -252,10 +282,22 @@ namespace BalloonParty.Item.Preview
         /// </summary>
         internal void BeginHide()
         {
-            // Idempotent: called every frame the controller has nothing to show, but only the first such
-            // frame (still _visible) has anything to start — a call mid-fade, or after one has already
-            // released, is a no-op rather than restarting the clock or double-releasing.
-            if (_fading || !_visible)
+            // Called every frame the controller has nothing to show, so this must stay idempotent past
+            // whichever frame actually starts something. A call arriving mid-fade is the one case that
+            // still has to DO something: if that fade is the loop's own (see BeginLoopFade), a real hide
+            // must win over it — the pens are already stopped and already ageing (StopPensEmitting), so
+            // nothing about the fade itself restarts, only where it lands, redirected here from a replay
+            // to a release (see AdvanceFade). A call arriving mid- a genuine hide-fade, or after one has
+            // already released, hits this same branch and is a true no-op, since _cyclePhase is already
+            // Drawing and _visible already false.
+            if (_fading)
+            {
+                _cyclePhase = CyclePhase.Drawing;
+                _visible = false;
+                return;
+            }
+
+            if (!_visible)
             {
                 return;
             }
@@ -266,25 +308,7 @@ namespace BalloonParty.Item.Preview
                 return;
             }
 
-            for (var i = 0; i < _pens.Count; i++)
-            {
-                var trail = _pens[i].Trail;
-                if (trail != null)
-                {
-                    trail.SetEmitting(false);
-                }
-            }
-
-            // A retired approach pen is already not emitting, so this is a no-op for most of them — only
-            // one still mid-dash (or not yet started) actually needs stopping here.
-            for (var i = 0; i < _approachPens.Count; i++)
-            {
-                var trail = _approachPens[i].Trail;
-                if (trail != null)
-                {
-                    trail.SetEmitting(false);
-                }
-            }
+            StopPensEmitting();
 
             // Read off a live pen rather than re-authoring the duration here, so this can never drift
             // from the pen prefab's own authored ribbon lifetime.
@@ -292,6 +316,42 @@ namespace BalloonParty.Item.Preview
             _fadeElapsed = 0f;
             _fading = true;
             _visible = false;
+        }
+
+        // Stops every pen — figure and approach alike — laying new ribbon without releasing them, so
+        // whatever's already drawn can age out on the ribbon's own lifetime instead of vanishing outright.
+        // Shared by BeginHide (a real hide) and BeginLoopFade (the loop's own fade before a replay); the
+        // two differ only in what happens once that ribbon lifetime elapses (see AdvanceFade). Also keeps
+        // each pen's Emitting mirror in step with the trail it just stopped — not just the trail itself —
+        // so a Show that later cancels this fade and lands on RefitPens' surviving-pen path (see Show)
+        // still sees a real edge in ApplyPenPosition instead of a stale "already emitting" no-op.
+        private void StopPensEmitting()
+        {
+            for (var i = 0; i < _pens.Count; i++)
+            {
+                var pen = _pens[i];
+                if (pen.Trail != null)
+                {
+                    pen.Trail.SetEmitting(false);
+                    pen.Emitting = false;
+                }
+
+                _pens[i] = pen;
+            }
+
+            // A retired approach pen is already not emitting, so this is a no-op for most of them — only
+            // one still mid-dash (or not yet started) actually needs stopping here.
+            for (var i = 0; i < _approachPens.Count; i++)
+            {
+                var pen = _approachPens[i];
+                if (pen.Trail != null)
+                {
+                    pen.Trail.SetEmitting(false);
+                    pen.Emitting = false;
+                }
+
+                _approachPens[i] = pen;
+            }
         }
 
         public void LateTick()
@@ -325,10 +385,115 @@ namespace BalloonParty.Item.Preview
                 AdvanceApproachPen(ref pen, deltaTime);
                 _approachPens[i] = pen;
             }
+
+            AdvanceRebloomCycle(deltaTime);
+        }
+
+        // The loop's own clock: ticks _cycleElapsed once per visible, non-fading frame — same gating
+        // LateTick already applies before reaching here — and walks _cyclePhase through Drawing (the
+        // draw-in, BloomDuration long) then Holding (the settled pause, RebloomHoldSeconds long), at which
+        // point BeginLoopFade takes over: it stops every pen and moves the ticker into LateTick's other
+        // branch (AdvanceFade), which is what actually calls RestartCascade and hands the phase back to
+        // Drawing once the fade elapses. A single ticker-level clock rather than polling every pen for "am
+        // I settled" — every pen already shares one BloomElapsed-derived clock by construction, so this
+        // just reads the same shape of signal one level up. RebloomHoldSeconds <= 0 is the off switch:
+        // never advance the phase at all, draw once and hold, exactly the behaviour before this existed.
+        private void AdvanceRebloomCycle(float deltaTime)
+        {
+            if (_config.RebloomHoldSeconds <= 0f)
+            {
+                return;
+            }
+
+            _cycleElapsed += deltaTime;
+
+            switch (_cyclePhase)
+            {
+                case CyclePhase.Drawing:
+                    if (_cycleElapsed >= _config.BloomDuration)
+                    {
+                        _cyclePhase = CyclePhase.Holding;
+                        _cycleElapsed = 0f;
+                    }
+
+                    break;
+
+                case CyclePhase.Holding:
+                    if (_cycleElapsed >= _config.RebloomHoldSeconds)
+                    {
+                        BeginLoopFade();
+                    }
+
+                    break;
+            }
+        }
+
+        // Starts the loop's own fade before a replay — the settled figure stops emitting and its ribbons
+        // age out on their own lifetime, exactly like a real hide (see StopPensEmitting), before
+        // RestartCascade draws it in again once AdvanceFade sees that lifetime elapse. Never touches
+        // _visible: the preview is still showing, just between cycles — only a genuine BeginHide turns it
+        // off, and does so explicitly even if it lands mid-fade (see BeginHide).
+        private void BeginLoopFade()
+        {
+            if (_pens.Count == 0)
+            {
+                // Nothing to fade out — replay straight away rather than stalling the cycle on a fade
+                // with nothing to age out.
+                RestartCascade();
+                _cyclePhase = CyclePhase.Drawing;
+                _cycleElapsed = 0f;
+                return;
+            }
+
+            StopPensEmitting();
+
+            // Read off a live pen rather than re-authoring the duration here, so this can never drift
+            // from the pen prefab's own authored ribbon lifetime — same source BeginHide reads.
+            _fadeDuration = _pens[0].Trail != null ? _pens[0].Trail.EffectiveRibbonSeconds : 0f;
+            _fadeElapsed = 0f;
+            _fading = true;
+            _cyclePhase = CyclePhase.Fading;
+        }
+
+        // Replays the whole draw-in — approach leg included — without re-acquiring geometry or touching
+        // the pool: the shape, strokes, arc tables, entry offsets, dash counts and cascade timings are all
+        // unchanged between cycles, so only the pens' own cascade state resets, via the identical per-pen
+        // reset AcquirePens/AcquireApproachPens use to introduce a pen the first time (ResetPenForDrawIn /
+        // ResetApproachPenForDrawIn). Approach pens have retired by the time a hold elapses, so they are
+        // revived here rather than left dead — a replay that skipped them would draw only the figure and
+        // never the comet leading into it.
+        private void RestartCascade()
+        {
+            for (var i = 0; i < _pens.Count; i++)
+            {
+                var pen = _pens[i];
+                if (pen.Trail == null)
+                {
+                    continue;
+                }
+
+                ResetPenForDrawIn(ref pen);
+                _pens[i] = pen;
+            }
+
+            for (var i = 0; i < _approachPens.Count; i++)
+            {
+                var pen = _approachPens[i];
+                if (pen.Trail == null)
+                {
+                    continue;
+                }
+
+                ResetApproachPenForDrawIn(ref pen);
+                _approachPens[i] = pen;
+            }
         }
 
         // Pens hold their last position while fading (no AdvancePen calls here) — a fading ribbon should
-        // hang where it stopped, not keep sweeping its dash while it dims.
+        // hang where it stopped, not keep sweeping its dash while it dims. Once the ribbon lifetime
+        // elapses, _cyclePhase is what tells the loop's own fade (BeginLoopFade) apart from a genuine
+        // hide (BeginHide) — only BeginLoopFade ever leaves it at Fading, so that's the one case that
+        // replays instead of releasing.
         private void AdvanceFade(float deltaTime)
         {
             _fadeElapsed += deltaTime;
@@ -337,8 +502,17 @@ namespace BalloonParty.Item.Preview
                 return;
             }
 
-            ReleasePens();
             _fading = false;
+
+            if (_cyclePhase == CyclePhase.Fading)
+            {
+                _cyclePhase = CyclePhase.Drawing;
+                _cycleElapsed = 0f;
+                RestartCascade();
+                return;
+            }
+
+            ReleasePens();
         }
 
         // Cumulative arc length per point, so a pen's travel can be expressed as one distance that maps to a
@@ -684,6 +858,44 @@ namespace BalloonParty.Item.Preview
             }
         }
 
+        // The figure-pen reset for the start of a draw-in — parked pen-up at the host origin, cascade
+        // state zeroed. Shared by AcquirePens' introduce branch and RestartCascade's re-bloom, so "what
+        // does it mean for this pen to begin cascading in" has exactly one definition rather than a second
+        // copy that can drift from the original. Never seeds the pen emitting: AdvancePen's rising edge is
+        // what starts the ribbon, once this pen's own cascade window opens, never this reset directly —
+        // the standing rule that a pen must never be emitting at a position it is about to leave
+        // discontinuously is exactly why the trail goes dark here rather than mid-sweep.
+        private void ResetPenForDrawIn(ref Pen pen)
+        {
+            pen.BloomElapsed = 0f;
+            pen.Bloomed = false;
+            pen.Parked = true;
+            pen.Distance = 0f;
+
+            pen.Trail.ClearRibbon();
+            pen.Trail.SetPosition(new Vector3(_origin.x, _origin.y, 0f));
+            pen.Trail.SetEmitting(false);
+            pen.Emitting = false;
+
+            pen.HasLastPosition = false;
+            pen.LastPosition = default;
+        }
+
+        // Mirrors ResetPenForDrawIn one level down, for an approach dash's own pen — shared by
+        // AcquireApproachPens' introduce branch and RestartCascade. A retired approach pen (the common
+        // case once a settled hold elapses) is revived here, not just reset: Retired must go back to
+        // false or AdvanceApproachPen would skip it forever.
+        private void ResetApproachPenForDrawIn(ref ApproachPen pen)
+        {
+            pen.Retired = false;
+            pen.Emitting = false;
+            pen.BloomElapsed = 0f;
+
+            pen.Trail.ClearRibbon();
+            pen.Trail.SetPosition(new Vector3(_origin.x, _origin.y, 0f));
+            pen.Trail.SetEmitting(false);
+        }
+
         private void AcquirePens(bool introduce)
         {
             var strokeCount = _shape.Strokes.Count;
@@ -713,16 +925,9 @@ namespace BalloonParty.Item.Preview
                     pen.StrokeIndex = s;
                     pen.DashIndex = dashIndex;
 
-                    // Distance only matters once Bloomed (AdvanceDash's own ping-pong) — the cascade
-                    // itself is driven by the shared clock in AdvanceCascade, not by accumulated distance,
-                    // so this just primes the value AdvanceDash will inherit at handoff.
-                    pen.Distance = 0f;
-
                     if (introduce)
                     {
-                        pen.BloomElapsed = 0f;
-                        pen.Bloomed = false;
-                        pen.Parked = true;
+                        ResetPenForDrawIn(ref pen);
                     }
                     else
                     {
@@ -733,26 +938,31 @@ namespace BalloonParty.Item.Preview
                         // cascading in again. Bloomed = true skips AdvanceCascade forever after, so Parked
                         // must be cleared explicitly here — a reused pen's could otherwise still read true
                         // from whatever figure it last belonged to and leave it dark.
+                        //
+                        // Distance only matters once Bloomed (AdvanceDash's own ping-pong) — the cascade
+                        // itself is driven by the shared clock in AdvanceCascade, not by accumulated
+                        // distance, so this just primes the value AdvanceDash will inherit at handoff.
+                        pen.Distance = 0f;
                         pen.BloomElapsed = _config.BloomDuration + 1f;
                         pen.Bloomed = true;
                         pen.Parked = false;
+
+                        // Parked pen-up at the origin rather than seeded emitting: AdvancePen's rising
+                        // edge (visible flips true) is what starts the ribbon, and that edge clears first
+                        // and runs after SetPosition, so the ribbon opens clean at the pen's real first
+                        // position — wherever this pen's own dash start puts it once its window opens —
+                        // never a chord from this parked origin to there.
+                        pen.Trail.ClearRibbon();
+                        pen.Trail.SetPosition(new Vector3(_origin.x, _origin.y, 0f));
+                        pen.Trail.SetEmitting(false);
+                        pen.Emitting = false;
+
+                        // A reused pen's teleport baseline is stale from its previous figure, and a
+                        // freshly grown one already reads false — either way it must not be trusted, so
+                        // clear it explicitly rather than rely on carryover.
+                        pen.HasLastPosition = false;
+                        pen.LastPosition = default;
                     }
-
-                    // Parked pen-up at the origin rather than seeded emitting: AdvancePen's rising edge
-                    // (visible flips true) is what starts the ribbon, and that edge clears first and runs
-                    // after SetPosition, so the ribbon opens clean at the pen's real first position —
-                    // wherever this pen's own dash start puts it once its window opens — never a chord
-                    // from this parked origin to there.
-                    pen.Trail.ClearRibbon();
-                    pen.Trail.SetPosition(new Vector3(_origin.x, _origin.y, 0f));
-                    pen.Trail.SetEmitting(false);
-                    pen.Emitting = false;
-
-                    // A reused pen's teleport baseline is stale from its previous figure, and a freshly
-                    // grown one already reads false — either way it must not be trusted, so clear it
-                    // explicitly rather than rely on carryover.
-                    pen.HasLastPosition = false;
-                    pen.LastPosition = default;
 
                     _pens[penIndex] = pen;
                     penIndex++;
@@ -791,12 +1001,7 @@ namespace BalloonParty.Item.Preview
                         // Parked pen-up at the origin — a placeholder AdvanceApproachPen overwrites with
                         // the pen's real dash-start position before it is ever emitting, the same rule
                         // AcquirePens follows for the figure's own pens.
-                        pen.Retired = false;
-                        pen.Emitting = false;
-                        pen.BloomElapsed = 0f;
-                        pen.Trail.ClearRibbon();
-                        pen.Trail.SetPosition(new Vector3(_origin.x, _origin.y, 0f));
-                        pen.Trail.SetEmitting(false);
+                        ResetApproachPenForDrawIn(ref pen);
                     }
                     else
                     {
@@ -1383,6 +1588,15 @@ namespace BalloonParty.Item.Preview
             }
 
             return _tracePoints[lastIndex];
+        }
+
+        // The re-bloom loop's three-phase state — see _cyclePhase and AdvanceRebloomCycle for what drives
+        // the transitions between them.
+        private enum CyclePhase
+        {
+            Drawing,
+            Holding,
+            Fading,
         }
 
         private struct Pen
