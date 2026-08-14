@@ -408,41 +408,11 @@ namespace BalloonParty.Item.Preview
             }
 
             _traceLength = total;
-            _hostTraceOffset = NearestOffsetOnPolyline(
-                _tracePoints, _traceArcTable, new Vector3(_origin.x, _origin.y, 0f));
-        }
 
-        // Where the closest point of an arbitrary polyline to a target sits, as an arc-length offset from
-        // the polyline's own first point — an O(n) walk over every segment, fine here since it runs once
-        // per Show/refit (for the host's own position on the trace), never per frame or per pen.
-        private static float NearestOffsetOnPolyline(
-            IReadOnlyList<Vector3> points, IReadOnlyList<float> arcTable, Vector3 target)
-        {
-            var bestOffset = 0f;
-            var bestDistanceSqr = float.MaxValue;
-
-            for (var i = 0; i < points.Count - 1; i++)
-            {
-                var a = points[i];
-                var segment = points[i + 1] - a;
-                var segmentLengthSqr = segment.sqrMagnitude;
-
-                var t = segmentLengthSqr <= 1e-10f
-                    ? 0f
-                    : Mathf.Clamp01(Vector3.Dot(target - a, segment) / segmentLengthSqr);
-
-                var candidate = a + (segment * t);
-                var distanceSqr = (target - candidate).sqrMagnitude;
-                if (distanceSqr >= bestDistanceSqr)
-                {
-                    continue;
-                }
-
-                bestDistanceSqr = distanceSqr;
-                bestOffset = arcTable[i] + (t * Mathf.Sqrt(segmentLengthSqr));
-            }
-
-            return bestOffset;
+            // The offset alone is all this needs — the projected point itself matters only to Snipe's
+            // corridor origin (SnipeRangePreview), which calls the same shared helper directly.
+            ItemPreviewEntry.TryFindNearestPointOnPolyline(
+                _tracePoints, new Vector3(_origin.x, _origin.y, 0f), out _, out _hostTraceOffset);
         }
 
         // Where each stroke's own figure-drawing starts: the arc-length offset of the point where the

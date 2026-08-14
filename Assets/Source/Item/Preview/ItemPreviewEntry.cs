@@ -90,6 +90,61 @@ namespace BalloonParty.Item.Preview
             return false;
         }
 
+        /// <summary>
+        ///     Where the closest point of an arbitrary polyline to <paramref name="target" /> sits: the
+        ///     point itself and its arc-length offset from the polyline's own first point. Shared by
+        ///     <see cref="ItemPreviewTicker" /> (locating the host on the aim trace, to anchor the
+        ///     approach cascade's own start) and <see cref="SnipeRangePreview" /> (anchoring the pierce
+        ///     corridor on that same trace instead of the host centre) so this projection exists in one
+        ///     place rather than twice. An O(n) walk over every segment, fine for either caller: the
+        ///     ticker runs it once per <c>Show</c>/refit, never per frame, and Snipe once per
+        ///     <c>BuildShape</c>.
+        /// </summary>
+        /// <returns>
+        ///     False when <paramref name="points" /> has fewer than two points to project onto — nothing
+        ///     to be nearest to — leaving <paramref name="point" /> and <paramref name="offset" /> at
+        ///     their defaults for the caller's own fallback.
+        /// </returns>
+        internal static bool TryFindNearestPointOnPolyline(
+            IReadOnlyList<Vector3> points, Vector3 target, out Vector3 point, out float offset)
+        {
+            point = default;
+            offset = 0f;
+
+            if (points == null || points.Count < 2)
+            {
+                return false;
+            }
+
+            var bestDistanceSqr = float.MaxValue;
+            var accumulated = 0f;
+
+            for (var i = 0; i < points.Count - 1; i++)
+            {
+                var a = points[i];
+                var segment = points[i + 1] - a;
+                var segmentLengthSqr = segment.sqrMagnitude;
+                var segmentLength = Mathf.Sqrt(segmentLengthSqr);
+
+                var t = segmentLengthSqr <= 1e-10f
+                    ? 0f
+                    : Mathf.Clamp01(Vector3.Dot(target - a, segment) / segmentLengthSqr);
+
+                var candidate = a + (segment * t);
+                var distanceSqr = (target - candidate).sqrMagnitude;
+                if (distanceSqr < bestDistanceSqr)
+                {
+                    bestDistanceSqr = distanceSqr;
+                    offset = accumulated + (t * segmentLength);
+                    point = candidate;
+                }
+
+                accumulated += segmentLength;
+            }
+
+            return true;
+        }
+
         // One trace segment against every segment of the stroke (including the closed wrap leg), kept
         // outside the outer loop so each level of nesting stays shallow enough to read at a glance.
         private static bool TryFindNearestCrossing(

@@ -182,6 +182,20 @@ namespace BalloonParty.Item.Preview
                 return;
             }
 
+            // _shownSlot/_hasShownHost is a "last actually shown" cache, only ever written by
+            // ShowSightedHost once a signature has dwelt long enough to draw — NOT a live mirror of what
+            // is currently sighted. A sweep that lands on a DIFFERENT host and back onto this one, too
+            // quickly for that other host to ever dwell its own way to a Show, would otherwise leave
+            // _shownSlot pinned on the original host the whole time: by the time the aim resettles there,
+            // _sightedSlot equals _shownSlot again and the visit elsewhere is invisible to ShowSightedHost's
+            // introduce check, so the figure reappears already formed instead of re-blooming. Sighting a
+            // slot the figure isn't actually shown for is itself proof the aim left it, dwell or no dwell,
+            // so the memory that suppresses re-introduction must not survive that visit.
+            if (_hasShownHost && slot != _shownSlot)
+            {
+                _hasShownHost = false;
+            }
+
             _hasSightedHost = true;
             _sightedSlot = slot;
             _sightedOrigin = origin;

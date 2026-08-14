@@ -143,6 +143,61 @@ namespace BalloonParty.Tests.Item
             Assert.AreEqual(5f, traceOffset, 0.001f);
         }
 
+        // Straight polyline: the nearest point to an off-line target is the foot of the perpendicular,
+        // and its arc-length offset is just the distance along the line to that foot.
+        [Test]
+        public void TryFindNearestPointOnPolyline_StraightPolyline_ReturnsPerpendicularFootAndOffset()
+        {
+            var polyline = new List<Vector3>
+            {
+                new(0f, 0f, 0f),
+                new(10f, 0f, 0f),
+            };
+
+            var found = ItemPreviewEntry.TryFindNearestPointOnPolyline(
+                polyline, new Vector3(4f, 3f, 0f), out var point, out var offset);
+
+            Assert.IsTrue(found);
+            Assert.AreEqual(new Vector3(4f, 0f, 0f), point);
+            Assert.AreEqual(4f, offset, 0.0001f);
+        }
+
+        // The case that matters: a deflected aim bends the trace before the point nearest the host. The
+        // offset must accumulate the full first leg plus the partial distance into the second, not treat
+        // the polyline as if it ran straight from its own first point.
+        [Test]
+        public void TryFindNearestPointOnPolyline_BentMultiSegmentPolyline_ReturnsOffsetAlongBend()
+        {
+            // Leg 1: (0,0) -> (10,0), length 10.
+            // Leg 2: (10,0) -> (10,10), length 10 — the target (10,4) projects onto this leg, 4 units in.
+            var polyline = new List<Vector3>
+            {
+                new(0f, 0f, 0f),
+                new(10f, 0f, 0f),
+                new(10f, 10f, 0f),
+            };
+
+            var found = ItemPreviewEntry.TryFindNearestPointOnPolyline(
+                polyline, new Vector3(10f, 4f, 0f), out var point, out var offset);
+
+            Assert.IsTrue(found);
+            Assert.AreEqual(new Vector3(10f, 4f, 0f), point);
+            Assert.AreEqual(14f, offset, 0.0001f, "10 (first leg) + 4 (partway into the second) = 14");
+        }
+
+        [Test]
+        public void TryFindNearestPointOnPolyline_FewerThanTwoPoints_ReturnsFalse()
+        {
+            var polyline = new List<Vector3> { new(4f, -5f, 0f) };
+
+            var found = ItemPreviewEntry.TryFindNearestPointOnPolyline(
+                polyline, new Vector3(0f, 0f, 0f), out var point, out var offset);
+
+            Assert.IsFalse(found);
+            Assert.AreEqual(default(Vector3), point);
+            Assert.AreEqual(0f, offset);
+        }
+
         [Test]
         public void TryFindEntryOffset_FewerThanTwoTracePoints_ReturnsFalse()
         {
