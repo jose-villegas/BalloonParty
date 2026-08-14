@@ -16,7 +16,7 @@ MonoBehaviour:
   _dashSpacing: 0.15
   _maxPens: 256
   _traceSpeed: 1.25
-  _bloomDuration: 0.5
+  _bloomDuration: 1
   _bloomCurve:
     serializedVersion: 2
     m_Curve:
