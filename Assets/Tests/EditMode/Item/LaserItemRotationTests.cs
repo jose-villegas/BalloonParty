@@ -38,5 +38,25 @@ namespace BalloonParty.Tests.Item
         {
             Assert.IsFalse(LaserItemRotation.IsDwelling(elapsedSeconds, StepSeconds));
         }
+
+        // DwellDuration is the one definition IsDwelling, DrawnAngle and ISpinningItemVisual.DwellSeconds
+        // all key off (see LaserItemRotation), so this doubles as coverage for the dwell length
+        // ItemRangePreviewController's HoldLoopMayRebloom now compares against two full re-bloom cycles.
+        [Test]
+        public void DwellDuration_ReturnsStepSecondsTimesDwellFraction()
+        {
+            Assert.AreEqual(DwellBoundary, LaserItemRotation.DwellDuration(StepSeconds), 1e-5f);
+        }
+
+        [Test]
+        public void DwellDuration_AgreesWithIsDwellingBoundary()
+        {
+            // The invariant the two are meant to share: the dwell boundary IsDwelling reads true up to and
+            // including is exactly what DwellDuration reports — not a second, independently-derived value
+            // that merely happens to match today.
+            var dwellDuration = LaserItemRotation.DwellDuration(StepSeconds);
+            Assert.IsTrue(LaserItemRotation.IsDwelling(dwellDuration, StepSeconds));
+            Assert.IsFalse(LaserItemRotation.IsDwelling(dwellDuration + 1e-4f, StepSeconds));
+        }
     }
 }

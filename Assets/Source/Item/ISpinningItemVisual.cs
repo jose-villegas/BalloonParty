@@ -19,5 +19,12 @@ namespace BalloonParty.Item
         /// inferring it from a frame-to-frame delta, which a <c>Mathf.SmoothStep</c> ease drives toward
         /// zero on its own tail and would misread as arrived early.</summary>
         bool IsSettled { get; }
+
+        /// <summary>How long, in seconds, the item rests at one angle before a transition to the next
+        /// begins — the same span <see cref="IsSettled" /> reads true for within one step. Lets a
+        /// consumer compare its own re-draw cadence against how long a spin actually dwells
+        /// (<c>ItemRangePreviewController</c>'s hold-loop-vs-rotation arbitration) without re-deriving the
+        /// rotation's own authored step length and easing fraction.</summary>
+        float DwellSeconds { get; }
     }
 }

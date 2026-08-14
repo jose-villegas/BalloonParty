@@ -49,6 +49,10 @@ namespace BalloonParty.Item
         // disagree because there is only one comparison, not a second one written to match it.
         bool ISpinningItemVisual.IsSettled => IsDwelling(_elapsed, _stepSeconds);
 
+        // The exact span IsSettled/IsDwelling reads true for within one step — same DwellDuration
+        // both of those already key off, so this cannot drift out of step with either.
+        float ISpinningItemVisual.DwellSeconds => DwellDuration(_stepSeconds);
+
         private void OnEnable()
         {
             // Random start step (not a random angle) so multiple lasers on the board don't march in
@@ -212,9 +216,10 @@ namespace BalloonParty.Item
             return Mathf.LerpAngle(_angles[_previousIndex], _angles[_currentIndex], smoothT);
         }
 
-        // Where the dwell ends and the transition tail begins — the one definition DrawnAngle and
-        // IsDwelling both key off, so neither can drift out of step with the other.
-        private static float DwellDuration(float stepSeconds)
+        // Where the dwell ends and the transition tail begins — the one definition DrawnAngle,
+        // IsDwelling and DwellSeconds all key off, so none of the three can drift out of step with the
+        // others. Internal rather than private so it is edit-mode testable directly, mirroring IsDwelling.
+        internal static float DwellDuration(float stepSeconds)
         {
             return stepSeconds * (1f - TransitionFraction);
         }

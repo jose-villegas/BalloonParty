@@ -116,6 +116,15 @@ namespace BalloonParty.Item.Preview
         private bool _previousSpinSettled;
         private bool _hasPreviousSpinSettled;
 
+        // True once HasSpinLeftSettledAngle has asked the ticker to end the current cycle early, for the
+        // cycle currently in flight — the only way AdvanceOrRebloomActiveHost's CycleComplete branch can
+        // tell "this park is the rotation's own falling edge" apart from "the hold loop's timer reached
+        // RebloomHoldSeconds on its own," since both funnel into the very same CycleComplete signal (see
+        // ItemPreviewTicker.RequestEarlyCycleEnd/CycleComplete remarks). Reset on every draw by ShowHost —
+        // the shared funnel, same as _hasPreviousSpinSettled — so a stale request from a previous host or
+        // a previous cycle can never be read as covering this one.
+        private bool _earlyCycleEndRequested;
+
         // Whether the SET last actually shown (_shownSetSlots) is still current — see ShowActiveHost for
         // why re-settling on the identical set skips the re-bloom, and RefreshSightedHosts for why a
         // detour through a different set must not be invisible to that check.
@@ -196,7 +205,7 @@ namespace BalloonParty.Item.Preview
             }
 
             var active = _sightedHosts[_sequenceIndex];
-            var spinDegrees = ResolveSpinDegrees(active.Slot, out var spinSettled);
+            var spinDegrees = ResolveSpinDegrees(active.Slot, out var spinSettled, out var spinning);
             var traceEnd = _traceProvider.End;
 
             // A changed signature (a different set, or the active host's own geometry drifting — NOT its
@@ -220,7 +229,7 @@ namespace BalloonParty.Item.Preview
             // exists to hold.
             if (_shown)
             {
-                AdvanceOrRebloomActiveHost(active, spinDegrees, spinSettled, in traceEnd);
+                AdvanceOrRebloomActiveHost(active, spinDegrees, spinSettled, spinning, in traceEnd);
                 return;
             }
 
@@ -261,10 +270,12 @@ namespace BalloonParty.Item.Preview
 
         // isSettled defaults true for a non-spinning (or unhosted) slot — nothing is ever in flight for it,
         // so it can never register a settled-to-unsettled edge (HasSpinLeftSettledAngle), which correctly
-        // keeps it a no-op, exactly as before this existed.
-        private float ResolveSpinDegrees(Vector2Int slot, out bool isSettled)
+        // keeps it a no-op, exactly as before this existed. spinning is null for that same case, which
+        // HoldLoopMayRebloom reads as "no dwell of its own to measure — the hold loop stays its only
+        // cadence," exactly as before this existed either.
+        private float ResolveSpinDegrees(Vector2Int slot, out bool isSettled, out ISpinningItemVisual spinning)
         {
-            var spinning = _grid.ViewAt(slot) is IHostsSpinningItem spinHost ? spinHost.SpinningItem : null;
+            spinning = _grid.ViewAt(slot) is IHostsSpinningItem spinHost ? spinHost.SpinningItem : null;
             isSettled = spinning?.IsSettled ?? true;
             return spinning?.AngleDegrees ?? 0f;
         }
@@ -280,6 +291,7 @@ namespace BalloonParty.Item.Preview
             _activeHostElapsed = 0f;
             _hasShownSet = false;
             _hasPreviousSpinSettled = false;
+            _earlyCycleEndRequested = false;
         }
 
         // The one place a shown figure's turn can move on, now that both ways of getting here go through
@@ -292,15 +304,17 @@ namespace BalloonParty.Item.Preview
         // Once parked, _activeHostElapsed decides what happens next — the same budget that used to live
         // only in the now-removed ReactToSpinSettle. A natural CycleComplete always arrives well past
         // oneCycleSeconds (a full Draw+Hold+Fade already takes at least that long), so a non-spinning host
-        // keeps behaving exactly as before: advance to the next host (or wrap to the only one, on a
-        // single-host sequence). A spin-forced park can arrive early, and that is the one case this now
-        // also has to decide: still within its turn, re-show the SAME host — the re-bloom, and it
-        // genuinely blooms now, because the ticker parked and dropped _visible in between, unlike calling
-        // Show directly on a still-visible figure — or, if its turn already ran long, advance instead of
-        // re-blooming again. Gated on RebloomHoldSeconds > 0 to match AdvanceRebloomCycle's own off
-        // switch: with looping authored off, a park can only ever be spin-forced (the natural loop never
-        // parks at all), and it must keep re-blooming the same host in place forever, exactly as before
-        // this existed.
+        // keeps behaving exactly as before: advance to the next host, or wrap to the only one on a
+        // single-host sequence — except that wrap IS a re-bloom in place (the sequence has nowhere else to
+        // go), so TurnTimerMayAdvance holds it to the same HoldLoopMayRebloom qualification the spin-forced
+        // branch below already answers to, rather than letting the turn timer bypass it. A spin-forced
+        // park can arrive early, and that is the one case this now also has to decide: still within its
+        // turn, re-show the SAME host — the re-bloom, and it genuinely blooms now, because the ticker
+        // parked and dropped _visible in between, unlike calling Show directly on a still-visible figure —
+        // or, if its turn already ran long, advance instead of re-blooming again. Gated on
+        // RebloomHoldSeconds > 0 to match AdvanceRebloomCycle's own off switch: with looping authored off,
+        // a park can only ever be spin-forced (the natural loop never parks at all), and it must keep
+        // re-blooming the same host in place forever, exactly as before this existed.
         //
         // HasSpinLeftSettledAngle catches the other half: the active host's spin LEAVING its settled step
         // — beginning a transition toward the next one — is the re-bloom trigger, not arriving at the new
@@ -317,38 +331,69 @@ namespace BalloonParty.Item.Preview
         // extra. Because the fade is shorter than the rotation's own transition, the ticker will typically
         // park mid-transition — CycleComplete above waits out the remainder (!spinSettled) before it will
         // draw, so the redraw always lands on the rotation's own arrival, never ahead of it.
+        //
+        // A third thing this now has to decide, once the turn isn't spent: whether THIS park is even
+        // allowed to redraw in place at all. The hold loop's own timer (AdvanceRebloomCycle, off
+        // RebloomHoldSeconds) and a spinning host's own step cadence are two independent clocks racing on
+        // the same ticker; see HoldLoopMayRebloom for why a host whose dwell can't hold two full redraws
+        // must never take the hold loop's redraw, only the rotation's own falling edge
+        // (_earlyCycleEndRequested, set where RequestEarlyCycleEnd is called below). A qualifying spinning
+        // host, and every non-spinning one, keeps redrawing on the hold loop exactly as before this
+        // existed.
         private void AdvanceOrRebloomActiveHost(
-            in ItemPreviewSightedHost active, float spinDegrees, bool spinSettled, in PredictionTraceEnd traceEnd)
+            in ItemPreviewSightedHost active, float spinDegrees, bool spinSettled, ISpinningItemVisual spinning,
+            in PredictionTraceEnd traceEnd)
         {
-            if (_ticker.CycleComplete)
-            {
-                if (!spinSettled)
-                {
-                    // Parked mid-transition: nothing to draw until the rotation itself lands. No work
-                    // queued, no allocation — just wait for a later frame's spinSettled to read true.
-                    return;
-                }
-
-                var oneCycleSeconds = _config.BloomDuration + _config.RebloomHoldSeconds;
-                if (_config.RebloomHoldSeconds > 0f && _activeHostElapsed >= oneCycleSeconds)
-                {
-                    AdvanceSequence(in traceEnd);
-                }
-                else
-                {
-                    ShowHost(in active, spinDegrees, in traceEnd, introduce: true);
-                }
-
-                return;
-            }
-
+            // Tracked first, unconditionally — every frame this method runs, regardless of CycleComplete
+            // or any return below. The rotation's own departure is the only thing that can ever authorise
+            // a redraw for a host the hold loop has disqualified (see HoldLoopMayRebloom), and it has to
+            // be caught even while the ticker sits parked: a parked host has no other clock running, so an
+            // edge missed here is an edge that can never be recovered, stranding the figure dark for good.
+            // RequestEarlyCycleEnd is already a no-op while parked or fading (see its own remarks), so
+            // calling it on the edge in any state is safe — only the flag set alongside it matters.
             if (HasSpinLeftSettledAngle(spinSettled))
             {
                 _ticker.RequestEarlyCycleEnd();
+                _earlyCycleEndRequested = true;
             }
 
             _previousSpinSettled = spinSettled;
             _hasPreviousSpinSettled = true;
+
+            if (!_ticker.CycleComplete)
+            {
+                return;
+            }
+
+            if (!spinSettled)
+            {
+                // Parked mid-transition: nothing to draw until the rotation itself lands. No work
+                // queued, no allocation — just wait for a later frame's spinSettled to read true.
+                return;
+            }
+
+            var oneCycleSeconds = _config.BloomDuration + _config.RebloomHoldSeconds;
+
+            // A one-host sequence's "advance" wraps straight back to itself (AdvanceSequence's own mod
+            // arithmetic), which makes it indistinguishable from a re-bloom in place — driven purely by
+            // this same turn timer, on the hold cadence, with nothing to tell it apart from the qualified
+            // re-bloom below except which branch happened to run first. TurnTimerMayAdvance is what stops
+            // that wrap from bypassing HoldLoopMayRebloom's dwell qualification the way a genuine advance
+            // to a DIFFERENT host must not be held up by any one host's own rotation.
+            if (_config.RebloomHoldSeconds > 0f && _activeHostElapsed >= oneCycleSeconds &&
+                TurnTimerMayAdvance(_sightedHosts.Count, spinning, oneCycleSeconds))
+            {
+                AdvanceSequence(in traceEnd);
+            }
+            else if (HoldLoopMayRebloom(spinning, oneCycleSeconds) || _earlyCycleEndRequested)
+            {
+                ShowHost(in active, spinDegrees, in traceEnd, introduce: true);
+            }
+
+            // Disqualified, and this park wasn't the rotation's own doing: leave the figure dark and
+            // unconsumed. CycleComplete stays true (see its own remarks) until either the turn above
+            // runs out on a later frame, or the rotation's next falling edge asks again — nothing to
+            // queue here in the meantime.
         }
 
         // True on the FALLING edge of ISpinningItemVisual.IsSettled — settled last frame, not settled this
@@ -361,6 +406,35 @@ namespace BalloonParty.Item.Preview
         private bool HasSpinLeftSettledAngle(bool spinSettled)
         {
             return _hasPreviousSpinSettled && _previousSpinSettled && !spinSettled;
+        }
+
+        // A hold-driven re-bloom only makes sense if the host stays at one angle long enough to hold at
+        // least two full redraws — otherwise the hold loop's own cadence (oneCycleSeconds) and the
+        // rotation's own dwell/step cadence drift past each other, and a hold-loop re-bloom can land just
+        // before the rotation turns, cutting the draw-in short before the rotation's own fade takes over
+        // (see the Item README for the concrete cadence numbers that motivated this). oneCycleSeconds
+        // omits the ribbon fade that actually ends each cycle, so it slightly understates a full redraw —
+        // fine for this heuristic (and it keeps this controller from needing the pen prefab's own
+        // lifetime), but do not tighten it into an exact figure; that would change which hosts qualify.
+        // Non-spinning hosts (spinning == null) have no dwell of their own to measure against, so the hold
+        // loop stays their only cadence, exactly as before this existed. Internal rather than private so
+        // it is edit-mode testable directly, mirroring LaserItemRotation.IsDwelling/DwellDuration.
+        internal static bool HoldLoopMayRebloom(ISpinningItemVisual spinning, float oneCycleSeconds)
+        {
+            return spinning == null || spinning.DwellSeconds >= 2f * oneCycleSeconds;
+        }
+
+        // Whether the turn timer's advance may actually run once it fires. A sequence of more than one
+        // host is a genuine advance to a DIFFERENT host — that has nothing to do with any one host's own
+        // rotation, so it always may. A one-host sequence's advance wraps back onto itself
+        // (AdvanceSequence's `% _sightedHosts.Count`), which is a re-bloom in every way that matters, so it
+        // has to clear the very same dwell qualification the rotation's own re-bloom-in-place branch does
+        // — otherwise the turn timer would silently re-bloom a disqualified host the hold-loop check right
+        // below it exists specifically to stop. Internal rather than private so this decision is edit-mode
+        // testable directly, mirroring HoldLoopMayRebloom.
+        internal static bool TurnTimerMayAdvance(int hostCount, ISpinningItemVisual spinning, float oneCycleSeconds)
+        {
+            return hostCount > 1 || HoldLoopMayRebloom(spinning, oneCycleSeconds);
         }
 
         // TraceEnd.Kind is exact (a different contact type IS a different aim, however close the geometry);
@@ -470,7 +544,7 @@ namespace BalloonParty.Item.Preview
         {
             _sequenceIndex = (_sequenceIndex + 1) % _sightedHosts.Count;
             var active = _sightedHosts[_sequenceIndex];
-            var spinDegrees = ResolveSpinDegrees(active.Slot, out _);
+            var spinDegrees = ResolveSpinDegrees(active.Slot, out _, out _);
 
             _signatureOrigin = active.Origin;
             _signatureDirection = active.Direction;
@@ -489,14 +563,17 @@ namespace BalloonParty.Item.Preview
         // the tracker on every draw is what stops a host's edge state from ever surviving onto a DIFFERENT
         // active host (see AdvanceSequence and _previousSpinSettled's own remarks): the very next frame's
         // reading, whatever it is, becomes the new baseline rather than being compared against whatever the
-        // previous host last reported. Callers are responsible for everything else a particular draw
-        // implies (introduce, signature/sequence bookkeeping, _activeHostElapsed) — this only ever does the
-        // draw itself.
+        // previous host last reported. _earlyCycleEndRequested is cleared here for the same reason: once
+        // this draw starts a fresh cycle, whether THAT cycle's eventual park was rotation-requested has to
+        // be decided fresh too, never inherited from whatever the previous cycle (or host) last asked for.
+        // Callers are responsible for everything else a particular draw implies (introduce,
+        // signature/sequence bookkeeping, _activeHostElapsed) — this only ever does the draw itself.
         private void ShowHost(in ItemPreviewSightedHost host, float spinDegrees, in PredictionTraceEnd traceEnd, bool introduce)
         {
             var context = BuildContext(in host, spinDegrees, in traceEnd);
             _ticker.Show(host.Preview, in context, introduce);
             _hasPreviousSpinSettled = false;
+            _earlyCycleEndRequested = false;
         }
 
         private ItemPreviewContext BuildContext(in ItemPreviewSightedHost active, float spinDegrees, in PredictionTraceEnd traceEnd)

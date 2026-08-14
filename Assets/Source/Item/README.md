@@ -231,6 +231,21 @@ spin — so the re-bloom always lands on the rotation's own arrival, never ahead
 timer and the sequence position are all left untouched throughout — the loop stays running, the sequence
 doesn't move.
 <br><br>
+The edge tracker itself (`_previousSpinSettled`/`_hasPreviousSpinSettled`) is updated **every frame**
+`AdvanceOrRebloomActiveHost` runs, unconditionally, before any branching on `CycleComplete` — deliberately,
+because a disqualified host can sit parked for an arbitrary stretch (see `HoldLoopMayRebloom` below) with
+no other clock running against it while parked. A tracker that only updated on the non-parked path would
+go stale for that whole stretch: the rotation could depart its settled angle and land on the next one
+entirely while parked, and a tracker that never saw the departure could never set
+`_earlyCycleEndRequested`, leaving nothing left to authorise a redraw when it lands — the figure stays dark
+permanently, having missed the one edge that could have revived it. Observing the edge unconditionally is
+what a disqualified Laser actually needs: hold-park lands mid-dwell (the gate correctly suppresses the
+hold-driven re-bloom), the rotation departs and the edge is still caught even though the ticker is parked,
+the rotation lands and the redraw fires there, authorised by the edge rather than the hold timer.
+`RequestEarlyCycleEnd` being a no-op while parked or fading (see its own remarks) is what makes calling it
+from every state safe — it is only the flag alongside it, `_earlyCycleEndRequested`, that has to be set
+unconditionally for this to work.
+<br><br>
 Because a spin-forced park can land well before `RebloomHoldSeconds` would have ended the hold naturally,
 the decision of what to do once parked **and settled** — re-bloom the same host again or hand off to the
 next one — lives in one place for both kinds of park: `ItemRangePreviewController.AdvanceOrRebloomActiveHost`,
@@ -242,7 +257,15 @@ cycle's worth of time (`BloomDuration + RebloomHoldSeconds`, the same terms
 knob), the next park advances the sequence (`AdvanceSequence`) instead of re-blooming the same host
 again. A natural `CycleComplete` — the loop's own scheduled end, not a spin-forced one — always arrives
 well past that threshold on its own, since a full Draw+Hold+Fade already takes at least that long, so a
-non-spinning host keeps behaving exactly as before: every park it reaches advances. This only ever
+non-spinning host keeps behaving exactly as before: every park it reaches advances. A single sighted
+host's "advance" is a special case worth calling out: `AdvanceSequence`'s `% _sightedHosts.Count` wraps
+it straight back onto itself, which is a re-bloom in place in every way that matters — driven purely by
+this same turn timer, on the hold cadence — and is indistinguishable from the qualified re-bloom below
+except for which branch happened to fire first. `TurnTimerMayAdvance` holds that wrap to the very same
+`HoldLoopMayRebloom` qualification the spin-forced branch already answers to, so a disqualified Laser's
+one-host sequence can no longer bypass the dwell rule just because it arrived via the turn timer instead
+of the rotation's own falling edge; a genuine advance to a *different* host (`hostCount > 1`) is
+unaffected, since that has nothing to do with any one host's rotation. This only ever
 re-evaluates once the rotation is dwelling — a settled moment, not mid-lerp — so it never interrupts a
 draw-in the way an advance triggered on an arbitrary frame could. Gated on `RebloomHoldSeconds > 0`,
 mirroring `AdvanceRebloomCycle`'s own off switch: with looping authored off the natural loop never parks
@@ -252,6 +275,40 @@ first draw simply holds forever. Non-spinning items are unaffected end to end:
 `ItemRangePreviewController.ResolveSpinDegrees` reports settled `true` permanently for a host with no
 spinning item, so it can never register a falling edge — `HasSpinLeftSettledAngle` never fires, the
 mid-transition wait never triggers, and they keep advancing purely on `CycleComplete`, exactly as before.
+<br><br>
+**A hold-driven re-bloom only takes over once a spinning host's dwell can hold two full redraws — below
+that, the rotation's own falling edge is its sole cadence.** The hold loop's own timer
+(`AdvanceRebloomCycle`, off `RebloomHoldSeconds`) and a spinning host's step cadence
+(`LaserItemRotation._stepSeconds`) are two clocks running independently on the same ticker, and with the
+authored defaults they drift: one cycle of Draw+Hold is `BloomDuration + RebloomHoldSeconds` (1 +
+0.65 = 1.65s), against a Laser's 1.5s step — close enough that the hold loop's own scheduled re-bloom
+regularly lands just before the rotation's falling edge fires its own, cutting a fresh draw-in short
+before it can finish, moments before the rotation's turn fades it away again anyway. Since both routes
+converge on the very same `CycleComplete` signal (see above), `AdvanceOrRebloomActiveHost` cannot tell them
+apart from the signal alone, so `ItemRangePreviewController` tracks `_earlyCycleEndRequested`, set the
+moment `HasSpinLeftSettledAngle` calls `RequestEarlyCycleEnd` and cleared on every draw (`ShowHost`) —
+this is what lets it distinguish "this park is the rotation's own doing" from "the hold loop's timer
+reached `RebloomHoldSeconds` on its own." `HoldLoopMayRebloom` compares the host's own
+`ISpinningItemVisual.DwellSeconds` (added alongside `IsSettled`, and derived from the same
+`LaserItemRotation.DwellDuration` both `IsDwelling` and `DrawnAngle` already key off, so none of the three
+can disagree) against twice `oneCycleSeconds`: at least two full redraws' worth of dwell is what makes a
+hold-driven re-bloom land somewhere sane within the dwell rather than racing the rotation's own turn.
+Below that threshold, a park reached by the hold loop's own timer (`_earlyCycleEndRequested` still false)
+is left dark and unconsumed rather than redrawn — `CycleComplete` stays true (it does until the next `Show`
+clears it) until either the rotation's own falling edge asks again, or the turn simply runs out. That last
+part matters most for a sequence of more than one host: **the turn advance to a genuinely different host
+is checked first**, before the hold-loop qualification, so suppressing a disqualified host's hold-driven
+re-bloom can never suppress `_activeHostElapsed` reaching `oneCycleSeconds` and calling `AdvanceSequence`
+on to the next host — the fix that stops a fast-reblooming Laser from holding the sequence forever keeps
+working exactly the same regardless of whether this qualification passes. A *single*-host sequence is the
+one case where that ordering alone isn't enough, because its "advance" wraps back onto the very host the
+qualification exists to gate — see `TurnTimerMayAdvance` above for why that wrap has to clear
+`HoldLoopMayRebloom` before the turn timer is allowed to fire it. `oneCycleSeconds` omits the ribbon fade
+that actually ends each cycle, understating
+a full redraw slightly — deliberately: exact would need the pen prefab's own ribbon lifetime, which this
+heuristic doesn't otherwise need, so leave it approximate rather than "fixing" it into a precise figure
+that would silently move which hosts qualify. Non-spinning hosts (`spinning == null`) have no dwell to
+measure against, so the hold loop stays their only cadence, exactly as before this existed.
 
 The loop's fade deliberately authors no second duration: `BeginLoopFade` reads `_fadeDuration` off a
 live pen's trail exactly the way `BeginHide` already does for a real hide (`HighlightTrail.
