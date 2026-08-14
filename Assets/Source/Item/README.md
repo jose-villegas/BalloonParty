@@ -397,6 +397,60 @@ heuristic doesn't otherwise need, so leave it approximate rather than "fixing" i
 that would silently move which hosts qualify. Non-spinning hosts (`spinning == null`) have no dwell to
 measure against, so the hold loop stays their only cadence, exactly as before this existed.
 
+**An advance additionally requires the current host's figure to have completed a full hold at least
+once.** `_activeHostElapsed` reaching `oneCycleSeconds` used to be the whole story, but it is a wall-clock
+test and cannot tell "the figure was genuinely held for its full `RebloomHoldSeconds`" apart from "every
+cycle this turn got cut short by `RequestEarlyCycleEnd` right as the elapsed budget happened to run out" —
+a host whose rotation departs its settled step just before `Holding` would have elapsed naturally could
+satisfy the old check having only ever *flashed* the figure, with the exact desync depending on how the
+rotation's own phase happened to line up against the cycle: sometimes a full hold, sometimes a flash.
+`ItemPreviewTicker` is what actually knows the difference — its `CyclePhase` machine runs
+`Drawing` → `Holding` → `Fading`, and a cut-short cycle leaves `Holding` early via
+`RequestEarlyCycleEnd`/`BeginLoopFade` instead of by `_cycleElapsed` reaching `RebloomHoldSeconds` on its
+own — so it exposes that fact directly rather than the controller trying to reconstruct it from timings,
+which is what the elapsed-only test already did badly. `ItemPreviewTicker.CompletedFullHold` is true only
+when `AdvanceRebloomCycle`'s own `Holding` case reaches `RebloomHoldSeconds` naturally; it resets to
+`false` on every `Show`, so it always describes the cycle currently in flight (or the one that just
+parked), never a stale cycle from before. `ItemRangePreviewController` latches it into
+`_activeHostCompletedFullHold` every time `AdvanceOrRebloomActiveHost` observes a park that belongs to the
+already-active, already-drawn host (`_activeHostCompletedFullHold |= ItemPreviewTicker.CompletedFullHold`)
+— a **latch**, not a mirror, because a turn can span several re-bloom cycles (a qualifying
+`HoldLoopMayRebloom` redraw, a spin-driven one) before it is actually allowed to advance, and only *one* of
+those cycles needs to have completed naturally for the requirement to be satisfied. `BeginActiveHostTurn`
+resets both `_activeHostElapsed` and `_activeHostCompletedFullHold` together at every point a host's turn
+genuinely (re)starts — `ShowActiveHost`'s fresh dwell, `AdvanceSequence`'s own successful draw, and the
+deferred-draw retry (`ResumeDeferredDraw`) finishing what `AdvanceSequence` started — and deliberately
+never for a same-host re-bloom, which is what lets the flag accumulate "completed at least once" across
+several re-blooms instead of being wiped by every one of them.
+<br><br>
+`FullHoldMayAdvance` is the qualification itself, checked alongside `TurnTimerMayAdvance` in
+`AdvanceOrRebloomActiveHost`'s advance condition: `completedFullHold || activeHostElapsed >=
+FullHoldStarvationMultiplier * oneCycleSeconds`. The second half is the guard against reintroducing the
+starvation bug `TurnTimerMayAdvance`/`HoldLoopMayRebloom` already exist to prevent, this time for a host
+whose cycles keep landing cut short rather than one whose dwell can't attempt a redraw at all — without it,
+a badly mistuned config where the rotation's own falling edge always wins the race before `Holding` elapses
+would hold a host's turn hostage forever, having never once earned the flag honestly.
+`FullHoldStarvationMultiplier` is `4` — four multiples of `oneCycleSeconds`, chosen because at the authored
+values (`BloomDuration` `0.45` + `RebloomHoldSeconds` `0.3` = `0.75`s of draw-plus-hold, against a Laser's
+`1.125`s dwell — `_stepSeconds` `1.5` × `(1 − TransitionFraction)` `0.75`) the draw now waits for the
+rotation to settle before it starts, so both the draw and the hold fit inside a single dwell and a full
+hold should complete within the very first cycle; the multiplier only ever matters for a tuning where it
+doesn't, and four uncut cycles' worth of waiting gives that race several chances to land the other way
+before giving up, rather than either firing on the very first cut-short cycle (defeating the fix) or
+leaving a host stuck for an unbounded stretch (reintroducing the starvation bug).
+<br><br>
+**Bomb and Laser in one sequence, concretely:** each host is shown for its full `RebloomHoldSeconds` before
+`AdvanceSequence` moves the sequence on — a non-spinning Bomb always did, and a spinning Laser now does too,
+because its own rotation-driven re-blooms within its turn only ever restart a fresh `Drawing` → `Holding`
+cycle rather than shortening the one already reaching its natural end; the *next* park after that qualifies
+via `FullHoldMayAdvance` and hands off to whichever host is next.
+<br><br>
+`FullHoldMayAdvance` is `internal static` and pure, mirroring `HoldLoopMayRebloom`/`TurnTimerMayAdvance`, so
+the decision is covered directly in `ItemRangePreviewControllerTests` rather than through the controller's
+full `LateTick` machinery. `ItemPreviewTicker.CompletedFullHold` itself is not: it only ever changes as a
+side effect of `LateTick` driving real pens against a real pool and prefab, so there is no pure slice of it
+to test in isolation the way the controller's own decision has.
+
 The loop's fade deliberately authors no second duration: `BeginLoopFade` reads `_fadeDuration` off a
 live pen's trail exactly the way `BeginHide` already does for a real hide (`HighlightTrail.
 EffectiveRibbonSeconds`), and `LateTick` advances the very same `_fadeElapsed`/`_fading` machinery either

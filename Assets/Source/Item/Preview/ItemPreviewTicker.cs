@@ -172,6 +172,17 @@ namespace BalloonParty.Item.Preview
         // filling in on that path, so there is nothing for IsDrawing to protect.
         private float _drawInElapsed;
 
+        // True once the current cycle's Holding phase has elapsed RebloomHoldSeconds on its own — reached
+        // the end of the hold naturally — rather than being cut short by RequestEarlyCycleEnd.
+        // ItemRangePreviewController needs exactly this fact to decide whether a host's turn may advance
+        // (see CompletedFullHold below): a wall-clock elapsed test on the host can't tell "the figure was
+        // actually held" apart from "the cycle got cut short right as it would have qualified," which is
+        // the desync the controller used to have. Reset by Show alongside the rest of the cycle's own
+        // state, so it always describes the cycle currently in flight (or the one that just parked) rather
+        // than something left over from before; set true only in AdvanceRebloomCycle's own natural
+        // Holding -> Fading transition, never by RequestEarlyCycleEnd's early one.
+        private bool _completedFullHold;
+
         // The signal ItemRangePreviewController checks before letting any external trigger change what is
         // drawn — see the Item README's draw-in-completes invariant. Deliberately not _cyclePhase ==
         // Drawing: that field stays pinned at Drawing forever once RebloomHoldSeconds is authored off (see
@@ -189,6 +200,13 @@ namespace BalloonParty.Item.Preview
         // response IS what consumes it; if nothing ever does, it just stays parked until a
         // BeginHide/Hide releases the pens instead, never observed twice for the one cycle that set it.
         internal bool CycleComplete => _parked;
+
+        // Whether the cycle that just parked (see CycleComplete) reached the end of its Holding phase
+        // naturally. ItemRangePreviewController reads this once CycleComplete turns true and latches it
+        // into its own per-host-turn flag — a single cycle isn't necessarily the whole turn, since a host
+        // can re-bloom several times before its turn actually ends — so the persistent bookkeeping belongs
+        // there, not here; this only ever reports the fact for whichever cycle most recently completed.
+        internal bool CompletedFullHold => _completedFullHold;
 
         internal ItemPreviewTicker(
             PoolManager poolManager,
@@ -315,9 +333,12 @@ namespace BalloonParty.Item.Preview
 
             // A Show starts its own draw-in — resetting the phase and clock here, rather than leaving
             // either running, is what stops a fresh figure starting mid-hold or mid-fade, or a Show
-            // racing an already-due re-bloom on the very same frame.
+            // racing an already-due re-bloom on the very same frame. _completedFullHold resets alongside
+            // them for the same reason: it describes the cycle this Show is starting, not whatever cycle
+            // (on whatever host) last set it.
             _cyclePhase = CyclePhase.Drawing;
             _cycleElapsed = 0f;
+            _completedFullHold = false;
 
             // introduce == false means every pen above was just handed its fully-settled state directly
             // (AcquirePens/RefitPens) rather than cascading in — pin the clock straight past BloomDuration
@@ -544,6 +565,10 @@ namespace BalloonParty.Item.Preview
                 case CyclePhase.Holding:
                     if (_cycleElapsed >= _config.RebloomHoldSeconds)
                     {
+                        // The hold elapsed on its own here — as opposed to RequestEarlyCycleEnd cutting
+                        // it short from Drawing or from earlier in Holding — so this cycle counts as a
+                        // completed full hold (see _completedFullHold's own remarks).
+                        _completedFullHold = true;
                         BeginLoopFade();
                     }
 

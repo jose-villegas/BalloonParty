@@ -37,6 +37,18 @@ namespace BalloonParty.Item.Preview
         private const float SignatureEpsilon = 1e-3f;
         private const float SignatureEpsilonSq = SignatureEpsilon * SignatureEpsilon;
 
+        // How many multiples of one cycle's own draw+hold (oneCycleSeconds) an active host's turn may run
+        // without ever completing a full hold before FullHoldMayAdvance forces an advance anyway — the
+        // guard against a host whose cycles keep landing cut short (see FullHoldMayAdvance) starving the
+        // sequence the way an unqualified hold-driven re-bloom used to. At the authored values
+        // (BloomDuration 0.45 + RebloomHoldSeconds 0.3 = 0.75s against a Laser's 1.125s dwell) a full hold
+        // completes within the very first cycle, so this only ever matters for a mistuned config where the
+        // rotation's own falling edge keeps winning the race before Holding elapses — four full cycles'
+        // worth of waiting gives that race several chances to land the other way before giving up, without
+        // leaving a host stuck for an unbounded stretch the way the starvation bug this whole area exists
+        // to prevent did.
+        private const float FullHoldStarvationMultiplier = 4f;
+
         private readonly SlotGrid _grid;
         private readonly PredictionTraceProvider _traceProvider;
         private readonly ItemPreviewTicker _ticker;
@@ -112,6 +124,18 @@ namespace BalloonParty.Item.Preview
         // successful draw, and on any full reset or signature change, so a stale flag can never make an
         // unrelated host's turn-timer check take the wrong branch.
         private bool _activeHostDrawPending;
+
+        // Whether the active host's figure has completed a full RebloomHoldSeconds hold at least once
+        // during its current turn — latched from ItemPreviewTicker.CompletedFullHold each time a cycle
+        // parks, since a turn can span several re-bloom cycles (HoldLoopMayRebloom's own re-draws, a
+        // spin-driven redraw) before it actually advances, and only ONE of those needs to have completed
+        // naturally. AdvanceOrRebloomActiveHost's advance decision requires this (see FullHoldMayAdvance)
+        // so a rotation that keeps cutting cycles short via RequestEarlyCycleEnd can't end a host's turn
+        // having only ever flashed the figure — see the Item README. Reset by BeginActiveHostTurn
+        // alongside _activeHostElapsed, at every point a host's turn genuinely (re)starts, so a stale true
+        // left over from a previous host — or a previous pass through the same host — can never authorise
+        // an advance it didn't itself earn.
+        private bool _activeHostCompletedFullHold;
 
         // The active host's ISpinningItemVisual.IsSettled as of last frame, read straight off
         // LaserItemRotation.IsDwelling (via IHostsSpinningItem) — an exact boolean, not a threshold on a
@@ -339,11 +363,27 @@ namespace BalloonParty.Item.Preview
             _shown = false;
             _dwellElapsed = 0f;
             _activeHostElapsed = 0f;
+            _activeHostCompletedFullHold = false;
             _activeHostDrawPending = false;
             _hasShownSet = false;
             _hasPreviousSpinSettled = false;
             _earlyCycleEndRequested = false;
             _earlyCycleEndPending = false;
+        }
+
+        // Shared reset for every point a host's turn genuinely (re)starts — ShowActiveHost's fresh dwell,
+        // AdvanceSequence's own successful draw, and the deferred-draw retry in AdvanceOrRebloomActiveHost
+        // finishing what AdvanceSequence started. _activeHostElapsed and _activeHostCompletedFullHold both
+        // describe THIS turn and must reset together, at the actual draw rather than whenever the sequence
+        // index merely moves — see either field's own remarks for why. Deliberately never called for a
+        // same-host re-bloom (HoldLoopMayRebloom's own redraw, or a spin-driven one) — that is the same
+        // turn continuing, not a new one starting, which is exactly what lets _activeHostCompletedFullHold
+        // accumulate "completed at least once" across several re-blooms instead of being wiped by every
+        // one of them.
+        private void BeginActiveHostTurn()
+        {
+            _activeHostElapsed = 0f;
+            _activeHostCompletedFullHold = false;
         }
 
         // The one place a shown figure's turn can move on, now that both ways of getting here go through
@@ -354,10 +394,16 @@ namespace BalloonParty.Item.Preview
         // the figure is already dark, never repositioning a visible one.
         //
         // Once parked, _activeHostElapsed decides what happens next — the same budget that used to live
-        // only in the now-removed ReactToSpinSettle. A natural CycleComplete always arrives well past
-        // oneCycleSeconds (a full Draw+Hold+Fade already takes at least that long), so a non-spinning host
-        // keeps behaving exactly as before: advance to the next host, or wrap to the only one on a
-        // single-host sequence — except that wrap IS a re-bloom in place (the sequence has nowhere else to
+        // only in the now-removed ReactToSpinSettle — together with _activeHostCompletedFullHold, which
+        // FullHoldMayAdvance checks alongside it: the elapsed budget alone can't tell a genuinely held
+        // figure apart from one whose every cycle got cut short by RequestEarlyCycleEnd right as the
+        // budget happened to run out, so an advance additionally requires this host's figure to have been
+        // held for its full RebloomHoldSeconds at least once this turn (or the turn to have run starved
+        // for a generous while regardless — see FullHoldMayAdvance's own remarks). A natural CycleComplete
+        // always arrives well past oneCycleSeconds (a full Draw+Hold+Fade already takes at least that
+        // long), so a non-spinning host keeps behaving exactly as before: advance to the next host, or
+        // wrap to the only one on a single-host sequence — except that wrap IS a re-bloom in place (the
+        // sequence has nowhere else to
         // go), so TurnTimerMayAdvance holds it to the same HoldLoopMayRebloom qualification the spin-forced
         // branch below already answers to, rather than letting the turn timer bypass it. A spin-forced
         // park can arrive early, and that is the one case this now also has to decide: still within its
@@ -436,31 +482,17 @@ namespace BalloonParty.Item.Preview
 
             if (_activeHostDrawPending)
             {
-                // AdvanceSequence already moved onto this host while its rotation was mid-transition and
-                // deferred the draw (see ShowHost) — _activeHostElapsed is stale evidence of the
-                // PREVIOUS host's turn running out, not this one's. Finish the deferred draw directly
-                // instead of falling into the turn-timer decision below, which would misread that stale
-                // value as another turn already expired and advance straight past this host unseen.
-                // Routed through TryDrawActiveHost, not a bare ShowHost call, because the rotation settling
-                // is no guarantee the now-buildable figure is non-empty — it can just as easily turn out
-                // empty as a host reached any other way, and the deferred draw deserves the same skip.
-                var outcome = TryDrawActiveHost(in traceEnd, introduce: true);
-                if (outcome == ShowOutcome.Drew)
-                {
-                    _activeHostDrawPending = false;
-                    _activeHostElapsed = 0f;
-                }
-                else if (outcome == ShowOutcome.Empty)
-                {
-                    // A full lap found nothing to draw — see AdvanceSequence's own Empty branch for why
-                    // dropping _shown (and the pending flag with it) is the right fallback rather than
-                    // leaving this host queued forever for a draw that will never come.
-                    _activeHostDrawPending = false;
-                    _shown = false;
-                }
-
+                ResumeDeferredDraw(in traceEnd);
                 return;
             }
+
+            // This park belongs to the host already active and drawn (not a deferred draw just finishing
+            // above) — latch whether ITS cycle completed a full hold naturally, so a turn that has to
+            // re-bloom the same host several times before it may advance never loses that fact to a later
+            // cut-short cycle overwriting it. See FullHoldMayAdvance / _activeHostCompletedFullHold's own
+            // remarks for why this can't just be reconstructed from _activeHostElapsed the way the old
+            // elapsed-only check tried to.
+            _activeHostCompletedFullHold |= _ticker.CompletedFullHold;
 
             var oneCycleSeconds = _config.BloomDuration + _config.RebloomHoldSeconds;
 
@@ -469,9 +501,14 @@ namespace BalloonParty.Item.Preview
             // this same turn timer, on the hold cadence, with nothing to tell it apart from the qualified
             // re-bloom below except which branch happened to run first. TurnTimerMayAdvance is what stops
             // that wrap from bypassing HoldLoopMayRebloom's dwell qualification the way a genuine advance
-            // to a DIFFERENT host must not be held up by any one host's own rotation.
+            // to a DIFFERENT host must not be held up by any one host's own rotation. FullHoldMayAdvance is
+            // the second, independent qualification alongside it: even a genuine advance to a DIFFERENT
+            // host must not fire off the back of a park that only happened because the rotation kept
+            // cutting THIS host's cycles short before it was ever actually held — see the Item README for
+            // the concrete desync this closes.
             if (_config.RebloomHoldSeconds > 0f && _activeHostElapsed >= oneCycleSeconds &&
-                TurnTimerMayAdvance(_sightedHosts.Count, spinning, oneCycleSeconds))
+                TurnTimerMayAdvance(_sightedHosts.Count, spinning, oneCycleSeconds) &&
+                FullHoldMayAdvance(_activeHostCompletedFullHold, _activeHostElapsed, oneCycleSeconds))
             {
                 AdvanceSequence(in traceEnd);
             }
@@ -494,6 +531,36 @@ namespace BalloonParty.Item.Preview
             // unconsumed. CycleComplete stays true (see its own remarks) until either the turn above
             // runs out on a later frame, or the rotation's next falling edge asks again — nothing to
             // queue here in the meantime.
+        }
+
+        // Finishes a draw AdvanceSequence deferred because the newly active host's rotation was
+        // mid-transition when it moved onto it (see _activeHostDrawPending) — split out of
+        // AdvanceOrRebloomActiveHost purely to keep that method's own branching within the style audit's
+        // complexity ceiling; the caller always returns immediately after calling this, exactly as it did
+        // when this was inline.
+        //
+        // _activeHostElapsed is stale evidence of the PREVIOUS host's turn running out, not this one's, so
+        // this finishes the deferred draw directly instead of falling into the turn-timer decision, which
+        // would misread that stale value as another turn already expired and advance straight past this
+        // host unseen. Routed through TryDrawActiveHost, not a bare ShowHost call, because the rotation
+        // settling is no guarantee the now-buildable figure is non-empty — it can just as easily turn out
+        // empty as a host reached any other way, and the deferred draw deserves the same skip.
+        private void ResumeDeferredDraw(in PredictionTraceEnd traceEnd)
+        {
+            var outcome = TryDrawActiveHost(in traceEnd, introduce: true);
+            if (outcome == ShowOutcome.Drew)
+            {
+                _activeHostDrawPending = false;
+                BeginActiveHostTurn();
+            }
+            else if (outcome == ShowOutcome.Empty)
+            {
+                // A full lap found nothing to draw — see AdvanceSequence's own Empty branch for why
+                // dropping _shown (and the pending flag with it) is the right fallback rather than
+                // leaving this host queued forever for a draw that will never come.
+                _activeHostDrawPending = false;
+                _shown = false;
+            }
         }
 
         // True on the FALLING edge of ISpinningItemVisual.IsSettled — settled last frame, not settled this
@@ -535,6 +602,23 @@ namespace BalloonParty.Item.Preview
         internal static bool TurnTimerMayAdvance(int hostCount, ISpinningItemVisual spinning, float oneCycleSeconds)
         {
             return hostCount > 1 || HoldLoopMayRebloom(spinning, oneCycleSeconds);
+        }
+
+        // Whether the active host's turn may advance on hold-completion grounds — the third qualification
+        // AdvanceOrRebloomActiveHost's advance decision checks, alongside the turn timer itself and
+        // TurnTimerMayAdvance's own dwell qualification. completedFullHold is latched off
+        // ItemPreviewTicker.CompletedFullHold each time a cycle parks (see _activeHostCompletedFullHold's
+        // own remarks) — true once this host's figure has been held for its full RebloomHoldSeconds at
+        // least once this turn, rather than every completed cycle having been cut short by
+        // RequestEarlyCycleEnd before Holding ever elapsed. The starvation fallback covers a mistuned
+        // config where that never happens on its own: FullHoldStarvationMultiplier is a generous multiple
+        // of oneCycleSeconds (see its own remarks for why 4x) past which the turn advances anyway rather
+        // than holding the sequence hostage to a host that can never legitimately satisfy the first half.
+        // Internal rather than private so this decision is edit-mode testable directly, mirroring
+        // HoldLoopMayRebloom/TurnTimerMayAdvance.
+        internal static bool FullHoldMayAdvance(bool completedFullHold, float activeHostElapsed, float oneCycleSeconds)
+        {
+            return completedFullHold || activeHostElapsed >= FullHoldStarvationMultiplier * oneCycleSeconds;
         }
 
         // TraceEnd.Kind is exact (a different contact type IS a different aim, however close the geometry);
@@ -627,9 +711,11 @@ namespace BalloonParty.Item.Preview
             CopySlots(_shownSetSlots, _sightedHosts);
 
             // The dwell that led here is exactly the time this host was NOT on screen — see
-            // _activeHostElapsed's own remarks for why its turn budget starts counting only now, at the
-            // actual draw, rather than back when the signature that triggered this dwell was stored.
-            _activeHostElapsed = 0f;
+            // _activeHostElapsed's own remarks for why its turn budget (and, alongside it, whether this
+            // turn has completed a full hold yet — see _activeHostCompletedFullHold) starts counting only
+            // now, at the actual draw, rather than back when the signature that triggered this dwell was
+            // stored.
+            BeginActiveHostTurn();
             return true;
         }
 
@@ -725,7 +811,7 @@ namespace BalloonParty.Item.Preview
 
             if (outcome == ShowOutcome.Drew)
             {
-                _activeHostElapsed = 0f;
+                BeginActiveHostTurn();
             }
             else if (outcome == ShowOutcome.WaitingOnSpin)
             {

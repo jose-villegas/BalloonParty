@@ -93,6 +93,43 @@ namespace BalloonParty.Tests.Item
             Assert.IsTrue(ItemRangePreviewController.TurnTimerMayAdvance(1, null, OneCycleSeconds));
         }
 
+        // FullHoldMayAdvance is the fix for the reported desync: a wall-clock elapsed test alone can't
+        // tell a figure that was genuinely held for its full RebloomHoldSeconds apart from one whose every
+        // cycle got cut short by RequestEarlyCycleEnd right as the elapsed budget happened to run out — so
+        // an advance now additionally requires a latched "completed a full hold at least once" flag,
+        // falling back to a generous starvation multiple of oneCycleSeconds so a host that can never
+        // legitimately earn that flag (a badly mistuned config) doesn't hold the sequence forever.
+        [Test]
+        public void FullHoldMayAdvance_CompletedFullHold_ReturnsTrueRegardlessOfElapsed()
+        {
+            Assert.IsTrue(ItemRangePreviewController.FullHoldMayAdvance(true, 0f, OneCycleSeconds));
+        }
+
+        [Test]
+        public void FullHoldMayAdvance_NeverCompleted_BelowStarvationBound_ReturnsFalse()
+        {
+            // Just under the 4x-oneCycleSeconds starvation bound, with no full hold ever recorded — the
+            // exact desync this fix closes: the elapsed budget alone used to be enough to advance here.
+            var elapsed = (OneCycleSeconds * 4f) - 0.01f;
+            Assert.IsFalse(ItemRangePreviewController.FullHoldMayAdvance(false, elapsed, OneCycleSeconds));
+        }
+
+        [Test]
+        public void FullHoldMayAdvance_NeverCompleted_AtStarvationBound_ReturnsTrue()
+        {
+            // The boundary belongs to the "may advance" side, mirroring HoldLoopMayRebloom's own >=
+            // boundary convention.
+            var elapsed = OneCycleSeconds * 4f;
+            Assert.IsTrue(ItemRangePreviewController.FullHoldMayAdvance(false, elapsed, OneCycleSeconds));
+        }
+
+        [Test]
+        public void FullHoldMayAdvance_NeverCompleted_WellPastStarvationBound_ReturnsTrue()
+        {
+            var elapsed = OneCycleSeconds * 20f;
+            Assert.IsTrue(ItemRangePreviewController.FullHoldMayAdvance(false, elapsed, OneCycleSeconds));
+        }
+
         private sealed class FakeSpinningItemVisual : ISpinningItemVisual
         {
             public float AngleDegrees => 0f;
