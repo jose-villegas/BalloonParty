@@ -4,7 +4,7 @@ using UnityEngine;
 namespace BalloonParty.Item.Preview
 {
     /// <summary>
-    ///     Pure polyline-vs-polyline math: where a trace first crosses one stroke of an
+    ///     Pure polyline-vs-polyline math: where a trace crosses one stroke of an
     ///     <see cref="ItemPreviewShape" />, expressed as an arc-length offset along that stroke. Factored out
     ///     so the intersection walk is edit-mode testable without the ticker's pen/pool machinery, mirroring
     ///     <see cref="BalloonParty.Prediction.TraceHitGeometry" />.
@@ -16,13 +16,38 @@ namespace BalloonParty.Item.Preview
         // letting a near-zero denominator blow the result up.
         private const float ParallelEpsilon = 1e-6f;
 
+        // Two crossings resolved within this distance of each other in trace arc length are treated as
+        // one and the same — a graze past a shared vertex (the same physical point seen from two
+        // adjacent stroke segments, one at its own t = 1 and the other at t = 0) or a near-tangent line
+        // can otherwise resolve to two crossings a hair apart depending on which segment's own rounding
+        // happens to land where. Collapsing them stops the pick from flickering between the near and far
+        // answer as sub-pixel aim jitter nudges which of the two floating-point noise finds "second."
+        private const float DuplicateCrossingArcEpsilon = 1e-4f;
+
+        // Below zero and thus never rejects a genuine crossing on its own — TryFindNearestCrossing's own
+        // [0, 1] range check already excludes anything this would otherwise need to guard against — so
+        // passing this in is how a caller says "no lower bound, find the very first crossing on this
+        // segment" rather than "find the next one after some point already found."
+        private const float NoLowerBound = -1f;
+
         /// <summary>
-        ///     Finds where <paramref name="tracePoints" /> first crosses <paramref name="shape" />'s stroke
-        ///     at <paramref name="strokeIndex" />, walking the trace segment by segment so "first" means
-        ///     earliest along the shot's own direction of travel rather than merely the first stroke
-        ///     segment tested. A closed stroke's wrap leg (last point back to first) counts as a segment.
-        ///     Ties within one trace segment — more than one stroke segment crossed at once — are broken by
-        ///     the intersection nearest that trace segment's own start.
+        ///     Finds where <paramref name="tracePoints" /> crosses <paramref name="shape" />'s stroke at
+        ///     <paramref name="strokeIndex" />, walking the trace segment by segment so "along travel"
+        ///     means ordered by the shot's own direction of travel rather than merely stroke-segment
+        ///     index. Prefers the SECOND such crossing — the sight's exit from a stroke it passes through
+        ///     (Bomb's blast circle, Paint's spread triangle) — falling back to the only crossing found
+        ///     when the sight crosses just once (Shield's stub sitting at the trace's own end, Laser's
+        ///     lines crossing at the host, a Lightning arc reached only through the chain, Snipe's
+        ///     corridor anchored near-collinear with the trace itself). A closed stroke's wrap leg (last
+        ///     point back to first) counts as a segment; a single trace segment can cross a closed stroke
+        ///     twice, and the two crossings can also fall on different trace segments — either way, a
+        ///     crossing found on an earlier trace segment always precedes one found on a later one,
+        ///     regardless of stroke-segment index. Ties within one trace segment — more than one stroke
+        ///     segment crossed at once — are broken by the intersection nearest that trace segment's own
+        ///     start (or, once a first crossing is already in hand, nearest the first, since that is what
+        ///     "next along travel" means there). See <see cref="DuplicateCrossingArcEpsilon" /> for how a
+        ///     graze that would otherwise register as two near-identical crossings collapses to one
+        ///     instead of flickering between them.
         /// </summary>
         /// <param name="arcTable">
         ///     The caller's cumulative-arc-length table, parallel to <see cref="ItemPreviewShape.Points" />:
@@ -68,6 +93,10 @@ namespace BalloonParty.Item.Preview
             var points = shape.Points;
             var segmentCount = stroke.Closed ? stroke.Count : stroke.Count - 1;
 
+            var haveFirst = false;
+            var firstOffset = 0f;
+            var firstTraceOffset = 0f;
+
             var traceArc = 0f;
             for (var traceIndex = 0; traceIndex < tracePoints.Count - 1; traceIndex++)
             {
@@ -75,19 +104,88 @@ namespace BalloonParty.Item.Preview
                 var p2 = tracePoints[traceIndex + 1];
                 var traceSegmentLength = Vector3.Distance(p1, p2);
 
-                if (!TryFindNearestCrossing(
-                        p1, p2, stroke, points, segmentCount, out var segment, out var tStroke, out var tTrace))
+                // No first crossing yet: this segment's own nearest one becomes it. Once there is a
+                // first, every segment's own search — including the very one that just found it — looks
+                // for a SECOND past sameSegmentFloor instead; on a fresh later segment that floor is
+                // NoLowerBound (nothing on it yet to be past), and on the segment the first was just
+                // found on it is that crossing's own tTrace, so a closed stroke re-crossed before the
+                // trace even leaves the segment is still found without a separate code path for it.
+                var sameSegmentFloor = NoLowerBound;
+
+                if (!haveFirst)
                 {
-                    traceArc += traceSegmentLength;
-                    continue;
+                    if (!TryFindNearestCrossing(
+                            p1, p2, stroke, points, segmentCount, NoLowerBound,
+                            out var segment, out var tStroke, out var tTrace))
+                    {
+                        traceArc += traceSegmentLength;
+                        continue;
+                    }
+
+                    firstOffset = ComputeArcOffset(stroke, points, arcTable, segment, tStroke);
+                    firstTraceOffset = traceArc + (tTrace * traceSegmentLength);
+                    haveFirst = true;
+                    sameSegmentFloor = tTrace;
                 }
 
-                offset = ComputeArcOffset(stroke, points, arcTable, segment, tStroke);
-                traceOffset = traceArc + (tTrace * traceSegmentLength);
-                return true;
+                if (TryFindCrossingPastFloor(
+                        p1, p2, stroke, points, segmentCount, arcTable, sameSegmentFloor, traceArc,
+                        traceSegmentLength, firstTraceOffset, out offset, out traceOffset))
+                {
+                    return true;
+                }
+
+                traceArc += traceSegmentLength;
             }
 
-            return false;
+            if (!haveFirst)
+            {
+                return false;
+            }
+
+            offset = firstOffset;
+            traceOffset = firstTraceOffset;
+            return true;
+        }
+
+        // Looks for a crossing past minT on this one trace segment and, if found, reports it only when
+        // it lands more than DuplicateCrossingArcEpsilon beyond floorTraceOffset (the first crossing's
+        // own arc offset) — collapsing a near-duplicate graze into "nothing new here" rather than a
+        // spurious second answer. Shared by both call sites in TryFindEntryOffset: the same-segment
+        // search right after the first crossing is found, and every later segment's search after that,
+        // which differ only in minT and are otherwise identical work.
+        private static bool TryFindCrossingPastFloor(
+            Vector3 p1,
+            Vector3 p2,
+            in ItemPreviewStroke stroke,
+            IReadOnlyList<Vector3> points,
+            int segmentCount,
+            IReadOnlyList<float> arcTable,
+            float minT,
+            float traceArc,
+            float traceSegmentLength,
+            float floorTraceOffset,
+            out float offset,
+            out float traceOffset)
+        {
+            offset = 0f;
+            traceOffset = 0f;
+
+            if (!TryFindNearestCrossing(
+                    p1, p2, stroke, points, segmentCount, minT, out var segment, out var tStroke, out var tTrace))
+            {
+                return false;
+            }
+
+            var candidateOffset = traceArc + (tTrace * traceSegmentLength);
+            if (candidateOffset - floorTraceOffset <= DuplicateCrossingArcEpsilon)
+            {
+                return false;
+            }
+
+            offset = ComputeArcOffset(stroke, points, arcTable, segment, tStroke);
+            traceOffset = candidateOffset;
+            return true;
         }
 
         /// <summary>
@@ -450,12 +548,16 @@ namespace BalloonParty.Item.Preview
 
         // One trace segment against every segment of the stroke (including the closed wrap leg), kept
         // outside the outer loop so each level of nesting stays shallow enough to read at a glance.
+        // minT excludes anything at or below it — NoLowerBound for "the very first crossing on this
+        // segment," or an already-found crossing's own tTrace for "the next one past it," which is how
+        // TryFindEntryOffset finds a second crossing sharing this same trace segment with the first.
         private static bool TryFindNearestCrossing(
             Vector3 p1,
             Vector3 p2,
             in ItemPreviewStroke stroke,
             IReadOnlyList<Vector3> points,
             int segmentCount,
+            float minT,
             out int bestSegment,
             out float bestTStroke,
             out float bestTTrace)
@@ -486,8 +588,10 @@ namespace BalloonParty.Item.Preview
 
                 // A later (or equal) crossing along this trace segment can't beat one already held,
                 // regardless of whether it even lands on the stroke segment — skip before touching
-                // tStroke at all.
-                if (tTrace < 0f || tTrace > 1f || tTrace >= bestTTrace)
+                // tStroke at all. tTrace <= minT excludes a crossing at or before the caller's own
+                // floor — the mechanism a "find the next one" search uses to skip past a crossing
+                // already found on this same segment.
+                if (tTrace < 0f || tTrace > 1f || tTrace <= minT || tTrace >= bestTTrace)
                 {
                     continue;
                 }

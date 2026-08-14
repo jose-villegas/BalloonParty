@@ -16,10 +16,12 @@ namespace BalloonParty.Tests.Item
             _shape = new ItemPreviewShape();
         }
 
-        // The single most important case: a trace through a closed circle must resolve to whichever
-        // side it reaches FIRST, not merely whichever segment happens to sit earlier in the point list.
+        // The single most important case: a straight trace through a closed circle must resolve to the
+        // EXIT crossing — the far side, along the shot's own direction of travel — not the near side it
+        // enters from, since a figure's cascade now starts where the sight leaves the shape it passes
+        // through rather than where it first touches it.
         [Test]
-        public void TryFindEntryOffset_ClosedCircle_ReturnsNearSideCrossing()
+        public void TryFindEntryOffset_ClosedCircle_ReturnsFarSideCrossing()
         {
             _shape.AddCircle(Vector2.zero, 5f, 32);
             var arcTable = BuildArcTable(_shape, out _);
@@ -40,8 +42,8 @@ namespace BalloonParty.Tests.Item
             var samplePoint = SamplePointAtOffset(stroke, _shape.Points, arcTable, offset);
 
             // Entering from -X, the near-side crossing sits on the circle's left half; the far-side exit
-            // (which a naive "first stroke segment found" walk could return instead) sits on the right.
-            Assert.Less(samplePoint.x, 0f, "the near crossing must be on the -X side the trace enters from");
+            // this now must return sits on the right instead.
+            Assert.Greater(samplePoint.x, 0f, "the far crossing must be on the +X side the trace exits toward");
             Assert.AreEqual(5f, samplePoint.magnitude, 0.05f, "the sample should still sit on the circle");
         }
 
@@ -141,6 +143,149 @@ namespace BalloonParty.Tests.Item
             Assert.AreEqual(5f, offset, 0.001f);
             // The trace runs straight from (5,-5) to (5,5); the vertex crossing at (5,0) sits 5 units in.
             Assert.AreEqual(5f, traceOffset, 0.001f);
+        }
+
+        // A single trace segment can cross a closed stroke twice without the trace itself ever bending —
+        // a straight sight through a 10x10 square (via the left and right edges) is the simplest case.
+        // Both crossings are found while walking the very same p1/p2 pair, which is what exercises the
+        // same-trace-segment half of the "second crossing" search rather than the cross-segment half.
+        [Test]
+        public void TryFindEntryOffset_BothCrossingsOnOneTraceSegment_ReturnsSecondCrossing()
+        {
+            _shape.BeginStroke();
+            _shape.AddPoint(new Vector3(0f, 0f, 0f));
+            _shape.AddPoint(new Vector3(10f, 0f, 0f));
+            _shape.AddPoint(new Vector3(10f, 10f, 0f));
+            _shape.AddPoint(new Vector3(0f, 10f, 0f));
+            _shape.EndStroke(closed: true);
+
+            var arcTable = BuildArcTable(_shape, out _);
+
+            // One straight segment spanning x = -5 to 15 at y = 5: crosses the left edge (x = 0) then the
+            // right edge (x = 10), both on this one trace segment.
+            var trace = new List<Vector3>
+            {
+                new(-5f, 5f, 0f),
+                new(15f, 5f, 0f),
+            };
+
+            var found = ItemPreviewEntry.TryFindEntryOffset(_shape, 0, arcTable, trace, out var offset, out var traceOffset);
+
+            Assert.IsTrue(found);
+            // The right edge sits 15 units around the perimeter from (0,0): 10 along the bottom, then 5
+            // up the right side to (10,5) — the exit, not the left-edge entry at 35.
+            Assert.AreEqual(15f, offset, 0.001f);
+            // The trace runs (-5,5) -> (15,5); (10,5) sits 15 units in.
+            Assert.AreEqual(15f, traceOffset, 0.001f);
+
+            var stroke = _shape.Strokes[0];
+            var samplePoint = SamplePointAtOffset(stroke, _shape.Points, arcTable, offset);
+            Assert.AreEqual(new Vector3(10f, 5f, 0f), samplePoint, "must land on the right edge, the exit");
+        }
+
+        // Mirrors the case above with the identical square and the identical two crossings, but this
+        // time the trace bends between them — the entry (left edge) is found on the first trace segment
+        // and the exit (right edge) only on the second, so "second along travel" has to survive crossing
+        // a trace-segment boundary, not just a same-segment re-scan. Same expected answer either way,
+        // which is the point: where the trace happens to bend must not change which crossing wins.
+        [Test]
+        public void TryFindEntryOffset_CrossingsSplitAcrossTwoTraceSegments_ReturnsSecondCrossing()
+        {
+            _shape.BeginStroke();
+            _shape.AddPoint(new Vector3(0f, 0f, 0f));
+            _shape.AddPoint(new Vector3(10f, 0f, 0f));
+            _shape.AddPoint(new Vector3(10f, 10f, 0f));
+            _shape.AddPoint(new Vector3(0f, 10f, 0f));
+            _shape.EndStroke(closed: true);
+
+            var arcTable = BuildArcTable(_shape, out _);
+
+            // Leg 1: (-5,5) -> (5,5), crosses only the left edge (x = 0), never reaching x = 10.
+            // Leg 2: (5,5) -> (15,5), crosses only the right edge (x = 10).
+            var trace = new List<Vector3>
+            {
+                new(-5f, 5f, 0f),
+                new(5f, 5f, 0f),
+                new(15f, 5f, 0f),
+            };
+
+            var found = ItemPreviewEntry.TryFindEntryOffset(_shape, 0, arcTable, trace, out var offset, out var traceOffset);
+
+            Assert.IsTrue(found);
+            Assert.AreEqual(15f, offset, 0.001f, "the same right-edge exit as the one-segment version above");
+            Assert.AreEqual(15f, traceOffset, 0.001f, "10 (first leg) + 5 (partway into the second) = 15");
+        }
+
+        // The fallback this whole feature leans on: a stroke the sight crosses only once (Shield's stub,
+        // Laser's lines, a single-crossing Lightning arc) must still resolve to that one crossing rather
+        // than coming up empty because no "second" exists. An open two-segment polyline crossed once on
+        // its second leg only, well clear of the shared vertex, so this is a genuine single intersection
+        // rather than the vertex-tie case above.
+        [Test]
+        public void TryFindEntryOffset_OpenPolylineCrossedOnce_FallsBackToOnlyCrossing()
+        {
+            _shape.BeginStroke();
+            _shape.AddPoint(new Vector3(0f, 0f, 0f));
+            _shape.AddPoint(new Vector3(10f, 0f, 0f));
+            _shape.AddPoint(new Vector3(10f, 10f, 0f));
+            _shape.EndStroke();
+
+            var arcTable = BuildArcTable(_shape, out _);
+
+            // Horizontal at y = 5: parallel to (and clear of) the first leg, crosses only the second.
+            var trace = new List<Vector3>
+            {
+                new(0f, 5f, 0f),
+                new(20f, 5f, 0f),
+            };
+
+            var found = ItemPreviewEntry.TryFindEntryOffset(_shape, 0, arcTable, trace, out var offset, out var traceOffset);
+
+            Assert.IsTrue(found);
+            Assert.AreEqual(15f, offset, 0.001f, "10 (first leg) + 5 up the second to (10,5)");
+            Assert.AreEqual(10f, traceOffset, 0.001f);
+        }
+
+        // The tangency guard: a trace running exactly through a CLOSED stroke's own vertex, entirely
+        // outside the shape on both sides of that point, registers a crossing from both stroke segments
+        // meeting there (one at its own t = 1, the other at t = 0) at the identical trace position — the
+        // same graze-past-a-shared-vertex situation TryFindEntryOffset_TraceThroughVertex_... exercises
+        // for an open stroke, but here on a CLOSED one, where the "prefer the second crossing" rule would
+        // otherwise have something to prefer. Without collapsing the duplicate, this would either flicker
+        // between the two near-identical answers on floating-point rounding alone, or silently double-
+        // report the same physical point as two crossings; either way it must resolve to exactly one
+        // stable answer.
+        [Test]
+        public void TryFindEntryOffset_TangentAtClosedStrokeVertex_ReturnsSingleStableCrossing()
+        {
+            _shape.BeginStroke();
+            _shape.AddPoint(new Vector3(0f, 0f, 0f));
+            _shape.AddPoint(new Vector3(10f, 0f, 0f));
+            _shape.AddPoint(new Vector3(10f, 10f, 0f));
+            _shape.AddPoint(new Vector3(0f, 10f, 0f));
+            _shape.EndStroke(closed: true);
+
+            var arcTable = BuildArcTable(_shape, out _);
+
+            // Passes exactly through the corner (10,10) at a 45-degree angle, staying outside the square
+            // on both sides of that point (x > 10 before it, y > 10 after) rather than cutting a chord
+            // through the interior.
+            var trace = new List<Vector3>
+            {
+                new(15f, 5f, 0f),
+                new(5f, 15f, 0f),
+            };
+
+            var found = ItemPreviewEntry.TryFindEntryOffset(_shape, 0, arcTable, trace, out var offset, out var traceOffset);
+
+            Assert.IsTrue(found);
+            // 20 units around the perimeter from (0,0) lands exactly on the (10,10) corner.
+            Assert.AreEqual(20f, offset, 0.001f);
+            Assert.AreEqual(Mathf.Sqrt(200f), traceOffset, 0.001f, "half of the trace's own length to its midpoint");
+
+            var stroke = _shape.Strokes[0];
+            var samplePoint = SamplePointAtOffset(stroke, _shape.Points, arcTable, offset);
+            Assert.AreEqual(new Vector3(10f, 10f, 0f), samplePoint, "the single stable answer is the corner itself");
         }
 
         // Straight polyline: the nearest point to an off-line target is the foot of the perpendicular,
