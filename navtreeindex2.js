@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"NullAudioMixerRouter_8cs.html":[7,0,0,11],
 "OrthogonalSizeCameraController_8cs.html":[7,0,5,4],
 "OverflowHeartRequestedMessage_8cs.html":[7,0,14,7,19],
 "OverflowSettings_8cs.html":[7,0,3,17],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "SpinSpace_8cs.html":[7,0,8,35],
 "SpriteColorableRenderer_8cs.html":[7,0,1,4,6],
 "SpriteLayerCombinerEditor_8cs.html":[7,0,6,8,0],
-"SpriteLayerCombinerEditor_8cs.html#aef19bab18b9814edeef255c43e4f6bbc":[7,0,6,8,0,1],
-"SpriteLayerCombiner_8cs.html":[7,0,14,10,10]
+"SpriteLayerCombinerEditor_8cs.html#aef19bab18b9814edeef255c43e4f6bbc":[7,0,6,8,0,1]
 };

@@ -126,9 +126,18 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Shared_1_1IProjectileFlightCo
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a3e600f87ae35bc3b369b153df593bee8" id="r_a3e600f87ae35bc3b369b153df593bee8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3e600f87ae35bc3b369b153df593bee8">AimAngleMaxDegrees</a><code> [get]</code></td></tr>
+<tr class="memdesc:a3e600f87ae35bc3b369b153df593bee8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Upper bound (degrees) of the reachable aim range — see <a class="el" href="#aaff2132cb222633e1d8d475d7516ec2c" title="Lower bound (degrees) of the reachable aim range, measured from +X the same way ShotBoardGather....">AimAngleMinDegrees</a>.  <br /></td></tr>
+<tr class="separator:a3e600f87ae35bc3b369b153df593bee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaff2132cb222633e1d8d475d7516ec2c" id="r_aaff2132cb222633e1d8d475d7516ec2c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaff2132cb222633e1d8d475d7516ec2c">AimAngleMinDegrees</a><code> [get]</code></td></tr>
+<tr class="memdesc:aaff2132cb222633e1d8d475d7516ec2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lower bound (degrees) of the reachable aim range, measured from +X the same way <code>ShotBoardGather.DirectionFromDegrees</code> does (0 = due right, 90 = straight up).  <br /></td></tr>
+<tr class="separator:aaff2132cb222633e1d8d475d7516ec2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1913f23d49b7f49c76d51428fca74ac8" id="r_a1913f23d49b7f49c76d51428fca74ac8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1913f23d49b7f49c76d51428fca74ac8">AimAngleStepDegrees</a><code> [get]</code></td></tr>
 <tr class="memdesc:a1913f23d49b7f49c76d51428fca74ac8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimum angular subdivision (degrees) the aim direction snaps to. 0 = continuous aim.  <br /></td></tr>
 <tr class="separator:a1913f23d49b7f49c76d51428fca74ac8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a219507640f8942d81f40ff6cd0de7ed8" id="r_a219507640f8942d81f40ff6cd0de7ed8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a219507640f8942d81f40ff6cd0de7ed8">AimLatchSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a219507640f8942d81f40ff6cd0de7ed8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds to look back before a release event when resolving the fired direction.  <br /></td></tr>
+<tr class="separator:a219507640f8942d81f40ff6cd0de7ed8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e7bc21b7ed76cc7912791a85f383785" id="r_a2e7bc21b7ed76cc7912791a85f383785"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2e7bc21b7ed76cc7912791a85f383785">CruisePiercingTapThreshold</a><code> [get]</code></td></tr>
 <tr class="separator:a2e7bc21b7ed76cc7912791a85f383785"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ca3be7bbd6f6282c5364a3eca8c7b4d" id="r_a5ca3be7bbd6f6282c5364a3eca8c7b4d"><td class="memItemLeft" align="right" valign="top">AnimationCurve&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ca3be7bbd6f6282c5364a3eca8c7b4d">CruiseTapCurve</a><code> [get]</code></td></tr>
@@ -185,6 +194,59 @@ Properties</h2></td></tr>
 <div class="textblock"><p>Read-only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning. </p>
 <p>A focused contract split out of the former umbrella game-configuration asset. </p>
 </div><h2 class="groupheader">Property Documentation</h2>
+<a id="a3e600f87ae35bc3b369b153df593bee8" name="a3e600f87ae35bc3b369b153df593bee8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e600f87ae35bc3b369b153df593bee8">&#9670;&#160;</a></span>AimAngleMaxDegrees</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Shared.IProjectileFlightConfig.AimAngleMaxDegrees</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Upper bound (degrees) of the reachable aim range — see <a class="el" href="#aaff2132cb222633e1d8d475d7516ec2c" title="Lower bound (degrees) of the reachable aim range, measured from +X the same way ShotBoardGather....">AimAngleMinDegrees</a>. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a9fe41ea4d84daf4b8178d5dc2c781000">BalloonParty.Configuration.ProjectileFlightConfig</a>.</p>
+
+</div>
+</div>
+<a id="aaff2132cb222633e1d8d475d7516ec2c" name="aaff2132cb222633e1d8d475d7516ec2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaff2132cb222633e1d8d475d7516ec2c">&#9670;&#160;</a></span>AimAngleMinDegrees</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Shared.IProjectileFlightConfig.AimAngleMinDegrees</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Lower bound (degrees) of the reachable aim range, measured from +X the same way <code>ShotBoardGather.DirectionFromDegrees</code> does (0 = due right, 90 = straight up). </p>
+<p>Unlike <a class="el" href="#a1913f23d49b7f49c76d51428fca74ac8" title="Minimum angular subdivision (degrees) the aim direction snaps to. 0 = continuous aim.">AimAngleStepDegrees</a> this is never "off" — the range always applies. Must stay below <a class="el" href="#a3e600f87ae35bc3b369b153df593bee8" title="Upper bound (degrees) of the reachable aim range — see AimAngleMinDegrees.">AimAngleMaxDegrees</a>. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a9238d7ca582c49e1e3403a194f4d3251">BalloonParty.Configuration.ProjectileFlightConfig</a>.</p>
+
+</div>
+</div>
 <a id="a1913f23d49b7f49c76d51428fca74ac8" name="a1913f23d49b7f49c76d51428fca74ac8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1913f23d49b7f49c76d51428fca74ac8">&#9670;&#160;</a></span>AimAngleStepDegrees</h2>
 
@@ -208,6 +270,33 @@ Properties</h2></td></tr>
 <p>Minimum angular subdivision (degrees) the aim direction snaps to. 0 = continuous aim. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#af99d14316205f479911eee67668aa5b4">BalloonParty.Configuration.ProjectileFlightConfig</a>.</p>
+
+</div>
+</div>
+<a id="a219507640f8942d81f40ff6cd0de7ed8" name="a219507640f8942d81f40ff6cd0de7ed8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a219507640f8942d81f40ff6cd0de7ed8">&#9670;&#160;</a></span>AimLatchSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Shared.IProjectileFlightConfig.AimLatchSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds to look back before a release event when resolving the fired direction. </p>
+<p>A touchscreen lift-off registers as a position change (a finger rolling off the glass), so firing the aim from slightly before release keeps that displacement out of the shot. 0 = fire the live direction. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ab573b2040314a8f2ad964f3cd5887241">BalloonParty.Configuration.ProjectileFlightConfig</a>.</p>
 
 </div>
 </div>

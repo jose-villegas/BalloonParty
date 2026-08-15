@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html" title=" " alt="" coords="5,5,203,45"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1IShieldPreviewSettings.html" title="Shield&#39;s own figure params." alt="" coords="5,13,203,53"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1ShieldPreviewSettings.html" title=" " alt="" coords="251,5,492,60"/>
+<area shape="poly" id="edge70_Node000000_Node000001" title=" " alt="" coords="216,30,250,30,250,35,216,35"/>
 </map>

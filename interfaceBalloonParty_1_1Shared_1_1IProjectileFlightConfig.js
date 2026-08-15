@@ -1,6 +1,9 @@
 var interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig =
 [
+    [ "AimAngleMaxDegrees", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a3e600f87ae35bc3b369b153df593bee8", null ],
+    [ "AimAngleMinDegrees", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#aaff2132cb222633e1d8d475d7516ec2c", null ],
     [ "AimAngleStepDegrees", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a1913f23d49b7f49c76d51428fca74ac8", null ],
+    [ "AimLatchSeconds", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a219507640f8942d81f40ff6cd0de7ed8", null ],
     [ "CruisePiercingTapThreshold", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a2e7bc21b7ed76cc7912791a85f383785", null ],
     [ "CruiseTapCurve", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a5ca3be7bbd6f6282c5364a3eca8c7b4d", null ],
     [ "CruiseTapEaseDuration", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a0287395d0427c47cb911b2464848955c", null ],

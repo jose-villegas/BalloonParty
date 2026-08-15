@@ -152,8 +152,8 @@ Package Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
-<tr class="memitem:aa13022cc0ff2f4ac12d02298f5161506" id="r_aa13022cc0ff2f4ac12d02298f5161506"><td class="memItemLeft" align="right" valign="top">static Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa13022cc0ff2f4ac12d02298f5161506">QuantizeAimDirection</a> (Vector3 direction, float stepDegrees)</td></tr>
-<tr class="separator:aa13022cc0ff2f4ac12d02298f5161506"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfc24424de127a8fecc2acf833a7bbfa" id="r_acfc24424de127a8fecc2acf833a7bbfa"><td class="memItemLeft" align="right" valign="top">static Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acfc24424de127a8fecc2acf833a7bbfa">ClampAndQuantizeAimDirection</a> (Vector3 direction, float stepDegrees, float minAngleDegrees, float maxAngleDegrees)</td></tr>
+<tr class="separator:acfc24424de127a8fecc2acf833a7bbfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -178,6 +178,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a30735ba0f34d91dba7302e7526567f75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02930293b10d19627f15ddb4abbc0f61" id="r_a02930293b10d19627f15ddb4abbc0f61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02930293b10d19627f15ddb4abbc0f61">Reload</a> ()</td></tr>
 <tr class="separator:a02930293b10d19627f15ddb4abbc0f61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadf06e2db35f396fc78810ecfec3bf0b" id="r_aadf06e2db35f396fc78810ecfec3bf0b"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aadf06e2db35f396fc78810ecfec3bf0b">ResolveLatchedDirection</a> ()</td></tr>
+<tr class="separator:aadf06e2db35f396fc78810ecfec3bf0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87d23c88447d99813baace4041d25c6f" id="r_a87d23c88447d99813baace4041d25c6f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a87d23c88447d99813baace4041d25c6f">ScaleAwayActiveProjectile</a> ()</td></tr>
 <tr class="separator:a87d23c88447d99813baace4041d25c6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61697f8555b739cee4e029da6d5af2b0" id="r_a61697f8555b739cee4e029da6d5af2b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a61697f8555b739cee4e029da6d5af2b0">TryFire</a> ()</td></tr>
@@ -197,6 +199,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a5a73d5c70e042bce036c1fe2bb5bb4a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3d5c57651fd8b2608996d45358a55aa" id="r_af3d5c57651fd8b2608996d45358a55aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html">ProjectileView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3d5c57651fd8b2608996d45358a55aa">_activeView</a></td></tr>
 <tr class="separator:af3d5c57651fd8b2608996d45358a55aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d314878533cbfdc6b5df124904c508f" id="r_a6d314878533cbfdc6b5df124904c508f"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Thrower_1_1AimDirectionHistory.html">AimDirectionHistory</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d314878533cbfdc6b5df124904c508f">_aimHistory</a> = new(<a class="el" href="#ac527fbcefd83285caea3552cb3ddec9b">AimHistoryCapacity</a>)</td></tr>
+<tr class="separator:a6d314878533cbfdc6b5df124904c508f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4556eddb1977a5a50bc4c56621ded51" id="r_ab4556eddb1977a5a50bc4c56621ded51"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html">BoardClearMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab4556eddb1977a5a50bc4c56621ded51">_boardClearSubscriber</a></td></tr>
 <tr class="separator:ab4556eddb1977a5a50bc4c56621ded51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12c652fed197903c0c5679ec5bade6f4" id="r_a12c652fed197903c0c5679ec5bade6f4"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html">IDeflectorField</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a12c652fed197903c0c5679ec5bade6f4">_deflectorField</a></td></tr>
@@ -272,6 +276,8 @@ Private Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
+<tr class="memitem:ac527fbcefd83285caea3552cb3ddec9b" id="r_ac527fbcefd83285caea3552cb3ddec9b"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac527fbcefd83285caea3552cb3ddec9b">AimHistoryCapacity</a> = 32</td></tr>
+<tr class="separator:ac527fbcefd83285caea3552cb3ddec9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa21bf7386f544bd4ddc85a778cd1d6a2" id="r_aa21bf7386f544bd4ddc85a778cd1d6a2"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa21bf7386f544bd4ddc85a778cd1d6a2">DegenerateDirectionSqrMagnitude</a> = 1e-8f</td></tr>
 <tr class="separator:aa21bf7386f544bd4ddc85a778cd1d6a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -426,6 +432,45 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="acfc24424de127a8fecc2acf833a7bbfa" name="acfc24424de127a8fecc2acf833a7bbfa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfc24424de127a8fecc2acf833a7bbfa">&#9670;&#160;</a></span>ClampAndQuantizeAimDirection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Vector3 BalloonParty.Thrower.ThrowerController.ClampAndQuantizeAimDirection </td>
+          <td>(</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>direction</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>stepDegrees</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>minAngleDegrees</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>maxAngleDegrees</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac497d1607399c4a0644aa0ffd0f66c71" name="ac497d1607399c4a0644aa0ffd0f66c71"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac497d1607399c4a0644aa0ffd0f66c71">&#9670;&#160;</a></span>ClearPredictionTrace()</h2>
 
@@ -643,35 +688,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aa13022cc0ff2f4ac12d02298f5161506" name="aa13022cc0ff2f4ac12d02298f5161506"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa13022cc0ff2f4ac12d02298f5161506">&#9670;&#160;</a></span>QuantizeAimDirection()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static Vector3 BalloonParty.Thrower.ThrowerController.QuantizeAimDirection </td>
-          <td>(</td>
-          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>direction</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>stepDegrees</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a02930293b10d19627f15ddb4abbc0f61" name="a02930293b10d19627f15ddb4abbc0f61"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a02930293b10d19627f15ddb4abbc0f61">&#9670;&#160;</a></span>Reload()</h2>
 
@@ -683,6 +699,31 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">void BalloonParty.Thrower.ThrowerController.Reload </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aadf06e2db35f396fc78810ecfec3bf0b" name="aadf06e2db35f396fc78810ecfec3bf0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadf06e2db35f396fc78810ecfec3bf0b">&#9670;&#160;</a></span>ResolveLatchedDirection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector3 BalloonParty.Thrower.ThrowerController.ResolveLatchedDirection </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -915,6 +956,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html">ProjectileView</a> BalloonParty.Thrower.ThrowerController._activeView</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6d314878533cbfdc6b5df124904c508f" name="a6d314878533cbfdc6b5df124904c508f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d314878533cbfdc6b5df124904c508f">&#9670;&#160;</a></span>_aimHistory</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="classBalloonParty_1_1Thrower_1_1AimDirectionHistory.html">AimDirectionHistory</a> BalloonParty.Thrower.ThrowerController._aimHistory = new(<a class="el" href="#ac527fbcefd83285caea3552cb3ddec9b">AimHistoryCapacity</a>)</td>
         </tr>
       </table>
   </td>
@@ -1712,6 +1775,28 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac527fbcefd83285caea3552cb3ddec9b" name="ac527fbcefd83285caea3552cb3ddec9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac527fbcefd83285caea3552cb3ddec9b">&#9670;&#160;</a></span>AimHistoryCapacity</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int BalloonParty.Thrower.ThrowerController.AimHistoryCapacity = 32</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

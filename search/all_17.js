@@ -141,7 +141,7 @@ var searchData=
   ['methods_138',['Methods',['../style_guide.html#autotoc_md792',1,'']]],
   ['methods_139',['New methods',['../plan_bubble_cluster_hit_feedback.html#autotoc_md320',1,'']]],
   ['metric_140',['Metric',['../structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1Entry.html#a96acd0264905e1b768cc2fd8858f9ca0',1,'BalloonParty.Editor.MetricBindingDrawer.Entry.Metric'],['../structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html#a2bb6fa448f1427cfbb798d8616c532ec',1,'BalloonParty.UI.Telemetry.MetricBinding.Metric'],['../namespaceBalloonParty_1_1UI_1_1Telemetry.html#a20e80a757cebf98f741774a57e8c5311a216ab40cda5c7c00ff42a4efb1827d89',1,'BalloonParty.UI.Telemetry.Metric']]],
-  ['metric_141',['Why a dropdown and not a component per metric',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/UI/Telemetry/README.md#autotoc_md958',1,'']]],
+  ['metric_141',['Why a dropdown and not a component per metric',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/UI/Telemetry/README.md#autotoc_md960',1,'']]],
   ['metricaxis_142',['MetricAxis',['../namespaceBalloonParty_1_1Game_1_1Telemetry.html#a70fd8bf1148bf059d1e9549b680d3a18',1,'BalloonParty::Game::Telemetry']]],
   ['metricaxis_2ecs_143',['MetricAxis.cs',['../MetricAxis_8cs.html',1,'']]],
   ['metricbinding_144',['MetricBinding',['../structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html',1,'BalloonParty::UI::Telemetry']]],

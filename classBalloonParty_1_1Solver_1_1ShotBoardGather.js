@@ -1,6 +1,7 @@
 var classBalloonParty_1_1Solver_1_1ShotBoardGather =
 [
     [ "BuildItemProfile", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a124a77f42d4528948f5390f02e606718", null ],
+    [ "ClampToReachableAngle", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a1d0d4397f27526a1dd445d0c62f29b39", null ],
     [ "ClassifyContactKind", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a97550b80ad5be8c8786f0f3b371b466e", null ],
     [ "CollectBoard", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#aa2fc676075e4f95609479ab424369f81", null ],
     [ "DirectionFromDegrees", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a49c261705b2a8db210d42c99ed8223af", null ],

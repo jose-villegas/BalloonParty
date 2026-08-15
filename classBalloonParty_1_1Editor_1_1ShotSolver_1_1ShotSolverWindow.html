@@ -201,9 +201,9 @@ Static Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a41bdd7ff6cc2b0dfd70a8083d95e32c8" id="r_a41bdd7ff6cc2b0dfd70a8083d95e32c8"><td class="memItemLeft" align="right" valign="top">readonly List&lt; Vector3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a41bdd7ff6cc2b0dfd70a8083d95e32c8">_actualSamples</a> = new()</td></tr>
 <tr class="separator:a41bdd7ff6cc2b0dfd70a8083d95e32c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeff26998bc7cf26d017b65a0c27ffb75" id="r_aeff26998bc7cf26d017b65a0c27ffb75"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeff26998bc7cf26d017b65a0c27ffb75">_arcMaxDegrees</a> = <a class="el" href="#a615b69b3b89287c66d56090e68f7ab1b">DefaultArcMaxDegrees</a></td></tr>
+<tr class="memitem:aeff26998bc7cf26d017b65a0c27ffb75" id="r_aeff26998bc7cf26d017b65a0c27ffb75"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeff26998bc7cf26d017b65a0c27ffb75">_arcMaxDegrees</a> = ConfigCache.Value != null ? ConfigCache.Value.AimAngleMaxDegrees : <a class="el" href="#a63f8d91fdb1c478be514127aa962a484">FallbackArcMaxDegrees</a></td></tr>
 <tr class="separator:aeff26998bc7cf26d017b65a0c27ffb75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae048f2f0003c352428d270ff8e6ee604" id="r_ae048f2f0003c352428d270ff8e6ee604"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae048f2f0003c352428d270ff8e6ee604">_arcMinDegrees</a> = <a class="el" href="#a6c1c553ba60c805a142f77b5bac139aa">DefaultArcMinDegrees</a></td></tr>
+<tr class="memitem:ae048f2f0003c352428d270ff8e6ee604" id="r_ae048f2f0003c352428d270ff8e6ee604"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae048f2f0003c352428d270ff8e6ee604">_arcMinDegrees</a> = ConfigCache.Value != null ? ConfigCache.Value.AimAngleMinDegrees : <a class="el" href="#aed0960dc33650ed57593ca6e9cdb12e9">FallbackArcMinDegrees</a></td></tr>
 <tr class="separator:ae048f2f0003c352428d270ff8e6ee604"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1d0f249301035686f9a816d2d0352ce" id="r_af1d0f249301035686f9a816d2d0352ce"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af1d0f249301035686f9a816d2d0352ce">_bestAngleDegrees</a> = float.NaN</td></tr>
 <tr class="separator:af1d0f249301035686f9a816d2d0352ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -262,16 +262,16 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a59b06bdc99af0703b5570a317288310d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a7040dea56236b62eb393e847b48031" id="r_a9a7040dea56236b62eb393e847b48031"><td class="memItemLeft" align="right" valign="top">static readonly EditorAssetCache&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html">ProjectileFlightConfig</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9a7040dea56236b62eb393e847b48031">ConfigCache</a> = new()</td></tr>
 <tr class="separator:a9a7040dea56236b62eb393e847b48031"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a615b69b3b89287c66d56090e68f7ab1b" id="r_a615b69b3b89287c66d56090e68f7ab1b"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a615b69b3b89287c66d56090e68f7ab1b">DefaultArcMaxDegrees</a> = 170f</td></tr>
-<tr class="separator:a615b69b3b89287c66d56090e68f7ab1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c1c553ba60c805a142f77b5bac139aa" id="r_a6c1c553ba60c805a142f77b5bac139aa"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6c1c553ba60c805a142f77b5bac139aa">DefaultArcMinDegrees</a> = 10f</td></tr>
-<tr class="separator:a6c1c553ba60c805a142f77b5bac139aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3eaf3f702e3bbf9cb865f458af53359b" id="r_a3eaf3f702e3bbf9cb865f458af53359b"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3eaf3f702e3bbf9cb865f458af53359b">DefaultMinWindowWidthDegrees</a> = 1.5f</td></tr>
 <tr class="separator:a3eaf3f702e3bbf9cb865f458af53359b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e6020711768bf607003b227620981df" id="r_a2e6020711768bf607003b227620981df"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2e6020711768bf607003b227620981df">DefaultSampleCount</a> = 2048</td></tr>
 <tr class="separator:a2e6020711768bf607003b227620981df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb90d7a811a3efbf82289bb4c7f9bfa8" id="r_aeb90d7a811a3efbf82289bb4c7f9bfa8"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb90d7a811a3efbf82289bb4c7f9bfa8">DefaultTargetScore</a> = 700</td></tr>
 <tr class="separator:aeb90d7a811a3efbf82289bb4c7f9bfa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63f8d91fdb1c478be514127aa962a484" id="r_a63f8d91fdb1c478be514127aa962a484"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a63f8d91fdb1c478be514127aa962a484">FallbackArcMaxDegrees</a> = 175f</td></tr>
+<tr class="separator:a63f8d91fdb1c478be514127aa962a484"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed0960dc33650ed57593ca6e9cdb12e9" id="r_aed0960dc33650ed57593ca6e9cdb12e9"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed0960dc33650ed57593ca6e9cdb12e9">FallbackArcMinDegrees</a> = 5f</td></tr>
+<tr class="separator:aed0960dc33650ed57593ca6e9cdb12e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9683b2003028d4d60df8213ffd66bd56" id="r_a9683b2003028d4d60df8213ffd66bd56"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9683b2003028d4d60df8213ffd66bd56">GamePathThicknessWorld</a> = 0.05f</td></tr>
 <tr class="separator:a9683b2003028d4d60df8213ffd66bd56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2845b864acd492381d4d15562800c45" id="r_ac2845b864acd492381d4d15562800c45"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac2845b864acd492381d4d15562800c45">MaxBisectionIterations</a> = 30</td></tr>
@@ -942,7 +942,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Editor.ShotSolver.ShotSolverWindow._arcMaxDegrees = <a class="el" href="#a615b69b3b89287c66d56090e68f7ab1b">DefaultArcMaxDegrees</a></td>
+          <td class="memname">float BalloonParty.Editor.ShotSolver.ShotSolverWindow._arcMaxDegrees = ConfigCache.Value != null ? ConfigCache.Value.AimAngleMaxDegrees : <a class="el" href="#a63f8d91fdb1c478be514127aa962a484">FallbackArcMaxDegrees</a></td>
         </tr>
       </table>
   </td>
@@ -964,7 +964,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Editor.ShotSolver.ShotSolverWindow._arcMinDegrees = <a class="el" href="#a6c1c553ba60c805a142f77b5bac139aa">DefaultArcMinDegrees</a></td>
+          <td class="memname">float BalloonParty.Editor.ShotSolver.ShotSolverWindow._arcMinDegrees = ConfigCache.Value != null ? ConfigCache.Value.AimAngleMinDegrees : <a class="el" href="#aed0960dc33650ed57593ca6e9cdb12e9">FallbackArcMinDegrees</a></td>
         </tr>
       </table>
   </td>
@@ -1570,50 +1570,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a615b69b3b89287c66d56090e68f7ab1b" name="a615b69b3b89287c66d56090e68f7ab1b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a615b69b3b89287c66d56090e68f7ab1b">&#9670;&#160;</a></span>DefaultArcMaxDegrees</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const float BalloonParty.Editor.ShotSolver.ShotSolverWindow.DefaultArcMaxDegrees = 170f</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6c1c553ba60c805a142f77b5bac139aa" name="a6c1c553ba60c805a142f77b5bac139aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6c1c553ba60c805a142f77b5bac139aa">&#9670;&#160;</a></span>DefaultArcMinDegrees</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const float BalloonParty.Editor.ShotSolver.ShotSolverWindow.DefaultArcMinDegrees = 10f</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a3eaf3f702e3bbf9cb865f458af53359b" name="a3eaf3f702e3bbf9cb865f458af53359b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3eaf3f702e3bbf9cb865f458af53359b">&#9670;&#160;</a></span>DefaultMinWindowWidthDegrees</h2>
 
@@ -1669,6 +1625,50 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">const int BalloonParty.Editor.ShotSolver.ShotSolverWindow.DefaultTargetScore = 700</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a63f8d91fdb1c478be514127aa962a484" name="a63f8d91fdb1c478be514127aa962a484"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63f8d91fdb1c478be514127aa962a484">&#9670;&#160;</a></span>FallbackArcMaxDegrees</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.Editor.ShotSolver.ShotSolverWindow.FallbackArcMaxDegrees = 175f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aed0960dc33650ed57593ca6e9cdb12e9" name="aed0960dc33650ed57593ca6e9cdb12e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed0960dc33650ed57593ca6e9cdb12e9">&#9670;&#160;</a></span>FallbackArcMinDegrees</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.Editor.ShotSolver.ShotSolverWindow.FallbackArcMinDegrees = 5f</td>
         </tr>
       </table>
   </td>
@@ -1878,7 +1878,7 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>0 = continuous aim. </p>
-<p>Read from the project's <a class="el" href="classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html">ProjectileFlightConfig</a> asset rather than the live DI container — cheap enough for every <a class="el" href="#a6eb0477f8090d9042b4c5fdddd661036">OnGUI</a> call, and matches <a class="el" href="classBalloonParty_1_1Thrower_1_1ThrowerController.html#aa13022cc0ff2f4ac12d02298f5161506">ThrowerController.QuantizeAimDirection</a>'s notion of "reachable" regardless of whether a sweep has gathered the live board yet. </p>
+<p>Read from the project's <a class="el" href="classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html">ProjectileFlightConfig</a> asset rather than the live DI container — cheap enough for every <a class="el" href="#a6eb0477f8090d9042b4c5fdddd661036">OnGUI</a> call, and matches <a class="el" href="classBalloonParty_1_1Thrower_1_1ThrowerController.html#acfc24424de127a8fecc2acf833a7bbfa">ThrowerController.ClampAndQuantizeAimDirection</a>'s notion of "reachable" regardless of whether a sweep has gathered the live board yet. </p>
 
 </div>
 </div>

@@ -1,0 +1,10 @@
+<map id="BalloonParty.Configuration.Editor.AimFanSceneOverlay" name="BalloonParty.Configuration.Editor.AimFanSceneOverlay">
+<area shape="rect" id="Node000001" title="Draws a ray per reachable aim angle from the thrower&#39;s launch position, clipped to the map limits,..." alt="" coords="28,271,229,311"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Thrower_1_1ThrowerView.html" title=" " alt="" coords="5,183,252,208"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="131,222,131,270,126,270,126,222"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="61,5,185,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="127,44,131,182,126,182,121,45"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Prediction_1_1PredictionTraceView.html" title=" " alt="" coords="145,80,320,120"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="152,37,208,78,205,82,148,41"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="203,131,144,184,140,180,199,127"/>
+</map>

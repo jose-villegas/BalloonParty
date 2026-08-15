@@ -1,3 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1MapLimitsSceneOverlay.html" title="Draws the map limits rectangle in the Scene view whenever a ProjectileFlightConfig asset exists." alt="" coords="5,5,227,45"/>
+<area shape="rect" id="Node000000" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1AimFanSceneOverlay.html" title="Draws a ray per reachable aim angle from the thrower&#39;s launch position, clipped to the map limits,..." alt="" coords="5,5,207,45"/>
 </map>

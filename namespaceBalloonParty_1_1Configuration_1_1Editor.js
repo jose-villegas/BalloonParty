@@ -1,5 +1,6 @@
 var namespaceBalloonParty_1_1Configuration_1_1Editor =
 [
+    [ "AimFanSceneOverlay", "classBalloonParty_1_1Configuration_1_1Editor_1_1AimFanSceneOverlay.html", "classBalloonParty_1_1Configuration_1_1Editor_1_1AimFanSceneOverlay" ],
     [ "BalloonPrefabEntryDrawer", "classBalloonParty_1_1Configuration_1_1Editor_1_1BalloonPrefabEntryDrawer.html", "classBalloonParty_1_1Configuration_1_1Editor_1_1BalloonPrefabEntryDrawer" ],
     [ "GameDisplayConfigurationEditor", "classBalloonParty_1_1Configuration_1_1Editor_1_1GameDisplayConfigurationEditor.html", "classBalloonParty_1_1Configuration_1_1Editor_1_1GameDisplayConfigurationEditor" ],
     [ "HitVfxOverrideDrawer", "classBalloonParty_1_1Configuration_1_1Editor_1_1HitVfxOverrideDrawer.html", "classBalloonParty_1_1Configuration_1_1Editor_1_1HitVfxOverrideDrawer" ],

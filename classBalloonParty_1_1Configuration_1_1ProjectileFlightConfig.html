@@ -109,6 +109,7 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1ProjectileFlight
 <div class="header">
   <div class="summary">
 <a href="#properties">Properties</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Configuration.ProjectileFlightConfig Class Reference</div></div>
@@ -131,9 +132,18 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1ProjectileFlight
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a9fe41ea4d84daf4b8178d5dc2c781000" id="r_a9fe41ea4d84daf4b8178d5dc2c781000"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9fe41ea4d84daf4b8178d5dc2c781000">AimAngleMaxDegrees</a><code> [get]</code></td></tr>
+<tr class="memdesc:a9fe41ea4d84daf4b8178d5dc2c781000"><td class="mdescLeft">&#160;</td><td class="mdescRight">Upper bound (degrees) of the reachable aim range — see <a class="el" href="#a9238d7ca582c49e1e3403a194f4d3251" title="Lower bound (degrees) of the reachable aim range, measured from +X the same way ShotBoardGather....">AimAngleMinDegrees</a>.  <br /></td></tr>
+<tr class="separator:a9fe41ea4d84daf4b8178d5dc2c781000"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9238d7ca582c49e1e3403a194f4d3251" id="r_a9238d7ca582c49e1e3403a194f4d3251"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9238d7ca582c49e1e3403a194f4d3251">AimAngleMinDegrees</a><code> [get]</code></td></tr>
+<tr class="memdesc:a9238d7ca582c49e1e3403a194f4d3251"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lower bound (degrees) of the reachable aim range, measured from +X the same way <code>ShotBoardGather.DirectionFromDegrees</code> does (0 = due right, 90 = straight up).  <br /></td></tr>
+<tr class="separator:a9238d7ca582c49e1e3403a194f4d3251"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af99d14316205f479911eee67668aa5b4" id="r_af99d14316205f479911eee67668aa5b4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af99d14316205f479911eee67668aa5b4">AimAngleStepDegrees</a><code> [get]</code></td></tr>
 <tr class="memdesc:af99d14316205f479911eee67668aa5b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimum angular subdivision (degrees) the aim direction snaps to. 0 = continuous aim.  <br /></td></tr>
 <tr class="separator:af99d14316205f479911eee67668aa5b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab573b2040314a8f2ad964f3cd5887241" id="r_ab573b2040314a8f2ad964f3cd5887241"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab573b2040314a8f2ad964f3cd5887241">AimLatchSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:ab573b2040314a8f2ad964f3cd5887241"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds to look back before a release event when resolving the fired direction.  <br /></td></tr>
+<tr class="separator:ab573b2040314a8f2ad964f3cd5887241"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa12f42883b247ee14cc0aaf555b1a834" id="r_aa12f42883b247ee14cc0aaf555b1a834"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa12f42883b247ee14cc0aaf555b1a834">CruisePiercingTapThreshold</a><code> [get]</code></td></tr>
 <tr class="separator:aa12f42883b247ee14cc0aaf555b1a834"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3b7f460bac8bf66958da027958c26ab" id="r_ac3b7f460bac8bf66958da027958c26ab"><td class="memItemLeft" align="right" valign="top">AnimationCurve&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac3b7f460bac8bf66958da027958c26ab">CruiseTapCurve</a><code> [get]</code></td></tr>
@@ -186,10 +196,21 @@ Properties</h2></td></tr>
 <tr class="memitem:a31ab9fbf32d452315314042560651f90" id="r_a31ab9fbf32d452315314042560651f90"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31ab9fbf32d452315314042560651f90">SweepTapThreshold</a><code> [get]</code></td></tr>
 <tr class="separator:a31ab9fbf32d452315314042560651f90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a8fabaa62fb5e9b96d144f3ea832a5709" id="r_a8fabaa62fb5e9b96d144f3ea832a5709"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8fabaa62fb5e9b96d144f3ea832a5709">OnValidate</a> ()</td></tr>
+<tr class="separator:a8fabaa62fb5e9b96d144f3ea832a5709"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a2c68e7281618abd30764b62c5351514e" id="r_a2c68e7281618abd30764b62c5351514e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c68e7281618abd30764b62c5351514e">_aimAngleMaxDegrees</a> = 175f</td></tr>
+<tr class="separator:a2c68e7281618abd30764b62c5351514e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a390fb3a7dddd32ecd8abe9a8a5b0c42b" id="r_a390fb3a7dddd32ecd8abe9a8a5b0c42b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a390fb3a7dddd32ecd8abe9a8a5b0c42b">_aimAngleMinDegrees</a> = 5f</td></tr>
+<tr class="separator:a390fb3a7dddd32ecd8abe9a8a5b0c42b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada23e3735f9fcb4d03e0bde823a27288" id="r_ada23e3735f9fcb4d03e0bde823a27288"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada23e3735f9fcb4d03e0bde823a27288">_aimAngleStepDegrees</a></td></tr>
 <tr class="separator:ada23e3735f9fcb4d03e0bde823a27288"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a124ed6391094bfea8d39c82502c85302" id="r_a124ed6391094bfea8d39c82502c85302"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a124ed6391094bfea8d39c82502c85302">_aimLatchSeconds</a></td></tr>
+<tr class="separator:a124ed6391094bfea8d39c82502c85302"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab492ecc640e13c5b322163fc500b28b8" id="r_ab492ecc640e13c5b322163fc500b28b8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab492ecc640e13c5b322163fc500b28b8">_cruisePiercingTapThreshold</a> = 3</td></tr>
 <tr class="separator:ab492ecc640e13c5b322163fc500b28b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16ff31d8c1027a8c3e6a7a678028ed74" id="r_a16ff31d8c1027a8c3e6a7a678028ed74"><td class="memItemLeft" align="right" valign="top">AnimationCurve&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a16ff31d8c1027a8c3e6a7a678028ed74">_cruiseTapCurve</a> = AnimationCurve.Linear(0f, 0f, 1f, 1f)</td></tr>
@@ -239,7 +260,77 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a6f533407b3ba1e4ec9ae7edb5417a2b4" id="r_a6f533407b3ba1e4ec9ae7edb5417a2b4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f533407b3ba1e4ec9ae7edb5417a2b4">_sweepTapThreshold</a></td></tr>
 <tr class="separator:a6f533407b3ba1e4ec9ae7edb5417a2b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a8fabaa62fb5e9b96d144f3ea832a5709" name="a8fabaa62fb5e9b96d144f3ea832a5709"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fabaa62fb5e9b96d144f3ea832a5709">&#9670;&#160;</a></span>OnValidate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Configuration.ProjectileFlightConfig.OnValidate </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a2c68e7281618abd30764b62c5351514e" name="a2c68e7281618abd30764b62c5351514e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c68e7281618abd30764b62c5351514e">&#9670;&#160;</a></span>_aimAngleMaxDegrees</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.ProjectileFlightConfig._aimAngleMaxDegrees = 175f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a390fb3a7dddd32ecd8abe9a8a5b0c42b" name="a390fb3a7dddd32ecd8abe9a8a5b0c42b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a390fb3a7dddd32ecd8abe9a8a5b0c42b">&#9670;&#160;</a></span>_aimAngleMinDegrees</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.ProjectileFlightConfig._aimAngleMinDegrees = 5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ada23e3735f9fcb4d03e0bde823a27288" name="ada23e3735f9fcb4d03e0bde823a27288"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ada23e3735f9fcb4d03e0bde823a27288">&#9670;&#160;</a></span>_aimAngleStepDegrees</h2>
 
@@ -251,6 +342,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Configuration.ProjectileFlightConfig._aimAngleStepDegrees</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a124ed6391094bfea8d39c82502c85302" name="a124ed6391094bfea8d39c82502c85302"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a124ed6391094bfea8d39c82502c85302">&#9670;&#160;</a></span>_aimLatchSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.ProjectileFlightConfig._aimLatchSeconds</td>
         </tr>
       </table>
   </td>
@@ -791,6 +904,59 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="a9fe41ea4d84daf4b8178d5dc2c781000" name="a9fe41ea4d84daf4b8178d5dc2c781000"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9fe41ea4d84daf4b8178d5dc2c781000">&#9670;&#160;</a></span>AimAngleMaxDegrees</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.ProjectileFlightConfig.AimAngleMaxDegrees</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Upper bound (degrees) of the reachable aim range — see <a class="el" href="#a9238d7ca582c49e1e3403a194f4d3251" title="Lower bound (degrees) of the reachable aim range, measured from +X the same way ShotBoardGather....">AimAngleMinDegrees</a>. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a3e600f87ae35bc3b369b153df593bee8">BalloonParty.Shared.IProjectileFlightConfig</a>.</p>
+
+</div>
+</div>
+<a id="a9238d7ca582c49e1e3403a194f4d3251" name="a9238d7ca582c49e1e3403a194f4d3251"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9238d7ca582c49e1e3403a194f4d3251">&#9670;&#160;</a></span>AimAngleMinDegrees</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.ProjectileFlightConfig.AimAngleMinDegrees</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Lower bound (degrees) of the reachable aim range, measured from +X the same way <code>ShotBoardGather.DirectionFromDegrees</code> does (0 = due right, 90 = straight up). </p>
+<p>Unlike <a class="el" href="#af99d14316205f479911eee67668aa5b4" title="Minimum angular subdivision (degrees) the aim direction snaps to. 0 = continuous aim.">AimAngleStepDegrees</a> this is never "off" — the range always applies. Must stay below <a class="el" href="#a9fe41ea4d84daf4b8178d5dc2c781000" title="Upper bound (degrees) of the reachable aim range — see AimAngleMinDegrees.">AimAngleMaxDegrees</a>. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#aaff2132cb222633e1d8d475d7516ec2c">BalloonParty.Shared.IProjectileFlightConfig</a>.</p>
+
+</div>
+</div>
 <a id="af99d14316205f479911eee67668aa5b4" name="af99d14316205f479911eee67668aa5b4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af99d14316205f479911eee67668aa5b4">&#9670;&#160;</a></span>AimAngleStepDegrees</h2>
 
@@ -814,6 +980,33 @@ Private Attributes</h2></td></tr>
 <p>Minimum angular subdivision (degrees) the aim direction snaps to. 0 = continuous aim. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a1913f23d49b7f49c76d51428fca74ac8">BalloonParty.Shared.IProjectileFlightConfig</a>.</p>
+
+</div>
+</div>
+<a id="ab573b2040314a8f2ad964f3cd5887241" name="ab573b2040314a8f2ad964f3cd5887241"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab573b2040314a8f2ad964f3cd5887241">&#9670;&#160;</a></span>AimLatchSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.ProjectileFlightConfig.AimLatchSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds to look back before a release event when resolving the fired direction. </p>
+<p>A touchscreen lift-off registers as a position change (a finger rolling off the glass), so firing the aim from slightly before release keeps that displacement out of the shot. 0 = fire the live direction. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a219507640f8942d81f40ff6cd0de7ed8">BalloonParty.Shared.IProjectileFlightConfig</a>.</p>
 
 </div>
 </div>

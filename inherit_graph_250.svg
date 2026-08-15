@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Scenario_1_1SmokeFieldService_1_1PendingStamp.html" target="_top" xlink:title=" ">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html" target="_top" xlink:title="Holds the smoke field&#39;s GPU resources: ping&#45;pong RTs and blit&#45;and&#45;swap, separate from SmokeFieldServi...">
 <polygon fill="white" stroke="#666666" points="158,-30 0,-30 0,0 158,0 158,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Scenario.Smoke</text>
-<text text-anchor="middle" x="79" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">FieldService.PendingStamp</text>
+<text text-anchor="middle" x="79" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">FieldResources</text>
 </a>
 </g>
 </g>

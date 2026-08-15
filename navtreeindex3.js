@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"SpriteLayerCombiner_8cs.html":[7,0,14,10,10],
 "SpriteRendererExtensions_8cs.html":[7,0,14,4,17],
 "SpriteShadowBakerEditor_8cs.html":[7,0,6,5,2],
 "SpriteShadowBaker_8cs.html":[7,0,14,10,11],
@@ -22,11 +23,11 @@ var NAVTREEINDEX3 =
 "TexturePreviewBox_8cs.html":[7,0,6,40],
 "ThermalFrameRateGovernor_8cs.html":[7,0,14,12,3],
 "ThermalGovernorSettings_8cs.html":[7,0,3,24],
-"ThrowerController_8cs.html":[7,0,17,0],
-"ThrowerLifetimeScope_8cs.html":[7,0,17,1],
-"ThrowerOriginProvider_8cs.html":[7,0,17,2],
-"ThrowerSettings_8cs.html":[7,0,17,3],
-"ThrowerView_8cs.html":[7,0,17,4],
+"ThrowerController_8cs.html":[7,0,17,1],
+"ThrowerLifetimeScope_8cs.html":[7,0,17,2],
+"ThrowerOriginProvider_8cs.html":[7,0,17,3],
+"ThrowerSettings_8cs.html":[7,0,17,4],
+"ThrowerView_8cs.html":[7,0,17,5],
 "TimeOfDayCheat_8cs.html":[7,0,2,21],
 "TimeOfDayClock_8cs.html":[7,0,14,11,6],
 "TimeOfDayCycle_8cs.html":[7,0,7,4,7],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3e26ed679bfcc356d10c54213fe89adb":[6,0,0,0,0,3,41],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a44f9b214c8bb534badae2c7fa15d7174":[5,0,0,0,0,3,37],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a44f9b214c8bb534badae2c7fa15d7174":[6,0,0,0,0,3,37],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a48c3170743a4904ade4e383e90a923be":[5,0,0,0,0,3,7],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a48c3170743a4904ade4e383e90a923be":[6,0,0,0,0,3,7]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a48c3170743a4904ade4e383e90a923be":[5,0,0,0,0,3,7]
 };

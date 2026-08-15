@@ -127,7 +127,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>The full-screen level-up ceremony that plays when all color bars complete.</p>
-<h1><a class="anchor" id="autotoc_md930"></a>
+<h1><a class="anchor" id="autotoc_md932"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -137,9 +137,9 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>LevelUpPopUp</code>   </td><td class="markdownTableBodyNone">Holds a <code>PauseService</code> pause while it waits for the level-complete hit cinematic to end (via an injected <code>CinematicEndGate</code>), then freezes time via <code>TimeScaleService</code>, shows the popup with the new and previous level numbers, spawns fill trails from each <code>ColorProgressBar</code> to the level fill, and publishes <code>LevelUpDismissedMessage</code> on Continue   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md931"></a>
+<h1><a class="anchor" id="autotoc_md933"></a>
 How it works</h1>
-<h2><a class="anchor" id="autotoc_md932"></a>
+<h2><a class="anchor" id="autotoc_md934"></a>
 Sequence</h2>
 <ol type="1">
 <li><b>Hit beat ends</b> — <code>LevelUpCinematic</code> ends the level-complete hit phase after the authored <code>LevelCompleteHit</code> curve duration elapses (duration-based, not wall-hit triggered), setting <code>CinematicState</code> to <code>None</code>.</li>
@@ -153,26 +153,26 @@ Sequence</h2>
 <li><b>Ascent + navigate</b> — the phase flip to <code>Transitioning</code> triggers <code>LevelTransitionController</code> (the Ascent), which slides the new level in. The camera un-zoom was already started at <code>EndPanIn</code> by <code>LevelUpCinematic</code> (via <code>CinematicCameraRig.RestoreCurveDriven</code>) — the Ascent does not touch the camera. <code>LevelController</code> owns the nav return to <code>Game</code> once <code>LevelTransitionCompletedMessage</code> arrives. There is <b>no</b> <code>LevelCompleteRestore</code> cinematic state played — it's kept in the enum only for serialized-index stability; its curve is read for the <code>RestoreCurveDriven</code> call.</li>
 </ol>
 <p>The Animator's <code>updateMode</code> is set to <code>UnscaledTime</code> in <code>Start()</code>, so animations play even while the game is paused.</p>
-<h2><a class="anchor" id="autotoc_md933"></a>
+<h2><a class="anchor" id="autotoc_md935"></a>
 Fill trail spawning</h2>
 <p><code>LevelUpPopUp</code> owns a per-color dictionary of <code>TrailSpawner</code> instances (pool key <code>FillTrail_{colorName}</code>, sorting order 3200). For each wave, it iterates the message's completed colors, reads the bar's position via <code>_scoreTrailService.GetTarget(colorName).RandomPosition()</code>, picks a random offset within <code>_fillTargetRadiusMultiplier</code> of the <b>target area's</b> radius, and calls <code>Spawn</code> with <code>useUnscaledTime: true</code>. Arrival increments <code>_fillTrailArrivedCount</code> and tweens the fill toward the new fraction. Trails reuse the same <code>SimplePoolChannel&lt;FlyingTrail&gt;</code> factory as score trails but are pooled under separate keys.</p>
 <p><b><code>_levelFill</code> and <code>_fillTargetArea</code> are two different objects on purpose.</b> The fill scales from 0 to 1 over the ceremony, so measuring the arrival disc from it would send every trail to a single point at the start and drift the destination outward as it grew. <code>_fillTargetArea</code> keeps its size throughout and is the only thing <code>TryGetFillTargetGeometry</code> reads — do not collapse them back into one reference.</p>
-<h2><a class="anchor" id="autotoc_md934"></a>
+<h2><a class="anchor" id="autotoc_md936"></a>
 Gate pattern</h2>
 <p><code>LevelUpLifetimeScope</code> registers <code>CinematicEndGate(CinematicState.LevelCompleteHit)</code> <b>by concrete type</b>, and <code>LevelUpPopUp</code> injects <code>CinematicEndGate</code> directly — not <code>IReadyGate</code>. That keeps the dependency explicit and stops the popup from silently resolving the parent scope's <code>NavigationReadyGate(Game)</code> if this registration ever went missing. Both are <code>IReadyGate</code> implementations over <code>UniTask.WaitUntil</code> on a reactive property, just on different state machines — though no current consumer actually injects the interface; every gate, including <code>GridSpawnerCoordinator</code>'s <code>NavigationReadyGate</code>, is injected by concrete type.</p>
 <div class="fragment"><div class="line">CinematicEndGate(LevelCompleteHit) → opens when Cinematic.Current != LevelCompleteHit</div>
 <div class="line">NavigationReadyGate(Game)      → opens when Navigation.Current == Game</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md935"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md937"></a>
 Continue is gated on the fill</h2>
 <p><code>OnContinue</code> returns early unless <code>_fillComplete</code>, and <code>_continueButton.interactable</code> is false until then — two halves of one rule, because the popup's full-screen button keeps receiving raycasts either way. <b>Anything that can prevent the fill from completing therefore makes the popup unmissable</b>, so both known cases complete it immediately instead: a level-up with no completed colours (reachable via the cheat that grants a level directly) and an unassigned <code>_levelFill</code>. The second is not paranoia — that field changed type from <code>Image</code> to <code>RectTransform</code>, so every prefab authored before that starts out unassigned.</p>
-<h1><a class="anchor" id="autotoc_md936"></a>
+<h1><a class="anchor" id="autotoc_md938"></a>
 Wiring requirements</h1>
 <ul>
 <li>The popup GameObject must be <b>active</b> in the scene at all times — visibility is controlled by CanvasGroup alpha (animated by the <code>LevelUp</code> animator), not by <code>SetActive</code>. If the object is disabled, <code>Start()</code> never runs and <code>ScoreLevelUpMessage</code> is never subscribed.</li>
 <li>Registered in <code>LevelUpLifetimeScope</code> via <code>RegisterComponentInHierarchy&lt;LevelUpPopUp&gt;()</code>.</li>
 <li><code>_levelFill</code> and <code>_fillTargetArea</code> must be <b>different</b> objects (see below). <code>_continueButton</code>, <code>_previousLevelLabel</code>, <code>_statsRevealCover</code> and <code>_statContainers</code> are all optional — unassigned, each simply drops its part of the ceremony rather than breaking it.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md937"></a>
+<h1><a class="anchor" id="autotoc_md939"></a>
 Interactions</h1>
 <ul>
 <li><b><code>LevelController</code></b> (<code>Game/Level/</code>) — publishes <code>ScoreLevelUpMessage</code> (triggers <code>ShowAfterGateAsync</code>) and transitions navigation to <code>LevelUp</code>; on dismissal advances the level (two-phase commit) and flips <code>LevelUpPhase</code> to drive the Ascent</li>

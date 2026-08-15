@@ -4,6 +4,7 @@ var NAVTREEINDEX0 =
 "ActiveProjectilePierce_8cs.html":[7,0,12,1,0],
 "ActorHitMessage_8cs.html":[7,0,14,7,0],
 "AddShieldCheat_8cs.html":[7,0,2,0],
+"AimDirectionHistory_8cs.html":[7,0,17,0],
 "AimMode_8cs.html":[7,0,8,8],
 "AlignTiming_8cs.html":[7,0,8,9],
 "AndroidThermalSource_8cs.html":[7,0,14,12,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "IAudioMixerSettings_8cs.html":[7,0,0,0,3],
 "IBackgroundFieldSettings_8cs.html":[7,0,3,4,4],
 "IBalanceBiasSource_8cs.html":[7,0,15,0,5],
-"IBalanceInfluence_8cs.html":[7,0,15,0,6],
-"IBalloonItem_8cs.html":[7,0,8,12]
+"IBalanceInfluence_8cs.html":[7,0,15,0,6]
 };

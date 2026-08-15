@@ -1,6 +1,10 @@
 var classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig =
 [
+    [ "OnValidate", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a8fabaa62fb5e9b96d144f3ea832a5709", null ],
+    [ "_aimAngleMaxDegrees", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a2c68e7281618abd30764b62c5351514e", null ],
+    [ "_aimAngleMinDegrees", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a390fb3a7dddd32ecd8abe9a8a5b0c42b", null ],
     [ "_aimAngleStepDegrees", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ada23e3735f9fcb4d03e0bde823a27288", null ],
+    [ "_aimLatchSeconds", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a124ed6391094bfea8d39c82502c85302", null ],
     [ "_cruisePiercingTapThreshold", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ab492ecc640e13c5b322163fc500b28b8", null ],
     [ "_cruiseTapCurve", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a16ff31d8c1027a8c3e6a7a678028ed74", null ],
     [ "_cruiseTapEaseDuration", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a31b78f2a98639644eb556e80a643e696", null ],
@@ -25,7 +29,10 @@ var classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig =
     [ "_speedGainPerTap", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a5e2a7cc7c81ce1065c7ae39acb3a9a2b", null ],
     [ "_sweepEnabled", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a7fc0065c4a18fae0a49f8fa7b7d0e1a7", null ],
     [ "_sweepTapThreshold", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a6f533407b3ba1e4ec9ae7edb5417a2b4", null ],
+    [ "AimAngleMaxDegrees", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a9fe41ea4d84daf4b8178d5dc2c781000", null ],
+    [ "AimAngleMinDegrees", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a9238d7ca582c49e1e3403a194f4d3251", null ],
     [ "AimAngleStepDegrees", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#af99d14316205f479911eee67668aa5b4", null ],
+    [ "AimLatchSeconds", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ab573b2040314a8f2ad964f3cd5887241", null ],
     [ "CruisePiercingTapThreshold", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#aa12f42883b247ee14cc0aaf555b1a834", null ],
     [ "CruiseTapCurve", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ac3b7f460bac8bf66958da027958c26ab", null ],
     [ "CruiseTapEaseDuration", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a65cb3c052e2cab567b02dad4dfa72008", null ],

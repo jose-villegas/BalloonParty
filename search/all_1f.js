@@ -58,7 +58,7 @@ var searchData=
   ['unusedassetswindow_2ecs_55',['UnusedAssetsWindow.cs',['../UnusedAssetsWindow_8cs.html',1,'']]],
   ['up_20ceremony_20flag_20then_20orchestrate_56',['The level-up ceremony (flag-then-orchestrate)',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Game/Level/README.md#autotoc_md198',1,'']]],
   ['up_20point_20carry_20over_202026_2007_2018_57',['15 — Level-Up Point Carry-Over (2026-07-18)',['../plan_future_ideas.html#autotoc_md462',1,'']]],
-  ['up_20reset_20flow_58',['Level-up reset flow',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/UI/Score/README.md#autotoc_md947',1,'']]],
+  ['up_20reset_20flow_58',['Level-up reset flow',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/UI/Score/README.md#autotoc_md949',1,'']]],
   ['up_20tier_20scoped_202026_2007_2025_59',['Phase G — Headless level diagnostics (follow-up tier; scoped 2026-07-25)',['../plan_shot_solver_accuracy.html#autotoc_md670',1,'']]],
   ['up_20tier_20unchanged_20spec_20in_20§4_20phase_20g_60',['G — headless level diagnostics (follow-up tier; unchanged spec in §4 Phase G)',['../plan_shot_solver_accuracy.html#autotoc_md680',1,'']]],
   ['up_20timing_61',['Up Timing',['../plan_level_up_timing.html',1,'Level-Up Timing'],['../plan_level_up_timing.html#autotoc_md588',1,'Level-Up Timing']]],

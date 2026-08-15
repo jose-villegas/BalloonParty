@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Editor_1_1Release_1_1ReleasePublisher.html" target="_top" xlink:title="Creates the GitHub release and uploads the APKs, talking to the REST API directly.">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Editor_1_1PropertyDrawerHelper.html" target="_top" xlink:title="Shared drawing utilities for custom PropertyDrawers.">
 <polygon fill="white" stroke="#666666" points="152,-30 0,-30 0,0 152,0 152,-30"/>
-<text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Editor.Release.</text>
-<text text-anchor="middle" x="76" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">ReleasePublisher</text>
+<text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Editor.Property</text>
+<text text-anchor="middle" x="76" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">DrawerHelper</text>
 </a>
 </g>
 </g>

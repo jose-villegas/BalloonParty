@@ -135,6 +135,7 @@ var annotated_dup =
           [ "TrackedTrailSettings", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1TrackedTrailSettings.html", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1TrackedTrailSettings" ]
         ] ],
         [ "Editor", "namespaceBalloonParty_1_1Configuration_1_1Editor.html", [
+          [ "AimFanSceneOverlay", "classBalloonParty_1_1Configuration_1_1Editor_1_1AimFanSceneOverlay.html", "classBalloonParty_1_1Configuration_1_1Editor_1_1AimFanSceneOverlay" ],
           [ "BalloonPrefabEntryDrawer", "classBalloonParty_1_1Configuration_1_1Editor_1_1BalloonPrefabEntryDrawer.html", "classBalloonParty_1_1Configuration_1_1Editor_1_1BalloonPrefabEntryDrawer" ],
           [ "GameDisplayConfigurationEditor", "classBalloonParty_1_1Configuration_1_1Editor_1_1GameDisplayConfigurationEditor.html", "classBalloonParty_1_1Configuration_1_1Editor_1_1GameDisplayConfigurationEditor" ],
           [ "HitVfxOverrideDrawer", "classBalloonParty_1_1Configuration_1_1Editor_1_1HitVfxOverrideDrawer.html", "classBalloonParty_1_1Configuration_1_1Editor_1_1HitVfxOverrideDrawer" ],
@@ -947,6 +948,7 @@ var annotated_dup =
         [ "ShotStaticActorSnapshot", "structBalloonParty_1_1Solver_1_1ShotStaticActorSnapshot.html", "structBalloonParty_1_1Solver_1_1ShotStaticActorSnapshot" ]
       ] ],
       [ "Thrower", "namespaceBalloonParty_1_1Thrower.html", [
+        [ "AimDirectionHistory", "classBalloonParty_1_1Thrower_1_1AimDirectionHistory.html", "classBalloonParty_1_1Thrower_1_1AimDirectionHistory" ],
         [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html", "classBalloonParty_1_1Thrower_1_1ThrowerController" ],
         [ "ThrowerLifetimeScope", "classBalloonParty_1_1Thrower_1_1ThrowerLifetimeScope.html", "classBalloonParty_1_1Thrower_1_1ThrowerLifetimeScope" ],
         [ "ThrowerOriginProvider", "classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html", "classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider" ],
