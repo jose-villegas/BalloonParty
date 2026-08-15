@@ -1,5 +1,6 @@
 var interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig =
 [
+    [ "AimAngleStepDegrees", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a1913f23d49b7f49c76d51428fca74ac8", null ],
     [ "CruisePiercingTapThreshold", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a2e7bc21b7ed76cc7912791a85f383785", null ],
     [ "CruiseTapCurve", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a5ca3be7bbd6f6282c5364a3eca8c7b4d", null ],
     [ "CruiseTapEaseDuration", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a0287395d0427c47cb911b2464848955c", null ],

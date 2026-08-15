@@ -52,6 +52,7 @@ var classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow =
     [ "_windows", "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#ad86dc94c1e216b96554d05a4026235df", null ],
     [ "ActualPathColor", "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a4a1769d12b3f207307feff8ffc5cc201", null ],
     [ "BoundaryPrecisionDegrees", "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a59b06bdc99af0703b5570a317288310d", null ],
+    [ "ConfigCache", "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a9a7040dea56236b62eb393e847b48031", null ],
     [ "DefaultArcMaxDegrees", "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a615b69b3b89287c66d56090e68f7ab1b", null ],
     [ "DefaultArcMinDegrees", "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a6c1c553ba60c805a142f77b5bac139aa", null ],
     [ "DefaultMinWindowWidthDegrees", "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a3eaf3f702e3bbf9cb865f458af53359b", null ],
@@ -64,5 +65,6 @@ var classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow =
     [ "PathThicknessPixels", "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#ab92a02bb3adb2bf746e8da1483437d58", null ],
     [ "QualifyingColor", "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#aca120322334c34c932c50ae21e8b6943", null ],
     [ "StripHeight", "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#aca0f65893d72d4346ed364a0ad8c38d3", null ],
-    [ "TargetLineColor", "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#afb77fe4658eeb9fd05b594add45b9c91", null ]
+    [ "TargetLineColor", "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#afb77fe4658eeb9fd05b594add45b9c91", null ],
+    [ "AimAngleStepDegrees", "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a0f91d3519ddff7fa9fb5812e8a1106a6", null ]
 ];

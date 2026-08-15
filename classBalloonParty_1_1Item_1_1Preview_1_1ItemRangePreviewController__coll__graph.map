@@ -1,46 +1,48 @@
 <map id="BalloonParty.Item.Preview.ItemRangePreviewController" name="BalloonParty.Item.Preview.ItemRangePreviewController">
-<area shape="rect" id="Node000001" title="Decides which item hosts the aim is sighted on, and drives the visible range telegraph through them i..." alt="" coords="1028,339,1237,379"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="741,5,827,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="841,9,880,9,924,14,967,26,1006,48,1039,80,1065,117,1087,158,1103,201,1124,280,1132,339,1127,339,1118,281,1098,202,1082,160,1061,120,1035,83,1002,52,965,31,923,19,880,14,841,14"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="354,51,462,76"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="476,67,585,83,722,114,796,137,869,165,940,200,1006,241,1067,291,1114,337,1110,341,1063,295,1002,245,937,205,867,170,794,142,721,119,584,88,475,72"/>
-<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html" title="Drives the pens of the one visible item&#45;range figure, closed&#45;form off a single clock — no tweens,..." alt="" coords="687,254,881,294"/>
-<area shape="poly" id="edge13_Node000013_Node000003" title=" " alt="" coords="476,73,569,101,618,122,664,148,696,173,726,201,770,252,766,256,722,205,693,177,661,152,616,126,567,106,475,79"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="359,100,457,125"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="471,117,563,130,663,151,762,180,838,206,912,238,1005,282,1102,337,1099,341,1003,287,910,243,836,211,761,185,662,157,562,135,470,122"/>
-<area shape="poly" id="edge14_Node000013_Node000004" title=" " alt="" coords="472,124,506,136,530,148,567,159,597,164,627,171,664,185,718,218,762,252,758,256,715,222,661,190,626,176,596,170,566,164,528,152,504,140,470,129"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="697,551,871,591"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="883,557,945,541,1003,513,1041,482,1074,445,1118,378,1123,381,1078,448,1045,486,1005,518,946,546,885,562"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="321,583,495,623"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="508,593,662,581,697,577,697,583,663,586,509,599"/>
-<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,583,212,623"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="226,601,321,601,321,606,226,606"/>
-<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="316,647,500,687"/>
-<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="513,648,587,632,662,611,686,601,718,589,720,594,688,606,664,617,588,637,514,653"/>
-<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="319,711,497,751"/>
-<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="510,724,550,717,589,705,627,688,661,664,670,650,672,635,674,618,685,602,701,589,704,594,689,605,679,620,678,635,675,652,665,668,630,692,591,710,551,722,511,729"/>
-<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,711,198,751"/>
-<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="212,729,318,729,318,734,212,734"/>
-<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="319,519,497,559"/>
-<area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="511,545,697,561,697,567,510,551"/>
-<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html" title="Shared reference to the current aim&#45;prediction trace, decoupled from direct access — mirrors BalloonP..." alt="" coords="697,615,871,655"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="884,621,946,603,975,589,1002,572,1026,551,1048,526,1082,472,1107,419,1123,378,1128,380,1112,421,1087,474,1052,529,1030,554,1006,576,978,594,948,608,886,626"/>
-<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="880,295,1051,337,1049,342,879,300"/>
-<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="315,278,501,318"/>
-<area shape="poly" id="edge15_Node000013_Node000014" title=" " alt="" coords="515,296,662,290,686,287,687,293,663,295,515,302"/>
-<area shape="rect" id="Node000015" href="$classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html" title="One pen of an item&#45;range telegraph: a head sprite dragging a TrailRenderer ribbon,..." alt="" coords="311,150,505,190"/>
-<area shape="poly" id="edge16_Node000013_Node000015" title=" " alt="" coords="497,191,530,199,597,214,663,230,729,251,727,256,662,235,596,219,529,205,495,196"/>
-<area shape="rect" id="Node000016" title=" " alt="" coords="47,187,171,212"/>
-<area shape="poly" id="edge17_Node000015_Node000016" title=" " alt="" coords="184,189,310,177,311,182,185,195"/>
-<area shape="rect" id="Node000017" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="15,122,202,162"/>
-<area shape="poly" id="edge18_Node000015_Node000017" title=" " alt="" coords="216,149,311,158,310,164,215,155"/>
-<area shape="rect" id="Node000018" href="$interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html" title="Tuning for the aim&#45;time item range telegraph (Item Range Preview)." alt="" coords="10,405,207,445"/>
-<area shape="poly" id="edge24_Node000001_Node000018" title=" " alt="" coords="221,443,311,454,415,458,521,456,626,448,728,436,911,406,1051,377,1052,382,912,412,728,442,626,453,521,461,415,464,310,459,220,448"/>
-<area shape="poly" id="edge19_Node000013_Node000018" title=" " alt="" coords="220,401,505,342,662,302,703,292,705,297,663,307,506,347,221,406"/>
-<area shape="rect" id="Node000019" href="$classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewViewport.html" title="Single shared owner of &quot;what is visible&quot; for the range&#45;preview figures — the camera&#45;derived world rec..." alt="" coords="311,405,505,445"/>
-<area shape="poly" id="edge21_Node000019_Node000018" title=" " alt="" coords="221,422,311,422,311,427,221,427"/>
-<area shape="poly" id="edge23_Node000001_Node000019" title=" " alt="" coords="519,414,662,402,1027,367,1028,373,663,407,519,419"/>
-<area shape="poly" id="edge20_Node000013_Node000019" title=" " alt="" coords="518,405,608,389,662,376,692,357,720,335,764,292,768,296,724,339,695,362,664,380,610,394,519,410"/>
-<area shape="rect" id="Node000020" href="$classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewShape.html" title="The figure one item&#39;s range draws, as a set of polylines." alt="" coords="311,214,505,254"/>
-<area shape="poly" id="edge22_Node000013_Node000020" title=" " alt="" coords="519,244,530,245,687,261,686,267,529,250,519,249"/>
+<area shape="rect" id="Node000001" title="Decides which item hosts the aim is sighted on, and drives the visible range telegraph through them i..." alt="" coords="1041,327,1251,367"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="755,117,840,142"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="854,133,935,152,978,169,1019,191,1057,223,1090,260,1135,325,1131,328,1086,263,1053,227,1016,196,976,174,933,158,853,139"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="361,262,469,287"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="483,274,719,286,868,298,1018,316,1062,324,1061,329,1017,321,868,303,719,291,482,279"/>
+<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html" title="Drives the pens of the one visible item&#45;range figure, closed&#45;form off a single clock — no tweens,..." alt="" coords="700,444,895,484"/>
+<area shape="poly" id="edge13_Node000013_Node000003" title=" " alt="" coords="483,286,519,296,604,322,638,338,678,367,691,386,702,405,727,425,754,442,752,446,724,429,698,408,686,389,674,371,636,343,602,327,518,301,481,291"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="365,311,464,337"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="478,322,715,326,1017,336,1041,337,1041,342,1017,341,715,332,478,327"/>
+<area shape="poly" id="edge14_Node000013_Node000004" title=" " alt="" coords="478,333,520,347,544,363,580,376,609,383,640,388,677,400,762,441,760,446,675,405,638,394,608,388,578,381,541,368,517,352,476,338"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="711,167,884,207"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="898,203,959,221,1019,246,1079,285,1126,324,1122,328,1076,289,1016,250,957,226,897,208"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="328,5,501,45"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="515,29,557,37,600,50,641,68,678,94,688,109,691,124,693,138,702,151,720,164,717,169,698,155,688,140,686,125,683,111,674,98,638,73,598,55,556,42,514,34"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,5,212,45"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="226,23,328,23,328,28,226,28"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="323,69,507,109"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="521,106,677,143,739,164,737,169,675,148,520,111"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="325,133,504,173"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="518,160,711,176,710,182,517,165"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,133,198,173"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="212,151,325,151,325,156,212,156"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="325,197,504,237"/>
+<area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="518,213,676,204,710,200,711,205,676,209,518,219"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html" title="Shared reference to the current aim&#45;prediction trace, decoupled from direct access — mirrors BalloonP..." alt="" coords="710,355,885,395"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="898,364,1041,352,1041,358,899,369"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="870,437,1084,364,1086,369,871,442"/>
+<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="321,489,508,529"/>
+<area shape="poly" id="edge15_Node000013_Node000014" title=" " alt="" coords="522,500,676,484,699,480,700,486,676,489,522,505"/>
+<area shape="rect" id="Node000015" href="$classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html" title="One pen of an item&#45;range telegraph: a head sprite dragging a TrailRenderer ribbon,..." alt="" coords="317,361,512,401"/>
+<area shape="poly" id="edge16_Node000013_Node000015" title=" " alt="" coords="496,402,543,415,700,446,699,451,542,420,494,408"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="47,341,171,366"/>
+<area shape="poly" id="edge17_Node000015_Node000016" title=" " alt="" coords="185,358,317,370,317,375,184,363"/>
+<area shape="rect" id="Node000017" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="15,391,202,431"/>
+<area shape="poly" id="edge18_Node000015_Node000017" title=" " alt="" coords="215,398,317,388,318,393,216,403"/>
+<area shape="rect" id="Node000018" href="$interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html" title="Tuning for the aim&#45;time item range telegraph (Item Range Preview)." alt="" coords="10,680,207,720"/>
+<area shape="poly" id="edge25_Node000001_Node000018" title=" " alt="" coords="207,720,349,743,435,750,527,752,621,747,716,732,808,706,851,688,893,667,939,636,981,597,1019,555,1052,511,1103,427,1133,366,1138,368,1108,430,1056,514,1023,558,985,601,943,640,896,672,854,693,809,711,717,737,622,752,527,757,434,755,348,748,206,725"/>
+<area shape="poly" id="edge19_Node000013_Node000018" title=" " alt="" coords="157,671,228,635,310,601,367,584,413,575,460,567,518,553,597,530,675,503,737,482,739,487,677,508,599,535,519,559,461,572,414,580,369,589,312,607,230,640,159,676"/>
+<area shape="rect" id="Node000019" href="$classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewViewport.html" title="Single shared owner of &quot;what is visible&quot; for the range&#45;preview figures — the camera&#45;derived world rec..." alt="" coords="317,680,512,720"/>
+<area shape="poly" id="edge21_Node000019_Node000018" title=" " alt="" coords="221,697,317,697,317,703,221,703"/>
+<area shape="poly" id="edge24_Node000001_Node000019" title=" " alt="" coords="526,700,601,693,639,686,675,675,748,643,819,605,887,561,950,516,1055,429,1123,365,1126,369,1058,433,953,520,890,566,822,609,751,648,677,680,640,691,602,699,526,706"/>
+<area shape="poly" id="edge20_Node000013_Node000019" title=" " alt="" coords="525,679,620,660,675,644,715,608,747,563,771,519,786,483,791,485,776,521,752,566,719,611,677,649,621,666,526,684"/>
+<area shape="rect" id="Node000020" href="$classBalloonParty_1_1Balloon_1_1BalloonContactRadii.html" title="Per&#45;type contact radius, read once off the authored prefabs." alt="" coords="311,616,519,656"/>
+<area shape="poly" id="edge22_Node000013_Node000020" title=" " alt="" coords="532,626,616,615,650,608,675,599,710,574,741,543,783,483,787,486,745,546,714,578,677,604,652,613,617,621,533,631"/>
+<area shape="rect" id="Node000021" href="$classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewShape.html" title="The figure one item&#39;s range draws, as a set of polylines." alt="" coords="317,425,512,465"/>
+<area shape="poly" id="edge23_Node000013_Node000021" title=" " alt="" coords="526,459,543,460,700,464,700,469,543,465,526,464"/>
 </map>

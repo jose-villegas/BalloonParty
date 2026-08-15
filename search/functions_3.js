@@ -145,5 +145,6 @@ var searchData=
   ['dropchainhostsafterremoval_142',['DropChainHostsAfterRemoval',['../classBalloonParty_1_1Item_1_1ItemAssigner.html#acb6a55ee635c933f8d3b6638346be74f',1,'BalloonParty::Item::ItemAssigner']]],
   ['dump_143',['Dump',['../classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerDumper.html#ace30bed3d529ddb0b3be882ce14c174f',1,'BalloonParty::Editor::FrameDump::FrameDebuggerDumper']]],
   ['dumpwithstepscreenshots_144',['DumpWithStepScreenshots',['../classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerDumper.html#a868158f52d6a7b8dc2bc50c0212a4a8e',1,'BalloonParty::Editor::FrameDump::FrameDebuggerDumper']]],
-  ['duration_145',['Duration',['../classBalloonParty_1_1Shared_1_1Extensions_1_1AnimationCurveExtensions.html#a4fb0c20f499639659da2e5e47e4a1b5e',1,'BalloonParty::Shared::Extensions::AnimationCurveExtensions']]]
+  ['duration_145',['Duration',['../classBalloonParty_1_1Shared_1_1Extensions_1_1AnimationCurveExtensions.html#a4fb0c20f499639659da2e5e47e4a1b5e',1,'BalloonParty::Shared::Extensions::AnimationCurveExtensions']]],
+  ['dwellduration_146',['DwellDuration',['../classBalloonParty_1_1Item_1_1LaserItemRotation.html#a4b8aee362766ed7da7cdb68dda8527bb',1,'BalloonParty::Item::LaserItemRotation']]]
 ];

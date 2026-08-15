@@ -129,6 +129,12 @@ Static Package Functions</h2></td></tr>
 <tr class="separator:a061dfcc6de2cdcc4a7edf07b370ebc1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6bfe4d3bc6d6a602b663559c4fbf20a" id="r_ac6bfe4d3bc6d6a602b663559c4fbf20a"><td class="memItemLeft" align="right" valign="top">static Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac6bfe4d3bc6d6a602b663559c4fbf20a">OriginForAngle</a> (float angleDegrees, in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotSolveContext.html">ShotSolveContext</a> context)</td></tr>
 <tr class="separator:ac6bfe4d3bc6d6a602b663559c4fbf20a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab88a95d92d59275da97225a68afb6c67" id="r_ab88a95d92d59275da97225a68afb6c67"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab88a95d92d59275da97225a68afb6c67">ResolveSweepAngle</a> (int index, float arcMinDegrees, float arcMaxDegrees, float stepDegrees, int continuousSampleCount)</td></tr>
+<tr class="memdesc:ab88a95d92d59275da97225a68afb6c67"><td class="mdescLeft">&#160;</td><td class="mdescRight">The i'th sweep angle over [<em>arcMinDegrees</em> , <em>arcMaxDegrees</em> ], paired with <a class="el" href="#adfa4ab3433fc337d9417d0997d9c73f2" title="How many angles a sweep over [arcMinDegrees , arcMaxDegrees ] needs.">ResolveSweepSampleCount</a>.  <br /></td></tr>
+<tr class="separator:ab88a95d92d59275da97225a68afb6c67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfa4ab3433fc337d9417d0997d9c73f2" id="r_adfa4ab3433fc337d9417d0997d9c73f2"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adfa4ab3433fc337d9417d0997d9c73f2">ResolveSweepSampleCount</a> (float arcMinDegrees, float arcMaxDegrees, float stepDegrees, int continuousSampleCount)</td></tr>
+<tr class="memdesc:adfa4ab3433fc337d9417d0997d9c73f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many angles a sweep over [<em>arcMinDegrees</em> , <em>arcMaxDegrees</em> ] needs.  <br /></td></tr>
+<tr class="separator:adfa4ab3433fc337d9417d0997d9c73f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a940e2beda842e0e975e718f0edea9be1" id="r_a940e2beda842e0e975e718f0edea9be1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotSimulationResult.html">ShotSimulationResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a940e2beda842e0e975e718f0edea9be1">SimulateAt</a> (float angleDegrees, in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotSolveContext.html">ShotSolveContext</a> context, <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a>[] workingSet, List&lt; Vector2 &gt; pathOut=null, List&lt; float &gt; timesOut=null, float radiusBias=0f, string targetColorId=null, in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightSeed.html">ShotFlightSeed</a> seed=default)</td></tr>
 <tr class="separator:a940e2beda842e0e975e718f0edea9be1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -138,6 +144,10 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:a124a77f42d4528948f5390f02e606718"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2fc676075e4f95609479ab424369f81" id="r_aa2fc676075e4f95609479ab424369f81"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2fc676075e4f95609479ab424369f81">CollectBoard</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a> balloonsConfig, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette, List&lt; <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a> &gt; targets, List&lt; <a class="el" href="structBalloonParty_1_1Solver_1_1ShotDynamicActorSnapshot.html">ShotDynamicActorSnapshot</a> &gt; otherDynamicActors, List&lt; <a class="el" href="structBalloonParty_1_1Solver_1_1ShotStaticActorSnapshot.html">ShotStaticActorSnapshot</a> &gt; staticActors)</td></tr>
 <tr class="separator:aa2fc676075e4f95609479ab424369f81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70ad11bed0959690fbc07344dea65b9e" id="r_a70ad11bed0959690fbc07344dea65b9e"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a70ad11bed0959690fbc07344dea65b9e">GridFirstIndex</a> (float arcMinDegrees, float stepDegrees)</td></tr>
+<tr class="separator:a70ad11bed0959690fbc07344dea65b9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d30d8e8dcf88ca17a413b3931b1d776" id="r_a6d30d8e8dcf88ca17a413b3931b1d776"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d30d8e8dcf88ca17a413b3931b1d776">GridLastIndex</a> (float arcMaxDegrees, float stepDegrees)</td></tr>
+<tr class="separator:a6d30d8e8dcf88ca17a413b3931b1d776"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5cae8f3bb69413e02681dfe4ce3bb53b" id="r_a5cae8f3bb69413e02681dfe4ce3bb53b"><td class="memItemLeft" align="right" valign="top">static Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5cae8f3bb69413e02681dfe4ce3bb53b">ResolveProjectileColliderOffset</a> (<a class="el" href="classBalloonParty_1_1Thrower_1_1ThrowerSettings.html">ThrowerSettings</a> settings)</td></tr>
 <tr class="separator:a5cae8f3bb69413e02681dfe4ce3bb53b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5c44a749d9d3b44d39fdda24a3a654f" id="r_aa5c44a749d9d3b44d39fdda24a3a654f"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5c44a749d9d3b44d39fdda24a3a654f">ResolveProjectileContactRadius</a> (<a class="el" href="classBalloonParty_1_1Thrower_1_1ThrowerSettings.html">ThrowerSettings</a> settings)</td></tr>
@@ -355,6 +365,64 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a70ad11bed0959690fbc07344dea65b9e" name="a70ad11bed0959690fbc07344dea65b9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70ad11bed0959690fbc07344dea65b9e">&#9670;&#160;</a></span>GridFirstIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int BalloonParty.Solver.ShotBoardGather.GridFirstIndex </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>arcMinDegrees</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>stepDegrees</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6d30d8e8dcf88ca17a413b3931b1d776" name="a6d30d8e8dcf88ca17a413b3931b1d776"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d30d8e8dcf88ca17a413b3931b1d776">&#9670;&#160;</a></span>GridLastIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int BalloonParty.Solver.ShotBoardGather.GridLastIndex </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>arcMaxDegrees</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>stepDegrees</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac6bfe4d3bc6d6a602b663559c4fbf20a" name="ac6bfe4d3bc6d6a602b663559c4fbf20a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac6bfe4d3bc6d6a602b663559c4fbf20a">&#9670;&#160;</a></span>OriginForAngle()</h2>
 
@@ -431,6 +499,95 @@ Static Private Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab88a95d92d59275da97225a68afb6c67" name="ab88a95d92d59275da97225a68afb6c67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab88a95d92d59275da97225a68afb6c67">&#9670;&#160;</a></span>ResolveSweepAngle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.Solver.ShotBoardGather.ResolveSweepAngle </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>index</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>arcMinDegrees</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>arcMaxDegrees</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>stepDegrees</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>continuousSampleCount</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The i'th sweep angle over [<em>arcMinDegrees</em> , <em>arcMaxDegrees</em> ], paired with <a class="el" href="#adfa4ab3433fc337d9417d0997d9c73f2" title="How many angles a sweep over [arcMinDegrees , arcMaxDegrees ] needs.">ResolveSweepSampleCount</a>. </p>
+<p>Continuous aim (<em>stepDegrees</em>  &lt;= 0) lerps evenly across <em>continuousSampleCount</em>  samples, exactly as before quantization existed. A quantized aim instead walks the absolute step grid — the same grid <a class="el" href="classBalloonParty_1_1Thrower_1_1ThrowerController.html#aa13022cc0ff2f4ac12d02298f5161506">ThrowerController.QuantizeAimDirection</a> snaps player input to — rather than lerping and hoping the result coincides with a reachable angle. That grid is anchored at multiples of <em>stepDegrees</em>  in absolute terms, not at <em>arcMinDegrees</em> , so the first sample is the smallest step multiple at or above <em>arcMinDegrees</em>  — not necessarily <em>arcMinDegrees</em>  itself. When the step is wider than the whole arc (no multiple falls inside it), this returns whichever neighbouring grid line sits closest to the arc, so the single guaranteed sample from <a class="el" href="#adfa4ab3433fc337d9417d0997d9c73f2" title="How many angles a sweep over [arcMinDegrees , arcMaxDegrees ] needs.">ResolveSweepSampleCount</a> is still a reachable angle. </p>
+
+</div>
+</div>
+<a id="adfa4ab3433fc337d9417d0997d9c73f2" name="adfa4ab3433fc337d9417d0997d9c73f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfa4ab3433fc337d9417d0997d9c73f2">&#9670;&#160;</a></span>ResolveSweepSampleCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int BalloonParty.Solver.ShotBoardGather.ResolveSweepSampleCount </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>arcMinDegrees</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>arcMaxDegrees</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>stepDegrees</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>continuousSampleCount</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How many angles a sweep over [<em>arcMinDegrees</em> , <em>arcMaxDegrees</em> ] needs. </p>
+<p>Continuous aim (<em>stepDegrees</em>  &lt;= 0) keeps the caller's fixed <em>continuousSampleCount</em>  unchanged — today's behaviour. A quantized aim instead counts the step multiples that land inside the arc, so the sweep only ever visits angles <a class="el" href="classBalloonParty_1_1Thrower_1_1ThrowerController.html#aa13022cc0ff2f4ac12d02298f5161506">ThrowerController.QuantizeAimDirection</a> can actually reach — a ~31° arc at a 5° step is ~7 samples, not thousands. Always at least 1, even when the step is wider than the whole arc. </p>
 
 </div>
 </div>

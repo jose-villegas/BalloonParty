@@ -307,7 +307,9 @@ var searchData=
   ['full_304',['Full',['../namespaceBalloonParty_1_1Shared_1_1SceneLight.html#aba1f92fb89a50c3bfb7903105772e9b9abbd47109890259c0127154db1af26c75',1,'BalloonParty::Shared::SceneLight']]],
   ['full_20detail_20in_20the_20review_20transcript_305',['5. Test plan (per test-everything; full detail in the review transcript)',['../plan_shot_solver_accuracy.html#autotoc_md671',1,'']]],
   ['full_20grid_20clear_20out_20calculation_306',['2.4 Full Grid Clear-Out Calculation',['../plan_future_ideas.html#autotoc_md381',1,'']]],
-  ['fullyshowndelay_307',['FullyShownDelay',['../classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#afb11b54dcc89b7cdfac42dde23904dc5',1,'BalloonParty::UI::Score::ProgressNotice']]],
-  ['future_20ideas_308',['5 — Relocated Future Ideas',['../plan_future_ideas.html#autotoc_md396',1,'']]],
-  ['future_20ideas_20improvements_309',['Future Ideas Improvements',['../plan_future_ideas.html',1,'Future Ideas &amp; Improvements'],['../plan_future_ideas.html#autotoc_md368',1,'Future Ideas &amp; Improvements']]]
+  ['fullholdmayadvance_307',['FullHoldMayAdvance',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a516bcad8df0d3e60a6f886b1a16c4797',1,'BalloonParty::Item::Preview::ItemRangePreviewController']]],
+  ['fullholdstarvationmultiplier_308',['FullHoldStarvationMultiplier',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a697a2a5410268b653162a3a2c608136d',1,'BalloonParty::Item::Preview::ItemRangePreviewController']]],
+  ['fullyshowndelay_309',['FullyShownDelay',['../classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#afb11b54dcc89b7cdfac42dde23904dc5',1,'BalloonParty::UI::Score::ProgressNotice']]],
+  ['future_20ideas_310',['5 — Relocated Future Ideas',['../plan_future_ideas.html#autotoc_md396',1,'']]],
+  ['future_20ideas_20improvements_311',['Future Ideas Improvements',['../plan_future_ideas.html',1,'Future Ideas &amp; Improvements'],['../plan_future_ideas.html#autotoc_md368',1,'Future Ideas &amp; Improvements']]]
 ];

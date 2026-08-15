@@ -110,6 +110,7 @@ $(function(){initNavTree('classBalloonParty_1_1Item_1_1LaserItemRotation.html','
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pac-methods">Package Functions</a> &#124;
+<a href="#pac-static-methods">Static Package Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
@@ -143,11 +144,24 @@ Package Functions</h2></td></tr>
 <tr class="memitem:aa261a406353ab9493b7bdc15d26449b7" id="r_aa261a406353ab9493b7bdc15d26449b7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa261a406353ab9493b7bdc15d26449b7">Configure</a> (<a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a> lightField, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette, <a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html">LaserSettings</a> settings, Vector2 slotSeparation)</td></tr>
 <tr class="separator:aa261a406353ab9493b7bdc15d26449b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
+Static Package Functions</h2></td></tr>
+<tr class="memitem:a4b8aee362766ed7da7cdb68dda8527bb" id="r_a4b8aee362766ed7da7cdb68dda8527bb"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4b8aee362766ed7da7cdb68dda8527bb">DwellDuration</a> (float stepSeconds)</td></tr>
+<tr class="separator:a4b8aee362766ed7da7cdb68dda8527bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae20cb14249d8d8ad3d7c009bfef84b37" id="r_ae20cb14249d8d8ad3d7c009bfef84b37"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae20cb14249d8d8ad3d7c009bfef84b37">IsDwelling</a> (float elapsedSeconds, float stepSeconds)</td></tr>
+<tr class="separator:ae20cb14249d8d8ad3d7c009bfef84b37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
 <tr class="memitem:af0820e9a76cb48619c535c998c47c40b" id="r_af0820e9a76cb48619c535c998c47c40b"><td class="memItemLeft" align="right" valign="top">float ISpinningItemVisual.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af0820e9a76cb48619c535c998c47c40b">AngleDegrees</a><code> [get]</code></td></tr>
 <tr class="memdesc:af0820e9a76cb48619c535c998c47c40b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current world-space Z rotation, in degrees.  <br /></td></tr>
 <tr class="separator:af0820e9a76cb48619c535c998c47c40b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0fa8fc5afaff4eeb2bda2c7198c54e5" id="r_ad0fa8fc5afaff4eeb2bda2c7198c54e5"><td class="memItemLeft" align="right" valign="top">float ISpinningItemVisual.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0fa8fc5afaff4eeb2bda2c7198c54e5">DwellSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad0fa8fc5afaff4eeb2bda2c7198c54e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">How long, in seconds, the item rests at one angle before a transition to the next begins — the same span <a class="el" href="#a1d589340cbdc2bd865de61473e20a3ae" title="True while AngleDegrees is holding still (dwelling on a step, or a frozen snapshot with nothing left ...">IsSettled</a> reads true for within one step.  <br /></td></tr>
+<tr class="separator:ad0fa8fc5afaff4eeb2bda2c7198c54e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d589340cbdc2bd865de61473e20a3ae" id="r_a1d589340cbdc2bd865de61473e20a3ae"><td class="memItemLeft" align="right" valign="top">bool ISpinningItemVisual.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1d589340cbdc2bd865de61473e20a3ae">IsSettled</a><code> [get]</code></td></tr>
+<tr class="memdesc:a1d589340cbdc2bd865de61473e20a3ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">True while <a class="el" href="#af0820e9a76cb48619c535c998c47c40b" title="Current world-space Z rotation, in degrees.">AngleDegrees</a> is holding still (dwelling on a step, or a frozen snapshot with nothing left to move), false while a transition toward a new angle is still in flight.  <br /></td></tr>
+<tr class="separator:a1d589340cbdc2bd865de61473e20a3ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48723aa011842cefd82541d36f42e33e" id="r_a48723aa011842cefd82541d36f42e33e"><td class="memItemLeft" align="right" valign="top">float ISpinningItemVisual.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a48723aa011842cefd82541d36f42e33e">SpinDegreesPerSecond</a><code> [get]</code></td></tr>
 <tr class="separator:a48723aa011842cefd82541d36f42e33e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -334,6 +348,60 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4b8aee362766ed7da7cdb68dda8527bb" name="a4b8aee362766ed7da7cdb68dda8527bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b8aee362766ed7da7cdb68dda8527bb">&#9670;&#160;</a></span>DwellDuration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.Item.LaserItemRotation.DwellDuration </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>stepSeconds</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae20cb14249d8d8ad3d7c009bfef84b37" name="ae20cb14249d8d8ad3d7c009bfef84b37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae20cb14249d8d8ad3d7c009bfef84b37">&#9670;&#160;</a></span>IsDwelling()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Item.LaserItemRotation.IsDwelling </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>elapsedSeconds</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>stepSeconds</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -823,6 +891,60 @@ Static Private Attributes</h2></td></tr>
 <p>Current world-space Z rotation, in degrees. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Item_1_1ISpinningItemVisual.html#ab4049964a2813eb366d89a0a46104045">BalloonParty.Item.ISpinningItemVisual</a>.</p>
+
+</div>
+</div>
+<a id="ad0fa8fc5afaff4eeb2bda2c7198c54e5" name="ad0fa8fc5afaff4eeb2bda2c7198c54e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0fa8fc5afaff4eeb2bda2c7198c54e5">&#9670;&#160;</a></span>DwellSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float ISpinningItemVisual. BalloonParty.Item.LaserItemRotation.DwellSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How long, in seconds, the item rests at one angle before a transition to the next begins — the same span <a class="el" href="#a1d589340cbdc2bd865de61473e20a3ae" title="True while AngleDegrees is holding still (dwelling on a step, or a frozen snapshot with nothing left ...">IsSettled</a> reads true for within one step. </p>
+<p>Lets a consumer compare its own re-draw cadence against how long a spin actually dwells (<code>ItemRangePreviewController</code>'s hold-loop-vs-rotation arbitration) without re-deriving the rotation's own authored step length and easing fraction. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Item_1_1ISpinningItemVisual.html#a7822d4c6b3e8d507660f6e4c0dd37a10">BalloonParty.Item.ISpinningItemVisual</a>.</p>
+
+</div>
+</div>
+<a id="a1d589340cbdc2bd865de61473e20a3ae" name="a1d589340cbdc2bd865de61473e20a3ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d589340cbdc2bd865de61473e20a3ae">&#9670;&#160;</a></span>IsSettled</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ISpinningItemVisual. BalloonParty.Item.LaserItemRotation.IsSettled</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>True while <a class="el" href="#af0820e9a76cb48619c535c998c47c40b" title="Current world-space Z rotation, in degrees.">AngleDegrees</a> is holding still (dwelling on a step, or a frozen snapshot with nothing left to move), false while a transition toward a new angle is still in flight. </p>
+<p>Lets a consumer that only ever sees the raw angle — the aim-time range telegraph (<code>ItemRangePreviewController</code>) — tell "arrived" from "still easing in" without inferring it from a frame-to-frame delta, which a <code>Mathf.SmoothStep</code> ease drives toward zero on its own tail and would misread as arrived early. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Item_1_1ISpinningItemVisual.html#a706b2c466499a013e565f4ef40a4abee">BalloonParty.Item.ISpinningItemVisual</a>.</p>
 
 </div>
 </div>

@@ -5,6 +5,8 @@ var classBalloonParty_1_1Item_1_1LaserItemRotation =
     [ "Configure", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#aa261a406353ab9493b7bdc15d26449b7", null ],
     [ "DisposeTelegraph", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#afb6617bc8a241e4d5208afdba45646f7", null ],
     [ "DrawnAngle", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#aba0e4596ca9d7178accf8ba96d6a6c35", null ],
+    [ "DwellDuration", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#a4b8aee362766ed7da7cdb68dda8527bb", null ],
+    [ "IsDwelling", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#ae20cb14249d8d8ad3d7c009bfef84b37", null ],
     [ "OnDisable", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#a65cbc62a91a434bd37d61a13e8a52da6", null ],
     [ "OnEnable", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#a49912cb28a389c228e981fe6aa3aa13b", null ],
     [ "RegisterTelegraph", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#a4bd81e223218116b7e3f41ed35bc58bb", null ],
@@ -26,5 +28,7 @@ var classBalloonParty_1_1Item_1_1LaserItemRotation =
     [ "_verticalRegistration", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#a777c5968796128e5cab774cf7cc2641f", null ],
     [ "TransitionFraction", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#adf90d23c890d8466f71dd9564e146cbd", null ],
     [ "AngleDegrees", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#af0820e9a76cb48619c535c998c47c40b", null ],
+    [ "DwellSeconds", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#ad0fa8fc5afaff4eeb2bda2c7198c54e5", null ],
+    [ "IsSettled", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#a1d589340cbdc2bd865de61473e20a3ae", null ],
     [ "SpinDegreesPerSecond", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#a48723aa011842cefd82541d36f42e33e", null ]
 ];

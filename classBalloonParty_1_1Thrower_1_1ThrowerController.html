@@ -110,9 +110,11 @@ $(function(){initNavTree('classBalloonParty_1_1Thrower_1_1ThrowerController.html
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pac-methods">Package Functions</a> &#124;
+<a href="#pac-static-methods">Static Package Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Thrower_1_1ThrowerController-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Thrower.ThrowerController Class Reference</div></div>
 </div><!--header-->
@@ -147,6 +149,11 @@ Package Functions</h2></td></tr>
 <tr class="separator:aabbcf90785287f2907e814454c0f191e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72af301666dcad5df369149590646f3f" id="r_a72af301666dcad5df369149590646f3f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a72af301666dcad5df369149590646f3f">FireAt</a> (Vector3 direction)</td></tr>
 <tr class="separator:a72af301666dcad5df369149590646f3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
+Static Package Functions</h2></td></tr>
+<tr class="memitem:aa13022cc0ff2f4ac12d02298f5161506" id="r_aa13022cc0ff2f4ac12d02298f5161506"><td class="memItemLeft" align="right" valign="top">static Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa13022cc0ff2f4ac12d02298f5161506">QuantizeAimDirection</a> (Vector3 direction, float stepDegrees)</td></tr>
+<tr class="separator:aa13022cc0ff2f4ac12d02298f5161506"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -262,6 +269,11 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a59bef5df1ec4f05c862e8ec46a47940f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e44adc3cdcb044fde4f2c5d6dd2b331" id="r_a0e44adc3cdcb044fde4f2c5d6dd2b331"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Thrower_1_1ThrowerView.html">ThrowerView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e44adc3cdcb044fde4f2c5d6dd2b331">_view</a></td></tr>
 <tr class="separator:a0e44adc3cdcb044fde4f2c5d6dd2b331"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:aa21bf7386f544bd4ddc85a778cd1d6a2" id="r_aa21bf7386f544bd4ddc85a778cd1d6a2"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa21bf7386f544bd4ddc85a778cd1d6a2">DegenerateDirectionSqrMagnitude</a> = 1e-8f</td></tr>
+<tr class="separator:aa21bf7386f544bd4ddc85a778cd1d6a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aabbcf90785287f2907e814454c0f191e" name="aabbcf90785287f2907e814454c0f191e"></a>
@@ -625,6 +637,35 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa13022cc0ff2f4ac12d02298f5161506" name="aa13022cc0ff2f4ac12d02298f5161506"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa13022cc0ff2f4ac12d02298f5161506">&#9670;&#160;</a></span>QuantizeAimDirection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Vector3 BalloonParty.Thrower.ThrowerController.QuantizeAimDirection </td>
+          <td>(</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>direction</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>stepDegrees</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1671,6 +1712,28 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa21bf7386f544bd4ddc85a778cd1d6a2" name="aa21bf7386f544bd4ddc85a778cd1d6a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa21bf7386f544bd4ddc85a778cd1d6a2">&#9670;&#160;</a></span>DegenerateDirectionSqrMagnitude</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.Thrower.ThrowerController.DegenerateDirectionSqrMagnitude = 1e-8f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

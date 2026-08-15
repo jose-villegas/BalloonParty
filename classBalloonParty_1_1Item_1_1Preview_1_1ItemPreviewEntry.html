@@ -116,13 +116,19 @@ $(function(){initNavTree('classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewEnt
 </div><!--header-->
 <div class="contents">
 
-<p>Pure polyline-vs-polyline math: where a trace first crosses one stroke of an <a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewShape.html" title="The figure one item&#39;s range draws, as a set of polylines.">ItemPreviewShape</a>, expressed as an arc-length offset along that stroke.  
+<p>Pure polyline-vs-polyline math: where a trace crosses one stroke of an <a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewShape.html" title="The figure one item&#39;s range draws, as a set of polylines.">ItemPreviewShape</a>, expressed as an arc-length offset along that stroke.  
  <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
+<tr class="memitem:a96b690fd7341e3355946a9ab4ae0ddd7" id="r_a96b690fd7341e3355946a9ab4ae0ddd7"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a96b690fd7341e3355946a9ab4ae0ddd7">AppendApproachLoop</a> (List&lt; Vector3 &gt; buffer, Vector3 center, Vector3 towardPoint, Vector2 fallbackDirection, float radius, int segments)</td></tr>
+<tr class="memdesc:a96b690fd7341e3355946a9ab4ae0ddd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends a closed loop around <em>center</em>  at <em>radius</em>  to <em>buffer</em>  — the "circle the balloon once" flourish <a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html" title="Drives the pens of the one visible item-range figure, closed-form off a single clock — no tweens,...">ItemPreviewTicker</a> prefixes onto an approach leg, ahead of the leg's own points.  <br /></td></tr>
+<tr class="separator:a96b690fd7341e3355946a9ab4ae0ddd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd37b308bccd0278410b93c62d5639bd" id="r_acd37b308bccd0278410b93c62d5639bd"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acd37b308bccd0278410b93c62d5639bd">TryFindCircleCrossing</a> (IReadOnlyList&lt; Vector3 &gt; tracePoints, IReadOnlyList&lt; float &gt; traceArcTable, Vector3 center, float radius, float hostOffset, bool forward, out Vector3 point, out float offset)</td></tr>
+<tr class="memdesc:acd37b308bccd0278410b93c62d5639bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where <em>tracePoints</em>  crosses the circle of <em>radius</em>  around <em>center</em> , walking outward from <em>hostOffset</em>  — the centre's own arc-length projection onto the trace (<code><a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html#a68b9b97bf4b8b6589939a3c364916ee9">ItemPreviewTicker._hostTraceOffset</a></code>) — on whichever side <em>forward</em>  selects.  <br /></td></tr>
+<tr class="separator:acd37b308bccd0278410b93c62d5639bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29935b25cc09e53d3c765b516c0980e0" id="r_a29935b25cc09e53d3c765b516c0980e0"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29935b25cc09e53d3c765b516c0980e0">TryFindEntryOffset</a> (<a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewShape.html">ItemPreviewShape</a> shape, int strokeIndex, IReadOnlyList&lt; float &gt; arcTable, IReadOnlyList&lt; Vector3 &gt; tracePoints, out float offset, out float traceOffset)</td></tr>
-<tr class="memdesc:a29935b25cc09e53d3c765b516c0980e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds where <em>tracePoints</em>  first crosses <em>shape</em> 's stroke at <em>strokeIndex</em> , walking the trace segment by segment so "first" means earliest along the shot's own direction of travel rather than merely the first stroke segment tested.  <br /></td></tr>
+<tr class="memdesc:a29935b25cc09e53d3c765b516c0980e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds where <em>tracePoints</em>  crosses <em>shape</em> 's stroke at <em>strokeIndex</em> , walking the trace segment by segment so "along travel" means ordered by the shot's own direction of travel rather than merely stroke-segment index.  <br /></td></tr>
 <tr class="separator:a29935b25cc09e53d3c765b516c0980e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bb295f5bb2afba7f418045b9f43fae2" id="r_a1bb295f5bb2afba7f418045b9f43fae2"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1bb295f5bb2afba7f418045b9f43fae2">TryFindNearestPointOnPolyline</a> (IReadOnlyList&lt; Vector3 &gt; points, Vector3 target, out Vector3 point, out float offset)</td></tr>
 <tr class="memdesc:a1bb295f5bb2afba7f418045b9f43fae2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where the closest point of an arbitrary polyline to <em>target</em>  sits: the point itself and its arc-length offset from the polyline's own first point.  <br /></td></tr>
@@ -134,18 +140,93 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:ac161c9203d23c742950fd1cb38e97933"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d571925eee1405acca30ae8b14b38e5" id="r_a1d571925eee1405acca30ae8b14b38e5"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1d571925eee1405acca30ae8b14b38e5">GetStrokeSegment</a> (in <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewStroke.html">ItemPreviewStroke</a> stroke, int segmentIndex, IReadOnlyList&lt; Vector3 &gt; points, out Vector3 a, out Vector3 b)</td></tr>
 <tr class="separator:a1d571925eee1405acca30ae8b14b38e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee1f7a0f2f0cc300839dc4de8a456627" id="r_aee1f7a0f2f0cc300839dc4de8a456627"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aee1f7a0f2f0cc300839dc4de8a456627">TryFindNearestCrossing</a> (Vector3 p1, Vector3 p2, in <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewStroke.html">ItemPreviewStroke</a> stroke, IReadOnlyList&lt; Vector3 &gt; points, int segmentCount, out int bestSegment, out float bestTStroke, out float bestTTrace)</td></tr>
-<tr class="separator:aee1f7a0f2f0cc300839dc4de8a456627"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82a6fa1026c7e2c86a57e96b1b04127a" id="r_a82a6fa1026c7e2c86a57e96b1b04127a"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a82a6fa1026c7e2c86a57e96b1b04127a">TryFindCrossingPastFloor</a> (Vector3 p1, Vector3 p2, in <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewStroke.html">ItemPreviewStroke</a> stroke, IReadOnlyList&lt; Vector3 &gt; points, int segmentCount, IReadOnlyList&lt; float &gt; arcTable, float minT, float traceArc, float traceSegmentLength, float floorTraceOffset, out float offset, out float traceOffset)</td></tr>
+<tr class="separator:a82a6fa1026c7e2c86a57e96b1b04127a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc6c8fd6ab65682ad15774f1b3da9bde" id="r_afc6c8fd6ab65682ad15774f1b3da9bde"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc6c8fd6ab65682ad15774f1b3da9bde">TryFindNearestCrossing</a> (Vector3 p1, Vector3 p2, in <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewStroke.html">ItemPreviewStroke</a> stroke, IReadOnlyList&lt; Vector3 &gt; points, int segmentCount, float minT, out int bestSegment, out float bestTStroke, out float bestTTrace)</td></tr>
+<tr class="separator:afc6c8fd6ab65682ad15774f1b3da9bde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8ca8b209106822e8e3f5d39a910c6bc" id="r_af8ca8b209106822e8e3f5d39a910c6bc"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af8ca8b209106822e8e3f5d39a910c6bc">TryGetSegmentCircleRoots</a> (Vector3 a, Vector3 b, Vector3 center, float radius, out float t1, out float t2)</td></tr>
+<tr class="separator:af8ca8b209106822e8e3f5d39a910c6bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab328ade956ac5f91827855748718efe5" id="r_ab328ade956ac5f91827855748718efe5"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab328ade956ac5f91827855748718efe5">TryLocateSegment</a> (IReadOnlyList&lt; float &gt; arcTable, float offset, out int segIndex, out float segT)</td></tr>
+<tr class="separator:ab328ade956ac5f91827855748718efe5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7a6b2e8d9baaaa5afb571b512dec9d6" id="r_ad7a6b2e8d9baaaa5afb571b512dec9d6"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad7a6b2e8d9baaaa5afb571b512dec9d6">TryPickInRange</a> (float t1, float t2, float lo, float hi, bool preferLarger, out float picked)</td></tr>
+<tr class="separator:ad7a6b2e8d9baaaa5afb571b512dec9d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c1d146d59a78b50dbafb5dfeac5cf33" id="r_a7c1d146d59a78b50dbafb5dfeac5cf33"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c1d146d59a78b50dbafb5dfeac5cf33">TryWalkCircleBackward</a> (IReadOnlyList&lt; Vector3 &gt; tracePoints, IReadOnlyList&lt; float &gt; traceArcTable, Vector3 center, float radius, int startSegment, float startT, out Vector3 point, out float offset)</td></tr>
+<tr class="separator:a7c1d146d59a78b50dbafb5dfeac5cf33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2452bc49e60bc38451e6045552a0ff47" id="r_a2452bc49e60bc38451e6045552a0ff47"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2452bc49e60bc38451e6045552a0ff47">TryWalkCircleForward</a> (IReadOnlyList&lt; Vector3 &gt; tracePoints, IReadOnlyList&lt; float &gt; traceArcTable, Vector3 center, float radius, int startSegment, float startT, out Vector3 point, out float offset)</td></tr>
+<tr class="separator:a2452bc49e60bc38451e6045552a0ff47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
+<tr class="memitem:a0f32078f13d0e57a7c0a725bdfd9ef61" id="r_a0f32078f13d0e57a7c0a725bdfd9ef61"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0f32078f13d0e57a7c0a725bdfd9ef61">DuplicateCrossingArcEpsilon</a> = 1e-4f</td></tr>
+<tr class="separator:a0f32078f13d0e57a7c0a725bdfd9ef61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64d0fcc0940cecdb7fe9c1cc65800535" id="r_a64d0fcc0940cecdb7fe9c1cc65800535"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a64d0fcc0940cecdb7fe9c1cc65800535">NoLowerBound</a> = -1f</td></tr>
+<tr class="separator:a64d0fcc0940cecdb7fe9c1cc65800535"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a010baf2b805188515ec2bd7e0f4d2e54" id="r_a010baf2b805188515ec2bd7e0f4d2e54"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a010baf2b805188515ec2bd7e0f4d2e54">ParallelEpsilon</a> = 1e-6f</td></tr>
 <tr class="separator:a010baf2b805188515ec2bd7e0f4d2e54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Pure polyline-vs-polyline math: where a trace first crosses one stroke of an <a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewShape.html" title="The figure one item&#39;s range draws, as a set of polylines.">ItemPreviewShape</a>, expressed as an arc-length offset along that stroke. </p>
+<div class="textblock"><p>Pure polyline-vs-polyline math: where a trace crosses one stroke of an <a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewShape.html" title="The figure one item&#39;s range draws, as a set of polylines.">ItemPreviewShape</a>, expressed as an arc-length offset along that stroke. </p>
 <p>Factored out so the intersection walk is edit-mode testable without the ticker's pen/pool machinery, mirroring <a class="el" href="classBalloonParty_1_1Prediction_1_1TraceHitGeometry.html" title="Pure polyline-vs-circle math, factored out of TraceHitMarker so the segment projection/intersection i...">BalloonParty.Prediction.TraceHitGeometry</a>. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a96b690fd7341e3355946a9ab4ae0ddd7" name="a96b690fd7341e3355946a9ab4ae0ddd7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96b690fd7341e3355946a9ab4ae0ddd7">&#9670;&#160;</a></span>AppendApproachLoop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.Item.Preview.ItemPreviewEntry.AppendApproachLoop </td>
+          <td>(</td>
+          <td class="paramtype">List&lt; Vector3 &gt;</td>          <td class="paramname"><span class="paramname"><em>buffer</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>center</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>towardPoint</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>fallbackDirection</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>segments</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Appends a closed loop around <em>center</em>  at <em>radius</em>  to <em>buffer</em>  — the "circle the balloon once" flourish <a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html" title="Drives the pens of the one visible item-range figure, closed-form off a single clock — no tweens,...">ItemPreviewTicker</a> prefixes onto an approach leg, ahead of the leg's own points. </p>
+<p>Starts and ends at the very same vertex: the last point re-uses the first outright rather than recomputing it from angle + 2π, so the loop closes exactly regardless of trig round-off. That starting vertex sits on the ray from <em>center</em>  through <em>towardPoint</em>  — the direction the leg that follows already departs in — so the loop's own end and the leg's own start connect via the shortest possible bridge rather than an arbitrary one; the caller (<code><a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html#a08417003a36bfce496425116a5b34ff8">ItemPreviewTicker.BuildApproachPaths</a></code>) appends the leg's true first point right after, and the two are simply adjacent points in one polyline from there — no special-casing needed at that seam, only at this one.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fallbackDirection</td><td>Used when <em>towardPoint</em>  coincides with <em>center</em>  — true of <a class="el" href="namespaceBalloonParty_1_1Item_1_1Laser.html">Laser</a>, <a class="el" href="namespaceBalloonParty_1_1Item_1_1Paint.html">Paint</a> and <a class="el" href="namespaceBalloonParty_1_1Item_1_1Lightning.html">Lightning</a>'s first arc, whose entry sits on the host itself, leaving no leg direction to sight the loop's start off. Normally the aim's own travel direction. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The loop's own arc length: the discrete polygon's actual perimeter, summed the same way every other stroke length in this file is (consecutive point distances), not the ideal <code>2πr</code> — so it stays exactly consistent with how the caller's own arc-length table later walks these same points. Zero (nothing appended) for a non-positive radius or fewer than 3 segments, the caller's own "no loop" case. </dd></dl>
+
+</div>
+</div>
 <a id="ac161c9203d23c742950fd1cb38e97933" name="ac161c9203d23c742950fd1cb38e97933"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac161c9203d23c742950fd1cb38e97933">&#9670;&#160;</a></span>ComputeArcOffset()</h2>
 
@@ -234,6 +315,154 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="acd37b308bccd0278410b93c62d5639bd" name="acd37b308bccd0278410b93c62d5639bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd37b308bccd0278410b93c62d5639bd">&#9670;&#160;</a></span>TryFindCircleCrossing()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Item.Preview.ItemPreviewEntry.TryFindCircleCrossing </td>
+          <td>(</td>
+          <td class="paramtype">IReadOnlyList&lt; Vector3 &gt;</td>          <td class="paramname"><span class="paramname"><em>tracePoints</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; float &gt;</td>          <td class="paramname"><span class="paramname"><em>traceArcTable</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>center</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>hostOffset</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>forward</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out Vector3</td>          <td class="paramname"><span class="paramname"><em>point</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out float</td>          <td class="paramname"><span class="paramname"><em>offset</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where <em>tracePoints</em>  crosses the circle of <em>radius</em>  around <em>center</em> , walking outward from <em>hostOffset</em>  — the centre's own arc-length projection onto the trace (<code><a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html#a68b9b97bf4b8b6589939a3c364916ee9">ItemPreviewTicker._hostTraceOffset</a></code>) — on whichever side <em>forward</em>  selects. </p>
+<p>Exists so a caller anchoring a loop on the balloon's own boundary (<a class="el" href="#a96b690fd7341e3355946a9ab4ae0ddd7" title="Appends a closed loop around center  at radius  to buffer  — the &quot;circle the balloon once&quot; flourish I...">AppendApproachLoop</a>) never has to assume the crossing sits exactly one radius along the trace from that projection: with a perpendicular offset <code>d</code> the true half-chord is <code>sqrt(r² - d²)</code>, not <code>r</code>, and a bent trace can cross the circle's boundary on a segment other than the one the projection itself falls on — both of which this walk solves for directly (a real per-segment line/circle intersection) rather than approximating.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forward</td><td>True to walk toward increasing trace offset, false toward decreasing — the caller picks whichever side the approach is actually heading, normally by comparing the stroke's own entry offset against <em>hostOffset</em> , so a figure whose entry lies further along travel (<a class="el" href="namespaceBalloonParty_1_1Item_1_1Shield.html">Shield</a>, out at the wall) leaves by the forward crossing and one whose entry lies behind the host (<a class="el" href="namespaceBalloonParty_1_1Item_1_1Bomb.html">Bomb</a>'s circle, which the sight reaches before the host centre) leaves by the backward one, with no special-casing needed between the two. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>False — leaving <em>point</em>  and <em>offset</em>  at their defaults — when there is nothing to walk (fewer than two trace points), the circle can't be reached at all (a non-positive radius, or a host projection further than <em>radius</em>  from every point on the trace), or the trace runs out before ever crossing back out of the circle on the requested side (its own end sits inside). A caller degrades to its pre-crossing fallback in every one of these, exactly as <a class="el" href="#a29935b25cc09e53d3c765b516c0980e0" title="Finds where tracePoints  crosses shape &#39;s stroke at strokeIndex , walking the trace segment by segmen...">TryFindEntryOffset</a>'s own callers do. </dd></dl>
+
+</div>
+</div>
+<a id="a82a6fa1026c7e2c86a57e96b1b04127a" name="a82a6fa1026c7e2c86a57e96b1b04127a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82a6fa1026c7e2c86a57e96b1b04127a">&#9670;&#160;</a></span>TryFindCrossingPastFloor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Item.Preview.ItemPreviewEntry.TryFindCrossingPastFloor </td>
+          <td>(</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>p1</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>p2</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewStroke.html">ItemPreviewStroke</a></td>          <td class="paramname"><span class="paramname"><em>stroke</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; Vector3 &gt;</td>          <td class="paramname"><span class="paramname"><em>points</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>segmentCount</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; float &gt;</td>          <td class="paramname"><span class="paramname"><em>arcTable</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>minT</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>traceArc</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>traceSegmentLength</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>floorTraceOffset</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out float</td>          <td class="paramname"><span class="paramname"><em>offset</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out float</td>          <td class="paramname"><span class="paramname"><em>traceOffset</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a29935b25cc09e53d3c765b516c0980e0" name="a29935b25cc09e53d3c765b516c0980e0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a29935b25cc09e53d3c765b516c0980e0">&#9670;&#160;</a></span>TryFindEntryOffset()</h2>
 
@@ -281,8 +510,8 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Finds where <em>tracePoints</em>  first crosses <em>shape</em> 's stroke at <em>strokeIndex</em> , walking the trace segment by segment so "first" means earliest along the shot's own direction of travel rather than merely the first stroke segment tested. </p>
-<p>A closed stroke's wrap leg (last point back to first) counts as a segment. Ties within one trace segment — more than one stroke segment crossed at once — are broken by the intersection nearest that trace segment's own start.</p>
+<p>Finds where <em>tracePoints</em>  crosses <em>shape</em> 's stroke at <em>strokeIndex</em> , walking the trace segment by segment so "along travel" means ordered by the shot's own direction of travel rather than merely stroke-segment index. </p>
+<p>Prefers the SECOND such crossing — the sight's exit from a stroke it passes through (<a class="el" href="namespaceBalloonParty_1_1Item_1_1Bomb.html">Bomb</a>'s blast circle, <a class="el" href="namespaceBalloonParty_1_1Item_1_1Paint.html">Paint</a>'s spread triangle) — falling back to the only crossing found when the sight crosses just once (<a class="el" href="namespaceBalloonParty_1_1Item_1_1Shield.html">Shield</a>'s stub sitting at the trace's own end, <a class="el" href="namespaceBalloonParty_1_1Item_1_1Laser.html">Laser</a>'s lines crossing at the host, a <a class="el" href="namespaceBalloonParty_1_1Item_1_1Lightning.html">Lightning</a> arc reached only through the chain, <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a>'s corridor anchored near-collinear with the trace itself). A closed stroke's wrap leg (last point back to first) counts as a segment; a single trace segment can cross a closed stroke twice, and the two crossings can also fall on different trace segments — either way, a crossing found on an earlier trace segment always precedes one found on a later one, regardless of stroke-segment index. Ties within one trace segment — more than one stroke segment crossed at once — are broken by the intersection nearest that trace segment's own start (or, once a first crossing is already in hand, nearest the first, since that is what "next along travel" means there). See <a class="el" href="#a0f32078f13d0e57a7c0a725bdfd9ef61">DuplicateCrossingArcEpsilon</a> for how a graze that would otherwise register as two near-identical crossings collapses to one instead of flickering between them.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">arcTable</td><td>The caller's cumulative-arc-length table, parallel to <a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewShape.html#ab6706ee352f8ef4af6b377e3eae7e790">ItemPreviewShape.Points</a>: <code>arcTable[stroke.Start + i]</code> is the distance from the stroke's first point to its i-th (see <code><a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html#a5a930fe7c47c5bbe7200a2debba46af3">ItemPreviewTicker.BuildArcTable</a></code>). Read only, never rebuilt here. </td></tr>
@@ -294,8 +523,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aee1f7a0f2f0cc300839dc4de8a456627" name="aee1f7a0f2f0cc300839dc4de8a456627"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aee1f7a0f2f0cc300839dc4de8a456627">&#9670;&#160;</a></span>TryFindNearestCrossing()</h2>
+<a id="afc6c8fd6ab65682ad15774f1b3da9bde" name="afc6c8fd6ab65682ad15774f1b3da9bde"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc6c8fd6ab65682ad15774f1b3da9bde">&#9670;&#160;</a></span>TryFindNearestCrossing()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -327,6 +556,11 @@ Static Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>segmentCount</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>minT</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -396,7 +630,306 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="af8ca8b209106822e8e3f5d39a910c6bc" name="af8ca8b209106822e8e3f5d39a910c6bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8ca8b209106822e8e3f5d39a910c6bc">&#9670;&#160;</a></span>TryGetSegmentCircleRoots()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Item.Preview.ItemPreviewEntry.TryGetSegmentCircleRoots </td>
+          <td>(</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>a</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>b</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>center</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out float</td>          <td class="paramname"><span class="paramname"><em>t1</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out float</td>          <td class="paramname"><span class="paramname"><em>t2</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab328ade956ac5f91827855748718efe5" name="ab328ade956ac5f91827855748718efe5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab328ade956ac5f91827855748718efe5">&#9670;&#160;</a></span>TryLocateSegment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Item.Preview.ItemPreviewEntry.TryLocateSegment </td>
+          <td>(</td>
+          <td class="paramtype">IReadOnlyList&lt; float &gt;</td>          <td class="paramname"><span class="paramname"><em>arcTable</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>offset</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out int</td>          <td class="paramname"><span class="paramname"><em>segIndex</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out float</td>          <td class="paramname"><span class="paramname"><em>segT</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad7a6b2e8d9baaaa5afb571b512dec9d6" name="ad7a6b2e8d9baaaa5afb571b512dec9d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7a6b2e8d9baaaa5afb571b512dec9d6">&#9670;&#160;</a></span>TryPickInRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Item.Preview.ItemPreviewEntry.TryPickInRange </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>t1</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>t2</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>lo</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>hi</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>preferLarger</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out float</td>          <td class="paramname"><span class="paramname"><em>picked</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7c1d146d59a78b50dbafb5dfeac5cf33" name="a7c1d146d59a78b50dbafb5dfeac5cf33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c1d146d59a78b50dbafb5dfeac5cf33">&#9670;&#160;</a></span>TryWalkCircleBackward()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Item.Preview.ItemPreviewEntry.TryWalkCircleBackward </td>
+          <td>(</td>
+          <td class="paramtype">IReadOnlyList&lt; Vector3 &gt;</td>          <td class="paramname"><span class="paramname"><em>tracePoints</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; float &gt;</td>          <td class="paramname"><span class="paramname"><em>traceArcTable</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>center</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>startSegment</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>startT</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out Vector3</td>          <td class="paramname"><span class="paramname"><em>point</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out float</td>          <td class="paramname"><span class="paramname"><em>offset</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2452bc49e60bc38451e6045552a0ff47" name="a2452bc49e60bc38451e6045552a0ff47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2452bc49e60bc38451e6045552a0ff47">&#9670;&#160;</a></span>TryWalkCircleForward()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Item.Preview.ItemPreviewEntry.TryWalkCircleForward </td>
+          <td>(</td>
+          <td class="paramtype">IReadOnlyList&lt; Vector3 &gt;</td>          <td class="paramname"><span class="paramname"><em>tracePoints</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; float &gt;</td>          <td class="paramname"><span class="paramname"><em>traceArcTable</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>center</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>startSegment</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>startT</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out Vector3</td>          <td class="paramname"><span class="paramname"><em>point</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out float</td>          <td class="paramname"><span class="paramname"><em>offset</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a0f32078f13d0e57a7c0a725bdfd9ef61" name="a0f32078f13d0e57a7c0a725bdfd9ef61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f32078f13d0e57a7c0a725bdfd9ef61">&#9670;&#160;</a></span>DuplicateCrossingArcEpsilon</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.Item.Preview.ItemPreviewEntry.DuplicateCrossingArcEpsilon = 1e-4f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a64d0fcc0940cecdb7fe9c1cc65800535" name="a64d0fcc0940cecdb7fe9c1cc65800535"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64d0fcc0940cecdb7fe9c1cc65800535">&#9670;&#160;</a></span>NoLowerBound</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.Item.Preview.ItemPreviewEntry.NoLowerBound = -1f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a010baf2b805188515ec2bd7e0f4d2e54" name="a010baf2b805188515ec2bd7e0f4d2e54"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a010baf2b805188515ec2bd7e0f4d2e54">&#9670;&#160;</a></span>ParallelEpsilon</h2>
 

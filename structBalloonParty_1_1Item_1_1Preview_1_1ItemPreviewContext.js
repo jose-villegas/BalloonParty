@@ -1,7 +1,8 @@
 var structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewContext =
 [
-    [ "ItemPreviewContext", "structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewContext.html#a1e4db553e98a561b9a7656f32e6a3cde", null ],
+    [ "ItemPreviewContext", "structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewContext.html#a54ea350bb79116eaee0cb05dea983d4a", null ],
     [ "AimDirection", "structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewContext.html#a930a24005381e90c524899cb10efd3dd", null ],
+    [ "HostBalloonType", "structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewContext.html#aa34ca83563aeb9255a3453ceda106e7b", null ],
     [ "HostColorId", "structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewContext.html#a4cf5904b25c859a76232f67c87dc2624", null ],
     [ "ItemSpinDegrees", "structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewContext.html#a804a44111a08730f14813b10f1510889", null ],
     [ "Origin", "structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewContext.html#a5f67bb384b669e90f8e606327b46acc3", null ],

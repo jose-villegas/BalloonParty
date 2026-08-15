@@ -127,14 +127,17 @@ $(function(){initNavTree('structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewCo
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1e4db553e98a561b9a7656f32e6a3cde" id="r_a1e4db553e98a561b9a7656f32e6a3cde"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e4db553e98a561b9a7656f32e6a3cde">ItemPreviewContext</a> (Vector2 origin, Vector2Int slot, Vector2 aimDirection, IReadOnlyList&lt; Vector3 &gt; tracePoints, string hostColorId, float itemSpinDegrees, <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a> traceEnd=default, <a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewViewport.html">ItemPreviewViewport</a> viewport=null)</td></tr>
-<tr class="separator:a1e4db553e98a561b9a7656f32e6a3cde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54ea350bb79116eaee0cb05dea983d4a" id="r_a54ea350bb79116eaee0cb05dea983d4a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a54ea350bb79116eaee0cb05dea983d4a">ItemPreviewContext</a> (Vector2 origin, Vector2Int slot, Vector2 aimDirection, IReadOnlyList&lt; Vector3 &gt; tracePoints, string hostColorId, float itemSpinDegrees, <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a> traceEnd=default, <a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewViewport.html">ItemPreviewViewport</a> viewport=null, <a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60e">BalloonType</a> hostBalloonType=default)</td></tr>
+<tr class="separator:a54ea350bb79116eaee0cb05dea983d4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a930a24005381e90c524899cb10efd3dd" id="r_a930a24005381e90c524899cb10efd3dd"><td class="memItemLeft" align="right" valign="top">readonly Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a930a24005381e90c524899cb10efd3dd">AimDirection</a></td></tr>
 <tr class="memdesc:a930a24005381e90c524899cb10efd3dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Travel direction of the trace leg that crosses the host — the shot's heading on arrival.  <br /></td></tr>
 <tr class="separator:a930a24005381e90c524899cb10efd3dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa34ca83563aeb9255a3453ceda106e7b" id="r_aa34ca83563aeb9255a3453ceda106e7b"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60e">BalloonType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa34ca83563aeb9255a3453ceda106e7b">HostBalloonType</a></td></tr>
+<tr class="memdesc:aa34ca83563aeb9255a3453ceda106e7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The host's own balloon type — lets a figure that needs the host's true size (the approach loop's circle, see <a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html" title="Drives the pens of the one visible item-range figure, closed-form off a single clock — no tweens,...">ItemPreviewTicker</a>) read it off <code>BalloonContactRadii</code> rather than guessing.  <br /></td></tr>
+<tr class="separator:aa34ca83563aeb9255a3453ceda106e7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4cf5904b25c859a76232f67c87dc2624" id="r_a4cf5904b25c859a76232f67c87dc2624"><td class="memItemLeft" align="right" valign="top">readonly string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4cf5904b25c859a76232f67c87dc2624">HostColorId</a></td></tr>
 <tr class="separator:a4cf5904b25c859a76232f67c87dc2624"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a804a44111a08730f14813b10f1510889" id="r_a804a44111a08730f14813b10f1510889"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a804a44111a08730f14813b10f1510889">ItemSpinDegrees</a></td></tr>
@@ -159,8 +162,8 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>Everything about one aim-crossing that a range figure depends on. </p>
 <p>Only per-crossing data lives here — the services a preview needs (config, grid, walls) are constructor-injected into the preview itself, since they never change between crossings. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a1e4db553e98a561b9a7656f32e6a3cde" name="a1e4db553e98a561b9a7656f32e6a3cde"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1e4db553e98a561b9a7656f32e6a3cde">&#9670;&#160;</a></span>ItemPreviewContext()</h2>
+<a id="a54ea350bb79116eaee0cb05dea983d4a" name="a54ea350bb79116eaee0cb05dea983d4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54ea350bb79116eaee0cb05dea983d4a">&#9670;&#160;</a></span>ItemPreviewContext()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -203,7 +206,12 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewViewport.html">ItemPreviewViewport</a></td>          <td class="paramname"><span class="paramname"><em>viewport</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewViewport.html">ItemPreviewViewport</a></td>          <td class="paramname"><span class="paramname"><em>viewport</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60e">BalloonType</a></td>          <td class="paramname"><span class="paramname"><em>hostBalloonType</em></span><span class="paramdefsep"> = </span><span class="paramdefval">default</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -224,6 +232,23 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Travel direction of the trace leg that crosses the host — the shot's heading on arrival. </p>
+
+</div>
+</div>
+<a id="aa34ca83563aeb9255a3453ceda106e7b" name="aa34ca83563aeb9255a3453ceda106e7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa34ca83563aeb9255a3453ceda106e7b">&#9670;&#160;</a></span>HostBalloonType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60e">BalloonType</a> BalloonParty.Item.Preview.ItemPreviewContext.HostBalloonType</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The host's own balloon type — lets a figure that needs the host's true size (the approach loop's circle, see <a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html" title="Drives the pens of the one visible item-range figure, closed-form off a single clock — no tweens,...">ItemPreviewTicker</a>) read it off <code>BalloonContactRadii</code> rather than guessing. </p>
+<p>Defaults to the enum's first member for call sites (mostly tests) that don't care, same as every other optional trailing param here. </p>
 
 </div>
 </div>
