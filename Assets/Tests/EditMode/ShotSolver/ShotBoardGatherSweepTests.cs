@@ -130,5 +130,80 @@ namespace BalloonParty.Tests.ShotSolver
 
             Assert.AreEqual(200f, angle, 0.0001f);
         }
+
+        // ClampToReachableAngle backs ThrowerController.ClampAndQuantizeAimDirection — the thrower's
+        // per-frame aim clamp. Pinned here too (not just via the controller) since this is the single
+        // source both the thrower and the sweep above share; a regression here would silently desync
+        // "what the player can aim at" from "what the sweep considers reachable".
+
+        [Test]
+        public void ClampToReachableAngle_ContinuousAim_RawAngleWithinRange_ReturnsRawAngleUnchanged()
+        {
+            var angle = ShotBoardGather.ClampToReachableAngle(90f, ArcMinDegrees, ArcMaxDegrees, 0f);
+
+            Assert.AreEqual(90f, angle, 0.0001f);
+        }
+
+        [Test]
+        public void ClampToReachableAngle_ContinuousAim_RawAngleOutsideRange_ClampsToNearestBound()
+        {
+            Assert.AreEqual(
+                ArcMinDegrees, ShotBoardGather.ClampToReachableAngle(-40f, ArcMinDegrees, ArcMaxDegrees, 0f), 0.0001f);
+            Assert.AreEqual(
+                ArcMaxDegrees, ShotBoardGather.ClampToReachableAngle(400f, ArcMinDegrees, ArcMaxDegrees, 0f), 0.0001f);
+        }
+
+        [Test]
+        public void ClampToReachableAngle_QuantizedAim_RawAngleWithinRangeOnGrid_ReturnsItUnchanged()
+        {
+            var angle = ShotBoardGather.ClampToReachableAngle(100f, ArcMinDegrees, ArcMaxDegrees, 5f);
+
+            Assert.AreEqual(100f, angle, 0.0001f);
+        }
+
+        [Test]
+        public void ClampToReachableAngle_QuantizedAim_RawAngleOutsideRangeEntirely_ClampsToNearestReachableGridLine()
+        {
+            // -50 is far below the 10..170 arc — must land on the nearest reachable multiple of 5
+            // INSIDE the arc (10), not on the nearest bare multiple of 5 to -50 (-50 itself).
+            var below = ShotBoardGather.ClampToReachableAngle(-50f, ArcMinDegrees, ArcMaxDegrees, 5f);
+            Assert.AreEqual(10f, below, 0.0001f);
+
+            var above = ShotBoardGather.ClampToReachableAngle(500f, ArcMinDegrees, ArcMaxDegrees, 5f);
+            Assert.AreEqual(170f, above, 0.0001f);
+        }
+
+        [Test]
+        public void ClampToReachableAngle_RangeBoundsNotGridMultiples_RawAngleBelowRange_LandsOnFirstReachableLine()
+        {
+            // Mirrors ResolveSweepAngle_StepDoesNotDivideArcEvenly_FirstSampleIsNotArcMinItself: 12 is
+            // not a multiple of 5, so the lowest reachable angle inside [12, 27] is 15, not 12 or 10.
+            var angle = ShotBoardGather.ClampToReachableAngle(0f, 12f, 27f, 5f);
+
+            Assert.AreEqual(15f, angle, 0.0001f);
+        }
+
+        [Test]
+        public void ClampToReachableAngle_RangeBoundsNotGridMultiples_RawAngleInsideRange_SnapsToNearestGridLine()
+        {
+            // 17 is between the reachable lines 15 and 20 — nearer to 15.
+            var angle = ShotBoardGather.ClampToReachableAngle(17f, 12f, 27f, 5f);
+
+            Assert.AreEqual(15f, angle, 0.0001f);
+        }
+
+        [Test]
+        public void ClampToReachableAngle_StepWiderThanRange_IgnoresRawAngle_MatchesResolveSweepAngleFallback()
+        {
+            // No multiple of 200 falls inside [10, 12] — ClampToReachableAngle must pick the exact same
+            // single reachable angle ResolveSweepAngle's index-0 sample would, regardless of where the
+            // raw angle sits, or the thrower and the sweep could disagree about the one angle that's
+            // actually reachable.
+            var expected = ShotBoardGather.ResolveSweepAngle(0, 10f, 12f, 200f, ContinuousSampleCount);
+
+            Assert.AreEqual(expected, ShotBoardGather.ClampToReachableAngle(-1000f, 10f, 12f, 200f), 0.0001f);
+            Assert.AreEqual(expected, ShotBoardGather.ClampToReachableAngle(11f, 10f, 12f, 200f), 0.0001f);
+            Assert.AreEqual(expected, ShotBoardGather.ClampToReachableAngle(1000f, 10f, 12f, 200f), 0.0001f);
+        }
     }
 }

@@ -37,8 +37,12 @@ namespace BalloonParty.Editor.ShotSolver
         private const int DefaultSampleCount = 2048;
         private const int DefaultTargetScore = 700;
         private const float DefaultMinWindowWidthDegrees = 1.5f;
-        private const float DefaultArcMinDegrees = 10f;
-        private const float DefaultArcMaxDegrees = 170f;
+
+        // Only used if no ProjectileFlightConfig asset can be found to seed _arcMinDegrees/
+        // _arcMaxDegrees from — mirrors that asset's own field defaults so the fallback reads the
+        // same as the intended behaviour, not an arbitrary placeholder.
+        private const float FallbackArcMinDegrees = 5f;
+        private const float FallbackArcMaxDegrees = 175f;
         private const float BoundaryPrecisionDegrees = 0.01f;
         private const float PathThicknessPixels = 4f;
         private const float GamePathThicknessWorld = 0.05f;
@@ -64,8 +68,12 @@ namespace BalloonParty.Editor.ShotSolver
         private int _sampleCount = DefaultSampleCount;
         private int _targetScore = DefaultTargetScore;
         private float _minWindowWidthDegrees = DefaultMinWindowWidthDegrees;
-        private float _arcMinDegrees = DefaultArcMinDegrees;
-        private float _arcMaxDegrees = DefaultArcMaxDegrees;
+        // Seeded from the live config's reachable range (the same source the thrower's clamp and
+        // FireBestShotCheat's sweep use), not a hardcoded constant — but user-editable from here on:
+        // this window's arc deliberately stays overridable for experimentation beyond what the player
+        // can actually aim at, unlike FireBestShotCheat which sweeps the config range as-is.
+        private float _arcMinDegrees = ConfigCache.Value != null ? ConfigCache.Value.AimAngleMinDegrees : FallbackArcMinDegrees;
+        private float _arcMaxDegrees = ConfigCache.Value != null ? ConfigCache.Value.AimAngleMaxDegrees : FallbackArcMaxDegrees;
         private bool _drawBest;
         private float[] _sweepScores;
         private int _bestWindowIndex = -1;
@@ -85,8 +93,8 @@ namespace BalloonParty.Editor.ShotSolver
 
         /// <summary>0 = continuous aim. Read from the project's <see cref="ProjectileFlightConfig" />
         /// asset rather than the live DI container — cheap enough for every <see cref="OnGUI" /> call,
-        /// and matches <see cref="ThrowerController.QuantizeAimDirection" />'s notion of "reachable"
-        /// regardless of whether a sweep has gathered the live board yet.</summary>
+        /// and matches <see cref="ThrowerController.ClampAndQuantizeAimDirection" />'s notion of
+        /// "reachable" regardless of whether a sweep has gathered the live board yet.</summary>
         private float AimAngleStepDegrees => ConfigCache.Value != null ? ConfigCache.Value.AimAngleStepDegrees : 0f;
 
         [MenuItem("Tools/BalloonParty/Shot Solver")]

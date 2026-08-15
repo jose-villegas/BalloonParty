@@ -41,5 +41,24 @@ namespace BalloonParty.Shared
 
         /// <summary>Minimum angular subdivision (degrees) the aim direction snaps to. 0 = continuous aim.</summary>
         float AimAngleStepDegrees { get; }
+
+        /// <summary>
+        /// Lower bound (degrees) of the reachable aim range, measured from +X the same way
+        /// <c>ShotBoardGather.DirectionFromDegrees</c> does (0 = due right, 90 = straight up). Unlike
+        /// <see cref="AimAngleStepDegrees"/> this is never "off" — the range always applies. Must stay
+        /// below <see cref="AimAngleMaxDegrees"/>.
+        /// </summary>
+        float AimAngleMinDegrees { get; }
+
+        /// <summary>Upper bound (degrees) of the reachable aim range — see <see cref="AimAngleMinDegrees"/>.</summary>
+        float AimAngleMaxDegrees { get; }
+
+        /// <summary>
+        /// Seconds to look back before a release event when resolving the fired direction. A
+        /// touchscreen lift-off registers as a position change (a finger rolling off the glass), so
+        /// firing the aim from slightly before release keeps that displacement out of the shot.
+        /// 0 = fire the live direction.
+        /// </summary>
+        float AimLatchSeconds { get; }
     }
 }

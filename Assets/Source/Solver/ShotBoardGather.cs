@@ -160,8 +160,9 @@ namespace BalloonParty.Solver
         /// <paramref name="arcMaxDegrees" />] needs. Continuous aim (<paramref name="stepDegrees" />
         /// &lt;= 0) keeps the caller's fixed <paramref name="continuousSampleCount" /> unchanged —
         /// today's behaviour. A quantized aim instead counts the step multiples that land inside the
-        /// arc, so the sweep only ever visits angles <see cref="ThrowerController.QuantizeAimDirection" />
-        /// can actually reach — a ~31° arc at a 5° step is ~7 samples, not thousands. Always at least
+        /// arc, so the sweep only ever visits angles
+        /// <see cref="ThrowerController.ClampAndQuantizeAimDirection" /> can actually reach — a ~31° arc
+        /// at a 5° step is ~7 samples, not thousands. Always at least
         /// 1, even when the step is wider than the whole arc.</summary>
         internal static int ResolveSweepSampleCount(
             float arcMinDegrees, float arcMaxDegrees, float stepDegrees, int continuousSampleCount)
@@ -181,7 +182,7 @@ namespace BalloonParty.Solver
         /// Continuous aim (<paramref name="stepDegrees" /> &lt;= 0) lerps evenly across
         /// <paramref name="continuousSampleCount" /> samples, exactly as before quantization existed.
         /// A quantized aim instead walks the absolute step grid — the same grid
-        /// <see cref="ThrowerController.QuantizeAimDirection" /> snaps player input to — rather than
+        /// <see cref="ThrowerController.ClampAndQuantizeAimDirection" /> snaps player input to — rather than
         /// lerping and hoping the result coincides with a reachable angle. That grid is anchored at
         /// multiples of <paramref name="stepDegrees" /> in absolute terms, not at
         /// <paramref name="arcMinDegrees" />, so the first sample is the smallest step multiple at or
@@ -209,6 +210,41 @@ namespace BalloonParty.Solver
             var below = lastIndex * stepDegrees;
             var above = firstIndex * stepDegrees;
             return arcMinDegrees - below <= above - arcMaxDegrees ? below : above;
+        }
+
+        /// <summary>Resolves a raw aim angle into the thrower's reachable set: clamped into
+        /// [<paramref name="minDegrees" />, <paramref name="maxDegrees" />] and, for a quantized aim
+        /// (<paramref name="stepDegrees" /> &gt; 0), snapped onto the exact same absolute step grid
+        /// <see cref="ResolveSweepAngle" /> sweeps — so the thrower's own clamp and the solver's sweep
+        /// can never disagree about what angles are reachable. Order matters: clamping the angle and
+        /// then snapping can push the result back outside the range (the nearest grid line to a
+        /// clamped boundary sample can sit past it); snapping the angle and then clamping it can land
+        /// on a value that isn't a step multiple at all. This sidesteps both by clamping the ROUNDED
+        /// GRID INDEX instead of the angle, so the result is always both a step multiple and inside
+        /// the range, by construction. Continuous aim (<paramref name="stepDegrees" /> &lt;= 0) is a
+        /// plain clamp. When no step multiple falls inside the range at all (a step wider than the
+        /// whole range), falls back to whichever neighbouring grid line sits closest — mirroring
+        /// <see cref="ResolveSweepAngle" />'s identical fallback for the same degenerate case.</summary>
+        internal static float ClampToReachableAngle(
+            float rawAngleDegrees, float minDegrees, float maxDegrees, float stepDegrees)
+        {
+            if (stepDegrees <= 0f)
+            {
+                return Mathf.Clamp(rawAngleDegrees, minDegrees, maxDegrees);
+            }
+
+            var firstIndex = GridFirstIndex(minDegrees, stepDegrees);
+            var lastIndex = GridLastIndex(maxDegrees, stepDegrees);
+            if (firstIndex > lastIndex)
+            {
+                var below = lastIndex * stepDegrees;
+                var above = firstIndex * stepDegrees;
+                return minDegrees - below <= above - maxDegrees ? below : above;
+            }
+
+            var rawIndex = Mathf.RoundToInt(rawAngleDegrees / stepDegrees);
+            var clampedIndex = Mathf.Clamp(rawIndex, firstIndex, lastIndex);
+            return clampedIndex * stepDegrees;
         }
 
         // Every occupied slot feeds the dynamic-board sim's SlotGrid: poppable/deflectable shot

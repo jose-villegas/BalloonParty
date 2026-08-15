@@ -201,7 +201,9 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
 
 ## Sweep and refine
 
-`ShotSolverWindow` samples N angles across a configurable arc (default 10°–170°, measured from +X),
+`ShotSolverWindow` samples N angles across a configurable arc (seeded from
+`IProjectileFlightConfig.AimAngleMinDegrees`/`AimAngleMaxDegrees` — 5°–175° by default, measured from
++X — but user-editable from there for experimentation beyond what the player can actually aim at),
 then finds contiguous runs where `RawScore >= target`. Each run's edges are refined by bisection to
 ~0.01° (the plan's §2 fair-window resolution threshold), not by enumerating exact tangency angles —
 the plan calls that exact enumeration v2. The "best" window is the widest qualifying one; "Draw Best"
@@ -211,7 +213,7 @@ re-simulates its centre angle with the simulator's optional path-capture list an
 **Sample count.** With `IProjectileFlightConfig.AimAngleStepDegrees` at 0 (continuous aim, the
 default), N is the editable **Samples** field (default 2048), lerped evenly across the arc — unchanged
 from before quantization existed. Once a non-zero step is configured, the aim only ever lands on
-multiples of that step (`ThrowerController.QuantizeAimDirection`), so the window instead derives N
+multiples of that step (`ThrowerController.ClampAndQuantizeAimDirection`), so the window instead derives N
 from the arc and the step (`ShotBoardGather.ResolveSweepSampleCount`) and samples exactly those
 reachable angles (`ResolveSweepAngle`) — the **Samples** field becomes a read-only display of that
 derived count rather than an editable one, so it can't drift back to sampling off-grid angles. This is

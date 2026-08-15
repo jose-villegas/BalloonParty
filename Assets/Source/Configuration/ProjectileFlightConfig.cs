@@ -124,6 +124,21 @@ namespace BalloonParty.Configuration
                  "snapped to the nearest one. 0 = continuous aim (today's exact behaviour).")]
         [SerializeField] [Min(0f)] private float _aimAngleStepDegrees;
 
+        [Tooltip("Lower bound of the reachable aim range, in degrees measured from +X (0 = due right, " +
+                 "90 = straight up, matching ShotBoardGather.DirectionFromDegrees) — the thrower simply " +
+                 "cannot aim below this. Unlike the step above, this is never off: the range always " +
+                 "applies. Must stay below Aim Angle Max Degrees (see OnValidate).")]
+        [SerializeField] private float _aimAngleMinDegrees = 5f;
+
+        [Tooltip("Upper bound of the reachable aim range — see Aim Angle Min Degrees. Must stay above it.")]
+        [SerializeField] private float _aimAngleMaxDegrees = 175f;
+
+        [Tooltip("Seconds to look back before release when resolving the fired direction. A " +
+                 "touchscreen lift-off reads as a last-instant position change; latching to a moment " +
+                 "before release keeps that displacement out of the shot. 0 = fire the live direction " +
+                 "(today's exact behaviour). Useful range to try: roughly 0.06-0.12 (60-120ms).")]
+        [SerializeField] [Min(0f)] private float _aimLatchSeconds;
+
         public int ProjectileStartingShields => _projectileStartingShields;
         public int ShieldToneThreshold => _shieldToneThreshold;
         public float ProjectileSpeed => _projectileSpeed;
@@ -149,5 +164,27 @@ namespace BalloonParty.Configuration
         public float HoldSpeedUpLerpDuration => _holdSpeedUpLerpDuration;
         public float HoldSpeedUpTooltipDelay => _holdSpeedUpTooltipDelay;
         public float AimAngleStepDegrees => _aimAngleStepDegrees;
+        public float AimAngleMinDegrees => _aimAngleMinDegrees;
+        public float AimAngleMaxDegrees => _aimAngleMaxDegrees;
+        public float AimLatchSeconds => _aimLatchSeconds;
+
+        // The range is never opt-in (unlike the step), so an inverted pair can't be left silently
+        // broken the way an unused knob could — auto-correct it back to a valid (non-empty) range and
+        // say so, mirroring LevelPacingConfiguration's own cross-field OnValidate guards. Editor-only:
+        // OnValidate never runs in a build, but by the time an edit ships it has already been fixed
+        // (or never introduced) in the editor.
+        private void OnValidate()
+        {
+#if UNITY_EDITOR
+            if (_aimAngleMinDegrees >= _aimAngleMaxDegrees)
+            {
+                Debug.LogWarning(
+                    $"ProjectileFlightConfig ({name}): Aim Angle Min ({_aimAngleMinDegrees}) must be less " +
+                    $"than Aim Angle Max ({_aimAngleMaxDegrees}) — the aim range would be empty or " +
+                    "inverted. Pushing Max just above Min.");
+                _aimAngleMaxDegrees = _aimAngleMinDegrees + 0.01f;
+            }
+#endif
+        }
     }
 }

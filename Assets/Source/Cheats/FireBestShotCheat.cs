@@ -30,8 +30,6 @@ namespace BalloonParty.Cheats
         // Only used for continuous aim (AimAngleStepDegrees <= 0) — a quantized aim instead samples
         // exactly the reachable angles (see ShotBoardGather.ResolveSweepSampleCount).
         private const int ContinuousSampleCount = 1024;
-        private const float ArcMinDegrees = 10f;
-        private const float ArcMaxDegrees = 170f;
 
         private readonly SlotGrid _grid;
         private readonly IProjectileFlightConfig _config;
@@ -192,13 +190,15 @@ namespace BalloonParty.Cheats
             in ShotSolveContext context, ShotBalloonState[] workingSet, out float bestAngle, out int bestScore)
         {
             var sampleCount = ShotBoardGather.ResolveSweepSampleCount(
-                ArcMinDegrees, ArcMaxDegrees, _config.AimAngleStepDegrees, ContinuousSampleCount);
-            bestAngle = ArcMinDegrees;
+                _config.AimAngleMinDegrees, _config.AimAngleMaxDegrees, _config.AimAngleStepDegrees,
+                ContinuousSampleCount);
+            bestAngle = _config.AimAngleMinDegrees;
             bestScore = int.MinValue;
             for (var i = 0; i < sampleCount; i++)
             {
                 var angle = ShotBoardGather.ResolveSweepAngle(
-                    i, ArcMinDegrees, ArcMaxDegrees, _config.AimAngleStepDegrees, ContinuousSampleCount);
+                    i, _config.AimAngleMinDegrees, _config.AimAngleMaxDegrees, _config.AimAngleStepDegrees,
+                    ContinuousSampleCount);
                 var score = ShotBoardGather.SimulateAt(angle, context, workingSet).RawScore;
                 if (score > bestScore)
                 {

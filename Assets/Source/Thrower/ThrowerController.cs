@@ -14,6 +14,7 @@ using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.SceneLight;
+using BalloonParty.Solver;
 using DG.Tweening;
 using MessagePipe;
 using UniRx;
@@ -28,6 +29,11 @@ namespace BalloonParty.Thrower
         // Sub-hundredth-of-a-degree noise floor: a direction whose length has decayed this far below unit
         // (mouse resting exactly on the thrower) is not a real heading to snap, only Atan2 noise.
         private const float DegenerateDirectionSqrMagnitude = 1e-8f;
+
+        // At a pessimistic 10 fps (a hitch, not steady state) this holds 3.2s of aim history — far
+        // beyond even a generous multiple of the latch's useful range (60-120ms) — for a few hundred
+        // bytes. Comfortably covers the largest sensible latch at the lowest sensible frame rate.
+        private const int AimHistoryCapacity = 32;
 
         private readonly IPredictionTraceConfig _traceConfig;
         private readonly IDeflectorField _deflectorField;
@@ -61,6 +67,11 @@ namespace BalloonParty.Thrower
         // Cached since Object.name allocates; Reload() hits this twice per shot.
         private readonly string _projectilePoolKey;
 
+        // Stores the quantized direction each frame (what RotateTo/the prediction trace actually show
+        // the player), so a latched fire reproduces exactly the heading that was on screen a moment
+        // earlier rather than re-deriving it from a raw sample.
+        private readonly AimDirectionHistory _aimHistory = new(AimHistoryCapacity);
+
         private IWriteableProjectileModel _activeProjectile;
         private ProjectileView _activeView;
         private Vector3 _direction = Vector3.up;
@@ -72,7 +83,8 @@ namespace BalloonParty.Thrower
         private PredictionTraceLights _traceLights;
 
         // Set by FireBestShotCheat (auto-fire toggle) to override the aimed direction on the next
-        // player-initiated fire. Consumed (cleared) once used. Null means no override.
+        // player-initiated fire. Consumed (cleared) once used. Null means no override. Not range-clamped
+        // here — see FireAt, which both this and the cheat's one-shot path route through.
         internal Vector3? DirectionOverride { get; set; }
 
         [Inject]
@@ -224,6 +236,13 @@ namespace BalloonParty.Thrower
         // NOT pause-gated — the cheat console holds PauseSource.Cheat while open, so a pause guard
         // would make the cheat a silent no-op; arming while paused is safe because the pause-gated
         // FixedUpdate keeps the shot still until the menu closes.
+        //
+        // Deliberately does not run the direction through ClampAndQuantizeAimDirection — same as it
+        // already bypasses quantization. FireBestShotCheat sweeps within
+        // [IProjectileFlightConfig.AimAngleMinDegrees, AimAngleMaxDegrees] (via ShotBoardGather), so
+        // its angles are already in range by construction; ShotSolverWindow's arc is deliberately
+        // user-editable for experimentation and is allowed to probe outside the player's reachable
+        // range on purpose (see its README) — clamping here would silently defeat that.
         internal void FireAt(Vector3 direction)
         {
             if (!_isMovable || _activeProjectile == null || _activeView == null || _activeProjectile.IsFree)
@@ -238,23 +257,34 @@ namespace BalloonParty.Thrower
             Fire();
         }
 
-        // Snaps a raw aim direction to the nearest multiple of stepDegrees, so the pointer keeps moving
-        // continuously while the heading it produces jumps between fixed headings — a game rule, so it
-        // lives here rather than in ThrowerView, which only reports raw pointer state. Snapping to the
-        // NEAREST multiple (not flooring) is deliberate: a floor would bias every aim toward one side of
-        // its true heading. stepDegrees <= 0, or a degenerate (near-zero) direction, both mean continuous
-        // aim — the direction passes through unchanged. internal static so the pure snap is edit-mode
-        // testable without spinning up the controller.
-        internal static Vector3 QuantizeAimDirection(Vector3 direction, float stepDegrees)
+        // Clamps a raw aim direction into [minAngleDegrees, maxAngleDegrees] and, for a quantized aim
+        // (stepDegrees > 0), snaps it to the nearest multiple of stepDegrees — so the pointer keeps
+        // moving continuously while the heading it produces jumps between fixed headings within the
+        // range. A game rule, so it lives here rather than in ThrowerView, which only reports raw
+        // pointer state. The range is never opt-in (unlike the step) — it always applies, even with
+        // stepDegrees <= 0 (a plain clamp).
+        //
+        // Order matters, and ShotBoardGather.ClampToReachableAngle is why this delegates rather than
+        // clamping-then-snapping or snapping-then-clamping here: clamp first and a snap can push the
+        // result back outside the range; snap first and a clamp can land on an angle that isn't on the
+        // grid. ClampToReachableAngle sidesteps both by clamping the ROUNDED GRID INDEX, guaranteeing
+        // the result is always both a step multiple and inside the range — and it's the exact same
+        // grid ShotBoardGather's sweep samples, so the player's reachable angles and the solver's
+        // swept ones can never disagree.
+        //
+        // A degenerate (near-zero) direction passes through unchanged — there is no angle to clamp.
+        // internal static so the pure operation is edit-mode testable without spinning up the controller.
+        internal static Vector3 ClampAndQuantizeAimDirection(
+            Vector3 direction, float stepDegrees, float minAngleDegrees, float maxAngleDegrees)
         {
-            if (stepDegrees <= 0f || direction.sqrMagnitude < DegenerateDirectionSqrMagnitude)
+            if (direction.sqrMagnitude < DegenerateDirectionSqrMagnitude)
             {
                 return direction;
             }
 
             var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            var snapped = Mathf.Round(angle / stepDegrees) * stepDegrees;
-            var radians = snapped * Mathf.Deg2Rad;
+            var resolved = ShotBoardGather.ClampToReachableAngle(angle, minAngleDegrees, maxAngleDegrees, stepDegrees);
+            var radians = resolved * Mathf.Deg2Rad;
             return new Vector3(Mathf.Cos(radians), Mathf.Sin(radians), 0f);
         }
 
@@ -388,8 +418,26 @@ namespace BalloonParty.Thrower
                 _direction = DirectionOverride.Value;
                 DirectionOverride = null;
             }
+            else
+            {
+                _direction = ResolveLatchedDirection();
+            }
 
             Fire();
+        }
+
+        // Trusts the aim from AimLatchSeconds before now, not the live sample: the release instant is
+        // the least trustworthy one in a touch gesture (see AimDirectionHistory). 0 (the default) skips
+        // the lookup and fires the live direction — today's exact behaviour.
+        private Vector3 ResolveLatchedDirection()
+        {
+            var latchSeconds = _flightConfig.AimLatchSeconds;
+            if (latchSeconds <= 0f)
+            {
+                return _direction;
+            }
+
+            return _aimHistory.TryResolve(Time.time - latchSeconds, out var direction) ? direction : _direction;
         }
 
         private void Fire()
@@ -399,6 +447,8 @@ namespace BalloonParty.Thrower
             _positionProvider.SetFree(true);
             ClearPredictionTrace();
             _view.PlayRecoil(_direction);
+            // A fast follow-up shot must not latch onto a direction recorded before this one fired.
+            _aimHistory.Clear();
         }
 
         private void UpdateDirection()
@@ -410,7 +460,10 @@ namespace BalloonParty.Thrower
 
             if (_view.TryGetAimDirection(out var direction))
             {
-                _direction = QuantizeAimDirection(direction, _flightConfig.AimAngleStepDegrees);
+                _direction = ClampAndQuantizeAimDirection(
+                    direction, _flightConfig.AimAngleStepDegrees, _flightConfig.AimAngleMinDegrees,
+                    _flightConfig.AimAngleMaxDegrees);
+                _aimHistory.Record(Time.time, _direction);
             }
         }
 

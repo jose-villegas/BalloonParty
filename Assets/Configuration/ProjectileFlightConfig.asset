@@ -165,3 +165,6 @@ MonoBehaviour:
   _holdSpeedUpLerpDuration: 2
   _holdSpeedUpTooltipDelay: 7
   _aimAngleStepDegrees: 0.5
+  _aimAngleMinDegrees: 5
+  _aimAngleMaxDegrees: 175
+  _aimLatchSeconds: 0.1
