@@ -69,13 +69,21 @@ namespace BalloonParty.Configuration
         [Range(0f, 0.5f)]
         [SerializeField] private float _overlapPadding;
 
-        [Tooltip("Caps how far one frame's overlap correction can displace a formation from its deterministic " +
-                 "travel center, as a fraction of its OWN CURRENT (bloom/taper-scaled) radius — not the fitted " +
-                 "radius, so the push budget tapers to zero right along with the shape as it nears the bar, " +
-                 "guaranteeing an exact landing. Keeps the push a bounded perturbation around the golden-spiral " +
-                 "path so a pop's shapes still read as one radiating burst instead of a jammed pile.")]
+        [Tooltip("Caps how much overlap correction ONE FRAME can add to a formation's PERSISTENT separation " +
+                 "offset (it accumulates across frames until formations genuinely clear each other — see " +
+                 "SeparationRelaxRate — so this is a per-frame growth-rate cap, not a cap on the total " +
+                 "displacement), as a fraction of the formation's OWN CURRENT (bloom/taper-scaled) radius. " +
+                 "Keeps growth smooth frame to frame instead of snapping formations apart in one jump.")]
         [Range(0.1f, 1f)]
         [SerializeField] private float _maxOverlapPushFraction;
+
+        [Tooltip("How fast (e-foldings per second) a formation's accumulated separation offset decays back " +
+                 "toward zero once it's no longer overlapping anyone — e.g. 1.5 halves the offset roughly " +
+                 "every 0.46s. Too low and shapes visibly hang onto a detour after clearing; too high and the " +
+                 "offset can't build up enough to actually separate two formations on a sustained collision " +
+                 "course. This is what lets a formation still land exactly on target after being shoved aside.")]
+        [Range(0.2f, 5f)]
+        [SerializeField] private float _separationRelaxRate;
 
         [Tooltip("0 exempts the PRINCIPAL formation's center from overlap correction entirely (it still " +
                  "repels others) — the level-up cinematic tracks this formation's anchor Transform, and even " +
@@ -93,6 +101,7 @@ namespace BalloonParty.Configuration
         public float DisplacementSpeed => _displacementSpeed;
         public float OverlapPadding => _overlapPadding;
         public float MaxOverlapPushFraction => _maxOverlapPushFraction;
+        public float SeparationRelaxRate => _separationRelaxRate;
         public float PrincipalPushDamping => _principalPushDamping;
 
         internal BigScoreFormationSettings(
@@ -105,6 +114,7 @@ namespace BalloonParty.Configuration
             float displacementSpeed = 1f,
             float overlapPadding = 0.05f,
             float maxOverlapPushFraction = 0.6f,
+            float separationRelaxRate = 1.5f,
             float principalPushDamping = 0f)
         {
             _baseRadius = baseRadius;
@@ -116,6 +126,7 @@ namespace BalloonParty.Configuration
             _displacementSpeed = displacementSpeed;
             _overlapPadding = overlapPadding;
             _maxOverlapPushFraction = maxOverlapPushFraction;
+            _separationRelaxRate = separationRelaxRate;
             _principalPushDamping = principalPushDamping;
         }
     }

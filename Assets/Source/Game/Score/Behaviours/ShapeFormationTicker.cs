@@ -165,8 +165,10 @@ namespace BalloonParty.Game.Score.Behaviours
                 AdvanceOrDefer(i, dt, unscaledDt);
             }
 
-            // Pass B: fold each pending formation's overlap correction directly into its CandidateCenter.
-            ResolveOverlaps(_pending, _stationary);
+            // Pass B: grow each pending formation's PERSISTENT SeparationOffset to resolve overlaps, then
+            // passively relax it back toward zero — see ResolveOverlaps for why this needs to persist
+            // across ticks instead of being recomputed fresh from CandidateCenter alone every frame.
+            ResolveOverlaps(_pending, _stationary, dt);
 
             // Pass C: commit each pending formation to its corrected center — rotation/ribbon reframe/pen
             // placement/guide/anchor/report, same math the old single-pass AdvanceFormation did, just fed the
@@ -367,55 +369,76 @@ namespace BalloonParty.Game.Score.Behaviours
         }
 
         // Pass B: resolves overlaps across every formation occupying space this tick — pending (mid-travel,
-        // CANDIDATE center) AND stationary (Paused/still-fading, current committed Center) — including pairs
-        // from DIFFERENT concurrent groups (a single AoE can trigger several BigScoreTrailBehaviour.Begin()
-        // calls in the same frame, each with its own origin), then folds the correction into each PENDING
-        // formation's CandidateCenter. Stationary entries always carry weight 0 (see AdvanceOrDefer), so their
-        // own computed offset is provably zero — never applied, since they're never committed by Pass C.
-        // Padding/push-fraction are read PER-FORMATION from its own Group.Settings (not a single shared value),
-        // so a future config that lets concurrent groups diverge doesn't silently pick an arbitrary one's knobs.
-        // Neither LIST is ever mutated (no Add/Remove) — only the FormationState instances they reference are,
-        // via CandidateCenter below — hence IReadOnlyList rather than List despite the write-back.
-        private void ResolveOverlaps(IReadOnlyList<FormationState> pending, IReadOnlyList<FormationState> stationary)
+        // apparent position = CandidateCenter + its own accumulated SeparationOffset) AND stationary
+        // (Paused/still-fading, current committed Center, already includes whatever offset it last carried)
+        // — including pairs from DIFFERENT concurrent groups (a single AoE can trigger several
+        // BigScoreTrailBehaviour.Begin() calls in the same frame, each with its own origin).
+        //
+        // The correction GROWS each pending formation's PERSISTENT SeparationOffset rather than being folded
+        // straight into CandidateCenter and discarded: CandidateCenter is recomputed from scratch every tick
+        // purely from Origin/liveTarget/Elapsed, with zero memory of any previous correction, so a one-shot
+        // "nudge the ideal position this frame" would just get reset the instant the next tick's ideal
+        // position is recomputed — two formations whose deterministic paths stay close for their WHOLE flight
+        // would wobble in place and never actually separate. Accumulating lets the separation build up over
+        // as many frames as it takes to genuinely clear, and the passive relax below (independent of whether
+        // a push happened this tick) eases it back toward zero once formations are no longer crowded, so a
+        // formation still eventually converges back onto — and lands at — its intended target.
+        //
+        // Stationary entries always carry weight 0 (see AdvanceOrDefer), so their own computed offset is
+        // provably zero and is never read back — they're never committed by Pass C. Padding/push-fraction/
+        // relax-rate are read PER-FORMATION from its own Group.Settings (not a single shared value), so a
+        // future config that lets concurrent groups diverge doesn't silently pick an arbitrary one's knobs.
+        // Neither LIST is ever mutated (no Add/Remove) — only the FormationState instances they reference are
+        // (SeparationOffset) — hence IReadOnlyList rather than List despite the write-back.
+        private void ResolveOverlaps(IReadOnlyList<FormationState> pending, IReadOnlyList<FormationState> stationary, float dt)
         {
             var count = pending.Count + stationary.Count;
-            if (count < 2)
+            if (count >= 2)
             {
-                return;
+                EnsureCorrectionCapacity(count);
+                for (var i = 0; i < pending.Count; i++)
+                {
+                    var state = pending[i];
+                    _correctionCenters[i] = state.CandidateCenter + state.SeparationOffset;
+                    _correctionRadii[i] = state.FormationRadius * state.CandidateScale;
+                    // The PRINCIPAL's anchor drives the level-up cinematic's camera target — a per-frame push
+                    // there is camera-visible in a way it isn't for a satellite, so it defaults to immovable
+                    // (weight 0) and lets its partner absorb the whole correction instead.
+                    _correctionWeights[i] = state.IsPrincipal ? state.Group.Settings.PrincipalPushDamping : 1f;
+                    _correctionPadding[i] = state.Group.Settings.OverlapPadding;
+                    _correctionMaxPush[i] = state.Group.Settings.MaxOverlapPushFraction;
+                }
+
+                for (var i = 0; i < stationary.Count; i++)
+                {
+                    var state = stationary[i];
+                    var index = pending.Count + i;
+                    _correctionCenters[index] = state.Center;
+                    _correctionRadii[index] = state.FormationRadius * state.LastScale;
+                    _correctionWeights[index] = 0f;
+                    _correctionPadding[index] = state.Group.Settings.OverlapPadding;
+                    _correctionMaxPush[index] = state.Group.Settings.MaxOverlapPushFraction;
+                }
+
+                FormationOverlapResolver.Resolve(
+                    _correctionCenters, _correctionRadii, _correctionWeights, _correctionPadding,
+                    _correctionMaxPush, count, _correctionOffsets);
+
+                for (var i = 0; i < pending.Count; i++)
+                {
+                    pending[i].SeparationOffset += _correctionOffsets[i];
+                }
             }
 
-            EnsureCorrectionCapacity(count);
+            // Passive relax: every pending formation's offset eases back toward zero at its own group's rate,
+            // UNCONDITIONALLY (not gated behind count >= 2 above) — a lone formation must still shed whatever
+            // offset it accumulated while it had company. Exponential (not linear) so it scales with the
+            // offset's own current size rather than needing a separate per-radius speed.
             for (var i = 0; i < pending.Count; i++)
             {
                 var state = pending[i];
-                _correctionCenters[i] = state.CandidateCenter;
-                _correctionRadii[i] = state.FormationRadius * state.CandidateScale;
-                // The PRINCIPAL's anchor drives the level-up cinematic's camera target — a per-frame push there
-                // is camera-visible in a way it isn't for a satellite, so it defaults to immovable (weight 0)
-                // and lets its partner absorb the whole correction instead.
-                _correctionWeights[i] = state.IsPrincipal ? state.Group.Settings.PrincipalPushDamping : 1f;
-                _correctionPadding[i] = state.Group.Settings.OverlapPadding;
-                _correctionMaxPush[i] = state.Group.Settings.MaxOverlapPushFraction;
-            }
-
-            for (var i = 0; i < stationary.Count; i++)
-            {
-                var state = stationary[i];
-                var index = pending.Count + i;
-                _correctionCenters[index] = state.Center;
-                _correctionRadii[index] = state.FormationRadius * state.LastScale;
-                _correctionWeights[index] = 0f;
-                _correctionPadding[index] = state.Group.Settings.OverlapPadding;
-                _correctionMaxPush[index] = state.Group.Settings.MaxOverlapPushFraction;
-            }
-
-            FormationOverlapResolver.Resolve(
-                _correctionCenters, _correctionRadii, _correctionWeights, _correctionPadding, _correctionMaxPush,
-                count, _correctionOffsets);
-
-            for (var i = 0; i < pending.Count; i++)
-            {
-                pending[i].CandidateCenter += _correctionOffsets[i];
+                var relax = Mathf.Exp(-state.Group.Settings.SeparationRelaxRate * dt);
+                state.SeparationOffset *= relax;
             }
         }
 
@@ -444,7 +467,7 @@ namespace BalloonParty.Game.Score.Behaviours
             var settings = state.Group.Settings;
             var oldCenter = state.Center;
             var oldRotation = state.Rotation;
-            var newCenter = state.CandidateCenter;
+            var newCenter = state.CandidateCenter + state.SeparationOffset;
             var scale = state.CandidateScale;
 
             // Tumble spins from t = 0 (invisible while the shape is a point). Ease the angular VELOCITY toward
@@ -815,11 +838,23 @@ namespace BalloonParty.Game.Score.Behaviours
             internal bool Reported;
             internal bool Frozen;
 
-            // This tick's not-yet-committed travel center/scale/live-target (Pass A), overlap-corrected by
-            // Pass B, then committed to Center/LastScale by Pass C (FinishAdvance) in ShapeFormationTicker.
+            // This tick's not-yet-committed travel center/scale/live-target (Pass A), read by Pass B (folded
+            // with SeparationOffset into the apparent position), then committed to Center/LastScale by Pass C
+            // (FinishAdvance) in ShapeFormationTicker. CandidateCenter is always the PURE deterministic
+            // travel-curve position — Pass B never writes into it.
             internal Vector3 CandidateCenter;
             internal float CandidateScale;
             internal Vector3 LiveTarget;
+
+            // PERSISTENT (not reset every tick) accumulated overlap-avoidance displacement from the
+            // deterministic path — see ShapeFormationTicker.ResolveOverlaps. A single per-frame correction
+            // recomputed fresh against CandidateCenter alone could never resolve a SUSTAINED overlap (two
+            // formations whose deterministic paths stay close for their whole flight): the next frame's
+            // ideal position has no memory of the previous frame's push, so it would just reset right back.
+            // Accumulating here lets separation build up over several frames until formations are genuinely
+            // apart, and decays back toward zero once they are (see the passive relax in ResolveOverlaps),
+            // so a formation still eventually converges back onto — and lands at — its intended target.
+            internal Vector3 SeparationOffset;
 
             // Set by Pass C when the formation's travel finished this tick; drained by Pass D's dedicated
             // release sweep — never removed from _states mid-Pass-C, where a recorded index could go stale.
@@ -857,6 +892,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 Reported = false;
                 Frozen = false;
                 PendingRelease = false;
+                SeparationOffset = Vector3.zero;
             }
         }
     }

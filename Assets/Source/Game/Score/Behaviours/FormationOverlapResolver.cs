@@ -10,14 +10,15 @@ namespace BalloonParty.Game.Score.Behaviours
     ///     <c>IReadOnlyList</c>) so indexing inside the O(n²) loop is direct, not through the array-
     ///     covariance interface shim.
     ///
-    ///     This is a JACOBI relaxation: every pair reads the frame's ORIGINAL centers and offsets only
-    ///     accumulate, never feed back into the same pass — a 3+-body mutual overlap can overshoot in one
-    ///     call. That's deliberate, not a bug: since <see cref="Resolve"/> is recomputed fresh every frame
-    ///     against a moving deterministic target (never against a persisted, potentially-drifted offset —
-    ///     see <see cref="ShapeFormationTicker.ComputeCandidateCenter"/>), convergence-in-one-pass was
-    ///     never the goal. Switching to Gauss-Seidel (feeding corrections back within the same pass) would
-    ///     make the result depend on iteration order — which the caller's swap-remove pooling shuffles
-    ///     nondeterministically — so don't "fix" the overshoot that way.
+    ///     This is a JACOBI relaxation: every pair reads the CALL's ORIGINAL centers and offsets only
+    ///     accumulate, never feed back into the same call — a 3+-body mutual overlap can overshoot in one
+    ///     call. That's deliberate, not a bug: this method itself holds no state and is called once per
+    ///     tick, so convergence-in-one-call was never the goal — the CALLER
+    ///     (<c>ShapeFormationTicker.ResolveOverlaps</c>) accumulates the returned offset into each
+    ///     formation's persistent <c>FormationState.SeparationOffset</c> across as many ticks as it takes to
+    ///     genuinely resolve a sustained overlap. Switching to Gauss-Seidel (feeding corrections back within
+    ///     the same call) would make the result depend on iteration order — which the caller's swap-remove
+    ///     pooling shuffles nondeterministically — so don't "fix" the overshoot that way.
     /// </summary>
     internal static class FormationOverlapResolver
     {
@@ -30,12 +31,13 @@ namespace BalloonParty.Game.Score.Behaviours
         /// <summary>
         ///     Single relaxation pass over the first <paramref name="count"/> entries: for every
         ///     overlapping pair, splits the correction by <paramref name="moveWeights"/> (0 = immovable —
-        ///     its partner absorbs the whole correction instead of a 50/50 split) and clamps each
-        ///     formation's TOTAL accumulated offset to <c>radius * maxPushFractions[i]</c> (per-formation,
-        ///     not a single shared value — two concurrent groups could author different settings).
-        ///     Recomputed fresh from the CURRENT <paramref name="centers"/> every call — no persisted
-        ///     velocity/spring state — so calling this once per frame against that frame's own
-        ///     deterministic travel position settles overlaps without ever drifting from the ideal path.
+        ///     its partner absorbs the whole correction instead of a 50/50 split) and clamps THIS CALL's
+        ///     offset to <c>radius * maxPushFractions[i]</c> (per-formation, not a single shared value —
+        ///     two concurrent groups could author different settings). This method holds no state of its
+        ///     own — every call reads only the <paramref name="centers"/> passed in — the caller decides
+        ///     whether that's a one-shot fresh position or, as <c>ShapeFormationTicker</c> does, a
+        ///     persistent accumulator plus the last resolved offset; see that class's <c>ResolveOverlaps</c>
+        ///     for why a sustained overlap needs the latter.
         ///
         ///     Distances are measured in the XY PLANE ONLY (Z is zeroed before every distance/direction
         ///     computation) — the board reads as flat 2D under an orthographic camera, but formation

@@ -143,18 +143,17 @@ overkill for a background flourish):
    the LARGEST fitted radius among this group's own decomposed pieces, not `ShapeCatalog.MaxRadiusScale` (the
    catalog-wide worst case, the 100-shape). A small burst like `7 = 5+2` now packs tight instead of spacing out
    as if a giant sphere might appear.
-2. **Continuous cross-group push** — `ShapeFormationTicker.LateTick` runs a 4-pass tick: **Pass A** computes
-   each mid-travel formation's deterministic CANDIDATE center/scale (`ComputeCandidateCenter`) and defers it to
-   a pending list (`_pending`) instead of committing; **Pass B** (`ResolveOverlaps`) runs
+2. **Continuous cross-group push, WITH MEMORY** — `ShapeFormationTicker.LateTick` runs a 4-pass tick: **Pass A**
+   computes each mid-travel formation's deterministic CANDIDATE center/scale (`ComputeCandidateCenter`) and
+   defers it to a pending list (`_pending`) instead of committing; **Pass B** (`ResolveOverlaps`) runs
    `FormationOverlapResolver.Resolve` — a pure, allocation-free O(n²) relaxation pass — over EVERY formation
    occupying space this tick, including ones from other concurrent groups and ones the level-up cinematic has
-   frozen (see **Stationary formations** below), and folds the correction into each candidate center; **Pass C**
-   (`FinishAdvance`) commits the corrected center (rotation/spin, ribbon re-framing, pen placement, guide,
-   anchor, arrival report — the same math the old single-pass `AdvanceFormation` did, just fed the corrected
-   center); **Pass D** is a dedicated backward sweep that releases whatever Pass C flagged finished, kept
-   separate from the other passes because removing a formation from `_states` by a recorded index mid-pass
-   would go stale the instant an earlier-recorded formation gets relocated by a later swap-remove in the same
-   frame.
+   frozen (see **Stationary formations** below); **Pass C** (`FinishAdvance`) commits the corrected center
+   (rotation/spin, ribbon re-framing, pen placement, guide, anchor, arrival report — the same math the old
+   single-pass `AdvanceFormation` did, just fed the corrected center); **Pass D** is a dedicated backward sweep
+   that releases whatever Pass C flagged finished, kept separate from the other passes because removing a
+   formation from `_states` by a recorded index mid-pass would go stale the instant an earlier-recorded
+   formation gets relocated by a later swap-remove in the same frame.
 
    Distances are resolved in the **XY plane only** — Z is zeroed before every distance/direction computation
    in `FormationOverlapResolver`. The board reads as flat 2D under the orthographic camera, but a formation's
@@ -162,18 +161,31 @@ overkill for a background flourish):
    full 3D would judge two formations "apart" the instant their travel progress differs by even a couple of
    frames, silently defeating the cross-group case this exists for.
 
-   The correction is recomputed fresh every frame directly against that frame's own deterministic travel
-   position — never against a persisted, potentially-drifted offset — so there's no separate "restoring force"
-   needed: the golden-spiral path IS the anchor every single frame. Two knobs (`BigScoreFormationSettings`,
-   read PER-FORMATION from its own group's settings, not a single shared value) keep a pop's formations
-   reading as *its own* radiating burst rather than an isotropic jammed pile: `OverlapPadding` (world-unit gap
-   enforced beyond "just touching") and `MaxOverlapPushFraction` (caps one frame's correction to a fraction of
-   the formation's OWN CURRENT bloom/taper-scaled radius, not its fitted radius — so the push budget tapers to
-   zero right along with the shape as it nears the bar, guaranteeing an exact landing). A third knob,
-   `PrincipalPushDamping` (default 0), exempts the PRINCIPAL formation's center from *receiving* correction —
-   `WriteAnchor` copies a principal's center into the Transform the level-up cinematic pans the camera to, so
-   even a small per-frame nudge there is camera-visible; the principal still repels others at full weight, it
-   just never moves itself.
+   **The correction is persistent, not recomputed-and-discarded every frame.** An earlier version folded the
+   resolved push straight into `CandidateCenter` and let it get overwritten next tick — but `CandidateCenter`
+   is recomputed from scratch every tick purely from `Origin`/`liveTarget`/`Elapsed`, with zero memory of any
+   previous correction, so that one-shot nudge just got reset the instant the next tick's ideal position was
+   recomputed. Two formations whose deterministic paths stay close for their WHOLE flight would wobble in
+   place and never actually separate — which is exactly the "still clumping" symptom that shipped first. Pass
+   B instead GROWS each formation's own `FormationState.SeparationOffset` — a field that persists across
+   ticks — and `FinishAdvance` commits `CandidateCenter + SeparationOffset` as the real position. Separation
+   can now build up over as many frames as it takes to genuinely clear a sustained overlap, at the cost of a
+   real (if usually small) detour from the ideal path and a correspondingly later arrival — an explicit
+   trade-off: no-overlap wins over exact-path-adherence. A passive per-tick relax (`Mathf.Exp(-SeparationRelaxRate
+   * dt)`, unconditional — runs even for a formation with no active push this tick) eases the offset back
+   toward zero once a formation clears its neighbours, so it still converges back onto — and lands at — its
+   intended target rather than carrying a permanent detour forever.
+
+   Four knobs (`BigScoreFormationSettings`, read PER-FORMATION from its own group's settings, not a single
+   shared value) tune this: `OverlapPadding` (world-unit gap enforced beyond "just touching"),
+   `MaxOverlapPushFraction` (caps how much ONE FRAME can grow the separation offset by, as a fraction of the
+   formation's OWN CURRENT bloom/taper-scaled radius — a per-frame growth-RATE cap, not a cap on the total
+   accumulated offset), `SeparationRelaxRate` (e-foldings/second the offset decays at once unopposed — higher
+   snaps back to the ideal path faster but can't sustain as much separation against a persistent collision
+   course), and `PrincipalPushDamping` (default 0, exempts the PRINCIPAL formation's center from *receiving*
+   correction — `WriteAnchor` copies a principal's center into the Transform the level-up cinematic pans the
+   camera to, so even a small per-frame nudge there is camera-visible; the principal still repels others at
+   full weight, it just never moves itself).
 
    **Stationary formations**: `AdvanceOrDefer` also collects Paused (cinematic-frozen) and still-fading
    (`SnapFade`) formations into `_stationary` — they enter the same `Resolve` call as `_pending`, always at
