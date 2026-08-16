@@ -37,11 +37,11 @@ namespace BalloonParty.Item.Preview
         private float _minY;
         private float _maxY;
 
-        public bool IsActive => _isActive;
-        public float MinX => _minX;
-        public float MaxX => _maxX;
-        public float MinY => _minY;
-        public float MaxY => _maxY;
+        internal bool IsActive => _isActive;
+        internal float MinX => _minX;
+        internal float MaxX => _maxX;
+        internal float MinY => _minY;
+        internal float MaxY => _maxY;
 
         internal ItemPreviewViewport(IItemPreviewConfig config)
         {
@@ -52,7 +52,7 @@ namespace BalloonParty.Item.Preview
         ///     Recomputes the visible rect from <see cref="Camera.main" />, at most once per frame — later
         ///     calls this frame are free, so every caller can refresh unconditionally before reading.
         /// </summary>
-        public void Refresh()
+        internal void Refresh()
         {
             if (_lastRefreshedFrame == Time.frameCount)
             {
@@ -86,7 +86,7 @@ namespace BalloonParty.Item.Preview
             _maxY = centre.y + halfHeight;
         }
 
-        public bool Contains(Vector3 position)
+        internal bool Contains(Vector3 position)
         {
             return position.x >= _minX && position.x <= _maxX && position.y >= _minY && position.y <= _maxY;
         }
@@ -97,7 +97,7 @@ namespace BalloonParty.Item.Preview
         ///     <c>WallLimits.TryFindCrossing</c>'s own. False when the rect isn't active or the ray never
         ///     crosses an edge (a near-zero direction).
         /// </summary>
-        public bool TryFindExit(Vector3 origin, Vector3 direction, out float distance)
+        internal bool TryFindExit(Vector3 origin, Vector3 direction, out float distance)
         {
             distance = 0f;
             if (!_isActive)

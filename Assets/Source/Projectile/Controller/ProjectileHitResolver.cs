@@ -25,6 +25,8 @@ namespace BalloonParty.Projectile.Controller
         private readonly IRunConfig _runConfig;
         private readonly SlotGrid _grid;
         private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
+        private readonly Vector2[] _sideNeighborOffsets = new Vector2[6];
+        private readonly Vector2Int[] _sideValidNeighborSlots = new Vector2Int[6];
 
         public ProjectileHitResolver(
             IHitDispatcher hitDispatcher,
@@ -253,8 +255,6 @@ namespace BalloonParty.Projectile.Controller
             }
 
             var center = (Vector2)_grid.IndexToWorldPosition(slot);
-            var neighborOffsets = new Vector2[6];
-            var validNeighborSlots = new Vector2Int[6];
             var validCount = 0;
             HexCoordinates.HexNeighborIndices(slot.x, slot.y, _neighborBuffer);
 
@@ -266,8 +266,8 @@ namespace BalloonParty.Projectile.Controller
                     continue;
                 }
 
-                validNeighborSlots[validCount] = neighbor;
-                neighborOffsets[validCount] = (Vector2)_grid.IndexToWorldPosition(neighbor) - center;
+                _sideValidNeighborSlots[validCount] = neighbor;
+                _sideNeighborOffsets[validCount] = (Vector2)_grid.IndexToWorldPosition(neighbor) - center;
                 validCount++;
             }
 
@@ -276,14 +276,23 @@ namespace BalloonParty.Projectile.Controller
                 return;
             }
 
-            var sideIndices = VectorMathExtensions.GetMostPerpendicularIndices(direction2D.normalized, neighborOffsets, validCount, Math.Min(2, validCount));
-            foreach (var index in sideIndices)
+            VectorMathExtensions.GetTwoMostPerpendicular(
+                direction2D.normalized, _sideNeighborOffsets, validCount, out var firstIndex, out var secondIndex);
+            RecolorSideNeighbor(firstIndex);
+            RecolorSideNeighbor(secondIndex);
+        }
+
+        private void RecolorSideNeighbor(int index)
+        {
+            if (index < 0)
             {
-                var neighbor = validNeighborSlots[index];
-                if (_grid.At(neighbor) is IPaintable paintable)
-                {
-                    paintable.Color.Value = GamePalette.RainbowColorId;
-                }
+                return;
+            }
+
+            var neighbor = _sideValidNeighborSlots[index];
+            if (_grid.At(neighbor) is IPaintable paintable)
+            {
+                paintable.Color.Value = GamePalette.RainbowColorId;
             }
         }
     }

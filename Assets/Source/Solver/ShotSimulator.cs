@@ -169,6 +169,13 @@ namespace BalloonParty.Solver
         // Fire Best cheat), so a shared scratch buffer never aliases across concurrent calls.
         private static readonly Vector2Int[] NeighborBuffer = new Vector2Int[6];
 
+        // Same single-threaded scratch-buffer convention as NeighborBuffer above, for
+        // ConvertSideNeighboursToRainbow — this simulator is single-threaded per sweep sample, so a
+        // static scratch buffer is safe and avoids a per-call allocation on a path ShotBoardGather's
+        // sweep can invoke hundreds of times.
+        private static readonly Vector2[] SideNeighborOffsetsScratch = new Vector2[6];
+        private static readonly int[] SideNeighborWorkingSetIndicesScratch = new int[6];
+
         // Reused across an item activation's EffectHit list (@ref plan_shot_solver_accuracy Phase C1
         // onward) — same single-threaded scratch-buffer convention as NeighborBuffer above.
         private static readonly List<EffectHit> ItemHitsScratch = new();
@@ -1282,10 +1289,7 @@ namespace BalloonParty.Solver
             var center = workingSet[centerIndex].Position;
             HexCoordinates.HexNeighborIndices(slot.x, slot.y, NeighborBuffer);
 
-            var neighborOffsets = new Vector2[6];
-            var neighborIndices = new int[6];
             var count = 0;
-
             for (var n = 0; n < 6; n++)
             {
                 var neighbor = NeighborBuffer[n];
@@ -1296,8 +1300,8 @@ namespace BalloonParty.Solver
                         continue;
                     }
 
-                    neighborOffsets[count] = workingSet[i].Position - center;
-                    neighborIndices[count] = i;
+                    SideNeighborOffsetsScratch[count] = workingSet[i].Position - center;
+                    SideNeighborWorkingSetIndicesScratch[count] = i;
                     count++;
                     break;
                 }
@@ -1308,15 +1312,23 @@ namespace BalloonParty.Solver
                 return;
             }
 
-            var sideIndices = VectorMathExtensions.GetMostPerpendicularIndices(direction, neighborOffsets, count, Math.Min(2, count));
-            for (var j = 0; j < sideIndices.Length; j++)
+            VectorMathExtensions.GetTwoMostPerpendicular(
+                direction, SideNeighborOffsetsScratch, count, out var firstIndex, out var secondIndex);
+            RecolorSideNeighbor(workingSet, firstIndex, rainbowColorId);
+            RecolorSideNeighbor(workingSet, secondIndex, rainbowColorId);
+        }
+
+        private static void RecolorSideNeighbor(ShotBalloonState[] workingSet, int sideIndex, string rainbowColorId)
+        {
+            if (sideIndex < 0)
             {
-                var i = neighborIndices[sideIndices[j]];
-                if (!workingSet[i].IsStatic && !workingSet[i].IsRainbow
-                    && !string.IsNullOrEmpty(workingSet[i].ColorId))
-                {
-                    ApplyRecolor(ref workingSet[i], rainbowColorId, rainbowColorId);
-                }
+                return;
+            }
+
+            var i = SideNeighborWorkingSetIndicesScratch[sideIndex];
+            if (!workingSet[i].IsStatic && !workingSet[i].IsRainbow && !string.IsNullOrEmpty(workingSet[i].ColorId))
+            {
+                ApplyRecolor(ref workingSet[i], rainbowColorId, rainbowColorId);
             }
         }
 

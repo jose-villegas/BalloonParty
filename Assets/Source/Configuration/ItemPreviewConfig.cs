@@ -6,6 +6,11 @@ namespace BalloonParty.Configuration
     [CreateAssetMenu(menuName = "Configuration/Item Preview Config", fileName = "ItemPreviewConfig")]
     internal class ItemPreviewConfig : ScriptableObject, IItemPreviewConfig
     {
+        // Resolved once rather than in the BloomCurve fallback branch below — that branch runs per pen
+        // per frame while a figure blooms (up to MaxPens times), and AnimationCurve.EaseInOut allocates a
+        // new managed+native curve every call.
+        private static readonly AnimationCurve DefaultBloomCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+
         [Header("Dashes")]
         [Tooltip("World length a pen paints within its dash slot before blanking. Universal across every " +
             "figure, so a Bomb circle and Shield's stub dash at the same size.")]
@@ -54,7 +59,7 @@ namespace BalloonParty.Configuration
         // every bloom to a pen sitting on the host — fall back the way ProjectileMotionResolver does.
         public AnimationCurve BloomCurve => _bloomCurve is { length: > 0 }
             ? _bloomCurve
-            : AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+            : DefaultBloomCurve;
 
         public float TraceSpeed => _traceSpeed;
         public float SightDelaySeconds => _sightDelaySeconds;

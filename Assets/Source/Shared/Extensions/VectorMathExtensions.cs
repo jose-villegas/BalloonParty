@@ -53,58 +53,44 @@ namespace BalloonParty.Shared.Extensions
             return t < 0f ? t + 1f : t;
         }
 
-        /// <summary>Returns the indices of the vectors that are most perpendicular to <paramref name="direction" />.
-        /// The result is the vectors with the smallest absolute dot product against the normalized direction,
-        /// useful for selecting the side neighbours of a projectile pop based on its travel direction.</summary>
-        internal static int[] GetMostPerpendicularIndices(Vector2 direction, Vector2[] vectors, int vectorCount, int count)
+        /// <summary>Finds the (up to) two vectors most perpendicular to <paramref name="direction" /> — the
+        /// smallest absolute dot product against the normalized direction — used to pick the left/right side
+        /// neighbours of a projectile pop from its travel direction. Allocation-free: a single pass tracking
+        /// the two smallest dots directly, rather than sorting a scratch copy of every candidate, since every
+        /// caller only ever wants the best two. -1 in either out parameter means no such vector exists
+        /// (<paramref name="vectorCount" /> was 0 or 1).</summary>
+        internal static void GetTwoMostPerpendicular(
+            Vector2 direction, Vector2[] vectors, int vectorCount, out int firstIndex, out int secondIndex)
         {
-            if (vectors == null || vectorCount <= 0 || count <= 0)
+            firstIndex = -1;
+            secondIndex = -1;
+            if (vectors == null)
             {
-                return Array.Empty<int>();
+                return;
             }
 
-            var absDots = new float[vectorCount];
-            var indices = new int[vectorCount];
+            var firstDot = float.MaxValue;
+            var secondDot = float.MaxValue;
             for (var i = 0; i < vectorCount; i++)
             {
                 var vector = vectors[i];
-                if (vector.sqrMagnitude < 1e-8f)
+                var absDot = vector.sqrMagnitude < 1e-8f
+                    ? 1f
+                    : Mathf.Abs(Vector2.Dot(direction, vector.normalized));
+
+                if (absDot < firstDot)
                 {
-                    absDots[i] = 1f;
+                    secondDot = firstDot;
+                    secondIndex = firstIndex;
+                    firstDot = absDot;
+                    firstIndex = i;
                 }
-                else
+                else if (absDot < secondDot)
                 {
-                    absDots[i] = Mathf.Abs(Vector2.Dot(direction, vector.normalized));
-                }
-
-                indices[i] = i;
-            }
-
-            for (var i = 0; i < vectorCount - 1; i++)
-            {
-                for (var j = i + 1; j < vectorCount; j++)
-                {
-                    if (absDots[j] < absDots[i])
-                    {
-                        var tempDot = absDots[i];
-                        absDots[i] = absDots[j];
-                        absDots[j] = tempDot;
-
-                        var tempIndex = indices[i];
-                        indices[i] = indices[j];
-                        indices[j] = tempIndex;
-                    }
+                    secondDot = absDot;
+                    secondIndex = i;
                 }
             }
-
-            count = Mathf.Min(count, vectorCount);
-            var result = new int[count];
-            for (var i = 0; i < count; i++)
-            {
-                result[i] = indices[i];
-            }
-
-            return result;
         }
 
         /// <summary>True length of the open polyline through every point — the sum of consecutive segment lengths.</summary>

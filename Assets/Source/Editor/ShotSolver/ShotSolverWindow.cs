@@ -151,7 +151,7 @@ namespace BalloonParty.Editor.ShotSolver
                 // Quantized aim: sampling anything off the reachable grid could recommend (and, via
                 // Fire Best, actually fire) a shot the player could never aim at — so once a step is
                 // configured, the count is derived from the arc/step and shown, not user-editable.
-                _sampleCount = ShotBoardGather.ResolveSweepSampleCount(
+                _sampleCount = AimAngleGrid.ResolveSweepSampleCount(
                     _arcMinDegrees, _arcMaxDegrees, stepDegrees, _sampleCount);
                 using (new EditorGUI.DisabledScope(true))
                 {
@@ -628,7 +628,7 @@ namespace BalloonParty.Editor.ShotSolver
 
         private float SampleAngle(int index)
         {
-            return ShotBoardGather.ResolveSweepAngle(
+            return AimAngleGrid.ResolveSweepAngle(
                 index, _arcMinDegrees, _arcMaxDegrees, AimAngleStepDegrees, _sampleCount);
         }
 

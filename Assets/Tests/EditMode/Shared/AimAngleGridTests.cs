@@ -1,15 +1,15 @@
 using NUnit.Framework;
 using UnityEngine;
-using BalloonParty.Solver;
+using BalloonParty.Shared;
 
-namespace BalloonParty.Tests.ShotSolver
+namespace BalloonParty.Tests.Shared
 {
-    /// <summary>Pins <see cref="ShotBoardGather.ResolveSweepSampleCount" />/<see cref="ShotBoardGather.ResolveSweepAngle" />
+    /// <summary>Pins <see cref="AimAngleGrid.ResolveSweepSampleCount" />/<see cref="AimAngleGrid.ResolveSweepAngle" />
     /// — the shared sample-grid derivation both <c>FireBestShotCheat</c> and <c>ShotSolverWindow</c>
     /// sweep against, so a quantized aim (<c>IProjectileFlightConfig.AimAngleStepDegrees</c>) only
     /// ever samples angles the player could actually reach.</summary>
     [TestFixture]
-    public class ShotBoardGatherSweepTests
+    public class AimAngleGridTests
     {
         private const float ArcMinDegrees = 10f;
         private const float ArcMaxDegrees = 170f;
@@ -18,7 +18,7 @@ namespace BalloonParty.Tests.ShotSolver
         [Test]
         public void ResolveSweepSampleCount_ZeroStep_ReturnsContinuousCountUnchanged()
         {
-            var count = ShotBoardGather.ResolveSweepSampleCount(
+            var count = AimAngleGrid.ResolveSweepSampleCount(
                 ArcMinDegrees, ArcMaxDegrees, 0f, ContinuousSampleCount);
 
             Assert.AreEqual(ContinuousSampleCount, count);
@@ -32,7 +32,7 @@ namespace BalloonParty.Tests.ShotSolver
             for (var i = 0; i < ContinuousSampleCount; i += 97)
             {
                 var expected = Mathf.Lerp(ArcMinDegrees, ArcMaxDegrees, i / (float)(ContinuousSampleCount - 1));
-                var actual = ShotBoardGather.ResolveSweepAngle(
+                var actual = AimAngleGrid.ResolveSweepAngle(
                     i, ArcMinDegrees, ArcMaxDegrees, 0f, ContinuousSampleCount);
 
                 Assert.AreEqual(expected, actual, 0.0001f);
@@ -42,7 +42,7 @@ namespace BalloonParty.Tests.ShotSolver
         [Test]
         public void ResolveSweepSampleCount_NegativeStep_TreatedAsContinuous()
         {
-            var count = ShotBoardGather.ResolveSweepSampleCount(
+            var count = AimAngleGrid.ResolveSweepSampleCount(
                 ArcMinDegrees, ArcMaxDegrees, -5f, ContinuousSampleCount);
 
             Assert.AreEqual(ContinuousSampleCount, count);
@@ -52,7 +52,7 @@ namespace BalloonParty.Tests.ShotSolver
         public void ResolveSweepSampleCount_StepDividesArcEvenly_CountsEveryGridLineInclusive()
         {
             // 10..170 by 5 lands exactly on both ends: 33 multiples of 5.
-            var count = ShotBoardGather.ResolveSweepSampleCount(ArcMinDegrees, ArcMaxDegrees, 5f, ContinuousSampleCount);
+            var count = AimAngleGrid.ResolveSweepSampleCount(ArcMinDegrees, ArcMaxDegrees, 5f, ContinuousSampleCount);
 
             Assert.AreEqual(33, count);
         }
@@ -60,21 +60,21 @@ namespace BalloonParty.Tests.ShotSolver
         [Test]
         public void ResolveSweepAngle_StepDividesArcEvenly_FirstAndLastAnglesAreArcBounds()
         {
-            var count = ShotBoardGather.ResolveSweepSampleCount(ArcMinDegrees, ArcMaxDegrees, 5f, ContinuousSampleCount);
+            var count = AimAngleGrid.ResolveSweepSampleCount(ArcMinDegrees, ArcMaxDegrees, 5f, ContinuousSampleCount);
 
-            Assert.AreEqual(ArcMinDegrees, ShotBoardGather.ResolveSweepAngle(0, ArcMinDegrees, ArcMaxDegrees, 5f, ContinuousSampleCount), 0.0001f);
-            Assert.AreEqual(ArcMaxDegrees, ShotBoardGather.ResolveSweepAngle(count - 1, ArcMinDegrees, ArcMaxDegrees, 5f, ContinuousSampleCount), 0.0001f);
+            Assert.AreEqual(ArcMinDegrees, AimAngleGrid.ResolveSweepAngle(0, ArcMinDegrees, ArcMaxDegrees, 5f, ContinuousSampleCount), 0.0001f);
+            Assert.AreEqual(ArcMaxDegrees, AimAngleGrid.ResolveSweepAngle(count - 1, ArcMinDegrees, ArcMaxDegrees, 5f, ContinuousSampleCount), 0.0001f);
         }
 
         [Test]
         public void ResolveSweepAngle_StepDividesArcEvenly_EveryAngleIsOnGridAndWithinArc()
         {
             const float step = 5f;
-            var count = ShotBoardGather.ResolveSweepSampleCount(ArcMinDegrees, ArcMaxDegrees, step, ContinuousSampleCount);
+            var count = AimAngleGrid.ResolveSweepSampleCount(ArcMinDegrees, ArcMaxDegrees, step, ContinuousSampleCount);
 
             for (var i = 0; i < count; i++)
             {
-                var angle = ShotBoardGather.ResolveSweepAngle(i, ArcMinDegrees, ArcMaxDegrees, step, ContinuousSampleCount);
+                var angle = AimAngleGrid.ResolveSweepAngle(i, ArcMinDegrees, ArcMaxDegrees, step, ContinuousSampleCount);
 
                 Assert.GreaterOrEqual(angle, ArcMinDegrees);
                 Assert.LessOrEqual(angle, ArcMaxDegrees);
@@ -88,7 +88,7 @@ namespace BalloonParty.Tests.ShotSolver
         public void ResolveSweepSampleCount_StepDoesNotDivideArcEvenly_CountsOnlyTheReachableAngles()
         {
             // Reachable multiples of 5 in [12, 27]: 15, 20, 25 — three, not five.
-            var count = ShotBoardGather.ResolveSweepSampleCount(12f, 27f, 5f, ContinuousSampleCount);
+            var count = AimAngleGrid.ResolveSweepSampleCount(12f, 27f, 5f, ContinuousSampleCount);
 
             Assert.AreEqual(3, count);
         }
@@ -98,7 +98,7 @@ namespace BalloonParty.Tests.ShotSolver
         {
             // The grid is anchored at absolute multiples of the step, not at the arc's own min — 12
             // is not a multiple of 5, so the first reachable angle inside [12, 27] is 15.
-            var first = ShotBoardGather.ResolveSweepAngle(0, 12f, 27f, 5f, ContinuousSampleCount);
+            var first = AimAngleGrid.ResolveSweepAngle(0, 12f, 27f, 5f, ContinuousSampleCount);
 
             Assert.AreEqual(15f, first, 0.0001f);
         }
@@ -107,7 +107,7 @@ namespace BalloonParty.Tests.ShotSolver
         public void ResolveSweepSampleCount_StepWiderThanArc_StillYieldsAtLeastOneSample()
         {
             // No multiple of 200 falls inside [10, 12] — the guard must still return >= 1.
-            var count = ShotBoardGather.ResolveSweepSampleCount(10f, 12f, 200f, ContinuousSampleCount);
+            var count = AimAngleGrid.ResolveSweepSampleCount(10f, 12f, 200f, ContinuousSampleCount);
 
             Assert.AreEqual(1, count);
         }
@@ -117,7 +117,7 @@ namespace BalloonParty.Tests.ShotSolver
         {
             // Candidates are 0 (below the arc, distance 10) and 200 (above the arc, distance 188) —
             // 0 is nearer.
-            var angle = ShotBoardGather.ResolveSweepAngle(0, 10f, 12f, 200f, ContinuousSampleCount);
+            var angle = AimAngleGrid.ResolveSweepAngle(0, 10f, 12f, 200f, ContinuousSampleCount);
 
             Assert.AreEqual(0f, angle, 0.0001f);
         }
@@ -126,7 +126,7 @@ namespace BalloonParty.Tests.ShotSolver
         public void ResolveSweepAngle_StepWiderThanArc_PicksTheOtherNeighbourWhenItIsCloser()
         {
             // Candidates are 0 (distance 100) and 200 (distance 30) — 200 is nearer.
-            var angle = ShotBoardGather.ResolveSweepAngle(0, 100f, 170f, 200f, ContinuousSampleCount);
+            var angle = AimAngleGrid.ResolveSweepAngle(0, 100f, 170f, 200f, ContinuousSampleCount);
 
             Assert.AreEqual(200f, angle, 0.0001f);
         }
@@ -139,7 +139,7 @@ namespace BalloonParty.Tests.ShotSolver
         [Test]
         public void ClampToReachableAngle_ContinuousAim_RawAngleWithinRange_ReturnsRawAngleUnchanged()
         {
-            var angle = ShotBoardGather.ClampToReachableAngle(90f, ArcMinDegrees, ArcMaxDegrees, 0f);
+            var angle = AimAngleGrid.ClampToReachableAngle(90f, ArcMinDegrees, ArcMaxDegrees, 0f);
 
             Assert.AreEqual(90f, angle, 0.0001f);
         }
@@ -148,15 +148,15 @@ namespace BalloonParty.Tests.ShotSolver
         public void ClampToReachableAngle_ContinuousAim_RawAngleOutsideRange_ClampsToNearestBound()
         {
             Assert.AreEqual(
-                ArcMinDegrees, ShotBoardGather.ClampToReachableAngle(-40f, ArcMinDegrees, ArcMaxDegrees, 0f), 0.0001f);
+                ArcMinDegrees, AimAngleGrid.ClampToReachableAngle(-40f, ArcMinDegrees, ArcMaxDegrees, 0f), 0.0001f);
             Assert.AreEqual(
-                ArcMaxDegrees, ShotBoardGather.ClampToReachableAngle(400f, ArcMinDegrees, ArcMaxDegrees, 0f), 0.0001f);
+                ArcMaxDegrees, AimAngleGrid.ClampToReachableAngle(400f, ArcMinDegrees, ArcMaxDegrees, 0f), 0.0001f);
         }
 
         [Test]
         public void ClampToReachableAngle_QuantizedAim_RawAngleWithinRangeOnGrid_ReturnsItUnchanged()
         {
-            var angle = ShotBoardGather.ClampToReachableAngle(100f, ArcMinDegrees, ArcMaxDegrees, 5f);
+            var angle = AimAngleGrid.ClampToReachableAngle(100f, ArcMinDegrees, ArcMaxDegrees, 5f);
 
             Assert.AreEqual(100f, angle, 0.0001f);
         }
@@ -166,10 +166,10 @@ namespace BalloonParty.Tests.ShotSolver
         {
             // -50 is far below the 10..170 arc — must land on the nearest reachable multiple of 5
             // INSIDE the arc (10), not on the nearest bare multiple of 5 to -50 (-50 itself).
-            var below = ShotBoardGather.ClampToReachableAngle(-50f, ArcMinDegrees, ArcMaxDegrees, 5f);
+            var below = AimAngleGrid.ClampToReachableAngle(-50f, ArcMinDegrees, ArcMaxDegrees, 5f);
             Assert.AreEqual(10f, below, 0.0001f);
 
-            var above = ShotBoardGather.ClampToReachableAngle(500f, ArcMinDegrees, ArcMaxDegrees, 5f);
+            var above = AimAngleGrid.ClampToReachableAngle(500f, ArcMinDegrees, ArcMaxDegrees, 5f);
             Assert.AreEqual(170f, above, 0.0001f);
         }
 
@@ -178,7 +178,7 @@ namespace BalloonParty.Tests.ShotSolver
         {
             // Mirrors ResolveSweepAngle_StepDoesNotDivideArcEvenly_FirstSampleIsNotArcMinItself: 12 is
             // not a multiple of 5, so the lowest reachable angle inside [12, 27] is 15, not 12 or 10.
-            var angle = ShotBoardGather.ClampToReachableAngle(0f, 12f, 27f, 5f);
+            var angle = AimAngleGrid.ClampToReachableAngle(0f, 12f, 27f, 5f);
 
             Assert.AreEqual(15f, angle, 0.0001f);
         }
@@ -187,7 +187,7 @@ namespace BalloonParty.Tests.ShotSolver
         public void ClampToReachableAngle_RangeBoundsNotGridMultiples_RawAngleInsideRange_SnapsToNearestGridLine()
         {
             // 17 is between the reachable lines 15 and 20 — nearer to 15.
-            var angle = ShotBoardGather.ClampToReachableAngle(17f, 12f, 27f, 5f);
+            var angle = AimAngleGrid.ClampToReachableAngle(17f, 12f, 27f, 5f);
 
             Assert.AreEqual(15f, angle, 0.0001f);
         }
@@ -199,11 +199,11 @@ namespace BalloonParty.Tests.ShotSolver
             // single reachable angle ResolveSweepAngle's index-0 sample would, regardless of where the
             // raw angle sits, or the thrower and the sweep could disagree about the one angle that's
             // actually reachable.
-            var expected = ShotBoardGather.ResolveSweepAngle(0, 10f, 12f, 200f, ContinuousSampleCount);
+            var expected = AimAngleGrid.ResolveSweepAngle(0, 10f, 12f, 200f, ContinuousSampleCount);
 
-            Assert.AreEqual(expected, ShotBoardGather.ClampToReachableAngle(-1000f, 10f, 12f, 200f), 0.0001f);
-            Assert.AreEqual(expected, ShotBoardGather.ClampToReachableAngle(11f, 10f, 12f, 200f), 0.0001f);
-            Assert.AreEqual(expected, ShotBoardGather.ClampToReachableAngle(1000f, 10f, 12f, 200f), 0.0001f);
+            Assert.AreEqual(expected, AimAngleGrid.ClampToReachableAngle(-1000f, 10f, 12f, 200f), 0.0001f);
+            Assert.AreEqual(expected, AimAngleGrid.ClampToReachableAngle(11f, 10f, 12f, 200f), 0.0001f);
+            Assert.AreEqual(expected, AimAngleGrid.ClampToReachableAngle(1000f, 10f, 12f, 200f), 0.0001f);
         }
     }
 }

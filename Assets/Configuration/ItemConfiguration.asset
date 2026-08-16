@@ -37,6 +37,7 @@ MonoBehaviour:
       _implosionStrengthScale: 15
       _implosionDuration: 0.05
     _laser:
+      _rotationStepSeconds: 3
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
       _laserColorCycles: 2
@@ -198,6 +199,7 @@ MonoBehaviour:
       _implosionStrengthScale: 1.5
       _implosionDuration: 0.05
     _laser:
+      _rotationStepSeconds: 3
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
       _laserColorCycles: 2
@@ -359,6 +361,7 @@ MonoBehaviour:
       _implosionStrengthScale: 1.5
       _implosionDuration: 0.05
     _laser:
+      _rotationStepSeconds: 3
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
       _laserColorCycles: 2
@@ -520,6 +523,7 @@ MonoBehaviour:
       _implosionStrengthScale: 1.5
       _implosionDuration: 0.05
     _laser:
+      _rotationStepSeconds: 3
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
       _laserColorCycles: 2
@@ -681,6 +685,7 @@ MonoBehaviour:
       _implosionStrengthScale: 1.5
       _implosionDuration: 0.05
     _laser:
+      _rotationStepSeconds: 3
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
       _laserColorCycles: 2
@@ -877,6 +882,7 @@ MonoBehaviour:
       _implosionStrengthScale: 1.5
       _implosionDuration: 0.05
     _laser:
+      _rotationStepSeconds: 3
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
       _laserColorCycles: 2

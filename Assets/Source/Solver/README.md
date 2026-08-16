@@ -7,18 +7,23 @@ data types) and its dynamic-board companions (`ShotBoardDynamics`, `ShotSimBoard
 `ShotMotionMath`), its item-carrier companions (`ShotItemLayer`, `ShotSimEffectBoard`), and
 `ShotBoardGather`, which snapshots the live board/thrower/config into a `ShotSolveContext`.
 
-`ShotBoardGather` also owns the sweep's sample grid (`ResolveSweepSampleCount`/`ResolveSweepAngle`):
-with `IProjectileFlightConfig.AimAngleStepDegrees` at 0 (continuous aim), a sweep lerps a fixed count
+The sweep's sample grid (`ResolveSweepSampleCount`/`ResolveSweepAngle`) and its sibling
+`ClampToReachableAngle` live in `Shared/AimAngleGrid` rather than here — that grid is a domain rule
+about which angles the thrower can reach, consumed by four independent places (the live
+`ThrowerController`, `FireBestShotCheat`, `ShotSolverWindow`, and the Scene-view aim fan overlay), not
+solver-specific logic, so it lives in `Shared/` next to `WallLimits` for the same reason. `ShotBoardGather`
+now *consumes* `AimAngleGrid` for its sweep rather than owning the grid math itself: with
+`IProjectileFlightConfig.AimAngleStepDegrees` at 0 (continuous aim), a sweep lerps a fixed count
 of samples across the arc, same as before quantization existed; with a non-zero step, it instead
 samples exactly the step's multiples that fall inside the arc — the same absolute grid
 `ThrowerController.ClampAndQuantizeAimDirection` snaps player input to — so a sweep can never
 recommend an angle the player could not actually aim at. Both sweeping callers (`FireBestShotCheat`,
-`ShotSolverWindow`) go through these two statics rather than each lerping the arc themselves, and both
-source the arc bounds from `IProjectileFlightConfig.AimAngleMinDegrees`/`AimAngleMaxDegrees` — the
-same range the thrower clamps aim to — rather than a separate constant, so a sweep can never cover a
+`ShotSolverWindow`) go through `AimAngleGrid`'s two statics rather than each lerping the arc themselves,
+and both source the arc bounds from `IProjectileFlightConfig.AimAngleMinDegrees`/`AimAngleMaxDegrees` —
+the same range the thrower clamps aim to — rather than a separate constant, so a sweep can never cover a
 different set of angles than the player can actually reach.
 
-`ShotBoardGather.ClampToReachableAngle` is the sibling the thrower's own clamp calls: given a raw aim
+`AimAngleGrid.ClampToReachableAngle` is the sibling the thrower's own clamp calls: given a raw aim
 angle, it resolves the same grid-anchored "reachable" angle `ResolveSweepAngle` would sample at that
 position — clamping the *rounded grid index*, not the angle itself, so a clamp-then-snap or
 snap-then-clamp can't disagree with what the sweep considers reachable (see

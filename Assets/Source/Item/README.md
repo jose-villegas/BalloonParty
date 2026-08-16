@@ -15,7 +15,7 @@ Items are game-wide collectible effects — Bomb, Laser, Lightning, Paint, Shiel
 | `ItemDisplayService` | Plain MonoBehaviour on the host's item container (a serialized reference on `BalloonView` — no DI). `Bind()` bridges the host's reactive properties (`Item`, color name, slot index) to a pooled visual's lifecycle: gets the `ItemVisualView` for `ItemSettings.VisualPrefab` from `PoolManager.GetOrRegister()`, reparents it under itself, recolors immediately when the host's color changes (a **rainbow** host flips PaintBlob-shaded sprites to their radial palette rings via `ItemVisualView.SetRainbow`, matching the flung blobs), re-sorts on slot changes, and exposes the active visual's `ITransformCapture` (the laser's rotating body) to the host |
 | `ItemVisualView` | MonoBehaviour on each item visual prefab (PU_Bomb, PU_Laser, etc.) — implements `IItemView` and `IPoolable`; `Activate(color)` shows and colors, `SetColor(color)` recolors without toggling visibility, `Deactivate()` hides. Sorting managed via `ApplySortingOrder(int)` |
 | `SimplePoolChannel<ItemVisualView>` | `PoolChannel<ItemVisualView>` — one channel per visual prefab, keyed by prefab name. Managed by `ItemDisplayService` via `PoolManager.GetOrRegister()` |
-| `LaserItemRotation` | MonoBehaviour on the laser body child — **stepped** rotation: dwells on a hex-grid-aligned angle for `_stepSeconds`, then eases to the next one over the trailing `TransitionFraction` of the step (`Mathf.SmoothStep` + `Mathf.LerpAngle`), stepping through all 6 hex bearings (`0`, `A`, `180-A`, `180`, `180+A`, `360-A`, derived from `ISlotGridConfig.SlotSeparation`) in order so every transition — including the wrap — moves forward under `Mathf.LerpAngle`'s shortest-path rule (see "Idle laser telegraph" below). Picks a random start step (not a random angle) on `OnEnable` so multiple lasers don't march in lockstep; `CaptureSnapshot()` stops it. Implements `ITransformCapture` so the host can snapshot the rotation at hit time |
+| `LaserItemRotation` | MonoBehaviour on the laser body child — **stepped** rotation: dwells on a hex-grid-aligned angle for `LaserSettings.RotationStepSeconds`, then eases to the next one over the trailing `TransitionFraction` of the step (`Mathf.SmoothStep` + `Mathf.LerpAngle`), stepping through all 6 hex bearings (`0`, `A`, `180-A`, `180`, `180+A`, `360-A`, derived from `ISlotGridConfig.SlotSeparation`) in order so every transition — including the wrap — moves forward under `Mathf.LerpAngle`'s shortest-path rule (see "Idle laser telegraph" below). Falls back to a hardcoded `DefaultStepSeconds` (1.5s) before `Configure()` hands in a `LaserSettings` — mirrors the same pre-`Configure` fallback the hex bearings themselves already needed. Picks a random start step (not a random angle) on `OnEnable` so multiple lasers don't march in lockstep; `CaptureSnapshot()` stops it. Implements `ITransformCapture` so the host can snapshot the rotation at hit time |
 | `ITransformCapture` / `TransformSnapshot` | Capture contract for item visuals whose transform matters at hit time — `CaptureSnapshot()` returns position/rotation/scale. `BalloonController` snapshots the hit balloon's capture component and publishes `TransformCapturedMessage` (in `Shared/Messages/`) |
 | `ItemEffectPlayer` | Plain C# — plays an item's one-shot activation effect: pulls the `EffectView` for `ItemSettings.ActivationEffectPrefab` from the pool, tints it by the popped balloon's color, returns it on completion. Shared by bomb/laser/shield; chain/splash effects drive their own two-phase setup |
 | `BalloonOverlapQuery` | Plain C# — shared physics setup for AoE items (bomb, laser): a balloon-layer `ContactFilter2D` plus `TryResolveBalloon()` that maps a hit collider to a live balloon model, skipping recycled views and the popped balloon itself |
@@ -348,8 +348,8 @@ non-spinning host keeps behaving exactly as before: every park it reaches advanc
 host's "advance" is a special case worth calling out: `AdvanceSequence`'s `% _sightedHosts.Count` wraps
 it straight back onto itself, which is a re-bloom in place in every way that matters — driven purely by
 this same turn timer, on the hold cadence — and is indistinguishable from the qualified re-bloom below
-except for which branch happened to fire first. `TurnTimerMayAdvance` holds that wrap to the very same
-`HoldLoopMayRebloom` qualification the spin-forced branch already answers to, so a disqualified Laser's
+except for which branch happened to fire first. `ResolveTurnCadence`'s turn-timer half holds that wrap to
+the very same `HoldLoopMayRebloom` qualification the spin-forced branch already answers to, so a disqualified Laser's
 one-host sequence can no longer bypass the dwell rule just because it arrived via the turn timer instead
 of the rotation's own falling edge; a genuine advance to a *different* host (`hostCount > 1`) is
 unaffected, since that has nothing to do with any one host's rotation. This only ever
@@ -366,11 +366,17 @@ mid-transition wait never triggers, and they keep advancing purely on `CycleComp
 **A hold-driven re-bloom only takes over once a spinning host's dwell can hold two full redraws — below
 that, the rotation's own falling edge is its sole cadence.** The hold loop's own timer
 (`AdvanceRebloomCycle`, off `RebloomHoldSeconds`) and a spinning host's step cadence
-(`LaserItemRotation._stepSeconds`) are two clocks running independently on the same ticker, and with the
-authored defaults they drift: one cycle of Draw+Hold is `BloomDuration + RebloomHoldSeconds` (1 +
+(`LaserSettings.RotationStepSeconds`) are two clocks running independently on the same ticker — and, since
+each lives on its own asset with no reference to the other, nothing stops them from being authored into a
+drift: one cycle of Draw+Hold is `BloomDuration + RebloomHoldSeconds` (1 +
 0.65 = 1.65s), against a Laser's 1.5s step — close enough that the hold loop's own scheduled re-bloom
 regularly lands just before the rotation's falling edge fires its own, cutting a fresh draw-in short
-before it can finish, moments before the rotation's turn fades it away again anyway. Since both routes
+before it can finish, moments before the rotation's turn fades it away again anyway. `AdvanceOrRebloomActiveHost`
+now logs a one-time `Log.Warn` (guarded by `_hasWarnedAboutCadenceMismatch`, since `Log.Warn` does not strip
+from release builds) the first time it actually observes a disqualified spinning host in play — naming the
+host's own dwell and the two-cycle minimum it fell short of — since an editor-time check would need
+`LaserSettings` to reach into `IItemPreviewConfig` (or vice versa) purely to validate, a coupling neither
+asset otherwise needs. Since both routes
 converge on the very same `CycleComplete` signal (see above), `AdvanceOrRebloomActiveHost` cannot tell them
 apart from the signal alone, so `ItemRangePreviewController` tracks `_earlyCycleEndRequested`, set the
 moment `HasSpinLeftSettledAngle` calls `RequestEarlyCycleEnd` and cleared on every draw (`ShowHost`) —
@@ -389,7 +395,7 @@ re-bloom can never suppress `_activeHostElapsed` reaching `oneCycleSeconds` and 
 on to the next host — the fix that stops a fast-reblooming Laser from holding the sequence forever keeps
 working exactly the same regardless of whether this qualification passes. A *single*-host sequence is the
 one case where that ordering alone isn't enough, because its "advance" wraps back onto the very host the
-qualification exists to gate — see `TurnTimerMayAdvance` above for why that wrap has to clear
+qualification exists to gate — see `ResolveTurnCadence` above for why that wrap has to clear
 `HoldLoopMayRebloom` before the turn timer is allowed to fire it. `oneCycleSeconds` omits the ribbon fade
 that actually ends each cycle, understating
 a full redraw slightly — deliberately: exact would need the pen prefab's own ribbon lifetime, which this
@@ -423,16 +429,16 @@ deferred-draw retry (`ResumeDeferredDraw`) finishing what `AdvanceSequence` star
 never for a same-host re-bloom, which is what lets the flag accumulate "completed at least once" across
 several re-blooms instead of being wiped by every one of them.
 <br><br>
-`FullHoldMayAdvance` is the qualification itself, checked alongside `TurnTimerMayAdvance` in
-`AdvanceOrRebloomActiveHost`'s advance condition: `completedFullHold || activeHostElapsed >=
+This qualification is the `fullHoldMayAdvance` local inside `ResolveTurnCadence`, checked alongside the
+turn-timer half in the same function's advance condition: `completedFullHold || activeHostElapsed >=
 FullHoldStarvationMultiplier * oneCycleSeconds`. The second half is the guard against reintroducing the
-starvation bug `TurnTimerMayAdvance`/`HoldLoopMayRebloom` already exist to prevent, this time for a host
+starvation bug the turn-timer/`HoldLoopMayRebloom` qualification already exists to prevent, this time for a host
 whose cycles keep landing cut short rather than one whose dwell can't attempt a redraw at all — without it,
 a badly mistuned config where the rotation's own falling edge always wins the race before `Holding` elapses
 would hold a host's turn hostage forever, having never once earned the flag honestly.
 `FullHoldStarvationMultiplier` is `4` — four multiples of `oneCycleSeconds`, chosen because at the authored
 values (`BloomDuration` `0.45` + `RebloomHoldSeconds` `0.3` = `0.75`s of draw-plus-hold, against a Laser's
-`1.125`s dwell — `_stepSeconds` `1.5` × `(1 − TransitionFraction)` `0.75`) the draw now waits for the
+`1.125`s dwell — `LaserSettings.RotationStepSeconds` `1.5` × `(1 − TransitionFraction)` `0.75`) the draw now waits for the
 rotation to settle before it starts, so both the draw and the hold fit inside a single dwell and a full
 hold should complete within the very first cycle; the multiplier only ever matters for a tuning where it
 doesn't, and four uncut cycles' worth of waiting gives that race several chances to land the other way
@@ -443,13 +449,18 @@ leaving a host stuck for an unbounded stretch (reintroducing the starvation bug)
 `AdvanceSequence` moves the sequence on — a non-spinning Bomb always did, and a spinning Laser now does too,
 because its own rotation-driven re-blooms within its turn only ever restart a fresh `Drawing` → `Holding`
 cycle rather than shortening the one already reaching its natural end; the *next* park after that qualifies
-via `FullHoldMayAdvance` and hands off to whichever host is next.
+via `ResolveTurnCadence`'s `fullHoldMayAdvance` check and hands off to whichever host is next.
 <br><br>
-`FullHoldMayAdvance` is `internal static` and pure, mirroring `HoldLoopMayRebloom`/`TurnTimerMayAdvance`, so
-the decision is covered directly in `ItemRangePreviewControllerTests` rather than through the controller's
-full `LateTick` machinery. `ItemPreviewTicker.CompletedFullHold` itself is not: it only ever changes as a
-side effect of `LateTick` driving real pens against a real pool and prefab, so there is no pure slice of it
-to test in isolation the way the controller's own decision has.
+`ResolveTurnCadence` is `internal static` and pure — it consolidates what used to be three separately-named
+predicates (`HoldLoopMayRebloom`/`TurnTimerMayAdvance`/`FullHoldMayAdvance`) into one function returning a
+`TurnCadenceOutcome` (`Wait`/`Advance`/`Rebloom`), called from the single `AdvanceOrRebloomActiveHost` call
+site via a `switch`. `HoldLoopMayRebloom` itself lives on as a private helper `ResolveTurnCadence` calls
+twice (once folded into its own turn-timer qualification, once directly for the re-bloom check) — private
+rather than internal now, since nothing outside `ResolveTurnCadence` needs it anymore. The whole decision is
+covered directly in `ItemRangePreviewControllerTests` against `ResolveTurnCadence`, rather than through the
+controller's full `LateTick` machinery. `ItemPreviewTicker.CompletedFullHold` itself is not: it only ever
+changes as a side effect of `LateTick` driving real pens against a real pool and prefab, so there is no pure
+slice of it to test in isolation the way the controller's own decision has.
 
 The loop's fade deliberately authors no second duration: `BeginLoopFade` reads `_fadeDuration` off a
 live pen's trail exactly the way `BeginHide` already does for a real hide (`HighlightTrail.
@@ -601,7 +612,10 @@ only ever starts it emitting once it has already been repositioned to its own da
 recurring failure mode this system has hit from several angles now (the re-entry, reassigned-slot,
 approach-versus-cascade, and single-pen-toggling-emitting cases above and below), which makes it worth
 stating as a standing rule rather than a pile of separate fixes: **a pen must never be emitting at a
-position it is about to leave discontinuously.**
+position it is about to leave discontinuously.** This is now a machine-checked regression, not just a
+comment: `Assets/Tests/EditMode/Item/ItemPreviewTickerStandingRuleTests.cs` drives a real
+`ItemPreviewTicker` through `Tick(float)` across a draw-in, hold, fade and restart, and fails the moment
+any pen reads `emitting == true` after jumping between ticks.
 
 "Parked" is wider than just the ribbon: `HighlightTrail.SetEmitting` toggles the head sprite alongside
 the `TrailRenderer`, so a parked pen shows neither a ribbon nor a lone dot sliding around with no ribbon
@@ -760,8 +774,9 @@ neighbour slots at bearings of roughly `0`, `A`, `2A`, `180`, `180+A`, `180+2A` 
 but not exactly, since the grid isn't perfectly regular — a hexagon). Because `LaserCross` fires a
 four-arm cross, its look repeats every 90°, so only three of those six angles are visually distinct
 (`0`, `A`, `180-A` read the same as `180`, `180+A`, `360-A`). `LaserItemRotation` still cycles through
-all six in order rather than just those three, spending `_stepSeconds` on each (the trailing quarter
-of which eases into the next) — `Mathf.LerpAngle` always takes the shortest path, and with only three
+all six in order rather than just those three, spending `LaserSettings.RotationStepSeconds` on each
+(the trailing quarter of which eases into the next) — `Mathf.LerpAngle` always takes the shortest path,
+and with only three
 entries the wrap from the last step back to the first would run backwards (~-120°), snapping the cross
 instead of continuing its turn. Stepping through all six keeps every transition, including the wrap, a
 forward ~+60°, so the rotation reads as continuous even though its look only has three distinct

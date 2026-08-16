@@ -28,7 +28,7 @@ namespace BalloonParty.Cheats
     internal class FireBestShotCheat : ICheat, ICheatControls, IStartable, IDisposable
     {
         // Only used for continuous aim (AimAngleStepDegrees <= 0) — a quantized aim instead samples
-        // exactly the reachable angles (see ShotBoardGather.ResolveSweepSampleCount).
+        // exactly the reachable angles (see AimAngleGrid.ResolveSweepSampleCount).
         private const int ContinuousSampleCount = 1024;
 
         private readonly SlotGrid _grid;
@@ -189,14 +189,14 @@ namespace BalloonParty.Cheats
         private void FindBestAngle(
             in ShotSolveContext context, ShotBalloonState[] workingSet, out float bestAngle, out int bestScore)
         {
-            var sampleCount = ShotBoardGather.ResolveSweepSampleCount(
+            var sampleCount = AimAngleGrid.ResolveSweepSampleCount(
                 _config.AimAngleMinDegrees, _config.AimAngleMaxDegrees, _config.AimAngleStepDegrees,
                 ContinuousSampleCount);
             bestAngle = _config.AimAngleMinDegrees;
             bestScore = int.MinValue;
             for (var i = 0; i < sampleCount; i++)
             {
-                var angle = ShotBoardGather.ResolveSweepAngle(
+                var angle = AimAngleGrid.ResolveSweepAngle(
                     i, _config.AimAngleMinDegrees, _config.AimAngleMaxDegrees, _config.AimAngleStepDegrees,
                     ContinuousSampleCount);
                 var score = ShotBoardGather.SimulateAt(angle, context, workingSet).RawScore;

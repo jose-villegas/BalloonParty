@@ -170,7 +170,7 @@ namespace BalloonParty.Configuration.Editor
         private static void DrawFan(ProjectileFlightConfig config, ThrowerView thrower)
         {
             var stepDegrees = config.AimAngleStepDegrees;
-            var sampleCount = ShotBoardGather.ResolveSweepSampleCount(
+            var sampleCount = AimAngleGrid.ResolveSweepSampleCount(
                 config.AimAngleMinDegrees, config.AimAngleMaxDegrees, stepDegrees, 1);
 
             // The spawn point, not the pivot transform — where a shot actually leaves from (same
@@ -183,7 +183,7 @@ namespace BalloonParty.Configuration.Editor
 
             for (var i = 0; i < sampleCount; i++)
             {
-                var angleDegrees = ShotBoardGather.ResolveSweepAngle(
+                var angleDegrees = AimAngleGrid.ResolveSweepAngle(
                     i, config.AimAngleMinDegrees, config.AimAngleMaxDegrees, stepDegrees, 1);
                 var direction = (Vector3)ShotBoardGather.DirectionFromDegrees(angleDegrees);
                 if (!walls.TryFindCrossing(origin, direction, out var crossing, out _))

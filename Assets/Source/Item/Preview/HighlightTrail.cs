@@ -26,6 +26,11 @@ namespace BalloonParty.Item.Preview
         /// </summary>
         internal float EffectiveRibbonSeconds => _trailRenderer.time;
 
+        // Test-only read of the trail's real emitting state — narrower than exposing the TrailRenderer
+        // itself, and the ticker's own Pen.Emitting mirror isn't good enough for a regression test that
+        // exists specifically to catch the mirror and the renderer disagreeing.
+        internal bool IsEmittingForTest => _trailRenderer.emitting;
+
         private void Awake()
         {
             if (_trailRenderer == null)
@@ -65,6 +70,18 @@ namespace BalloonParty.Item.Preview
             {
                 _head.enabled = false;
             }
+        }
+
+        // Explicit wiring, mirroring LaserItemRotation.Configure: a pooled component can't rely on Awake
+        // alone the way a scene-placed one can — Awake genuinely does run for a real spawned prefab in
+        // actual play, but there's no reason a caller who already HAS the right references should have to
+        // wait for it. Unconditional (unlike Awake's own if-null fallback above, which exists to respect
+        // an artist's real Inspector wiring) — a caller invoking this is stating the references directly,
+        // not offering a fallback.
+        internal void Configure(TrailRenderer trailRenderer, SpriteRenderer head = null)
+        {
+            _trailRenderer = trailRenderer;
+            _head = head;
         }
 
         /// <summary>Pen up/down — a pen travelling to its stroke shouldn't necessarily draw on the way.</summary>

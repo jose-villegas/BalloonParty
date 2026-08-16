@@ -48,7 +48,10 @@ namespace BalloonParty.Thrower
                 return false;
             }
 
-            var oldestIndex = _head;
+            // The true oldest slot, not _head (the next-WRITE slot) — computed up front rather than
+            // tracked as a side effect of the loop below, so this can't be misread as a meaningful
+            // starting value for the fallback it only ever serves.
+            var oldestIndex = (_head - _count + _capacity) % _capacity;
             for (var i = 0; i < _count; i++)
             {
                 var index = (_head - 1 - i + _capacity) % _capacity;
@@ -57,8 +60,6 @@ namespace BalloonParty.Thrower
                     direction = _directions[index];
                     return true;
                 }
-
-                oldestIndex = index;
             }
 
             direction = _directions[oldestIndex];

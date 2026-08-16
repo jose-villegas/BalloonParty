@@ -57,6 +57,8 @@ namespace BalloonParty.Game
                  "sprite, carrying the highlight material. Unassigned simply shows no telegraph.")]
         [SerializeField] private HighlightTrail _itemPreviewPenPrefab;
 
+        [Tooltip("Tuning for the aim-time item range telegraph (dash pacing, bloom/hold timing, per-item " +
+                 "overrides). Unassigned falls back to a default-constructed instance.")]
         [SerializeField] private ItemPreviewConfig _itemPreviewConfig;
 
         [SerializeField] private AudioSourceVoice _sfxVoicePrefab;

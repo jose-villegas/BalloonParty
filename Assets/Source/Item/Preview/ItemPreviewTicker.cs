@@ -44,6 +44,14 @@ namespace BalloonParty.Item.Preview
         private readonly BalloonContactRadii _balloonRadii;
         private readonly string _poolKey;
 
+        // Cached once rather than built at each of the four GetOrRegister call sites below — a lambda
+        // capturing _penPrefab can't be cached by the compiler, so writing "() => new
+        // SimplePoolChannel<HighlightTrail>(_penPrefab)" inline allocates a fresh delegate every time a
+        // reused pen's Trail is null (every pen on the first Show after a genuine hide, up to MaxPens of
+        // them). GetOrRegister only ever calls this once in practice (ItemPreviewPoolBootstrap registers
+        // the channel at startup), so the factory itself is cold — only its allocation was ever hot.
+        private readonly Func<PoolChannel<HighlightTrail>> _penChannelFactory;
+
         private readonly ItemPreviewShape _shape = new();
         private readonly List<Pen> _pens = new();
 
@@ -252,6 +260,7 @@ namespace BalloonParty.Item.Preview
             _viewport = viewport;
             _balloonRadii = balloonRadii;
             _poolKey = penPrefab != null ? penPrefab.name : nameof(HighlightTrail);
+            _penChannelFactory = () => new SimplePoolChannel<HighlightTrail>(_penPrefab);
         }
 
         public void Dispose()
@@ -532,11 +541,16 @@ namespace BalloonParty.Item.Preview
             }
         }
 
-        public void LateTick()
+        public void LateTick() => Tick(Time.deltaTime);
+
+        // The stateful core LateTick drives off the ambient clock — split out so an EditMode test can
+        // exercise the exact same cascade/cycle logic against a scripted deltaTime sequence, deterministic
+        // and Time-free (see the Item README's draw-in-completes invariant test).
+        internal void Tick(float deltaTime)
         {
             if (_fading)
             {
-                AdvanceFade(Time.deltaTime);
+                AdvanceFade(deltaTime);
                 return;
             }
 
@@ -548,8 +562,6 @@ namespace BalloonParty.Item.Preview
             // Idempotent per frame, so it costs nothing extra when ItemRangePreviewController already
             // refreshed the same viewport earlier this frame.
             _viewport.Refresh();
-
-            var deltaTime = Time.deltaTime;
 
             // See _drawInElapsed's own remarks for why this runs unconditionally here rather than inside
             // AdvanceRebloomCycle below.
@@ -1244,8 +1256,7 @@ namespace BalloonParty.Item.Preview
                 for (var dashIndex = 0; dashIndex < dashesOnStroke; dashIndex++)
                 {
                     var pen = _pens[penIndex];
-                    pen.Trail ??= _poolManager.GetOrRegister(
-                        _poolKey, () => new SimplePoolChannel<HighlightTrail>(_penPrefab));
+                    pen.Trail ??= _poolManager.GetOrRegister(_poolKey, _penChannelFactory);
                     pen.StrokeIndex = s;
                     pen.DashIndex = dashIndex;
 
@@ -1315,8 +1326,7 @@ namespace BalloonParty.Item.Preview
                 for (var dashIndex = 0; dashIndex < dashesOnStroke; dashIndex++)
                 {
                     var pen = _approachPens[penIndex];
-                    pen.Trail ??= _poolManager.GetOrRegister(
-                        _poolKey, () => new SimplePoolChannel<HighlightTrail>(_penPrefab));
+                    pen.Trail ??= _poolManager.GetOrRegister(_poolKey, _penChannelFactory);
                     pen.StrokeIndex = s;
                     pen.DashIndex = dashIndex;
 
@@ -1372,8 +1382,7 @@ namespace BalloonParty.Item.Preview
                     // A pen carried over from before the resize (Trail already set) keeps its bloom and
                     // distance; only a slot the figure just grew into starts life with a null Trail.
                     var isNewPen = pen.Trail == null;
-                    pen.Trail ??= _poolManager.GetOrRegister(
-                        _poolKey, () => new SimplePoolChannel<HighlightTrail>(_penPrefab));
+                    pen.Trail ??= _poolManager.GetOrRegister(_poolKey, _penChannelFactory);
                     pen.StrokeIndex = s;
                     pen.DashIndex = dashIndex;
 
@@ -1416,8 +1425,7 @@ namespace BalloonParty.Item.Preview
                 {
                     var pen = _approachPens[penIndex];
                     var isNewPen = pen.Trail == null;
-                    pen.Trail ??= _poolManager.GetOrRegister(
-                        _poolKey, () => new SimplePoolChannel<HighlightTrail>(_penPrefab));
+                    pen.Trail ??= _poolManager.GetOrRegister(_poolKey, _penChannelFactory);
                     pen.StrokeIndex = s;
                     pen.DashIndex = dashIndex;
 

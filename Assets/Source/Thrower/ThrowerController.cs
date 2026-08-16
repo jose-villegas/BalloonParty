@@ -14,7 +14,6 @@ using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.SceneLight;
-using BalloonParty.Solver;
 using DG.Tweening;
 using MessagePipe;
 using UniRx;
@@ -239,7 +238,7 @@ namespace BalloonParty.Thrower
         //
         // Deliberately does not run the direction through ClampAndQuantizeAimDirection — same as it
         // already bypasses quantization. FireBestShotCheat sweeps within
-        // [IProjectileFlightConfig.AimAngleMinDegrees, AimAngleMaxDegrees] (via ShotBoardGather), so
+        // [IProjectileFlightConfig.AimAngleMinDegrees, AimAngleMaxDegrees] (via AimAngleGrid), so
         // its angles are already in range by construction; ShotSolverWindow's arc is deliberately
         // user-editable for experimentation and is allowed to probe outside the player's reachable
         // range on purpose (see its README) — clamping here would silently defeat that.
@@ -264,12 +263,12 @@ namespace BalloonParty.Thrower
         // pointer state. The range is never opt-in (unlike the step) — it always applies, even with
         // stepDegrees <= 0 (a plain clamp).
         //
-        // Order matters, and ShotBoardGather.ClampToReachableAngle is why this delegates rather than
+        // Order matters, and AimAngleGrid.ClampToReachableAngle is why this delegates rather than
         // clamping-then-snapping or snapping-then-clamping here: clamp first and a snap can push the
         // result back outside the range; snap first and a clamp can land on an angle that isn't on the
         // grid. ClampToReachableAngle sidesteps both by clamping the ROUNDED GRID INDEX, guaranteeing
         // the result is always both a step multiple and inside the range — and it's the exact same
-        // grid ShotBoardGather's sweep samples, so the player's reachable angles and the solver's
+        // grid AimAngleGrid's sweep helpers sample, so the player's reachable angles and a sweep's
         // swept ones can never disagree.
         //
         // A degenerate (near-zero) direction passes through unchanged — there is no angle to clamp.
@@ -283,7 +282,7 @@ namespace BalloonParty.Thrower
             }
 
             var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            var resolved = ShotBoardGather.ClampToReachableAngle(angle, minAngleDegrees, maxAngleDegrees, stepDegrees);
+            var resolved = AimAngleGrid.ClampToReachableAngle(angle, minAngleDegrees, maxAngleDegrees, stepDegrees);
             var radians = resolved * Mathf.Deg2Rad;
             return new Vector3(Mathf.Cos(radians), Mathf.Sin(radians), 0f);
         }

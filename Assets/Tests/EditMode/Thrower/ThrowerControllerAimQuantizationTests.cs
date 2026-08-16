@@ -1,4 +1,4 @@
-using BalloonParty.Solver;
+using BalloonParty.Shared;
 using BalloonParty.Thrower;
 using NUnit.Framework;
 using UnityEngine;
@@ -18,20 +18,30 @@ namespace BalloonParty.Tests.Thrower
         public void ClampAndQuantizeAimDirection_ZeroStep_ReturnsDirectionUnchangedWithinRange()
         {
             var direction = new Vector3(0.6f, 0.8f, 0f);
+            var expectedAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
             var result = ThrowerController.ClampAndQuantizeAimDirection(direction, 0f, WideMinDegrees, WideMaxDegrees);
 
-            Assert.AreEqual(direction, result);
+            // Continuous aim still round-trips through Atan2/Cos/Sin (see ClampAndQuantizeAimDirection's
+            // own remarks — there is no short-circuit for "already reachable"), so the returned direction
+            // is only equal to within float precision, not bit-for-bit — comparing the recovered angle
+            // against a tolerance is what every other angle-producing test in this file already does.
+            var resultAngle = Mathf.Atan2(result.y, result.x) * Mathf.Rad2Deg;
+            Assert.AreEqual(expectedAngle, resultAngle, 0.001f);
         }
 
         [Test]
         public void ClampAndQuantizeAimDirection_NegativeStep_ReturnsDirectionUnchangedWithinRange()
         {
             var direction = new Vector3(0.6f, 0.8f, 0f);
+            var expectedAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
             var result = ThrowerController.ClampAndQuantizeAimDirection(direction, -15f, WideMinDegrees, WideMaxDegrees);
 
-            Assert.AreEqual(direction, result);
+            // Same Atan2/Cos/Sin round-trip as the zero-step case above — a negative step is also treated
+            // as continuous, so this isn't bit-exact either.
+            var resultAngle = Mathf.Atan2(result.y, result.x) * Mathf.Rad2Deg;
+            Assert.AreEqual(expectedAngle, resultAngle, 0.001f);
         }
 
         [Test]
@@ -178,11 +188,11 @@ namespace BalloonParty.Tests.Thrower
         }
 
         [Test]
-        public void ClampAndQuantizeAimDirection_MatchesShotBoardGatherClampToReachableAngle()
+        public void ClampAndQuantizeAimDirection_MatchesAimAngleGridClampToReachableAngle()
         {
-            // The whole point of routing through ShotBoardGather is that the thrower's clamp and the
-            // solver's sweep grid can never disagree — pin the delegation directly rather than just its
-            // observable effects.
+            // The whole point of routing through AimAngleGrid is that the thrower's clamp and every
+            // sweep built on the same grid can never disagree — pin the delegation directly rather than
+            // just its observable effects.
             const float step = 5f;
             const float min = 12f;
             const float max = 27f;
@@ -195,7 +205,7 @@ namespace BalloonParty.Tests.Thrower
                 var result = ThrowerController.ClampAndQuantizeAimDirection(direction, step, min, max);
                 var resultAngle = Mathf.Atan2(result.y, result.x) * Mathf.Rad2Deg;
 
-                var expected = ShotBoardGather.ClampToReachableAngle(rawDegrees, min, max, step);
+                var expected = AimAngleGrid.ClampToReachableAngle(rawDegrees, min, max, step);
                 Assert.AreEqual(expected, resultAngle, 0.001f, $"raw {rawDegrees}°");
             }
         }

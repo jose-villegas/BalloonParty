@@ -12,10 +12,12 @@ namespace BalloonParty.Item
     public class LaserItemRotation : MonoBehaviour, ITransformCapture, ISpinningItemVisual
     {
         // Keeps the transition confined to the tail of each step, so the icon reads as genuinely
-        // still for the rest of it, without needing a second authored knob alongside _stepSeconds.
+        // still for the rest of it, without needing a second authored knob alongside StepSeconds.
         private const float TransitionFraction = 0.25f;
 
-        [SerializeField] [Min(0.01f)] private float _stepSeconds = 1.5f;
+        // OnEnable reads StepSeconds before Configure() (called later by the pooling host) has run, so a
+        // laser shown before then still steps sensibly — the same problem _angles below already solves.
+        private const float DefaultStepSeconds = 1.5f;
 
         // The item icon is pooled through a non-injecting channel, so the host (ItemDisplayService)
         // hands these in via Configure rather than DI.
@@ -35,6 +37,11 @@ namespace BalloonParty.Item
         private IDisposable _horizontalRegistration;
         private IDisposable _verticalRegistration;
 
+        // Routes every read of the step duration through the settings asset once Configure() has handed
+        // one in, falling back to DefaultStepSeconds before then (or if none was ever configured) — the
+        // same pre-Configure fallback _angles solves for the hex bearings.
+        private float StepSeconds => _laserSettings != null ? _laserSettings.RotationStepSeconds : DefaultStepSeconds;
+
         // Non-destructive spin read for the shot solver's gather (@ref plan_shot_solver_accuracy
         // Phase C §4) — CaptureSnapshot stops the spin, so gather must use this instead.
         float ISpinningItemVisual.AngleDegrees => transform.eulerAngles.z;
@@ -47,11 +54,11 @@ namespace BalloonParty.Item
 
         // Reports the exact same condition DrawnAngle branches on, via IsDwelling — the two cannot
         // disagree because there is only one comparison, not a second one written to match it.
-        bool ISpinningItemVisual.IsSettled => IsDwelling(_elapsed, _stepSeconds);
+        bool ISpinningItemVisual.IsSettled => IsDwelling(_elapsed, StepSeconds);
 
         // The exact span IsSettled/IsDwelling reads true for within one step — same DwellDuration
         // both of those already key off, so this cannot drift out of step with either.
-        float ISpinningItemVisual.DwellSeconds => DwellDuration(_stepSeconds);
+        float ISpinningItemVisual.DwellSeconds => DwellDuration(StepSeconds);
 
         private void OnEnable()
         {
@@ -187,14 +194,15 @@ namespace BalloonParty.Item
             _vertical = null;
         }
 
-        // Advances to the next step whenever elapsed time crosses _stepSeconds, wrapping the
+        // Advances to the next step whenever elapsed time crosses StepSeconds, wrapping the
         // remainder (not zeroing it) so a long frame doesn't drop time off the following step.
         private void AdvanceStep()
         {
             _elapsed += Time.deltaTime;
-            while (_elapsed >= _stepSeconds)
+            var stepSeconds = StepSeconds;
+            while (_elapsed >= stepSeconds)
             {
-                _elapsed -= _stepSeconds;
+                _elapsed -= stepSeconds;
                 _previousIndex = _currentIndex;
                 _currentIndex = (_currentIndex + 1) % _angles.Length;
             }
@@ -204,13 +212,14 @@ namespace BalloonParty.Item
         // target across the last TransitionFraction of it.
         private float DrawnAngle()
         {
-            if (IsDwelling(_elapsed, _stepSeconds))
+            var stepSeconds = StepSeconds;
+            if (IsDwelling(_elapsed, stepSeconds))
             {
                 return _angles[_previousIndex];
             }
 
-            var dwellDuration = DwellDuration(_stepSeconds);
-            var transitionDuration = _stepSeconds * TransitionFraction;
+            var dwellDuration = DwellDuration(stepSeconds);
+            var transitionDuration = stepSeconds * TransitionFraction;
             var t = (_elapsed - dwellDuration) / transitionDuration;
             var smoothT = Mathf.SmoothStep(0f, 1f, t);
             return Mathf.LerpAngle(_angles[_previousIndex], _angles[_currentIndex], smoothT);

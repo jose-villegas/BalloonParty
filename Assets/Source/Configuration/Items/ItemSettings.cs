@@ -100,6 +100,8 @@ namespace BalloonParty.Configuration.Items
         [Tooltip("Rainbow holder only: how many times the beam lerps through the allowed colours over the anim.")]
         [SerializeField] [Min(0f)] private float _laserColorCycles = 2f;
 
+        [SerializeField] [Min(0.01f)] private float _rotationStepSeconds = 1.5f;
+
         [SerializeField] [Min(0f)] private float _beamLightHalfWidth = 0.7f;
         [SerializeField] [Min(0f)] private float _beamLightIntensity = 2f;
         [SerializeField] [Min(0f)] private float _beamLightFalloff = 1.5f;
@@ -113,6 +115,9 @@ namespace BalloonParty.Configuration.Items
         public float RaycastDistance => _laserRaycastDistance;
         public float CircleCastRadius => _laserCircleCastRadius;
         public float ColorCycles => _laserColorCycles;
+
+        /// <summary>How long the icon dwells on one hex-aligned angle before stepping to the next.</summary>
+        public float RotationStepSeconds => _rotationStepSeconds;
 
         /// <summary>Perpendicular half-width (reach) of each beam's area light.</summary>
         public float BeamLightHalfWidth => _beamLightHalfWidth;

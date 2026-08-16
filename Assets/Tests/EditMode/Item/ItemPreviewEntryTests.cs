@@ -281,7 +281,7 @@ namespace BalloonParty.Tests.Item
             Assert.IsTrue(found);
             // 20 units around the perimeter from (0,0) lands exactly on the (10,10) corner.
             Assert.AreEqual(20f, offset, 0.001f);
-            Assert.AreEqual(Mathf.Sqrt(200f), traceOffset, 0.001f, "half of the trace's own length to its midpoint");
+            Assert.AreEqual(Mathf.Sqrt(200f) / 2f, traceOffset, 0.001f, "half of the trace's own length to its midpoint");
 
             var stroke = _shape.Strokes[0];
             var samplePoint = SamplePointAtOffset(stroke, _shape.Points, arcTable, offset);

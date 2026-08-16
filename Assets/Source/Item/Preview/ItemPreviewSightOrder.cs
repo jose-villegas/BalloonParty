@@ -63,8 +63,8 @@ namespace BalloonParty.Item.Preview
         }
 
         // A cached singleton rather than a Comparison<T> delegate built at the call site, so the grid walk
-        // this feeds — gated on trace version, which in practice changes every frame while aiming — never
-        // allocates a comparer or delegate of its own.
+        // this feeds — gated on trace version, which skips whenever the published trace is unchanged —
+        // never allocates a comparer or delegate of its own on the frames it does run.
         private sealed class TraceOffsetComparer : IComparer<ItemPreviewSightedHost>
         {
             public int Compare(ItemPreviewSightedHost a, ItemPreviewSightedHost b)
