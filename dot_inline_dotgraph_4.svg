@@ -47,14 +47,14 @@
   </g>
 </defs>
 <script type="application/ecmascript">
-var viewWidth = 1113;
+var viewWidth = 1125;
 var viewHeight = 741;
 </script>
 <script type="application/ecmascript" xlink:href="svg.min.js"/>
 <svg id="graph" class="graph">
 <g id="viewport">
 <title>ShapeFormations</title>
-<polygon fill="white" stroke="transparent" points="-4,4 -4,-737 1109,-737 1109,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-737 1121,-737 1121,4 -4,4"/>
 <g id="clust1" class="cluster">
 <title>cluster_scoring</title>
 <polygon fill="#e8f5dc" stroke="black" points="8,-8 8,-110 170,-110 170,-8 8,-8"/>
@@ -62,23 +62,23 @@ var viewHeight = 741;
 </g>
 <g id="clust2" class="cluster">
 <title>cluster_seam</title>
-<polygon fill="#f5f5dc" stroke="black" points="121,-153.5 121,-606 495,-606 495,-153.5 121,-153.5"/>
-<text text-anchor="middle" x="308" y="-590.8" font-family="Times,serif" font-size="14.00">Choreography seam</text>
+<polygon fill="#f5f5dc" stroke="black" points="132,-153.5 132,-606 506,-606 506,-153.5 132,-153.5"/>
+<text text-anchor="middle" x="319" y="-590.8" font-family="Times,serif" font-size="14.00">Choreography seam</text>
 </g>
 <g id="clust3" class="cluster">
 <title>cluster_formation</title>
-<polygon fill="#dce8f5" stroke="black" points="503,-148 503,-487 919,-487 919,-148 503,-148"/>
-<text text-anchor="middle" x="711" y="-471.8" font-family="Times,serif" font-size="14.00">Formation simulation</text>
+<polygon fill="#dce8f5" stroke="black" points="514,-148 514,-487 1067,-487 1067,-148 514,-148"/>
+<text text-anchor="middle" x="790.5" y="-471.8" font-family="Times,serif" font-size="14.00">Formation simulation</text>
 </g>
 <g id="clust4" class="cluster">
 <title>cluster_downstream</title>
-<polygon fill="#ffe8cc" stroke="black" points="186,-13.5 186,-104.5 484,-104.5 484,-13.5 186,-13.5"/>
-<text text-anchor="middle" x="335" y="-89.3" font-family="Times,serif" font-size="14.00">Downstream consumers</text>
+<polygon fill="#ffe8cc" stroke="black" points="195,-13.5 195,-104.5 493,-104.5 493,-13.5 195,-13.5"/>
+<text text-anchor="middle" x="344" y="-89.3" font-family="Times,serif" font-size="14.00">Downstream consumers</text>
 </g>
 <g id="clust5" class="cluster">
 <title>cluster_levelup</title>
-<polygon fill="#f5dce8" stroke="black" points="525,-634 525,-725 883,-725 883,-634 525,-634"/>
-<text text-anchor="middle" x="704" y="-709.8" font-family="Times,serif" font-size="14.00">Level&#45;up seam</text>
+<polygon fill="#f5dce8" stroke="black" points="588,-634 588,-725 946,-725 946,-634 588,-634"/>
+<text text-anchor="middle" x="767" y="-709.8" font-family="Times,serif" font-size="14.00">Level&#45;up seam</text>
 </g>
 <!-- ScoreController -->
 <g id="node1" class="node">
@@ -93,287 +93,305 @@ var viewHeight = 741;
 <!-- Service -->
 <g id="node2" class="node">
 <title>Service</title>
-<polygon fill="white" stroke="black" points="263,-575 129,-575 129,-523 263,-523 263,-575"/>
-<text text-anchor="middle" x="196" y="-563" font-family="Helvetica,sans-Serif" font-size="10.00">ScoreTrailService</text>
-<text text-anchor="middle" x="196" y="-552" font-family="Helvetica,sans-Serif" font-size="10.00">OnScorePointsGroup:</text>
-<text text-anchor="middle" x="196" y="-541" font-family="Helvetica,sans-Serif" font-size="10.00">looks up endpoint,</text>
-<text text-anchor="middle" x="196" y="-530" font-family="Helvetica,sans-Serif" font-size="10.00">builds ScoreTrailContext</text>
+<polygon fill="white" stroke="black" points="274,-575 140,-575 140,-523 274,-523 274,-575"/>
+<text text-anchor="middle" x="207" y="-563" font-family="Helvetica,sans-Serif" font-size="10.00">ScoreTrailService</text>
+<text text-anchor="middle" x="207" y="-552" font-family="Helvetica,sans-Serif" font-size="10.00">OnScorePointsGroup:</text>
+<text text-anchor="middle" x="207" y="-541" font-family="Helvetica,sans-Serif" font-size="10.00">looks up endpoint,</text>
+<text text-anchor="middle" x="207" y="-530" font-family="Helvetica,sans-Serif" font-size="10.00">builds ScoreTrailContext</text>
 </g>
 <!-- ScoreController&#45;&gt;Service -->
 <g id="edge1" class="edge">
 <title>ScoreController&#45;&gt;Service</title>
-<path fill="none" stroke="black" d="M77.27,-79.24C67.79,-106.88 56,-148.81 56,-186.5 56,-431 56,-431 56,-431 56,-470.25 88.81,-498.92 122.66,-518.05"/>
-<polygon fill="black" stroke="black" points="121.27,-521.28 131.74,-522.95 124.6,-515.12 121.27,-521.28"/>
-<text text-anchor="middle" x="115.5" y="-324.3" font-family="Helvetica,sans-Serif" font-size="9.00">ScorePointsGroupMessage</text>
-<text text-anchor="middle" x="115.5" y="-314.3" font-family="Helvetica,sans-Serif" font-size="9.00">(Points, LastScore,</text>
-<text text-anchor="middle" x="115.5" y="-304.3" font-family="Helvetica,sans-Serif" font-size="9.00">Multiplier, HitDirection)</text>
+<path fill="none" stroke="black" d="M81.6,-79.26C75.55,-107.1 68,-149.3 68,-186.5 68,-431 68,-431 68,-431 68,-470.09 100.57,-498.75 134.18,-517.92"/>
+<polygon fill="black" stroke="black" points="132.74,-521.12 143.2,-522.83 136.09,-514.97 132.74,-521.12"/>
+<text text-anchor="middle" x="127.5" y="-324.3" font-family="Helvetica,sans-Serif" font-size="9.00">ScorePointsGroupMessage</text>
+<text text-anchor="middle" x="127.5" y="-314.3" font-family="Helvetica,sans-Serif" font-size="9.00">(Points, LastScore,</text>
+<text text-anchor="middle" x="127.5" y="-304.3" font-family="Helvetica,sans-Serif" font-size="9.00">Multiplier, HitDirection)</text>
 </g>
 <!-- Resolver -->
 <g id="node3" class="node">
 <title>Resolver</title>
-<polygon fill="white" stroke="black" points="388,-456 232,-456 232,-404 388,-404 388,-456"/>
-<text text-anchor="middle" x="310" y="-444" font-family="Helvetica,sans-Serif" font-size="10.00">ScoreTrailBehaviourResolver</text>
-<text text-anchor="middle" x="310" y="-433" font-family="Helvetica,sans-Serif" font-size="10.00">Resolve(Points):</text>
-<text text-anchor="middle" x="310" y="-422" font-family="Helvetica,sans-Serif" font-size="10.00">highest MinPoints</text>
-<text text-anchor="middle" x="310" y="-411" font-family="Helvetica,sans-Serif" font-size="10.00">that clears wins</text>
+<polygon fill="white" stroke="black" points="400,-456 244,-456 244,-404 400,-404 400,-456"/>
+<text text-anchor="middle" x="322" y="-444" font-family="Helvetica,sans-Serif" font-size="10.00">ScoreTrailBehaviourResolver</text>
+<text text-anchor="middle" x="322" y="-433" font-family="Helvetica,sans-Serif" font-size="10.00">Resolve(Points):</text>
+<text text-anchor="middle" x="322" y="-422" font-family="Helvetica,sans-Serif" font-size="10.00">highest MinPoints</text>
+<text text-anchor="middle" x="322" y="-411" font-family="Helvetica,sans-Serif" font-size="10.00">that clears wins</text>
 </g>
 <!-- Service&#45;&gt;Resolver -->
 <g id="edge2" class="edge">
 <title>Service&#45;&gt;Resolver</title>
-<path fill="none" stroke="black" d="M220.46,-522.9C237.44,-505.47 260.21,-482.1 278.54,-463.28"/>
-<polygon fill="black" stroke="black" points="281.11,-465.66 285.58,-456.06 276.1,-460.78 281.11,-465.66"/>
-<text text-anchor="middle" x="281.5" y="-497.8" font-family="Helvetica,sans-Serif" font-size="9.00">Resolve(Points)</text>
+<path fill="none" stroke="black" d="M231.67,-522.9C248.8,-505.47 271.78,-482.1 290.27,-463.28"/>
+<polygon fill="black" stroke="black" points="292.86,-465.64 297.37,-456.06 287.86,-460.74 292.86,-465.64"/>
+<text text-anchor="middle" x="292.5" y="-497.8" font-family="Helvetica,sans-Serif" font-size="9.00">Resolve(Points)</text>
 </g>
 <!-- Reporter -->
 <g id="node5" class="node">
 <title>Reporter</title>
-<polygon fill="white" stroke="black" points="364,-213.5 210,-213.5 210,-161.5 364,-161.5 364,-213.5"/>
-<text text-anchor="middle" x="287" y="-201.5" font-family="Helvetica,sans-Serif" font-size="10.00">ScoreTrailReporter</text>
-<text text-anchor="middle" x="287" y="-190.5" font-family="Helvetica,sans-Serif" font-size="10.00">(one per group, not pooled)</text>
-<text text-anchor="middle" x="287" y="-179.5" font-family="Helvetica,sans-Serif" font-size="10.00">ReportArrival — asserts</text>
-<text text-anchor="middle" x="287" y="-168.5" font-family="Helvetica,sans-Serif" font-size="10.00">never&#45;overshoot, exact sum</text>
+<polygon fill="white" stroke="black" points="376,-213.5 222,-213.5 222,-161.5 376,-161.5 376,-213.5"/>
+<text text-anchor="middle" x="299" y="-201.5" font-family="Helvetica,sans-Serif" font-size="10.00">ScoreTrailReporter</text>
+<text text-anchor="middle" x="299" y="-190.5" font-family="Helvetica,sans-Serif" font-size="10.00">(one per group, not pooled)</text>
+<text text-anchor="middle" x="299" y="-179.5" font-family="Helvetica,sans-Serif" font-size="10.00">ReportArrival — asserts</text>
+<text text-anchor="middle" x="299" y="-168.5" font-family="Helvetica,sans-Serif" font-size="10.00">never&#45;overshoot, exact sum</text>
 </g>
 <!-- Service&#45;&gt;Reporter -->
 <g id="edge5" class="edge">
 <title>Service&#45;&gt;Reporter</title>
-<path fill="none" stroke="black" d="M191.25,-522.98C183.27,-474.91 171,-367.14 203,-285 212.59,-260.37 231.42,-237.79 248.82,-220.67"/>
-<polygon fill="black" stroke="black" points="251.33,-223.11 256.16,-213.68 246.5,-218.04 251.33,-223.11"/>
-<text text-anchor="middle" x="225.5" y="-378.8" font-family="Helvetica,sans-Serif" font-size="9.00">new(colour, total)</text>
-<text text-anchor="middle" x="225.5" y="-368.8" font-family="Helvetica,sans-Serif" font-size="9.00">per group</text>
+<path fill="none" stroke="black" d="M202.37,-522.97C194.63,-474.89 182.84,-367.09 215,-285 224.64,-260.39 243.47,-237.81 260.86,-220.69"/>
+<polygon fill="black" stroke="black" points="263.37,-223.13 268.19,-213.69 258.54,-218.06 263.37,-223.13"/>
+<text text-anchor="middle" x="237.5" y="-378.8" font-family="Helvetica,sans-Serif" font-size="9.00">new(colour, total)</text>
+<text text-anchor="middle" x="237.5" y="-368.8" font-family="Helvetica,sans-Serif" font-size="9.00">per group</text>
 </g>
 <!-- Flights -->
-<g id="node11" class="node">
+<g id="node12" class="node">
 <title>Flights</title>
-<polygon fill="white" stroke="black" points="910.5,-208 759.5,-208 759.5,-167 910.5,-167 910.5,-208"/>
-<text text-anchor="middle" x="835" y="-196" font-family="Helvetica,sans-Serif" font-size="10.00">TrailFlightRegistry&lt;TrailId&gt;</text>
-<text text-anchor="middle" x="835" y="-185" font-family="Helvetica,sans-Serif" font-size="10.00">anchor registered as the</text>
-<text text-anchor="middle" x="835" y="-174" font-family="Helvetica,sans-Serif" font-size="10.00">group&#39;s principal flight</text>
+<polygon fill="white" stroke="black" points="1058.5,-208 907.5,-208 907.5,-167 1058.5,-167 1058.5,-208"/>
+<text text-anchor="middle" x="983" y="-196" font-family="Helvetica,sans-Serif" font-size="10.00">TrailFlightRegistry&lt;TrailId&gt;</text>
+<text text-anchor="middle" x="983" y="-185" font-family="Helvetica,sans-Serif" font-size="10.00">anchor registered as the</text>
+<text text-anchor="middle" x="983" y="-174" font-family="Helvetica,sans-Serif" font-size="10.00">group&#39;s principal flight</text>
 </g>
 <!-- Service&#45;&gt;Flights -->
-<g id="edge21" class="edge">
+<g id="edge22" class="edge">
 <title>Service&#45;&gt;Flights</title>
-<path fill="none" stroke="black" d="M263.32,-524.95C266.24,-524.23 269.14,-523.58 272,-523 457.49,-485.31 517.87,-542.03 694.41,-489.9"/>
-<polygon fill="black" stroke="black" points="695.44,-493.25 704,-487 693.41,-486.55 695.44,-493.25"/>
-<text text-anchor="middle" x="957" y="-373.8" font-family="Helvetica,sans-Serif" font-size="9.00">&#45;&gt; Flights.CompleteAll()</text>
+<path fill="none" stroke="black" d="M274.32,-524.95C277.24,-524.23 280.14,-523.58 283,-523 468.49,-485.31 528.8,-541.82 705.41,-489.89"/>
+<polygon fill="black" stroke="black" points="706.44,-493.24 715,-487 704.42,-486.54 706.44,-493.24"/>
+<text text-anchor="middle" x="969" y="-373.8" font-family="Helvetica,sans-Serif" font-size="9.00">&#45;&gt; Flights.CompleteAll()</text>
 </g>
 <!-- Default -->
 <g id="node6" class="node">
 <title>Default</title>
-<polygon fill="white" stroke="black" points="361.5,-337 212.5,-337 212.5,-296 361.5,-296 361.5,-337"/>
-<text text-anchor="middle" x="287" y="-325" font-family="Helvetica,sans-Serif" font-size="10.00">DefaultScoreTrailBehaviour</text>
-<text text-anchor="middle" x="287" y="-314" font-family="Helvetica,sans-Serif" font-size="10.00">classic per&#45;point fan&#45;out</text>
-<text text-anchor="middle" x="287" y="-303" font-family="Helvetica,sans-Serif" font-size="10.00">(&lt; MinPoints)</text>
+<polygon fill="white" stroke="black" points="373.5,-337 224.5,-337 224.5,-296 373.5,-296 373.5,-337"/>
+<text text-anchor="middle" x="299" y="-325" font-family="Helvetica,sans-Serif" font-size="10.00">DefaultScoreTrailBehaviour</text>
+<text text-anchor="middle" x="299" y="-314" font-family="Helvetica,sans-Serif" font-size="10.00">classic per&#45;point fan&#45;out</text>
+<text text-anchor="middle" x="299" y="-303" font-family="Helvetica,sans-Serif" font-size="10.00">(&lt; MinPoints)</text>
 </g>
 <!-- Resolver&#45;&gt;Default -->
 <g id="edge6" class="edge">
 <title>Resolver&#45;&gt;Default</title>
-<path fill="none" stroke="black" d="M303.16,-403.61C301.7,-397.84 300.23,-391.73 299,-386 296.27,-373.31 293.72,-359.2 291.67,-347.1"/>
-<polygon fill="black" stroke="black" points="295.1,-346.36 290.02,-337.06 288.19,-347.5 295.1,-346.36"/>
-<text text-anchor="middle" x="341.5" y="-373.8" font-family="Helvetica,sans-Serif" font-size="9.00">points &lt; MinPoints</text>
+<path fill="none" stroke="black" d="M315.16,-403.61C313.7,-397.84 312.23,-391.73 311,-386 308.27,-373.31 305.72,-359.2 303.67,-347.1"/>
+<polygon fill="black" stroke="black" points="307.1,-346.36 302.02,-337.06 300.19,-347.5 307.1,-346.36"/>
+<text text-anchor="middle" x="353.5" y="-373.8" font-family="Helvetica,sans-Serif" font-size="9.00">points &lt; MinPoints</text>
 </g>
 <!-- Big -->
 <g id="node7" class="node">
 <title>Big</title>
-<polygon fill="white" stroke="black" points="695,-456 511,-456 511,-404 695,-404 695,-456"/>
-<text text-anchor="middle" x="603" y="-444" font-family="Helvetica,sans-Serif" font-size="10.00">BigScoreTrailBehaviour</text>
-<text text-anchor="middle" x="603" y="-433" font-family="Helvetica,sans-Serif" font-size="10.00">Decompose (optimal coin</text>
-<text text-anchor="middle" x="603" y="-422" font-family="Helvetica,sans-Serif" font-size="10.00">change over Denominations)</text>
-<text text-anchor="middle" x="603" y="-411" font-family="Helvetica,sans-Serif" font-size="10.00">FitScale/ClampCenter, TumbleAxis</text>
+<polygon fill="white" stroke="black" points="706,-456 522,-456 522,-404 706,-404 706,-456"/>
+<text text-anchor="middle" x="614" y="-444" font-family="Helvetica,sans-Serif" font-size="10.00">BigScoreTrailBehaviour</text>
+<text text-anchor="middle" x="614" y="-433" font-family="Helvetica,sans-Serif" font-size="10.00">Decompose (optimal coin</text>
+<text text-anchor="middle" x="614" y="-422" font-family="Helvetica,sans-Serif" font-size="10.00">change over Denominations)</text>
+<text text-anchor="middle" x="614" y="-411" font-family="Helvetica,sans-Serif" font-size="10.00">FitScale/ClampCenter, TumbleAxis</text>
 </g>
 <!-- Resolver&#45;&gt;Big -->
 <g id="edge7" class="edge">
 <title>Resolver&#45;&gt;Big</title>
-<path fill="none" stroke="black" d="M388.13,-430C422.61,-430 463.6,-430 500.49,-430"/>
-<polygon fill="black" stroke="black" points="500.78,-433.5 510.78,-430 500.78,-426.5 500.78,-433.5"/>
-<text text-anchor="middle" x="449.5" y="-435.8" font-family="Helvetica,sans-Serif" font-size="9.00">points &gt;= MinPoints</text>
+<path fill="none" stroke="black" d="M400.25,-430C434.45,-430 475.03,-430 511.59,-430"/>
+<polygon fill="black" stroke="black" points="511.79,-433.5 521.79,-430 511.79,-426.5 511.79,-433.5"/>
+<text text-anchor="middle" x="461" y="-435.8" font-family="Helvetica,sans-Serif" font-size="9.00">points &gt;= MinPoints</text>
 </g>
 <!-- ConfigSO -->
 <g id="node4" class="node">
 <title>ConfigSO</title>
-<polygon fill="white" stroke="black" points="487,-569.5 281,-569.5 281,-528.5 487,-528.5 487,-569.5"/>
-<text text-anchor="middle" x="384" y="-557.5" font-family="Helvetica,sans-Serif" font-size="10.00">IScoreTrailBehaviourConfiguration (SO)</text>
-<text text-anchor="middle" x="384" y="-546.5" font-family="Helvetica,sans-Serif" font-size="10.00">Entries: (Id, MinPoints)</text>
-<text text-anchor="middle" x="384" y="-535.5" font-family="Helvetica,sans-Serif" font-size="10.00">+ BigScoreFormationSettings</text>
+<polygon fill="white" stroke="black" points="498,-569.5 292,-569.5 292,-528.5 498,-528.5 498,-569.5"/>
+<text text-anchor="middle" x="395" y="-557.5" font-family="Helvetica,sans-Serif" font-size="10.00">IScoreTrailBehaviourConfiguration (SO)</text>
+<text text-anchor="middle" x="395" y="-546.5" font-family="Helvetica,sans-Serif" font-size="10.00">Entries: (Id, MinPoints)</text>
+<text text-anchor="middle" x="395" y="-535.5" font-family="Helvetica,sans-Serif" font-size="10.00">+ BigScoreFormationSettings</text>
 </g>
 <!-- ConfigSO&#45;&gt;Resolver -->
 <g id="edge3" class="edge">
 <title>ConfigSO&#45;&gt;Resolver</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M371.61,-528.42C360.67,-511.11 344.47,-485.49 331.42,-464.87"/>
-<polygon fill="black" stroke="black" points="334.35,-462.96 326.05,-456.38 328.44,-466.7 334.35,-462.96"/>
-<text text-anchor="middle" x="372" y="-497.8" font-family="Helvetica,sans-Serif" font-size="9.00">Entries</text>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M382.78,-528.42C371.98,-511.11 356,-485.49 343.13,-464.87"/>
+<polygon fill="black" stroke="black" points="346.1,-463.01 337.83,-456.38 340.16,-466.72 346.1,-463.01"/>
+<text text-anchor="middle" x="384" y="-497.8" font-family="Helvetica,sans-Serif" font-size="9.00">Entries</text>
 </g>
 <!-- ConfigSO&#45;&gt;Big -->
 <g id="edge4" class="edge">
 <title>ConfigSO&#45;&gt;Big</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M421.06,-528.42C443.61,-516.48 472.99,-500.9 499,-487 514.8,-478.56 531.93,-469.35 547.63,-460.9"/>
-<polygon fill="black" stroke="black" points="549.55,-463.84 556.7,-456.01 546.23,-457.67 549.55,-463.84"/>
-<text text-anchor="middle" x="544.5" y="-497.8" font-family="Helvetica,sans-Serif" font-size="9.00">BigScoreFormationSettings</text>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M432.06,-528.42C454.61,-516.48 483.99,-500.9 510,-487 525.8,-478.56 542.93,-469.35 558.63,-460.9"/>
+<polygon fill="black" stroke="black" points="560.55,-463.84 567.7,-456.01 557.23,-457.67 560.55,-463.84"/>
+<text text-anchor="middle" x="555.5" y="-497.8" font-family="Helvetica,sans-Serif" font-size="9.00">BigScoreFormationSettings</text>
 </g>
 <!-- Reporter&#45;&gt;ScoreController -->
-<g id="edge17" class="edge">
+<g id="edge18" class="edge">
 <title>Reporter&#45;&gt;ScoreController</title>
-<path fill="none" stroke="black" d="M209.89,-169.06C188.74,-161.81 166.77,-151.76 149,-138 132,-124.83 118.17,-105.44 108.09,-88.07"/>
-<polygon fill="black" stroke="black" points="111.08,-86.25 103.16,-79.22 104.96,-89.66 111.08,-86.25"/>
-<text text-anchor="middle" x="206.5" y="-130.8" font-family="Helvetica,sans-Serif" font-size="9.00">ScoreTrailArrivedMessage</text>
-<text text-anchor="middle" x="206.5" y="-120.8" font-family="Helvetica,sans-Serif" font-size="9.00">(OnTrailArrived)</text>
+<path fill="none" stroke="black" d="M221.9,-168.91C199.97,-161.62 176.93,-151.59 158,-138 139.51,-124.73 123.61,-105.1 111.74,-87.61"/>
+<polygon fill="black" stroke="black" points="114.66,-85.67 106.25,-79.23 108.81,-89.51 114.66,-85.67"/>
+<text text-anchor="middle" x="215.5" y="-130.8" font-family="Helvetica,sans-Serif" font-size="9.00">ScoreTrailArrivedMessage</text>
+<text text-anchor="middle" x="215.5" y="-120.8" font-family="Helvetica,sans-Serif" font-size="9.00">(OnTrailArrived)</text>
 </g>
 <!-- LevelController -->
-<g id="node12" class="node">
+<g id="node13" class="node">
 <title>LevelController</title>
-<polygon fill="white" stroke="black" points="328,-73.5 194,-73.5 194,-21.5 328,-21.5 328,-73.5"/>
-<text text-anchor="middle" x="261" y="-61.5" font-family="Helvetica,sans-Serif" font-size="10.00">LevelController</text>
-<text text-anchor="middle" x="261" y="-50.5" font-family="Helvetica,sans-Serif" font-size="10.00">confirmed watermark:</text>
-<text text-anchor="middle" x="261" y="-39.5" font-family="Helvetica,sans-Serif" font-size="10.00">Max(current, Min(Score,</text>
-<text text-anchor="middle" x="261" y="-28.5" font-family="Helvetica,sans-Serif" font-size="10.00">projected)) per colour</text>
+<polygon fill="white" stroke="black" points="337,-73.5 203,-73.5 203,-21.5 337,-21.5 337,-73.5"/>
+<text text-anchor="middle" x="270" y="-61.5" font-family="Helvetica,sans-Serif" font-size="10.00">LevelController</text>
+<text text-anchor="middle" x="270" y="-50.5" font-family="Helvetica,sans-Serif" font-size="10.00">confirmed watermark:</text>
+<text text-anchor="middle" x="270" y="-39.5" font-family="Helvetica,sans-Serif" font-size="10.00">Max(current, Min(Score,</text>
+<text text-anchor="middle" x="270" y="-28.5" font-family="Helvetica,sans-Serif" font-size="10.00">projected)) per colour</text>
 </g>
 <!-- Reporter&#45;&gt;LevelController -->
-<g id="edge16" class="edge">
+<g id="edge17" class="edge">
 <title>Reporter&#45;&gt;LevelController</title>
-<path fill="none" stroke="black" d="M277.52,-161.1C275.08,-153.74 272.66,-145.62 271,-138 267.17,-120.46 264.76,-100.64 263.27,-84.12"/>
-<polygon fill="black" stroke="black" points="266.73,-83.48 262.42,-73.8 259.76,-84.06 266.73,-83.48"/>
-<text text-anchor="middle" x="328.5" y="-125.8" font-family="Helvetica,sans-Serif" font-size="9.00">ScoreTrailArrivedMessage</text>
+<path fill="none" stroke="black" d="M287.66,-161.23C284.75,-153.87 281.91,-145.73 280,-138 275.69,-120.57 273.24,-100.77 271.84,-84.23"/>
+<polygon fill="black" stroke="black" points="275.3,-83.6 271.06,-73.89 268.32,-84.12 275.3,-83.6"/>
+<text text-anchor="middle" x="337.5" y="-125.8" font-family="Helvetica,sans-Serif" font-size="9.00">ScoreTrailArrivedMessage</text>
 </g>
 <!-- ColorProgressBar -->
-<g id="node13" class="node">
+<g id="node14" class="node">
 <title>ColorProgressBar</title>
-<polygon fill="white" stroke="black" points="476,-68 346,-68 346,-27 476,-27 476,-68"/>
-<text text-anchor="middle" x="411" y="-56" font-family="Helvetica,sans-Serif" font-size="10.00">ColorProgressBar</text>
-<text text-anchor="middle" x="411" y="-45" font-family="Helvetica,sans-Serif" font-size="10.00">: ITrailEndpoint</text>
-<text text-anchor="middle" x="411" y="-34" font-family="Helvetica,sans-Serif" font-size="10.00">bar fill + landing target</text>
+<polygon fill="white" stroke="black" points="485,-68 355,-68 355,-27 485,-27 485,-68"/>
+<text text-anchor="middle" x="420" y="-56" font-family="Helvetica,sans-Serif" font-size="10.00">ColorProgressBar</text>
+<text text-anchor="middle" x="420" y="-45" font-family="Helvetica,sans-Serif" font-size="10.00">: ITrailEndpoint</text>
+<text text-anchor="middle" x="420" y="-34" font-family="Helvetica,sans-Serif" font-size="10.00">bar fill + landing target</text>
 </g>
 <!-- Reporter&#45;&gt;ColorProgressBar -->
-<g id="edge18" class="edge">
+<g id="edge19" class="edge">
 <title>Reporter&#45;&gt;ColorProgressBar</title>
-<path fill="none" stroke="black" d="M357.31,-161.47C368.06,-155.16 378.17,-147.42 386,-138 399.95,-121.23 406.14,-97.21 408.87,-78.27"/>
-<polygon fill="black" stroke="black" points="412.38,-78.42 410.09,-68.08 405.43,-77.59 412.38,-78.42"/>
-<text text-anchor="middle" x="454.5" y="-125.8" font-family="Helvetica,sans-Serif" font-size="9.00">ScoreTrailArrivedMessage</text>
+<path fill="none" stroke="black" d="M366.71,-161.45C377.31,-155.12 387.3,-147.38 395,-138 408.85,-121.14 415.04,-97.13 417.8,-78.21"/>
+<polygon fill="black" stroke="black" points="421.31,-78.38 419.04,-68.04 414.36,-77.54 421.31,-78.38"/>
+<text text-anchor="middle" x="463.5" y="-125.8" font-family="Helvetica,sans-Serif" font-size="9.00">ScoreTrailArrivedMessage</text>
 </g>
 <!-- Default&#45;&gt;Reporter -->
-<g id="edge15" class="edge">
+<g id="edge16" class="edge">
 <title>Default&#45;&gt;Reporter</title>
-<path fill="none" stroke="black" d="M287,-295.93C287,-276.75 287,-247.06 287,-223.75"/>
-<polygon fill="black" stroke="black" points="290.5,-223.55 287,-213.55 283.5,-223.55 290.5,-223.55"/>
-<text text-anchor="middle" x="319.5" y="-254.8" font-family="Helvetica,sans-Serif" font-size="9.00">ReportArrival</text>
-<text text-anchor="middle" x="319.5" y="-244.8" font-family="Helvetica,sans-Serif" font-size="9.00">(1 point each)</text>
+<path fill="none" stroke="black" d="M299,-295.93C299,-276.75 299,-247.06 299,-223.75"/>
+<polygon fill="black" stroke="black" points="302.5,-223.55 299,-213.55 295.5,-223.55 302.5,-223.55"/>
+<text text-anchor="middle" x="331.5" y="-254.8" font-family="Helvetica,sans-Serif" font-size="9.00">ReportArrival</text>
+<text text-anchor="middle" x="331.5" y="-244.8" font-family="Helvetica,sans-Serif" font-size="9.00">(1 point each)</text>
 </g>
 <!-- Default&#45;&gt;Flights -->
-<g id="edge14" class="edge">
+<g id="edge15" class="edge">
 <title>Default&#45;&gt;Flights</title>
-<path fill="none" stroke="black" d="M317.85,-295.99C349.43,-277.14 400.62,-249.63 449,-237 579.1,-203.03 619.33,-246.23 751,-219 760.25,-217.09 769.84,-214.36 779.1,-211.32"/>
-<polygon fill="black" stroke="black" points="780.28,-214.61 788.6,-208.05 778.01,-207.99 780.28,-214.61"/>
-<text text-anchor="middle" x="493" y="-254.8" font-family="Helvetica,sans-Serif" font-size="9.00">Register/Unregister</text>
-<text text-anchor="middle" x="493" y="-244.8" font-family="Helvetica,sans-Serif" font-size="9.00">per&#45;point TrailId</text>
+<path fill="none" stroke="black" d="M328.03,-295.92C359.98,-274.79 409.65,-243.31 431,-237 530.81,-207.49 796.86,-239 899,-219 908.38,-217.16 918.11,-214.44 927.48,-211.37"/>
+<polygon fill="black" stroke="black" points="928.76,-214.63 937.08,-208.07 926.48,-208.02 928.76,-214.63"/>
+<text text-anchor="middle" x="475" y="-254.8" font-family="Helvetica,sans-Serif" font-size="9.00">Register/Unregister</text>
+<text text-anchor="middle" x="475" y="-244.8" font-family="Helvetica,sans-Serif" font-size="9.00">per&#45;point TrailId</text>
 </g>
 <!-- Big&#45;&gt;Reporter -->
 <g id="edge10" class="edge">
 <title>Big&#45;&gt;Reporter</title>
-<path fill="none" stroke="black" d="M510.88,-407.1C474.62,-394.7 434.84,-375.9 406,-348 367.11,-310.38 390.47,-278.71 356,-237 350.95,-230.89 344.95,-225.19 338.63,-220.01"/>
-<polygon fill="black" stroke="black" points="340.55,-217.07 330.49,-213.73 336.27,-222.61 340.55,-217.07"/>
-<text text-anchor="middle" x="454" y="-324.3" font-family="Helvetica,sans-Serif" font-size="9.00">ReportArrival</text>
-<text text-anchor="middle" x="454" y="-314.3" font-family="Helvetica,sans-Serif" font-size="9.00">per formation</text>
-<text text-anchor="middle" x="454" y="-304.3" font-family="Helvetica,sans-Serif" font-size="9.00">(remainder&#45;free split)</text>
+<path fill="none" stroke="black" d="M521.85,-406.83C485.9,-394.41 446.55,-375.67 418,-348 379.15,-310.34 402.47,-278.71 368,-237 362.95,-230.89 356.95,-225.19 350.63,-220.01"/>
+<polygon fill="black" stroke="black" points="352.55,-217.07 342.49,-213.73 348.27,-222.61 352.55,-217.07"/>
+<text text-anchor="middle" x="466" y="-324.3" font-family="Helvetica,sans-Serif" font-size="9.00">ReportArrival</text>
+<text text-anchor="middle" x="466" y="-314.3" font-family="Helvetica,sans-Serif" font-size="9.00">per formation</text>
+<text text-anchor="middle" x="466" y="-304.3" font-family="Helvetica,sans-Serif" font-size="9.00">(remainder&#45;free split)</text>
 </g>
 <!-- Catalog -->
 <g id="node8" class="node">
 <title>Catalog</title>
-<polygon fill="white" stroke="black" points="693,-348 511,-348 511,-285 693,-285 693,-348"/>
-<text text-anchor="middle" x="602" y="-336" font-family="Helvetica,sans-Serif" font-size="10.00">ShapeCatalog (static)</text>
-<text text-anchor="middle" x="602" y="-325" font-family="Helvetica,sans-Serif" font-size="10.00">denomination &#45;&gt; FormationShape</text>
-<text text-anchor="middle" x="602" y="-314" font-family="Helvetica,sans-Serif" font-size="10.00">unit&#45;sphere verts, closed walks,</text>
-<text text-anchor="middle" x="602" y="-303" font-family="Helvetica,sans-Serif" font-size="10.00">perimeters, PensPerWalk</text>
-<text text-anchor="middle" x="602" y="-292" font-family="Helvetica,sans-Serif" font-size="10.00">warmed at scope Start()</text>
+<polygon fill="white" stroke="black" points="705,-348 523,-348 523,-285 705,-285 705,-348"/>
+<text text-anchor="middle" x="614" y="-336" font-family="Helvetica,sans-Serif" font-size="10.00">ShapeCatalog (static)</text>
+<text text-anchor="middle" x="614" y="-325" font-family="Helvetica,sans-Serif" font-size="10.00">denomination &#45;&gt; FormationShape</text>
+<text text-anchor="middle" x="614" y="-314" font-family="Helvetica,sans-Serif" font-size="10.00">unit&#45;sphere verts, closed walks,</text>
+<text text-anchor="middle" x="614" y="-303" font-family="Helvetica,sans-Serif" font-size="10.00">perimeters, PensPerWalk</text>
+<text text-anchor="middle" x="614" y="-292" font-family="Helvetica,sans-Serif" font-size="10.00">warmed at scope Start()</text>
 </g>
 <!-- Big&#45;&gt;Catalog -->
 <g id="edge8" class="edge">
 <title>Big&#45;&gt;Catalog</title>
-<path fill="none" stroke="black" d="M602.78,-403.98C602.65,-390.52 602.5,-373.58 602.37,-358.28"/>
-<polygon fill="black" stroke="black" points="605.86,-357.97 602.27,-348 598.86,-358.03 605.86,-357.97"/>
-<text text-anchor="middle" x="652" y="-378.8" font-family="Helvetica,sans-Serif" font-size="9.00">TryGet(denomination)</text>
-<text text-anchor="middle" x="652" y="-368.8" font-family="Helvetica,sans-Serif" font-size="9.00">&#45;&gt; FormationShape</text>
+<path fill="none" stroke="black" d="M614,-403.98C614,-390.52 614,-373.58 614,-358.28"/>
+<polygon fill="black" stroke="black" points="617.5,-358 614,-348 610.5,-358 617.5,-358"/>
+<text text-anchor="middle" x="664" y="-378.8" font-family="Helvetica,sans-Serif" font-size="9.00">TryGet(denomination)</text>
+<text text-anchor="middle" x="664" y="-368.8" font-family="Helvetica,sans-Serif" font-size="9.00">&#45;&gt; FormationShape</text>
 </g>
 <!-- Ticker -->
 <g id="node9" class="node">
 <title>Ticker</title>
-<polygon fill="white" stroke="black" points="910.5,-342.5 711.5,-342.5 711.5,-290.5 910.5,-290.5 910.5,-342.5"/>
-<text text-anchor="middle" x="811" y="-330.5" font-family="Helvetica,sans-Serif" font-size="10.00">ShapeFormationTicker : ILateTickable</text>
-<text text-anchor="middle" x="811" y="-319.5" font-family="Helvetica,sans-Serif" font-size="10.00">pooled FormationGroup/State</text>
-<text text-anchor="middle" x="811" y="-308.5" font-family="Helvetica,sans-Serif" font-size="10.00">C(t) travel, Q(t) tumble,</text>
-<text text-anchor="middle" x="811" y="-297.5" font-family="Helvetica,sans-Serif" font-size="10.00">scale(t) curve, pen arc&#45;length orbit</text>
+<polygon fill="white" stroke="black" points="922.5,-342.5 723.5,-342.5 723.5,-290.5 922.5,-290.5 922.5,-342.5"/>
+<text text-anchor="middle" x="823" y="-330.5" font-family="Helvetica,sans-Serif" font-size="10.00">ShapeFormationTicker : ILateTickable</text>
+<text text-anchor="middle" x="823" y="-319.5" font-family="Helvetica,sans-Serif" font-size="10.00">pooled FormationGroup/State</text>
+<text text-anchor="middle" x="823" y="-308.5" font-family="Helvetica,sans-Serif" font-size="10.00">C(t) travel, Q(t) tumble,</text>
+<text text-anchor="middle" x="823" y="-297.5" font-family="Helvetica,sans-Serif" font-size="10.00">scale(t) curve, pen arc&#45;length orbit</text>
 </g>
 <!-- Big&#45;&gt;Ticker -->
 <g id="edge9" class="edge">
 <title>Big&#45;&gt;Ticker</title>
-<path fill="none" stroke="black" d="M669.3,-403.94C680.85,-398.62 692.52,-392.58 703,-386 714.47,-378.79 714.95,-373.84 726,-366 734.91,-359.68 744.71,-353.47 754.39,-347.72"/>
-<polygon fill="black" stroke="black" points="756.33,-350.64 763.21,-342.58 752.81,-344.59 756.33,-350.64"/>
-<text text-anchor="middle" x="803.5" y="-378.8" font-family="Helvetica,sans-Serif" font-size="9.00">BeginGroup (anchor)</text>
-<text text-anchor="middle" x="803.5" y="-368.8" font-family="Helvetica,sans-Serif" font-size="9.00">LaunchFormation × denomination</text>
+<path fill="none" stroke="black" d="M681.24,-403.88C692.82,-398.58 704.5,-392.57 715,-386 726.48,-378.81 726.95,-373.84 738,-366 746.91,-359.68 756.71,-353.47 766.39,-347.72"/>
+<polygon fill="black" stroke="black" points="768.33,-350.64 775.21,-342.58 764.81,-344.59 768.33,-350.64"/>
+<text text-anchor="middle" x="815.5" y="-378.8" font-family="Helvetica,sans-Serif" font-size="9.00">BeginGroup (anchor)</text>
+<text text-anchor="middle" x="815.5" y="-368.8" font-family="Helvetica,sans-Serif" font-size="9.00">LaunchFormation × denomination</text>
 </g>
 <!-- Ticker&#45;&gt;Reporter -->
-<g id="edge13" class="edge">
+<g id="edge14" class="edge">
 <title>Ticker&#45;&gt;Reporter</title>
-<path fill="none" stroke="black" d="M724,-290.47C716.58,-288.55 709.17,-286.69 702,-285 661.03,-275.32 649.18,-279.58 609,-267 577.48,-257.13 572.54,-246.83 541,-237 486.67,-220.07 423.86,-208.01 374.3,-200.16"/>
-<polygon fill="black" stroke="black" points="374.67,-196.67 364.25,-198.59 373.59,-203.59 374.67,-196.67"/>
-<text text-anchor="middle" x="651.5" y="-259.8" font-family="Helvetica,sans-Serif" font-size="9.00">ReportArrival</text>
-<text text-anchor="middle" x="651.5" y="-249.8" font-family="Helvetica,sans-Serif" font-size="9.00">(RangeLast, Value)</text>
-<text text-anchor="middle" x="651.5" y="-239.8" font-family="Helvetica,sans-Serif" font-size="9.00">one per formation</text>
+<path fill="none" stroke="black" d="M738.52,-290.43C730.28,-288.42 722,-286.56 714,-285 643.76,-271.31 618.73,-297.51 554,-267 536.66,-258.82 539.91,-246.04 523,-237 480.93,-214.5 429.12,-202.44 385.93,-195.97"/>
+<polygon fill="black" stroke="black" points="386.4,-192.5 376.01,-194.56 385.42,-199.43 386.4,-192.5"/>
+<text text-anchor="middle" x="596.5" y="-259.8" font-family="Helvetica,sans-Serif" font-size="9.00">ReportArrival</text>
+<text text-anchor="middle" x="596.5" y="-249.8" font-family="Helvetica,sans-Serif" font-size="9.00">(RangeLast, Value)</text>
+<text text-anchor="middle" x="596.5" y="-239.8" font-family="Helvetica,sans-Serif" font-size="9.00">one per formation</text>
+</g>
+<!-- OverlapResolver -->
+<g id="node10" class="node">
+<title>OverlapResolver</title>
+<polygon fill="white" stroke="black" points="710,-213.5 522,-213.5 522,-161.5 710,-161.5 710,-213.5"/>
+<text text-anchor="middle" x="616" y="-201.5" font-family="Helvetica,sans-Serif" font-size="10.00">FormationOverlapResolver (pure)</text>
+<text text-anchor="middle" x="616" y="-190.5" font-family="Helvetica,sans-Serif" font-size="10.00">O(n^2) push&#45;apart, once/tick,</text>
+<text text-anchor="middle" x="616" y="-179.5" font-family="Helvetica,sans-Serif" font-size="10.00">across EVERY pending formation</text>
+<text text-anchor="middle" x="616" y="-168.5" font-family="Helvetica,sans-Serif" font-size="10.00">(including other concurrent groups)</text>
+</g>
+<!-- Ticker&#45;&gt;OverlapResolver -->
+<g id="edge11" class="edge">
+<title>Ticker&#45;&gt;OverlapResolver</title>
+<path fill="none" stroke="black" d="M736.05,-290.49C705.01,-281.07 676.13,-271.54 670,-267 654.44,-255.48 641.83,-238.08 632.71,-222.6"/>
+<polygon fill="black" stroke="black" points="635.7,-220.76 627.75,-213.76 629.59,-224.19 635.7,-220.76"/>
+<text text-anchor="middle" x="720.5" y="-259.8" font-family="Helvetica,sans-Serif" font-size="9.00">Resolve() once/tick,</text>
+<text text-anchor="middle" x="720.5" y="-249.8" font-family="Helvetica,sans-Serif" font-size="9.00">folds correction into</text>
+<text text-anchor="middle" x="720.5" y="-239.8" font-family="Helvetica,sans-Serif" font-size="9.00">each CandidateCenter</text>
 </g>
 <!-- Pens -->
-<g id="node10" class="node">
+<g id="node11" class="node">
 <title>Pens</title>
-<polygon fill="white" stroke="black" points="741.5,-219 580.5,-219 580.5,-156 741.5,-156 741.5,-219"/>
-<text text-anchor="middle" x="661" y="-207" font-family="Helvetica,sans-Serif" font-size="10.00">Pens + anchor + guide</text>
-<text text-anchor="middle" x="661" y="-196" font-family="Helvetica,sans-Serif" font-size="10.00">pooled FlyingTrail pens</text>
-<text text-anchor="middle" x="661" y="-185" font-family="Helvetica,sans-Serif" font-size="10.00">(TrailRenderer ink),</text>
-<text text-anchor="middle" x="661" y="-174" font-family="Helvetica,sans-Serif" font-size="10.00">anchor Transform = principal,</text>
-<text text-anchor="middle" x="661" y="-163" font-family="Helvetica,sans-Serif" font-size="10.00">guide traces the travel path</text>
+<polygon fill="white" stroke="black" points="889.5,-219 728.5,-219 728.5,-156 889.5,-156 889.5,-219"/>
+<text text-anchor="middle" x="809" y="-207" font-family="Helvetica,sans-Serif" font-size="10.00">Pens + anchor + guide</text>
+<text text-anchor="middle" x="809" y="-196" font-family="Helvetica,sans-Serif" font-size="10.00">pooled FlyingTrail pens</text>
+<text text-anchor="middle" x="809" y="-185" font-family="Helvetica,sans-Serif" font-size="10.00">(TrailRenderer ink),</text>
+<text text-anchor="middle" x="809" y="-174" font-family="Helvetica,sans-Serif" font-size="10.00">anchor Transform = principal,</text>
+<text text-anchor="middle" x="809" y="-163" font-family="Helvetica,sans-Serif" font-size="10.00">guide traces the travel path</text>
 </g>
 <!-- Ticker&#45;&gt;Pens -->
-<g id="edge11" class="edge">
+<g id="edge12" class="edge">
 <title>Ticker&#45;&gt;Pens</title>
-<path fill="none" stroke="black" d="M761.77,-290.4C750.19,-283.51 738.24,-275.57 728,-267 714.23,-255.48 700.97,-240.95 689.94,-227.54"/>
-<polygon fill="black" stroke="black" points="692.36,-224.97 683.37,-219.36 686.91,-229.35 692.36,-224.97"/>
-<text text-anchor="middle" x="772" y="-254.8" font-family="Helvetica,sans-Serif" font-size="9.00">Acquire()/Release()</text>
-<text text-anchor="middle" x="772" y="-244.8" font-family="Helvetica,sans-Serif" font-size="9.00">per FormationState</text>
+<path fill="none" stroke="black" d="M793.2,-290.38C787.01,-283.5 781.36,-275.55 778,-267 773.05,-254.39 775.72,-240.65 781.15,-228.25"/>
+<polygon fill="black" stroke="black" points="784.4,-229.57 785.76,-219.06 778.14,-226.43 784.4,-229.57"/>
+<text text-anchor="middle" x="822" y="-254.8" font-family="Helvetica,sans-Serif" font-size="9.00">Acquire()/Release()</text>
+<text text-anchor="middle" x="822" y="-244.8" font-family="Helvetica,sans-Serif" font-size="9.00">per FormationState</text>
 </g>
 <!-- Ticker&#45;&gt;Flights -->
-<g id="edge12" class="edge">
+<g id="edge13" class="edge">
 <title>Ticker&#45;&gt;Flights</title>
-<path fill="none" stroke="black" d="M815.74,-290.41C819.66,-269.66 825.24,-240.15 829.38,-218.22"/>
-<polygon fill="black" stroke="black" points="832.87,-218.61 831.29,-208.13 825.99,-217.31 832.87,-218.61"/>
-<text text-anchor="middle" x="869" y="-254.8" font-family="Helvetica,sans-Serif" font-size="9.00">Register/Unregister</text>
-<text text-anchor="middle" x="869" y="-244.8" font-family="Helvetica,sans-Serif" font-size="9.00">CarrierId</text>
+<path fill="none" stroke="black" d="M846.11,-290.12C852.65,-282.76 859.7,-274.64 866,-267 876.69,-254.04 876.11,-247.78 889,-237 900,-227.8 913.02,-219.71 925.82,-212.89"/>
+<polygon fill="black" stroke="black" points="927.76,-215.83 935.07,-208.16 924.58,-209.6 927.76,-215.83"/>
+<text text-anchor="middle" x="933" y="-254.8" font-family="Helvetica,sans-Serif" font-size="9.00">Register/Unregister</text>
+<text text-anchor="middle" x="933" y="-244.8" font-family="Helvetica,sans-Serif" font-size="9.00">CarrierId</text>
 </g>
 <!-- Cinematic -->
-<g id="node14" class="node">
+<g id="node15" class="node">
 <title>Cinematic</title>
-<polygon fill="white" stroke="black" points="875,-694 699,-694 699,-642 875,-642 875,-694"/>
-<text text-anchor="middle" x="787" y="-682" font-family="Helvetica,sans-Serif" font-size="10.00">LevelUpCinematic</text>
-<text text-anchor="middle" x="787" y="-671" font-family="Helvetica,sans-Serif" font-size="10.00">Flights.Get(principal)</text>
-<text text-anchor="middle" x="787" y="-660" font-family="Helvetica,sans-Serif" font-size="10.00">Pause / Complete</text>
-<text text-anchor="middle" x="787" y="-649" font-family="Helvetica,sans-Serif" font-size="10.00">(see @ref arch_score_cinematic)</text>
+<polygon fill="white" stroke="black" points="938,-694 762,-694 762,-642 938,-642 938,-694"/>
+<text text-anchor="middle" x="850" y="-682" font-family="Helvetica,sans-Serif" font-size="10.00">LevelUpCinematic</text>
+<text text-anchor="middle" x="850" y="-671" font-family="Helvetica,sans-Serif" font-size="10.00">Flights.Get(principal)</text>
+<text text-anchor="middle" x="850" y="-660" font-family="Helvetica,sans-Serif" font-size="10.00">Pause / Complete</text>
+<text text-anchor="middle" x="850" y="-649" font-family="Helvetica,sans-Serif" font-size="10.00">(see @ref arch_score_cinematic)</text>
 </g>
 <!-- Cinematic&#45;&gt;Flights -->
-<g id="edge19" class="edge">
+<g id="edge20" class="edge">
 <title>Cinematic&#45;&gt;Flights</title>
-<path fill="none" stroke="black" d="M875.32,-659.19C943.4,-647.74 1026,-619.53 1026,-550 1026,-550 1026,-550 1026,-315.5 1026,-260.86 971.13,-228.31 920.21,-209.86"/>
-<polygon fill="black" stroke="black" points="928.41,-213.45 919,-208.58 923.32,-218.26 928.41,-213.45"/>
-<text text-anchor="middle" x="1065.5" y="-432.8" font-family="Helvetica,sans-Serif" font-size="9.00">Get(principal id)</text>
-<text text-anchor="middle" x="1065.5" y="-422.8" font-family="Helvetica,sans-Serif" font-size="9.00">Pause / Complete</text>
+<path fill="none" stroke="black" d="M938.22,-647.43C987.07,-630.82 1038,-601.23 1038,-550 1038,-550 1038,-550 1038,-497.11"/>
+<polygon fill="black" stroke="black" points="1041.5,-497 1038,-487 1034.5,-497 1041.5,-497"/>
+<text text-anchor="middle" x="1077.5" y="-432.8" font-family="Helvetica,sans-Serif" font-size="9.00">Get(principal id)</text>
+<text text-anchor="middle" x="1077.5" y="-422.8" font-family="Helvetica,sans-Serif" font-size="9.00">Pause / Complete</text>
 </g>
 <!-- Transition -->
-<g id="node15" class="node">
+<g id="node16" class="node">
 <title>Transition</title>
-<polygon fill="white" stroke="black" points="681.5,-688.5 532.5,-688.5 532.5,-647.5 681.5,-647.5 681.5,-688.5"/>
-<text text-anchor="middle" x="607" y="-676.5" font-family="Helvetica,sans-Serif" font-size="10.00">LevelTransitionController</text>
-<text text-anchor="middle" x="607" y="-665.5" font-family="Helvetica,sans-Serif" font-size="10.00">HoldOutgoing() on every</text>
-<text text-anchor="middle" x="607" y="-654.5" font-family="Helvetica,sans-Serif" font-size="10.00">ITransitionOutgoingContent</text>
+<polygon fill="white" stroke="black" points="744.5,-688.5 595.5,-688.5 595.5,-647.5 744.5,-647.5 744.5,-688.5"/>
+<text text-anchor="middle" x="670" y="-676.5" font-family="Helvetica,sans-Serif" font-size="10.00">LevelTransitionController</text>
+<text text-anchor="middle" x="670" y="-665.5" font-family="Helvetica,sans-Serif" font-size="10.00">HoldOutgoing() on every</text>
+<text text-anchor="middle" x="670" y="-654.5" font-family="Helvetica,sans-Serif" font-size="10.00">ITransitionOutgoingContent</text>
 </g>
 <!-- Transition&#45;&gt;Service -->
-<g id="edge20" class="edge">
+<g id="edge21" class="edge">
 <title>Transition&#45;&gt;Service</title>
-<path fill="none" stroke="black" d="M532.34,-663.08C462.54,-657.21 356.67,-642.55 272,-606 257.82,-599.88 243.78,-590.67 231.7,-581.48"/>
-<polygon fill="black" stroke="black" points="233.69,-578.6 223.67,-575.16 229.36,-584.1 233.69,-578.6"/>
-<text text-anchor="middle" x="351" y="-616.8" font-family="Helvetica,sans-Serif" font-size="9.00">HoldOutgoing()</text>
+<path fill="none" stroke="black" d="M595.49,-665.67C515.41,-661.9 385.77,-648.93 283,-606 268.62,-599.99 254.44,-590.73 242.3,-581.45"/>
+<polygon fill="black" stroke="black" points="244.25,-578.53 234.24,-575.06 239.9,-584.02 244.25,-578.53"/>
+<text text-anchor="middle" x="358" y="-616.8" font-family="Helvetica,sans-Serif" font-size="9.00">HoldOutgoing()</text>
 </g>
 </g>
 </svg>

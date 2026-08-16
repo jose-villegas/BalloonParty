@@ -1,6 +1,8 @@
 var classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState =
 [
     [ "Initialize", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a49a8b9aa5a58f38a26d69c5ac5b14178", null ],
+    [ "CandidateCenter", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#abf52cd0d8c975007ef8c2ca284023947", null ],
+    [ "CandidateScale", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a897f30c195184c398ed03051ab3a089f", null ],
     [ "Center", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a6301552d4c9582ed0ea6795507855d23", null ],
     [ "Duration", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#aae25b53cc72b518669243d2e0e97c314", null ],
     [ "Elapsed", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a7a5a357ddd75b6a54bcb15288d74a15a", null ],
@@ -12,8 +14,10 @@ var classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1
     [ "InitialRotation", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a4f6b2b5d70ca65ce67afb974b077448d", null ],
     [ "IsPrincipal", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a4853db3c4c16c6721a50ce541c244945", null ],
     [ "LastScale", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a01e2eb8118fb26d33c61d463b86a11c6", null ],
+    [ "LiveTarget", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a186e7e6f7add178729a71097648cea70", null ],
     [ "LocalPenSpeed", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a4b96381e40d6030a2e20133285af1e0c", null ],
     [ "Origin", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a7df9cc0e3fca64da14470c48409bacf6", null ],
+    [ "PendingRelease", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a99378bc13fb892002b15bf901c145675", null ],
     [ "PenRibbonTime", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a4daaa22f0b6c031a699edc4d5a0939d0", null ],
     [ "PenSegment", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#ac6ce76de8e94d87e8095bea36c03d7bd", null ],
     [ "PenStartDist", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a3597cdcacb635a92f31ed3e94a68eefd", null ],
@@ -22,6 +26,7 @@ var classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1
     [ "RangeLast", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a8b733390fc0d0e82963e9c1825a83667", null ],
     [ "Reported", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#ab55e5004121433776f7b792db298d992", null ],
     [ "Rotation", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#adcfcba5b4a119dc8cd63a96245b332fe", null ],
+    [ "SeparationOffset", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#aee7991d69975b5e8dbd637d5f511203e", null ],
     [ "Shape", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a0bff2000da707ccbd9bfb3113bdda7f9", null ],
     [ "SpinAngle", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a3e15aa2eaeb92cf9e69c0d92185c5a3a", null ],
     [ "SpinAxis", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#afb8e1af9e19a0b488d4f5372fef258be", null ],

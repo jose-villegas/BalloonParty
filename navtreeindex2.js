@@ -1,5 +1,7 @@
 var NAVTREEINDEX2 =
 {
+"NudgeOverride_8cs.html":[7,0,9,3],
+"NudgeService_8cs.html":[7,0,9,5],
 "NudgeType_8cs.html":[7,0,9,6],
 "NullAudioMixerRouter_8cs.html":[7,0,0,11],
 "OrthogonalSizeCameraController_8cs.html":[7,0,5,4],
@@ -140,9 +142,9 @@ var NAVTREEINDEX2 =
 "ScorePointsGroupMessage_8cs.html":[7,0,14,7,32],
 "ScoreTrailArrivedMessage_8cs.html":[7,0,14,7,33],
 "ScoreTrailBehaviourConfiguration_8cs.html":[7,0,3,21],
-"ScoreTrailBehaviourId_8cs.html":[7,0,7,6,0,4],
-"ScoreTrailBehaviourResolver_8cs.html":[7,0,7,6,0,5],
-"ScoreTrailContext_8cs.html":[7,0,7,6,0,6],
+"ScoreTrailBehaviourId_8cs.html":[7,0,7,6,0,6],
+"ScoreTrailBehaviourResolver_8cs.html":[7,0,7,6,0,7],
+"ScoreTrailContext_8cs.html":[7,0,7,6,0,8],
 "ScoreTrailService_8cs.html":[7,0,7,6,4],
 "ScoreUILifetimeScope_8cs.html":[7,0,18,5,7],
 "ScoringControlPoint_8cs.html":[7,0,3,7,7],
@@ -166,8 +168,8 @@ var NAVTREEINDEX2 =
 "SfxVoicePoolBootstrap_8cs.html":[7,0,0,15],
 "ShaderTimeService_8cs.html":[7,0,14,10,8],
 "ShadowBakeUtility_8cs.html":[7,0,6,5,1],
-"ShapeCatalog_8cs.html":[7,0,7,6,0,7],
-"ShapeFormationTicker_8cs.html":[7,0,7,6,0,8],
+"ShapeCatalog_8cs.html":[7,0,7,6,0,9],
+"ShapeFormationTicker_8cs.html":[7,0,7,6,0,10],
 "ShieldChainPlanner_8cs.html":[7,0,8,6,0],
 "ShieldChainSettings_8cs.html":[7,0,3,22],
 "ShieldChainWindow_8cs.html":[7,0,6,6,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX2 =
 "SpeckSpawnRequestMessage_8cs.html":[7,0,14,7,37],
 "SpeckSpawnSettings_8cs.html":[7,0,3,4,26],
 "SpeedTapMintedMessage_8cs.html":[7,0,14,7,38],
-"SpinSpace_8cs.html":[7,0,8,35],
-"SpriteColorableRenderer_8cs.html":[7,0,1,4,6],
-"SpriteLayerCombinerEditor_8cs.html":[7,0,6,8,0]
+"SpinSpace_8cs.html":[7,0,8,35]
 };

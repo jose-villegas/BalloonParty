@@ -63,7 +63,8 @@ var NAVTREEINDEX0 =
 "BalloonType_8cs.html":[7,0,1,3,0],
 "BalloonView_8cs.html":[7,0,1,4,1],
 "BalloonsConfiguration_8cs.html":[7,0,3,0,2],
-"BigScoreTrailBehaviour_8cs.html":[7,0,7,6,0,0],
+"BigScoreFormationGizmos_8cs.html":[7,0,7,6,0,0],
+"BigScoreTrailBehaviour_8cs.html":[7,0,7,6,0,1],
 "BlockLevelUpCheat_8cs.html":[7,0,2,3],
 "BoardClearController_8cs.html":[7,0,7,5,0],
 "BoardClearMessage_8cs.html":[7,0,14,7,3],
@@ -157,7 +158,7 @@ var NAVTREEINDEX0 =
 "DangerHeartLossView_8cs.html":[7,0,18,1,1],
 "DangerSoundRouter_8cs.html":[7,0,0,2,1],
 "DangerUILifetimeScope_8cs.html":[7,0,18,1,2],
-"DefaultScoreTrailBehaviour_8cs.html":[7,0,7,6,0,1],
+"DefaultScoreTrailBehaviour_8cs.html":[7,0,7,6,0,2],
 "DeflectorActorModel_8cs.html":[7,0,15,0,0,10],
 "DevLogConsole_8cs.html":[7,0,2,8],
 "DisturbanceFieldCoordinates_8cs.html":[7,0,14,3,0],
@@ -190,6 +191,7 @@ var NAVTREEINDEX0 =
 "ForceDestroyProjectileMessage_8cs.html":[7,0,14,7,6],
 "ForceGameOverCheat_8cs.html":[7,0,2,11],
 "ForceRestartCheat_8cs.html":[7,0,2,12],
+"FormationOverlapResolver_8cs.html":[7,0,7,6,0,3],
 "FormattedLabel_8cs.html":[7,0,18,12],
 "FrameDebuggerDumper_8cs.html":[7,0,6,2,0],
 "FrameDebuggerEventReader_8cs.html":[7,0,6,2,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX0 =
 "HoldSpeedUpTooltip_8cs.html":[7,0,18,8,0],
 "IActiveLevelParameters_8cs.html":[7,0,7,4,0],
 "IAudioMixerRouter_8cs.html":[7,0,0,8],
-"IAudioMixerSettings_8cs.html":[7,0,0,0,3],
-"IBackgroundFieldSettings_8cs.html":[7,0,3,4,4],
-"IBalanceBiasSource_8cs.html":[7,0,15,0,5]
+"IAudioMixerSettings_8cs.html":[7,0,0,0,3]
 };

@@ -1,5 +1,7 @@
 var NAVTREEINDEX19 =
 {
+"classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html#a767dd8e9d27227e4678bc9e6e405dcda":[5,0,0,3,11,1],
+"classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html#a767dd8e9d27227e4678bc9e6e405dcda":[6,0,0,3,11,1],
 "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html#aa6ff8a5eb870ab4f20db68a3efdd8ea7":[5,0,0,3,11,4],
 "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html#aa6ff8a5eb870ab4f20db68a3efdd8ea7":[6,0,0,3,11,4],
 "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html#ab72359f236caf77d737a4dbf904dd9bc":[5,0,0,3,11,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX19 =
 "classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html#acad327320bff5323a50a2790eaf05795":[5,0,0,3,6,5,18],
 "classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html#acad327320bff5323a50a2790eaf05795":[6,0,0,3,6,5,18],
 "classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html#addff59992f3f90c413728466a5110d6f":[5,0,0,3,6,5,3],
-"classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html#addff59992f3f90c413728466a5110d6f":[6,0,0,3,6,5,3],
-"classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html":[5,0,0,3,6,6],
-"classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html":[6,0,0,3,6,6]
+"classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html#addff59992f3f90c413728466a5110d6f":[6,0,0,3,6,5,3]
 };

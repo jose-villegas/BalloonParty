@@ -10,6 +10,7 @@ var classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour =
     [ "EnsureDpCapacity", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a12303d81b6adc3d11558f2b94d905ba7", null ],
     [ "FitScale", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#aba384954d8c15c25cd96fbf966e142ed", null ],
     [ "GetPrincipalId", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a26d356caee288b4f61670248fb998393", null ],
+    [ "GroupMaxRadius", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a0dd984dda539d9f1c8152707187a8bfe", null ],
     [ "IsBetterDp", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#aff7ab0dcff98194e0b05585c4500b78e", null ],
     [ "ReconstructLargestFirst", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a220cd9edce85db8d17750dc7e01dff8c", null ],
     [ "SubCenter", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a2490afce189176a21f036dda96ead5e8", null ],

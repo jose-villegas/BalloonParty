@@ -168,12 +168,16 @@ Private Types</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:aa3c7dc1e77d36280fd1e8bc6d3a859d8" id="r_aa3c7dc1e77d36280fd1e8bc6d3a859d8"><td class="memItemLeft" align="right" valign="top">Transform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3c7dc1e77d36280fd1e8bc6d3a859d8">AcquireAnchor</a> (Vector3 position)</td></tr>
 <tr class="separator:aa3c7dc1e77d36280fd1e8bc6d3a859d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a6fdbcbd41182ebc7e43f547430b257" id="r_a0a6fdbcbd41182ebc7e43f547430b257"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0a6fdbcbd41182ebc7e43f547430b257">AdvanceFormation</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a> state, float dt)</td></tr>
-<tr class="separator:a0a6fdbcbd41182ebc7e43f547430b257"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5f5f1d955beb291db8ba7fa3a6b644d" id="r_ad5f5f1d955beb291db8ba7fa3a6b644d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad5f5f1d955beb291db8ba7fa3a6b644d">AdvanceOrDefer</a> (int index, float dt, float unscaledDt)</td></tr>
+<tr class="separator:ad5f5f1d955beb291db8ba7fa3a6b644d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52786fd20e75a404d8cc1aeabd511de8" id="r_a52786fd20e75a404d8cc1aeabd511de8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a52786fd20e75a404d8cc1aeabd511de8">AdvanceSnapFade</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a> state, float unscaledDt)</td></tr>
 <tr class="separator:a52786fd20e75a404d8cc1aeabd511de8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2a941d66f5f6cce7d1b9b1b6ffb2aba" id="r_ad2a941d66f5f6cce7d1b9b1b6ffb2aba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad2a941d66f5f6cce7d1b9b1b6ffb2aba">DecrementGroup</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html">FormationGroup</a> group)</td></tr>
 <tr class="separator:ad2a941d66f5f6cce7d1b9b1b6ffb2aba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe3c14d867e55f96e90d5dac1fbf67d3" id="r_abe3c14d867e55f96e90d5dac1fbf67d3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abe3c14d867e55f96e90d5dac1fbf67d3">EnsureCorrectionCapacity</a> (int count)</td></tr>
+<tr class="separator:abe3c14d867e55f96e90d5dac1fbf67d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95805c2d186eb784fd2056d525deb95a" id="r_a95805c2d186eb784fd2056d525deb95a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a95805c2d186eb784fd2056d525deb95a">FinishAdvance</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a> state, float dt)</td></tr>
+<tr class="separator:a95805c2d186eb784fd2056d525deb95a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24f02fe3963fb8d22bc1ecda96d33e90" id="r_a24f02fe3963fb8d22bc1ecda96d33e90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24f02fe3963fb8d22bc1ecda96d33e90">FreezeRibbons</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a> state)</td></tr>
 <tr class="separator:a24f02fe3963fb8d22bc1ecda96d33e90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a302edcb8c857d78dac122165a2636fbd" id="r_a302edcb8c857d78dac122165a2636fbd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a302edcb8c857d78dac122165a2636fbd">ReleaseAnchor</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html">FormationGroup</a> group)</td></tr>
@@ -184,6 +188,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a18ad0c3f51b71efcf22783aecf6dfc9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad39dc15102dda59b470edf16d94ebb74" id="r_ad39dc15102dda59b470edf16d94ebb74"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad39dc15102dda59b470edf16d94ebb74">ReleaseVertices</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a> state)</td></tr>
 <tr class="separator:ad39dc15102dda59b470edf16d94ebb74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ecaef5397dca73b599641a0c0372828" id="r_a5ecaef5397dca73b599641a0c0372828"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ecaef5397dca73b599641a0c0372828">ResolveOverlaps</a> (IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a> &gt; pending, IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a> &gt; stationary, float dt)</td></tr>
+<tr class="separator:a5ecaef5397dca73b599641a0c0372828"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3151ac661b3555936df5c7259894cf9f" id="r_a3151ac661b3555936df5c7259894cf9f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3151ac661b3555936df5c7259894cf9f">Snap</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a> state, int index, <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html">FormationGroup</a> group)</td></tr>
 <tr class="separator:a3151ac661b3555936df5c7259894cf9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affa1c884806e355c68fdc79d56372661" id="r_affa1c884806e355c68fdc79d56372661"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#affa1c884806e355c68fdc79d56372661">ThawRibbons</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a> state)</td></tr>
@@ -191,6 +197,8 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a2c1e08f601866d55f17bfbc4dec0af63" id="r_a2c1e08f601866d55f17bfbc4dec0af63"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c1e08f601866d55f17bfbc4dec0af63">ComputeCandidateCenter</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a> state, float dt)</td></tr>
+<tr class="separator:a2c1e08f601866d55f17bfbc4dec0af63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a7e3e63f022b0bc1f2a3264348162eb" id="r_a8a7e3e63f022b0bc1f2a3264348162eb"><td class="memItemLeft" align="right" valign="top">static Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a7e3e63f022b0bc1f2a3264348162eb">LocalToWorld</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a> state, Vector3 local)</td></tr>
 <tr class="separator:a8a7e3e63f022b0bc1f2a3264348162eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3dcfd45e7478326161ae327d7bbe1bb2" id="r_a3dcfd45e7478326161ae327d7bbe1bb2"><td class="memItemLeft" align="right" valign="top">static Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3dcfd45e7478326161ae327d7bbe1bb2">NormalizedLerp</a> (Vector3 a, Vector3 b, float t)</td></tr>
@@ -208,12 +216,28 @@ Static Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:af394f17997663a15d026df6d51d9a06c" id="r_af394f17997663a15d026df6d51d9a06c"><td class="memItemLeft" align="right" valign="top">readonly Stack&lt; Transform &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af394f17997663a15d026df6d51d9a06c">_anchorPool</a> = new(8)</td></tr>
 <tr class="separator:af394f17997663a15d026df6d51d9a06c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1892f3f7080e90b262de711fca52db2a" id="r_a1892f3f7080e90b262de711fca52db2a"><td class="memItemLeft" align="right" valign="top">Vector3[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1892f3f7080e90b262de711fca52db2a">_correctionCenters</a> = new Vector3[16]</td></tr>
+<tr class="separator:a1892f3f7080e90b262de711fca52db2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecd75c1e36613d9f489f9f45c9e5a4a6" id="r_aecd75c1e36613d9f489f9f45c9e5a4a6"><td class="memItemLeft" align="right" valign="top">float[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aecd75c1e36613d9f489f9f45c9e5a4a6">_correctionMaxPush</a> = new float[16]</td></tr>
+<tr class="separator:aecd75c1e36613d9f489f9f45c9e5a4a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a792867cccb28b8a1b39a3d4264dc4285" id="r_a792867cccb28b8a1b39a3d4264dc4285"><td class="memItemLeft" align="right" valign="top">Vector3[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a792867cccb28b8a1b39a3d4264dc4285">_correctionOffsets</a> = new Vector3[16]</td></tr>
+<tr class="separator:a792867cccb28b8a1b39a3d4264dc4285"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae03feced4740227d0f35a95778717fbe" id="r_ae03feced4740227d0f35a95778717fbe"><td class="memItemLeft" align="right" valign="top">float[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae03feced4740227d0f35a95778717fbe">_correctionPadding</a> = new float[16]</td></tr>
+<tr class="separator:ae03feced4740227d0f35a95778717fbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b98dae67e2672b2e346df792ca4d382" id="r_a4b98dae67e2672b2e346df792ca4d382"><td class="memItemLeft" align="right" valign="top">float[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4b98dae67e2672b2e346df792ca4d382">_correctionRadii</a> = new float[16]</td></tr>
+<tr class="separator:a4b98dae67e2672b2e346df792ca4d382"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55b65c224decd7669ce11d592f33fb12" id="r_a55b65c224decd7669ce11d592f33fb12"><td class="memItemLeft" align="right" valign="top">float[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a55b65c224decd7669ce11d592f33fb12">_correctionWeights</a> = new float[16]</td></tr>
+<tr class="separator:a55b65c224decd7669ce11d592f33fb12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9c8d15c629ef4b0ff298600bd4fc579" id="r_ab9c8d15c629ef4b0ff298600bd4fc579"><td class="memItemLeft" align="right" valign="top">readonly Stack&lt; <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html">FormationGroup</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab9c8d15c629ef4b0ff298600bd4fc579">_groupPool</a> = new(8)</td></tr>
 <tr class="separator:ab9c8d15c629ef4b0ff298600bd4fc579"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a415e09962c9ea7b33dc10c68d2821dae" id="r_a415e09962c9ea7b33dc10c68d2821dae"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a415e09962c9ea7b33dc10c68d2821dae">_pending</a> = new(16)</td></tr>
+<tr class="separator:a415e09962c9ea7b33dc10c68d2821dae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8f15b70d1758bf374f19a30b58497d6" id="r_ac8f15b70d1758bf374f19a30b58497d6"><td class="memItemLeft" align="right" valign="top">readonly Stack&lt; <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac8f15b70d1758bf374f19a30b58497d6">_pool</a> = new(16)</td></tr>
 <tr class="separator:ac8f15b70d1758bf374f19a30b58497d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52bad5e7bddcf00ce7babd5e2084a1a3" id="r_a52bad5e7bddcf00ce7babd5e2084a1a3"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a52bad5e7bddcf00ce7babd5e2084a1a3">_states</a> = new(16)</td></tr>
 <tr class="separator:a52bad5e7bddcf00ce7babd5e2084a1a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab42c88bc25508ace9c14cca708f4fc56" id="r_ab42c88bc25508ace9c14cca708f4fc56"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab42c88bc25508ace9c14cca708f4fc56">_stationary</a> = new(8)</td></tr>
+<tr class="separator:ab42c88bc25508ace9c14cca708f4fc56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -233,7 +257,8 @@ Static Private Attributes</h2></td></tr>
 <p>Design constraints:</p>
 <p>• States, groups and anchors are pooled via swap-remove (mirrors <code>BalloonMotionTicker</code>) — a running formation must never allocate; adding fields to <code><a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a></code> that reference managed heap objects will defeat this.</p>
 <p>• <code>liveTarget</code> re-reads the endpoint centre every tick so a drifting <a class="el" href="namespaceBalloonParty_1_1UI.html">UI</a> bar never leaves the landing position stale — do not cache the target position at launch.</p>
-<p>• Transport bridge: every formation in a group shares a single <a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1TrailFlight.html" title="Controls a single trail&#39;s in-flight state via transport-style commands over DOTween.">TrailFlight</a> anchor. The flight stays registered (InFlight) through the group's whole life and is unregistered only once the last formation finishes — if a principal that lands first unregistered eagerly, the cinematic would see Idle and snap the remaining shapes mid-travel. Paused inflates ribbon time so the drawn figure survives the freeze; Idle triggers the SnapFade. </p>
+<p>• Transport bridge: every formation in a group shares a single <a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1TrailFlight.html" title="Controls a single trail&#39;s in-flight state via transport-style commands over DOTween.">TrailFlight</a> anchor. The flight stays registered (InFlight) through the group's whole life and is unregistered only once the last formation finishes — if a principal that lands first unregistered eagerly, the cinematic would see Idle and snap the remaining shapes mid-travel. Paused inflates ribbon time so the drawn figure survives the freeze; Idle triggers the SnapFade.</p>
+<p>• <code>ReportOnce</code> publishes <code>ScoreTrailArrivedMessage</code> SYNCHRONOUSLY (MessagePipe) from both Pass A (<code>Snap</code>) and Pass C (<code>FinishAdvance</code>). A subscriber that re-entrantly triggers a new pop mid-tick (→ <code><a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a969d83503a75f378177b475bad608a30" title="Owns the group from spawn to final arrival.">BigScoreTrailBehaviour.Begin</a></code> → <code>LaunchFormation</code>) appends to <code>_states</code> ABOVE the current backward cursor and is simply skipped this tick (picked up next <code>LateTick</code>) — safe only because <code>_pending</code>/<code>_stationary</code> hold object REFERENCES, not indices, and a freshly-launched state's <code>PendingRelease</code> starts false. Don't refactor either list to store indices without re-checking this. </p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a58402d3cd9ac1d9358b618890bc428a7" name="a58402d3cd9ac1d9358b618890bc428a7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a58402d3cd9ac1d9358b618890bc428a7">&#9670;&#160;</a></span>FormationPhase</h2>
@@ -287,8 +312,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a0a6fdbcbd41182ebc7e43f547430b257" name="a0a6fdbcbd41182ebc7e43f547430b257"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a6fdbcbd41182ebc7e43f547430b257">&#9670;&#160;</a></span>AdvanceFormation()</h2>
+<a id="ad5f5f1d955beb291db8ba7fa3a6b644d" name="ad5f5f1d955beb291db8ba7fa3a6b644d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5f5f1d955beb291db8ba7fa3a6b644d">&#9670;&#160;</a></span>AdvanceOrDefer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -297,14 +322,19 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool BalloonParty.Game.Score.Behaviours.ShapeFormationTicker.AdvanceFormation </td>
+          <td class="memname">void BalloonParty.Game.Score.Behaviours.ShapeFormationTicker.AdvanceOrDefer </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a></td>          <td class="paramname"><span class="paramname"><em>state</em></span>, </td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>index</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>dt</em></span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>dt</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>unscaledDt</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -370,6 +400,35 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a2c1e08f601866d55f17bfbc4dec0af63" name="a2c1e08f601866d55f17bfbc4dec0af63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c1e08f601866d55f17bfbc4dec0af63">&#9670;&#160;</a></span>ComputeCandidateCenter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Game.Score.Behaviours.ShapeFormationTicker.ComputeCandidateCenter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a></td>          <td class="paramname"><span class="paramname"><em>state</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>dt</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ad2a941d66f5f6cce7d1b9b1b6ffb2aba" name="ad2a941d66f5f6cce7d1b9b1b6ffb2aba"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad2a941d66f5f6cce7d1b9b1b6ffb2aba">&#9670;&#160;</a></span>DecrementGroup()</h2>
 
@@ -384,6 +443,60 @@ Static Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html">FormationGroup</a></td>          <td class="paramname"><span class="paramname"><em>group</em></span></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abe3c14d867e55f96e90d5dac1fbf67d3" name="abe3c14d867e55f96e90d5dac1fbf67d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe3c14d867e55f96e90d5dac1fbf67d3">&#9670;&#160;</a></span>EnsureCorrectionCapacity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.Score.Behaviours.ShapeFormationTicker.EnsureCorrectionCapacity </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>count</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a95805c2d186eb784fd2056d525deb95a" name="a95805c2d186eb784fd2056d525deb95a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95805c2d186eb784fd2056d525deb95a">&#9670;&#160;</a></span>FinishAdvance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.Score.Behaviours.ShapeFormationTicker.FinishAdvance </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a></td>          <td class="paramname"><span class="paramname"><em>state</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>dt</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -687,6 +800,40 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a5ecaef5397dca73b599641a0c0372828" name="a5ecaef5397dca73b599641a0c0372828"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ecaef5397dca73b599641a0c0372828">&#9670;&#160;</a></span>ResolveOverlaps()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.Score.Behaviours.ShapeFormationTicker.ResolveOverlaps </td>
+          <td>(</td>
+          <td class="paramtype">IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>pending</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>stationary</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>dt</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="adc1b91fe097c06c91973e2acc1889ef4" name="adc1b91fe097c06c91973e2acc1889ef4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adc1b91fe097c06c91973e2acc1889ef4">&#9670;&#160;</a></span>ScaleVertices()</h2>
 
@@ -823,6 +970,138 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a1892f3f7080e90b262de711fca52db2a" name="a1892f3f7080e90b262de711fca52db2a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1892f3f7080e90b262de711fca52db2a">&#9670;&#160;</a></span>_correctionCenters</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector3 [] BalloonParty.Game.Score.Behaviours.ShapeFormationTicker._correctionCenters = new Vector3[16]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aecd75c1e36613d9f489f9f45c9e5a4a6" name="aecd75c1e36613d9f489f9f45c9e5a4a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aecd75c1e36613d9f489f9f45c9e5a4a6">&#9670;&#160;</a></span>_correctionMaxPush</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float [] BalloonParty.Game.Score.Behaviours.ShapeFormationTicker._correctionMaxPush = new float[16]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a792867cccb28b8a1b39a3d4264dc4285" name="a792867cccb28b8a1b39a3d4264dc4285"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a792867cccb28b8a1b39a3d4264dc4285">&#9670;&#160;</a></span>_correctionOffsets</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector3 [] BalloonParty.Game.Score.Behaviours.ShapeFormationTicker._correctionOffsets = new Vector3[16]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae03feced4740227d0f35a95778717fbe" name="ae03feced4740227d0f35a95778717fbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae03feced4740227d0f35a95778717fbe">&#9670;&#160;</a></span>_correctionPadding</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float [] BalloonParty.Game.Score.Behaviours.ShapeFormationTicker._correctionPadding = new float[16]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4b98dae67e2672b2e346df792ca4d382" name="a4b98dae67e2672b2e346df792ca4d382"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b98dae67e2672b2e346df792ca4d382">&#9670;&#160;</a></span>_correctionRadii</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float [] BalloonParty.Game.Score.Behaviours.ShapeFormationTicker._correctionRadii = new float[16]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a55b65c224decd7669ce11d592f33fb12" name="a55b65c224decd7669ce11d592f33fb12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55b65c224decd7669ce11d592f33fb12">&#9670;&#160;</a></span>_correctionWeights</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float [] BalloonParty.Game.Score.Behaviours.ShapeFormationTicker._correctionWeights = new float[16]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab9c8d15c629ef4b0ff298600bd4fc579" name="ab9c8d15c629ef4b0ff298600bd4fc579"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab9c8d15c629ef4b0ff298600bd4fc579">&#9670;&#160;</a></span>_groupPool</h2>
 
@@ -834,6 +1113,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly Stack&lt;<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html">FormationGroup</a>&gt; BalloonParty.Game.Score.Behaviours.ShapeFormationTicker._groupPool = new(8)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a415e09962c9ea7b33dc10c68d2821dae" name="a415e09962c9ea7b33dc10c68d2821dae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a415e09962c9ea7b33dc10c68d2821dae">&#9670;&#160;</a></span>_pending</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a>&gt; BalloonParty.Game.Score.Behaviours.ShapeFormationTicker._pending = new(16)</td>
         </tr>
       </table>
   </td>
@@ -878,6 +1179,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly List&lt;<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a>&gt; BalloonParty.Game.Score.Behaviours.ShapeFormationTicker._states = new(16)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab42c88bc25508ace9c14cca708f4fc56" name="ab42c88bc25508ace9c14cca708f4fc56"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab42c88bc25508ace9c14cca708f4fc56">&#9670;&#160;</a></span>_stationary</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html">FormationState</a>&gt; BalloonParty.Game.Score.Behaviours.ShapeFormationTicker._stationary = new(8)</td>
         </tr>
       </table>
   </td>

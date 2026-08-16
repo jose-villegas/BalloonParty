@@ -110,12 +110,12 @@ $(function(){initNavTree('plan_level_up_timing.html',''); initResizable(true); }
   <div class="headertitle"><div class="title">Level-Up Timing</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md588"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md589"></a>
 Level-Up Timing</h1>
 <p>Replace the level-up ceremony's <em>gate-before-fire</em> model with <em>flag-then-orchestrate</em>: the moment a pop's score completes the level requirement, raise a flag, hold the other systems, let the shot play out its whole flight, and present the popup where the reload would have gone.</p>
 <p><b>Status:</b> implemented on <code>feature/level-up-timing</code> branch. Implementation diverged from spec in these ways: wall-hit trigger replaced by duration-based end, 8s cap replaced by 15s diagnostic watchdog, ramp-up added post-cinematic. Written to be executed by an implementer who does not have the design conversation — every edit names its file, its insertion point and its code. Items marked <b>DECISION</b> are already answered: do not re-derive them, and do not invent a type, message or controller that is not listed.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md590"></a>
+<h2><a class="anchor" id="autotoc_md591"></a>
 1. The bug this fixes</h2>
 <p><code>LevelController.CheckLevelUp</code> refuses to fire on four conditions but is re-entered from only two places (a score-trail arrival, and the pierce falling edge). Two conditions never re-check when they clear, so a refusal is forgotten permanently:</p>
 <table class="markdownTable">
@@ -132,7 +132,7 @@ Level-Up Timing</h1>
 </table>
 <p><b>The compound path.</b> <code>LossImminent</code> is <code>PendingCharges &gt;= health</code>; <code>PendingCharges</code> counts queued <em>rejected</em> balloons — overflow produced by the spawn that runs at the <b>end of a shot</b>. The pierce gate defers the check to the pierce falling edge, which fires when the shot dies, immediately <em>before</em> that spawn. So: final pops land, trails launch; shot dies, pierce clears, <code>CheckLevelUp</code> runs but confirmed progress isn't complete yet (trails still flying); spawn queues overflow; <code>LossImminent</code> goes true; the last trail arrives, the check is refused, and nothing ever asks again. Reported twice (stuck before the popup after completing level 12); unreproducible on a clean jump to level 12, which has an empty overflow queue and full hearts.</p>
 <p><b>Second, independent candidate, same symptom:</b> a dropped trail (pool loss, "no target provider") leaves projected progress complete but confirmed never done. Section 4 removes it by construction.</p>
-<h2><a class="anchor" id="autotoc_md591"></a>
+<h2><a class="anchor" id="autotoc_md592"></a>
 2. The model</h2>
 <div class="fragment"><div class="line">pop scores -&gt; requirement met (CLAIM time, projected progress)</div>
 <div class="line">   |</div>
@@ -151,7 +151,7 @@ Level-Up Timing</h1>
 <div class="line">             -&gt; LevelTransitionCompletedMessage -&gt; Playing + reload</div>
 </div><!-- fragment --><p>The presenting boundary is <b>end-of-flight</b>, which always arrives (and 6.3's cap covers the paths where the shot leaves play another way). A recorded flag consumed at a boundary cannot be forgotten; a refused check can. That is the entire fix.</p>
 <p><b>Why it is available:</b> <code>ClaimProgress</code> already caps progress at the requirement and banks the excess run-scoped (<code><a class="el" href="LevelController_8cs.html">LevelController.cs</a>:195-211</code>). Nothing scored after the tipping pop is lost, so nothing has to be suppressed or hurried.</p>
-<h2><a class="anchor" id="autotoc_md592"></a>
+<h2><a class="anchor" id="autotoc_md593"></a>
 2.1 The signals, by name</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -171,7 +171,7 @@ Level-Up Timing</h1>
 <li><code>WallHitMessage</code> (line 470) publishes BEFORE <code>ResolvePierceAtBounce</code> (line 508), so a discharge-tipped claim does not close its own Window A on the same bounce.</li>
 <li>The <b>death</b> wall takes the <code>Destroyed</code> branch and returns at line 463 <em>without</em> publishing <code>WallHitMessage</code>. Window A therefore closes on <code>WallHitMessage</code> <b>or</b> <code>ProjectileDestroyedMessage</code>, whichever lands first.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md593"></a>
+<h2><a class="anchor" id="autotoc_md594"></a>
 3. What this deletes</h2>
 <ul>
 <li>The pierce gate and its falling-edge subscription (<code>LevelController</code> lines 99-106, the <code>_pierce</code> field/param). The flight always finishes, so <code>PendingPierceHits</code> can never be stranded.</li>
@@ -181,7 +181,7 @@ Level-Up Timing</h1>
 <li><code>ThrowerController.ScaleAwayActiveProjectile</code> on <code>LevelUpDismissedMessage</code> (line 115) — the shot is already retired by then (6.5 is what makes this safe). Keep it for game-over.</li>
 <li>In <code>LevelUpCinematic</code>: the <code>PauseSource.Cinematic</code> pause, and the tipping-trail apparatus (<code>WaitForTippingTrailAsync</code>, <code>AdvanceTrackedTrail</code>, <code>PanInTimeoutFactor</code>, <code>TrailRegisterTimeoutFactor</code>). The camera no longer needs the trail to exist (6.7).</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md594"></a>
+<h2><a class="anchor" id="autotoc_md595"></a>
 4. Detect on projected progress; keep tipping identity as presentation</h2>
 <p>Detection moves to claim time. The claim is authoritative the instant the pop happens; the trail is presentation.</p>
 <ul>
@@ -189,14 +189,14 @@ Level-Up Timing</h1>
 <li><b>DECISION — keep the tipping-trail identity for highlights</b> (the scale-up, and future effects), but flow it FORWARD from the claim instead of reconstructing it backwards from arrivals. <code><a class="el" href="ScoreController_8cs.html">ScoreController.cs</a>:246</code> already receives <code>(baseProgress, granted)</code> from <code>ClaimProgress</code>, so the pop that tips the level is known before its trail exists — mark the trail at spawn. Deterministic by construction; if it is ever wrong you lose a highlight, not a run. This is the root of the historical bugginess here: one cosmetic signal was carrying correctness weight.</li>
 <li><b>DECISION — keep BOTH progress dicts.</b> <code>_projectedProgress</code> (claim-time) and <code>_levelProgress</code> (confirmed) stop being a correctness mechanism, but the bars still fill against the confirmed value. Collapsing them would make bars jump to full at pop time and lose the fill the trails exist to sell.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md595"></a>
+<h2><a class="anchor" id="autotoc_md596"></a>
 5. The orchestrator IS the existing phase machine</h2>
 <p><b>Do not add a second controller.</b> Two authorities over this ceremony is the shape of every historical misfire here (<code>fe1f8c07</code>, the straggler misfire). <code>LevelController</code> already owns <code>LevelUpPhase</code>; add one value, appended <b>last</b> in the enum (nothing serializes it; appending keeps existing values stable):</p>
 <p><code>Playing -&gt; Completing -&gt; Pending -&gt; Transitioning -&gt; Playing</code></p>
 <p><code>LevelController</code> gains a <code>Tick</code> and ~5 dependencies. That god-class drift is accepted deliberately; if it worsens later, extract <em>behind</em> the phase property, never beside it.</p>
-<h2><a class="anchor" id="autotoc_md596"></a>
+<h2><a class="anchor" id="autotoc_md597"></a>
 6. The edits</h2>
-<h3><a class="anchor" id="autotoc_md597"></a>
+<h3><a class="anchor" id="autotoc_md598"></a>
 6.1 TimeScaleService — exclusivity</h3>
 <p><b>New file</b> <code><a class="el" href="ITimeScaleClaims_8cs.html">Assets/Source/Shared/Pause/ITimeScaleClaims.cs</a></code> (+ <code>.meta</code>, mirror a sibling). It exists so <code>LevelControllerTests</code> can substitute it: <code>TimeScaleService</code> is <code>internal sealed</code> (unfakeable), and a fixture using the real one leaves the editor's <code>Time.timeScale</code> warped for the rest of the session — the failure class fixed in commit <code>c4351c90</code>.</p>
 <div class="fragment"><div class="line"><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceBalloonParty_1_1Shared_1_1Pause.html">BalloonParty.Shared.Pause</a></div>
@@ -288,7 +288,7 @@ Level-Up Timing</h1>
 </div><!-- fragment --><p>Registration, <code><a class="el" href="GameScopeRegistration_8cs.html">Game/GameScopeRegistration.cs</a>:124</code>:</p>
 <div class="fragment"><div class="line">builder.RegisterEntryPoint&lt;TimeScaleService&gt;().AsSelf().As&lt;ITimeScaleClaims&gt;().As&lt;IRunResettable&gt;();</div>
 </div><!-- fragment --><p><b>DECISION — suppress at <code>Apply</code>, never cancel other claims.</b> Cancelling was rejected on evidence: <code>LastShield</code> (<code>ProjectileDoomedTimeScaleController.Tick</code>) and <code>Cinematic</code> (<code>CameraRigCinematic</code> lines 121/164/177) re-claim <em>every frame</em> from curves, so releasing them invites the claim back next frame. <code>LastShield</code> is the collision that matters — a doomed shot completing the level on its last pop is a likely pairing. Suppressing it is safe: the doomed drift eases over normalized GAME time (<code><a class="el" href="ProjectileMotionResolver_8cs.html">ProjectileMotionResolver.cs</a>:50</code>), so muting the claim changes its wall-clock length, never its shape.</p>
-<h3><a class="anchor" id="autotoc_md598"></a>
+<h3><a class="anchor" id="autotoc_md599"></a>
 6.2 The two windows</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -301,7 +301,7 @@ Level-Up Timing</h1>
 <td class="markdownTableBodyNone"><b>B — hand-off</b>   </td><td class="markdownTableBodyNone">plain <code>Claim(LevelUpCeremony, v)</code> — deliberately <b>NOT</b> exclusive   </td><td class="markdownTableBodyNone">that curve's END value   </td><td class="markdownTableBodyNone"><code>LevelUpDismissedMessage</code> -&gt; <code>Release</code>   </td></tr>
 </table>
 <p><b>DECISION — Window B must be plain.</b> <code>LevelUpPopUp</code> claims <code>LevelUpPopup = 0</code> only after <code>await _gate.WaitAsync</code> (<code><a class="el" href="LevelUpPopUp_8cs.html">UI/LevelUp/LevelUpPopUp.cs</a>:95-99</code>). Exclusivity across that instant would suppress the popup's own freeze (board moving behind the popup); releasing a frame early would snap the world to full speed. <code>min(beat, 0) = 0</code> makes the hand-off automatic.</p>
-<h3><a class="anchor" id="autotoc_md599"></a>
+<h3><a class="anchor" id="autotoc_md600"></a>
 6.3 LevelController — the exact edits</h3>
 <p>It becomes <code>ITickable</code>; <b>no registration change</b> — <code>RegisterEntryPoint&lt;LevelController&gt;()</code> (<code><a class="el" href="GameScopeRegistration_8cs.html">GameScopeRegistration.cs</a>:180</code>) picks up entry-point interfaces automatically.</p>
 <p><b>Delete:</b> <code>_pierceEndedSubscription</code> (field, <code>Start()</code> block lines 99-106, <code>Dispose()</code> line); the <code>_pierce</code> field + ctor param; <code>WillLevelUp()</code>; the pierce/nav/loss guards inside <code>CheckLevelUp</code> (lines 302-313) and <code>CheckLevelUp</code> itself. <b>Keep</b> <code>AllColorsConfirmed</code> (watchdog).</p>
@@ -457,7 +457,7 @@ Level-Up Timing</h1>
 <div class="ttc" id="anamespaceBalloonParty_1_1Game_1_1Level_html_a57ec4a7422d3ec908dda0a536e08a712"><div class="ttname"><a href="namespaceBalloonParty_1_1Game_1_1Level.html#a57ec4a7422d3ec908dda0a536e08a712">BalloonParty.Game.Level.LevelUpPhase</a></div><div class="ttdeci">LevelUpPhase</div><div class="ttdoc">The level-up ceremony as one explicit state, owned by LevelController.</div><div class="ttdef"><b>Definition</b> LevelUpPhase.cs:11</div></div>
 <div class="ttc" id="anamespaceBalloonParty_1_1Shared_1_1GameState_html_a59d8996d0c851ba4d4a00fb55277bbd6"><div class="ttname"><a href="namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6">BalloonParty.Shared.GameState.NavigationState</a></div><div class="ttdeci">NavigationState</div><div class="ttdef"><b>Definition</b> NavigationState.cs:4</div></div>
 </div><!-- fragment --><p>Also: <code>OnTrailArrived</code> no longer calls <code>CheckLevelUp</code>, and <b>must allow <code>Completing</code></b> — change its guard at line 259 from <code>!= Playing</code> to <code>== Pending || == Transitioning</code>, so confirmed progress keeps advancing while the flight plays out (the bars depend on it, 6.6). <code>OnLevelUpDismissed</code> gains <code>ReleaseCeremonyTimeScale();</code> as its first statement. <code>OnLevelUpAborted</code> accepts <code>Completing</code> too, routing it to <code>AbandonCeremony("cinematic aborted")</code>. <code>ClearRunState</code> gains <code>_windowAOpen = false; _completingElapsed = 0f; ReleaseCeremonyTimeScale();</code>. <code>Dispose</code> gains <code>ReleaseCeremonyTimeScale();</code> plus the three new subscription disposals.</p>
-<h3><a class="anchor" id="autotoc_md600"></a>
+<h3><a class="anchor" id="autotoc_md601"></a>
 6.4 New message: LevelUpAbandonedMessage</h3>
 <p>Without it, an abandoned ceremony leaves the thrower with <b>no projectile and no path that will ever load one</b> (the destroy-time load was held, and <code>LevelTransitionCompletedMessage</code> never comes) — a soft-lock on exactly the loss path this plan is meant to make safe.</p>
 <p><code><a class="el" href="LevelUpAbandonedMessage_8cs.html">Assets/Source/Shared/Messages/LevelUpAbandonedMessage.cs</a></code> (+ <code>.meta</code>):</p>
@@ -469,7 +469,7 @@ Level-Up Timing</h1>
 <div class="line">}</div>
 <div class="ttc" id="anamespaceBalloonParty_1_1Shared_1_1Messages_html"><div class="ttname"><a href="namespaceBalloonParty_1_1Shared_1_1Messages.html">BalloonParty.Shared.Messages</a></div><div class="ttdef"><b>Definition</b> ActorHitMessage.cs:6</div></div>
 </div><!-- fragment --><p>Register beside the other level-up brokers (~<code><a class="el" href="GameScopeRegistration_8cs.html">GameScopeRegistration.cs</a>:79</code>): <code>builder.RegisterMessageBroker&lt;LevelUpAbandonedMessage&gt;(options);</code></p>
-<h3><a class="anchor" id="autotoc_md601"></a>
+<h3><a class="anchor" id="autotoc_md602"></a>
 6.5 The holds — predicate is <code>Phase != Playing</code>, NEVER <code>== Completing</code></h3>
 <p><b>DECISION, not optional.</b> <code>Completing -&gt; Pending</code> happens <em>inside</em> the <code>ProjectileDestroyedMessage</code> dispatch, and the subscribers live in two lifetime scopes (<code>BalloonSpawner</code> + <code>LevelController</code> in <code>GameScopeRegistration</code>, <code>ThrowerController</code> in <code>ThrowerLifetimeScope</code>), so dispatch order cannot be reasoned about. <code>== Completing</code> is a coin flip that spawns the cancelled wave or reloads the held shot. Three independent reviewers converged on this.</p>
 <table class="markdownTable">
@@ -503,12 +503,12 @@ Level-Up Timing</h1>
 <div class="line"><span class="comment">// thrower stays empty forever.</span></div>
 <div class="line">_levelUpAbandonedSubscriber.Subscribe(_ =&gt; LoadProjectile()).AddTo(_subscriptions);</div>
 </div><!-- fragment --><p>Add <code>using <a class="el" href="namespaceBalloonParty_1_1Game_1_1Level.html">BalloonParty.Game.Level</a>;</code>, an <code>ILevelProgress</code> ctor param, and an <code>ISubscriber&lt;LevelUpAbandonedMessage&gt;</code> ctor param. Leave <code>UnfireIfNeverFlown</code> (line 120) alone — dead under the new model but harmless and guarded.</p>
-<h3><a class="anchor" id="autotoc_md602"></a>
+<h3><a class="anchor" id="autotoc_md603"></a>
 6.6 ColorProgressBar must keep drawing during Completing</h3>
 <p><code><a class="el" href="ColorProgressBar_8cs.html">UI/Score/ColorProgressBar.cs</a>:128</code> is <code>private bool LevelUpInProgress =&gt; _levelProgress.Phase.Value != LevelUpPhase.Playing;</code> and <code>OnTrailArrived</code> (~line 545) bails on it. Left as-is, every confirming trail that lands during the flight is swallowed and the popup appears over visibly short bars. Change to:</p>
 <div class="fragment"><div class="line"><span class="keyword">private</span> <span class="keywordtype">bool</span> LevelUpInProgress =&gt; _levelProgress.Phase.Value == LevelUpPhase.Pending</div>
 <div class="line">                                  || _levelProgress.Phase.Value == LevelUpPhase.Transitioning;</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md603"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md604"></a>
 6.7 The pan-in stops pausing; the camera follows the shot</h3>
 <p><b>DECISION.</b> <code>LevelUpCinematic.BeginCinematicWithTrail</code> calls <code>_pauseService.Pause(PauseSource.Cinematic)</code> (<code><a class="el" href="LevelUpCinematic_8cs.html">Game/Cinematics/LevelUpCinematic.cs</a>:213</code>) and <code>ProjectileView.FixedUpdate</code> returns early on <code>IsAnyPaused</code> (<code><a class="el" href="ProjectileView_8cs.html">ProjectileView.cs</a>:185</code>). Since the pan-in arms at the tipping claim, leaving that pause in place means the shot <b>stops</b>, never reaches a wall, never dies — <code>ProjectileDestroyedMessage</code> never arrives and <b>every level-up hard-locks</b>. Do this exactly:</p>
 <ol type="1">
@@ -519,7 +519,7 @@ Level-Up Timing</h1>
 <li><b>Camera target is the PROJECTILE, not the tipping trail.</b> <code>ProjectilePositionProvider</code> (already maintained by <code>ThrowerController.Set/Clear</code>, lines 210/246) is the live handle — no puppeteering, no waiting for a trail to register. Follow it for <b>Window A only</b> (tipping claim -&gt; first wall) so camera and clock share one boundary, then release to normal framing for the rest of the flight. <b>DECISION — do NOT pan to the score bars.</b> They fill during the flight, so there is nothing left to show there, and the camera is a world-space instrument while the bars are UI. The out-pan is simply the rig's existing restore, run at end-of-flight before the popup, gated by the <code>CinematicEndGate</code> that <code>LevelUpPopUp</code> already awaits (<code><a class="el" href="LevelUpPopUp_8cs.html">LevelUpPopUp.cs</a>:97</code>).</li>
 <li>This removes the camera-park problem: <code>CameraRigCinematic.EndPanIn</code> currently leaves the camera zoomed for a later restore, which would have played the whole remaining flight framed away from the shot. With the follow model the camera's last act <em>is</em> the restore.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md604"></a>
+<h2><a class="anchor" id="autotoc_md605"></a>
 7. Tests</h2>
 <p>Only what is actually writable. <code>BalloonSpawner</code> and <code>ThrowerController</code> have <b>no</b> EditMode fixture and need <code>SlotGrid</code>/pools/a <code>ThrowerView</code> MonoBehaviour — do not build scaffolding for them. Verify those holds by reading plus the in-editor playtest, and say so rather than claiming coverage.</p>
 <p><b><code>Assets/Tests/EditMode/Shared/TimeScaleServiceTests.cs</code></b> (existing; keep its <code>Time.timeScale = 1f</code> <code>TearDown</code>):</p><ul>
@@ -546,7 +546,7 @@ Level-Up Timing</h1>
 <p><b>Delete outright</b> (they assert the pierce gate, a mechanism this plan removes — there is no behaviour to redirect them to; leave a one-line comment saying why): <code>CheckLevelUp_WhilePiercing_HoldsCommit</code>, <code>PierceEnded_WithRequirementMet_PublishesOnceAndGoesPending</code>, <code>NotPiercing_ConfirmingArrival_FiresImmediately</code>, <code>PierceEnded_RequirementNotMet_DoesNotPublish</code>, <code>MultipleArrivalsDuringPierce_ThenPierceEnds_PublishesOnce</code>, <code>ClaimProgress_WhilePiercing_StillBanksExcess</code>, <code>PierceEnded_WhenLossImminent_DoesNotPublish</code>, <code>PierceEnded_WhenNotInGame_DoesNotPublish</code>, <code>PierceEnded_WhileAlreadyPending_DoesNotRePublish</code>, <code>PierceEnded_AfterDispose_DoesNotFireOrThrow</code>.</p>
 <p><b>Invert, do not delete:</b> <code>LevelUp_WhenLossImminent_DoesNotLevelUp</code> — its current contract <em>is</em> the bug. Flip the assertion with a comment explaining why it inverted.</p>
 <p><b>Not worth testing:</b> the watchdog log; <code>LevelUpCinematic</code>'s own gate changes (already Deferred per <code>Assets/Tests/README.md</code>; its PlayMode smoke test stays); the <code>ScaleAwayActiveProjectile</code> deletion (provably inert); <code>PendingPierceHits</code> discharge (untouched, already covered by <code>ProjectileMotionResolverTests</code>/<code>ProjectileHitResolverTests</code>).</p>
-<h2><a class="anchor" id="autotoc_md605"></a>
+<h2><a class="anchor" id="autotoc_md606"></a>
 8. Sequencing</h2>
 <ol type="1">
 <li><b>Time-scale exclusivity</b> — <code>ITimeScaleClaims</code>, the new <code>TimeScaleSource</code> member, the <code>Apply</code> rewrite, registration, <code>TimeScaleServiceTests</code>. Nothing observes it yet; safe alone.</li>
@@ -557,7 +557,7 @@ Level-Up Timing</h1>
 <li><b>Docs</b> — <code><a class="el" href="Game_2Level_2README_8md.html">Game/Level/README.md</a></code> (it documents the model being replaced), <code><a class="el" href="Game_2Cinematics_2README_8md.html">Game/Cinematics/README.md</a></code>, and the <code><a class="el" href="CheatState_8cs.html">Cheats/CheatState.cs</a></code> doc comment.</li>
 </ol>
 <p>After every step: <code>dotnet build BalloonParty.Runtime.csproj -nologo -clp:ErrorsOnly</code> (plus <code>BalloonParty.Tests.EditMode.csproj</code> from step 1, and <code>BalloonParty.Tests.PlayMode.csproj</code> whenever a runtime interface gains a member) and <code>python3 Tools/style_audit.py</code>. <b>The implementer cannot run the tests</b> — there is no headless Unity runner in that environment. Stop after each numbered step and hand back for an in-editor run; a green build proves very little about this change. Do not report a step as verified on a compile alone.</p>
-<h2><a class="anchor" id="autotoc_md606"></a>
+<h2><a class="anchor" id="autotoc_md607"></a>
 9. Risks — playtest, not compile</h2>
 <ul>
 <li><b>The played-out flight scores nothing visible.</b> A capped claim returns <code>granted == 0</code> and <code>ScoreController.ResolveAttributions</code> skips those (<code><a class="el" href="ScoreController_8cs.html">ScoreController.cs</a>:247</code>) — no trail, no point notice, no score tick. Points still bank, but the player pops balloons for <em>seconds</em> with no reward. Today that window is milliseconds. Watch for this specifically; it is a different complaint from "dead
@@ -566,10 +566,10 @@ Level-Up Timing</h1>
 <li><b>Cancelling the tipping shot's spawn wave</b> is a balance change: one fewer wave per level-up.</li>
 <li><b>The follow camera</b> on a shot crossing the box in ~0.2s and bouncing several times a second may be unpleasant. Window A's slow-mo covers exactly that span, which is why the two match. If the whole flight is wanted instead, ease the framing out after the wall rather than tracking tightly.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md607"></a>
+<h2><a class="anchor" id="autotoc_md608"></a>
 10. Known residual (scoped, cosmetic)</h2>
 <p><b>Trail-to-bar mismatch under a moving camera.</b> Score trails fly world-space toward UI bars; with the camera now moving during the flight, a trail that baked its target at launch will drift or overshoot. Previously hidden because the world was frozen and the trail was puppeteered. First thing to check: whether <code>ScoreTrailService</code>'s <code>TrailSpawner</code> homes on a <b>Transform</b> (may already be correct, just needing damping) or a <b>cached Vector3</b> (needs per-frame re-projection). Fix on its own schedule — it is cosmetic by construction now, because progression is decided at claim time. That is the point of the split in section 4: the same misbehaving trail used to be able to withhold a ceremony or strand a run.</p>
-<h2><a class="anchor" id="autotoc_md608"></a>
+<h2><a class="anchor" id="autotoc_md609"></a>
 11. Keep the watchdog regardless</h2>
 <p>Dev-only. When progress is complete and the phase has not moved within ~2s, <code>Log.Warn</code> the phase, navigation, <code>LossImminent</code>, <code>AllColorsConfirmed</code> per colour, and whether a projectile is in flight. This bug class is rare, unreproducible on demand, and cost a full session to diagnose from a description. The next occurrence should name its own cause. </p>
 </div></div><!-- contents -->

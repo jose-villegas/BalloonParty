@@ -110,13 +110,13 @@ $(function(){initNavTree('plan_item_range_preview.html',''); initResizable(true)
   <div class="headertitle"><div class="title">Item Range Preview</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md575"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md576"></a>
 Item Range Preview</h1>
 <blockquote class="doxtable">
 <p>Working plan for the aim-time telegraph that draws an item's affected area on the board with ribbon trails, when the prediction line of sight crosses the balloon hosting it. </p>
 </blockquote>
 <hr  />
-<h2><a class="anchor" id="autotoc_md577"></a>
+<h2><a class="anchor" id="autotoc_md578"></a>
 Orientation</h2>
 <p>Today the aim telegraph tells the player <em>where the shot goes</em>. It says nothing about what an item along that path would <b>do</b> — the player has to know each item's range from memory. This feature draws that range, live, while aiming: sight an item, see its shape painted on the board by trails that stream out of the host balloon.</p>
 <p>The look is borrowed from the score-trail <b>formations</b> (<code>Game/Score/Behaviours/</code>), where "pens" — small glowing heads dragging <code>TrailRenderer</code> ribbons — orbit a shape's edges and leave the drawn figure behind them. That system already proved the technique; this reuses the <em>idea</em>, not the code: score formations tumble 3D polyhedra toward a UI bar, while these are flat, board-space, and anchored to a balloon.</p>
@@ -138,7 +138,7 @@ Orientation</h2>
 <td class="markdownTableBodyNone">Snipe   </td><td class="markdownTableBodyNone">a line from the host to the wall — the pierce corridor   </td></tr>
 </table>
 <hr  />
-<h2><a class="anchor" id="autotoc_md579"></a>
+<h2><a class="anchor" id="autotoc_md580"></a>
 The seam</h2>
 <p>One interface, one implementation per item type, resolved by <code>ItemType</code>. This mirrors <code>IBalloonItem</code> / <code>ItemActivator</code> exactly — VContainer registers every implementation, the consumer takes <code>IEnumerable&lt;IItemRangePreview&gt;</code> and builds a <code>Dictionary&lt;ItemType, ...&gt;</code> once in <code>Start</code>. A new item ships its preview beside its handler and needs no change here.</p>
 <p>The shared vocabulary is a <b>stroke</b>: one polyline the pens trace. Every figure above decomposes into strokes — a circle is one closed stroke, the plus is two open ones, the laser is two closed rectangles, lightning is one stroke per arc. Nothing in the driver knows what an item <em>is</em>, only how many strokes it drew and where their points are.</p>
@@ -189,7 +189,7 @@ The seam</h2>
 <p>Each preview constructor-injects whatever it needs to compute its own figure — <code>IItemConfiguration</code> for the tuned radii, <code>SlotGrid</code> for the occupants Lightning chains through or Paint covers, <code>IProjectileFlightConfig</code> for the walls Snipe runs to. The context carries only what changes per crossing.</p>
 <p><b>Reuse the existing cores where they already exist.</b> <code>PaintTriangle.Build</code>, <code>LightningChain</code>, <code>BombBlast</code> and <code>LaserCross</code> are already config-free pure geometry shared by the live handlers and the shot solver. A preview that re-derives its own shape would drift from the effect it advertises — the same failure <code>CircleContact</code> exists to prevent for the aim line. Where a core selects <em>targets</em> rather than an outline, the preview calls it for the target set and draws the outline around that result.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md581"></a>
+<h2><a class="anchor" id="autotoc_md582"></a>
 Driving the pens</h2>
 <div class="fragment"><div class="line">sequenceDiagram</div>
 <div class="line">    participant Ctl as ItemRangePreviewController</div>
@@ -221,7 +221,7 @@ Driving the pens</h2>
 </ul>
 <p>Pens are distributed round-robin across strokes, so a 2-stroke plus sign with 6 pens puts 3 on each arm, and the count stays a tuning knob rather than a per-item decision.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md583"></a>
+<h2><a class="anchor" id="autotoc_md584"></a>
 Where the trigger lives</h2>
 <p>The controller is <b>plain C#</b> (<code>ILateTickable</code>), not a <code>SightReaction</code> on the balloon prefab. Two reasons:</p>
 <ol type="1">
@@ -234,7 +234,7 @@ Where the trigger lives</h2>
 <p><b>Note on the existing probe.</b> <code>PredictionSightProbe</code> stays exactly as it is — it drives the per-item <em>reactions</em> (glitter, fade, drift) on the visual itself. This controller answers a different question (which host currently owns the board-level telegraph) and the two are deliberately independent. </p>
 </blockquote>
 <hr  />
-<h2><a class="anchor" id="autotoc_md585"></a>
+<h2><a class="anchor" id="autotoc_md586"></a>
 Phases</h2>
 <div class="fragment"><div class="line">1  Infrastructure       ✅ DONE — ItemPreviewShape/Stroke, IItemRangePreview, ItemPreviewContext,</div>
 <div class="line">                          HighlightTrail + prefab, ItemPreviewTicker, ItemRangePreviewController,</div>
@@ -249,7 +249,7 @@ Phases</h2>
 <div class="line">                          telemetry if it earns it</div>
 </div><!-- fragment --><p><b>Milestone 1 is the vertical slice</b>: put the line of sight on an item and watch trails leave the host in a circular outward motion toward the figure they will draw. Shape fidelity and looks come after that reads right.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md587"></a>
+<h2><a class="anchor" id="autotoc_md588"></a>
 Open questions</h2>
 <ul>
 <li><b>Does the figure track a moving host?</b> Balloons drift while the board settles. Either the shape rebuilds each frame (correct, costs a rebuild) or it anchors to the host transform and rides along (cheap, but a Lightning chain's targets would lie). Start with a rebuild gated on the trace version and revisit if it shows up in a profile.</li>

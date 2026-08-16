@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$structBalloonParty_1_1Shared_1_1ImpactEventBus_1_1Impact.html" title=" " alt="" coords="5,5,205,45"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html" title="The deflectors the aim telegraph must bounce off, in the geometry the projectile will actually meet." alt="" coords="5,5,224,45"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridDeflectorField.html" title="Every occupied slot whose actor would turn an ordinary shot away, as circles." alt="" coords="272,5,445,45"/>
+<area shape="poly" id="edge460_Node000000_Node000001" title=" " alt="" coords="238,23,272,23,272,28,238,28"/>
 </map>

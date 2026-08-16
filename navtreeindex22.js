@@ -1,5 +1,7 @@
 var NAVTREEINDEX22 =
 {
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a6f533407b3ba1e4ec9ae7edb5417a2b4":[5,0,0,3,23,28],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a6f533407b3ba1e4ec9ae7edb5417a2b4":[6,0,0,3,23,28],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a73d98bc94d184ffca8f14edf7e61a45c":[5,0,0,3,23,14],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a73d98bc94d184ffca8f14edf7e61a45c":[6,0,0,3,23,14],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a7fc0065c4a18fae0a49f8fa7b7d0e1a7":[5,0,0,3,23,27],
@@ -247,7 +249,5 @@ var NAVTREEINDEX22 =
 "classBalloonParty_1_1Display_1_1CameraShakeController.html#a6d5bc91a4d392a6bacb0bff859c809b4":[5,0,0,4,1,4],
 "classBalloonParty_1_1Display_1_1CameraShakeController.html#a6d5bc91a4d392a6bacb0bff859c809b4":[6,0,0,4,1,4],
 "classBalloonParty_1_1Display_1_1CameraShakeController.html#a981d18177157d58a78bca33ffcc02ac9":[5,0,0,4,1,5],
-"classBalloonParty_1_1Display_1_1CameraShakeController.html#a981d18177157d58a78bca33ffcc02ac9":[6,0,0,4,1,5],
-"classBalloonParty_1_1Display_1_1CameraShakeController.html#a9df93fd94e6ccb6b0496fcc5ac8208c6":[5,0,0,4,1,6],
-"classBalloonParty_1_1Display_1_1CameraShakeController.html#a9df93fd94e6ccb6b0496fcc5ac8208c6":[6,0,0,4,1,6]
+"classBalloonParty_1_1Display_1_1CameraShakeController.html#a981d18177157d58a78bca33ffcc02ac9":[6,0,0,4,1,5]
 };

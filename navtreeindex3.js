@@ -1,5 +1,7 @@
 var NAVTREEINDEX3 =
 {
+"SpriteColorableRenderer_8cs.html":[7,0,1,4,6],
+"SpriteLayerCombinerEditor_8cs.html":[7,0,6,8,0],
 "SpriteLayerCombinerEditor_8cs.html#aef19bab18b9814edeef255c43e4f6bbc":[7,0,6,8,0,1],
 "SpriteLayerCombiner_8cs.html":[7,0,14,10,10],
 "SpriteRendererExtensions_8cs.html":[7,0,14,4,17],
@@ -247,7 +249,5 @@ var NAVTREEINDEX3 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3687bbf9b9c25e40dfe23768ad0fbbce":[5,0,0,0,0,3,44],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3687bbf9b9c25e40dfe23768ad0fbbce":[6,0,0,0,0,3,44],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3e26ed679bfcc356d10c54213fe89adb":[5,0,0,0,0,3,41],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3e26ed679bfcc356d10c54213fe89adb":[6,0,0,0,0,3,41],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a44f9b214c8bb534badae2c7fa15d7174":[5,0,0,0,0,3,37],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a44f9b214c8bb534badae2c7fa15d7174":[6,0,0,0,0,3,37]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3e26ed679bfcc356d10c54213fe89adb":[6,0,0,0,0,3,41]
 };

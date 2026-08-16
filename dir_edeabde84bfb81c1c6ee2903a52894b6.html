@@ -120,9 +120,13 @@ $(function(){initNavTree('dir_edeabde84bfb81c1c6ee2903a52894b6.html',''); initRe
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="files" name="files"></a>
 Files</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="BigScoreFormationGizmos_8cs.html">BigScoreFormationGizmos.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="BigScoreTrailBehaviour_8cs.html">BigScoreTrailBehaviour.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="DefaultScoreTrailBehaviour_8cs.html">DefaultScoreTrailBehaviour.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FormationOverlapResolver_8cs.html">FormationOverlapResolver.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IScoreTrailBehaviour_8cs.html">IScoreTrailBehaviour.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,11 +163,15 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>DefaultScoreTrailBehaviour</code>   </td><td class="markdownTableBodyNone">Reproduces the pre-seam pipeline byte-for-byte: one pooled trail per point, scatter-fan origin, <code>0.02 s</code> stagger, one point reported per landing, first trail (<code>msg.FirstScore</code>) is the principal    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>BigScoreTrailBehaviour</code>   </td><td class="markdownTableBodyNone">The confluence handler for large awards: decomposes the group total into a catalog of 3D shapes (<code>Decompose</code>, optimal coin change over <code>ShapeCatalog.Denominations</code>), spreads their sub-centres around the pop, and launches every shape via <code>ShapeFormationTicker</code> simultaneously. The largest shape is the principal    </td></tr>
+<td class="markdownTableBodyNone"><code>BigScoreTrailBehaviour</code>   </td><td class="markdownTableBodyNone">The confluence handler for large awards: decomposes the group total into a catalog of 3D shapes (<code>Decompose</code>, optimal coin change over <code>ShapeCatalog.Denominations</code>), spreads their sub-centres around the pop on a golden-angle spiral sized off <code>GroupMaxRadius</code> (this group's own largest fitted shape, not the catalog-wide worst case), and launches every shape via <code>ShapeFormationTicker</code> simultaneously. The largest shape is the principal    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ShapeCatalog</code>   </td><td class="markdownTableBodyNone">Hand-authored 3D shape data, one entry per denomination (vertex count == score value == pen count). Built once (<code>Warm()</code> forces this at scope start), zero-alloc lookup thereafter    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ShapeFormationTicker</code>   </td><td class="markdownTableBodyNone"><code>ILateTickable</code> — the analytic, pooled, zero-alloc per-frame driver for every in-flight shape formation: pen orbit, travel toward the bar, tumble, ribbon re-framing, and the pause/snap/slow-mo transport bridge   </td></tr>
+<td class="markdownTableBodyNone"><code>ShapeFormationTicker</code>   </td><td class="markdownTableBodyNone"><code>ILateTickable</code> — the analytic, pooled, zero-alloc per-frame driver for every in-flight shape formation: pen orbit, travel toward the bar, tumble, ribbon re-framing, the pause/snap/slow-mo transport bridge, and (see <b>Overlap Resolution</b> below) a cross-group separation pass so concurrently airborne formations don't interpenetrate    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>FormationOverlapResolver</code>   </td><td class="markdownTableBodyNone">Pure, allocation-free pairwise "push circles apart" math — no Unity-object dependency, so it's independently unit-tested. Called once per tick by <code>ShapeFormationTicker</code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>BigScoreFormationGizmos</code>   </td><td class="markdownTableBodyNone">Editor-only scene-view overlay (<code>_showBounds</code> toggle) — draws each in-flight formation's current bounding sphere as a flat XY circle (<code>GizmoDrawingHelper.DrawWorldCircle</code>) at <code>ShapeFormationTicker.ForEachActiveBounds</code>'s center/radius   </td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->

@@ -1,5 +1,7 @@
 var NAVTREEINDEX1 =
 {
+"IBackgroundFieldSettings_8cs.html":[7,0,3,4,4],
+"IBalanceBiasSource_8cs.html":[7,0,15,0,5],
 "IBalanceInfluence_8cs.html":[7,0,15,0,6],
 "IBalloonItem_8cs.html":[7,0,8,12],
 "IBalloonModel_8cs.html":[7,0,1,1,6],
@@ -97,9 +99,9 @@ var NAVTREEINDEX1 =
 "ISceneLightRuntime_8cs.html":[7,0,14,11,0],
 "ISceneLightSettings_8cs.html":[7,0,3,4,10],
 "IScoreTrailBehaviourConfiguration_8cs.html":[7,0,3,14],
-"IScoreTrailBehaviour_8cs.html":[7,0,7,6,0,2],
+"IScoreTrailBehaviour_8cs.html":[7,0,7,6,0,4],
 "IScoreTrailConfig_8cs.html":[7,0,14,25],
-"IScoreTrailReporter_8cs.html":[7,0,7,6,0,3],
+"IScoreTrailReporter_8cs.html":[7,0,7,6,0,5],
 "IScreenSpaceLightSettings_8cs.html":[7,0,3,4,11],
 "ISealedMetrics_8cs.html":[7,0,7,7,11],
 "ISfxProvider_8cs.html":[7,0,0,1,6],
@@ -247,7 +249,5 @@ var NAVTREEINDEX1 =
 "NearLevelUpCheat_8cs.html":[7,0,2,16],
 "NudgeMessage_8cs.html":[7,0,9,2],
 "NudgeOverrideDrawer_8cs.html":[7,0,9,0,0],
-"NudgeOverrideResolver_8cs.html":[7,0,9,4],
-"NudgeOverride_8cs.html":[7,0,9,3],
-"NudgeService_8cs.html":[7,0,9,5]
+"NudgeOverrideResolver_8cs.html":[7,0,9,4]
 };

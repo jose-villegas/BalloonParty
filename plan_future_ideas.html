@@ -110,15 +110,15 @@ $(function(){initNavTree('plan_future_ideas.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">Future Ideas &amp; Improvements</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md368"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md369"></a>
 Future Ideas &amp; Improvements</h1>
 <blockquote class="doxtable">
 <p>Collection of deferred features, improvement concepts, and speculative designs. Nothing here is scheduled — items graduate into dedicated plans when prioritised. </p>
 </blockquote>
 <hr  />
-<h2><a class="anchor" id="autotoc_md370"></a>
+<h2><a class="anchor" id="autotoc_md371"></a>
 1 — VFX Improvements</h2>
-<h3><a class="anchor" id="autotoc_md371"></a>
+<h3><a class="anchor" id="autotoc_md372"></a>
 1.1 Unbreakable Pop VFX — Falling Debris</h3>
 <p>When a Piercing item finally destroys an Unbreakable balloon, the pop should feel weighty and earned. Instead of a standard particle burst, the Unbreakable shatters into falling debris pieces that obey gravity.</p>
 <p><b>Art direction:</b> Heavy chunks of the Unbreakable's shell material (stone, metal, knotted rubber — whichever direction the Unbreakable art takes) crack apart and tumble downward. Pieces should vary in size, rotate as they fall, and fade out or shrink before reaching the bottom of the screen. A brief flash/shockwave at the moment of destruction sells the impact.</p>
@@ -132,27 +132,27 @@ Future Ideas &amp; Improvements</h1>
 <li>Small spark/clank at the contact point — a single bright flash + 2–3 tiny sparks</li>
 <li>Communicates "this did nothing" without being dramatic</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md372"></a>
+<h3><a class="anchor" id="autotoc_md373"></a>
 1.2 Soap Cluster Pop VFX</h3>
 <p><code>PSVFX_SoapBubblePop</code> — iridescent soap-film ring + mist burst at the removed bubble's world position (uses <code>IBalloonHitHandler.GetVfxWorldPosition</code> from <code>PLAN-BubbleClusterHitFeedback</code>).</p>
 <p><code>PSVFX_SoapClusterBurst</code> — larger multi-ring final pop when the last bubble is destroyed.</p>
-<h3><a class="anchor" id="autotoc_md373"></a>
+<h3><a class="anchor" id="autotoc_md374"></a>
 1.3 Deflector Bounce VFX</h3>
 <p><code>PSVFX_DeflectorBounce</code> — small sparkle/flash at the contact point when a projectile bounces off the Deflector.</p>
-<h3><a class="anchor" id="autotoc_md374"></a>
+<h3><a class="anchor" id="autotoc_md375"></a>
 1.4 Absorber Consume VFX</h3>
 <p><code>PSVFX_AbsorberPop</code> — implosion / suction burst at contact point when the Absorber consumes a projectile.</p>
-<h3><a class="anchor" id="autotoc_md375"></a>
+<h3><a class="anchor" id="autotoc_md376"></a>
 1.5 Gatekeeper Hit + Break VFX</h3>
 <ul>
 <li><code>PSVFX_GatekeeperHit</code> — hit dust/chip on non-killing hits</li>
 <li><code>PSVFX_GatekeeperBreak</code> — larger debris/burst on final destruction</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md377"></a>
+<h2><a class="anchor" id="autotoc_md378"></a>
 2 — Spawn Weights, Pity System &amp; Streak Balancing</h2>
 <p>The procedural placement engine (Phase 8.3) and difficulty system (Phase 8.4) use flat weights today. This section proposes dynamic weight adjustment to create better pacing and satisfying scoring patterns.</p>
-<h3><a class="anchor" id="autotoc_md378"></a>
+<h3><a class="anchor" id="autotoc_md379"></a>
 2.1 Per-Level Balloon &amp; Item Weights</h3>
 <p><code>DifficultyProfile</code> (Phase 8.4) already defines <code>ActorWeightOverrides</code> per level. Extend this to cover item spawn weights as well:</p>
 <div class="fragment"><div class="line">DifficultyProfile</div>
@@ -160,7 +160,7 @@ Future Ideas &amp; Improvements</h1>
 <div class="line">├── ItemWeights: ItemWeightEntry[]          ← per-ItemType weight multiplier</div>
 <div class="line">└── GridActorWeights: ActorWeightEntry[]    ← per-GridActorType weight multiplier (existing)</div>
 </div><!-- fragment --><p>Each entry is a <code>(type, float weightMultiplier)</code> pair applied on top of the base weight from <code>BalloonsConfiguration</code> / <code>ItemConfiguration</code>. This lets difficulty profiles gradually introduce new types (weight 0 → 0.1 → 0.5) and phase out early-game types (weight 1.0 → 0.3).</p>
-<h3><a class="anchor" id="autotoc_md379"></a>
+<h3><a class="anchor" id="autotoc_md380"></a>
 2.2 Pity System for Weight Randoms</h3>
 <p>Prevent long drought streaks where a desired type never appears. A pity counter tracks consecutive spawn passes where a type was eligible but not selected. When the counter exceeds a threshold, the type's effective weight is boosted until it is selected, then the counter resets.</p>
 <p><b>Design sketch:</b></p>
@@ -185,7 +185,7 @@ Future Ideas &amp; Improvements</h1>
 <li><code>PityBoostPerMiss</code> — additive weight multiplier per miss beyond threshold (e.g. 0.5)</li>
 <li>Per-type opt-out — some types (e.g. Absorber) should NOT pity-boost</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md380"></a>
+<h3><a class="anchor" id="autotoc_md381"></a>
 2.3 Color Streak Balancing</h3>
 <p>The game is more satisfying when players occasionally encounter a high-density cluster of same-color balloons — a "streak opportunity" that rewards aim and planning. Pure random distribution rarely produces these clusters naturally.</p>
 <p><b>Mechanism — streak weight bias:</b></p>
@@ -217,7 +217,7 @@ Future Ideas &amp; Improvements</h1>
 <li>Weight columns reachable by a single bounce from common shot angles</li>
 <li>Cap spatial clustering to avoid making the grid trivially clearable</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md381"></a>
+<h3><a class="anchor" id="autotoc_md382"></a>
 2.4 Full Grid Clear-Out Calculation</h3>
 <p>Before finalising a spawn pass, run a simulation to verify the grid is theoretically clearable — that the player has a path to pop every balloon given optimal play. If the grid is provably unclearable (e.g. Unbreakables block all paths to a cluster with no Piercing items available), the spawner should adjust.</p>
 <p><b>Scope:</b></p><ul>
@@ -227,10 +227,10 @@ Future Ideas &amp; Improvements</h1>
 </ul>
 <p><b>Integration point:</b> <code>GridSpawner.ValidateGrid()</code> — called after placement, before the spawn pass commits. If validation fails, re-roll problematic slots (up to N retries) or log a warning for manual review.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md383"></a>
+<h2><a class="anchor" id="autotoc_md384"></a>
 3 — Custom Level Editor</h2>
 <p>Insert hand-designed levels between procedural ones. Useful for story beats, tutorials, boss encounters, and curated difficulty spikes.</p>
-<h3><a class="anchor" id="autotoc_md384"></a>
+<h3><a class="anchor" id="autotoc_md385"></a>
 3.1 Level Sequence Model</h3>
 <div class="fragment"><div class="line">LevelSequence</div>
 <div class="line">├── entries: LevelEntry[]</div>
@@ -238,7 +238,7 @@ Future Ideas &amp; Improvements</h1>
 <div class="line">│   └── CustomLevelEntry      → loads from a LevelDefinition asset</div>
 <div class="line">└── GetEntry(levelIndex) → LevelEntry</div>
 </div><!-- fragment --><p><code>LevelSequence</code> is a ScriptableObject that defines the ordered list of levels. Procedural entries use <code>DifficultyProfile</code>; custom entries reference a <code>LevelDefinition</code> asset.</p>
-<h3><a class="anchor" id="autotoc_md385"></a>
+<h3><a class="anchor" id="autotoc_md386"></a>
 3.2 <code>LevelDefinition</code> ScriptableObject</h3>
 <div class="fragment"><div class="line">LevelDefinition</div>
 <div class="line">├── GridLayout: SlotEntry[columns, rows]</div>
@@ -247,7 +247,7 @@ Future Ideas &amp; Improvements</h1>
 <div class="line">├── ObjectiveOverride: LevelObjective?    ← optional; null = use default scoring</div>
 <div class="line">├── TutorialOverride: TutorialSequence?   ← optional; triggers tutorial on entry</div>
 <div class="line">└── Metadata: { displayName, description, author }</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md386"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md387"></a>
 3.3 Custom Level Editor Window (Unity Editor)</h3>
 <p>A Unity Editor window (<code>Window &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Level Editor</code>) for visual grid authoring:</p>
 <ul>
@@ -258,7 +258,7 @@ Future Ideas &amp; Improvements</h1>
 <li>Save/Load: serialises to <code>LevelDefinition</code> SO assets in <code>Assets/ScriptableObjects/Levels/</code></li>
 </ul>
 <p><b>Implementation:</b> <code>EditorWindow</code> subclass in <code><a class="el" href="namespaceBalloonParty_1_1Editor.html">BalloonParty.Editor</a></code>. Uses <code>SerializedObject</code> for undo support. Grid rendering via <code>GUILayout</code> or custom <code>EditorGUI</code> drawing.</p>
-<h3><a class="anchor" id="autotoc_md387"></a>
+<h3><a class="anchor" id="autotoc_md388"></a>
 3.4 Level Sequence Integration</h3>
 <p><code>DifficultyService</code> (Phase 8.4) gains a <code>LevelSequence</code> reference. On level transition:</p><ol type="1">
 <li>Read <code>LevelSequence.GetEntry(currentLevel)</code></li>
@@ -267,10 +267,10 @@ Future Ideas &amp; Improvements</h1>
 </ol>
 <p><code>CustomLevelLoader</code> implements <code>IGridSpawner</code> with <code>SpawnStage.DynamicActors</code>. The coordinator runs it instead of <code>GridSpawner</code> when the current level is custom.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md389"></a>
+<h2><a class="anchor" id="autotoc_md390"></a>
 4 — Tutorial System &amp; Pacing</h2>
 <p>Introduce new actors and mechanics gradually through guided tutorial sequences rather than dropping everything on the player at once.</p>
-<h3><a class="anchor" id="autotoc_md390"></a>
+<h3><a class="anchor" id="autotoc_md391"></a>
 4.1 Tutorial Trigger System</h3>
 <div class="fragment"><div class="line">TutorialTrigger</div>
 <div class="line">├── TriggerCondition: enum { OnLevelReached, OnFirstEncounter, OnItemAcquired, Manual }</div>
@@ -279,7 +279,7 @@ Future Ideas &amp; Improvements</h1>
 <div class="line">├── RequiredLevel: int?                 ← for OnLevelReached</div>
 <div class="line">└── HasBeenShown: bool                  ← persisted; never re-shows after completion</div>
 </div><!-- fragment --><p><code>TutorialManager : IStartable</code> — holds <code>TutorialTrigger[]</code> (from a <code>TutorialConfiguration</code> SO). On each level start or actor encounter, checks triggers and fires the first unshown match.</p>
-<h3><a class="anchor" id="autotoc_md391"></a>
+<h3><a class="anchor" id="autotoc_md392"></a>
 4.2 Tutorial Sequence Definition</h3>
 <div class="fragment"><div class="line">TutorialSequence (ScriptableObject)</div>
 <div class="line">├── Steps: TutorialStep[]</div>
@@ -289,7 +289,7 @@ Future Ideas &amp; Improvements</h1>
 <div class="line">│   └── PauseStep      → freezes gameplay for N seconds or until tap</div>
 <div class="line">├── PausesGameplay: bool   ← if true, sets Time.timeScale = 0 during the sequence</div>
 <div class="line">└── CompletionReward: int? ← optional bonus score on completion</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md392"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md393"></a>
 4.3 Pacing — Suggested Actor Introduction Order</h3>
 <p>Tutorials fire on first encounter with each actor type. The difficulty curve (Phase 8.4) controls when actors first appear, so tutorials are implicitly paced:</p>
 <div class="fragment"><div class="line">Level 1:    Tutorial — &quot;Welcome&quot; + basic shooting</div>
@@ -304,7 +304,7 @@ Future Ideas &amp; Improvements</h1>
 <div class="line">Level 14:   First Unbreakable → Tutorial: &quot;Unbreakables can only be destroyed with items&quot;</div>
 <div class="line">Level 16:   First Absorber → Tutorial: &quot;Absorbers eat your shot — avoid them!&quot;</div>
 </div><!-- fragment --><p>These are starting suggestions — real pacing comes from playtesting.</p>
-<h3><a class="anchor" id="autotoc_md393"></a>
+<h3><a class="anchor" id="autotoc_md394"></a>
 4.4 Tutorial UI</h3>
 <ul>
 <li><b>Dialog overlay:</b> semi-transparent panel at bottom of screen; character portrait on left, text on right; tap to advance</li>
@@ -312,19 +312,19 @@ Future Ideas &amp; Improvements</h1>
 <li><b>Action prompt:</b> arrow or hand icon pointing at the expected interaction point; fades once the player performs the action</li>
 </ul>
 <p><b>Implementation:</b> <code>TutorialView : MonoBehaviour</code> on a dedicated Canvas (sort order above gameplay, below pause menu). Subscribes to <code>TutorialStepMessage</code> via MessagePipe. Each step type has a corresponding view handler.</p>
-<h3><a class="anchor" id="autotoc_md394"></a>
+<h3><a class="anchor" id="autotoc_md395"></a>
 4.5 Persistence</h3>
 <p><code>TutorialProgressData</code> — a simple <code>HashSet&lt;string&gt;</code> of completed tutorial IDs, serialised to <code>PlayerPrefs</code> or a JSON file. <code>TutorialManager</code> checks this set before firing any trigger.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md396"></a>
+<h2><a class="anchor" id="autotoc_md397"></a>
 5 — Relocated Future Ideas</h2>
 <p>Ideas previously embedded in other plan files, moved here for consolidation.</p>
-<h3><a class="anchor" id="autotoc_md397"></a>
+<h3><a class="anchor" id="autotoc_md398"></a>
 5.1 Soap Cluster Merge <em>(from PLAN-ContentProduction + PLAN-GridActorExpansion)</em></h3>
 <p>Adjacent Soap Cluster balloons merge when nudged together or when proximity drops below a threshold. The merged cluster's <code>HitsRemaining</code> = sum of both (capped at 5); <code>_BubbleCount</code> transitions to the new count via a merge animation (two soap-film rings flowing into each other). One <code>IBalloonModel</code> survives; the other is returned to the pool.</p>
 <p>Scoring angle: merge triggers a bonus payout ( \(\text{mergedHits} \times \text{baseScore}\)), creating a risk/reward dynamic — letting clusters grow is tempting but reduces future individual scoring opportunities.</p>
 <p>Needs: neighbor query post-nudge, <code>ClusterMergeMessage</code>, merge VFX, and a <code>BubblePopController</code> that knows which bubble index was added/removed for the transition animation.</p>
-<h3><a class="anchor" id="autotoc_md398"></a>
+<h3><a class="anchor" id="autotoc_md399"></a>
 5.2 Unbreakable Roam <em>(from PLAN-ContentProduction)</em> — ✅ SHIPPED 2026-07-12</h3>
 <p>Shipped with two deviations from the sketch below: the contract is <code>IPreBalanceRelocatable</code> (implementers define their own placement; the balancer supplies resting slots and invokes in <code>BalancePriority</code> order — no per-entry config toggle), and the pick is not uniform random: the unbreakable roams toward the board's <em>opposite side</em>, preferring far slots (squared-distance weighted). See <code><a class="el" href="Balloon_2README_8md.html">Balloon/README.md</a> → Balance phase</code>.</p>
 <p>Original sketch: before the normal balance pass runs, each Unbreakable balloon picks a random empty slot on the grid and teleports (or animates) to it. Then the standard balance algorithm resumes as normal, settling everything else around the Unbreakable's new position.</p>
@@ -335,13 +335,13 @@ Future Ideas &amp; Improvements</h1>
 <li>The relocation animation plays first (or as part of the same batch); then the normal balance loop runs and may move other actors that became unbalanced by the relocation</li>
 <li>Config knob on <code>BalloonsConfiguration</code> entry: <code>bool RelocatesOnBalance</code> — so the behaviour can be toggled per balloon type without code changes</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md399"></a>
+<h3><a class="anchor" id="autotoc_md400"></a>
 5.3 New Balloon Archetypes <em>(from PLAN-GridActorExpansion)</em></h3>
 <ul>
 <li><b>Chain</b> — pops adjacent same-color balloons when destroyed; needs neighbor query at pop time</li>
 <li><b>Ghost</b> — <code>PassThrough</code> always (projectile travels through), pops after N passes</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md400"></a>
+<h3><a class="anchor" id="autotoc_md401"></a>
 5.4 New Grid Actor Archetypes <em>(from PLAN-GridActorExpansion)</em></h3>
 <ul>
 <li><b>Recolorer</b> — static; changes adjacent balloon colors each turn (undermines paint strategy)</li>
@@ -349,7 +349,7 @@ Future Ideas &amp; Improvements</h1>
 <li><b>Spawner</b> — static; places a new balloon into an adjacent empty slot each turn (fills gaps)</li>
 <li><b>ShieldTower</b> — static; grants periodic shields to adjacent balloons</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md401"></a>
+<h3><a class="anchor" id="autotoc_md402"></a>
 5.5 <code>IPassThrough</code> Behaviour Extensions <em>(from PLAN-GridActorExpansion)</em></h3>
 <p><b>Density / passage resistance</b> — a Puff-like actor could expose a <code>float Density</code> (0–1) that the animation system uses to modulate travel speed. A thin mist barely slows the path; a dense cloud visibly delays it: </p><div class="fragment"><div class="line"><span class="keyword">public</span> <span class="keyword">interface </span>IPassThrough</div>
 <div class="line">{</div>
@@ -385,36 +385,36 @@ Future Ideas &amp; Improvements</h1>
 </div><!-- fragment --><p><code>SlotGrid.IsTraversable</code> would call <code>IsCurrentlyTraversable</code> instead of just checking for the marker interface. The balance phase flag could be set via a shared <code>TurnPhaseTracker</code> service or a simple bool toggled by <code>BalloonBalancer</code> before/after its pass.</p>
 <p>Visual feedback: immature Puffs render denser/more opaque (shader <code>_Density</code> parameter driven from <code>IsMature</code>), so the player can see they're currently solid. On maturity transition, the cloud lightens over ~0.5 s via the existing diffusion reform rate.</p>
 <p>Both extensions are additive — <code>IPassThrough</code> stays a marker today and gains members (or a companion interface) only when a concrete actor type demands it.</p>
-<h3><a class="anchor" id="autotoc_md402"></a>
+<h3><a class="anchor" id="autotoc_md403"></a>
 5.6 Spider Web Obstacle <em>(from PLAN-SpiderWeb)</em></h3>
 <p>A <b>traversable + degradable</b> grid actor — fills the vocabulary gap where no actor is currently both pass-through <em>and</em> destructible. The projectile passes through (<code>PassThrough</code>) but each pass <b>tears</b> the web, degrading it through visual stages; after <b>N hits</b> it breaks and clears the slot. Distinct from the other blockers — Deflector (<code>Deflect</code>), Absorber (<code>Absorb</code>), Gatekeeper (<code>Deflect</code> → <code>Pop</code> after N) all stop the shot; the Spider Web lets shots through while still wearing down.</p>
 <p>Sketch: <code>SpiderWebObstacleModel : IWriteableSlotActor, IPassThrough</code> with a <code>HitsRemaining</code> countdown; the view swaps strand-density stages per hit (full → frayed → tattered → break). Needs a <code>GridActorConfiguration</code> entry + art (idle sway, hit tear, break). The full ideation lived in the retired <code>PLAN-SpiderWeb</code> (recoverable from git history).</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md404"></a>
+<h2><a class="anchor" id="autotoc_md405"></a>
 6 — Puff Cloud Polish &amp; Performance</h2>
 <p>Items deferred from the completed Puff Cloud Simulation implementation.</p>
-<h3><a class="anchor" id="autotoc_md405"></a>
+<h3><a class="anchor" id="autotoc_md406"></a>
 6.1 Visual Polish</h3>
 <ul>
 <li><b>Shadow pass</b> — <code>_SHADOW_ON</code> toggle already exists in the shader but is tuning-incomplete; needs art-direction pass for shadow offset, softness, and fill width per scene context</li>
 <li><b>Cloud fade-in on Puff spawn</b> — when a new Puff slot is placed, the cloud density should start at 0 and reform to 1.0 over ~0.5s, reusing the existing diffusion reform mechanic instead of appearing instantly</li>
 <li><b>Cloud dissolve on Puff removal</b> — when a Puff slot is removed, the cloud should drain to 0 over ~0.5s (invert the reform trend for that cluster region) rather than vanishing immediately; mirrors the fade-in and feels organic</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md406"></a>
+<h3><a class="anchor" id="autotoc_md407"></a>
 6.2 Performance &amp; Device Scaling</h3>
 <ul>
 <li><b>Disturbance field resolution scaling</b> — scale <code>TexelsPerUnit</code> down based on <code>QualitySettings.GetQualityLevel()</code> (e.g. half resolution on <code>Low</code>, full on <code>High</code>); avoids a fixed RT size that may be too large for low-end devices</li>
 <li><b>Diffusion tick rate throttle</b> — skip diffusion ticks on low-end when the frame budget is tight; <code>DiffusionTickInterval</code> is already configurable, but an adaptive version would watch <code>Time.deltaTime</code> against a budget threshold and extend the interval dynamically</li>
 <li><b>Target: &lt; 0.5 ms total</b> for all active cloud blits + diffusion tick on target mobile devices; profile with Unity's GPU profiler before shipping</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md407"></a>
+<h3><a class="anchor" id="autotoc_md408"></a>
 6.3 Edge Cases</h3>
 <ul>
 <li><b>Cloud at grid boundary</b> — quad placement at extreme column/row positions can push cloud geometry outside the camera frustum; clamp the world-space quad to the field bounds</li>
 <li><b>All Puffs removed in one frame</b> — if a balance pass removes support from every slot in a cluster simultaneously, <code>PuffClusterRegistry</code> publishes <code>Removed</code> and the view is returned to pool; verify the registry handles this atomically (no intermediate <code>Resized</code> event with zero slots)</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md409"></a>
+<h2><a class="anchor" id="autotoc_md410"></a>
 7 — Vertical Cloud Drift</h2>
 <blockquote class="doxtable">
 <p>Captured for when the feature is prioritised. Pairs well with the difficulty scaling system (Phase 8.4). </p>
@@ -437,20 +437,20 @@ Future Ideas &amp; Improvements</h1>
 <li>Pairs well with <code>IOnPassThrough</code> triggers (see section 5.5) — a drifting cloud that tints or buffs balloons it passes through would create emergent gameplay</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md411"></a>
+<h2><a class="anchor" id="autotoc_md412"></a>
 8 — Timed Release: Balloon Pass-Through Delay</h2>
 <blockquote class="doxtable">
 <p>Balloons that land beneath a Puff cloud rest visibly on the support for a configurable beat, then float up through the traversable slots on the next balance pass. The delay makes the interaction readable — "the balloon is resting
 under the cloud" — before it naturally pushes through. </p>
 </blockquote>
-<h3><a class="anchor" id="autotoc_md412"></a>
+<h3><a class="anchor" id="autotoc_md413"></a>
 8.1 Current Behaviour</h3>
 <ol type="1">
 <li>Pop happens → <code>BalanceBalloonsMessage</code> fires → <code>BalloonBalancer.Balance()</code> runs (next frame)</li>
 <li>Balancer scans for <code>IsUnbalanced</code> → moves balloons toward row 0</li>
 <li>Puff slots block movement because <code>IsEmpty</code> returns false → balloon stops below the cloud</li>
 </ol>
-<h3><a class="anchor" id="autotoc_md413"></a>
+<h3><a class="anchor" id="autotoc_md414"></a>
 8.2 Proposed Flow</h3>
 <ol type="1">
 <li>Pop happens → balance runs as before</li>
@@ -459,7 +459,7 @@ under the cloud" — before it naturally pushes through. </p>
 <li>On the next balance pass, the balancer checks <code>IsTraversable</code> for <code>IPassThrough</code> slots and allows routing through them — but <b>only for balloons whose delay has elapsed</b></li>
 <li>Balloon animates <b>through</b> the cloud, stamping the disturbance field as it goes (the cloud reacts to the balloon passing through it)</li>
 </ol>
-<h3><a class="anchor" id="autotoc_md414"></a>
+<h3><a class="anchor" id="autotoc_md415"></a>
 8.3 Model Sketch</h3>
 <p>Each balloon model tracks how long it has been waiting beneath a blocking <code>IPassThrough</code> slot:</p>
 <div class="fragment"><div class="line"><span class="keyword">internal</span> <span class="keyword">interface </span>ITimedRelease</div>
@@ -472,28 +472,28 @@ under the cloud" — before it naturally pushes through. </p>
 <p><b>Config knob</b> (on <code>IBalloonsConfiguration</code> or a dedicated <code>IPassThroughSettings</code>):</p><ul>
 <li><code>float PassThroughDelay</code> — seconds a balloon must wait before it can traverse (e.g. 1.0–2.0 s)</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md415"></a>
+<h3><a class="anchor" id="autotoc_md416"></a>
 8.4 Balancer Changes</h3>
 <ul>
 <li><code>OptimalNextEmptySlot</code> gains a traversability check: when evaluating upward paths, if the next slot implements <code>IPassThrough</code> and the moving balloon's <code>IsReadyToPassThrough</code> is true, treat the slot as passable</li>
 <li>Path computation may need to chain through multiple consecutive Puff slots (a balloon floating up through a tall cloud)</li>
 <li><code>IsUnbalanced</code> must account for balloons that are <em>temporarily</em> stable (waiting under a cloud) vs. <em>permanently</em> stable</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md416"></a>
+<h3><a class="anchor" id="autotoc_md417"></a>
 8.5 Visual Feedback</h3>
 <ul>
 <li><b>Waiting state:</b> subtle idle bob or squash animation on the resting balloon so the player reads it as "about to move"</li>
 <li><b>Transit animation:</b> balloon floats upward through the cloud; each frame the balloon's world position stamps the disturbance field, creating a visible parting effect in the cloud density</li>
 <li><b>Cloud reaction:</b> the disturbance dissipates via the existing diffusion reform rate — the cloud naturally closes behind the balloon</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md417"></a>
+<h3><a class="anchor" id="autotoc_md418"></a>
 8.6 Relationship to Existing Pass-Through Ideas</h3>
 <p>This complements the <b>phase-gated + maturity timer</b> concept in section 5.5:</p><ul>
 <li><b>Maturity timer</b> (§ 5.5) gates when the <em>Puff itself</em> becomes permeable</li>
 <li><b>Timed release</b> (this section) gates when the <em>balloon</em> is ready to pass through</li>
 </ul>
 <p>Both can coexist: a Puff must first mature before any balloon can traverse it, and even then the balloon must wait its own delay before floating through. The two timers create a layered pacing system — the cloud opens up, then the balloon pushes through.</p>
-<h3><a class="anchor" id="autotoc_md418"></a>
+<h3><a class="anchor" id="autotoc_md419"></a>
 8.7 Open Questions</h3>
 <ol type="1">
 <li><b>Delay scaling</b> — should <code>PassThroughDelay</code> decrease at higher difficulty (faster pace) or increase (harder grid)?</li>
@@ -502,7 +502,7 @@ under the cloud" — before it naturally pushes through. </p>
 <li><b>Interaction with Unbreakable Roam</b> (§ 5.2) — an Unbreakable that roams into a slot below a Puff should respect the same delay, or should roam bypass it?</li>
 </ol>
 <hr  />
-<h2><a class="anchor" id="autotoc_md420"></a>
+<h2><a class="anchor" id="autotoc_md421"></a>
 Open Questions</h2>
 <ol type="1">
 <li><b>Pity system scope</b> — should pity tracking be global (across all spawn types) or per-category (balloons, items, grid actors independently)?</li>
@@ -515,12 +515,12 @@ Open Questions</h2>
 <li><b>Puff maturity threshold</b> — how many turns before a Puff becomes permeable? Too short and the blocking phase is imperceptible; too long and it feels like a permanent wall. Suggested range: 2–4 turns. Should this scale with difficulty?</li>
 </ol>
 <hr  />
-<h2><a class="anchor" id="autotoc_md422"></a>
+<h2><a class="anchor" id="autotoc_md423"></a>
 9 — Quality Settings System</h2>
 <blockquote class="doxtable">
 <p>A runtime quality tier system that adapts rendering fidelity, VFX density, and simulation resolution to the target device. The game currently ships at one fixed quality level with no device-adaptive scaling. </p>
 </blockquote>
-<h3><a class="anchor" id="autotoc_md423"></a>
+<h3><a class="anchor" id="autotoc_md424"></a>
 9.1 Architecture</h3>
 <div class="fragment"><div class="line">IQualityProfile (interface)</div>
 <div class="line">├── QualityTier Tier { get; }            // Low, Medium, High</div>
@@ -539,10 +539,10 @@ Open Questions</h2>
 <div class="line">├── Exposes IQualityProfile for injection</div>
 <div class="line">└── Applies global settings (shader keywords, RT resolution, etc.)</div>
 </div><!-- fragment --><p><code>QualityService</code> runs once at startup. Consumers inject <code>IQualityProfile</code> (read-only) and branch on tier or read specific values. No per-frame cost — all decisions are made at init time.</p>
-<h3><a class="anchor" id="autotoc_md424"></a>
+<h3><a class="anchor" id="autotoc_md425"></a>
 9.2 Parameter Inventory</h3>
 <p>Every tuneable parameter in the current codebase that is a candidate for quality binding, grouped by system.</p>
-<h4><a class="anchor" id="autotoc_md425"></a>
+<h4><a class="anchor" id="autotoc_md426"></a>
 Shader Keywords (GPU cost)</h4>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -565,7 +565,7 @@ Shader Keywords (GPU cost)</h4>
 <td class="markdownTableBodyNone">PaintBlob   </td><td class="markdownTableBodyNone"><code>_SHADOW_ON</code>   </td><td class="markdownTableBodyNone">ON   </td><td class="markdownTableBodyNone">OFF   </td><td class="markdownTableBodyNone">Shadow under paint splat   </td></tr>
 </table>
 <p><b>Implementation:</b> <code>QualityService.Start()</code> iterates all affected materials and calls <code>material.EnableKeyword()</code> / <code>material.DisableKeyword()</code>. Alternatively, views read <code>IQualityProfile.Shaders</code> in their setup and toggle locally.</p>
-<h4><a class="anchor" id="autotoc_md426"></a>
+<h4><a class="anchor" id="autotoc_md427"></a>
 Disturbance Field (GPU + memory)</h4>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -579,7 +579,7 @@ Disturbance Field (GPU + memory)</h4>
 </table>
 <p><b>Impact:</b> Halving <code>TexelsPerUnit</code> (8→4) reduces the RT from ~48×72 to ~24×36 texels — 4× fewer pixels in the diffusion blit. <code>DiffusionTickInterval</code> at 0.10s runs the blit 10×/sec instead of 20×/sec — halves GPU blit work.</p>
 <p><b>Implementation:</b> <code>DisturbanceFieldService</code> already reads these from <code>IDisturbanceFieldSettings</code>. Option A: have <code>QualityService</code> modify the SO values at startup (mutates shared asset — fragile). Option B: create a <code>QualityAwareDisturbanceSettings</code> wrapper that reads the base SO and overrides values based on tier. Option B is cleaner.</p>
-<h4><a class="anchor" id="autotoc_md427"></a>
+<h4><a class="anchor" id="autotoc_md428"></a>
 Unbreakable Balloon GrabPass (GPU — single highest-cost operation)</h4>
 <p>The <code>UnbreakableBalloon.shader</code> uses a <b>named <code>GrabPass { "_GrabTexture" }</code></b> to capture the framebuffer for realtime convex-mirror reflections. Key facts:</p>
 <ul>
@@ -635,7 +635,7 @@ Unbreakable Balloon GrabPass (GPU — single highest-cost operation)</h4>
 <p><b>Estimated visual gain:</b></p><ul>
 <li>Unbreakable-to-Unbreakable reflections — noticeable when 2+ are adjacent</li>
 </ul>
-<h4><a class="anchor" id="autotoc_md428"></a>
+<h4><a class="anchor" id="autotoc_md429"></a>
 Particle VFX (GPU fill rate + CPU simulation)</h4>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -655,7 +655,7 @@ Particle VFX (GPU fill rate + CPU simulation)</h4>
 <li>Shield: <code>PSVFX_ShieldGain</code>, <code>PSVFX_ShieldBounce</code>, <code>PSVFX_ShieldLose</code></li>
 </ul>
 <p><b>Implementation:</b> VFX pool channels already exist. A <code>QualityAwareParticleScaler</code> could modify <code>ParticleSystem.main.maxParticles</code> and <code>startLifetime</code> on spawn. Or: create Low/High prefab variants and swap via <code>IQualityProfile</code> — more work but art-directable.</p>
-<h4><a class="anchor" id="autotoc_md429"></a>
+<h4><a class="anchor" id="autotoc_md430"></a>
 Projectile Trail (GPU fill rate)</h4>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -667,7 +667,7 @@ Projectile Trail (GPU fill rate)</h4>
 </table>
 <p><b>Files:</b> <code><a class="el" href="ProjectileTrail_8cs.html">ProjectileTrail.cs</a></code>, <code><a class="el" href="FlyingTrail_8cs.html">FlyingTrail.cs</a></code>, <code>LevelUpTrailEffect.cs</code></p>
 <p><b>Implementation:</b> Read <code>IQualityProfile</code> in trail setup and scale <code>_trailRenderer.time</code> and width.</p>
-<h4><a class="anchor" id="autotoc_md430"></a>
+<h4><a class="anchor" id="autotoc_md431"></a>
 Procedural Shader Octave Count</h4>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -681,7 +681,7 @@ Procedural Shader Octave Count</h4>
 </div><!-- fragment --><p> Branching on a uniform is well-predicted on mobile GPUs — minimal cost.</p>
 <p><b>Implementation option B — shader variants:</b> <code>#pragma multi_compile OCTAVES_2 OCTAVES_3</code>. Compiles two variants, no runtime branching, but increases shader memory.</p>
 <p><b>Recommendation:</b> option A for simplicity. The branch is uniform (same for all fragments in a draw call), so the GPU doesn't pay warp-divergence cost.</p>
-<h4><a class="anchor" id="autotoc_md431"></a>
+<h4><a class="anchor" id="autotoc_md432"></a>
 Animation Quality</h4>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -694,7 +694,7 @@ Animation Quality</h4>
 <td class="markdownTableBodyNone">Score trail curve resolution   </td><td class="markdownTableBodyNone">Default   </td><td class="markdownTableBodyNone">Fewer waypoints   </td><td class="markdownTableBodyNone">Less Bezier evaluation   </td></tr>
 </table>
 <p>These are minor CPU savings — only relevant if profiling shows DOTween overhead. Low priority.</p>
-<h4><a class="anchor" id="autotoc_md432"></a>
+<h4><a class="anchor" id="autotoc_md433"></a>
 Pool Sizes</h4>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -707,7 +707,7 @@ Pool Sizes</h4>
 <td class="markdownTableBodyNone">Score trail pool   </td><td class="markdownTableBodyNone">Current   </td><td class="markdownTableBodyNone">Smaller   </td><td class="markdownTableBodyNone">Less memory   </td></tr>
 </table>
 <p>Pool sizes mainly affect memory, not frame time. Low priority for quality tiers.</p>
-<h3><a class="anchor" id="autotoc_md433"></a>
+<h3><a class="anchor" id="autotoc_md434"></a>
 9.3 Suggested Tier Thresholds</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -720,7 +720,7 @@ Pool Sizes</h4>
 <td class="markdownTableBodyNone"><b>Low</b>   </td><td class="markdownTableBodyNone">iPhone 7, budget Android (&lt; 3 GB RAM)   </td><td class="markdownTableBodyNone"><code>SystemInfo.graphicsMemorySize &lt; 2048</code> OR <code>SystemInfo.processorFrequency &lt; 1800</code>   </td></tr>
 </table>
 <p>Alternative: use <code>Application.targetFrameRate</code> and monitor <code>Time.deltaTime</code> over the first 5 seconds — if the device can't hold 60 fps during the intro, drop to Low.</p>
-<h3><a class="anchor" id="autotoc_md434"></a>
+<h3><a class="anchor" id="autotoc_md435"></a>
 9.4 Implementation Priorities</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -744,7 +744,7 @@ Pool Sizes</h4>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>P4</b>   </td><td class="markdownTableBodyNone">Pool size caps   </td><td class="markdownTableBodyNone">Memory only   </td><td class="markdownTableBodyNone">Low   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md435"></a>
+<h3><a class="anchor" id="autotoc_md436"></a>
 9.5 Open Questions</h3>
 <ol type="1">
 <li><b>When to detect tier</b> — at app startup (once) or dynamically (adaptive)? Adaptive is more complex but handles thermal throttling. Start with startup detection; add adaptive downgrade later if needed.</li>
@@ -754,7 +754,7 @@ Pool Sizes</h4>
 <li><b>Testing matrix</b> — which devices define the Low/Medium/High boundaries? Need a concrete test device list before shipping quality tiers.</li>
 </ol>
 <hr  />
-<h2><a class="anchor" id="autotoc_md437"></a>
+<h2><a class="anchor" id="autotoc_md438"></a>
 10 — Baked Noise Texture for Puff Clouds</h2>
 <blockquote class="doxtable">
 <p>Replace runtime Simplex noise evaluation in the PuffCloud shader with a pre-baked tileable noise texture lookup. </p>
@@ -770,7 +770,7 @@ Pool Sizes</h4>
 <p><b>Texture:</b> 512×512 R8 = 256 KB, Repeat wrap, Bilinear, no mipmaps.</p>
 <p><b>Priority:</b> Medium — biggest GPU bottleneck on mobile. Do after bush Phase 4 (rattle). Pairs with section 11 below for a unified preload pass.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md439"></a>
+<h2><a class="anchor" id="autotoc_md440"></a>
 11 — Runtime Bush Baking at Preload</h2>
 <blockquote class="doxtable">
 <p>Move bush leaf atlas and branch map generation from editor-only export to a runtime preload step. Textures generated on first load instead of shipped as assets. </p>
@@ -804,11 +804,11 @@ Pool Sizes</h4>
 <p><b>Benefits:</b> ~1–2 MB build size reduction, infinite per-session variety, no export step for design iteration, single source of truth (settings SO).</p>
 <p><b>Priority:</b> Low — current pipeline works. Best as polish after all bush phases complete. Combine with section 10 into a unified preload bake pass.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md441"></a>
+<h2><a class="anchor" id="autotoc_md442"></a>
 12 — Losing Conditions</h2>
 <p>The game currently has <b>no fail state</b>: each turn <code>BalloonSpawner</code> adds lines, <code>BalloonBalancer</code> consolidates them, and the player chases per-color level-ups indefinitely. Picking a losing condition effectively picks the genre feel — survival-puzzle, score-attack with a clock, or run-based. The ideas below are grounded in systems that already exist.</p>
 <p>A shared property: <b>all of these reuse the <code>Navigation</code> state machine.</b> A <code>GameOver</code> state slots in beside <code>Launch</code> / <code>Game</code> / <code>LevelUp</code>, and the thrower already no-ops its <code>Tick</code> outside the <code>Game</code> state, so input-lockout on loss is essentially free.</p>
-<h3><a class="anchor" id="autotoc_md442"></a>
+<h3><a class="anchor" id="autotoc_md443"></a>
 12.1 Grid encroachment — the natural fit (Puzzle Bobble lineage)</h3>
 <p>Balloons advance toward the thrower; if any actor crosses a danger boundary on the thrower's side of the grid, the player loses.</p>
 <ul>
@@ -817,33 +817,33 @@ Pool Sizes</h4>
 <li><b>Tension knobs:</b> lines/turn, deadline depth, and — elegantly — <code>UnbreakableBalloonModel</code> becomes the threat (only pops on <code>Piercing</code>, so it deflects and clogs, pushing the front toward the deadline). Tough / Gatekeeper accumulation does the same.</li>
 </ul>
 <p><b>Recommended default</b> — most mechanically native, readable to the player, and reuses the turn pipeline almost entirely.</p>
-<h3><a class="anchor" id="autotoc_md443"></a>
+<h3><a class="anchor" id="autotoc_md444"></a>
 12.2 Resource economy — make the existing Shield item matter</h3>
 <ul>
 <li><b>Finite ammo / magazine.</b> Today the thrower reloads infinitely on <code>ProjectileDestroyedMessage</code>. Cap reloads per level; the <b>Shield item</b> (which already grants projectile shields) becomes the lifeline that extends a run. Run dry before the level-up threshold → lose. Turns a currently-minor item into a must-grab and makes every deflect (wasted shield) sting.</li>
 <li><b>Shield-only survival.</b> Keep infinite reloads but projectile shields are the player's life — if a projectile dies with zero productive pops (all deflects/absorbs), bleed a global life counter. Ties into the existing <code>Deflect</code> / <code>Absorb</code> outcomes and <code>AbsorberActorModel</code>.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md444"></a>
+<h3><a class="anchor" id="autotoc_md445"></a>
 12.3 Clock / turn pressure — score-attack flavor</h3>
 <ul>
 <li><b>Turn limit per level.</b> <code>BalloonSpawner</code> already tracks <code>_turnCount</code>. Give each level a throw budget; <code>ScoreController</code> already knows the level threshold and per-color confirmed progress. Don't reach the next level in N throws → lose. Because level-up needs <b>all</b> colors to meet threshold, a starved color naturally creates the failure pressure without anything new.</li>
 <li><b>Combo decay variant.</b> Use <code>ColorStreakTracker</code> inversely — a "heat" bar that drains over time and only refills on pops/streaks; hits zero → lose. Leans into the streak system already built.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md445"></a>
+<h3><a class="anchor" id="autotoc_md446"></a>
 12.4 Lockout / soft-lock (safety net, not a headline mechanic)</h3>
 <ul>
 <li><b>Column lockout.</b> <code>GatekeeperActorModel</code> blocks a column until destroyed. If every firing lane is blocked by Gatekeepers / Absorbers / Unbreakables so no productive shot exists, declare loss. Niche, but a good backstop so a clogged board doesn't simply stall.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md446"></a>
+<h3><a class="anchor" id="autotoc_md447"></a>
 12.5 How these compose</h3>
 <p>The strongest design usually pairs <b>one spatial pressure</b> (12.1) with <b>one economy or clock</b> (12.2 or 12.3): the grid creeps down while ammo/turns run out, so the player is squeezed from two directions. 12.4 is the safety net underneath either.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md448"></a>
+<h2><a class="anchor" id="autotoc_md449"></a>
 13 — Roguelike Run Modifiers (Unlockables)</h2>
 <blockquote class="doxtable">
 <p>Per-run modifiers earned through progression that reshape spawn odds and grant triggered board effects — a strategy / roguelike layer on top of each run. Offered at level-up, presented as cards, and reset when the run resets. Pairs strongly with a fail state (§ 12) — picks matter far more when a run can be lost. </p>
 </blockquote>
-<h3><a class="anchor" id="autotoc_md449"></a>
+<h3><a class="anchor" id="autotoc_md450"></a>
 13.1 Concept</h3>
 <p>As a run progresses the player unlocks modifiers that bias which balloons/items spawn and grant triggered effects. Two archetypes:</p>
 <ul>
@@ -852,10 +852,10 @@ Pool Sizes</h4>
 <li><b>Active ("spawn now" / triggered)</b> — a one-shot or charge-limited effect the player fires during gameplay. E.g. <em>"Spawn Bomb"</em> activates a bomb on a current grid balloon; <em>"Clear Row"</em> wipes the deadline line.</li>
 </ul>
 <p>Visual representation: <b>cards</b> (the open presentation question). Level-up deals a choice of N cards; pick one, it joins the run's build.</p>
-<h3><a class="anchor" id="autotoc_md450"></a>
+<h3><a class="anchor" id="autotoc_md451"></a>
 13.2 When unlocks are offered</h3>
 <p>Level-up is the natural trigger — <code>ScoreLevelUpMessage</code> already fires and the level-up ceremony (<code>LevelUpCinematic</code> + popup) is an existing frozen beat. A card-select step slots into or just after the popup: freeze via <code>TimeScaleService</code> (already the pattern there), present the cards, apply the pick, release. Reuse the level-up gating so nothing else runs during selection; a new <code>Navigation</code>/popup sub-phase, not a new scene.</p>
-<h3><a class="anchor" id="autotoc_md451"></a>
+<h3><a class="anchor" id="autotoc_md452"></a>
 13.3 Model sketch</h3>
 <div class="fragment"><div class="line"><span class="keyword">internal</span> <span class="keyword">interface </span>IRunModifier { ModifierKind Kind { <span class="keyword">get</span>; } }   <span class="comment">// Passive | Active</span></div>
 <div class="line"> </div>
@@ -870,7 +870,7 @@ Pool Sizes</h4>
 <div class="line">}</div>
 </div><!-- fragment --><p><code>RunModifierStack : IRunResettable</code> — holds acquired modifiers, rebuilds the accumulated passive state, clears on <code>ResetRun</code>. <b>Must be <code>IRunResettable</code></b> so a new run starts clean (same reset graph as <code>ScoreController</code> / <code>LevelDifficultyResolver</code>).</p>
 <p><code>RunModifierState</code> — the accumulated passive values read at decision points: per-type spawn-weight multipliers, "+N item types per pass", and global tuning (bomb radius, starting shields, hits-to-pop deltas).</p>
-<h3><a class="anchor" id="autotoc_md452"></a>
+<h3><a class="anchor" id="autotoc_md453"></a>
 13.4 Passive modifier ideas</h3>
 <p>Plug into existing decision points:</p>
 <ul>
@@ -883,7 +883,7 @@ Pool Sizes</h4>
 <li><b>Economy</b> (if a fail state ships, § 12) — +turn budget, slower grid encroachment.</li>
 <li><b>Meta-tuning as cards</b> — expose the pity threshold (§ 2.2) and streak bias (§ 2.3): "droughts end faster", "longer color streaks".</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md453"></a>
+<h3><a class="anchor" id="autotoc_md454"></a>
 13.5 Active "spawn now" + grid-effect ideas</h3>
 <p>Most reuse the existing item handlers and hit pipeline — an active modifier is largely "fire an item/effect without a projectile carrying it":</p>
 <ul>
@@ -898,7 +898,7 @@ Pool Sizes</h4>
 <li><b>Freeze</b> — halt grid encroachment for N turns (defensive, if § 12.1 ships).</li>
 </ul>
 <p>Two sub-flavors: <b>untargeted</b> (fires on a rule-picked target — simplest UI) vs <b>targeted</b> (player selects — needs a targeting mode: tap-to-select with a highlight, gated behind a pause/<code>Navigation</code> state so the shot input doesn't fire instead).</p>
-<h3><a class="anchor" id="autotoc_md454"></a>
+<h3><a class="anchor" id="autotoc_md455"></a>
 13.6 Integration points (existing systems)</h3>
 <ul>
 <li><code>ItemActivator</code> / <code>IHitDispatcher</code> / item handlers — active item effects, no new path.</li>
@@ -909,7 +909,7 @@ Pool Sizes</h4>
 <li><code>Navigation</code> + <code>TimeScaleService</code> — freeze for card-select / targeting.</li>
 <li><code>IRunResettable</code> — the modifier stack and any charges reset per run.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md455"></a>
+<h3><a class="anchor" id="autotoc_md456"></a>
 13.7 Card presentation (the open visual question)</h3>
 <ul>
 <li>Level-up deals N cards (3?); pick 1. Rarity tiers (common/rare) tune the pool.</li>
@@ -917,7 +917,7 @@ Pool Sizes</h4>
 <li>Passive cards show as the run's collected build — readable at a glance so the player understands their current odds.</li>
 <li>Card = icon + name + one-line effect + rarity frame. The <code>SpriteLayerCombiner</code> baked sprite tooling could pre-compose card art.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md456"></a>
+<h3><a class="anchor" id="autotoc_md457"></a>
 13.8 Open questions</h3>
 <ol type="1">
 <li><b>In-run only vs meta-progression</b> — the examples are all run-scoped ("whole
@@ -928,21 +928,21 @@ Pool Sizes</h4>
 <li><b>Targeting on touch</b> — reuse the aim/tap input or a dedicated select mode? The prediction-trace UI may repurpose for target highlighting.</li>
 </ol>
 <hr  />
-<h2><a class="anchor" id="autotoc_md458"></a>
+<h2><a class="anchor" id="autotoc_md459"></a>
 14 — Level Pacing Follow-ups (post-ship)</h2>
 <p>Deferred tech-debt / tooling left over from the shipped Loss Condition &amp; Pacing work (<code>LevelPacingConfiguration</code> / <code>LevelDifficultyResolver</code>; the feature's living docs are <code><a class="el" href="Game_2Level_2README_8md.html">Game/Level/README.md</a></code>, <code><a class="el" href="Game_2Health_2README_8md.html">Game/Health/README.md</a></code>, <code><a class="el" href="Game_2Cinematics_2README_8md.html">Game/Cinematics/README.md</a></code>). None of these gate the feature — it is shipped and playtested; these are optional polish.</p>
-<h3><a class="anchor" id="autotoc_md459"></a>
+<h3><a class="anchor" id="autotoc_md460"></a>
 14.1 Jump-to-level cheat</h3>
 <p>A dev cheat to warp straight to level N (e.g. 50) to inspect late-game pacing without grinding. Looping <code>RunController</code> level-ups N times is O(N) and re-fires every side effect (cinematics, HP refill) N times — wrong and slow. Needs a new seam: <code>ScoreController</code> has no "set level directly" — add an internal <code>JumpToLevel(int level)</code> that sets <code>_level.Value</code> and publishes <code>ScoreLevelUpMessage</code> once (skipping the ceremony), or thread it through <code>RunController</code>. Surface via <code>CheatConsoleView</code> (check whether it supports a text-entry/parameterized cheat; otherwise preset targets like "Jump to 10/25/50").</p>
-<h3><a class="anchor" id="autotoc_md460"></a>
+<h3><a class="anchor" id="autotoc_md461"></a>
 14.2 Extract a shared <code>LevelPacingValidator</code></h3>
 <p><code>LevelPacingConfiguration.OnValidate</code> (editor-only warnings) and the "resolve levels 1..50 without
 throwing" EditMode test check the same invariants two different ways and can drift. Extract a plain <code>LevelPacingValidator.Validate(ILevelPacingConfiguration, ISlotGridConfig) : IReadOnlyList&lt;string&gt;</code> (issue messages, no Unity/editor dependency): <code>OnValidate</code> logs each issue, the EditMode test asserts the list is empty. Also the seam a future "test a hypothetical config" editor tool would call.</p>
-<h3><a class="anchor" id="autotoc_md461"></a>
+<h3><a class="anchor" id="autotoc_md462"></a>
 14.3 Escalate <code>LevelDifficultyResolver.FallbackParameters</code> to a hard failure</h3>
 <p>The fallback covers "no authored range contains this level" — which 14.2's validator is meant to make unreachable in anything that passed validation. Once the validator is trusted, this should throw (or at minimum <code>Debug.LogError</code>, not <code>LogWarning</code> + a silent Simple-only substitute), per the project's don't-defend-against-the-impossible stance: a shipped gap in the level ranges should be loud.</p>
 <p><em>(The original 14.4 — deleting the dead catalog spawn-rate properties — is done: <code>GameStartedBalloonLines</code>/ <code>NewProjectileBalloonLines</code>, <code>ItemSettings.TurnCheckEvery</code>, and <code>GridActorPrefabEntry</code>'s <code>Weight</code>/<code>MinCount</code>/<code>MaxCount</code> + <code>IWeightedEntry</code> impl were removed once pacing owned those values.)</em></p>
-<h2><a class="anchor" id="autotoc_md462"></a>
+<h2><a class="anchor" id="autotoc_md463"></a>
 15 — Level-Up Point Carry-Over (2026-07-18)</h2>
 <p>Overshoot points must survive a level-up: requirement 700, a pop lands the color at 730 → the 30 leftover counts toward the next level's progress AND the run score. Today <code>ILevelProgress.ClaimProgress</code> caps <code>granted</code> at the threshold, so overshoot is silently discarded before it ever becomes trails, score, or progress — with TrailChoreography's "+N" orb arrivals the discard gets more visible (one big orb can straddle the boundary), so this should land alongside or shortly after that plan's step 3.</p>
 <p><b>Shipped 2026-07-19 (capture-and-bank, not carry):</b> rather than fold the excess back into progress or score, <code>LevelController</code> now merely <em>captures</em> it. <code>ClaimProgress</code> still caps <code>granted</code> at the threshold and progress still resets to zero at level-up exactly as before, but the overflow it used to drop (<code>overflow = points - granted</code>) is banked run-scoped per colour (<code>_bankedExcess</code>, read via <code>ILevelProgress.ExcessPoints</code>/<code>TotalExcessPoints</code>) as a running total that accumulates across levels, clears only on a run reset, and skips the <code>BlockLevelUp</code> cheat. For now it's just logged (editor/dev) when it accrues — nothing in gameplay or UI reads it.</p>
@@ -954,7 +954,7 @@ throwing" EditMode test check the same invariants two different ways and can dri
   only flies within one level" — carry-over would otherwise strain that during straggler windows).</li>
 <li>The bar's ceremony drain/reset starts the new level's slider at the leftover instead of zero — the visible payoff. Touchpoints: <code>ILevelProgress</code>/<code>ClaimProgress</code>, <code>LevelController</code> (required-threshold bookkeeping, <code>WillLevelUp</code>), <code>ColorProgressBar</code> (stashed max + post-drain start value), <code>ScoreController</code> (drop the cap comment in <code>PublishPoints</code>), TrailChoreography contracts (no change expected — the watermark/<code>LastScore</code> semantics are already cumulative).</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md463"></a>
+<h2><a class="anchor" id="autotoc_md464"></a>
 16 — Grand Antiprism: the 100 denomination (2026-07-19)</h2>
 <p><b>Superseded 2026-07-19 (same day as implementation):</b> the grand antiprism shipped, verified, and was then replaced by a spherical-spiral "yarn ball" as the 100 — the legibility pass found 500 projected 4D edges read as noise mid-tumble; the crown tier follows the silhouette principle (12 hexagonal prism, 50 torus, 100 yarn ball). The full verified 4D construction (600-cell, orthogonal-decagon removal, perspective projection, Eulerian splicing) lives in git history at commit 7fc97c53 if a 4-polytope ever earns a comeback (e.g. as a roguelike-exclusive skin rather than a denomination).</p>
 <p><b>Implemented 2026-07-19</b> — shipped in <code>ShapeCatalog</code> (600-cell minus two orthogonal great decagons traced via the \(\varphi\)-recurrence, perspective-from-w projection at c = 2, Eulerian circuit walks with undersized-cycle splicing so every walk earns a pen); cheat preset + tests added.</p>
@@ -967,7 +967,7 @@ throwing" EditMode test check the same invariants two different ways and can dri
 <li><b>Ripples</b>: ShapeFormationTicker.MaxVertexCount → 100; decomposition tests (100 = [100]; check knock-ons — e.g. 250 = [100, 100, 50] once 100 exists); RadiusScale ~1.6; per-formation ribbon-correction cost makes the queued NativeArray batching lever (memory: optimization findings) effectively a prerequisite.</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md465"></a>
+<h2><a class="anchor" id="autotoc_md466"></a>
 Bush Visual Polish</h2>
 <p>Deferred from the bush sprite-baking system (phases 0–4 shipped). Low-priority cosmetic improvements — pick up when bushes get another art pass.</p>
 <ul>

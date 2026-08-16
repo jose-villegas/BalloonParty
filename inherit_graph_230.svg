@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Item_1_1Shield_1_1ShieldHostCandidate.html" target="_top" xlink:title="One balloon a shield could be placed on, as the planner sees it.">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Item_1_1Shield_1_1ShieldChainPlanner.html" target="_top" xlink:title="Places shields along flights the thrower can actually fly, so a chain is collectable by construction ...">
 <polygon fill="white" stroke="#666666" points="138,-30 0,-30 0,0 138,0 138,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Shield.</text>
-<text text-anchor="middle" x="69" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">ShieldHostCandidate</text>
+<text text-anchor="middle" x="69" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">ShieldChainPlanner</text>
 </a>
 </g>
 </g>
