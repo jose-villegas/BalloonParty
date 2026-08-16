@@ -74,8 +74,11 @@ namespace BalloonParty.Game.Score.Behaviours
 
             var limits = new WallLimits(context.FlightConfig.LimitsClockwise);
             var fitScale = FitScale(settings.BaseRadius, limits);
+            // The wall-safety margin for the PRINCIPAL still uses the catalog-wide worst case (it must stay
+            // valid whatever shape ends up there); sub-centre SPACING below uses this group's actual radii
+            // instead — a small decomposition (7 = 5+2) shouldn't space out as if a 100-shape might appear.
             var fittedMaxRadius = settings.BaseRadius * fitScale * ShapeCatalog.MaxRadiusScale;
-            var spacing = 2f * fittedMaxRadius;
+            var spacing = 2f * GroupMaxRadius(_denominations, settings.BaseRadius, fitScale);
 
             var carrierId = new TrailId(context.ColorName, context.LastScore);
             // Clamp the principal (the largest formation) with the max fitted radius so even a 30-sphere stays on-board.
@@ -149,6 +152,29 @@ namespace BalloonParty.Game.Score.Behaviours
             var denominations = ShapeCatalog.Denominations;
             ComputeDpCosts(total, denominations);
             ReconstructLargestFirst(total, denominations, result);
+        }
+
+        // The largest fitted radius among THIS decomposition's pieces (not ShapeCatalog.MaxRadiusScale, the
+        // catalog-WIDE worst case) — sizes phyllotaxis spacing to the shapes actually launching, so a small
+        // burst (7 = 5+2) packs tight instead of spacing as if a 100-shape might appear. ShapeFormationTicker's
+        // overlap-resolution pass is the safety net for whatever the spiral still leaves touching, including
+        // contacts with OTHER concurrent groups this function has no visibility into.
+        internal static float GroupMaxRadius(IReadOnlyList<int> denominations, float baseRadius, float fitScale)
+        {
+            var max = 0f;
+            for (var i = 0; i < denominations.Count; i++)
+            {
+                if (ShapeCatalog.TryGet(denominations[i], out var shape))
+                {
+                    var radius = baseRadius * fitScale * shape.RadiusScale;
+                    if (radius > max)
+                    {
+                        max = radius;
+                    }
+                }
+            }
+
+            return max > 0f ? max : baseRadius * fitScale;
         }
 
         // Decompose can only leave a terminal remainder of 1 if 2 and/or 3 drop out of the catalog ladder — with

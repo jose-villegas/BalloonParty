@@ -131,6 +131,57 @@ pure translation at scale 1 is the identity-delta fast path). The ribbon **is** 
 ink shrinks with the shape as it tapers toward the bar, which matters most on the long-ribbon shapes (few pens
 sharing a long walk) where unscaled old ink would outlive the taper and hold the big silhouette.
 
+### Overlap Resolution
+
+Formations don't only need to avoid their OWN siblings — a single AoE pop (bomb/lightning/laser) can trigger
+several independent `BigScoreTrailBehaviour.Begin()` calls in the same frame, each with its own origin, so
+concurrently airborne formations from *different* pops commonly end up near each other. Two cheap, non-physical
+fixes handle this (a real Lubachevsky-Stillinger-style dynamic packing solver was considered and set aside as
+overkill for a background flourish):
+
+1. **Tighter spawn spacing** — `BigScoreTrailBehaviour.GroupMaxRadius` sizes the golden-angle spiral's spacing off
+   the LARGEST fitted radius among this group's own decomposed pieces, not `ShapeCatalog.MaxRadiusScale` (the
+   catalog-wide worst case, the 100-shape). A small burst like `7 = 5+2` now packs tight instead of spacing out
+   as if a giant sphere might appear.
+2. **Continuous cross-group push** — `ShapeFormationTicker.LateTick` runs a 4-pass tick: **Pass A** computes
+   each mid-travel formation's deterministic CANDIDATE center/scale (`ComputeCandidateCenter`) and defers it to
+   a pending list (`_pending`) instead of committing; **Pass B** (`ResolveOverlaps`) runs
+   `FormationOverlapResolver.Resolve` — a pure, allocation-free O(n²) relaxation pass — over EVERY formation
+   occupying space this tick, including ones from other concurrent groups and ones the level-up cinematic has
+   frozen (see **Stationary formations** below), and folds the correction into each candidate center; **Pass C**
+   (`FinishAdvance`) commits the corrected center (rotation/spin, ribbon re-framing, pen placement, guide,
+   anchor, arrival report — the same math the old single-pass `AdvanceFormation` did, just fed the corrected
+   center); **Pass D** is a dedicated backward sweep that releases whatever Pass C flagged finished, kept
+   separate from the other passes because removing a formation from `_states` by a recorded index mid-pass
+   would go stale the instant an earlier-recorded formation gets relocated by a later swap-remove in the same
+   frame.
+
+   Distances are resolved in the **XY plane only** — Z is zeroed before every distance/direction computation
+   in `FormationOverlapResolver`. The board reads as flat 2D under the orthographic camera, but a formation's
+   `C(t)` travels a large, camera-invisible Z distance toward the score-bar canvas as it flies; resolving in
+   full 3D would judge two formations "apart" the instant their travel progress differs by even a couple of
+   frames, silently defeating the cross-group case this exists for.
+
+   The correction is recomputed fresh every frame directly against that frame's own deterministic travel
+   position — never against a persisted, potentially-drifted offset — so there's no separate "restoring force"
+   needed: the golden-spiral path IS the anchor every single frame. Two knobs (`BigScoreFormationSettings`,
+   read PER-FORMATION from its own group's settings, not a single shared value) keep a pop's formations
+   reading as *its own* radiating burst rather than an isotropic jammed pile: `OverlapPadding` (world-unit gap
+   enforced beyond "just touching") and `MaxOverlapPushFraction` (caps one frame's correction to a fraction of
+   the formation's OWN CURRENT bloom/taper-scaled radius, not its fitted radius — so the push budget tapers to
+   zero right along with the shape as it nears the bar, guaranteeing an exact landing). A third knob,
+   `PrincipalPushDamping` (default 0), exempts the PRINCIPAL formation's center from *receiving* correction —
+   `WriteAnchor` copies a principal's center into the Transform the level-up cinematic pans the camera to, so
+   even a small per-frame nudge there is camera-visible; the principal still repels others at full weight, it
+   just never moves itself.
+
+   **Stationary formations**: `AdvanceOrDefer` also collects Paused (cinematic-frozen) and still-fading
+   (`SnapFade`) formations into `_stationary` — they enter the same `Resolve` call as `_pending`, always at
+   weight 0 (immovable), using their already-committed `Center`/`LastScale` instead of a candidate. They repel
+   other formations away from them but are never displaced or committed by Pass C themselves. Without this, a
+   full-size constellation frozen mid-air during the level-up zoom — exactly the moment the camera is closest
+   and a flythrough would be most visible — would be invisible to every other formation's overlap check.
+
 **Transport bridge** — the group's anchor `TrailFlight` handle is the pause/snap/slow-mo interface, shared by
 every formation in the group (so a cinematic pause/completion fans out to the whole constellation), polled per
 tick: `Paused` freezes the formation and inflates its ribbon time so the drawn figure survives the freeze; `Idle`

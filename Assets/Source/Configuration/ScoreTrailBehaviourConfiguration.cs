@@ -63,6 +63,27 @@ namespace BalloonParty.Configuration
         [Range(0f, 5f)]
         [SerializeField] private float _displacementSpeed;
 
+        [Tooltip("Extra gap enforced between two formations' bounding circles when resolving overlap, in " +
+                 "WORLD units. 0 lets them just touch; a small positive value keeps a visible sliver of " +
+                 "space so overlapping silhouettes never fully kiss.")]
+        [Range(0f, 0.5f)]
+        [SerializeField] private float _overlapPadding;
+
+        [Tooltip("Caps how far one frame's overlap correction can displace a formation from its deterministic " +
+                 "travel center, as a fraction of its OWN CURRENT (bloom/taper-scaled) radius — not the fitted " +
+                 "radius, so the push budget tapers to zero right along with the shape as it nears the bar, " +
+                 "guaranteeing an exact landing. Keeps the push a bounded perturbation around the golden-spiral " +
+                 "path so a pop's shapes still read as one radiating burst instead of a jammed pile.")]
+        [Range(0.1f, 1f)]
+        [SerializeField] private float _maxOverlapPushFraction;
+
+        [Tooltip("0 exempts the PRINCIPAL formation's center from overlap correction entirely (it still " +
+                 "repels others) — the level-up cinematic tracks this formation's anchor Transform, and even " +
+                 "a small per-frame nudge reads as camera jitter. Raise toward 1 to let the principal absorb " +
+                 "part of the push if twin-principal overlaps between concurrent pops look wrong in practice.")]
+        [Range(0f, 1f)]
+        [SerializeField] private float _principalPushDamping;
+
         public float BaseRadius => _baseRadius;
         public AnimationCurve ScaleOverTravel => _scaleOverTravel;
         public float PenSpeed => _penSpeed;
@@ -70,6 +91,9 @@ namespace BalloonParty.Configuration
         public float SpinSpeedDegrees => _spinSpeedDegrees;
         public float DisplacementScale => _displacementScale;
         public float DisplacementSpeed => _displacementSpeed;
+        public float OverlapPadding => _overlapPadding;
+        public float MaxOverlapPushFraction => _maxOverlapPushFraction;
+        public float PrincipalPushDamping => _principalPushDamping;
 
         internal BigScoreFormationSettings(
             float baseRadius,
@@ -78,7 +102,10 @@ namespace BalloonParty.Configuration
             float coverage,
             float spinSpeedDegrees,
             float displacementScale = 1f,
-            float displacementSpeed = 1f)
+            float displacementSpeed = 1f,
+            float overlapPadding = 0.05f,
+            float maxOverlapPushFraction = 0.6f,
+            float principalPushDamping = 0f)
         {
             _baseRadius = baseRadius;
             _scaleOverTravel = scaleOverTravel;
@@ -87,6 +114,9 @@ namespace BalloonParty.Configuration
             _spinSpeedDegrees = spinSpeedDegrees;
             _displacementScale = displacementScale;
             _displacementSpeed = displacementSpeed;
+            _overlapPadding = overlapPadding;
+            _maxOverlapPushFraction = maxOverlapPushFraction;
+            _principalPushDamping = principalPushDamping;
         }
     }
 

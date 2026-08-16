@@ -37,6 +37,7 @@ digraph ShapeFormations {
         Big [label="BigScoreTrailBehaviour\nDecompose (optimal coin\nchange over Denominations)\nFitScale/ClampCenter, TumbleAxis"];
         Catalog [label="ShapeCatalog (static)\ndenomination -> FormationShape\nunit-sphere verts, closed walks,\nperimeters, PensPerWalk\nwarmed at scope Start()"];
         Ticker [label="ShapeFormationTicker : ILateTickable\npooled FormationGroup/State\nC(t) travel, Q(t) tumble,\nscale(t) curve, pen arc-length orbit"];
+        OverlapResolver [label="FormationOverlapResolver (pure)\nO(n^2) push-apart, once/tick,\nacross EVERY pending formation\n(including other concurrent groups)"];
         Pens [label="Pens + anchor + guide\npooled FlyingTrail pens\n(TrailRenderer ink),\nanchor Transform = principal,\nguide traces the travel path"];
         Flights [label="TrailFlightRegistry<TrailId>\nanchor registered as the\ngroup's principal flight"];
     }
@@ -71,6 +72,7 @@ digraph ShapeFormations {
     Big -> Ticker [label="BeginGroup (anchor)\nLaunchFormation × denomination"];
     Big -> Reporter [label="ReportArrival\nper formation\n(remainder-free split)"];
 
+    Ticker -> OverlapResolver [label="Resolve() once/tick,\nfolds correction into\neach CandidateCenter"];
     Ticker -> Pens [label="Acquire()/Release()\nper FormationState"];
     Ticker -> Flights [label="Register/Unregister\nCarrierId"];
     Ticker -> Reporter [label="ReportArrival\n(RangeLast, Value)\none per formation"];
@@ -136,6 +138,19 @@ rides the formation centre, tracing the genuine travel path underneath the shape
 the principal formation's centre is written back to the group's anchor each tick
 (`WriteAnchor`) — that anchor transform is the one thing `TrailFlightRegistry` and the
 level-up cinematic ever see.
+
+`LateTick` is actually four passes, not one, because `C(t)`'s deterministic position isn't
+final: **Pass A** computes every mid-travel formation's CANDIDATE centre/scale and defers
+it to a pending list instead of committing; **Pass B** hands the whole pending set —
+including formations from OTHER concurrent groups, since one AoE pop can trigger several
+`BigScoreTrailBehaviour.Begin()` calls in the same frame — to `FormationOverlapResolver`,
+a pure O(n²) "push circles apart" relaxation with no persisted velocity state (recomputed
+fresh every tick against that frame's own deterministic position, so the golden-spiral path
+is always the anchor a correction can only perturb, never drift away from); **Pass C**
+commits the corrected centre through the same rotation/ribbon/pen/anchor math described
+above; **Pass D** is a dedicated release sweep, kept separate because flagging-then-sweeping
+is the only safe way to remove a deferred formation without an index going stale under the
+class's existing swap-remove pooling.
 
 **Downstream consumers:** every `Reporter.ReportArrival` call publishes one
 `ScoreTrailArrivedMessage(colorName, score, points, at)`. `LevelController` folds it into

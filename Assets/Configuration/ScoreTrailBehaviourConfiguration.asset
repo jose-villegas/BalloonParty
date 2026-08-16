@@ -66,6 +66,9 @@ MonoBehaviour:
     _spinSpeedDegrees: 540
     _displacementScale: 1.25
     _displacementSpeed: 5
+    _overlapPadding: 0.05
+    _maxOverlapPushFraction: 0.6
+    _principalPushDamping: 0
   _scorePointTraceDuration: 1
   _scorePointsScatterDelay: 0.02
   _scorePointBurstDuration: 0.12

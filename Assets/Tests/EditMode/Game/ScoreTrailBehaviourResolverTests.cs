@@ -135,6 +135,68 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void GroupMaxRadius_SingleDenomination_ReturnsThatShapesFittedRadius()
+        {
+            Assert.IsTrue(ShapeCatalog.TryGet(5, out var shape));
+
+            var radius = BigScoreTrailBehaviour.GroupMaxRadius(new List<int> { 5 }, baseRadius: 2f, fitScale: 0.5f);
+
+            Assert.AreEqual(2f * 0.5f * shape.RadiusScale, radius, 1e-5f);
+        }
+
+        [Test]
+        public void GroupMaxRadius_MultiDenomination_ReturnsTheLargerFittedRadius_NotTheCatalogWideMax()
+        {
+            // 7 = 5 + 2 (see Decompose_OptimalCoinChange_MatchesDesignExamples). Neither piece is anywhere
+            // near ShapeCatalog.MaxRadiusScale (the 100-denomination sphere) — the old bug spaced this burst
+            // as if it might be.
+            Assert.IsTrue(ShapeCatalog.TryGet(5, out var five));
+            Assert.IsTrue(ShapeCatalog.TryGet(2, out var two));
+
+            var radius = BigScoreTrailBehaviour.GroupMaxRadius(new List<int> { 5, 2 }, baseRadius: 2f, fitScale: 0.5f);
+
+            var expected = 2f * 0.5f * Mathf.Max(five.RadiusScale, two.RadiusScale);
+            Assert.AreEqual(expected, radius, 1e-5f);
+            Assert.Less(radius, 2f * 0.5f * ShapeCatalog.MaxRadiusScale, "must not fall back to the catalog-wide max");
+        }
+
+        [Test]
+        public void GroupMaxRadius_EmptyList_FallsBackToBaseRadiusTimesFitScale_NotZero()
+        {
+            var radius = BigScoreTrailBehaviour.GroupMaxRadius(new List<int>(), baseRadius: 2f, fitScale: 0.5f);
+
+            Assert.AreEqual(1f, radius, 1e-5f);
+        }
+
+        [Test]
+        public void GroupMaxRadius_UnknownDenominationMixedWithValid_SkipsUnknownUsesValidShapesRadius()
+        {
+            // 1 has no catalog entry (see Decompose_OptimalCoinChange_MatchesDesignExamples: "1 = no
+            // shape, just a single default trail") — mirrors what AssertNoRemainder guards against ever
+            // reaching here, but that guard is a Log.Assert, which is stripped from release builds, so a
+            // stray 1 could actually slip through in production.
+            Assert.IsFalse(ShapeCatalog.TryGet(1, out _));
+            Assert.IsTrue(ShapeCatalog.TryGet(5, out var five));
+
+            var radius = BigScoreTrailBehaviour.GroupMaxRadius(new List<int> { 1, 5 }, baseRadius: 2f, fitScale: 0.5f);
+
+            Assert.AreEqual(2f * 0.5f * five.RadiusScale, radius, 1e-5f);
+        }
+
+        [Test]
+        public void GroupMaxRadius_AllDenominationsUnknown_FallsBackToBaseRadiusTimesFitScale()
+        {
+            // A non-empty list where every entry misses the catalog — a distinct code path from the
+            // empty-list case (the loop runs and finds nothing, rather than never running at all).
+            Assert.IsFalse(ShapeCatalog.TryGet(1, out _));
+            Assert.IsFalse(ShapeCatalog.TryGet(11, out _));
+
+            var radius = BigScoreTrailBehaviour.GroupMaxRadius(new List<int> { 1, 11 }, baseRadius: 2f, fitScale: 0.5f);
+
+            Assert.AreEqual(1f, radius, 1e-5f);
+        }
+
+        [Test]
         public void ShapeCatalog_EveryLadderDenomination_HasAConsistentShape()
         {
             foreach (var denomination in ShapeCatalog.Denominations)

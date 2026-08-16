@@ -101,6 +101,14 @@ namespace BalloonParty.Game.Score.Behaviours
     ///       once the last formation finishes — if a principal that lands first unregistered eagerly, the
     ///       cinematic would see Idle and snap the remaining shapes mid-travel. Paused inflates ribbon time
     ///       so the drawn figure survives the freeze; Idle triggers the SnapFade.
+    ///
+    ///     • <c>ReportOnce</c> publishes <c>ScoreTrailArrivedMessage</c> SYNCHRONOUSLY (MessagePipe) from
+    ///       both Pass A (<c>Snap</c>) and Pass C (<c>FinishAdvance</c>). A subscriber that re-entrantly
+    ///       triggers a new pop mid-tick (→ <c>BigScoreTrailBehaviour.Begin</c> → <c>LaunchFormation</c>)
+    ///       appends to <c>_states</c> ABOVE the current backward cursor and is simply skipped this tick
+    ///       (picked up next <c>LateTick</c>) — safe only because <c>_pending</c>/<c>_stationary</c> hold
+    ///       object REFERENCES, not indices, and a freshly-launched state's <c>PendingRelease</c> starts
+    ///       false. Don't refactor either list to store indices without re-checking this.
     /// </summary>
     internal sealed class ShapeFormationTicker : ILateTickable
     {
@@ -118,59 +126,65 @@ namespace BalloonParty.Game.Score.Behaviours
         private readonly Stack<Transform> _anchorPool = new(8);
         private readonly Stack<FormationGroup> _groupPool = new(8);
 
+        // Formations mid-travel this tick, collected by Pass A and consumed by Passes B/C — a plain instance
+        // list (matches _states/_pool's own convention in this class), Clear()+Add() each frame so capacity
+        // is reused once it plateaus.
+        private readonly List<FormationState> _pending = new(16);
+
+        // Formations that occupy space this tick but don't travel — Paused (cinematic-frozen) or mid-SnapFade.
+        // Pass B still needs to repel OTHER formations away from these (a paused, full-size constellation
+        // sitting mid-air during the level-up zoom is exactly when a flythrough would be most visible), so they
+        // enter the SAME overlap-resolve call as _pending, always at weight 0 — immovable, never committed by
+        // Pass C (their Center/LastScale are already stable, that's what "frozen"/"fading" means).
+        private readonly List<FormationState> _stationary = new(8);
+
+        // Grow-only scratch for FormationOverlapResolver.Resolve's O(n²) pass — resized only when too small
+        // (mirrors FlyingTrail._ribbonScratch / BigScoreTrailBehaviour._dpPieces), never shrunk.
+        private Vector3[] _correctionCenters = new Vector3[16];
+        private float[] _correctionRadii = new float[16];
+        private float[] _correctionWeights = new float[16];
+        private float[] _correctionPadding = new float[16];
+        private float[] _correctionMaxPush = new float[16];
+        private Vector3[] _correctionOffsets = new Vector3[16];
+
         public void LateTick()
         {
             var dt = Time.deltaTime;
             var unscaledDt = Time.unscaledDeltaTime;
 
+            _pending.Clear();
+            _stationary.Clear();
+
+            // Pass A: cancel / SnapFade / Paused / Idle-snap release or continue exactly as before, factored
+            // into AdvanceOrDefer. The normal-travel branch computes a CANDIDATE center/scale and defers to
+            // _pending instead of committing immediately; Paused/still-fading formations defer to _stationary
+            // instead — both feed Pass B, so overlaps resolve against every other formation occupying space
+            // this tick, including ones from OTHER concurrent groups and ones the cinematic has frozen.
             for (var i = _states.Count - 1; i >= 0; i--)
             {
-                var state = _states[i];
-                var group = state.Group;
+                AdvanceOrDefer(i, dt, unscaledDt);
+            }
 
-                // Run reset recreated the group CTS — discard WITHOUT reporting (the reset clears the run's score).
-                if (group.CancellationToken.IsCancellationRequested)
+            // Pass B: fold each pending formation's overlap correction directly into its CandidateCenter.
+            ResolveOverlaps(_pending, _stationary);
+
+            // Pass C: commit each pending formation to its corrected center — rotation/ribbon reframe/pen
+            // placement/guide/anchor/report, same math the old single-pass AdvanceFormation did, just fed the
+            // corrected center instead of the raw travel one. Finished formations are flagged (PendingRelease),
+            // not removed here — removing by a recorded _states index would go stale the instant an earlier,
+            // already-recorded pending formation gets relocated by a later swap-remove elsewhere this frame.
+            for (var i = 0; i < _pending.Count; i++)
+            {
+                FinishAdvance(_pending[i], dt);
+            }
+
+            // Pass D: a clean, dedicated backward sweep releases everything Pass C flagged — isolated from any
+            // other logic, so it's the same proven-safe swap-remove pattern the rest of this class relies on.
+            for (var i = _states.Count - 1; i >= 0; i--)
+            {
+                if (_states[i].PendingRelease)
                 {
-                    ReleaseVertices(state);
-                    ReleaseStateAt(i);
-                    DecrementGroup(group);
-                    continue;
-                }
-
-                // Post-snap: run the unscaled vertex fade-out to completion, then drop the state.
-                if (state.Phase == FormationPhase.SnapFade)
-                {
-                    if (AdvanceSnapFade(state, unscaledDt))
-                    {
-                        ReleaseStateAt(i);
-                        DecrementGroup(group);
-                    }
-
-                    continue;
-                }
-
-                var flightPhase = group.Flight.Phase;
-
-                // Cinematic froze the principal — freeze the whole formation and inflate the ribbons so the drawn
-                // figure doesn't decay while the cinematic owns the anchor transform.
-                if (flightPhase == FlightPhase.Paused)
-                {
-                    FreezeRibbons(state);
-                    continue;
-                }
-
-                // Unpaused — restore the computed coverage times before advancing.
-                ThawRibbons(state);
-
-                // Cinematic pan-in / CompleteAll drove the principal to Idle — snap this formation now.
-                if (flightPhase == FlightPhase.Idle)
-                {
-                    Snap(state, i, group);
-                    continue;
-                }
-
-                if (AdvanceFormation(state, dt))
-                {
+                    var group = _states[i].Group;
                     ReleaseStateAt(i);
                     DecrementGroup(group);
                 }
@@ -269,21 +283,169 @@ namespace BalloonParty.Game.Score.Behaviours
             group.Remaining++;
         }
 
-        // Returns true when the formation has finished its travel and the state should be released.
-        private bool AdvanceFormation(FormationState state, float dt)
+        // Pass A body for one _states index: cancel / SnapFade / Paused / Idle-snap release or return exactly
+        // as the old single-pass LateTick did. Only the normal-travel branch differs — it computes a
+        // CANDIDATE center/scale and defers to _pending instead of committing immediately.
+        private void AdvanceOrDefer(int index, float dt, float unscaledDt)
         {
+            var state = _states[index];
             var group = state.Group;
-            var settings = group.Settings;
-            var oldCenter = state.Center;
-            var oldRotation = state.Rotation;
 
+            // Run reset recreated the group CTS — discard WITHOUT reporting (the reset clears the run's score).
+            if (group.CancellationToken.IsCancellationRequested)
+            {
+                ReleaseVertices(state);
+                ReleaseStateAt(index);
+                DecrementGroup(group);
+                return;
+            }
+
+            // Post-snap: run the unscaled vertex fade-out to completion, then drop the state. Still-fading
+            // formations still occupy screen space, so they stay a (weight-0, immovable) repeller until gone.
+            if (state.Phase == FormationPhase.SnapFade)
+            {
+                if (AdvanceSnapFade(state, unscaledDt))
+                {
+                    ReleaseStateAt(index);
+                    DecrementGroup(group);
+                }
+                else
+                {
+                    _stationary.Add(state);
+                }
+
+                return;
+            }
+
+            var flightPhase = group.Flight.Phase;
+
+            // Cinematic froze the principal — freeze the whole formation and inflate the ribbons so the drawn
+            // figure doesn't decay while the cinematic owns the anchor transform. Still stays a repeller: a
+            // full-size, frozen constellation is exactly when a flythrough from another group is most visible.
+            if (flightPhase == FlightPhase.Paused)
+            {
+                FreezeRibbons(state);
+                _stationary.Add(state);
+                return;
+            }
+
+            // Unpaused — restore the computed coverage times before advancing.
+            ThawRibbons(state);
+
+            // Cinematic pan-in / CompleteAll drove the principal to Idle — snap this formation now.
+            if (flightPhase == FlightPhase.Idle)
+            {
+                Snap(state, index, group);
+                return;
+            }
+
+            ComputeCandidateCenter(state, dt);
+            _pending.Add(state);
+        }
+
+        // Pass A (first half of the old AdvanceFormation): where this formation WANTS to be and how big it
+        // WANTS to be this frame, before any cross-formation overlap correction. Advances Elapsed (must happen
+        // exactly once per tick) and evaluates the deterministic travel/scale curves; does not touch Center,
+        // Rotation or LastScale yet — those still hold last frame's values, needed as FinishAdvance's "old"
+        // state for ribbon re-framing.
+        private static void ComputeCandidateCenter(FormationState state, float dt)
+        {
             state.Elapsed += dt;
             var t = state.Elapsed;
 
             // Centre travels origin -> live target (re-read each tick, so a moving bar is still hit exactly).
-            var liveTarget = group.Target != null ? group.Target.Center + state.TargetOffset : state.Origin;
+            var liveTarget = state.Group.Target != null
+                ? state.Group.Target.Center + state.TargetOffset
+                : state.Origin;
             var travelT = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(t / state.Duration));
-            var newCenter = Vector3.Lerp(state.Origin, liveTarget, travelT);
+
+            state.LiveTarget = liveTarget;
+            state.CandidateCenter = Vector3.Lerp(state.Origin, liveTarget, travelT);
+            state.CandidateScale = state.Group.Settings.ScaleOverTravel != null
+                ? state.Group.Settings.ScaleOverTravel.Evaluate(t)
+                : 0f;
+        }
+
+        // Pass B: resolves overlaps across every formation occupying space this tick — pending (mid-travel,
+        // CANDIDATE center) AND stationary (Paused/still-fading, current committed Center) — including pairs
+        // from DIFFERENT concurrent groups (a single AoE can trigger several BigScoreTrailBehaviour.Begin()
+        // calls in the same frame, each with its own origin), then folds the correction into each PENDING
+        // formation's CandidateCenter. Stationary entries always carry weight 0 (see AdvanceOrDefer), so their
+        // own computed offset is provably zero — never applied, since they're never committed by Pass C.
+        // Padding/push-fraction are read PER-FORMATION from its own Group.Settings (not a single shared value),
+        // so a future config that lets concurrent groups diverge doesn't silently pick an arbitrary one's knobs.
+        // Neither LIST is ever mutated (no Add/Remove) — only the FormationState instances they reference are,
+        // via CandidateCenter below — hence IReadOnlyList rather than List despite the write-back.
+        private void ResolveOverlaps(IReadOnlyList<FormationState> pending, IReadOnlyList<FormationState> stationary)
+        {
+            var count = pending.Count + stationary.Count;
+            if (count < 2)
+            {
+                return;
+            }
+
+            EnsureCorrectionCapacity(count);
+            for (var i = 0; i < pending.Count; i++)
+            {
+                var state = pending[i];
+                _correctionCenters[i] = state.CandidateCenter;
+                _correctionRadii[i] = state.FormationRadius * state.CandidateScale;
+                // The PRINCIPAL's anchor drives the level-up cinematic's camera target — a per-frame push there
+                // is camera-visible in a way it isn't for a satellite, so it defaults to immovable (weight 0)
+                // and lets its partner absorb the whole correction instead.
+                _correctionWeights[i] = state.IsPrincipal ? state.Group.Settings.PrincipalPushDamping : 1f;
+                _correctionPadding[i] = state.Group.Settings.OverlapPadding;
+                _correctionMaxPush[i] = state.Group.Settings.MaxOverlapPushFraction;
+            }
+
+            for (var i = 0; i < stationary.Count; i++)
+            {
+                var state = stationary[i];
+                var index = pending.Count + i;
+                _correctionCenters[index] = state.Center;
+                _correctionRadii[index] = state.FormationRadius * state.LastScale;
+                _correctionWeights[index] = 0f;
+                _correctionPadding[index] = state.Group.Settings.OverlapPadding;
+                _correctionMaxPush[index] = state.Group.Settings.MaxOverlapPushFraction;
+            }
+
+            FormationOverlapResolver.Resolve(
+                _correctionCenters, _correctionRadii, _correctionWeights, _correctionPadding, _correctionMaxPush,
+                count, _correctionOffsets);
+
+            for (var i = 0; i < pending.Count; i++)
+            {
+                pending[i].CandidateCenter += _correctionOffsets[i];
+            }
+        }
+
+        private void EnsureCorrectionCapacity(int count)
+        {
+            if (_correctionCenters.Length >= count)
+            {
+                return;
+            }
+
+            var capacity = Mathf.NextPowerOfTwo(count);
+            _correctionCenters = new Vector3[capacity];
+            _correctionRadii = new float[capacity];
+            _correctionWeights = new float[capacity];
+            _correctionPadding = new float[capacity];
+            _correctionMaxPush = new float[capacity];
+            _correctionOffsets = new Vector3[capacity];
+        }
+
+        // Pass C (second half of the old AdvanceFormation): commits the formation to its CORRECTED center.
+        // TransformRibbon is already generic to arbitrary translation, so feeding it the corrected center
+        // instead of the raw travel one needs no changes there; state.Guide rides the corrected center too —
+        // it's documented as drawing the formation's ACTUAL path, so showing the corrected wiggle is the point.
+        private void FinishAdvance(FormationState state, float dt)
+        {
+            var settings = state.Group.Settings;
+            var oldCenter = state.Center;
+            var oldRotation = state.Rotation;
+            var newCenter = state.CandidateCenter;
+            var scale = state.CandidateScale;
 
             // Tumble spins from t = 0 (invisible while the shape is a point). Ease the angular VELOCITY toward
             // its target and integrate the angle, so a high spin speed ramps in instead of snapping the ribbons
@@ -293,8 +455,6 @@ namespace BalloonParty.Game.Score.Behaviours
             state.SpinAngle += state.SpinSpeed * dt;
             var newRotation = Quaternion.AngleAxis(state.SpinAngle, state.SpinAxis) * state.InitialRotation;
             var delta = newRotation * Quaternion.Inverse(oldRotation);
-
-            var scale = settings.ScaleOverTravel != null ? settings.ScaleOverTravel.Evaluate(t) : 0f;
 
             // Re-frame the drawn ink by the same translate+tumble+SCALE the live frame moved through, so the
             // drawn figure shrinks with the shape as it approaches the bar. Scale correction matters most on
@@ -336,14 +496,14 @@ namespace BalloonParty.Game.Score.Behaviours
 
             WriteAnchor(state);
 
-            if (t < state.Duration)
+            if (state.Elapsed < state.Duration)
             {
-                return false;
+                return;
             }
 
-            ReportOnce(state, liveTarget);
+            ReportOnce(state, state.LiveTarget);
             ReleaseVertices(state);
-            return true;
+            state.PendingRelease = true;
         }
 
         // True once the fade completes and the vertices have been released.
@@ -655,6 +815,16 @@ namespace BalloonParty.Game.Score.Behaviours
             internal bool Reported;
             internal bool Frozen;
 
+            // This tick's not-yet-committed travel center/scale/live-target (Pass A), overlap-corrected by
+            // Pass B, then committed to Center/LastScale by Pass C (FinishAdvance) in ShapeFormationTicker.
+            internal Vector3 CandidateCenter;
+            internal float CandidateScale;
+            internal Vector3 LiveTarget;
+
+            // Set by Pass C when the formation's travel finished this tick; drained by Pass D's dedicated
+            // release sweep — never removed from _states mid-Pass-C, where a recorded index could go stale.
+            internal bool PendingRelease;
+
             internal void Initialize(FormationGroup group, in BigScoreFormationRequest request)
             {
                 Group = group;
@@ -686,6 +856,7 @@ namespace BalloonParty.Game.Score.Behaviours
                 Guide = null;
                 Reported = false;
                 Frozen = false;
+                PendingRelease = false;
             }
         }
     }
