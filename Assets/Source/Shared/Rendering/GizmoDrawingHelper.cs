@@ -94,6 +94,25 @@ namespace BalloonParty.Shared.Rendering
         }
 
         /// <summary>
+        ///     Draws a world-space circle in the XY plane — a bounding sphere projected flat, for a
+        ///     top-down/2D board where a wire sphere would foreshorten into an ellipse from the play camera.
+        /// </summary>
+        public static void DrawWorldCircle(Vector3 center, float radius, Color color)
+        {
+            const int segments = 48;
+
+            Gizmos.color = color;
+            var prev = center + new Vector3(radius, 0f, 0f);
+            for (var i = 1; i <= segments; i++)
+            {
+                var angle = 2f * Mathf.PI * i / segments;
+                var next = center + new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0f);
+                Gizmos.DrawLine(prev, next);
+                prev = next;
+            }
+        }
+
+        /// <summary>
         ///     Draws a world-space annulus sector (ring segment) in the XY plane: an inner and outer arc
         ///     joined by two radial edges. Angles are in degrees, CCW from +x. A zero inner radius
         ///     collapses the inner arc to the center point.

@@ -177,6 +177,20 @@ namespace BalloonParty.Game.Score.Behaviours
             }
         }
 
+#if UNITY_EDITOR
+        // Editor-only: the live world center and CURRENT bounding radius of every in-flight formation, for
+        // BigScoreFormationGizmos. FormationRadius is the shape's radius at scale 1 (unit-magnitude vertices);
+        // LastScale is the travel curve's most recent sample (LocalToWorld multiplies every vertex by both),
+        // so their product is the sphere every pen is currently orbiting inside of.
+        internal void ForEachActiveBounds(System.Action<Vector3, float> visit)
+        {
+            for (var i = 0; i < _states.Count; i++)
+            {
+                visit(_states[i].Center, _states[i].FormationRadius * _states[i].LastScale);
+            }
+        }
+#endif
+
         // Synchronous so the anchor registers before the caller's Begin returns (the cinematic's registry wait
         // depends on it). Acquires a pooled group + its anchor and registers the principal flight.
         internal FormationGroup BeginGroup(in BigScoreGroupRequest request)

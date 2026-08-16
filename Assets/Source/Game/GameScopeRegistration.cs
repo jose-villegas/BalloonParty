@@ -195,6 +195,7 @@ namespace BalloonParty.Game
             // Scene-view debug overlay only; hierarchy registration throws if the component is absent,
             // so the guard keeps device builds independent of the debug object.
             builder.RegisterComponentInHierarchy<BalanceGizmos>();
+            builder.RegisterComponentInHierarchy<BigScoreFormationGizmos>();
 #endif
         }
 
