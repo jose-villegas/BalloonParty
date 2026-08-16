@@ -1,6 +1,7 @@
 var hierarchy =
 [
     [ "BalloonParty.Shared.Messages.ActorHitMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html", null ],
+    [ "BalloonParty.Shared.AimAngleGrid", "classBalloonParty_1_1Shared_1_1AimAngleGrid.html", null ],
     [ "BalloonParty.Thrower.AimDirectionHistory", "classBalloonParty_1_1Thrower_1_1AimDirectionHistory.html", null ],
     [ "BalloonParty.Configuration.Editor.AimFanSceneOverlay", "classBalloonParty_1_1Configuration_1_1Editor_1_1AimFanSceneOverlay.html", null ],
     [ "BalloonParty.Editor.GradientTextureDrawer.GradientStorage.AlphaKeyEntry", "classBalloonParty_1_1Editor_1_1GradientTextureDrawer_1_1GradientStorage_1_1AlphaKeyEntry.html", null ],

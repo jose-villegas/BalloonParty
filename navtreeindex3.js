@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"SpriteLayerCombinerEditor_8cs.html#aef19bab18b9814edeef255c43e4f6bbc":[7,0,6,8,0,1],
 "SpriteLayerCombiner_8cs.html":[7,0,14,10,10],
 "SpriteRendererExtensions_8cs.html":[7,0,14,4,17],
 "SpriteShadowBakerEditor_8cs.html":[7,0,6,5,2],
@@ -9,7 +10,7 @@ var NAVTREEINDEX3 =
 "StaticActorModel_8cs.html":[7,0,15,0,22],
 "StaticActorSpawner_8cs.html":[7,0,15,0,23],
 "StreakChangedMessage_8cs.html":[7,0,14,7,39],
-"StreakShieldRule_8cs.html":[7,0,14,31],
+"StreakShieldRule_8cs.html":[7,0,14,32],
 "StrikethroughArrivedMessage_8cs.html":[7,0,14,7,40],
 "StubThermalSource_8cs.html":[7,0,14,12,2],
 "TailGrowthConfig_8cs.html":[7,0,3,7,9],
@@ -65,7 +66,7 @@ var NAVTREEINDEX3 =
 "UnbreakableBalloonVariant_8cs.html":[7,0,1,3,7],
 "UnbreakableBalloonVariant_8cs.html#a832e8f52fca5a678819ec96269dcb532":[7,0,1,3,7,2],
 "UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d":[7,0,1,3,7,1],
-"UnitCircleAttribute_8cs.html":[7,0,14,32],
+"UnitCircleAttribute_8cs.html":[7,0,14,33],
 "UnitCircleDrawer_8cs.html":[7,0,6,41],
 "UnusedAssetsWindow_8cs.html":[7,0,6,42],
 "VariationPicker_8cs.html":[7,0,0,18],
@@ -75,7 +76,7 @@ var NAVTREEINDEX3 =
 "VoicePlayback_8cs.html":[7,0,0,20],
 "WallBounceEndCondition_8cs.html":[7,0,12,0,3],
 "WallHitMessage_8cs.html":[7,0,14,7,42],
-"WallLimits_8cs.html":[7,0,14,33],
+"WallLimits_8cs.html":[7,0,14,34],
 "WallNetView_8cs.html":[7,0,13,0,1],
 "WaveDamageMessage_8cs.html":[7,0,14,7,43],
 "WaveDeficitCalculator_8cs.html":[7,0,7,3,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3e26ed679bfcc356d10c54213fe89adb":[5,0,0,0,0,3,41],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3e26ed679bfcc356d10c54213fe89adb":[6,0,0,0,0,3,41],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a44f9b214c8bb534badae2c7fa15d7174":[5,0,0,0,0,3,37],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a44f9b214c8bb534badae2c7fa15d7174":[6,0,0,0,0,3,37],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a48c3170743a4904ade4e383e90a923be":[5,0,0,0,0,3,7]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a44f9b214c8bb534badae2c7fa15d7174":[6,0,0,0,0,3,37]
 };

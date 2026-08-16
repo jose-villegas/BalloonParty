@@ -167,6 +167,8 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:a29a958ed54839de533a042058f38bb91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8f5cb1035af6f6394fff4b181a70d54" id="r_ac8f5cb1035af6f6394fff4b181a70d54"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac8f5cb1035af6f6394fff4b181a70d54">PopItemHit</a> (<a class="el" href="classBalloonParty_1_1Solver_1_1ShotItemLayer.html">ShotItemLayer</a> items, <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a>[] workingSet, ref int activeCount, int index, float tHit, <a class="el" href="classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html">ShotBoardDynamics</a> dynamics, in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotScoreRules.html">ShotScoreRules</a> scoreRules, string sourceColorId, <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762">DamageFlags</a> flags, ref <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightState.html">ShotFlightState</a> state)</td></tr>
 <tr class="separator:ac8f5cb1035af6f6394fff4b181a70d54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4ba01acda9faabd8a32dff16d55f4e9" id="r_af4ba01acda9faabd8a32dff16d55f4e9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af4ba01acda9faabd8a32dff16d55f4e9">RecolorSideNeighbor</a> (<a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a>[] workingSet, int sideIndex, string rainbowColorId)</td></tr>
+<tr class="separator:af4ba01acda9faabd8a32dff16d55f4e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73b35546cd2cbc967011ce1eeb2ceb83" id="r_a73b35546cd2cbc967011ce1eeb2ceb83"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73b35546cd2cbc967011ce1eeb2ceb83">RecordColor</a> (string colorId, ref <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightState.html">ShotFlightState</a> state)</td></tr>
 <tr class="separator:a73b35546cd2cbc967011ce1eeb2ceb83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adefa979d895458a7fa064a0d2b309852" id="r_adefa979d895458a7fa064a0d2b309852"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adefa979d895458a7fa064a0d2b309852">RemoveActive</a> (<a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a>[] workingSet, ref int activeCount, int index)</td></tr>
@@ -216,6 +218,10 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:aad797543d79449b745d506edf8115ce3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a540742f10227afd890e3cbcbcd844ab6" id="r_a540742f10227afd890e3cbcbcd844ab6"><td class="memItemLeft" align="right" valign="top">static readonly Vector2Int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a540742f10227afd890e3cbcbcd844ab6">NeighborBuffer</a> = new Vector2Int[6]</td></tr>
 <tr class="separator:a540742f10227afd890e3cbcbcd844ab6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a2bd05a68ea2f1f9d0fe39e663f764e" id="r_a4a2bd05a68ea2f1f9d0fe39e663f764e"><td class="memItemLeft" align="right" valign="top">static readonly Vector2[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4a2bd05a68ea2f1f9d0fe39e663f764e">SideNeighborOffsetsScratch</a> = new Vector2[6]</td></tr>
+<tr class="separator:a4a2bd05a68ea2f1f9d0fe39e663f764e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0057c7b9d24a82caf0b6b44f0b94ae04" id="r_a0057c7b9d24a82caf0b6b44f0b94ae04"><td class="memItemLeft" align="right" valign="top">static readonly int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0057c7b9d24a82caf0b6b44f0b94ae04">SideNeighborWorkingSetIndicesScratch</a> = new int[6]</td></tr>
+<tr class="separator:a0057c7b9d24a82caf0b6b44f0b94ae04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Pure, headless, deterministic billiard simulator for one aim direction (see plan_shot_geometry). </p>
@@ -923,6 +929,40 @@ Static Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">ref <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightState.html">ShotFlightState</a></td>          <td class="paramname"><span class="paramname"><em>state</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af4ba01acda9faabd8a32dff16d55f4e9" name="af4ba01acda9faabd8a32dff16d55f4e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4ba01acda9faabd8a32dff16d55f4e9">&#9670;&#160;</a></span>RecolorSideNeighbor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Solver.ShotSimulator.RecolorSideNeighbor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a>[]</td>          <td class="paramname"><span class="paramname"><em>workingSet</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>sideIndex</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>rainbowColorId</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -2029,6 +2069,50 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly Vector2Int [] BalloonParty.Solver.ShotSimulator.NeighborBuffer = new Vector2Int[6]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4a2bd05a68ea2f1f9d0fe39e663f764e" name="a4a2bd05a68ea2f1f9d0fe39e663f764e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a2bd05a68ea2f1f9d0fe39e663f764e">&#9670;&#160;</a></span>SideNeighborOffsetsScratch</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly Vector2 [] BalloonParty.Solver.ShotSimulator.SideNeighborOffsetsScratch = new Vector2[6]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0057c7b9d24a82caf0b6b44f0b94ae04" name="a0057c7b9d24a82caf0b6b44f0b94ae04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0057c7b9d24a82caf0b6b44f0b94ae04">&#9670;&#160;</a></span>SideNeighborWorkingSetIndicesScratch</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int [] BalloonParty.Solver.ShotSimulator.SideNeighborWorkingSetIndicesScratch = new int[6]</td>
         </tr>
       </table>
   </td>

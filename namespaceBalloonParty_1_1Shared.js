@@ -13,6 +13,7 @@ var namespaceBalloonParty_1_1Shared =
     [ "Rendering", "namespaceBalloonParty_1_1Shared_1_1Rendering.html", "namespaceBalloonParty_1_1Shared_1_1Rendering" ],
     [ "SceneLight", "namespaceBalloonParty_1_1Shared_1_1SceneLight.html", "namespaceBalloonParty_1_1Shared_1_1SceneLight" ],
     [ "Thermal", "namespaceBalloonParty_1_1Shared_1_1Thermal.html", "namespaceBalloonParty_1_1Shared_1_1Thermal" ],
+    [ "AimAngleGrid", "classBalloonParty_1_1Shared_1_1AimAngleGrid.html", "classBalloonParty_1_1Shared_1_1AimAngleGrid" ],
     [ "CircleContact", "classBalloonParty_1_1Shared_1_1CircleContact.html", "classBalloonParty_1_1Shared_1_1CircleContact" ],
     [ "ContactRadius", "classBalloonParty_1_1Shared_1_1ContactRadius.html", "classBalloonParty_1_1Shared_1_1ContactRadius" ],
     [ "DeflectorCircle", "structBalloonParty_1_1Shared_1_1DeflectorCircle.html", "structBalloonParty_1_1Shared_1_1DeflectorCircle" ],

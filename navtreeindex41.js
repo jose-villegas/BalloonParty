@@ -1,5 +1,12 @@
 var NAVTREEINDEX41 =
 {
+"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog.html#adbdcc45998eabfa0e7db7d94f7c1f0b8":[5,0,0,6,7,14,11],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog.html#adbdcc45998eabfa0e7db7d94f7c1f0b8":[6,0,0,6,7,14,11],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog.html#aeb0ab0c0d99692dd2fd0ab4d512bf6e6":[5,0,0,6,7,14,16],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog.html#aeb0ab0c0d99692dd2fd0ab4d512bf6e6":[6,0,0,6,7,14,16],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html":[5,0,0,6,7,15],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html":[6,0,0,6,7,15],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a04c497010a8c0e8c88cf05b45fe6a444":[5,0,0,6,7,15,18],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a04c497010a8c0e8c88cf05b45fe6a444":[6,0,0,6,7,15,18],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a2543fbab8d11c3c62233f20b67f0e5b9":[5,0,0,6,7,15,3],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricScope.html#a2543fbab8d11c3c62233f20b67f0e5b9":[6,0,0,6,7,15,3],
@@ -242,12 +249,5 @@ var NAVTREEINDEX41 =
 "classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html#a5f56cc68ec98e659f5f5001ea6ccb884":[5,0,0,6,7,25,4],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html#a5f56cc68ec98e659f5f5001ea6ccb884":[6,0,0,6,7,25,4],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html#a6f5e81193932c7fa3210bbf8b8e0fc34":[5,0,0,6,7,25,5],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html#a6f5e81193932c7fa3210bbf8b8e0fc34":[6,0,0,6,7,25,5],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html#a9fb8e1a2dafb978571cab4352521d4cc":[5,0,0,6,7,25,6],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html#a9fb8e1a2dafb978571cab4352521d4cc":[6,0,0,6,7,25,6],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html#ae6c06d8a5dd95a715048395de379ec45":[5,0,0,6,7,25,1],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html#ae6c06d8a5dd95a715048395de379ec45":[6,0,0,6,7,25,1],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html#af079b8326db4cd6ffde50e2fda8638b0":[5,0,0,6,7,25,8],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html#af079b8326db4cd6ffde50e2fda8638b0":[6,0,0,6,7,25,8],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html#af3ad51760a1fa85f25fd4ee4ac81ac37":[5,0,0,6,7,25,7]
+"classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html#a6f5e81193932c7fa3210bbf8b8e0fc34":[6,0,0,6,7,25,5]
 };

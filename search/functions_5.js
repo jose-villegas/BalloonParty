@@ -94,6 +94,5 @@ var searchData=
   ['from_91',['From',['../classBalloonParty_1_1Editor_1_1GradientTextureDrawer_1_1GradientStorage.html#a0fd841a2f85f2e346b66a981c3edb719',1,'BalloonParty.Editor.GradientTextureDrawer.GradientStorage.From()'],['../structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html#a0aa269ff62131f09d555a98d633db416',1,'BalloonParty.Shared.Messages.ActorHitMessage.From()'],['../structBalloonParty_1_1Solver_1_1ShotSlotLattice.html#af208f56c5c260e855b1542f05147ac45',1,'BalloonParty.Solver.ShotSlotLattice.From()']]],
   ['fromcollider_92',['FromCollider',['../classBalloonParty_1_1Shared_1_1ContactRadius.html#a36bf9a7a135c59e518f6a15324ef13f3',1,'BalloonParty::Shared::ContactRadius']]],
   ['fromconfiguration_93',['FromConfiguration',['../structBalloonParty_1_1Item_1_1Effects_1_1ItemEffectParams.html#a7473441bfbeee91983fe2fdc278cdbdf',1,'BalloonParty::Item::Effects::ItemEffectParams']]],
-  ['fromjson_94',['FromJson',['../classBalloonParty_1_1Audio_1_1Editor_1_1AttributionLedger.html#ad4b2341009a877440f17a61dfce406e2',1,'BalloonParty::Audio::Editor::AttributionLedger']]],
-  ['fullholdmayadvance_95',['FullHoldMayAdvance',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a516bcad8df0d3e60a6f886b1a16c4797',1,'BalloonParty::Item::Preview::ItemRangePreviewController']]]
+  ['fromjson_94',['FromJson',['../classBalloonParty_1_1Audio_1_1Editor_1_1AttributionLedger.html#ad4b2341009a877440f17a61dfce406e2',1,'BalloonParty::Audio::Editor::AttributionLedger']]]
 ];

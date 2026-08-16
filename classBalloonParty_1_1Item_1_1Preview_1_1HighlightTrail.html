@@ -147,6 +147,8 @@ Package Functions</h2></td></tr>
 <tr class="memitem:a79bf490cac9edc286eaa4d7cb99f6db2" id="r_a79bf490cac9edc286eaa4d7cb99f6db2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a79bf490cac9edc286eaa4d7cb99f6db2">ClearRibbon</a> ()</td></tr>
 <tr class="memdesc:a79bf490cac9edc286eaa4d7cb99f6db2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Drops the recorded ribbon, so a jump to a new stroke doesn't draw a chord across the gap.  <br /></td></tr>
 <tr class="separator:a79bf490cac9edc286eaa4d7cb99f6db2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a157cb85533c086329b4a354f2a426de3" id="r_a157cb85533c086329b4a354f2a426de3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a157cb85533c086329b4a354f2a426de3">Configure</a> (TrailRenderer trailRenderer, SpriteRenderer head=null)</td></tr>
+<tr class="separator:a157cb85533c086329b4a354f2a426de3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d7a34810bcd865305608d3e293adcf8" id="r_a4d7a34810bcd865305608d3e293adcf8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d7a34810bcd865305608d3e293adcf8">SetEmitting</a> (bool emitting)</td></tr>
 <tr class="memdesc:a4d7a34810bcd865305608d3e293adcf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pen up/down — a pen travelling to its stroke shouldn't necessarily draw on the way.  <br /></td></tr>
 <tr class="separator:a4d7a34810bcd865305608d3e293adcf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -158,6 +160,8 @@ Properties</h2></td></tr>
 <tr class="memitem:a880b48f0eb2b2952b1c1584f250f423c" id="r_a880b48f0eb2b2952b1c1584f250f423c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a880b48f0eb2b2952b1c1584f250f423c">EffectiveRibbonSeconds</a><code> [get]</code></td></tr>
 <tr class="memdesc:a880b48f0eb2b2952b1c1584f250f423c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pen prefab's own authored ribbon lifetime — every item shares it now.  <br /></td></tr>
 <tr class="separator:a880b48f0eb2b2952b1c1584f250f423c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04f1f7426adb143bfe212dde71ab6dce" id="r_a04f1f7426adb143bfe212dde71ab6dce"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a04f1f7426adb143bfe212dde71ab6dce">IsEmittingForTest</a><code> [get]</code></td></tr>
+<tr class="separator:a04f1f7426adb143bfe212dde71ab6dce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -224,6 +228,35 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Drops the recorded ribbon, so a jump to a new stroke doesn't draw a chord across the gap. </p>
+
+</div>
+</div>
+<a id="a157cb85533c086329b4a354f2a426de3" name="a157cb85533c086329b4a354f2a426de3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a157cb85533c086329b4a354f2a426de3">&#9670;&#160;</a></span>Configure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Preview.HighlightTrail.Configure </td>
+          <td>(</td>
+          <td class="paramtype">TrailRenderer</td>          <td class="paramname"><span class="paramname"><em>trailRenderer</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SpriteRenderer</td>          <td class="paramname"><span class="paramname"><em>head</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -385,6 +418,28 @@ Private Attributes</h2></td></tr>
 
 <p>The pen prefab's own authored ribbon lifetime — every item shares it now. </p>
 <p>A graceful hide reads this to know how long a paused ribbon takes to fade on its own. </p>
+
+</div>
+</div>
+<a id="a04f1f7426adb143bfe212dde71ab6dce" name="a04f1f7426adb143bfe212dde71ab6dce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04f1f7426adb143bfe212dde71ab6dce">&#9670;&#160;</a></span>IsEmittingForTest</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Item.Preview.HighlightTrail.IsEmittingForTest</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

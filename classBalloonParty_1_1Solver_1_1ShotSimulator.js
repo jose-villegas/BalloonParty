@@ -17,6 +17,7 @@ var classBalloonParty_1_1Solver_1_1ShotSimulator =
     [ "IsPathClearAhead", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a799679b3d7426ffb7a1ed315ca2f2480", null ],
     [ "NudgeItemHit", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a29a958ed54839de533a042058f38bb91", null ],
     [ "PopItemHit", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ac8f5cb1035af6f6394fff4b181a70d54", null ],
+    [ "RecolorSideNeighbor", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#af4ba01acda9faabd8a32dff16d55f4e9", null ],
     [ "RecordColor", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a73b35546cd2cbc967011ce1eeb2ceb83", null ],
     [ "RemoveActive", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#adefa979d895458a7fa064a0d2b309852", null ],
     [ "ResolveBalloonContact", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a13f1ff5fdbeb5a27b6dd1af11a28f05d", null ],
@@ -41,5 +42,7 @@ var classBalloonParty_1_1Solver_1_1ShotSimulator =
     [ "EventEpsilon", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a0c52a0a635ca14e084eac4a88a9eac5b", null ],
     [ "ItemHitsScratch", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a06bcf8dab927941f9397ef54942e987e", null ],
     [ "MinSpeed", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#aad797543d79449b745d506edf8115ce3", null ],
-    [ "NeighborBuffer", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a540742f10227afd890e3cbcbcd844ab6", null ]
+    [ "NeighborBuffer", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a540742f10227afd890e3cbcbcd844ab6", null ],
+    [ "SideNeighborOffsetsScratch", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a4a2bd05a68ea2f1f9d0fe39e663f764e", null ],
+    [ "SideNeighborWorkingSetIndicesScratch", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a0057c7b9d24a82caf0b6b44f0b94ae04", null ]
 ];

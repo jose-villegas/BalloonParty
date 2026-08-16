@@ -142,6 +142,8 @@ Directories</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="files" name="files"></a>
 Files</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AimAngleGrid_8cs.html">AimAngleGrid.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CircleContact_8cs.html">CircleContact.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ContactRadius_8cs.html">ContactRadius.cs</a></td></tr>
@@ -227,16 +229,18 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>WallLimits</code>   </td><td class="markdownTableBodyNone">The four play-area walls unpacked from <code>IProjectileFlightConfig.LimitsClockwise</code> — wall-crossing (<code>TryFindCrossing</code>), billiard mirror-reflect (<code>Reflect</code>), in-bounds clamp (<code>ClampInside</code>)    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>AimAngleGrid</code>   </td><td class="markdownTableBodyNone">The thrower's reachable-angle domain rule — the absolute step grid a quantized aim snaps to (<code>ClampToReachableAngle</code>) plus the paired sweep-sample grid (<code>ResolveSweepSampleCount</code>/<code>ResolveSweepAngle</code>). One domain rule, four independent consumers: the live <code>ThrowerController</code>, <code>FireBestShotCheat</code>, the editor <code>ShotSolverWindow</code>, and the Scene-view <code>AimFanSceneOverlay</code>. Used to live on <code>Solver/ShotBoardGather</code>, which meant live gameplay (<code>ThrowerController</code>) depended on an analysis/planning subsystem to aim — backwards, since the shared thing is a game rule about which angles the thrower can reach, not solver logic; moved here for exactly the reason <code>WallLimits</code> is here    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>EnumIndexedAttribute</code>   </td><td class="markdownTableBodyNone"><code>PropertyAttribute</code> that labels a serialized array indexed by enum ordinal with the enum value's name instead of "Element N"    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>CircleContact</code>   </td><td class="markdownTableBodyNone">The one analytic ray-circle entry solver (<code>TryFindEntry</code>/<code>TryFindEntryNormal</code>), shared by the projectile's real deflection (<code>ProjectileMotionResolver</code>) and the aim telegraph (<code>Prediction/PredictionTraceCalculator</code>) so the drawn line can't drift from the flight it predicts    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ContactRadius</code>   </td><td class="markdownTableBodyNone"><code>FromCollider(Collider2D, lossyScaleX)</code> — the one place a circle/capsule collider becomes a world-space contact radius, shared by live gather and the shot solver's static archetypes    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>IDeflectorField</code> / <code>DeflectorCircle</code>   </td><td class="markdownTableBodyNone">The deflectors the aim telegraph (and the shield planner) must bounce off, as circles in the geometry the projectile will actually meet. Implemented by <code>SlotGridDeflectorField</code> (<code>Slots/Grid/</code>)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>IPierceItemField</code> / <code>PierceItemCircle</code>   </td><td class="markdownTableBodyNone">The pierce-arming item hosts the aim telegraph must know about, so it can stop drawing a deflection off every tough beyond the first one crossed. Implemented by <code>SlotGridPierceItemField</code> (<code>Slots/Grid/</code>)    </td></tr>
+<td class="markdownTableBodyNone"><code>IDeflectorField</code> / <code>DeflectorCircle</code>   </td><td class="markdownTableBodyNone">The deflectors the aim telegraph (and the shield planner) must bounce off, as circles in the geometry the projectile will actually meet. Implemented by <code>SlotGridDeflectorField</code> (<code>Slots/Grid/</code>)    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>IPierceItemField</code> / <code>PierceItemCircle</code>   </td><td class="markdownTableBodyNone">The pierce-arming item hosts the aim telegraph must know about, so it can stop drawing a deflection off every tough beyond the first one crossed. Implemented by <code>SlotGridPierceItemField</code> (<code>Slots/Grid/</code>)    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>StreakShieldRule</code>   </td><td class="markdownTableBodyNone">The one place a continued colour streak's shield refund is decided, called by both the live <code>ProjectileHitResolver</code> and the shot solver's <code>ShotSimulator</code> so the two can't drift apart   </td></tr>
 </table>
 <p>This table covers the folders and the types other features reach for most; a few small editor-only attributes living alongside these files aren't broken out separately.</p>

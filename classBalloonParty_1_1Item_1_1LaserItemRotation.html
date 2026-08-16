@@ -164,6 +164,8 @@ Properties</h2></td></tr>
 <tr class="separator:a1d589340cbdc2bd865de61473e20a3ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48723aa011842cefd82541d36f42e33e" id="r_a48723aa011842cefd82541d36f42e33e"><td class="memItemLeft" align="right" valign="top">float ISpinningItemVisual.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a48723aa011842cefd82541d36f42e33e">SpinDegreesPerSecond</a><code> [get]</code></td></tr>
 <tr class="separator:a48723aa011842cefd82541d36f42e33e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a116310b2388f6ed592fdad0ef0c91946" id="r_a116310b2388f6ed592fdad0ef0c91946"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a116310b2388f6ed592fdad0ef0c91946">StepSeconds</a><code> [get]</code></td></tr>
+<tr class="separator:a116310b2388f6ed592fdad0ef0c91946"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -206,8 +208,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a1c8a73971e2261cfcaf4cbaac2cd3d38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f53f58f57b776e5c08b2f8e0133faef" id="r_a0f53f58f57b776e5c08b2f8e0133faef"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0f53f58f57b776e5c08b2f8e0133faef">_previousIndex</a></td></tr>
 <tr class="separator:a0f53f58f57b776e5c08b2f8e0133faef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90268d14af03437f17e49f32a248640a" id="r_a90268d14af03437f17e49f32a248640a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a90268d14af03437f17e49f32a248640a">_stepSeconds</a> = 1.5f</td></tr>
-<tr class="separator:a90268d14af03437f17e49f32a248640a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf506aa6a9bba468c280f5de154234d1" id="r_aaf506aa6a9bba468c280f5de154234d1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf506aa6a9bba468c280f5de154234d1">_stopped</a></td></tr>
 <tr class="separator:aaf506aa6a9bba468c280f5de154234d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3e5d2808ad33f49c317b384306927b6" id="r_ae3e5d2808ad33f49c317b384306927b6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1Light.html">Light</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae3e5d2808ad33f49c317b384306927b6">_vertical</a></td></tr>
@@ -217,6 +217,8 @@ Private Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
+<tr class="memitem:afe5cb1df51b709f354c43760054b567e" id="r_afe5cb1df51b709f354c43760054b567e"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe5cb1df51b709f354c43760054b567e">DefaultStepSeconds</a> = 1.5f</td></tr>
+<tr class="separator:afe5cb1df51b709f354c43760054b567e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf90d23c890d8466f71dd9564e146cbd" id="r_adf90d23c890d8466f71dd9564e146cbd"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adf90d23c890d8466f71dd9564e146cbd">TransitionFraction</a> = 0.25f</td></tr>
 <tr class="separator:adf90d23c890d8466f71dd9564e146cbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -757,28 +759,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a90268d14af03437f17e49f32a248640a" name="a90268d14af03437f17e49f32a248640a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a90268d14af03437f17e49f32a248640a">&#9670;&#160;</a></span>_stepSeconds</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float BalloonParty.Item.LaserItemRotation._stepSeconds = 1.5f</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="aaf506aa6a9bba468c280f5de154234d1" name="aaf506aa6a9bba468c280f5de154234d1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaf506aa6a9bba468c280f5de154234d1">&#9670;&#160;</a></span>_stopped</h2>
 
@@ -839,6 +819,28 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afe5cb1df51b709f354c43760054b567e" name="afe5cb1df51b709f354c43760054b567e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe5cb1df51b709f354c43760054b567e">&#9670;&#160;</a></span>DefaultStepSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.Item.LaserItemRotation.DefaultStepSeconds = 1.5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -969,6 +971,28 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Item_1_1ISpinningItemVisual.html#a738bda3a396d514a7abe2e9c913130fe">BalloonParty.Item.ISpinningItemVisual</a>.</p>
+
+</div>
+</div>
+<a id="a116310b2388f6ed592fdad0ef0c91946" name="a116310b2388f6ed592fdad0ef0c91946"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a116310b2388f6ed592fdad0ef0c91946">&#9670;&#160;</a></span>StepSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Item.LaserItemRotation.StepSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"NudgeType_8cs.html":[7,0,9,6],
 "NullAudioMixerRouter_8cs.html":[7,0,0,11],
 "OrthogonalSizeCameraController_8cs.html":[7,0,5,4],
 "OverflowHeartRequestedMessage_8cs.html":[7,0,14,7,19],
@@ -26,7 +27,7 @@ var NAVTREEINDEX2 =
 "ParticleEffectView_8cs.html":[7,0,14,9,6],
 "ParticlePoolChannel_8cs.html":[7,0,14,9,7],
 "PathHelper_8cs.html":[7,0,14,0,0],
-"PathTrace_8cs.html":[7,0,14,28],
+"PathTrace_8cs.html":[7,0,14,29],
 "PauseService_8cs.html":[7,0,14,8,2],
 "PauseSource_8cs.html":[7,0,14,8,3],
 "PausedMessage_8cs.html":[7,0,14,8,1],
@@ -192,7 +193,7 @@ var NAVTREEINDEX2 =
 "ShotSimulator_8cs.html":[7,0,16,8],
 "ShotSolverWindow_8cs.html":[7,0,6,7,0],
 "ShoveVector_8cs.html":[7,0,15,2,5],
-"ShowIfEnumAttribute_8cs.html":[7,0,14,29],
+"ShowIfEnumAttribute_8cs.html":[7,0,14,30],
 "ShowIfEnumDrawer_8cs.html":[7,0,6,36],
 "SightFadeReaction_8cs.html":[7,0,8,28],
 "SightGlitterDriftReaction_8cs.html":[7,0,8,29],
@@ -224,7 +225,7 @@ var NAVTREEINDEX2 =
 "SnipeRangePreview_8cs.html":[7,0,8,5,15],
 "SoapBubbleClusterVariant_8cs.html":[7,0,1,3,5],
 "SortingHelper_8cs.html":[7,0,14,10,9],
-"SortingLayerNameAttribute_8cs.html":[7,0,14,30],
+"SortingLayerNameAttribute_8cs.html":[7,0,14,31],
 "SortingLayerNameDrawer_8cs.html":[7,0,6,37],
 "SoundBankClipAssigner_8cs.html":[7,0,0,1,12],
 "SoundBankConfigurationEditor_8cs.html":[7,0,0,1,13],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "SpeedTapMintedMessage_8cs.html":[7,0,14,7,38],
 "SpinSpace_8cs.html":[7,0,8,35],
 "SpriteColorableRenderer_8cs.html":[7,0,1,4,6],
-"SpriteLayerCombinerEditor_8cs.html":[7,0,6,8,0],
-"SpriteLayerCombinerEditor_8cs.html#aef19bab18b9814edeef255c43e4f6bbc":[7,0,6,8,0,1]
+"SpriteLayerCombinerEditor_8cs.html":[7,0,6,8,0]
 };

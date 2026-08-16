@@ -14,6 +14,7 @@ var classBalloonParty_1_1Configuration_1_1ItemPreviewConfig =
     [ "_shield", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#a210d6a418a2b484de10c625501dea97a", null ],
     [ "_sightDelaySeconds", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#a9370a7180078a9ef30d9450a8ce31ba0", null ],
     [ "_traceSpeed", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#ac688b18727537f8629251d2814b06413", null ],
+    [ "DefaultBloomCurve", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#aa52bcdc38ef0b37585e2abeb141edf77", null ],
     [ "BloomCurve", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#a42f6ddc462085e5462773dc827041802", null ],
     [ "BloomDuration", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#a4beda9e63b6291b56b3eb1a47fd5cc78", null ],
     [ "Bomb", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#adf547bff936f6a3b579763941f096955", null ],

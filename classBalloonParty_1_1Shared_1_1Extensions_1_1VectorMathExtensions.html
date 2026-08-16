@@ -155,9 +155,9 @@ Static Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
-<tr class="memitem:ad34eaf869a33d3359d3defecc86eec67" id="r_ad34eaf869a33d3359d3defecc86eec67"><td class="memItemLeft" align="right" valign="top">static int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad34eaf869a33d3359d3defecc86eec67">GetMostPerpendicularIndices</a> (Vector2 direction, Vector2[] vectors, int vectorCount, int count)</td></tr>
-<tr class="memdesc:ad34eaf869a33d3359d3defecc86eec67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the indices of the vectors that are most perpendicular to <em>direction</em> .  <br /></td></tr>
-<tr class="separator:ad34eaf869a33d3359d3defecc86eec67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac65682e9f712e52550e92582425b3c6" id="r_aac65682e9f712e52550e92582425b3c6"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aac65682e9f712e52550e92582425b3c6">GetTwoMostPerpendicular</a> (Vector2 direction, Vector2[] vectors, int vectorCount, out int firstIndex, out int secondIndex)</td></tr>
+<tr class="memdesc:aac65682e9f712e52550e92582425b3c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the (up to) two vectors most perpendicular to <em>direction</em>  — the smallest absolute dot product against the normalized direction — used to pick the left/right side neighbours of a projectile pop from its travel direction.  <br /></td></tr>
+<tr class="separator:aac65682e9f712e52550e92582425b3c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Stateless geometry helpers: 2D distance/radius tests, point-set ops, a framing clamp. </p>
@@ -366,8 +366,8 @@ Static Package Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ad34eaf869a33d3359d3defecc86eec67" name="ad34eaf869a33d3359d3defecc86eec67"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad34eaf869a33d3359d3defecc86eec67">&#9670;&#160;</a></span>GetMostPerpendicularIndices()</h2>
+<a id="aac65682e9f712e52550e92582425b3c6" name="aac65682e9f712e52550e92582425b3c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac65682e9f712e52550e92582425b3c6">&#9670;&#160;</a></span>GetTwoMostPerpendicular()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -376,7 +376,7 @@ Static Package Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static int[] BalloonParty.Shared.Extensions.VectorMathExtensions.GetMostPerpendicularIndices </td>
+          <td class="memname">static void BalloonParty.Shared.Extensions.VectorMathExtensions.GetTwoMostPerpendicular </td>
           <td>(</td>
           <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>direction</em></span>, </td>
         </tr>
@@ -393,7 +393,12 @@ Static Package Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>count</em></span>&#160;)</td>
+          <td class="paramtype">out int</td>          <td class="paramname"><span class="paramname"><em>firstIndex</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out int</td>          <td class="paramname"><span class="paramname"><em>secondIndex</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -403,8 +408,8 @@ Static Package Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns the indices of the vectors that are most perpendicular to <em>direction</em> . </p>
-<p>The result is the vectors with the smallest absolute dot product against the normalized direction, useful for selecting the side neighbours of a projectile pop based on its travel direction. </p>
+<p>Finds the (up to) two vectors most perpendicular to <em>direction</em>  — the smallest absolute dot product against the normalized direction — used to pick the left/right side neighbours of a projectile pop from its travel direction. </p>
+<p>Allocation-free: a single pass tracking the two smallest dots directly, rather than sorting a scratch copy of every candidate, since every caller only ever wants the best two. -1 in either out parameter means no such vector exists (<em>vectorCount</em>  was 0 or 1). </p>
 
 </div>
 </div>

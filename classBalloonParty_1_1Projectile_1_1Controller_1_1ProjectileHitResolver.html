@@ -140,6 +140,8 @@ Public Member Functions</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:aeb364cdbc61c7065f934faa2dd871c27" id="r_aeb364cdbc61c7065f934faa2dd871c27"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb364cdbc61c7065f934faa2dd871c27">ConvertSideNeighboursToRainbow</a> (Vector2Int slot, Vector3 projectileDirection)</td></tr>
 <tr class="separator:aeb364cdbc61c7065f934faa2dd871c27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a975c6d6a957d54fe681d5f27dbfeab4a" id="r_a975c6d6a957d54fe681d5f27dbfeab4a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a975c6d6a957d54fe681d5f27dbfeab4a">RecolorSideNeighbor</a> (int index)</td></tr>
+<tr class="separator:a975c6d6a957d54fe681d5f27dbfeab4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb3a7b6858c9cbd3eb20c8c5fb2104d4" id="r_abb3a7b6858c9cbd3eb20c8c5fb2104d4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Projectile_1_1Controller.html#adcae15a3eb95c064df9a6b8fc67069e5">ProjectileHitVisual</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abb3a7b6858c9cbd3eb20c8c5fb2104d4">ResolveContactPop</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a> projectile, <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a> balloon, Vector3 balloonWorldPosition, bool isPiercing)</td></tr>
 <tr class="separator:abb3a7b6858c9cbd3eb20c8c5fb2104d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -164,6 +166,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a4c335ddf2b3d0119c4fd270eff325062"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80b738cbb4593f3a726e767b6110c544" id="r_a80b738cbb4593f3a726e767b6110c544"><td class="memItemLeft" align="right" valign="top">readonly IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html">ShieldGainedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80b738cbb4593f3a726e767b6110c544">_shieldGainedPublisher</a></td></tr>
 <tr class="separator:a80b738cbb4593f3a726e767b6110c544"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41e96c8ba5639b8440e0c7c5625f06b6" id="r_a41e96c8ba5639b8440e0c7c5625f06b6"><td class="memItemLeft" align="right" valign="top">readonly Vector2[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a41e96c8ba5639b8440e0c7c5625f06b6">_sideNeighborOffsets</a> = new Vector2[6]</td></tr>
+<tr class="separator:a41e96c8ba5639b8440e0c7c5625f06b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4977615d332512ae404e93ac5f59275a" id="r_a4977615d332512ae404e93ac5f59275a"><td class="memItemLeft" align="right" valign="top">readonly Vector2Int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4977615d332512ae404e93ac5f59275a">_sideValidNeighborSlots</a> = new Vector2Int[6]</td></tr>
+<tr class="separator:a4977615d332512ae404e93ac5f59275a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa660a02c3e75f5f2998f03f3a0d96a0" id="r_afa660a02c3e75f5f2998f03f3a0d96a0"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html">ColorStreakTracker</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa660a02c3e75f5f2998f03f3a0d96a0">_streakTracker</a></td></tr>
 <tr class="separator:afa660a02c3e75f5f2998f03f3a0d96a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -298,6 +304,31 @@ Private Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a975c6d6a957d54fe681d5f27dbfeab4a" name="a975c6d6a957d54fe681d5f27dbfeab4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a975c6d6a957d54fe681d5f27dbfeab4a">&#9670;&#160;</a></span>RecolorSideNeighbor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Projectile.Controller.ProjectileHitResolver.RecolorSideNeighbor </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>index</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -511,6 +542,50 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly IPublisher&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html">ShieldGainedMessage</a>&gt; BalloonParty.Projectile.Controller.ProjectileHitResolver._shieldGainedPublisher</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a41e96c8ba5639b8440e0c7c5625f06b6" name="a41e96c8ba5639b8440e0c7c5625f06b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41e96c8ba5639b8440e0c7c5625f06b6">&#9670;&#160;</a></span>_sideNeighborOffsets</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly Vector2 [] BalloonParty.Projectile.Controller.ProjectileHitResolver._sideNeighborOffsets = new Vector2[6]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4977615d332512ae404e93ac5f59275a" name="a4977615d332512ae404e93ac5f59275a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4977615d332512ae404e93ac5f59275a">&#9670;&#160;</a></span>_sideValidNeighborSlots</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly Vector2Int [] BalloonParty.Projectile.Controller.ProjectileHitResolver._sideValidNeighborSlots = new Vector2Int[6]</td>
         </tr>
       </table>
   </td>

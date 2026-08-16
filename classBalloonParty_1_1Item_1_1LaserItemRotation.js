@@ -22,13 +22,14 @@ var classBalloonParty_1_1Item_1_1LaserItemRotation =
     [ "_lightField", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#af8145558e0483e14d6a8b653c8554a0d", null ],
     [ "_palette", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#a1c8a73971e2261cfcaf4cbaac2cd3d38", null ],
     [ "_previousIndex", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#a0f53f58f57b776e5c08b2f8e0133faef", null ],
-    [ "_stepSeconds", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#a90268d14af03437f17e49f32a248640a", null ],
     [ "_stopped", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#aaf506aa6a9bba468c280f5de154234d1", null ],
     [ "_vertical", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#ae3e5d2808ad33f49c317b384306927b6", null ],
     [ "_verticalRegistration", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#a777c5968796128e5cab774cf7cc2641f", null ],
+    [ "DefaultStepSeconds", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#afe5cb1df51b709f354c43760054b567e", null ],
     [ "TransitionFraction", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#adf90d23c890d8466f71dd9564e146cbd", null ],
     [ "AngleDegrees", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#af0820e9a76cb48619c535c998c47c40b", null ],
     [ "DwellSeconds", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#ad0fa8fc5afaff4eeb2bda2c7198c54e5", null ],
     [ "IsSettled", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#a1d589340cbdc2bd865de61473e20a3ae", null ],
-    [ "SpinDegreesPerSecond", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#a48723aa011842cefd82541d36f42e33e", null ]
+    [ "SpinDegreesPerSecond", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#a48723aa011842cefd82541d36f42e33e", null ],
+    [ "StepSeconds", "classBalloonParty_1_1Item_1_1LaserItemRotation.html#a116310b2388f6ed592fdad0ef0c91946", null ]
 ];

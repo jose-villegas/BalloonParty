@@ -802,6 +802,7 @@ var annotated_dup =
           [ "StubThermalSource", "classBalloonParty_1_1Shared_1_1Thermal_1_1StubThermalSource.html", "classBalloonParty_1_1Shared_1_1Thermal_1_1StubThermalSource" ],
           [ "ThermalFrameRateGovernor", "classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html", "classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor" ]
         ] ],
+        [ "AimAngleGrid", "classBalloonParty_1_1Shared_1_1AimAngleGrid.html", "classBalloonParty_1_1Shared_1_1AimAngleGrid" ],
         [ "CircleContact", "classBalloonParty_1_1Shared_1_1CircleContact.html", "classBalloonParty_1_1Shared_1_1CircleContact" ],
         [ "ContactRadius", "classBalloonParty_1_1Shared_1_1ContactRadius.html", "classBalloonParty_1_1Shared_1_1ContactRadius" ],
         [ "DeflectorCircle", "structBalloonParty_1_1Shared_1_1DeflectorCircle.html", "structBalloonParty_1_1Shared_1_1DeflectorCircle" ],

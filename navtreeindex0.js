@@ -4,6 +4,7 @@ var NAVTREEINDEX0 =
 "ActiveProjectilePierce_8cs.html":[7,0,12,1,0],
 "ActorHitMessage_8cs.html":[7,0,14,7,0],
 "AddShieldCheat_8cs.html":[7,0,2,0],
+"AimAngleGrid_8cs.html":[7,0,14,13],
 "AimDirectionHistory_8cs.html":[7,0,17,0],
 "AimMode_8cs.html":[7,0,8,8],
 "AlignTiming_8cs.html":[7,0,8,9],
@@ -126,7 +127,7 @@ var NAVTREEINDEX0 =
 "CinematicTraits_8cs.html":[7,0,14,5,4],
 "Cinematic_8cs.html":[7,0,14,5,0],
 "CinematicsSettings_8cs.html":[7,0,3,2,2],
-"CircleContact_8cs.html":[7,0,14,13],
+"CircleContact_8cs.html":[7,0,14,14],
 "ClipPickMode_8cs.html":[7,0,0,0,1],
 "ClipWrapMode_8cs.html":[7,0,0,0,2],
 "CloudNoiseTextureGenerator_8cs.html":[7,0,6,14],
@@ -147,7 +148,7 @@ var NAVTREEINDEX0 =
 "CombatSoundRouter_8cs.html":[7,0,0,2,0],
 "CompositeColorableRenderer_8cs.html":[7,0,14,10,3],
 "CompositeTelemetrySink_8cs.html":[7,0,7,7,5],
-"ContactRadius_8cs.html":[7,0,14,14],
+"ContactRadius_8cs.html":[7,0,14,15],
 "DamageContext_8cs.html":[7,0,15,1,0],
 "DamageFlags_8cs.html":[7,0,15,1,1],
 "DampedSpring1D_8cs.html":[7,0,14,6,0],
@@ -175,7 +176,7 @@ var NAVTREEINDEX0 =
 "EffectViewPreviewPlayer_8cs.html":[7,0,6,1,3],
 "EffectView_8cs.html":[7,0,14,9,1],
 "EndRunRequestedMessage_8cs.html":[7,0,14,7,5],
-"EnumIndexedAttribute_8cs.html":[7,0,14,15],
+"EnumIndexedAttribute_8cs.html":[7,0,14,16],
 "EnumIndexedDrawer_8cs.html":[7,0,6,16],
 "FPSCounter_8cs.html":[7,0,14,2,1],
 "FadeImage_8cs.html":[7,0,18,11],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "IAudioMixerRouter_8cs.html":[7,0,0,8],
 "IAudioMixerSettings_8cs.html":[7,0,0,0,3],
 "IBackgroundFieldSettings_8cs.html":[7,0,3,4,4],
-"IBalanceBiasSource_8cs.html":[7,0,15,0,5],
-"IBalanceInfluence_8cs.html":[7,0,15,0,6]
+"IBalanceBiasSource_8cs.html":[7,0,15,0,5]
 };

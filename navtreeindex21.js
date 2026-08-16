@@ -1,5 +1,12 @@
 var NAVTREEINDEX21 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#af7cff732bdd8b626c26f3b7c71211ad4":[5,0,0,3,7,6,7],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#af7cff732bdd8b626c26f3b7c71211ad4":[6,0,0,3,7,6,7],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#afccb6ccda543996913f09a0865b0aebf":[5,0,0,3,7,6,22],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#afccb6ccda543996913f09a0865b0aebf":[6,0,0,3,7,6,22],
+"classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html":[5,0,0,3,7,7],
+"classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html":[6,0,0,3,7,7],
+"classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html#a044cdc9307526be293bee9b60ec81659":[5,0,0,3,7,7,1],
 "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html#a044cdc9307526be293bee9b60ec81659":[6,0,0,3,7,7,1],
 "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html#a15e2ad73cd54e758e6f9eee51dba1ff8":[5,0,0,3,7,7,6],
 "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html#a15e2ad73cd54e758e6f9eee51dba1ff8":[6,0,0,3,7,7,6],
@@ -242,12 +249,5 @@ var NAVTREEINDEX21 =
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a65cb3c052e2cab567b02dad4dfa72008":[5,0,0,3,23,35],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a65cb3c052e2cab567b02dad4dfa72008":[6,0,0,3,23,35],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a6f533407b3ba1e4ec9ae7edb5417a2b4":[5,0,0,3,23,28],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a6f533407b3ba1e4ec9ae7edb5417a2b4":[6,0,0,3,23,28],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a73d98bc94d184ffca8f14edf7e61a45c":[5,0,0,3,23,14],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a73d98bc94d184ffca8f14edf7e61a45c":[6,0,0,3,23,14],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a7fc0065c4a18fae0a49f8fa7b7d0e1a7":[5,0,0,3,23,27],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a7fc0065c4a18fae0a49f8fa7b7d0e1a7":[6,0,0,3,23,27],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a80833c2ed7278d64261d9cf4c9579645":[5,0,0,3,23,24],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a80833c2ed7278d64261d9cf4c9579645":[6,0,0,3,23,24],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a82128484b49dda801682e953ee04b165":[5,0,0,3,23,15]
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a6f533407b3ba1e4ec9ae7edb5417a2b4":[6,0,0,3,23,28]
 };

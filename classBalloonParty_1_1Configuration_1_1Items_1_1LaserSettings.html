@@ -135,6 +135,9 @@ Properties</h2></td></tr>
 <tr class="separator:aab6eb3e904928d5a6ec70aaa720e2079"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acad327320bff5323a50a2790eaf05795" id="r_acad327320bff5323a50a2790eaf05795"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acad327320bff5323a50a2790eaf05795">RaycastDistance</a><code> [get]</code></td></tr>
 <tr class="separator:acad327320bff5323a50a2790eaf05795"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3920cac77bda19abc1e6689680f05715" id="r_a3920cac77bda19abc1e6689680f05715"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3920cac77bda19abc1e6689680f05715">RotationStepSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a3920cac77bda19abc1e6689680f05715"><td class="mdescLeft">&#160;</td><td class="mdescRight">How long the icon dwells on one hex-aligned angle before stepping to the next.  <br /></td></tr>
+<tr class="separator:a3920cac77bda19abc1e6689680f05715"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9237dcb7a63d485d71662b19ece25854" id="r_a9237dcb7a63d485d71662b19ece25854"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9237dcb7a63d485d71662b19ece25854">TelegraphEnabled</a><code> [get]</code></td></tr>
 <tr class="memdesc:a9237dcb7a63d485d71662b19ece25854"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the idle telegraph cross-light is active.  <br /></td></tr>
 <tr class="separator:a9237dcb7a63d485d71662b19ece25854"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -164,6 +167,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a0ecf3388baba3e37741bd450f4a374ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00e44c704c0264ffa639289a6782a9d6" id="r_a00e44c704c0264ffa639289a6782a9d6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00e44c704c0264ffa639289a6782a9d6">_laserRaycastDistance</a> = 20f</td></tr>
 <tr class="separator:a00e44c704c0264ffa639289a6782a9d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a647fd4e52c37f0ca4df94a817197b7" id="r_a8a647fd4e52c37f0ca4df94a817197b7"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a647fd4e52c37f0ca4df94a817197b7">_rotationStepSeconds</a> = 1.5f</td></tr>
+<tr class="separator:a8a647fd4e52c37f0ca4df94a817197b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1358bba0c2f10d00315545895f72ceec" id="r_a1358bba0c2f10d00315545895f72ceec"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1358bba0c2f10d00315545895f72ceec">_telegraphEnabled</a></td></tr>
 <tr class="separator:a1358bba0c2f10d00315545895f72ceec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31bbf9f3a898bb55fe42b0059a3a032a" id="r_a31bbf9f3a898bb55fe42b0059a3a032a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31bbf9f3a898bb55fe42b0059a3a032a">_telegraphHalfLength</a> = 2f</td></tr>
@@ -317,6 +322,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Configuration.Items.LaserSettings._laserRaycastDistance = 20f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8a647fd4e52c37f0ca4df94a817197b7" name="a8a647fd4e52c37f0ca4df94a817197b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a647fd4e52c37f0ca4df94a817197b7">&#9670;&#160;</a></span>_rotationStepSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Items.LaserSettings._rotationStepSeconds = 1.5f</td>
         </tr>
       </table>
   </td>
@@ -576,6 +603,30 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3920cac77bda19abc1e6689680f05715" name="a3920cac77bda19abc1e6689680f05715"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3920cac77bda19abc1e6689680f05715">&#9670;&#160;</a></span>RotationStepSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Items.LaserSettings.RotationStepSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How long the icon dwells on one hex-aligned angle before stepping to the next. </p>
 
 </div>
 </div>

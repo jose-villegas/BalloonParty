@@ -168,6 +168,8 @@ Package Functions</h2></td></tr>
 <tr class="memitem:ac668ddd1b99f5362e281b57896775f70" id="r_ac668ddd1b99f5362e281b57896775f70"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac668ddd1b99f5362e281b57896775f70">Show</a> (<a class="el" href="interfaceBalloonParty_1_1Item_1_1Preview_1_1IItemRangePreview.html">IItemRangePreview</a> preview, in <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewContext.html">ItemPreviewContext</a> context, bool introduce)</td></tr>
 <tr class="memdesc:ac668ddd1b99f5362e281b57896775f70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds <em>preview</em> 's figure for this crossing and aims the pens at it.  <br /></td></tr>
 <tr class="separator:ac668ddd1b99f5362e281b57896775f70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c166e5a1399fcf657daf5d70bbc4c87" id="r_a4c166e5a1399fcf657daf5d70bbc4c87"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4c166e5a1399fcf657daf5d70bbc4c87">Tick</a> (float deltaTime)</td></tr>
+<tr class="separator:a4c166e5a1399fcf657daf5d70bbc4c87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
@@ -338,6 +340,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ab76805b36cae1d5d04bb6e94ba798ec2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c534e7182e2aa66bb3b87bcb9a1488a" id="r_a7c534e7182e2aa66bb3b87bcb9a1488a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c534e7182e2aa66bb3b87bcb9a1488a">_parked</a></td></tr>
 <tr class="separator:a7c534e7182e2aa66bb3b87bcb9a1488a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62df42d05f9dec07900e8d1f7b7e8fa5" id="r_a62df42d05f9dec07900e8d1f7b7e8fa5"><td class="memItemLeft" align="right" valign="top">readonly Func&lt; PoolChannel&lt; <a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html">HighlightTrail</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a62df42d05f9dec07900e8d1f7b7e8fa5">_penChannelFactory</a></td></tr>
+<tr class="separator:a62df42d05f9dec07900e8d1f7b7e8fa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22c0d5c43a1178bdb7c3a282ed5a8a04" id="r_a22c0d5c43a1178bdb7c3a282ed5a8a04"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html">HighlightTrail</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22c0d5c43a1178bdb7c3a282ed5a8a04">_penPrefab</a></td></tr>
 <tr class="separator:a22c0d5c43a1178bdb7c3a282ed5a8a04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95aa3a223154afa044649c8f82fe894a" id="r_a95aa3a223154afa044649c8f82fe894a"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker_1_1Pen.html">Pen</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a95aa3a223154afa044649c8f82fe894a">_pens</a> = new()</td></tr>
@@ -1765,6 +1769,31 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4c166e5a1399fcf657daf5d70bbc4c87" name="a4c166e5a1399fcf657daf5d70bbc4c87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c166e5a1399fcf657daf5d70bbc4c87">&#9670;&#160;</a></span>Tick()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Preview.ItemPreviewTicker.Tick </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>deltaTime</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a5948d2784f4e2cf0ad902fb3e9f125eb" name="a5948d2784f4e2cf0ad902fb3e9f125eb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5948d2784f4e2cf0ad902fb3e9f125eb">&#9670;&#160;</a></span>_aimDirection</h2>
@@ -2459,6 +2488,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool BalloonParty.Item.Preview.ItemPreviewTicker._parked</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a62df42d05f9dec07900e8d1f7b7e8fa5" name="a62df42d05f9dec07900e8d1f7b7e8fa5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62df42d05f9dec07900e8d1f7b7e8fa5">&#9670;&#160;</a></span>_penChannelFactory</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly Func&lt;PoolChannel&lt;<a class="el" href="classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html">HighlightTrail</a>&gt; &gt; BalloonParty.Item.Preview.ItemPreviewTicker._penChannelFactory</td>
         </tr>
       </table>
   </td>
