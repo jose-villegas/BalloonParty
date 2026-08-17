@@ -93,6 +93,17 @@ namespace BalloonParty.Shared.Extensions
             }
         }
 
+        /// <summary>True if <paramref name="offset" /> lies on the forward side of <paramref name="direction" />
+        /// (a positive dot product) — used to exclude what a travelling shot is heading toward from an area
+        /// effect it just triggered (e.g. a pierce discharge bloom), so the shot can't immediately re-score
+        /// off something it converted itself. Sign-only, so <paramref name="direction" /> need not be
+        /// normalized; a zero-length direction can't say what's "ahead", so it reads false for every offset
+        /// (nothing gets excluded).</summary>
+        public static bool IsAhead(this Vector2 offset, Vector2 direction)
+        {
+            return Vector2.Dot(offset, direction) > 0f;
+        }
+
         /// <summary>True length of the open polyline through every point — the sum of consecutive segment lengths.</summary>
         public static float PolylineLength(this IReadOnlyList<Vector3> points)
         {

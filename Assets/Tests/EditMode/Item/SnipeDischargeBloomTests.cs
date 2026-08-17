@@ -90,6 +90,39 @@ namespace BalloonParty.Tests.Item
         }
 
         [Test]
+        public void OnDischarged_Rainbow_ExcludesBalloonsAheadOfTravelDirection()
+        {
+            // Two toughs → charge 2 → radius 2, same tuning as the radius test above. Both slots sit
+            // exactly 1 unit from centre along the shot's +X travel axis, on opposite sides.
+            var center = new Vector3(1f, -0.25f, 0f);
+
+            // (2,5) sits ahead of the shot's onward (+X) travel — it's what a re-armed banked charge
+            // would plow into next, so it must NOT bloom (that's the self-feeding multiplier this guards).
+            var ahead = PlaceBalloon(new Vector2Int(2, 5), "Red");
+            // (1,5) sits behind the discharge along the same axis — still within radius, still blooms.
+            var behind = PlaceBalloon(new Vector2Int(1, 5), "Blue");
+
+            _dischargedHandler.Handle(new PierceDischargedMessage(center, toughCount: 2, isRainbow: true, direction: Vector3.right));
+
+            Assert.AreEqual("Red", ahead.Color.Value, "a balloon ahead of the shot's travel must stay untouched");
+            Assert.AreEqual(GamePalette.RainbowColorId, behind.Color.Value);
+        }
+
+        [Test]
+        public void OnDischarged_Rainbow_NoDirection_BloomsFullRadius()
+        {
+            var center = new Vector3(1f, -0.25f, 0f);
+
+            // Default/degenerate direction can't say what's "ahead" — falls back to the old omnidirectional
+            // behaviour rather than silently excluding balloons for no reason.
+            var wellInside = PlaceBalloon(new Vector2Int(2, 5), "Red");
+
+            _dischargedHandler.Handle(new PierceDischargedMessage(center, toughCount: 2, isRainbow: true));
+
+            Assert.AreEqual(GamePalette.RainbowColorId, wellInside.Color.Value);
+        }
+
+        [Test]
         public void OnDischarged_NotRainbow_ConvertsNothing()
         {
             var center = new Vector3(1f, -0.25f, 0f);

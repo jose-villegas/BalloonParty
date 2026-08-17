@@ -66,6 +66,36 @@ namespace BalloonParty.Tests.Shared
         }
 
         [Test]
+        public void IsAhead_ForwardOffset_IsTrue()
+        {
+            Assert.IsTrue(new Vector2(1f, 0f).IsAhead(new Vector2(1f, 0f)));
+        }
+
+        [Test]
+        public void IsAhead_BehindOffset_IsFalse()
+        {
+            Assert.IsFalse(new Vector2(-1f, 0f).IsAhead(new Vector2(1f, 0f)));
+        }
+
+        [Test]
+        public void IsAhead_PerpendicularOffset_IsFalse()
+        {
+            Assert.IsFalse(new Vector2(0f, 1f).IsAhead(new Vector2(1f, 0f)));
+        }
+
+        [Test]
+        public void IsAhead_UnnormalizedDirection_SignIsUnaffected()
+        {
+            Assert.IsTrue(new Vector2(1f, 0f).IsAhead(new Vector2(50f, 0f)));
+        }
+
+        [Test]
+        public void IsAhead_ZeroLengthDirection_IsAlwaysFalse()
+        {
+            Assert.IsFalse(new Vector2(1f, 0f).IsAhead(Vector2.zero));
+        }
+
+        [Test]
         public void DirectionFromAngle_CardinalAngles()
         {
             var east = VectorMathExtensions.DirectionFromAngle(0f);

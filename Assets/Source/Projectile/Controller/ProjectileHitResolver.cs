@@ -132,7 +132,8 @@ namespace BalloonParty.Projectile.Controller
             // shockwave / slow-mo. Centred on the plowed line, carrying the charge (tough count) and
             // whether the shot was rainbow.
             _flightStats.RecordPierceDischarge();
-            _dischargedPublisher.Publish(new PierceDischargedMessage(center / resolvedCount, resolvedCount, isRainbowBuff));
+            _dischargedPublisher.Publish(new PierceDischargedMessage(
+                center / resolvedCount, resolvedCount, isRainbowBuff, projectile.Direction));
 
             pending.Clear();
         }
