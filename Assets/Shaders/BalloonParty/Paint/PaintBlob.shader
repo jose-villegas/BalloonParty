@@ -47,6 +47,12 @@ Shader "BalloonParty/Paint/PaintBlob"
         _ShadowDistance     ("Shadow Distance", Range(0, 0.3))      = 0.036
         _ShadowSoftness     ("Shadow Softness", Range(0.001, 0.08)) = 0.02
         _ShadowScale        ("Shadow Scale",    Range(0.10, 3.00))  = 1.0
+        // A shadow needs a surface to land on — fade it toward the floor where there's no cloud/smoke
+        // behind the blob, full where there is, instead of always drawing at fixed intensity regardless
+        // of what's actually behind it (the Sprite/LightDriven ground-shadow pattern).
+        [Toggle(_CLOUD_FADE_ON)] _CloudShadowFade ("Shadow Reacts To Background", Float) = 0
+        _CloudShadowFloor   ("Cloud Fade Floor",    Range(0, 1))    = 0.0
+        _SmokeReceiveWeight ("Smoke Shadow Receive", Range(0, 1))   = 0
     }
 
     SubShader
@@ -71,11 +77,14 @@ Shader "BalloonParty/Paint/PaintBlob"
             #pragma fragment frag
             #pragma target 3.5
             #pragma shader_feature _SHADOW_ON
+            #pragma shader_feature_local _CLOUD_FADE_ON
             #pragma multi_compile_instancing
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
             #include "../Include/Composite.cginc"
             #include "../Include/RainbowBand.cginc"
+            #include "../Include/BackgroundField.cginc"
+            #include "../Include/SmokeField.cginc"
 
             struct appdata_t
             {
@@ -97,6 +106,13 @@ Shader "BalloonParty/Paint/PaintBlob"
                 float3 lightTint : TEXCOORD3;
                 #ifdef _SHADOW_ON
                 float  shadowFade : TEXCOORD4;
+                #if defined(_CLOUD_FADE_ON)
+                // The fragment's own world position — the shadow is drawn at the SAME screen/world
+                // pixels as the blob (an SDF-shift trick moves the SHAPE, not the quad), so this is
+                // what's actually "behind" a given shadow pixel. Per-fragment, not per-blob, so the
+                // fade can vary across the shadow's own footprint (e.g. half on a cloud, half off).
+                float2 worldPos : TEXCOORD5;
+                #endif
                 #endif
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
@@ -142,6 +158,10 @@ Shader "BalloonParty/Paint/PaintBlob"
             float  _ShadowDistance;
             float  _ShadowSoftness;
             float  _ShadowScale;
+            #if defined(_CLOUD_FADE_ON)
+            float  _CloudShadowFloor;
+            float  _SmokeReceiveWeight;
+            #endif
             #endif
 
             // Computes the blob SDF boundary at a given UV offset from center.
@@ -193,6 +213,12 @@ Shader "BalloonParty/Paint/PaintBlob"
                 OUT.lightTint = SceneLightTintAtLOD(blobCenterWorld);
                 #ifdef _SHADOW_ON
                 OUT.shadowFade = ShadowLightFadeAtLOD(blobCenterWorld);
+                #if defined(_CLOUD_FADE_ON)
+                // Per-vertex world position, interpolated to each fragment below — unlike lightDir/
+                // lightTint/shadowFade (deliberately ONE coherent sample per blob), the background field
+                // needs the REAL position under each pixel so the fade can vary across the shadow.
+                OUT.worldPos = mul(unity_ObjectToWorld, IN.vertex).xy;
+                #endif
                 #endif
                 return OUT;
             }
@@ -220,6 +246,15 @@ Shader "BalloonParty/Paint/PaintBlob"
                 float2 shadowUV    = (uv - shadowLocal) / max(_ShadowScale, 0.001);
                 float  shadowAlpha = BlobAlpha(shadowUV, _ShadowSoftness / max(_ShadowScale, 0.001)) * _ShadowColor.a;
                 shadowAlpha *= IN.shadowFade;
+                #if defined(_CLOUD_FADE_ON)
+                // A shadow needs a surface to land on — fade toward the floor with nothing behind THIS
+                // pixel, full where there's cloud/smoke to catch it. Per-fragment (IN.worldPos is the
+                // true, interpolated position under this pixel), so the fade can vary across the
+                // shadow's own footprint instead of the whole shadow flipping as one unit.
+                float receive = BackgroundFieldDensity(IN.worldPos);
+                receive = max(receive, SmokeFieldSample(IN.worldPos).a * _SmokeReceiveWeight);
+                shadowAlpha *= lerp(_CloudShadowFloor, 1.0, receive);
+                #endif
                 #endif
 
                 // Early discard — nothing to draw if both blob and shadow are invisible
