@@ -1,5 +1,7 @@
 var NAVTREEINDEX87 =
 {
+"structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#ac6b03562889f6fa7d33203c13f3fede4":[6,0,0,3,6,4,2],
+"structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#adfa8d26d3b55c7af4a1fd3ad5796d0cf":[5,0,0,3,6,4,4],
 "structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#adfa8d26d3b55c7af4a1fd3ad5796d0cf":[6,0,0,3,6,4,4],
 "structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html":[5,0,0,3,7,4],
 "structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html":[6,0,0,3,7,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX87 =
 "structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1SourceCatalog.html#a3149843a24591b5bd3036584bd86c347":[6,0,0,5,23,1,2],
 "structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1SourceCatalog.html#a66840a262dfccd334165404081c804c5":[5,0,0,5,23,1,0],
 "structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1SourceCatalog.html#a66840a262dfccd334165404081c804c5":[6,0,0,5,23,1,0],
-"structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1SourceCatalog.html#a91278cd656ef943c9bf469f8b1ca4165":[5,0,0,5,23,1,1],
-"structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1SourceCatalog.html#a91278cd656ef943c9bf469f8b1ca4165":[6,0,0,5,23,1,1],
-"structBalloonParty_1_1Editor_1_1Release_1_1ReleaseRequest.html":[5,0,0,5,4,1]
+"structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1SourceCatalog.html#a91278cd656ef943c9bf469f8b1ca4165":[5,0,0,5,23,1,1]
 };

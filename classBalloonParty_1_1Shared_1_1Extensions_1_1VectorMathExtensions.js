@@ -7,6 +7,7 @@ var classBalloonParty_1_1Shared_1_1Extensions_1_1VectorMathExtensions =
     [ "ClampToWindow", "classBalloonParty_1_1Shared_1_1Extensions_1_1VectorMathExtensions.html#aa04257329759040a872e02d0a173f16f", null ],
     [ "DirectionFromAngle", "classBalloonParty_1_1Shared_1_1Extensions_1_1VectorMathExtensions.html#a834bfa0109b711c57fa93019f0124701", null ],
     [ "GetTwoMostPerpendicular", "classBalloonParty_1_1Shared_1_1Extensions_1_1VectorMathExtensions.html#aac65682e9f712e52550e92582425b3c6", null ],
+    [ "IsAhead", "classBalloonParty_1_1Shared_1_1Extensions_1_1VectorMathExtensions.html#ad441b3e50e8e3f8d8d1ae0ad9eb6f57c", null ],
     [ "PolylineLength", "classBalloonParty_1_1Shared_1_1Extensions_1_1VectorMathExtensions.html#a2483de863f503d85f1c6bafc032ec0c4", null ],
     [ "RandomPointInAnnulusSector", "classBalloonParty_1_1Shared_1_1Extensions_1_1VectorMathExtensions.html#aecac2755ad6f60a1f20bc19d533227af", null ],
     [ "SqrDistance2D", "classBalloonParty_1_1Shared_1_1Extensions_1_1VectorMathExtensions.html#a4aa9e0d7de44382c2d5d2ae9eeeaf6c7", null ],

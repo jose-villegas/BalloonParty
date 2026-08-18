@@ -4,7 +4,7 @@ var classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker =
     [ "Dispose", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html#a535dd2f48bf85efe522d2c26e2b7cb84", null ],
     [ "GetStreak", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html#a0cb6fd9d02d327a96fe7e57d542d57f0", null ],
     [ "PublishChanged", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html#a93e9d4ccdac46068a33c63cf6f10379d", null ],
-    [ "Record", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html#ac1a2a63006f1a6e9e196d1d1206c8d7c", null ],
+    [ "Record", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html#af813676f22c7e89a3930ef513ad42293", null ],
     [ "RecordDeferred", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html#afc8d6d76dd50344948f88c728cdc0702", null ],
     [ "RecordWildcard", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html#aef53a7aedc6b2173b8be3e388d315fe4", null ],
     [ "Reset", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html#a9778eadbe1f5d0726f447420f32c4350", null ],

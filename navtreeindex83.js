@@ -1,5 +1,7 @@
 var NAVTREEINDEX83 =
 {
+"namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6a8f347bc7cebca9fa6d97e70c6bc29eb3":[5,0,0,12,5,14,3],
+"namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6a9506f0fd0f7f1b07960b15b4c9e68d1a":[5,0,0,12,5,14,0],
 "namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6ae7c8e9e1f90eadea8b03762d9e9215c7":[5,0,0,12,5,14,2],
 "namespaceBalloonParty_1_1Shared_1_1GameState.html#aadf066414424aff953d1b79f327952bb":[5,0,0,12,5,13],
 "namespaceBalloonParty_1_1Shared_1_1GameState.html#aadf066414424aff953d1b79f327952bba32f2360b90157759ead1be1a7ea2333a":[5,0,0,12,5,13,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX83 =
 "plan_future_ideas.html#autotoc_md425":[3,4,0,9,1],
 "plan_future_ideas.html#autotoc_md426":[3,4,0,9,1,0],
 "plan_future_ideas.html#autotoc_md427":[3,4,0,9,1,1],
-"plan_future_ideas.html#autotoc_md428":[3,4,0,9,1,2],
-"plan_future_ideas.html#autotoc_md429":[3,4,0,9,1,3],
-"plan_future_ideas.html#autotoc_md430":[3,4,0,9,1,4]
+"plan_future_ideas.html#autotoc_md428":[3,4,0,9,1,2]
 };

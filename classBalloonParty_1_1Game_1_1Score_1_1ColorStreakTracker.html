@@ -138,9 +138,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a535dd2f48bf85efe522d2c26e2b7cb84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0cb6fd9d02d327a96fe7e57d542d57f0" id="r_a0cb6fd9d02d327a96fe7e57d542d57f0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0cb6fd9d02d327a96fe7e57d542d57f0">GetStreak</a> (string colorName)</td></tr>
 <tr class="separator:a0cb6fd9d02d327a96fe7e57d542d57f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1a2a63006f1a6e9e196d1d1206c8d7c" id="r_ac1a2a63006f1a6e9e196d1d1206c8d7c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac1a2a63006f1a6e9e196d1d1206c8d7c">Record</a> (string colorId, bool breaksStreak=false)</td></tr>
-<tr class="memdesc:ac1a2a63006f1a6e9e196d1d1206c8d7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Records a pop attribution and returns the streak multiplier to apply to points.  <br /></td></tr>
-<tr class="separator:ac1a2a63006f1a6e9e196d1d1206c8d7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af813676f22c7e89a3930ef513ad42293" id="r_af813676f22c7e89a3930ef513ad42293"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af813676f22c7e89a3930ef513ad42293">Record</a> (string colorId, bool breaksStreak=false, bool canIncrement=true)</td></tr>
+<tr class="memdesc:af813676f22c7e89a3930ef513ad42293"><td class="mdescLeft">&#160;</td><td class="mdescRight">Records a balloon pop against the streak and returns the multiplier to score it at.  <br /></td></tr>
+<tr class="separator:af813676f22c7e89a3930ef513ad42293"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc8d6d76dd50344948f88c728cdc0702" id="r_afc8d6d76dd50344948f88c728cdc0702"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc8d6d76dd50344948f88c728cdc0702">RecordDeferred</a> ()</td></tr>
 <tr class="memdesc:afc8d6d76dd50344948f88c728cdc0702"><td class="mdescLeft">&#160;</td><td class="mdescRight">Banks a pop from a colourless projectile hitting a rainbow balloon.  <br /></td></tr>
 <tr class="separator:afc8d6d76dd50344948f88c728cdc0702"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -277,8 +277,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac1a2a63006f1a6e9e196d1d1206c8d7c" name="ac1a2a63006f1a6e9e196d1d1206c8d7c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac1a2a63006f1a6e9e196d1d1206c8d7c">&#9670;&#160;</a></span>Record()</h2>
+<a id="af813676f22c7e89a3930ef513ad42293" name="af813676f22c7e89a3930ef513ad42293"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af813676f22c7e89a3930ef513ad42293">&#9670;&#160;</a></span>Record()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -291,12 +291,18 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>breaksStreak</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>breaksStreak</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>canIncrement</em></span><span class="paramdefsep"> = </span><span class="paramdefval">true</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Records a pop attribution and returns the streak multiplier to apply to points. </p>
+<p>Records a balloon pop against the streak and returns the multiplier to score it at. </p>
+<p>Pass <em>canIncrement</em>  as false for a pop that didn't come from the shot itself (an item/AOE pop): a same-colour pop then keeps the streak alive at its current multiplier without pushing it higher, and a colour change still tracks the new colour (so a later direct hit resumes from the right place) but can't cash in a carried rainbow bonus or the deferred bank — both stay armed, untouched, for whichever direct hit claims them. <em>breaksStreak</em>  always resets regardless of <em>canIncrement</em> . </p>
 
 </div>
 </div>
@@ -316,7 +322,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Banks a pop from a colourless projectile hitting a rainbow balloon. </p>
-<p>The count is folded into the streak the next time <a class="el" href="#ac1a2a63006f1a6e9e196d1d1206c8d7c" title="Records a pop attribution and returns the streak multiplier to apply to points.">Record</a> establishes a colour. </p>
+<p>The count is folded into the streak the next time <a class="el" href="#af813676f22c7e89a3930ef513ad42293" title="Records a balloon pop against the streak and returns the multiplier to score it at.">Record</a> establishes a colour. </p>
 
 </div>
 </div>

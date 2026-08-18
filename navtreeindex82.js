@@ -1,5 +1,7 @@
 var NAVTREEINDEX82 =
 {
+"namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea7f14a4d8653b66c662a9cd9abb6a9004":[5,0,0,1,3,7,1],
+"namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60eacda9af439530c93364d7e44ab31cfb07":[5,0,0,1,3,7,5],
 "namespaceBalloonParty_1_1Balloon_1_1View.html":[5,0,0,1,4],
 "namespaceBalloonParty_1_1Cheats.html":[5,0,0,2],
 "namespaceBalloonParty_1_1Configuration.html":[5,0,0,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX82 =
 "namespaceBalloonParty_1_1Shared_1_1GameState.html#a215f59d6ae03f95cde0cf7bc71abdd3ea7b549c39b6c31bcfbcc0dfda6224863b":[5,0,0,12,5,12,3],
 "namespaceBalloonParty_1_1Shared_1_1GameState.html#a215f59d6ae03f95cde0cf7bc71abdd3ea8143eb3223b0fb12c5201192275bc100":[5,0,0,12,5,12,2],
 "namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6":[5,0,0,12,5,14],
-"namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6a63d72051e901c069f8aa1b32aa0c43bb":[5,0,0,12,5,14,1],
-"namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6a8f347bc7cebca9fa6d97e70c6bc29eb3":[5,0,0,12,5,14,3],
-"namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6a9506f0fd0f7f1b07960b15b4c9e68d1a":[5,0,0,12,5,14,0]
+"namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6a63d72051e901c069f8aa1b32aa0c43bb":[5,0,0,12,5,14,1]
 };

@@ -1,5 +1,7 @@
 var NAVTREEINDEX84 =
 {
+"plan_future_ideas.html#autotoc_md429":[3,4,0,9,1,3],
+"plan_future_ideas.html#autotoc_md430":[3,4,0,9,1,4],
 "plan_future_ideas.html#autotoc_md431":[3,4,0,9,1,5],
 "plan_future_ideas.html#autotoc_md432":[3,4,0,9,1,6],
 "plan_future_ideas.html#autotoc_md433":[3,4,0,9,1,7],
@@ -247,7 +249,5 @@ var NAVTREEINDEX84 =
 "plan_web_demo_hosting.html#autotoc_md716":[3,11,0,0],
 "plan_web_demo_hosting.html#autotoc_md717":[3,11,0,1],
 "plan_web_demo_hosting.html#autotoc_md718":[3,11,0,2],
-"plan_web_demo_hosting.html#autotoc_md719":[3,11,0,3],
-"plan_web_demo_hosting.html#autotoc_md720":[3,11,0,4],
-"plan_web_demo_hosting.html#autotoc_md721":[3,11,0,5]
+"plan_web_demo_hosting.html#autotoc_md719":[3,11,0,3]
 };

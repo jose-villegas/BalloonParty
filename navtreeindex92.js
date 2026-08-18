@@ -1,5 +1,11 @@
 var NAVTREEINDEX92 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html":[6,0,0,12,7,35],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html#ae26032fb2fbc2dffa6cd69b53987cdde":[5,0,0,12,7,35,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html#ae26032fb2fbc2dffa6cd69b53987cdde":[6,0,0,12,7,35,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html#aec04c97992d74bb8c335a0ea8c661e1c":[5,0,0,12,7,35,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html#aec04c97992d74bb8c335a0ea8c661e1c":[6,0,0,12,7,35,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBalloonLineMessage.html":[5,0,0,12,7,36],
 "structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBalloonLineMessage.html":[6,0,0,12,7,36],
 "structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBalloonLineMessage.html#a4595a956efe18d5cc942028549e8e5bd":[5,0,0,12,7,36,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBalloonLineMessage.html#a4595a956efe18d5cc942028549e8e5bd":[6,0,0,12,7,36,1],
@@ -243,11 +249,5 @@ var NAVTREEINDEX92 =
 "structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html#a30de055f3a116b255d54f857725e34b0":[6,0,0,13,1,15,1],
 "structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html#a688000243af7e290bc99385d584f8f7a":[5,0,0,13,1,15,4],
 "structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html#a688000243af7e290bc99385d584f8f7a":[6,0,0,13,1,15,4],
-"structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html#a979c94d0c5e56ecc16bd394a5a3c945c":[5,0,0,13,1,15,3],
-"structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html#a979c94d0c5e56ecc16bd394a5a3c945c":[6,0,0,13,1,15,3],
-"structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html#ab821a061f94d3203562cfb76f7e180a3":[5,0,0,13,1,15,2],
-"structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html#ab821a061f94d3203562cfb76f7e180a3":[6,0,0,13,1,15,2],
-"structBalloonParty_1_1Slots_1_1Grid_1_1ShoveVector.html":[5,0,0,13,2,5],
-"structBalloonParty_1_1Slots_1_1Grid_1_1ShoveVector.html":[6,0,0,13,2,5],
-"structBalloonParty_1_1Slots_1_1Grid_1_1ShoveVector.html#a38c2ef6feeaf843d06c3343471f2b720":[5,0,0,13,2,5,0]
+"structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html#a979c94d0c5e56ecc16bd394a5a3c945c":[5,0,0,13,1,15,3]
 };

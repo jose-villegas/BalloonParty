@@ -117,7 +117,7 @@ $(function(){initNavTree('classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBl
 </div><!--header-->
 <div class="contents">
 
-<p>The rainbow <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a>'s discharge payoff: when a rainbow lance discharges, converts every paintable balloon within a charge-scaled radius of the shattered line to rainbow.  
+<p>The rainbow <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a>'s discharge payoff: when a rainbow lance shatters the tough balloons it plowed through, every paintable balloon near the shattered line turns rainbow too, in a radius that grows with how many toughs it ate (capped so a big plow never eats the whole board) — except balloons ahead of where the shot is still travelling.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Item.Snipe.SnipeDischargeBloom:</div>
@@ -163,8 +163,9 @@ Private Attributes</h2></td></tr>
 <tr class="separator:acf0dbbc7cafe2fae808b8b64ffe7be17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The rainbow <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a>'s discharge payoff: when a rainbow lance discharges, converts every paintable balloon within a charge-scaled radius of the shattered line to rainbow. </p>
-<p>Charge is the count of toughs it plowed; the radius grows per charge up to a hard cap so a big plow never eats the whole board. The toughs themselves are the fuel — popped by the discharge, and never paintable. </p>
+<div class="textblock"><p>The rainbow <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a>'s discharge payoff: when a rainbow lance shatters the tough balloons it plowed through, every paintable balloon near the shattered line turns rainbow too, in a radius that grows with how many toughs it ate (capped so a big plow never eats the whole board) — except balloons ahead of where the shot is still travelling. </p>
+<p>The toughs themselves are never painted; they're the fuel that was just spent, not the reward.</p>
+<p>The forward exclusion exists because the shot isn't necessarily done: a banked <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a> charge — a second <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a> pickup grabbed while one lance is already flying, saved up instead of wasted — can arm a fresh piercing run the instant this discharge ends, sending the shot straight back through whatever lies ahead, including balloons this bloom just converted. Popping a balloon the shot painted itself would hand it a free, uncapped streak hit (<code>ColorStreakTracker.RecordWildcard</code>), so the bloom stays behind the shot instead of feeding its own combo. This is the same fix already made to the plain per-pop rainbow-neighbour conversion (<code>ProjectileHitResolver.ConvertSideNeighboursToRainbow</code>, which recolours the balloons beside a normal pop), which had the identical self-feeding problem before it was limited to the shot's sides. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a552ed4a40c2599f902c5e54edb45f34e" name="a552ed4a40c2599f902c5e54edb45f34e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a552ed4a40c2599f902c5e54edb45f34e">&#9670;&#160;</a></span>SnipeDischargeBloom()</h2>

@@ -209,8 +209,8 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="af915a4f3df9f513ca2c08e1a87aff762a71b82d588f8ca5360dd8f79f4452f61a" name="af915a4f3df9f513ca2c08e1a87aff762a71b82d588f8ca5360dd8f79f4452f61a"></a>Piercing&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="af915a4f3df9f513ca2c08e1a87aff762ab3fb6cd550a52ce3f69b60a4261937fa" name="af915a4f3df9f513ca2c08e1a87aff762ab3fb6cd550a52ce3f69b60a4261937fa"></a>WildcardStreak&#160;</td><td class="fielddoc"><p>The hit should extend the score streak regardless of colour (a colour-agnostic, rainbow-buffed projectile) — see <code>ColorStreakTracker.RecordWildcard</code>. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="af915a4f3df9f513ca2c08e1a87aff762aa5dcddfe1229c26686d7abc62e4223ec" name="af915a4f3df9f513ca2c08e1a87aff762aa5dcddfe1229c26686d7abc62e4223ec"></a>DirectHit&#160;</td><td class="fielddoc"><p>The projectile itself struck the actor — absent from AOE/item damage, so per-pop reactions (e.g. </p>
-<p>pop-spawns) can exclude bombs/lasers/lightning. </p>
+<tr><td class="fieldname"><a id="af915a4f3df9f513ca2c08e1a87aff762aa5dcddfe1229c26686d7abc62e4223ec" name="af915a4f3df9f513ca2c08e1a87aff762aa5dcddfe1229c26686d7abc62e4223ec"></a>DirectHit&#160;</td><td class="fielddoc"><p>The projectile itself struck the actor, as opposed to an item/AOE effect (bomb, laser, lightning) popping it. </p>
+<p>Lets systems that trigger off a pop (e.g. spawning something from it) exclude those items, and gates whether a pop can grow the colour streak (<code>ScoreController.RecordStreakMultiplier</code>) — an item/AOE pop still scores at the live multiplier and still breaks the streak on a mismatch, it just can't climb it. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="af915a4f3df9f513ca2c08e1a87aff762afd7495145e5651d0a7edad206f333719" name="af915a4f3df9f513ca2c08e1a87aff762afd7495145e5651d0a7edad206f333719"></a>DeferredStreak&#160;</td><td class="fielddoc"><p>A colourless projectile popped a rainbow balloon — the streak contribution is deferred until the projectile adopts a colour on a subsequent hit. </p>
 </td></tr>

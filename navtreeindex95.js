@@ -1,5 +1,11 @@
 var NAVTREEINDEX95 =
 {
+"style_guide.html#autotoc_md761":[1,0,3],
+"style_guide.html#autotoc_md763":[1,0,4],
+"style_guide.html#autotoc_md764":[1,0,4,0],
+"style_guide.html#autotoc_md766":[1,0,5],
+"style_guide.html#autotoc_md768":[1,0,6],
+"style_guide.html#autotoc_md769":[1,0,6,0],
 "style_guide.html#autotoc_md770":[1,0,6,1],
 "style_guide.html#autotoc_md771":[1,0,6,2],
 "style_guide.html#autotoc_md772":[1,0,7],

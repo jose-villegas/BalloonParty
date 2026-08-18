@@ -1,5 +1,7 @@
 var NAVTREEINDEX79 =
 {
+"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html#ae614ffdb19803919f4aa04f5b25d360d":[6,0,0,6,7,8,1],
+"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1IReadOnlyMetricSet.html":[5,0,0,6,7,9],
 "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1IReadOnlyMetricSet.html":[6,0,0,6,7,9],
 "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1IReadOnlyMetricSet.html#a3f8ce01e4db142e1f6a28ffd52224342":[5,0,0,6,7,9,0],
 "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1IReadOnlyMetricSet.html#a3f8ce01e4db142e1f6a28ffd52224342":[6,0,0,6,7,9,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX79 =
 "interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html#a0af2fd00818aa8e1a1db7b880e4db6e7":[6,0,0,12,22,6],
 "interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html#a1b0f646f1adf1e564bb22d98d40b48c9":[5,0,0,12,22,1],
 "interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html#a1b0f646f1adf1e564bb22d98d40b48c9":[6,0,0,12,22,1],
-"interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html#a2578a2c861e5516e28c58c9f0305787c":[5,0,0,12,22,9],
-"interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html#a2578a2c861e5516e28c58c9f0305787c":[6,0,0,12,22,9],
-"interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html#a32baa99d3a629f110282f35e92cae33f":[5,0,0,12,22,0]
+"interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html#a2578a2c861e5516e28c58c9f0305787c":[5,0,0,12,22,9]
 };

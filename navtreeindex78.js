@@ -1,5 +1,7 @@
 var NAVTREEINDEX78 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1IPaintPreviewSettings.html":[6,0,0,3,16],
+"interfaceBalloonParty_1_1Configuration_1_1IPaintPreviewSettings.html#a64631c7472996731902e5345585b422a":[5,0,0,3,16,0],
 "interfaceBalloonParty_1_1Configuration_1_1IPaintPreviewSettings.html#a64631c7472996731902e5345585b422a":[6,0,0,3,16,0],
 "interfaceBalloonParty_1_1Configuration_1_1IScoreTrailBehaviourConfiguration.html":[5,0,0,3,17],
 "interfaceBalloonParty_1_1Configuration_1_1IScoreTrailBehaviourConfiguration.html":[6,0,0,3,17],
@@ -247,7 +249,5 @@ var NAVTREEINDEX78 =
 "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html#a0b39fa6b6e370b966a89e1a229f1b6a3":[6,0,0,6,7,8,0],
 "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html#acc1d3b4443b50cbf2e89641587f76974":[5,0,0,6,7,8,2],
 "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html#acc1d3b4443b50cbf2e89641587f76974":[6,0,0,6,7,8,2],
-"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html#ae614ffdb19803919f4aa04f5b25d360d":[5,0,0,6,7,8,1],
-"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html#ae614ffdb19803919f4aa04f5b25d360d":[6,0,0,6,7,8,1],
-"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1IReadOnlyMetricSet.html":[5,0,0,6,7,9]
+"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html#ae614ffdb19803919f4aa04f5b25d360d":[5,0,0,6,7,8,1]
 };

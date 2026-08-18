@@ -138,6 +138,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a834bfa0109b711c57fa93019f0124701" id="r_a834bfa0109b711c57fa93019f0124701"><td class="memItemLeft" align="right" valign="top">static Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a834bfa0109b711c57fa93019f0124701">DirectionFromAngle</a> (float radians)</td></tr>
 <tr class="memdesc:a834bfa0109b711c57fa93019f0124701"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unit direction in the XY plane for <em>radians</em> ; assign to a <code>Vector3</code> local before adding (direct <code>Vector3 + Vector2</code> is ambiguous).  <br /></td></tr>
 <tr class="separator:a834bfa0109b711c57fa93019f0124701"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad441b3e50e8e3f8d8d1ae0ad9eb6f57c" id="r_ad441b3e50e8e3f8d8d1ae0ad9eb6f57c"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad441b3e50e8e3f8d8d1ae0ad9eb6f57c">IsAhead</a> (this Vector2 offset, Vector2 direction)</td></tr>
+<tr class="memdesc:ad441b3e50e8e3f8d8d1ae0ad9eb6f57c"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if <em>offset</em>  points toward where <em>direction</em>  is heading rather than away from it.  <br /></td></tr>
+<tr class="separator:ad441b3e50e8e3f8d8d1ae0ad9eb6f57c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2483de863f503d85f1c6bafc032ec0c4" id="r_a2483de863f503d85f1c6bafc032ec0c4"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2483de863f503d85f1c6bafc032ec0c4">PolylineLength</a> (this IReadOnlyList&lt; Vector3 &gt; points)</td></tr>
 <tr class="memdesc:a2483de863f503d85f1c6bafc032ec0c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">True length of the open polyline through every point — the sum of consecutive segment lengths.  <br /></td></tr>
 <tr class="separator:a2483de863f503d85f1c6bafc032ec0c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -410,6 +413,38 @@ Static Package Functions</h2></td></tr>
 
 <p>Finds the (up to) two vectors most perpendicular to <em>direction</em>  — the smallest absolute dot product against the normalized direction — used to pick the left/right side neighbours of a projectile pop from its travel direction. </p>
 <p>Allocation-free: a single pass tracking the two smallest dots directly, rather than sorting a scratch copy of every candidate, since every caller only ever wants the best two. -1 in either out parameter means no such vector exists (<em>vectorCount</em>  was 0 or 1). </p>
+
+</div>
+</div>
+<a id="ad441b3e50e8e3f8d8d1ae0ad9eb6f57c" name="ad441b3e50e8e3f8d8d1ae0ad9eb6f57c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad441b3e50e8e3f8d8d1ae0ad9eb6f57c">&#9670;&#160;</a></span>IsAhead()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Shared.Extensions.VectorMathExtensions.IsAhead </td>
+          <td>(</td>
+          <td class="paramtype">this Vector2</td>          <td class="paramname"><span class="paramname"><em>offset</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>direction</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>True if <em>offset</em>  points toward where <em>direction</em>  is heading rather than away from it. </p>
+<p>Used to keep a travelling shot's own after-effects (e.g. a pierce discharge bloom) from reaching in front of it, where the shot would immediately fly back through whatever it just affected. A sign-only dot-product test, so <em>direction</em>  need not be normalized; a zero-length direction can't point anywhere, so it reads false for every offset (nothing counts as "ahead", so nothing gets excluded). </p>
 
 </div>
 </div>

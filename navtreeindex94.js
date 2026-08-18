@@ -1,5 +1,11 @@
 var NAVTREEINDEX94 =
 {
+"structBalloonParty_1_1Solver_1_1ShotFlightState.html#a711c37ce5c12d232575ec90422667fb9":[6,0,0,14,10,32],
+"structBalloonParty_1_1Solver_1_1ShotFlightState.html#a7b19ece1cdadf6e179052f9fc5fae696":[5,0,0,14,10,16],
+"structBalloonParty_1_1Solver_1_1ShotFlightState.html#a7b19ece1cdadf6e179052f9fc5fae696":[6,0,0,14,10,16],
+"structBalloonParty_1_1Solver_1_1ShotFlightState.html#a7e9ce022885325beb1400e388a83b378":[5,0,0,14,10,19],
+"structBalloonParty_1_1Solver_1_1ShotFlightState.html#a7e9ce022885325beb1400e388a83b378":[6,0,0,14,10,19],
+"structBalloonParty_1_1Solver_1_1ShotFlightState.html#a81696fee54dc2a25f1d7d7777d3d9273":[5,0,0,14,10,28],
 "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a81696fee54dc2a25f1d7d7777d3d9273":[6,0,0,14,10,28],
 "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a8de3fbce87f96f91bbb3286f4eacb0dd":[5,0,0,14,10,20],
 "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a8de3fbce87f96f91bbb3286f4eacb0dd":[6,0,0,14,10,20],
@@ -243,11 +249,5 @@ var NAVTREEINDEX94 =
 "style_guide.html#autotoc_md756":[1,0,2,0],
 "style_guide.html#autotoc_md757":[1,0,2,1],
 "style_guide.html#autotoc_md758":[1,0,2,2],
-"style_guide.html#autotoc_md759":[1,0,2,3],
-"style_guide.html#autotoc_md761":[1,0,3],
-"style_guide.html#autotoc_md763":[1,0,4],
-"style_guide.html#autotoc_md764":[1,0,4,0],
-"style_guide.html#autotoc_md766":[1,0,5],
-"style_guide.html#autotoc_md768":[1,0,6],
-"style_guide.html#autotoc_md769":[1,0,6,0]
+"style_guide.html#autotoc_md759":[1,0,2,3]
 };

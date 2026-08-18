@@ -1,5 +1,7 @@
 var NAVTREEINDEX85 =
 {
+"plan_web_demo_hosting.html#autotoc_md720":[3,11,0,4],
+"plan_web_demo_hosting.html#autotoc_md721":[3,11,0,5],
 "plan_web_demo_hosting.html#autotoc_md722":[3,11,0,6],
 "plans.html":[3],
 "plans.html#autotoc_md723":[3,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX85 =
 "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html":[6,0,0,3,0,3],
 "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#a0b33883f04902467de9bc8a56649d31a":[5,0,0,3,0,3,6],
 "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#a0b33883f04902467de9bc8a56649d31a":[6,0,0,3,0,3,6],
-"structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#a2d33804fb858444b48c1e5876e8a89fb":[5,0,0,3,0,3,1],
-"structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#a2d33804fb858444b48c1e5876e8a89fb":[6,0,0,3,0,3,1],
-"structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#a3710befb2e5b6fb06818a3f2435b021b":[5,0,0,3,0,3,3]
+"structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#a2d33804fb858444b48c1e5876e8a89fb":[5,0,0,3,0,3,1]
 };
