@@ -336,6 +336,24 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
+        public void DischargePending_PublishesMessageWithProjectilesCurrentDirection()
+        {
+            // The direction changes between the plow (recorded here) and the discharge below — a bounce
+            // in between — so the published message must carry the direction AT DISCHARGE TIME (the
+            // post-bounce direction the SnipeDischargeBloom exclusion relies on), not whatever direction
+            // the shot was travelling while plowing.
+            _projectile.IsPiercing.Value = true;
+            _projectile.Direction = Vector3.right;
+            PlaceAndRecordTough(new Vector2Int(2, 4));
+
+            _projectile.Direction = new Vector3(0f, -1f, 0f);
+            _resolver.DischargePending(_projectile);
+
+            _dischargedPublisher.Received(1).Publish(Arg.Is<PierceDischargedMessage>(m =>
+                m.Direction == new Vector3(0f, -1f, 0f)));
+        }
+
+        [Test]
         public void Resolve_PopNormalBalloon_StealsColour()
         {
             var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));

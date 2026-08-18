@@ -147,6 +147,15 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
 
 ## Accepted approximations (plan §7)
 
+- **Known divergence, not yet mirrored (2026-08-17):** live's `ScoreController.RecordStreakMultiplier`
+  now gates streak GROWTH on `DamageFlags.DirectHit` — an item/AOE pop (Bomb/Laser/Lightning) scores
+  at whatever multiplier is already live but can no longer climb it, only the shot's own contact/pierce-
+  discharge hits can. `ShotSimulator`'s mirror (`RecordColor`, called from `ResolvePopScore`) still
+  increments unconditionally for every same-colour pop regardless of `cause.Flags`, so the solver
+  currently OVER-predicts streak/score for any shot chain with item/AOE pops — `FireBestShotCheat` and
+  `ShotSolverWindow` will rank those chains above what live actually pays out. Needs `RecordColor`
+  threading `cause.Flags.HasFlag(DamageFlags.DirectHit)` the same way live threads it into
+  `ColorStreakTracker.Record`'s `canIncrement`.
 - `ShotItemLayer.MaxActivationsPerFlight` (32) is a sim-only safety valve — live's `ItemActivator`
   has no cap, so a flight that would chain past it in-game keeps granting effects the sim silently
   drops from that point. Related edge: chained activations enqueue in the chain's hit order, and

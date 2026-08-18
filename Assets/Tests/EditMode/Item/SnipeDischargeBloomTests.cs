@@ -63,7 +63,8 @@ namespace BalloonParty.Tests.Item
             // (3,6) sits 4.72² from the centre — just beyond the radius; the charge doesn't reach it.
             var justOutside = PlaceBalloon(new Vector2Int(3, 6), "Blue");
 
-            _dischargedHandler.Handle(new PierceDischargedMessage(center, toughCount: 2, isRainbow: true));
+            _dischargedHandler.Handle(new PierceDischargedMessage(
+                center, toughCount: 2, isRainbow: true, direction: Vector3.zero, position: Vector3.zero));
 
             Assert.AreEqual(GamePalette.RainbowColorId, wellInside.Color.Value);
             Assert.AreEqual(GamePalette.RainbowColorId, chargeWidenedInside.Color.Value);
@@ -84,7 +85,8 @@ namespace BalloonParty.Tests.Item
             var stillConverted = PlaceBalloon(new Vector2Int(2, 4), "Red");
 
             Assert.DoesNotThrow(() =>
-                _dischargedHandler.Handle(new PierceDischargedMessage(center, toughCount: 2, isRainbow: true)));
+                _dischargedHandler.Handle(new PierceDischargedMessage(
+                    center, toughCount: 2, isRainbow: true, direction: Vector3.zero, position: Vector3.zero)));
 
             Assert.AreEqual(GamePalette.RainbowColorId, stillConverted.Color.Value);
         }
@@ -93,7 +95,9 @@ namespace BalloonParty.Tests.Item
         public void OnDischarged_Rainbow_ExcludesBalloonsAheadOfTravelDirection()
         {
             // Two toughs → charge 2 → radius 2, same tuning as the radius test above. Both slots sit
-            // exactly 1 unit from centre along the shot's +X travel axis, on opposite sides.
+            // exactly 1 unit from centre along the shot's +X travel axis, on opposite sides. Position ==
+            // Center here as a simplifying assumption (the shot IS at the plowed line) — see
+            // ExclusionAnchorsAtShotPosition_NotPlowCentroid below for the case where they differ.
             var center = new Vector3(1f, -0.25f, 0f);
 
             // (2,5) sits ahead of the shot's onward (+X) travel — it's what a re-armed banked charge
@@ -102,10 +106,54 @@ namespace BalloonParty.Tests.Item
             // (1,5) sits behind the discharge along the same axis — still within radius, still blooms.
             var behind = PlaceBalloon(new Vector2Int(1, 5), "Blue");
 
-            _dischargedHandler.Handle(new PierceDischargedMessage(center, toughCount: 2, isRainbow: true, direction: Vector3.right));
+            _dischargedHandler.Handle(new PierceDischargedMessage(
+                center, toughCount: 2, isRainbow: true, direction: Vector3.right, position: center));
 
             Assert.AreEqual("Red", ahead.Color.Value, "a balloon ahead of the shot's travel must stay untouched");
             Assert.AreEqual(GamePalette.RainbowColorId, behind.Color.Value);
+        }
+
+        [Test]
+        public void OnDischarged_Rainbow_PerpendicularBalloon_StillBlooms()
+        {
+            // Same tuning as the exclusion test above: two toughs → charge 2 → radius 2. Position ==
+            // Center as a simplifying assumption (see the exclusion test above).
+            var center = new Vector3(1f, -0.25f, 0f);
+
+            // (2,4) sits directly above the centre — its offset is purely vertical, i.e. exactly
+            // perpendicular to the shot's +X travel (dot product 0). IsAhead is a strict ">", so this
+            // boundary case is NOT "ahead" and must still bloom.
+            var perpendicular = PlaceBalloon(new Vector2Int(2, 4), "Red");
+
+            _dischargedHandler.Handle(new PierceDischargedMessage(
+                center, toughCount: 2, isRainbow: true, direction: Vector3.right, position: center));
+
+            Assert.AreEqual(GamePalette.RainbowColorId, perpendicular.Color.Value,
+                "a balloon exactly on the dot==0 boundary is not \"ahead\" and must still bloom");
+        }
+
+        [Test]
+        public void OnDischarged_Rainbow_ExclusionAnchorsAtShotPosition_NotPlowCentroid()
+        {
+            // The plowed line's Centre (which shapes the radius) sits BEHIND the shot by discharge time —
+            // the shot bounced off a wall further along the corridor. This regression pins the anchor bug:
+            // a balloon that looks "behind" relative to Centre can still be squarely in the shot's actual
+            // return path from its real Position, and the exclusion MUST be judged from Position.
+            var center = new Vector3(0f, -0.25f, 0f);   // toughs' centroid — shapes the radius (2 here).
+            var position = new Vector3(6f, -0.25f, 0f); // where the shot actually is at discharge time.
+            var direction = Vector3.left;                // it resumes travel back toward the centroid.
+
+            // (2,5) sits at distance 2 from Centre (the radius boundary) on the FAR side from Position —
+            // a Centre-anchored test sees its offset from Centre pointing AWAY from the travel direction
+            // ("not ahead") and would bloom it. Anchored at Position, it sits squarely between Position
+            // and Centre — directly in the path the shot is about to retrace — and must NOT bloom.
+            var inTheReturnPath = PlaceBalloon(new Vector2Int(2, 5), "Red");
+
+            _dischargedHandler.Handle(new PierceDischargedMessage(
+                center, toughCount: 2, isRainbow: true, direction: direction, position: position));
+
+            Assert.AreEqual("Red", inTheReturnPath.Color.Value,
+                "anchored at Position (not Center), this balloon is ahead of the shot and must stay untouched");
         }
 
         [Test]
@@ -117,7 +165,8 @@ namespace BalloonParty.Tests.Item
             // behaviour rather than silently excluding balloons for no reason.
             var wellInside = PlaceBalloon(new Vector2Int(2, 5), "Red");
 
-            _dischargedHandler.Handle(new PierceDischargedMessage(center, toughCount: 2, isRainbow: true));
+            _dischargedHandler.Handle(new PierceDischargedMessage(
+                center, toughCount: 2, isRainbow: true, direction: Vector3.zero, position: Vector3.zero));
 
             Assert.AreEqual(GamePalette.RainbowColorId, wellInside.Color.Value);
         }
@@ -131,7 +180,8 @@ namespace BalloonParty.Tests.Item
             // piercing discharge never converts.
             var atCentre = PlaceBalloon(new Vector2Int(2, 5), "Red");
 
-            _dischargedHandler.Handle(new PierceDischargedMessage(center, toughCount: 2, isRainbow: false));
+            _dischargedHandler.Handle(new PierceDischargedMessage(
+                center, toughCount: 2, isRainbow: false, direction: Vector3.zero, position: Vector3.zero));
 
             Assert.AreEqual("Red", atCentre.Color.Value);
         }

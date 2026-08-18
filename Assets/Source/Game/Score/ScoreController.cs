@@ -178,7 +178,20 @@ namespace BalloonParty.Game.Score
         // (e.g. the rainbow balloon), in which case the streak records against that colour instead.
         private int RecordStreakMultiplier(IReadOnlyList<ScoreAttribution> attributions, DamageFlags flags)
         {
+            // WildcardStreak/CarryStreak are only ever meant to ride a direct hit (ProjectileHitResolver
+            // is their sole producer today) — but DamageFlags is also plain serialized data on
+            // ItemSettings, so nothing stops a future content author from ticking one on a Bomb/Laser/
+            // Lightning in the inspector and silently reopening the "item pop grows the streak" exploit
+            // this method exists to close. Catch that in dev builds rather than trust the convention.
+            Log.Assert(
+                flags.HasFlag(DamageFlags.DirectHit)
+                || !(flags.HasFlag(DamageFlags.WildcardStreak) || flags.HasFlag(DamageFlags.CarryStreak)),
+                "ScoreController",
+                "WildcardStreak/CarryStreak without DirectHit — only ProjectileHitResolver may author these flags.");
+
             // A colour-agnostic (rainbow-buffed) projectile keeps the streak climbing on any pop.
+            // WildcardStreak is only ever set on the shot's own hits, never an item/AOE one, so this
+            // branch already excludes bombs/lasers/lightning without needing its own DirectHit check.
             if (flags.HasFlag(DamageFlags.WildcardStreak))
             {
                 return _streakTracker.RecordWildcard();
@@ -198,9 +211,15 @@ namespace BalloonParty.Game.Score
                 return _streakTracker.RecordWildcard();
             }
 
+            // Only the shot itself (contact pop or pierce discharge) grows the streak. An item/AOE pop
+            // (Bomb/Laser/Lightning — never DirectHit) still scores at whatever multiplier is already
+            // live on a matching colour and still breaks the streak on a mismatch, it just can't climb
+            // it further — a bomb can't farm combo the player didn't earn by aim.
+            var canIncrement = flags.HasFlag(DamageFlags.DirectHit);
+
             if (attributions.Count == 1)
             {
-                return _streakTracker.Record(attributions[0].ColorId, attributions[0].BreaksStreak);
+                return _streakTracker.Record(attributions[0].ColorId, attributions[0].BreaksStreak, canIncrement);
             }
 
             var primaryIndex = -1;
@@ -224,10 +243,12 @@ namespace BalloonParty.Game.Score
             if (primaryIndex >= 0)
             {
                 var primary = attributions[primaryIndex];
-                return _streakTracker.Record(primary.ColorId, primary.BreaksStreak);
+                return _streakTracker.Record(primary.ColorId, primary.BreaksStreak, canIncrement);
             }
 
-            _streakTracker.Record(null, true);
+            // breaksStreak short-circuits Record before canIncrement is ever read — pass false, not
+            // canIncrement, so this reads as the unconditional break it actually is.
+            _streakTracker.Record(null, true, canIncrement: false);
             return 1;
         }
 

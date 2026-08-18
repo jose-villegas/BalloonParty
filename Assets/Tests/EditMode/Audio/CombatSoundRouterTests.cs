@@ -444,9 +444,9 @@ namespace BalloonParty.Tests.Audio
         [Test]
         public void OnPierceDischarged_PitchRampsAcrossConsecutiveDischarges()
         {
-            _pierceHandler.Handle(new PierceDischargedMessage(Vector3.zero, 2, false));
-            _pierceHandler.Handle(new PierceDischargedMessage(Vector3.zero, 3, false));
-            _pierceHandler.Handle(new PierceDischargedMessage(Vector3.zero, 1, false));
+            _pierceHandler.Handle(new PierceDischargedMessage(Vector3.zero, 2, false, Vector3.zero, Vector3.zero));
+            _pierceHandler.Handle(new PierceDischargedMessage(Vector3.zero, 3, false, Vector3.zero, Vector3.zero));
+            _pierceHandler.Handle(new PierceDischargedMessage(Vector3.zero, 1, false, Vector3.zero, Vector3.zero));
 
             // First discharge at offset 0, second at +2 (whole tone), third at +4.
             _player.Received(1).Play(GameSoundId.PierceDischarge, Vector3.zero, null, 0, 1f);
@@ -459,13 +459,13 @@ namespace BalloonParty.Tests.Audio
         [Test]
         public void OnLoaded_ResetsPierceDischargeCounter()
         {
-            _pierceHandler.Handle(new PierceDischargedMessage(Vector3.zero, 2, false));
-            _pierceHandler.Handle(new PierceDischargedMessage(Vector3.zero, 3, false));
+            _pierceHandler.Handle(new PierceDischargedMessage(Vector3.zero, 2, false, Vector3.zero, Vector3.zero));
+            _pierceHandler.Handle(new PierceDischargedMessage(Vector3.zero, 3, false, Vector3.zero, Vector3.zero));
 
             // New flight — counter resets.
             _loadedHandler.Handle(new ProjectileLoadedMessage(null));
 
-            _pierceHandler.Handle(new PierceDischargedMessage(Vector3.zero, 1, false));
+            _pierceHandler.Handle(new PierceDischargedMessage(Vector3.zero, 1, false, Vector3.zero, Vector3.zero));
 
             // After reset, discharge should be at offset 0 again.
             _player.Received().Play(GameSoundId.PierceDischarge, Vector3.zero, null, 0, 1f);

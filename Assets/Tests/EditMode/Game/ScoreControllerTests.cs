@@ -222,12 +222,71 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void Streak_ItemPop_MatchingColor_ScoresAtCurrentMultiplier_ButDoesNotGrow()
+        {
+            FirePop(Red);
+            FirePop(Red);
+            Assert.AreEqual(2, _streakTracker.GetStreak(Red));
+
+            _scoredPublisher.ClearReceivedCalls();
+            FireItemPop(Red);
+
+            // Scored at the already-live x2 multiplier from the direct hits...
+            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 2));
+            // ...but an item/AOE pop can't climb the streak past what direct hits built.
+            Assert.AreEqual(2, _streakTracker.GetStreak(Red));
+        }
+
+        [Test]
+        public void Streak_ItemPop_DifferentColor_StillResetsStreak()
+        {
+            FirePop(Red);
+            FirePop(Red);
+
+            // A mismatched pop resets the streak regardless of what popped it — the streak tracks
+            // colour, not the source.
+            FireItemPop(Blue);
+
+            Assert.AreEqual(0, _streakTracker.GetStreak(Red));
+            Assert.AreEqual(1, _streakTracker.GetStreak(Blue));
+        }
+
+        [Test]
+        public void Streak_ItemPop_ThenDirectHit_ResumesGrowingFromCurrentStreak()
+        {
+            FirePop(Red);
+            FirePop(Red);
+            FireItemPop(Red);
+
+            FirePop(Red);
+
+            Assert.AreEqual(3, _streakTracker.GetStreak(Red));
+        }
+
+        [Test]
         public void Streak_WildcardGroupWithOnePrimary_RecordsAgainstPrimaryAndGrows()
         {
             FirePop(Red);
             FireMultiColor((Red, 1, true), (Blue, 1, false));
 
             Assert.AreEqual(2, _streakTracker.GetStreak(Red));
+        }
+
+        [Test]
+        public void Streak_ItemPop_MultiAttributionPrimary_ScoresAtCurrentMultiplier_ButDoesNotGrow()
+        {
+            // Simulates an item (Bomb/Laser/Lightning) popping a rainbow balloon: a multi-attribution
+            // group with one primary entry, built from a non-DirectHit context — the primary-attribution
+            // branch of RecordStreakMultiplier must respect the same gate as the single-attribution one.
+            FirePop(Red);
+            FirePop(Red);
+            Assert.AreEqual(2, _streakTracker.GetStreak(Red));
+
+            _scoredPublisher.ClearReceivedCalls();
+            FireMultiColor(DamageFlags.Normal, (Red, 1, true), (Blue, 1, false));
+
+            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 2));
+            Assert.AreEqual(2, _streakTracker.GetStreak(Red), "an item pop's primary attribution can't grow the streak either");
         }
 
         [Test]
@@ -368,10 +427,14 @@ namespace BalloonParty.Tests.Game
         }
 
         // OnActorHit is invoked directly — ScoreController is a HitPipeline stage, not a bus subscriber.
-        private void FireHit(IBalloonModel model, int damage)
+        // Defaults to DirectHit — a real projectile contact/discharge always carries it (see
+        // ProjectileHitResolver) — so plain FireHit/FirePop calls represent a direct pop that grows the
+        // streak, matching every test below written before item/AOE pops were gated separately.
+        private void FireHit(IBalloonModel model, int damage, DamageFlags flags = DamageFlags.DirectHit)
         {
-            var outcome = model.EvaluateHit(new DamageContext(damage));
-            _controller.OnActorHit(new ActorHitMessage(model, Vector3.zero, Vector3.up, outcome, new DamageContext(damage)));
+            var context = new DamageContext(damage, flags);
+            var outcome = model.EvaluateHit(context);
+            _controller.OnActorHit(new ActorHitMessage(model, Vector3.zero, Vector3.up, outcome, context));
         }
 
         private void FirePop(string color, int scoreValue = 1)
@@ -379,17 +442,29 @@ namespace BalloonParty.Tests.Game
             FireHit(CreateModel(color, 1, scoreValue), 1);
         }
 
+        // Simulates an item/AOE pop (Bomb/Laser/Lightning) the way their handlers actually build a
+        // DamageContext — from ItemSettings.Flags, which never carries DirectHit.
+        private void FireItemPop(string color, int scoreValue = 1)
+        {
+            FireHit(CreateModel(color, 1, scoreValue), 1, DamageFlags.Normal);
+        }
+
         private void FireMultiColor(params (string Color, int Points, bool IsPrimary)[] attributions)
+        {
+            FireMultiColor(DamageFlags.DirectHit, attributions);
+        }
+
+        private void FireMultiColor(DamageFlags flags, params (string Color, int Points, bool IsPrimary)[] attributions)
         {
             var actor = new MultiColorActor(attributions);
             _controller.OnActorHit(new ActorHitMessage(
-                actor, Vector3.zero, Vector3.up, HitOutcome.Pop, new DamageContext(1)));
+                actor, Vector3.zero, Vector3.up, HitOutcome.Pop, new DamageContext(1, flags)));
         }
 
         // Unlike FireHit, carries a real SourceColorId — required for the rainbow's primary attribution.
         private void FireHitWithColor(IBalloonModel model, int damage, string sourceColorId)
         {
-            var context = new DamageContext(damage, DamageFlags.Normal, sourceColorId);
+            var context = new DamageContext(damage, DamageFlags.DirectHit, sourceColorId);
             var outcome = model.EvaluateHit(context);
             _controller.OnActorHit(new ActorHitMessage(model, Vector3.zero, Vector3.up, outcome, context));
         }

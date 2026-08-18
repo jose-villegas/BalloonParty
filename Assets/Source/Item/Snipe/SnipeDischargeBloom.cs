@@ -12,19 +12,23 @@ using VContainer.Unity;
 namespace BalloonParty.Item.Snipe
 {
     /// <summary>
-    ///     The rainbow Snipe's discharge payoff: when a rainbow lance discharges, converts every paintable
-    ///     balloon within a charge-scaled radius of the shattered line to rainbow, EXCEPT balloons ahead of
-    ///     the shot's onward travel direction. Charge is the count of toughs it plowed; the radius grows
-    ///     per charge up to a hard cap so a big plow never eats the whole board. The toughs themselves are
-    ///     the fuel — popped by the discharge, and never paintable.
+    ///     The rainbow Snipe's discharge payoff: when a rainbow lance shatters the tough balloons it plowed
+    ///     through, every paintable balloon near the shattered line turns rainbow too, in a radius that
+    ///     grows with how many toughs it ate (capped so a big plow never eats the whole board) — except
+    ///     balloons ahead of where the shot is still travelling. The toughs themselves are never painted;
+    ///     they're the fuel that was just spent, not the reward.
     /// </summary>
     /// <remarks>
-    ///     The forward exclusion mirrors <c>ProjectileHitResolver.ConvertSideNeighboursToRainbow</c>: a
-    ///     banked Snipe charge can re-arm piercing on this same discharge event, sending the shot straight
-    ///     back through whatever it just bloomed. Without the exclusion those balloons pop as free wildcard
-    ///     streak hits (uncapped <c>ColorStreakTracker.RecordWildcard</c>), so the shot's own bloom fed its
-    ///     multiplier — the same self-feeding pattern the neighbour conversion had before it was scoped to
-    ///     the shot's sides.
+    ///     The forward exclusion exists because the shot isn't necessarily done: a banked Snipe charge — a
+    ///     second Snipe pickup grabbed while one lance is already flying, saved up instead of wasted — can
+    ///     arm a fresh piercing run the instant this discharge ends, sending the shot straight back through
+    ///     whatever lies ahead, including balloons this bloom just converted. Popping a balloon the shot
+    ///     painted itself would hand it a free, uncapped streak hit (<c>ColorStreakTracker.RecordWildcard</c>),
+    ///     so the bloom stays behind the shot instead of feeding its own combo. This is the same fix already
+    ///     made to the plain per-pop rainbow-neighbour conversion
+    ///     (<c>ProjectileHitResolver.ConvertSideNeighboursToRainbow</c>, which recolours the balloons beside
+    ///     a normal pop), which had the identical self-feeding problem before it was limited to the shot's
+    ///     sides.
     /// </remarks>
     internal sealed class SnipeDischargeBloom : IStartable, IDisposable
     {
@@ -80,9 +84,13 @@ namespace BalloonParty.Item.Snipe
                     continue;
                 }
 
-                // A zero-length direction (no onward travel) reads as "ahead" of nothing, so IsAhead
-                // never excludes — the bloom falls back to the full radius.
-                if (((Vector2)worldPosition - (Vector2)msg.Center).IsAhead(direction2D))
+                // Anchored at the shot's actual position (where it resumes travel from), NOT the plowed
+                // line's centre used for the radius above — the centre sits behind the shot by discharge
+                // time, so a centre-anchored test would exclude the far side of the bloom instead of the
+                // near side the shot is about to fly back through. A zero-length direction (no onward
+                // travel, e.g. the death-flush discharge) reads as "ahead" of nothing, so IsAhead never
+                // excludes — the bloom falls back to the full radius.
+                if (((Vector2)worldPosition - (Vector2)msg.Position).IsAhead(direction2D))
                 {
                     continue;
                 }

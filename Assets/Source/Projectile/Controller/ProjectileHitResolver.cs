@@ -132,8 +132,13 @@ namespace BalloonParty.Projectile.Controller
             // shockwave / slow-mo. Centred on the plowed line, carrying the charge (tough count) and
             // whether the shot was rainbow.
             _flightStats.RecordPierceDischarge();
+            // The plowed line's centroid ("center") sits behind the shot by the time it discharges — the
+            // wall bounce already moved it on to SegmentStartPosition, which the bloom needs as the ANCHOR
+            // for its "don't repaint what I'm about to fly back through" exclusion (the centroid would
+            // exclude the wrong half — see PierceDischargedMessage's doc).
             _dischargedPublisher.Publish(new PierceDischargedMessage(
-                center / resolvedCount, resolvedCount, isRainbowBuff, projectile.Direction));
+                center / resolvedCount, resolvedCount, isRainbowBuff,
+                projectile.Direction, projectile.Flight.SegmentStartPosition));
 
             pending.Clear();
         }

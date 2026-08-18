@@ -12,8 +12,11 @@ namespace BalloonParty.Slots.Capabilities
         /// rainbow-buffed projectile) — see <c>ColorStreakTracker.RecordWildcard</c>.</summary>
         WildcardStreak = 1 << 1,
 
-        /// <summary>The projectile itself struck the actor — absent from AOE/item damage, so per-pop
-        /// reactions (e.g. pop-spawns) can exclude bombs/lasers/lightning.</summary>
+        /// <summary>The projectile itself struck the actor, as opposed to an item/AOE effect (bomb, laser,
+        /// lightning) popping it. Lets systems that trigger off a pop (e.g. spawning something from it)
+        /// exclude those items, and gates whether a pop can grow the colour streak
+        /// (<c>ScoreController.RecordStreakMultiplier</c>) — an item/AOE pop still scores at the live
+        /// multiplier and still breaks the streak on a mismatch, it just can't climb it.</summary>
         DirectHit = 1 << 2,
 
         /// <summary>A colourless projectile popped a rainbow balloon — the streak contribution is

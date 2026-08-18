@@ -236,7 +236,7 @@ namespace BalloonParty.Tests.Item
 
         private void Discharge()
         {
-            _dischargedHandler.Handle(new PierceDischargedMessage(Vector3.zero, 1, false));
+            _dischargedHandler.Handle(new PierceDischargedMessage(Vector3.zero, 1, false, Vector3.zero, Vector3.zero));
         }
 
         private static ItemSettings CreateSnipeSettings()

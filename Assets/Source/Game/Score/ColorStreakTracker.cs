@@ -38,8 +38,14 @@ namespace BalloonParty.Game.Score
             return LastColor == colorName ? CurrentStreak : 0;
         }
 
-        /// <summary>Records a pop attribution and returns the streak multiplier to apply to points.</summary>
-        public int Record(string colorId, bool breaksStreak = false)
+        /// <summary>Records a balloon pop against the streak and returns the multiplier to score it at.
+        /// Pass <paramref name="canIncrement" /> as false for a pop that didn't come from the shot itself
+        /// (an item/AOE pop): a same-colour pop then keeps the streak alive at its current multiplier
+        /// without pushing it higher, and a colour change still tracks the new colour (so a later direct
+        /// hit resumes from the right place) but can't cash in a carried rainbow bonus or the deferred
+        /// bank — both stay armed, untouched, for whichever direct hit claims them. <paramref
+        /// name="breaksStreak" /> always resets regardless of <paramref name="canIncrement" />.</summary>
+        public int Record(string colorId, bool breaksStreak = false, bool canIncrement = true)
         {
             if (breaksStreak)
             {
@@ -49,25 +55,47 @@ namespace BalloonParty.Game.Score
 
             if (colorId == LastColor)
             {
+                if (!canIncrement)
+                {
+                    return CurrentStreak;
+                }
+
                 CurrentStreak++;
+                PublishChanged();
+                return CurrentStreak;
             }
-            else if (_carryOnColorChange && CurrentStreak > 0)
+
+            if (!canIncrement)
+            {
+                if (_carryOnColorChange && CurrentStreak > 0)
+                {
+                    // Only the direct hit that actually changes the projectile's own colour may cash in
+                    // a carried rainbow bonus — leave it (and the colour it's waiting to land on) alone
+                    // for whichever hit claims it. This pop just scores at 1, unattributed to any streak.
+                    return 1;
+                }
+
+                LastColor = colorId;
+                CurrentStreak = 1;
+                PublishChanged();
+                return CurrentStreak;
+            }
+
+            if (_carryOnColorChange && CurrentStreak > 0)
             {
                 // A rainbow pop flagged carry: the multiplier transfers to the new colour intact,
                 // folding in any deferred rainbow pops banked since the carry was armed.
-                LastColor = colorId;
                 CurrentStreak += 1 + _deferredPops;
-                _carryOnColorChange = false;
             }
             else
             {
                 // Flush any deferred rainbow pops into the new colour's streak — they happened
                 // before the projectile had a colour, so they count toward this first real hit.
-                LastColor = colorId;
                 CurrentStreak = 1 + _deferredPops;
-                _carryOnColorChange = false;
             }
 
+            LastColor = colorId;
+            _carryOnColorChange = false;
             _deferredPops = 0;
             PublishChanged();
             return CurrentStreak;

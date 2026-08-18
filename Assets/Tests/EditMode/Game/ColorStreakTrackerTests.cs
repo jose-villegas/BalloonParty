@@ -89,6 +89,64 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void Record_CanIncrementFalse_MatchingColor_DoesNotGrowStreak()
+        {
+            _tracker.Record("Red");
+            _tracker.Record("Red");
+
+            Assert.AreEqual(2, _tracker.Record("Red", canIncrement: false));
+            Assert.AreEqual(2, _tracker.CurrentStreak);
+        }
+
+        [Test]
+        public void Record_CanIncrementFalse_DifferentColor_StillResetsToOne()
+        {
+            _tracker.Record("Red");
+            _tracker.Record("Red");
+
+            Assert.AreEqual(1, _tracker.Record("Blue", canIncrement: false));
+        }
+
+        [Test]
+        public void Record_CanIncrementFalse_ThenTrue_ResumesGrowingFromCurrentStreak()
+        {
+            _tracker.Record("Red");
+            _tracker.Record("Red");
+            _tracker.Record("Red", canIncrement: false);
+
+            Assert.AreEqual(3, _tracker.Record("Red"));
+        }
+
+        [Test]
+        public void Record_CanIncrementFalse_DifferentColor_CarryArmed_LeavesCarryIntactForDirectHit()
+        {
+            _tracker.Record("Green");
+            _tracker.RecordWildcard(); // arms carry, CurrentStreak = 2, LastColor still "Green"
+
+            // An item/AOE pop of a different colour, while carry is armed, must not consume it — only
+            // the direct hit that actually changes the projectile's colour may cash it in.
+            Assert.AreEqual(1, _tracker.Record("Purple", canIncrement: false));
+            Assert.AreEqual("Green", _tracker.LastColor, "state stays untouched so the carry still lands");
+            Assert.AreEqual(2, _tracker.CurrentStreak);
+
+            // The next direct hit still cashes in the carry correctly, as if the item pop never happened.
+            Assert.AreEqual(3, _tracker.Record("Purple"));
+        }
+
+        [Test]
+        public void Record_CanIncrementFalse_DifferentColor_PreservesDeferredBankForDirectHit()
+        {
+            _tracker.RecordDeferred();
+            _tracker.RecordDeferred();
+
+            // An intervening item/AOE pop of some OTHER colour must not burn the bank — only a direct
+            // hit establishing a real colour may fold it in.
+            _tracker.Record("Blue", canIncrement: false);
+
+            Assert.AreEqual(3, _tracker.Record("Red"), "the banked deferred pops still fold into the first direct hit");
+        }
+
+        [Test]
         public void GetStreak_MatchingColor_ReturnsCurrentStreak()
         {
             _tracker.Record("Red");

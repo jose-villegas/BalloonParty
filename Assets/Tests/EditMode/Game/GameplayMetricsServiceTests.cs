@@ -569,8 +569,8 @@ namespace BalloonParty.Tests.Game
         {
             _harness.EnterGame();
             Play();
-            _harness.PierceDischarged.Handle(new PierceDischargedMessage(Vector3.zero, 3, false));
-            _harness.PierceDischarged.Handle(new PierceDischargedMessage(Vector3.zero, 2, true));
+            _harness.PierceDischarged.Handle(new PierceDischargedMessage(Vector3.zero, 3, false, Vector3.zero, Vector3.zero));
+            _harness.PierceDischarged.Handle(new PierceDischargedMessage(Vector3.zero, 2, true, Vector3.zero, Vector3.zero));
             _harness.CompleteLevel(2);
 
             var level = _harness.LastOf(RecordKind.Level);
