@@ -296,7 +296,7 @@ graph TD
 
 ## Tier 0: Free / Near-Free Wins
 
-### F2 — Remove the shrink `Array.Resize` in `TransformRibbon` · **sonnet**
+### F2 — Remove the shrink `Array.Resize` in `TransformRibbon` · **sonnet** · ✅ DONE (`a4581825`)
 
 `FlyingTrail.cs`: the static scratch `_ribbonScratch` (line 42) grows to
 `NextPowerOfTwo(count)` when small (:249-252) but is then **shrunk back to exactly `count`
@@ -317,7 +317,7 @@ and stops allocating.
 ghost-tail check (José): trigger a tumbling, shrinking formation (the delta≠identity +
 scaleRatio≠1 branch at :269-273); ink must stay glued to the figure, no stray tail points.
 
-### F3 — `SetCharArray` in `RollingTextAnimator` · **haiku**
+### F3 — `SetCharArray` in `RollingTextAnimator` · **haiku** · ✅ DONE (`a4581825`)
 
 Four sites build a heap string from the reused `_formattingBuffer`:
 `RollingTextAnimator.cs:81` (hot — per frame while an odometer rolls), plus cold :114,

@@ -1237,22 +1237,49 @@ Deferred tech-debt / tooling left over from the shipped Loss Condition & Pacing 
 `Game/Level/README.md`, `Game/Health/README.md`, `Game/Cinematics/README.md`). None of these gate the
 feature — it is shipped and playtested; these are optional polish.
 
-### 14.1 Jump-to-level cheat
+### 14.1 Jump-to-level cheat — ✅ SHIPPED
 
-A dev cheat to warp straight to level N (e.g. 50) to inspect late-game pacing without grinding. Looping
-`RunController` level-ups N times is O(N) and re-fires every side effect (cinematics, HP refill) N times
-— wrong and slow. Needs a new seam: `ScoreController` has no "set level directly" — add an internal
-`JumpToLevel(int level)` that sets `_level.Value` and publishes `ScoreLevelUpMessage` once (skipping the
-ceremony), or thread it through `RunController`. Surface via `CheatConsoleView` (check whether it supports
-a text-entry/parameterized cheat; otherwise preset targets like "Jump to 10/25/50").
+Shipped as `Cheats/StartFromLevelCheat.cs`, under "Run" in `CheatConsoleView` (text-entry level field,
+not preset targets). Deviates from the sketch below: rather than a new `ScoreController.JumpToLevel`
+seam that warps a live run mid-flight, it sets a dev start-level override (`CheatState.StartLevel`) and
+calls `RunController.RestartRun()` — a full restart that re-resolves the difficulty mix and respawns the
+board fresh at that level. Sidesteps the O(N) re-fire problem the same way (no looped level-ups), at the
+cost of not preserving in-run state (score, held items) across the jump — acceptable for its purpose
+(inspecting late-game pacing/spawn mix), not a drop-in replacement for a mid-run warp if one is ever
+needed.
 
-### 14.2 Extract a shared `LevelPacingValidator`
+Original sketch: a dev cheat to warp straight to level N (e.g. 50) to inspect late-game pacing without
+grinding. Looping `RunController` level-ups N times is O(N) and re-fires every side effect (cinematics,
+HP refill) N times — wrong and slow. Needs a new seam: `ScoreController` has no "set level directly" —
+add an internal `JumpToLevel(int level)` that sets `_level.Value` and publishes `ScoreLevelUpMessage`
+once (skipping the ceremony), or thread it through `RunController`. Surface via `CheatConsoleView` (check
+whether it supports a text-entry/parameterized cheat; otherwise preset targets like "Jump to 10/25/50").
 
-`LevelPacingConfiguration.OnValidate` (editor-only warnings) and the "resolve levels 1..50 without
-throwing" EditMode test check the same invariants two different ways and can drift. Extract a plain
-`LevelPacingValidator.Validate(ILevelPacingConfiguration, ISlotGridConfig) : IReadOnlyList<string>`
-(issue messages, no Unity/editor dependency): `OnValidate` logs each issue, the EditMode test asserts the
-list is empty. Also the seam a future "test a hypothetical config" editor tool would call.
+### 14.2 Extract a shared `LevelPacingValidator` — ✅ SHIPPED
+
+Shipped as `Configuration/Level/LevelPacingValidator.cs` — an `internal static` class with
+`Validate(ILevelPacingConfiguration config, int levelsToCheck, string configName) : IReadOnlyList<string>`.
+`LevelPacingConfiguration.OnValidate` now logs each returned issue via `Debug.LogWarning` instead of
+running its own four private `WarnOn*` methods (removed). Deviates from the sketch below: no
+`ISlotGridConfig` parameter — none of the four checks (gaps/overlaps, fallback issues, empty weighted
+sets, non-monotonic threshold) need grid dimensions, so it wasn't added speculatively. The
+non-monotonic-threshold scan's range (`levelsToCheck`) is instead an explicit `int` the caller derives
+from its own scoring curve — that data isn't on `ILevelPacingConfiguration`, so deriving it inside the
+validator would have required adding scoring-curve access to the interface for one check.
+`ColorsForLevel` was added to `ILevelPacingConfiguration` (widened from `internal` to `public` on the
+concrete class to satisfy interface implementation) since the validator needs it and only had the
+interface to work through. Directly unit-tested in `LevelPacingValidatorTests.cs` — the "resolve levels
+1..50 without throwing" EditMode test (`LevelDifficultyResolverTests.ExhaustiveResolve_Levels1To50_NeverThrows`)
+was left as-is, since it exercises `LevelDifficultyResolver`'s resilience via a mocked config, a
+different invariant than the validator's authoring checks — not the literal duplication this task named,
+but a related one worth keeping regardless.
+
+Original sketch: `LevelPacingConfiguration.OnValidate` (editor-only warnings) and the "resolve levels
+1..50 without throwing" EditMode test check the same invariants two different ways and can drift.
+Extract a plain `LevelPacingValidator.Validate(ILevelPacingConfiguration, ISlotGridConfig) :
+IReadOnlyList<string>` (issue messages, no Unity/editor dependency): `OnValidate` logs each issue, the
+EditMode test asserts the list is empty. Also the seam a future "test a hypothetical config" editor tool
+would call.
 
 ### 14.3 Escalate `LevelDifficultyResolver.FallbackParameters` to a hard failure
 

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Type;
 using UnityEngine;
@@ -31,10 +30,21 @@ namespace BalloonParty.Configuration.Level
         {
 #if UNITY_EDITOR
             _scoringCurve.Validate(name);
-            WarnOnGapsAndOverlaps();
-            WarnOnFallbackIssues();
-            WarnOnEmptyWeightedSets();
-            WarnOnNonMonotonicThreshold();
+
+            // The non-monotonic-threshold check needs how far out to scan; that's scoring-curve data,
+            // which isn't on ILevelPacingConfiguration, so it's derived here rather than in the shared
+            // validator (see LevelPacingValidator's own doc).
+            var levelsToCheck = 0;
+            if (!_scoringCurve.IsEmpty)
+            {
+                var controlPoints = _scoringCurve.ControlPoints;
+                levelsToCheck = controlPoints[controlPoints.Count - 1].Level + 5;
+            }
+
+            foreach (var issue in LevelPacingValidator.Validate(this, levelsToCheck, name))
+            {
+                Debug.LogWarning(issue);
+            }
 #endif
         }
 
@@ -85,7 +95,7 @@ namespace BalloonParty.Configuration.Level
             return max;
         }
 
-        internal int ColorsForLevel(int level)
+        public int ColorsForLevel(int level)
         {
             var bits = (uint)MaskForLevel(level);
             var count = 0;
@@ -118,133 +128,5 @@ namespace BalloonParty.Configuration.Level
 
             return fallbackMask;
         }
-
-#if UNITY_EDITOR
-        private void WarnOnGapsAndOverlaps()
-        {
-            for (var i = 1; i < _ranges.Length; i++)
-            {
-                var previous = _ranges[i - 1];
-                var current = _ranges[i];
-
-                if (previous.IsFallback || current.IsFallback)
-                {
-                    continue;
-                }
-
-                if (previous.IsOpenEnded)
-                {
-                    Debug.LogWarning(
-                        $"LevelPacingConfiguration ({name}): range starting at {previous.FromLevel} is open-ended " +
-                        $"but is followed by a range starting at {current.FromLevel} — the later range is unreachable.");
-                    continue;
-                }
-
-                if (current.FromLevel != previous.ToLevel + 1)
-                {
-                    Debug.LogWarning(
-                        $"LevelPacingConfiguration ({name}): gap or overlap between ranges " +
-                        $"[{previous.FromLevel}-{previous.ToLevel}] and [{current.FromLevel}-{current.ToLevel}] " +
-                        "— ranges must be contiguous.");
-                }
-            }
-        }
-
-        private void WarnOnFallbackIssues()
-        {
-            var hasDefault = false;
-            var seenIds = new System.Collections.Generic.HashSet<int>();
-
-            for (var i = 0; i < _ranges.Length; i++)
-            {
-                if (!_ranges[i].IsFallback)
-                {
-                    continue;
-                }
-
-                if (_ranges[i].FromLevel == -1)
-                {
-                    hasDefault = true;
-                }
-
-                if (!seenIds.Add(_ranges[i].FromLevel))
-                {
-                    Debug.LogWarning(
-                        $"LevelPacingConfiguration ({name}): duplicate fallback ID {_ranges[i].FromLevel} " +
-                        "— each fallback must have a unique FromLevel.");
-                }
-            }
-
-            if (!hasDefault)
-            {
-                Debug.LogWarning(
-                    $"LevelPacingConfiguration ({name}): missing default fallback (FromLevel = -1). " +
-                    "Normal gameplay requires exactly one entry with FromLevel = -1.");
-            }
-        }
-
-        private void WarnOnEmptyWeightedSets()
-        {
-            for (var i = 0; i < _ranges.Length; i++)
-            {
-                var weights = _ranges[i].Parameters?.BalloonWeights;
-                var hasPositiveWeight = false;
-                if (weights != null)
-                {
-                    foreach (var weight in weights)
-                    {
-                        if (weight.Weight > 0f)
-                        {
-                            hasPositiveWeight = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (!hasPositiveWeight)
-                {
-                    Debug.LogWarning(
-                        $"LevelPacingConfiguration ({name}): range starting at {_ranges[i].FromLevel} has no " +
-                        "balloon type with a positive weight — nothing could spawn.");
-                }
-            }
-        }
-
-        private void WarnOnNonMonotonicThreshold()
-        {
-            if (_scoringCurve.IsEmpty)
-            {
-                return;
-            }
-
-            var cps = _scoringCurve.ControlPoints;
-            var lastCpLevel = cps[cps.Count - 1].Level;
-            var checkLevels = lastCpLevel + 5;
-            var previousTotal = int.MinValue;
-
-            for (var level = 1; level <= checkLevels; level++)
-            {
-                var perColor = ThresholdForLevel(level);
-                var colors = ColorsForLevel(level);
-                var total = perColor * colors;
-
-                if (perColor <= 0)
-                {
-                    Debug.LogWarning(
-                        $"LevelPacingConfiguration ({name}): threshold at level {level} is non-positive " +
-                        $"({perColor}) — check the scoring curve milestones.");
-                }
-                else if (total < previousTotal)
-                {
-                    Debug.LogWarning(
-                        $"LevelPacingConfiguration ({name}): total difficulty drops at level {level} " +
-                        $"({previousTotal} → {total}, {colors} colors × {perColor}/color) — " +
-                        "ensure the cumulative curve increment grows with level.");
-                }
-
-                previousTotal = total;
-            }
-        }
-#endif
     }
 }

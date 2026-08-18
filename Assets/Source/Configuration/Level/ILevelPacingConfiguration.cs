@@ -14,6 +14,9 @@ namespace BalloonParty.Configuration.Level
         /// <summary>Points required per colour to complete <paramref name="level" /> — derived from the scoring curve's cumulative milestones, divided by colour count, and snapped to a clean multiple.</summary>
         int ThresholdForLevel(int level);
 
+        /// <summary>Count of colours allowed at <paramref name="level" /> — the popcount of that level's allowed-colours mask.</summary>
+        int ColorsForLevel(int level);
+
         /// <summary>
         ///     Upper bound on how many of a balloon type can share the board across every range — the pool
         ///     prewarm size. Uncapped ranges (0 cap) scale to their board size (<paramref name="columns" /> ×
