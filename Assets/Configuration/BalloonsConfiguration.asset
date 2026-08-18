@@ -168,7 +168,7 @@ MonoBehaviour:
     _hitVfxOverrides: []
     _hitsToPop: 1
     _scoreValue: 2
-    _itemActivationWeight: 0.1
+    _itemActivationWeight: 0.025
     _balanceBias: 3
     _maxBalanceSteps: 0
     _moveSpeed: 1.35
