@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"SpinSpace_8cs.html":[7,0,8,35],
 "SpriteColorableRenderer_8cs.html":[7,0,1,4,6],
 "SpriteLayerCombinerEditor_8cs.html":[7,0,6,8,0],
 "SpriteLayerCombinerEditor_8cs.html#aef19bab18b9814edeef255c43e4f6bbc":[7,0,6,8,0,1],
@@ -15,8 +16,8 @@ var NAVTREEINDEX3 =
 "StreakShieldRule_8cs.html":[7,0,14,32],
 "StrikethroughArrivedMessage_8cs.html":[7,0,14,7,40],
 "StubThermalSource_8cs.html":[7,0,14,12,2],
-"TailGrowthConfig_8cs.html":[7,0,3,7,9],
-"TailGrowthMode_8cs.html":[7,0,3,7,10],
+"TailGrowthConfig_8cs.html":[7,0,3,7,10],
+"TailGrowthMode_8cs.html":[7,0,3,7,11],
 "TelemetryEnvelopeSerializer_8cs.html":[7,0,7,7,28],
 "TelemetryEnvelope_8cs.html":[7,0,7,7,27],
 "TelemetryLogMenu_8cs.html":[7,0,6,38],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a31a1df334b0ca100035eec52978eb612":[6,0,0,0,0,3,17],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3687bbf9b9c25e40dfe23768ad0fbbce":[5,0,0,0,0,3,44],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3687bbf9b9c25e40dfe23768ad0fbbce":[6,0,0,0,0,3,44],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3e26ed679bfcc356d10c54213fe89adb":[5,0,0,0,0,3,41],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3e26ed679bfcc356d10c54213fe89adb":[6,0,0,0,0,3,41]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3e26ed679bfcc356d10c54213fe89adb":[5,0,0,0,0,3,41]
 };

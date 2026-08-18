@@ -193,11 +193,12 @@ var NAVTREEINDEX1 =
 "LevelPacingConfiguration_8cs.html":[7,0,3,7,2],
 "LevelPacingCurvePanel_8cs.html":[7,0,6,20],
 "LevelPacingMigrationTool_8cs.html":[7,0,6,21],
+"LevelPacingValidator_8cs.html":[7,0,3,7,3],
 "LevelPacingWindow_8cs.html":[7,0,6,22],
-"LevelParameters_8cs.html":[7,0,3,7,3],
+"LevelParameters_8cs.html":[7,0,3,7,4],
 "LevelRangeEntryDrawer_8cs.html":[7,0,6,23],
-"LevelRangeEntry_8cs.html":[7,0,3,7,4],
-"LevelScoringCurve_8cs.html":[7,0,3,7,5],
+"LevelRangeEntry_8cs.html":[7,0,3,7,5],
+"LevelScoringCurve_8cs.html":[7,0,3,7,6],
 "LevelTransitionCompletedMessage_8cs.html":[7,0,14,7,14],
 "LevelTransitionController_8cs.html":[7,0,7,4,5],
 "LevelUpAbandonedMessage_8cs.html":[7,0,14,7,15],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "Navigation_8cs.html":[7,0,14,5,9],
 "NearLevelUpCheat_8cs.html":[7,0,2,16],
 "NudgeMessage_8cs.html":[7,0,9,2],
-"NudgeOverrideDrawer_8cs.html":[7,0,9,0,0],
-"NudgeOverrideResolver_8cs.html":[7,0,9,4]
+"NudgeOverrideDrawer_8cs.html":[7,0,9,0,0]
 };

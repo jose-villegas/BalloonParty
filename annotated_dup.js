@@ -205,6 +205,7 @@ var annotated_dup =
           [ "ILevelPacingConfiguration", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration" ],
           [ "ILevelParameters", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters" ],
           [ "LevelPacingConfiguration", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration" ],
+          [ "LevelPacingValidator", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingValidator.html", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingValidator" ],
           [ "LevelParameters", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters" ],
           [ "LevelRangeEntry", "structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html", "structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry" ],
           [ "LevelScoringCurve", "structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html", "structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve" ],

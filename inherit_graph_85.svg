@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html" target="_top" xlink:title="One contiguous span of levels sharing a RangedLevelParameters mix.">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingValidator.html" target="_top" xlink:title="Plain&#45;C# level&#45;pacing invariant checks — shared by LevelPacingConfiguration&#39;s editor&#45;only OnValidate ...">
 <polygon fill="white" stroke="#666666" points="148,-30 0,-30 0,0 148,0 148,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
-<text text-anchor="middle" x="74" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Level.LevelRangeEntry</text>
+<text text-anchor="middle" x="74" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Level.LevelPacingValidator</text>
 </a>
 </g>
 </g>

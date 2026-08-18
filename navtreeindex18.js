@@ -1,5 +1,6 @@
 var NAVTREEINDEX18 =
 {
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html#a78864b24c04c2ed32d4ae2f8b9de049c":[6,0,0,3,4,24,32],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html#a85952e11c87bf589e80ed79ec8656159":[5,0,0,3,4,24,4],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html#a85952e11c87bf589e80ed79ec8656159":[6,0,0,3,4,24,4],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html#a94a57cf680d8debee1f72213a0bf887c":[5,0,0,3,4,24,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX18 =
 "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html#a21aff57d70a38541694d633041f168dd":[6,0,0,3,11,2],
 "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html#a40db9e658001210800e1515a104dc3ea":[5,0,0,3,11,7],
 "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html#a40db9e658001210800e1515a104dc3ea":[6,0,0,3,11,7],
-"classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html#a65d695f8b7604a41f9c412dfa763aa68":[5,0,0,3,11,0],
-"classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html#a65d695f8b7604a41f9c412dfa763aa68":[6,0,0,3,11,0]
+"classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html#a65d695f8b7604a41f9c412dfa763aa68":[5,0,0,3,11,0]
 };

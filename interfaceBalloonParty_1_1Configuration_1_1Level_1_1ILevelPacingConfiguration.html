@@ -127,6 +127,9 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILe
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a512ea1172a87069162a443a978f8e7e1" id="r_a512ea1172a87069162a443a978f8e7e1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a512ea1172a87069162a443a978f8e7e1">ColorsForLevel</a> (int level)</td></tr>
+<tr class="memdesc:a512ea1172a87069162a443a978f8e7e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Count of colours allowed at <em>level</em>  — the popcount of that level's allowed-colours mask.  <br /></td></tr>
+<tr class="separator:a512ea1172a87069162a443a978f8e7e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8180a7c80ff7448293ca03438f90c67" id="r_af8180a7c80ff7448293ca03438f90c67"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af8180a7c80ff7448293ca03438f90c67">MaxConcurrentBalloons</a> (<a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60e">BalloonType</a> type, int columns)</td></tr>
 <tr class="memdesc:af8180a7c80ff7448293ca03438f90c67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Upper bound on how many of a balloon type can share the board across every range — the pool prewarm size.  <br /></td></tr>
 <tr class="separator:af8180a7c80ff7448293ca03438f90c67"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -142,6 +145,27 @@ Properties</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Level-range difficulty authoring; read by <code>LevelDifficultyResolver</code> (and by the balloon spawner's pool prewarm, via <a class="el" href="#af8180a7c80ff7448293ca03438f90c67" title="Upper bound on how many of a balloon type can share the board across every range — the pool prewarm s...">MaxConcurrentBalloons</a>). </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a512ea1172a87069162a443a978f8e7e1" name="a512ea1172a87069162a443a978f8e7e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a512ea1172a87069162a443a978f8e7e1">&#9670;&#160;</a></span>ColorsForLevel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Level.ILevelPacingConfiguration.ColorsForLevel </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>level</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Count of colours allowed at <em>level</em>  — the popcount of that level's allowed-colours mask. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a8e5a36830884f82b21a7a176ffd7ab71">BalloonParty.Configuration.Level.LevelPacingConfiguration</a>.</p>
+
+</div>
+</div>
 <a id="af8180a7c80ff7448293ca03438f90c67" name="af8180a7c80ff7448293ca03438f90c67"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af8180a7c80ff7448293ca03438f90c67">&#9670;&#160;</a></span>MaxConcurrentBalloons()</h2>
 

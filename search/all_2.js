@@ -9,7 +9,7 @@ var searchData=
   ['2_204_20full_20grid_20clear_20out_20calculation_6',['2.4 Full Grid Clear-Out Calculation',['../plan_future_ideas.html#autotoc_md382',1,'']]],
   ['2_20bake_20—_20one_20blit_20per_20level_20gpu_20amortizable_7',['2. Bake — one blit per level (GPU, amortizable)',['../plan_terrain_biomes.html#autotoc_md689',1,'']]],
   ['2_20cpu_20vs_20gpu_20classification_8',['2. CPU vs GPU classification',['../plan_performance_recovery.html#autotoc_md619',1,'']]],
-  ['2_20extract_20a_20shared_20tt_20levelpacingvalidator_20tt_9',['14.2 Extract a shared &lt;tt&gt;LevelPacingValidator&lt;/tt&gt;',['../plan_future_ideas.html#autotoc_md461',1,'']]],
+  ['2_20extract_20a_20shared_20tt_20levelpacingvalidator_20tt_20—_20✅_20shipped_9',['14.2 Extract a shared &lt;tt&gt;LevelPacingValidator&lt;/tt&gt; — ✅ SHIPPED',['../plan_future_ideas.html#autotoc_md461',1,'']]],
   ['2_20goals_20non_20goals_10',['2. Goals &amp; non-goals',['../plan_shot_solver_accuracy.html#autotoc_md661',1,'']]],
   ['2_20parameter_20inventory_11',['9.2 Parameter Inventory',['../plan_future_ideas.html#autotoc_md425',1,'']]],
   ['2_20performance_20device_20scaling_12',['6.2 Performance &amp; Device Scaling',['../plan_future_ideas.html#autotoc_md407',1,'']]],

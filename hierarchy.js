@@ -931,6 +931,7 @@ var hierarchy =
     [ "BalloonParty.Shared.Messages.LevelDescendStartedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelDescendStartedMessage.html", null ],
     [ "BalloonParty.Editor.LevelPacingCurvePanel", "classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html", null ],
     [ "BalloonParty.Editor.LevelPacingMigrationTool", "classBalloonParty_1_1Editor_1_1LevelPacingMigrationTool.html", null ],
+    [ "BalloonParty.Configuration.Level.LevelPacingValidator", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingValidator.html", null ],
     [ "BalloonParty.Configuration.Level.LevelRangeEntry", "structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html", null ],
     [ "BalloonParty.Configuration.Level.LevelScoringCurve", "structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html", null ],
     [ "BalloonParty.Shared.Messages.LevelTransitionCompletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelTransitionCompletedMessage.html", null ],

@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"NudgeOverrideResolver_8cs.html":[7,0,9,4],
 "NudgeOverride_8cs.html":[7,0,9,3],
 "NudgeService_8cs.html":[7,0,9,5],
 "NudgeType_8cs.html":[7,0,9,6],
@@ -98,7 +99,7 @@ var NAVTREEINDEX2 =
 "RangeMode_8cs.html":[7,0,3,9,3],
 "RangedFloat_8cs.html":[7,0,3,9,1],
 "RangedInt_8cs.html":[7,0,3,9,2],
-"RangedLevelParameters_8cs.html":[7,0,3,7,6],
+"RangedLevelParameters_8cs.html":[7,0,3,7,7],
 "ReactiveBinderRegistration_8cs.html":[7,0,18,0,2],
 "ReactiveCounterLabel_8cs.html":[7,0,18,14],
 "ReactivePropertyBinder_8cs.html":[7,0,18,0,3],
@@ -147,12 +148,12 @@ var NAVTREEINDEX2 =
 "ScoreTrailContext_8cs.html":[7,0,7,6,0,8],
 "ScoreTrailService_8cs.html":[7,0,7,6,4],
 "ScoreUILifetimeScope_8cs.html":[7,0,18,5,7],
-"ScoringControlPoint_8cs.html":[7,0,3,7,7],
+"ScoringControlPoint_8cs.html":[7,0,3,7,8],
 "ScreenSpaceLightServiceEditor_8cs.html":[7,0,6,32],
 "ScreenSpaceLightService_8cs.html":[7,0,5,6],
 "ScriptReferenceRemap_8cs.html":[7,0,6,33],
 "ScriptSearchPopup_8cs.html":[7,0,6,34],
-"SegmentMode_8cs.html":[7,0,3,7,8],
+"SegmentMode_8cs.html":[7,0,3,7,9],
 "SessionTelemetryContext_8cs.html":[7,0,7,7,26],
 "SetMobileTextureSize_8cs.html":[7,0,6,35],
 "SfxCandidate_8cs.html":[7,0,0,1,7],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "SpeckProfile_8cs.html":[7,0,15,0,21],
 "SpeckSpawnRequestMessage_8cs.html":[7,0,14,7,37],
 "SpeckSpawnSettings_8cs.html":[7,0,3,4,26],
-"SpeedTapMintedMessage_8cs.html":[7,0,14,7,38],
-"SpinSpace_8cs.html":[7,0,8,35]
+"SpeedTapMintedMessage_8cs.html":[7,0,14,7,38]
 };

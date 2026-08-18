@@ -192,8 +192,8 @@ var plans =
           [ "13.8 Open questions", "plan_future_ideas.html#autotoc_md457", null ]
         ] ],
         [ "14 — Level Pacing Follow-ups (post-ship)", "plan_future_ideas.html#autotoc_md459", [
-          [ "14.1 Jump-to-level cheat", "plan_future_ideas.html#autotoc_md460", null ],
-          [ "14.2 Extract a shared LevelPacingValidator", "plan_future_ideas.html#autotoc_md461", null ],
+          [ "14.1 Jump-to-level cheat — ✅ SHIPPED", "plan_future_ideas.html#autotoc_md460", null ],
+          [ "14.2 Extract a shared LevelPacingValidator — ✅ SHIPPED", "plan_future_ideas.html#autotoc_md461", null ],
           [ "14.3 Escalate LevelDifficultyResolver.FallbackParameters to a hard failure", "plan_future_ideas.html#autotoc_md462", null ]
         ] ],
         [ "15 — Level-Up Point Carry-Over (2026-07-18)", "plan_future_ideas.html#autotoc_md463", null ],
@@ -317,8 +317,8 @@ var plans =
           [ "Decision tree", "plan_performance_recovery.html#autotoc_md627", null ]
         ] ],
         [ "Tier 0: Free / Near-Free Wins", "plan_performance_recovery.html#autotoc_md629", [
-          [ "F2 — Remove the shrink Array.Resize in TransformRibbon · sonnet", "plan_performance_recovery.html#autotoc_md630", null ],
-          [ "F3 — SetCharArray in RollingTextAnimator · haiku", "plan_performance_recovery.html#autotoc_md631", null ],
+          [ "F2 — Remove the shrink Array.Resize in TransformRibbon · sonnet · ✅ DONE (a4581825)", "plan_performance_recovery.html#autotoc_md630", null ],
+          [ "F3 — SetCharArray in RollingTextAnimator · haiku · ✅ DONE (a4581825)", "plan_performance_recovery.html#autotoc_md631", null ],
           [ "F4 — Shader variant warmup · sonnet (capture = José)", "plan_performance_recovery.html#autotoc_md632", null ],
           [ "C1 + C3 — Projectile cleanups · sonnet, one session (same file)", "plan_performance_recovery.html#autotoc_md633", null ]
         ] ],
