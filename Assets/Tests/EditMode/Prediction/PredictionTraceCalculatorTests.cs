@@ -77,8 +77,8 @@ namespace BalloonParty.Tests.Prediction
             _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out _);
 
             // Origin plus where it got to. It used to be the origin alone, which drew no line at all —
-            // invisible before deflections existed, because every upward shot ends on a wall, but a
-            // deflection sends the line downward where no wall stops it.
+            // invisible before deflections existed, because every upward shot ends on a wall, and a
+            // deflection can send the line anywhere the segment budget runs out first.
             Assert.AreEqual(2, _results.Count);
             Assert.AreEqual(3f * 0.5f, _results[1].y, 0.01f, "three steps of 0.5 travelled");
         }
@@ -93,6 +93,22 @@ namespace BalloonParty.Tests.Prediction
 
             Assert.GreaterOrEqual(_results.Count, 2);
             Assert.AreEqual(DefaultLimits.y, _results[1].x, 0.01f);
+        }
+
+        // The bottom wall is a real, visible wall the live shot bounces off (ProjectileMotionResolver
+        // reflects off it the same as the other three) — a deflection sent downward must stop and
+        // bounce there instead of running past the visible play area on the segment budget alone.
+        [Test]
+        public void Calculate_DeflectionSendsLineDownward_BouncesAtBottomLimit()
+        {
+            _config.MaxReflections.Returns(1);
+            _deflectors.Add(new DeflectorCircle(new Vector2(0f, 2f), 0.5f));
+
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out var end);
+
+            Assert.AreEqual(PredictionTraceEndKind.Wall, end.Kind);
+            Assert.AreEqual(DefaultLimits.z, _results[_results.Count - 1].y, 0.05f,
+                "the reflected line stops at the bottom wall, not off past the visible play area");
         }
 
         [Test]

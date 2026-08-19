@@ -36,8 +36,8 @@ namespace BalloonParty.Prediction
         }
 
         /// <summary>
-        ///     Calculates the prediction trace, bouncing off the left/right/top walls and off any
-        ///     balloon that would deflect the shot rather than let it through — until the path crosses a
+        ///     Calculates the prediction trace, bouncing off all four walls and off any balloon that
+        ///     would deflect the shot rather than let it through — until the path crosses a
         ///     pierce-item host, from which point on it just continues straight through every tough
         ///     instead, matching a piercing shot's real flight.
         /// </summary>
@@ -106,6 +106,16 @@ namespace BalloonParty.Prediction
                     shift = (walls.Top - origin.y) / direction.y;
                     extended = origin + (direction * shift);
                     topHit = true;
+                }
+
+                // The bottom wall is a real, visible wall the live shot bounces off just like the
+                // other three (ProjectileMotionResolver.Step reflects off it the same as any other) —
+                // it just doesn't end the trace the way a top-wall hit deliberately does below.
+                if (extended.y < walls.Bottom)
+                {
+                    reflect += Vector3.up;
+                    shift = (walls.Bottom - origin.y) / direction.y;
+                    extended = origin + (direction * shift);
                 }
 
                 if (!isPiercing)

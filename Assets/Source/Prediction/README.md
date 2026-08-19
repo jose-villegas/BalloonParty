@@ -6,7 +6,7 @@ Prediction trace system — draws a dotted line showing the projectile's predict
 
 ### PredictionTraceCalculator
 
-Pure C# class (no MonoBehaviour) that takes an origin, direction, and reusable `List<Vector3>`, then fills it with world-space trace points by stepping forward and reflecting off walls **and off balloons that would deflect the shot**. Bounces off left, right, and top limits (from `LimitsClockwise`). A top-wall hit terminates further bounces.
+Pure C# class (no MonoBehaviour) that takes an origin, direction, and reusable `List<Vector3>`, then fills it with world-space trace points by stepping forward and reflecting off walls **and off balloons that would deflect the shot**. Bounces off all four limits (from `LimitsClockwise`), the same rectangle `ProjectileMotionResolver` reflects the live shot off. A top-wall hit terminates further bounces — the left/right/bottom walls reflect normally instead, spending the shared reflection budget like a deflection does.
 
 **Deflections come from `IDeflectorField`** (implemented by `SlotGridDeflectorField`, which walks the grid). An actor qualifies when it is `IDeflectsShots` and `DeflectsOrdinaryHit` — Tough with more than one hit left, Unbreakable, the static Deflector, a Gatekeeper with hits left — and its view still has an active collider and a non-zero `ContactRadius`, so an actor mid-despawn, or a static with no collider authored, never deflects the line.
 

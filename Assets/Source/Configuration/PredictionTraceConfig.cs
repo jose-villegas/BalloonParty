@@ -16,7 +16,7 @@ namespace BalloonParty.Configuration
 
         [Tooltip("Segments drawn before the trace gives up. Times the segment length, this is how " +
             "far the line can reach — and it is what ends a line that nothing else terminates, such " +
-            "as one sent downward by a deflection, where there is no bottom wall.")]
+            "as one piercing straight through every remaining tough with no wall left to end it on.")]
         [FormerlySerializedAs("_predictionTraceMaxSteps")]
         [SerializeField] [Min(1)] private int _maxSegments = 15;
 
