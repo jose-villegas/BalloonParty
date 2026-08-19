@@ -36,7 +36,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1648295896144469879
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -93,6 +93,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!96 &1827487983935383960
 TrailRenderer:
   serializedVersion: 4
@@ -201,14 +202,14 @@ TrailRenderer:
       m_ColorSpace: -1
       m_NumColorKeys: 2
       m_NumAlphaKeys: 3
-    numCornerVertices: 5
-    numCapVertices: 5
+    numCornerVertices: 0
+    numCapVertices: 0
     alignment: 0
     textureMode: 0
     textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 0.1
+  m_MinVertexDistance: 0
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 0
