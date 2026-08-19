@@ -2,10 +2,15 @@ Shader "BalloonParty/Display/SkyScatter"
 {
     // The sky-scatter backdrop: renders on the quad SkyScatterService builds at startup, sorted
     // behind every other backdrop layer (BackgroundCloud, WallNet, SmokeField) so it reads as
-    // replacing the camera's flat clear colour rather than sitting on top of it. A naive 2D stand-in
-    // for atmospheric scattering: a stack of circles that all share one tangent point toward the
-    // scene light, growing outward from the light's own colour to an authored horizon colour, with a
-    // slow per-ring wave so the stack breathes instead of sitting static.
+    // enriching the camera's flat clear colour rather than replacing it outright — this shader is
+    // genuinely alpha-blended (see Blend below), so wherever it fades to transparent the camera's own
+    // clear colour (already the current time-of-day light colour, via CameraBackgroundTint) shows
+    // through. A naive 2D stand-in for atmospheric scattering: a stack of circles that all share one
+    // tangent point toward the scene light. Every ring is coloured off the SAME live light colour —
+    // there is no separate authored "horizon" hue to blend toward — with the authored accent colour
+    // applied only as a multiplier whose strength fades out toward the bigger rings, and the ring's
+    // own opacity fading the same way, so the effect reads as a glow near the light that dissolves
+    // into the ordinary sky rather than a colour gradient with a hard destination.
     Properties
     {
         [Header(Rings)]
@@ -18,8 +23,16 @@ Shader "BalloonParty/Display/SkyScatter"
         _AnchorRectScale  ("Anchor Rect Scale",Range(0, 3))        = 1
 
         [Header(Color)]
-        _HorizonColor     ("Horizon Color",    Color)              = (0.55, 0.75, 0.95, 1)
-        _ColorCurve       ("Color Curve",      Range(0.2, 3))      = 1
+        // Multiplies the live scene-light colour near the origin; its influence fades toward the
+        // outer rings (see _TintFalloff), so the outermost ring reads as the plain light colour.
+        _SelectedColor    ("Selected Color",   Color)              = (1.15, 1.0, 0.85, 1)
+        _TintFalloff      ("Tint Falloff",     Range(0.2, 3))      = 1
+
+        [Header(Alpha)]
+        // Opacity at the smallest (innermost) ring — the established base the outer rings fade down
+        // from, not necessarily fully opaque.
+        _BaseAlpha        ("Base Alpha",       Range(0, 1))        = 0.85
+        _AlphaFalloff     ("Alpha Falloff",    Range(0.2, 4))      = 1.5
 
         [Header(Motion)]
         _WaveAmplitude    ("Wave Amplitude",   Range(0, 0.3))      = 0.05
@@ -44,7 +57,11 @@ Shader "BalloonParty/Display/SkyScatter"
         Cull Off
         Lighting Off
         ZWrite Off
-        Blend Off
+        // One, not SrcAlpha: the fragment shader accumulates rings as PREMULTIPLIED colour (see the
+        // compositing loop below), so the GPU must add it straight over the framebuffer rather than
+        // multiplying by alpha a second time — SrcAlpha here would square every ring's alpha, crushing
+        // anything short of fully opaque toward black and reading as "darker the bigger the circle."
+        Blend One OneMinusSrcAlpha
 
         Pass
         {
@@ -60,8 +77,10 @@ Shader "BalloonParty/Display/SkyScatter"
             // early-continue below, mirroring the batched field shaders' _StampCount pattern.
             #define SKY_SCATTER_MAX_RINGS 10
 
-            fixed4 _HorizonColor;
-            float  _ColorCurve;
+            fixed4 _SelectedColor;
+            float  _TintFalloff;
+            float  _BaseAlpha;
+            float  _AlphaFalloff;
             float  _RingCount;
             float  _BaseRadius;
             float  _RadiusGrowth;
@@ -121,13 +140,15 @@ Shader "BalloonParty/Display/SkyScatter"
                 float cloudNoise = (BackgroundFieldNoise(wp) - 0.5) * _BackgroundFieldActive;
 
                 int count = (int) clamp(_RingCount, 2, SKY_SCATTER_MAX_RINGS);
-                float3 color = _HorizonColor.rgb;
                 float3 lightColor = SceneLightTint();
 
-                // Back-to-front: the biggest ring (horizon colour) paints first, each smaller ring
-                // layers on top. Every ring shares the same anchor tangent point (its centre sits
-                // exactly one radius from the anchor), so growing radii nest automatically — no
-                // per-ring containment test needed.
+                // Standard back-to-front "over" compositing, starting fully transparent — wherever the
+                // accumulated alpha ends below 1, Blend One OneMinusSrcAlpha lets the camera's own
+                // clear colour (already the current light colour) show through underneath. Every ring
+                // shares the same anchor tangent point (its centre sits exactly one radius from the
+                // anchor), so growing radii nest automatically — no per-ring containment test needed.
+                float4 accum = float4(0.0, 0.0, 0.0, 0.0);
+
                 for (int j = SKY_SCATTER_MAX_RINGS - 1; j >= 0; j--)
                 {
                     if (j >= count)
@@ -147,13 +168,22 @@ Shader "BalloonParty/Display/SkyScatter"
                     float2 center = anchor + spreadDir * radius;
 
                     float dist = distance(wp, center) + cloudNoise * _CloudDistortion * radius;
-                    float coverage = smoothstep(radius + _EdgeSoftness, radius - _EdgeSoftness, dist);
+                    float spatialCoverage = smoothstep(radius + _EdgeSoftness, radius - _EdgeSoftness, dist);
 
-                    float3 ringColor = lerp(lightColor, _HorizonColor.rgb, pow(t, _ColorCurve));
-                    color = lerp(color, ringColor, coverage);
+                    // near-to-far falloff (1 at the origin ring, 0 at the outermost) shapes both how
+                    // strongly the selected colour tints this ring and how opaque it is — two
+                    // independent knobs on the same shape, since one is a colour multiplier and the
+                    // other is genuine transparency.
+                    float nearness = pow(saturate(1.0 - t), _TintFalloff);
+                    float3 ringColor = lightColor * lerp(float3(1.0, 1.0, 1.0), _SelectedColor.rgb, nearness);
+
+                    float ringAlpha = _BaseAlpha * pow(saturate(1.0 - t), _AlphaFalloff) * spatialCoverage;
+
+                    accum.rgb = lerp(accum.rgb, ringColor, ringAlpha);
+                    accum.a = ringAlpha + accum.a * (1.0 - ringAlpha);
                 }
 
-                return fixed4(color, 1.0);
+                return accum;
             }
             ENDCG
         }

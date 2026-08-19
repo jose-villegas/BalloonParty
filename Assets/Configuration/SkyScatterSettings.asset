@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1427d2a6c57c41ac8c99255f7780d589, type: 3}
   m_Name: SkyScatterSettings
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   _material: {fileID: 2100000, guid: 652ec5d0ca42487f862a93e042dc86ee, type: 2}
   _overscanMultiplier: 1.6
   _sortingLayerName: Default

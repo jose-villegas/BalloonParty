@@ -19,23 +19,27 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties:
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _AnchorRectScale: 1
-    - _BaseRadius: 0.16
-    - _CloudDistortion: 0.06
-    - _ColorCurve: 1
-    - _EdgeSoftness: 0.035
-    - _RadiusGrowth: 1.55
-    - _RingCount: 7
+    - _AlphaFalloff: 1.5
+    - _AnchorRectScale: 3
+    - _BaseAlpha: 0.85
+    - _BaseRadius: 0.2
+    - _CloudDistortion: 0.3
+    - _ColorCurve: 2.94
+    - _EdgeSoftness: 0.2
+    - _RadiusGrowth: 1.5
+    - _RingCount: 10
+    - _TintFalloff: 1
     - _WaveAmplitude: 0.05
-    - _WavePhaseStep: 0.9
-    - _WaveSpeed: 0.2
+    - _WavePhaseStep: 1.25
+    - _WaveSpeed: 1
     m_Colors:
-    - _HorizonColor: {r: 0.55, g: 0.75, b: 0.95, a: 1}
+    - _HorizonColor: {r: 0.18431373, g: 0.32941177, b: 0.5882353, a: 1}
+    - _SelectedColor: {r: 1.15, g: 1, b: 0.85, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
