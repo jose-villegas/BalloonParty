@@ -15,7 +15,7 @@ Shader "BalloonParty/Display/SkyScatter"
     {
         [Header(Rings)]
         _RingCount        ("Ring Count",       Range(2, 10))       = 7
-        _BaseRadius       ("Base Radius",      Range(0.05, 1))     = 0.16
+        _BaseRadius       ("Base Radius",      Range(0.05, 3))     = 0.16
         _RadiusGrowth     ("Radius Growth",    Range(1.05, 3))     = 1.55
         // Scales the play-area rectangle used to place the anchor: 1 = anchor sits exactly where the
         // scene-light ray exits that rectangle (on the wall), < 1 pulls it inside the play field,

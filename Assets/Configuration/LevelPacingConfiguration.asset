@@ -910,7 +910,7 @@ MonoBehaviour:
   - _fromLevel: 4
     _toLevel: 4
     _parameters:
-      _spawnLines: 4
+      _spawnLines: 3
       _boardLines: 5
       _itemCadence:
         _min: 1
