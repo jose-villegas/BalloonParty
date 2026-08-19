@@ -99,18 +99,15 @@ namespace BalloonParty.Prediction
                     extended = origin + (direction * shift);
                 }
 
-                var topHit = false;
                 if (extended.y > walls.Top)
                 {
                     reflect += Vector3.down;
                     shift = (walls.Top - origin.y) / direction.y;
                     extended = origin + (direction * shift);
-                    topHit = true;
                 }
 
                 // The bottom wall is a real, visible wall the live shot bounces off just like the
-                // other three (ProjectileMotionResolver.Step reflects off it the same as any other) —
-                // it just doesn't end the trace the way a top-wall hit deliberately does below.
+                // other three (ProjectileMotionResolver.Step reflects off it the same as any other).
                 if (extended.y < walls.Bottom)
                 {
                     reflect += Vector3.up;
@@ -167,8 +164,7 @@ namespace BalloonParty.Prediction
                 {
                     results.Add(extended);
 
-                    // The top wall ends the shot in flight, so the line ends with it.
-                    if (topHit || reflectsLeft <= 0)
+                    if (reflectsLeft <= 0)
                     {
                         end = new PredictionTraceEnd(
                             pierceStartIndex, PredictionTraceEndKind.Wall, reflect.normalized);
@@ -181,9 +177,8 @@ namespace BalloonParty.Prediction
             }
 
             // Points are otherwise only recorded AT a bounce, so a run that ends between them draws
-            // nothing for its last leg. Rare before deflections existed — every upward shot ends on a
-            // wall — but a deflection routinely sends the line downward, where there is no bottom
-            // limit to terminate on, and the trace would stop dead at the balloon.
+            // nothing for its last leg — reachable once piercing, where nothing but the segment budget
+            // itself can end the trace before it ever crosses another wall.
             if (results.Count == 0 || (results[results.Count - 1] - origin).sqrMagnitude > 1e-6f)
             {
                 results.Add(origin);

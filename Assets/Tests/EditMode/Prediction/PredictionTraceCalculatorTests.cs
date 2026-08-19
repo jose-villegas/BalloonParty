@@ -139,19 +139,27 @@ namespace BalloonParty.Tests.Prediction
         {
             _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out _);
 
-            var lastPoint = _results[_results.Count - 1];
-            Assert.AreEqual(DefaultLimits.x, lastPoint.y, 0.01f);
+            Assert.GreaterOrEqual(_results.Count, 2);
+            Assert.AreEqual(DefaultLimits.x, _results[1].y, 0.01f);
         }
 
+        // The top wall used to be special-cased to end the trace outright; it now reflects and spends
+        // the shared budget exactly like the other three, matching ProjectileMotionResolver/WallLimits,
+        // which never singled it out either — a shot with shields left genuinely does bounce off the
+        // top and come back down.
         [Test]
-        public void Calculate_TopWallHit_TerminatesBouncing()
+        public void Calculate_TopWallHit_ReflectsAndContinues()
         {
-            _config.MaxReflections.Returns(10);
+            _config.MaxReflections.Returns(1);
             _config.MaxSegments.Returns(200);
 
-            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out _);
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out var end);
 
-            Assert.AreEqual(2, _results.Count);
+            Assert.AreEqual(3, _results.Count);
+            Assert.AreEqual(DefaultLimits.x, _results[1].y, 0.01f, "turns at the top wall");
+            Assert.AreEqual(DefaultLimits.z, _results[2].y, 0.01f,
+                "the leg leaving it runs straight back down to the bottom wall");
+            Assert.AreEqual(PredictionTraceEndKind.Wall, end.Kind);
         }
 
         [Test]
@@ -251,17 +259,21 @@ namespace BalloonParty.Tests.Prediction
         [Test]
         public void Calculate_GrazingShot_DeflectsOnceTheProjectileRadiusIsCounted()
         {
+            // Zero budget on both calls so each ends at the very first thing it hits — the top wall
+            // reflects and continues now like any other wall, which would otherwise entangle this test
+            // with how many times it bounces afterward instead of just whether it deflected at all.
+            _config.MaxReflections.Returns(0);
+
             // Passes 0.6 to the right of centre: outside the balloon's 0.5, inside 0.5 + 0.2.
             _deflectors.Add(new DeflectorCircle(new Vector2(0f, 2f), 0.5f));
             var origin = new Vector3(0.6f, 0f, 0f);
 
             _calculator.Calculate(origin, Vector3.up, 0f, _results, out _);
-            var asAPoint = _results.Count;
+            Assert.AreEqual(DefaultLimits.x, _results[1].y, 0.01f,
+                "as a point it misses entirely — straight to the top wall");
 
             _calculator.Calculate(origin, Vector3.up, 0.2f, _results, out _);
-
-            Assert.AreEqual(2, asAPoint, "as a point it misses entirely — straight to the top wall");
-            Assert.Greater(_results.Count, asAPoint, "with its real radius it clips and turns");
+            Assert.Less(_results[1].y, DefaultLimits.x, "with its real radius it clips and turns before the wall");
             Assert.Less(_results[1].x, origin.x + 0.5f, "contact sits on the near side, not through it");
         }
 
@@ -285,6 +297,9 @@ namespace BalloonParty.Tests.Prediction
         [Test]
         public void Calculate_PierceItemWithNoDeflectorInTheWay_InsertsVertexAndReportsPierceStartIndex()
         {
+            // Zero budget so the piercing run ends at the very first wall it reaches (the top, now that
+            // it reflects and continues like any other) rather than bouncing on past it.
+            _config.MaxReflections.Returns(0);
             _pierceItems.Add(new PierceItemCircle(new Vector2(0f, 2f), 0.5f));
 
             _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out var end);
@@ -311,6 +326,9 @@ namespace BalloonParty.Tests.Prediction
         [Test]
         public void Calculate_ToughBeyondPierceHost_IsPassedThroughInsteadOfDeflecting()
         {
+            // Zero budget so the piercing run ends at the very first wall it reaches (the top, now that
+            // it reflects and continues like any other) rather than bouncing on past it.
+            _config.MaxReflections.Returns(0);
             _pierceItems.Add(new PierceItemCircle(new Vector2(0f, 2f), 0.5f));
             _deflectors.Add(new DeflectorCircle(new Vector2(0f, 3.5f), 0.5f));
 
@@ -350,6 +368,9 @@ namespace BalloonParty.Tests.Prediction
         [Test]
         public void Calculate_PierceItemNearerThanDeflectorOnTheSameStep_ArmsInsteadOfDeflecting()
         {
+            // Zero budget so the piercing run ends at the very first wall it reaches (the top, now that
+            // it reflects and continues like any other) rather than bouncing on past it.
+            _config.MaxReflections.Returns(0);
             _pierceItems.Add(new PierceItemCircle(new Vector2(0f, 0.2f), 0.05f));
             _deflectors.Add(new DeflectorCircle(new Vector2(0f, 0.4f), 0.05f));
 
