@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.Effects.ISkyScatterSettings" name="BalloonParty.Configuration.Effects.ISkyScatterSettings">
+<area shape="rect" id="Node000001" title="Read&#45;only tuning for the sky&#45;scatter backdrop (see SkyScatterService)." alt="" coords="5,5,203,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1SkyScatterSettings.html" title="Authored tuning for the sky&#45;scatter backdrop; assign the display material here and wire the asset int..." alt="" coords="5,93,203,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,59,107,93,101,93,101,59"/>
+</map>

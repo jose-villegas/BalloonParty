@@ -9,5 +9,6 @@ var classBalloonParty_1_1Game_1_1AppLifetimeScope =
     [ "_projectileFlightConfig", "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a230305700c5f8ae5c6ed7cde6a983c4d", null ],
     [ "_sceneLightFieldSettings", "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a560bbc0d8e30ba1895182085b2a4cabd", null ],
     [ "_sfxVoicePrefab", "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#af84e7e9b4ea31f26d3d5f3a81a5e8517", null ],
+    [ "_skyScatterSettings", "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a935056c153c2f9a3af818efc7b300389", null ],
     [ "_soundBank", "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a01606de8c2b3ce7760387623af05de90", null ]
 ];

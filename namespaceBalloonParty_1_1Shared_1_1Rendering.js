@@ -9,6 +9,7 @@ var namespaceBalloonParty_1_1Shared_1_1Rendering =
     [ "IColorableRenderer", "interfaceBalloonParty_1_1Shared_1_1Rendering_1_1IColorableRenderer.html", "interfaceBalloonParty_1_1Shared_1_1Rendering_1_1IColorableRenderer" ],
     [ "ImageShadowBaker", "classBalloonParty_1_1Shared_1_1Rendering_1_1ImageShadowBaker.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1ImageShadowBaker" ],
     [ "MeshHelper", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshHelper.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshHelper" ],
+    [ "QuadRendererBuilder", "classBalloonParty_1_1Shared_1_1Rendering_1_1QuadRendererBuilder.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1QuadRendererBuilder" ],
     [ "ShaderTimeService", "classBalloonParty_1_1Shared_1_1Rendering_1_1ShaderTimeService.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1ShaderTimeService" ],
     [ "SortingHelper", "classBalloonParty_1_1Shared_1_1Rendering_1_1SortingHelper.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1SortingHelper" ],
     [ "SpriteLayerCombiner", "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner" ],

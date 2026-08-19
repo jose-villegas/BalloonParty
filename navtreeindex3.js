@@ -1,13 +1,17 @@
 var NAVTREEINDEX3 =
 {
+"SpeckProfile_8cs.html":[7,0,15,0,21],
+"SpeckSpawnRequestMessage_8cs.html":[7,0,14,7,37],
+"SpeckSpawnSettings_8cs.html":[7,0,3,4,28],
+"SpeedTapMintedMessage_8cs.html":[7,0,14,7,38],
 "SpinSpace_8cs.html":[7,0,8,35],
 "SpriteColorableRenderer_8cs.html":[7,0,1,4,6],
 "SpriteLayerCombinerEditor_8cs.html":[7,0,6,8,0],
 "SpriteLayerCombinerEditor_8cs.html#aef19bab18b9814edeef255c43e4f6bbc":[7,0,6,8,0,1],
-"SpriteLayerCombiner_8cs.html":[7,0,14,10,10],
+"SpriteLayerCombiner_8cs.html":[7,0,14,10,11],
 "SpriteRendererExtensions_8cs.html":[7,0,14,4,17],
 "SpriteShadowBakerEditor_8cs.html":[7,0,6,5,2],
-"SpriteShadowBaker_8cs.html":[7,0,14,10,11],
+"SpriteShadowBaker_8cs.html":[7,0,14,10,12],
 "StampProfileDrawer_8cs.html":[7,0,3,3,9],
 "StartFromLevelCheat_8cs.html":[7,0,2,20],
 "StaticActorModel_8cs.html":[7,0,15,0,22],
@@ -37,7 +41,7 @@ var NAVTREEINDEX3 =
 "TimeOfDayCycle_8cs.html":[7,0,7,4,7],
 "TimeOfDayOrbit_8cs.html":[7,0,18,18],
 "TimeOfDayService_8cs.html":[7,0,14,11,7],
-"TimeOfDaySource_8cs.html":[7,0,3,4,27],
+"TimeOfDaySource_8cs.html":[7,0,3,4,29],
 "TimeOfDaySwap_8cs.html":[7,0,18,19],
 "TimeOfDayTint_8cs.html":[7,0,18,20],
 "TimeOfDayVisibility_8cs.html":[7,0,18,21],
@@ -86,7 +90,7 @@ var NAVTREEINDEX3 =
 "WaveDeficit_8cs.html":[7,0,7,3,5],
 "WeightedPickExtensions_8cs.html":[7,0,14,4,22],
 "WindSoundRouter_8cs.html":[7,0,0,2,5],
-"WorldPolylineGizmo_8cs.html":[7,0,14,10,12],
+"WorldPolylineGizmo_8cs.html":[7,0,14,10,13],
 "annotated.html":[6,0],
 "arch_balance_flow.html":[2,4],
 "arch_balance_flow.html#autotoc_md55":[2,4,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX3 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a2fe1dd168100fe656f89827ee48f0ae3":[6,0,0,0,0,3,20],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a319dd22608234db2a5dab1173a03a472":[5,0,0,0,0,3,21],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a319dd22608234db2a5dab1173a03a472":[6,0,0,0,0,3,21],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a31a1df334b0ca100035eec52978eb612":[5,0,0,0,0,3,17],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a31a1df334b0ca100035eec52978eb612":[6,0,0,0,0,3,17],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3687bbf9b9c25e40dfe23768ad0fbbce":[5,0,0,0,0,3,44],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3687bbf9b9c25e40dfe23768ad0fbbce":[6,0,0,0,0,3,44],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3e26ed679bfcc356d10c54213fe89adb":[5,0,0,0,0,3,41]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a31a1df334b0ca100035eec52978eb612":[5,0,0,0,0,3,17]
 };

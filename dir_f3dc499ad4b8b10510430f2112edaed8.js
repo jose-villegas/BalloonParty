@@ -8,6 +8,7 @@ var dir_f3dc499ad4b8b10510430f2112edaed8 =
     [ "GradientTextureHelper.cs", "GradientTextureHelper_8cs.html", "GradientTextureHelper_8cs" ],
     [ "ImageShadowBaker.cs", "ImageShadowBaker_8cs.html", "ImageShadowBaker_8cs" ],
     [ "MeshHelper.cs", "MeshHelper_8cs.html", "MeshHelper_8cs" ],
+    [ "QuadRendererBuilder.cs", "QuadRendererBuilder_8cs.html", "QuadRendererBuilder_8cs" ],
     [ "ShaderTimeService.cs", "ShaderTimeService_8cs.html", "ShaderTimeService_8cs" ],
     [ "SortingHelper.cs", "SortingHelper_8cs.html", "SortingHelper_8cs" ],
     [ "SpriteLayerCombiner.cs", "SpriteLayerCombiner_8cs.html", "SpriteLayerCombiner_8cs" ],

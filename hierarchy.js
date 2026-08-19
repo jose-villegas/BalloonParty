@@ -342,6 +342,7 @@ var hierarchy =
       ] ],
       [ "BalloonParty.Projectile.Model.ProjectileBuff", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileBuff.html", null ],
       [ "BalloonParty.Scenario.BackgroundFieldService", "classBalloonParty_1_1Scenario_1_1BackgroundFieldService.html", null ],
+      [ "BalloonParty.Scenario.SkyScatterService", "classBalloonParty_1_1Scenario_1_1SkyScatterService.html", null ],
       [ "BalloonParty.Scenario.SmokeFieldService", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html", null ],
       [ "BalloonParty.Shared.Disturbance.DisturbanceFieldService", "classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html", null ],
       [ "BalloonParty.Shared.SceneLight.SceneLightFieldService", "classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html", null ],
@@ -711,6 +712,9 @@ var hierarchy =
     [ "BalloonParty.Slots.Grid.IShieldSlotPreference", "interfaceBalloonParty_1_1Slots_1_1Grid_1_1IShieldSlotPreference.html", [
       [ "BalloonParty.Item.Shield.ShieldSlotPreference", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldSlotPreference.html", null ]
     ] ],
+    [ "BalloonParty.Configuration.Effects.ISkyScatterSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISkyScatterSettings.html", [
+      [ "BalloonParty.Configuration.Effects.SkyScatterSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SkyScatterSettings.html", null ]
+    ] ],
     [ "BalloonParty.Slots.Actor.ISlotActor", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html", [
       [ "BalloonParty.Slots.Actor.IDynamicSlotActor", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IDynamicSlotActor.html", [
         [ "BalloonParty.Balloon.Model.IBalloonModel", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html", null ],
@@ -822,6 +826,7 @@ var hierarchy =
       [ "BalloonParty.Projectile.Controller.ProjectileDoomedTimeScaleController", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html", null ],
       [ "BalloonParty.Projectile.ProjectileFacingSource", "classBalloonParty_1_1Projectile_1_1ProjectileFacingSource.html", null ],
       [ "BalloonParty.Scenario.BackgroundFieldService", "classBalloonParty_1_1Scenario_1_1BackgroundFieldService.html", null ],
+      [ "BalloonParty.Scenario.SkyScatterService", "classBalloonParty_1_1Scenario_1_1SkyScatterService.html", null ],
       [ "BalloonParty.Scenario.SmokeFieldService", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html", null ],
       [ "BalloonParty.Shared.Cadence.EffectCadenceCoordinator", "classBalloonParty_1_1Shared_1_1Cadence_1_1EffectCadenceCoordinator.html", null ],
       [ "BalloonParty.Shared.Disturbance.DisturbanceFieldService", "classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html", null ],
@@ -1155,6 +1160,7 @@ var hierarchy =
       [ "BalloonParty.Editor.UnitCircleDrawer", "classBalloonParty_1_1Editor_1_1UnitCircleDrawer.html", null ]
     ] ],
     [ "BalloonParty.Editor.PropertyDrawerHelper", "classBalloonParty_1_1Editor_1_1PropertyDrawerHelper.html", null ],
+    [ "BalloonParty.Shared.Rendering.QuadRendererBuilder", "classBalloonParty_1_1Shared_1_1Rendering_1_1QuadRendererBuilder.html", null ],
     [ "BalloonParty.Configuration.Ranges.RangedFloat", "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html", null ],
     [ "BalloonParty.Configuration.Ranges.RangedInt", "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html", null ],
     [ "BalloonParty.UI.Binding.ReactiveBinderRegistration", "classBalloonParty_1_1UI_1_1Binding_1_1ReactiveBinderRegistration.html", null ],
@@ -1201,6 +1207,7 @@ var hierarchy =
       [ "BalloonParty.Configuration.Effects.PuffCloudSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html", null ],
       [ "BalloonParty.Configuration.Effects.SceneLightFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html", null ],
       [ "BalloonParty.Configuration.Effects.ShieldFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html", null ],
+      [ "BalloonParty.Configuration.Effects.SkyScatterSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SkyScatterSettings.html", null ],
       [ "BalloonParty.Configuration.Effects.SmokeFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html", null ],
       [ "BalloonParty.Configuration.Effects.SpeckFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckFieldSettings.html", null ],
       [ "BalloonParty.Configuration.GameDisplayConfiguration", "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html", null ],

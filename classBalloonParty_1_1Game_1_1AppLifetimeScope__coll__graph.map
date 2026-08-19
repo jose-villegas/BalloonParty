@@ -1,39 +1,44 @@
 <map id="BalloonParty.Game.AppLifetimeScope" name="BalloonParty.Game.AppLifetimeScope">
-<area shape="rect" id="Node000001" title="The persistent app root: the single VContainer scope that lives for the whole session (DontDestroyOnL..." alt="" coords="845,348,1073,388"/>
+<area shape="rect" id="Node000001" title="The persistent app root: the single VContainer scope that lives for the whole session (DontDestroyOnL..." alt="" coords="845,393,1073,433"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="452,147,567,173"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="581,167,636,178,698,194,762,216,823,244,859,268,892,296,942,346,939,350,888,300,855,272,820,249,760,220,696,199,635,183,580,172"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="581,167,637,179,699,197,763,222,823,255,863,288,898,325,947,392,943,395,894,329,859,292,820,260,761,226,697,202,635,184,580,172"/>
 <area shape="rect" id="Node000003" href="$classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html" title=" " alt="" coords="411,393,608,433"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="621,399,845,377,845,382,622,405"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="622,411,845,411,845,416,622,416"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="62,454,191,479"/>
 <area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="205,453,410,424,411,430,205,458"/>
 <area shape="rect" id="Node000006" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html" title=" " alt="" coords="397,197,622,237"/>
-<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="204,462,227,453,246,439,257,424,261,409,259,377,255,343,259,325,270,308,297,282,328,261,361,245,396,234,397,239,363,250,330,266,300,286,274,311,264,327,261,344,264,376,267,409,262,426,250,443,229,458,206,467"/>
-<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html" title=" " alt="" coords="393,323,625,363"/>
-<area shape="poly" id="edge12_Node000011_Node000004" title=" " alt="" coords="204,454,247,439,258,430,271,419,347,385,422,360,424,365,349,390,273,424,262,434,249,444,206,459"/>
-<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html" title="Authored tuning for the shared cloud field; assign the blit material + resolution here and wire the a..." alt="" coords="394,532,625,572"/>
-<area shape="poly" id="edge16_Node000014_Node000004" title=" " alt="" coords="203,479,249,489,423,529,422,534,247,495,202,485"/>
-<area shape="rect" id="Node000016" href="$classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html" title=" " alt="" coords="411,460,608,500"/>
-<area shape="poly" id="edge19_Node000016_Node000004" title=" " alt="" coords="205,467,411,474,411,479,205,472"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="204,462,227,454,246,440,259,419,264,399,262,379,258,357,253,336,251,314,256,292,270,270,290,256,320,245,396,228,397,234,322,250,293,261,274,274,261,294,257,314,258,335,263,356,268,378,269,400,264,421,250,443,230,458,206,467"/>
+<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html" title=" " alt="" coords="393,327,625,367"/>
+<area shape="poly" id="edge12_Node000011_Node000004" title=" " alt="" coords="204,454,247,439,258,430,271,419,303,403,330,395,393,379,440,364,441,369,394,384,332,400,305,408,273,424,262,434,249,444,206,459"/>
+<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html" title="Authored tuning for the shared cloud field; assign the blit material + resolution here and wire the a..." alt="" coords="394,459,625,499"/>
+<area shape="poly" id="edge16_Node000014_Node000004" title=" " alt="" coords="205,466,394,472,394,478,205,472"/>
+<area shape="rect" id="Node000016" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1SkyScatterSettings.html" title="Authored tuning for the sky&#45;scatter backdrop; assign the display material here and wire the asset int..." alt="" coords="411,527,608,567"/>
+<area shape="poly" id="edge19_Node000016_Node000004" title=" " alt="" coords="202,480,413,524,412,529,201,485"/>
+<area shape="rect" id="Node000018" href="$classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html" title=" " alt="" coords="411,596,608,636"/>
+<area shape="poly" id="edge22_Node000018_Node000004" title=" " alt="" coords="206,472,250,490,262,504,274,519,304,540,331,553,394,576,442,593,440,598,392,581,328,558,302,545,270,523,258,508,246,494,204,477"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html" title=" " alt="" coords="26,389,227,429"/>
 <area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="241,408,411,410,411,415,241,413"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="584,239,899,345,898,350,582,244"/>
-<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings.html" title="Read&#45;only tuning for the scene&#45;light field (see Milestone 3)." alt="" coords="12,197,241,237"/>
-<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="255,215,396,215,396,220,255,220"/>
-<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IScreenSpaceLightSettings.html" title="Read&#45;only tuning for the screen&#45;space GI approximation (see Screen&#45;Space Light (2D GI))." alt="" coords="5,5,248,45"/>
-<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="229,47,249,55,316,83,343,101,371,129,380,144,383,158,386,170,395,182,415,195,412,199,391,186,381,172,378,159,375,146,367,132,339,105,313,88,247,60,227,52"/>
-<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightSettings.html" title="Read&#45;only ambient/main scene&#45;light configuration — direction, colour, intensity." alt="" coords="27,69,226,109"/>
-<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="222,111,249,119,311,138,371,164,395,182,427,195,425,200,392,186,368,169,309,143,247,124,220,116"/>
-<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html" title="Read&#45;only tuning for the night&#45;mode time&#45;of&#45;day cycle." alt="" coords="26,133,227,173"/>
-<area shape="poly" id="edge10_Node000006_Node000010" title=" " alt="" coords="241,170,397,196,396,201,241,175"/>
-<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="640,347,845,359,845,364,639,353"/>
-<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IDisturbanceFieldSettings.html" title=" " alt="" coords="9,261,245,301"/>
-<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="259,291,370,307,432,320,431,325,369,312,258,296"/>
-<area shape="rect" id="Node000013" href="$structBalloonParty_1_1Configuration_1_1Effects_1_1StampProfile.html" title=" " alt="" coords="28,325,225,365"/>
-<area shape="poly" id="edge14_Node000011_Node000013" title=" " alt="" coords="239,342,393,341,393,346,239,347"/>
-<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="637,532,729,510,776,494,820,475,855,455,887,431,937,386,940,390,890,435,857,459,823,480,778,499,731,515,639,537"/>
-<area shape="rect" id="Node000015" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBackgroundFieldSettings.html" title="Read&#45;only tuning for the shared cloud field (see BackgroundFieldService)." alt="" coords="9,568,244,608"/>
-<area shape="poly" id="edge17_Node000014_Node000015" title=" " alt="" coords="258,576,369,567,394,564,394,569,370,572,258,582"/>
-<area shape="poly" id="edge18_Node000001_Node000016" title=" " alt="" coords="621,461,719,442,821,417,910,386,912,391,822,423,720,447,622,466"/>
-<area shape="rect" id="Node000017" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="17,504,237,544"/>
-<area shape="poly" id="edge20_Node000016_Node000017" title=" " alt="" coords="250,507,410,489,410,494,251,512"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="573,240,822,347,917,391,915,396,820,352,571,245"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings.html" title="Read&#45;only tuning for the scene&#45;light field (see Milestone 3)." alt="" coords="12,5,241,45"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="229,47,249,55,316,83,343,101,371,129,380,144,383,158,386,170,395,182,415,195,412,199,391,186,381,172,378,159,375,146,367,132,339,105,313,88,247,60,227,52"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IScreenSpaceLightSettings.html" title="Read&#45;only tuning for the screen&#45;space GI approximation (see Screen&#45;Space Light (2D GI))." alt="" coords="5,69,248,109"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="222,111,249,119,311,138,371,164,395,182,427,195,425,200,392,186,368,169,309,143,247,124,220,116"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightSettings.html" title="Read&#45;only ambient/main scene&#45;light configuration — direction, colour, intensity." alt="" coords="27,133,226,173"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="240,170,397,196,396,201,240,175"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html" title="Read&#45;only tuning for the night&#45;mode time&#45;of&#45;day cycle." alt="" coords="26,197,227,237"/>
+<area shape="poly" id="edge10_Node000006_Node000010" title=" " alt="" coords="241,215,397,215,397,220,241,220"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="640,363,846,394,845,399,639,368"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IDisturbanceFieldSettings.html" title=" " alt="" coords="9,325,245,365"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="259,343,393,344,393,349,259,348"/>
+<area shape="rect" id="Node000013" href="$structBalloonParty_1_1Configuration_1_1Effects_1_1StampProfile.html" title=" " alt="" coords="28,261,225,301"/>
+<area shape="poly" id="edge14_Node000011_Node000013" title=" " alt="" coords="239,298,394,324,393,330,238,303"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="638,457,821,431,845,427,845,433,822,436,639,463"/>
+<area shape="rect" id="Node000015" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBackgroundFieldSettings.html" title="Read&#45;only tuning for the shared cloud field (see BackgroundFieldService)." alt="" coords="9,504,244,544"/>
+<area shape="poly" id="edge17_Node000014_Node000015" title=" " alt="" coords="257,506,394,490,394,495,258,511"/>
+<area shape="poly" id="edge18_Node000001_Node000016" title=" " alt="" coords="621,525,719,504,820,475,873,454,919,431,922,436,875,459,822,480,720,509,622,531"/>
+<area shape="rect" id="Node000017" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISkyScatterSettings.html" title="Read&#45;only tuning for the sky&#45;scatter backdrop (see SkyScatterService)." alt="" coords="28,568,225,608"/>
+<area shape="poly" id="edge20_Node000016_Node000017" title=" " alt="" coords="239,575,369,561,410,557,411,562,370,567,239,580"/>
+<area shape="poly" id="edge21_Node000001_Node000018" title=" " alt="" coords="621,601,721,578,772,561,820,539,857,515,890,486,940,432,944,435,894,490,860,519,823,544,774,566,722,584,622,606"/>
+<area shape="rect" id="Node000019" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="17,632,237,672"/>
+<area shape="poly" id="edge23_Node000018_Node000019" title=" " alt="" coords="250,641,369,631,410,626,411,631,370,636,250,646"/>
 </map>
