@@ -111,6 +111,29 @@ namespace BalloonParty.Tests.Prediction
                 "the reflected line stops at the bottom wall, not off past the visible play area");
         }
 
+        // Mirrors the bottom-limit test above but with the authored production numbers
+        // (Assets/Configuration/PredictionTraceConfig.asset / ProjectileFlightConfig.asset) rather than
+        // the test fixture's own round DefaultLimits/SegmentLength — a deflection sent back up toward
+        // the top wall must still reach and terminate there under the real config, not just under
+        // numbers chosen to land on convenient step boundaries.
+        [Test]
+        public void Calculate_DeflectionSendsLineUpward_ReachesTopLimitUnderProductionConfig()
+        {
+            var limits = new Vector4(3.625f, 2.25f, -4.5f, -2.25f);
+            _flightConfig.LimitsClockwise.Returns(limits);
+            _config.SegmentLength.Returns(1f);
+            _config.MaxSegments.Returns(64);
+            _config.MaxReflections.Returns(1);
+
+            _deflectors.Add(new DeflectorCircle(new Vector2(0f, -2f), 0.5f));
+
+            _calculator.Calculate(Vector3.zero, Vector3.down, 0f, _results, out var end);
+
+            Assert.AreEqual(PredictionTraceEndKind.Wall, end.Kind);
+            Assert.AreEqual(limits.x, _results[_results.Count - 1].y, 0.05f,
+                "the leg reflected off the balloon reaches and stops at the top wall");
+        }
+
         [Test]
         public void Calculate_StraightUp_HitsTopWall()
         {

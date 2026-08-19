@@ -240,9 +240,11 @@ namespace BalloonParty.Item.Preview
             // (PredictionTraceProvider.SetTrace), so this genuinely skips the grid walk while the aim is
             // held still. KNOWN GAP: TryScoreHost sights a host by geometry alone — whether the trace
             // polyline crosses its contact circle — with no dependency on whether that host is what
-            // caused the trace to change. A balloon that spawns or settles into an already-computed,
-            // unobstructed lane therefore never bumps Version and so never gets sighted until the aim
-            // itself moves. Not fixed here; recorded so the gate isn't mistaken for free of cost.
+            // caused the trace to change. A balloon OTHER than the currently active one (see
+            // EnsureActiveHostIsCurrent below, which covers that one) that spawns or settles into an
+            // already-computed, unobstructed lane therefore never bumps Version and so never gets
+            // sighted until the aim itself moves. Not fixed here; recorded so the gate isn't mistaken
+            // for free of cost.
             if (_traceProvider.Version != _lastVersion)
             {
                 _lastVersion = _traceProvider.Version;
@@ -252,6 +254,16 @@ namespace BalloonParty.Item.Preview
             if (!_hasSightedHosts)
             {
                 HideAndClearSignature();
+                return;
+            }
+
+            // The version gate above only ever catches the AIM changing — it says nothing about the
+            // currently active host's own position. A balloon can keep drifting (or settling into its
+            // slot) for several frames after the aim itself goes still, and without this the drawn
+            // figure stays pinned to wherever that host was the instant it was picked up, ignoring
+            // every frame of settle since (the bug this exists to fix).
+            if (!EnsureActiveHostIsCurrent())
+            {
                 return;
             }
 
@@ -355,6 +367,49 @@ namespace BalloonParty.Item.Preview
             }
 
             _hasSightedHosts = _sightedHosts.Count > 0;
+        }
+
+        // Keeps the active host's own geometry current every tick, independent of the version gate above
+        // — see TryRefreshActiveHostGeometry. Falls back to the full walk when even that fails (the
+        // cached entry is stale outright, not just drifted), and bails the same way Tick's other early
+        // exits do if nothing is sighted any more. Split out of Tick purely to keep its own branching
+        // within the style audit's complexity ceiling.
+        private bool EnsureActiveHostIsCurrent()
+        {
+            if (TryRefreshActiveHostGeometry())
+            {
+                return true;
+            }
+
+            RefreshSightedHosts();
+            if (!_hasSightedHosts)
+            {
+                HideAndClearSignature();
+                return false;
+            }
+
+            _sequenceIndex = Mathf.Min(_sequenceIndex, _sightedHosts.Count - 1);
+            return true;
+        }
+
+        // Re-scores the currently active host against its OWN live view and the current trace — the
+        // single-host counterpart to CollectSightedHosts' full walk, run unconditionally every Tick so
+        // the active host's drawn geometry never lags behind a balloon still drifting into its slot. One
+        // TraceHitGeometry test against the host's own view, not a grid walk, so it is cheap enough to
+        // run regardless of the version gate. False means the cached entry is no longer trustworthy at
+        // all — the view despawned, lost its item, or the trace no longer crosses it (the host settled
+        // clear of the aim, or the aim moved off it since the last walk) — so the caller falls back to
+        // the full walk rather than drawing a host that may not even belong in the set any more.
+        private bool TryRefreshActiveHostGeometry()
+        {
+            var stale = _sightedHosts[_sequenceIndex];
+            if (!TryScoreHost(stale.Slot, out var hit) || !_previewMap.TryGetValue(hit.Item, out var preview))
+            {
+                return false;
+            }
+
+            _sightedHosts[_sequenceIndex] = new ItemPreviewSightedHost(stale.Slot, preview, hit.Origin, hit.Direction);
+            return true;
         }
 
         // isSettled defaults true for a non-spinning (or unhosted) slot — nothing is ever in flight for it,
