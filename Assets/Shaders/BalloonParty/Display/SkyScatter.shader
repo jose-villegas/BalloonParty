@@ -40,8 +40,8 @@ Shader "BalloonParty/Display/SkyScatter"
         _WavePhaseStep    ("Wave Phase Step",  Range(0, 6.283))    = 0.9
 
         [Header(Cloud Influence)]
-        _CloudDistortion  ("Cloud Distortion", Range(0, 0.3))      = 0.06
-        _EdgeSoftness     ("Edge Softness",    Range(0.001, 0.2))  = 0.035
+        _CloudDistortion  ("Cloud Distortion", Range(0, 1))        = 0.06
+        _EdgeSoftness     ("Edge Softness",    Range(0.001, 1))    = 0.035
     }
 
     SubShader
@@ -123,16 +123,15 @@ Shader "BalloonParty/Display/SkyScatter"
                 float2 toLight = SceneLightDirection();
                 float2 spreadDir = -toLight;
 
-                // The anchor sits where the ray from centre along toLight exits the rectangle — i.e.
-                // on the wall itself, in the light's direction — scaled by _AnchorRectScale before the
-                // intersection so the knob reads as "how big a rectangle to aim at," not an arbitrary
-                // distance: 1 = the wall, < 1 = inside the play field, > 1 = beyond the wall. Standard
-                // ray-vs-box-boundary distance from the centre (division guarded against an
-                // axis-aligned light direction).
-                float2 rect = halfFrame * _AnchorRectScale;
-                float2 tAxis = rect / max(abs(toLight), 1e-5);
-                float  anchorReach = min(tAxis.x, tAxis.y);
-                float2 anchor = toLight * anchorReach;
+                // The anchor orbits the circle that passes through every corner of the play-area
+                // rectangle (its circumscribed circle, radius = the half-diagonal), at the same angle
+                // as the scene light — a fixed distance out that simply rotates with the light, rather
+                // than sliding along the rectangle's edges as the light direction changes (which used
+                // to make the anchor jump distance whenever it crossed a corner). _AnchorRectScale
+                // scales that circle: 1 = exactly the circumscribed circle, < 1 pulls the anchor inside
+                // the play field, > 1 pushes it further out.
+                float  circumRadius = length(halfFrame) * _AnchorRectScale;
+                float2 anchor = toLight * circumRadius;
 
                 // One shared cloud tap, reused (scaled per-ring below) to bend every ring's edge —
                 // gated by _BackgroundFieldActive so an absent field contributes exactly zero rather
