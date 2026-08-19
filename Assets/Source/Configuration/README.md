@@ -3,10 +3,10 @@
 All game data is split across focused ScriptableObjects. Most are registered as singletons in
 `GameLifetimeScope` and injected wherever needed. A handful that the single persistent camera and its
 always-on backdrop fields need — `GameDisplayConfiguration`, `DisturbanceFieldSettings`,
-`BackgroundFieldSettings`, and the direction/GI-facing interfaces of `SceneLightFieldSettings`
-(`ISceneLightSettings`/`ITimeOfDaySettings`/`IScreenSpaceLightSettings`) — are instead owned by
-`AppLifetimeScope`, the persistent app root that parents both the Launcher and Game scopes; see
-`Assets/Source/README.md`.
+`BackgroundFieldSettings`, `SkyScatterSettings`, and the direction/GI-facing interfaces of
+`SceneLightFieldSettings` (`ISceneLightSettings`/`ITimeOfDaySettings`/`IScreenSpaceLightSettings`) — are
+instead owned by `AppLifetimeScope`, the persistent app root that parents both the Launcher and Game
+scopes; see `Assets/Source/README.md`.
 
 Source is organized into per-context subfolders: `Balloons/`, `Buffs/`, `Cinematics/`, `Effects/`, `GridActors/`, `Items/`, `Level/`, `Palette/`, `Ranges/`, and `Editor/` (drawers). The tables below note the subfolder where it isn't obvious.
 
@@ -39,6 +39,7 @@ Source is organized into per-context subfolders: `Balloons/`, `Buffs/`, `Cinemat
 | `SpeckFieldSettings` | `ISpeckFieldSettings` | Ambient speck-field tuning — motion/disturbance response, per-speck look (size, trail, scale, fade, heat, color-lerp), and spawning/reduction: the spawn-all testing toggle, initial active count, per-source `SpeckProfile[]` (`SpeckSource` flags), and the reduction curve. The `SpeckField` component keeps only its own compute shader + material |
 | `SmokeFieldSettings` | `ISmokeFieldSettings` (`Effects/`) | Smoke field tuning — stamp/decay shaders, RT resolution (`TexelsPerUnit`), decay rate/tick interval, wind speed/influence/age-bias/direction/swing, and per-source `PaintProfile[]` with `PaintSource` flags. `GetProfile(PaintSource)` resolves the active profile for a given source |
 | `ShieldFieldSettings` | `IShieldFieldSettings` (`Effects/`) | *(Planned — see @ref plan_em_shield_field)* Per-instance tuning for the procedural EM shield shader — layer spacing, dissolve/appear duration, noise scale, field-line density, pulse speed, glow intensity, tint alpha, base radius |
+| `SkyScatterSettings` | `ISkyScatterSettings` (`Effects/`) | Sky-scatter backdrop tuning — the display material (ring count/colours/wave/cloud-distortion all live on it, mirroring `BackgroundFieldSettings.DensityMaterial`), the quad's overscan multiplier over the reference world size, and its sorting layer/order. Owned by `AppLifetimeScope`, not `GameLifetimeScope` — see `Scenario/README.md` |
 | `BushVariantData` | — | Pre-baked bush variant asset (branch map texture + leaf attachment slots), created by the Bush Baker editor window, loaded at runtime by `BushView` |
 
 ### Data types

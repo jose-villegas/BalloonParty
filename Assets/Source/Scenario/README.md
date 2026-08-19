@@ -3,6 +3,37 @@
 The shared field services and the views that render the play-area frame — the visible boundary the
 projectile bounces off.
 
+## SkyScatterService
+
+`SkyScatterService.cs` — owns the sky-scatter backdrop: a single stationary quad rendered immediately
+after the camera's flat clear colour and behind every other backdrop layer (`BackgroundCloud`, `WallNet`,
+`SmokeField`) — a naive 2D stand-in for atmospheric scattering. Unlike `BackgroundFieldService` below it
+bakes nothing: the look (a stack of circles sharing one tangent point toward the scene light, growing
+outward from the light's own colour to an authored horizon colour, with a slow per-ring wave and
+cloud-perturbed edges) lives entirely in `Shaders/BalloonParty/Display/SkyScatter.shader`, driven off
+uniforms the shader already has for free — `SceneLight.cginc`'s flat globals (`_SceneLightDir`/
+`_SceneLightColor`/`_SceneLightIntensity`) and `BackgroundField.cginc`'s shared cloud-density map. The
+service's only job is building and sizing the quad once: a plain-C# DI singleton (`IStartable`/
+`IDisposable`, no `MonoBehaviour`) that builds the quad via the shared `Shared/Rendering/
+QuadRendererBuilder` (also used by `ScreenSpaceLightService`'s GI overlay), assigns the material/sorting
+layer/order from `ISkyScatterSettings`, and scales it to `IGameDisplayConfiguration.
+ReferenceWorldWidth/Height × OverscanMultiplier`. It stays stationary and generously oversized rather
+than tracking the camera, so a shake or cinematic pan never reveals an edge — the same trade
+`BackgroundCloud` makes. Registered in `AppLifetimeScope` (the persistent app root, not
+`GameLifetimeScope`) so the sky reads correctly from the Launch begin-screen's first frame. Tuning lives
+on `SkyScatterSettings` (`ISkyScatterSettings`: the display material + overscan + sorting layer/order) —
+the actual ring count/colours/wave/cloud-distortion knobs are all Properties on the material itself, not
+on the settings SO (mirroring how `BackgroundFieldSettings.DensityMaterial` owns the cloud roll's
+tuning).
+
+This is the one exception in `Scenario/` to "a `Renderer` is owned by a View, never a plain-C# service":
+the quad is built once and never touched again (no `Tick`, no per-frame state), so a `MonoBehaviour`
+View would only exist to satisfy `RegisterComponentInHierarchy`'s requirement that the component already
+sit in a prefab's serialized hierarchy — a materially riskier hand-edit than the single settings-asset
+field reference this design needs instead. If a future revision gives the quad per-frame behaviour
+(tracking the camera, reacting to input), split the renderer-owning half into a View at that point rather
+than growing this service's Unity-API surface further.
+
 ## BackgroundFieldService
 
 `BackgroundFieldService.cs` — owns the shared cloud field: an RT (`_BackgroundDensityTex`) blitted from

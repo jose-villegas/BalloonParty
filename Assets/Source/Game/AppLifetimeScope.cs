@@ -39,6 +39,7 @@ namespace BalloonParty.Game
         [SerializeField] private SceneLightFieldSettings _sceneLightFieldSettings;
         [SerializeField] private DisturbanceFieldSettings _disturbanceFieldSettings;
         [SerializeField] private BackgroundFieldSettings _backgroundFieldSettings;
+        [SerializeField] private SkyScatterSettings _skyScatterSettings;
         [SerializeField] private Audio.Configuration.SoundBankConfiguration _soundBank;
         [SerializeField] private Audio.View.AudioSourceVoice _sfxVoicePrefab;
         [SerializeField] private Audio.Configuration.AudioMixerSettings _audioMixerSettings;
@@ -86,6 +87,19 @@ namespace BalloonParty.Game
             builder.Register<ScenarioContentRoot>(Lifetime.Singleton);
             builder.Register<DisturbanceFieldService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<BackgroundFieldService>(Lifetime.Singleton).AsImplementedInterfaces();
+
+            // The sky-scatter backdrop quad — behind BackgroundCloud/WallNet/SmokeField, right after the
+            // camera's flat clear colour. App scope for the same reason as the fields above: visible from
+            // the Launch begin-screen's first frame. Guarded (unlike its siblings above) because this
+            // slot is new and, until someone assigns the asset on this prefab, RegisterInstance with a
+            // null SO would NRE the whole app root at Configure time rather than degrading gracefully —
+            // SkyScatterService itself already logs and no-ops on a missing material.
+            if (_skyScatterSettings != null)
+            {
+                builder.RegisterInstance<ISkyScatterSettings>(_skyScatterSettings);
+                builder.Register<SkyScatterService>(Lifetime.Singleton).AsImplementedInterfaces();
+            }
+
             // App scope, not Game: a global shader uniform has no scene lifetime, and a material
             // opted into the unscaled clock would freeze at 0 anywhere this did not tick.
             builder.Register<ShaderTimeService>(Lifetime.Singleton).AsImplementedInterfaces();

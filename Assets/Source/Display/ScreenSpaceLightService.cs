@@ -185,23 +185,13 @@ namespace BalloonParty.Display
                 _overlayLayer = LayerMask.NameToLayer("TransparentFX");
             }
 
-            var overlay = new GameObject("ScreenSpaceLightOverlay")
-            {
-                layer = _overlayLayer
-            };
+            var overlay = QuadRendererBuilder.Build(
+                "ScreenSpaceLightOverlay", _overlayMaterial, _overlayLayer,
+                _sortingLayerName, _sortingOrder);
             _overlayTransform = overlay.transform;
             _overlayTransform.SetParent(transform, false);
             _overlayTransform.localPosition = new Vector3(0f, 0f, OverlayDistance);
-
-            var filter = overlay.AddComponent<MeshFilter>();
-            filter.sharedMesh = MeshHelper.CreateQuad(QuadPivot.Center);
-
-            _overlayRenderer = overlay.AddComponent<MeshRenderer>();
-            _overlayRenderer.sharedMaterial = _overlayMaterial;
-            _overlayRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-            _overlayRenderer.receiveShadows = false;
-            _overlayRenderer.sortingLayerName = _sortingLayerName;
-            _overlayRenderer.sortingOrder = _sortingOrder;
+            _overlayRenderer = overlay.GetComponent<MeshRenderer>();
 
             return true;
         }

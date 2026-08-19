@@ -77,9 +77,10 @@ public class GameLifetimeScope : LifetimeScope
 regardless of navigation state: the display config, the ambient time-of-day owner
 (`TimeOfDayService`/`TimeOfDayClock`), the whole camera pipeline (ortho sizing, scene capture,
 screen-space light, background tint, cinematic view, camera-shake view), and the camera-independent
-backdrop fields (disturbance, background cloud, the shared impact bus, `ScenarioContentRoot`, and the
-launch finger-poke). Per-run gameplay — the local light field, smoke, and everything under
-`GameScopeRegistration` — stays in `GameLifetimeScope`, resolving those singletons from the parent.
+backdrop fields (disturbance, background cloud, the sky-scatter quad, the shared impact bus,
+`ScenarioContentRoot`, and the launch finger-poke). Per-run gameplay — the local light field, smoke, and
+everything under `GameScopeRegistration` — stays in `GameLifetimeScope`, resolving those singletons from
+the parent.
 
 **Configuration assets registered in `GameLifetimeScope`:**
 

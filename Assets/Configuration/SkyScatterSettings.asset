@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1427d2a6c57c41ac8c99255f7780d589, type: 3}
+  m_Name: SkyScatterSettings
+  m_EditorClassIdentifier:
+  _material: {fileID: 2100000, guid: 652ec5d0ca42487f862a93e042dc86ee, type: 2}
+  _overscanMultiplier: 1.6
+  _sortingLayerName: Default
+  _sortingOrder: -20
