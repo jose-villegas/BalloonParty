@@ -1229,7 +1229,6 @@ MonoBehaviour:
     _fetchPrompt: chalk
   - _channel: 0
     _clips:
-    - {fileID: 0}
     - {fileID: 8300000, guid: 4d7ee98f9531dd04baebfe7d06802cc6, type: 3}
     _clipPickMode: 0
     _clipWrapMode: 0
