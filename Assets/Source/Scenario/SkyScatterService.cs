@@ -59,7 +59,12 @@ namespace BalloonParty.Scenario
             _quad = QuadRendererBuilder.Build(
                 "SkyScatter", _settings.Material, ScenarioLayer,
                 _settings.SortingLayerName, _settings.SortingOrder);
-            UnityEngine.Object.DontDestroyOnLoad(_quad);
+
+            // DontDestroyOnLoad throws outside play mode (PoolManager.Root guards it the same way).
+            if (Application.isPlaying)
+            {
+                UnityEngine.Object.DontDestroyOnLoad(_quad);
+            }
 
             var overscan = Mathf.Max(1f, _settings.OverscanMultiplier);
             _quad.transform.localScale = new Vector3(
