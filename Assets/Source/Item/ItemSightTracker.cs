@@ -39,16 +39,6 @@ namespace BalloonParty.Item
             }
         }
 
-        // Enter/exit hysteresis on centrality, mirroring PredictionSightProbe's own enter/exit
-        // thresholds — a raw "does the trace touch this circle at all" test has zero buffer against a
-        // graze right at the edge, and a balloon still drifting into its slot moves just enough
-        // between grid walks to cross that razor-thin boundary back and forth, chattering the slot in
-        // and out of the sighted set. Once a slot enters (centrality >= Enter), it takes a bigger drop
-        // (centrality < Exit) to leave again, the same asymmetric gap the probe uses to keep a graze
-        // from chattering its own enter/exit edge.
-        private const float SightEnterCentrality = 0.2f;
-        private const float SightExitCentrality = 0.05f;
-
         private static readonly TraceOffsetComparer OffsetComparer = new();
 
         private readonly SlotGrid _grid;
@@ -56,7 +46,6 @@ namespace BalloonParty.Item
 
         private readonly List<SightedItem> _sighted = new();
         private readonly List<ItemSightHit> _rawScratch = new();
-        private readonly List<Vector2Int> _previousRawSlots = new();
         private readonly List<Vector2Int> _lastLoggedSlots = new();
         private readonly StringBuilder _logScratch = new();
 
@@ -115,21 +104,20 @@ namespace BalloonParty.Item
         }
 
         // Raw candidacy (active collider, non-zero contact radius, crossed by the trace) is
-        // ItemSightQuery's job now — the single walk shared with ItemRangePreviewController's own sighted
+        // ItemSightQuery's job — the single walk shared with ItemRangePreviewController's own sighted
         // set, so the two can't independently drift on what counts as "crossed" the way they once did.
-        // This method's own job starts where that raw hit test ends: hysteresis membership and trace
-        // ordering, neither of which ItemSightQuery imposes since not every consumer wants them (the
-        // preview walk orders unconditionally but has no hysteresis; this one needs both).
-        // `_previousRawSlots` (this walk's sighted set BEFORE it's overwritten) is what the hysteresis
-        // check below reads.
+        // Deliberately no centrality threshold here, matching ItemSightQuery's own raw output: a shallow
+        // graze along the very edge of an item's contact circle is still a real crossing, and both the
+        // preview telegraph and PredictionSightProbe's continuous ramp reactions (SightScalePulseReaction
+        // etc., which read raw Sight, not a latch) already treat it as sighted. An earlier version of
+        // this method added its own enter/exit hysteresis on top, meant to guard against a settling
+        // balloon chattering in and out right at that edge — but ItemSightSoundRouter's own settle gate
+        // (SightSoundSettleSeconds) already absorbs that kind of flicker upstream of anything this method
+        // decides, so the extra threshold only ever cost precision: a graze the other two systems clearly
+        // sighted was silently missing from here, undercounting a real chain. This method's own job is
+        // just trace ordering on top of ItemSightQuery's raw walk.
         private void CollectSighted()
         {
-            _previousRawSlots.Clear();
-            for (var i = 0; i < _sighted.Count; i++)
-            {
-                _previousRawSlots.Add(_sighted[i].Slot);
-            }
-
             ItemSightQuery.CollectSightedHosts(_grid, _traceProvider.Points, _rawScratch);
 
             _sighted.Clear();
@@ -137,12 +125,6 @@ namespace BalloonParty.Item
             for (var i = 0; i < _rawScratch.Count; i++)
             {
                 var candidate = _rawScratch[i];
-                var wasSighted = ContainsSlot(_previousRawSlots, candidate.Slot);
-                if (candidate.Centrality < (wasSighted ? SightExitCentrality : SightEnterCentrality))
-                {
-                    continue;
-                }
-
                 ItemPreviewEntry.TryFindNearestPointOnPolyline(
                     _traceProvider.Points, candidate.Position, out _, out var traceOffset);
                 _sighted.Add(new SightedItem(candidate.Slot, candidate.Position, traceOffset, candidate.Item));
@@ -183,19 +165,6 @@ namespace BalloonParty.Item
             }
 
             Log.Info("ItemSight", _logScratch.ToString());
-        }
-
-        private static bool ContainsSlot(IReadOnlyList<Vector2Int> slots, Vector2Int slot)
-        {
-            for (var i = 0; i < slots.Count; i++)
-            {
-                if (slots[i] == slot)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         private sealed class TraceOffsetComparer : IComparer<SightedItem>

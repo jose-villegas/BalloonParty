@@ -71,34 +71,28 @@ holds: settle-gating, chain-replay-whole, staggering, and the pitch ramp.
 **`ItemSightTracker` qualifies a host through `Item/ItemSightQuery`** — the same low-level
 walk `ItemRangePreviewController.CollectSightedHosts` now shares (active collider, non-zero
 contact radius, crossed by the trace polyline), extracted specifically so the two couldn't keep
-independently re-deriving that test and drifting apart the way they had (the preview walk has
-no hysteresis; this tracker does — see below). `ItemSightTracker` orders the result with the
-same arc-length projection `ItemPreviewSightOrder` uses
-(`ItemPreviewEntry.TryFindNearestPointOnPolyline`), applied after its own hysteresis filter, not
-before — ordering hosts about to be discarded would be wasted work. Its walk (`CollectSighted`)
+independently re-deriving that test and drifting apart. `ItemSightTracker` orders the result
+with the same arc-length projection `ItemPreviewSightOrder` uses
+(`ItemPreviewEntry.TryFindNearestPointOnPolyline`); it applies no filter of its own on top —
+every host `ItemSightQuery` reports crossed is sighted, full stop. Its walk (`CollectSighted`)
 is gated on `PredictionTraceProvider.Version`, the same skip-while-the-aim-is-held-still gate
 `ItemRangePreviewController`'s own walk uses, and runs from `ILateTickable.LateTick` — nothing
 publishes "a balloon was sighted" today, so this is polling, not subscribing (see the one
 exception above).
 
-**Sighted membership itself uses enter/exit hysteresis, not a raw touch test.**
-`TraceHitGeometry.TryFindSurfaceHit` also reports `centrality` (0 = tangent graze, 1 = dead
-centre), surfaced on every `ItemSightQuery.ItemSightHit`, which `ItemSightTracker.CollectSighted`
-checks against `SightEnterCentrality`/`SightExitCentrality` (0.2/0.05) instead of accepting any
-positive value — the same asymmetric-gap idea `PredictionSightProbe` already uses for its own
-enter/exit latch. `ItemRangePreviewController` reads the very same `Centrality` field off the
-same hit and deliberately ignores it — this hysteresis is `ItemSightTracker`'s own policy, not
-part of the shared query.
-A raw "does the trace touch this circle at all" test has zero buffer against a graze right at
-the edge: a host still drifting into its slot moves just enough between grid walks to cross that
-razor-thin boundary back and forth, chattering the slot in and out of the sighted set — which,
-combined with the router's settle timer restarting on every raw change, either stops a
-borderline host from ever settling long enough to trigger at all, or drops it out of a chain
-right as the chain would have settled, undercounting it. Once a slot enters (centrality past
-0.2), it takes a bigger drop (below 0.05) to leave again, so a graze wobbling around the edge
-doesn't flip the settle timer's restart condition every frame. `_previousRawSlots` — this walk's
-sighted set, captured before `CollectSighted` overwrites `_sighted` with the new one — is what
-decides which threshold applies to each candidate.
+**Membership deliberately has no centrality threshold — a shallow graze counts.** An earlier
+version added its own enter/exit hysteresis here (0.2/0.05 on `TraceHitGeometry`'s `centrality`
+output), meant to stop a settling balloon from chattering in and out of the sighted set right at
+the edge of its contact circle. It was removed: `ItemRangePreviewController`'s own walk imposes
+no such threshold, and `PredictionSightProbe`'s continuous ramp reactions
+(`SightScalePulseReaction` and siblings, which read raw `Sight`, never a latch) light up on any
+graze at all — so the hysteresis didn't protect against anything those two systems weren't
+already handling, it just meant a graze they both correctly counted as sighted could go missing
+from here and from the audio cue, undercounting a real chain by exactly the borderline item. The
+chatter concern it was guarding against is still covered, just one layer up:
+`ItemSightSoundRouter`'s own settle gate (`SightSoundSettleSeconds`) already requires the raw
+chain to hold steady before reacting to it, so a slot flickering in and out between grid walks
+just keeps resetting that timer rather than needing a second guard here.
 
 `ItemSightTracker` also logs (`Log.Info("ItemSight", …)`, stripped from release builds) every
 time the sighted structure itself changes — slot identity or order, not every version-gated walk
