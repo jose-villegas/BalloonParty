@@ -315,8 +315,9 @@ var searchData=
   ['full_312',['Full',['../namespaceBalloonParty_1_1Shared_1_1SceneLight.html#aba1f92fb89a50c3bfb7903105772e9b9abbd47109890259c0127154db1af26c75',1,'BalloonParty::Shared::SceneLight']]],
   ['full_20detail_20in_20the_20review_20transcript_313',['5. Test plan (per test-everything; full detail in the review transcript)',['../plan_shot_solver_accuracy.html#autotoc_md672',1,'']]],
   ['full_20grid_20clear_20out_20calculation_314',['2.4 Full Grid Clear-Out Calculation',['../plan_future_ideas.html#autotoc_md382',1,'']]],
-  ['fullholdstarvationmultiplier_315',['FullHoldStarvationMultiplier',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a697a2a5410268b653162a3a2c608136d',1,'BalloonParty::Item::Preview::ItemRangePreviewController']]],
-  ['fullyshowndelay_316',['FullyShownDelay',['../classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#afb11b54dcc89b7cdfac42dde23904dc5',1,'BalloonParty::UI::Score::ProgressNotice']]],
-  ['future_20ideas_317',['5 — Relocated Future Ideas',['../plan_future_ideas.html#autotoc_md397',1,'']]],
-  ['future_20ideas_20improvements_318',['Future Ideas Improvements',['../plan_future_ideas.html',1,'Future Ideas &amp; Improvements'],['../plan_future_ideas.html#autotoc_md369',1,'Future Ideas &amp; Improvements']]]
+  ['fullalphakeys_315',['FullAlphaKeys',['../classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a9371ae2720a7fd0478b0524188bc4cce',1,'BalloonParty::Prediction::PredictionTraceView']]],
+  ['fullholdstarvationmultiplier_316',['FullHoldStarvationMultiplier',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a697a2a5410268b653162a3a2c608136d',1,'BalloonParty::Item::Preview::ItemRangePreviewController']]],
+  ['fullyshowndelay_317',['FullyShownDelay',['../classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#afb11b54dcc89b7cdfac42dde23904dc5',1,'BalloonParty::UI::Score::ProgressNotice']]],
+  ['future_20ideas_318',['5 — Relocated Future Ideas',['../plan_future_ideas.html#autotoc_md397',1,'']]],
+  ['future_20ideas_20improvements_319',['Future Ideas Improvements',['../plan_future_ideas.html',1,'Future Ideas &amp; Improvements'],['../plan_future_ideas.html#autotoc_md369',1,'Future Ideas &amp; Improvements']]]
 ];

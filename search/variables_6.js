@@ -45,6 +45,7 @@ var searchData=
   ['frozen_42',['Frozen',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a2ce88226fa4fe7c07892dfe820bea040',1,'BalloonParty::Game::Score::Behaviours::ShapeFormationTicker::FormationState']]],
   ['frozenribbontime_43',['FrozenRibbonTime',['../classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#aff0799102deca42e5bcb26fdba057f73',1,'BalloonParty::UI::Score::FlyingTrail']]],
   ['frustumpadding_44',['FrustumPadding',['../classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraRig.html#a9bae027003046be7fdc761a02ab37772',1,'BalloonParty::Game::Cinematics::CinematicCameraRig']]],
-  ['fullholdstarvationmultiplier_45',['FullHoldStarvationMultiplier',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a697a2a5410268b653162a3a2c608136d',1,'BalloonParty::Item::Preview::ItemRangePreviewController']]],
-  ['fullyshowndelay_46',['FullyShownDelay',['../classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#afb11b54dcc89b7cdfac42dde23904dc5',1,'BalloonParty::UI::Score::ProgressNotice']]]
+  ['fullalphakeys_45',['FullAlphaKeys',['../classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a9371ae2720a7fd0478b0524188bc4cce',1,'BalloonParty::Prediction::PredictionTraceView']]],
+  ['fullholdstarvationmultiplier_46',['FullHoldStarvationMultiplier',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a697a2a5410268b653162a3a2c608136d',1,'BalloonParty::Item::Preview::ItemRangePreviewController']]],
+  ['fullyshowndelay_47',['FullyShownDelay',['../classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#afb11b54dcc89b7cdfac42dde23904dc5',1,'BalloonParty::UI::Score::ProgressNotice']]]
 ];

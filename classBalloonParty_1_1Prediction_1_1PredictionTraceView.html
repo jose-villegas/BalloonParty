@@ -110,7 +110,9 @@ $(function(){initNavTree('classBalloonParty_1_1Prediction_1_1PredictionTraceView
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Prediction_1_1PredictionTraceView-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Prediction.PredictionTraceView Class Reference</div></div>
 </div><!--header-->
@@ -141,19 +143,226 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a4c10a9eff14d0b9a240fdc344532891d" id="r_a4c10a9eff14d0b9a240fdc344532891d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4c10a9eff14d0b9a240fdc344532891d">ApplyFlatFade</a> (LineRenderer segment, Vector3 start, Vector3 end, float startFraction, float endFraction)</td></tr>
+<tr class="separator:a4c10a9eff14d0b9a240fdc344532891d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0e320221a3e183c57cf8ee6778c323e" id="r_ae0e320221a3e183c57cf8ee6778c323e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae0e320221a3e183c57cf8ee6778c323e">ApplyPlainSegment</a> (LineRenderer segment, Vector3 start, Vector3 end)</td></tr>
+<tr class="separator:ae0e320221a3e183c57cf8ee6778c323e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d5b0b4cdaad4c5fb94adcb11a55e5e0" id="r_a5d5b0b4cdaad4c5fb94adcb11a55e5e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d5b0b4cdaad4c5fb94adcb11a55e5e0">ApplySegmentRender</a> (LineRenderer segment, int index, int segmentCount)</td></tr>
+<tr class="separator:a5d5b0b4cdaad4c5fb94adcb11a55e5e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2ae482970b80263426292789ddaeb81" id="r_af2ae482970b80263426292789ddaeb81"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af2ae482970b80263426292789ddaeb81">ApplyTaperedSegment</a> (LineRenderer segment, Vector3 start, Vector3 end, float startFraction)</td></tr>
+<tr class="separator:af2ae482970b80263426292789ddaeb81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac612f6e036bfb86fe1a09dc40a9ec932" id="r_ac612f6e036bfb86fe1a09dc40a9ec932"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac612f6e036bfb86fe1a09dc40a9ec932">Awake</a> ()</td></tr>
 <tr class="separator:ac612f6e036bfb86fe1a09dc40a9ec932"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0731608a7bb712aabfb1b6e7e289bbff" id="r_a0731608a7bb712aabfb1b6e7e289bbff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0731608a7bb712aabfb1b6e7e289bbff">BuildSegmentEndpoints</a> (IReadOnlyList&lt; Vector3 &gt; points)</td></tr>
+<tr class="separator:a0731608a7bb712aabfb1b6e7e289bbff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0677556d445caf8ef9abe6f4ef17ab98" id="r_a0677556d445caf8ef9abe6f4ef17ab98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0677556d445caf8ef9abe6f4ef17ab98">EnsureSegmentCapacity</a> (int count)</td></tr>
+<tr class="separator:a0677556d445caf8ef9abe6f4ef17ab98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58530c710179dbf857360b7b7f891ef4" id="r_a58530c710179dbf857360b7b7f891ef4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a58530c710179dbf857360b7b7f891ef4">JoinExtension</a> (Vector3 previous, Vector3 corner, Vector3 next)</td></tr>
+<tr class="separator:a58530c710179dbf857360b7b7f891ef4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acda81027cc4b5c060fbf243f6877a22f" id="r_acda81027cc4b5c060fbf243f6877a22f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acda81027cc4b5c060fbf243f6877a22f">RebuildGradients</a> (Color color)</td></tr>
+<tr class="separator:acda81027cc4b5c060fbf243f6877a22f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a706355b9e0521c37a693ef1e32632bf3" id="r_a706355b9e0521c37a693ef1e32632bf3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a706355b9e0521c37a693ef1e32632bf3">CopyRenderSettings</a> (LineRenderer source, LineRenderer destination)</td></tr>
+<tr class="separator:a706355b9e0521c37a693ef1e32632bf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:ab85719220f77952b0de8f8cb32558e95" id="r_ab85719220f77952b0de8f8cb32558e95"><td class="memItemLeft" align="right" valign="top">GradientAlphaKey[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab85719220f77952b0de8f8cb32558e95">_baseAlphaKeys</a></td></tr>
-<tr class="separator:ab85719220f77952b0de8f8cb32558e95"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f78057b614d96cfb8de5f50a8694410" id="r_a3f78057b614d96cfb8de5f50a8694410"><td class="memItemLeft" align="right" valign="top">LineRenderer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f78057b614d96cfb8de5f50a8694410">_lineRenderer</a></td></tr>
-<tr class="separator:a3f78057b614d96cfb8de5f50a8694410"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a049661980df794b324293845c0bdf5ae" id="r_a049661980df794b324293845c0bdf5ae"><td class="memItemLeft" align="right" valign="top">Vector3[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a049661980df794b324293845c0bdf5ae">_positionBuffer</a> = Array.Empty&lt;Vector3&gt;()</td></tr>
-<tr class="separator:a049661980df794b324293845c0bdf5ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a398823ba0ae17759bd6846a18d02ac" id="r_a2a398823ba0ae17759bd6846a18d02ac"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a398823ba0ae17759bd6846a18d02ac">_activeSegmentCount</a></td></tr>
+<tr class="separator:a2a398823ba0ae17759bd6846a18d02ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f267d0656173f474c45e2b5c49ea985" id="r_a8f267d0656173f474c45e2b5c49ea985"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8f267d0656173f474c45e2b5c49ea985">_color</a> = Color.white</td></tr>
+<tr class="separator:a8f267d0656173f474c45e2b5c49ea985"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec396c78f1ba82f6af9717c4965eea6e" id="r_aec396c78f1ba82f6af9717c4965eea6e"><td class="memItemLeft" align="right" valign="top">readonly GradientColorKey[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aec396c78f1ba82f6af9717c4965eea6e">_colorKeyScratch</a> = new GradientColorKey[2]</td></tr>
+<tr class="separator:aec396c78f1ba82f6af9717c4965eea6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a254c90cc0b65cc8c12e592db928c37c3" id="r_a254c90cc0b65cc8c12e592db928c37c3"><td class="memItemLeft" align="right" valign="top">readonly GradientAlphaKey[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a254c90cc0b65cc8c12e592db928c37c3">_flatBothFadeScratch</a> = new GradientAlphaKey[4]</td></tr>
+<tr class="separator:a254c90cc0b65cc8c12e592db928c37c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71ebd100c08cf290fa21e889b91f378c" id="r_a71ebd100c08cf290fa21e889b91f378c"><td class="memItemLeft" align="right" valign="top">Gradient&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a71ebd100c08cf290fa21e889b91f378c">_flatGradient</a></td></tr>
+<tr class="separator:a71ebd100c08cf290fa21e889b91f378c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad15a58e97046aceae01c3f481ee9bea3" id="r_ad15a58e97046aceae01c3f481ee9bea3"><td class="memItemLeft" align="right" valign="top">readonly GradientAlphaKey[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad15a58e97046aceae01c3f481ee9bea3">_flatOneFadeScratch</a> = new GradientAlphaKey[3]</td></tr>
+<tr class="separator:ad15a58e97046aceae01c3f481ee9bea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bf46152c18cc1321d6b1bfa66078842" id="r_a4bf46152c18cc1321d6b1bfa66078842"><td class="memItemLeft" align="right" valign="top">Gradient&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4bf46152c18cc1321d6b1bfa66078842">_scratchGradient</a></td></tr>
+<tr class="separator:a4bf46152c18cc1321d6b1bfa66078842"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dd33e0a102a0e52787322bc02576dc7" id="r_a5dd33e0a102a0e52787322bc02576dc7"><td class="memItemLeft" align="right" valign="top">readonly List&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5dd33e0a102a0e52787322bc02576dc7">_segmentEndExtensions</a> = new()</td></tr>
+<tr class="separator:a5dd33e0a102a0e52787322bc02576dc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a971f98e500a904cc48c84968fd04872c" id="r_a971f98e500a904cc48c84968fd04872c"><td class="memItemLeft" align="right" valign="top">readonly List&lt; Vector3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a971f98e500a904cc48c84968fd04872c">_segmentEnds</a> = new()</td></tr>
+<tr class="separator:a971f98e500a904cc48c84968fd04872c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee8437902df237bda01dfa41549abdab" id="r_aee8437902df237bda01dfa41549abdab"><td class="memItemLeft" align="right" valign="top">readonly List&lt; LineRenderer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aee8437902df237bda01dfa41549abdab">_segments</a> = new()</td></tr>
+<tr class="separator:aee8437902df237bda01dfa41549abdab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2ba0dabba0f64c47e0b9f7616da3d01" id="r_ac2ba0dabba0f64c47e0b9f7616da3d01"><td class="memItemLeft" align="right" valign="top">readonly List&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac2ba0dabba0f64c47e0b9f7616da3d01">_segmentStartExtensions</a> = new()</td></tr>
+<tr class="separator:ac2ba0dabba0f64c47e0b9f7616da3d01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bf30b5f9caa3939f28c80c140f700f3" id="r_a1bf30b5f9caa3939f28c80c140f700f3"><td class="memItemLeft" align="right" valign="top">readonly List&lt; Vector3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1bf30b5f9caa3939f28c80c140f700f3">_segmentStarts</a> = new()</td></tr>
+<tr class="separator:a1bf30b5f9caa3939f28c80c140f700f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87543e34b1d0ce1fb3c82ac60e971f47" id="r_a87543e34b1d0ce1fb3c82ac60e971f47"><td class="memItemLeft" align="right" valign="top">GradientAlphaKey[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a87543e34b1d0ce1fb3c82ac60e971f47">_taperedAlphaKeys</a></td></tr>
+<tr class="separator:a87543e34b1d0ce1fb3c82ac60e971f47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22fbbc4edeee806e3e23c5deb4c5605d" id="r_a22fbbc4edeee806e3e23c5deb4c5605d"><td class="memItemLeft" align="right" valign="top">GradientAlphaKey[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22fbbc4edeee806e3e23c5deb4c5605d">_taperedFadeInScratch</a></td></tr>
+<tr class="separator:a22fbbc4edeee806e3e23c5deb4c5605d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e95007ad89eb76e7d7be1139ed8b81e" id="r_a4e95007ad89eb76e7d7be1139ed8b81e"><td class="memItemLeft" align="right" valign="top">Gradient&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e95007ad89eb76e7d7be1139ed8b81e">_taperedGradient</a></td></tr>
+<tr class="separator:a4e95007ad89eb76e7d7be1139ed8b81e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb50e862f435de8984fd2fcc99f79172" id="r_afb50e862f435de8984fd2fcc99f79172"><td class="memItemLeft" align="right" valign="top">LineRenderer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afb50e862f435de8984fd2fcc99f79172">_template</a></td></tr>
+<tr class="separator:afb50e862f435de8984fd2fcc99f79172"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a9371ae2720a7fd0478b0524188bc4cce" id="r_a9371ae2720a7fd0478b0524188bc4cce"><td class="memItemLeft" align="right" valign="top">static readonly GradientAlphaKey[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9371ae2720a7fd0478b0524188bc4cce">FullAlphaKeys</a></td></tr>
+<tr class="separator:a9371ae2720a7fd0478b0524188bc4cce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af084d6494ea1025ca4ddc2bb8b778b1e" id="r_af084d6494ea1025ca4ddc2bb8b778b1e"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af084d6494ea1025ca4ddc2bb8b778b1e">MaxJoinFraction</a> = 0.3f</td></tr>
+<tr class="separator:af084d6494ea1025ca4ddc2bb8b778b1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a5eb7adc287b56259da4a8975ac618a" id="r_a3a5eb7adc287b56259da4a8975ac618a"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3a5eb7adc287b56259da4a8975ac618a">MiterLimit</a> = 4f</td></tr>
+<tr class="separator:a3a5eb7adc287b56259da4a8975ac618a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a4c10a9eff14d0b9a240fdc344532891d" name="a4c10a9eff14d0b9a240fdc344532891d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c10a9eff14d0b9a240fdc344532891d">&#9670;&#160;</a></span>ApplyFlatFade()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Prediction.PredictionTraceView.ApplyFlatFade </td>
+          <td>(</td>
+          <td class="paramtype">LineRenderer</td>          <td class="paramname"><span class="paramname"><em>segment</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>start</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>end</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>startFraction</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>endFraction</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae0e320221a3e183c57cf8ee6778c323e" name="ae0e320221a3e183c57cf8ee6778c323e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0e320221a3e183c57cf8ee6778c323e">&#9670;&#160;</a></span>ApplyPlainSegment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Prediction.PredictionTraceView.ApplyPlainSegment </td>
+          <td>(</td>
+          <td class="paramtype">LineRenderer</td>          <td class="paramname"><span class="paramname"><em>segment</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>start</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>end</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5d5b0b4cdaad4c5fb94adcb11a55e5e0" name="a5d5b0b4cdaad4c5fb94adcb11a55e5e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d5b0b4cdaad4c5fb94adcb11a55e5e0">&#9670;&#160;</a></span>ApplySegmentRender()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Prediction.PredictionTraceView.ApplySegmentRender </td>
+          <td>(</td>
+          <td class="paramtype">LineRenderer</td>          <td class="paramname"><span class="paramname"><em>segment</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>index</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>segmentCount</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af2ae482970b80263426292789ddaeb81" name="af2ae482970b80263426292789ddaeb81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2ae482970b80263426292789ddaeb81">&#9670;&#160;</a></span>ApplyTaperedSegment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Prediction.PredictionTraceView.ApplyTaperedSegment </td>
+          <td>(</td>
+          <td class="paramtype">LineRenderer</td>          <td class="paramname"><span class="paramname"><em>segment</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>start</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>end</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>startFraction</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac612f6e036bfb86fe1a09dc40a9ec932" name="ac612f6e036bfb86fe1a09dc40a9ec932"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac612f6e036bfb86fe1a09dc40a9ec932">&#9670;&#160;</a></span>Awake()</h2>
 
@@ -179,6 +388,31 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a0731608a7bb712aabfb1b6e7e289bbff" name="a0731608a7bb712aabfb1b6e7e289bbff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0731608a7bb712aabfb1b6e7e289bbff">&#9670;&#160;</a></span>BuildSegmentEndpoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Prediction.PredictionTraceView.BuildSegmentEndpoints </td>
+          <td>(</td>
+          <td class="paramtype">IReadOnlyList&lt; Vector3 &gt;</td>          <td class="paramname"><span class="paramname"><em>points</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a43e78f4036e6ef6335d34a1eb313a35d" name="a43e78f4036e6ef6335d34a1eb313a35d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a43e78f4036e6ef6335d34a1eb313a35d">&#9670;&#160;</a></span>Clear()</h2>
 
@@ -192,6 +426,119 @@ Private Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a706355b9e0521c37a693ef1e32632bf3" name="a706355b9e0521c37a693ef1e32632bf3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a706355b9e0521c37a693ef1e32632bf3">&#9670;&#160;</a></span>CopyRenderSettings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Prediction.PredictionTraceView.CopyRenderSettings </td>
+          <td>(</td>
+          <td class="paramtype">LineRenderer</td>          <td class="paramname"><span class="paramname"><em>source</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">LineRenderer</td>          <td class="paramname"><span class="paramname"><em>destination</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0677556d445caf8ef9abe6f4ef17ab98" name="a0677556d445caf8ef9abe6f4ef17ab98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0677556d445caf8ef9abe6f4ef17ab98">&#9670;&#160;</a></span>EnsureSegmentCapacity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Prediction.PredictionTraceView.EnsureSegmentCapacity </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>count</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a58530c710179dbf857360b7b7f891ef4" name="a58530c710179dbf857360b7b7f891ef4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a58530c710179dbf857360b7b7f891ef4">&#9670;&#160;</a></span>JoinExtension()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Prediction.PredictionTraceView.JoinExtension </td>
+          <td>(</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>previous</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>corner</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>next</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acda81027cc4b5c060fbf243f6877a22f" name="acda81027cc4b5c060fbf243f6877a22f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acda81027cc4b5c060fbf243f6877a22f">&#9670;&#160;</a></span>RebuildGradients()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Prediction.PredictionTraceView.RebuildGradients </td>
+          <td>(</td>
+          <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>color</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -231,8 +578,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="ab85719220f77952b0de8f8cb32558e95" name="ab85719220f77952b0de8f8cb32558e95"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab85719220f77952b0de8f8cb32558e95">&#9670;&#160;</a></span>_baseAlphaKeys</h2>
+<a id="a2a398823ba0ae17759bd6846a18d02ac" name="a2a398823ba0ae17759bd6846a18d02ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a398823ba0ae17759bd6846a18d02ac">&#9670;&#160;</a></span>_activeSegmentCount</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -241,7 +588,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">GradientAlphaKey [] BalloonParty.Prediction.PredictionTraceView._baseAlphaKeys</td>
+          <td class="memname">int BalloonParty.Prediction.PredictionTraceView._activeSegmentCount</td>
         </tr>
       </table>
   </td>
@@ -253,8 +600,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a3f78057b614d96cfb8de5f50a8694410" name="a3f78057b614d96cfb8de5f50a8694410"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f78057b614d96cfb8de5f50a8694410">&#9670;&#160;</a></span>_lineRenderer</h2>
+<a id="a8f267d0656173f474c45e2b5c49ea985" name="a8f267d0656173f474c45e2b5c49ea985"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f267d0656173f474c45e2b5c49ea985">&#9670;&#160;</a></span>_color</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -263,7 +610,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">LineRenderer BalloonParty.Prediction.PredictionTraceView._lineRenderer</td>
+          <td class="memname">Color BalloonParty.Prediction.PredictionTraceView._color = Color.white</td>
         </tr>
       </table>
   </td>
@@ -275,8 +622,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a049661980df794b324293845c0bdf5ae" name="a049661980df794b324293845c0bdf5ae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a049661980df794b324293845c0bdf5ae">&#9670;&#160;</a></span>_positionBuffer</h2>
+<a id="aec396c78f1ba82f6af9717c4965eea6e" name="aec396c78f1ba82f6af9717c4965eea6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec396c78f1ba82f6af9717c4965eea6e">&#9670;&#160;</a></span>_colorKeyScratch</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -285,12 +632,369 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Vector3 [] BalloonParty.Prediction.PredictionTraceView._positionBuffer = Array.Empty&lt;Vector3&gt;()</td>
+          <td class="memname">readonly GradientColorKey [] BalloonParty.Prediction.PredictionTraceView._colorKeyScratch = new GradientColorKey[2]</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a254c90cc0b65cc8c12e592db928c37c3" name="a254c90cc0b65cc8c12e592db928c37c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a254c90cc0b65cc8c12e592db928c37c3">&#9670;&#160;</a></span>_flatBothFadeScratch</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly GradientAlphaKey [] BalloonParty.Prediction.PredictionTraceView._flatBothFadeScratch = new GradientAlphaKey[4]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a71ebd100c08cf290fa21e889b91f378c" name="a71ebd100c08cf290fa21e889b91f378c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71ebd100c08cf290fa21e889b91f378c">&#9670;&#160;</a></span>_flatGradient</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Gradient BalloonParty.Prediction.PredictionTraceView._flatGradient</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad15a58e97046aceae01c3f481ee9bea3" name="ad15a58e97046aceae01c3f481ee9bea3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad15a58e97046aceae01c3f481ee9bea3">&#9670;&#160;</a></span>_flatOneFadeScratch</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly GradientAlphaKey [] BalloonParty.Prediction.PredictionTraceView._flatOneFadeScratch = new GradientAlphaKey[3]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4bf46152c18cc1321d6b1bfa66078842" name="a4bf46152c18cc1321d6b1bfa66078842"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bf46152c18cc1321d6b1bfa66078842">&#9670;&#160;</a></span>_scratchGradient</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Gradient BalloonParty.Prediction.PredictionTraceView._scratchGradient</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5dd33e0a102a0e52787322bc02576dc7" name="a5dd33e0a102a0e52787322bc02576dc7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5dd33e0a102a0e52787322bc02576dc7">&#9670;&#160;</a></span>_segmentEndExtensions</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;float&gt; BalloonParty.Prediction.PredictionTraceView._segmentEndExtensions = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a971f98e500a904cc48c84968fd04872c" name="a971f98e500a904cc48c84968fd04872c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a971f98e500a904cc48c84968fd04872c">&#9670;&#160;</a></span>_segmentEnds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;Vector3&gt; BalloonParty.Prediction.PredictionTraceView._segmentEnds = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aee8437902df237bda01dfa41549abdab" name="aee8437902df237bda01dfa41549abdab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee8437902df237bda01dfa41549abdab">&#9670;&#160;</a></span>_segments</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;LineRenderer&gt; BalloonParty.Prediction.PredictionTraceView._segments = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac2ba0dabba0f64c47e0b9f7616da3d01" name="ac2ba0dabba0f64c47e0b9f7616da3d01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2ba0dabba0f64c47e0b9f7616da3d01">&#9670;&#160;</a></span>_segmentStartExtensions</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;float&gt; BalloonParty.Prediction.PredictionTraceView._segmentStartExtensions = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1bf30b5f9caa3939f28c80c140f700f3" name="a1bf30b5f9caa3939f28c80c140f700f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bf30b5f9caa3939f28c80c140f700f3">&#9670;&#160;</a></span>_segmentStarts</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;Vector3&gt; BalloonParty.Prediction.PredictionTraceView._segmentStarts = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a87543e34b1d0ce1fb3c82ac60e971f47" name="a87543e34b1d0ce1fb3c82ac60e971f47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87543e34b1d0ce1fb3c82ac60e971f47">&#9670;&#160;</a></span>_taperedAlphaKeys</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">GradientAlphaKey [] BalloonParty.Prediction.PredictionTraceView._taperedAlphaKeys</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a22fbbc4edeee806e3e23c5deb4c5605d" name="a22fbbc4edeee806e3e23c5deb4c5605d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22fbbc4edeee806e3e23c5deb4c5605d">&#9670;&#160;</a></span>_taperedFadeInScratch</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">GradientAlphaKey [] BalloonParty.Prediction.PredictionTraceView._taperedFadeInScratch</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4e95007ad89eb76e7d7be1139ed8b81e" name="a4e95007ad89eb76e7d7be1139ed8b81e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e95007ad89eb76e7d7be1139ed8b81e">&#9670;&#160;</a></span>_taperedGradient</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Gradient BalloonParty.Prediction.PredictionTraceView._taperedGradient</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afb50e862f435de8984fd2fcc99f79172" name="afb50e862f435de8984fd2fcc99f79172"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb50e862f435de8984fd2fcc99f79172">&#9670;&#160;</a></span>_template</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">LineRenderer BalloonParty.Prediction.PredictionTraceView._template</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9371ae2720a7fd0478b0524188bc4cce" name="a9371ae2720a7fd0478b0524188bc4cce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9371ae2720a7fd0478b0524188bc4cce">&#9670;&#160;</a></span>FullAlphaKeys</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly GradientAlphaKey [] BalloonParty.Prediction.PredictionTraceView.FullAlphaKeys</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">        {</div>
+<div class="line">            <span class="keyword">new</span>(1f, 0f),</div>
+<div class="line">            <span class="keyword">new</span>(1f, 1f)</div>
+<div class="line">        }</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="af084d6494ea1025ca4ddc2bb8b778b1e" name="af084d6494ea1025ca4ddc2bb8b778b1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af084d6494ea1025ca4ddc2bb8b778b1e">&#9670;&#160;</a></span>MaxJoinFraction</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.Prediction.PredictionTraceView.MaxJoinFraction = 0.3f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3a5eb7adc287b56259da4a8975ac618a" name="a3a5eb7adc287b56259da4a8975ac618a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a5eb7adc287b56259da4a8975ac618a">&#9670;&#160;</a></span>MiterLimit</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.Prediction.PredictionTraceView.MiterLimit = 4f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
