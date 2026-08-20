@@ -68,20 +68,27 @@ this router, potentially a future HUD or debug view — reads the one shared, al
 answer instead of re-deriving it. The router's own job is strictly what happens once that chain
 holds: settle-gating, chain-replay-whole, staggering, and the pitch ramp.
 
-**`ItemSightTracker` qualifies a host the same way `ItemRangePreviewController.TryScoreHost`
-does** (active collider, non-zero contact radius, crossed by the trace polyline) and orders it
-with the same arc-length projection `ItemPreviewSightOrder` uses
-(`ItemPreviewEntry.TryFindNearestPointOnPolyline`). Its walk (`CollectSighted`) is gated on
-`PredictionTraceProvider.Version`, the same skip-while-the-aim-is-held-still gate
+**`ItemSightTracker` qualifies a host through `Item/ItemSightQuery`** — the same low-level
+walk `ItemRangePreviewController.CollectSightedHosts` now shares (active collider, non-zero
+contact radius, crossed by the trace polyline), extracted specifically so the two couldn't keep
+independently re-deriving that test and drifting apart the way they had (the preview walk has
+no hysteresis; this tracker does — see below). `ItemSightTracker` orders the result with the
+same arc-length projection `ItemPreviewSightOrder` uses
+(`ItemPreviewEntry.TryFindNearestPointOnPolyline`), applied after its own hysteresis filter, not
+before — ordering hosts about to be discarded would be wasted work. Its walk (`CollectSighted`)
+is gated on `PredictionTraceProvider.Version`, the same skip-while-the-aim-is-held-still gate
 `ItemRangePreviewController`'s own walk uses, and runs from `ILateTickable.LateTick` — nothing
 publishes "a balloon was sighted" today, so this is polling, not subscribing (see the one
 exception above).
 
 **Sighted membership itself uses enter/exit hysteresis, not a raw touch test.**
 `TraceHitGeometry.TryFindSurfaceHit` also reports `centrality` (0 = tangent graze, 1 = dead
-centre), which `ItemSightTracker.CollectSighted` checks against
-`SightEnterCentrality`/`SightExitCentrality` (0.2/0.05) instead of accepting any positive value
-— the same asymmetric-gap idea `PredictionSightProbe` already uses for its own enter/exit latch.
+centre), surfaced on every `ItemSightQuery.ItemSightHit`, which `ItemSightTracker.CollectSighted`
+checks against `SightEnterCentrality`/`SightExitCentrality` (0.2/0.05) instead of accepting any
+positive value — the same asymmetric-gap idea `PredictionSightProbe` already uses for its own
+enter/exit latch. `ItemRangePreviewController` reads the very same `Centrality` field off the
+same hit and deliberately ignores it — this hysteresis is `ItemSightTracker`'s own policy, not
+part of the shared query.
 A raw "does the trace touch this circle at all" test has zero buffer against a graze right at
 the edge: a host still drifting into its slot moves just enough between grid walks to cross that
 razor-thin boundary back and forth, chattering the slot in and out of the sighted set — which,

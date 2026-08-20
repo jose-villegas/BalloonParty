@@ -4,7 +4,6 @@ using BalloonParty.Configuration.Items;
 using BalloonParty.Item.Preview;
 using BalloonParty.Prediction;
 using BalloonParty.Shared.Diagnostics;
-using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using UnityEngine;
 using VContainer;
@@ -56,6 +55,7 @@ namespace BalloonParty.Item
         private readonly PredictionTraceProvider _traceProvider;
 
         private readonly List<SightedItem> _sighted = new();
+        private readonly List<ItemSightHit> _rawScratch = new();
         private readonly List<Vector2Int> _previousRawSlots = new();
         private readonly List<Vector2Int> _lastLoggedSlots = new();
         private readonly StringBuilder _logScratch = new();
@@ -114,12 +114,14 @@ namespace BalloonParty.Item
             return true;
         }
 
-        // Mirrors ItemRangePreviewController.CollectSightedHosts/TryScoreHost — an item host qualifies
-        // by the same geometry (active collider, non-zero contact radius, crossed by the trace) — but
-        // answers only "is this slot sighted right now", not which preview it should show, so it never
-        // touches the preview map. Ordered first-to-last along the trace (the same projection
-        // ItemPreviewSightOrder uses). `_previousRawSlots` (this walk's sighted set BEFORE it's
-        // overwritten) is what the hysteresis check below reads.
+        // Raw candidacy (active collider, non-zero contact radius, crossed by the trace) is
+        // ItemSightQuery's job now — the single walk shared with ItemRangePreviewController's own sighted
+        // set, so the two can't independently drift on what counts as "crossed" the way they once did.
+        // This method's own job starts where that raw hit test ends: hysteresis membership and trace
+        // ordering, neither of which ItemSightQuery imposes since not every consumer wants them (the
+        // preview walk orders unconditionally but has no hysteresis; this one needs both).
+        // `_previousRawSlots` (this walk's sighted set BEFORE it's overwritten) is what the hysteresis
+        // check below reads.
         private void CollectSighted()
         {
             _previousRawSlots.Clear();
@@ -128,41 +130,22 @@ namespace BalloonParty.Item
                 _previousRawSlots.Add(_sighted[i].Slot);
             }
 
+            ItemSightQuery.CollectSightedHosts(_grid, _traceProvider.Points, _rawScratch);
+
             _sighted.Clear();
 
-            for (var col = 0; col < _grid.Columns; col++)
+            for (var i = 0; i < _rawScratch.Count; i++)
             {
-                for (var row = 0; row < _grid.Rows; row++)
+                var candidate = _rawScratch[i];
+                var wasSighted = ContainsSlot(_previousRawSlots, candidate.Slot);
+                if (candidate.Centrality < (wasSighted ? SightExitCentrality : SightEnterCentrality))
                 {
-                    var slot = new Vector2Int(col, row);
-                    if (_grid.At(slot) is not IHasItemSlot host || host.Item.Value == ItemType.None)
-                    {
-                        continue;
-                    }
-
-                    var view = _grid.ViewAt(slot);
-                    if (view == null || !view.HasActiveCollider || view.ContactRadius <= 0f)
-                    {
-                        continue;
-                    }
-
-                    if (!TraceHitGeometry.TryFindSurfaceHit(
-                            _traceProvider.Points, view.ContactCenter, view.ContactRadius, out _,
-                            out var centrality, out _))
-                    {
-                        continue;
-                    }
-
-                    var wasSighted = ContainsSlot(_previousRawSlots, slot);
-                    if (centrality < (wasSighted ? SightExitCentrality : SightEnterCentrality))
-                    {
-                        continue;
-                    }
-
-                    ItemPreviewEntry.TryFindNearestPointOnPolyline(
-                        _traceProvider.Points, view.ContactCenter, out _, out var traceOffset);
-                    _sighted.Add(new SightedItem(slot, view.ContactCenter, traceOffset, host.Item.Value));
+                    continue;
                 }
+
+                ItemPreviewEntry.TryFindNearestPointOnPolyline(
+                    _traceProvider.Points, candidate.Position, out _, out var traceOffset);
+                _sighted.Add(new SightedItem(candidate.Slot, candidate.Position, traceOffset, candidate.Item));
             }
 
             _sighted.Sort(OffsetComparer);
