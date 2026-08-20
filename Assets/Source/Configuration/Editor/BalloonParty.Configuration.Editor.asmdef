@@ -4,7 +4,8 @@
     "references": [
         "BalloonParty.Runtime",
         "BalloonParty.Editor",
-        "com.balloonparty.editorui.Editor"
+        "com.balloonparty.editorui.Editor",
+        "VContainer"
     ],
     "includePlatforms": [
         "Editor"

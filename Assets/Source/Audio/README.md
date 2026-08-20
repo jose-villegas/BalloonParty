@@ -30,6 +30,7 @@ Unity audio only (`AudioSource` + `AudioMixer`), no middleware.
 | `Routing/DangerSoundRouter` | Starts/stops the `DangerWarn` loop as `IDangerLevel` crosses `DangerLevelThreshold` |
 | `Routing/WindSoundRouter` | Drives the `WindLoop` volume from cruise speed (TotalCruiseTaps) via `SetVolumeFactor` |
 | `Routing/MusicSoundRouter` | Navigation-driven music: plays `LaunchMusic` in the Launch state, stops it (fading) on the move to Game. In `Game`, crossfades a day/night gameplay-loop pair (the current time-of-day loop at full volume, the other ducked, swapping smoothly as `IsNight` flips); both loops duck while a shot is in flight — the window opens on `ProjectileFiredMessage`, not on `ProjectileLoadedMessage` — and pitch down together as danger level rises, toward a tritone at max danger |
+| `Routing/ItemSightSoundRouter` | Plays `ItemSighted` as an ascending run whenever the settled chain of item-hosting balloons the aim's prediction line crosses changes — see *The item-sighted cue* below. Detection itself lives in `Item/ItemSightTracker`, not here |
 | `Configuration/GameSoundId`, `SfxChannel`, `SfxEntry`, `ISoundBankConfiguration`, `SoundBankConfiguration` | The data side — see *Configuration* below |
 
 **Namespace:** `BalloonParty.Audio` (`.Routing`, `.View`, `.Configuration` for their folders).
@@ -51,6 +52,92 @@ a `(GameSoundId, Vector3? worldPosition)` call on `ISoundPlayer`. It never picks
 computes a volume, or throttles anything — all of that is `SfxService`'s job. When a voice
 finishes (or its throttle/cap check fails), `SfxService` returns it to the pool; nothing
 downstream needs to know a sound was skipped.
+
+**One exception:** `ItemSightSoundRouter` (below) has no message to translate — nothing
+publishes "a balloon just entered the aim's line of sight" — so it polls instead of
+subscribing. Every other router stays a pure message-to-`Play()` translator.
+
+## The item-sighted cue
+
+`ItemSightSoundRouter` plays `GameSoundId.ItemSighted` as an ascending run once the aim's
+prediction line **settles** on a "chain" — every item-hosting balloon the trace currently
+crosses, ordered first-to-last along it. Detection is not the router's job: `Item/ItemSightTracker`
+(a separate service, not under `Audio/`) owns the per-frame grid walk and exposes the answer as
+`ItemSightTracker.Sighted`, so anything else that wants "what's sighted right now" — today just
+this router, potentially a future HUD or debug view — reads the one shared, already-walked
+answer instead of re-deriving it. The router's own job is strictly what happens once that chain
+holds: settle-gating, chain-replay-whole, staggering, and the pitch ramp.
+
+**`ItemSightTracker` qualifies a host the same way `ItemRangePreviewController.TryScoreHost`
+does** (active collider, non-zero contact radius, crossed by the trace polyline) and orders it
+with the same arc-length projection `ItemPreviewSightOrder` uses
+(`ItemPreviewEntry.TryFindNearestPointOnPolyline`). Its walk (`CollectSighted`) is gated on
+`PredictionTraceProvider.Version`, the same skip-while-the-aim-is-held-still gate
+`ItemRangePreviewController`'s own walk uses, and runs from `ILateTickable.LateTick` — nothing
+publishes "a balloon was sighted" today, so this is polling, not subscribing (see the one
+exception above).
+
+**Sighted membership itself uses enter/exit hysteresis, not a raw touch test.**
+`TraceHitGeometry.TryFindSurfaceHit` also reports `centrality` (0 = tangent graze, 1 = dead
+centre), which `ItemSightTracker.CollectSighted` checks against
+`SightEnterCentrality`/`SightExitCentrality` (0.2/0.05) instead of accepting any positive value
+— the same asymmetric-gap idea `PredictionSightProbe` already uses for its own enter/exit latch.
+A raw "does the trace touch this circle at all" test has zero buffer against a graze right at
+the edge: a host still drifting into its slot moves just enough between grid walks to cross that
+razor-thin boundary back and forth, chattering the slot in and out of the sighted set — which,
+combined with the router's settle timer restarting on every raw change, either stops a
+borderline host from ever settling long enough to trigger at all, or drops it out of a chain
+right as the chain would have settled, undercounting it. Once a slot enters (centrality past
+0.2), it takes a bigger drop (below 0.05) to leave again, so a graze wobbling around the edge
+doesn't flip the settle timer's restart condition every frame. `_previousRawSlots` — this walk's
+sighted set, captured before `CollectSighted` overwrites `_sighted` with the new one — is what
+decides which threshold applies to each candidate.
+
+`ItemSightTracker` also logs (`Log.Info("ItemSight", …)`, stripped from release builds) every
+time the sighted structure itself changes — slot identity or order, not every version-gated walk
+that happens to reconfirm the same chain — purely as a debugging aid for watching what the aim
+is actually crossing without inferring it from the audio cue downstream.
+
+**Settling, not reacting to every raw change, is what keeps the cue from sounding chaotic.** The
+router reads `ItemSightTracker.Sighted` every `Tick` (`UpdateSettleAndTrigger`), independent of
+the tracker's own version gate, because a settle timer has to keep accumulating wall time while
+the aim holds still, which is exactly when that gate stops firing at all. Whenever the raw
+sighted chain differs from the one currently being timed, the timer restarts against the new
+one — mirroring `IItemPreviewConfig.SightDelaySeconds`' own "restarts whenever the sighted host
+changes" rule for the visual telegraph. Only once a candidate chain has held continuously for
+`IItemPreviewConfig.SightSoundSettleSeconds` does it get to actually play. A fast sweep across
+several items therefore stays silent the whole way across the board — every transient chain it
+passes through on the way resets the timer before it can fire — and only the chain the aim
+actually stops on ever sounds.
+
+**A chain replays whole, not incrementally.** `ItemSightTracker.ChainMatches` is the exact,
+order-sensitive equality both the settle-restart check and the final
+compare-against-what's-playing check use.
+Once settled, if that chain is the SAME one already playing (or just played), staying there
+stays silent — nothing re-triggers just because the settle timer keeps ticking past the
+threshold. If it's DIFFERENT — a new item joined the path, one dropped off the end, the aim
+swept the trace back so the same two hosts now sight in the opposite order, or the aim settled
+on an entirely different chain — `StopAllActive` cuts whatever the previous chain's run was
+still playing (`ISoundPlayer.Stop`, tracked since each `Play` call in `DrainPending`),
+`_pending.Clear()` drops anything left queued from it, and the WHOLE new chain is queued fresh
+from its first host. A chain that grew by one item therefore doesn't add a single new note onto
+the old run — it replays start to end again, one host longer, reading as one continuously
+re-confirmed phrase rather than notes trickling in one at a time.
+
+Queued notes drain one at a time, `IItemPreviewConfig.SightSoundStaggerSeconds` apart — never
+all at once — each a whole tone (`MusicalPitchExtensions.WholeToneSemitones`) higher than the
+last, capped at two octaves (`ItemSightSoundRouter.MaxRampSemitones`, a plain const like
+`CombatSoundRouter.MaxRampSemitones` — the ramp cap isn't something a player needs to retune,
+only the stagger and settle timings are). So a chain of several items plays as a rising run in
+the order the shot would actually reach them, not a chord and not the grid-walk's own arbitrary
+visit order.
+
+The moment the raw sighted chain goes fully empty — the aim swept off every item, or stopped
+aiming outright — the same stop-and-clear fires immediately, with **no settle delay on the way
+out**: only arriving at a chain waits out the settle timer, leaving it is instant, so the cue
+never keeps ringing (or waits around) after the aim has visibly already left. The chain itself
+resets to nothing at the same moment, so the next item sighted starts a brand new chain from
+the root rather than extending a stale one.
 
 ## MVC split
 

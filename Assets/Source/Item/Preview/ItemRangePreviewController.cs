@@ -350,6 +350,16 @@ namespace BalloonParty.Item.Preview
         {
             CollectSightedHosts();
 
+            // Clamped immediately after every rebuild — EnsureActiveHostIsCurrent (called every Tick,
+            // regardless of whether this method just ran) reads _sightedHosts[_sequenceIndex] before
+            // Tick's own setChanged-driven clamp further down ever runs, so a sequence index left
+            // pointing past a set that just shrank on THIS rebuild would otherwise index out of range
+            // there first.
+            if (_sequenceIndex >= _sightedHosts.Count)
+            {
+                _sequenceIndex = Mathf.Max(0, _sightedHosts.Count - 1);
+            }
+
             // _shownSetSlots/_hasShownSet is a "last actually shown" cache, only ever written by
             // ShowActiveHost once a signature has dwelt long enough to draw — NOT a live mirror of what
             // is currently sighted. A sweep that lands on a DIFFERENT set and back onto this one, too
@@ -399,9 +409,17 @@ namespace BalloonParty.Item.Preview
         // run regardless of the version gate. False means the cached entry is no longer trustworthy at
         // all — the view despawned, lost its item, or the trace no longer crosses it (the host settled
         // clear of the aim, or the aim moved off it since the last walk) — so the caller falls back to
-        // the full walk rather than drawing a host that may not even belong in the set any more.
+        // the full walk rather than drawing a host that may not even belong in the set any more. Also
+        // false when _sequenceIndex itself is out of range — RefreshSightedHosts clamps it right after
+        // every rebuild, but this guard is what keeps that invariant from ever becoming a crash here
+        // again rather than a graceful fall-back if some future edit reorders things.
         private bool TryRefreshActiveHostGeometry()
         {
+            if (_sequenceIndex >= _sightedHosts.Count)
+            {
+                return false;
+            }
+
             var stale = _sightedHosts[_sequenceIndex];
             if (!TryScoreHost(stale.Slot, out var hit) || !_previewMap.TryGetValue(hit.Item, out var preview))
             {

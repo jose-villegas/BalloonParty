@@ -2744,7 +2744,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414bf5e95bf84ec4becc7353e01f8877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.Items.LaserItemRotation
-  _stepSeconds: 3
 --- !u!1001 &4110641795659025926
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2933,6 +2932,16 @@ PrefabInstance:
       propertyPath: '_spritesToSetColor.Array.data[1]'
       value: 
       objectReference: {fileID: 3842388724407884539}
+    - target: {fileID: 3588865259240446372, guid: ef986049aad6e40dcb0027158268936d,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.4314343
+      objectReference: {fileID: 0}
+    - target: {fileID: 3588865259240446372, guid: ef986049aad6e40dcb0027158268936d,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.4314343
+      objectReference: {fileID: 0}
     - target: {fileID: 6868395874174977538, guid: ef986049aad6e40dcb0027158268936d,
         type: 3}
       propertyPath: m_LocalPosition.x

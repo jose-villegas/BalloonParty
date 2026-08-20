@@ -46,6 +46,15 @@ namespace BalloonParty.Configuration
             "replays from scratch. 0 disables the loop: draw once and hold.")]
         [SerializeField] [Min(0f)] private float _rebloomHoldSeconds = 1.5f;
 
+        [Header("Item-sighted audio cue")]
+        [Tooltip("Seconds between successive notes when more than one item balloon is sighted together " +
+            "— the item-sighted cue plays one at a time, never simultaneously.")]
+        [SerializeField] [Min(0f)] private float _sightSoundStaggerSeconds = 0.09f;
+
+        [Tooltip("Seconds the aim's sighted item chain must hold continuously before the item-sighted " +
+            "cue plays it. Restarts whenever the raw sighted chain changes.")]
+        [SerializeField] [Min(0f)] private float _sightSoundSettleSeconds = 0.12f;
+
         [SerializeField] private ShieldPreviewSettings _shield = new();
         [SerializeField] private BombPreviewSettings _bomb = new();
         [SerializeField] private PaintPreviewSettings _paint = new();
@@ -64,6 +73,8 @@ namespace BalloonParty.Configuration
         public float TraceSpeed => _traceSpeed;
         public float SightDelaySeconds => _sightDelaySeconds;
         public float RebloomHoldSeconds => _rebloomHoldSeconds;
+        public float SightSoundStaggerSeconds => _sightSoundStaggerSeconds;
+        public float SightSoundSettleSeconds => _sightSoundSettleSeconds;
         public IShieldPreviewSettings Shield => _shield;
         public IBombPreviewSettings Bomb => _bomb;
         public IPaintPreviewSettings Paint => _paint;
