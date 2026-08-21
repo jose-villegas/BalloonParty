@@ -37,10 +37,10 @@ MonoBehaviour:
       _implosionStrengthScale: 15
       _implosionDuration: 0.05
     _laser:
-      _rotationStepSeconds: 3
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
       _laserColorCycles: 2
+      _rotationStepSeconds: 3
       _beamLightHalfWidth: 0.7
       _beamLightIntensity: 2
       _beamLightFalloff: 1.5
@@ -199,10 +199,10 @@ MonoBehaviour:
       _implosionStrengthScale: 1.5
       _implosionDuration: 0.05
     _laser:
-      _rotationStepSeconds: 3
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
       _laserColorCycles: 2
+      _rotationStepSeconds: 3
       _beamLightHalfWidth: 1.25
       _beamLightIntensity: 1
       _beamLightFalloff: 0.85
@@ -361,10 +361,10 @@ MonoBehaviour:
       _implosionStrengthScale: 1.5
       _implosionDuration: 0.05
     _laser:
-      _rotationStepSeconds: 3
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
       _laserColorCycles: 2
+      _rotationStepSeconds: 3
       _beamLightHalfWidth: 0.7
       _beamLightIntensity: 2
       _beamLightFalloff: 1.5
@@ -523,10 +523,10 @@ MonoBehaviour:
       _implosionStrengthScale: 1.5
       _implosionDuration: 0.05
     _laser:
-      _rotationStepSeconds: 3
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
       _laserColorCycles: 2
+      _rotationStepSeconds: 3
       _beamLightHalfWidth: 0.7
       _beamLightIntensity: 2
       _beamLightFalloff: 1.5
@@ -685,10 +685,10 @@ MonoBehaviour:
       _implosionStrengthScale: 1.5
       _implosionDuration: 0.05
     _laser:
-      _rotationStepSeconds: 3
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
       _laserColorCycles: 2
+      _rotationStepSeconds: 3
       _beamLightHalfWidth: 0.7
       _beamLightIntensity: 2
       _beamLightFalloff: 1.5
@@ -882,10 +882,10 @@ MonoBehaviour:
       _implosionStrengthScale: 1.5
       _implosionDuration: 0.05
     _laser:
-      _rotationStepSeconds: 3
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
       _laserColorCycles: 2
+      _rotationStepSeconds: 3
       _beamLightHalfWidth: 0.7
       _beamLightIntensity: 2
       _beamLightFalloff: 1.5
