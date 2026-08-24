@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Items;
+using BalloonParty.Item;
 using BalloonParty.Prediction;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Slots.Capabilities;
@@ -62,6 +63,10 @@ namespace BalloonParty.Item.Preview
         // ItemPreviewSightOrder — the sequence the telegraph steps through. Rebuilt from scratch by
         // RefreshSightedHosts on every grid-walk refresh, never appended across frames.
         private readonly List<ItemPreviewSightedHost> _sightedHosts = new();
+
+        // Scratch for ItemSightQuery's raw (unordered, unfiltered by preview registration) walk result —
+        // reused every RefreshSightedHosts call rather than allocated, same as _sightedHosts itself.
+        private readonly List<ItemSightHit> _rawSightScratch = new();
 
         // Ordered slots of the set the current signature describes, and of the set last actually shown —
         // parallel snapshots of _sightedHosts' own Slot column (via CopySlots). Two separate lists, not
@@ -350,6 +355,16 @@ namespace BalloonParty.Item.Preview
         {
             CollectSightedHosts();
 
+            // Clamped immediately after every rebuild — EnsureActiveHostIsCurrent (called every Tick,
+            // regardless of whether this method just ran) reads _sightedHosts[_sequenceIndex] before
+            // Tick's own setChanged-driven clamp further down ever runs, so a sequence index left
+            // pointing past a set that just shrank on THIS rebuild would otherwise index out of range
+            // there first.
+            if (_sequenceIndex >= _sightedHosts.Count)
+            {
+                _sequenceIndex = Mathf.Max(0, _sightedHosts.Count - 1);
+            }
+
             // _shownSetSlots/_hasShownSet is a "last actually shown" cache, only ever written by
             // ShowActiveHost once a signature has dwelt long enough to draw — NOT a live mirror of what
             // is currently sighted. A sweep that lands on a DIFFERENT set and back onto this one, too
@@ -399,16 +414,25 @@ namespace BalloonParty.Item.Preview
         // run regardless of the version gate. False means the cached entry is no longer trustworthy at
         // all — the view despawned, lost its item, or the trace no longer crosses it (the host settled
         // clear of the aim, or the aim moved off it since the last walk) — so the caller falls back to
-        // the full walk rather than drawing a host that may not even belong in the set any more.
+        // the full walk rather than drawing a host that may not even belong in the set any more. Also
+        // false when _sequenceIndex itself is out of range — RefreshSightedHosts clamps it right after
+        // every rebuild, but this guard is what keeps that invariant from ever becoming a crash here
+        // again rather than a graceful fall-back if some future edit reorders things.
         private bool TryRefreshActiveHostGeometry()
         {
-            var stale = _sightedHosts[_sequenceIndex];
-            if (!TryScoreHost(stale.Slot, out var hit) || !_previewMap.TryGetValue(hit.Item, out var preview))
+            if (_sequenceIndex >= _sightedHosts.Count)
             {
                 return false;
             }
 
-            _sightedHosts[_sequenceIndex] = new ItemPreviewSightedHost(stale.Slot, preview, hit.Origin, hit.Direction);
+            var stale = _sightedHosts[_sequenceIndex];
+            if (!ItemSightQuery.TryScoreHost(_grid, stale.Slot, _traceProvider.Points, out var hit)
+                || !_previewMap.TryGetValue(hit.Item, out var preview))
+            {
+                return false;
+            }
+
+            _sightedHosts[_sequenceIndex] = new ItemPreviewSightedHost(stale.Slot, preview, hit.Position, hit.Direction);
             return true;
         }
 
@@ -1010,72 +1034,29 @@ namespace BalloonParty.Item.Preview
                 traceEnd, _viewport, balloonType);
         }
 
-        // Collects every item host the trace crosses, then orders them first-to-last along the line via
-        // ItemPreviewSightOrder — the sequence the telegraph steps through, rather than picking a single
-        // winner by centrality the way this used to. TraceHitGeometry still reports how squarely the line
-        // crosses a balloon, but that answers a different question from how far along the line the
-        // balloon sits, and only the latter orders a sequence — so TryScoreHost discards it.
+        // Collects every item host the trace crosses via ItemSightQuery — the same raw walk
+        // ItemSightTracker's own sighted set now shares, so the two can't independently drift on what
+        // counts as "crossed" — then orders them first-to-last along the line via ItemPreviewSightOrder,
+        // the sequence the telegraph steps through. ItemSightQuery reports centrality too (how squarely
+        // the line crosses a balloon), but that answers a different question from how far along the line
+        // the balloon sits, and only the latter orders a sequence, so it's discarded here same as before.
         private void CollectSightedHosts()
         {
+            ItemSightQuery.CollectSightedHosts(_grid, _traceProvider.Points, _rawSightScratch);
+
             _sightedHosts.Clear();
-
-            for (var col = 0; col < _grid.Columns; col++)
+            for (var i = 0; i < _rawSightScratch.Count; i++)
             {
-                for (var row = 0; row < _grid.Rows; row++)
+                var hit = _rawSightScratch[i];
+                if (!_previewMap.TryGetValue(hit.Item, out var preview))
                 {
-                    var candidate = new Vector2Int(col, row);
-                    if (!TryScoreHost(candidate, out var hit) || !_previewMap.TryGetValue(hit.Item, out var preview))
-                    {
-                        continue;
-                    }
-
-                    _sightedHosts.Add(new ItemPreviewSightedHost(candidate, preview, hit.Origin, hit.Direction));
+                    continue;
                 }
+
+                _sightedHosts.Add(new ItemPreviewSightedHost(hit.Slot, preview, hit.Position, hit.Direction));
             }
 
             ItemPreviewSightOrder.OrderAlongTrace(_sightedHosts, _traceProvider.Points);
-        }
-
-        // One slot's candidacy: it must host an item, have live geometry to aim at (an actor mid-despawn or
-        // one with no collider authored is not a target), and be crossed by the trace.
-        private bool TryScoreHost(Vector2Int slot, out HostHit hit)
-        {
-            hit = default;
-
-            if (_grid.At(slot) is not IHasItemSlot host || host.Item.Value == ItemType.None)
-            {
-                return false;
-            }
-
-            var view = _grid.ViewAt(slot);
-            if (view == null || !view.HasActiveCollider || view.ContactRadius <= 0f)
-            {
-                return false;
-            }
-
-            if (!TraceHitGeometry.TryFindSurfaceHit(
-                    _traceProvider.Points, view.ContactCenter, view.ContactRadius, out _,
-                    out _, out var direction))
-            {
-                return false;
-            }
-
-            hit = new HostHit(host.Item.Value, view.ContactCenter, direction);
-            return true;
-        }
-
-        private readonly struct HostHit
-        {
-            internal readonly ItemType Item;
-            internal readonly Vector2 Origin;
-            internal readonly Vector2 Direction;
-
-            internal HostHit(ItemType item, Vector2 origin, Vector2 direction)
-            {
-                Item = item;
-                Origin = origin;
-                Direction = direction;
-            }
         }
 
         // ShowHost's own result — three genuinely different reasons a draw attempt didn't put anything new

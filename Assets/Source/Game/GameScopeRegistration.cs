@@ -290,6 +290,7 @@ namespace BalloonParty.Game
             builder.Register<PaintItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<SnipeItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.RegisterEntryPoint<SnipeDischargeBloom>();
+            builder.RegisterEntryPoint<ItemSightTracker>().AsSelf();
 
             RegisterItemRangePreviews(builder);
         }
@@ -398,6 +399,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<WindSoundRouter>();
             builder.RegisterEntryPoint<MusicSoundRouter>();
             builder.RegisterEntryPoint<AudioChannelController>();
+            builder.RegisterEntryPoint<ItemSightSoundRouter>();
         }
 
         // The dictionary is the choreography seam: the resolver maps each ScoreTrailBehaviourId to its handler.

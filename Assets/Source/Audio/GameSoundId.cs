@@ -97,6 +97,10 @@ namespace BalloonParty.Audio
         BalloonDeflectTougher,
 
         // Played when a strikethrough heart begins sliding across a doomed spawn line.
-        Strikethrough
+        Strikethrough,
+
+        // Played by ItemSightSoundRouter each time the aim's prediction line newly crosses an
+        // item-hosting balloon; several sighted at once step up a whole tone per note.
+        ItemSighted
     }
 }

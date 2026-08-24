@@ -117,6 +117,22 @@ namespace BalloonParty.Configuration
         /// </summary>
         float RebloomHoldSeconds { get; }
 
+        /// <summary>
+        ///     Seconds between successive notes of the item-sighted audio cue
+        ///     (<c>Audio/Routing/ItemSightSoundRouter</c>) when more than one item balloon is sighted
+        ///     together — the notes play one at a time, never simultaneously, each a whole tone higher
+        ///     than the last.
+        /// </summary>
+        float SightSoundStaggerSeconds { get; }
+
+        /// <summary>
+        ///     Seconds the aim's sighted item chain must hold continuously before the item-sighted
+        ///     audio cue plays it — the same settle-before-reacting shape as
+        ///     <see cref="SightDelaySeconds" /> above, just gating the audio cue instead of the visual
+        ///     figure, and restarting whenever the raw sighted chain changes for the same reason.
+        /// </summary>
+        float SightSoundSettleSeconds { get; }
+
         /// <summary>Shield's own figure params.</summary>
         IShieldPreviewSettings Shield { get; }
 

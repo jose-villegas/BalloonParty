@@ -808,5 +808,15 @@
     "LicenseName": "Attribution",
     "LicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
     "RequiresAttribution": true
+  },
+  {
+    "SoundId": "ItemSighted",
+    "ProviderId": 169854,
+    "Name": "Wind Chime Crunch",
+    "Author": "GnoteSoundz",
+    "SoundUrl": "https://freesound.org/people/GnoteSoundz/sounds/169854/",
+    "LicenseName": "Creative Commons 0",
+    "LicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "RequiresAttribution": false
   }
 ]
