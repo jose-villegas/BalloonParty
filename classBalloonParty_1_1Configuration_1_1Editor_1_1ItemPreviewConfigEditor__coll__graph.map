@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.Editor.ItemPreviewConfigEditor" name="BalloonParty.Configuration.Editor.ItemPreviewConfigEditor">
+<area shape="rect" id="Node000001" title="Adds a live, play&#45;mode&#45;only panel below the default inspector showing what ItemSightTracker currently..." alt="" coords="5,79,229,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="49,5,185,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,44,120,79,115,79,115,44"/>
+</map>

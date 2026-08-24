@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html" target="_top" xlink:title="Turns one MetricBinding plus a snapshot into the object a label formats.">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="143,-30 0,-30 0,0 143,0 143,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.Telemetry.</text>
-<text text-anchor="middle" x="71.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">MetricValueResolver</text>
+<text text-anchor="middle" x="71.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">MetricBinding</text>
 </a>
 </g>
 </g>

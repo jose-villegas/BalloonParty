@@ -172,6 +172,12 @@ Properties</h2></td></tr>
 <tr class="memitem:a575d4a0040af9d92b3b4631b9112e1f1" id="r_a575d4a0040af9d92b3b4631b9112e1f1"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a575d4a0040af9d92b3b4631b9112e1f1">SightDelaySeconds</a><code> [get]</code></td></tr>
 <tr class="memdesc:a575d4a0040af9d92b3b4631b9112e1f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds a host must stay continuously sighted before its figure first appears.  <br /></td></tr>
 <tr class="separator:a575d4a0040af9d92b3b4631b9112e1f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a204e38dbdded78c8a5db595a5ecd8e01" id="r_a204e38dbdded78c8a5db595a5ecd8e01"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a204e38dbdded78c8a5db595a5ecd8e01">SightSoundSettleSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a204e38dbdded78c8a5db595a5ecd8e01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds the aim's sighted item chain must hold continuously before the item-sighted audio cue plays it — the same settle-before-reacting shape as <a class="el" href="#a575d4a0040af9d92b3b4631b9112e1f1" title="Seconds a host must stay continuously sighted before its figure first appears.">SightDelaySeconds</a> above, just gating the audio cue instead of the visual figure, and restarting whenever the raw sighted chain changes for the same reason.  <br /></td></tr>
+<tr class="separator:a204e38dbdded78c8a5db595a5ecd8e01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad115a2ef7d527a6c85bd3ddfd98cbdd9" id="r_ad115a2ef7d527a6c85bd3ddfd98cbdd9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad115a2ef7d527a6c85bd3ddfd98cbdd9">SightSoundStaggerSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad115a2ef7d527a6c85bd3ddfd98cbdd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds between successive notes of the item-sighted audio cue (<code>Audio/Routing/ItemSightSoundRouter</code>) when more than one item balloon is sighted together — the notes play one at a time, never simultaneously, each a whole tone higher than the last.  <br /></td></tr>
+<tr class="separator:ad115a2ef7d527a6c85bd3ddfd98cbdd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc8ff5f7dc8af4b0e7ed92b66dfc356a" id="r_afc8ff5f7dc8af4b0e7ed92b66dfc356a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc8ff5f7dc8af4b0e7ed92b66dfc356a">TraceSpeed</a><code> [get]</code></td></tr>
 <tr class="memdesc:afc8ff5f7dc8af4b0e7ed92b66dfc356a"><td class="mdescLeft">&#160;</td><td class="mdescRight">World units per second a pen travels along its stroke once it starts tracing.  <br /></td></tr>
 <tr class="separator:afc8ff5f7dc8af4b0e7ed92b66dfc356a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -198,6 +204,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a210d6a418a2b484de10c625501dea97a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9370a7180078a9ef30d9450a8ce31ba0" id="r_a9370a7180078a9ef30d9450a8ce31ba0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9370a7180078a9ef30d9450a8ce31ba0">_sightDelaySeconds</a> = 0.15f</td></tr>
 <tr class="separator:a9370a7180078a9ef30d9450a8ce31ba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a309d1c92b702b146e44f7b1202ad6462" id="r_a309d1c92b702b146e44f7b1202ad6462"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a309d1c92b702b146e44f7b1202ad6462">_sightSoundSettleSeconds</a> = 0.12f</td></tr>
+<tr class="separator:a309d1c92b702b146e44f7b1202ad6462"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a546389c8e7fd4de4998fec131589a269" id="r_a546389c8e7fd4de4998fec131589a269"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a546389c8e7fd4de4998fec131589a269">_sightSoundStaggerSeconds</a> = 0.09f</td></tr>
+<tr class="separator:a546389c8e7fd4de4998fec131589a269"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac688b18727537f8629251d2814b06413" id="r_ac688b18727537f8629251d2814b06413"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac688b18727537f8629251d2814b06413">_traceSpeed</a> = 6f</td></tr>
 <tr class="separator:ac688b18727537f8629251d2814b06413"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -416,6 +426,50 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Configuration.ItemPreviewConfig._sightDelaySeconds = 0.15f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a309d1c92b702b146e44f7b1202ad6462" name="a309d1c92b702b146e44f7b1202ad6462"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a309d1c92b702b146e44f7b1202ad6462">&#9670;&#160;</a></span>_sightSoundSettleSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.ItemPreviewConfig._sightSoundSettleSeconds = 0.12f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a546389c8e7fd4de4998fec131589a269" name="a546389c8e7fd4de4998fec131589a269"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a546389c8e7fd4de4998fec131589a269">&#9670;&#160;</a></span>_sightSoundStaggerSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.ItemPreviewConfig._sightSoundStaggerSeconds = 0.09f</td>
         </tr>
       </table>
   </td>
@@ -735,6 +789,58 @@ Static Private Attributes</h2></td></tr>
 <p>Restarts whenever the sighted host changes, so sweeping the aim across a row of items shows nothing until it settles on one. 0 shows the figure the instant a host is sighted, reproducing the old no-delay behaviour. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#a2651d3bab7bf39744182aa88555e729e">BalloonParty.Configuration.IItemPreviewConfig</a>.</p>
+
+</div>
+</div>
+<a id="a204e38dbdded78c8a5db595a5ecd8e01" name="a204e38dbdded78c8a5db595a5ecd8e01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a204e38dbdded78c8a5db595a5ecd8e01">&#9670;&#160;</a></span>SightSoundSettleSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.ItemPreviewConfig.SightSoundSettleSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds the aim's sighted item chain must hold continuously before the item-sighted audio cue plays it — the same settle-before-reacting shape as <a class="el" href="#a575d4a0040af9d92b3b4631b9112e1f1" title="Seconds a host must stay continuously sighted before its figure first appears.">SightDelaySeconds</a> above, just gating the audio cue instead of the visual figure, and restarting whenever the raw sighted chain changes for the same reason. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#a2da1bf46261ddc6e2555e2eeb80718d3">BalloonParty.Configuration.IItemPreviewConfig</a>.</p>
+
+</div>
+</div>
+<a id="ad115a2ef7d527a6c85bd3ddfd98cbdd9" name="ad115a2ef7d527a6c85bd3ddfd98cbdd9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad115a2ef7d527a6c85bd3ddfd98cbdd9">&#9670;&#160;</a></span>SightSoundStaggerSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.ItemPreviewConfig.SightSoundStaggerSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds between successive notes of the item-sighted audio cue (<code>Audio/Routing/ItemSightSoundRouter</code>) when more than one item balloon is sighted together — the notes play one at a time, never simultaneously, each a whole tone higher than the last. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#af2d7a4f558f3a567132412346908c873">BalloonParty.Configuration.IItemPreviewConfig</a>.</p>
 
 </div>
 </div>

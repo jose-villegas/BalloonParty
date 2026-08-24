@@ -3,6 +3,7 @@ var dir_eb0398146ff26b85588986ae0cab5e96 =
     [ "BalloonPrefabEntryDrawer.cs", "BalloonPrefabEntryDrawer_8cs.html", "BalloonPrefabEntryDrawer_8cs" ],
     [ "GameDisplayConfigurationDrawer.cs", "GameDisplayConfigurationDrawer_8cs.html", "GameDisplayConfigurationDrawer_8cs" ],
     [ "HitVfxOverrideDrawer.cs", "HitVfxOverrideDrawer_8cs.html", "HitVfxOverrideDrawer_8cs" ],
+    [ "ItemPreviewConfigEditor.cs", "ItemPreviewConfigEditor_8cs.html", "ItemPreviewConfigEditor_8cs" ],
     [ "ItemSettingsDrawer.cs", "ItemSettingsDrawer_8cs.html", "ItemSettingsDrawer_8cs" ],
     [ "PaintProfileDrawer.cs", "PaintProfileDrawer_8cs.html", "PaintProfileDrawer_8cs" ],
     [ "PaletteColorMaskDrawer.cs", "PaletteColorMaskDrawer_8cs.html", "PaletteColorMaskDrawer_8cs" ],

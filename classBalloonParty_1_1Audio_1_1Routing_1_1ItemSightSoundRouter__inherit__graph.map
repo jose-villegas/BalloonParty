@@ -1,0 +1,5 @@
+<map id="BalloonParty.Audio.Routing.ItemSightSoundRouter" name="BalloonParty.Audio.Routing.ItemSightSoundRouter">
+<area shape="rect" id="Node000001" title="Plays a rising chime run once the aim&#39;s prediction line settles on a &quot;chain&quot; of item&#45;hosting balloons..." alt="" coords="5,79,207,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="52,5,160,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,44,109,79,103,79,103,44"/>
+</map>

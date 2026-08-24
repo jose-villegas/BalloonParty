@@ -31,7 +31,7 @@ var searchData=
   ['toughballoonvariant_28',['ToughBalloonVariant',['../classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html',1,'BalloonParty::Balloon::Type']]],
   ['tracehitgeometry_29',['TraceHitGeometry',['../classBalloonParty_1_1Prediction_1_1TraceHitGeometry.html',1,'BalloonParty::Prediction']]],
   ['tracehitmarker_30',['TraceHitMarker',['../classBalloonParty_1_1Prediction_1_1TraceHitMarker.html',1,'BalloonParty::Prediction']]],
-  ['traceoffsetcomparer_31',['TraceOffsetComparer',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightOrder_1_1TraceOffsetComparer.html',1,'BalloonParty::Item::Preview::ItemPreviewSightOrder']]],
+  ['traceoffsetcomparer_31',['TraceOffsetComparer',['../classBalloonParty_1_1Item_1_1ItemSightTracker_1_1TraceOffsetComparer.html',1,'BalloonParty.Item.ItemSightTracker.TraceOffsetComparer'],['../classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightOrder_1_1TraceOffsetComparer.html',1,'BalloonParty.Item.Preview.ItemPreviewSightOrder.TraceOffsetComparer']]],
   ['trackedtrailsettings_32',['TrackedTrailSettings',['../classBalloonParty_1_1Configuration_1_1Cinematics_1_1TrackedTrailSettings.html',1,'BalloonParty::Configuration::Cinematics']]],
   ['trailendpointkeys_33',['TrailEndpointKeys',['../classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointKeys.html',1,'BalloonParty::Shared::Pool']]],
   ['trailendpointregistry_34',['TrailEndpointRegistry',['../classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointRegistry.html',1,'BalloonParty::Shared::Pool']]],

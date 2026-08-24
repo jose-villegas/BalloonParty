@@ -131,7 +131,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Owns the per-shot boundary and the counts scoped to it. A <b>gameplay</b> service, not part of the telemetry subsystem — audio depends on it, so making it telemetry's would put a shipping feature downstream of metrics.</p>
-<h1><a class="anchor" id="autotoc_md182"></a>
+<h1><a class="anchor" id="autotoc_md183"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -145,10 +145,10 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>FlightStatsService</code>   </td><td class="markdownTableBodyNone">Implements all three. Plain C#, <code>IStartable</code>/<code>IDisposable</code>   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md183"></a>
+<h1><a class="anchor" id="autotoc_md184"></a>
 Which window to gate on</h1>
 <p><code>IsAirborne</code> is almost always the one you want for effects — ducking, time-scale, anything that should stop when the shot dies. <code>IsLoaded</code> stays true while the player is <em>aiming</em>, so gating a duck on it holds the effect permanently between shots. <code>IsLoaded</code> exists because per-flight counts are scoped to it: they reset on load, not on fire.</p>
-<h1><a class="anchor" id="autotoc_md184"></a>
+<h1><a class="anchor" id="autotoc_md185"></a>
 The publisher counts, then publishes</h1>
 <p>Every count is written by whoever publishes the corresponding message, immediately before that publish:</p>
 <table class="markdownTable">
@@ -164,10 +164,10 @@ The publisher counts, then publishes</h1>
 <p>That is what makes the counts safe to share: every subscriber reads a total that already includes the event it is reacting to, so <b>no reader depends on MessagePipe's subscription order</b>, which is enforced nowhere. <code>CombatSoundRouter</code> relies on this directly, reading the post-increment count and subtracting one so the flight's first pop of a type lands on the root.</p>
 <p>Only the flight <em>boundary</em> (<code>ProjectileLoadedMessage</code>, <code>Fired</code>, <code>Destroyed</code>) is a subscription here, because nothing reads a boundary flag mid-dispatch and expects it to already have flipped.</p>
 <p>If a subscriber ever counts one of these instead, the value each reader sees becomes order-dependent and the pitch ramps drift by a step — silently, and only audible to someone listening for it. Don't.</p>
-<h1><a class="anchor" id="autotoc_md185"></a>
+<h1><a class="anchor" id="autotoc_md186"></a>
 Cheats feed it too</h1>
 <p><code>AwardScorePopCheat</code>, <code>BalloonRemoverCheat</code> and <code>ScoreCheatHelper</code> all dispatch through <code>HitPipeline</code>, so cheat-driven pops land in these counts. That is deliberate — those runs are cheat-tagged for filtering downstream, and special-casing them here would make the audio ramps behave differently under cheats than in a real run.</p>
-<h1><a class="anchor" id="autotoc_md186"></a>
+<h1><a class="anchor" id="autotoc_md187"></a>
 Design plan</h1>
 <p>Full specification: <a class="el" href="plan_gameplay_telemetry.html">Gameplay Telemetry</a> </p>
 </div><!-- contents -->

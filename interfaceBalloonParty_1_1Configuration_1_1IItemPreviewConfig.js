@@ -10,5 +10,7 @@ var interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig =
     [ "RebloomHoldSeconds", "interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#a74e6c832f60a3c3028bcecea338b87b8", null ],
     [ "Shield", "interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#a944b55114cae4aeed5a9905bef332782", null ],
     [ "SightDelaySeconds", "interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#a2651d3bab7bf39744182aa88555e729e", null ],
+    [ "SightSoundSettleSeconds", "interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#a2da1bf46261ddc6e2555e2eeb80718d3", null ],
+    [ "SightSoundStaggerSeconds", "interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#af2d7a4f558f3a567132412346908c873", null ],
     [ "TraceSpeed", "interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#a98ef3d0ea0d9b34dd0b45af8822ac92a", null ]
 ];

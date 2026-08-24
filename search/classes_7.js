@@ -12,6 +12,5 @@ var searchData=
   ['hitvfxoverride_9',['HitVfxOverride',['../classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html',1,'BalloonParty::Configuration::Balloons']]],
   ['hitvfxoverridedrawer_10',['HitVfxOverrideDrawer',['../classBalloonParty_1_1Configuration_1_1Editor_1_1HitVfxOverrideDrawer.html',1,'BalloonParty::Configuration::Editor']]],
   ['holdspeedupcontroller_11',['HoldSpeedUpController',['../classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html',1,'BalloonParty::Projectile::Controller']]],
-  ['holdspeeduptooltip_12',['HoldSpeedUpTooltip',['../classBalloonParty_1_1UI_1_1Tooltip_1_1HoldSpeedUpTooltip.html',1,'BalloonParty::UI::Tooltip']]],
-  ['hosthit_13',['HostHit',['../structBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController_1_1HostHit.html',1,'BalloonParty::Item::Preview::ItemRangePreviewController']]]
+  ['holdspeeduptooltip_12',['HoldSpeedUpTooltip',['../classBalloonParty_1_1UI_1_1Tooltip_1_1HoldSpeedUpTooltip.html',1,'BalloonParty::UI::Tooltip']]]
 ];

@@ -13,6 +13,8 @@ var classBalloonParty_1_1Configuration_1_1ItemPreviewConfig =
     [ "_rebloomHoldSeconds", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#a6f44e7a45abeb7d18abd80d354a0121d", null ],
     [ "_shield", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#a210d6a418a2b484de10c625501dea97a", null ],
     [ "_sightDelaySeconds", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#a9370a7180078a9ef30d9450a8ce31ba0", null ],
+    [ "_sightSoundSettleSeconds", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#a309d1c92b702b146e44f7b1202ad6462", null ],
+    [ "_sightSoundStaggerSeconds", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#a546389c8e7fd4de4998fec131589a269", null ],
     [ "_traceSpeed", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#ac688b18727537f8629251d2814b06413", null ],
     [ "DefaultBloomCurve", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#aa52bcdc38ef0b37585e2abeb141edf77", null ],
     [ "BloomCurve", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#a42f6ddc462085e5462773dc827041802", null ],
@@ -25,5 +27,7 @@ var classBalloonParty_1_1Configuration_1_1ItemPreviewConfig =
     [ "RebloomHoldSeconds", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#a37dd398928496c5a27c7fbc2e6b08566", null ],
     [ "Shield", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#a044bc925a44a9184c4ed23c91d4f1a7d", null ],
     [ "SightDelaySeconds", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#a575d4a0040af9d92b3b4631b9112e1f1", null ],
+    [ "SightSoundSettleSeconds", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#a204e38dbdded78c8a5db595a5ecd8e01", null ],
+    [ "SightSoundStaggerSeconds", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#ad115a2ef7d527a6c85bd3ddfd98cbdd9", null ],
     [ "TraceSpeed", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html#afc8ff5f7dc8af4b0e7ed92b66dfc356a", null ]
 ];

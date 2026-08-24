@@ -1,0 +1,5 @@
+<map id="BalloonParty.Item.ItemSightTracker" name="BalloonParty.Item.ItemSightTracker">
+<area shape="rect" id="Node000001" title="Tracks which item&#45;hosting balloons the aim&#39;s prediction line currently crosses, ordered first&#45;to&#45;last..." alt="" coords="5,79,208,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="53,5,161,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,44,109,79,104,79,104,44"/>
+</map>

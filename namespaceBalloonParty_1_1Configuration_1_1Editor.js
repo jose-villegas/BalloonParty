@@ -4,6 +4,7 @@ var namespaceBalloonParty_1_1Configuration_1_1Editor =
     [ "BalloonPrefabEntryDrawer", "classBalloonParty_1_1Configuration_1_1Editor_1_1BalloonPrefabEntryDrawer.html", "classBalloonParty_1_1Configuration_1_1Editor_1_1BalloonPrefabEntryDrawer" ],
     [ "GameDisplayConfigurationEditor", "classBalloonParty_1_1Configuration_1_1Editor_1_1GameDisplayConfigurationEditor.html", "classBalloonParty_1_1Configuration_1_1Editor_1_1GameDisplayConfigurationEditor" ],
     [ "HitVfxOverrideDrawer", "classBalloonParty_1_1Configuration_1_1Editor_1_1HitVfxOverrideDrawer.html", "classBalloonParty_1_1Configuration_1_1Editor_1_1HitVfxOverrideDrawer" ],
+    [ "ItemPreviewConfigEditor", "classBalloonParty_1_1Configuration_1_1Editor_1_1ItemPreviewConfigEditor.html", "classBalloonParty_1_1Configuration_1_1Editor_1_1ItemPreviewConfigEditor" ],
     [ "ItemSettingsDrawer", "classBalloonParty_1_1Configuration_1_1Editor_1_1ItemSettingsDrawer.html", "classBalloonParty_1_1Configuration_1_1Editor_1_1ItemSettingsDrawer" ],
     [ "MapLimitsSceneOverlay", "classBalloonParty_1_1Configuration_1_1Editor_1_1MapLimitsSceneOverlay.html", "classBalloonParty_1_1Configuration_1_1Editor_1_1MapLimitsSceneOverlay" ],
     [ "PaintProfileDrawer", "classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html", "classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer" ],

@@ -23,6 +23,8 @@ var dir_a2ee3c219a349d2fa420a04c54f658ee =
     [ "ItemAssigner.cs", "ItemAssigner_8cs.html", "ItemAssigner_8cs" ],
     [ "ItemDisplayService.cs", "ItemDisplayService_8cs.html", "ItemDisplayService_8cs" ],
     [ "ItemEffectPlayer.cs", "ItemEffectPlayer_8cs.html", "ItemEffectPlayer_8cs" ],
+    [ "ItemSightQuery.cs", "ItemSightQuery_8cs.html", "ItemSightQuery_8cs" ],
+    [ "ItemSightTracker.cs", "ItemSightTracker_8cs.html", "ItemSightTracker_8cs" ],
     [ "ItemVisualView.cs", "ItemVisualView_8cs.html", "ItemVisualView_8cs" ],
     [ "ITransformCapture.cs", "ITransformCapture_8cs.html", "ITransformCapture_8cs" ],
     [ "LaserItemRotation.cs", "LaserItemRotation_8cs.html", "LaserItemRotation_8cs" ],

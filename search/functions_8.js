@@ -67,6 +67,9 @@ var searchData=
   ['itempreviewviewport_64',['ItemPreviewViewport',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewViewport.html#a0afcecf3b08c79489732c7500aaccf06',1,'BalloonParty::Item::Preview::ItemPreviewViewport']]],
   ['itemprofile_65',['ItemProfile',['../structBalloonParty_1_1Solver_1_1ItemProfile.html#a12634ca24b86602ca5823948a3b6ab87',1,'BalloonParty::Solver::ItemProfile']]],
   ['itemrangepreviewcontroller_66',['ItemRangePreviewController',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#ad1034ff46894b5149b22061afe5cf97d',1,'BalloonParty::Item::Preview::ItemRangePreviewController']]],
-  ['itemsoundrouter_67',['ItemSoundRouter',['../classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#ad2ad021f55a7b1858354a36d219291e8',1,'BalloonParty::Audio::Routing::ItemSoundRouter']]],
-  ['itemtypeweight_68',['ItemTypeWeight',['../structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a9c9f47d69b58f0006a9b147a899f3c9e',1,'BalloonParty::Configuration::Items::ItemTypeWeight']]]
+  ['itemsighthit_67',['ItemSightHit',['../structBalloonParty_1_1Item_1_1ItemSightHit.html#ab64897c8db3b480737f91f9cee32f3cd',1,'BalloonParty::Item::ItemSightHit']]],
+  ['itemsightsoundrouter_68',['ItemSightSoundRouter',['../classBalloonParty_1_1Audio_1_1Routing_1_1ItemSightSoundRouter.html#a5c5ebd5c00be532b6d7358b7925698b3',1,'BalloonParty::Audio::Routing::ItemSightSoundRouter']]],
+  ['itemsighttracker_69',['ItemSightTracker',['../classBalloonParty_1_1Item_1_1ItemSightTracker.html#a22de1fbbc081b9e63d07e15636917df8',1,'BalloonParty::Item::ItemSightTracker']]],
+  ['itemsoundrouter_70',['ItemSoundRouter',['../classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#ad2ad021f55a7b1858354a36d219291e8',1,'BalloonParty::Audio::Routing::ItemSoundRouter']]],
+  ['itemtypeweight_71',['ItemTypeWeight',['../structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a9c9f47d69b58f0006a9b147a899f3c9e',1,'BalloonParty::Configuration::Items::ItemTypeWeight']]]
 ];

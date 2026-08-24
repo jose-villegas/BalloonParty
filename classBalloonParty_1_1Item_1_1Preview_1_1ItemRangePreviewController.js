@@ -1,6 +1,5 @@
 var classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController =
 [
-    [ "HostHit", "structBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController_1_1HostHit.html", "structBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController_1_1HostHit" ],
     [ "ShowOutcome", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a02afcfe0a1dbd28a930a2c9cf08529ce", [
       [ "Drew", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a02afcfe0a1dbd28a930a2c9cf08529cea4744ccf98ed9fcec2a3224ebb13333ed", null ],
       [ "WaitingOnSpin", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a02afcfe0a1dbd28a930a2c9cf08529cea18ab95fdd7df3279ca8d840790f8bd91", null ],
@@ -39,7 +38,6 @@ var classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController =
     [ "Tick", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a19919b295458dd175986af2099dc083a", null ],
     [ "TryDrawActiveHost", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a5f63817b06f84cb8d6a0b4434dfd7926", null ],
     [ "TryRefreshActiveHostGeometry", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a8cf03730f3405a3d1cfa7776acd7348d", null ],
-    [ "TryScoreHost", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a69e993bde2e8157700e8e75a4ab6fdcc", null ],
     [ "_activeHostCompletedFullHold", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#abd4d8026b633971b59f6e2e7fe496fac", null ],
     [ "_activeHostDrawPending", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a4bce1d6cce31a1120adeb75480e7facd", null ],
     [ "_activeHostElapsed", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a575aa5bbb18efd7827ce32f86ada5d44", null ],
@@ -57,6 +55,7 @@ var classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController =
     [ "_previewMap", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#ad712392eaf75125b8e23e0e6243ea428", null ],
     [ "_previews", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a13dff335cdf9e05867331c3be2197b28", null ],
     [ "_previousSpinSettled", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a33f3c2d5631fbc155b27f35686929be7", null ],
+    [ "_rawSightScratch", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a570f752a0455f72198c4b4ffa6e21876", null ],
     [ "_sequenceIndex", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a10e81057512e63dae4ba5b3ae05e05da", null ],
     [ "_shown", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#ae1f68b4bb81ac127e71a5edd77ec21a1", null ],
     [ "_shownSetSlots", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html#a774c2ba25e7a55212da3636f3ce6ca0f", null ],

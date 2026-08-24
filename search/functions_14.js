@@ -17,6 +17,7 @@ var searchData=
   ['updatepredictiontrace_14',['UpdatePredictionTrace',['../classBalloonParty_1_1Thrower_1_1ThrowerController.html#aec34d8e5f39781e38103bb070553ebfc',1,'BalloonParty::Thrower::ThrowerController']]],
   ['updatereduction_15',['UpdateReduction',['../classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#ad290e6ea7eef8fd2cf348dd3820ba640',1,'BalloonParty::Slots::Actor::SpeckField']]],
   ['updaterustleproximity_16',['UpdateRustleProximity',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html#a583f40d4423dc09c39bc849e754945c0',1,'BalloonParty::Slots::Actor::Archetype::BushRustleController']]],
-  ['updatetelegraph_17',['UpdateTelegraph',['../classBalloonParty_1_1Item_1_1LaserItemRotation.html#a6f2fbb9d18e2680184a362ebd1db1da2',1,'BalloonParty::Item::LaserItemRotation']]],
-  ['uploadstamparrays_18',['UploadStampArrays',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html#a80ccae423cd5831837bb6a315675748a',1,'BalloonParty::Shared::Disturbance::DisturbanceFieldService']]]
+  ['updatesettleandtrigger_17',['UpdateSettleAndTrigger',['../classBalloonParty_1_1Audio_1_1Routing_1_1ItemSightSoundRouter.html#a11f0a5770b8eac9987d3f6484357929a',1,'BalloonParty::Audio::Routing::ItemSightSoundRouter']]],
+  ['updatetelegraph_18',['UpdateTelegraph',['../classBalloonParty_1_1Item_1_1LaserItemRotation.html#a6f2fbb9d18e2680184a362ebd1db1da2',1,'BalloonParty::Item::LaserItemRotation']]],
+  ['uploadstamparrays_19',['UploadStampArrays',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html#a80ccae423cd5831837bb6a315675748a',1,'BalloonParty::Shared::Disturbance::DisturbanceFieldService']]]
 ];

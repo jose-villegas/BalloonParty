@@ -10,6 +10,7 @@ var searchData=
   ['itempaint_7',['ItemPaint',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a0060f53888235b958453c92785051bde',1,'BalloonParty::Audio']]],
   ['itemsactivated_8',['ItemsActivated',['../namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba194da3d12f0bb49a0d58c0121d5330c5',1,'BalloonParty::Game::Telemetry']]],
   ['itemshield_9',['ItemShield',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13ad8bfbd17de8d7c638fbd6b21e8104f08',1,'BalloonParty::Audio']]],
-  ['itemsnipe_10',['ItemSnipe',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a6f1d9179825a25c610192a17356ae3f0',1,'BalloonParty::Audio']]],
-  ['itemtype_11',['ItemType',['../namespaceBalloonParty_1_1Game_1_1Telemetry.html#a70fd8bf1148bf059d1e9549b680d3a18a29a3922237fd0263dff4affed9b7a637',1,'BalloonParty::Game::Telemetry']]]
+  ['itemsighted_10',['ItemSighted',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13aa65762fb22742c8d8fa01d1fbb3438ce',1,'BalloonParty::Audio']]],
+  ['itemsnipe_11',['ItemSnipe',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a6f1d9179825a25c610192a17356ae3f0',1,'BalloonParty::Audio']]],
+  ['itemtype_12',['ItemType',['../namespaceBalloonParty_1_1Game_1_1Telemetry.html#a70fd8bf1148bf059d1e9549b680d3a18a29a3922237fd0263dff4affed9b7a637',1,'BalloonParty::Game::Telemetry']]]
 ];
